@@ -27,8 +27,6 @@ class SwCharFmt;
 class SwTxtCharFmt;
 class IntlWrapper;
 
-// ATT_CHARFMT *********************************************
-
 class SW_DLLPUBLIC SwFmtCharFmt: public SfxPoolItem, public SwClient
 {
     friend class SwTxtCharFmt;

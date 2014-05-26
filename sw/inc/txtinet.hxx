@@ -26,8 +26,6 @@
 class SwTxtNode;
 class SwCharFmt;
 
-// ATT_INETFMT *********************************************
-
 class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrNesting, public SwClient
 {
     SwTxtNode * m_pTxtNode;

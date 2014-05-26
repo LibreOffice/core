@@ -35,10 +35,7 @@ public:
     void ShowReferencePage();
 };
 
-/* --------------------------------------------------
- * field dialog only showing database page to support
- * mail merge
- * --------------------------------------------------*/
+// field dialog only showing database page to support mail merge
 class SwFldDataOnlyDlgWrapper : public SwChildWinWrapper
 {
 public:

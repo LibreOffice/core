@@ -26,13 +26,10 @@ class SwFrm;
 class SwTxtNode;
 class SwDoc;
 
-// SWTXT_FLYCNT ********************************
 // Attribute for line-bound frames (without end index).
-
 class SwTxtFlyCnt : public SwTxtAttr
 {
     SwFlyInCntFrm  *_GetFlyFrm( const SwFrm *pCurrFrm );
-
 public:
     SwTxtFlyCnt( SwFmtFlyCnt& rAttr, sal_Int32 nStart );
 

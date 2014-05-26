@@ -49,7 +49,6 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 
-/* class SwVbaParagraphs */
 typedef CollTestImplHelper< ooo::vba::word::XParagraphs > SwVbaParagraphs_BASE;
 
 class SwVbaParagraphs : public SwVbaParagraphs_BASE

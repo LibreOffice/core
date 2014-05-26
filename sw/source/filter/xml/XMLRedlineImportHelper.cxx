@@ -240,7 +240,6 @@ RedlineInfo::~RedlineInfo()
     delete pNextRedline;
 }
 
-// XMLRedlineImportHelper
 XMLRedlineImportHelper::XMLRedlineImportHelper(
     bool bNoRedlinesPlease,
     const Reference<XPropertySet> & rModel,

@@ -965,12 +965,12 @@ SwDrawFrmFmt* SwDoc::InsertDrawObj(
     return pFmt;
 }
 
-/* ---------------------------------------------------------------------------
-    paragraph frames - o.k. if the PaM includes the paragraph from the beginning
-                       to the beginning of the next paragraph at least
-    frames at character - o.k. if the PaM starts at least at the same position
-                         as the frame
- ---------------------------------------------------------------------------*/
+/*
+ * paragraph frames - o.k. if the PaM includes the paragraph from the beginning
+ *                    to the beginning of the next paragraph at least
+ * frames at character - o.k. if the PaM starts at least at the same position
+ *                      as the frame
+ */
 static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
                         RndStdIds nAnchorId )
 {
@@ -1763,8 +1763,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel(
     return pNewFmt;
 }
 
-// IDocumentTimerAccess methods ------------------------------------------
-
+// IDocumentTimerAccess methods
 void SwDoc::StartIdling()
 {
     mbStartIdleTimer = true;

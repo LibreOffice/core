@@ -68,10 +68,7 @@
 
 extern SW_DLLPUBLIC SwWrtShell* GetActiveWrtShell();
 
-/*--------------------------------------------------------------------
-    Description:    the dialog's carrier
- --------------------------------------------------------------------*/
-
+// the dialog's carrier
 SwTemplateDlg::SwTemplateDlg(Window* pParent,
                              SfxStyleSheetBase& rBase,
                              sal_uInt16 nRegion,

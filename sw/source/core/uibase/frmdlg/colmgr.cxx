@@ -25,9 +25,8 @@
 #include "colmgr.hxx"
 
 // private methods
-/*------------------------------------------------------------------------
- Description:   set column width to current width
-------------------------------------------------------------------------*/
+
+// set column width to current width
 void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
 {
     const sal_uInt16 nCount = rCol.GetColumns().size();
@@ -40,9 +39,8 @@ void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth)
 }
 
 // public methods
-/*------------------------------------------------------------------------
- Description:   set column quantity and Gutterwidth
-------------------------------------------------------------------------*/
+
+// set column quantity and Gutterwidth
 void SwColMgr::SetCount(sal_uInt16 nCount, sal_uInt16  nGutterWidth)
 {
     aFmtCol.Init(nCount, nGutterWidth, nWidth);
@@ -78,23 +76,18 @@ void SwColMgr::SetGutterWidth(sal_uInt16 nGutterWidth, sal_uInt16 nPos )
     }
 }
 
-/*------------------------------------------------------------------------
- Description:   height separation line
-------------------------------------------------------------------------*/
+// height separation line
 short SwColMgr::GetLineHeightPercent() const
 {
     return (short)aFmtCol.GetLineHeight();
 }
-
 void SwColMgr::SetLineHeightPercent(short nPercent)
 {
     OSL_ENSURE(nPercent <= 100, "line height may be at most 100%");
     aFmtCol.SetLineHeight((sal_uInt8)nPercent);
 }
 
-/*------------------------------------------------------------------------
- Description:   column width
-------------------------------------------------------------------------*/
+// column width
 sal_uInt16 SwColMgr::GetColWidth(sal_uInt16 nIdx) const
 {
     OSL_ENSURE(nIdx < GetCount(), "Spaltenarray ueberindiziert.");
@@ -108,18 +101,14 @@ void SwColMgr::SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWd)
 
 }
 
-/*--------------------------------------------------------------------
-    Description:    newly set size
- --------------------------------------------------------------------*/
+// newly set size
 void SwColMgr::SetActualWidth(sal_uInt16 nW)
 {
     nWidth = nW;
     ::FitToActualSize(aFmtCol, nW);
 }
 
-/*--------------------------------------------------------------------
-    Description: ctor
- --------------------------------------------------------------------*/
+// ctor
 SwColMgr::SwColMgr(const SfxItemSet& rSet, sal_uInt16 nActWidth) :
     aFmtCol((const SwFmtCol&)rSet.Get(RES_COL)),
     nWidth(nActWidth)

@@ -24,9 +24,7 @@
 class SfxItemSet;
 class SwWrtShell;
 
-/*--------------------------------------------------------------------
-   Description:    the tab dialog carrier of TabPages
- --------------------------------------------------------------------*/
+// the tab dialog carrier of TabPages
 class SwTemplateDlg: public SfxStyleDialog
 {
 
@@ -71,8 +69,8 @@ class SwTemplateDlg: public SfxStyleDialog
     sal_uInt16 m_nNumPosId;
 
 public:
-    // @param sPage
-    // Identifies name of page to open at by default
+    /// @param sPage
+    /// Identifies name of page to open at by default
     SwTemplateDlg(  Window*             pParent,
                     SfxStyleSheetBase&  rBase,
                     sal_uInt16          nRegion,

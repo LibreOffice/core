@@ -36,9 +36,7 @@ class SwTxtFmtColl;
 class SwFrmFmt;
 class SwNumRule;
 
-/*--------------------------------------------------------------------
-    Local helper class.
- --------------------------------------------------------------------*/
+// Local helper class.
 class SwPoolFmtList : public std::vector<OUString>
 {
 public:
@@ -47,9 +45,7 @@ public:
     void Erase();
 };
 
-/*--------------------------------------------------------------------
-    Temporary StyleSheet.
- --------------------------------------------------------------------*/
+// Temporary StyleSheet.
 class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
 {
     friend class SwDocStyleSheetPool;
@@ -147,10 +143,7 @@ public:
     virtual bool            IsUsed() const SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-   Iterator for Pool.
- --------------------------------------------------------------------*/
-
+// Iterator for Pool.
 class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
 {
     rtl::Reference< SwDocStyleSheet > mxIterSheet;

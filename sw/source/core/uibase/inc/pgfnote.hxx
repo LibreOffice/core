@@ -28,9 +28,7 @@
 #include <vcl/group.hxx>
 #include <svtools/ctrlbox.hxx>
 
-/*--------------------------------------------------------------------
-    Description:    footnote settings TabPage
- --------------------------------------------------------------------*/
+// footnote settings TabPage
 class SwFootNotePage: public SfxTabPage
 {
 public:

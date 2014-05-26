@@ -49,8 +49,7 @@ bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
 SW_DLLPUBLIC SwCntntNode* GoNextNds( SwNodeIndex * pIdx, bool );
 SwCntntNode* GoPreviousNds( SwNodeIndex * pIdx, bool );
 
-// --------- Funktionsdefinitionen fuer die SwCrsrShell --------------
-
+// Funktionsdefinitionen fuer die SwCrsrShell
 bool GoPrevPara( SwPaM&, SwPosPara);
 bool GoCurrPara( SwPaM&, SwPosPara);
 bool GoNextPara( SwPaM&, SwPosPara);
@@ -58,8 +57,7 @@ bool GoPrevSection( SwPaM&, SwPosSection);
 bool GoCurrSection( SwPaM&, SwPosSection);
 bool GoNextSection( SwPaM&, SwPosSection);
 
-// ------------ Typedefiniton fuer Funktionen ----------------------
-
+// Typedefiniton fuer Funktionen
 typedef bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
 typedef SwCntntNode* (*GoNds)( SwNodeIndex*, bool );
 typedef void (*GoDoc)( SwPosition* );
@@ -82,7 +80,7 @@ struct SwMoveFnCollection
     MvSection fnSection;
 };
 
-// --------- Funktionsdefinitionen fuers Suchen --------------
+// Funktionsdefinitionen fuers Suchen
 SwCntntNode* GetNode( SwPaM&, bool&, SwMoveFn, bool bInReadOnly = false );
 
 #endif

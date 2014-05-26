@@ -202,8 +202,8 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
         rPam.DeleteMark();
     }
 
-    // ----- search the start
-    // --- look where a ruby attribute starts
+    // search the start
+    // look where a ruby attribute starts
     sal_uInt16 nHtIdx = USHRT_MAX;
     const SwpHints* pHts = pTNd->GetpSwpHints();
     const SwTxtAttr* pAttr = 0;

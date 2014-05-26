@@ -32,8 +32,6 @@
 
 class SwEnvDlg;
 
-// class SwEnvPrtPage ---------------------------------------------------------
-
 class SwEnvPrtPage : public SfxTabPage
 {
     ToolBox*     m_pAlignBox;

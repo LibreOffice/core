@@ -27,9 +27,7 @@
 class SwWrtShell;
 class SwForm;
 
-/*--------------------------------------------------------------------
-    Description: manager for directory functionality
- --------------------------------------------------------------------*/
+// manager for directory functionality
 //one single method will be sufficient to insert AND upate indexes
 class SW_DLLPUBLIC SwTOXDescription
 {
@@ -296,9 +294,7 @@ public:
 
 };
 
-/*--------------------------------------------------------------------
-    Description: inlines
- --------------------------------------------------------------------*/
+// inlines
 inline sal_uInt16 SwTOXMgr::GetTOXMarkCount()
     {   return aCurMarks.size();   }
 

@@ -27,7 +27,6 @@
 #include <svx/checklbx.hxx>
 #include <rtl/ustring.hxx>
 
-// class SwCompatibilityOptPage ------------------------------------------
 class SwWrtShell;
 struct SwCompatibilityOptPage_Impl;
 

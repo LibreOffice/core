@@ -61,10 +61,6 @@ void SwMultiTOXMarkDlg::Apply()
     rMgr.SetCurTOXMark(nPos);
 }
 
-/*--------------------------------------------------
- overload dtor
---------------------------------------------------*/
-
 SwMultiTOXMarkDlg::~SwMultiTOXMarkDlg() {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

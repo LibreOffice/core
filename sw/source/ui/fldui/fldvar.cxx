@@ -566,14 +566,11 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Description: renew types in SelectionBox
- --------------------------------------------------------------------*/
+// renew types in SelectionBox
 void SwFldVarPage::UpdateSubType()
 {
     OUString sOldSel;
     const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
-
     SetSelectionSel(m_pSelectionLB->GetSelectEntryPos());
     if(GetSelectionSel() != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = m_pSelectionLB->GetEntry(GetSelectionSel());
@@ -800,9 +797,7 @@ sal_Int32 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
     return nSize;
 }
 
-/*--------------------------------------------------------------------
-    Description: Modify
- --------------------------------------------------------------------*/
+// Modify
 IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
 {
     OUString sValue(m_pValueED->GetText());

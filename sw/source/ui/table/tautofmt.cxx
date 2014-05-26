@@ -487,8 +487,6 @@ IMPL_LINK_NOARG_INLINE_START(SwAutoFormatDlg, OkHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 
-// AutoFmtPreview
-
 AutoFmtPreview::AutoFmtPreview(Window* pParent) :
         Window          ( pParent ),
         aCurData        ( OUString() ),

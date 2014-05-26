@@ -331,8 +331,6 @@ public:
     virtual FillAttributesPtr getFillAttributes() const;
 };
 
-// --------------- inline Implementations ------------------------
-
 //UUUUinline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
 //UUUU                                             bool bInParents ) const
 //UUUU{

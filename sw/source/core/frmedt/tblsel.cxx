@@ -2283,9 +2283,6 @@ static bool lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
     return &rTable == pTblFrm;
 }
 
-/*
- * lcl_UpdateRepeatedHeadlines
- */
 static void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
 {
     OSL_ENSURE( rTabFrm.IsFollow(), "lcl_UpdateRepeatedHeadlines called for non-follow tab" );

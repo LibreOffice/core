@@ -171,9 +171,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
     }
 }
 
-//  class SwFmtFrmSize
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtFrmSize::SwFmtFrmSize( SwFrmSize eSize, SwTwips nWidth, SwTwips nHeight )
     : SfxPoolItem( RES_FRM_SIZE ),
     m_aSize( nWidth, nHeight ),
@@ -419,13 +417,10 @@ bool SwFmtFrmSize::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//  class SwFmtFillOrder
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtFillOrder::SwFmtFillOrder( SwFillOrder nFO )
     : SfxEnumItem( RES_FILL_ORDER, sal_uInt16(nFO) )
 {}
-
 SfxPoolItem*  SwFmtFillOrder::Clone( SfxItemPool* ) const
 {
     return new SwFmtFillOrder( GetFillOrder() );
@@ -436,9 +431,7 @@ sal_uInt16  SwFmtFillOrder::GetValueCount() const
     return SW_FILL_ORDER_END - SW_FILL_ORDER_BEGIN;
 }
 
-//  class SwFmtHeader
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtHeader::SwFmtHeader( SwFrmFmt *pHeaderFmt )
     : SfxPoolItem( RES_HEADER ),
     SwClient( pHeaderFmt ),
@@ -483,9 +476,7 @@ void SwFmtHeader::RegisterToFormat( SwFmt& rFmt )
     rFmt.Add(this);
 }
 
-//  class SwFmtFooter
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtFooter::SwFmtFooter( SwFrmFmt *pFooterFmt )
     : SfxPoolItem( RES_FOOTER ),
     SwClient( pFooterFmt ),
@@ -530,9 +521,7 @@ SfxPoolItem*  SwFmtFooter::Clone( SfxItemPool* ) const
     return new SwFmtFooter( *this );
 }
 
-//  class SwFmtCntnt
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtCntnt::SwFmtCntnt( const SwFmtCntnt &rCpy )
     : SfxPoolItem( RES_CNTNT )
 {
@@ -572,9 +561,7 @@ SfxPoolItem*  SwFmtCntnt::Clone( SfxItemPool* ) const
     return new SwFmtCntnt( *this );
 }
 
-//  class SwFmtPageDesc
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtPageDesc::SwFmtPageDesc( const SwFmtPageDesc &rCpy )
     : SfxPoolItem( RES_PAGEDESC ),
     SwClient( (SwPageDesc*)rCpy.GetPageDesc() ),
@@ -1105,9 +1092,7 @@ bool SwFmtCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//  class SwFmtSurround
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtSurround::SwFmtSurround( SwSurround eFly ) :
     SfxEnumItem( RES_SURROUND, sal_uInt16( eFly ) )
 {
@@ -1241,9 +1226,7 @@ SfxPoolItem* SwFmtVertOrient::Create(SvStream &rStream, sal_uInt16 /*itemVersion
     return new SwFmtVertOrient(yPos, orient, relation);
 }
 
-//  class SwFmtVertOrient
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtVertOrient::SwFmtVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )
     : SfxPoolItem( RES_VERT_ORIENT ),
@@ -1325,9 +1308,7 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//  class SwFmtHoriOrient
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtHoriOrient::SwFmtHoriOrient( SwTwips nX, sal_Int16 eHori,
                               sal_Int16 eRel, bool bPos )
     : SfxPoolItem( RES_HORI_ORIENT ),
@@ -1421,9 +1402,7 @@ bool SwFmtHoriOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//  class SwFmtAnchor
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtAnchor::SwFmtAnchor( RndStdIds nRnd, sal_uInt16 nPage )
     : SfxPoolItem( RES_ANCHOR ),
     nAnchorId( nRnd ),
@@ -1628,9 +1607,7 @@ bool SwFmtAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//  class SwFmtURL
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 SwFmtURL::SwFmtURL() :
     SfxPoolItem( RES_URL ),
     pMap( 0 ),
@@ -1788,28 +1765,20 @@ bool SwFmtURL::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-// class SwFmtEditInReadonly
-
 SfxPoolItem* SwFmtEditInReadonly::Clone( SfxItemPool* ) const
 {
     return new SwFmtEditInReadonly( Which(), GetValue() );
 }
-
-// class SwFmtLayoutSplit
 
 SfxPoolItem* SwFmtLayoutSplit::Clone( SfxItemPool* ) const
 {
     return new SwFmtLayoutSplit( GetValue() );
 }
 
-// class SwFmtRowSplit
-
 SfxPoolItem* SwFmtRowSplit::Clone( SfxItemPool* ) const
 {
     return new SwFmtRowSplit( GetValue() );
 }
-
-// class SwFmtNoBalancedColumns
 
 SfxPoolItem* SwFmtNoBalancedColumns::Clone( SfxItemPool* ) const
 {
@@ -2032,8 +2001,6 @@ bool SwFmtChain::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     return bRet;
 }
 
-//class SwFmtLineNumber
-
 SwFmtLineNumber::SwFmtLineNumber() :
     SfxPoolItem( RES_LINENUMBER )
 {
@@ -2106,8 +2073,6 @@ bool SwFmtLineNumber::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     }
     return bRet;
 }
-
-// class SwTextGridItem
 
 SwTextGridItem::SwTextGridItem()
     : SfxPoolItem( RES_TEXTGRID ), m_aColor( COL_LIGHTGRAY ), m_nLines( 20 )
@@ -2398,16 +2363,12 @@ void SwTextGridItem::Init()
     }
 }
 
-// class SwHeaderAndFooterEatSpacingItem
-
 SfxPoolItem* SwHeaderAndFooterEatSpacingItem::Clone( SfxItemPool* ) const
 {
     return new SwHeaderAndFooterEatSpacingItem( Which(), GetValue() );
 }
 
-//  class SwFrmFmt
-//  Partially implemented inline in hxx
-
+// Partially implemented inline in hxx
 TYPEINIT1( SwFrmFmt, SwFmt );
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( SwFrmFmt )
 

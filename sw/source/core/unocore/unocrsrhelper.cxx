@@ -295,9 +295,7 @@ GetNestedTextContent(SwTxtNode & rTextNode, sal_Int32 const nIndex,
     return xRet;
 }
 
-/* --------------------------------------------------
- *  Read the special properties of the cursor
- * --------------------------------------------------*/
+// Read the special properties of the cursor
 bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam
                                         , Any *pAny
@@ -911,9 +909,7 @@ void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
     }
 }
 
-/* --------------------------------------------------
- * reset special properties of the cursor
- * --------------------------------------------------*/
+// reset special properties of the cursor
 void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPam)
 {
     SwDoc* pDoc = rPam.GetDoc();

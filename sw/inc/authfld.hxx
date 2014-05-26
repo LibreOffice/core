@@ -170,7 +170,6 @@ public:
     virtual OUString GetDescription() const SAL_OVERRIDE;
 };
 
-// --- inlines -----------------------------------------------------------
 inline OUString SwAuthEntry::GetAuthorField(ToxAuthorityField ePos) const
 {
     SAL_WARN_IF(AUTH_FIELD_END <= ePos, "sw", "wrong index");

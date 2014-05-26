@@ -230,9 +230,7 @@ SwLinePortion *SwTxtFormatter::Underflow( SwTxtFormatInfo &rInf )
 //        }
 //    }
 
-    /*--------------------------------------------------
-     * Snapshot
-     * --------------------------------------------------*/
+    // Snapshot
     if ( pPor==rInf.GetLast() )
     {
         // We end up here, if the portion triggering the under-flow
@@ -242,9 +240,7 @@ SwLinePortion *SwTxtFormatter::Underflow( SwTxtFormatInfo &rInf )
         pPor->Truncate();
         return pPor; // Is that enough?
     }
-    /*---------------------------------------------------
-     * End the snapshot
-     * --------------------------------------------------*/
+    // End the snapshot
 
     // X + Width == 0 with SoftHyph > Line?!
     if( !pPor || !(rInf.X() + pPor->Width()) )

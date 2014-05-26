@@ -28,10 +28,7 @@
 #include <swundo.hxx>
 #include <globals.hrc>
 
-/*--------------------------------------------------------------------
-    Description: handle indexes with TOXMgr
- --------------------------------------------------------------------*/
-
+// handle indexes with TOXMgr
 SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):
     pSh(pShell)
 {
@@ -39,10 +36,7 @@ SwTOXMgr::SwTOXMgr(SwWrtShell* pShell):
     SetCurTOXMark(0);
 }
 
-/*--------------------------------------------------------------------
-    Description: handle current TOXMarks
- --------------------------------------------------------------------*/
-
+// handle current TOXMarks
 sal_uInt16 SwTOXMgr::GetTOXMarks()
 {
     return pSh->GetCurTOXMarks(aCurMarks);
@@ -158,14 +152,11 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
     pSh->SwEditShell::Insert(*pMark);
     pSh->EndAllAction();
 }
-/*--------------------------------------------------------------------
-    Description: Update of TOXMarks
- --------------------------------------------------------------------*/
 
+// Update of TOXMarks
 void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 {
     OSL_ENSURE(pCurTOXMark, "no current TOXMark");
-
     pSh->StartAllAction();
     if(pCurTOXMark->GetTOXType()->GetType() == TOX_INDEX)
     {
@@ -235,10 +226,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     }
 }
 
-/*--------------------------------------------------------------------
-    Description:    determine UserTypeID
- --------------------------------------------------------------------*/
-
+// determine UserTypeID
 sal_uInt16 SwTOXMgr::GetUserTypeID(const OUString& rStr)
 {
     sal_uInt16 nSize = pSh->GetTOXTypeCount(TOX_USER);
@@ -253,10 +241,7 @@ sal_uInt16 SwTOXMgr::GetUserTypeID(const OUString& rStr)
     return nSize;
 }
 
-/*--------------------------------------------------------------------
-    Description: traveling between TOXMarks
- --------------------------------------------------------------------*/
-
+// traveling between TOXMarks
 void SwTOXMgr::NextTOXMark(bool bSame)
 {
     OSL_ENSURE(pCurTOXMark, "no current TOXMark");
@@ -277,14 +262,11 @@ void SwTOXMgr::PrevTOXMark(bool bSame)
     }
 }
 
-/*--------------------------------------------------------------------
-    Description: insert keyword index
- --------------------------------------------------------------------*/
+// insert keyword index
 const SwTOXBase* SwTOXMgr::GetCurTOX()
 {
     return pSh->GetCurTOX();
 }
-
 const SwTOXType* SwTOXMgr::GetTOXType(TOXTypes eTyp, sal_uInt16 nId) const
 {
     return pSh->GetTOXType(eTyp, nId);

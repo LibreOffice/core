@@ -22,9 +22,7 @@
 #include <vcl/field.hxx>
 #include "swdllapi.h"
 
-/*--------------------------------------------------------------------
-    Description:    numerical input
- --------------------------------------------------------------------*/
+// numerical input
 class SW_DLLPUBLIC NumEditAction: public NumericField
 {
     Link aActionLink;
@@ -40,9 +38,7 @@ public:
     const Link& GetActionHdl() const                { return aActionLink; }
 };
 
-/* --------------------------------------------------
- * Edit that doesn't accept spaces
- * --------------------------------------------------*/
+// Edit that doesn't accept spaces
 class SW_DLLPUBLIC NoSpaceEdit : public Edit
 {
     OUString sForbiddenChars;
@@ -57,9 +53,7 @@ public:
     const OUString& GetForbiddenChars(){return sForbiddenChars;}
 };
 
-/* --------------------------------------------------
- * No space and no full stop
- * --------------------------------------------------*/
+// No space and no full stop
 class TableNameEdit : public NoSpaceEdit
 {
 public:
@@ -70,9 +64,7 @@ public:
     }
 };
 
-/* --------------------------------------------------
-    call a link when KEY_RETURN is pressed
- --------------------------------------------------*/
+// call a link when KEY_RETURN is pressed
 class SW_DLLPUBLIC ReturnActionEdit : public Edit
 {
     Link    aReturnActionLink;

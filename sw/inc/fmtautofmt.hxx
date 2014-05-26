@@ -23,8 +23,6 @@
 #include <format.hxx>
 #include <boost/shared_ptr.hpp>
 
-// ATT_AUTOFMT *********************************************
-
 class SwFmtAutoFmt: public SfxPoolItem
 {
     boost::shared_ptr<SfxItemSet> mpHandle;

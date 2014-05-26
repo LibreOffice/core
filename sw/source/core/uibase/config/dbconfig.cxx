@@ -28,10 +28,6 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-/*--------------------------------------------------------------------
-     Description: Ctor
- --------------------------------------------------------------------*/
-
 const Sequence<OUString>& SwDBConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames;

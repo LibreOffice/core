@@ -18,15 +18,15 @@
  */
 #ifndef INCLUDED_SW_INC_TBLAFMT_HXX
 #define INCLUDED_SW_INC_TBLAFMT_HXX
-/*************************************************************************
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    The structure of table auto formatting should not be changed. It is used
-    by different code of Writer and Calc. If a change is necessary, the
-    source code of both applications must be changed!
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-**************************************************************************/
+/*
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ *
+ *     The structure of table auto formatting should not be changed. It is used
+ *     by different code of Writer and Calc. If a change is necessary, the
+ *     source code of both applications must be changed!
+ *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ */
 
 #include <boost/scoped_ptr.hpp>
 

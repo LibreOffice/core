@@ -661,7 +661,6 @@ SwUnoCursorHelper::GetCurTxtFmtColl(SwPaM & rPaM, const bool bConditional)
     return (bError) ? 0 : pFmt;
 }
 
-// class SwXTextCursor
 class SwXTextCursor::Impl
     : public SwClient
 {

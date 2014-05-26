@@ -29,8 +29,6 @@
 class SwLabDlg;
 class SwLabItem;
 
-// class SwLabPrtPage -------------------------------------------------------
-
 class SwLabPrtPage : public SfxTabPage
 {
     Printer*      pPrinter;             // for the shaft setting - unfortunately

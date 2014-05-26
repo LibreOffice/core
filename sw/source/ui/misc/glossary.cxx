@@ -112,9 +112,7 @@ struct GroupUserData
           bReadonly(false)  {}
 };
 
-/*------------------------------------------------------------------------
- Description:   dialog for new block name
-------------------------------------------------------------------------*/
+// dialog for new block name
 class SwNewGlosNameDlg : public ModalDialog
 {
     Edit*        m_pNewName;
@@ -156,9 +154,7 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
     m_pNewName->GrabFocus();
 }
 
-/*------------------------------------------------------------------------
- Description:   query / set currently set group
-------------------------------------------------------------------------*/
+// query / set currently set group
 OUString SwGlossaryDlg::GetCurrGroup()
 {
     if( !::GetCurrGlosGroup().isEmpty() )
@@ -237,9 +233,7 @@ SwGlossaryDlg::~SwGlossaryDlg()
     delete pExampleFrame;
 }
 
-/*------------------------------------------------------------------------
- Description:   select new group
-------------------------------------------------------------------------*/
+// select new group
 IMPL_LINK( SwGlossaryDlg, GrpSelect, SvTreeListBox *, pBox )
 {
     SvTreeListEntry* pEntry = pBox->FirstSelected();
@@ -312,9 +306,7 @@ void SwGlossaryDlg::EnableShortName(bool bOn)
     m_pShortNameEdit->Enable(bOn);
 }
 
-/* --------------------------------------------------
- * does the title exist in the selected group?
- * --------------------------------------------------*/
+// does the title exist in the selected group?
 SvTreeListEntry* SwGlossaryDlg::DoesBlockExist(const OUString& rBlock,
                 const OUString& rShort)
 {
@@ -586,9 +578,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     return 1;
 }
 
-/*--------------------------------------------------------------------
-     Description:   dialog manage regions
- --------------------------------------------------------------------*/
+// dialog manage regions
 IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
 {
     SwGlossaries* pGloss = ::GetGlossaries();
@@ -664,9 +654,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
     return 0;
 }
 
-/*------------------------------------------------------------------------
- Description:   initialisation; from Ctor and after editing regions
-------------------------------------------------------------------------*/
+// initialisation; from Ctor and after editing regions
 void SwGlossaryDlg::Init()
 {
     m_pCategoryBox->SetUpdateMode( false );
@@ -775,14 +763,11 @@ IMPL_LINK_NOARG_INLINE_START(SwGlossaryDlg, EditHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwGlossaryDlg, EditHdl)
 
-/*------------------------------------------------------------------------
- Description:   KeyInput for ShortName - Edits without Spaces
-------------------------------------------------------------------------*/
+// KeyInput for ShortName - Edits without Spaces
 IMPL_LINK( SwNewGlosNameDlg, Modify, Edit *, pBox )
 {
     OUString aName(m_pNewName->GetText());
     SwGlossaryDlg* pDlg = (SwGlossaryDlg*)GetParent();
-
     if (pBox == m_pNewName)
         m_pNewShort->SetText( lcl_GetValidShortCut( aName ) );
 
@@ -821,9 +806,7 @@ IMPL_LINK( SwGlossaryDlg, CheckBoxHdl, CheckBox *, pBox )
     return 0;
 }
 
-/* --------------------------------------------------
- * TreeListBox for groups and blocks
- * --------------------------------------------------*/
+// TreeListBox for groups and blocks
 SwGlTreeListBox::SwGlTreeListBox(Window* pParent, WinBits nBits)
     : SvTreeListBox(pParent, nBits)
     , sReadonly(SW_RESSTR(SW_STR_READONLY)),

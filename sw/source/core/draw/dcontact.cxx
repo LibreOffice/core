@@ -164,8 +164,6 @@ bool IsMarqueeTextObj( const SdrObject& rObj )
          || SDRTEXTANI_ALTERNATE == eTKind || SDRTEXTANI_SLIDE == eTKind );
 }
 
-// SwContact
-
 SwContact::SwContact( SwFrmFmt *pToRegisterIn ) :
     SwClient( pToRegisterIn ),
     mbInDTOR( false )
@@ -390,8 +388,6 @@ sal_uInt32 SwContact::GetMaxOrdNum() const
 
     return nMaxOrdNum;
 }
-
-// SwFlyDrawContact
 
 SwFlyDrawContact::SwFlyDrawContact( SwFlyFrmFmt *pToRegisterIn, SdrModel * ) :
     SwContact( pToRegisterIn )
@@ -2141,8 +2137,6 @@ sdr::contact::ViewContact* SwDrawVirtObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::VCOfDrawVirtObj(*this);
 }
-
-// SwDrawVirtObj
 
 SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
                               SwDrawContact&    _rDrawContact )

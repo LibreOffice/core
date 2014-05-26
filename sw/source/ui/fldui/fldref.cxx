@@ -441,10 +441,7 @@ IMPL_LINK_NOARG(SwFldRefPage, SubTypeHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Description: renew types in SelectionLB
- --------------------------------------------------------------------*/
-
+// renew types in SelectionLB
 void SwFldRefPage::UpdateSubType()
 {
     SwWrtShell *pSh = GetWrtShell();
@@ -738,10 +735,7 @@ sal_Int32 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
     return nSize;
 }
 
-/*--------------------------------------------------------------------
-    Description: Modify
- --------------------------------------------------------------------*/
-
+// Modify
 IMPL_LINK_NOARG(SwFldRefPage, ModifyHdl)
 {
     OUString aName(m_pNameED->GetText());

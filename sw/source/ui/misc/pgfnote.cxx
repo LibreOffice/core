@@ -48,10 +48,8 @@ static const sal_uInt16 aPageRg[] = {
     0
 };
 
-/*------------------------------------------------------------------------
- Description:  handler to switch between the different possibilities
-               how the footnote region's height can be set.
-------------------------------------------------------------------------*/
+// handler to switch between the different possibilities how the footnote
+// region's height can be set.
 IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightPage)
 {
     m_pMaxHeightEdit->Enable(false);
@@ -67,9 +65,7 @@ IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightMetric)
 }
 IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightMetric)
 
-/*------------------------------------------------------------------------
- Description:   handler limit values
-------------------------------------------------------------------------*/
+// handler limit values
 IMPL_LINK_NOARG(SwFootNotePage, HeightModify)
 {
     m_pMaxHeightEdit->SetMax(m_pMaxHeightEdit->Normalize(lMaxHeight -
@@ -257,9 +253,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     delete pDefFtnInfo;
 }
 
-/*--------------------------------------------------------------------
-    Description:    stuff attributes into the set, when OK
- --------------------------------------------------------------------*/
+// stuff attributes into the set, when OK
 bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
 {
     SwPageFtnInfoItem aItem((const SwPageFtnInfoItem&)GetItemSet().Get(FN_PARAM_FTN_INFO));

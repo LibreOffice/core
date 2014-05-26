@@ -101,9 +101,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw)
     Init();
 }
 
-/*--------------------------------------------------------------------
-    Description: initialise controls
- --------------------------------------------------------------------*/
+// initialise controls
 void SwFldEditDlg::Init()
 {
     SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
@@ -212,9 +210,7 @@ void SwFldEditDlg::InsertHdl()
     GetOKButton()->Click();
 }
 
-/*--------------------------------------------------------------------
-     Description: kick off changing of the field
- --------------------------------------------------------------------*/
+// kick off changing of the field
 IMPL_LINK_NOARG(SwFldEditDlg, OKHdl)
 {
     if (GetOKButton()->IsEnabled())
@@ -237,9 +233,7 @@ short SwFldEditDlg::Execute()
     return GetTabPage() ? Dialog::Execute() : static_cast<short>(RET_CANCEL);
 }
 
-/*--------------------------------------------------------------------
-    Description: Traveling between fields of the same type
- --------------------------------------------------------------------*/
+// Traveling between fields of the same type
 IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
 {
     bool bNext = pButton == m_pNextBT;

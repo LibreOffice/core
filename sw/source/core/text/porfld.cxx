@@ -1046,9 +1046,7 @@ void SwTxtFrm::StopAnimation( OutputDevice* pOut )
     }
 }
 
-// SwCombinedPortion::SwCombinedPortion(..)
 // initializes the script array and clears the width array
-
 SwCombinedPortion::SwCombinedPortion( const OUString &rTxt )
     : SwFldPortion( rTxt )
     , nUpPos(0)

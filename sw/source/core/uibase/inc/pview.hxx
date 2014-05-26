@@ -295,7 +295,6 @@ public:
     virtual ~SwPagePreview();
 };
 
-// ----------------- inline methods ----------------------
 inline void SwPagePreview::AdjustEditWin()
 {
     OuterResizePixel( Point(), GetFrameWindow()->GetOutputSizePixel() );

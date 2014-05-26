@@ -3678,9 +3678,6 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         Window::MouseButtonDown(rMEvt);
 }
 
-/**
- * MouseMove
- */
 void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 {
     MouseEvent rMEvt(_rMEvt);

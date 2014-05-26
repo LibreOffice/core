@@ -46,7 +46,6 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 
-/* class SwVbaAutoTextEntries */
 typedef CollTestImplHelper< ooo::vba::word::XAutoTextEntries > SwVbaAutoTextEntries_BASE;
 
 class SwVbaAutoTextEntries : public SwVbaAutoTextEntries_BASE

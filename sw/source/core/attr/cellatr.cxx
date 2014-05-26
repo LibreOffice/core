@@ -31,8 +31,6 @@
 #include <switerator.hxx>
 #include <swtable.hxx>
 
-// SwTblBoxNumFormat
-
 SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, bool bFlag )
     : SfxUInt32Item( RES_BOXATR_FORMAT, nFormat ), bAuto( bFlag )
 {
@@ -49,8 +47,6 @@ SfxPoolItem* SwTblBoxNumFormat::Clone( SfxItemPool* ) const
 {
     return new SwTblBoxNumFormat( GetValue(), bAuto );
 }
-
-// SwTblBoxFormula
 
 SwTblBoxFormula::SwTblBoxFormula( const OUString& rFormula )
     : SfxPoolItem( RES_BOXATR_FORMULA ),
@@ -191,8 +187,6 @@ void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
         ChgValid( !rCalcPara.IsStackOverflow() ); // value is now valid again
     }
 }
-
-// SwTblBoxValue
 
 SwTblBoxValue::SwTblBoxValue()
     : SfxPoolItem( RES_BOXATR_VALUE ), nValue( 0 )

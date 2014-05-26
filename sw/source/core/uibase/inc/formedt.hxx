@@ -34,9 +34,7 @@
 class SwWrtShell;
 class SwForm;
 
-/*--------------------------------------------------------------------
-     Description:   insert marker for index entry
- --------------------------------------------------------------------*/
+// insert marker for index entry
 class SwIdxFormDlg : public SvxStandardDialog
 {
     DECL_LINK( EntryHdl, Button * );

@@ -50,9 +50,7 @@ SwDocDisplayItem::SwDocDisplayItem( sal_uInt16 _nWhich ) :
 
 };
 
-/*-------------------------------------------------------------------
-    Item for the Settings dialog, page document view
---------------------------------------------------------------------*/
+// Item for the Settings dialog, page document view
 SwDocDisplayItem::SwDocDisplayItem( const SwDocDisplayItem& rDocDisplayItem ):
             SfxPoolItem(rDocDisplayItem)
 {
@@ -225,26 +223,20 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
     rVOpt.SetPostIts    (bNotes             );
 }
 
-/*--------------------------------------------------------------------
-    Description: CopyCTOR
- --------------------------------------------------------------------*/
+// CopyCTOR
 SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
             SfxPoolItem(rAddPrinterItem),
             SwPrintData( rAddPrinterItem )
 {
 }
 
-/*--------------------------------------------------------------------
-    Description: CTOR for empty Item
- --------------------------------------------------------------------*/
+// CTOR for empty Item
 SwAddPrinterItem::SwAddPrinterItem( sal_uInt16 _nWhich):
                 SfxPoolItem(_nWhich)
 {
 }
 
-/*--------------------------------------------------------------------
-    Description: CTOR from SwPrintOptions
- --------------------------------------------------------------------*/
+// CTOR from SwPrintOptions
 SwAddPrinterItem::SwAddPrinterItem( sal_uInt16 _nWhich, const SwPrintData& rPrtData ) :
     SfxPoolItem(_nWhich)
 {
@@ -265,9 +257,7 @@ bool SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
     return  SwPrintData::operator==(rItem);
 }
 
-/*--------------------------------------------------
- Item for Settings dialog, ShadowCursorPage
---------------------------------------------------*/
+// Item for Settings dialog, ShadowCursorPage
 SwShadowCursorItem::SwShadowCursorItem( sal_uInt16 _nWhich )
     : SfxPoolItem( _nWhich ),
     eMode( FILL_TAB )

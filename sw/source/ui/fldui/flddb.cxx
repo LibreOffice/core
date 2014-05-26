@@ -76,9 +76,7 @@ SwFldDBPage::~SwFldDBPage()
 {
 }
 
-/*--------------------------------------------------------------------
-    Description: initialise TabPage
- --------------------------------------------------------------------*/
+// initialise TabPage
 void SwFldDBPage::Reset(const SfxItemSet&)
 {
     Init(); // Allgemeine initialisierung
@@ -469,9 +467,7 @@ IMPL_LINK_NOARG(SwFldDBPage, AddDBHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description: Modify
- --------------------------------------------------------------------*/
+// Modify
 IMPL_LINK_NOARG(SwFldDBPage, ModifyHdl)
 {
     CheckInsert();

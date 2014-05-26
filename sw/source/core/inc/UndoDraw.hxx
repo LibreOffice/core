@@ -31,7 +31,7 @@ class SdrObjGroup;
 class SdrUndoAction;
 class SwDrawFrmFmt;
 
-// ----------- Undo for Draw Objects ---------------------------------
+// Undo for Draw Objects
 class SwSdrUndo : public SwUndo
 {
     SdrUndoAction* pSdrUndo;

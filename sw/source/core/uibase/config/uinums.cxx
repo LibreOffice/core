@@ -47,14 +47,12 @@ using namespace ::com::sun::star;
 
 #define CHAPTER_FILENAME "chapter.cfg"
 
-// SwNumRulesWithName ----------------------------------------------------
-// PUBLIC METHODES -------------------------------------------------------
-/*------------------------------------------------------------------------
+/*
  Description:   Saving a rule
  Parameter:     rCopy -- the rule to save
                     nIdx -- position, where the rule is to be saved.
                         An old rule at that position will be overwritten.
-------------------------------------------------------------------------*/
+*/
 
 SwBaseNumRules::SwBaseNumRules( const OUString& rFileName )
     :
@@ -105,7 +103,6 @@ void SwBaseNumRules::ApplyNumRules(const SwNumRulesWithName &rCopy, sal_uInt16 n
         *pNumRules[nIdx] = rCopy;
 }
 
-// PROTECTED METHODS ----------------------------------------------------
 bool SwBaseNumRules::Store(SvStream &rStream)
 {
     rStream.WriteUInt16( ACT_NUM_VERSION );

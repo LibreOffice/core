@@ -24,8 +24,6 @@
 
 TYPEINIT0(SwIndexReg);
 
-// SwIndex
-
 SwIndex::SwIndex(SwIndexReg *const pReg, sal_Int32 const nIdx)
     : m_nIndex( nIdx )
     , m_pIndexReg( pReg )
@@ -208,8 +206,6 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, sal_Int32 nIdx )
     }
     return *this;
 }
-
-// SwIndexReg
 
 SwIndexReg::SwIndexReg()
     : m_pFirst( 0 ), m_pLast( 0 )

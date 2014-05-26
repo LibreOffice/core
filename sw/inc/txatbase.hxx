@@ -132,8 +132,6 @@ public:
     virtual sal_Int32* GetEnd() SAL_OVERRIDE;
 };
 
-// --------------- Inline Implementations ------------------------
-
 inline const sal_Int32* SwTxtAttr::End() const
 {
     return const_cast<SwTxtAttr * >(this)->GetEnd();

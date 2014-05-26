@@ -23,7 +23,6 @@
 #include <fltshell.hxx>
 #include <w1class.hxx>
 
-////////////////////////////////////////////////////////////// Ww1Shell
 class Ww1Shell : public SwFltShell
 {
 public:

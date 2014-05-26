@@ -37,14 +37,11 @@
 #include "colex.hxx"
 #include "colmgr.hxx"
 
-/*-----------------------------------------------------------------------
-    Description: Taking the updated values from the set
- -----------------------------------------------------------------------*/
+// Taking the updated values from the set
 void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
     SfxItemPool* pPool = rSet.GetPool();
     sal_uInt16 nWhich = pPool->GetWhich( SID_ATTR_PAGE );
-
     if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
     {
         // alignment

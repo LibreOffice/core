@@ -24,7 +24,6 @@
 #include <unotools/configitem.hxx>
 #include "swdllapi.h"
 
-// class SwLabItem ----------------------------------------------------------
 class SwLabCfgItem;
 
 class SW_DLLPUBLIC SwLabItem : public SfxPoolItem
@@ -104,7 +103,6 @@ public:
     OUString   sGlossaryBlockName;
 };
 
-// class SwLabCfgItem -------------------------------------------------------
 class SwLabCfgItem : public utl::ConfigItem
 {
     SwLabItem   aItem;

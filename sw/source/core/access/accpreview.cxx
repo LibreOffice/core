@@ -30,8 +30,6 @@ using ::com::sun::star::lang::IndexOutOfBoundsException;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 
-// SwAccessiblePreview
-
 SwAccessiblePreview::SwAccessiblePreview( SwAccessibleMap *pMp ) :
     SwAccessibleDocumentBase( pMp )
 {

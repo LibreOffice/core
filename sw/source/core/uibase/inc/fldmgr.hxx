@@ -43,9 +43,7 @@ class SvxMacroItem;
 class SvNumberFormatter;
 class Window;
 
-/*--------------------------------------------------------------------
-    Description: the groups of fields
- --------------------------------------------------------------------*/
+// the groups of fields
 enum SwFldGroups
 {
     GRP_DOC,
@@ -62,10 +60,8 @@ struct SwFldGroupRgn
     sal_uInt16 nEnd;
 };
 
-/*--------------------------------------------------------------------
-    Description:  the field manager handles the insertation of fields
-                  with command strings
- --------------------------------------------------------------------*/
+// the field manager handles the insertation of fields
+// with command strings
 struct SwInsertFld_Data
 {
     sal_uInt16 nTypeId;

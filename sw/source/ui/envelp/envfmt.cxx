@@ -326,14 +326,10 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
     return 0;
 }
 
-/*------------------------------------------------------------------------
-  Description: A temporary Itemset that gets discarded at abort
-------------------------------------------------------------------------*/
-
+// A temporary Itemset that gets discarded at abort
 SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, bool bSender)
 {
     SfxItemSet *&pAddrSet = bSender ? GetParentSwEnvDlg()->pSenderSet : GetParentSwEnvDlg()->pAddresseeSet;
-
     if (!pAddrSet)
     {
         // determine range (merge both Itemsets' ranges)

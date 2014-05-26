@@ -24,9 +24,7 @@
 class SwTxtNode;
 class SwDoc;
 
-// SWTXT_TOXMARK *******************************
 // Attribute for indices/tables of contents.
-
 class SwTxtTOXMark : public SwTxtAttrEnd
 {
     SwTxtNode * m_pTxtNode;

@@ -186,9 +186,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, OKHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description: modify
- --------------------------------------------------------------------*/
+// modify
 IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl)
 {
     bool bEnable = m_pNumberingOnCB->IsChecked() && !m_pDivisorED->GetText().isEmpty();
@@ -200,9 +198,7 @@ IMPL_LINK_NOARG(SwLineNumberingDlg, ModifyHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description: On/Off
- --------------------------------------------------------------------*/
+// On/Off
 IMPL_LINK_NOARG(SwLineNumberingDlg, LineOnOffHdl)
 {
     bool bEnable = m_pNumberingOnCB->IsChecked();

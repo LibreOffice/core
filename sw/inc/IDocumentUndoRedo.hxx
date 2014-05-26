@@ -32,8 +32,6 @@ namespace sw {
     class RepeatContext;
 }
 
-/** IDocumentUndoRedo
-*/
 class IDocumentUndoRedo
 {
 public:

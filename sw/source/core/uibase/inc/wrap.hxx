@@ -39,10 +39,7 @@ public:
     SwWrtShell*  GetWrtShell()   { return pWrtShell; }
 };
 
-/*--------------------------------------------------------------------
-    Description:    circulation TabPage
- --------------------------------------------------------------------*/
-
+// circulation TabPage
 class SwWrapTabPage: public SfxTabPage
 {
     // WRAPPING

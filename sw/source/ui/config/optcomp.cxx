@@ -40,8 +40,6 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::uno;
 using namespace ::std;
 
-// struct CompatibilityItem ----------------------------------------------
-
 struct CompatibilityItem
 {
     OUString    m_sName;
@@ -92,8 +90,6 @@ struct SwCompatibilityOptPage_Impl
 
     SwCompatibilityItemList     m_aList;
 };
-
-// class SwCompatibilityOptPage ------------------------------------------
 
 SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptCompatPage",

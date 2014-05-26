@@ -34,8 +34,6 @@
 
 using namespace ::com::sun::star;
 
-// SwRenderData
-
 SwRenderData::SwRenderData()
 {
 }
@@ -155,8 +153,6 @@ void SwRenderData::MakeSwPrtOptions(
     rOptions.SetPrintUIOptions( pOpt );
     rOptions.SetRenderData( this );
 }
-
-// SwPrintUIOptions
 
 SwPrintUIOptions::SwPrintUIOptions(
     sal_uInt16 nCurrentPage,

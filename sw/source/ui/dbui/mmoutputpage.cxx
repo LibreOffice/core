@@ -879,9 +879,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendAsHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-/*-------------------------------------------------------------------------
-    Send documents as e-mail
-  -----------------------------------------------------------------------*/
+// Send documents as e-mail
 IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();

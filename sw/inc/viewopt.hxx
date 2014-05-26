@@ -189,10 +189,7 @@ public:
     inline sal_uInt32   GetCoreOptions() const {return nCoreOptions;}
     inline void     SetUIOptions( const SwViewOption& );
 
-/*---------------------------------------------------------------------------
-    Options from nCoreOptions
-----------------------------------------------------------------------------*/
-
+    // Options from nCoreOptions
     inline bool IsIdle() const
         { return bIdle; }
 
@@ -330,9 +327,7 @@ public:
     inline void SetCrossHair( bool b )
         { b ? (nCoreOptions |= VIEWOPT_1_CROSSHAIR ) : ( nCoreOptions &= ~VIEWOPT_1_CROSSHAIR); }
 
-/*---------------------------------------------------------------------------
-    Options from nCore2Options
-----------------------------------------------------------------------------*/
+    // Options from nCore2Options
     inline bool IsBlackFont() const
         {return nCore2Options & VIEWOPT_CORE2_BLACKFONT ? sal_True : sal_False;}
 
@@ -436,10 +431,7 @@ public:
     inline bool operator == ( const SwViewOption &rOpt ) const;
     inline bool operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
-/*---------------------------------------------------------------------------
-    Options from nUIOptions
-----------------------------------------------------------------------------*/
-
+    // Options from nUIOptions
     bool    IsViewVScrollBar() const
         {
 #if HAVE_FEATURE_DESKTOP

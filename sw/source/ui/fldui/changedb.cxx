@@ -49,9 +49,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
 
-/*--------------------------------------------------------------------
-    Description: edit insert-field
- --------------------------------------------------------------------*/
+// edit insert-field
 SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
     : SvxStandardDialog(&rVw.GetViewFrame()->GetWindow(), "ExchangeDatabasesDialog",
         "modules/swriter/ui/exchangedatabases.ui")
@@ -85,14 +83,11 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw)
     TreeSelectHdl();
 }
 
-/*--------------------------------------------------------------------
-    Description: initialise database listboxes
- --------------------------------------------------------------------*/
+// initialise database listboxes
 void SwChangeDBDlg::FillDBPopup()
 {
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference<XDatabaseContext> xDBContext = DatabaseContext::create(xContext);
-
     const SwDBData& rDBData = pSh->GetDBData();
     m_pAvailDBTLB->Select(rDBData.sDataSource, rDBData.sCommand, aEmptyOUStr);
 
@@ -165,22 +160,16 @@ SvTreeListEntry* SwChangeDBDlg::Insert(const OUString& rDBName)
     return pRet;
 }
 
-/*--------------------------------------------------------------------
-    Description: destroy dialog
- --------------------------------------------------------------------*/
+// destroy dialog
 SwChangeDBDlg::~SwChangeDBDlg()
 {
     delete pMgr;
 }
-
-/*--------------------------------------------------------------------
-     Description:   close
- --------------------------------------------------------------------*/
+// close
 void SwChangeDBDlg::Apply()
 {
     UpdateFlds();
 }
-
 void SwChangeDBDlg::UpdateFlds()
 {
     std::vector<OUString> aDBNames;
@@ -243,9 +232,7 @@ IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description: convert database name for display
- --------------------------------------------------------------------*/
+// convert database name for display
 void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
 {
     if (rDBData.sDataSource.isEmpty() && rDBData.sCommand.isEmpty())

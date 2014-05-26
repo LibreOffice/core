@@ -135,8 +135,6 @@ void SAL_CALL SwOLEListener_Impl::disposing( const lang::EventObject& ) throw (u
         pOLELRU_Cache->RemoveObj( *mpObj );
 }
 
-// SwEmbedObjectLink
-
 // TODO/LATER: actually SwEmbedObjectLink should be used here, but because different objects are used to control
 //             embedded object different link objects with the same functionality had to be implemented
 
@@ -204,8 +202,6 @@ void SwEmbedObjectLink::Closed()
     pOleNode->BreakFileLink_Impl();
     SvBaseLink::Closed();
 }
-
-// SwOLENode
 
 SwOLENode::SwOLENode( const SwNodeIndex &rWhere,
                     const svt::EmbeddedObjectRef& xObj,

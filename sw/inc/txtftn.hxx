@@ -29,8 +29,6 @@ class SwNodes;
 class SwDoc;
 class SwFrm;
 
-// ATT_FTN **********************************************************
-
 class SW_DLLPUBLIC SwTxtFtn : public SwTxtAttr
 {
     SwNodeIndex * m_pStartNode;

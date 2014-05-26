@@ -40,9 +40,8 @@
 class SwWrtShell;
 class SwTOXMgr;
 class SwTOXMark;
-/*--------------------------------------------------------------------
-     Description:   insert mark for index entry
- --------------------------------------------------------------------*/
+
+// insert mark for index entry
 class SwIndexMarkFloatDlg;
 class SwIndexMarkModalDlg;
 

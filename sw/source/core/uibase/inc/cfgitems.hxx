@@ -40,9 +40,8 @@ class SwShdwCrsrOptionsTabPage;
 SfxPrinter* GetPrt( SwViewShell* );
 void        SetPrt( SfxPrinter* );
 
-/*--------OS 12.01.95 -----------------------------------
-Item for settings dialog - document view
---------------------------------------------------------- */
+// OS 12.01.95
+// Item for settings dialog - document view
 class SW_DLLPUBLIC SwDocDisplayItem : public SfxPoolItem
 {
     friend class SwShdwCrsrOptionsTabPage;
@@ -74,9 +73,8 @@ public:
     void                        FillViewOptions( SwViewOption& rVOpt) const;
 };
 
-/*--------OS 12.01.95 -----------------------------------
-Item for settings dialog, element page
---------------------------------------------------------- */
+// OS 12.01.95
+// Item for settings dialog, element page
 class SW_DLLPUBLIC SwElemItem : public SfxPoolItem
 {
     //view
@@ -112,9 +110,8 @@ public:
 
 };
 
-/*--------OS 12.01.95 -----------------------------------
-Item for settings dialog - printer/add ons
---------------------------------------------------------- */
+// OS 12.01.95
+// Item for settings dialog - printer/add ons
 class SW_DLLPUBLIC SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
     friend class SwAddPrinterTabPage;
@@ -158,9 +155,8 @@ public:
 
 };
 
-/*--------OS 12.01.95 -----------------------------------
-Item for settings dialog, ShadowCursorPage
---------------------------------------------------------- */
+// OS 12.01.95
+// Item for settings dialog, ShadowCursorPage
 class SW_DLLPUBLIC SwShadowCursorItem : public SfxPoolItem
 {
     sal_uInt8 eMode;
@@ -186,9 +182,8 @@ public:
 
 #ifdef DBG_UTIL
 
-/*--------OS 12.01.95 -----------------------------------
-Item for settings dialog - test settings
---------------------------------------------------------- */
+// OS 12.01.95
+// Item for settings dialog - test settings
 class SW_DLLPUBLIC SwTestItem : public SfxPoolItem
 {
     friend class SwModule;
