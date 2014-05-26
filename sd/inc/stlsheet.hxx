@@ -120,7 +120,7 @@ public:
     void notifyModifyListener();
 
 protected:
-    const SfxItemPropertySimpleEntry* getPropertyMapEntry( const OUString& rPropertyName ) const throw();
+    const SfxItemPropertySimpleEntry* getPropertyMapEntry( const OUString& rPropertyName ) const throw (css::uno::RuntimeException);
 
     virtual void Load (SvStream& rIn, sal_uInt16 nVersion) SAL_OVERRIDE;
     virtual void Store(SvStream& rOut) SAL_OVERRIDE;
