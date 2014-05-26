@@ -451,7 +451,7 @@ long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
     aOptions.bTotalSize  = bTotalSize;
 
     return aCol[nCol].GetNeededSize
-        ( nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, aOptions );
+        ( nRow, pDev, nPPTX, nPPTY, rZoomX, rZoomY, bWidth, aOptions, NULL );
 }
 
 bool ScTable::SetOptimalHeight(
@@ -1802,7 +1802,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
 
         Fraction aZoom(1,1);
         nPixel = aCol[rCol].GetNeededSize(
-            nRow, pDev, nPPTX, nPPTY, aZoom, aZoom, true, aOptions );
+            nRow, pDev, nPPTX, nPPTY, aZoom, aZoom, true, aOptions, NULL );
 
         aCol[rCol].SetTextWidth(nRow, static_cast<sal_uInt16>(nPixel));
     }
