@@ -40,7 +40,15 @@ GL3DBarChart::GL3DBarChart(
     mpRenderer->SetSize(aSize);
     mrWindow.setRenderer(this);
     mpRenderer->init();
-    maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, MoveCamera));
+}
+
+GL3DBarChart::BarInformation::BarInformation(const glm::vec3& rPos, float nVal,
+        sal_Int32 nIndex, sal_Int32 nSeriesIndex):
+    maPos(rPos),
+    mnVal(nVal),
+    mnIndex(nIndex),
+    mnSeriesIndex(nSeriesIndex)
+{
 }
 
 GL3DBarChart::~GL3DBarChart()
@@ -102,6 +110,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         COL_RED, COL_GREEN, COL_YELLOW, COL_BROWN, COL_GRAY
     };
 
+    maCategories.clear();
+    maSeriesNames.clear();
+    maSeriesNames.reserve(rDataSeriesContainer.size());
+    maBarMap.clear();
     maShapes.clear();
     maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
     mpCamera = static_cast<opengl3D::Camera*>(&maShapes.back());
@@ -124,6 +136,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         OUString aSeriesName =
             DataSeriesHelper::getDataSeriesLabel(
                 rDataSeries.getModel(), mxChartType->getRoleOfSequenceForSeriesLabel());
+
+        maSeriesNames.push_back(aSeriesName);
 
         if(!aSeriesName.isEmpty())
         {
@@ -154,6 +168,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             glm::mat4 aScaleMatrix = glm::scale(nBarSizeX, nBarSizeY, float(nVal/nMaxVal));
             glm::mat4 aTranslationMatrix = glm::translate(nXPos, nYPos, 0.0f);
             glm::mat4 aBarPosition = aTranslationMatrix * aScaleMatrix;
+
+            maBarMap.insert(std::pair<sal_uInt32, BarInformation>(nId,
+                        BarInformation(glm::vec3(nXPos, nYPos, float(nVal/nMaxVal)),
+                            nVal, nIndex, nSeriesIndex)));
 
             maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId++));
         }
@@ -186,12 +204,6 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     pAxis->setPosition(aBegin, aEnd);
     pAxis->setLineColor(COL_BLUE);
 
-    // test for information
-    maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
-                "I'm really nice text", 0));
-    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
-    pScreenText->setPosition(glm::vec2(-1.0f, 0.9f), glm::vec2(-0.6f, 0.75f));
-
     // Chart background.
     maShapes.push_back(new opengl3D::Rectangle(mpRenderer.get(), nId++));
     opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(&maShapes.back());
@@ -208,6 +220,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     uno::Sequence<OUString> aCats = rCatProvider.getSimpleCategories();
     for (sal_Int32 i = 0; i < aCats.getLength(); ++i)
     {
+        maCategories.push_back(aCats[i]);
         if(aCats[i].isEmpty())
             continue;
 
@@ -292,16 +305,41 @@ public:
 
 }
 
-void GL3DBarChart::clickedAt(const Point& rPos)
+void GL3DBarChart::clickedAt(const Point& /*rPos*/)
 {
-    sal_uInt32 nId = 1;
+    sal_uInt32 nId = 5;
+    /*
     {
         PickingModeSetter aPickingModeSetter(mpRenderer.get());
         render();
         nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y());
     }
-    if (mpCamera && nId != COL_WHITE)
-        mpCamera->zoom(nId);
+    */
+
+    std::map<sal_uInt32, const BarInformation>::const_iterator itr =
+        maBarMap.find(nId);
+
+    if(itr == maBarMap.end())
+        return;
+
+    const BarInformation& rBarInfo = itr->second;
+    mnStepsTotal = 100;
+    mnStep = 0;
+    maOldCameraDirection = maCameraDirection;
+    maCameraDirection = rBarInfo.maPos;
+    render();
+
+    maStep = (rBarInfo.maPos - maCameraPosition)/102.0f;
+
+    maTimer.SetTimeout(TIMEOUT);
+    maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, MoveToBar));
+    maTimer.Start();
+
+    maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
+                OUString("Value: ") + OUString::number(rBarInfo.mnVal), 0));
+    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
+    pScreenText->setPosition(glm::vec2(-1.0f, 0.9f), glm::vec2(-0.6f, 0.75f));
+
 }
 
 void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 nButtons)
@@ -357,6 +395,7 @@ void GL3DBarChart::moveToCorner()
     mnStepsTotal = 100;
     maStep = (getCornerPosition(mnCornerId) - maCameraPosition) / float(mnStepsTotal);
     maTimer.SetTimeout(TIMEOUT);
+    maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, MoveCamera));
     maTimer.Start();
 }
 
@@ -374,6 +413,27 @@ IMPL_LINK_NOARG(GL3DBarChart, MoveCamera)
     }
     else
     {
+        mnStep = 0;
+    }
+
+    return 0;
+}
+
+IMPL_LINK_NOARG(GL3DBarChart, MoveToBar)
+{
+    maTimer.Stop();
+    if(mnStep < mnStepsTotal)
+    {
+        ++mnStep;
+        maCameraPosition += maStep;
+        mpCamera->setPosition(maCameraPosition);
+        render();
+        maTimer.SetTimeout(TIMEOUT);
+        maTimer.Start();
+    }
+    else
+    {
+        maShapes.pop_back();
         mnStep = 0;
     }
 
