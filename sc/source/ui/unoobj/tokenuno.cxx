@@ -476,6 +476,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     break;
                 default:
                     OSL_TRACE( "ScTokenConversion::ConvertToTokenSequence: unhandled token type SvStackVar %d", rToken.GetType());
+                    //fall-through
                 case svSep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
                 case svJump:    // occurs with ocIf, ocChose
                 case svMissing: // occurs with ocMissing
