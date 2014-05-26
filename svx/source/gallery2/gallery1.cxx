@@ -596,7 +596,7 @@ bool Gallery::RemoveTheme( const OUString& rThemeName )
     return bRet;
 }
 
-GalleryTheme* Gallery::ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry )
+GalleryTheme* Gallery::ImplGetCachedTheme(const GalleryThemeEntry* pThemeEntry)
 {
     GalleryTheme* pTheme = NULL;
 
@@ -623,12 +623,18 @@ GalleryTheme* Gallery::ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry 
 
                 if( pIStm )
                 {
-                    pTheme = new GalleryTheme( this, (GalleryThemeEntry*) pThemeEntry );
-                    ReadGalleryTheme( *pIStm, *pTheme );
-
-                    if( pIStm->GetError() )
+                    try
                     {
-                        delete pTheme, pTheme = NULL;
+                        pTheme = new GalleryTheme( this, (GalleryThemeEntry*) pThemeEntry );
+                        ReadGalleryTheme( *pIStm, *pTheme );
+
+                        if( pIStm->GetError() )
+                        {
+                            delete pTheme, pTheme = NULL;
+                        }
+                    }
+                    catch (const css::ucb::ContentCreationException&)
+                    {
                     }
 
                     delete pIStm;
