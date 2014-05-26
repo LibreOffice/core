@@ -408,7 +408,7 @@ ContentProvider::queryStorageClone( const OUString & rUri ) const
 uno::Reference< io::XInputStream >
 ContentProvider::queryInputStream( const OUString & rUri,
                                    const OUString & rPassword ) const
-    throw ( packages::WrongPasswordException )
+    throw ( packages::WrongPasswordException, css::uno::RuntimeException )
 {
     if ( m_xStgElemFac.is() )
     {

@@ -122,7 +122,8 @@ public:
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
     queryInputStream( const OUString & rUri,
                       const OUString & rPassword ) const
-        throw ( com::sun::star::packages::WrongPasswordException );
+        throw ( com::sun::star::packages::WrongPasswordException,
+                css::uno::RuntimeException );
 
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
     queryOutputStream( const OUString & rUri,
