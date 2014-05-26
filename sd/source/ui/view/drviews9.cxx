@@ -59,6 +59,7 @@
 
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -208,7 +209,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
     CheckLineTo (rReq);
 
     SfxBindings&    rBindings = GetViewFrame()->GetBindings();
-    SfxItemSet*     pAttr = new SfxItemSet ( GetDoc()->GetPool() );
+    boost::scoped_ptr<SfxItemSet> pAttr(new SfxItemSet ( GetDoc()->GetPool() ));
 
     GetView()->GetAttributes( *pAttr );
     const SfxItemSet* pArgs = rReq.GetArgs();
@@ -733,9 +734,8 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
             ;
     }
 
-    mpDrawView->SetAttributes (*(const SfxItemSet *) pAttr);
+    mpDrawView->SetAttributes (*(const SfxItemSet *) pAttr.get());
     rReq.Ignore ();
-    delete pAttr;
 }
 
 /**

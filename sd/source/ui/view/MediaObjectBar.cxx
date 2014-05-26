@@ -39,6 +39,7 @@
 #include "drawview.hxx"
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace sd;
 
@@ -89,7 +90,7 @@ void MediaObjectBar::GetState( SfxItemSet& rSet )
     {
         if( SID_AVMEDIA_TOOLBOX == nWhich )
         {
-            SdrMarkList* pMarkList = new SdrMarkList( mpView->GetMarkedObjectList() );
+            boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( mpView->GetMarkedObjectList() ));
             bool         bDisable = true;
 
             if( 1 == pMarkList->GetMarkCount() )
@@ -108,8 +109,6 @@ void MediaObjectBar::GetState( SfxItemSet& rSet )
 
             if( bDisable )
                 rSet.DisableItem( SID_AVMEDIA_TOOLBOX );
-
-            delete pMarkList;
         }
 
         nWhich = aIter.NextWhich();
@@ -130,7 +129,7 @@ void MediaObjectBar::Execute( SfxRequest& rReq )
 
         if( pItem )
         {
-            SdrMarkList* pMarkList = new SdrMarkList( mpView->GetMarkedObjectList() );
+            boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( mpView->GetMarkedObjectList() ));
 
             if( 1 == pMarkList->GetMarkCount() )
             {
@@ -146,8 +145,6 @@ void MediaObjectBar::Execute( SfxRequest& rReq )
                     rDoc.SetChanged(true);
                 }
             }
-
-            delete pMarkList;
         }
     }
 }
