@@ -556,8 +556,8 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
             SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
             if ( pObject )
             {
-                OObjectBase* pBase = dynamic_cast<OObjectBase*>(pObject);
-                pBase->EndListening(false);
+                OObjectBase& rBase = dynamic_cast<OObjectBase&>(*pObject);
+                rBase.EndListening(false);
                 if ( aPos.X < i_nLeftMargin )
                 {
                     aPos.X  = i_nLeftMargin;
@@ -571,9 +571,9 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
                         aSize.Width += aPos.X - i_nLeftMargin;
                         aPos.X = i_nLeftMargin;
                         // add listener around
-                        pBase->StartListening();
+                        rBase.StartListening();
                         xReportComponent->setSize(aSize);
-                        pBase->EndListening(false);
+                        rBase.EndListening(false);
                     }
                     bChanged = true;
                 }
@@ -591,7 +591,7 @@ void OReportSection::impl_adjustObjectSizePosition(sal_Int32 i_nPaperWidth,sal_I
 
                     pObject->RecalcBoundRect();
                 }
-                pBase->StartListening();
+                rBase.StartListening();
             }
         }
     }
