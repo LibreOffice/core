@@ -284,28 +284,6 @@ void GL3DBarChart::update()
     render();
 }
 
-namespace {
-
-class PickingModeSetter
-{
-private:
-    opengl3D::OpenGL3DRenderer* mpRenderer;
-
-public:
-    PickingModeSetter(opengl3D::OpenGL3DRenderer* pRenderer):
-        mpRenderer(pRenderer)
-    {
-        mpRenderer->SetPickingMode(true);
-    }
-
-    ~PickingModeSetter()
-    {
-        mpRenderer->SetPickingMode(false);
-    }
-};
-
-}
-
 void GL3DBarChart::clickedAt(const Point& /*rPos*/, sal_uInt16 nButtons)
 {
     if(mbBlockUserInput)
