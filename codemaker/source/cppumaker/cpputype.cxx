@@ -914,7 +914,7 @@ OUString CppuType::resolveOuterTypedefs(OUString const & name) const {
         if (m_typeMgr->getSort(n, &ent) != codemaker::UnoType::SORT_TYPEDEF) {
             return n;
         }
-        n = dynamic_cast< unoidl::TypedefEntity * >(ent.get())->getType();
+        n = dynamic_cast<unoidl::TypedefEntity&>(*ent.get()).getType();
     }
 }
 
