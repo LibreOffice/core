@@ -1746,6 +1746,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, cons
             case DataType::DOUBLE:
             case DataType::TIMESTAMP:
                 bSetZero = true;
+                //fall-through
             case DataType::LONGVARBINARY:
             case DataType::DATE:
             case DataType::BIT:
