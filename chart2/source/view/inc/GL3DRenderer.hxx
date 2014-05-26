@@ -16,6 +16,7 @@
 #include "glm/gtx/quaternion.hpp"
 
 #include <com/sun/star/awt/Point.hpp>
+#include <boost/shared_array.hpp>
 #include <tools/gen.hxx>
 
 #include <vcl/bitmapex.hxx>
@@ -161,8 +162,16 @@ public:
     void EndAddShape3DExtrudeObject();
     void SetSize(const Size& rSize);
     void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up);
-    void CreateTextTexture(const BitmapEx& rBitmapEx, glm::vec3 vTopLeft,glm::vec3 vTopRight, glm::vec3 vBottomRight, glm::vec3 vBottomLeft, sal_uInt32 nUniqueId);
-    void CreateScreenTextTexture(const BitmapEx& rBitmapEx, glm::vec2 vTopLeft, glm::vec2 vBottomRight, sal_uInt32 nUniqueId);
+    void CreateTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
+                           ::Size maSizePixels,
+                           glm::vec3 vTopLeft,glm::vec3 vTopRight,
+                           glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                           sal_uInt32 nUniqueId);
+    void CreateScreenTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
+                                 ::Size maSizePixels,
+
+                                 glm::vec2 vTopLeft, glm::vec2 vBottomRight,
+                                 sal_uInt32 nUniqueId);
     void ProcessUnrenderedShape();
 
     void SetPickingMode(bool bPickingMode);

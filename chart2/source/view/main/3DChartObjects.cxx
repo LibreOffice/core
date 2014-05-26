@@ -68,7 +68,7 @@ void Line::setLineColor(const Color& rColor)
     maLineColor = rColor;
 }
 
-const BitmapEx& TextCache::getText(OUString const & rText)
+const TextCacheItem& TextCache::getText(OUString const & rText)
 {
     TextCacheType::const_iterator itr = maTextCache.find(rText);
     if(itr != maTextCache.end())
@@ -85,14 +85,16 @@ const BitmapEx& TextCache::getText(OUString const & rText)
     aDevice.SetBackground(Wallpaper(COL_TRANSPARENT));
     aDevice.DrawText(Point(0,0), rText);
 
-    BitmapEx* pText = new BitmapEx(aDevice.GetBitmapEx(Point(0,0), aDevice.GetOutputSize()));
-    maTextCache.insert(rText, pText);
-    return *pText;
+    BitmapEx aText(aDevice.GetBitmapEx(Point(0,0), aDevice.GetOutputSize()));
+    TextCacheItem *pItem = new TextCacheItem(OpenGLHelper::ConvertBitmapExToRGBABuffer(aText), aText.GetSizePixel());
+    maTextCache.insert(rText, pItem);
+
+    return *maTextCache.find(rText)->second;
 }
 
 Text::Text(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId):
     Renderable3DObject(pRenderer, nId),
-    mrText(rTextCache.getText(rStr))
+    maText(rTextCache.getText(rStr))
 {
 }
 
@@ -100,12 +102,14 @@ void Text::render()
 {
     glm::vec3 dir2 = maTopRight - maTopLeft;
     glm::vec3 bottomLeft = maBottomRight - dir2;
-    mpRenderer->CreateTextTexture(mrText, maTopLeft, maTopRight, maBottomRight, bottomLeft, mnUniqueId);
+    mpRenderer->CreateTextTexture(maText.maPixels, maText.maSize,
+                                  maTopLeft, maTopRight, maBottomRight, bottomLeft,
+                                  mnUniqueId);
 }
 
 Size Text::getSize() const
 {
-    return mrText.GetSizePixel();
+    return maText.maSize;
 }
 
 void Text::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight)
@@ -117,7 +121,7 @@ void Text::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, co
 
 ScreenText::ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId):
     Renderable3DObject(pRenderer, nId),
-    mrText(rTextCache.getText(rStr))
+    maText(rTextCache.getText(rStr))
 {
 }
 
@@ -129,7 +133,9 @@ void ScreenText::setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottom
 
 void ScreenText::render()
 {
-    mpRenderer->CreateScreenTextTexture(mrText, maTopLeft, maBottomRight, mnUniqueId);
+    mpRenderer->CreateScreenTextTexture(maText.maPixels, maText.maSize,
+                                        maTopLeft, maBottomRight,
+                                        mnUniqueId);
 }
 
 Rectangle::Rectangle(OpenGL3DRenderer* pRenderer, sal_uInt32 nId):
