@@ -7,23 +7,34 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    width="486"
    height="80"
-   id="svg1205">
-  <defs
-     id="defs1207">
-    <clipPath
-       id="clipPath11479-0">
-      <rect
-         width="530"
-         height="87.272736"
-         x="6.6086682e-06"
-         y="-18.000011"
-         id="rect11481-5"
-         style="opacity:0.6;fill:#530260;fill-opacity:1;stroke:none" />
-    </clipPath>
-  </defs>
+   id="svg1205"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="flat_logo.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="993"
+     inkscape:window-height="709"
+     id="namedview3134"
+     showgrid="false"
+     inkscape:zoom="1.5843621"
+     inkscape:cx="267.37384"
+     inkscape:cy="-38.823705"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1205" />
   <metadata
      id="metadata1210">
     <rdf:RDF>
@@ -32,37 +43,27 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <g
-     transform="matrix(0.91698112,0,0,0.91666657,-6e-6,16.50001)"
-     clip-path="url(#clipPath11479-0)"
-     id="g10412-3"
-     style="fill:#71a752;fill-opacity:1">
-    <text
-       x="-287.35712"
-       y="233.28569"
-       id="text2985-8"
-       xml:space="preserve"
-       style="font-size:40px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#71a752;fill-opacity:1;stroke:none"><tspan
-         x="-287.35712"
-         y="233.28569"
-         id="tspan2987-8"
-         style="fill:#71a752;fill-opacity:1" /></text>
-    <path
-       d="m 530,-18.000011 0,300.000031 -530,0 0,-300.000031 z"
-       id="rect3983-6"
-       style="fill:#71a752;fill-opacity:1;stroke:none" />
-    <rect
-       width="530"
-       height="300"
-       x="5.4150391e-06"
-       y="-18"
-       id="rect13441-6"
-       style="fill:#71a752;fill-opacity:1;stroke:none" />
-  </g>
+  <text
+     sodipodi:linespacing="125%"
+     style="font-size:36.67295456px;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#71a752;fill-opacity:1;stroke:none"
+     xml:space="preserve"
+     id="text2985-8"
+     y="230.38472"
+     x="-263.45587"
+     transform="scale(1.0001716,0.99982847)"><tspan
+       style="fill:#71a752;fill-opacity:1"
+       id="tspan2987-8"
+       y="230.38472"
+       x="-263.45587" /></text>
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:#71a752;fill-opacity:1;stroke:none"
+     id="rect3983-6"
+     d="m 485.99999,0 0,80 L -6e-6,80 l 0,-80 z" />
   <g
      transform="matrix(0.62747746,0,0,0.62747746,-228.72288,-1457.0571)"
      id="g4122"
