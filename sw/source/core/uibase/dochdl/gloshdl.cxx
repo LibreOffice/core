@@ -62,7 +62,6 @@ using namespace ::com::sun::star;
 
 const short RET_EDIT = 100;
 
-// PUBLIC METHODS -------------------------------------------------------
 struct TextBlockInfo_Impl
 {
     OUString sTitle;

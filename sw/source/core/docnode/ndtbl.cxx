@@ -2303,10 +2303,6 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
     return nRet;
 }
 
-/**
- * SwTableNode
- *
- */
 SwTableNode::SwTableNode( const SwNodeIndex& rIdx )
     : SwStartNode( rIdx, ND_TABLENODE )
 {

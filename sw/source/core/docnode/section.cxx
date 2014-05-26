@@ -189,8 +189,6 @@ OUString SwSectionData::CollapseWhiteSpaces(const OUString& sName)
     return aBuf.makeStringAndClear();
 }
 
-// SwSection ===========================================================
-
 SwSection::SwSection(
         SectionType const eType, OUString const& rName, SwSectionFmt & rFormat)
     : SwClient(& rFormat)
@@ -623,8 +621,6 @@ const SwTOXBase* SwSection::GetTOXBase() const
         pRet = dynamic_cast<const SwTOXBaseSection*>(this);
     return pRet;
 }
-
-// SwSectionFmt ========================================================
 
 SwSectionFmt::SwSectionFmt( SwSectionFmt* pDrvdFrm, SwDoc *pDoc )
     : SwFrmFmt( pDoc->GetAttrPool(), OUString(), pDrvdFrm )

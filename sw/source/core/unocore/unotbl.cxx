@@ -1953,8 +1953,6 @@ void SwXTextTableCursor::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNe
     ClientModify(this, pOld, pNew);
 }
 
-// SwXTextTable
-
 class SwXTextTable::Impl
 {
 private:
@@ -1965,8 +1963,6 @@ public:
 
     Impl() : m_Listeners(m_Mutex) { }
 };
-
-// SwTableProperties_Impl
 
 class SwTableProperties_Impl
 {

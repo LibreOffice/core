@@ -395,9 +395,9 @@ public:
                                                 bool bFmt = false,
                                                 const OString& sDefPage = OString(),
                                                 const OUString* pFmtStr = 0) = 0;
-    // @param nSlot
-    // Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
-    // Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane
+    /// @param nSlot
+    /// Identifies optional Slot by which the creation of the Template (Style) dialog is triggered.
+    /// Currently used, if nRegion == SFX_STYLE_FAMILY_PAGE in order to activate certain dialog pane
     virtual SfxAbstractApplyTabDialog*  CreateTemplateDialog(
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,

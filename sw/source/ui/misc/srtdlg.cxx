@@ -76,9 +76,7 @@ static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
     rLstBox.Clear();
 }
 
-/*--------------------------------------------------------------------
-     Description: determine lines and columns for table selection
- --------------------------------------------------------------------*/
+// determine lines and columns for table selection
 static bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 {
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
@@ -103,9 +101,7 @@ static bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
     return true;
 }
 
-/*--------------------------------------------------------------------
-     Description: init list
- --------------------------------------------------------------------*/
+// init list
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell)
     : SvxStandardDialog(pParent, "SortDialog", "modules/swriter/ui/sortdialog.ui")
     , aColTxt(SW_RES(STR_COL))
@@ -270,9 +266,7 @@ sal_Unicode SwSortDlg::GetDelimChar() const
     return cRet;
 }
 
-/*--------------------------------------------------------------------
-    Description: pass on to the Core
- --------------------------------------------------------------------*/
+// pass on to the Core
 void SwSortDlg::Apply()
 {
     // save all settings

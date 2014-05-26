@@ -68,10 +68,8 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------
- Tools->Options->Writer->View
- Tools->Options->Writer/Web->View
---------------------------------------------------------- */
+// Tools->Options->Writer->View
+// Tools->Options->Writer/Web->View
 SwContentOptPage::SwContentOptPage( Window* pParent,
                                       const SfxItemSet& rCoreSet ) :
     SfxTabPage(pParent, "ViewOptionsPage",
@@ -283,9 +281,8 @@ IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
     VertRulerHdl(m_pVRulerCBox);
     return 0;
 }
-/*------------------------------------------------------
- TabPage Printer additional settings
--------------------------------------------------------*/
+
+// TabPage Printer additional settings
 SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
     const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "PrintOptionsPage",
@@ -507,9 +504,7 @@ void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
     }
 }
 
-/*--------------------------------------------------
-    Tabpage Standardfonts
---------------------------------------------------*/
+// Tabpage Standardfonts
 SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
                                        const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptFontTabPage" , "modules/swriter/ui/optfonttabpage.ui" , rSet),
@@ -1446,9 +1441,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-/*--------------------------------------------------
- TabPage for Redlining
---------------------------------------------------*/
+// TabPage for Redlining
 struct CharAttr
 {
     sal_uInt16 nItemId;
@@ -1482,9 +1475,7 @@ static sal_uInt16 aDeletedAttrMap[] = { 0, 1, 2, 5, 6, 7, 8, 9, 10 };
 // not used
 static sal_uInt16 aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 
-/*-----------------------------------------------------------------------
-    Description: Preview of selection
- -----------------------------------------------------------------------*/
+// Preview of selection
 SwMarkPreview::SwMarkPreview( Window *pParent, WinBits nWinBits ) :
 
     Window(pParent, nWinBits),

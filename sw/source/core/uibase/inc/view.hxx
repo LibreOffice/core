@@ -115,9 +115,7 @@ enum ShellModes
     SHELL_MODE_NAVIGATION
 };
 
-/*--------------------------------------------------------------------
-    Description:    apply a template
- --------------------------------------------------------------------*/
+// apply a template
 struct SwApplyTemplate
 {
     union
@@ -144,9 +142,7 @@ struct SwApplyTemplate
     }
 };
 
-/*--------------------------------------------------------------------
-    Description:    view of a document
- --------------------------------------------------------------------*/
+// view of a document
 class SW_DLLPUBLIC SwView: public SfxViewShell
 {
     friend class SwHHCWrapper;
@@ -666,7 +662,6 @@ public:
     void SetAnnotationMode(bool bMode);
 };
 
-// ----------------- inline Methoden ----------------------
 inline long SwView::GetXScroll() const
 {
     return m_aVisArea.GetWidth() * nScrollX / 100L;

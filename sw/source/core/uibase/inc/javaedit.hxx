@@ -30,8 +30,6 @@ class SwScriptField;
 
 namespace sfx2 { class FileDialogHelper; }
 
-// class SwJavaEditDialog -------------------------------------------------
-
 class SwJavaEditDialog : public SvxStandardDialog
 {
 private:

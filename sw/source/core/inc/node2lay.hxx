@@ -21,7 +21,7 @@
 
 #include <tools/solar.h>
 
-/* --------------------------------------------------
+/*
  * Die Klasse SwNode2Layout stellt die Verbindung von Nodes zum Layout her.
  * Sie liefert einen intelligenten Iterator ueber die zum Node oder Nodebereich
  * gehoerenden Frames. Je nach Zweck der Iteration, z.B. um vor oder hinter
@@ -41,7 +41,7 @@
  *    die Frames gehaengt werden koennen.
  * 2. Die Lieferung der Frames hinter/vor die die neuen Frames eines Nodes
  *    gehaengt werden muessen, ebenfalls von MakeFrms gerufen.
- * --------------------------------------------------*/
+ */
 
 class SwNode2LayImpl;
 class SwFrm;

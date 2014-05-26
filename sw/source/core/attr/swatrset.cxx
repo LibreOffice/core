@@ -41,8 +41,6 @@
 #include <svx/sxenditm.hxx>
 #include <svx/sdsxyitm.hxx>
 
-// SwAttrPool
-
 SwAttrPool::SwAttrPool( SwDoc* pD )
     : SfxItemPool( OUString("SWG"),
                     POOLATTR_BEGIN, POOLATTR_END-1,
@@ -144,8 +142,6 @@ void SwAttrPool::removeAndDeleteSecondaryPools()
     SfxItemPool::Free(pSdrPool);
     SfxItemPool::Free(pEEgPool);
 }
-
-// SwAttrSet
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
     : SfxItemSet( rPool, nWh1, nWh2 ), pOldSet( 0 ), pNewSet( 0 )

@@ -28,10 +28,7 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-/*--------------------------------------------------------------------
-     Description: Ctor
- --------------------------------------------------------------------*/
-
+// Ctor
 Sequence<OUString> SwPrintOptions::GetPropertyNames()
 {
     static const char* aPropNames[] =

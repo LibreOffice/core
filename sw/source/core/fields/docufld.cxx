@@ -101,8 +101,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace nsSwDocInfoSubType;
 
-// SwPageNumberFieldType
-
 SwPageNumberFieldType::SwPageNumberFieldType()
     : SwFieldType( RES_PAGENUMBERFLD ),
     nNumberingType( SVX_NUM_ARABIC ),
@@ -169,8 +167,6 @@ void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
             }
     }
 }
-
-// SwPageNumberField
 
 SwPageNumberField::SwPageNumberField(SwPageNumberFieldType* pTyp,
           sal_uInt16 nSub, sal_uInt32 nFmt, short nOff,
@@ -314,7 +310,6 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return bRet;
 }
-// SwAuthorFieldType
 
 SwAuthorFieldType::SwAuthorFieldType()
     : SwFieldType( RES_AUTHORFLD )
@@ -334,8 +329,6 @@ SwFieldType* SwAuthorFieldType::Copy() const
 {
     return new SwAuthorFieldType;
 }
-
-// SwAuthorField
 
 SwAuthorField::SwAuthorField(SwAuthorFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
@@ -410,8 +403,6 @@ bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-// SwFileNameFieldType
-
 SwFileNameFieldType::SwFileNameFieldType(SwDoc *pDocument)
     : SwFieldType( RES_FILENAMEFLD )
 {
@@ -475,8 +466,6 @@ SwFieldType* SwFileNameFieldType::Copy() const
     SwFieldType *pTmp = new SwFileNameFieldType(pDoc);
     return pTmp;
 }
-
-// SwFileNameField
 
 SwFileNameField::SwFileNameField(SwFileNameFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
@@ -589,8 +578,6 @@ bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return true;
 }
 
-// SwTemplNameFieldType
-
 SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
     : SwFieldType( RES_TEMPLNAMEFLD )
 {
@@ -653,7 +640,6 @@ SwFieldType* SwTemplNameFieldType::Copy() const
     SwFieldType *pTmp = new SwTemplNameFieldType(pDoc);
     return pTmp;
 }
-// SwTemplNameField
 
 SwTemplNameField::SwTemplNameField(SwTemplNameFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt)
@@ -734,8 +720,6 @@ bool SwTemplNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-
-// SwDocStatFieldType
 
 SwDocStatFieldType::SwDocStatFieldType(SwDoc* pDocument)
     : SwFieldType( RES_DOCSTATFLD ), nNumberingType( SVX_NUM_ARABIC )
@@ -1280,8 +1264,6 @@ bool SwDocInfoField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     }
     return true;
 }
-
-// SwHiddenTxtFieldType
 
 SwHiddenTxtFieldType::SwHiddenTxtFieldType( bool bSetHidden )
     : SwFieldType( RES_HIDDENTXTFLD ), bHidden( bSetHidden )

@@ -70,7 +70,6 @@ private:
     sal_uInt16              nWidth;
 };
 
-// INLINE METHOD --------------------------------------------------------
 inline  sal_uInt16 SwColMgr::GetCount() const
 {
     return aFmtCol.GetNumCols();

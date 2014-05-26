@@ -28,8 +28,6 @@
 
 class SwTxtFmtColl;
 
-// class SwEnvFmtPage ---------------------------------------------------------
-
 class SwEnvFmtPage : public SfxTabPage
 {
     MetricField*  m_pAddrLeftField;

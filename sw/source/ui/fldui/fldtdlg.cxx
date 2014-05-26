@@ -46,10 +46,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
-/*--------------------------------------------------------------------
-    Description:    carrier of the dialog
- --------------------------------------------------------------------*/
-
+// carrier of the dialog
 SwFldDlg::SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent)
     : SfxTabDialog(pParent, "FieldDialog", "modules/swriter/ui/fielddialog.ui")
     , m_pChildWin(pCW)
@@ -182,10 +179,7 @@ SfxItemSet* SwFldDlg::CreateInputItemSet( sal_uInt16 nID  )
         return 0;
 }
 
-/*--------------------------------------------------------------------
-     Description: kick off inserting of new fields
- --------------------------------------------------------------------*/
-
+// kick off inserting of new fields
 IMPL_LINK_NOARG(SwFldDlg, OKHdl)
 {
     if (GetOKButton().IsEnabled())
@@ -205,10 +199,7 @@ IMPL_LINK_NOARG(SwFldDlg, CancelHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description: newly initialise dialog after Doc-Switch
- --------------------------------------------------------------------*/
-
+// newly initialise dialog after Doc-Switch
 void SwFldDlg::ReInitDlg()
 {
     SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
@@ -242,22 +233,15 @@ void SwFldDlg::ReInitDlg()
     m_pChildWin->SetOldDocShell(pDocSh);
 }
 
-/*--------------------------------------------------------------------
-    Description: newly initialise TabPage after Doc-Switch
- --------------------------------------------------------------------*/
-
+// newly initialise TabPage after Doc-Switch
 void SwFldDlg::ReInitTabPage( sal_uInt16 nPageId, bool bOnlyActivate )
 {
     SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
-
     if ( pPage )
         pPage->EditNewField( bOnlyActivate );   // newly initialise TabPage
 }
 
-/*--------------------------------------------------------------------
-    Description: newly initialise after activation of a few TabPages
- --------------------------------------------------------------------*/
-
+// newly initialise after activation of a few TabPages
 void SwFldDlg::Activate()
 {
     SwView* pView = ::GetActiveView();

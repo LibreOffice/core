@@ -63,8 +63,7 @@ long SwSelPaintRects::nPixPtX = 0;
 long SwSelPaintRects::nPixPtY = 0;
 MapMode* SwSelPaintRects::pMapMode = 0;
 
-// -----  Starting from here: classes / methods for the non-text-cursor -----
-
+// Starting from here: classes / methods for the non-text-cursor
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
     : m_pCrsrShell( pCShell )
 {

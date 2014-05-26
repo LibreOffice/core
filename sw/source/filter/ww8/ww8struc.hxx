@@ -176,7 +176,7 @@ struct WW8_STD
     sal_uInt16  cupx : 4;          // # of UPXs (and UPEs)
     sal_uInt16  istdNext : 12;     // next style
     sal_uInt16  bchUpe;            // offset to end of upx's, start of upe's
-    //-------- jetzt neu:
+    // jetzt neu:
     // ab Ver8 gibts zwei Felder mehr:
   sal_uInt16    fAutoRedef : 1;    /* auto redefine style when appropriate */
   sal_uInt16    fHidden : 1;       /* hidden from UI? */

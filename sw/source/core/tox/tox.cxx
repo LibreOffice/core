@@ -130,10 +130,6 @@ static SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
 
 TYPEINIT2( SwTOXMark, SfxPoolItem, SwClient );    // fuers rtti
 
-/*--------------------------------------------------------------------
-     TOX dtor and ctor
- --------------------------------------------------------------------*/
-
 /// pool default constructor
 SwTOXMark::SwTOXMark()
     : SfxPoolItem( RES_TXTATR_TOXMARK )
@@ -239,10 +235,7 @@ void SwTOXMark::InsertTOXMarks( SwTOXMarks& aMarks, const SwTOXType& rType )
     }
 }
 
-/*--------------------------------------------------------------------
-  Manage types of TOX
- --------------------------------------------------------------------*/
-
+// Manage types of TOX
 SwTOXType::SwTOXType( TOXTypes eTyp, const OUString& rName )
     : SwModify(0),
     aName(rName),
@@ -257,10 +250,7 @@ SwTOXType::SwTOXType(const SwTOXType& rCopy)
 {
 }
 
-/*--------------------------------------------------------------------
-    Edit forms
-  --------------------------------------------------------------------*/
-
+// Edit forms
 SwForm::SwForm( TOXTypes eTyp ) // #i21237#
     : eType( eTyp ), nFormMaxLevel( SwForm::GetFormMaxLevel( eTyp )),
 //  nFirstTabPos( lNumIndent ),
@@ -466,10 +456,6 @@ OUString SwForm::GetFormChapterMark() {return OUString("<C>");}
 OUString SwForm::GetFormText()        {return OUString("<X>");}
 OUString SwForm::GetFormAuth()        {return OUString("<A>");}
 
-/*--------------------------------------------------------------------
-  Ctor TOXBase
- --------------------------------------------------------------------*/
-
 SwTOXBase::SwTOXBase(const SwTOXType* pTyp, const SwForm& rForm,
                      sal_uInt16 nCreaType, const OUString& rTitle )
     : SwClient((SwModify*)pTyp)
@@ -557,10 +543,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
     return *this;
 }
 
-/*--------------------------------------------------------------------
-  TOX specific functions
- --------------------------------------------------------------------*/
-
+// TOX specific functions
 SwTOXBase::~SwTOXBase()
 {
 //    if( GetTOXType()->GetType() == TOX_USER  )

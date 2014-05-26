@@ -5223,7 +5223,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
     rSt.ReadInt32( fcMin );
     rSt.ReadInt32( fcMac );
 
-// Einschub fuer WW8 *****************************************************
+// Einschub fuer WW8
     if (IsEightPlus(eVer))
     {
         rSt.ReadUInt16( csw );
@@ -5251,7 +5251,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.ReadUInt16( clw );
     }
 
-// Ende des Einschubs fuer WW8 *******************************************
+// Ende des Einschubs fuer WW8
 
         // Marke: "rglw"  Beginning of the array of longs
     rSt.ReadInt32( cbMac );
@@ -5277,7 +5277,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.SeekRel( 1 * sizeof( sal_Int32) );
     else
     {
-// Einschub fuer WW8 *****************************************************
+// Einschub fuer WW8
         rSt.ReadInt32( pnFbpChpFirst );
         rSt.ReadInt32( pnChpFirst );
         rSt.ReadInt32( cpnBteChp );
@@ -5292,7 +5292,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
         rSt.ReadUInt16( cfclcb );
     }
 
-// Ende des Einschubs fuer WW8 *******************************************
+// Ende des Einschubs fuer WW8
 
     // Marke: "rgfclcb" Beginning of array of FC/LCB pairs.
     rSt.ReadInt32( fcStshfOrig );
@@ -5647,7 +5647,7 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
     Set_UInt32( pData, fcMin );
     Set_UInt32( pData, fcMac );
 
-// Einschub fuer WW8 *****************************************************
+// Einschub fuer WW8
 
     // Marke: "rgsw"  Beginning of the array of shorts
     if( bVer8 )
@@ -5662,7 +5662,7 @@ bool WW8Fib::WriteHeader(SvStream& rStrm)
         Set_UInt16( pData, clw );
     }
 
-// Ende des Einschubs fuer WW8 *******************************************
+// Ende des Einschubs fuer WW8
 
     // Marke: "rglw"  Beginning of the array of longs
     Set_UInt32( pData, cbMac );
@@ -5708,7 +5708,7 @@ bool WW8Fib::Write(SvStream& rStrm)
     if( !bVer8 )
         pData += 1 * sizeof( sal_Int32);
 
-// Einschub fuer WW8 *****************************************************
+// Einschub fuer WW8
     if( bVer8 )
     {
         Set_UInt32( pData, pnFbpChpFirst );
@@ -5724,7 +5724,7 @@ bool WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, fcIslandLim );
         Set_UInt16( pData, cfclcb );
     }
-// Ende des Einschubs fuer WW8 *******************************************
+// Ende des Einschubs fuer WW8
 
     // Marke: "rgfclcb" Beginning of array of FC/LCB pairs.
     Set_UInt32( pData, fcStshfOrig );
@@ -6516,8 +6516,6 @@ void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
         if( nI & grpfIhdt )
             nIdxOffset++;
 }
-
-//          WW8Dop
 
 WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize) : bUseThaiLineBreakingRules(false)
 {

@@ -25,7 +25,7 @@
  * The PROTOCOL macros allow you to log events in frame methods. In places where
  * logging is useful either one of the PROTOCOL(...) or PROTOCOL_ENTER(...) can
  * be used. PROTOCOL_ENTER(...) additionally logs the leaving of a method.
-
+ *
  * The PROTOCOL macros accept the following parameters:
  * 1.   A pointer to an SwFrm (usually "this" or "rThis")
  * 2.   The function group i.e. PROT_MAKEALL. This is used to decide (inline)
@@ -82,7 +82,6 @@
  *      listed; default is 0 which means that none are logged. It's also
  *      possible to remove functions using '!'.
  *      An example INI file:
- *      ------------------------------------------
  *           #Functions: all, except PRTARE
  *           [record] 0xFFFFFFFE !0x200
  *           [frmid]
@@ -90,7 +89,6 @@
  *           1 2 12 13 14 15
  *           #no layout frames, except ColumnFrms
  *           [frmtype] !0x3FFF 0x4
- *      ------------------------------------------
  *
  * As soon as the logging is in process, one can manipulate many things in
  * SwImplProtocol::_Record(...) using a debugger, especially concerning
@@ -100,7 +98,6 @@
 #include "dbg_lay.hxx"
 
 #include <stdio.h>
-
 #include "flyfrm.hxx"
 #include "txtfrm.hxx"
 #include <fntcache.hxx>

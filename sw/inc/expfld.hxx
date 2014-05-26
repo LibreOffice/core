@@ -350,10 +350,7 @@ public:
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) SAL_OVERRIDE;
 };
 
-/*--------------------------------------------------------------------
-    Description: Sorted list of input fields and DropDown fields
- --------------------------------------------------------------------*/
-
+// Sorted list of input fields and DropDown fields
 class SwInputFieldList
 {
 public:

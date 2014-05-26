@@ -62,7 +62,7 @@ public:
     void ViewDestroyed() { pView = 0; }
 };
 
-// --------------------------- Clipboard EventListener ------------------
+// Clipboard EventListener
 class SwClipboardChangeListener : public ::cppu::WeakImplHelper1<
     ::com::sun::star::datatransfer::clipboard::XClipboardListener >
 {

@@ -76,9 +76,7 @@ using namespace com::sun::star::util;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-     Description:   dialog to insert a directory selection
- --------------------------------------------------------------------*/
+// dialog to insert a directory selection
 SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     SwWrtShell& rWrtShell)
     : m_rDialog(rDialog)
@@ -171,9 +169,7 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, bool bNewDlg,
     m_pEntryED->GrabFocus();
 }
 
-/*--------------------------------------------------------------------
-     Description: Newly initialise controls with the new selection
- --------------------------------------------------------------------*/
+// Newly initialise controls with the new selection
 void SwIndexMarkPane::InitControls()
 {
     OSL_ENSURE(pSh && pTOXMgr, "no shell?");
@@ -345,9 +341,7 @@ OUString SwIndexMarkPane::GetDefaultPhoneticReading( const OUString& rText )
     return xExtendedIndexEntrySupplier->getPhoneticCandidate(rText, LanguageTag::convertToLocale( nLangForPhoneticReading ));
 }
 
-/* --------------------------------------------------
-    Change the content of m_pEntryED if text is selected
- --------------------------------------------------*/
+// Change the content of m_pEntryED if text is selected
 void    SwIndexMarkPane::Activate()
 {
     // display current selection (first element) ????
@@ -373,9 +367,7 @@ void    SwIndexMarkPane::Activate()
     }
 }
 
-/*--------------------------------------------------------------------
-     Description:   evaluate Ok-Button
- --------------------------------------------------------------------*/
+// evaluate Ok-Button
 void SwIndexMarkPane::Apply()
 {
     InsertUpdate();
@@ -383,14 +375,11 @@ void SwIndexMarkPane::Apply()
         pSh->ResetSelect(0, false);
 }
 
-/*--------------------------------------------------------------------
-    Description: apply changes
- --------------------------------------------------------------------*/
+// apply changes
 void SwIndexMarkPane::InsertUpdate()
 {
     pSh->StartUndo(bDel ? UNDO_INDEX_ENTRY_DELETE : UNDO_INDEX_ENTRY_INSERT);
     pSh->StartAllAction();
-
     SwRewriter aRewriter;
 
     if( bNewMark )
@@ -422,9 +411,7 @@ void SwIndexMarkPane::InsertUpdate()
     nKey2Pos = m_pKey2DCB->GetEntryPos(m_pKey2DCB->GetText());
 }
 
-/*--------------------------------------------------------------------
-     Description:   insert mark
- --------------------------------------------------------------------*/
+// insert mark
 static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSensitive)
 {
     rSh.Push();
@@ -498,9 +485,7 @@ void SwIndexMarkPane::InsertMark()
     pSh->EndAllAction();
 }
 
-/*--------------------------------------------------------------------
-     Description:   update mark
- --------------------------------------------------------------------*/
+// update mark
 void SwIndexMarkPane::UpdateMark()
 {
     OUString  aAltText(m_pEntryED->GetText());
@@ -540,14 +525,11 @@ void SwIndexMarkPane::UpdateMark()
     pTOXMgr->UpdateTOXMark(aDesc);
 }
 
-/*--------------------------------------------------------------------
-    Description: insert new keys
- --------------------------------------------------------------------*/
+// insert new keys
 void SwIndexMarkPane::UpdateKeyBoxes()
 {
     OUString aKey(m_pKey1DCB->GetText());
     sal_Int32 nPos = m_pKey1DCB->GetEntryPos(aKey);
-
     if(nPos == COMBOBOX_ENTRY_NOTFOUND && !aKey.isEmpty())
     {   // create new key
         m_pKey1DCB->InsertEntry(aKey);
@@ -642,9 +624,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, CloseHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Description:   select index type only when inserting
- --------------------------------------------------------------------*/
+// select index type only when inserting
 IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
 {
     if (m_pTypeDCB == pBox)
@@ -773,9 +753,7 @@ IMPL_LINK_NOARG(SwIndexMarkPane, DelHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Description: renew dialog view
- --------------------------------------------------------------------*/
+// renew dialog view
 void SwIndexMarkPane::UpdateDialog()
 {
     OSL_ENSURE(pSh && pTOXMgr, "no shell?");
@@ -877,9 +855,7 @@ void SwIndexMarkPane::UpdateDialog()
     pSh->EndCrsrMove();
 }
 
-/*--------------------------------------------------------------------
-     Remind whether the edit boxes for Phonetic reading are changed manually
- --------------------------------------------------------------------*/
+// Remind whether the edit boxes for Phonetic reading are changed manually
 IMPL_LINK( SwIndexMarkPane, PhoneticEDModifyHdl, Edit *, pEdit )
 {
     if (m_pPhoneticED0 == pEdit)
@@ -897,9 +873,7 @@ IMPL_LINK( SwIndexMarkPane, PhoneticEDModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Description: Enable Disable of the 2nd key
- --------------------------------------------------------------------*/
+// Enable Disable of the 2nd key
 IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
 {
     if (m_pKey1DCB == pBox)
@@ -955,9 +929,6 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
     return 0;
 }
 
-/*--------------------------------------------------
- overload dtor
---------------------------------------------------*/
 SwIndexMarkPane::~SwIndexMarkPane()
 {
     delete pTOXMgr;

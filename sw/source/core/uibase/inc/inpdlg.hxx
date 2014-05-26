@@ -31,10 +31,7 @@ class SwUserFieldType;
 class SwField;
 class SwWrtShell;
 
-/*--------------------------------------------------------------------
-     Description: insert fields
- --------------------------------------------------------------------*/
-
+// insert fields
 class SwFldInputDlg: public SvxStandardDialog
 {
     virtual void    Apply() SAL_OVERRIDE;

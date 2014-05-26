@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_INC_NAVIPI_HXX
 #define INCLUDED_SW_SOURCE_CORE_UIBASE_INC_NAVIPI_HXX
 
-// INCLUDE ---------------------------------------------------------------
-
 #include <vcl/lstbox.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/transfer.hxx>
@@ -49,7 +47,6 @@ class SwNavHelpToolBox : public SwHelpToolBox
         SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
 };
 
-// CLASS -----------------------------------------------------------------
 class SwNavigationPI : public Window,
                         public SfxControllerItem, public SfxListener
 {
@@ -57,7 +54,6 @@ class SwNavigationPI : public Window,
     friend class SwContentTree;
     friend class SwGlobalTree;
 
-    // --------- members -----------------------------
     SwNavHelpToolBox    aContentToolBox;
     SwHelpToolBox       aGlobalToolBox;
     ImageList           aContentImageList;
@@ -96,7 +92,6 @@ class SwNavigationPI : public Window,
     bool    bPageCtrlsVisible : 1;
     bool    bGlobalMode : 1;
 
-    // --------- methods -----------------------------
     bool _IsZoomedIn() const {return bIsZoomedIn;}
     void _ZoomOut();
     void _ZoomIn();

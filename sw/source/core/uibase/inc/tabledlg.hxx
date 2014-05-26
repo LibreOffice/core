@@ -27,9 +27,7 @@
 class SwWrtShell;
 struct TColumn;
 
-/*-------------------------------------------------------
- table dialog
---------------------------------------------------------- */
+// table dialog
 class SwTableTabDlg : public SfxTabDialog
 {
     SwWrtShell* pShell;

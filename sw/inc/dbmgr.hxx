@@ -83,9 +83,7 @@ enum DBManagerOptions
     DBMGR_MERGE_SINGLE_FILE  ///< Save merge as single file.
 };
 
-/*--------------------------------------------------------------------
-     Administration of (new) logical databases.
- --------------------------------------------------------------------*/
+// Administration of (new) logical databases.
 #define SW_DB_SELECT_UNKNOWN    0
 #define SW_DB_SELECT_TABLE      1
 #define SW_DB_SELECT_QUERY      2

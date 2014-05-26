@@ -32,9 +32,7 @@ class SwView;
 class SwWrtShell;
 struct SwDBData;
 
-/*--------------------------------------------------------------------
-     Description: exchange database at fields
- --------------------------------------------------------------------*/
+// exchange database at fields
 class SwChangeDBDlg: public SvxStandardDialog
 {
     SvTreeListBox*  m_pUsedDBTLB;

@@ -268,14 +268,11 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     ActivatePage( rSet );
 }
 
-/*--------------------------------------------------------------------
-    Description:    stuff attributes into the set when OK
- --------------------------------------------------------------------*/
+// stuff attributes into the set when OK
 bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 {
     bool bModified = false;
     const SfxPoolItem* pOldItem;
-
     const SwFmtSurround& rOldSur = (const SwFmtSurround&)GetItemSet().Get(RES_SURROUND);
     SwFmtSurround aSur( rOldSur );
 
@@ -373,9 +370,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     return bModified;
 }
 
-/*--------------------------------------------------------------------
-    Description:    example update
- --------------------------------------------------------------------*/
+// example update
 void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 {
     // anchor
@@ -569,14 +564,11 @@ int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
     return sal_True;
 }
 
-/*--------------------------------------------------------------------
-    Description:    range check
- --------------------------------------------------------------------*/
+// range check
 IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
 {
         sal_Int64 nValue = pEdit->GetValue();
         MetricField *pOpposite = 0;
-
         if (pEdit == m_pLeftMarginED)
             pOpposite = m_pRightMarginED;
         else if (pEdit == m_pRightMarginED)

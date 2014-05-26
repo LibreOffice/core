@@ -111,7 +111,6 @@ public:
                                             sal_uInt16 nIdx) SAL_OVERRIDE;
 };
 
-// INLINE METHODE --------------------------------------------------------
 inline const SwNumRulesWithName *SwBaseNumRules::GetRules(sal_uInt16 nIdx) const
 {
     OSL_ENSURE(nIdx < nMaxRules, "Array der NumRules ueberindiziert.");

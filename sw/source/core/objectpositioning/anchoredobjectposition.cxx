@@ -38,9 +38,6 @@
 using namespace ::com::sun::star;
 using namespace objectpositioning;
 
-// **************************************************************************
-// constructor, destructor, initialization
-// **************************************************************************
 SwAnchoredObjectPosition::SwAnchoredObjectPosition( SdrObject& _rDrawObj )
     : mrDrawObj( _rDrawObj ),
       mbIsObjFly( false ),
@@ -838,10 +835,8 @@ SwTwips SwAnchoredObjectPosition::_CalcRelPosX(
     return nRelPosX;
 }
 
-// **************************************************************************
 // method incl. helper methods for adjusting proposed horizontal position,
 // if object has to draw aside another object.
-// **************************************************************************
 /** adjust calculated horizontal position in order to draw object
     aside other objects with same positioning
 */

@@ -28,9 +28,7 @@ class SwDropDownField;
 class SwField;
 class SwWrtShell;
 
-/*--------------------------------------------------------------------
-     Dialog to edit drop down field selection
- --------------------------------------------------------------------*/
+// Dialog to edit drop down field selection
 namespace sw
 {
 class DropDownFieldDialog : public SvxStandardDialog

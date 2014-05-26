@@ -45,11 +45,8 @@ using namespace ::com::sun::star::beans;
 // with exceptions. So we can reduce the code of the other files, which don't
 // need any exception handling.
 
-/*--------------------------------------------------------------------
-     Description: Is the database field numeric?
-     remark: in case of error sal_True is returned
- --------------------------------------------------------------------*/
-
+// Is the database field numeric?
+// remark: in case of error sal_True is returned
 bool SwFldMgr::IsDBNumeric( const OUString& rDBName, const OUString& rTblQryName,
                             bool bIsTable, const OUString& rFldName)
 {

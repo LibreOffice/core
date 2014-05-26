@@ -1291,19 +1291,19 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 }
 
 /*
-    ----------------------- >> MERGE << ------------------------
-     Algorithm:
-        If we only have one Line in the _FndBox, take this Line and test
-        the Box count:
-        - If we have more than one Box, we merge on Box level, meaning
-          the new Box will be as wide as the old ones.
-            - All Lines that are above/under the Area, are inserted into
-            the Box as Line + Box.
-            - All Lines that come before/after the Area, are inserted into
-              the Boxes Left/Right.
-
-    ----------------------- >> MERGE << ------------------------
-*/
+ * >> MERGE <<
+ * Algorithm:
+ *    If we only have one Line in the _FndBox, take this Line and test
+ *    the Box count:
+ * If we have more than one Box, we merge on Box level, meaning
+ *      the new Box will be as wide as the old ones.
+ * All Lines that are above/under the Area, are inserted into
+ *        the Box as Line + Box.
+ * All Lines that come before/after the Area, are inserted into
+ *          the Boxes Left/Right.
+ *
+ * >> MERGE <<
+ */
 static void lcl_CpyLines( sal_uInt16 nStt, sal_uInt16 nEnd,
                                 SwTableLines& rLines,
                                 SwTableBox* pInsBox,

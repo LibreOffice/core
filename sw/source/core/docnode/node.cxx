@@ -896,8 +896,6 @@ SwEndNode::SwEndNode( SwNodes& rNds, sal_uLong nPos, SwStartNode& rSttNd )
     pStartOfSection->pEndOfSection = this;
 }
 
-// SwCntntNode
-
 SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType,
                             SwFmtColl *pColl )
     : SwModify( pColl ),     // CrsrsShell, FrameFmt,

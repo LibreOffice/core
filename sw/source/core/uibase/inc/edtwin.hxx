@@ -43,9 +43,7 @@ struct  SwApplyTemplate;
 struct  QuickHelpData;
 class   SdrDropMarkerOverlay;
 
-/*--------------------------------------------------------------------
-    Description:    input window
- --------------------------------------------------------------------*/
+// input window
 
 /** Window class for the Writer edit area, this is the one handling mouse
     and keyboard events and doing the final painting of the document from

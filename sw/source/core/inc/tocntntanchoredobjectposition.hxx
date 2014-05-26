@@ -53,7 +53,6 @@ namespace objectpositioning
             // the needed type
             SwTxtFrm&       GetAnchorTxtFrm() const;
 
-        // *********************************************************************
             /** determine frame for horizontal position
 
                 if the given proposed frame is a content frame, the proposed

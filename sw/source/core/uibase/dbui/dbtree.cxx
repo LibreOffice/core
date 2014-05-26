@@ -430,9 +430,7 @@ OUString SwDBTreeList::GetDBName(OUString& rTableName, OUString& rColumnName, sa
     return sDBName;
 }
 
-/*------------------------------------------------------------------------
- Description:   Format: database.table
-------------------------------------------------------------------------*/
+// Format: database.table
 void SwDBTreeList::Select(const OUString& rDBName, const OUString& rTableName, const OUString& rColumnName)
 {
     SvTreeListEntry* pParent;

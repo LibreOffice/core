@@ -126,10 +126,7 @@ static void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, Combo
     }
 }
 
-/*----------------------------------------------------------------------------
- Description: user data class for region information
-----------------------------------------------------------------------------*/
-
+// user data class for region information
 class SectRepr
 {
 private:
@@ -305,9 +302,7 @@ OUString SectRepr::GetSubRegion() const
     return sLinkFile;
 }
 
-/*----------------------------------------------------------------------------
- Description: dialog edit regions
-----------------------------------------------------------------------------*/
+// dialog edit regions
 SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     : SfxModalDialog(pParent, "EditSectionDialog",
         "modules/swriter/ui/editsectiondialog.ui")
@@ -439,14 +434,11 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
     return bRet;
 }
 
-/*---------------------------------------------------------------------
-    Description: recursively look for child-sections
----------------------------------------------------------------------*/
+// recursively look for child-sections
 void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pEntry )
 {
     SwSection* pSect = 0;
     SvTreeListEntry* pSelEntry = 0;
-
     if (!pFmt)
     {
         const sal_uInt16 nCount=rSh.GetSectionFmtCount();
@@ -551,11 +543,8 @@ void    SwEditRegionDlg::SelectSection(const OUString& rSectionName)
     }
 }
 
-/*---------------------------------------------------------------------
-    Description:    selected entry in TreeListBox is showed in
-                    Edit window
-                    in case of multiselection some controls are disabled
----------------------------------------------------------------------*/
+// selected entry in TreeListBox is showed in Edit window in case of
+// multiselection some controls are disabled
 IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
 {
     bDontCheckPasswd = true;
@@ -740,10 +729,7 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
     return 0;
 }
 
-/*---------------------------------------------------------------------
-    Description:    in OkHdl the modified settings are being applied
-                    and reversed regions are deleted
----------------------------------------------------------------------*/
+// in OkHdl the modified settings are being applied and reversed regions are deleted
 IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
 {
     // temp. Array because during changing of a region the position
@@ -821,9 +807,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
     return 0;
 }
 
-/*---------------------------------------------------------------------
- Description: Toggle protect
----------------------------------------------------------------------*/
+// Toggle protect
 IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -847,9 +831,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     return 0;
 }
 
-/*---------------------------------------------------------------------
- Description: Toggle hide
----------------------------------------------------------------------*/
+// Toggle hide
 IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -876,9 +858,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
     return 0;
 }
 
-/*---------------------------------------------------------------------
- Description: Toggle edit in readonly
----------------------------------------------------------------------*/
+// Toggle edit in readonly
 IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -897,9 +877,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
     return 0;
 }
 
-/*---------------------------------------------------------------------
- Description: clear selected region
----------------------------------------------------------------------*/
+// clear selected region
 IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
 {
     if(!CheckPasswd())
@@ -964,9 +942,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
     return 0;
 }
 
-/*---------------------------------------------------------------------
- Description: link CheckBox to file?
----------------------------------------------------------------------*/
+// link CheckBox to file?
 IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
 {
     if(!CheckPasswd(pBox))
@@ -1023,14 +999,11 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
     return 0;
 }
 
-/*---------------------------------------------------------------------
-    Description: call dialog paste file
----------------------------------------------------------------------*/
+// call dialog paste file
 IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl)
 {
     if(!CheckPasswd(0))
         return 0;
-
     m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
     delete m_pDocInserter;
@@ -1140,10 +1113,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
     return 0;
 }
 
-/*---------------------------------------------------------------------
-    Description:    Applying of the filename or the
-                    linked region
----------------------------------------------------------------------*/
+// Applying of the filename or the linked region
 IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
 {
     Selection aSelect = pEdit->GetSelection();
@@ -1295,11 +1265,8 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
     return 0;
 }
 
-/*---------------------------------------------------------------------
-    Description:    the current region name is being added to the
-                    TreeListBox immediately during editing, with empty
-                    string no Ok()
----------------------------------------------------------------------*/
+// the current region name is being added to the TreeListBox immediately during
+// editing, with empty string no Ok()
 IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl)
 {
     if(!CheckPasswd(0))
@@ -1402,9 +1369,7 @@ Image SwEditRegionDlg::BuildBitmap( bool bProtect, bool bHidden )
     return rImgLst.GetImage((int(!bHidden)+((bProtect ? 1 : 0)<<1)) + 1);
 }
 
-/*--------------------------------------------------------------------
-    Description:    helper function - read region names from medium
- --------------------------------------------------------------------*/
+// helper function - read region names from medium
 static void lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox )
 {
     rBox.Clear();

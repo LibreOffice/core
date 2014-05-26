@@ -410,10 +410,10 @@ void WW8AttributeOutput::StartStyle( const OUString& rName, StyleType eType, sal
     {
         nBit16 = bAutoUpdate ? 1 : 0;  // fAutoRedef : 1
         Set_UInt16( pData, nBit16 );
-        //-------- jetzt neu:
+        // jetzt neu:
         // ab Ver8 gibts zwei Felder mehr:
-        //sal_uInt16    fHidden : 1;       /* hidden from UI? */
-        //sal_uInt16    : 14;              /* unused bits */
+        // sal_uInt16    fHidden : 1;       /* hidden from UI?
+        // sal_uInt16    : 14;              /* unused bits
     }
 
     sal_uInt16 nLen = static_cast< sal_uInt16 >( ( pData - aWW8_STD ) + 1 +

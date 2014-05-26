@@ -78,8 +78,6 @@ namespace nsRedlineType_t
     const RedlineType_t REDLINE_FORM_AUTOFMT = 0x80;// Can be a flag in RedlineType.
 }
 
-/** IDocumentRedlineAccess
-*/
 class IDocumentRedlineAccess
 {
      // Static helper functions

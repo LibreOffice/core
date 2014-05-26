@@ -135,7 +135,6 @@ class SwAutoFormat
     bool m_bEmptyLine : 1;
     bool m_bMoreLines : 1;
 
-    // ------------- private methods -----------------------------
     CharClass& GetCharClass( LanguageType eLang ) const
     {
         if( !m_pCharClass || eLang != m_eCharClassLang )

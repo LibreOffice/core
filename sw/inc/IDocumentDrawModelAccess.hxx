@@ -25,8 +25,6 @@
 class SdrModel;
 class SdrPageView;
 
-/** IDocumentDrawModelAccess
- */
 class IDocumentDrawModelAccess
 {
 public:

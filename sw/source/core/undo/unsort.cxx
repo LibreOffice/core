@@ -30,10 +30,7 @@
 #include <redline.hxx>
 #include <node2lay.hxx>
 
-/*--------------------------------------------------------------------
-    Description:   Undo for Sorting
- --------------------------------------------------------------------*/
-
+// Undo for Sorting
 SwSortUndoElement::~SwSortUndoElement()
 {
     // are there string pointers saved?

@@ -21,7 +21,6 @@
 
 #include <sfx2/stbitem.hxx>
 
-// class BookmarkToolBoxControl -------------------------------------------
 class SwTemplateControl : public SfxStatusBarControl
 {
 protected:

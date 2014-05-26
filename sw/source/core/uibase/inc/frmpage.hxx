@@ -38,9 +38,7 @@ struct FrmMap;
 // OD 12.11.2003 #i22341#
 struct SwPosition;
 
-/*--------------------------------------------------------------------
-     Description:   frame dialog
- --------------------------------------------------------------------*/
+// frame dialog
 class SwFrmPage: public SfxTabPage
 {
     // size

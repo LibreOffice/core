@@ -115,10 +115,7 @@ public:
     inline bool IsNumeric( const OUString& rStr ) const;
 };
 
-/*--------------------------------------------------------------------
-     Beschreibung: Klassen fuer die Sortierung der Verzeichnisse
- --------------------------------------------------------------------*/
-
+// Beschreibung: Klassen fuer die Sortierung der Verzeichnisse
 struct SwTOXSortTabBase
 {
     SwTOXSources aTOXSources;
@@ -175,10 +172,7 @@ inline const ::com::sun::star::lang::Locale& SwTOXSortTabBase::GetLocale() const
     return aLocale;
 }
 
-/*--------------------------------------------------------------------
-     Beschreibung: fuer Sortierung nach Text
- --------------------------------------------------------------------*/
-
+// Beschreibung: fuer Sortierung nach Text
 struct SwTOXIndex : public SwTOXSortTabBase
 {
     SwTOXIndex( const SwTxtNode&, const SwTxtTOXMark*, sal_uInt16 nOptions, sal_uInt8 nKeyLevel,
@@ -215,10 +209,7 @@ private:
     sal_uInt16  nLev;
 };
 
-/*--------------------------------------------------------------------
-     Beschreibung: fuer Sortierung nach Position
- --------------------------------------------------------------------*/
-
+// Beschreibung: fuer Sortierung nach Position
 struct SwTOXContent : public SwTOXSortTabBase
 {
     SwTOXContent( const SwTxtNode&, const SwTxtTOXMark*,

@@ -89,26 +89,20 @@ OUString lcl_CheckFileName( const OUString& rNewFilePath,
 
 }
 
-/*------------------------------------------------------------------------
-    Description: supplies the default group's name
-------------------------------------------------------------------------*/
+// supplies the default group's name
 OUString SwGlossaries::GetDefName()
 {
     return OUString("standard");
 
 }
 
-/*------------------------------------------------------------------------
-    Description: supplies the number of text block groups
-------------------------------------------------------------------------*/
+// supplies the number of text block groups
 sal_uInt16 SwGlossaries::GetGroupCnt()
 {
     return static_cast<sal_uInt16>(GetNameList().size());
 }
 
-/*------------------------------------------------------------------------
-    Description: supplies the group's name
-------------------------------------------------------------------------*/
+// supplies the group's name
 bool SwGlossaries::FindGroupName(OUString& rGroup)
 {
     // if the group name doesn't contain a path, a suitable group entry
@@ -164,9 +158,7 @@ OUString SwGlossaries::GetGroupTitle( const OUString& rGroupName )
     return sRet;
 }
 
-/*------------------------------------------------------------------------
-    Description: supplies the group rName's text block document
-------------------------------------------------------------------------*/
+// supplies the group rName's text block document
 SwTextBlocks* SwGlossaries::GetGroupDoc(const OUString &rName,
                                         bool bCreate)
 {
@@ -187,18 +179,13 @@ SwTextBlocks* SwGlossaries::GetGroupDoc(const OUString &rName,
     return GetGlosDoc( rName, bCreate );
 }
 
-/*------------------------------------------------------------------------
- Description:   delete a text block
-------------------------------------------------------------------------*/
+// delete a text block
 void SwGlossaries::PutGroupDoc(SwTextBlocks *pBlock) {
     delete pBlock;
 }
 
-/*------------------------------------------------------------------------
-    Description:   Creates a new document with the group name. temporarly
-                   also created as file so that groups remain there later
-                   (without access).
-------------------------------------------------------------------------*/
+// Creates a new document with the group name. temporarly also created as file
+// so that groups remain there later (without access).
 bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
 {
     const OUString sNewPath(rGroupName.getToken(1, GLOS_DELIM));
@@ -272,9 +259,7 @@ bool    SwGlossaries::RenameGroupDoc(
     return true;
 }
 
-/*------------------------------------------------------------------------
-    Description: Deletes a text block group
-------------------------------------------------------------------------*/
+// Deletes a text block group
 bool SwGlossaries::DelGroupDoc(const OUString &rName)
 {
     sal_uInt16 nPath = (sal_uInt16)rName.getToken(1, GLOS_DELIM).toInt32();
@@ -297,9 +282,7 @@ SwGlossaries::~SwGlossaries()
     InvalidateUNOOjects();
 }
 
-/*------------------------------------------------------------------------
-    Description: read a block document
-------------------------------------------------------------------------*/
+// read a block document
 SwTextBlocks* SwGlossaries::GetGlosDoc( const OUString &rName, bool bCreate ) const
 {
     sal_uInt16 nPath = (sal_uInt16)rName.getToken(1, GLOS_DELIM).toInt32();
@@ -331,9 +314,7 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const OUString &rName, bool bCreate ) co
     return pTmp;
 }
 
-/*------------------------------------------------------------------------
-    Description: access to the list of names; read in if applicable
-------------------------------------------------------------------------*/
+// access to the list of names; read in if applicable
 std::vector<OUString> & SwGlossaries::GetNameList()
 {
     if (m_GlosArr.empty())
@@ -367,10 +348,7 @@ SwGlossaries::SwGlossaries()
     UpdateGlosPath(true);
 }
 
-/*------------------------------------------------------------------------
-    Description: set new path and recreate internal array
-------------------------------------------------------------------------*/
-
+// set new path and recreate internal array
 rtl::OUString lcl_makePath(const std::vector<rtl::OUString>& rPaths)
 {
     std::vector<rtl::OUString>::const_iterator aIt(rPaths.begin());

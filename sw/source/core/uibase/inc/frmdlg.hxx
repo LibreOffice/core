@@ -24,9 +24,7 @@
 #include <sfx2/tabdlg.hxx>
 class SwWrtShell;
 
-/*--------------------------------------------------------------------
-   Description: frame dialog
- --------------------------------------------------------------------*/
+// frame dialog
 class SwFrmDlg : public SfxTabDialog
 {
     bool m_bFormat;

@@ -62,8 +62,6 @@ SwObjPositioningInProgress::~SwObjPositioningInProgress()
     }
 }
 
-// SwAnchoredObject
-
 TYPEINIT0(SwAnchoredObject);
 
 SwAnchoredObject::SwAnchoredObject() :

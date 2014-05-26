@@ -34,8 +34,6 @@
 
 class SwWrtShell;
 
-// class SwDropCapsDlg ******************************************************
-
 class SwDropCapsDlg : public SfxSingleTabDialog
 {
 public:
@@ -43,8 +41,6 @@ public:
 };
 
 class SwDropCapsPict;
-
-// class SwDropCapsPage *****************************************************
 
 class SwDropCapsPage : public SfxTabPage
 {

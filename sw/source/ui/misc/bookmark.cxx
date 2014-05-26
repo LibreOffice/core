@@ -63,9 +63,7 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
     return 0;
 }
 
-/*------------------------------------------------------------------------
-     Description: callback to delete a text mark
- -----------------------------------------------------------------------*/
+// callback to delete a text mark
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
 {
     // remove text marks from the ComboBox
@@ -80,10 +78,8 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
     return 0;
 }
 
-/*------------------------------------------------------------------------
-     Description: callback for OKButton. Inserts a new text mark to the
-     current position. Deleted text marks are also deleted in the model.
- -----------------------------------------------------------------------*/
+// callback for OKButton. Inserts a new text mark to the current position.
+// Deleted text marks are also deleted in the model.
 void SwInsertBookmarkDlg::Apply()
 {
     //at first remove deleted bookmarks to prevent multiple bookmarks with the same
@@ -198,14 +194,11 @@ sal_Int32 BookmarkCombo::GetSelectEntryCount() const
     return nCnt;
 }
 
-/*------------------------------------------------------------------------
-     Description: position inside of the listbox (the ComboBox)
- -----------------------------------------------------------------------*/
+// position inside of the listbox (the ComboBox)
 sal_Int32 BookmarkCombo::GetSelectEntryPos( sal_Int32 nSelIndex ) const
 {
     sal_Int32 nCnt = 0;
     sal_Int32 nPos = GetFirstSelEntryPos();
-
     while (nPos != COMBOBOX_ENTRY_NOTFOUND)
     {
         if (nSelIndex == nCnt)

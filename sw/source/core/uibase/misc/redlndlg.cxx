@@ -71,9 +71,7 @@ SwRedlineAcceptChild::SwRedlineAcceptChild( Window* _pParent,
     ((SwModelessRedlineAcceptDlg *)pWindow)->Initialize(pInfo);
 }
 
-/*--------------------------------------------------------------------
-    Description: newly initialise dialog after document switch
- --------------------------------------------------------------------*/
+// newly initialise dialog after document switch
 bool SwRedlineAcceptChild::ReInitDlg(SwDocShell *pDocSh)
 {
     bool bRet;
@@ -346,9 +344,7 @@ OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uIn
     return OUString();
 }
 
-/*--------------------------------------------------------------------
-    Description: newly initialise after activation
- --------------------------------------------------------------------*/
+// newly initialise after activation
 void SwRedlineAcceptDlg::Activate()
 {
     // prevent update if flag is set (#102547#)

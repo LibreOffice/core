@@ -198,10 +198,8 @@ OUString SwMailMergeWizard::getStateDisplayName( WizardState _nState ) const
     }
     return OUString();
 }
-/*----------------------------------------------------------------------
-    enables/disables pages in the roadmap depending on the current
-    page and state
-  -----------------------------------------------------------------------*/
+
+// enables/disables pages in the roadmap depending on the current page and state
 void SwMailMergeWizard::UpdateRoadmap()
 {
 /*
@@ -271,10 +269,8 @@ void SwMailMergeWizard::UpdateRoadmap()
         enableState( nPage, bEnable );
     }
 }
-/*-- --------------------------------------------------------------------
-    enables/disables pages in the roadmap depending on the current
-    page and state
-  -----------------------------------------------------------------------*/
+
+// enables/disables pages in the roadmap depending on the current page and state
 void SwMailMergeWizard::CreateTargetDocument()
 {
     GetSwView()->GetWrtShell().GetDBManager()->

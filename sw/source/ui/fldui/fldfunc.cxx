@@ -453,9 +453,7 @@ IMPL_LINK_NOARG(SwFldFuncPage, ListEnableHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-     Description: renew types in SelectionBox
- --------------------------------------------------------------------*/
+// renew types in SelectionBox
 void SwFldFuncPage::UpdateSubType()
 {
     const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
@@ -498,14 +496,11 @@ void SwFldFuncPage::UpdateSubType()
     m_pSelectionLB->SetUpdateMode(true);
 }
 
-/*--------------------------------------------------------------------
-    Description: call MacroBrowser, fill Listbox with Macros
- --------------------------------------------------------------------*/
+// call MacroBrowser, fill Listbox with Macros
 IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
 {
     Window* pDefModalDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( pBtn );
-
     const OUString sMacro(TurnMacroString(m_pNameED->GetText()).replaceAll(".", ";"));
     if (GetFldMgr().ChooseMacro(sMacro))
         UpdateSubType();

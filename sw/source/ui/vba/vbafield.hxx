@@ -40,8 +40,6 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 };
 
-// *** SwVbaFields ***********************************************
-
 typedef CollTestImplHelper< ov::word::XFields > SwVbaFields_BASE;
 
 class SwVbaFields : public SwVbaFields_BASE

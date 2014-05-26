@@ -1315,7 +1315,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
         case UNDERLINE_WAVE:
             b = m_rWW8Export.bWrtWW8 ? 11 : 3;
             break;
-        // ------------  new in WW2000  -------------------------------------
+        // new in WW2000
         case UNDERLINE_BOLDDOTTED:
             b = m_rWW8Export.bWrtWW8 ? 20 : 4;
             break;

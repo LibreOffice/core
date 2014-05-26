@@ -56,10 +56,8 @@ namespace SwMailMergeHelper
 
 struct SwAddressPreview_Impl;
 
-/*-------------------------------------------------------------------------
-    Preview window used to show the possible selection of address blocks
-    and also the resulting address filled with database data
-  -----------------------------------------------------------------------*/
+// Preview window used to show the possible selection of address blocks
+// and also the resulting address filled with database data
 class SW_DLLPUBLIC SwAddressPreview : public Window
 {
     ScrollBar               aVScrollBar;
@@ -116,11 +114,8 @@ public:
     void    SetSelectHdl (const Link& rLink) {m_aSelectHdl = rLink;}
 };
 
-/*-------------------------------------------------------------------------
-    iterate over an address block or a greeting line
-    the iterator returns the parts either as pure string
-    or as column
-  -----------------------------------------------------------------------*/
+// iterate over an address block or a greeting line the iterator returns the
+// parts either as pure string or as column
 struct SwMergeAddressItem
 {
     OUString  sText;

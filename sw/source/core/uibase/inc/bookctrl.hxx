@@ -22,8 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <sfx2/stbitem.hxx>
 
-// class BookmarkToolBoxControl -------------------------------------------
-
 class SwBookmarkControl : public SfxStatusBarControl
 {
     virtual void    Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;

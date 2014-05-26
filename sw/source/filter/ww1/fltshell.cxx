@@ -888,8 +888,6 @@ SfxPoolItem* SwFltAnchor::Clone(SfxItemPool*) const
     return new SwFltAnchor(*this);
 }
 
-// SwFltAnchorClient
-
 SwFltAnchorClient::SwFltAnchorClient(SwFltAnchor * pFltAnchor)
 : m_pFltAnchor(pFltAnchor)
 {
@@ -1014,7 +1012,6 @@ SfxPoolItem* SwFltSection::Clone(SfxItemPool*) const
 // all filters. the whole trouble of inserting texts and formatting attributes,
 // manage positions, styles & headers/footers etc.
 
-// SwFltShell
 SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, const OUString& rBaseURL, bool bNew, sal_uLong nFieldFl) :
     pCurrentPageDesc(0),
     pSavedPos(0),

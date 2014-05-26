@@ -43,8 +43,6 @@ using namespace ::com::sun::star;
 TYPEINIT1_AUTOFACTORY(SwCropGrf, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwGammaGrf, SfxPoolItem)
 
-// SwMirrorGrf
-
 SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
 {
     return new SwMirrorGrf( *this );
@@ -149,8 +147,6 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-// SwCropGrf
-
 SwCropGrf::SwCropGrf()
     : SvxGrfCrop( RES_GRFATR_CROPGRF )
 {}
@@ -163,8 +159,6 @@ SfxPoolItem* SwCropGrf::Clone( SfxItemPool* ) const
 {
     return new SwCropGrf( *this );
 }
-
-// SwRotationGrf
 
 SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
 {

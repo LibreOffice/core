@@ -28,14 +28,10 @@
 
 class SwTOXMgr;
 
-/*--------------------------------------------------------------------
-     Description:   insert mark for index entry
- --------------------------------------------------------------------*/
-
+// insert mark for index entry
 class SwMultiTOXMarkDlg : public SvxStandardDialog
 {
     DECL_LINK( SelectHdl, ListBox * );
-
     FixedText*         m_pTextFT;
     ListBox*           m_pTOXLB;
 

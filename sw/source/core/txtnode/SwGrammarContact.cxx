@@ -27,18 +27,17 @@
 #include <rootfrm.hxx>
 #include <viewsh.hxx>
 
-/* SwGrammarContact
-    This class is responsible for the delayed display of grammar checks when a paragraph is edited
-    It's a client of the paragraph the cursor points to.
-    If the cursor position changes, updateCursorPosition has to be called
-    If the grammar checker wants to set a grammar marker at a paragraph, he has to request
-    the grammar list from this class. If the requested paragraph is not edited, it returns
-    the normal grammar list. But if the paragraph is the active one, a proxy list will be returned and
-    all changes are set in this proxy list. If the cursor leaves the paragraph the proxy list
-    will replace the old list. If the grammar checker has completed the paragraph ('setChecked')
-    then a timer is setup which replaces the old list as well.
-*/
-
+/*
+ * This class is responsible for the delayed display of grammar checks when a paragraph is edited
+ * It's a client of the paragraph the cursor points to.
+ * If the cursor position changes, updateCursorPosition has to be called
+ * If the grammar checker wants to set a grammar marker at a paragraph, he has to request
+ * the grammar list from this class. If the requested paragraph is not edited, it returns
+ * the normal grammar list. But if the paragraph is the active one, a proxy list will be returned and
+ * all changes are set in this proxy list. If the cursor leaves the paragraph the proxy list
+ * will replace the old list. If the grammar checker has completed the paragraph ('setChecked')
+ * then a timer is setup which replaces the old list as well.
+ */
 class SwGrammarContact : public IGrammarContact, public SwClient
 {
     Timer aTimer;

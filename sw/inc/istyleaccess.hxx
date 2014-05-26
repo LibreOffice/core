@@ -22,14 +22,10 @@
 #include <vector>
 #include <svl/stylepool.hxx>
 
-/*--------------------------------------------------------------------
-    Management of (automatic) styles
- --------------------------------------------------------------------*/
-
+// Management of (automatic) styles
 class IStyleAccess
 {
 public:
-
     enum SwAutoStyleFamily
     {
         AUTO_STYLE_CHAR,

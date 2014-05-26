@@ -42,14 +42,10 @@
 
 static bool bFootnote = true;
 
-/*------------------------------------------------------------------------
- Description:   inserting a footnote with OK
-------------------------------------------------------------------------*/
-
+// inserting a footnote with OK
 void SwInsFootNoteDlg::Apply()
 {
     OUString aStr;
-
     if ( m_pNumberCharBtn->IsChecked() )
         aStr = m_pNumberCharEdit->GetText();
 

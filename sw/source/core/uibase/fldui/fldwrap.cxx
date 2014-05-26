@@ -53,9 +53,7 @@ IMPL_LINK_NOARG(SwChildWinWrapper, UpdateHdl)
     return 0;
 }
 
-/*--------------------------------------------------------------------
-    Description: newly initialise dialog after Doc switch
- --------------------------------------------------------------------*/
+// newly initialise dialog after Doc switch
 bool SwChildWinWrapper::ReInitDlg(SwDocShell *)
 {
     bool bRet = false;
@@ -94,9 +92,7 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* _pParent, sal_uInt16 nId,
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
 
-/*--------------------------------------------------------------------
-    Description: newly initialise dialog after Doc switch
- --------------------------------------------------------------------*/
+// newly initialise dialog after Doc switch
 bool SwFldDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     bool bRet;
@@ -144,9 +140,7 @@ SwFldDataOnlyDlgWrapper::SwFldDataOnlyDlgWrapper( Window* _pParent, sal_uInt16 n
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
 
-/* --------------------------------------------------
- * re-init after doc activation
- * --------------------------------------------------*/
+// re-init after doc activation
 bool SwFldDataOnlyDlgWrapper::ReInitDlg(SwDocShell *pDocSh)
 {
     bool bRet;

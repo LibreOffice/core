@@ -29,9 +29,7 @@
 
 using namespace ::com::sun::star;
 
-/*--------------------------------------------------------------------
-    Description: edit insert-field
- --------------------------------------------------------------------*/
+// edit insert-field
 sw::DropDownFieldDialog::DropDownFieldDialog(Window *pParent, SwWrtShell &rS,
                               SwField* pField, bool bNextButton)
     : SvxStandardDialog(pParent, "DropdownFieldDialog",

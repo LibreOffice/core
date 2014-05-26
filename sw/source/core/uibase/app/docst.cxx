@@ -829,7 +829,6 @@ sal_uInt16 SwDocShell::Edit(
     return nRet;
 }
 
-// Delete
 sal_uInt16 SwDocShell::Delete(const OUString &rName, sal_uInt16 nFamily)
 {
     SfxStyleSheetBase *pStyle = mxBasePool->Find(rName, (SfxStyleFamily)nFamily);
@@ -1217,13 +1216,12 @@ void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
 {
     _LoadStyles(rSource, false);
 }
-/* --------------------------------------------------
-    bPreserveCurrentDocument determines whether SetFixFields() is called
-    This call modifies the source document. This mustn't happen when the source
-    is a document the user is working on.
-    Calls of ::LoadStyles() normally use files especially loaded for the purpose
-    of importing styles.
- --------------------------------------------------*/
+
+// bPreserveCurrentDocument determines whether SetFixFields() is called
+// This call modifies the source document. This mustn't happen when the source
+// is a document the user is working on.
+// Calls of ::LoadStyles() normally use files especially loaded for the purpose
+// of importing styles.
 void SwDocShell::_LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocument )
 {
 /*  [Description]

@@ -33,8 +33,6 @@
 
 #include <app.hrc>
 
-// Globals ******************************************************************
-
 static const sal_uInt16 aPageRg[] = {
     FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
     0

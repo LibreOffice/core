@@ -97,10 +97,7 @@ SwCharDlg::~SwCharDlg()
 {
 }
 
-/*--------------------------------------------------------------------
-    Description:    set FontList
- --------------------------------------------------------------------*/
-
+// set FontList
 void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));

@@ -43,7 +43,6 @@ typedef ::std::vector< AutoTextEntryRef > UnoAutoTextEntries;
 
 #define GLOS_DELIM (sal_Unicode)'*'
 
-// CLASS -----------------------------------------------------------------
 class SW_DLLPUBLIC SwGlossaries
 {
     UnoAutoTextGroups       m_aGlossaryGroups;
