@@ -1009,7 +1009,7 @@ void SwDoc::ReplaceDefaults(const SwDoc& rSource)
 
 void SwDoc::ReplaceCompatabilityOptions(const SwDoc& rSource)
 {
-    m_pDocumentSettingManager->ReplaceCompatabilityOptions(rSource.GetDocumentSettingManager());
+    m_pDocumentSettingManager->ReplaceCompatibilityOptions(rSource.GetDocumentSettingManager());
 }
 
 SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const

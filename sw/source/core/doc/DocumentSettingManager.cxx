@@ -37,8 +37,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mnLinkUpdMode( GLOBALSETTING ),
     meFldUpdMode( AUTOUPD_GLOBALSETTING ),
     meChrCmprType( CHARCOMPRESS_NONE ),
-    mn32DummyCompatabilityOptions1(0),
-    mn32DummyCompatabilityOptions2(0),
+    mn32DummyCompatibilityOptions1(0),
+    mn32DummyCompatibilityOptions2(0),
     mbHTMLMode(false),
     mbIsGlobalDoc(false),
     mbGlblDocSaveLinks(false),
@@ -479,10 +479,10 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
 }
 
 
-void sw::DocumentSettingManager::ReplaceCompatabilityOptions(const DocumentSettingManager& rSource)
+void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSettingManager& rSource)
 {
-    Setn32DummyCompatabilityOptions1( rSource.Getn32DummyCompatabilityOptions1() );
-    Setn32DummyCompatabilityOptions2( rSource.Getn32DummyCompatabilityOptions2() );
+    Setn32DummyCompatibilityOptions1( rSource.Getn32DummyCompatibilityOptions1() );
+    Setn32DummyCompatibilityOptions2( rSource.Getn32DummyCompatibilityOptions2() );
 
     mbParaSpaceMax = rSource.mbParaSpaceMax;
     mbParaSpaceMaxAtPages = rSource.mbParaSpaceMaxAtPages;
@@ -510,23 +510,23 @@ void sw::DocumentSettingManager::ReplaceCompatabilityOptions(const DocumentSetti
     mbTabAtLeftIndentForParagraphsInList = rSource.mbTabAtLeftIndentForParagraphsInList;
 }
 
-sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatabilityOptions1() const
+sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions1() const
 {
-    return mn32DummyCompatabilityOptions1;
+    return mn32DummyCompatibilityOptions1;
 }
 
-void sw::DocumentSettingManager::Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 )
+void sw::DocumentSettingManager::Setn32DummyCompatibilityOptions1( const sal_uInt32 CompatibilityOptions1 )
 {
-    mn32DummyCompatabilityOptions1 = CompatabilityOptions1;
+    mn32DummyCompatibilityOptions1 = CompatibilityOptions1;
 }
 
-sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatabilityOptions2() const
+sal_uInt32 sw::DocumentSettingManager::Getn32DummyCompatibilityOptions2() const
 {
-    return mn32DummyCompatabilityOptions2;
+    return mn32DummyCompatibilityOptions2;
 }
 
-void sw::DocumentSettingManager::Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 )
+void sw::DocumentSettingManager::Setn32DummyCompatibilityOptions2( const sal_uInt32 CompatibilityOptions2 )
 {
-    mn32DummyCompatabilityOptions2 = CompatabilityOptions2;
+    mn32DummyCompatibilityOptions2 = CompatibilityOptions2;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

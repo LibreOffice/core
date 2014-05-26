@@ -211,19 +211,19 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
 
     /** Get the n32DummyCompatabilityOptions1
     */
-    virtual sal_uInt32 Getn32DummyCompatabilityOptions1() const = 0;
+    virtual sal_uInt32 Getn32DummyCompatibilityOptions1() const = 0;
 
     /** Set the n32DummyCompatabilityOptions1
     */
-    virtual void Setn32DummyCompatabilityOptions1( const sal_uInt32 CompatabilityOptions1 ) = 0;
+    virtual void Setn32DummyCompatibilityOptions1( const sal_uInt32 CompatibilityOptions1 ) = 0;
 
     /** Get the n32DummyCompatabilityOptions2
     */
-    virtual sal_uInt32 Getn32DummyCompatabilityOptions2() const = 0;
+    virtual sal_uInt32 Getn32DummyCompatibilityOptions2() const = 0;
 
     /** Set the n32DummyCompatabilityOptions2
     */
-    virtual void Setn32DummyCompatabilityOptions2( const sal_uInt32 CompatabilityOptions2 ) = 0;
+    virtual void Setn32DummyCompatibilityOptions2( const sal_uInt32 CompatibilityOptions2 ) = 0;
 
 protected:
     virtual ~IDocumentSettingAccess() {};
