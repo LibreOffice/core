@@ -27,8 +27,11 @@ $(call gb_ExternalProject_get_state_target,libodfgen,build) :
 		export PKG_CONFIG="" \
 		&& ./configure \
 			--with-pic \
-			$(if $(DISABLE_DYNLOADING),,--enable-shared) \
-			--disable-static \
+			$(if $(DISABLE_DYNLOADING), \
+				--enable-static --disable-shared \
+			, \
+				--enable-shared --disable-static \
+			) \
 			--disable-debug \
 			--disable-werror \
 			--disable-weffc \
