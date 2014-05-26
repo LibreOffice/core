@@ -215,6 +215,7 @@ void Index::makeIndexKeys(const lang::Locale &rLocale, const OUString &algorithm
                 break;
             case sal_Unicode('{'):
                 close = '}';
+                //fall-through
             case sal_Unicode('('):
                 if (key_count > 0) {
                     sal_Int16 end = i+1;
