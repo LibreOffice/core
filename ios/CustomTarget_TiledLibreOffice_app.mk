@@ -14,7 +14,14 @@ BUILDID			:=$(shell cd $(SRCDIR) && git log -1 --format=%H)
 #- Macros ---------------------------------------------------------------------
 
 define TiledLibreOfficeXcodeBuild
-	CC=;xcodebuild -project experimental/TiledLibreOffice/TiledLibreOffice.xcodeproj -target TiledLibreOffice -arch $(XCODE_ARCHS) -configuration $(if $(ENABLE_DEBUG),Debug,Release) $(1) $(if $(verbose)$(VERBOSE),,>/dev/null)
+	CC=; \
+	tempfile=`mktemp -t customtarget.tiledlibreoffice.XXXXXX`; \
+	xcodebuild \
+		-project experimental/TiledLibreOffice/TiledLibreOffice.xcodeproj \
+		-target TiledLibreOffice \
+		-arch $(XCODE_ARCHS) \
+		-configuration $(if $(ENABLE_DEBUG),Debug,Release) \
+		$(1) $(if $(verbose)$(VERBOSE),,>$tempfile; test $$? = 0 || cat $tempfile; rm $tempfile)
 endef
 
 #- Targets --------------------------------------------------------------------
