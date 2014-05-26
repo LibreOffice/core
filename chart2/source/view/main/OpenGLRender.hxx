@@ -12,6 +12,7 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vcl/font.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
+#include <boost/shared_array.hpp>
 
 // Include GLM
 #include <list>
@@ -96,9 +97,15 @@ public:
     int RenderRectangleShape(bool bBorder, bool bFill);
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
 
+    int CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixels,
+                          const ::Size &aPixelSize,
+                          const ::css::awt::Point&,
+                          const ::css::awt::Size& aSize,
+                          long rotation,
+                          const ::css::drawing::HomogenMatrix3& rTrans);
     int CreateTextTexture(const BitmapEx& rBitmapEx,
-            const com::sun::star::awt::Point& aPos, const com::sun::star::awt::Size& aSize,
-            long rotation, const com::sun::star::drawing::HomogenMatrix3& rTrans);
+            const ::css::awt::Point& aPos, const css::awt::Size& aSize,
+            long rotation, const ::css::drawing::HomogenMatrix3& rTrans);
     int CreateTextTexture(::rtl::OUString const &textValue, Font aFont, long fontColor, awt::Point aPos, awt::Size aSize, long rotation);
     int RenderTextShape();
 

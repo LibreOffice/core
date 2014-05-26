@@ -38,7 +38,6 @@
 
 #include <vcl/opengl/OpenGLHelper.hxx>
 
-#include <boost/scoped_array.hpp>
 #include "CommonConverters.hxx"
 
 using namespace com::sun::star;
@@ -946,9 +945,21 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
     }
 #endif
 
-    long bmpWidth = rBitmapEx.GetSizePixel().Width();
-    long bmpHeight = rBitmapEx.GetSizePixel().Height();
-    boost::scoped_array<sal_uInt8> bitmapBuf(OpenGLHelper::ConvertBitmapExToRGBABuffer(rBitmapEx));
+    boost::shared_array<sal_uInt8> bitmapBuf(OpenGLHelper::ConvertBitmapExToRGBABuffer(rBitmapEx));
+
+    return CreateTextTexture(bitmapBuf, rBitmapEx.GetSizePixel(),
+                             awt::Point(), aSize, rotation, rTrans);
+}
+
+int OpenGLRender::CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixels,
+                                    const ::Size &aPixelSize,
+                                    const awt::Point&,
+                                    const awt::Size& aSize,
+                                    long rotation,
+                                    const drawing::HomogenMatrix3& rTrans)
+{
+    long bmpWidth = aPixelSize.Width();
+    long bmpHeight = aPixelSize.Height();
 
     TextInfo aTextInfo;
     aTextInfo.rotation = -(double)rotation / 360.0 * 2* GL_PI;
@@ -983,7 +994,7 @@ int OpenGLRender::CreateTextTexture(const BitmapEx& rBitmapEx, const awt::Point&
     CHECK_GL_ERROR();
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     CHECK_GL_ERROR();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmapBuf.get());
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bmpWidth, bmpHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, rPixels.get());
     CHECK_GL_ERROR();
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();

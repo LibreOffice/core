@@ -15,17 +15,28 @@
 #include "GL3DRenderer.hxx"
 
 #include <boost/ptr_container/ptr_map.hpp>
+#include <boost/shared_array.hpp>
 
 namespace chart {
 
 namespace opengl3D {
 
+struct TextCacheItem
+{
+    TextCacheItem(sal_uInt8 *pPixels, ::Size aSize)
+        : maSize(aSize), maPixels(pPixels)
+    {
+    }
+    ::Size maSize;
+    boost::shared_array<sal_uInt8> maPixels;
+};
+
 class TextCache
 {
 public:
-    const BitmapEx& getText(OUString const & rText);
+    const TextCacheItem &getText(OUString const & rText);
 private:
-    typedef boost::ptr_map<OUString const, BitmapEx> TextCacheType;
+    typedef boost::ptr_map<OUString const, TextCacheItem> TextCacheType;
 
     TextCacheType maTextCache;
 };
@@ -85,7 +96,7 @@ public:
     void setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight);
 
 private:
-    const BitmapEx& mrText;
+    TextCacheItem maText;
     glm::vec3 maTopLeft;
     glm::vec3 maTopRight;
     glm::vec3 maBottomRight;
@@ -100,7 +111,7 @@ public:
     void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight);
 
 private:
-    const BitmapEx& mrText;
+    TextCacheItem maText;
     glm::vec2 maTopLeft;
     glm::vec2 maBottomRight;
 };
