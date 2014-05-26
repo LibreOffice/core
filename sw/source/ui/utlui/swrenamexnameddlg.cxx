@@ -21,7 +21,7 @@
 #include <globals.hrc>
 
 #include <utlui.hrc>
-#include <../../core/uibase/utlui/unotools.hrc>
+#include <../../uibase/utlui/unotools.hrc>
 #include <unoprnms.hxx>
 #include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>

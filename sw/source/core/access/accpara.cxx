@@ -93,7 +93,7 @@
 #include <expfld.hxx>
 #include <flddat.hxx>
 #include <fldui.hrc>
-#include "../uibase/inc/fldmgr.hxx"
+#include "../../uibase/inc/fldmgr.hxx"
 #include "fldbas.hxx"      // SwField
 
 using namespace ::com::sun::star;

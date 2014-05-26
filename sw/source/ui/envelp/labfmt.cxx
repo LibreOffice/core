@@ -26,12 +26,12 @@
 #include "swtypes.hxx"
 #include "cmdid.h"
 #include "label.hxx"
-#include "../../core/uibase/envelp/labimp.hxx"
+#include "../../uibase/envelp/labimp.hxx"
 #include "labimg.hxx"
 #include "labfmt.hxx"
 #include "uitool.hxx"
 
-#include "../../core/uibase/envelp/label.hrc"
+#include "../../uibase/envelp/label.hrc"
 #include "labfmt.hrc"
 #include <unomid.h>
 
