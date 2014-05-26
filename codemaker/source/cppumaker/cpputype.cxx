@@ -719,7 +719,7 @@ OUString CppuType::getTypeClass(OUString const & name, bool cStyle) {
             : OUString("::css::uno::TypeClass_INTERFACE");
     case codemaker::UnoType::SORT_TYPEDEF:
         return getTypeClass(
-            dynamic_cast< unoidl::TypedefEntity * >(ent.get())->getType(),
+            dynamic_cast<unoidl::TypedefEntity&>(*ent.get()).getType(),
             cStyle);
     default:
         for (;;) { std::abort(); }
