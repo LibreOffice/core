@@ -7726,7 +7726,7 @@ AC_SUBST(ENABLE_CMIS)
 dnl ===================================================================
 dnl Check for system libwpd
 dnl ===================================================================
-libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10 libwpd-stream-0.10],["-I${WORKDIR}/UnpackedTarball/libwpd/inc"],["-L${WORKDIR}/UnpackedTarball/libwpd/src/lib/.libs -lwpd-0.10"])
+libo_CHECK_SYSTEM_MODULE([libwpd],[WPD],[libwpd-0.10],["-I${WORKDIR}/UnpackedTarball/libwpd/inc"],["-L${WORKDIR}/UnpackedTarball/libwpd/src/lib/.libs -lwpd-0.10"])
 
 dnl ===================================================================
 dnl Check for system lcms2
