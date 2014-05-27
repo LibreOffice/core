@@ -20,6 +20,7 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/scopedbitmapaccess.hxx>
 
 class FilterConfigItem;
 
@@ -44,7 +45,6 @@ private:
 
     bool                mbStatus;
     Bitmap              maBmp;
-    BitmapWriteAccess*  mpAcc;
     sal_uInt32          mnWidth, mnHeight;      // Bildausmass in Pixeln
     sal_uInt16              mnDstBitsPerPix;
     sal_uInt16              mnDstColors;
@@ -53,7 +53,7 @@ private:
     sal_uInt8               mnRepCount, mnRepVal;   // RLE Decoding
     bool                mbPalette;
 
-    bool                ImplReadBody();
+    bool                ImplReadBody(BitmapWriteAccess * pAcc);
     bool                ImplReadHeader();
     sal_uInt8               ImplGetByte();
 
@@ -68,7 +68,6 @@ public:
 RASReader::RASReader(SvStream &rRAS)
     : m_rRAS(rRAS)
     , mbStatus(true)
-    , mpAcc(NULL)
     , mnWidth(0)
     , mnHeight(0)
     , mnDstBitsPerPix(0)
@@ -108,7 +107,8 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
         return false;
 
     maBmp = Bitmap( Size( mnWidth, mnHeight ), mnDstBitsPerPix );
-    if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == 0 )
+    Bitmap::ScopedWriteAccess pAcc(maBmp);
+    if ( pAcc == 0 )
         return false;
 
     if ( mnDstBitsPerPix <= 8 )     // paletten bildchen
@@ -127,7 +127,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
 
             if ( ( mnDstColors >= 2 ) && ( ( mnColorMapSize % 3 ) == 0 ) )
             {
-                mpAcc->SetPaletteEntryCount( mnDstColors );
+                pAcc->SetPaletteEntryCount( mnDstColors );
                 sal_uInt16  i;
                 sal_uInt8   nRed[256], nGreen[256], nBlue[256];
                 for ( i = 0; i < mnDstColors; i++ ) m_rRAS.ReadUChar( nRed[ i ] );
@@ -135,7 +135,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
                 for ( i = 0; i < mnDstColors; i++ ) m_rRAS.ReadUChar( nBlue[ i ] );
                 for ( i = 0; i < mnDstColors; i++ )
                 {
-                    mpAcc->SetPaletteColor( i, BitmapColor( nRed[ i ], nGreen[ i ], nBlue[ i ] ) );
+                    pAcc->SetPaletteColor( i, BitmapColor( nRed[ i ], nGreen[ i ], nBlue[ i ] ) );
                 }
                 mbPalette = true;
             }
@@ -149,11 +149,11 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
         if ( !mbPalette )
         {
             mnDstColors = 1 << mnDstBitsPerPix;
-            mpAcc->SetPaletteEntryCount( mnDstColors );
+            pAcc->SetPaletteEntryCount( mnDstColors );
             for ( sal_uInt16 i = 0; i < mnDstColors; i++ )
             {
                 sal_uLong nCount = 255 - ( 255 * i / ( mnDstColors - 1 ) );
-                mpAcc->SetPaletteColor( i, BitmapColor( (sal_uInt8)nCount, (sal_uInt8)nCount, (sal_uInt8)nCount ) );
+                pAcc->SetPaletteColor( i, BitmapColor( (sal_uInt8)nCount, (sal_uInt8)nCount, (sal_uInt8)nCount ) );
             }
         }
     }
@@ -167,12 +167,8 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     }
 
     // Bitmap-Daten einlesen
-    mbStatus = ImplReadBody();
+    mbStatus = ImplReadBody(pAcc.get());
 
-    if ( mpAcc )
-    {
-        maBmp.ReleaseAccess( mpAcc ), mpAcc = NULL;
-    }
     if ( mbStatus )
         rGraphic = maBmp;
 
@@ -219,7 +215,7 @@ bool RASReader::ImplReadHeader()
 
 
 
-bool RASReader::ImplReadBody()
+bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
 {
     sal_uLong   x, y;
     sal_uInt8   nDat = 0;
@@ -233,7 +229,7 @@ bool RASReader::ImplReadBody()
                 {
                     if (!(x & 7))
                         nDat = ImplGetByte();
-                    mpAcc->SetPixelIndex( y, x,
+                    pAcc->SetPixelIndex( y, x,
                         sal::static_int_cast< sal_uInt8 >(
                             nDat >> ( ( x & 7 ) ^ 7 )) );
                 }
@@ -247,7 +243,7 @@ bool RASReader::ImplReadBody()
                 for ( x = 0; x < mnWidth; x++ )
                 {
                     nDat = ImplGetByte();
-                    mpAcc->SetPixelIndex( y, x, nDat );
+                    pAcc->SetPixelIndex( y, x, nDat );
                 }
                 if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
             }
@@ -274,7 +270,7 @@ bool RASReader::ImplReadBody()
                                 nGreen = ImplGetByte();
                                 nRed = ImplGetByte();
                             }
-                            mpAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
+                            pAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                         if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
                     }
@@ -298,7 +294,7 @@ bool RASReader::ImplReadBody()
                                 nGreen = ImplGetByte();
                                 nRed = ImplGetByte();
                             }
-                            mpAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
+                            pAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                     }
                     break;
