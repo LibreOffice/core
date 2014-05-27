@@ -167,7 +167,7 @@ protected:
 
 public:
     SvxShape( SdrObject* pObj ) throw ();
-    SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet ) throw ();
+    SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet ) throw (css::uno::RuntimeException);
     SvxShape() throw (css::uno::RuntimeException);
     virtual ~SvxShape() throw ();
 
