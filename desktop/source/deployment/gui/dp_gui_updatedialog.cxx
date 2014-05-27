@@ -138,9 +138,9 @@ static const sal_uInt16 CMD_IGNORE_ALL_UPDATES = 3;
 enum Kind { ENABLED_UPDATE, DISABLED_UPDATE, SPECIFIC_ERROR };
 
 OUString confineToParagraph(OUString const & text) {
-    // Confine arbitrary text to a single paragraph in a dp_gui::AutoScrollEdit.
+    // Confine arbitrary text to a single paragraph in a VclMultiLineEdit
     // This assumes that U+000A and U+000D are the only paragraph separators in
-    // a dp_gui::AutoScrollEdit, and that replacing them with a single space
+    // a VclMultiLineEdit, and that replacing them with a single space
     // each is acceptable:
     return text.replace(LF, ' ').replace(CR, ' ');
 }

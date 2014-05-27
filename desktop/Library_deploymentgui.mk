@@ -56,7 +56,6 @@ endif
 $(eval $(call gb_Library_set_componentfile,deploymentgui,desktop/source/deployment/gui/deploymentgui))
 
 $(eval $(call gb_Library_add_exception_objects,deploymentgui,\
-    desktop/source/deployment/gui/dp_gui_autoscrolledit \
     desktop/source/deployment/gui/dp_gui_dependencydialog \
     desktop/source/deployment/gui/dp_gui_dialog2 \
     desktop/source/deployment/gui/dp_gui_extensioncmdqueue \

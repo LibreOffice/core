@@ -25,12 +25,11 @@
 #include "vcl/fixed.hxx"
 #include "vcl/dialog.hxx"
 #include "vcl/prgsbar.hxx"
+#include "vcl/vclmedit.hxx"
 #include "rtl/ref.hxx"
 #include <vector>
 
-#include "dp_gui_autoscrolledit.hxx"
 /// @HTML
-
 namespace com { namespace sun { namespace star { namespace deployment {
     class XExtensionManager;
 }}}}
@@ -109,14 +108,11 @@ private:
     FixedText *m_pFt_action;
     ProgressBar *m_pStatusbar;
     FixedText *m_pFt_extension_name;
-    AutoScrollEdit *m_pMle_info;
+    VclMultiLineEdit *m_pMle_info;
     HelpButton *m_pHelp;
     OKButton *m_pOk;
     CancelButton *m_pCancel;
 };
-
-
-
 
 }
 

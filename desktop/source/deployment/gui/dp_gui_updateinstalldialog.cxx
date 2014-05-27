@@ -225,6 +225,8 @@ UpdateInstallDialog::UpdateInstallDialog(
     get(m_pStatusbar, "STATUSBAR");
     get(m_pFt_extension_name, "EXTENSION_NAME");
     get(m_pMle_info, "INFO");
+    m_pMle_info->set_height_request(m_pMle_info->GetTextHeight() * 5);
+    m_pMle_info->set_width_request(m_pMle_info->approximate_char_width() * 56);
     get(m_pHelp, "HELP");
     get(m_pOk, "OK");
     get(m_pCancel, "CANCEL");
@@ -232,7 +234,6 @@ UpdateInstallDialog::UpdateInstallDialog(
     m_xExtensionManager = css::deployment::ExtensionManager::get( xCtx );
 
     m_pCancel->SetClickHdl(LINK(this, UpdateInstallDialog, cancelHandler));
-    m_pMle_info->EnableCursor(false);
     if ( ! dp_misc::office_is_running())
         m_pHelp->Disable();
 }
@@ -255,7 +256,7 @@ short UpdateInstallDialog::Execute()
 void UpdateInstallDialog::updateDone()
 {
     if (!m_bError)
-        m_pMle_info->InsertText(m_sNoErrors);
+        m_pMle_info->SetText(m_pMle_info->GetText() + m_sNoErrors);
     m_pOk->Enable();
     m_pOk->GrabFocus();
     m_pCancel->Disable();
@@ -284,26 +285,28 @@ void UpdateInstallDialog::setError(INSTALL_ERROR err, OUString const & sExtensio
         OSL_ASSERT(false);
     }
 
+    OUString sMsg(m_pMle_info->GetText());
     sError = sError.replaceFirst("%NAME", sExtension);
     //We want to have an empty line between the error messages. However,
     //there shall be no empty line after the last entry.
     if (m_bNoEntry)
         m_bNoEntry = false;
     else
-        m_pMle_info->InsertText(OUString("\n"));
-    m_pMle_info->InsertText(sError);
+        sMsg += "\n";
+    sMsg += sError;
     //Insert more information about the error
     if (!exceptionMessage.isEmpty())
-        m_pMle_info->InsertText(m_sThisErrorOccurred + exceptionMessage + "\n");
+        sMsg += m_sThisErrorOccurred + exceptionMessage + "\n";
 
-    m_pMle_info->InsertText(m_sNoInstall);
-    m_pMle_info->InsertText(OUString("\n"));
+    sMsg += m_sNoInstall + "\n";
+
+    m_pMle_info->SetText(sMsg);
 }
 
 void UpdateInstallDialog::setError(OUString const & exceptionMessage)
 {
     m_bError = true;
-    m_pMle_info->InsertText(exceptionMessage + "\n");
+    m_pMle_info->SetText(m_pMle_info->GetText() + exceptionMessage + "\n");
 }
 
 IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler)
