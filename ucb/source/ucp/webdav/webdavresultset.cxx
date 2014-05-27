@@ -26,9 +26,7 @@
 
  *************************************************************************/
 #include "webdavresultset.hxx"
-#ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
-#endif
 
 #include "comphelper/processfactory.hxx"
 
