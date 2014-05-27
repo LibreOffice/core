@@ -65,6 +65,7 @@
 #define UNO_NAME_FOOTER_LEFT_MARGIN "FooterLeftMargin"
 #define UNO_NAME_FOOTER_RIGHT_MARGIN "FooterRightMargin"
 #define UNO_NAME_TEXT_RANGE "TextRange"
+#define UNO_NAME_TEXT_BOX "TextBox"
 #define UNO_NAME_NAME "Name"
 #define UNO_NAME_NUMBERING_ALIGNMENT "NumberingAlignment"
 #define UNO_NAME_BULLET_FONT_NAME "BulletFontName"

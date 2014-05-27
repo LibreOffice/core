@@ -813,6 +813,7 @@
 #define FN_SHAPE_STARTPOSITION_IN_HORI_L2R (FN_PARAM2+25)
 #define FN_SHAPE_ENDPOSITION_IN_HORI_L2R   (FN_PARAM2+26)
 #define FN_PARAM_PAM                    (FN_PARAM2+27) /* Point and Mark */
+#define FN_TEXT_BOX                     (FN_PARAM2+28) /* TextBox Property*/
 
 // Status: not more than 19!
 #define FN_STAT_PAGE                (FN_STAT + 1)

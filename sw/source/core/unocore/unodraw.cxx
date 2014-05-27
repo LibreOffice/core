@@ -1178,6 +1178,15 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         delete pInternalPam;
                     }
                 }
+                else if (pEntry->nWID == FN_TEXT_BOX)
+                {
+                    bool bValue;
+                    aValue >>= bValue;
+                    // If TextBox is to be enabled.
+                    if (bValue)
+                        SwTextBoxHelper::create(pFmt);
+
+                }
                 // #i28749#
                 else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
                 {
@@ -1499,6 +1508,11 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                             aRet = aAny;
                         }
                     }
+                }
+                else if (pEntry->nWID == FN_TEXT_BOX)
+                {
+                    bool bValue = SwTextBoxHelper::findTextBox(pFmt);
+                    aRet <<= bValue;
                 }
                 // #i28749#
                 else if ( FN_SHAPE_TRANSFORMATION_IN_HORI_L2R == pEntry->nWID )

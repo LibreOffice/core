@@ -65,8 +65,7 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
     }
 }
 
-// If we have an associated TextFrame, then return that.
-SwFrmFmt* lcl_findTextBox(SwFrmFmt* pShape)
+SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)
 {
     SwFrmFmt* pRet = 0;
 
@@ -94,7 +93,7 @@ uno::Any SwTextBoxHelper::getXTextAppend(SwFrmFmt* pShape, const uno::Type& rTyp
 
     if (rType == cppu::UnoType<css::text::XTextAppend>::get())
     {
-        if (SwFrmFmt* pFmt = lcl_findTextBox(pShape))
+        if (SwFrmFmt* pFmt = findTextBox(pShape))
         {
             uno::Reference<text::XTextAppend> xTextAppend(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
             aRet <<= xTextAppend;
@@ -109,7 +108,7 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
     uno::Any aValue(rValue);
     nMemberId &= ~CONVERT_TWIPS;
 
-    if (SwFrmFmt* pFmt = lcl_findTextBox(pShape))
+    if (SwFrmFmt* pFmt = findTextBox(pShape))
     {
         bool bSync = false;
         bool bAdjustX = false;
