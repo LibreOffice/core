@@ -98,17 +98,45 @@ std::list<SwFrmFmt*> SwTextBoxHelper::findTextBoxes(SwDoc* pDoc)
     return aRet;
 }
 
+/// If the passed SdrObject is in fact a TextFrame, that is used as a TextBox.
+bool lcl_isTextBox(SdrObject* pSdrObject, std::list<SwFrmFmt*>& rTextBoxes)
+{
+    SwVirtFlyDrawObj* pObject = PTR_CAST(SwVirtFlyDrawObj, pSdrObject);
+    return pObject && std::find(rTextBoxes.begin(), rTextBoxes.end(), pObject->GetFmt()) != rTextBoxes.end();
+}
+
 sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage, std::list<SwFrmFmt*>& rTextBoxes)
 {
     sal_Int32 nRet = 0;
     for (size_t i = 0; i < pPage->GetObjCount(); ++i)
     {
-        SwVirtFlyDrawObj* pObject = PTR_CAST(SwVirtFlyDrawObj, pPage->GetObj(i));
-        if (pObject && std::find(rTextBoxes.begin(), rTextBoxes.end(), pObject->GetFmt()) != rTextBoxes.end())
+        if (lcl_isTextBox(pPage->GetObj(i), rTextBoxes))
             continue;
         ++nRet;
     }
     return nRet;
+}
+
+uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::list<SwFrmFmt*>& rTextBoxes) throw(lang::IndexOutOfBoundsException)
+{
+    if (nIndex < 0 || nIndex >= getCount(pPage, rTextBoxes))
+        throw lang::IndexOutOfBoundsException();
+
+    SdrObject* pRet = 0;
+    sal_Int32 nCount = 0; // Current logical index.
+    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    {
+        if (lcl_isTextBox(pPage->GetObj(i), rTextBoxes))
+            continue;
+        if (nCount == nIndex)
+        {
+            pRet = pPage->GetObj(i);
+            break;
+        }
+        ++nCount;
+    }
+    assert(pRet);
+    return uno::makeAny(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY));
 }
 
 SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)

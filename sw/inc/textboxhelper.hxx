@@ -14,6 +14,7 @@
 
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Type.h>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 class SdrPage;
 class SwFrmFmt;
@@ -43,6 +44,8 @@ public:
     static std::list<SwFrmFmt*> findTextBoxes(SwDoc* pDoc);
     /// Count number of shapes in the document, excluding TextBoxes.
     static sal_Int32 getCount(SdrPage* pPage, std::list<SwFrmFmt*>& rTextBoxes);
+    /// Get a shape by index, excluding TextBoxes.
+    static css::uno::Any getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::list<SwFrmFmt*>& rTextBoxes) throw(css::lang::IndexOutOfBoundsException);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
