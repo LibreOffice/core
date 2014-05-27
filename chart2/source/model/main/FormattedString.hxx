@@ -36,11 +36,11 @@ namespace chart
 namespace impl
 {
 typedef ::cppu::WeakImplHelper5<
-    ::css::chart2::XFormattedString2,
-    ::css::lang::XServiceInfo,
-    ::css::util::XCloneable,
-    ::css::util::XModifyBroadcaster,
-    ::css::util::XModifyListener >
+    css::chart2::XFormattedString2,
+    css::lang::XServiceInfo,
+    css::util::XCloneable,
+    css::util::XModifyBroadcaster,
+    css::util::XModifyListener >
     FormattedString_Base;
 }
 
@@ -50,8 +50,8 @@ class FormattedString :
     public ::property::OPropertySet
 {
 public:
-    FormattedString( ::css::uno::Reference<
-           ::css::uno::XComponentContext > const & xContext );
+    FormattedString( css::uno::Reference<
+           css::uno::XComponentContext > const & xContext );
     virtual ~FormattedString();
 
     /// declare XServiceInfo methods
@@ -82,43 +82,43 @@ protected:
 
     // ____ XFormattedString ____
     virtual OUString SAL_CALL getString()
-        throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setString( const OUString& String )
-        throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ OPropertySet ____
-    virtual ::css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::css::beans::UnknownPropertyException) SAL_OVERRIDE;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
+        throw(css::beans::UnknownPropertyException) SAL_OVERRIDE;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
 
     // ____ XPropertySet ____
-    virtual ::css::uno::Reference< ::css::beans::XPropertySetInfo > SAL_CALL
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo()
-        throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XCloneable ____
-    virtual ::css::uno::Reference< ::css::util::XCloneable > SAL_CALL createClone()
-        throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const ::css::uno::Reference< ::css::util::XModifyListener >& aListener )
-        throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeModifyListener(
-        const ::css::uno::Reference< ::css::util::XModifyListener >& aListener )
-        throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference< css::util::XModifyListener >& aListener )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const ::css::lang::EventObject& aEvent )
-        throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::lang::EventObject& aEvent )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const ::css::lang::EventObject& Source )
-        throw (::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::lang::EventObject& Source )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() SAL_OVERRIDE;
@@ -129,7 +129,7 @@ protected:
 private:
     OUString m_aString;
 
-    ::css::uno::Reference< ::css::util::XModifyListener > m_xModifyEventForwarder;
+    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
 };
 
 } //  namespace chart

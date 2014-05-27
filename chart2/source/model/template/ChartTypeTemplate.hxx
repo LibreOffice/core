@@ -92,7 +92,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     /// denotes if the chart needs categories at the first scale
     virtual sal_Bool SAL_CALL supportsCategories()
-        throw (::css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, ::std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL changeDiagram(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram )

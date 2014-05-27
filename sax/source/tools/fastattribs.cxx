@@ -239,7 +239,7 @@ FastTokenLookup::FastTokenLookup()
  * pet sequence around and do some heavy petting on it.
  */
 sal_Int32 FastTokenLookup::getTokenFromChars(
-        const ::css::uno::Reference< ::css::xml::sax::XFastTokenHandler > &xTokenHandler,
+        const css::uno::Reference< css::xml::sax::XFastTokenHandler > &xTokenHandler,
         FastTokenHandlerBase *pTokenHandler,
         const char *pToken, size_t nLen /* = 0 */ )
 {

@@ -61,11 +61,11 @@ class SAX_DLLPUBLIC FastTokenHandlerBase
 class SAX_DLLPUBLIC FastTokenLookup
 {
     static const int mnUtf8BufferSize = 128;
-    ::css::uno::Sequence< sal_Int8 > maUtf8Buffer;
+    css::uno::Sequence< sal_Int8 > maUtf8Buffer;
 public:
     FastTokenLookup();
     sal_Int32 getTokenFromChars(
-        const ::css::uno::Reference< ::css::xml::sax::XFastTokenHandler > &mxTokenHandler,
+        const css::uno::Reference< css::xml::sax::XFastTokenHandler > &mxTokenHandler,
         FastTokenHandlerBase *pTokenHandler,
         const char *pStr, size_t nLength = 0 );
 };

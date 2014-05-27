@@ -643,7 +643,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
                         sal_Int32 nRotation = 0;
                         xShapeProps->getPropertyValue("RotateAngle") >>= nRotation;
 
-                        ::css::beans::PropertyValues aGrabBag;
+                        css::beans::PropertyValues aGrabBag;
                         bool bContainsEffects = false;
                         xShapeProps->getPropertyValue("InteropGrabBag") >>= aGrabBag;
                         for( sal_Int32 i = 0; i < aGrabBag.getLength(); ++i )

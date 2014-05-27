@@ -69,8 +69,8 @@ public:
 
     // XComponent - as used by VCL to lifecycle manage this bridge.
     virtual void SAL_CALL dispose();
-    virtual void SAL_CALL addEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& )    { /* dummy */ }
-    virtual void SAL_CALL removeEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& ) { /* dummy */ }
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& )    { /* dummy */ }
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& ) { /* dummy */ }
 
     // XMSAAService
     virtual sal_Int64 SAL_CALL getAccObjectPtr(

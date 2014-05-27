@@ -137,16 +137,16 @@ struct SwMergeDescriptor
     const ::svx::ODataAccessDescriptor&                 rDescriptor;
     OUString                                            sSaveToFilter; ///< export filter to save resulting files
     OUString                                            sSaveToFilterOptions;
-    ::css::uno::Sequence< ::css::beans::PropertyValue > aSaveToFilterData;
+    css::uno::Sequence< css::beans::PropertyValue >     aSaveToFilterData;
 
     OUString                                            sSubject;
     OUString                                            sAddressFromColumn;
     OUString                                            sMailBody;
     OUString                                            sAttachmentName;
-    ::css::uno::Sequence< OUString >                    aCopiesTo;
-    ::css::uno::Sequence< OUString >                    aBlindCopiesTo;
+    css::uno::Sequence< OUString >                      aCopiesTo;
+    css::uno::Sequence< OUString >                      aBlindCopiesTo;
 
-    ::css::uno::Reference< ::css::mail::XSmtpService >  xSmtpServer;
+    css::uno::Reference< css::mail::XSmtpService >      xSmtpServer;
 
     bool                                            bSendAsHTML;
     bool                                            bSendAsAttachment;
@@ -247,7 +247,7 @@ public:
     void            GetColumnNames(ListBox* pListBox,
                             const OUString& rDBName, const OUString& rTableName, bool bAppend = false);
     void            GetColumnNames(ListBox* pListBox,
-                            ::css::uno::Reference< ::css::sdbc::XConnection> xConnection,
+                            css::uno::Reference< css::sdbc::XConnection> xConnection,
                             const OUString& rTableName, bool bAppend = false);
 
     sal_uLong GetColumnFmt( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> xSource,

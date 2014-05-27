@@ -341,8 +341,8 @@ class FmGridControl;
 class SVX_DLLPUBLIC FmXGridPeer :public VCLXWindow
                     ,public FmXGridPeer_BASE
 {
-    ::css::uno::Reference< ::css::container::XIndexContainer >    m_xColumns;
-    ::css::uno::Reference< ::css::sdbc::XRowSet >                 m_xCursor;
+    css::uno::Reference< css::container::XIndexContainer >    m_xColumns;
+    css::uno::Reference< css::sdbc::XRowSet >                 m_xCursor;
     ::cppu::OInterfaceContainerHelper       m_aModifyListeners,
                                             m_aUpdateListeners,
                                             m_aContainerListeners,
@@ -352,13 +352,13 @@ class SVX_DLLPUBLIC FmXGridPeer :public VCLXWindow
     OUString                m_aMode;
     sal_Int32               m_nCursorListening;
 
-    ::css::uno::Reference< ::css::frame::XDispatchProviderInterceptor >   m_xFirstDispatchInterceptor;
+    css::uno::Reference< css::frame::XDispatchProviderInterceptor >   m_xFirstDispatchInterceptor;
 
     bool                                m_bInterceptingDispatch;
 
     bool*                               m_pStateCache;
         // one bool for each supported url
-    ::css::uno::Reference< ::css::frame::XDispatch > *                    m_pDispatchers;
+    css::uno::Reference< css::frame::XDispatch > *                    m_pDispatchers;
         // one dispatcher for each supported url
         // (I would like to have a vector here but including the stl in an exported file seems
         // very risky to me ....)
@@ -368,11 +368,11 @@ class SVX_DLLPUBLIC FmXGridPeer :public VCLXWindow
     GridListenerDelegator*  m_pGridListener;
 
 protected:
-    ::css::uno::Reference< ::css::uno::XComponentContext >    m_xContext;
+    css::uno::Reference< css::uno::XComponentContext >    m_xContext;
     ::osl::Mutex                                              m_aMutex;
 
 public:
-    FmXGridPeer(const ::css::uno::Reference< ::css::uno::XComponentContext >&);
+    FmXGridPeer(const css::uno::Reference< css::uno::XComponentContext >&);
     virtual ~FmXGridPeer();
 
     // spaeter Constructor, immer nach dem realen Constructor zu rufen !
