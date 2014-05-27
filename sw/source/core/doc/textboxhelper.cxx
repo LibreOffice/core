@@ -26,6 +26,8 @@
 
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
@@ -196,6 +198,7 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
     if (!pShape)
         return;
 
+    OUString aPropertyName = rPropertyName;
     uno::Any aValue(rValue);
     nMemberId &= ~CONVERT_TWIPS;
 
@@ -237,6 +240,19 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             bSync = true;
             bAdjustSize = true;
             break;
+        case RES_ANCHOR:
+            switch (nMemberId)
+            {
+            case MID_ANCHOR_ANCHORTYPE:
+                if (aValue.get<text::TextContentAnchorType>() == text::TextContentAnchorType_AS_CHARACTER)
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
+                    xPropertySet->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode_THROUGHT));
+                    return;
+                }
+                break;
+            }
+            break;
         }
 
         if (bSync)
@@ -271,7 +287,7 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             }
 
             uno::Reference<beans::XPropertySet> xPropertySet(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
-            xPropertySet->setPropertyValue(rPropertyName, aValue);
+            xPropertySet->setPropertyValue(aPropertyName, aValue);
         }
     }
 }
