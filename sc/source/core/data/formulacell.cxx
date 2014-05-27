@@ -1682,10 +1682,21 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 nFormatIndex = ScGlobal::GetStandardFormat(*pDocument->GetFormatTable(),
                         nFormatIndex, nFormatType);
 
-            // set number format explicitly
-            pDocument->SetNumberFormat( aPos, nFormatIndex );
+            // Do not replace a General format (which was the reason why
+            // mbNeedsNumberFormat was set) with a General format.
+            // 1. setting a format has quite some overhead in the
+            // ScPatternAttr/ScAttrArray handling, even if identical.
+            // 2. the General formats may be of different locales.
+            // XXX if mbNeedsNumberFormat was set even if the current format
+            // was not General then we'd have to obtain the current format here
+            // and check at least the types.
+            if ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
+            {
+                // set number format explicitly
+                pDocument->SetNumberFormat( aPos, nFormatIndex );
+                bChanged = true;
+            }
 
-            bChanged = true;
             mbNeedsNumberFormat = false;
         }
 
