@@ -166,7 +166,7 @@ protected:
     virtual bool setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProperty ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
 public:
-    SvxShape( SdrObject* pObj ) throw ();
+    SvxShape( SdrObject* pObj ) throw (css::uno::RuntimeException);
     SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet ) throw (css::uno::RuntimeException);
     SvxShape() throw (css::uno::RuntimeException);
     virtual ~SvxShape() throw ();

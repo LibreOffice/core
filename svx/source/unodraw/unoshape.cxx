@@ -182,7 +182,7 @@ protected:
 ***********************************************************************/
 
 
-SvxShape::SvxShape( SdrObject* pObject ) throw()
+SvxShape::SvxShape( SdrObject* pObject ) throw( uno::RuntimeException )
 :   maSize(100,100)
 ,   mpImpl( new SvxShapeImpl( *this, maMutex ) )
 ,   mbIsMultiPropertyCall(false)
