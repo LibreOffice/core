@@ -2094,7 +2094,7 @@ public:
     void SetCalcConfig( const ScCalcConfig& rConfig );
     const ScCalcConfig& GetCalcConfig() const;
 
-private: // CLOOK-Impl-methods
+private:
 
     /**
      * Use this class as a locale variable to merge number formatter from
