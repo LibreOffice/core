@@ -85,7 +85,7 @@ public:
 
 protected:
     /// Copy&paste helper.
-#if !defined MACOSX && !defined WNT
+#if !defined WNT
     void paste(const OUString& aFilename, uno::Reference<text::XTextRange> xTextRange = uno::Reference<text::XTextRange>())
     {
         uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
@@ -112,7 +112,7 @@ protected:
 
 #define DECLARE_RTFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
 
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(WNT)
 
 DECLARE_RTFIMPORT_TEST(testFdo45553, "fdo45553.rtf")
 {
