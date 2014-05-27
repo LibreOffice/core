@@ -83,12 +83,12 @@ void SwTextBoxHelper::destroy(SwFrmFmt* pShape)
     }
 }
 
-std::list<SwFrmFmt*> SwTextBoxHelper::findTextBoxes(SwDoc* pDoc)
+std::list<SwFrmFmt*> SwTextBoxHelper::findTextBoxes(const SwDoc* pDoc)
 {
     std::list<SwFrmFmt*> aRet;
 
-    SwFrmFmts& rSpzFrmFmts = *pDoc->GetSpzFrmFmts();
-    for (SwFrmFmts::iterator it = rSpzFrmFmts.begin(); it != rSpzFrmFmts.end(); ++it)
+    const SwFrmFmts& rSpzFrmFmts = *pDoc->GetSpzFrmFmts();
+    for (SwFrmFmts::const_iterator it = rSpzFrmFmts.begin(); it != rSpzFrmFmts.end(); ++it)
     {
         SwFrmFmt* pTextBox = findTextBox(*it);
         if (pTextBox)
