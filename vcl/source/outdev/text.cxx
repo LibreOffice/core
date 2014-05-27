@@ -149,7 +149,12 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
 
     nX += nBaseX;
     nY += nBaseY;
-    mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this );
+    //mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this ); // original code
+    Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
+    Polygon   aPoly( aRect );
+    PolyPolygon aPolyPoly(aPoly);
+    DrawTransparent(aPolyPoly, 50);
+
 }
 
 void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
@@ -474,12 +479,12 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
     rSalLayout.DrawBase() += Point( mnTextOffX, mnTextOffY );
 
     /*
-     if the text has some background get it (XXX: now getting fixed color)
+     if the text has some background get it
      and the set it as the new filling color
     */
     if (mbTextBackground) {
-        // set right background
-        Color aColor = COL_BLUE;
+        // set right background // (XXX: now getting fixed color)
+        Color aColor = RGB_COLORDATA(0x66,0x66, 0xFF); // blue-ish
         // SetBackground does not work
         SetTextFillColor(aColor);
     }
