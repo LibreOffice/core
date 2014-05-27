@@ -487,7 +487,7 @@ ScVbaWorksheets::getServiceNames()
     return sNames;
 }
 
-bool ScVbaWorksheets::nameExists( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab ) throw ( lang::IllegalArgumentException )
+bool ScVbaWorksheets::nameExists( uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab ) throw ( lang::IllegalArgumentException, uno::RuntimeException )
 {
     if (!xSpreadDoc.is())
         throw lang::IllegalArgumentException( "nameExists() xSpreadDoc is null", uno::Reference< uno::XInterface  >(), 1 );
