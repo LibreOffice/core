@@ -2055,7 +2055,6 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78384,"fdo78384.docx")
         return;
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts","ascii","Wingdings");
 }
-#endif
 
 DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
 {
@@ -2066,6 +2065,8 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
     if (!pXmlDoc)
         return;
 }
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
