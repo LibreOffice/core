@@ -126,11 +126,6 @@ bool Options::checkCommandFile(std::vector< std::string > & rArgs, char const * 
     return (fclose(fp) == 0);
 }
 
-bool Options::initOptions (std::vector< std::string > & rArgs)
-{
-    return initOptions_Impl (rArgs);
-}
-
 bool Options::badOption (char const * reason, char const * option) const
 {
     (void) fprintf(stderr, "%s: %s option '%s'\n", m_program.c_str(), reason, option);

@@ -602,11 +602,6 @@ void SfxStyleSheetBasePool::SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n)
     nSearchFamily = eFam; nMask = n;
 }
 
-sal_uInt16 SfxStyleSheetBasePool::GetSearchMask() const
-{
-    return nMask;
-}
-
 SfxStyleSheetIteratorPtr SfxStyleSheetBasePool::CreateIterator
 (
  SfxStyleFamily eFam,
@@ -837,17 +832,6 @@ void SfxStyleSheetBase::Load( SvStream&, sal_uInt16 )
 void SfxStyleSheetBase::Store( SvStream& )
 {
 }
-
-SfxItemPool& SfxStyleSheetBasePool::GetPool()
-{
-    return rPool;
-}
-
-const SfxItemPool& SfxStyleSheetBasePool::GetPool() const
-{
-    return rPool;
-}
-
 
 SfxStyleSheet::SfxStyleSheet(const OUString &rName,
                              const SfxStyleSheetBasePool& r_Pool,

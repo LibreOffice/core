@@ -209,11 +209,6 @@ MergeData::~MergeData()
     delete pMergeEntrys;
 }
 
-MergeEntrys* MergeData::GetMergeEntries()
-{
-    return pMergeEntrys;
-}
-
 bool MergeData::operator==( ResData *pData )
 {
     return pData->sId == sLID && pData->sGId == sGID

@@ -37,11 +37,6 @@ UnoVirtualMachine::CreationException::CreationException(
 
 UnoVirtualMachine::CreationException::~CreationException() {}
 
-UnoVirtualMachine::CreationException &
-UnoVirtualMachine::CreationException::operator =(CreationException const &) {
-    return *this;
-}
-
 UnoVirtualMachine::UnoVirtualMachine(
     rtl::Reference< jvmaccess::VirtualMachine > const & virtualMachine,
     void * classLoader):
@@ -56,15 +51,6 @@ UnoVirtualMachine::UnoVirtualMachine(
     if (m_classLoader == 0) {
         throw CreationException();
     }
-}
-
-rtl::Reference< jvmaccess::VirtualMachine >
-UnoVirtualMachine::getVirtualMachine() const {
-    return m_virtualMachine;
-}
-
-void * UnoVirtualMachine::getClassLoader() const {
-    return m_classLoader;
 }
 
 UnoVirtualMachine::~UnoVirtualMachine() {

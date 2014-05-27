@@ -31,11 +31,6 @@ Options::~Options()
 
 }
 
-const OString& Options::getProgramName() const
-{
-    return m_program;
-}
-
 bool Options::isValid(const OString& option) const
 {
     return m_options.find(option) != m_options.end();
@@ -49,11 +44,6 @@ const OString Options::getOption(const OString& option) const
         throw IllegalArgument("Option is not valid or currently not set.");
     }
     return i->second;
-}
-
-const StringVector& Options::getInputFiles()
-{
-    return m_inputFiles;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

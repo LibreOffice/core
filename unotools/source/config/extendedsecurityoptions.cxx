@@ -79,7 +79,8 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
 
         virtual void Commit() SAL_OVERRIDE;
 
-        SvtExtendedSecurityOptions::OpenHyperlinkMode   GetOpenHyperlinkMode();
+        SvtExtendedSecurityOptions::OpenHyperlinkMode   GetOpenHyperlinkMode() { return m_eOpenHyperlinkMode; }
+
     private:
 
         /*-****************************************************************************************************
@@ -195,13 +196,6 @@ void SvtExtendedSecurityOptions_Impl::Commit()
 
     // Set properties in configuration.
     PutProperties( seqNames, seqValues );
-}
-
-//  public method
-
-SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions_Impl::GetOpenHyperlinkMode()
-{
-    return m_eOpenHyperlinkMode;
 }
 
 //  private method

@@ -36,11 +36,11 @@ public:
 
     OUString getString() const;
 
-    rtl_uString* getData();
-    const rtl_uString* getData() const;
+    rtl_uString* getData() { return mpData; }
+    const rtl_uString* getData() const { return mpData; }
 
-    rtl_uString* getDataIgnoreCase();
-    const rtl_uString* getDataIgnoreCase() const;
+    rtl_uString* getDataIgnoreCase() { return mpDataIgnoreCase; }
+    const rtl_uString* getDataIgnoreCase() const { return mpDataIgnoreCase; }
 
     bool isValid() const;
     bool isEmpty() const;

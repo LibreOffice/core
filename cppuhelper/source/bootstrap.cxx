@@ -78,11 +78,6 @@ BootstrapException & BootstrapException::operator=( const BootstrapException & e
     return *this;
 }
 
-const ::rtl::OUString & BootstrapException::getMessage() const
-{
-    return m_aMessage;
-}
-
 Reference< XComponentContext > SAL_CALL bootstrap()
 {
     Reference< XComponentContext > xRemoteContext;

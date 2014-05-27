@@ -79,9 +79,6 @@ ConditionWaiter::timedout::timedout(timedout const &) {}
 
 ConditionWaiter::timedout::~timedout() {}
 
-ConditionWaiter::timedout &
-ConditionWaiter::timedout::operator =(timedout const &) { return *this; }
-
 ConditionWaiter::ConditionWaiter(Condition& aCond)
     : m_aCond(aCond)
 {

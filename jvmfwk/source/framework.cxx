@@ -1223,11 +1223,6 @@ CJavaInfo::~CJavaInfo()
     jfw_freeJavaInfo(pInfo);
 }
 
-CJavaInfo::operator ::JavaInfo* ()
-{
-    return pInfo;
-}
-
 JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
 {
     if (pInfo == NULL)
@@ -1244,7 +1239,6 @@ JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
     }
     return newInfo;
 }
-
 
 JavaInfo* CJavaInfo::cloneJavaInfo() const
 {
@@ -1270,16 +1264,6 @@ CJavaInfo & CJavaInfo::operator = (const ::JavaInfo* info)
     jfw_freeJavaInfo(pInfo);
     pInfo = copyJavaInfo(info);
     return *this;
-}
-
-const ::JavaInfo* CJavaInfo::operator ->() const
-{
-    return pInfo;
-}
-
-CJavaInfo::operator JavaInfo const * () const
-{
-    return pInfo;
 }
 
 OUString CJavaInfo::getVendor() const

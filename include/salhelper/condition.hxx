@@ -90,7 +90,7 @@ namespace salhelper
 
             virtual ~timedout();
 
-            timedout & operator =(timedout const &);
+            timedout & operator =(timedout const &) { return *this; }
         };
 
         ConditionWaiter(Condition& aCond,sal_uInt32 milliSec)

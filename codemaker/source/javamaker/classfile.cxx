@@ -486,10 +486,6 @@ ClassFile::ClassFile(
 
 ClassFile::~ClassFile() {}
 
-ClassFile::Code * ClassFile::newCode() {
-    return new Code(*this);
-}
-
 sal_uInt16 ClassFile::addIntegerInfo(sal_Int32 value) {
     std::map< sal_Int32, sal_uInt16 >::iterator i(m_integerInfos.find(value));
     if (i != m_integerInfos.end()) {

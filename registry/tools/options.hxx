@@ -40,7 +40,7 @@ public:
 
     static bool checkArgument (std::vector< std::string > & rArgs, char const * arg, size_t len);
 
-    bool initOptions (std::vector< std::string > & rArgs);
+    bool initOptions (std::vector< std::string > & rArgs) { return initOptions_Impl(rArgs); }
     bool badOption (char const * reason, char const * option) const;
 
     std::string const & getProgramName() const { return m_program; }

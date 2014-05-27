@@ -95,12 +95,12 @@ public:
         @param  nSize [in]
         @return store_E_None upon success
      */
-    storeError setSize (sal_uInt32 nSize);
+    storeError setSize (sal_uInt32 nSize) { return setSize_Impl(nSize); }
 
     /**
         @return store_E_None upon success
      */
-    storeError flush();
+    storeError flush() { return flush_Impl(); }
 
 protected:
     ~ILockBytes() {}

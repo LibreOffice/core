@@ -125,16 +125,6 @@ storeError ILockBytes::getSize (sal_uInt32 & rnSize)
     return getSize_Impl (rnSize);
 }
 
-storeError ILockBytes::setSize (sal_uInt32 nSize)
-{
-    return setSize_Impl (nSize);
-}
-
-storeError ILockBytes::flush()
-{
-    return flush_Impl();
-}
-
 /*========================================================================
  *
  * FileLockBytes implementation.

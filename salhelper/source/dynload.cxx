@@ -89,11 +89,6 @@ ORealDynamicLoader::~ORealDynamicLoader()
     }
 }
 
-sal_uInt32 ORealDynamicLoader::acquire()
-{
-    return ++m_refCount;
-}
-
 sal_uInt32 ORealDynamicLoader::release()
 {
     sal_uInt32 nRet = --m_refCount;
@@ -102,11 +97,6 @@ sal_uInt32 ORealDynamicLoader::release()
     return nRet;
 }
 
-
-void* ORealDynamicLoader::getApi() const
-{
-    return m_pApi;
-}
 
 } // namespace salhelper
 

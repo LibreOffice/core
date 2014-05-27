@@ -110,10 +110,6 @@ OUString RootAccess::getLocale() const {
     return locale_;
 }
 
-bool RootAccess::isUpdate() const {
-    return update_;
-}
-
 void RootAccess::setAlive(bool b) {
     alive_ = b;
 }

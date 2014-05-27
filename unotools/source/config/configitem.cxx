@@ -1095,11 +1095,6 @@ bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
     return bRet;
 }
 
-sal_Int16   ConfigItem::GetMode() const
-{
-    return m_nMode;
-}
-
 void    ConfigItem::SetModified()
 {
     m_bIsModified = true;
@@ -1108,11 +1103,6 @@ void    ConfigItem::SetModified()
 void    ConfigItem::ClearModified()
 {
     m_bIsModified = false;
-}
-
-bool ConfigItem::IsModified() const
-{
-    return m_bIsModified;
 }
 
 bool ConfigItem::IsInValueChange() const

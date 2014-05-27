@@ -35,6 +35,7 @@ CXPathObjectPtr::~CXPathObjectPtr()
 {
     xmlXPathFreeObject(_object);
 }
+
 CXPathObjectPtr & CXPathObjectPtr::operator = (xmlXPathObject* pObj)
 {
     if (_object == pObj)
@@ -43,15 +44,6 @@ CXPathObjectPtr & CXPathObjectPtr::operator = (xmlXPathObject* pObj)
     xmlXPathFreeObject(_object);
     _object = pObj;
     return *this;
-}
-xmlXPathObject* CXPathObjectPtr::operator ->()
-
-{
-    return _object;
-}
-CXPathObjectPtr::operator xmlXPathObject*() const
-{
-    return _object;
 }
 
 CXPathContextPtr::CXPathContextPtr(xmlXPathContextPtr aContext)
@@ -76,15 +68,6 @@ CXPathContextPtr & CXPathContextPtr::operator = (xmlXPathContextPtr pObj)
     _object = pObj;
     return *this;
 }
-xmlXPathContext* CXPathContextPtr::operator ->()
-{
-    return _object;
-}
-
-CXPathContextPtr::operator xmlXPathContext*() const
-{
-    return _object;
-}
 
 CXmlDocPtr::CXmlDocPtr(xmlDoc* aDoc)
     : _object(aDoc)
@@ -108,17 +91,6 @@ CXmlDocPtr & CXmlDocPtr::operator = (xmlDoc* pObj)
     return *this;
 }
 
-xmlDoc* CXmlDocPtr::operator ->()
-{
-    return _object;
-}
-
-CXmlDocPtr::operator xmlDoc*() const
-{
-    return _object;
-}
-
-
 CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
     : _object(aChar)
 {
@@ -130,6 +102,7 @@ CXmlCharPtr::CXmlCharPtr(const OUString & s):
     OString o = OUStringToOString(s, RTL_TEXTENCODING_UTF8);
     _object = xmlCharStrdup(o.getStr());
 }
+
 CXmlCharPtr::CXmlCharPtr():_object(NULL)
 {
 }
@@ -146,11 +119,6 @@ CXmlCharPtr & CXmlCharPtr::operator = (xmlChar* pObj)
     xmlFree(_object);
     _object = pObj;
     return *this;
-}
-
-CXmlCharPtr::operator xmlChar*() const
-{
-    return _object;
 }
 
 CXmlCharPtr::operator OUString()

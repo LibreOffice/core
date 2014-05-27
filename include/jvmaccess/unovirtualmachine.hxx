@@ -45,7 +45,7 @@ public:
 
         virtual ~CreationException();
 
-        CreationException & operator =(CreationException const &);
+        CreationException & operator =(CreationException const &) { return *this; }
     };
 
     /** Create a wrapper around a Java virtual machine and an appropriate UNO
@@ -74,7 +74,7 @@ public:
         @return
         The Java virtual machine wrapper.  Will never be null.
      */
-    rtl::Reference< jvmaccess::VirtualMachine > getVirtualMachine() const;
+    rtl::Reference< jvmaccess::VirtualMachine > getVirtualMachine() const { return m_virtualMachine; }
 
     /** Get the UNO class loader.
 
@@ -85,7 +85,7 @@ public:
         different for different JDK versions, so that the mangled C++ name of
         the function would depend on the JDK version used at compile time.
      */
-    void * getClassLoader() const;
+    void * getClassLoader() const { return m_classLoader; }
 
 private:
     UnoVirtualMachine(UnoVirtualMachine &); // not defined

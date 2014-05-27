@@ -46,12 +46,13 @@ public:
             const ::rtl::OUString& strInitFunction );
 
     /// increase the reference count.
-    sal_uInt32 SAL_CALL acquire();
+    sal_uInt32 SAL_CALL acquire() {  return ++m_refCount; }
+
     /// decrease the reference count and delete the last instance.
     sal_uInt32 SAL_CALL release();
 
     /// returns a poiner to the initialized API function structure.
-    void* SAL_CALL getApi() const;
+    void* SAL_CALL getApi() const { return m_pApi; }
 
 protected:
     /** Constructor.

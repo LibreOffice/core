@@ -2029,12 +2029,6 @@ bool LanguageTag::isValidBcp47() const
 }
 
 
-bool LanguageTag::isSystemLocale() const
-{
-    return mbSystemLocale;
-}
-
-
 LanguageTag & LanguageTag::makeFallback()
 {
     if (!mbIsFallback)

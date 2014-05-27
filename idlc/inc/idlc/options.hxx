@@ -60,8 +60,8 @@ public:
     OString prepareHelp();
     OString prepareVersion();
 
-    const OString&   getProgramName() const;
-    bool                isValid(const OString& option);
+    const OString&   getProgramName() const { return m_program; }
+    bool             isValid(const OString& option);
     const OString&   getOption(const OString& option)
         throw( IllegalArgument );
 

@@ -57,7 +57,7 @@ public:
 
             virtual ~CreationException();
 
-            CreationException & operator =(CreationException const &);
+            CreationException & operator =(CreationException const &) { return *this; }
         };
 
         /** Attach the current thread to a virtual machine.

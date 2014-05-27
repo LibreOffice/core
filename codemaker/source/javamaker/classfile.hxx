@@ -156,7 +156,7 @@ public:
 
     ~ClassFile();
 
-    Code * newCode();
+    Code * newCode() { return new Code(*this); }
 
     sal_uInt16 addIntegerInfo(sal_Int32 value);
     sal_uInt16 addFloatInfo(float value);

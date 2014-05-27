@@ -119,7 +119,7 @@ public:
         A reference to the message. The reference is valid for the lifetime of
         this BootstrapException.
      */
-    const ::rtl::OUString & getMessage() const;
+    const ::rtl::OUString & getMessage() const { return m_aMessage; }
 
 private:
     ::rtl::OUString m_aMessage;

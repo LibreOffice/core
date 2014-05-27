@@ -94,9 +94,9 @@ public:
     bool operator < (const SunVersion& ver) const;
     bool operator == (const SunVersion& ver) const;
 
-    /** Test if the version is compatible tu SUN's versioning scheme
+    /** Test if the version is compatible with SUN's versioning scheme
      */
-    operator bool ();
+    operator bool () { return m_bValid; }
 
     /** Will always contain a value if the object has been constructed with
         a version string.
