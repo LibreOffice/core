@@ -88,7 +88,8 @@ bool OGLPlayer::create( const OUString& rURL )
                 GraphicFilter aFilter;
                 Graphic aGraphic;
                 aFilter.ImportGraphic(aGraphic, INetURLObject(sFilesURL));
-                const BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
+                BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
+                aBitmapEx.Mirror(BMP_MIRROR_VERT);
                 rFile.buffer = (char*)OpenGLHelper::ConvertBitmapExToRGBABuffer(aBitmapEx);
                 rFile.imagewidth = aBitmapEx.GetSizePixel().Width();
                 rFile.imageheight = aBitmapEx.GetSizePixel().Height();
