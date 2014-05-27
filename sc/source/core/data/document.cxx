@@ -268,9 +268,14 @@ std::vector<OUString> ScDocument::GetAllTableNames() const
     TableContainer::const_iterator it = maTabs.begin(), itEnd = maTabs.end();
     for (; it != itEnd; ++it)
     {
+        // Positions need to be preserved for ScCompiler and address convention
+        // context, so still push an empty string for NULL tabs.
         OUString aName;
-        const ScTable& rTab = **it;
-        rTab.GetName(aName);
+        if (*it)
+        {
+            const ScTable& rTab = **it;
+            rTab.GetName(aName);
+        }
         aNames.push_back(aName);
     }
 
