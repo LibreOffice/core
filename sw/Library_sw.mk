@@ -202,6 +202,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/tblafmt \
     sw/source/core/doc/tblcpy \
     sw/source/core/doc/tblrwcl \
+    sw/source/core/doc/textboxhelper \
     sw/source/core/doc/visiturl \
     sw/source/core/docnode/cancellablejob \
     sw/source/core/docnode/finalthreadmanager \

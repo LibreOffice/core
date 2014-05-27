@@ -28,6 +28,7 @@
 #include <unotextrange.hxx>
 #include <svx/svditer.hxx>
 #include <swunohelper.hxx>
+#include <textboxhelper.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <fmtcntnt.hxx>
@@ -974,7 +975,11 @@ SwXShape::~SwXShape()
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType ) throw( uno::RuntimeException, std::exception )
 {
-    uno::Any aRet = SwXShapeBaseClass::queryInterface(aType);
+    uno::Any aRet = SwTextBoxHelper::getXTextAppend(GetFrmFmt(), aType);
+    if (aRet.hasValue())
+        return aRet;
+
+    aRet = SwXShapeBaseClass::queryInterface(aType);
     // #i53320# - follow-up of #i31698#
     // interface drawing::XShape is overloaded. Thus, provide
     // correct object instance.
@@ -1325,6 +1330,8 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     else
                         pFmt->SetFmtAttr(aSet);
                 }
+                // We have a pFmt and a pEntry as well: try to sync TextBox property.
+                SwTextBoxHelper::syncProperty(pFmt, pEntry->nWID, pEntry->nMemberId, rPropertyName, aValue);
             }
             else
             {
@@ -2309,6 +2316,7 @@ void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
     {
         mxShape->setSize( aSize );
     }
+    SwTextBoxHelper::syncProperty(GetFrmFmt(), RES_FRM_SIZE, MID_FRMSIZE_SIZE, "Size", uno::makeAny(aSize));
 }
 // #i31698#
 // implementation of virtual methods from drawing::XShapeDescriptor
