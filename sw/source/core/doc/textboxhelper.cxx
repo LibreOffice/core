@@ -105,6 +105,10 @@ uno::Any SwTextBoxHelper::getXTextAppend(SwFrmFmt* pShape, const uno::Type& rTyp
 
 void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, const OUString& rPropertyName, const css::uno::Any& rValue)
 {
+    // No shape yet? Then nothing to do, initial properties are set by create().
+    if (!pShape)
+        return;
+
     uno::Any aValue(rValue);
     nMemberId &= ~CONVERT_TWIPS;
 
