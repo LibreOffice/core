@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkGrid" id="DocumentInfoPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -52,7 +53,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">9</property>
+        <property name="top_attach">10</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -68,7 +69,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">10</property>
+        <property name="top_attach">11</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -84,7 +85,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">11</property>
+        <property name="top_attach">12</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -100,7 +101,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">12</property>
+        <property name="top_attach">13</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -146,7 +147,7 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">9</property>
+        <property name="top_attach">10</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -161,7 +162,7 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">10</property>
+        <property name="top_attach">11</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -176,7 +177,7 @@
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">11</property>
+        <property name="top_attach">12</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -188,18 +189,6 @@
         <property name="hexpand">True</property>
         <property name="xalign">0</property>
         <property name="selectable">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">12</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label26">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -215,15 +204,14 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="no_show_all">True</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">13</property>
-        <property name="width">1</property>
+        <property name="top_attach">14</property>
+        <property name="width">2</property>
         <property name="height">1</property>
       </packing>
     </child>
@@ -238,7 +226,7 @@
       </object>
       <packing>
         <property name="left_attach">2</property>
-        <property name="top_attach">13</property>
+        <property name="top_attach">14</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -255,38 +243,7 @@
       </object>
       <packing>
         <property name="left_attach">2</property>
-        <property name="top_attach">9</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="templateft">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="label" translatable="yes">Template:</property>
-        <property name="use_underline">True</property>
-        <property name="mnemonic_widget">showtemplate</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">15</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel" id="showtemplate">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="xalign">0</property>
-        <property name="selectable">True</property>
-        <property name="max_width_chars">56</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">15</property>
+        <property name="top_attach">10</property>
         <property name="width">1</property>
         <property name="height">1</property>
       </packing>
@@ -342,11 +299,10 @@
       <object class="GtkLabel" id="showlocation">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="justify">left</property>
-        <property name="selectable">False</property>
-        <property name="max_width_chars">56</property>
-        <property name="wrap">True</property>
         <property name="hexpand">True</property>
+        <property name="xalign">0</property>
+        <property name="wrap">True</property>
+        <property name="max_width_chars">56</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -404,35 +360,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkEntry" id="nameed">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="valign">center</property>
-        <property name="hexpand">True</property>
-        <property name="invisible_char">•</property>
-        <property name="invisible_char_set">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkImage" id="icon">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="stock">gtk-missing-image</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkLabel" id="label2">
         <property name="height_request">18</property>
         <property name="visible">True</property>
@@ -459,26 +386,12 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="label4">
-        <property name="height_request">18</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">14</property>
-        <property name="width">3</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkCheckButton" id="readonlycb">
         <property name="label" translatable="yes">_Read-only</property>
         <property name="use_action_appearance">False</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="use_action_appearance">False</property>
         <property name="use_underline">True</property>
         <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
@@ -500,6 +413,81 @@
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
         <property name="width">3</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="templateft">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">Template:</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">showtemplate</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">9</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="showtemplate">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="xalign">0</property>
+        <property name="selectable">True</property>
+        <property name="max_width_chars">56</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">9</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkGrid" id="grid1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="valign">center</property>
+        <property name="hexpand">True</property>
+        <property name="column_spacing">12</property>
+        <child>
+          <object class="GtkImage" id="icon">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="valign">center</property>
+            <property name="stock">gtk-missing-image</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="nameed">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="valign">center</property>
+            <property name="hexpand">True</property>
+            <property name="invisible_char">•</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">2</property>
         <property name="height">1</property>
       </packing>
     </child>
