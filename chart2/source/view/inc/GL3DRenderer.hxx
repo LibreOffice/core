@@ -190,6 +190,7 @@ public:
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
+    void ClearBuffer();
     void RenderPolygon3DObject();
     void RenderLine3D(Polygon3DInfo &polygon);
     void RenderPolygon3D(Polygon3DInfo &polygon);

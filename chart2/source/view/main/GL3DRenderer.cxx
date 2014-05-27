@@ -253,10 +253,7 @@ void OpenGL3DRenderer::init()
 
     glEnable(GL_MULTISAMPLE);
 
-    glClearColor (1.0, 1.0, 1.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearDepth(1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ClearBuffer();
 
     glGenBuffers(1, &m_CubeVertexBuf);
     glGenBuffers(1, &m_CubeNormalBuf);
@@ -1693,12 +1690,42 @@ void OpenGL3DRenderer::CreateSceneBoxView()
                m_CameraInfo.cameraUp);
 }
 
+void OpenGL3DRenderer::ClearBuffer()
+{
+    static bool bOldRender = getenv("OLDRENDER");
+    if (!bOldRender) // gradient background
+    {
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_LIGHTING);
+
+        glClearDepth(1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glBegin (GL_QUADS);
+        glColor3f(0.3,0.3,0.3);
+        glVertex3f (-1.0f, -1.0f, -1.0f);
+        glVertex3f (1.0f, -1.0f, -1.0f);
+
+        glColor3f(0.0,0.0,0.0);
+        glVertex3f (1.0f, 1.0f, -1.0f);
+        glVertex3f (-1.0f, 1.0f, -1.0f);
+        glEnd ();
+
+        glEnable(GL_LIGHTING);
+        glEnable(GL_DEPTH_TEST);
+    }
+    else
+    {
+        glClearDepth(1.0f);
+        glClearColor (1.0, 0.5, 0.5, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+}
+
 void OpenGL3DRenderer::ProcessUnrenderedShape(bool bNewScene)
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
-    glClearDepth(1.0f);
-    glClearColor(1.0, 1.0, 1.0, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ClearBuffer();
     CreateSceneBoxView();
     //Polygon
     RenderPolygon3DObject();
