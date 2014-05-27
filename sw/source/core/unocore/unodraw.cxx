@@ -1182,9 +1182,10 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 {
                     bool bValue;
                     aValue >>= bValue;
-                    // If TextBox is to be enabled.
                     if (bValue)
                         SwTextBoxHelper::create(pFmt);
+                    else
+                        SwTextBoxHelper::destroy(pFmt);
 
                 }
                 // #i28749#
