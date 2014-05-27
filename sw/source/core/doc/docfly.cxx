@@ -450,6 +450,8 @@ void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
 
     for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
     {
+        if (IsInvalidItem(pItem))
+            continue;
         const SfxPoolItem* pResult = pItem;
 
         switch(pItem->Which())
