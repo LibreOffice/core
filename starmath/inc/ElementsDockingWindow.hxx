@@ -16,11 +16,14 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 #define INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 
+#include <boost/scoped_ptr.hpp>
 #include <sfx2/dockwin.hxx>
 #include <svx/dlgctrl.hxx>
+#include <vcl/scrbar.hxx>
 
 #include <document.hxx>
 #include <node.hxx>
@@ -67,7 +70,6 @@ public:
 
 class SmElementsControl : public Control
 {
-
     static const sal_uInt16 aUnaryBinaryOperatorsList[][2];
     static const sal_uInt16 aRelationsList[][2];
     static const sal_uInt16 aSetOperations[][2];
@@ -95,6 +97,7 @@ class SmElementsControl : public Control
     SmElementList maElementList;
     Size          maMaxElementDimensions;
     bool          mbVerticalMode;
+    boost::scoped_ptr< ScrollBar > mpScroll;
 
     void addElement(const OUString& aElementVisual, const OUString& aElementSource, const OUString& aHelpText);
 
@@ -113,6 +116,9 @@ public:
     void setVerticalMode(bool bVertical);
 
     void SetSelectHdl(const Link& rLink)   { aSelectHdlLink = rLink; }
+
+    DECL_LINK( ScrollHdl, void* );
+    void DoScroll(long nDelta);
 };
 
 class SmElementsDockingWindow : public SfxDockingWindow
@@ -151,7 +157,6 @@ protected:
     virtual ~SmElementsDockingWindowWrapper();
 };
 
-
-#endif // _SYMBOLDOCKINGWINDOW_HXX_
+#endif // INCLUDED_STARMATH_INC_ELEMENTSDOCKINGWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
