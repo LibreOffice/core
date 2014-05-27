@@ -30,6 +30,7 @@
 #include <swunohelper.hxx>
 #include <textboxhelper.hxx>
 #include <doc.hxx>
+#include <docary.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtflcnt.hxx>
@@ -516,7 +517,13 @@ sal_Int32 SwXDrawPage::getCount(void) throw( uno::RuntimeException, std::excepti
     else
     {
         ((SwXDrawPage*)this)->GetSvxPage();
-        return pDrawPage->getCount();
+
+        std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+
+        if (aTextBoxes.empty())
+            return pDrawPage->getCount();
+        else
+            return SwTextBoxHelper::getCount(pDrawPage->GetSdrPage(), aTextBoxes);
     }
 }
 
