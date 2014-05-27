@@ -975,7 +975,7 @@ SwXShape::~SwXShape()
 
 uno::Any SwXShape::queryInterface( const uno::Type& aType ) throw( uno::RuntimeException, std::exception )
 {
-    uno::Any aRet = SwTextBoxHelper::getXTextAppend(GetFrmFmt(), aType);
+    uno::Any aRet = SwTextBoxHelper::queryInterface(GetFrmFmt(), aType);
     if (aRet.hasValue())
         return aRet;
 
