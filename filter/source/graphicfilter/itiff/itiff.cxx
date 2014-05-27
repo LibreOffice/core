@@ -1368,15 +1368,15 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                             aAnimation.Insert( aAnimationBitmap );
                         }
                     }
-                    // Aufraeumen:
-                    for ( i = 0; i < 4; i++ )
-                        delete[] pMap[ i ];
-
-                    delete[] pColorMap;
-                    delete[] pStripOffsets;
-                    delete[] pStripByteCounts;
                 }
             }
+
+            // Clean up:
+            for ( i = 0; i < 4; i++ )
+                delete[] pMap[ i ];
+            delete[] pColorMap;
+            delete[] pStripOffsets;
+            delete[] pStripByteCounts;
         }
     }
 
