@@ -55,7 +55,7 @@ public:
     virtual ~SvxUnoXPropertyTable() throw();
 
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() = 0;
-    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw(lang::IllegalArgumentException) = 0;
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw(uno::RuntimeException, lang::IllegalArgumentException) = 0;
 
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -636,7 +636,7 @@ public:
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() SAL_OVERRIDE;
-    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw() SAL_OVERRIDE;
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw(uno::RuntimeException) SAL_OVERRIDE;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -663,7 +663,7 @@ uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw(
     return aAny;
 }
 
-XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
+XPropertyEntry* SvxUnoXBitmapTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw(uno::RuntimeException)
 {
     OUString aURL;
     if(!(rAny >>= aURL))
