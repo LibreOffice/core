@@ -37,7 +37,7 @@ public:
     // XHelperInterface
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
-    static css::uno::Reference< ov::excel::XAxis > createAxis( const css::uno::Reference< ov::excel::XChart >& xChart, const css::uno::Reference< css::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup ) throw ( css::uno::RuntimeException );
+    static css::uno::Reference< ov::excel::XAxis > createAxis( const css::uno::Reference< ov::excel::XChart >& xChart, const css::uno::Reference< css::uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup ) throw ( css::uno::RuntimeException, css::script::BasicErrorException );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAAXES_HXX
