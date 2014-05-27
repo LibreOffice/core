@@ -465,7 +465,7 @@ private:
                 the whole runtime can't be used any longer.
      */
     bool impl_loadContent()
-        throw(LoadEnvException, css::uno::RuntimeException);
+        throw(LoadEnvException, css::uno::RuntimeException, css::beans::IllegalTypeException);
 
     /** @short  checks if the specified content is already loaded.
 
