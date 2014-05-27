@@ -44,6 +44,7 @@ import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
 import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Group;
+import org.jfree.report.structure.DetailSection;
 
 import org.pentaho.reporting.libraries.formula.lvalues.ContextLookup;
 import org.pentaho.reporting.libraries.formula.lvalues.LValue;
@@ -257,14 +258,14 @@ public class FormatValueUtility
         return true;
     }
 
-    public static boolean isGroupChanged(LayoutController ref)
+    private static boolean isGroupChanged(LayoutController ref)
     {
         // search the group.
-        final SectionLayoutController slc = findGroup(ref);
+        final SectionLayoutController slc = findGroupOrDetail(ref);
         if (slc == null)
         {
-            // Always print the content of the report header and footer and
-            // the page header and footer.
+            // {Page, Report} × {Header, Footer} have no usable iteration count
+            // err on the side of showing them rather than not showing them
             return true;
         }
 
@@ -272,10 +273,9 @@ public class FormatValueUtility
         return slc.getIterationCount() == 0;
     }
 
-    public static SectionLayoutController findGroup(LayoutController ref)
+    private static SectionLayoutController findGroupOrDetail(LayoutController ref)
     {
         LayoutController parent = ref.getParent();
-        boolean skipNext = false;
         while (parent != null)
         {
             if (!(parent instanceof SectionLayoutController))
@@ -286,19 +286,8 @@ public class FormatValueUtility
             {
                 final SectionLayoutController slc = (SectionLayoutController) parent;
                 final Element element = slc.getElement();
-                if (element instanceof OfficeGroupSection)
+                if (!(element instanceof Group || element instanceof DetailSection))
                 {
-                    // This is a header or footer. So we take the next group instead.
-                    skipNext = true;
-                    parent = parent.getParent();
-                }
-                else if (!(element instanceof Group))
-                {
-                    parent = parent.getParent();
-                }
-                else if (skipNext)
-                {
-                    skipNext = false;
                     parent = parent.getParent();
                 }
                 else
