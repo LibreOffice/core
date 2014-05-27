@@ -28,6 +28,7 @@
 #include <ndtxt.hxx>
 #include <unocrsr.hxx>
 #include <docary.hxx>
+#include <textboxhelper.hxx>
 #include <tox.hxx>
 #include <unomid.h>
 #include <unoparaframeenum.hxx>
@@ -43,6 +44,7 @@
 #include <fmtanchr.hxx>
 #include <fmtrfmrk.hxx>
 #include <frmfmt.hxx>
+#include <fmtflcnt.hxx>
 #include <unoidx.hxx>
 #include <unocoll.hxx>
 #include <redline.hxx>
@@ -687,7 +689,8 @@ lcl_ExportHints(
     const sal_Int32 nCurrentIndex,
     const bool bRightMoveForbidden,
     bool & o_rbCursorMoved,
-    sal_Int32 & o_rNextAttrPosition )
+    sal_Int32 & o_rNextAttrPosition,
+    std::list<SwFrmFmt*>& rTextBoxes)
 {
     // if the attribute has a dummy character, then xRef is set (except META)
     // otherwise, the portion for the attribute is inserted into rPortions!
@@ -856,6 +859,11 @@ lcl_ExportHints(
                         pUnoCrsr->Right(1,CRSR_SKIP_CHARS,false,false);
                         if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
                             break; // Robust #i81708 content in covered cells
+
+                        // Do not expose inline anchored textboxes.
+                        if (std::find(rTextBoxes.begin(), rTextBoxes.end(), pAttr->GetFlyCnt().GetFrmFmt()) != rTextBoxes.end())
+                            break;
+
                         pUnoCrsr->Exchange();
                         xRef = new SwXTextPortion( pUnoCrsr, xParent, PORTION_FRAME);
                     }
@@ -1234,6 +1242,8 @@ static void lcl_CreatePortions(
     PortionStack_t PortionStack;
     PortionStack.push( PortionList_t(&i_rPortions, (const SwTxtAttr *)0) );
 
+    std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+
     bool bAtEnd( false );
     while (!bAtEnd) // every iteration consumes at least current character!
     {
@@ -1284,7 +1294,7 @@ static void lcl_CreatePortions(
             // N.B.: side-effects nNextAttrIndex, bCursorMoved; may move cursor
             xRef = lcl_ExportHints(PortionStack, i_xParentText, pUnoCrsr,
                         pHints, i_nStartPos, i_nEndPos, nCurrentIndex, bAtEnd,
-                        bCursorMoved, nNextAttrIndex);
+                        bCursorMoved, nNextAttrIndex, aTextBoxes);
             if (PortionStack.empty())
             {
                 OSL_FAIL("CreatePortions: stack underflow");
