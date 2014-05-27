@@ -751,7 +751,7 @@ ScVbaFormat<Ifc1>::isAmbiguous(const OUString& _sPropertyName) throw ( script::B
 
 template< typename Ifc1 >
 void
-ScVbaFormat<Ifc1>::initializeNumberFormats() throw ( script::BasicErrorException )
+ScVbaFormat<Ifc1>::initializeNumberFormats() throw ( script::BasicErrorException, uno::RuntimeException )
 {
     if ( !xNumberFormats.is() )
     {
