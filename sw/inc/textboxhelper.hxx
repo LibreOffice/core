@@ -30,6 +30,8 @@ public:
     static css::uno::Any getXTextAppend(SwFrmFmt* pShape, const css::uno::Type& rType);
     /// Sync property of TextBox with the one of the shape.
     static void syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, const OUString& rPropertyName, const css::uno::Any& rValue);
+    /// If we have an associated TextFrame, then return that.
+    static SwFrmFmt* findTextBox(SwFrmFmt* pShape);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

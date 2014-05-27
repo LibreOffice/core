@@ -1394,6 +1394,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_RELATIVE_HEIGHT_RELATION), RES_FRM_SIZE, cppu::UnoType<sal_Int16>::get(),      PROPERTY_NONE, MID_FRMSIZE_REL_HEIGHT_RELATION },
                     { OUString(UNO_NAME_RELATIVE_WIDTH), RES_FRM_SIZE,      cppu::UnoType<sal_Int16>::get()  ,         PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH  },
                     { OUString(UNO_NAME_RELATIVE_WIDTH_RELATION), RES_FRM_SIZE, cppu::UnoType<sal_Int16>::get(),       PROPERTY_NONE, MID_FRMSIZE_REL_WIDTH_RELATION },
+                    { OUString(UNO_NAME_TEXT_BOX), FN_TEXT_BOX, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aShapeMap_Impl;
