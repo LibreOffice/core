@@ -31,7 +31,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 ScVbaHyperlink::ScVbaHyperlink( const uno::Sequence< uno::Any >& rArgs,
-        const uno::Reference< uno::XComponentContext >& rxContext ) throw (lang::IllegalArgumentException) :
+        const uno::Reference< uno::XComponentContext >& rxContext ) throw (lang::IllegalArgumentException, uno::RuntimeException) :
     HyperlinkImpl_BASE( getXSomethingFromArgs< XHelperInterface >( rArgs, 0 ), rxContext ),
     mxCell( getXSomethingFromArgs< table::XCell >( rArgs, 1, false ) ),
     mnType( office::MsoHyperlinkType::msoHyperlinkRange )
