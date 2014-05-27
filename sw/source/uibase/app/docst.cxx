@@ -57,7 +57,7 @@
 #include "viewopt.hxx"
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include "swstyle.h"
 #include "frmfmt.hxx"
@@ -159,7 +159,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
                     SfxTemplateItem aItem(nWhich, aName);
 
                     sal_uInt16 nMask = 0;
-                    if( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) )
+                    if( pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
                         nMask = SWSTYLEBIT_HTML;
                     else
                     {
@@ -185,7 +185,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
             case SID_STYLE_FAMILY3:
 
-                if( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) )
+                if( pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) )
                     rSet.DisableItem( nWhich );
                 else
                 {
@@ -201,7 +201,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
             case SID_STYLE_FAMILY4:
             {
                 SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
-                if( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
+                if( pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) && !rHtmlOpt.IsPrintLayoutExtension())
                     rSet.DisableItem( nWhich );
                 else
                 {

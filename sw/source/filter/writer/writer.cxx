@@ -29,7 +29,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <IMark.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <numrule.hxx>
 #include <swerror.h>
 
@@ -134,8 +134,8 @@ Writer::~Writer()
 /*
  * Document Interface Access
  */
-IDocumentSettingAccess* Writer::getIDocumentSettingAccess() { return &pDoc->GetDocumentSettingManager(); }
-const IDocumentSettingAccess* Writer::getIDocumentSettingAccess() const { return &pDoc->GetDocumentSettingManager(); }
+IDocumentSettingAccess* Writer::getIDocumentSettingAccess() { return &pDoc->getIDocumentSettingAccess(); }
+const IDocumentSettingAccess* Writer::getIDocumentSettingAccess() const { return &pDoc->getIDocumentSettingAccess(); }
 IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() { return pDoc; }
 const IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() const { return pDoc; }
 

@@ -79,7 +79,7 @@
 #include <ddefld.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
@@ -313,7 +313,7 @@ void SwTransferable::InitOle( SfxObjectShell* pDoc, SwDoc& rDoc )
     const Size aSz( OLESIZE );
     SwRect aVis( Point( DOCUMENTBORDER, DOCUMENTBORDER ), aSz );
     pDoc->SetVisArea( aVis.SVRect() );
-    rDoc.GetDocumentSettingManager().set(IDocumentSettingAccess::BROWSE_MODE, true );
+    rDoc.getIDocumentSettingAccess().set(IDocumentSettingAccess::BROWSE_MODE, true );
 }
 
 uno::Reference < embed::XEmbeddedObject > SwTransferable::FindOLEObj( sal_Int64& nAspect ) const

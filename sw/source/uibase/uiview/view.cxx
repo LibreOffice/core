@@ -71,7 +71,7 @@
 #include <srcview.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>
 #include <wview.hxx>
@@ -192,7 +192,7 @@ void SwView::GotFocus() const
     {
         SwWrtShell& rWrtShell = GetWrtShell();
         rWrtShell.GetDoc()->SetCurrentViewShell( GetWrtShellPtr() );
-        rWrtShell.GetDoc()->GetDocumentSettingManager().set( IDocumentSettingAccess::BROWSE_MODE,
+        rWrtShell.GetDoc()->getIDocumentSettingAccess().set( IDocumentSettingAccess::BROWSE_MODE,
                                  rWrtShell.GetViewOptions()->getBrowseMode() );
     }
 }
@@ -757,7 +757,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     // but loading of docs with embedded fonts happens after SwDocShell is created
     // but before SwEditWin (which handles the VCL event) is created. So update
     // manually.
-    if( pDocSh->GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::EMBED_FONTS ))
+    if( pDocSh->GetDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::EMBED_FONTS ))
         pDocSh->UpdateFontList();
     bool bWebDShell = pDocSh->ISA(SwWebDocShell);
 
@@ -808,7 +808,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         if( !bOldShellWasSrcView && bWebDShell && !m_bOldShellWasPagePreview )
             aUsrPref.setBrowseMode( true );
         else
-            aUsrPref.setBrowseMode( rDoc.GetDocumentSettingManager().get(IDocumentSettingAccess::BROWSE_MODE) );
+            aUsrPref.setBrowseMode( rDoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE) );
 
         //For the BrowseMode we do not assume a factor.
         if( aUsrPref.getBrowseMode() && aUsrPref.GetZoomType() != SVX_ZOOM_PERCENT )

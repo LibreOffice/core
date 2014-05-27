@@ -94,7 +94,7 @@
 #include <crsskip.hxx>
 #include <fmtinfmt.hxx>
 #include <doc.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
@@ -1018,7 +1018,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             // pre-conditions are met then align the formula to the baseline of the text
             const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
             const bool bDoMathBaselineAlignment = xObj.is() && SotExchange::IsMath( xObj->getClassID() )
-                    && FLY_AS_CHAR == eSet && rSh.GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+                    && FLY_AS_CHAR == eSet && rSh.GetDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
             if (bDoMathBaselineAlignment)
                 rSh.AlignFormulaToBaseline( xObj );
 

@@ -34,7 +34,7 @@
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <doc.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <unofreg.hxx>
 #include <TextCursorHelper.hxx>
@@ -1051,7 +1051,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
         pDoc->GetDocShell()->SetVisArea ( aRect );
 
     if (bChangeBrowseMode)
-        pDoc->GetDocumentSettingManager().set(IDocumentSettingAccess::BROWSE_MODE, bBrowseMode );
+        pDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::BROWSE_MODE, bBrowseMode );
 
     if (bChangeShowRedline)
         GetTextImport()->SetShowChanges( bShowRedlineChanges );

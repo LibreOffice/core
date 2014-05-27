@@ -20,7 +20,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <wrtsh.hxx>
 #include <doc.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <swtypes.hxx>
 #include <view.hxx>
 #include <edtwin.hxx>
@@ -165,7 +165,7 @@ void SwOleClient::FormatChanged()
     if ( pView && xObj.is() && SotExchange::IsMath( xObj->getClassID() ) )
     {
         SwWrtShell & rWrtSh = pView->GetWrtShell();
-        if (rWrtSh.GetDoc()->GetDocumentSettingManager().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ))
+        if (rWrtSh.GetDoc()->getIDocumentSettingAccess().get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ))
             rWrtSh.AlignFormulaToBaseline( xObj );
     }
 }

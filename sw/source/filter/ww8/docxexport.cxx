@@ -41,7 +41,7 @@
 #include <algorithm>
 
 #include <IMark.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <docsh.hxx>
 #include <ndtxt.hxx>
 #include <wrtww8.hxx>
@@ -825,11 +825,11 @@ void DocxExport::WriteSettings()
         pFS->singleElementNS( XML_w, XML_mirrorMargins, FSEND );
 
     // Embed Fonts
-    if( pDoc->GetDocumentSettingManager().get( IDocumentSettingAccess::EMBED_FONTS ))
+    if( pDoc->getIDocumentSettingAccess().get( IDocumentSettingAccess::EMBED_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedTrueTypeFonts, FSEND );
 
     // Embed System Fonts
-    if( pDoc->GetDocumentSettingManager().get( IDocumentSettingAccess::EMBED_SYSTEM_FONTS ))
+    if( pDoc->getIDocumentSettingAccess().get( IDocumentSettingAccess::EMBED_SYSTEM_FONTS ))
         pFS->singleElementNS( XML_w, XML_embedSystemFonts, FSEND );
 
     // Default Tab Stop

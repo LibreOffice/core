@@ -94,7 +94,7 @@
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
 #include <doc.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
@@ -3840,7 +3840,7 @@ Sequence< OUString > SwXOutlineTarget::getSupportedServiceNames(void) throw( Run
 }
 
 SwXDocumentPropertyHelper::SwXDocumentPropertyHelper(SwDoc& rDoc) :
-SvxUnoForbiddenCharsTable ( rDoc.GetDocumentSettingManager().getForbiddenCharacterTable() )
+SvxUnoForbiddenCharsTable ( rDoc.getIDocumentSettingAccess().getForbiddenCharacterTable() )
 ,m_pDoc(&rDoc)
 {
 }
