@@ -27,6 +27,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <textboxhelper.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
 #include <unocrsr.hxx>
@@ -181,10 +182,17 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     {
         const SwSortedObjs *pObjs = pCFrm->GetDrawObjs();
         if( pObjs )
+        {
+            std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
             for( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
+
+                // Filter out textboxes, which are not interesting at an UNO level.
+                if (std::find(aTextBoxes.begin(), aTextBoxes.end(), &rFmt) != aTextBoxes.end())
+                    continue;
+
                 if ( rFmt.GetAnchor().GetAnchorId() == nChkType )
                 {
                     // create SwDepend and insert into array
@@ -199,6 +207,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                     rFrames.push_back(entry);
                 }
             }
+        }
     }
     else
     {
