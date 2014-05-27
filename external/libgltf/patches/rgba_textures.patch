@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/Texture.cpp libgltf/src/Texture.cpp
+--- libgltf.org/src/Texture.cpp	2014-05-27 16:40:18.625920865 +0200
++++ libgltf/src/Texture.cpp	2014-05-27 16:41:45.601917179 +0200
+@@ -60,7 +60,7 @@
+ bool Texture::loadTexture2DFromBuffer(unsigned char* buffer, int width,
+                                       int height)
+ {
+-    GLenum format = GL_BGRA;
++    GLenum format = GL_RGBA;
+ 
+     createFromData(buffer, width, height, format, false);
+ 
