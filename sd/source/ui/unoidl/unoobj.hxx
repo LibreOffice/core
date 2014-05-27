@@ -47,7 +47,8 @@ private:
     const SfxItemPropertyMapEntry* mpMap;
     SdXImpressDocument* mpModel;
 
-    void SetStyleSheet( const ::com::sun::star::uno::Any& rAny ) throw( ::com::sun::star::lang::IllegalArgumentException, css::beans::UnknownPropertyException );
+    void SetStyleSheet( const ::com::sun::star::uno::Any& rAny )
+        throw( ::com::sun::star::lang::IllegalArgumentException, css::beans::UnknownPropertyException, css::uno::RuntimeException );
     ::com::sun::star::uno::Any GetStyleSheet() const throw( ::com::sun::star::beans::UnknownPropertyException  );
 
     // Intern
