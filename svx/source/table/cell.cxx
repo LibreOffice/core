@@ -359,6 +359,7 @@ Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) th
 , mbMerged( false )
 , mnRowSpan( 1 )
 , mnColSpan( 1 )
+, mnCachedMinHeight( -1 )
 , mxTable( rTableObj.getTable() )
 {
     if( rTableObj.GetModel() )
@@ -525,6 +526,7 @@ void Cell::setMerged()
 
 void Cell::notifyModified()
 {
+    mnCachedMinHeight = -1;
     if( mxTable.is() )
         mxTable->setModified( sal_True );
 }
@@ -681,8 +683,10 @@ sal_Int32 Cell::getMinimumHeight()
     if( !mpProperties )
         return 0;
 
+    if( mnCachedMinHeight != -1 )
+        return mnCachedMinHeight;
+
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
-    sal_Int32 nMinimumHeight = 0;
 
     Rectangle aTextRect;
     TakeTextAnchorRect( aTextRect );
@@ -693,7 +697,7 @@ sal_Int32 Cell::getMinimumHeight()
     if(pEditOutliner)
     {
         pEditOutliner->SetMaxAutoPaperSize(aSize);
-        nMinimumHeight = pEditOutliner->GetTextHeight()+1;
+        mnCachedMinHeight = pEditOutliner->GetTextHeight()+1;
     }
     else /*if ( hasText() )*/
     {
@@ -706,12 +710,12 @@ sal_Int32 Cell::getMinimumHeight()
         {
             rOutliner.SetText(*GetOutlinerParaObject());
         }
-        nMinimumHeight=rOutliner.GetTextHeight()+1;
+        mnCachedMinHeight=rOutliner.GetTextHeight()+1;
         rOutliner.Clear();
     }
 
-    nMinimumHeight += GetTextUpperDistance() + GetTextLowerDistance();
-    return nMinimumHeight;
+    mnCachedMinHeight += GetTextUpperDistance() + GetTextLowerDistance();
+    return mnCachedMinHeight;
 }
 
 
