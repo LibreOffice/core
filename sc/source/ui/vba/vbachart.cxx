@@ -1020,7 +1020,7 @@ ScVbaChart::assignDiagramAttributes()
 
 
 uno::Reference< beans::XPropertySet >
-ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( script::BasicErrorException )
+ScVbaChart::getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( script::BasicErrorException, uno::RuntimeException )
 {
     assignDiagramAttributes();
     uno::Reference< beans::XPropertySet > xAxisProps;
