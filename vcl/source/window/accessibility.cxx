@@ -104,7 +104,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::datatransfer::dnd;
 using namespace ::com::sun::star;
-using namespace com::sun;
 
 using ::com::sun::star::awt::XTopWindow;
 

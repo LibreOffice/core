@@ -26,14 +26,13 @@
 
 #include "content.hxx"
 
-using namespace com::sun;
 using namespace com::sun::star;
 
 using namespace chelp;
 
 // virtual
 uno::Sequence< beans::Property > Content::getProperties(
-    const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     bool withMediaType = m_aURLParameter.isFile() || m_aURLParameter.isRoot();
     bool isModule = m_aURLParameter.isModule();
@@ -155,44 +154,44 @@ uno::Sequence< beans::Property > Content::getProperties(
 }
 
 // virtual
-uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
-    const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
+uno::Sequence< ucb::CommandInfo > Content::getCommands(
+    const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
     // Supported commands
 
 #define COMMAND_COUNT 5
 
-    static const star::ucb::CommandInfo aCommandInfoTable[] =
+    static const ucb::CommandInfo aCommandInfoTable[] =
     {
         // Required commands
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             "getCommandInfo",
             -1,
             getCppuVoidType()
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             "getPropertySetInfo",
             -1,
             getCppuVoidType()
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             "getPropertyValues",
             -1,
             getCppuType( static_cast< uno::Sequence< beans::Property > * >( 0 ) )
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             "setPropertyValues",
             -1,
             getCppuType( static_cast< uno::Sequence< beans::PropertyValue > * >( 0 ) )
         ),
-        star::ucb::CommandInfo(
+        ucb::CommandInfo(
             "open",
             -1,
-            cppu::UnoType<star::ucb::OpenCommandArgument2>::get()
+            cppu::UnoType<ucb::OpenCommandArgument2>::get()
         )
     };
 
-    return uno::Sequence< star::ucb::CommandInfo >(
+    return uno::Sequence< ucb::CommandInfo >(
         aCommandInfoTable, COMMAND_COUNT );
 }
 

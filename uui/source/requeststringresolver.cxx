@@ -22,10 +22,10 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-using namespace com::sun;
+using namespace css;
 
 UUIInteractionRequestStringResolver::UUIInteractionRequestStringResolver(
-    star::uno::Reference< star::uno::XComponentContext > const &
+    uno::Reference< uno::XComponentContext > const &
         rxContext)
     SAL_THROW(())
         : m_pImpl(new UUIInteractionHelper(rxContext))
@@ -39,7 +39,7 @@ UUIInteractionRequestStringResolver::~UUIInteractionRequestStringResolver()
 
 OUString SAL_CALL
 UUIInteractionRequestStringResolver::getImplementationName()
-    throw (star::uno::RuntimeException, std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     return OUString::createFromAscii(m_aImplementationName);
 }
@@ -47,50 +47,50 @@ UUIInteractionRequestStringResolver::getImplementationName()
 sal_Bool SAL_CALL
 UUIInteractionRequestStringResolver::supportsService(
         OUString const & rServiceName)
-    throw (star::uno::RuntimeException, std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-star::uno::Sequence< OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
 UUIInteractionRequestStringResolver::getSupportedServiceNames()
-    throw (star::uno::RuntimeException, std::exception)
+    throw (uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
 
-star::beans::Optional< OUString > SAL_CALL
+beans::Optional< OUString > SAL_CALL
 UUIInteractionRequestStringResolver::getStringFromInformationalRequest(
-    const star::uno::Reference<
-        star::task::XInteractionRequest >& Request )
-    throw (star::uno::RuntimeException, std::exception)
+    const uno::Reference<
+        task::XInteractionRequest >& Request )
+    throw (uno::RuntimeException, std::exception)
 {
     try
     {
         return m_pImpl->getStringFromRequest(Request);
     }
-    catch (star::uno::RuntimeException const & ex)
+    catch (uno::RuntimeException const & ex)
     {
-        throw star::uno::RuntimeException(ex.Message, *this);
+        throw uno::RuntimeException(ex.Message, *this);
     }
 }
 
 char const UUIInteractionRequestStringResolver::m_aImplementationName[]
     = "com.sun.star.comp.uui.UUIInteractionRequestStringResolver";
 
-star::uno::Sequence< OUString >
+uno::Sequence< OUString >
 UUIInteractionRequestStringResolver::getSupportedServiceNames_static()
 {
-    star::uno::Sequence< OUString > aNames(1);
+    uno::Sequence< OUString > aNames(1);
     aNames[0] = "com.sun.star.task.InteractionRequestStringResolver";
     return aNames;
 }
 
-star::uno::Reference< star::uno::XInterface > SAL_CALL
+uno::Reference< uno::XInterface > SAL_CALL
 UUIInteractionRequestStringResolver::createInstance(
-    star::uno::Reference< star::lang::XMultiServiceFactory > const &
+    uno::Reference< lang::XMultiServiceFactory > const &
         rServiceFactory)
-    SAL_THROW((star::uno::Exception))
+    SAL_THROW((uno::Exception))
 {
     try
     {
@@ -98,7 +98,7 @@ UUIInteractionRequestStringResolver::createInstance(
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException("out of memory", 0);
+        throw uno::RuntimeException("out of memory", 0);
     }
 }
 

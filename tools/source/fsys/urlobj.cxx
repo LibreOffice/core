@@ -40,7 +40,7 @@
 namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
     // unnamed namespaces don't work well yet...
 
-using namespace com::sun;
+using namespace css;
 
 //  INetURLObject
 
@@ -3702,7 +3702,7 @@ OUString INetURLObject::GetURLNoMark(DecodeMechanism eMechanism,
 
 OUString
 INetURLObject::getAbbreviated(
-    star::uno::Reference< star::util::XStringWidth > const & rStringWidth,
+    uno::Reference< util::XStringWidth > const & rStringWidth,
     sal_Int32 nWidth,
     DecodeMechanism eMechanism,
     rtl_TextEncoding eCharset)
