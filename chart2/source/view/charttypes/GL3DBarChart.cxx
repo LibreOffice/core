@@ -62,6 +62,7 @@ namespace {
 
 const float TEXT_HEIGHT = 15.0f;
 const float DEFAULT_CAMERA_HEIGHT = 500.0f;
+const size_t STEPS = 100;
 const sal_uLong TIMEOUT = 5;
 
 float calculateTextWidth(const OUString& rText)
@@ -311,7 +312,7 @@ void GL3DBarChart::clickedAt(const Point& /*rPos*/, sal_uInt16 nButtons)
     mbBlockUserInput = true;
 
     const BarInformation& rBarInfo = itr->second;
-    mnStepsTotal = 100;
+    mnStepsTotal = STEPS;
     mnStep = 0;
     maCameraDirection = rBarInfo.maPos;
     render();
@@ -383,7 +384,7 @@ glm::vec3 GL3DBarChart::getCornerPosition(sal_Int8 nId)
 
 void GL3DBarChart::moveToCorner()
 {
-    mnStepsTotal = 100;
+    mnStepsTotal = STEPS;
     maStep = (getCornerPosition(mnCornerId) - maCameraPosition) / float(mnStepsTotal);
     maTimer.SetTimeout(TIMEOUT);
     maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, MoveCamera));
