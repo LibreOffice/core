@@ -90,7 +90,7 @@ private:
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
 
-    SdPage* InsertSdPage( sal_uInt16 nPage, bool bDuplicate = false ) throw();
+    SdPage* InsertSdPage( sal_uInt16 nPage, bool bDuplicate = false ) throw (css::uno::RuntimeException);
 
     const bool mbImpressDoc;
     bool mbClipBoard;
