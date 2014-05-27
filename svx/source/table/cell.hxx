@@ -211,7 +211,7 @@ protected:
     SVX_DLLPRIVATE ::com::sun::star::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap );
 
 private:
-    SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw();
+    SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw(css::uno::RuntimeException);
     SVX_DLLPRIVATE virtual ~Cell() throw();
 
     const SvxItemPropertySet* mpPropSet;

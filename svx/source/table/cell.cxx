@@ -348,7 +348,7 @@ rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj, OutlinerParaObject*
 
 
 
-Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw()
+Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw(css::uno::RuntimeException)
 : SdrText( rTableObj, pOutlinerParaObject )
 , SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 , mpPropSet( ImplGetSvxCellPropertySet() )
