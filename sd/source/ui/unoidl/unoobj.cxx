@@ -1087,7 +1087,7 @@ void SdXShape::SetMasterDepend( bool bDepend ) throw()
     }
 }
 
-void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumentException )
+void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumentException, beans::UnknownPropertyException )
 {
     SdrObject* pObj = mpShape->GetSdrObject();
     if( pObj == NULL )
