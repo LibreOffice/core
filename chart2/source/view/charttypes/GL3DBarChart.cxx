@@ -64,6 +64,7 @@ const float TEXT_HEIGHT = 15.0f;
 const float DEFAULT_CAMERA_HEIGHT = 500.0f;
 const size_t STEPS = 100;
 const sal_uLong TIMEOUT = 5;
+const sal_uInt32 ID_STEP = 10;
 
 float calculateTextWidth(const OUString& rText)
 {
@@ -145,7 +146,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         if(!aSeriesName.isEmpty())
         {
             maShapes.push_back(new opengl3D::Text(mpRenderer.get(),
-                        *mpTextCache, aSeriesName, nId++));
+                        *mpTextCache, aSeriesName, nId));
+            nId += ID_STEP;
             opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
             glm::vec3 aTopLeft, aTopRight, aBottomRight;
             aTopRight.x = -nBarDistanceY;
@@ -176,7 +178,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
                         BarInformation(glm::vec3(nXPos, nYPos, float(nVal/nMaxVal)),
                             nVal, nIndex, nSeriesIndex)));
 
-            maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId++));
+            maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId));
+            nId += ID_STEP;
         }
 
         float nThisXEnd = nPointCount * (nBarSizeX + nBarDistanceX);
@@ -189,7 +192,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     nYPos += nBarSizeY + nBarDistanceY;
 
     // X axis
-    maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId++));
+    maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId));
+    nId += ID_STEP;
     opengl3D::Line* pAxis = static_cast<opengl3D::Line*>(&maShapes.back());
     glm::vec3 aBegin;
     aBegin.y = nYPos;
@@ -199,7 +203,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     pAxis->setLineColor(COL_BLUE);
 
     // Y axis
-    maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId++));
+    maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId));
+    nId += ID_STEP;
     pAxis = static_cast<opengl3D::Line*>(&maShapes.back());
     aBegin.x = aBegin.y = 0;
     aEnd = aBegin;
@@ -208,7 +213,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     pAxis->setLineColor(COL_BLUE);
 
     // Chart background.
-    maShapes.push_back(new opengl3D::Rectangle(mpRenderer.get(), nId++));
+    maShapes.push_back(new opengl3D::Rectangle(mpRenderer.get(), nId));
+    nId += ID_STEP;
     opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(&maShapes.back());
     glm::vec3 aTopLeft;
     glm::vec3 aTopRight = aTopLeft;
@@ -230,7 +236,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         float nXPos = i * (nBarSizeX + nBarDistanceX);
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), *mpTextCache,
-                    aCats[i], nId++));
+                    aCats[i], nId));
+        nId += ID_STEP;
         opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
         aTopLeft.x = nXPos + TEXT_HEIGHT;
         aTopLeft.y = nYPos + calculateTextWidth(aCats[i]) + 0.5 * nBarDistanceY;
@@ -243,7 +250,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         // create shapes on other side as well
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), *mpTextCache,
-                    aCats[i], nId++));
+                    aCats[i], nId));
+        nId += ID_STEP;
         p = static_cast<opengl3D::Text*>(&maShapes.back());
         aTopLeft.x = nXPos + TEXT_HEIGHT;
         aTopLeft.y =  - 0.5 * nBarDistanceY;
