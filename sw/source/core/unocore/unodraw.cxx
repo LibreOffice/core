@@ -538,7 +538,11 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
         throw lang::IndexOutOfBoundsException();
 
     ((SwXDrawPage*)this)->GetSvxPage();
-    return pDrawPage->getByIndex( nIndex );
+    std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+    if (aTextBoxes.empty())
+        return pDrawPage->getByIndex( nIndex );
+    else
+        return SwTextBoxHelper::getByIndex(pDrawPage->GetSdrPage(), nIndex, aTextBoxes);
 }
 
 uno::Type  SwXDrawPage::getElementType(void) throw( uno::RuntimeException, std::exception )
