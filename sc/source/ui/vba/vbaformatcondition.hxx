@@ -39,7 +39,12 @@ protected:
     css::uno::Reference< ov::excel::XStyle > mxStyle;
     css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
 public:
-    ScVbaFormatCondition(  const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::sheet::XSheetConditionalEntry >& _xSheetConditionalEntry, const css::uno::Reference< ov::excel::XStyle >&,  const css::uno::Reference< ov::excel::XFormatConditions >& _xFormatConditions, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::uno::RuntimeException );
+    ScVbaFormatCondition( const css::uno::Reference< ov::XHelperInterface >& xParent,
+                          const css::uno::Reference< css::uno::XComponentContext > & xContext,
+                          const css::uno::Reference< css::sheet::XSheetConditionalEntry >& _xSheetConditionalEntry,
+                          const css::uno::Reference< ov::excel::XStyle >&,
+                          const css::uno::Reference< ov::excel::XFormatConditions >& _xFormatConditions,
+                          const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::uno::RuntimeException, css::script::BasicErrorException );
 
     void notifyRange() throw ( css::script::BasicErrorException );
     static css::sheet::ConditionOperator retrieveAPIType(sal_Int32 _nVBAType, const css::uno::Reference< css::sheet::XSheetCondition >& _xSheetCondition ) throw( css::script::BasicErrorException );

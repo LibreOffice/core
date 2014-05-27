@@ -31,7 +31,16 @@ lcl_getScVbaFormatConditionsPtr( const uno::Reference< excel::XFormatConditions 
         DebugHelper::exception(SbERR_METHOD_FAILED, OUString() );
     return pFormatConditions;
 }
-ScVbaFormatCondition::ScVbaFormatCondition(  const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetConditionalEntry >& _xSheetConditionalEntry, const uno::Reference< excel::XStyle >& _xStyle, const uno::Reference< excel::XFormatConditions >& _xFormatConditions, const uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::uno::RuntimeException ) : ScVbaFormatCondition_BASE( xParent, xContext, uno::Reference< sheet::XSheetCondition >( _xSheetConditionalEntry, css::uno::UNO_QUERY_THROW ) ), moFormatConditions( _xFormatConditions ), mxStyle( _xStyle ), mxParentRangePropertySet( _xPropertySet )
+
+ScVbaFormatCondition::ScVbaFormatCondition( const uno::Reference< XHelperInterface >& xParent,
+                                            const uno::Reference< uno::XComponentContext > & xContext,
+                                            const uno::Reference< sheet::XSheetConditionalEntry >& _xSheetConditionalEntry,
+                                            const uno::Reference< excel::XStyle >& _xStyle,
+                                            const uno::Reference< excel::XFormatConditions >& _xFormatConditions,
+                                            const uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::uno::RuntimeException, css::script::BasicErrorException )
+    : ScVbaFormatCondition_BASE( xParent, xContext,
+                                 uno::Reference< sheet::XSheetCondition >( _xSheetConditionalEntry, css::uno::UNO_QUERY_THROW ) ),
+                                 moFormatConditions( _xFormatConditions ), mxStyle( _xStyle ), mxParentRangePropertySet( _xPropertySet )
 {
         mxSheetConditionalEntries = lcl_getScVbaFormatConditionsPtr( moFormatConditions )->getSheetConditionalEntries();
 
