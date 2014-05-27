@@ -776,7 +776,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
 
 // XImageManagerImpl
 void ImageManagerImpl::reset()
-throw (::com::sun::star::uno::RuntimeException)
+throw (::com::sun::star::uno::RuntimeException, lang::IllegalAccessException)
 {
     SolarMutexGuard g;
 
