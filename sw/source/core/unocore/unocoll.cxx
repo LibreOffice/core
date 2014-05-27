@@ -1200,7 +1200,8 @@ uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)
         throw uno::RuntimeException();
     if(nIndex < 0 || nIndex >= USHRT_MAX)
         throw IndexOutOfBoundsException();
-    SwFrmFmt* pFmt = GetDoc()->GetFlyNum(static_cast<sal_uInt16>(nIndex), eType);
+    // Ignore TextBoxes for TextFrames.
+    SwFrmFmt* pFmt = GetDoc()->GetFlyNum(static_cast<sal_uInt16>(nIndex), eType, /*bIgnoreTextBoxes=*/eType == FLYCNTTYPE_FRM);
     if(!pFmt)
         throw IndexOutOfBoundsException();
     return lcl_UnoWrapFrame(pFmt, eType);
