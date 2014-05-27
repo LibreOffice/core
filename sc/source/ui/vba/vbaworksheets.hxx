@@ -69,7 +69,7 @@ public:
     virtual OUString getServiceImplName() SAL_OVERRIDE;
     virtual css::uno::Sequence<OUString> getServiceNames() SAL_OVERRIDE;
 
-    static bool nameExists( css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab ) throw ( css::lang::IllegalArgumentException );
+    static bool nameExists( css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEETS_HXX
