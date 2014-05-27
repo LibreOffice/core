@@ -257,7 +257,7 @@ protected:
         return createCollectionObject( m_xNameAccess->getByName( sIndex ) );
     }
 
-    virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException)
+    virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException)
     {
         if ( !m_xIndexAccess.is() )
             throw css::uno::RuntimeException("ScVbaCollectionBase numeric index access not supported by this object" );
