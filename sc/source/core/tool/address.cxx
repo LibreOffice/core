@@ -873,6 +873,14 @@ static inline const sal_Unicode* lcl_a1_get_row( const sal_Unicode* p,
     return pEnd;
 }
 
+/// B:B or 2:2, but not B:2 or 2:B or B2:B or B:B2 or ...
+static bool isValidSingleton( sal_uInt16 nFlags, sal_uInt16 nFlags2 )
+{
+    bool bCols = (nFlags & SCA_VALID_COL) && ((nFlags & SCA_VALID_COL2) || (nFlags2 & SCA_VALID_COL));
+    bool bRows = (nFlags & SCA_VALID_ROW) && ((nFlags & SCA_VALID_ROW2) || (nFlags2 & SCA_VALID_ROW));
+    return (bCols && !bRows) || (!bCols && bRows);
+}
+
 static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
                                            const sal_Unicode* p,
                                            ScDocument* pDoc,
@@ -978,7 +986,7 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
     }
 
     p = tmp2;
-    p = lcl_eatWhiteSpace( p+1 );
+    p = lcl_eatWhiteSpace( p+1 );   // after ':'
     tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2 );
     if( !tmp1 && aEndTabName.isEmpty() )     // Probably the aEndTabName was specified after the first range
     {
@@ -991,16 +999,17 @@ static sal_uInt16 lcl_ScRange_Parse_XL_A1( ScRange& r,
                 r.aEnd.SetTab( nTab );
                 nFlags |= SCA_VALID_TAB2 | SCA_TAB2_3D | SCA_TAB2_ABSOLUTE;
             }
-            p = lcl_eatWhiteSpace( p+1 );
+            if (*p == '!' || *p == ':')
+                p = lcl_eatWhiteSpace( p+1 );
             tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2 );
         }
     }
-    if( !tmp1 ) // strange, but valid singleton
-        return nFlags;
+    if( !tmp1 ) // strange, but maybe valid singleton
+        return isValidSingleton( nFlags, nFlags2) ? nFlags : (nFlags & ~SCA_VALID);
 
     tmp2 = lcl_a1_get_row( tmp1, &r.aEnd, &nFlags2 );
-    if( !tmp2 ) // strange, but valid singleton
-        return nFlags;
+    if( !tmp2 ) // strange, but maybe valid singleton
+        return isValidSingleton( nFlags, nFlags2) ? nFlags : (nFlags & ~SCA_VALID);
 
     if ( *tmp2 != 0 )
     {
