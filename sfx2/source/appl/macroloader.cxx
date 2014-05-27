@@ -188,7 +188,7 @@ void SAL_CALL SfxMacroLoader::removeStatusListener(
 }
 
 ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, com::sun::star::uno::Any& rRetval, SfxObjectShell* pSh )
-    throw ( uno::RuntimeException )
+    throw ( ucb::ContentCreationException, uno::RuntimeException )
 {
 #ifdef DISABLE_SCRIPTING
     (void) rURL;

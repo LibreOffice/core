@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/util/URL.hpp>
 
 #include <cppuhelper/implbase4.hxx>
@@ -62,7 +63,7 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    static ErrCode loadMacro( const OUString& aURL, css::uno::Any& rRetval, SfxObjectShell* pDoc=NULL ) throw( css::uno::RuntimeException );
+    static ErrCode loadMacro( const OUString& aURL, css::uno::Any& rRetval, SfxObjectShell* pDoc=NULL ) throw( css::uno::RuntimeException, css::ucb::ContentCreationException );
 
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,
