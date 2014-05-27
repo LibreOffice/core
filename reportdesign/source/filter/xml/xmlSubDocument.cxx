@@ -118,6 +118,7 @@ void OXMLSubDocument::EndElement()
             uno::Reference< report::XReportControlModel >   xComponentModel(m_xComponent,uno::UNO_QUERY);
             if ( xComponentModel.is() && xFakeModel.is() )
             {
+                xComponentModel->setPrintWhenGroupChange(xFakeModel->getPrintWhenGroupChange());
                 const sal_Int32 nCount = xFakeModel->getCount();
                 try
                 {
