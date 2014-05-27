@@ -704,8 +704,9 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
                 writer.writeFormatAttribute("start", TMP_FORMAT, *pHint->GetStart());
             if (pHint->GetEnd())
                 writer.writeFormatAttribute("end", TMP_FORMAT, *pHint->GetEnd());
+            writer.writeFormatAttribute("whichId", TMP_FORMAT, pHint->Which());
 
-            const char* pWhich = "???";
+            const char* pWhich = 0;
             switch (pHint->Which())
             {
                 case RES_TXTATR_AUTOFMT:
@@ -714,10 +715,14 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
                 case RES_TXTATR_ANNOTATION:
                     pWhich = "annotation";
                     break;
+                case RES_TXTATR_FLYCNT:
+                    pWhich = "fly content";
+                    break;
                 default:
                     break;
             }
-            writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
+            if (pWhich)
+                writer.writeFormatAttribute("which", "%s", BAD_CAST(pWhich));
 
             if (pHint->Which() == RES_TXTATR_AUTOFMT)
             {
