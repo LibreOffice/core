@@ -32,7 +32,6 @@ private:
     SvStream& m_rPCX;               // the PCX file to read
 
     Bitmap              aBmp;
-    BitmapWriteAccess*  pAcc;
     sal_uInt8           nVersion;           // PCX-Version
     sal_uInt8           nEncoding;          // compression type
     sal_uLong           nBitsPerPlanePix;   // bits per plane per pixel
@@ -48,7 +47,7 @@ private:
 
 
     bool            Callback( sal_uInt16 nPercent );
-    void                ImplReadBody();
+    void                ImplReadBody(BitmapWriteAccess * pAcc);
     void                ImplReadPalette( sal_uLong nCol );
     void                ImplReadHeader();
 
@@ -63,7 +62,6 @@ public:
 
 PCXReader::PCXReader(SvStream &rStream)
     : m_rPCX(rStream)
-    , pAcc(NULL)
     , nVersion(0)
     , nEncoding(0)
     , nBitsPerPlanePix(0)
@@ -112,7 +110,8 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
     if ( nStatus )
     {
         aBmp = Bitmap( Size( nWidth, nHeight ), nDestBitsPerPixel );
-        if ( ( pAcc = aBmp.AcquireWriteAccess() ) == 0 )
+        Bitmap::ScopedWriteAccess pAcc(aBmp);
+        if ( pAcc == 0 )
             return false;
 
         if ( nDestBitsPerPixel <= 8 )
@@ -126,7 +125,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
             }
         }
         // read bitmap data
-        ImplReadBody();
+        ImplReadBody(pAcc.get());
 
         // If an extended color palette exists at the end of the file, then read it and
         // and write again in palette:
@@ -148,9 +147,8 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
             rBitmap.SetPrefMapMode(aMapMode);
             rBitmap.SetPrefSize(Size(nWidth,nHeight));
         }
-    */  if ( nStatus && pAcc )
+    */  if ( nStatus )
         {
-            aBmp.ReleaseAccess( pAcc ), pAcc = NULL;
             rGraphic = aBmp;
             return true;
         }
@@ -217,7 +215,7 @@ void PCXReader::ImplReadHeader()
     }
 }
 
-void PCXReader::ImplReadBody()
+void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
 {
     sal_uInt8   *pPlane[ 4 ], * pDest, * pSource1, * pSource2, * pSource3, *pSource4;
     sal_uLong   i, nx, ny, np, nCount, nPercent;
