@@ -323,9 +323,6 @@
     <glade-widget-class title="Cui Custom MultiLine Edit" name="cuilo-CuiCustomMultilineEdit"
                         generic-name="CuiCustomMultiLineEdit" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
-    <glade-widget-class title="AutoScrollEdit" name="deploymentgui-AutoScrollEdit"
-                        generic-name="AutoScrollEdit" parent="GtkTextView"
-                        icon-name="widget-gtk-textview"/>
     <glade-widget-class title="LicenseView" name="deploymentgui-LicenseView"
                         generic-name="LicenseView" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
