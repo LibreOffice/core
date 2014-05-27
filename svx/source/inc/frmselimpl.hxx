@@ -210,8 +210,6 @@ struct FrameSelectorImpl : public Resource
     void                SetBorderState( FrameBorder& rBorder, FrameBorderState eState );
     /** Sets the core style of the specified frame border, or hides the frame border, if pStyle is 0. */
     void                SetBorderCoreStyle( FrameBorder& rBorder, const editeng::SvxBorderLine* pStyle );
-    /** Sets the color of the specified frame border. */
-    void                SetBorderColor( FrameBorder& rBorder, const Color& rColor );
 
     /** Changes the state of a frame border after a control event (mouse/keyboard). */
     void                ToggleBorderState( FrameBorder& rBorder );
