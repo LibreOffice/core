@@ -120,16 +120,25 @@ sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
 }
 
 /// @attention If you change this, also update SwXFrameEnumeration in unocoll.
-SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType )
+SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType, bool bIgnoreTextBoxes )
 {
     SwFrmFmts& rFmts = *GetSpzFrmFmts();
     SwFrmFmt* pRetFmt = 0;
     sal_uInt16 nSize = rFmts.size();
     const SwNodeIndex* pIdx;
     sal_uInt16 nCount = 0;
+
+    std::list<SwFrmFmt*> aTextBoxes;
+    if (bIgnoreTextBoxes)
+        aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
+
     for( sal_uInt16 i = 0; !pRetFmt && i < nSize; ++i )
     {
         SwFrmFmt* pFlyFmt = rFmts[ i ];
+
+        if (bIgnoreTextBoxes && std::find(aTextBoxes.begin(), aTextBoxes.end(), pFlyFmt) != aTextBoxes.end())
+            continue;
+
         if( RES_FLYFRMFMT == pFlyFmt->Which()
             && 0 != ( pIdx = pFlyFmt->GetCntnt().GetCntntIdx() )
             && pIdx->GetNodes().IsDocNodes()
