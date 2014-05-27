@@ -10,10 +10,14 @@
 #ifndef INCLUDED_SW_INC_TEXTBOXHELPER_HXX
 #define INCLUDED_SW_INC_TEXTBOXHELPER_HXX
 
+#include <list>
+
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Type.h>
 
+class SdrPage;
 class SwFrmFmt;
+class SwDoc;
 
 /**
  * A TextBox is a TextFrame, that is tied to a drawinglayer shape.
@@ -34,6 +38,11 @@ public:
     static void syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, const OUString& rPropertyName, const css::uno::Any& rValue);
     /// If we have an associated TextFrame, then return that.
     static SwFrmFmt* findTextBox(SwFrmFmt* pShape);
+
+    /// Look up TextFrames in a document, which are in fact TextBoxes.
+    static std::list<SwFrmFmt*> findTextBoxes(SwDoc* pDoc);
+    /// Count number of shapes in the document, excluding TextBoxes.
+    static sal_Int32 getCount(SdrPage* pPage, std::list<SwFrmFmt*>& rTextBoxes);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

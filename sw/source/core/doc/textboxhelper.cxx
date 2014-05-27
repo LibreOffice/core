@@ -18,9 +18,11 @@
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
 #include <unomid.h>
+#include <dflyobj.hxx>
 
 #include <svx/svdoashp.hxx>
 #include <svx/unopage.hxx>
+#include <svx/svdpage.hxx>
 
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/SizeType.hpp>
@@ -79,6 +81,34 @@ void SwTextBoxHelper::destroy(SwFrmFmt* pShape)
         if (pFmt)
             pShape->GetDoc()->DelLayoutFmt(pFmt);
     }
+}
+
+std::list<SwFrmFmt*> SwTextBoxHelper::findTextBoxes(SwDoc* pDoc)
+{
+    std::list<SwFrmFmt*> aRet;
+
+    SwFrmFmts& rSpzFrmFmts = *pDoc->GetSpzFrmFmts();
+    for (SwFrmFmts::iterator it = rSpzFrmFmts.begin(); it != rSpzFrmFmts.end(); ++it)
+    {
+        SwFrmFmt* pTextBox = findTextBox(*it);
+        if (pTextBox)
+            aRet.push_back(pTextBox);
+    }
+
+    return aRet;
+}
+
+sal_Int32 SwTextBoxHelper::getCount(SdrPage* pPage, std::list<SwFrmFmt*>& rTextBoxes)
+{
+    sal_Int32 nRet = 0;
+    for (size_t i = 0; i < pPage->GetObjCount(); ++i)
+    {
+        SwVirtFlyDrawObj* pObject = PTR_CAST(SwVirtFlyDrawObj, pPage->GetObj(i));
+        if (pObject && std::find(rTextBoxes.begin(), rTextBoxes.end(), pObject->GetFmt()) != rTextBoxes.end())
+            continue;
+        ++nRet;
+    }
+    return nRet;
 }
 
 SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)
