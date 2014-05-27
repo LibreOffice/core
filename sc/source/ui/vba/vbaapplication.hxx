@@ -38,7 +38,7 @@ private:
     // note: member variables moved to struct "ScVbaAppSettings", see cxx file, to be shared by all application instances
     ScVbaAppSettings& mrAppSettings;
 
-    OUString getOfficePath( const OUString& sPath ) throw ( css::uno::RuntimeException );
+    OUString getOfficePath( const OUString& sPath ) throw ( css::uno::RuntimeException, css::script::BasicErrorException );
 
 protected:
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException) SAL_OVERRIDE;
