@@ -420,7 +420,7 @@ bool HbLayoutEngine::layout(ServerFontLayout& rLayout, ImplLayoutArgs& rArgs)
 
             static hb_unicode_funcs_t* pHbUnicodeFuncs = getUnicodeFuncs();
 
-            int nHbFlags = HB_BUFFER_FLAG_DEFAULT;
+            int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
             if (nMinRunPos == 0)
                 nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
             if (nEndRunPos == rArgs.mnLength)
