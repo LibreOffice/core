@@ -243,14 +243,6 @@ End
     End
 #endif
 
-#define STD_JAR_FILE(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        Name     = STRING(CONCAT2(name,.jar)); \
-        Dir      = gid_Dir_Classes; \
-        Styles   = (PACKED); \
-    End
-
 #define LIBO_JAR_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \
@@ -266,8 +258,6 @@ End
         Dir = GID_DIR_URE_JAVA; \
         Styles = (PACKED); \
     End
-
-#define JARFILENAME(name) STRING(CONCAT2(name,.jar))
 
 #define SPECIAL_COMPONENT_LIB_FILE(id,name) \
     File id \
