@@ -718,7 +718,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 }
 
 void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValue )
-    throw( UnknownPropertyException, WrappedTargetException )
+    throw( RuntimeException, UnknownPropertyException, WrappedTargetException )
 {
     SmDocShell *pDocSh = static_cast < SmDocShell * > (GetObjectShell());
 

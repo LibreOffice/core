@@ -61,7 +61,7 @@ protected:
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const ::com::sun::star::uno::Any* pValues )
         throw( css::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) SAL_OVERRIDE;
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue )
-        throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException ) SAL_OVERRIDE;
+        throw( css::uno::RuntimeException, ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException ) SAL_OVERRIDE;
 public:
     SmModel( SfxObjectShell *pObjSh = 0 );
     virtual ~SmModel() throw ();
