@@ -143,13 +143,15 @@ SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)
 {
     SwFrmFmt* pRet = 0;
 
-    if (pShape->GetAttrSet().HasItem(RES_CNTNT))
+    // Only draw frames can have TextBoxes.
+    if (pShape->Which() == RES_DRAWFRMFMT && pShape->GetAttrSet().HasItem(RES_CNTNT))
     {
         const SwFmtCntnt& rCntnt = pShape->GetCntnt();
         SwFrmFmts& rSpzFrmFmts = *pShape->GetDoc()->GetSpzFrmFmts();
         for (SwFrmFmts::iterator it = rSpzFrmFmts.begin(); it != rSpzFrmFmts.end(); ++it)
         {
             SwFrmFmt* pFmt = *it;
+            // Only a fly frame can be a TextBox.
             if (pFmt->Which() == RES_FLYFRMFMT && pFmt->GetAttrSet().HasItem(RES_CNTNT) && pFmt->GetCntnt() == rCntnt)
             {
                 pRet = pFmt;
