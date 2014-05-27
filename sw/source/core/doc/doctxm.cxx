@@ -417,7 +417,8 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd
 
     SwTOXBaseSection *const pNewSection(
         dynamic_cast<SwTOXBaseSection*>(& pNewSectionNode->GetSection()));
-    pNewSection->SetTOXName(sSectNm); // rTOX may have had no name...
+    if (pNewSection)
+        pNewSection->SetTOXName(sSectNm); // rTOX may have had no name...
     return pNewSection;
 }
 
