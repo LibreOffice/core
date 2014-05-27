@@ -93,8 +93,8 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     get(mpCheckTotalRows,           "check-total-rows");
     get(mpCheckDrillToDetail,       "check-drill-to-details");
 
-    get(mpButtonApply,  "apply");
-    get(mpButtonClose,  "close");
+    get(mpBtnOK,  "ok");
+    get(mpBtnCancel,  "cancel");
 
     get(mpSourceRadioNamedRange, "source-radio-named-range");
     get(mpSourceRadioSelection,  "source-radio-selection");
@@ -146,8 +146,8 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
     mpDestinationButton->SetLoseFocusHdl(aLink);
 
     // Buttons
-    mpButtonClose->SetClickHdl(LINK(this, ScPivotLayoutDialog, CloseClicked));
-    mpButtonApply->SetClickHdl(LINK(this, ScPivotLayoutDialog, ApplyClicked));
+    mpBtnCancel->SetClickHdl(LINK(this, ScPivotLayoutDialog, CancelClicked));
+    mpBtnOK->SetClickHdl(LINK(this, ScPivotLayoutDialog, OKClicked));
 
     // Initialize Data
     maPivotTableObject.FillOldParam(maPivotParameters);
@@ -606,13 +606,14 @@ void ScPivotLayoutDialog::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNa
     return mpListBoxData->PushDataFieldNames(rDataFieldNames);
 }
 
-IMPL_LINK( ScPivotLayoutDialog, ApplyClicked, PushButton*, /*pButton*/ )
+IMPL_LINK( ScPivotLayoutDialog, OKClicked, PushButton*, /*pButton*/ )
 {
     ApplyChanges();
+    DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
     return 0;
 }
 
-IMPL_LINK( ScPivotLayoutDialog, CloseClicked, PushButton*, /*pButton*/ )
+IMPL_LINK( ScPivotLayoutDialog, CancelClicked, PushButton*, /*pButton*/ )
 {
     DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
     return 0;
