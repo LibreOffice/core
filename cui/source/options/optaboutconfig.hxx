@@ -40,7 +40,7 @@ public:
     //void setBehaviour( bool bNumeric, int nLengthLimit);
 };
 
-class CuiAboutConfigTabPage : public ModalDialog
+class CuiAboutConfigTabPage : public ModelessDialog
 {
 private:
     SvSimpleTableContainer* m_pPrefCtrl;

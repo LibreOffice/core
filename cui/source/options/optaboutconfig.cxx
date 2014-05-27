@@ -130,7 +130,7 @@ Size CuiAboutConfigTabPage::GetOptimalSize() const
 }
 
 CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSet& rItemSet*/ ) :
-    ModalDialog( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui"),
+    ModelessDialog( pParent, "AboutConfig", "cui/ui/aboutconfigdialog.ui"),
     m_pPrefCtrl( get<SvSimpleTableContainer>("preferences") ),
     m_pResetBtn( get<PushButton>("reset") ),
     m_pEditBtn( get<PushButton>("edit") ),
