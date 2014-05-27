@@ -1975,8 +1975,14 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
 static sal_Int32 lcl_ConvertCrop(sal_uInt32 const nCrop, sal_Int32 const nSize)
 {
     // cast to sal_Int32 to handle negative crop properly
-    return ((static_cast<sal_Int32>(nCrop) >> 16) * nSize)
-              + (((nCrop & 0xffff) * nSize) >> 16) ;
+    sal_Int32 const nIntegral(static_cast<sal_Int32>(nCrop) >> 16);
+    // fdo#77454: heuristic to detect mangled values written by old OOo/LO
+    if (abs(nIntegral) >= 50) // FIXME: what's a good cut-off?
+    {
+        SAL_INFO("sw.ww8", "ignoring suspiciously large crop: " << nIntegral);
+        return 0;
+    }
+    return (nIntegral * nSize) + (((nCrop & 0xffff) * nSize) >> 16);
 }
 
 void
