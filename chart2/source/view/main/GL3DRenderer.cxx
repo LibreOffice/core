@@ -1662,9 +1662,12 @@ void OpenGL3DRenderer::SetPickingMode(bool bPickingMode)
 
 sal_uInt32 OpenGL3DRenderer::GetPixelColorFromPoint(long nX, long nY)
 {
+    static sal_uInt32 nId = 0;
+    OUString aFileName = OUString("/home/moggi/work/picking_") + OUString::number(nId++) + ".png";
+    OpenGLHelper::renderToFile(m_iWidth, m_iHeight, aFileName);
     boost::scoped_array<sal_uInt8> buf(new sal_uInt8[4]);
-    glReadPixels(nX, nY, 1, 1, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
-    Color aColor(buf[3], buf[2], buf[1], buf[0]);
+    glReadPixels(nX, m_iHeight-nY, 1, 1, GL_BGRA, GL_UNSIGNED_BYTE, buf.get());
+    Color aColor(255-buf[3], buf[2], buf[1], buf[0]);
     return aColor.GetColor();
 }
 

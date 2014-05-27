@@ -316,7 +316,7 @@ public:
 
 }
 
-void GL3DBarChart::clickedAt(const Point& /*rPos*/, sal_uInt16 nButtons)
+void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
 {
     if(mbBlockUserInput)
         return;
@@ -325,13 +325,11 @@ void GL3DBarChart::clickedAt(const Point& /*rPos*/, sal_uInt16 nButtons)
         return;
 
     sal_uInt32 nId = 5;
-    /*
     {
         PickingModeSetter aPickingModeSetter(mpRenderer.get());
         render();
         nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y());
     }
-    */
 
     std::map<sal_uInt32, const BarInformation>::const_iterator itr =
         maBarMap.find(nId);
