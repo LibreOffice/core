@@ -49,6 +49,7 @@
 #include <unofield.hxx>
 #include <unoidx.hxx>
 #include <unoframe.hxx>
+#include <textboxhelper.hxx>
 #include <unofootnote.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtcntnt.hxx>
@@ -1087,12 +1088,15 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // #i104937#
     SwFrmFmt* pFmt( 0 );
+
+    std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+
     for( sal_uInt16 i = 0; i < nSize; ++i )
 //    for(SwFrmFmt* pFmt = (*pFmts)[0]; pFmt < pFmtsEnd; ++pFmt)
     {
         // #i104937#
         pFmt = (*pFmts)[i];
-        if(pFmt->Which() != RES_FLYFRMFMT)
+        if(pFmt->Which() != RES_FLYFRMFMT || std::find(aTextBoxes.begin(), aTextBoxes.end(), pFmt) != aTextBoxes.end())
             continue;
         const SwNodeIndex* pIdx =  pFmt->GetCntnt().GetCntntIdx();
         if(!pIdx || !pIdx->GetNodes().IsDocNodes())
