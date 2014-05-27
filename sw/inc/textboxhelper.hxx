@@ -26,6 +26,8 @@ class SwTextBoxHelper
 public:
     /// Create a TextBox for a shape.
     static void create(SwFrmFmt* pShape);
+    /// Destroy a TextBox for a shape.
+    static void destroy(SwFrmFmt* pShape);
     /// Get XTextAppend of a shape's TextBox, if there is any.
     static css::uno::Any getXTextAppend(SwFrmFmt* pShape, const css::uno::Type& rType);
     /// Sync property of TextBox with the one of the shape.

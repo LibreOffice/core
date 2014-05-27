@@ -65,6 +65,22 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
     }
 }
 
+void SwTextBoxHelper::destroy(SwFrmFmt* pShape)
+{
+    // If a TextBox was enabled previously
+    if (pShape->GetAttrSet().HasItem(RES_CNTNT))
+    {
+        SwFrmFmt* pFmt = findTextBox(pShape);
+
+        // Unlink the TextBox's text range from the original shape.
+        pShape->ResetFmtAttr(RES_CNTNT);
+
+        // Delete the associated TextFrame.
+        if (pFmt)
+            pShape->GetDoc()->DelLayoutFmt(pFmt);
+    }
+}
+
 SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)
 {
     SwFrmFmt* pRet = 0;
