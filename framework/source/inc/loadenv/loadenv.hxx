@@ -412,7 +412,7 @@ private:
                 the whole runtime can't be used any longer.
      */
     void impl_detectTypeAndFilter()
-        throw(LoadEnvException, css::uno::RuntimeException);
+        throw(LoadEnvException, css::uno::RuntimeException, css::beans::IllegalTypeException);
 
     /** @short  tries to ask user for it's filter decision in case
                 normal detection failed.
