@@ -24,9 +24,7 @@
 #include "webdavdatasupplier.hxx"
 #include "webdavcontent.hxx"
 #include "ContentProperties.hxx"
-#ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
-#endif
 #include "SerfUri.hxx"
 
 using namespace com::sun::star;
