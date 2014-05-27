@@ -515,8 +515,10 @@ OUString Package::getDescription() throw (
 }
 
 
-OUString Package::getLicenseText() throw (
-    deployment::ExtensionRemovedException,RuntimeException, std::exception)
+OUString Package::getLicenseText()throw (
+    deployment::DeploymentException,
+    deployment::ExtensionRemovedException,
+    RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -751,6 +753,7 @@ PackageRegistryBackend * Package::getMyBackend() const
     }
     return pBackend;
 }
+
 OUString Package::getRepositoryName()
     throw (RuntimeException, std::exception)
 {
@@ -759,7 +762,8 @@ OUString Package::getRepositoryName()
 }
 
 beans::Optional< OUString > Package::getRegistrationDataURL()
-        throw (deployment::ExtensionRemovedException,
+        throw (deployment::DeploymentException,
+               deployment::ExtensionRemovedException,
                css::uno::RuntimeException, std::exception)
 {
     if (m_bRemoved)
@@ -772,8 +776,6 @@ sal_Bool Package::isRemoved()
 {
     return m_bRemoved;
 }
-
-
 
 Package::TypeInfo::~TypeInfo()
 {

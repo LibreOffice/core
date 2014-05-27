@@ -84,7 +84,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         //XPackage
         virtual css::beans::Optional< OUString > SAL_CALL getRegistrationDataURL()
-            throw (deployment::ExtensionRemovedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (deployment::DeploymentException, deployment::ExtensionRemovedException,
+                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     };
     friend class PackageImpl;
 
@@ -356,7 +357,8 @@ void BackendImpl::PackageImpl::processPackage_(
 }
 
 beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
-    throw (deployment::ExtensionRemovedException,
+    throw (deployment::DeploymentException,
+           deployment::ExtensionRemovedException,
            css::uno::RuntimeException, std::exception)
 {
     if (m_bRemoved)

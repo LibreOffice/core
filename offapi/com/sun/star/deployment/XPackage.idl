@@ -265,7 +265,8 @@ interface XPackage
                 license
     */
     string getLicenseText()
-         raises (ExtensionRemovedException);
+         raises (DeploymentException,
+                 ExtensionRemovedException);
 
     /** returns a sequence of update information URLs.
 
@@ -347,7 +348,7 @@ interface XPackage
         be an empty string.
     */
     com::sun::star::beans::Optional<string> getRegistrationDataURL()
-        raises (ExtensionRemovedException);
+        raises (DeploymentException, ExtensionRemovedException);
 
     /** indicates if this object represents a removed extension or extension
         item. This is the case when it was created by providing

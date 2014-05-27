@@ -227,7 +227,8 @@ public:
         throw (css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getLicenseText()
-        throw (css::deployment::ExtensionRemovedException,
+        throw (css::deployment::DeploymentException,
+               css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< OUString > SAL_CALL
     getUpdateInformationURLs()
@@ -253,7 +254,8 @@ public:
     virtual OUString SAL_CALL getRepositoryName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::beans::Optional< OUString > SAL_CALL getRegistrationDataURL()
-        throw (css::deployment::ExtensionRemovedException,
+        throw (css::deployment::DeploymentException,
+               css::deployment::ExtensionRemovedException,
                css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isRemoved()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
