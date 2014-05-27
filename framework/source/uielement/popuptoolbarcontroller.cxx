@@ -142,7 +142,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
     }
     catch (const css::uno::Exception& e)
     {
-        SAL_INFO( "framework.uielement", "Caught an exception: " << e.Message );
+        SAL_INFO( "fwk.uielement", "Caught an exception: " << e.Message );
     }
 
     SolarMutexGuard aSolarLock;
@@ -242,7 +242,7 @@ void PopupMenuToolbarController::createPopupMenuController()
         catch ( const css::uno::Exception &e )
         {
             m_xPopupMenu.clear();
-            SAL_INFO( "framework.uielement", "Caught an exception: " << e.Message );
+            SAL_INFO( "fwk.uielement", "Caught an exception: " << e.Message );
         }
     }
 }
