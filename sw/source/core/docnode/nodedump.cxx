@@ -17,6 +17,7 @@
 #include "txatbase.hxx"
 #include "fmtautofmt.hxx"
 #include "fmtcntnt.hxx"
+#include "fmtornt.hxx"
 #include "charfmt.hxx"
 #include "frmfmt.hxx"
 #include "fmtanchr.hxx"
@@ -412,11 +413,15 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
             case RES_VERT_ORIENT:
             {
                 pWhich = "frame vertical orientation";
+                const SwFmtVertOrient* pOrient = static_cast<const SwFmtVertOrient*>(pItem);
+                oValue = "orient: " + OString::number(pOrient->GetVertOrient()) + ", relation: " + OString::number(pOrient->GetRelationOrient()) + ", position: " + OString::number(pOrient->GetPos());
                 break;
             }
             case RES_HORI_ORIENT:
             {
                 pWhich = "frame horizontal orientation";
+                const SwFmtHoriOrient* pOrient = static_cast<const SwFmtHoriOrient*>(pItem);
+                oValue = "orient: " + OString::number(pOrient->GetHoriOrient()) + ", relation: " + OString::number(pOrient->GetRelationOrient()) + ", position: " + OString::number(pOrient->GetPos());
                 break;
             }
             case RES_ANCHOR:
