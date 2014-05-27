@@ -32,6 +32,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/metaactiontypes.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
@@ -59,9 +60,6 @@
 #else
 #define GLYPH_FONT_HEIGHT   256
 #endif
-
-#define META_BMPSCALEPART_ACTION            (118)
-#define META_BMPEXSCALEPART_ACTION          (121)
 
 struct ImplOutDevData;
 class ImplFontEntry;
