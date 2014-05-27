@@ -64,6 +64,8 @@
 #include <globalnames.hxx>
 #include <inputopt.hxx>
 
+#include <editable.hxx>
+
 #include <formula/IFunctionDescription.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -2192,6 +2194,47 @@ void Test::testEnterMixedMatrix()
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetString(1,0,0), m_pDoc->GetString(1,3,0));
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(0,1,0), m_pDoc->GetValue(0,4,0));
     CPPUNIT_ASSERT_EQUAL(m_pDoc->GetValue(1,1,0), m_pDoc->GetValue(1,4,0));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testMatrixEditable()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Test");
+
+    // Values in A1:B1.
+    m_pDoc->SetValue(ScAddress(0,0,0), 1.0);
+    m_pDoc->SetValue(ScAddress(1,0,0), 2.0);
+
+    // A2 is a normal formula.
+    m_pDoc->SetString(ScAddress(0,1,0), "=5");
+
+    // A3:A4 is a matrix.
+    ScRange aMatRange(0,2,0,0,3,0);
+    ScMarkData aMark;
+    aMark.SetMarkArea(aMatRange);
+    m_pDoc->InsertMatrixFormula(0, 2, 0, 3, aMark, "=TRANSPOSE(A1:B1)", NULL);
+
+    // Check their values.
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(0,1,0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(0,2,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,3,0)));
+
+    // Make sure A3:A4 is a matrix.
+    ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(0,2,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_MESSAGE("A3 should be matrix origin.", pFC->GetMatrixFlag() == MM_FORMULA);
+
+    pFC = m_pDoc->GetFormulaCell(ScAddress(0,3,0));
+    CPPUNIT_ASSERT(pFC);
+    CPPUNIT_ASSERT_MESSAGE("A4 should be matrix reference.", pFC->GetMatrixFlag() == MM_REFERENCE);
+
+    // Check to make sure A3:A4 combined is editable.
+    ScEditableTester aTester;
+    aTester.TestSelection(m_pDoc, aMark);
+    CPPUNIT_ASSERT(aTester.IsEditable());
 
     m_pDoc->DeleteTab(0);
 }

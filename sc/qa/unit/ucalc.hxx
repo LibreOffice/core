@@ -195,6 +195,7 @@ public:
     void testCSV();
     void testMatrix();
     void testEnterMixedMatrix();
+    void testMatrixEditable();
 
     /**
      * Basic test for pivot tables.
@@ -442,6 +443,7 @@ public:
     CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST(testEnterMixedMatrix);
+    CPPUNIT_TEST(testMatrixEditable);
     CPPUNIT_TEST(testPivotTable);
     CPPUNIT_TEST(testPivotTableLabels);
     CPPUNIT_TEST(testPivotTableDateLabels);
