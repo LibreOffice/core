@@ -523,6 +523,9 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         }
     }
 
+    if (mxStatusIndicator.is())
+        mxStatusIndicator->end();
+
 #ifdef DEBUG_RESOLVE
     debug_logger->endElement();
 #endif
