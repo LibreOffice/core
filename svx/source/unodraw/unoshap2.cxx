@@ -1403,7 +1403,7 @@ drawing::PolygonKind SvxShapePolyPolygonBezier::GetPolygonKind() const throw()
 }
 
 
-void SvxShapePolyPolygonBezier::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw()
+void SvxShapePolyPolygonBezier::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(uno::RuntimeException)
 {
     ::SolarMutexGuard aGuard;
 
