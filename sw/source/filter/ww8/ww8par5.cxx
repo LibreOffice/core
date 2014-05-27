@@ -2486,7 +2486,7 @@ eF_ResT SwWW8ImplReader::Read_F_DBField( WW8FieldDesc* pF, String& rStr )
     pSBase->WW8ReadString( *pStrm, aResult, pPlcxMan->GetCpOfs()+
                            pF->nSRes, pF->nLRes, eTextCharSet );
 
-    aResult = aResult.replace( '\xb', '\n' );
+    aResult.SearchAndReplaceAll( '\xb', '\n' );
 
     aFld.InitContent(aResult);
 
