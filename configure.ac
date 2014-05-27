@@ -6836,7 +6836,9 @@ if test "$ENABLE_JAVA" != ""; then
         else
             AC_MSG_RESULT([no])
         fi
-    else # ? not sure if it's valid for all OS, and all JVMs?
+    elif test "$cross_compiling" != "yes"; then
+        # at least 2 reasons to check: officebean needs to link -ljawt,
+        # and libjpipe.so needs to be loaded by java to run JunitTests.
         case $CPUNAME in
             AXP|X86_64|HPPA|IA64|POWERPC64|S390X|SPARC64)
                 if test -f "$JAVAINTERPRETER" -a "`$JAVAINTERPRETER -version 2>&1 | $GREP -i 64-bit`" = "" >/dev/null; then
