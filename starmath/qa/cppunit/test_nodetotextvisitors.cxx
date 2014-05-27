@@ -232,6 +232,7 @@ void Test::SimpleOperators()
     parseandparseagain("llint a", "Double curved integral");
     parseandparseagain("lllint a", "Triple curved integral");
     parseandparseagain("prod from {i=1} to {n} {(i+1)}", "Product with range");
+    ParseAndCheck("%Ux2135", "%Ux2135", "fdo#77831");
 }
 
 void Test::SimpleAttributes()

@@ -375,6 +375,12 @@ const sal_Int32 coContFlags =
     (coStartFlags & ~KParseTokens::IGNORE_LEADING_WS)
     | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
+// user-defined char continuing characters may be any alphanumeric or dot.
+const sal_Int32 coUserDefinedCharContFlags =
+    ((KParseTokens::ANY_LETTER_OR_NUMBER | KParseTokens::IGNORE_LEADING_WS | KParseTokens::ASC_DOT)
+        & ~KParseTokens::IGNORE_LEADING_WS)
+    | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
+
 // First character for numbers, may be any numeric or dot
 const sal_Int32 coNumStartFlags =
         KParseTokens::ASC_DIGIT |
@@ -644,7 +650,7 @@ void SmParser::NextToken()
                                 m_aBufferString, rnEndPos,
                                 KParseTokens::ANY_LETTER,
                                 aEmptyStr,
-                                coContFlags,
+                                coUserDefinedCharContFlags,
                                 aEmptyStr );
 
                         sal_Int32 nTmpStart = rnEndPos + aTmpRes.LeadingWhiteSpace;
