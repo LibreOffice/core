@@ -35,7 +35,7 @@ protected:
     css::uno::Reference< css::style::XStyle > mxStyle;
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::container::XNameContainer > mxStyleFamilyNameContainer;
-    void initialise() throw ( css::uno::RuntimeException );
+    void initialise() throw ( css::uno::RuntimeException, css::script::BasicErrorException );
 public:
     ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const OUString& sStyleName, const css::uno::Reference< css::frame::XModel >& _xModel ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
     ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& _xModel ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );

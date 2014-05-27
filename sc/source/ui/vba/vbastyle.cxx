@@ -42,7 +42,7 @@ lcl_getStyleProps( const OUString& sStyleName, const uno::Reference< frame::XMod
 }
 
 
-void ScVbaStyle::initialise() throw ( uno::RuntimeException )
+void ScVbaStyle::initialise() throw ( uno::RuntimeException, script::BasicErrorException )
 {
     if (!mxModel.is() )
         DebugHelper::exception(SbERR_METHOD_FAILED, OUString( "XModel Interface could not be retrieved") );
