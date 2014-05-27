@@ -58,7 +58,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <DocumentSettingManager.hxx>
+#include <IDocumentSettingAccess.hxx>
 
 #include <pausethreadstarting.hxx>
 
@@ -180,7 +180,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     }
 
     sal_uInt16 const eUnit = SvXMLUnitConverter::GetMeasureUnit(
-            SW_MOD()->GetMetric(pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::HTML_MODE)));
+            SW_MOD()->GetMetric(pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE)));
     if (GetMM100UnitConverter().GetXMLMeasureUnit() != eUnit )
     {
         GetMM100UnitConverter().SetXMLMeasureUnit( eUnit );
@@ -234,12 +234,12 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     }
 
     // adjust document class (eClass)
-    if (pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::GLOBAL_DOCUMENT))
+    if (pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT))
     {
         eClass = XML_TEXT_GLOBAL;
 
         // additionally, we take care of the save-linked-sections-thingy
-        mbSaveLinkedSections = pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
+        mbSaveLinkedSections = pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
     }
     // MIB: 03/26/04: The Label information is saved in the settings, so
     // we don't need it here.
@@ -390,7 +390,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     pValue[nIndex].Name = "ShowRedlineChanges";
     pValue[nIndex++].Value.setValue( &bShowRedlineChanges, ::getBooleanCppuType() );
 
-    sal_Bool bInBrowse =  pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::BROWSE_MODE);
+    sal_Bool bInBrowse =  pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE);
     pValue[nIndex].Name = "InBrowseMode";
     pValue[nIndex++].Value.setValue( &bInBrowse, ::getBooleanCppuType() );
 
