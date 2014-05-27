@@ -1326,10 +1326,9 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     // Zoom-Item
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
-        SvxZoomItem* pZoomItem;
         sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
-        pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom );
+        boost::scoped_ptr<SvxZoomItem> pZoomItem(new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom ));
 
         // limit area
         sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
@@ -1339,7 +1338,6 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
         pZoomItem->SetValueSet( nZoomValues );
         rSet.Put( *pZoomItem );
-        delete pZoomItem;
     }
 
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )

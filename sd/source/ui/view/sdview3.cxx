@@ -75,6 +75,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <svx/xbtmpit.hxx>
+#include <boost/scoped_ptr.hpp>
 
 
 // - Namespaces -
@@ -265,7 +266,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     TransferableDataHelper  aDataHelper( rDataHelper );
     SdrObject*              pPickObj = NULL;
     SdPage*                 pPage = NULL;
-    ImageMap*               pImageMap = NULL;
+    boost::scoped_ptr<ImageMap> pImageMap;
     bool bReturn = false;
     bool                    bLink = ( ( mnAction & DND_ACTION_LINK ) != 0 );
     bool                    bCopy = ( ( ( mnAction & DND_ACTION_COPY ) != 0 ) || bLink );
@@ -316,7 +317,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVIM, xStm ) )
         {
-            pImageMap = new ImageMap;
+            pImageMap.reset(new ImageMap);
             // mba: clipboard always must contain absolute URLs (could be from alien source)
             pImageMap->Read( *xStm, OUString() );
         }
@@ -1165,7 +1166,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         if( !bReturn && aDataHelper.HasFormat( FORMAT_GDIMETAFILE ) )
         {
             // if no object was inserted, insert a picture
-            InsertMetaFile( aDataHelper, rPos, pImageMap, true );
+            InsertMetaFile( aDataHelper, rPos, pImageMap.get(), true );
             bReturn = true;
         }
     }
@@ -1203,7 +1204,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
-            InsertGraphic( aGraphic, mnAction, aInsertPos, NULL, pImageMap );
+            InsertGraphic( aGraphic, mnAction, aInsertPos, NULL, pImageMap.get() );
             bReturn = true;
         }
     }
@@ -1229,7 +1230,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
         }
 
-        bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap, nFormat == 0 );
+        bReturn = InsertMetaFile( aDataHelper, aInsertPos, pImageMap.get(), nFormat == 0 );
     }
 
     if(!bReturn && (!bLink || pPickObj) && CHECK_FORMAT_TRANS(FORMAT_BITMAP))
@@ -1282,7 +1283,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             Size aImageMapSize(aBmpEx.GetPrefSize());
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
-            InsertGraphic( aBmpEx, mnAction, aInsertPos, NULL, pImageMap );
+            InsertGraphic( aBmpEx, mnAction, aInsertPos, NULL, pImageMap.get() );
             bReturn = true;
         }
     }
@@ -1488,28 +1489,25 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     MarkListHasChanged();
     mbIsDropAllowed = true;
     rDnDAction = mnAction;
-    delete pImageMap;
 
     return bReturn;
 }
 
 bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nPasteOptions )
 {
-    SdDrawDocument* pModel = new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh );
+    boost::scoped_ptr<SdDrawDocument> pModel(new SdDrawDocument( DOCUMENT_TYPE_IMPRESS, mpDocSh ));
     pModel->NewOrLoadCompleted(NEW_DOC);
     pModel->GetItemPool().SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
     pModel->InsertPage(pModel->AllocPage(false));
 
-    Reference< XComponent > xComponent( new SdXImpressDocument( pModel, true ) );
+    Reference< XComponent > xComponent( new SdXImpressDocument( pModel.get(), true ) );
     pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
 
-    CreateTableFromRTF( *xStm, pModel );
+    CreateTableFromRTF( *xStm, pModel.get() );
     bool bRet = Paste( *pModel, maDropPos, pPage, nPasteOptions );
 
     xComponent->dispose();
     xComponent.clear();
-
-    delete pModel;
 
     return bRet;
 }
