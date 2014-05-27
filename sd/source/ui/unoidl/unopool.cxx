@@ -50,7 +50,8 @@ public:
     virtual ~SdUnoDrawPool() throw();
 
 protected:
-    virtual void putAny( SfxItemPool* pPool, const PropertyMapEntry* pEntry, const uno::Any& rValue ) throw( beans::UnknownPropertyException, lang::IllegalArgumentException) SAL_OVERRIDE;
+    virtual void putAny( SfxItemPool* pPool, const PropertyMapEntry* pEntry, const uno::Any& rValue )
+        throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException ) SAL_OVERRIDE;
 
 private:
     SdDrawDocument* mpDrawModel;
@@ -66,7 +67,7 @@ SdUnoDrawPool::~SdUnoDrawPool() throw()
 }
 
 void SdUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const uno::Any& rValue )
-    throw(beans::UnknownPropertyException, lang::IllegalArgumentException)
+    throw(beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException)
 {
     switch( pEntry->mnHandle )
     {
