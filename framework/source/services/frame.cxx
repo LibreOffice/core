@@ -404,7 +404,7 @@ private:
     bool                                                                    m_bSelfClose;                /// in case of CloseVetoException on method close() wqs thrown by ourself - we must close ourself later if no internal processes are running
     bool                                                                    m_bIsHidden;                 /// indicates, if this frame is used in hidden mode or not
     static css::uno::WeakReference< css::frame::XFrame2 >                   m_xCloserFrame;              /// holds the only frame, which must show the special closer menu item (can be NULL!)
-    css::uno::Reference< ::css::frame::XLayoutManager2 >                    m_xLayoutManager;            /// is used to layout the child windows of the frame.
+    css::uno::Reference< css::frame::XLayoutManager2 >                      m_xLayoutManager;            /// is used to layout the child windows of the frame.
     css::uno::Reference< css::frame::XDispatchInformationProvider >         m_xDispatchInfoHelper;
     css::uno::Reference< css::frame::XTitle >                               m_xTitleHelper;
 

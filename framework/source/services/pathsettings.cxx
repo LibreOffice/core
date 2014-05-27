@@ -206,14 +206,14 @@ public:
     }
 
     // XInterface
-    virtual ::css::uno::Any SAL_CALL queryInterface( const ::css::uno::Type& type) throw ( ::css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& type) throw ( css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
         { OWeakObject::acquire(); }
     virtual void SAL_CALL release() throw () SAL_OVERRIDE
         { OWeakObject::release(); }
 
     // XTypeProvider
-    virtual ::css::uno::Sequence< ::css::uno::Type > SAL_CALL getTypes(  ) throw(::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // css::util::XChangesListener
     virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& aEvent) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -447,7 +447,7 @@ private:
     // warning:   by ‘virtual void {anonymous}::PathSettings::getFastPropertyValue(com::sun::star::uno::Any&, sal_Int32) const’ [-Woverloaded-virtual]
     using cppu::OPropertySetHelper::getFastPropertyValue;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(::css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** factory methods to guarantee right (but on demand) initialized members ... */
     css::uno::Reference< css::util::XStringSubstitution > fa_getSubstitution();

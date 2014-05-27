@@ -1524,7 +1524,7 @@ void SAL_CALL SfxBaseController::removeTitleChangeListener(const Reference< fram
         xBroadcaster->removeTitleChangeListener (xListener);
 }
 
-void SfxBaseController::initialize( const ::css::uno::Sequence< ::css::uno::Any >& /*aArguments*/ ) throw (css::uno::RuntimeException, std::exception)
+void SfxBaseController::initialize( const css::uno::Sequence< css::uno::Any >& /*aArguments*/ ) throw (css::uno::RuntimeException, std::exception)
 {
     if (m_pData->m_pViewShell)
         m_pData->m_pViewShell->Initialize();

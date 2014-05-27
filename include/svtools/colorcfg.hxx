@@ -114,7 +114,7 @@ public:
     EditableColorConfig();
     ~EditableColorConfig();
 
-    ::css::uno::Sequence< OUString >  GetSchemeNames() const;
+    css::uno::Sequence< OUString >  GetSchemeNames() const;
     void                        DeleteScheme(const OUString& rScheme );
     void                        AddScheme(const OUString& rScheme );
     bool                        LoadScheme(const OUString& rScheme );

@@ -54,7 +54,7 @@ namespace svxform
 
     public:
         // no bit fields at all (want to pass the addresses to the OConfigurationValueContainer)
-        ::css::uno::Sequence< OUString >
+        css::uno::Sequence< OUString >
                     aHistory;
         OUString    sSingleSearchField;
 

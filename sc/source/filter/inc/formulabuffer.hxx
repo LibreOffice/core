@@ -127,11 +127,11 @@ public:
     void setCellFormulaValue(
         const css::table::CellAddress& rAddress, const OUString& rValueStr, sal_Int32 nCellType );
 
-    void                setCellArrayFormula( const ::css::table::CellRangeAddress& rRangeAddress,
-                                             const ::css::table::CellAddress& rTokenAddress,
+    void                setCellArrayFormula( const css::table::CellRangeAddress& rRangeAddress,
+                                             const css::table::CellAddress& rTokenAddress,
                                              const OUString& );
-    void                createSharedFormulaMapEntry( const ::css::table::CellAddress& rAddress,
-                                                     const ::css::table::CellRangeAddress& rRange,
+    void                createSharedFormulaMapEntry( const css::table::CellAddress& rAddress,
+                                                     const css::table::CellRangeAddress& rRange,
                                                      sal_Int32 nSharedId, const OUString& rTokens );
 
     /// ensure sizes of vectors matches the number of sheets

@@ -109,7 +109,7 @@ struct SwSpellArgs : SwArgsBase
 
 class SwInterHyphInfo
 {
-    ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord >    xHyphWord;
+    css::uno::Reference< css::linguistic2::XHyphenatedWord >    xHyphWord;
     const Point aCrsrPos;
     bool bNoLang : 1;
     bool bCheck  : 1;
@@ -143,11 +143,11 @@ public:
     bool IsCheck() const { return bCheck; }
     void SetCheck( const bool bNew ) { bCheck = bNew; }
     void SetNoLang( const bool bNew ) { bNoLang = bNew; }
-    void SetHyphWord(const ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord >  &rxHW)
+    void SetHyphWord(const css::uno::Reference< css::linguistic2::XHyphenatedWord >  &rxHW)
     {
         xHyphWord = rxHW;
     }
-    ::css::uno::Reference< ::css::linguistic2::XHyphenatedWord > GetHyphWord()
+    css::uno::Reference< css::linguistic2::XHyphenatedWord > GetHyphWord()
     {
         return xHyphWord;
     }

@@ -29,9 +29,9 @@ using namespace css;
 
 void SSLWarnDialog::ViewCert()
 {
-    uno::Reference< ::css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
+    uno::Reference< css::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 
-    xDocumentDigitalSignatures = ::css::security::DocumentDigitalSignatures::createDefault( m_xContext );
+    xDocumentDigitalSignatures = css::security::DocumentDigitalSignatures::createDefault( m_xContext );
 
     xDocumentDigitalSignatures.get()->showCertificate(getCert());
 }
