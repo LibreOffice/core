@@ -1232,7 +1232,7 @@ public:
 
     /** Access to frames.
     Iterate over Flys - forr Basic-Collections. */
-    sal_uInt16 GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL) const;
+    sal_uInt16 GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL, bool bIgnoreTextBoxes = false ) const;
     SwFrmFmt* GetFlyNum(sal_uInt16 nIdx, FlyCntType eType = FLYCNTTYPE_ALL);
 
     // Copy formats in own arrays and return them.

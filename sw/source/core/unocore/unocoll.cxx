@@ -1188,7 +1188,8 @@ sal_Int32 SwXFrames::getCount(void) throw(uno::RuntimeException, std::exception)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return GetDoc()->GetFlyCount(eType);
+    // Ignore TextBoxes for TextFrames.
+    return GetDoc()->GetFlyCount(eType, /*bIgnoreTextBoxes=*/eType == FLYCNTTYPE_FRM);
 }
 
 uno::Any SwXFrames::getByIndex(sal_Int32 nIndex)

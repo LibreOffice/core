@@ -42,6 +42,7 @@
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <flyfrms.hxx>
+#include <textboxhelper.hxx>
 #include <frmtool.hxx>
 #include <frmfmt.hxx>
 #include <ndtxt.hxx>
@@ -68,15 +69,24 @@
 
 using namespace ::com::sun::star;
 
-sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType ) const
+sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
 {
     const SwFrmFmts& rFmts = *GetSpzFrmFmts();
     sal_uInt16 nSize = rFmts.size();
     sal_uInt16 nCount = 0;
     const SwNodeIndex* pIdx;
+
+    std::list<SwFrmFmt*> aTextBoxes;
+    if (bIgnoreTextBoxes)
+        aTextBoxes = SwTextBoxHelper::findTextBoxes(this);
+
     for ( sal_uInt16 i = 0; i < nSize; i++)
     {
         const SwFrmFmt* pFlyFmt = rFmts[ i ];
+
+        if (bIgnoreTextBoxes && std::find(aTextBoxes.begin(), aTextBoxes.end(), pFlyFmt) != aTextBoxes.end())
+            continue;
+
         if( RES_FLYFRMFMT == pFlyFmt->Which()
             && 0 != ( pIdx = pFlyFmt->GetCntnt().GetCntntIdx() )
             && pIdx->GetNodes().IsDocNodes()
