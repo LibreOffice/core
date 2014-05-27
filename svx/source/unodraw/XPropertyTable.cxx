@@ -54,7 +54,7 @@ public:
 
     virtual ~SvxUnoXPropertyTable() throw();
 
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() = 0;
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw(uno::RuntimeException) = 0;
     virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw(uno::RuntimeException, lang::IllegalArgumentException) = 0;
 
     // XServiceInfo
@@ -635,7 +635,7 @@ public:
     SvxUnoXBitmapTable( XPropertyList* pTable ) throw() : SvxUnoXPropertyTable( XATTR_FILLBITMAP, pTable ) {};
 
     // SvxUnoXPropertyTable
-    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() SAL_OVERRIDE;
+    virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw(uno::RuntimeException) SAL_OVERRIDE;
     virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw(uno::RuntimeException) SAL_OVERRIDE;
 
     // XElementAccess
@@ -652,7 +652,7 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoXBitmapTable_createInstance( XP
 }
 
 // SvxUnoXPropertyTable
-uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw()
+uno::Any SvxUnoXBitmapTable::getAny( const XPropertyEntry* pEntry ) const throw(uno::RuntimeException)
 {
     OUString aURL( UNO_NAME_GRAPHOBJ_URLPREFIX);
     const GraphicObject& rGraphicObject(((XBitmapEntry*)pEntry)->GetGraphicObject());
