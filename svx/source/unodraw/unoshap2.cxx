@@ -1268,7 +1268,7 @@ drawing::PolygonKind SvxShapePolyPolygon::GetPolygonKind() const throw()
 }
 
 
-void SvxShapePolyPolygon::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw()
+void SvxShapePolyPolygon::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(uno::RuntimeException)
 {
     ::SolarMutexGuard aGuard;
 
