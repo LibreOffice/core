@@ -23,6 +23,7 @@
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
 
 #include <swtypes.hxx>
 #include <flyenum.hxx>
@@ -218,7 +219,7 @@ namespace SwUnoCursorHelper
             const ::com::sun::star::uno::Any& rValue,
             SwDoc & rDoc, SfxItemSet & rSet);
     void SetTxtFmtColl(const ::com::sun::star::uno::Any & rAny, SwPaM & rPaM)
-        throw (::com::sun::star::lang::IllegalArgumentException);
+        throw (::com::sun::star::lang::IllegalArgumentException, css::uno::RuntimeException);
     bool SetCursorPropertyValue(
             SfxItemPropertySimpleEntry const& rEntry,
             ::com::sun::star::uno::Any const& rValue,

@@ -260,7 +260,7 @@ throw (lang::IllegalArgumentException)
 
 void
 SwUnoCursorHelper::SetTxtFmtColl(const uno::Any & rAny, SwPaM & rPaM)
-throw (lang::IllegalArgumentException)
+throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SwDoc *const pDoc = rPaM.GetDoc();
     SwDocShell *const pDocSh = pDoc->GetDocShell();
