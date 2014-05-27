@@ -41,7 +41,7 @@ ScVbaComment::ScVbaComment(
         const uno::Reference< XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< frame::XModel >& xModel,
-        const uno::Reference< table::XCellRange >& xRange ) throw( lang::IllegalArgumentException ) :
+        const uno::Reference< table::XCellRange >& xRange ) throw( lang::IllegalArgumentException, uno::RuntimeException ) :
     ScVbaComment_BASE( xParent, xContext ),
     mxModel( xModel, uno::UNO_SET_THROW ),
     mxRange( xRange )
