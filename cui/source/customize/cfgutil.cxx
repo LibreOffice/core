@@ -582,7 +582,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         InitStyles();
     }
 
-    OSL_TRACE("** ** About to initialise SF Scripts");
+    SAL_INFO("cui.customize", "** ** About to initialise SF Scripts");
     // Add Scripting Framework entries
     Reference< browse::XBrowseNode > rootNode;
     Reference< XComponentContext > xCtx(
@@ -594,8 +594,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     }
     catch( Exception& e )
     {
-        OSL_TRACE(" Caught some exception whilst retrieving browse nodes from factory... Exception: %s",
-            OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        SAL_INFO("cui.customize", "Caught some exception whilst retrieving browse nodes from factory... Exception: " << e.Message);
         // TODO exception handling
     }
 
@@ -770,8 +769,7 @@ Image SfxConfigGroupListBox::GetImage(
                     if ( pmoduleDescr[ pos ].Name == "ooSetupFactoryEmptyDocumentURL" )
                     {
                         pmoduleDescr[ pos ].Value >>= factoryURL;
-                        OSL_TRACE("factory url for doc images is %s",
-                        OUStringToOString( factoryURL , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+                        SAL_INFO("cui.customize", "factory url for doc images is " << factoryURL);
                         break;
                     }
                 }
