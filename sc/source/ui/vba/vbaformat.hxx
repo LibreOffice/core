@@ -51,7 +51,7 @@ protected:
     css::uno::Reference< css::lang::XMultiServiceFactory > xMultiServiceFactory;
     bool isAmbiguous(const OUString& _sPropertyName) throw ( css::script::BasicErrorException );
     css::uno::Reference< css::beans::XPropertyState > getXPropertyState() throw ( css::uno::RuntimeException );
-    void initializeNumberFormats() throw ( css::script::BasicErrorException );
+    void initializeNumberFormats() throw ( css::script::BasicErrorException, css::uno::RuntimeException );
     SfxItemSet*  getCurrentDataSet( ) throw ( css::uno::RuntimeException );
 protected:
     virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );
