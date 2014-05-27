@@ -1094,7 +1094,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
 {
     if( rAction.mpDXAry )
     {
-        const sal_uLong nAryLen = mnLen;
+        const sal_Int32 nAryLen = mnLen;
 
         mpDXAry = new sal_Int32[ nAryLen ];
         memcpy( mpDXAry, rAction.mpDXAry, nAryLen * sizeof( sal_Int32 ) );
@@ -1114,7 +1114,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
     mnIndex     ( nIndex ),
     mnLen       ( nLen )
 {
-    const sal_uLong nAryLen = pDXAry ? mnLen : 0;
+    const sal_Int32 nAryLen = pDXAry ? mnLen : 0;
 
     if( nAryLen )
     {
@@ -1177,7 +1177,7 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt16(mnIndex);
     rOStm.WriteUInt16(mnLen);
-    rOStm.WriteUInt16(nAryLen);
+    rOStm.WriteInt32(nAryLen);
 
     for (sal_Int32 i = 0; i < nAryLen; ++i)
         rOStm.WriteInt32( mpDXAry[ i ] );
@@ -1187,8 +1187,6 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 
 void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
-    sal_Int32 nAryLen;
-
     delete[] mpDXAry;
 
     VersionCompat aCompat(rIStm, STREAM_READ);
@@ -1200,9 +1198,8 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     sal_uInt16 nTmpLen(0);
     rIStm.ReadUInt16(nTmpLen);
     mnLen = nTmpLen;
-    sal_uInt16 nTmpAryLen(0);
-    rIStm.ReadUInt16(nTmpAryLen);
-    nAryLen = nTmpAryLen;
+    sal_Int32 nAryLen(0);
+    rIStm.ReadInt32(nAryLen);
 
     if ( mnIndex + mnLen > maStr.getLength() )
     {
