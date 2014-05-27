@@ -142,9 +142,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
     }
     catch (const css::uno::Exception& e)
     {
-        OSL_TRACE( "PopupMenuToolbarController - caught an exception! %s",
-                   rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-        (void) e;
+        SAL_INFO( "framework.uielement", "Caught an exception: " << e.Message );
     }
 
     SolarMutexGuard aSolarLock;
@@ -244,9 +242,7 @@ void PopupMenuToolbarController::createPopupMenuController()
         catch ( const css::uno::Exception &e )
         {
             m_xPopupMenu.clear();
-            OSL_TRACE( "PopupMenuToolbarController - caught an exception! %s",
-                       OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
-            (void) e;
+            SAL_INFO( "framework.uielement", "Caught an exception: " << e.Message );
         }
     }
 }

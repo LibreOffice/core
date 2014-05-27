@@ -75,9 +75,7 @@ using namespace ::osl;
 
 void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Reference< frame::XModel >& xModel )
 {
-        OSL_TRACE("SFURL_firing_impl() processing script url %s",
-            OUStringToOString( aScriptEvent.ScriptCode,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+        SAL_INFO("basic", "Processing script url " << aScriptEvent.ScriptCode);
         try
         {
             Reference< provider::XScriptProvider > xScriptProvider;
@@ -102,7 +100,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
 
             if ( !xScriptProvider.is() )
             {
-                OSL_TRACE("SFURL_firing_impl() Failed to create msp");
+                SAL_INFO("basic", "Failed to create msp");
                 return;
             }
             Sequence< Any > inArgs( 0 );
@@ -116,7 +114,7 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
 
             if ( !xScript.is() )
             {
-                OSL_TRACE("SFURL_firing_impl() Failed to obtain XScript");
+                SAL_INFO("basic", "Failed to Failed to obtain XScript");
                 return;
             }
 
@@ -128,15 +126,11 @@ void SFURL_firing_impl( const ScriptEvent& aScriptEvent, Any* pRet, const Refere
         }
         catch ( const RuntimeException& re )
         {
-            OSL_TRACE("SFURL_firing_impl() Caught RuntimeException reason %s.",
-                OUStringToOString( re.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("basic", "Caught RuntimeException reason " << re.Message);
         }
         catch ( const Exception& e )
         {
-            OSL_TRACE("SFURL_firing_impl() Caught Exception reason %s.",
-                OUStringToOString( e.Message,
-                    RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            SAL_INFO("basic", "Caught Exception reason " << e.Message);
         }
 
 }
@@ -491,7 +485,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
     css::uno::Reference< css::container::XNameContainer > aDlgLib;
     bool bDocDialog = false;
     StarBASIC* pFoundBasic = NULL;
-    OSL_TRACE("About to try get a hold of ThisComponent");
+    SAL_INFO("basic", "About to try get a hold of ThisComponent");
     Reference< frame::XModel > xModel = StarBASIC::GetModelFromBasic( GetSbData()->pInst->GetBasic() ) ;
     aDlgLib = implFindDialogLibForDialogBasic( aAnyISP, GetSbData()->pInst->GetBasic(), pFoundBasic );
     // If we found the dialog then it belongs to the Search basic
