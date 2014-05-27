@@ -218,7 +218,7 @@ public:
                              const Font&, const Size& rPixelSize, float fExactHeight,
                 ImplDirectFontSubstitution* pDevSpecific );
     ImplFontEntry*      GetFontEntry( ImplDevFontList*,
-                    FontSelectPattern&, ImplDirectFontSubstitution* pDevSpecific );
+                    const FontSelectPattern&, ImplDirectFontSubstitution* pDevSpecific );
     ImplFontEntry*      GetGlyphFallbackFont( ImplDevFontList*, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
     void                Release( ImplFontEntry* );
