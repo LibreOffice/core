@@ -556,9 +556,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 
     maElementListBox.SetSelectHdl(LINK(this, SmElementsDockingWindow, ElementSelectedHandle));
 
-    Wallpaper aWallpaper( Color( COL_WHITE ) );
-
-    maElementsControl.SetBackground( aWallpaper );
+    maElementsControl.SetBackground( Color( COL_WHITE ) );
     maElementsControl.SetTextColor( Color( COL_BLACK ) );
     maElementsControl.SetSelectHdl(LINK(this, SmElementsDockingWindow, SelectClickHdl));
 
