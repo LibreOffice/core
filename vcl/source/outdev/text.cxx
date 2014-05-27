@@ -149,14 +149,14 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
 
     nX += nBaseX;
     nY += nBaseY;
-    mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this ); // original code
+    //mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this ); // original code
 
     Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
     Polygon   aPoly( aRect );
     PolyPolygon aPolyPoly(aPoly);
-    DrawTransparent(aPolyPoly, 50);
-    // Code above is wrong: it just messes up.
-
+    Color aColor = RGB_COLORDATA(0x66,0x66, 0xFF);
+    SetTextFillColor(aColor);
+    DrawTransparent(aPolyPoly, 70);
 
 }
 
@@ -486,6 +486,7 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
      and the set it as the new filling color
     */
     if (mbTextBackground) {
+        // FIXME(matteocam)
         // set right background // (XXX: now getting fixed color)
         Color aColor = RGB_COLORDATA(0x66,0x66, 0xFF); // blue-ish
         // SetBackground does not work
