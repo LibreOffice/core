@@ -154,7 +154,7 @@ sal_uInt16 ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sal_uInt16 n
         }
 
         size_t nRowsToRead = nRow2 - nRow + 1;
-        size_t nEnd = std::min(it->size, nRowsToRead);
+        size_t nEnd = std::min(it->size, nOffset+nRowsToRead); // last row + 1
         sc::formula_block::const_iterator itCell = sc::formula_block::begin(*it->data);
         std::advance(itCell, nOffset);
         for (size_t i = nOffset; i < nEnd; ++itCell, ++i)
