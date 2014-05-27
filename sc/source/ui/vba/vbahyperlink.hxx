@@ -34,7 +34,7 @@ class ScVbaHyperlink : public HyperlinkImpl_BASE
 public:
     ScVbaHyperlink(
         const css::uno::Sequence< css::uno::Any >& rArgs,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::lang::IllegalArgumentException);
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     ScVbaHyperlink(
         const css::uno::Reference< ov::XHelperInterface >& rxAnchor,
