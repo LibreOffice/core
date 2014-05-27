@@ -55,7 +55,7 @@ public:
     virtual ~SvxUnoXPropertyTable() throw();
 
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() = 0;
-    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw() = 0;
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw(lang::IllegalArgumentException) = 0;
 
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -318,7 +318,7 @@ public:
 
     // SvxUnoXPropertyTable
     virtual uno::Any getAny( const XPropertyEntry* pEntry ) const throw() SAL_OVERRIDE;
-    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw() SAL_OVERRIDE;
+    virtual XPropertyEntry* getEntry( const OUString& rName, const uno::Any& rAny ) const throw(lang::IllegalArgumentException) SAL_OVERRIDE;
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() throw( uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -345,7 +345,7 @@ uno::Any SvxUnoXLineEndTable::getAny( const XPropertyEntry* pEntry ) const throw
     return aAny;
 }
 
-XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw()
+XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const uno::Any& rAny ) const throw(lang::IllegalArgumentException)
 {
 
     if( !rAny.getValue() || rAny.getValueType() != cppu::UnoType<drawing::PolyPolygonBezierCoords>::get())
