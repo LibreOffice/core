@@ -95,6 +95,7 @@
 #include "DrawController.hxx"
 
 #include <numeric>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -1247,7 +1248,7 @@ bool View::ShouldToggleOn(
         return false;
 
     bool bToggleOn = false;
-    SdrOutliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel);
+    boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel));
     sal_uInt32 nMarkCount = GetMarkedObjectCount();
     for (sal_uInt32 nIndex = 0; nIndex < nMarkCount && !bToggleOn; nIndex++)
     {
@@ -1297,7 +1298,6 @@ bool View::ShouldToggleOn(
             pOutliner->Clear();
         }
     }
-    delete pOutliner;
     return bToggleOn;
 }
 
@@ -1320,8 +1320,8 @@ void View::ChangeMarkedObjectsBulletsNumbering(
         ? false
         : ShouldToggleOn( bToggle, bHandleBullets );
 
-    SdrOutliner* pOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel);
-    OutlinerView* pOutlinerView = new OutlinerView(pOutliner, pWindow);
+    boost::scoped_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, pSdrModel));
+    boost::scoped_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner.get(), pWindow));
 
     const sal_uInt32 nMarkCount = GetMarkedObjectCount();
     for (sal_uInt32 nIndex = 0; nIndex < nMarkCount; nIndex++)
@@ -1414,9 +1414,6 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     }
     else
         delete pUndoGroup;
-
-    delete pOutliner;
-    delete pOutlinerView;
 }
 
 } // end of namespace sd

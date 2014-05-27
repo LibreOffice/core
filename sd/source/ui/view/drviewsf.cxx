@@ -64,6 +64,7 @@
 #include <editeng/adjustitem.hxx>
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace svx::sidebar;
 using namespace ::com::sun::star;
@@ -562,7 +563,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 aNewAttr.Put( aEditAttr, false );
 
 
-                SvxNumRule* pNumRule = NULL;
+                boost::scoped_ptr<SvxNumRule> pNumRule;
                 const SfxPoolItem* pTmpItem=NULL;
                 sal_uInt16 nNumItemId = SID_ATTR_NUMBERING_RULE;
 
@@ -572,7 +573,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 pTmpItem=GetNumBulletItem(aNewAttr, nNumItemId);
 
                 if (pTmpItem)
-                    pNumRule = new SvxNumRule(*((SvxNumBulletItem*)pTmpItem)->GetNumRule());
+                    pNumRule.reset(new SvxNumRule(*((SvxNumBulletItem*)pTmpItem)->GetNumRule()));
 
                 if ( pNumRule )
                 {
@@ -626,7 +627,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                             }
                         }
                     }
-                  delete pNumRule;
                 }
             }
             break;
@@ -666,11 +666,11 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    SfxItemSet* pSet = NULL;
+    boost::scoped_ptr<SfxItemSet> pSet;
 
     if( bAttr )
     {
-        pSet = new SfxItemSet( GetDoc()->GetPool() );
+        pSet.reset(new SfxItemSet( GetDoc()->GetPool() ));
         mpDrawView->GetAttributes( *pSet );
         rSet.Put( *pSet, false );
     }
@@ -733,7 +733,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             rSet.InvalidateItem(EE_CHAR_KERNING);
             rSet.InvalidateItem(SID_ATTR_CHAR_KERNING);
         }
-        delete pSet;
     }
 }
 

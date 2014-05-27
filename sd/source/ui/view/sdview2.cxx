@@ -65,6 +65,7 @@
 #include <vcl/svapp.hxx>
 
 #include "slideshow.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace sd {
 
@@ -916,10 +917,10 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
                 OUString aDesc(SD_RESSTR(STR_DESC_NAMEGROUP));
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                AbstractSvxNameDialog* pDlg = 0;
+                boost::scoped_ptr<AbstractSvxNameDialog> pDlg;
 
                 if (pFact)
-                    pDlg = pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), aNewName, aDesc );
+                    pDlg.reset(pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), aNewName, aDesc ));
 
                 if( pDlg )
                 {
@@ -935,8 +936,6 @@ bool View::GetExchangeList (std::vector<OUString> &rExchangeList,
                         if( !mrDoc.GetObj( aNewName ) )
                             bNameOK = true;
                     }
-
-                    delete pDlg;
                 }
             }
         }

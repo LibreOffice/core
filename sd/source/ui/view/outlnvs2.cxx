@@ -297,14 +297,14 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_PHOTOALBUM:
         {
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-            VclAbstractDialog* pDlg = pFact ? pFact->CreateSdPhotoAlbumDialog(
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact ? pFact->CreateSdPhotoAlbumDialog(
                 GetActiveWindow(),
-                GetDoc()) : 0;
+                GetDoc()) : 0);
 
             if (pDlg)
             {
                 pDlg->Execute();
-                delete pDlg;
+                pDlg.reset();
             }
             Cancel();
             rReq.Ignore ();
@@ -472,44 +472,44 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         case SID_INSERT_FLD_PAGES:
         case SID_INSERT_FLD_FILE:
         {
-            SvxFieldItem* pFieldItem = 0;
+            boost::scoped_ptr<SvxFieldItem> pFieldItem;
 
             switch( nSId )
             {
                 case SID_INSERT_FLD_DATE_FIX:
-                    pFieldItem = new SvxFieldItem(
-                        SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem(
+                        SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_DATE_VAR:
-                    pFieldItem = new SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxDateField(), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_TIME_FIX:
-                    pFieldItem = new SvxFieldItem(
-                        SvxExtTimeField( Time( Time::SYSTEM ), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem(
+                        SvxExtTimeField( Time( Time::SYSTEM ), SVXTIMETYPE_FIX ), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_TIME_VAR:
-                    pFieldItem = new SvxFieldItem( SvxExtTimeField(), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxExtTimeField(), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_AUTHOR:
                 {
                     SvtUserOptions aUserOptions;
-                    pFieldItem = new SvxFieldItem(
+                    pFieldItem.reset(new SvxFieldItem(
                             SvxAuthorField(
                                 aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() )
-                                , EE_FEATURE_FIELD );
+                                , EE_FEATURE_FIELD ));
                 }
                 break;
 
                 case SID_INSERT_FLD_PAGE:
-                    pFieldItem = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_PAGES:
-                    pFieldItem = new SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxPagesField(), EE_FEATURE_FIELD ));
                 break;
 
                 case SID_INSERT_FLD_FILE:
@@ -519,7 +519,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                         aName = GetDocSh()->GetMedium()->GetName();
                     //else
                     //  aName = GetDocSh()->GetName();
-                    pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
+                    pFieldItem.reset(new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD ));
                 }
                 break;
             }
@@ -545,7 +545,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             if( pFieldItem )
                 pOutlinerView->InsertField( *pFieldItem );
 
-            delete pFieldItem;
+            pFieldItem.reset();
 
             Cancel();
             rReq.Ignore ();
@@ -563,10 +563,10 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
             {
                 // Dialog...
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-                AbstractSdModifyFieldDlg* pDlg = pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() ) : 0;
+                boost::scoped_ptr<AbstractSdModifyFieldDlg> pDlg(pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() ) : 0);
                 if( pDlg && (pDlg->Execute() == RET_OK) )
                 {
-                    SvxFieldData* pField = pDlg->GetField();
+                    boost::scoped_ptr<SvxFieldData> pField(pDlg->GetField());
                     if( pField )
                     {
                         SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
@@ -588,7 +588,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                             aSel.nEndPos--;
                         pOutlinerView->SetSelection( aSel );
 
-                        delete pField;
+                        pField.reset();
                     }
 
                     SfxItemSet aSet( pDlg->GetItemSet() );
@@ -601,7 +601,6 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                             pOutliner->UpdateFields();
                     }
                 }
-                delete pDlg;
             }
 
             Cancel();
