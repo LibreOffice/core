@@ -329,12 +329,12 @@ void CppuType::dumpGetCppuTypePreamble(FileStream & out) {
         out << " > {\npublic:\n";
         inc();
         out << indent()
-            << "static inline ::css::uno::Type const & get() {\n";
+            << "static inline css::uno::Type const & get() {\n";
     } else {
         if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
             out << "\n\n";
         }
-        out << ("inline ::css::uno::Type const &"
+        out << ("inline css::uno::Type const &"
                 " cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, false, false, true);
         out << " const *) {\n";
@@ -357,7 +357,7 @@ void CppuType::dumpGetCppuTypePostamble(FileStream & out) {
         }
     }
     dumpTemplateHead(out);
-    out << ("inline ::css::uno::Type const & SAL_CALL"
+    out << ("inline css::uno::Type const & SAL_CALL"
             " getCppuType(SAL_UNUSED_PARAMETER ");
     dumpType(out, name_);
     dumpTemplateParameters(out);
@@ -552,7 +552,7 @@ void CppuType::dumpHFileContent(
           || isPolymorphic()))
     {
         out << "\n" << indent()
-            << ("inline ::css::uno::Type const &"
+            << ("inline css::uno::Type const &"
                 " cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, false, false, true);
         out << " const *);\n";
@@ -562,7 +562,7 @@ void CppuType::dumpHFileContent(
     }
     out << "\n";
     dumpTemplateHead(out);
-    out << "inline ::css::uno::Type const & SAL_CALL getCppuType(";
+    out << "inline css::uno::Type const & SAL_CALL getCppuType(";
     dumpType(out, name_, true);
     dumpTemplateParameters(out);
     out << " *) SAL_THROW(());\n\n#endif\n";
@@ -571,25 +571,25 @@ void CppuType::dumpHFileContent(
 void CppuType::dumpGetCppuType(FileStream & out) {
     if (name_ == "com.sun.star.uno.XInterface") {
         out << indent()
-            << ("inline ::css::uno::Type const & SAL_CALL"
+            << ("inline css::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, true);
         out << " *) SAL_THROW(()) {\n";
         inc();
         out << indent()
-            << ("return ::cppu::UnoType< ::css::uno::XInterface"
+            << ("return ::cppu::UnoType< css::uno::XInterface"
                 " >::get();\n");
         dec();
         out << indent() << "}\n";
     } else if (name_ == "com.sun.star.uno.Exception") {
         out << indent()
-            << ("inline ::css::uno::Type const & SAL_CALL"
+            << ("inline css::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, true);
         out << " *) SAL_THROW(()) {\n";
         inc();
         out << indent()
-            << ("return ::cppu::UnoType< ::css::uno::Exception"
+            << ("return ::cppu::UnoType< css::uno::Exception"
                 " >::get();\n");
         dec();
         out << indent() << "}\n";
@@ -612,7 +612,7 @@ void CppuType::dumpLightGetCppuType(FileStream & out) {
         << getTypeClass(name_, true) << ", \"" << name_ << "\" );\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return * reinterpret_cast< ::css::uno::Type * >("
+        << ("return * reinterpret_cast< css::uno::Type * >("
             " &the_type );\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -638,85 +638,85 @@ OUString CppuType::getTypeClass(OUString const & name, bool cStyle) {
     case codemaker::UnoType::SORT_VOID:
         return cStyle
             ? OUString("typelib_TypeClass_VOID")
-            : OUString("::css::uno::TypeClass_VOID");
+            : OUString("css::uno::TypeClass_VOID");
     case codemaker::UnoType::SORT_BOOLEAN:
         return cStyle
             ? OUString("typelib_TypeClass_BOOLEAN")
-            : OUString("::css::uno::TypeClass_BOOLEAN");
+            : OUString("css::uno::TypeClass_BOOLEAN");
     case codemaker::UnoType::SORT_BYTE:
         return cStyle
             ? OUString("typelib_TypeClass_BYTE")
-            : OUString("::css::uno::TypeClass_BYTE");
+            : OUString("css::uno::TypeClass_BYTE");
     case codemaker::UnoType::SORT_SHORT:
         return cStyle
             ? OUString("typelib_TypeClass_SHORT")
-            : OUString("::css::uno::TypeClass_SHORT");
+            : OUString("css::uno::TypeClass_SHORT");
     case codemaker::UnoType::SORT_UNSIGNED_SHORT:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_SHORT")
-            : OUString("::css::uno::TypeClass_UNSIGNED_SHORT");
+            : OUString("css::uno::TypeClass_UNSIGNED_SHORT");
     case codemaker::UnoType::SORT_LONG:
         return cStyle
             ? OUString("typelib_TypeClass_LONG")
-            : OUString("::css::uno::TypeClass_LONG");
+            : OUString("css::uno::TypeClass_LONG");
     case codemaker::UnoType::SORT_UNSIGNED_LONG:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_LONG")
-            : OUString("::css::uno::TypeClass_UNSIGNED_LONG");
+            : OUString("css::uno::TypeClass_UNSIGNED_LONG");
     case codemaker::UnoType::SORT_HYPER:
         return cStyle
             ? OUString("typelib_TypeClass_HYPER")
-            : OUString("::css::uno::TypeClass_HYPER");
+            : OUString("css::uno::TypeClass_HYPER");
     case codemaker::UnoType::SORT_UNSIGNED_HYPER:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_HYPER")
-            : OUString("::css::uno::TypeClass_UNSIGNED_HYPER");
+            : OUString("css::uno::TypeClass_UNSIGNED_HYPER");
     case codemaker::UnoType::SORT_FLOAT:
         return cStyle
             ? OUString("typelib_TypeClass_FLOAT")
-            : OUString("::css::uno::TypeClass_FLOAT");
+            : OUString("css::uno::TypeClass_FLOAT");
     case codemaker::UnoType::SORT_DOUBLE:
         return cStyle
             ? OUString("typelib_TypeClass_DOUBLE")
-            : OUString("::css::uno::TypeClass_DOUBLE");
+            : OUString("css::uno::TypeClass_DOUBLE");
     case codemaker::UnoType::SORT_CHAR:
         return cStyle
             ? OUString("typelib_TypeClass_CHAR")
-            : OUString("::css::uno::TypeClass_CHAR");
+            : OUString("css::uno::TypeClass_CHAR");
     case codemaker::UnoType::SORT_STRING:
         return cStyle
             ? OUString("typelib_TypeClass_STRING")
-            : OUString("::css::uno::TypeClass_STRING");
+            : OUString("css::uno::TypeClass_STRING");
     case codemaker::UnoType::SORT_TYPE:
         return cStyle
             ? OUString("typelib_TypeClass_TYPE")
-            : OUString("::css::uno::TypeClass_TYPE");
+            : OUString("css::uno::TypeClass_TYPE");
     case codemaker::UnoType::SORT_ANY:
         return cStyle
             ? OUString("typelib_TypeClass_ANY")
-            : OUString("::css::uno::TypeClass_ANY");
+            : OUString("css::uno::TypeClass_ANY");
     case codemaker::UnoType::SORT_SEQUENCE_TYPE:
         return cStyle
             ? OUString("typelib_TypeClass_SEQUENCE")
-            : OUString("::css::uno::TypeClass_SEQUENCE");
+            : OUString("css::uno::TypeClass_SEQUENCE");
     case codemaker::UnoType::SORT_ENUM_TYPE:
         return cStyle
             ? OUString("typelib_TypeClass_ENUM")
-            : OUString("::css::uno::TypeClass_ENUM");
+            : OUString("css::uno::TypeClass_ENUM");
     case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
     case codemaker::UnoType::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE:
     case codemaker::UnoType::SORT_INSTANTIATED_POLYMORPHIC_STRUCT_TYPE:
         return cStyle
             ? OUString("typelib_TypeClass_STRUCT")
-            : OUString("::css::uno::TypeClass_STRUCT");
+            : OUString("css::uno::TypeClass_STRUCT");
     case codemaker::UnoType::SORT_EXCEPTION_TYPE:
         return cStyle
             ? OUString("typelib_TypeClass_EXCEPTION")
-            : OUString("::css::uno::TypeClass_EXCEPTION");
+            : OUString("css::uno::TypeClass_EXCEPTION");
     case codemaker::UnoType::SORT_INTERFACE_TYPE:
         return cStyle
             ? OUString("typelib_TypeClass_INTERFACE")
-            : OUString("::css::uno::TypeClass_INTERFACE");
+            : OUString("css::uno::TypeClass_INTERFACE");
     case codemaker::UnoType::SORT_TYPEDEF:
         return getTypeClass(
             dynamic_cast<unoidl::TypedefEntity&>(*ent.get()).getType(),
@@ -740,7 +740,7 @@ void CppuType::dumpType(
     }
     for (sal_Int32 i = 0; i != k; ++i) {
         out << (cppuUnoType
-                ? "::cppu::UnoSequenceType" : "::css::uno::Sequence")
+                ? "::cppu::UnoSequenceType" : "css::uno::Sequence")
             << "< ";
     }
     switch (m_typeMgr->getSort(n)) {
@@ -784,10 +784,10 @@ void CppuType::dumpType(
         out << "::rtl::OUString";
         break;
     case codemaker::UnoType::SORT_TYPE:
-        out << "::css::uno::Type";
+        out << "css::uno::Type";
         break;
     case codemaker::UnoType::SORT_ANY:
-        out << "::css::uno::Any";
+        out << "css::uno::Any";
         break;
     case codemaker::UnoType::SORT_ENUM_TYPE:
     case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
@@ -811,7 +811,7 @@ void CppuType::dumpType(
         break;
     case codemaker::UnoType::SORT_INTERFACE_TYPE:
         if (!native) {
-            out << "::css::uno::Reference< ";
+            out << "css::uno::Reference< ";
         }
         out << codemaker::cpp::scopedCppName(u2b(n));
         if (!native) {
@@ -1091,7 +1091,7 @@ void InterfaceType::dumpDeclaration(FileStream & out) {
     dumpAttributes(out);
     dumpMethods(out);
     out << "\n" << indent()
-        << ("static inline ::css::uno::Type const & SAL_CALL"
+        << ("static inline css::uno::Type const & SAL_CALL"
             " static_type(void * = 0);\n\n");
     dec();
     out << "protected:\n";
@@ -1112,7 +1112,7 @@ void InterfaceType::dumpHxxFile(
     includes.dump(out, &name_);
     out << "\n";
     dumpGetCppuType(out);
-    out << "\n::css::uno::Type const & "
+    out << "\ncss::uno::Type const & "
         << codemaker::cpp::scopedCppName(u2b(name_))
         << "::static_type(SAL_UNUSED_PARAMETER void *) {\n";
     inc();
@@ -1232,7 +1232,7 @@ void InterfaceType::dumpNormalGetCppuType(FileStream & out) {
         << (bases == 0 ? "0" : "aSuperTypes") << " );\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return * reinterpret_cast< ::css::uno::Type * >("
+        << ("return * reinterpret_cast< css::uno::Type * >("
             " &the_type );\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -1241,10 +1241,10 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out) {
     codemaker::cppumaker::dumpNamespaceOpen(out, name_, false);
     OUString staticTypeClass("the" + id_ + "Type");
     out << " namespace detail {\n\n" << indent() << "struct " << staticTypeClass
-        << " : public rtl::StaticWithInit< ::css::uno::Type *, "
+        << " : public rtl::StaticWithInit< css::uno::Type *, "
         << staticTypeClass << " >\n" << indent() << "{\n";
     inc();
-    out << indent() << "::css::uno::Type * operator()() const\n"
+    out << indent() << "css::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
     out << indent() << "::rtl::OUString sTypeName( \"" << name_ << "\" );\n\n"
@@ -1295,7 +1295,7 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out) {
     out << indent()
         << ("typelib_typedescription_release( (typelib_TypeDescription*)pTD"
             " );\n\n")
-        << indent() << "return new ::css::uno::Type( "
+        << indent() << "return new css::uno::Type( "
         << getTypeClass(name_) << ", sTypeName ); // leaked\n";
     dec();
     out << indent() << "}\n";
@@ -1304,7 +1304,7 @@ void InterfaceType::dumpComprehensiveGetCppuType(FileStream & out) {
     codemaker::cppumaker::dumpNamespaceClose(out, name_, false);
     out << " }\n\n";
     dumpGetCppuTypePreamble(out);
-    out << indent() << "const ::css::uno::Type &rRet = *detail::"
+    out << indent() << "const css::uno::Type &rRet = *detail::"
         << staticTypeClass << "::get();\n" << indent()
         << "// End inline typedescription generation\n" << indent()
         << "static bool bInitStarted = false;\n" << indent()
@@ -1351,7 +1351,7 @@ void InterfaceType::dumpCppuAttributeRefs(FileStream & out, sal_uInt32 & index)
             << "],\n";
         inc(38);
         out << indent()
-            << ("(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_ATTRIBUTE,\n")
+            << ("(typelib_TypeClass)css::uno::TypeClass_INTERFACE_ATTRIBUTE,\n")
             << indent() << "sAttributeName" << n << ".pData );\n";
         dec(38);
         ++n;
@@ -1370,7 +1370,7 @@ void InterfaceType::dumpCppuMethodRefs(FileStream & out, sal_uInt32 & index) {
             << "],\n";
         inc(38);
         out << indent()
-            << ("(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_METHOD,\n")
+            << ("(typelib_TypeClass)css::uno::TypeClass_INTERFACE_METHOD,\n")
             << indent() << "sMethodName" << n << ".pData );\n";
         dec(38);
         ++n;
@@ -1381,7 +1381,7 @@ void InterfaceType::addComprehensiveGetCppuTypeIncludes(
     codemaker::cppumaker::Includes & includes) const
 {
     // The comprehensive getCppuType method always includes a line
-    // "getCppuType( (const ::css::uno::RuntimeException*)0 );":
+    // "getCppuType( (const css::uno::RuntimeException*)0 );":
     includes.addCppuUnotypeHxx();
     includes.add("com.sun.star.uno.RuntimeException");
 }
@@ -1583,7 +1583,7 @@ void InterfaceType::dumpExceptionSpecification(
         if (!first) {
             out << ", ";
         }
-        out << "::css::uno::RuntimeException, ::std::exception";
+        out << "css::uno::RuntimeException, ::std::exception";
     }
     out << ")";
 #if !defined DBG_UTIL
@@ -1951,7 +1951,7 @@ void PlainStructType::dumpLightGetCppuType(FileStream & out) {
         << getTypeClass(name_, true) << ", \"" << name_ << "\");\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n");
+        << ("return *reinterpret_cast< css::uno::Type * >(&the_type);\n");
     dumpGetCppuTypePostamble(out);
 }
 
@@ -1991,7 +1991,7 @@ void PlainStructType::dumpNormalGetCppuType(FileStream & out) {
     out << ", " << entity_->getDirectMembers().size() << ", the_members, 0);\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n");
+        << ("return *reinterpret_cast< css::uno::Type * >(&the_type);\n");
     dumpGetCppuTypePostamble(out);
 }
 
@@ -2000,10 +2000,10 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out) {
     codemaker::cppumaker::dumpNamespaceOpen(out, name_, false);
     out << " namespace detail {\n\n" << indent() << "struct "
         << staticTypeClass
-        << " : public rtl::StaticWithInit< ::css::uno::Type *, "
+        << " : public rtl::StaticWithInit< css::uno::Type *, "
         << staticTypeClass << " >\n" << indent() << "{\n";
     inc();
-    out << indent() << "::css::uno::Type * operator()() const\n"
+    out << indent() << "css::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
     out << indent() << "::rtl::OUString the_name( \"" << name_ << "\" );\n";
@@ -2058,7 +2058,7 @@ void PlainStructType::dumpComprehensiveGetCppuType(FileStream & out) {
     out << ", " << entity_->getDirectMembers().size() << ", the_members);\n"
         << indent() << "::typelib_typedescription_register(&the_newType);\n"
         << indent() << "::typelib_typedescription_release(the_newType);\n"
-        << indent() << "return new ::css::uno::Type("
+        << indent() << "return new css::uno::Type("
         << getTypeClass(name_) << ", the_name); // leaked\n";
     dec();
     out << indent() << "}\n";
@@ -2378,7 +2378,7 @@ void PolyStructType::dumpLightGetCppuType(FileStream & out) {
         << ", the_buffer.getStr());\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return *reinterpret_cast< ::css::uno::Type * >(&the_type);\n");
+        << ("return *reinterpret_cast< css::uno::Type * >(&the_type);\n");
     dumpGetCppuTypePostamble(out);
 }
 
@@ -2447,7 +2447,7 @@ void PolyStructType::dumpNormalGetCppuType(FileStream & out) {
         << ", the_members, the_parameterizedTypes);\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return *reinterpret_cast< ::css::uno::Type * >("
+        << ("return *reinterpret_cast< css::uno::Type * >("
             "&the_type);\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -2457,12 +2457,12 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out) {
     dumpTemplateHead(out);
     OUString staticTypeClass("the" + id_ + "Type");
     out << "struct " << staticTypeClass
-        << " : public rtl::StaticWithInit< ::css::uno::Type *, "
+        << " : public rtl::StaticWithInit< css::uno::Type *, "
         << staticTypeClass;
     dumpTemplateParameters(out);
     out << " >\n" << indent() << "{\n";
     inc();
-    out << indent() << "::css::uno::Type * operator()() const\n"
+    out << indent() << "css::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
     out << indent() << "::rtl::OUStringBuffer the_buffer;\n" << indent()
@@ -2501,7 +2501,7 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out) {
             {
                 sal_uInt32 k = static_cast< sal_uInt32 >(parameters.size() - 1);
                 out << indent()
-                    << "::css::uno::Type const & the_ptype" << k
+                    << "css::uno::Type const & the_ptype" << k
                     << " = ::cppu::getTypeFavourChar(static_cast< ";
                 dumpTypeParameterName(out, i->type);
                 out << " * >(0));\n" << indent()
@@ -2557,7 +2557,7 @@ void PolyStructType::dumpComprehensiveGetCppuType(FileStream & out) {
         << entity_->getMembers().size() << ", the_members);\n" << indent()
         << "::typelib_typedescription_register(&the_newType);\n" << indent()
         << "::typelib_typedescription_release(the_newType);\n" << indent()
-        << "return new ::css::uno::Type(" << getTypeClass(name_)
+        << "return new css::uno::Type(" << getTypeClass(name_)
         << ", the_name); // leaked\n";
     dec();
     out << indent() << "}\n";
@@ -2828,7 +2828,7 @@ void ExceptionType::dumpLightGetCppuType(FileStream & out) {
         << getTypeClass(name_, true) << ", \"" << name_ << "\" );\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return * reinterpret_cast< ::css::uno::Type * >("
+        << ("return * reinterpret_cast< css::uno::Type * >("
             " &the_type );\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -2846,7 +2846,7 @@ void ExceptionType::dumpNormalGetCppuType(FileStream & out) {
             baseException = true;
         } else {
             out << indent()
-                << ("const ::css::uno::Type& rBaseType ="
+                << ("const css::uno::Type& rBaseType ="
                     " ::cppu::UnoType< ");
             dumpType(out, base, true, false, false, true);
             out << " >::get();\n\n";
@@ -2865,7 +2865,7 @@ void ExceptionType::dumpNormalGetCppuType(FileStream & out) {
             OUString modType(typeToIdentifier(type));
             if (seen.insert(type).second) {
                 out << indent()
-                    << "const ::css::uno::Type& rMemberType_"
+                    << "const css::uno::Type& rMemberType_"
                     << modType << " = ::cppu::UnoType< ";
                 dumpType(out, type, false, false, false, true);
                 out << " >::get();\n";
@@ -2890,7 +2890,7 @@ void ExceptionType::dumpNormalGetCppuType(FileStream & out) {
         << " );\n";
     dec();
     out << indent() << "}\n" << indent()
-        << ("return * reinterpret_cast< const ::css::uno::Type * >("
+        << ("return * reinterpret_cast< const css::uno::Type * >("
             " &the_type );\n");
     dumpGetCppuTypePostamble(out);
 }
@@ -2900,10 +2900,10 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out) {
     out << " namespace detail {\n\n";
     OUString staticTypeClass("the" + id_ + "Type");
     out << indent() << "struct " << staticTypeClass
-        << " : public rtl::StaticWithInit< ::css::uno::Type *, "
+        << " : public rtl::StaticWithInit< css::uno::Type *, "
         << staticTypeClass << " >\n" << indent() << "{\n";
     inc();
-    out << indent() << "::css::uno::Type * operator()() const\n"
+    out << indent() << "css::uno::Type * operator()() const\n"
         << indent() << "{\n";
     inc();
     out << indent() << "::rtl::OUString sTypeName( \"" << name_ << "\" );\n\n"
@@ -2912,7 +2912,7 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out) {
     OUString base(entity_->getDirectBase());
     if (!base.isEmpty()) {
         out << indent()
-            << ("const ::css::uno::Type& rSuperType ="
+            << ("const css::uno::Type& rSuperType ="
                 " ::cppu::UnoType< ");
         dumpType(out, base, false, false, false, true);
         out << " >::get();\n";
@@ -2961,7 +2961,7 @@ void ExceptionType::dumpComprehensiveGetCppuType(FileStream & out) {
             " );\n\n")
         << indent() << "typelib_typedescription_release( pTD );\n" << indent()
         << "// End inline typedescription generation\n\n" << indent()
-        << "return new ::css::uno::Type( " << getTypeClass(name_)
+        << "return new css::uno::Type( " << getTypeClass(name_)
         << ", sTypeName ); // leaked\n";
     dec();
     out << indent() << "}\n";
@@ -3062,7 +3062,7 @@ bool ExceptionType::dumpBaseMembers(
                   && memberCount == 1
                   && i->name == "Context"
                   && i->type == "com.sun.star.uno.XInterface") {
-                out << " = ::css::uno::Reference< ::css::uno::XInterface >()";
+                out << " = css::uno::Reference< css::uno::XInterface >()";
             }
             hasMember = true;
         }
@@ -3159,7 +3159,7 @@ void EnumType::dumpNormalGetCppuType(FileStream& o)
     dec();
     o << indent() << "}\n";
     o << indent()
-      << ("return * reinterpret_cast< ::css::uno::Type * >("
+      << ("return * reinterpret_cast< css::uno::Type * >("
           " &the_type );\n");
     dumpGetCppuTypePostamble(o);
 }
@@ -3173,10 +3173,10 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << " namespace detail {\n\n";
 
     OUString sStaticTypeClass("the" + id_ + "Type");
-    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< ::css::uno::Type *, " << sStaticTypeClass << " >\n";
+    o << indent() << "struct " << sStaticTypeClass << " : public rtl::StaticWithInit< css::uno::Type *, " << sStaticTypeClass << " >\n";
     o << indent() << "{\n";
     inc();
-    o << indent() << "::css::uno::Type * operator()() const\n";
+    o << indent() << "css::uno::Type * operator()() const\n";
     o << indent() << "{\n";
 
     inc();
@@ -3226,7 +3226,7 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
     o << indent() << "typelib_typedescription_release( pTD );\n"
       << indent() << "// End inline typedescription generation\n\n";
 
-    o << indent() << "return new ::css::uno::Type( "
+    o << indent() << "return new css::uno::Type( "
       << getTypeClass(name_) << ", sTypeName ); // leaked\n";
 
     dec();
@@ -3444,10 +3444,10 @@ void ServiceType::dumpHxxFile(
           << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
           << name_.replaceAll(".", "_dot_") << ") && defined LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
-          << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
+          << "\nextern \"C\" css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
           << name_.replaceAll(".", "_dot_")
-          << "(::css::uno::XComponentContext *, ::css::uno::Sequence< "
-             "::css::uno::Any > const &);\n#endif\n";
+          << "(css::uno::XComponentContext *, css::uno::Sequence< "
+             "css::uno::Any > const &);\n#endif\n";
     }
     o << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
@@ -3465,16 +3465,16 @@ void ServiceType::dumpHxxFile(
              i != entity_->getConstructors().end(); ++i)
         {
             if (i->defaultConstructor) {
-                o << indent() << "static ::css::uno::Reference< "
+                o << indent() << "static css::uno::Reference< "
                   << scopedBaseName << " > "
                   << codemaker::cpp::translateUnoToCppIdentifier(
                       "create", "method", codemaker::cpp::ITM_NONGLOBAL,
                       &cppName)
-                  << ("(::css::uno::Reference< ::css::uno::XComponentContext > const &"
+                  << ("(css::uno::Reference< css::uno::XComponentContext > const &"
                       " the_context) {\n");
                 inc();
                 o << indent() << "assert(the_context.is());\n" << indent()
-                  << "::css::uno::Reference< " << scopedBaseName
+                  << "css::uno::Reference< " << scopedBaseName
                   << " > the_instance;\n" << indent() << "try {\n";
                 inc();
                 o << ("#if defined LO_URE_CURRENT_ENV && defined "
@@ -3484,32 +3484,32 @@ void ServiceType::dumpHxxFile(
                   << name_.replaceAll(".", "_dot_")
                   << ") && defined LO_URE_CTOR_FUN_"
                   << name_.replaceAll(".", "_dot_") << "\n" << indent()
-                  << "the_instance = ::css::uno::Reference< " << scopedBaseName
-                  << (" >(::css::uno::Reference< ::css::uno::XInterface >("
-                      "static_cast< ::css::uno::XInterface * >((*"
+                  << "the_instance = css::uno::Reference< " << scopedBaseName
+                  << (" >(css::uno::Reference< css::uno::XInterface >("
+                      "static_cast< css::uno::XInterface * >((*"
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
-                  << (")(the_context.get(), ::css::uno::Sequence<"
-                      " ::css::uno::Any >())), ::SAL_NO_ACQUIRE),"
-                      " ::css::uno::UNO_QUERY);\n#else\n")
-                  << indent() << "the_instance = ::css::uno::Reference< "
+                  << (")(the_context.get(), css::uno::Sequence<"
+                      " css::uno::Any >())), ::SAL_NO_ACQUIRE),"
+                      " css::uno::UNO_QUERY);\n#else\n")
+                  << indent() << "the_instance = css::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithContext(::rtl::OUString("
                       " \"")
                   << name_
-                  << "\" ), the_context), ::css::uno::UNO_QUERY);\n#endif\n";
+                  << "\" ), the_context), css::uno::UNO_QUERY);\n#endif\n";
                 dec();
                 o << indent()
-                  << "} catch (const ::css::uno::RuntimeException &) {\n";
+                  << "} catch (const css::uno::RuntimeException &) {\n";
                 inc();
                 o << indent() << "throw;\n";
                 dec();
                 o << indent()
-                  << ("} catch (const ::css::uno::Exception & the_exception) {\n");
+                  << ("} catch (const css::uno::Exception & the_exception) {\n");
                 inc();
                 o << indent()
-                  << "throw ::css::uno::DeploymentException("
+                  << "throw css::uno::DeploymentException("
                   << failsToSupply(name_, baseName)
                   << " + \": \" + the_exception.Message, the_context);\n";
                 dec();
@@ -3517,7 +3517,7 @@ void ServiceType::dumpHxxFile(
                   << "if (!the_instance.is()) {\n";
                 inc();
                 o << indent()
-                  << "throw ::css::uno::DeploymentException("
+                  << "throw css::uno::DeploymentException("
                   << failsToSupply(name_, baseName)
                   << ", the_context);\n";
                 dec();
@@ -3525,12 +3525,12 @@ void ServiceType::dumpHxxFile(
                 dec();
                 o << indent() << "}\n\n";
             } else {
-                o << indent() << "static ::css::uno::Reference< "
+                o << indent() << "static css::uno::Reference< "
                   << scopedBaseName << " > "
                   << codemaker::cpp::translateUnoToCppIdentifier(
                       u2b(i->name), "method", codemaker::cpp::ITM_NONGLOBAL,
                       &cppName)
-                  << ("(::css::uno::Reference< ::css::uno::XComponentContext > const &"
+                  << ("(css::uno::Reference< css::uno::XComponentContext > const &"
                       " the_context");
                 bool rest = hasRestParameter(*i);
                 for (std::vector<
@@ -3556,7 +3556,7 @@ void ServiceType::dumpHxxFile(
                 o << indent() << "assert(the_context.is());\n";
                 if (!rest && !i->parameters.empty()) {
                     o << indent()
-                      << ("::css::uno::Sequence< ::css::uno::Any > the_arguments(")
+                      << ("css::uno::Sequence< css::uno::Any > the_arguments(")
                       << i->parameters.size() << ");\n";
                     std::vector<
                         unoidl::SingleInterfaceBasedServiceEntity::Constructor::
@@ -3578,7 +3578,7 @@ void ServiceType::dumpHxxFile(
                                         u2b(j->type), &rank, 0)))
                             == codemaker::UnoType::SORT_CHAR)
                         {
-                            o << "= ::css::uno::Any(&" << param
+                            o << "= css::uno::Any(&" << param
                               << ", ::cppu::UnoType< ";
                             for (sal_Int32 k = 0; k < rank; ++k) {
                                 o << "::cppu::UnoSequenceType< ";
@@ -3594,7 +3594,7 @@ void ServiceType::dumpHxxFile(
                         o << ";\n";
                     }
                 }
-                o << indent() << "::css::uno::Reference< "
+                o << indent() << "css::uno::Reference< "
                   << scopedBaseName << " > the_instance;\n";
                 codemaker::ExceptionTree tree;
                 for (std::vector< OUString >::const_iterator j(
@@ -3614,9 +3614,9 @@ void ServiceType::dumpHxxFile(
                   << name_.replaceAll(".", "_dot_")
                   << ") && defined LO_URE_CTOR_FUN_"
                   << name_.replaceAll(".", "_dot_") << "\n" << indent()
-                  << "the_instance = ::css::uno::Reference< " << scopedBaseName
-                  << (" >(::css::uno::Reference< ::css::uno::XInterface >("
-                      "static_cast< ::css::uno::XInterface * >((*"
+                  << "the_instance = css::uno::Reference< " << scopedBaseName
+                  << (" >(css::uno::Reference< css::uno::XInterface >("
+                      "static_cast< css::uno::XInterface * >((*"
                       "LO_URE_CTOR_FUN_")
                   << name_.replaceAll(".", "_dot_")
                   << ")(the_context.get(), ";
@@ -3625,23 +3625,23 @@ void ServiceType::dumpHxxFile(
                         u2b(i->parameters.back().name), "param",
                         codemaker::cpp::ITM_NONGLOBAL);
                 } else if (i->parameters.empty()) {
-                    o << "::css::uno::Sequence< ::css::uno::Any >()";
+                    o << "css::uno::Sequence< css::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
-                o << ")), ::SAL_NO_ACQUIRE), ::css::uno::UNO_QUERY);\n" << indent()
-                  << ("::css::uno::Reference< ::css::lang::XInitialization > "
-                      "init(the_instance, ::css::uno::UNO_QUERY);\n")
+                o << ")), ::SAL_NO_ACQUIRE), css::uno::UNO_QUERY);\n" << indent()
+                  << ("css::uno::Reference< css::lang::XInitialization > "
+                      "init(the_instance, css::uno::UNO_QUERY);\n")
                   << indent() << "if (init.is()) {\n"
                   << indent() << "    init->initialize(";
                 if (i->parameters.empty()) {
-                    o << "::css::uno::Sequence< ::css::uno::Any >()";
+                    o << "css::uno::Sequence< css::uno::Any >()";
                 } else {
                     o << "the_arguments";
                 }
                 o << ");\n" << indent() << "}\n";
                 o << ("#else\n")
-                  << indent() << "the_instance = ::css::uno::Reference< "
+                  << indent() << "the_instance = css::uno::Reference< "
                   << scopedBaseName
                   << (" >(the_context->getServiceManager()->"
                       "createInstanceWithArgumentsAndContext(::rtl::OUString("
@@ -3652,25 +3652,25 @@ void ServiceType::dumpHxxFile(
                         u2b(i->parameters.back().name), "param",
                         codemaker::cpp::ITM_NONGLOBAL);
                 } else if (i->parameters.empty()) {
-                    o << ("::css::uno::Sequence< ::css::uno::Any >()");
+                    o << ("css::uno::Sequence< css::uno::Any >()");
                 } else {
                     o << "the_arguments";
                 }
-                o << ", the_context), ::css::uno::UNO_QUERY);\n#endif\n";
+                o << ", the_context), css::uno::UNO_QUERY);\n#endif\n";
                 if (!tree.getRoot()->present) {
                     dec();
                     o << indent()
-                      << ("} catch (const ::css::uno::RuntimeException &) {\n");
+                      << ("} catch (const css::uno::RuntimeException &) {\n");
                     inc();
                     o << indent() << "throw;\n";
                     dec();
                     dumpCatchClauses(o, tree.getRoot());
                     o << indent()
-                      << ("} catch (const ::css::uno::Exception &"
+                      << ("} catch (const css::uno::Exception &"
                           " the_exception) {\n");
                     inc();
                     o << indent()
-                      << "throw ::css::uno::DeploymentException("
+                      << "throw css::uno::DeploymentException("
                       << failsToSupply(name_, baseName)
                       << " + \": \" + the_exception.Message, the_context);\n";
                     dec();
@@ -3679,7 +3679,7 @@ void ServiceType::dumpHxxFile(
                 o << indent() << "if (!the_instance.is()) {\n";
                 inc();
                 o << indent()
-                  << "throw ::css::uno::DeploymentException("
+                  << "throw css::uno::DeploymentException("
                   << failsToSupply(name_, baseName)
                   << ", the_context);\n";
                 dec();
@@ -3765,26 +3765,26 @@ void SingletonType::dumpHxxFile(
       << " && (LO_URE_CURRENT_ENV) == (LO_URE_CTOR_ENV_"
       << name_.replaceAll(".", "_dot_") << ") && defined LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_")
-      << "\nextern \"C\" ::css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
+      << "\nextern \"C\" css::uno::XInterface * SAL_CALL LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_")
-      << "(::css::uno::XComponentContext *, ::css::uno::Sequence< "
-         "::css::uno::Any > const &);\n#endif\n";
+      << "(css::uno::XComponentContext *, css::uno::Sequence< "
+         "css::uno::Any > const &);\n#endif\n";
     o << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
         o << "\n";
     }
     o << "\nclass " << cppName << " {\npublic:\n";
     inc();
-    o << indent() << "static ::css::uno::Reference< "
+    o << indent() << "static css::uno::Reference< "
       << scopedBaseName << " > "
       << codemaker::cpp::translateUnoToCppIdentifier(
           "get", "method", codemaker::cpp::ITM_NONGLOBAL, &cppName)
-      << ("(::css::uno::Reference<"
-          " ::css::uno::XComponentContext > const & the_context)"
+      << ("(css::uno::Reference<"
+          " css::uno::XComponentContext > const & the_context)"
           " {\n");
     inc();
     o << indent() << "assert(the_context.is());\n" << indent()
-      << "::css::uno::Reference< " << scopedBaseName
+      << "css::uno::Reference< " << scopedBaseName
       << " > instance;\n"
       << ("#if defined LO_URE_CURRENT_ENV && defined "
           "LO_URE_CTOR_ENV_")
@@ -3793,21 +3793,21 @@ void SingletonType::dumpHxxFile(
       << name_.replaceAll(".", "_dot_")
       << ") && defined LO_URE_CTOR_FUN_"
       << name_.replaceAll(".", "_dot_") << "\n" << indent()
-      << "instance = ::css::uno::Reference< " << scopedBaseName
-      << (" >(::css::uno::Reference< ::css::uno::XInterface >("
-          "static_cast< ::css::uno::XInterface * >((*"
+      << "instance = css::uno::Reference< " << scopedBaseName
+      << (" >(css::uno::Reference< css::uno::XInterface >("
+          "static_cast< css::uno::XInterface * >((*"
           "LO_URE_CTOR_FUN_")
       << name_.replaceAll(".", "_dot_")
-      << (")(the_context.get(), ::css::uno::Sequence<"
-          " ::css::uno::Any >())), ::SAL_NO_ACQUIRE),"
-                      " ::css::uno::UNO_QUERY);\n#else\n")
+      << (")(the_context.get(), css::uno::Sequence<"
+          " css::uno::Any >())), ::SAL_NO_ACQUIRE),"
+                      " css::uno::UNO_QUERY);\n#else\n")
       << indent() << ("the_context->getValueByName("
           "::rtl::OUString( \"/singletons/")
       << name_ << "\" )) >>= instance;\n" << "#endif\n"
       << indent() << "if (!instance.is()) {\n";
     inc();
     o << indent()
-      << ("throw ::css::uno::DeploymentException("
+      << ("throw css::uno::DeploymentException("
           "::rtl::OUString( \"component context"
           " fails to supply singleton ")
       << name_ << " of type " << baseName << "\" ), the_context);\n";

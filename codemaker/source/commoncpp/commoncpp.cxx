@@ -57,7 +57,7 @@ OString scopedCppName(OString const & type, bool ns_alias)
     OString s(tmpBuf.makeStringAndClear());
     if (ns_alias && s.startsWith("::com::sun::star::", &s))
     {
-        s = "::css::" + s; // nicer shorthand
+        s = "css::" + s; // nicer shorthand
     }
 
     return s;
@@ -73,13 +73,13 @@ OString translateUnoToCppType(
             "void", "::sal_Bool", "::sal_Int8", "::sal_Int16", "::sal_uInt16",
             "::sal_Int32", "::sal_uInt32", "::sal_Int64", "::sal_uInt64",
             "float", "double", "::sal_Unicode", "rtl::OUString",
-            "::css::uno::Type", "::css::uno::Any" };
+            "css::uno::Type", "css::uno::Any" };
         buf.append(cppTypes[sort]);
     } else {
         if (sort == codemaker::UnoType::SORT_INTERFACE_TYPE
             && nucleus == "com.sun.star.uno.XInterface")
         {
-            buf.append("::css::uno::XInterface");
+            buf.append("css::uno::XInterface");
         } else {
             //TODO: check that nucleus is a valid (UTF-8) identifier
             buf.append(u2b(nucleus));
