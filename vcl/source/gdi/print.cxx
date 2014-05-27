@@ -648,7 +648,7 @@ bool Printer::AcquireGraphics() const
 
 void Printer::ImplReleaseFonts()
 {
-#ifndef UNX
+#ifdef UNX
     // HACK to fix an urgent P1 printing issue fast
     // WinSalPrinter does not respect GetGraphics/ReleaseGraphics conventions
     // so Printer::mpGraphics often points to a dead WinSalGraphics
