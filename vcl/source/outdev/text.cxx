@@ -149,11 +149,14 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
 
     nX += nBaseX;
     nY += nBaseY;
-    //mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this ); // original code
+    mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this ); // original code
+
     Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
     Polygon   aPoly( aRect );
     PolyPolygon aPolyPoly(aPoly);
     DrawTransparent(aPolyPoly, 50);
+    // Code above is wrong: it just messes up.
+
 
 }
 
