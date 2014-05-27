@@ -17,14 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtools/controldims.hrc"
-
 #include "dp_gui.hrc"
-
-#define LOCAL_WIDTH (60 * RSC_BS_CHARWIDTH)
-#define LOCAL_LIST_HEIGHT (7 * RSC_BS_CHARHEIGHT)
-#define LOCAL_BUTTON_WIDTH 80
-
 
 String RID_DLG_UPDATE_INSTALL_INSTALLING {
     Text[en-US] = "Installing extensions...";
