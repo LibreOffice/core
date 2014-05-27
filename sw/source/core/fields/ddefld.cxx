@@ -366,7 +366,8 @@ bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
             {
                 rVal >>= sToken;
             }
-            sNewCmd += sToken + OUString(sfx2::cTokenSeparator);
+            sNewCmd += (i < 2)
+                ? sToken + OUString(sfx2::cTokenSeparator) : sToken;
         }
         SetCmd( sNewCmd );
     }
