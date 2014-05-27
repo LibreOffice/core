@@ -103,18 +103,29 @@ SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)
     return pRet;
 }
 
-uno::Any SwTextBoxHelper::getXTextAppend(SwFrmFmt* pShape, const uno::Type& rType)
+template < typename T >
+void lcl_queryInterface(SwFrmFmt* pShape, uno::Any& rAny)
+{
+    if (SwFrmFmt* pFmt = SwTextBoxHelper::findTextBox(pShape))
+    {
+        uno::Reference<T> xInterface(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
+        rAny <<= xInterface;
+    }
+}
+
+uno::Any SwTextBoxHelper::queryInterface(SwFrmFmt* pShape, const uno::Type& rType)
 {
     uno::Any aRet;
 
     if (rType == cppu::UnoType<css::text::XTextAppend>::get())
     {
-        if (SwFrmFmt* pFmt = findTextBox(pShape))
-        {
-            uno::Reference<text::XTextAppend> xTextAppend(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
-            aRet <<= xTextAppend;
-        }
+        lcl_queryInterface<text::XTextAppend>(pShape, aRet);
     }
+    else if (rType == cppu::UnoType<css::text::XText>::get())
+    {
+        lcl_queryInterface<text::XText>(pShape, aRet);
+    }
+
 
     return aRet;
 }
