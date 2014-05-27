@@ -61,8 +61,8 @@ GL3DBarChart::~GL3DBarChart()
 namespace {
 
 const float TEXT_HEIGHT = 15.0f;
+const float DEFAULT_CAMERA_HEIGHT = 500.0f;
 const sal_uLong TIMEOUT = 5;
-const float DEFAULT_CAMERA_HEIGHT = 200.0f;
 
 float calculateTextWidth(const OUString& rText)
 {
