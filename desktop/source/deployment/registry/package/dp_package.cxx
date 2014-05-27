@@ -182,7 +182,9 @@ class BackendImpl : public ImplBaseT
             throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual OUString SAL_CALL getLicenseText()
-            throw (deployment::ExtensionRemovedException, RuntimeException, std::exception) SAL_OVERRIDE;
+            throw (deployment::DeploymentException,
+                   deployment::ExtensionRemovedException,
+                   RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual void SAL_CALL exportTo(
             OUString const & destFolderURL, OUString const & newTitle,
@@ -999,7 +1001,9 @@ OUString BackendImpl::PackageImpl::getDescription()
 
 
 OUString BackendImpl::PackageImpl::getLicenseText()
-    throw (deployment::ExtensionRemovedException, RuntimeException, std::exception)
+    throw (deployment::DeploymentException,
+           deployment::ExtensionRemovedException,
+           RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();

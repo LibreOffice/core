@@ -75,8 +75,12 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             OUString const & url, OUString const & libType, bool bRemoved,
             OUString const & identifier);
         // XPackage
-        virtual OUString SAL_CALL getDescription() throw (RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual OUString SAL_CALL getLicenseText() throw (RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getDescription()
+            throw (deployment::ExtensionRemovedException,
+                   RuntimeException, std::exception) SAL_OVERRIDE;
+        virtual OUString SAL_CALL getLicenseText()
+            throw (deployment::ExtensionRemovedException,
+                   RuntimeException, std::exception) SAL_OVERRIDE;
     };
     friend class PackageImpl;
 
@@ -116,7 +120,9 @@ BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
     return pBackend;
 }
 
-OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException, std::exception)
+OUString BackendImpl::PackageImpl::getDescription()
+    throw (deployment::ExtensionRemovedException,
+           RuntimeException, std::exception)
 {
     if (m_descr.isEmpty())
         return Package::getDescription();
@@ -124,12 +130,12 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException, std
         return m_descr;
 }
 
-
-OUString BackendImpl::PackageImpl::getLicenseText() throw (RuntimeException, std::exception)
+OUString BackendImpl::PackageImpl::getLicenseText()
+    throw (deployment::ExtensionRemovedException,
+           RuntimeException, std::exception)
 {
     return Package::getDescription();
 }
-
 
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
