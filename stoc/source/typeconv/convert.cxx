@@ -358,7 +358,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             return nRet;
         }
         throw CannotConvertException(
-            OUString("UNSIGNED HYPER out of range!"),
+            "UNSIGNED HYPER out of range!",
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
 
@@ -372,7 +372,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             return nRet;
         }
         throw CannotConvertException(
-            OUString("FLOAT out of range!"),
+            "FLOAT out of range!",
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
     case TypeClass_DOUBLE:
@@ -384,7 +384,7 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
             return nRet;
         }
         throw CannotConvertException(
-            OUString("DOUBLE out of range!"),
+            "DOUBLE out of range!",
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
 
@@ -395,27 +395,27 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
         if (! getHyperValue( fVal, *(OUString const *)rAny.getValue() ))
         {
             throw CannotConvertException(
-                OUString("invalid STRING value!"),
+                "invalid STRING value!",
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
         nRet = (fVal > SAL_INT64_MAX ? (sal_Int64)(sal_uInt64)fVal : (sal_Int64)fVal);
         if (fVal >= min && (fVal < 0 || ((sal_uInt64)fVal) <= max))
             return nRet;
         throw CannotConvertException(
-            OUString("STRING value out of range!"),
+            "STRING value out of range!",
             Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
     }
 
     default:
         throw CannotConvertException(
-            OUString("TYPE is not supported!"),
+            "TYPE is not supported!",
             Reference<XInterface>(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
 
     if (nRet >= min && (nRet < 0 || (sal_uInt64)nRet <= max))
         return nRet;
     throw CannotConvertException(
-        OUString("VALUE is out of range!"),
+        "VALUE is out of range!",
         Reference<XInterface>(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
 }
 
@@ -481,7 +481,7 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
         if (! getNumericValue( fRet, *(OUString *)rAny.getValue() ))
         {
             throw CannotConvertException(
-                OUString("invalid STRING value!"),
+                "invalid STRING value!",
                 Reference<XInterface>(), aDestinationClass, FailReason::IS_NOT_NUMBER, 0 );
         }
         break;
@@ -489,14 +489,14 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max ) c
 
     default:
         throw CannotConvertException(
-            OUString("TYPE is not supported!"),
+            "TYPE is not supported!",
             Reference< XInterface >(), aDestinationClass, FailReason::TYPE_NOT_SUPPORTED, 0 );
     }
 
     if (fRet >= min && fRet <= max)
         return fRet;
     throw CannotConvertException(
-        OUString("VALUE is out of range!"),
+        "VALUE is out of range!",
         Reference< XInterface >(), aDestinationClass, FailReason::OUT_OF_RANGE, 0 );
 }
 
@@ -537,7 +537,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         else
         {
             throw CannotConvertException(
-                OUString("value is not of same or derived type!"),
+                "value is not of same or derived type!",
                 Reference< XInterface >(), aDestinationClass,
                 FailReason::SOURCE_IS_NO_DERIVED_TYPE, 0 );
         }
@@ -558,14 +558,14 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
             !*(XInterface * const *)rVal.getValue())
         {
             throw CannotConvertException(
-                OUString("value is no interface!"),
+                "value is no interface!",
                 Reference< XInterface >(), aDestinationClass, FailReason::NO_SUCH_INTERFACE, 0 );
         }
         if (! (aRet = (*(XInterface * const *)rVal.getValue())->queryInterface(
                    aDestType )).hasValue())
         {
             throw CannotConvertException(
-                OUString("value has no such interface!"),
+                "value has no such interface!",
                 Reference< XInterface >(), aDestinationClass, FailReason::NO_SUCH_INTERFACE, 0 );
         }
         break;
@@ -668,7 +668,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         else
         {
             throw CannotConvertException(
-                OUString("value cannot be converted to demanded ENUM!"),
+                "value cannot be converted to demanded ENUM!",
                 Reference< XInterface >(), aDestinationClass, FailReason::IS_NOT_ENUM, 0 );
         }
         break;
@@ -690,7 +690,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         return aRet;
 
     throw CannotConvertException(
-        OUString("conversion not possible!"),
+        "conversion not possible!",
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
 }
 
@@ -719,7 +719,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
 
     default:
         throw IllegalArgumentException(
-            OUString("destination type is not simple!"),
+            "destination type is not simple!",
             Reference< XInterface >(), (sal_Int16) 1 );
     }
 
@@ -769,7 +769,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             else
             {
                 throw CannotConvertException(
-                    OUString("STRING has no boolean value!"),
+                    "STRING has no boolean value!",
                     Reference< XInterface >(), aDestinationClass, FailReason::IS_NOT_BOOL, 0 );
             }
         }
@@ -852,7 +852,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             else
             {
                 throw CannotConvertException(
-                    OUString("value is not ENUM!"),
+                    "value is not ENUM!",
                     Reference< XInterface >(), aDestinationClass, FailReason::IS_NOT_ENUM, 0 );
             }
             break;
@@ -904,7 +904,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         return aRet;
 
     throw CannotConvertException(
-        OUString("conversion not possible!"),
+        "conversion not possible!",
         Reference< XInterface >(), aDestinationClass, FailReason::INVALID, 0 );
 }
 }

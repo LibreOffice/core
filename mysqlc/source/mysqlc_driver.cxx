@@ -144,7 +144,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not load the " BUNDLE_MARIADB " library!");
         throw SQLException(
-            OUString( "Unable to load the " BUNDLE_MARIADB " library."  ),
+            "Unable to load the " BUNDLE_MARIADB " library.",
             *this,
             OUString( "08001"  ),  // "unable to connect"
             0,
@@ -164,7 +164,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not load the " CPPCONN_LIB " library!");
         throw SQLException(
-            OUString( "Unable to load the " CPPCONN_LIB " library."  ),
+            "Unable to load the " CPPCONN_LIB " library.",
             *this,
             OUString( "08001"  ),  // "unable to connect"
             0,
@@ -181,7 +181,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not find the factory symbol in " CPPCONN_LIB "!");
         throw SQLException(
-            OUString( CPPCONN_LIB " is invalid: missing the driver factory function."  ),
+            CPPCONN_LIB " is invalid: missing the driver factory function.",
             *this,
             OUString( "08001"  ),  // "unable to connect"
             0,
@@ -194,7 +194,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
     if ( !cppDriver )
     {
         throw SQLException(
-            OUString( "Unable to obtain the MySQL_Driver instance from Connector/C++."  ),
+            "Unable to obtain the MySQL_Driver instance from Connector/C++.",
             *this,
             OUString( "08001"  ),  // "unable to connect"
             0,

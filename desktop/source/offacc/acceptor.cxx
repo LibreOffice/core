@@ -144,8 +144,9 @@ void Acceptor::initialize( const Sequence<Any>& aArguments )
         // get connect string and protocol from accept string
         // "<connectString>;<protocol>"
         sal_Int32 nIndex1 = m_aAcceptString.indexOf( ';' );
-        if (nIndex1 < 0) throw IllegalArgumentException(
-            OUString("Invalid accept-string format"), m_rContext, 1);
+        if (nIndex1 < 0)
+            throw IllegalArgumentException(
+                    "Invalid accept-string format", m_rContext, 1);
         m_aConnectString = m_aAcceptString.copy( 0 , nIndex1 ).trim();
         nIndex1++;
         sal_Int32 nIndex2 = m_aAcceptString.indexOf( ';' , nIndex1 );
@@ -170,8 +171,7 @@ void Acceptor::initialize( const Sequence<Any>& aArguments )
 
     if (!bOk)
     {
-        throw IllegalArgumentException(
-            OUString("invalid initialization"), m_rContext, 1);
+        throw IllegalArgumentException( "invalid initialization", m_rContext, 1);
     }
 }
 

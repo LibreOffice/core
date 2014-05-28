@@ -438,10 +438,10 @@ SAL_IMPLEMENT_MAIN()
         {
             if (! aUnoUrl.endsWithIgnoreAsciiCase( ";uno.ComponentContext" ))
                 throw RuntimeException(
-                    OUString("expected UNO-URL with instance name uno.ComponentContext!" ) );
+                    "expected UNO-URL with instance name uno.ComponentContext!" );
             if (bSingleInstance)
                 throw RuntimeException(
-                    OUString("unexpected option --singleinstance!") );
+                    "unexpected option --singleinstance!" );
         }
         if (!aImplName.isEmpty() && aLocation.isEmpty())
             throw RuntimeException("give component location!" );

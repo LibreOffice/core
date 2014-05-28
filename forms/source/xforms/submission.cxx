@@ -491,7 +491,7 @@ void SAL_CALL Submission::submitWithInteraction(
 
     if ( !xModel.is() || msID.isEmpty() )
         throw RuntimeException(
-                OUString( "This is not a valid submission object." ),
+                "This is not a valid submission object.",
                 *this
               );
 

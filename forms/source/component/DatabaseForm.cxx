@@ -390,7 +390,7 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
         catch(const Exception&)
         {
             throw WrappedTargetException(
-                OUString( "Could not clone the given database form." ),
+                "Could not clone the given database form.",
                 *const_cast< ODatabaseForm* >( &_cloneSource ),
                 ::cppu::getCaughtException()
             );

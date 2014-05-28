@@ -710,7 +710,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 break;
                 default:
                     throw IllegalArgumentException(
-                        OUString( "SwXViewSettings: invalid zoom type"), 0, 0);
+                        "SwXViewSettings: invalid zoom type", 0, 0);
             }
             mpViewOption->SetZoomType( eZoom );
             mbApplyZoom = true;

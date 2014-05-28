@@ -179,7 +179,7 @@ public: // Error handler
         ++nError;
         printf( "Error !\n" );
         throw  SAXException(
-            OUString( "error from error handler") ,
+            "error from error handler",
             Reference < XInterface >() ,
             aSAXParseException );
     }

@@ -245,8 +245,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
             catch ( Exception const & )
             {
                 throw RuntimeException(
-                    OUString( "OFileAccess::transferrImpl - Unable to obtain "
-                            "destination folder URL!"  ),
+                    "OFileAccess::transferrImpl - Unable to obtain destination folder URL!",
                     static_cast< cppu::OWeakObject * >( this ) );
             }
 
@@ -255,8 +254,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
         }
 
         throw RuntimeException(
-            OUString( "OFileAccess::transferrImpl - Unable to obtain "
-                    "destination folder URL!"  ),
+               "OFileAccess::transferrImpl - Unable to obtain destination folder URL!",
                 static_cast< cppu::OWeakObject * >( this ) );
 
     }

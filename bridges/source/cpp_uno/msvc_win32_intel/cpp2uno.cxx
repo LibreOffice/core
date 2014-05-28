@@ -337,9 +337,7 @@ static typelib_TypeClass __cdecl cpp_mediate(
     }
     default:
     {
-        throw RuntimeException(
-            OUString("no member description found!"),
-            (XInterface *)pThis );
+        throw RuntimeException( "no member description found!", (XInterface *)pThis );
     }
     }
 
@@ -442,8 +440,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
         Rtti():
             n0(0), n1(0), n2(0),
             rtti(CPPU_CURRENT_NAMESPACE::msci_getRTTI(
-                     OUString(
-                                       "com.sun.star.uno.XInterface")))
+                     OUString("com.sun.star.uno.XInterface")))
         {}
     };
     static Rtti rtti;

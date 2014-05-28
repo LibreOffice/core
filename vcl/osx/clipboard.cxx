@@ -113,7 +113,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
         [mPasteboard release];
 
         throw RuntimeException(
-            OUString("AquaClipboard: Cannot create pasteboard change listener"),
+            "AquaClipboard: Cannot create pasteboard change listener",
             static_cast<XClipboardEx*>(this));
     }
 

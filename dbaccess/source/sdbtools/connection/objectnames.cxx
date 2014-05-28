@@ -346,7 +346,7 @@ namespace sdbtools
         catch( const Exception& )
         {
             throw IllegalArgumentException(
-                OUString( "The connection could not provide its database's meta data." ),
+                "The connection could not provide its database's meta data.",
                 NULL,
                 0
             );

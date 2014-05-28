@@ -282,7 +282,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
 
         if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
             throw ScannerException(
-                OUString("Scanner does not exist"),
+                "Scanner does not exist",
                 Reference< XScannerManager >( this ),
                 ScanError_InvalidContext
             );
@@ -290,7 +290,7 @@ sal_Bool ScannerManager::configureScannerAndScan( ScannerContext& scanner_contex
         boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
         if( pHolder->m_bBusy )
             throw ScannerException(
-                OUString("Scanner is busy"),
+                "Scanner is busy",
                 Reference< XScannerManager >( this ),
                 ScanError_ScanInProgress
             );
@@ -321,14 +321,14 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            OUString("Scanner does not exist"),
+            "Scanner does not exist",
             Reference< XScannerManager >( this ),
             ScanError_InvalidContext
             );
     boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
     if( pHolder->m_bBusy )
         throw ScannerException(
-            OUString("Scanner is busy"),
+            "Scanner is busy",
             Reference< XScannerManager >( this ),
             ScanError_ScanInProgress
             );
@@ -347,7 +347,7 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            OUString("Scanner does not exist"),
+            "Scanner does not exist",
             Reference< XScannerManager >( this ),
             ScanError_InvalidContext
             );
@@ -366,7 +366,7 @@ Reference< css::awt::XBitmap > ScannerManager::getBitmap( const ScannerContext& 
 
     if( scanner_context.InternalData < 0 || (sal_uLong)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
-            OUString("Scanner does not exist"),
+            "Scanner does not exist",
             Reference< XScannerManager >( this ),
             ScanError_InvalidContext
             );

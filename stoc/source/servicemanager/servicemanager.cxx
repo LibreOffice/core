@@ -625,7 +625,7 @@ void SAL_CALL OServiceManagerWrapper::setPropertyValue(
         else
         {
             throw IllegalArgumentException(
-                OUString("no XComponentContext given!"),
+                "no XComponentContext given!",
                 (OWeakObject *)this, 1 );
         }
     }
@@ -788,7 +788,7 @@ void OServiceManager::setPropertyValue(
         else
         {
             throw IllegalArgumentException(
-                OUString("no XComponentContext given!"),
+                "no XComponentContext given!",
                 (OWeakObject *)this, 1 );
         }
     }
@@ -1187,7 +1187,7 @@ void OServiceManager::insert( const Any & Element )
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
     {
         throw IllegalArgumentException(
-            OUString("no interface given!"),
+            "no interface given!",
             Reference< XInterface >(), 0 );
     }
     Reference<XInterface > xEle( Element, UNO_QUERY_THROW );
@@ -1265,8 +1265,7 @@ void OServiceManager::remove( const Any & Element )
     else
     {
         throw IllegalArgumentException(
-            OUString(
-                          "neither interface nor string given!"),
+            "neither interface nor string given!",
             Reference< XInterface >(), 0 );
     }
 
@@ -1280,7 +1279,7 @@ void OServiceManager::remove( const Any & Element )
     if( aIt == m_ImplementationMap.end() )
     {
         throw NoSuchElementException(
-            OUString("element is not in!"),
+            "element is not in!",
             static_cast< OWeakObject * >(this) );
     }
     //First remove all factories which have been loaded by ORegistryServiceManager.

@@ -631,7 +631,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
     }
     else {
         throw NotConnectedException(
-            OUString("MarkableInputStream::readBytes NotConnectedException") ,
+            "MarkableInputStream::readBytes NotConnectedException",
             *this );
     }
     return nBytesRead;
@@ -693,7 +693,7 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
     else
     {
         throw NotConnectedException(
-            OUString("MarkableInputStream::readSomeBytes NotConnectedException") ,
+            "MarkableInputStream::readSomeBytes NotConnectedException",
             *this );
     }
     return nBytesRead;
@@ -709,7 +709,7 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
 {
     if ( nBytesToSkip < 0 )
         throw BufferSizeExceededException(
-            OUString("precondition not met: XInputStream::skipBytes: non-negative integer required!"),
+            "precondition not met: XInputStream::skipBytes: non-negative integer required!",
             *this
         );
 
@@ -728,7 +728,7 @@ sal_Int32 OMarkableInputStream::available(void) throw (NotConnectedException, Ru
     else
     {
         throw NotConnectedException(
-            OUString("MarkableInputStream::available NotConnectedException") ,
+            "MarkableInputStream::available NotConnectedException",
             *this );
     }
 
@@ -754,7 +754,7 @@ void OMarkableInputStream::closeInput(void) throw (NotConnectedException, Runtim
     }
     else {
         throw NotConnectedException(
-            OUString("MarkableInputStream::closeInput NotConnectedException") ,
+            "MarkableInputStream::closeInput NotConnectedException",
             *this );
     }
 }

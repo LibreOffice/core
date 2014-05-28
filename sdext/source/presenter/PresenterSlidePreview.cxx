@@ -68,8 +68,7 @@ PresenterSlidePreview::PresenterSlidePreview (
         || ! rpPresenterController.is())
     {
         throw RuntimeException(
-            OUString(
-                "PresenterSlidePreview can not be constructed due to empty argument"),
+            "PresenterSlidePreview can not be constructed due to empty argument",
             static_cast<XWeak*>(this));
     }
 
@@ -393,7 +392,7 @@ void PresenterSlidePreview::ThrowIfDisposed (void)
     if (PresenterSlidePreviewInterfaceBase::rBHelper.bDisposed || PresenterSlidePreviewInterfaceBase::rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString( "PresenterSlidePreview object has already been disposed"),
+            "PresenterSlidePreview object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

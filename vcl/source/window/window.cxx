@@ -965,7 +965,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         {
             // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
             throw RuntimeException(
-                OUString( "Could not create system window!"  ),
+                "Could not create system window!",
                 Reference< XInterface >() );
         }
 

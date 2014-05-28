@@ -265,13 +265,13 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     // parameter checking
     if (0 == aCommand.getLength())
         throw IllegalArgumentException(
-            OUString("Empty command"),
+            "Empty command",
             static_cast< XSystemShellExecute* >( this ),
             1 );
 
     if ((nFlags & ~(NO_SYSTEM_ERROR_MESSAGE | URIS_ONLY)) != 0)
         throw IllegalArgumentException(
-            OUString("Invalid Flags specified"),
+            "Invalid Flags specified",
             static_cast< XSystemShellExecute* >( this ),
             3 );
 
@@ -282,10 +282,9 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
         if (!(uri.is() && uri->isAbsolute()))
         {
             throw css::lang::IllegalArgumentException(
-                (OUString(
-                        "XSystemShellExecute.execute URIS_ONLY with"
-                        " non-absolute URI reference ")
-                 + aCommand),
+                OUString("XSystemShellExecute.execute URIS_ONLY with"
+                         " non-absolute URI reference ")
+                 + aCommand,
                 static_cast< cppu::OWeakObject * >(this), 0);
         }
     }
@@ -336,7 +335,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
             psxErr = MapError(psxErr);
 
         throw SystemShellExecuteException(
-            OUString("Error executing command"),
+            "Error executing command",
             static_cast< XSystemShellExecute* >(this),
             psxErr);
     }

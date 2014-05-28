@@ -315,9 +315,7 @@ namespace
             "### illegal vtable index!" );
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
-            throw RuntimeException(
-                OUString( "illegal vtable index!" ),
-                (XInterface *)pCppI );
+            throw RuntimeException( "illegal vtable index!", (XInterface *)pCppI );
         }
 
         // determine called method
@@ -414,9 +412,7 @@ namespace
         }
         default:
         {
-            throw RuntimeException(
-                OUString( "no member description found!" ),
-                (XInterface *)pCppI );
+            throw RuntimeException( "no member description found!", (XInterface *)pCppI );
         }
         }
 
