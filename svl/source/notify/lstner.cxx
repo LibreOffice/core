@@ -59,9 +59,7 @@ SfxListener::~SfxListener()
 
 void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 {
-    SfxBroadcasterArr_Impl::iterator aIter = std::find( aBCs.begin(), aBCs.end(), &rBroadcaster );
-    if ( aIter != aBCs.end() )
-        aBCs.erase( aIter );
+    aBCs.erase( std::find( aBCs.begin(), aBCs.end(), &rBroadcaster ) );
 }
 
 
