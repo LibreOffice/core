@@ -2689,10 +2689,11 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     uno::Sequence<OUString> aStyles(nStyles);
     OUString* pStyles = aStyles.getArray();
     OUString aString;
+    sal_Int32 nPos = 0;
     for(sal_Int32 i = 0; i < nStyles; ++i)
     {
         SwStyleNameMapper::FillProgName(
-            rStyles.getToken(i, TOX_STYLE_DELIMITER),
+            rStyles.getToken(0, TOX_STYLE_DELIMITER, nPos),
             aString,
             nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
             true);
