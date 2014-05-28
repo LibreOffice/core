@@ -31,6 +31,13 @@ OGLPlayer::OGLPlayer()
 
 OGLPlayer::~OGLPlayer()
 {
+    for (size_t i = 0; i < m_pHandle->size; ++i)
+    {
+        if (m_pHandle->files[i].type != GLTF_JSON)
+        {
+            delete [] m_pHandle->files[i].buffer;
+        }
+    }
     gltf_renderer_release(m_pHandle);
 }
 
@@ -68,6 +75,8 @@ bool OGLPlayer::create( const OUString& rURL )
 
     m_pHandle = gltf_renderer_init(&aJsonFile);
 
+    delete [] aJsonFile.buffer;
+
     if( !m_pHandle || !m_pHandle->files )
     {
         SAL_WARN("avmedia.opengl", "gltf_renderer_init returned an invalid glTFHandle");
@@ -87,7 +96,14 @@ bool OGLPlayer::create( const OUString& rURL )
                 // Load images as bitmaps
                 GraphicFilter aFilter;
                 Graphic aGraphic;
-                aFilter.ImportGraphic(aGraphic, INetURLObject(sFilesURL));
+                if( aFilter.ImportGraphic(aGraphic, INetURLObject(sFilesURL)) != GRFILTER_OK )
+                {
+                    rFile.buffer = 0;
+                    rFile.imagewidth = 0;
+                    rFile.imageheight = 0;
+                    SAL_WARN("avmedia.opengl", "Can't load texture file: " + sFilesURL);
+                    return false;
+                }
                 BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
                 aBitmapEx.Mirror(BMP_MIRROR_VERT);
                 rFile.buffer = (char*)OpenGLHelper::ConvertBitmapExToRGBABuffer(aBitmapEx);
@@ -98,6 +114,8 @@ bool OGLPlayer::create( const OUString& rURL )
             {
                 if( !lcl_LoadFile(&rFile, sFilesURL) )
                 {
+                    rFile.buffer = 0;
+                    rFile.size = 0;
                     SAL_WARN("avmedia.opengl", "Can't load glTF file: " + sFilesURL);
                     return false;
                 }
