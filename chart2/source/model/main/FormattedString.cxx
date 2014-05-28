@@ -210,7 +210,7 @@ Sequence< OUString > FormattedString::getSupportedServiceNames_Static()
 
 // ____ OPropertySet ____
 uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
+    throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticFormattedStringDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
