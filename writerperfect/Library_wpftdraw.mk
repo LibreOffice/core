@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	cdr \
 	freehand \
 	mspub \
+	mwaw \
 	odfgen \
 	revenge \
 	visio \
@@ -58,6 +59,7 @@ $(eval $(call gb_Library_add_exception_objects,wpftdraw,\
 	writerperfect/source/draw/FreehandImportFilter \
 	writerperfect/source/draw/ImportFilterBase \
 	writerperfect/source/draw/MSPUBImportFilter \
+	writerperfect/source/draw/MWAWDrawImportFilter \
 	writerperfect/source/draw/VisioImportFilter \
 	writerperfect/source/draw/WPGImportFilter \
 	writerperfect/source/draw/wpftdraw_genericfilter \
