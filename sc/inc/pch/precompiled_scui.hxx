@@ -114,4 +114,5 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/window.hxx>
 #include <vector>
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

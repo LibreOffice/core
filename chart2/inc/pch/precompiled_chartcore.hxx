@@ -15,6 +15,7 @@
 */
 
 #include "com/sun/star/uno/RuntimeException.hpp"
+#include "glm/gtc/matrix_inverse.hpp"
 #include <GL/glew.h>
 #include <algorithm>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -30,6 +31,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <boost/bind.hpp>
+#include <boost/checked_delete.hpp>
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -222,6 +224,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <config_features.h>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -306,6 +309,10 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <valarray>
 #include <vcl/cvtgrf.hxx>
+#include <vcl/font.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
+#include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/openglwin.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

@@ -14,8 +14,11 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
+#include <algorithm>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include <cassert>
+#include <climits>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/Property.hpp>
@@ -98,6 +101,7 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <config_folders.h>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase5.hxx>
@@ -111,6 +115,11 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
+#include <cstddef>
+#include <functional>
+#include <i18nlangtag/languagetag.hxx>
+#include <list>
+#include <map>
 #include <osl/conditn.hxx>
 #include <osl/file.h>
 #include <osl/file.hxx>
@@ -131,19 +140,10 @@
 #include <sal/log.hxx>
 #include <sal/types.h>
 #include <salhelper/thread.hxx>
-#include <xmlreader/span.hxx>
-#include <xmlreader/xmlreader.hxx>
-#include <algorithm>
-#include <cassert>
-#include <climits>
-#include <config_folders.h>
-#include <cstddef>
-#include <functional>
-#include <i18nlangtag/languagetag.hxx>
-#include <list>
-#include <map>
 #include <set>
 #include <stack>
 #include <vector>
+#include <xmlreader/span.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

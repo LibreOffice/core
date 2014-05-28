@@ -15,6 +15,7 @@
 */
 
 #include "avmedia/mediawindow.hxx"
+#include "boost/noncopyable.hpp"
 #include "canvas/elapsedtime.hxx"
 #include "com/sun/star/office/XAnnotationEnumeration.hpp"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -72,6 +73,7 @@
 #include <boost/function.hpp>
 #include <boost/limits.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_array.hpp>
@@ -857,6 +859,7 @@
 #include <unotools/viewoptions.hxx>
 #include <utility>
 #include <vcl/FilterConfigItem.hxx>
+#include <vcl/abstdlg.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bmpacc.hxx>
@@ -915,6 +918,5 @@
 #include <vcl/wrkwin.hxx>
 #include <vector>
 #include <xmloff/settingsstore.hxx>
-#include<sfx2/viewfrm.hxx>
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

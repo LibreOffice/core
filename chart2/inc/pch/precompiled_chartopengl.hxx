@@ -18,7 +18,6 @@
 #include <algorithm>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
-#include <boost/scoped_array.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

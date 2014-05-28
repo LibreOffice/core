@@ -14,10 +14,8 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "basegfx/matrix/b2dhommatrix.hxx"
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "com/sun/star/accessibility/AccessibleRole.hpp"
 #include "com/sun/star/accessibility/MSAAService.hpp"
 #include "com/sun/star/accessibility/XAccessible.hpp"
@@ -28,7 +26,6 @@
 #include "com/sun/star/awt/XWindow.hpp"
 #include "com/sun/star/awt/XWindowPeer.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/beans/PropertyValues.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
@@ -46,8 +43,6 @@
 #include "com/sun/star/graphic/GraphicProvider.hpp"
 #include "com/sun/star/graphic/XGraphicProvider.hpp"
 #include "com/sun/star/i18n/TransliterationModules.hpp"
-#include "com/sun/star/i18n/WordType.hpp"
-#include "com/sun/star/i18n/XBreakIterator.hpp"
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/io/XSeekable.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
@@ -58,7 +53,6 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XServiceName.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
-#include "com/sun/star/linguistic2/LinguServiceManager.hpp"
 #include "com/sun/star/packages/zip/ZipFileAccess.hpp"
 #include "com/sun/star/rendering/CanvasFactory.hpp"
 #include "com/sun/star/rendering/XCanvas.hpp"
@@ -84,7 +78,6 @@
 #include "i18nutil/unicode.hxx"
 #include "officecfg/Office/Common.hxx"
 #include "osl/diagnose.h"
-#include "osl/file.h"
 #include "osl/file.hxx"
 #include "osl/module.h"
 #include "osl/module.hxx"
@@ -107,7 +100,6 @@
 #include "string.h"
 #include "tools/debug.hxx"
 #include "tools/diagnose_ex.h"
-#include "tools/poly.hxx"
 #include "tools/rc.h"
 #include "tools/resmgr.hxx"
 #include "tools/stream.hxx"
@@ -118,7 +110,6 @@
 #include "unotools/collatorwrapper.hxx"
 #include "unotools/confignode.hxx"
 #include "unotools/fontcfg.hxx"
-#include "unotools/fontcvt.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/streamwrap.hxx"
 #include "unotools/syslocaleoptions.hxx"
@@ -170,8 +161,10 @@
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/XDisplayConnection.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/awt/XGraphics.hpp>
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
@@ -182,6 +175,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
@@ -231,6 +225,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/rendering/CanvasFactory.hpp>
 #include <com/sun/star/rendering/ColorComponentTag.hpp>
@@ -245,6 +240,7 @@
 #include <com/sun/star/rendering/XIntegerBitmap.hpp>
 #include <com/sun/star/rendering/XIntegerReadOnlyBitmap.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
+#include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
@@ -334,6 +330,7 @@
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -349,6 +346,7 @@
 #include <sot/factory.hxx>
 #include <sot/formats.hxx>
 #include <sot/object.hxx>
+#include <stack>
 #include <stdexcept>
 #include <stdio.h>
 #include <stdlib.h>
@@ -395,6 +393,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/confignode.hxx>
+#include <unotools/fontcfg.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/localedatawrapper.hxx>

@@ -152,6 +152,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/genlink.hxx>
 #include <sfx2/imagemgr.hxx>
+#include <sfx2/infobar.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>

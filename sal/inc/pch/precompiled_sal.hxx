@@ -51,6 +51,7 @@
 #include "rtl/uuid.h"
 #include <algorithm>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_array.hpp>
 #include <boost/unordered_map.hpp>
 #include <cassert>
 #include <config_features.h>

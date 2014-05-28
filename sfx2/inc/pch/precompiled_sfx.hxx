@@ -18,6 +18,7 @@
 #include "unotools/charclass.hxx"
 #include <algorithm>
 #include <assert.h>
+#include <avmedia/mediaitem.hxx>
 #include <basegfx/color/bcolortools.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -514,6 +515,8 @@
 #include <cstring>
 #include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fontattribute.hxx>
+#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
