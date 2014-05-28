@@ -18,6 +18,7 @@
  */
 
 #ifndef INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBTOOLS_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBTOOLS_HXX
 
 #include <vcl/taskpanelist.hxx>
 
@@ -39,6 +40,6 @@ namespace bib
     }
 }
 
-#endif
+#endif // INCLUDED_EXTENSIONS_SOURCE_BIBLIOGRAPHY_BIBTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

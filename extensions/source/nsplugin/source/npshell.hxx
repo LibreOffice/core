@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NPSHELL_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NPSHELL_HXX
+
 #ifdef UNIX
 
 #ifndef MOZ_X11
@@ -90,5 +93,7 @@ typedef struct _PluginInstance
 
 /* Extern functions */
 extern "C" NPMIMEType dupMimeType(NPMIMEType type);
+
+#endif // INCLUDED_EXTENSIONS_SOURCE_NSPLUGIN_SOURCE_NPSHELL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

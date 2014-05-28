@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
+
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/deployment/UpdateInformationProvider.hpp>
@@ -59,5 +62,7 @@ bool storeExtensionUpdateInfos(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< OUString > > &rUpdateInfos
 );
+
+#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATEPROTOCOL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
