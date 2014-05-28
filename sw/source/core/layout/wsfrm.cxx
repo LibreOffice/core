@@ -3459,9 +3459,10 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                             (Frm().*fnRect->fnGetHeight)();
                     (Frm().*fnRect->fnAddBottom)( nDiff );
                     // #i68520#
-                    if ( dynamic_cast<SwFlyFrm*>(this) )
+                    SwFlyFrm *pFlyFrm = dynamic_cast<SwFlyFrm*>(this);
+                    if (pFlyFrm)
                     {
-                        dynamic_cast<SwFlyFrm*>(this)->InvalidateObjRectWithSpaces();
+                        pFlyFrm->InvalidateObjRectWithSpaces();
                     }
                     (this->*fnRect->fnSetYMargins)( nTop, nBorder - nTop );
                     ChgLowersProp( aOldSz );
