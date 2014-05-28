@@ -283,7 +283,7 @@ bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildIte
             if (nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS)
                 // months and quarters are both 1-based
                 return (nGroupValue - 1 == (nChildValue - 1) / 3);
-
+            break;
         case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
             // a day is only contained in its quarter or month
             if (nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS ||
