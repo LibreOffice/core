@@ -1,0 +1,29 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<node oor:name="Great_Works_Draw" oor:op="replace">
+    <prop oor:name="Flags">
+        <value>IMPORT ALIEN USESOPTIONS 3RDPARTYFILTER PREFERRED</value>
+    </prop>
+    <prop oor:name="FilterService">
+        <value>com.sun.star.comp.Draaw.MWAWDrawImportFilter</value>
+    </prop>
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">GreatWorks Document</value>
+    </prop>
+    <prop oor:name="FileFormatVersion">
+        <value>0</value>
+    </prop>
+    <prop oor:name="Type">
+        <value>draw_Great_Works</value>
+    </prop>
+    <prop oor:name="DocumentService">
+        <value>com.sun.star.drawing.DrawingDocument</value>
+    </prop>
+</node>
