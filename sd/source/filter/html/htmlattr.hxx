@@ -31,7 +31,7 @@ protected:
     Color   m_aVLinkColor, m_aALinkColor;
 
 public:
-    SdHtmlAttrPreview( Window* pParent, const ResId& rResId );
+    SdHtmlAttrPreview( Window* pParent, WinBits nStyle );
     virtual ~SdHtmlAttrPreview();
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
