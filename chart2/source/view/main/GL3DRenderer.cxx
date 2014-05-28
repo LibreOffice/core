@@ -274,7 +274,7 @@ void OpenGL3DRenderer::init()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     m_fViewAngle = 60.0f;
-    m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 2000.0f);
+    m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 6000.0f);
 
     maResources.LoadShaders();
     maPickingResources.LoadShaders();
