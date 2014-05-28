@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef INCLUDED_FILTER_SOURCE_MSFILTER_VISCACHE_HXX
+#define INCLUDED_FILTER_SOURCE_MSFILTER_VISCACHE_HXX
 
 #include <sfx2/objsh.hxx>
 #include <tools/stream.hxx>
@@ -65,5 +67,6 @@ public:
     void    Write( SvStream & rStm );
 };
 
+#endif // INCLUDED_FILTER_SOURCE_MSFILTER_VISCACHE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

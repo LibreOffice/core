@@ -16,6 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_SHAPE_HXX
+#define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_SHAPE_HXX
 
 #include <vcl/virdev.hxx>
 
@@ -49,5 +51,7 @@ namespace PictReaderShape {
   */
   void drawArc(VirtualDevice *dev, bool drawFrame, Rectangle const &orig, const double& angle1, const double& angle2, Size const &pSize);
 }
+
+#endif // INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_SHAPE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
