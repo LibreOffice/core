@@ -67,6 +67,11 @@ const size_t STEPS = 100;
 const sal_uLong TIMEOUT = 5;
 const sal_uInt32 ID_STEP = 10;
 
+const float BAR_SIZE_X = 30.0f;
+const float BAR_SIZE_Y = 5.0f;
+const float BAR_DISTANCE_X = 5.0f;
+const float BAR_DISTANCE_Y = 5.0;
+
 float calculateTextWidth(const OUString& rText)
 {
     return rText.getLength() * 10;
@@ -103,11 +108,6 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     // guarantee they are positioned correctly.  In fact, they are guaranteed
     // to be positioned incorrectly.
 
-    const float nBarSizeX = 30.0f;
-    const float nBarSizeY = 5.0f;
-    const float nBarDistanceX = 5.0f;
-    const float nBarDistanceY = 5.0;
-
     sal_uInt32 nId = 1;
     float nXEnd = 0.0;
     float nYPos = 0.0;
@@ -130,7 +130,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
             itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
     {
-        nYPos = nSeriesIndex * (nBarSizeY + nBarDistanceY) + nBarDistanceY;
+        nYPos = nSeriesIndex * (BAR_SIZE_Y + BAR_DISTANCE_Y) + BAR_DISTANCE_Y;
 
         const VDataSeries& rDataSeries = *itr;
         sal_Int32 nPointCount = rDataSeries.getTotalPointCount();
@@ -152,10 +152,10 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             nId += ID_STEP;
             opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
             glm::vec3 aTopLeft, aTopRight, aBottomRight;
-            aTopRight.x = -nBarDistanceY;
-            aTopRight.y = nYPos + nBarDistanceY;
-            aTopLeft.x = calculateTextWidth(aSeriesName) * -1.0 - nBarDistanceY;
-            aTopLeft.y = nYPos + nBarDistanceY;
+            aTopRight.x = -BAR_DISTANCE_Y;
+            aTopRight.y = nYPos + BAR_DISTANCE_Y;
+            aTopLeft.x = calculateTextWidth(aSeriesName) * -1.0 - BAR_DISTANCE_Y;
+            aTopLeft.y = nYPos + BAR_DISTANCE_Y;
             aBottomRight = aTopRight;
             aBottomRight.y -= TEXT_HEIGHT;
             p->setPosition(aTopLeft, aTopRight, aBottomRight);
@@ -170,9 +170,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             }
 
             float nVal = rDataSeries.getYValue(nIndex);
-            float nXPos = nIndex * (nBarSizeX + nBarDistanceX) + nBarDistanceX;
+            float nXPos = nIndex * (BAR_SIZE_X + BAR_DISTANCE_X) + BAR_DISTANCE_X;
 
-            glm::mat4 aScaleMatrix = glm::scale(glm::vec3(nBarSizeX, nBarSizeY, float(nVal/nMaxVal)));
+            glm::mat4 aScaleMatrix = glm::scale(glm::vec3(BAR_SIZE_X, BAR_SIZE_Y, float(nVal/nMaxVal)));
             glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(nXPos, nYPos, 0.0f));
             glm::mat4 aBarPosition = aTranslationMatrix * aScaleMatrix;
 
@@ -184,14 +184,14 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             nId += ID_STEP;
         }
 
-        float nThisXEnd = nPointCount * (nBarSizeX + nBarDistanceX);
+        float nThisXEnd = nPointCount * (BAR_SIZE_X + BAR_DISTANCE_X);
         if (nXEnd < nThisXEnd)
             nXEnd = nThisXEnd;
 
         ++nSeriesIndex;
     }
 
-    nYPos += nBarSizeY + nBarDistanceY;
+    nYPos += BAR_SIZE_Y + BAR_DISTANCE_Y;
 
     // X axis
     maShapes.push_back(new opengl3D::Line(mpRenderer.get(), nId));
@@ -220,7 +220,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(&maShapes.back());
     glm::vec3 aTopLeft;
     glm::vec3 aTopRight = aTopLeft;
-    aTopRight.x = nXEnd + 2 * nBarDistanceX;
+    aTopRight.x = nXEnd + 2 * BAR_DISTANCE_X;
     glm::vec3 aBottomRight = aTopRight;
     aBottomRight.y = nYPos;
     pRect->setPosition(aTopLeft, aTopRight, aBottomRight);
@@ -235,18 +235,18 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         if(aCats[i].isEmpty())
             continue;
 
-        float nXPos = i * (nBarSizeX + nBarDistanceX);
+        float nXPos = i * (BAR_SIZE_X + BAR_DISTANCE_X);
 
         maShapes.push_back(new opengl3D::Text(mpRenderer.get(), *mpTextCache,
                     aCats[i], nId));
         nId += ID_STEP;
         opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
         aTopLeft.x = nXPos + TEXT_HEIGHT;
-        aTopLeft.y = nYPos + calculateTextWidth(aCats[i]) + 0.5 * nBarDistanceY;
+        aTopLeft.y = nYPos + calculateTextWidth(aCats[i]) + 0.5 * BAR_DISTANCE_Y;
         aTopRight = aTopLeft;
-        aTopRight.y = nYPos + 0.5* nBarDistanceY;
+        aTopRight.y = nYPos + 0.5* BAR_DISTANCE_Y;
         aBottomRight.x = nXPos;
-        aBottomRight.y = nYPos + 0.5 * nBarDistanceY;
+        aBottomRight.y = nYPos + 0.5 * BAR_DISTANCE_Y;
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
 
         // create shapes on other side as well
@@ -256,16 +256,16 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         nId += ID_STEP;
         p = static_cast<opengl3D::Text*>(&maShapes.back());
         aTopLeft.x = nXPos + TEXT_HEIGHT;
-        aTopLeft.y =  - 0.5 * nBarDistanceY;
+        aTopLeft.y =  - 0.5 * BAR_DISTANCE_Y;
         aTopRight = aTopLeft;
-        aTopRight.y = -calculateTextWidth(aCats[i]) - 0.5* nBarDistanceY;
+        aTopRight.y = -calculateTextWidth(aCats[i]) - 0.5* BAR_DISTANCE_Y;
         aBottomRight.x = nXPos;
-        aBottomRight.y = -calculateTextWidth(aCats[i]) - 0.5 * nBarDistanceY;
+        aBottomRight.y = -calculateTextWidth(aCats[i]) - 0.5 * BAR_DISTANCE_Y;
         p->setPosition(aTopLeft, aTopRight, aBottomRight);
     }
 
-    mnMaxX = nMaxPointCount * (nBarSizeX + nBarDistanceX) + 40;
-    mnMaxY = nSeriesIndex * (nBarSizeY + nBarDistanceY) + 40;
+    mnMaxX = nMaxPointCount * (BAR_SIZE_X + BAR_DISTANCE_X) + 40;
+    mnMaxY = nSeriesIndex * (BAR_SIZE_Y + BAR_DISTANCE_Y) + 40;
 
     maCameraPosition = glm::vec3(-30, -30, DEFAULT_CAMERA_HEIGHT);
     mpCamera->setPosition(maCameraPosition);
@@ -354,10 +354,17 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     const BarInformation& rBarInfo = itr->second;
     mnStepsTotal = STEPS;
     mnStep = 0;
-    maCameraDirection = rBarInfo.maPos;
     render();
 
-    maStep = (rBarInfo.maPos - maCameraPosition)/102.0f;
+    glm::vec3 maTargetPosition = rBarInfo.maPos;
+    maTargetPosition.z += 45;
+    maStep = (maTargetPosition - maCameraPosition)/100.0f;
+
+    glm::vec3 maTargetDirection = rBarInfo.maPos;
+    maTargetDirection.x += BAR_SIZE_X / 2.0f;
+    maTargetDirection.y += BAR_SIZE_Y / 2.0f;
+
+    maStepDirection = (maTargetDirection - maCameraDirection)/100.f;
 
     maTimer.SetTimeout(TIMEOUT);
     maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, MoveToBar));
@@ -426,6 +433,8 @@ void GL3DBarChart::moveToCorner()
 {
     mnStepsTotal = STEPS;
     maStep = (getCornerPosition(mnCornerId) - maCameraPosition) / float(mnStepsTotal);
+
+    maStepDirection = (glm::vec3(mnMaxX/2.0f, mnMaxY/2.0f, 0) - maCameraDirection)/ float(mnStepsTotal);
     maTimer.SetTimeout(TIMEOUT);
     maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, MoveCamera));
     maTimer.Start();
@@ -439,6 +448,8 @@ IMPL_LINK_NOARG(GL3DBarChart, MoveCamera)
         ++mnStep;
         maCameraPosition += maStep;
         mpCamera->setPosition(maCameraPosition);
+        maCameraDirection += maStepDirection;
+        mpCamera->setDirection(maCameraDirection);
         render();
         maTimer.SetTimeout(TIMEOUT);
         maTimer.Start();
@@ -460,6 +471,8 @@ IMPL_LINK_NOARG(GL3DBarChart, MoveToBar)
         ++mnStep;
         maCameraPosition += maStep;
         mpCamera->setPosition(maCameraPosition);
+        maCameraDirection += maStepDirection;
+        mpCamera->setDirection(maCameraDirection);
         render();
         maTimer.SetTimeout(TIMEOUT);
         maTimer.Start();
