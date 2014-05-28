@@ -1878,18 +1878,18 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         SwStartNode* pSttNode = pUnoCrsr->GetNode()->StartOfSectionNode();
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
         const SfxItemPropertySimpleEntry* pEntry =
                                     m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(pEntry)
         {
-            pTblCrsr->MakeBoxSels();
+            rTblCrsr.MakeBoxSels();
             switch(pEntry->nWID )
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
                 {
                     SvxBrushItem aBrush( RES_BACKGROUND );
-                    if(pTblCrsr->GetDoc()->GetBoxAttr( *pUnoCrsr, aBrush ))
+                    if (rTblCrsr.GetDoc()->GetBoxAttr( *pUnoCrsr, aBrush ))
                         aBrush.QueryValue(aRet, pEntry->nMemberId);
 
                 }
@@ -1910,12 +1910,12 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
                 break;
                 default:
                 {
-                    SfxItemSet aSet(pTblCrsr->GetDoc()->GetAttrPool(),
+                    SfxItemSet aSet(rTblCrsr.GetDoc()->GetAttrPool(),
                         RES_CHRATR_BEGIN,       RES_FRMATR_END -1,
                         RES_UNKNOWNATR_CONTAINER, RES_UNKNOWNATR_CONTAINER,
                         0L);
                     // erstmal die Attribute des Cursors
-                    SwUnoCursorHelper::GetCrsrAttr(pTblCrsr->GetSelRing(),
+                    SwUnoCursorHelper::GetCrsrAttr(rTblCrsr.GetSelRing(),
                             aSet);
                     m_pPropSet->getPropertyValue(*pEntry, aSet, aRet);
                 }
