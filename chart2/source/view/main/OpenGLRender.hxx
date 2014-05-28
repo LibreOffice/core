@@ -28,9 +28,6 @@
 #define DEBUG_POSITIONING 0
 #define RENDER_TO_FILE 0
 
-using namespace std;
-using namespace ::com::sun::star;
-
 struct PosVecf3
 {
     float x;
@@ -64,9 +61,9 @@ struct TextInfo
     float nDy;
 };
 
-typedef vector<GLfloat> Area2DPointList;
-typedef vector<GLfloat> PieSegment2DPointList;
-typedef vector<GLfloat> PointList;
+typedef std::vector<GLfloat> Area2DPointList;
+typedef std::vector<GLfloat> PieSegment2DPointList;
+typedef std::vector<GLfloat> PointList;
 
 // for 3D, use vector to save the points
 
@@ -99,14 +96,14 @@ public:
 
     int CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixels,
                           const ::Size &aPixelSize,
-                          const ::css::awt::Point&,
-                          const ::css::awt::Size& aSize,
+                          const css::awt::Point&,
+                          const css::awt::Size& aSize,
                           long rotation,
-                          const ::css::drawing::HomogenMatrix3& rTrans);
+                          const css::drawing::HomogenMatrix3& rTrans);
     int CreateTextTexture(const BitmapEx& rBitmapEx,
-            const ::css::awt::Point& aPos, const css::awt::Size& aSize,
-            long rotation, const ::css::drawing::HomogenMatrix3& rTrans);
-    int CreateTextTexture(::rtl::OUString const &textValue, Font aFont, long fontColor, awt::Point aPos, awt::Size aSize, long rotation);
+            const css::awt::Point& aPos, const css::awt::Size& aSize,
+            long rotation, const css::drawing::HomogenMatrix3& rTrans);
+    int CreateTextTexture(::rtl::OUString const &textValue, Font aFont, long fontColor, css::awt::Point aPos, css::awt::Size aSize, long rotation);
     int RenderTextShape();
 
     int SetArea2DShapePoint(float x, float y, int listLength);
