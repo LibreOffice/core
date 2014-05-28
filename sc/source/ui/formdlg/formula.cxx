@@ -542,8 +542,8 @@ void ScFormulaDlg::setDispatcherLock( bool bLock )
 void ScFormulaDlg::setReferenceInput(const formula::FormEditData* _pData)
 {
     ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = const_cast<ScFormEditData*>(dynamic_cast<const ScFormEditData*>(_pData));
-    pScMod->SetRefInputHdl(pData->GetInputHandler());
+    ScFormEditData& rData = const_cast<ScFormEditData&>(dynamic_cast<const ScFormEditData&>(*_pData));
+    pScMod->SetRefInputHdl(rData.GetInputHandler());
 }
 void ScFormulaDlg::deleteFormData()
 {
