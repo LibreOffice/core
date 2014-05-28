@@ -28,7 +28,7 @@ void main()
 
     normalCameraspace = normalize(mat3(V) * normalMatrix * vertexNormalModelspace);
 	
-	fragBarColor = barColor;
+    fragBarColor = barColor;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
