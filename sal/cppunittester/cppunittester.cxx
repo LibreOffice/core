@@ -48,7 +48,6 @@
 #include "cppunit/portability/Stream.h"
 
 #include "boost/noncopyable.hpp"
-#include "boost/ptr_container/ptr_vector.hpp"
 #include <boost/scoped_array.hpp>
 #include "boost/static_assert.hpp"
 
@@ -273,7 +272,6 @@ SAL_IMPLEMENT_MAIN() {
 #endif
 #endif
 
-    boost::ptr_vector<osl::Module> modules;
     std::vector<CppUnit::Protector *> protectors;
     CppUnit::TestResult result;
     std::string args;
@@ -303,8 +301,9 @@ SAL_IMPLEMENT_MAIN() {
         rtl::OUString lib(getArgument(index + 1));
         rtl::OUString sym(getArgument(index + 2));
 #ifndef DISABLE_DYNLOADING
-        modules.push_back(new osl::Module(lib, SAL_LOADMODULE_GLOBAL));
-        oslGenericFunction fn = modules.back().getFunctionSymbol(sym);
+        osl::Module mod(lib, SAL_LOADMODULE_GLOBAL);
+        oslGenericFunction fn = mod.getFunctionSymbol(sym);
+        mod.release();
 #else
         oslGenericFunction fn = 0;
         if (sym == "unoexceptionprotector")
