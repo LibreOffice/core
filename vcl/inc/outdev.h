@@ -149,7 +149,7 @@ public:
 
     ImplFontEntry*      GetFontEntry( PhysicalFontCollection*,
                              const Font&, const Size& rPixelSize, float fExactHeight);
-    ImplFontEntry*      GetFontEntry( PhysicalFontCollection*, const FontSelectPattern& );
+    ImplFontEntry*      GetFontEntry( PhysicalFontCollection*, FontSelectPattern& );
     ImplFontEntry*      GetGlyphFallbackFont( PhysicalFontCollection*, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );
     void                Release( ImplFontEntry* );
