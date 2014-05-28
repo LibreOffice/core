@@ -146,7 +146,7 @@ static void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
 {
     ShellResource* pShellRes = SwViewShell::GetShellRes();
 
-    if(rTmp.equals(pShellRes->aTOXUserName))
+    if(rTmp==pShellRes->aTOXUserName)
     {
         rTmp = cUserDefined;
     }
@@ -363,8 +363,8 @@ public:
                 : 0));
         if (!pTOXSection)
         {
-            throw uno::RuntimeException(OUString(
-                    "SwXDocumentIndex: disposed or invalid"), 0);
+            throw uno::RuntimeException(
+                    "SwXDocumentIndex: disposed or invalid", 0);
         }
         return *pTOXSection;
     }
@@ -548,15 +548,13 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString("Unknown property: ")
-                + rPropertyName,
+            "Unknown property: " + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw beans::PropertyVetoException(
-            OUString("Property is read-only: " )
-                + rPropertyName,
+            "Property is read-only: " + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
 
@@ -604,8 +602,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                     "tox type name can only be changed for user indexes");
             if (pSectionFmt)
             {
-                OUString sTmp = rTOXBase.GetTOXType()->GetTypeName();
-                if (sTmp != sNewName)
+                if (rTOXBase.GetTOXType()->GetTypeName() != sNewName)
                 {
                     lcl_ReAssignTOXType(pSectionFmt->GetDoc(),
                             rTOXBase, sNewName);
@@ -726,9 +723,8 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             // convert file-format/API/external programmatic english name
             // to internal UI name before usage
-            OUString aName( SwStyleNameMapper::GetSpecialExtraUIName(
+            rTOXBase.SetSequenceName( SwStyleNameMapper::GetSpecialExtraUIName(
                                 lcl_AnyToString(rValue) ) );
-            rTOXBase.SetSequenceName( aName );
         }
         break;
         case WID_LABEL_DISPLAY_TYPE:
@@ -887,8 +883,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString("Unknown property: ")
-                + rPropertyName,
+            "Unknown property: " + rPropertyName,
             static_cast< cppu::OWeakObject * >(this));
     }
 
@@ -942,24 +937,17 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_IDX_TITLE  :
             {
-                OUString uRet(pTOXBase->GetTitle());
-                aRet <<= uRet;
+                aRet <<= pTOXBase->GetTitle();
                 break;
             }
             case WID_IDX_NAME:
-                aRet <<= OUString(pTOXBase->GetTOXName());
+                aRet <<= pTOXBase->GetTOXName();
             break;
             case WID_USER_IDX_NAME:
             {
-                OUString sTmp;
-                if (!m_pImpl->m_bIsDescriptor)
-                {
-                    sTmp = pTOXBase->GetTOXType()->GetTypeName();
-                }
-                else
-                {
-                    sTmp = m_pImpl->m_pProps->GetTypeName();
-                }
+                OUString sTmp((!m_pImpl->m_bIsDescriptor)
+                    ? pTOXBase->GetTOXType()->GetTypeName()
+                    : m_pImpl->m_pProps->GetTypeName());
                 //I18N
                 lcl_ConvertTOUNameToProgrammaticName(sTmp);
                 aRet <<= sTmp;
@@ -969,16 +957,16 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 aRet <<= LanguageTag(pTOXBase->GetLanguage()).getLocale();
             break;
             case WID_IDX_SORT_ALGORITHM:
-                aRet <<= OUString(pTOXBase->GetSortAlgorithm());
+                aRet <<= pTOXBase->GetSortAlgorithm();
             break;
             case WID_LEVEL      :
                 aRet <<= static_cast<sal_Int16>(pTOXBase->GetLevel());
             break;
             case WID_TOC_BOOKMARK  :
-               aRet <<= OUString(pTOXBase->GetBookmarkName());
+               aRet <<= pTOXBase->GetBookmarkName();
             break;
             case WID_INDEX_ENTRY_TYPE  :
-               aRet <<= OUString(pTOXBase->GetEntryTypeName());
+               aRet <<= pTOXBase->GetEntryTypeName();
             break;
             case WID_CREATE_FROM_MARKS:
                 lcl_BitMaskToAny(aRet, nCreate, nsSwTOXElement::TOX_MARK);
@@ -1042,9 +1030,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 // convert internal UI name to
                 // file-format/API/external programmatic english name
                 // before usage
-                OUString aName( SwStyleNameMapper::GetSpecialExtraProgName(
-                                    pTOXBase->GetSequenceName() ) );
-                aRet <<= OUString( aName );
+                aRet <<= SwStyleNameMapper::GetSpecialExtraProgName(
+                                    pTOXBase->GetSequenceName() );
             }
             break;
             case WID_LABEL_DISPLAY_TYPE:
@@ -1844,8 +1831,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 {
                     SwTOXType const*const pTemp =
                         pDoc->GetTOXType( m_pImpl->m_eTOXType, i );
-                    if (m_pImpl->m_sUserIndexName ==
-                            OUString(pTemp->GetTypeName()))
+                    if (m_pImpl->m_sUserIndexName == pTemp->GetTypeName())
                     {
                         pTOXType = pTemp;
                         break;
@@ -2003,8 +1989,8 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
 
     if (!pTxtAttr)
     {
-        throw uno::RuntimeException(OUString(
-            "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute"),
+        throw uno::RuntimeException(
+            "SwXDocumentIndexMark::InsertTOXMark(): cannot insert attribute",
             0);
     }
 
@@ -2121,15 +2107,13 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString("Unknown property: ")
-                + rPropertyName,
+            "Unknown property: " + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
     if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
     {
         throw beans::PropertyVetoException(
-            OUString("Property is read-only: ")
-                + rPropertyName,
+            "Property is read-only: " + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
 
@@ -2271,8 +2255,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     if (!pEntry)
     {
         throw beans::UnknownPropertyException(
-            OUString("Unknown property: ")
-                + rPropertyName,
+            "Unknown property: " + rPropertyName,
             static_cast<cppu::OWeakObject *>(this));
     }
     if (::sw::GetDefaultTextContentValue(aRet, rPropertyName, pEntry->nWID))
@@ -2286,33 +2269,32 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         switch(pEntry->nWID)
         {
             case WID_ALT_TEXT:
-                aRet <<= OUString(m_pImpl->m_pTOXMark->GetAlternativeText());
+                aRet <<= m_pImpl->m_pTOXMark->GetAlternativeText();
             break;
             case WID_LEVEL:
                 aRet <<= static_cast<sal_Int16>(
                             m_pImpl->m_pTOXMark->GetLevel() - 1);
             break;
             case WID_TOC_BOOKMARK :
-                aRet <<= OUString(m_pImpl->m_pTOXMark->GetBookmarkName());
+                aRet <<= m_pImpl->m_pTOXMark->GetBookmarkName();
             break;
             case WID_INDEX_ENTRY_TYPE :
-                aRet <<= OUString(m_pImpl->m_pTOXMark->GetEntryTypeName());
+                aRet <<= m_pImpl->m_pTOXMark->GetEntryTypeName();
             break;
             case WID_PRIMARY_KEY  :
-                aRet <<= OUString(m_pImpl->m_pTOXMark->GetPrimaryKey());
+                aRet <<= m_pImpl->m_pTOXMark->GetPrimaryKey();
             break;
             case WID_SECONDARY_KEY:
-                aRet <<= OUString(m_pImpl->m_pTOXMark->GetSecondaryKey());
+                aRet <<= m_pImpl->m_pTOXMark->GetSecondaryKey();
             break;
             case WID_TEXT_READING:
-                aRet <<= OUString(m_pImpl->m_pTOXMark->GetTextReading());
+                aRet <<= m_pImpl->m_pTOXMark->GetTextReading();
             break;
             case WID_PRIMARY_KEY_READING:
-                aRet <<= OUString(m_pImpl->m_pTOXMark->GetPrimaryKeyReading());
+                aRet <<= m_pImpl->m_pTOXMark->GetPrimaryKeyReading();
             break;
             case WID_SECONDARY_KEY_READING:
-                aRet <<= OUString(
-                        m_pImpl->m_pTOXMark->GetSecondaryKeyReading());
+                aRet <<= m_pImpl->m_pTOXMark->GetSecondaryKeyReading();
             break;
             case WID_USER_IDX_NAME :
             {
@@ -2512,7 +2494,6 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     if(!IsValid())
         throw uno::RuntimeException();
 
-    OUString sToFind(rName);
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     for( size_t n = 0; n < rFmts.size(); ++n )
     {
@@ -2520,7 +2501,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
             pSect->GetFmt()->GetSectionNode() &&
             (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
-                == sToFind))
+                == rName))
         {
            const uno::Reference< text::XDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
@@ -2577,7 +2558,6 @@ throw (uno::RuntimeException, std::exception)
     if(!IsValid())
         throw uno::RuntimeException();
 
-    OUString sToFind(rName);
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     for( size_t n = 0; n < rFmts.size(); ++n )
     {
@@ -2586,7 +2566,7 @@ throw (uno::RuntimeException, std::exception)
             pSect->GetFmt()->GetSectionNode())
         {
             if (static_cast<SwTOXBaseSection const*>(pSect)->GetTOXName()
-                    == sToFind)
+                    == rName)
             {
                 return sal_True;
             }
@@ -2882,9 +2862,8 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                     sFillChar.isEmpty() ? ' ' : sFillChar[0];
             }
             else if ( pProperties[j].Name == "Text" )
-               {
-                const OUString sText = lcl_AnyToString(pProperties[j].Value);
-                aToken.sText = sText;
+            {
+                aToken.sText = lcl_AnyToString(pProperties[j].Value);
             }
             else if ( pProperties[j].Name == "ChapterFormat" )
             {
@@ -3005,7 +2984,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
     sal_Int32 nTokenCount = 0;
     uno::Sequence< beans::PropertyValues > aRetSeq;
-    OUString aString;
+    OUString aProgCharStyle;
     while(aIt != aPattern.end()) // #i21237#
     {
         nTokenCount++;
@@ -3017,10 +2996,9 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
             pTokenProps[nTokenCount-1];
         SwStyleNameMapper::FillProgName(
                         aToken.sCharStyleName,
-                        aString,
+                        aProgCharStyle,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,
                         true );
-        const OUString aProgCharStyle( aString );
         switch(aToken.eTokenType)
         {
             case TOKEN_ENTRY_NO:
@@ -3134,7 +3112,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                 pArr[1].Value <<= aProgCharStyle;
 
                 pArr[2].Name = "Text";
-                pArr[2].Value <<= OUString(aToken.sText);
+                pArr[2].Value <<= aToken.sText;
             }
             break;
             case TOKEN_PAGE_NUMS:
