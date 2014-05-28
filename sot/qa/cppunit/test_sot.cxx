@@ -76,7 +76,7 @@ namespace
                                         pData[i - 1] == c );
             }
         }
-
+        free(pData);
         return true;
     }
 
