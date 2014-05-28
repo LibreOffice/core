@@ -1227,23 +1227,23 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
 }
 
 ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
-    const FontSelectPattern& rFontSelData )
+    FontSelectPattern& aFontSelData )
 {
+    const FontSelectPattern aFontSelDataOrig(aFontSelData);
     // check if a directly matching logical font instance is already cached,
     // the most recently used font usually has a hit rate of >50%
     ImplFontEntry *pEntry = NULL;
     PhysicalFontFamily* pFontFamily = NULL;
     IFSD_Equal aIFSD_Equal;
-    if( mpFirstEntry && aIFSD_Equal( rFontSelData, mpFirstEntry->maFontSelData ) )
+    if( mpFirstEntry && aIFSD_Equal( aFontSelData, mpFirstEntry->maFontSelData ) )
         pEntry = mpFirstEntry;
     else
     {
-        FontInstanceList::iterator it = maFontInstanceList.find( rFontSelData );
+        FontInstanceList::iterator it = maFontInstanceList.find( aFontSelData );
         if( it != maFontInstanceList.end() )
             pEntry = (*it).second;
     }
 
-    FontSelectPattern aFontSelData(rFontSelData);
     if( !pEntry ) // no direct cache hit
     {
         // find the best matching logical font family and update font selector accordingly
@@ -1318,7 +1318,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
 
         // Add the new entry to the cache with the original FontSelectPattern,
         // so that we can find it next time as a direct cache hit.
-        maFontInstanceList[ rFontSelData ] = pEntry;
+        maFontInstanceList[ aFontSelDataOrig ] = pEntry;
     }
 
     mpFirstEntry = pEntry;
