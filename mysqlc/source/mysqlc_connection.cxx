@@ -118,7 +118,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     // parse url. Url has the following format:
     // external server: sdbc:mysqlc:[hostname]:[port]/[dbname]
 
-    if (!url.compareTo(OUString(MYSQLC_URI_PREFIX), sizeof(MYSQLC_URI_PREFIX)-1)) {
+    if (url.startsWith(MYSQLC_URI_PREFIX)) {
         nIndex = 12;
     } else {
         bEmbedded = sal_True;
