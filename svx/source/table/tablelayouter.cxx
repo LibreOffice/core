@@ -72,14 +72,13 @@ TableLayouter::~TableLayouter()
 
 
 
-basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
+basegfx::B2ITuple TableLayouter::getCellSize( const CellRef& xCell, const CellPos& rPos  ) const
 {
     sal_Int32 width = 0;
     sal_Int32 height = 0;
 
     try
     {
-        CellRef xCell( getCell( rPos ) );
         if( xCell.is() && !xCell->isMerged() )
         {
             CellPos aPos( rPos );
@@ -117,14 +116,13 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
 
 
 
-bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rArea ) const
+bool TableLayouter::getCellArea( const CellRef& xCell, const CellPos& rPos, basegfx::B2IRectangle& rArea ) const
 {
     try
     {
-        CellRef xCell( getCell( rPos ) );
         if( xCell.is() && !xCell->isMerged() && isValid(rPos) )
         {
-            const basegfx::B2ITuple aCellSize( getCellSize( rPos ) );
+            const basegfx::B2ITuple aCellSize( getCellSize( xCell, rPos ) );
             const bool bRTL = (mxTable->getSdrTableObj()->GetWritingMode() == WritingMode_RL_TB);
 
             if( (rPos.mnCol < ((sal_Int32)maColumns.size()) && (rPos.mnRow < ((sal_Int32)maRows.size()) ) ) )
@@ -862,7 +860,7 @@ void TableLayouter::updateCells( Rectangle& rRectangle )
             if( xCell.is() )
             {
                 basegfx::B2IRectangle aCellArea;
-                getCellArea( aPos, aCellArea );
+                getCellArea( xCell, aPos, aCellArea );
 
                 Rectangle aCellRect;
                 aCellRect.Left() = aCellArea.getMinX();
