@@ -2605,8 +2605,8 @@ sal_uLong GDIMetaFile::GetChecksum() const
 
             case META_CLIPREGION_ACTION :
             {
-                MetaClipRegionAction* pAct = dynamic_cast< MetaClipRegionAction* >(pAction);
-                const Region& rRegion = pAct->GetRegion();
+                MetaClipRegionAction& rAct = dynamic_cast<MetaClipRegionAction&>(*pAction);
+                const Region& rRegion = rAct.GetRegion();
 
                 if(rRegion.HasPolyPolygonOrB2DPolyPolygon())
                 {
@@ -2657,7 +2657,7 @@ sal_uLong GDIMetaFile::GetChecksum() const
                         }
                     }
 
-                    sal_uInt8 tmp = (sal_uInt8)pAct->IsClipping();
+                    sal_uInt8 tmp = (sal_uInt8)rAct.IsClipping();
                     nCrc = rtl_crc32(nCrc, &tmp, 1);
                 }
                 else
