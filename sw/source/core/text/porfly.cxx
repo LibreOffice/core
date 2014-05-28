@@ -24,6 +24,7 @@
 #include "rootfrm.hxx"
 #include "frmfmt.hxx"
 #include "viewsh.hxx"
+#include "textboxhelper.hxx"
 
 #include <vcl/outdev.hxx>
 #include <editeng/lrspitem.hxx>
@@ -349,6 +350,35 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
         // OD 2004-04-13 #i26791#
         SwObjPositioningInProgress aObjPosInProgress( *pSdrObj );
         aObjPositioning.CalcPosition();
+    }
+
+    SwFrmFmt* pShape = FindFrmFmt(pSdrObj);
+    const SwFmtAnchor& rAnchor(pShape->GetAnchor());
+    if (rAnchor.GetAnchorId() == FLY_AS_CHAR)
+    {
+        // This is an inline draw shape, see if it has a textbox.
+        SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(pShape);
+        if (pTextBox)
+        {
+            // It has, so look up its text rectangle, and adjust the position
+            // of the textbox accordingly.
+            Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pShape);
+
+            SwFmtHoriOrient aHori(pTextBox->GetHoriOrient());
+            aHori.SetHoriOrient(css::text::HoriOrientation::NONE);
+            sal_Int32 nLeft = aTextRectangle.getX() - rFrm.Frm().Left();
+            aHori.SetPos(nLeft);
+
+            SwFmtVertOrient aVert(pTextBox->GetVertOrient());
+            aVert.SetVertOrient(css::text::VertOrientation::NONE);
+            sal_Int32 nTop = aTextRectangle.getY() - rFrm.Frm().Top() - nFlyAsc;
+            aVert.SetPos(nTop);
+
+            pTextBox->LockModify();
+            pTextBox->SetFmtAttr(aHori);
+            pTextBox->SetFmtAttr(aVert);
+            pTextBox->UnlockModify();
+        }
     }
 
     SetAlign( aObjPositioning.GetLineAlignment() );
