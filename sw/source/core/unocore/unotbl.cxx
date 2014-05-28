@@ -1780,14 +1780,14 @@ sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal)
             // hier muessen die Actions aufgehoben werden
             UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
         }
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        pTblCrsr->MakeBoxSels();
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+        rTblCrsr.MakeBoxSels();
         {
             UnoActionContext aContext(pUnoCrsr->GetDoc());
-            bRet = pTblCrsr->GetDoc()->SplitTbl(
-                    pTblCrsr->GetSelectedBoxes(), !Horizontal, Count);
+            bRet = rTblCrsr.GetDoc()->SplitTbl(
+                    rTblCrsr.GetSelectedBoxes(), !Horizontal, Count);
         }
-        pTblCrsr->MakeBoxSels();
+        rTblCrsr.MakeBoxSels();
     }
     return bRet;
 }
