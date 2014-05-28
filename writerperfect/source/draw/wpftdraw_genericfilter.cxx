@@ -32,6 +32,7 @@
 #include "CDRImportFilter.hxx"
 #include "CMXImportFilter.hxx"
 #include "MSPUBImportFilter.hxx"
+#include "MWAWDrawImportFilter.hxx"
 #include "FreehandImportFilter.hxx"
 #include "VisioImportFilter.hxx"
 #include "WPGImportFilter.hxx"
@@ -52,6 +53,10 @@ static cppu::ImplementationEntry const services[] = {
     { &MSPUBImportFilter_createInstance,
       &MSPUBImportFilter_getImplementationName,
       &MSPUBImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &MWAWDrawImportFilter_createInstance,
+      &MWAWDrawImportFilter_getImplementationName,
+      &MWAWDrawImportFilter_getSupportedServiceNames,
       &cppu::createSingleComponentFactory, 0, 0 },
     { &VisioImportFilter_createInstance,
       &VisioImportFilter_getImplementationName,
