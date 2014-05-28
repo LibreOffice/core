@@ -3385,15 +3385,15 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName)
                     pUnoCrsr->GetPoint()->nNode = *pLastNd;
 
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-                    pCrsr->MakeBoxSels();
+                    SwUnoTableCrsr& rCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+                    rCrsr.MakeBoxSels();
 
                     SfxItemSet aSet(pDoc->GetAttrPool(),
                                     RES_BOX, RES_BOX,
                                     SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                     0);
                     aSet.Put(SvxBoxInfoItem( SID_ATTR_BORDER_INNER ));
-                    pDoc->GetTabBorders(*pCrsr, aSet);
+                    pDoc->GetTabBorders(rCrsr, aSet);
                     const SvxBoxInfoItem& rBoxInfoItem =
                         (const SvxBoxInfoItem&)aSet.Get(SID_ATTR_BORDER_INNER);
                     const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
