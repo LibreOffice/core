@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <sstream>
 
 #include <boost/shared_ptr.hpp>
 
@@ -96,6 +97,24 @@ const shared_ptr<RVNGInputStream> lcl_createStreamForURL(const rtl::OUString &rU
 
     const shared_ptr<RVNGInputStream> pInput(new WPXSvInputStream(xInputStream));
     return pInput;
+}
+
+void lcl_testSubStreams(const shared_ptr<RVNGInputStream> &pInput)
+{
+    shared_ptr<RVNGInputStream> pSubStream;
+
+    // all valid substreams can be read
+    for (std::size_t i = 0; i != pInput->subStreamCount(); ++i)
+    {
+        std::ostringstream msg("opening substream ");
+        msg << i;
+        pSubStream.reset(pInput->getSubStreamById(i));
+        CPPUNIT_ASSERT_MESSAGE(msg.str(), bool(pSubStream));
+    }
+
+    // invalid substreams cannot be read
+    pSubStream.reset(pInput->getSubStreamById(pInput->subStreamCount()));
+    CPPUNIT_ASSERT(!pSubStream);
 }
 
 void WPXSvStreamTest::testRead()
@@ -281,8 +300,17 @@ void WPXSvStreamTest::testStructured()
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());
+        CPPUNIT_ASSERT(2 == pInput->subStreamCount());
+        lcl_testSubStreams(pInput);
+
+        // check for existing substream
+        CPPUNIT_ASSERT(pInput->existsSubStream("WordDocument"));
         shared_ptr<RVNGInputStream> pSubStream(pInput->getSubStreamByName("WordDocument"));
         CPPUNIT_ASSERT(bool(pSubStream));
+        CPPUNIT_ASSERT(!pSubStream->isEnd());
+
+        // check for not existing substream
+        CPPUNIT_ASSERT(!pInput->existsSubStream("foo"));
         pSubStream.reset(pInput->getSubStreamByName("foo"));
         CPPUNIT_ASSERT(!pSubStream);
     }
@@ -293,8 +321,18 @@ void WPXSvStreamTest::testStructured()
         assert(bool(pInput));
 
         CPPUNIT_ASSERT(pInput->isStructured());
+        CPPUNIT_ASSERT(9 == pInput->subStreamCount());
+        lcl_testSubStreams(pInput);
+
+        // check for existing substream
+        CPPUNIT_ASSERT(pInput->existsSubStream("content.xml"));
         shared_ptr<RVNGInputStream> pSubStream(pInput->getSubStreamByName("content.xml"));
         CPPUNIT_ASSERT(bool(pSubStream));
+        CPPUNIT_ASSERT(!pSubStream->isEnd());
+
+        // check for not existing substream
+        CPPUNIT_ASSERT(pInput->existsSubStream("content.xml"));
+        CPPUNIT_ASSERT(!pInput->existsSubStream("foo"));
         pSubStream.reset(pInput->getSubStreamByName("foo"));
         CPPUNIT_ASSERT(!pSubStream);
     }
@@ -304,7 +342,11 @@ void WPXSvStreamTest::testStructured()
         const shared_ptr<RVNGInputStream> pInput(lcl_createStream());
 
         CPPUNIT_ASSERT(!pInput->isStructured());
+        CPPUNIT_ASSERT(0 == pInput->subStreamCount());
+        CPPUNIT_ASSERT(!pInput->existsSubStream("foo"));
         CPPUNIT_ASSERT(0 == pInput->getSubStreamByName("foo"));
+        CPPUNIT_ASSERT(0 == pInput->getSubStreamById(42));
+        CPPUNIT_ASSERT(0 == pInput->subStreamName(42));
     }
 }
 
