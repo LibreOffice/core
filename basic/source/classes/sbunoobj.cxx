@@ -4349,7 +4349,8 @@ public:
                                  const Sequence< Any >& rParams,
                                  Sequence< sal_Int16 >& rOutParamIndex,
                                  Sequence< Any >& rOutParam )
-        throw( CannotConvertException, InvocationTargetException, std::exception ) SAL_OVERRIDE;
+        throw (CannotConvertException, InvocationTargetException,
+               RuntimeException, std::exception ) SAL_OVERRIDE;
 
     // XComponent
     virtual void SAL_CALL dispose() throw(RuntimeException, std::exception) SAL_OVERRIDE;
@@ -4450,7 +4451,8 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
                                             const Sequence< Any >& rParams,
                                             Sequence< sal_Int16 >&,
                                             Sequence< Any >& )
-    throw( CannotConvertException, InvocationTargetException, std::exception )
+    throw (CannotConvertException, InvocationTargetException,
+           RuntimeException, std::exception)
 {
     SolarMutexGuard guard;
 
