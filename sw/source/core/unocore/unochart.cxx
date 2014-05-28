@@ -2635,10 +2635,9 @@ the last cell they can be added.
 bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         sal_Int32 nFirstNew, sal_Int32 nCount )
 {
-    bool bChanged = false;
-
     SwUnoTableCrsr* pUnoTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
-    //pUnoTblCrsr->MakeBoxSels();
+    if (!pUnoTblCrsr)
+        return false;
 
     const SwStartNode *pStartNd  = 0;
     const SwTableBox  *pStartBox = 0;
@@ -2665,6 +2664,7 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
     SwRangeDescriptor aDesc;
     FillRangeDescriptor( aDesc, aCellRange );
 
+    bool bChanged = false;
     OUString aNewStartCell;
     OUString aNewEndCell;
     if (bExtendCol && aDesc.nBottom + 1 == nFirstNew)
