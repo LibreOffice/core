@@ -694,6 +694,9 @@ BasicManager* SfxObjectShell::GetBasicManager() const
 #ifdef DISABLE_SCRIPTING
     return NULL;
 #else
+    if (pImp->m_bNoBasicCapabilities)
+        return NULL;
+
     BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
     if ( !pBasMgr )
         pBasMgr = SFX_APP()->GetBasicManager();
