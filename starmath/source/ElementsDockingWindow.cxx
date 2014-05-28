@@ -622,7 +622,7 @@ SmElementsDockingWindow::SmElementsDockingWindow(SfxBindings* pInputBindings, Sf
 {
     maElementsControl.SetBorderStyle( WINDOW_BORDER_MONO );
 
-    maElementListBox.SetDropDownLineCount( 10 );
+    maElementListBox.SetDropDownLineCount( SAL_N_ELEMENTS(aCategories) );
 
     for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS(aCategories) ; i++)
     {
