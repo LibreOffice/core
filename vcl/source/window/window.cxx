@@ -1235,6 +1235,9 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
 
 bool Window::ImplCheckUIFont( const Font& rFont )
 {
+    if (Application::IsHeadlessModeEnabled())
+        return true;
+
     if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
         return true;
 
