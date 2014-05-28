@@ -940,8 +940,8 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
 
             Size szDestPixel = mpVDev->LogicToPixel(srcSize, aTWIPSMode);
 
-            double pixXScale = static_cast<double>(szDestPixel.Width()) / originalPixelRect.GetWidth();
-            double pixYScale = static_cast<double>(szDestPixel.Height()) / originalPixelRect.GetHeight();
+            double pixXScale = originalPixelRect.GetWidth() ? static_cast<double>(szDestPixel.Width()) / originalPixelRect.GetWidth() : 1.0;
+            double pixYScale = originalPixelRect.GetHeight() ? static_cast<double>(szDestPixel.Height()) / originalPixelRect.GetHeight() : 1.0;
 
             // AS: If the image has been scaled down, then scale down the quality
             //   that we use for JPEG compression.
@@ -1272,8 +1272,8 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             aMatrix.set(2, 2, 1.0);
 
             // scale bitmap
-            double XScale = (double)aNewRect.GetWidth()/aOldRect.GetWidth();
-            double YScale = (double)aNewRect.GetHeight()/aOldRect.GetHeight();
+            double XScale = aOldRect.GetWidth() ? (double)aNewRect.GetWidth()/aOldRect.GetWidth() : 1.0;
+            double YScale = aOldRect.GetHeight() ? (double)aNewRect.GetHeight()/aOldRect.GetHeight() : 1.0;
 
             aMatrix.scale( XScale, YScale );
 
