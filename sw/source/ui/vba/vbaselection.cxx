@@ -348,7 +348,8 @@ SwVbaSelection::Move( const uno::Any& _unit, const uno::Any& _count, const uno::
     }
 }
 
-void SwVbaSelection::NextCell( sal_Int32 nCount, word::E_DIRECTION eDirection ) throw ( uno::RuntimeException )
+void SwVbaSelection::NextCell(sal_Int32 nCount, word::E_DIRECTION eDirection)
+    throw (css::script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextTable > xTextTable;
