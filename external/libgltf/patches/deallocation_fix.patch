@@ -1,0 +1,12 @@
+diff -ur libgltf.org/src/LoadScene.cpp libgltf/src/LoadScene.cpp
+--- libgltf.org/src/LoadScene.cpp	2014-05-28 15:35:48.232375923 +0200
++++ libgltf/src/LoadScene.cpp	2014-05-28 15:36:02.600375314 +0200
+@@ -144,7 +144,7 @@
+         free(gHandle->files);
+         gHandle->files = NULL;
+     }
+-    delete gHandle;
++    free(gHandle);
+     return true;
+ }
+ 

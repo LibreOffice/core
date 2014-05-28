@@ -20,6 +20,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/include_path_freetype.patch \
 	external/libgltf/patches/openmp-disable.patch \
 	external/libgltf/patches/rgba_textures.patch \
+	external/libgltf/patches/deallocation_fix.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
