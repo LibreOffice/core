@@ -564,13 +564,10 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     SwTOXBase & rTOXBase( m_pImpl->GetTOXSectionOrThrow() );
 
     sal_uInt16 nCreate = rTOXBase.GetCreateType();
-    sal_uInt16 nTOIOptions = 0;
     sal_uInt16 nOLEOptions = rTOXBase.GetOLEOptions();
     const TOXTypes eTxBaseType = rTOXBase.GetTOXType()->GetType();
-    if (eTxBaseType == TOX_INDEX)
-    {
-        nTOIOptions = rTOXBase.GetOptions();
-    }
+    sal_uInt16 nTOIOptions = (eTxBaseType == TOX_INDEX)
+        ? rTOXBase.GetOptions() : 0;
     SwForm  aForm(rTOXBase.GetTOXForm());
     bool bForm = false;
     switch (pEntry->nWID)
@@ -852,7 +849,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                         rPropertyName, rValue, aAttrSet);
 
                 const SwSectionFmts& rSects = m_pImpl->m_pDoc->GetSections();
-                for (sal_uInt16 i = 0; i < rSects.size(); i++)
+                for (size_t i = 0; i < rSects.size(); ++i)
                 {
                     const SwSectionFmt* pTmpFmt = rSects[ i ];
                     if (pTmpFmt == pSectionFmt)
@@ -929,7 +926,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     SwSections aSectArr;
                     pSectionFmt->GetChildSections(aSectArr,
                             SORTSECT_NOT, false);
-                    for(sal_uInt16 i = 0; i < aSectArr.size(); i++)
+                    for(size_t i = 0; i < aSectArr.size(); ++i)
                     {
                         SwSection* pSect = aSectArr[i];
                         if(pSect->GetType() == TOX_HEADER_SECTION)
@@ -1172,7 +1169,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case WID_PARA_LEV10:
             {
                 // in sdbcx::Index Label 1 begins at Pos 2 otherwise at Pos 1
-                sal_uInt16 nLPos = pTOXBase->GetType() == TOX_INDEX ? 2 : 1;
+                const sal_uInt16 nLPos = pTOXBase->GetType() == TOX_INDEX ? 2 : 1;
                 OUString aString;
                 SwStyleNameMapper::FillProgName(
                         rForm.GetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1),
@@ -1195,7 +1192,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 SwTOXMark::InsertTOXMarks( aMarks, *pType );
                 uno::Sequence< uno::Reference<text::XDocumentIndexMark> > aXMarks(aMarks.size());
                 uno::Reference<text::XDocumentIndexMark>* pxMarks = aXMarks.getArray();
-                for(sal_uInt16 i = 0; i < aMarks.size(); i++)
+                for(size_t i = 0; i < aMarks.size(); ++i)
                 {
                     SwTOXMark* pMark = aMarks[i];
                     pxMarks[i] = SwXDocumentIndexMark::CreateXDocumentIndexMark(
@@ -2461,7 +2458,7 @@ SwXDocumentIndexes::getCount() throw (uno::RuntimeException, std::exception)
 
     sal_uInt32 nRet = 0;
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
+    for( size_t n = 0; n < rFmts.size(); ++n )
     {
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2486,7 +2483,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
     sal_Int32 nIdx = 0;
 
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
+    for( size_t n = 0; n < rFmts.size(); ++n )
     {
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2517,7 +2514,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
 
     OUString sToFind(rName);
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
+    for( size_t n = 0; n < rFmts.size(); ++n )
     {
         const SwSection* pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2546,8 +2543,7 @@ SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException, std::excepti
 
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     sal_Int32 nCount = 0;
-    sal_uInt16 n;
-    for( n = 0; n < rFmts.size(); ++n )
+    for( size_t n = 0; n < rFmts.size(); ++n )
     {
         SwSection const*const pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2559,8 +2555,8 @@ SwXDocumentIndexes::getElementNames() throw (uno::RuntimeException, std::excepti
 
     uno::Sequence< OUString > aRet(nCount);
     OUString* pArray = aRet.getArray();
-    sal_uInt16 nCnt;
-    for( n = 0, nCnt = 0; n < rFmts.size(); ++n )
+    sal_Int32 nCnt = 0;
+    for( size_t n = 0; n < rFmts.size(); ++n )
     {
         SwSection const*const pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2583,7 +2579,7 @@ throw (uno::RuntimeException, std::exception)
 
     OUString sToFind(rName);
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
-    for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
+    for( size_t n = 0; n < rFmts.size(); ++n )
     {
         SwSection const*const pSect = rFmts[ n ]->GetSection();
         if( TOX_CONTENT_SECTION == pSect->GetType() &&
@@ -2709,11 +2705,11 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
 
     const OUString& rStyles =
         rTOXBase.GetStyleNames(static_cast<sal_uInt16>(nIndex));
-    const sal_uInt16 nStyles = comphelper::string::getTokenCount(rStyles, TOX_STYLE_DELIMITER);
+    const sal_Int32 nStyles = comphelper::string::getTokenCount(rStyles, TOX_STYLE_DELIMITER);
     uno::Sequence<OUString> aStyles(nStyles);
     OUString* pStyles = aStyles.getArray();
     OUString aString;
-    for(sal_uInt16 i = 0; i < nStyles; i++)
+    for(sal_Int32 i = 0; i < nStyles; ++i)
     {
         SwStyleNameMapper::FillProgName(
             rStyles.getToken(i, TOX_STYLE_DELIMITER),
@@ -3007,7 +3003,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         GetPattern(static_cast<sal_uInt16>(nIndex));
     SwFormTokens::iterator aIt = aPattern.begin();
 
-    sal_uInt16 nTokenCount = 0;
+    sal_Int32 nTokenCount = 0;
     uno::Sequence< beans::PropertyValues > aRetSeq;
     OUString aString;
     while(aIt != aPattern.end()) // #i21237#
