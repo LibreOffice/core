@@ -220,6 +220,11 @@ SmElementsControl::SmElementsControl(Window *pParent, const ResId& rResId)
     , mbVerticalMode(true)
     , mpScroll(new ScrollBar(this, WB_VERT))
 {
+    SetMapMode( MapMode(MAP_100TH_MM) );
+    SetDrawMode( DRAWMODE_DEFAULT );
+    SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
+    SetDigitLanguage( LANGUAGE_ENGLISH );
+
     maFormat.SetBaseSize(PixelToLogic(Size(0, SmPtsTo100th_mm(12))));
 
     mpScroll->SetScrollHdl( LINK(this, SmElementsControl, ScrollHdl) );
@@ -239,11 +244,6 @@ void SmElementsControl::setVerticalMode(bool bVerticalMode)
 void SmElementsControl::Paint(const Rectangle&)
 {
     Push();
-
-    SetMapMode( MapMode(MAP_100TH_MM) );
-    SetDrawMode( DRAWMODE_DEFAULT );
-    SetLayoutMode( TEXT_LAYOUT_BIDI_LTR );
-    SetDigitLanguage( LANGUAGE_ENGLISH );
 
     bool bOldVisibleState = mpScroll->IsVisible();
 
