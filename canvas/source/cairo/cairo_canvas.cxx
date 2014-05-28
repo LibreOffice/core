@@ -90,7 +90,7 @@ namespace cairocanvas
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->nSize )
-            throw lang::NoSupportException( "Passed SystemGraphicsData invalid!", NULL);
+            throw lang::NoSupportException( "Passed SystemGraphicsData invalid!" );
 
         bool bHasXRender = IsCairoWorking(pOutDev);
         ENSURE_ARG_OR_THROW( bHasXRender == true, "SpriteCanvas::SpriteCanvas: No RENDER extension" );

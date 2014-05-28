@@ -464,7 +464,7 @@ const Property& OPropertyContainerHelper::getProperty( const OUString& _rName ) 
         PropertyDescriptionNameMatch( _rName )
     );
     if ( pos == m_aProperties.end() )
-        throw UnknownPropertyException( _rName, NULL );
+        throw UnknownPropertyException( _rName );
 
     return pos->aProperty;
 }

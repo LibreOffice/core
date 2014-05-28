@@ -1276,7 +1276,7 @@ namespace dbmm
 
             SharedStorage xScriptsRoot( aDocStorage.getScriptsRoot( _eScriptType ) );
             if ( !xScriptsRoot.is() )
-                throw RuntimeException("internal error", NULL );
+                throw RuntimeException("internal error");
 
             // loop through the script libraries
             Sequence< OUString > aStorageElements( xScriptsRoot->getElementNames() );

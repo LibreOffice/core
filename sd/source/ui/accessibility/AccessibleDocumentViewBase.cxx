@@ -277,7 +277,7 @@ Reference<XAccessible> SAL_CALL
         if (nIndex == 0)
             return mxAccessibleOLEObject;
 
-    throw lang::IndexOutOfBoundsException ( "no child with index " + OUString::number(nIndex), NULL);
+    throw lang::IndexOutOfBoundsException ( "no child with index " + OUString::number(nIndex) );
 }
 
 

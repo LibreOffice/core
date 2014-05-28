@@ -96,7 +96,7 @@ namespace dxcanvas
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->hDC )
-            throw lang::NoSupportException("Passed SystemGraphicsData or HDC invalid!", NULL);
+            throw lang::NoSupportException("Passed SystemGraphicsData or HDC invalid!");
 
         sal_Int64 nPtr = 0;
         maArguments[0] >>= nPtr;
@@ -157,7 +157,7 @@ namespace dxcanvas
 
         const SystemGraphicsData* pSysData=reinterpret_cast<const SystemGraphicsData*>(aSeq.getConstArray());
         if( !pSysData || !pSysData->hDC )
-            throw lang::NoSupportException( "Passed SystemGraphicsData or HDC invalid!", NULL);
+            throw lang::NoSupportException( "Passed SystemGraphicsData or HDC invalid!");
 
         sal_Int64 nPtr = 0;
         maArguments[0] >>= nPtr;
@@ -175,7 +175,7 @@ namespace dxcanvas
         hBmp=(HBITMAP)GetCurrentObject(pSysData->hDC, OBJ_BITMAP);
         if( !hBmp || GetObjectType(pSysData->hDC) != OBJ_MEMDC )
         {
-            throw lang::NoSupportException( "Passed HDC is no mem DC/has no bitmap selected!", NULL);
+            throw lang::NoSupportException( "Passed HDC is no mem DC/has no bitmap selected!");
         }
 
         mpTarget.reset( new DXBitmap(

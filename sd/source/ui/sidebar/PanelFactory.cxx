@@ -137,12 +137,10 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     ::Window* pParentWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( ! xParentWindow.is() || pParentWindow==NULL)
         throw RuntimeException(
-            OUString("PanelFactory::createUIElement called without ParentWindow"),
-            NULL);
+            "PanelFactory::createUIElement called without ParentWindow");
     if ( ! xFrame.is())
         throw RuntimeException(
-            OUString("PanelFactory::createUIElement called without XFrame"),
-            NULL);
+            "PanelFactory::createUIElement called without XFrame");
 
     // Tunnel through the controller to obtain a ViewShellBase.
     ViewShellBase* pBase = NULL;
@@ -155,7 +153,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
             pBase = pController->GetViewShellBase();
     }
     if (pBase == NULL)
-        throw RuntimeException("can not get ViewShellBase for frame", NULL);
+        throw RuntimeException("can not get ViewShellBase for frame");
 
     // Get bindings from given arguments.
     const sal_uInt64 nBindingsValue (aArguments.getOrDefault("SfxBindings", sal_uInt64(0)));

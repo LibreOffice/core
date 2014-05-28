@@ -68,7 +68,7 @@ namespace dxcanvas
         const SystemEnvData *pData = rWindow.GetSystemData();
         const HWND hWnd = reinterpret_cast<HWND>(pData->hWnd);
         if( !IsWindow( hWnd ) )
-            throw lang::NoSupportException( "Passed window has invalid system window, or canvas out-of-process!", NULL);
+            throw lang::NoSupportException( "Passed window has invalid system window, or canvas out-of-process!" );
 
         mpSpriteCanvas = &rSpriteCanvas;
 

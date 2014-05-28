@@ -227,7 +227,7 @@ namespace logging
                 }
 
                 if ( !bSuccess )
-                    throw ServiceNotRegisteredException( sServiceName, NULL );
+                    throw ServiceNotRegisteredException( sServiceName );
             }
 
             return xInstance;

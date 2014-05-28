@@ -34,7 +34,7 @@ namespace
                     return;
                 OUString sMsg = OUString::createFromAscii(m_pError->message);
                 g_error_free(m_pError);
-                throw RuntimeException(sMsg, NULL);
+                throw RuntimeException(sMsg);
             }
             GError** getRef() { return &m_pError; }
     };
@@ -51,7 +51,7 @@ namespace
                                NULL,
                                error.getRef());
         if(!proxy)
-            throw RuntimeException("couldnt get a proxy!",NULL);
+            throw RuntimeException("couldnt get a proxy!");
         return proxy;
     }
 }
