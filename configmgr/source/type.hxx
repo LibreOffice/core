@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_TYPE_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_TYPE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;

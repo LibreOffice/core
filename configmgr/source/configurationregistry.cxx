@@ -17,46 +17,46 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/beans/NamedValue.hpp"
-#include "com/sun/star/beans/Property.hpp"
-#include "com/sun/star/beans/XProperty.hpp"
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
-#include "com/sun/star/container/XNamed.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/registry/InvalidRegistryException.hpp"
-#include "com/sun/star/registry/InvalidValueException.hpp"
-#include "com/sun/star/registry/MergeConflictException.hpp"
-#include "com/sun/star/registry/RegistryKeyType.hpp"
-#include "com/sun/star/registry/RegistryValueType.hpp"
-#include "com/sun/star/registry/XRegistryKey.hpp"
-#include "com/sun/star/registry/XSimpleRegistry.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/DeploymentException.hpp"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/Type.hxx"
-#include "com/sun/star/uno/TypeClass.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/util/XFlushable.hpp"
-#include "cppu/unotype.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase3.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "cppuhelper/weak.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/Property.hpp>
+#include <com/sun/star/beans/XProperty.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/registry/InvalidRegistryException.hpp>
+#include <com/sun/star/registry/InvalidValueException.hpp>
+#include <com/sun/star/registry/MergeConflictException.hpp>
+#include <com/sun/star/registry/RegistryKeyType.hpp>
+#include <com/sun/star/registry/RegistryValueType.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/registry/XSimpleRegistry.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/TypeClass.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/util/XFlushable.hpp>
+#include <cppu/unotype.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include "configurationregistry.hxx"
 

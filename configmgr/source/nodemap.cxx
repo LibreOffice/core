@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include "node.hxx"
 #include "nodemap.hxx"

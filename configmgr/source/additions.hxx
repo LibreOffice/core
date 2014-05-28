@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_ADDITIONS_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_ADDITIONS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <list>
 

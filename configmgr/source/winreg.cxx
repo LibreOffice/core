@@ -19,14 +19,14 @@
 #pragma warning(pop)
 #endif
 
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "rtl/ustring.hxx"
-#include "osl/file.h"
-#include "osl/file.hxx"
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <rtl/ustring.hxx>
+#include <osl/file.h>
+#include <osl/file.hxx>
 #include "winreg.hxx"
 #include "writemodfile.hxx"
 

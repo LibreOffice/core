@@ -20,12 +20,12 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_PARSER_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_PARSER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <set>
 
-#include "salhelper/simplereferenceobject.hxx"
-#include "xmlreader/xmlreader.hxx"
+#include <salhelper/simplereferenceobject.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 namespace xmlreader { struct Span; }
 

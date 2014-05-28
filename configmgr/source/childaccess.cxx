@@ -17,31 +17,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <vector>
 
-#include "com/sun/star/container/XChild.hpp"
-#include "com/sun/star/lang/NoSupportException.hpp"
-#include "com/sun/star/lang/XUnoTunnel.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/Type.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "cppu/unotype.hxx"
-#include "cppuhelper/queryinterface.hxx"
-#include "cppuhelper/weak.hxx"
-#include "comphelper/servicehelper.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/string.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <cppu/unotype.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/weak.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/string.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include "access.hxx"
 #include "childaccess.hxx"

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_GROUPNODE_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_GROUPNODE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 #include "node.hxx"
 #include "nodemap.hxx"

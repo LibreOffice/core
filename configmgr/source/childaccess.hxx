@@ -20,20 +20,20 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_CHILDACCESS_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_CHILDACCESS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
-#include "boost/scoped_ptr.hpp"
-#include "boost/shared_ptr.hpp"
-#include "com/sun/star/container/XChild.hpp"
-#include "com/sun/star/lang/NoSupportException.hpp"
-#include "com/sun/star/lang/XUnoTunnel.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "rtl/ref.hxx"
-#include "sal/types.h"
+#include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ref.hxx>
+#include <sal/types.h>
 
 #include "access.hxx"
 #include "path.hxx"

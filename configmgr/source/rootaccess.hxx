@@ -20,20 +20,20 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_ROOTACCESS_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_ROOTACCESS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <set>
 #include <vector>
 
-#include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/util/ChangesSet.hpp"
-#include "com/sun/star/util/XChangesBatch.hpp"
-#include "com/sun/star/util/XChangesNotifier.hpp"
-#include "boost/shared_ptr.hpp"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/util/ChangesSet.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#include <boost/shared_ptr.hpp>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include "access.hxx"
 #include "modifications.hxx"

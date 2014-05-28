@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "com/sun/star/beans/Optional.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
 
 #include "components.hxx"
 #include "node.hxx"

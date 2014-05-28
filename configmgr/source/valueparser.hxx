@@ -20,17 +20,17 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_VALUEPARSER_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_VALUEPARSER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <set>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-#include "rtl/ref.hxx"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
-#include "xmlreader/pad.hxx"
-#include "xmlreader/xmlreader.hxx"
+#include <boost/noncopyable.hpp>
+#include <rtl/ref.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <xmlreader/pad.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 #include "type.hxx"
 

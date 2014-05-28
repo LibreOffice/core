@@ -17,33 +17,33 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <vector>
 
-#include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/lang/EventObject.hpp"
-#include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Type.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/util/ChangesEvent.hpp"
-#include "com/sun/star/util/ChangesSet.hpp"
-#include "com/sun/star/util/ElementChange.hpp"
-#include "com/sun/star/util/XChangesBatch.hpp"
-#include "com/sun/star/util/XChangesListener.hpp"
-#include "com/sun/star/util/XChangesNotifier.hpp"
-#include "comphelper/sequenceasvector.hxx"
-#include "cppu/unotype.hxx"
-#include "cppuhelper/queryinterface.hxx"
-#include "cppuhelper/weak.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/util/ChangesEvent.hpp>
+#include <com/sun/star/util/ChangesSet.hpp>
+#include <com/sun/star/util/ElementChange.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/util/XChangesListener.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#include <comphelper/sequenceasvector.hxx>
+#include <cppu/unotype.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/weak.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 
 #include "broadcaster.hxx"
 #include "childaccess.hxx"

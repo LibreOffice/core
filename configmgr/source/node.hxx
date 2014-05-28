@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_NODE_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_NODE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ref.hxx"
-#include "salhelper/simplereferenceobject.hxx"
+#include <rtl/ref.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include "nodemap.hxx"
 

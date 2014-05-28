@@ -17,41 +17,41 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
-#include "com/sun/star/beans/NamedValue.hpp"
-#include "com/sun/star/beans/PropertyChangeEvent.hpp"
-#include "com/sun/star/beans/XPropertyChangeListener.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/beans/XPropertyState.hpp"
-#include "com/sun/star/configuration/theDefaultProvider.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
-#include "com/sun/star/container/XNameReplace.hpp"
-#include "com/sun/star/container/XNamed.hpp"
-#include "com/sun/star/lang/EventObject.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/util/XChangesBatch.hpp"
-#include "cppuhelper/implbase1.hxx"
-#include "osl/conditn.hxx"
-#include "osl/thread.h"
-#include "osl/thread.hxx"
-#include "osl/time.h"
-#include "rtl/ref.hxx"
-#include "rtl/string.h"
-#include "rtl/textcvt.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <osl/conditn.hxx>
+#include <osl/thread.h>
+#include <osl/thread.hxx>
+#include <osl/time.h>
+#include <rtl/ref.hxx>
+#include <rtl/string.h>
+#include <rtl/textcvt.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 #include <comphelper/processfactory.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 

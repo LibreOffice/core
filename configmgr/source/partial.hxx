@@ -20,15 +20,15 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_PARTIAL_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_PARTIAL_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <boost/unordered_map.hpp>
 #include <set>
 
-#include "boost/noncopyable.hpp"
+#include <boost/noncopyable.hpp>
 
 #include "path.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 namespace configmgr {
 
