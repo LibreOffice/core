@@ -270,15 +270,30 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     vMup = glm::normalize(vMup);
                     vMup *= 25.0f;
 
-                    if(nCode == KEY_Q)vMoveBy += vMove*(0.001f*fModelSize);
-                    if(nCode == KEY_E)vMoveBy -= vMove*(0.001f*fModelSize);
-                    if(nCode == KEY_A)vMoveBy -= vStrafe*(0.001f*fModelSize);
-                    if(nCode == KEY_D)vMoveBy += vStrafe*(0.001f*fModelSize);
-                    if(nCode == KEY_W)vMoveBy -= vMup*(0.001f*fModelSize);
-                    if(nCode == KEY_S)vMoveBy += vMup*(0.001f*fModelSize);
+                    if(nCode == KEY_Q)vMoveBy += vMove*(0.0005f*fModelSize);
+                    if(nCode == KEY_E)vMoveBy -= vMove*(0.0005f*fModelSize);
+                    if(nCode == KEY_A)vMoveBy -= vStrafe*(0.0005f*fModelSize);
+                    if(nCode == KEY_D)vMoveBy += vStrafe*(0.0005f*fModelSize);
+                    if(nCode == KEY_W)vMoveBy -= vMup*(0.0005f*fModelSize);
+                    if(nCode == KEY_S)vMoveBy += vMup*(0.0005f*fModelSize);
                 }
                 gltf_renderer_move_camera(m_pHandle, vMoveBy.x, vMoveBy.y, vMoveBy.z, 0.0);
                 update();
+            }
+        }
+    }
+    // TODO: Clean this mess up after libgltf gets a working camera handling
+     else if( pEvent->GetId() == VCLEVENT_WINDOW_KEYUP )
+    {
+        KeyEvent* pKeyEvt = (KeyEvent*)pEvent->GetData();
+        if(pKeyEvt)
+        {
+            const sal_uInt16 nCode = pKeyEvt->GetKeyCode().GetCode();
+            if (nCode == KEY_Q || nCode == KEY_E ||
+                nCode == KEY_A || nCode == KEY_D ||
+                nCode == KEY_W || nCode == KEY_S )
+            {
+                gltf_renderer_move_camera(m_pHandle, 0.0, 0.0, 0.0, 0.0);
             }
         }
     }
