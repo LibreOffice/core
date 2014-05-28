@@ -940,6 +940,11 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     // but we should have filtered quite some unnecessary calls already.
 
 #ifndef DISABLE_SCRIPTING
+    Reference<document::XEmbeddedScripts> xScripts(_rxComponent, UNO_QUERY);
+    if (!xScripts.is())
+        // Likely BASIC is disabled.
+        return;
+
     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
     rTheCurrentComponent = _rxComponent;
     if ( pAppMgr )
