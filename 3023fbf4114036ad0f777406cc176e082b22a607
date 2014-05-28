@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa963961_eb7d81e8",
+        "filename": "sd/source/filter/html/pubdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000464
+      },
+      "writtenOn": "2014-05-28T17:40:46Z",
+      "side": 1,
+      "message": "This causes SIGABRT. The warning is: warn:vcl.layout:24250:1:include/vcl/builder.hxx:268: widget \"previewDrawingarea\" not found in .ui",
+      "revId": "3023fbf4114036ad0f777406cc176e082b22a607",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
