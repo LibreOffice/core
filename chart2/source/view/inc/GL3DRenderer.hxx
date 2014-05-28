@@ -142,6 +142,13 @@ struct TextInfo
     float vertex[12];
 };
 
+struct BatchBarInfo
+{
+    std::vector <glm::mat4> modelMatrixList;
+    std::vector <glm::mat3> normalMatrixList;
+    std::vector <glm::vec4> colorList;
+};
+
 class OpenGL3DRenderer
 {
 public:
@@ -249,6 +256,16 @@ private:
         GLint m_2DColorID;
         GLint m_MatrixID;
 
+        // Batch render
+        GLint m_3DBatchProID;
+        GLint m_3DBatchProjectionID;
+        GLint m_3DBatchViewID;
+        GLint m_3DBatchModelID;
+        GLint m_3DBatchNormalMatrixID;
+        GLint m_3DBatchVertexID;
+        GLint m_3DBatchNormalID;
+        GLint m_3DBatchColorID;
+
         ShaderResources();
         ~ShaderResources();
 
@@ -343,6 +360,14 @@ private:
     GLuint mnPickingFbo;
     GLuint mnPickingRboDepth;
     GLuint mnPickingRboColor;
+
+    BatchBarInfo m_BarSurface[3];
+    GLuint m_BatchModelMatrixBuf;
+    GLuint m_BatchNormalMatrixBuf;
+    GLuint m_BatchColorBuf;
+    MaterialParameters m_Batchmaterial;
+    GLuint m_Batch3DUBOBuffer;
+    GLint m_Batch3DActualSizeLight;
 };
 
 }
