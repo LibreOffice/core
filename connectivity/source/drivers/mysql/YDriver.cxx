@@ -115,12 +115,12 @@ namespace connectivity
 
         bool isOdbcUrl(const OUString& _sUrl)
         {
-            return _sUrl.copy(0,16) == "sdbc:mysql:odbc:";
+            return _sUrl.startsWith("sdbc:mysql:odbc:");
         }
 
         bool isNativeUrl(const OUString& _sUrl)
         {
-            return (!_sUrl.compareTo(OUString("sdbc:mysql:mysqlc:"), sizeof("sdbc:mysql:mysqlc:")-1));
+            return _sUrl.startsWith("sdbc:mysql:mysqlc:");
         }
 
         T_DRIVERTYPE lcl_getDriverType(const OUString& _sUrl)

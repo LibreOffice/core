@@ -243,7 +243,7 @@ sal_Bool SAL_CALL MysqlCDriver::acceptsURL(const OUString& url)
         throw(SQLException, RuntimeException, std::exception)
 {
     OSL_TRACE("MysqlCDriver::acceptsURL");
-    return (!url.compareTo(OUString("sdbc:mysqlc:"), sizeof("sdbc:mysqlc:")-1));
+    return url.startsWith("sdbc:mysqlc:");
 }
 /* }}} */
 
