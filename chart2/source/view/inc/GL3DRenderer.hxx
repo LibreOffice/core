@@ -230,6 +230,7 @@ private:
     void GetBatchMiddleInfo(Extrude3DInfo &extrude3D);
     void InitBatch3DUniformBlock();
     void UpdateBatch3DUniformBlock();
+    void RenderBatchBars();
 private:
 
     struct ShaderResources
