@@ -12,9 +12,9 @@
 
 #define TOP_SURFACE 0
 #define MIDDLE_SURFACE 1
-#define BOTTOM_SURFACE 2
-#define FLAT_TOP_SURFACE 3
-#define FLAT_BOTTOM_SURFACE 4
+#define FLAT_BOTTOM_SURFACE 2
+#define BOTTOM_SURFACE 3
+#define FLAT_TOP_SURFACE 4
 
 static GLfloat boundBox[] = {
     0.0f, 0.0f, 0.0f,

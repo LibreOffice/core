@@ -119,6 +119,9 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
     glDeleteBuffers(1, &m_3DUBOBuffer);
     glDeleteBuffers(1, &m_VertexBuffer);
     glDeleteBuffers(1, &m_NormalBuffer);
+    glDeleteBuffers(1, &m_Batch3DUBOBuffer);
+    glDeleteBuffers(1, &m_3DUBOBuffer);
+    glDeleteBuffers(1, &m_3DUBOBuffer);
 
     glDeleteFramebuffers(1, &mnPickingFbo);
     glDeleteRenderbuffers(1, &mnPickingRboDepth);
@@ -146,6 +149,14 @@ OpenGL3DRenderer::ShaderResources::ShaderResources()
     , m_2DVertexID(0)
     , m_2DColorID(0)
     , m_MatrixID(0)
+    , m_3DBatchProID(0)
+    , m_3DBatchProjectionID(0)
+    , m_3DBatchViewID(0)
+    , m_3DBatchModelID(0)
+    , m_3DBatchNormalMatrixID(0)
+    , m_3DBatchVertexID(0)
+    , m_3DBatchNormalID(0)
+    , m_3DBatchColorID(0)
 {
 }
 
@@ -155,6 +166,7 @@ OpenGL3DRenderer::ShaderResources::~ShaderResources()
     glDeleteProgram(m_TextProID);
     glDeleteProgram(m_ScreenTextProID);
     glDeleteProgram(m_3DProID);
+    glDeleteProgram(m_3DBatchProID);
 }
 
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
@@ -183,6 +195,14 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
 
+    m_3DBatchProID = OpenGLHelper::LoadShaders("shape3DVertexShaderBatch", "shape3DFragmentShaderBatch");
+    m_3DBatchProjectionID = glGetUniformLocation(m_3DBatchProID, "P");
+    m_3DBatchViewID = glGetUniformLocation(m_3DBatchProID, "V");
+    m_3DBatchModelID = glGetAttribLocation(m_3DBatchProID, "M");
+    m_3DBatchNormalMatrixID = glGetAttribLocation(m_3DBatchProID, "normalMatrix");
+    m_3DBatchVertexID = glGetAttribLocation(m_3DBatchProID, "vertexPositionModelspace");
+    m_3DBatchNormalID = glGetAttribLocation(m_3DBatchProID, "vertexNormalModelspace");
+    m_3DBatchColorID = glGetAttribLocation(m_3DBatchProID, "barColor");
     CHECK_GL_ERROR();
 }
 
@@ -243,6 +263,9 @@ void OpenGL3DRenderer::init()
     glGenBuffers(1, &m_CubeElementBuf);
     glGenBuffers(1, &m_VertexBuffer);
     glGenBuffers(1, &m_NormalBuffer);
+    glGenBuffers(1, &m_BatchModelMatrixBuf);
+    glGenBuffers(1, &m_BatchNormalMatrixBuf);
+    glGenBuffers(1, &m_BatchColorBuf);
     glGenBuffers(1, &m_BoundBox);
     glBindBuffer(GL_ARRAY_BUFFER, m_BoundBox);
     glBufferData(GL_ARRAY_BUFFER, sizeof(boundBox), boundBox, GL_STATIC_DRAW);
@@ -1028,6 +1051,7 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
         m_Normals.clear();
         m_Indices.clear();
     }
+    m_Batchmaterial = m_Extrude3DInfo.material;
 }
 
 void OpenGL3DRenderer::EndAddShape3DExtrudeObject()
@@ -1679,7 +1703,8 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     //Polygon
     RenderPolygon3DObject();
     //Shape3DExtrudeObject
-    RenderExtrude3DObject();
+    RenderBatchBars();
+//    RenderExtrude3DObject();
     //render text
     RenderTextShape();
     // render screen text
@@ -1838,6 +1863,113 @@ void OpenGL3DRenderer::GetBatchBarsInfo()
             m_BarSurface[0].colorList.push_back(extrude3DInfo.material.materialColor);
         }
     }
+}
+
+void OpenGL3DRenderer::RenderBatchBars()
+{
+    GetBatchBarsInfo();
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+
+    glUseProgram(maResources.m_3DBatchProID);
+    UpdateBatch3DUniformBlock();
+    glBindBuffer(GL_UNIFORM_BUFFER, m_Batch3DUBOBuffer);
+    glBufferSubData(GL_UNIFORM_BUFFER, m_Batch3DActualSizeLight, sizeof(MaterialParameters), &m_Batchmaterial);
+    CHECK_GL_ERROR();
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    glUniformMatrix4fv(maResources.m_3DBatchViewID, 1, GL_FALSE, &m_3DView[0][0]);
+    glUniformMatrix4fv(maResources.m_3DBatchProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+    CHECK_GL_ERROR();
+    GLuint vertexBuf = m_Extrude3DInfo.rounded ? m_CubeVertexBuf : m_BoundBox;
+    GLuint normalBuf = m_Extrude3DInfo.rounded ? m_CubeNormalBuf : m_BoundBoxNormal;
+    //vertex
+    glEnableVertexAttribArray(maResources.m_3DBatchVertexID);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuf);
+    glVertexAttribPointer(maResources.m_3DBatchVertexID, // attribute
+                          3,                  // size
+                          GL_FLOAT,           // type
+                          GL_FALSE,           // normalized?
+                          0,                  // stride
+                          (void*)0            // array buffer offset
+                          );
+    //normal
+    glEnableVertexAttribArray(maResources.m_3DBatchNormalID);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBuf);
+    glVertexAttribPointer(maResources.m_3DBatchNormalID, // attribute
+                            3,                  // size
+                            GL_FLOAT,           // type
+                            GL_FALSE,           // normalized?
+                            0,                  // stride
+                            (void*)0            // array buffer offset
+                            );
+
+    for (unsigned int i = 0; i < 4 ; i++)
+    {
+        glEnableVertexAttribArray(maResources.m_3DBatchModelID + i);
+        glBindBuffer(GL_ARRAY_BUFFER, m_BatchModelMatrixBuf);
+        glVertexAttribPointer(maResources.m_3DBatchModelID + i, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), reinterpret_cast<GLvoid*>(sizeof(GLfloat) * i * 4));
+        glVertexAttribDivisor(maResources.m_3DBatchModelID + i, 1);
+    }
+
+    for (unsigned int i = 0; i < 3 ; i++)
+    {
+        glEnableVertexAttribArray(maResources.m_3DBatchNormalMatrixID + i);
+        glBindBuffer(GL_ARRAY_BUFFER, m_BatchNormalMatrixBuf);
+        glVertexAttribPointer(maResources.m_3DBatchNormalMatrixID + i, 3, GL_FLOAT, GL_FALSE, sizeof(glm::mat3), reinterpret_cast<GLvoid*>(sizeof(GLfloat) * i * 3));
+        glVertexAttribDivisor(maResources.m_3DBatchNormalMatrixID + i, 1);
+    }
+    glEnableVertexAttribArray(maResources.m_3DBatchColorID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_BatchColorBuf);
+    glVertexAttribPointer(maResources.m_3DBatchColorID , 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4), 0);
+    glVertexAttribDivisor(maResources.m_3DBatchColorID, 1);
+    if (m_Extrude3DInfo.rounded)
+    {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_CubeElementBuf);
+        for (int i = 0; i < 3; i++)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, m_BatchModelMatrixBuf);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * m_BarSurface[i].modelMatrixList.size(), &m_BarSurface[i].modelMatrixList[0][0], GL_DYNAMIC_DRAW);
+            glBindBuffer(GL_ARRAY_BUFFER, m_BatchNormalMatrixBuf);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat3) * m_BarSurface[i].normalMatrixList.size(), &m_BarSurface[i].normalMatrixList[0][0], GL_DYNAMIC_DRAW);
+            glBindBuffer(GL_ARRAY_BUFFER, m_BatchColorBuf);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * m_BarSurface[i].colorList.size(), &m_BarSurface[i].colorList[0], GL_DYNAMIC_DRAW);
+            glDrawElementsInstancedBaseVertex(GL_TRIANGLES,
+                                              m_Extrude3DInfo.size[i],
+                                              GL_UNSIGNED_SHORT,
+                                              reinterpret_cast<GLvoid*>(m_Extrude3DInfo.startIndex[i]),
+                                              m_BarSurface[i].modelMatrixList.size(),
+                                              0);
+        }
+    }
+    else
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, m_BatchModelMatrixBuf);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * m_BarSurface[0].modelMatrixList.size(), &m_BarSurface[0].modelMatrixList[0][0], GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, m_BatchNormalMatrixBuf);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat3) * m_BarSurface[0].normalMatrixList.size(), &m_BarSurface[0].normalMatrixList[0][0], GL_DYNAMIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, m_BatchColorBuf);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * m_BarSurface[0].colorList.size(), &m_BarSurface[0].colorList[0], GL_DYNAMIC_DRAW);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 36, m_BarSurface[0].modelMatrixList.size());
+    }
+    glDisableVertexAttribArray(maResources.m_3DBatchVertexID);
+    glDisableVertexAttribArray(maResources.m_3DBatchNormalID);
+    glDisableVertexAttribArray(maResources.m_3DBatchColorID);
+    glVertexAttribDivisor(maResources.m_3DBatchColorID, 0);
+    for (unsigned int i = 0; i < 4 ; i++)
+    {
+        glDisableVertexAttribArray(maResources.m_3DBatchModelID + i);
+        glVertexAttribDivisor(maResources.m_3DBatchModelID + i, 0);
+    }
+    for (unsigned int i = 0; i < 3 ; i++)
+    {
+        glDisableVertexAttribArray(maResources.m_3DBatchNormalMatrixID + i);
+        glVertexAttribDivisor(maResources.m_3DBatchNormalMatrixID + i, 0);
+    }
+    glFinish();
+    glUseProgram(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glDisable(GL_CULL_FACE);
 }
 }
 }
