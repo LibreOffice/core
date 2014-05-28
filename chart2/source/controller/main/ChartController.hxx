@@ -215,7 +215,8 @@ public:
     // ::com::sun::star::view::XSelectionSupplier (optional interface)
     virtual sal_Bool SAL_CALL
         select( const ::com::sun::star::uno::Any& rSelection )
-                            throw ( com::sun::star::lang::IllegalArgumentException, std::exception ) SAL_OVERRIDE;
+            throw (css::lang::IllegalArgumentException,
+                   css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Any  SAL_CALL
         getSelection() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

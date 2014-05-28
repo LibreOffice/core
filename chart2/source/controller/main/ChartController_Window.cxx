@@ -1618,9 +1618,8 @@ bool ChartController::requestQuickHelp(
 }
 
 // XSelectionSupplier (optional interface)
-        sal_Bool SAL_CALL ChartController
-::select( const uno::Any& rSelection )
-        throw( lang::IllegalArgumentException, std::exception )
+sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
+    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     bool bSuccess = false;
 
