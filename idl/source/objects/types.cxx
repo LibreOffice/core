@@ -784,6 +784,10 @@ SvMetaType::SvMetaType( const OString& rName,
     aBasicPostfix.setString(rBasicPostfix);
 }
 
+SvMetaType::~SvMetaType() {
+    delete pAttrList;
+}
+
 void SvMetaType::Load( SvPersistStream & rStm )
 {
     SvMetaExtern::Load( rStm );

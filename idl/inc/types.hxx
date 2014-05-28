@@ -173,6 +173,8 @@ public:
                         const OString& rCName, const OString& rBasicName,
                         const OString& rBasicPostfix );
 
+    virtual ~SvMetaType();
+
     SvMetaAttributeMemberList & GetAttrList() const;
     sal_uLong               GetAttrCount() const
                         {
