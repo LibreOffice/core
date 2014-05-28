@@ -77,7 +77,8 @@ protected:
 
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException) SAL_OVERRIDE;
+        throw (css::beans::UnknownPropertyException,
+               css::uno::RuntimeException) SAL_OVERRIDE;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
