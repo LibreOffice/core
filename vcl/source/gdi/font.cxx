@@ -301,6 +301,15 @@ void Font::SetFillColor( const Color& rColor )
         mpImplFont->mbTransparent = true;
 }
 
+void Font::SetBackgroundColor(const Color& rColor)
+{
+    // FIXME
+    //MakeUnique();
+    /*mpImplFont->maBkgColor = rColor;
+    if () */
+}
+
+
 void Font::SetTransparent( bool bTransparent )
 {
 
@@ -956,6 +965,8 @@ Font Font::identifyFont( const void* i_pBuffer, sal_uInt32 i_nSize )
 const Color& Font::GetColor() const { return mpImplFont->maColor; }
 
 const Color& Font::GetFillColor() const { return mpImplFont->maFillColor; }
+
+const Color& Font::GetBackgroundColor() const { /*return mpImplFont->maBkgColor;*/ }
 
 bool Font::IsTransparent() const { return mpImplFont->mbTransparent; }
 

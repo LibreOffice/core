@@ -60,12 +60,10 @@ public:
     void                SetAlign( FontAlign );
     FontAlign           GetAlign() const;
 
-    // XXX: now font has background iff it is (single-y) underlined
-    // also forces non transparency
-    bool                HasBackgroundColor() const {
+    // FIXME(matteocam) // XXX: is this the right spot for changes?
+    void                SetBackgroundColor(const Color &);
+    const Color&        GetBackgroundColor() const;
 
-                return GetUnderline() == UNDERLINE_SINGLE;
-    }
 
     void                SetName( const OUString& rFamilyName );
     const OUString&     GetName() const;

@@ -481,18 +481,6 @@ void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 
     rSalLayout.DrawBase() += Point( mnTextOffX, mnTextOffY );
 
-    /*
-     if the text has some background get it
-     and the set it as the new filling color
-    */
-    if (mbTextBackground) {
-        // FIXME(matteocam)
-        // set right background // (XXX: now getting fixed color)
-        Color aColor = RGB_COLORDATA(0x66,0x66, 0xFF); // blue-ish
-        // SetBackground does not work
-        SetTextFillColor(aColor);
-    }
-
     if( IsTextFillColor() )
         ImplDrawTextBackground( rSalLayout );
 
