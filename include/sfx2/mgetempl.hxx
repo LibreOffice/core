@@ -54,6 +54,7 @@ class SfxManageStyleSheetPage : public SfxTabPage
 
     SfxStyleSheetBase *pStyle;
     SfxStyleFamilies *pFamilies;
+    SfxStyleSheetBasePool *pPool;
     const SfxStyleFamilyItem *pItem;
     OUString aBuf;
     bool bModified;
