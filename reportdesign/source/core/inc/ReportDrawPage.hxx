@@ -31,7 +31,8 @@ namespace reportdesign
         OReportDrawPage(const OReportDrawPage&);
         void operator =(const OReportDrawPage&);
     protected:
-        virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape )throw (std::exception) SAL_OVERRIDE;
+        virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape )
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const throw (std::exception) SAL_OVERRIDE;
     public:
         OReportDrawPage(SdrPage* pPage,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);

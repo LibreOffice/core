@@ -170,7 +170,8 @@ Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
     return aSeq;
 }
 
-Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sal_Int32 nIndex) const throw()
+Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal_Int32 nIndex) const
+    throw (RuntimeException)
 {
     //  NumberingRule aRule;
     const SvxNumberFormat& rFmt = maRule.GetLevel((sal_uInt16) nIndex);

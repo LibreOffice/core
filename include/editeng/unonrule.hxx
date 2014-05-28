@@ -72,7 +72,8 @@ public:
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // internal
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const throw();
+    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const
+        throw (css::uno::RuntimeException);
     void setNumberingRuleByIndex( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rProperties, sal_Int32 nIndex) throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException );
 
     static sal_Int16 Compare( const com::sun::star::uno::Any& rAny1, const com::sun::star::uno::Any& rAny2 );
