@@ -618,16 +618,15 @@ static void lcl_FormatTable(SwFrmFmt* pTblFmt)
     }
 }
 
-static void lcl_CrsrSelect(SwPaM* pCrsr, bool bExpand)
+static void lcl_CrsrSelect(SwPaM& rCrsr, bool bExpand)
 {
     if(bExpand)
     {
-        if(!pCrsr->HasMark())
-            pCrsr->SetMark();
+        if(!rCrsr.HasMark())
+            rCrsr.SetMark();
     }
-    else if(pCrsr->HasMark())
-        pCrsr->DeleteMark();
-
+    else if(rCrsr.HasMark())
+        rCrsr.DeleteMark();
 }
 
 static void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pBox, bool bRow)
@@ -1648,9 +1647,9 @@ sal_Bool SwXTextTableCursor::gotoCellByName(const OUString& sCellName, sal_Bool 
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->GotoTblBox(sCellName);
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+        lcl_CrsrSelect(rTblCrsr, Expand);
+        bRet = rTblCrsr.GotoTblBox(sCellName);
     }
     return bRet;
 }
@@ -1662,9 +1661,9 @@ sal_Bool SwXTextTableCursor::goLeft(sal_Int16 Count, sal_Bool Expand) throw( uno
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->Left( Count,CRSR_SKIP_CHARS, false, false);
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+        lcl_CrsrSelect(rTblCrsr, Expand);
+        bRet = rTblCrsr.Left(Count, CRSR_SKIP_CHARS, false, false);
     }
     return bRet;
 }
@@ -1676,9 +1675,9 @@ sal_Bool SwXTextTableCursor::goRight(sal_Int16 Count, sal_Bool Expand) throw( un
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->Right( Count, CRSR_SKIP_CHARS, false, false);
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+        lcl_CrsrSelect(rTblCrsr, Expand);
+        bRet = rTblCrsr.Right(Count, CRSR_SKIP_CHARS, false, false);
     }
     return bRet;
 }
@@ -1690,9 +1689,9 @@ sal_Bool SwXTextTableCursor::goUp(sal_Int16 Count, sal_Bool Expand) throw( uno::
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->UpDown(true, Count, 0, 0);
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+        lcl_CrsrSelect(rTblCrsr, Expand);
+        bRet = rTblCrsr.UpDown(true, Count, 0, 0);
     }
     return bRet;
 }
@@ -1704,9 +1703,9 @@ sal_Bool SwXTextTableCursor::goDown(sal_Int16 Count, sal_Bool Expand) throw( uno
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
-        bRet = pTblCrsr->UpDown(false, Count, 0, 0);
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+        lcl_CrsrSelect(rTblCrsr, Expand);
+        bRet = rTblCrsr.UpDown(false, Count, 0, 0);
     }
     return bRet;
 }
@@ -1717,9 +1716,9 @@ void SwXTextTableCursor::gotoStart(sal_Bool Expand) throw( uno::RuntimeException
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
-        pTblCrsr->MoveTable(fnTableCurr, fnTableStart);
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+        lcl_CrsrSelect(rTblCrsr, Expand);
+        rTblCrsr.MoveTable(fnTableCurr, fnTableStart);
     }
 }
 
@@ -1729,9 +1728,9 @@ void SwXTextTableCursor::gotoEnd(sal_Bool Expand) throw( uno::RuntimeException, 
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        lcl_CrsrSelect( pTblCrsr, Expand );
-        pTblCrsr->MoveTable(fnTableCurr, fnTableEnd);
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+        lcl_CrsrSelect(rTblCrsr, Expand);
+        rTblCrsr.MoveTable(fnTableCurr, fnTableEnd);
     }
 }
 
