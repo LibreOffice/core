@@ -638,7 +638,8 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
     throw beans::UnknownPropertyException();
 }
 
-void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, uno::Any& rAny, const SfxItemSet& rSet ) throw( beans::UnknownPropertyException )
+void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pMap, uno::Any& rAny, const SfxItemSet& rSet )
+    throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     switch( pMap->nWID )
     {
