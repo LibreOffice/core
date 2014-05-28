@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_FILTER_SOURCE_PLACEWARE_ZIPFILE_HXX
+#define INCLUDED_FILTER_SOURCE_PLACEWARE_ZIPFILE_HXX
+
 /* Local file head offsets.  The header is followed by the filename and
    possibly the extra field. */
 #define zf_lfhSig       0
@@ -80,5 +83,7 @@
 
 /* Compression values. */
 #define zf_compNone     0
+
+#endif // INCLUDED_FILTER_SOURCE_PLACEWARE_ZIPFILE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
