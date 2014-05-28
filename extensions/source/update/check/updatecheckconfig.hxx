@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIG_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIG_HXX
+
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -226,5 +229,7 @@ T getValue( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Name
 
     return T();
 }
+
+#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECKCONFIG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
