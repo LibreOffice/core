@@ -62,8 +62,6 @@
 #include <map>
 #include <boost/unordered_map.hpp>
 
-using namespace com::sun::star;
-
 
 namespace chart {
 
@@ -175,7 +173,7 @@ public:
 
 protected:
 
-    std::map<OUString, uno::Any> maProperties;
+    std::map<OUString, css::uno::Any> maProperties;
     com::sun::star::awt::Point maPosition;
     com::sun::star::awt::Size maSize;
 
@@ -189,29 +187,29 @@ private:
 class DummyCube : public DummyXShape
 {
 public:
-    DummyCube(const drawing::Position3D &rPos, const drawing::Direction3D& rSize,
-            const uno::Reference< beans::XPropertySet > & xPropSet,
+    DummyCube(const css::drawing::Position3D &rPos, const css::drawing::Direction3D& rSize,
+            const css::uno::Reference< css::beans::XPropertySet > & xPropSet,
             const tPropertyNameMap& rPropertyNameMap );
 };
 
 class DummyCylinder : public DummyXShape
 {
 public:
-    DummyCylinder(const drawing::Position3D&, const drawing::Direction3D& rSize );
+    DummyCylinder(const css::drawing::Position3D&, const css::drawing::Direction3D& rSize );
 };
 
 class DummyPyramid : public DummyXShape
 {
 public:
-    DummyPyramid(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
-            const uno::Reference< beans::XPropertySet > & xPropSet,
+    DummyPyramid(const css::drawing::Position3D& rPosition, const css::drawing::Direction3D& rSize,
+            const css::uno::Reference< css::beans::XPropertySet > & xPropSet,
             const tPropertyNameMap& rPropertyNameMap );
 };
 
 class DummyCone : public DummyXShape
 {
 public:
-    DummyCone(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize);
+    DummyCone(const css::drawing::Position3D& rPosition, const css::drawing::Direction3D& rSize);
 };
 
 class DummyPieSegment2D : public DummyXShape
@@ -219,7 +217,7 @@ class DummyPieSegment2D : public DummyXShape
 public:
     DummyPieSegment2D(double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree,
             double fUnitCircleInnerRadius, double fUnitCircleOuterRadius,
-            const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene);
+            const css::drawing::Direction3D& rOffset, const css::drawing::HomogenMatrix& rUnitCircleToScene);
     void render() SAL_OVERRIDE;
 private:
     double mfUnitCircleStartAngleDegree;
@@ -227,25 +225,25 @@ private:
     double mfUnitCircleInnerRadius;
     double mfUnitCircleOuterRadius;
 
-    drawing::Direction3D maOffset;
-    drawing::HomogenMatrix maUnitCircleToScene;
+    css::drawing::Direction3D maOffset;
+    css::drawing::HomogenMatrix maUnitCircleToScene;
 };
 
 class DummyPieSegment : public DummyXShape
 {
 public:
     DummyPieSegment(
-            const drawing::Direction3D& rOffset, const drawing::HomogenMatrix& rUnitCircleToScene);
+            const css::drawing::Direction3D& rOffset, const css::drawing::HomogenMatrix& rUnitCircleToScene);
 
 private:
-    drawing::Direction3D maOffset;
-    drawing::HomogenMatrix maUnitCircleToScene;
+    css::drawing::Direction3D maOffset;
+    css::drawing::HomogenMatrix maUnitCircleToScene;
 };
 
 class DummyStripe : public DummyXShape
 {
 public:
-    DummyStripe(const Stripe& rStripe, const uno::Reference< beans::XPropertySet > & xPropSet,
+    DummyStripe(const Stripe& rStripe, const css::uno::Reference< css::beans::XPropertySet > & xPropSet,
             const tPropertyNameMap& rPropertyNameMap );
 
 private:
@@ -255,32 +253,32 @@ private:
 class DummyArea3D : public DummyXShape
 {
 public:
-    DummyArea3D(const drawing::PolyPolygonShape3D& rShape);
+    DummyArea3D(const css::drawing::PolyPolygonShape3D& rShape);
 
 private:
-    drawing::PolyPolygonShape3D maShapes;
+    css::drawing::PolyPolygonShape3D maShapes;
 };
 
 class DummyArea2D : public DummyXShape
 {
 public:
-    DummyArea2D(const drawing::PointSequenceSequence& rShape);
+    DummyArea2D(const css::drawing::PointSequenceSequence& rShape);
 
     virtual void render() SAL_OVERRIDE;
 
 private:
-    drawing::PointSequenceSequence maShapes;
+    css::drawing::PointSequenceSequence maShapes;
 };
 
 class DummySymbol2D : public DummyXShape
 {
 public:
-    DummySymbol2D(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
+    DummySymbol2D(const css::drawing::Position3D& rPosition, const css::drawing::Direction3D& rSize,
             sal_Int32 nStandardSymbol, sal_Int32 nFillColor);
     void render() SAL_OVERRIDE;
 private:
-    drawing::Position3D mrPosition;
-    drawing::Direction3D mrSize;
+    css::drawing::Position3D mrPosition;
+    css::drawing::Direction3D mrSize;
     sal_Int32 mnStandardSymbol;
     sal_Int32 mnFillColor;
 };
@@ -288,17 +286,17 @@ private:
 class DummyGraphic2D : public DummyXShape
 {
 public:
-    DummyGraphic2D(const drawing::Position3D& rPosition, const drawing::Direction3D& rSize,
-            const uno::Reference< graphic::XGraphic > xGraphic );
+    DummyGraphic2D(const css::drawing::Position3D& rPosition, const css::drawing::Direction3D& rSize,
+            const css::uno::Reference< css::graphic::XGraphic > xGraphic );
 
 private:
-    uno::Reference< graphic::XGraphic > mxGraphic;
+    css::uno::Reference< css::graphic::XGraphic > mxGraphic;
 };
 
 class DummyCircle : public DummyXShape
 {
 public:
-    DummyCircle(const awt::Point& rPosition, const awt::Size& rSize);
+    DummyCircle(const css::awt::Point& rPosition, const css::awt::Size& rSize);
 
     virtual void render() SAL_OVERRIDE;
 };
@@ -306,30 +304,30 @@ public:
 class DummyLine3D : public DummyXShape
 {
 public:
-    DummyLine3D(const drawing::PolyPolygonShape3D& rPoints, const VLineProperties& rProperties);
+    DummyLine3D(const css::drawing::PolyPolygonShape3D& rPoints, const VLineProperties& rProperties);
 
 private:
-    drawing::PolyPolygonShape3D maPoints;
+    css::drawing::PolyPolygonShape3D maPoints;
 };
 
 class DummyLine2D : public DummyXShape
 {
 public:
-    DummyLine2D(const drawing::PointSequenceSequence& rPoints, const VLineProperties* pProperties);
-    DummyLine2D(const awt::Size& rSize, const awt::Point& rPosition);
+    DummyLine2D(const css::drawing::PointSequenceSequence& rPoints, const VLineProperties* pProperties);
+    DummyLine2D(const css::awt::Size& rSize, const css::awt::Point& rPosition);
 
     virtual void render() SAL_OVERRIDE;
 
 private:
-    drawing::PointSequenceSequence maPoints;
+    css::drawing::PointSequenceSequence maPoints;
 };
 
 class DummyRectangle : public DummyXShape
 {
 public:
     DummyRectangle();
-    DummyRectangle(const awt::Size& rSize);
-    DummyRectangle(const awt::Size& rSize, const awt::Point& rPoint, const tNameSequence& rNames,
+    DummyRectangle(const css::awt::Size& rSize);
+    DummyRectangle(const css::awt::Size& rSize, const css::awt::Point& rPoint, const tNameSequence& rNames,
             const tAnySequence& rValues );
 
     virtual void render() SAL_OVERRIDE;
@@ -339,7 +337,7 @@ class DummyText : public DummyXShape
 {
 public:
     DummyText(const OUString& rText, const tNameSequence& rNames,
-            const tAnySequence& rValues, const uno::Any& rTrans, com::sun::star::uno::Reference<
+            const tAnySequence& rValues, const css::uno::Any& rTrans, com::sun::star::uno::Reference<
             com::sun::star::drawing::XShapes > xTarget, double nRotation);
 
     virtual void render() SAL_OVERRIDE;
@@ -352,7 +350,7 @@ private:
     void setTransformatAsProperty(const com::sun::star::drawing::HomogenMatrix3& rMatrix);
 
     OUString maText;
-    uno::Any maTrans;
+    css::uno::Any maTrans;
     BitmapEx maBitmap;
     double mnRotation;
 };
