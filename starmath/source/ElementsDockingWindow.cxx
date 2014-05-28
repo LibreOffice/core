@@ -220,7 +220,7 @@ SmElementsControl::SmElementsControl(Window *pParent, const ResId& rResId)
     , mbVerticalMode(true)
     , mpScroll(new ScrollBar(this, WB_VERT))
 {
-    maFormat.SetBaseSize(PixelToLogic(Size(0, 24)));
+    maFormat.SetBaseSize(PixelToLogic(Size(0, SmPtsTo100th_mm(12))));
 
     mpScroll->SetScrollHdl( LINK(this, SmElementsControl, ScrollHdl) );
     mpScroll->Show();
