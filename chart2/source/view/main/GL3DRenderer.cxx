@@ -1965,7 +1965,6 @@ void OpenGL3DRenderer::RenderBatchBars()
         glDisableVertexAttribArray(maResources.m_3DBatchNormalMatrixID + i);
         glVertexAttribDivisor(maResources.m_3DBatchNormalMatrixID + i, 0);
     }
-    glFinish();
     glUseProgram(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glDisable(GL_CULL_FACE);
