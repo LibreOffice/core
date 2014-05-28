@@ -138,7 +138,7 @@ void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInt
     if ( !aItem.hasValue( ) ||
          aItem.getValueType( ) != cppu::UnoType<OUString>::get() )
          throw IllegalArgumentException(
-            OUString( "invalid value type or any has no value" ),
+            "invalid value type or any has no value",
             rXInterface,
             aArgPos );
 
@@ -160,7 +160,7 @@ void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference<
     if ( !aItemList.hasValue( ) ||
          aItemList.getValueType( ) != getCppuType((Sequence<OUString>*)0) )
          throw IllegalArgumentException(
-            OUString( "invalid value type or any has no value" ),
+            "invalid value type or any has no value",
             rXInterface,
             aArgPos );
 
@@ -188,7 +188,7 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
            (aPosition.getValueType( ) != cppu::UnoType<sal_Int16>::get()) &&
            (aPosition.getValueType( ) != cppu::UnoType<sal_Int8>::get()) ) )
          throw IllegalArgumentException(
-            OUString( "invalid value type or any has no value" ),
+            "invalid value type or any has no value",
             rXInterface,
             aArgPos );
 
@@ -201,7 +201,7 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
     // index was not correct
     if ( CB_ERR == lRet )
         throw IllegalArgumentException(
-            OUString( "invalid item position" ),
+            "invalid item position",
             rXInterface,
             aArgPos );
 }
@@ -240,7 +240,7 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
            (aPosition.getValueType( ) != cppu::UnoType<sal_Int16>::get()) &&
            (aPosition.getValueType( ) != cppu::UnoType<sal_Int8>::get()) ) )
          throw IllegalArgumentException(
-            OUString( "invalid value type or any has no value" ),
+            "invalid value type or any has no value",
             rXInterface,
             aArgPos );
 
@@ -249,7 +249,7 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
 
     if ( nPos < -1 )
         throw IllegalArgumentException(
-            OUString("invalid index"),
+            "invalid index",
             rXInterface,
             aArgPos );
 
@@ -257,7 +257,7 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
 
     if ( (CB_ERR == lRet) && (-1 != nPos) )
         throw IllegalArgumentException(
-            OUString("invalid index"),
+            "invalid index",
             rXInterface,
             aArgPos );
 }
@@ -350,7 +350,7 @@ void SAL_CALL CheckboxSetState(
     if ( !aState.hasValue( ) ||
          aState.getValueType( ) != cppu::UnoType<sal_Bool>::get())
          throw IllegalArgumentException(
-            OUString( "invalid value type or any has no value" ),
+            "invalid value type or any has no value",
             rXInterface,
             aArgPos );
 

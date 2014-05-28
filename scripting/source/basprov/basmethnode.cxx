@@ -276,7 +276,7 @@ namespace basprov
         else
         {
             throw IllegalArgumentException(
-                OUString( "BasicMethodNodeImpl::invoke: function name not supported!"  ),
+                "BasicMethodNodeImpl::invoke: function name not supported!",
                 Reference< XInterface >(), 1 );
         }
 

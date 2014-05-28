@@ -118,7 +118,7 @@ void CWinFileOpenImpl::setDisplayDirectory(const OUString& aDirectory)
         if ( ::osl::FileBase::E_None !=
              ::osl::FileBase::getSystemPathFromFileURL(aDirectory,aSysDirectory))
             throw IllegalArgumentException(
-                OUString("Invalid directory"),
+                "Invalid directory",
                 static_cast<XFilePicker2*>(m_FilePicker), 1);
 
         // we ensure that there is a trailing '/' at the end of
@@ -189,7 +189,7 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
         rc = ::com::sun::star::ui::dialogs::ExecutableDialogResults::CANCEL;
     else
         throw uno::RuntimeException(
-            OUString("Error executing dialog"),
+            "Error executing dialog",
             static_cast<XFilePicker2*>(m_FilePicker));
 
     return rc;
@@ -208,7 +208,7 @@ void SAL_CALL CWinFileOpenImpl::appendFilter(const OUString& aTitle, const OUStr
 
     if (!bRet)
         throw IllegalArgumentException(
-            OUString("filter already exists"),
+            "filter already exists",
             static_cast<XFilePicker2*>(m_FilePicker), 1);
 
     // #95345# see MSDN OPENFILENAME
@@ -233,7 +233,7 @@ void SAL_CALL CWinFileOpenImpl::setCurrentFilter(const OUString& aTitle)
 
     if (filterPos < 0)
         throw IllegalArgumentException(
-            OUString("filter doesn't exist"),
+            "filter doesn't exist",
             static_cast<XFilePicker2*>(m_FilePicker), 1);
 
     // filter index of the base class starts with 1

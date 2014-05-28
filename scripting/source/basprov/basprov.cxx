@@ -69,17 +69,7 @@ namespace basprov
 
     static OUString getImplementationName_BasicProviderImpl()
     {
-        static OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static OUString aImplName( "com.sun.star.comp.scripting.ScriptProviderForBasic"  );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
+        return OUString( "com.sun.star.comp.scripting.ScriptProviderForBasic"  );
     }
 
 
@@ -210,7 +200,7 @@ namespace basprov
         if ( aArguments.getLength() != 1 )
         {
             throw IllegalArgumentException(
-                OUString( "BasicProviderImpl::initialize: incorrect argument count."  ),
+                "BasicProviderImpl::initialize: incorrect argument count.",
                 *this,
                 1
             );
@@ -225,7 +215,7 @@ namespace basprov
             if ( !xModel.is() )
             {
                 throw IllegalArgumentException(
-                    OUString( "BasicProviderImpl::initialize: unable to determine the document model from the script invocation context."  ),
+                    "BasicProviderImpl::initialize: unable to determine the document model from the script invocation context.",
                     *this,
                     1
                 );
@@ -236,7 +226,7 @@ namespace basprov
             if ( !( aArguments[0] >>= m_sScriptingContext ) )
             {
                 throw IllegalArgumentException(
-                    OUString( "BasicProviderImpl::initialize: incorrect argument type "   ).concat(  aArguments[0].getValueTypeName() ),
+                    OUString( "BasicProviderImpl::initialize: incorrect argument type " ) + aArguments[0].getValueTypeName(),
                     *this,
                     1
                 );
@@ -319,8 +309,7 @@ namespace basprov
 
 
         OUString aDescription = sfUri->getName();
-        OUString aLocation = sfUri->getParameter(
-            OUString("location") );
+        OUString aLocation = sfUri->getParameter( OUString("location") );
 
         sal_Int32 nIndex = 0;
         // In some strange circumstances the Library name can have an
@@ -418,10 +407,6 @@ namespace basprov
 
     OUString BasicProviderImpl::getName(  ) throw (RuntimeException, std::exception)
     {
-        // TODO
-
-        SolarMutexGuard aGuard;
-
         return OUString("Basic");
     }
 

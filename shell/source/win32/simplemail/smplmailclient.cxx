@@ -234,7 +234,7 @@ void CSmplMailClient::assembleCommandLine(
         osl::FileBase::RC err = osl::FileBase::getSystemPathFromFileURL(attachments[i], sysPath);
         if (err != osl::FileBase::E_None)
             throw IllegalArgumentException(
-                OUString("Invalid attachment file URL"),
+                "Invalid attachment file URL",
                 static_cast<XSimpleMailClient*>(this),
                 1);
 
@@ -260,7 +260,7 @@ void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
 
     if (!executeSenddoc(senddocParams))
         throw Exception(
-            OUString("Send email failed"),
+            "Send email failed",
             static_cast<XSimpleMailClient*>(this));
 }
 
@@ -269,7 +269,7 @@ void CSmplMailClient::validateParameter(
 {
     if (!xSimpleMailMessage.is())
         throw IllegalArgumentException(
-            OUString("Empty mail message reference"),
+            "Empty mail message reference",
             static_cast<XSimpleMailClient*>(this),
             1);
 
@@ -278,14 +278,14 @@ void CSmplMailClient::validateParameter(
     // check the flags, the allowed range is 0 - (2^n - 1)
     if (aFlag < 0 || aFlag > 3)
         throw IllegalArgumentException(
-            OUString("Invalid flag value"),
+            "Invalid flag value",
             static_cast<XSimpleMailClient*>(this),
             2);
 
     // check if a recipient is specified of the flags NO_USER_INTERFACE is specified
     if ((aFlag & NO_USER_INTERFACE) && !xSimpleMailMessage->getRecipient().getLength())
         throw IllegalArgumentException(
-            OUString("No recipient specified"),
+            "No recipient specified",
             static_cast<XSimpleMailClient*>(this),
             1);
 }

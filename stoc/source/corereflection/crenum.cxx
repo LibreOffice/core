@@ -153,7 +153,7 @@ void IdlEnumFieldImpl::set( const Any &, const Any & )
     throw(css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception)
 {
     throw IllegalAccessException(
-        OUString("enum field is constant!"),
+        "enum field is constant!",
         (XWeak *)(OWeakObject *)this );
 }
 
@@ -161,7 +161,7 @@ void IdlEnumFieldImpl::set( Any &, const Any & )
     throw(css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception)
 {
     throw IllegalAccessException(
-        OUString("enum field is constant!"),
+        "enum field is constant!",
         (XWeak *)(OWeakObject *)this );
 }
 

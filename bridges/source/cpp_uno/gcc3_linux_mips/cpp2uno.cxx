@@ -422,9 +422,7 @@ namespace
     OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
-      throw RuntimeException(
-          OUString( "illegal vtable index!" ),
-          (XInterface *)pThis );
+      throw RuntimeException( "illegal vtable index!", (XInterface *)pThis );
     }
 
     // determine called method
@@ -535,9 +533,7 @@ namespace
 #ifdef BRDEBUG
     fprintf(stderr,"cpp_mediate6\n");
 #endif
-          throw RuntimeException(
-              OUString( "no member description found!" ),
-              (XInterface *)pThis );
+          throw RuntimeException( "no member description found!", (XInterface *)pThis );
         }
     }
 

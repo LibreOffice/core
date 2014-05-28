@@ -200,7 +200,7 @@ inline sal_uInt32 SaxWriterHelper::writeSequence() throw( SAXException )
         Any a;
         a <<= e;
         throw SAXException(
-            OUString("io exception during writing"),
+            "io exception during writing",
             Reference< XInterface > (),
             a );
     }
@@ -1023,12 +1023,12 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
     if( ! m_bDocStarted )
     {
         throw SAXException(
-            OUString("endDocument called before startDocument"),
+            "endDocument called before startDocument",
             Reference< XInterface >() , Any() );
     }
     if( m_nLevel ) {
         throw SAXException(
-            OUString("unexpected end of document"),
+            "unexpected end of document",
             Reference< XInterface >() , Any() );
     }
     m_pSaxWriterHelper->endDocument();
@@ -1041,7 +1041,7 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
         Any a;
         a <<= e;
         throw SAXException(
-            OUString("IO exception during closing the IO Stream"),
+            "IO exception during closing the IO Stream",
             Reference< XInterface > (),
             a );
     }

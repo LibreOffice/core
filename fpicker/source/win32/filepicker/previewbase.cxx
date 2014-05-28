@@ -79,11 +79,11 @@ void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const ::com::sun::s
 {
     if (aImageFormat != ::com::sun::star::ui::dialogs::FilePreviewImageFormats::BITMAP)
         throw IllegalArgumentException(
-            OUString("unsupported image format"), 0, 1);
+            "unsupported image format", 0, 1);
 
     if (aImage.hasValue() && (aImage.getValueType() != getCppuType((Sequence<sal_Int8>*)0)))
         throw IllegalArgumentException(
-            OUString("invalid image data"), 0, 2);
+            "invalid image data", 0, 2);
 
      // save the new image data and force a redraw
     m_ImageData   = aImage;

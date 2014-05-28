@@ -242,7 +242,7 @@ void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArgu
     else
     {
         throw RuntimeException(
-            OUString("PresenterPane: invalid number of arguments"),
+            "PresenterPane: invalid number of arguments",
                 static_cast<XWeak*>(this));
     }
 }
@@ -498,7 +498,7 @@ void PresenterPaneBorderManager::ThrowIfDisposed (void)
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString( "PresenterPaneBorderManager object has already been disposed"),
+            "PresenterPaneBorderManager object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

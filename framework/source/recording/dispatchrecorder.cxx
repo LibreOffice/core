@@ -410,8 +410,8 @@ void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::st
     if (element.getValueType() !=
         cppu::UnoType<com::sun::star::frame::DispatchStatement>::get()) {
                         throw com::sun::star::lang::IllegalArgumentException(
-                        OUString( "Illegal argument in dispatch recorder" ),
-                        Reference< XInterface >(), 2 );
+                          "Illegal argument in dispatch recorder",
+                          Reference< XInterface >(), 2 );
     }
 
     if (idx >= (sal_Int32)m_aStatements.size()) {

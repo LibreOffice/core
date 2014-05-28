@@ -232,7 +232,7 @@ void ReflectionBase::setName( const OUString& /* aName */ )
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
     throw RuntimeException(
-        OUString( "pq_sdbc::ReflectionBase::setName not implemented" ),
+        "pq_sdbc::ReflectionBase::setName not implemented",
         *this );
     //setPropertyValue( getStatics().NAME , makeAny( aName ) );
 }

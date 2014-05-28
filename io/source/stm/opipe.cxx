@@ -153,7 +153,7 @@ sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRe
             if( m_bInputStreamClosed )
             {
                 throw NotConnectedException(
-                    OUString("Pipe::readBytes NotConnectedException"),
+                    "Pipe::readBytes NotConnectedException",
                     *this );
             }
             sal_Int32 nOccupiedBufferLen = m_pFIFO->getSize();
@@ -192,7 +192,7 @@ sal_Int32 OPipeImpl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBy
             if( m_bInputStreamClosed )
             {
                 throw NotConnectedException(
-                    OUString("Pipe::readSomeBytes NotConnectedException"),
+                    "Pipe::readSomeBytes NotConnectedException",
                     *this );
             }
             if( m_pFIFO->getSize() )
@@ -224,7 +224,7 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
     if( m_bInputStreamClosed )
     {
         throw NotConnectedException(
-            OUString("Pipe::skipBytes NotConnectedException"),
+            "Pipe::skipBytes NotConnectedException",
             *this );
     }
 
@@ -233,7 +233,7 @@ void OPipeImpl::skipBytes(sal_Int32 nBytesToSkip)
             > std::numeric_limits< sal_Int32 >::max() - m_nBytesToSkip) )
     {
         throw BufferSizeExceededException(
-            OUString("Pipe::skipBytes BufferSizeExceededException"),
+            "Pipe::skipBytes BufferSizeExceededException",
             *this );
     }
     m_nBytesToSkip += nBytesToSkip;
@@ -252,7 +252,7 @@ sal_Int32 OPipeImpl::available(void)
     if( m_bInputStreamClosed )
     {
         throw NotConnectedException(
-            OUString("Pipe::available NotConnectedException"),
+            "Pipe::available NotConnectedException",
             *this );
     }
     return m_pFIFO->getSize();
@@ -287,14 +287,14 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
     if( m_bOutputStreamClosed )
     {
         throw NotConnectedException(
-            OUString("Pipe::writeBytes NotConnectedException (outputstream)"),
+            "Pipe::writeBytes NotConnectedException (outputstream)",
             *this );
     }
 
     if( m_bInputStreamClosed )
     {
         throw NotConnectedException(
-            OUString("Pipe::writeBytes NotConnectedException (inputstream)"),
+            "Pipe::writeBytes NotConnectedException (inputstream)",
             *this );
     }
 
@@ -325,13 +325,13 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
     catch ( I_FIFO_OutOfBoundsException & )
     {
         throw BufferSizeExceededException(
-            OUString("Pipe::writeBytes BufferSizeExceededException"),
+            "Pipe::writeBytes BufferSizeExceededException",
             *this );
     }
     catch ( I_FIFO_OutOfMemoryException & )
     {
         throw BufferSizeExceededException(
-            OUString("Pipe::writeBytes BufferSizeExceededException"),
+            "Pipe::writeBytes BufferSizeExceededException",
             *this );
     }
 

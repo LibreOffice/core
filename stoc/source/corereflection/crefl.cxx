@@ -353,7 +353,7 @@ Reference< XIdlClass > IdlReflectionServiceImpl::forType( typelib_TypeDescriptio
         return xRet;
     }
     throw RuntimeException(
-        OUString( "IdlReflectionServiceImpl::forType() failed!" ),
+        "IdlReflectionServiceImpl::forType() failed!",
         (XWeak *)(OWeakObject *)this );
 }
 
@@ -373,7 +373,7 @@ const Mapping & IdlReflectionServiceImpl::getCpp2Uno()
             if (! _aCpp2Uno.is())
             {
                 throw RuntimeException(
-                    OUString("cannot get c++ to uno mapping!"),
+                    "cannot get c++ to uno mapping!",
                     (XWeak *)(OWeakObject *)this );
             }
         }
@@ -396,7 +396,7 @@ const Mapping & IdlReflectionServiceImpl::getUno2Cpp()
             if (! _aUno2Cpp.is())
             {
                 throw RuntimeException(
-                    OUString("cannot get uno to c++ mapping!"),
+                    "cannot get uno to c++ mapping!",
                     (XWeak *)(OWeakObject *)this );
             }
         }
@@ -413,7 +413,7 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
         return (uno_Interface *)getCpp2Uno().mapInterface( xObj.get(), pTo );
 
     throw RuntimeException(
-        OUString("illegal object given!"),
+        "illegal object given!",
         (XWeak *)(OWeakObject *)this );
 }
 

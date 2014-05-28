@@ -89,7 +89,7 @@ namespace sd { namespace colortoolpanel
         {
             OSL_FAIL( "ToolPanelFactory::createUIElement: no parent window in the args!" );
             throw IllegalArgumentException(
-                OUString( "No parent window provided in the creation arguments. Cannot create tool panel." ),
+                "No parent window provided in the creation arguments. Cannot create tool panel.",
                 *this,
                 2
             );

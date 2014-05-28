@@ -83,13 +83,13 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
     if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
-            OUString("no sequence given!"),
+            "no sequence given!",
             (XWeak *)(OWeakObject *)this, 0 );
     }
     if (nLen < 0)
     {
         throw IllegalArgumentException(
-            OUString("illegal length given!"),
+            "illegal length given!",
             (XWeak *)(OWeakObject *)this, 1 );
     }
 
@@ -108,7 +108,7 @@ sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
     if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
-            OUString("no sequence given!"),
+            "no sequence given!",
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
@@ -122,7 +122,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
-            OUString("no sequence given!"),
+            "no sequence given!",
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
@@ -130,7 +130,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     if (pSeq->nElements <= nIndex)
     {
         throw ArrayIndexOutOfBoundsException(
-            OUString("illegal index given!"),
+            "illegal index given!",
             (XWeak *)(OWeakObject *)this );
     }
 
@@ -153,7 +153,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
-            OUString("no sequence given!"),
+            "no sequence given!",
             (XWeak *)(OWeakObject *)this, 0 );
     }
 
@@ -161,7 +161,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     if (pSeq->nElements <= nIndex)
     {
         throw ArrayIndexOutOfBoundsException(
-            OUString("illegal index given!"),
+            "illegal index given!",
             (XWeak *)(OWeakObject *)this );
     }
 
@@ -181,7 +181,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     {
         TYPELIB_DANGER_RELEASE( pElemTypeDescr );
         throw IllegalArgumentException(
-            OUString("sequence element is not assignable by given value!"),
+            "sequence element is not assignable by given value!",
             (XWeak *)(OWeakObject *)this, 2 );
     }
     TYPELIB_DANGER_RELEASE( pElemTypeDescr );

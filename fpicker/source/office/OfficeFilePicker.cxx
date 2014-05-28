@@ -958,7 +958,7 @@ void SAL_CALL SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
     // check the names
     if ( FilterNameExists( aFilters ) )
         throw IllegalArgumentException(
-            OUString("filter name exists"),
+            "filter name exists",
             static_cast< OWeakObject * >(this), 1);
 
     // ensure that we have a filter list

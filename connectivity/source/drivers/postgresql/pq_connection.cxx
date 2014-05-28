@@ -303,7 +303,7 @@ Reference< XPreparedStatement > Connection::prepareCall( const OUString& )
         throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException(
-        OUString( "pq_driver: Callable statements not supported" ),
+        "pq_driver: Callable statements not supported",
         Reference< XInterface > (), OUString() , 1, Any() );
 }
 

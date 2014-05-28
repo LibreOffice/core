@@ -134,8 +134,8 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         if ( aURL.isEmpty() && !aCommand.isEmpty() )
         {
             throw RuntimeException(
-                (OUString( "Cannot translate URI reference to external format: ")
-                 + aCommand),
+                OUString("Cannot translate URI reference to external format: ")
+                 + aCommand,
                 static_cast< cppu::OWeakObject * >(this));
         }
 
@@ -175,7 +175,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         } catch (com::sun::star::lang::IllegalArgumentException &)
         {
             throw SystemShellExecuteException(
-                OUString("Could not expand $BRAND_BASE_DIR path"),
+                "Could not expand $BRAND_BASE_DIR path",
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
 
@@ -183,7 +183,7 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
         {
             throw SystemShellExecuteException(
-                OUString("Cound not convert executable path"),
+                "Cound not convert executable path",
                 static_cast < XSystemShellExecute * > (this), ENOENT );
         }
 
@@ -224,10 +224,9 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
     } else if ((nFlags & css::system::SystemShellExecuteFlags::URIS_ONLY) != 0)
     {
         throw css::lang::IllegalArgumentException(
-            (OUString(
-                    "XSystemShellExecute.execute URIS_ONLY with non-absolute"
-                    " URI reference ")
-             + aCommand),
+            OUString("XSystemShellExecute.execute URIS_ONLY with non-absolute"
+                     " URI reference ")
+             + aCommand,
             static_cast< cppu::OWeakObject * >(this), 0);
     } else {
         escapeForShell(aBuffer, OUStringToOString(aCommand, osl_getThreadTextEncoding()));

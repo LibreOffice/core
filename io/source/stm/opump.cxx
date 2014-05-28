@@ -262,18 +262,14 @@ void Pump::run()
 
             if( ! rInput.is() )
             {
-                NotConnectedException exception(
-                    OUString("no input stream set") , Reference<XInterface>((OWeakObject*)this) );
-                throw exception;
+                throw NotConnectedException( "no input stream set", (OWeakObject*)this );
             }
             Sequence< sal_Int8 > aData;
             while( rInput->readSomeBytes( aData, 65536 ) )
             {
                 if( ! rOutput.is() )
                 {
-                    NotConnectedException exception(
-                        OUString("no output stream set") , Reference<XInterface>( (OWeakObject*)this) );
-                    throw exception;
+                    throw NotConnectedException( "no output stream set", (OWeakObject*)this );
                 }
                 rOutput->writeBytes( aData );
                 osl_yieldThread();
@@ -372,7 +368,7 @@ void Pump::start() throw( RuntimeException, std::exception )
     else
     {
         throw RuntimeException(
-            OUString("Pump::start Couldn't create worker thread"),
+            "Pump::start Couldn't create worker thread",
             *this);
     }
 }
