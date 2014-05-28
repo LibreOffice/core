@@ -470,8 +470,7 @@ Reference<XComponentContext> getUNO(
                 //We show a message box or print to the console that there
                 //is another instance already running
                 if ( ! InitVCL() )
-                    throw RuntimeException( "Cannot initialize VCL!",
-                                            NULL );
+                    throw RuntimeException( "Cannot initialize VCL!" );
                 {
                     WarningBox warn(NULL, WB_OK | WB_DEF_OK, sMsg);
                     warn.SetText(utl::ConfigManager::getProductName());
@@ -481,7 +480,7 @@ Reference<XComponentContext> getUNO(
                 DeInitVCL();
             }
 
-            throw LockFileException("\n" + sError + sMsg + "\n");
+            throw LockFileException(sError + sMsg);
         }
     }
 

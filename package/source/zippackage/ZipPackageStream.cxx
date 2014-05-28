@@ -715,7 +715,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             }
         }
         else
-            throw IllegalArgumentException(THROW_WHERE "MediaType must be a string!\n",
+            throw IllegalArgumentException(THROW_WHERE "MediaType must be a string!",
                                             uno::Reference< XInterface >(),
                                             2 );
 
@@ -723,7 +723,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     else if ( aPropertyName == "Size" )
     {
         if ( !( aValue >>= aEntry.nSize ) )
-            throw IllegalArgumentException(THROW_WHERE "Wrong type for Size property!\n",
+            throw IllegalArgumentException(THROW_WHERE "Wrong type for Size property!",
                                             uno::Reference< XInterface >(),
                                             2 );
     }
@@ -746,7 +746,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                 m_xBaseEncryptionData = new BaseEncryptionData;
         }
         else
-            throw IllegalArgumentException(THROW_WHERE "Wrong type for Encrypted property!\n",
+            throw IllegalArgumentException(THROW_WHERE "Wrong type for Encrypted property!",
                                             uno::Reference< XInterface >(),
                                             2 );
 
@@ -772,7 +772,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
                 aNewKey = aSequence;
             }
             else
-                throw IllegalArgumentException(THROW_WHERE "Wrong type for EncryptionKey property!\n",
+                throw IllegalArgumentException(THROW_WHERE "Wrong type for EncryptionKey property!",
                                                 uno::Reference< XInterface >(),
                                                 2 );
         }
@@ -804,7 +804,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         uno::Sequence< beans::NamedValue > aKeys;
         if ( !( aValue >>= aKeys ) )
         {
-                throw IllegalArgumentException(THROW_WHERE "Wrong type for StorageEncryptionKeys property!\n",
+                throw IllegalArgumentException(THROW_WHERE "Wrong type for StorageEncryptionKeys property!",
                                                 uno::Reference< XInterface >(),
                                                 2 );
         }
@@ -845,7 +845,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
             m_bCompressedIsSetFromOutside = true;
         }
         else
-            throw IllegalArgumentException(THROW_WHERE "Wrong type for Compressed property!\n",
+            throw IllegalArgumentException(THROW_WHERE "Wrong type for Compressed property!",
                                             uno::Reference< XInterface >(),
                                             2 );
     }
