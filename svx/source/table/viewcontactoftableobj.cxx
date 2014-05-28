@@ -576,7 +576,7 @@ namespace sdr
 
                             if(xCurrentCell.is() && !xCurrentCell->isMerged())
                             {
-                                if(rTableLayouter.getCellArea(aCellPos, aCellArea))
+                                if(rTableLayouter.getCellArea(xCurrentCell, aCellPos, aCellArea))
                                 {
                                     // create cell transformation matrix
                                     basegfx::B2DHomMatrix aCellMatrix;
