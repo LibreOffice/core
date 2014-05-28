@@ -3906,8 +3906,8 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 // remove actions to enable box selection
                 UnoActionRemoveContext aRemoveContext(pDoc);
             }
-            SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
-            pCrsr->MakeBoxSels();
+            SwUnoTableCrsr& rCrsr = dynamic_cast<SwUnoTableCrsr&>(*pTblCrsr);
+            rCrsr.MakeBoxSels();
             switch(pEntry->nWID )
             {
                 case FN_UNO_TABLE_CELL_BACKGROUND:
@@ -3944,7 +3944,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                     aBoxInfo.SetValid(nValid, true);
 
                     aSet.Put(aBoxInfo);
-                    pDoc->GetTabBorders(*pCrsr, aSet);
+                    pDoc->GetTabBorders(rCrsr, aSet);
 
                     aSet.Put(aBoxInfo);
                     SvxBoxItem aBoxItem((const SvxBoxItem&)aSet.Get(RES_BOX));
@@ -3957,7 +3957,7 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 {
                     SfxUInt32Item aNumberFormat(RES_BOXATR_FORMAT);
                     ((SfxPoolItem&)aNumberFormat).PutValue(aValue, 0);
-                    pDoc->SetBoxAttr( *pCrsr, aNumberFormat);
+                    pDoc->SetBoxAttr(rCrsr, aNumberFormat);
                 }
                 break;
                 case FN_UNO_RANGE_ROW_LABEL:
@@ -3983,15 +3983,15 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName, const uno::An
                 default:
                 {
                     SfxItemSet aItemSet( pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID );
-                    SwUnoCursorHelper::GetCrsrAttr(pCrsr->GetSelRing(),
+                    SwUnoCursorHelper::GetCrsrAttr(rCrsr.GetSelRing(),
                             aItemSet);
 
                     if (!SwUnoCursorHelper::SetCursorPropertyValue(
-                            *pEntry, aValue, pCrsr->GetSelRing(), aItemSet))
+                            *pEntry, aValue, rCrsr.GetSelRing(), aItemSet))
                     {
                         m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
                     }
-                    SwUnoCursorHelper::SetCrsrAttr(pCrsr->GetSelRing(),
+                    SwUnoCursorHelper::SetCrsrAttr(rCrsr.GetSelRing(),
                             aItemSet, nsSetAttrMode::SETATTR_DEFAULT, true);
                 }
             }
