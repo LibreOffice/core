@@ -177,7 +177,7 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
                      ::com::sun::star::uno::RuntimeException, std::exception)
 {
     if ( !m_aPropVals.empty() )
-        throw PropertyExistException();
+        throw IllegalArgumentException();
 
     const PropertyValue *pPropVals = rPropertyValues.getConstArray();
     for (sal_Int32 n = 0; n < rPropertyValues.getLength(); ++n)
