@@ -174,13 +174,18 @@ xmlNodePtr HelpCompiler::clone(xmlNodePtr node, const std::string& appl)
             if (strcmp((const char*)list->name, "switchinline") == 0 || strcmp((const char*)list->name, "switch") == 0)
             {
                 std::string tmp="";
-                if (strcmp((const char*)xmlGetProp(list, (xmlChar*)"select"), "sys"))
+                xmlChar * prop = xmlGetProp(list, (xmlChar*)"select");
+                if (prop != 0)
                 {
-                    tmp = gui;
-                }
-                if (strcmp((const char*)xmlGetProp(list, (xmlChar*)"select"), "appl"))
-                {
-                    tmp = appl;
+                    if (strcmp((char *)prop, "sys") == 0)
+                    {
+                        tmp = gui;
+                    }
+                    else if (strcmp((char *)prop, "appl") == 0)
+                    {
+                        tmp = appl;
+                    }
+                    xmlFree(prop);
                 }
                 if (tmp.compare("") != 0)
                 {
