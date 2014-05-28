@@ -46,7 +46,8 @@ protected:
 
     // Create a SdrObject according to a description. Can be used by derived classes to
     // support own ::com::sun::star::drawing::Shapes (e.g. controls).
-    virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape ) throw (std::exception) SAL_OVERRIDE;
+    virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > & xShape )
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
     SwFmDrawPage( SdrPage* pPage );

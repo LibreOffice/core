@@ -291,7 +291,8 @@ uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj 
     return xShape;
 }
 
-SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape > & xShape ) throw (std::exception)
+SdrObject* SwFmDrawPage::_CreateSdrObject( const uno::Reference< drawing::XShape > & xShape )
+    throw (uno::RuntimeException, std::exception)
 {
     //TODO: stimmt das so - kann die Methode weg?
     return SvxFmDrawPage::_CreateSdrObject( xShape );
