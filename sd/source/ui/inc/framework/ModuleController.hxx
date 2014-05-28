@@ -100,7 +100,7 @@ private:
 
     ModuleController (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
-        throw();
+        throw (std::exception);
     ModuleController (void); // Not implemented.
     ModuleController (const ModuleController&); // Not implemented.
     virtual ~ModuleController (void) throw();
