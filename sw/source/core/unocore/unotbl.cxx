@@ -4642,10 +4642,10 @@ void SAL_CALL SwXCellRange::sort(const uno::Sequence< beans::PropertyValue >& rD
     if(pFmt &&
         SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
     {
-        SwUnoTableCrsr* pTableCrsr = dynamic_cast<SwUnoTableCrsr*>(pTblCrsr);
-        pTableCrsr->MakeBoxSels();
+        SwUnoTableCrsr& rTableCrsr = dynamic_cast<SwUnoTableCrsr&>(*pTblCrsr);
+        rTableCrsr.MakeBoxSels();
         UnoActionContext aContext( pFmt->GetDoc() );
-        pFmt->GetDoc()->SortTbl(pTableCrsr->GetSelectedBoxes(), aSortOpt);
+        pFmt->GetDoc()->SortTbl(rTableCrsr.GetSelectedBoxes(), aSortOpt);
     }
 }
 
