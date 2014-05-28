@@ -224,6 +224,9 @@ private:
     void ReleaseExtrude3DShapes();
     void ReleaseTextShapes();
     void ReleaseScreenTextShapes();
+    void ReleaseBatchBarInfo();
+    void InitBatch3DUniformBlock();
+    void UpdateBatch3DUniformBlock();
 private:
 
     struct ShaderResources

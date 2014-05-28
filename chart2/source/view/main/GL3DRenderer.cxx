@@ -278,6 +278,7 @@ void OpenGL3DRenderer::init()
 
     CHECK_GL_ERROR();
     Init3DUniformBlock();
+    InitBatch3DUniformBlock();
 
     glViewport(0, 0, m_iWidth, m_iHeight);
     Set3DSenceInfo(0xFFFFFF, true);
@@ -1066,6 +1067,59 @@ void OpenGL3DRenderer::Init3DUniformBlock()
     glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_3DUBOBuffer, ((nBlockDataSizeLight / nUniformBufferAlignSize) + std::min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize, nBlockDataSizeMertrial);
     glUniformBlockBinding(maResources.m_3DProID, a3DMaterialBlockIndex, 1);
     //for the light source uniform, we must calc the offset of each element
+    CHECK_GL_ERROR();
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void OpenGL3DRenderer::InitBatch3DUniformBlock()
+{
+    if(mbPickingMode)
+        return;
+
+    GLuint a3DLightBlockIndex = glGetUniformBlockIndex(maResources.m_3DBatchProID, "GlobalLights");
+    GLuint a3DMaterialBlockIndex = glGetUniformBlockIndex(maResources.m_3DBatchProID, "GlobalMaterialParameters");
+
+    if ((GL_INVALID_INDEX == a3DLightBlockIndex) || (GL_INVALID_INDEX == a3DMaterialBlockIndex))
+    {
+        return;
+    }
+    int nUniformBufferAlignSize = 1;
+    glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &nUniformBufferAlignSize);
+    GLint nBlockDataSizeLight = 0, nBlockDataSizeMertrial = 0;
+    glGetActiveUniformBlockiv(maResources.m_3DBatchProID, a3DLightBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeLight);
+    glGetActiveUniformBlockiv(maResources.m_3DBatchProID, a3DMaterialBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, &nBlockDataSizeMertrial);
+    CHECK_GL_ERROR();
+    glGenBuffers(1, &m_Batch3DUBOBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, m_Batch3DUBOBuffer);
+    CHECK_GL_ERROR();
+    m_Batch3DActualSizeLight = ((nBlockDataSizeLight / nUniformBufferAlignSize) + std::min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize;
+//    cout << "nBlockDataSizeMertrial = " << nBlockDataSizeMertrial << ", nBlockDataSizeLight = " << nBlockDataSizeLight << ", m_3DActualSizeLight = " << m_3DActualSizeLight << endl;
+    int dataSize = m_Batch3DActualSizeLight + nBlockDataSizeMertrial;
+    glBufferData(GL_UNIFORM_BUFFER, dataSize, NULL, GL_DYNAMIC_DRAW);
+    glBindBufferRange(GL_UNIFORM_BUFFER, 2, m_Batch3DUBOBuffer, 0, nBlockDataSizeLight);
+    CHECK_GL_ERROR();
+    glUniformBlockBinding(maResources.m_3DBatchProID, a3DLightBlockIndex, 2);
+
+    glBindBufferRange(GL_UNIFORM_BUFFER, 3, m_Batch3DUBOBuffer, ((nBlockDataSizeLight / nUniformBufferAlignSize) + std::min(nBlockDataSizeLight % nUniformBufferAlignSize, 1)) * nUniformBufferAlignSize, nBlockDataSizeMertrial);
+    glUniformBlockBinding(maResources.m_3DBatchProID, a3DMaterialBlockIndex, 3);
+    //for the light source uniform, we must calc the offset of each element
+    CHECK_GL_ERROR();
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+}
+
+void OpenGL3DRenderer::UpdateBatch3DUniformBlock()
+{
+    if(mbPickingMode)
+        return;
+
+    glBindBuffer(GL_UNIFORM_BUFFER, m_Batch3DUBOBuffer);
+    glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(GLint), &m_LightsInfo.lightNum);
+    CHECK_GL_ERROR();
+    //current std140 alignment: 16
+    glBufferSubData(GL_UNIFORM_BUFFER, 16, sizeof(glm::vec4), &m_LightsInfo.ambient[0]);
+    CHECK_GL_ERROR();
+    //current std140 alignment: 16
+    glBufferSubData(GL_UNIFORM_BUFFER, 32, sizeof(LightSource) * MAX_LIGHT_NUM, &m_LightsInfo.light);
     CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
