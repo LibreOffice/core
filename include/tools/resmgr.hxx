@@ -32,10 +32,10 @@ class InternalResMgr;
 struct RSHEADER_TYPE
 {
 private:
-    sal_uInt32              nId;        ///< Identifier of resource
-    RESOURCE_TYPE           nRT;        ///< Resource type
-    sal_uInt32              nGlobOff;   ///< Global offset
-    sal_uInt32              nLocalOff;  ///< Local offset
+    char nId[4];        ///< Identifier of resource
+    char nRT[4];        ///< Resource type
+    char nGlobOff[4];   ///< Global offset
+    char nLocalOff[4];  ///< Local offset
 
 public:
     inline sal_uInt32       GetId();    ///< Identifier of resource
