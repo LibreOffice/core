@@ -296,8 +296,8 @@ void GL3DBarChart::render()
     {
         mpCamera->render();
     }
+    mpRenderer->ProcessUnrenderedShape(mbNeedsNewRender);
     mbNeedsNewRender = false;
-    mpRenderer->ProcessUnrenderedShape();
     mrWindow.getContext()->swapBuffers();
 }
 
