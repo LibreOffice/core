@@ -516,6 +516,33 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[][2], sal_uI
                 addElement("\"" + SM_RESSTR(STR_ALIGN_CENTER) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_ALIGNRX)
                 addElement("\"" + SM_RESSTR(STR_ALIGN_RIGHT) + "\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+
+            else if (aElementId == RID_SLRPARENTX)
+                addElement("left ( binom{<?>}{<?>} right ) ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_SLRBRACKETX)
+                addElement("left [ binom{<?>}{<?>} right ] ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_SLRDBRACKETX)
+                addElement("left ldbracket binom{<?>}{<?>} right rdbracket ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_SLRBRACEX)
+                addElement("left lbrace binom{<?>}{<?>} right rbrace ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_SLRANGLEX)
+                addElement("left langle binom{<?>}{<?>} right rangle ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_SLRCEILX)
+                addElement("left lceil binom{<?>}{<?>} right rceil ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_SLRFLOORX)
+                addElement("left lfloor binom{<?>}{<?>} right rfloor ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+
+            else if (aElementId == RID_SLRLINEX)
+                addElement("left lline binom{<?>}{<?>} right rline ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_SLRDLINEX)
+                addElement("left ldline binom{<?>}{<?>} right rdline ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_SLMRANGLEXY)
+                addElement("left langle binom{<?>}{<?>} mline binom{<?>}{<?>} right rangle ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+
+            else if (aElementId == RID_XOVERBRACEY)
+                addElement("{<?><?><?>} overbrace {<?>} ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+            else if (aElementId == RID_XUNDERBRACEY)
+                addElement("{<?><?><?>} underbrace {<?>} ", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else
                 addElement(SM_RESSTR(aElementId), SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
         }
