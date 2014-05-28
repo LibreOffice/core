@@ -591,7 +591,7 @@ void Axis::fireModifyEvent()
 
 // ____ OPropertySet ____
 uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
+    throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticAxisDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );

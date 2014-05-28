@@ -66,7 +66,8 @@ protected:
         may throw an UnknownPropertyException.
      */
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException) = 0;
+        throw (css::beans::UnknownPropertyException,
+               css::uno::RuntimeException) = 0;
 
     /** The InfoHelper table contains all property names and types of
         this object.
