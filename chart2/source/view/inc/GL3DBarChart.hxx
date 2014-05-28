@@ -79,6 +79,7 @@ private:
 
     Timer maTimer;
     glm::vec3 maStep;
+    glm::vec3 maStepDirection;
     size_t mnStep;
     size_t mnStepsTotal;
     float mnMaxX;
