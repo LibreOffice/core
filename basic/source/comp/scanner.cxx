@@ -439,7 +439,7 @@ bool SbiScanner::NextSym()
         bNumber = true;
         // Hex literals are signed Integers ( as defined by basic
         // e.g. -2,147,483,648 through 2,147,483,647 (signed)
-        sal_Int32 l = 0;
+        sal_uInt32 lu = 0;
         int i;
         bool bBufOverflow = false;
         while(nCol < aLine.getLength() &&  theBasicCharClass::get().isAlphaNumeric(aLine[nCol] & 0xFF, bCompatible))
@@ -463,15 +463,16 @@ bool SbiScanner::NextSym()
         {
             i = (*p & 0xFF) - '0';
             if( i > 9 ) i -= 7;
-            l = ( l * base ) + i;
+            lu = ( lu * base ) + i;
             if( !ndig-- )
             {
                 GenError( SbERR_MATH_OVERFLOW ); break;
             }
         }
         if(nCol < aLine.getLength() && aLine[nCol] == '&') ++pLine, ++nCol;
-        nVal = (double) l;
-        eScanType = ( l >= SbxMININT && l <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
+        sal_Int32 ls = static_cast<sal_Int32>(lu);
+        nVal = (double) ls;
+        eScanType = ( ls >= SbxMININT && ls <= SbxMAXINT ) ? SbxINTEGER : SbxLONG;
         if( bBufOverflow )
             GenError( SbERR_MATH_OVERFLOW );
     }
