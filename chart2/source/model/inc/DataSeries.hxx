@@ -112,7 +112,8 @@ protected:
 
     // ____ OPropertySet ____
     virtual ::com::sun::star::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(::com::sun::star::beans::UnknownPropertyException) SAL_OVERRIDE;
+        throw (css::beans::UnknownPropertyException,
+               css::uno::RuntimeException) SAL_OVERRIDE;
     virtual void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const SAL_OVERRIDE;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,

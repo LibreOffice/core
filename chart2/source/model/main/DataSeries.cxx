@@ -243,7 +243,8 @@ Sequence< OUString > DataSeries::getSupportedServiceNames_Static()
 
 // ____ OPropertySet ____
 uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
+    throw (beans::UnknownPropertyException,
+           uno::RuntimeException)
 {
     const tPropertyValueMap& rStaticDefaults = StaticDataSeriesDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
