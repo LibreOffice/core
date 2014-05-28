@@ -128,7 +128,7 @@ namespace slideshow
             if( !mxPlayer.is() )
                 implInitialize( maBounds );
 
-            if( mxPlayer.is() && ( mxPlayer->getDuration() > 0.0 ) )
+            if (mxPlayer.is())
                 mxPlayer->start();
 
             return true;
@@ -170,7 +170,7 @@ namespace slideshow
 
         void ViewMediaShape::pauseMedia()
         {
-            if( mxPlayer.is() && ( mxPlayer->getDuration() > 0.0 ) )
+            if (mxPlayer.is())
                 mxPlayer->stop();
         }
 
@@ -178,7 +178,7 @@ namespace slideshow
 
         void ViewMediaShape::setMediaTime(double fTime)
         {
-            if( mxPlayer.is() && ( mxPlayer->getDuration() > 0.0 ) )
+            if (mxPlayer.is())
                 mxPlayer->setMediaTime(fTime);
         }
 
