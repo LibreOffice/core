@@ -367,7 +367,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
                 OUString("Value: ") + OUString::number(rBarInfo.mnVal), 0));
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
     pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f));
-
+    pScreenText->render();
 }
 
 void GL3DBarChart::mouseDragMove(const Point& , const Point& , sal_uInt16 nButtons)
@@ -467,6 +467,7 @@ IMPL_LINK_NOARG(GL3DBarChart, MoveToBar)
     else
     {
         maShapes.pop_back();
+        mpRenderer->ReleaseScreenTextShapes();
         mbBlockUserInput = false;
         mnStep = 0;
     }
