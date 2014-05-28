@@ -33,7 +33,7 @@ Globals
             CREATE_MSP_INSTALLSET 1
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
-            WINDOWSPATCHLEVEL 22
+            WINDOWSPATCHLEVEL 23
             OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
             BUILDIDCWS {buildidcws}
@@ -50,13 +50,13 @@ LibreOffice
         {
             PRODUCTNAME LibreOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -22
+            PRODUCTEXTENSION -23
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4.0
             USERDIRPRODUCTVERSION 4
             ABOUTBOXPRODUCTVERSION 4.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX :build-322
+            ABOUTBOXPRODUCTVERSIONSUFFIX :build-323
             BASEPRODUCTVERSION 4.0
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
@@ -100,14 +100,14 @@ LibreOffice_Dev
         {
             PRODUCTNAME LOdev
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -22
+            PRODUCTEXTENSION -23
             UNIXBASISROOTNAME lodev4.0
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4.0
             USERDIRPRODUCTVERSION 4
             ABOUTBOXPRODUCTVERSION 4.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX :build-322
+            ABOUTBOXPRODUCTVERSIONSUFFIX :build-323
             BASEPRODUCTVERSION 4.0
             DEVELOPMENTPRODUCT 1
             BASISPACKAGEPREFIX lodevbasis
@@ -161,7 +161,7 @@ URE
             PRODUCTVERSION 4.0
             PACKAGEVERSION 4.0
             PACKAGEREVISION 1
-            PRODUCTEXTENSION -22
+            PRODUCTEXTENSION -23
             BRANDPACKAGEVERSION 4.0
             LICENSENAME LGPL
             NOVERSIONINDIRNAME 1
@@ -192,7 +192,7 @@ LibreOffice_SDK
         {
             PRODUCTNAME LibreOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -22
+            PRODUCTEXTENSION -23
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
             BRANDPACKAGEVERSION 4.0
@@ -231,7 +231,7 @@ LibreOffice_Dev_SDK
         {
             PRODUCTNAME LOdev
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -22
+            PRODUCTEXTENSION -23
             UNIXBASISROOTNAME lodev4.0
             POSTVERSIONEXTENSION SDK
             POSTVERSIONEXTENSIONUNIX sdk
@@ -276,7 +276,7 @@ LibreOffice_Test
         {
             PRODUCTNAME LibreOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -22
+            PRODUCTEXTENSION -23
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
             BRANDPACKAGEVERSION 4.0
@@ -315,7 +315,7 @@ LibreOffice_Dev_Test
         {
             PRODUCTNAME LOdev
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -22
+            PRODUCTEXTENSION -23
             UNIXBASISROOTNAME lodev4.0
             POSTVERSIONEXTENSION TEST
             POSTVERSIONEXTENSIONUNIX test
@@ -359,13 +359,13 @@ OxygenOffice
         {
             PRODUCTNAME OxygenOffice
             PRODUCTVERSION 4.0
-            PRODUCTEXTENSION -22
+            PRODUCTEXTENSION -23
             POSTVERSIONEXTENSION
             POSTVERSIONEXTENSIONUNIX
             BRANDPACKAGEVERSION 4.0
             USERDIRPRODUCTVERSION 4
             ABOUTBOXPRODUCTVERSION 4.0
-            ABOUTBOXPRODUCTVERSIONSUFFIX :build-322
+            ABOUTBOXPRODUCTVERSIONSUFFIX :build-323
             BASEPRODUCTVERSION 4.0
             PCPFILENAME openoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
