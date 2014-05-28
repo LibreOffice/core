@@ -1584,10 +1584,10 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
         *pUnoCrsr->GetMark() = *pTableSelection->GetMark();
     }
     const SwSelBoxes& rBoxes = pTableSelection->GetSelectedBoxes();
-    SwTableCursor* pTableCrsr = dynamic_cast<SwTableCursor*>(pUnoCrsr);
+    SwTableCursor& rTableCrsr = dynamic_cast<SwTableCursor&>(*pUnoCrsr);
     for (size_t i = 0; i < rBoxes.size(); i++)
     {
-        pTableCrsr->InsertBox( *rBoxes[i] );
+        rTableCrsr.InsertBox( *rBoxes[i] );
     }
 
     pUnoCrsr->Add(&aCrsrDepend);
