@@ -234,7 +234,7 @@ Graphic GraphicFilterMosaic::GetFilteredGraphic( const Graphic& rGraphic,
         if( aBmpEx.Filter( BMP_FILTER_MOSAIC, &aParam ) )
         {
             if( IsEnhanceEdges() )
-                aBmpEx.Filter( BMP_FILTER_SHARPEN );
+                (void)aBmpEx.Filter( BMP_FILTER_SHARPEN );
 
             aRet = aBmpEx;
         }
