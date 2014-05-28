@@ -8,7 +8,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1">
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="2.0">
   <LC_INFO>
     <Language>
       <LangID>fr</LangID>
@@ -33,19 +33,17 @@
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>‘</QuotationStart>
-      <QuotationEnd>’</QuotationEnd>
-      <DoubleQuotationStart>«</DoubleQuotationStart>
-      <DoubleQuotationEnd>»</DoubleQuotationEnd>
+      <QuotationStart>'</QuotationStart>
+      <QuotationEnd>'</QuotationEnd>
+      <DoubleQuotationStart>"</DoubleQuotationStart>
+      <DoubleQuotationEnd>"</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>am</TimeAM>
-    <TimePM>pm</TimePM>
+    <TimeAM>AM</TimeAM>
+    <TimePM>PM</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$F-800C]">
-    <DateAcceptancePattern>D/M</DateAcceptancePattern>
-    <DateAcceptancePattern>D.M.Y</DateAcceptancePattern>
-    <DateAcceptancePattern>D-M-Y</DateAcceptancePattern>
+    <DateAcceptancePattern>M/D</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>General</FormatCode>
     </FormatElement>
@@ -77,34 +75,34 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode># ##0 [CURRENCY];-# ##0 [CURRENCY]</FormatCode>
+      <FormatCode># ##0[CURRENCY];-# ##0[CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode># ##0,00 [CURRENCY];-# ##0,00 [CURRENCY]</FormatCode>
+      <FormatCode># ##0,00[CURRENCY];-# ##0,00[CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode># ##0 [CURRENCY];[RED]-# ##0 [CURRENCY]</FormatCode>
+      <FormatCode># ##0[CURRENCY];[RED]-# ##0[CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode># ##0,00 [CURRENCY];[RED]-# ##0,00 [CURRENCY]</FormatCode>
+      <FormatCode># ##0,00[CURRENCY];[RED]-# ##0,00[CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
-      <FormatCode># ##0,00 CCC</FormatCode>
+      <FormatCode># ##0,00CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode># ##0,-- [CURRENCY];[RED]-# ##0,-- [CURRENCY]</FormatCode>
+      <FormatCode># ##0,--[CURRENCY];[RED]-# ##0,--[CURRENCY]</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
-      <FormatCode>D/MM/YY</FormatCode>
+      <FormatCode>YY/MM/DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
       <FormatCode>NNNNDD MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>DD/MM/YY</FormatCode>
+      <FormatCode>YY/MM/DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>DD/MM/YYYY</FormatCode>
+      <FormatCode>YYYY/MM/DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="22">
       <FormatCode>D MMM YY</FormatCode>
@@ -119,7 +117,7 @@
       <FormatCode>D MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey22" default="false" type="long" usage="DATE" formatindex="26">
-      <FormatCode>D MMMM YY</FormatCode>
+      <FormatCode>D MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
       <FormatCode>NN DD/MMM/YY</FormatCode>
@@ -145,7 +143,7 @@
       <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="34">
-      <FormatCode>MM/YY</FormatCode>
+      <FormatCode>YY/MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="35">
       <FormatCode>MMM/DD</FormatCode>
@@ -181,10 +179,10 @@
       <FormatCode>[HH]:MM:SS,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME" formatindex="46">
-      <FormatCode>DD/MM/YY HH:MM</FormatCode>
+      <FormatCode>YY/MM/DD HH:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-      <FormatCode>DD/MM/YYYY HH:MM:SS AM/PM</FormatCode>
+      <FormatCode>YYYY/MM/DD HH:MM:SS AM/PM</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
@@ -199,11 +197,12 @@
     </SearchOptions>
   </LC_SEARCH>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z Å Ä Ö</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
-    <FollowPageWord>sv p</FollowPageWord>
-    <FollowPageWord>sv pp</FollowPageWord>
+    <UnicodeScript>6</UnicodeScript>
+    <FollowPageWord>sq</FollowPageWord>
+    <FollowPageWord>sqq</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
@@ -247,17 +246,17 @@
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>janv</DefaultAbbrvName>
+          <DefaultAbbrvName>jan</DefaultAbbrvName>
           <DefaultFullName>janvier</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>févr</DefaultAbbrvName>
+          <DefaultAbbrvName>fév</DefaultAbbrvName>
           <DefaultFullName>février</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>mars</DefaultAbbrvName>
+          <DefaultAbbrvName>mar</DefaultAbbrvName>
           <DefaultFullName>mars</DefaultFullName>
         </Month>
         <Month>
@@ -272,22 +271,22 @@
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>juin</DefaultAbbrvName>
+          <DefaultAbbrvName>jun</DefaultAbbrvName>
           <DefaultFullName>juin</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>juil</DefaultAbbrvName>
+          <DefaultAbbrvName>jul</DefaultAbbrvName>
           <DefaultFullName>juillet</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>août</DefaultAbbrvName>
+          <DefaultAbbrvName>aoû</DefaultAbbrvName>
           <DefaultFullName>août</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>sept</DefaultAbbrvName>
+          <DefaultAbbrvName>sep</DefaultAbbrvName>
           <DefaultFullName>septembre</DefaultFullName>
         </Month>
         <Month>
@@ -309,13 +308,13 @@
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>av. J.-C</DefaultAbbrvName>
+          <DefaultAbbrvName>av. J.-C.</DefaultAbbrvName>
           <DefaultFullName>avant Jésus-Christ</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>apr. J.-C</DefaultAbbrvName>
-          <DefaultFullName>après Jésus-Christ</DefaultFullName>
+          <DefaultAbbrvName>ap. J.-C.</DefaultAbbrvName>
+          <DefaultFullName>après  Jésus-Christ</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
@@ -329,7 +328,7 @@
       <CurrencyID>XOF</CurrencyID>
       <CurrencySymbol>F</CurrencySymbol>
       <BankSymbol>XOF</BankSymbol>
-      <CurrencyName>CFA Franc</CurrencyName>
+      <CurrencyName>Franc CFA - BCEAO</CurrencyName>
       <DecimalPlaces>0</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
@@ -340,18 +339,18 @@
   </LC_TRANSLITERATION>
   <LC_MISC>
     <ReservedWords>
-      <trueWord>Vrai</trueWord>
-      <falseWord>Faux</falseWord>
-      <quarter1Word>1er trimestre</quarter1Word>
-      <quarter2Word>2e trimestre</quarter2Word>
-      <quarter3Word>3e trimestre</quarter3Word>
-      <quarter4Word>4e trimestre</quarter4Word>
-      <aboveWord>supra</aboveWord>
-      <belowWord>infra</belowWord>
-      <quarter1Abbreviation>T1</quarter1Abbreviation>
-      <quarter2Abbreviation>T2</quarter2Abbreviation>
-      <quarter3Abbreviation>T3</quarter3Abbreviation>
-      <quarter4Abbreviation>T4</quarter4Abbreviation>
+      <trueWord>vrai</trueWord>
+      <falseWord>faux</falseWord>
+      <quarter1Word>Premier trimestre</quarter1Word>
+      <quarter2Word>Deuxième trimestre</quarter2Word>
+      <quarter3Word>Troisième trimestre</quarter3Word>
+      <quarter4Word>Quatrième trimestre</quarter4Word>
+      <aboveWord>carré</aboveWord>
+      <belowWord>Racine carré</belowWord>
+      <quarter1Abbreviation>1er trim.</quarter1Abbreviation>
+      <quarter2Abbreviation>2e trim.</quarter2Abbreviation>
+      <quarter3Abbreviation>3e trim.</quarter3Abbreviation>
+      <quarter4Abbreviation>4e trim.</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
   <LC_NumberingLevel>
