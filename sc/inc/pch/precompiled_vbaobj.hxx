@@ -327,4 +327,5 @@
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vector>
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

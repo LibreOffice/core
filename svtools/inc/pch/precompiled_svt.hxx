@@ -262,6 +262,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
+#include <config_features.h>
 #include <config_folders.h>
 #include <config_oauth2.h>
 #include <cppuhelper/factory.hxx>
@@ -376,6 +377,7 @@
 #include <tools/multisel.hxx>
 #include <tools/poly.hxx>
 #include <tools/rcid.h>
+#include <tools/resary.hxx>
 #include <tools/resid.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/rtti.hxx>
@@ -486,4 +488,5 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vector>
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

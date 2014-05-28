@@ -35,6 +35,7 @@
 #include <basic/sbxcore.hxx>
 #include <basic/sbxobj.hxx>
 #include <boost/bind.hpp>
+#include <boost/checked_delete.hpp>
 #include <boost/foreach.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -51,6 +52,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <cassert>
@@ -102,8 +104,11 @@
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
+#include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/HighlightedRange.hpp>
@@ -416,6 +421,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <comphelper/random.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -935,11 +941,13 @@
 #include <vcl/metric.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/openglwin.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/status.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/syschild.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
@@ -980,4 +988,5 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/xmluconv.hxx>
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

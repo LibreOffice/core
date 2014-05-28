@@ -18,6 +18,7 @@
 #include "comphelper/anytostring.hxx"
 #include "comphelper/processfactory.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include "rtl/bootstrap.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "sal/log.hxx"
 #include "sax/fastparser.hxx"
@@ -29,6 +30,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <boost/algorithm/string.hpp>
 #include <boost/bind.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
@@ -331,13 +333,17 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 #include <com/sun/star/xml/sax/XLocator.hpp>
+#include <comphelper/anytostring.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/sequenceasvector.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <config_folders.h>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implementationentry.hxx>
@@ -357,12 +363,12 @@
 #include <iostream>
 #include <list>
 #include <map>
-#include <math.h>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
 #include <osl/time.h>
+#include <rtl/bootstrap.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/math.hxx>
 #include <rtl/random.h>
@@ -398,6 +404,7 @@
 #include <tools/multisel.hxx>
 #include <tools/stream.hxx>
 #include <tools/time.hxx>
+#include <unotools/docinfohelper.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>

@@ -14,8 +14,6 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include <comphelper/accessibleeventnotifier.hxx>
-#include <unotools/accessiblerelationsethelper.hxx>
 #include <algorithm>
 #include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>

@@ -115,7 +115,6 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/imgmgr.hxx>
-#include <sfx2/module.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
@@ -190,7 +189,6 @@
 #include <vcl/lineinfo.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>

@@ -146,6 +146,7 @@
 #include <map>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
+#include <osl/detail/file.h>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
@@ -195,4 +196,5 @@
 #include <ucbhelper/interceptedinteraction.hxx>
 #include <uno/data.h>
 #include <vector>
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

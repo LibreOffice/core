@@ -19,6 +19,7 @@
 #include "rtl/ref.hxx"
 #include <algorithm>
 #include <avmedia/mediawindow.hxx>
+#include <avmedia/modeltools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
@@ -168,6 +169,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/uno3.hxx>
+#include <config_features.h>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <cppcanvas/bitmap.hxx>
 #include <cppcanvas/canvas.hxx>
@@ -217,9 +219,11 @@
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>

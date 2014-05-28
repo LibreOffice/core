@@ -48,6 +48,7 @@
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/tuple/tuple.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <cassert>
@@ -252,7 +253,6 @@
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/mail/XSmtpService.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
@@ -286,7 +286,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
@@ -329,8 +328,6 @@
 #include <com/sun/star/text/HoriOrientationFormat.hpp>
 #include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <com/sun/star/text/LabelFollow.hpp>
-#include <com/sun/star/text/MailMergeEvent.hpp>
-#include <com/sun/star/text/MailMergeType.hpp>
 #include <com/sun/star/text/NotePrintMode.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/PlaceholderType.hpp>
@@ -367,8 +364,6 @@
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSettingsSupplier.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
-#include <com/sun/star/text/XMailMergeBroadcaster.hpp>
-#include <com/sun/star/text/XMailMergeListener.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -414,7 +409,6 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
-#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Duration.hpp>
@@ -627,6 +621,7 @@
 #include <map>
 #include <math.h>
 #include <memory>
+#include <numeric>
 #include <o3tl/sorted_vector.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Writer.hxx>
@@ -956,6 +951,7 @@
 #include <svx/unomid.hxx>
 #include <svx/unomod.hxx>
 #include <svx/unomodel.hxx>
+#include <svx/unopage.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/verttexttbxctrl.hxx>

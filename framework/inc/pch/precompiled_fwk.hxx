@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/utility.hpp>
 #include <com/sun/star/awt/Command.hpp>
@@ -197,6 +198,7 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/task/theJobExecutor.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -403,4 +405,5 @@
 #include <vcl/wrkwin.hxx>
 #include <vector>
 #include <wchar.h>
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

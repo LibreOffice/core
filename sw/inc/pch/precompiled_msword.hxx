@@ -22,6 +22,7 @@
 #include <boost/optional.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/unordered_set.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -94,6 +95,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
+#include <config_features.h>
 #include <config_version.h>
 #include <cppuhelper/implementationentry.hxx>
 #include <cstdio>
@@ -261,6 +263,7 @@
 #include <ucbhelper/content.hxx>
 #include <unicode/ubidi.h>
 #include <unotools/configmgr.hxx>
+#include <unotools/docinfohelper.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontcvt.hxx>
