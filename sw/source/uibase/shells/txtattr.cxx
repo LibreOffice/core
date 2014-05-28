@@ -492,7 +492,9 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxItemPool& rPool = GetPool();
     SfxItemSet aCoreSet(rPool, aTxtFmtCollSetRange);
-    rSh.GetCurAttr(aCoreSet); // Request *all* text attributes from the core.
+    // Request *all* text attributes from the core.
+    // fdo#78737: this is called from SvxRuler, which requires the list indents!
+    rSh.GetCurAttr(aCoreSet, /* bMergeIndentValuesOfNumRule = */ true);
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nSlot = aIter.FirstWhich();
