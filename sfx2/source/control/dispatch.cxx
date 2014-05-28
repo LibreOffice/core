@@ -1309,6 +1309,9 @@ void SfxDispatcher::Update_Impl( bool bForce )
 
     Flush();
 
+    if (Application::IsHeadlessModeEnabled())
+        return;
+
     if ( !pImp->pFrame )
         return;
 
