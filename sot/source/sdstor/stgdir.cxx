@@ -967,13 +967,8 @@ bool StgDirStrm::Store()
 
 void* StgDirStrm::GetEntry( sal_Int32 n, bool bDirty )
 {
-    if( n < 0 )
-        return NULL;
-
-    n *= STGENTRY_SIZE;
-    if( n >= nSize )
-        return NULL;
-    return GetPtr( n, true, bDirty );
+    return n < 0 || n >= nSize / STGENTRY_SIZE
+        ? NULL : GetPtr( n * STGENTRY_SIZE, true, bDirty );
 }
 
 // Find a dir entry.
