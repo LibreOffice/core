@@ -35,6 +35,7 @@ public:
 private:
     virtual bool doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName ) SAL_OVERRIDE;
     virtual bool doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &rFilterName, librevenge::RVNGTextInterface &rGenerator ) SAL_OVERRIDE;
+    virtual void doRegisterHandlers( OdtGenerator &rGenerator ) SAL_OVERRIDE;
 };
 
 OUString MSWorksImportFilter_getImplementationName()

@@ -24,6 +24,13 @@ using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 
+static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+{
+    OdsGenerator exporter;
+    exporter.addDocumentHandler(pHandler, streamType);
+    return libwps::WPSDocument::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter)==libwps::WPS_OK;
+}
+
 bool MSWorksImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator )
 {
     return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator);
@@ -41,6 +48,11 @@ bool MSWorksImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, O
     }
 
     return false;
+}
+
+void MSWorksImportFilter::doRegisterHandlers( OdtGenerator &rGenerator )
+{
+    rGenerator.registerEmbeddedObjectHandler("image/wks-ods", &handleEmbeddedWKSObject);
 }
 
 OUString MSWorksImportFilter_getImplementationName ()

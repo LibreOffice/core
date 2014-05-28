@@ -24,11 +24,18 @@ using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 
-static bool handleEmbeddedMWAWObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+static bool handleEmbeddedMWAWGraphicObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
 {
     OdgGenerator exporter;
     exporter.addDocumentHandler(pHandler, streamType);
     return MWAWDocument::decodeGraphic(data, &exporter);
+}
+
+static bool handleEmbeddedMWAWSpreadsheetObject(const librevenge::RVNGBinaryData &data, OdfDocumentHandler *pHandler,  const OdfStreamType streamType)
+{
+    OdsGenerator exporter;
+    exporter.addDocumentHandler(pHandler, streamType);
+    return MWAWDocument::decodeSpreadsheet(data, &exporter);
 }
 
 bool MWAWImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator )
@@ -65,11 +72,11 @@ bool MWAWImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUSt
             case MWAWDocument::MWAW_T_EDOC:
                 rTypeName = "writer_eDoc_Document";
                 break;
-            case MWAWDocument::MWAW_T_GREATWORKS:
-                rTypeName = "writer_Great_Works";
-                break;
             case MWAWDocument::MWAW_T_FULLWRITE:
                 rTypeName = "writer_FullWrite_Professional";
+                break;
+            case MWAWDocument::MWAW_T_GREATWORKS:
+                rTypeName = "writer_Great_Works";
                 break;
             case MWAWDocument::MWAW_T_HANMACWORDJ:
                 rTypeName = "writer_HanMac_Word_J";
@@ -83,23 +90,23 @@ bool MWAWImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUSt
             case MWAWDocument::MWAW_T_MACDOC:
                 rTypeName = "writer_MacDoc";
                 break;
-            case MWAWDocument::MWAW_T_MARINERWRITE:
-                rTypeName = "writer_Mariner_Write";
-                break;
-            case MWAWDocument::MWAW_T_MINDWRITE:
-                rTypeName = "writer_MindWrite";
-                break;
             case MWAWDocument::MWAW_T_MACWRITE:
                 rTypeName = "writer_MacWrite";
                 break;
             case MWAWDocument::MWAW_T_MACWRITEPRO:
                 rTypeName = "writer_MacWritePro";
                 break;
+            case MWAWDocument::MWAW_T_MARINERWRITE:
+                rTypeName = "writer_Mariner_Write";
+                break;
             case MWAWDocument::MWAW_T_MICROSOFTWORD:
                 rTypeName = "writer_Mac_Word";
                 break;
             case MWAWDocument::MWAW_T_MICROSOFTWORKS:
                 rTypeName = "writer_Mac_Works";
+                break;
+            case MWAWDocument::MWAW_T_MINDWRITE:
+                rTypeName = "writer_MindWrite";
                 break;
             case MWAWDocument::MWAW_T_MORE:
                 rTypeName = "writer_Mac_More";
@@ -123,13 +130,35 @@ bool MWAWImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUSt
                 rTypeName = "writer_ZWrite";
                 break;
 
+            case MWAWDocument::MWAW_T_ADOBEILLUSTRATOR:
+            case MWAWDocument::MWAW_T_CLARISRESOLVE:
+            case MWAWDocument::MWAW_T_DBASE:
+            case MWAWDocument::MWAW_T_FAMILYTREEMAKER:
+            case MWAWDocument::MWAW_T_FILEMAKER:
+            case MWAWDocument::MWAW_T_FOXBASE:
+            case MWAWDocument::MWAW_T_FULLIMPACT:
+            case MWAWDocument::MWAW_T_FULLPAINT:
             case MWAWDocument::MWAW_T_FRAMEMAKER:
+            case MWAWDocument::MWAW_T_INFOGENIE:
+            case MWAWDocument::MWAW_T_KALEIDAGRAPH:
+            case MWAWDocument::MWAW_T_MACDRAFT:
             case MWAWDocument::MWAW_T_MACDRAW:
+            case MWAWDocument::MWAW_T_MACDRAWPRO:
             case MWAWDocument::MWAW_T_MACPAINT:
+            case MWAWDocument::MWAW_T_MICROSOFTFILE:
+            case MWAWDocument::MWAW_T_MICROSOFTMULTIPLAN:
+            case MWAWDocument::MWAW_T_OVERVUE:
             case MWAWDocument::MWAW_T_PAGEMAKER:
+            case MWAWDocument::MWAW_T_PIXELPAINT:
             case MWAWDocument::MWAW_T_READYSETGO:
             case MWAWDocument::MWAW_T_RAGTIME:
+            case MWAWDocument::MWAW_T_SUPERPAINT:
+            case MWAWDocument::MWAW_T_SYMPOSIUM:
+            case MWAWDocument::MWAW_T_TRAPEZE:
+            case MWAWDocument::MWAW_T_WINGZ:
             case MWAWDocument::MWAW_T_XPRESS:
+            case MWAWDocument::MWAW_T_4DIMENSION:
+
             case MWAWDocument::MWAW_T_RESERVED1:
             case MWAWDocument::MWAW_T_RESERVED2:
             case MWAWDocument::MWAW_T_RESERVED3:
@@ -151,7 +180,8 @@ bool MWAWImportFilter::doDetectFormat( librevenge::RVNGInputStream &rInput, OUSt
 
 void MWAWImportFilter::doRegisterHandlers( OdtGenerator &rGenerator )
 {
-    rGenerator.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWObject);
+    rGenerator.registerEmbeddedObjectHandler("image/mwaw-odg", &handleEmbeddedMWAWGraphicObject);
+    rGenerator.registerEmbeddedObjectHandler("image/mwaw-ods", &handleEmbeddedMWAWSpreadsheetObject);
 }
 
 OUString MWAWImportFilter_getImplementationName ()
