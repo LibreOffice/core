@@ -14,16 +14,19 @@
 class OpenGLWindowImpl
 {
 public:
-    OpenGLWindowImpl(SystemChildWindow* pWindow);
+    OpenGLWindowImpl(Window* pWindow);
     OpenGLContext* getContext();
 private:
     OpenGLContext maContext;
+    boost::scoped_ptr<SystemChildWindow> mpChildWindow;
 };
 
-OpenGLWindowImpl::OpenGLWindowImpl(SystemChildWindow* pWindow)
+OpenGLWindowImpl::OpenGLWindowImpl(Window* pWindow):
+    mpChildWindow(new SystemChildWindow(pWindow))
 {
-    maContext.init(pWindow);
+    maContext.init(mpChildWindow.get());
     pWindow->SetMouseTransparent(false);
+    maContext.show();
 }
 
 OpenGLContext* OpenGLWindowImpl::getContext()
@@ -32,7 +35,7 @@ OpenGLContext* OpenGLWindowImpl::getContext()
 }
 
 OpenGLWindow::OpenGLWindow(Window* pParent):
-    SystemChildWindow(pParent, 0),
+    Window(pParent, 0),
     mpImpl(new OpenGLWindowImpl(this)),
     mpRenderer(NULL)
 {
@@ -57,6 +60,7 @@ void OpenGLWindow::Paint(const Rectangle&)
 
 void OpenGLWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    getContext()->show();
     maStartPoint = rMEvt.GetPosPixel();
 }
 

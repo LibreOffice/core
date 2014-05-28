@@ -32,7 +32,7 @@ public:
 };
 
 // pImpl Pattern to avoid linking against OpenGL libs when using the class without the context
-class VCLOPENGL_DLLPUBLIC OpenGLWindow : public SystemChildWindow
+class VCLOPENGL_DLLPUBLIC OpenGLWindow : public Window
 {
 public:
     OpenGLWindow(Window* pParent);
