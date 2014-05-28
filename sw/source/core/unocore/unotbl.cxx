@@ -3185,8 +3185,8 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     pUnoCrsr->SetMark();
                     pUnoCrsr->GetPoint()->nNode = *pBRBox->GetSttNd();
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
-                    SwUnoTableCrsr* pCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-                    pCrsr->MakeBoxSels();
+                    SwUnoTableCrsr& rCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+                    rCrsr.MakeBoxSels();
 
                     SfxItemSet aSet(pDoc->GetAttrPool(),
                                     RES_BOX, RES_BOX,
@@ -3220,7 +3220,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName, const uno::An
                     aSet.Put(aBox);
                     aSet.Put(aBoxInfo);
 
-                    pDoc->SetTabBorders(*pCrsr, aSet);
+                    pDoc->SetTabBorders(rCrsr, aSet);
                     delete pUnoCrsr;
                 }
                 break;
