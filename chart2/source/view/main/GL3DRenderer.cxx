@@ -299,6 +299,7 @@ void OpenGL3DRenderer::init()
 
     OpenGLHelper::createFramebuffer(m_iWidth, m_iHeight, mnPickingFbo, mnPickingRboDepth, mnPickingRboColor);
 
+    m_Extrude3DInfo.rounded = false;
     CHECK_GL_ERROR();
     Init3DUniformBlock();
     InitBatch3DUniformBlock();
@@ -378,10 +379,6 @@ void OpenGL3DRenderer::SetVertex(PackedVertex &packed,
 
 void OpenGL3DRenderer::CreateActualRoundedCube(float fRadius, int iSubDivY, int iSubDivZ, float width, float height, float depth)
 {
-    if ((fRadius > (width / 2)) || (fRadius > (height / 2)) || (fRadius > (depth / 2)))
-    {
-        return;
-    }
     float topThreshold = depth - 2 * fRadius;
     float bottomThreshold = fRadius;
 
@@ -1033,12 +1030,14 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
     m_Extrude3DInfo.xTransform = tranform.x;
     m_Extrude3DInfo.yTransform = tranform.y;
     m_Extrude3DInfo.zTransform = tranform.z;
-    m_Extrude3DInfo.rounded = roundedCorner;
-    if (m_Extrude3DInfo.rounded && (m_RoundBarMesh.iMeshSizes == 0))
+    float width = 1.0f;
+    float height = m_Extrude3DInfo.yScale / m_Extrude3DInfo.xScale;
+    float radius = height > 0.2f ? 0.2f : height / 4.0f;
+    float depth = 1 + 2 * radius;
+    bool NORoundedCube = (radius > (width / 2)) || (radius > (height / 2)) || (radius > (depth / 2));
+    if (!NORoundedCube && roundedCorner && (m_RoundBarMesh.iMeshSizes == 0))
     {
-        float radius = 0.2f;
-        CreateActualRoundedCube(radius, CORNER_DIVION_Y, CORNER_DIVION_Z,
-                1.0f, m_Extrude3DInfo.yScale / m_Extrude3DInfo.xScale, 1 + 2 * radius);
+        CreateActualRoundedCube(radius, CORNER_DIVION_Y, CORNER_DIVION_Z, width, height, depth);
         AddVertexData(m_CubeVertexBuf);
         AddNormalData(m_CubeNormalBuf);
         AddIndexData(m_CubeElementBuf);
@@ -1050,6 +1049,7 @@ void OpenGL3DRenderer::AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 nC
         m_Vertices.clear();
         m_Normals.clear();
         m_Indices.clear();
+        m_Extrude3DInfo.rounded = true;
     }
     m_Batchmaterial = m_Extrude3DInfo.material;
 }
@@ -1871,7 +1871,6 @@ void OpenGL3DRenderer::RenderBatchBars()
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-
     glUseProgram(maResources.m_3DBatchProID);
     UpdateBatch3DUniformBlock();
     glBindBuffer(GL_UNIFORM_BUFFER, m_Batch3DUBOBuffer);
