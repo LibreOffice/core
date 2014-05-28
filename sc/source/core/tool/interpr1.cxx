@@ -8091,7 +8091,7 @@ void ScInterpreter::ScRight()
         if (nParamCount == 2)
         {
             double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( nVal < 0.0 || nVal > SAL_MAX_UINT16 )
+            if ( rtl::math::isNan(nVal) || nVal < 0.0 || nVal > SAL_MAX_UINT16 )
             {
                 PushIllegalArgument();
                 return ;
