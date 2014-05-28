@@ -19,7 +19,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,libgltf,\
 	external/libgltf/patches/include_path_glew.patch \
 	external/libgltf/patches/include_path_freetype.patch \
 	external/libgltf/patches/openmp-disable.patch \
-	external/libgltf/patches/free_file_buffers.patch \
 	external/libgltf/patches/rgba_textures.patch \
 ))
 
