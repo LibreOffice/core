@@ -2157,11 +2157,10 @@ void Desktop::PreloadConfigurationData()
     }
 
     // preload user interface element factories
-    Sequence< Sequence< css::beans::PropertyValue > > aSeqSeqPropValue;
     Reference< XUIElementFactoryManager > xUIElementFactory = theUIElementFactoryManager::get( xContext );
     try
     {
-        aSeqSeqPropValue = xUIElementFactory->getRegisteredFactories();
+        xUIElementFactory->getRegisteredFactories();
     }
     catch ( const ::com::sun::star::uno::Exception& )
     {
@@ -2174,7 +2173,7 @@ void Desktop::PreloadConfigurationData()
     css::frame::thePopupMenuControllerFactory::get( xContext );
     try
     {
-        xPopupMenuControllerFactory->hasController(
+        (void)xPopupMenuControllerFactory->hasController(
                     OUString( ".uno:CharFontName" ),
                     OUString() );
     }
@@ -2183,7 +2182,6 @@ void Desktop::PreloadConfigurationData()
     }
 
     // preload filter configuration
-    Sequence< OUString > aSeq;
     xNameAccess = Reference< XNameAccess >(
                     xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
                     UNO_QUERY );
@@ -2191,7 +2189,7 @@ void Desktop::PreloadConfigurationData()
     {
         try
         {
-             aSeq = xNameAccess->getElementNames();
+             xNameAccess->getElementNames();
         }
         catch ( const ::com::sun::star::uno::Exception& )
         {
@@ -2206,7 +2204,7 @@ void Desktop::PreloadConfigurationData()
     {
         try
         {
-             aSeq = xNameAccess->getElementNames();
+             xNameAccess->getElementNames();
         }
         catch ( const ::com::sun::star::uno::Exception& )
         {
