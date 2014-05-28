@@ -303,13 +303,13 @@ const OUString& ScStyleSheet::GetFollow() const
 //! Flag gesetzt und abgefragt werden.
 //! Die ganze Abfrage muss raus, wenn fuer eine neue Datei-Version die Namens-Umsetzung wegfaellt.
 
-bool ScStyleSheet::SetName( const OUString& rNew )
+bool ScStyleSheet::SetName(const OUString& rNew, bool bReindexNow)
 {
     OUString aFileStdName = OUString(STRING_STANDARD);
     if ( rNew == aFileStdName && aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )
         return false;
     else
-        return SfxStyleSheet::SetName( rNew );
+        return SfxStyleSheet::SetName(rNew, bReindexNow);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
