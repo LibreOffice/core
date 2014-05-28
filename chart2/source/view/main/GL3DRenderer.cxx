@@ -1725,16 +1725,120 @@ sal_uInt32 OpenGL3DRenderer::GetPixelColorFromPoint(long nX, long nY)
     return aColor.GetColor();
 }
 
+void OpenGL3DRenderer::ReleaseBatchBarInfo()
+{
+    for (int i = 0; i < 3; i++)
+    {
+        m_BarSurface[i].modelMatrixList.clear();
+        m_BarSurface[i].normalMatrixList.clear();
+        m_BarSurface[i].colorList.clear();
+    }
+}
+
+
 void OpenGL3DRenderer::ReleaseShapes()
 {
     ReleasePolygonShapes();
     ReleaseExtrude3DShapes();
     ReleaseTextShapes();
     ReleaseScreenTextShapes();
+    ReleaseBatchBarInfo();
 }
 
+void OpenGL3DRenderer::GetBatchMiddleInfo(Extrude3DInfo &extrude3D)
+{
+    float xyScale = extrude3D.xScale;
+    float zScale = extrude3D.zScale;
+    float actualZScale = zScale - m_RoundBarMesh.bottomThreshold * xyScale;
+    PosVecf3 trans = {extrude3D.xTransform,
+                      extrude3D.yTransform,
+                      extrude3D.zTransform};
+    if (actualZScale < 0.0f)
+    {
+          return ;
+    }
+    else
+    {
+        glm::mat4 scale = glm::scale(xyScale, xyScale,actualZScale);
+        glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+        m_Model = aTranslationMatrix * extrude3D.rotation * scale;
+    }
+    glm::mat3 normalMatrix(m_Model);
+    glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+    m_BarSurface[MIDDLE_SURFACE].modelMatrixList.push_back(m_Model);
+    m_BarSurface[MIDDLE_SURFACE].normalMatrixList.push_back(normalInverseTranspos);
+    m_BarSurface[MIDDLE_SURFACE].colorList.push_back(extrude3D.material.materialColor);
 }
 
+void OpenGL3DRenderer::GetBatchTopAndFlatInfo(Extrude3DInfo &extrude3D)
+{
+    float xyScale = extrude3D.xScale;
+    float zScale = extrude3D.zScale;
+    float actualZTrans = zScale - m_RoundBarMesh.bottomThreshold * xyScale;
+    PosVecf3 trans = {extrude3D.xTransform,
+                      extrude3D.yTransform,
+                      extrude3D.zTransform};
+    glm::mat4 orgTrans = glm::translate(glm::vec3(0.0, 0.0, -1.0));
+    if (actualZTrans < 0.0f)
+    {
+        // the height of rounded corner is higher than the cube than use the org scale matrix
+        //yScale /= (float)(1 + BOTTOM_THRESHOLD);
+        zScale /= (float)(m_RoundBarMesh.bottomThreshold);
+        glm::mat4 scale = glm::scale(xyScale, xyScale, zScale);
+        //MoveModelf(trans, angle, scale);
+        glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+        m_Model = aTranslationMatrix * extrude3D.rotation * scale * orgTrans;
+    }
+    else
+    {
+        // use different matrices for different parts
+        glm::mat4 topTrans = glm::translate(glm::vec3(0.0, 0.0, actualZTrans));
+        glm::mat4 topScale = glm::scale(xyScale, xyScale, xyScale);
+        glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+        m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
+    }
+    glm::mat3 normalMatrix(m_Model);
+    glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+    m_BarSurface[TOP_SURFACE].modelMatrixList.push_back(m_Model);
+    m_BarSurface[TOP_SURFACE].normalMatrixList.push_back(normalInverseTranspos);
+    m_BarSurface[TOP_SURFACE].colorList.push_back(extrude3D.material.materialColor);
+
+    glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
+    glm::mat4 flatScale = glm::scale(xyScale, xyScale, xyScale);
+    m_Model = aTranslationMatrix * extrude3D.rotation * flatScale;
+    normalMatrix = glm::mat3(m_Model);
+    normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+
+    m_BarSurface[FLAT_BOTTOM_SURFACE].modelMatrixList.push_back(m_Model);
+    m_BarSurface[FLAT_BOTTOM_SURFACE].normalMatrixList.push_back(normalInverseTranspos);
+    m_BarSurface[FLAT_BOTTOM_SURFACE].colorList.push_back(extrude3D.material.materialColor);
 }
 
+void OpenGL3DRenderer::GetBatchBarsInfo()
+{
+    for (size_t i = 0; i < m_Extrude3DList.size(); i++)
+    {
+        Extrude3DInfo &extrude3DInfo = m_Extrude3DList[i];
+        extrude3DInfo.zTransform *= m_fHeightWeight;
+        extrude3DInfo.zScale *= m_fHeightWeight;
+        if (m_Extrude3DInfo.rounded)
+        {
+            GetBatchTopAndFlatInfo(extrude3DInfo);
+            GetBatchMiddleInfo(extrude3DInfo);
+        }
+        else
+        {
+            glm::mat4 transformMatrix = glm::translate(glm::vec3(extrude3DInfo.xTransform, extrude3DInfo.yTransform, extrude3DInfo.zTransform));
+            glm::mat4 scaleMatrix = glm::scale(extrude3DInfo.xScale, extrude3DInfo.yScale, extrude3DInfo.zScale);
+            m_Model = transformMatrix * extrude3DInfo.rotation * scaleMatrix;
+            glm::mat3 normalMatrix(m_Model);
+            glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
+            m_BarSurface[0].modelMatrixList.push_back(m_Model);
+            m_BarSurface[0].normalMatrixList.push_back(normalInverseTranspos);
+            m_BarSurface[0].colorList.push_back(extrude3DInfo.material.materialColor);
+        }
+    }
+}
+}
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

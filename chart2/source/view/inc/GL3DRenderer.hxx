@@ -225,6 +225,9 @@ private:
     void ReleaseTextShapes();
     void ReleaseScreenTextShapes();
     void ReleaseBatchBarInfo();
+    void GetBatchBarsInfo();
+    void GetBatchTopAndFlatInfo(Extrude3DInfo &extrude3D);
+    void GetBatchMiddleInfo(Extrude3DInfo &extrude3D);
     void InitBatch3DUniformBlock();
     void UpdateBatch3DUniformBlock();
 private:
