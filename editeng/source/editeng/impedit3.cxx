@@ -2556,6 +2556,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
     rFont = pNode->GetCharAttribs().GetDefFont();
 
+    /*
+     * Set attributes for script types Asian and Complex
+    */
     short nScriptType = GetI18NScriptType( EditPaM( pNode, nPos ) );
     if ( ( nScriptType == i18n::ScriptType::ASIAN ) || ( nScriptType == i18n::ScriptType::COMPLEX ) )
     {
@@ -2574,6 +2577,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
     sal_uInt16 nRelWidth = ((const SvxCharScaleWidthItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_FONTWIDTH)).GetValue();
 
+    /*
+     * Set output device's line and overline colors
+    */
     if ( pOut )
     {
         const SvxUnderlineItem& rTextLineColor = (const SvxUnderlineItem&)pNode->GetContentAttribs().GetItem( EE_CHAR_UNDERLINE );
@@ -2594,6 +2600,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_Int32 nPos, SvxFont& rFo
 
     const SvxLanguageItem* pCJKLanguageItem = NULL;
 
+    /*
+     * Scan through char attributes of pNode
+    */
     if ( aStatus.UseCharAttribs() )
     {
         CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
@@ -3412,6 +3421,12 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                              ' ' == aText[nTextStart + nTextLen - 1] )
                                             --nTextLen;
 
+                                        // FIXME(matteocam)
+                                        if (aTmpFont.GetItalic() != ITALIC_NONE) {
+                                            Color aColor = COL_BROWN;
+                                            aTmpFont.SetFillColor(aColor);
+                                        }
+
                                         // output directly
                                         aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
 
@@ -3684,6 +3699,8 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRect, OutputDev
             SvxFont aTmpFont;
             ContentNode* pNode = GetEditDoc().GetObject( 0 );
             SeekCursor( pNode, 1, aTmpFont );
+
+
             Color aFontColor( aTmpFont.GetColor() );
             if( (aFontColor == COL_AUTO) || IsForceAutoColor() )
                 aFontColor = GetAutoColor();

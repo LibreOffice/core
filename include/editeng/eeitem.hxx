@@ -80,18 +80,18 @@
 #define EE_CHAR_OVERLINE            (EE_ITEMS_START+47)
 #define EE_CHAR_CASEMAP             (EE_ITEMS_START+48)
 #define EE_CHAR_GRABBAG             (EE_ITEMS_START+49)
-#define EE_CHAR_BKGCOLOR            (EE_ITEMS_START+50)
+//#define EE_CHAR_BKGCOLOR            (EE_ITEMS_START+50)
 
-#define EE_CHAR_END                 (EE_ITEMS_START+50)
+#define EE_CHAR_END                 (EE_ITEMS_START+49)
 
-#define EE_FEATURE_START            (EE_ITEMS_START+51)
-#define EE_FEATURE_TAB              (EE_ITEMS_START+51)
-#define EE_FEATURE_LINEBR           (EE_ITEMS_START+52)
-#define EE_FEATURE_NOTCONV          (EE_ITEMS_START+53)
-#define EE_FEATURE_FIELD            (EE_ITEMS_START+54)
-#define EE_FEATURE_END              (EE_ITEMS_START+54)
+#define EE_FEATURE_START            (EE_ITEMS_START+50)
+#define EE_FEATURE_TAB              (EE_ITEMS_START+50)
+#define EE_FEATURE_LINEBR           (EE_ITEMS_START+51)
+#define EE_FEATURE_NOTCONV          (EE_ITEMS_START+52)
+#define EE_FEATURE_FIELD            (EE_ITEMS_START+53)
+#define EE_FEATURE_END              (EE_ITEMS_START+53)
 
-#define EE_ITEMS_END                (EE_ITEMS_START+54)
+#define EE_ITEMS_END                (EE_ITEMS_START+53)
 
 #define EDITITEMCOUNT ( EE_ITEMS_END - EE_ITEMS_START + 1 )
 

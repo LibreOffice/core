@@ -520,8 +520,6 @@ void OutputDevice::SetFont( const Font& rNewFont )
 
         aFont.SetColor( aTextColor );
 
-        mbTextBackground = aFont.HasBackgroundColor();
-
         bool bTransFill = aFont.IsTransparent();
         if ( !bTransFill )
         {
