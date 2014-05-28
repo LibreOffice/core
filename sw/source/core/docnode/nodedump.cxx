@@ -561,6 +561,7 @@ void SwFrmFmts::dumpAsXml(xmlTextWriterPtr w, const char* pName)
             SwFrmFmt* pFmt = static_cast<SwFrmFmt*>(GetFmt(i));
             writer.startElement("swfrmfmt");
             OString aName = OUStringToOString(pFmt->GetName(), RTL_TEXTENCODING_UTF8);
+            writer.writeFormatAttribute("ptr", "%p", pFmt);
             writer.writeFormatAttribute("name", "%s", BAD_CAST(aName.getStr()));
 
             writer.writeFormatAttribute("whichId", TMP_FORMAT, pFmt->Which());
