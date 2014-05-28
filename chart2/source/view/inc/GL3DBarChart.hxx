@@ -105,6 +105,7 @@ private:
 
     std::map<sal_uInt32, const BarInformation> maBarMap;
     bool mbBlockUserInput;
+    bool mbNeedsNewRender;
 };
 
 }

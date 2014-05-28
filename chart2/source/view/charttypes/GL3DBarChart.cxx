@@ -35,7 +35,8 @@ GL3DBarChart::GL3DBarChart(
     mnStep(0),
     mnStepsTotal(0),
     mnCornerId(0),
-    mbBlockUserInput(false)
+    mbBlockUserInput(false),
+    mbNeedsNewRender(true)
 {
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -93,6 +94,7 @@ double findMaxValue(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer)
 void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer,
         ExplicitCategoriesProvider& rCatProvider)
 {
+    mpRenderer->ReleaseShapes();
     // Each series of data flows from left to right, and multiple series are
     // stacked vertically along y axis.
 
@@ -269,6 +271,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     mpCamera->setPosition(maCameraPosition);
     maCameraDirection = glm::vec3(mnMaxX/2, mnMaxY/2, 0);
     mpCamera->setDirection(maCameraDirection);
+
+    mbNeedsNewRender = true;
 }
 
 void GL3DBarChart::render()
@@ -280,11 +284,19 @@ void GL3DBarChart::render()
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
     mrWindow.getContext()->setWinSize(aSize);
-    for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
-            itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+    if(mbNeedsNewRender)
     {
-        itr->render();
+        for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
+                itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+        {
+            itr->render();
+        }
     }
+    else
+    {
+        mpCamera->render();
+    }
+    mbNeedsNewRender = false;
     mpRenderer->ProcessUnrenderedShape();
     mrWindow.getContext()->swapBuffers();
 }

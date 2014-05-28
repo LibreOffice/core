@@ -184,6 +184,9 @@ public:
     void SetPickingMode(bool bPickingMode);
 
     sal_uInt32 GetPixelColorFromPoint(long nX, long nY);
+
+    void ReleaseShapes();
+    void ReleaseScreenTextShapes();
 private:
     void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
 
@@ -219,11 +222,9 @@ private:
                                int iSubDivZ, float width, float height, float depth);
     void CreateSceneBoxView();
 
-    void ReleaseShapes();
     void ReleasePolygonShapes();
     void ReleaseExtrude3DShapes();
     void ReleaseTextShapes();
-    void ReleaseScreenTextShapes();
     void ReleaseBatchBarInfo();
     void GetBatchBarsInfo();
     void GetBatchTopAndFlatInfo(Extrude3DInfo &extrude3D);
