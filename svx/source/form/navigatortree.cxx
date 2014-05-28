@@ -1311,7 +1311,7 @@ namespace svxform
     }
 
 
-    bool NavigatorTree::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
+    bool NavigatorTree::EditingEntry( SvTreeListEntry* pEntry, ::Selection& rSelection )
     {
         if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
             return false;

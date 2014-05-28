@@ -1053,7 +1053,7 @@ namespace svx
     }
 
 
-    void FmTextControlShell::formActivated( const Reference< XFormController >& _rxController )
+    void FmTextControlShell::formActivated( const Reference< runtime::XFormController >& _rxController )
     {
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::formActivated: 0x" );
@@ -1081,7 +1081,7 @@ namespace svx
     }
 
 
-    void FmTextControlShell::formDeactivated( const Reference< XFormController >& _rxController )
+    void FmTextControlShell::formDeactivated( const Reference< runtime::XFormController >& _rxController )
     {
 #if OSL_DEBUG_LEVEL > 0
         OString sTrace( "FmTextControlShell::formDeactivated: 0x" );
@@ -1097,7 +1097,7 @@ namespace svx
     }
 
 
-    void FmTextControlShell::startControllerListening( const Reference< XFormController >& _rxController )
+    void FmTextControlShell::startControllerListening( const Reference< runtime::XFormController >& _rxController )
     {
         OSL_PRECOND( _rxController.is(), "FmTextControlShell::startControllerListening: invalid controller!" );
         if ( !_rxController.is() )

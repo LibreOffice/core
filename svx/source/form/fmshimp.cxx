@@ -3993,7 +3993,7 @@ bool FmXFormShell::HasControlFocus() const
 
     try
     {
-        Reference< XFormController > xController( getActiveController() );
+        Reference< runtime::XFormController > xController( getActiveController() );
         Reference< XControl > xCurrentControl;
         if ( xController.is() )
             xCurrentControl.set( xController->getCurrentControl() );
