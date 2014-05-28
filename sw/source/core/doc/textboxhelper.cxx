@@ -192,6 +192,16 @@ uno::Any SwTextBoxHelper::queryInterface(SwFrmFmt* pShape, const uno::Type& rTyp
     return aRet;
 }
 
+Rectangle SwTextBoxHelper::getTextRectangle(SwFrmFmt* pShape)
+{
+    Rectangle aRet;
+    aRet.SetEmpty();
+    SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>(pShape->FindRealSdrObject());
+    if (pCustomShape)
+        pCustomShape->GetTextBounds(aRet);
+    return aRet;
+}
+
 void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, const OUString& rPropertyName, const css::uno::Any& rValue)
 {
     // No shape yet? Then nothing to do, initial properties are set by create().
@@ -260,12 +270,9 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             // Position/size should be the text position/size, not the shape one as-is.
             if (bAdjustX || bAdjustY || bAdjustSize)
             {
-                SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>(pShape->FindRealSdrObject());
-                if (pCustomShape)
+                Rectangle aRect = getTextRectangle(pShape);
+                if (!aRect.IsEmpty())
                 {
-                    Rectangle aRect;
-                    pCustomShape->GetTextBounds(aRect);
-
                     if (bAdjustX || bAdjustY)
                     {
                         sal_Int32 nValue;

@@ -19,6 +19,7 @@
 class SdrPage;
 class SwFrmFmt;
 class SwDoc;
+class Rectangle;
 
 /**
  * A TextBox is a TextFrame, that is tied to a drawinglayer shape.
@@ -39,6 +40,8 @@ public:
     static void syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, const OUString& rPropertyName, const css::uno::Any& rValue);
     /// If we have an associated TextFrame, then return that.
     static SwFrmFmt* findTextBox(SwFrmFmt* pShape);
+    /// Return the textbox rectangle of a draw shape (absolute values, in twips).
+    static Rectangle getTextRectangle(SwFrmFmt* pShape);
 
     /// Look up TextFrames in a document, which are in fact TextBoxes.
     static std::list<SwFrmFmt*> findTextBoxes(const SwDoc* pDoc);
