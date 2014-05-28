@@ -1038,16 +1038,18 @@ void SdStyleSheetPool::UpdateStdNames()
                         // Sheet does exist: old sheet has to be removed
                         aEraseList.push_back( pStyle );
                     }
-                    Reindex();
                 }
             }
         }
     }
 
-    // styles that could not be renamed, must be removed
-    for ( size_t i = 0, n = aEraseList.size(); i < n; ++i )
-        Remove( aEraseList[ i ] );
-    Reindex();
+    if (!aEraseList.empty())
+    {
+        // styles that could not be renamed, must be removed
+        for ( size_t i = 0, n = aEraseList.size(); i < n; ++i )
+            Remove( aEraseList[ i ] );
+        Reindex();
+    }
 }
 
 // Set new SvxNumBulletItem for the respective style sheet

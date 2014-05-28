@@ -105,8 +105,13 @@ public:
     // returns the internal name of this style
     virtual const OUString& GetName() const;
 
-    // sets the internal name of this style
-    virtual bool SetName( const OUString& );
+    // sets the internal name of this style.
+    //
+    // If the name of a style is changed, then the styles container needs to be
+    // reindexed (see IndexedStyleSheets). If you set bReindexNow to false to
+    // defer that indexing, then you must call the Reindex manually on the
+    // SfxStyleSheetBasePool parent.
+    virtual bool SetName(const OUString& rNewName, bool bReindexNow = true);
 
     /** returns the display name of this style, it is used at the user interface.
         If the display name is empty, this method returns the internal name. */
