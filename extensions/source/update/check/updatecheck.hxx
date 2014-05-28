@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECK_HXX
+#define INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECK_HXX
+
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -177,5 +180,7 @@ UpdateCheckInitData::operator() () const
 {
     return rtl::Reference< UpdateCheck > (new UpdateCheck());
 }
+
+#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_UPDATECHECK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
