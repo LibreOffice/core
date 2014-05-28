@@ -481,7 +481,7 @@ void SmElementsControl::addElements(const sal_uInt16 aElementsArray[][2], sal_uI
             addSeparator();
         } else {
             if (aElementId == RID_NEWLINE)
-                addElement(OStringToOUString( "\xe2\x86\xb5", RTL_TEXTENCODING_UTF8 ), SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
+                addElement(OUString( "\xe2\x86\xb5", 3, RTL_TEXTENCODING_UTF8 ), SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_SBLANK)
                 addElement("\"`\"", SM_RESSTR(aElementId), SM_RESSTR(aElementIdHelp));
             else if (aElementId == RID_BLANK)
