@@ -204,7 +204,7 @@ uno::Reference< util::XCloneable > SAL_CALL RegressionEquation::createClone()
 
 // ____ OPropertySet ____
 uno::Any RegressionEquation::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
+    throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticRegressionEquationDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
