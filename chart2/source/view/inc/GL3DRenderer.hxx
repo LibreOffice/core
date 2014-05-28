@@ -179,7 +179,7 @@ public:
 
                                  glm::vec2 vTopLeft, glm::vec2 vBottomRight,
                                  sal_uInt32 nUniqueId);
-    void ProcessUnrenderedShape();
+    void ProcessUnrenderedShape(bool bNewScene);
 
     void SetPickingMode(bool bPickingMode);
 
@@ -231,7 +231,7 @@ private:
     void GetBatchMiddleInfo(Extrude3DInfo &extrude3D);
     void InitBatch3DUniformBlock();
     void UpdateBatch3DUniformBlock();
-    void RenderBatchBars();
+    void RenderBatchBars(bool bNewScene);
 private:
 
     struct ShaderResources

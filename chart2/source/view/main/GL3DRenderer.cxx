@@ -1693,7 +1693,7 @@ void OpenGL3DRenderer::CreateSceneBoxView()
                m_CameraInfo.cameraUp);
 }
 
-void OpenGL3DRenderer::ProcessUnrenderedShape()
+void OpenGL3DRenderer::ProcessUnrenderedShape(bool bNewScene)
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
     glClearDepth(1.0f);
@@ -1706,7 +1706,7 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     if(mbPickingMode)
         RenderExtrude3DObject();
     else
-        RenderBatchBars();
+        RenderBatchBars(bNewScene);
     //render text
     RenderTextShape();
     // render screen text
@@ -1865,9 +1865,10 @@ void OpenGL3DRenderer::GetBatchBarsInfo()
     }
 }
 
-void OpenGL3DRenderer::RenderBatchBars()
+void OpenGL3DRenderer::RenderBatchBars(bool bNewScene)
 {
-    GetBatchBarsInfo();
+    if(bNewScene)
+        GetBatchBarsInfo();
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
