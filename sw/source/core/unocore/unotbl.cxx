@@ -1746,22 +1746,22 @@ sal_Bool SwXTextTableCursor::mergeRange()
             // hier muessen die Actions aufgehoben werden
             UnoActionRemoveContext aRemoveContext(pUnoCrsr->GetDoc());
         }
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-        pTblCrsr->MakeBoxSels();
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+        rTblCrsr.MakeBoxSels();
 
         {
             UnoActionContext aContext(pUnoCrsr->GetDoc());
-            bRet = TBLMERGE_OK == pTblCrsr->GetDoc()->MergeTbl(*pTblCrsr);
+            bRet = TBLMERGE_OK == rTblCrsr.GetDoc()->MergeTbl(rTblCrsr);
             if(bRet)
             {
-                size_t nCount = pTblCrsr->GetSelectedBoxesCount();
+                size_t nCount = rTblCrsr.GetSelectedBoxesCount();
                 while (nCount--)
                 {
-                    pTblCrsr->DeleteBox(nCount);
+                    rTblCrsr.DeleteBox(nCount);
                 }
             }
         }
-        pTblCrsr->MakeBoxSels();
+        rTblCrsr.MakeBoxSels();
     }
     return bRet;
 }
