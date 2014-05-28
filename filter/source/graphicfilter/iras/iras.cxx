@@ -20,7 +20,6 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <vcl/scopedbitmapaccess.hxx>
 
 class FilterConfigItem;
 
