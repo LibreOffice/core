@@ -91,21 +91,15 @@ Sequence<OUString> SAL_CALL ModuleController_getSupportedServiceNames (void)
     return Sequence<OUString>(&sServiceName, 1);
 }
 
-
-
-
 //===== ModuleController ======================================================
-
 Reference<XModuleController> ModuleController::CreateInstance (
     const Reference<XComponentContext>& rxContext)
 {
     return new ModuleController(rxContext);
 }
 
-
-
-
-ModuleController::ModuleController (const Reference<XComponentContext>& rxContext) throw()
+ModuleController::ModuleController (const Reference<XComponentContext>& rxContext)
+    throw (std::exception)
     : ModuleControllerInterfaceBase(MutexOwner::maMutex),
       mxController(),
       mpResourceToFactoryMap(new ResourceToFactoryMap()),
@@ -114,9 +108,6 @@ ModuleController::ModuleController (const Reference<XComponentContext>& rxContex
     (void)rxContext;
     LoadFactories(rxContext);
 }
-
-
-
 
 ModuleController::~ModuleController (void) throw()
 {
