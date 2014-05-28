@@ -1286,22 +1286,22 @@ void SwXFrame::SetSelection(SwPaM& rCopySource)
     *m_pCopySource->GetMark() = *rCopySource.End();
 }
 
-SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
+SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrmFmt &rFmt)
 {
-    SdrObject* pObject = pFmt->FindSdrObject();
+    SdrObject* pObject = rFmt.FindSdrObject();
     if( !pObject )
     {
-        SwDoc *pDoc = pFmt->GetDoc();
+        SwDoc *pDoc = rFmt.GetDoc();
         // #i52858# - method name changed
         SdrModel *pDrawModel = pDoc->GetOrCreateDrawModel();
         SwFlyDrawContact* pContactObject
-                    = new SwFlyDrawContact( pFmt, pDrawModel );
+                    = new SwFlyDrawContact( &rFmt, pDrawModel );
         pObject = pContactObject->GetMaster();
 
-        const :: SwFmtSurround& rSurround = pFmt->GetSurround();
+        const :: SwFmtSurround& rSurround = rFmt.GetSurround();
         pObject->SetLayer(
             ( SURROUND_THROUGHT == rSurround.GetSurround() &&
-              !pFmt->GetOpaque().GetValue() ) ? pDoc->GetHellId()
+              !rFmt.GetOpaque().GetValue() ) ? pDoc->GetHellId()
                                              : pDoc->GetHeavenId() );
 
         pDrawModel->GetPage(0)->InsertObject( pObject );
@@ -1447,26 +1447,22 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
         // New attribute Title
         else if( FN_UNO_TITLE == pEntry->nWID )
         {
-            SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-            OSL_ENSURE( pFmt,
-                    "unexpected type of <pFmt> --> crash" );
+            SwFlyFrmFmt& rFlyFmt = dynamic_cast<SwFlyFrmFmt&>(*pFmt);
             OUString sTitle;
             aValue >>= sTitle;
             // assure that <SdrObject> instance exists.
-            GetOrCreateSdrObject( pFlyFmt );
-            pFlyFmt->GetDoc()->SetFlyFrmTitle( *(pFlyFmt), sTitle );
+            GetOrCreateSdrObject(rFlyFmt);
+            pFlyFmt->GetDoc()->SetFlyFrmTitle(rFlyFmt, sTitle);
         }
         // New attribute Description
         else if( FN_UNO_DESCRIPTION == pEntry->nWID )
         {
-            SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-            OSL_ENSURE( pFmt,
-                    "unexpected type of <pFmt> --> crash" );
+            SwFlyFrmFmt& rFlyFmt = dynamic_cast<SwFlyFrmFmt&>(*pFmt);
             OUString sDescription;
             aValue >>= sDescription;
             // assure that <SdrObject> instance exists.
-            GetOrCreateSdrObject( pFlyFmt );
-            pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), sDescription );
+            GetOrCreateSdrObject(rFlyFmt);
+            pFlyFmt->GetDoc()->SetFlyFrmDescription(rFlyFmt, sDescription);
         }
         else if(FN_UNO_FRAME_STYLE_NAME == pEntry->nWID)
         {
@@ -1681,7 +1677,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             if( nZOrder >= 0)
             {
                 SdrObject* pObject =
-                    GetOrCreateSdrObject( (SwFlyFrmFmt*)pFmt );
+                    GetOrCreateSdrObject( (SwFlyFrmFmt&)*pFmt );
                 SdrModel *pDrawModel = pDoc->GetDrawModel();
                 pDrawModel->GetPage(0)->
                             SetObjectOrdNum(pObject->GetOrdNum(), nZOrder);
@@ -2088,22 +2084,18 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
 //        }
         else if( FN_UNO_TITLE == pEntry->nWID )
         {
-            SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-            OSL_ENSURE( pFmt,
-                    "unexpected type of <pFmt> --> crash" );
+            SwFlyFrmFmt& rFlyFmt = dynamic_cast<SwFlyFrmFmt&>(*pFmt);
             // assure that <SdrObject> instance exists.
-            GetOrCreateSdrObject( pFlyFmt );
-            aAny <<= OUString(pFlyFmt->GetObjTitle());
+            GetOrCreateSdrObject(rFlyFmt);
+            aAny <<= OUString(rFlyFmt.GetObjTitle());
         }
         // New attribute Description
         else if( FN_UNO_DESCRIPTION == pEntry->nWID )
         {
-            SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-            OSL_ENSURE( pFmt,
-                    "unexpected type of <pFmt> --> crash" );
+            SwFlyFrmFmt& rFlyFmt = dynamic_cast<SwFlyFrmFmt&>(*pFmt);
             // assure that <SdrObject> instance exists.
-            GetOrCreateSdrObject( pFlyFmt );
-            aAny <<= OUString(pFlyFmt->GetObjDescription());
+            GetOrCreateSdrObject(rFlyFmt);
+            aAny <<= OUString(rFlyFmt.GetObjDescription());
         }
         else if(eType == FLYCNTTYPE_GRF &&
                 (rPropertyName == UNO_NAME_ACTUAL_SIZE))
@@ -2541,22 +2533,18 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             // New attribute Title
             else if( FN_UNO_TITLE == pEntry->nWID )
             {
-                SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-                OSL_ENSURE( pFmt,
-                        "unexpected type of <pFmt> --> crash" );
+                SwFlyFrmFmt& rFlyFmt = dynamic_cast<SwFlyFrmFmt&>(*pFmt);
                 // assure that <SdrObject> instance exists.
-                GetOrCreateSdrObject( pFlyFmt );
-                pFlyFmt->GetDoc()->SetFlyFrmTitle( *(pFlyFmt), aEmptyOUStr );
+                GetOrCreateSdrObject(rFlyFmt);
+                pFlyFmt->GetDoc()->SetFlyFrmTitle(rFlyFmt, aEmptyOUStr);
             }
             // New attribute Description
             else if( FN_UNO_DESCRIPTION == pEntry->nWID )
             {
-                SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
-                OSL_ENSURE( pFmt,
-                        "unexpected type of <pFmt> --> crash" );
+                SwFlyFrmFmt& rFlyFmt = dynamic_cast<SwFlyFrmFmt&>(*pFmt);
                 // assure that <SdrObject> instance exists.
-                GetOrCreateSdrObject( pFlyFmt );
-                pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), aEmptyOUStr );
+                GetOrCreateSdrObject(rFlyFmt);
+                pFlyFmt->GetDoc()->SetFlyFrmDescription(rFlyFmt, aEmptyOUStr);
             }
             else
             {
@@ -3038,7 +3026,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             }
         }
         if( pFmt && pDoc->GetDrawModel() )
-            GetOrCreateSdrObject( pFmt );
+            GetOrCreateSdrObject(*pFmt);
         const ::uno::Any* pOrder;
         if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
             setPropertyValue(UNO_NAME_Z_ORDER, *pOrder);

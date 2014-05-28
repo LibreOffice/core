@@ -358,7 +358,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     xPropSet = pXFrame;
     if( pDoc->GetDrawModel() )
-        SwXFrame::GetOrCreateSdrObject(
+        SwXFrame::GetOrCreateSdrObject(*
                 static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
     if( !rTblName.isEmpty() )
     {
@@ -596,7 +596,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
-                SwXFrame::GetOrCreateSdrObject(
+                SwXFrame::GetOrCreateSdrObject(*
                         static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
         }
     }
@@ -653,7 +653,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     xPropSet = pXFrame;
     if( pDoc->GetDrawModel() )
-        SwXFrame::GetOrCreateSdrObject(
+        SwXFrame::GetOrCreateSdrObject(*
                 static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
 
     return xPropSet;
@@ -726,7 +726,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
-                SwXFrame::GetOrCreateSdrObject(
+                SwXFrame::GetOrCreateSdrObject(*
                         static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
         }
     }
@@ -877,7 +877,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
-                SwXFrame::GetOrCreateSdrObject(
+                SwXFrame::GetOrCreateSdrObject(*
                         static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
         }
     }

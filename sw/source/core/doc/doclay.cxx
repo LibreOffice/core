@@ -380,7 +380,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt(
         SwFlyFrmFmt *pFormat = MakeFlyFrmFmt( rSource.GetName(), pDest );
         pDest = pFormat;
 
-        SwXFrame::GetOrCreateSdrObject(pFormat);
+        SwXFrame::GetOrCreateSdrObject(*pFormat);
     }
     else
         pDest = MakeDrawFrmFmt( OUString(), pDest );
