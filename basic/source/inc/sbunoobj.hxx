@@ -40,15 +40,14 @@
 
 class StructRefInfo
 {
-    StructRefInfo();
     com::sun::star::uno::Any& maAny;
-    typelib_TypeDescription* mpTD;
+    css::uno::Type maType;
     sal_Int32 mnPos;
 public:
-    StructRefInfo( com::sun::star::uno::Any& aAny, typelib_TypeDescription* pTD, sal_Int32 nPos ) : maAny( aAny ), mpTD( pTD ), mnPos( nPos ) {}
+    StructRefInfo( com::sun::star::uno::Any& aAny, css::uno::Type const & rType, sal_Int32 nPos ) : maAny( aAny ), maType( rType ), mnPos( nPos ) {}
 
     sal_Int32 getPos() const { return mnPos; }
-    typelib_TypeDescription* getTD() const { return mpTD; }
+    css::uno::Type getType() const { return maType; }
     OUString getTypeName() const;
     com::sun::star::uno::Any& getRootAnyRef() { return maAny; };
 

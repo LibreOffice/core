@@ -2401,9 +2401,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
             aClassName_ = aUnoObj_.getValueType().getTypeName();
             bSetClassName = true;
         }
-        typelib_TypeDescription * pDeclTD = 0;
-        typelib_typedescription_getByName( &pDeclTD, maTmpUnoObj.getValueTypeName().pData );
-        StructRefInfo aThisStruct( maTmpUnoObj, pDeclTD, 0 );
+        StructRefInfo aThisStruct( maTmpUnoObj, maTmpUnoObj.getValueType(), 0 );
         maStructInfo.reset( new SbUnoStructRefObject( GetName(), aThisStruct ) );
     }
     else if( eType == TypeClass_INTERFACE )
@@ -4776,16 +4774,19 @@ Any StructRefInfo::getValue()
     Any aRet;
     uno_any_destruct(
         &aRet, reinterpret_cast< uno_ReleaseFunc >(cpp_release) );
+    typelib_TypeDescription * pTD = 0;
+    maType.getDescription(&pTD);
     uno_any_construct(
-        &aRet, getInst(), mpTD,
+        &aRet, getInst(), pTD,
                 reinterpret_cast< uno_AcquireFunc >(cpp_acquire) );
+    typelib_typedescription_release(pTD);
     return aRet;
 }
 
 void StructRefInfo::setValue( const Any& rValue )
 {
     uno_type_assignData( getInst(),
-        mpTD->pWeakRef,
+       maType.getTypeLibType(),
        (void*)rValue.getValue(),
        rValue.getValueTypeRef(),
        reinterpret_cast< uno_QueryInterfaceFunc >(cpp_queryInterface),
@@ -4795,12 +4796,7 @@ void StructRefInfo::setValue( const Any& rValue )
 
 OUString StructRefInfo::getTypeName() const
 {
-    OUString sTypeName;
-    if ( mpTD )
-    {
-        sTypeName = mpTD->pTypeName;
-    }
-    return sTypeName;
+    return maType.getTypeName();
 }
 
 void* StructRefInfo::getInst()
@@ -4810,10 +4806,7 @@ void* StructRefInfo::getInst()
 
 TypeClass StructRefInfo::getTypeClass() const
 {
-    TypeClass t = TypeClass_VOID;
-    if ( mpTD )
-        t =  (TypeClass)mpTD->eTypeClass;
-    return t;
+    return maType.getTypeClass();
 }
 
 SbUnoStructRefObject::SbUnoStructRefObject( const OUString& aName_, const StructRefInfo& rMemberInfo ) :  SbxObject( aName_ ), maMemberInfo( rMemberInfo ), mbMemberCacheInit( false )
@@ -4832,7 +4825,8 @@ void SbUnoStructRefObject::initMemberCache()
     if ( mbMemberCacheInit )
         return;
     sal_Int32 nAll = 0;
-    typelib_TypeDescription * pTD = maMemberInfo.getTD();
+    typelib_TypeDescription * pTD = 0;
+    maMemberInfo.getType().getDescription(&pTD);
     typelib_CompoundTypeDescription * pCompTypeDescr = (typelib_CompoundTypeDescription *)pTD;
     for ( ; pCompTypeDescr; pCompTypeDescr = pCompTypeDescr->pBaseTypeDescription )
         nAll += pCompTypeDescr->nMembers;
@@ -4844,17 +4838,11 @@ void SbUnoStructRefObject::initMemberCache()
         sal_Int32 * pMemberOffsets                     = pCompTypeDescr->pMemberOffsets;
         for ( sal_Int32 nPos = pCompTypeDescr->nMembers; nPos--; )
         {
-            typelib_TypeDescription * pMemberTD = 0;
-            TYPELIB_DANGER_GET( &pMemberTD, ppTypeRefs[nPos] );
-            OSL_ENSURE( pMemberTD, "### cannot get field in struct!" );
-            if (pMemberTD)
-            {
-                OUString aName( ppNames[nPos] );
-                TYPELIB_DANGER_RELEASE( pMemberTD );
-                maFields[ aName ] = new StructRefInfo( maMemberInfo.getRootAnyRef(), pMemberTD, maMemberInfo.getPos() + pMemberOffsets[nPos] );
-            }
+            OUString aName( ppNames[nPos] );
+            maFields[ aName ] = new StructRefInfo( maMemberInfo.getRootAnyRef(), ppTypeRefs[nPos], maMemberInfo.getPos() + pMemberOffsets[nPos] );
         }
     }
+    typelib_typedescription_release(pTD);
     mbMemberCacheInit = true;
 }
 
@@ -5093,15 +5081,15 @@ StructRefInfo SbUnoStructRefObject::getStructMember( const OUString& rMemberName
     }
     StructFieldInfo::iterator it = maFields.find( rMemberName );
 
-    typelib_TypeDescription * pFoundTD = NULL;
+    css::uno::Type aFoundType;
     sal_Int32 nFoundPos = -1;
 
     if ( it != maFields.end() )
     {
-        pFoundTD = it->second->getTD();
+        aFoundType = it->second->getType();
         nFoundPos = it->second->getPos();
     }
-    StructRefInfo aRet( maMemberInfo.getRootAnyRef(), pFoundTD, nFoundPos );
+    StructRefInfo aRet( maMemberInfo.getRootAnyRef(), aFoundType, nFoundPos );
     return aRet;
 }
 
