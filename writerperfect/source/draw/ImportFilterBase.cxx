@@ -95,6 +95,8 @@ throw (RuntimeException, std::exception)
     OdgGenerator exporter;
     exporter.addDocumentHandler(&xHandler, ODF_FLAT_XML);
 
+    doRegisterHandlers(exporter);
+
     return doImportDocument(input, exporter);
 }
 
@@ -168,6 +170,10 @@ throw (Exception, RuntimeException, std::exception)
             }
         }
     }
+}
+
+void ImportFilterImpl::doRegisterHandlers( OdgGenerator & )
+{
 }
 
 }

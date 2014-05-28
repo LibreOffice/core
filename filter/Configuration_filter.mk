@@ -599,10 +599,17 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 	draw8_template \
 	draw_WordPerfect_Graphics \
 	draw_Visio_Document \
-    draw_Publisher_Document \
+	draw_Publisher_Document \
 	draw_CorelDraw_Document \
 	draw_Corel_Presentation_Exchange \
 	draw_Freehand_Document \
+	draw_Visio_Document \
+	draw_Beagle_Works \
+	draw_ClarisWorks \
+	draw_Great_Works \
+	draw_Mac_Works \
+	draw_MacPaint \
+	draw_SuperPaint \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
@@ -613,10 +620,16 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filt
 	draw8_template \
 	WordPerfectGraphics \
 	VisioDocument \
-    PublisherDocument \
+	PublisherDocument \
 	CorelDrawDocument \
 	CorelPresentationExchange \
 	FreehandDocument \
+	Beagle_Works_Draw \
+	ClarisWorks_Draw \
+	Great_Works_Draw \
+	Mac_Works_Draw \
+	MacPaint_Draw \
+	SuperPaint_Draw \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\

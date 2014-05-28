@@ -39,6 +39,8 @@ namespace xml { namespace sax {
 }
 } } }
 
+class OdgGenerator;
+
 namespace writerperfect
 {
 namespace draw
@@ -80,6 +82,7 @@ public:
 private:
     virtual bool doDetectFormat( librevenge::RVNGInputStream &rInput, OUString &rTypeName ) = 0;
     virtual bool doImportDocument( librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator ) = 0;
+    virtual void doRegisterHandlers( OdgGenerator &rGenerator );
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > mxContext;
