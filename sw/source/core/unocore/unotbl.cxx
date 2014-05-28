@@ -1591,8 +1591,8 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
     }
 
     pUnoCrsr->Add(&aCrsrDepend);
-    SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
-    pTblCrsr->MakeBoxSels();
+    SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
+    rTblCrsr.MakeBoxSels();
 }
 
 SwXTextTableCursor::~SwXTextTableCursor()
