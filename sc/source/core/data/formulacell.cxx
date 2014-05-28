@@ -1211,6 +1211,17 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
                 ++xGroup->mnLength;
                 SetCellGroup( xGroup );
 
+                // Do setup here based on previous cell.
+
+                nFormatType = pPreviousCell->nFormatType;
+                bSubTotal = pPreviousCell->bSubTotal;
+                bChanged = true;
+                bCompile = false;
+                StartListeningTo( pDocument );
+
+                if (bSubTotal)
+                    pDocument->AddSubTotalCell(this);
+
                 bSkipCompile = true;
                 pCode = pPreviousCell->pCode;
 
@@ -1226,31 +1237,31 @@ void ScFormulaCell::CompileXML( sc::CompileFormulaContext& rCxt, ScProgress& rPr
         ScTokenArray* pCodeOld = pCode;
         pCode = aComp.CompileString( aFormula, aFormulaNmsp );
         delete pCodeOld;
-    }
 
-    if( !pCode->GetCodeError() )
-    {
-        if ( !pCode->GetLen() )
-        {
-            if ( aFormula[0] == '=' )
-                pCode->AddBad( aFormula.copy( 1 ) );
-            else
-                pCode->AddBad( aFormula );
-        }
-        bSubTotal = aComp.CompileTokenArray();
         if( !pCode->GetCodeError() )
         {
-            nFormatType = aComp.GetNumFormatType();
-            bChanged = true;
-            bCompile = false;
-            StartListeningTo( pDocument );
-        }
+            if ( !pCode->GetLen() )
+            {
+                if ( aFormula[0] == '=' )
+                    pCode->AddBad( aFormula.copy( 1 ) );
+                else
+                    pCode->AddBad( aFormula );
+            }
+            bSubTotal = aComp.CompileTokenArray();
+            if( !pCode->GetCodeError() )
+            {
+                nFormatType = aComp.GetNumFormatType();
+                bChanged = true;
+                bCompile = false;
+                StartListeningTo( pDocument );
+            }
 
-        if (bSubTotal)
-            pDocument->AddSubTotalCell(this);
+            if (bSubTotal)
+                pDocument->AddSubTotalCell(this);
+        }
+        else
+            bChanged = true;
     }
-    else
-        bChanged = true;
 
     //  Same as in Load: after loading, it must be known if ocMacro is in any formula
     //  (for macro warning, CompileXML is called at the end of loading XML file)
