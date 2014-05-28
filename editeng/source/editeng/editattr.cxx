@@ -131,6 +131,11 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
     rFont.SetUnderline( (FontUnderline)((const SvxUnderlineItem*)GetItem())->GetValue() );
     if ( pOutDev )
         pOutDev->SetTextLineColor( ((const SvxUnderlineItem*)GetItem())->GetColor() );
+
+    // FIXME(matteocam)
+    Color aColor = RGB_COLORDATA(0x66,0x66, 0xFF);  // blue-ish
+    if ( pOutDev )
+        pOutDev->SetTextFillColor(aColor);
 }
 
 

@@ -149,14 +149,7 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
 
     nX += nBaseX;
     nY += nBaseY;
-    //mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this ); // original code
-
-    Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
-    Polygon   aPoly( aRect );
-    PolyPolygon aPolyPoly(aPoly);
-    Color aColor = RGB_COLORDATA(0x66,0x66, 0xFF);
-    SetTextFillColor(aColor);
-    DrawTransparent(aPolyPoly, 70);
+    mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this ); // original code
 
 }
 
