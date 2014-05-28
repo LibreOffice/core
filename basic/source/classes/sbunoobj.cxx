@@ -4341,7 +4341,7 @@ public:
     virtual void SAL_CALL setValue( const OUString& rProperty, const Any& rValue )
         throw( UnknownPropertyException, std::exception ) SAL_OVERRIDE;
     virtual Any SAL_CALL getValue( const OUString& rProperty )
-        throw( UnknownPropertyException, std::exception ) SAL_OVERRIDE;
+        throw (UnknownPropertyException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasMethod( const OUString& rName ) throw(std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasProperty( const OUString& rProp ) throw(std::exception) SAL_OVERRIDE;
 
@@ -4409,7 +4409,8 @@ void SAL_CALL ModuleInvocationProxy::setValue( const OUString& rProperty, const 
 
 }
 
-Any SAL_CALL ModuleInvocationProxy::getValue( const OUString& rProperty ) throw( UnknownPropertyException, std::exception )
+Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
+    throw (UnknownPropertyException, RuntimeException, std::exception)
 {
     if( !m_bProxyIsClassModuleObject )
     {
