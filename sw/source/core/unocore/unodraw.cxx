@@ -1191,7 +1191,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
                 else if (pEntry->nWID == FN_TEXT_BOX)
                 {
-                    bool bValue;
+                    bool bValue(false);
                     aValue >>= bValue;
                     if (bValue)
                         SwTextBoxHelper::create(pFmt);
