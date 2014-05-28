@@ -145,8 +145,8 @@ void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
-    gltf_animation_stop(m_pHandle);
     m_aTimer.Stop();
+    gltf_animation_stop(m_pHandle);
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaying() throw ( uno::RuntimeException, std::exception )
