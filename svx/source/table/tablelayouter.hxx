@@ -73,9 +73,7 @@ public:
 
     void UpdateBorderLayout();
 
-    basegfx::B2ITuple getCellSize( const CellPos& rPos ) const;
-    bool getCellArea( const CellRef& xCell, basegfx::B2IRectangle& rArea ) const;
-    bool getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rArea ) const;
+    bool getCellArea( const CellRef& xCell, const CellPos& rPos, basegfx::B2IRectangle& rArea ) const;
 
     ::sal_Int32 getRowCount() const { return static_cast< ::sal_Int32 >( maRows.size() ); }
     ::sal_Int32 getColumnCount() const { return static_cast< ::sal_Int32 >( maColumns.size() ); }
@@ -103,6 +101,7 @@ public:
 
 private:
     CellRef getCell( const CellPos& rPos ) const;
+    basegfx::B2ITuple getCellSize( const CellRef& xCell, const CellPos& rPos ) const;
 
     void LayoutTableWidth( ::Rectangle& rArea, bool bFit );
     void LayoutTableHeight( ::Rectangle& rArea, bool bFit );
