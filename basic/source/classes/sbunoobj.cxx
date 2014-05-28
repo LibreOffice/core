@@ -368,18 +368,7 @@ TYPEINIT1(SbUnoAnyObject,SbxObject)
 // TODO: source out later
 Reference<XIdlClass> TypeToIdlClass( const Type& rType )
 {
-    // register void as default class
-    Reference<XIdlClass> xRetClass;
-    typelib_TypeDescription * pTD = 0;
-    rType.getDescription( &pTD );
-
-    if( pTD )
-    {
-        OUString sOWName( pTD->pTypeName );
-        Reference< XIdlReflection > xRefl = getCoreReflection_Impl();
-        xRetClass = xRefl->forName( sOWName );
-    }
-    return xRetClass;
+    return getCoreReflection_Impl()->forName(rType.getTypeName());
 }
 
 // Exception type unknown
