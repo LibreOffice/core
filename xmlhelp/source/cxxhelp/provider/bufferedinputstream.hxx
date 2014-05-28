@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_BUFFEREDINPUTSTREAM_HXX
+#define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_BUFFEREDINPUTSTREAM_HXX
+
 #include <cppuhelper/weak.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -103,5 +106,7 @@ namespace chelp {
         const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xInputStream);
 
 }
+
+#endif // INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_BUFFEREDINPUTSTREAM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
