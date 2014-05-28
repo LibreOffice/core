@@ -17,26 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "com/sun/star/beans/XPropertiesChangeListener.hpp"
-#include "com/sun/star/beans/XPropertyChangeListener.hpp"
-#include "com/sun/star/container/XContainerListener.hpp"
-#include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
-#include "com/sun/star/lang/XEventListener.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/util/XChangesListener.hpp"
-#include "cppuhelper/exc_hlp.hxx"
-#include "rtl/string.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/util/XChangesListener.hpp>
+#include <cppuhelper/exc_hlp.hxx>
+#include <rtl/string.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 
 #include "broadcaster.hxx"
 

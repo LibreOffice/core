@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "osl/mutex.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <osl/mutex.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 
 #include "configurationprovider.hxx"
 #include "defaultprovider.hxx"

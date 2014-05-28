@@ -19,7 +19,7 @@
 
 #include <config_folders.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
@@ -27,28 +27,28 @@
 #include <list>
 #include <set>
 
-#include "com/sun/star/beans/Optional.hpp"
-#include "com/sun/star/beans/UnknownPropertyException.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "osl/conditn.hxx"
-#include "osl/file.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/bootstrap.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/instance.hxx"
-#include "sal/log.hxx"
-#include "sal/types.h"
-#include "salhelper/thread.hxx"
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <osl/conditn.hxx>
+#include <osl/file.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/bootstrap.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/instance.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
+#include <salhelper/thread.hxx>
 
 #include "additions.hxx"
 #include "components.hxx"

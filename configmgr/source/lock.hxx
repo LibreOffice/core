@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_LOCK_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_LOCK_HXX
 
-#include "sal/config.h"
-#include "osl/mutex.hxx"
-#include "boost/shared_ptr.hpp"
+#include <sal/config.h>
+#include <osl/mutex.hxx>
+#include <boost/shared_ptr.hpp>
 
 namespace configmgr {
 

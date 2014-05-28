@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_MODIFICATIONS_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_MODIFICATIONS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/unordered_map.hpp"
-#include "boost/noncopyable.hpp"
+#include <boost/unordered_map.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "path.hxx"
 

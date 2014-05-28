@@ -17,44 +17,44 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/beans/NamedValue.hpp"
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/configuration/theDefaultProvider.hpp"
-#include "com/sun/star/lang/EventObject.hpp"
-#include "com/sun/star/lang/Locale.hpp"
-#include "com/sun/star/lang/XLocalizable.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/util/XFlushListener.hpp"
-#include "com/sun/star/util/XFlushable.hpp"
-#include "com/sun/star/util/XRefreshListener.hpp"
-#include "com/sun/star/util/XRefreshable.hpp"
-#include "cppu/unotype.hxx"
-#include "cppuhelper/basemutex.hxx"
-#include "cppuhelper/compbase5.hxx"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/interfacecontainer.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "cppuhelper/weak.hxx"
-#include "osl/mutex.hxx"
-#include "sal/types.h"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XLocalizable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/util/XFlushListener.hpp>
+#include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/util/XRefreshListener.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
+#include <cppu/unotype.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase5.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <osl/mutex.hxx>
+#include <sal/types.h>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
 

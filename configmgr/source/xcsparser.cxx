@@ -17,22 +17,22 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <cstddef>
 #include <set>
 
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "rtl/ref.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
-#include "xmlreader/span.hxx"
-#include "xmlreader/xmlreader.hxx"
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <rtl/ref.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+#include <xmlreader/span.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 #include "data.hxx"
 #include "localizedpropertynode.hxx"

@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 #include "data.hxx"
 #include "groupnode.hxx"

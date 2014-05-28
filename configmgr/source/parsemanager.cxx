@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <set>
 
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "sal/types.h"
-#include "xmlreader/span.hxx"
-#include "xmlreader/xmlreader.hxx"
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <sal/types.h>
+#include <xmlreader/span.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 #include "parsemanager.hxx"
 #include "parser.hxx"

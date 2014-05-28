@@ -7,30 +7,30 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/container/XHierarchicalNameAccess.hpp"
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/lang/NotInitializedException.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "cppuhelper/implbase3.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "cppuhelper/weak.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include "components.hxx"
 #include "lock.hxx"

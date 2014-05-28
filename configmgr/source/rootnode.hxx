@@ -10,9 +10,9 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_ROOTNODE_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_ROOTNODE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
 #include "node.hxx"
 #include "nodemap.hxx"

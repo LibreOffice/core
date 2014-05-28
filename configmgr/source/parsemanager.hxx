@@ -20,17 +20,17 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_PARSEMANAGER_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_PARSEMANAGER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <set>
 
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "rtl/ref.hxx"
-#include "sal/types.h"
-#include "salhelper/simplereferenceobject.hxx"
-#include "xmlreader/span.hxx"
-#include "xmlreader/xmlreader.hxx"
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <rtl/ref.hxx>
+#include <sal/types.h>
+#include <salhelper/simplereferenceobject.hxx>
+#include <xmlreader/span.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 
 namespace configmgr {

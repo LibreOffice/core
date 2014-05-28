@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Any.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
+#include <com/sun/star/uno/Any.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 
 #include "localizedvaluenode.hxx"
 #include "node.hxx"

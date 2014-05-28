@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_NODEMAP_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_NODEMAP_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 #include <map>
-#include "rtl/ref.hxx"
+#include <rtl/ref.hxx>
 
 
 namespace configmgr {

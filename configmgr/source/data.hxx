@@ -20,17 +20,17 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_DATA_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_DATA_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <climits>
 #include <map>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "salhelper/simplereferenceobject.hxx"
+#include <boost/noncopyable.hpp>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include "additions.hxx"
 #include "modifications.hxx"

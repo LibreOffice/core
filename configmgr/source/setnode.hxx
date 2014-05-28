@@ -20,12 +20,12 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_SETNODE_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_SETNODE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 #include "node.hxx"
 #include "nodemap.hxx"

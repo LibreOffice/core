@@ -20,17 +20,17 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_BROADCASTER_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_BROADCASTER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/beans/PropertyChangeEvent.hpp"
-#include "com/sun/star/container/ContainerEvent.hpp"
-#include "com/sun/star/lang/EventObject.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/util/ChangesEvent.hpp"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/beans/PropertyChangeEvent.hpp>
+#include <com/sun/star/container/ContainerEvent.hpp>
+#include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/util/ChangesEvent.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace beans {

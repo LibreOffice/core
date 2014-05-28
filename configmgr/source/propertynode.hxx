@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_PROPERTYNODE_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_PROPERTYNODE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Any.hxx"
-#include "rtl/ref.hxx"
+#include <com/sun/star/uno/Any.hxx>
+#include <rtl/ref.hxx>
 
 #include "node.hxx"
 #include "type.hxx"

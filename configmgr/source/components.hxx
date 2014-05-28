@@ -20,16 +20,16 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_COMPONENTS_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_COMPONENTS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <map>
 #include <set>
 
-#include "boost/noncopyable.hpp"
-#include "boost/shared_ptr.hpp"
-#include "com/sun/star/beans/Optional.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "rtl/ref.hxx"
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 
 #include "additions.hxx"
 #include "data.hxx"

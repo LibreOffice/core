@@ -20,14 +20,14 @@
 #ifndef INCLUDED_CONFIGMGR_SOURCE_XCUPARSER_HXX
 #define INCLUDED_CONFIGMGR_SOURCE_XCUPARSER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <set>
 #include <stack>
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "xmlreader/xmlreader.hxx"
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 #include "additions.hxx"
 #include "node.hxx"
