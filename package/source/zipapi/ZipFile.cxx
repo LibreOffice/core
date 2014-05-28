@@ -381,18 +381,18 @@ uno::Reference< XInputStream > ZipFile::StaticGetDataFromRawStream( const uno::R
         throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
 {
     if ( !rData.is() )
-        throw ZipIOException("Encrypted stream without encryption data!\n" );
+        throw ZipIOException("Encrypted stream without encryption data!" );
 
     if ( !rData->m_aKey.getLength() )
         throw packages::WrongPasswordException(THROW_WHERE );
 
     uno::Reference< XSeekable > xSeek( xStream, UNO_QUERY );
     if ( !xSeek.is() )
-        throw ZipIOException("The stream must be seekable!\n" );
+        throw ZipIOException("The stream must be seekable!" );
 
     // if we have a digest, then this file is an encrypted one and we should
     // check if we can decrypt it or not
-    OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!\n" );
+    OSL_ENSURE( rData->m_aDigest.getLength(), "Can't detect password correctness without digest!" );
     if ( rData->m_aDigest.getLength() )
     {
         sal_Int32 nSize = sal::static_int_cast< sal_Int32 >( xSeek->getLength() );
