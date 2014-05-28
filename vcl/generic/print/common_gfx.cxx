@@ -295,10 +295,10 @@ PrinterGfx::EndSetClipRegion()
         if( ! JoinVerticalClipRectangles( it, aOldPoint, nColumn ) )
         {
             // failed, so it is a single rectangle
-            PSBinMoveTo (it->TopLeft(),                          aOldPoint, nColumn );
-            PSBinLineTo (Point( it->Left(), it->Bottom()+1 ),    aOldPoint, nColumn );
+            PSBinMoveTo (Point( it->Left()-1, it->Top()-1),      aOldPoint, nColumn );
+            PSBinLineTo (Point( it->Left()-1, it->Bottom()+1 ),  aOldPoint, nColumn );
             PSBinLineTo (Point( it->Right()+1, it->Bottom()+1 ), aOldPoint, nColumn );
-            PSBinLineTo (Point( it->Right()+1, it->Top() ),      aOldPoint, nColumn );
+            PSBinLineTo (Point( it->Right()+1, it->Top()-1 ),    aOldPoint, nColumn );
             ++it;
         }
     }
