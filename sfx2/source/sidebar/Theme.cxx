@@ -483,11 +483,11 @@ void SAL_CALL Theme::setPropertyValue (
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
-        throw beans::UnknownPropertyException(rsPropertyName, NULL);
+        throw beans::UnknownPropertyException(rsPropertyName);
 
     const PropertyType eType (GetPropertyType(iId->second));
     if (eType == PT_Invalid)
-        throw beans::UnknownPropertyException(rsPropertyName, NULL);
+        throw beans::UnknownPropertyException(rsPropertyName);
 
     const ThemeItem eItem (iId->second);
 

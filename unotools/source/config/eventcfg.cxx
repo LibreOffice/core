@@ -264,7 +264,7 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
         SupportedEventsVector::const_iterator pos = ::std::find(
             m_supportedEvents.begin(), m_supportedEvents.end(), aName );
         if ( pos == m_supportedEvents.end() )
-            throw container::NoSuchElementException( aName, NULL );
+            throw container::NoSuchElementException( aName );
 
         props[1].Value <<= OUString();
     }

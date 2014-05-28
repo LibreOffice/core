@@ -608,7 +608,7 @@ namespace oglcanvas
             {
                 glXDestroyContext(pDisplay, pContext1);
                 glXDestroyContext(pDisplay, pContext2);
-                throw lang::NoSupportException("Could not select OpenGL context!", NULL);
+                throw lang::NoSupportException("Could not select OpenGL context!");
             }
 
             const GLubyte* extensions=glGetString( GL_EXTENSIONS );
@@ -694,7 +694,7 @@ namespace oglcanvas
 
         if( !mpGLContext || glGetError() != GL_NO_ERROR )
             throw lang::NoSupportException(
-                "Could not create OpenGL context, or an error occurred doing so!", NULL);
+                "Could not create OpenGL context, or an error occurred doing so!");
 
         notifySizeUpdate(rViewArea);
         mpChildWindow->Show();

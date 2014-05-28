@@ -2298,7 +2298,7 @@ namespace
         }
         catch(const Exception&)
         {
-            throw ElementExistException(newName,NULL);
+            throw ElementExistException(newName);
         }
     }
 }

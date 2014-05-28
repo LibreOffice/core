@@ -65,13 +65,13 @@ GConfClient* getGconfClient()
 
             g_error_free(aError);
             aError = NULL;
-            throw uno::RuntimeException(msg, NULL);
+            throw uno::RuntimeException(msg);
         }
 
         mClient = gconf_client_get_default();
         if (!mClient)
         {
-            throw uno::RuntimeException("GconfBackend:GconfLayer: Cannot Initialize Gconf connection",NULL);
+            throw uno::RuntimeException("GconfBackend:GconfLayer: Cannot Initialize Gconf connection");
         }
 
         static const char * const PreloadValuesList[] =

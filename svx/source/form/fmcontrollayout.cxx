@@ -203,7 +203,7 @@ namespace svxform
         // the names of the family, and the style - depends on the document type we live in
         OUString sFamilyName, sStyleName;
         if ( !lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName ) )
-            throw RuntimeException("unknown document type!", NULL );
+            throw RuntimeException("unknown document type!");
 
         // the concrete style
         Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );

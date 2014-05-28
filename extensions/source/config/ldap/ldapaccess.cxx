@@ -153,7 +153,7 @@ void LdapConnection::initConnection()
         OUStringBuffer message ;
 
         message.appendAscii("Cannot initialise connection to LDAP: No server specified.") ;
-        throw ldap::LdapConnectionException(message.makeStringAndClear(), NULL) ;
+        throw ldap::LdapConnectionException(message.makeStringAndClear()) ;
     }
 
     if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
@@ -173,8 +173,7 @@ void LdapConnection::initConnection()
         message.append(mLdapDefinition.mServer) ;
         message.appendAscii(":") ;
         message.append(mLdapDefinition.mPort) ;
-        throw ldap::LdapConnectionException(message.makeStringAndClear(),
-                                            NULL) ;
+        throw ldap::LdapConnectionException(message.makeStringAndClear());
     }
 }
 
@@ -246,7 +245,7 @@ void LdapConnection::initConnection()
     if (aUser.isEmpty())
     {
         throw lang::IllegalArgumentException(
-            OUString("LdapConnection::findUserDn -User id is empty"),
+            "LdapConnection::findUserDn -User id is empty",
                 NULL, 0) ;
     }
 

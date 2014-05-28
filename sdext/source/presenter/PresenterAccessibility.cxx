@@ -1380,7 +1380,7 @@ sal_uInt32 AccessibleStateSet::GetStateMask (const sal_Int16 nState)
 {
     if (nState<0 || nState>=sal_Int16(sizeof(sal_uInt32)*8))
     {
-        throw RuntimeException("AccessibleStateSet::GetStateMask: invalid state", NULL);
+        throw RuntimeException("AccessibleStateSet::GetStateMask: invalid state");
     }
 
     return 1<<nState;
