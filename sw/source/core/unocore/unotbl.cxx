@@ -1813,14 +1813,14 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
         SwStartNode* pSttNode = pUnoCrsr->GetNode()->StartOfSectionNode();
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
-        SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
+        SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
         const SfxItemPropertySimpleEntry* pEntry =
                                     m_pPropSet->getPropertyMap().getByName(rPropertyName);
         if(pEntry)
         {
             if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 throw beans::PropertyVetoException("Property is read-only: " + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-            pTblCrsr->MakeBoxSels();
+            rTblCrsr.MakeBoxSels();
             SwDoc* pDoc = pUnoCrsr->GetDoc();
             switch(pEntry->nWID )
             {
@@ -1846,15 +1846,15 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
                 default:
                 {
                     SfxItemSet aItemSet( pDoc->GetAttrPool(), pEntry->nWID, pEntry->nWID );
-                    SwUnoCursorHelper::GetCrsrAttr(pTblCrsr->GetSelRing(),
+                    SwUnoCursorHelper::GetCrsrAttr(rTblCrsr.GetSelRing(),
                             aItemSet);
 
                     if (!SwUnoCursorHelper::SetCursorPropertyValue(
-                            *pEntry, aValue, pTblCrsr->GetSelRing(), aItemSet))
+                            *pEntry, aValue, rTblCrsr.GetSelRing(), aItemSet))
                     {
                         m_pPropSet->setPropertyValue(*pEntry, aValue, aItemSet);
                     }
-                    SwUnoCursorHelper::SetCrsrAttr(pTblCrsr->GetSelRing(),
+                    SwUnoCursorHelper::SetCrsrAttr(rTblCrsr.GetSelRing(),
                             aItemSet, nsSetAttrMode::SETATTR_DEFAULT, true);
                 }
             }
