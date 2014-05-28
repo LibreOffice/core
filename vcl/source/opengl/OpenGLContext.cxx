@@ -783,6 +783,8 @@ SystemWindowData OpenGLContext::generateWinData(Window* pParent)
         aWinData.pVisual = (void*)(vi->visual);
     }
 
+    XFree(pFBC);
+
     return aWinData;
 }
 
