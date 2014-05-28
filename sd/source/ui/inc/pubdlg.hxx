@@ -26,6 +26,7 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
 #include "resltn.hxx"
 #include "pres.hxx"
 #include "assclass.hxx"
@@ -52,7 +53,8 @@ class SdPublishingDlg : public ModalDialog
 {
 private:
     // page 1 controls
-    FixedLine*      pPage1_Titel;
+    VclContainer*   pPage1;
+    FixedText*      pPage1_Titel;
     RadioButton*    pPage1_NewDesign;
     RadioButton*    pPage1_OldDesign;
     ListBox*        pPage1_Designs;
@@ -60,22 +62,26 @@ private:
     FixedText*      pPage1_Desc;
 
     // page 2 controls
-    FixedLine*      pPage2_Titel;
+    VclContainer*   pPage2;
+    VclContainer*   pPage2Frame2;
+    VclContainer*   pPage2Frame3;
+    VclContainer*   pPage2Frame4;
+    FixedText*      pPage2_Titel;
     RadioButton*    pPage2_Standard;
     RadioButton*    pPage2_Frames;
     RadioButton*    pPage2_SingleDocument;
     RadioButton*    pPage2_Kiosk;
     RadioButton*    pPage2_WebCast;
-    FixedBitmap*    pPage2_Standard_FB;
-    FixedBitmap*    pPage2_Frames_FB;
-    FixedBitmap*    pPage2_Kiosk_FB;
-    FixedBitmap*    pPage2_WebCast_FB;
+    FixedImage*    pPage2_Standard_FB;
+    FixedImage*    pPage2_Frames_FB;
+    FixedImage*    pPage2_Kiosk_FB;
+    FixedImage*    pPage2_WebCast_FB;
 
-    FixedLine*      pPage2_Titel_Html;
+    FixedText*      pPage2_Titel_Html;
     CheckBox*       pPage2_Content;
     CheckBox*       pPage2_Notes;
 
-    FixedLine*      pPage2_Titel_WebCast;
+    FixedText*      pPage2_Titel_WebCast;
     RadioButton*    pPage2_ASP;
     RadioButton*    pPage2_PERL;
     FixedText*      pPage2_URL_txt;
@@ -84,8 +90,7 @@ private:
     Edit*           pPage2_CGI;
     FixedText*      pPage2_Index_txt;
     Edit*           pPage2_Index;
-    FixedLine*      pPage2_Vert;
-    FixedLine*      pPage2_Titel_Kiosk;
+    FixedText*      pPage2_Titel_Kiosk;
     RadioButton*    pPage2_ChgDefault;
     RadioButton*    pPage2_ChgAuto;
     FixedText*      pPage2_Duration_txt;
@@ -93,23 +98,24 @@ private:
     CheckBox*       pPage2_Endless;
 
     // page 3 controls
-    FixedLine*      pPage3_Titel1;
+    VclContainer*   pPage3;
+    FixedText*      pPage3_Titel1;
     RadioButton*    pPage3_Png;
     RadioButton*    pPage3_Gif;
     RadioButton*    pPage3_Jpg;
     FixedText*      pPage3_Quality_txt;
     ComboBox*       pPage3_Quality;
-    FixedLine*      pPage3_Vert;
-    FixedLine*      pPage3_Titel2;
+    FixedText*      pPage3_Titel2;
     RadioButton*    pPage3_Resolution_1;
     RadioButton*    pPage3_Resolution_2;
     RadioButton*    pPage3_Resolution_3;
-    FixedLine*      pPage3_Titel3;
+    FixedText*      pPage3_Titel3;
     CheckBox*       pPage3_SldSound;
     CheckBox*       pPage3_HiddenSlides;
-    // page 4 controls
 
-    FixedLine*      pPage4_Titel1;
+    // page 4 controls
+    VclContainer*   pPage4;
+    FixedText*      pPage4_Titel1;
     FixedText*      pPage4_Author_txt;
     Edit*           pPage4_Author;
     FixedText*      pPage4_Email_txt;
@@ -117,18 +123,18 @@ private:
     FixedText*      pPage4_WWW_txt;
     Edit*           pPage4_WWW;
     FixedText*      pPage4_Titel2;
-    MultiLineEdit*  pPage4_Misc;
+    VclMultiLineEdit*  pPage4_Misc;
     CheckBox*       pPage4_Download;
 
     // page 5 controls
-
-    FixedLine*      pPage5_Titel;
+    VclContainer*   pPage5;
+    FixedText*      pPage5_Titel;
     CheckBox*       pPage5_TextOnly;
     ValueSet*       pPage5_Buttons;
 
     // page 6 controls
-
-    FixedLine*      pPage6_Titel;
+    VclContainer*   pPage6;
+    FixedText*      pPage6_Titel;
     RadioButton*    pPage6_Default;
     RadioButton*    pPage6_User;
     PushButton*     pPage6_Back;
@@ -142,12 +148,9 @@ private:
     boost::scoped_ptr< ButtonSet > mpButtonSet;
 
     // standard controls
-    FixedLine       aBottomLine;
-    HelpButton      aHelpButton;
-    CancelButton    aCancelButton;
-    PushButton      aLastPageButton;
-    PushButton      aNextPageButton;
-    OKButton        aFinishButton;
+    PushButton*     pLastPageButton;
+    PushButton*     pNextPageButton;
+    PushButton*     pFinishButton;
 
     Assistent       aAssistentFunc;
 
@@ -156,7 +159,6 @@ private:
 
     void SetDefaults();
     void CreatePages();
-    void RemovePages();
 
     Color m_aBackColor, m_aTextColor, m_aLinkColor;
     Color m_aVLinkColor, m_aALinkColor;

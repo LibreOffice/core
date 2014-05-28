@@ -45,7 +45,6 @@
 
 #include "sdresid.hxx"
 #include "sdattr.hxx"
-#include "pubdlg.hrc"
 #include "pubdlg.hxx"
 #include "htmlattr.hxx"
 #include "htmlex.hxx"
@@ -59,8 +58,6 @@ using namespace com::sun::star::beans;
 
 
 #define NOOFPAGES 6
-
-extern void InterpolateFixedBitmap( FixedBitmap * pBitmap );
 
 //ID for the config-data with the HTML-settings
 const sal_uInt16 nMagic = (sal_uInt16)0x1977;
@@ -364,32 +361,36 @@ public:
 // SdPublishingDlg Methods
 
 SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
-:   ModalDialog(pWindow, SdResId( DLG_PUBLISHING ))
+:   ModalDialog(pWindow, "PublishingDialog", "modules/simpress/ui/publishingdialog.ui")
 ,   mpButtonSet( new ButtonSet() )
-,   aBottomLine( this, SdResId( BOTTOM_LINE ) )
-,   aHelpButton(this,SdResId(BUT_HELP))
-,   aCancelButton(this,SdResId(BUT_CANCEL))
-,   aLastPageButton(this,SdResId(BUT_LAST))
-,   aNextPageButton(this,SdResId(BUT_NEXT))
-,   aFinishButton(this,SdResId(BUT_FINISH))
 ,   aAssistentFunc(NOOFPAGES)
 ,   m_bButtonsDirty(true)
 ,   m_bDesignListDirty(false)
 ,   m_pDesign(NULL)
 {
+    get(pLastPageButton, "lastPageButton");
+    get(pNextPageButton, "nextPageButton");
+    get(pFinishButton, "finishButton");
+
     m_bImpress = eDocType == DOCUMENT_TYPE_IMPRESS;
+
+    //Lock down the preferred size based on the
+    //initial max-size configuration
+    Size aSize(get_preferred_size());
+    set_width_request(aSize.Width());
+    set_height_request(aSize.Height());
 
     CreatePages();
     Load();
 
     // sets the output page
     aAssistentFunc.GotoPage(1);
-    aLastPageButton.Disable();
+    pLastPageButton->Disable();
 
     // button assignment
-    aFinishButton.SetClickHdl(LINK(this,SdPublishingDlg,FinishHdl));
-    aLastPageButton.SetClickHdl(LINK(this,SdPublishingDlg,LastPageHdl));
-    aNextPageButton.SetClickHdl(LINK(this,SdPublishingDlg,NextPageHdl));
+    pFinishButton->SetClickHdl(LINK(this,SdPublishingDlg,FinishHdl));
+    pLastPageButton->SetClickHdl(LINK(this,SdPublishingDlg,LastPageHdl));
+    pNextPageButton->SetClickHdl(LINK(this,SdPublishingDlg,NextPageHdl));
 
     pPage1_NewDesign->SetClickHdl(LINK(this,SdPublishingDlg,DesignHdl));
     pPage1_OldDesign->SetClickHdl(LINK(this,SdPublishingDlg,DesignHdl));
@@ -437,8 +438,6 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 
     pPage6_DocColors->Check();
 
-    FreeResource();
-
     pPage3_Quality->InsertEntry( OUString( "25%" ) );
     pPage3_Quality->InsertEntry( OUString( "50%" ) );
     pPage3_Quality->InsertEntry( OUString( "75%" ) );
@@ -458,269 +457,189 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 
     SetHelpId(aPageHelpIds[0]);
 
-    aNextPageButton.GrabFocus();
+    pNextPageButton->GrabFocus();
 }
 
 SdPublishingDlg::~SdPublishingDlg()
 {
-    RemovePages();
 }
 
 // Generate dialog controls and embed them in the pages
 void SdPublishingDlg::CreatePages()
 {
     // Page 1
-    aAssistentFunc.InsertControl(1,
-        pPage1_Titel = new FixedLine(this,SdResId(PAGE1_TITEL)));
-    aAssistentFunc.InsertControl(1,
-        pPage1_NewDesign = new RadioButton(this,SdResId(PAGE1_NEW_DESIGN)));
-    aAssistentFunc.InsertControl(1,
-        pPage1_OldDesign = new RadioButton(this,SdResId(PAGE1_OLD_DESIGN)));
-    aAssistentFunc.InsertControl(1,
-        pPage1_Designs = new ListBox(this,SdResId(PAGE1_DESIGNS)));
-    aAssistentFunc.InsertControl(1,
-        pPage1_DelDesign = new PushButton(this,SdResId(PAGE1_DEL_DESIGN)));
-    aAssistentFunc.InsertControl(1,
-        pPage1_Desc = new FixedText(this,SdResId(PAGE1_DESC)));
-
+    get(pPage1, "page1");
+    get(pPage1_Titel, "assignLabel");
+    get(pPage1_NewDesign, "newDesignRadiobutton");
+    get(pPage1_OldDesign, "oldDesignRadiobutton");
+    get(pPage1_Designs, "designsTreeview");
+    get(pPage1_DelDesign, "delDesingButton");
+    get(pPage1_Desc, "descLabel");
+    aAssistentFunc.InsertControl(1, pPage1);
+    aAssistentFunc.InsertControl(1, pPage1_Titel);
+    aAssistentFunc.InsertControl(1, pPage1_NewDesign);
+    aAssistentFunc.InsertControl(1, pPage1_OldDesign);
+    aAssistentFunc.InsertControl(1, pPage1_Designs);
+    aAssistentFunc.InsertControl(1, pPage1_DelDesign);
+    aAssistentFunc.InsertControl(1, pPage1_Desc);
 
     // Page 2
-    aAssistentFunc.InsertControl(2,
-        pPage2_Titel = new FixedLine(this,SdResId(PAGE2_TITEL )));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Standard = new RadioButton(this,SdResId(PAGE2_STANDARD)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Frames = new RadioButton(this,SdResId(PAGE2_FRAMES)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_SingleDocument = new RadioButton(this,SdResId(PAGE2_SINGLE_DOCUMENT)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Kiosk = new RadioButton(this,SdResId(PAGE2_KIOSK)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_WebCast = new RadioButton(this,SdResId(PAGE2_WEBCAST)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Standard_FB = new FixedBitmap(this,SdResId(PAGE2_NOFRAMES_FB)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Frames_FB = new FixedBitmap(this,SdResId(PAGE2_FRAMES_FB)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Kiosk_FB = new FixedBitmap(this,SdResId(PAGE2_KIOSK_FB)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_WebCast_FB = new FixedBitmap(this,SdResId(PAGE2_WEBCAST_FB)));
+    get(pPage2, "page2");
+    get(pPage2Frame2, "page2.2");
+    get(pPage2Frame3, "page2.3");
+    get(pPage2Frame4, "page2.4");
+    get(pPage2_Titel, "publicationLabel");
+    get(pPage2_Standard, "standardRadiobutton");
+    get(pPage2_Frames, "framesRadiobutton");
+    get(pPage2_SingleDocument, "singleDocumentRadiobutton");
+    get(pPage2_Kiosk, "kioskRadiobutton");
+    get(pPage2_WebCast, "webCastRadiobutton");
+    get(pPage2_Standard_FB, "standardFBImage");
+    get(pPage2_Frames_FB, "framesFBImage");
+    get(pPage2_Kiosk_FB, "kioskFBImage");
+    get(pPage2_WebCast_FB, "webCastFBImage");
+    aAssistentFunc.InsertControl(2, pPage2);
+    aAssistentFunc.InsertControl(2, pPage2Frame2);
+    aAssistentFunc.InsertControl(2, pPage2Frame3);
+    aAssistentFunc.InsertControl(2, pPage2Frame4);
+    aAssistentFunc.InsertControl(2, pPage2_Titel);
+    aAssistentFunc.InsertControl(2, pPage2_Standard);
+    aAssistentFunc.InsertControl(2, pPage2_Frames);
+    aAssistentFunc.InsertControl(2, pPage2_SingleDocument);
+    aAssistentFunc.InsertControl(2, pPage2_Kiosk);
+    aAssistentFunc.InsertControl(2, pPage2_WebCast);
+    aAssistentFunc.InsertControl(2, pPage2_Standard_FB);
+    aAssistentFunc.InsertControl(2, pPage2_Frames_FB);
+    aAssistentFunc.InsertControl(2, pPage2_Kiosk_FB);
+    aAssistentFunc.InsertControl(2, pPage2_WebCast_FB);
 
-    aAssistentFunc.InsertControl(2,
-        pPage2_Titel_Html = new FixedLine(this,SdResId(PAGE2_TITEL_HTML)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Content = new CheckBox(this,SdResId(PAGE2_CONTENT)));
+    get(pPage2_Titel_Html, "htmlOptionsLabel");
+    get(pPage2_Content, "contentCheckbutton");
+    get(pPage2_Notes, "notesCheckbutton");
+    aAssistentFunc.InsertControl(2, pPage2_Titel_Html);
+    aAssistentFunc.InsertControl(2, pPage2_Content);
     if(m_bImpress)
-        aAssistentFunc.InsertControl(2,
-            pPage2_Notes = new CheckBox(this,SdResId(PAGE2_NOTES)));
+        aAssistentFunc.InsertControl(2, pPage2_Notes);
 
-    aAssistentFunc.InsertControl(2,
-        pPage2_Titel_WebCast = new FixedLine(this,SdResId(PAGE2_TITEL_WEBCAST)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Index_txt = new FixedText(this,SdResId(PAGE2_INDEX_TXT)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Index = new Edit(this,SdResId(PAGE2_INDEX)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_ASP = new RadioButton(this,SdResId(PAGE2_ASP)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_PERL = new RadioButton(this,SdResId(PAGE2_PERL)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_URL_txt = new FixedText(this,SdResId(PAGE2_URL_TXT)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_URL = new Edit(this,SdResId(PAGE2_URL)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_CGI_txt = new FixedText(this,SdResId(PAGE2_CGI_TXT)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_CGI = new Edit(this,SdResId(PAGE2_CGI)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Vert = new FixedLine( this,SdResId( PAGE2_VERT )));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Titel_Kiosk = new FixedLine(this,SdResId(PAGE2_TITEL_KIOSK)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_ChgDefault = new RadioButton(this,SdResId(PAGE2_CHG_DEFAULT)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_ChgAuto = new RadioButton(this,SdResId(PAGE2_CHG_AUTO)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Duration_txt = new FixedText(this,SdResId(PAGE2_DURATION_TXT)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Duration = new TimeField(this,SdResId(PAGE2_DURATION_TMF)));
-    aAssistentFunc.InsertControl(2,
-        pPage2_Endless = new CheckBox(this,SdResId(PAGE2_ENDLESS)));
+    get(pPage2_Titel_WebCast, "webCastLabel");
+    get(pPage2_ASP, "ASPRadiobutton");
+    get(pPage2_PERL, "perlRadiobutton");
+    get(pPage2_URL_txt, "URLTxtLabel");
+    get(pPage2_URL, "URLEntry");
+    get(pPage2_CGI_txt, "CGITxtLabel");
+    get(pPage2_CGI, "CGIEntry");
+    get(pPage2_Index_txt, "indexTxtLabel");
+    get(pPage2_Index, "indexEntry");
+    get(pPage2_Titel_Kiosk, "kioskLabel");
+    get(pPage2_ChgDefault, "chgDefaultRadiobutton");
+    get(pPage2_ChgAuto, "chgAutoRadiobutton");
+    get(pPage2_Duration_txt, "durationTxtLabel");
+    get(pPage2_Duration, "durationSpinbutton");
+    get(pPage2_Endless, "endlessCheckbutton");
+    aAssistentFunc.InsertControl(2, pPage2_Titel_WebCast);
+    aAssistentFunc.InsertControl(2, pPage2_Index_txt);
+    aAssistentFunc.InsertControl(2, pPage2_Index);
+    aAssistentFunc.InsertControl(2, pPage2_ASP);
+    aAssistentFunc.InsertControl(2, pPage2_PERL);
+    aAssistentFunc.InsertControl(2, pPage2_URL_txt);
+    aAssistentFunc.InsertControl(2, pPage2_URL);
+    aAssistentFunc.InsertControl(2, pPage2_CGI_txt);
+    aAssistentFunc.InsertControl(2, pPage2_CGI);
+    aAssistentFunc.InsertControl(2, pPage2_Titel_Kiosk);
+    aAssistentFunc.InsertControl(2, pPage2_ChgDefault);
+    aAssistentFunc.InsertControl(2, pPage2_ChgAuto);
+    aAssistentFunc.InsertControl(2, pPage2_Duration_txt);
+    aAssistentFunc.InsertControl(2, pPage2_Duration);
+    aAssistentFunc.InsertControl(2, pPage2_Endless);
 
     // Page 3
-    aAssistentFunc.InsertControl(3,
-        pPage3_Titel1 = new FixedLine(this,SdResId(PAGE3_TITEL_1)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Png = new RadioButton(this,SdResId(PAGE3_PNG)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Gif = new RadioButton(this,SdResId(PAGE3_GIF)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Jpg = new RadioButton(this,SdResId(PAGE3_JPG)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Quality_txt = new FixedText(this,SdResId(PAGE3_QUALITY_TXT)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Quality = new ComboBox(this,SdResId(PAGE3_QUALITY)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Vert = new FixedLine( this,SdResId( PAGE3_VERT )));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Titel2 = new FixedLine(this,SdResId(PAGE3_TITEL_2)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Resolution_1 = new RadioButton(this,SdResId(PAGE3_RESOLUTION_1)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Resolution_2 = new RadioButton(this,SdResId(PAGE3_RESOLUTION_2)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Resolution_3 = new RadioButton(this,SdResId(PAGE3_RESOLUTION_3)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_Titel3 = new FixedLine(this,SdResId(PAGE3_TITEL_3)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_SldSound = new CheckBox(this,SdResId(PAGE3_SLD_SOUND)));
-    aAssistentFunc.InsertControl(3,
-        pPage3_HiddenSlides = new CheckBox(this,SdResId(PAGE3_HIDDEN_SLIDES)));
+    get(pPage3, "page3");
+    get(pPage3_Titel1, "saveImgAsLabel");
+    get(pPage3_Png, "pngRadiobutton");
+    get(pPage3_Gif, "gifRadiobutton");
+    get(pPage3_Jpg, "jpgRadiobutton");
+    get(pPage3_Quality_txt, "qualityTxtLabel");
+    get(pPage3_Quality, "qualityCombobox");
+    get(pPage3_Titel2, "monitorResolutionLabel");
+    get(pPage3_Resolution_1, "resolution1Radiobutton");
+    get(pPage3_Resolution_2, "resolution2Radiobutton");
+    get(pPage3_Resolution_3, "resolution3Radiobutton");
+    get(pPage3_Titel3, "effectsLabel");
+    get(pPage3_SldSound, "sldSoundCheckbutton");
+    get(pPage3_HiddenSlides, "hiddenSlidesCheckbutton");
+    aAssistentFunc.InsertControl(3, pPage3);
+    aAssistentFunc.InsertControl(3, pPage3_Titel1);
+    aAssistentFunc.InsertControl(3, pPage3_Png);
+    aAssistentFunc.InsertControl(3, pPage3_Gif);
+    aAssistentFunc.InsertControl(3, pPage3_Jpg);
+    aAssistentFunc.InsertControl(3, pPage3_Quality_txt);
+    aAssistentFunc.InsertControl(3, pPage3_Quality);
+    aAssistentFunc.InsertControl(3, pPage3_Titel2);
+    aAssistentFunc.InsertControl(3, pPage3_Resolution_1);
+    aAssistentFunc.InsertControl(3, pPage3_Resolution_2);
+    aAssistentFunc.InsertControl(3, pPage3_Resolution_3);
+    aAssistentFunc.InsertControl(3, pPage3_Titel3);
+    aAssistentFunc.InsertControl(3, pPage3_SldSound);
+    aAssistentFunc.InsertControl(3, pPage3_HiddenSlides);
 
     // Page 4
-    aAssistentFunc.InsertControl(4,
-        pPage4_Titel1 = new FixedLine(this,SdResId(PAGE4_TITEL_1)));
-    aAssistentFunc.InsertControl(4,
-        pPage4_Author_txt = new FixedText(this,SdResId(PAGE4_AUTHOR_TXT)));
-    aAssistentFunc.InsertControl(4,
-        pPage4_Author = new Edit(this,SdResId(PAGE4_AUTHOR)));
-    aAssistentFunc.InsertControl(4,
-        pPage4_Email_txt = new FixedText(this,SdResId(PAGE4_EMAIL_TXT)));
-    aAssistentFunc.InsertControl(4,
-        pPage4_Email = new Edit(this,SdResId(PAGE4_EMAIL_EDIT)));
-    aAssistentFunc.InsertControl(4,
-        pPage4_WWW_txt = new FixedText(this,SdResId(PAGE4_WWW_TXT)));
-    aAssistentFunc.InsertControl(4,
-        pPage4_WWW = new Edit(this,SdResId(PAGE4_WWW_EDIT)));
-    aAssistentFunc.InsertControl(4,
-        pPage4_Titel2 = new FixedText(this,SdResId(PAGE4_TITEL_2)));
-    aAssistentFunc.InsertControl(4,
-        pPage4_Misc = new MultiLineEdit(this,SdResId(PAGE4_MISC)));
+    get(pPage4, "page4");
+    get(pPage4_Titel1, "infTitlePageLabel");
+    get(pPage4_Author_txt, "authorTxtLabel");
+    get(pPage4_Author, "authorEntry");
+    get(pPage4_Email_txt, "emailTxtLabel");
+    get(pPage4_Email, "emailEntry");
+    get(pPage4_WWW_txt, "wwwTxtLabel");
+    get(pPage4_WWW, "wwwEntry");
+    get(pPage4_Titel2, "addInformLabel");
+    get(pPage4_Misc, "miscTextview");
+    get(pPage4_Download, "downloadCheckbutton");
+    aAssistentFunc.InsertControl(4, pPage4);
+    aAssistentFunc.InsertControl(4, pPage4_Titel1);
+    aAssistentFunc.InsertControl(4, pPage4_Author_txt);
+    aAssistentFunc.InsertControl(4, pPage4_Author);
+    aAssistentFunc.InsertControl(4, pPage4_Email_txt);
+    aAssistentFunc.InsertControl(4, pPage4_Email);
+    aAssistentFunc.InsertControl(4, pPage4_WWW_txt);
+    aAssistentFunc.InsertControl(4, pPage4_WWW);
+    aAssistentFunc.InsertControl(4, pPage4_Titel2);
+    aAssistentFunc.InsertControl(4, pPage4_Misc);
     if(m_bImpress)
-        aAssistentFunc.InsertControl(4,
-            pPage4_Download = new CheckBox(this,SdResId(PAGE4_DOWNLOAD)));
+        aAssistentFunc.InsertControl(4, pPage4_Download);
 
     // Page 5
-    aAssistentFunc.InsertControl(5,
-        pPage5_Titel = new FixedLine(this,SdResId(PAGE5_TITEL)));
-    aAssistentFunc.InsertControl(5,
-        pPage5_TextOnly = new CheckBox(this, SdResId(PAGE5_TEXTONLY)));
-    aAssistentFunc.InsertControl(5,
-        pPage5_Buttons = new ValueSet(this,SdResId(PAGE5_BUTTONS)));
+    get(pPage5, "page5");
+    get(pPage5_Titel, "buttonStyleLabel");
+    get(pPage5_TextOnly, "textOnlyCheckbutton");
+    get(pPage5_Buttons, "buttonsDrawingarea");
+    aAssistentFunc.InsertControl(5, pPage5);
+    aAssistentFunc.InsertControl(5, pPage5_Titel);
+    aAssistentFunc.InsertControl(5, pPage5_TextOnly);
+    aAssistentFunc.InsertControl(5, pPage5_Buttons);
 
     // Page 6
-    aAssistentFunc.InsertControl(6,
-        pPage6_Titel = new FixedLine(this,SdResId(PAGE6_TITEL)));
-    aAssistentFunc.InsertControl(6,
-        pPage6_DocColors = new RadioButton(this,SdResId(PAGE6_DOCCOLORS)));
-    aAssistentFunc.InsertControl(6,
-        pPage6_Default = new RadioButton(this,SdResId(PAGE6_DEFAULT)));
-    aAssistentFunc.InsertControl(6,
-        pPage6_User = new RadioButton(this,SdResId(PAGE6_USER)));
-    aAssistentFunc.InsertControl(6,
-        pPage6_Text = new PushButton(this,SdResId(PAGE6_TEXT)));
-    aAssistentFunc.InsertControl(6,
-        pPage6_Link = new PushButton(this,SdResId(PAGE6_LINK)));
-    aAssistentFunc.InsertControl(6,
-        pPage6_ALink = new PushButton(this,SdResId(PAGE6_ALINK)));
-    aAssistentFunc.InsertControl(6,
-        pPage6_VLink = new PushButton(this,SdResId(PAGE6_VLINK)));
-    aAssistentFunc.InsertControl(6,
-        pPage6_Back = new PushButton(this,SdResId(PAGE6_BACK)));
-    aAssistentFunc.InsertControl(6,
-        pPage6_Preview = new SdHtmlAttrPreview(this,SdResId(PAGE6_PREVIEW)));
-
-    InterpolateFixedBitmap(pPage2_Standard_FB);
-    InterpolateFixedBitmap(pPage2_Frames_FB);
-    InterpolateFixedBitmap(pPage2_Kiosk_FB);
-    InterpolateFixedBitmap(pPage2_WebCast_FB);
-}
-
-// Delete the controls of the dialog
-void SdPublishingDlg::RemovePages()
-{
-    delete pPage1_Titel;
-    delete pPage1_NewDesign;
-    delete pPage1_OldDesign;
-    delete pPage1_Designs;
-    delete pPage1_DelDesign;
-    delete pPage1_Desc;
-
-    delete pPage2_Titel;
-    delete pPage2_Standard;
-    delete pPage2_Frames;
-    delete pPage2_SingleDocument;
-    delete pPage2_Kiosk;
-    delete pPage2_WebCast;
-    delete pPage2_Standard_FB;
-    delete pPage2_Frames_FB;
-    delete pPage2_Kiosk_FB;
-    delete pPage2_WebCast_FB;
-
-    delete pPage2_Titel_Html;
-    delete pPage2_Content;
-    if(m_bImpress)
-        delete pPage2_Notes;
-
-    delete pPage2_Vert;
-    delete pPage2_Titel_WebCast;
-    delete pPage2_Index_txt;
-    delete pPage2_Index;
-    delete pPage2_ASP;
-    delete pPage2_PERL;
-    delete pPage2_URL_txt;
-    delete pPage2_URL;
-    delete pPage2_CGI_txt;
-    delete pPage2_CGI;
-
-    delete pPage2_Titel_Kiosk;
-    delete pPage2_ChgDefault;
-    delete pPage2_ChgAuto;
-    delete pPage2_Duration_txt;
-    delete pPage2_Duration;
-    delete pPage2_Endless;
-
-    delete pPage3_Titel1;
-    delete pPage3_Png;
-    delete pPage3_Gif;
-    delete pPage3_Jpg;
-    delete pPage3_Quality_txt;
-    delete pPage3_Quality;
-    delete pPage3_Vert;
-    delete pPage3_Titel2;
-    delete pPage3_Resolution_1;
-    delete pPage3_Resolution_2;
-    delete pPage3_Resolution_3;
-    delete pPage3_Titel3;
-    delete pPage3_SldSound;
-    delete pPage3_HiddenSlides;
-
-    delete pPage4_Titel1;
-    delete pPage4_Author_txt;
-    delete pPage4_Author;
-    delete pPage4_Email_txt;
-    delete pPage4_Email;
-    delete pPage4_WWW_txt;
-    delete pPage4_WWW;
-    delete pPage4_Titel2;
-    delete pPage4_Misc;
-    if(m_bImpress)
-        delete pPage4_Download;
-
-    delete pPage5_Titel;
-    delete pPage5_TextOnly;
-    delete pPage5_Buttons;
-
-    delete pPage6_Titel;
-    delete pPage6_Default;
-    delete pPage6_User;
-    delete pPage6_Back;
-    delete pPage6_Text;
-    delete pPage6_Link;
-    delete pPage6_VLink;
-    delete pPage6_ALink;
-    delete pPage6_DocColors;
-    delete pPage6_Preview;
+    get(pPage6, "page6");
+    get(pPage6_Titel, "selectColorLabel");
+    get(pPage6_Default, "defaultRadiobutton");
+    get(pPage6_User, "userRadiobutton");
+    get(pPage6_Back, "backButton");
+    get(pPage6_Text, "textButton");
+    get(pPage6_Link, "linkButton");
+    get(pPage6_VLink, "vLinkButton");
+    get(pPage6_ALink, "aLinkButton");
+    get(pPage6_DocColors, "docColorsRadiobutton");
+    get(pPage6_Preview, "previewDrawingarea");
+    aAssistentFunc.InsertControl(6, pPage6);
+    aAssistentFunc.InsertControl(6, pPage6_Titel);
+    aAssistentFunc.InsertControl(6, pPage6_DocColors);
+    aAssistentFunc.InsertControl(6, pPage6_Default);
+    aAssistentFunc.InsertControl(6, pPage6_User);
+    aAssistentFunc.InsertControl(6, pPage6_Text);
+    aAssistentFunc.InsertControl(6, pPage6_Link);
+    aAssistentFunc.InsertControl(6, pPage6_ALink);
+    aAssistentFunc.InsertControl(6, pPage6_VLink);
+    aAssistentFunc.InsertControl(6, pPage6_Back);
+    aAssistentFunc.InsertControl(6, pPage6_Preview);
 }
 
 // Initialize dialog with default-values
@@ -1191,16 +1110,16 @@ void SdPublishingDlg::ChangePage()
 
     UpdatePage();
 
-    if( aNextPageButton.IsEnabled() )
-        aNextPageButton.GrabFocus();
+    if( pNextPageButton->IsEnabled() )
+        pNextPageButton->GrabFocus();
     else
-        aFinishButton.GrabFocus();
+        pFinishButton->GrabFocus();
 }
 
 void SdPublishingDlg::UpdatePage()
 {
-    aNextPageButton.Enable(!aAssistentFunc.IsLastPage());
-    aLastPageButton.Enable(!aAssistentFunc.IsFirstPage());
+    pNextPageButton->Enable(!aAssistentFunc.IsLastPage());
+    pLastPageButton->Enable(!aAssistentFunc.IsFirstPage());
 
     int nPage = aAssistentFunc.GetCurrentPage();
 
@@ -1224,6 +1143,7 @@ void SdPublishingDlg::UpdatePage()
 
         if( pPage2_WebCast->IsChecked() )
         {
+            pPage2Frame4->Show();
             pPage2_Titel_WebCast->Show();
             pPage2_ASP->Show();
             pPage2_PERL->Show();
@@ -1244,6 +1164,7 @@ void SdPublishingDlg::UpdatePage()
         }
         else
         {
+            pPage2Frame4->Hide();
             pPage2_Titel_WebCast->Hide();
             pPage2_ASP->Hide();
             pPage2_PERL->Hide();
@@ -1257,6 +1178,7 @@ void SdPublishingDlg::UpdatePage()
 
         if( pPage2_Kiosk->IsChecked() )
         {
+            pPage2Frame3->Show();
             pPage2_Titel_Kiosk->Show();
             pPage2_ChgDefault->Show();
             pPage2_ChgAuto->Show();
@@ -1269,6 +1191,7 @@ void SdPublishingDlg::UpdatePage()
         }
         else
         {
+            pPage2Frame3->Hide();
             pPage2_Titel_Kiosk->Hide();
             pPage2_ChgDefault->Hide();
             pPage2_ChgAuto->Hide();
@@ -1279,6 +1202,7 @@ void SdPublishingDlg::UpdatePage()
 
         if( pPage2_Standard->IsChecked() || pPage2_Frames->IsChecked() )
         {
+            pPage2Frame2->Show();
             pPage2_Titel_Html->Show();
             pPage2_Content->Show();
             if(m_bImpress)
@@ -1286,6 +1210,7 @@ void SdPublishingDlg::UpdatePage()
         }
         else
         {
+            pPage2Frame2->Hide();
             pPage2_Titel_Html->Hide();
             pPage2_Content->Hide();
             if(m_bImpress)
@@ -1294,7 +1219,7 @@ void SdPublishingDlg::UpdatePage()
         break;
     case 3:
         if( pPage2_Kiosk->IsChecked() || pPage2_WebCast->IsChecked() )
-            aNextPageButton.Disable();
+            pNextPageButton->Disable();
 
         if( pPage2_WebCast->IsChecked() )
             pPage3_SldSound->Disable();
