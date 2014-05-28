@@ -62,7 +62,7 @@ private:
     OUString m_sURL;
     glTFHandle* m_pHandle;
     OpenGLContext m_aContext;
-    Timer m_aTimer;
+    AutoTimer m_aTimer;
     OGLWindow* m_pOGLWindow;
 };
 
