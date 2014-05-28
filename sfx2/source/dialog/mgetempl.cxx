@@ -45,7 +45,6 @@
 SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "ManageStylePage", "sfx/ui/managestylepage.ui", rAttrSet)
     , pStyle(&((SfxStyleDialog*)GetParentDialog())->GetStyleSheet())
-    , pPool(NULL)
     , pItem(0)
     , bModified(false)
     , aName(pStyle->GetName())
@@ -79,6 +78,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     OSL_ENSURE( pResMgr, "No ResMgr in Module" );
     pFamilies = new SfxStyleFamilies( ResId( DLG_STYLE_DESIGNER, *pResMgr ) );
 
+    SfxStyleSheetBasePool* pPool = 0;
     SfxObjectShell* pDocShell = SfxObjectShell::Current();
 
     if ( pDocShell )
@@ -105,7 +105,6 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
             aNoName += OUString::number( nNo );
         }
         pStyle->SetName( aNoName );
-        pPool->Reindex();
         aName = aNoName;
         aFollow = pStyle->GetFollow();
         aParent = pStyle->GetParent();
@@ -420,11 +419,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
     OUString sCmp( pStyle->GetName() );
 
     if ( sCmp != aName )
-    {
-        pStyle->SetName(aName);
-        if (pPool)
-            pPool->Reindex();
-    }
+        pStyle->SetName( aName );
     m_pNameRw->SetText( aName );
     m_pNameRw->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
@@ -547,8 +542,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
         if ( m_pNameRw->HasFocus() )
             LoseFocusHdl( m_pNameRw );
 
-        bool bOk = pStyle->SetName(comphelper::string::stripStart(m_pNameRw->GetText(), ' '));
-        if (!bOk)
+        if (!pStyle->SetName(comphelper::string::stripStart(m_pNameRw->GetText(), ' ')))
         {
             InfoBox aBox( this, SfxResId( MSG_TABPAGE_INVALIDNAME ) );
             aBox.Execute();
@@ -556,8 +550,6 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
             m_pNameRw->SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
             return SfxTabPage::KEEP_PAGE;
         }
-        else if (pPool)
-            pPool->Reindex();
         bModified = true;
     }
 

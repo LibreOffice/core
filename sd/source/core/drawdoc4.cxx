@@ -1103,7 +1103,6 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
             aReplList.push_back(aReplData);
 
             pSheet->SetName(aSheetName);
-            mxStyleSheetPool.get()->Reindex();
         }
 
         pSheet = aIter.Next();

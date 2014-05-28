@@ -155,7 +155,7 @@ const OUString& SfxStyleSheetBase::GetName() const
     return aName;
 }
 
-bool SfxStyleSheetBase::SetName( const OUString& rName )
+bool SfxStyleSheetBase::SetName(const OUString& rName, bool bReIndexNow)
 {
     if(rName.isEmpty())
         return false;
@@ -178,6 +178,8 @@ bool SfxStyleSheetBase::SetName( const OUString& rName )
         if ( aFollow == aName )
             aFollow = rName;
         aName = rName;
+        if (bReIndexNow)
+            pPool->Reindex();
         pPool->SetSearchMask(eTmpFam, nTmpMask);
         pPool->Broadcast( SfxStyleSheetHintExtended(
             SFX_STYLESHEET_MODIFIED, aOldName, *this ) );

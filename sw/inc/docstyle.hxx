@@ -123,7 +123,7 @@ public:
     void                    PresetParent(const OUString& rName){ aParent = rName; }
     void                    PresetFollow(const OUString& rName){ aFollow = rName; }
 
-    virtual bool            SetName( const OUString& rStr) SAL_OVERRIDE;
+    virtual bool            SetName(const OUString& rNewName, bool bReindexNow = true) SAL_OVERRIDE;
     virtual bool            SetParent( const OUString& rStr) SAL_OVERRIDE;
     virtual bool            SetFollow( const OUString& rStr) SAL_OVERRIDE;
 

@@ -625,14 +625,10 @@ bool SdStyleSheet::HasClearParentSupport() const
     return true;
 }
 
-
-
-bool SdStyleSheet::SetName( const OUString& rName )
+bool SdStyleSheet::SetName(const OUString& rName, bool bReindexNow)
 {
-    return SfxStyleSheet::SetName( rName );
+    return SfxStyleSheet::SetName(rName, bReindexNow);
 }
-
-
 
 void SdStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
 {

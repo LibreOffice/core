@@ -869,14 +869,14 @@ OUString  SwDocStyleSheet::GetDescription()
 }
 
 // Set names
-bool  SwDocStyleSheet::SetName( const OUString& rStr)
+bool  SwDocStyleSheet::SetName(const OUString& rStr, bool bReindexNow)
 {
     if( rStr.isEmpty() )
         return false;
 
     if( aName != rStr )
     {
-        if( !SfxStyleSheetBase::SetName( rStr ))
+        if( !SfxStyleSheetBase::SetName(rStr, bReindexNow))
             return false;
     }
     else if(!bPhysical)
