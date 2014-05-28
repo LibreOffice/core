@@ -1711,7 +1711,6 @@ void OpenGL3DRenderer::ProcessUnrenderedShape()
     RenderTextShape();
     // render screen text
     RenderScreenTextShape();
-    ReleaseShapes();
 #if DEBUG_FBO
     OUString aFileName = OUString("D://shaderout_") + OUString::number(m_iWidth) + "_" + OUString::number(m_iHeight) + ".png";
     OpenGLHelper::renderToFile(m_iWidth, m_iHeight, aFileName);
@@ -1761,7 +1760,6 @@ void OpenGL3DRenderer::ReleaseBatchBarInfo()
         m_BarSurface[i].colorList.clear();
     }
 }
-
 
 void OpenGL3DRenderer::ReleaseShapes()
 {
