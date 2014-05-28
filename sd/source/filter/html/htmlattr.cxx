@@ -20,15 +20,26 @@
 #include "htmlattr.hxx"
 #include "htmlex.hxx"
 #include <vcl/decoview.hxx>
+#include <vcl/builder.hxx>
 
 
 
 
-SdHtmlAttrPreview::SdHtmlAttrPreview( Window* pParent, const ResId& rResId )
-:Control( pParent, rResId )
+SdHtmlAttrPreview::SdHtmlAttrPreview( Window* pParent, WinBits nStyle )
+:Control( pParent, nStyle )
 {
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSdHtmlAttrPreview(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = 0;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+
+    return new SdHtmlAttrPreview(pParent, nWinStyle);
+}
 
 
 SdHtmlAttrPreview::~SdHtmlAttrPreview()

@@ -32,7 +32,6 @@ $(eval $(call gb_SrsTarget_set_include,sd/res,\
 
 $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/core/glob.src \
-    sd/source/filter/html/pubdlg.src \
     sd/source/ui/accessibility/accessibility.src \
     sd/source/ui/animations/CustomAnimation.src \
     sd/source/ui/annotations/annotations.src \
