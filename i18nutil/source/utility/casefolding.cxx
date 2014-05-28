@@ -79,12 +79,14 @@ Mapping& casefolding::getConditionalValue(const sal_Unicode* str, sal_Int32 pos,
 
 Mapping& casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 len, Locale& aLocale, sal_uInt8 nMappingType) throw (RuntimeException)
 {
-        static Mapping dummy = { 0, 1, { 0, 0, 0 } };
-        sal_Int16 address = CaseMappingIndex[str[pos] >> 8] << 8;
+    static Mapping dummy = { 0, 1, { 0, 0, 0 } };
+    sal_Int16 address = CaseMappingIndex[str[pos] >> 8];
 
-        dummy.map[0] = str[pos];
+    dummy.map[0] = str[pos];
 
-        if (address >= 0 && (CaseMappingValue[address += (str[pos] & 0xFF)].type & nMappingType)) {
+    if (address >= 0) {
+        address = (address << 8) + (str[pos] & 0xFF);
+        if (CaseMappingValue[address].type & nMappingType) {
             sal_uInt8 type = CaseMappingValue[address].type;
             if (type & ValueTypeNotValue) {
                 if (CaseMappingValue[address].value == 0)
@@ -105,7 +107,8 @@ Mapping& casefolding::getValue(const sal_Unicode* str, sal_Int32 pos, sal_Int32 
             } else
                 dummy.map[0] = CaseMappingValue[address].value;
         }
-        return dummy;
+    }
+    return dummy;
 }
 
 inline bool SAL_CALL
