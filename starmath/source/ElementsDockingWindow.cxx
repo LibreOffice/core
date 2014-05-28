@@ -435,6 +435,7 @@ void SmElementsControl::DoScroll(long nDelta)
     aRect.Right() -= mpScroll->GetSizePixel().Width();
     Scroll( 0, -nDelta, aRect );
     mpScroll->SetPosPixel(aNewPoint);
+    Invalidate();
 }
 
 void SmElementsControl::addSeparator()
