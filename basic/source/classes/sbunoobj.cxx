@@ -4339,7 +4339,7 @@ public:
     // XInvocation
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw(std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setValue( const OUString& rProperty, const Any& rValue )
-        throw( UnknownPropertyException, std::exception ) SAL_OVERRIDE;
+        throw (UnknownPropertyException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual Any SAL_CALL getValue( const OUString& rProperty )
         throw (UnknownPropertyException, RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasMethod( const OUString& rName ) throw(std::exception) SAL_OVERRIDE;
@@ -4371,7 +4371,8 @@ Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospecti
     return Reference< XIntrospectionAccess >();
 }
 
-void SAL_CALL ModuleInvocationProxy::setValue( const OUString& rProperty, const Any& rValue ) throw( UnknownPropertyException, std::exception )
+void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const Any& rValue)
+    throw (UnknownPropertyException, RuntimeException, std::exception)
 {
     if( !m_bProxyIsClassModuleObject )
         throw UnknownPropertyException();
