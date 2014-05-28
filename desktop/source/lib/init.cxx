@@ -206,10 +206,13 @@ static LibreOfficeDocument* lo_documentLoad(LibreOffice* pThis, const char* pURL
 
     try
     {
+        uno::Sequence<css::beans::PropertyValue> aArgs(2);
+        aArgs[0].Name = "EmbeddedScriptSupport";
+        aArgs[0].Value <<= false;
+        aArgs[1].Name = "DocumentRecoverySupport";
+        aArgs[1].Value <<= false;
         uno::Reference<lang::XComponent> xComponent;
-        xComponent = xComponentLoader->loadComponentFromURL(
-                                            aURL, OUString("_blank"), 0,
-                                            uno::Sequence<css::beans::PropertyValue>());
+        xComponent = xComponentLoader->loadComponentFromURL(aURL, "_blank", 0, aArgs);
 
         if (xComponent.is())
             return new LibLODocument_Impl(xComponent);

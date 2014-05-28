@@ -687,7 +687,19 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
 
             // create the new doc
             const OUString sServiceName = aDescriptor.getOrDefault( "DocumentService", OUString() );
-            xModel.set( m_aContext->getServiceManager()->createInstanceWithContext(sServiceName, m_aContext), UNO_QUERY_THROW );
+            bool bScript = aDescriptor.getOrDefault("EmbeddedScriptSupport", true);
+            bool bDocRecovery = aDescriptor.getOrDefault("DocumentRecoverySupport", true);
+
+            uno::Sequence<uno::Any> aArgs(2);
+            beans::PropertyValue aVal;
+            aVal.Name = "EmbeddedScriptSupport";
+            aVal.Value <<= bScript;
+            aArgs[0] <<= aVal;
+            aVal.Name = "DocumentRecoverySupport";
+            aVal.Value <<= bDocRecovery;
+            aArgs[1] <<= aVal;
+
+            xModel.set( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sServiceName, aArgs, m_aContext), UNO_QUERY_THROW );
 
             // load resp. init it
             const Reference< XLoadable > xLoadable( xModel, UNO_QUERY_THROW );
