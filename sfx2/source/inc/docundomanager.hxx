@@ -29,12 +29,84 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
+/** base class for sub components of an SfxBaseModel, which share their ref count and lifetime with the SfxBaseModel
+*/
+class SfxModelSubComponent
+{
+public:
+    /** checks whether the instance is alive, i.e. properly initialized, and not yet disposed
+    */
+    void    MethodEntryCheck()
+    {
+        m_rModel.MethodEntryCheck( true );
+    }
+
+    // called when the SfxBaseModel which the component is superordinate of is being disposed
+    virtual void disposing();
+
+protected:
+    SfxModelSubComponent( SfxBaseModel& i_model )
+        :m_rModel( i_model )
+    {
+    }
+    virtual ~SfxModelSubComponent();
+
+    void acquireModel()  { m_rModel.acquire(); }
+    void releaseModel()  { m_rModel.release(); }
+
+    bool isDisposed() const {   return m_rModel.IsDisposed();   }
+
+protected:
+    const SfxBaseModel& getBaseModel() const { return m_rModel; }
+          SfxBaseModel& getBaseModel()       { return m_rModel; }
+
+          ::osl::Mutex&  getMutex()          { return m_rModel.getMutex(); }
+
+private:
+    SfxBaseModel&   m_rModel;
+};
+
+class SfxModelGuard
+{
+public:
+    enum AllowedModelState
+    {
+        // not yet initialized
+        E_INITIALIZING,
+        // fully alive, i.e. initialized, and not yet disposed
+        E_FULLY_ALIVE
+    };
+
+    SfxModelGuard( SfxBaseModel& i_rModel, const AllowedModelState i_eState = E_FULLY_ALIVE )
+        : m_aGuard()
+    {
+        i_rModel.MethodEntryCheck( i_eState != E_INITIALIZING );
+    }
+    SfxModelGuard( SfxModelSubComponent& i_rSubComponent )
+        :m_aGuard()
+    {
+        i_rSubComponent.MethodEntryCheck();
+    }
+    ~SfxModelGuard()
+    {
+    }
+
+    void reset()
+    {
+        m_aGuard.reset();
+    }
+
+    void clear()
+    {
+        m_aGuard.clear();
+    }
+
+private:
+    SolarMutexResettableGuard  m_aGuard;
+};
 
 namespace sfx2
 {
-
-
-
     //= DocumentUndoManager
 
     typedef ::cppu::WeakImplHelper1 <css::document::XUndoManager> DocumentUndoManager_Base;
