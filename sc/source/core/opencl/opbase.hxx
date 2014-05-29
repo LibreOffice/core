@@ -165,8 +165,14 @@ public:
     virtual std::string GenStringSlidingWindowDeclRef(bool=false) const
     { return std::string(""); }
 
+    virtual bool IsMixedArgument() const
+    { return false; }
+
     /// Generate use/references to the argument
     virtual void GenDeclRef(std::stringstream &ss) const;
+    virtual void GenNumDeclRef(std::stringstream &ss) const{ss << ",";}
+
+    virtual void GenStringDeclRef(std::stringstream &ss) const{ss << ",";}
 
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel, int, int, cl_program) = 0;
@@ -205,7 +211,7 @@ public:
     virtual void GenSlidingWindowDecl(std::stringstream &ss) const SAL_OVERRIDE;
 
     /// When referenced in a sliding window function
-    virtual std::string GenSlidingWindowDeclRef(bool=false) const SAL_OVERRIDE;
+    virtual std::string GenSlidingWindowDeclRef(bool=true) const SAL_OVERRIDE;
 
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel, int, int, cl_program) SAL_OVERRIDE;
