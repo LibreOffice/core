@@ -136,7 +136,6 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
         //pOutDev->SetTextLineColor( ((const SvxUnderlineItem*)GetItem())->GetColor() );
 
     // FIXME(matteocam)
-
     if ( pOutDev )
         pOutDev->SetTextFillColor(aColor);
 }
@@ -228,6 +227,28 @@ void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
     Color aColor = ((const SvxColorItem*)GetItem())->GetValue();
     rFont.SetColor( aColor);
     //fprintf(stderr, "Called SetFont with Color %d\n", aColor.GetColor());
+}
+
+// class EditCharAttribBackgroundColor
+
+EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
+                                const SvxBackgroundColorItem& rAttr,
+                                  sal_uInt16 _nStart,
+                                  sal_uInt16 _nEnd )
+    : EditCharAttrib( rAttr, _nStart, _nEnd )
+{
+    // FIXME(matteocam)
+    //DBG_ASSERT( rAttr.Which() == EE_CHAR_BKG_COLOR, "Not a BackgroundColor attribute!" );
+}
+
+void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
+{
+    /* FIXME(matteocam)
+     *
+    Color aColor = ((const SvxBackgroundColorItem*)GetItem())->GetValue();
+    rFont.SetFillColor( aColor); // XXX: Is it SetFillColor we want?
+    */
+
 }
 
 
