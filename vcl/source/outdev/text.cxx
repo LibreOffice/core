@@ -465,6 +465,7 @@ void OutputDevice::ImplDrawSpecialText( SalLayout& rSalLayout )
 
 void OutputDevice::ImplDrawText( SalLayout& rSalLayout )
 {
+
     if( mbInitClipRegion )
         InitClipRegion();
     if( mbOutputClipped )
@@ -828,6 +829,8 @@ void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              MetricVector* pVector, OUString* pDisplayText
                              )
 {
+
+
     if(nLen == 0x0FFFF)
     {
         SAL_INFO("sal.rtl.xub",
@@ -948,6 +951,12 @@ void OutputDevice::DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                   const sal_Int32* pDXAry,
                                   sal_Int32 nIndex, sal_Int32 nLen )
 {
+    fprintf(stderr, "TextFillColor printing %c is (%d, %d, %d)\n",
+        (char) rStr.toChar(),
+        GetTextFillColor().GetRed(),
+        GetTextFillColor().GetGreen(),
+        GetTextFillColor().GetBlue());
+
     if(nLen == 0x0FFFF)
     {
         SAL_INFO("sal.rtl.xub",
@@ -1429,6 +1438,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const Rectangle& r
                                  MetricVector* pVector, OUString* pDisplayText,
                                  ::vcl::ITextLayout& _rLayout )
 {
+
     Color aOldTextColor;
     Color aOldTextFillColor;
     bool  bRestoreFillColor = false;
