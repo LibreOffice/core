@@ -77,6 +77,31 @@ public:
 
 };
 
+/*
+ *  FIXME(matteocam):
+ * both classes Svx{Background,}Color should be derived from a
+ * common ancestor or be totally separate (not recommended probably).
+*/
+
+// class SvxBackgroundColorItem
+
+// XXX: to be moved in a separate header.
+class EDITENG_DLLPUBLIC SvxBackgroundColorItem : public SvxColorItem
+{
+    public:
+        TYPEINFO_OVERRIDE();
+
+        SvxBackgroundColorItem( const sal_uInt16 nId );
+        SvxBackgroundColorItem( const Color& rCol,
+                                const sal_uInt16 nId );
+        SvxBackgroundColorItem( SvStream& rStrm, const sal_uInt16 nId  );
+        SvxBackgroundColorItem( const SvxBackgroundColorItem& rCopy );
+
+        virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const SAL_OVERRIDE;
+        virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const SAL_OVERRIDE;
+
+};
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

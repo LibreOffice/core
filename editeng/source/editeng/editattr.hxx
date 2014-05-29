@@ -38,6 +38,7 @@ class SvxOverlineItem;
 class SvxFontHeightItem;
 class SvxCharScaleWidthItem;
 class SvxColorItem;
+class SvxBackgroundColorItem;
 class SvxAutoKernItem;
 class SvxKerningItem;
 class SvxWordLineModeItem;
@@ -307,6 +308,18 @@ public:
 
     virtual void    SetFont( SvxFont& rFont, OutputDevice* pOutDev ) SAL_OVERRIDE;
 };
+
+// class EditCharAttribBackgroundColor
+
+class EditCharAttribBackgroundColor : public EditCharAttrib
+{
+public:
+    EditCharAttribBackgroundColor(const SvxBackgroundColorItem& rAttr,
+                                  sal_uInt16 nStart,
+                                  sal_uInt16 nEnd );
+    virtual void    SetFont(SvxFont& rFont, OutputDevice* pOutDev) SAL_OVERRIDE;
+};
+
 
 
 // class EditCharAttribLanguage
