@@ -36,7 +36,6 @@ class ISfxTemplateCommon
 {
 public:
     virtual SfxStyleFamily GetActualFamily() const = 0;
-    virtual OUString GetSelectedEntry() const = 0;
 
 protected:
     ~ISfxTemplateCommon() {}

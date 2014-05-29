@@ -147,7 +147,6 @@ private:
         ISfxTemplateCommon_Impl( SfxCommonTemplateDialog_Impl* pDialogP ) : pDialog( pDialogP ) {}
         virtual ~ISfxTemplateCommon_Impl() {}
         virtual SfxStyleFamily GetActualFamily() const SAL_OVERRIDE { return pDialog->GetActualFamily(); }
-        virtual OUString GetSelectedEntry() const SAL_OVERRIDE { return pDialog->GetSelectedEntry(); }
     };
 
     ISfxTemplateCommon_Impl     aISfxTemplateCommon;
