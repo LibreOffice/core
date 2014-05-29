@@ -297,7 +297,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
         SAL_WARN("avmedia.opengl", "Error occured while parsing *.json file! Error code: " << nRet);
         return uno::Reference< media::XFrameGrabber >();
     }
-    OGLFrameGrabber *pFrameGrabber = new OGLFrameGrabber( m_pHandle );
+    OGLFrameGrabber *pFrameGrabber = new OGLFrameGrabber( *m_pHandle );
     return uno::Reference< media::XFrameGrabber >( pFrameGrabber );
 }
 
