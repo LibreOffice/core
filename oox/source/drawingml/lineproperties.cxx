@@ -385,7 +385,7 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 lclConvertCustomDash( aLineDash, maCustomDash );
 
             // convert relative dash/dot length to absolute length
-            sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 35 );
+            sal_Int32 nBaseLineWidth = ::std::min< sal_Int32 >( nLineWidth, 35 );
             aLineDash.DotLen *= nBaseLineWidth;
             aLineDash.DashLen *= nBaseLineWidth;
             aLineDash.Distance *= nBaseLineWidth;
