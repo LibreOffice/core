@@ -31,6 +31,7 @@ WpftCalcFilterTest::WpftCalcFilterTest()
 
 void WpftCalcFilterTest::test()
 {
+    doTest("com.sun.star.comp.Calc.MWAWCalcImportFilter", "/writerperfect/qa/unit/data/calc/libmwaw/");
     doTest("com.sun.star.comp.Calc.MSWorksCalcImportFilter", "/writerperfect/qa/unit/data/calc/libwps/");
 }
 
