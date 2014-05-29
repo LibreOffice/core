@@ -314,6 +314,43 @@ void OpXor::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    return t;\n";
     ss << "}\n";
 }
+void OpIf::GenSlidingWindowFunction(std::stringstream &ss,
+    const std::string &sSymName, SubArguments &vSubArguments)
+{
+    ss << "\ndouble " << sSymName;
+    ss << "_"<< BinFuncName() <<"(";
+    if(vSubArguments.size()!=3) throw  Unhandled("unknown operand for ocPush");
+    for (unsigned i = 0; i < vSubArguments.size(); i++)
+    {
+        if (i)
+            ss << ",";
+        vSubArguments[i]->GenSlidingWindowDecl(ss);
+    }
+    ss << ") {\n";
+    ss << "    int gid0 = get_global_id(0);\n";
+
+    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
+    if(tmpCur0->GetType() == formula::svDoubleVectorRef)
+    {
+            throw UnhandledToken(tmpCur0, "unknown operand for ocPush");
+    }
+    else
+    {
+        ss << "    if(isNan(";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << ")||  ";
+        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+        ss << " == 0)\n";
+        ss << "         return ";
+        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+        ss << "     else";
+        ss <<"          return ";
+        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+        ss <<";\n";
+    }
+    ss << "}\n";
+}
 
 }}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
