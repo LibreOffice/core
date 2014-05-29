@@ -37,7 +37,7 @@ namespace drawinglayer
             This primitive is needed to have the correct XDrawPage as ViewInformation for decomposing
             the page contents (given as PageContent here) if these contain e.g.
             view-dependent (in this case XDrawPage-dependent) text fields like PageNumber. If You want
-            those primitives to be visualized correctly, Your renderer needs to locally correct it's
+            those primitives to be visualized correctly, Your renderer needs to locally correct its
             ViewInformation2D to reference the new XDrawPage.
          */
         class DRAWINGLAYER_DLLPUBLIC PagePreviewPrimitive2D : public BufferedDecompositionPrimitive2D

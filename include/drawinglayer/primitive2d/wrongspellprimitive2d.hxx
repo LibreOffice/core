@@ -41,7 +41,7 @@ namespace drawinglayer
             TextSimplePortionPrimitive2D more as needed.
 
             A renderer who does not want to visualize this (if contained at all)
-            can detect and ignore this primitive. If it's decomposition is used,
+            can detect and ignore this primitive. If its decomposition is used,
             it will be visualized as red wavelines.
 
             The geometric definition defines a line on the X-Axis (no Y-coordinates)

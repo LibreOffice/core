@@ -46,7 +46,7 @@ namespace drawinglayer
         /** TextSimplePortionPrimitive2D class
 
             This is the basic primitive for representing a text portion. It contains
-            all needed information. If it is not handled by a renderer, it's decomposition
+            all needed information. If it is not handled by a renderer, its decomposition
             will provide the text PolyPolygon outlines as filled polygons, correctly
             transformed.
 

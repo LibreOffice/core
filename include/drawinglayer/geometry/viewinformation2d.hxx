@@ -135,7 +135,7 @@ namespace drawinglayer
             double getViewTime() const;
             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& getVisualizedPage() const;
 
-            /// On-demand prepared Object to View transformation and it's inerse for convenience
+            /// On-demand prepared Object to View transformation and its inverse for convenience
             const basegfx::B2DHomMatrix& getObjectToViewTransformation() const;
             const basegfx::B2DHomMatrix& getInverseObjectToViewTransformation() const;
 

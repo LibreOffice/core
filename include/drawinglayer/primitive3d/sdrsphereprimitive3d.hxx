@@ -34,7 +34,7 @@ namespace drawinglayer
 
             This 3D primitive expands the SdrPrimitive3D to a 3D sphere definition.
             The sphere is implicitly in unit coordinates and the given transformation
-            defines it's geometry in space.
+            defines its geometry in space.
          */
         class DRAWINGLAYER_DLLPUBLIC SdrSpherePrimitive3D : public SdrPrimitive3D
         {

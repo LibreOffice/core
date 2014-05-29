@@ -34,7 +34,7 @@ namespace drawinglayer
 
             This 3D primitive expands the SdrPrimitive3D to a 3D cube definition.
             The cube is implicitly in unit coordinates and the given transformation
-            defines it's geometry in space.
+            defines its geometry in space.
          */
         class DRAWINGLAYER_DLLPUBLIC SdrCubePrimitive3D : public SdrPrimitive3D
         {

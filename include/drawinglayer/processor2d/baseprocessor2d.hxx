@@ -147,7 +147,7 @@ namespace drawinglayer
             only needs to handle some Basic Primitives and create outline and collect
             outline polygons e.g. for primitives with area like BitmapPrimitive2D (a
             rectangle) and PolyPolygonColorPrimitive2D. When also handling the Grouping
-            Primitives MaskPrimitive2D (e.g. ignoring it's content, using the mask polyPolygon)
+            Primitives MaskPrimitive2D (e.g. ignoring its content, using the mask polyPolygon)
             and TransformPrimitive2D (to have the correct local transformation), a processor
             creating the outline can be written using just four (4) primitives. As a tipp, it can
             be helpful to add many for the purpose not interesting higher level primitives
