@@ -174,6 +174,8 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
         GetModelFromBasic( SbxObject* pBasic );
+
+    static void DetachAllDocBasicItems();
 };
 
 typedef tools::SvRef<StarBASIC> StarBASICRef;

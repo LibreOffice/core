@@ -21,6 +21,7 @@ $(eval $(call gb_Library_use_libraries,unotest,\
 	cppu \
 	cppuhelper \
 	sal \
+	sb \
 	$(gb_UWINAPI) \
 ))
 

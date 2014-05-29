@@ -80,6 +80,11 @@ public:
     void startListening();
     void stopListening();
 
+    void setDisposed( bool bDisposed )
+    {
+        mbDisposed = bDisposed;
+    }
+
     virtual void SAL_CALL queryClosing( const lang::EventObject& rSource, sal_Bool bGetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL notifyClosing( const lang::EventObject& rSource ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL disposing( const lang::EventObject& rSource ) throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -2007,7 +2012,16 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
     return xModel;
 }
 
-
+void StarBASIC::DetachAllDocBasicItems()
+{
+    DocBasicItemMap& rItems = GaDocBasicItems::get();
+    DocBasicItemMap::iterator it = rItems.begin(), itEnd = rItems.end();
+    for (; it != itEnd; ++it)
+    {
+        DocBasicItemRef xItem = it->second;
+        xItem->setDisposed(true);
+    }
+}
 
 // #118116 Implementation Collection object
 
