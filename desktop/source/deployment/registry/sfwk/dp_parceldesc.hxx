@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SFWK_DP_PARCELDESC_HXX
+#define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SFWK_DP_PARCELDESC_HXX
+
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
@@ -78,5 +81,7 @@ public:
 }
 }
 }
+
+#endif // INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_SFWK_DP_PARCELDESC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
