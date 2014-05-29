@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
+#define INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
+
 #include <rtl/ustring.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -56,5 +59,7 @@ public:
     virtual void SAL_CALL initialize(const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aSequence) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
+
+#endif // INCLUDED_FORMS_SOURCE_XFORMS_XPATHLIB_EXTENSION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
