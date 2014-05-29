@@ -537,6 +537,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/s
 	MS_Excel_2007_Binary \
 	calc_OOXML \
 	calc_OOXML_Template \
+	calc_MS_Works_Document \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
@@ -568,6 +569,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filt
 	calc_MS_Excel_2007_Binary \
 	calc_OOXML \
 	calc_OOXML_Template \
+	MS_Works_Calc \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\

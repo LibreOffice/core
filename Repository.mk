@@ -162,6 +162,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,calc, \
 	scd \
 	scfilt \
 	scui \
+	wpftcalc \
 	$(if $(ENABLE_OPENCL),scopencl) \
 	$(if $(ENABLE_COINMP)$(ENABLE_LPSOLVE),solver) \
 	$(if $(DISABLE_SCRIPTING),,vbaobj) \
