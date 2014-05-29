@@ -1628,6 +1628,20 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78957, "fdo78957.docx")
     CPPUNIT_ASSERT(cy >= 0 );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79256, "fdo79256.docx")
+{
+    /* Corruption issue containing Line Style with Long Dashes and Dots
+     * After RT checking the Dash Length value. Dash Length value should not be greater than 2147483.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    const sal_Int32 maxLimit = 2147483;
+    sal_Int32 d = getXPath(pXmlDoc,"/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]/a:ds[1]","d").toInt32();
+    CPPUNIT_ASSERT(d <= maxLimit );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

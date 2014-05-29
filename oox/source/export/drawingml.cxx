@@ -628,6 +628,11 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
         // line style is a dash and it was not set by the shape style
         // TODO: the XML_d and XML_sp values seem insane
         mpFS->startElementNS( XML_a, XML_custDash, FSEND );
+
+        aLineDash.DotLen = aLineDash.DotLen / nLineWidth;
+        aLineDash.DashLen = aLineDash.DashLen / nLineWidth;
+        aLineDash.Distance = aLineDash.Distance / nLineWidth;
+
         int i;
         for( i = 0; i < aLineDash.Dots; i ++ )
             mpFS->singleElementNS( XML_a, XML_ds,
