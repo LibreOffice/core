@@ -242,6 +242,7 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
         SAL_WARN("avmedia.opengl", "Failed to get the SystemChildWindow for rendering!");
         return uno::Reference< media::XPlayerWindow >();
     }
+    assert(pChildWindow->GetParent());
 
     if( !m_aContext.init(pChildWindow) )
     {
@@ -264,7 +265,7 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
         SAL_WARN("avmedia.opengl", "Error occured while parsing *.json file! Error code: " << nRet);
         return uno::Reference< media::XPlayerWindow >();
     }
-    m_pOGLWindow = new OGLWindow(m_pHandle, &m_aContext, pChildWindow);
+    m_pOGLWindow = new OGLWindow(*m_pHandle, m_aContext, *pChildWindow->GetParent());
     return uno::Reference< media::XPlayerWindow >( m_pOGLWindow );
 }
 

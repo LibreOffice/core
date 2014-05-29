@@ -27,7 +27,7 @@ class OGLWindow : public ::cppu::WeakImplHelper2 < com::sun::star::media::XPlaye
                                                    com::sun::star::lang::XServiceInfo >
 {
 public:
-    OGLWindow( glTFHandle* pHandle, OpenGLContext* pContext, SystemChildWindow* pChildWindow );
+    OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, Window& rEventHandlerParent );
     virtual ~OGLWindow();
 
     virtual void SAL_CALL update() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -65,9 +65,9 @@ private:
     DECL_LINK( FocusGrabber, VclWindowEvent* );
     DECL_LINK( CameraHandler, VclWindowEvent* );
 
-    glTFHandle* m_pHandle;
-    OpenGLContext* m_pContext;
-    Window* m_pEventHandler;
+    glTFHandle& m_rHandle;
+    OpenGLContext& m_rContext;
+    Window& m_rEventHandler;
     bool m_bVisible;
     com::sun::star::media::ZoomLevel meZoomLevel;
     Point m_aLastMousePos;
