@@ -111,6 +111,7 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
     for(;pBegin != pEnd;++pBegin)
     {
         // this is a special property to find the jdbc driver
+        // FYI, OUString::compareToAscii() returns zero on equality, like strcmp()
         if  (   pBegin->Name.compareToAscii( "JavaDriverClass" )
             &&  pBegin->Name.compareToAscii( "JavaDriverClassPath" )
             &&  pBegin->Name.compareToAscii( "SystemProperties" )
