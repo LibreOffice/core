@@ -6,6 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+
+#ifndef INCLUDED_DESKTOP_SOURCE_SPLASH/UNXSPLASH_HXX
+#define INCLUDED_DESKTOP_SOURCE_SPLASH/UNXSPLASH_HXX
+
 #include <stdio.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -74,5 +78,7 @@ public:
 uno::Reference< uno::XInterface > SAL_CALL UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception );
 OUString UnxSplash_getImplementationName();
 com::sun::star::uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw ();
+
+#endif // INCLUDED_DESKTOP_SOURCE_SPLASH/UNXSPLASH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
