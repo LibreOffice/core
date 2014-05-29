@@ -109,10 +109,6 @@ void SAL_CALL OGLWindow::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidt
         m_rHandle.viewport.y = nY;
         m_rHandle.viewport.width = nWidth;
         m_rHandle.viewport.height = nHeight;
-        if( m_bVisible )
-        {
-            update();
-        }
     }
 }
 
@@ -129,7 +125,6 @@ void SAL_CALL OGLWindow::setVisible( sal_Bool bSet )
     assert(m_rEventHandler.GetParent());
     if( bSet && !m_bVisible )
     {
-        update();
         m_rEventHandler.GetParent()->AddEventListener( LINK(this, OGLWindow, FocusGrabber));
         m_rEventHandler.AddEventListener( LINK(this, OGLWindow, CameraHandler));
         m_rEventHandler.GrabFocus();
@@ -279,7 +274,6 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     if(nCode == KEY_S)vMoveBy += vMup*(0.0005f*fModelSize);
                 }
                 gltf_renderer_move_camera(&m_rHandle, vMoveBy.x, vMoveBy.y, vMoveBy.z, 0.0);
-                update();
             }
         }
     }
@@ -326,7 +320,6 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
             long nDeltaY = aCurPos.Y()-m_aLastMousePos.Y();
             // TODO: It seems this method just moves the camera but not rotate it.
             gltf_renderer_rotate_camera(&m_rHandle, (float)nDeltaX*fSensitivity, (float)nDeltaY*fSensitivity, 0.0, 0.0);
-            update();
 
             m_aLastMousePos = aCurPos;
         }
