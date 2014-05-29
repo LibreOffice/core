@@ -1778,6 +1778,14 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
                          (pEntry->nMemberId == MID_FRMSIZE_REL_HEIGHT_RELATION ||
                           pEntry->nMemberId == MID_FRMSIZE_REL_WIDTH_RELATION))
                     pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
+                else if (pEntry->nWID == FN_TEXT_BOX)
+                {
+                    // The TextBox property is set, if we can find a textbox for this shape.
+                    if (pFmt && SwTextBoxHelper::findTextBox(pFmt))
+                        pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
+                    else
+                        pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
+                }
                 else if(pFmt)
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
