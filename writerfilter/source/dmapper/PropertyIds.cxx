@@ -391,6 +391,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_INDEX_ENTRY_TYPE               :   sName = "IndexEntryType"; break;
             case PROP_CELL_INTEROP_GRAB_BAG          :   sName = "CellInteropGrabBag"; break;
             case PROP_TABLE_INTEROP_GRAB_BAG         :   sName = "TableInteropGrabBag"; break;
+            case PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING : sName = "ApplyParagraphMarkFormatToNumbering"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));
