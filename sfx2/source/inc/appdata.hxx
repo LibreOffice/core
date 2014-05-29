@@ -106,7 +106,6 @@ public:
 
     // "current" functionality
     SfxProgress*                        pProgress;
-    ISfxTemplateCommon*                 pTemplateCommon;
 
     sal_uInt16                              nDocModalMode;              // counts documents in modal mode
     sal_uInt16                              nAutoTabPageId;
