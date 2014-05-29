@@ -137,8 +137,6 @@ SfxModule* SfxApplication::GetModule_Impl()
 
 ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBindings )
 {
-    if( pAppData_Impl->pTemplateCommon )
-        return pAppData_Impl->pTemplateCommon;
     SfxChildWindow *pChild = rBindings.GetWorkWindow_Impl()->GetChildWindow_Impl(
         SfxTemplateDialogWrapper::GetChildWindowId() );
     if ( pChild )
