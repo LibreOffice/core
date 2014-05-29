@@ -177,7 +177,6 @@ void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Poi
 
 OUString ThemeTable::getStringForTheme(const Id id)
 {
-    std::map<sal_uInt32, OUString> tmpThemeFontMap;
     switch (id)
     {
         case NS_ooxml::LN_Value_ST_Theme_majorEastAsia:
