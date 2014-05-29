@@ -386,9 +386,17 @@ void LineProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
             // convert relative dash/dot length to absolute length
             sal_Int32 nBaseLineWidth = ::std::max< sal_Int32 >( nLineWidth, 35 );
-            aLineDash.DotLen *= nBaseLineWidth;
-            aLineDash.DashLen *= nBaseLineWidth;
-            aLineDash.Distance *= nBaseLineWidth;
+
+            /* Calculating the dots, dashes and distance
+             *  according to the base line width and dividing
+             *  the line based on pattern.
+            */
+            sal_Int32 totalPatternLen = aLineDash.DotLen + aLineDash.DashLen + aLineDash.Distance;
+            sal_Int32 patternCount = nBaseLineWidth / totalPatternLen;
+
+            aLineDash.DotLen *= (aLineDash.Dots * patternCount);
+            aLineDash.DashLen *= (aLineDash.Dashes * patternCount);
+            aLineDash.Distance *= patternCount;
 
             if( rPropMap.setProperty( SHAPEPROP_LineDash, aLineDash ) )
                 eLineStyle = drawing::LineStyle_DASH;
