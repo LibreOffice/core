@@ -31,11 +31,11 @@ WpftWriterFilterTest::WpftWriterFilterTest()
 
 void WpftWriterFilterTest::test()
 {
-    doTest("com.sun.star.comp.Writer.AbiWordImportFilter", "/writerperfect/qa/unit/data/libabw/");
-    // doTest("org.libreoffice.comp.Writer.EBookImportFilter", "/writerperfect/qa/unit/data/libe-book/");
-    doTest("com.sun.star.comp.Writer.MSWorksImportFilter", "/writerperfect/qa/unit/data/libwps/");
-    // doTest("com.sun.star.comp.Writer.MWAWImportFilter", "/writerperfect/qa/unit/data/libmwaw/");
-    doTest("com.sun.star.comp.Writer.WordPerfectImportFilter", "/writerperfect/qa/unit/data/libwpd/");
+    doTest("com.sun.star.comp.Writer.AbiWordImportFilter", "/writerperfect/qa/unit/data/writer/libabw/");
+    // doTest("org.libreoffice.comp.Writer.EBookImportFilter", "/writerperfect/qa/unit/data/writer/libe-book/");
+    doTest("com.sun.star.comp.Writer.MSWorksImportFilter", "/writerperfect/qa/unit/data/writer/libwps/");
+    // doTest("com.sun.star.comp.Writer.MWAWImportFilter", "/writerperfect/qa/unit/data/writer/libmwaw/");
+    doTest("com.sun.star.comp.Writer.WordPerfectImportFilter", "/writerperfect/qa/unit/data/writer/libwpd/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftWriterFilterTest);
