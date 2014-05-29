@@ -78,6 +78,6 @@ private:
     const rtl::Reference< DownloadInteractionHandler > m_aHandler;
 };
 
-#define // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_DOWNLOAD_HXX
+#endif // INCLUDED_EXTENSIONS_SOURCE_UPDATE_CHECK_DOWNLOAD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
