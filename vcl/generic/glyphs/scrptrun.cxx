@@ -207,7 +207,14 @@ UBool ScriptRun::next()
             // pop it from the stack
             if (pairIndex >= 0 && (pairIndex & 1) != 0 && parenSP >= 0) {
                 parenSP -= 1;
-                startSP -= 1;
+                /* decrement startSP only if it is >= 0,
+                   decrementing it unnecessarily will lead to memory corruption
+                   while processing the above while block.
+                   e.g. startSP = -4 , parenSP = -1
+                */
+                if (startSP >= 0) {
+                    startSP -= 1;
+                }
             }
         } else {
             // if the run broke on a surrogate pair,
