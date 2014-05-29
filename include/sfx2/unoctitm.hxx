@@ -169,7 +169,8 @@ public:
     void                setMasterSlaveCommand( bool bSet );
     void SAL_CALL       dispatch( const ::com::sun::star::util::URL& aURL,
                                   const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
-                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException );
+                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener )
+        throw (css::uno::RuntimeException, std::exception);
     void SAL_CALL       addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException );
     void                UnBindController();
     SfxDispatcher*      GetDispatcher();

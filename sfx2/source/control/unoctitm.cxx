@@ -593,7 +593,8 @@ OUString SfxDispatchController_Impl::getSlaveCommand( const ::com::sun::star::ut
 
 void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util::URL& aURL,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener )
+    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (
