@@ -581,6 +581,7 @@ private:
     bool mbBackgroundParaOverDrawings;
     bool mbTabOverMargin;
     bool mbSurroundTextWrapSmall;
+    bool mApplyParagraphMarkFormatToNumbering;
 
     bool mbLastBrowseMode                           : 1;
 

@@ -123,7 +123,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_EMBED_FONTS,
     HANDLE_EMBED_SYSTEM_FONTS,
     HANDLE_TAB_OVER_MARGIN,
-    HANDLE_SURROUND_TEXT_WRAP_SMALL
+    HANDLE_SURROUND_TEXT_WRAP_SMALL,
+    HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING
 };
 
 static MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -194,6 +195,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("EmbedSystemFonts"), HANDLE_EMBED_SYSTEM_FONTS, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("TabOverMargin"), HANDLE_TAB_OVER_MARGIN, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("SurroundTextWrapSmall"), HANDLE_SURROUND_TEXT_WRAP_SMALL, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("ApplyParagraphMarkFormatToNumbering"), HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, CPPUTYPE_BOOLEAN, 0, 0},
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
  * find another solution before adding them to this property set - MTG
@@ -797,6 +799,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::SURROUND_TEXT_WRAP_SMALL, bTmp);
         }
         break;
+        case HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
+        {
+            bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1214,6 +1222,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_SURROUND_TEXT_WRAP_SMALL:
         {
             sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::SURROUND_TEXT_WRAP_SMALL );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;

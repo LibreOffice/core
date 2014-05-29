@@ -206,6 +206,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case FLOATTABLE_NOMARGINS: return mbFloattableNomargins;
         case EMBED_FONTS: return mEmbedFonts;
         case EMBED_SYSTEM_FONTS: return mEmbedSystemFonts;
+        case APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: return mApplyParagraphMarkFormatToNumbering;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -399,6 +400,9 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
         case EMBED_SYSTEM_FONTS:
             mEmbedSystemFonts = value;
+            break;
+        case APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
+            mApplyParagraphMarkFormatToNumbering = value;
             break;
         default:
             OSL_FAIL("Invalid setting id");

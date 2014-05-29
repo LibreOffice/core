@@ -345,6 +345,7 @@ const OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_PARA_SHADOW_FORMAT: sName = "ParaShadowFormat"; break;
             case PROP_FOOTNOTE_LINE_RELATIVE_WIDTH: sName = "FootnoteLineRelativeWidth"; break;
             case PROP_HORIZONTAL_MERGE: sName = "HorizontalMerge"; break;
+            case PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING : sName = "ApplyParagraphMarkFormatToNumbering"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

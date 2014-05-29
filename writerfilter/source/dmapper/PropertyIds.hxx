@@ -316,6 +316,7 @@ enum PropertyIds
         ,PROP_PARA_TOP_MARGIN_BEFORE_AUTO_SPACING
         ,PROP_PARA_BOTTOM_MARGIN_AFTER_AUTO_SPACING
         ,PROP_HORIZONTAL_MERGE
+        ,PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
