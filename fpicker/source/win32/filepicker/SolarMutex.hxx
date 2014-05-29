@@ -17,8 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_SOLARMUTEX_HXX
+#define INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_SOLARMUTEX_HXX
+
 int ReleaseSolarMutexOnMainThreadContext(unsigned nThreadId);
 
 void AcquireSolarMutex(int nAcquireCount);
+
+#endif // INCLUDED_FPICKER_SOURCE_WIN32_FILEPICKER_SOLARMUTEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
