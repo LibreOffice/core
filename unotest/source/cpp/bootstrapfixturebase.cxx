@@ -15,6 +15,7 @@
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <basic/sbstar.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -105,6 +106,7 @@ void test::BootstrapFixtureBase::setUp()
 
 void test::BootstrapFixtureBase::tearDown()
 {
+    StarBASIC::DetachAllDocBasicItems();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

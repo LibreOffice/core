@@ -98,6 +98,7 @@
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
+#include <basic/sbstar.hxx>
 
 #include <svtools/fontsubstconfig.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -1766,6 +1767,7 @@ int Desktop::doShutdown()
     // with the solar mutex unlocked, to avoid deadlock:
     sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
+    StarBASIC::DetachAllDocBasicItems();
     Application::AcquireSolarMutex(nAcquireCount);
     // be sure that path/language options gets destroyed before
     // UCB is deinitialized

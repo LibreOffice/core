@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     i18nlangtag \
     sal \
     salhelper \
+    sb \
     sfx \
     svl \
     svt \
