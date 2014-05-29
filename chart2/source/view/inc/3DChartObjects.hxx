@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_3DCHARTOBJECTS_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_INC_3DCHARTOBJECTS_HXX
+
 #include <glm/glm.hpp>
 #include <tools/color.hxx>
 #include <vcl/bitmapex.hxx>
@@ -152,5 +155,7 @@ private:
 }
 
 }
+
+#endif // INCLUDED_CHART2_SOURCE_VIEW_INC_3DCHARTOBJECTS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

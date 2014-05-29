@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_CONNECTIVITY/SOURCE/DRIVERS/MOZAB/BOOTSTRAP/MNSPROFILE.HXX
+#define INCLUDED_CONNECTIVITY/SOURCE/DRIVERS/MOZAB/BOOTSTRAP/MNSPROFILE.HXX
+
 #include "mozilla_nsprofile.h"
 
 #define _MAX_LENGTH   256
@@ -63,5 +66,7 @@ public:
 
 extern nsresult ConvertStringToUnicode(nsCString& aCharset, const char* inString, nsAString& outString);
 extern nsresult GetPlatformCharset(nsCString& aCharset);
+
+#endif // INCLUDED_CONNECTIVITY/SOURCE/DRIVERS/MOZAB/BOOTSTRAP/MNSPROFILE.HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

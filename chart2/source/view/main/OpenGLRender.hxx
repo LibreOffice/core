@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_MAIN_OPENGLRENDER_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_MAIN_OPENGLRENDER_HXX
+
 #include <vcl/bitmapex.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -239,5 +242,7 @@ private:
     GLuint m_DebugColorID;
 #endif
 };
+
+#endif // INCLUDED_CHART2_SOURCE_VIEW_MAIN_OPENGLRENDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
