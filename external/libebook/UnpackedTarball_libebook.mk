@@ -15,6 +15,7 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,libebook,1))
 
 $(eval $(call gb_UnpackedTarball_add_patches,libebook,\
 	external/libebook/0001-blind-attempt-to-workaround-MSVC-bug.patch \
+	external/libebook/0001-parse-zipped-FictionBook-2-files-again.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
