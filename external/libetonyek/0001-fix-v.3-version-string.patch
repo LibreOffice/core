@@ -1,0 +1,26 @@
+From 16b7bf009a06ac48c69f94b778a09151aa20fa53 Mon Sep 17 00:00:00 2001
+From: David Tardon <dtardon@redhat.com>
+Date: Thu, 29 May 2014 17:04:05 +0200
+Subject: [PATCH] fix v.3 version string
+
+Change-Id: I689fd53bedeccb8d1cda5275832f36333fe1d108
+---
+ src/lib/KEY2Token.gperf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib/KEY2Token.gperf b/src/lib/KEY2Token.gperf
+index d1bf501..483ca97 100644
+--- a/src/lib/KEY2Token.gperf
++++ b/src/lib/KEY2Token.gperf
+@@ -25,7 +25,7 @@ struct Token
+ 1,_1
+ 2004102100,VERSION_STR_2
+ 2005092101,COMPATIBLE_VERSION_STR_3,
+-2005140600,VERSION_STR_3
++2005112100,VERSION_STR_3
+ 72007061400,VERSION_STR_4
+ 92008102400,VERSION_STR_5
+ BGBuildChunk,BGBuildChunk
+-- 
+1.9.3
+
