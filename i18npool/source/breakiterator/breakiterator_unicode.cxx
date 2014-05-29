@@ -376,29 +376,13 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         if (line.aBreakIterator->preceding(nStartPos + 1) == nStartPos) { //Line boundary break
             lbr.breakIndex = nStartPos;
             lbr.breakType = BreakType::WORDBOUNDARY;
-        } else if (hOptions.rHyphenator.is()) { //Hyphenation break
-            sal_Int32 boundary_with_punctuation = (line.aBreakIterator->next() != BreakIterator::DONE) ? line.aBreakIterator->current() : 0;
-            line.aBreakIterator->preceding(nStartPos + 1); // reset to check correct hyphenation of "word-word"
-
-            sal_Int32 nStartPosWordEnd = nStartPos;
-            while (line.aBreakIterator->current() < nStartPosWordEnd && u_ispunct((sal_uInt32)Text[nStartPosWordEnd])) // starting punctuation
-                nStartPosWordEnd --;
-
-            Boundary wBoundary = getWordBoundary( Text, nStartPosWordEnd, rLocale,
+        } else if (hOptions.rHyphenator.is()) { //Hyphenation break, FIXME: fdo#56392
+            Boundary wBoundary = getWordBoundary( Text, nStartPos, rLocale,
                 WordType::DICTIONARY_WORD, false);
-
-            nStartPosWordEnd = wBoundary.endPos;
-            while (nStartPosWordEnd < Text.getLength() && (u_ispunct((sal_uInt32)Text[nStartPosWordEnd]))) // ending punctuation
-                nStartPosWordEnd ++;
-            nStartPosWordEnd = nStartPosWordEnd - wBoundary.endPos;
-            if (hOptions.hyphenIndex - wBoundary.startPos < nStartPosWordEnd) nStartPosWordEnd = hOptions.hyphenIndex - wBoundary.startPos;
-#define SPACE 0x0020
-            while (boundary_with_punctuation > wBoundary.endPos && Text[--boundary_with_punctuation] == SPACE);
-            if (boundary_with_punctuation != 0) boundary_with_punctuation += 1 - wBoundary.endPos;
             uno::Reference< linguistic2::XHyphenatedWord > aHyphenatedWord;
             aHyphenatedWord = hOptions.rHyphenator->hyphenate(Text.copy(wBoundary.startPos,
                         wBoundary.endPos - wBoundary.startPos), rLocale,
-                    (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos - nStartPosWordEnd), hOptions.aHyphenationOptions);
+                    (sal_Int16) (hOptions.hyphenIndex - wBoundary.startPos), hOptions.aHyphenationOptions);
             if (aHyphenatedWord.is()) {
                 lbr.rHyphenatedWord = aHyphenatedWord;
                 if(wBoundary.startPos + aHyphenatedWord->getHyphenationPos() + 1 < nMinBreakPos )
