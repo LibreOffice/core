@@ -18,8 +18,10 @@
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
 #include <unomid.h>
+#include <unoprnms.hxx>
 #include <dflyobj.hxx>
 
+#include <editeng/unoprnms.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdpage.hxx>
@@ -47,14 +49,14 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
         // Initialize properties.
         uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
         uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
-        xPropertySet->setPropertyValue("TopBorder", aEmptyBorder);
-        xPropertySet->setPropertyValue("BottomBorder", aEmptyBorder);
-        xPropertySet->setPropertyValue("LeftBorder", aEmptyBorder);
-        xPropertySet->setPropertyValue("RightBorder", aEmptyBorder);
+        xPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
+        xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
+        xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
+        xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
 
-        xPropertySet->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(100)));
+        xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(sal_Int32(100)));
 
-        xPropertySet->setPropertyValue("SizeType", uno::makeAny(text::SizeType::FIX));
+        xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
 
         // Link its text range to the original shape.
         uno::Reference<text::XTextRange> xTextBox(xTextFrame, uno::UNO_QUERY_THROW);
@@ -72,12 +74,12 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
         syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(xShape->getSize()));
 
         uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
-        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, xShapePropertySet->getPropertyValue("HoriOrient"));
-        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION, xShapePropertySet->getPropertyValue("HoriOrientRelation"));
-        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_ORIENT, xShapePropertySet->getPropertyValue("VertOrient"));
-        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_RELATION, xShapePropertySet->getPropertyValue("VertOrientRelation"));
-        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, xShapePropertySet->getPropertyValue("HoriOrientPosition"));
-        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, xShapePropertySet->getPropertyValue("VertOrientPosition"));
+        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT));
+        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT_RELATION));
+        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_ORIENT, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT));
+        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_RELATION, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_RELATION));
+        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, xShapePropertySet->getPropertyValue(UNO_NAME_HORI_ORIENT_POSITION));
+        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, xShapePropertySet->getPropertyValue(UNO_NAME_VERT_ORIENT_POSITION));
     }
 }
 
@@ -247,13 +249,13 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             switch (nMemberId)
             {
             case MID_HORIORIENT_ORIENT:
-                aPropertyName = "HoriOrient";
+                aPropertyName = UNO_NAME_HORI_ORIENT;
                 break;
             case MID_HORIORIENT_RELATION:
-                aPropertyName = "HoriOrientRelation";
+                aPropertyName = UNO_NAME_HORI_ORIENT_RELATION;
                 break;
             case MID_HORIORIENT_POSITION:
-                aPropertyName = "HoriOrientPosition";
+                aPropertyName = UNO_NAME_HORI_ORIENT_POSITION;
                 bAdjustX = true;
                 break;
             }
@@ -262,19 +264,19 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             switch (nMemberId)
             {
             case MID_VERTORIENT_ORIENT:
-                aPropertyName = "VertOrient";
+                aPropertyName = UNO_NAME_VERT_ORIENT;
                 break;
             case MID_VERTORIENT_RELATION:
-                aPropertyName = "VertOrientRelation";
+                aPropertyName = UNO_NAME_VERT_ORIENT_RELATION;
                 break;
             case MID_VERTORIENT_POSITION:
-                aPropertyName = "VertOrientPosition";
+                aPropertyName = UNO_NAME_VERT_ORIENT_POSITION;
                 bAdjustY = true;
                 break;
             }
             break;
         case RES_FRM_SIZE:
-            aPropertyName = "Size";
+            aPropertyName = UNO_NAME_SIZE;
             bAdjustSize = true;
             break;
         case RES_ANCHOR:
@@ -284,7 +286,7 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
                 if (aValue.get<text::TextContentAnchorType>() == text::TextContentAnchorType_AS_CHARACTER)
                 {
                     uno::Reference<beans::XPropertySet> xPropertySet(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode_THROUGHT));
+                    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGHT));
                     return;
                 }
                 break;
