@@ -19,6 +19,7 @@
 
 #include "sbcomp.hxx"
 #include "iosys.hxx"
+#include <boost/scoped_ptr.hpp>
 
 // test if there's an I/O channel
 
@@ -51,9 +52,9 @@ void SbiParser::Print()
     {
         if( !IsEoln( Peek() ) )
         {
-            SbiExpression* pExpr = new SbiExpression( this );
+            boost::scoped_ptr<SbiExpression> pExpr(new SbiExpression( this ));
             pExpr->Gen();
-            delete pExpr;
+            pExpr.reset();
             Peek();
             aGen.Gen( eCurTok == COMMA ? _PRINTF : _BPRINT );
         }
@@ -80,9 +81,9 @@ void SbiParser::Write()
 
     while( !bAbort )
     {
-        SbiExpression* pExpr = new SbiExpression( this );
+        boost::scoped_ptr<SbiExpression> pExpr(new SbiExpression( this ));
         pExpr->Gen();
-        delete pExpr;
+        pExpr.reset();
         aGen.Gen( _BWRITE );
         if( Peek() == COMMA )
         {
@@ -129,14 +130,14 @@ void SbiParser::Line()
 void SbiParser::LineInput()
 {
     Channel( true );
-    SbiExpression* pExpr = new SbiExpression( this, SbOPERAND );
+    boost::scoped_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
     if( !pExpr->IsVariable() )
         Error( SbERR_VAR_EXPECTED );
     if( pExpr->GetType() != SbxVARIANT && pExpr->GetType() != SbxSTRING )
         Error( SbERR_CONVERSION );
     pExpr->Gen();
     aGen.Gen( _LINPUT );
-    delete pExpr;
+    pExpr.reset();
     aGen.Gen( _CHAN0 );     // ResetChannel() not in StepLINPUT() anymore
 }
 
@@ -146,7 +147,7 @@ void SbiParser::Input()
 {
     aGen.Gen( _RESTART );
     Channel( true );
-    SbiExpression* pExpr = new SbiExpression( this, SbOPERAND );
+    boost::scoped_ptr<SbiExpression> pExpr(new SbiExpression( this, SbOPERAND ));
     while( !bAbort )
     {
         if( !pExpr->IsVariable() )
@@ -156,12 +157,11 @@ void SbiParser::Input()
         if( Peek() == COMMA )
         {
             Next();
-            delete pExpr;
-            pExpr = new SbiExpression( this, SbOPERAND );
+            pExpr.reset(new SbiExpression( this, SbOPERAND ));
         }
         else break;
     }
-    delete pExpr;
+    pExpr.reset();
     aGen.Gen( _CHAN0 );
 }
 
@@ -240,20 +240,20 @@ void SbiParser::Open()
     }
     TestToken( AS );
     // channel number
-    SbiExpression* pChan = new SbiExpression( this );
+    boost::scoped_ptr<SbiExpression> pChan(new SbiExpression( this ));
     if( !pChan )
         Error( SbERR_SYNTAX );
-    SbiExpression* pLen = NULL;
+    boost::scoped_ptr<SbiExpression> pLen;
     if( Peek() == SYMBOL )
     {
         Next();
         if( aSym.equalsIgnoreAsciiCase("LEN") )
         {
             TestToken( EQ );
-            pLen = new SbiExpression( this );
+            pLen.reset(new SbiExpression( this ));
         }
     }
-    if( !pLen ) pLen = new SbiExpression( this, 128, SbxINTEGER );
+    if( !pLen ) pLen.reset(new SbiExpression( this, 128, SbxINTEGER ));
     // the stack for the OPEN command looks as follows:
     // block length
     // channel number
@@ -263,8 +263,6 @@ void SbiParser::Open()
         pChan->Gen();
     aFileName.Gen();
     aGen.Gen( _OPEN, nMode, nFlags );
-    delete pLen;
-    delete pChan;
     bInStatement = false;
 }
 

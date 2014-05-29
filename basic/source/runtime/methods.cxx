@@ -57,6 +57,7 @@
 #include <ooo/vba/XHelperInterface.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 #include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace comphelper;
 using namespace osl;
@@ -4475,8 +4476,8 @@ RTLFUNC(LoadPicture)
     }
 
     OUString aFileURL = getFullPath( rPar.Get(1)->GetOUString() );
-    SvStream* pStream = utl::UcbStreamHelper::CreateStream( aFileURL, STREAM_READ );
-    if( pStream != NULL )
+    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream( aFileURL, STREAM_READ ));
+    if( pStream )
     {
         Bitmap aBmp;
         ReadDIB(aBmp, *pStream, true);
@@ -4486,7 +4487,6 @@ RTLFUNC(LoadPicture)
         ((SbStdPicture*)(SbxObject*)xRef)->SetGraphic( aGraphic );
         rPar.Get(0)->PutObject( xRef );
     }
-    delete pStream;
 }
 
 RTLFUNC(SavePicture)
@@ -4601,7 +4601,7 @@ RTLFUNC(MsgBox)
     }
 
     nType &= (16+32+64);
-    MessBox* pBox = 0;
+    boost::scoped_ptr<MessBox> pBox;
 
     SolarMutexGuard aSolarGuard;
 
@@ -4609,19 +4609,19 @@ RTLFUNC(MsgBox)
     switch( nType )
     {
     case 16:
-        pBox = new ErrorBox( pParent, nWinBits, aMsg );
+        pBox.reset(new ErrorBox( pParent, nWinBits, aMsg ));
         break;
     case 32:
-        pBox = new QueryBox( pParent, nWinBits, aMsg );
+        pBox.reset(new QueryBox( pParent, nWinBits, aMsg ));
         break;
     case 48:
-        pBox = new WarningBox( pParent, nWinBits, aMsg );
+        pBox.reset(new WarningBox( pParent, nWinBits, aMsg ));
         break;
     case 64:
-        pBox = new InfoBox( pParent, nWinBits, aMsg );
+        pBox.reset(new InfoBox( pParent, nWinBits, aMsg ));
         break;
     default:
-        pBox = new MessBox( pParent, nWinBits, aTitle, aMsg );
+        pBox.reset(new MessBox( pParent, nWinBits, aTitle, aMsg ));
     }
     pBox->SetText( aTitle );
     sal_uInt16 nRet = (sal_uInt16)pBox->Execute();
@@ -4643,7 +4643,6 @@ RTLFUNC(MsgBox)
         nMappedRet = nButtonMap[ nRet ];
     }
     rPar.Get(0)->PutInteger( nMappedRet );
-    delete pBox;
 }
 
 RTLFUNC(SetAttr)

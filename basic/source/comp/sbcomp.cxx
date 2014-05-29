@@ -24,6 +24,7 @@
 #include "sbobjmod.hxx"
 #include <svtools/miscopt.hxx>
 #include <stdio.h>
+#include <boost/scoped_ptr.hpp>
 
 // To activate tracing enable in sbtrace.hxx
 #ifdef DBG_TRACE_BASIC
@@ -954,11 +955,11 @@ bool SbModule::Compile()
     SbModule* pOld = GetSbData()->pCompMod;
     GetSbData()->pCompMod = this;
 
-    SbiParser* pParser = new SbiParser( (StarBASIC*) GetParent(), this );
+    boost::scoped_ptr<SbiParser> pParser(new SbiParser( (StarBASIC*) GetParent(), this ));
     while( pParser->Parse() ) {}
     if( !pParser->GetErrors() )
         pParser->aGen.Save();
-    delete pParser;
+    pParser.reset();
     // for the disassembler
     if( pImage )
         pImage->aOUSource = aOUSource;

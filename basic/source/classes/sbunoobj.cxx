@@ -93,6 +93,7 @@ using namespace cppu;
 #include <runtime.hxx>
 
 #include <math.h>
+#include <boost/scoped_array.hpp>
 #include <boost/unordered_map.hpp>
 #include <com/sun/star/reflection/XTypeDescriptionEnumerationAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
@@ -1399,9 +1400,9 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
 
                     if( nSeqLevel == nDims )
                     {
-                        sal_Int32* pLowerBounds = new sal_Int32[nDims];
-                        sal_Int32* pUpperBounds = new sal_Int32[nDims];
-                        sal_Int32* pActualIndices = new sal_Int32[nDims];
+                        boost::scoped_array<sal_Int32> pLowerBounds(new sal_Int32[nDims]);
+                        boost::scoped_array<sal_Int32> pUpperBounds(new sal_Int32[nDims]);
+                        boost::scoped_array<sal_Int32> pActualIndices(new sal_Int32[nDims]);
                         for( short i = 1 ; i <= nDims ; i++ )
                         {
                             sal_Int32 lBound, uBound;
@@ -1413,11 +1414,7 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                         }
 
                         aRetVal = implRekMultiDimArrayToSequence( pArray, aElemType,
-                            nDims - 1, 0, pActualIndices, pLowerBounds, pUpperBounds );
-
-                        delete[] pUpperBounds;
-                        delete[] pLowerBounds;
-                        delete[] pActualIndices;
+                            nDims - 1, 0, pActualIndices.get(), pLowerBounds.get(), pUpperBounds.get() );
                     }
                 }
             }
