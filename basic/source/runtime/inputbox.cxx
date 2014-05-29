@@ -26,6 +26,7 @@
 #include "runtime.hxx"
 #include "stdobj.hxx"
 #include "rtlproto.hxx"
+#include <boost/scoped_ptr.hpp>
 
 class SvRTLInputBox : public ModalDialog
 {
@@ -171,11 +172,10 @@ RTLFUNC(InputBox)
             nX = rPar.Get(4)->GetLong();
             nY = rPar.Get(5)->GetLong();
         }
-        SvRTLInputBox *pDlg=new SvRTLInputBox(GetpApp()->GetDefDialogParent(),
-                    rPrompt,aTitle,aDefault,nX,nY);
+        boost::scoped_ptr<SvRTLInputBox> pDlg(new SvRTLInputBox(GetpApp()->GetDefDialogParent(),
+                    rPrompt,aTitle,aDefault,nX,nY));
         pDlg->Execute();
         rPar.Get(0)->PutString( pDlg->GetText() );
-        delete pDlg;
     }
 }
 

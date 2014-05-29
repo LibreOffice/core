@@ -29,6 +29,7 @@
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <basic/codecompletecache.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -965,7 +966,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                     bool bError2 = true;
                     if( bOptional && bCompatible && eTok == EQ )
                     {
-                        SbiConstExpression* pDefaultExpr = new SbiConstExpression( this );
+                        boost::scoped_ptr<SbiConstExpression> pDefaultExpr(new SbiConstExpression( this ));
                         SbxDataType eType2 = pDefaultExpr->GetType();
 
                         sal_uInt16 nStringId;
@@ -978,7 +979,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
                             nStringId = aGblStrings.Add( pDefaultExpr->GetValue(), eType2 );
                         }
                         pPar->SetDefaultId( nStringId );
-                        delete pDefaultExpr;
+                        pDefaultExpr.reset();
 
                         eTok = Next();
                         if( eTok == COMMA || eTok == RPAREN )

@@ -21,6 +21,7 @@
 #include <list>
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <svl/brdcst.hxx>
@@ -1779,7 +1780,7 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
     ErrorHdlResetter aErrHdl;
     SbxBase::ResetError();
 
-    SbiParser* pParser = new SbiParser( (StarBASIC*) GetParent(), this );
+    boost::scoped_ptr<SbiParser> pParser(new SbiParser( (StarBASIC*) GetParent(), this ));
     pParser->SetCodeCompleting(true);
 
     while( pParser->Parse() ) {}
@@ -1801,7 +1802,6 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
                 aCache.InsertLocalVar( pSymDef->GetName(), pChildSymDef->GetName(), pParser->aGblStrings.Find(pChildSymDef->GetTypeId()) );
         }
     }
-    delete pParser;
 }
 
 SbxArrayRef SbModule::GetMethods()

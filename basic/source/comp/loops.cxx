@@ -19,6 +19,7 @@
 
 
 #include "sbcomp.hxx"
+#include <boost/scoped_ptr.hpp>
 
 // Single-line IF and Multiline IF
 
@@ -64,10 +65,10 @@ void SbiParser::If()
             aGen.BackChain( nEndLbl );
 
             aGen.Statement();
-            SbiExpression* pCond = new SbiExpression( this );
+            boost::scoped_ptr<SbiExpression> pCond(new SbiExpression( this ));
             pCond->Gen();
             nEndLbl = aGen.Gen( _JUMPF, 0 );
-            delete pCond;
+            pCond.reset();
             TestToken( THEN );
             eTok = Peek();
             while( !( eTok == ELSEIF || eTok == ELSE || eTok == ENDIF ) &&
