@@ -44,6 +44,13 @@ public:
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "Xor"; }
 };
+class OpIf:public Normal
+{
+public:
+    virtual void GenSlidingWindowFunction(std::stringstream &ss,
+            const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "IF"; }
+};
 
 }}
 
