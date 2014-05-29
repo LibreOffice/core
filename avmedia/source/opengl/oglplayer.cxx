@@ -149,7 +149,6 @@ void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
     assert(m_pHandle);
-    gltf_animation_stop(m_pHandle);
     m_aTimer.Stop();
     gltf_animation_stop(m_pHandle);
 }
