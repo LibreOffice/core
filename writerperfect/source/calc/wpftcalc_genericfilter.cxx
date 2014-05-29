@@ -30,12 +30,16 @@
 #include "sal/types.h"
 
 #include "MSWorksCalcImportFilter.hxx"
+#include "MWAWCalcImportFilter.hxx"
 
 namespace {
 
 static cppu::ImplementationEntry const services[] = {
     { &MSWorksCalcImportFilter_createInstance, &MSWorksCalcImportFilter_getImplementationName,
       &MSWorksCalcImportFilter_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { &MWAWCalcImportFilter_createInstance, &MWAWCalcImportFilter_getImplementationName,
+      &MWAWCalcImportFilter_getSupportedServiceNames,
       &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 } };
 
