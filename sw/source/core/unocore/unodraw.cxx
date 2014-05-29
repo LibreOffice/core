@@ -1353,7 +1353,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         pFmt->SetFmtAttr(aSet);
                 }
                 // We have a pFmt and a pEntry as well: try to sync TextBox property.
-                SwTextBoxHelper::syncProperty(pFmt, pEntry->nWID, pEntry->nMemberId, rPropertyName, aValue);
+                SwTextBoxHelper::syncProperty(pFmt, pEntry->nWID, pEntry->nMemberId, aValue);
             }
             else
             {
@@ -2343,7 +2343,7 @@ void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
     {
         mxShape->setSize( aSize );
     }
-    SwTextBoxHelper::syncProperty(GetFrmFmt(), RES_FRM_SIZE, MID_FRMSIZE_SIZE, "Size", uno::makeAny(aSize));
+    SwTextBoxHelper::syncProperty(GetFrmFmt(), RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(aSize));
 }
 // #i31698#
 // implementation of virtual methods from drawing::XShapeDescriptor

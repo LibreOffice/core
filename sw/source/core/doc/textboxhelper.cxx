@@ -69,15 +69,15 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
 
         // Also initialize the properties, which are not constant, but inherited from the shape's ones.
         uno::Reference<drawing::XShape> xShape(pShape->FindRealSdrObject()->getUnoShape(), uno::UNO_QUERY);
-        syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, "Size", uno::makeAny(xShape->getSize()));
+        syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(xShape->getSize()));
 
         uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
-        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, "HoriOrient", xShapePropertySet->getPropertyValue("HoriOrient"));
-        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION, "HoriOrientRelation", xShapePropertySet->getPropertyValue("HoriOrientRelation"));
-        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_ORIENT, "VertOrient", xShapePropertySet->getPropertyValue("VertOrient"));
-        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_RELATION, "VertOrientRelation", xShapePropertySet->getPropertyValue("VertOrientRelation"));
-        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, "HoriOrientPosition", xShapePropertySet->getPropertyValue("HoriOrientPosition"));
-        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, "VertOrientPosition", xShapePropertySet->getPropertyValue("VertOrientPosition"));
+        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, xShapePropertySet->getPropertyValue("HoriOrient"));
+        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION, xShapePropertySet->getPropertyValue("HoriOrientRelation"));
+        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_ORIENT, xShapePropertySet->getPropertyValue("VertOrient"));
+        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_RELATION, xShapePropertySet->getPropertyValue("VertOrientRelation"));
+        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, xShapePropertySet->getPropertyValue("HoriOrientPosition"));
+        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, xShapePropertySet->getPropertyValue("VertOrientPosition"));
     }
 }
 
@@ -226,19 +226,18 @@ Rectangle SwTextBoxHelper::getTextRectangle(SwFrmFmt* pShape, bool bAbsolute)
     return aRet;
 }
 
-void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, const OUString& rPropertyName, const css::uno::Any& rValue)
+void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, const css::uno::Any& rValue)
 {
     // No shape yet? Then nothing to do, initial properties are set by create().
     if (!pShape)
         return;
 
-    OUString aPropertyName = rPropertyName;
     uno::Any aValue(rValue);
     nMemberId &= ~CONVERT_TWIPS;
 
     if (SwFrmFmt* pFmt = findTextBox(pShape))
     {
-        bool bSync = false;
+        OUString aPropertyName;
         bool bAdjustX = false;
         bool bAdjustY = false;
         bool bAdjustSize = false;
@@ -248,11 +247,13 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             switch (nMemberId)
             {
             case MID_HORIORIENT_ORIENT:
+                aPropertyName = "HoriOrient";
+                break;
             case MID_HORIORIENT_RELATION:
-                bSync = true;
+                aPropertyName = "HoriOrientRelation";
                 break;
             case MID_HORIORIENT_POSITION:
-                bSync = true;
+                aPropertyName = "HoriOrientPosition";
                 bAdjustX = true;
                 break;
             }
@@ -261,17 +262,19 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             switch (nMemberId)
             {
             case MID_VERTORIENT_ORIENT:
+                aPropertyName = "VertOrient";
+                break;
             case MID_VERTORIENT_RELATION:
-                bSync = true;
+                aPropertyName = "VertOrientRelation";
                 break;
             case MID_VERTORIENT_POSITION:
-                bSync = true;
+                aPropertyName = "VertOrientPosition";
                 bAdjustY = true;
                 break;
             }
             break;
         case RES_FRM_SIZE:
-            bSync = true;
+            aPropertyName = "Size";
             bAdjustSize = true;
             break;
         case RES_ANCHOR:
@@ -289,7 +292,7 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             break;
         }
 
-        if (bSync)
+        if (!aPropertyName.isEmpty())
         {
             // Position/size should be the text position/size, not the shape one as-is.
             if (bAdjustX || bAdjustY || bAdjustSize)
