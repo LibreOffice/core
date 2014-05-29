@@ -35,6 +35,7 @@ void WpftDrawFilterTest::test()
     doTest("com.sun.star.comp.Draw.CMXImportFilter", "/writerperfect/qa/unit/data/draw/libcdr-cmx/");
     doTest("com.sun.star.comp.Draw.FreehandImportFilter", "/writerperfect/qa/unit/data/draw/libfreehand/");
     doTest("com.sun.star.comp.Draw.MSPUBImportFilter", "/writerperfect/qa/unit/data/draw/libmspub/");
+    doTest("com.sun.star.comp.Draw.MWAWDrawImportFilter", "/writerperfect/qa/unit/data/draw/libmwaw/");
     doTest("com.sun.star.comp.Draw.VisioImportFilter", "/writerperfect/qa/unit/data/draw/libvisio/");
     doTest("com.sun.star.comp.Draw.WPGImportFilter", "/writerperfect/qa/unit/data/draw/libwpg/");
 }
