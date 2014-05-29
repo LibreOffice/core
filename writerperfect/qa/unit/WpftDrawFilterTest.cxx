@@ -31,12 +31,12 @@ WpftDrawFilterTest::WpftDrawFilterTest()
 
 void WpftDrawFilterTest::test()
 {
-    doTest("com.sun.star.comp.Draw.CDRImportFilter", "/writerperfect/qa/unit/data/libcdr/");
-    doTest("com.sun.star.comp.Draw.CMXImportFilter", "/writerperfect/qa/unit/data/libcdr-cmx/");
-    doTest("com.sun.star.comp.Draw.FreehandImportFilter", "/writerperfect/qa/unit/data/libfreehand/");
-    doTest("com.sun.star.comp.Draw.MSPUBImportFilter", "/writerperfect/qa/unit/data/libmspub/");
-    doTest("com.sun.star.comp.Draw.VisioImportFilter", "/writerperfect/qa/unit/data/libvisio/");
-    doTest("com.sun.star.comp.Draw.WPGImportFilter", "/writerperfect/qa/unit/data/libwpg/");
+    doTest("com.sun.star.comp.Draw.CDRImportFilter", "/writerperfect/qa/unit/data/draw/libcdr/");
+    doTest("com.sun.star.comp.Draw.CMXImportFilter", "/writerperfect/qa/unit/data/draw/libcdr-cmx/");
+    doTest("com.sun.star.comp.Draw.FreehandImportFilter", "/writerperfect/qa/unit/data/draw/libfreehand/");
+    doTest("com.sun.star.comp.Draw.MSPUBImportFilter", "/writerperfect/qa/unit/data/draw/libmspub/");
+    doTest("com.sun.star.comp.Draw.VisioImportFilter", "/writerperfect/qa/unit/data/draw/libvisio/");
+    doTest("com.sun.star.comp.Draw.WPGImportFilter", "/writerperfect/qa/unit/data/draw/libwpg/");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WpftDrawFilterTest);

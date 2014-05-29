@@ -67,8 +67,8 @@ private:
 };
 
 static const char aText[] = "hello world";
-static const char aOLEFile[] = "/writerperfect/qa/unit/data/fdo40686-1.doc";
-static const char aZipFile[] = "/writerperfect/qa/unit/data/test.odt";
+static const char aOLEFile[] = "/writerperfect/qa/unit/data/stream/fdo40686-1.doc";
+static const char aZipFile[] = "/writerperfect/qa/unit/data/stream/test.odt";
 
 shared_ptr<RVNGInputStream> lcl_createStream()
 {
