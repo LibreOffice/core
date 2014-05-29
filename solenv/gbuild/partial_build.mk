@@ -35,6 +35,6 @@ endif
 gb_PARTIAL_BUILD := T
 include $(SRCDIR)/solenv/gbuild/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(wildcard $(module_directory)/Module*.mk)))
+$(eval $(call gb_Module_make_global_targets,$(wildcard $(module_directory)Module*.mk)))
 
 # vim: set noet sw=4 ts=4:
