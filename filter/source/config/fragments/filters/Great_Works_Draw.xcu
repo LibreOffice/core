@@ -12,7 +12,7 @@
         <value>IMPORT ALIEN USESOPTIONS 3RDPARTYFILTER PREFERRED</value>
     </prop>
     <prop oor:name="FilterService">
-        <value>com.sun.star.comp.Draaw.MWAWDrawImportFilter</value>
+        <value>com.sun.star.comp.Draw.MWAWDrawImportFilter</value>
     </prop>
     <prop oor:name="UIName">
         <value xml:lang="en-US">GreatWorks Document</value>

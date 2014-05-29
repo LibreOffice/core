@@ -120,6 +120,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	writerperfect/source/draw/wpftdraw \
 	writerperfect/source/impress/wpftimpress \
 	writerperfect/source/writer/wpftwriter \
+	writerperfect/source/calc/wpftcalc \
 	$(if $(filter MACOSX,$(OS)), \
 		$(if $(filter 1060,$(MACOSX_SDK_VERSION)),, \
 			$(call gb_Helper_optional,AVMEDIA,avmedia/source/macavf/avmediaMacAVF) \
