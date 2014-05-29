@@ -34,6 +34,9 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_UPDATEABLERESULTSET_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_UPDATEABLERESULTSET_HXX
+
 #include "pq_sequenceresultset.hxx"
 #include "pq_resultsetmetadata.hxx"
 
@@ -174,5 +177,7 @@ public: // XResultSetMetaDataSupplier
 
 
 }
+
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_UPDATEABLERESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

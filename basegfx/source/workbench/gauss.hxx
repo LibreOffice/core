@@ -38,6 +38,10 @@
 
     @return true, if elimination succeeded.
  */
+
+#ifndef INCLUDED_BASEGFX_SOURCE_WORKBENCH_GAUSS_HXX
+#define INCLUDED_BASEGFX_SOURCE_WORKBENCH_GAUSS_HXX
+
 template <class Matrix, typename BaseType>
 bool eliminate(     Matrix&         matrix,
                     int             rows,
@@ -162,5 +166,7 @@ bool solve( Matrix&     matrix,
 
     return false;
 }
+
+#endif // INCLUDED_BASEGFX_SOURCE_WORKBENCH_GAUSS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

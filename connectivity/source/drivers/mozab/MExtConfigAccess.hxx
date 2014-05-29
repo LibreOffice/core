@@ -18,6 +18,7 @@
  */
 
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MEXTCONFIGACCESS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MEXTCONFIGACCESS_HXX
 
 // This is the extended version (for use on the SO side of the driver) of MConfigAccess
 // (which is for use on the mozilla side only)

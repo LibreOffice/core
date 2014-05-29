@@ -34,6 +34,9 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_SEQUENCERESULTSETMETADATA_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_SEQUENCERESULTSETMETADATA_HXX
+
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 
@@ -87,5 +90,7 @@ namespace pq_sdbc_driver
     };
 
 }
+
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_SEQUENCERESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
