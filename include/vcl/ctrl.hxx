@@ -136,7 +136,6 @@ public:
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
     // invalidates layout data
     virtual void    SetText( const OUString& rStr ) SAL_OVERRIDE;
