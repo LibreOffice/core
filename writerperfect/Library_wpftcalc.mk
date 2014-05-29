@@ -17,25 +17,40 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-$(eval $(call gb_Module_Module,writerperfect))
+$(eval $(call gb_Library_Library,wpftcalc))
 
-$(eval $(call gb_Module_add_targets,writerperfect,\
-	Library_wpftcalc \
-	Library_wpftdraw \
-	Library_wpftimpress \
-	Library_wpftwriter \
-	Library_writerperfect \
+$(eval $(call gb_Library_set_componentfile,wpftcalc,writerperfect/source/calc/wpftcalc))
+
+$(eval $(call gb_Library_use_sdk_api,wpftcalc))
+
+$(eval $(call gb_Library_use_libraries,wpftcalc,\
+	comphelper \
+	cppu \
+	cppuhelper \
+	sal \
+	sot \
+	tl \
+	utl \
+	writerperfect \
+	xo \
+	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_Module_add_check_targets,writerperfect,\
-	CppunitTest_writerperfect_stream \
+$(eval $(call gb_Library_use_externals,wpftcalc,\
+	odfgen \
+	revenge \
+	wps \
+	zlib \
+	lcms2 \
+	libxml2 \
+	icui18n \
+	icuuc \
 ))
 
-$(eval $(call gb_Module_add_slowcheck_targets,writerperfect,\
-	CppunitTest_writerperfect_draw \
-	CppunitTest_writerperfect_impress \
-	CppunitTest_writerperfect_writer \
-	StaticLibrary_writerperfect_importtestbase \
+$(eval $(call gb_Library_add_exception_objects,wpftcalc,\
+	writerperfect/source/calc/ImportFilterBase \
+	writerperfect/source/calc/MSWorksCalcImportFilter \
+	writerperfect/source/calc/wpftcalc_genericfilter \
 ))
 
 # vim: set noet sw=4 ts=4:
