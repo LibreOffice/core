@@ -19,12 +19,12 @@
 
 
 #include "docundomanager.hxx"
+#include <cppuhelper/weak.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
-
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <comphelper/anytostring.hxx>
@@ -228,11 +228,9 @@ namespace sfx2
     {
     }
 
-
     DocumentUndoManager::~DocumentUndoManager()
     {
     }
-
 
     void DocumentUndoManager::disposing()
     {
@@ -247,15 +245,17 @@ namespace sfx2
     }
 
 
-    void SAL_CALL DocumentUndoManager::acquire(  ) throw ()
+    void SAL_CALL DocumentUndoManager::acquire() throw()
     {
-        SfxModelSubComponent::acquire();
+        OWeakObject::acquire();
+        SfxModelSubComponent::acquireModel();
     }
 
 
-    void SAL_CALL DocumentUndoManager::release(  ) throw ()
+    void SAL_CALL DocumentUndoManager::release() throw()
     {
-        SfxModelSubComponent::release();
+        SfxModelSubComponent::releaseModel();
+        OWeakObject::release();
     }
 
 

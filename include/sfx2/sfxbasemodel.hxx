@@ -916,9 +916,8 @@ protected:
     }
     virtual ~SfxModelSubComponent();
 
-    // helpers for implementing XInterface - delegates ref counting to the SfxBaseModel
-    void acquire()  {   m_rModel.acquire(); }
-    void release()  {   m_rModel.release(); }
+    void acquireModel()  { m_rModel.acquire(); }
+    void releaseModel()  { m_rModel.release(); }
 
     bool isDisposed() const {   return m_rModel.IsDisposed();   }
 

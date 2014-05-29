@@ -37,8 +37,7 @@ namespace sfx2
 
     //= DocumentUndoManager
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::document::XUndoManager
-                                >   DocumentUndoManager_Base;
+    typedef ::cppu::WeakImplHelper1 <css::document::XUndoManager> DocumentUndoManager_Base;
     struct DocumentUndoManager_Impl;
     class DocumentUndoManager   :public DocumentUndoManager_Base
                                 ,public SfxModelSubComponent
