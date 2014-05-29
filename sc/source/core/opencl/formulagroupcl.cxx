@@ -378,28 +378,55 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
         vRef = pDVR->GetArrays()[mnIndex];
     }
     size_t szHostBuffer = nStrings * sizeof(cl_int);
-    // Marshal strings. Right now we pass hashes of these string
-    mpClmem = clCreateBuffer(kEnv.mpkContext,
-            (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
-            szHostBuffer, NULL, &err);
-    if (CL_SUCCESS != err)
-        throw OpenCLError(err, __FILE__, __LINE__);
-    cl_uint *pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
-            kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
-            szHostBuffer, 0, NULL, NULL, &err);
-    if (CL_SUCCESS != err)
-        throw OpenCLError(err, __FILE__, __LINE__);
-    for (size_t i = 0; i < nStrings; i++)
+    cl_uint *pHashBuffer = NULL;
+
+    if ( vRef.mpStringArray != NULL)
     {
-        if (vRef.mpStringArray[i])
+        // Marshal strings. Right now we pass hashes of these string
+        mpClmem = clCreateBuffer(kEnv.mpkContext,
+                (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
+                szHostBuffer, NULL, &err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err, __FILE__, __LINE__);
+
+        pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
+                kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
+                szHostBuffer, 0, NULL, NULL, &err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err, __FILE__, __LINE__);
+
+        for (size_t i = 0; i < nStrings; i++)
         {
-            const OUString tmp = OUString(vRef.mpStringArray[i]);
-            pHashBuffer[i] = tmp.hashCode();
-        }
-        else
-        {
+            if (vRef.mpStringArray[i])
+            {
+                const OUString tmp = OUString(vRef.mpStringArray[i]);
+                pHashBuffer[i] = tmp.hashCode();
+            }
+            else
+            {
+                pHashBuffer[i] = 0;
+            }
+         }
+    }
+    else
+    {
+        if (nStrings == 0)
+        szHostBuffer = sizeof(cl_int); // a dummy small value
+        // Marshal as a buffer of NANs
+        mpClmem = clCreateBuffer(kEnv.mpkContext,
+                (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
+                szHostBuffer, NULL, &err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err, __FILE__, __LINE__);
+
+        cl_uint *pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
+                kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
+                szHostBuffer, 0, NULL, NULL, &err);
+        if (CL_SUCCESS != err)
+            throw OpenCLError(err, __FILE__, __LINE__);
+
+        for (size_t i = 0; i < szHostBuffer/sizeof(cl_int); i++)
             pHashBuffer[i] = 0;
-        }
     }
     err = clEnqueueUnmapMemObject(kEnv.mpkCmdQueue, mpClmem,
             pHashBuffer, 0, NULL, NULL);
@@ -425,6 +452,7 @@ public:
         ss << ", ";
         mStringArgument.GenSlidingWindowDecl(ss);
     }
+    virtual bool IsMixedArgument() const SAL_OVERRIDE {return true;}
     virtual void GenSlidingWindowFunction(std::stringstream &) SAL_OVERRIDE {}
     /// Generate declaration
     virtual void GenDecl(std::stringstream &ss) const SAL_OVERRIDE
@@ -439,12 +467,20 @@ public:
         ss << ",";
         mStringArgument.GenDeclRef(ss);
     }
-    virtual std::string GenSlidingWindowDeclRef(bool) const SAL_OVERRIDE
+    virtual void GenNumDeclRef(std::stringstream& ss) const SAL_OVERRIDE
+    {
+        VectorRef::GenSlidingWindowDecl(ss);
+    }
+    virtual void GenStringDeclRef(std::stringstream& ss) const SAL_OVERRIDE
+    {
+        mStringArgument.GenSlidingWindowDecl(ss);
+    }
+    virtual std::string GenSlidingWindowDeclRef(bool nested) const SAL_OVERRIDE
     {
         std::stringstream ss;
         ss << "(!isNan(" << VectorRef::GenSlidingWindowDeclRef();
         ss << ")?" << VectorRef::GenSlidingWindowDeclRef();
-        ss << ":" << mStringArgument.GenSlidingWindowDeclRef();
+        ss << ":" << mStringArgument.GenSlidingWindowDeclRef(nested);
         ss << ")";
         return ss.str();
     }
@@ -725,15 +761,16 @@ public:
         ss << ",";
         mStringArgument.GenDeclRef(ss);
     }
-    virtual std::string GenSlidingWindowDeclRef(bool) const SAL_OVERRIDE
+    virtual std::string GenSlidingWindowDeclRef(bool nested) const SAL_OVERRIDE
     {
         std::stringstream ss;
         ss << "(!isNan(" << mDoubleArgument.GenSlidingWindowDeclRef();
         ss << ")?" << mDoubleArgument.GenSlidingWindowDeclRef();
-        ss << ":" << mStringArgument.GenSlidingWindowDeclRef();
+        ss << ":" << mStringArgument.GenSlidingWindowDeclRef(nested);
         ss << ")";
         return ss.str();
     }
+    virtual bool IsMixedArgument() const SAL_OVERRIDE {return true;}
     virtual std::string GenDoubleSlidingWindowDeclRef(bool=false) const SAL_OVERRIDE
     {
         std::stringstream ss;
@@ -745,6 +782,14 @@ public:
         std::stringstream ss;
         ss << mStringArgument.GenSlidingWindowDeclRef();
         return ss.str();
+    }
+    virtual void GenNumDeclRef(std::stringstream& ss) const SAL_OVERRIDE
+    {
+         mDoubleArgument.GenDeclRef(ss);
+    }
+    virtual void GenStringDeclRef(std::stringstream& ss) const SAL_OVERRIDE
+    {
+        mStringArgument.GenDeclRef(ss);
     }
     virtual size_t Marshal(cl_kernel k, int argno, int vw, cl_program p) SAL_OVERRIDE
     {

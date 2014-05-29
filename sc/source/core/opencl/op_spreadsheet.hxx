@@ -20,6 +20,7 @@ public:
     virtual void GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments) SAL_OVERRIDE;
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "VLookup"; }
+    virtual bool takeString() const SAL_OVERRIDE { return true; }
 };
 
 }}
