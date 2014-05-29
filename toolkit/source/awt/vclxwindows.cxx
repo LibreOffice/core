@@ -175,11 +175,11 @@ namespace toolkit
         switch ( nStyle )
         {
         case FLAT:
-            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & ~STYLE_OPTION_MONO );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_MONO );
             break;
         case LOOK3D:
         default:
-            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_MONO );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & ~STYLE_OPTION_MONO );
         }
         aSettings.SetStyleSettings( aStyleSettings );
         _pWindow->SetSettings( aSettings );
