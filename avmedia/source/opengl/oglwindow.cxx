@@ -19,7 +19,6 @@ OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, Window& rEve
     , m_rContext( rContext )
     , m_rEventHandler( rEventHandlerParent )
     , m_bVisible ( false )
-    , meZoomLevel( media::ZoomLevel_ORIGINAL )
     , m_aLastMousePos(Point())
 {
 }
@@ -38,26 +37,14 @@ void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::except
     m_rContext.swapBuffers();
 }
 
-sal_Bool SAL_CALL OGLWindow::setZoomLevel( css::media::ZoomLevel eZoomLevel ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGLWindow::setZoomLevel( css::media::ZoomLevel /*eZoomLevel*/ ) throw (css::uno::RuntimeException, std::exception)
 {
-    bool bRet = false;
-
-    if( media::ZoomLevel_NOT_AVAILABLE != meZoomLevel &&
-        media::ZoomLevel_NOT_AVAILABLE != eZoomLevel )
-    {
-        if( eZoomLevel != meZoomLevel )
-        {
-            meZoomLevel = eZoomLevel;
-        }
-        bRet = true;
-    }
-    // TODO: set zoom level, not just store this value
-    return bRet;
+    return false;
 }
 
 css::media::ZoomLevel SAL_CALL OGLWindow::getZoomLevel() throw (css::uno::RuntimeException, std::exception)
 {
-    return meZoomLevel;
+    return media::ZoomLevel_ORIGINAL;
 }
 
 void SAL_CALL OGLWindow::setPointerType( sal_Int32 ) throw (css::uno::RuntimeException, std::exception)
