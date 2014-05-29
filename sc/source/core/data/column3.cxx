@@ -182,7 +182,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     // Check if there are any cells below the end row that will get shifted.
     bool bShiftCells = false;
-    if (nEndRow < MAXROWCOUNT-1) //only makes sense to do this if there *is* a row after the end row
+    if (nEndRow < MAXROW) //only makes sense to do this if there *is* a row after the end row
     {
         aPos = maCells.position(itCell, nEndRow+1);
         itCell = aPos.first;
