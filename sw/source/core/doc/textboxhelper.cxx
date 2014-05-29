@@ -66,6 +66,10 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
             aSet.Put(aCntnt);
             pShape->SetFmtAttr(aSet);
         }
+
+        // Also initialize the properties, which are not constant, but inherited from the shape's ones.
+        uno::Reference<drawing::XShape> xShape(pShape->FindRealSdrObject()->getUnoShape(), uno::UNO_QUERY);
+        syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, "Size", uno::makeAny(xShape->getSize()));
     }
 }
 
