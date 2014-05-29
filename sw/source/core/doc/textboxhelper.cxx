@@ -70,6 +70,14 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
         // Also initialize the properties, which are not constant, but inherited from the shape's ones.
         uno::Reference<drawing::XShape> xShape(pShape->FindRealSdrObject()->getUnoShape(), uno::UNO_QUERY);
         syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, "Size", uno::makeAny(xShape->getSize()));
+
+        uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
+        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, "HoriOrient", xShapePropertySet->getPropertyValue("HoriOrient"));
+        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_RELATION, "HoriOrientRelation", xShapePropertySet->getPropertyValue("HoriOrientRelation"));
+        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_ORIENT, "VertOrient", xShapePropertySet->getPropertyValue("VertOrient"));
+        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_RELATION, "VertOrientRelation", xShapePropertySet->getPropertyValue("VertOrientRelation"));
+        syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, "HoriOrientPosition", xShapePropertySet->getPropertyValue("HoriOrientPosition"));
+        syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, "VertOrientPosition", xShapePropertySet->getPropertyValue("VertOrientPosition"));
     }
 }
 
@@ -196,13 +204,25 @@ uno::Any SwTextBoxHelper::queryInterface(SwFrmFmt* pShape, const uno::Type& rTyp
     return aRet;
 }
 
-Rectangle SwTextBoxHelper::getTextRectangle(SwFrmFmt* pShape)
+Rectangle SwTextBoxHelper::getTextRectangle(SwFrmFmt* pShape, bool bAbsolute)
 {
     Rectangle aRet;
     aRet.SetEmpty();
     SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>(pShape->FindRealSdrObject());
     if (pCustomShape)
         pCustomShape->GetTextBounds(aRet);
+
+    if (!bAbsolute)
+    {
+        // Relative, so count the logic (reference) rectangle, see the EnhancedCustomShape2d ctor.
+        Point aPoint(pCustomShape->GetSnapRect().Center());
+        Size aSize(pCustomShape->GetLogicRect().GetSize());
+        aPoint.X() -= aSize.Width() / 2;
+        aPoint.Y() -= aSize.Height() / 2;
+        Rectangle aLogicRect(aPoint, aSize);
+        aRet.Move(-1 * aLogicRect.Left(), -1 * aLogicRect.Top());
+    }
+
     return aRet;
 }
 
@@ -274,7 +294,7 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             // Position/size should be the text position/size, not the shape one as-is.
             if (bAdjustX || bAdjustY || bAdjustSize)
             {
-                Rectangle aRect = getTextRectangle(pShape);
+                Rectangle aRect = getTextRectangle(pShape, /*bAbsolute=*/false);
                 if (!aRect.IsEmpty())
                 {
                     if (bAdjustX || bAdjustY)
@@ -283,9 +303,9 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
                         if (aValue >>= nValue)
                         {
                             if (bAdjustX)
-                                nValue = TWIPS_TO_MM(aRect.getX());
+                                nValue += TWIPS_TO_MM(aRect.getX());
                             else if (bAdjustY)
-                                nValue = TWIPS_TO_MM(aRect.getY());
+                                nValue += TWIPS_TO_MM(aRect.getY());
                             aValue <<= nValue;
                         }
                     }
