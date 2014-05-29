@@ -2230,6 +2230,7 @@ namespace
                 case META_MASK_ACTION :
                 {
                     /** CHECKED, WORKS WELL: Simply same as META_BMP_ACTION */
+                    /** Huh, no it isn't!? */
                     const MetaMaskAction* pA = (const MetaMaskAction*)pAction;
                     const BitmapEx aBitmapEx(createMaskBmpEx(pA->GetBitmap(), pA->GetColor()));
 
