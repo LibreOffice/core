@@ -227,7 +227,7 @@ void OpenGL3DRenderer::PickingShaderResources::LoadShaders()
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
 }
 
-void OpenGL3DRenderer::SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up)
+void OpenGL3DRenderer::SetCameraInfo(const glm::vec3& pos, const glm::vec3& direction, const glm::vec3& up)
 {
     m_CameraInfo.cameraPos = pos;
     m_CameraInfo.cameraOrg = direction;
@@ -712,7 +712,7 @@ int OpenGL3DRenderer::GenerateRoundCornerBar(std::vector<glm::vec3> &vertices, s
     return iFacesAdded;
 }
 
-void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
+void OpenGL3DRenderer::RenderLine3D(const Polygon3DInfo& polygon)
 {
     glUseProgram(maResources.m_CommonProID);
     PosVecf3 trans = {0.0f, 0, 0.0};
@@ -756,7 +756,7 @@ void OpenGL3DRenderer::RenderLine3D(Polygon3DInfo &polygon)
     glUseProgram(0);
 }
 
-void OpenGL3DRenderer::RenderPolygon3D(Polygon3DInfo &polygon)
+void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
 {
     size_t verticesNum = polygon.verticesList.size();
     size_t normalsNum = polygon.normalsList.size();
@@ -1455,8 +1455,8 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
 
 void OpenGL3DRenderer::CreateScreenTextTexture(
         const boost::shared_array<sal_uInt8> &bitmapBuf,
-        ::Size maSizePixels,
-        glm::vec2 vTopLeft, glm::vec2 vBottomRight, sal_uInt32 nUniqueId)
+        ::Size maSizePixels, const glm::vec2& vTopLeft,
+        const glm::vec2& vBottomRight, sal_uInt32 nUniqueId)
 {
     long bmpWidth = maSizePixels.Width();
     long bmpHeight = maSizePixels.Height();
@@ -1501,8 +1501,8 @@ void OpenGL3DRenderer::CreateScreenTextTexture(
 
 void OpenGL3DRenderer::CreateTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
                                          ::Size maSizePixels,
-                                         glm::vec3 vTopLeft,glm::vec3 vTopRight,
-                                         glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                                         const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
+                                         const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
                                          sal_uInt32 nUniqueId)
 {
     long bmpWidth = maSizePixels.Width();
@@ -1744,7 +1744,7 @@ void OpenGL3DRenderer::ProcessUnrenderedShape(bool bNewScene)
 #endif
 }
 
-void OpenGL3DRenderer::MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale)
+void OpenGL3DRenderer::MoveModelf(const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale)
 {
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
@@ -1797,7 +1797,7 @@ void OpenGL3DRenderer::ReleaseShapes()
     ReleaseBatchBarInfo();
 }
 
-void OpenGL3DRenderer::GetBatchMiddleInfo(Extrude3DInfo &extrude3D)
+void OpenGL3DRenderer::GetBatchMiddleInfo(const Extrude3DInfo &extrude3D)
 {
     float xyScale = extrude3D.xScale;
     float zScale = extrude3D.zScale;
@@ -1822,7 +1822,7 @@ void OpenGL3DRenderer::GetBatchMiddleInfo(Extrude3DInfo &extrude3D)
     m_BarSurface[MIDDLE_SURFACE].colorList.push_back(extrude3D.material.materialColor);
 }
 
-void OpenGL3DRenderer::GetBatchTopAndFlatInfo(Extrude3DInfo &extrude3D)
+void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
 {
     float xyScale = extrude3D.xScale;
     float zScale = extrude3D.zScale;

@@ -168,17 +168,15 @@ public:
     void AddShape3DExtrudeObject(bool roundedCorner, sal_uInt32 color, sal_uInt32 specular, const glm::mat4& modelMatrix, sal_uInt32 nUniqueId);
     void EndAddShape3DExtrudeObject();
     void SetSize(const Size& rSize);
-    void SetCameraInfo(glm::vec3 pos, glm::vec3 direction, glm::vec3 up);
+    void SetCameraInfo(const glm::vec3& pos, const glm::vec3& direction, const glm::vec3& up);
     void CreateTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
                            ::Size maSizePixels,
-                           glm::vec3 vTopLeft,glm::vec3 vTopRight,
-                           glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                           const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
+                           const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
                            sal_uInt32 nUniqueId);
     void CreateScreenTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
-                                 ::Size maSizePixels,
-
-                                 glm::vec2 vTopLeft, glm::vec2 vBottomRight,
-                                 sal_uInt32 nUniqueId);
+                                 ::Size maSizePixels, const glm::vec2& vTopLeft,
+                                 const glm::vec2& vBottomRight, sal_uInt32 nUniqueId);
     void ProcessUnrenderedShape(bool bNewScene);
 
     void SetPickingMode(bool bPickingMode);
@@ -188,12 +186,12 @@ public:
     void ReleaseShapes();
     void ReleaseScreenTextShapes();
 private:
-    void MoveModelf(PosVecf3& trans,PosVecf3& angle,PosVecf3& scale);
+    void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 
     void ClearBuffer();
     void RenderPolygon3DObject();
-    void RenderLine3D(Polygon3DInfo &polygon);
-    void RenderPolygon3D(Polygon3DInfo &polygon);
+    void RenderLine3D(const Polygon3DInfo &polygon);
+    void RenderPolygon3D(const Polygon3DInfo &polygon);
     void Init3DUniformBlock();
     void Update3DUniformBlock();
     void RenderExtrude3DObject();
@@ -228,8 +226,8 @@ private:
     void ReleaseTextShapes();
     void ReleaseBatchBarInfo();
     void GetBatchBarsInfo();
-    void GetBatchTopAndFlatInfo(Extrude3DInfo &extrude3D);
-    void GetBatchMiddleInfo(Extrude3DInfo &extrude3D);
+    void GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D);
+    void GetBatchMiddleInfo(const Extrude3DInfo &extrude3D);
     void InitBatch3DUniformBlock();
     void UpdateBatch3DUniformBlock();
     void RenderBatchBars(bool bNewScene);
