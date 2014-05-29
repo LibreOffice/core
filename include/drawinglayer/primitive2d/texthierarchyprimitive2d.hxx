@@ -33,7 +33,7 @@ namespace drawinglayer
     {
         /** TextHierarchyLinePrimitive2D class
 
-            Text format hierarchy helper class. It decomposes to it's
+            Text format hierarchy helper class. It decomposes to its
             content, so all direct renderers may ignore it. If You need
             to know more about line hierarchies You may react on it and
             also need to take care that the source of data uses it.
@@ -132,7 +132,7 @@ namespace drawinglayer
         enum FieldType
         {
             /** unspecified. If more info is needed for a FieldType,
-                create a new type and it's handling
+                create a new type and its handling
              */
             FIELD_TYPE_COMMON,
 

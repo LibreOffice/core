@@ -39,7 +39,7 @@ namespace drawinglayer
             inside of the mask PolyPolygon is defined to be visible.
 
             This primitive should be handled by a renderer. If it is not handled,
-            it decomposes to it's Child content, and thus the visualisation would
+            it decomposes to its Child content, and thus the visualisation would
             contaiun no clips.
 
             The geometrc range of this primitive is completely defined by the Mask

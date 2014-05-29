@@ -40,7 +40,7 @@ namespace drawinglayer
             a valid decomposition if a valid Viewport is given in the
             ViewInformation2D at decomposition time.
 
-            It will try to buffer it's last decomposition using maLastViewport
+            It will try to buffer its last decomposition using maLastViewport
             to detect changes in the get2DDecomposition call.
          */
         class DRAWINGLAYER_DLLPUBLIC BackgroundColorPrimitive2D : public BufferedDecompositionPrimitive2D

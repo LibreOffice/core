@@ -34,7 +34,7 @@ namespace drawinglayer
 
             This is a helper class which encapsulates geometry that should be
             painted XOR, e.g. old cursor visualisations. It decomposes to
-            it's content, so when not supporting it, the contained geometry
+            its content, so when not supporting it, the contained geometry
             will be visualized normally.
             Unfortunately this is still needed, but hard to support on various
             systems. XOR painting needs read access to the target, so modern

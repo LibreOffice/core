@@ -32,7 +32,7 @@ namespace drawinglayer
             Info hierarchy helper class to hold contents like Name, Title and
             Description which are valid for the child content, e.g. created for
             primitives based on DrawingLayer objects or SVG parts. It decomposes
-            to it's content, so all direct renderers may ignore it. May e.g.
+            to its content, so all direct renderers may ignore it. May e.g.
             be used when re-creating graphical content from a sequence of primitives
          */
         class DRAWINGLAYER_DLLPUBLIC ObjectInfoPrimitive2D : public GroupPrimitive2D
