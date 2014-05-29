@@ -108,6 +108,9 @@ LoggedStream(dmapper_logger, "DomainMapper"),
     m_pImpl->SetDocumentSettingsProperty(
         PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_SURROUND_TEXT_WRAP_SMALL ),
         uno::makeAny( true ) );
+    m_pImpl->SetDocumentSettingsProperty(
+        PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ),
+        uno::makeAny( true ) );
 
     // Don't load the default style definitions to avoid weird mix
     m_pImpl->SetDocumentSettingsProperty("StylesNoDefault", uno::makeAny(true));
