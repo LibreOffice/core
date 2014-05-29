@@ -253,8 +253,8 @@ sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         // special case: page styles are allowed to create new styles by example
         // but not allowed to be created by drag and drop
-        if( pDialog->nActFamily == SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( SFX_STYLE_FAMILY_PAGE ) ||
-                pDialog->bNewByExampleDisabled )
+        if (pDialog->GetActualFamily() == SFX_STYLE_FAMILY_PAGE ||
+                pDialog->bNewByExampleDisabled)
             return DND_ACTION_NONE;
         else
             return DND_ACTION_COPY;
