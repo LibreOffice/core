@@ -28,18 +28,23 @@ using libebook::EBOOKDocument;
 
 bool EBookImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &rFilterName, librevenge::RVNGTextInterface &rGenerator )
 {
+    EBOOKDocument::Type type = EBOOKDocument::TYPE_UNKNOWN;
+
     if (rFilterName == "FictionBook 2")
-        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_FICTIONBOOK2);
+        type = EBOOKDocument::TYPE_FICTIONBOOK2;
     else if (rFilterName == "PalmDoc")
-        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_PALMDOC);
+        type = EBOOKDocument::TYPE_PALMDOC;
     else if (rFilterName == "Plucker eBook")
-        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_PLUCKER);
+        type = EBOOKDocument::TYPE_PLUCKER;
     else if (rFilterName == "eReader eBook")
-        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_PEANUTPRESS);
+        type = EBOOKDocument::TYPE_PEANUTPRESS;
     else if (rFilterName == "TealDoc")
-        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_TEALDOC);
+        type = EBOOKDocument::TYPE_TEALDOC;
     else if (rFilterName == "zTXT")
-        return EBOOKDocument::parse(&rInput, &rGenerator, EBOOKDocument::TYPE_ZTXT);
+        type = EBOOKDocument::TYPE_ZTXT;
+
+    if (EBOOKDocument::TYPE_UNKNOWN != type)
+        return EBOOKDocument::RESULT_OK == EBOOKDocument::parse(&rInput, &rGenerator, type);
 
     return false;
 }
