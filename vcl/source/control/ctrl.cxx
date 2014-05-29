@@ -368,31 +368,6 @@ void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
     pDev->OutputDevice::SetSettings( aOriginalSettings );
 }
 
-void Control::DataChanged( const DataChangedEvent& rDCEvt)
-{
-    // we don't want to lose some style settings for controls created with the
-    // toolkit
-    if ( IsCreatedWithToolkit() &&
-         (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-    {
-        const AllSettings* pOldSettings = rDCEvt.GetOldSettings();
-
-        AllSettings aSettings = GetSettings();
-        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        sal_uLong nNewOptions = aStyleSettings.GetOptions();
-
-        if ( pOldSettings && !(nNewOptions & STYLE_OPTION_MONO) && ( pOldSettings->GetStyleSettings().GetOptions() & STYLE_OPTION_MONO ) )
-        {
-            nNewOptions |= STYLE_OPTION_MONO;
-            aStyleSettings.SetOptions( nNewOptions );
-            aStyleSettings.SetMonoColor( pOldSettings->GetStyleSettings().GetMonoColor() );
-            aSettings.SetStyleSettings( aStyleSettings );
-            SetSettings( aSettings );
-        }
-    }
-}
-
 ControlLayoutData::~ControlLayoutData()
 {
     if( m_pParent )
