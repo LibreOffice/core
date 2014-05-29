@@ -3112,6 +3112,18 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
         return;
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79256, "fdo79256.docx")
+{
+    /* Corruption issue containing Line Style with Long Dashes and Dots
+     * After RT checking for custDash tag
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc,"/w:document/w:body/w:p/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:spPr[1]/a:ln[1]/a:custDash[1]", 1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testAuthorPropertySdt, "author-property.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
