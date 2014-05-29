@@ -110,7 +110,9 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
 
     for(;pBegin != pEnd;++pBegin)
     {
-        // this is a special property to find the jdbc driver
+        // these are properties used internally by LibreOffice,
+        // and should not be passed to the JDBC driver
+        // (which probably does not know anything about them anyway).
         // FYI, OUString::compareToAscii() returns zero on equality, like strcmp()
         if  (   pBegin->Name.compareToAscii( "JavaDriverClass" )
             &&  pBegin->Name.compareToAscii( "JavaDriverClassPath" )
