@@ -182,19 +182,22 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     // Check if there are any cells below the end row that will get shifted.
     bool bShiftCells = false;
-    aPos = maCells.position(itCell, nEndRow+1);
-    itCell = aPos.first;
-    if (itCell->type == sc::element_type_empty)
+    if (nEndRow < MAXROWCOUNT-1) //only makes sense to do this if there *is* a row after the end row
     {
-        // This block is empty. See if there is any block that follows.
-        sc::CellStoreType::iterator itTest = itCell;
-        ++itTest;
-        if (itTest != maCells.end())
-            // Non-empty block follows -> cells that will get shifted.
+        aPos = maCells.position(itCell, nEndRow+1);
+        itCell = aPos.first;
+        if (itCell->type == sc::element_type_empty)
+        {
+            // This block is empty. See if there is any block that follows.
+            sc::CellStoreType::iterator itTest = itCell;
+            ++itTest;
+            if (itTest != maCells.end())
+                // Non-empty block follows -> cells that will get shifted.
+                bShiftCells = true;
+        }
+        else
             bShiftCells = true;
     }
-    else
-        bShiftCells = true;
 
     sc::SingleColumnSpanSet aNonEmptySpans;
     if (bShiftCells)
