@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDIRSERVICEPROVIDER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDIRSERVICEPROVIDER_HXX
 
 #include "mozilla_nsprofiledirserviceprovider.h"
 
@@ -72,5 +74,7 @@ protected:
  */
 
 nsresult NS_NewProfileDirServiceProvider( nsProfileDirServiceProvider** aProvider);
+
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDIRSERVICEPROVIDER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
