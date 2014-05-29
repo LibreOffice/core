@@ -308,6 +308,14 @@ COMPHELPER_DLLPUBLIC inline OUStringBuffer& padToLength(
     return detail::padToLength(rBuffer, nLength, cFill);
 }
 
+COMPHELPER_DLLPUBLIC inline OUString duplicate(const OUString& rString, int nCopies)
+{
+    if (nCopies <= 0)
+        return OUString("");
+    else
+        return rString + duplicate(rString, nCopies-1);
+}
+
 /** Replace a token in a string
     @param rIn       OUString in which the token is to be replaced
     @param nToken    which nToken to replace
