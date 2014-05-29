@@ -186,7 +186,6 @@ namespace svgio
                         }
 
                         return fRetval;
-                        break;
                     }
                     default:
                     {

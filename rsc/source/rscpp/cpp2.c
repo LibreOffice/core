@@ -278,7 +278,6 @@ nest_err:       cerror("#%s must be in an #if", token);
                 cput(c);
             fprintf( pCppOut, "\n" );
             exit( 1 );
-            break;
         }
         default:
             /*
