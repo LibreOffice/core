@@ -128,7 +128,9 @@ void DocBasicItem::stopListening()
     if( mbDisposed ) return;
     mbDisposed = true;
     Any aThisComp;
-    mrDocBasic.GetUNOConstant( "ThisComponent", aThisComp );
+    if (!mrDocBasic.GetUNOConstant("ThisComponent", aThisComp))
+        return;
+
     Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
     if( xCloseBC.is() )
     {

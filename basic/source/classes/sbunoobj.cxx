@@ -2427,18 +2427,30 @@ SbUnoObject::~SbUnoObject()
 // pass the introspection on Demand
 void SbUnoObject::doIntrospection( void )
 {
-    static Reference< XIntrospection > xIntrospection;
-
     if( !bNeedIntrospection )
         return;
-    bNeedIntrospection = false;
 
-    if( !xIntrospection.is() )
+    Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+
+    if (!xContext.is())
+        return;
+
+
+    // get the introspection service
+    Reference<XIntrospection> xIntrospection;
+
+    try
     {
-        // get the introspection service
-        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        xIntrospection = theIntrospection::get( xContext );
+        xIntrospection = theIntrospection::get(xContext);
     }
+    catch ( const css::uno::DeploymentException& ex )
+    {
+    }
+
+    if (!xIntrospection.is())
+        return;
+
+    bNeedIntrospection = false;
 
     // pass the introspection
     try
