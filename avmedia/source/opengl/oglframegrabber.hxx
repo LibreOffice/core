@@ -25,7 +25,7 @@ class OGLFrameGrabber : public FrameGrabber_BASE
 {
 public:
 
-    OGLFrameGrabber( glTFHandle* pHandle );
+    OGLFrameGrabber( glTFHandle& rHandle );
     virtual ~OGLFrameGrabber();
 
     // XFrameGrabber
@@ -37,7 +37,7 @@ public:
     virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    glTFHandle* m_pHandle;
+    glTFHandle& m_rHandle;
 };
 
 } // namespace ogl

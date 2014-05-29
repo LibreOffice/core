@@ -23,9 +23,9 @@ using namespace com::sun::star;
 
 namespace avmedia { namespace ogl {
 
-OGLFrameGrabber::OGLFrameGrabber(  glTFHandle* pHandle )
+OGLFrameGrabber::OGLFrameGrabber(  glTFHandle& rHandle )
     : FrameGrabber_BASE()
-    , m_pHandle( pHandle )
+    , m_rHandle( rHandle )
 {
 }
 
@@ -36,9 +36,10 @@ OGLFrameGrabber::~OGLFrameGrabber()
 uno::Reference< css::graphic::XGraphic > SAL_CALL OGLFrameGrabber::grabFrame( double /*fMediaTime*/ )
         throw ( uno::RuntimeException, std::exception )
 {
-    boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[m_pHandle->viewport.width * m_pHandle->viewport.height * 4]);
-    gltf_renderer_get_bitmap(&m_pHandle, 1, (char*)pBuffer.get(), GL_BGRA);
-    BitmapEx aBitmap = OpenGLHelper::ConvertBGRABufferToBitmapEx(pBuffer.get(), m_pHandle->viewport.width, m_pHandle->viewport.height);
+    boost::scoped_array<sal_uInt8> pBuffer(new sal_uInt8[m_rHandle.viewport.width * m_rHandle.viewport.height * 4]);
+    glTFHandle* pHandle = &m_rHandle;
+    gltf_renderer_get_bitmap(&pHandle, 1, (char*)pBuffer.get(), GL_BGRA);
+    BitmapEx aBitmap = OpenGLHelper::ConvertBGRABufferToBitmapEx(pBuffer.get(), m_rHandle.viewport.width, m_rHandle.viewport.height);
     return Graphic( aBitmap ).GetXGraphic();
 }
 
