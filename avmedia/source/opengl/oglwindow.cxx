@@ -14,10 +14,10 @@ using namespace com::sun::star;
 
 namespace avmedia { namespace ogl {
 
-OGLWindow::OGLWindow( glTFHandle* pHandle, OpenGLContext* pContext, SystemChildWindow* pChildWindow )
-    : m_pHandle( pHandle )
-    , m_pContext( pContext )
-    , m_pEventHandler( pChildWindow->GetParent() )
+OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, Window& rEventHandlerParent )
+    : m_rHandle( rHandle )
+    , m_rContext( rContext )
+    , m_rEventHandler( rEventHandlerParent )
     , m_bVisible ( false )
     , meZoomLevel( media::ZoomLevel_ORIGINAL )
     , m_aLastMousePos(Point())
@@ -31,11 +31,11 @@ OGLWindow::~OGLWindow()
 
 void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::exception)
 {
-    m_pContext->makeCurrent();
-    gltf_prepare_renderer(m_pHandle);
-    gltf_renderer(m_pHandle);
-    gltf_complete_renderer(m_pHandle);
-    m_pContext->swapBuffers();
+    m_rContext.makeCurrent();
+    gltf_prepare_renderer(&m_rHandle);
+    gltf_renderer(&m_rHandle);
+    gltf_complete_renderer(&m_rHandle);
+    m_rContext.swapBuffers();
 }
 
 sal_Bool SAL_CALL OGLWindow::setZoomLevel( css::media::ZoomLevel eZoomLevel ) throw (css::uno::RuntimeException, std::exception)
@@ -83,8 +83,9 @@ uno::Sequence< OUString > SAL_CALL OGLWindow::getSupportedServiceNames() throw (
 
 void SAL_CALL OGLWindow::dispose() throw (uno::RuntimeException, std::exception)
 {
-    m_pEventHandler->GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
-    m_pEventHandler->RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
+    assert(m_rEventHandler.GetParent());
+    m_rEventHandler.GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
+    m_rEventHandler.RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
 }
 
 void SAL_CALL OGLWindow::addEventListener( const uno::Reference< lang::XEventListener >& )
@@ -100,14 +101,14 @@ void SAL_CALL OGLWindow::removeEventListener( const uno::Reference< lang::XEvent
 void SAL_CALL OGLWindow::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 /*nFlags*/ )
     throw (uno::RuntimeException, std::exception)
 {
-    if( m_pHandle->viewport.x != nX || m_pHandle->viewport.x != nY ||
-        m_pHandle->viewport.width != nWidth || m_pHandle->viewport.height != nHeight )
+    if( m_rHandle.viewport.x != nX || m_rHandle.viewport.x != nY ||
+        m_rHandle.viewport.width != nWidth || m_rHandle.viewport.height != nHeight )
     {
-        m_pContext->setWinSize(Size(nWidth,nHeight));
-        m_pHandle->viewport.x = nX;
-        m_pHandle->viewport.y = nY;
-        m_pHandle->viewport.width = nWidth;
-        m_pHandle->viewport.height = nHeight;
+        m_rContext.setWinSize(Size(nWidth,nHeight));
+        m_rHandle.viewport.x = nX;
+        m_rHandle.viewport.y = nY;
+        m_rHandle.viewport.width = nWidth;
+        m_rHandle.viewport.height = nHeight;
         if( m_bVisible )
         {
             update();
@@ -118,24 +119,25 @@ void SAL_CALL OGLWindow::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidt
 awt::Rectangle SAL_CALL OGLWindow::getPosSize()
     throw (uno::RuntimeException, std::exception)
 {
-    return awt::Rectangle(m_pHandle->viewport.x, m_pHandle->viewport.y,
-                          m_pHandle->viewport.width, m_pHandle->viewport.height);
+    return awt::Rectangle(m_rHandle.viewport.x, m_rHandle.viewport.y,
+                          m_rHandle.viewport.width, m_rHandle.viewport.height);
 }
 
 void SAL_CALL OGLWindow::setVisible( sal_Bool bSet )
     throw (uno::RuntimeException, std::exception)
 {
+    assert(m_rEventHandler.GetParent());
     if( bSet && !m_bVisible )
     {
         update();
-        m_pEventHandler->GetParent()->AddEventListener( LINK(this, OGLWindow, FocusGrabber));
-        m_pEventHandler->AddEventListener( LINK(this, OGLWindow, CameraHandler));
-        m_pEventHandler->GrabFocus();
+        m_rEventHandler.GetParent()->AddEventListener( LINK(this, OGLWindow, FocusGrabber));
+        m_rEventHandler.AddEventListener( LINK(this, OGLWindow, CameraHandler));
+        m_rEventHandler.GrabFocus();
     }
     else if( !bSet )
     {
-        m_pEventHandler->GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
-        m_pEventHandler->RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
+        m_rEventHandler.GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
+        m_rEventHandler.RemoveEventListener( LINK(this, OGLWindow, CameraHandler));
     }
     m_bVisible = bSet;
 }
@@ -212,26 +214,25 @@ void SAL_CALL OGLWindow::removePaintListener( const uno::Reference< awt::XPaintL
 
 IMPL_LINK(OGLWindow, FocusGrabber, VclWindowEvent*, pEvent)
 {
-    assert(m_pEventHandler);
     if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
         MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
         if(pMouseEvt)
         {
             const Point& rMousePos = pMouseEvt->GetPosPixel();
-            const Rectangle aWinRect(m_pEventHandler->GetPosPixel(),m_pEventHandler->GetSizePixel());
+            const Rectangle aWinRect(m_rEventHandler.GetPosPixel(),m_rEventHandler.GetSizePixel());
             // Grab focus to the OpenGL window when mouse pointer is over it
             if( aWinRect.IsInside(rMousePos) )
             {
-                if ( !m_pEventHandler->HasFocus() )
+                if ( !m_rEventHandler.HasFocus() )
                 {
-                    m_pEventHandler->GrabFocus();
+                    m_rEventHandler.GrabFocus();
                 }
             }
             // Move focus to the document when mouse is not over the OpenGL window
-            else if ( m_pEventHandler->HasFocus() )
+            else if ( m_rEventHandler.HasFocus() )
             {
-                m_pEventHandler->GrabFocusToDocument();
+                m_rEventHandler.GrabFocusToDocument();
             }
         }
     }
@@ -257,8 +258,8 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     glm::vec3 vEye;
                     glm::vec3 vView;
                     glm::vec3 vUp;
-                    gltf_get_camera_pos(m_pHandle, &vEye,&vView,&vUp);
-                    float fModelSize =(float)gltf_get_model_size(m_pHandle);
+                    gltf_get_camera_pos(&m_rHandle, &vEye,&vView,&vUp);
+                    float fModelSize =(float)gltf_get_model_size(&m_rHandle);
 
                     glm::vec3 vMove = vView-vEye;
                     vMove = glm::normalize(vMove);
@@ -277,7 +278,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     if(nCode == KEY_W)vMoveBy -= vMup*(0.0005f*fModelSize);
                     if(nCode == KEY_S)vMoveBy += vMup*(0.0005f*fModelSize);
                 }
-                gltf_renderer_move_camera(m_pHandle, vMoveBy.x, vMoveBy.y, vMoveBy.z, 0.0);
+                gltf_renderer_move_camera(&m_rHandle, vMoveBy.x, vMoveBy.y, vMoveBy.z, 0.0);
                 update();
             }
         }
@@ -293,7 +294,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                 nCode == KEY_A || nCode == KEY_D ||
                 nCode == KEY_W || nCode == KEY_S )
             {
-                gltf_renderer_move_camera(m_pHandle, 0.0, 0.0, 0.0, 0.0);
+                gltf_renderer_move_camera(&m_rHandle, 0.0, 0.0, 0.0, 0.0);
             }
         }
     }
@@ -307,15 +308,15 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
     }
     else if( pEvent->GetId() == VCLEVENT_WINDOW_MOUSEMOVE )
     {
-        if ( !m_pEventHandler->HasFocus() )
+        if ( !m_rEventHandler.HasFocus() )
         {
-            m_pEventHandler->GrabFocus();
+            m_rEventHandler.GrabFocus();
         }
         MouseEvent* pMouseEvt = (MouseEvent*)pEvent->GetData();
         if(pMouseEvt && pMouseEvt->IsLeft())
         {
             const Point& aCurPos = pMouseEvt->GetPosPixel();
-            float fSensitivity = std::min(m_pHandle->viewport.width, m_pHandle->viewport.height);
+            float fSensitivity = std::min(m_rHandle.viewport.width, m_rHandle.viewport.height);
             if (fSensitivity == 0.0)
                 fSensitivity = 1.0;
             else
@@ -324,7 +325,7 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
             long nDeltaX = m_aLastMousePos.X()-aCurPos.X();
             long nDeltaY = aCurPos.Y()-m_aLastMousePos.Y();
             // TODO: It seems this method just moves the camera but not rotate it.
-            gltf_renderer_rotate_camera(m_pHandle, (float)nDeltaX*fSensitivity, (float)nDeltaY*fSensitivity, 0.0, 0.0);
+            gltf_renderer_rotate_camera(&m_rHandle, (float)nDeltaX*fSensitivity, (float)nDeltaY*fSensitivity, 0.0, 0.0);
             update();
 
             m_aLastMousePos = aCurPos;
