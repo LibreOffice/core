@@ -1682,6 +1682,18 @@ public:
     }
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "leq"; }
 };
+class OpLess: public Binary {
+public:
+    virtual std::string GetBottom(void) SAL_OVERRIDE { return "0"; }
+    virtual std::string Gen2(const std::string &lhs, const std::string &rhs) const SAL_OVERRIDE
+    {
+        std::stringstream ss;
+        ss << "("<< lhs << "<" << rhs <<")";
+        return ss.str();
+    }
+    virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "less"; }
+};
+
 
 class OpGreater: public Binary {
 public:
@@ -2266,6 +2278,9 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                 break;
             case ocLessEqual:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLessEqual));
+                break;
+            case ocLess:
+                mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpLess));
                 break;
             case ocEqual:
                 mvSubArguments.push_back(SoPHelper(ts, ft->Children[i], new OpEqual));
@@ -2871,6 +2886,10 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
             case ocAveDev:
                 mvSubArguments.push_back(SoPHelper(ts,
                          ft->Children[i], new OpAveDev));
+                 break;
+            case ocIf:
+                 mvSubArguments.push_back(SoPHelper(ts,
+                         ft->Children[i], new OpIf));
                  break;
             case ocExternal:
                 if ( !(pChild->GetExternal().compareTo(OUString(
