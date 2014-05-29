@@ -65,7 +65,7 @@ void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBroadcaster )
 
 // registers a specific SfxBroadcaster
 
-bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDups )
+void SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDups )
 {
     if ( !bPreventDups || !IsListening( rBroadcaster ) )
     {
@@ -73,27 +73,25 @@ bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDup
         aBCs.push_back( &rBroadcaster );
 
         DBG_ASSERT( IsListening(rBroadcaster), "StartListening failed" );
-        return true;
     }
-
-    return false;
 }
 
 
 // unregisters a specific SfxBroadcaster
 
-bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
+void SfxListener::EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups )
 {
-    if ( !IsListening( rBroadcaster ) )
-        return false;
-
     do
     {
+        SfxBroadcasterArr_Impl::iterator it = std::find( aBCs.begin(), aBCs.end(), &rBroadcaster );
+        if ( it == aBCs.end() )
+        {
+            break;
+        }
         rBroadcaster.RemoveListener(*this);
-        aBCs.erase( std::find( aBCs.begin(), aBCs.end(), &rBroadcaster ) );
+        aBCs.erase( it );
     }
-    while ( bAllDups && IsListening( rBroadcaster ) );
-    return true;
+    while ( bAllDups );
 }
 
 
