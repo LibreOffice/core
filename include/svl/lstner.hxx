@@ -47,8 +47,8 @@ public:
                         SfxListener( const SfxListener &rCopy );
     virtual             ~SfxListener();
 
-    bool                StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDups = false );
-    bool                EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups = false );
+    void                StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDups = false );
+    void                EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups = false );
     void                EndListeningAll();
     bool                IsListening( SfxBroadcaster& rBroadcaster ) const;
 
