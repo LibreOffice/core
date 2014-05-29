@@ -31,14 +31,17 @@ OGLPlayer::OGLPlayer()
 
 OGLPlayer::~OGLPlayer()
 {
-    for (size_t i = 0; i < m_pHandle->size; ++i)
+    if( m_pHandle )
     {
-        if (m_pHandle->files[i].type != GLTF_JSON)
+        for (size_t i = 0; i < m_pHandle->size; ++i)
         {
-            delete [] m_pHandle->files[i].buffer;
+            if (m_pHandle->files[i].type != GLTF_JSON)
+            {
+                delete [] m_pHandle->files[i].buffer;
+            }
         }
+        gltf_renderer_release(m_pHandle);
     }
-    gltf_renderer_release(m_pHandle);
 }
 
 static bool lcl_LoadFile( glTFFile* io_pFile, const OUString& rURL)
