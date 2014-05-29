@@ -538,6 +538,12 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/s
 	calc_OOXML \
 	calc_OOXML_Template \
 	calc_MS_Works_Document \
+	calc_Beagle_Works \
+	calc_ClarisWorks \
+	calc_Claris_Resolve \
+	calc_Great_Works \
+	calc_Mac_Works \
+	calc_Mac_Wingz \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
@@ -570,6 +576,12 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filt
 	calc_OOXML \
 	calc_OOXML_Template \
 	MS_Works_Calc \
+	Beagle_Works_Calc \
+	ClarisWorks_Calc \
+	Claris_Resolve_Calc \
+	Great_Works_Calc \
+	Mac_Wingz_Calc \
+	Mac_Works_Calc \
 )
 
 $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
