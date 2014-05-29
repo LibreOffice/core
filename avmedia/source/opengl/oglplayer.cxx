@@ -18,6 +18,8 @@
 #include <tools/urlobj.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 
+#include <cassert>
+
 using namespace com::sun::star;
 
 namespace avmedia { namespace ogl {
@@ -138,6 +140,7 @@ bool OGLPlayer::create( const OUString& rURL )
 void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
+    assert(m_pHandle);
     gltf_animation_start(m_pHandle);
     m_aTimer.Start();
 }
@@ -145,6 +148,8 @@ void SAL_CALL OGLPlayer::start() throw ( uno::RuntimeException, std::exception )
 void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
+    assert(m_pHandle);
+    gltf_animation_stop(m_pHandle);
     m_aTimer.Stop();
     gltf_animation_stop(m_pHandle);
 }
@@ -152,12 +157,14 @@ void SAL_CALL OGLPlayer::stop() throw ( uno::RuntimeException, std::exception )
 sal_Bool SAL_CALL OGLPlayer::isPlaying() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
+    assert(m_pHandle);
     return (sal_Bool)gltf_animation_is_playing(m_pHandle);
 }
 
 double SAL_CALL OGLPlayer::getDuration() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
+    assert(m_pHandle);
     return gltf_animation_get_duration(m_pHandle);
 }
 
@@ -165,6 +172,7 @@ void SAL_CALL OGLPlayer::setMediaTime( double fTime ) throw ( uno::RuntimeExcept
 {
     // TODO: doesn't work, but cause problem in playing
     osl::MutexGuard aGuard(m_aMutex);
+    assert(m_pHandle);
     (void) fTime;
     //gltf_animation_set_time(m_pHandle, fTime);
 }
@@ -172,18 +180,21 @@ void SAL_CALL OGLPlayer::setMediaTime( double fTime ) throw ( uno::RuntimeExcept
 double SAL_CALL OGLPlayer::getMediaTime() throw ( ::com::sun::star::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
+    assert(m_pHandle);
     return 0.0; //gltf_animation_get_time(m_pHandle);
 }
 
 void SAL_CALL OGLPlayer::setPlaybackLoop( sal_Bool bSet ) throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
+    assert(m_pHandle);
     gltf_animation_set_looping(m_pHandle, (int)bSet);
 }
 
 sal_Bool SAL_CALL OGLPlayer::isPlaybackLoop() throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
+    assert(m_pHandle);
     return (sal_Bool)gltf_animation_get_looping(m_pHandle);
 }
 
@@ -220,10 +231,17 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     osl::MutexGuard aGuard( m_aMutex );
 
     assert( rArguments.getLength() >= 3 );
+    assert(m_pHandle);
 
     sal_IntPtr pIntPtr = 0;
     rArguments[ 2 ] >>= pIntPtr;
     SystemChildWindow *pChildWindow = reinterpret_cast< SystemChildWindow* >( pIntPtr );
+
+    if( !pChildWindow )
+    {
+        SAL_WARN("avmedia.opengl", "Failed to get the SystemChildWindow for rendering!");
+        return uno::Reference< media::XPlayerWindow >();
+    }
 
     if( !m_aContext.init(pChildWindow) )
     {
@@ -254,6 +272,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
      throw ( uno::RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard(m_aMutex);
+    assert(m_pHandle);
 
     if( !m_aContext.init() )
     {
@@ -301,6 +320,7 @@ IMPL_LINK(OGLPlayer,TimerHandler,Timer*,pTimer)
     if (pTimer == &m_aTimer)
     {
         osl::MutexGuard aGuard(m_aMutex);
+        assert(m_pOGLWindow);
         m_pOGLWindow->update();
     }
 
