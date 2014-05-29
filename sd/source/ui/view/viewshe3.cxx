@@ -72,6 +72,7 @@
 
 #include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
+#include <sfx2/templdlg.hxx>
 #include <svl/aeitem.hxx>
 #include <basic/sbstar.hxx>
 
@@ -102,17 +103,12 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
                 if( pStyleSheet )
                 {
                     SfxStyleFamily eFamily = pStyleSheet->GetFamily();
-                    if(eFamily == SD_STYLE_FAMILY_GRAPHICS)
-                        nFamily = 2;
-                    else if(eFamily == SD_STYLE_FAMILY_CELL )
-                        nFamily = 3;
-                    else // SD_STYLE_FAMILY_PSEUDO
-                        nFamily = 5;
-
+                    nFamily = SfxTemplateDialog::SfxFamilyIdToNId(eFamily);
                     GetDocSh()->SetStyleFamily(nFamily);
                 }
             }
         }
+
         rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, nFamily ));
     }
 

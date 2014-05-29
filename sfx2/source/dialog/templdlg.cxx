@@ -149,16 +149,9 @@ SfxTemplateDialog::SfxTemplateDialog
     pImpl->updateNonFamilyImages();
 }
 
-//-------------------------------------------------------------------------
-
 SfxTemplateDialog::~SfxTemplateDialog()
 {
     delete pImpl;
-}
-
-ISfxTemplateCommon* SfxTemplateDialog::GetISfxTemplateCommon()
-{
-    return pImpl->GetISfxTemplateCommon();
 }
 
 void SfxTemplateDialog::SetParagraphFamily()
@@ -168,8 +161,6 @@ void SfxTemplateDialog::SetParagraphFamily()
     // then select the automatic filter
     pImpl->SetAutomaticFilter();
 }
-
-// ------------------------------------------------------------------------
 
 void SfxTemplateDialog::DataChanged( const DataChangedEvent& _rDCEvt )
 {
@@ -252,8 +243,8 @@ sal_Int8 DropListBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         // special case: page styles are allowed to create new styles by example
         // but not allowed to be created by drag and drop
-        if( pDialog->nActFamily == SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( SFX_STYLE_FAMILY_PAGE ) ||
-                pDialog->bNewByExampleDisabled )
+        if (pDialog->GetActualFamily() == SFX_STYLE_FAMILY_PAGE ||
+                pDialog->bNewByExampleDisabled)
             return DND_ACTION_NONE;
         else
             return DND_ACTION_COPY;
@@ -834,7 +825,6 @@ SvTreeListEntry* FillBox_Impl(SvTreeListBox *pBox,
 
 SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Window* pW, bool ) :
     mbIgnoreSelect( false ),
-    aISfxTemplateCommon     ( this ),
     pBindings               ( pB ),
     pWindow                 ( pW ),
     pModule                 ( NULL ),
@@ -885,7 +875,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Win
 sal_uInt16 SfxCommonTemplateDialog_Impl::StyleNrToInfoOffset(sal_uInt16 nId)
 {
     const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nId );
-    return SfxFamilyIdToNId(pItem->GetFamily())-1;
+    return SfxTemplateDialog::SfxFamilyIdToNId(pItem->GetFamily())-1;
 }
 
 //-------------------------------------------------------------------------
@@ -982,7 +972,7 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     for( ; nCount--; )
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nCount );
-        sal_uInt16 nId = SfxFamilyIdToNId( pItem->GetFamily() );
+        sal_uInt16 nId = SfxTemplateDialog::SfxFamilyIdToNId( pItem->GetFamily() );
         InsertFamilyItem( nId, pItem );
     }
 
@@ -1075,9 +1065,7 @@ SfxCommonTemplateDialog_Impl::~SfxCommonTemplateDialog_Impl()
         m_pDeletionWatcher->signal();
 }
 
-//-------------------------------------------------------------------------
-
-sal_uInt16 SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( SfxStyleFamily nFamily )
+sal_uInt16 SfxTemplateDialog::SfxFamilyIdToNId(SfxStyleFamily nFamily)
 {
     switch ( nFamily )
     {
@@ -1087,6 +1075,19 @@ sal_uInt16 SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( SfxStyleFamily nFamil
         case SFX_STYLE_FAMILY_PAGE:   return 4;
         case SFX_STYLE_FAMILY_PSEUDO: return 5;
         default:                      return 0;
+    }
+}
+
+SfxStyleFamily SfxTemplateDialog::NIdToSfxFamilyId(sal_uInt16 nId)
+{
+    switch (nId)
+    {
+        case 1: return SFX_STYLE_FAMILY_CHAR;
+        case 2: return SFX_STYLE_FAMILY_PARA;
+        case 3: return SFX_STYLE_FAMILY_FRAME;
+        case 4: return SFX_STYLE_FAMILY_PAGE;
+        case 5: return SFX_STYLE_FAMILY_PSEUDO;
+        default: return SFX_STYLE_FAMILY_ALL;
     }
 }
 
@@ -1115,7 +1116,7 @@ const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() con
     for(size_t i = 0; i < nCount; ++i)
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->at( i );
-        sal_uInt16 nId = SfxFamilyIdToNId(pItem->GetFamily());
+        sal_uInt16 nId = SfxTemplateDialog::SfxFamilyIdToNId(pItem->GetFamily());
         if(nId == nActFamily)
             return pItem;
     }
@@ -2544,7 +2545,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
     for( ; nLoop--; )
     {
         const SfxStyleFamilyItem *pItem = pStyleFamilies->at( nLoop );
-        sal_uInt16 nId = SfxFamilyIdToNId( pItem->GetFamily() );
+        sal_uInt16 nId = SfxTemplateDialog::SfxFamilyIdToNId( pItem->GetFamily() );
         m_aActionTbL.SetItemImage( nId, pItem->GetImage() );
     }
 }
@@ -2942,7 +2943,7 @@ sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     // special case: page styles are allowed to create new styles by example
     // but not allowed to be created by drag and drop
-    if ( nItemId != SfxCommonTemplateDialog_Impl::SfxFamilyIdToNId( SFX_STYLE_FAMILY_PAGE )&&
+    if ( nItemId != SfxTemplateDialog::SfxFamilyIdToNId( SFX_STYLE_FAMILY_PAGE )&&
         IsDropFormatSupported( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
         !rParent.bNewByExampleDisabled )
     {
