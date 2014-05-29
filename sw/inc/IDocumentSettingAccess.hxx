@@ -92,7 +92,8 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
          STYLES_NODEFAULT,
          FLOATTABLE_NOMARGINS,
          EMBED_FONTS,
-         EMBED_SYSTEM_FONTS
+         EMBED_SYSTEM_FONTS,
+         APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING
      };
 
  public:

@@ -50,6 +50,7 @@
 #include "fmtmeta.hxx"
 #include "reffld.hxx"
 #include "flddat.hxx"
+#include "fmtautofmt.hxx"
 
 static bool lcl_IsInBody( SwFrm *pFrm )
 {
@@ -401,6 +402,32 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     return pRet;
 }
 
+// OOXML spec says that w:rPr inside w:pPr specifies formatting for the paragraph mark symbol (i.e. the control
+// character than can be configured to be shown). However, in practice MSO also uses it as direct formatting
+// for numbering in that paragraph. I don't know if the problem is in the spec or in MSWord.
+static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtFormatInfo& rInf, const IDocumentSettingAccess* pIDSA )
+{
+    SwTxtNode* node = rInf.GetTxtFrm()->GetTxtNode();
+    if( !pIDSA->get(IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
+        return;
+    if( SwpHints* hints = node->GetpSwpHints())
+    {
+        for( int i = 0; i < hints->Count(); ++i )
+        {
+            SwTxtAttr* hint = hints->GetTextHint( i );
+            // Formatting for the paragraph mark is set to apply only to the (non-existent) extra character
+            // the at end of the txt node.
+            if( hint->Which() == RES_TXTATR_AUTOFMT && hint->GetStart() != NULL && hint->GetEnd() != NULL
+                && *hint->GetStart() == *hint->GetEnd() && *hint->GetStart() == node->Len())
+            {
+                boost::shared_ptr<SfxItemSet> pSet(hint->GetAutoFmt().GetStyleHandle());
+                pNumFnt->SetDiffFnt( pSet.get(), pIDSA );
+            }
+        }
+    }
+}
+
+
 SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 {
     if( rInf.IsNumDone() || rInf.GetTxtStart() != nStart
@@ -487,6 +514,8 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 if( pFmt )
                     pNumFnt->SetDiffFnt( pFmt, pIDSA );
 
+                checkApplyParagraphMarkFormatToNumbering( pNumFnt, rInf, pIDSA );
+
                 if ( pFmtFnt )
                 {
                     const sal_uInt8 nAct = pNumFnt->GetActual();
@@ -543,6 +572,8 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 
                     if( pFmt )
                         pNumFnt->SetDiffFnt( pFmt, pIDSA );
+
+                    checkApplyParagraphMarkFormatToNumbering( pNumFnt, rInf, pIDSA );
 
                     // we do not allow a vertical font
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
