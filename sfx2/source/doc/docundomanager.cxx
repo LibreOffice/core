@@ -19,7 +19,6 @@
 
 
 #include "docundomanager.hxx"
-#include <cppuhelper/weak.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
