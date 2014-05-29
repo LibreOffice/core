@@ -133,7 +133,7 @@ throw (RuntimeException, std::exception)
     // An XML import service: what we push sax messages to..
     Reference < XDocumentHandler > xInternalHandler(
         mxContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.comp.Draw.XMLOasisImporter", mxContext),
+            "com.sun.star.comp.Impress.XMLOasisImporter", mxContext),
         css::uno::UNO_QUERY_THROW);
 
     // The XImporter sets up an empty target document for XDocumentHandler to write to..
