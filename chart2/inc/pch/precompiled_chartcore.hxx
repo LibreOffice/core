@@ -310,7 +310,6 @@
 #include <valarray>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/font.hxx>
-#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <vcl/openglwin.hxx>
 #include <vcl/outdev.hxx>
