@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
 #ifndef INCLUDED_RSC_INC_RSCARRAY_HXX
 #define INCLUDED_RSC_INC_RSCARRAY_HXX
 
@@ -119,6 +120,6 @@ public:
     virtual RSCCLASS_TYPE   GetClassType() const SAL_OVERRIDE;
 };
 
-#endif //_RSCARRAY
+#endif // INCLUDED_RSC_INC_RSCARRAY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -62,6 +62,9 @@
  Jan 2005           Created
  ************************************************************************/
 
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUNOHEADER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUNOHEADER_HXX
+
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/factory.hxx>
@@ -73,5 +76,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 
 #include "xfilter/xfglobal.hxx"
+
+#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPUNOHEADER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

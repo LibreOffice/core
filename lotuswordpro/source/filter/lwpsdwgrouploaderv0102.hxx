@@ -58,6 +58,10 @@
  * Mar 2005         revised for new processing procedure.
  * Jan 2005         created
  ****************************************************************************/
+
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
+
 #include <tools/stream.hxx>
 #include "lwpheader.hxx"
 #include "assert.h"
@@ -85,5 +89,7 @@ public:
     XFFrame* CreateDrawObject(void);
     // end add
 };
+
+#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

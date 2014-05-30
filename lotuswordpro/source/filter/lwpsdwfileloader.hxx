@@ -58,6 +58,10 @@
  * Mar 2005         revised for new processing procedure.
  * Jan 2005         created
  ****************************************************************************/
+
+#ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
+#define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
+
 #include <assert.h>
 #include <tools/stream.hxx>
 #include "lwpheader.hxx"
@@ -82,5 +86,7 @@ public:
     void CreateDrawObjects(std::vector <XFFrame*>* pDrawObjVector);
     // end add
 };
+
+#endif // INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

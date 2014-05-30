@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_L10NTOOLS_INC_HELPMERGE_HXX
+#define INCLUDED_L10NTOOLS_INC_HELPMERGE_HXX
+
 #include "xmlparse.hxx"
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -55,5 +58,7 @@ private:
 
     void ProcessHelp( LangHashMap* aLangHM , const OString& sCur , ResData *pResData , MergeDataFile* pMergeDataFile );
 };
+
+#endif // INCLUDED_L10NTOOLS_INC_HELPMERGE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
