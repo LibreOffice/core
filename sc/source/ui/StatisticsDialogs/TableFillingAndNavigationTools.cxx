@@ -18,10 +18,7 @@
 
 #include "TableFillingAndNavigationTools.hxx"
 
-FormulaTemplate::FormulaTemplate(ScDocument* aDocument, ScAddress::Details aAddressDetails) :
-    mDocument(aDocument),
-    mAddressDetails(aAddressDetails)
-{}
+FormulaTemplate::FormulaTemplate(ScDocument* pDoc) : mpDoc(pDoc) {}
 
 void FormulaTemplate::setTemplate(OUString aTemplate)
 {
@@ -33,27 +30,30 @@ void FormulaTemplate::setTemplate(const char* aTemplate)
     mTemplate = OUString::createFromAscii(aTemplate);
 }
 
-OUString& FormulaTemplate::getTemplate()
+const OUString& FormulaTemplate::getTemplate()
 {
     return mTemplate;
 }
 
-void FormulaTemplate::applyRange(OUString aVariable, ScRange aRange)
+void FormulaTemplate::applyRange(const OUString& aVariable, const ScRange& aRange, bool b3D)
 {
-    OUString aString = aRange.Format(SCR_ABS, mDocument, mAddressDetails);
+    sal_uInt16 nFlag = b3D ? SCR_ABS_3D : SCR_ABS;
+    OUString aString = aRange.Format(nFlag, mpDoc, mpDoc->GetAddressConvention());
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyRangeList(OUString aVariable, ScRangeList aRangeList)
+void FormulaTemplate::applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList, bool b3D)
 {
+    sal_uInt16 nFlag = b3D ? SCR_ABS_3D : SCR_ABS;
     OUString aString;
-    aRangeList.Format(aString, SCR_ABS, mDocument);
+    aRangeList.Format(aString, nFlag, mpDoc, mpDoc->GetAddressConvention());
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
-void FormulaTemplate::applyAddress(OUString aVariable, ScAddress aAddress)
+void FormulaTemplate::applyAddress(const OUString& aVariable, const ScAddress& aAddress, bool b3D)
 {
-    OUString aString = aAddress.Format(SCR_ABS, mDocument, mAddressDetails);
+    sal_uInt16 nFlag = b3D ? SCA_ABS_3D : SCA_ABS;
+    OUString aString = aAddress.Format(nFlag, mpDoc, mpDoc->GetAddressConvention());
     mTemplate = mTemplate.replaceAll(aVariable, aString);
 }
 
