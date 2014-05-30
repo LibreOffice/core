@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_INCLUDE_EDITENG_NUMDEF_HXX
-#define INCLUDED_INCLUDE_EDITENG_NUMDEF_HXX
+#ifndef INCLUDED_EDITENG_NUMDEF_HXX
+#define INCLUDED_EDITENG_NUMDEF_HXX
 
 #define SVX_MAX_NUM             10 // max. possible numbering level
 #define SVX_DEF_BULLET          (0xF000 + 149)// Character for lists
 
-#endif // INCLUDED_INCLUDE_EDITENG_NUMDEF_HXX
+#endif // INCLUDED_EDITENG_NUMDEF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

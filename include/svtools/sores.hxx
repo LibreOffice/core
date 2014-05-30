@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_INCLUDE_SVTOOLS_SORES_HXX
-#define INCLUDED_INCLUDE_SVTOOLS_SORES_HXX
+#ifndef INCLUDED_SVTOOLS_SORES_HXX
+#define INCLUDED_SVTOOLS_SORES_HXX
 
 //  Strings
 #define STR_ERROR_OBJNOCREATE                   32014
@@ -99,6 +99,6 @@
 #define STR_FORMAT_ID_HTML_NO_COMMENT           (STR_FORMAT_START + 119)
 #define STR_FORMAT_END                          (STR_FORMAT_ID_HTML_NO_COMMENT)
 
-#endif // INCLUDED_INCLUDE_SVTOOLS_SORES_HXX
+#endif // INCLUDED_SVTOOLS_SORES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

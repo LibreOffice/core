@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_INCLUDE_XMLOFF_LANGUAGETAGODF_HXX
-#define INCLUDED_INCLUDE_XMLOFF_LANGUAGETAGODF_HXX
+#ifndef INCLUDED_XMLOFF_LANGUAGETAGODF_HXX
+#define INCLUDED_XMLOFF_LANGUAGETAGODF_HXX
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
@@ -35,6 +35,6 @@ struct LanguageTagODF
     LanguageTag getLanguageTag() const { return LanguageTag( maRfcLanguageTag, maLanguage, maScript, maCountry); }
 };
 
-#endif // INCLUDED_INCLUDE_XMLOFF_LANGUAGETAGODF_HXX
+#endif // INCLUDED_XMLOFF_LANGUAGETAGODF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
