@@ -354,6 +354,7 @@ void OConnection::disposing()
     // we noticed that we should be destroied in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);
     dispose_ChildImpl();
+    m_xCatalog.clear();
 }
 
 
