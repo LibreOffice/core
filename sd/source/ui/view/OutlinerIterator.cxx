@@ -83,14 +83,14 @@ bool IteratorPosition::operator== (const IteratorPosition& aPosition) const
 
 //===== Iterator ==============================================================
 
-Iterator::Iterator (void)
+Iterator::Iterator()
 {
     mpIterator = NULL;
 }
 
 Iterator::Iterator (const Iterator& rIterator)
 {
-    mpIterator = rIterator.mpIterator->Clone();
+    mpIterator = rIterator.mpIterator ? rIterator.mpIterator->Clone() : NULL;
 }
 
 Iterator::Iterator (IteratorImplBase* pObject)
@@ -98,7 +98,7 @@ Iterator::Iterator (IteratorImplBase* pObject)
     mpIterator = pObject;
 }
 
-Iterator::~Iterator (void)
+Iterator::~Iterator()
 {
     delete mpIterator;
 }
