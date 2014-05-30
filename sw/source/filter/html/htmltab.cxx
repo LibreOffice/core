@@ -4278,6 +4278,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TFOOT_OFF:
         case HTML_TABLE_OFF:
             SkipToken( -1 );
+            //fall-through
         case HTML_TABLEROW_OFF:
             bDone = true;
             break;
