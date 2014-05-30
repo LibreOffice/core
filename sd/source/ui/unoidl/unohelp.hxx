@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SD_SOURCE_UI_UNOIDL_UNOHELP_HXX
+#define INCLUDED_SD_SOURCE_UI_UNOIDL_UNOHELP_HXX
+
 namespace sd
 {
 inline void bool2any( bool bBool, ::com::sun::star::uno::Any& rAny )
@@ -29,5 +32,7 @@ inline void bool2any( bool bBool, ::com::sun::star::uno::Any& rAny )
 #define QUERYINT( xint ) \
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
         aAny <<= uno::Reference< xint >(this)
+
+#endif // INCLUDED_SD_SOURCE_UI_UNOIDL_UNOHELP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
