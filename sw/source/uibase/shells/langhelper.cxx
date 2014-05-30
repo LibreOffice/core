@@ -425,12 +425,12 @@ namespace SwLangHelper
         if (nState > SFX_ITEM_DEFAULT && pItem)
         {
             // the item is set and can be used
-            nLang = (dynamic_cast< const SvxLanguageItem* >(pItem))->GetLanguage();
+            nLang = (dynamic_cast<const SvxLanguageItem&>(*pItem)).GetLanguage();
         }
         else if (nState == SFX_ITEM_DEFAULT)
         {
             // since the attribute is not set: retrieve the default value
-            nLang = (dynamic_cast< const SvxLanguageItem& >(aSet.GetPool()->GetDefaultItem( nLangWhichId ))).GetLanguage();
+            nLang = (dynamic_cast<const SvxLanguageItem&>(aSet.GetPool()->GetDefaultItem( nLangWhichId ))).GetLanguage();
         }
         else if (nState == SFX_ITEM_DONTCARE)
         {
