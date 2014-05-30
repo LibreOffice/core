@@ -393,6 +393,11 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
             if( nName == NS_ooxml::LN_CT_Spacing_line )
             {
+                if( m_pImpl->getTableManager().isInCell() )
+                {
+                    // direct formatting is applied for table cell data
+                    m_pImpl->SetIsTableHasDirectFormatting(true);
+                }
                 m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "line", OUString::number(nIntValue));
                 //now set the value depending on the Mode
                 if( aSpacing.Mode == style::LineSpacingMode::PROP )
