@@ -253,13 +253,13 @@ namespace detail
 
     @return         rBuf;
  */
-COMPHELPER_DLLPUBLIC inline OStringBuffer& truncateToLength(
+inline OStringBuffer& truncateToLength(
     OStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
 {
     return detail::truncateToLength(rBuffer, nLength);
 }
 
-COMPHELPER_DLLPUBLIC inline OUStringBuffer& truncateToLength(
+inline OUStringBuffer& truncateToLength(
     OUStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
 {
     return detail::truncateToLength(rBuffer, nLength);
@@ -294,14 +294,14 @@ namespace detail
 
     @return         rBuf;
  */
-COMPHELPER_DLLPUBLIC inline OStringBuffer& padToLength(
+inline OStringBuffer& padToLength(
     OStringBuffer& rBuffer, sal_Int32 nLength,
     sal_Char cFill = '\0') SAL_THROW(())
 {
     return detail::padToLength(rBuffer, nLength, cFill);
 }
 
-COMPHELPER_DLLPUBLIC inline OUStringBuffer& padToLength(
+inline OUStringBuffer& padToLength(
     OUStringBuffer& rBuffer, sal_Int32 nLength,
     sal_Unicode cFill = '\0') SAL_THROW(())
 {
@@ -433,32 +433,32 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OString &rString);
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(const OUString &rString);
 
-COMPHELPER_DLLPUBLIC inline bool isdigitAscii(sal_Unicode c)
+inline bool isdigitAscii(sal_Unicode c)
 {
     return ((c >= '0') && (c <= '9'));
 }
 
-COMPHELPER_DLLPUBLIC inline bool isxdigitAscii(sal_Unicode c)
+inline bool isxdigitAscii(sal_Unicode c)
 {
     return isdigitAscii(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
 }
 
-COMPHELPER_DLLPUBLIC inline bool islowerAscii(sal_Unicode c)
+inline bool islowerAscii(sal_Unicode c)
 {
     return ((c >= 'a') && (c <= 'z'));
 }
 
-COMPHELPER_DLLPUBLIC inline bool isupperAscii(sal_Unicode c)
+inline bool isupperAscii(sal_Unicode c)
 {
     return ((c >= 'A') && (c <= 'Z'));
 }
 
-COMPHELPER_DLLPUBLIC inline bool isalphaAscii(sal_Unicode c)
+inline bool isalphaAscii(sal_Unicode c)
 {
     return islowerAscii(c) || isupperAscii(c);
 }
 
-COMPHELPER_DLLPUBLIC inline bool isalnumAscii(sal_Unicode c)
+inline bool isalnumAscii(sal_Unicode c)
 {
     return isalphaAscii(c) || isdigitAscii(c);
 }

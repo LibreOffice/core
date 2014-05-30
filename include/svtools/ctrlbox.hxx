@@ -274,12 +274,12 @@ public:
     bool IsDouble( ) const { return (0 != m_nRate1) && (0 != m_nRate2);  }
 };
 
-SVT_DLLPUBLIC inline Color sameColor( Color rMain )
+inline Color sameColor( Color rMain )
 {
     return rMain;
 }
 
-SVT_DLLPUBLIC inline Color sameDistColor( Color /*rMain*/, Color rDefault )
+inline Color sameDistColor( Color /*rMain*/, Color rDefault )
 {
     return rDefault;
 }

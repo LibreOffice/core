@@ -44,12 +44,12 @@ namespace psp
 
 
     // parses the first double in the string; decimal is '.' only
-    VCL_DLLPUBLIC inline double StringToDouble( const OUString& rStr )
+    inline double StringToDouble( const OUString& rStr )
     {
         return rtl::math::stringToDouble(rStr, sal_Unicode('.'), sal_Unicode(0));
     }
 
-    VCL_DLLPUBLIC inline double StringToDouble(const OString& rStr)
+    inline double StringToDouble(const OString& rStr)
     {
         return rtl::math::stringToDouble(rStr, '.', static_cast<sal_Char>(0));
     }
@@ -57,7 +57,7 @@ namespace psp
     // fills a character buffer with the string representation of a double
     // the buffer has to be long enough (e.g. 128 bytes)
     // returns the string len
-    VCL_DLLPUBLIC inline int getValueOfDouble( char* pBuffer, double f, int nPrecision = 0)
+    inline int getValueOfDouble( char* pBuffer, double f, int nPrecision = 0)
     {
         OString aStr( rtl::math::doubleToString( f, rtl_math_StringFormat_G, nPrecision, '.', true ) );
         int nLen = aStr.getLength();
