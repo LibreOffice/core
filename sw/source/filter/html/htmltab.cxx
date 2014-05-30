@@ -4450,6 +4450,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         case HTML_TBODY_ON:
         case HTML_TABLE_OFF:
             SkipToken( -1 );
+            //fall-through
         case HTML_THEAD_OFF:
         case HTML_TBODY_OFF:
         case HTML_TFOOT_OFF:
