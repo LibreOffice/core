@@ -18,6 +18,7 @@
  */
 
 #ifndef INCLUDED_SVX_SOURCE_SDR_CONTACT_SDRMEDIAWINDOW_HXX
+#define INCLUDED_SVX_SOURCE_SDR_CONTACT_SDRMEDIAWINDOW_HXX
 
 #include <avmedia/mediawindow.hxx>
 
@@ -57,6 +58,6 @@ private:
 
 } }
 
-#endif
+#endif // INCLUDED_SVX_SOURCE_SDR_CONTACT_SDRMEDIAWINDOW_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

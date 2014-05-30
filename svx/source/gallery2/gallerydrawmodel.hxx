@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SVX_SOURCE_GALLERY2_GALLERYDRAWMODEL_HXX
+#define INCLUDED_SVX_SOURCE_GALLERY2_GALLERYDRAWMODEL_HXX
+
 #include <sfx2/objsh.hxx>
 
 class FmFormModel;
@@ -33,5 +36,7 @@ private:
     SfxObjectShellLock mxDoc;
     FmFormModel* mpFormModel;
 };
+
+#endif // INCLUDED_SVX_SOURCE_GALLERY2_GALLERYDRAWMODEL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
+#define INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
+
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/menu.hxx>
@@ -132,5 +135,7 @@ public:
     void                    ShowContextMenu();
     bool                    KeyInput( const KeyEvent& rKEvt, Window* pWindow );
 };
+
+#endif // INCLUDED_SVX_SOURCE_GALLERY2_GALBRWS1_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
