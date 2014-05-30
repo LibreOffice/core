@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_I18NPOOL_INC_ORDINALSUFFIX_HXX
+#define INCLUDED_I18NPOOL_INC_ORDINALSUFFIX_HXX
+
 #include <com/sun/star/i18n/XOrdinalSuffix.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -45,5 +48,7 @@ class OrdinalSuffix : public cppu::WeakImplHelper2
 
 };
 } } } }
+
+#endif // INCLUDED_I18NPOOL_INC_ORDINALSUFFIX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

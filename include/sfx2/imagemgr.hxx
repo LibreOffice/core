@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_INCLUDE_SFX2_IMAGEMGR_HXX
+#define INCLUDED_INCLUDE_SFX2_IMAGEMGR_HXX
+
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
@@ -30,5 +33,7 @@ SFX2_DLLPUBLIC Image SAL_CALL GetImage(
     const OUString& aURL,
     bool bBig
 );
+
+#endif // INCLUDED_INCLUDE_SFX2_IMAGEMGR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
