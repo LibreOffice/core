@@ -10,8 +10,22 @@
 $(eval $(call gb_Module_Module,libmwaw))
 
 $(eval $(call gb_Module_add_targets,libmwaw,\
-	ExternalProject_libmwaw \
 	UnpackedTarball_libmwaw \
 ))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,libmwaw,\
+	Library_mwaw \
+))
+
+else
+
+$(eval $(call gb_Module_add_targets,libmwaw,\
+	ExternalPackage_libmwaw \
+	ExternalProject_libmwaw \
+))
+
+endif
 
 # vim: set noet sw=4 ts=4:
