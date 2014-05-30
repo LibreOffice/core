@@ -1213,6 +1213,7 @@ bool ImplSdPPTImport::Import()
                     break;
                     case 10 :   // titlemaster
                         nSelectedPage = 1;
+                        //fall-through
                     case 2 :    // master
                     {
                         ePageKind = PK_STANDARD;
