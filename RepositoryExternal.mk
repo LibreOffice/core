@@ -2003,21 +2003,44 @@ gb_ExternalProject__use_wps :=
 
 else # !SYSTEM_WPS
 
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	wps \
+))
+
 define gb_LinkTarget__use_wps
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libwps)/inc \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libwps)/src/lib/.libs/libwps-0.3$(gb_StaticLibrary_PLAINEXT) \
+
+$(call gb_LinkTarget_use_libraries,$(1),\
+	wps \
 )
-$(call gb_LinkTarget_use_external_project,$(1),libwps)
 
 endef
-define gb_ExternalProject__use_wps
-$(call gb_ExternalProject_use_external_project,$(1),libwps)
+
+else # !MSC
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo, \
+	libwps \
+))
+
+define gb_LinkTarget__use_wps
+$(call gb_LinkTarget_use_package,$(1),libwps)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libwps)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,libwps)/src/lib/.libs -lwps-0.3 \
+)
 
 endef
+
+endif # MSC
 
 endif # SYSTEM_WPS
 
