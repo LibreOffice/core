@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sal/config.h>
+
+#include <boost/scoped_ptr.hpp>
 #include <test/bootstrapfixture.hxx>
 
 #include <osl/file.hxx>
@@ -40,8 +43,7 @@ public:
 void CanvasTest::testComposite()
 {
 #ifdef LINUX
-    Window* pWin = new WorkWindow( (Window *)NULL );
-    CPPUNIT_ASSERT( pWin != NULL );
+    boost::scoped_ptr<Window> pWin(new WorkWindow( (Window *)NULL ));
 
     uno::Reference<rendering::XCanvas> xCanvas = pWin->GetCanvas ();
     if( !xCanvas.is() )
