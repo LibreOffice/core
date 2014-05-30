@@ -2279,9 +2279,9 @@ void SbiRuntime::StepREDIMP()
             else if (nDims > 0)
             {
                 // Store dims to use them for copying later
-                sal_Int32* pLowerBounds = new sal_Int32[nDims];
-                sal_Int32* pUpperBounds = new sal_Int32[nDims];
-                sal_Int32* pActualIndices = new sal_Int32[nDims];
+                boost::scoped_array<sal_Int32> pLowerBounds(new sal_Int32[nDims]);
+                boost::scoped_array<sal_Int32> pUpperBounds(new sal_Int32[nDims]);
+                boost::scoped_array<sal_Int32> pActualIndices(new sal_Int32[nDims]);
 
                 // Compare bounds
                 for( short i = 1 ; i <= nDims ; i++ )
@@ -2300,10 +2300,7 @@ void SbiRuntime::StepREDIMP()
                 // (It would be faster to work on the flat internal data array of an
                 // SbyArray but this solution is clearer and easier)
                 implCopyDimArray( pNewArray, pOldArray, nDims - 1,
-                                  0, pActualIndices, pLowerBounds, pUpperBounds );
-                delete[] pUpperBounds;
-                delete[] pLowerBounds;
-                delete[] pActualIndices;
+                                  0, pActualIndices.get(), pLowerBounds.get(), pUpperBounds.get() );
             }
 
             refRedimpArray = NULL;

@@ -27,6 +27,7 @@
 #include "sbxconv.hxx"
 #include "math.h"
 #include <comphelper/processfactory.hxx>
+#include <boost/scoped_ptr.hpp>
 
 
 double ImpGetDate( const SbxValues* p )
@@ -99,7 +100,7 @@ double ImpGetDate( const SbxValues* p )
         {
             LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
 
-            SvNumberFormatter* pFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
+            boost::scoped_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;
@@ -144,8 +145,6 @@ double ImpGetDate( const SbxValues* p )
             {
                 SbxBase::SetError( SbxERR_CONVERSION ); nRes = 0;
             }
-
-            delete pFormatter;
         }
         break;
     case SbxOBJECT:
@@ -269,7 +268,7 @@ start:
             Color* pColor;
 
             LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
-            SvNumberFormatter* pFormatter = new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType );
+            boost::scoped_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
 
             sal_uInt32 nIndex;
             sal_Int32 nCheckPos = 0;
@@ -314,7 +313,6 @@ start:
                                             LANGUAGE_GERMAN,
                                             eLangType );
             pFormatter->GetOutputString( n, nIndex, *p->pOUString, &pColor );
-            delete pFormatter;
             break;
         }
     case SbxOBJECT:
