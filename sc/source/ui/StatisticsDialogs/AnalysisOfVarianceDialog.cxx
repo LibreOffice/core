@@ -106,7 +106,7 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
 {
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+    FormulaTemplate aTemplate(mDocument);
 
     output.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ANOVA_SINGLE_FACTOR_LABEL));
     output.nextRow();
