@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SVX_SOURCE_GALLERY2_CODEC_HXX
+#define INCLUDED_SVX_SOURCE_GALLERY2_CODEC_HXX
+
 #include <sal/types.h>
 
 class SvStream;
@@ -36,5 +39,7 @@ public:
 
     static bool IsCoded( SvStream& rStm, sal_uInt32& rVersion );
 };
+
+#endif // INCLUDED_SVX_SOURCE_GALLERY2_CODEC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
