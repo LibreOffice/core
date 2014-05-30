@@ -25,11 +25,7 @@
 #include <sot/storage.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
-using namespace ::rtl;
-using namespace ::cppu;
 using namespace ::com::sun::star;
-
-
 
 WriterFilterDetection::WriterFilterDetection(
     const uno::Reference< uno::XComponentContext >& rxContext) :

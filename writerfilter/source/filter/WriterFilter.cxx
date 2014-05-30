@@ -22,11 +22,7 @@
 #include <WriterFilterDetection.hxx>
 #include <RtfFilter.hxx>
 
-using namespace ::rtl;
-using namespace ::cppu;
 using namespace ::com::sun::star;
-
-
 
 WriterFilter::WriterFilter( const uno::Reference< uno::XComponentContext >& rxContext)  :
     m_xContext( rxContext )

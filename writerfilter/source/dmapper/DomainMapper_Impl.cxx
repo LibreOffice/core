@@ -77,7 +77,6 @@
 #include <filter/msfilter/util.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::rtl;
 namespace writerfilter {
 namespace dmapper{
 
