@@ -1807,7 +1807,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         if( bUndo )
             BegUndo();
 
-        pMaster = (SdPage*) AllocPage(true);
+        pMaster = AllocSdPage(true);
         pMaster->SetSize(pSelectedPage->GetSize());
         pMaster->SetBorder(pSelectedPage->GetLftBorder(),
                            pSelectedPage->GetUppBorder(),
@@ -1822,7 +1822,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
         pMaster->SetAutoLayout(AUTOLAYOUT_NONE, true, true);
 
-        pNotesMaster = (SdPage*) AllocPage(true);
+        pNotesMaster = AllocSdPage(true);
         pNotesMaster->SetPageKind(PK_NOTES);
         pNotesMaster->SetSize(pNotes->GetSize());
         pNotesMaster->SetBorder(pNotes->GetLftBorder(),

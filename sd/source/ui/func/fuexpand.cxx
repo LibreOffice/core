@@ -134,7 +134,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 if ( nDepth == 0 )
                 {
                     // page with title & structuring!
-                    SdPage* pPage = (SdPage*) mpDoc->AllocPage(false);
+                    SdPage* pPage = mpDoc->AllocSdPage(false);
                     pPage->SetSize(pActualPage->GetSize() );
                     pPage->SetBorder(pActualPage->GetLftBorder(),
                                      pActualPage->GetUppBorder(),
@@ -156,7 +156,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // notes-page
-                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(false);
+                    SdPage* pNotesPage = mpDoc->AllocSdPage(false);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
                                           pActualNotesPage->GetUppBorder(),

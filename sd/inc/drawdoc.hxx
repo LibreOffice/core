@@ -201,7 +201,6 @@ private:
         com::sun::star::xml::dom::XNode> > maPresObjectInfo;
 
     bool                mbUseEmbedFonts;
-
 protected:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
@@ -215,6 +214,7 @@ public:
 
     virtual SdrModel*   AllocModel() const SAL_OVERRIDE;
     virtual SdrPage*    AllocPage(bool bMasterPage) SAL_OVERRIDE;
+    SdPage*             AllocSdPage(bool bMasterPage);
     virtual bool        IsReadOnly() const SAL_OVERRIDE;
     virtual void        SetChanged(bool bFlag = true) SAL_OVERRIDE;
 

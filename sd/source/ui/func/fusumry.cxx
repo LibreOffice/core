@@ -117,7 +117,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
                     // page with title & structuring!
-                    pSummaryPage = (SdPage*) mpDoc->AllocPage(false);
+                    pSummaryPage = mpDoc->AllocSdPage(false);
                     pSummaryPage->SetSize(pActualPage->GetSize() );
                     pSummaryPage->SetBorder(pActualPage->GetLftBorder(),
                                      pActualPage->GetUppBorder(),
@@ -137,7 +137,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 
                     // notes-page
-                    SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(false);
+                    SdPage* pNotesPage = mpDoc->AllocSdPage(false);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
                                           pActualNotesPage->GetUppBorder(),

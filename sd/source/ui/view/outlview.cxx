@@ -441,7 +441,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 
     // this page is exemplary
     SdPage* pExample = (SdPage*)mrDoc.GetSdPage((sal_uInt16)nExample, PK_STANDARD);
-    SdPage* pPage = (SdPage*)mrDoc.AllocPage(false);
+    SdPage* pPage = mrDoc.AllocSdPage(false);
 
     pPage->SetLayoutName(pExample->GetLayoutName());
 
@@ -478,7 +478,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     |* now the notes page
     \*********************************************************************/
     pExample = (SdPage*)mrDoc.GetSdPage((sal_uInt16)nExample, PK_NOTES);
-    SdPage* pNotesPage = (SdPage*)mrDoc.AllocPage(false);
+    SdPage* pNotesPage = mrDoc.AllocSdPage(false);
 
     pNotesPage->SetLayoutName(pExample->GetLayoutName());
 
