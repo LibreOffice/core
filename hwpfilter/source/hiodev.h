@@ -53,7 +53,7 @@ class DLLEXPORT HIODev
 
         virtual int read1b() = 0;
         virtual int read2b() = 0;
-        virtual long read4b() = 0;
+        virtual int read4b() = 0;
         virtual int readBlock( void *ptr, int size ) = 0;
         virtual int skipBlock( int size ) = 0;
 
@@ -113,7 +113,7 @@ class HStreamIODev : public HIODev
  * Read 4 bytes from stream
  */
         using HIODev::read4b;
-        virtual long read4b() SAL_OVERRIDE;
+        virtual int read4b() SAL_OVERRIDE;
 /**
  * Read some bytes from stream to given pointer as amount of size
  */
@@ -153,7 +153,7 @@ class HMemIODev : public HIODev
         using HIODev::read2b;
         virtual int read2b() SAL_OVERRIDE;
         using HIODev::read4b;
-        virtual long read4b() SAL_OVERRIDE;
+        virtual int read4b() SAL_OVERRIDE;
         virtual int readBlock( void *ptr, int size ) SAL_OVERRIDE;
         virtual int skipBlock( int size ) SAL_OVERRIDE;
     protected:
