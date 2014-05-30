@@ -74,6 +74,7 @@ $(call gb_ExternalProject_get_clean_target,%) :
 define gb_ExternalProject_ExternalProject
 $(call gb_ExternalProject_get_target,$(1)) : EXTERNAL_WORKDIR := $(call gb_UnpackedTarball_get_dir,$(1))
 
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(gb_Module_CURRENTMAKEFILE)
 $(call gb_ExternalProject_get_preparation_target,$(1)) :| $(dir $(call gb_ExternalProject_get_target,$(1))).dir
 $(call gb_UnpackedTarball_get_preparation_target,$(1)) : $(call gb_ExternalProject_get_preparation_target,$(1))
 $(call gb_ExternalProject_get_clean_target,$(1)) : $(call gb_UnpackedTarball_get_clean_target,$(1))
