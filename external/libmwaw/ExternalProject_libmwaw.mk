@@ -25,8 +25,11 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 		export PKG_CONFIG="" \
 		&& ./configure \
 			--with-pic \
-			--enable-static \
-			--disable-shared \
+			$(if $(DISABLE_DYNLOADING), \
+				--enable-static --disable-shared \
+			, \
+				--enable-shared --disable-static \
+			) \
 			--without-docs \
 			--disable-tools \
 			--disable-zip \
@@ -35,6 +38,7 @@ $(call gb_ExternalProject_get_state_target,libmwaw,build) :
 			--disable-werror \
 			CXXFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost) -I$(BUILDDIR)/config_$(gb_Side))" \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
+			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& (cd $(EXTERNAL_WORKDIR)/src/lib && \
 			$(MAKE)) \
 	)

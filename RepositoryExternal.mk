@@ -2035,17 +2035,44 @@ endef
 
 else # !SYSTEM_MWAW
 
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo,\
+	mwaw \
+))
+
 define gb_LinkTarget__use_mwaw
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,libmwaw)/inc \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libmwaw)/src/lib/.libs/libmwaw-0.3$(gb_StaticLibrary_PLAINEXT) \
+
+$(call gb_LinkTarget_use_libraries,$(1),\
+	mwaw \
 )
-$(call gb_LinkTarget_use_external_project,$(1),libmwaw)
 
 endef
+
+else # !MSC
+
+$(eval $(call gb_Helper_register_packages_for_install,ooo,\
+	libmwaw \
+))
+
+define gb_LinkTarget__use_mwaw
+$(call gb_LinkTarget_use_package,$(1),libmwaw)
+
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,libmwaw)/inc \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	-L$(call gb_UnpackedTarball_get_dir,libmwaw)/src/lib/.libs -lmwaw-0.3 \
+)
+
+endef
+
+endif # MSC
 
 endif # SYSTEM_MWAW
 
