@@ -415,30 +415,40 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
     // Write out ColorList  ...
     SvxColorList aColorList;
+    // COL_AUTO should be the default color, always put it first
+    aColorList.push_back(COL_AUTO);
+    SvxColorItem const& rDefault(static_cast<SvxColorItem const&>(
+                aEditDoc.GetItemPool().GetDefaultItem(EE_CHAR_COLOR)));
+    if (rDefault.GetValue() != COL_AUTO) // is the default always AUTO?
+    {
+        aColorList.push_back(rDefault.GetValue());
+    }
     sal_uInt32 i = 0;
-    SvxColorItem* pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, i );
+    SvxColorItem const* pColorItem = static_cast<SvxColorItem const*>(
+            aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, i));
     while ( pColorItem )
     {
-        sal_uInt32 nPos = i;
-        if ( pColorItem->GetValue() == COL_AUTO )
-            nPos = 0;
-        aColorList.Insert( new SvxColorItem( *pColorItem ), nPos );
-        pColorItem = (SvxColorItem*)aEditDoc.GetItemPool().GetItem2( EE_CHAR_COLOR, ++i );
+        ++i;
+        if ( pColorItem->GetValue() != COL_AUTO )
+        {
+            aColorList.push_back(pColorItem->GetValue());
+        }
+        pColorItem = static_cast<SvxColorItem const*>(
+                aEditDoc.GetItemPool().GetItem2(EE_CHAR_COLOR, i));
     }
-    aColorList.Insert( new SvxColorItem( (const SvxColorItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_COLOR) ), i );
 
     rOutput.WriteChar( '{' ).WriteCharPtr( OOO_STRING_SVTOOLS_RTF_COLORTBL );
-    for ( j = 0; j < aColorList.Count(); j++ )
+    for ( j = 0; j < aColorList.size(); j++ )
     {
-        pColorItem = aColorList.GetObject( j );
-        if ( !j || ( pColorItem->GetValue() != COL_AUTO ) )
+        Color const color = aColorList[j];
+        if (color != COL_AUTO) // auto is represented by "empty" element
         {
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_RED );
-            rOutput.WriteNumber( static_cast<sal_uInt32>(pColorItem->GetValue().GetRed()) );
+            rOutput.WriteNumber( static_cast<sal_uInt32>(color.GetRed()) );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_GREEN );
-            rOutput.WriteNumber( static_cast<sal_uInt32>(pColorItem->GetValue().GetGreen()) );
+            rOutput.WriteNumber( static_cast<sal_uInt32>(color.GetGreen()) );
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_BLUE );
-            rOutput.WriteNumber( static_cast<sal_uInt32>(pColorItem->GetValue().GetBlue()) );
+            rOutput.WriteNumber( static_cast<sal_uInt32>(color.GetBlue()) );
         }
         rOutput.WriteChar( ';' );
     }
@@ -784,7 +794,11 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_COLOR:
         {
-            sal_uInt32 n = rColorList.GetId( (const SvxColorItem&)rItem );
+            SvxColorList::const_iterator const iter = ::std::find(
+                    rColorList.begin(), rColorList.end(),
+                    static_cast<SvxColorItem const&>(rItem).GetValue());
+            assert(iter != rColorList.end());
+            sal_uInt32 const n = iter - rColorList.begin();
             rOutput.WriteCharPtr( OOO_STRING_SVTOOLS_RTF_CF );
             rOutput.WriteNumber( n );
         }
