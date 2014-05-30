@@ -816,13 +816,10 @@ void Outliner::DetectChange (void)
     }
 }
 
-
-
-
-bool Outliner::DetectSelectionChange (void)
+bool Outliner::DetectSelectionChange()
 {
     bool bSelectionHasChanged = false;
-    sal_uLong nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
+    sal_uLong nMarkCount = mpView ? mpView->GetMarkedObjectList().GetMarkCount() : 0;
 
     // If mpObj is NULL then we have not yet found our first match.
     // Detecting a change makes no sense.
@@ -853,10 +850,7 @@ bool Outliner::DetectSelectionChange (void)
     return bSelectionHasChanged;
 }
 
-
-
-
-void Outliner::RememberStartPosition (void)
+void Outliner::RememberStartPosition()
 {
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     if ( ! pViewShell)
@@ -909,10 +903,7 @@ void Outliner::RememberStartPosition (void)
     }
 }
 
-
-
-
-void Outliner::RestoreStartPosition (void)
+void Outliner::RestoreStartPosition()
 {
     bool bRestore = true;
     // Take a negative start page index as inidicator that restoring the
