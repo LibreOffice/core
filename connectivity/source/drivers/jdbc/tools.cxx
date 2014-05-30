@@ -113,39 +113,38 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
         // these are properties used internally by LibreOffice,
         // and should not be passed to the JDBC driver
         // (which probably does not know anything about them anyway).
-        // FYI, OUString::compareToAscii() returns zero on equality, like strcmp()
-        if  (   pBegin->Name.compareToAscii( "JavaDriverClass" )
-            &&  pBegin->Name.compareToAscii( "JavaDriverClassPath" )
-            &&  pBegin->Name.compareToAscii( "SystemProperties" )
-            &&  pBegin->Name.compareToAscii( "CharSet" )
-            &&  pBegin->Name.compareToAscii( "AppendTableAliasName" )
-            &&  pBegin->Name.compareToAscii( "AddIndexAppendix" )
-            &&  pBegin->Name.compareToAscii( "FormsCheckRequiredFields" )
-            &&  pBegin->Name.compareToAscii( "GenerateASBeforeCorrelationName" )
-            &&  pBegin->Name.compareToAscii( "EscapeDateTime" )
-            &&  pBegin->Name.compareToAscii( "ParameterNameSubstitution" )
-            &&  pBegin->Name.compareToAscii( "IsPasswordRequired" )
-            &&  pBegin->Name.compareToAscii( "IsAutoRetrievingEnabled" )
-            &&  pBegin->Name.compareToAscii( "AutoRetrievingStatement" )
-            &&  pBegin->Name.compareToAscii( "UseCatalogInSelect" )
-            &&  pBegin->Name.compareToAscii( "UseSchemaInSelect" )
-            &&  pBegin->Name.compareToAscii( "AutoIncrementCreation" )
-            &&  pBegin->Name.compareToAscii( "Extension" )
-            &&  pBegin->Name.compareToAscii( "NoNameLengthLimit" )
-            &&  pBegin->Name.compareToAscii( "EnableSQL92Check" )
-            &&  pBegin->Name.compareToAscii( "EnableOuterJoinEscape" )
-            &&  pBegin->Name.compareToAscii( "BooleanComparisonMode" )
-            &&  pBegin->Name.compareToAscii( "IgnoreCurrency" )
-            &&  pBegin->Name.compareToAscii( "TypeInfoSettings" )
-            &&  pBegin->Name.compareToAscii( "IgnoreDriverPrivileges" )
-            &&  pBegin->Name.compareToAscii( "ImplicitCatalogRestriction" )
-            &&  pBegin->Name.compareToAscii( "ImplicitSchemaRestriction" )
-            &&  pBegin->Name.compareToAscii( "SupportsTableCreation" )
-            &&  pBegin->Name.compareToAscii( "UseJava" )
-            &&  pBegin->Name.compareToAscii( "Authentication" )
-            &&  pBegin->Name.compareToAscii( "PreferDosLikeLineEnds" )
-            &&  pBegin->Name.compareToAscii( "PrimaryKeySupport" )
-            &&  pBegin->Name.compareToAscii( "RespectDriverResultSetType" )
+        if  (   pBegin->Name != "JavaDriverClass"
+            &&  pBegin->Name != "JavaDriverClassPath"
+            &&  pBegin->Name != "SystemProperties"
+            &&  pBegin->Name != "CharSet"
+            &&  pBegin->Name != "AppendTableAliasName"
+            &&  pBegin->Name != "AddIndexAppendix"
+            &&  pBegin->Name != "FormsCheckRequiredFields"
+            &&  pBegin->Name != "GenerateASBeforeCorrelationName"
+            &&  pBegin->Name != "EscapeDateTime"
+            &&  pBegin->Name != "ParameterNameSubstitution"
+            &&  pBegin->Name != "IsPasswordRequired"
+            &&  pBegin->Name != "IsAutoRetrievingEnabled"
+            &&  pBegin->Name != "AutoRetrievingStatement"
+            &&  pBegin->Name != "UseCatalogInSelect"
+            &&  pBegin->Name != "UseSchemaInSelect"
+            &&  pBegin->Name != "AutoIncrementCreation"
+            &&  pBegin->Name != "Extension"
+            &&  pBegin->Name != "NoNameLengthLimit"
+            &&  pBegin->Name != "EnableSQL92Check"
+            &&  pBegin->Name != "EnableOuterJoinEscape"
+            &&  pBegin->Name != "BooleanComparisonMode"
+            &&  pBegin->Name != "IgnoreCurrency"
+            &&  pBegin->Name != "TypeInfoSettings"
+            &&  pBegin->Name != "IgnoreDriverPrivileges"
+            &&  pBegin->Name != "ImplicitCatalogRestriction"
+            &&  pBegin->Name != "ImplicitSchemaRestriction"
+            &&  pBegin->Name != "SupportsTableCreation"
+            &&  pBegin->Name != "UseJava"
+            &&  pBegin->Name != "Authentication"
+            &&  pBegin->Name != "PreferDosLikeLineEnds"
+            &&  pBegin->Name != "PrimaryKeySupport"
+            &&  pBegin->Name != "RespectDriverResultSetType"
             )
         {
             OUString aStr;
