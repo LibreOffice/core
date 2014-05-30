@@ -374,9 +374,31 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 
     m_bImpress = eDocType == DOCUMENT_TYPE_IMPRESS;
 
+    Size aSize(LogicToPixel(Size(60, 50), MAP_APPFONT));
+    get(pPage2_Standard_FB, "standardFBImage");
+    pPage2_Standard_FB->set_width_request(aSize.Width());
+    pPage2_Standard_FB->set_height_request(aSize.Height());
+    get(pPage2_Frames_FB, "framesFBImage");
+    pPage2_Frames_FB->set_width_request(aSize.Width());
+    pPage2_Frames_FB->set_height_request(aSize.Height());
+    get(pPage2_Kiosk_FB, "kioskFBImage");
+    pPage2_Kiosk_FB->set_width_request(aSize.Width());
+    pPage2_Kiosk_FB->set_height_request(aSize.Height());
+    get(pPage2_WebCast_FB, "webCastFBImage");
+    pPage2_WebCast_FB->set_width_request(aSize.Width());
+    pPage2_WebCast_FB->set_height_request(aSize.Height());
+
+    get(pPage4_Misc, "miscTextview");
+    pPage4_Misc->set_height_request(pPage4_Misc->GetTextHeight() * 8);
+    pPage4_Misc->set_width_request(pPage4_Misc->approximate_char_width() * 52);
+
+    get(pPage1_Designs, "designsTreeview");
+    pPage1_Designs->set_height_request(pPage4_Misc->GetTextHeight() * 8);
+    pPage1_Designs->set_width_request(pPage4_Misc->approximate_char_width() * 52);
+
     //Lock down the preferred size based on the
     //initial max-size configuration
-    Size aSize(get_preferred_size());
+    aSize = get_preferred_size();
     set_width_request(aSize.Width());
     set_height_request(aSize.Height());
 
@@ -472,7 +494,6 @@ void SdPublishingDlg::CreatePages()
     get(pPage1_Titel, "assignLabel");
     get(pPage1_NewDesign, "newDesignRadiobutton");
     get(pPage1_OldDesign, "oldDesignRadiobutton");
-    get(pPage1_Designs, "designsTreeview");
     get(pPage1_DelDesign, "delDesingButton");
     get(pPage1_Desc, "descLabel");
     aAssistentFunc.InsertControl(1, pPage1);
@@ -494,10 +515,6 @@ void SdPublishingDlg::CreatePages()
     get(pPage2_SingleDocument, "singleDocumentRadiobutton");
     get(pPage2_Kiosk, "kioskRadiobutton");
     get(pPage2_WebCast, "webCastRadiobutton");
-    get(pPage2_Standard_FB, "standardFBImage");
-    get(pPage2_Frames_FB, "framesFBImage");
-    get(pPage2_Kiosk_FB, "kioskFBImage");
-    get(pPage2_WebCast_FB, "webCastFBImage");
     aAssistentFunc.InsertControl(2, pPage2);
     aAssistentFunc.InsertControl(2, pPage2Frame2);
     aAssistentFunc.InsertControl(2, pPage2Frame3);
@@ -592,7 +609,6 @@ void SdPublishingDlg::CreatePages()
     get(pPage4_WWW_txt, "wwwTxtLabel");
     get(pPage4_WWW, "wwwEntry");
     get(pPage4_Titel2, "addInformLabel");
-    get(pPage4_Misc, "miscTextview");
     get(pPage4_Download, "downloadCheckbutton");
     aAssistentFunc.InsertControl(4, pPage4);
     aAssistentFunc.InsertControl(4, pPage4_Titel1);
