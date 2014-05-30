@@ -1102,6 +1102,7 @@ void SwHTMLParser::NewAnchor()
 
             case HTML_O_SDONCLICK:
                 eScriptType2 = STARBASIC;
+                //fall-through
             case HTML_O_ONCLICK:
                 nEvent = SFX_EVENT_MOUSECLICK_OBJECT;
                 goto ANCHOR_SETEVENT;
