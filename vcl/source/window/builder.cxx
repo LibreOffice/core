@@ -1429,7 +1429,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkImage")
     {
         extractStock(id, rMap);
-        pWindow = new FixedImage(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+        pWindow = new FixedImage(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK|WB_SCALE);
         //such parentless GtkImages are temps used to set icons on buttons
         //default them to hidden to stop e.g. insert->index entry flicking temp
         //full screen windows
