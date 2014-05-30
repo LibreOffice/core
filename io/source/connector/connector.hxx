@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR.HXX
-#define INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR.HXX
+#ifndef INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR_HXX
+#define INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR_HXX
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -133,6 +133,6 @@ namespace stoc_connector
     };
 }
 
-#endif // INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR.HXX
+#endif // INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
