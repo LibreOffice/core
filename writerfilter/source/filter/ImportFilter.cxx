@@ -38,9 +38,7 @@
 #include <oox/ole/olestorage.hxx>
 #include <oox/ole/vbaproject.hxx>
 #include <oox/helper/graphichelper.hxx>
-using namespace ::rtl;
 using namespace ::com::sun::star;
-using utl::MediaDescriptor;
 
 
 
@@ -62,7 +60,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     }
     else if (m_xDstDoc.is())
     {
-        MediaDescriptor aMediaDesc( aDescriptor );
+        utl::MediaDescriptor aMediaDesc( aDescriptor );
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
 
         uno::Reference< io::XInputStream > xInputStream;
@@ -105,7 +103,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
     {
         writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
-        uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());
+        uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());
         writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream, xStatusIndicator));
 
         uno::Reference<frame::XModel> xModel(m_xDstDoc, uno::UNO_QUERY_THROW);
@@ -163,7 +161,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
         {
             ::oox::ole::VbaProject aVbaProject( m_xContext, xModel, "Writer" );
-            uno::Reference< frame::XFrame > xFrame = aMediaDesc.getUnpackedValueOrDefault(  MediaDescriptor::PROP_FRAME(), uno::Reference< frame::XFrame > () );
+            uno::Reference< frame::XFrame > xFrame = aMediaDesc.getUnpackedValueOrDefault(  utl::MediaDescriptor::PROP_FRAME(), uno::Reference< frame::XFrame > () );
 
             // if no XFrame try fallback to what we can glean from the Model
             if ( !xFrame.is() )
