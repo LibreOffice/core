@@ -777,6 +777,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::EMBED_FONTS, bTmp);
         }
+        break;
         case HANDLE_EMBED_SYSTEM_FONTS:
         {
             bool bTmp = *(sal_Bool*)rValue.getValue();
