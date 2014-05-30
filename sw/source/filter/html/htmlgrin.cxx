@@ -1108,6 +1108,7 @@ void SwHTMLParser::NewAnchor()
 
             case HTML_O_SDONMOUSEOVER:
                 eScriptType2 = STARBASIC;
+                //fall-through
             case HTML_O_ONMOUSEOVER:
                 nEvent = SFX_EVENT_MOUSEOVER_OBJECT;
                 goto ANCHOR_SETEVENT;
