@@ -282,7 +282,7 @@ sal_UCS4 ImplFontCharMap::GetCharFromIndex( int nCharIndex ) const
 
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned Getsal_uInt16( const unsigned char* p ){ return((p[0]<<8) | p[1]);}
-static int GetSShort( const unsigned char* p ){ return((static_cast<signed char>(p[0])<<8)|p[1]);}
+static int GetSShort( const unsigned char* p ){ return static_cast<sal_Int16>((p[0]<<8)|p[1]);}
 
 // TODO: move CMAP parsing directly into the ImplFontCharMap class
 bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
