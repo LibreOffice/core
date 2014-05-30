@@ -237,7 +237,6 @@ protected:
             sal_Int32                m_nParamIndex;
             bool                 m_bIsAlwaysFalseQuery;
             ::rtl::Reference<OKeySet>     m_pKeySet;
-            OSortIndex*              m_pSortIndex;
             sal_Int32                 m_nNewRow;        //inserted row
             sal_Int32                     m_nUpdatedRow;    //updated row
             sal_Int32                 m_RowStates;

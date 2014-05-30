@@ -103,7 +103,6 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const ::boost::shared_ptr< conne
     ,m_nParamIndex(0)
     ,m_bIsAlwaysFalseQuery(false)
     ,m_pKeySet(NULL)
-    ,m_pSortIndex(NULL)
     ,m_nNewRow(0)
     ,m_nUpdatedRow(0)
     ,m_RowStates(0)
@@ -1266,7 +1265,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
                     OSL_ENSURE( m_aQueryHelper.queryComplete(), "Query not complete!!");
 
-                    m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
+                    OSortIndex aSortIndex(eKeyType,m_aOrderbyAscending);
 
                     OSL_TRACE("OrderbyColumnNumber->size() = %zu",m_aOrderbyColumnNumber.size());
 #if OSL_DEBUG_LEVEL > 0
@@ -1287,17 +1286,16 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                             pKeyValue->pushKey(new ORowSetValueDecorator(value));
                         }
 
-                        m_pSortIndex->AddKeyValue( pKeyValue );
+                        aSortIndex.AddKeyValue( pKeyValue );
                     }
 
-                    m_pKeySet = m_pSortIndex->CreateKeySet();
+                    m_pKeySet = aSortIndex.CreateKeySet();
                     m_CurrentRowCount = static_cast<sal_Int32>(m_pKeySet->get().size());
 #if OSL_DEBUG_LEVEL > 0
                     for( OKeySet::Vector::size_type i = 0; i < m_pKeySet->get().size(); i++ )
                         OSL_TRACE("Sorted: %d -> %d", i, (m_pKeySet->get())[i] );
 #endif
 
-                    m_pSortIndex = NULL;
                     beforeFirst(); // Go back to start
                 }
                 else  //we always need m_pKeySet now
