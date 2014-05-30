@@ -254,6 +254,7 @@ int MakeToken( YYSTYPE * pTokenVal )
                     break;
                 case INCLUDE:
                     bLastInclude = true;
+                    //fall-through
                 default:
                     pTokenVal->value = aKey.yylval;
                 }
