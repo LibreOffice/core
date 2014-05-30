@@ -84,7 +84,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
 {
     AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+    FormulaTemplate aTemplate(mDocument);
 
     boost::scoped_ptr<DataRangeIterator> pIterator;
     if (mGroupedBy == BY_COLUMN)
@@ -93,6 +93,9 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
         pIterator.reset(new DataRangeByRowIterator(mInputRange));
 
     aOutput.nextColumn();
+
+    // Use explicit sheet name in case the input and output are on different sheets.
+    bool b3DAddress = mInputRange.aStart.Tab() != mOutputAddress.Tab();
 
     // Write column/row labels
     for( ; pIterator->hasNext(); pIterator->next() )
@@ -128,7 +131,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
         for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != NULL; i++)
         {
             aTemplate.setTemplate(lclCalcDefinitions[i].aFormula);
-            aTemplate.applyRange(strWildcardRange, pIterator->get());
+            aTemplate.applyRange(strWildcardRange, pIterator->get(), b3DAddress);
             aOutput.writeFormula(aTemplate.getTemplate());
             aOutput.nextRow();
         }

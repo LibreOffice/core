@@ -25,8 +25,7 @@ class FormulaTemplate
 {
 private:
     OUString            mTemplate;
-    ScDocument*         mDocument;
-    ScAddress::Details  mAddressDetails;
+    ScDocument*         mpDoc;
 
     typedef std::map<OUString, ScRange>   RangeReplacementMap;
     typedef std::map<OUString, ScAddress> AddressReplacementMap;
@@ -35,18 +34,18 @@ private:
     RangeReplacementMap   mRangeReplacementMap;
 
 public:
-    FormulaTemplate(ScDocument* aDocument, ScAddress::Details aAddressDetails);
+    FormulaTemplate(ScDocument* pDoc);
 
     void      setTemplate(const OUString& aTemplate);
     void      setTemplate(const char* aTemplate);
-    OUString& getTemplate();
+    const OUString& getTemplate();
 
     void      autoReplaceRange(const OUString& aVariable, ScRange aRange);
     void      autoReplaceAddress(const OUString& aVariable, ScAddress aAddress);
 
-    void      applyRange(const OUString& aVariable, ScRange aRange);
-    void      applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList);
-    void      applyAddress(const OUString& aVariable, ScAddress aAddress);
+    void      applyRange(const OUString& aVariable, const ScRange& aRange, bool b3D = true);
+    void      applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList, bool b3D = true);
+    void      applyAddress(const OUString& aVariable, const ScAddress& aAddress, bool b3D = true);
     void      applyString(const OUString& aVariable, const OUString& aValue);
     void      applyNumber(const OUString& aVariable, sal_Int32 aValue);
 };

@@ -53,7 +53,7 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
 {
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+    FormulaTemplate aTemplate(mDocument);
 
     boost::scoped_ptr<DataRangeIterator> pIterator;
     if (mGroupedBy == BY_COLUMN)
