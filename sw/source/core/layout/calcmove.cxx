@@ -1122,7 +1122,7 @@ void SwCntntFrm::MakeAll()
          HasFollow() &&
          GetFollow()->GetFrm() == GetNext() )
     {
-        dynamic_cast<SwTxtFrm*>(this)->JoinFrm();
+        dynamic_cast<SwTxtFrm&>(*this).JoinFrm();
     }
 
     // #i28701# - move master forward, if it has to move,
