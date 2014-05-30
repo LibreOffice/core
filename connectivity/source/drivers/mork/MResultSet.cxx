@@ -823,7 +823,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSL_TRACE("analyseSQL : Got Punctuation ()");
         MQueryExpression *subExpression = new MQueryExpression();
         analyseWhereClause( parseTree->getChild( 1 ), *subExpression );
-        queryExpression.getExpressions().push_back( subExpression );
+        queryExpression.addExpression( subExpression );
     }
     else if ((SQL_ISRULE(parseTree,search_condition) || (SQL_ISRULE(parseTree,boolean_term)))
              && parseTree->count() == 3)                   // Handle AND/OR
@@ -885,7 +885,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             OSL_TRACE("Query always evaluates to FALSE");
             m_bIsAlwaysFalseQuery = true;
         }
-        queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op, matchString ));
+        queryExpression.addExpression( new MQueryExpressionString( columnName, op, matchString ));
     }
     else if (SQL_ISRULE(parseTree,like_predicate))
     {
@@ -1021,7 +1021,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             }
         }
 
-        queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op, matchString ));
+        queryExpression.addExpression( new MQueryExpressionString( columnName, op, matchString ));
     }
     else if (SQL_ISRULE(parseTree,test_for_null))
     {
@@ -1046,7 +1046,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OUString sTableRange;
         m_pSQLIterator->getColumnRange(parseTree->getChild(0),columnName,sTableRange);
 
-        queryExpression.getExpressions().push_back( new MQueryExpressionString( columnName, op ));
+        queryExpression.addExpression( new MQueryExpressionString( columnName, op ));
     }
     else
     {
@@ -1103,12 +1103,10 @@ void OResultSet::fillRowData()
         return;
     }
 
-    m_aQueryHelper.setExpression( queryExpression );
-
     OUString aStr(  m_pTable->getName() );
     m_aQueryHelper.setAddressbook( aStr );
 
-    sal_Int32 rv = m_aQueryHelper.executeQuery(xConnection);
+    sal_Int32 rv = m_aQueryHelper.executeQuery(xConnection, queryExpression);
     if ( rv == -1 ) {
         m_pStatement->getOwnConnection()->throwSQLException( STR_ERR_EXECUTING_QUERY, *this );
     }

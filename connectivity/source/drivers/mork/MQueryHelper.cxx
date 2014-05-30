@@ -97,16 +97,6 @@ void MQueryHelper::setAddressbook(OUString &ab)
     OSL_TRACE("\tOUT MQuery::setAddressbook()");
 }
 
-void MQueryHelper::setExpression( MQueryExpression &_expr )
-{
-    OSL_TRACE("IN MQueryHelper::setExpression()");
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    m_aExpr = _expr;
-
-    OSL_TRACE("\tOUT MQuery::setExpression()");
-}
-
 void MQueryHelper::append(MQueryHelperResultEntry* resEnt)
 {
     if ( resEnt != NULL ) {
@@ -198,7 +188,7 @@ bool MQueryHelper::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUS
     return true;
 }
 
-sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
+sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression & expr)
 {
     reset();
 
@@ -256,7 +246,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
                     OUString valueOUString = OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
                     entry->setValue(key, valueOUString);
                 }
-                ::std::vector< sal_Bool > vector = entryMatchedByExpression(this, &m_aExpr, entry);
+                ::std::vector< sal_Bool > vector = entryMatchedByExpression(this, &expr, entry);
                 bool result = true;
                 for (::std::vector<sal_Bool>::iterator iter = vector.begin(); iter != vector.end(); ++iter)
                 {
@@ -279,7 +269,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
 ::std::vector< sal_Bool > entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression* _aExpr, MQueryHelperResultEntry* entry)
 {
     ::std::vector< sal_Bool > resultVector;
-    MQueryExpression::ExprVector::iterator evIter;
+    MQueryExpression::ExprVector::const_iterator evIter;
     for( evIter = _aExpr->getExpressions().begin();
          evIter != _aExpr->getExpressions().end();
          ++evIter )

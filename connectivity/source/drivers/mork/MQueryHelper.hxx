@@ -27,6 +27,7 @@
 #include <osl/thread.hxx>
 #include <connectivity/FValue.hxx>
 
+#include <boost/noncopyable.hpp>
 #include <boost/unordered_map.hpp>
 
 #include "MErrorResource.hxx"
@@ -68,6 +69,8 @@ namespace connectivity
             MQueryExpressionBase( node_type _eNodeType ) : m_eNodeType( _eNodeType ) {}
 
         public:
+            virtual ~MQueryExpressionBase() {}
+
             bool   isUnknown( ) const { return m_eNodeType == Unknown; }
             bool   isStringExpr( ) const { return m_eNodeType == StringExpr; }
             bool   isExpr( ) const { return m_eNodeType == Expr; }
@@ -105,7 +108,7 @@ namespace connectivity
             const OUString&    getValue() const { return m_aValue; }
         };
 
-        class MQueryExpression : public MQueryExpressionBase
+        class MQueryExpression : public MQueryExpressionBase, private boost::noncopyable
         {
             friend class MQueryHelper;
 
@@ -117,14 +120,14 @@ namespace connectivity
                 OR
             } bool_cond;
 
-            void setExpressions( ExprVector& _exprVector )
-                            { m_aExprVector = _exprVector; }
-
             // All expressions on a peer level use same condition operator
             void setExpressionCondition( bool_cond _cond )
                             { m_aExprCondType = _cond; }
 
-            ExprVector& getExpressions( )
+            void addExpression(MQueryExpressionBase * expr)
+                            { m_aExprVector.push_back(expr); }
+
+            ExprVector const & getExpressions( ) const
                             { return m_aExprVector; }
 
             // All expressions on a peer level use same condition operator
@@ -133,8 +136,15 @@ namespace connectivity
 
             MQueryExpression() : MQueryExpressionBase( MQueryExpressionBase::Expr ),
                                  m_aExprCondType( OR )
-                            { m_aExprVector.clear(); }
+                            {}
 
+            virtual ~MQueryExpression() {
+                for (ExprVector::iterator i(m_aExprVector.begin());
+                     i != m_aExprVector.end(); ++i)
+                {
+                    delete *i;
+                }
+            }
 
         protected:
             ExprVector          m_aExprVector;
@@ -174,7 +184,6 @@ namespace connectivity
             OColumnAlias        m_rColumnAlias;
             ErrorDescriptor     m_aError;
             OUString     m_aAddressbook;
-            MQueryExpression    m_aExpr;
 
 /*
             void            clearResultOrComplete();
@@ -197,14 +206,12 @@ namespace connectivity
             sal_Int32                  getResultCount() const;
             bool                       checkRowAvailable( sal_Int32 nDBRow );
             bool                       getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const OUString& aDBColumnName, sal_Int32 nType );
-            sal_Int32                  executeQuery(OConnection* xConnection);
+            sal_Int32                  executeQuery(OConnection* xConnection, MQueryExpression & expr);
             const OColumnAlias&        getColumnAlias() const { return m_rColumnAlias; }
             bool                       hadError() const { return m_aError.is(); }
             inline ErrorDescriptor&    getError() { return m_aError; }
 
             void                       setAddressbook( OUString&);
-            void                       setExpression( MQueryExpression &_expr );
-
         };
     }
 }
