@@ -76,7 +76,6 @@ DBG_NAMEEX( EditEngine )
 
 class EditView;
 class EditEngine;
-class SvxColorList;
 
 class SvxSearchItem;
 class SvxLRSpaceItem;
