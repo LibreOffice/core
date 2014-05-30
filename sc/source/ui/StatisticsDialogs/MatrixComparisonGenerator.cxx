@@ -70,7 +70,7 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
 {
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+    FormulaTemplate aTemplate(mDocument);
 
     SCTAB inTab = mInputRange.aStart.Tab();
 
