@@ -10,8 +10,22 @@
 $(eval $(call gb_Module_Module,libwps))
 
 $(eval $(call gb_Module_add_targets,libwps,\
-	ExternalProject_libwps \
 	UnpackedTarball_libwps \
 ))
+
+ifeq ($(COM),MSC)
+
+$(eval $(call gb_Module_add_targets,libwps,\
+	Library_wps \
+))
+
+else
+
+$(eval $(call gb_Module_add_targets,libwps,\
+	ExternalPackage_libwps \
+	ExternalProject_libwps \
+))
+
+endif
 
 # vim: set noet sw=4 ts=4:
