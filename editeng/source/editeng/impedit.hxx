@@ -74,7 +74,6 @@
 
 class EditView;
 class EditEngine;
-class SvxColorList;
 
 class SvxSearchItem;
 class SvxLRSpaceItem;

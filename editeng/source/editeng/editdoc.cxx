@@ -2958,45 +2958,6 @@ bool CharAttribList::DbgCheckAttribs() const
 #endif
 
 
-SvxColorList::SvxColorList()
-{
-}
-
-SvxColorList::~SvxColorList()
-{
-    for ( sal_Int32 i = 0, n = aColorList.size(); i < n; ++i )
-        delete aColorList[ i ];
-    aColorList.clear();
-}
-
-sal_Int32 SvxColorList::GetId( const SvxColorItem& rColorItem )
-{
-    for ( sal_Int32 i = 0, n = aColorList.size(); i < n; ++i )
-        if ( *aColorList[ i ] == rColorItem )
-            return i;
-    DBG_WARNING( "Color not found: GetId()" );
-    return 0;
-}
-
-void SvxColorList::Insert( SvxColorItem* pItem, sal_Int32 nIndex )
-{
-    if ( nIndex >= (sal_Int32)aColorList.size() )
-    {
-        aColorList.push_back( pItem );
-    }
-    else
-    {
-        DummyColorList::iterator it = aColorList.begin();
-        ::std::advance( it, nIndex );
-        aColorList.insert( it, pItem );
-    }
-}
-
-SvxColorItem* SvxColorList::GetObject( sal_Int32 nIndex )
-{
-    return ( nIndex >= (sal_Int32)aColorList.size() ) ? NULL : aColorList[ nIndex ];
-}
-
 EditEngineItemPool::EditEngineItemPool( bool bPersistenRefCounts )
     : SfxItemPool( "EditEngineItemPool", EE_ITEMS_START, EE_ITEMS_END,
                     aItemInfos, 0, bPersistenRefCounts )
