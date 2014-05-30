@@ -1221,6 +1221,7 @@ bool ImplSdPPTImport::Import()
                     break;
                     case 5 :    // notes master
                         eEditMode = EM_MASTERPAGE;
+                        //fall-through
                     case 3 :    // notes
                         ePageKind = PK_NOTES;
                     break;
