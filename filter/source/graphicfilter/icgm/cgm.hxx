@@ -94,7 +94,7 @@ class CGM
 
         sal_uInt32          ImplGetUI16( sal_uInt32 nAlign = 0 );
         sal_uInt8           ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision );
-        long                ImplGetI( sal_uInt32 nPrecision );
+        sal_Int32           ImplGetI( sal_uInt32 nPrecision );
         sal_uInt32          ImplGetUI( sal_uInt32 nPrecision );
         void                ImplGetSwitch4( sal_uInt8* pSource, sal_uInt8* pDest );
         void                ImplGetSwitch8( sal_uInt8* pSource, sal_uInt8* pDest );
