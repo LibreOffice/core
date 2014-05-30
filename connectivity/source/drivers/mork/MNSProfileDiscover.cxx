@@ -122,10 +122,9 @@ namespace connectivity
                         fullProfilePath = profilePath;
                     }
 
-                    ProfileStruct*  profileItem     = new ProfileStruct(product,profileName,
+                    m_Product.mProfileList[profileName] = ProfileStruct(product,profileName,
                             fullProfilePath
                         );
-                    m_Product.mProfileList[profileName] = profileItem;
 
                     sal_Int32 isDefault = 0;
                     if (!sIsDefault.isEmpty())
@@ -151,7 +150,7 @@ namespace connectivity
                 return OUString();
             }
             else
-                return m_Product.mProfileList[profileName]->getProfilePath();
+                return m_Product.mProfileList[profileName].getProfilePath();
         }
 
         OUString ProfileAccess::getDefaultProfile( ::com::sun::star::mozilla::MozillaProductType product ) throw (::com::sun::star::uno::RuntimeException)
@@ -168,8 +167,7 @@ namespace connectivity
                 //there are not any profiles
                 return OUString();
             }
-            ProfileStruct * aProfile = (*m_Product.mProfileList.begin()).second;
-            return aProfile->getProfileName();
+            return (*m_Product.mProfileList.begin()).second.getProfileName();
         }
     }
 }
