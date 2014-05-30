@@ -486,30 +486,41 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_WATERCAN:
             {
-                ISfxTemplateCommon* pTemplateCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
-                if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
+                SfxPoolItem* pItem = NULL;
+                GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
+                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
+                if (pFamilyItem && SfxTemplateDialog::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
                     rSet.Put(SfxBoolItem(nWhich,false));
                 else
                 {
                     SfxBoolItem aItem(nWhich, SD_MOD()->GetWaterCan());
                     aAllSet.Put( aItem, aItem.Which());
                 }
+                delete pItem;
             }
             break;
 
             case SID_STYLE_NEW:
             {
-                ISfxTemplateCommon* pTemplateCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
-                if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
+                SfxPoolItem* pItem = NULL;
+                GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
+                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
+                if (pFamilyItem && SfxTemplateDialog::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
+                {
                     rSet.DisableItem(nWhich);
+                }
+                delete pItem;
             }
             break;
 
             case SID_STYLE_DRAGHIERARCHIE:
             {
-                ISfxTemplateCommon* pTemplateCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
-                if (pTemplateCommon && pTemplateCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
+                SfxPoolItem* pItem = NULL;
+                GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
+                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
+                if (pFamilyItem && SfxTemplateDialog::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
                     rSet.DisableItem(nWhich);
+                delete pItem;
             }
             break;
 
@@ -517,14 +528,17 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 // It is not possible to create PseudoStyleSheets 'by Example';
                 // normal style sheets need a selected object for that
-                ISfxTemplateCommon* pTemplCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
-                if (pTemplCommon)
+
+                SfxPoolItem* pItem = NULL;
+                GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
+                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
+                if (pFamilyItem)
                 {
-                    if (pTemplCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
+                    if (SfxTemplateDialog::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
                     {
                         rSet.DisableItem(nWhich);
                     }
-                    else if (pTemplCommon->GetActualFamily() == SD_STYLE_FAMILY_GRAPHICS)
+                    else if (SfxTemplateDialog::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_GRAPHICS)
                     {
                         if (!mpDrawView->AreObjectsMarked())
                         {
@@ -532,7 +546,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                         }
                     }
                 }
-                // if there is no (yet) a designer, we have to go back into the
+                // if there is no (yet) a style designer, we have to go back into the
                 // view state; an actual set family can not be considered
                 else
                 {
@@ -541,7 +555,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                         rSet.DisableItem(nWhich);
                     }
                 }
-
+                delete pItem;
             }
             break;
 

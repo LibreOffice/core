@@ -139,17 +139,6 @@ private:
     class DeletionWatcher;
     friend class DeletionWatcher;
     bool mbIgnoreSelect;
-    class ISfxTemplateCommon_Impl : public ISfxTemplateCommon
-    {
-    private:
-        SfxCommonTemplateDialog_Impl* pDialog;
-    public:
-        ISfxTemplateCommon_Impl( SfxCommonTemplateDialog_Impl* pDialogP ) : pDialog( pDialogP ) {}
-        virtual ~ISfxTemplateCommon_Impl() {}
-        virtual SfxStyleFamily GetActualFamily() const SAL_OVERRIDE { return pDialog->GetActualFamily(); }
-    };
-
-    ISfxTemplateCommon_Impl     aISfxTemplateCommon;
 
     void    ReadResource();
     void    ClearResource();
@@ -285,7 +274,6 @@ public:
     virtual void        EnableHide( bool b = true )  { bCanHide = b; }
     virtual void        EnableShow( bool b = true )  { bCanShow = b; }
 
-    ISfxTemplateCommon* GetISfxTemplateCommon() { return &aISfxTemplateCommon; }
     Window*             GetWindow() { return pWindow; }
 
     void                EnableTreeDrag( bool b = true );
@@ -305,9 +293,6 @@ public:
 
     // normaly for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
     virtual PopupMenu*  CreateContextMenu( void );
-
-    // converts from SFX_STYLE_FAMILY Ids to 1-5
-    static sal_uInt16       SfxFamilyIdToNId( SfxStyleFamily nFamily );
 
     void                SetAutomaticFilter();
 };

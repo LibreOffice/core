@@ -1594,9 +1594,10 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_EDIT:
             {
-                ISfxTemplateCommon* pTmplCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
-
-                if (pTmplCommon && pTmplCommon->GetActualFamily() == SD_STYLE_FAMILY_PSEUDO)
+                SfxPoolItem* pItem = NULL;
+                GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
+                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
+                if (pFamilyItem && SfxTemplateDialog::NIdToSfxFamilyId(pFamilyItem->GetValue()) == SD_STYLE_FAMILY_PSEUDO)
                 {
                     SfxItemSet aSet(*rSet.GetPool(), SID_STATUS_LAYOUT, SID_STATUS_LAYOUT);
                     GetStatusBarState(aSet);
@@ -1607,6 +1608,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
                         rSet.DisableItem(nWhich);
                     }
                 }
+                delete pItem;
             }
             break;
 

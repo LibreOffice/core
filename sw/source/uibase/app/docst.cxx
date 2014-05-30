@@ -100,9 +100,14 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     else
     {
         SfxViewFrame* pFrame = pShell->GetView().GetViewFrame();
-        const ISfxTemplateCommon* pCommon = SFX_APP()->GetCurrentTemplateCommon(pFrame->GetBindings());
-        if( pCommon )
-            nActualFamily = static_cast< sal_uInt16 >(pCommon->GetActualFamily());
+        SfxPoolItem* pItem = NULL;
+        pFrame->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
+        SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem);
+        if (pFamilyItem)
+        {
+            nActualFamily = static_cast<sal_uInt16>(SfxTemplateDialog::NIdToSfxFamilyId(pFamilyItem->GetValue()));
+        }
+        delete pItem;
     }
 
     while (nWhich)
