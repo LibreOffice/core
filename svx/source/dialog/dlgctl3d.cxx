@@ -224,8 +224,11 @@ void Svx3DPreviewControl::SetObjectType(sal_uInt16 nType)
             break;
         }
 
-        mpScene->Insert3DObj( mp3DObj );
-        mp3DObj->SetMergedItemSet(aSet);
+        if (mp3DObj)
+        {
+            mpScene->Insert3DObj( mp3DObj );
+            mp3DObj->SetMergedItemSet(aSet);
+        }
 
         Resize();
     }
