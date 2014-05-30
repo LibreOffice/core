@@ -1442,6 +1442,13 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             }
             else
                 xPrSet->setPropertyValue(rPropertyName, aValue);
+
+            if (pFmt)
+            {
+                // We have a pFmt (but no pEntry): try to sync TextBox property.
+                SwTextBoxHelper::syncProperty(pFmt, rPropertyName, aValue);
+            }
+
             // #i31698# - restore object position, if caption point is set.
             if ( rPropertyName == "CaptionPoint" && getShapeType() == "com.sun.star.drawing.CaptionShape" )
             {
