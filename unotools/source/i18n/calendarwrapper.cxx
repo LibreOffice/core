@@ -98,12 +98,12 @@ OUString CalendarWrapper::getUniqueID() const
     return OUString();
 }
 
-void CalendarWrapper::setDateTime( double nTimeInDays )
+void CalendarWrapper::setDateTime( double fTimeInDays )
 {
     try
     {
         if ( xC.is() )
-            xC->setDateTime( nTimeInDays );
+            xC->setDateTime( fTimeInDays );
     }
     catch (const Exception& e)
     {
@@ -160,7 +160,7 @@ sal_Int32 CalendarWrapper::getDSTOffsetInMillis() const
             CalendarFieldIndex::DST_OFFSET_SECOND_MILLIS);
 }
 
-void CalendarWrapper::setLocalDateTime( double nTimeInDays )
+void CalendarWrapper::setLocalDateTime( double fTimeInDays )
 {
     try
     {
@@ -173,11 +173,11 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
             // dates! (Which was the cause for #i76623# when the timezone of a
             // previously set date was used.) Timezone may also include
             // seconds, so use milliseconds field as well.
-            xC->setDateTime( nTimeInDays );
+            xC->setDateTime( fTimeInDays );
             sal_Int32 nZone1 = getZoneOffsetInMillis();
             sal_Int32 nDST1  = getDSTOffsetInMillis();
-            double nLoc = nTimeInDays - (double)(nZone1 + nDST1) / MILLISECONDS_PER_DAY;
-            xC->setDateTime( nLoc );
+            double fLoc = fTimeInDays - (double)(nZone1 + nDST1) / MILLISECONDS_PER_DAY;
+            xC->setDateTime( fLoc );
             sal_Int32 nZone2 = getZoneOffsetInMillis();
             sal_Int32 nDST2  = getDSTOffsetInMillis();
             // If DSTs differ after calculation, we crossed boundaries. Do it
@@ -187,8 +187,8 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
             // http://www.erack.de/download/timetest.c
             if ( nDST1 != nDST2 )
             {
-                nLoc = nTimeInDays - (double)(nZone2 + nDST2) / MILLISECONDS_PER_DAY;
-                xC->setDateTime( nLoc );
+                fLoc = fTimeInDays - (double)(nZone2 + nDST2) / MILLISECONDS_PER_DAY;
+                xC->setDateTime( fLoc );
                 // #i17222# If the DST onset rule says to switch from 00:00 to
                 // 01:00 and we tried to set onsetDay 00:00 with DST, the
                 // result was onsetDay-1 23:00 and no DST, which is not what we
@@ -198,8 +198,8 @@ void CalendarWrapper::setLocalDateTime( double nTimeInDays )
                 sal_Int32 nDST3 = getDSTOffsetInMillis();
                 if ( nDST2 != nDST3 && !nDST3 )
                 {
-                    nLoc = nTimeInDays - (double)(nZone2 + nDST3) / MILLISECONDS_PER_DAY;
-                    xC->setDateTime( nLoc );
+                    fLoc = fTimeInDays - (double)(nZone2 + nDST3) / MILLISECONDS_PER_DAY;
+                    xC->setDateTime( fLoc );
                 }
             }
         }
@@ -216,11 +216,11 @@ double CalendarWrapper::getLocalDateTime() const
     {
         if ( xC.is() )
         {
-            double nTimeInDays = xC->getDateTime();
+            double fTimeInDays = xC->getDateTime();
             sal_Int32 nZone = getZoneOffsetInMillis();
             sal_Int32 nDST = getDSTOffsetInMillis();
-            nTimeInDays += (double)(nZone + nDST) / MILLISECONDS_PER_DAY;
-            return nTimeInDays;
+            fTimeInDays += (double)(nZone + nDST) / MILLISECONDS_PER_DAY;
+            return fTimeInDays;
         }
     }
     catch (const Exception& e)
