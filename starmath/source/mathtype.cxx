@@ -2635,11 +2635,13 @@ void MathType::HandleOperator(SmNode *pNode,int nLevel)
         pS->WriteUChar( sal_uInt8(CHAR) );
         pS->WriteUChar( sal_uInt8(0x86) );
         pS->WriteUInt16( sal_uInt16(0x222B) );
+        ///fall-through
     case TIINT:
     case TLLINT:
         pS->WriteUChar( sal_uInt8(CHAR) );
         pS->WriteUChar( sal_uInt8(0x86) );
         pS->WriteUInt16( sal_uInt16(0x222B) );
+        ///fall-through
     case TINT:
     case TINTD:
     case TLINT:
