@@ -83,6 +83,20 @@ typedef struct
 namespace
 {
 
+rtl::OUString lcl_normalizeSubStreamPath(const rtl::OUString &rPath)
+{
+    // accept paths which begin by '/'
+    // TODO: maybe this should to a full normalization
+    if (rPath.startsWith("/") && rPath.getLength() >= 2)
+        return rPath.copy(1);
+    return rPath;
+}
+
+}
+
+namespace
+{
+
 const rtl::OUString concatPath(const rtl::OUString &lhs, const rtl::OUString &rhs)
 {
     if (lhs.isEmpty())
@@ -174,10 +188,7 @@ void OLEStorageImpl::initialize(SvStream *const pStream)
 
 SotStorageStreamRef OLEStorageImpl::getStream(const rtl::OUString &rPath)
 {
-    rtl::OUString aPath(rPath);
-    // accept paths which begin by '/'
-    if (aPath.startsWith("/") && aPath.getLength() >= 2)
-        aPath=rPath.copy(1);
+    const rtl::OUString aPath(lcl_normalizeSubStreamPath(rPath));
     NameMap_t::iterator aIt = maNameMap.find(aPath);
 
     // For the while don't return stream in this situation.
@@ -324,7 +335,8 @@ void ZipStorageImpl::initialize()
 
 Reference<XInputStream> ZipStorageImpl::getStream(const rtl::OUString &rPath)
 {
-    NameMap_t::iterator aIt = maNameMap.find(rPath);
+    const rtl::OUString aPath(lcl_normalizeSubStreamPath(rPath));
+    NameMap_t::iterator aIt = maNameMap.find(aPath);
 
     // For the while don't return stream in this situation.
     // Later, given how libcdr's zip stream implementation behaves,
@@ -333,7 +345,7 @@ Reference<XInputStream> ZipStorageImpl::getStream(const rtl::OUString &rPath)
         return Reference<XInputStream>();
 
     if (!maStreams[aIt->second].xStream.is())
-        maStreams[aIt->second].xStream = createStream(rPath);
+        maStreams[aIt->second].xStream = createStream(aPath);
 
     return maStreams[aIt->second].xStream;
 }
