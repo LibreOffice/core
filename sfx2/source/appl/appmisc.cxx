@@ -135,15 +135,6 @@ SfxModule* SfxApplication::GetModule_Impl()
     }
 }
 
-ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBindings )
-{
-    SfxChildWindow *pChild = rBindings.GetWorkWindow_Impl()->GetChildWindow_Impl(
-        SfxTemplateDialogWrapper::GetChildWindowId() );
-    if ( pChild )
-        return ((SfxTemplateDialog*) pChild->GetWindow())->GetISfxTemplateCommon();
-    return 0;
-}
-
 bool  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
 SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }
 SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl->pSlotPool; }

@@ -174,9 +174,6 @@ public:
     SfxTemplateDialog*          GetTemplateDialog();
     Window*                     GetTopWindow() const;
 
-    // TODO/CLEANUP: make currently selected family a view property and so we don't need to query the status from the "TemplateCommon"
-    ISfxTemplateCommon*         GetCurrentTemplateCommon( SfxBindings& );
-
     // members
     SfxFilterMatcher&           GetFilterMatcher();
     SfxProgress*                GetProgress() const;

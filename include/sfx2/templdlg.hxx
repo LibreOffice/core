@@ -30,19 +30,7 @@
 
 class SfxTemplateDialog_Impl;
 
-// class ISfxTemplateCommon ----------------------------------------------
-
-class ISfxTemplateCommon
-{
-public:
-    virtual SfxStyleFamily GetActualFamily() const = 0;
-
-protected:
-    ~ISfxTemplateCommon() {}
-};
-
 // class SfxTemplateDialog -----------------------------------------------
-
 class SfxTemplateDialog : public SfxDockingWindow
 {
 private:
@@ -62,8 +50,12 @@ public:
 
     virtual void                Update();
 
-    ISfxTemplateCommon*         GetISfxTemplateCommon();
     void                        SetParagraphFamily();
+
+    // converts from SFX_STYLE_FAMILY Ids to 1-5
+    static sal_uInt16 SFX2_DLLPUBLIC SfxFamilyIdToNId(SfxStyleFamily nFamily);
+    // converts from 1-5 to SFX_STYLE_FAMILY Ids
+    static SfxStyleFamily SFX2_DLLPUBLIC NIdToSfxFamilyId(sal_uInt16 nId);
 };
 
 // class SfxTemplateDialogWrapper ----------------------------------------
