@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
- #define INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
+#ifndef INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
 
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -30,11 +30,11 @@ class SwTable;
 class SwChartDataProvider;
 class SwChartLockController_Helper;
 
- /** Give access to the data-provider for chart
+/** Give access to the data-provider for chart
  */
- class IDocumentChartDataProviderAccess
- {
- public:
+class IDocumentChartDataProviderAccess
+{
+public:
 
     /**
         returns or creates the data-provider for chart
@@ -52,10 +52,10 @@ class SwChartLockController_Helper;
     */
     virtual SwChartLockController_Helper & GetChartControllerHelper() = 0;
 
- protected:
+protected:
     virtual ~IDocumentChartDataProviderAccess() {};
- };
+};
 
- #endif // INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
+#endif // INCLUDED_SW_INC_IDOCUMENTCHARTDATAPROVIDERACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

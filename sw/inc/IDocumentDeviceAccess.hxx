@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
- #define INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
+#ifndef INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
 
- class SfxPrinter;
- class JobSetup;
- class SwPrintData;
- class VirtualDevice;
- class OutputDevice;
+class SfxPrinter;
+class JobSetup;
+class SwPrintData;
+class VirtualDevice;
+class OutputDevice;
 
- /** Provides access to the formatting devices of a document
+/** Provides access to the formatting devices of a document
  */
- class IDocumentDeviceAccess
- {
- public:
+class IDocumentDeviceAccess
+{
+public:
 
     /** Return the printer set at the document.
 
@@ -130,10 +130,10 @@
      */
     virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData) = 0;
 
- protected:
+protected:
     virtual ~IDocumentDeviceAccess() {};
- };
+};
 
- #endif // INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
+#endif // INCLUDED_SW_INC_IDOCUMENTDEVICEACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

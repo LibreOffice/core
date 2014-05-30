@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WW8STTBF_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_WW8STTBF_HXX
+
 #include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/shared_array.hpp>
@@ -134,5 +137,7 @@ typedef ::std::vector<OUString> StringVector_t;
     {
     }
 }
+
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_WW8STTBF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

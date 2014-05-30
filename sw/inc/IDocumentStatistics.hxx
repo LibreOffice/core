@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX
- #define INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX
+#ifndef INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX
 
- struct SwDocStat;
+struct SwDocStat;
 
- /** Document statistics information
+/** Document statistics information
  */
- class IDocumentStatistics
- {
- public:
+class IDocumentStatistics
+{
+public:
 
     /** DocInfo has changed (notify via DocShell):
         make required fields update.
@@ -60,8 +60,8 @@
 
 protected:
     virtual ~IDocumentStatistics() {};
- };
+};
 
- #endif // INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX
+#endif // INCLUDED_SW_INC_IDOCUMENTSTATISTICS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

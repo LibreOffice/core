@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
- #define INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
+#ifndef INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
+#define INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
 
- #include <tools/solar.h>
+#include <tools/solar.h>
 
- /** Get information about the current document state
+/** Get information about the current document state
  */
- class IDocumentState
- {
- public:
+class IDocumentState
+{
+public:
     /** Must be called manually at changes of format.
     */
     virtual void SetModified() = 0;
@@ -56,10 +56,10 @@
 
     virtual void SetLoaded(bool b = true) = 0;
 
- protected:
+protected:
     virtual ~IDocumentState() {};
- };
+};
 
- #endif // INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
+#endif // INCLUDED_SW_INC_IDOCUMENTSTATE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

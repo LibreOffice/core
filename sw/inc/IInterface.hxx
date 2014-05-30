@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IINTERFACE_HXX
- #define INCLUDED_SW_INC_IINTERFACE_HXX
+#ifndef INCLUDED_SW_INC_IINTERFACE_HXX
+#define INCLUDED_SW_INC_IINTERFACE_HXX
 
- #include <sal/types.h>
+#include <sal/types.h>
 
- /** The base interface
+/** The base interface
  */
- class IInterface
- {
- public:
+class IInterface
+{
+public:
 
     /** Acquire a reference to an instance. A caller shall release
         the instance by calling 'release' when it is no longer needed.
@@ -54,8 +54,8 @@
 
 protected:
     virtual ~IInterface() {};
- };
+};
 
- #endif // IDOCUMENT_HXX_INCLUDED
+#endif // INCLUDED_SW_INC_IINTERFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

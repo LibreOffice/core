@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IDOCUMENTSTYLEPOOLACCESS_HXX
- #define INCLUDED_SW_INC_IDOCUMENTSTYLEPOOLACCESS_HXX
+#ifndef INCLUDED_SW_INC_IDOCUMENTSTYLEPOOLACCESS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTSTYLEPOOLACCESS_HXX
 
- #include <sal/types.h>
+#include <sal/types.h>
 
- class SwTxtFmtColl;
- class SwCharFmt;
- class SwFmt;
- class SwFrmFmt;
- class SwNumRule;
- class SwPageDesc;
+class SwTxtFmtColl;
+class SwCharFmt;
+class SwFmt;
+class SwFrmFmt;
+class SwNumRule;
+class SwPageDesc;
 
- /** Access to the style pool
+/** Access to the style pool
  */
- class IDocumentStylePoolAccess
- {
- public:
+class IDocumentStylePoolAccess
+{
+public:
 
     /** Return "Auto-Collection with ID.
         Create, if it does not yet exist.
@@ -64,7 +64,7 @@
     virtual bool IsPoolFmtUsed( sal_uInt16 nId ) const = 0;
     virtual bool IsPoolPageDescUsed( sal_uInt16 nId ) const = 0;
 
- protected:
+protected:
     virtual ~IDocumentStylePoolAccess() {};
 };
 

@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_SW_QA_EXTRAS_INC_SWMODELTESTBASE_HXX
+#define INCLUDED_SW_QA_EXTRAS_INC_SWMODELTESTBASE_HXX
+
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
@@ -641,5 +644,7 @@ inline void assertBorderEqual(
 
 #define CPPUNIT_ASSERT_BORDER_EQUAL(aExpected, aActual) \
         assertBorderEqual( aExpected, aActual, CPPUNIT_SOURCELINE() ) \
+
+#endif // INCLUDED_SW_QA_EXTRAS_INC_SWMODELTESTBASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

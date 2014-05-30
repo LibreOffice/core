@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW1_W1CLASS_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW1_W1CLASS_HXX
+
 #include <rtl/ustring.hxx>
 
 // local
@@ -1481,5 +1485,7 @@ public:
     void Push1(Ww1PlainText* pDoc, sal_uLong ulSeek, sal_uLong ulSeek2 = 0,
                Ww1Fields* = 0);
 };
+
+#endif // INCLUDED_SW_SOURCE_FILTER_WW1_W1CLASS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
