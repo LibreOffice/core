@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR.HXX
+#define INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR.HXX
+
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 
@@ -24,8 +27,8 @@
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 
 #include <boost/unordered_set.hpp>
-#       include <osl/socket.hxx>
-#       include <osl/pipe.hxx>
+#include <osl/socket.hxx>
+#include <osl/pipe.hxx>
 
 namespace stoc_connector
 {
@@ -130,5 +133,6 @@ namespace stoc_connector
     };
 }
 
+#endif // INCLUDED_IO_SOURCE_CONNECTOR_CONNECTOR.HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

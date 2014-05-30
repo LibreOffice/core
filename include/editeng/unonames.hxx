@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_INCLUDE_EDITENG_UNONAMES_HXX
+#define INCLUDED_INCLUDE_EDITENG_UNONAMES_HXX
+
 // Common across fields
 #define UNO_TC_PROP_ANCHOR               "Anchor"
 #define UNO_TC_PROP_TEXTFIELD_TYPE       "TextFieldType"
@@ -39,5 +42,7 @@
 #define UNO_TC_PROP_MEASURE_KIND "Kind"
 
 #define UNO_TR_PROP_SELECTION "Selection"
+
+#endif // INCLUDED_INCLUDE_EDITENG_UNONAMES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
