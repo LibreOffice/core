@@ -114,6 +114,7 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
         case ENDIF:
             if (recursion)
                 return(type);
+            /*fall-through*/
         case DEFINE:
             define(line, &symbols);
             break;
