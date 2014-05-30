@@ -26,6 +26,7 @@
 #include <svx/unopage.hxx>
 #include <svx/svdpage.hxx>
 
+#include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -212,7 +213,18 @@ Rectangle SwTextBoxHelper::getTextRectangle(SwFrmFmt* pShape, bool bAbsolute)
     aRet.SetEmpty();
     SdrObjCustomShape* pCustomShape = dynamic_cast<SdrObjCustomShape*>(pShape->FindRealSdrObject());
     if (pCustomShape)
+    {
+        // Need to temporarily release the lock acquired in
+        // SdXMLShapeContext::AddShape(), otherwise we get an empty rectangle,
+        // see EnhancedCustomShapeEngine::getTextBounds().
+        uno::Reference<document::XActionLockable> xLockable(pCustomShape->getUnoShape(), uno::UNO_QUERY);
+        sal_Int16 nLocks = 0;
+        if (xLockable.is())
+            nLocks = xLockable->resetActionLocks();
         pCustomShape->GetTextBounds(aRet);
+        if (nLocks)
+            xLockable->setActionLocks(nLocks);
+    }
 
     if (!bAbsolute)
     {
@@ -226,6 +238,12 @@ Rectangle SwTextBoxHelper::getTextRectangle(SwFrmFmt* pShape, bool bAbsolute)
     }
 
     return aRet;
+}
+
+void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, const OUString& rPropertyName, const css::uno::Any& /*rValue*/)
+{
+    if (rPropertyName == "CustomShapeGeometry")
+        syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any());
 }
 
 void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, const css::uno::Any& rValue)
