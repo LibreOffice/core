@@ -631,17 +631,48 @@ private:
 class DocumentGuard : private ModelMethodGuard
 {
 public:
-    enum MethodType
+    enum __InitMethod
     {
         // a method which is to initialize the document
         InitMethod,
+    };
+
+    enum __DefaultMethod
+    {
         // a default method
-        DefaultMethod,
+        DefaultMethod
+    };
+
+    enum __MethodUsedDuringInit
+    {
         // a method which is used (externally) during the initialization phase
-        MethodUsedDuringInit,
+        MethodUsedDuringInit
+    };
+
+    enum __MethodWithoutInit
+    {
         // a method which does not need initialization - use with care!
         MethodWithoutInit
     };
+
+
+    /** constructs the guard
+
+        @param _document
+            the ODatabaseDocument instance
+
+        @throws ::com::sun::star::lang::DisposedException
+            If the given component is already disposed
+
+        @throws ::com::sun::star::lang::NotInitializedException
+            if the given component is not yet initialized
+    */
+    DocumentGuard(const ODatabaseDocument& _document, __DefaultMethod)
+        : ModelMethodGuard(_document)
+        , m_document(_document )
+    {
+        m_document.checkInitialized();
+    }
 
     /** constructs the guard
 
@@ -652,24 +683,46 @@ public:
             If the given component is already disposed
 
         @throws ::com::sun::star::frame::DoubleInitializationException
-            if _eType is InitMethod, and the given component is already initialized, or currently being initialized.
+            if the given component is already initialized, or currently being initialized.
+    */
+    DocumentGuard(const ODatabaseDocument& _document, __InitMethod)
+        : ModelMethodGuard(_document)
+        , m_document(_document)
+    {
+        m_document.checkNotInitialized();
+    }
+
+    /** constructs the guard
+
+        @param _document
+            the ODatabaseDocument instance
+
+        @throws ::com::sun::star::lang::DisposedException
+            If the given component is already disposed
 
         @throws ::com::sun::star::lang::NotInitializedException
-            if _eType is DefaultMethod, and the given component is not yet initialized; or if _eType
-            is MethodUsedDuringInit, and the component is still uninitialized, and not in the initialization
+            if the component is still uninitialized, and not in the initialization
             phase currently.
     */
-    DocumentGuard( const ODatabaseDocument& _document, MethodType _eType = DefaultMethod )
-        :ModelMethodGuard( _document )
-        ,m_document( _document )
+    DocumentGuard(const ODatabaseDocument& _document, __MethodUsedDuringInit)
+        : ModelMethodGuard(_document)
+        , m_document(_document)
     {
-        switch ( _eType )
-        {
-            case InitMethod:            m_document.checkNotInitialized();    break;
-            case DefaultMethod:         m_document.checkInitialized();       break;
-            case MethodUsedDuringInit:  m_document.checkNotUninitilized();   break;
-            case MethodWithoutInit:                                         break;
-        }
+        m_document.checkNotUninitilized();
+    }
+
+    /** constructs the guard
+
+        @param _document
+            the ODatabaseDocument instance
+
+        @throws ::com::sun::star::lang::DisposedException
+            If the given component is already disposed
+    */
+    DocumentGuard(const ODatabaseDocument& _document, __MethodWithoutInit)
+        : ModelMethodGuard( _document )
+        , m_document( _document )
+    {
     }
 
     ~DocumentGuard()
