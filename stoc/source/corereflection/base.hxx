@@ -18,6 +18,9 @@
  */
 //  #define TEST_LIST_CLASSES
 
+#ifndef INCLUDED_STOC_SOURCE_COREREFLECTION_BASE_HXX
+#define INCLUDED_STOC_SOURCE_COREREFLECTION_BASE_HXX
+
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <uno/mapping.hxx>
@@ -431,5 +434,7 @@ inline bool coerce_assign(
 
 }
 
+
+#endif // INCLUDED_STOC_SOURCE_COREREFLECTION_BASE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
