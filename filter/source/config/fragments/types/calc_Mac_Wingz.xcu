@@ -18,7 +18,7 @@
     <node oor:name="calc_Mac_Wingz" oor:op="replace" >
         <prop oor:name="DetectService"><value>com.sun.star.comp.Calc.MWAWCalcImportFilter</value></prop>
         <prop oor:name="URLPattern"/>
-        <prop oor:name="Extensions"><value></value></prop>
+        <prop oor:name="Extensions"><value>dummy</value></prop>
         <prop oor:name="MediaType"></prop>
         <prop oor:name="Preferred"><value>true</value></prop>
         <prop oor:name="PreferredFilter"><value>Mac_Wingz_Calc</value></prop>
