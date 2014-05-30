@@ -44,7 +44,7 @@ class FixedLine;
 //and SfxDockingWindow, where it is changed into a UniqueId and cleared
 //This reverses the clear of the HelpId
 
-SFX2_DLLPUBLIC inline void reverseUniqueHelpIdHack(Window &rWindow)
+inline void reverseUniqueHelpIdHack(Window &rWindow)
 {
     if (rWindow.GetHelpId().isEmpty())
         rWindow.SetHelpId(rWindow.GetUniqueId());

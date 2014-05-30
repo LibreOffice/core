@@ -757,13 +757,13 @@ VCL_DLLPUBLIC Window* prevLogicalChildOfParent(Window *pTopLevel, Window *pChild
 //Returns true is the Window has a single child which is a container
 VCL_DLLPUBLIC bool isLayoutEnabled(const Window *pWindow);
 
-VCL_DLLPUBLIC inline bool isContainerWindow(const Window &rWindow)
+inline bool isContainerWindow(const Window &rWindow)
 {
     WindowType eType = rWindow.GetType();
     return (eType == WINDOW_CONTAINER || eType == WINDOW_SCROLLWINDOW);
 }
 
-VCL_DLLPUBLIC inline bool isContainerWindow(const Window *pWindow)
+inline bool isContainerWindow(const Window *pWindow)
 {
     return pWindow && isContainerWindow(*pWindow);
 }

@@ -198,56 +198,56 @@ namespace basegfx
 
 
 
-    BASEGFX_DLLPUBLIC inline B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    inline B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB)
     {
         B2ITuple aSum(rTupA);
         aSum += rTupB;
         return aSum;
     }
 
-    BASEGFX_DLLPUBLIC inline B2ITuple operator-(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    inline B2ITuple operator-(const B2ITuple& rTupA, const B2ITuple& rTupB)
     {
         B2ITuple aSub(rTupA);
         aSub -= rTupB;
         return aSub;
     }
 
-    BASEGFX_DLLPUBLIC inline B2ITuple operator/(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    inline B2ITuple operator/(const B2ITuple& rTupA, const B2ITuple& rTupB)
     {
         B2ITuple aDiv(rTupA);
         aDiv /= rTupB;
         return aDiv;
     }
 
-    BASEGFX_DLLPUBLIC inline B2ITuple operator*(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    inline B2ITuple operator*(const B2ITuple& rTupA, const B2ITuple& rTupB)
     {
         B2ITuple aMul(rTupA);
         aMul *= rTupB;
         return aMul;
     }
 
-    BASEGFX_DLLPUBLIC inline B2ITuple operator*(const B2ITuple& rTup, sal_Int32 t)
+    inline B2ITuple operator*(const B2ITuple& rTup, sal_Int32 t)
     {
         B2ITuple aNew(rTup);
         aNew *= t;
         return aNew;
     }
 
-    BASEGFX_DLLPUBLIC inline B2ITuple operator*(sal_Int32 t, const B2ITuple& rTup)
+    inline B2ITuple operator*(sal_Int32 t, const B2ITuple& rTup)
     {
         B2ITuple aNew(rTup);
         aNew *= t;
         return aNew;
     }
 
-    BASEGFX_DLLPUBLIC inline B2ITuple operator/(const B2ITuple& rTup, sal_Int32 t)
+    inline B2ITuple operator/(const B2ITuple& rTup, sal_Int32 t)
     {
         B2ITuple aNew(rTup);
         aNew /= t;
         return aNew;
     }
 
-    BASEGFX_DLLPUBLIC inline B2ITuple operator/(sal_Int32 t, const B2ITuple& rTup)
+    inline B2ITuple operator/(sal_Int32 t, const B2ITuple& rTup)
     {
         B2ITuple aNew(t, t);
         B2ITuple aTmp(rTup);
