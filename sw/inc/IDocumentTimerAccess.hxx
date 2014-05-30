@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
- #define INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
+#ifndef INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
 
- /** Manipulate background jobs of the document. It starts with a mode of
+/** Manipulate background jobs of the document. It starts with a mode of
  'started' and a block count of 0.
  */
- class IDocumentTimerAccess
- {
- public:
+class IDocumentTimerAccess
+{
+public:
     /**
     Set modus to 'start'.
     */
@@ -55,10 +55,10 @@
     */
     virtual void StartBackgroundJobs() = 0;
 
- protected:
+protected:
     virtual ~IDocumentTimerAccess() {};
- };
+};
 
- #endif // INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
+#endif // INCLUDED_SW_INC_IDOCUMENTTIMERACCESS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
