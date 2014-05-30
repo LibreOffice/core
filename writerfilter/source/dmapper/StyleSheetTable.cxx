@@ -1113,8 +1113,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             // Don't add the style name properties
                             bool bIsParaStyleName = aPropValues[nProp].Name == "ParaStyleName";
                             bool bIsCharStyleName = aPropValues[nProp].Name == "CharStyleName";
-                            bool bIsParaInteropGrabBag = aPropValues[nProp].Name == "ParaInteropGrabBag";
-                            if ( !bIsParaStyleName && !bIsCharStyleName && !bIsParaInteropGrabBag)
+                            if ( !bIsParaStyleName && !bIsCharStyleName )
                             {
                                 aSortedPropVals.Insert( aPropValues[nProp] );
                             }

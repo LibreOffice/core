@@ -3426,6 +3426,21 @@ DECLARE_OOXMLEXPORT_TEST(testFdo78910, "fdo78910.docx")
     assertXPath ( pXmlDoc, "//w:hyperlink[2]/w:r[5]/w:fldChar", "fldCharType", "end" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo76934, "fdo76934.docx")
+{
+    /* Issue was, AuoSpacing property if present inside styles.xml, LO was not able to
+     * preserve it.
+     */
+
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+
+    if (!pXmlDoc)
+        return;
+
+    // Ensure that after fix LO is preserving AutoSpacing property in styles.xml
+    assertXPath ( pXmlDoc, "/w:styles[1]/w:style[36]/w:pPr[1]/w:spacing[1]", "beforeAutospacing", "1" );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
 {
     xmlDocPtr pXmlFootNotes = parseExport("word/footnotes.xml");

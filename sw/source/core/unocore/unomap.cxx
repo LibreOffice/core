@@ -535,7 +535,8 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { OUString(UNO_NAME_SNAP_TO_GRID), RES_PARATR_SNAPTOGRID, cppu::UnoType<bool>::get(), PropertyAttribute::MAYBEVOID, 0 }, \
                     { OUString(UNO_NAME_OUTLINE_LEVEL), RES_PARATR_OUTLINELEVEL,cppu::UnoType<sal_Int16>::get(), PropertyAttribute::MAYBEVOID, 0}, \
                     { OUString(UNO_NAME_HIDDEN), FN_UNO_HIDDEN,     cppu::UnoType<bool>::get(), PROPERTY_NONE, 0}, \
-                    { OUString(UNO_NAME_STYLE_INTEROP_GRAB_BAG), FN_UNO_STYLE_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
+                    { OUString(UNO_NAME_STYLE_INTEROP_GRAB_BAG), FN_UNO_STYLE_INTEROP_GRAB_BAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0}, \
+                    { OUString(UNO_NAME_PARA_INTEROP_GRAB_BAG), RES_PARATR_GRABBAG, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), PROPERTY_NONE, 0},
 
 #define COMMON_FLDTYP_PROPERTIES \
                     { OUString(UNO_NAME_IS_FIELD_USED),      FIELD_PROP_IS_FIELD_USED,      cppu::UnoType<float>::get(), PropertyAttribute::READONLY, 0},\
