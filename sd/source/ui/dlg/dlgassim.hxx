@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SD_SOURCE_UI_DLG_DLGASSIM_HXX
+#define INCLUDED_SD_SOURCE_UI_DLG_DLGASSIM_HXX
+
 #include "drawdoc.hxx"
 #include <svx/svdotext.hxx>
 #include <svtools/treelistbox.hxx>
@@ -46,5 +49,7 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
 };
+
+#endif // INCLUDED_SD_SOURCE_UI_DLG_DLGASSIM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
