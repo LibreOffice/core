@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDRAWER_HXX
+#define INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDRAWER_HXX
 
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
@@ -103,5 +105,7 @@ namespace svt
 
 } // namespace svt
 
+
+#endif // INCLUDED_SVTOOLS_SOURCE_TOOLPANEL_TOOLPANELDRAWER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

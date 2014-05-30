@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_STOC_INC_STOCSERVICES_HXX
+#define INCLUDED_STOC_INC_STOCSERVICES_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -82,5 +84,7 @@ namespace stoc_services
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
 } // namespace
+
+#endif // INCLUDED_STOC_INC_STOCSERVICES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
