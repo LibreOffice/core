@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SVTOOLS_SOURCE_CONTROL_VALUEIMP_HXX
+#define INCLUDED_SVTOOLS_SOURCE_CONTROL_VALUEIMP_HXX
+
 #include <osl/mutex.hxx>
 #include <tools/color.hxx>
 #include <vcl/image.hxx>
@@ -262,5 +265,7 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
+
+#endif // INCLUDED_SVTOOLS_SOURCE_CONTROL_VALUEIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

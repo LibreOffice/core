@@ -17,10 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef \
-    INCLUDED_stoc_source_uriproc_UriSchemeParser_vndDOTsunDOTstarDOTscript_hxx
-#define \
-    INCLUDED_stoc_source_uriproc_UriSchemeParser_vndDOTsunDOTstarDOTscript_hxx
+#ifndef INCLUDED_STOC_SOURCE_URIPROC_URISCHEMEPARSER_VNDDOTSUNDOTSTARDOTSCRIPT_HXX
+#define INCLUDED_STOC_SOURCE_URIPROC_URISCHEMEPARSER_VNDDOTSUNDOTSTARDOTSCRIPT_HXX
 
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -50,6 +48,6 @@ namespace UriSchemeParser_vndDOTsunDOTstarDOTscript {
 
 } }
 
-#endif
+#endif // INCLUDED_STOC_SOURCE_URIPROC_URISCHEMEPARSER_VNDDOTSUNDOTSTARDOTSCRIPT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

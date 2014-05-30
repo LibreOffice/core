@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SVTOOLS_SOURCE_CONTROL_TOOLBARMENUIMP_HXX
+#define INCLUDED_SVTOOLS_SOURCE_CONTROL_TOOLBARMENUIMP_HXX
+
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
@@ -310,5 +313,7 @@ struct ToolbarMenu_Impl
 };
 
 }
+
+#endif // INCLUDED_SVTOOLS_SOURCE_CONTROL_TOOLBARMENUIMP_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
