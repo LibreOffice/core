@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_INCLUDE_SFX2_BROKENPACKAGEINT_HXX
-#define INCLUDED_INCLUDE_SFX2_BROKENPACKAGEINT_HXX
+#ifndef INCLUDED_SFX2_BROKENPACKAGEINT_HXX
+#define INCLUDED_SFX2_BROKENPACKAGEINT_HXX
 
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
@@ -48,6 +48,6 @@ public:
     com::sun::star::uno::Reference < ::com::sun::star::task::XInteractionRequest > GetRequest();
 };
 
-#endif // INCLUDED_INCLUDE_SFX2_BROKENPACKAGEINT_HXX
+#endif // INCLUDED_SFX2_BROKENPACKAGEINT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
