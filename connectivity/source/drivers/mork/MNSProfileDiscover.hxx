@@ -34,14 +34,7 @@
 #include "dllapi.h"
 
 using namespace com::sun::star::mozilla;
-namespace connectivity
-{
-    namespace mork
-    {
-        class ProfileStruct;
-    }
-}
-typedef ::std::map < OUString, ::connectivity::mork::ProfileStruct* > ProfileList;
+
 namespace connectivity
 {
     namespace mork
@@ -49,8 +42,8 @@ namespace connectivity
         class ProfileStruct
         {
         public:
-            ProfileStruct(MozillaProductType aProduct, const OUString& aProfileName,
-                          const OUString &aProfilePath
+            ProfileStruct(MozillaProductType aProduct = MozillaProductType_Default, const OUString& aProfileName = OUString(),
+                          const OUString &aProfilePath = OUString()
                             );
             MozillaProductType getProductType() { return product;}
             OUString getProfileName(){ return profileName;}
@@ -60,6 +53,8 @@ namespace connectivity
             OUString profileName;
             OUString profilePath;
         };
+
+        typedef ::std::map < OUString, ProfileStruct > ProfileList;
 
         class ProductStruct
         {
