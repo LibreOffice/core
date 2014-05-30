@@ -712,7 +712,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                         OUString aCommand = ((PopupMenu*)pMenu)->GetItemCommand(nId);
                         if (aCommand.isEmpty() )
                         {
-                            if(!ExecuteMenuCommand( *dynamic_cast<PopupMenu*>(pMenu), *GetViewFrame(), nId ))
+                            if(!ExecuteMenuCommand(dynamic_cast<PopupMenu&>(*pMenu), *GetViewFrame(), nId ))
                                 pPopup->Execute(nId);
                         }
                         else
