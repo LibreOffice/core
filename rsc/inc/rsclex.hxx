@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_RSC_INC_RSCLEX_HXX
+#define INCLUDED_RSC_INC_RSCLEX_HXX
+
 #include <boost/unordered_set.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
@@ -111,5 +114,7 @@ extern RscFileInst *            pFI;
 extern RscExpression *          pExp;
 extern ObjectStack              S;
 extern StringContainer*         pStringContainer;
+
+#endif // INCLUDED_RSC_INC_RSCLEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
