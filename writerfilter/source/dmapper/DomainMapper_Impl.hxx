@@ -387,6 +387,7 @@ private:
     /// If the current paragraph is inside a structured document element.
     bool                            m_bSdt;
     bool                            m_bIsFirstRun;
+    bool                            m_bIsTableHasDirectFormatting;
 
     css::uno::Reference< css::text::XTextCursor > xTOCMarkerCursor;
     css::uno::Reference< css::text::XTextCursor > mxTOCTextCursor;
@@ -472,6 +473,10 @@ public:
     void SetSdt(bool bSdt);
     /// Getter method for m_bSdt.
     bool GetSdt();
+    /// Getter method for m_bIsTableHasDirectFormatting
+    bool GetIsTableHasDirectFormatting();
+    /// Setter method for m_bIsTableHasDirectFormatting
+    void SetIsTableHasDirectFormatting(bool bIsTableHasDirectFormatting);
     bool GetParaChanged();
 
     void deferBreak( BreakType deferredBreakType );
