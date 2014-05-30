@@ -42,9 +42,8 @@ SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId
     switch( nSlotId )
     {
         default :
-        {
             DBG_ASSERT( false, "SvxTbxCtlCustomShapes: unknown slot executed. ?" );
-        }
+            //fall-through
         case SID_DRAWTBX_CS_BASIC :
         {
             m_aCommand = ".uno:BasicShapes.diamond";
