@@ -3460,6 +3460,19 @@ DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
     assertXPath(pXmlEndNotes, "/w:endnotes", "Ignorable", "w14 wp14");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo78907,"fdo78907.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page" );
+
+    xmlDocPtr pXmlDoc1 = parseExport("word/footer1.xml");
+    if (!pXmlDoc1)
+        return;
+    assertXPath ( pXmlDoc1, "/w:ftr[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl", 0 );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
