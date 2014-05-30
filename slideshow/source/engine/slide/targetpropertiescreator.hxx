@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_TARGETPROPERTIESCREATOR_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_TARGETPROPERTIESCREATOR_HXX
+
 #include <com/sun/star/animations/TargetProperties.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
@@ -43,5 +46,7 @@ namespace slideshow
 
     } // namespace internal
 } // namespace slideshow
+
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_SLIDE_TARGETPROPERTIESCREATOR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_SC_SOURCE_UI_INC_COLORFORMAT_HXX
+#define INCLUDED_SC_SOURCE_UI_INC_COLORFORMAT_HXX
+
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -50,5 +53,7 @@ public:
 
     ScDataBarFormatData* GetData();
 };
+
+#endif // INCLUDED_SC_SOURCE_UI_INC_COLORFORMAT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

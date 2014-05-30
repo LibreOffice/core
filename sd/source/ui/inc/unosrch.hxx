@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SD_SOURCE_UI_INC_UNOSRCH_HXX
+#define INCLUDED_SD_SOURCE_UI_INC_UNOSRCH_HXX
+
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -137,5 +140,7 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
+
+#endif // INCLUDED_SD_SOURCE_UI_INC_UNOSRCH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
