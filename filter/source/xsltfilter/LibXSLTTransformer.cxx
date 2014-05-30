@@ -327,6 +327,7 @@ namespace XSLT
                 outBuf->writecallback = &ParserOutputBufferCallback::on_write;
                 outBuf->closecallback = &ParserOutputBufferCallback::on_close;
                 xsltSaveResultTo(outBuf, result, styleSheet);
+                xmlOutputBufferClose(outBuf);
             }
         else
             {
