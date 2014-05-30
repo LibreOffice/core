@@ -217,6 +217,11 @@ interface OutlineView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_PRESENTATION_CURRENT_SLIDE // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_EDIT_OUTLINER // ole : no, status : ?
     [
         ExecMethod = FuPermanent ;
