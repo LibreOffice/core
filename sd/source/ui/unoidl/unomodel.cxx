@@ -452,7 +452,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
     if( 0 == nPageCount )
     {
         // this is only used for clipboard where we only have one page
-        pStandardPage = (SdPage*) mpDoc->AllocPage(false);
+        pStandardPage = mpDoc->AllocSdPage(false);
 
         Size aDefSize(21000, 29700);   // A4-Hochformat
         pStandardPage->SetSize( aDefSize );
@@ -485,7 +485,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         if( bDuplicate )
             pStandardPage = (SdPage*) pPreviousStandardPage->Clone();
         else
-            pStandardPage = (SdPage*) mpDoc->AllocPage(false);
+            pStandardPage = mpDoc->AllocSdPage(false);
 
         pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
         pStandardPage->SetBorder( pPreviousStandardPage->GetLftBorder(),
@@ -520,7 +520,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         if( bDuplicate )
             pNotesPage = (SdPage*) pPreviousNotesPage->Clone();
         else
-            pNotesPage = (SdPage*) mpDoc->AllocPage(false);
+            pNotesPage = mpDoc->AllocSdPage(false);
 
         pNotesPage->SetSize( pPreviousNotesPage->GetSize() );
         pNotesPage->SetBorder( pPreviousNotesPage->GetLftBorder(),
@@ -2723,7 +2723,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         SdPage* pRefNotesPage = mpModel->mpDoc->GetSdPage( (sal_uInt16)0, PK_NOTES);
 
         // create and instert new draw masterpage
-        SdPage* pMPage = (SdPage*)mpModel->mpDoc->AllocPage(true);
+        SdPage* pMPage = mpModel->mpDoc->AllocSdPage(true);
         pMPage->SetSize( pPage->GetSize() );
         pMPage->SetBorder( pPage->GetLftBorder(),
                            pPage->GetUppBorder(),
@@ -2740,7 +2740,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         xDrawPage = uno::Reference< drawing::XDrawPage >::query( pMPage->getUnoPage() );
 
         // create and instert new notes masterpage
-        SdPage* pMNotesPage = (SdPage*)mpModel->mpDoc->AllocPage(true);
+        SdPage* pMNotesPage = mpModel->mpDoc->AllocSdPage(true);
         pMNotesPage->SetSize( pRefNotesPage->GetSize() );
         pMNotesPage->SetPageKind(PK_NOTES);
         pMNotesPage->SetBorder( pRefNotesPage->GetLftBorder(),

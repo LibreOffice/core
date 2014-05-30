@@ -173,7 +173,7 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 
     // create new document with page
     pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
-    SdPage* pPage = (SdPage*) pMyDoc->AllocPage(false);
+    SdPage* pPage = pMyDoc->AllocSdPage(false);
     pMyDoc->InsertPage(pPage);
 
     pControllerItem = new AnimationControllerItem( SID_ANIMATOR_STATE, this, pBindings );
