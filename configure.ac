@@ -4771,7 +4771,7 @@ if test "$test_cups" = "yes"; then
     AC_CHECK_LIB([cups], [cupsPrintFiles], [:])
     AC_CHECK_HEADER(cups/cups.h, AC_DEFINE(HAVE_CUPS_H))
     if test "$ac_cv_lib_cups_cupsPrintFiles" != "yes" -o "$ac_cv_header_cups_cups_h" != "yes"; then
-        AC_MSG_ERROR([Could not find CUPS. Install libcupsys2-dev or cups-devel.])
+        AC_MSG_ERROR([Could not find CUPS. Install libcups2-dev or cups-devel.])
     fi
 
 else
