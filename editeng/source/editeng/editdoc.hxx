@@ -131,23 +131,8 @@ public:
 
 //  ----------------------------------------------------------------------
 //  class SvxColorList
-//  ----------------------------------------------------------------------
 
-class SvxColorList
-{
-private:
-    typedef std::vector<SvxColorItem*> DummyColorList;
-    DummyColorList aColorList;
-
-public:
-            SvxColorList();
-            ~SvxColorList();
-
-    size_t  GetId( const SvxColorItem& rColor );
-    size_t  Count() { return aColorList.size(); };
-    void    Insert( SvxColorItem* pItem, size_t nIndex );
-    SvxColorItem* GetObject( size_t nIndex );
-};
+typedef std::vector<Color> SvxColorList;
 
 //  ----------------------------------------------------------------------
 //  class ItemList
