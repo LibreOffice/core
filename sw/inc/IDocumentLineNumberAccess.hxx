@@ -17,23 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IDOCUMENTLINENUMBERACCESS_HXX
- #define INCLUDED_SW_INC_IDOCUMENTLINENUMBERACCESS_HXX
+#ifndef INCLUDED_SW_INC_IDOCUMENTLINENUMBERACCESS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTLINENUMBERACCESS_HXX
 
- #include <sal/types.h>
+#include <sal/types.h>
 
 class SwLineNumberInfo;
 
- /** Access to the line number information
+/** Access to the line number information
  */
- class IDocumentLineNumberAccess
- {
- public:
+class IDocumentLineNumberAccess
+{
+public:
 
     virtual const SwLineNumberInfo& GetLineNumberInfo() const = 0;
     virtual void SetLineNumberInfo(const SwLineNumberInfo& rInfo) = 0;
 
- protected:
+protected:
     virtual ~IDocumentLineNumberAccess() {};
 };
 

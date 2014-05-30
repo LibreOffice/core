@@ -17,25 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #ifndef INCLUDED_SW_INC_IDOCUMENTREDLINEACCESS_HXX
- #define INCLUDED_SW_INC_IDOCUMENTREDLINEACCESS_HXX
+#ifndef INCLUDED_SW_INC_IDOCUMENTREDLINEACCESS_HXX
+#define INCLUDED_SW_INC_IDOCUMENTREDLINEACCESS_HXX
 
- #include <sal/types.h>
- #include <tools/solar.h>
+#include <sal/types.h>
+#include <tools/solar.h>
 
- #include <limits.h>
+#include <limits.h>
 
- #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 
- class SwRangeRedline;
- class SwTableRowRedline;
- class SwTableCellRedline;
- class SwRedlineTbl;
- class SwExtraRedlineTbl;
- class SwPaM;
- struct SwPosition;
- class SwStartNode;
- class SwNode;
+class SwRangeRedline;
+class SwTableRowRedline;
+class SwTableCellRedline;
+class SwRedlineTbl;
+class SwExtraRedlineTbl;
+class SwPaM;
+struct SwPosition;
+class SwStartNode;
+class SwNode;
 
 typedef sal_uInt16 RedlineMode_t;
 namespace nsRedlineMode_t
@@ -203,10 +203,10 @@ public:
     virtual void SetRedlinePassword(
         /*[in]*/const ::com::sun::star::uno::Sequence <sal_Int8>& rNewPassword) = 0;
 
- protected:
+protected:
      virtual ~IDocumentRedlineAccess() {};
- };
+};
 
- #endif
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
