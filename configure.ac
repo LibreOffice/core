@@ -4610,6 +4610,7 @@ if test "$cross_compiling" = "yes"; then
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
+        --disable-cups \
         --disable-graphite \
         --disable-pdfimport \
         --disable-postgresql-sdbc \
