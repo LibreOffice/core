@@ -97,6 +97,7 @@ void MorkDriverTest::tearDown()
 {
 // how to make dispose() work?
 // Reference< com::sun::star::lang::XComponent >( m_xMorkComponent, UNO_QUERY_THROW )->dispose();
+    m_xConnection->close();
     test::BootstrapFixture::tearDown();
 }
 
@@ -159,6 +160,9 @@ void MorkDriverTest::test_select_default_all()
     CPPUNIT_ASSERT_MESSAGE("fetch last row failed!", result);
     mail = xDelegatorRow->getString(1);
     CPPUNIT_ASSERT_MESSAGE("last row is not john@doe9.org!", mail.equalsAscii("john@doe9.org"));
+
+    css::uno::Reference<css::sdbc::XCloseable>(
+        xStatement, css::uno::UNO_QUERY_THROW)->close();
 }
 
 void MorkDriverTest::test_select_list_table_joe_doe_5()
@@ -186,6 +190,9 @@ void MorkDriverTest::test_select_list_table_joe_doe_5()
     CPPUNIT_ASSERT_MESSAGE("fetch first row failed!", result);
     OUString mail = xDelegatorRow->getString(1);
     CPPUNIT_ASSERT_MESSAGE("last row is not john@doe5.org!", mail.equalsAscii("john@doe5.org"));
+
+    css::uno::Reference<css::sdbc::XCloseable>(
+        xStatement, css::uno::UNO_QUERY_THROW)->close();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MorkDriverTest);
