@@ -104,6 +104,9 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
 
 void FuDraw::ResetModifiers()
 {
+    if (!pView)
+        return;
+
     ScViewData* pViewData = pViewShell->GetViewData();
     const ScViewOptions& rOpt = pViewData->GetOptions();
     const ScGridOptions& rGrid = rOpt.GetGridOptions();
