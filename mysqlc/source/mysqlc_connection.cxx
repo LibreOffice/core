@@ -158,10 +158,10 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
             OSL_VERIFY( pIter->Value >>= aPass );
         } else if (pIter->Name.equalsAscii("LocalSocket")) {
             OSL_VERIFY( pIter->Value >>= sUnixSocket );
-            unixSocketPassed = true;
+            unixSocketPassed = !sUnixSocket.isEmpty();
         } else if (pIter->Name.equalsAscii("NamedPipe")) {
             OSL_VERIFY( pIter->Value >>= sNamedPipe );
-            namedPipePassed = true;
+            namedPipePassed = !sNamedPipe.isEmpty();
         } else if ( pIter->Name.equalsAscii("PublicConnectionURL")) {
             OSL_VERIFY( pIter->Value >>= m_settings.connectionURL );
         } else if ( pIter->Name.equalsAscii("NewURL")) {    // legacy name for "PublicConnectionURL"
