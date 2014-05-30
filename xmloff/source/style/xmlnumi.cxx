@@ -291,7 +291,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
     else if( IsXMLToken( rLName, XML_LIST_LEVEL_STYLE_IMAGE ) )
         bImage = true;
 
-    SvXMLTokenMap aTokenMap( lcl_getLevelAttrTokenMap() );
+    static const SvXMLTokenMap aTokenMap( lcl_getLevelAttrTokenMap() );
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -666,7 +666,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rListLevel( rLLevel )
 {
-    SvXMLTokenMap aTokenMap( lcl_getStyleAttributesAttrTokenMap() );
+    static const SvXMLTokenMap aTokenMap( lcl_getStyleAttributesAttrTokenMap() );
     SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
 
     OUString sFontName, sFontFamily, sFontStyleName, sFontFamilyGeneric,
@@ -960,7 +960,7 @@ SvxXMLListLevelStyleLabelAlignmentAttrContext_Impl::SvxXMLListLevelStyleLabelAli
     SvXMLImportContext( rImport, nPrfx, rLName ),
     rListLevel( rLLevel )
 {
-    SvXMLTokenMap aTokenMap( lcl_getStyleAlignmentAttributesAttrTokenMap() );
+    static const SvXMLTokenMap aTokenMap( lcl_getStyleAlignmentAttributesAttrTokenMap() );
     SvXMLUnitConverter& rUnitConv = GetImport().GetMM100UnitConverter();
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
