@@ -4645,6 +4645,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         case HTML_TABLEROW_ON:
         case HTML_TABLE_OFF:
             SkipToken( -1 );
+            //fall-through
         case HTML_COLGROUP_OFF:
             bDone = true;
             break;
