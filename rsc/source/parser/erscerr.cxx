@@ -124,6 +124,7 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
 
         case ERR_NOINPUT:
             StdLstErr( "Input file was not specified.\n");
+            //fall-through
         case ERR_USAGE:
             StdLstOut( "Copyright (C) 2000 - 2012 LibreOffice contributors.\n" );
             {
