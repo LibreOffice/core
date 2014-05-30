@@ -1593,7 +1593,7 @@ static bool lcl_NoPrev( const SwFrm& rFrm )
         const SwFrm* pPrev( rFrm.GetPrev() );
         while ( pPrev &&
                 pPrev->IsSctFrm() &&
-                !dynamic_cast<const SwSectionFrm*>(pPrev)->GetSection() )
+                !dynamic_cast<const SwSectionFrm&>(*pPrev).GetSection() )
         {
             pPrev = pPrev->GetPrev();
             bSkippedDirectPrevEmptySection = true;
