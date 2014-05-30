@@ -1522,6 +1522,9 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
                     break;
             }
         }
+        else
+            break ;
+
         bBreak = aFrmBreak.IsBreakNowWidAndOrp(rLine);
     }while( !bBreak );
 
