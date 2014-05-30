@@ -59,6 +59,8 @@
 #include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/script/XLibraryQueryExecutable.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <boost/scoped_ptr.hpp>
+
 namespace basic
 {
 
@@ -975,11 +977,10 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     {
                         throw uno::RuntimeException();
                     }
-                    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xCodeStream );
+                    boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
                     if ( !pStream || pStream->GetError() )
                     {
                         sal_Int32 nError = pStream ? pStream->GetError() : ERRCODE_IO_GENERAL;
-                        delete pStream;
                         throw task::ErrorCodeIOException(
                             ("utl::UcbStreamHelper::CreateStream failed for \""
                              + aCodeStreamName + "\": 0x"
@@ -989,8 +990,6 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
 
                     /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );
                     // TODO: Check return value
-
-                    delete pStream;
                 }
                 catch(const uno::Exception& )
                 {
@@ -1093,11 +1092,10 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                                                         aCodeStreamName,
                                                                         embed::ElementModes::READ );
 
-                            SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xCodeStream );
+                            boost::scoped_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
                             if ( !pStream || pStream->GetError() )
                             {
                                 sal_Int32 nError = pStream ? pStream->GetError() : ERRCODE_IO_GENERAL;
-                                delete pStream;
                                 throw task::ErrorCodeIOException(
                                     ("utl::UcbStreamHelper::CreateStream failed"
                                      " for code.bin: 0x"
@@ -1108,8 +1106,6 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
 
                             /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );
                             // TODO: Check return value
-
-                            delete pStream;
                         }
                         catch(const uno::Exception& )
                         {

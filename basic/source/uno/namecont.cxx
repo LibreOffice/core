@@ -757,7 +757,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         }
         else
         {
-            INetURLObject* pLibInfoInetObj = NULL;
+            boost::scoped_ptr<INetURLObject> pLibInfoInetObj;
             if( meInitMode == CONTAINER_INIT_FILE )
             {
                 aFileName = aInitFileName;
@@ -766,11 +766,11 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             {
                 if( nPass == 1 )
                 {
-                    pLibInfoInetObj = new INetURLObject( maLibraryPath.getToken(0, (sal_Unicode)';') );
+                    pLibInfoInetObj.reset(new INetURLObject( maLibraryPath.getToken(0, (sal_Unicode)';') ));
                 }
                 else
                 {
-                    pLibInfoInetObj = new INetURLObject( maLibraryPath.getToken(1, (sal_Unicode)';') );
+                    pLibInfoInetObj.reset(new INetURLObject( maLibraryPath.getToken(1, (sal_Unicode)';') ));
                 }
                 pLibInfoInetObj->insertName( maInfoFileName, false, INetURLObject::LAST_SEGMENT, true, INetURLObject::ENCODE_ALL );
                 pLibInfoInetObj->setExtension( OUString("xlc") );
@@ -805,8 +805,6 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                     xInput.clear();
                 }
             }
-
-            delete pLibInfoInetObj;
         }
 
         if( xInput.is() )
@@ -816,11 +814,11 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             source.sSystemId    = aFileName;
 
             // start parsing
-            ::xmlscript::LibDescriptorArray* pLibArray = new ::xmlscript::LibDescriptorArray();
+            boost::scoped_ptr< ::xmlscript::LibDescriptorArray> pLibArray(new ::xmlscript::LibDescriptorArray());
 
             try
             {
-                xParser->setDocumentHandler( ::xmlscript::importLibraryContainer( pLibArray ) );
+                xParser->setDocumentHandler( ::xmlscript::importLibraryContainer( pLibArray.get() ) );
                 xParser->parseStream( source );
             }
             catch ( const xml::sax::SAXException& e )
@@ -973,7 +971,6 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             {
                 mbOldInfoFormat = false;
             }
-            delete pLibArray;
         }
     }
 
