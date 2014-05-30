@@ -468,6 +468,8 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl( Reference< XInputStream > xStream ) 
             try
             {
                 mnLength = mxSeekable->getLength();
+                if (0 < mxSeekable->getPosition())
+                    mxSeekable->seek(0);
             }
             catch ( ... )
             {
