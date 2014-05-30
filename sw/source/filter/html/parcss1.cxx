@@ -1052,6 +1052,7 @@ CSS1Expression *CSS1Parser::ParseDeclaration( OUString& rProperty )
         case CSS1_EMX:
             if( '-'==cSign )
                 nValue = -nValue;
+            //fall-through
         case CSS1_STRING:
         case CSS1_PERCENTAGE:
         case CSS1_IDENT:
