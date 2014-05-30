@@ -138,10 +138,10 @@ CalendarImpl::getAllCalendars( const Locale& rLocale ) throw(RuntimeException, s
 }
 
 void SAL_CALL
-CalendarImpl::setDateTime( double timeInDays ) throw(RuntimeException, std::exception)
+CalendarImpl::setDateTime( double fTimeInDays ) throw(RuntimeException, std::exception)
 {
     if (xCalendar.is())
-        xCalendar->setDateTime( timeInDays );
+        xCalendar->setDateTime( fTimeInDays );
     else
         throw ERROR ;
 }

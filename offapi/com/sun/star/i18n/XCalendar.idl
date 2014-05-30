@@ -58,7 +58,7 @@ published interface XCalendar : com::sun::star::uno::XInterface
         passed since start date. The fractional part represents
         fractions of a day, thus 0.5 means 12 hours.
      */
-    void    setDateTime( [in] double nTimeInDays );
+    void    setDateTime( [in] double fTimeInDays );
 
     /**
         Get the date/time as an offset to the start of the calendar at

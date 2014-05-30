@@ -282,7 +282,7 @@ Calendar_gregorian::getUniqueID() throw(RuntimeException, std::exception)
 }
 
 void SAL_CALL
-Calendar_gregorian::setDateTime( double timeInDays ) throw(RuntimeException, std::exception)
+Calendar_gregorian::setDateTime( double fTimeInDays ) throw(RuntimeException, std::exception)
 {
     // ICU handles dates in milliseconds as double values and uses floor()
     // to obtain integer values, which may yield a date decremented by one
@@ -291,7 +291,7 @@ Calendar_gregorian::setDateTime( double timeInDays ) throw(RuntimeException, std
     // pass a value without fraction here. If not, that may lead to
     // fdo#44286 or fdo#52619 and the like, e.g. when passing
     // -2136315212000.000244 instead of -2136315212000.000000
-    double fM = timeInDays * U_MILLIS_PER_DAY;
+    double fM = fTimeInDays * U_MILLIS_PER_DAY;
     double fR = rtl::math::round( fM );
     SAL_INFO_IF( fM != fR, "i18npool",
             "Calendar_gregorian::setDateTime: " << std::fixed << fM << " rounded to " << fR);
@@ -309,9 +309,9 @@ Calendar_gregorian::getDateTime() throw(RuntimeException, std::exception)
         getValue();
     }
     UErrorCode status;
-    double r = body->getTime(status = U_ZERO_ERROR);
+    double fR = body->getTime(status = U_ZERO_ERROR);
     if ( !U_SUCCESS(status) ) throw ERROR;
-    return r / U_MILLIS_PER_DAY;
+    return fR / U_MILLIS_PER_DAY;
 }
 
 // map field value from gregorian calendar to other calendar, it can be overwritten by derived class.

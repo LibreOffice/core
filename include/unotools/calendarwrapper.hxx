@@ -58,11 +58,11 @@ public:
     ::com::sun::star::uno::Sequence< OUString > getAllCalendars( const ::com::sun::star::lang::Locale& rLocale ) const;
     OUString getUniqueID() const;
     /// set UTC date/time
-    void setDateTime( double nTimeInDays );
+    void setDateTime( double fTimeInDays );
     /// get UTC date/time
     double getDateTime() const;
     /// convenience method to set local date/time
-    void setLocalDateTime( double nTimeInDays );
+    void setLocalDateTime( double fTimeInDays );
     /// convenience method to get local date/time
     double getLocalDateTime() const;
 

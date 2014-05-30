@@ -57,7 +57,7 @@ public:
 
     // Methods in XCalendar
     virtual void SAL_CALL loadCalendar(const OUString& uniqueID, const com::sun::star::lang::Locale& rLocale) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setDateTime(double nTimeInDays) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setDateTime(double fTimeInDays) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual double SAL_CALL getDateTime() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setValue( sal_Int16 nFieldIndex, sal_Int16 nValue ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int16 SAL_CALL getValue(sal_Int16 nFieldIndex) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
