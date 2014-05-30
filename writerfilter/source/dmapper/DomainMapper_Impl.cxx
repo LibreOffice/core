@@ -186,6 +186,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bUsingEnhancedFields( false ),
         m_bSdt(false),
         m_bIsFirstRun(false),
+        m_bIsTableHasDirectFormatting(false),
         m_xAnnotationField(),
         m_nAnnotationId( -1 ),
         m_aAnnotationPositions(),
@@ -447,6 +448,16 @@ void DomainMapper_Impl::SetSdt(bool bSdt)
 bool DomainMapper_Impl::GetSdt()
 {
     return m_bSdt;
+}
+
+void DomainMapper_Impl::SetIsTableHasDirectFormatting(bool bIsTableHasDirectFormatting)
+{
+    m_bIsTableHasDirectFormatting = bIsTableHasDirectFormatting;
+}
+
+bool DomainMapper_Impl::GetIsTableHasDirectFormatting()
+{
+    return m_bIsTableHasDirectFormatting;
 }
 
 bool DomainMapper_Impl::GetParaChanged()

@@ -757,9 +757,15 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 if ( aDefaultRepeatIt != pAllCellProps->end( ) )
                     pAllCellProps->erase( aDefaultRepeatIt );
 
-                aDefaultRepeatIt = pAllCellProps->find(PROP_PARA_LINE_SPACING);
-                if ( aDefaultRepeatIt != pAllCellProps->end( ) )
-                    pAllCellProps->erase( aDefaultRepeatIt );
+                if( m_rDMapper_Impl.GetIsTableHasDirectFormatting() )
+                {
+                    // Bug#78883 : direct formatting is applied for table cell data
+                    // so we can erase para line spacing property from style.xml
+                    aDefaultRepeatIt = pAllCellProps->find(PROP_PARA_LINE_SPACING);
+                    if ( aDefaultRepeatIt != pAllCellProps->end( ) )
+                        pAllCellProps->erase( aDefaultRepeatIt );
+                    m_rDMapper_Impl.SetIsTableHasDirectFormatting(false);
+                }
 
                 aDefaultRepeatIt = pAllCellProps->find(PROP_TBL_HEADER);
                 if ( aDefaultRepeatIt != pAllCellProps->end( ) )
