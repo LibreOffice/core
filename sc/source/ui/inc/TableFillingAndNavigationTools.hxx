@@ -25,17 +25,17 @@ class FormulaTemplate
 {
 private:
     OUString            mTemplate;
-    ScDocument*         mDocument;
-    ScAddress::Details  mAddressDetails;
+    ScDocument*         mpDoc;
+
 public:
-    FormulaTemplate(ScDocument* aDocument, ScAddress::Details aAddressDetails);
+    FormulaTemplate(ScDocument* pDoc);
 
     void        setTemplate(OUString aTemplate);
     void        setTemplate(const char* aTemplate);
-    OUString&   getTemplate();
-    void        applyRange(OUString aVariable, ScRange aRange);
-    void        applyRangeList(OUString aVariable, ScRangeList aRangeList);
-    void        applyAddress(OUString aVariable, ScAddress aAddress);
+    const OUString& getTemplate();
+    void        applyRange(const OUString& aVariable, const ScRange& aRange, bool b3D = true);
+    void        applyRangeList(const OUString& aVariable, const ScRangeList& aRangeList, bool b3D = true);
+    void        applyAddress(const OUString& aVariable, const ScAddress& aAddress, bool b3D = true);
     void        applyString(OUString aVariable, OUString aValue);
     void        applyNumber(OUString aVariable, sal_Int32 aValue);
 };
