@@ -111,6 +111,7 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
         case ELIF:
             if (!recursion)
                 gobble(filep, file, file_red, symbols);
+            /*fall-through*/
         case ENDIF:
             if (recursion)
                 return(type);
