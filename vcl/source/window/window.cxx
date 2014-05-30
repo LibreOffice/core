@@ -2338,7 +2338,9 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
         // eg, the drop down of a combobox which is a system floating window
         if( mpWindowImpl->mbFrame && GetParent() && GetParent()->IsCompoundControl() &&
             GetParent()->IsNativeWidgetEnabled() != IsNativeWidgetEnabled() )
+        {
             EnableNativeWidget( GetParent()->IsNativeWidgetEnabled() );
+        }
 
         if ( mpWindowImpl->mbCallMove )
         {
