@@ -548,7 +548,7 @@ ScRange ScAnalysisOfVarianceDialog::ApplyOutput(ScDocShell* pDocShell)
 {
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
         formula::FormulaGrammar::mergeToGrammar(formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+    FormulaTemplate aTemplate(mDocument);
 
     if (meFactor == SINGLE_FACTOR)
     {

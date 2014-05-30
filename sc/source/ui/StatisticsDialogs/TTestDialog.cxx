@@ -63,7 +63,7 @@ ScRange ScTTestDialog::ApplyOutput(ScDocShell* pDocShell)
 {
     AddressWalkerWriter aOutput(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+    FormulaTemplate aTemplate(mDocument);
 
     boost::scoped_ptr<DataRangeIterator> pVariable1Iterator;
     if (mGroupedBy == BY_COLUMN)

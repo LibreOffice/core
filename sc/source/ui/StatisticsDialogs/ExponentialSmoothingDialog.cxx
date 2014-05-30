@@ -53,7 +53,7 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
 {
     AddressWalkerWriter output(mOutputAddress, pDocShell, mDocument,
             formula::FormulaGrammar::mergeToGrammar( formula::FormulaGrammar::GRAM_ENGLISH, mAddressDetails.eConv));
-    FormulaTemplate aTemplate(mDocument, mAddressDetails);
+    FormulaTemplate aTemplate(mDocument);
 
     // Smoothing factor
     double aSmoothingFactor = mpSmoothingFactor->GetValue() / 100.0;
