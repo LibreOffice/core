@@ -110,6 +110,7 @@ control(int counter)
         case L_nodebug: tp = "nodebug";         break;
 #endif
         default:        hash = L_nogood;
+        /*fall-through*/
         case L_nogood:  tp = "";                break;
         }
         if (!streq(tp, token))
