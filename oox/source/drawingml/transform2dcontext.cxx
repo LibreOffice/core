@@ -62,12 +62,29 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
                     OUString sXValue = rAttribs.getString( XML_x ).get();
                     OUString sYValue = rAttribs.getString( XML_y ).get();
                     if( !sXValue.isEmpty() )
-                        mrShape.getTextBody()->getTextProperties().moTextOffX = GetCoordinate( sXValue.toInt32() - mrShape.getPosition().X );
+                        mrShape.getTextBody()->getTextProperties().moTextOffUpper = GetCoordinate( sXValue.toInt32() - mrShape.getPosition().X );
                     if( !sYValue.isEmpty() )
-                        mrShape.getTextBody()->getTextProperties().moTextOffY = GetCoordinate( sYValue.toInt32() - mrShape.getPosition().Y );
+                        mrShape.getTextBody()->getTextProperties().moTextOffLeft = GetCoordinate( sYValue.toInt32() - mrShape.getPosition().Y );
                 }
                 break;
             case A_TOKEN( ext ):
+                {
+                    const OUString sXValue = rAttribs.getString( XML_cx ).get();
+                    const OUString sYValue = rAttribs.getString( XML_cy ).get();
+                    if( !sXValue.isEmpty() )
+                    {
+                        mrShape.getTextBody()->getTextProperties().moTextOffRight = GetCoordinate(mrShape.getSize().Width - sXValue.toInt32());
+                        if( mrShape.getTextBody()->getTextProperties().moTextOffLeft )
+                           *mrShape.getTextBody()->getTextProperties().moTextOffRight -=  *mrShape.getTextBody()->getTextProperties().moTextOffLeft;
+                    }
+                    if( !sYValue.isEmpty() )
+                    {
+                        mrShape.getTextBody()->getTextProperties().moTextOffLower = GetCoordinate(mrShape.getSize().Height - sYValue.toInt32());
+                        if( mrShape.getTextBody()->getTextProperties().moTextOffUpper )
+                           *mrShape.getTextBody()->getTextProperties().moTextOffLower -=  *mrShape.getTextBody()->getTextProperties().moTextOffUpper;
+
+                    }
+                }
                 break;
         }
         return 0;
