@@ -2208,7 +2208,7 @@ bool SwRootFrm::IsLeftToRightViewLayout() const
     // #i88036#
     // Only ask a non-empty page frame for its layout direction
     const SwPageFrm& rPage =
-                    dynamic_cast<const SwPageFrm*>(Lower())->GetFormatPage();
+                    dynamic_cast<const SwPageFrm&>(*Lower()).GetFormatPage();
     return !rPage.IsRightToLeft() && !rPage.IsVertical();
 }
 
