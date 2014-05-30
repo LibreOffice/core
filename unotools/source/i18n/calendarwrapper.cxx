@@ -143,7 +143,7 @@ sal_Int32 CalendarWrapper::getCombinedOffsetInMillis(
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n", "setLocalDateTime: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n", "getCombinedOffsetInMillis: Exception caught " << e.Message );
     }
     return nOffset;
 }
@@ -252,7 +252,7 @@ bool CalendarWrapper::isValid() const
     }
     catch (const Exception& e)
     {
-        SAL_WARN( "unotools.i18n",  "isValue: Exception caught " << e.Message );
+        SAL_WARN( "unotools.i18n",  "isValid: Exception caught " << e.Message );
     }
     return false;
 }
