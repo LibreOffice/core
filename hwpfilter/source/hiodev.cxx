@@ -201,7 +201,7 @@ int HStreamIODev::read2b()
 }
 
 
-long HStreamIODev::read4b()
+int HStreamIODev::read4b()
 {
     int res = (compressed) ? GZREAD(rBuf, 4) : _stream.readBytes(rBuf, 4);
 
@@ -318,7 +318,7 @@ int HMemIODev::read2b()
 }
 
 
-long HMemIODev::read4b()
+int HMemIODev::read4b()
 {
     pos += 4;
     if (pos <= length)
