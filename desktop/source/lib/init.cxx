@@ -161,6 +161,11 @@ struct LibLODocument_Impl : public _LibreOfficeDocument
         saveAs = doc_saveAs;
         saveAsWithOptions = doc_saveAsWithOptions;
     }
+
+    ~LibLODocument_Impl()
+    {
+        mxComponent->dispose();
+    }
 };
 
 static void doc_destroy(LibreOfficeDocument *pThis)
