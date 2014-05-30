@@ -3876,6 +3876,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TBODY_OFF:
         case HTML_TABLE_OFF:
             SkipToken(-1);
+            //fall-through
         case HTML_TABLEHEADER_OFF:
         case HTML_TABLEDATA_OFF:
             bDone = true;
