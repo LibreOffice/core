@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_INCLUDE_VCL_THREADEX_HXX
+#define INCLUDED_INCLUDE_VCL_THREADEX_HXX
+
 #include <osl/conditn.h>
 #include <osl/thread.h>
 #include <tools/link.hxx>
@@ -245,5 +248,7 @@ inline typename FuncT::result_type syncExecute( FuncT const& func )
 
 } // namespace solarthread
 } // namespace vcl
+
+#endif // INCLUDED_INCLUDE_VCL_THREADEX_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

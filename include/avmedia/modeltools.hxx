@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_INCLUDE_AVMEDIA_MODELTOOLS_HXX
+#define INCLUDED_INCLUDE_AVMEDIA_MODELTOOLS_HXX
+
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <avmedia/avmediadllapi.h>
@@ -20,5 +23,7 @@ bool AVMEDIA_DLLPUBLIC Embed3DModel(
 bool AVMEDIA_DLLPUBLIC IsModel(const OUString& rMimeType);
 
 } // namespace avemdia
+
+#endif // INCLUDED_INCLUDE_AVMEDIA_MODELTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
