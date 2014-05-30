@@ -392,6 +392,7 @@ continue2:
                 case S_SELF:
                     ip += runelen;
                     runelen = 1;
+                    /*fall-through*/
                 case S_SELFB:
                     tp->type = (unsigned char) GETACT(state);
                     tp->len = ip - tp->t;
