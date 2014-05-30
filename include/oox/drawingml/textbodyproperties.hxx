@@ -37,8 +37,10 @@ struct TextBodyProperties
     bool                                            mbAnchorCtr;
     OptValue< sal_Int32 >                           moVert;
     boost::optional< sal_Int32 >                    moInsets[4];
-    boost::optional< sal_Int32 >                    moTextOffX;
-    boost::optional< sal_Int32 >                    moTextOffY;
+    boost::optional< sal_Int32 >                    moTextOffUpper;
+    boost::optional< sal_Int32 >                    moTextOffLeft;
+    boost::optional< sal_Int32 >                    moTextOffLower;
+    boost::optional< sal_Int32 >                    moTextOffRight;
     ::com::sun::star::drawing::TextVerticalAdjust   meVA;
 
     explicit            TextBodyProperties();
