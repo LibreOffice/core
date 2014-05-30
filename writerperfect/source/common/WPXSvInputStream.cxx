@@ -174,7 +174,11 @@ void OLEStorageImpl::initialize(SvStream *const pStream)
 
 SotStorageStreamRef OLEStorageImpl::getStream(const rtl::OUString &rPath)
 {
-    NameMap_t::iterator aIt = maNameMap.find(rPath);
+    rtl::OUString aPath(rPath);
+    // accept paths which begin by '/'
+    if (aPath.startsWith("/") && aPath.getLength() >= 2)
+        aPath=rPath.copy(1);
+    NameMap_t::iterator aIt = maNameMap.find(aPath);
 
     // For the while don't return stream in this situation.
     // Later, given how libcdr's zip stream implementation behaves,
@@ -183,7 +187,7 @@ SotStorageStreamRef OLEStorageImpl::getStream(const rtl::OUString &rPath)
         return SotStorageStreamRef();
 
     if (!maStreams[aIt->second].stream.ref.Is())
-        maStreams[aIt->second].stream.ref = createStream(rPath);
+        maStreams[aIt->second].stream.ref = createStream(aPath);
 
     return maStreams[aIt->second].stream.ref;
 }
@@ -206,7 +210,7 @@ void OLEStorageImpl::traverse(const SotStorageRef &rStorage, const rtl::OUString
     {
         if (aIt->IsStream())
         {
-            maStreams.push_back(OLEStreamData(rtl::OUStringToOString(aIt->GetName(), RTL_TEXTENCODING_UTF8)));
+            maStreams.push_back(OLEStreamData(rtl::OUStringToOString(concatPath(rPath, aIt->GetName()), RTL_TEXTENCODING_UTF8)));
             maNameMap[concatPath(rPath, aIt->GetName())] = maStreams.size() - 1;
         }
         else if (aIt->IsStorage())
