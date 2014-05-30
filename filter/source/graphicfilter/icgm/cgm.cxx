@@ -112,7 +112,7 @@ sal_uInt8 CGM::ImplGetByte( sal_uInt32 nSource, sal_uInt32 nPrecision )
     return (sal_uInt8)( nSource >> ( ( nPrecision - 1 ) << 3 ) );
 };
 
-long CGM::ImplGetI( sal_uInt32 nPrecision )
+sal_Int32 CGM::ImplGetI( sal_uInt32 nPrecision )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     mnParaSize += nPrecision;
