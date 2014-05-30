@@ -155,8 +155,8 @@ private:
     sal_uInt16          nEOICode;
     sal_uInt16          nTableSize;
     sal_uInt16          nCodeSize;
-    sal_uLong           nOffset;
-    sal_uLong           dwShift;
+    sal_uInt32          nOffset;
+    sal_uInt32          dwShift;
 
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
