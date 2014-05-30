@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SAL_QA_INC_VALUEEQUAL_HXX
+#define INCLUDED_SAL_QA_INC_VALUEEQUAL_HXX
+
 #include <sal/config.h>
 
 #include <math.h>
@@ -113,5 +116,7 @@ bool is_double_equal(double x, double y)
 {
     return is_equal<double>(x, y, PREC_double);
 }
+
+#endif // INCLUDED_SAL_QA_INC_VALUEEQUAL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

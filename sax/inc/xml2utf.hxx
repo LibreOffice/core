@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_SAX_INC_XML2UTF_HXX
+#define INCLUDED_SAX_INC_XML2UTF_HXX
+
 #include <sal/types.h>
 
 namespace sax_expatwrap {
@@ -130,5 +133,7 @@ private:
     Unicode2TextConverter *m_pUnicode2Text;
 };
 }
+
+#endif // INCLUDED_SAX_INC_XML2UTF_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
