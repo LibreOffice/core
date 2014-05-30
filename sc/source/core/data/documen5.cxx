@@ -688,6 +688,9 @@ std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> > ScDoc
                 continue;
 
             uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
+            if(!xChartDoc.is())
+                continue;
+
             Rectangle aRect = pObject->GetLastBoundRect();
             aRet.push_back(std::pair<uno::Reference<chart2::XChartDocument>, Rectangle>(xChartDoc, aRect));
         }

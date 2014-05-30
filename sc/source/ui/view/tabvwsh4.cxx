@@ -581,7 +581,10 @@ void ScTabViewShell::AddOpenGLChartWindows()
     for(std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> >::iterator itr = aCharts.begin(),
             itrEnd = aCharts.end(); itr != itrEnd; ++itr)
     {
+        if(!itr->first.is())
+            return;
         OpenGLWindow* pOpenGLWindow = new OpenGLWindow(pParentWindow);
+
         pOpenGLWindow->Show(false);
         Size aSize = itr->second.GetSize();
         Size aWindowSize = pOpenGLWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
