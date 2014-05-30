@@ -325,32 +325,35 @@ bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 
 bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    if ( mpView->IsDragHelpLine() )
+    if (mpView && mpView->IsDragHelpLine())
         mpView->EndDragHelpLine();
 
     if ( bDragHelpLine )
     {
         Rectangle aOutputArea(Point(0,0), mpWindow->GetOutputSizePixel());
 
-        if ( !aOutputArea.IsInside(rMEvt.GetPosPixel()) )
+        if (mpView && !aOutputArea.IsInside(rMEvt.GetPosPixel()))
             mpView->GetSdrPageView()->DeleteHelpLine(nHelpLine);
 
         mpWindow->ReleaseMouse();
     }
 
-    FrameView* pFrameView = mpViewShell->GetFrameView();
-    mpView->SetOrtho( pFrameView->IsOrtho() );
-    mpView->SetAngleSnapEnabled( pFrameView->IsAngleSnapEnabled() );
-    mpView->SetSnapEnabled(true);
-    mpView->SetCreate1stPointAsCenter(false);
-    mpView->SetResizeAtCenter(false);
-    mpView->SetDragWithCopy(pFrameView->IsDragWithCopy());
-    mpView->SetGridSnap(pFrameView->IsGridSnap());
-    mpView->SetBordSnap(pFrameView->IsBordSnap());
-    mpView->SetHlplSnap(pFrameView->IsHlplSnap());
-    mpView->SetOFrmSnap(pFrameView->IsOFrmSnap());
-    mpView->SetOPntSnap(pFrameView->IsOPntSnap());
-    mpView->SetOConSnap(pFrameView->IsOConSnap());
+    if (mpView)
+    {
+        FrameView* pFrameView = mpViewShell->GetFrameView();
+        mpView->SetOrtho( pFrameView->IsOrtho() );
+        mpView->SetAngleSnapEnabled( pFrameView->IsAngleSnapEnabled() );
+        mpView->SetSnapEnabled(true);
+        mpView->SetCreate1stPointAsCenter(false);
+        mpView->SetResizeAtCenter(false);
+        mpView->SetDragWithCopy(pFrameView->IsDragWithCopy());
+        mpView->SetGridSnap(pFrameView->IsGridSnap());
+        mpView->SetBordSnap(pFrameView->IsBordSnap());
+        mpView->SetHlplSnap(pFrameView->IsHlplSnap());
+        mpView->SetOFrmSnap(pFrameView->IsOFrmSnap());
+        mpView->SetOPntSnap(pFrameView->IsOPntSnap());
+        mpView->SetOConSnap(pFrameView->IsOConSnap());
+    }
 
     bIsInDragMode = false;
     ForcePointer(&rMEvt);
