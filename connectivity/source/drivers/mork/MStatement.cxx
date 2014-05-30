@@ -106,6 +106,7 @@ void OCommonStatement::disposing()
     m_pConnection = NULL;
 
     m_pSQLIterator->dispose();
+    delete m_pParseTree;
 
     dispose_ChildImpl();
     OCommonStatement_IBASE::disposing();
