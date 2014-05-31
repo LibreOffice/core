@@ -271,6 +271,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/textlayout \
     vcl/source/gdi/virdev \
     vcl/source/gdi/wall \
+    vcl/source/bitmap/bitmapfilter \
+    vcl/source/bitmap/bitmapscalesuper \
     vcl/source/helper/canvasbitmap \
     vcl/source/helper/canvastools \
     vcl/source/helper/evntpost \
