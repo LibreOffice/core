@@ -39,6 +39,7 @@
 #include <crsskip.hxx>
 #include <doc.hxx>
 #include <wordcountdialog.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace com { namespace sun { namespace star { namespace util {
     struct SearchOptions;
@@ -128,8 +129,8 @@ long SwWrtShell::SelAll()
             LeaveBlockMode();
         SwMvContext aMvContext(this);
         bool bMoveTable = false;
-        SwPosition *pStartPos = 0;
-        SwPosition *pEndPos = 0;
+        boost::scoped_ptr<SwPosition> pStartPos;
+        boost::scoped_ptr<SwPosition> pEndPos;
         SwShellCrsr* pTmpCrsr = 0;
         if( !HasWholeTabSelection() )
         {
@@ -138,8 +139,8 @@ long SwWrtShell::SelAll()
             pTmpCrsr = getShellCrsr( false );
             if( pTmpCrsr )
             {
-                pStartPos = new SwPosition( *pTmpCrsr->GetPoint() );
-                pEndPos = new SwPosition( *pTmpCrsr->GetMark() );
+                pStartPos.reset(new SwPosition( *pTmpCrsr->GetPoint() ));
+                pEndPos.reset(new SwPosition( *pTmpCrsr->GetMark() ));
             }
             Push();
             bool bIsFullSel = !MoveSection( fnSectionCurr, fnSectionStart);
@@ -187,8 +188,6 @@ long SwWrtShell::SelAll()
                       *pEndPos == *pTmpCrsr->GetPoint() ) ) && !bStartsWithTable)
                     SwCrsrShell::SttEndDoc(false);
             }
-            delete pStartPos;
-            delete pEndPos;
         }
     }
     EndSelect();

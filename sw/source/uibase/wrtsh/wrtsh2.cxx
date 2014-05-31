@@ -63,6 +63,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <xmloff/odffields.hxx>
+#include <boost/scoped_ptr.hpp>
 
 void SwWrtShell::Insert(SwField &rFld)
 {
@@ -192,13 +193,13 @@ bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
 
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg(pParentWin, *this, pFld, bNextButton);
+    boost::scoped_ptr<AbstractFldInputDlg> pDlg(pFact->CreateFldInputDlg(pParentWin, *this, pFld, bNextButton));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
 
     // Register for possible input field deletion while dialog is open
-    FieldDeletionModify aModify(pDlg);
+    FieldDeletionModify aModify(pDlg.get());
     GetDoc()->GetUnoCallBack()->Add(&aModify);
 
     bool bRet = RET_CANCEL == pDlg->Execute();
@@ -209,7 +210,7 @@ bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
 
-    delete pDlg;
+    pDlg.reset();
     GetWin()->Update();
     return bRet;
 }
@@ -219,14 +220,14 @@ bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, bool bNextButton, OString* p
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog(NULL, *this, pFld, bNextButton);
+    boost::scoped_ptr<AbstractDropDownFieldDialog> pDlg(pFact->CreateDropDownFieldDialog(NULL, *this, pFld, bNextButton));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
     sal_uInt16 nRet = pDlg->Execute();
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
-    delete pDlg;
+    pDlg.reset();
     bool bRet = RET_CANCEL == nRet;
     GetWin()->Update();
     if(RET_YES == nRet)

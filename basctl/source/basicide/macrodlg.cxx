@@ -48,6 +48,7 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 
 #include <map>
+#include <boost/scoped_ptr.hpp>
 
 namespace basctl
 {
@@ -765,9 +766,9 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         StoreMacroDescription();
 
         EntryDescriptor aDesc = m_pBasicBox->GetEntryDescriptor(m_pBasicBox->FirstSelected());
-        OrganizeDialog* pDlg = new OrganizeDialog( this, 0, aDesc );
+        boost::scoped_ptr<OrganizeDialog> pDlg(new OrganizeDialog( this, 0, aDesc ));
         sal_uInt16 nRet = pDlg->Execute();
-        delete pDlg;
+        pDlg.reset();
 
         if ( nRet ) // not only closed
         {
