@@ -26,7 +26,7 @@
 
 #include <connectivity/FValue.hxx>
 #include <connectivity/OSubComponent.hxx>
-#include <cppuhelper/compbase8.hxx>
+#include <cppuhelper/compbase7.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
 
@@ -39,7 +39,9 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#if 0
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#endif
 
 namespace connectivity
 {
@@ -48,11 +50,13 @@ namespace connectivity
         /*
         **  OResultSet
         */
-        typedef ::cppu::WeakComponentImplHelper8<      ::com::sun::star::sdbc::XResultSet,
+        typedef ::cppu::WeakComponentImplHelper7<       ::com::sun::star::sdbc::XResultSet,
                                                         ::com::sun::star::sdbc::XRow,
                                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                                         ::com::sun::star::util::XCancellable,
+#if 0
                                                         ::com::sun::star::sdbc::XWarningsSupplier,
+#endif
                                                         ::com::sun::star::sdbc::XCloseable,
                                                         ::com::sun::star::sdbc::XColumnLocate,
                                                         ::com::sun::star::lang::XServiceInfo> OResultSet_BASE;
@@ -185,8 +189,10 @@ namespace connectivity
             // XCloseable
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             // XWarningsSupplier
+#if 0
             virtual ::com::sun::star::uno::Any SAL_CALL getWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual void SAL_CALL clearWarnings(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+#endif
 
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn(const ::rtl::OUString& columnName)
