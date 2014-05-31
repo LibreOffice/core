@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CustomTarget_CustomTarget,extras/source/autotext))
+$(eval $(call gb_CustomTarget_CustomTarget,extras/source/autocorr))
 
 extras_AUTOCORR_LANGS := \
 	af-ZA:af-ZA \
@@ -56,249 +56,254 @@ extras_AUTOCORR_LANGS := \
 	zh-TW:zh-TW \
 
 extras_AUTOCORR_XMLFILES := \
-	af-ZA/acor/DocumentList.xml \
-	af-ZA/acor/META-INF/manifest.xml \
-	af-ZA/acor/SentenceExceptList.xml \
-	af-ZA/acor/WordExceptList.xml \
-	bg/acor/DocumentList.xml \
-	bg/acor/META-INF/manifest.xml \
-	bg/acor/SentenceExceptList.xml \
-	bg/acor/WordExceptList.xml \
-	ca/acor/BlockList.xml \
-	ca/acor/DocumentList.xml \
-	ca/acor/META-INF/manifest.xml \
-	ca/acor/SentenceExceptList.xml \
-	ca/acor/WordExceptList.xml \
-	cs/acor/BlockList.xml \
-	cs/acor/DocumentList.xml \
-	cs/acor/META-INF/manifest.xml \
-	da/acor/BlockList.xml \
-	da/acor/DocumentList.xml \
-	da/acor/META-INF/manifest.xml \
-	da/acor/SentenceExceptList.xml \
-	da/acor/WordExceptList.xml \
-	de/acor/BlockList.xml \
-	de/acor/DocumentList.xml \
-	de/acor/META-INF/manifest.xml \
-	de/acor/SentenceExceptList.xml \
-	de/acor/WordExceptList.xml \
-	en-AU/acor/BlockList.xml \
-	en-AU/acor/DocumentList.xml \
-	en-AU/acor/META-INF/manifest.xml \
-	en-AU/acor/SentenceExceptList.xml \
-	en-AU/acor/WordExceptList.xml \
-	en-GB/acor/BlockList.xml \
-	en-GB/acor/DocumentList.xml \
-	en-GB/acor/META-INF/manifest.xml \
-	en-GB/acor/SentenceExceptList.xml \
-	en-GB/acor/WordExceptList.xml \
-	en-US/acor/BlockList.xml \
-	en-US/acor/DocumentList.xml \
-	en-US/acor/META-INF/manifest.xml \
-	en-US/acor/SentenceExceptList.xml \
-	en-US/acor/WordExceptList.xml \
-	en-ZA/acor/DocumentList.xml \
-	en-ZA/acor/META-INF/manifest.xml \
-	en-ZA/acor/SentenceExceptList.xml \
-	en-ZA/acor/WordExceptList.xml \
-	es/acor/BlockList.xml \
-	es/acor/DocumentList.xml \
-	es/acor/META-INF/manifest.xml \
-	es/acor/SentenceExceptList.xml \
-	es/acor/WordExceptList.xml \
-	fa/acor/DocumentList.xml \
-	fa/acor/META-INF/manifest.xml \
-	fi/acor/BlockList.xml \
-	fi/acor/DocumentList.xml \
-	fi/acor/META-INF/manifest.xml \
-	fi/acor/SentenceExceptList.xml \
-	fi/acor/WordExceptList.xml \
-	fr/acor/DocumentList.xml \
-	fr/acor/META-INF/manifest.xml \
-	fr/acor/SentenceExceptList.xml \
-	fr/acor/WordExceptList.xml \
-	ga-IE/acor/DocumentList.xml \
-	ga-IE/acor/META-INF/manifest.xml \
-	ga-IE/acor/SentenceExceptList.xml \
-	ga-IE/acor/WordExceptList.xml \
-	hr/acor/DocumentList.xml \
-	hr/acor/META-INF/manifest.xml \
-	hr/acor/SentenceExceptList.xml \
-	hr/acor/WordExceptList.xml \
-	hu/acor/BlockList.xml \
-	hu/acor/DocumentList.xml \
-	hu/acor/META-INF/manifest.xml \
-	hu/acor/SentenceExceptList.xml \
-	hu/acor/WordExceptList.xml \
-	is/acor/META-INF/manifest.xml \
-	is/acor/SentenceExceptList.xml \
-	it/acor/BlockList.xml \
-	it/acor/DocumentList.xml \
-	it/acor/META-INF/manifest.xml \
-	it/acor/SentenceExceptList.xml \
-	it/acor/WordExceptList.xml \
-	ja/acor/DocumentList.xml \
-	ja/acor/META-INF/manifest.xml \
-	ja/acor/SentenceExceptList.xml \
-	ko/acor/DocumentList.xml \
-	ko/acor/META-INF/manifest.xml \
-	ko/acor/SentenceExceptList.xml \
-	lb-LU/acor/DocumentList.xml \
-	lb-LU/acor/META-INF/manifest.xml \
-	lt/acor/BlockList.xml \
-	lt/acor/DocumentList.xml \
-	lt/acor/META-INF/manifest.xml \
-	lt/acor/SentenceExceptList.xml \
-	lt/acor/WordExceptList.xml \
-	mn/acor/DocumentList.xml \
-	mn/acor/META-INF/manifest.xml \
-	mn/acor/SentenceExceptList.xml \
-	mn/acor/WordExceptList.xml \
-	nl-BE/acor/BlockList.xml \
-	nl-BE/acor/DocumentList.xml \
-	nl-BE/acor/META-INF/manifest.xml \
-	nl-BE/acor/SentenceExceptList.xml \
-	nl-BE/acor/WordExceptList.xml \
-	nl/acor/BlockList.xml \
-	nl/acor/DocumentList.xml \
-	nl/acor/META-INF/manifest.xml \
-	nl/acor/SentenceExceptList.xml \
-	nl/acor/WordExceptList.xml \
-	pl/acor/DocumentList.xml \
-	pl/acor/META-INF/manifest.xml \
-	pl/acor/SentenceExceptList.xml \
-	pl/acor/WordExceptList.xml \
-	pt-BR/acor/BlockList.xml \
-	pt-BR/acor/DocumentList.xml \
-	pt-BR/acor/META-INF/manifest.xml \
-	pt-BR/acor/SentenceExceptList.xml \
-	pt-BR/acor/WordExceptList.xml \
-	pt/acor/BlockList.xml \
-	pt/acor/DocumentList.xml \
-	pt/acor/META-INF/manifest.xml \
-	pt/acor/SentenceExceptList.xml \
-	pt/acor/WordExceptList.xml \
-	ro/acor/BlockList.xml \
-	ro/acor/DocumentList.xml \
-	ro/acor/META-INF/manifest.xml \
-	ro/acor/SentenceExceptList.xml \
-	ro/acor/WordExceptList.xml \
-	ru/acor/BlockList.xml \
-	ru/acor/DocumentList.xml \
-	ru/acor/META-INF/manifest.xml \
-	ru/acor/SentenceExceptList.xml \
-	ru/acor/WordExceptList.xml \
-	sk/acor/DocumentList.xml \
-	sk/acor/META-INF/manifest.xml \
-	sk/acor/SentenceExceptList.xml \
-	sk/acor/WordExceptList.xml \
-	sl/acor/DocumentList.xml \
-	sl/acor/META-INF/manifest.xml \
-	sl/acor/SentenceExceptList.xml \
-	sl/acor/WordExceptList.xml \
-	sr-CS/acor/DocumentList.xml \
-	sr-CS/acor/META-INF/manifest.xml \
-	sr-CS/acor/SentenceExceptList.xml \
-	sr-CS/acor/WordExceptList.xml \
-	sr-Latn-CS/acor/DocumentList.xml \
-	sr-Latn-CS/acor/META-INF/manifest.xml \
-	sr-Latn-CS/acor/SentenceExceptList.xml \
-	sr-Latn-CS/acor/WordExceptList.xml \
-	sr-Latn-ME/acor/DocumentList.xml \
-	sr-Latn-ME/acor/META-INF/manifest.xml \
-	sr-Latn-ME/acor/SentenceExceptList.xml \
-	sr-Latn-ME/acor/WordExceptList.xml \
-	sr-Latn-RS/acor/DocumentList.xml \
-	sr-Latn-RS/acor/META-INF/manifest.xml \
-	sr-Latn-RS/acor/SentenceExceptList.xml \
-	sr-Latn-RS/acor/WordExceptList.xml \
-	sr-ME/acor/DocumentList.xml \
-	sr-ME/acor/META-INF/manifest.xml \
-	sr-ME/acor/SentenceExceptList.xml \
-	sr-ME/acor/WordExceptList.xml \
-	sr-RS/acor/DocumentList.xml \
-	sr-RS/acor/META-INF/manifest.xml \
-	sr-RS/acor/SentenceExceptList.xml \
-	sr-RS/acor/WordExceptList.xml \
-	sv/acor/BlockList.xml \
-	sv/acor/DocumentList.xml \
-	sv/acor/META-INF/manifest.xml \
-	sv/acor/SentenceExceptList.xml \
-	sv/acor/WordExceptList.xml \
-	tr/acor/DocumentList.xml \
-	tr/acor/META-INF/manifest.xml \
-	tr/acor/SentenceExceptList.xml \
-	tr/acor/WordExceptList.xml \
-	vi/acor/DocumentList.xml \
-	vi/acor/META-INF/manifest.xml \
-	vi/acor/WordExceptList.xml \
-	zh-CN/acor/DocumentList.xml \
-	zh-CN/acor/META-INF/manifest.xml \
-	zh-CN/acor/SentenceExceptList.xml \
-	zh-TW/acor/DocumentList.xml \
-	zh-TW/acor/META-INF/manifest.xml \
-	zh-TW/acor/SentenceExceptList.xml \
+	af-ZA/DocumentList.xml \
+	af-ZA/META-INF/manifest.xml \
+	af-ZA/SentenceExceptList.xml \
+	af-ZA/WordExceptList.xml \
+	bg/DocumentList.xml \
+	bg/META-INF/manifest.xml \
+	bg/SentenceExceptList.xml \
+	bg/WordExceptList.xml \
+	ca/BlockList.xml \
+	ca/DocumentList.xml \
+	ca/META-INF/manifest.xml \
+	ca/SentenceExceptList.xml \
+	ca/WordExceptList.xml \
+	cs/BlockList.xml \
+	cs/DocumentList.xml \
+	cs/META-INF/manifest.xml \
+	da/BlockList.xml \
+	da/DocumentList.xml \
+	da/META-INF/manifest.xml \
+	da/SentenceExceptList.xml \
+	da/WordExceptList.xml \
+	de/BlockList.xml \
+	de/DocumentList.xml \
+	de/META-INF/manifest.xml \
+	de/SentenceExceptList.xml \
+	de/WordExceptList.xml \
+	en-AU/BlockList.xml \
+	en-AU/DocumentList.xml \
+	en-AU/META-INF/manifest.xml \
+	en-AU/SentenceExceptList.xml \
+	en-AU/WordExceptList.xml \
+	en-GB/BlockList.xml \
+	en-GB/DocumentList.xml \
+	en-GB/META-INF/manifest.xml \
+	en-GB/SentenceExceptList.xml \
+	en-GB/WordExceptList.xml \
+	en-US/BlockList.xml \
+	en-US/DocumentList.xml \
+	en-US/META-INF/manifest.xml \
+	en-US/SentenceExceptList.xml \
+	en-US/WordExceptList.xml \
+	en-ZA/DocumentList.xml \
+	en-ZA/META-INF/manifest.xml \
+	en-ZA/SentenceExceptList.xml \
+	en-ZA/WordExceptList.xml \
+	es/BlockList.xml \
+	es/DocumentList.xml \
+	es/META-INF/manifest.xml \
+	es/SentenceExceptList.xml \
+	es/WordExceptList.xml \
+	fa/DocumentList.xml \
+	fa/META-INF/manifest.xml \
+	fi/BlockList.xml \
+	fi/DocumentList.xml \
+	fi/META-INF/manifest.xml \
+	fi/SentenceExceptList.xml \
+	fi/WordExceptList.xml \
+	fr/DocumentList.xml \
+	fr/META-INF/manifest.xml \
+	fr/SentenceExceptList.xml \
+	fr/WordExceptList.xml \
+	ga-IE/DocumentList.xml \
+	ga-IE/META-INF/manifest.xml \
+	ga-IE/SentenceExceptList.xml \
+	ga-IE/WordExceptList.xml \
+	hr/DocumentList.xml \
+	hr/META-INF/manifest.xml \
+	hr/SentenceExceptList.xml \
+	hr/WordExceptList.xml \
+	hu/BlockList.xml \
+	hu/DocumentList.xml \
+	hu/META-INF/manifest.xml \
+	hu/SentenceExceptList.xml \
+	hu/WordExceptList.xml \
+	is/META-INF/manifest.xml \
+	is/SentenceExceptList.xml \
+	it/BlockList.xml \
+	it/DocumentList.xml \
+	it/META-INF/manifest.xml \
+	it/SentenceExceptList.xml \
+	it/WordExceptList.xml \
+	ja/DocumentList.xml \
+	ja/META-INF/manifest.xml \
+	ja/SentenceExceptList.xml \
+	ko/DocumentList.xml \
+	ko/META-INF/manifest.xml \
+	ko/SentenceExceptList.xml \
+	lb-LU/DocumentList.xml \
+	lb-LU/META-INF/manifest.xml \
+	lt/BlockList.xml \
+	lt/DocumentList.xml \
+	lt/META-INF/manifest.xml \
+	lt/SentenceExceptList.xml \
+	lt/WordExceptList.xml \
+	mn/DocumentList.xml \
+	mn/META-INF/manifest.xml \
+	mn/SentenceExceptList.xml \
+	mn/WordExceptList.xml \
+	nl-BE/BlockList.xml \
+	nl-BE/DocumentList.xml \
+	nl-BE/META-INF/manifest.xml \
+	nl-BE/SentenceExceptList.xml \
+	nl-BE/WordExceptList.xml \
+	nl/BlockList.xml \
+	nl/DocumentList.xml \
+	nl/META-INF/manifest.xml \
+	nl/SentenceExceptList.xml \
+	nl/WordExceptList.xml \
+	pl/DocumentList.xml \
+	pl/META-INF/manifest.xml \
+	pl/SentenceExceptList.xml \
+	pl/WordExceptList.xml \
+	pt-BR/BlockList.xml \
+	pt-BR/DocumentList.xml \
+	pt-BR/META-INF/manifest.xml \
+	pt-BR/SentenceExceptList.xml \
+	pt-BR/WordExceptList.xml \
+	pt/BlockList.xml \
+	pt/DocumentList.xml \
+	pt/META-INF/manifest.xml \
+	pt/SentenceExceptList.xml \
+	pt/WordExceptList.xml \
+	ro/BlockList.xml \
+	ro/DocumentList.xml \
+	ro/META-INF/manifest.xml \
+	ro/SentenceExceptList.xml \
+	ro/WordExceptList.xml \
+	ru/BlockList.xml \
+	ru/DocumentList.xml \
+	ru/META-INF/manifest.xml \
+	ru/SentenceExceptList.xml \
+	ru/WordExceptList.xml \
+	sk/DocumentList.xml \
+	sk/META-INF/manifest.xml \
+	sk/SentenceExceptList.xml \
+	sk/WordExceptList.xml \
+	sl/DocumentList.xml \
+	sl/META-INF/manifest.xml \
+	sl/SentenceExceptList.xml \
+	sl/WordExceptList.xml \
+	sr-CS/DocumentList.xml \
+	sr-CS/META-INF/manifest.xml \
+	sr-CS/SentenceExceptList.xml \
+	sr-CS/WordExceptList.xml \
+	sr-Latn-CS/DocumentList.xml \
+	sr-Latn-CS/META-INF/manifest.xml \
+	sr-Latn-CS/SentenceExceptList.xml \
+	sr-Latn-CS/WordExceptList.xml \
+	sr-Latn-ME/DocumentList.xml \
+	sr-Latn-ME/META-INF/manifest.xml \
+	sr-Latn-ME/SentenceExceptList.xml \
+	sr-Latn-ME/WordExceptList.xml \
+	sr-Latn-RS/DocumentList.xml \
+	sr-Latn-RS/META-INF/manifest.xml \
+	sr-Latn-RS/SentenceExceptList.xml \
+	sr-Latn-RS/WordExceptList.xml \
+	sr-ME/DocumentList.xml \
+	sr-ME/META-INF/manifest.xml \
+	sr-ME/SentenceExceptList.xml \
+	sr-ME/WordExceptList.xml \
+	sr-RS/DocumentList.xml \
+	sr-RS/META-INF/manifest.xml \
+	sr-RS/SentenceExceptList.xml \
+	sr-RS/WordExceptList.xml \
+	sv/BlockList.xml \
+	sv/DocumentList.xml \
+	sv/META-INF/manifest.xml \
+	sv/SentenceExceptList.xml \
+	sv/WordExceptList.xml \
+	tr/DocumentList.xml \
+	tr/META-INF/manifest.xml \
+	tr/SentenceExceptList.xml \
+	tr/WordExceptList.xml \
+	vi/DocumentList.xml \
+	vi/META-INF/manifest.xml \
+	vi/WordExceptList.xml \
+	zh-CN/DocumentList.xml \
+	zh-CN/META-INF/manifest.xml \
+	zh-CN/SentenceExceptList.xml \
+	zh-TW/DocumentList.xml \
+	zh-TW/META-INF/manifest.xml \
+	zh-TW/SentenceExceptList.xml \
 
 
 extras_AUTOCORR_MIMETYPEFILES := \
-	af-ZA/acor/mimetype \
-	bg/acor/mimetype \
-	ca/acor/mimetype \
-	cs/acor/mimetype \
-	da/acor/mimetype \
-	de/acor/mimetype \
-	en-AU/acor/mimetype \
-	en-GB/acor/mimetype \
-	en-US/acor/mimetype \
-	en-ZA/acor/mimetype \
-	es/acor/mimetype \
-	fa/acor/mimetype \
-	fi/acor/mimetype \
-	fr/acor/mimetype \
-	ga-IE/acor/mimetype \
-	hu/acor/mimetype \
-	is/acor/mimetype \
-	it/acor/mimetype \
-	lb-LU/acor/mimetype \
-	lt/acor/mimetype \
-	mn/acor/mimetype \
-	nl-BE/acor/mimetype \
-	nl/acor/mimetype \
-	pl/acor/mimetype \
-	pt-BR/acor/mimetype \
-	pt/acor/mimetype \
-	ro/acor/mimetype \
-	ru/acor/mimetype \
-	sk/acor/mimetype \
-	sl/acor/mimetype \
-	sr-CS/acor/mimetype \
-	sr-Latn-CS/acor/mimetype \
-	sr-Latn-ME/acor/mimetype \
-	sr-Latn-RS/acor/mimetype \
-	sr-ME/acor/mimetype \
-	sr-RS/acor/mimetype \
-	sv/acor/mimetype \
-	tr/acor/mimetype \
-	vi/acor/mimetype \
+	af-ZA/mimetype \
+	bg/mimetype \
+	ca/mimetype \
+	cs/mimetype \
+	da/mimetype \
+	de/mimetype \
+	en-AU/mimetype \
+	en-GB/mimetype \
+	en-US/mimetype \
+	en-ZA/mimetype \
+	es/mimetype \
+	fa/mimetype \
+	fi/mimetype \
+	fr/mimetype \
+	ga-IE/mimetype \
+	hr/mimetype \
+	hu/mimetype \
+	is/mimetype \
+	it/mimetype \
+	ja/mimetype \
+	ko/mimetype \
+	lb-LU/mimetype \
+	lt/mimetype \
+	mn/mimetype \
+	nl-BE/mimetype \
+	nl/mimetype \
+	pl/mimetype \
+	pt-BR/mimetype \
+	pt/mimetype \
+	ro/mimetype \
+	ru/mimetype \
+	sk/mimetype \
+	sl/mimetype \
+	sr-CS/mimetype \
+	sr-Latn-CS/mimetype \
+	sr-Latn-ME/mimetype \
+	sr-Latn-RS/mimetype \
+	sr-ME/mimetype \
+	sr-RS/mimetype \
+	sv/mimetype \
+	tr/mimetype \
+	vi/mimetype \
+	zh-CN/mimetype \
+	zh-TW/mimetype \
 
 
 ifneq ($(sort $(foreach file,$(extras_AUTOCORR_XMLFILES),$(firstword $(subst /, ,$(file))))),$(sort $(foreach lang,$(extras_AUTOCORR_LANGS),$(firstword $(subst :, ,$(lang))))))
 $(call gb_Output_error,defined autocorrection languages do not match existing directories)
 endif
 
-$(call gb_CustomTarget_get_target,extras/source/autotext) : \
-	$(foreach lang,$(extras_AUTOCORR_LANGS),$(call gb_CustomTarget_get_workdir,extras/source/autotext)/acor_$(lastword $(subst :, ,$(lang))).dat)
+$(call gb_CustomTarget_get_target,extras/source/autocorr) : \
+	$(foreach lang,$(extras_AUTOCORR_LANGS),$(call gb_CustomTarget_get_workdir,extras/source/autocorr)/acor_$(lastword $(subst :, ,$(lang))).dat)
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%/mimetype : $(SRCDIR)/extras/source/autotext/lang/%/mimetype
+$(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%/mimetype : $(SRCDIR)/extras/source/autocorr/lang/%/mimetype
 	$(call gb_Output_announce,$*/mimetype,$(true),CPY,1)
 	cp $< $@
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.xml : $(SRCDIR)/extras/source/autotext/lang/%.xml \
+$(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%.xml : $(SRCDIR)/extras/source/autocorr/lang/%.xml \
 		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
 	$(call gb_Output_announce,$*.xml,$(true),XSL,1)
 	$(call gb_ExternalExecutable_get_command,xsltproc) -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.dat :
+$(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%.dat :
 	$(call gb_Output_announce,$*.dat,$(true),ZIP,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		cd $(EXTRAS_AUTOCORR_DIR) && \
@@ -317,18 +322,18 @@ $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
 	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
 
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_AUTOCORR_FILES := $(foreach file,$(filter $(3)/%,$(extras_AUTOCORR_MIMETYPEFILES) $(extras_AUTOCORR_XMLFILES)),$(subst $(3)/acor/,,$(file)))
+	EXTRAS_AUTOCORR_FILES := $(foreach file,$(filter $(3)/%,$(extras_AUTOCORR_MIMETYPEFILES) $(extras_AUTOCORR_XMLFILES)),$(subst $(3)/,,$(file)))
 $(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_AUTOCORR_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)/acor
+	EXTRAS_AUTOCORR_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)
 
 endef
 
 $(eval $(foreach file,$(extras_AUTOCORR_MIMETYPEFILES) $(extras_AUTOCORR_XMLFILES),\
-	$(call extras_Autocorr_make_file_deps,extras/source/autotext,$(file)) \
+	$(call extras_Autocorr_make_file_deps,extras/source/autocorr,$(file)) \
 ))
 
 $(eval $(foreach lang,$(extras_AUTOCORR_LANGS),\
-	$(call extras_Autocorr_make_zip_deps,extras/source/autotext,acor_$(lastword $(subst :, ,$(lang))).dat,$(firstword $(subst :, ,$(lang)))) \
+	$(call extras_Autocorr_make_zip_deps,extras/source/autocorr,acor_$(lastword $(subst :, ,$(lang))).dat,$(firstword $(subst :, ,$(lang)))) \
 ))
 
 # vim: set noet sw=4 ts=4:
