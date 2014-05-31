@@ -1145,9 +1145,9 @@ void DummyXShapes::render()
     }
 }
 
-DummyChart::DummyChart(uno::Reference< drawing::XShape > xTarget):
+DummyChart::DummyChart():
     mbNotInit(true),
-    m_GLRender(xTarget)
+    m_GLRender()
 {
     SAL_INFO("chart2.opengl", "DummyXShape::DummyChart()-----test: ");
     setName("com.sun.star.chart2.shapes");

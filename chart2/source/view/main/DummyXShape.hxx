@@ -387,7 +387,7 @@ protected:
 class DummyChart : public DummyXShapes
 {
 public:
-    DummyChart(com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xDrawPage);
+    DummyChart();
     virtual ~DummyChart();
     virtual DummyChart* getRootShape() SAL_OVERRIDE;
 

@@ -375,49 +375,6 @@ void OpenGLRender::prepareToRender()
 
 void OpenGLRender::renderToBitmap()
 {
-    if (mbArbMultisampleSupported)
-    {
-        GLenum status;
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glBindFramebuffer(GL_READ_FRAMEBUFFER, m_frameBufferMS);
-        status = glCheckFramebufferStatus(GL_READ_FRAMEBUFFER);
-        if (status != GL_FRAMEBUFFER_COMPLETE)
-        {
-            SAL_INFO("chart2.opengl", "The frame buffer status is not complete!");
-        }
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_FboID[0]);
-        status = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
-        if (status != GL_FRAMEBUFFER_COMPLETE)
-        {
-            SAL_INFO("chart2.opengl", "The frame buffer status is not complete!");
-        }
-        glBlitFramebuffer(0, 0 ,m_iWidth, m_iHeight, 0, 0,m_iWidth ,m_iHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-        glBindFramebuffer(GL_READ_FRAMEBUFFER,0);
-        glBindFramebuffer(GL_DRAW_FRAMEBUFFER,0);
-    }
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
-
-    BitmapEx aBitmap = GetAsBitmap();
-#if RENDER_TO_FILE
-    static int nIdx = 0;
-    OUString aName = OUString( "file:///home/moggi/Documents/work/text" ) + OUString::number( nIdx++ ) + ".png";
-    try {
-        vcl::PNGWriter aWriter( aBitmap );
-        SvFileStream sOutput( aName, STREAM_WRITE );
-        aWriter.Write( sOutput );
-        sOutput.Close();
-    } catch (...) {
-        SAL_WARN("chart2.opengl", "Error writing png to " << aName);
-    }
-#else
-    Graphic aGraphic(aBitmap);
-    uno::Reference< awt::XBitmap> xBmp( aGraphic.GetXGraphic(), uno::UNO_QUERY );
-    uno::Reference < beans::XPropertySet > xPropSet ( mxTarget, uno::UNO_QUERY );
-    xPropSet->setPropertyValue("Graphic", uno::makeAny(aGraphic.GetXGraphic()));
-    mxTarget->setSize(awt::Size(m_iWidth*OPENGL_SCALE_VALUE, m_iHeight*OPENGL_SCALE_VALUE));
-    mxTarget->setPosition(awt::Point(0,0));
-#endif
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 int OpenGLRender::CreateTextureObj(int width, int height)
@@ -502,9 +459,8 @@ void OpenGLRender::Release()
     glDeleteRenderbuffers(1, &m_renderBufferDepthMS);
 }
 
-OpenGLRender::OpenGLRender(uno::Reference< drawing::XShape > xTarget)
-    : mxTarget(xTarget)
-    , m_iWidth(1600)
+OpenGLRender::OpenGLRender()
+    : m_iWidth(1600)
     , m_iHeight(900)
     , m_Model(glm::mat4(1.0f))
     , m_VertexBuffer(0)
