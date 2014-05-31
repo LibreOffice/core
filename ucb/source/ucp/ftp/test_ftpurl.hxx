@@ -17,10 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_TEST_FTPURL_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_TEST_FTPURL_HXX
+
 extern int test_ftpurl(void);
 extern int test_ftpproperties(void);
 extern int test_ftpopen(void);
 extern int test_ftplist(void);
 extern int test_ftpparent(void);
+
+#endif // INCLUDED_UCB_SOURCE_UCP_FTP_TEST_FTPURL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

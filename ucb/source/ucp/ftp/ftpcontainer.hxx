@@ -22,6 +22,9 @@
 
  *************************************************************************/
 
+#ifndef INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTAINER_HXX
+#define INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTAINER_HXX
+
 #include <sal/types.h>
 
 namespace ftp {
@@ -50,5 +53,7 @@ public:
 
 extern "C" int memory_write(
     void *buffer,size_t size,size_t nmemb,void *stream);
+
+#endif // INCLUDED_UCB_SOURCE_UCP_FTP_FTPCONTAINER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
