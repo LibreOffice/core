@@ -32,9 +32,9 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
 {
-    SwTwips         nYPos;  ///< Contains *always* the current RelPos.
-    sal_Int16       eOrient;
-    sal_Int16       eRelation;
+    SwTwips         m_nYPos;  ///< Contains *always* the current RelPos.
+    sal_Int16       m_eOrient;
+    sal_Int16       m_eRelation;
 public:
     TYPEINFO_OVERRIDE();
     SwFmtVertOrient( SwTwips nY = 0, sal_Int16 eVert = com::sun::star::text::VertOrientation::NONE,
@@ -55,13 +55,13 @@ public:
     SvStream& Store(SvStream &rStream, sal_uInt16 itemVersion) const SAL_OVERRIDE;
     SfxPoolItem* Create(SvStream &rStream, sal_uInt16 itemVersion) const SAL_OVERRIDE;
 
-    sal_Int16 GetVertOrient() const { return eOrient; }
-    sal_Int16 GetRelationOrient() const { return eRelation; }
-    void   SetVertOrient( sal_Int16 eNew ) { eOrient = eNew; }
-    void   SetRelationOrient( sal_Int16 eNew ) { eRelation = eNew; }
+    sal_Int16 GetVertOrient() const { return m_eOrient; }
+    sal_Int16 GetRelationOrient() const { return m_eRelation; }
+    void   SetVertOrient( sal_Int16 eNew ) { m_eOrient = eNew; }
+    void   SetRelationOrient( sal_Int16 eNew ) { m_eRelation = eNew; }
 
-    SwTwips GetPos() const { return nYPos; }
-    void    SetPos( SwTwips nNew ) { nYPos = nNew; }
+    SwTwips GetPos() const { return m_nYPos; }
+    void    SetPos( SwTwips nNew ) { m_nYPos = nNew; }
 };
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
@@ -101,9 +101,9 @@ public:
 
 inline SwFmtVertOrient &SwFmtVertOrient::operator=( const SwFmtVertOrient &rCpy )
 {
-    nYPos = rCpy.GetPos();
-    eOrient = rCpy.GetVertOrient();
-    eRelation = rCpy.GetRelationOrient();
+    m_nYPos = rCpy.GetPos();
+    m_eOrient = rCpy.GetVertOrient();
+    m_eRelation = rCpy.GetRelationOrient();
     return *this;
 }
 inline SwFmtHoriOrient &SwFmtHoriOrient::operator=( const SwFmtHoriOrient &rCpy )

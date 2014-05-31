@@ -1199,11 +1199,11 @@ bool SwFmtSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 SvStream& SwFmtVertOrient::Store(SvStream &rStream, sal_uInt16 /*version*/) const
 {
 #if SAL_TYPES_SIZEOFLONG == 8
-    rStream.WriteInt64(nYPos);
+    rStream.WriteInt64(m_nYPos);
 #else
-    rStream.WriteInt32(nYPos);
+    rStream.WriteInt32(m_nYPos);
 #endif
-    rStream.WriteInt16( eOrient ).WriteInt16( eRelation );
+    rStream.WriteInt16( m_eOrient ).WriteInt16( m_eRelation );
     return rStream;
 }
 
@@ -1230,22 +1230,22 @@ SfxPoolItem* SwFmtVertOrient::Create(SvStream &rStream, sal_uInt16 /*itemVersion
 SwFmtVertOrient::SwFmtVertOrient( SwTwips nY, sal_Int16 eVert,
                                   sal_Int16 eRel )
     : SfxPoolItem( RES_VERT_ORIENT ),
-    nYPos( nY ),
-    eOrient( eVert ),
-    eRelation( eRel )
+    m_nYPos( nY ),
+    m_eOrient( eVert ),
+    m_eRelation( eRel )
 {}
 
 bool SwFmtVertOrient::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "not the same attributes" );
-    return ( nYPos     == ((SwFmtVertOrient&)rAttr).nYPos &&
-             eOrient   == ((SwFmtVertOrient&)rAttr).eOrient &&
-             eRelation == ((SwFmtVertOrient&)rAttr).eRelation );
+    return ( m_nYPos     == ((SwFmtVertOrient&)rAttr).m_nYPos &&
+             m_eOrient   == ((SwFmtVertOrient&)rAttr).m_eOrient &&
+             m_eRelation == ((SwFmtVertOrient&)rAttr).m_eRelation );
 }
 
 SfxPoolItem*  SwFmtVertOrient::Clone( SfxItemPool* ) const
 {
-    return new SwFmtVertOrient( nYPos, eOrient, eRelation );
+    return new SwFmtVertOrient( m_nYPos, m_eOrient, m_eRelation );
 }
 
 bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1257,11 +1257,11 @@ bool SwFmtVertOrient::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     {
         case MID_VERTORIENT_ORIENT:
         {
-            rVal <<= (sal_Int16)eOrient;
+            rVal <<= (sal_Int16)m_eOrient;
         }
         break;
         case MID_VERTORIENT_RELATION:
-                rVal <<= (sal_Int16)eRelation;
+                rVal <<= (sal_Int16)m_eRelation;
         break;
         case MID_VERTORIENT_POSITION:
                 rVal <<= (sal_Int32)convertTwipToMm100(GetPos());
@@ -1284,12 +1284,12 @@ bool SwFmtVertOrient::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_uInt16 nVal = text::VertOrientation::NONE;
             rVal >>= nVal;
-            eOrient = nVal;
+            m_eOrient = nVal;
         }
         break;
         case MID_VERTORIENT_RELATION:
         {
-            eRelation = lcl_IntToRelation(rVal);
+            m_eRelation = lcl_IntToRelation(rVal);
         }
         break;
         case MID_VERTORIENT_POSITION:
