@@ -3678,6 +3678,20 @@ void OpGamma::GenSlidingWindowFunction(
 void OpCorrel::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
+    if( vSubArguments.size() !=2 ||vSubArguments[0]->GetFormulaToken()
+        ->GetType() != formula::svDoubleVectorRef||vSubArguments[1]
+        ->GetFormulaToken()->GetType() != formula::svDoubleVectorRef )
+        ///only support DoubleVector in OpCorrelfor GPU calculating.
+        throw Unhandled();
+    const formula::DoubleVectorRefToken* pCurDVRX =
+        static_cast<const formula::DoubleVectorRefToken *>(
+        vSubArguments[0]->GetFormulaToken());
+    const formula::DoubleVectorRefToken* pCurDVRY =
+        static_cast<const formula::DoubleVectorRefToken *>(
+        vSubArguments[1]->GetFormulaToken());
+    if(  pCurDVRX->GetRefRowSize() != pCurDVRY->GetRefRowSize() )
+         throw Unhandled();
+
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -3698,16 +3712,8 @@ void OpCorrel::GenSlidingWindowFunction(
     ss << "double arg1 = 0.0;\n\t";
     ss << "int cnt = 0;\n\t";
 
-    FormulaToken *pCurX = vSubArguments[0]->GetFormulaToken();
-    FormulaToken *pCurY = vSubArguments[1]->GetFormulaToken();
-    const formula::DoubleVectorRefToken* pCurDVRX =
-        static_cast<const formula::DoubleVectorRefToken *>(pCurX);
-    const formula::DoubleVectorRefToken* pCurDVRY =
-        static_cast<const formula::DoubleVectorRefToken *>(pCurY);
-    size_t nCurWindowSizeX = pCurDVRX->GetRefRowSize();
-    size_t nCurWindowSizeY = pCurDVRY->GetRefRowSize();
-    if(nCurWindowSizeX == nCurWindowSizeY)
-    {
+    size_t nCurWindowSizeX = pCurDVRY->GetRefRowSize();
+
         ss << "for (int i = ";
         if (!pCurDVRX->IsStartFixed() && pCurDVRX->IsEndFixed()) {
             ss << "gid0; i < " << nCurWindowSizeX << "; i++) {\n\t\t";
@@ -3880,7 +3886,6 @@ void OpCorrel::GenSlidingWindowFunction(
         ss << "}\n\t";
         ss << "}\n";
         ss << "}";
-    }
 }
 
 void OpNegbinomdist::GenSlidingWindowFunction(
@@ -3959,10 +3964,20 @@ void OpNegbinomdist::GenSlidingWindowFunction(
 void OpPearson::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
-    FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
-    assert(pCur);
+    if( vSubArguments.size() !=2 ||vSubArguments[0]->GetFormulaToken()
+        ->GetType() != formula::svDoubleVectorRef||vSubArguments[1]
+        ->GetFormulaToken()->GetType() != formula::svDoubleVectorRef )
+        ///only support DoubleVector in OpPearson for GPU calculating.
+        throw Unhandled();
     const formula::DoubleVectorRefToken* pDVR =
-        static_cast<const formula::DoubleVectorRefToken *>(pCur);
+        static_cast<const formula::DoubleVectorRefToken *>(
+        vSubArguments[0]->GetFormulaToken());
+    const formula::DoubleVectorRefToken* pCurDVRY =
+        static_cast<const formula::DoubleVectorRefToken *>(
+        vSubArguments[1]->GetFormulaToken());
+    if(  pDVR->GetRefRowSize() != pCurDVRY->GetRefRowSize() )
+         throw Unhandled();
+
     size_t nCurWindowSize = pDVR->GetRefRowSize();
 
     ss << "\ndouble " << sSymName;
@@ -4000,6 +4015,7 @@ void OpPearson::GenSlidingWindowFunction(
     ss << ";\n";
     ss << "          fIny = "<<vSubArguments[1]->GenSlidingWindowDeclRef(true);
     ss << "  ;\n";
+    ss << " if(isNan(fInx)||isNan(fIny)){fInx=0.0;fIny=0.0;fCount = fCount-1;}\n";
     ss << "       fSumX += fInx;\n";
     ss << "       fSumY += fIny;\n";
     ss << "       fCount = fCount + 1;\n";
@@ -4026,6 +4042,7 @@ void OpPearson::GenSlidingWindowFunction(
     ss << " ;\n";
     ss << "           fIny = "<<vSubArguments[1]->GenSlidingWindowDeclRef(true);
     ss << " ;\n";
+    ss << " if(isNan(fInx)||isNan(fIny)){fInx=0.0;fIny=0.0;}\n";
     ss << "           fSumDeltaXDeltaY += (fInx - fMeanX) * (fIny - fMeanY);\n";
     ss << "           fSumX += pow(fInx - fMeanX,2);\n";
     ss << "           fSumY += pow(fIny - fMeanY,2);\n";
@@ -4579,11 +4596,21 @@ void OpCritBinom::GenSlidingWindowFunction(std::stringstream& ss,
 void OpRsq::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName, SubArguments &vSubArguments)
 {
-    FormulaToken* pCur = vSubArguments[1]->GetFormulaToken();
-    assert(pCur);
-    const formula::DoubleVectorRefToken* pCurDVR =
-        static_cast<const formula::DoubleVectorRefToken *>(pCur);
-    size_t nCurWindowSize = pCurDVR->GetRefRowSize();
+    if( vSubArguments.size() !=2 ||vSubArguments[0]->GetFormulaToken()
+        ->GetType() != formula::svDoubleVectorRef||vSubArguments[1]
+        ->GetFormulaToken()->GetType() != formula::svDoubleVectorRef )
+        ///only support DoubleVector in OpRsq for GPU calculating.
+        throw Unhandled();
+    const formula::DoubleVectorRefToken* pCurDVR1 =
+        static_cast<const formula::DoubleVectorRefToken *>(
+        vSubArguments[0]->GetFormulaToken());
+    const formula::DoubleVectorRefToken* pCurDVR2 =
+        static_cast<const formula::DoubleVectorRefToken *>(
+        vSubArguments[1]->GetFormulaToken());
+    if(  pCurDVR1->GetRefRowSize() != pCurDVR2->GetRefRowSize() )
+         throw Unhandled();
+
+    size_t nCurWindowSize = pCurDVR1->GetRefRowSize();
 
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
@@ -4605,29 +4632,18 @@ void OpRsq::GenSlidingWindowFunction(
     ss << "    double tmp0,tmp1;\n";
     vSubArguments.size();
     ss <<"\n";
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::DoubleVectorRefToken*tmpCurDVR0= static_cast<const
-    formula::DoubleVectorRefToken *>(tmpCur0);
-    FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
-    const formula::DoubleVectorRefToken*tmpCurDVR1= static_cast<const
-    formula::DoubleVectorRefToken *>(tmpCur1);
-    ss << "    int buffer_fInx_len = ";
-    ss << tmpCurDVR0->GetArrayLength();
-    ss << ";\n";
-    ss << "    int buffer_fIny_len = ";
-    ss << tmpCurDVR1->GetArrayLength();
-    ss << ";\n";
+
     ss << "   for(int i=0; i<"<<nCurWindowSize<<"; i++)\n";
     ss << "   {\n";
-    ss << "     if((gid0+i)>=buffer_fInx_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << "     if(isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef(true);
     ss << "))\n";
     ss << "         fInx = 0;\n";
     ss << "     else\n";
     ss << "        fInx = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
-    ss << "      if((gid0+i)>=buffer_fIny_len || isNan(";
-    ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << "      if(isNan(";
+    ss << vSubArguments[1]->GenSlidingWindowDeclRef(true);
     ss << "))\n";
     ss << "          fIny = 0;\n";
     ss << "      else\n";
@@ -4643,14 +4659,14 @@ void OpRsq::GenSlidingWindowFunction(
     ss << "    fSumY = 0.0;\n";
     ss << "    for(int i=0; i<"<<nCurWindowSize<<"; i++)\n";
     ss << "    {\n";
-    ss << "     if((gid0+i)>=buffer_fInx_len || isNan(";
-    ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << "     if(isNan(";
+    ss << vSubArguments[0]->GenSlidingWindowDeclRef(true);
     ss << "))\n";
     ss << "         fInx = 0;\n";
     ss << "     else\n";
     ss << "        fInx = "<<vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
-    ss << "      if((gid0+i)>=buffer_fIny_len || isNan(";
+    ss << "      if(isNan(";
     ss << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << "))\n";
     ss << "          fIny = 0;\n";

@@ -424,14 +424,6 @@ void OpEven::GenSlidingWindowFunction(std::stringstream &ss,
 void OpMod::GenSlidingWindowFunction(std::stringstream &ss,
             const std::string &sSymName, SubArguments &vSubArguments)
 {
-#ifdef ISNAN
-    FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR0= static_cast<const
-          formula::SingleVectorRefToken *>(tmpCur0);
-    FormulaToken *tmpCur1 = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR1= static_cast<const
-          formula::SingleVectorRefToken *>(tmpCur1);
-#endif
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -444,22 +436,13 @@ void OpMod::GenSlidingWindowFunction(std::stringstream &ss,
     ss <<"    int gid0=get_global_id(0);\n";
     ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
-    ss <<"    double arg1 =" << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << "    double arg1 =" << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << ";\n";
-#ifdef ISNAN
-    ss<< "    if(isNan(arg0)||(gid0>=";
-    ss<<tmpCurDVR0->GetArrayLength();
-    ss<<"))\n";
-    ss<<"        arg0 = 0;\n";
-#endif
-#ifdef ISNAN
-    ss<< "    if(isNan(arg1)||(gid0>=";
-    ss<<tmpCurDVR1->GetArrayLength();
-    ss<<"))\n";
-    ss<<"        arg1 = 0;\n";
-#endif
+    ss << "    if(isNan(arg0)||arg0 == 0)\n";
+    ss << "        return 0;\n";
+    ss << "    if(isNan(arg1) || arg1 ==0)\n";
+    ss << "        return NAN;\n";
     ss << "    double tem;\n";
-    ss << "    if(arg1 != 0) {\n";
     ss << "        if(arg0 < 0 && arg1 > 0)\n";
     ss << "            while(arg0 < 0)\n";
     ss << "                arg0 += arg1;\n";
@@ -467,9 +450,6 @@ void OpMod::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "            while(arg0 > 0)\n";
     ss << "                arg0 += arg1;\n";
     ss << "        tem = fmod(arg0,arg1);\n";
-    ss << "    }\n";
-    ss << "    else\n";
-    ss << "        tem = 0;\n";
     ss << "    if(arg1 < 0 && tem > 0)\n";
     ss << "        tem = -tem;\n";
     ss << "    return tem;\n";
@@ -2318,9 +2298,6 @@ void OpFloor::GenSlidingWindowFunction(
     std::stringstream &ss, const std::string &sSymName,
     SubArguments &vSubArguments)
 {
-    FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
-    const formula::SingleVectorRefToken*tmpCurDVR= static_cast<const
-        formula::SingleVectorRefToken *>(tmpCur);
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -2330,35 +2307,27 @@ void OpFloor::GenSlidingWindowFunction(
         vSubArguments[i]->GenSlidingWindowDecl(ss);
     }
     ss << ")\n{\n";
-    ss <<"    int gid0=get_global_id(0);\n";
-    ss << "    double arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
+    ss << "    int gid0=get_global_id(0);\n";
+    ss << "    double arg0,arg1,arg2=0.0;\n";
+    ss << "    arg0 = " << vSubArguments[0]->GenSlidingWindowDeclRef();
     ss << ";\n";
-    ss << "    double arg1 = " << vSubArguments[1]->GenSlidingWindowDeclRef();
+    ss << "    arg1 = " << vSubArguments[1]->GenSlidingWindowDeclRef();
     ss << ";\n";
-    ss << "    double arg2 = " << vSubArguments[2]->GenSlidingWindowDeclRef();
-    ss << ";\n";
-#ifdef ISNAN
-    ss<< "    if(isNan(arg0)||(gid0>=";
-    ss<<tmpCurDVR->GetArrayLength();
-    ss<<"))\n";
-    ss<<"        arg0 = 0;\n";
-    ss<< "    if(isNan(arg1)||(gid0>=";
-    ss<<tmpCurDVR->GetArrayLength();
-    ss<<"))\n";
-    ss<<"        arg1 = 0;\n";
-    ss<< "    if(isNan(arg2)||(gid0>=";
-    ss<<tmpCurDVR->GetArrayLength();
-    ss<<"))\n";
-    ss<<"        arg2 = 0;\n";
-#endif
-    ss <<"    if(arg1==0.0)\n";
-    ss <<"        return 0.0;\n";
-    ss <<"    else if(arg0*arg1<0.0)\n";
-    ss <<"        return 0.0000000001;\n";
-    ss <<"    else if(arg2==0.0&&arg0<0.0)\n";
-    ss <<"        return (trunc(arg0/arg1)+1)*arg1;\n";
-    ss <<"    else\n";
-    ss <<"        return trunc(arg0/arg1)*arg1;\n";
+    if ( 3 == vSubArguments.size() )
+    {
+        ss << "    arg2 = " << vSubArguments[2]->GenSlidingWindowDeclRef();
+        ss << ";\n";
+    }
+    ss << "    if(isNan(arg0) || isNan(arg1))\n";
+    ss << "        return 0;\n";
+    ss << "    if(isNan(arg2))\n";
+    ss << "        arg2 = 0.0;\n";
+    ss << "    if(arg0*arg1<0)\n";
+    ss << "        return NAN;\n";
+    ss << "    else if(arg2==0.0&&arg0<0.0)\n";
+    ss << "        return (trunc(arg0/arg1)+1)*arg1;\n";
+    ss << "    else\n";
+    ss << "        return trunc(arg0/arg1)*arg1;\n";
     ss << "}\n";
 }
 void OpBitOr::GenSlidingWindowFunction(std::stringstream &ss,
