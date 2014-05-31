@@ -299,11 +299,15 @@ void Font::SetFillColor( const Color& rColor )
     mpImplFont->maFillColor = rColor;
     if ( rColor.GetTransparency() )
         mpImplFont->mbTransparent = true;
+    if (GetUnderline() == UNDERLINE_SINGLE ) {
+        fprintf(stderr, "I'm setting a filling (from Font) of (%d,%d,%d) \n",
+            rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue());
+    }
 }
 
 void Font::SetBackgroundColor(const Color& rColor)
 {
-    // FIXME
+    // FIXME(matteocam)
     //MakeUnique();
     /*mpImplFont->maBkgColor = rColor;
     if () */
