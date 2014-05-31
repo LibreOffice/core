@@ -404,6 +404,11 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
             pNew = new EditCharAttribField( (const SvxFieldItem&)rNew, nS );
         }
         break;
+        case EE_CHAR_BKGCOLOR:
+        {
+            pNew = new EditCharAttribBackgroundColor( (const SvxBackgroundColorItem&)rNew, nS, nE );
+        }
+        break;
         default:
         {
             OSL_FAIL( "Invalid Attribute!" );

@@ -24,7 +24,8 @@
 
 /*
  * NOTE: Changes in this file will probably require
- *        consistent changes in eerdll.cxx as well.
+ *        consistent changes in eerdll.cxx and editdoc.cxx
+ *        as well.
 */
 
 #define EE_ITEMS_START              (OWN_ATTR_VALUE_END+1)
