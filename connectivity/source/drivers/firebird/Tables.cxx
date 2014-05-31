@@ -9,6 +9,7 @@
 
 #include "Table.hxx"
 #include "Tables.hxx"
+#include "Catalog.hxx"
 
 #include <connectivity/dbtools.hxx>
 
@@ -29,24 +30,11 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 
 
-Tables::Tables(const uno::Reference< XDatabaseMetaData >& rMetaData,
-               OWeakObject& rParent,
-               Mutex& rMutex,
-               TStringVector& rNames) :
-    OCollection(rParent,
-                true,
-                rMutex,
-                rNames),
-    m_rMutex(rMutex),
-    m_xMetaData(rMetaData)
-{
-}
-
 //----- OCollection -----------------------------------------------------------
 void Tables::impl_refresh()
     throw(RuntimeException)
 {
-    // TODO: IMPLEMENT ME
+    static_cast<Catalog&>(m_rParent).refreshTables();
 }
 
 ObjectType Tables::createObject(const OUString& rName)

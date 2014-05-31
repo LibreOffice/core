@@ -25,9 +25,6 @@ namespace connectivity
          */
         class Tables: public ::connectivity::sdbcx::OCollection
         {
-        private:
-            ::osl::Mutex& m_rMutex;
-
         protected:
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >
                 m_xMetaData;
@@ -47,7 +44,7 @@ namespace connectivity
             Tables(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& rMetaData,
                    ::cppu::OWeakObject& rParent,
                    ::osl::Mutex& rMutex,
-                   ::connectivity::TStringVector& rNames);
+                   ::connectivity::TStringVector& rNames) : sdbcx::OCollection(rParent, true, rMutex, rNames), m_xMetaData(rMetaData) {}
 
             // TODO: we should also implement XDataDescriptorFactory, XRefreshable,
             // XAppend,  etc., but all are optional.
