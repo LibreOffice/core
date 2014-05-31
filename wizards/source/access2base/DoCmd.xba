@@ -135,6 +135,7 @@ Dim vFindValue As Variant, oFindrecord As Object
 		If .FindRecord = 0 Then Goto Error_FindRecord
 		.FindRecord = 0
 		Set ofForm = getObject(.Form)
+		If ofForm._Type = OBJCONTROL Then Set ofForm = ofForm.Form		&apos;	Bug Tombola
 		Set ocGrid = getObject(.GridControl)
 
 		&apos;	Move cursor to the initial row. Operation based on last FindRecord, not on user interactions done inbetween
@@ -330,6 +331,7 @@ Dim oFindRecord As _FindParams
 					If vParentGrid.SubType &lt;&gt; CTLGRIDCONTROL Then Goto Error_Target
 					.GridControl = vParentGrid._Shortcut
 					ofParentForm = getObject(_getUpperShortcut(vParentGrid._Shortcut, vParentGrid._Name))
+					If ofParentForm._Type = OBJCONTROL Then Set ofParentForm = ofParentForm.Form		&apos;	Bug Tombola
 					If IsNull(ofParentForm.DatabaseForm) Then Goto Error_DatabaseForm
 					.Target = ocTarget._Shortcut
 					Set vDataField = ocTarget.ControlModel.BoundField
@@ -798,7 +800,7 @@ Dim sFilter As String, oForm As Object, oFormsCollection As Object
 	With ofForm
 		Select Case pvDataMode
 			Case acFormAdd
-				.setAllowAdditions = True
+				.AllowAdditions = True
 				.AllowDeletions = False
 				.AllowEdits = False
 			Case acFormEdit
