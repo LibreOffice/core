@@ -1707,11 +1707,17 @@ void OpRound::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    int singleIndex =  gid0;\n";
     GenTmpVariables(ss,vSubArguments);
     CheckAllSubArgumentIsNan(ss,vSubArguments);
-    ss << "    for(int i=0;i<tmp1;i++)\n";
-    ss << "        tmp0 = tmp0 * 10;\n";
+    if(vSubArguments.size() ==2)
+    {
+        ss << "    for(int i=0;i<tmp1;i++)\n";
+        ss << "        tmp0 = tmp0 * 10;\n";
+    }
     ss << "    double tmp=round(tmp0);\n";
-    ss << "    for(int i=0;i<tmp1;i++)\n";
-    ss << "        tmp = tmp / 10;\n";
+    if(vSubArguments.size() ==2)
+    {
+        ss << "    for(int i=0;i<tmp1;i++)\n";
+        ss << "        tmp = tmp / 10;\n";
+    }
     ss << "    return tmp;\n";
     ss << "}";
 }
