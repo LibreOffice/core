@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_VCL_SOURCE_FILTER_IXPM_RGBTABLE_HXX
+#define INCLUDED_VCL_SOURCE_FILTER_IXPM_RGBTABLE_HXX
+
 struct XPMRGBTab
 {
     const char* name;
@@ -685,5 +688,7 @@ static const XPMRGBTab pRGBTable[] = {
 { "LightGreen",             144, 238, 144 },
 { NULL,                   0 ,   0,   0}
 };
+
+#endif // INCLUDED_VCL_SOURCE_FILTER_IXPM_RGBTABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
