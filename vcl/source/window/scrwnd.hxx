@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_VCL_SOURCE_WINDOW_SCRWND_HXX
+#define INCLUDED_VCL_SOURCE_WINDOW_SCRWND_HXX
+
 #include <vcl/floatwin.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
@@ -73,5 +76,7 @@ public:
     void                ImplSetWheelMode( sal_uLong nWheelMode );
     sal_uLong               ImplGetWheelMode() const { return mnWheelMode; }
 };
+
+#endif // INCLUDED_VCL_SOURCE_WINDOW_SCRWND_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

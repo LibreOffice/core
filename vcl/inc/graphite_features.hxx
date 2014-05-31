@@ -21,6 +21,10 @@
 // Parse a string of features specified as ; separated pairs.
 // e.g.
 // 1001=1&2002=2&fav1=0
+
+#ifndef INCLUDED_VCL_INC_GRAPHITE_FEATURES_HXX
+#define INCLUDED_VCL_INC_GRAPHITE_FEATURES_HXX
+
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <graphite_static.hxx>
@@ -66,5 +70,7 @@ namespace grutils
     };
 
 }
+
+#endif // INCLUDED_VCL_INC_GRAPHITE_FEATURES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
