@@ -419,7 +419,7 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
 
-        cl_uint *pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
+            pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
                 kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
                 szHostBuffer, 0, NULL, NULL, &err);
         if (CL_SUCCESS != err)
