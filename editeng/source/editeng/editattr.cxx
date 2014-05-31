@@ -237,17 +237,13 @@ EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
                                   sal_uInt16 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    // FIXME(matteocam)
-    //DBG_ASSERT( rAttr.Which() == EE_CHAR_BKG_COLOR, "Not a BackgroundColor attribute!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_BKGCOLOR, "Not a BackgroundColor attribute!" );
 }
 
 void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    /* FIXME(matteocam)
-     *
     Color aColor = ((const SvxBackgroundColorItem*)GetItem())->GetValue();
     rFont.SetFillColor( aColor); // XXX: Is it SetFillColor we want?
-    */
 
 }
 
