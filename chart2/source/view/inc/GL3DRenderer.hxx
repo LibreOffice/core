@@ -20,7 +20,6 @@
 #include <tools/gen.hxx>
 
 #include <vcl/bitmapex.hxx>
-#include <vcl/opengl/IOpenGLRenderer.hxx>
 
 #include <vector>
 #include <list>
