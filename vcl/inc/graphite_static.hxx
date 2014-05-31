@@ -7,10 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_VCL_INC_GRAPHITE_STATIC_HXX
+#define INCLUDED_VCL_INC_GRAPHITE_STATIC_HXX
+
 #ifdef WNT
 #  ifndef GRAPHITE2_STATIC
 #    define GRAPHITE2_STATIC 1
 #  endif
 #endif
+
+#endif // INCLUDED_VCL_INC_GRAPHITE_STATIC_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
