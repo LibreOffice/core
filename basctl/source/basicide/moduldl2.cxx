@@ -64,6 +64,7 @@
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
 #include <cassert>
+#include <boost/scoped_ptr.hpp>
 
 namespace basctl
 {
@@ -636,7 +637,7 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
                 bool const bProtected = xPasswd->isLibraryPasswordProtected( aLibName );
 
                 // change password dialog
-                SvxPasswordDialog* pDlg = new SvxPasswordDialog( this, true, !bProtected );
+                boost::scoped_ptr<SvxPasswordDialog> pDlg(new SvxPasswordDialog( this, true, !bProtected ));
                 pDlg->SetCheckPasswordHdl( LINK( this, LibPage, CheckPasswordHdl ) );
 
                 if ( pDlg->Execute() == RET_OK )
@@ -653,7 +654,6 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
 
                     MarkDocumentModified( m_aCurDocument );
                 }
-                delete pDlg;
             }
         }
     }
@@ -775,7 +775,7 @@ void LibPage::InsertLib()
 
         if ( xModLibContImport.is() || xDlgLibContImport.is() )
         {
-            LibDialog* pLibDlg = 0;
+            boost::scoped_ptr<LibDialog> pLibDlg;
 
             Reference< script::XLibraryContainer > xModLibContImp( xModLibContImport, UNO_QUERY );
             Reference< script::XLibraryContainer > xDlgLibContImp( xDlgLibContImport, UNO_QUERY );
@@ -787,7 +787,7 @@ void LibPage::InsertLib()
                 // library import dialog
                 if ( !pLibDlg )
                 {
-                    pLibDlg = new LibDialog( this );
+                    pLibDlg.reset(new LibDialog( this ));
                     pLibDlg->SetStorageName( aURLObj.getName() );
                     pLibDlg->GetLibBox().SetMode(ObjectMode::Library);
                 }
@@ -1044,7 +1044,7 @@ void LibPage::InsertLib()
                         m_pLibBox->SetCurEntry( pFirstNew );
                 }
 
-                delete pLibDlg;
+                pLibDlg.reset();
                 if ( bChanges )
                     MarkDocumentModified( m_aCurDocument );
             }

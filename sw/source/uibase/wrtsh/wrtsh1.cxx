@@ -102,6 +102,7 @@
 
 #include "PostItMgr.hxx"
 #include <sfx2/msgpool.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -371,8 +372,8 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                     OString aCmd(".uno:");
                     aCmd += pSlot->GetUnoName();
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    SfxAbstractInsertObjectDialog* pDlg =
-                            pFact->CreateInsertObjectDialog( GetWin(), OStringToOUString( aCmd, RTL_TEXTENCODING_UTF8 ), xStor, &aServerList );
+                    boost::scoped_ptr<SfxAbstractInsertObjectDialog> pDlg(
+                            pFact->CreateInsertObjectDialog( GetWin(), OStringToOUString( aCmd, RTL_TEXTENCODING_UTF8 ), xStor, &aServerList ));
                     if ( pDlg )
                     {
                         pDlg->Execute();
@@ -383,8 +384,6 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                                      xIconMetaFile.is() ? embed::Aspects::MSOLE_ICON : embed::Aspects::MSOLE_CONTENT );
                         if ( xIconMetaFile.is() )
                             xObj.SetGraphicStream( xIconMetaFile, aIconMediaType );
-
-                        DELETEZ( pDlg );
                     }
 
                     break;
