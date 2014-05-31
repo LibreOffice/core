@@ -197,7 +197,8 @@ static sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
 
 static sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
 {
-    sal_uInt16 nWhich = rFld.Which(), nSrvId = USHRT_MAX;
+    const sal_uInt16 nWhich = rFld.Which();
+    sal_uInt16 nSrvId = USHRT_MAX;
     //special handling for some fields
     switch( nWhich )
     {
@@ -208,7 +209,7 @@ static sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
 
     case RES_DOCINFOFLD:
         {
-            sal_uInt16 nSubType = rFld.GetSubType();
+            const sal_uInt16 nSubType = rFld.GetSubType();
             switch( (nSubType & 0xff))
             {
             case DI_CHANGE:
@@ -826,7 +827,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 
             uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(aFldArr.size());
             uno::Reference<text::XDependentTextField>* pRetSeq = aRetSeq.getArray();
-            for(sal_uInt16 i = 0; i < aFldArr.size(); i++)
+            for(size_t i = 0; i < aFldArr.size(); ++i)
             {
                 pFld = aFldArr[i];
                 uno::Reference<text::XTextField> const xField =
@@ -840,7 +841,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         else
         {
             //TODO: Properties fuer die uebrigen Feldtypen einbauen
-            sal_uInt16 nMId = GetFieldTypeMId( rPropertyName, *pType );
+            const sal_uInt16 nMId = GetFieldTypeMId( rPropertyName, *pType );
             if (USHRT_MAX == nMId)
             {
                 throw beans::UnknownPropertyException(
@@ -965,7 +966,7 @@ throw (uno::RuntimeException, std::exception)
         throw uno::RuntimeException();
     sal_uInt16 nTypeIdx = USHRT_MAX;
     const SwFldTypes* pTypes = m_pImpl->m_pDoc->GetFldTypes();
-    for( sal_uInt16 i = 0; i < pTypes->size(); i++ )
+    for( size_t i = 0; i < pTypes->size(); i++ )
     {
         if((*pTypes)[i] == pFldType)
             nTypeIdx = i;
@@ -1026,7 +1027,7 @@ OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
     if(RES_SETEXPFLD == rType.Which())
     {
         const SwFldTypes* pTypes = rDoc.GetFldTypes();
-        for( sal_uInt16 i = 0; i <= INIT_FLDTYPES; i++ )
+        for( size_t i = 0; i <= size_t(INIT_FLDTYPES); i++ )
         {
             if((*pTypes)[i] == &rType)
             {
@@ -2126,7 +2127,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     if(pField)
     {
         // special treatment for mail merge fields
-        sal_uInt16 nWhich = pField->Which();
+        const sal_uInt16 nWhich = pField->Which();
         if( RES_DBFLD == nWhich &&
             (rPropertyName == UNO_NAME_DATA_BASE_NAME ||
             rPropertyName == UNO_NAME_DATA_BASE_URL||
@@ -2683,7 +2684,7 @@ static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
     else if (rTypeName == "DataBase")
     {
         rName = rName.copy(RTL_CONSTASCII_LENGTH("DataBase."));
-        sal_uInt16 nDotCount = comphelper::string::getTokenCount(rName, '.');
+        const sal_Int32 nDotCount = comphelper::string::getTokenCount(rName, '.');
         if( 2 <= nDotCount )
         {
             // #i51815#
@@ -2704,7 +2705,7 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
         throw uno::RuntimeException();
 
     OUString sName(rName), sTypeName;
-    sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
+    const sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
     if( USHRT_MAX == nResId )
         throw container::NoSuchElementException(
             "SwXTextFieldMasters::getByName(" + rName + ")",
@@ -2795,7 +2796,7 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::Runti
         throw uno::RuntimeException();
 
     OUString sName(rName), sTypeName;
-    sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
+    const sal_uInt16 nResId = lcl_GetIdByName( sName, sTypeName );
     bool bRet = false;
     if( USHRT_MAX != nResId )
     {
@@ -2971,8 +2972,8 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc & rDoc)
     sal_Int32 nFillPos = 0;
 
     const SwFldTypes* pFldTypes = m_pImpl->m_pDoc->GetFldTypes();
-    sal_uInt16 nCount = pFldTypes->size();
-    for(sal_uInt16 nType = 0;  nType < nCount;  ++nType)
+    const size_t nCount = pFldTypes->size();
+    for(size_t nType = 0;  nType < nCount;  ++nType)
     {
         const SwFieldType *pCurType = (*pFldTypes)[nType];
         SwIterator<SwFmtFld,SwFieldType> aIter( *pCurType );
