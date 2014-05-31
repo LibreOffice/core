@@ -1082,6 +1082,27 @@ void ScXMLExport::ExportExternalRefCacheStyles()
 
 namespace {
 
+void handleFont(
+    std::vector<XMLPropertyState>& rPropStates,
+    const SfxPoolItem* p, const UniReference<XMLPropertySetMapper>& xMapper, const OUString& rXMLName )
+{
+    sal_Int32 nEntryCount = xMapper->GetEntryCount();
+
+    // Apparently font info needs special handling.
+    const SvxFontItem* pItem = static_cast<const SvxFontItem*>(p);
+
+    sal_Int32 nIndexFontName = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, rXMLName, 0);
+
+    if (nIndexFontName == -1 || nIndexFontName >= nEntryCount)
+        return;
+
+    uno::Any aAny;
+    if (!pItem->QueryValue(aAny, MID_FONT_FAMILY_NAME))
+        return;
+
+    rPropStates.push_back(XMLPropertyState(nIndexFontName, aAny));
+}
+
 const SvxFieldData* toXMLPropertyStates(
     std::vector<XMLPropertyState>& rPropStates, const std::vector<const SfxPoolItem*>& rSecAttrs,
     const UniReference<XMLPropertySetMapper>& xMapper, const ScXMLEditAttributeMap& rAttrMap )
@@ -1113,22 +1134,13 @@ const SvxFieldData* toXMLPropertyStates(
         switch (p->Which())
         {
             case EE_CHAR_FONTINFO:
+                handleFont(rPropStates, p, xMapper, "font-name");
+            break;
             case EE_CHAR_FONTINFO_CJK:
+                handleFont(rPropStates, p, xMapper, "font-name-asian");
+            break;
             case EE_CHAR_FONTINFO_CTL:
-            {
-                // Apparently font info needs special handling.
-                const SvxFontItem* pItem = static_cast<const SvxFontItem*>(p);
-
-                sal_Int32 nIndexFontName = xMapper->GetEntryIndex(XML_NAMESPACE_STYLE, "font-name", 0);
-
-                if (nIndexFontName == -1 || nIndexFontName >= nEntryCount)
-                    break;
-
-                if (!pItem->QueryValue(aAny, MID_FONT_FAMILY_NAME))
-                    break;
-
-                rPropStates.push_back(XMLPropertyState(nIndexFontName, aAny));
-            }
+                handleFont(rPropStates, p, xMapper, "font-name-complex");
             break;
             case EE_CHAR_WEIGHT:
             case EE_CHAR_WEIGHT_CJK:
