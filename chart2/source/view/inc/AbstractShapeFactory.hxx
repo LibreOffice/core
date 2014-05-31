@@ -29,6 +29,8 @@
 
 #include <rtl/ustring.hxx>
 
+class OpenGLWindow;
+
 namespace chart {
 
 
@@ -239,6 +241,9 @@ public:
      */
     virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage) = 0;
 
+    virtual bool preRender(OpenGLWindow* pWindow) = 0;
+    virtual void postRender(OpenGLWindow* pWindow) = 0;
+
     virtual void clearPage(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage) = 0;
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
@@ -284,6 +289,7 @@ public:
 };
 
 }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

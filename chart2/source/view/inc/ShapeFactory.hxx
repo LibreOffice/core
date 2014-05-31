@@ -199,6 +199,9 @@ public:
      */
     virtual void render(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > ) SAL_OVERRIDE {}
 
+    virtual bool preRender(OpenGLWindow*) SAL_OVERRIDE { return true; }
+    virtual void postRender(OpenGLWindow*) SAL_OVERRIDE {}
+
     virtual void clearPage(com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > ) SAL_OVERRIDE {}
 
 private:

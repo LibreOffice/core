@@ -73,7 +73,7 @@ typedef std::vector<GLfloat> PointList;
 class OpenGLRender
 {
 public:
-    OpenGLRender(com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xTarget);
+    OpenGLRender();
     ~OpenGLRender();
     int InitOpenGL();
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
@@ -125,9 +125,6 @@ public:
 
 
 private:
-
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > mxTarget;
-
 #if 0
         //for performance
     double m_dFreq;
