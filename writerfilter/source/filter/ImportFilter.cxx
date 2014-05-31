@@ -78,7 +78,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             return sal_False;
 
 #ifdef DEBUG_IMPORT
-        OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
+        OUString sURL = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
         writerfilter::TagLogger::Pointer_t debugLogger
