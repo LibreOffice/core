@@ -130,7 +130,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
     if( pCntntNode->IsGrfNode() )
     {
-        SwGrfNode* pSwGrfNode = dynamic_cast< SwGrfNode* >(pCntntNode);
+        SwGrfNode* pSwGrfNode = pCntntNode->GetGrfNode();
         OSL_ENSURE(pSwGrfNode, "Error, pSwGrfNode expected when node answers IsGrfNode() with true (!)");
         const GraphicObject& rGrfObj = pSwGrfNode->GetGrfObj();
 
