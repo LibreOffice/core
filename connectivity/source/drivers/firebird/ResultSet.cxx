@@ -756,6 +756,7 @@ void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException)
 }
 
 //----- XWarningsSupplier UNSUPPORTED -----------------------------------------
+#if 0
 void SAL_CALL OResultSet::clearWarnings() throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException("clearWarnings not supported in firebird",
@@ -768,6 +769,7 @@ Any SAL_CALL OResultSet::getWarnings() throw(SQLException, RuntimeException)
                                                   *this);
     return Any();
 }
+#endif
 
 //----- OIdPropertyArrayUsageHelper ------------------------------------------
 IPropertyArrayHelper* OResultSet::createArrayHelper() const
