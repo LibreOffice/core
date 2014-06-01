@@ -11,6 +11,8 @@
 #define SW_TOXTEXTGENERATOR_HXX_
 
 #include "sal/types.h"
+
+#include <boost/shared_ptr.hpp>
 #include <vector>
 
 class SwDoc;
@@ -20,12 +22,15 @@ class SwTOXSortTabBase;
 
 namespace sw {
 
-class SW_DLLPUBLIC ToxTextGenerator
+class ToxLinkProcessor;
+
+class SAL_DLLPUBLIC_EXPORT ToxTextGenerator
 {
 public:
-    ToxTextGenerator(const SwForm& toxForm)
-    :mToxForm(toxForm)
-    {;}
+    ToxTextGenerator(const SwForm& toxForm);
+
+    ~ToxTextGenerator();
+
     /** Generate the text for an entry of a table of X (X is, e.g., content).
      *
      * This method will process the entries in @p entries, starting at @p indexOfEntryToProcess and
@@ -36,9 +41,9 @@ public:
                       sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess,
                       sal_uInt32 _nTOXSectNdIdx, const SwPageDesc* _pDefaultPageDesc);
 
-
 private:
     const SwForm& mToxForm;
+    boost::shared_ptr<ToxLinkProcessor> mLinkProcessor;
 };
 
 }
