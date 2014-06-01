@@ -116,7 +116,7 @@ public:
 };
 
 // Beschreibung: Klassen fuer die Sortierung der Verzeichnisse
-struct SwTOXSortTabBase
+struct SAL_DLLPUBLIC_EXPORT SwTOXSortTabBase
 {
     SwTOXSources aTOXSources;
     ::com::sun::star::lang::Locale aLocale;

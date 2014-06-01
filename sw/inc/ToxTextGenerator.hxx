@@ -13,6 +13,8 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+#include "rtl/ustring.hxx"
+
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
@@ -25,6 +27,7 @@ class SwPageDesc;
 class SwTxtAttr;
 class SwTxtNode;
 class SwTOXSortTabBase;
+class ToxTextGeneratorTest;
 
 namespace sw {
 
@@ -72,6 +75,19 @@ private:
     static void
     ApplyHandledTextToken(const HandledTextToken& htt, SwTxtNode& targetNode);
 
+    /** Handle a page number token.
+     *
+     * Will return a string of @p numberOfToxSources concatenated '@' signs, separated by commas, and
+     * finished by a '~'.
+     * (The '@' sign is the magic character C_NUM_REPL, the '~' sign is the magic character C_END_PAGE_NUM.
+     *
+     * @internal
+     * The count of similar entries, i.e., nodes in aTOXSources of SwTOXSortTabBase gives the PagerNumber
+     * pattern.
+     */
+    static OUString
+    ConstructPageNumberPlaceholder(size_t numberOfToxSources);
+
     /** Collect the attributes of a hint that shall be copied over to the TOX.
      *
      * Some text attributes are used in the TOX entries. This method defines which attributes are used.
@@ -81,6 +97,19 @@ private:
      */
     static boost::shared_ptr<SfxItemSet>
     CollectAttributesForTox(const SwTxtAttr& hint, SwAttrPool& pool);
+
+    /** This method will call GetNumStringOfFirstNode() of the first node in the provided SwTOXSortTabBase.
+     *
+     * The parameters @p bUsePrefix and @p nLevel are passed to SwTxtNode::GetNumString()
+     *
+     * @internal
+     * The method is only called if several preconditions for @p rBase are true. Check the implementation
+     * for details.
+     */
+    static OUString
+    GetNumStringOfFirstNode(const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel);
+
+    friend class ::ToxTextGeneratorTest;
 };
 
 }

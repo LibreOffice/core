@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sw_tox_test))
 $(eval $(call gb_CppunitTest_add_exception_objects,sw_tox_test, \
 	sw/qa/cppunit/tox/test_ToxWhitespaceStripper \
 	sw/qa/cppunit/tox/test_ToxLinkProcessor \
+	sw/qa/cppunit/tox/test_ToxTextGenerator \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_tox_test, \
