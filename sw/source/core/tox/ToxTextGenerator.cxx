@@ -34,21 +34,11 @@
 #include "DocumentSettingManager.hxx"
 #include "SwStyleNameMapper.hxx"
 #include "ToxWhitespaceStripper.hxx"
+#include "ToxLinkProcessor.hxx"
 
 #include "editeng/tstpitem.hxx"
 #include "editeng/lrspitem.hxx"
 #include "rtl/ustring.hxx"
-
-struct LinkStruct
-{
-    SwFmtINetFmt    aINetFmt;
-    sal_Int32 nStartTextPos, nEndTextPos;
-
-    LinkStruct( const OUString& rURL, sal_Int32 nStart, sal_Int32 nEnd )
-        : aINetFmt( rURL, OUString()),
-        nStartTextPos( nStart),
-        nEndTextPos(nEnd) {}
-};
 
 /// Generate String according to the Form and remove the
 /// special characters 0-31 and 255.
@@ -70,9 +60,15 @@ static OUString lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix
     return sRet;
 }
 
-typedef std::vector<LinkStruct*> LinkStructArr;
-
 namespace sw {
+
+ToxTextGenerator::ToxTextGenerator(const SwForm& toxForm)
+:mToxForm(toxForm),
+ mLinkProcessor(new ToxLinkProcessor())
+{;}
+
+ToxTextGenerator::~ToxTextGenerator()
+{;}
 
 // Add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
 // which page description is used, no appropriate one is found.
@@ -80,8 +76,6 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
         sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess, sal_uInt32 _nTOXSectNdIdx,
         const SwPageDesc* _pDefaultPageDesc)
 {
-    LinkStructArr   aLinkArr;
-
     // pTOXNd is only set at the first mark
     SwTxtNode* pTOXNd = (SwTxtNode*)entries.at(indexOfEntryToProcess)->pTOXNd;
     // FIXME this operates directly on the node text
@@ -97,9 +91,6 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
         OSL_ENSURE( nLvl < mToxForm.GetFormMax(), "invalid FORM_LEVEL");
 
         SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
-        sal_Int32 nLinkStartPosition = -1;
-        OUString  sLinkCharacterStyle; // default to "Default" character style - which is none
-        OUString sURL;
         // create an enumerator
         // #i21237#
         SwFormTokens aPattern = mToxForm.GetPattern(nLvl);
@@ -276,36 +267,11 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
                 break;
 
             case TOKEN_LINK_START:
-                nLinkStartPosition = rTxt.getLength();
-                sLinkCharacterStyle = aToken.sCharStyleName;
-            break;
+                mLinkProcessor->StartNewLink(rTxt.getLength(), aToken.sCharStyleName);
+                break;
 
             case TOKEN_LINK_END:
-                    //TODO: only paired start/end tokens are valid
-                if (nLinkStartPosition != -1)
-                {
-                    SwIndex aIdx( pTOXNd, nLinkStartPosition );
-                    // pTOXNd->Erase( aIdx, SwForm::nFormLinkSttLen );
-                    sal_Int32 nEnd = rTxt.getLength();
-
-                    if( sURL.isEmpty() )
-                    {
-                        sURL = rBase.GetURL();
-                        if( sURL.isEmpty() )
-                            break;
-                    }
-                    LinkStruct* pNewLink = new LinkStruct(sURL, nLinkStartPosition,
-                                                    nEnd);
-                    const sal_uInt16 nPoolId =
-                            sLinkCharacterStyle.isEmpty()
-                            ? USHRT_MAX
-                            : SwStyleNameMapper::GetPoolIdFromUIName( sLinkCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
-                    pNewLink->aINetFmt.SetVisitedFmtAndId( sLinkCharacterStyle, nPoolId );
-                    pNewLink->aINetFmt.SetINetFmtAndId( sLinkCharacterStyle, nPoolId );
-                    aLinkArr.push_back(pNewLink);
-                    nLinkStartPosition = -1;
-                    sLinkCharacterStyle = "";
-                }
+                mLinkProcessor->CloseLink(rTxt.getLength(), rBase.GetURL());
                 break;
 
             case TOKEN_AUTHORITY:
@@ -339,13 +305,7 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
 
         pTOXNd->SetAttr( aTStops );
     }
-
-    for(LinkStructArr::const_iterator i = aLinkArr.begin(); i != aLinkArr.end(); ++i)
-    {
-        pTOXNd->InsertItem((*i)->aINetFmt, (*i)->nStartTextPos,
-                           (*i)->nEndTextPos);
-        delete (*i);
-    }
+    mLinkProcessor->InsertLinkAttributes(*pTOXNd);
 }
 
 } // end namespace sw
