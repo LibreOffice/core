@@ -389,6 +389,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/tox/toxhlp \
     sw/source/core/tox/txmsrt \
     sw/source/core/tox/ToxTextGenerator \
+    sw/source/core/tox/ToxWhitespaceStripper \
     sw/source/core/txtnode/SwGrammarContact \
     sw/source/core/txtnode/atrfld \
     sw/source/core/txtnode/atrflyin \
