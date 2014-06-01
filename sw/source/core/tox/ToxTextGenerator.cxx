@@ -47,27 +47,37 @@
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
 
-/// Generate String according to the Form and remove the
-/// special characters 0-31 and 255.
-static OUString lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel )
+namespace sw {
+
+OUString
+ToxTextGenerator::GetNumStringOfFirstNode( const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel )
 {
     OUString sRet;
-
-    if( !rBase.pTxtMark && !rBase.aTOXSources.empty() )
-    {   // only if it's not a Mark
-        const SwTxtNode* pNd = rBase.aTOXSources[0].pNd->GetTxtNode();
-        if( pNd )
-        {
-            const SwNumRule* pRule = pNd->GetNumRule();
-
-            if( pRule && pNd->GetActualListLevel() < MAXLEVEL )
-                sRet = pNd->GetNumString(bUsePrefix, nLevel);
-        }
+    if (!rBase.pTxtMark) { // only if it's not a Mark
+        return sRet;
     }
+
+    if (rBase.aTOXSources.empty()) {
+        return sRet;
+    }
+
+    const SwTxtNode* pNd = rBase.aTOXSources[0].pNd->GetTxtNode();
+    if (!pNd) {
+        return sRet;
+    }
+
+    const SwNumRule* pRule = pNd->GetNumRule();
+    if (!pRule) {
+        return sRet;
+    }
+
+    if (pNd->GetActualListLevel() < MAXLEVEL) {
+        sRet = pNd->GetNumString(bUsePrefix, nLevel);
+    }
+
     return sRet;
 }
 
-namespace sw {
 
 ToxTextGenerator::ToxTextGenerator(const SwForm& toxForm)
 :mToxForm(toxForm),
@@ -111,7 +121,7 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
             {
             case TOKEN_ENTRY_NO:
                 // for TOC numbering
-                rTxt += lcl_GetNumString( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) ) ;
+                rTxt += GetNumStringOfFirstNode( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) ) ;
                 break;
 
             case TOKEN_ENTRY_TEXT: {
@@ -123,7 +133,7 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
             case TOKEN_ENTRY:
                 {
                     // for TOC numbering
-                    rTxt += lcl_GetNumString( rBase, true, MAXLEVEL );
+                    rTxt += GetNumStringOfFirstNode( rBase, true, MAXLEVEL );
                     SwIndex aIdx( pTOXNd, rTxt.getLength() );
                     ToxWhitespaceStripper stripper(rBase.GetTxt().sText);
                     pTOXNd->InsertText(stripper.GetStrippedString(), aIdx);
@@ -210,22 +220,7 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
                 break;
 
             case TOKEN_PAGE_NUMS:
-                    // Place holder for the PageNumber; we only respect the first one
-                {
-                    // The count of similar entries gives the PagerNumber pattern
-                    size_t nSize = rBase.aTOXSources.size();
-                    if (nSize > 0)
-                    {
-                        OUString aInsStr = OUString(C_NUM_REPL);
-                        for (size_t i = 1; i < nSize; ++i)
-                        {
-                            aInsStr += S_PAGE_DELI;
-                            aInsStr += OUString(C_NUM_REPL);
-                        }
-                        aInsStr += OUString(C_END_PAGE_NUM);
-                        rTxt += aInsStr;
-                    }
-                }
+                rTxt += ConstructPageNumberPlaceholder(rBase.aTOXSources.size());
                 break;
 
             case TOKEN_CHAPTER_INFO:
@@ -378,6 +373,23 @@ ToxTextGenerator::ApplyHandledTextToken(const HandledTextToken& htt, SwTxtNode& 
                 htt.startPositions.at(i) + offset,
                 htt.endPositions.at(i) + offset);
     }
+}
+
+OUString
+ToxTextGenerator::ConstructPageNumberPlaceholder(size_t numberOfToxSources)
+{
+    OUString retval;
+    if (numberOfToxSources == 0) {
+        return retval;
+    }
+    // Place holder for the PageNumber; we only respect the first one
+    retval += OUString(C_NUM_REPL);
+    for (size_t i = 1; i < numberOfToxSources; ++i) {
+        retval += S_PAGE_DELI;
+        retval += OUString(C_NUM_REPL);
+    }
+    retval += OUString(C_END_PAGE_NUM);
+    return retval;
 }
 
 } // end namespace sw
