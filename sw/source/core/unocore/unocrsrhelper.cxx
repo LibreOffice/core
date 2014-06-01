@@ -20,6 +20,7 @@
 #include <unocrsrhelper.hxx>
 
 #include <map>
+#include <algorithm>
 
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -667,13 +668,11 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             if (rPam.GetNode(true) == rPam.GetNode(false)
                 && pTxtNode && pTxtNode->GetpSwpHints())
             {
-                sal_uInt16 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
-                sal_uInt16 nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
+                sal_Int32 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
+                sal_Int32 nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
                 if(nPaMStart > nPaMEnd)
                 {
-                    sal_uInt16 nTmp = nPaMStart;
-                    nPaMStart = nPaMEnd;
-                    nPaMEnd = nTmp;
+                    std::swap(nPaMStart, nPaMEnd);
                 }
                 Sequence< OUString> aCharStyles;
                 SwpHints* pHints = pTxtNode->GetpSwpHints();
@@ -682,8 +681,8 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     SwTxtAttr* pAttr = pHints->GetStart( nAttr );
                     if(pAttr->Which() != RES_TXTATR_CHARFMT)
                         continue;
-                    sal_uInt16 nAttrStart = *pAttr->GetStart();
-                    sal_uInt16 nAttrEnd = *pAttr->GetEnd();
+                    const sal_Int32 nAttrStart = *pAttr->GetStart();
+                    const sal_Int32 nAttrEnd = *pAttr->GetEnd();
                     //check if the attribute touches the selection
                     if( ( nAttrEnd > nPaMStart && nAttrStart < nPaMEnd ) ||
                         ( !nAttrStart && !nAttrEnd && !nPaMStart && !nPaMEnd ) )
@@ -787,9 +786,9 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         {
 
                             // get CharStyle and set the rule
-                            sal_uInt16 nChCount = pDoc->GetCharFmts()->size();
+                            const size_t nChCount = pDoc->GetCharFmts()->size();
                             SwCharFmt* pCharFmt = 0;
-                            for(sal_uInt16 nCharFmt = 0; nCharFmt < nChCount; nCharFmt++)
+                            for(size_t nCharFmt = 0; nCharFmt < nChCount; ++nCharFmt)
                             {
                                 SwCharFmt& rChFmt = *((*(pDoc->GetCharFmts()))[nCharFmt]);
                                 if(rChFmt.GetName() == pNewCharStyles[i])
