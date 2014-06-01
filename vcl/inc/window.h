@@ -96,77 +96,77 @@ bool ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, co
 struct ImplWinData
 {
     OUString*           mpExtOldText;
-    sal_uInt16*             mpExtOldAttrAry;
+    sal_uInt16*         mpExtOldAttrAry;
     Rectangle*          mpCursorRect;
     long                mnCursorExtWidth;
-    bool            mbVertical;
+    bool                mbVertical;
     Rectangle*          mpCompositionCharRects;
     long                mnCompositionCharRects;
     Rectangle*          mpFocusRect;
     Rectangle*          mpTrackRect;
-    sal_uInt16              mnTrackFlags;
-    sal_uInt16              mnIsTopWindow;
-    bool                mbMouseOver;          // tracks mouse over for native widget paint effect
-    bool                mbEnableNativeWidget; // toggle native widget rendering
+    sal_uInt16          mnTrackFlags;
+    sal_uInt16          mnIsTopWindow;
+    bool                mbMouseOver;            //< tracks mouse over for native widget paint effect
+    bool                mbEnableNativeWidget;   //< toggle native widget rendering
     ::std::list< Window* >
                         maTopWindowChildren;
 };
 
 struct ImplOverlapData
 {
-    VirtualDevice*      mpSaveBackDev;      // saved background bitmap
-    Region*             mpSaveBackRgn;      // saved region, which must be invalidated
-    Window*             mpNextBackWin;      // next window with saved background
-    sal_uIntPtr         mnSaveBackSize;     // bitmap size of saved background
-    bool            mbSaveBack;         // sal_True: save background
-    sal_uInt8           mnTopLevel;         // Level for Overlap-Window
+    VirtualDevice*      mpSaveBackDev;          //< saved background bitmap
+    Region*             mpSaveBackRgn;          //< saved region, which must be invalidated
+    Window*             mpNextBackWin;          //< next window with saved background
+    sal_uIntPtr         mnSaveBackSize;         //< bitmap size of saved background
+    bool                mbSaveBack;             //< true: save background
+    sal_uInt8           mnTopLevel;             //< Level for Overlap-Window
 };
 
 struct ImplFrameData
 {
-    Timer               maPaintTimer;       // paint timer
-    Timer               maResizeTimer;      // resize timer
-    InputContext        maOldInputContext;  // last set Input Context
-    Window*             mpNextFrame;        // next frame window
-    Window*             mpFirstOverlap;     // first overlap window
-    Window*             mpFocusWin;         // focus window (is also set, when frame doesn't have the focous)
-    Window*             mpMouseMoveWin;     // last window, where MouseMove() called
-    Window*             mpMouseDownWin;     // last window, where MouseButtonDown() called
-    Window*             mpFirstBackWin;     // first overlap-window with saved background
-    ::std::vector<Window *> maOwnerDrawList; // List of system windows with owner draw decoration
-    PhysicalFontCollection* mpFontCollection;         // Font-List for this frame
-    ImplFontCache*      mpFontCache;        // Font-Cache for this frame
-    sal_Int32           mnDPIX;             // Original Screen Resolution
-    sal_Int32           mnDPIY;             // Original Screen Resolution
-    ImplMapRes          maMapUnitRes;       // for LogicUnitToPixel
-    sal_uIntPtr         mnAllSaveBackSize;  // size of all bitmaps of saved backgrounds
-    ImplSVEvent *       mnFocusId;          // FocusId for PostUserLink
-    ImplSVEvent *       mnMouseMoveId;      // MoveId for PostUserLink
-    long                mnLastMouseX;       // last x mouse position
-    long                mnLastMouseY;       // last y mouse position
-    long                mnBeforeLastMouseX; // last but one x mouse position
-    long                mnBeforeLastMouseY; // last but one y mouse position
-    long                mnFirstMouseX;      // first x mouse position by mousebuttondown
-    long                mnFirstMouseY;      // first y mouse position by mousebuttondown
-    long                mnLastMouseWinX;    // last x mouse position, rel. to pMouseMoveWin
-    long                mnLastMouseWinY;    // last y mouse position, rel. to pMouseMoveWin
-    sal_uInt16          mnModalMode;        // frame based modal count (app based makes no sense anymore)
-    sal_uIntPtr         mnMouseDownTime;    // mouse button down time for double click
-    sal_uInt16          mnClickCount;       // mouse click count
-    sal_uInt16          mnFirstMouseCode;   // mouse code by mousebuttondown
-    sal_uInt16          mnMouseCode;        // mouse code
-    sal_uInt16          mnMouseMode;        // mouse mode
-    MapUnit             meMapUnit;          // last MapUnit for LogicUnitToPixel
-    bool            mbHasFocus;         // focus
-    bool            mbInMouseMove;      // is MouseMove on stack
-    bool            mbMouseIn;          // is Mouse inside the frame
-    bool            mbStartDragCalled;  // is command startdrag called
-    bool            mbNeedSysWindow;    // set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
-    bool            mbMinimized;        // set, when FrameSize <= 0
-    bool            mbStartFocusState;  // FocusState, when sending the event
-    bool            mbInSysObjFocusHdl; // within a SysChildren's GetFocus handler
-    bool            mbInSysObjToTopHdl; // within a SysChildren's ToTop handler
-    bool            mbSysObjFocus;      // does a SysChild have focus
+    Timer               maPaintTimer;           //< paint timer
+    Timer               maResizeTimer;          //< resize timer
+    InputContext        maOldInputContext;      //< last set Input Context
+    Window*             mpNextFrame;            //< next frame window
+    Window*             mpFirstOverlap;         //< first overlap window
+    Window*             mpFocusWin;             //< focus window (is also set, when frame doesn't have the focous)
+    Window*             mpMouseMoveWin;         //< last window, where MouseMove() called
+    Window*             mpMouseDownWin;         //< last window, where MouseButtonDown() called
+    Window*             mpFirstBackWin;         //< first overlap-window with saved background
+    ::std::vector<Window *> maOwnerDrawList;    //< List of system windows with owner draw decoration
+    PhysicalFontCollection* mpFontCollection;   //< Font-List for this frame
+    ImplFontCache*      mpFontCache;            //< Font-Cache for this frame
+    sal_Int32           mnDPIX;                 //< Original Screen Resolution
+    sal_Int32           mnDPIY;                 //< Original Screen Resolution
+    ImplMapRes          maMapUnitRes;           //< for LogicUnitToPixel
+    sal_uIntPtr         mnAllSaveBackSize;      //< size of all bitmaps of saved backgrounds
+    ImplSVEvent *       mnFocusId;              //< FocusId for PostUserLink
+    ImplSVEvent *       mnMouseMoveId;          //< MoveId for PostUserLink
+    long                mnLastMouseX;           //< last x mouse position
+    long                mnLastMouseY;           //< last y mouse position
+    long                mnBeforeLastMouseX;     //< last but one x mouse position
+    long                mnBeforeLastMouseY;     //< last but one y mouse position
+    long                mnFirstMouseX;          //< first x mouse position by mousebuttondown
+    long                mnFirstMouseY;          //< first y mouse position by mousebuttondown
+    long                mnLastMouseWinX;        //< last x mouse position, rel. to pMouseMoveWin
+    long                mnLastMouseWinY;        //< last y mouse position, rel. to pMouseMoveWin
+    sal_uInt16          mnModalMode;            //< frame based modal count (app based makes no sense anymore)
+    sal_uIntPtr         mnMouseDownTime;        //< mouse button down time for double click
+    sal_uInt16          mnClickCount;           //< mouse click count
+    sal_uInt16          mnFirstMouseCode;       //< mouse code by mousebuttondown
+    sal_uInt16          mnMouseCode;            //< mouse code
+    sal_uInt16          mnMouseMode;            //< mouse mode
+    MapUnit             meMapUnit;              //< last MapUnit for LogicUnitToPixel
+    bool                mbHasFocus;             //< focus
+    bool                mbInMouseMove;          //< is MouseMove on stack
+    bool                mbMouseIn;              //> is Mouse inside the frame
+    bool                mbStartDragCalled;      //< is command startdrag called
+    bool                mbNeedSysWindow;        //< set, when FrameSize <= IMPL_MIN_NEEDSYSWIN
+    bool                mbMinimized;            //< set, when FrameSize <= 0
+    bool                mbStartFocusState;      //< FocusState, when sending the event
+    bool                mbInSysObjFocusHdl;     //< within a SysChildren's GetFocus handler
+    bool                mbInSysObjToTopHdl;     //< within a SysChildren's ToTop handler
+    bool                mbSysObjFocus;          //< does a SysChild have focus
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > mxDragSource;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > mxDropTarget;
@@ -179,12 +179,12 @@ struct ImplFrameData
 
 struct ImplAccessibleInfos
 {
-    sal_uInt16 nAccessibleRole;
-    OUString* pAccessibleName;
-    OUString* pAccessibleDescription;
-    Window* pLabeledByWindow;
-    Window* pLabelForWindow;
-    Window* pMemberOfWindow;
+    sal_uInt16          nAccessibleRole;
+    OUString*           pAccessibleName;
+    OUString*           pAccessibleDescription;
+    Window*             pLabeledByWindow;
+    Window*             pLabelForWindow;
+    Window*             pMemberOfWindow;
 
     ImplAccessibleInfos();
     ~ImplAccessibleInfos();
@@ -254,24 +254,24 @@ public:
     ::std::vector< FixedText* > m_aMnemonicLabels;
     ImplAccessibleInfos* mpAccessibleInfos;
     VCLXWindow*         mpVCLXWindow;
-    Region              maWinRegion;        // region to 'shape' the VCL window (frame coordinates)
-    Region              maWinClipRegion;    // the (clipping) region that finally corresponds to the VCL window (frame coordinates)
-    Region              maInvalidateRegion; // region that has to be redrawn (frame coordinates)
-    Region*             mpChildClipRegion;  // child clip region if CLIPCHILDREN is set (frame coordinates)
-    Region*             mpPaintRegion;      // only set during Paint() method call (window coordinates)
+    Region              maWinRegion;            //< region to 'shape' the VCL window (frame coordinates)
+    Region              maWinClipRegion;        //< the (clipping) region that finally corresponds to the VCL window (frame coordinates)
+    Region              maInvalidateRegion;     //< region that has to be redrawn (frame coordinates)
+    Region*             mpChildClipRegion;      //< child clip region if CLIPCHILDREN is set (frame coordinates)
+    Region*             mpPaintRegion;          //< only set during Paint() method call (window coordinates)
     WinBits             mnStyle;
     WinBits             mnPrevStyle;
     WinBits             mnExtendedStyle;
     WinBits             mnPrevExtendedStyle;
     WindowType          mnType;
     ControlPart         mnNativeBackground;
-    sal_uInt16              mnWaitCount;
-    sal_uInt16              mnPaintFlags;
-    sal_uInt16              mnGetFocusFlags;
-    sal_uInt16              mnParentClipMode;
-    sal_uInt16              mnActivateMode;
-    sal_uInt16              mnDlgCtrlFlags;
-    sal_uInt16              mnLockCount;
+    sal_uInt16          mnWaitCount;
+    sal_uInt16          mnPaintFlags;
+    sal_uInt16          mnGetFocusFlags;
+    sal_uInt16          mnParentClipMode;
+    sal_uInt16          mnActivateMode;
+    sal_uInt16          mnDlgCtrlFlags;
+    sal_uInt16          mnLockCount;
     AlwaysInputMode     meAlwaysInputMode;
     VclAlign            meHalign;
     VclAlign            meValign;
