@@ -687,28 +687,28 @@ namespace
 }
 #endif
 
-
-
 BasicManager* SfxObjectShell::GetBasicManager() const
 {
-#ifdef DISABLE_SCRIPTING
-    return NULL;
-#else
-    BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
-    if ( !pBasMgr )
-        pBasMgr = SFX_APP()->GetBasicManager();
-    return pBasMgr;
+    BasicManager* pBasMgr = NULL;
+#ifndef DISABLE_SCRIPTING
+    try
+    {
+        pBasMgr = lcl_getBasicManagerForDocument( *this );
+        if ( !pBasMgr )
+            pBasMgr = SFX_APP()->GetBasicManager();
+    }
+    catch (const css::ucb::ContentCreationException& e)
+    {
+        SAL_WARN("sfx.doc", "caught exception " << e.Message);
+    }
 #endif
+    return pBasMgr;
 }
-
-
 
 void SfxObjectShell::SetHasNoBasic()
 {
     pImp->m_bNoBasicCapabilities = true;
 }
-
-
 
 bool SfxObjectShell::HasBasic() const
 {
