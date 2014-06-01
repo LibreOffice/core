@@ -36,12 +36,14 @@ private:
     ClipManager() {};
 
     void clipSiblings( Window* pWindow, Region& rRegion );
+    void intersectClipRegion( Window* pWindow, Region& rRegion );
 
 public:
     ~ClipManager() { instanceFlag = false; }
     static ClipManager *GetInstance();
 
     void InitClipRegion( Window *pWindow );
+    void ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, bool bOverlaps );
 };
 
 #endif

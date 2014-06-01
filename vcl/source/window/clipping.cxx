@@ -182,39 +182,6 @@ void Window::EnableClipSiblings( bool bClipSiblings )
     mpWindowImpl->mbClipSiblings = bClipSiblings;
 }
 
-void Window::ImplClipBoundaries( Region& rRegion, bool bThis, bool bOverlaps )
-{
-    if ( bThis )
-        ImplIntersectWindowClipRegion( rRegion );
-    else if ( ImplIsOverlapWindow() )
-    {
-        // clip to frame if required
-        if ( !mpWindowImpl->mbFrame )
-            rRegion.Intersect( Rectangle( Point( 0, 0 ), Size( mpWindowImpl->mpFrameWindow->mnOutWidth, mpWindowImpl->mpFrameWindow->mnOutHeight ) ) );
-
-        if ( bOverlaps && !rRegion.IsEmpty() )
-        {
-            // Clip Overlap Siblings
-            Window* pStartOverlapWindow = this;
-            while ( !pStartOverlapWindow->mpWindowImpl->mbFrame )
-            {
-                Window* pOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
-                while ( pOverlapWindow && (pOverlapWindow != pStartOverlapWindow) )
-                {
-                    pOverlapWindow->ImplExcludeOverlapWindows2( rRegion );
-                    pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
-                }
-                pStartOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow;
-            }
-
-            // Clip Child Overlap Windows
-            ImplExcludeOverlapWindows( rRegion );
-        }
-    }
-    else
-        ImplGetParent()->ImplIntersectWindowClipRegion( rRegion );
-}
-
 bool Window::ImplClipChildren( Region& rRegion )
 {
     bool    bOtherClip = false;
@@ -492,16 +459,6 @@ bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
     }
     else
         return mpWindowImpl->mpFrameWindow->ImplSetClipFlagOverlapWindows( bSysObjOnlySmaller );
-}
-
-void Window::ImplIntersectWindowClipRegion( Region& rRegion )
-{
-    ClipManager *clipMgr = ClipManager::GetInstance();
-
-    if ( mpWindowImpl->mbInitWinClipRegion )
-        clipMgr->InitClipRegion(this);
-
-    rRegion.Intersect( mpWindowImpl->maWinClipRegion );
 }
 
 void Window::ImplIntersectWindowRegion( Region& rRegion )

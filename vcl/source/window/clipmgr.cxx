@@ -56,13 +56,58 @@ void ClipManager::InitClipRegion( Window *pWindow )
         clipSiblings( pWindow, pWindow->mpWindowImpl->maWinClipRegion );
 
     // Clip Parent Boundaries
-    pWindow->ImplClipBoundaries( pWindow->mpWindowImpl->maWinClipRegion, false, true );
+    ClipBoundaries( pWindow, pWindow->mpWindowImpl->maWinClipRegion, false, true );
 
     // Clip Children
     if ( (pWindow->GetStyle() & WB_CLIPCHILDREN) || pWindow->mpWindowImpl->mbClipChildren )
         pWindow->mpWindowImpl->mbInitChildRegion = true;
 
     pWindow->mpWindowImpl->mbInitWinClipRegion = false;
+}
+
+void ClipManager::ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, bool bOverlaps )
+{
+    if ( bThis )
+        intersectClipRegion( pWindow, rRegion );
+    else if ( pWindow->ImplIsOverlapWindow() )
+    {
+        // clip to frame if required
+        if ( !pWindow->mpWindowImpl->mbFrame )
+            rRegion.Intersect( Rectangle( Point( 0, 0 ), pWindow->GetOutputSizePixel() ) );
+
+        if ( bOverlaps && !rRegion.IsEmpty() )
+        {
+            // Clip Overlap Siblings
+            Window* pStartOverlapWindow = pWindow;
+            while ( !pStartOverlapWindow->mpWindowImpl->mbFrame )
+            {
+                Window* pOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
+                while ( pOverlapWindow && (pOverlapWindow != pStartOverlapWindow) )
+                {
+                    pOverlapWindow->ImplExcludeOverlapWindows2( rRegion );
+                    pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
+                }
+                pStartOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow;
+            }
+
+            // Clip Child Overlap Windows
+            pWindow->ImplExcludeOverlapWindows( rRegion );
+        }
+    }
+    else
+    {
+        intersectClipRegion( pWindow->ImplGetParent(), rRegion );
+    }
+}
+
+void ClipManager::intersectClipRegion( Window* pWindow, Region& rRegion )
+{
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
+    if ( pWindow->mpWindowImpl->mbInitWinClipRegion )
+        clipMgr->InitClipRegion(pWindow);
+
+    rRegion.Intersect( pWindow->mpWindowImpl->maWinClipRegion );
 }
 
 void ClipManager::clipSiblings( Window* pWindow, Region& rRegion )

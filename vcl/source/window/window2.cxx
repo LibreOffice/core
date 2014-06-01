@@ -44,6 +44,7 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <scrwnd.hxx>
+#include <clipmgr.hxx>
 
 using namespace com::sun::star;
 
@@ -232,6 +233,8 @@ void Window::HideTracking()
 
 void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     OutputDevice *pOutDev = GetOutDev();
     Rectangle aRect( pOutDev->ImplLogicToDevicePixel( rRect ) );
 
@@ -270,7 +273,7 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
             Point aPoint( mnOutOffX, mnOutOffY );
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
-            ImplClipBoundaries( aRegion, false, false );
+            clipMgr->ClipBoundaries( this, aRegion, false, false );
             pOutDev->SelectClipRegion( aRegion, pGraphics );
         }
     }
@@ -294,6 +297,8 @@ void Window::InvertTracking( const Rectangle& rRect, sal_uInt16 nFlags )
 
 void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     sal_uInt16 nPoints = rPoly.GetSize();
 
     if ( nPoints < 2 )
@@ -334,7 +339,7 @@ void Window::InvertTracking( const Polygon& rPoly, sal_uInt16 nFlags )
             Point aPoint( mnOutOffX, mnOutOffY );
             Region aRegion( Rectangle( aPoint,
                                        Size( mnOutWidth, mnOutHeight ) ) );
-            ImplClipBoundaries( aRegion, false, false );
+            clipMgr->ClipBoundaries( this, aRegion, false, false );
             pOutDev->SelectClipRegion( aRegion, pGraphics );
         }
     }

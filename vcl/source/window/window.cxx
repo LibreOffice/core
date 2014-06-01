@@ -1504,6 +1504,8 @@ void Window::ImplUpdateSysObjPos()
 void Window::ImplPosSizeWindow( long nX, long nY,
                                 long nWidth, long nHeight, sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     bool    bNewPos         = false;
     bool    bNewSize        = false;
     bool    bCopyBits       = false;
@@ -1720,7 +1722,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                                                    Size( mnOutWidth, mnOutHeight ) ) );
                         if ( mpWindowImpl->mbWinRegion )
                             aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
-                        ImplClipBoundaries( aRegion, false, true );
+                        clipMgr->ClipBoundaries( this, aRegion, false, true );
                         if ( !pOverlapRegion->IsEmpty() )
                         {
                             pOverlapRegion->Move( mnOutOffX-nOldOutOffX, mnOutOffY-nOldOutOffY );
@@ -1773,7 +1775,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                     aRegion.Exclude( *pOldRegion );
                     if ( mpWindowImpl->mbWinRegion )
                         aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
-                    ImplClipBoundaries( aRegion, false, true );
+                    clipMgr->ClipBoundaries( this, aRegion, false, true );
                     if ( !aRegion.IsEmpty() )
                         ImplInvalidateFrameRegion( &aRegion, INVALIDATE_CHILDREN );
                 }
@@ -1786,7 +1788,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 Region aRegion( *pOldRegion );
                 if ( !mpWindowImpl->mbPaintTransparent )
                     ImplExcludeWindowRegion( aRegion );
-                ImplClipBoundaries( aRegion, false, true );
+                clipMgr->ClipBoundaries( this, aRegion, false, true );
                 if ( !aRegion.IsEmpty() && !mpWindowImpl->mpBorderWindow )
                     ImplInvalidateParentFrameRegion( aRegion );
             }

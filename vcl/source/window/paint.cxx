@@ -31,6 +31,7 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <svdata.hxx>
+#include <clipmgr.hxx>
 
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
 #define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)
@@ -377,9 +378,10 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags
 
 void Window::ImplInvalidateOverlapFrameRegion( const Region& rRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
     Region aRegion = rRegion;
 
-    ImplClipBoundaries( aRegion, true, true );
+    clipMgr->ClipBoundaries( this, aRegion, true, true );
     if ( !aRegion.IsEmpty() )
         ImplInvalidateFrameRegion( &aRegion, INVALIDATE_CHILDREN );
 
@@ -407,6 +409,7 @@ void Window::ImplInvalidateParentFrameRegion( Region& rRegion )
 
 void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
 
     // reset background storage
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
@@ -468,7 +471,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
             else
                 aRegion.Intersect( *pRegion );
         }
-        ImplClipBoundaries( aRegion, true, true );
+        clipMgr->ClipBoundaries( this, aRegion, true, true );
         if ( nFlags & INVALIDATE_NOCHILDREN )
         {
             nFlags &= ~INVALIDATE_CHILDREN;
@@ -595,6 +598,8 @@ void Window::ImplValidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
 
 void Window::ImplValidate( const Region* pRegion, sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     // assemble region
     bool    bValidateAll = !pRegion;
     sal_uInt16  nOrgFlags = nFlags;
@@ -615,7 +620,7 @@ void Window::ImplValidate( const Region* pRegion, sal_uInt16 nFlags )
         Region      aRegion( aRect );
         if ( pRegion )
             aRegion.Intersect( *pRegion );
-        ImplClipBoundaries( aRegion, true, true );
+        clipMgr->ClipBoundaries( this, aRegion, true, true );
         if ( nFlags & VALIDATE_NOCHILDREN )
         {
             nFlags &= ~VALIDATE_CHILDREN;
@@ -1183,6 +1188,8 @@ void Window::Erase()
 void Window::ImplScroll( const Rectangle& rRect,
                          long nHorzScroll, long nVertScroll, sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if ( !IsDeviceOutputNecessary() )
         return;
 
@@ -1265,7 +1272,7 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     aRegion.Exclude( aInvalidateRegion );
 
-    ImplClipBoundaries( aRegion, false, true );
+    clipMgr->ClipBoundaries( this, aRegion, false, true );
     if ( !bScrollChildren )
     {
         if ( nOrgFlags & SCROLL_NOCHILDREN )
