@@ -37,6 +37,7 @@ private:
 
     void clipSiblings( Window* pWindow, Region& rRegion );
     void intersectClipRegion( Window* pWindow, Region& rRegion );
+    void excludeOverlapWindows( Window *pWindow, Region& rRegion );
 
 public:
     ~ClipManager() { instanceFlag = false; }

@@ -92,19 +92,34 @@ void ClipManager::ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, 
                     if ( pWindow->mpWindowImpl->mbReallyVisible )
                         pWindow->ImplExcludeWindowRegion( rRegion );
 
-                    ImplExcludeOverlapWindows( rRegion );
+                    excludeOverlapWindows( pWindow, rRegion );
                     pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
                 }
                 pStartOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow;
             }
 
-            // Clip Child Overlap Windows
-            pWindow->ImplExcludeOverlapWindows( rRegion );
+            // Clip child overlap windows
+            excludeOverlapWindows( pWindow, rRegion );
         }
     }
     else
     {
         intersectClipRegion( pWindow->ImplGetParent(), rRegion );
+    }
+}
+
+void ClipManager::excludeOverlapWindows( Window *pWindow, Region& rRegion )
+{
+    Window* pOverlapWindow = pWindow->mpWindowImpl->mpFirstOverlap;
+    while ( pOverlapWindow )
+    {
+        if ( pOverlapWindow->mpWindowImpl->mbReallyVisible )
+        {
+            pOverlapWindow->ImplExcludeWindowRegion( rRegion );
+            excludeOverlapWindows( pOverlapWindow, rRegion );
+        }
+
+        pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
     }
 }
 
