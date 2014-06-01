@@ -21,7 +21,7 @@ $(eval $(call gb_Library_add_cxxflags,cli_cppuhelper,\
 
 $(eval $(call gb_Library_add_ldflags,cli_cppuhelper,\
 	-ignore:4248 \
-	-keyfile:$(call gb_Helper_windows_path,$(SRCDIR)/cli_ure/source/cliuno.snk) \
+	-keyfile:$(SRCDIR)/cli_ure/source/cliuno.snk \
 ))
 
 $(eval $(call gb_Library_add_ldflags,cli_cppuhelper,\

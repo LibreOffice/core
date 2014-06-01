@@ -59,7 +59,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-nologo \
 		-out:$(CLI_ASSEMBLY_OUTFILE) \
 		-version:$(CLI_ASSEMBLY_VERSION) \
-		-keyfile:$(call gb_Helper_windows_path,$(CLI_ASSEMBLY_KEYFILE)) \
+		-keyfile:$(CLI_ASSEMBLY_KEYFILE) \
 		-link:$(CLI_ASSEMBLY_CONFIGFILE) \
 		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) && \
 	touch $(1) \
