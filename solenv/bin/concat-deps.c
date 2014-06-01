@@ -1137,7 +1137,9 @@ const char *env_str;
         /* extract filename of dep file from a 'space' separated list */
         while(*in_list_cursor)
         {
-            if(*in_list_cursor == ' ' || *in_list_cursor == '\n')
+            /* the input here may contain Win32 \r\n EOL */
+            if(*in_list_cursor == ' '
+                || *in_list_cursor == '\n' || *in_list_cursor == '\r')
             {
                 *in_list_cursor = 0;
                 if(in_list_base < in_list_cursor)
