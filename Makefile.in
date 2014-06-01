@@ -43,7 +43,7 @@ $(BUILDDIR)/config_host.mk : $(wildcard \
 		$(BUILDDIR)/autogen.input \
 		$(BUILDDIR)/autogen.lastrun \
 		)
-	$(SRCDIR)/autogen.sh
+	sh -c $(SRCDIR)/autogen.sh
 
 else # MAKE_RESTARTS
 
