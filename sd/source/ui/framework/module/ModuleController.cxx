@@ -68,7 +68,8 @@ public:
 
 
 Reference<XInterface> SAL_CALL ModuleController_createInstance (
-    const Reference<XComponentContext>& rxContext) throw (css::uno::Exception)
+    const Reference<XComponentContext>& rxContext)
+        throw (css::uno::Exception, std::exception)
 {
     return Reference<XInterface>(ModuleController::CreateInstance(rxContext), UNO_QUERY);
 }
