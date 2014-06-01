@@ -23,6 +23,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include "frmtool.hxx"
 #include "dflyobj.hxx"
 #include "hints.hxx"
@@ -302,7 +303,7 @@ bool SwOszControl::ChkOsz()
 |*/
 void SwFlyAtCntFrm::MakeAll()
 {
-    if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    if ( !GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
     }
@@ -473,7 +474,7 @@ void SwFlyAtCntFrm::MakeAll()
                       !bConsiderWrapInfluenceDueToOverlapPrevCol &&
                       // #i40444#
                       !bConsiderWrapInfluenceDueToMovedFwdAnchor &&
-                      GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
+                      GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
             // #i3317# - instead of attribute change apply
             // temporarly the 'straightforward positioning process'.

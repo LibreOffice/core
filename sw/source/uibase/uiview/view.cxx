@@ -72,6 +72,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>
 #include <wview.hxx>
@@ -1633,7 +1634,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if( !bReadonly )
                     {
                         SwDrawDocument * pDrawDoc = 0;
-                        if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (GetDocShell()->GetDoc()->GetDrawModel() ) ) )
+                        if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
                         {
                             if( !pDrawDoc->GetOpenInDesignMode() )
                                 break;// don't touch the design mode

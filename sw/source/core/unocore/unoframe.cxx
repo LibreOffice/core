@@ -43,6 +43,7 @@
 #include <hints.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <swcli.hxx>
@@ -1294,7 +1295,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrmFmt &rFmt)
     {
         SwDoc *pDoc = rFmt.GetDoc();
         // #i52858# - method name changed
-        SdrModel *pDrawModel = pDoc->GetOrCreateDrawModel();
+        SdrModel *pDrawModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
         SwFlyDrawContact* pContactObject
                     = new SwFlyDrawContact( &rFmt, pDrawModel );
         pObject = pContactObject->GetMaster();
@@ -1302,9 +1303,8 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrmFmt &rFmt)
         const :: SwFmtSurround& rSurround = rFmt.GetSurround();
         pObject->SetLayer(
             ( SURROUND_THROUGHT == rSurround.GetSurround() &&
-              !rFmt.GetOpaque().GetValue() ) ? pDoc->GetHellId()
-                                             : pDoc->GetHeavenId() );
-
+              !rFmt.GetOpaque().GetValue() ) ? pDoc->getIDocumentDrawModelAccess().GetHellId()
+                                             : pDoc->getIDocumentDrawModelAccess().GetHeavenId() );
         pDrawModel->GetPage(0)->InsertObject( pObject );
     }
 
@@ -1681,8 +1681,13 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             if( nZOrder >= 0 && std::find(aTextBoxes.begin(), aTextBoxes.end(), pFmt) == aTextBoxes.end())
             {
                 SdrObject* pObject =
+<<<<<<< HEAD
                     GetOrCreateSdrObject( (SwFlyFrmFmt&)*pFmt );
                 SdrModel *pDrawModel = pDoc->GetDrawModel();
+=======
+                    GetOrCreateSdrObject( (SwFlyFrmFmt*)pFmt );
+                SdrModel *pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+>>>>>>> Split out IDocumentDrawModelAccess from SwDoc.
                 pDrawModel->GetPage(0)->
                             SetObjectOrdNum(pObject->GetOrdNum(), nZOrder);
             }
@@ -3029,8 +3034,13 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFrmFmt, m_sName);
             }
         }
+<<<<<<< HEAD
         if( pFmt && pDoc->GetDrawModel() )
             GetOrCreateSdrObject(*pFmt);
+=======
+        if( pFmt && pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+            GetOrCreateSdrObject( pFmt );
+>>>>>>> Split out IDocumentDrawModelAccess from SwDoc.
         const ::uno::Any* pOrder;
         if( pProps->GetProperty(FN_UNO_Z_ORDER, 0, pOrder) )
             setPropertyValue(UNO_NAME_Z_ORDER, *pOrder);

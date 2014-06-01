@@ -33,6 +33,7 @@
 #include <ftnidx.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <IShellCursorSupplier.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
@@ -552,7 +553,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         if( pCont->GetAnchorFrm() && !pObj->IsInserted() )
         {
             OSL_ENSURE( pDoc->GetDrawModel(), "RestoreFlyAnchor without DrawModel" );
-            pDoc->GetDrawModel()->GetPage( 0 )->InsertObject( pObj );
+            pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->InsertObject( pObj );
         }
         pObj->SetRelativePos( aDrawSavePt );
 

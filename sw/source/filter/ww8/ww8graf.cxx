@@ -65,6 +65,7 @@
 #include <fmtanchr.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docary.hxx>
 #include <ndgrf.hxx>
 #include <ndtxt.hxx>
@@ -3038,8 +3039,8 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
 {
     if (!pDrawModel)
     {
-        rDoc.GetOrCreateDrawModel(); // #i52858# - method name changed
-        pDrawModel  = rDoc.GetDrawModel();
+        rDoc.getIDocumentDrawModelAccess().GetOrCreateDrawModel(); // #i52858# - method name changed
+        pDrawModel  = rDoc.getIDocumentDrawModelAccess().GetDrawModel();
         OSL_ENSURE(pDrawModel, "Kann DrawModel nicht anlegen");
         pDrawPg = pDrawModel->GetPage(0);
 

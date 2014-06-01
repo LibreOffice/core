@@ -19,6 +19,7 @@
 
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
+#include <DocumentDrawModelManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 
@@ -147,6 +148,27 @@ sal_Int32 SwDoc::getReferenceCount() const
 {
     OSL_ENSURE(mReferenceCount >= 0, "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
     return mReferenceCount;
+}
+
+/* IDocumentDrawModelAccess */
+IDocumentDrawModelAccess const & SwDoc::getIDocumentDrawModelAccess() const
+{
+    return GetDocumentDrawModelManager();
+}
+
+IDocumentDrawModelAccess & SwDoc::getIDocumentDrawModelAccess()
+{
+    return GetDocumentDrawModelManager();
+}
+
+::sw::DocumentDrawModelManager const & SwDoc::GetDocumentDrawModelManager() const
+{
+    return *m_pDocumentDrawModelManager;
+}
+
+::sw::DocumentDrawModelManager & SwDoc::GetDocumentDrawModelManager()
+{
+    return *m_pDocumentDrawModelManager;
 }
 
 /* IDocumentSettingAccess */

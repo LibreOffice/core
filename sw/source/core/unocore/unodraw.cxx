@@ -32,6 +32,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtflcnt.hxx>
 #include <txtatr.hxx>
@@ -513,7 +514,7 @@ sal_Int32 SwXDrawPage::getCount(void) throw( uno::RuntimeException, std::excepti
     SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
-    if(!pDoc->GetDrawModel())
+    if(!pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         return 0;
     else
     {
@@ -535,7 +536,7 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
     SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
-    if(!pDoc->GetDrawModel())
+    if(!pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         throw lang::IndexOutOfBoundsException();
 
     ((SwXDrawPage*)this)->GetSvxPage();
@@ -556,7 +557,7 @@ sal_Bool SwXDrawPage::hasElements(void) throw( uno::RuntimeException, std::excep
     SolarMutexGuard aGuard;
     if(!pDoc)
         throw uno::RuntimeException();
-    if(!pDoc->GetDrawModel())
+    if(!pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         return sal_False;
     else
         return ((SwXDrawPage*)this)->GetSvxPage()->hasElements();
@@ -674,9 +675,9 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     // #108784# - set layer of new drawing object to corresponding
     // invisible layer.
     if(FmFormInventor != pObj->GetObjInventor())
-        pObj->SetLayer( bOpaque ? pDoc->GetInvisibleHeavenId() : pDoc->GetInvisibleHellId() );
+        pObj->SetLayer( bOpaque ? pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() );
     else
-        pObj->SetLayer(pDoc->GetInvisibleControlsId());
+        pObj->SetLayer(pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
 
     SwPaM* pPam = new SwPaM(pDoc->GetNodes().GetEndOfContent());
     SwUnoInternalPaM* pInternalPam = 0;
@@ -825,7 +826,7 @@ SwFmDrawPage*   SwXDrawPage::GetSvxPage()
     {
         SolarMutexGuard aGuard;
         // #i52858#
-        SdrModel* pModel = pDoc->GetOrCreateDrawModel();
+        SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
         SdrPage* pPage = pModel->GetPage( 0 );
 
         {
@@ -1115,16 +1116,16 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         SdrObject* pObj = pSvxShape->GetSdrObject();
                         // set layer of new drawing
                         // object to corresponding invisible layer.
-                        bool bIsVisible = pDoc->IsVisibleLayerId( pObj->GetLayer() );
+                        bool bIsVisible = pDoc->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() );
                         if(FmFormInventor != pObj->GetObjInventor())
                         {
                             pObj->SetLayer( *(sal_Bool*)aValue.getValue()
-                                            ? ( bIsVisible ? pDoc->GetHeavenId() : pDoc->GetInvisibleHeavenId() )
-                                            : ( bIsVisible ? pDoc->GetHellId() : pDoc->GetInvisibleHellId() ));
+                                            ? ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHeavenId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() )
+                                            : ( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetHellId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() ));
                         }
                         else
                         {
-                            pObj->SetLayer( bIsVisible ? pDoc->GetControlsId() : pDoc->GetInvisibleControlsId());
+                            pObj->SetLayer( bIsVisible ? pDoc->getIDocumentDrawModelAccess().GetControlsId() : pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
                         }
 
                     }
@@ -1481,8 +1482,8 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                         SdrObject* pObj = pSvxShape->GetSdrObject();
                         // consider invisible layers
                         sal_Bool bOpaque =
-                            ( pObj->GetLayer() != pFmt->GetDoc()->GetHellId() &&
-                              pObj->GetLayer() != pFmt->GetDoc()->GetInvisibleHellId() );
+                            ( pObj->GetLayer() != pFmt->GetDoc()->getIDocumentDrawModelAccess().GetHellId() &&
+                              pObj->GetLayer() != pFmt->GetDoc()->getIDocumentDrawModelAccess().GetInvisibleHellId() );
                         aRet.setValue(&bOpaque, ::getBooleanCppuType());
                     }
                 }
@@ -2787,12 +2788,12 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::Ru
                     if( FmFormInventor != pObj->GetObjInventor())
                     {
                         pObj->SetLayer( pSwShape->pImpl->GetOpaque()
-                                        ? pDoc->GetInvisibleHeavenId()
-                                        : pDoc->GetInvisibleHellId() );
+                                        ? pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId()
+                                        : pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId() );
                     }
                     else
                     {
-                        pObj->SetLayer(pDoc->GetInvisibleControlsId());
+                        pObj->SetLayer(pDoc->getIDocumentDrawModelAccess().GetInvisibleControlsId());
                     }
                 }
             }

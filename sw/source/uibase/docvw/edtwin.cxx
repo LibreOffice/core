@@ -75,6 +75,7 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <fldbas.hxx>
 #include <swmodule.hxx>
 #include <docsh.hxx>
@@ -485,7 +486,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
 
                             SdrObject* pSelectableObj = rSh.GetObjAt(rLPt);
                             // Don't update pointer if this is a background image only.
-                            if (pSelectableObj->GetLayer() != rSh.GetDoc()->GetHellId())
+                            if (pSelectableObj->GetLayer() != rSh.GetDoc()->getIDocumentDrawModelAccess().GetHellId())
                                 eStyle = bMovable ? POINTER_MOVE : POINTER_ARROW;
                             m_aActHitType = SDRHIT_OBJECT;
                         }
@@ -2678,7 +2679,7 @@ static bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
     SwContentAtPos aSwContentAtPos(SwContentAtPos::SW_INETATTR);
     SdrObject* pSelectableObj = rSh.GetObjAt(rDocPos);
 
-    return rSh.GetContentAtPos(rDocPos, aSwContentAtPos) && pSelectableObj->GetLayer() == rSh.GetDoc()->GetHellId();
+    return rSh.GetContentAtPos(rDocPos, aSwContentAtPos) && pSelectableObj->GetLayer() == rSh.GetDoc()->getIDocumentDrawModelAccess().GetHellId();
 }
 
 #if !HAVE_FEATURE_DESKTOP

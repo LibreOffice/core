@@ -63,6 +63,7 @@
 #include <ndindex.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <swrect.hxx>
@@ -857,8 +858,8 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
                     OSL_ENSURE(!this, "Unsupported surround type for export");
                     break;
             }
-            if (pObj && (pObj->GetLayer() == rWrt.pDoc->GetHellId() ||
-                    pObj->GetLayer() == rWrt.pDoc->GetInvisibleHellId()))
+            if (pObj && (pObj->GetLayer() == rWrt.pDoc->getIDocumentDrawModelAccess().GetHellId() ||
+                    pObj->GetLayer() == rWrt.pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId()))
             {
                 nFlags |= 0x4000;
             }
@@ -1000,7 +1001,7 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
         SwFrmFmt* pFmt = (SwFrmFmt*)&rFmt;
         nOrdNum = pDoc->GetSpzFrmFmts()->GetPos( pFmt );
 
-        const SdrModel* pModel = pDoc->GetDrawModel();
+        const SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         if( pModel )
             nOrdNum += pModel->GetPage( 0 )->GetObjCount();
     }
@@ -2160,7 +2161,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
 void SwBasicEscherEx::Init()
 {
     MapUnit eMap = MAP_TWIP;
-    if (SdrModel *pModel = rWrt.pDoc->GetDrawModel())
+    if (SdrModel *pModel = rWrt.pDoc->getIDocumentDrawModelAccess().GetDrawModel())
     {
         // PPT arbeitet nur mit Einheiten zu 576DPI
         // WW hingegen verwendet twips, dh. 1440DPI.
@@ -2176,7 +2177,7 @@ void SwBasicEscherEx::Init()
     mnEmuMul = aFact.GetNumerator();
     mnEmuDiv = aFact.GetDenominator();
 
-    SetHellLayerId(rWrt.pDoc->GetHellId());
+    SetHellLayerId(rWrt.pDoc->getIDocumentDrawModelAccess().GetHellId());
 }
 
 sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax) const
@@ -2202,7 +2203,7 @@ sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax) const
 
 SdrLayerID SwBasicEscherEx::GetInvisibleHellId() const
 {
-    return rWrt.pDoc->GetInvisibleHellId();
+    return rWrt.pDoc->getIDocumentDrawModelAccess().GetInvisibleHellId();
 }
 
 void SwBasicEscherEx::WritePictures()
@@ -2294,7 +2295,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                         bool bSwapInPage = false;
                         if (!pSdrObj->GetPage())
                         {
-                            if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
+                            if (SdrModel* pModel = rWrt.pDoc->getIDocumentDrawModelAccess().GetDrawModel())
                             {
                                 if (SdrPage *pPage = pModel->GetPage(0))
                                 {
@@ -3026,7 +3027,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, sal_uInt32 nShapeId )
     {
         OpenContainer( ESCHER_SpContainer );
 
-        SdrModel *pModel = rWrt.pDoc->GetDrawModel();
+        SdrModel *pModel = rWrt.pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         OutputDevice *pDevice = Application::GetDefaultDevice();
         OSL_ENSURE(pModel && pDevice, "no model or device");
 

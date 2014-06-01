@@ -59,6 +59,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 #include <pausethreadstarting.hxx>
 
@@ -228,7 +229,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
         //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
-        SdrModel* pModel = pDoc->GetDrawModel();
+        SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         if( pModel )
             pModel->GetPage( 0 )->RecalcObjOrdNums();
     }

@@ -25,6 +25,7 @@
 #include "flyfrms.hxx"
 #include <dflyobj.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 SwFlyInCntFrm::SwFlyInCntFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pSib, pAnch )
@@ -199,7 +200,7 @@ void SwFlyInCntFrm::RegistFlys()
 void SwFlyInCntFrm::MakeAll()
 {
     // OD 2004-01-19 #110582#
-    if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    if ( !GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
     }

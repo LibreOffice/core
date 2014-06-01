@@ -20,7 +20,6 @@
 #include <config_features.h>
 
 #include <doc.hxx>
-#include <DocumentSettingManager.hxx>
 #include <dcontact.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -89,6 +88,8 @@
 #include <MarkManager.hxx>
 #include <UndoManager.hxx>
 #include <DocumentDeviceManager.hxx>
+#include <DocumentSettingManager.hxx>
+#include <DocumentDrawModelManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -187,8 +188,9 @@ SwDoc::SwDoc()
     mpAttrPool(new SwAttrPool(this)),
     mpMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
+    m_pDocumentDrawModelManager( new ::sw::DocumentDrawModelManager( *this ) ),
     m_pUndoManager(new ::sw::UndoManager(
-            boost::shared_ptr<SwNodes>(new SwNodes(this)), *this, *this, *this)),
+            boost::shared_ptr<SwNodes>(new SwNodes(this)), *m_pDocumentDrawModelManager, *this, *this)),
     m_pDocumentSettingManager(new ::sw::DocumentSettingManager(*this)),
     m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
@@ -207,7 +209,6 @@ SwDoc::SwDoc()
     mpTOXTypes( new SwTOXTypes() ),
     mpDefTOXBases( new SwDefTOXBase_Impl() ),
     mpCurrentView( 0 ),
-    mpDrawModel( 0 ),
     mpUpdtFlds( new SwDocUpdtFld( this ) ),
     mpFldTypes( new SwFldTypes() ),
     mpGlossaryDoc( 0 ),
@@ -456,9 +457,9 @@ SwDoc::~SwDoc()
     mpLayouter = 0L;
 
     // Deactivate Undo notification from Draw
-    if( mpDrawModel )
+    if( GetDocumentDrawModelManager().GetDrawModel() )
     {
-        DrawNotifyUndoHdl();
+        GetDocumentDrawModelManager().DrawNotifyUndoHdl();
         ClrContourCache();
     }
 
@@ -593,7 +594,7 @@ SwDoc::~SwDoc()
     // Only now destroy the Model, the drawing objects - which are also
     // contained in the Undo - need to remove their attributes from the
     // Model. Also, DrawContacts could exist before this.
-    ReleaseDrawModel();
+    GetDocumentDrawModelManager().ReleaseDrawModel();
     // Destroy DrawModel before the LinkManager, because it's always set
     // in the DrawModel.
     DELETEZ( mpLinkMgr );
@@ -658,11 +659,11 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
         }
 
         mpLinkMgr->SetPersist( mpDocShell );
-        if( mpDrawModel )
+        if( GetDocumentDrawModelManager().GetDrawModel() )
         {
-            ((SwDrawDocument*)mpDrawModel)->SetObjectShell( mpDocShell );
-            mpDrawModel->SetPersist( mpDocShell );
-            OSL_ENSURE( mpDrawModel->GetPersist() == GetPersist(),
+            ((SwDrawDocument*)GetDocumentDrawModelManager().GetDrawModel())->SetObjectShell( mpDocShell );
+            GetDocumentDrawModelManager().GetDrawModel()->SetPersist( mpDocShell );
+            OSL_ENSURE( GetDocumentDrawModelManager().GetDrawModel()->GetPersist() == GetPersist(),
                     "draw model's persist is out of sync" );
         }
     }
@@ -689,9 +690,9 @@ void SwDoc::ClearDoc()
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // Deactivate Undo notification from Draw
-    if( mpDrawModel )
+    if( GetDocumentDrawModelManager().GetDrawModel() )
     {
-        DrawNotifyUndoHdl();
+        GetDocumentDrawModelManager().DrawNotifyUndoHdl();
         ClrContourCache();
     }
 
@@ -699,7 +700,7 @@ void SwDoc::ClearDoc()
     sal_uInt16 n;
     while ( 0 != (n = GetSpzFrmFmts()->size()) )
         DelLayoutFmt((*mpSpzFrmFmtTbl)[n-1]);
-    OSL_ENSURE( !mpDrawModel || !mpDrawModel->GetPage(0)->GetObjCount(),
+    OSL_ENSURE( !GetDocumentDrawModelManager().GetDrawModel() || !GetDocumentDrawModelManager().GetDrawModel()->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
 
     mpRedlineTbl->DeleteAndDestroyAll();

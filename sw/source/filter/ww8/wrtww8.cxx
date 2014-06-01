@@ -59,6 +59,7 @@
 #include <frmatr.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <viewopt.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
@@ -3063,8 +3064,8 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     CollectOutlineBookmarks(*pDoc);
 
     // make unique OrdNums (Z-Order) for all drawing-/fly Objects
-    if ( pDoc->GetDrawModel() )
-        pDoc->GetDrawModel()->GetPage( 0 )->RecalcObjOrdNums();
+    if ( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+        pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->RecalcObjOrdNums();
 
     ExportDocument_Impl();
 

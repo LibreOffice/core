@@ -37,6 +37,7 @@
 #include <hintids.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 using namespace com::sun::star;
 
@@ -147,7 +148,7 @@ uno::Reference<embed::XStorage> SwDrawDocument::GetDocumentStorage() const
 SdrLayerID SwDrawDocument::GetControlExportLayerId( const SdrObject & ) const
 {
     //for versions < 5.0, there was only Hell and Heaven
-    return (SdrLayerID)pDoc->GetHeavenId();
+    return (SdrLayerID)pDoc->getIDocumentDrawModelAccess().GetHeavenId();
 }
 
 uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()

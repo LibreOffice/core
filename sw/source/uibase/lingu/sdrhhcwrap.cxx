@@ -40,6 +40,7 @@
 #include <dcontact.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docary.hxx>
 #include <edtwin.hxx>
 
@@ -50,7 +51,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
        const Font* pTargetFnt,
        sal_Int32 nConvOptions,
        bool bInteractive ) :
-    SdrOutliner(pVw->GetDocShell()->GetDoc()->GetDrawModel()->
+    SdrOutliner(pVw->GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->
                              GetDrawOutliner().GetEmptyItemSet().GetPool(),
                 OUTLINERMODE_TEXTOBJECT ),
     pView( pVw ),

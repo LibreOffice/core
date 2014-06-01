@@ -41,6 +41,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <rootfrm.hxx>
 #include <poolfmt.hxx>
@@ -510,287 +511,6 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     }
 }
 
-#include <svx/sxenditm.hxx>
-
-// Is also called by the Sw3 Reader, if there was an error when reading the
-// drawing layer. If it is called by the Sw3 Reader the layer is rebuilt
-// from scratch.
-void SwDoc::InitDrawModel()
-{
-    // !! Attention: there is similar code in the Sw3 Reader (sw3imp.cxx) that
-    // also has to be maintained!!
-    if ( mpDrawModel )
-        ReleaseDrawModel();
-
-//UUUU
-//  // Setup DrawPool and EditEnginePool. Ownership is ours and only gets passed
-//  // to the Drawing.
-//  // The pools are destroyed in the ReleaseDrawModel.
-//  // for loading the drawing items. This must be loaded without RefCounts!
-//  SfxItemPool *pSdrPool = new SdrItemPool( &GetAttrPool() );
-//  // change DefaultItems for the SdrEdgeObj distance items to TWIPS.
-//  if(pSdrPool)
-//  {
-//      const long nDefEdgeDist = ((500 * 72) / 127); // 1/100th mm in twips
-//      pSdrPool->SetPoolDefaultItem(SdrEdgeNode1HorzDistItem(nDefEdgeDist));
-//      pSdrPool->SetPoolDefaultItem(SdrEdgeNode1VertDistItem(nDefEdgeDist));
-//      pSdrPool->SetPoolDefaultItem(SdrEdgeNode2HorzDistItem(nDefEdgeDist));
-//      pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
-//
-//      // #i33700#
-//      // Set shadow distance defaults as PoolDefaultItems. Details see bug.
-//      pSdrPool->SetPoolDefaultItem(SdrShadowXDistItem((300 * 72) / 127));
-//      pSdrPool->SetPoolDefaultItem(SdrShadowYDistItem((300 * 72) / 127));
-//  }
-//  SfxItemPool *pEEgPool = EditEngine::CreatePool( false );
-//  pSdrPool->SetSecondaryPool( pEEgPool );
-//   if ( !GetAttrPool().GetFrozenIdRanges () )
-//      GetAttrPool().FreezeIdRanges();
-//  else
-//      pSdrPool->FreezeIdRanges();
-
-    // set FontHeight pool defaults without changing static SdrEngineDefaults
-    GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
-
-    SAL_INFO( "sw.doc", "before create DrawDocument" );
-    // The document owns the SdrModel. We always have two layers and one page.
-    mpDrawModel = new SwDrawDocument( this );
-
-    mpDrawModel->EnableUndo( GetIDocumentUndoRedo().DoesUndo() );
-
-    OUString sLayerNm;
-    sLayerNm = "Hell";
-    mnHell   = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
-
-    sLayerNm = "Heaven";
-    mnHeaven = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
-
-    sLayerNm = "Controls";
-    mnControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
-
-    // add invisible layers corresponding to the visible ones.
-    {
-        sLayerNm = "InvisibleHell";
-        mnInvisibleHell   = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
-
-        sLayerNm = "InvisibleHeaven";
-        mnInvisibleHeaven = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
-
-        sLayerNm = "InvisibleControls";
-        mnInvisibleControls = mpDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
-    }
-
-    SdrPage* pMasterPage = mpDrawModel->AllocPage( false );
-    mpDrawModel->InsertPage( pMasterPage );
-    SAL_INFO( "sw.doc", "after create DrawDocument" );
-    SAL_INFO( "sw.doc", "before create Spellchecker/Hyphenator" );
-    SdrOutliner& rOutliner = mpDrawModel->GetDrawOutliner();
-    uno::Reference< XSpellChecker1 > xSpell = ::GetSpellChecker();
-    rOutliner.SetSpeller( xSpell );
-    uno::Reference<XHyphenator> xHyphenator( ::GetHyphenator() );
-    rOutliner.SetHyphenator( xHyphenator );
-    SAL_INFO( "sw.doc", "after create Spellchecker/Hyphenator" );
-    SetCalcFieldValueHdl(&rOutliner);
-    SetCalcFieldValueHdl(&mpDrawModel->GetHitTestOutliner());
-
-    // Set the LinkManager in the model so that linked graphics can be inserted.
-    // The WinWord import needs it too.
-    mpDrawModel->SetLinkManager( &GetLinkManager() );
-    mpDrawModel->SetAddExtLeading( GetDocumentSettingManager().get(IDocumentSettingAccess::ADD_EXT_LEADING) );
-
-    OutputDevice* pRefDev = getIDocumentDeviceAccess().getReferenceDevice( false );
-    if ( pRefDev )
-        mpDrawModel->SetRefDevice( pRefDev );
-
-    mpDrawModel->SetNotifyUndoActionHdl( LINK( this, SwDoc, AddDrawUndo ));
-    if ( mpCurrentView )
-    {
-        SwViewShell* pViewSh = mpCurrentView;
-        do
-        {
-            SwRootFrm* pRoot =  pViewSh->GetLayout();
-            if( pRoot && !pRoot->GetDrawPage() )
-            {
-                // Disable "multiple layout" for the moment:
-                // use pMasterPage instead of a new created SdrPage
-                // mpDrawModel->AllocPage( FALSE );
-                // mpDrawModel->InsertPage( pDrawPage );
-                SdrPage* pDrawPage = pMasterPage;
-                pRoot->SetDrawPage( pDrawPage );
-                pDrawPage->SetSize( pRoot->Frm().SSize() );
-            }
-            pViewSh = (SwViewShell*)pViewSh->GetNext();
-        }while( pViewSh != mpCurrentView );
-    }
-}
-
-/** method to notify drawing page view about the invisible layers */
-void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
-{
-    OUString sLayerNm;
-    sLayerNm = "InvisibleHell";
-    _rSdrPageView.SetLayerVisible( sLayerNm, false );
-
-    sLayerNm = "InvisibleHeaven";
-    _rSdrPageView.SetLayerVisible( sLayerNm, false );
-
-    sLayerNm = "InvisibleControls";
-    _rSdrPageView.SetLayerVisible( sLayerNm, false );
-}
-
-/** method to determine, if a layer ID belongs to the visible ones.
-
-    @note If given layer ID is unknown, method asserts and returns <false>.
-*/
-bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
-{
-    bool bRetVal;
-
-    if ( _nLayerId == GetHeavenId() ||
-         _nLayerId == GetHellId() ||
-         _nLayerId == GetControlsId() )
-    {
-        bRetVal = true;
-    }
-    else if ( _nLayerId == GetInvisibleHeavenId() ||
-              _nLayerId == GetInvisibleHellId() ||
-              _nLayerId == GetInvisibleControlsId() )
-    {
-        bRetVal = false;
-    }
-    else
-    {
-        OSL_FAIL( "<SwDoc::IsVisibleLayerId(..)> - unknown layer ID." );
-        bRetVal = false;
-    }
-
-    return bRetVal;
-}
-
-/** method to determine, if the corresponding visible layer ID for a invisible one.
-
-    @note If given layer ID is a visible one, method returns given layer ID.
-    @note If given layer ID is unknown, method returns given layer ID.
-*/
-SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId )
-{
-    SdrLayerID nVisibleLayerId;
-
-    if ( _nInvisibleLayerId == GetInvisibleHeavenId() )
-    {
-        nVisibleLayerId = GetHeavenId();
-    }
-    else if ( _nInvisibleLayerId == GetInvisibleHellId() )
-    {
-        nVisibleLayerId = GetHellId();
-    }
-    else if ( _nInvisibleLayerId == GetInvisibleControlsId() )
-    {
-        nVisibleLayerId = GetControlsId();
-    }
-    else if ( _nInvisibleLayerId == GetHeavenId() ||
-              _nInvisibleLayerId == GetHellId() ||
-              _nInvisibleLayerId == GetControlsId() )
-    {
-        OSL_FAIL( "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID already an invisible one." );
-        nVisibleLayerId = _nInvisibleLayerId;
-    }
-    else
-    {
-        OSL_FAIL( "<SwDoc::GetVisibleLayerIdByInvisibleOne(..)> - given layer ID is unknown." );
-        nVisibleLayerId = _nInvisibleLayerId;
-    }
-
-    return nVisibleLayerId;
-}
-
-/** method to determine, if the corresponding invisible layer ID for a visible one.
-
-    @note If given layer ID is a invisible one, method returns given layer ID.
-    @note If given layer ID is unknown, method returns given layer ID.
-*/
-SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId )
-{
-    SdrLayerID nInvisibleLayerId;
-
-    if ( _nVisibleLayerId == GetHeavenId() )
-    {
-        nInvisibleLayerId = GetInvisibleHeavenId();
-    }
-    else if ( _nVisibleLayerId == GetHellId() )
-    {
-        nInvisibleLayerId = GetInvisibleHellId();
-    }
-    else if ( _nVisibleLayerId == GetControlsId() )
-    {
-        nInvisibleLayerId = GetInvisibleControlsId();
-    }
-    else if ( _nVisibleLayerId == GetInvisibleHeavenId() ||
-              _nVisibleLayerId == GetInvisibleHellId() ||
-              _nVisibleLayerId == GetInvisibleControlsId() )
-    {
-        OSL_FAIL( "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID already an invisible one." );
-        nInvisibleLayerId = _nVisibleLayerId;
-    }
-    else
-    {
-        OSL_FAIL( "<SwDoc::GetInvisibleLayerIdByVisibleOne(..)> - given layer ID is unknown." );
-        nInvisibleLayerId = _nVisibleLayerId;
-    }
-
-    return nInvisibleLayerId;
-}
-
-void SwDoc::ReleaseDrawModel()
-{
-    if ( mpDrawModel )
-    {
-        // !! Also maintain the code in the sw3io for inserting documents!!
-
-        delete mpDrawModel; mpDrawModel = 0;
-//UUUU
-//      SfxItemPool *pSdrPool = GetAttrPool().GetSecondaryPool();
-//
-//      OSL_ENSURE( pSdrPool, "missing pool" );
-//      SfxItemPool *pEEgPool = pSdrPool->GetSecondaryPool();
-//      OSL_ENSURE( !pEEgPool->GetSecondaryPool(), "I don't accept additional pools");
-//      pSdrPool->Delete();                 // First have the items destroyed,
-//                                          // then destroy the chain!
-//      GetAttrPool().SetSecondaryPool( 0 );    // This one's a must!
-//      pSdrPool->SetSecondaryPool( 0 );    // That one's safer
-//      SfxItemPool::Free(pSdrPool);
-//      SfxItemPool::Free(pEEgPool);
-    }
-}
-
-SdrModel* SwDoc::_MakeDrawModel()
-{
-    OSL_ENSURE( !mpDrawModel, "_MakeDrawModel: Why?" );
-    InitDrawModel();
-    if ( mpCurrentView )
-    {
-        SwViewShell* pTmp = mpCurrentView;
-        do
-        {
-            pTmp->MakeDrawView();
-            pTmp = (SwViewShell*) pTmp->GetNext();
-        } while ( pTmp != mpCurrentView );
-
-        // Broadcast, so that the FormShell can be connected to the DrawView
-        if( GetDocShell() )
-        {
-            SfxSimpleHint aHnt( SW_BROADCAST_DRAWVIEWS_CREATED );
-            GetDocShell()->Broadcast( aHnt );
-        }
-    }
-    return mpDrawModel;
-}
-
-void SwDoc::DrawNotifyUndoHdl()
-{
-    mpDrawModel->SetNotifyUndoActionHdl( Link() );
-}
-
 /// In the Outliner, set a link to the method for field display in edit objects.
 void SwDoc::SetCalcFieldValueHdl(Outliner* pOutliner)
 {
@@ -870,18 +590,6 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
     return(0);
 }
 
-/* TFFDI: The functions formerly declared 'inline'
- */
-const SdrModel* SwDoc::GetDrawModel() const { return mpDrawModel; }
-SdrModel* SwDoc::GetDrawModel() { return mpDrawModel; }
-SdrLayerID SwDoc::GetHeavenId() const { return mnHeaven; }
-SdrLayerID SwDoc::GetHellId() const { return mnHell; }
-SdrLayerID SwDoc::GetControlsId() const { return mnControls;   }
-SdrLayerID SwDoc::GetInvisibleHeavenId() const { return mnInvisibleHeaven; }
-SdrLayerID SwDoc::GetInvisibleHellId() const { return mnInvisibleHell; }
-SdrLayerID SwDoc::GetInvisibleControlsId() const { return mnInvisibleControls; }
-SdrModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
-
 // #i62875#
 namespace docfunc
 {
@@ -889,10 +597,10 @@ namespace docfunc
     {
         bool bExistsDrawObjs( false );
 
-        if ( p_rDoc.GetDrawModel() &&
-             p_rDoc.GetDrawModel()->GetPage( 0 ) )
+        if ( p_rDoc.getIDocumentDrawModelAccess().GetDrawModel() &&
+             p_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 ) )
         {
-            const SdrPage& rSdrPage( *(p_rDoc.GetDrawModel()->GetPage( 0 )) );
+            const SdrPage& rSdrPage( *(p_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )) );
 
             SdrObjListIter aIter( rSdrPage, IM_FLAT );
             while( aIter.IsMore() )
@@ -914,10 +622,10 @@ namespace docfunc
     {
         bool bAllDrawObjsOnPage( true );
 
-        if ( p_rDoc.GetDrawModel() &&
-             p_rDoc.GetDrawModel()->GetPage( 0 ) )
+        if ( p_rDoc.getIDocumentDrawModelAccess().GetDrawModel() &&
+             p_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 ) )
         {
-            const SdrPage& rSdrPage( *(p_rDoc.GetDrawModel()->GetPage( 0 )) );
+            const SdrPage& rSdrPage( *(p_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )) );
 
             SdrObjListIter aIter( rSdrPage, IM_FLAT );
             while( aIter.IsMore() )

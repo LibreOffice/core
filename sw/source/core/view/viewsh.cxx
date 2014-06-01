@@ -32,6 +32,7 @@
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -2514,8 +2515,8 @@ const IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() const { ret
 IDocumentDeviceAccess* SwViewShell::getIDocumentDeviceAccess() { return &mpDoc->getIDocumentDeviceAccess(); }
 const IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() const { return mpDoc->getIDocumentMarkAccess(); }
 IDocumentMarkAccess* SwViewShell::getIDocumentMarkAccess() { return mpDoc->getIDocumentMarkAccess(); }
-const IDocumentDrawModelAccess* SwViewShell::getIDocumentDrawModelAccess() const { return mpDoc; }
-IDocumentDrawModelAccess* SwViewShell::getIDocumentDrawModelAccess() { return mpDoc; }
+const IDocumentDrawModelAccess* SwViewShell::getIDocumentDrawModelAccess() const { return & mpDoc->getIDocumentDrawModelAccess(); }
+IDocumentDrawModelAccess* SwViewShell::getIDocumentDrawModelAccess() { return & mpDoc->getIDocumentDrawModelAccess(); }
 const IDocumentRedlineAccess* SwViewShell::getIDocumentRedlineAccess() const { return mpDoc; }
 IDocumentRedlineAccess* SwViewShell::getIDocumentRedlineAccess() { return mpDoc; }
 const IDocumentLayoutAccess* SwViewShell::getIDocumentLayoutAccess() const { return mpDoc; }

@@ -19,6 +19,7 @@
 
 #include <DocumentSettingManager.hxx>
 #include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
@@ -388,7 +389,7 @@ void sw::DocumentSettingManager::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLan
     }
     mxForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
 
-    SdrModel *pDrawModel = m_rDoc.GetDrawModel();
+    SdrModel *pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
     if( pDrawModel )
     {
         pDrawModel->SetForbiddenCharsTable( mxForbiddenCharsTable );
@@ -458,7 +459,7 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
     {
         meChrCmprType = n;
 
-        SdrModel *pDrawModel = m_rDoc.GetDrawModel();
+        SdrModel *pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
         if( pDrawModel )
         {
             pDrawModel->SetCharCompressType( static_cast<sal_uInt16>(n) );

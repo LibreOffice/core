@@ -8,6 +8,7 @@
  */
 
 #include "doc.hxx"
+#include <IDocumentDrawModelAccess.hxx>
 #include "ndtxt.hxx"
 #include "MarkManager.hxx"
 #include "docary.hxx"
@@ -189,7 +190,7 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpNumRuleTbl->dumpAsXml( writer );
     mpRedlineTbl->dumpAsXml( writer );
     mpExtraRedlineTbl->dumpAsXml( writer );
-    lcl_dumpSdrModel( writer, mpDrawModel );
+    lcl_dumpSdrModel( writer, getIDocumentDrawModelAccess().GetDrawModel() );
     writer.endElement();
 }
 

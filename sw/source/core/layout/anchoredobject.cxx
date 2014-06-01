@@ -21,6 +21,7 @@
 #include <fmtornt.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <fmtsrnd.hxx>
 #include <dcontact.hxx>
 #include <editeng/ulspitem.hxx>
@@ -783,7 +784,7 @@ SwTxtFrm* SwAnchoredObject::FindAnchorCharFrm()
 */
 bool SwAnchoredObject::IsFormatPossible() const
 {
-    return GetFrmFmt().GetDoc()->IsVisibleLayerId( GetDrawObj()->GetLayer() );
+    return GetFrmFmt().GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetDrawObj()->GetLayer() );
 }
 
 // --> #i3317#

@@ -39,6 +39,7 @@
 #include "TextCursorHelper.hxx"
 #include "unoframe.hxx"
 #include "doc.hxx"
+#include <IDocumentDrawModelAccess.hxx>
 #include "unocoll.hxx"
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
@@ -357,7 +358,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
     SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     xPropSet = pXFrame;
-    if( pDoc->GetDrawModel() )
+    if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
         SwXFrame::GetOrCreateSdrObject(*
                 static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
     if( !rTblName.isEmpty() )
@@ -595,8 +596,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
 
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
+<<<<<<< HEAD
             if( pDoc->GetDrawModel() )
                 SwXFrame::GetOrCreateSdrObject(*
+=======
+            if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+                SwXFrame::GetOrCreateSdrObject(
+>>>>>>> Split out IDocumentDrawModelAccess from SwDoc.
                         static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
         }
     }
@@ -652,8 +658,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
                                        NULL);
     SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
     xPropSet = pXFrame;
+<<<<<<< HEAD
     if( pDoc->GetDrawModel() )
         SwXFrame::GetOrCreateSdrObject(*
+=======
+    if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+        SwXFrame::GetOrCreateSdrObject(
+>>>>>>> Split out IDocumentDrawModelAccess from SwDoc.
                 static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
 
     return xPropSet;
@@ -725,8 +736,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                                             NULL);
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
+<<<<<<< HEAD
             if( pDoc->GetDrawModel() )
                 SwXFrame::GetOrCreateSdrObject(*
+=======
+            if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+                SwXFrame::GetOrCreateSdrObject(
+>>>>>>> Split out IDocumentDrawModelAccess from SwDoc.
                         static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
         }
     }
@@ -876,8 +892,13 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
                                             NULL);
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
+<<<<<<< HEAD
             if( pDoc->GetDrawModel() )
                 SwXFrame::GetOrCreateSdrObject(*
+=======
+            if( pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
+                SwXFrame::GetOrCreateSdrObject(
+>>>>>>> Split out IDocumentDrawModelAccess from SwDoc.
                         static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
         }
     }
