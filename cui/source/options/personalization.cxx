@@ -371,6 +371,10 @@ void SearchAndParseThread::execute()
         Bitmap aBmp = aGraphic.GetBitmap();
         vResultList.push_back( Image( aBmp ) );
     }
+
+    // for VCL to be able to do visual changes in the thread
+    SolarMutexGuard aGuard;
+
     m_pPersonaDialog->SetImages( vResultList );
     sProgress = "";
     m_pPersonaDialog->SetProgress( sProgress );
