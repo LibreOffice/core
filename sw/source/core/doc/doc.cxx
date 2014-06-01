@@ -150,6 +150,32 @@ sal_Int32 SwDoc::getReferenceCount() const
     return mReferenceCount;
 }
 
+::sw::MetaFieldManager & SwDoc::GetMetaFieldManager()
+{
+    return *m_pMetaFieldManager;
+}
+
+::sw::UndoManager & SwDoc::GetUndoManager()
+{
+    return *m_pUndoManager;
+}
+
+::sw::UndoManager const & SwDoc::GetUndoManager() const
+{
+    return *m_pUndoManager;
+}
+
+
+IDocumentUndoRedo & SwDoc::GetIDocumentUndoRedo()
+{
+    return *m_pUndoManager;
+}
+
+IDocumentUndoRedo const & SwDoc::GetIDocumentUndoRedo() const
+{
+    return *m_pUndoManager;
+}
+
 /* IDocumentDrawModelAccess */
 IDocumentDrawModelAccess const & SwDoc::getIDocumentDrawModelAccess() const
 {
@@ -180,6 +206,16 @@ IDocumentSettingAccess const & SwDoc::getIDocumentSettingAccess() const
 IDocumentSettingAccess & SwDoc::getIDocumentSettingAccess()
 {
     return GetDocumentSettingManager();
+}
+
+::sw::DocumentSettingManager & SwDoc::GetDocumentSettingManager()
+{
+    return *m_pDocumentSettingManager;
+}
+
+::sw::DocumentSettingManager const & SwDoc::GetDocumentSettingManager() const
+{
+    return *m_pDocumentSettingManager;
 }
 
 sal_uInt32 SwDoc::getRsid() const

@@ -912,48 +912,6 @@ SwDoc::GetXmlIdRegistry()
     return *m_pXmlIdRegistry;
 }
 
-::sw::MetaFieldManager &
-SwDoc::GetMetaFieldManager()
-{
-    return *m_pMetaFieldManager;
-}
-
-::sw::UndoManager &
-SwDoc::GetUndoManager()
-{
-    return *m_pUndoManager;
-}
-
-::sw::UndoManager const&
-SwDoc::GetUndoManager() const
-{
-    return *m_pUndoManager;
-}
-
-::sw::DocumentSettingManager &
-SwDoc::GetDocumentSettingManager()
-{
-    return *m_pDocumentSettingManager;
-}
-
-::sw::DocumentSettingManager const&
-SwDoc::GetDocumentSettingManager() const
-{
-    return *m_pDocumentSettingManager;
-}
-
-IDocumentUndoRedo &
-SwDoc::GetIDocumentUndoRedo()
-{
-    return *m_pUndoManager;
-}
-
-IDocumentUndoRedo const&
-SwDoc::GetIDocumentUndoRedo() const
-{
-    return *m_pUndoManager;
-}
-
 void SwDoc::InitTOXTypes()
 {
    ShellResource* pShellRes = SwViewShell::GetShellRes();
