@@ -108,6 +108,35 @@ void ClipManager::ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, 
     }
 }
 
+bool ClipManager::ClipChildren( Window *pWindow, Region& rRegion )
+{
+    bool    bOtherClip = false;
+    Window* pChildWindow = pWindow->mpWindowImpl->mpFirstChild;
+    while ( pChildWindow )
+    {
+        if ( pChildWindow->mpWindowImpl->mbReallyVisible )
+        {
+            // read-out ParentClipMode-Flags
+            sal_uInt16 nClipMode = pChildWindow->GetParentClipMode();
+
+            if ( !(nClipMode & PARENTCLIPMODE_NOCLIP) &&
+                 ((nClipMode & PARENTCLIPMODE_CLIP) || (pWindow->GetStyle() & WB_CLIPCHILDREN)) )
+            {
+                Exclude( pChildWindow, rRegion );
+            }
+            else
+            {
+                bOtherClip = true;
+            }
+        }
+
+        pChildWindow = pChildWindow->mpWindowImpl->mpNext;
+    }
+
+    return bOtherClip;
+}
+
+
 void ClipManager::Exclude( Window *pWindow, Region& rRegion )
 {
     if ( pWindow->mpWindowImpl->mbWinRegion )

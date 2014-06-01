@@ -183,31 +183,6 @@ void Window::EnableClipSiblings( bool bClipSiblings )
     mpWindowImpl->mbClipSiblings = bClipSiblings;
 }
 
-bool Window::ImplClipChildren( Region& rRegion )
-{
-    ClipManager *clipMgr = ClipManager::GetInstance();
-
-    bool    bOtherClip = false;
-    Window* pWindow = mpWindowImpl->mpFirstChild;
-    while ( pWindow )
-    {
-        if ( pWindow->mpWindowImpl->mbReallyVisible )
-        {
-            // read-out ParentClipMode-Flags
-            sal_uInt16 nClipMode = pWindow->GetParentClipMode();
-            if ( !(nClipMode & PARENTCLIPMODE_NOCLIP) &&
-                 ((nClipMode & PARENTCLIPMODE_CLIP) || (GetStyle() & WB_CLIPCHILDREN)) )
-                clipMgr->Exclude( pWindow, rRegion );
-            else
-                bOtherClip = true;
-        }
-
-        pWindow = pWindow->mpWindowImpl->mpNext;
-    }
-
-    return bOtherClip;
-}
-
 void Window::ImplClipAllChildren( Region& rRegion )
 {
     ClipManager *clipMgr = ClipManager::GetInstance();
@@ -223,6 +198,8 @@ void Window::ImplClipAllChildren( Region& rRegion )
 
 void Window::ImplInitWinChildClipRegion()
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if ( !mpWindowImpl->mpFirstChild )
     {
         if ( mpWindowImpl->mpChildClipRegion )
@@ -238,7 +215,7 @@ void Window::ImplInitWinChildClipRegion()
         else
             *mpWindowImpl->mpChildClipRegion = mpWindowImpl->maWinClipRegion;
 
-        ImplClipChildren( *mpWindowImpl->mpChildClipRegion );
+        clipMgr->ClipChildren( this, *mpWindowImpl->mpChildClipRegion );
     }
 
     mpWindowImpl->mbInitChildRegion = false;

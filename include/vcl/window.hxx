@@ -523,7 +523,6 @@ private:
 
     SAL_DLLPRIVATE void                 ImplIntersectWindowRegion( Region& rRegion );
 
-    SAL_DLLPRIVATE bool                 ImplClipChildren( Region& rRegion );
     SAL_DLLPRIVATE void                 ImplClipAllChildren( Region& rRegion );
 
     SAL_DLLPRIVATE void                 ImplInitWinChildClipRegion();

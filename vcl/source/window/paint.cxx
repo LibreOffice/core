@@ -483,7 +483,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
                     ImplClipAllChildren( aRegion );
                 else
                 {
-                    if ( ImplClipChildren( aRegion ) )
+                    if ( clipMgr->ClipChildren( this, aRegion ) )
                         nFlags |= INVALIDATE_CHILDREN;
                 }
             }
@@ -632,7 +632,7 @@ void Window::ImplValidate( const Region* pRegion, sal_uInt16 nFlags )
                 ImplClipAllChildren( aRegion );
             else
             {
-                if ( ImplClipChildren( aRegion ) )
+                if ( clipMgr->ClipChildren( this, aRegion ) )
                     nFlags |= VALIDATE_CHILDREN;
             }
         }
@@ -1284,7 +1284,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         if ( nOrgFlags & SCROLL_NOCHILDREN )
             ImplClipAllChildren( aRegion );
         else
-            ImplClipChildren( aRegion );
+            clipMgr->ClipChildren( this, aRegion );
     }
     if ( mbClipRegion && (nFlags & SCROLL_USECLIPREGION) )
         aRegion.Intersect( maRegion );
@@ -1347,7 +1347,7 @@ void Window::ImplScroll( const Rectangle& rRect,
             if ( nOrgFlags & SCROLL_NOCHILDREN )
                 ImplClipAllChildren( aInvalidateRegion );
             else
-                ImplClipChildren( aInvalidateRegion );
+                clipMgr->ClipChildren( this, aInvalidateRegion );
         }
         ImplInvalidateFrameRegion( &aInvalidateRegion, nPaintFlags );
     }
