@@ -64,6 +64,9 @@
 #include <scriptinfo.hxx>
 #include <switerator.hxx>
 #include <ToxTextGenerator.hxx>
+#include <ToxTabStopTokenHandler.hxx>
+
+#include <boost/make_shared.hpp>
 
 using namespace ::com::sun::star;
 
@@ -974,8 +977,15 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         // pass node index of table-of-content section and default page description
         // to method <GenerateText(..)>.
         ::SetProgressState( 0, pDoc->GetDocShell() );
-        sw::ToxTextGenerator ttgn(GetTOXForm());
-        ttgn.GenerateText((SwDoc*) GetFmt()->GetDoc(), aSortArr, nCnt, nRange, pSectNd->GetIndex(), pDefaultPageDesc);
+
+        boost::shared_ptr<sw::ToxTabStopTokenHandler> tabStopTokenHandler =
+                boost::make_shared<sw::DefaultToxTabStopTokenHandler>(
+                        pSectNd->GetIndex(), *pDefaultPageDesc, GetTOXForm().IsRelTabPos(),
+                        pDoc->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
+                                sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_INDENT :
+                                sw::DefaultToxTabStopTokenHandler::TABSTOPS_RELATIVE_TO_PAGE);
+        sw::ToxTextGenerator ttgn(GetTOXForm(), tabStopTokenHandler);
+        ttgn.GenerateText((SwDoc*) GetFmt()->GetDoc(), aSortArr, nCnt, nRange);
         nCnt += nRange - 1;
     }
 
