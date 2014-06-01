@@ -44,6 +44,9 @@ public:
     ~ClipManager() { instanceFlag = false; }
     static ClipManager *GetInstance();
 
+    void SetParentClipMode( Window* pWindow, sal_uInt16 nMode );
+    sal_uInt16 GetParentClipMode( Window* pWindow ) const;
+
     bool IsOverlapWindow( Window* pWindow ) const;
 
     void InitClipRegion( Window *pWindow );

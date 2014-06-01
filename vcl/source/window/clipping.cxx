@@ -67,27 +67,13 @@ void Window::InitClipRegion()
 void Window::SetParentClipMode( sal_uInt16 nMode )
 {
     ClipManager *clipMgr = ClipManager::GetInstance();
-
-    if ( mpWindowImpl->mpBorderWindow )
-        mpWindowImpl->mpBorderWindow->SetParentClipMode( nMode );
-    else
-    {
-        if ( !clipMgr->IsOverlapWindow( this ) )
-        {
-            mpWindowImpl->mnParentClipMode = nMode;
-            if ( nMode & PARENTCLIPMODE_CLIP )
-                mpWindowImpl->mpParent->mpWindowImpl->mbClipChildren = true;
-        }
-    }
+    clipMgr->SetParentClipMode( this, nMode );
 }
 
 sal_uInt16 Window::GetParentClipMode() const
 {
-
-    if ( mpWindowImpl->mpBorderWindow )
-        return mpWindowImpl->mpBorderWindow->GetParentClipMode();
-    else
-        return mpWindowImpl->mnParentClipMode;
+    ClipManager *clipMgr = ClipManager::GetInstance();
+    return clipMgr->GetParentClipMode( const_cast<Window*>(this) );
 }
 
 void Window::ExpandPaintClipRegion( const Region& rRegion )

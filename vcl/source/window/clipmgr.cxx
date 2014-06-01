@@ -44,6 +44,30 @@ ClipManager* ClipManager::GetInstance()
     }
 }
 
+void ClipManager::SetParentClipMode( Window* pWindow, sal_uInt16 nMode )
+{
+    if ( pWindow->mpWindowImpl->mpBorderWindow )
+        pWindow->mpWindowImpl->mpBorderWindow->SetParentClipMode( nMode );
+    else
+    {
+        if ( IsOverlapWindow( pWindow ) )
+        {
+            pWindow->mpWindowImpl->mnParentClipMode = nMode;
+            if ( nMode & PARENTCLIPMODE_CLIP )
+                pWindow->mpWindowImpl->mpParent->mpWindowImpl->mbClipChildren = true;
+        }
+    }
+}
+
+sal_uInt16 ClipManager::GetParentClipMode( Window* pWindow ) const
+{
+
+    if ( pWindow->mpWindowImpl->mpBorderWindow )
+        return GetParentClipMode( pWindow->mpWindowImpl->mpBorderWindow );
+    else
+        return pWindow->mpWindowImpl->mnParentClipMode;
+}
+
 void ClipManager::InitClipRegion( Window *pWindow )
 {
     // Build Window region
