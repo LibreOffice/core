@@ -50,8 +50,8 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
 
         if( !nSttCntnt )    // than take the Flys along
         {
-            sal_uInt16 nArrLen = pDoc->GetSpzFrmFmts()->size();
-            for( sal_uInt16 n = 0; n < nArrLen; ++n )
+            const size_t nArrLen = pDoc->GetSpzFrmFmts()->size();
+            for( size_t n = 0; n < nArrLen; ++n )
             {
                 SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
                 SwFmtAnchor const*const  pAnchor = &pFmt->GetAnchor();
@@ -103,8 +103,8 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, bool bScanFlys,
     {
         // than collect all new Flys
         SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
-        sal_uInt16 nArrLen = pDoc->GetSpzFrmFmts()->size();
-        for( sal_uInt16 n = 0; n < nArrLen; ++n )
+        const size_t nArrLen = pDoc->GetSpzFrmFmts()->size();
+        for( size_t n = 0; n < nArrLen; ++n )
         {
             SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[n];
             SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
