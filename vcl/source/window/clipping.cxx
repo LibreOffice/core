@@ -507,14 +507,6 @@ void Window::ImplExcludeOverlapWindows( Region& rRegion )
     }
 }
 
-void Window::ImplExcludeOverlapWindows2( Region& rRegion )
-{
-    if ( mpWindowImpl->mbReallyVisible )
-        ImplExcludeWindowRegion( rRegion );
-
-    ImplExcludeOverlapWindows( rRegion );
-}
-
 void Window::ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Region& rRegion )
 {
     Window* pWindow = mpWindowImpl->mpFirstOverlap;

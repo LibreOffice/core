@@ -89,7 +89,10 @@ void ClipManager::ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, 
                 Window* pOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
                 while ( pOverlapWindow && (pOverlapWindow != pStartOverlapWindow) )
                 {
-                    pOverlapWindow->ImplExcludeOverlapWindows2( rRegion );
+                    if ( pWindow->mpWindowImpl->mbReallyVisible )
+                        pWindow->ImplExcludeWindowRegion( rRegion );
+
+                    ImplExcludeOverlapWindows( rRegion );
                     pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
                 }
                 pStartOverlapWindow = pStartOverlapWindow->mpWindowImpl->mpOverlapWindow;
