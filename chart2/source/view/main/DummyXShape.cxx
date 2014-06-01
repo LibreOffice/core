@@ -1189,7 +1189,6 @@ void DummyChart::render()
 #else
     DummyXShapes::render();
 #endif
-    m_GLRender.renderToBitmap();
 }
 
 void DummyChart::clear()

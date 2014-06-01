@@ -116,15 +116,6 @@ GLfloat texCoords[] = {
 
 int OpenGLRender::InitOpenGL()
 {
-    //TODO: moggi: get the information from the context
-    mbArbMultisampleSupported = true;
-
-    if (glewIsSupported("framebuffer_object") != GLEW_OK)
-    {
-        SAL_WARN("chart2.opengl", "GL stack has no framebuffer support");
-        return -1;
-    }
-
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
@@ -344,70 +335,11 @@ void OpenGLRender::renderDebug()
 void OpenGLRender::prepareToRender()
 {
     glViewport(0, 0, m_iWidth, m_iHeight);
-    if (!m_FboID[0])
-    {
-        // create a texture object
-        CreateTextureObj(m_iWidth, m_iHeight);
-        //create render buffer object
-        CreateRenderObj(m_iWidth, m_iHeight);
-        //create fbo
-        CreateFrameBufferObj();
-        if (mbArbMultisampleSupported)
-        {
-            CreateMultiSampleFrameBufObj();
-        }
-    }
-    //bind fbo
-    if (mbArbMultisampleSupported)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER,m_frameBufferMS);
-    }
-    else
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[0]);
-    }
 
     // Clear the screen
     glClearDepth(1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     m_fZStep = 0;
-}
-
-void OpenGLRender::renderToBitmap()
-{
-}
-
-int OpenGLRender::CreateTextureObj(int width, int height)
-{
-    glGenTextures(2, m_TextureObj);
-    for (int i = 0; i < 2; i++)
-    {
-        glBindTexture(GL_TEXTURE_2D, m_TextureObj[i]);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-        CHECK_GL_ERROR();
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-    return 0;
-}
-
-int OpenGLRender::CreateRenderObj(int width, int height)
-{
-    glGenRenderbuffers(2, m_RboID);
-    for (int i = 0; i < 2; i++)
-    {
-        CHECK_GL_ERROR();
-        glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[i]);
-        CHECK_GL_ERROR();
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-        CHECK_GL_ERROR();
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
-        CHECK_GL_ERROR();
-    }
-    return 0;
 }
 
 int OpenGLRender::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
@@ -416,29 +348,6 @@ int OpenGLRender::MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale)
     glm::mat4 aScaleMatrix = glm::scale(glm::vec3(scale.x, scale.y, scale.z));
     glm::mat4 aRotationMatrix = glm::eulerAngleYXZ(angle.y, angle.x, angle.z);
     m_Model = aTranslationMatrix * aRotationMatrix * aScaleMatrix;
-    return 0;
-}
-
-int OpenGLRender::CreateFrameBufferObj()
-{
-    // create a framebuffer object, you need to delete them when program exits.
-    glGenFramebuffers(2, m_FboID);
-    glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    for (int i = 0; i < 2; i++)
-    {
-        glBindFramebuffer(GL_FRAMEBUFFER, m_FboID[i]);
-        glBindTexture(GL_TEXTURE_2D, m_TextureObj[i]);
-        // attach a texture to FBO color attachement point
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_TextureObj[i], 0);
-        glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        // attach a renderbuffer to depth attachment point
-        glBindRenderbuffer(GL_RENDERBUFFER, m_RboID[i]);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_RboID[i]);
-        glCheckFramebufferStatus(GL_FRAMEBUFFER);
-        glBindRenderbuffer(GL_RENDERBUFFER, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
     return 0;
 }
 
@@ -451,12 +360,6 @@ void OpenGLRender::Release()
     glDeleteProgram(m_TextProID);
     glDeleteProgram(m_BackgroundProID);
     glDeleteProgram(m_SymbolProID);
-    glDeleteFramebuffers(2, m_FboID);
-    glDeleteFramebuffers(1, &m_frameBufferMS);
-    glDeleteTextures(2, m_TextureObj);
-    glDeleteRenderbuffers(2, m_RboID);
-    glDeleteRenderbuffers(1, &m_renderBufferColorMS);
-    glDeleteRenderbuffers(1, &m_renderBufferDepthMS);
 }
 
 OpenGLRender::OpenGLRender()
@@ -468,18 +371,8 @@ OpenGLRender::OpenGLRender()
     , m_MatrixID(0)
     , m_RenderVertexBuf(0)
     , m_RenderTexCoordBuf(0)
-#if 0
-    , m_iPointNum(0)
-#endif
     , m_fLineWidth(0.001f)
-    , mbArbMultisampleSupported(false)
-#if defined( _WIN32 )
-    , m_iArbMultisampleFormat(0)
-#endif
     , m_2DColor(glm::vec4(1.0, 0.0, 0.0, 1.0))
-    , m_frameBufferMS(0)
-    , m_renderBufferColorMS(0)
-    , m_renderBufferDepthMS(0)
     , m_CommonProID(0)
     , m_2DVertexID(0)
     , m_2DColorID(0)
@@ -502,12 +395,6 @@ OpenGLRender::OpenGLRender()
 {
     //TODO: moggi: use STL
     memset(&m_Line2DPointList, 0, sizeof(Line2DPointList));
-    m_FboID[0] = 0;
-    m_FboID[1] = 0;
-    m_TextureObj[0] = 0;
-    m_TextureObj[1] = 0;
-    m_RboID[0] = 0;
-    m_RboID[1] = 0;
 
     memset(&m_Bubble2DCircle, 0, sizeof(m_Bubble2DCircle));
 
@@ -580,27 +467,6 @@ void OpenGLRender::SetColor(sal_uInt32 color, sal_uInt8 nAlpha)
     sal_uInt8 g = (color & 0x0000FF00) >> 8;
     sal_uInt8 b = (color & 0x000000FF);
     m_2DColor = glm::vec4((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, nAlpha/ 255.f);
-}
-
-int OpenGLRender::CreateMultiSampleFrameBufObj()
-{
-    glGenFramebuffers(1, &m_frameBufferMS);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferMS);
-
-    glGenRenderbuffers(1, &m_renderBufferColorMS);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_renderBufferColorMS);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 8,  GL_RGB, m_iWidth, m_iHeight);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_renderBufferColorMS);
-
-    glGenRenderbuffers(1, &m_renderBufferDepthMS);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_renderBufferDepthMS);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, 8, GL_DEPTH_COMPONENT24, m_iWidth, m_iHeight);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_renderBufferDepthMS);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    return 0;
 }
 
 int OpenGLRender::Create2DCircle(int detail)
