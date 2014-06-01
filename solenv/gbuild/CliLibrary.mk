@@ -33,20 +33,20 @@ endif
 gb_CliLibrary__get_source = $(SRCDIR)/$(1).cs
 gb_CliLibrary__get_generated_source = $(WORKDIR)/$(1).cs
 
+# csc has silly problems handling files passed on command line
 define gb_CliLibrary__command
 $(call gb_Output_announce,$(2),$(true),CSC,3)
-$(call gb_Helper_abbreviate_dirs,\
-	csc $(call gb_Helper_windows_path, \
+	csc \
 		$(call gb_CliLibrary__get_csflags) \
 		$(CLI_CSCFLAGS) \
 		-target:library \
 		-out:$(1) \
-		-keyfile:$(call gb_Helper_windows_path,$(CLI_KEYFILE)) \
+		-keyfile:$(CLI_KEYFILE) \
 		-reference:System.dll \
 		$(foreach assembly,$(CLI_ASSEMBLIES),-reference:$(assembly)) \
-		$(CLI_SOURCES) \
-	) \
-)
+		$(subst /,\,$(CLI_SOURCES)) \
+
+
 endef
 
 .PHONY : $(call gb_CliLibrary_get_clean_target,%)
