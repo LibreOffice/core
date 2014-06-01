@@ -154,6 +154,46 @@ void debugGL3DOutput( ChartModel& rModel )
 
 }
 
+class GL2DRenderer : public IRenderer
+{
+public:
+    GL2DRenderer(ChartView* pView);
+
+    virtual void update() SAL_OVERRIDE;
+    virtual void clickedAt(const Point& rPos, sal_uInt16 nButton) SAL_OVERRIDE;
+    virtual void mouseDragMove(const Point& rBegin, const Point& rEnd, sal_uInt16 nButton) SAL_OVERRIDE;
+    virtual void scroll(long nDelta) SAL_OVERRIDE;
+    virtual void contextDestroyed() SAL_OVERRIDE;
+private:
+    ChartView* mpView;
+};
+
+GL2DRenderer::GL2DRenderer(ChartView* pView):
+    mpView(pView)
+{
+}
+
+void GL2DRenderer::update()
+{
+    mpView->render();
+}
+
+void GL2DRenderer::clickedAt(const Point&, sal_uInt16 )
+{
+}
+
+void GL2DRenderer::mouseDragMove(const Point& , const Point& , sal_uInt16 )
+{
+}
+
+void GL2DRenderer::scroll(long )
+{
+}
+
+void GL2DRenderer::contextDestroyed()
+{
+}
+
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 {
     return theExplicitValueProviderUnoTunnelId::get().getSeq();
@@ -195,6 +235,7 @@ ChartView::ChartView(
     , m_nScaleYDenominator(1)
     , m_bSdrViewIsInEditMode(false)
     , m_aResultingDiagramRectangleExcludingAxes(0,0,0,0)
+    , mp2DRenderer(new GL2DRenderer(this))
 {
     init();
 }
@@ -2674,6 +2715,8 @@ void ChartView::render()
 {
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
     OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
+    if(pWindow)
+        pWindow->setRenderer(mp2DRenderer.get());
     bool bRender = pShapeFactory->preRender(pWindow);
     if(bRender)
     {
