@@ -2615,13 +2615,7 @@ void ChartView::createShapes()
         //cleanup: remove all empty group shapes to avoid grey border lines:
         lcl_removeEmptyGroupShapes( mxRootShape );
 
-        OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
-        bool bRender = pShapeFactory->preRender(pWindow);
-        if(bRender)
-        {
-            pShapeFactory->render(mxRootShape);
-            pShapeFactory->postRender(pWindow);
-        }
+        render();
 
         if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
         {
@@ -2673,6 +2667,18 @@ void ChartView::createShapes()
     if(maTimeBased.bTimeBased)
     {
         maTimeBased.nFrame++;
+    }
+}
+
+void ChartView::render()
+{
+    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+    OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
+    bool bRender = pShapeFactory->preRender(pWindow);
+    if(bRender)
+    {
+        pShapeFactory->render(mxRootShape);
+        pShapeFactory->postRender(pWindow);
     }
 }
 
