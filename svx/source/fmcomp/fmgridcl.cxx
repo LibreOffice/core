@@ -1177,7 +1177,7 @@ void FmGridControl::DeleteSelectedRows()
     {
         Reference< ::com::sun::star::sdbcx::XDeleteRows >  xDeleteThem((Reference< XInterface >)*getDataSource(), UNO_QUERY);
 
-        // colect the bookmarks of the selected rows
+        // collect the bookmarks of the selected rows
         Sequence < Any> aBookmarks = getSelectionBookmarks();
 
         // determine the next row to position after deletion
