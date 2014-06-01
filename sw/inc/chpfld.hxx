@@ -24,6 +24,7 @@
 class SwFrm;
 class SwCntntNode;
 class SwTxtNode;
+class ToxTextGeneratorTest;
 
 enum SwChapterFormat
 {
@@ -36,7 +37,7 @@ enum SwChapterFormat
     CF_END
 };
 
-class SwChapterFieldType : public SwFieldType
+class SW_DLLPUBLIC SwChapterFieldType : public SwFieldType
 {
 public:
     SwChapterFieldType();
@@ -48,6 +49,7 @@ public:
 class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
+    friend class ToxTextGeneratorTest; // the unittest needs to mock the chapter fields.
     sal_uInt8 nLevel;
     OUString sTitle;
     OUString sNumber;
