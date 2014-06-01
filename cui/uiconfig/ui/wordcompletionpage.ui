@@ -106,7 +106,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="text" translatable="yes">500</property>
+                    <property name="text" translatable="no">500</property>
                     <property name="adjustment">adjustment1</property>
                     <property name="value">500</property>
                   </object>
@@ -151,7 +151,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
-                    <property name="text" translatable="yes">100</property>
+                    <property name="text" translatable="no">100</property>
                     <property name="adjustment">adjustment2</property>
                     <property name="value">100</property>
                   </object>
