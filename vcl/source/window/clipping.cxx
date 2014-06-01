@@ -188,19 +188,6 @@ void Window::EnableClipSiblings( bool bClipSiblings )
     mpWindowImpl->mbClipSiblings = bClipSiblings;
 }
 
-void Window::ImplClipAllChildren( Region& rRegion )
-{
-    ClipManager *clipMgr = ClipManager::GetInstance();
-
-    Window* pWindow = mpWindowImpl->mpFirstChild;
-    while ( pWindow )
-    {
-        if ( pWindow->mpWindowImpl->mbReallyVisible )
-            clipMgr->Exclude( pWindow, rRegion );
-        pWindow = pWindow->mpWindowImpl->mpNext;
-    }
-}
-
 bool Window::ImplSysObjClip( const Region* pOldRegion )
 {
     ClipManager *clipMgr = ClipManager::GetInstance();

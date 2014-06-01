@@ -49,6 +49,7 @@ public:
     void InitClipRegion( Window *pWindow );
     void ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, bool bOverlaps );
     bool ClipChildren( Window *pWindow, Region& rRegion );
+    void ClipAllChildren( Window *pWindow, Region& rRegion );
     Region* GetChildClipRegion( Window* pWindow );
 
     void Intersect( Window* pWindow, Region& rRegion );

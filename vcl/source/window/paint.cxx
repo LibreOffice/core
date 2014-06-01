@@ -482,7 +482,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
             if ( !(nFlags & INVALIDATE_NOCLIPCHILDREN) )
             {
                 if ( nOrgFlags & INVALIDATE_NOCHILDREN )
-                    ImplClipAllChildren( aRegion );
+                    clipMgr->ClipAllChildren( this, aRegion );
                 else
                 {
                     if ( clipMgr->ClipChildren( this, aRegion ) )
@@ -631,7 +631,7 @@ void Window::ImplValidate( const Region* pRegion, sal_uInt16 nFlags )
         {
             nFlags &= ~VALIDATE_CHILDREN;
             if ( nOrgFlags & VALIDATE_NOCHILDREN )
-                ImplClipAllChildren( aRegion );
+                clipMgr->ClipAllChildren( this, aRegion );
             else
             {
                 if ( clipMgr->ClipChildren( this, aRegion ) )
@@ -1284,7 +1284,7 @@ void Window::ImplScroll( const Rectangle& rRect,
     if ( !bScrollChildren )
     {
         if ( nOrgFlags & SCROLL_NOCHILDREN )
-            ImplClipAllChildren( aRegion );
+            clipMgr->ClipAllChildren( this, aRegion );
         else
             clipMgr->ClipChildren( this, aRegion );
     }
@@ -1347,7 +1347,7 @@ void Window::ImplScroll( const Rectangle& rRect,
         if ( !bScrollChildren )
         {
             if ( nOrgFlags & SCROLL_NOCHILDREN )
-                ImplClipAllChildren( aInvalidateRegion );
+                clipMgr->ClipAllChildren( this, aInvalidateRegion );
             else
                 clipMgr->ClipChildren( this, aInvalidateRegion );
         }

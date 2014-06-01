@@ -136,6 +136,18 @@ bool ClipManager::ClipChildren( Window *pWindow, Region& rRegion )
     return bOtherClip;
 }
 
+void ClipManager::ClipAllChildren( Window *pWindow, Region& rRegion )
+{
+    Window* pChildWindow = pWindow->mpWindowImpl->mpFirstChild;
+    while ( pChildWindow )
+    {
+        if ( pChildWindow->mpWindowImpl->mbReallyVisible )
+            Exclude( pWindow, rRegion );
+        pChildWindow = pChildWindow->mpWindowImpl->mpNext;
+    }
+}
+
+
 Region* ClipManager::GetChildClipRegion( Window* pWindow )
 {
     if ( pWindow->mpWindowImpl->mbInitWinClipRegion )
