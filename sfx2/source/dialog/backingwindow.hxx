@@ -26,7 +26,6 @@
 #include <vcl/button.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/toolbox.hxx>
 
 #include <sfx2/recentdocsview.hxx>
 #include <sfx2/templatelocalview.hxx>
@@ -45,10 +44,13 @@
 
 #include <set>
 
+class ToolBox;
+
 class BackingWindow
     : public Window
     , public VclBuilderContainer
 {
+    typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >         mxContext;
     com::sun::star::uno::Reference<com::sun::star::frame::XDispatchProvider >        mxDesktopDispatchProvider;
     com::sun::star::uno::Reference<com::sun::star::frame::XFrame>                    mxFrame;
@@ -89,11 +91,14 @@ class BackingWindow
 
     Rectangle                       maStartCentButtons;
 
+    bool                            mbIsSaveMode;
     bool                            mbInitControls;
     sal_Int32                       mnHideExternalLinks;
     svt::AcceleratorExecute*        mpAccExec;
 
     void setupButton( PushButton* pButton );
+    void OnTemplateImport ();
+    void OnRegionState (const ThumbnailViewItem *pItem);
 
     void dispatchURL( const OUString& i_rURL,
                       const OUString& i_rTarget = OUString( "_default" ),
@@ -101,9 +106,14 @@ class BackingWindow
                       const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& = com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >()
                       );
 
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelTemplates;
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> maSelFolders;
+
     DECL_LINK(ClickHdl, Button*);
     DECL_LINK(ExtLinkClickHdl, Button*);
     DECL_LINK(OpenRegionHdl, void*);
+    DECL_LINK(TBXViewHdl, void*);
+    DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*);
 
     void initControls();
 
