@@ -50,6 +50,7 @@
 #include <fltini.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docary.hxx>
 #include <docsh.hxx>
 #include <unotextrange.hxx>
@@ -445,10 +446,10 @@ static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 
 static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 {
-    if ( _rDoc.GetDrawModel() &&
-         _rDoc.GetDrawModel()->GetPage( 0 ) )
+    if ( _rDoc.getIDocumentDrawModelAccess().GetDrawModel() &&
+         _rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 ) )
     {
-        const SdrPage& rSdrPage( *(_rDoc.GetDrawModel()->GetPage( 0 )) );
+        const SdrPage& rSdrPage( *(_rDoc.getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )) );
 
         // iterate recursive with group objects over all shapes on the draw page
         SdrObjListIter aIter( rSdrPage );

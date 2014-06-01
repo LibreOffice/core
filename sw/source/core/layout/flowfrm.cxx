@@ -50,6 +50,7 @@
 #include <fmtfollowtextflow.hxx>
 #include <switerator.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 bool SwFlowFrm::m_bMoveBwdJump = false;
 
@@ -1047,7 +1048,7 @@ bool SwFlowFrm::IsPrevObjMove() const
             // OD 2004-01-20 #110582# - do not consider hidden objects
             // #i26945# - do not consider object, which
             // doesn't follow the text flow.
-            if ( pObj->GetFrmFmt().GetDoc()->IsVisibleLayerId(
+            if ( pObj->GetFrmFmt().GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
                                             pObj->GetDrawObj()->GetLayer() ) &&
                  pObj->GetFrmFmt().GetFollowTextFlow().GetValue() )
             {

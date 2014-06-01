@@ -32,6 +32,7 @@
 #include <ndgrf.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <ndindex.hxx>
 #include <docary.hxx>
 #include <fmtcntnt.hxx>
@@ -445,7 +446,7 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
 
 void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
 {
-    SdrModel* pDrawModel = GetOrCreateDrawModel();
+    SdrModel* pDrawModel = getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SfxItemIter aIter(rSet);
 
     for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())

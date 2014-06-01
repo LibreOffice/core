@@ -38,6 +38,7 @@
 #include <unotools/lingucfg.hxx>
 #include <doc.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <frmfmt.hxx>
@@ -767,7 +768,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
             {
                 bool bHasSpellError = false;
                 {
-                    SdrOutliner aTmpOutliner(pDoc->GetDrawModel()->
+                    SdrOutliner aTmpOutliner(pDoc->getIDocumentDrawModelAccess().GetDrawModel()->
                                              GetDrawOutliner().GetEmptyItemSet().GetPool(),
                                                 OUTLINERMODE_TEXTOBJECT );
                     aTmpOutliner.SetRefDevice( pDoc->getIDocumentDeviceAccess().getPrinter( false ) );

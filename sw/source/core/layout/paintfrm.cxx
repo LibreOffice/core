@@ -70,6 +70,7 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 #include <ndole.hxx>
 #include <svx/charthelper.hxx>
@@ -3331,7 +3332,7 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                 {
                     // OD 29.08.2002 #102450# - add 3rd parameter
                     // OD 09.12.2002 #103045# - add 4th parameter for horizontal text direction.
-                    pSh->Imp()->PaintLayer( pSh->GetDoc()->GetHeavenId(),
+                    pSh->Imp()->PaintLayer( pSh->GetDoc()->getIDocumentDrawModelAccess().GetHeavenId(),
                                             pPrintData,
                                             pPage->Frm(),
                                             &aPageBackgrdColor,
@@ -6665,7 +6666,7 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
                 for ( sal_uInt32 i = 0; i < rObjs.Count(); ++i )
                 {
                     const SwAnchoredObject* pAnchoredObj = rObjs[i];
-                    if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId(
+                    if ( pPage->GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
                                     pAnchoredObj->GetDrawObj()->GetLayer() ) &&
                          pAnchoredObj->ISA(SwFlyFrm) )
                     {
@@ -6755,7 +6756,7 @@ static void lcl_RefreshLine( const SwLayoutFrm *pLay,
             // OD 2004-02-12 #110582#-2 - do *not* consider fly frame, which
             // belongs to a invisible layer
             if ( pFly->IsBackgroundTransparent() ||
-                 !pFly->GetFmt()->GetDoc()->IsVisibleLayerId( pObj->GetLayer() ) )
+                 !pFly->GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( pObj->GetLayer() ) )
             {
                 aIter.Next();
                 continue;

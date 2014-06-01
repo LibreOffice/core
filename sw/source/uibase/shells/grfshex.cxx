@@ -29,6 +29,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <frmfmt.hxx>
 #include <frmmgr.hxx>
@@ -137,7 +138,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest& rReq )
 
             SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aPos, aSize ) );
 
-            pObj->SetModel(rSh.GetDoc()->GetDrawModel()); // set before setURL
+            pObj->SetModel(rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()); // set before setURL
             pObj->setURL( realURL, "" );
             rSh.EnterStdMode();
             rSh.SwFEShell::InsertDrawObj( *pObj, aPos );

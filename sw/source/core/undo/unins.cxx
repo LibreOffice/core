@@ -31,6 +31,7 @@
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -948,11 +949,11 @@ void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
             if( LTYPE_DRAW == eType )
             {
                 pSdrObj->SetLayer( nLayerId );
-                if( pSdrObj->GetLayer() == rDoc.GetHellId() )
-                    pSdrObj->SetLayer( rDoc.GetHeavenId() );
+                if( pSdrObj->GetLayer() == rDoc.getIDocumentDrawModelAccess().GetHellId() )
+                    pSdrObj->SetLayer( rDoc.getIDocumentDrawModelAccess().GetHeavenId() );
                 // OD 02.07.2003 #108784#
-                else if( pSdrObj->GetLayer() == rDoc.GetInvisibleHellId() )
-                    pSdrObj->SetLayer( rDoc.GetInvisibleHeavenId() );
+                else if( pSdrObj->GetLayer() == rDoc.getIDocumentDrawModelAccess().GetInvisibleHellId() )
+                    pSdrObj->SetLayer( rDoc.getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
             }
         }
     }

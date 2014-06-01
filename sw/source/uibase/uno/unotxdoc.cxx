@@ -96,6 +96,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
@@ -1920,7 +1921,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             SwDrawDocument * pDrawDoc;
             bool bAuto = *(sal_Bool*) aValue.getValue();
 
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * >( pDocShell->GetDoc()->GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * >( pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
                 pDrawDoc->SetAutoControlFocus( bAuto );
             else if (bAuto)
             {
@@ -1930,7 +1931,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
                 // SdrModel and we are leaving the default at false,
                 // we don't need to make an SdrModel and can do nothing
                 // #i52858# - method name changed
-                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
+                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 pDrawDoc->SetAutoControlFocus ( bAuto );
             }
         }
@@ -1940,7 +1941,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             SwDrawDocument * pDrawDoc;
             bool bMode = *(sal_Bool*)aValue.getValue();
 
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
                 pDrawDoc->SetOpenInDesignMode( bMode );
             else if (!bMode)
             {
@@ -1951,7 +1952,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
                 // we don't need to make an SdrModel and can do
                 // nothing
                 // #i52858# - method name changed
-                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
+                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 pDrawDoc->SetOpenInDesignMode ( bMode );
             }
         }
@@ -2090,7 +2091,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             SwDrawDocument * pDrawDoc;
             bool bAuto;
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
                 bAuto = pDrawDoc->GetAutoControlFocus();
             else
                 bAuto = false;
@@ -2101,7 +2102,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             SwDrawDocument * pDrawDoc;
             bool bMode;
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
                 bMode = pDrawDoc->GetOpenInDesignMode();
             else
                 bMode = true;
@@ -3860,32 +3861,32 @@ Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
             // assure that Draw model is created, if it doesn't exist.
             case SW_CREATE_DASH_TABLE         :
                 if(!xDashTable.is())
-                    xDashTable = SvxUnoDashTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
+                    xDashTable = SvxUnoDashTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xDashTable;
             break;
             case SW_CREATE_GRADIENT_TABLE     :
                 if(!xGradientTable.is())
-                    xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
+                    xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xGradientTable;
             break;
             case SW_CREATE_HATCH_TABLE        :
                 if(!xHatchTable.is())
-                    xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
+                    xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xHatchTable;
             break;
             case SW_CREATE_BITMAP_TABLE       :
                 if(!xBitmapTable.is())
-                    xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
+                    xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xBitmapTable;
             break;
             case SW_CREATE_TRANSGRADIENT_TABLE:
                 if(!xTransGradientTable.is())
-                    xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
+                    xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xTransGradientTable;
             break;
             case SW_CREATE_MARKER_TABLE       :
                 if(!xMarkerTable.is())
-                    xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->GetOrCreateDrawModel() );
+                    xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
                 xRet = xMarkerTable;
             break;
             case  SW_CREATE_DRAW_DEFAULTS:

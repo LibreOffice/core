@@ -39,6 +39,7 @@
 #include <sortedobjs.hxx>
 #include <viewimp.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 using namespace ::com::sun::star;
 
@@ -95,7 +96,7 @@ void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPageFrm,
 
 void SwFlyFreeFrm::MakeAll()
 {
-    if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
+    if ( !GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
     }

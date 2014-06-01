@@ -54,6 +54,7 @@
 #include <viewsh.hxx>
 #include "pam.hxx"
 #include "doc.hxx"
+#include <IDocumentDrawModelAccess.hxx>
 #include "ndtxt.hxx"
 #include "flypos.hxx"
 #include "wrthtml.hxx"
@@ -349,7 +350,7 @@ void SwHTMLWriter::OutHiddenForms()
     // Ohne DrawModel kann es auch keine Controls geben. Dann darf man
     // auch nicht per UNO auf das Dok zugreifen, weil sonst ein DrawModel
     // angelegt wird.
-    if( !pDoc->GetDrawModel() )
+    if( !pDoc->getIDocumentDrawModelAccess().GetDrawModel() )
         return;
 
     SwDocShell *pDocSh = pDoc->GetDocShell();

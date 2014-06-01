@@ -27,13 +27,14 @@
 
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 using namespace ::com::sun::star;
 
 // Load Document
 void  SwDocShell::InitDraw()
 {
-    SdrModel *pDrDoc = pDoc->GetDrawModel();
+    SdrModel *pDrDoc = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     if( pDrDoc )
     {
         // create Lists and Tables DocShell's ItemSet

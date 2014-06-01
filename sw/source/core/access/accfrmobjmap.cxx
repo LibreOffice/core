@@ -24,6 +24,7 @@
 
 #include <viewsh.hxx>
 #include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <frmfmt.hxx>
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>
@@ -38,8 +39,8 @@ using namespace sw::access;
 SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
                                             const SwFrm& rFrm,
                                             SwAccessibleMap& rAccMap )
-    : nHellId( rAccMap.GetShell()->GetDoc()->GetHellId() )
-    , nControlsId( rAccMap.GetShell()->GetDoc()->GetControlsId() )
+    : nHellId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetHellId() )
+    , nControlsId( rAccMap.GetShell()->GetDoc()->getIDocumentDrawModelAccess().GetControlsId() )
 {
     const bool bVisibleChildrenOnly = SwAccessibleChild( &rFrm ).IsVisibleChildrenOnly();
 

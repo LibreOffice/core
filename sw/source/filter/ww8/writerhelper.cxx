@@ -49,6 +49,7 @@
 #include <unotools/streamwrap.hxx>
 #include <numrule.hxx>
 #include <vcl/svapp.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;
@@ -395,9 +396,9 @@ namespace sw
 
         // #i38889# - by default put objects into the invisible layers.
         SetLayer::SetLayer(const SwDoc &rDoc)
-            : mnHeavenLayer(rDoc.GetInvisibleHeavenId()),
-              mnHellLayer(rDoc.GetInvisibleHellId()),
-              mnFormLayer(rDoc.GetInvisibleControlsId())
+            : mnHeavenLayer(rDoc.getIDocumentDrawModelAccess().GetInvisibleHeavenId()),
+              mnHellLayer(rDoc.getIDocumentDrawModelAccess().GetInvisibleHellId()),
+              mnFormLayer(rDoc.getIDocumentDrawModelAccess().GetInvisibleControlsId())
         {
         }
 

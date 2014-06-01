@@ -45,6 +45,8 @@
 #include <comphelper/seqstream.hxx>
 
 
+#include <IDocumentDrawModelAccess.hxx>
+
 using namespace com::sun::star;
 using namespace oox;
 
@@ -317,7 +319,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         if (pObj != NULL)
         {
             // SdrObjects know their layer, consider that instead of the frame format.
-            bOpaque = pObj->GetLayer() != pFrmFmt->GetDoc()->GetHellId() && pObj->GetLayer() != pFrmFmt->GetDoc()->GetInvisibleHellId();
+            bOpaque = pObj->GetLayer() != pFrmFmt->GetDoc()->getIDocumentDrawModelAccess().GetHellId() && pObj->GetLayer() != pFrmFmt->GetDoc()->getIDocumentDrawModelAccess().GetInvisibleHellId();
 
             lclMovePositionWithRotation(aPos, rSize, pObj->GetRotateAngle());
         }
@@ -653,7 +655,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFr
     bool bSwapInPage = false;
     if (!(sdrObj)->GetPage())
     {
-        if (SdrModel* pModel = m_pImpl->m_rExport.pDoc->GetDrawModel())
+        if (SdrModel* pModel = m_pImpl->m_rExport.pDoc->getIDocumentDrawModelAccess().GetDrawModel())
         {
             if (SdrPage* pPage = pModel->GetPage(0))
             {

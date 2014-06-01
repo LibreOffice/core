@@ -81,6 +81,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
@@ -522,7 +523,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor )
         case SOT_FORMATSTR_ID_DRAWING:
             {
                 SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
-                bOK = SetObject( pDoc->GetDrawModel(),
+                bOK = SetObject( pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
                                 SWTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
             }
             break;

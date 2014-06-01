@@ -46,6 +46,7 @@
 #include <navicfg.hxx>
 #include <edtwin.hxx>
 #include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <unotools.hxx>
 #include <crsskip.hxx>
 #include <cmdid.h>
@@ -872,7 +873,7 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
                 SdrView* pDrawView = pActiveShell->GetDrawView();
                 if (pDrawView)
                 {
-                    SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                    SdrModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                     SdrPage* pPage = pDrawModel->GetPage(0);
                     const sal_uInt32 nCount = pPage->GetObjCount();
                     for( sal_uInt32 i=0; i< nCount; i++ )
@@ -965,7 +966,7 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
                 SdrView* pDrawView = pActiveShell->GetDrawView();
                 if (pDrawView)
                 {
-                    SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                    SdrModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                     SdrPage* pPage = pDrawModel->GetPage(0);
                     sal_uInt32 nCount = pPage->GetObjCount();
                     for( sal_uInt32 i=0; i< nCount; i++ )
@@ -1409,7 +1410,7 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
             SdrView* pDrawView = pActiveShell->GetDrawView();
             if (pDrawView)
             {
-                SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                SdrModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                 SdrPage* pPage = pDrawModel->GetPage(0);
                 sal_uInt32 nCount = pPage->GetObjCount();
 
@@ -2678,7 +2679,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                         {
                             pDrawView->SdrEndTextEdit();//Change from "EndTextEdit" to "SdrEndTextEdit" for acc migration
 
-                            SdrModel* pDrawModel = pActiveShell->GetDoc()->GetDrawModel();
+                            SdrModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                             SdrPage* pPage = pDrawModel->GetPage(0);
                             sal_uInt32 nCount = pPage->GetObjCount();
                             bool hasObjectMarked = false;

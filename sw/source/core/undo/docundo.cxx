@@ -35,6 +35,7 @@
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
 #include <limits>
+#include <IDocumentDrawModelAccess.hxx>
 
 using namespace ::com::sun::star;
 

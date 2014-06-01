@@ -45,6 +45,7 @@
 #include "flyfrm.hxx"
 #include "doc.hxx"
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include "fesh.hxx"
 #include "dview.hxx"
 #include "dflyobj.hxx"
@@ -1327,7 +1328,7 @@ void SwRootFrm::RemoveSuperfluous()
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 // OD 2004-01-19 #110582# - do not consider hidden objects
-                if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId(
+                if ( pPage->GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
                                     pAnchoredObj->GetDrawObj()->GetLayer() ) &&
                      !pAnchoredObj->GetAnchorFrm()->FindFooterOrHeader() )
                 {

@@ -40,6 +40,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <cmdid.h>
 #include <swstyle.h>
 #include <app.hrc>
@@ -1150,7 +1151,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
                     //UUUU create needed items for XPropertyList entries from the DrawModel so that
                     // the Area TabPage can access them
-                    const SdrModel* pDrawModel = rDoc.GetDrawModel();
+                    const SdrModel* pDrawModel = rDoc.getIDocumentDrawModelAccess().GetDrawModel();
 
                     aCoreSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
                     aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));

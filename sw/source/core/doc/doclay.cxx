@@ -63,6 +63,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
@@ -500,11 +501,11 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
                                 bool bInsInPage )
 {
     // #i52858# - method name changed
-    SdrPage *pPg = GetOrCreateDrawModel()->GetPage( 0 );
+    SdrPage *pPg = getIDocumentDrawModelAccess().GetOrCreateDrawModel()->GetPage( 0 );
     if( !pPg )
     {
-        pPg = GetDrawModel()->AllocPage( false );
-        GetDrawModel()->InsertPage( pPg );
+        pPg = getIDocumentDrawModelAccess().GetDrawModel()->AllocPage( false );
+        getIDocumentDrawModelAccess().GetDrawModel()->InsertPage( pPg );
     }
 
     SdrObject *pObj = rObj.Clone();
@@ -531,9 +532,9 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
          !pObj->ISA(SwVirtFlyDrawObj) &&
          !IS_TYPE(SdrObject,pObj) )
     {
-        if ( IsVisibleLayerId( nLayerIdForClone ) )
+        if ( getIDocumentDrawModelAccess().IsVisibleLayerId( nLayerIdForClone ) )
         {
-            nLayerIdForClone = GetInvisibleLayerIdByVisibleOne( nLayerIdForClone );
+            nLayerIdForClone = getIDocumentDrawModelAccess().GetInvisibleLayerIdByVisibleOne( nLayerIdForClone );
         }
     }
     pObj->SetLayer( nLayerIdForClone );
@@ -1556,8 +1557,8 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
 
     // Send the frame to the back, if needed.
     // Consider the 'invisible' hell layer.
-    if ( rDoc.GetHellId() != nLayerId &&
-         rDoc.GetInvisibleHellId() != nLayerId )
+    if ( rDoc.getIDocumentDrawModelAccess().GetHellId() != nLayerId &&
+         rDoc.getIDocumentDrawModelAccess().GetInvisibleHellId() != nLayerId )
     {
         SvxOpaqueItem aOpaque( RES_OPAQUE );
         aOpaque.SetValue( true );
@@ -1624,14 +1625,14 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     pNewSet->ClearItem();
 
     pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
-    if (nLayerId == rDoc.GetHellId())
+    if (nLayerId == rDoc.getIDocumentDrawModelAccess().GetHellId())
     {
     // Consider drawing objects in the 'invisible' hell layer
-        rSdrObj.SetLayer( rDoc.GetHeavenId() );
+        rSdrObj.SetLayer( rDoc.getIDocumentDrawModelAccess().GetHeavenId() );
     }
-    else if (nLayerId == rDoc.GetInvisibleHellId())
+    else if (nLayerId == rDoc.getIDocumentDrawModelAccess().GetInvisibleHellId())
     {
-        rSdrObj.SetLayer( rDoc.GetInvisibleHeavenId() );
+        rSdrObj.SetLayer( rDoc.getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
     }
     pNewSet->Put( SvxLRSpaceItem( RES_LR_SPACE ) );
     pNewSet->Put( SvxULSpaceItem( RES_UL_SPACE ) );

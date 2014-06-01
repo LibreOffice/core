@@ -95,11 +95,13 @@
 #include <ndole.hxx>
 #include <lineinfo.hxx>
 #include <rtf.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 #include <vcl/cvtgrf.hxx>
 #include <oox/mathml/export.hxx>
 
 #include <com/sun/star/i18n/ScriptType.hpp>
+
 
 using ::editeng::SvxBorderLine;
 
@@ -1713,7 +1715,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
             bool bSwapInPage = false;
             if (!pSdrObj->GetPage())
             {
-                if (SdrModel* pModel = m_rExport.pDoc->GetDrawModel())
+                if (SdrModel* pModel = m_rExport.pDoc->getIDocumentDrawModelAccess().GetDrawModel())
                 {
                     if (SdrPage* pPage = pModel->GetPage(0))
                     {

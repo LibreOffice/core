@@ -21,9 +21,10 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unoprov.hxx>
 #include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 
 SwSvxUnoDrawPool::SwSvxUnoDrawPool( SwDoc* pDoc ) throw() :
-    SvxUnoDrawPool(pDoc->GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER),
+    SvxUnoDrawPool(pDoc->getIDocumentDrawModelAccess().GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER),
     m_pDoc(pDoc)
 {
 }
@@ -42,7 +43,7 @@ SfxItemPool* SwSvxUnoDrawPool::getModelPool( bool /*bReadOnly*/ ) throw()
         //SdrModel* pModel = m_pDoc->MakeDrawModel();
         //return &pModel->GetItemPool();
         // #i52858# - method name changed
-        m_pDoc->GetOrCreateDrawModel();
+        m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
         return &(m_pDoc->GetAttrPool());
     }
     return 0;

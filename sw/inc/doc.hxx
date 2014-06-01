@@ -30,7 +30,6 @@
 #include <IDocumentLineNumberAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentState.hxx>
-#include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
@@ -208,6 +207,7 @@ namespace sw {
     class IShellCursorSupplier;
     class DocumentSettingManager;
     class DocumentDeviceManager;
+    class DocumentDrawModelManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -253,7 +253,6 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentLineNumberAccess,
     public IDocumentStatistics,
     public IDocumentState,
-    public IDocumentDrawModelAccess,
     public IDocumentLayoutAccess,
     public IDocumentTimerAccess,
     public IDocumentChartDataProviderAccess,
@@ -287,6 +286,7 @@ class SW_DLLPUBLIC SwDoc :
 
     const ::boost::scoped_ptr< ::sw::mark::MarkManager> mpMarkManager;
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
+    const ::boost::scoped_ptr< ::sw::DocumentDrawModelManager > m_pDocumentDrawModelManager;
     const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
     const ::boost::scoped_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
     ::boost::scoped_ptr< ::sw::DocumentDeviceManager > m_pDeviceAccess;
@@ -311,7 +311,6 @@ class SW_DLLPUBLIC SwDoc :
     SwDefTOXBase_Impl * mpDefTOXBases;   //< defaults of SwTOXBase's
 
     SwViewShell       *mpCurrentView;  //< SwDoc should get a new member mpCurrentView
-    SdrModel        *mpDrawModel;        //< StarView Drawing
 
     SwDocUpdtFld    *mpUpdtFlds;         //< Struct for updating fields
     SwFldTypes      *mpFldTypes;
@@ -405,18 +404,6 @@ private:
     sal_Int32   mIdleBlockCount;
     sal_Int8    mnLockExpFld;        //< If != 0 UpdateExpFlds() has no effect!
 
-    /** Draw Model Layer IDs
-     * LayerIds, Heaven == above document
-     *           Hell   == below document
-     *         Controls == at the very top
-     */
-    SdrLayerID  mnHeaven;
-    SdrLayerID  mnHell;
-    SdrLayerID  mnControls;
-    SdrLayerID  mnInvisibleHeaven;
-    SdrLayerID  mnInvisibleHell;
-    SdrLayerID  mnInvisibleControls;
-
     bool mbGlossDoc              : 1;    //< TRUE: glossary document.
     bool mbModified              : 1;    //< TRUE: document has changed.
     bool mbDtor                  : 1;    /**< TRUE: is in SwDoc DTOR.
@@ -465,10 +452,6 @@ private:
 
     // private methods
     void checkRedlining(RedlineMode_t& _rReadlineMode);
-
-    DECL_LINK( AddDrawUndo, SdrUndoAction * );
-                                        // DrawModel
-    void DrawNotifyUndoHdl();
 
     /** Only for internal use and therefore private.
      Copy a range within the same or to another document.
@@ -520,9 +503,6 @@ private:
     std::vector<OUString>& FindUsedDBs( const std::vector<OUString>& rAllDBNames,
                                 const OUString& rFormula,
                                 std::vector<OUString>& rUsedDBNames );
-
-    void InitDrawModel();
-    void ReleaseDrawModel();
 
     void _CreateNumberFormatter();
 
@@ -782,20 +762,12 @@ public:
     virtual void SetLoaded(bool b) SAL_OVERRIDE;
 
     // IDocumentDrawModelAccess
-    virtual const SdrModel* GetDrawModel() const SAL_OVERRIDE;
-    virtual SdrModel* GetDrawModel() SAL_OVERRIDE;
-    virtual SdrLayerID GetHeavenId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetHellId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetControlsId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleHeavenId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleHellId() const SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleControlsId() const SAL_OVERRIDE;
-    virtual void NotifyInvisibleLayers( SdrPageView& _rSdrPageView ) SAL_OVERRIDE;
-    virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const SAL_OVERRIDE;
-    virtual SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId ) SAL_OVERRIDE;
-    virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) SAL_OVERRIDE;
-    virtual SdrModel* _MakeDrawModel() SAL_OVERRIDE;
-    virtual SdrModel* GetOrCreateDrawModel() SAL_OVERRIDE;
+    DECL_LINK( AddDrawUndo, SdrUndoAction * );
+    IDocumentDrawModelAccess const & getIDocumentDrawModelAccess() const;
+    IDocumentDrawModelAccess & getIDocumentDrawModelAccess();
+
+    ::sw::DocumentDrawModelManager const & GetDocumentDrawModelManager() const;
+    ::sw::DocumentDrawModelManager & GetDocumentDrawModelManager();
 
     // IDocumentLayoutAccess
     virtual void SetCurrentViewShell( SwViewShell* pNew ) SAL_OVERRIDE;

@@ -1918,7 +1918,7 @@ const IDocumentDeviceAccess* SwNode::getIDocumentDeviceAccess() const { return &
 const IDocumentRedlineAccess* SwNode::getIDocumentRedlineAccess() const { return GetDoc(); }
 const IDocumentStylePoolAccess* SwNode::getIDocumentStylePoolAccess() const { return GetDoc(); }
 const IDocumentLineNumberAccess* SwNode::getIDocumentLineNumberAccess() const { return GetDoc(); }
-const IDocumentDrawModelAccess* SwNode::getIDocumentDrawModelAccess() const { return GetDoc(); }
+const IDocumentDrawModelAccess* SwNode::getIDocumentDrawModelAccess() const { return & GetDoc()->getIDocumentDrawModelAccess(); }
 const IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() const { return GetDoc(); }
 IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() { return GetDoc(); }
 const IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() const { return GetDoc(); }

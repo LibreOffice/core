@@ -19,6 +19,7 @@
 
 #include <textapi.hxx>
 #include <doc.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editeng.hxx>
@@ -123,7 +124,7 @@ SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
     if( !pImpl->mpOutliner )
     {
         //init draw model first
-        pImpl->mpDoc->GetOrCreateDrawModel();
+        pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
         pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
         pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
     }
@@ -141,7 +142,7 @@ void SwTextAPIEditSource::SetText( OutlinerParaObject& rText )
         if( !pImpl->mpOutliner )
         {
             //init draw model first
-            pImpl->mpDoc->GetOrCreateDrawModel();
+            pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
             pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
             pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
         }
@@ -157,7 +158,7 @@ void SwTextAPIEditSource::SetString( const OUString& rText )
         if( !pImpl->mpOutliner )
         {
             //init draw model first
-            pImpl->mpDoc->GetOrCreateDrawModel();
+            pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
             pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
             pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
         }

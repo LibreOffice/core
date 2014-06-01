@@ -54,6 +54,7 @@
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <rootfrm.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -1393,9 +1394,9 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
                 pNewObj->NbcMove(Size(aVec.getX(), aVec.getY()));
 
                 if( pNewObj->ISA( SdrUnoObj ) )
-                    pNewObj->SetLayer( GetDoc()->GetControlsId() );
+                    pNewObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetControlsId() );
                 else if( pOldObj->ISA( SdrUnoObj ) )
-                    pNewObj->SetLayer( GetDoc()->GetHeavenId() );
+                    pNewObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetHeavenId() );
                 else
                     pNewObj->SetLayer( pOldObj->GetLayer() );
 
@@ -1524,11 +1525,11 @@ void SwFEShell::Paste( SvStream& rStrm, sal_uInt16 nAction, const Point* pPt )
             SdrObject *pObj = pView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
             if( pObj->ISA( SdrUnoObj ) )
             {
-                pObj->SetLayer( GetDoc()->GetControlsId() );
+                pObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetControlsId() );
                 bDesignMode = true;
             }
             else
-                pObj->SetLayer( GetDoc()->GetHeavenId() );
+                pObj->SetLayer( GetDoc()->getIDocumentDrawModelAccess().GetHeavenId() );
             const Rectangle &rSnap = pObj->GetSnapRect();
             const Size aDiff( rSnap.GetWidth()/2, rSnap.GetHeight()/2 );
             pView->MoveMarkedObj( aDiff );

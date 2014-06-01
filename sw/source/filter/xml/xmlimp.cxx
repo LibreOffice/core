@@ -36,6 +36,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <unofreg.hxx>
 #include <TextCursorHelper.hxx>
 #include <unotext.hxx>
@@ -667,10 +668,10 @@ void SwXMLImport::startDocument()
     }
 
     // We need a draw model to be able to set the z order
-    pDoc->GetOrCreateDrawModel(); // #i52858# - method name changed
+    pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel(); // #i52858# - method name changed
 
     // SJ: #i49801# locking the modell to disable repaints
-    SdrModel* pDrawModel = pDoc->GetDrawModel();
+    SdrModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     if ( pDrawModel )
         pDrawModel->setLock(true);
 
@@ -870,7 +871,7 @@ void SwXMLImport::endDocument( void )
                 pDoc->PrtOLENotify( true );
         }
 
-        SdrModel* pDrawModel = pDoc->GetDrawModel();
+        SdrModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         if ( pDrawModel )
             pDrawModel->setLock(false);
     }
