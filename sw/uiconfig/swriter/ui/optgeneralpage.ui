@@ -287,7 +287,7 @@
                             <property name="can_focus">True</property>
                             <property name="halign">start</property>
                             <property name="invisible_char">●</property>
-                            <property name="text" translatable="yes">1.25</property>
+                            <property name="text" translatable="no">1.25</property>
                             <property name="adjustment">adjustment1</property>
                             <property name="digits">2</property>
                             <property name="value">1.25</property>
@@ -496,7 +496,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="halign">start</property>
                                     <property name="invisible_char">●</property>
-                                    <property name="text" translatable="yes">1800</property>
+                                    <property name="text" translatable="no">1800</property>
                                     <property name="adjustment">adjustment-sps</property>
                                     <property name="value">1800</property>
                                   </object>
