@@ -478,7 +478,7 @@ OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 {
     SolarMutexGuard aGuard;
     OUString sRet;
-    sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
     if(nObjectType < nEntries)
         sRet = OUString::createFromAscii(aProvNamesId[nObjectType].pName);
     return sRet;
@@ -486,7 +486,7 @@ OUString    SwXServiceProvider::GetProviderName(sal_uInt16 nObjectType)
 
 uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 {
-    sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
     uno::Sequence<OUString> aRet(nEntries);
     OUString* pArray = aRet.getArray();
     sal_uInt16 n = 0;
@@ -506,7 +506,7 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 
 sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
 {
-    sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
+    const sal_uInt16 nEntries = sizeof(aProvNamesId) / sizeof(aProvNamesId[0]);
     for(sal_uInt16 i = 0; i < nEntries; i++ )
     {
         if (rServiceName.equalsAscii(aProvNamesId[i].pName))
@@ -889,7 +889,7 @@ uno::Any SwXTextTables::getByName(const OUString& rItemName)
     uno::Any aRet;
     if(IsValid())
     {
-        sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
+        const sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
         uno::Reference< XTextTable >  xTbl;
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
@@ -916,7 +916,7 @@ uno::Sequence< OUString > SwXTextTables::getElementNames(void)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
+    const sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
     uno::Sequence<OUString> aSeq(nCount);
     if(nCount)
     {
@@ -938,7 +938,7 @@ sal_Bool SwXTextTables::hasByName(const OUString& rName)
     bool bRet= false;
     if(IsValid())
     {
-        sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
+        const sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
             SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
@@ -1084,14 +1084,14 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
         return;
     // #i104937#
 //    const SwFrmFmt* const pFmtsEnd = (*pFmts)[pFmts->Count()];
-    const sal_uInt16 nSize = pFmts->size();
+    const size_t nSize = pFmts->size();
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // #i104937#
     SwFrmFmt* pFmt( 0 );
 
     std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
 
-    for( sal_uInt16 i = 0; i < nSize; ++i )
+    for( size_t i = 0; i < nSize; ++i )
 //    for(SwFrmFmt* pFmt = (*pFmts)[0]; pFmt < pFmtsEnd; ++pFmt)
     {
         // #i104937#
@@ -1423,8 +1423,8 @@ sal_Int32 SwXTextSections::getCount(void) throw( uno::RuntimeException, std::exc
     if(!IsValid())
         throw uno::RuntimeException();
     const SwSectionFmts& rSectFmts = GetDoc()->GetSections();
-    sal_uInt16 nCount = rSectFmts.size();
-    for(sal_uInt16 i = nCount; i; i--)
+    size_t nCount = rSectFmts.size();
+    for(size_t i = nCount; i; --i)
     {
         if( !rSectFmts[i - 1]->IsInNodesArr())
             nCount--;
@@ -1442,17 +1442,17 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
         SwSectionFmts& rFmts = GetDoc()->GetSections();
 
         const SwSectionFmts& rSectFmts = GetDoc()->GetSections();
-        sal_uInt16 nCount = rSectFmts.size();
-        for(sal_uInt16 i = 0; i < nCount; i++)
+        const size_t nCount = rSectFmts.size();
+        for(size_t i = 0; i < nCount; ++i)
         {
             if( !rSectFmts[i]->IsInNodesArr())
                 nIndex ++;
-            else if(nIndex == i)
+            else if(static_cast<size_t>(nIndex) == i)
                 break;
-            if(nIndex == i)
+            if(static_cast<size_t>(nIndex) == i)
                 break;
         }
-        if(nIndex >= 0 && nIndex < (sal_Int32)rFmts.size())
+        if(nIndex >= 0 && static_cast<size_t>(nIndex) < rFmts.size())
         {
             SwSectionFmt* pFmt = rFmts[(sal_uInt16)nIndex];
             xRet = GetObject(*pFmt);
@@ -1475,7 +1475,7 @@ uno::Any SwXTextSections::getByName(const OUString& Name)
         OUString aName(Name);
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         uno::Reference< XTextSection >  xSect;
-        for(sal_uInt16 i = 0; i < rFmts.size(); i++)
+        for(size_t i = 0; i < rFmts.size(); ++i)
         {
             SwSectionFmt* pFmt = rFmts[i];
             if (pFmt->IsInNodesArr()
@@ -1500,9 +1500,9 @@ uno::Sequence< OUString > SwXTextSections::getElementNames(void)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    sal_uInt16 nCount = GetDoc()->GetSections().size();
+    size_t nCount = GetDoc()->GetSections().size();
     SwSectionFmts& rSectFmts = GetDoc()->GetSections();
-    for(sal_uInt16 i = nCount; i; i--)
+    for(size_t i = nCount; i; --i)
     {
         if( !rSectFmts[i - 1]->IsInNodesArr())
             nCount--;
@@ -1513,8 +1513,8 @@ uno::Sequence< OUString > SwXTextSections::getElementNames(void)
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         OUString* pArray = aSeq.getArray();
-        sal_uInt16 nIndex = 0;
-        for( sal_uInt16 i = 0; i < nCount; i++, nIndex++)
+        size_t nIndex = 0;
+        for( size_t i = 0; i < nCount; ++i, ++nIndex)
         {
             const SwSectionFmt* pFmt = rFmts[nIndex];
             while(!pFmt->IsInNodesArr())
@@ -1535,7 +1535,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& rName)
     if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
-        for(sal_uInt16 i = 0; i < rFmts.size(); i++)
+        for(size_t i = 0; i < rFmts.size(); ++i)
         {
             const SwSectionFmt* pFmt = rFmts[i];
             if (rName == pFmt->GetSection()->GetSectionName())
@@ -1562,7 +1562,7 @@ uno::Type SAL_CALL SwXTextSections::getElementType() throw(uno::RuntimeException
 sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nCount = 0;
+    size_t nCount = 0;
     if(IsValid())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
@@ -1760,9 +1760,9 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
     if(IsValid())
     {
         uno::Reference< XIndexReplace >  xRef;
-        if ( nIndex < (sal_Int32)GetDoc()->GetNumRuleTbl().size() )
+        if ( static_cast<size_t>(nIndex) < GetDoc()->GetNumRuleTbl().size() )
         {
-            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< sal_uInt16 >(nIndex) ], GetDoc());
+            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ nIndex ], GetDoc());
             aRet.setValue(&xRef, cppu::UnoType<XIndexReplace>::get());
         }
 
@@ -1821,9 +1821,9 @@ sal_Int32 SwXFootnotes::getCount(void) throw( uno::RuntimeException, std::except
     if(!IsValid())
         throw uno::RuntimeException();
     sal_Int32 nCount = 0;
-    sal_uInt16 n, nFtnCnt = GetDoc()->GetFtnIdxs().size();
+    const size_t nFtnCnt = GetDoc()->GetFtnIdxs().size();
     SwTxtFtn* pTxtFtn;
-    for( n = 0; n < nFtnCnt; ++n )
+    for( size_t n = 0; n < nFtnCnt; ++n )
     {
         pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
         const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
@@ -1842,10 +1842,10 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
     sal_Int32 nCount = 0;
     if(IsValid())
     {
-        sal_uInt16 n, nFtnCnt = GetDoc()->GetFtnIdxs().size();
+        const size_t nFtnCnt = GetDoc()->GetFtnIdxs().size();
         SwTxtFtn* pTxtFtn;
         uno::Reference< XFootnote >  xRef;
-        for( n = 0; n < nFtnCnt; ++n )
+        for( size_t n = 0; n < nFtnCnt; ++n )
         {
             pTxtFtn = GetDoc()->GetFtnIdxs()[ n ];
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
@@ -1971,7 +1971,7 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::R
     if(IsValid())
     {
         std::vector<OUString> aStrings;
-        sal_uInt16 nCount = GetDoc()->GetRefMarks( &aStrings );
+        const sal_uInt16 nCount = GetDoc()->GetRefMarks( &aStrings );
         aRet.realloc(nCount);
         OUString* pNames = aRet.getArray();
         for(sal_uInt16 i = 0; i < nCount; i++)
