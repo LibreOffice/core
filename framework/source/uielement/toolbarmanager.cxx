@@ -226,8 +226,6 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
     m_pToolBar->SetMenuType( nMenuType );
     m_pToolBar->SetMenuButtonHdl( LINK( this, ToolBarManager, MenuButton ) );
-    m_pToolBar->GetMenu()->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
-    m_pToolBar->GetMenu()->SetDeactivateHdl( LINK( this, ToolBarManager, MenuDeactivate ) );
 
     // set name for testtool, the useful part is after the last '/'
     sal_Int32 idx = rResourceName.lastIndexOf('/');
@@ -1786,10 +1784,24 @@ IMPL_LINK( ToolBarManager, Command, CommandEvent*, pCmdEvt )
     ::PopupMenu * pMenu = GetToolBarCustomMenu(m_pToolBar);
     if (pMenu)
     {
+        // We only want to handle events for the context menu, but not events
+        // on the toolbars overflow menu, hence we should only receive events
+        // from the toolbox menu when we are actually showing it as our context
+        // menu (the same menu retrieved with  GetMenu() is reused for both the
+        // overflow and context menus). If we set these Hdls permanently rather
+        // than just when the context menu is showing, then events are duplicated
+        // when the menu is being used as an overflow menu.
+        m_pToolBar->GetMenu()->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
+        m_pToolBar->GetMenu()->SetDeactivateHdl( LINK( this, ToolBarManager, MenuDeactivate ) );
+
         // make sure all disabled entries will be shown
         pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
         ::Point aPoint( pCmdEvt->GetMousePosPixel() );
         pMenu->Execute( m_pToolBar, aPoint );
+
+        // Unlink our listeners again -- see above for why.
+        m_pToolBar->GetMenu()->SetSelectHdl( Link() );
+        m_pToolBar->GetMenu()->SetDeactivateHdl( Link() );
     }
 
     return 0;

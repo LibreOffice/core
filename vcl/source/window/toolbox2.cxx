@@ -1992,7 +1992,13 @@ void ToolBox::ImplExecuteCustomMenu()
             // call button handler to allow for menu customization
             mpData->maMenuButtonHdl.Call( this );
 
-        // register handler
+        // We specifically only register this event listener when executing our
+        // overflow menu (and remove it directly afterwards), as the same menu
+        // is reused for both the overflow menu (as managed here in ToolBox),
+        // but also by ToolBarManager for its context menu. If we leave event
+        // listeners alive beyond when the menu is showing in the desired mode
+        // then duplicate events can happen as the context menu "duplicates"
+        // items from the overflow menu, which both listeners would then act on.
         GetMenu()->AddEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
 
         // make sure all disabled entries will be shown
