@@ -92,7 +92,6 @@ public:
     int RenderBubble2FBO(int wholeFlag);
 
     void prepareToRender();
-    void renderToBitmap();
 
     int RenderRectangleShape(bool bBorder, bool bFill);
     int RectangleShapePoint(float x, float y, float directionX, float directionY);
@@ -134,10 +133,6 @@ private:
     int m_iHeight;
 
 private:
-    int CreateTextureObj(int width, int height);
-    int CreateRenderObj(int width, int height);
-    int CreateFrameBufferObj();
-    int CreateMultiSampleFrameBufObj();
     int Create2DCircle(int detail);
 private:
     // Projection matrix : default 45 degree Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
@@ -169,30 +164,13 @@ private:
 
     GLuint m_RenderTexCoordBuf;
 
-    GLuint m_TextureObj[2];
-
-    GLuint m_FboID[2];
-
-    GLuint m_RboID[2];
-#if 0
-    int m_iPointNum;
-#endif
     Line2DPointList m_Line2DPointList;
 
     float m_fLineWidth;
 
     std::list <Line2DPointList> m_Line2DShapePointList;
 
-
-    bool mbArbMultisampleSupported;
-#if defined( _WIN32 )
-    int m_iArbMultisampleFormat;
-#endif
-
     glm::vec4 m_2DColor;
-    GLuint m_frameBufferMS;
-    GLuint m_renderBufferColorMS;
-    GLuint m_renderBufferDepthMS;
 
     Bubble2DCircle m_Bubble2DCircle;
 
