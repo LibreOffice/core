@@ -27,6 +27,12 @@
 #include <svtools/openfiledroptargetlistener.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/langhelp.hxx>
+#include <sfx2/filedlghelper.hxx>
+#include <sfx2/sfxresid.hxx>
+#include <sfx2/templatecontaineritem.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/toolbox.hxx>
+
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -43,6 +49,10 @@
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+
+//well find a better way for it.
+#include "../doc/doc.hrc"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -241,11 +251,18 @@ void BackingWindow::initControls()
     mpLocalView->Hide();
     mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
 
+    mpCurrentView = mpLocalView;
+
     mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
     mpViewBar->SetItemBits(mpViewBar->GetItemId("repository"), TIB_DROPDOWNONLY);
-    //mpViewBar->SetClickHdl(LINK(this,BackingWindow,TBXViewHdl));
+    mpViewBar->SetClickHdl(LINK(this,BackingWindow,TBXViewHdl));
     //mpViewBar->SetDropdownClickHdl(LINK(this,BackingWindow,TBXDropdownHdl));
     mpViewBar->Hide();
+
+    //set handlers
+    mpLocalView->setItemStateHdl(LINK(this, BackingWindow, TVItemStateHdl));
+    mpLocalView->setOpenRegionHdl(LINK(this, BackingWindow, OpenRegionHdl));
+
     /*FIXME: Add other things for Local View
      *Filter and the bars*/
 
@@ -441,6 +458,154 @@ void BackingWindow::Resize()
         Invalidate();
 }
 
+void BackingWindow::OnTemplateImport ()
+{
+    size_t nDialogType =
+        com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE;
+
+    sfx2::FileDialogHelper aFileDlg(nDialogType, SFXWB_MULTISELECTION);
+
+    // add "All" filter
+    aFileDlg.AddFilter( SfxResId(STR_SFX_FILTERNAME_ALL).toString(),
+                        OUString(FILEDIALOG_FILTER_ALL) );
+
+    // add template filter
+    OUString sFilterExt;
+    OUString sFilterName( SfxResId( STR_TEMPLATE_FILTER ).toString() );
+
+    // add filters of modules which are installed
+    SvtModuleOptions aModuleOpt;
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+        sFilterExt += "*.ott;*.stw;*.oth";
+
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+    {
+        if ( !sFilterExt.isEmpty() )
+            sFilterExt += ";";
+
+        sFilterExt += "*.ots;*.stc";
+    }
+
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+    {
+        if ( !sFilterExt.isEmpty() )
+            sFilterExt += ";";
+
+        sFilterExt += "*.otp;*.sti";
+    }
+
+    if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+    {
+        if ( !sFilterExt.isEmpty() )
+            sFilterExt += ";";
+
+        sFilterExt += "*.otg;*.std";
+
+
+    if ( !sFilterExt.isEmpty() )
+        sFilterExt += ";";
+
+    sFilterExt += "*.vor";
+
+    sFilterName += " (";
+    sFilterName += sFilterExt;
+    sFilterName += ")";
+
+    aFileDlg.AddFilter( sFilterName, sFilterExt );
+    aFileDlg.SetCurrentFilter( sFilterName );
+
+    ErrCode nCode = aFileDlg.Execute();
+
+    if ( nCode == ERRCODE_NONE )
+    {
+        com::sun::star::uno::Sequence<OUString> aFiles = aFileDlg.GetSelectedFiles();
+
+        if (aFiles.hasElements())
+        {
+            if (!maSelFolders.empty())
+            {
+                //Import to the selected regions
+                std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
+                for (pIter = maSelFolders.begin(); pIter != maSelFolders.end(); ++pIter)
+                {
+                    OUString aTemplateList;
+                    TemplateContainerItem *pFolder = (TemplateContainerItem*)(*pIter);
+
+                    for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
+                    {
+                        if(!mpLocalView->copyFrom(pFolder,aFiles[i]))
+                        {
+                            if (aTemplateList.isEmpty())
+                                aTemplateList = aFiles[i];
+                            else
+                                aTemplateList = aTemplateList + "\n" + aFiles[i];
+                        }
+                    }
+
+                    if (!aTemplateList.isEmpty())
+                    {
+                        OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
+                        aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
+                        ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
+                    }
+                }
+            }
+            else
+            {
+                //Import to current region
+                OUString aTemplateList;
+                for (size_t i = 0, n = aFiles.getLength(); i < n; ++i)
+                {
+                    if(!mpLocalView->copyFrom(aFiles[i]))
+                    {
+                        if (aTemplateList.isEmpty())
+                            aTemplateList = aFiles[i];
+                        else
+                            aTemplateList = aTemplateList + "\n" + aFiles[i];
+                    }
+                }
+
+                if (!aTemplateList.isEmpty())
+                {
+                    OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
+                    aMsg = aMsg.replaceFirst("$1",mpLocalView->getCurRegionName());
+                    ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
+                }
+            }
+
+            mpLocalView->Invalidate(INVALIDATE_NOERASE);
+            }
+        }
+    }
+}
+
+void BackingWindow::OnRegionState (const ThumbnailViewItem *pItem)
+{
+    if (pItem->isSelected())
+    {
+        if (maSelFolders.empty() && !mbIsSaveMode)
+        {
+            mpViewBar->ShowItem("import");
+            mpViewBar->ShowItem("delete");
+            mpViewBar->HideItem("new_folder");
+        }
+
+        maSelFolders.insert(pItem);
+    }
+    else
+    {
+        maSelFolders.erase(pItem);
+
+        if (maSelFolders.empty() && !mbIsSaveMode)
+        {
+            mpViewBar->HideItem("import");
+            mpViewBar->HideItem("delete");
+            mpViewBar->ShowItem("new_folder");
+        }
+    }
+}
+
+
 IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton)
 {
     OUString aNode;
@@ -525,22 +690,60 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
     return 0;
 }
 
+//FIXME: Obvious enough
 IMPL_LINK_NOARG( BackingWindow, OpenRegionHdl)
 {
-    //maSelFolders.clear();
-    //maSelTemplates.clear();
+    maSelFolders.clear();
+    maSelTemplates.clear();
 
-    //mpViewBar->ShowItem(VIEWBAR_NEW_FOLDER, mpCurView->isNestedRegionAllowed());
+    mpViewBar->ShowItem("new_folder", mpCurrentView->isNestedRegionAllowed());
 
-    //if (!mbIsSaveMode)
-        //mpViewBar->ShowItem(VIEWBAR_IMPORT, mpCurView->isImportAllowed());
+    if (!mbIsSaveMode)
+        mpViewBar->ShowItem("import", mpCurrentView->isImportAllowed());
 
     //mpTemplateBar->Hide();
-    //mpViewBar->Show();
+    mpViewBar->Show();
     //mpActionBar->Show();
 
     return 0;
 }
+
+//FIXME: Implement OnSomething() methods
+IMPL_LINK_NOARG(BackingWindow,TBXViewHdl)
+{
+    const size_t nCurItemId = mpViewBar->GetCurItemId();
+
+    if (nCurItemId == mpViewBar->GetItemId("import"))
+        OnTemplateImport();
+    //else if (nCurItemId == mpViewBar->GetItemId("delete"))
+    //{
+        //if (mpCurView == mpLocalView)
+            ////OnFolderDelete();
+        //else
+            ////OnRepositoryDelete();
+    //}
+    //else if (nCurItemId == mpViewBar->GetItemId("new_folder"))
+        ////OnFolderNew();
+    //else if (nCurItemId == mpViewBar->GetItemId("save"))
+        ////OnTemplateSaveAs();
+
+    return 0;
+}
+
+IMPL_LINK(BackingWindow, TVItemStateHdl, const ThumbnailViewItem*, pItem)
+{
+    const TemplateContainerItem *pCntItem = dynamic_cast<const TemplateContainerItem*>(pItem);
+
+    if (pCntItem)
+        OnRegionState(pItem);
+    //else
+        //FIXME:Move this to here
+        //OnTemplateState(pItem);
+
+    return 0;
+}
+
+
 
 
 struct ImplDelayedDispatch
