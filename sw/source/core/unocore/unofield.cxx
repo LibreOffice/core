@@ -558,7 +558,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             const ::std::vector<OUString>& rExtraArr(
                     SwStyleNameMapper::GetExtraUINameArray());
-            OUString sTypeName = pType->GetName();
+            const OUString sTypeName = pType->GetName();
             static sal_uInt16 nIds[] =
             {
                 RES_POOLCOLL_LABEL_DRAWING - RES_POOLCOLL_EXTRA_BEGIN,
@@ -603,21 +603,17 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     }
     else if (!pType && m_pImpl->m_pDoc && rPropertyName == UNO_NAME_NAME)
     {
-        OUString uTmp;
-        rValue >>= uTmp;
-        OUString sTypeName(uTmp);
+        OUString sTypeName;
+        rValue >>= sTypeName;
         SwFieldType * pType2 = m_pImpl->m_pDoc->GetFldType(
                 m_pImpl->m_nResTypeId, sTypeName, false);
 
-        OUString sTable(SW_RES(STR_POOLCOLL_LABEL_TABLE));
-        OUString sDrawing(SW_RES(STR_POOLCOLL_LABEL_DRAWING));
-        OUString sFrame(SW_RES(STR_POOLCOLL_LABEL_FRAME));
-        OUString sIllustration(SW_RES(STR_POOLCOLL_LABEL_ABB));
-
         if(pType2 ||
             (RES_SETEXPFLD == m_pImpl->m_nResTypeId &&
-            ( sTypeName == sTable || sTypeName == sDrawing ||
-              sTypeName == sFrame || sTypeName == sIllustration )))
+            ( sTypeName == SW_RESSTR(STR_POOLCOLL_LABEL_TABLE) ||
+              sTypeName == SW_RESSTR(STR_POOLCOLL_LABEL_DRAWING) ||
+              sTypeName == SW_RESSTR(STR_POOLCOLL_LABEL_FRAME) ||
+              sTypeName == SW_RESSTR(STR_POOLCOLL_LABEL_ABB) )))
         {
             throw lang::IllegalArgumentException();
         }
@@ -1023,7 +1019,7 @@ void SwXFieldMaster::Impl::Modify(
 
 OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
 {
-    OUString sRet(rType.GetName());
+    const OUString sName(rType.GetName());
     if(RES_SETEXPFLD == rType.Which())
     {
         const SwFldTypes* pTypes = rDoc.GetFldTypes();
@@ -1031,12 +1027,11 @@ OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rD
         {
             if((*pTypes)[i] == &rType)
             {
-                sRet = SwStyleNameMapper::GetProgName ( sRet, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-                break;
+                return SwStyleNameMapper::GetProgName( sName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
             }
         }
     }
-    return sRet;
+    return sName;
 }
 
 OUString SwXFieldMaster::LocalizeFormula(
@@ -1045,16 +1040,15 @@ OUString SwXFieldMaster::LocalizeFormula(
     bool bQuery)
 {
     const OUString sTypeName(rFld.GetTyp()->GetName());
-    OUString sProgName = SwStyleNameMapper::GetProgName(sTypeName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
+    const OUString sProgName(
+        SwStyleNameMapper::GetProgName(sTypeName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL ));
     if(sProgName != sTypeName)
     {
-        OUString sSource = bQuery ? sTypeName : sProgName;
-        OUString sDest = bQuery ? sProgName : sTypeName;
+        const OUString sSource = bQuery ? sTypeName : sProgName;
+        const OUString sDest = bQuery ? sProgName : sTypeName;
         if(rFormula.startsWith(sSource))
         {
-            OUString sTmpFormula = sDest;
-            sTmpFormula += rFormula.copy(sSource.getLength());
-            return sTmpFormula;
+            return sDest + rFormula.copy(sSource.getLength());
         }
     }
     return rFormula;
@@ -1289,10 +1283,7 @@ throw (uno::RuntimeException, std::exception)
     {
         throw uno::RuntimeException();
     }
-    OUString const ret( (bShowCommand)
-            ? pField->GetFieldName()
-            : pField->ExpandField(true) );
-    return ret;
+    return bShowCommand ? pField->GetFieldName() : pField->ExpandField(true);
 }
 
 void SAL_CALL SwXTextField::attach(
@@ -2557,12 +2548,12 @@ throw (uno::RuntimeException, std::exception)
 uno::Sequence< OUString > SAL_CALL SwXTextField::getSupportedServiceNames()
 throw (uno::RuntimeException, std::exception)
 {
-    OUString sServiceName =
+    const OUString sServiceName =
         SwXServiceProvider::GetProviderName(m_pImpl->m_nServiceId);
 
     // case-corected version of service-name (see #i67811)
     // (need to supply both because of compatibility to older versions)
-    OUString sServiceNameCC(  OldNameToNewName_Impl( sServiceName ) );
+    const OUString sServiceNameCC(  OldNameToNewName_Impl( sServiceName ) );
     sal_Int32 nLen = sServiceName == sServiceNameCC ? 2 : 3;
 
     uno::Sequence< OUString > aRet( nLen );
@@ -2675,8 +2666,8 @@ static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
     {
         nResId = RES_SETEXPFLD;
 
-        OUString sFldTypName( rName.getToken( 1, '.' ));
-        OUString sUIName( SwStyleNameMapper::GetSpecialExtraUIName( sFldTypName ) );
+        const OUString sFldTypName( rName.getToken( 1, '.' ));
+        const OUString sUIName( SwStyleNameMapper::GetSpecialExtraUIName( sFldTypName ) );
 
         if( sUIName != sFldTypName )
             rName = comphelper::string::setToken(rName, 1, '.', sUIName);
