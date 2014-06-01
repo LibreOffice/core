@@ -25,7 +25,7 @@ $(eval $(call gb_WinResTarget_set_rcfile,so_activex,extensions/source/activex/so
 
 $(eval $(call gb_WinResTarget_add_defs,so_activex,\
 	$$(DEFS) \
-	-DSO_ACTIVEX_TLB=\"$(subst /,\\\\,$(WORKDIR)/CustomTarget/extensions/source/activex/idl/so_activex.tlb\") \
+	-DSO_ACTIVEX_TLB=\"$(subst /,"\\\\",$(WORKDIR)/CustomTarget/extensions/source/activex/idl/so_activex.tlb\") \
 ))
 
 # vim:set noet sw=4 ts=4:
