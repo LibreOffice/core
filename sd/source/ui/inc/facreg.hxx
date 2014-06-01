@@ -76,7 +76,7 @@ css::uno::Sequence<OUString> SAL_CALL ConfigurationController_getSupportedServic
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL ModuleController_createInstance(
     const css::uno::Reference<css::uno::XComponentContext>& rxContext)
-    throw(css::uno::Exception);
+    throw(css::uno::Exception, std::exception);
 OUString ModuleController_getImplementationName(void) throw (css::uno::RuntimeException);
 css::uno::Sequence<OUString> SAL_CALL ModuleController_getSupportedServiceNames (void)
     throw (css::uno::RuntimeException);
