@@ -21,7 +21,6 @@
 
 #include "chpfld.hxx"
 #include "cntfrm.hxx"
-#include "pagefrm.hxx"
 #include "fchrfmt.hxx"
 #include "doc.hxx"
 #include "fmtinfmt.hxx"
@@ -30,18 +29,14 @@
 #include "tox.hxx"
 #include "txmsrt.hxx"
 #include "fmtautofmt.hxx"
-#include "fmtfsize.hxx"
-#include "fmtpdsc.hxx"
 #include "DocumentSettingManager.hxx"
 #include "SwStyleNameMapper.hxx"
 #include "swatrset.hxx"
 #include "ToxWhitespaceStripper.hxx"
 #include "ToxLinkProcessor.hxx"
+#include "ToxTabStopTokenHandler.hxx"
 #include "txatbase.hxx"
 
-#include "editeng/tstpitem.hxx"
-#include "editeng/lrspitem.hxx"
-#include "rtl/ustring.hxx"
 #include "svl/itemiter.hxx"
 
 #include <boost/foreach.hpp>
@@ -95,9 +90,11 @@ ToxTextGenerator::GetNumStringOfFirstNode( const SwTOXSortTabBase& rBase, bool b
 }
 
 
-ToxTextGenerator::ToxTextGenerator(const SwForm& toxForm)
-:mToxForm(toxForm),
- mLinkProcessor(new ToxLinkProcessor())
+ToxTextGenerator::ToxTextGenerator(const SwForm& toxForm,
+        boost::shared_ptr<ToxTabStopTokenHandler> tabStopHandler)
+: mToxForm(toxForm),
+  mLinkProcessor(new ToxLinkProcessor()),
+  mTabStopTokenHandler(tabStopHandler)
 {;}
 
 ToxTextGenerator::~ToxTextGenerator()
@@ -153,9 +150,9 @@ ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, c
 
 // Add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
 // which page description is used, no appropriate one is found.
-void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*> &entries,
-        sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess, sal_uInt32 _nTOXSectNdIdx,
-        const SwPageDesc* _pDefaultPageDesc)
+void
+ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*> &entries,
+        sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess)
 {
     // pTOXNd is only set at the first mark
     SwTxtNode* pTOXNd = (SwTxtNode*)entries.at(indexOfEntryToProcess)->pTOXNd;
@@ -204,80 +201,13 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
                 }
                 break;
 
-            case TOKEN_TAB_STOP:
-                if (aToken.bWithTab) // #i21237#
-                    rTxt += "\t";
-
-                if(SVX_TAB_ADJUST_END > aToken.eTabAlign)
-                {
-                    const SvxLRSpaceItem& rLR =
-                        (SvxLRSpaceItem&)pTOXNd->
-                        SwCntntNode::GetAttr( RES_LR_SPACE, true );
-
-                    long nTabPosition = aToken.nTabStopPosition;
-                    if( !mToxForm.IsRelTabPos() && rLR.GetTxtLeft() )
-                        nTabPosition -= rLR.GetTxtLeft();
-                    aTStops.Insert( SvxTabStop( nTabPosition,
-                                                aToken.eTabAlign,
-                                                cDfltDecimalChar,
-                                                aToken.cTabFillChar ));
-                }
-                else
-                {
-                    const SwPageDesc* pPageDesc = ((SwFmtPageDesc&)pTOXNd->
-                                SwCntntNode::GetAttr( RES_PAGEDESC )).GetPageDesc();
-
-                    bool bCallFindRect = true;
-                    long nRightMargin;
-                    if( pPageDesc )
-                    {
-                        const SwFrm* pFrm = pTOXNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, true );
-                        if( !pFrm || 0 == ( pFrm = pFrm->FindPageFrm() ) ||
-                            pPageDesc != ((SwPageFrm*)pFrm)->GetPageDesc() )
-                            // we have to go via the PageDesc here
-                            bCallFindRect = false;
-                    }
-
-                    SwRect aNdRect;
-                    if( bCallFindRect )
-                        aNdRect = pTOXNd->FindLayoutRect( true );
-
-                    if( aNdRect.IsEmpty() )
-                    {
-                        // Nothing helped so far, so we go via the PageDesc
-                        sal_uInt32 nPgDescNdIdx = pTOXNd->GetIndex() + 1;
-                        sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
-                        pPageDesc = pTOXNd->FindPageDesc( false, pPgDescNdIdx );
-                        if ( !pPageDesc ||
-                             *pPgDescNdIdx < _nTOXSectNdIdx )
-                        {
-                            // Use default page description, if none is found
-                            // or the found one is given by a Node before the
-                            // table-of-content section.
-                            pPageDesc = _pDefaultPageDesc;
-                        }
-
-                        const SwFrmFmt& rPgDscFmt = pPageDesc->GetMaster();
-                        nRightMargin = rPgDscFmt.GetFrmSize().GetWidth() -
-                                         rPgDscFmt.GetLRSpace().GetLeft() -
-                                         rPgDscFmt.GetLRSpace().GetRight();
-                    }
-                    else
-                        nRightMargin = aNdRect.Width();
-                    //#i24363# tab stops relative to indent
-                    if( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
-                    {
-                        // left margin of paragraph style
-                        const SvxLRSpaceItem& rLRSpace = pTOXNd->GetTxtColl()->GetLRSpace();
-                        nRightMargin -= rLRSpace.GetLeft();
-                        nRightMargin -= rLRSpace.GetTxtFirstLineOfst();
-                    }
-
-                    aTStops.Insert( SvxTabStop( nRightMargin, SVX_TAB_ADJUST_RIGHT,
-                                                cDfltDecimalChar,
-                                                aToken.cTabFillChar ));
-                }
+            case TOKEN_TAB_STOP: {
+                ToxTabStopTokenHandler::HandledTabStopToken htst =
+                        mTabStopTokenHandler->HandleTabStopToken(aToken, *pTOXNd, pDoc->GetCurrentLayout());
+                rTxt += htst.text;
+                aTStops.Insert(htst.tabStop);
                 break;
+            }
 
             case TOKEN_TEXT:
                 rTxt += aToken.sText;

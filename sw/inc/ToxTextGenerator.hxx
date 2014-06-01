@@ -38,19 +38,26 @@ class SwDoc;
 class SwForm;
 struct SwFormToken;
 class SwPageDesc;
+class SwRootFrm;
 class SwTxtAttr;
 class SwTxtNode;
 struct SwTOXSortTabBase;
+class SvxTabStop;
 class ToxTextGeneratorTest;
 
 namespace sw {
 
 class ToxLinkProcessor;
+class ToxTabStopTokenHandler;
 
+/** This class generates text for the entries of a table of x.
+ *
+ * You can control its behavior by calling @link SetTabstopPolicy() and specifying the desired behavior.
+ */
 class SW_DLLPUBLIC ToxTextGenerator
 {
 public:
-    ToxTextGenerator(const SwForm& toxForm);
+    ToxTextGenerator(const SwForm& toxForm, boost::shared_ptr<ToxTabStopTokenHandler> tabStopHandler);
 
     virtual ~ToxTextGenerator();
 
@@ -61,12 +68,12 @@ public:
      */
     void
     GenerateText(SwDoc *doc, const std::vector<SwTOXSortTabBase*>& entries,
-                      sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess,
-                      sal_uInt32 _nTOXSectNdIdx, const SwPageDesc* _pDefaultPageDesc);
+                      sal_uInt16 indexOfEntryToProcess, sal_uInt16 numberOfEntriesToProcess);
 
 private:
     const SwForm& mToxForm;
     boost::shared_ptr<ToxLinkProcessor> mLinkProcessor;
+    boost::shared_ptr<ToxTabStopTokenHandler> mTabStopTokenHandler;
 
     /** A handled text token.
      * It contains the information which should be added to the target text node.

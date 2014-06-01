@@ -12,13 +12,16 @@
 #include "tox.hxx"
 #include "txmsrt.hxx"
 #include "ToxTextGenerator.hxx"
+#include "ToxTabStopTokenHandler.hxx"
+
+#include <boost/make_shared.hpp>
 
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-using sw::ToxTextGenerator;
+using namespace sw;
 
 class ToxTextGeneratorTest : public CppUnit::TestFixture {
 public:
@@ -100,10 +103,21 @@ ToxTextGeneratorTest::EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty()
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
 
+class MockedToxTabStopTokenHandler : public ToxTabStopTokenHandler {
+public:
+    virtual HandledTabStopToken
+    HandleTabStopToken(const SwFormToken& aToken, const SwTxtNode& targetNode,
+            const SwRootFrm *currentLayout) const {
+        (void)(aToken); (void)(targetNode); (void)(currentLayout); // avoid unused warnings.
+        return HandledTabStopToken();
+    }
+};
+
 class ToxTextGeneratorWithMockedChapterField : public ToxTextGenerator {
 public:
     ToxTextGeneratorWithMockedChapterField(SwForm &form)
-    : ToxTextGenerator(form), mChapterFieldType(), mChapterField(&mChapterFieldType) {;}
+    : ToxTextGenerator(form, boost::make_shared<MockedToxTabStopTokenHandler>()),
+      mChapterFieldType(), mChapterField(&mChapterFieldType) {;}
 
     SwChapterField&
     GetChapterField() {
