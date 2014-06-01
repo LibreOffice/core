@@ -38,6 +38,7 @@ private:
     void clipSiblings( Window* pWindow, Region& rRegion );
     void intersectClipRegion( Window* pWindow, Region& rRegion );
     void excludeOverlapWindows( Window *pWindow, Region& rRegion );
+    void initChildClipRegion( Window *pWindow );
 
 public:
     ~ClipManager() { instanceFlag = false; }
@@ -48,6 +49,7 @@ public:
     void InitClipRegion( Window *pWindow );
     void ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, bool bOverlaps );
     bool ClipChildren( Window *pWindow, Region& rRegion );
+    Region* GetChildClipRegion( Window* pWindow );
 
     void Exclude( Window *pWindow, Region& rRegion );
 };

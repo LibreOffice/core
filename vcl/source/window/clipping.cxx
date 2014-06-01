@@ -33,6 +33,8 @@ void Window::InitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
 
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     Region  aRegion;
 
     // Put back backed up background
@@ -42,7 +44,7 @@ void Window::InitClipRegion()
         aRegion = *(mpWindowImpl->mpPaintRegion);
     else
     {
-        aRegion = *(ImplGetWinChildClipRegion());
+        aRegion = *(clipMgr->GetChildClipRegion(this));
         // --- RTL -- only this region is in frame coordinates, so re-mirror it
         // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
         if( ImplIsAntiparallel() )
@@ -90,12 +92,14 @@ sal_uInt16 Window::GetParentClipMode() const
 
 void Window::ExpandPaintClipRegion( const Region& rRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if( mpWindowImpl->mpPaintRegion )
     {
         Region aPixRegion = LogicToPixel( rRegion );
         Region aDevPixRegion = ImplPixelToDevicePixel( aPixRegion );
 
-        Region aWinChildRegion = *ImplGetWinChildClipRegion();
+        Region aWinChildRegion = *clipMgr->GetChildClipRegion(this);
         // --- RTL -- only this region is in frame coordinates, so re-mirror it
         if( ImplIsAntiparallel() )
         {
@@ -115,6 +119,7 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
 Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
 {
     ClipManager *clipMgr = ClipManager::GetInstance();
+
     Region aWinClipRegion;
 
     if ( nFlags & WINDOW_GETCLIPREGION_NOCHILDREN )
@@ -125,7 +130,7 @@ Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
     }
     else
     {
-        Region* pWinChildClipRegion = ((Window*)this)->ImplGetWinChildClipRegion();
+        Region* pWinChildClipRegion = clipMgr->GetChildClipRegion(const_cast<Window*>(this));
         aWinClipRegion = *pWinChildClipRegion;
         // --- RTL --- remirror clip region before passing it to somebody
         if( ImplIsAntiparallel() )
@@ -196,48 +201,10 @@ void Window::ImplClipAllChildren( Region& rRegion )
     }
 }
 
-void Window::ImplInitWinChildClipRegion()
-{
-    ClipManager *clipMgr = ClipManager::GetInstance();
-
-    if ( !mpWindowImpl->mpFirstChild )
-    {
-        if ( mpWindowImpl->mpChildClipRegion )
-        {
-            delete mpWindowImpl->mpChildClipRegion;
-            mpWindowImpl->mpChildClipRegion = NULL;
-        }
-    }
-    else
-    {
-        if ( !mpWindowImpl->mpChildClipRegion )
-            mpWindowImpl->mpChildClipRegion = new Region( mpWindowImpl->maWinClipRegion );
-        else
-            *mpWindowImpl->mpChildClipRegion = mpWindowImpl->maWinClipRegion;
-
-        clipMgr->ClipChildren( this, *mpWindowImpl->mpChildClipRegion );
-    }
-
-    mpWindowImpl->mbInitChildRegion = false;
-}
-
-Region* Window::ImplGetWinChildClipRegion()
-{
-    ClipManager *clipMgr = ClipManager::GetInstance();
-
-    if ( mpWindowImpl->mbInitWinClipRegion )
-        clipMgr->InitClipRegion(this);
-    if ( mpWindowImpl->mbInitChildRegion )
-        ImplInitWinChildClipRegion();
-    if ( mpWindowImpl->mpChildClipRegion )
-        return mpWindowImpl->mpChildClipRegion;
-    else
-        return &mpWindowImpl->maWinClipRegion;
-}
-
-
 bool Window::ImplSysObjClip( const Region* pOldRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     bool bUpdate = true;
 
     if ( mpWindowImpl->mpSysObj )
@@ -246,7 +213,7 @@ bool Window::ImplSysObjClip( const Region* pOldRegion )
 
         if ( bVisibleState )
         {
-            Region* pWinChildClipRegion = ImplGetWinChildClipRegion();
+            Region* pWinChildClipRegion = clipMgr->GetChildClipRegion(this);
 
             if ( !pWinChildClipRegion->IsEmpty() )
             {

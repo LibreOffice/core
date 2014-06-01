@@ -97,8 +97,10 @@ PaintHelper::PaintHelper(Window *pWindow, sal_uInt16 nPaintFlags)
 
 void PaintHelper::DoPaint(const Region* pRegion)
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     WindowImpl* pWindowImpl = m_pWindow->ImplGetWindowImpl();
-    Region* pWinChildClipRegion = m_pWindow->ImplGetWinChildClipRegion();
+    Region* pWinChildClipRegion = clipMgr->GetChildClipRegion(m_pWindow);
     if ( pWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
         pWindowImpl->maInvalidateRegion = *pWinChildClipRegion;
     else
@@ -365,7 +367,7 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags
             Region *pChildRegion;
             if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALL )
                 // invalidate the whole child window region in the parent
-                pChildRegion = ImplGetWinChildClipRegion();
+                pChildRegion = clipMgr->GetChildClipRegion(this);
             else
                 // invalidate the same region in the parent that has to be repainted in the child
                 pChildRegion = &mpWindowImpl->maInvalidateRegion;

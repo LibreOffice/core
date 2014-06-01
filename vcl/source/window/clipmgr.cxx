@@ -136,6 +136,17 @@ bool ClipManager::ClipChildren( Window *pWindow, Region& rRegion )
     return bOtherClip;
 }
 
+Region* ClipManager::GetChildClipRegion( Window* pWindow )
+{
+    if ( pWindow->mpWindowImpl->mbInitWinClipRegion )
+        InitClipRegion( pWindow );
+    if ( pWindow->mpWindowImpl->mbInitChildRegion )
+        initChildClipRegion( pWindow );
+    if ( pWindow->mpWindowImpl->mpChildClipRegion )
+        return pWindow->mpWindowImpl->mpChildClipRegion;
+    else
+        return &pWindow->mpWindowImpl->maWinClipRegion;
+}
 
 void ClipManager::Exclude( Window *pWindow, Region& rRegion )
 {
@@ -153,6 +164,28 @@ void ClipManager::Exclude( Window *pWindow, Region& rRegion )
     }
 }
 
+void ClipManager::initChildClipRegion( Window *pWindow )
+{
+    if ( !pWindow->mpWindowImpl->mpFirstChild )
+    {
+        if ( pWindow->mpWindowImpl->mpChildClipRegion )
+        {
+            delete pWindow->mpWindowImpl->mpChildClipRegion;
+            pWindow->mpWindowImpl->mpChildClipRegion = NULL;
+        }
+    }
+    else
+    {
+        if ( !pWindow->mpWindowImpl->mpChildClipRegion )
+            pWindow->mpWindowImpl->mpChildClipRegion = new Region( pWindow->mpWindowImpl->maWinClipRegion );
+        else
+            *pWindow->mpWindowImpl->mpChildClipRegion = pWindow->mpWindowImpl->maWinClipRegion;
+
+        ClipChildren( pWindow, *pWindow->mpWindowImpl->mpChildClipRegion );
+    }
+
+    pWindow->mpWindowImpl->mbInitChildRegion = false;
+}
 
 void ClipManager::excludeOverlapWindows( Window *pWindow, Region& rRegion )
 {
