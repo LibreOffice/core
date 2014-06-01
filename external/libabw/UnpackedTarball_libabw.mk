@@ -11,4 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libabw))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libabw,$(ABW_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_add_patches,libabw,\
+	external/libabw/libabw_quote.patch.1 \
+))
+
 # vim: set noet sw=4 ts=4:
