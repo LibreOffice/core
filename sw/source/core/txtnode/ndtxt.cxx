@@ -3277,7 +3277,7 @@ bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                 continue;
             } // else: delete, see below
         }
-        assert(-1 != nStartDelete); // without delete range, would have contined
+        assert(-1 != nStartDelete); // without delete range, would have continued
         rDestNd.EraseText(
             SwIndex(&rDestNd, nStartDelete),
             aDestIdx.GetIndex() - nStartDelete);
