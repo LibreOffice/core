@@ -291,6 +291,23 @@ static sal_uInt16 lcl_GetPropMapIdForFieldType( sal_uInt16 nWhich )
     return nId;
 }
 
+static sal_Int32 lcl_PropName2TokenPos(const OUString& rPropertyName)
+{
+    if (rPropertyName == UNO_NAME_DDE_COMMAND_TYPE)
+        return 0;
+
+    if (rPropertyName == UNO_NAME_DDE_COMMAND_FILE)
+        return 1;
+
+    if (rPropertyName == UNO_NAME_DDE_COMMAND_ELEMENT)
+        return 2;
+
+    if (rPropertyName == UNO_NAME_IS_AUTOMATIC_UPDATE)
+        return 3;
+
+    return SAL_MAX_INT32;
+}
+
 sal_uInt16 GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
 {
     sal_uInt16 nId = lcl_GetPropMapIdForFieldType( rTyp.Which() );
@@ -711,10 +728,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             break;
         case RES_DDEFLD:
             {
-                sal_uInt16 nPart = rPropertyName == UNO_NAME_DDE_COMMAND_TYPE ? 0 :
-                        rPropertyName == UNO_NAME_DDE_COMMAND_FILE ? 1 :
-                        rPropertyName == UNO_NAME_DDE_COMMAND_ELEMENT ? 2 :
-                        rPropertyName == UNO_NAME_IS_AUTOMATIC_UPDATE ? 3 : USHRT_MAX;
+                sal_Int32 nPart = lcl_PropName2TokenPos(rPropertyName);
                 if(nPart  < 3 )
                 {
                     if (m_pImpl->m_sParam1.isEmpty())
@@ -915,10 +929,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 break;
             case RES_DDEFLD:
                 {
-                    sal_uInt16 nPart = rPropertyName == UNO_NAME_DDE_COMMAND_TYPE  ? 0 :
-                        rPropertyName == UNO_NAME_DDE_COMMAND_FILE ? 1 :
-                            rPropertyName == UNO_NAME_DDE_COMMAND_ELEMENT  ? 2 :
-                            rPropertyName == UNO_NAME_IS_AUTOMATIC_UPDATE ? 3 : USHRT_MAX;
+                    const sal_Int32 nPart = lcl_PropName2TokenPos(rPropertyName);
                     if(nPart  < 3 )
                         aRet <<= m_pImpl->m_sParam1.getToken(nPart, sfx2::cTokenSeparator);
                     else if(3 == nPart)
