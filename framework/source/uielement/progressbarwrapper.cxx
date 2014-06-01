@@ -237,7 +237,7 @@ void ProgressBarWrapper::setValue( ::sal_Int32 nValue )
 }
 
 void ProgressBarWrapper::reset()
-throw (uno::RuntimeException)
+    throw (uno::RuntimeException, std::exception)
 {
     setText( OUString() );
     setValue( 0 );
