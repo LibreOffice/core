@@ -22,6 +22,7 @@
 #include "fmtfsize.hxx"
 #include "fmtpdsc.hxx"
 #include "SwStyleNameMapper.hxx"
+#include "ToxWhitespaceStripper.hxx"
 
 #include "editeng/tstpitem.hxx"
 #include "editeng/lrspitem.hxx"
@@ -37,32 +38,6 @@ struct LinkStruct
         nStartTextPos( nStart),
         nEndTextPos(nEnd) {}
 };
-
-/// Generate String with newlines changed to spaces, consecutive spaces changed
-/// to a single space, and trailing space removed.
-OUString lcl_RemoveLineBreaks(const OUString &rRet)
-{
-    if (rRet.isEmpty())
-        return rRet;
-    sal_Int32 nOffset = 0;
-    OUStringBuffer sRet(rRet.replace('\n', ' '));
-    for (sal_Int32 i = 1; i < sRet.getLength(); ++i)
-    {
-        if ( sRet[i - 1] == ' ' && sRet[i] == ' ' )
-        {
-            nOffset += 1;
-        }
-        else
-        {
-            sRet[i - nOffset] = sRet[i];
-        }
-    }
-    if (sRet[sRet.getLength() - 1] == ' ')
-    {
-        nOffset += 1;
-    }
-    return sRet.copy(0, sRet.getLength() - nOffset).toString();
-}
 
 /// Generate String according to the Form and remove the
 /// special characters 0-31 and 255.
@@ -133,8 +108,8 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
             case TOKEN_ENTRY_TEXT:
                 {
                     SwIndex aIdx( pTOXNd, std::min(pTOXNd->GetTxt().getLength(),rTxt.getLength()) );
-                    rBase.FillText( *pTOXNd, aIdx );
-                    rTxt = lcl_RemoveLineBreaks(rTxt);
+                    ToxWhitespaceStripper stripper(rBase.GetTxt().sText);
+                    pTOXNd->InsertText(stripper.GetStrippedString(), aIdx);
                 }
                 break;
 
@@ -142,10 +117,9 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
                 {
                     // for TOC numbering
                     rTxt += lcl_GetNumString( rBase, true, MAXLEVEL );
-
                     SwIndex aIdx( pTOXNd, rTxt.getLength() );
-                    rBase.FillText( *pTOXNd, aIdx );
-                    rTxt = lcl_RemoveLineBreaks(rTxt);
+                    ToxWhitespaceStripper stripper(rBase.GetTxt().sText);
+                    pTOXNd->InsertText(stripper.GetStrippedString(), aIdx);
                 }
                 break;
 
