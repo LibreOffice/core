@@ -187,7 +187,6 @@ OString MyWin::processCommand( const OString& rCommand )
         if( connect( nSocket, (const sockaddr*)&addr, sizeof(addr) ) )
         {
             perror( "SvpElementContainer: connect() failed" );
-            close(nSocket);
         }
         else
         {
