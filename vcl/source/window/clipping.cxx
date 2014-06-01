@@ -64,12 +64,13 @@ void Window::InitClipRegion()
 
 void Window::SetParentClipMode( sal_uInt16 nMode )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetParentClipMode( nMode );
     else
     {
-        if ( !ImplIsOverlapWindow() )
+        if ( !clipMgr->IsOverlapWindow( this ) )
         {
             mpWindowImpl->mnParentClipMode = nMode;
             if ( nMode & PARENTCLIPMODE_CLIP )
@@ -350,7 +351,9 @@ void Window::ImplUpdateSysObjOverlapsClip()
 
 void Window::ImplUpdateSysObjClip()
 {
-    if ( !ImplIsOverlapWindow() )
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
+    if ( !clipMgr->IsOverlapWindow( this ) )
     {
         ImplUpdateSysObjChildrenClip();
 
@@ -431,7 +434,9 @@ bool Window::ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller )
 
 bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
 {
-    if ( !ImplIsOverlapWindow() )
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
+    if ( !clipMgr->IsOverlapWindow( this ) )
     {
         bool bUpdate = ImplSetClipFlagChildren( bSysObjOnlySmaller );
 
@@ -541,9 +546,11 @@ void Window::ImplIntersectAndUnionOverlapWindows2( const Region& rInterRegion, R
 
 void Window::ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& rRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     // Clip Overlap Siblings
     Window* pStartOverlapWindow;
-    if ( !ImplIsOverlapWindow() )
+    if ( !clipMgr->IsOverlapWindow( this ) )
         pStartOverlapWindow = mpWindowImpl->mpOverlapWindow;
     else
         pStartOverlapWindow = this;
@@ -559,7 +566,7 @@ void Window::ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& 
     }
 
     // Clip Child Overlap Windows
-    if ( !ImplIsOverlapWindow() )
+    if ( !clipMgr->IsOverlapWindow( this ) )
         mpWindowImpl->mpOverlapWindow->ImplIntersectAndUnionOverlapWindows( rInterRegion, rRegion );
     else
         ImplIntersectAndUnionOverlapWindows( rInterRegion, rRegion );
@@ -568,6 +575,8 @@ void Window::ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& 
 void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
                                     bool bChildren, bool bParent, bool bSiblings )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     Region  aRegion( rSourceRect );
     if ( mpWindowImpl->mbWinRegion )
         rRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
@@ -580,7 +589,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
     if ( bParent )
     {
         pWindow = this;
-        if ( !ImplIsOverlapWindow() )
+        if ( !clipMgr->IsOverlapWindow( this ) )
         {
             pWindow = ImplGetParent();
             do
@@ -588,7 +597,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
                 aTempRegion = aRegion;
                 pWindow->ImplExcludeWindowRegion( aTempRegion );
                 rRegion.Union( aTempRegion );
-                if ( pWindow->ImplIsOverlapWindow() )
+                if ( clipMgr->IsOverlapWindow( pWindow ) )
                     break;
                 pWindow = pWindow->ImplGetParent();
             }
@@ -603,7 +612,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
     }
 
     // Siblings
-    if ( bSiblings && !ImplIsOverlapWindow() )
+    if ( bSiblings && !clipMgr->IsOverlapWindow( this ) )
     {
         pWindow = mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild;
         do

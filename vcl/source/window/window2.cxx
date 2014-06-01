@@ -1040,11 +1040,6 @@ bool Window::ImplIsPushButton() const
     return mpWindowImpl->mbPushButton;
 }
 
-bool Window::ImplIsOverlapWindow() const
-{
-    return mpWindowImpl->mbOverlapWin;
-}
-
 void Window::ImplSetMouseTransparent( bool bTransparent )
 {
     mpWindowImpl->mbMouseTransparent = bTransparent;

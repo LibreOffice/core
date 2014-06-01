@@ -421,6 +421,8 @@ Window::~Window()
 #endif
     }
 
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     // if we get focus pass focus to another window
     Window* pOverlapWindow = ImplGetFirstOverlapWindow();
     if ( pSVData->maWinData.mpFocusWin == this
@@ -440,10 +442,10 @@ Window::~Window()
         // of the next FrameWindow
             if ( pBorderWindow )
             {
-                if ( pBorderWindow->ImplIsOverlapWindow() )
+                if ( clipMgr->IsOverlapWindow( pBorderWindow ) )
                     pParent = pBorderWindow->mpWindowImpl->mpOverlapWindow;
             }
-            else if ( ImplIsOverlapWindow() )
+            else if ( clipMgr->IsOverlapWindow( this ) )
                 pParent = mpWindowImpl->mpOverlapWindow;
 
             if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() && ! pParent->IsInModalMode() )
@@ -852,6 +854,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
 {
     DBG_ASSERT( mpWindowImpl->mbFrame || pParent, "Window::Window(): pParent == NULL" );
 
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     ImplSVData* pSVData = ImplGetSVData();
     Window*     pRealParent = pParent;
 
@@ -1089,7 +1093,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     {
         if ( pParent )
         {
-            if ( !ImplIsOverlapWindow() )
+            if ( !clipMgr->IsOverlapWindow( this ) )
             {
                 mpWindowImpl->mbDisabled          = pParent->mpWindowImpl->mbDisabled;
                 mpWindowImpl->mbInputDisabled     = pParent->mpWindowImpl->mbInputDisabled;
@@ -1459,9 +1463,11 @@ void Window::ImplLogicToPoint( Font& rFont ) const
 
 bool Window::ImplUpdatePos()
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     bool bSysChild = false;
 
-    if ( ImplIsOverlapWindow() )
+    if ( clipMgr->IsOverlapWindow( this ) )
     {
         mnOutOffX  = mpWindowImpl->mnX;
         mnOutOffY  = mpWindowImpl->mnY;
@@ -1713,7 +1719,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
                 {
                     bool bInvalidate = false;
                     bool bParentPaint = true;
-                    if ( !ImplIsOverlapWindow() )
+                    if ( !clipMgr->IsOverlapWindow( this ) )
                         bParentPaint = mpWindowImpl->mpParent->IsPaintEnabled();
                     if ( bCopyBits && bParentPaint && !HasPaintEvent() )
                     {
@@ -1922,6 +1928,8 @@ void Window::LoseFocus()
 
 void Window::RequestHelp( const HelpEvent& rHEvt )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     // if Balloon-Help is requested, show the balloon
     // with help text set
     if ( rHEvt.GetMode() & HELPMODE_BALLOON )
@@ -1929,7 +1937,7 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
         OUString rStr = GetHelpText();
         if ( rStr.isEmpty() )
             rStr = GetQuickHelpText();
-        if ( rStr.isEmpty() && ImplGetParent() && !ImplIsOverlapWindow() )
+        if ( rStr.isEmpty() && ImplGetParent() && !clipMgr->IsOverlapWindow( this ) )
             ImplGetParent()->RequestHelp( rHEvt );
         else
             Help::ShowBalloon( this, rHEvt.GetMousePosPixel(), rStr );
@@ -1937,12 +1945,12 @@ void Window::RequestHelp( const HelpEvent& rHEvt )
     else if ( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         const OUString& rStr = GetQuickHelpText();
-        if ( rStr.isEmpty() && ImplGetParent() && !ImplIsOverlapWindow() )
+        if ( rStr.isEmpty() && ImplGetParent() && !clipMgr->IsOverlapWindow( this ) )
             ImplGetParent()->RequestHelp( rHEvt );
         else
         {
             Point aPos = GetPosPixel();
-            if ( ImplGetParent() && !ImplIsOverlapWindow() )
+            if ( ImplGetParent() && !clipMgr->IsOverlapWindow( this ) )
                 aPos = ImplGetParent()->OutputToScreenPixel( aPos );
             Rectangle   aRect( aPos, GetSizePixel() );
             OUString      aHelpText;
@@ -2281,7 +2289,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             Region  aInvRegion;
             bool    bSaveBack = false;
 
-            if ( ImplIsOverlapWindow() && !mpWindowImpl->mbFrame )
+            if ( clipMgr->IsOverlapWindow( this ) && !mpWindowImpl->mbFrame )
             {
                 if ( ImplRestoreOverlapBackground( aInvRegion ) )
                     bSaveBack = true;
@@ -2301,7 +2309,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             ImplResetReallyVisible();
             ImplSetClipFlag();
 
-            if ( ImplIsOverlapWindow() && !mpWindowImpl->mbFrame )
+            if ( clipMgr->IsOverlapWindow( this ) && !mpWindowImpl->mbFrame )
             {
                 // convert focus
                 if ( !(nFlags & SHOW_NOFOCUSCHANGE) && HasChildPathFocus() )
@@ -2365,7 +2373,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
         StateChanged( STATE_CHANGE_VISIBLE );
 
         Window* pTestParent;
-        if ( ImplIsOverlapWindow() )
+        if ( clipMgr->IsOverlapWindow( this ) )
             pTestParent = mpWindowImpl->mpOverlapWindow;
         else
             pTestParent = ImplGetParent();
@@ -2377,7 +2385,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
             // If it is a SystemWindow it automatically pops up on top of
             // all other windows if needed.
-            if ( ImplIsOverlapWindow() && !(nFlags & SHOW_NOACTIVATE) )
+            if ( clipMgr->IsOverlapWindow( this ) && !(nFlags & SHOW_NOACTIVATE) )
             {
                 ImplStartToTop(( nFlags & SHOW_FOREGROUNDTASK ) ? TOTOP_FOREGROUNDTASK : 0 );
                 ImplFocusToTop( 0, false );
@@ -2953,6 +2961,8 @@ Point Window::ScreenToOutputPixel( const Point& rPos ) const
 
 long Window::ImplGetUnmirroredOutOffX()
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     // revert mnOutOffX changes that were potentially made in ImplPosSizeWindow
     long offx = mnOutOffX;
     OutputDevice *pOutDev = GetOutDev();
@@ -2960,12 +2970,12 @@ long Window::ImplGetUnmirroredOutOffX()
     {
         if( mpWindowImpl->mpParent && !mpWindowImpl->mpParent->mpWindowImpl->mbFrame && mpWindowImpl->mpParent->ImplIsAntiparallel() )
         {
-            if ( !ImplIsOverlapWindow() )
+            if ( !clipMgr->IsOverlapWindow( this ) )
                 offx -= mpWindowImpl->mpParent->mnOutOffX;
 
             offx = mpWindowImpl->mpParent->mnOutWidth - mnOutWidth - offx;
 
-            if ( !ImplIsOverlapWindow() )
+            if ( !clipMgr->IsOverlapWindow( this ) )
                 offx += mpWindowImpl->mpParent->mnOutOffX;
 
         }

@@ -321,8 +321,10 @@ IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl)
 
 void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     // set PAINTCHILDREN for all parent windows till the first OverlapWindow
-    if ( !ImplIsOverlapWindow() )
+    if ( !clipMgr->IsOverlapWindow( this ) )
     {
         Window* pTempWindow = this;
         sal_uInt16 nTranspPaint = IsPaintTransparent() ? IMPL_PAINT_PAINT : 0;
@@ -335,7 +337,7 @@ void Window::ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags
             if( ! pTempWindow->IsPaintTransparent() )
                 nTranspPaint = 0;
         }
-        while ( !pTempWindow->ImplIsOverlapWindow() );
+        while ( !clipMgr->IsOverlapWindow( pTempWindow ) );
     }
 
     // set Paint-Flags
@@ -433,7 +435,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
                 break;
             }
 
-            if ( pTempWindow->ImplIsOverlapWindow() )
+            if ( clipMgr->IsOverlapWindow( pTempWindow ) )
                 break;
 
             pTempWindow = pTempWindow->ImplGetParent();
@@ -521,10 +523,12 @@ void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
                                            long nHorzScroll, long nVertScroll,
                                            bool bChildren )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     // also shift Paint-Region when paints need processing
     ImplMoveInvalidateRegion( rRect, nHorzScroll, nVertScroll, bChildren );
     // Paint-Region should be shifted, as drawn by the parents
-    if ( !ImplIsOverlapWindow() )
+    if ( !clipMgr->IsOverlapWindow( this ) )
     {
         Region  aPaintAllRegion;
         Window* pPaintAllWindow = this;
@@ -542,7 +546,7 @@ void Window::ImplMoveAllInvalidateRegions( const Rectangle& rRect,
                     aPaintAllRegion.Union( pPaintAllWindow->mpWindowImpl->maInvalidateRegion );
             }
         }
-        while ( !pPaintAllWindow->ImplIsOverlapWindow() );
+        while ( !clipMgr->IsOverlapWindow( pPaintAllWindow ) );
         if ( !aPaintAllRegion.IsEmpty() )
         {
             aPaintAllRegion.Move( nHorzScroll, nVertScroll );
@@ -898,6 +902,7 @@ void Window::Validate( sal_uInt16 nFlags )
 
 bool Window::HasPaintEvent() const
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
 
     if ( !mpWindowImpl->mbReallyVisible )
         return false;
@@ -908,7 +913,7 @@ bool Window::HasPaintEvent() const
     if ( mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINT )
         return true;
 
-    if ( !ImplIsOverlapWindow() )
+    if ( !clipMgr->IsOverlapWindow( const_cast<Window*>(this) ) )
     {
         const Window* pTempWindow = this;
         do
@@ -917,7 +922,7 @@ bool Window::HasPaintEvent() const
             if ( pTempWindow->mpWindowImpl->mnPaintFlags & (IMPL_PAINT_PAINTCHILDREN | IMPL_PAINT_PAINTALLCHILDREN) )
                 return true;
         }
-        while ( !pTempWindow->ImplIsOverlapWindow() );
+        while ( !clipMgr->IsOverlapWindow( const_cast<Window*>(pTempWindow) ) );
     }
 
     return false;
@@ -925,6 +930,7 @@ bool Window::HasPaintEvent() const
 
 void Window::Update()
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
 
     if ( mpWindowImpl->mpBorderWindow )
     {
@@ -948,7 +954,7 @@ void Window::Update()
     // First we should skip all windows which are Paint-Transparent
     Window* pUpdateWindow = this;
     Window* pWindow = pUpdateWindow;
-    while ( !pWindow->ImplIsOverlapWindow() )
+    while ( !clipMgr->IsOverlapWindow(pWindow) )
     {
         if ( !pWindow->mpWindowImpl->mbPaintTransparent )
         {
@@ -964,7 +970,7 @@ void Window::Update()
     {
         if ( pWindow->mpWindowImpl->mnPaintFlags & IMPL_PAINT_PAINTALLCHILDREN )
             pUpdateWindow = pWindow;
-        if ( pWindow->ImplIsOverlapWindow() )
+        if ( clipMgr->IsOverlapWindow( pWindow ) )
             break;
         pWindow = pWindow->ImplGetParent();
     }

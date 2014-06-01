@@ -42,6 +42,8 @@ public:
     ~ClipManager() { instanceFlag = false; }
     static ClipManager *GetInstance();
 
+    bool IsOverlapWindow( Window* pWindow ) const;
+
     void InitClipRegion( Window *pWindow );
     void ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, bool bOverlaps );
 };

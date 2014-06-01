@@ -30,6 +30,7 @@
 #include <window.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
+#include <clipmgr.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 
@@ -61,6 +62,8 @@ Window* Window::ImplGetTopmostFrameWindow()
 
 void Window::ImplInsertWindow( Window* pParent )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     mpWindowImpl->mpParent            = pParent;
     mpWindowImpl->mpRealParent        = pParent;
 
@@ -74,10 +77,10 @@ void Window::ImplInsertWindow( Window* pParent )
         mpWindowImpl->mbFrame         = false;
 
         // search overlap window and insert window in list
-        if ( ImplIsOverlapWindow() )
+        if ( clipMgr->IsOverlapWindow(this) )
         {
             Window* pFirstOverlapParent = pParent;
-            while ( !pFirstOverlapParent->ImplIsOverlapWindow() )
+            while ( !clipMgr->IsOverlapWindow( pFirstOverlapParent ) )
                 pFirstOverlapParent = pFirstOverlapParent->ImplGetParent();
             mpWindowImpl->mpOverlapWindow = pFirstOverlapParent;
 
@@ -94,7 +97,7 @@ void Window::ImplInsertWindow( Window* pParent )
         }
         else
         {
-            if ( pParent->ImplIsOverlapWindow() )
+            if ( clipMgr->IsOverlapWindow( pParent ) )
                 mpWindowImpl->mpOverlapWindow = pParent;
             else
                 mpWindowImpl->mpOverlapWindow = pParent->mpWindowImpl->mpOverlapWindow;
@@ -110,10 +113,12 @@ void Window::ImplInsertWindow( Window* pParent )
 
 void Window::ImplRemoveWindow( bool bRemoveFrameData )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     // remove window from the lists
     if ( !mpWindowImpl->mbFrame )
     {
-        if ( ImplIsOverlapWindow() )
+        if ( clipMgr->IsOverlapWindow( this ) )
         {
             if ( mpWindowImpl->mpFrameData->mpFirstOverlap == this )
                 mpWindowImpl->mpFrameData->mpFirstOverlap = mpWindowImpl->mpNextOverlap;
@@ -192,7 +197,9 @@ void Window::reorderWithinParent(sal_uInt16 nNewPosition)
 
 void Window::ImplToBottomChild()
 {
-    if ( !ImplIsOverlapWindow() && !mpWindowImpl->mbReallyVisible && (mpWindowImpl->mpParent->mpWindowImpl->mpLastChild != this) )
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
+    if ( !clipMgr->IsOverlapWindow( this ) && !mpWindowImpl->mbReallyVisible && (mpWindowImpl->mpParent->mpWindowImpl->mpLastChild != this) )
     {
         // put the window to the end of the list
         if ( mpWindowImpl->mpPrev )
@@ -209,7 +216,7 @@ void Window::ImplToBottomChild()
 
 void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
 {
-    DBG_ASSERT( ImplIsOverlapWindow(), "Window::ImplCalcToTop(): Is not a OverlapWindow" );
+    DBG_ASSERT( ClipManager::GetInstance()->IsOverlapWindow(this), "Window::ImplCalcToTop(): Is not a OverlapWindow" );
 
     if ( !mpWindowImpl->mbFrame )
     {
@@ -236,7 +243,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
 
 void Window::ImplToTop( sal_uInt16 nFlags )
 {
-    DBG_ASSERT( ImplIsOverlapWindow(), "Window::ImplToTop(): Is not a OverlapWindow" );
+    DBG_ASSERT( ClipManager::GetInstance()->IsOverlapWindow(this), "Window::ImplToTop(): Is not a OverlapWindow" );
 
     if ( mpWindowImpl->mbFrame )
     {
@@ -326,11 +333,13 @@ void Window::ImplToTop( sal_uInt16 nFlags )
 
 void Window::ImplStartToTop( sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     ImplCalcToTopData   aStartData;
     ImplCalcToTopData*  pCurData;
     ImplCalcToTopData*  pNextData;
     Window* pOverlapWindow;
-    if ( ImplIsOverlapWindow() )
+    if ( clipMgr->IsOverlapWindow( this ) )
         pOverlapWindow = this;
     else
         pOverlapWindow = mpWindowImpl->mpOverlapWindow;
@@ -379,12 +388,14 @@ void Window::ImplStartToTop( sal_uInt16 nFlags )
 
 void Window::ImplFocusToTop( sal_uInt16 nFlags, bool bReallyVisible )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     // do we need to fetch the focus?
     if ( !(nFlags & TOTOP_NOGRABFOCUS) )
     {
         // first window with GrabFocus-Activate gets the focus
         Window* pFocusWindow = this;
-        while ( !pFocusWindow->ImplIsOverlapWindow() )
+        while ( !clipMgr->IsOverlapWindow( pFocusWindow ) )
         {
             // if the window has no BorderWindow, we
             // should always find the belonging BorderWindow
@@ -443,6 +454,7 @@ void Window::ToTop( sal_uInt16 nFlags )
 
 void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
 
     if ( mpWindowImpl->mpBorderWindow )
     {
@@ -452,7 +464,7 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
 
     if ( nFlags & WINDOW_ZORDER_FIRST )
     {
-        if ( ImplIsOverlapWindow() )
+        if ( clipMgr->IsOverlapWindow( this ) )
             pRefWindow = mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
         else
             pRefWindow = mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild;
@@ -460,7 +472,7 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
     }
     else if ( nFlags & WINDOW_ZORDER_LAST )
     {
-        if ( ImplIsOverlapWindow() )
+        if ( clipMgr->IsOverlapWindow( this ) )
             pRefWindow = mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpLastOverlap;
         else
             pRefWindow = mpWindowImpl->mpParent->mpWindowImpl->mpLastChild;
@@ -478,7 +490,7 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
         if ( pRefWindow->mpWindowImpl->mpPrev == this )
             return;
 
-        if ( ImplIsOverlapWindow() )
+        if ( clipMgr->IsOverlapWindow( this ) )
         {
             if ( mpWindowImpl->mpPrev )
                 mpWindowImpl->mpPrev->mpWindowImpl->mpNext = mpWindowImpl->mpNext;
@@ -516,7 +528,7 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
         if ( pRefWindow->mpWindowImpl->mpNext == this )
             return;
 
-        if ( ImplIsOverlapWindow() )
+        if ( clipMgr->IsOverlapWindow( this ) )
         {
             if ( mpWindowImpl->mpPrev )
                 mpWindowImpl->mpPrev->mpWindowImpl->mpNext = mpWindowImpl->mpNext;
@@ -574,7 +586,7 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
                 // Is INCOMPLETE !!!
                 Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
                 Window*     pWindow = NULL;
-                if ( ImplIsOverlapWindow() )
+                if ( clipMgr->IsOverlapWindow( this ) )
                 {
                     if ( mpWindowImpl->mpOverlapWindow )
                         pWindow = mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpFirstOverlap;
@@ -711,9 +723,11 @@ bool Window::ImplIsRealParentPath( const Window* pWindow ) const
 
 bool Window::ImplIsChild( const Window* pWindow, bool bSystemWindow ) const
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     do
     {
-        if ( !bSystemWindow && pWindow->ImplIsOverlapWindow() )
+        if ( !bSystemWindow && clipMgr->IsOverlapWindow( const_cast<Window*>(pWindow) ) )
             break;
 
         pWindow = pWindow->ImplGetParent();
@@ -768,6 +782,8 @@ void Window::ImplResetReallyVisible()
 
 void Window::ImplUpdateWindowPtr( Window* pWindow )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if ( mpWindowImpl->mpFrameWindow != pWindow->mpWindowImpl->mpFrameWindow )
     {
         // release graphic
@@ -778,7 +794,7 @@ void Window::ImplUpdateWindowPtr( Window* pWindow )
     mpWindowImpl->mpFrameData     = pWindow->mpWindowImpl->mpFrameData;
     mpWindowImpl->mpFrame         = pWindow->mpWindowImpl->mpFrame;
     mpWindowImpl->mpFrameWindow   = pWindow->mpWindowImpl->mpFrameWindow;
-    if ( pWindow->ImplIsOverlapWindow() )
+    if ( clipMgr->IsOverlapWindow( pWindow ) )
         mpWindowImpl->mpOverlapWindow = pWindow;
     else
         mpWindowImpl->mpOverlapWindow = pWindow->mpWindowImpl->mpOverlapWindow;
@@ -858,6 +874,8 @@ void Window::SetParent( Window* pNewParent )
     DBG_ASSERT( pNewParent, "Window::SetParent(): pParent == NULL" );
     DBG_ASSERT( pNewParent != this, "someone tried to reparent a window to itself" );
 
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if( pNewParent == this )
         return;
 
@@ -905,7 +923,7 @@ void Window::SetParent( Window* pNewParent )
     // check if the overlap window changes
     Window* pOldOverlapWindow;
     Window* pNewOverlapWindow = NULL;
-    if ( ImplIsOverlapWindow() )
+    if ( clipMgr->IsOverlapWindow( this ) )
         pOldOverlapWindow = NULL;
     else
     {
@@ -949,7 +967,7 @@ void Window::SetParent( Window* pNewParent )
     // If the Overlap-Window has changed, we need to test whether
     // OverlapWindows that had the Child window as their parent
     // need to be put into the window hierarchy.
-    if ( ImplIsOverlapWindow() )
+    if ( clipMgr->IsOverlapWindow( this ) )
     {
         if ( bNewFrame )
         {
@@ -1051,6 +1069,7 @@ Window* Window::GetChild( sal_uInt16 nChild ) const
 
 Window* Window::GetWindow( sal_uInt16 nType ) const
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
 
     switch ( nType )
     {
@@ -1076,13 +1095,13 @@ Window* Window::GetWindow( sal_uInt16 nType ) const
             return mpWindowImpl->mpLastOverlap;
 
         case WINDOW_OVERLAP:
-            if ( ImplIsOverlapWindow() )
+            if ( clipMgr->IsOverlapWindow( const_cast<Window*>(this) ) )
                 return (Window*)this;
             else
                 return mpWindowImpl->mpOverlapWindow;
 
         case WINDOW_PARENTOVERLAP:
-            if ( ImplIsOverlapWindow() )
+            if ( clipMgr->IsOverlapWindow( const_cast<Window*>(this) ) )
                 return mpWindowImpl->mpOverlapWindow;
             else
                 return mpWindowImpl->mpOverlapWindow->mpWindowImpl->mpOverlapWindow;
@@ -1140,9 +1159,11 @@ Window* Window::GetWindow( sal_uInt16 nType ) const
 
 bool Window::IsChild( const Window* pWindow, bool bSystemWindow ) const
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     do
     {
-        if ( !bSystemWindow && pWindow->ImplIsOverlapWindow() )
+        if ( !bSystemWindow && clipMgr->IsOverlapWindow( const_cast<Window*>(pWindow) ) )
             break;
 
         pWindow = pWindow->ImplGetParent();

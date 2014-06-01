@@ -413,7 +413,6 @@ public:
     SAL_DLLPRIVATE bool                 ImplIsPushButton() const;
     SAL_DLLPRIVATE bool                 ImplIsSplitter() const;
     SAL_DLLPRIVATE bool                 ImplIsDockingWindow() const;
-    SAL_DLLPRIVATE bool                 ImplIsOverlapWindow() const;
 
     SAL_DLLPRIVATE void                 ImplIsInTaskPaneList( bool mbIsInTaskList );
 

@@ -25,6 +25,7 @@
 #include <window.h>
 #include <svdata.hxx>
 #include <salframe.hxx>
+#include <clipmgr.hxx>
 
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -49,8 +50,10 @@ void Window::NotifyAllChildren( DataChangedEvent& rDCEvt )
 
 bool Window::PreNotify( NotifyEvent& rNEvt )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     bool bDone = false;
-    if ( mpWindowImpl->mpParent && !ImplIsOverlapWindow() )
+    if ( mpWindowImpl->mpParent && !clipMgr->IsOverlapWindow( this ) )
         bDone = mpWindowImpl->mpParent->PreNotify( rNEvt );
 
     if ( !bDone )
@@ -90,6 +93,8 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
 
 bool Window::Notify( NotifyEvent& rNEvt )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     bool nRet = false;
 
     // check for docking window
@@ -166,7 +171,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
         // if the parent also has dialog control activated, the parent takes over control
         if ( (rNEvt.GetType() == EVENT_KEYINPUT) || (rNEvt.GetType() == EVENT_KEYUP) )
         {
-            if ( ImplIsOverlapWindow() ||
+            if ( clipMgr->IsOverlapWindow( this ) ||
                  ((getNonLayoutRealParent(this)->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
             {
                 nRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == EVENT_KEYINPUT );
@@ -188,7 +193,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
 
     if ( !nRet )
     {
-        if ( mpWindowImpl->mpParent && !ImplIsOverlapWindow() )
+        if ( mpWindowImpl->mpParent && !clipMgr->IsOverlapWindow( this ) )
             nRet = mpWindowImpl->mpParent->Notify( rNEvt );
     }
 

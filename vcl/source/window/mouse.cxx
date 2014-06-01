@@ -39,6 +39,7 @@
 #include <salframe.hxx>
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
+#include <clipmgr.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
@@ -90,6 +91,8 @@ bool Window::ImplTestMousePointerSet()
 
 PointerStyle Window::ImplGetMousePointer() const
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     PointerStyle    ePointerStyle;
     bool            bWait = false;
 
@@ -120,7 +123,7 @@ PointerStyle Window::ImplGetMousePointer() const
             }
         }
 
-        if ( pWindow->ImplIsOverlapWindow() )
+        if ( clipMgr->IsOverlapWindow( const_cast<Window*>(pWindow) ) )
             break;
 
         pWindow = pWindow->ImplGetParent();

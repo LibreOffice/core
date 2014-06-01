@@ -52,7 +52,7 @@ void ClipManager::InitClipRegion( Window *pWindow )
     if ( pWindow->mpWindowImpl->mbWinRegion )
         pWindow->mpWindowImpl->maWinClipRegion.Intersect( pWindow->ImplPixelToDevicePixel( pWindow->mpWindowImpl->maWinRegion ) );
 
-    if ( pWindow->mpWindowImpl->mbClipSiblings && !pWindow->ImplIsOverlapWindow() )
+    if ( pWindow->mpWindowImpl->mbClipSiblings && !IsOverlapWindow( pWindow ) )
         clipSiblings( pWindow, pWindow->mpWindowImpl->maWinClipRegion );
 
     // Clip Parent Boundaries
@@ -65,11 +65,16 @@ void ClipManager::InitClipRegion( Window *pWindow )
     pWindow->mpWindowImpl->mbInitWinClipRegion = false;
 }
 
+bool ClipManager::IsOverlapWindow( Window* pWindow ) const
+{
+    return pWindow->mpWindowImpl->mbOverlapWin;
+}
+
 void ClipManager::ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, bool bOverlaps )
 {
     if ( bThis )
         intersectClipRegion( pWindow, rRegion );
-    else if ( pWindow->ImplIsOverlapWindow() )
+    else if ( IsOverlapWindow( pWindow ) )
     {
         // clip to frame if required
         if ( !pWindow->mpWindowImpl->mbFrame )
