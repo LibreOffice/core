@@ -236,7 +236,7 @@ private:
         throw (css::uno::RuntimeException, std::exception);
 
     void Init( const DAVRequestEnvironment & rEnv )
-        throw ( std::exception );
+        throw (css::uno::RuntimeException, std::exception);
 
     // ret: true => retry request.
     void HandleError( int nError,
