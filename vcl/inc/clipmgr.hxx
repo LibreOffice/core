@@ -47,6 +47,8 @@ public:
 
     void InitClipRegion( Window *pWindow );
     void ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, bool bOverlaps );
+
+    void Exclude( Window *pWindow, Region& rRegion );
 };
 
 #endif

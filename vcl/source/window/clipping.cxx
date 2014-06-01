@@ -185,6 +185,8 @@ void Window::EnableClipSiblings( bool bClipSiblings )
 
 bool Window::ImplClipChildren( Region& rRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     bool    bOtherClip = false;
     Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
@@ -195,7 +197,7 @@ bool Window::ImplClipChildren( Region& rRegion )
             sal_uInt16 nClipMode = pWindow->GetParentClipMode();
             if ( !(nClipMode & PARENTCLIPMODE_NOCLIP) &&
                  ((nClipMode & PARENTCLIPMODE_CLIP) || (GetStyle() & WB_CLIPCHILDREN)) )
-                pWindow->ImplExcludeWindowRegion( rRegion );
+                clipMgr->Exclude( pWindow, rRegion );
             else
                 bOtherClip = true;
         }
@@ -208,11 +210,13 @@ bool Window::ImplClipChildren( Region& rRegion )
 
 void Window::ImplClipAllChildren( Region& rRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     Window* pWindow = mpWindowImpl->mpFirstChild;
     while ( pWindow )
     {
         if ( pWindow->mpWindowImpl->mbReallyVisible )
-            pWindow->ImplExcludeWindowRegion( rRegion );
+            clipMgr->Exclude( pWindow, rRegion );
         pWindow = pWindow->mpWindowImpl->mpNext;
     }
 }
@@ -474,24 +478,6 @@ void Window::ImplIntersectWindowRegion( Region& rRegion )
         rRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
 }
 
-void Window::ImplExcludeWindowRegion( Region& rRegion )
-{
-    if ( mpWindowImpl->mbWinRegion )
-    {
-        Point aPoint( mnOutOffX, mnOutOffY );
-        Region aRegion( Rectangle( aPoint,
-                                   Size( mnOutWidth, mnOutHeight ) ) );
-        aRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
-        rRegion.Exclude( aRegion );
-    }
-    else
-    {
-        Point aPoint( mnOutOffX, mnOutOffY );
-        rRegion.Exclude( Rectangle( aPoint,
-                                    Size( mnOutWidth, mnOutHeight ) ) );
-    }
-}
-
 void Window::ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Region& rRegion )
 {
     Window* pWindow = mpWindowImpl->mpFirstOverlap;
@@ -572,7 +558,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
             do
             {
                 aTempRegion = aRegion;
-                pWindow->ImplExcludeWindowRegion( aTempRegion );
+                clipMgr->Exclude( pWindow, aTempRegion );
                 rRegion.Union( aTempRegion );
                 if ( clipMgr->IsOverlapWindow( pWindow ) )
                     break;

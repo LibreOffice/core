@@ -90,7 +90,7 @@ void ClipManager::ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, 
                 while ( pOverlapWindow && (pOverlapWindow != pStartOverlapWindow) )
                 {
                     if ( pWindow->mpWindowImpl->mbReallyVisible )
-                        pWindow->ImplExcludeWindowRegion( rRegion );
+                        Exclude( pWindow, rRegion );
 
                     excludeOverlapWindows( pWindow, rRegion );
                     pOverlapWindow = pOverlapWindow->mpWindowImpl->mpNext;
@@ -108,6 +108,23 @@ void ClipManager::ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, 
     }
 }
 
+void ClipManager::Exclude( Window *pWindow, Region& rRegion )
+{
+    if ( pWindow->mpWindowImpl->mbWinRegion )
+    {
+        Region aRegion( Rectangle( Point ( pWindow->mnOutOffX, pWindow->mnOutOffY ),
+                                   pWindow->GetOutputSizePixel() ) );
+        aRegion.Intersect( pWindow->ImplPixelToDevicePixel( pWindow->mpWindowImpl->maWinRegion ) );
+        rRegion.Exclude( aRegion );
+    }
+    else
+    {
+        rRegion.Exclude( Rectangle( Point ( pWindow->mnOutOffX, pWindow->mnOutOffY ),
+                                    pWindow->GetOutputSizePixel() ) );
+    }
+}
+
+
 void ClipManager::excludeOverlapWindows( Window *pWindow, Region& rRegion )
 {
     Window* pOverlapWindow = pWindow->mpWindowImpl->mpFirstOverlap;
@@ -115,7 +132,7 @@ void ClipManager::excludeOverlapWindows( Window *pWindow, Region& rRegion )
     {
         if ( pOverlapWindow->mpWindowImpl->mbReallyVisible )
         {
-            pOverlapWindow->ImplExcludeWindowRegion( rRegion );
+            Exclude( pOverlapWindow, rRegion );
             excludeOverlapWindows( pOverlapWindow, rRegion );
         }
 
@@ -143,7 +160,7 @@ void ClipManager::clipSiblings( Window* pWindow, Region& rRegion )
             break;
 
         if ( pChildWindow->mpWindowImpl->mbReallyVisible )
-            pChildWindow->ImplExcludeWindowRegion( rRegion );
+            Exclude( pChildWindow, rRegion );
 
         pChildWindow = pChildWindow->mpWindowImpl->mpNext;
     }

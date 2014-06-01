@@ -1793,7 +1793,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             {
                 Region aRegion( *pOldRegion );
                 if ( !mpWindowImpl->mbPaintTransparent )
-                    ImplExcludeWindowRegion( aRegion );
+                    clipMgr->Exclude( this, aRegion );
                 clipMgr->ClipBoundaries( this, aRegion, false, true );
                 if ( !aRegion.IsEmpty() && !mpWindowImpl->mpBorderWindow )
                     ImplInvalidateParentFrameRegion( aRegion );

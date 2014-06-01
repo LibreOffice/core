@@ -270,6 +270,7 @@ class VCL_DLLPUBLIC OutputDevice: private boost::noncopyable
     friend class VirtualDevice;
     friend class Window;
     friend class WorkWindow;
+    friend class ClipManager;
     friend class vcl::PDFWriterImpl;
     friend void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight );
 
