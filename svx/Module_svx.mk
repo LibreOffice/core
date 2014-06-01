@@ -35,8 +35,8 @@ $(eval $(call gb_Module_add_l10n_targets,svx,\
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,svx,\
     Executable_gengal \
-    Package_gengal \
     $(if $(filter-out WNT,$(OS)), \
+		Package_gengal \
         Executable_pixelctl) \
 ))
 endif
