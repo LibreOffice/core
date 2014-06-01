@@ -31,12 +31,6 @@ ImageControl::ImageControl( Window* pParent, WinBits nStyle )
 {
 }
 
-ImageControl::ImageControl( Window* pParent, const ResId& rResId )
-    :FixedImage( pParent, rResId )
-    ,mnScaleMode( ImageScaleMode::ANISOTROPIC )
-{
-}
-
 void ImageControl::SetScaleMode( const ::sal_Int16 _nMode )
 {
     if ( _nMode != mnScaleMode )

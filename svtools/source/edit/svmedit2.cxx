@@ -28,13 +28,6 @@ ExtMultiLineEdit::ExtMultiLineEdit( Window* pParent, WinBits nWinStyle ) :
 {
 }
 
-ExtMultiLineEdit::ExtMultiLineEdit( Window* pParent, const ResId& rResId ) :
-
-    MultiLineEdit( pParent, rResId )
-
-{
-}
-
 ExtMultiLineEdit::~ExtMultiLineEdit()
 {
 }

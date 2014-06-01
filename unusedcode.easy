@@ -181,10 +181,6 @@ basegfx::tools::containsOnlyHorizontalAndVerticalEdges(basegfx::B2DPolyPolygon c
 canvas::createSurfaceProxyManager(boost::shared_ptr<canvas::IRenderModule> const&)
 chart::ChartTypeUnoDlg::Create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 chart::ShapeToolbarController::create(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
-chart::opengl3D::OpenGL3DRenderer::GetTime()
-chart::opengl3D::OpenGL3DRenderer::RenderClickPos(Point)
-chart::opengl3D::OpenGL3DRenderer::RenderFPS(float)
-chart::opengl3D::OpenGL3DRenderer::RenderTexture(unsigned int)
 chart::opengl3D::Text::getSize() const
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
