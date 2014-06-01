@@ -208,6 +208,71 @@ void GalApp::Init()
     }
 }
 
+std::vector<OUString> ReadResponseFile_Impl(OUString const& rInput)
+{
+    osl::File file(rInput);
+    osl::FileBase::RC rc = file.open(osl_File_OpenFlag_Read);
+    OString const uInput(rtl::OUStringToOString(rInput, RTL_TEXTENCODING_UTF8));
+    if (osl::FileBase::E_None != rc)
+    {
+        fprintf(stderr, "error while opening response file: %s (%d)\n",
+            uInput.getStr(), rc);
+        exit(1);
+    }
+
+    std::vector<OUString> ret;
+    OUStringBuffer b;
+    char buf[1<<16];
+    while (true)
+    {
+        sal_uInt64 size(0);
+        rc = file.read(buf, sizeof(buf), size);
+        if (osl::FileBase::E_None != rc)
+        {
+            fprintf(stderr, "error while reading response file: %s (%d)\n",
+                uInput.getStr(), rc);
+            exit(1);
+        }
+        if (!size)
+            break;
+        for (sal_uInt64 i = 0; i < size; ++i)
+        {
+            if (static_cast<unsigned char>(buf[i]) >= 128)
+            {
+                fprintf(stderr, "non-ASCII character in response file: %s\n",
+                    uInput.getStr());
+                exit(1);
+            }
+            switch (buf[i])
+            {
+                case ' ' :
+                case '\t':
+                case '\r':
+                case '\n':
+                    if (!b.isEmpty())
+                        ret.push_back(b.makeStringAndClear());
+                    break;
+                default:
+                    b.append(buf[i]);
+                    break;
+            }
+        }
+    }
+    if (!b.isEmpty())
+        ret.push_back(b.makeStringAndClear());
+    return ret;
+}
+
+void
+ReadResponseFile(std::vector<INetURLObject> & rFiles, OUString const& rInput)
+{
+    std::vector<OUString> files(ReadResponseFile_Impl(rInput));
+    for (size_t i = 0; i < files.size(); ++i)
+    {
+        rFiles.push_back(Smartify(files[i]));
+    }
+}
+
 int GalApp::Main()
 {
     OUString aPath, aDestDir;
@@ -239,6 +304,8 @@ int GalApp::Main()
         else if ( aParam == "--number-from" )
             fprintf ( stderr, "--number-from is deprecated, themes now "
                       "have filenames based on their names\n" );
+        else if ( aParam == "--filenames" )
+            ReadResponseFile(aFiles, GetCommandLineParam(++i));
         else
             aFiles.push_back( Smartify( aParam ) );
     }
