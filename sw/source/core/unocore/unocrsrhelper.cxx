@@ -343,7 +343,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     sRet = pTmpNode->GetNumString();
                 }
 
-                *pAny <<= OUString(sRet);
+                *pAny <<= sRet;
             }
         break;
         case RES_PARATR_OUTLINELEVEL:
@@ -425,8 +425,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     // #i91601#
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
-                        const OUString sListId = pTxtNd->GetListId();
-                        *pAny <<= OUString(sListId);
+                        *pAny <<= pTxtNd->GetListId();
                     }
                     else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                     {
@@ -901,10 +900,8 @@ void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
     const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->GetCurrentLayout())->FindPageFrm();
     if(pPage)
     {
-        OUString tmp;
         SwStyleNameMapper::FillProgName(pPage->GetPageDesc()->GetName(),
-            tmp, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
-        rString = tmp;
+            rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
     }
 }
 
@@ -1116,8 +1113,6 @@ bool DocInsertStringSplitCR(
 
     // grouping done in InsertString is intended for typing, not API calls
     ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-    OUString aTxt;
-    sal_Int32 nStartIdx = 0;
     SwTxtNode* const pTxtNd =
         rNewCursor.GetPoint()->nNode.GetNode().GetTxtNode();
     if (!pTxtNd)
@@ -1125,6 +1120,8 @@ bool DocInsertStringSplitCR(
         SAL_INFO("sw.uno", "DocInsertStringSplitCR: need a text node");
         return false;
     }
+    OUString aTxt;
+    sal_Int32 nStartIdx = 0;
     const sal_Int32 nMaxLength = COMPLETE_STRING - pTxtNd->GetTxt().getLength();
 
     sal_Int32 nIdx = rText.indexOf( '\r', nStartIdx );
