@@ -28,7 +28,6 @@ class SVT_DLLPUBLIC ExtMultiLineEdit : public MultiLineEdit
 {
 public:
                     ExtMultiLineEdit( Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
-                    ExtMultiLineEdit( Window* pParent, const ResId& rResId );
                     virtual ~ExtMultiLineEdit();
 
                     // methods of TextView
