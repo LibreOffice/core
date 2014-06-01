@@ -88,6 +88,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpHelpButton, "help");
     get(mpExtensionsButton, "extensions");
 
+    get(mpViewBar, "action_view");
+
     //Containers are invisible to cursor traversal
     //So on pressing "right" when in Help the
     //extension button is considered as a candidate
@@ -239,6 +241,11 @@ void BackingWindow::initControls()
     mpLocalView->Hide();
     mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
 
+    mpViewBar->SetButtonType(BUTTON_SYMBOLTEXT);
+    mpViewBar->SetItemBits(mpViewBar->GetItemId("repository"), TIB_DROPDOWNONLY);
+    //mpViewBar->SetClickHdl(LINK(this,BackingWindow,TBXViewHdl));
+    //mpViewBar->SetDropdownClickHdl(LINK(this,BackingWindow,TBXDropdownHdl));
+    mpViewBar->Hide();
     /*FIXME: Add other things for Local View
      *Filter and the bars*/
 
@@ -513,9 +520,28 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 */
         mpAllRecentThumbnails->Hide();
         mpLocalView->Show();
+        mpViewBar->Show();
     }
     return 0;
 }
+
+IMPL_LINK_NOARG( BackingWindow, OpenRegionHdl)
+{
+    //maSelFolders.clear();
+    //maSelTemplates.clear();
+
+    //mpViewBar->ShowItem(VIEWBAR_NEW_FOLDER, mpCurView->isNestedRegionAllowed());
+
+    //if (!mbIsSaveMode)
+        //mpViewBar->ShowItem(VIEWBAR_IMPORT, mpCurView->isImportAllowed());
+
+    //mpTemplateBar->Hide();
+    //mpViewBar->Show();
+    //mpActionBar->Show();
+
+    return 0;
+}
+
 
 struct ImplDelayedDispatch
 {
