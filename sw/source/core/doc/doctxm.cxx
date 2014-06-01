@@ -64,27 +64,11 @@
 #include <editsh.hxx>
 #include <scriptinfo.hxx>
 #include <switerator.hxx>
+#include <ToxTextGenerator.hxx>
 
 using namespace ::com::sun::star;
 
-const sal_Unicode cNumRepl      = '@';
-const sal_Unicode cEndPageNum   = '~';
-const sal_Char sPageDeli[] = ", ";
-
 TYPEINIT2( SwTOXBaseSection, SwTOXBase, SwSection );    // for RTTI
-
-struct LinkStruct
-{
-    SwFmtINetFmt    aINetFmt;
-    sal_Int32 nStartTextPos, nEndTextPos;
-
-    LinkStruct( const OUString& rURL, sal_Int32 nStart, sal_Int32 nEnd )
-        : aINetFmt( rURL, OUString()),
-        nStartTextPos( nStart),
-        nEndTextPos(nEnd) {}
-};
-
-typedef std::vector<LinkStruct*> LinkStructArr;
 
 sal_uInt16 SwDoc::GetTOIKeys( SwTOIKeyType eTyp, std::vector<OUString>& rArr ) const
 {
@@ -990,7 +974,9 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
         }
         // pass node index of table-of-content section and default page description
         // to method <GenerateText(..)>.
-        GenerateText( nCnt, nRange, pSectNd->GetIndex(), pDefaultPageDesc );
+        ::SetProgressState( 0, pDoc->GetDocShell() );
+        sw::ToxTextGenerator ttgn(GetTOXForm());
+        ttgn.GenerateText((SwDoc*) GetFmt()->GetDoc(), aSortArr, nCnt, nRange, pSectNd->GetIndex(), pDefaultPageDesc);
         nCnt += nRange - 1;
     }
 
@@ -1534,330 +1520,6 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
     }
 }
 
-/// Generate String according to the Form and remove the
-/// special characters 0-31 and 255.
-static OUString lcl_GetNumString( const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel )
-{
-    OUString sRet;
-
-    if( !rBase.pTxtMark && !rBase.aTOXSources.empty() )
-    {   // only if it's not a Mark
-        const SwTxtNode* pNd = rBase.aTOXSources[0].pNd->GetTxtNode();
-        if( pNd )
-        {
-            const SwNumRule* pRule = pNd->GetNumRule();
-
-            if( pRule && pNd->GetActualListLevel() < MAXLEVEL )
-                sRet = pNd->GetNumString(bUsePrefix, nLevel);
-        }
-    }
-    return sRet;
-}
-
-/// Generate String with newlines changed to spaces, consecutive spaces changed
-/// to a single space, and trailing space removed.
-OUString lcl_RemoveLineBreaks(const OUString &rRet)
-{
-    if (rRet.isEmpty())
-        return rRet;
-    sal_Int32 nOffset = 0;
-    OUStringBuffer sRet(rRet.replace('\n', ' '));
-    for (sal_Int32 i = 1; i < sRet.getLength(); ++i)
-    {
-        if ( sRet[i - 1] == ' ' && sRet[i] == ' ' )
-        {
-            nOffset += 1;
-        }
-        else
-        {
-            sRet[i - nOffset] = sRet[i];
-        }
-    }
-    if (sRet[sRet.getLength() - 1] == ' ')
-    {
-        nOffset += 1;
-    }
-    return sRet.copy(0, sRet.getLength() - nOffset).toString();
-}
-
-// Add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
-// which page description is used, no appropriate one is found.
-void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
-                                     sal_uInt16 nCount,
-                                     const sal_uInt32   _nTOXSectNdIdx,
-                                     const SwPageDesc*  _pDefaultPageDesc )
-{
-    LinkStructArr   aLinkArr;
-    SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
-    ::SetProgressState( 0, pDoc->GetDocShell() );
-
-    // pTOXNd is only set at the first mark
-    SwTxtNode* pTOXNd = (SwTxtNode*)aSortArr[nArrayIdx]->pTOXNd;
-    // FIXME this operates directly on the node text
-    OUString & rTxt = const_cast<OUString&>(pTOXNd->GetTxt());
-    rTxt = "";
-    for(sal_uInt16 nIndex = nArrayIdx; nIndex < nArrayIdx + nCount; nIndex++)
-    {
-        if(nIndex > nArrayIdx)
-            rTxt += ", "; // comma separation
-        // Initialize String with the Pattern from the form
-        const SwTOXSortTabBase& rBase = *aSortArr[nIndex];
-        sal_uInt16 nLvl = rBase.GetLevel();
-        OSL_ENSURE( nLvl < GetTOXForm().GetFormMax(), "invalid FORM_LEVEL");
-
-        SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
-        sal_Int32 nLinkStartPosition = -1;
-        OUString  sLinkCharacterStyle; // default to "Default" character style - which is none
-        OUString sURL;
-        // create an enumerator
-        // #i21237#
-        SwFormTokens aPattern = GetTOXForm().GetPattern(nLvl);
-        SwFormTokens::iterator aIt = aPattern.begin();
-        // remove text from node
-        while(aIt != aPattern.end()) // #i21237#
-        {
-            SwFormToken aToken = *aIt; // #i21237#
-            sal_Int32 nStartCharStyle = rTxt.getLength();
-            switch( aToken.eTokenType )
-            {
-            case TOKEN_ENTRY_NO:
-                // for TOC numbering
-                rTxt += lcl_GetNumString( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) ) ;
-                break;
-
-            case TOKEN_ENTRY_TEXT:
-                {
-                    SwIndex aIdx( pTOXNd, std::min(pTOXNd->GetTxt().getLength(),rTxt.getLength()) );
-                    rBase.FillText( *pTOXNd, aIdx );
-                    rTxt = lcl_RemoveLineBreaks(rTxt);
-                }
-                break;
-
-            case TOKEN_ENTRY:
-                {
-                    // for TOC numbering
-                    rTxt += lcl_GetNumString( rBase, true, MAXLEVEL );
-
-                    SwIndex aIdx( pTOXNd, rTxt.getLength() );
-                    rBase.FillText( *pTOXNd, aIdx );
-                    rTxt = lcl_RemoveLineBreaks(rTxt);
-                }
-                break;
-
-            case TOKEN_TAB_STOP:
-                if (aToken.bWithTab) // #i21237#
-                    rTxt += "\t";
-
-                if(SVX_TAB_ADJUST_END > aToken.eTabAlign)
-                {
-                    const SvxLRSpaceItem& rLR =
-                        (SvxLRSpaceItem&)pTOXNd->
-                        SwCntntNode::GetAttr( RES_LR_SPACE, true );
-
-                    long nTabPosition = aToken.nTabStopPosition;
-                    if( !GetTOXForm().IsRelTabPos() && rLR.GetTxtLeft() )
-                        nTabPosition -= rLR.GetTxtLeft();
-                    aTStops.Insert( SvxTabStop( nTabPosition,
-                                                aToken.eTabAlign,
-                                                cDfltDecimalChar,
-                                                aToken.cTabFillChar ));
-                }
-                else
-                {
-                    const SwPageDesc* pPageDesc = ((SwFmtPageDesc&)pTOXNd->
-                                SwCntntNode::GetAttr( RES_PAGEDESC )).GetPageDesc();
-
-                    bool bCallFindRect = true;
-                    long nRightMargin;
-                    if( pPageDesc )
-                    {
-                        const SwFrm* pFrm = pTOXNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, true );
-                        if( !pFrm || 0 == ( pFrm = pFrm->FindPageFrm() ) ||
-                            pPageDesc != ((SwPageFrm*)pFrm)->GetPageDesc() )
-                            // we have to go via the PageDesc here
-                            bCallFindRect = false;
-                    }
-
-                    SwRect aNdRect;
-                    if( bCallFindRect )
-                        aNdRect = pTOXNd->FindLayoutRect( true );
-
-                    if( aNdRect.IsEmpty() )
-                    {
-                        // Nothing helped so far, so we go via the PageDesc
-                        sal_uInt32 nPgDescNdIdx = pTOXNd->GetIndex() + 1;
-                        sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
-                        pPageDesc = pTOXNd->FindPageDesc( false, pPgDescNdIdx );
-                        if ( !pPageDesc ||
-                             *pPgDescNdIdx < _nTOXSectNdIdx )
-                        {
-                            // Use default page description, if none is found
-                            // or the found one is given by a Node before the
-                            // table-of-content section.
-                            pPageDesc = _pDefaultPageDesc;
-                        }
-
-                        const SwFrmFmt& rPgDscFmt = pPageDesc->GetMaster();
-                        nRightMargin = rPgDscFmt.GetFrmSize().GetWidth() -
-                                         rPgDscFmt.GetLRSpace().GetLeft() -
-                                         rPgDscFmt.GetLRSpace().GetRight();
-                    }
-                    else
-                        nRightMargin = aNdRect.Width();
-                    //#i24363# tab stops relative to indent
-                    if( pDoc->GetDocumentSettingManager().get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
-                    {
-                        // left margin of paragraph style
-                        const SvxLRSpaceItem& rLRSpace = pTOXNd->GetTxtColl()->GetLRSpace();
-                        nRightMargin -= rLRSpace.GetLeft();
-                        nRightMargin -= rLRSpace.GetTxtFirstLineOfst();
-                    }
-
-                    aTStops.Insert( SvxTabStop( nRightMargin, SVX_TAB_ADJUST_RIGHT,
-                                                cDfltDecimalChar,
-                                                aToken.cTabFillChar ));
-                }
-                break;
-
-            case TOKEN_TEXT:
-                rTxt += aToken.sText;
-                break;
-
-            case TOKEN_PAGE_NUMS:
-                    // Place holder for the PageNumber; we only respect the first one
-                {
-                    // The count of similar entries gives the PagerNumber pattern
-                    size_t nSize = rBase.aTOXSources.size();
-                    if (nSize > 0)
-                    {
-                        OUString aInsStr = OUString(cNumRepl);
-                        for (size_t i = 1; i < nSize; ++i)
-                        {
-                            aInsStr += sPageDeli;
-                            aInsStr += OUString(cNumRepl);
-                        }
-                        aInsStr += OUString(cEndPageNum);
-                        rTxt += aInsStr;
-                    }
-                }
-                break;
-
-            case TOKEN_CHAPTER_INFO:
-                {
-                    // A bit tricky: Find a random Frame
-                    const SwTOXSource* pTOXSource = 0;
-                    if (!rBase.aTOXSources.empty())
-                        pTOXSource = &rBase.aTOXSources[0];
-
-                    // #i53420#
-                    if ( pTOXSource && pTOXSource->pNd &&
-                         pTOXSource->pNd->IsCntntNode() )
-                    {
-                        const SwCntntFrm* pFrm = pTOXSource->pNd->getLayoutFrm( pDoc->GetCurrentLayout() );
-                        if( pFrm )
-                        {
-                            SwChapterFieldType aFldTyp;
-                            SwChapterField aFld( &aFldTyp, aToken.nChapterFormat );
-                            aFld.SetLevel( static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) );
-                            // #i53420#
-                            aFld.ChangeExpansion( pFrm,
-                                dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
-                                true );
-                            //---> #i89791#
-                            // continue to support CF_NUMBER
-                            // and CF_NUM_TITLE in order to handle ODF 1.0/1.1
-                            // written by OOo 3.x in the same way as OOo 2.x
-                            // would handle them.
-                            if ( CF_NUM_NOPREPST_TITLE == aToken.nChapterFormat ||
-                                 CF_NUMBER == aToken.nChapterFormat )
-                                rTxt += aFld.GetNumber(); // get the string number without pre/postfix
-                            else if ( CF_NUMBER_NOPREPST == aToken.nChapterFormat ||
-                                      CF_NUM_TITLE == aToken.nChapterFormat )
-                            {
-                                rTxt += aFld.GetNumber();
-                                rTxt += " ";
-                                rTxt += aFld.GetTitle();
-                            }
-                            else if(CF_TITLE == aToken.nChapterFormat)
-                                rTxt += aFld.GetTitle();
-                        }
-                    }
-                }
-                break;
-
-            case TOKEN_LINK_START:
-                nLinkStartPosition = rTxt.getLength();
-                sLinkCharacterStyle = aToken.sCharStyleName;
-            break;
-
-            case TOKEN_LINK_END:
-                    //TODO: only paired start/end tokens are valid
-                if (nLinkStartPosition != -1)
-                {
-                    SwIndex aIdx( pTOXNd, nLinkStartPosition );
-                    // pTOXNd->Erase( aIdx, SwForm::nFormLinkSttLen );
-                    sal_Int32 nEnd = rTxt.getLength();
-
-                    if( sURL.isEmpty() )
-                    {
-                        sURL = rBase.GetURL();
-                        if( sURL.isEmpty() )
-                            break;
-                    }
-                    LinkStruct* pNewLink = new LinkStruct(sURL, nLinkStartPosition,
-                                                    nEnd);
-                    const sal_uInt16 nPoolId =
-                            sLinkCharacterStyle.isEmpty()
-                            ? USHRT_MAX
-                            : SwStyleNameMapper::GetPoolIdFromUIName( sLinkCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
-                    pNewLink->aINetFmt.SetVisitedFmtAndId( sLinkCharacterStyle, nPoolId );
-                    pNewLink->aINetFmt.SetINetFmtAndId( sLinkCharacterStyle, nPoolId );
-                    aLinkArr.push_back(pNewLink);
-                    nLinkStartPosition = -1;
-                    sLinkCharacterStyle = "";
-                }
-                break;
-
-            case TOKEN_AUTHORITY:
-                {
-                    ToxAuthorityField eField = (ToxAuthorityField)aToken.nAuthorityField;
-                    SwIndex aIdx( pTOXNd, rTxt.getLength() );
-                    rBase.FillText( *pTOXNd, aIdx, static_cast<sal_uInt16>(eField) );
-                }
-                break;
-            case TOKEN_END: break;
-            }
-
-            if ( !aToken.sCharStyleName.isEmpty() )
-            {
-                SwCharFmt* pCharFmt;
-                if( USHRT_MAX != aToken.nPoolId )
-                    pCharFmt = pDoc->GetCharFmtFromPool( aToken.nPoolId );
-                else
-                    pCharFmt = pDoc->FindCharFmtByName( aToken.sCharStyleName);
-
-                if (pCharFmt)
-                {
-                    SwFmtCharFmt aFmt( pCharFmt );
-                    pTOXNd->InsertItem( aFmt, nStartCharStyle,
-                        rTxt.getLength(), nsSetAttrMode::SETATTR_DONTEXPAND );
-                }
-            }
-
-            ++aIt; // #i21237#
-        }
-
-        pTOXNd->SetAttr( aTStops );
-    }
-
-    for(LinkStructArr::const_iterator i = aLinkArr.begin(); i != aLinkArr.end(); ++i)
-    {
-        pTOXNd->InsertItem((*i)->aINetFmt, (*i)->nStartTextPos,
-                           (*i)->nEndTextPos);
-        delete (*i);
-    }
-}
-
 /// Calculate PageNumber and insert after formatting
 void SwTOXBaseSection::UpdatePageNum()
 {
@@ -1990,11 +1652,11 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
     // collect starts end ends of main entry character style
     boost::scoped_ptr< std::vector<sal_uInt16> > xCharStyleIdx(pMainEntryNums ? new std::vector<sal_uInt16> : 0);
 
-    OUString sSrchStr = OUStringBuffer().append(cNumRepl).
-        append(sPageDeli).append(cNumRepl).makeStringAndClear();
+    OUString sSrchStr = OUStringBuffer().append(C_NUM_REPL).
+        append(S_PAGE_DELI).append(C_NUM_REPL).makeStringAndClear();
     sal_Int32 nStartPos = pNd->GetTxt().indexOf(sSrchStr);
-    sSrchStr = OUStringBuffer().append(cNumRepl).
-        append(cEndPageNum).makeStringAndClear();
+    sSrchStr = OUStringBuffer().append(C_NUM_REPL).
+        append(C_END_PAGE_NUM).makeStringAndClear();
     sal_Int32 nEndPos = pNd->GetTxt().indexOf(sSrchStr);
     sal_uInt16 i;
 
@@ -2061,7 +1723,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                     if(nCount >= 2 )
                         aNumStr += "-";
                     else if(nCount == 1 )
-                        aNumStr += sPageDeli;
+                        aNumStr += S_PAGE_DELI;
                     //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
                     if(nCount)
                         aNumStr += aType.GetNumStr( nBeg + nCount );
@@ -2069,7 +1731,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
 
                 // Create new String
                 nBeg     = rNums[i];
-                aNumStr += sPageDeli;
+                aNumStr += S_PAGE_DELI;
                 //the change of the character style must apply after sPageDeli is appended
                 if (xCharStyleIdx && bMainEntryChanges)
                 {
@@ -2084,7 +1746,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         {   // Insert all Numbers
             aNumStr += aType.GetNumStr( sal_uInt16(rNums[i]) );
             if(i != (rNums.size()-1))
-                aNumStr += sPageDeli;
+                aNumStr += S_PAGE_DELI;
         }
     }
     // Flush when ending and the following old values
@@ -2100,7 +1762,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
             if(nCount >= 2)
                 aNumStr += "-";
             else if(nCount == 1)
-                aNumStr += sPageDeli;
+                aNumStr += S_PAGE_DELI;
             //#58127# If nCount == 0, then the only PageNumber is already in aNumStr!
             if(nCount)
                 aNumStr += SvxNumberType( rDescs[i-1]->GetNumType() ).GetNumStr( nBeg+nCount );

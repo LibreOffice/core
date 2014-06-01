@@ -43,6 +43,11 @@ class SwDoc;
 class SwTOXMarks : public std::vector<SwTOXMark*> {};
 
 // Entry of content index, alphabetical index or user defined index
+
+extern const sal_Unicode C_NUM_REPL;
+extern const sal_Unicode C_END_PAGE_NUM;
+extern const OUString S_PAGE_DELI;
+
 class SW_DLLPUBLIC SwTOXMark
     : public SfxPoolItem
     , public SwModify
