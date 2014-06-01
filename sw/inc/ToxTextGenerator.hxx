@@ -10,14 +10,20 @@
 #ifndef SW_TOXTEXTGENERATOR_HXX_
 #define SW_TOXTEXTGENERATOR_HXX_
 
+#include "rtl/ustring.hxx"
 #include "sal/types.h"
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
+class SfxItemSet;
+class SwAttrPool;
+class SwFmtAutoFmt;
 class SwDoc;
 class SwForm;
 class SwPageDesc;
+class SwTxtAttr;
+class SwTxtNode;
 class SwTOXSortTabBase;
 
 namespace sw {
@@ -44,6 +50,37 @@ public:
 private:
     const SwForm& mToxForm;
     boost::shared_ptr<ToxLinkProcessor> mLinkProcessor;
+
+    /** A handled text token.
+     * It contains the information which should be added to the target text node.
+     */
+    struct HandledTextToken {
+        OUString text;
+        std::vector<SwFmtAutoFmt*> autoFormats;
+        std::vector<sal_Int32> startPositions;
+        std::vector<sal_Int32> endPositions;
+    };
+    /** Append text (and selected attributes) to a target node.
+     *
+     * Will take the text of @p source, and return the text and the attributes which should be added to the
+     * target text node. @see CollectAttributesForTox() for the criteria of the attributes which are taken.
+     */
+    static HandledTextToken
+    HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& attrPool);
+
+    /** Applies the result of a handled text token to a target node. */
+    static void
+    ApplyHandledTextToken(const HandledTextToken& htt, SwTxtNode& targetNode);
+
+    /** Collect the attributes of a hint that shall be copied over to the TOX.
+     *
+     * Some text attributes are used in the TOX entries. This method defines which attributes are used.
+     *
+     * @param hint The hint from which the attributes are taken
+     * @param pool The attribute pool for the new items
+     */
+    static boost::shared_ptr<SfxItemSet>
+    CollectAttributesForTox(const SwTxtAttr& hint, SwAttrPool& pool);
 };
 
 }
