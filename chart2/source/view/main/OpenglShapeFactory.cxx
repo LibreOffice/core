@@ -447,9 +447,8 @@ uno::Reference< drawing::XShape >
     return pText;
 }
 
-void OpenglShapeFactory::render(uno::Reference< drawing::XDrawPage > xDrawPage)
+void OpenglShapeFactory::render(uno::Reference< drawing::XShapes > xRootShape)
 {
-    uno::Reference< drawing::XShapes > xRootShape = getChartShape(xDrawPage);
     dummy::DummyChart* pChart = dynamic_cast<dummy::DummyChart*>(xRootShape.get());
     assert(pChart);
     pChart->render();
@@ -472,9 +471,8 @@ void OpenglShapeFactory::postRender(OpenGLWindow* pWindow)
     pWindow->getContext()->swapBuffers();
 }
 
-void OpenglShapeFactory::clearPage(uno::Reference< drawing::XDrawPage > xDrawPage)
+void OpenglShapeFactory::clearPage(uno::Reference< drawing::XShapes > xRootShape)
 {
-    uno::Reference< drawing::XShapes > xRootShape = getChartShape(xDrawPage);
     dummy::DummyChart* pChart = dynamic_cast<dummy::DummyChart*>(xRootShape.get());
     assert(pChart);
     pChart->clear();
