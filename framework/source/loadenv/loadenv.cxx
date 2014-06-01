@@ -1183,13 +1183,14 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
     {
-        // try everyone ...
-        // Ignore any loader, which makes trouble :-)
-        ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
-        OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(sPROP_NAME, OUString());
-        css::uno::Reference< css::uno::XInterface > xLoader;
         try
         {
+            // try everyone ...
+            // Ignore any loader, which makes trouble :-)
+            ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
+            OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(sPROP_NAME, OUString());
+            css::uno::Reference< css::uno::XInterface > xLoader;
+
             xLoader = xLoaderFactory->createInstance(sLoader);
             if (xLoader.is())
                 return xLoader;
