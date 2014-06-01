@@ -55,6 +55,7 @@ class DrawModelWrapper;
 class SeriesPlotterContainer;
 class VDataSeries;
 class GL3DPlotterBase;
+class GL2DRenderer;
 
 enum TimeBasedMode
 {
@@ -103,6 +104,7 @@ class ChartView : public ::cppu::WeakImplHelper10<
         , public ExplicitValueProvider
         , private SfxListener
 {
+    friend class GL2DRenderer;
 private:
     void init();
 
@@ -277,6 +279,7 @@ private: //member
     boost::shared_ptr<GL3DPlotterBase> m_pGL3DPlotter;
     TimeBasedInfo maTimeBased;
     osl::Mutex maTimeMutex;
+    boost::scoped_ptr<GL2DRenderer> mp2DRenderer;
 };
 
 }
