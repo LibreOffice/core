@@ -18,3 +18,4 @@
 
 [assembly:System.Reflection.AssemblyDescription( "CLI-UNO: Language Binding specific types" )]
 [assembly:System.Reflection.AssemblyCompany( "OpenOffice.org" )]
+[assembly:System.Reflection.AssemblyVersion( "@CLI_BASETYPES_NEW_VERSION@" )]

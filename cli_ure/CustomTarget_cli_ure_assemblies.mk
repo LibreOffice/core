@@ -37,19 +37,19 @@ $(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/assembly.cs : \
 	| $(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/.dir
 
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/basetypes/assembly.cs :
-	$(GNUCOPY) $< $@.tmp && \
-	echo '[assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)" )]' >> $@.tmp && \
+	sed -e "s/@CLI_BASETYPES_NEW_VERSION@/$(CLI_BASETYPES_NEW_VERSION)/g" \
+		< $< > $@.tmp && \
 	mv $@.tmp $@
 
 # TODO use macros for this
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/native/assembly.cxx :
-	$(GNUCOPY) $< $@.tmp && \
-	echo '[assembly:System::Reflection::AssemblyVersion( "$(CLI_CPPUHELPER_NEW_VERSION)" )];' >> $@.tmp && \
+	sed -e "s/@CLI_CPPUHELPER_NEW_VERSION@/$(CLI_CPPUHELPER_NEW_VERSION)/g" \
+		< $< > $@.tmp && \
 	mv $@.tmp $@
 
 $(call gb_CustomTarget_get_workdir,cli_ure/source)/ure/assembly.cs :
-	$(GNUCOPY) $< $@.tmp && \
-	echo '[assembly:System.Reflection.AssemblyVersion( "$(CLI_URE_NEW_VERSION)" )]' >> $@.tmp && \
+	sed -e "s/@CLI_URE_NEW_VERSION@/$(CLI_URE_NEW_VERSION)/g" \
+		< $< > $@.tmp && \
 	mv $@.tmp $@
 
 # vim: set noet sw=4 ts=4:
