@@ -608,7 +608,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 {
                     uno::Sequence< uno::Any > aArgs(1);
                     aArgs[ 0 ] <<= pDoc->GetDocShell()->GetModel();
-                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( OUString("ooo.vba.word.Globals"), aArgs );
+                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
                     pDoc->GetDocShell()->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
                 }
                 aGlobs >>= xRet;
@@ -1465,21 +1465,20 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
     return makeAny(xRet);
 }
 
-uno::Any SwXTextSections::getByName(const OUString& Name)
+uno::Any SwXTextSections::getByName(const OUString& rName)
     throw( NoSuchElementException, WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
     if(IsValid())
     {
-        OUString aName(Name);
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         uno::Reference< XTextSection >  xSect;
         for(size_t i = 0; i < rFmts.size(); ++i)
         {
             SwSectionFmt* pFmt = rFmts[i];
             if (pFmt->IsInNodesArr()
-                && (aName == pFmt->GetSection()->GetSectionName()))
+                && (rName == pFmt->GetSection()->GetSectionName()))
             {
                 xSect = GetObject(*pFmt);
                 aRet.setValue(&xSect, cppu::UnoType<XTextSection>::get());
