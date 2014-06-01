@@ -46,18 +46,34 @@
 
 #include <boost/foreach.hpp>
 #include <boost/make_shared.hpp>
+#include <cassert>
+
+namespace {
+
+bool sortTabHasNoToxSourcesOrFirstToxSourceHasNoNode(const SwTOXSortTabBase& sortTab)
+{
+    if (sortTab.aTOXSources.empty()) {
+        return true;
+    }
+    if (sortTab.aTOXSources.at(0).pNd != NULL) {
+        return true;
+    }
+    return false;
+}
+
+} // end anonymous namespace
 
 namespace sw {
 
 OUString
 ToxTextGenerator::GetNumStringOfFirstNode( const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel )
 {
-    OUString sRet;
-    if (!rBase.pTxtMark) { // only if it's not a Mark
-        return sRet;
+    if (sortTabHasNoToxSourcesOrFirstToxSourceHasNoNode(rBase)) {
+        return OUString();
     }
 
-    if (rBase.aTOXSources.empty()) {
+    OUString sRet;
+    if (!rBase.pTxtMark) { // only if it's not a Mark
         return sRet;
     }
 
@@ -86,6 +102,54 @@ ToxTextGenerator::ToxTextGenerator(const SwForm& toxForm)
 
 ToxTextGenerator::~ToxTextGenerator()
 {;}
+
+OUString
+ToxTextGenerator::HandleChapterToken(const SwTOXSortTabBase& rBase, const SwFormToken& aToken,
+        SwDoc* pDoc) const
+{
+    if (sortTabHasNoToxSourcesOrFirstToxSourceHasNoNode(rBase)) {
+        return OUString();
+    }
+
+    // A bit tricky: Find a random Frame
+    const SwCntntNode* contentNode = rBase.aTOXSources.at(0).pNd->GetCntntNode();
+    if (!contentNode) {
+        return OUString();
+    }
+
+    // #i53420#
+    const SwCntntFrm* contentFrame = contentNode->getLayoutFrm(pDoc->GetCurrentLayout());
+    if (!contentFrame) {
+        return OUString();
+    }
+
+    return GenerateTextForChapterToken(aToken, contentFrame, contentNode);
+}
+
+OUString
+ToxTextGenerator::GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwCntntFrm* contentFrame,
+        const SwCntntNode *contentNode) const
+{
+    OUString retval;
+
+    SwChapterFieldType chapterFieldType;
+    SwChapterField aFld = ObtainChapterField(&chapterFieldType, &chapterToken, contentFrame, contentNode);
+
+    //---> #i89791#
+    // continue to support CF_NUMBER and CF_NUM_TITLE in order to handle ODF 1.0/1.1 written by OOo 3.x
+    // in the same way as OOo 2.x would handle them.
+    if (CF_NUM_NOPREPST_TITLE == chapterToken.nChapterFormat || CF_NUMBER == chapterToken.nChapterFormat) {
+        retval += aFld.GetNumber(); // get the string number without pre/postfix
+    }
+    else if (CF_NUMBER_NOPREPST == chapterToken.nChapterFormat || CF_NUM_TITLE == chapterToken.nChapterFormat) {
+        retval += aFld.GetNumber();
+        retval += " ";
+        retval += aFld.GetTitle();
+    } else if (CF_TITLE == chapterToken.nChapterFormat) {
+        retval += aFld.GetTitle();
+    }
+    return retval;
+}
 
 // Add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
 // which page description is used, no appropriate one is found.
@@ -224,46 +288,7 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
                 break;
 
             case TOKEN_CHAPTER_INFO:
-                {
-                    // A bit tricky: Find a random Frame
-                    const SwTOXSource* pTOXSource = 0;
-                    if (!rBase.aTOXSources.empty())
-                        pTOXSource = &rBase.aTOXSources[0];
-
-                    // #i53420#
-                    if ( pTOXSource && pTOXSource->pNd &&
-                         pTOXSource->pNd->IsCntntNode() )
-                    {
-                        const SwCntntFrm* pFrm = pTOXSource->pNd->getLayoutFrm( pDoc->GetCurrentLayout() );
-                        if( pFrm )
-                        {
-                            SwChapterFieldType aFldTyp;
-                            SwChapterField aFld( &aFldTyp, aToken.nChapterFormat );
-                            aFld.SetLevel( static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) );
-                            // #i53420#
-                            aFld.ChangeExpansion( pFrm,
-                                dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
-                                true );
-                            //---> #i89791#
-                            // continue to support CF_NUMBER
-                            // and CF_NUM_TITLE in order to handle ODF 1.0/1.1
-                            // written by OOo 3.x in the same way as OOo 2.x
-                            // would handle them.
-                            if ( CF_NUM_NOPREPST_TITLE == aToken.nChapterFormat ||
-                                 CF_NUMBER == aToken.nChapterFormat )
-                                rTxt += aFld.GetNumber(); // get the string number without pre/postfix
-                            else if ( CF_NUMBER_NOPREPST == aToken.nChapterFormat ||
-                                      CF_NUM_TITLE == aToken.nChapterFormat )
-                            {
-                                rTxt += aFld.GetNumber();
-                                rTxt += " ";
-                                rTxt += aFld.GetTitle();
-                            }
-                            else if(CF_TITLE == aToken.nChapterFormat)
-                                rTxt += aFld.GetTitle();
-                        }
-                    }
-                }
+                rTxt += HandleChapterToken(rBase, aToken, pDoc);
                 break;
 
             case TOKEN_LINK_START:
@@ -375,7 +400,7 @@ ToxTextGenerator::ApplyHandledTextToken(const HandledTextToken& htt, SwTxtNode& 
     }
 }
 
-OUString
+/*static*/ OUString
 ToxTextGenerator::ConstructPageNumberPlaceholder(size_t numberOfToxSources)
 {
     OUString retval;
@@ -392,6 +417,20 @@ ToxTextGenerator::ConstructPageNumberPlaceholder(size_t numberOfToxSources)
     return retval;
 }
 
+/*virtual*/ SwChapterField
+ToxTextGenerator::ObtainChapterField(SwChapterFieldType* chapterFieldType,
+        const SwFormToken* chapterToken, const SwCntntFrm* contentFrame,
+        const SwCntntNode* contentNode) const
+{
+    assert(chapterToken);
+    assert(chapterToken->nOutlineLevel >= 1);
+
+    SwChapterField retval(chapterFieldType, chapterToken->nChapterFormat);
+    retval.SetLevel(static_cast<sal_uInt8>(chapterToken->nOutlineLevel - 1));
+    // #i53420#
+    retval.ChangeExpansion(contentFrame, contentNode, true);
+    return retval;
+}
 } // end namespace sw
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
