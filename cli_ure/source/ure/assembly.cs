@@ -18,3 +18,4 @@
 
 [assembly:System.Reflection.AssemblyDescription( "CLI-UNO Runtime Library" )]
 [assembly:System.Reflection.AssemblyCompany( "OpenOffice.org" )]
+[assembly:System.Reflection.AssemblyVersion( "@CLI_URE_NEW_VERSION@" )]
