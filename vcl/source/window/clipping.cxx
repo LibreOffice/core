@@ -24,6 +24,7 @@
 
 #include <salobj.hxx>
 #include <window.h>
+#include <clipmgr.hxx>
 
 #define IMPL_MAXSAVEBACKSIZE    (640*480)
 #define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
@@ -112,13 +113,13 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
 
 Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
 {
-
+    ClipManager *clipMgr = ClipManager::GetInstance();
     Region aWinClipRegion;
 
     if ( nFlags & WINDOW_GETCLIPREGION_NOCHILDREN )
     {
         if ( mpWindowImpl->mbInitWinClipRegion )
-            ((Window*)this)->ImplInitWinClipRegion();
+            clipMgr->InitClipRegion(const_cast<Window *>(this));
         aWinClipRegion = mpWindowImpl->maWinClipRegion;
     }
     else
@@ -248,43 +249,6 @@ void Window::ImplClipAllChildren( Region& rRegion )
     }
 }
 
-void Window::ImplClipSiblings( Region& rRegion )
-{
-    Window* pWindow = ImplGetParent()->mpWindowImpl->mpFirstChild;
-    while ( pWindow )
-    {
-        if ( pWindow == this )
-            break;
-
-        if ( pWindow->mpWindowImpl->mbReallyVisible )
-            pWindow->ImplExcludeWindowRegion( rRegion );
-
-        pWindow = pWindow->mpWindowImpl->mpNext;
-    }
-}
-
-void Window::ImplInitWinClipRegion()
-{
-    // Build Window Region
-    mpWindowImpl->maWinClipRegion = Rectangle( Point( mnOutOffX, mnOutOffY ),
-                                 Size( mnOutWidth, mnOutHeight ) );
-    if ( mpWindowImpl->mbWinRegion )
-        mpWindowImpl->maWinClipRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
-
-    // ClipSiblings
-    if ( mpWindowImpl->mbClipSiblings && !ImplIsOverlapWindow() )
-        ImplClipSiblings( mpWindowImpl->maWinClipRegion );
-
-    // Clip Parent Boundaries
-    ImplClipBoundaries( mpWindowImpl->maWinClipRegion, false, true );
-
-    // Clip Children
-    if ( (GetStyle() & WB_CLIPCHILDREN) || mpWindowImpl->mbClipChildren )
-        mpWindowImpl->mbInitChildRegion = true;
-
-    mpWindowImpl->mbInitWinClipRegion = false;
-}
-
 void Window::ImplInitWinChildClipRegion()
 {
     if ( !mpWindowImpl->mpFirstChild )
@@ -310,8 +274,10 @@ void Window::ImplInitWinChildClipRegion()
 
 Region* Window::ImplGetWinChildClipRegion()
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if ( mpWindowImpl->mbInitWinClipRegion )
-        ImplInitWinClipRegion();
+        clipMgr->InitClipRegion(this);
     if ( mpWindowImpl->mbInitChildRegion )
         ImplInitWinChildClipRegion();
     if ( mpWindowImpl->mpChildClipRegion )
@@ -530,8 +496,10 @@ bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
 
 void Window::ImplIntersectWindowClipRegion( Region& rRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if ( mpWindowImpl->mbInitWinClipRegion )
-        ImplInitWinClipRegion();
+        clipMgr->InitClipRegion(this);
 
     rRegion.Intersect( mpWindowImpl->maWinClipRegion );
 }
@@ -832,6 +800,8 @@ void Window::ImplSaveOverlapBackground()
 {
     DBG_ASSERT( !mpWindowImpl->mpOverlapData->mpSaveBackDev, "Window::ImplSaveOverlapBackground() - Background already saved" );
 
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if ( !mpWindowImpl->mbFrame )
     {
         sal_uLong nSaveBackSize = mnOutWidth*mnOutHeight;
@@ -846,7 +816,7 @@ void Window::ImplSaveOverlapBackground()
                     mpWindowImpl->mpFrameWindow->ImplUpdateAll();
 
                     if ( mpWindowImpl->mbInitWinClipRegion )
-                        ImplInitWinClipRegion();
+                        clipMgr->InitClipRegion(this);
 
                     mpWindowImpl->mpOverlapData->mnSaveBackSize = nSaveBackSize;
                     mpWindowImpl->mpFrameData->mnAllSaveBackSize += nSaveBackSize;
@@ -871,10 +841,12 @@ void Window::ImplSaveOverlapBackground()
 
 bool Window::ImplRestoreOverlapBackground( Region& rInvRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if ( mpWindowImpl->mpOverlapData->mpSaveBackDev )
     {
         if ( mpWindowImpl->mbInitWinClipRegion )
-            ImplInitWinClipRegion();
+            clipMgr->InitClipRegion(this);
 
         if ( mpWindowImpl->mpOverlapData->mpSaveBackDev )
         {

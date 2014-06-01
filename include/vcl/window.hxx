@@ -348,6 +348,7 @@ class VCL_DLLPUBLIC Window : public OutputDevice, public Resource
     friend class ImplBorderWindow;
     friend class VclBuilder;
     friend class PaintHelper;
+    friend class ClipManager;
 
     // TODO: improve missing functionality
     // only required because of SetFloatingMode()
@@ -530,9 +531,7 @@ private:
     SAL_DLLPRIVATE void                 ImplClipBoundaries( Region& rRegion, bool bThis, bool bOverlaps );
     SAL_DLLPRIVATE bool                 ImplClipChildren( Region& rRegion );
     SAL_DLLPRIVATE void                 ImplClipAllChildren( Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplClipSiblings( Region& rRegion );
 
-    SAL_DLLPRIVATE void                 ImplInitWinClipRegion();
     SAL_DLLPRIVATE void                 ImplInitWinChildClipRegion();
     SAL_DLLPRIVATE Region*              ImplGetWinChildClipRegion();
 

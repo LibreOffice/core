@@ -1727,6 +1727,14 @@ public:
      */
     SAL_DLLPRIVATE long         ImplLogicWidthToDevicePixel( long nWidth ) const;
 
+    /** Convert a region in pixel units to a region in device pixel units and coords.
+
+     @param         rPixelRect  Const reference to region.
+
+     @returns Region based on device pixel coordinates and units.
+     */
+    SAL_DLLPRIVATE Region       ImplPixelToDevicePixel( const Region& rRegion ) const;
+
 private:
 
     /** Convert a logical X coordinate to a device pixel's X coordinate.
@@ -1855,14 +1863,6 @@ private:
      @returns Line based on physical device pixel coordinates and units.
      */
     SAL_DLLPRIVATE LineInfo     ImplLogicToDevicePixel( const LineInfo& rLineInfo ) const;
-
-    /** Convert a region in pixel units to a region in device pixel units and coords.
-
-     @param         rPixelRect  Const reference to region.
-
-     @returns Region based on device pixel coordinates and units.
-     */
-    SAL_DLLPRIVATE Region       ImplPixelToDevicePixel( const Region& rRegion ) const;
 
     /** Invalidate the view transformation.
 

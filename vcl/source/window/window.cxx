@@ -56,6 +56,7 @@
 #include <brdwin.hxx>
 #include <helpwin.hxx>
 #include <dndlcon.hxx>
+#include <clipmgr.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XDisplayConnection.hpp>
@@ -2241,6 +2242,7 @@ Font Window::GetPointFont() const
 
 void Window::Show( bool bVisible, sal_uInt16 nFlags )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
 
     if ( mpWindowImpl->mbVisible == bVisible )
         return;
@@ -2286,7 +2288,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
             if ( !bSaveBack )
             {
                 if ( mpWindowImpl->mbInitWinClipRegion )
-                    ImplInitWinClipRegion();
+                    clipMgr->InitClipRegion(this);
                 aInvRegion = mpWindowImpl->maWinClipRegion;
             }
 
