@@ -12,6 +12,7 @@
 
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
+#include "swdllapi.h"
 
 #include "rtl/ustring.hxx"
 
@@ -21,8 +22,13 @@
 class SfxItemSet;
 class SwAttrPool;
 class SwFmtAutoFmt;
+class SwChapterField;
+class SwChapterFieldType;
+class SwCntntFrm;
+class SwCntntNode;
 class SwDoc;
 class SwForm;
+class SwFormToken;
 class SwPageDesc;
 class SwTxtAttr;
 class SwTxtNode;
@@ -33,12 +39,12 @@ namespace sw {
 
 class ToxLinkProcessor;
 
-class SAL_DLLPUBLIC_EXPORT ToxTextGenerator
+class SW_DLLPUBLIC ToxTextGenerator
 {
 public:
     ToxTextGenerator(const SwForm& toxForm);
 
-    ~ToxTextGenerator();
+    virtual ~ToxTextGenerator();
 
     /** Generate the text for an entry of a table of X (X is, e.g., content).
      *
@@ -108,6 +114,25 @@ private:
      */
     static OUString
     GetNumStringOfFirstNode(const SwTOXSortTabBase& rBase, bool bUsePrefix, sal_uInt8 nLevel);
+
+    /** Handle a chapter token.
+     */
+    OUString
+    HandleChapterToken(const SwTOXSortTabBase& rBase, const SwFormToken& aToken, SwDoc* pDoc) const;
+
+    /** Generate the text for a chapter token.
+     */
+    OUString
+    GenerateTextForChapterToken(const SwFormToken& chapterToken, const SwCntntFrm* contentFrame,
+            const SwCntntNode *contentNode) const;
+
+    /** Obtain a ChapterField to use for the text generation.
+     * @internal
+     * This method is overridden in the unittests. Do not override it yourself.
+     */
+    virtual SwChapterField
+    ObtainChapterField(SwChapterFieldType* chapterFieldType, const SwFormToken* chapterToken,
+            const SwCntntFrm* contentFrame, const SwCntntNode *contentNode) const;
 
     friend class ::ToxTextGeneratorTest;
 };
