@@ -51,6 +51,7 @@ public:
     bool ClipChildren( Window *pWindow, Region& rRegion );
     Region* GetChildClipRegion( Window* pWindow );
 
+    void Intersect( Window* pWindow, Region& rRegion );
     void Exclude( Window *pWindow, Region& rRegion );
 };
 

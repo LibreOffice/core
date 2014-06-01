@@ -148,6 +148,14 @@ Region* ClipManager::GetChildClipRegion( Window* pWindow )
         return &pWindow->mpWindowImpl->maWinClipRegion;
 }
 
+void ClipManager::Intersect( Window* pWindow, Region& rRegion )
+{
+    rRegion.Intersect( Rectangle( Point( pWindow->mnOutOffX, pWindow->mnOutOffY ),
+                                  pWindow->GetOutputSizePixel() ) );
+    if ( pWindow->mpWindowImpl->mbWinRegion )
+        rRegion.Intersect( pWindow->ImplPixelToDevicePixel( pWindow->mpWindowImpl->maWinRegion ) );
+}
+
 void ClipManager::Exclude( Window *pWindow, Region& rRegion )
 {
     if ( pWindow->mpWindowImpl->mbWinRegion )

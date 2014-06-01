@@ -414,23 +414,17 @@ bool Window::ImplSetClipFlag( bool bSysObjOnlySmaller )
         return mpWindowImpl->mpFrameWindow->ImplSetClipFlagOverlapWindows( bSysObjOnlySmaller );
 }
 
-void Window::ImplIntersectWindowRegion( Region& rRegion )
-{
-    rRegion.Intersect( Rectangle( Point( mnOutOffX, mnOutOffY ),
-                                  Size( mnOutWidth, mnOutHeight ) ) );
-    if ( mpWindowImpl->mbWinRegion )
-        rRegion.Intersect( ImplPixelToDevicePixel( mpWindowImpl->maWinRegion ) );
-}
-
 void Window::ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Region& rRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     Window* pWindow = mpWindowImpl->mpFirstOverlap;
     while ( pWindow )
     {
         if ( pWindow->mpWindowImpl->mbReallyVisible )
         {
             Region aTempRegion( rInterRegion );
-            pWindow->ImplIntersectWindowRegion( aTempRegion );
+            clipMgr->Intersect( pWindow, aTempRegion );
             rRegion.Union( aTempRegion );
             pWindow->ImplIntersectAndUnionOverlapWindows( rInterRegion, rRegion );
         }
@@ -441,10 +435,12 @@ void Window::ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Re
 
 void Window::ImplIntersectAndUnionOverlapWindows2( const Region& rInterRegion, Region& rRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if ( mpWindowImpl->mbReallyVisible )
     {
         Region aTempRegion( rInterRegion );
-        ImplIntersectWindowRegion( aTempRegion );
+        clipMgr->Intersect( this, aTempRegion );
         rRegion.Union( aTempRegion );
     }
 
@@ -527,7 +523,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
             if ( pWindow->mpWindowImpl->mbReallyVisible && (pWindow != this) )
             {
                 aTempRegion = aRegion;
-                pWindow->ImplIntersectWindowRegion( aTempRegion );
+                clipMgr->Intersect( pWindow, aTempRegion );
                 rRegion.Union( aTempRegion );
             }
             pWindow = pWindow->mpWindowImpl->mpNext;
@@ -543,7 +539,7 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
             if ( pWindow->mpWindowImpl->mbReallyVisible )
             {
                 aTempRegion = aRegion;
-                pWindow->ImplIntersectWindowRegion( aTempRegion );
+                clipMgr->Intersect( pWindow, aTempRegion );
                 rRegion.Union( aTempRegion );
             }
             pWindow = pWindow->mpWindowImpl->mpNext;

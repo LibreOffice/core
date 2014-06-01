@@ -521,8 +521,6 @@ private:
     SAL_DLLPRIVATE void                 ImplUpdateSysObjOverlapsClip();
     SAL_DLLPRIVATE void                 ImplUpdateSysObjClip();
 
-    SAL_DLLPRIVATE void                 ImplIntersectWindowRegion( Region& rRegion );
-
     SAL_DLLPRIVATE void                 ImplClipAllChildren( Region& rRegion );
 
     SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Region& rRegion );
