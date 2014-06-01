@@ -137,7 +137,7 @@
                                           <object class="GtkSpinButton" id="left:0.00cm">
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
-                                            <property name="text" translatable="yes">2.00</property>
+                                            <property name="text" translatable="no">2.00</property>
                                             <property name="adjustment">adjustment1</property>
                                             <property name="digits">2</property>
                                             <property name="value">2</property>

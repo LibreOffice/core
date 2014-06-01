@@ -361,7 +361,7 @@
                     <property name="tooltip_text" translatable="yes">Above Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">0</property>
+                    <property name="text" translatable="no">0</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -403,7 +403,7 @@
                     <property name="tooltip_text" translatable="yes">Below Paragraph Spacing</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">0</property>
+                    <property name="text" translatable="no">0</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -638,7 +638,7 @@
                     <property name="tooltip_text" translatable="yes">Before Text Indent</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">0</property>
+                    <property name="text" translatable="no">0</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -678,7 +678,7 @@
                     <property name="tooltip_text" translatable="yes">After Text Indent</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">0</property>
+                    <property name="text" translatable="no">0</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
@@ -718,7 +718,7 @@
                     <property name="tooltip_text" translatable="yes">First Line Indent</property>
                     <property name="hexpand">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">0</property>
+                    <property name="text" translatable="no">0</property>
                     <property name="adjustment">adjustment1</property>
                   </object>
                   <packing>
