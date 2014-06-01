@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Sun May 25 15:43:37 2014 -->
+<!-- Generated with glade 3.16.0 on Sun Jun  1 16:42:18 2014 -->
 <interface>
-  <!-- interface-requires LibreOffice 1.0 -->
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkImage" id="calc_all_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -388,6 +388,85 @@
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
+              <object class="GtkToolbar" id="action_view">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <child>
+                  <object class="GtkToolButton" id="repository">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="action_name">repository</property>
+                    <property name="label" translatable="yes">Repository</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">sfx2/imglst/actionview026.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="import">
+                    <property name="can_focus">False</property>
+                    <property name="action_name">import</property>
+                    <property name="label" translatable="yes">Import</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">sfx2/imglst/actionview010.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="delete">
+                    <property name="can_focus">False</property>
+                    <property name="action_name">delete</property>
+                    <property name="label" translatable="yes">Delete</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">sfx2/imglst/actionview025.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="save">
+                    <property name="can_focus">False</property>
+                    <property name="action_name">save</property>
+                    <property name="label" translatable="yes">Save</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">sfx2/imglst/actionview028.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="new_folder">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="action_name">new_folder</property>
+                    <property name="label" translatable="yes">New Folder</property>
+                    <property name="use_underline">True</property>
+                    <property name="icon_name">sfx2/imglst/actionview029.png</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
               <object class="sfxlo-RecentDocsView" id="all_recent">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -398,7 +477,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -412,7 +491,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>

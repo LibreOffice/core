@@ -26,9 +26,11 @@
 #include <vcl/button.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/toolbox.hxx>
 
 #include <sfx2/recentdocsview.hxx>
 #include <sfx2/templatelocalview.hxx>
+#include <sfx2/templateabstractview.hxx>
 #include <sfx2/templateviewitem.hxx>
 
 #include <svtools/acceleratorexecute.hxx>
@@ -79,6 +81,9 @@ class BackingWindow
 
     RecentDocsView*                 mpAllRecentThumbnails;
     TemplateLocalView*              mpLocalView;
+    TemplateAbstractView*           mpCurrentView;
+
+    ToolBox*                        mpViewBar;
 
     std::vector<Window*>            maDndWindows;
 
@@ -98,6 +103,7 @@ class BackingWindow
 
     DECL_LINK(ClickHdl, Button*);
     DECL_LINK(ExtLinkClickHdl, Button*);
+    DECL_LINK(OpenRegionHdl, void*);
 
     void initControls();
 
