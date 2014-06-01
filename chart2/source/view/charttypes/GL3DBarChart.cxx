@@ -34,6 +34,8 @@ GL3DBarChart::GL3DBarChart(
     mpTextCache(new opengl3D::TextCache()),
     mnStep(0),
     mnStepsTotal(0),
+    mnMaxX(0),
+    mnMaxY(0),
     mnCornerId(0),
     mbBlockUserInput(false),
     mbNeedsNewRender(true)
