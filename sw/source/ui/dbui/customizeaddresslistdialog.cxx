@@ -24,6 +24,7 @@
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>
 #include <helpid.h>
+#include <boost/scoped_ptr.hpp>
 
 SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         Window* pParent, const SwCSVData& rOldData)
@@ -75,11 +76,11 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
         nPos = 0;
 
-    SwAddRenameEntryDialog* pDlg;
+    boost::scoped_ptr<SwAddRenameEntryDialog> pDlg;
     if (bRename)
-        pDlg = new SwRenameEntryDialog(pButton, m_pNewData->aDBColumnHeaders);
+        pDlg.reset(new SwRenameEntryDialog(pButton, m_pNewData->aDBColumnHeaders));
     else
-        pDlg = new SwAddEntryDialog(pButton, m_pNewData->aDBColumnHeaders);
+        pDlg.reset(new SwAddEntryDialog(pButton, m_pNewData->aDBColumnHeaders));
     if(bRename)
     {
         OUString aTemp = m_pFieldsLB->GetEntry(nPos);
@@ -110,7 +111,7 @@ IMPL_LINK(SwCustomizeAddressListDialog, AddRenameHdl_Impl, PushButton*, pButton)
         m_pFieldsLB->InsertEntry(sNew, nPos);
         m_pFieldsLB->SelectEntryPos(nPos);
     }
-    delete pDlg;
+    pDlg.reset();
     UpdateButtons();
     return 0;
 }
