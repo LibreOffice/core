@@ -297,7 +297,7 @@ void DocumentDeviceManager::PrtDataChanged()
 // If you change this, also modify InJobSetup in Sw3io if appropriate.
 
     // #i41075#
-    OSL_ENSURE( m_rSwdoc.get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
+    OSL_ENSURE( m_rSwdoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ||
             0 != getPrinter( false ), "PrtDataChanged will be called recursively!" );
     SwRootFrm* pTmpRoot = m_rSwdoc.GetCurrentLayout();
     boost::scoped_ptr<SwWait> pWait;
