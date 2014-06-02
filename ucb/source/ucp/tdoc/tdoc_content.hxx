@@ -238,8 +238,9 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
     getStream( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw ( ::com::sun::star::ucb::CommandFailedException,
-                ::com::sun::star::task::DocumentPasswordRequest );
+        throw ( css::ucb::CommandFailedException,
+                css::task::DocumentPasswordRequest,
+                css::uno::RuntimeException );
 
 public:
     // Create existing content. Fail, if not already exists.

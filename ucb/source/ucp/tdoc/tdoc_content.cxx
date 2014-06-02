@@ -2890,7 +2890,8 @@ uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
 uno::Reference< io::XStream > Content::getStream(
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw ( ucb::CommandFailedException,
-            task::DocumentPasswordRequest )
+            task::DocumentPasswordRequest,
+            uno::RuntimeException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
