@@ -256,7 +256,7 @@ public:
     RTFFrame aFrame;
 
     /// CJK or CTL?
-    bool bIsCjk;
+    enum { LOCH, HICH, DBCH } eRunType;
 
     // Info group.
     int nYear;

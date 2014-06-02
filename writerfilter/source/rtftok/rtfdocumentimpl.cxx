@@ -980,9 +980,33 @@ int RTFDocumentImpl::resolveChars(char ch)
                 m_aStates.top().nCharsToSkip--;
             }
         }
+
         // read a single char if we're in hex mode
         if (m_aStates.top().nInternalState == INTERNAL_HEX)
             break;
+
+        if (RTFParserState::DBCH == m_aStates.top().eRunType &&
+            RTL_TEXTENCODING_MS_932 == m_aStates.top().nCurrentEncoding)
+        {
+            unsigned char uch = ch;
+            if ((uch >= 0x80 && uch <= 0x9F) || uch >= 0xE0)
+            {
+                // read second byte of 2-byte Shift-JIS - may be \ { }
+                Strm().ReadChar(ch);
+                if (m_aStates.top().nCharsToSkip == 0)
+                {
+                    assert(bUnicodeChecked);
+                    aBuf.append(ch);
+                }
+                else
+                {
+                    assert(bSkipped);
+                    // anybody who uses \ucN with Shift-JIS is insane
+                    m_aStates.top().nCharsToSkip--;
+                }
+            }
+        }
+
         Strm().ReadChar(ch);
     }
     if (m_aStates.top().nInternalState != INTERNAL_HEX && !Strm().IsEof())
@@ -2980,12 +3004,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
     case RTF_LOCH:
         // Noop, dmapper detects this automatically.
+        m_aStates.top().eRunType = RTFParserState::LOCH;
         break;
     case RTF_HICH:
-        m_aStates.top().bIsCjk = true;
+        m_aStates.top().eRunType = RTFParserState::HICH;
         break;
     case RTF_DBCH:
-        m_aStates.top().bIsCjk = false;
+        m_aStates.top().eRunType = RTFParserState::DBCH;
         break;
     case RTF_TITLEPG:
     {
@@ -3471,7 +3496,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         if (nKeyword == RTF_F)
             nSprm = NS_ooxml::LN_CT_Fonts_ascii;
         else
-            nSprm = (m_aStates.top().bIsCjk ? NS_ooxml::LN_CT_Fonts_eastAsia : NS_ooxml::LN_CT_Fonts_cs);
+            nSprm = (m_aStates.top().eRunType == RTFParserState::HICH
+                ? NS_ooxml::LN_CT_Fonts_eastAsia : NS_ooxml::LN_CT_Fonts_cs);
         if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE || m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
         {
             m_aFontIndexes.push_back(nParam);
@@ -5714,7 +5740,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
       aShape(),
       aDrawingObject(),
       aFrame(this),
-      bIsCjk(false),
+      eRunType(LOCH),
       nYear(0),
       nMonth(0),
       nDay(0),
