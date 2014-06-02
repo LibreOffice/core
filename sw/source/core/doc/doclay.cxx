@@ -37,7 +37,6 @@
 #include <svx/svdouno.hxx>
 #include <svx/fmpage.hxx>
 #include <editeng/frmdiritem.hxx>
-
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -86,6 +85,7 @@
 #include <pagedesc.hxx>
 #include <PostItMgr.hxx>
 #include <comcore.hrc>
+#include <drawdoc.hxx>
 
 #include <unoframe.hxx>
 

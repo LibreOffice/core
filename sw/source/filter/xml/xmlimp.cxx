@@ -59,6 +59,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <unotxdoc.hxx>
+#include <drawdoc.hxx>
 
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xformsimport.hxx>
@@ -668,7 +669,7 @@ void SwXMLImport::startDocument()
     pDoc->GetOrCreateDrawModel(); // #i52858# - method name changed
 
     // SJ: #i49801# locking the modell to disable repaints
-    SdrModel* pDrawModel = pDoc->GetDrawModel();
+    SwDrawModel* pDrawModel = pDoc->GetDrawModel();
     if ( pDrawModel )
         pDrawModel->setLock(true);
 
@@ -868,7 +869,7 @@ void SwXMLImport::endDocument( void )
                 pDoc->PrtOLENotify( true );
         }
 
-        SdrModel* pDrawModel = pDoc->GetDrawModel();
+        SwDrawModel* pDrawModel = pDoc->GetDrawModel();
         if ( pDrawModel )
             pDrawModel->setLock(false);
     }

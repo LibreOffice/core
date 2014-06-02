@@ -36,7 +36,12 @@
 #include <ucbhelper/content.hxx>
 #include <swunohelper.hxx>
 
-namespace SWUnoHelper {
+//UUUU
+#include <svx/xfillit0.hxx>
+#include <svl/itemset.hxx>
+
+namespace SWUnoHelper
+{
 
 sal_Int32 GetEnumAsInt32( const ::com::sun::star::uno::Any& rVal )
 {
@@ -259,6 +264,34 @@ bool UCB_GetFileListOfFolder( const OUString& rURL,
         bOk = false;
     }
     return bOk;
+}
+
+//UUUU
+bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet)
+{
+    const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rSet.GetItem(XATTR_FILLSTYLE, false)));
+
+    if(!pXFillStyleItem)
+    {
+        return false;
+    }
+
+    // here different FillStyles can be excluded for export; it will depend on the
+    // quality these fallbacks can reach. That again is done in getSvxBrushItemFromSourceSet,
+    // take a look there how the superset of DrawObject FillStyles is mapped to SvxBrushItem.
+    // For now, take them all - except XFILL_NONE
+
+    if(XFILL_NONE != pXFillStyleItem->GetValue())
+    {
+        return true;
+    }
+
+    // if(XFILL_SOLID == pXFillStyleItem->GetValue() || XFILL_BITMAP == pXFillStyleItem->GetValue())
+    // {
+    //     return true;
+    // }
+
+    return false;
 }
 
 }

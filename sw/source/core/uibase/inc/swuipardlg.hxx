@@ -34,6 +34,8 @@ class SwParaDlg: public SfxTabDialog
     sal_uInt16 m_nParaDrpCps;
     sal_uInt16 m_nParaBckGrnd;
     sal_uInt16 m_nParaBorder;
+    sal_uInt16 m_nAreaId;
+    sal_uInt16 m_nTransparenceId;
 
     void PageCreated(sal_uInt16 nId, SfxTabPage& rPage) SAL_OVERRIDE;
 

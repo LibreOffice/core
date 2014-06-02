@@ -43,8 +43,8 @@ class SW_DLLPUBLIC SwFrmFmt: public SwFmt
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::uno::XInterface> m_wXObject;
 
-    //UUUU
-    FillAttributesPtr           maFillAttributes;
+    //UUUU DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
 
 protected:
     SwFrmFmt(
@@ -134,8 +134,8 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
     void RegisterToFormat( SwFmt& rFmt );
 
-    //UUUU
-    virtual FillAttributesPtr getFillAttributes() const SAL_OVERRIDE;
+    //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const SAL_OVERRIDE;
 };
 
 // The FlyFrame-Format

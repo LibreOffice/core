@@ -91,6 +91,7 @@
 #include <fmturl.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svl/whiter.hxx>
+#include <drawdoc.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;

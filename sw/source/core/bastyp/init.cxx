@@ -172,6 +172,10 @@ sal_uInt16 aTxtNodeSetRange[] = {
     RES_PARATR_BEGIN, RES_PARATR_END-1,
     RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+
+    //UUUU FillAttribute support (paragraph FillStyle)
+    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+
     0
 };
 
@@ -228,7 +232,7 @@ sal_uInt16 aFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
 
-    //UUUU FillAttribute support
+    //UUUU FillAttribute support (TextFrame, OLE, Writer GraphicObject)
     XATTR_FILL_FIRST, XATTR_FILL_LAST,
 
     0

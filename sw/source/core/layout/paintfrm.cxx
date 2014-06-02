@@ -75,8 +75,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-//UUUU
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <ndtxt.hxx>
+#include <drawdoc.hxx>
 
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
@@ -1823,7 +1825,7 @@ static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
 }
 
 bool DrawFillAttributes(
-    const FillAttributesPtr& rFillAttributes,
+    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
     const SwRect& rPaintRect,
     OutputDevice& rOut)
@@ -1833,7 +1835,7 @@ bool DrawFillAttributes(
 
     if(bUseNew && rFillAttributes.get() && rFillAttributes->isUsed())
     {
-        const basegfx::B2DRange aPaintRange(
+        basegfx::B2DRange aPaintRange(
             rPaintRect.Left(),
             rPaintRect.Top(),
             rPaintRect.Right(),
@@ -1843,6 +1845,14 @@ bool DrawFillAttributes(
             !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
             !basegfx::fTools::equalZero(aPaintRange.getHeight()))
         {
+            //UUUU need to expand for correct AAed and non-AAed visualization as primitive; move
+            // bounds to half-(logical)pixel bounds and add a width/height of one pixel that is missing
+            // from SwRect/Rectangle integer handling
+            const basegfx::B2DVector aSingleUnit(rOut.GetInverseViewTransformation() * basegfx::B2DVector(0.5, 0.5));
+
+            aPaintRange.expand(aPaintRange.getMinimum() - (aSingleUnit * 0.5));
+            aPaintRange.expand(aPaintRange.getMaximum() + (aSingleUnit * 1.5));
+
             const basegfx::B2DRange aDefineRange(
                 rOriginalLayoutRect.Left(),
                 rOriginalLayoutRect.Top(),
@@ -3881,7 +3891,7 @@ bool SwFlyFrm::IsBackgroundTransparent() const
         const Color* pSectionTOXColor = 0;
         SwRect aDummyRect;
         //UUUU
-        FillAttributesPtr aFillAttributes;
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
         if ( GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false) )
         {
@@ -4116,10 +4126,10 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         {
             const SwFrmFmt* pSwFrmFmt = dynamic_cast< const SwFrmFmt* >(GetFmt());
 
-            if(pSwFrmFmt && RES_FLYFRMFMT == pSwFrmFmt->Which())
+            if(pSwFrmFmt && (RES_FLYFRMFMT == pSwFrmFmt->Which() || RES_FRMFMT == pSwFrmFmt->Which()))
             {
                 //UUUU check for transparency
-                const FillAttributesPtr aFillAttributes(pSwFrmFmt->getFillAttributes());
+                const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pSwFrmFmt->getSdrAllFillAttributesHelper());
 
                 // check if the new fill attributes are used
                 if(aFillAttributes.get() && aFillAttributes->isUsed())
@@ -5892,38 +5902,22 @@ void SwPageFrm::PaintGrid( OutputDevice* pOut, SwRect &rRect ) const
 void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
                                  SwViewShell* _pViewShell ) const
 {
-    if (  _pViewShell->GetWin() &&
-         !_pViewShell->GetViewOptions()->getBrowseMode() )
+    if (  _pViewShell->GetWin() && !_pViewShell->GetViewOptions()->getBrowseMode() )
     {
-        SwRect aPgPrtRect( Prt() );
-        aPgPrtRect.Pos() += Frm().Pos();
-        if ( !aPgPrtRect.IsInside( _rOutputRect ) )
+        //UUUU Simplified paint with DrawingLayer FillStyle
+        SwRect aPgRect = Frm();
+        aPgRect._Intersection( _rOutputRect );
+
+        if(!aPgRect.IsEmpty())
         {
-            SwRect aPgRect = Frm();
-            aPgRect._Intersection( _rOutputRect );
-            if(aPgRect.Height() < 0 || aPgRect.Width() <= 0)    // No intersection
-                return;
-            SwRegionRects aPgRegion( aPgRect );
-            aPgRegion -= aPgPrtRect;
-            //const SwPageFrm* pPage = static_cast<const SwPageFrm*>(this);
-            //if ( pPage->GetSortedObjs() )
-            //    ::lcl_SubtractFlys( this, pPage, aPgRect, aPgRegion );
-            if ( !aPgRegion.empty() )
+            OutputDevice *pOut = _pViewShell->GetOut();
+
+            if(pOut->GetFillColor() != aGlobalRetoucheColor)
             {
-                OutputDevice *pOut = _pViewShell->GetOut();
-                if ( pOut->GetFillColor() != aGlobalRetoucheColor )
-                    pOut->SetFillColor( aGlobalRetoucheColor );
-                for ( sal_uInt16 i = 0; i < aPgRegion.size(); ++i )
-                {
-                    if ( 1 < aPgRegion.size() )
-                    {
-                        ::SwAlignRect( aPgRegion[i], pGlobalShell );
-                        if( !aPgRegion[i].HasArea() )
-                            continue;
-                    }
-                    pOut->DrawRect(aPgRegion[i].SVRect());
-                }
+                pOut->SetFillColor(aGlobalRetoucheColor);
             }
+
+            pOut->DrawRect(aPgRect.SVRect());
         }
     }
 }
@@ -6426,7 +6420,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     bool bLowMode = true;
 
     //UUUU
-    FillAttributesPtr aFillAttributes;
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     bool bBack = GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigBackRect, bLowerMode );
     //- Output if a separate background is used.
@@ -6458,14 +6452,14 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                 pTmpBackBrush = new SvxBrushItem( Color( COL_WHITE ), RES_BACKGROUND );
 
                 //UUU
-                aFillAttributes.reset(new FillAttributes(Color( COL_WHITE )));
+                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(Color( COL_WHITE )));
             }
             else
             {
                 pTmpBackBrush = new SvxBrushItem( aGlobalRetoucheColor, RES_BACKGROUND);
 
                 //UUU
-                aFillAttributes.reset(new FillAttributes(aGlobalRetoucheColor));
+                aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(aGlobalRetoucheColor));
             }
 
             pItem = pTmpBackBrush;
@@ -6516,7 +6510,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
                     pItem = pNewItem;
 
                     //UUUU
-                    aFillAttributes.reset(new FillAttributes(*pCol));
+                    aFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(*pCol));
                 }
 
                 //if ( pPage->GetSortedObjs() )
@@ -7204,32 +7198,40 @@ const Color& SwPageFrm::GetDrawBackgrdColor() const
     SwRect aDummyRect;
 
     //UUUU
-    FillAttributesPtr aFillAttributes;
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     if ( GetBackgroundBrush( aFillAttributes, pBrushItem, pDummyColor, aDummyRect, true) )
     {
-        OUString referer;
-        SwViewShell * sh1 = getRootFrm()->GetCurrShell();
-        if (sh1 != 0) {
-            SfxObjectShell * sh2 = sh1->GetDoc()->GetPersist();
-            if (sh2 != 0 && sh2->HasName()) {
-                referer = sh2->GetMedium()->GetName();
+        if(aFillAttributes.get() && aFillAttributes->isUsed()) //UUUU
+        {
+            // let SdrAllFillAttributesHelper do the average color calculation
+            return Color(aFillAttributes->getAverageColor(aGlobalRetoucheColor.getBColor()));
+        }
+        else if(pBrushItem)
+        {
+            OUString referer;
+            SwViewShell * sh1 = getRootFrm()->GetCurrShell();
+            if (sh1 != 0) {
+                SfxObjectShell * sh2 = sh1->GetDoc()->GetPersist();
+                if (sh2 != 0 && sh2->HasName()) {
+                    referer = sh2->GetMedium()->GetName();
+                }
             }
-        }
-        const Graphic* pGraphic = pBrushItem->GetGraphic(referer);
+            const Graphic* pGraphic = pBrushItem->GetGraphic(referer);
 
-        if(pGraphic)
-        {
-            // #i29105# when a graphic is set, it may be possible to calculate a single
-            // color which looks good in all places of the graphic. Since it is
-            // planned to have text edit on the overlay one day and the fallback
-            // to aGlobalRetoucheColor returns something useful, just use that
-            // for now.
-        }
-        else
-        {
-            // not a graphic, use (hopefully) initialized color
-            return pBrushItem->GetColor();
+            if(pGraphic)
+            {
+                // #29105# when a graphic is set, it may be possible to calculate a single
+                // color which looks good in all places of the graphic. Since it is
+                // planned to have text edit on the overlay one day and the fallback
+                // to aGlobalRetoucheColor returns something useful, just use that
+                // for now.
+            }
+            else
+            {
+                // not a graphic, use (hopefully) initialized color
+                return pBrushItem->GetColor();
+            }
         }
     }
 
@@ -7366,7 +7368,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
     @return true, if a background brush for the frame is found
 */
 bool SwFrm::GetBackgroundBrush(
-    FillAttributesPtr& rFillAttributes,
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SvxBrushItem* & rpBrush,
     const Color*& rpCol,
     SwRect &rOrigRect,
@@ -7382,18 +7384,7 @@ bool SwFrm::GetBackgroundBrush(
             return false;
 
         //UUUU
-        const SwLayoutFrm* pSwLayoutFrm = dynamic_cast< const SwLayoutFrm* >(pFrm);
-
-        if(pSwLayoutFrm)
-        {
-            const SwFrmFmt* pSwFrmFmt = dynamic_cast< const SwFrmFmt* >(pSwLayoutFrm->GetFmt());
-
-            if(pSwFrmFmt  && RES_FLYFRMFMT == pSwFrmFmt->Which())
-            {
-                rFillAttributes = pSwFrmFmt->getFillAttributes();
-            }
-        }
-
+        rFillAttributes = pFrm->getSdrAllFillAttributesHelper();
         const SvxBrushItem &rBack = pFrm->GetAttrSet()->GetBackground();
 
         if( pFrm->IsSctFrm() )
@@ -7613,7 +7604,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
 {
     Graphic aRet;
-    SdrModel *pMod = getIDocumentDrawModelAccess()->GetDrawModel();
+    SwDrawModel* pMod = getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMod )
     {
         SdrObject *pObj = FindSdrObject();

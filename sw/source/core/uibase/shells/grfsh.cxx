@@ -26,7 +26,6 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
-
 #include <sfx2/objface.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/protitem.hxx>
@@ -70,13 +69,12 @@
 
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <drawdoc.hxx>
 #include <svx/drawitem.hxx>
-
 #define SwGrfShell
 
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
-
 #include "swabstdlg.hxx"
 
 #define TOOLBOX_NAME "colorbar"
@@ -238,7 +236,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             //UUUU create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
-            const SdrModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->GetDrawModel();
+            const SwDrawModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->GetDrawModel();
 
             aSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
             aSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));

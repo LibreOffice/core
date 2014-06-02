@@ -20,24 +20,76 @@
 #include "bbdlg.hxx"
 #include "border.hxx"
 #include "backgrnd.hxx"
+//UUUU
+#include "svx/svxids.hrc"
+#include "cuitabarea.hxx"
 
 SvxBorderBackgroundDlg::SvxBorderBackgroundDlg(Window *pParent,
-    const SfxItemSet& rCoreSet, bool bEnableSelector)
-
-    : SfxTabDialog(pParent, "BorderBackgroundDialog",
-        "cui/ui/borderbackgrounddialog.ui", &rCoreSet)
-    , m_bEnableBackgroundSelector(bEnableSelector)
+    const SfxItemSet& rCoreSet,
+    bool bEnableSelector,
+    bool bEnableDrawingLayerFillStyles)
+    : SfxTabDialog(pParent,
+        bEnableDrawingLayerFillStyles
+            ? OString("BorderAreaTransparencyDialog")
+            : OString("BorderBackgroundDialog"),
+        bEnableDrawingLayerFillStyles
+            ? OUString("cui/ui/borderareatransparencydialog.ui")
+            : OUString("cui/ui/borderbackgrounddialog.ui"),
+        &rCoreSet)
+    , mbEnableBackgroundSelector(bEnableSelector)
+    , mbEnableDrawingLayerFillStyles(bEnableDrawingLayerFillStyles)
     , m_nBackgroundPageId(0)
+    , m_nAreaPageId(0)
+    , m_nTransparencePageId(0)
 {
     AddTabPage("borders", SvxBorderTabPage::Create, 0 );
-    m_nBackgroundPageId = AddTabPage("background", SvxBackgroundTabPage::Create, 0 );
+    if (mbEnableDrawingLayerFillStyles)
+    {
+        //UUUU Here we want full DrawingLayer FillStyle access, so add Area and Transparency TabPages
+        m_nAreaPageId = AddTabPage("area", SvxAreaTabPage::Create, 0);
+        m_nTransparencePageId = AddTabPage("transparence", SvxTransparenceTabPage::Create, 0);
+    }
+    else
+    {
+        m_nBackgroundPageId = AddTabPage("background", SvxBackgroundTabPage::Create, 0 );
+    }
 }
 
 void SvxBorderBackgroundDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
-    // Make it possible to switch between color/graphic:
-    if ( m_bEnableBackgroundSelector && (nPageId == m_nBackgroundPageId) )
-        ((SvxBackgroundTabPage&)rTabPage).ShowSelector( );
+    if (nPageId == m_nBackgroundPageId)
+    {
+        // allow switching between Color/graphic
+        if(mbEnableBackgroundSelector)
+        {
+            static_cast< SvxBackgroundTabPage& >(rTabPage).ShowSelector();
+        }
+    }
+    //UUUU inits for Area and Transparency TabPages
+    // The selection attribute lists (XPropertyList derivates, e.g. XColorList for
+    // the color table) need to be added as items (e.g. SvxColorTableItem) to make
+    // these pages find the needed attributes for fill style suggestions.
+    // These are added in SwDocStyleSheet::GetItemSet() for the SFX_STYLE_FAMILY_PARA on
+    // demand, but could also be directly added from the DrawModel.
+    else if (nPageId == m_nAreaPageId)
+    {
+        SfxItemSet aNew(
+            *GetInputSetImpl()->GetPool(),
+            SID_COLOR_TABLE, SID_BITMAP_LIST,
+            SID_OFFER_IMPORT, SID_OFFER_IMPORT,
+            0, 0);
+
+        aNew.Put(*GetInputSetImpl());
+
+        // add flag for direct graphic content selection
+        aNew.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
+
+        rTabPage.PageCreated(aNew);
+    }
+    else if (nPageId == m_nTransparencePageId)
+    {
+        rTabPage.PageCreated(*GetInputSetImpl());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

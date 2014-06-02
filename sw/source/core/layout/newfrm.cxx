@@ -33,6 +33,7 @@
 #include "viewimp.hxx"
 #include <hints.hxx>
 #include <viewopt.hxx>
+#include <drawdoc.hxx>
 #include <set>
 
 SwLayVout     *SwRootFrm::pVout = 0;
@@ -482,7 +483,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );
     bCallbackActionEnabled = false; // needs to be set to sal_True before leaving!
 
-    SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
+    SwDrawModel* pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )
     {
         // Disable "multiple layout"

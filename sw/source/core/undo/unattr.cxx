@@ -50,6 +50,7 @@
 #include <section.hxx>
 #include <charfmt.hxx>
 #include <switerator.hxx>
+#include <drawdoc.hxx>
 
 SwUndoFmtAttrHelper::SwUndoFmtAttrHelper( SwFmt& rFmt, bool bSvDrwPt )
     : SwClient( &rFmt )

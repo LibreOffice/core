@@ -26,6 +26,9 @@
 #include <vector>
 #include <xmloff/xmlstyle.hxx>
 
+//UUUU
+#include <boost/unordered_set.hpp>
+
 struct XMLPropertyState;
 class SvXMLStylesContext;
 
@@ -33,18 +36,52 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 
+//UUUU
+typedef boost::unordered_set<OUString, OUStringHash> OldFillStyleDefinitionSet;
+
 class XMLOFF_DLLPUBLIC XMLPropStyleContext : public SvXMLStyleContext
 {
+private:
     const OUString msIsPhysical;
     const OUString msFollowStyle;
     ::std::vector< XMLPropertyState > maProperties;
     ::com::sun::star::uno::Reference < ::com::sun::star::style::XStyle > mxStyle;
     SvXMLImportContextRef               mxStyles;
 
+    //UUUU
+    static OldFillStyleDefinitionSet maStandardSet;
+    static OldFillStyleDefinitionSet maHeaderSet;
+    static OldFillStyleDefinitionSet maFooterSet;
+    static OldFillStyleDefinitionSet maParaSet;
+
     SAL_DLLPRIVATE XMLPropStyleContext(XMLPropStyleContext &); // not defined
     SAL_DLLPRIVATE void operator =(XMLPropStyleContext &); // not defined
 
 protected:
+
+    //UUUU Helper to check if the local maProperties contzains the given
+    // FillStyle tag and if the FillStyle there is different from FillStyle_NONE
+    bool doNewDrawingLayerFillStyleDefinitionsExist(
+        const ::rtl::OUString& rFillStyleTag) const;
+
+    //UUUU Helper which will deactivate all old fill definitions (identified by
+    // the given OldFillStyleDefinitionSet) in the local maProperties. Deactivation
+    // is done setting theindex to -1. It returns true when actually old fill
+    // definitions existed and were deactivated
+    bool deactivateOldFillStyleDefinitions(
+        const OldFillStyleDefinitionSet& rHashSetOfTags);
+
+    //UUUU Helper to translate new DrawingLayer FillStyle values which are name-based
+    // from ODF internal name to style display names which can be found in the current
+    // document model (using NameOrIndex Items). The change is executed on the internal
+    // maProperties. The return value is true when actually names were changed
+    bool translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames();
+
+    //UUUU provider for often used sets
+    const OldFillStyleDefinitionSet& getStandardSet();
+    const OldFillStyleDefinitionSet& getHeaderSet();
+    const OldFillStyleDefinitionSet& getFooterSet();
+    const OldFillStyleDefinitionSet& getParaSet();
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,
                                const OUString& rLocalName,

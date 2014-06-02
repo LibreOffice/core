@@ -47,7 +47,16 @@
 #include <comphelper/servicehelper.hxx>
 #include <boost/scoped_ptr.hpp>
 
+//UUUU
+#include <swunohelper.hxx>
+#include <svx/unobrushitemhelper.hxx>
+#include <editeng/unoipset.hxx>
+#include <svx/xflbstit.hxx>
+#include <svx/xflbmtit.hxx>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+
 using namespace ::com::sun::star;
+
 
 class SwParaSelection
 {
@@ -151,6 +160,13 @@ public:
             const uno::Sequence< OUString >& rPropertyNames)
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 uno::RuntimeException);
+
+    //UUUU
+    void GetSinglePropertyValue_Impl(
+        const SfxItemPropertySimpleEntry& rEntry,
+        const SfxItemSet& rSet,
+        uno::Any& rAny ) const
+    throw(uno::RuntimeException);
 
     uno::Sequence< beans::GetDirectPropertyTolerantResult >
         GetPropertyValuesTolerant_Impl(
@@ -427,6 +443,98 @@ throw (beans::PropertyVetoException, lang::IllegalArgumentException,
     }
 }
 
+//UUUU Support for DrawingLayer FillStyles for GetPropertyValue() usages
+void SwXParagraph::Impl::GetSinglePropertyValue_Impl(
+    const SfxItemPropertySimpleEntry& rEntry,
+    const SfxItemSet& rSet,
+    uno::Any& rAny ) const
+throw(uno::RuntimeException)
+{
+    bool bDone(false);
+
+    switch(rEntry.nWID)
+    {
+        case RES_BACKGROUND:
+        {
+            const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
+            const sal_uInt8 nMemberId(rEntry.nMemberId & (~SFX_METRIC_ITEM));
+
+            if(!aOriginalBrushItem.QueryValue(rAny, nMemberId))
+            {
+                OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
+            }
+
+            bDone = true;
+            break;
+        }
+        case OWN_ATTR_FILLBMP_MODE:
+        {
+            const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&rSet.Get(XATTR_FILLBMP_STRETCH));
+            const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&rSet.Get(XATTR_FILLBMP_TILE));
+
+            if( pTileItem && pTileItem->GetValue() )
+            {
+                rAny <<= drawing::BitmapMode_REPEAT;
+            }
+            else if( pStretchItem && pStretchItem->GetValue() )
+            {
+                rAny <<= drawing::BitmapMode_STRETCH;
+            }
+            else
+            {
+                rAny <<= drawing::BitmapMode_NO_REPEAT;
+            }
+
+            bDone = true;
+            break;
+        }
+        default: break;
+    }
+
+    if(!bDone)
+    {
+        // fallback to standard get value implementation used before this helper was created
+        m_rPropSet.getPropertyValue(rEntry, rSet, rAny);
+
+        if(rEntry.aType == ::getCppuType((const sal_Int16*)0) && rEntry.aType != rAny.getValueType())
+        {
+            // since the sfx uInt16 item now exports a sal_Int32, we may have to fix this here
+            sal_Int32 nValue(0);
+
+            rAny >>= nValue;
+            rAny <<= static_cast< sal_Int16 >(nValue);
+        }
+
+        //UUUU check for needed metric translation
+        if(rEntry.nMemberId & SFX_METRIC_ITEM)
+        {
+            bool bDoIt(true);
+
+            if(XATTR_FILLBMP_SIZEX == rEntry.nWID || XATTR_FILLBMP_SIZEY == rEntry.nWID)
+            {
+                // exception: If these ItemTypes are used, do not convert when these are negative
+                // since this means they are intended as percent values
+                sal_Int32 nValue = 0;
+
+                if(rAny >>= nValue)
+                {
+                    bDoIt = nValue > 0;
+                }
+            }
+
+            if(bDoIt)
+            {
+                const SfxMapUnit eMapUnit(rSet.GetPool()->GetMetric(rEntry.nWID));
+
+                if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+                {
+                    SvxUnoConvertToMM(eMapUnit, rAny);
+                }
+            }
+        }
+    }
+}
+
 uno::Sequence< uno::Any > SwXParagraph::Impl::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
@@ -460,8 +568,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 *pEntry, aPam, &(pValues[nProp]), eTemp, &rTxtNode );
             if (!bDone)
             {
-                m_rPropSet.getPropertyValue(
-                    *pEntry, rAttrSet, pValues[nProp]);
+                //UUUU
+                GetSinglePropertyValue_Impl(*pEntry, rAttrSet, pValues[nProp]);
             }
         }
     }
@@ -723,8 +831,8 @@ throw (uno::RuntimeException)
                         // if not found try the real paragraph attributes...
                         if (!bDone)
                         {
-                            m_rPropSet.getPropertyValue(
-                                *pEntry, rValueAttrSet, aValue );
+                            //UUUU
+                            GetSinglePropertyValue_Impl(*pEntry, rValueAttrSet, aValue);
                         }
                     }
 
@@ -838,61 +946,108 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 }
 
 static beans::PropertyState lcl_SwXParagraph_getPropertyState(
-//                          SwUnoCrsr& rUnoCrsr,
-                            const SwTxtNode& rTxtNode,
-                            const SwAttrSet** ppSet,
-                            const SfxItemPropertySimpleEntry& rEntry,
-                            bool &rAttrSetFetched )
+    // SwUnoCrsr& rUnoCrsr,
+    const SwTxtNode& rTxtNode,
+    const SwAttrSet** ppSet,
+    const SfxItemPropertySimpleEntry& rEntry,
+    bool &rAttrSetFetched)
     throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
-    beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
+    beans::PropertyState eRet(beans::PropertyState_DEFAULT_VALUE);
 
-    if(!(*ppSet) && !rAttrSetFetched )
+    if(!(*ppSet) && !rAttrSetFetched)
     {
         (*ppSet) = rTxtNode.GetpSwAttrSet();
         rAttrSetFetched = true;
     }
-    SwPosition aPos( rTxtNode );
-    SwPaM aPam( aPos );
-    switch( rEntry.nWID )
+
+    SwPosition aPos(rTxtNode);
+    SwPaM aPam(aPos);
+    bool bDone(false);
+
+    switch(rEntry.nWID)
     {
-    case FN_UNO_NUM_RULES:
-        // if numbering is set, return it; else do nothing
-        SwUnoCursorHelper::getNumberingProperty( aPam, eRet, NULL );
-        break;
-    case FN_UNO_ANCHOR_TYPES:
-        break;
-    case RES_ANCHOR:
-        if ( MID_SURROUND_SURROUNDTYPE != rEntry.nMemberId )
-            goto lcl_SwXParagraph_getPropertyStateDEFAULT;
-        break;
-    case RES_SURROUND:
-        if ( MID_ANCHOR_ANCHORTYPE != rEntry.nMemberId )
-            goto lcl_SwXParagraph_getPropertyStateDEFAULT;
-        break;
-    case FN_UNO_PARA_STYLE:
-    case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
+        case FN_UNO_NUM_RULES:
         {
-            SwFmtColl* pFmt = SwUnoCursorHelper::GetCurTxtFmtColl(
-                aPam, rEntry.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
-            eRet = pFmt ? beans::PropertyState_DIRECT_VALUE
-                        : beans::PropertyState_AMBIGUOUS_VALUE;
+            // if numbering is set, return it; else do nothing
+            SwUnoCursorHelper::getNumberingProperty(aPam,eRet,NULL);
+            bDone = true;
+            break;
         }
-        break;
-    case FN_UNO_PAGE_STYLE:
+        case FN_UNO_ANCHOR_TYPES:
+        {
+            bDone = true;
+            break;
+        }
+        case RES_ANCHOR:
+        {
+            bDone = (MID_SURROUND_SURROUNDTYPE == rEntry.nMemberId);
+            break;
+        }
+        case RES_SURROUND:
+        {
+            bDone = (MID_ANCHOR_ANCHORTYPE == rEntry.nMemberId);
+            break;
+        }
+        case FN_UNO_PARA_STYLE:
+        case FN_UNO_PARA_CONDITIONAL_STYLE_NAME:
+        {
+            SwFmtColl* pFmt = SwUnoCursorHelper::GetCurTxtFmtColl(aPam,rEntry.nWID == FN_UNO_PARA_CONDITIONAL_STYLE_NAME);
+            eRet = pFmt ? beans::PropertyState_DIRECT_VALUE : beans::PropertyState_AMBIGUOUS_VALUE;
+            bDone = true;
+            break;
+        }
+        case FN_UNO_PAGE_STYLE:
         {
             OUString sVal;
             SwUnoCursorHelper::GetCurPageStyle( aPam, sVal );
             eRet = !sVal.isEmpty() ? beans::PropertyState_DIRECT_VALUE
                               : beans::PropertyState_AMBIGUOUS_VALUE;
+            bDone = true;
+            break;
         }
-        break;
-    lcl_SwXParagraph_getPropertyStateDEFAULT:
-    default:
-        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, false))
-            eRet = beans::PropertyState_DIRECT_VALUE;
-        break;
+
+        //UUUU DrawingLayer PropertyStyle support
+        case OWN_ATTR_FILLBMP_MODE:
+        {
+            if(*ppSet)
+            {
+                if(SFX_ITEM_SET == (*ppSet)->GetItemState(XATTR_FILLBMP_STRETCH, false)
+                    || SFX_ITEM_SET == (*ppSet)->GetItemState(XATTR_FILLBMP_TILE, false))
+                {
+                    eRet = beans::PropertyState_DIRECT_VALUE;
+                }
+                else
+                {
+                    eRet = beans::PropertyState_AMBIGUOUS_VALUE;
+                }
+
+                bDone = true;
+            }
+            break;
+        }
+        case RES_BACKGROUND:
+        {
+            if(*ppSet)
+            {
+                if(SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(**ppSet))
+                {
+                    eRet = beans::PropertyState_DIRECT_VALUE;
+                    bDone = true;
+                }
+            }
+            break;
+        }
     }
+
+    if(!bDone)
+    {
+        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, false))
+        {
+            eRet = beans::PropertyState_DIRECT_VALUE;
+        }
+    }
+
     return eRet;
 }
 
@@ -1000,10 +1155,24 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
             static_cast<cppu::OWeakObject *>(this));
     }
 
-    if (pEntry->nWID < RES_FRMATR_END)
+    const bool bBelowFrmAtrEnd(pEntry->nWID < RES_FRMATR_END);
+    const bool bDrawingLayerRange(XATTR_FILL_FIRST <= pEntry->nWID && XATTR_FILL_LAST >= pEntry->nWID);
+
+    if(bBelowFrmAtrEnd || bDrawingLayerRange)
     {
         std::set<sal_uInt16> aWhichIds;
-        aWhichIds.insert( pEntry->nWID );
+
+        //UUUU For FillBitmapMode two IDs have to be reset (!)
+        if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
+        {
+            aWhichIds.insert(XATTR_FILLBMP_STRETCH);
+            aWhichIds.insert(XATTR_FILLBMP_TILE);
+        }
+        else
+        {
+            aWhichIds.insert(pEntry->nWID);
+        }
+
         if (pEntry->nWID < RES_PARATR_BEGIN)
         {
             aCursor.GetDoc()->ResetAttrs(aCursor, true, aWhichIds);
@@ -1020,14 +1189,19 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
             {
                 pTemp->MovePara(fnParaCurr, fnParaStart);
             }
+
             pTemp->SetMark();
             *pTemp->GetPoint() = aEnd;
             //pTemp->Exchange();
+
             SwUnoCursorHelper::SelectPam(*pTemp, true);
+
             if (!SwUnoCursorHelper::IsEndOfPara(*pTemp))
             {
                 pTemp->MovePara(fnParaCurr, fnParaEnd);
             }
+
+
             pTemp->GetDoc()->ResetAttrs(*pTemp, true, aWhichIds);
         }
     }
@@ -1062,10 +1236,13 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             static_cast<cppu::OWeakObject *>(this));
     }
 
-    if (pEntry->nWID < RES_FRMATR_END)
+    const bool bBelowFrmAtrEnd(pEntry->nWID < RES_FRMATR_END);
+    const bool bDrawingLayerRange(XATTR_FILL_FIRST <= pEntry->nWID && XATTR_FILL_LAST >= pEntry->nWID);
+
+    if(bBelowFrmAtrEnd || bDrawingLayerRange)
     {
-        const SfxPoolItem& rDefItem =
-            rTxtNode.GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
+        const SfxPoolItem& rDefItem = rTxtNode.GetDoc()->GetAttrPool().GetDefaultItem(pEntry->nWID);
+
         rDefItem.QueryValue(aRet, pEntry->nMemberId);
     }
 

@@ -26,13 +26,13 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
-
 #include <tools/debug.hxx>
-
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include "XMLSectionFootnoteConfigExport.hxx"
 
+//UUUU
+#include <xmlsdtypes.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -795,20 +795,20 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_MARGINALL:             pAllMargin = propertie; break;
 
         //UUUU
-        case CTF_SW_REPEAT_OFFSET_X:
+        case CTF_REPEAT_OFFSET_X:
             pRepeatOffsetX = propertie;
             break;
 
         //UUUU
-        case CTF_SW_REPEAT_OFFSET_Y:
+        case CTF_REPEAT_OFFSET_Y:
             pRepeatOffsetY = propertie;
             break;
 
         //UUUU
-        case CTF_SW_FILLGRADIENTNAME:
-        case CTF_SW_FILLHATCHNAME:
-        case CTF_SW_FILLBITMAPNAME:
-        case CTF_SW_FILLTRANSNAME:
+        case CTF_FILLGRADIENTNAME:
+        case CTF_FILLHATCHNAME:
+        case CTF_FILLBITMAPNAME:
+        case CTF_FILLTRANSNAME:
             {
                 OUString aStr;
                 if( (propertie->maValue >>= aStr) && 0 == aStr.getLength() )

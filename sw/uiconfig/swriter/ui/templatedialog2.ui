@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="TemplateDialog2">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -288,13 +289,27 @@
               <placeholder/>
             </child>
             <child type="tab">
-              <object class="GtkLabel" id="background">
+              <object class="GtkLabel" id="area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Background</property>
+                <property name="label" translatable="yes">Area</property>
               </object>
               <packing>
                 <property name="position">12</property>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="transparence">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Transparency</property>
+              </object>
+              <packing>
+                <property name="position">13</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -308,7 +323,7 @@
                 <property name="label" translatable="yes">Borders</property>
               </object>
               <packing>
-                <property name="position">13</property>
+                <property name="position">14</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -322,7 +337,7 @@
                 <property name="label" translatable="yes">Condition</property>
               </object>
               <packing>
-                <property name="position">14</property>
+                <property name="position">15</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>

@@ -37,7 +37,7 @@
 #include <viewopt.hxx>
 #include <swwait.hxx>
 #include <fntcache.hxx>
-
+#include <drawdoc.hxx>
 
 class SwDocShell;
 class SwWait;

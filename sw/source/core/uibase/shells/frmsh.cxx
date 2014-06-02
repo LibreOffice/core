@@ -62,6 +62,7 @@
 #include <swdtflvr.hxx>
 #include <swwait.hxx>
 #include <docstat.hxx>
+#include <drawdoc.hxx>
 #include <IDocumentStatistics.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
@@ -442,7 +443,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 //UUUU create needed items for XPropertyList entries from the DrawModel so that
                 // the Area TabPage can access them
-                const SdrModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->GetDrawModel();
+                const SwDrawModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->GetDrawModel();
 
                 aSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
                 aSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));

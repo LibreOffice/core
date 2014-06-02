@@ -28,16 +28,21 @@
 class SvxBorderBackgroundDlg: public SfxTabDialog
 {
 public:
-    SvxBorderBackgroundDlg(Window *pParent, const SfxItemSet& rCoreSet,
-        bool bEnableSelector = false);
+    SvxBorderBackgroundDlg(Window *pParent,
+        const SfxItemSet& rCoreSet,
+        bool bEnableSelector = false,
+        bool bEnableDrawingLayerFillStyles = false);
 protected:
     virtual void    PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage ) SAL_OVERRIDE;
 
 private:
-    bool m_bEnableBackgroundSelector; ///< for Border/Background
+    /// bitfield
+    bool        mbEnableBackgroundSelector : 1;         ///< for Border/Background
+    bool        mbEnableDrawingLayerFillStyles : 1;     ///< for full DrawingLayer FillStyles
     sal_uInt16  m_nBackgroundPageId;
+    sal_uInt16  m_nAreaPageId;
+    sal_uInt16  m_nTransparencePageId;
 };
-
 
 #endif
 

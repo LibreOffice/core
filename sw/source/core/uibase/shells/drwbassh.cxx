@@ -49,7 +49,6 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
-
 #include <shells.hrc>
 #define SwDrawBaseShell
 #include <sfx2/msg.hxx>
@@ -62,8 +61,8 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-
 #include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -614,7 +613,7 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     else
     {
         nRet = 1;
-        SdrModel* pModel = rSh.getIDocumentDrawModelAccess()->GetDrawModel();
+        SwDrawModel* pModel = rSh.getIDocumentDrawModelAccess()->GetDrawModel();
         SdrObjListIter aIter( *(pModel->GetPage(0)), IM_DEEPWITHGROUPS );
         while( aIter.IsMore() )
         {

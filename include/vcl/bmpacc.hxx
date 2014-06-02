@@ -193,6 +193,7 @@ public:
 
     void                        SetLineColor( const Color& rColor );
 
+    void                        SetFillColor();
     void                        SetFillColor( const Color& rColor );
 
     void                        Erase( const Color& rColor );

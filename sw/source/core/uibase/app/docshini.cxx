@@ -548,7 +548,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         }
 
         UpdateFontList();
-        InitDraw();
+        InitDrawModelAndDocShell(this, pDoc ? pDoc->GetDrawModel() : 0);
 
         SetError( nErr, OUString( OSL_LOG_PREFIX ) );
         bRet = !IsError( nErr );
@@ -614,7 +614,7 @@ void SwDocShell::SubInitNew()
     OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
     mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
     UpdateFontList();
-    InitDraw();
+    InitDrawModelAndDocShell(this, pDoc ? pDoc->GetDrawModel() : 0);
 
     pDoc->setLinkUpdateMode( GLOBALSETTING );
     pDoc->setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );

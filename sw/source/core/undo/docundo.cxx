@@ -20,9 +20,7 @@
 #include <UndoManager.hxx>
 
 #include <vcl/wrkwin.hxx>
-
 #include <svx/svdmodel.hxx>
-
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <ndarr.hxx>
@@ -34,6 +32,7 @@
 #include <undo.hrc>
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
+#include <drawdoc.hxx>
 #include <limits>
 
 using namespace ::com::sun::star;
@@ -85,7 +84,7 @@ void UndoManager::DoUndo(bool const bDoUndo)
     {
         EnableUndo(bDoUndo);
 
-        SdrModel *const pSdrModel = m_rDrawModelAccess.GetDrawModel();
+        SwDrawModel*const pSdrModel = m_rDrawModelAccess.GetDrawModel();
         if( pSdrModel )
         {
             pSdrModel->EnableUndo(bDoUndo);

@@ -24,12 +24,12 @@
 class SwDoc;
 class SwDocShell;
 
-class SwDrawDocument : public FmFormModel
+class SwDrawModel : public FmFormModel
 {
     SwDoc* pDoc;
 public:
-    SwDrawDocument( SwDoc* pDoc );
-    virtual ~SwDrawDocument();
+    SwDrawModel( SwDoc* pDoc );
+    virtual ~SwDrawModel();
 
     const SwDoc& GetDoc() const { return *pDoc; }
           SwDoc& GetDoc()       { return *pDoc; }

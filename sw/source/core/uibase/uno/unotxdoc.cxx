@@ -118,6 +118,7 @@
 #include <swatrset.hxx>
 #include <view.hxx>
 #include <srcview.hxx>
+#include <drawdoc.hxx>
 
 #include <svtools/langtab.hxx>
 #include <map>
@@ -1915,10 +1916,10 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel * pDrawDoc;
             bool bAuto = *(sal_Bool*) aValue.getValue();
 
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * >( pDocShell->GetDoc()->GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawModel * >( pDocShell->GetDoc()->GetDrawModel() ) ) )
                 pDrawDoc->SetAutoControlFocus( bAuto );
             else if (bAuto)
             {
@@ -1928,17 +1929,17 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
                 // SdrModel and we are leaving the default at false,
                 // we don't need to make an SdrModel and can do nothing
                 // #i52858# - method name changed
-                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
+                pDrawDoc = dynamic_cast< SwDrawModel * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
                 pDrawDoc->SetAutoControlFocus ( bAuto );
             }
         }
         break;
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel * pDrawDoc;
             bool bMode = *(sal_Bool*)aValue.getValue();
 
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawModel * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
                 pDrawDoc->SetOpenInDesignMode( bMode );
             else if (!bMode)
             {
@@ -1949,7 +1950,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
                 // we don't need to make an SdrModel and can do
                 // nothing
                 // #i52858# - method name changed
-                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
+                pDrawDoc = dynamic_cast< SwDrawModel * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
                 pDrawDoc->SetOpenInDesignMode ( bMode );
             }
         }
@@ -2086,9 +2087,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel * pDrawDoc;
             bool bAuto;
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawModel * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
                 bAuto = pDrawDoc->GetAutoControlFocus();
             else
                 bAuto = false;
@@ -2097,9 +2098,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel * pDrawDoc;
             bool bMode;
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawModel * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
                 bMode = pDrawDoc->GetOpenInDesignMode();
             else
                 bMode = true;

@@ -29,6 +29,7 @@
 #include <breakit.hxx>
 #include <docary.hxx>
 #include <SwUndoFmt.hxx>
+#include <drawdoc.hxx>
 
 /* IDocumentSettingAccess */
 

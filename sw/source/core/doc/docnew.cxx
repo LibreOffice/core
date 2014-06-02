@@ -103,6 +103,9 @@
 #include <fmtmeta.hxx>
 #include <boost/foreach.hpp>
 
+//UUUU
+#include <svx/xfillit0.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
@@ -288,6 +291,21 @@ SwDoc::SwDoc()
     mbReadOnly(false),
     meDocType(DOCTYPE_NATIVE)
 {
+    //UUUU The DrawingLayer ItemPool which is used as 2nd pool for Writer documents' pool
+    // has a default for the XFillStyleItem of XFILL_SOLID and the color for it is the default
+    // fill color (blue7 or similar). This is a problem, in Writer we want the default fill
+    // style to be XFILL_NONE. This cannot simply be done by changing it in the 2nd pool at the
+    // pool defaults when the DrawingLayer ItemPool is used for Writer, that would lead to
+    // countless problems like DrawObjects initial fill and others.
+    // It is also hard to find all places where the initial ItemSets for Writer (including
+    // style hierarchies) are created and to always set (but only at the root) the FillStyle
+    // to NONE fixed; that will add that attribute to the file format. It will be hard to reset
+    // attribbute sets (which is done at import and using UI). Also not a good solution.
+    // Luckily Writer uses pDfltTxtFmtColl as default parent for all paragraphs and similar, thus
+    // it is possible to set this attribute here. It will be not reset when importing.
+    mpDfltTxtFmtColl->SetFmtAttr(XFillStyleItem(XFILL_NONE));
+    mpDfltFrmFmt->SetFmtAttr(XFillStyleItem(XFILL_NONE));
+
     /*
      * DefaultFormats and DefaultFormatCollections (FmtColl)
      * are inserted at position 0 at the respective array.
@@ -668,11 +686,17 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
         mpLinkMgr->SetPersist( mpDocShell );
         if( mpDrawModel )
         {
-            ((SwDrawDocument*)mpDrawModel)->SetObjectShell( mpDocShell );
+            ((SwDrawModel*)mpDrawModel)->SetObjectShell( mpDocShell );
             mpDrawModel->SetPersist( mpDocShell );
             OSL_ENSURE( mpDrawModel->GetPersist() == GetPersist(),
                     "draw model's persist is out of sync" );
         }
+
+        // set DocShell pointer also on DrawModel
+        InitDrawModelAndDocShell(mpDocShell, GetDrawModel());
+        OSL_ENSURE(!GetDocumentDrawModelManager().GetDrawModel() ||
+            GetDocumentDrawModelManager().GetDrawModel()->GetPersist() == GetPersist(),
+            "draw model's persist is out of sync");
     }
 }
 

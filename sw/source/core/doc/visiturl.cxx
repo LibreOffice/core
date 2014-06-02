@@ -75,7 +75,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                             bUnLockView = !pESh->IsViewLocked();
                             pESh->LockView( true );
                         }
-                        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( false );
+                        const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid(false);
                         const SwTxtAttr* pAttr = pTxtAttr;
                         SwUpdateAttr aUpdateAttr( *pAttr->GetStart(),
                                                   *pAttr->End(),

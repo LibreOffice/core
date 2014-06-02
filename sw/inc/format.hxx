@@ -25,8 +25,6 @@
 #include <calbck.hxx>
 #include <hintids.hxx>
 #include <boost/shared_ptr.hpp>
-//UUUU
-#include <fillattributes.hxx>
 
 class IDocumentSettingAccess;
 class IDocumentDrawModelAccess;
@@ -36,6 +34,11 @@ class IDocumentFieldsAccess;
 class IDocumentChartDataProviderAccess;
 class SwDoc;
 class SfxGrabBagItem;
+
+namespace drawinglayer { namespace attribute {
+    class SdrAllFillAttributesHelper;
+    typedef boost::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
+}}
 
 /// Base class for various Writer styles.
 class SW_DLLPUBLIC SwFmt : public SwModify
@@ -241,7 +244,7 @@ public:
     inline const SvxBoxItem               &GetBox( bool = true ) const;
     inline const SvxFmtKeepItem         &GetKeep( bool = true ) const;
 
-    //UUUU
+    //UUUU Get SvxBrushItem for Background fill (partially for backwards compatibility)
     const SvxBrushItem& GetBackground( bool = true ) const;
 
     inline const SvxShadowItem            &GetShadow( bool = true ) const;
@@ -327,29 +330,15 @@ public:
     */
     virtual bool IsShadowTransparent() const;
 
-    //UUUU
-    virtual FillAttributesPtr getFillAttributes() const;
+    //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 };
-
-// --------------- inline Implementations ------------------------
-
-//UUUUinline const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich,
-//UUUU                                             bool bInParents ) const
-//UUUU{
-//UUUU  return aSet.Get( nWhich, bInParents );
-//UUUU}
 
 inline void SwFmt::SetName( const sal_Char* pNewName,
                              bool bBroadcast )
 {
     SetName(OUString::createFromAscii(pNewName), bBroadcast);
 }
-
-//UUUUinline SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent,
-//UUUU                                      const SfxPoolItem **ppItem ) const
-//UUUU{
-//UUUU  return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
-//UUUU}
 
 #endif // INCLUDED_SW_INC_FORMAT_HXX
 

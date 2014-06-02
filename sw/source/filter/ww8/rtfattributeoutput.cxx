@@ -31,7 +31,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/tencinfo.h>
 #include <svtools/rtfkeywd.hxx>
-
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/adjustitem.hxx>
@@ -95,6 +94,7 @@
 #include <ndole.hxx>
 #include <lineinfo.hxx>
 #include <rtf.hxx>
+#include <drawdoc.hxx>
 
 #include <vcl/cvtgrf.hxx>
 #include <oox/mathml/export.hxx>
@@ -1718,7 +1718,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl(const sw::Frame& rFrame, const Poin
             bool bSwapInPage = false;
             if (!pSdrObj->GetPage())
             {
-                if (SdrModel* pModel = m_rExport.pDoc->GetDrawModel())
+                if (SwDrawModel* pModel = m_rExport.pDoc->GetDrawModel())
                 {
                     if (SdrPage* pPage = pModel->GetPage(0))
                     {

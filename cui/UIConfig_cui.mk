@@ -26,6 +26,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/autocorrectdialog \
 	cui/uiconfig/ui/backgroundpage \
 	cui/uiconfig/ui/bitmaptabpage \
+	cui/uiconfig/ui/borderareatransparencydialog \
 	cui/uiconfig/ui/borderbackgrounddialog \
 	cui/uiconfig/ui/borderpage \
 	cui/uiconfig/ui/breaknumberoption \

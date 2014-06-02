@@ -845,7 +845,7 @@ static bool isA11yRelevantAttribute(MSHORT nWhich)
     return nWhich != RES_CHRATR_RSID;
 }
 
-static bool hasA11yRelevantAttribute( const std::vector<MSHORT>& nWhich )
+static bool hasA11yRelevantAttribute( const std::vector<sal_uInt16>& nWhich )
 {
     for( std::vector<MSHORT>::const_iterator nItr = nWhich.begin();
             nItr < nWhich.end(); ++nItr )
@@ -953,8 +953,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         break;
         case RES_UPDATE_ATTR:
         {
-            nPos = ((SwUpdateAttr*)pNew)->nStart;
-            nLen = ((SwUpdateAttr*)pNew)->nEnd - nPos;
+            nPos = ((SwUpdateAttr*)pNew)->getStart();
+            nLen = ((SwUpdateAttr*)pNew)->getEnd() - nPos;
             if( IsIdxInside( nPos, nLen ) )
             {
                 // Es muss in jedem Fall neu formatiert werden,
@@ -967,7 +967,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     nLen = 1;
 
                 _InvalidateRange( SwCharRange( nPos, nLen) );
-                MSHORT nTmp = ((SwUpdateAttr*)pNew)->nWhichAttr;
+                MSHORT nTmp = ((SwUpdateAttr*)pNew)->getWhichAttr();
 
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
@@ -977,8 +977,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 }
             }
 
-            if( isA11yRelevantAttribute( ((SwUpdateAttr*)pNew)->nWhichAttr ) &&
-                    hasA11yRelevantAttribute( ((SwUpdateAttr*)pNew)->aWhichFmtAttr ) )
+            if( isA11yRelevantAttribute( ((SwUpdateAttr*)pNew)->getWhichAttr() ) &&
+                    hasA11yRelevantAttribute( ((SwUpdateAttr*)pNew)->getFmtAttr() ) )
             {
                 // #i104008#
                 SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;

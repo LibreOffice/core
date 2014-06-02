@@ -50,6 +50,7 @@
 #include "swhtml.hxx"
 #include <shellio.hxx>
 #include <rtl/strbuf.hxx>
+#include <drawdoc.hxx>
 
 using namespace css;
 
@@ -358,7 +359,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // Ein DrawTxtobj anlegen
     // #i52858# - method name changed
-    SdrModel* pModel = pDoc->GetOrCreateDrawModel();
+    SwDrawModel* pModel = pDoc->GetOrCreateDrawModel();
 
     SdrPage* pPg = pModel->GetPage( 0 );
     pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,

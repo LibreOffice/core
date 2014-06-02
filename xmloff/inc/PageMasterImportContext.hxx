@@ -25,7 +25,12 @@
 
 class PageStyleContext : public XMLPropStyleContext
 {
+private:
     OUString sPageUsage;
+
+    //UUUU
+    bool                m_bIsFillStyleAlreadyConverted : 1;
+
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,

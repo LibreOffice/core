@@ -51,6 +51,7 @@
 #include <flyfrm.hxx>
 #include <ndtyp.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <drawdoc.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/SvxShapeTypes.hxx>

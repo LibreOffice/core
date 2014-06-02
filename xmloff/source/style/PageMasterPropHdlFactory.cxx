@@ -28,8 +28,24 @@
 #include <xmloff/PageMasterStyleMap.hxx>
 #include <com/sun/star/text/TextGridMode.hpp>
 
+//UUUU
+#include <xmloff/EnumPropertyHdl.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include "XMLFillBitmapSizePropertyHandler.hxx"
+#include "XMLBitmapLogicalSizePropertyHandler.hxx"
+#include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
+
 using namespace ::xmloff::token;
 using namespace ::com::sun::star;
+//UUUU
+using namespace ::com::sun::star::drawing;
+
+//UUUU
+extern SvXMLEnumMapEntry aXML_FillStyle_EnumMap[];
+extern SvXMLEnumMapEntry aXML_RefPoint_EnumMap[];
+extern SvXMLEnumMapEntry aXML_BitmapMode_EnumMap[];
 
 static SvXMLEnumMapEntry const aXML_TextGridMode_ConstantMap[] =
 {
@@ -118,6 +134,34 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
                 pHdl = new XMLConstantsPropertyHandler(
                     aXML_TextGridMode_ConstantMap, XML_NONE );
             break;
+
+            //UUUU
+            case XML_SW_TYPE_FILLSTYLE:
+                pHdl = new XMLEnumPropertyHdl( aXML_FillStyle_EnumMap, ::getCppuType((const FillStyle*)0) );
+                break;
+            case XML_SW_TYPE_FILLBITMAPSIZE:
+                pHdl = new XMLFillBitmapSizePropertyHandler();
+                break;
+            case XML_SW_TYPE_LOGICAL_SIZE:
+                pHdl = new XMLBitmapLogicalSizePropertyHandler();
+                break;
+            case XML_SW_TYPE_BITMAP_REFPOINT:
+                pHdl = new XMLEnumPropertyHdl( aXML_RefPoint_EnumMap, getCppuType((const RectanglePoint*)0) );
+                break;
+            case XML_SW_TYPE_BITMAP_MODE:
+                pHdl = new XMLEnumPropertyHdl( aXML_BitmapMode_EnumMap, getCppuType((const BitmapMode*)0) );
+                break;
+            case XML_SW_TYPE_BITMAPREPOFFSETX:
+            case XML_SW_TYPE_BITMAPREPOFFSETY:
+                pHdl = new XMLBitmapRepeatOffsetPropertyHandler(XML_SW_TYPE_BITMAPREPOFFSETX == nType);
+                break;
+
+            //UUUU
+            default:
+            {
+                OSL_ENSURE(false, "XMLPropertyHandler missing (!)");
+                break;
+            }
         }
 
         if( pHdl )

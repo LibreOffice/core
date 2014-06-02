@@ -3520,18 +3520,20 @@ void SwRangeRedline::InvalidateRange()       // trigger the Layout
         sal_Int32 nTmp2 = nSttCnt; nSttCnt = nEndCnt; nEndCnt = nTmp2;
     }
 
-    SwUpdateAttr aHt( 0, 0, RES_FMT_CHG );
     SwNodes& rNds = GetDoc()->GetNodes();
-    for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+    for (sal_uLong n(nSttNd); n <= nEndNd; ++n)
     {
-        SwNode* pNd = rNds[n];
-        if( pNd->IsTxtNode() )
+        SwNode* pNode = rNds[n];
+
+        if (pNode && pNode->IsTxtNode())
         {
-            aHt.nStart = n == nSttNd ? nSttCnt : 0;
-            aHt.nEnd = (n == nEndNd)
-                ? nEndCnt
-                : static_cast<SwTxtNode*>(pNd)->GetTxt().getLength();
-            ((SwTxtNode*)pNd)->ModifyNotification( &aHt, &aHt );
+            SwTxtNode* pNd = static_cast< SwTxtNode* >(pNode);
+            SwUpdateAttr aHt(
+                n == nSttNd ? nSttCnt : 0,
+                n == nEndNd ? nEndCnt : pNd->GetTxt().getLength(),
+                RES_FMT_CHG);
+
+            pNd->ModifyNotification(&aHt, &aHt);
         }
     }
 }

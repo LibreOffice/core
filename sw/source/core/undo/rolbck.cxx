@@ -979,20 +979,31 @@ SwHistory::~SwHistory()
     Delete( 0 );
 }
 
-void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
-                     sal_uLong nNodeIdx )
+void SwHistory::Add(
+    const SfxPoolItem* pOldValue,
+    const SfxPoolItem* pNewValue,
+    sal_uLong nNodeIdx)
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
+    const sal_uInt16 nWhich(pNewValue->Which());
 
-    sal_uInt16 nWhich = pNewValue->Which();
-    if( (nWhich >= POOLATTR_END)
-        || (nWhich == RES_TXTATR_FIELD)
-        || (nWhich == RES_TXTATR_ANNOTATION) )
+    // excluded values
+    if(nWhich == RES_TXTATR_FIELD || nWhich == RES_TXTATR_ANNOTATION)
+    {
         return;
+    }
 
-    // no default attribute?
-    SwHistoryHint * pHt;
-    if ( pOldValue && pOldValue != GetDfltAttr( pOldValue->Which() ) )
+    // no default Attribute?
+    SwHistoryHint* pHt = 0;
+
+    //UUUU To be able to include the DrawingLayer FillItems something more
+    // general has to be done to check if an Item is default than to check
+    // if it's pointzer equals that in Writer's global PoolDefaults (held in
+    // aAttrTab and used to fill the pool defaults in Writer - looks as if
+    // Writer is *older* than the SfxItemPool ?). I checked the possibility to
+    // get the SfxItemPool here (works), but decided to use the SfxPoolItem's
+    // global tooling aka IsDefaultItem(const SfxPoolItem*) for now
+    if(pOldValue && !IsDefaultItem(pOldValue))
     {
         pHt = new SwHistorySetFmt( pOldValue, nNodeIdx );
     }
@@ -1000,6 +1011,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
     {
         pHt = new SwHistoryResetFmt( pNewValue, nNodeIdx );
     }
+
     m_SwpHstry.push_back( pHt );
 }
 
@@ -1197,21 +1209,34 @@ sal_uInt16 SwHistory::SetTmpEnd( sal_uInt16 nNewTmpEnd )
     return nOld;
 }
 
-void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx )
+void SwHistory::CopyFmtAttr(
+    const SfxItemSet& rSet,
+    sal_uLong nNodeIdx)
 {
-    if( rSet.Count() )
+    if(rSet.Count())
     {
-        SfxItemIter aIter( rSet );
-        do {
-            if( (SfxPoolItem*)-1 != aIter.GetCurItem() )
+        SfxItemIter aIter(rSet);
+
+        do
+        {
+            if(!IsInvalidItem(aIter.GetCurItem()))
             {
                 const SfxPoolItem* pNew = aIter.GetCurItem();
-                Add( pNew, pNew, nNodeIdx );
+
+                Add(
+                    pNew,
+                    pNew,
+                    nNodeIdx);
             }
-            if( aIter.IsAtEnd() )
+
+            if(aIter.IsAtEnd())
+            {
                 break;
+            }
+
             aIter.NextItem();
-        } while( true );
+
+        } while(true);
     }
 }
 
@@ -1298,29 +1323,38 @@ SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
 
 void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    // #i114861#
-    // Do not handle a "noop" modify
-    // - e.g. <SwTxtNode::NumRuleChgd()> uses such a "noop" modify
-    if ( m_pHistory && ( pOld || pNew ) &&
-         pOld != pNew )
+    if ( m_pHistory && ( pOld || pNew ) && pOld != pNew )
     {
         if ( pNew->Which() < POOLATTR_END )
         {
-            m_pHistory->Add( pOld, pNew, m_nNodeIndex );
+            if(RES_UPDATE_ATTR == pNew->Which())
+            {
+                // const SfxItemPool& rPool = static_cast< const SwUpdateAttr* >(pNew)->GetSfxItemPool();
+
+                m_pHistory->Add(
+                    // rPool,
+                    pOld,
+                    pNew,
+                    m_nNodeIndex);
+            }
+            else
+            {
+                OSL_ENSURE(false, "Unexpected update attribute (!)");
+            }
         }
         else if (pOld && RES_ATTRSET_CHG == pNew->Which())
         {
             SwHistoryHint* pNewHstr;
-            const SfxItemSet& rSet =
-                *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet();
+            const SfxItemSet& rSet = *static_cast< const SwAttrSetChg* >(pOld)->GetChgSet();
+
             if ( 1 < rSet.Count() )
             {
-                pNewHstr =
-                    new SwHistorySetAttrSet( rSet, m_nNodeIndex, m_WhichIdSet );
+                pNewHstr = new SwHistorySetAttrSet( rSet, m_nNodeIndex, m_WhichIdSet );
             }
             else
             {
                 const SfxPoolItem* pItem = SfxItemIter( rSet ).FirstItem();
+
                 if ( m_WhichIdSet.count( pItem->Which() ) )
                 {
                     pNewHstr = new SwHistorySetFmt( pItem, m_nNodeIndex );
@@ -1330,6 +1364,7 @@ void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     pNewHstr = new SwHistoryResetFmt( pItem, m_nNodeIndex );
                 }
             }
+
             m_pHistory->m_SwpHstry.push_back( pNewHstr );
         }
     }

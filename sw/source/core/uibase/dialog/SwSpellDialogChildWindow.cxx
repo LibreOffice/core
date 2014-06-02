@@ -38,6 +38,7 @@
 #include <unotools/lingucfg.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
+#include <drawdoc.hxx>
 #include <docary.hxx>
 #include <frmfmt.hxx>
 #include <dcontact.hxx>

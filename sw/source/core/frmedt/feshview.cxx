@@ -18,7 +18,6 @@
  */
 
 #include "hintids.hxx"
-
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
@@ -77,6 +76,7 @@
 #include <HandleAnchorNodeChg.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <switerator.hxx>
+#include <drawdoc.hxx>
 
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

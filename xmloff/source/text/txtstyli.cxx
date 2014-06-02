@@ -48,6 +48,10 @@
 #include <utility>
 #include <vector>
 
+//UUUU
+#include <xmlsdtypes.hxx>
+#include <xmloff/xmlerror.hxx>
+
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -397,22 +401,19 @@ void XMLTextStyleContext::FillPropertySet(
     // catch the combined characters attribute
 
     // imitate XMLPropStyleContext::FillPropertySet(...)
-    UniReference < SvXMLImportPropertyMapper > xImpPrMap =
-        ((SvXMLStylesContext *)GetStyles())->GetImportPropertyMapper(GetFamily());
-    DBG_ASSERT( xImpPrMap.is(), "Where is the import prop mapper?" );
-    if( xImpPrMap.is() )
+    SvXMLStylesContext* pSvXMLStylesContext = static_cast< SvXMLStylesContext* >(GetStyles());
+    UniReference < SvXMLImportPropertyMapper > xImpPrMap = pSvXMLStylesContext->GetImportPropertyMapper(GetFamily());
+    DBG_ASSERT(xImpPrMap.is(),"Where is the import prop mapper?");
+
+    if(xImpPrMap.is())
     {
-
         // imitate SvXMLImportPropertyMapper::FillPropertySet(...)
-
         // The reason for this is that we have no other way to
         // efficiently intercept the value of combined characters. To
         // get that value, we could iterate through the map once more,
         // but instead we chose to insert the code into this
         // iteration. I haven't been able to come up with a much more
         // intelligent solution.
-
-
         struct _ContextID_Index_Pair aContextIDs[] =
         {
             { CTF_COMBINED_CHARACTERS_FIELD, -1 },
@@ -422,28 +423,56 @@ void XMLTextStyleContext::FillPropertySet(
             { CTF_FONTFAMILYNAME, -1 },
             { CTF_FONTFAMILYNAME_CJK, -1 },
             { CTF_FONTFAMILYNAME_CTL, -1 },
+
+            //UUU need special handling for DrawingLayer FillStyle names
+            { CTF_FILLGRADIENTNAME, -1 },
+            { CTF_FILLTRANSNAME, -1 },
+            { CTF_FILLHATCHNAME, -1 },
+            { CTF_FILLBITMAPNAME, -1 },
+
             { -1, -1 }
         };
 
-        // get property set info
-        Reference< XPropertySetInfo > xInfo( rPropSet->getPropertySetInfo(), UNO_SET_THROW );
+        // the style families associated with the same index modulo 4
+        static sal_uInt16 aFamilies[] =
+        {
+            XML_STYLE_FAMILY_SD_GRADIENT_ID,
+            XML_STYLE_FAMILY_SD_GRADIENT_ID,
+            XML_STYLE_FAMILY_SD_HATCH_ID,
+            XML_STYLE_FAMILY_SD_FILL_IMAGE_ID
+        };
 
+        // get property set info
+        Reference< XPropertySetInfo > xInfo;
+        UniReference< XMLPropertySetMapper > rPropMapper;
         bool bAutomatic = false;
-        if( ((SvXMLStylesContext *)GetStyles())->IsAutomaticStyle() &&
-            ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT || GetFamily() == XML_STYLE_FAMILY_TEXT_PARAGRAPH ) )
+
+        if(pSvXMLStylesContext->IsAutomaticStyle() &&
+            (XML_STYLE_FAMILY_TEXT_TEXT == GetFamily() || XML_STYLE_FAMILY_TEXT_PARAGRAPH == GetFamily()))
         {
             bAutomatic = true;
+
             if( !GetAutoName().isEmpty() )
             {
                 OUString sAutoProp = ( GetFamily() == XML_STYLE_FAMILY_TEXT_TEXT ) ?
                     OUString( "CharAutoStyleName" ):
                     OUString( "ParaAutoStyleName" );
+
                 try
                 {
+                    if(!xInfo.is())
+                    {
+                        xInfo = rPropSet->getPropertySetInfo();
+                    }
+
                     if ( xInfo->hasPropertyByName( sAutoProp ) )
+                    {
                         rPropSet->setPropertyValue( sAutoProp, makeAny(GetAutoName()) );
+                    }
                     else
+                    {
                         bAutomatic = false;
+                    }
                 }
                 catch( const RuntimeException& ) { throw; }
                 catch( const Exception& )
@@ -453,13 +482,19 @@ void XMLTextStyleContext::FillPropertySet(
                 }
             }
         }
+
         if( bAutomatic )
+        {
             xImpPrMap->CheckSpecialContext( GetProperties(), rPropSet, aContextIDs );
+        }
         else
+        {
             xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
+        }
+
+        sal_Int32 nIndex = aContextIDs[0].nIndex;
 
         // have we found a combined characters
-        sal_Int32 nIndex = aContextIDs[0].nIndex;
         if ( nIndex != -1 )
         {
             Any& rAny = GetProperties()[nIndex].maValue;
@@ -472,71 +507,140 @@ void XMLTextStyleContext::FillPropertySet(
         // value; if we didn't find one, we'll set to false, the file
         // format default.
         // border-model: same
-        if( IsDefaultStyle() && GetFamily() == XML_STYLE_FAMILY_TABLE_ROW )
+        if(IsDefaultStyle() && XML_STYLE_FAMILY_TABLE_ROW == GetFamily())
         {
-            OUString sIsSplitAllowed( "IsSplitAllowed" );
-            DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sIsSplitAllowed ),
-                        "property missing?" );
-            rPropSet->setPropertyValue( sIsSplitAllowed,
-                (aContextIDs[1].nIndex == -1)
-                ? makeAny( false )
-                : GetProperties()[aContextIDs[1].nIndex].maValue );
+            OUString sIsSplitAllowed("IsSplitAllowed");
+            DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sIsSplitAllowed ), "property missing?" );
+            rPropSet->setPropertyValue(
+                sIsSplitAllowed,
+                (aContextIDs[1].nIndex == -1) ? makeAny( false ) : GetProperties()[aContextIDs[1].nIndex].maValue );
         }
 
-        if( IsDefaultStyle() && GetFamily() == XML_STYLE_FAMILY_TABLE_TABLE )
+        if(XML_STYLE_FAMILY_TABLE_TABLE == IsDefaultStyle() && GetFamily())
         {
             OUString sCollapsingBorders("CollapsingBorders");
-            DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ),
-                        "property missing?" );
-            rPropSet->setPropertyValue( sCollapsingBorders,
+            DBG_ASSERT( rPropSet->getPropertySetInfo()->hasPropertyByName( sCollapsingBorders ), "property missing?" );
+            rPropSet->setPropertyValue(
+                sCollapsingBorders,
                 (aContextIDs[2].nIndex == -1)
                 ? makeAny( false )
                 : GetProperties()[aContextIDs[2].nIndex].maValue );
         }
 
 
-        // check for StarBats and StarMath fonts
-
-        // iterate over aContextIDs entries 3..6
-        for ( sal_Int32 i = 3; i < 7; i++ )
+        // iterate over aContextIDs entries, start with 3, prev ones are already used above
+        for(sal_uInt16 i(3); aContextIDs[i].nContextID != -1; i++)
         {
             nIndex = aContextIDs[i].nIndex;
+
             if ( nIndex != -1 )
             {
                 // Found!
                 struct XMLPropertyState& rState = GetProperties()[nIndex];
-                Any rAny = rState.maValue;
-                sal_Int32 nMapperIndex = rState.mnIndex;
 
-                // Now check for font name in rState and set corrected value,
-                // if necessary.
-                OUString sFontName;
-                rAny >>= sFontName;
-                if ( !sFontName.isEmpty() )
+                switch(aContextIDs[i].nContextID)
                 {
-                    if ( sFontName.equalsIgnoreAsciiCase( "StarBats" ) ||
-                         sFontName.equalsIgnoreAsciiCase( "StarMath" ) )
+                    case CTF_FILLGRADIENTNAME:
+                    case CTF_FILLTRANSNAME:
+                    case CTF_FILLHATCHNAME:
+                    case CTF_FILLBITMAPNAME:
                     {
-                        // construct new value
-                        sFontName = "StarSymbol";
-                        Any aAny( rAny );
-                        aAny <<= sFontName;
+                        // DrawingLayer FillStyle name´needs to be mapped to DisplayName
+                        rtl::OUString sStyleName;
+                        rState.maValue >>= sStyleName;
 
-                        // get property set mapper
-                        UniReference<XMLPropertySetMapper> rPropMapper =
-                            xImpPrMap->getPropertySetMapper();
+                        //UUUU translate the used name from ODF intern to the name used in the Model
+                        sStyleName = GetImport().GetStyleDisplayName(aFamilies[i - 7], sStyleName);
 
-                        // set property
-                        OUString rPropertyName(
-                            rPropMapper->GetEntryAPIName(nMapperIndex) );
-                        if ( xInfo->hasPropertyByName( rPropertyName ) )
+                        if(bAutomatic)
                         {
-                            rPropSet->setPropertyValue( rPropertyName, aAny );
+                            // in this case the rPropSet got not really filled since above the call to
+                            // CheckSpecialContext was used and not FillPropertySet, thus the below call to
+                            // setPropertyValue can fail/will not be useful (e.g. when the rPropSet
+                            // is a SwXTextCursor).
+                            // This happens for AutoStyles which are already filled in XMLPropStyleContext::CreateAndInsert,
+                            // thus the whole mechanism based on _ContextID_Index_Pair will not work
+                            // in that case. Thus the slots which need to be converted already get
+                            // converted there (its called first) and not here (see
+                            // translateNameBasedDrawingLayerFillStyleDefinitionsToStyleDisplayNames)
+                            // For convenience, still Write back the corrected value to the XMLPropertyState entry
+                            rState.maValue <<= sStyleName;
+                            break;
                         }
+
+                        // Still needed if it's not an AutomaticStyle (!)
+                        try
+                        {
+                            if(!rPropMapper.is())
+                            {
+                                rPropMapper = xImpPrMap->getPropertySetMapper();
+                            }
+
+                            // set property
+                            const rtl::OUString& rPropertyName = rPropMapper->GetEntryAPIName(rState.mnIndex);
+
+                            if(!xInfo.is())
+                            {
+                                xInfo = rPropSet->getPropertySetInfo();
+                            }
+
+                            if(xInfo->hasPropertyByName(rPropertyName))
+                            {
+                                rPropSet->setPropertyValue(rPropertyName,Any(sStyleName));
+                            }
+                        }
+                        catch(::com::sun::star::lang::IllegalArgumentException& e)
+                        {
+                            Sequence< rtl::OUString > aSeq(1);
+                            aSeq[0] = sStyleName;
+                            GetImport().SetError(XMLERROR_STYLE_PROP_VALUE | XMLERROR_FLAG_WARNING, aSeq, e.Message, NULL);
+                        }
+                        break;
                     }
-                    // else: "normal" style name -> no correction is necessary
+                    default:
+                    {
+                        // check for StarBats and StarMath fonts
+                        Any rAny = rState.maValue;
+                        sal_Int32 nMapperIndex = rState.mnIndex;
+
+                        // Now check for font name in rState and set corrected value,
+                        // if necessary.
+                        OUString sFontName;
+                        rAny >>= sFontName;
+
+                        if ( !sFontName.isEmpty() )
+                        {
+                            if ( sFontName.equalsIgnoreAsciiCase( "StarBats" ) ||
+                                 sFontName.equalsIgnoreAsciiCase( "StarMath" ) )
+                            {
+                                // construct new value
+                                sFontName = "StarSymbol";
+                                Any aAny(rAny);
+                                aAny <<= sFontName;
+
+                                if(!rPropMapper.is())
+                                {
+                                    rPropMapper = xImpPrMap->getPropertySetMapper();
+                                }
+
+                                // set property
+                                OUString rPropertyName(rPropMapper->GetEntryAPIName(nMapperIndex));
+
+                                if(!xInfo.is())
+                                {
+                                    xInfo = rPropSet->getPropertySetInfo();
+                                }
+
+                                if(xInfo->hasPropertyByName(rPropertyName))
+                                {
+                                    rPropSet->setPropertyValue(rPropertyName,aAny);
+                                }
+                            }
+                            // else: "normal" style name -> no correction is necessary
+                        }
+                        // else: no style name found -> illegal value -> ignore
+                    }
                 }
-                // else: no style name found -> illegal value -> ignore
             }
         }
     }

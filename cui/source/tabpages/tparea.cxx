@@ -790,7 +790,7 @@ void SvxAreaTabPage::Construct()
 
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    sal_Int32 nCount;
+    sal_Int32 nCount(0);
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
     SFX_ITEMSET_ARG (&rSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,false);
     if (pPageTypeItem)
@@ -803,7 +803,9 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 
         if( pColorList.is() )
         {
-            sal_Int32 _nPos = 0;
+            //UUUU use evtl. previously selected entry to avoid changing values just by
+            // switching TabPages in dialogs using this TabPage
+            sal_Int32 _nPos(nPos);
 
             if( *pnBitmapListState )
             {
@@ -2383,6 +2385,7 @@ void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
     SFX_ITEMSET_ARG (&aSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,false);
     SFX_ITEMSET_ARG (&aSet,pDlgTypeItem,SfxUInt16Item,SID_DLG_TYPE,false);
     SFX_ITEMSET_ARG (&aSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,false);
+
     //UUUU
     SFX_ITEMSET_ARG (&aSet, pOfferImportItem, SfxBoolItem, SID_OFFER_IMPORT, false);
 

@@ -65,6 +65,7 @@
 #include <sortedobjs.hxx>
 #include <anchoredobject.hxx>
 #include <wrtsh.hxx>
+#include <drawdoc.hxx>
 
 #include "../uibase/inc/view.hxx"
 #include <PostItMgr.hxx>
@@ -753,7 +754,7 @@ void SwViewShell::SetAddExtLeading( bool bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         pIDSA->set(IDocumentSettingAccess::ADD_EXT_LEADING, bNew );
-        SdrModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
+        SwDrawModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
         if ( pTmpDrawModel )
             pTmpDrawModel->SetAddExtLeading( bNew );
         const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;

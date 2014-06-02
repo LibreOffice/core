@@ -42,6 +42,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
 #include <poolfmt.hrc>
+#include <drawdoc.hxx>
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>

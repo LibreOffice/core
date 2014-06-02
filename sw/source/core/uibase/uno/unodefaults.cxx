@@ -21,6 +21,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unoprov.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 
 SwSvxUnoDrawPool::SwSvxUnoDrawPool( SwDoc* pDoc ) throw() :
     SvxUnoDrawPool(pDoc->GetDrawModel(), SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER),

@@ -25,6 +25,7 @@
 #include <svx/svdpagv.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
+#include <drawdoc.hxx>
 
 #include <svx/svdoutl.hxx>
 

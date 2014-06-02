@@ -92,7 +92,7 @@ class Outliner;
 class OutputDevice;
 class Point;
 class SbxArray;
-class SdrModel;
+class SwDrawModel;
 class SdrObject;
 class SdrUndoAction;
 class VirtualDevice;
@@ -315,7 +315,7 @@ class SW_DLLPUBLIC SwDoc :
     SwDefTOXBase_Impl * mpDefTOXBases;   //< defaults of SwTOXBase's
 
     SwViewShell       *mpCurrentView;  //< SwDoc should get a new member mpCurrentView
-    SdrModel        *mpDrawModel;        //< StarView Drawing
+    SwDrawModel        *mpDrawModel;        //< StarView Drawing
 
     SwDocUpdtFld    *mpUpdtFlds;         //< Struct for updating fields
     SwFldTypes      *mpFldTypes;
@@ -871,8 +871,8 @@ public:
     virtual void SetLoaded(bool b) SAL_OVERRIDE;
 
     // IDocumentDrawModelAccess
-    virtual const SdrModel* GetDrawModel() const SAL_OVERRIDE;
-    virtual SdrModel* GetDrawModel() SAL_OVERRIDE;
+    virtual const SwDrawModel* GetDrawModel() const SAL_OVERRIDE;
+    virtual SwDrawModel* GetDrawModel() SAL_OVERRIDE;
     virtual SdrLayerID GetHeavenId() const SAL_OVERRIDE;
     virtual SdrLayerID GetHellId() const SAL_OVERRIDE;
     virtual SdrLayerID GetControlsId() const SAL_OVERRIDE;
@@ -883,8 +883,8 @@ public:
     virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const SAL_OVERRIDE;
     virtual SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId ) SAL_OVERRIDE;
     virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId ) SAL_OVERRIDE;
-    virtual SdrModel* _MakeDrawModel() SAL_OVERRIDE;
-    virtual SdrModel* GetOrCreateDrawModel() SAL_OVERRIDE;
+    virtual SwDrawModel* _MakeDrawModel() SAL_OVERRIDE;
+    virtual SwDrawModel* GetOrCreateDrawModel() SAL_OVERRIDE;
 
     // IDocumentLayoutAccess
     virtual void SetCurrentViewShell( SwViewShell* pNew ) SAL_OVERRIDE;

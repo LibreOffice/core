@@ -28,7 +28,6 @@
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <dcontact.hxx>
-
 #include <ndgrf.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -57,6 +56,7 @@
 #include <undoflystrattr.hxx>
 #include <switerator.hxx>
 #include <boost/scoped_ptr.hpp>
+#include <drawdoc.hxx>
 
 //UUUU
 #include <svx/xbtmpit.hxx>
@@ -426,7 +426,7 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
 
 void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
 {
-    SdrModel* pDrawModel = GetOrCreateDrawModel();
+    SwDrawModel* pDrawModel = GetOrCreateDrawModel();
     SfxItemIter aIter(rSet);
 
     for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())
@@ -495,13 +495,7 @@ bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
         pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
     }
 
-    //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
-    // and evtl. correct that item to ensure unique names for that type. This call may
-    // modify/correct entries inside of the given SfxItemSet
-    CheckForUniqueItemForLineFillNameOrIndex(rSet);
-
-    bool const bRet =
-        lcl_SetFlyFrmAttr(*this, &SwDoc::SetFlyFrmAnchor, rFlyFmt, rSet);
+    bool const bRet = lcl_SetFlyFrmAttr(*this, &SwDoc::SetFlyFrmAnchor, rFlyFmt, rSet);
 
     if ( pSaveUndo.get() )
     {

@@ -34,13 +34,13 @@
 #include <accmap.hxx>
 
 #include <pagepreviewlayout.hxx>
-
 #include <comcore.hrc>
 #include <svx/svdundo.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <drawdoc.hxx>
 
 void SwViewImp::Init( const SwViewOption *pNewOpt )
 {

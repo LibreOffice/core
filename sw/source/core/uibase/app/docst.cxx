@@ -47,7 +47,8 @@
 #include <SwRewriter.hxx>
 #include <numrule.hxx>
 #include <swundo.hxx>
-
+#include <svx/svdmodel.hxx>
+#include <svx/drawitem.hxx>
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "docsh.hxx"
@@ -56,6 +57,8 @@
 #include "globals.hrc"
 #include "viewopt.hxx"
 #include <doc.hxx>
+#include <drawdoc.hxx>
+#include "IDocumentDrawModelAccess.hxx"
 #include <IDocumentUndoRedo.hxx>
 #include "swstyle.h"
 #include "frmfmt.hxx"
@@ -69,7 +72,6 @@
 #include "swevent.hxx"
 #include "edtwin.hxx"
 #include "unochart.hxx"
-
 #include "app.hrc"
 #include "swabstdlg.hxx"
 
@@ -571,13 +573,6 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
             ::ConvertAttrGenToChar(aTmpSet, CONV_ATTR_STD);
         }
 
-        //UUUU
-        if(m_bNew && SFX_STYLE_FAMILY_FRAME == m_nFamily)
-        {
-            // clear FillStyle so that it works as a derived attribute
-            aTmpSet.ClearItem(XATTR_FILLSTYLE);
-        }
-
         m_xTmp->SetItemSet( aTmpSet );
 
         if( SFX_STYLE_FAMILY_PAGE == m_nFamily && SvtLanguageOptions().IsCTLFontEnabled() )
@@ -587,6 +582,20 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
                 SwChartHelper::DoUpdateAllCharts( pDoc );
         }
     }
+
+    //UUUU
+    if(m_bNew && SFX_STYLE_FAMILY_FRAME == m_nFamily)
+    {
+        if(SFX_STYLE_FAMILY_FRAME == m_nFamily || SFX_STYLE_FAMILY_PARA == m_nFamily)
+        {
+            // clear FillStyle so that it works as a derived attribute
+            SfxItemSet aTmpSet(*m_pDlg->GetOutputItemSet());
+
+            aTmpSet.ClearItem(XATTR_FILLSTYLE);
+            m_xTmp->SetItemSet(aTmpSet);
+        }
+    }
+
     if(SFX_STYLE_FAMILY_PAGE == m_nFamily)
         pView->InvalidateRulerPos();
 
@@ -603,10 +612,6 @@ IMPL_LINK_NOARG(ApplyStyle, ApplyHdl)
 
     return m_nRet;
 }
-
-//UUUU
-//#include <svx/svdmodel.hxx>
-//#include <svx/drawitem.hxx>
 
 sal_uInt16 SwDocShell::Edit(
     const OUString &rName,
@@ -737,22 +742,22 @@ sal_uInt16 SwDocShell::Edit(
     {
         ::ConvertAttrCharToGen(xTmp->GetItemSet(), CONV_ATTR_STD);
     }
+
+    if(SFX_STYLE_FAMILY_PAGE == nFamily || SFX_STYLE_FAMILY_PARA == nFamily)
+    {
+        //UUUU create needed items for XPropertyList entries from the DrawModel so that
+        // the Area TabPage can access them
+        SfxItemSet& rSet = xTmp->GetItemSet();
+        const SwDrawModel* pDrawModel = GetDoc()->GetDrawModel();
+
+        rSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
+        rSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));
+        rSet.Put(SvxHatchListItem(pDrawModel->GetHatchList(), SID_HATCH_LIST));
+        rSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapList(), SID_BITMAP_LIST));
+    }
+
     if (!bBasic)
     {
-        //UUUU
-        //if(SFX_STYLE_FAMILY_FRAME == nFamily)
-        //{
-        //    //UUUU create needed items for XPropertyList entries from the DrawModel so that
-        //    // the Area TabPage can access them
-        //    SfxItemSet& rSet = xTmp->GetItemSet();
-        //    const SdrModel* pDrawModel = GetDoc()->GetDrawModel();
-        //
-        //    rSet.Put(SvxColorTableItem(pDrawModel->GetColorTableFromSdrModel(), SID_COLOR_TABLE));
-        //    rSet.Put(SvxGradientListItem(pDrawModel->GetGradientListFromSdrModel(), SID_GRADIENT_LIST));
-        //    rSet.Put(SvxHatchListItem(pDrawModel->GetHatchListFromSdrModel(), SID_HATCH_LIST));
-        //    rSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapListFromSdrModel(), SID_BITMAP_LIST));
-        //}
-
         // prior to the dialog the HtmlMode at the DocShell is being sunk
         sal_uInt16 nHtmlMode = ::GetHtmlMode(this);
 

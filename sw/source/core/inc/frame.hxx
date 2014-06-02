@@ -61,8 +61,6 @@ class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
 typedef struct _xmlTextWriter *xmlTextWriterPtr;
-//UUUU
-class FillAttributes;
 
 // Each FrmType is represented here as a bit.
 // The bits must be set in a way that it can be determined with masking of
@@ -222,6 +220,12 @@ enum MakePageType
     MAKEPAGE_FTN,       // add footnote if needed
     MAKEPAGE_NOSECTION  // Don't create section frames
 };
+
+//UUUU
+namespace drawinglayer { namespace attribute {
+    class SdrAllFillAttributesHelper;
+    typedef boost::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
+}}
 
 /**
  * Base class of the Writer layout elements.
@@ -513,7 +517,7 @@ public:
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
 
     bool GetBackgroundBrush(
-        boost::shared_ptr< FillAttributes >& rFillAttributes,
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
         const SvxBrushItem*& rpBrush,
         const Color*& rpColor,
         SwRect &rOrigRect,
@@ -886,6 +890,9 @@ public:
     bool KnowsFormat( const SwFmt& rFmt ) const;
     void RegisterToFormat( SwFmt& rFmt );
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
+
+    //UUUU
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 
 public:
     // if writer is NULL, dumps the layout structure as XML in layout.xml

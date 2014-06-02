@@ -61,6 +61,7 @@
 
 #include <vector>
 #include <switerator.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -552,7 +553,7 @@ void SwDoc::InitDrawModel()
 
     SAL_INFO( "sw.doc", "before create DrawDocument" );
     // The document owns the SdrModel. We always have two layers and one page.
-    mpDrawModel = new SwDrawDocument( this );
+    mpDrawModel = new SwDrawModel( this );
 
     mpDrawModel->EnableUndo( GetIDocumentUndoRedo().DoesUndo() );
 
@@ -761,7 +762,7 @@ void SwDoc::ReleaseDrawModel()
     }
 }
 
-SdrModel* SwDoc::_MakeDrawModel()
+SwDrawModel* SwDoc::_MakeDrawModel()
 {
     OSL_ENSURE( !mpDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
@@ -870,15 +871,15 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
 /* TFFDI: The functions formerly declared 'inline'
  */
-const SdrModel* SwDoc::GetDrawModel() const { return mpDrawModel; }
-SdrModel* SwDoc::GetDrawModel() { return mpDrawModel; }
+const SwDrawModel* SwDoc::GetDrawModel() const { return mpDrawModel; }
+SwDrawModel* SwDoc::GetDrawModel() { return mpDrawModel; }
 SdrLayerID SwDoc::GetHeavenId() const { return mnHeaven; }
 SdrLayerID SwDoc::GetHellId() const { return mnHell; }
 SdrLayerID SwDoc::GetControlsId() const { return mnControls;   }
 SdrLayerID SwDoc::GetInvisibleHeavenId() const { return mnInvisibleHeaven; }
 SdrLayerID SwDoc::GetInvisibleHellId() const { return mnInvisibleHell; }
 SdrLayerID SwDoc::GetInvisibleControlsId() const { return mnInvisibleControls; }
-SdrModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
+SwDrawModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
 
 // #i62875#
 namespace docfunc

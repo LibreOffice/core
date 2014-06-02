@@ -54,7 +54,6 @@
 #include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
-
 #include <statstr.hrc>
 
 #include <SwStyleNameMapper.hxx>
@@ -69,6 +68,7 @@
 #include <svx/svdograf.hxx>
 #include <sfx2/docfilt.hxx>
 #include <istyleaccess.hxx>
+#include <drawdoc.hxx>
 
 #include <sfx2/DocumentMetadataAccess.hxx>
 

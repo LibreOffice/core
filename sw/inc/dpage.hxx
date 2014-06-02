@@ -23,7 +23,7 @@
 #include <svx/svdobj.hxx>
 
 class SdrPageGridFrameList;
-class SwDrawDocument;
+class SwDrawModel;
 class SwDoc;
 
 class SwDPage : public FmFormPage, public SdrObjUserCall
@@ -32,7 +32,7 @@ class SwDPage : public FmFormPage, public SdrObjUserCall
     SwDoc&                  rDoc;
 
 public:
-    SwDPage(SwDrawDocument& rNewModel, bool bMasterPage=false);
+    SwDPage(SwDrawModel& rNewModel, bool bMasterPage=false);
     virtual ~SwDPage();
 
     // #i3694#

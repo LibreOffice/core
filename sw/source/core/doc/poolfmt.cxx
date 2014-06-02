@@ -64,6 +64,9 @@
 #include <numrule.hxx>
 #include <svx/xdef.hxx>
 
+//UUUU
+#include <svx/xfillit0.hxx>
+
 using namespace ::editeng;
 using namespace ::com::sun::star;
 

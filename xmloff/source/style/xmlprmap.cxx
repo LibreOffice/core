@@ -171,7 +171,7 @@ sal_Int32 XMLPropertySetMapper::GetEntryIndex(
     sal_Int32 nEntries = GetEntryCount();
     sal_Int32 nIndex= nStartAt == - 1? 0 : nStartAt+1;
 
-    if ( nEntries )
+    if ( nEntries && nIndex < nEntries )
     {
         do
         {

@@ -137,7 +137,19 @@ namespace svx
                 else
                     pBmpAcc->SetLineColor( Color( COL_BLACK ) );
 
-                pBmpAcc->SetFillColor( maCurColor = aColor );
+                // use not only COL_TRANSPARENT for detection of transparence,
+                // but the method/way which is designed to do that
+                const bool bIsTransparent(0xff == aColor.GetTransparency());
+                maCurColor = aColor;
+
+                if(bIsTransparent)
+                {
+                    pBmpAcc->SetFillColor();
+                }
+                else
+                {
+                    pBmpAcc->SetFillColor(maCurColor);
+                }
 
                 if( maBmpSize.Width() == maBmpSize.Height() )
                     maUpdRect = Rectangle( Point( 0, maBmpSize.Height() * 3 / 4 ), Size( maBmpSize.Width(), maBmpSize.Height() / 4 ) );
@@ -148,7 +160,7 @@ namespace svx
 
                 if( pMskAcc )
                 {
-                    if( COL_TRANSPARENT == aColor.GetColor() )
+                    if( bIsTransparent )
                     {
                         pMskAcc->SetLineColor( COL_BLACK );
                         pMskAcc->SetFillColor( COL_WHITE );

@@ -42,6 +42,7 @@
 #include <docxexport.hxx>
 #include <docxexportfilter.hxx>
 #include <writerhelper.hxx>
+#include <drawdoc.hxx>
 #include <comphelper/seqstream.hxx>
 
 #include <climits>

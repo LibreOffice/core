@@ -57,6 +57,7 @@
 #include "sectfrm.hxx"
 #include <vcl/svapp.hxx>
 #include "switerator.hxx"
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 

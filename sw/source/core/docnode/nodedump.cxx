@@ -39,6 +39,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/xfillit0.hxx>
 #include <tools/datetimeutils.hxx>
+#include <drawdoc.hxx>
 
 #include <libxml/encoding.h>
 #include <libxml/xmlwriter.h>

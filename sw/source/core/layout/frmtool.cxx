@@ -61,6 +61,10 @@
 #include <objectformatter.hxx>
 #include <switerator.hxx>
 
+//UUUU
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
+#include <drawdoc.hxx>
+
 // ftnfrm.cxx:
 void sw_RemoveFtns( SwFtnBossFrm* pBoss, bool bPageOnly, bool bEndNotes );
 
@@ -199,9 +203,23 @@ SwFrmNotify::~SwFrmNotify()
             (aPrt.*fnRect->fnGetHeight)()!=(pFrm->Prt().*fnRect->fnGetHeight)();
     if ( bPrtWidth || bPrtHeight )
     {
-        const SvxGraphicPosition ePos = pFrm->GetAttrSet()->GetBackground().GetGraphicPos();
-        if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
-            pFrm->SetCompletePaint();
+        //UUUU
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes(pFrm->getSdrAllFillAttributesHelper());
+
+        if(aFillAttributes.get() && aFillAttributes->isUsed())
+        {
+            //UUUU use SetCompletePaint if needed
+            if(aFillAttributes->needCompleteRepaint())
+            {
+                pFrm->SetCompletePaint();
+            }
+        }
+        else
+        {
+            const SvxGraphicPosition ePos = pFrm->GetAttrSet()->GetBackground().GetGraphicPos();
+            if(GPOS_NONE != ePos && GPOS_TILED != ePos)
+                pFrm->SetCompletePaint();
+        }
     }
     else
     {

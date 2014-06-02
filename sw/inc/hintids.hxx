@@ -21,6 +21,7 @@
 
 #include <tools/solar.h>
 #include <sal/types.h>
+#include <svx/xdef.hxx>
 #include "swdllapi.h"
 
 // For SwTxtHints without end index the following char is added:
@@ -398,10 +399,15 @@ inline bool isPARATR(const sal_uInt16 nWhich)
 }
 inline bool isPARATR_LIST(const sal_uInt16 nWhich)
 {
-    return (RES_PARATR_LIST_BEGIN <= nWhich) && (RES_PARATR_LIST_END > nWhich); }
+    return (RES_PARATR_LIST_BEGIN <= nWhich) && (RES_PARATR_LIST_END > nWhich);
+}
 inline bool isFRMATR(const sal_uInt16 nWhich)
 {
     return (RES_FRMATR_BEGIN <= nWhich) && (RES_FRMATR_END > nWhich);
+}
+inline bool isDrawingLayerAttribute(const sal_uInt16 nWhich) //UUUU
+{
+    return (XATTR_FILL_FIRST <= nWhich) && (XATTR_FILL_LAST >= nWhich);
 }
 inline bool isGRFATR(const sal_uInt16 nWhich)
 {

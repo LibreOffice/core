@@ -95,6 +95,7 @@
 #include "sfx2/sfxsids.hrc"
 #include <svl/urihelper.hxx>
 #include <unotools/saveopt.hxx>
+#include <drawdoc.hxx>
 
 #include <algorithm>
 
@@ -1001,7 +1002,7 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
         SwFrmFmt* pFmt = (SwFrmFmt*)&rFmt;
         nOrdNum = pDoc->GetSpzFrmFmts()->GetPos( pFmt );
 
-        const SdrModel* pModel = pDoc->GetDrawModel();
+        const SwDrawModel* pModel = pDoc->GetDrawModel();
         if( pModel )
             nOrdNum += pModel->GetPage( 0 )->GetObjCount();
     }
@@ -2186,7 +2187,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
 void SwBasicEscherEx::Init()
 {
     MapUnit eMap = MAP_TWIP;
-    if (SdrModel *pModel = rWrt.pDoc->GetDrawModel())
+    if (SwDrawModel *pModel = rWrt.pDoc->GetDrawModel())
     {
         // PPT arbeitet nur mit Einheiten zu 576DPI
         // WW hingegen verwendet twips, dh. 1440DPI.
@@ -2320,7 +2321,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
                         bool bSwapInPage = false;
                         if (!pSdrObj->GetPage())
                         {
-                            if (SdrModel* pModel = rWrt.pDoc->GetDrawModel())
+                            if (SwDrawModel* pModel = rWrt.pDoc->GetDrawModel())
                             {
                                 if (SdrPage *pPage = pModel->GetPage(0))
                                 {
@@ -3052,7 +3053,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, sal_uInt32 nShapeId )
     {
         OpenContainer( ESCHER_SpContainer );
 
-        SdrModel *pModel = rWrt.pDoc->GetDrawModel();
+        SwDrawModel *pModel = rWrt.pDoc->GetDrawModel();
         OutputDevice *pDevice = Application::GetDefaultDevice();
         OSL_ENSURE(pModel && pDevice, "no model or device");
 

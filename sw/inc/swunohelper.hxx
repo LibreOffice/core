@@ -35,6 +35,9 @@ namespace rtl {class OUString;}
 
 class DateTime;
 
+//UUUU
+class SfxItemSet;
+
 namespace SWUnoHelper {
 
 // calls over the compherl the getEnumAsInt32 function and handle the
@@ -70,6 +73,12 @@ SW_DLLPUBLIC bool UCB_IsFile( const OUString& rURL );
 
     // is the URL a existing directory?
 bool UCB_IsDirectory( const OUString& rURL );
+
+///UUUU helper to check if fill style is set to color or bitmap
+/// and thus formally used SvxBrushItem parts need to be mapped
+/// for backwards compatibility
+bool needToMapFillItemsToSvxBrushItemTypes(const SfxItemSet& rSet);
+
 }
 
 #endif
