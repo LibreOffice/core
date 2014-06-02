@@ -457,8 +457,8 @@ SvxColumnItem::SvxColumnItem( sal_uInt16 nAct ) :
     nLeft       (0),
     nRight      (0),
     nActColumn  (nAct),
-    bTable      (sal_False),
-    bOrtho      (sal_True)
+    bTable      (false),
+    bOrtho      (true)
 
 {}
 
@@ -467,8 +467,8 @@ SvxColumnItem::SvxColumnItem( sal_uInt16 nActCol, sal_uInt16 left, sal_uInt16 ri
     nLeft       (left),
     nRight      (right),
     nActColumn  (nActCol),
-    bTable      (sal_True),
-    bOrtho      (sal_True)
+    bTable      (true),
+    bOrtho      (true)
 {}
 
 SvxColumnItem::SvxColumnItem( const SvxColumnItem& rCopy ) :
