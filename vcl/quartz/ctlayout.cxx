@@ -356,14 +356,8 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
     SAL_INFO( "vcl.ct", "CGContextSetTextPosition(" << rAquaGraphics.mrContext << "," << aTextPos << ")" );
     CGContextSetTextPosition( rAquaGraphics.mrContext, aTextPos.x, aTextPos.y );
 
-    // set the text color as fill color (see kCTForegroundColorFromContextAttributeName)
-    CGContextSetFillColor( rAquaGraphics.mrContext, rAquaGraphics.maTextColor.AsArray() );
-
-    SAL_INFO( "vcl.ct", "CTLineDraw(" << ctline << "," << rAquaGraphics.mrContext << ")" );
-    // draw the text
-    CTLineDraw( ctline, rAquaGraphics.mrContext );
 #ifndef IOS
-    // request an update of the changed window area
+    // request an update of the to-be-changed window area
     if( rAquaGraphics.IsWindowGraphics() )
     {
         const CGRect aInkRect = CTLineGetImageBounds( mpCTLine, rAquaGraphics.mrContext );
@@ -371,6 +365,14 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
         rAquaGraphics.RefreshRect( aRefreshRect );
     }
 #endif
+
+    // set the text color as fill color (see kCTForegroundColorFromContextAttributeName)
+    CGContextSetFillColor( rAquaGraphics.mrContext, rAquaGraphics.maTextColor.AsArray() );
+
+    SAL_INFO( "vcl.ct", "CTLineDraw(" << ctline << "," << rAquaGraphics.mrContext << ")" );
+    // draw the text
+    CTLineDraw( ctline, rAquaGraphics.mrContext );
+
     // restore the original graphic context transformations
     SAL_INFO( "vcl.ct", "CGContextRestoreGState(" << rAquaGraphics.mrContext << ")" );
     CGContextRestoreGState( rAquaGraphics.mrContext );
