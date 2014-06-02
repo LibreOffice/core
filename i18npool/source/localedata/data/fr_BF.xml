@@ -45,7 +45,7 @@
   <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$F-800C]">
     <DateAcceptancePattern>M/D</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
-      <FormatCode>General</FormatCode>
+      <FormatCode>Standard</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER" formatindex="1">
       <FormatCode>0</FormatCode>
