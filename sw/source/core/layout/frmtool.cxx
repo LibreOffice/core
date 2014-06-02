@@ -1149,7 +1149,7 @@ static bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
     return bRetVal;
 }
 
-void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
+static void lcl_AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
 {
     //Connecting of all Objects, which are described in the SpzTbl with the
     //layout.
@@ -1164,9 +1164,10 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
     while ( !aCpy.empty() && aCpy.size() != nOldCnt )
     {
         nOldCnt = aCpy.size();
-        for ( int i = 0; i < int(aCpy.size()); ++i )
+        SwFrmFmts::iterator it = aCpy.begin();
+        while ( it != aCpy.end() )
         {
-            SwFrmFmt *pFmt = (SwFrmFmt*)aCpy[ sal_uInt16(i) ];
+            SwFrmFmt *pFmt = *it;
             const SwFmtAnchor &rAnch = pFmt->GetAnchor();
             sal_Bool bRemove = sal_False;
             if ((rAnch.GetAnchorId() == FLY_AT_PAGE) ||
@@ -1190,9 +1191,17 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
             }
             if ( bRemove )
             {
-                aCpy.erase( aCpy.begin() + i );
-                --i;
+                if ( (*it) != aCpy.back() ) {
+                    (*it) = aCpy.back();
+                    aCpy.pop_back();
+                }
+                else {
+                    aCpy.pop_back();
+                    it = aCpy.end();
+                }
             }
+            else
+                it++;
         }
     }
     aCpy.clear();
@@ -1590,7 +1599,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     if ( bPages )       //Jetzt noch die Flys verbinden lassen.
     {
         if ( !bDontCreateObjects )
-            AppendAllObjs( pTbl, pLayout );
+            ::lcl_AppendAllObjs( pTbl, pLayout );
         bObjsDirect = true;
     }
 
@@ -1791,7 +1800,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 {
                     const SwFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
                     if( !pTbl->empty() )
-                        AppendAllObjs( pTbl, pUpper );
+                        ::lcl_AppendAllObjs( pTbl, pUpper );
                 }
 
                 // Wenn nichts eingefuegt wurde, z.B. ein ausgeblendeter Bereich,
