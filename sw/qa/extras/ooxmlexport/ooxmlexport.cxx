@@ -1541,7 +1541,8 @@ DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
     xmlDocPtr pXmlFontTable = parseExport("word/fontTable.xml");
     if (!pXmlFontTable)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlFontTable, "/w:fonts/w:font");
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlFontTable, "/w:fonts/w:font");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     sal_Int32 length = xmlXPathNodeSetGetLength(pXmlNodes);
     for(sal_Int32 index = 0; index < length; index++){
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[index];
@@ -1550,6 +1551,7 @@ DECLARE_OOXMLEXPORT_TEST(testFontNameIsEmpty, "font-name-is-empty.docx")
             CPPUNIT_FAIL("Font name is empty.");
         }
     }
+    xmlXPathFreeObject(pXmlObj);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMultiColumnLineSeparator, "multi-column-line-separator-SAVED.docx")
@@ -2816,10 +2818,12 @@ DECLARE_OOXMLEXPORT_TEST(testGenericTextField, "Unsupportedtextfields.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc,"/w:document/w:body/w:p[2]/w:r[2]/w:instrText");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match("PRINTDATE   \\* MERGEFORMAT"));
+    xmlXPathFreeObject(pXmlObj);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDateControl, "date-control.docx")
@@ -2966,12 +2970,14 @@ DECLARE_OOXMLEXPORT_TEST(testCitation,"FDO74775.docx")
     xmlDocPtr pXmlDoc = parseExport();
     if (!pXmlDoc)
         return;
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc,"/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[3]/w:instrText");
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc,"/w:document/w:body/w:sdt/w:sdtContent/w:p[1]/w:r[3]/w:instrText");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT(pXmlNodes != 0);
     CPPUNIT_ASSERT(pXmlNodes->nodeNr > 0);
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     OUString contents = OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
     CPPUNIT_ASSERT(contents.match(" CITATION [Kra06]"));
+    xmlXPathFreeObject(pXmlObj);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo76016, "fdo76016.docx")
