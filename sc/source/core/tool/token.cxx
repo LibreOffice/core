@@ -2914,8 +2914,8 @@ void ScTokenArray::MoveReference(
     }
 }
 
-void ScTokenArray::MoveReference(
-    const ScAddress& rPos, SCTAB nTab, SCROW nRow1, SCROW nRow2, const sc::ColReorderMapType& rColMap )
+void ScTokenArray::MoveReferenceColReorder(
+    const ScAddress& rPos, SCTAB nTab, SCROW nRow1, SCROW nRow2, const sc::ColRowReorderMapType& rColMap )
 {
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
@@ -2932,7 +2932,7 @@ void ScTokenArray::MoveReference(
                 if (aAbs.Tab() == nTab && nRow1 <= aAbs.Row() && aAbs.Row() <= nRow2)
                 {
                     // Inside reordered row range.
-                    sc::ColReorderMapType::const_iterator it = rColMap.find(aAbs.Col());
+                    sc::ColRowReorderMapType::const_iterator it = rColMap.find(aAbs.Col());
                     if (it != rColMap.end())
                     {
                         // This column is reordered.
@@ -2960,13 +2960,76 @@ void ScTokenArray::MoveReference(
                 if (aAbs.aStart.Tab() == nTab && nRow1 <= aAbs.aStart.Row() && aAbs.aEnd.Row() <= nRow2)
                 {
                     // Inside reordered row range.
-                    sc::ColReorderMapType::const_iterator it = rColMap.find(aAbs.aStart.Col());
+                    sc::ColRowReorderMapType::const_iterator it = rColMap.find(aAbs.aStart.Col());
                     if (it != rColMap.end())
                     {
                         // This column is reordered.
                         SCCOL nNewCol = it->second;
                         aAbs.aStart.SetCol(nNewCol);
                         aAbs.aEnd.SetCol(nNewCol);
+                        rRef.SetRange(aAbs, rPos);
+                    }
+                }
+            }
+            break;
+            default:
+                ;
+        }
+    }
+}
+
+void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, SCCOL nCol1, SCCOL nCol2, const sc::ColRowReorderMapType& rRowMap )
+{
+    FormulaToken** p = pCode;
+    FormulaToken** pEnd = p + static_cast<size_t>(nLen);
+    for (; p != pEnd; ++p)
+    {
+        switch ((*p)->GetType())
+        {
+            case svSingleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScSingleRefData& rRef = pToken->GetSingleRef();
+                ScAddress aAbs = rRef.toAbs(rPos);
+
+                if (aAbs.Tab() == nTab && nCol1 <= aAbs.Col() && aAbs.Col() <= nCol2)
+                {
+                    // Inside reordered column range.
+                    sc::ColRowReorderMapType::const_iterator it = rRowMap.find(aAbs.Row());
+                    if (it != rRowMap.end())
+                    {
+                        // This column is reordered.
+                        SCROW nNewRow = it->second;
+                        aAbs.SetRow(nNewRow);
+                        rRef.SetAddress(aAbs, rPos);
+                    }
+                }
+            }
+            break;
+            case svDoubleRef:
+            {
+                ScToken* pToken = static_cast<ScToken*>(*p);
+                ScComplexRefData& rRef = pToken->GetDoubleRef();
+                ScRange aAbs = rRef.toAbs(rPos);
+
+                if (aAbs.aStart.Tab() != aAbs.aEnd.Tab())
+                    // Must be a single-sheet reference.
+                    break;
+
+                if (aAbs.aStart.Row() != aAbs.aEnd.Row())
+                    // Whole range must fit in a single row.
+                    break;
+
+                if (aAbs.aStart.Tab() == nTab && nCol1 <= aAbs.aStart.Col() && aAbs.aEnd.Col() <= nCol2)
+                {
+                    // Inside reordered column range.
+                    sc::ColRowReorderMapType::const_iterator it = rRowMap.find(aAbs.aStart.Row());
+                    if (it != rRowMap.end())
+                    {
+                        // This row is reordered.
+                        SCCOL nNewRow = it->second;
+                        aAbs.aStart.SetRow(nNewRow);
+                        aAbs.aEnd.SetRow(nNewRow);
                         rRef.SetRange(aAbs, rPos);
                     }
                 }

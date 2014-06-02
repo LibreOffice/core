@@ -297,6 +297,35 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
     rCell.SetCellGroup(xNone);
 }
 
+void SharedFormulaUtil::unshareFormulaCells(CellStoreType& rCells, std::vector<SCROW>& rRows)
+{
+    if (rRows.empty())
+        return;
+
+    // Sort and remove duplicates.
+    std::sort(rRows.begin(), rRows.end());
+    rRows.erase(std::unique(rRows.begin(), rRows.end()), rRows.end());
+
+    // Add next cell positions to the list (to ensure that each position becomes a single cell).
+    std::vector<SCROW> aRows2;
+    std::vector<SCROW>::const_iterator it = rRows.begin(), itEnd = rRows.end();
+    for (; it != itEnd; ++it)
+    {
+        if (*it > MAXROW)
+            break;
+
+        aRows2.push_back(*it);
+
+        if (*it < MAXROW)
+            aRows2.push_back(*it+1);
+    }
+
+    // Remove duplicates again (the vector should still be sorted).
+    aRows2.erase(std::unique(aRows2.begin(), aRows2.end()), aRows2.end());
+
+    splitFormulaCellGroups(rCells, aRows2);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

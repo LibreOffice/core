@@ -167,7 +167,13 @@ public:
      * @param nRow2 bottom row of reordered range.
      * @param rColMap old-to-new column mapping.
      */
-    void MoveReference( const ScAddress& rPos, SCTAB nTab, SCROW nRow1, SCROW nRow2, const sc::ColReorderMapType& rColMap );
+    void MoveReferenceColReorder(
+        const ScAddress& rPos, SCTAB nTab, SCROW nRow1, SCROW nRow2,
+        const sc::ColRowReorderMapType& rColMap );
+
+    void MoveReferenceRowReorder(
+        const ScAddress& rPos, SCTAB nTab, SCCOL nCol1, SCCOL nCol2,
+        const sc::ColRowReorderMapType& rRowMap );
 
     /**
      * Adjust all references in named expression. In named expression, we only

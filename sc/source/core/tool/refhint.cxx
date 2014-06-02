@@ -31,12 +31,12 @@ const ScAddress& RefMovedHint::getDelta() const
     return maMoveDelta;
 }
 
-RefColReorderHint::RefColReorderHint( const sc::ColReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 ) :
+RefColReorderHint::RefColReorderHint( const sc::ColRowReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 ) :
     RefHint(ColumnReordered), mrColMap(rColMap), mnTab(nTab), mnRow1(nRow1), mnRow2(nRow2) {}
 
 RefColReorderHint::~RefColReorderHint() {}
 
-const sc::ColReorderMapType& RefColReorderHint::getColMap() const
+const sc::ColRowReorderMapType& RefColReorderHint::getColMap() const
 {
     return mrColMap;
 }
@@ -54,6 +54,31 @@ SCROW RefColReorderHint::getStartRow() const
 SCROW RefColReorderHint::getEndRow() const
 {
     return mnRow2;
+}
+
+RefRowReorderHint::RefRowReorderHint( const sc::ColRowReorderMapType& rRowMap, SCTAB nTab, SCCOL nCol1, SCCOL nCol2 ) :
+    RefHint(RowReordered), mrRowMap(rRowMap), mnTab(nTab), mnCol1(nCol1), mnCol2(nCol2) {}
+
+RefRowReorderHint::~RefRowReorderHint() {}
+
+const sc::ColRowReorderMapType& RefRowReorderHint::getRowMap() const
+{
+    return mrRowMap;
+}
+
+SCTAB RefRowReorderHint::getTab() const
+{
+    return mnTab;
+}
+
+SCCOL RefRowReorderHint::getStartColumn() const
+{
+    return mnCol1;
+}
+
+SCCOL RefRowReorderHint::getEndColumn() const
+{
+    return mnCol2;
 }
 
 }

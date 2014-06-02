@@ -93,4 +93,22 @@ bool ScDocument::HasUniformRowHeight( SCTAB nTab, SCROW nRow1, SCROW nRow2 ) con
     return pTab->HasUniformRowHeight(nRow1, nRow2);
 }
 
+void ScDocument::UnshareFormulaCells( SCTAB nTab, SCCOL nCol, std::vector<SCROW>& rRows )
+{
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    pTab->UnshareFormulaCells(nCol, rRows);
+}
+
+void ScDocument::RegroupFormulaCells( SCTAB nTab, SCCOL nCol )
+{
+    ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    pTab->RegroupFormulaCells(nCol);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

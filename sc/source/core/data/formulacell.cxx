@@ -52,6 +52,8 @@
 #include "refupdatecontext.hxx"
 #include <tokenstringcontext.hxx>
 #include <refhint.hxx>
+#include <listenerquery.hxx>
+#include <listenerqueryids.hxx>
 
 #include <boost/scoped_ptr.hpp>
 
@@ -1915,8 +1917,23 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
                 const sc::RefColReorderHint& rRefColReorder =
                     static_cast<const sc::RefColReorderHint&>(rRefHint);
                 if (!IsShared() || IsSharedTop())
-                    pCode->MoveReference(
-                        aPos, rRefColReorder.getTab(), rRefColReorder.getStartRow(), rRefColReorder.getEndRow(), rRefColReorder.getColMap());
+                    pCode->MoveReferenceColReorder(
+                        aPos, rRefColReorder.getTab(),
+                        rRefColReorder.getStartRow(),
+                        rRefColReorder.getEndRow(),
+                        rRefColReorder.getColMap());
+            }
+            break;
+            case sc::RefHint::RowReordered:
+            {
+                const sc::RefRowReorderHint& rRefRowReorder =
+                    static_cast<const sc::RefRowReorderHint&>(rRefHint);
+                if (!IsShared() || IsSharedTop())
+                    pCode->MoveReferenceRowReorder(
+                        aPos, rRefRowReorder.getTab(),
+                        rRefRowReorder.getStartColumn(),
+                        rRefRowReorder.getEndColumn(),
+                        rRefRowReorder.getRowMap());
             }
             break;
             default:
@@ -1958,6 +1975,23 @@ void ScFormulaCell::Notify( const SfxHint& rHint )
                     && !pDocument->IsInFormulaTrack( this ) )
                 pDocument->AppendToFormulaTrack( this );
         }
+    }
+}
+
+void ScFormulaCell::Query( SvtListener::QueryBase& rQuery ) const
+{
+    switch (rQuery.getId())
+    {
+        case SC_LISTENER_QUERY_FORMULA_GROUP_POS:
+        {
+            sc::RefQueryFormulaGroup& rRefQuery =
+                static_cast<sc::RefQueryFormulaGroup&>(rQuery);
+            if (IsShared())
+                rRefQuery.add(aPos);
+        }
+        break;
+        default:
+            ;
     }
 }
 

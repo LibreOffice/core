@@ -47,6 +47,7 @@
 #include "queryentry.hxx"
 #include "markdata.hxx"
 #include "progress.hxx"
+#include <undosort.hxx>
 
 #include <set>
 #include <memory>
@@ -433,8 +434,6 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-    SCTAB nSrcTab = nTab;
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
 
     ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rSortParam.nCol1, rSortParam.nRow1,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
@@ -444,28 +443,25 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         return false;
     }
 
-    ScDBData* pDestData = NULL;
-    ScRange aOldDest;
-    sal_Bool bCopy = !rSortParam.bInplace;
+    bool bCopy = !rSortParam.bInplace;
     if ( bCopy && rSortParam.nDestCol == rSortParam.nCol1 &&
                   rSortParam.nDestRow == rSortParam.nRow1 && rSortParam.nDestTab == nTab )
         bCopy = false;
+
     ScSortParam aLocalParam( rSortParam );
     if ( bCopy )
     {
-        aLocalParam.MoveToDest();
-        if ( !ValidColRow( aLocalParam.nCol2, aLocalParam.nRow2 ) )
-        {
-            if (!bApi)
-                rDocShell.ErrorMessage(STR_PASTE_FULL);
-            return false;
-        }
+        // Copy the data range to the destination then move the sort range to it.
+        ScRange aSrcRange(rSortParam.nCol1, rSortParam.nRow1, nTab, rSortParam.nCol2, rSortParam.nRow2, nTab);
+        ScAddress aDestPos(rSortParam.nDestCol,rSortParam.nDestRow,rSortParam.nDestTab);
 
-        nTab = rSortParam.nDestTab;
-        pDestData = pDoc->GetDBAtCursor( rSortParam.nDestCol, rSortParam.nDestRow,
-                                            rSortParam.nDestTab, sal_True );
-        if (pDestData)
-            pDestData->GetArea(aOldDest);
+        ScDocFunc& rDocFunc = rDocShell.GetDocFunc();
+        bool bRet = rDocFunc.MoveBlock(aSrcRange, aDestPos, false, bRecord, bPaint, bApi);
+
+        if (!bRet)
+            return false;
+
+        aLocalParam.MoveToDest();
     }
 
     ScEditableTester aTester( pDoc, nTab, aLocalParam.nCol1,aLocalParam.nRow1,
@@ -515,133 +511,23 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     if ( aQueryParam.GetEntry(0).bDoQuery )
         bRepeatQuery = sal_True;
 
-    if (bRepeatQuery && bCopy)
-    {
-        if ( aQueryParam.bInplace ||
-                aQueryParam.nDestCol != rSortParam.nDestCol ||
-                aQueryParam.nDestRow != rSortParam.nDestRow ||
-                aQueryParam.nDestTab != rSortParam.nDestTab )       // Query auf selben Zielbereich?
-            bRepeatQuery = false;
-    }
-
-    ScUndoSort* pUndoAction = 0;
-    if ( bRecord )
-    {
-        //  Referenzen ausserhalb des Bereichs werden nicht veraendert !
-
-        ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        //  Zeilenhoehen immer (wegen automatischer Anpassung)
-        //! auf ScBlockUndo umstellen
-        pUndoDoc->InitUndo( pDoc, nTab, nTab, false, sal_True );
-
-        /*  #i59745# Do not copy note captions to undo document. All existing
-            caption objects will be repositioned while sorting which is tracked
-            in drawing undo. When undo is executed, the old positions will be
-            restored, and the cells with the old notes (which still refer to the
-            existing captions) will be copied back into the source document. */
-        pDoc->CopyToDocument( aLocalParam.nCol1, aLocalParam.nRow1, nTab,
-                                aLocalParam.nCol2, aLocalParam.nRow2, nTab,
-                                IDF_ALL|IDF_NOCAPTIONS, false, pUndoDoc );
-
-        const ScRange* pR = 0;
-        if (pDestData)
-        {
-            /*  #i59745# Do not copy note captions from destination range to
-                undo document. All existing caption objects will be removed
-                which is tracked in drawing undo. When undo is executed, the
-                caption objects are reinserted with drawing undo, and the cells
-                with the old notes (which still refer to the existing captions)
-                will be copied back into the source document. */
-            pDoc->CopyToDocument( aOldDest, IDF_ALL|IDF_NOCAPTIONS, false, pUndoDoc );
-            pR = &aOldDest;
-        }
-
-        //  Zeilenhoehen immer (wegen automatischer Anpassung)
-        //! auf ScBlockUndo umstellen
-//        if (bRepeatQuery)
-            pDoc->CopyToDocument( 0, aLocalParam.nRow1, nTab, MAXCOL, aLocalParam.nRow2, nTab,
-                                    IDF_NONE, false, pUndoDoc );
-
-        ScDBCollection* pUndoDB = NULL;
-        ScDBCollection* pDocDB = pDoc->GetDBCollection();
-        if (!pDocDB->empty())
-            pUndoDB = new ScDBCollection( *pDocDB );
-
-        pUndoAction = new ScUndoSort( &rDocShell, nTab, rSortParam, pUndoDoc, pUndoDB, pR );
-        rDocShell.GetUndoManager()->AddUndoAction( pUndoAction );
-
-        // #i59745# collect all drawing undo actions affecting cell note captions
-        if( pDrawLayer )
-            pDrawLayer->BeginCalcUndo(false);
-    }
-
-    if ( bCopy )
-    {
-        if (pDestData)
-            pDoc->DeleteAreaTab(aOldDest, IDF_CONTENTS);            // Zielbereich vorher loeschen
-
-        ScRange aSource( rSortParam.nCol1,rSortParam.nRow1,nSrcTab,
-                            rSortParam.nCol2,rSortParam.nRow2,nSrcTab );
-        ScAddress aDest( rSortParam.nDestCol, rSortParam.nDestRow, rSortParam.nDestTab );
-
-        rDocShell.GetDocFunc().MoveBlock( aSource, aDest, false, false, false, sal_True );
-    }
+    sc::ReorderParam aUndoParam;
 
     // don't call ScDocument::Sort with an empty SortParam (may be empty here if bCopy is set)
     if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
     {
         ScProgress aProgress(&rDocShell, ScGlobal::GetRscString(STR_PROGRESS_SORTING), 0);
-        pDoc->Sort( nTab, aLocalParam, bRepeatQuery, &aProgress );
+        pDoc->Sort(nTab, aLocalParam, bRepeatQuery, &aProgress, &aUndoParam);
     }
 
-    sal_Bool bSave = sal_True;
-    if (bCopy)
+    if (bRecord)
     {
-        ScSortParam aOldSortParam;
-        pDBData->GetSortParam( aOldSortParam );
-        if (aOldSortParam.GetSortKeyCount() &&
-            aOldSortParam.maKeyState[0].bDoSort && aOldSortParam.bInplace)
-        {
-            bSave = false;
-            aOldSortParam.nDestCol = rSortParam.nDestCol;
-            aOldSortParam.nDestRow = rSortParam.nDestRow;
-            aOldSortParam.nDestTab = rSortParam.nDestTab;
-            pDBData->SetSortParam( aOldSortParam );                 // dann nur DestPos merken
-        }
-    }
-    if (bSave)                                              // Parameter merken
-    {
-        pDBData->SetSortParam( rSortParam );
-        pDBData->SetHeader( rSortParam.bHasHeader );        //! ???
-        pDBData->SetByRow( rSortParam.bByRow );             //! ???
+        // Set up an undo object.
+        sc::UndoSort* pUndoAction = new sc::UndoSort(&rDocShell, aUndoParam);
+        rDocShell.GetUndoManager()->AddUndoAction(pUndoAction);
     }
 
-    if (bCopy)                                          // neuen DB-Bereich merken
-    {
-        //  Tabelle umschalten von aussen (View)
-        //! SetCursor ??!?!
-
-        ScRange aDestPos( aLocalParam.nCol1, aLocalParam.nRow1, nTab,
-                            aLocalParam.nCol2, aLocalParam.nRow2, nTab );
-        ScDBData* pNewData;
-        if (pDestData)
-            pNewData = pDestData;               // Bereich vorhanden -> anpassen
-        else                                    // Bereich ab Cursor/Markierung wird angelegt
-            pNewData = rDocShell.GetDBData(aDestPos, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );
-        if (pNewData)
-        {
-            pNewData->SetArea( nTab,
-                                aLocalParam.nCol1,aLocalParam.nRow1,
-                                aLocalParam.nCol2,aLocalParam.nRow2 );
-            pNewData->SetSortParam( aLocalParam );
-            pNewData->SetHeader( aLocalParam.bHasHeader );      //! ???
-            pNewData->SetByRow( aLocalParam.bByRow );
-        }
-        else
-        {
-            OSL_FAIL("Zielbereich nicht da");
-        }
-    }
+    pDBData->SetSortParam(rSortParam);
 
     ScRange aDirtyRange(
         aLocalParam.nCol1, nStartRow, nTab,
@@ -661,22 +547,11 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
             nStartX = 0;
             nEndX = MAXCOL;
         }
-        if (pDestData)
-        {
-            if ( nEndX < aOldDest.aEnd.Col() )
-                nEndX = aOldDest.aEnd.Col();
-            if ( nEndY < aOldDest.aEnd.Row() )
-                nEndY = aOldDest.aEnd.Row();
-        }
         rDocShell.PostPaint(ScRange(nStartX, nStartY, nTab, nEndX, nEndY, nTab), nPaint);
     }
 
     if (!bUniformRowHeight)
         rDocShell.AdjustRowHeight(nStartRow, aLocalParam.nRow2, nTab);
-
-    // #i59745# set collected drawing undo actions at sorting undo action
-    if( pUndoAction && pDrawLayer )
-        pUndoAction->SetDrawUndoAction( pDrawLayer->GetCalcUndo() );
 
     aModificator.SetDocumentModified();
 
