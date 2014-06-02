@@ -766,7 +766,7 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
     // FIXME(matteocam)
     if ( rColor.GetRed() == 0x66 ) { // component of the blue I use
         fprintf(stderr, "OutputDevice::SetTextFillColor(Color &): called  with (%d, %d, %d)\n",
-                rColor.GetRed(), rColor.GetBlue(), rColor.GetGreen());
+                rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue());
     }
 
     // end modified code

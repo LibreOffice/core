@@ -134,6 +134,8 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 
     /* FIXME(matteocam) */
     rFont.SetFillColor(aColor); // XXX: alone it works but it set it white (vcl causing troubes?)
+    //if (pOutDev)
+    //    pOutDev->SetTextFillColor(aColor); // this doesn't work either
     // end FIXME
 
     if ( pOutDev )
