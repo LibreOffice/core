@@ -43,15 +43,15 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
 
     get( m_pProgressLabel, "progress_label" );
 
-    get(m_vImageList[0], "image1");
-    get(m_vImageList[1], "image2");
-    get(m_vImageList[2], "image3");
-    get(m_vImageList[3], "image4");
-    get(m_vImageList[4], "image5");
-    get(m_vImageList[5], "image6");
-    get(m_vImageList[6], "image7");
-    get(m_vImageList[7], "image8");
-    get(m_vImageList[8], "image9");
+    get(m_vResultList[0], "result1");
+    get(m_vResultList[1], "result2");
+    get(m_vResultList[2], "result3");
+    get(m_vResultList[3], "result4");
+    get(m_vResultList[4], "result5");
+    get(m_vResultList[5], "result6");
+    get(m_vResultList[6], "result7");
+    get(m_vResultList[7], "result8");
+    get(m_vResultList[8], "result9");
 }
 
 OUString SelectPersonaDialog::GetPersonaURL() const
@@ -86,7 +86,9 @@ void SelectPersonaDialog::SetImages( std::vector<Image> &rImageList )
     sal_Int32 nCount = 0;
     for( std::vector<Image>::iterator it=rImageList.begin(); it!=rImageList.end(); ++it )
     {
-        m_vImageList[nCount++]->SetImage( *it );
+        m_vResultList[nCount]->Show();
+        m_vResultList[nCount]->SetModeImage( *it );
+        nCount++;
     }
 }
 
@@ -357,7 +359,7 @@ void SearchAndParseThread::execute()
 
     std::vector<OUString> vLearnmoreURLs = pHandler->getLearnmoreURLs();
     std::vector<OUString>::iterator it;
-    std::vector<Image> vImageList;
+    std::vector<Image> vResultList;
     GraphicFilter aFilter;
     Graphic aGraphic;
 
@@ -367,9 +369,9 @@ void SearchAndParseThread::execute()
         INetURLObject aURLObj( sHeaderFile );
         aFilter.ImportGraphic( aGraphic, aURLObj );
         Bitmap aBmp = aGraphic.GetBitmap();
-        vImageList.push_back( Image( aBmp ) );
+        vResultList.push_back( Image( aBmp ) );
     }
-    m_pPersonaDialog->SetImages( vImageList );
+    m_pPersonaDialog->SetImages( vResultList );
     sProgress = "";
     m_pPersonaDialog->SetProgress( sProgress );
     m_pPersonaDialog->setOptimalLayoutSize();

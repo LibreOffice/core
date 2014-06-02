@@ -65,7 +65,7 @@ private:
     Edit *m_pEdit;                          ///< The input line for the Persona URL
     PushButton *m_pButton;
     FixedText *m_pProgressLabel;
-    FixedImage *m_vImageList[9];
+    PushButton *m_vResultList[9];
 
 public:
     SelectPersonaDialog( Window *pParent );
