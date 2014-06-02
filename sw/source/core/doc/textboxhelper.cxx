@@ -226,7 +226,7 @@ Rectangle SwTextBoxHelper::getTextRectangle(SwFrmFmt* pShape, bool bAbsolute)
             xLockable->setActionLocks(nLocks);
     }
 
-    if (!bAbsolute)
+    if (!bAbsolute && pCustomShape)
     {
         // Relative, so count the logic (reference) rectangle, see the EnhancedCustomShape2d ctor.
         Point aPoint(pCustomShape->GetSnapRect().Center());
