@@ -2172,9 +2172,15 @@ void SbMethod::Broadcast( sal_uIntPtr nHintId )
         if( mpPar.Is() )
         {
             // Enrigister this as element 0, but don't reset the parent!
-            if( GetType() != SbxVOID )
+            switch( GetType() ) {
+            case SbxEMPTY:
+            case SbxVOID:
+                break;
+            default:
                 mpPar->PutDirect( pThisCopy, 0 );
-               SetParameters( NULL );
+                break;
+            }
+            SetParameters( NULL );
         }
 
         pCst = pSave;
