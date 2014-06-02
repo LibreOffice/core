@@ -2846,7 +2846,8 @@ static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
                 ContentProvider * pProvider,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw ( ucb::CommandFailedException,
-            task::DocumentPasswordRequest )
+            task::DocumentPasswordRequest,
+            uno::RuntimeException )
 {
     OUString aPassword;
     bool bPasswordRequested = false;
