@@ -611,7 +611,8 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
     }
 }
 
-SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, SdrObject *pObj, SvxDrawPage *mpPage, OUString const & referer ) throw()
+SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor, SdrObject *pObj, SvxDrawPage *mpPage, OUString const & referer )
+    throw (css::uno::RuntimeException)
 {
     SvxShape* pRet = NULL;
     switch( nInventor )
