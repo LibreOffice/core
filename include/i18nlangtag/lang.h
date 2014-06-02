@@ -698,6 +698,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_CREE_PLAINS_LATIN     0x0691
 #define LANGUAGE_USER_CREE_PLAINS_SYLLABICS 0x8291  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_USER_CREE_PLAINS_LATIN)) */
 #define LANGUAGE_USER_LENGO                 0x0692
+#define LANGUAGE_USER_FRENCH_BENIN          0x840C  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_FRENCH)) */
 
 
 /* Primary language ID range for on-the-fly assignment. */
