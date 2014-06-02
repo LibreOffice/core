@@ -80,6 +80,8 @@ using namespace ::xmloff::token;
 #define TMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_TEXT,context)
 #define PMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
 #define MAP_END() { 0L, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010, false }
+// extensions import/export
+#define MAP_EXT(name,prefix,token,type,context)  _MAPV(name,prefix,token,type,context,SvtSaveOptions::ODFVER_012_EXT_COMPAT)
 
 // entry list for graphic properties
 
@@ -288,6 +290,9 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // misc object properties
     GMAP( "MoveProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_MOVE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_MOVE_PROTECT ),
     GMAP( "SizeProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_SIZE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_SIZE_PROTECT ),
+
+    MAP_EXT("TextBox", XML_NAMESPACE_LO_EXT, XML_TEXT_BOX, XML_TYPE_BOOL|XML_TYPE_PROP_GRAPHIC, 0),
+
     MAP_END()
 };
 
