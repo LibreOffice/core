@@ -37,6 +37,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star;
@@ -110,13 +111,12 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
     if(bTemplate)
     {
         m_pLoadTemplateRB->Check();
-        SfxNewFileDialog* pNewFileDlg = new SfxNewFileDialog(this, 0);
+        boost::scoped_ptr<SfxNewFileDialog> pNewFileDlg(new SfxNewFileDialog(this, 0));
         sal_uInt16 nRet = pNewFileDlg->Execute();
         if(RET_TEMPLATE_LOAD == nRet)
             bTemplate = false;
         else if(RET_CANCEL != nRet)
             m_sLoadTemplateName = pNewFileDlg->GetTemplateFileName();
-        delete pNewFileDlg;
     }
     else
         m_pLoadDocRB->Check();

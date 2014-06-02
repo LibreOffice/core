@@ -33,6 +33,7 @@
 #include <selectdbtabledialog.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbcx;
@@ -159,9 +160,8 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
         pProperties[4].Name = "ShowTreeViewButton";
         pProperties[4].Value <<= sal_False;
 
-        SwDBTablePreviewDialog* pDlg = new SwDBTablePreviewDialog(pButton, aProperties);
+        boost::scoped_ptr<SwDBTablePreviewDialog> pDlg(new SwDBTablePreviewDialog(pButton, aProperties));
         pDlg->Execute();
-        delete pDlg;
     }
 
     return 0;

@@ -1279,8 +1279,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
 
                     case _DB_Column::DB_COL_FIELD:
                         {
-                            SwDBField *const pFld = static_cast<SwDBField *>(
-                                pDBCol->DB_ColumnData.pField->CopyField());
+                            boost::scoped_ptr<SwDBField> pFld(static_cast<SwDBField *>(
+                                pDBCol->DB_ColumnData.pField->CopyField()));
                             double nValue = DBL_MAX;
 
                             Reference< XPropertySet > xColumnProps;
@@ -1311,7 +1311,6 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                             pFld->SetInitialized();
 
                             rSh.Insert( *pFld );
-                            delete pFld;
                         }
                         break;
 
@@ -1655,7 +1654,7 @@ void SwInsertDBColAutoPilot::Load()
         pDataSourceProps[2] >>= nCommandType;
         if(sSource.equals(aDBData.sDataSource) && sCommand.equals(aDBData.sCommand))
         {
-            _DB_ColumnConfigData* pNewData = new _DB_ColumnConfigData;
+            boost::scoped_ptr<_DB_ColumnConfigData> pNewData(new _DB_ColumnConfigData);
             pNewData->sSource = sSource;
             pNewData->sTable = sCommand;
 
@@ -1808,7 +1807,6 @@ void SwInsertDBColAutoPilot::Load()
             // when the cursor is inside of a table, table must NEVER be selectable
             if( !m_pRbAsTable->IsEnabled() && m_pRbAsTable->IsChecked() )
                 m_pRbAsField->Check( true );
-            delete pNewData;
             break;
         }
     }

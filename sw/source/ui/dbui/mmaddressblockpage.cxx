@@ -164,8 +164,8 @@ IMPL_LINK_NOARG(SwMailMergeAddressBlockPage, AddressListHdl_Impl)
 
 IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
 {
-    SwSelectAddressBlockDialog* pDlg =
-                new SwSelectAddressBlockDialog(pButton, m_pWizard->GetConfigItem());
+    boost::scoped_ptr<SwSelectAddressBlockDialog> pDlg(
+                new SwSelectAddressBlockDialog(pButton, m_pWizard->GetConfigItem()));
     SwMailMergeConfigItem& rConfig = m_pWizard->GetConfigItem();
     pDlg->SetAddressBlocks(rConfig.GetAddressBlocks(), m_pSettingsWIN->GetSelectedAddress());
     pDlg->SetSettings(rConfig.IsIncludeCountry(), rConfig.GetExcludeCountry());
@@ -183,7 +183,7 @@ IMPL_LINK(SwMailMergeAddressBlockPage, SettingsHdl_Impl, PushButton*, pButton)
         rConfig.SetCountrySettings(pDlg->IsIncludeCountry(), pDlg->GetCountry());
         InsertDataHdl_Impl(0);
     }
-    delete pDlg;
+    pDlg.reset();
     GetWizard()->UpdateRoadmap();
     GetWizard()->enableButtons(WZB_NEXT, GetWizard()->isStateEnabled(MM_GREETINGSPAGE));
     return 0;

@@ -63,6 +63,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxdlg.hxx>
 #include <svx/flagsdef.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -758,7 +759,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
         sal_uInt16 nNewPos = rDocFmts.GetPos( pFmt );
         if( USHRT_MAX != nNewPos )
         {
-            SfxItemSet* pSet = pFmt->GetAttrSet().Clone( false );
+            boost::scoped_ptr<SfxItemSet> pSet(pFmt->GetAttrSet().Clone( false ));
             if( pFmt->GetCol() != pRepr->GetCol() )
                 pSet->Put( pRepr->GetCol() );
 
@@ -781,8 +782,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
                 pSet->Put( pRepr->GetLRSpace());
 
             rSh.UpdateSection( nNewPos, pRepr->GetSectionData(),
-                            pSet->Count() ? pSet : 0 );
-            delete pSet;
+                               pSet->Count() ? pSet.get() : 0 );
         }
         pEntry = m_pTree->Next( pEntry );
     }
@@ -1307,7 +1307,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
     OUString sFileName, sFilterName, sPassword;
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
-        SfxMedium* pMedium = m_pDocInserter->CreateMedium();
+        boost::scoped_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium());
         if ( pMedium )
         {
             sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
@@ -1316,7 +1316,6 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
             if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 sPassword = ( (SfxStringItem*)pItem )->GetValue();
             ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
-            delete pMedium;
         }
     }
 
@@ -1774,7 +1773,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
 {
     if ( _pFileDlg->GetError() == ERRCODE_NONE )
     {
-        SfxMedium* pMedium = m_pDocInserter->CreateMedium();
+        boost::scoped_ptr<SfxMedium> pMedium(m_pDocInserter->CreateMedium());
         if ( pMedium )
         {
             m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
@@ -1785,7 +1784,6 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
             m_pFileNameED->SetText( INetURLObject::decode(
                 m_sFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
             ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
-            delete pMedium;
         }
     }
     else

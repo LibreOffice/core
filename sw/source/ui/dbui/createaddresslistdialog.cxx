@@ -40,6 +40,7 @@
 #include <dbui.hrc>
 #include <helpid.h>
 #include <unomid.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -517,7 +518,7 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl)
 
 IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
 {
-    SwCustomizeAddressListDialog* pDlg = new SwCustomizeAddressListDialog(pButton, *m_pCSVData);
+    boost::scoped_ptr<SwCustomizeAddressListDialog> pDlg(new SwCustomizeAddressListDialog(pButton, *m_pCSVData));
     if(RET_OK == pDlg->Execute())
     {
         delete m_pCSVData;
@@ -525,7 +526,7 @@ IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
         m_pAddressControl->SetData(*m_pCSVData);
         m_pAddressControl->SetCurrentDataSet(m_pAddressControl->GetCurrentDataSet());
     }
-    delete pDlg;
+    pDlg.reset();
 
     //update find dialog
     if(m_pFindDlg)

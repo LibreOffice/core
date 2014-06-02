@@ -70,6 +70,7 @@
 #include <statstr.hrc>
 #include <unomid.h>
 #include <comphelper/string.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace svt;
 using namespace ::com::sun::star;
@@ -493,7 +494,7 @@ IMPL_LINK(SwMailMergeOutputPage, DocumentSelectionHdl_Impl, RadioButton*, pButto
 
 IMPL_LINK(SwMailMergeOutputPage, CopyToHdl_Impl, PushButton*, pButton)
 {
-    SwCopyToDialog* pDlg = new SwCopyToDialog(pButton);
+    boost::scoped_ptr<SwCopyToDialog> pDlg(new SwCopyToDialog(pButton));
     pDlg->SetCC(m_sCC );
     pDlg->SetBCC(m_sBCC);
     if(RET_OK == pDlg->Execute())
@@ -501,7 +502,6 @@ IMPL_LINK(SwMailMergeOutputPage, CopyToHdl_Impl, PushButton*, pButton)
         m_sCC =     pDlg->GetCC() ;
         m_sBCC =    pDlg->GetBCC();
     }
-    delete pDlg;
     return 0;
 }
 
@@ -898,9 +898,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         if(RET_YES == nRet )
         {
             SfxAllItemSet aSet(pTargetView->GetPool());
-            SwMailConfigDlg* pDlg = new SwMailConfigDlg(pButton, aSet);
+            boost::scoped_ptr<SwMailConfigDlg> pDlg(new SwMailConfigDlg(pButton, aSet));
             nRet = pDlg->Execute();
-            delete pDlg;
         }
 
         if(nRet != RET_OK && nRet != RET_YES)
