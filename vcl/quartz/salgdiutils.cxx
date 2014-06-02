@@ -184,8 +184,8 @@ void AquaSalGraphics::RefreshRect(float lX, float lY, float lWidth, float lHeigh
         // this helps with antialiased rendering
         const Rectangle aVclRect(Point(static_cast<long int>(lX-1),
                     static_cast<long int>(lY-1) ),
-                 Size(  static_cast<long int>(lWidth+2),
-                    static_cast<long int>(lHeight+2) ) );
+                 Size(  static_cast<long int>(lWidth+3),
+                    static_cast<long int>(lHeight+3) ) );
         mpFrame->maInvalidRect.Union( aVclRect );
     }
 }
