@@ -1920,7 +1920,7 @@ OUString SwFEShell::GetObjTitle() const
             const SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {
-                return dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjTitle();
+                return static_cast<const SwFlyFrmFmt*>(pFmt)->GetObjTitle();
             }
             return pObj->GetTitle();
         }
