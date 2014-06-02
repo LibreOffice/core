@@ -20,27 +20,27 @@
 #**************************************************************
 
 
+PRJ = ..$/..
+PRJNAME = sal
+TARGET = sal_ut_types
 
-PRJ := ..$/..
-PRJNAME := sal
-TARGET := qa_sal
-
-ENABLE_EXCEPTIONS := TRUE
+ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
-SHL1TARGET = $(TARGET)_types
-SHL1OBJS = $(SLO)$/test_types.obj
-SHL1STDLIBS = $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-SHL1VERSIONMAP = version.map
-SHL1IMPLIB = i$(SHL1TARGET)
-DEF1NAME = $(SHL1TARGET)
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-SLOFILES = $(SHL1OBJS)
+.ELSE
+
+APP1OBJS = $(OBJ)/test_types.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(GTESTLIB) $(SALLIB)
+APP1TARGET = sal_ut_test
+APP1TEST = enabled
+#APP1TEST = disabled
 
 .INCLUDE: target.mk
 
-ALLTAR: test
-
-test .PHONY: $(SHL1TARGETN)
-    testshl2 $(SHL1TARGETN)
+.ENDIF

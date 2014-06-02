@@ -278,6 +278,9 @@ CPPUNITLIB = $(CPPUNIT_LIBS)
 .ELSE
 CPPUNITLIB = -lcppunit
 .ENDIF
+
+GTESTLIB= -lgtest
+
 .IF "$(SYSTEM_LIBXSLT)"=="YES"
 XSLTLIB=$(LIBXSLT_LIBS)
 .ELSE
@@ -293,7 +296,6 @@ REDLANDLIB=$(REDLAND_LIBS)
 .ELSE
 REDLANDLIB=-lrdf
 .ENDIF
-
 
 #
 # USED_%NAME%_LIBS
@@ -470,6 +472,8 @@ HELPLINKERLIB=ihelplinker.lib
 JVMACCESSLIB = ijvmaccess.lib
 XSLTLIB = libxslt.lib $(LIBXML2LIB)
 CPPUNITLIB = icppunit_dll.lib
+GTESTLIB = igtest.lib
+
 REDLANDLIB = librdf.lib
 
 JVMFWKLIB = ijvmfwk.lib

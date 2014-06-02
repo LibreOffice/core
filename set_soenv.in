@@ -105,7 +105,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
      $ENABLE_HUNSPELL, $ENABLE_HYPHEN,
-     $SYSTEM_PYTHON, $EPM_FLAGS);
+     $SYSTEM_PYTHON, $EPM_FLAGS, $ENABLE_UNIT_TESTS);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -1861,6 +1861,7 @@ ToFile( "SYSTEM_CPPUNIT",    "@SYSTEM_CPPUNIT@",   "e" );
 ToFile( "CPPUNIT_CFLAGS",    "@CPPUNIT_CFLAGS@",   "e" );
 ToFile( "CPPUNIT_LIBS",      "@CPPUNIT_LIBS@",     "e" );
 ToFile( "WITH_CPPUNIT",      "@WITH_CPPUNIT@",     "e" );
+ToFile( "ENABLE_UNIT_TESTS",      "@ENABLE_UNIT_TESTS@",     "e" );
 ToFile( "SYSTEM_LIBXML",     "@SYSTEM_LIBXML@",    "e" );
 ToFile( "USE_FT_EMBOLDEN",   "@USE_FT_EMBOLDEN@",  "e" );
 ToFile( "LIBXML_CFLAGS",     "@LIBXML_CFLAGS@",    "e" );
