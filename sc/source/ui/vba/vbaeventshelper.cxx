@@ -780,7 +780,8 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
 }
 
 OUString ScVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& rInfo,
-        const uno::Sequence< uno::Any >& rArgs ) const throw (lang::IllegalArgumentException)
+        const uno::Sequence< uno::Any >& rArgs ) const
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     bool bSheetEvent = false;
     rInfo.maUserData >>= bSheetEvent;
