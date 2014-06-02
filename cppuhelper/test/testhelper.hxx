@@ -16,10 +16,16 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#ifndef INCLUDED_CPPUHELPER_TEST_TESTHELPER_HXX
+#define INCLUDED_CPPUHELPER_TEST_TESTHELPER_HXX
+
 void testidlclass( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > &r);
 void testPropertyTypeHelper();
 void test_PropertySetHelper();
 void test_ImplHelper( const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > & xSF );
 void test_interfacecontainer();
+
+#endif // INCLUDED_CPPUHELPER_TEST_TESTHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

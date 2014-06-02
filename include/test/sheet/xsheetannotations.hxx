@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_TEST_SHEET_XSHEETANNOTATIONS_HXX
+#define INCLUDED_TEST_SHEET_XSHEETANNOTATIONS_HXX
+
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <test/testdllapi.hxx>
 
@@ -29,5 +32,7 @@ protected:
 };
 
 }
+
+#endif // INCLUDED_TEST_SHEET_XSHEETANNOTATIONS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

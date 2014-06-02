@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_CHART2_QA_EXTRAS_CHARTTEST_HXX
+#define INCLUDED_CHART2_QA_EXTRAS_CHARTTEST_HXX
+
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 #include <comphelper/processfactory.hxx>
@@ -309,5 +312,7 @@ uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const c
     uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
     return seriesList;
 }
+
+#endif // INCLUDED_CHART2_QA_EXTRAS_CHARTTEST_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

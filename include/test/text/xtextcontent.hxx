@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_TEST_TEXT_XTEXTCONTENT_HXX
+#define INCLUDED_TEST_TEXT_XTEXTCONTENT_HXX
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
@@ -30,5 +33,7 @@ public:
 };
 
 }
+
+#endif // INCLUDED_TEST_TEXT_XTEXTCONTENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

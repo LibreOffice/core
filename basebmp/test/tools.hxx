@@ -17,9 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_BASEBMP_TEST_TOOLS_HXX
+#define INCLUDED_BASEBMP_TEST_TOOLS_HXX
+
 #include <basebmp/bitmapdevice.hxx>
 
 int countPixel( const basebmp::BitmapDeviceSharedPtr& rDevice,
                 basebmp::Color                        checkColor );
+
+#endif // INCLUDED_BASEBMP_TEST_TOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#ifndef INCLUDED_IO_TEST_STM_TESTFACTREG_HXX
+#define INCLUDED_IO_TEST_STM_TESTFACTREG_HXX
+
 #include <rtl/strbuf.hxx>
 
 Reference< XInterface > SAL_CALL OPipeTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception );
@@ -109,5 +113,7 @@ Sequence<sal_Int8> createIntSeq( sal_Int32 i );
         return; \
     } \
     ((void)0)
+
+#endif // INCLUDED_IO_TEST_STM_TESTFACTREG_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

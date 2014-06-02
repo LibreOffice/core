@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_TEST_SHEET_XSPREADSHEETS2_HXX
+#define INCLUDED_TEST_SHEET_XSPREADSHEETS2_HXX
+
 #include <test/testdllapi.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -57,5 +60,7 @@ private:
 };
 
 }
+
+#endif // INCLUDED_TEST_SHEET_XSPREADSHEETS2_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
