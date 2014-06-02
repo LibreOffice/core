@@ -132,11 +132,16 @@
               <object class="GtkGrid" id="grid1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="row_spacing">6</property>
+                <property name="column_spacing">6</property>
                 <child>
-                  <object class="GtkImage" id="image1">
+                  <object class="GtkButton" id="result1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -146,10 +151,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="image2">
+                  <object class="GtkButton" id="result2">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -159,10 +167,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="image3">
+                  <object class="GtkButton" id="result3">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -172,10 +183,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="image4">
+                  <object class="GtkButton" id="result4">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -185,10 +199,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="image5">
+                  <object class="GtkButton" id="result5">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -198,10 +215,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="image6">
+                  <object class="GtkButton" id="result6">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -211,10 +231,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="image7">
+                  <object class="GtkButton" id="result7">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -224,10 +247,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="image8">
+                  <object class="GtkButton" id="result8">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -237,10 +263,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="image9">
+                  <object class="GtkButton" id="result9">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="stock">gtk-missing-image</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
