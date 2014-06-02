@@ -51,6 +51,7 @@
 #include "dpshttab.hxx"
 #include "queryentry.hxx"
 #include "dputil.hxx"
+#include <sortparam.hxx>
 
 #include <comphelper/extract.hxx>
 #include <comphelper/servicehelper.hxx>

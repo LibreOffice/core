@@ -31,6 +31,7 @@
 #include "subtotalparam.hxx"
 #include "globstr.hrc"
 #include <column.hxx>
+#include <sortparam.hxx>
 
 TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
 TYPEINIT1(ScBlockUndo,      ScSimpleUndo);

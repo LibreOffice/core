@@ -71,6 +71,7 @@ class DocumentStreamAccess;
 class CompileFormulaContext;
 struct SetFormulaDirtyContext;
 class RefMovedHint;
+struct ReorderParam;
 
 }
 
@@ -828,7 +829,10 @@ public:
     void        StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
     void        ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
 
-    void        Sort(const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress);
+    void Sort(
+        const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress, sc::ReorderParam* pUndo );
+    void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );
+
     bool ValidQuery(
         SCROW nRow, const ScQueryParam& rQueryParam, ScRefCellValue* pCell = NULL,
         bool* pbTestEqualCondition = NULL);
@@ -883,6 +887,9 @@ public:
     formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol, SCROW nRow );
     formula::FormulaTokenRef ResolveStaticReference( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
     formula::VectorRefArray FetchVectorRefArray( SCCOL nCol, SCROW nRow1, SCROW nRow2 );
+
+    void UnshareFormulaCells( SCCOL nCol, std::vector<SCROW>& rRows );
+    void RegroupFormulaCells( SCCOL nCol );
 
     ScRefCellValue GetRefCellValue( SCCOL nCol, SCROW nRow );
 
@@ -998,10 +1005,11 @@ private:
         ScRefCellValue& rCell2, SCCOL nCell2Col, SCROW nCell2Row ) const;
     short       Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const;
     short       Compare( ScSortInfoArray*, SCCOLROW nIndex1, SCCOLROW nIndex2) const;
-    ScSortInfoArray* CreateSortInfoArray( SCCOLROW nInd1, SCCOLROW nInd2, bool bKeepQuery );
+    ScSortInfoArray* CreateSortInfoArray( const sc::ReorderParam& rParam );
+    ScSortInfoArray* CreateSortInfoArray( const ScSortParam& rSortParam, SCCOLROW nInd1, SCCOLROW nInd2, bool bKeepQuery );
     void        QuickSort( ScSortInfoArray*, SCsCOLROW nLo, SCsCOLROW nHi);
-    void SortReorder( ScSortInfoArray* pArray, ScProgress* pProgress );
-    void SortReorderByRow( ScSortInfoArray* pArray, ScProgress* pProgress );
+    void SortReorderByColumn( ScSortInfoArray* pArray, SCROW nRow1, SCROW nRow2, bool bPattern, ScProgress* pProgress );
+    void SortReorderByRow( ScSortInfoArray* pArray, SCCOL nCol1, SCCOL nCol2, ScProgress* pProgress );
 
     bool        CreateExcelQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);
     bool        CreateStarQuery(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScQueryParam& rQueryParam);

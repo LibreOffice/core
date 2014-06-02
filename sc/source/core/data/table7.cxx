@@ -13,6 +13,7 @@
 #include <clipparam.hxx>
 #include <bcaslot.hxx>
 #include <segmenttree.hxx>
+#include <sharedformula.hxx>
 
 void ScTable::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const ScTable& rClipTab )
 {
@@ -76,6 +77,22 @@ bool ScTable::HasUniformRowHeight( SCROW nRow1, SCROW nRow2 ) const
         return false;
 
     return nRow2 <= aData.mnRow2;
+}
+
+void ScTable::UnshareFormulaCells( SCCOL nCol, std::vector<SCROW>& rRows )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    sc::SharedFormulaUtil::unshareFormulaCells(aCol[nCol].maCells, rRows);
+}
+
+void ScTable::RegroupFormulaCells( SCCOL nCol )
+{
+    if (!ValidCol(nCol))
+        return;
+
+    aCol[nCol].RegroupFormulaCells();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

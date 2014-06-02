@@ -252,4 +252,55 @@ void ScSortParam::MoveToDest()
     }
 }
 
+namespace sc {
+
+namespace {
+
+struct ReorderIndex
+{
+    struct LessByPos2 : std::binary_function<ReorderIndex, ReorderIndex, bool>
+    {
+        bool operator() ( const ReorderIndex& r1, const ReorderIndex& r2 ) const
+        {
+            return r1.mnPos2 < r2.mnPos2;
+        }
+    };
+
+    SCCOLROW mnPos1;
+    SCCOLROW mnPos2;
+
+    ReorderIndex( SCCOLROW nPos1, SCCOLROW nPos2 ) : mnPos1(nPos1), mnPos2(nPos2) {}
+};
+
+}
+
+void ReorderParam::reverse()
+{
+    SCCOLROW nStart;
+    if (mbByRow)
+        nStart = maSortRange.aStart.Row();
+    else
+        nStart = maSortRange.aStart.Col();
+
+    size_t n = maOrderIndices.size();
+    std::vector<ReorderIndex> aBucket;
+    aBucket.reserve(n);
+    for (size_t i = 0; i < n; ++i)
+    {
+        SCCOLROW nPos1 = i + nStart;
+        SCCOLROW nPos2 = maOrderIndices[i];
+        aBucket.push_back(ReorderIndex(nPos1, nPos2));
+    }
+
+    std::sort(aBucket.begin(), aBucket.end(), ReorderIndex::LessByPos2());
+    std::vector<SCCOLROW> aNew;
+    aNew.reserve(n);
+    for (size_t i = 0; i < n; ++i)
+        aNew.push_back(aBucket[i].mnPos1);
+
+    maOrderIndices.swap(aNew);
+}
+
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

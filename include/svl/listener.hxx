@@ -34,6 +34,16 @@ class SVL_DLLPUBLIC SvtListener
     const SvtListener&  operator=(const SvtListener &); // n.i., ist verboten
 
 public:
+    class SVL_DLLPUBLIC QueryBase
+    {
+        sal_uInt16 mnId;
+    public:
+        QueryBase( sal_uInt16 nId );
+        virtual ~QueryBase();
+
+        sal_uInt16 getId() const;
+    };
+
     SvtListener();
     SvtListener( const SvtListener &r );
     virtual ~SvtListener();
@@ -43,9 +53,11 @@ public:
     void EndListeningAll();
     bool IsListening( SvtBroadcaster& rBroadcaster ) const;
 
+    void CopyAllBroadcasters( const SvtListener& r );
     bool HasBroadcaster() const;
 
     virtual void Notify( const SfxHint& rHint );
+    virtual void Query( QueryBase& rQuery ) const;
 };
 
 

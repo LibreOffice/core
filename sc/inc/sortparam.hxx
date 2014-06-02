@@ -80,6 +80,33 @@ struct SC_DLLPUBLIC ScSortParam
     inline sal_uInt16 GetSortKeyCount() const { return maKeyState.size(); }
 };
 
+namespace sc {
+
+struct SC_DLLPUBLIC ReorderParam
+{
+    /**
+     * This sort range already takes into account the presence or absence of
+     * header row / column i.e. if a header row / column is present, it
+     * excludes that row / column.
+     */
+    ScRange maSortRange;
+
+    /**
+     * List of original column / row positions after reordering.
+     */
+    std::vector<SCCOLROW> maOrderIndices;
+    bool mbByRow;
+    bool mbPattern;
+    bool mbHiddenFiltered;
+
+    /**
+     * Reorder the position indices such that it can be used to undo the
+     * original reordering.
+     */
+    void reverse();
+};
+
+}
 
 #endif // SC_SORTPARAM_HXX
 

@@ -35,6 +35,7 @@
 #include "subtotalparam.hxx"
 #include "queryparam.hxx"
 #include "queryentry.hxx"
+#include <sortparam.hxx>
 
 #include "svx/dataaccessdescriptor.hxx"
 

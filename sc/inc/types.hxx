@@ -98,7 +98,7 @@ struct RangeMatrix
     bool isRangeValid() const;
 };
 
-typedef boost::unordered_map<SCCOL,SCCOL> ColReorderMapType;
+typedef boost::unordered_map<SCCOLROW,SCCOLROW> ColRowReorderMapType;
 
 }
 

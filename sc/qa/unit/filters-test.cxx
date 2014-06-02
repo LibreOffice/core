@@ -33,6 +33,10 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "formulacell.hxx"
+#include <dbdocfun.hxx>
+#include <globalnames.hxx>
+#include <dbdata.hxx>
+#include <sortparam.hxx>
 
 #include <svx/svdpage.hxx>
 
