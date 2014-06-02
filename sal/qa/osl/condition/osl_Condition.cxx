@@ -29,6 +29,10 @@
 //------------------------------------------------------------------------
 #include <osl_Condition_Const.h>
 
+#ifdef WNT
+#include <Windows.h>
+#endif
+
 #include "gtest/gtest.h"
 
 using namespace osl;
