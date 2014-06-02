@@ -321,6 +321,8 @@ public:
     void            SetNextTrack( ScFormulaCell* pF );
 
     virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
+    virtual void Query( SvtListener::QueryBase& rQuery ) const SAL_OVERRIDE;
+
     void SetCompile( bool bVal );
     ScDocument* GetDocument() const;
     void            SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag=true );
