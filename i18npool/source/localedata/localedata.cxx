@@ -106,6 +106,7 @@ static const struct {
     { "fr_SN",  lcl_DATA_EURO },
     { "fr_BJ",  lcl_DATA_EURO },
     { "fr_NE",  lcl_DATA_EURO },
+    { "fr_TG",  lcl_DATA_EURO },
     { "it_IT",  lcl_DATA_EURO },
     { "it_CH",  lcl_DATA_EURO },
     { "sl_SI",  lcl_DATA_EURO },
