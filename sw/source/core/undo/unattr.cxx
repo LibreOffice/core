@@ -552,7 +552,8 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
         if( pCont->GetAnchorFrm() && !pObj->IsInserted() )
         {
-            OSL_ENSURE( pDoc->GetDrawModel(), "RestoreFlyAnchor without DrawModel" );
+            OSL_ENSURE( pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
+                    "RestoreFlyAnchor without DrawModel" );
             pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->InsertObject( pObj );
         }
         pObj->SetRelativePos( aDrawSavePt );

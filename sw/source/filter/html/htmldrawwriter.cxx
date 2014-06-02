@@ -40,6 +40,7 @@
 
 #include <rtl/strbuf.hxx>
 
+#include <IDocumentDrawModelAccess.hxx>
 #include "charatr.hxx"
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
@@ -134,7 +135,8 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    OSL_ENSURE( rWrt.pDoc->GetDrawModel(), "Da gibt's ein Draw-Obj ohne ein Draw-Model zu haben?" );
+    OSL_ENSURE( rWrt.pDoc->getIDocumentDrawModelAccess().GetDrawModel(),
+            "There is a Draw-Obj with no Draw-Model?" );
     const SdrTextObj *pTextObj = (const SdrTextObj *)&rSdrObject;
 
     // Gibt es ueberhaupt auszugebenden Text
