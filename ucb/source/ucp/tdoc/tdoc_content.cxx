@@ -2802,7 +2802,8 @@ static OUString obtainPassword(
 uno::Reference< io::XInputStream > Content::getInputStream(
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw ( ucb::CommandFailedException,
-            task::DocumentPasswordRequest )
+            task::DocumentPasswordRequest,
+            uno::RuntimeException )
 {
     OUString aUri;
     OUString aPassword;
