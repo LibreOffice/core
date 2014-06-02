@@ -290,6 +290,14 @@ DECLARE_RTFIMPORT_TEST(testN751020, "n751020.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(200)), getProperty<sal_Int32>(xParaEnum->nextElement(), "ParaBottomMargin"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo79384, "fdo79384.rtf")
+{
+    uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Маркеры спискамЫ", 31, RTL_TEXTENCODING_UTF8),
+            xTextRange->getString());
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo47326, "fdo47326.rtf")
 {
     // This was 15 only, as \super buffered text, then the contents of it got lost.
