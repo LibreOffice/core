@@ -2171,7 +2171,7 @@ void SbMethod::Broadcast( sal_uIntPtr nHintId )
         SbMethodRef xHolder = pThisCopy;
         if( mpPar.Is() )
         {
-            // Enrigister this as element 0, but don't reset the parent!
+            // Enregister this as element 0, but don't reset the parent!
             switch( GetType() ) {
             case SbxEMPTY:
             case SbxVOID:
