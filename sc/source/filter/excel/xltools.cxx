@@ -258,7 +258,7 @@ double XclTools::ErrorToDouble( sal_uInt8 nXclError )
     return fVal;
 }
 
-XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sal_uInt8 nValue )
+XclBoolError XclTools::ErrorToEnum( double& rfDblValue, bool bErrOrBool, sal_uInt8 nValue )
 {
     XclBoolError eType;
     if( bErrOrBool )

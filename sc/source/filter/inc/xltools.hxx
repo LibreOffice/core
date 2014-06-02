@@ -119,7 +119,7 @@ public:
         @param rfDblValue  Returns 0.0 for error codes or the value of a Boolean (0.0 or 1.0).
         @param bErrorOrBool  false = nError is a Boolean value; true = is an error value.
         @param nValue  The error code or Boolean value. */
-    static XclBoolError ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sal_uInt8 nValue );
+    static XclBoolError ErrorToEnum( double& rfDblValue, bool bErrOrBool, sal_uInt8 nValue );
 
     /** Returns the length in twips calculated from a length in inches. */
     static sal_uInt16   GetTwipsFromInch( double fInches );

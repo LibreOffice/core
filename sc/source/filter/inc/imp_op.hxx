@@ -197,7 +197,7 @@ protected:
 
     virtual void            EndSheet( void );
     void                    NewTable( void );
-    const ScTokenArray*     ErrorToFormula( sal_uInt8 bErrOrVal, sal_uInt8 nError,
+    const ScTokenArray*     ErrorToFormula( bool bErrOrVal, sal_uInt8 nError,
                                 double& rVal );
 
     virtual void            AdjustRowHeight();

@@ -155,8 +155,8 @@ class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
     long nRight;            // Right edge for the table; for columns always
                             // equal to the surrounding frame
     sal_uInt16 nActColumn;  // the current column
-    sal_uInt8  bTable;      // table?
-    sal_uInt8  bOrtho;      // evenly spread columns
+    bool       bTable;      // table?
+    bool       bOrtho;      // evenly spread columns
 
 protected:
     virtual bool operator==( const SfxPoolItem& ) const SAL_OVERRIDE;

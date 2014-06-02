@@ -26,10 +26,10 @@
 
 struct DffPropFlags
 {
-    sal_uInt8   bSet        : 1;
-    sal_uInt8   bComplex    : 1;
-    sal_uInt8   bBlip       : 1;
-    sal_uInt8   bSoftAttr   : 1;
+    bool   bSet        : 1;
+    bool   bComplex    : 1;
+    bool   bBlip       : 1;
+    bool   bSoftAttr   : 1;
 };
 
 struct DffPropSetEntry
