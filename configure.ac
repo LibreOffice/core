@@ -2675,8 +2675,11 @@ if test $_os = Darwin; then
     10.9)
         MACOSX_SDK_VERSION=1090
         ;;
+    10.10)
+        MACOSX_SDK_VERSION=101000
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported value are 10.6--8])
+        AC_MSG_ERROR([with-macosx-sdk $with_macosx_sdk is not a supported value, supported values are 10.6--10])
         ;;
     esac
 
@@ -2714,7 +2717,7 @@ if test $_os = Darwin; then
                 fi
             fi
             ;;
-        10.8|10.9)
+        10.8|10.9|10.10)
             xcodepath="`xcode-select -print-path`"
             if test -d "$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"; then
                 MACOSX_SDK_PATH="$xcodepath/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$with_macosx_sdk.sdk"
@@ -2755,8 +2758,11 @@ if test $_os = Darwin; then
     10.9)
         MAC_OS_X_VERSION_MIN_REQUIRED="1090"
         ;;
+    10.10)
+        MAC_OS_X_VERSION_MIN_REQUIRED="101000"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported value are 10.6--9])
+        AC_MSG_ERROR([with-macosx-version-min-required $with_macosx_version_min_required is not a supported value, supported values are 10.6--10])
         ;;
     esac
 
@@ -2799,7 +2805,7 @@ if test $_os = Darwin; then
             INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             LIBTOOL=libtool
             ;;
-        10.7|10.8|10.9)
+        10.7|10.8|10.9|10.10)
             if test "$enable_libc__" = yes; then
                 if test "$with_macosx_version_min_required" = 10.6; then
                     AC_MSG_ERROR([--enable-libc++ requires --with-macosx-version-min-required >= 10.7])
@@ -2836,8 +2842,11 @@ if test $_os = Darwin; then
     10.9)
         MAC_OS_X_VERSION_MAX_ALLOWED="1090"
         ;;
+    10.10)
+        MAC_OS_X_VERSION_MAX_ALLOWED="101000"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported value are 10.6--8])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.6--10])
         ;;
     esac
 
