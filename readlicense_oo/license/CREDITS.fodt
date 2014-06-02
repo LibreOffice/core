@@ -3938,8 +3938,8 @@
       <table:covered-table-cell/>
      </table:table-row>
     </table:table>
-    <text:p text:style-name="Text_20_body">We do not distinguish between commits that were imported from the OOo code base and those who went directly into the LibreOffice code base as:</text:p>
-    <text:p text:style-name="Text_20_body">Do note that LibreOffice is divided into 20 git repositories. Pushing a change into all repositories will be counted as 20 commits as there is no way to distinguish this from 20 separate commits.</text:p>
+    <text:p text:style-name="Text_20_body">We do not distinguish between commits that were imported from the OOo code base and those who went directly into the LibreOffice code base as:<text:line-break/>a) it is technically not possible to distinguish between commits that go directly into the LibreOffice code base and commits that were merged in from the OpenOffice.org code base, and<text:line-break/>b) contributors to the OOo code base should also be credited for the excellent work they do.</text:p>
+    <text:p text:style-name="Text_20_body">Do note that LibreOffice used to be divided into 20 git repositories. Pushing a change into all repositories will be counted as 20 commits as there is no way to distinguish this from 20 separate commits.</text:p>
     <text:h text:style-name="Heading_20_2" text:outline-level="2">Total contributions to the TDF Wiki</text:h>
     <text:p text:style-name="P3">1750 individuals contributed: </text:p>
     <table:table table:name="Tabelle5" table:style-name="Tabelle5">
