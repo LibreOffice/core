@@ -4237,7 +4237,9 @@ sal_Int16 SAL_CALL FmXListBoxCell::getSelectedItemPos() throw( RuntimeException,
     if (m_pBox)
     {
         UpdateFromColumn();
-        return m_pBox->GetSelectEntryPos();
+        sal_Int32 nPos = m_pBox->GetSelectEntryPos();
+        assert(nPos < SHRT_MAX);
+        return nPos;
     }
     return 0;
 }
