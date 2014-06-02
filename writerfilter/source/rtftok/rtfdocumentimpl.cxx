@@ -956,7 +956,12 @@ int RTFDocumentImpl::resolveChars(char ch)
 
     bool bUnicodeChecked = false;
     bool bSkipped = false;
-    while (!Strm().IsEof() && (m_aStates.top().nInternalState == INTERNAL_HEX || (ch != '{' && ch != '}' && ch != '\\')))
+
+    // Workaround for buggy input: if we're inside a style entry, then ignore
+    // the fact that '{' without a matching '}' is invalid.
+    bool bStyleEntry = m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY;
+
+    while (!Strm().IsEof() && (m_aStates.top().nInternalState == INTERNAL_HEX || ((ch != '{' || bStyleEntry) && ch != '}' && ch != '\\')))
     {
         if (m_aStates.top().nInternalState == INTERNAL_HEX || (ch != 0x0d && ch != 0x0a))
         {
