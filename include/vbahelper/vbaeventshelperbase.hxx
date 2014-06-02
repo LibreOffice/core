@@ -135,7 +135,9 @@ protected:
     /** Derived classes have to return the name of the Basic document module. */
     virtual OUString implGetDocumentModuleName(
         const EventHandlerInfo& rInfo,
-        const css::uno::Sequence< css::uno::Any >& rArgs ) const throw (css::lang::IllegalArgumentException) = 0;
+        const css::uno::Sequence< css::uno::Any >& rArgs ) const
+            throw (css::lang::IllegalArgumentException,
+                   css::uno::RuntimeException) = 0;
 
 private:
     typedef ::std::map< sal_Int32, OUString > ModulePathMap;
