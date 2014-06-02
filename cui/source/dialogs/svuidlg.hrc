@@ -20,8 +20,6 @@
 #include <svl/solar.hrc>
 #include <helpid.hrc>
 
-#define TB_LINKS                32014
-
 #define STR_AUTOLINK                            32006
 #define STR_MANUALLINK                          32007
 #define STR_BROKENLINK                          32008
@@ -30,24 +28,5 @@
 #define STR_CLOSELINKMSG                        32011
 #define STR_CLOSELINKMSG_MULTI                  32024
 #define STR_WAITINGLINK                         32028
-
-#define MD_UPDATE_BASELINKS 32002
-#define FT_FILES               31
-#define FT_LINKS               32
-#define FT_TYPE                33
-#define FT_STATUS              34
-#define PB_UPDATE_NOW          35
-#define PB_OPEN_SOURCE         36
-#define PB_CHANGE_SOURCE       37
-#define PB_BREAK_LINK          38
-#define FT_SOURCE2             39
-#define FT_TYPE2               40
-#define FT_UPDATE              41
-#define RB_AUTOMATIC           42
-#define RB_MANUAL              43
-#define FT_FULL_SOURCE_NAME    44
-#define FT_FULL_TYPE_NAME      45
-#define FT_FILES2              47
-#define FT_FULL_FILE_NAME      48
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

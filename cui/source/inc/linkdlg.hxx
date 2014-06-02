@@ -41,26 +41,17 @@ class SvBaseLinksDlg : public ModalDialog
 {
     using Window::SetType;
 
-    FixedText aFtFiles;
-    FixedText aFtLinks;
-    FixedText aFtType;
-    FixedText aFtStatus;
-    SvTabListBox aTbLinks;
-    FixedText aFtFiles2;
-    FixedText aFtFullFileName;
-    FixedText aFtSource2;
-    FixedText aFtFullSourceName;
-    FixedText aFtType2;
-    FixedText aFtFullTypeName;
-    FixedText aFtUpdate;
-    RadioButton aRbAutomatic;
-    RadioButton aRbManual;
-    CancelButton aCancelButton1;
-    HelpButton aHelpButton1;
-    PushButton aPbUpdateNow;
-    PushButton aPbOpenSource;
-    PushButton aPbChangeSource;
-    PushButton aPbBreakLink;
+    FixedText *m_pFtFiles;
+    SvTabListBox *m_pTbLinks;
+    FixedText *m_pFtFullFileName;
+    FixedText *m_pFtFullSourceName;
+    FixedText *m_pFtFullTypeName;
+    RadioButton *m_pRbAutomatic;
+    RadioButton *m_pRbManual;
+    PushButton *m_pPbUpdateNow;
+    PushButton *m_pPbOpenSource;
+    PushButton *m_pPbChangeSource;
+    PushButton *m_pPbBreakLink;
     OUString aStrAutolink;
     OUString aStrManuallink;
     OUString aStrBrokenlink;
@@ -89,17 +80,6 @@ class SvBaseLinksDlg : public ModalDialog
     void InsertEntry( const sfx2::SvBaseLink& rLink, sal_uLong nPos = TREELIST_APPEND, bool bSelect = false);
 
     void StartUpdateTimer()         { aUpdateTimer.Start(); }
-
-    SvTabListBox&     Links()       { return aTbLinks; }
-    FixedText&      FileName()      { return aFtFullFileName; }
-    FixedText&      SourceName()    { return aFtFullSourceName; }
-    FixedText&      TypeName()      { return aFtFullTypeName; }
-    RadioButton&    Automatic()     { return aRbAutomatic; }
-    RadioButton&    Manual()        { return aRbManual; }
-    PushButton&     UpdateNow()     { return aPbUpdateNow; }
-    PushButton&     OpenSource()    { return aPbOpenSource; }
-    PushButton&     ChangeSource()  { return aPbChangeSource; }
-    PushButton&     BreakLink()     { return aPbBreakLink; }
 
     OUString&       Autolink()      { return aStrAutolink; }
     OUString&       Manuallink()    { return aStrManuallink; }
