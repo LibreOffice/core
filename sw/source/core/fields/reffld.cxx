@@ -236,9 +236,11 @@ bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
 
 const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
 {
-    SwDoc* pDoc = dynamic_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
+    SwGetRefFieldType *pTyp = dynamic_cast<SwGetRefFieldType*>(GetTyp());
+    if (!pTyp)
+        return NULL;
     sal_Int32 nDummy = -1;
-    return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
+    return SwGetRefFieldType::FindAnchor( pTyp->GetDoc(), sSetRefName, nSubType, nSeqNo, &nDummy );
 }
 
 // #i85090#
