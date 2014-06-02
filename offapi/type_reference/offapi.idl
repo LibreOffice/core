@@ -8194,7 +8194,7 @@ module com {
      ::com::sun::star::i18n::Calendar getLoadedCalendar();
      sequence< string > getAllCalendars([in] ::com::sun::star::lang::Locale rLocale);
      string getUniqueID();
-     void setDateTime([in] double fTimeInDays);
+     void setDateTime([in] double nTimeInDays);
      double getDateTime();
      void setValue([in] short nCalendarFieldIndex, [in] short nValue);
      short getValue([in] short nCalendarFieldIndex);
