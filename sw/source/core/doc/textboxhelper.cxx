@@ -243,7 +243,18 @@ Rectangle SwTextBoxHelper::getTextRectangle(SwFrmFmt* pShape, bool bAbsolute)
 void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, const OUString& rPropertyName, const css::uno::Any& /*rValue*/)
 {
     if (rPropertyName == "CustomShapeGeometry")
+    {
+        // CustomShapeGeometry changes the textbox position offset and size, so adjust both.
         syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any());
+
+        SdrObject* pObject = pShape->FindRealSdrObject();
+        if (pObject)
+        {
+            Rectangle aRectangle(pObject->GetSnapRect());
+            syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Left()))));
+            syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
+        }
+    }
 }
 
 void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, const css::uno::Any& rValue)
