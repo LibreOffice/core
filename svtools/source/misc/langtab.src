@@ -387,6 +387,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "French (Senegal)" ; LANGUAGE_FRENCH_SENEGAL ; > ;
         < "French (Benin)" ; LANGUAGE_USER_FRENCH_BENIN ; > ;
         < "French (Niger)" ; LANGUAGE_USER_FRENCH_NIGER ; > ;
+        < "French (Togo)" ; LANGUAGE_USER_FRENCH_TOGO ; > ;
     };
 };
 
