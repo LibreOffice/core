@@ -741,8 +741,15 @@ void OutputDevice::SetTextFillColor()
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextFillColorAction( Color(), false ) );
 
-    if ( maFont.GetColor() != Color( COL_TRANSPARENT ) )
+    if ( maFont.GetColor() != Color( COL_TRANSPARENT ) ) {
+        // FIXME(matteocam)
+        Color aColor = maFont.GetColor();
+        if (aColor.GetRed() == 0x66) {
+            fprintf(stderr, "OutputDevice::SetTextFillColor() changing blue to transparent\n ");
+        }
+        // end modified code
         maFont.SetFillColor( Color( COL_TRANSPARENT ) );
+    }
     if ( !maFont.IsTransparent() )
         maFont.SetTransparent( true );
 
@@ -755,6 +762,14 @@ void OutputDevice::SetTextFillColor( const Color& rColor )
 
     Color aColor( rColor );
     bool bTransFill = ImplIsColorTransparent( aColor );
+
+    // FIXME(matteocam)
+    if ( rColor.GetRed() == 0x66 ) { // component of the blue I use
+        fprintf(stderr, "OutputDevice::SetTextFillColor(Color &): called  with (%d, %d, %d)\n",
+                rColor.GetRed(), rColor.GetBlue(), rColor.GetGreen());
+    }
+
+    // end modified code
 
     if ( !bTransFill )
     {
