@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
+  <LC_INFO>
+    <Language>
+      <LangID>fr</LangID>
+      <DefaultName>French</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>TG</CountryID>
+      <DefaultName>Togo</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE unoid="generic" ref="fr_BF" />
+  <LC_FORMAT ref="fr_BF" replaceFrom="[CURRENCY]" replaceTo="[$F-8C0C]" />
+  <LC_COLLATION ref="fr_BF" />
+  <LC_SEARCH ref="fr_BF" />
+  <LC_INDEX ref="fr_BF" />
+  <LC_CALENDAR ref="fr_BF" />
+  <LC_CURRENCY ref="fr_BF" />
+  <LC_TRANSLITERATION ref="fr_BF" />
+  <LC_MISC ref="fr_BF" />
+  <LC_NumberingLevel ref="fr_BF" />
+  <LC_OutLineNumberingLevel ref="fr_BF"/>
+</Locale>
+<!--Version 1.0  -->
