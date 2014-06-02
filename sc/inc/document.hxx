@@ -29,7 +29,6 @@
 #include "rangenam.hxx"
 #include "brdcst.hxx"
 #include "tabopparams.hxx"
-#include "sortparam.hxx"
 #include "types.hxx"
 #include <formula/grammar.hxx>
 #include <formula/types.hxx>
@@ -79,6 +78,8 @@ class CellValues;
 class RowHeightContext;
 struct SetFormulaDirtyContext;
 class RefMovedHint;
+struct SortUndoParam;
+struct ReorderParam;
 
 }
 
@@ -181,6 +182,8 @@ class EditTextObject;
 struct ScRefCellValue;
 class ScDocumentImport;
 class ScPostIt;
+struct ScSubTotalParam;
+struct ScQueryParam;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -1676,7 +1679,9 @@ public:
     SC_DLLPUBLIC SvNumberFormatter* GetFormatTable() const;
     SC_DLLPUBLIC SvNumberFormatter* CreateFormatTable() const;
 
-    void            Sort( SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress );
+    void Sort( SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress, sc::ReorderParam* pUndo );
+    void Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress );
+
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub );
     SC_DLLPUBLIC bool           CreateQueryParam( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         SCTAB nTab, ScQueryParam& rQueryParam );
@@ -2033,8 +2038,8 @@ public:
 
     void            InvalidateStyleSheetUsage()
                         { bStyleSheetUsageInvalid = true; }
-    void GetSortParam( ScSortParam& rParam, SCTAB nTab );
-    void SetSortParam( ScSortParam& rParam, SCTAB nTab );
+    void SC_DLLPUBLIC GetSortParam( ScSortParam& rParam, SCTAB nTab );
+    void SC_DLLPUBLIC SetSortParam( ScSortParam& rParam, SCTAB nTab );
 
     inline void     SetVbaEventProcessor( const com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >& rxVbaEvents )
                         { mxVbaEvents = rxVbaEvents; }
@@ -2062,6 +2067,19 @@ public:
     void UpdateScriptTypes( const ScAddress& rPos, SCCOL nColSize, SCROW nRowSize );
 
     size_t GetFormulaHash( const ScAddress& rPos ) const;
+
+    /**
+     * Make specified formula cells non-grouped.
+     *
+     * @param nTab sheet index
+     * @param nCol column index
+     * @param rRows list of row indices at which formula cells are to be
+     *              unshared. This call sorts the passed row indices and
+     *              removes duplicates, which is why the caller must pass it
+     *              as reference.
+     */
+    void UnshareFormulaCells( SCTAB nTab, SCCOL nCol, std::vector<SCROW>& rRows );
+    void RegroupFormulaCells( SCTAB nTab, SCCOL nCol );
 
     ScFormulaVectorState GetFormulaVectorState( const ScAddress& rPos ) const;
 
@@ -2148,15 +2166,6 @@ private:
 
     void SharePooledResources( ScDocument* pSrcDoc );
 };
-inline void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )
-{
-    rParam = mSheetSortParams[ nTab ];
-}
-
-inline void ScDocument::SetSortParam( ScSortParam& rParam, SCTAB nTab )
-{
-    mSheetSortParams[ nTab ] = rParam;
-}
 
 #endif
 

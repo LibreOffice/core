@@ -21,6 +21,14 @@
 #include <svl/broadcast.hxx>
 #include <tools/debug.hxx>
 
+SvtListener::QueryBase::QueryBase( sal_uInt16 nId ) : mnId(nId) {}
+SvtListener::QueryBase::~QueryBase() {}
+
+sal_uInt16 SvtListener::QueryBase::getId() const
+{
+    return mnId;
+}
+
 SvtListener::SvtListener() {}
 
 SvtListener::SvtListener( const SvtListener &r ) :
@@ -75,12 +83,26 @@ bool SvtListener::IsListening( SvtBroadcaster& rBroadcaster ) const
     return maBroadcasters.count(&rBroadcaster) > 0;
 }
 
+void SvtListener::CopyAllBroadcasters( const SvtListener& r )
+{
+    BroadcastersType aCopy(r.maBroadcasters);
+    maBroadcasters.swap(aCopy);
+    BroadcastersType::iterator it = maBroadcasters.begin(), itEnd = maBroadcasters.end();
+    for (; it != itEnd; ++it)
+    {
+        SvtBroadcaster* p = *it;
+        p->Add(this);
+    }
+}
+
 bool SvtListener::HasBroadcaster() const
 {
     return !maBroadcasters.empty();
 }
 
-void SvtListener::Notify( const SfxHint& ) {}
+void SvtListener::Notify( const SfxHint& /*rHint*/ ) {}
+
+void SvtListener::Query( QueryBase& /*rQuery*/ ) const {}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,6 +35,7 @@
 #include <dbdocfun.hxx>
 #include <globalnames.hxx>
 #include <dbdata.hxx>
+#include <sortparam.hxx>
 
 #include <svx/svdpage.hxx>
 

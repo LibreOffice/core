@@ -100,6 +100,15 @@ public:
      * @param rCell formula cell instance
      */
     static void unshareFormulaCell(const CellStoreType::position_type& aPos, ScFormulaCell& rCell);
+
+    /**
+     * Make specified formula cells non-shared ones, and split them off from
+     * their respective adjacent formula cell groups.
+     *
+     * @param rCells cell storage container
+     * @param rRows row positions at which to unshare formula cells.
+     */
+    static void unshareFormulaCells(CellStoreType& rCells, std::vector<SCROW>& rRows);
 };
 
 }

@@ -33,6 +33,7 @@
 #include "globstr.hrc"
 #include <rowheightcontext.hxx>
 #include <column.hxx>
+#include <sortparam.hxx>
 
 TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
 TYPEINIT1(ScBlockUndo,      ScSimpleUndo);

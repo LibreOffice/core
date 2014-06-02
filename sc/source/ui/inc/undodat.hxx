@@ -231,7 +231,7 @@ public:
                     ScUndoSort( ScDocShell* pNewDocShell, SCTAB nNewTab,
                             const ScSortParam& rParam,
                             ScDocument* pNewUndoDoc,
-                            ScDBCollection* pNewUndoDB, const ScRange* pDest = NULL );
+                            ScDBCollection* pNewUndoDB );
     virtual         ~ScUndoSort();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -246,8 +246,6 @@ private:
     ScSortParam     aSortParam;
     ScDocument*     pUndoDoc;
     ScDBCollection* pUndoDB;                // due to source and target range
-    bool            bDestArea;
-    ScRange         aDestRange;
 };
 
 class ScUndoQuery: public ScDBFuncUndo

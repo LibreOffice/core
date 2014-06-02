@@ -18,7 +18,11 @@ namespace sc {
 class RefHint : public SfxSimpleHint
 {
 public:
-    enum Type { Moved, ColumnReordered };
+    enum Type {
+        Moved,
+        ColumnReordered,
+        RowReordered
+    };
 
 private:
     Type meType;
@@ -57,20 +61,38 @@ public:
 
 class RefColReorderHint : public RefHint
 {
-    const sc::ColReorderMapType& mrColMap;
+    const sc::ColRowReorderMapType& mrColMap;
     SCTAB mnTab;
     SCROW mnRow1;
     SCROW mnRow2;
 
 public:
-    RefColReorderHint( const sc::ColReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 );
+    RefColReorderHint( const sc::ColRowReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 );
     virtual ~RefColReorderHint();
 
-    const sc::ColReorderMapType& getColMap() const;
+    const sc::ColRowReorderMapType& getColMap() const;
 
     SCTAB getTab() const;
     SCROW getStartRow() const;
     SCROW getEndRow() const;
+};
+
+class RefRowReorderHint : public RefHint
+{
+    const sc::ColRowReorderMapType& mrRowMap;
+    SCTAB mnTab;
+    SCCOL mnCol1;
+    SCCOL mnCol2;
+
+public:
+    RefRowReorderHint( const sc::ColRowReorderMapType& rRowMap, SCTAB nTab, SCCOL nCol1, SCCOL nCol2 );
+    virtual ~RefRowReorderHint();
+
+    const sc::ColRowReorderMapType& getRowMap() const;
+
+    SCTAB getTab() const;
+    SCCOL getStartColumn() const;
+    SCCOL getEndColumn() const;
 };
 
 }

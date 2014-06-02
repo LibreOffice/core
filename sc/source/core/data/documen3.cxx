@@ -1335,15 +1335,28 @@ bool ScDocument::UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, b
     return false;
 }
 
-void ScDocument::Sort(SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress)
+void ScDocument::Sort(
+    SCTAB nTab, const ScSortParam& rSortParam, bool bKeepQuery, ScProgress* pProgress, sc::ReorderParam* pUndo )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         bool bOldEnableIdle = IsIdleEnabled();
         EnableIdle(false);
-        maTabs[nTab]->Sort(rSortParam, bKeepQuery, pProgress);
+        maTabs[nTab]->Sort(rSortParam, bKeepQuery, pProgress, pUndo);
         EnableIdle(bOldEnableIdle);
     }
+}
+
+void ScDocument::Reorder( const sc::ReorderParam& rParam, ScProgress* pProgress )
+{
+    ScTable* pTab = FetchTable(rParam.maSortRange.aStart.Tab());
+    if (!pTab)
+        return;
+
+    bool bOldEnableIdle = IsIdleEnabled();
+    EnableIdle(false);
+    pTab->Reorder(rParam, pProgress);
+    EnableIdle(bOldEnableIdle);
 }
 
 SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, bool bKeepSub)
@@ -1997,6 +2010,16 @@ bool ScDocument::ReservePatternCount( SCTAB nTab, SCCOL nCol, SCSIZE nReserve )
         return maTabs[nTab]->ReservePatternCount( nCol, nReserve );
     else
         return false;
+}
+
+void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )
+{
+    rParam = mSheetSortParams[ nTab ];
+}
+
+void ScDocument::SetSortParam( ScSortParam& rParam, SCTAB nTab )
+{
+    mSheetSortParams[ nTab ] = rParam;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

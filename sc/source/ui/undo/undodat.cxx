@@ -739,21 +739,14 @@ bool ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 
 ScUndoSort::ScUndoSort( ScDocShell* pNewDocShell,
                         SCTAB nNewTab, const ScSortParam& rParam,
-                        ScDocument* pNewUndoDoc, ScDBCollection* pNewUndoDB,
-                        const ScRange* pDest ) :
+                        ScDocument* pNewUndoDoc, ScDBCollection* pNewUndoDB ) :
     ScDBFuncUndo( pNewDocShell, ScRange( rParam.nCol1, rParam.nRow1, nNewTab,
                                          rParam.nCol2, rParam.nRow2, nNewTab ) ),
     nTab( nNewTab ),
     aSortParam( rParam ),
     pUndoDoc( pNewUndoDoc ),
-    pUndoDB( pNewUndoDB ),
-    bDestArea( false )
+    pUndoDB( pNewUndoDB )
 {
-    if ( pDest )
-    {
-        bDestArea = true;
-        aDestRange = *pDest;
-    }
 }
 
 ScUndoSort::~ScUndoSort()
@@ -795,13 +788,6 @@ void ScUndoSort::Undo()
     rDoc.DeleteAreaTab( nStartCol,nStartRow, nEndCol,nEndRow, nSortTab, IDF_ALL|IDF_NOCAPTIONS );
     pUndoDoc->CopyToDocument( nStartCol, nStartRow, nSortTab, nEndCol, nEndRow, nSortTab,
                                 IDF_ALL|IDF_NOCAPTIONS, false, &rDoc );
-
-    if (bDestArea)
-    {
-        // do not delete/copy note captions, they are handled in drawing undo (ScDBFuncUndo::mpDrawUndo)
-        rDoc.DeleteAreaTab( aDestRange, IDF_ALL|IDF_NOCAPTIONS );
-        pUndoDoc->CopyToDocument( aDestRange, IDF_ALL|IDF_NOCAPTIONS, false, &rDoc );
-    }
 
     // Row heights always (due to automatic adjustment)
     // TODO change to use ScBlockUndo

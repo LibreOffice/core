@@ -125,6 +125,7 @@
 #include "tokenarray.hxx"
 #include "stylehelper.hxx"
 #include "dputil.hxx"
+#include <sortparam.hxx>
 
 #include <list>
 #include <boost/scoped_array.hpp>
