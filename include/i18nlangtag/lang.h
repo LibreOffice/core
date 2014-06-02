@@ -700,6 +700,7 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_LENGO                 0x0692
 #define LANGUAGE_USER_FRENCH_BENIN          0x840C  /* makeLangID( 0x21, getPrimaryLanguage( LANGUAGE_FRENCH)) */
 #define LANGUAGE_USER_FRENCH_NIGER          0x880C  /* makeLangID( 0x22, getPrimaryLanguage( LANGUAGE_FRENCH)) */
+#define LANGUAGE_USER_FRENCH_TOGO           0x8C0C  /* makeLangID( 0x23, getPrimaryLanguage( LANGUAGE_FRENCH)) */
 
 
 /* Primary language ID range for on-the-fly assignment. */
