@@ -70,6 +70,8 @@
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
 
+//UUUU
+#include <svx/xfillit0.hxx>
 
 using namespace ::com::sun::star;
 
@@ -403,6 +405,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
                 aSet.Put(aScriptSpace);
             }
         }
+
         break;
 
     case RES_POOLCOLL_TEXT:                 // Textkoerper

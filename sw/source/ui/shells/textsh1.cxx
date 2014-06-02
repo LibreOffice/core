@@ -133,6 +133,9 @@
 #include <svx/nbdtmg.hxx>
 #endif
 
+//UUUU
+#include <svx/svdmodel.hxx>
+#include <svx/drawitem.hxx>
 
 #include <numrule.hxx>
 
@@ -896,27 +899,45 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
-            SfxItemSet aCoreSet( GetPool(),
-                            RES_PARATR_BEGIN,           RES_PARATR_END - 1,
-                            // --> OD 2008-02-25 #refactorlists#
-                            RES_PARATR_LIST_BEGIN,      RES_PARATR_LIST_END - 1,
-                            // <--
-                            RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,
-                            SID_ATTR_TABSTOP_POS,       SID_ATTR_TABSTOP_POS,
-                            SID_ATTR_TABSTOP_DEFAULTS,  SID_ATTR_TABSTOP_DEFAULTS,
-                            SID_ATTR_TABSTOP_OFFSET,    SID_ATTR_TABSTOP_OFFSET,
-                            SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_INNER,
-                            SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,
-                            SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,
-                            SID_HTML_MODE,              SID_HTML_MODE,
-                            FN_PARAM_1,                 FN_PARAM_1,
-                            FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,
-                            FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME,
+            SfxItemSet aCoreSet( GetPool(), //UUUU sorted by indices, one group of three concatenated
+                            RES_PARATR_BEGIN,           RES_PARATR_END - 1,         // [60
+                            RES_PARATR_LIST_BEGIN,      RES_PARATR_LIST_END - 1,    // [77
+                            RES_FRMATR_BEGIN,           RES_FRMATR_END - 1,         // [82
+
+                            //UUUU FillAttribute support
+                            XATTR_FILL_FIRST, XATTR_FILL_LAST,                      // [1014
+
+                            // includes SID_ATTR_TABSTOP_POS
+                            SID_ATTR_TABSTOP_DEFAULTS,  SID_ATTR_TABSTOP_OFFSET,    // [10003 .. 10005
+
+                            SID_ATTR_BORDER_INNER,      SID_ATTR_BORDER_INNER,      // [10023
+                            SID_ATTR_PARA_MODEL,        SID_ATTR_PARA_KEEP,         // [10065
+
+                            //UUUU items to hand over XPropertyList things like
+                            // XColorList, XHatchList, XGradientList and XBitmapList
+                            // to the Area TabPage
+                            SID_COLOR_TABLE,        SID_BITMAP_LIST,                // [10179
+
+                            SID_HTML_MODE,              SID_HTML_MODE,              // [10414
+                            SID_ATTR_PARA_PAGENUM,      SID_ATTR_PARA_PAGENUM,      // [10457
+                            FN_PARAM_1,                 FN_PARAM_1,                 // [21160
+                            FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,      // [21738
+                            FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME,    // [22418
                             0);
-            // --> OD 2008-01-16 #newlistlevelattrs#
+
             // get also the list level indent values merged as LR-SPACE item, if needed.
             rWrtSh.GetCurAttr( aCoreSet, true );
-            // <--
+
+            //UUUU create needed items for XPropertyList entries from the DrawModel so that
+            // the Area TabPage can access them
+            // Do this after GetCurAttr, this resets the ItemSet content again
+            const SdrModel* pDrawModel = GetView().GetDocShell()->GetDoc()->GetDrawModel();
+
+            aCoreSet.Put(SvxColorTableItem(pDrawModel->GetColorTableFromSdrModel(), SID_COLOR_TABLE));
+            aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientListFromSdrModel(), SID_GRADIENT_LIST));
+            aCoreSet.Put(SvxHatchListItem(pDrawModel->GetHatchListFromSdrModel(), SID_HATCH_LIST));
+            aCoreSet.Put(SvxBitmapListItem(pDrawModel->GetBitmapListFromSdrModel(), SID_BITMAP_LIST));
+
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
                             ::GetHtmlMode(GetView().GetDocShell())));
 

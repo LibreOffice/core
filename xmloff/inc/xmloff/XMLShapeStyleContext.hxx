@@ -40,8 +40,9 @@ protected:
     ::rtl::OUString     m_sControlDataStyleName;
     ::rtl::OUString     m_sListStyleName;
     sal_Bool            m_bIsNumRuleAlreadyConverted;
+
     //UUUU
-    sal_Bool            m_bIsFillStyleAlreadyConverted;
+    bool                m_bIsFillStyleAlreadyConverted : 1;
 
 protected:
     virtual void SetAttribute( sal_uInt16 nPrefixKey,

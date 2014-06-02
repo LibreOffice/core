@@ -505,13 +505,7 @@ sal_Bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
         pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
     }
 
-    //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
-    // and evtl. correct that item to ensure unique names for that type. This call may
-    // modify/correct entries inside of the given SfxItemSet
-    CheckForUniqueItemForLineFillNameOrIndex(rSet);
-
-    bool const bRet =
-        lcl_SetFlyFrmAttr(*this, &SwDoc::SetFlyFrmAnchor, rFlyFmt, rSet);
+    bool const bRet = lcl_SetFlyFrmAttr(*this, &SwDoc::SetFlyFrmAnchor, rFlyFmt, rSet);
 
     if ( pSaveUndo.get() )
     {

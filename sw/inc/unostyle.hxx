@@ -391,6 +391,7 @@ public:
     virtual sal_Bool SAL_CALL SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 
 };
+
 class SwXAutoStylesEnumerator : public cppu::WeakImplHelper1< ::com::sun::star::container::XEnumeration >,
     public SwClient
 {
@@ -418,8 +419,10 @@ class SwXAutoStyle : public cppu::WeakImplHelper3
 >,
     public SwClient
 {
-    SfxItemSet_Pointer_t    pSet;
-    IStyleAccess::SwAutoStyleFamily       eFamily;
+private:
+    SfxItemSet_Pointer_t                mpSet;
+    IStyleAccess::SwAutoStyleFamily     meFamily;
+    SwDoc&                              mrDoc;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > SAL_CALL GetPropertyValues_Impl( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 

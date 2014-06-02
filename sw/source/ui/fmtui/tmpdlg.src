@@ -148,12 +148,29 @@ TabDialog DLG_TEMPLATE_2
                 Text [ en-US ] = "Drop Caps" ;
                 PageResID = TP_DROPCAPS ;
             };
+
+            //UUUU new Area and Transparence TabPages
             PageItem
             {
-                Identifier = TP_BACKGROUND ;
-                Text [ en-US ] = "Background" ;
-                PageResID = TP_BACKGROUND ;
+                Identifier = RID_SVXPAGE_AREA;
+                PageResID = RID_SVXPAGE_AREA;
+                Text [ en-US ] = "Area" ;
             };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TRANSPARENCE;
+                PageResID = RID_SVXPAGE_TRANSPARENCE;
+                Text [ en-US ] = "Transparency" ;
+            };
+
+            //UUUU remove?
+            //PageItem
+            //{
+            //    Identifier = TP_BACKGROUND ;
+            //    Text [ en-US ] = "Background" ;
+            //    PageResID = TP_BACKGROUND ;
+            //};
+
             PageItem
             {
                 Identifier = TP_BORDER ;
@@ -196,12 +213,28 @@ TabDialog DLG_TEMPLATE_4
                 Text [ en-US ] = "Page" ;
                 PageResID = TP_PAGE_STD ;
             };*/
+
+            //UUUU new Area and Transparence TabPages
             PageItem
             {
-                Identifier = TP_BACKGROUND ;
-                Text [ en-US ] = "Background" ;
-                PageResID = TP_BACKGROUND ;
+                Identifier = RID_SVXPAGE_AREA;
+                PageResID = RID_SVXPAGE_AREA;
+                Text [ en-US ] = "Area" ;
             };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TRANSPARENCE;
+                PageResID = RID_SVXPAGE_TRANSPARENCE;
+                Text [ en-US ] = "Transparency" ;
+            };
+
+            //UUUU remove?
+            //PageItem
+            //{
+            //    Identifier = TP_BACKGROUND ;
+            //    Text [ en-US ] = "Background" ;
+            //    PageResID = TP_BACKGROUND ;
+            //};
             /*            PageItem
             {
                 Identifier = TP_BORDER ;

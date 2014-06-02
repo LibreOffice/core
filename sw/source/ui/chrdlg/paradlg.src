@@ -24,6 +24,8 @@
 #include "globals.hrc"
 #include "chrdlg.hrc"
 #include "paradlg.hrc"
+#include <svx/dialogs.hrc>
+
 #define HelpText "error - hier keine HelpTexte HelpText"
  // #define DLG_PARA 256
 TabDialog DLG_PARA
@@ -85,12 +87,28 @@ TabDialog DLG_PARA
                 Text [ en-US ] = "Borders" ;
                 PageResID = TP_BORDER ;
             };
+
+            //UUUU new Area and Transparence TabPages
             PageItem
             {
-                Identifier = TP_BACKGROUND ;
-                Text [ en-US ] = "Background" ;
-                PageResID = TP_BACKGROUND ;
+                Identifier = RID_SVXPAGE_AREA;
+                PageResID = RID_SVXPAGE_AREA;
+                Text [ en-US ] = "Area" ;
             };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TRANSPARENCE;
+                PageResID = RID_SVXPAGE_TRANSPARENCE;
+                Text [ en-US ] = "Transparency" ;
+            };
+
+            //UUUU Remove?
+            //PageItem
+            //{
+            //    Identifier = TP_BACKGROUND ;
+            //    Text [ en-US ] = "Background" ;
+            //    PageResID = TP_BACKGROUND ;
+            //};
         };
     };
 };

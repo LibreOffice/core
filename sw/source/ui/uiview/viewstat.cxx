@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -30,7 +28,6 @@
 #include <svl/aeitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>
-
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objitem.hxx>
 #include <svl/imageitm.hxx>
@@ -58,10 +55,11 @@
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/visitem.hxx>
-
 #include <cmdid.h>
-
 #include <IDocumentRedlineAccess.hxx>
+
+//UUUU
+#include <doc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -144,6 +142,15 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 const sal_uInt16 nCurIdx = pWrtShell->GetCurPageDesc();
                 const SwPageDesc& rDesc = pWrtShell->GetPageDesc( nCurIdx );
+
+                //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+                if(!rSet.GetParent())
+                {
+                    const SwFrmFmt& rMaster = rDesc.GetMaster();
+
+                    rSet.SetParent(&rMaster.GetDoc()->GetDfltFrmFmt()->GetAttrSet());
+                }
+
                 ::PageDescToItemSet( rDesc, rSet);
             }
             break;

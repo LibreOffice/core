@@ -125,6 +125,9 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::text::XTextContent> m_wXParagraph;
 
+    //UUUU DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFillAttributes;
+
     SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                              const SfxItemSet* pAutoAttr = 0 );
 
@@ -828,6 +831,9 @@ public:
         ::com::sun::star::rdf::XMetadatable > MakeUnoObject();
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwTxtNode)
+
+    //UUUU Access to DrawingLayer FillAttributes in a preprocessed form for primitive usage
+    virtual drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 };
 
 //-----------------------------------------------------------------------------

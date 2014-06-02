@@ -29,7 +29,12 @@
 
 class PageStyleContext : public XMLPropStyleContext
 {
-    ::rtl::OUString sPageUsage;
+private:
+    ::rtl::OUString     sPageUsage;
+
+    //UUUU
+    bool                m_bIsFillStyleAlreadyConverted : 1;
+
 protected:
 
     virtual void SetAttribute( sal_uInt16 nPrefixKey,

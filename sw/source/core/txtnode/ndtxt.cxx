@@ -91,6 +91,9 @@
 #include <switerator.hxx>
 #include <attrhint.hxx>
 
+//UUUU
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
+#include <svl/itemiter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -205,21 +208,23 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
 // SwTxtNode
 // --------------------
 
-SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
-                      SwTxtFmtColl *pTxtColl,
-                      const SfxItemSet* pAutoAttr )
-    : SwCntntNode( rWhere, ND_TEXTNODE, pTxtColl ),
-      m_pSwpHints( 0 ),
-      mpNodeNum( 0 ),
-      m_bLastOutlineState( false ),
-      m_bNotifiable( false ),
-      // --> OD 2008-11-19 #i70748#
-      mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
-      // <--
-      // --> OD 2008-05-06 #refactorlists#
-      mbInSetOrResetAttr( false ),
-      mpList( 0 )
-      // <--
+SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl, const SfxItemSet* pAutoAttr )
+:   SwCntntNode( rWhere, ND_TEXTNODE, pTxtColl ),
+    m_pSwpHints( 0 ),
+    mpNodeNum( 0 ),
+    m_Text(),
+    m_pParaIdleData_Impl(0),
+    m_bContainsHiddenChars(false),
+    m_bHiddenCharsHidePara(false),
+    m_bRecalcHiddenCharFlags(false),
+    m_bLastOutlineState( false ),
+    m_bNotifiable( false ),
+    mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
+    mbInSetOrResetAttr( false ),
+    mpList( 0 ),
+    m_pNumStringCache(),
+    m_wXParagraph(),
+    maFillAttributes()
 {
     InitSwParaStatistics( true );
 
@@ -1545,7 +1550,11 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
     if( this != pDest )
     {
         // Frames benachrichtigen, sonst verschwinden die Ftn-Nummern
-        SwUpdateAttr aHint( nOldPos, nOldPos, 0 );
+        SwUpdateAttr aHint(
+            nOldPos,
+            nOldPos,
+            0);
+
         pDest->ModifyNotification( 0, &aHint );
     }
 }
@@ -2466,7 +2475,11 @@ void SwTxtNode::GCAttr()
     if(bChanged)
     {
         //TxtFrm's reagieren auf aHint, andere auf aNew
-        SwUpdateAttr aHint( nMin, nMax, 0 );
+        SwUpdateAttr aHint(
+            nMin,
+            nMax,
+            0);
+
         NotifyClients( 0, &aHint );
         SwFmtChg aNew( GetTxtColl() );
         NotifyClients( 0, &aNew );
@@ -3649,6 +3662,28 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
                         (SwTxtFmtColl*)((SwFmtChg*)pNewValue)->pChangedFmt );
     }
 
+    //UUUU reset fill information
+    if(maFillAttributes.get())
+    {
+        sal_uInt16 nWhich = pNewValue ? pNewValue->Which() : 0;
+        bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
+
+        if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
+        {
+            SfxItemIter aIter(*((SwAttrSetChg*)pNewValue)->GetChgSet());
+
+            for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
+            {
+                bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
+            }
+        }
+
+        if(bReset)
+        {
+            maFillAttributes.reset();
+        }
+    }
+
     // --> OD 2008-03-27 #refactorlists#
     if ( !mbInSetOrResetAttr )
     {
@@ -3699,6 +3734,12 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
             HandleModifyAtTxtNode( *this, &aTmp1, &aTmp2  );
         }
         // <--
+
+        //UUUU reset fill information on parent style change
+        if(maFillAttributes.get())
+        {
+            maFillAttributes.reset();
+        }
     }
 
     // nur wenn im normalen Nodes-Array
@@ -5060,3 +5101,16 @@ bool SwTxtNode::HasPageNumberField()
 }
 //Bug 120881(End)
 
+//UUUU
+drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwTxtNode::getSdrAllFillAttributesHelper() const
+{
+    // create SdrAllFillAttributesHelper on demand
+    if(!maFillAttributes.get())
+    {
+        const_cast< SwTxtNode* >(this)->maFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(GetSwAttrSet()));
+    }
+
+    return maFillAttributes;
+}
+
+// eof

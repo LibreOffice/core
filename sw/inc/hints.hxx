@@ -107,13 +107,33 @@ public:
     SwDelTxt( xub_StrLen nS, xub_StrLen nL );
 };
 
-class SwUpdateAttr: public SwMsgPoolItem
+class SwUpdateAttr : public SwMsgPoolItem
 {
-public:
+private:
     xub_StrLen nStart;
     xub_StrLen nEnd;
     sal_uInt16 nWhichAttr;
-    SwUpdateAttr( xub_StrLen nS, xub_StrLen nE, sal_uInt16 nW );
+
+public:
+    SwUpdateAttr(
+        xub_StrLen nS,
+        xub_StrLen nE,
+        sal_uInt16 nW);
+
+    xub_StrLen getStart() const
+    {
+        return nStart;
+    }
+
+    xub_StrLen getEnd() const
+    {
+        return nEnd;
+    }
+
+    sal_uInt16 getWhichAttr() const
+    {
+        return nWhichAttr;
+    }
 };
 
 

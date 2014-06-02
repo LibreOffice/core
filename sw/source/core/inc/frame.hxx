@@ -59,8 +59,6 @@ class SwFmt;
 class SwPrintData;
 class SwSortedObjs;
 class SwAnchoredObject;
-//UUUU
-class FillAttributes;
 
 //Jeder FrmTyp findet sich hier in einem Bit wieder.
 //Die Bits muessen so gesetzt werden, dass mit einer Maskierung festgestellt
@@ -272,6 +270,12 @@ enum MakePageType
 // OD 2004-05-06 #i28701# - replaced by new class <SwSortedObjs>
 //typedef SdrObject* SdrObjectPtr;
 //SV_DECL_PTRARR(SwDrawObjs,SdrObjectPtr,1,1);
+
+//UUUU
+namespace drawinglayer { namespace attribute {
+    class SdrAllFillAttributesHelper;
+    typedef boost::shared_ptr< SdrAllFillAttributesHelper > SdrAllFillAttributesHelperPtr;
+}}
 
 class SwFrm: public SwClient, public SfxBroadcaster
 {
@@ -576,7 +580,7 @@ public:
     void Retouche( const SwPageFrm *pPage, const SwRect &rRect ) const;
 
     sal_Bool GetBackgroundBrush(
-        boost::shared_ptr< FillAttributes >& rFillAttributes,
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
         const SvxBrushItem*& rpBrush,
         const Color*& rpColor,
         SwRect &rOrigRect,
@@ -967,6 +971,9 @@ public:
     bool KnowsFormat( const SwFmt& rFmt ) const;
     void RegisterToFormat( SwFmt& rFmt );
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
+
+    //UUUU
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
 };
 
 inline sal_Bool SwFrm::IsInDocBody() const

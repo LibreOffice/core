@@ -24,15 +24,16 @@
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>
 
- // RID_SVXDLG_BBDLG ------------------------------------------------------
-TabDialog RID_SVXDLG_BBDLG
+// RID_SVXDLG_BBDLG_BACKGROUND and RID_SVXDLG_BBDLG_AREA_TRANS ------------
+
+TabDialog RID_SVXDLG_BBDLG_BACKGROUND
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 328 , 155 ) ;
     Text [ en-US ] = "Border / Background" ;
     Moveable = TRUE ;
-     // Closeable = TRUE; hat ja einen OKButton
+
     TabControl 1
     {
         OutputSize = TRUE ;
@@ -53,6 +54,45 @@ TabDialog RID_SVXDLG_BBDLG
         };
     };
 };
+
+TabDialog RID_SVXDLG_BBDLG_AREA_TRANS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 328 , 155 ) ;
+    Text [ en-US ] = "Border / Background" ;
+    Moveable = TRUE ;
+
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 2 , 10 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_BORDER ;
+                Text [ en-US ] = "Borders" ;
+            };
+
+            //UUUU new Area and Transparence TabPages
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_AREA;
+                PageResID = RID_SVXPAGE_AREA;
+                Text [ en-US ] = "Area" ;
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_TRANSPARENCE;
+                PageResID = RID_SVXPAGE_TRANSPARENCE;
+                Text [ en-US ] = "Transparency" ;
+            };
+        };
+    };
+};
+
  // ********************************************************************** EOF
 
 

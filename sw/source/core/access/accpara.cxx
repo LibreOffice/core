@@ -1209,7 +1209,7 @@ bool lcl_GetBackgroundColor( Color & rColor,
     SwRect aDummyRect;
 
     //UUUU
-    FillAttributesPtr aFillAttributes;
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
     if ( pFrm &&
          pFrm->GetBackgroundBrush( aFillAttributes, pBackgrdBrush, pSectionTOXColor, aDummyRect, false ) )

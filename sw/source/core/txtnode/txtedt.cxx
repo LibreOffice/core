@@ -646,14 +646,20 @@ void SwTxtNode::RstTxtAttr(
     }
 
     TryDeleteSwpHints();
+
     if (bChanged)
     {
         if ( HasHints() )
         {
             m_pSwpHints->Resort();
         }
+
         //TxtFrm's reagieren auf aHint, andere auf aNew
-        SwUpdateAttr aHint( nMin, nMax, 0 );
+        SwUpdateAttr aHint(
+            nMin,
+            nMax,
+            0);
+
         NotifyClients( 0, &aHint );
         SwFmtChg aNew( GetFmtColl() );
         NotifyClients( 0, &aNew );

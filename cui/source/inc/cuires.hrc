@@ -42,7 +42,11 @@
 #define RID_SVXDLG_TEXT                     (RID_SVX_START + 183)
 #define RID_SVXDLG_TRANSFORM                (RID_SVX_START +  45)
 #define RID_SVXDLG_LINE                     (RID_SVX_START +  50)
-#define RID_SVXDLG_BBDLG                    (RID_SVX_START +  40)
+
+//UUUU
+#define RID_SVXDLG_BBDLG_BACKGROUND         (RID_SVX_START +  40)
+#define RID_SVXDLG_BBDLG_AREA_TRANS         (RID_SVX_START +  41)
+
 #define RID_SVXDLG_CAPTION                  (RID_SVX_START + 151)
 #define RID_SVXDLG_AREA                     (RID_SVX_START +  55)
 #define RID_SVXSTRARY_PAPERSIZE_STD         (RID_SVX_START + 142)
