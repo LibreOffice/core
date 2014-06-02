@@ -24,7 +24,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=sal
-TARGET=qa_osl_condition
+TARGET=sal_ut_osl_condition
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -35,22 +35,19 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:Condition by codegen.pl
-SHL1OBJS=  \
-    $(SLO)$/osl_Condition.obj
+.IF "$(ENABLE_UNIT_TESTS)" != "YES"
+all:
+    @echo unit tests are disabled. Nothing to do.
 
-SHL1TARGET= osl_Condition
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
+.ELSE
 
-SHL1IMPLIB= i$(SHL1TARGET)
+APP1OBJS = $(OBJ)/osl_Condition.obj
+APP1RPATH = NONE
+APP1STDLIBS = $(GTESTLIB) $(SALLIB)
+APP1TARGET = sal_ut_osl_condition
+APP1TEST = enabled
+#APP1TEST = disabled
 
-DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-# auto generated Target:Condition
-# END ------------------------------------------------------------------
+.INCLUDE: target.mk
 
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.ENDIF

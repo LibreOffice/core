@@ -52,7 +52,7 @@
 #include <unistd.h>
 #endif
 
-#include <testshl/simpleheader.hxx>
+//#include <testshl/simpleheader.hxx>
 
 #define OSLTEST_DECLARE_USTRING( str_name, str_value ) \
     ::rtl::OUString a##str_name = rtl::OUString::createFromAscii( str_value )
@@ -62,7 +62,7 @@
 //------------------------------------------------------------------------
 OSLTEST_DECLARE_USTRING( TestCon,  "testcondition" );
 
-const char pTestString[17] = "Sun Microsystems";
+const char pTestString[27] = "Apache Software Foundation";
 
 
 #endif /* _OSL_CONDITION_CONST_H_ */
