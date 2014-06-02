@@ -20,170 +20,46 @@
 #include <svtools/controldims.hrc>
 #include "svuidlg.hrc"
 
-ModalDialog MD_UPDATE_BASELINKS
+
+String STR_AUTOLINK
 {
-    HelpID = "cui:ModalDialog:MD_UPDATE_BASELINKS";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 337 , 166 ) ;
-    Text [ en-US ] = "Edit Links" ;
-    Moveable = TRUE ;
-    FixedText FT_FILES
-    {
-        Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ en-US ] = "Source file" ;
-    };
-    FixedText FT_LINKS
-    {
-        Pos = MAP_APPFONT ( 83 , 6 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text [ en-US ] = "Element:" ;
-    };
-    FixedText FT_TYPE
-    {
-        Pos = MAP_APPFONT ( 150 , 6 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ en-US ] = "Type" ;
-    };
-    FixedText FT_STATUS
-    {
-        Pos = MAP_APPFONT ( 215 , 6 ) ;
-        Size = MAP_APPFONT ( 55 , 10 ) ;
-        Text [ en-US ] = "Status" ;
-    };
-    CancelButton 1
-    {
-        Pos = MAP_APPFONT ( 270 , 6 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Close" ;
-    };
-    HelpButton 1
-    {
-        Pos = MAP_APPFONT ( 270 , 26 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-    };
-    PushButton PB_UPDATE_NOW
-    {
-        HelpID = "cui:PushButton:MD_UPDATE_BASELINKS:PB_UPDATE_NOW";
-        Pos = MAP_APPFONT ( 270 , 43 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Update" ;
-    };
-    PushButton PB_OPEN_SOURCE
-    {
-        HelpID = "cui:PushButton:MD_UPDATE_BASELINKS:PB_OPEN_SOURCE";
-        Pos = MAP_APPFONT ( 270 , 60 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Open" ;
-    };
-    PushButton PB_CHANGE_SOURCE
-    {
-        HelpID = "cui:PushButton:MD_UPDATE_BASELINKS:PB_CHANGE_SOURCE";
-        Pos = MAP_APPFONT ( 270 , 77 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Modify..." ;
-    };
-    PushButton PB_BREAK_LINK
-    {
-        HelpID = "cui:PushButton:MD_UPDATE_BASELINKS:PB_BREAK_LINK";
-        Pos = MAP_APPFONT ( 270 , 94 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ en-US ] = "~Break Link" ;
-    };
-    FixedText FT_FILES2
-    {
-        Pos = MAP_APPFONT ( 6 , 111 ) ;
-        Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ en-US ] = "Source file" ;
-    };
-    FixedText FT_SOURCE2
-    {
-        Pos = MAP_APPFONT ( 6 , 124 ) ;
-        Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ en-US ] = "Element:" ;
-    };
-    FixedText FT_TYPE2
-    {
-        Pos = MAP_APPFONT ( 6 , 137 ) ;
-        Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ en-US ] = "Type:" ;
-    };
-    FixedText FT_UPDATE
-    {
-        Pos = MAP_APPFONT ( 6 , 150 ) ;
-        Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ en-US ] = "Update:" ;
-    };
-    RadioButton RB_AUTOMATIC
-    {
-        HelpID = "cui:RadioButton:MD_UPDATE_BASELINKS:RB_AUTOMATIC";
-        Pos = MAP_APPFONT ( 70 , 150 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ en-US ] = "~Automatic" ;
-    };
-    RadioButton RB_MANUAL
-    {
-        HelpID = "cui:RadioButton:MD_UPDATE_BASELINKS:RB_MANUAL";
-        Pos = MAP_APPFONT ( 133 , 150 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ en-US ] = "Ma~nual" ;
-    };
-    FixedText FT_FULL_FILE_NAME
-    {
-        Pos = MAP_APPFONT ( 70 , 111 ) ;
-        Size = MAP_APPFONT ( 225 , 10 ) ;
-    };
-    FixedText FT_FULL_SOURCE_NAME
-    {
-        Pos = MAP_APPFONT ( 70 , 124 ) ;
-        Size = MAP_APPFONT ( 225 , 10 ) ;
-    };
-    FixedText FT_FULL_TYPE_NAME
-    {
-        Pos = MAP_APPFONT ( 70 , 137 ) ;
-        Size = MAP_APPFONT ( 225 , 10 ) ;
-    };
-    String STR_AUTOLINK
-    {
-        Text [ en-US ] = "Automatic" ;
-    };
-    String STR_MANUALLINK
-    {
-        Text [ en-US ] = "Manual" ;
-    };
-    String STR_BROKENLINK
-    {
-        Text [ en-US ] = "Not available" ;
-    };
-    String STR_GRAPHICLINK
-    {
-        Text [ en-US ] = "Graphic" ;
-    };
-    String STR_BUTTONCLOSE
-    {
-        Text [ en-US ] = "~Close" ;
-    };
-    String STR_CLOSELINKMSG
-    {
-        Text [ en-US ] = "Are you sure you want to remove the selected link?" ;
-    };
-    String STR_CLOSELINKMSG_MULTI
-    {
-        Text [ en-US ] = "Are you sure you want to remove the selected link?" ;
-    };
-    String STR_WAITINGLINK
-    {
-        Text [ en-US ] = "Waiting";
-    };
+    Text [ en-US ] = "Automatic" ;
 };
-Control TB_LINKS
+
+String STR_MANUALLINK
 {
-    Border = TRUE ;
-    Pos = MAP_APPFONT ( 6 , 21 ) ;
-    Size = MAP_APPFONT ( 257 , 87 ) ;
-    TabStop = TRUE ;
-    ClipChildren = TRUE ;
+    Text [ en-US ] = "Manual" ;
 };
+
+String STR_BROKENLINK
+{
+    Text [ en-US ] = "Not available" ;
+};
+
+String STR_GRAPHICLINK
+{
+    Text [ en-US ] = "Graphic" ;
+};
+
+String STR_BUTTONCLOSE
+{
+    Text [ en-US ] = "~Close" ;
+};
+
+String STR_CLOSELINKMSG
+{
+    Text [ en-US ] = "Are you sure you want to remove the selected link?" ;
+};
+
+String STR_CLOSELINKMSG_MULTI
+{
+    Text [ en-US ] = "Are you sure you want to remove the selected link?" ;
+};
+
+String STR_WAITINGLINK
+{
+    Text [ en-US ] = "Waiting";
+};
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
