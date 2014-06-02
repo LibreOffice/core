@@ -32,12 +32,13 @@ xmlDocPtr XmlTestTools::parseXmlStream(SvStream* pStream)
     return xmlParseDoc(reinterpret_cast<xmlChar*>(pBuffer.get()));
 }
 
-xmlNodeSetPtr XmlTestTools::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
+xmlXPathObjectPtr XmlTestTools::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
 {
     xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
     registerNamespaces(pXmlXpathCtx);
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
-    return pXmlXpathObj->nodesetval;
+    xmlXPathFreeContext(pXmlXpathCtx);
+    return pXmlXpathObj;
 }
 
 void XmlTestTools::registerNamespaces(xmlXPathContextPtr& /*pXmlXpathCtx*/)
@@ -46,24 +47,32 @@ void XmlTestTools::registerNamespaces(xmlXPathContextPtr& /*pXmlXpathCtx*/)
 
 OUString XmlTestTools::getXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute)
 {
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     if (rAttribute.isEmpty())
         return OUString();
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    return OUString::createFromAscii((const char*)xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr())));
+    xmlChar * prop = xmlGetProp(pXmlNode, BAD_CAST(rAttribute.getStr()));
+    OUString s(OUString::createFromAscii((const char*)prop));
+    xmlFree(prop);
+    xmlXPathFreeObject(pXmlObj);
+    return s;
 }
 
 OUString XmlTestTools::getXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath)
 {
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
 
     CPPUNIT_ASSERT_MESSAGE(OString("XPath '" + rXPath + "' not found").getStr(),
             xmlXPathNodeSetGetLength(pXmlNodes) > 0);
 
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
-    return OUString::createFromAscii((const char*)((pXmlNode->children[0]).content));
+    OUString s(OUString::createFromAscii((const char*)((pXmlNode->children[0]).content)));
+    xmlXPathFreeObject(pXmlObj);
+    return s;
 }
 
 void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const OString& rAttribute, const OUString& rExpectedValue)
@@ -75,9 +84,11 @@ void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, const O
 
 void XmlTestTools::assertXPath(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfNodes)
 {
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  nNumberOfNodes, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
 }
 
 void XmlTestTools::assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent)
@@ -87,17 +98,20 @@ void XmlTestTools::assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, 
 
 void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
 {
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1, xmlXPathNodeSetGetLength(pXmlNodes));
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of child-nodes is incorrect").getStr(),
                                  nNumberOfChildNodes, (int)xmlChildElementCount(pXmlNode));
+    xmlXPathFreeObject(pXmlObj);
 }
 
 int XmlTestTools::getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName)
 {
-    xmlNodeSetPtr pXmlNodes = getXPathNode(pXmlDoc, rXPath);
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
                                  1,
                                  xmlXPathNodeSetGetLength(pXmlNodes));
@@ -109,6 +123,7 @@ int XmlTestTools::getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, con
             break;
         ++nRet;
     }
+    xmlXPathFreeObject(pXmlObj);
     return nRet;
 }
 

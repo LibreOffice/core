@@ -36,7 +36,8 @@ protected:
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx);
 
-    xmlNodeSetPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath);
+    // Caller must call xmlXPathFreeObject:
+    xmlXPathObjectPtr getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath);
     /**
      * Same as the assertXPath(), but don't assert: return the string instead.
      */
