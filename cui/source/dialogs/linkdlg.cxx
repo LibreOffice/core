@@ -78,27 +78,7 @@ static long nTabs[] =
 
 
 SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, bool bHtml )
-    : ModalDialog( pParent, CUI_RES( MD_UPDATE_BASELINKS ) ),
-    aFtFiles( this, CUI_RES( FT_FILES ) ),
-    aFtLinks( this, CUI_RES( FT_LINKS ) ),
-    aFtType( this, CUI_RES( FT_TYPE ) ),
-    aFtStatus( this, CUI_RES( FT_STATUS ) ),
-    aTbLinks( this, CUI_RES(TB_LINKS ) ),
-    aFtFiles2( this, CUI_RES( FT_FILES2 ) ),
-    aFtFullFileName( this, CUI_RES( FT_FULL_FILE_NAME ) ),
-    aFtSource2( this, CUI_RES( FT_SOURCE2 ) ),
-    aFtFullSourceName( this, CUI_RES( FT_FULL_SOURCE_NAME ) ),
-    aFtType2( this, CUI_RES( FT_TYPE2 ) ),
-    aFtFullTypeName( this, CUI_RES( FT_FULL_TYPE_NAME ) ),
-    aFtUpdate( this, CUI_RES( FT_UPDATE ) ),
-    aRbAutomatic( this, CUI_RES( RB_AUTOMATIC ) ),
-    aRbManual( this, CUI_RES( RB_MANUAL ) ),
-    aCancelButton1( this, CUI_RES( 1 ) ),
-    aHelpButton1( this, CUI_RES( 1 ) ),
-    aPbUpdateNow( this, CUI_RES( PB_UPDATE_NOW ) ),
-    aPbOpenSource( this, CUI_RES( PB_OPEN_SOURCE ) ),
-    aPbChangeSource( this, CUI_RES( PB_CHANGE_SOURCE ) ),
-    aPbBreakLink( this, CUI_RES( PB_BREAK_LINK ) ),
+    : ModalDialog( pParent, "BaseLinksDialog", "cui/ui/baselinksdialog.ui"),
     aStrAutolink( CUI_RES( STR_AUTOLINK ) ),
     aStrManuallink( CUI_RES( STR_MANUALLINK ) ),
     aStrBrokenlink( CUI_RES( STR_BROKENLINK ) ),
@@ -110,34 +90,44 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, bool bHtml 
     pLinkMgr( NULL ),
     bHtmlMode(bHtml)
 {
-    FreeResource();
+    get(m_pFtFiles, "FILES");
+    get(m_pTbLinks, "TB_LINKS");
+    get(m_pFtFullFileName, "FULL_FILE_NAME");
+    get(m_pFtFullSourceName, "FULL_SOURCE_NAME");
+    get(m_pFtFullTypeName, "FULL_TYPE_NAME");
+    get(m_pRbAutomatic, "AUTOMATIC");
+    get(m_pRbManual, "MANUAL");
+    get(m_pPbUpdateNow, "UPDATE_NOW");
+    get(m_pPbOpenSource, "OPEN");
+    get(m_pPbChangeSource, "CHANGE_SOURCE");
+    get(m_pPbBreakLink, "BREAK_LINK");
 
-    aTbLinks.SetHelpId(HID_LINKDLG_TABLB);
-    aTbLinks.SetSelectionMode( MULTIPLE_SELECTION );
-    aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
-    aTbLinks.Resize();  // OS: hack for correct selection
+    m_pTbLinks->SetHelpId(HID_LINKDLG_TABLB);
+    m_pTbLinks->SetSelectionMode( MULTIPLE_SELECTION );
+    m_pTbLinks->SetTabs( &nTabs[0], MAP_APPFONT );
+    m_pTbLinks->Resize();  // OS: hack for correct selection
 
     // UpdateTimer for DDE-/Grf-links, which are waited for
     aUpdateTimer.SetTimeoutHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateTimer.SetTimeout( 1000 );
 
     // Set the ZOrder, and accessible name to the dialog's title
-    aTbLinks.SetZOrder(0, WINDOW_ZORDER_FIRST);
-    aTbLinks.SetAccessibleName(this->GetText());
-    aTbLinks.SetAccessibleRelationLabeledBy(&aFtFiles);
+    m_pTbLinks->SetZOrder(0, WINDOW_ZORDER_FIRST);
+    m_pTbLinks->SetAccessibleName(this->GetText());
+    m_pTbLinks->SetAccessibleRelationLabeledBy(m_pFtFiles);
 
-    OpenSource().Hide();
+    m_pPbOpenSource->Hide();
 
-    Links().SetSelectHdl( LINK( this, SvBaseLinksDlg, LinksSelectHdl ) );
-    Links().SetDoubleClickHdl( LINK( this, SvBaseLinksDlg, LinksDoubleClickHdl ) );
-    Automatic().SetClickHdl( LINK( this, SvBaseLinksDlg, AutomaticClickHdl ) );
-    Manual().SetClickHdl( LINK( this, SvBaseLinksDlg, ManualClickHdl ) );
-    UpdateNow().SetClickHdl( LINK( this, SvBaseLinksDlg, UpdateNowClickHdl ) );
-    ChangeSource().SetClickHdl( LINK( this, SvBaseLinksDlg, ChangeSourceClickHdl ) );
+    m_pTbLinks->SetSelectHdl( LINK( this, SvBaseLinksDlg, LinksSelectHdl ) );
+    m_pTbLinks->SetDoubleClickHdl( LINK( this, SvBaseLinksDlg, LinksDoubleClickHdl ) );
+    m_pRbAutomatic->SetClickHdl( LINK( this, SvBaseLinksDlg, AutomaticClickHdl ) );
+    m_pRbManual->SetClickHdl( LINK( this, SvBaseLinksDlg, ManualClickHdl ) );
+    m_pPbUpdateNow->SetClickHdl( LINK( this, SvBaseLinksDlg, UpdateNowClickHdl ) );
+    m_pPbChangeSource->SetClickHdl( LINK( this, SvBaseLinksDlg, ChangeSourceClickHdl ) );
     if(!bHtmlMode)
-        BreakLink().SetClickHdl( LINK( this, SvBaseLinksDlg, BreakLinkClickHdl ) );
+        m_pPbBreakLink->SetClickHdl( LINK( this, SvBaseLinksDlg, BreakLinkClickHdl ) );
     else
-        BreakLink().Hide();
+        m_pPbBreakLink->Hide();
 
     SetManager( pMgr );
 }
@@ -186,11 +176,11 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
             }
         }
 
-        UpdateNow().Enable();
+        m_pPbUpdateNow->Enable();
 
-        Automatic().Disable();
-        Manual().Check();
-        Manual().Disable();
+        m_pRbAutomatic->Disable();
+        m_pRbManual->Check();
+        m_pRbManual->Disable();
     }
     else
     {
@@ -199,36 +189,36 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         if( !pLink )
             return 0;
 
-        UpdateNow().Enable();
+        m_pPbUpdateNow->Enable();
 
         OUString sType, sLink;
         OUString *pLinkNm = &sLink, *pFilter = 0;
 
         if( FILEOBJECT & pLink->GetObjType() )
         {
-            Automatic().Disable();
-            Manual().Check();
-            Manual().Disable();
+            m_pRbAutomatic->Disable();
+            m_pRbManual->Check();
+            m_pRbManual->Disable();
             if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
                 pLinkNm = 0, pFilter = &sLink;
         }
         else
         {
-            Automatic().Enable();
-            Manual().Enable();
+            m_pRbAutomatic->Enable();
+            m_pRbManual->Enable();
 
             if( LINKUPDATE_ALWAYS == pLink->GetUpdateMode() )
-                Automatic().Check();
+                m_pRbAutomatic->Check();
             else
-                Manual().Check();
+                m_pRbManual->Check();
         }
 
         OUString aFileName;
         pLinkMgr->GetDisplayNames( pLink, &sType, &aFileName, pLinkNm, pFilter );
         aFileName = INetURLObject::decode(aFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS);
-        FileName().SetText( aFileName );
-        SourceName().SetText( sLink );
-        TypeName().SetText( sType );
+        m_pFtFullFileName->SetText( aFileName );
+        m_pFtFullSourceName->SetText( sLink );
+        m_pFtFullTypeName->SetText( sType );
     }
     return 0;
 }
@@ -270,7 +260,7 @@ IMPL_LINK_INLINE_END( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButto
 
 IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
 {
-    SvTabListBox& rListBox = Links();
+    SvTabListBox& rListBox = *m_pTbLinks;
     sal_uLong nSelCnt = rListBox.GetSelectionCount();
     if( 255 < nSelCnt )
         nSelCnt = 255;
@@ -347,7 +337,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
 {
     (void)pPushButton;
 
-    sal_uLong nSelectionCount = Links().GetSelectionCount();
+    sal_uLong nSelectionCount = m_pTbLinks->GetSelectionCount();
     if(nSelectionCount > 1)
     {
         try
@@ -356,7 +346,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
 
             OUString sType, sFile, sLinkName;
             OUString sFilter;
-            SvTreeListEntry* pEntry = Links().FirstSelected();
+            SvTreeListEntry* pEntry = m_pTbLinks->FirstSelected();
             SvBaseLink* pLink = (SvBaseLink*)pEntry->GetUserData();
             pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, 0, 0 );
             INetURLObject aUrl(sFile);
@@ -374,8 +364,8 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
                 for( sal_uLong i = 0; i < nSelectionCount; i++)
                 {
                     pEntry = i==0 ?
-                        Links().FirstSelected() :
-                        Links().NextSelected( pEntry );
+                        m_pTbLinks->FirstSelected() :
+                        m_pTbLinks->NextSelected( pEntry );
                     DBG_ASSERT(pEntry,"Where is the entry?");
                     if (!pEntry)
                         continue;
@@ -420,7 +410,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
     (void)pPushButton;
 
     bool bModified = false;
-    if(Links().GetSelectionCount() <= 1)
+    if(m_pTbLinks->GetSelectionCount() <= 1)
     {
         sal_uLong nPos;
         SvBaseLinkRef xLink = GetSelEntry( &nPos );
@@ -431,7 +421,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
 
         if( RET_YES == aBox.Execute() )
         {
-            Links().GetModel()->Remove( Links().GetEntry( nPos ) );
+            m_pTbLinks->GetModel()->Remove( m_pTbLinks->GetEntry( nPos ) );
 
             // close object, if it's still existing
             bool bNewLnkMgr = OBJECT_CLIENT_FILE == xLink->GetObjType();
@@ -449,9 +439,9 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
                 pLinkMgr = 0;
                 SetManager( pNewMgr );
 
-                SvTreeListEntry* pEntry = Links().GetEntry( nPos ? --nPos : 0 );
+                SvTreeListEntry* pEntry = m_pTbLinks->GetEntry( nPos ? --nPos : 0 );
                 if( pEntry )
-                    Links().SetCurEntry( pEntry );
+                    m_pTbLinks->SetCurEntry( pEntry );
             }
             bModified = true;
         }
@@ -464,15 +454,15 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
         {
 
             SvBaseLinkMemberList aLinkList;
-            SvTreeListEntry* pEntry = Links().FirstSelected();
+            SvTreeListEntry* pEntry = m_pTbLinks->FirstSelected();
             while ( pEntry )
             {
                 void * pUD = pEntry->GetUserData();
                 if( pUD )
                     aLinkList.push_back( (SvBaseLink*)pUD );
-                pEntry = Links().NextSelected(pEntry);
+                pEntry = m_pTbLinks->NextSelected(pEntry);
             }
-            Links().RemoveSelection();
+            m_pTbLinks->RemoveSelection();
             for( sal_uLong i = 0; i < aLinkList.size(); i++ )
             {
                 SvBaseLinkRef xLink = aLinkList[i];
@@ -488,17 +478,17 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
     }
     if(bModified)
     {
-        if( !Links().GetEntryCount() )
+        if( !m_pTbLinks->GetEntryCount() )
         {
-            Automatic().Disable();
-            Manual().Disable();
-            UpdateNow().Disable();
-            ChangeSource().Disable();
-            BreakLink().Disable();
+            m_pRbAutomatic->Disable();
+            m_pRbManual->Disable();
+            m_pPbUpdateNow->Disable();
+            m_pPbChangeSource->Disable();
+            m_pPbBreakLink->Disable();
 
             OUString aEmpty;
-            SourceName().SetText( aEmpty );
-            TypeName().SetText( aEmpty );
+            m_pFtFullSourceName->SetText( aEmpty );
+            m_pFtFullTypeName->SetText( aEmpty );
         }
         if( pLinkMgr && pLinkMgr->GetPersist() )
             pLinkMgr->GetPersist()->SetModified();
@@ -510,20 +500,20 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
 {
     (void)pTimer;
 
-    Links().SetUpdateMode(false);
-    for( sal_uLong nPos = Links().GetEntryCount(); nPos; )
+    m_pTbLinks->SetUpdateMode(false);
+    for( sal_uLong nPos = m_pTbLinks->GetEntryCount(); nPos; )
     {
-        SvTreeListEntry* pBox = Links().GetEntry( --nPos );
+        SvTreeListEntry* pBox = m_pTbLinks->GetEntry( --nPos );
         SvBaseLinkRef xLink( (SvBaseLink*)pBox->GetUserData() );
         if( xLink.Is() )
         {
             OUString sCur( ImplGetStateStr( *xLink ) ),
-                    sOld( Links().GetEntryText( pBox, 3 ) );
+                    sOld( m_pTbLinks->GetEntryText( pBox, 3 ) );
             if( sCur != sOld )
-                Links().SetEntryText( sCur, pBox, 3 );
+                m_pTbLinks->SetEntryText( sCur, pBox, 3 );
         }
     }
-    Links().SetUpdateMode(true);
+    m_pTbLinks->SetUpdateMode(true);
     return 0;
 }
 
@@ -548,13 +538,13 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
 
         if( bLinkFnd )
         {
-            Links().SetUpdateMode(false);
-            Links().GetModel()->Remove( Links().GetEntry( nPos ) );
-            SvTreeListEntry* pToUnselect = Links().FirstSelected();
+            m_pTbLinks->SetUpdateMode(false);
+            m_pTbLinks->GetModel()->Remove( m_pTbLinks->GetEntry( nPos ) );
+            SvTreeListEntry* pToUnselect = m_pTbLinks->FirstSelected();
             InsertEntry( *_pLink, nPos, true );
             if(pToUnselect)
-                Links().Select(pToUnselect, false);
-            Links().SetUpdateMode(true);
+                m_pTbLinks->Select(pToUnselect, false);
+            m_pTbLinks->SetUpdateMode(true);
         }
         else
         {
@@ -593,9 +583,9 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 
     if( pNewMgr )
         // update has to be stopped before clear
-        Links().SetUpdateMode( false );
+        m_pTbLinks->SetUpdateMode( false );
 
-    Links().Clear();
+    m_pTbLinks->Clear();
     pLinkMgr = pNewMgr;
 
     if( pLinkMgr )
@@ -616,13 +606,13 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 
         if( !rLnks.empty() )
         {
-            SvTreeListEntry* pEntry = Links().GetEntry( 0 );
-            Links().SetCurEntry( pEntry );
-            Links().Select( pEntry );
+            SvTreeListEntry* pEntry = m_pTbLinks->GetEntry( 0 );
+            m_pTbLinks->SetCurEntry( pEntry );
+            m_pTbLinks->Select( pEntry );
             LinksSelectHdl( 0 );
         }
-        Links().SetUpdateMode( true );
-        Links().Invalidate();
+        m_pTbLinks->SetUpdateMode( true );
+        m_pTbLinks->Invalidate();
     }
 }
 
@@ -635,9 +625,9 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
 
     // GetTab(0) gives the position of the bitmap which is automatically inserted by the TabListBox.
     // So the first text column's width is Tab(2)-Tab(1).
-    long nWidthPixel = Links().GetLogicTab( 2 ) - Links().GetLogicTab( 1 );
+    long nWidthPixel = m_pTbLinks->GetLogicTab( 2 ) - m_pTbLinks->GetLogicTab( 1 );
     nWidthPixel -= SV_TAB_BORDER;
-    OUString aTxt = Links().GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
+    OUString aTxt = m_pTbLinks->GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
     INetURLObject aPath( sFileNm, INET_PROT_FILE );
     OUString aFileName = aPath.getName();
     aFileName = INetURLObject::decode(aFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS);
@@ -659,18 +649,18 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uLong nPos, bool 
     aEntry += "\t";
     aEntry += ImplGetStateStr( rLink );
 
-    SvTreeListEntry * pE = Links().InsertEntryToColumn( aEntry, nPos );
+    SvTreeListEntry * pE = m_pTbLinks->InsertEntryToColumn( aEntry, nPos );
     pE->SetUserData( (void*)&rLink );
     if(bSelect)
-        Links().Select(pE);
+        m_pTbLinks->Select(pE);
 }
 
 SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uLong* pPos )
 {
-    SvTreeListEntry* pE = Links().FirstSelected();
+    SvTreeListEntry* pE = m_pTbLinks->FirstSelected();
     sal_uLong nPos;
     if( pE && TREELIST_ENTRY_NOTFOUND !=
-        ( nPos = Links().GetModel()->GetAbsPos( pE ) ) )
+        ( nPos = m_pTbLinks->GetModel()->GetAbsPos( pE ) ) )
     {
         DBG_ASSERT( pE, "wo kommt der leere Eintrag her?" );
 
@@ -687,8 +677,8 @@ void SvBaseLinksDlg::SetType( SvBaseLink& rLink,
 {
     rLink.SetUpdateMode( nType );
     rLink.Update();
-    SvTreeListEntry* pBox = Links().GetEntry( nSelPos );
-    Links().SetEntryText( ImplGetStateStr( rLink ), pBox, 3 );
+    SvTreeListEntry* pBox = m_pTbLinks->GetEntry( nSelPos );
+    m_pTbLinks->SetEntryText( ImplGetStateStr( rLink ), pBox, 3 );
     if( pLinkMgr->GetPersist() )
         pLinkMgr->GetPersist()->SetModified();
 }
@@ -708,7 +698,7 @@ void SvBaseLinksDlg::SetActLink( SvBaseLink * pLink )
             {
                 if( pLink == *pLinkRef )
                 {
-                    Links().Select( Links().GetEntry( nSelect ) );
+                    m_pTbLinks->Select( m_pTbLinks->GetEntry( nSelect ) );
                     LinksSelectHdl( 0 );
                     return ;
                 }
