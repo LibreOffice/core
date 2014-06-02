@@ -59,7 +59,11 @@ void SwTxtCharFmt::ModifyNotification( const SfxPoolItem* pOld, const SfxPoolIte
 
     if ( m_pTxtNode )
     {
-        SwUpdateAttr aUpdateAttr( GetStart(), *GetEnd(), nWhich );
+        SwUpdateAttr aUpdateAttr(
+            GetStart(),
+            *GetEnd(),
+            nWhich);
+
         m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
@@ -167,7 +171,11 @@ void SwTxtINetFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     if ( m_pTxtNode )
     {
-        SwUpdateAttr aUpdateAttr( GetStart(), *GetEnd(), nWhich );
+        SwUpdateAttr aUpdateAttr(
+            GetStart(),
+            *GetEnd(),
+            nWhich);
+
         m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }
@@ -212,7 +220,11 @@ void SwTxtRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
     if ( m_pTxtNode )
     {
-        SwUpdateAttr aUpdateAttr( GetStart(), *GetEnd(), nWhich );
+        SwUpdateAttr aUpdateAttr(
+            GetStart(),
+            *GetEnd(),
+            nWhich);
+
         m_pTxtNode->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
     }
 }

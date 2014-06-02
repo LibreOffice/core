@@ -113,7 +113,7 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <unobrushitemhelper.hxx>
+#include <svx/unobrushitemhelper.hxx>
 #include <svx/xenum.hxx>
 #include <tgrditem.hxx>
 #include <flddropdown.hxx>
@@ -858,7 +858,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                     case XFILL_SOLID:
                     {
                         // Construct an SvxBrushItem, as expected by the exporters.
-                        aSet.Put(sw::getSvxBrushItemFromSourceSet(rFrmFmt.GetAttrSet()));
+                        aSet.Put(getSvxBrushItemFromSourceSet(rFrmFmt.GetAttrSet(), RES_BACKGROUND));
                         break;
                     }
                     default:

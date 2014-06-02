@@ -787,7 +787,11 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const OUString &rStr )
                                 ? pNode->GetpSwpHints()->Count() : 0;
     if( nOldAttrCnt != nNewAttrCnt )
     {
-        SwUpdateAttr aHint( 0, 0, 0 );
+        SwUpdateAttr aHint(
+            0,
+            0,
+            0);
+
         pNode->ModifyBroadcast( 0, &aHint, TYPE( SwCrsrShell ) );
     }
 

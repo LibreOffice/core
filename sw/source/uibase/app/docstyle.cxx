@@ -57,7 +57,11 @@
 #include <svx/xdef.hxx>
 #include <SwRewriter.hxx>
 
-using namespace com::sun::star;
+//UUUU
+#include <svx/xfillit0.hxx>
+#include <svx/xflftrit.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/drawitem.hxx>
 
 // The Format names in the list of all names have the
 // following family as their first character:
@@ -67,6 +71,8 @@ using namespace com::sun::star;
 #define cFRAME      (sal_Unicode)'f'
 #define cPAGE       (sal_Unicode)'g'
 #define cNUMRULE    (sal_Unicode)'n'
+
+using namespace com::sun::star;
 
 // At the names' publication, this character is removed again and the
 // family is newly generated.
@@ -768,6 +774,11 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
         bool bHasCJKFontPrefix = false;
         SvtCJKOptions aCJKOptions;
 
+        //UUUU Get currently used FillStyle and remember, also need the XFillFloatTransparenceItem
+        // to decide if gradient transparence is used
+        const XFillStyle eFillStyle(static_cast< const XFillStyleItem& >(pSet->Get(XATTR_FILLSTYLE)).GetValue());
+        const bool bUseFloatTransparence(static_cast< const XFillFloatTransparenceItem& >(pSet->Get(XATTR_FILLFLOATTRANSPARENCE)).IsEnabled());
+
         for ( const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem() )
         {
             if(!IsInvalidItem(pItem))
@@ -795,6 +806,44 @@ OUString  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                             bool bIsDefault = false;
                             switch ( pItem->Which() )
                             {
+                                //UUUU
+                                case XATTR_FILLCOLOR:
+                                {
+                                    // only use active FillStyle information
+                                    bIsDefault = (XFILL_SOLID == eFillStyle);
+                                    break;
+                                }
+                                case XATTR_FILLGRADIENT:
+                                {
+                                    // only use active FillStyle information
+                                    bIsDefault = (XFILL_GRADIENT == eFillStyle);
+                                    break;
+                                }
+                                case XATTR_FILLHATCH:
+                                {
+                                    // only use active FillStyle information
+                                    bIsDefault = (XFILL_HATCH == eFillStyle);
+                                    break;
+                                }
+                                case XATTR_FILLBITMAP:
+                                {
+                                    // only use active FillStyle information
+                                    bIsDefault = (XFILL_BITMAP == eFillStyle);
+                                    break;
+                                }
+                                case XATTR_FILLTRANSPARENCE:
+                                {
+                                    // only active when not FloatTransparence
+                                    bIsDefault = !bUseFloatTransparence;
+                                    break;
+                                }
+                                case XATTR_FILLFLOATTRANSPARENCE:
+                                {
+                                    // only active when FloatTransparence
+                                    bIsDefault = bUseFloatTransparence;
+                                    break;
+                                }
+
                                 case SID_ATTR_PARA_PAGENUM:
                                     sPageNum = aItemPresentation;
                                     break;
@@ -1102,10 +1151,6 @@ bool   SwDocStyleSheet::SetFollow( const OUString& rStr)
 
 // extract ItemSet to Name and Family, Mask
 
-//UUUU
-#include <svx/svdmodel.hxx>
-#include <svx/drawitem.hxx>
-
 SfxItemSet&   SwDocStyleSheet::GetItemSet()
 {
     if(!bPhysical)
@@ -1168,6 +1213,12 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
         case SFX_STYLE_FAMILY_PAGE :
             {
+                //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+                if(!aCoreSet.GetParent())
+                {
+                    aCoreSet.SetParent(&rDoc.GetDfltFrmFmt()->GetAttrSet());
+                }
+
                 OSL_ENSURE(pDesc, "No PageDescriptor");
                 ::PageDescToItemSet(*((SwPageDesc*)pDesc), aCoreSet);
             }

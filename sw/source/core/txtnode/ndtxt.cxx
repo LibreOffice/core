@@ -83,6 +83,10 @@
 #include <attrhint.hxx>
 #include <boost/scoped_ptr.hpp>
 
+//UUUU
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
+#include <svl/itemiter.hxx>
+
 using namespace ::com::sun::star;
 
 typedef std::vector<SwTxtAttr*> SwpHts;
@@ -186,18 +190,23 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     } while( true );
 }
 
-SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
-                      SwTxtFmtColl *pTxtColl,
-                      const SfxItemSet* pAutoAttr )
-    : SwCntntNode( rWhere, ND_TEXTNODE, pTxtColl ),
-      m_pSwpHints( 0 ),
-      mpNodeNum( 0 ),
-      m_bLastOutlineState( false ),
-      m_bNotifiable( false ),
-      // #i70748#
-      mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
-      mbInSetOrResetAttr( false ),
-      mpList( 0 )
+SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl, const SfxItemSet* pAutoAttr )
+:   SwCntntNode( rWhere, ND_TEXTNODE, pTxtColl ),
+    m_pSwpHints( 0 ),
+    mpNodeNum( 0 ),
+    m_Text(),
+    m_pParaIdleData_Impl(0),
+    m_bContainsHiddenChars(false),
+    m_bHiddenCharsHidePara(false),
+    m_bRecalcHiddenCharFlags(false),
+    m_bLastOutlineState( false ),
+    m_bNotifiable( false ),
+    mbEmptyListStyleSetDueToSetOutlineLevelAttr( false ),
+    mbInSetOrResetAttr( false ),
+    mpList( 0 ),
+    m_pNumStringCache(),
+    m_wXParagraph(),
+    maFillAttributes()
 {
     InitSwParaStatistics( true );
 
@@ -1521,7 +1530,11 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const sal_Int32 nTxtStartIdx,
     if( this != pDest )
     {
         // Frames benachrichtigen, sonst verschwinden die Ftn-Nummern
-        SwUpdateAttr aHint( nOldPos, nOldPos, 0 );
+        SwUpdateAttr aHint(
+            nOldPos,
+            nOldPos,
+            0);
+
         pDest->ModifyNotification( 0, &aHint );
     }
 }
@@ -2425,7 +2438,11 @@ void SwTxtNode::GCAttr()
     if(bChanged)
     {
         //TxtFrm's reagieren auf aHint, andere auf aNew
-        SwUpdateAttr aHint( nMin, nMax, 0 );
+        SwUpdateAttr aHint(
+            nMin,
+            nMax,
+            0);
+
         NotifyClients( 0, &aHint );
         SwFmtChg aNew( GetTxtColl() );
         NotifyClients( 0, &aNew );
@@ -3645,6 +3662,28 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
                         (SwTxtFmtColl*)((SwFmtChg*)pNewValue)->pChangedFmt );
     }
 
+    //UUUU reset fill information
+    if(maFillAttributes.get())
+    {
+        sal_uInt16 nWhich = pNewValue ? pNewValue->Which() : 0;
+        bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
+
+        if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
+        {
+            SfxItemIter aIter(*((SwAttrSetChg*)pNewValue)->GetChgSet());
+
+            for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem && !bReset; pItem = aIter.NextItem())
+            {
+                bReset = !IsInvalidItem(pItem) && pItem->Which() >= XATTR_FILL_FIRST && pItem->Which() <= XATTR_FILL_LAST;
+            }
+        }
+
+        if(bReset)
+        {
+            maFillAttributes.reset();
+        }
+    }
+
     if ( !mbInSetOrResetAttr )
     {
         HandleModifyAtTxtNode( *this, pOldValue, pNewValue );
@@ -3686,6 +3725,12 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
             SwFmtChg aTmp1( pOldColl );
             SwFmtChg aTmp2( pNewColl );
             HandleModifyAtTxtNode( *this, &aTmp1, &aTmp2  );
+        }
+
+        //UUUU reset fill information on parent style change
+        if(maFillAttributes.get())
+        {
+            maFillAttributes.reset();
         }
     }
 
@@ -4974,6 +5019,18 @@ SwTxtNode::MakeUnoObject()
     const uno::Reference<rdf::XMetadatable> xMeta(
             SwXParagraph::CreateXParagraph(*GetDoc(), *this), uno::UNO_QUERY);
     return xMeta;
+}
+
+//UUUU
+drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwTxtNode::getSdrAllFillAttributesHelper() const
+{
+    // create SdrAllFillAttributesHelper on demand
+    if(!maFillAttributes.get())
+    {
+        const_cast< SwTxtNode* >(this)->maFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(GetSwAttrSet()));
+    }
+
+    return maFillAttributes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

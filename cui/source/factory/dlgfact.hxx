@@ -571,9 +571,13 @@ public:
    virtual AbstractFmShowColsDialog * CreateFmShowColsDialog( Window* pParent ) SAL_OVERRIDE;
    virtual AbstractSvxZoomDialog * CreateSvxZoomDialog( Window* pParent,
                                             const SfxItemSet& rCoreSet) SAL_OVERRIDE;
-   virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg( Window* pParent,
-                                            const SfxItemSet& rCoreSet,
-                                            bool bEnableSelector = false) SAL_OVERRIDE ;
+   //UUUU add for SvxBorderBackgroundDlg
+   virtual SfxAbstractTabDialog* CreateSvxBorderBackgroundDlg(
+       Window* pParent,
+       const SfxItemSet& rCoreSet,
+       bool bEnableSelector = false,
+       bool bEnableDrawingLayerFillStyles = false) SAL_OVERRIDE;
+
    virtual AbstractSvxTransformTabDialog* CreateSvxTransformTabDialog( Window* pParent,
                                                                 const SfxItemSet* pAttr,
                                                                 const SdrView* pView,

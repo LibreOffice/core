@@ -64,7 +64,7 @@
         <SvxLRSpaceItem>:       <SID_ATTR_LRSPACE>
 */
 
-struct  SvxPage_Impl;
+//UUUU struct   SvxPage_Impl;
 typedef sal_uInt16 MarginPosition;
 
 class SvxPageDescPage : public SfxTabPage
@@ -72,6 +72,7 @@ class SvxPageDescPage : public SfxTabPage
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
 
+private:
     // paper format
     ListBox*             m_pPaperSizeBox;
 
@@ -137,7 +138,14 @@ class SvxPageDescPage : public SfxTabPage
     Paper               ePaperStart;
     Paper               ePaperEnd;
 
-    SvxPage_Impl*       pImpl;
+    //UUUU SvxPage_Impl*        pImpl;
+    MarginPosition      m_nPos;
+    Printer*            mpDefPrinter;
+
+    bool                mbDelPrinter : 1;
+
+    //UUUU
+    bool mbEnableDrawingLayerFillStyles : 1;
 
     void                Init_Impl();
     DECL_LINK(LayoutHdl_Impl, void *);
@@ -171,6 +179,9 @@ class SvxPageDescPage : public SfxTabPage
     bool                IsMarginOutOfRange();
 
     SvxPageDescPage( Window* pParent, const SfxItemSet& rSet );
+
+    //UUUU
+    void EnableDrawingLayerFillStyles(bool bNew) { mbEnableDrawingLayerFillStyles = bNew; }
 
 protected:
     virtual void        ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;

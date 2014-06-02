@@ -1309,12 +1309,20 @@ AbstractSvxSearchSimilarityDialog * AbstractDialogFactory_Impl::CreateSvxSearchS
     return NULL;
 }
 
-SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg( Window* pParent,
-                                            const SfxItemSet& rCoreSet,
-                                            bool bEnableSelector)
+//UUUU
+SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg(
+    Window* pParent,
+    const SfxItemSet& rCoreSet,
+    bool bEnableSelector,
+    bool bEnableDrawingLayerFillStyles)
 {
-    SfxTabDialog* pDlg = new SvxBorderBackgroundDlg( pParent, rCoreSet, bEnableSelector);
-    return new CuiAbstractTabDialog_Impl( pDlg );
+    SfxTabDialog* pDlg = new SvxBorderBackgroundDlg(
+        pParent,
+        rCoreSet,
+        bEnableSelector,
+        bEnableDrawingLayerFillStyles);
+
+    return new CuiAbstractTabDialog_Impl(pDlg);
 }
 
 AbstractSvxTransformTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTabDialog( Window* pParent,

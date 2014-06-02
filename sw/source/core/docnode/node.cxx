@@ -987,7 +987,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
     case RES_UPDATE_ATTR:
         if( GetNodes().IsDocNodes() && IsTxtNode() )
         {
-            const sal_uInt16 nTmp = ((SwUpdateAttr*)pNewValue)->nWhichAttr;
+            const sal_uInt16 nTmp = ((SwUpdateAttr*)pNewValue)->getWhichAttr();
             if ( RES_ATTRSET_CHG == nTmp )
             {
                 // TODO: anybody wants to do some optimization here?
@@ -1908,6 +1908,12 @@ SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnly
     }
 
     return pNodes;
+}
+
+//UUUU
+drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwCntntNode::getSdrAllFillAttributesHelper() const
+{
+    return drawinglayer::attribute::SdrAllFillAttributesHelperPtr();
 }
 
 /*

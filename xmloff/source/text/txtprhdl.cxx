@@ -46,13 +46,28 @@
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 
+//UUUU
+#include <xmloff/EnumPropertyHdl.hxx>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include "XMLFillBitmapSizePropertyHandler.hxx"
+#include "XMLBitmapLogicalSizePropertyHandler.hxx"
+#include <com/sun/star/drawing/RectanglePoint.hpp>
+#include <com/sun/star/drawing/BitmapMode.hpp>
+#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::xmloff::token;
+
 //UUUU
 using namespace ::com::sun::star::drawing;
+
+//UUUU
+extern SvXMLEnumMapEntry aXML_FillStyle_EnumMap[];
+extern SvXMLEnumMapEntry aXML_RefPoint_EnumMap[];
+extern SvXMLEnumMapEntry aXML_BitmapMode_EnumMap[];
 
 static SvXMLEnumMapEntry const pXML_HoriPos_Enum[] =
 {
@@ -1213,18 +1228,6 @@ public:
     ~XMLTextPropertyHandlerFactory_Impl();
 };
 
-//UUUU
-#include <xmloff/EnumPropertyHdl.hxx>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include "XMLFillBitmapSizePropertyHandler.hxx"
-#include "XMLBitmapLogicalSizePropertyHandler.hxx"
-#include <com/sun/star/drawing/RectanglePoint.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
-#include "XMLBitmapRepeatOffsetPropertyHandler.hxx"
-extern SvXMLEnumMapEntry aXML_FillStyle_EnumMap[];
-extern SvXMLEnumMapEntry aXML_RefPoint_EnumMap[];
-extern SvXMLEnumMapEntry aXML_BitmapMode_EnumMap[];
-
 const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
     ( sal_Int32 nType ) const
 {
@@ -1418,6 +1421,12 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLBitmapRepeatOffsetPropertyHandler(XML_SW_TYPE_BITMAPREPOFFSETX == nType);
         break;
 
+    //UUUU
+    default:
+    {
+        OSL_ENSURE(false, "XMLPropertyHandler missing (!)");
+        break;
+    }
     }
 
     return pHdl;

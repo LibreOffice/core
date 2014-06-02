@@ -166,18 +166,20 @@ void ColorControl::GetFocus (void)
 
 
 
-void ColorControl::SetCurColorSelect (Color aCol, bool bAvailable)
+void ColorControl::SetCurColorSelect(Color aCol,bool bAvailable)
 {
-//  FillColors();
-    short nCol = GetItemId_Imp( maVSColor, aCol );
-    if(! bAvailable)
+    //UUUU When transparent use transparent entry (entry 0)
+    const bool bIsTransparent(0xff == aCol.GetTransparency());
+    short nCol = bIsTransparent ? 0 : GetItemId_Imp(maVSColor,aCol);
+
+    if(!bAvailable)
     {
         maVSColor.SetNoSelection();
         return;
     }
 
     //if not found
-    if( nCol == -1)
+    if(nCol == -1)
     {
         maVSColor.SetNoSelection();
     }

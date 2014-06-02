@@ -130,7 +130,11 @@ namespace drawinglayer
                 // create FillGradientPrimitive2D for transparence and add to new sequence
                 // fillGradientPrimitive is enough here (compared to PolyPolygonGradientPrimitive2D) since float transparence will be masked anyways
                 const basegfx::B2DRange aRange(basegfx::tools::getRange(rPolyPolygon));
-                const Primitive2DReference xRefB(new FillGradientPrimitive2D(aRange, rFillGradient));
+                const Primitive2DReference xRefB(
+                    new FillGradientPrimitive2D(
+                        aRange,
+                        rDefinitionRange,
+                        rFillGradient));
                 const Primitive2DSequence aAlpha(&xRefB, 1L);
 
                 // create TransparencePrimitive2D using alpha and content

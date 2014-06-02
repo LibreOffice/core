@@ -448,13 +448,20 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         OSL_ENSURE(pHeaderFmt != 0, "no header format");
 
         // HeaderInfo, margins, background, border
-        SfxItemSet aHeaderSet( *rSet.GetPool(),
-                    SID_ATTR_PAGE_ON,       SID_ATTR_PAGE_SHARED,
-                    SID_ATTR_PAGE_SHARED_FIRST, SID_ATTR_PAGE_SHARED_FIRST,
-                    SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-                    SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-                    RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-                    0);
+        SfxItemSet aHeaderSet(*rSet.GetPool(),
+            RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+
+            //UUUU FillAttribute support
+            XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
+
+            SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
+            SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
+            SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
+            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
+            0, 0);
+
+        //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+        aHeaderSet.SetParent(&rMaster.GetDoc()->GetDfltFrmFmt()->GetAttrSet());
 
         // Dynamic or fixed height
         SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);
@@ -492,13 +499,20 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         OSL_ENSURE(pFooterFmt != 0, "no footer format");
 
         // FooterInfo, margins, background, border
-        SfxItemSet aFooterSet( *rSet.GetPool(),
-                    SID_ATTR_PAGE_ON,       SID_ATTR_PAGE_SHARED,
-                    SID_ATTR_PAGE_SHARED_FIRST, SID_ATTR_PAGE_SHARED_FIRST,
-                    SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-                    SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-                    RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-                    0);
+        SfxItemSet aFooterSet(*rSet.GetPool(),
+            RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+
+            //UUUU FillAttribute support
+            XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
+
+            SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
+            SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
+            SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
+            SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
+            0, 0);
+
+        //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+        aFooterSet.SetParent(&rMaster.GetDoc()->GetDfltFrmFmt()->GetAttrSet());
 
         // Dynamic or fixed height
         SfxBoolItem aOn(SID_ATTR_PAGE_ON, true);

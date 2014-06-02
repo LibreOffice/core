@@ -311,7 +311,7 @@ void SvXMLImportPropertyMapper::importXML(
                 }
             }
         }
-        while( ( nIndex >= 0 ) && (( nFlags & MID_FLAG_MULTI_PROPERTY ) != 0 ) );
+        while( ( nIndex >= 0 && nIndex + 1 < nEndIdx ) && (( nFlags & MID_FLAG_MULTI_PROPERTY ) != 0 ) );
     }
 
     finished( rProperties, nStartIdx, nEndIdx );

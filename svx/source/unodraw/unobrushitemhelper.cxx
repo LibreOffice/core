@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unobrushitemhelper.hxx>
+#include <svx/unobrushitemhelper.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xgrscit.hxx>
@@ -32,102 +32,101 @@
 #include <svx/xflbstit.hxx>
 #include <svx/xflboxy.hxx>
 #include <svx/xflbckit.hxx>
-#include <svx/unoshape.hxx>
-#include <hintids.hxx>
+#include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/xflhtit.hxx>
-
-namespace sw {
+#include <svx/unoshape.hxx>
 
 //UUUU
 void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxItemSet& rToSet)
 {
-    if(0xff != rBrush.GetColor().GetTransparency())
+    // Clear all items from the DrawingLayer FillStyle range (if we have any). All
+    // items that need to be set will be set as hard attributes
+    for(sal_uInt16 a(XATTR_FILL_FIRST); rToSet.Count() && a < XATTR_FILL_LAST; a++)
     {
+        rToSet.ClearItem(a);
+    }
+
+    const sal_uInt8 nTransparency(rBrush.GetColor().GetTransparency());
+
+    if(0xff != nTransparency)
+    {
+        // we have a color fill
         const Color aColor(rBrush.GetColor().GetRGBColor());
-        const sal_uInt8 nTransparency(rBrush.GetColor().GetTransparency());
 
         rToSet.Put(XFillStyleItem(XFILL_SOLID));
         rToSet.Put(XFillColorItem(OUString(), aColor));
 
-        if(0xff != nTransparency)
-        {
-            // nTransparency is in range [0..255]
-            rToSet.Put(XFillTransparenceItem((((sal_Int32)nTransparency * 100) + 127) / 255));
-        }
+        // nTransparency is in range [0..255], convert to [0..100] which is used in XFillTransparenceItem
+        rToSet.Put(XFillTransparenceItem((((sal_Int32)nTransparency * 100) + 127) / 255));
     }
     else if(GPOS_NONE != rBrush.GetGraphicPos())
     {
+        // we have a graphic fill, set fill style
+        rToSet.Put(XFillStyleItem(XFILL_BITMAP));
+
+        // set graphic (if available)
         const Graphic* pGraphic = rBrush.GetGraphic();
 
         if(pGraphic)
         {
-            // set fill style and graphic itself
-            rToSet.Put(XFillStyleItem(XFILL_BITMAP));
             rToSet.Put(XFillBitmapItem(OUString(), *pGraphic));
-
-            // set defaults
-            // already pool default rToSet.Put(XFillBmpPosItem(RP_MM));
-            // already pool default rToSet.Put(XFillBmpTileOffsetXItem(0));
-            // already pool default rToSet.Put(XFillBmpTileOffsetYItem(0));
-            // already pool default rToSet.Put(XFillBmpPosOffsetXItem(0));
-            // already pool default rToSet.Put(XFillBmpPosOffsetYItem(0));
-            // already pool default rToSet.Put(XFillBmpSizeLogItem(true));
-            // already pool default rToSet.Put(XFillBmpSizeXItem(0));
-            // already pool default rToSet.Put(XFillBmpSizeYItem(0));
-
-            if(GPOS_AREA == rBrush.GetGraphicPos())
-            {
-                // stretch, also means no tile (both items are defaulted to true)
-                // rToSet.Put(XFillBmpStretchItem(true));
-                rToSet.Put(XFillBmpTileItem(false));
-
-                // default for strech is also top-left, but this will not be visible
-                // rToSet.Put(XFillBmpPosItem(RP_LT));
-            }
-            else if(GPOS_TILED == rBrush.GetGraphicPos())
-            {
-                // tiled, also means no stretch (both items are defaulted to true)
-                rToSet.Put(XFillBmpStretchItem(false));
-                //rToSet.Put(XFillBmpTileItem(true));
-
-                // default for tiled is top-left
-                rToSet.Put(XFillBmpPosItem(RP_LT));
-            }
-            else
-            {
-                // everything else means no tile and no stretch
-                rToSet.Put(XFillBmpStretchItem(false));
-                rToSet.Put(XFillBmpTileItem(false));
-
-                switch(rBrush.GetGraphicPos())
-                {
-                    case GPOS_LT: rToSet.Put(XFillBmpPosItem(RP_LT)); break;
-                    case GPOS_MT: rToSet.Put(XFillBmpPosItem(RP_MT)); break;
-                    case GPOS_RT: rToSet.Put(XFillBmpPosItem(RP_RT)); break;
-                    case GPOS_LM: rToSet.Put(XFillBmpPosItem(RP_LM)); break;
-                    case GPOS_MM: rToSet.Put(XFillBmpPosItem(RP_MM)); break;
-                    case GPOS_RM: rToSet.Put(XFillBmpPosItem(RP_RM)); break;
-                    case GPOS_LB: rToSet.Put(XFillBmpPosItem(RP_LB)); break;
-                    case GPOS_MB: rToSet.Put(XFillBmpPosItem(RP_MB)); break;
-                    case GPOS_RB: rToSet.Put(XFillBmpPosItem(RP_RB)); break;
-                    default: break; // already handled GPOS_AREA, GPOS_TILED and GPOS_NONE
-                }
-            }
-
-            // check for transparency
-            const sal_Int8 nTransparency(rBrush.getGraphicTransparency());
-
-            if(0 != nTransparency)
-            {
-                // nTransparency is in range [0..100]
-                rToSet.Put(XFillTransparenceItem(nTransparency));
-            }
         }
         else
         {
             OSL_ENSURE(false, "Could not get Graphic from SvxBrushItem (!)");
+        }
+
+        if(GPOS_AREA == rBrush.GetGraphicPos())
+        {
+            // stretch, also means no tile (both items are defaulted to true)
+            rToSet.Put(XFillBmpStretchItem(true));
+            rToSet.Put(XFillBmpTileItem(false));
+
+            // default for strech is also top-left, but this will not be visible
+            rToSet.Put(XFillBmpPosItem(RP_LT));
+        }
+        else if(GPOS_TILED == rBrush.GetGraphicPos())
+        {
+            // tiled, also means no stretch (both items are defaulted to true)
+            rToSet.Put(XFillBmpStretchItem(false));
+            rToSet.Put(XFillBmpTileItem(true));
+
+            // default for tiled is top-left
+            rToSet.Put(XFillBmpPosItem(RP_LT));
+        }
+        else
+        {
+            // everything else means no tile and no stretch
+            rToSet.Put(XFillBmpStretchItem(false));
+            rToSet.Put(XFillBmpTileItem(false));
+
+            RECT_POINT aRectPoint(RP_MM);
+
+            switch(rBrush.GetGraphicPos())
+            {
+                case GPOS_LT: aRectPoint = RP_LT; break;
+                case GPOS_MT: aRectPoint = RP_MT; break;
+                case GPOS_RT: aRectPoint = RP_RT; break;
+                case GPOS_LM: aRectPoint = RP_LM; break;
+                case GPOS_MM: aRectPoint = RP_MM; break;
+                case GPOS_RM: aRectPoint = RP_RM; break;
+                case GPOS_LB: aRectPoint = RP_LB; break;
+                case GPOS_MB: aRectPoint = RP_MB; break;
+                case GPOS_RB: aRectPoint = RP_RB; break;
+                default: break; // GPOS_NONE, GPOS_AREA and GPOS_TILED already handled
+            }
+
+            rToSet.Put(XFillBmpPosItem(aRectPoint));
+        }
+
+        // check for graphic's transparency
+        const sal_Int8 nGraphicTransparency(rBrush.getGraphicTransparency());
+
+        if(0 != nGraphicTransparency)
+        {
+            // nGraphicTransparency is in range [0..100]
+            rToSet.Put(XFillTransparenceItem(nGraphicTransparency));
         }
     }
     else
@@ -136,10 +135,14 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
         // still need to rescue the color used. There are sequences used on the UNO API at
         // import time (OLE. e.g. chart) which first set RGB color (MID_BACK_COLOR_R_G_B,
         // color stays transparent) and then set transparency (MID_BACK_COLOR_TRANSPARENCY)
-        // to zero later. When not saving the color, it will be lost
+        // to zero later. When not saving the color, it will be lost.
+        // Also need to set the FillStyle to NONE to express the 0xff transparency flag; this
+        // is needed when e.g. first transparency is set to 0xff and then a Graphic gets set.
+        // When not changing the FillStyle, the next getSvxBrushItemFromSourceSet *will* return
+        // to XFILL_SOLID with the rescued color.
         const Color aColor(rBrush.GetColor().GetRGBColor());
 
-        // rToSet.Put(XFillStyleItem(XFILL_NONE));
+        rToSet.Put(XFillStyleItem(XFILL_NONE));
         rToSet.Put(XFillColorItem(OUString(), aColor));
     }
 }
@@ -165,7 +168,7 @@ sal_uInt16 getTransparenceForSvxBrushItem(const SfxItemSet& rSourceSet, bool bSe
 }
 
 //UUUU
-SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchInParents)
+SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchInParents, sal_uInt16 nBackgroundID)
 {
     Color aFillColor(static_cast< const XFillColorItem& >(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents)).GetColorValue());
 
@@ -178,24 +181,24 @@ SvxBrushItem getSvxBrushItemForSolid(const SfxItemSet& rSourceSet, bool bSearchI
         aFillColor.SetTransparency(static_cast< sal_uInt8 >((nFillTransparence * 255) / 100));
     }
 
-    return SvxBrushItem(aFillColor, RES_BACKGROUND);
+    return SvxBrushItem(aFillColor, nBackgroundID);
 }
 
 //UUUU
-SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, bool bSearchInParents)
+SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, sal_uInt16 nBackgroundID, bool bSearchInParents)
 {
     const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rSourceSet.GetItem(XATTR_FILLSTYLE, bSearchInParents)));
 
     if(!pXFillStyleItem || XFILL_NONE == pXFillStyleItem->GetValue())
     {
-        // need to rescue the evtl. set RGB color, but use as transparent color (we have XFILL_NONE)
+        // no fill, still need to rescue the evtl. set RGB color, but use as transparent color (we have XFILL_NONE)
         Color aFillColor(static_cast< const XFillColorItem& >(rSourceSet.Get(XATTR_FILLCOLOR, bSearchInParents)).GetColorValue());
         aFillColor.SetTransparency(0xff);
 
-        return SvxBrushItem(aFillColor, RES_BACKGROUND);
+        return SvxBrushItem(aFillColor, nBackgroundID);
     }
 
-    SvxBrushItem aRetval(RES_BACKGROUND);
+    SvxBrushItem aRetval(nBackgroundID);
 
     switch(pXFillStyleItem->GetValue())
     {
@@ -207,7 +210,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, bool bSe
         case XFILL_SOLID:
         {
             // create SvxBrushItem with fill color
-            aRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents);
+            aRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents, nBackgroundID);
             break;
         }
         case XFILL_GRADIENT:
@@ -229,7 +232,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, bool bSe
                 aMixedColor.SetTransparency(static_cast< sal_uInt8 >((nFillTransparence * 255) / 100));
             }
 
-            aRetval = SvxBrushItem(aMixedColor, RES_BACKGROUND);
+            aRetval = SvxBrushItem(aMixedColor, nBackgroundID);
             break;
         }
         case XFILL_HATCH:
@@ -241,7 +244,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, bool bSe
             if(bFillBackground)
             {
                 // hatch is background-filled, use FillColor as if XFILL_SOLID
-                aRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents);
+                aRetval = getSvxBrushItemForSolid(rSourceSet, bSearchInParents, nBackgroundID);
             }
             else
             {
@@ -258,7 +261,7 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, bool bSe
                 // nFillTransparence is in range [0..100] and needs to be in [0..255] unsigned
                 aHatchColor.SetTransparency(static_cast< sal_uInt8 >((nFillTransparence * 255) / 100));
 
-                aRetval = SvxBrushItem(aHatchColor, RES_BACKGROUND);
+                aRetval = SvxBrushItem(aHatchColor, nBackgroundID);
             }
 
             break;
@@ -269,50 +272,47 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, bool bSe
             const XFillBitmapItem& rBmpItm = static_cast< const XFillBitmapItem& >(rSourceSet.Get(XATTR_FILLBITMAP, bSearchInParents));
             const Graphic aGraphic(rBmpItm.GetGraphicObject().GetGraphic());
 
-            if(GRAPHIC_NONE != aGraphic.GetType())
+            // continue idependent of evtl. GRAPHIC_NONE as aGraphic.GetType(), we still need to rescue positions
+            SvxGraphicPosition aSvxGraphicPosition(GPOS_NONE);
+            const XFillBmpStretchItem& rStretchItem = static_cast< const XFillBmpStretchItem& >(rSourceSet.Get(XATTR_FILLBMP_STRETCH, bSearchInParents));
+            const XFillBmpTileItem& rTileItem = static_cast< const XFillBmpTileItem& >(rSourceSet.Get(XATTR_FILLBMP_TILE, bSearchInParents));
+
+            if(rTileItem.GetValue())
             {
-                // get graphic position
-                SvxGraphicPosition aSvxGraphicPosition(GPOS_NONE);
-                const XFillBmpStretchItem& rStretchItem = static_cast< const XFillBmpStretchItem& >(rSourceSet.Get(XATTR_FILLBMP_STRETCH, bSearchInParents));
-                const XFillBmpTileItem& rTileItem = static_cast< const XFillBmpTileItem& >(rSourceSet.Get(XATTR_FILLBMP_TILE, bSearchInParents));
+                aSvxGraphicPosition = GPOS_TILED;
+            }
+            else if(rStretchItem.GetValue())
+            {
+                aSvxGraphicPosition = GPOS_AREA;
+            }
+            else
+            {
+                const XFillBmpPosItem& rPosItem = static_cast< const XFillBmpPosItem& >(rSourceSet.Get(XATTR_FILLBMP_POS, bSearchInParents));
 
-                if(rTileItem.GetValue())
+                switch(rPosItem.GetValue())
                 {
-                    aSvxGraphicPosition = GPOS_TILED;
+                    case RP_LT: aSvxGraphicPosition = GPOS_LT; break;
+                    case RP_MT: aSvxGraphicPosition = GPOS_MT; break;
+                    case RP_RT: aSvxGraphicPosition = GPOS_RT; break;
+                    case RP_LM: aSvxGraphicPosition = GPOS_LM; break;
+                    case RP_MM: aSvxGraphicPosition = GPOS_MM; break;
+                    case RP_RM: aSvxGraphicPosition = GPOS_RM; break;
+                    case RP_LB: aSvxGraphicPosition = GPOS_LB; break;
+                    case RP_MB: aSvxGraphicPosition = GPOS_MB; break;
+                    case RP_RB: aSvxGraphicPosition = GPOS_RB; break;
                 }
-                else if(rStretchItem.GetValue())
-                {
-                    aSvxGraphicPosition = GPOS_AREA;
-                }
-                else
-                {
-                    const XFillBmpPosItem& rPosItem = static_cast< const XFillBmpPosItem& >(rSourceSet.Get(XATTR_FILLBMP_POS, bSearchInParents));
+            }
 
-                    switch(rPosItem.GetValue())
-                    {
-                        case RP_LT: aSvxGraphicPosition = GPOS_LT; break;
-                        case RP_MT: aSvxGraphicPosition = GPOS_MT; break;
-                        case RP_RT: aSvxGraphicPosition = GPOS_RT; break;
-                        case RP_LM: aSvxGraphicPosition = GPOS_LM; break;
-                        case RP_MM: aSvxGraphicPosition = GPOS_MM; break;
-                        case RP_RM: aSvxGraphicPosition = GPOS_RM; break;
-                        case RP_LB: aSvxGraphicPosition = GPOS_LB; break;
-                        case RP_MB: aSvxGraphicPosition = GPOS_MB; break;
-                        case RP_RB: aSvxGraphicPosition = GPOS_RB; break;
-                    }
-                }
+            // create with given graphic and position
+            aRetval = SvxBrushItem(aGraphic, aSvxGraphicPosition, nBackgroundID);
 
-                // create with given graphic and position
-                aRetval = SvxBrushItem(aGraphic, aSvxGraphicPosition, RES_BACKGROUND);
+            // get evtl. mixed transparence
+            const sal_uInt16 nFillTransparence(getTransparenceForSvxBrushItem(rSourceSet, bSearchInParents));
 
-                // get evtl. mixed transparence
-                const sal_uInt16 nFillTransparence(getTransparenceForSvxBrushItem(rSourceSet, bSearchInParents));
-
-                if(0 != nFillTransparence)
-                {
-                    // nFillTransparence is in range [0..100] and needs to be in [0..100] signed
-                    aRetval.setGraphicTransparency(static_cast< sal_Int8 >(nFillTransparence));
-                }
+            if(0 != nFillTransparence)
+            {
+                // nFillTransparence is in range [0..100] and needs to be in [0..100] signed
+                aRetval.setGraphicTransparency(static_cast< sal_Int8 >(nFillTransparence));
             }
 
             break;
@@ -321,7 +321,5 @@ SvxBrushItem getSvxBrushItemFromSourceSet(const SfxItemSet& rSourceSet, bool bSe
 
     return aRetval;
 }
-
-} // namespace sw
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

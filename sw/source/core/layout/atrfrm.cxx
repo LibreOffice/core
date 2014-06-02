@@ -77,7 +77,7 @@
 #endif
 
 //UUUU
-#include <fillattributes.hxx>
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/xfillit0.hxx>
 #include <svl/itemiter.hxx>
 
@@ -2378,20 +2378,6 @@ SwFrmFmt::SwFrmFmt(
     m_wXObject(),
     maFillAttributes()
 {
-    //UUUU
-    if(RES_FLYFRMFMT == nFmtWhich)
-    {
-        // when its a SwFlyFrmFmt do not do this, this setting
-        // will be derived from the parent style. In the future this
-        // may be needed for more formats; all which use the
-        // XATTR_FILL_FIRST, XATTR_FILL_LAST range as fill attributes
-    }
-    else
-    {
-        // set FillStyle to none; this is necessary since the pool default is
-        // to fill objects by color (blue8)
-        SetFmtAttr(XFillStyleItem(XFILL_NONE));
-    }
 }
 
 SwFrmFmt::SwFrmFmt(
@@ -2404,20 +2390,6 @@ SwFrmFmt::SwFrmFmt(
     m_wXObject(),
     maFillAttributes()
 {
-    //UUUU
-    if(RES_FLYFRMFMT == nFmtWhich)
-    {
-        // when its a SwFlyFrmFmt do not do this, this setting
-        // will be derived from the parent style. In the future this
-        // may be needed for more formats; all which use the
-        // XATTR_FILL_FIRST, XATTR_FILL_LAST range as fill attributes
-    }
-    else
-    {
-        // set FillStyle to none; this is necessary since the pool default is
-        // to fill objects by color (blue8)
-        SetFmtAttr(XFillStyleItem(XFILL_NONE));
-    }
 }
 
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
@@ -2435,7 +2407,7 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             RES_FOOTER, false, (const SfxPoolItem**)&pF );
 
         //UUUU reset fill information
-        if(RES_FLYFRMFMT == Which() && maFillAttributes.get())
+        if(maFillAttributes.get() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
         {
             SfxItemIter aIter(*((SwAttrSetChg*)pNew)->GetChgSet());
             bool bReset(false);
@@ -2451,10 +2423,10 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             }
         }
     }
-    else if(RES_FMT_CHG == nWhich) //UUUU
+    else if(RES_FMT_CHG == nWhich)
     {
         //UUUU reset fill information on format change (e.g. style changed)
-        if(RES_FLYFRMFMT == Which() && maFillAttributes.get())
+        if(maFillAttributes.get() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
         {
             maFillAttributes.reset();
         }
@@ -2975,9 +2947,9 @@ OUString SwFlyFrmFmt::GetObjDescription() const
 bool SwFlyFrmFmt::IsBackgroundTransparent() const
 {
     //UUUU
-    if(RES_FLYFRMFMT == Which() && getFillAttributes())
+    if((RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()) && getSdrAllFillAttributesHelper())
     {
-        return getFillAttributes()->isTransparent();
+        return getSdrAllFillAttributesHelper()->isTransparent();
     }
 
     // NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
@@ -3017,9 +2989,9 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
 bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
 {
     //UUUU
-    if(RES_FLYFRMFMT == Which() && getFillAttributes())
+    if((RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()) && getSdrAllFillAttributesHelper())
     {
-        return !getFillAttributes()->isUsed();
+        return !getSdrAllFillAttributesHelper()->isUsed();
     }
     else if ( (GetBackground().GetColor() == COL_TRANSPARENT) &&
          !(GetBackground().GetGraphicObject()) )
@@ -3242,20 +3214,20 @@ IMapObject* SwFrmFmt::GetIMapObject( const Point& rPoint,
 }
 
 //UUUU
-FillAttributesPtr SwFrmFmt::getFillAttributes() const
+drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFrmFmt::getSdrAllFillAttributesHelper() const
 {
-    if(RES_FLYFRMFMT == Which())
+    if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
     {
         // create FillAttributes on demand
         if(!maFillAttributes.get())
         {
-            const_cast< SwFrmFmt* >(this)->maFillAttributes.reset(new FillAttributes(GetAttrSet()));
+            const_cast< SwFrmFmt* >(this)->maFillAttributes.reset(new drawinglayer::attribute::SdrAllFillAttributesHelper(GetAttrSet()));
         }
     }
     else
     {
         // FALLBACKBREAKHERE assert wrong usage
-        OSL_ENSURE(false, "getFillAttributes() call only valid for RES_FLYFRMFMT currently (!)");
+        OSL_ENSURE(false, "getSdrAllFillAttributesHelper() call only valid for RES_FLYFRMFMT and RES_FRMFMT (!)");
     }
 
     return maFillAttributes;

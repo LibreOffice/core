@@ -73,12 +73,14 @@
 #include <comphelper/sequenceasvector.hxx>
 
 //UUUU
-#include <unobrushitemhelper.hxx>
+#include <svx/unobrushitemhelper.hxx>
 #include <editeng/unoipset.hxx>
 #include <editeng/memberids.hrc>
 #include <svx/unoshape.hxx>
 #include <svx/xflbstit.hxx>
 #include <svx/xflbmtit.hxx>
+#include <swunohelper.hxx>
+#include <svx/xbtmpit.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -89,13 +91,6 @@
 #include <set>
 
 #define STYLE_FAMILY_COUNT 5            // we have 5 style families
-#define TYPE_BOOL       0
-#define TYPE_SIZE       1
-#define TYPE_BRUSH      2
-#define TYPE_ULSPACE    3
-#define TYPE_SHADOW     4
-#define TYPE_LRSPACE    5
-#define TYPE_BOX        6
 
 const sal_uInt16 aStyleByIndex[] =
 {
@@ -116,49 +111,6 @@ const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
 };
 
 using namespace ::com::sun::star;
-
-//convert FN_... to RES_ in header and footer itemset
-static sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
-{
-    sal_uInt16 nRes = USHRT_MAX;
-    switch(nFNId)
-    {
-        case FN_UNO_FOOTER_ON:
-        case FN_UNO_HEADER_ON:
-        break;
-        case FN_UNO_FOOTER_BACKGROUND:
-        case FN_UNO_HEADER_BACKGROUND:      nRes = RES_BACKGROUND;
-        break;
-        case FN_UNO_FOOTER_BOX:
-        case FN_UNO_HEADER_BOX:             nRes = RES_BOX;
-        break;
-        case FN_UNO_FOOTER_LR_SPACE:
-        case FN_UNO_HEADER_LR_SPACE:        nRes = RES_LR_SPACE;
-        break;
-        case FN_UNO_FOOTER_SHADOW:
-        case FN_UNO_HEADER_SHADOW:          nRes = RES_SHADOW;
-        break;
-        case FN_UNO_FOOTER_BODY_DISTANCE:
-        case FN_UNO_HEADER_BODY_DISTANCE:   nRes = RES_UL_SPACE;
-        break;
-        case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
-        case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
-        break;
-        case FN_UNO_FOOTER_SHARE_CONTENT:
-        case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
-        break;
-        case FN_UNO_FIRST_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED_FIRST;
-        break;
-        case FN_UNO_FOOTER_HEIGHT:
-        case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
-        break;
-        case FN_UNO_FOOTER_EAT_SPACING:
-        case FN_UNO_HEADER_EAT_SPACING:   nRes = RES_HEADER_FOOTER_EAT_SPACING;
-        break;
-    }
-    return nRes;
-
-}
 
 static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum ( SfxStyleFamily eFamily )
 {
@@ -1578,66 +1530,100 @@ void    SwXStyle::ApplyDescriptorProperties()
     }
 }
 
-struct SwStyleBase_Impl
+class SwStyleBase_Impl
 {
-    SwDoc&              rDoc;
-
-    const SwPageDesc*   pOldPageDesc;
-
+private:
+    SwDoc& mrDoc;
+    const SwPageDesc* mpOldPageDesc;
     rtl::Reference< SwDocStyleSheet > mxNewBase;
-    SfxItemSet*         pItemSet;
+    SfxItemSet* mpItemSet;
+    OUString mrStyleName;
+    const SwAttrSet*                    mpParentStyle;
 
-    OUString     rStyleName;
+public:
+    SwStyleBase_Impl(SwDoc& rSwDoc, const OUString& rName, const SwAttrSet* pParentStyle)
+        : mrDoc(rSwDoc)
+        , mpOldPageDesc(0)
+        , mpItemSet(0)
+        , mrStyleName(rName)
+        , mpParentStyle(pParentStyle)
+    {
+    }
 
-    SwStyleBase_Impl(SwDoc& rSwDoc, const OUString& rName) :
-        rDoc(rSwDoc),
-        pOldPageDesc(0),
-        pItemSet(0),
-        rStyleName(rName)
-        {}
+    ~SwStyleBase_Impl()
+    {
+        delete mpItemSet;
+    }
 
-    ~SwStyleBase_Impl(){ delete pItemSet; }
+    rtl::Reference< SwDocStyleSheet >& getNewBase()
+    {
+        return mxNewBase;
+    }
 
-    bool HasItemSet() {return mxNewBase.is();}
+    void setNewBase(SwDocStyleSheet* pNew)
+    {
+        mxNewBase = pNew;
+    }
+
+    bool HasItemSet() const
+    {
+        return mxNewBase.is();
+    }
+
+    SfxItemSet* replaceItemSet(SfxItemSet* pNew)
+    {
+        SfxItemSet* pRetval = mpItemSet;
+        mpItemSet = pNew;
+        return pRetval;
+    }
+
     SfxItemSet& GetItemSet()
+    {
+        OSL_ENSURE(mxNewBase.is(), "no SwDocStyleSheet available");
+        if (!mpItemSet)
         {
-            OSL_ENSURE(mxNewBase.is(), "no SwDocStyleSheet available");
-            if(!pItemSet)
-                pItemSet = new SfxItemSet(mxNewBase->GetItemSet());
-            return *pItemSet;
-        }
+            mpItemSet = new SfxItemSet(mxNewBase->GetItemSet());
 
-        const SwPageDesc& GetOldPageDesc();
+            //UUUU set parent style to have the correct XFillStyle setting as XFILL_NONE
+            if(!mpItemSet->GetParent() && mpParentStyle)
+            {
+                mpItemSet->SetParent(mpParentStyle);
+            }
+        }
+        return *mpItemSet;
+    }
+
+    const SwPageDesc& GetOldPageDesc();
 };
 
 const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
 {
-    if(!pOldPageDesc)
+    if(!mpOldPageDesc)
     {
-        const sal_uInt16 nPDescCount = rDoc.GetPageDescCnt();
+        const sal_uInt16 nPDescCount = mrDoc.GetPageDescCnt();
         for(sal_uInt16 i = 0; i < nPDescCount; ++i)
         {
-            const SwPageDesc& rDesc = rDoc.GetPageDesc( i );
-            if(rDesc.GetName() == rStyleName)
+            const SwPageDesc& rDesc = mrDoc.GetPageDesc( i );
+            if(rDesc.GetName() == mrStyleName)
             {
-                pOldPageDesc = & rDesc;
+                mpOldPageDesc = & rDesc;
                 break;
             }
         }
-        if(!pOldPageDesc)
+        if(!mpOldPageDesc)
         {
             for(sal_uInt16 i = RC_POOLPAGEDESC_BEGIN; i <= STR_POOLPAGE_LANDSCAPE; ++i)
             {
-                if(SW_RESSTR(i) == rStyleName)
+                if(SW_RESSTR(i) == mrStyleName)
                 {
-                    pOldPageDesc = rDoc.GetPageDescFromPool( static_cast< sal_uInt16 >(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN) );
+                    mpOldPageDesc = mrDoc.GetPageDescFromPool( static_cast< sal_uInt16 >(RES_POOLPAGE_BEGIN + i - RC_POOLPAGEDESC_BEGIN) );
                     break;
                 }
             }
         }
     }
-    assert(pOldPageDesc != 0);
-    return *pOldPageDesc;
+    assert(mpOldPageDesc != 0);
+    return *mpOldPageDesc;
 }
 
 static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
@@ -1696,31 +1682,31 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             if ( rValue >>= bHidden )
             {
                 //make it a 'real' style - necessary for pooled styles
-                rBase.mxNewBase->GetItemSet();
-                rBase.mxNewBase->SetHidden( bHidden );
+                rBase.getNewBase()->GetItemSet();
+                rBase.getNewBase()->SetHidden( bHidden );
             }
         }
         break;
 
         case FN_UNO_STYLE_INTEROP_GRAB_BAG:
         {
-            rBase.mxNewBase->GetItemSet();
-            rBase.mxNewBase->SetGrabBagItem(rValue);
+            rBase.getNewBase()->GetItemSet();
+            rBase.getNewBase()->SetGrabBagItem(rValue);
         }
         break;
 
-        case XATTR_FILLBITMAP:
         case XATTR_FILLGRADIENT:
         case XATTR_FILLHATCH:
+        case XATTR_FILLBITMAP:
         case XATTR_FILLFLOATTRANSPARENCE:
         // not yet needed; activate when LineStyle support may be added
         // case XATTR_LINESTART:
         // case XATTR_LINEEND:
         // case XATTR_LINEDASH:
         {
-            //UUUU add set commands for FillName items
             if(MID_NAME == nMemberId)
             {
+                //UUUU add set commands for FillName items
                 OUString aTempName;
                 SfxItemSet& rStyleSet = rBase.GetItemSet();
 
@@ -1732,28 +1718,35 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 SvxShape::SetFillAttribute(rEntry.nWID, aTempName, rStyleSet);
                 bDone = true;
             }
+            else if(MID_GRAFURL == nMemberId)
+            {
+                if(XATTR_FILLBITMAP == rEntry.nWID)
+                {
+                    //UUUU Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
+                    const Graphic aNullGraphic;
+                    SfxItemSet& rStyleSet = rBase.GetItemSet();
+                    XFillBitmapItem aXFillBitmapItem(rStyleSet.GetPool(), aNullGraphic);
+
+                    aXFillBitmapItem.PutValue(aValue, nMemberId);
+                    rStyleSet.Put(aXFillBitmapItem);
+                    bDone = true;
+                }
+            }
 
             break;
         }
         case RES_BACKGROUND:
         {
-            //UUUU No new FillStyle for PageBackground; need to remove again when we want
-            // to support that, too. Add a break to *not* set bDone to true
-            if(SFX_STYLE_FAMILY_PAGE == eFamily)
-            {
-                break;
-            }
-
             //UUUU
             SfxItemSet& rStyleSet = rBase.GetItemSet();
-            const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rStyleSet));
+            const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rStyleSet, RES_BACKGROUND));
             SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
 
             aChangedBrushItem.PutValue(aValue, nMemberId);
 
             if(!(aChangedBrushItem == aOriginalBrushItem))
             {
-                sw::setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
+                setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, rStyleSet);
             }
 
             bDone = true;
@@ -1893,7 +1886,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                             aSetRule.Set( i, &aFmt );
                         }
                     }
-                    rBase.mxNewBase->SetNumRule(aSetRule);
+                    rBase.getNewBase()->SetNumRule(aSetRule);
                 }
             }
             else
@@ -1908,7 +1901,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             sal_Int16 nLevel = 0;
             aValue >>= nLevel;
             if( 0 <= nLevel && nLevel <= MAXLEVEL)
-                rBase.mxNewBase->GetCollection()->SetAttrOutlineLevel( nLevel );
+                rBase.getNewBase()->GetCollection()->SetAttrOutlineLevel( nLevel );
 
             bDone = true;
             break;
@@ -1920,7 +1913,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             aValue >>= sTmp;
             OUString aString;
             SwStyleNameMapper::FillUIName(sTmp, aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), true ) ;
-            rBase.mxNewBase->SetFollow( aString );
+            rBase.getNewBase()->SetFollow( aString );
 
             bDone = true;
             break;
@@ -1979,9 +1972,9 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         {
             bool bAuto = *(sal_Bool*)aValue.getValue();
             if(SFX_STYLE_FAMILY_PARA == eFamily)
-                rBase.mxNewBase->GetCollection()->SetAutoUpdateFmt(bAuto);
+                rBase.getNewBase()->GetCollection()->SetAutoUpdateFmt(bAuto);
             else if(SFX_STYLE_FAMILY_FRAME == eFamily)
-                rBase.mxNewBase->GetFrmFmt()->SetAutoUpdateFmt(bAuto);
+                rBase.getNewBase()->GetFrmFmt()->SetAutoUpdateFmt(bAuto);
 
             bDone = true;
             break;
@@ -2042,7 +2035,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         }
         case FN_UNO_CATEGORY:
         {
-            if(!rBase.mxNewBase->IsUserDefined())
+            if(!rBase.getNewBase()->IsUserDefined())
                 throw lang::IllegalArgumentException();
             short nSet = 0;
             aValue >>= nSet;
@@ -2071,7 +2064,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 default: throw lang::IllegalArgumentException();
             }
 
-            rBase.mxNewBase->SetMask( nId|SFXSTYLEBIT_USERDEF );
+            rBase.getNewBase()->SetMask( nId|SFXSTYLEBIT_USERDEF );
             bDone = true;
             break;
         }
@@ -2173,16 +2166,16 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         // --> OD 2006-10-18 #i70223#
         if ( SFX_STYLE_FAMILY_PARA == eFamily &&
                 rEntry.nWID == RES_PARATR_NUMRULE &&
-                rBase.mxNewBase.is() && rBase.mxNewBase->GetCollection() &&
-                //rBase.mxNewBase->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */) //#outline level,removed by zhaojianwei
-                rBase.mxNewBase->GetCollection()->IsAssignedToListLevelOfOutlineStyle() )       ////<-end,add by zhaojianwei
+                rBase.getNewBase().is() && rBase.getNewBase()->GetCollection() &&
+                //rBase.getNewBase()->GetCollection()->GetOutlineLevel() < MAXLEVEL /* assigned to list level of outline style */) //#outline level,removed by zhaojianwei
+                rBase.getNewBase()->GetCollection()->IsAssignedToListLevelOfOutlineStyle() )       ////<-end,add by zhaojianwei
         {
             OUString sNewNumberingRuleName;
             aValue >>= sNewNumberingRuleName;
             if ( sNewNumberingRuleName.isEmpty() ||
                  sNewNumberingRuleName != pDoc->GetOutlineNumRule()->GetName() )
             {
-                rBase.mxNewBase->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();
+                rBase.getNewBase()->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();
             }
         }
     }
@@ -2197,26 +2190,29 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
 {
     if ( !m_pDoc )
         throw uno::RuntimeException();
+
     sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
+
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_PARA  : nPropSetId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
         case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE ;break;
         case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE  ;break;
         case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE   ;break;
-        default:
-            ;
+        default: ;
     }
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
 
     if(rPropertyNames.getLength() != rValues.getLength())
+    {
         throw lang::IllegalArgumentException();
+    }
 
     const OUString* pNames = rPropertyNames.getConstArray();
     const uno::Any* pValues = rValues.getConstArray();
 
-    SwStyleBase_Impl aBaseImpl(*m_pDoc, m_sStyleName);
+    SwStyleBase_Impl aBaseImpl(*m_pDoc, m_sStyleName, &GetDoc()->GetDfltTxtFmtColl()->GetAttrSet()); //UUUU add pDfltTxtFmtColl as parent
     if(pBasePool)
     {
         const sal_uInt16 nSaveMask = pBasePool->GetSearchMask();
@@ -2225,35 +2221,41 @@ void SAL_CALL SwXStyle::SetPropertyValues_Impl(
         pBasePool->SetSearchMask(eFamily, nSaveMask );
         OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
-            aBaseImpl.mxNewBase = new SwDocStyleSheet(*(SwDocStyleSheet*)pBase);
+            aBaseImpl.setNewBase(new SwDocStyleSheet(*(SwDocStyleSheet*)pBase));
         else
             throw uno::RuntimeException();
     }
 
     for(sal_Int16 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp]);
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pNames[nProp]);
 
         if(!pEntry ||
            (!bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
             throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-        if(aBaseImpl.mxNewBase.is())
+        if(aBaseImpl.getNewBase().is())
         {
-            lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl,
-                                 pBasePool, m_pDoc, eFamily);
+            lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, pBasePool, m_pDoc, eFamily);
         }
         else if(bIsDescriptor)
         {
             if(!pPropImpl->SetProperty(pNames[nProp], pValues[nProp]))
+            {
                 throw lang::IllegalArgumentException();
+            }
         }
         else
+        {
             throw uno::RuntimeException();
+        }
     }
+
     if(aBaseImpl.HasItemSet())
-        aBaseImpl.mxNewBase->SetItemSet(aBaseImpl.GetItemSet());
+    {
+        aBaseImpl.getNewBase()->SetItemSet(aBaseImpl.GetItemSet());
+    }
 }
 
 void SwXStyle::setPropertyValues(
@@ -2322,9 +2324,9 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
     }
     else if(pBase)
     {
-        if(!rBase.mxNewBase.is())
+        if(!rBase.getNewBase().is())
         {
-            rBase.mxNewBase = new SwDocStyleSheet( *(SwDocStyleSheet*)pBase );
+            rBase.setNewBase(new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ));
         }
 
         //UUUU
@@ -2358,7 +2360,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
             {
-                const SwNumRule* pRule = rBase.mxNewBase->GetNumRule();
+                const SwNumRule* pRule = rBase.getNewBase()->GetNumRule();
                 OSL_ENSURE(pRule, "Wo ist die NumRule?");
                 uno::Reference< container::XIndexReplace >  xRules = new SwXNumberingRules(*pRule, pDoc);
 
@@ -2370,7 +2372,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             case RES_PARATR_OUTLINELEVEL:
             {
                 OSL_ENSURE( SFX_STYLE_FAMILY_PARA == eFamily, "only paras" );
-                int nLevel = rBase.mxNewBase->GetCollection()->GetAttrOutlineLevel();
+                int nLevel = rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel();
                 aRet <<= static_cast<sal_Int16>( nLevel );
                 bDone = true;
                 break;
@@ -2378,7 +2380,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             case FN_UNO_FOLLOW_STYLE:
             {
                 OUString aString;
-                SwStyleNameMapper::FillProgName(rBase.mxNewBase->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
+                SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
                 aRet <<= aString;
                 bDone = true;
                 break;
@@ -2407,9 +2409,9 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             {
                 sal_Bool bAuto = sal_False;
                 if(SFX_STYLE_FAMILY_PARA == eFamily)
-                    bAuto = rBase.mxNewBase->GetCollection()->IsAutoUpdateFmt();
+                    bAuto = rBase.getNewBase()->GetCollection()->IsAutoUpdateFmt();
                 else if(SFX_STYLE_FAMILY_FRAME == eFamily)
-                    bAuto = rBase.mxNewBase->GetFrmFmt()->IsAutoUpdateFmt();
+                    bAuto = rBase.getNewBase()->GetFrmFmt()->IsAutoUpdateFmt();
                 aRet.setValue(&bAuto, ::getBooleanCppuType());
 
                 bDone = true;
@@ -2417,7 +2419,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case FN_UNO_DISPLAY_NAME:
             {
-                aRet <<= rBase.mxNewBase->GetDisplayName();
+                aRet <<= rBase.getNewBase()->GetDisplayName();
 
                 bDone = true;
                 break;
@@ -2456,7 +2458,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case FN_UNO_CATEGORY:
             {
-                const sal_uInt16 nPoolId = rBase.mxNewBase->GetCollection()->GetPoolFmtId();
+                const sal_uInt16 nPoolId = rBase.getNewBase()->GetCollection()->GetPoolFmtId();
                 short nRet = -1;
 
                 switch ( COLL_GET_RANGE_BITS & nPoolId )
@@ -2487,7 +2489,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case SID_SWREGISTER_COLLECTION:
             {
-                const SwPageDesc *pPageDesc = rBase.mxNewBase->GetPageDesc();
+                const SwPageDesc *pPageDesc = rBase.getNewBase()->GetPageDesc();
                 const SwTxtFmtColl* pCol = 0;
                 OUString aString;
                 if( pPageDesc )
@@ -2501,16 +2503,9 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
             case RES_BACKGROUND:
             {
-                //UUUU No new FillStyle for PageBackground; need to remove again when we want
-                // to support that, too. Add a break to *not* set bDone to true
-                if(SFX_STYLE_FAMILY_PAGE == eFamily)
-                {
-                    break;
-                }
-
                 //UUUU
                 const SfxItemSet& rSet = rBase.GetItemSet();
-                const SvxBrushItem aOriginalBrushItem(sw::getSvxBrushItemFromSourceSet(rSet));
+                const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(rSet, RES_BACKGROUND));
 
                 if(!aOriginalBrushItem.QueryValue(aRet, nMemberId))
                 {
@@ -2608,30 +2603,33 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
 {
     if ( !m_pDoc )
         throw uno::RuntimeException();
+
     sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
+
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_PARA  : nPropSetId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
         case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE ;break;
         case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE  ;break;
         case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE   ;break;
-        default:
-            ;
+        default: ;
     }
+
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
-
     const OUString* pNames = rPropertyNames.getConstArray();
     uno::Sequence< uno::Any > aRet(rPropertyNames.getLength());
     uno::Any* pRet = aRet.getArray();
-    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName);
+    SwStyleBase_Impl aBase(*m_pDoc, m_sStyleName, &GetDoc()->GetDfltTxtFmtColl()->GetAttrSet()); //UUUU add pDfltTxtFmtColl as parent
     SfxStyleSheetBase* pBase = 0;
+
     for(sal_Int32 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp]);
         if(!pEntry ||
            (!bIsConditional && pNames[nProp] == UNO_NAME_PARA_STYLE_CONDITIONS))
             throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+
         if(pBasePool)
         {
             if(!pBase)
@@ -2641,6 +2639,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::GetPropertyValues_Impl(
                 pBase = pBasePool->Find(m_sStyleName);
                 pBasePool->SetSearchMask(eFamily, nSaveMask );
             }
+
             pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, eFamily, GetDoc() );
         }
         else if(bIsDescriptor)
@@ -2750,6 +2749,7 @@ void SwXStyle::setPropertyValue(const OUString& rPropertyName, const uno::Any& r
     SolarMutexGuard aGuard;
     const uno::Sequence<OUString> aProperties(&rPropertyName, 1);
     const uno::Sequence<uno::Any> aValues(&rValue, 1);
+
     SetPropertyValues_Impl( aProperties, aValues );
 }
 
@@ -2794,7 +2794,6 @@ beans::PropertyState SwXStyle::getPropertyState(const OUString& rPropertyName)
         throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
-
     uno::Sequence< OUString > aNames(1);
     OUString* pNames = aNames.getArray();
     pNames[0] = rPropertyName;
@@ -2809,6 +2808,7 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
     SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
+
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily );
@@ -2820,61 +2820,105 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
             const OUString* pNames = rPropertyNames.getConstArray();
             rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
             sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
+
             switch(eFamily)
             {
                 case SFX_STYLE_FAMILY_PARA  : nPropSetId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
                 case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE ;break;
                 case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE;   break;
                 case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE   ;break;
-                default:
-                    ;
+                default: ;
             }
+
             const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
             const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
+            const SfxItemSet& rSet = xStyle->GetItemSet();
 
-            SfxItemSet aSet = xStyle->GetItemSet();
             for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
             {
                 const OUString sPropName = pNames[i];
                 const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
+                bool bDone(false);
+
                 if(!pEntry)
+                {
                     throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast < cppu::OWeakObject * > ( this ) );
-                if( FN_UNO_NUM_RULES ==  pEntry->nWID ||
-                    FN_UNO_FOLLOW_STYLE == pEntry->nWID )
-                {
-                    pStates[i] = beans::PropertyState_DIRECT_VALUE;
                 }
-                else if(SFX_STYLE_FAMILY_PAGE == eFamily &&
-                        (sPropName.startsWith("Header") || sPropName.startsWith("Footer")))
+
+                if( FN_UNO_NUM_RULES == pEntry->nWID || FN_UNO_FOLLOW_STYLE == pEntry->nWID )
                 {
-                    const sal_uInt16 nResId = lcl_ConvertFNToRES(pEntry->nWID);
-                    bool bFooter = sPropName.startsWith("Footer");
-                    const SvxSetItem* pSetItem;
-                    if(SFX_ITEM_SET == aSet.GetItemState(
-                            bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                            false, (const SfxPoolItem**)&pSetItem))
+                    // handle NumRules first, done
+                    pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                    bDone = true;
+                }
+
+                // allow to retarget the SfxItemSet working on, default correctly. Only
+                // use pSourceSet below this point (except in header/footer processing)
+                const SfxItemSet* pSourceSet = &rSet;
+
+                if(!bDone)
+                {
+                    // check for Header/Footer entry
+                    const bool bHeader(SFX_STYLE_FAMILY_PAGE == eFamily && sPropName.startsWith("Header"));
+                    const bool bFooter(SFX_STYLE_FAMILY_PAGE == eFamily && sPropName.startsWith("Footer"));
+
+                    if(bHeader || bFooter)
                     {
-                        const SfxItemSet& rSet = pSetItem->GetItemSet();
-                        SfxItemState eState = rSet.GetItemState(nResId, false);
-                        if(SFX_ITEM_SET == eState)
-                            pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                        const SvxSetItem* pSetItem;
+
+                        if(SFX_ITEM_SET == rSet.GetItemState(
+                            bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+                            false,
+                            (const SfxPoolItem**)&pSetItem))
+                        {
+                            // retarget the SfxItemSet to the HeaderFooter SfxSetItem's SfxItenSet
+                            pSourceSet = &pSetItem->GetItemSet();
+                        }
                         else
-                            pStates[i] = beans::PropertyState_DEFAULT_VALUE;
+                        {
+                            // if no SetItem, value is ambigous and we are done
+                            pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
+                            bDone = true;
+                        }
+                    }
+                }
+
+                if(!bDone && OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
+                {
+                    //UUUU
+                    if(SFX_ITEM_SET == pSourceSet->GetItemState(XATTR_FILLBMP_STRETCH, false)
+                        || SFX_ITEM_SET == pSourceSet->GetItemState(XATTR_FILLBMP_TILE, false))
+                    {
+                        pStates[i] = beans::PropertyState_DIRECT_VALUE;
                     }
                     else
-                        pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
-                }
-                else
-                {
-                    pStates[i] = pPropSet->getPropertyState(*pEntry, aSet);
-                    if( SFX_STYLE_FAMILY_PAGE == eFamily &&
-                        SID_ATTR_PAGE_SIZE == pEntry->nWID &&
-                        beans::PropertyState_DIRECT_VALUE == pStates[i] )
                     {
-                        const SvxSizeItem& rSize =
-                            static_cast < const SvxSizeItem& >(
-                                    aSet.Get(SID_ATTR_PAGE_SIZE) );
+                        pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
+                    }
+
+                    bDone = true;
+                }
+
+                //UUUU for FlyFrames we need to mark all properties from type RES_BACKGROUND
+                // as beans::PropertyState_DIRECT_VALUE to let users of this property call
+                // getPropertyValue where the member properties will be mapped from the
+                // fill attributes to the according SvxBrushItem entries
+                if(!bDone && RES_BACKGROUND == pEntry->nWID
+                    && SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(*pSourceSet))
+                {
+                    pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                    bDone = true;
+                }
+
+                if(!bDone)
+                {
+                    pStates[i] = pPropSet->getPropertyState(*pEntry, *pSourceSet);
+
+                    if(SFX_STYLE_FAMILY_PAGE == eFamily && SID_ATTR_PAGE_SIZE == pEntry->nWID && beans::PropertyState_DIRECT_VALUE == pStates[i])
+                    {
+                        const SvxSizeItem& rSize = static_cast <const SvxSizeItem&>( rSet.Get(SID_ATTR_PAGE_SIZE));
                         sal_uInt8 nMemberId = pEntry->nMemberId & 0x7f;
+
                         if( ( LONG_MAX == rSize.GetSize().Width() &&
                               (MID_SIZE_WIDTH == nMemberId ||
                                MID_SIZE_SIZE == nMemberId ) ) ||
@@ -2888,10 +2932,15 @@ uno::Sequence< beans::PropertyState > SwXStyle::getPropertyStates(
             }
         }
         else
+        {
             throw uno::RuntimeException();
+        }
     }
     else
+    {
         throw uno::RuntimeException();
+    }
+
     return aRet;
 }
 
@@ -2919,60 +2968,97 @@ void SAL_CALL SwXStyle::setPropertiesToDefault( const uno::Sequence< OUString >&
             rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
             switch(eFamily)
             {
-                case SFX_STYLE_FAMILY_CHAR: pTargetFmt = xStyle->GetCharFmt(); break;
-                case SFX_STYLE_FAMILY_PARA: pTargetFmt = xStyle->GetCollection(); break;
-                case SFX_STYLE_FAMILY_FRAME: pTargetFmt = xStyle->GetFrmFmt(); break;
-                case SFX_STYLE_FAMILY_PAGE:
-                    {
-                        SwPageDesc *pDesc = m_pDoc->FindPageDesc(xStyle->GetPageDesc()->GetName());
-                        if( pDesc )
-                            pTargetFmt = &pDesc->GetMaster();
-                    }
+                case SFX_STYLE_FAMILY_CHAR:
+                    pTargetFmt = xStyle->GetCharFmt();
                     break;
+
+                case SFX_STYLE_FAMILY_PARA:
+                    pTargetFmt = xStyle->GetCollection();
+                    break;
+
+                case SFX_STYLE_FAMILY_FRAME:
+                    pTargetFmt = xStyle->GetFrmFmt();
+                    break;
+
+                case SFX_STYLE_FAMILY_PAGE:
+                {
+                    SwPageDesc *pDesc = m_pDoc->FindPageDesc(xStyle->GetPageDesc()->GetName());
+                    if( pDesc )
+                        pTargetFmt = &pDesc->GetMaster();
+                    break;
+                }
                 case SFX_STYLE_FAMILY_PSEUDO:
                     break;
-                default:
-                    ;
+                default: ;
             }
         }
     }
+
     sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
+
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_PARA  : nPropSetId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE; break;
         case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE; break;
         case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE; break;
         case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE; break;
-        default:
-            ;
+        default: ;
     }
+
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
-
     const OUString* pNames = aPropertyNames.getConstArray();
 
-    if ( pTargetFmt )
+    if(pTargetFmt)
     {
-        for( sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++ )
+        for(sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++)
         {
-            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp] );
+            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pNames[nProp]);
+
             if( !pEntry )
+            {
                 throw beans::UnknownPropertyException ( "Unknown property: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            }
+
             if ( pEntry->nWID == FN_UNO_FOLLOW_STYLE || pEntry->nWID == FN_UNO_NUM_RULES )
+            {
                 throw uno::RuntimeException ("Cannot reset: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
-            if ( pEntry->nFlags & beans::PropertyAttribute::READONLY )
+            }
+
+            if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
+            {
                 throw uno::RuntimeException("setPropertiesToDefault: property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+            }
 
             if( pEntry->nWID == RES_PARATR_OUTLINELEVEL )
+            {
                 static_cast<SwTxtFmtColl*>(pTargetFmt)->DeleteAssignmentToListLevelOfOutlineStyle();
+            }
             else
+            {
                 pTargetFmt->ResetFmtAttr( pEntry->nWID );
+            }
+
+            if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
+            {
+                //UUUU
+                SwDoc* pDoc = pTargetFmt->GetDoc();
+                SfxItemSet aSet(pDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                aSet.SetParent(&pTargetFmt->GetAttrSet());
+
+                aSet.ClearItem(XATTR_FILLBMP_STRETCH);
+                aSet.ClearItem(XATTR_FILLBMP_TILE);
+
+                pTargetFmt->SetFmtAttr(aSet);
+            }
         }
     }
-    else if ( bIsDescriptor )
+    else if(bIsDescriptor)
     {
-        for( sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++ )
-            pPropImpl->ClearProperty ( pNames[ nProp ] );
+        for(sal_Int32 nProp = 0, nEnd = aPropertyNames.getLength(); nProp < nEnd; nProp++)
+        {
+            pPropImpl->ClearProperty(pNames[nProp]);
+        }
     }
 }
 
@@ -2980,6 +3066,7 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
+
     if(pBasePool)
     {
         pBasePool->SetSearchMask(eFamily);
@@ -2989,98 +3076,116 @@ void SAL_CALL SwXStyle::setAllPropertiesToDefault(  )
         if(pBase)
         {
             rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
-
             SwFmt *pTargetFmt = 0;
             sal_uInt16 nPgDscPos = USHRT_MAX;
-            switch( eFamily )
+            switch(eFamily)
             {
-            case SFX_STYLE_FAMILY_CHAR :
-                pTargetFmt = xStyle->GetCharFmt();
-                break;
-            case SFX_STYLE_FAMILY_PARA :
+                case SFX_STYLE_FAMILY_CHAR:
+                    pTargetFmt = xStyle->GetCharFmt();
+                    break;
+
+                case SFX_STYLE_FAMILY_PARA:
                 {
                     pTargetFmt = xStyle->GetCollection();
-                    if ( xStyle->GetCollection() )
+                    if(xStyle->GetCollection())
+                    {
                         xStyle->GetCollection()->DeleteAssignmentToListLevelOfOutlineStyle();
+                    }
+                    break;
                 }
-                break;
-            case SFX_STYLE_FAMILY_FRAME:
-                pTargetFmt = xStyle->GetFrmFmt();
-                break;
-            case SFX_STYLE_FAMILY_PAGE:
+
+                case SFX_STYLE_FAMILY_FRAME:
+                    pTargetFmt = xStyle->GetFrmFmt();
+                    break;
+
+                case SFX_STYLE_FAMILY_PAGE:
                 {
                     SwPageDesc *pDesc = m_pDoc->FindPageDesc(xStyle->GetPageDesc()->GetName(), &nPgDscPos);
                     if( pDesc )
                     {
                         pTargetFmt = &pDesc->GetMaster();
-                        pDesc->SetUseOn ( nsUseOnPage::PD_ALL );
+                        pDesc->SetUseOn(nsUseOnPage::PD_ALL);
                     }
+                    break;
                 }
-                break;
-            case SFX_STYLE_FAMILY_PSEUDO:
-                break;
 
-            default:
-                ;
+                case SFX_STYLE_FAMILY_PSEUDO:
+                    break;
+
+                default: ;
             }
-            if( pTargetFmt )
+
+            if(pTargetFmt)
             {
-                if( USHRT_MAX != nPgDscPos )
+                if(USHRT_MAX != nPgDscPos)
                 {
                     SwPageDesc& rPageDesc = m_pDoc->GetPageDesc(nPgDscPos);
                     rPageDesc.ResetAllMasterAttr();
 
                     SvxLRSpaceItem aLR(RES_LR_SPACE);
-                    sal_Int32 nSize = GetMetricVal ( CM_1) * 2;
-                    aLR.SetLeft ( nSize );
-                    aLR.SetLeft ( nSize );
-                    SvxULSpaceItem aUL( RES_UL_SPACE );
-                    aUL.SetUpper ( static_cast < sal_uInt16 > ( nSize ) );
-                    aUL.SetLower ( static_cast < sal_uInt16 > ( nSize ) );
-                    pTargetFmt->SetFmtAttr( aLR );
-                    pTargetFmt->SetFmtAttr( aUL );
+                    sal_Int32 nSize = GetMetricVal(CM_1) * 2;
+                    aLR.SetLeft(nSize);
+                    aLR.SetLeft(nSize);
+                    SvxULSpaceItem aUL(RES_UL_SPACE);
+                    aUL.SetUpper(static_cast <sal_uInt16> (nSize));
+                    aUL.SetLower(static_cast <sal_uInt16> (nSize));
+                    pTargetFmt->SetFmtAttr(aLR);
+                    pTargetFmt->SetFmtAttr(aUL);
+                    SwPageDesc* pStdPgDsc = m_pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD);
+                    SwFmtFrmSize aFrmSz(ATT_FIX_SIZE);
 
-                    SwPageDesc* pStdPgDsc = m_pDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
-                    SwFmtFrmSize aFrmSz( ATT_FIX_SIZE );
-                    if( RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFmtId() )
+                    if(RES_POOLPAGE_STANDARD == rPageDesc.GetPoolFmtId())
                     {
-                        if( m_pDoc->getIDocumentDeviceAccess().getPrinter( false ) )
+                        if(m_pDoc->getIDocumentDeviceAccess().getPrinter(false))
                         {
                             const Size aPhysSize( SvxPaperInfo::GetPaperSize(
-                                        static_cast<Printer*>( m_pDoc->getIDocumentDeviceAccess().getPrinter( false ) )) );
-                            aFrmSz.SetSize( aPhysSize );
+                                static_cast<Printer*>(m_pDoc->getIDocumentDeviceAccess().getPrinter(false))));
+                            aFrmSz.SetSize(aPhysSize);
                         }
                         else
-                            aFrmSz.SetSize( SvxPaperInfo::GetDefaultPaperSize() );
+                        {
+                            aFrmSz.SetSize(SvxPaperInfo::GetDefaultPaperSize());
+                        }
 
                     }
                     else
                     {
                         aFrmSz = pStdPgDsc->GetMaster().GetFrmSize();
                     }
-                    if( pStdPgDsc->GetLandscape() )
+
+                    if(pStdPgDsc->GetLandscape())
                     {
                         SwTwips nTmp = aFrmSz.GetHeight();
-                        aFrmSz.SetHeight( aFrmSz.GetWidth() );
-                        aFrmSz.SetWidth( nTmp );
+                        aFrmSz.SetHeight(aFrmSz.GetWidth());
+                        aFrmSz.SetWidth(nTmp);
                     }
+
                     pTargetFmt->SetFmtAttr( aFrmSz );
                 }
                 else
+                {
                     pTargetFmt->ResetAllFmtAttr();
+                }
 
-                if( USHRT_MAX != nPgDscPos )
-                    m_pDoc->ChgPageDesc( nPgDscPos, m_pDoc->GetPageDesc(nPgDscPos) );
+                if(USHRT_MAX != nPgDscPos)
+                {
+                    m_pDoc->ChgPageDesc(nPgDscPos, m_pDoc->GetPageDesc(nPgDscPos));
+                }
             }
-
         }
         else
+        {
             throw uno::RuntimeException();
+        }
     }
     else if ( bIsDescriptor )
+    {
         pPropImpl->ClearAllProperties();
+    }
     else
+    {
         throw uno::RuntimeException();
+    }
 }
 
 uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Sequence< OUString >& aPropertyNames )
@@ -3088,10 +3193,12 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
 {
     SolarMutexGuard aGuard;
     sal_Int32 nCount = aPropertyNames.getLength();
-    uno::Sequence < uno::Any > aRet ( nCount );
-    if ( nCount )
+
+    uno::Sequence < uno::Any > aRet(nCount);
+
+    if(nCount)
     {
-        if( pBasePool)
+        if(pBasePool)
         {
             pBasePool->SetSearchMask(eFamily);
             SfxStyleSheetBase* pBase = pBasePool->Find(m_sStyleName);
@@ -3099,7 +3206,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
 
             if(pBase)
             {
-                rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+                rtl::Reference< SwDocStyleSheet > xStyle(new SwDocStyleSheet(*(SwDocStyleSheet*)pBase));
                 sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_STYLE;
                 switch(eFamily)
                 {
@@ -3107,8 +3214,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
                     case SFX_STYLE_FAMILY_FRAME : nPropSetId = PROPERTY_MAP_FRAME_STYLE; break;
                     case SFX_STYLE_FAMILY_PAGE  : nPropSetId = PROPERTY_MAP_PAGE_STYLE; break;
                     case SFX_STYLE_FAMILY_PSEUDO: nPropSetId = PROPERTY_MAP_NUM_STYLE; break;
-                    default:
-                        ;
+                    default: ;
                 }
                 const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
                 const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
@@ -3116,11 +3222,15 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
                 const SfxItemSet &rSet = xStyle->GetItemSet(), *pParentSet = rSet.GetParent();
                 const OUString *pNames = aPropertyNames.getConstArray();
                 uno::Any *pRet = aRet.getArray();
-                for ( sal_Int32 i = 0 ; i < nCount; i++)
+
+                for(sal_Int32 i = 0; i < nCount; i++)
                 {
-                    const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[i] );
-                    if ( !pEntry )
-                        throw beans::UnknownPropertyException ( "Unknown property: " + pNames[i], static_cast < cppu::OWeakObject * > ( this ) );
+                    const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(pNames[i]);
+
+                    if(!pEntry)
+                    {
+                        throw beans::UnknownPropertyException("Unknown property: " + pNames[i], static_cast < cppu::OWeakObject * >(this));
+                    }
 
                     if (pEntry->nWID >= RES_UNKNOWNATR_END)
                     {
@@ -3128,20 +3238,28 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
                         // parent set, so the default value is void
                         continue;
                     }
-                    if( pParentSet )
+
+                    if(pParentSet)
+                    {
                         aSwMapProvider.GetPropertySet(nPropSetId)->getPropertyValue(pNames[i], *pParentSet, pRet[i]);
-                    else if( pEntry->nWID != rSet.GetPool()->GetSlotId(pEntry->nWID) )
+                    }
+                    else if(pEntry->nWID != rSet.GetPool()->GetSlotId(pEntry->nWID))
                     {
                         const SfxPoolItem& rItem = rSet.GetPool()->GetDefaultItem(pEntry->nWID);
+
                         rItem.QueryValue(pRet[i], pEntry->nMemberId);
                     }
                 }
             }
             else
+            {
                 throw uno::RuntimeException();
+            }
         }
         else
+        {
             throw uno::RuntimeException();
+        }
     }
     return aRet;
 }
@@ -3203,39 +3321,25 @@ SwXPageStyle::~SwXPageStyle()
 
 }
 
-static void lcl_putItemToSet(const SvxSetItem* pSetItem, sal_uInt16 nRes, sal_uInt16 nItemType, const uno::Any& rVal, sal_uInt8 nMemberId, SwStyleBase_Impl& rBaseImpl)
+static void lcl_putItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet& rPropSet, const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rVal, SwStyleBase_Impl& rBaseImpl, SfxStyleSheetBasePool* pPool, SwDoc *pDoc, SfxStyleFamily eFamily)
 {
-    SvxSetItem* pNewSetItem = (SvxSetItem*)pSetItem->Clone();
+    // create a new SvxSetItem and get it's ItemSet as new target
+    SvxSetItem* pNewSetItem = static_cast< SvxSetItem* >(pSetItem->Clone());
     SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
-    const SfxPoolItem* pItem = 0;
-    SfxPoolItem* pNewItem = 0;
-    rSetSet.GetItemState(nRes, true, &pItem);
-    if(!pItem && nRes != rSetSet.GetPool()->GetSlotId(nRes))
-        pItem = &rSetSet.GetPool()->GetDefaultItem(nRes);
-    if(pItem)
-    {
-        pNewItem = pItem->Clone();
-    }
-    else
-    {
-        switch(nItemType)
-        {
-            case TYPE_BOOL: pNewItem = new SfxBoolItem(nRes);       break;
-            case TYPE_SIZE: pNewItem = new SvxSizeItem(nRes);       break;
-            case TYPE_BRUSH: pNewItem = new SvxBrushItem(nRes);     break;
-            case TYPE_ULSPACE: pNewItem = new SvxULSpaceItem(nRes); break;
-            case TYPE_SHADOW : pNewItem = new SvxShadowItem(nRes);  break;
-            case TYPE_LRSPACE: pNewItem = new SvxLRSpaceItem(nRes); break;
-            case TYPE_BOX: pNewItem = new SvxBoxItem(nRes);         break;
-        }
-    }
-    assert(pNewItem);
-    if (pNewItem)
-    {
-        pNewItem->PutValue(rVal, nMemberId);
-        rSetSet.Put(*pNewItem);
-        delete pNewItem;
-    }
+
+    // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
+    rSetSet.SetParent(&pDoc->GetDfltFrmFmt()->GetAttrSet());
+
+    // replace the used SfxItemSet at the SwStyleBase_Impl temporarily and use the
+    // default method to set the property
+    SfxItemSet* pRememberItemSet = rBaseImpl.replaceItemSet(&rSetSet);
+    lcl_SetStyleProperty(rEntry, rPropSet, rVal, rBaseImpl, pPool, pDoc, eFamily);
+    rBaseImpl.replaceItemSet(pRememberItemSet);
+
+    // reset paret at ItemSet from SetItem
+    rSetSet.SetParent(0);
+
+    // set the new SvxSetItem at the real target and delete it
     rBaseImpl.GetItemSet().Put(*pNewSetItem);
     delete pNewSetItem;
 }
@@ -3257,7 +3361,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
     const uno::Any* pValues = rValues.getConstArray();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE);
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
-    SwStyleBase_Impl aBaseImpl(*GetDoc(), GetStyleName());
+    SwStyleBase_Impl aBaseImpl(*GetDoc(), GetStyleName(), &GetDoc()->GetDfltFrmFmt()->GetAttrSet()); //UUUU add pDfltFrmFmt as parent
     if(GetBasePool())
     {
         const sal_uInt16 nSaveMask = GetBasePool()->GetSearchMask();
@@ -3266,140 +3370,194 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
         GetBasePool()->SetSearchMask(GetFamily(), nSaveMask );
         OSL_ENSURE(pBase, "where is the style?" );
         if(pBase)
-            aBaseImpl.mxNewBase = new SwDocStyleSheet(*(SwDocStyleSheet*)pBase);
+        {
+            aBaseImpl.setNewBase(new SwDocStyleSheet(*(SwDocStyleSheet*)pBase));
+        }
         else
+        {
             throw uno::RuntimeException();
+        }
     }
 
     for(sal_Int16 nProp = 0; nProp < rPropertyNames.getLength(); nProp++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp] );
+        const OUString& rPropName = pNames[nProp];
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
+
         if (!pEntry)
+        {
             throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+        }
+
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
+        {
             throw beans::PropertyVetoException ("Property is read-only: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+        }
 
         if(GetBasePool())
         {
             switch(pEntry->nWID)
             {
-                case FN_UNO_HEADER_ON:
-                case FN_UNO_HEADER_BACKGROUND:
-                case FN_UNO_HEADER_BOX:
-                case FN_UNO_HEADER_LR_SPACE:
-                case FN_UNO_HEADER_SHADOW:
-                case FN_UNO_HEADER_BODY_DISTANCE:
-                case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE:
-                case FN_UNO_HEADER_SHARE_CONTENT:
-                case FN_UNO_HEADER_HEIGHT:
-                case FN_UNO_HEADER_EAT_SPACING:
-
-                case FN_UNO_FIRST_SHARE_CONTENT:
-
-                case FN_UNO_FOOTER_ON:
-                case FN_UNO_FOOTER_BACKGROUND:
-                case FN_UNO_FOOTER_BOX:
-                case FN_UNO_FOOTER_LR_SPACE:
-                case FN_UNO_FOOTER_SHADOW:
-                case FN_UNO_FOOTER_BODY_DISTANCE:
-                case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
-                case FN_UNO_FOOTER_SHARE_CONTENT:
-                case FN_UNO_FOOTER_HEIGHT:
-                case FN_UNO_FOOTER_EAT_SPACING:
+                case SID_ATTR_PAGE_ON:
+                case RES_BACKGROUND:
+                case RES_BOX:
+                case RES_LR_SPACE:
+                case RES_SHADOW:
+                case RES_UL_SPACE:
+                case SID_ATTR_PAGE_DYNAMIC:
+                case SID_ATTR_PAGE_SHARED:
+                case SID_ATTR_PAGE_SHARED_FIRST:
+                case SID_ATTR_PAGE_SIZE:
+                case RES_HEADER_FOOTER_EAT_SPACING:
                 {
-                    bool bFooter = false;
-                    sal_uInt16 nItemType = TYPE_BOOL;
-                    sal_uInt16 nRes = 0;
-                    switch(pEntry->nWID)
-                    {
-                        case FN_UNO_FOOTER_ON:                  bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_ON:                  nRes = SID_ATTR_PAGE_ON;
-                        break;
-                        case FN_UNO_FOOTER_BACKGROUND:          bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_BACKGROUND:          nRes = RES_BACKGROUND; nItemType = TYPE_BRUSH;
-                        break;
-                        case FN_UNO_FOOTER_BOX:                 bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_BOX:                 nRes = RES_BOX; nItemType = TYPE_BOX;
-                        break;
-                        case FN_UNO_FOOTER_LR_SPACE:            bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_LR_SPACE:            nRes = RES_LR_SPACE;nItemType = TYPE_LRSPACE;
-                        break;
-                        case FN_UNO_FOOTER_SHADOW:              bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_SHADOW:              nRes = RES_SHADOW;nItemType = TYPE_SHADOW;
-                        break;
-                        case FN_UNO_FOOTER_BODY_DISTANCE:       bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_BODY_DISTANCE:       nRes = RES_UL_SPACE;nItemType = TYPE_ULSPACE;
-                        break;
-                        case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
-                        break;
-                        case FN_UNO_FOOTER_SHARE_CONTENT:       bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_SHARE_CONTENT:       nRes = SID_ATTR_PAGE_SHARED;
-                        break;
-                        case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
-                        break;
-                        case FN_UNO_FOOTER_HEIGHT:              bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_HEIGHT:              nRes = SID_ATTR_PAGE_SIZE;nItemType = TYPE_SIZE;
-                        break;
-                        case FN_UNO_FOOTER_EAT_SPACING:     bFooter = true;
-                        // no break
-                        case FN_UNO_HEADER_EAT_SPACING:     nRes = RES_HEADER_FOOTER_EAT_SPACING;nItemType = TYPE_SIZE;
-                        break;
-                    }
-                    const SvxSetItem* pSetItem;
-                    if(SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
-                            bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                            false, (const SfxPoolItem**)&pSetItem))
-                    {
-                        lcl_putItemToSet(pSetItem, nRes, nItemType, pValues[nProp], pEntry->nMemberId, aBaseImpl);
+                    // these entries are used in Header, Footer and (partially) in the PageStyle itself.
+                    // Check for Header/Footer entry
+                    const bool bHeader(rPropName.startsWith("Header"));
+                    const bool bFooter(rPropName.startsWith("Footer"));
 
-                        if (nRes == SID_ATTR_PAGE_SHARED_FIRST)
+                    if(bHeader || bFooter)
+                    {
+                        // it is a Header/Footer entry, access the SvxSetItem containing it's information
+                        const SvxSetItem* pSetItem = 0;
+
+                        if (SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
+                                    bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+                                    false, (const SfxPoolItem**)&pSetItem))
                         {
-                            // Need to add this to the other as well
-                            if (SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
-                                        bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
-                                        false, (const SfxPoolItem**)&pSetItem))
-                                lcl_putItemToSet(pSetItem, nRes, nItemType, pValues[nProp], pEntry->nMemberId, aBaseImpl);
+                            lcl_putItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+
+                            if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST)
+                            {
+                                // Need to add this to the other as well
+                                if (SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
+                                            bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
+                                            false, (const SfxPoolItem**)&pSetItem))
+                                {
+                                    lcl_putItemToSet(pSetItem, *pPropSet, *pEntry, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                                }
+                            }
+                        }
+                        else if(pEntry->nWID == SID_ATTR_PAGE_ON)
+                        {
+                            bool bVal = *(sal_Bool*)pValues[nProp].getValue();
+
+                            if(bVal)
+                            {
+                                // Header/footer gets switched on, create defauts and the needed SfxSetItem
+                                SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
+                                    RES_FRMATR_BEGIN,RES_FRMATR_END - 1,            // [82
+
+                                    //UUUU FillAttribute support
+                                    XATTR_FILL_FIRST, XATTR_FILL_LAST,              // [1014
+
+                                    SID_ATTR_BORDER_INNER,SID_ATTR_BORDER_INNER,    // [10023
+                                    SID_ATTR_PAGE_SIZE,SID_ATTR_PAGE_SIZE,          // [10051
+                                    SID_ATTR_PAGE_ON,SID_ATTR_PAGE_SHARED,          // [10060
+                                    SID_ATTR_PAGE_SHARED_FIRST,SID_ATTR_PAGE_SHARED_FIRST,
+                                    0);
+
+                                //UUUU set correct parent to get the XFILL_NONE FillStyle as needed
+                                aTempSet.SetParent(&GetDoc()->GetDfltFrmFmt()->GetAttrSet());
+
+                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_ON, true));
+                                aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(MM50, MM50)));
+                                aTempSet.Put(SvxLRSpaceItem(RES_LR_SPACE));
+                                aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
+                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, true));
+                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED_FIRST, true));
+                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, true));
+
+                                SvxSetItem aNewSetItem(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, aTempSet);
+                                aBaseImpl.GetItemSet().Put(aNewSetItem);
+                            }
                         }
                     }
-                    else if(SID_ATTR_PAGE_ON == nRes )
+                    else
                     {
-                        bool bVal = *(sal_Bool*)pValues[nProp].getValue();
-                        if(bVal)
+                        switch(pEntry->nWID)
                         {
-                            SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
-                                RES_BACKGROUND, RES_SHADOW,
-                                RES_LR_SPACE, RES_UL_SPACE,
-                                nRes, nRes,
-                                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                                SID_ATTR_PAGE_DYNAMIC, SID_ATTR_PAGE_DYNAMIC,
-                                SID_ATTR_PAGE_SHARED, SID_ATTR_PAGE_SHARED,
-                                SID_ATTR_PAGE_SHARED_FIRST, SID_ATTR_PAGE_SHARED_FIRST,
-                                0 );
-                            aTempSet.Put(SfxBoolItem(nRes, true));
-                            aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(MM50, MM50)));
-                            aTempSet.Put(SvxLRSpaceItem(RES_LR_SPACE));
-                            aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
-                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, true));
-                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED_FIRST, true));
-                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, true));
-
-                            SvxSetItem aNewSetItem( bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                                    aTempSet);
-                            aBaseImpl.GetItemSet().Put(aNewSetItem);
+                            case SID_ATTR_PAGE_DYNAMIC:
+                            case SID_ATTR_PAGE_SHARED:
+                            case SID_ATTR_PAGE_SHARED_FIRST:
+                            case SID_ATTR_PAGE_ON:
+                            case RES_HEADER_FOOTER_EAT_SPACING:
+                            {
+                                // these slots are exclusive to Header/Footer, thus this is an error
+                                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+                                break;
+                            }
+                            default:
+                            {
+                                // part of PageStyle, fallback to default
+                                lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                            }
                         }
                     }
+                    break;
                 }
-                break;
+
+                case XATTR_FILLBMP_SIZELOG:
+                case XATTR_FILLBMP_TILEOFFSETX:
+                case XATTR_FILLBMP_TILEOFFSETY:
+                case XATTR_FILLBMP_POSOFFSETX:
+                case XATTR_FILLBMP_POSOFFSETY:
+                case XATTR_FILLBMP_POS:
+                case XATTR_FILLBMP_SIZEX:
+                case XATTR_FILLBMP_SIZEY:
+                case XATTR_FILLBMP_STRETCH:
+                case XATTR_FILLBMP_TILE:
+                case OWN_ATTR_FILLBMP_MODE:
+                case XATTR_FILLCOLOR:
+                case XATTR_FILLBACKGROUND:
+                case XATTR_FILLBITMAP:
+                case XATTR_GRADIENTSTEPCOUNT:
+                case XATTR_FILLGRADIENT:
+                case XATTR_FILLHATCH:
+                case XATTR_FILLSTYLE:
+                case XATTR_FILLTRANSPARENCE:
+                case XATTR_FILLFLOATTRANSPARENCE:
+                case XATTR_SECONDARYFILLCOLOR:
+                {
+                    // This DrawingLayer FillStyle attributes can be part of Header, Footer and PageStyle
+                    // itself, so decide what to do using the name
+                    const bool bHeader(rPropName.startsWith("Header"));
+                    const bool bFooter(rPropName.startsWith("Footer"));
+
+                    if(bHeader || bFooter)
+                    {
+                        const SvxSetItem* pSetItem = 0;
+
+                        if(SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, sal_False, (const SfxPoolItem**)&pSetItem))
+                        {
+                            // create a new SvxSetItem and get it's ItemSet as new target
+                            SvxSetItem* pNewSetItem = static_cast< SvxSetItem* >(pSetItem->Clone());
+                            SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
+
+                            // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
+                            rSetSet.SetParent(&GetDoc()->GetDfltFrmFmt()->GetAttrSet());
+
+                            // replace the used SfxItemSet at the SwStyleBase_Impl temporarily and use the
+                            // default method to set the property
+                            SfxItemSet* pRememberItemSet = aBaseImpl.replaceItemSet(&rSetSet);
+                            lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                            aBaseImpl.replaceItemSet(pRememberItemSet);
+
+                            // reset paret at ItemSet from SetItem
+                            rSetSet.SetParent(0);
+
+                            // set the new SvxSetItem at the real target and delete it
+                            aBaseImpl.GetItemSet().Put(*pNewSetItem);
+                            delete pNewSetItem;
+                        }
+                    }
+                    else
+                    {
+                        // part of PageStyle, fallback to default
+                        lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                    }
+
+                    break;
+                }
                 case FN_PARAM_FTN_INFO :
                 {
                     const SfxPoolItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
@@ -3409,8 +3567,8 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     delete pNewFtnItem;
                     if(!bPut)
                         throw lang::IllegalArgumentException();
+                    break;
                 }
-                break;
                 case  FN_UNO_HEADER       :
                 case  FN_UNO_HEADER_LEFT  :
                 case  FN_UNO_HEADER_RIGHT :
@@ -3419,30 +3577,40 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case  FN_UNO_FOOTER_LEFT  :
                 case  FN_UNO_FOOTER_RIGHT :
                 case  FN_UNO_FOOTER_FIRST :
+                {
                     throw lang::IllegalArgumentException();
-                //break;
+                    break;
+                }
                 default:
-                    lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl,
-                                        GetBasePool(), GetDoc(), GetFamily());
+                {
+                    //UUUU
+                    lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl, GetBasePool(), GetDoc(), GetFamily());
+                    break;
+                }
             }
         }
         else if(IsDescriptor())
         {
-            if(!GetPropImpl()->SetProperty(pNames[nProp], pValues[nProp]))
+            if(!GetPropImpl()->SetProperty(rPropName, pValues[nProp]))
                 throw lang::IllegalArgumentException();
         }
         else
+        {
             throw uno::RuntimeException();
+        }
     }
+
     if(aBaseImpl.HasItemSet())
     {
         ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
+
         if (undoGuard.UndoWasEnabled())
         {
             // Fix i64460: as long as Undo of page styles with header/footer causes trouble...
             GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
         }
-        aBaseImpl.mxNewBase->SetItemSet(aBaseImpl.GetItemSet());
+
+        aBaseImpl.getNewBase()->SetItemSet(aBaseImpl.GetItemSet());
     }
 }
 
@@ -3505,13 +3673,18 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
     uno::Any* pRet = aRet.getArray();
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PAGE_STYLE);
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
-    SwStyleBase_Impl aBase(*GetDoc(), GetStyleName());
+    SwStyleBase_Impl aBase(*GetDoc(), GetStyleName(), &GetDoc()->GetDfltFrmFmt()->GetAttrSet()); //UUUU add pDfltFrmFmt as parent
     SfxStyleSheetBase* pBase = 0;
+
     for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
     {
-        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName( pNames[nProp] );
+        const OUString& rPropName = pNames[nProp];
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
+
         if (!pEntry)
-            throw beans::UnknownPropertyException("Unknown property: " + pNames[nProp], static_cast < cppu::OWeakObject * > ( this ) );
+        {
+            throw beans::UnknownPropertyException("Unknown property: " + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+        }
 
         if(GetBasePool())
         {
@@ -3522,138 +3695,152 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 pBase = GetBasePool()->Find(GetStyleName());
                 GetBasePool()->SetSearchMask(GetFamily(), nSaveMask );
             }
+
             sal_uInt16 nRes = 0;
-            bool bHeader = false;
             bool bLeft = false;
             bool bFirst = false;
+            const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+
             switch(pEntry->nWID)
             {
-                case FN_UNO_HEADER_ON:
-                case FN_UNO_HEADER_BACKGROUND:
-                case FN_UNO_HEADER_BOX:
-                case FN_UNO_HEADER_LR_SPACE:
-                case FN_UNO_HEADER_SHADOW:
-                case FN_UNO_HEADER_BODY_DISTANCE:
-                case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE:
-                case FN_UNO_HEADER_SHARE_CONTENT:
-                case FN_UNO_HEADER_HEIGHT:
-                case FN_UNO_HEADER_EAT_SPACING:
-
-                case FN_UNO_FIRST_SHARE_CONTENT:
-
-                case FN_UNO_FOOTER_ON:
-                case FN_UNO_FOOTER_BACKGROUND:
-                case FN_UNO_FOOTER_BOX:
-                case FN_UNO_FOOTER_LR_SPACE:
-                case FN_UNO_FOOTER_SHADOW:
-                case FN_UNO_FOOTER_BODY_DISTANCE:
-                case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE:
-                case FN_UNO_FOOTER_SHARE_CONTENT:
-                case FN_UNO_FOOTER_HEIGHT:
-                case FN_UNO_FOOTER_EAT_SPACING:
+                case SID_ATTR_PAGE_ON:
+                case RES_BACKGROUND:
+                case RES_BOX:
+                case RES_LR_SPACE:
+                case RES_SHADOW:
+                case RES_UL_SPACE:
+                case SID_ATTR_PAGE_DYNAMIC:
+                case SID_ATTR_PAGE_SHARED:
+                case SID_ATTR_PAGE_SHARED_FIRST:
+                case SID_ATTR_PAGE_SIZE:
+                case RES_HEADER_FOOTER_EAT_SPACING:
                 {
-                    SfxStyleSheetBasePool* pBasePool2 = ((SwXPageStyle*)this)->GetBasePool();
-                    pBasePool2->SetSearchMask(GetFamily());
-                    SfxStyleSheetBase* pBase2 = pBasePool2->Find(GetStyleName());
-                    if(pBase2)
+                    // These slots are used for Header, Footer and (partially) for PageStyle directly.
+                    // Check for Header/Footer entry
+                    const bool bHeader(rPropName.startsWith("Header"));
+                    const bool bFooter(rPropName.startsWith("Footer"));
+
+                    if(bHeader || bFooter)
+                    {
+                        // slot is a Header/Footer slot
+                        rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
+                        const SfxItemSet& rSet = xStyle->GetItemSet();
+                        const SvxSetItem* pSetItem;
+
+                        if(SFX_ITEM_SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, sal_False, (const SfxPoolItem**)&pSetItem))
+                        {
+                            // get from SfxItemSet of the corresponding SfxSetItem
+                            const SfxItemSet& rSetSet = pSetItem->GetItemSet();
+                            SfxItemSet* pRememberItemSet = aBase.replaceItemSet(&const_cast< SfxItemSet& >(rSetSet));
+                            pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
+                            aBase.replaceItemSet(pRememberItemSet);
+                        }
+                        else if(pEntry->nWID == SID_ATTR_PAGE_ON)
+                        {
+                            // header/footer is not available, thus off. Default is sal_False, though
+                            sal_Bool bRet = sal_False;
+                            pRet[nProp].setValue(&bRet, ::getCppuBooleanType());
+                        }
+                    }
+                    else
+                    {
+                        switch(pEntry->nWID)
+                        {
+                            case SID_ATTR_PAGE_DYNAMIC:
+                            case SID_ATTR_PAGE_SHARED:
+                            case SID_ATTR_PAGE_SHARED_FIRST:
+                            case SID_ATTR_PAGE_ON:
+                            case RES_HEADER_FOOTER_EAT_SPACING:
+                            {
+                                // these slots are exclusive to Header/Footer, thus this is an error
+                                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+                                break;
+                            }
+                            default:
+                            {
+                                // part of PageStyle, fallback to default
+                                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
+                            }
+                        }
+                    }
+
+                    break;
+                }
+
+                case XATTR_FILLBMP_SIZELOG:
+                case XATTR_FILLBMP_TILEOFFSETX:
+                case XATTR_FILLBMP_TILEOFFSETY:
+                case XATTR_FILLBMP_POSOFFSETX:
+                case XATTR_FILLBMP_POSOFFSETY:
+                case XATTR_FILLBMP_POS:
+                case XATTR_FILLBMP_SIZEX:
+                case XATTR_FILLBMP_SIZEY:
+                case XATTR_FILLBMP_STRETCH:
+                case XATTR_FILLBMP_TILE:
+                case OWN_ATTR_FILLBMP_MODE:
+                case XATTR_FILLCOLOR:
+                case XATTR_FILLBACKGROUND:
+                case XATTR_FILLBITMAP:
+                case XATTR_GRADIENTSTEPCOUNT:
+                case XATTR_FILLGRADIENT:
+                case XATTR_FILLHATCH:
+                case XATTR_FILLSTYLE:
+                case XATTR_FILLTRANSPARENCE:
+                case XATTR_FILLFLOATTRANSPARENCE:
+                case XATTR_SECONDARYFILLCOLOR:
+                {
+                    // This DrawingLayer FillStyle attributes can be part of Header, Footer and PageStyle
+                    // itself, so decide what to do using the name
+                    const bool bHeader(rPropName.startsWith("Header"));
+                    const bool bFooter(rPropName.startsWith("Footer"));
+
+                    if(bHeader || bFooter)
                     {
                         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
                         const SfxItemSet& rSet = xStyle->GetItemSet();
-                        bool bFooter = false;
-                        switch(pEntry->nWID)
-                        {
-                            case FN_UNO_FOOTER_ON:
-                                bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_ON:
-                            {
-                                //falls das SetItem nicht da ist, dann ist der Wert sal_False
-                                sal_Bool bRet = sal_False;
-                                pRet[nProp].setValue(&bRet, ::getCppuBooleanType());
-                                nRes = SID_ATTR_PAGE_ON;
-                            }
-                            break;
-                            case FN_UNO_FOOTER_BACKGROUND:      bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_BACKGROUND:      nRes = RES_BACKGROUND;
-                            break;
-                            case FN_UNO_FOOTER_BOX:             bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_BOX:             nRes = RES_BOX;
-                            break;
-                            case FN_UNO_FOOTER_LR_SPACE:        bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_LR_SPACE:        nRes = RES_LR_SPACE;
-                            break;
-                            case FN_UNO_FOOTER_SHADOW:          bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_SHADOW:          nRes = RES_SHADOW;
-                            break;
-                            case FN_UNO_FOOTER_BODY_DISTANCE:   bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_BODY_DISTANCE:   nRes = RES_UL_SPACE;
-                            break;
-                            case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
-                            break;
-                            case FN_UNO_FOOTER_SHARE_CONTENT:   bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
-                            break;
-                            case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
-                            break;
-                            case FN_UNO_FOOTER_HEIGHT:          bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
-                            break;
-                            case FN_UNO_FOOTER_EAT_SPACING: bFooter = true;
-                            // no break
-                            case FN_UNO_HEADER_EAT_SPACING: nRes = RES_HEADER_FOOTER_EAT_SPACING;
-                            break;
-                        }
                         const SvxSetItem* pSetItem;
-                        if(SFX_ITEM_SET == rSet.GetItemState(
-                                bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                                false, (const SfxPoolItem**)&pSetItem))
+                        if(SFX_ITEM_SET == rSet.GetItemState(bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET, sal_False, (const SfxPoolItem**)&pSetItem))
                         {
-                            const SfxItemSet& rTmpSet = pSetItem->GetItemSet();
-                            const SfxPoolItem* pItem = 0;
-                            rTmpSet.GetItemState(nRes, true, &pItem);
-                            if(!pItem && nRes != rTmpSet.GetPool()->GetSlotId(nRes))
-                                pItem = &rTmpSet.GetPool()->GetDefaultItem(nRes);
-                            if(pItem)
-                                pItem->QueryValue(pRet[nProp], pEntry->nMemberId);
+                            // set at SfxItemSet of the corresponding SfxSetItem
+                            const SfxItemSet& rSetSet = pSetItem->GetItemSet();
+                            SfxItemSet* pRememberItemSet = aBase.replaceItemSet(&const_cast< SfxItemSet& >(rSetSet));
+                            pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
+                            aBase.replaceItemSet(pRememberItemSet);
                         }
                     }
+                    else
+                    {
+                        // part of PageStyle, fallback to default
+                        pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
+                    }
+
+                    break;
                 }
-                break;
-                case  FN_UNO_HEADER       :
-                    goto Header;
-                case  FN_UNO_HEADER_LEFT  :
-                    bLeft = true; goto Header;
-                case  FN_UNO_HEADER_FIRST  :
-                    bFirst = true; goto Header;
-                case  FN_UNO_HEADER_RIGHT :
-                    goto Header;
-Header:
-                    bHeader = true;
-                    nRes = RES_HEADER; goto MakeObject;
-                case  FN_UNO_FOOTER       :
-                    goto Footer;
-                case  FN_UNO_FOOTER_LEFT  :
-                    bLeft = true; goto Footer;
-                case  FN_UNO_FOOTER_FIRST  :
-                    bFirst = true; goto Footer;
-                case  FN_UNO_FOOTER_RIGHT :
-Footer:
-                    nRes = RES_FOOTER;
-MakeObject:
+
+                case FN_UNO_HEADER:
+                case FN_UNO_HEADER_LEFT:
+                case FN_UNO_HEADER_RIGHT:
+                case FN_UNO_FOOTER:
+                case FN_UNO_FOOTER_LEFT:
+                case FN_UNO_FOOTER_RIGHT:
                 {
+                    //UUUU cleanups for readability (undos removed, rearranged)
+                    bool bHeader(false);
+
+                    switch(pEntry->nWID)
+                    {
+                        case FN_UNO_HEADER:       bHeader = true;  nRes = RES_HEADER; break;
+                        case FN_UNO_HEADER_LEFT:  bHeader = true;  nRes = RES_HEADER; bLeft = true;  break;
+                        case FN_UNO_HEADER_RIGHT: bHeader = true;  nRes = RES_HEADER; break;
+                        case FN_UNO_FOOTER:       bHeader = false; nRes = RES_FOOTER; break;
+                        case FN_UNO_FOOTER_LEFT:  bHeader = false; nRes = RES_FOOTER; bLeft = true;  break;
+                        case FN_UNO_FOOTER_RIGHT: bHeader = false; nRes = RES_FOOTER; break;
+                        default: break;
+                    }
+
                     const SwPageDesc& rDesc = aBase.GetOldPageDesc();
                     const SwFrmFmt* pFrmFmt = 0;
-                    bool bShare = (bHeader && rDesc.IsHeaderShared())||
-                                    (!bHeader && rDesc.IsFooterShared());
+                    bool bShare = (bHeader && rDesc.IsHeaderShared()) || (!bHeader && rDesc.IsFooterShared());
                     bool bShareFirst = rDesc.IsFirstShared();
                     // TextLeft returns the left content if there is one,
                     // Text and TextRight return the master content.
@@ -3679,32 +3866,45 @@ MakeObject:
                     {
                         pRet[nProp] <<= xRet;
                     }
+                    break;
                 }
-                break;
+
                 case FN_PARAM_FTN_INFO :
                 {
                     rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pBase ) );
                     const SfxItemSet& rSet = xStyle->GetItemSet();
                     const SfxPoolItem& rItem = rSet.Get(FN_PARAM_FTN_INFO);
-                    rItem.QueryValue(pRet[nProp], pEntry->nMemberId);
+                    rItem.QueryValue(pRet[nProp], nMemberId);
+                    break;
                 }
-                break;
                 default:
-                pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
+                {
+                    //UUUU
+                    pRet[nProp] = lcl_GetStyleProperty(*pEntry, *pPropSet, aBase, pBase, GetFamily(), GetDoc() );
+                    break;
+                }
             }
         }
         else if(IsDescriptor())
         {
             uno::Any* pAny = 0;
-            GetPropImpl()->GetProperty(pNames[nProp], pAny);
+            GetPropImpl()->GetProperty(rPropName, pAny);
+
             if ( !pAny )
-                GetPropImpl()->GetProperty ( pNames[nProp], mxStyleData, pRet[ nProp ] );
+            {
+                GetPropImpl()->GetProperty(rPropName, mxStyleData, pRet[nProp]);
+            }
             else
+            {
                 pRet[nProp] = *pAny;
+            }
         }
         else
+        {
             throw uno::RuntimeException();
+        }
     }
+
     return aRet;
 }
 
@@ -3915,8 +4115,11 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     const uno::Sequence< beans::PropertyValue >& Values )
         throw (uno::RuntimeException, std::exception)
 {
-    if( !pDocShell )
+    if (!pDocShell)
+    {
         throw uno::RuntimeException();
+    }
+
     const sal_uInt16* pRange = 0;
     const SfxItemPropertySet* pPropSet = 0;
     switch( eFamily )
@@ -3925,23 +4128,21 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         {
             pRange = aCharAutoFmtSetRange;
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CHAR_AUTO_STYLE);
+            break;
         }
-        break;
         case IStyleAccess::AUTO_STYLE_RUBY:
         {
             pRange = 0;//aTxtNodeSetRange;
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_RUBY_AUTO_STYLE);
+            break;
         }
-        break;
         case IStyleAccess::AUTO_STYLE_PARA:
         {
-            pRange = aTxtNodeSetRange;
+            pRange = aTxtNodeSetRange; //UUUU checked, already added support for [XATTR_FILL_FIRST, XATTR_FILL_LAST]
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARA_AUTO_STYLE);
+            break;
         }
-        break;
-
-        default:
-            ;
+        default: ;
     }
 
     if( !pPropSet)
@@ -3950,24 +4151,183 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
     SwAttrSet aSet( pDocShell->GetDoc()->GetAttrPool(), pRange );
     const beans::PropertyValue* pSeq = Values.getConstArray();
     sal_Int32 nLen = Values.getLength();
-    for( sal_Int32 i = 0; i < nLen; ++i )
+    const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == eFamily);
+
+    if(!bTakeCareOfDrawingLayerFillStyle)
     {
-        try
+        for( sal_Int32 i = 0; i < nLen; ++i )
         {
-            pPropSet->setPropertyValue( pSeq[i].Name, pSeq[i].Value, aSet );
-        }
-        catch (beans::UnknownPropertyException &)
-        {
-            OSL_FAIL( "Unknown property" );
-        }
-        catch (lang::IllegalArgumentException &)
-        {
-            OSL_FAIL( "Illegal argument" );
+            try
+            {
+                pPropSet->setPropertyValue( pSeq[i].Name, pSeq[i].Value, aSet );
+            }
+            catch (beans::UnknownPropertyException &)
+            {
+                OSL_FAIL( "Unknown property" );
+            }
+            catch (lang::IllegalArgumentException &)
+            {
+                OSL_FAIL( "Illegal argument" );
+            }
         }
     }
+    else
+    {
+        //UUUU set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
+        // to make cases in RES_BACKGROUND work correct; target *is* a style
+        // where this is the case
+        aSet.SetParent(&pDocShell->GetDoc()->GetDfltTxtFmtColl()->GetAttrSet());
 
+        //UUUU here the used DrawingLayer FillStyles are imported when family is
+        // equal to IStyleAccess::AUTO_STYLE_PARA, thus we will need to serve the
+        // used slots functionality here to do this correctly
+        const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
+
+        for( sal_Int32 i = 0; i < nLen; ++i )
+        {
+            const OUString& rPropName = pSeq[i].Name;
+            uno::Any aValue(pSeq[i].Value);
+            const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
+
+            if(!pEntry)
+            {
+                throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+            }
+
+            const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+            bool bDone(false);
+
+            // check for needed metric translation
+            if(pEntry->nMemberId & SFX_METRIC_ITEM)
+            {
+                bool bDoIt(true);
+
+                if(XATTR_FILLBMP_SIZEX == pEntry->nWID || XATTR_FILLBMP_SIZEY == pEntry->nWID)
+                {
+                    // exception: If these ItemTypes are used, do not convert when these are negative
+                    // since this means they are intended as percent values
+                    sal_Int32 nValue = 0;
+
+                    if(aValue >>= nValue)
+                    {
+                        bDoIt = nValue > 0;
+                    }
+                }
+
+                if(bDoIt)
+                {
+                    const SfxItemPool& rPool = pDocShell->GetDoc()->GetAttrPool();
+                    const SfxMapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
+
+                    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+                    {
+                        SvxUnoConvertFromMM(eMapUnit, aValue);
+                    }
+                }
+            }
+
+            switch(pEntry->nWID)
+            {
+                case XATTR_FILLGRADIENT:
+                case XATTR_FILLHATCH:
+                case XATTR_FILLBITMAP:
+                case XATTR_FILLFLOATTRANSPARENCE:
+                // not yet needed; activate when LineStyle support may be added
+                // case XATTR_LINESTART:
+                // case XATTR_LINEEND:
+                // case XATTR_LINEDASH:
+                {
+                    if(MID_NAME == nMemberId)
+                    {
+                        //UUUU add set commands for FillName items
+                        OUString aTempName;
+
+                        if(!(aValue >>= aTempName))
+                        {
+                            throw lang::IllegalArgumentException();
+                        }
+
+                        SvxShape::SetFillAttribute(pEntry->nWID, aTempName, aSet);
+                        bDone = true;
+                    }
+                    else if(MID_GRAFURL == nMemberId)
+                    {
+                        if(XATTR_FILLBITMAP == pEntry->nWID)
+                        {
+                            //UUUU Bitmap also has the MID_GRAFURL mode where a Bitmap URL is used
+                            const Graphic aNullGraphic;
+                            XFillBitmapItem aXFillBitmapItem(aSet.GetPool(), aNullGraphic);
+
+                            aXFillBitmapItem.PutValue(aValue, nMemberId);
+                            aSet.Put(aXFillBitmapItem);
+                            bDone = true;
+                        }
+                    }
+
+                    break;
+                }
+                case RES_BACKGROUND:
+                {
+                    //UUUU
+                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND));
+                    SvxBrushItem aChangedBrushItem(aOriginalBrushItem);
+
+                    aChangedBrushItem.PutValue(aValue, nMemberId);
+
+                    if(!(aChangedBrushItem == aOriginalBrushItem))
+                    {
+                        setSvxBrushItemAsFillAttributesToTargetSet(aChangedBrushItem, aSet);
+                    }
+
+                    bDone = true;
+                    break;
+                }
+                case OWN_ATTR_FILLBMP_MODE:
+                {
+                    //UUUU
+                    drawing::BitmapMode eMode;
+
+                    if(!(aValue >>= eMode))
+                    {
+                        sal_Int32 nMode = 0;
+
+                        if(!(aValue >>= nMode))
+                        {
+                            throw lang::IllegalArgumentException();
+                        }
+
+                        eMode = (drawing::BitmapMode)nMode;
+                    }
+
+                    aSet.Put(XFillBmpStretchItem(drawing::BitmapMode_STRETCH == eMode));
+                    aSet.Put(XFillBmpTileItem(drawing::BitmapMode_REPEAT == eMode));
+
+                    bDone = true;
+                    break;
+                }
+                default: break;
+            }
+
+            if(!bDone)
+            {
+                pPropSet->setPropertyValue( rPropName, aValue, aSet );
+            }
+         }
+
+        //UUUU clear parent again
+        aSet.SetParent(0);
+    }
+
+    //UUUU need to ensure uniqueness of evtl. added NameOrIndex items
+    // currently in principle only needed when bTakeCareOfDrawingLayerFillStyle,
+    // but does not hurt and is easily forgotten later eventually, so keep it
+    // as common case
+    pDocShell->GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aSet);
+
+    // AutomaticStyle creation
     SfxItemSet_Pointer_t pSet = pDocShell->GetDoc()->GetIStyleAccess().cacheAutomaticStyle( aSet, eFamily );
     uno::Reference<style::XAutoStyle> xRet = new SwXAutoStyle(pDocShell->GetDoc(), pSet, eFamily);
+
     return xRet;
 }
 
@@ -4070,11 +4430,23 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
     return aRet;
 }
 
-SwXAutoStyle::SwXAutoStyle( SwDoc* pDoc, SfxItemSet_Pointer_t pInitSet, IStyleAccess::SwAutoStyleFamily eFam )
-: pSet( pInitSet ), eFamily( eFam )
+//UUUU SwXAutoStyle with the family IStyleAccess::AUTO_STYLE_PARA (or
+// PROPERTY_MAP_PARA_AUTO_STYLE) now uses DrawingLayer FillStyles to allow
+// unified paragraph background fill, thus the UNO API implementation has to
+// support the needed slots for these. This seems to be used only for reading
+// (no setPropertyValue implementation here), so maybe specialized for saving
+// the Writer Doc to ODF
+
+SwXAutoStyle::SwXAutoStyle(
+    SwDoc* pDoc,
+    SfxItemSet_Pointer_t pInitSet,
+    IStyleAccess::SwAutoStyleFamily eFam)
+:   mpSet(pInitSet),
+    meFamily(eFam),
+    mrDoc(*pDoc)
 {
     // Register ourselves as a listener to the document (via the page descriptor)
-    pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
+    mrDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
 SwXAutoStyle::~SwXAutoStyle()
@@ -4085,14 +4457,16 @@ void SwXAutoStyle::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
-        pSet.reset();
+    {
+        mpSet.reset();
+    }
 }
 
 uno::Reference< beans::XPropertySetInfo > SwXAutoStyle::getPropertySetInfo(  )
                 throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< beans::XPropertySetInfo >  xRet;
-    switch( eFamily )
+    switch( meFamily )
     {
         case IStyleAccess::AUTO_STYLE_CHAR:
         {
@@ -4197,43 +4571,138 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
     throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
-    if( !pSet.get() )
+    if( !mpSet.get() )
+    {
         throw uno::RuntimeException();
-    // query_item
+    }
 
+    // query_item
     sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;
-    switch(eFamily)
+    switch(meFamily)
     {
         case IStyleAccess::AUTO_STYLE_CHAR  : nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;  break;
         case IStyleAccess::AUTO_STYLE_RUBY  : nPropSetId = PROPERTY_MAP_RUBY_AUTO_STYLE;  break;
         case IStyleAccess::AUTO_STYLE_PARA  : nPropSetId = PROPERTY_MAP_PARA_AUTO_STYLE;  break;
-        default:
-            ;
+        default: ;
     }
 
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
     const OUString* pNames = rPropertyNames.getConstArray();
 
-    sal_Int32 nLen = rPropertyNames.getLength();
+    const sal_Int32 nLen(rPropertyNames.getLength());
     uno::Sequence< uno::Any > aRet( nLen );
     uno::Any* pValues = aRet.getArray();
-
-    SfxItemSet& rSet = *pSet.get();
+    const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == meFamily);
 
     for( sal_Int32 i = 0; i < nLen; ++i )
     {
         const OUString sPropName = pNames[i];
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
         if(!pEntry)
-            throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast < cppu::OWeakObject * > ( this ) );
-        else if ( RES_TXTATR_AUTOFMT == pEntry->nWID || RES_AUTO_STYLE == pEntry->nWID )
         {
-            pValues[i] <<= StylePool::nameOf( pSet );
+            throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast < cppu::OWeakObject * > ( this ) );
         }
-        else
-            pPropSet->getPropertyValue( *pEntry, rSet, pValues[i] );
+
+        uno::Any aTarget;
+        bool bDone(false);
+
+        if ( RES_TXTATR_AUTOFMT == pEntry->nWID || RES_AUTO_STYLE == pEntry->nWID )
+        {
+            pValues[i] <<= StylePool::nameOf( mpSet );
+            bDone = true;
+        }
+        else if(bTakeCareOfDrawingLayerFillStyle)
+        {
+            //UUUU add support for DrawingLayer FillStyle slots
+            switch(pEntry->nWID)
+            {
+                case RES_BACKGROUND:
+                {
+                    const SvxBrushItem aOriginalBrushItem(getSvxBrushItemFromSourceSet(*mpSet, RES_BACKGROUND));
+                    const sal_uInt8 nMemberId(pEntry->nMemberId & (~SFX_METRIC_ITEM));
+
+                    if(!aOriginalBrushItem.QueryValue(aTarget, nMemberId))
+                    {
+                        OSL_ENSURE(false, "Error getting attribute from RES_BACKGROUND (!)");
+                    }
+
+                    bDone = true;
+                    break;
+                }
+                case OWN_ATTR_FILLBMP_MODE:
+                {
+                    const XFillBmpStretchItem* pStretchItem = dynamic_cast< const XFillBmpStretchItem* >(&mpSet->Get(XATTR_FILLBMP_STRETCH));
+                    const XFillBmpTileItem* pTileItem = dynamic_cast< const XFillBmpTileItem* >(&mpSet->Get(XATTR_FILLBMP_TILE));
+
+                    if( pTileItem && pTileItem->GetValue() )
+                    {
+                        aTarget <<= drawing::BitmapMode_REPEAT;
+                    }
+                    else if( pStretchItem && pStretchItem->GetValue() )
+                    {
+                        aTarget <<= drawing::BitmapMode_STRETCH;
+                    }
+                    else
+                    {
+                        aTarget <<= drawing::BitmapMode_NO_REPEAT;
+                    }
+
+                    bDone = true;
+                    break;
+                }
+            }
+        }
+
+        if(!bDone)
+        {
+            pPropSet->getPropertyValue( *pEntry, *mpSet, aTarget );
+        }
+
+        if(bTakeCareOfDrawingLayerFillStyle)
+        {
+            if(pEntry->aType == ::getCppuType((const sal_Int16*)0) && pEntry->aType != aTarget.getValueType())
+            {
+                // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
+                sal_Int32 nValue = 0;
+                aTarget >>= nValue;
+                aTarget <<= (sal_Int16)nValue;
+            }
+
+            // check for needed metric translation
+            if(pEntry->nMemberId & SFX_METRIC_ITEM)
+            {
+                bool bDoIt(true);
+
+                if(XATTR_FILLBMP_SIZEX == pEntry->nWID || XATTR_FILLBMP_SIZEY == pEntry->nWID)
+                {
+                    // exception: If these ItemTypes are used, do not convert when these are negative
+                    // since this means they are intended as percent values
+                    sal_Int32 nValue = 0;
+
+                    if(aTarget >>= nValue)
+                    {
+                        bDoIt = nValue > 0;
+                    }
+                }
+
+                if(bDoIt)
+                {
+                    const SfxItemPool& rPool = mrDoc.GetAttrPool();
+                    const SfxMapUnit eMapUnit(rPool.GetMetric(pEntry->nWID));
+
+                    if(eMapUnit != SFX_MAPUNIT_100TH_MM)
+                    {
+                        SvxUnoConvertToMM(eMapUnit, aTarget);
+                    }
+                }
+            }
+        }
+
+        // add value
+        pValues[i] = aTarget;
     }
+
     return aRet;
 }
 
@@ -4313,34 +4782,79 @@ uno::Sequence< beans::PropertyState > SwXAutoStyle::getPropertyStates(
         const uno::Sequence< OUString >& rPropertyNames )
             throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
-    if( !pSet.get() )
+    if (!mpSet.get())
+    {
         throw uno::RuntimeException();
+    }
+
     SolarMutexGuard aGuard;
     uno::Sequence< beans::PropertyState > aRet(rPropertyNames.getLength());
     beans::PropertyState* pStates = aRet.getArray();
     const OUString* pNames = rPropertyNames.getConstArray();
 
     sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;
-    switch(eFamily)
+    switch(meFamily)
     {
         case IStyleAccess::AUTO_STYLE_CHAR  : nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;  break;
         case IStyleAccess::AUTO_STYLE_RUBY  : nPropSetId = PROPERTY_MAP_RUBY_AUTO_STYLE;  break;
         case IStyleAccess::AUTO_STYLE_PARA  : nPropSetId = PROPERTY_MAP_PARA_AUTO_STYLE;  break;
-        default:
-            ;
+        default: ;
     }
 
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
-    SfxItemSet& rSet = *pSet.get();
+    const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == meFamily);
+
     for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
     {
         const OUString sPropName = pNames[i];
         const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(sPropName);
         if(!pEntry)
+        {
             throw beans::UnknownPropertyException("Unknown property: " + sPropName, static_cast < cppu::OWeakObject * > ( this ) );
-        pStates[i] = pPropSet->getPropertyState(*pEntry, rSet );
+        }
+
+        bool bDone(false);
+
+        if(bTakeCareOfDrawingLayerFillStyle)
+        {
+            //UUUU DrawingLayer PropertyStyle support
+            switch(pEntry->nWID)
+            {
+                case OWN_ATTR_FILLBMP_MODE:
+                {
+                    if(SFX_ITEM_SET == mpSet->GetItemState(XATTR_FILLBMP_STRETCH, false)
+                        || SFX_ITEM_SET == mpSet->GetItemState(XATTR_FILLBMP_TILE, false))
+                    {
+                        pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                    }
+                    else
+                    {
+                        pStates[i] = beans::PropertyState_AMBIGUOUS_VALUE;
+                    }
+
+                    bDone = true;
+                    break;
+                }
+                case RES_BACKGROUND:
+                {
+                    if(SWUnoHelper::needToMapFillItemsToSvxBrushItemTypes(*mpSet))
+                    {
+                        pStates[i] = beans::PropertyState_DIRECT_VALUE;
+                        bDone = true;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        if(!bDone)
+        {
+            pStates[i] = pPropSet->getPropertyState(*pEntry, *mpSet );
+        }
     }
+
     return aRet;
 }
 
@@ -4350,9 +4864,56 @@ void SwXAutoStyle::setAllPropertiesToDefault(  )
 }
 
 void SwXAutoStyle::setPropertiesToDefault(
-        const uno::Sequence< OUString >& /*aPropertyNames*/ )
+        const uno::Sequence< OUString >& rPropertyNames )
             throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
+    if( !mpSet.get() )
+    {
+        throw uno::RuntimeException();
+    }
+
+    const bool bTakeCareOfDrawingLayerFillStyle(IStyleAccess::AUTO_STYLE_PARA == meFamily);
+
+    if(!bTakeCareOfDrawingLayerFillStyle)
+    {
+        return;
+    }
+
+    //UUUU support DrawingLayer FillStyle slots from here on
+    SolarMutexGuard aGuard;
+    const OUString* pNames = rPropertyNames.getConstArray();
+    sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;
+
+    switch(meFamily)
+    {
+        case IStyleAccess::AUTO_STYLE_CHAR  : nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;  break;
+        case IStyleAccess::AUTO_STYLE_RUBY  : nPropSetId = PROPERTY_MAP_RUBY_AUTO_STYLE;  break;
+        case IStyleAccess::AUTO_STYLE_PARA  : nPropSetId = PROPERTY_MAP_PARA_AUTO_STYLE;  break;
+        default: ;
+    }
+
+    const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
+    const SfxItemPropertyMap& rMap = pPropSet->getPropertyMap();
+
+    for(sal_Int32 i = 0; i < rPropertyNames.getLength(); i++)
+    {
+        const OUString& rPropName = pNames[i];
+        const SfxItemPropertySimpleEntry* pEntry = rMap.getByName(rPropName);
+
+        if(!pEntry)
+        {
+            throw beans::UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropName, static_cast < cppu::OWeakObject * > ( this ) );
+        }
+
+        switch(pEntry->nWID)
+        {
+            case OWN_ATTR_FILLBMP_MODE:
+            {
+                mpSet->ClearItem(XATTR_FILLBMP_STRETCH);
+                mpSet->ClearItem(XATTR_FILLBMP_TILE);
+            }
+        }
+    }
 }
 
 uno::Sequence< uno::Any > SwXAutoStyle::getPropertyDefaults(
@@ -4366,26 +4927,25 @@ uno::Sequence< uno::Any > SwXAutoStyle::getPropertyDefaults(
 
 uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (uno::RuntimeException, std::exception)
 {
-    if( !pSet.get() )
+    if( !mpSet.get() )
         throw uno::RuntimeException();
     SolarMutexGuard aGuard;
     std::vector< beans::PropertyValue > aPropertyVector;
 
     sal_Int8 nPropSetId = 0;
-    switch(eFamily)
+    switch(meFamily)
     {
         case IStyleAccess::AUTO_STYLE_CHAR  : nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;  break;
         case IStyleAccess::AUTO_STYLE_RUBY  : nPropSetId = PROPERTY_MAP_RUBY_AUTO_STYLE;  break;
         case IStyleAccess::AUTO_STYLE_PARA  : nPropSetId = PROPERTY_MAP_PARA_AUTO_STYLE;  break;
-        default:
-            ;
+        default: ;
     }
 
     const SfxItemPropertySet* pPropSet = aSwMapProvider.GetPropertySet(nPropSetId);
     const SfxItemPropertyMap &rMap = pPropSet->getPropertyMap();
     PropertyEntryVector_t aPropVector = rMap.getPropertyEntries();
 
-    SfxItemSet& rSet = *pSet.get();
+    SfxItemSet& rSet = *mpSet.get();
     SfxItemIter aIter(rSet);
     const SfxPoolItem* pItem = aIter.FirstItem();
 

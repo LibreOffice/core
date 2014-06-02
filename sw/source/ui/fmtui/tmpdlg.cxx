@@ -194,10 +194,17 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
             m_nOutlineId = AddTabPage("outline", SwParagraphNumTabPage::Create,
                                     SwParagraphNumTabPage::GetRanges);
             m_nDropCapsId = AddTabPage("dropcaps", SwDropCapsPage::Create,
-                                        SwDropCapsPage::GetRanges );
-            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+                           SwDropCapsPage::GetRanges );
+
+            //UUUU add Area and Transparence TabPages
+            m_nAreaId = AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
+            m_nTransparenceId = AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+
+            //UUUU remove?
+            //OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            //OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+            //m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+
             OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), "GetTabPageCreatorFunc fail!");
             OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ), "GetTabPageRangesFunc fail!");
             m_nBorderId = AddTabPage("borders", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BORDER ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BORDER ) );
@@ -242,8 +249,9 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
                                         SwFrmAddPage::GetRanges);
             m_nWrapId = AddTabPage("wrap", SwWrapTabPage::Create,
                                         SwWrapTabPage::GetRanges);
-            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+            //UUUU remove?
+            //OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            //OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
 
             //UUUU remove?
             //m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
@@ -266,9 +274,15 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
         // page styles
         case SFX_STYLE_FAMILY_PAGE:
         {
-            OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
-            OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
-            m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+            //UUUU remove?
+            //OSL_ENSURE(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageCreatorFunc fail!");
+            //OSL_ENSURE(pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ), "GetTabPageRangesFunc fail!");
+            //m_nBackgroundId = AddTabPage("background", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_BACKGROUND ) );
+
+            //UUUU add Area and Transparence TabPages
+            m_nAreaId = AddTabPage("area", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_AREA ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_AREA ));
+            m_nTransparenceId = AddTabPage("transparence", pFact->GetTabPageCreatorFunc( RID_SVXPAGE_TRANSPARENCE ), pFact->GetTabPageRangesFunc( RID_SVXPAGE_TRANSPARENCE ) );
+
             m_nHeaderId = AddTabPage("header",  SvxHeaderPage::Create, SvxHeaderPage::GetRanges);
             m_nFooterId = AddTabPage("footer", SvxFooterPage::Create, SvxFooterPage::GetRanges);
 
@@ -501,7 +515,9 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
                     pFirstStyle = pStyleSheetPool->Next();
                 }
             }
-            aSet.Put (SfxStringListItem(SID_COLLECT_LIST, &aList));
+            //UUUU set DrawingLayer FillStyles active
+            aSet.Put(SfxBoolItem(SID_DRAWINGLAYER_FILLSTYLES, true));
+            aSet.Put(SfxStringListItem(SID_COLLECT_LIST, &aList));
             rPage.PageCreated(aSet);
         }
     }
@@ -556,12 +572,24 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     else if (nId == m_nHeaderId)
     {
         if(0 == (nHtmlMode & HTMLMODE_ON ))
+        {
             ((SvxHeaderPage&)rPage).EnableDynamicSpacing();
+        }
+
+        //UUUU set DrawingLayer FillStyles active
+        aSet.Put(SfxBoolItem(SID_DRAWINGLAYER_FILLSTYLES, true));
+        rPage.PageCreated(aSet);
     }
     else if (nId == m_nFooterId)
     {
         if(0 == (nHtmlMode & HTMLMODE_ON ))
+        {
             ((SvxFooterPage&)rPage).EnableDynamicSpacing();
+        }
+
+        //UUUU set DrawingLayer FillStyles active
+        aSet.Put(SfxBoolItem(SID_DRAWINGLAYER_FILLSTYLES, true));
+        rPage.PageCreated(aSet);
     }
     else if (nId == m_nBorderId)
     {
@@ -583,16 +611,12 @@ void SwTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     // demand, but could also be directly added from the DrawModel.
     else if (nId == m_nAreaId)
     {
-        SfxItemSet aNew(*aSet.GetPool(),
-                        SID_COLOR_TABLE, SID_BITMAP_LIST,
-                        SID_OFFER_IMPORT, SID_OFFER_IMPORT, 0, 0);
-
-        aNew.Put(GetStyleSheet().GetItemSet());
+        aSet.Put(GetStyleSheet().GetItemSet());
 
         // add flag for direct graphic content selection
-        aNew.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
+        aSet.Put(SfxBoolItem(SID_OFFER_IMPORT, true));
 
-        rPage.PageCreated(aNew);
+        rPage.PageCreated(aSet);
     }
     else if (nId == m_nTransparenceId)
     {

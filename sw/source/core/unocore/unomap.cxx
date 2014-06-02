@@ -639,6 +639,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { OUString(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID,     0},
                     { OUString(UNO_NAME_CHAR_STYLE_NAMES), FN_UNO_CHARFMT_SEQUENCE,  cppu::UnoType< cppu::UnoSequenceType<OUString> >::get(),     PropertyAttribute::MAYBEVOID,     0},
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    //UUUU Added for paragraph backgrounds, this is for paragraph itself
+                    FILL_PROPERTIES_SW
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aParagraphMap_Impl;
@@ -666,6 +672,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     TABSTOPS_MAP_ENTRY
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { OUString(UNO_NAME_PARA_AUTO_STYLE_NAME), RES_AUTO_STYLE,     cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID,     0},
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    //UUUU Added for paragraph backgrounds, this is for Paragraph AutoStyles
+                    FILL_PROPERTIES_SW
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aAutoParaStyleMap;
@@ -806,6 +818,12 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 static SfxItemPropertyMapEntry const aParaStyleMap [] =
                 {
                     COMMON_PARA_STYLE_PROPERTIES
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    //UUUU Added for paragraph backgrounds, this is for Paragraph Styles
+                    FILL_PROPERTIES_SW
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aParaStyleMap;
@@ -817,6 +835,14 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 {
                     COMMON_PARA_STYLE_PROPERTIES
                     { OUString(UNO_NAME_PARA_STYLE_CONDITIONS), FN_UNO_PARA_STYLE_CONDITIONS, cppu::UnoType< cppu::UnoSequenceType<css::beans::NamedValue> >::get(), PropertyAttribute::MAYBEVOID, 0},
+
+                    //UUUU added FillProperties for SW, same as FILL_PROPERTIES in svx
+                    // but need own defines in Writer due to later association of strings
+                    // and uno types (see loop at end of this method and definition of SW_PROP_NMID)
+                    // This entry is for adding that properties to style import/export
+                    //UUUU Added for paragraph backgrounds, this is for Paragraph Styles
+                    FILL_PROPERTIES_SW
+
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aParaStyleMap;
@@ -940,57 +966,62 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { OUString(UNO_NAME_SHADOW_FORMAT), RES_SHADOW,             cppu::UnoType<css::table::ShadowFormat>::get(),   PROPERTY_NONE, CONVERT_TWIPS},
                     { OUString(UNO_NAME_SHADOW_TRANSPARENCE), RES_SHADOW,       cppu::UnoType<sal_Int16>::get(),       PROPERTY_NONE, MID_SHADOW_TRANSPARENCE},
 
-                    { OUString(UNO_NAME_HEADER_BACK_COLOR), FN_UNO_HEADER_BACKGROUND,   cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
-                //  { OUString(UNO_NAME_HEADER_GRAPHIC), FN_UNO_HEADER_BACKGROUND,  &,                              PROPERTY_NONE, MID_GRAPHIC
-                    { OUString(UNO_NAME_HEADER_GRAPHIC_URL), FN_UNO_HEADER_BACKGROUND,          cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
-                    { OUString(UNO_NAME_HEADER_GRAPHIC_FILTER), FN_UNO_HEADER_BACKGROUND,           cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
-                    { OUString(UNO_NAME_HEADER_GRAPHIC_LOCATION), FN_UNO_HEADER_BACKGROUND,     cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
-                    { OUString(UNO_NAME_HEADER_LEFT_MARGIN), FN_UNO_HEADER_LR_SPACE,    cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
-                    { OUString(UNO_NAME_HEADER_RIGHT_MARGIN), FN_UNO_HEADER_LR_SPACE,   cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
-                    { OUString(UNO_NAME_HEADER_BACK_TRANSPARENT), FN_UNO_HEADER_BACKGROUND,     cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
-                    { OUString(UNO_NAME_HEADER_LEFT_BORDER), FN_UNO_HEADER_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, LEFT_BORDER  |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_HEADER_RIGHT_BORDER), FN_UNO_HEADER_BOX,                cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_HEADER_TOP_BORDER), FN_UNO_HEADER_BOX,              cppu::UnoType<css::table::BorderLine>::get(),  0, TOP_BORDER   |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_HEADER_BOTTOM_BORDER), FN_UNO_HEADER_BOX,               cppu::UnoType<css::table::BorderLine>::get(),  0, BOTTOM_BORDER|CONVERT_TWIPS },
-                    { OUString(UNO_NAME_HEADER_BORDER_DISTANCE), FN_UNO_HEADER_BOX,    cppu::UnoType<sal_Int32>::get(),    PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },
-                    { OUString(UNO_NAME_HEADER_LEFT_BORDER_DISTANCE), FN_UNO_HEADER_BOX,                cppu::UnoType<sal_Int32>::get(),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_HEADER_RIGHT_BORDER_DISTANCE), FN_UNO_HEADER_BOX,               cppu::UnoType<sal_Int32>::get(),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_HEADER_TOP_BORDER_DISTANCE), FN_UNO_HEADER_BOX,             cppu::UnoType<sal_Int32>::get(),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_HEADER_BOTTOM_BORDER_DISTANCE), FN_UNO_HEADER_BOX,              cppu::UnoType<sal_Int32>::get(),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
-                    { OUString(UNO_NAME_HEADER_SHADOW_FORMAT), FN_UNO_HEADER_SHADOW,        cppu::UnoType<css::table::ShadowFormat>::get(),   PROPERTY_NONE, CONVERT_TWIPS},
-                    { OUString(UNO_NAME_HEADER_BODY_DISTANCE), FN_UNO_HEADER_BODY_DISTANCE,cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE ,MID_LO_MARGIN|CONVERT_TWIPS       },
-                    { OUString(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT), FN_UNO_HEADER_IS_DYNAMIC_DISTANCE,cppu::UnoType<bool>::get(),            PROPERTY_NONE ,0         },
-                    { OUString(UNO_NAME_HEADER_IS_SHARED), FN_UNO_HEADER_SHARE_CONTENT,cppu::UnoType<bool>::get(),          PROPERTY_NONE ,0         },
-                    { OUString(UNO_NAME_HEADER_HEIGHT), FN_UNO_HEADER_HEIGHT,       cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
-                    { OUString(UNO_NAME_HEADER_IS_ON), FN_UNO_HEADER_ON,            cppu::UnoType<bool>::get(),         PROPERTY_NONE ,0         },
-                    { OUString(UNO_NAME_HEADER_DYNAMIC_SPACING), FN_UNO_HEADER_EAT_SPACING,            cppu::UnoType<bool>::get(),         PropertyAttribute::MAYBEVOID ,0         },
+                    //UUU use real WhichIDs for Header, no longer use extra-defined WhichIDs which make handling harder as needed.
+                    // The implementation will decide if these are part of Header/Footer or PageStyle depending on the SlotName,
+                    // more precisely on the first characters. Thus it is necessary that these are 'Header' for the Header slots
+                    { OUString(UNO_NAME_HEADER_BACK_COLOR), RES_BACKGROUND,   cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
+                //  { OUString(UNO_NAME_HEADER_GRAPHIC), RES_BACKGROUND,  &,                              PROPERTY_NONE, MID_GRAPHIC
+                    { OUString(UNO_NAME_HEADER_GRAPHIC_URL), RES_BACKGROUND,          cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
+                    { OUString(UNO_NAME_HEADER_GRAPHIC_FILTER), RES_BACKGROUND,           cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
+                    { OUString(UNO_NAME_HEADER_GRAPHIC_LOCATION), RES_BACKGROUND,     cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
+                    { OUString(UNO_NAME_HEADER_LEFT_MARGIN), RES_LR_SPACE,    cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
+                    { OUString(UNO_NAME_HEADER_RIGHT_MARGIN), RES_LR_SPACE,   cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
+                    { OUString(UNO_NAME_HEADER_BACK_TRANSPARENT), RES_BACKGROUND,     cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
+                    { OUString(UNO_NAME_HEADER_LEFT_BORDER), RES_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, LEFT_BORDER  |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_HEADER_RIGHT_BORDER), RES_BOX,                cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_HEADER_TOP_BORDER), RES_BOX,              cppu::UnoType<css::table::BorderLine>::get(),  0, TOP_BORDER   |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_HEADER_BOTTOM_BORDER), RES_BOX,               cppu::UnoType<css::table::BorderLine>::get(),  0, BOTTOM_BORDER|CONVERT_TWIPS },
+                    { OUString(UNO_NAME_HEADER_BORDER_DISTANCE), RES_BOX,    cppu::UnoType<sal_Int32>::get(),    PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },
+                    { OUString(UNO_NAME_HEADER_LEFT_BORDER_DISTANCE), RES_BOX,                cppu::UnoType<sal_Int32>::get(),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_HEADER_RIGHT_BORDER_DISTANCE), RES_BOX,               cppu::UnoType<sal_Int32>::get(),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_HEADER_TOP_BORDER_DISTANCE), RES_BOX,             cppu::UnoType<sal_Int32>::get(),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_HEADER_BOTTOM_BORDER_DISTANCE), RES_BOX,              cppu::UnoType<sal_Int32>::get(),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
+                    { OUString(UNO_NAME_HEADER_SHADOW_FORMAT), RES_SHADOW,        cppu::UnoType<css::table::ShadowFormat>::get(),   PROPERTY_NONE, CONVERT_TWIPS},
+                    { OUString(UNO_NAME_HEADER_BODY_DISTANCE), RES_UL_SPACE,    cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE ,MID_LO_MARGIN|CONVERT_TWIPS       },
+                    { OUString(UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT), SID_ATTR_PAGE_DYNAMIC,   cppu::UnoType<bool>::get(),            PROPERTY_NONE ,0         },
+                    { OUString(UNO_NAME_HEADER_IS_SHARED), SID_ATTR_PAGE_SHARED,    cppu::UnoType<bool>::get(),          PROPERTY_NONE ,0         },
+                    { OUString(UNO_NAME_HEADER_HEIGHT), SID_ATTR_PAGE_SIZE,       cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
+                    { OUString(UNO_NAME_HEADER_IS_ON), SID_ATTR_PAGE_ON,            cppu::UnoType<bool>::get(),         PROPERTY_NONE ,0         },
+                    { OUString(UNO_NAME_HEADER_DYNAMIC_SPACING), RES_HEADER_FOOTER_EAT_SPACING,            cppu::UnoType<bool>::get(),         PropertyAttribute::MAYBEVOID ,0         },
 
-                    { OUString(UNO_NAME_FIRST_IS_SHARED), FN_UNO_FIRST_SHARE_CONTENT,cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
 
-                    { OUString(UNO_NAME_FOOTER_BACK_COLOR), FN_UNO_FOOTER_BACKGROUND,   cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
-                //  { OUString(UNO_NAME_FOOTER_GRAPHIC), FN_UNO_FOOTER_BACKGROUND,      &,                              PROPERTY_NONE, MID_GRAPHIC
-                    { OUString(UNO_NAME_FOOTER_GRAPHIC_URL), FN_UNO_FOOTER_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
-                    { OUString(UNO_NAME_FOOTER_GRAPHIC_FILTER), FN_UNO_FOOTER_BACKGROUND,       cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
-                    { OUString(UNO_NAME_FOOTER_GRAPHIC_LOCATION), FN_UNO_FOOTER_BACKGROUND,     cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
-                    { OUString(UNO_NAME_FOOTER_LEFT_MARGIN), FN_UNO_FOOTER_LR_SPACE,    cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
-                    { OUString(UNO_NAME_FOOTER_RIGHT_MARGIN), FN_UNO_FOOTER_LR_SPACE,   cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
-                    { OUString(UNO_NAME_FOOTER_BACK_TRANSPARENT), FN_UNO_FOOTER_BACKGROUND,     cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
-                    { OUString(UNO_NAME_FOOTER_LEFT_BORDER), FN_UNO_FOOTER_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, LEFT_BORDER  |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_FOOTER_RIGHT_BORDER), FN_UNO_FOOTER_BOX,                cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_FOOTER_TOP_BORDER), FN_UNO_FOOTER_BOX,              cppu::UnoType<css::table::BorderLine>::get(),  0, TOP_BORDER   |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_FOOTER_BOTTOM_BORDER), FN_UNO_FOOTER_BOX,               cppu::UnoType<css::table::BorderLine>::get(),  0, BOTTOM_BORDER|CONVERT_TWIPS },
-                    { OUString(UNO_NAME_FOOTER_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,    cppu::UnoType<sal_Int32>::get(),    PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },
-                    { OUString(UNO_NAME_FOOTER_LEFT_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,                cppu::UnoType<sal_Int32>::get(),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_FOOTER_RIGHT_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,               cppu::UnoType<sal_Int32>::get(),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_FOOTER_TOP_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,             cppu::UnoType<sal_Int32>::get(),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
-                    { OUString(UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE), FN_UNO_FOOTER_BOX,              cppu::UnoType<sal_Int32>::get(),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
-                    { OUString(UNO_NAME_FOOTER_SHADOW_FORMAT), FN_UNO_FOOTER_SHADOW,        cppu::UnoType<css::table::ShadowFormat>::get(),   PROPERTY_NONE, CONVERT_TWIPS},
-                    { OUString(UNO_NAME_FOOTER_BODY_DISTANCE), FN_UNO_FOOTER_BODY_DISTANCE,cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE ,MID_UP_MARGIN|CONVERT_TWIPS       },
-                    { OUString(UNO_NAME_FOOTER_IS_DYNAMIC_HEIGHT), FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE,cppu::UnoType<bool>::get(),            PROPERTY_NONE ,0         },
-                    { OUString(UNO_NAME_FOOTER_IS_SHARED), FN_UNO_FOOTER_SHARE_CONTENT,cppu::UnoType<bool>::get(),          PROPERTY_NONE ,0         },
-                    { OUString(UNO_NAME_FOOTER_HEIGHT), FN_UNO_FOOTER_HEIGHT,       cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
-                    { OUString(UNO_NAME_FOOTER_IS_ON), FN_UNO_FOOTER_ON,            cppu::UnoType<bool>::get(),         PROPERTY_NONE ,0         },
-                    { OUString(UNO_NAME_FOOTER_DYNAMIC_SPACING), FN_UNO_FOOTER_EAT_SPACING,            cppu::UnoType<bool>::get(),         PropertyAttribute::MAYBEVOID ,0         },
+                    { OUString(UNO_NAME_FIRST_IS_SHARED), SID_ATTR_PAGE_SHARED_FIRST,   cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+
+                    //UUU use real WhichIDs for Footer, see Header (above) for more infos
+                    { OUString(UNO_NAME_FOOTER_BACK_COLOR), RES_BACKGROUND,   cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_BACK_COLOR        },
+                //  { OUString(UNO_NAME_FOOTER_GRAPHIC), RES_BACKGROUND,      &,                              PROPERTY_NONE, MID_GRAPHIC
+                    { OUString(UNO_NAME_FOOTER_GRAPHIC_URL), RES_BACKGROUND,      cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_URL    },
+                    { OUString(UNO_NAME_FOOTER_GRAPHIC_FILTER), RES_BACKGROUND,       cppu::UnoType<OUString>::get(), PROPERTY_NONE ,MID_GRAPHIC_FILTER    },
+                    { OUString(UNO_NAME_FOOTER_GRAPHIC_LOCATION), RES_BACKGROUND,     cppu::UnoType<css::style::GraphicLocation>::get(), PROPERTY_NONE ,MID_GRAPHIC_POSITION},
+                    { OUString(UNO_NAME_FOOTER_LEFT_MARGIN), RES_LR_SPACE,    cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_L_MARGIN|CONVERT_TWIPS},
+                    { OUString(UNO_NAME_FOOTER_RIGHT_MARGIN), RES_LR_SPACE,   cppu::UnoType<sal_Int32>::get(), PROPERTY_NONE, MID_R_MARGIN|CONVERT_TWIPS},
+                    { OUString(UNO_NAME_FOOTER_BACK_TRANSPARENT), RES_BACKGROUND,     cppu::UnoType<bool>::get(),         PROPERTY_NONE ,MID_GRAPHIC_TRANSPARENT       },
+                    { OUString(UNO_NAME_FOOTER_LEFT_BORDER), RES_BOX,             cppu::UnoType<css::table::BorderLine>::get(),  0, LEFT_BORDER  |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_FOOTER_RIGHT_BORDER), RES_BOX,                cppu::UnoType<css::table::BorderLine>::get(),  0, RIGHT_BORDER |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_FOOTER_TOP_BORDER), RES_BOX,              cppu::UnoType<css::table::BorderLine>::get(),  0, TOP_BORDER   |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_FOOTER_BOTTOM_BORDER), RES_BOX,               cppu::UnoType<css::table::BorderLine>::get(),  0, BOTTOM_BORDER|CONVERT_TWIPS },
+                    { OUString(UNO_NAME_FOOTER_BORDER_DISTANCE), RES_BOX,    cppu::UnoType<sal_Int32>::get(),    PropertyAttribute::MAYBEVOID, BORDER_DISTANCE|CONVERT_TWIPS },
+                    { OUString(UNO_NAME_FOOTER_LEFT_BORDER_DISTANCE), RES_BOX,                cppu::UnoType<sal_Int32>::get(),   0, LEFT_BORDER_DISTANCE  |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_FOOTER_RIGHT_BORDER_DISTANCE), RES_BOX,               cppu::UnoType<sal_Int32>::get(),   0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_FOOTER_TOP_BORDER_DISTANCE), RES_BOX,             cppu::UnoType<sal_Int32>::get(),   0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
+                    { OUString(UNO_NAME_FOOTER_BOTTOM_BORDER_DISTANCE), RES_BOX,              cppu::UnoType<sal_Int32>::get(),   0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
+                    { OUString(UNO_NAME_FOOTER_SHADOW_FORMAT), RES_SHADOW,        cppu::UnoType<css::table::ShadowFormat>::get(),   PROPERTY_NONE, CONVERT_TWIPS},
+                    { OUString(UNO_NAME_FOOTER_BODY_DISTANCE), RES_UL_SPACE,    cppu::UnoType<sal_Int32>::get(),            PROPERTY_NONE ,MID_UP_MARGIN|CONVERT_TWIPS       },
+                    { OUString(UNO_NAME_FOOTER_IS_DYNAMIC_HEIGHT), SID_ATTR_PAGE_DYNAMIC,   cppu::UnoType<bool>::get(),            PROPERTY_NONE ,0         },
+                    { OUString(UNO_NAME_FOOTER_IS_SHARED), SID_ATTR_PAGE_SHARED,    cppu::UnoType<bool>::get(),          PROPERTY_NONE ,0         },
+                    { OUString(UNO_NAME_FOOTER_HEIGHT), SID_ATTR_PAGE_SIZE,       cppu::UnoType<sal_Int32>::get(),           PROPERTY_NONE ,MID_SIZE_HEIGHT|CONVERT_TWIPS         },
+                    { OUString(UNO_NAME_FOOTER_IS_ON), SID_ATTR_PAGE_ON,            cppu::UnoType<bool>::get(),         PROPERTY_NONE ,0         },
+                    { OUString(UNO_NAME_FOOTER_DYNAMIC_SPACING), RES_HEADER_FOOTER_EAT_SPACING,            cppu::UnoType<bool>::get(),         PropertyAttribute::MAYBEVOID ,0         },
 
                     { OUString(UNO_NAME_IS_LANDSCAPE), SID_ATTR_PAGE,           cppu::UnoType<bool>::get(),             PROPERTY_NONE ,MID_PAGE_ORIENTATION   },
                     { OUString(UNO_NAME_NUMBERING_TYPE), SID_ATTR_PAGE,             cppu::UnoType<sal_Int16>::get(),           PROPERTY_NONE , MID_PAGE_NUMTYPE       },

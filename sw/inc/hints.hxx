@@ -93,15 +93,37 @@ public:
     SwDelTxt( sal_Int32 nS, sal_Int32 nL );
 };
 
-class SwUpdateAttr: public SwMsgPoolItem
+class SwUpdateAttr : public SwMsgPoolItem
 {
-public:
+private:
     sal_Int32 nStart;
     sal_Int32 nEnd;
     sal_uInt16 nWhichAttr;
     std::vector<sal_uInt16> aWhichFmtAttr; // attributes changed inside RES_TXTATR_AUTOFMT
+
+public:
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW );
     SwUpdateAttr( sal_Int32 nS, sal_Int32 nE, sal_uInt16 nW, std::vector<sal_uInt16> aW );
+
+    sal_Int32 getStart() const
+    {
+        return nStart;
+    }
+
+    sal_Int32 getEnd() const
+    {
+        return nEnd;
+    }
+
+    sal_uInt16 getWhichAttr() const
+    {
+        return nWhichAttr;
+    }
+
+    const std::vector<sal_uInt16>& getFmtAttr() const
+    {
+        return aWhichFmtAttr;
+    }
 };
 
 /** SwRefMarkFldUpdate is sent when the referencemarks should be updated.

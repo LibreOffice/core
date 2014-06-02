@@ -505,7 +505,8 @@ static bool lcl_InsAttr(
                  || isPARATR_LIST(nWhich)
                  || isFRMATR(nWhich)
                  || isGRFATR(nWhich)
-                 || isUNKNOWNATR(nWhich) )
+                 || isUNKNOWNATR(nWhich)
+                 || isDrawingLayerAttribute(nWhich) ) //UUUU
             {
                 pOtherSet = &rChgSet;
                 bOtherAttr = true;
@@ -532,6 +533,10 @@ static bool lcl_InsAttr(
                                     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                                     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
                                     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+
+                                    //UUUU FillAttribute support
+                                    XATTR_FILL_FIRST, XATTR_FILL_LAST,
+
                                     0 );
 
         pTmpCharItemSet->Put( rChgSet );
@@ -837,7 +842,14 @@ static bool lcl_InsAttr(
         if( pOtherSet && pOtherSet->Count() )
         {
             SwRegHistory aRegH( pNode, *pNode, pHistory );
-            bRet = pNode->SetAttr( *pOtherSet ) || bRet;
+
+            //UUUU Need to check for unique item for DrawingLayer items of type NameOrIndex
+            // and evtl. correct that item to ensure unique names for that type. This call may
+            // modify/correct entries inside of the given SfxItemSet
+            SfxItemSet aTempLocalCopy(*pOtherSet);
+
+            pDoc->CheckForUniqueItemForLineFillNameOrIndex(aTempLocalCopy);
+            bRet = pNode->SetAttr(aTempLocalCopy) || bRet;
         }
 
         DELETECHARSETS
@@ -1252,7 +1264,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         {
             aCallMod.Add( mpDfltGrfFmtColl );
         }
-        else if (isFRMATR(nWhich))
+        else if (isFRMATR(nWhich) || isDrawingLayerAttribute(nWhich) ) //UUUU
         {
             aCallMod.Add( mpDfltGrfFmtColl );
             aCallMod.Add( mpDfltTxtFmtColl );

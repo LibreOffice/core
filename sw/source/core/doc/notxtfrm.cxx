@@ -183,7 +183,7 @@ static void lcl_ClearArea( const SwFrm &rFrm,
         const SvxBrushItem *pItem; const Color *pCol; SwRect aOrigRect;
 
         //UUUU
-        FillAttributesPtr aFillAttributes;
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
         if ( rFrm.GetBackgroundBrush( aFillAttributes, pItem, pCol, aOrigRect, false ) )
         {

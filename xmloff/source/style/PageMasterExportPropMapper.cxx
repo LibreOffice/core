@@ -26,6 +26,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/extract.hxx>
 
+//UUUU
+#include <xmloff/txtprmap.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -332,6 +335,14 @@ void XMLPageMasterExportPropMapper::ContextFilter(
 
     XMLPropertyState*       pPrint              = NULL;
 
+    //UUUU
+    XMLPropertyState* pRepeatOffsetX = NULL;
+    XMLPropertyState* pRepeatOffsetY = NULL;
+    XMLPropertyState* pHeaderRepeatOffsetX = NULL;
+    XMLPropertyState* pHeaderRepeatOffsetY = NULL;
+    XMLPropertyState* pFooterRepeatOffsetX = NULL;
+    XMLPropertyState* pFooterRepeatOffsetY = NULL;
+
     UniReference < XMLPropertySetMapper > aPropMapper(getPropertySetMapper());
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rPropState.begin(); aIter != rPropState.end(); ++aIter )
@@ -390,11 +401,116 @@ void XMLPageMasterExportPropMapper::ContextFilter(
             case CTP_PM_GRID_BASE_WIDTH:        pPMGridBaseWidth    = pProp;    break;
             case CTP_PM_GRID_SNAP_TO_CHARS:     pPMGridSnapToChars  = pProp;    break;
             case CTP_PM_GRID_SNAP_TO:       pPMGridSnapTo = pProp;    break;
+
+            //UUUU
+            case CTF_PM_REPEAT_OFFSET_X:
+                pRepeatOffsetX = pProp;
+                break;
+
+            //UUUU
+            case CTF_PM_REPEAT_OFFSET_Y:
+                pRepeatOffsetY = pProp;
+                break;
+
+            //UUUU
+            case CTF_PM_HEADERREPEAT_OFFSET_X:
+                pHeaderRepeatOffsetX = pProp;
+                break;
+
+            //UUUU
+            case CTF_PM_HEADERREPEAT_OFFSET_Y:
+                pHeaderRepeatOffsetY = pProp;
+                break;
+
+            //UUUU
+            case CTF_PM_FOOTERREPEAT_OFFSET_X:
+                pFooterRepeatOffsetX = pProp;
+                break;
+
+            //UUUU
+            case CTF_PM_FOOTERREPEAT_OFFSET_Y:
+                pFooterRepeatOffsetY = pProp;
+                break;
+
+            //UUUU Sort out empty entries
+            case CTF_PM_FILLGRADIENTNAME:
+            case CTF_PM_FILLHATCHNAME:
+            case CTF_PM_FILLBITMAPNAME:
+            case CTF_PM_FILLTRANSNAME:
+
+            case CTF_PM_HEADERFILLGRADIENTNAME:
+            case CTF_PM_HEADERFILLHATCHNAME:
+            case CTF_PM_HEADERFILLBITMAPNAME:
+            case CTF_PM_HEADERFILLTRANSNAME:
+
+            case CTF_PM_FOOTERFILLGRADIENTNAME:
+            case CTF_PM_FOOTERFILLHATCHNAME:
+            case CTF_PM_FOOTERFILLBITMAPNAME:
+            case CTF_PM_FOOTERFILLTRANSNAME:
+            {
+                rtl::OUString aStr;
+
+                if( (pProp->maValue >>= aStr) && 0 == aStr.getLength() )
+                {
+                    pProp->mnIndex = -1;
+                }
+
+                break;
+            }
         }
+
         if (nPrintId == CTF_PM_PRINTMASK)
         {
             pPrint = pProp;
             lcl_RemoveState(pPrint);
+        }
+    }
+
+    //UUUU These entries need to be reduced to a single one for XML export.
+    // Both would be exported as 'draw:tile-repeat-offset' following a percent
+    // value and a 'vertical' or 'horizontal' tag as mark. If both would be active
+    // and both would be exported this would create an XML error (same property twice)
+    if(pRepeatOffsetX && pRepeatOffsetY)
+    {
+        sal_Int32 nOffset(0);
+
+        if((pRepeatOffsetX->maValue >>= nOffset) && (!nOffset))
+        {
+            pRepeatOffsetX->mnIndex = -1;
+        }
+        else
+        {
+            pRepeatOffsetY->mnIndex = -1;
+        }
+    }
+
+    //UUUU Same as above for Header
+    if(pHeaderRepeatOffsetX && pHeaderRepeatOffsetY)
+    {
+        sal_Int32 nOffset(0);
+
+        if((pHeaderRepeatOffsetX->maValue >>= nOffset) && (!nOffset))
+        {
+            pHeaderRepeatOffsetX->mnIndex = -1;
+        }
+        else
+        {
+            pHeaderRepeatOffsetY->mnIndex = -1;
+        }
+    }
+
+    //UUUU Same as above for Footer
+    if(pFooterRepeatOffsetX && pFooterRepeatOffsetY)
+    {
+        sal_Int32 nOffset(0);
+
+        if((pFooterRepeatOffsetX->maValue >>= nOffset) && (!nOffset))
+        {
+            pFooterRepeatOffsetX->mnIndex = -1;
+        }
+        else
+        {
+            pFooterRepeatOffsetY->mnIndex = -1;
         }
     }
 

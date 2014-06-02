@@ -61,7 +61,7 @@ void DrawGraphic(
     const sal_uInt8 nGrfNum = GRFNUM_NO,
     const bool bConsiderBackgroundTransparency = false );
 bool DrawFillAttributes(
-    const boost::shared_ptr< FillAttributes >& rFillAttributes,
+    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
     const SwRect& rOriginalLayoutRect,
     const SwRect& rPaintRect,
     OutputDevice& rOut);

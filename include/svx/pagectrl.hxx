@@ -21,14 +21,12 @@
 
 #include <vcl/window.hxx>
 #include <svx/svxdllapi.h>
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 
 // forward ---------------------------------------------------------------
-
 class SvxBoxItem;
-struct PageWindow_Impl;
 
 // class SvxPageWindow ---------------------------------------------------
-
 class SVX_DLLPUBLIC SvxPageWindow : public Window
 {
     using Window::GetBorder;
@@ -41,23 +39,28 @@ private:
     long        nBottom;
     long        nLeft;
     long        nRight;
-    Color       aColor;
 
-    PageWindow_Impl* pImpl;
+    SvxBoxItem*     pBorder;
+    sal_Bool        bResetBackground;
+    sal_Bool        bFrameDirection;
+    sal_Int32       nFrameDirection;
 
     long        nHdLeft;
     long        nHdRight;
     long        nHdDist;
     long        nHdHeight;
-    Color       aHdColor;
     SvxBoxItem* pHdBorder;
 
     long        nFtLeft;
     long        nFtRight;
     long        nFtDist;
     long        nFtHeight;
-    Color       aFtColor;
     SvxBoxItem* pFtBorder;
+
+    //UUUU
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maHeaderFillAttributes;
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maFooterFillAttributes;
+    drawinglayer::attribute::SdrAllFillAttributesHelperPtr  maPageFillAttributes;
 
     bool        bFooter :1;
     bool        bHeader :1;
@@ -77,64 +80,69 @@ protected:
                            const bool bSecond,
                            const bool bEnabled );
 
+    //UUUU
+    void drawFillAttributes(
+        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes,
+        const Rectangle& rPaintRange,
+        const Rectangle& rDefineRange);
+
 public:
     SvxPageWindow( Window* pParent );
     virtual ~SvxPageWindow();
 
-    void        SetWidth( long nW )                     { aSize.Width()  = nW; }
-    void        SetHeight( long nH )                    { aSize.Height() = nH; }
+    //UUUU
+    void setHeaderFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes) { maHeaderFillAttributes = rFillAttributes; }
+    void setFooterFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes) { maFooterFillAttributes = rFillAttributes; }
+    void setPageFillAttributes(const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& rFillAttributes) { maPageFillAttributes = rFillAttributes; }
+    const drawinglayer::attribute::SdrAllFillAttributesHelperPtr& getPageFillAttributes() const { return maPageFillAttributes; }
 
-    void        SetSize( const Size& rSz )              { aSize = rSz; }
+    void        SetWidth(long nW)                       { aSize.Width() = nW; }
+    void        SetHeight(long nH)                  { aSize.Height() = nH; }
+
+    void        SetSize(const Size& rSz)                { aSize = rSz; }
     const Size& GetSize() const                         { return aSize; }
 
-    void        SetTop( long nNew )                     { nTop = nNew; }
-    void        SetBottom( long nNew )                  { nBottom = nNew; }
-    void        SetLeft( long nNew )                    { nLeft = nNew; }
-    void        SetRight( long nNew )                   { nRight = nNew; }
-    void        SetColor( const Color& rNew )           { aColor = rNew; }
-    void        SetBorder( const SvxBoxItem& rNew );
-    void        SetBitmap( Bitmap* pBmp );
+    void        SetTop(long nNew)                       { nTop = nNew; }
+    void        SetBottom(long nNew)                    { nBottom = nNew; }
+    void        SetLeft(long nNew)                  { nLeft = nNew; }
+    void        SetRight(long nNew)                 { nRight = nNew; }
+    void        SetBorder(const SvxBoxItem& rNew);
 
-    long        GetTop() const                          { return nTop;   }
-    long        GetBottom() const                       { return nBottom;}
-    long        GetLeft() const                         { return nLeft;  }
+    long        GetTop() const                          { return nTop; }
+    long        GetBottom() const                       { return nBottom; }
+    long        GetLeft() const                         { return nLeft; }
     long        GetRight() const                        { return nRight; }
 
-    const Color&        GetColor() const                { return aColor; }
     const SvxBoxItem&   GetBorder() const;
 
-    void        SetHdLeft( long nNew )                  { nHdLeft = nNew; }
-    void        SetHdRight( long nNew )                 { nHdRight = nNew; }
-    void        SetHdDist( long nNew )                  { nHdDist = nNew; }
-    void        SetHdHeight( long nNew )                { nHdHeight = nNew; }
-    void        SetHdColor( const Color& aNew )         { aHdColor = aNew; }
-    void        SetHdBorder( const SvxBoxItem& rNew );
+    void        SetHdLeft(long nNew)                    { nHdLeft = nNew; }
+    void        SetHdRight(long nNew)                   { nHdRight = nNew; }
+    void        SetHdDist(long nNew)                    { nHdDist = nNew; }
+    void        SetHdHeight(long nNew)              { nHdHeight = nNew; }
+    void        SetHdBorder(const SvxBoxItem& rNew);
 
-    long        GetHdLeft() const                       { return nHdLeft;  }
+    long        GetHdLeft() const                       { return nHdLeft; }
     long        GetHdRight() const                      { return nHdRight; }
-    long        GetHdDist() const                       { return nHdDist;  }
-    long        GetHdHeight() const                     { return nHdHeight;}
+    long        GetHdDist() const                       { return nHdDist; }
+    long        GetHdHeight() const                     { return nHdHeight; }
 
-    const Color&        GetHdColor() const              { return aHdColor; }
     const SvxBoxItem&   GetHdBorder() const             { return *pHdBorder; }
 
-    void        SetFtLeft( long nNew )                  { nFtLeft = nNew; }
-    void        SetFtRight( long nNew )                 { nFtRight = nNew; }
-    void        SetFtDist( long nNew )                  { nFtDist = nNew; }
-    void        SetFtHeight( long nNew )                { nFtHeight = nNew; }
-    void        SetFtColor( const Color& aNew )         { aFtColor = aNew; }
-    void        SetFtBorder( const SvxBoxItem& rNew );
+    void        SetFtLeft(long nNew)                    { nFtLeft = nNew; }
+    void        SetFtRight(long nNew)                   { nFtRight = nNew; }
+    void        SetFtDist(long nNew)                    { nFtDist = nNew; }
+    void        SetFtHeight(long nNew)              { nFtHeight = nNew; }
+    void        SetFtBorder(const SvxBoxItem& rNew);
 
-    long        GetFtLeft() const                       { return nFtLeft;  }
+    long        GetFtLeft() const                       { return nFtLeft; }
     long        GetFtRight() const                      { return nFtRight; }
-    long        GetFtDist() const                       { return nFtDist;  }
-    long        GetFtHeight() const                     { return nFtHeight;}
+    long        GetFtDist() const                       { return nFtDist; }
+    long        GetFtHeight() const                     { return nFtHeight; }
 
-    const Color&        GetFtColor() const              { return aFtColor; }
     const SvxBoxItem&   GetFtBorder() const             { return *pFtBorder; }
 
-    void        SetUsage( sal_uInt16 eU )                   { eUsage = eU;  }
-    sal_uInt16      GetUsage() const                        { return eUsage;}
+    void        SetUsage(sal_uInt16 eU)                 { eUsage = eU; }
+    sal_uInt16      GetUsage() const                        { return eUsage; }
 
     void        SetHeader( bool bNew )                  { bHeader = bNew; }
     bool        GetHeader() const                       { return bHeader;}
@@ -150,7 +158,7 @@ public:
 
     void        EnableFrameDirection(bool bEnable);
     //uses enum SvxFrameDirection
-    void        SetFrameDirection(sal_Int32 nFrameDirection);
+    void        SetFrameDirection(sal_Int32 nDirection);
 
     void        ResetBackground();
 
@@ -158,6 +166,5 @@ public:
 };
 
 #endif // INCLUDED_SVX_PAGECTRL_HXX
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

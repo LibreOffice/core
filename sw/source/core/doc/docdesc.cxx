@@ -131,17 +131,19 @@ static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
     // correctly if we have different WhichRanges.
 
     // Take over the attributes which are of interest.
-    sal_uInt16 const aIdArr[] = { RES_FRM_SIZE, RES_UL_SPACE,
-                                        RES_BACKGROUND, RES_SHADOW,
-                                        RES_COL, RES_COL,
-                                        RES_FRAMEDIR, RES_FRAMEDIR,
-                                        RES_TEXTGRID, RES_TEXTGRID,
-                                        // #i45539#
-                                        RES_HEADER_FOOTER_EAT_SPACING,
-                                        RES_HEADER_FOOTER_EAT_SPACING,
-                                        RES_UNKNOWNATR_CONTAINER,
-                                        RES_UNKNOWNATR_CONTAINER,
-                                        0 };
+    sal_uInt16 const aIdArr[] = {
+        RES_FRM_SIZE,                   RES_UL_SPACE,                   // [83..86
+        RES_BACKGROUND,                 RES_SHADOW,                     // [99..101
+        RES_COL,                        RES_COL,                        // [103
+        RES_TEXTGRID,                   RES_TEXTGRID,                   // [109
+        RES_FRAMEDIR,                   RES_FRAMEDIR,                   // [114
+        RES_HEADER_FOOTER_EAT_SPACING,  RES_HEADER_FOOTER_EAT_SPACING,  // [115
+        RES_UNKNOWNATR_CONTAINER,       RES_UNKNOWNATR_CONTAINER,       // [143
+
+        //UUUU take over DrawingLayer FillStyles
+        XATTR_FILL_FIRST,               XATTR_FILL_LAST,                // [1014
+
+        0};
 
     const SfxPoolItem* pItem;
     for( sal_uInt16 n = 0; aIdArr[ n ]; n += 2 )
@@ -153,13 +155,49 @@ static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
             // All in aIdArr except from RES_HEADER_FOOTER_EAT_SPACING
             // bPage == false:
             // All in aIdArr except from RES_COL and RES_PAPER_BIN:
-            if( (  bPage && RES_HEADER_FOOTER_EAT_SPACING != nId ) ||
-                ( !bPage && RES_COL != nId && RES_PAPER_BIN != nId ))
+            bool bExecuteId(true);
+
+            if(bPage)
             {
-                if( SFX_ITEM_SET == rSource.GetItemState( nId, false, &pItem ))
-                    rDest.SetFmtAttr( *pItem );
+                // When Page
+                switch(nId)
+                {
+                    // All in aIdArr except from RES_HEADER_FOOTER_EAT_SPACING
+                    case RES_HEADER_FOOTER_EAT_SPACING:
+                    //UUUU take out SvxBrushItem; it's the result of the fallback
+                    // at SwFmt::GetItemState and not really in state SFX_ITEM_SET
+                    case RES_BACKGROUND:
+                        bExecuteId = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                // When not Page
+                switch(nId)
+                {
+                    // When not Page: All in aIdArr except from RES_COL and RES_PAPER_BIN:
+                    case RES_COL:
+                    case RES_PAPER_BIN:
+                        bExecuteId = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if(bExecuteId)
+            {
+                if (SFX_ITEM_SET == rSource.GetItemState(nId, false, &pItem))
+                {
+                    rDest.SetFmtAttr(*pItem);
+                }
                 else
-                    rDest.ResetFmtAttr( nId );
+                {
+                    rDest.ResetFmtAttr(nId);
+                }
             }
         }
     }

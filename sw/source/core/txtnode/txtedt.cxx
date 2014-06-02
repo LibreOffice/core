@@ -626,14 +626,20 @@ void SwTxtNode::RstTxtAttr(
     }
 
     TryDeleteSwpHints();
+
     if (bChanged)
     {
         if ( HasHints() )
         {   // possibly sometimes Resort would be sufficient, but...
             m_pSwpHints->MergePortions(*this);
         }
+
         // TxtFrm's respond to aHint, others to aNew
-        SwUpdateAttr aHint( nMin, nMax, 0 );
+        SwUpdateAttr aHint(
+            nMin,
+            nMax,
+            0);
+
         NotifyClients( 0, &aHint );
         SwFmtChg aNew( GetFmtColl() );
         NotifyClients( 0, &aNew );

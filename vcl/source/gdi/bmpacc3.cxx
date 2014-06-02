@@ -36,6 +36,12 @@ void BitmapWriteAccess::SetLineColor( const Color& rColor )
         mpLineColor = ( HasPalette() ? new BitmapColor(  (sal_uInt8) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
 }
 
+void BitmapWriteAccess::SetFillColor()
+{
+    delete mpFillColor;
+    mpFillColor = NULL;
+}
+
 void BitmapWriteAccess::SetFillColor( const Color& rColor )
 {
     delete mpFillColor;

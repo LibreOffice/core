@@ -505,7 +505,7 @@ static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
         SwRect aOrigBackRect;
 
         //UUUU
-        FillAttributesPtr aFillAttributes;
+        drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
         // Consider, that [GetBackgroundBrush(...)] can set <pCol>
         // See implementation in /core/layout/paintfrm.cxx

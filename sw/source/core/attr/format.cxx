@@ -28,8 +28,10 @@
 #include <swcache.hxx>
 #include <svl/grabbagitem.hxx>
 #include <com/sun/star/beans/PropertyValues.hpp>
+
 //UUUU
-#include <unobrushitemhelper.hxx>
+#include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
+#include <svx/unobrushitemhelper.hxx>
 #include <svx/xdef.hxx>
 
 using namespace com::sun::star;
@@ -388,7 +390,7 @@ bool SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
 
 const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
 {
-    if(RES_BACKGROUND == nWhich && RES_FLYFRMFMT == Which())
+    if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -397,7 +399,7 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
         // fill the local static SvxBrushItem from the current ItemSet so that
         // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
         // as good as possible to create a fallback representation and return that
-        aSvxBrushItem = sw::getSvxBrushItemFromSourceSet(aSet, bInParents);
+        aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bInParents);
 
         return aSvxBrushItem;
     }
@@ -408,11 +410,11 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
 
 SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem ) const
 {
-    if(RES_BACKGROUND == nWhich && RES_FLYFRMFMT == Which())
+    if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-        const FillAttributesPtr aFill = getFillAttributes();
+        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
 
         // check if the new fill attributes are used
         if(aFill.get() && aFill->isUsed())
@@ -422,7 +424,7 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
             // to and return as state that it is set
             static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
-            aSvxBrushItem = sw::getSvxBrushItemFromSourceSet(aSet, bSrchInParent);
+            aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bSrchInParent);
             if( ppItem )
                 *ppItem = &aSvxBrushItem;
 
@@ -452,7 +454,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
     bool bRet = false;
 
     //UUUU
-    if(RES_BACKGROUND == rAttr.Which() && RES_FLYFRMFMT == Which())
+    if(RES_BACKGROUND == rAttr.Which() && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -462,7 +464,7 @@ bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
         // fill a local ItemSet with the attributes corresponding as good as possible
         // to the new fill properties [XATTR_FILL_FIRST .. XATTR_FILL_LAST] and set these
         // as ItemSet
-        sw::setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
+        setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
 
         if(IsModifyLocked())
         {
@@ -541,7 +543,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
 
     bool bRet = false;
 
-    //UUUU Usel local copy to be able to apply needed changes, e.g. call
+    //UUUU Use local copy to be able to apply needed changes, e.g. call
     // CheckForUniqueItemForLineFillNameOrIndex which is needed for NameOrIndex stuff
     SfxItemSet aTempSet(rSet);
 
@@ -553,8 +555,8 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
         GetDoc()->CheckForUniqueItemForLineFillNameOrIndex(aTempSet);
     }
 
-    //UUUU
-    if(RES_FLYFRMFMT == Which())
+    //UUUU   FlyFrame              PageStyle
+    if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
     {
         const SfxPoolItem* pSource = 0;
 
@@ -567,7 +569,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
             // fill attribute ranges [XATTR_FILL_FIRST .. XATTR_FILL_LAST]. Add the attributes
             // corresponding as good as possible to the new fill properties and set the whole ItemSet
             const SvxBrushItem& rSource(static_cast< const SvxBrushItem& >(*pSource));
-            sw::setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
+            setSvxBrushItemAsFillAttributesToTargetSet(rSource, aTempSet);
 
             if(IsModifyLocked())
             {
@@ -787,7 +789,8 @@ void SwFmt::SetGrabBagItem(const uno::Any& rVal)
 //UUUU
 const SvxBrushItem& SwFmt::GetBackground(bool bInP) const
 {
-    if(RES_FLYFRMFMT == Which())
+    //UUUU   FlyFrame              PageStyle
+    if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         OSL_ENSURE(false, "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
@@ -796,7 +799,7 @@ const SvxBrushItem& SwFmt::GetBackground(bool bInP) const
         // fill the local static SvxBrushItem from the current ItemSet so that
         // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
         // as good as possible to create a fallback representation and return that
-        aSvxBrushItem = sw::getSvxBrushItemFromSourceSet(aSet, bInP);
+        aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bInP);
 
         return aSvxBrushItem;
     }
@@ -805,12 +808,9 @@ const SvxBrushItem& SwFmt::GetBackground(bool bInP) const
 }
 
 //UUUU
-FillAttributesPtr SwFmt::getFillAttributes() const
+drawinglayer::attribute::SdrAllFillAttributesHelperPtr SwFmt::getSdrAllFillAttributesHelper() const
 {
-    // FALLBACKBREAKHERE return empty pointer
-    OSL_ENSURE(false, "getFillAttributes() call only valid for RES_FLYFRMFMT currently (!)");
-
-    return FillAttributesPtr();
+    return drawinglayer::attribute::SdrAllFillAttributesHelperPtr();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

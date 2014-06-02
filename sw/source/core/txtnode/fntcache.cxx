@@ -2518,7 +2518,7 @@ bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
                 SwRect aOrigBackRect;
 
                 //UUUU
-                FillAttributesPtr aFillAttributes;
+                drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
                 /// OD 21.08.2002
                 ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
