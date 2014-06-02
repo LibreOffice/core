@@ -81,6 +81,7 @@ protected:
     bool                        mbVisible;
     bool                        mbPrintable;
     bool mbHaveXmlId;
+    bool mbTextBox; ///< If the text of this shape is handled by a Writer TextFrame.
 
     /** if bSupportsStyle is false, auto styles will be set but not a style */
     void SetStyle( bool bSupportsStyle = true );

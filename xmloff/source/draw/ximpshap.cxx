@@ -158,6 +158,7 @@ SdXMLShapeContext::SdXMLShapeContext(
     , mbVisible(true)
     , mbPrintable(true)
     , mbHaveXmlId(false)
+    , mbTextBox(false)
 {
 }
 
@@ -220,6 +221,15 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
                 if( mxCursor.is() )
                 {
                     xTxtImport->SetCursor( mxCursor );
+
+                    // Check if this shape has a TextBox, so we can pass the right context type.
+                    uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
+                    if (xPropertySet.is())
+                    {
+                        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+                        if (xPropertySetInfo->hasPropertyByName("TextBox"))
+                            xPropertySet->getPropertyValue("TextBox") >>= mbTextBox;
+                    }
                 }
 
                 // remember old list item and block (#91964#) and reset them
@@ -233,7 +243,8 @@ SvXMLImportContext *SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefix,
         if( mxCursor.is() )
         {
             pContext = GetImport().GetTextImport()->CreateTextChildContext(
-                GetImport(), p_nPrefix, rLocalName, xAttrList );
+                GetImport(), p_nPrefix, rLocalName, xAttrList,
+                ( mbTextBox ? XML_TEXT_TYPE_TEXTBOX : XML_TEXT_TYPE_SHAPE ) );
         }
     }
 
