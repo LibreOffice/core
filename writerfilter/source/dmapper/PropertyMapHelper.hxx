@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
+#define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
+
 #if OSL_DEBUG_LEVEL > 1
 #include "PropertyMap.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -41,5 +44,7 @@ void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger,
 }
 }
 #endif // OSL_DEBUG_LEVEL > 1
+
+#endif // INCLUDED_WRITERFILTER_SOURCE_DMAPPER_PROPERTYMAPHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
