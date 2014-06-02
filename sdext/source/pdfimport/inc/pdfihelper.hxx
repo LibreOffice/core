@@ -32,6 +32,7 @@
 #include "com/sun/star/rendering/PathJoinType.hpp"
 
 #include <vector>
+#include <boost/functional/hash.hpp>
 #include <boost/unordered_map.hpp>
 
 // virtual resolution of the PDF OutputDev in dpi
@@ -183,30 +184,30 @@ namespace pdfi
     {
         size_t operator()(const GraphicsContext& rGC ) const
         {
-            return size_t(rGC.LineColor.Red)
-                ^  size_t(rGC.LineColor.Green)
-                ^  size_t(rGC.LineColor.Blue)
-                ^  size_t(rGC.LineColor.Alpha)
-                ^  size_t(rGC.FillColor.Red)
-                ^  size_t(rGC.FillColor.Green)
-                ^  size_t(rGC.FillColor.Blue)
-                ^  size_t(rGC.FillColor.Alpha)
-                ^  size_t(rGC.LineJoin)
-                ^  size_t(rGC.LineCap)
-                ^  size_t(rGC.BlendMode)
-                ^  size_t(rGC.LineWidth)
-                ^  size_t(rGC.Flatness)
-                ^  size_t(rGC.MiterLimit)
+            return boost::hash_value(rGC.LineColor.Red)
+                ^  boost::hash_value(rGC.LineColor.Green)
+                ^  boost::hash_value(rGC.LineColor.Blue)
+                ^  boost::hash_value(rGC.LineColor.Alpha)
+                ^  boost::hash_value(rGC.FillColor.Red)
+                ^  boost::hash_value(rGC.FillColor.Green)
+                ^  boost::hash_value(rGC.FillColor.Blue)
+                ^  boost::hash_value(rGC.FillColor.Alpha)
+                ^  boost::hash_value(rGC.LineJoin)
+                ^  boost::hash_value(rGC.LineCap)
+                ^  boost::hash_value(rGC.BlendMode)
+                ^  boost::hash_value(rGC.LineWidth)
+                ^  boost::hash_value(rGC.Flatness)
+                ^  boost::hash_value(rGC.MiterLimit)
                 ^  rGC.DashArray.size()
-                ^  size_t(rGC.FontId)
-                ^  size_t(rGC.TextRenderMode)
-                ^  size_t(rGC.Transformation.get( 0, 0 ))
-                ^  size_t(rGC.Transformation.get( 1, 0 ))
-                ^  size_t(rGC.Transformation.get( 0, 1 ))
-                ^  size_t(rGC.Transformation.get( 1, 1 ))
-                ^  size_t(rGC.Transformation.get( 0, 2 ))
-                ^  size_t(rGC.Transformation.get( 1, 2 ))
-                ^  size_t(rGC.Clip.count() ? rGC.Clip.getB2DPolygon(0).count() : 0)
+                ^  boost::hash_value(rGC.FontId)
+                ^  boost::hash_value(rGC.TextRenderMode)
+                ^  boost::hash_value(rGC.Transformation.get( 0, 0 ))
+                ^  boost::hash_value(rGC.Transformation.get( 1, 0 ))
+                ^  boost::hash_value(rGC.Transformation.get( 0, 1 ))
+                ^  boost::hash_value(rGC.Transformation.get( 1, 1 ))
+                ^  boost::hash_value(rGC.Transformation.get( 0, 2 ))
+                ^  boost::hash_value(rGC.Transformation.get( 1, 2 ))
+                ^  boost::hash_value(rGC.Clip.count() ? rGC.Clip.getB2DPolygon(0).count() : 0)
                 ;
         }
     };
