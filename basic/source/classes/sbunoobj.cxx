@@ -2443,7 +2443,7 @@ void SbUnoObject::doIntrospection( void )
     {
         xIntrospection = theIntrospection::get(xContext);
     }
-    catch ( const css::uno::DeploymentException& ex )
+    catch ( const css::uno::DeploymentException& )
     {
     }
 
