@@ -720,12 +720,12 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                     {
                         OString aTmp(OUStringToOString(aStr,
                             osl_getThreadTextEncoding()));
-                        // In case the xub_StrLen will be longer than USHORT
-                        // one day, and room for pad byte check.
+                        // Old Add-Ins are limited to sal_uInt16 string
+                        // lengths, and room for pad byte check.
                         if ( aTmp.getLength() > SAL_MAX_UINT16 - 2 )
                             return false;
                         // Append a 0-pad-byte if string length is odd
-                        //! MUST be sal_uInt16 and not xub_StrLen
+                        //! MUST be sal_uInt16
                         sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
                         sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
 
@@ -843,12 +843,12 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                         {
                             OString aTmp(OUStringToOString(aStr,
                                 osl_getThreadTextEncoding()));
-                            // In case the xub_StrLen will be longer than USHORT
-                            // one day, and room for pad byte check.
-                            if ( aTmp.getLength() > ((sal_uInt16)(~0)) - 2 )
+                            // Old Add-Ins are limited to sal_uInt16 string
+                            // lengths, and room for pad byte check.
+                            if ( aTmp.getLength() > SAL_MAX_UINT16 - 2 )
                                 return false;
                             // Append a 0-pad-byte if string length is odd
-                            //! MUST be sal_uInt16 and not xub_StrLen
+                            //! MUST be sal_uInt16
                             sal_uInt16 nStrLen = (sal_uInt16) aTmp.getLength();
                             sal_uInt16 nLen = ( nStrLen + 2 ) & ~1;
                             if ( ((sal_uLong)nPos + 2 + nLen) > MAXARRSIZE)
