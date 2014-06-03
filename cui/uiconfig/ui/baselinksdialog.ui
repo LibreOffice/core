@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="BaseLinksDialog">
     <property name="can_focus">False</property>
@@ -22,8 +23,9 @@
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -39,7 +41,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -55,7 +56,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -71,7 +71,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -87,7 +86,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -103,7 +101,6 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_underline">True</property>
               </object>
               <packing>
@@ -129,7 +126,6 @@
             <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="box2">
-                <property name="width_request">580</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
@@ -140,13 +136,14 @@
                   <object class="GtkGrid" id="grid1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
                     <property name="column_spacing">6</property>
                     <child>
                       <object class="GtkLabel" id="FILES">
-                        <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Source file</property>
                       </object>
                       <packing>
@@ -158,9 +155,9 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="LINKS">
-                        <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Element:</property>
                       </object>
                       <packing>
@@ -172,9 +169,9 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="TYPE">
-                        <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Type</property>
                       </object>
                       <packing>
@@ -186,9 +183,10 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="STATUS">
-                        <property name="width_request">140</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">Status</property>
                       </object>
                       <packing>
@@ -197,9 +195,6 @@
                         <property name="width">1</property>
                         <property name="height">1</property>
                       </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -216,6 +211,11 @@
                     <property name="vexpand">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="Tab List-selection1"/>
+                    </child>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="TB_LINKS:border-atkobject">
+                        <property name="AtkObject::accessible-name" translatable="yes">Edit Links</property>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -237,12 +237,15 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="FILES2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Source file</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">TB_LINKS:border</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -255,6 +258,7 @@
                   <object class="GtkLabel" id="SOURCE2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Element:</property>
                   </object>
                   <packing>
@@ -268,6 +272,7 @@
                   <object class="GtkLabel" id="TYPE2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Type:</property>
                   </object>
                   <packing>
@@ -281,6 +286,7 @@
                   <object class="GtkLabel" id="UPDATE">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Update:</property>
                   </object>
                   <packing>
@@ -294,7 +300,7 @@
                   <object class="GtkLabel" id="FULL_FILE_NAME">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -307,7 +313,7 @@
                   <object class="GtkLabel" id="FULL_SOURCE_NAME">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -320,7 +326,7 @@
                   <object class="GtkLabel" id="FULL_TYPE_NAME">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">label</property>
+                    <property name="xalign">0</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -333,8 +339,7 @@
                   <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="AUTOMATIC">
                         <property name="label" translatable="yes">_Automatic</property>
@@ -342,11 +347,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">MANUAL</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -362,7 +367,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
