@@ -165,15 +165,11 @@ static const struct ExceptionalKey
 
 static AquaSalFrame* getMouseContainerFrame()
 {
-    NSInteger nWindows = 0;
-    NSCountWindows( &nWindows );
-    NSInteger* pWindows = (NSInteger*)alloca( nWindows * sizeof(NSInteger) );
-    // note: NSWindowList is supposed to be in z-order front to back
-    NSWindowList( nWindows, pWindows );
+    NSArray* aWindows = [NSWindow windowNumbersWithOptions:0];
     AquaSalFrame* pDispatchFrame = NULL;
-    for(int i = 0; i < nWindows && ! pDispatchFrame; i++ )
+    for(NSUInteger i = 0; i < [aWindows count] && ! pDispatchFrame; i++ )
     {
-        NSWindow* pWin = [NSApp windowWithWindowNumber: pWindows[i]];
+        NSWindow* pWin = [NSApp windowWithWindowNumber:[[aWindows objectAtIndex:i] integerValue]];
         if( pWin && [pWin isMemberOfClass: [SalFrameWindow class]] && [(SalFrameWindow*)pWin containsMouse] )
             pDispatchFrame = [(SalFrameWindow*)pWin getSalFrame];
     }
