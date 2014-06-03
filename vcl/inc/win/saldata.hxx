@@ -70,6 +70,8 @@ public:
     // checks if the menuhandle was created by VCL
     bool    IsKnownMenuHandle( HMENU hMenu );
 
+    bool                    mbResourcesAlreadyFreed;
+
 public:
     HINSTANCE               mhInst;                 // default instance handle
     HINSTANCE               mhPrevInst;             // previous instance handle
