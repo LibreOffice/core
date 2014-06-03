@@ -350,7 +350,7 @@ Reference< XSpellAlternatives >
             aLang = [aLang  stringByAppendingString:aTaggedCountry];
         }
         [macSpell setLanguage:aLang];
-        NSArray *guesses = [macSpell guessesForWord:aNSStr];
+        NSArray *guesses = [macSpell guessesForWordRange:NSMakeRange(0, [aNSStr length]) inString:aNSStr language:aLang inSpellDocumentWithTag:0];
         count = [guesses count];
         if (count)
         {
