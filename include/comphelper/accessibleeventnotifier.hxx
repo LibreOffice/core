@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
-#define COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
+#ifndef INCLUDED_COMPHELPER_ACCESSIBLEEVENTNOTIFIER_HXX
+#define INCLUDED_COMPHELPER_ACCESSIBLEEVENTNOTIFIER_HXX
 
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
@@ -124,8 +124,6 @@ namespace comphelper
 
 }   // namespace comphelper
 
-
-#endif // COMPHELPER_ACCESSIBLE_EVENT_NOTIFIER
-
+#endif // INCLUDED_COMPHELPER_ACCESSIBLEEVENTNOTIFIER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

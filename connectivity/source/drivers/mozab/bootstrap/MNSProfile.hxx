@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CONNECTIVITY/SOURCE/DRIVERS/MOZAB/BOOTSTRAP/MNSPROFILE.HXX
-#define INCLUDED_CONNECTIVITY/SOURCE/DRIVERS/MOZAB/BOOTSTRAP/MNSPROFILE.HXX
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILE_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILE_HXX
 
 #include "mozilla_nsprofile.h"
 
@@ -67,6 +67,6 @@ public:
 extern nsresult ConvertStringToUnicode(nsCString& aCharset, const char* inString, nsAString& outString);
 extern nsresult GetPlatformCharset(nsCString& aCharset);
 
-#endif // INCLUDED_CONNECTIVITY/SOURCE/DRIVERS/MOZAB/BOOTSTRAP/MNSPROFILE.HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

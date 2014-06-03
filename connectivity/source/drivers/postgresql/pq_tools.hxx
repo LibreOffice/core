@@ -34,8 +34,8 @@
  *
  ************************************************************************/
 
-#ifndef _PQ_TOOLS_
-#define _PQ_TOOLS_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_TOOLS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_POSTGRESQL_PQ_TOOLS_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>

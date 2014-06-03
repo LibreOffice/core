@@ -16,8 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_SDATABASEMETADATA_HXX
-#define CONNECTIVITY_SDATABASEMETADATA_HXX
+
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MDATABASEMETADATA_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MDATABASEMETADATA_HXX
+
 #include "MConnection.hxx"
 #include "mozillasrc/MDatabaseMetaDataHelper.hxx"
 #include "TDatabaseMetaDataBase.hxx"
@@ -193,6 +195,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_SDATABASEMETADATA_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MDATABASEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
