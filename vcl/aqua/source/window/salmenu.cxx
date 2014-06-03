@@ -891,8 +891,12 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame
     if( ! pWin )
         return Rectangle();
 
+#if MACOSX_SDK_VERSION >= 1070
+    NSRect aRect = [pWin convertRectToScreen:[pWin frame]];
+#else
     NSRect aRect = [pWin frame];
     aRect.origin = [pWin convertBaseToScreen: NSMakePoint( 0, 0 )];
+#endif
 
     // make coordinates relative to reference frame
     static_cast<AquaSalFrame*>(i_pReferenceFrame)->CocoaToVCL( aRect.origin );
