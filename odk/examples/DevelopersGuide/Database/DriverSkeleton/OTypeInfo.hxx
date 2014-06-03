@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef _CONNECTIVITY_OTYPEINFO_HXX_
-#define _CONNECTIVITY_OTYPEINFO_HXX_
+#ifndef INCLUDED_DATABASE_DRIVERSKELETON_OTYPEINFO_HXX
+#define INCLUDED_DATABASE_DRIVERSKELETON_OTYPEINFO_HXX
 
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -94,7 +94,7 @@ namespace connectivity
         inline ::rtl::OUString getDBName() const { return aTypeName; }
     };
 }
-#endif // _CONNECTIVITY_OTYPEINFO_HXX_
 
+#endif // INCLUDED_DATABASE_DRIVERSKELETON_OTYPEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

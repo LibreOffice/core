@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SSTATEMENT_HXX
-#define CONNECTIVITY_SSTATEMENT_HXX
+#ifndef INCLUDED_DATABASE_DRIVERSKELETON_SSTATEMENT_HXX
+#define INCLUDED_DATABASE_DRIVERSKELETON_SSTATEMENT_HXX
 
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
@@ -173,6 +173,7 @@ namespace connectivity
         };
     }
 }
-#endif // CONNECTIVITY_SSTATEMENT_HXX
+
+#endif // INCLUDED_DATABASE_DRIVERSKELETON_SSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SDRIVER_HXX
-#define CONNECTIVITY_SDRIVER_HXX
+#ifndef INCLUDED_DATABASE_DRIVERSKELETON_SDRIVER_HXX
+#define INCLUDED_DATABASE_DRIVERSKELETON_SDRIVER_HXX
 
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -83,6 +83,6 @@ namespace connectivity
 
 }
 
-#endif // CONNECTIVITY_SDRIVER_HXX
+#endif // INCLUDED_DATABASE_DRIVERSKELETON_SDRIVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

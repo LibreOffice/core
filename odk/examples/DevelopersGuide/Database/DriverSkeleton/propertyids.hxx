@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#define _CONNECTIVITY_PROPERTYIDS_HXX_
+#ifndef INCLUDED_DATABASE_DRIVERSKELETON_PROPERTYIDS_HXX
+#define INCLUDED_DATABASE_DRIVERSKELETON_PROPERTYIDS_HXX
 
 // this define has to be set to split the names into different dll's or so's
 // every dll has his own set of property names
@@ -141,7 +141,6 @@ namespace skeleton
 
 #define PROPERTY_ID_PRIVILEGES                      50
 
-#endif // _CONNECTIVITY_PROPERTYIDS_HXX_
-
+#endif // INCLUDED_DATABASE_DRIVERSKELETON_PROPERTYIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

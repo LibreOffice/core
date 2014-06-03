@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SDATABASEMETADATA_HXX
-#define CONNECTIVITY_SDATABASEMETADATA_HXX
+#ifndef INCLUDED_DATABASE_DRIVERSKELETON_SDATABASEMETADATA_HXX
+#define INCLUDED_DATABASE_DRIVERSKELETON_SDATABASEMETADATA_HXX
 
 #include "SConnection.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
@@ -216,6 +216,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_SDATABASEMETADATA_HXX
+#endif // INCLUDED_DATABASE_DRIVERSKELETON_SDATABASEMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
