@@ -364,6 +364,21 @@ DECLARE_ODFEXPORT_TEST(testShapeRelsize, "shape-relsize.odt")
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "RelativeHeightRelation"));
 }
 
+DECLARE_ODFEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.odt")
+{
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    comphelper::SequenceAsHashMap aCustomShapeGeometry = comphelper::SequenceAsHashMap(getProperty< uno::Sequence<beans::PropertyValue> >(xShape, "CustomShapeGeometry"));
+
+    // Test that the shape is a rounded rectangle.
+    CPPUNIT_ASSERT_EQUAL(OUString("round-rectangle"), aCustomShapeGeometry["Type"].get<OUString>());
+
+    // The shape text should start with a table, with "a" in its A1 cell.
+    uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1, xText), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), xCell->getString());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
