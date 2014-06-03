@@ -57,7 +57,7 @@ namespace frm
             bool _bSupportNoCheckRefValue = false
         );
         DECLARE_DEFAULT_CLONE_CTOR( OReferenceValueComponent )
-        DECLARE_DEFAULT_DTOR( OReferenceValueComponent );
+        virtual ~OReferenceValueComponent();
 
         // OPropertySet and friends
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;

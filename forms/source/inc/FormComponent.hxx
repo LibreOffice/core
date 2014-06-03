@@ -523,11 +523,6 @@ public:
                         getInstanceMutex() { return m_aMutex; }
 };
 
-
-// simple destructor
-#define DECLARE_DEFAULT_DTOR( classname )   \
-    virtual ~classname()
-
 // constructor for cloning a class
 #define DECLARE_DEFAULT_CLONE_CTOR( classname )  \
     classname( \
@@ -543,7 +538,7 @@ public:
         const OUString& _rDefault \
     ); \
     DECLARE_DEFAULT_CLONE_CTOR( classname )  \
-    DECLARE_DEFAULT_DTOR( classname )   \
+    virtual ~classname() \
 
 // all xtors for an inner class of the object hierarchy which is *bound*
 #define DECLARE_DEFAULT_BOUND_XTOR( classname ) \
@@ -555,7 +550,7 @@ public:
         const bool _bSupportsValidation \
     ); \
     DECLARE_DEFAULT_CLONE_CTOR( classname )  \
-    DECLARE_DEFAULT_DTOR( classname )   \
+    virtual ~classname() \
 
 // all xtors for a leas class of the object hierarchy
 #define DECLARE_DEFAULT_LEAF_XTOR( classname )  \
@@ -566,7 +561,7 @@ public:
         const classname* _pOriginal, \
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxFactory \
     ); \
-    DECLARE_DEFAULT_DTOR( classname )   \
+    virtual ~classname() \
 
 
 // XCloneable
