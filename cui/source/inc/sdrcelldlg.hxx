@@ -36,6 +36,7 @@ private:
     XBitmapListRef      mpBitmapList;
 
     sal_uInt16          m_nAreaPageId;
+    sal_uInt16          m_nBorderPageId;
 
 protected:
     virtual void Apply();

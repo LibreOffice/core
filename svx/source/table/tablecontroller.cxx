@@ -738,7 +738,7 @@ void SvxTableController::onFormatTable( SfxRequest& rReq )
 
         SvxBoxInfoItem aBoxInfoItem( static_cast< const SvxBoxInfoItem& >( aNewAttr.Get( SDRATTR_TABLE_BORDER_INNER ) ) );
 
-        MergeAttrFromSelectedCells(aNewAttr, false);
+        MergeAttrFromSelectedCells(aNewAttr, true);
         FillCommonBorderAttrFromSelectedCells( aBoxItem, aBoxInfoItem );
         aNewAttr.Put( aBoxItem );
         aNewAttr.Put( aBoxInfoItem );
