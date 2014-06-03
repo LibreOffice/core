@@ -40,7 +40,7 @@ public:
     QuickDiagrammingLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     // from FilterBase
-    virtual bool importDocument() throw() SAL_OVERRIDE;
+    virtual bool importDocument() throw (css::uno::RuntimeException) SAL_OVERRIDE;
     virtual bool exportDocument() throw() SAL_OVERRIDE;
 
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const SAL_OVERRIDE;
