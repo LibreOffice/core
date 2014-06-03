@@ -65,23 +65,23 @@ static bool handleEmbeddedWPGObject(const librevenge::RVNGBinaryData &data, OdfD
 
     libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-    if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(data.getDataStream())))
+    if (!libwpg::WPGraphics::isSupported(data.getDataStream()))
         fileFormat = libwpg::WPG_WPG1;
 
-    return libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter, fileFormat);
+    return libwpg::WPGraphics::parse(data.getDataStream(), &exporter, fileFormat);
 }
 
 static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, librevenge::RVNGBinaryData &output)
 {
     libwpg::WPGFileFormat fileFormat = libwpg::WPG_AUTODETECT;
 
-    if (!libwpg::WPGraphics::isSupported(const_cast<librevenge::RVNGInputStream *>(input.getDataStream())))
+    if (!libwpg::WPGraphics::isSupported(input.getDataStream()))
         fileFormat = libwpg::WPG_WPG1;
 
     librevenge::RVNGStringVector svgOutput;
     librevenge::RVNGSVGDrawingGenerator aSVGGenerator(svgOutput, "");
 
-    if (!libwpg::WPGraphics::parse(const_cast<librevenge::RVNGInputStream *>(input.getDataStream()), &aSVGGenerator, fileFormat))
+    if (!libwpg::WPGraphics::parse(input.getDataStream(), &aSVGGenerator, fileFormat))
         return false;
 
     assert(1 == svgOutput.size());

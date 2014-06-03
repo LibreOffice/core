@@ -28,7 +28,7 @@ static bool handleEmbeddedWKSObject(const librevenge::RVNGBinaryData &data, OdfD
 {
     OdsGenerator exporter;
     exporter.addDocumentHandler(pHandler, streamType);
-    return libwps::WPSDocument::parse(const_cast<librevenge::RVNGInputStream *>(data.getDataStream()), &exporter)==libwps::WPS_OK;
+    return libwps::WPSDocument::parse(data.getDataStream(), &exporter)==libwps::WPS_OK;
 }
 
 bool MSWorksImportFilter::doImportDocument( librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator )
