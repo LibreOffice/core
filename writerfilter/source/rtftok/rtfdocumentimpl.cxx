@@ -2626,8 +2626,10 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_LTRCH:
             // dmapper does not support this.
+            m_aStates.top().isRightToLeft = false;
             break;
         case RTF_RTLCH:
+            m_aStates.top().isRightToLeft = true;
             if (m_aDefaultState.nCurrentEncoding == RTL_TEXTENCODING_MS_1255)
                 m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
             break;
@@ -3187,11 +3189,20 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
         case RTF_F:
         case RTF_AF:
-            if (nKeyword == RTF_F)
-                nSprm = NS_sprm::LN_CRgFtc0;
+            if (m_aStates.top().isRightToLeft
+                || m_aStates.top().eRunType == RTFParserState::HICH)
+            {
+                nSprm = NS_sprm::LN_CRgFtc2;
+            }
+            else if (m_aStates.top().eRunType == RTFParserState::DBCH)
+            {
+                nSprm = NS_sprm::LN_CRgFtc1;
+            }
             else
-                nSprm = (m_aStates.top().eRunType == RTFParserState::HICH
-                    ? NS_sprm::LN_CRgFtc1 : NS_sprm::LN_CRgFtc2);
+            {
+                assert(m_aStates.top().eRunType == RTFParserState::LOCH);
+                nSprm = NS_sprm::LN_CRgFtc0;
+            }
             if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE || m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
             {
                 m_aFontIndexes.push_back(nParam);
@@ -3215,7 +3226,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 int nFontIndex = getFontIndex(nParam);
                 RTFValue::Pointer_t pValue(new RTFValue(nFontIndex));
                 m_aStates.top().aCharacterSprms.set(nSprm, pValue);
-                m_aStates.top().nCurrentEncoding = getEncoding(nFontIndex);
+                if (nKeyword == RTF_F)
+                    m_aStates.top().nCurrentEncoding = getEncoding(nFontIndex);
             }
             break;
         case RTF_RED:
@@ -5198,6 +5210,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
     aDrawingObject(),
     aFrame(this),
     eRunType(LOCH),
+    isRightToLeft(false),
     nYear(0),
     nMonth(0),
     nDay(0),

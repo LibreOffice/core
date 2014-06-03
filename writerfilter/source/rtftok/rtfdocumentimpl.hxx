@@ -255,6 +255,8 @@ namespace writerfilter {
 
                 /// CJK or CTL?
                 enum { LOCH, HICH, DBCH } eRunType;
+                /// ltrch or rtlch
+                bool isRightToLeft;
 
                 // Info group.
                 int nYear;
