@@ -62,9 +62,10 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxAreaTabPage&) rPage ).SetPos( 0 );
             ( (SvxAreaTabPage&) rPage ).Construct();
             ( (SvxAreaTabPage&) rPage ).ActivatePage( mrOutAttrs );
-
-        break;
-
+            break;
+        case RID_SVXPAGE_BORDER:
+            ( (SvxBorderTabPage&) rPage ).SetTableMode();
+            break;
         default:
             SfxTabDialog::PageCreated( nId, rPage );
             break;
