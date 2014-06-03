@@ -14,7 +14,7 @@ class InsertRemoveCells(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.xContext = pyuno.getComponentContext()
-        pyuno.experimentalExtraMagic()
+        pyuno.private_initTestEnvironment()
 
 
     # no need for a tearDown(cls) method.

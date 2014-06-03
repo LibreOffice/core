@@ -175,7 +175,7 @@ class UnoInProcess:
         return self.xDoc
     def setUp(self):
         self.xContext = pyuno.getComponentContext()
-        pyuno.experimentalExtraMagic()
+        pyuno.private_initTestEnvironment()
     def openEmptyWriterDoc(self):
         assert(self.xContext)
         smgr = self.getContext().ServiceManager
