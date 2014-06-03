@@ -1907,6 +1907,8 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
         rFont.SetLanguage( ((const SvxLanguageItem&)rSet.Get( nWhich_Language )).GetLanguage() );
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON ) )
         rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_BKGCOLOR ) == SFX_ITEM_ON ) )
+        rFont.SetColor( ((const SvxBackgroundColorItem&)rSet.Get( EE_CHAR_BKGCOLOR )).GetValue() );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontHeight ) == SFX_ITEM_ON ) )
         rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( nWhich_FontHeight ) ).GetHeight() ) );
     if ( bSearchInParent || ( rSet.GetItemState( nWhich_Weight ) == SFX_ITEM_ON ) )
