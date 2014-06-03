@@ -19,15 +19,12 @@
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
-
 #include <editeng/editeng.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/svxrtf.hxx>
 #include <vcl/outdev.hxx>
 #include <svtools/rtftoken.h>
 
-#define SC_RTFPARSE_CXX
 #include "rtfparse.hxx"
 #include "global.hxx"
 #include "document.hxx"

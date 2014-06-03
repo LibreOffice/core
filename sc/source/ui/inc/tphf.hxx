@@ -52,12 +52,9 @@ private:
     sal_uInt16          nPageUsage;
     const ScStyleDlg*   pStyleDlg;
 
-#ifdef _TPHF_CXX
-private:
     DECL_LINK(BtnHdl, void *);
     DECL_LINK( HFEditHdl, void* );
     DECL_LINK(TurnOnHdl, void *);
-#endif
 };
 
 class ScHeaderPage : public ScHFPage

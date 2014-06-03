@@ -36,9 +36,7 @@
 #include "filter.hrc"
 #include "globstr.hrc"
 
-#define _PFILTDLG_CXX
 #include "pfiltdlg.hxx"
-#undef _PFILTDLG_CXX
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 

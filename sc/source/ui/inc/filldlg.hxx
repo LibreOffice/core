@@ -96,8 +96,6 @@ private:
 
     bool        bStartValFlag;
 
-#ifdef _FILLDLG_CXX
-private:
     void Init( sal_uInt16 nPossDir );
     bool CheckStartVal();
     bool CheckIncrementVal();
@@ -105,7 +103,6 @@ private:
 
     DECL_LINK( OKHdl, void * );
     DECL_LINK( DisableHdl, Button * );
-#endif
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FILLDLG_HXX

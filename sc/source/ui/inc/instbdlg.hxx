@@ -84,7 +84,6 @@ private:
     SCTAB               nTableCount;
     OUString            m_sSheetDotDotDot;
 
-#ifdef SC_INSTBDLG_CXX
     void    Init_Impl( bool bFromFile );
     void    SetNewTable_Impl();
     void    SetFromTo_Impl();
@@ -98,7 +97,6 @@ private:
     DECL_LINK(DoEnterHdl, void *);
     DECL_LINK(BrowseTimeoutHdl, void *);
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
-#endif
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_INSTBDLG_HXX
