@@ -29,10 +29,7 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
-
-#define _SOLVRDLG_CXX
 #include "solvrdlg.hxx"
-#undef  _SOLVRDLG_CXX
 
 namespace
 {

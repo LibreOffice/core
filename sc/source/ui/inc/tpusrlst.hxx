@@ -81,8 +81,6 @@ private:
     bool            bCopyDone;
     sal_Int32       nCancelPos;
 
-#ifdef _TPUSRLST_CXX
-private:
     void    Init                ();
     size_t  UpdateUserListBox   ();
     void    UpdateEntries       ( size_t nList );
@@ -98,7 +96,6 @@ private:
     DECL_LINK( LbSelectHdl,     ListBox* );
     DECL_LINK( BtnClickHdl,     PushButton* );
     DECL_LINK( EdEntriesModHdl, VclMultiLineEdit* );
-#endif
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_TPUSRLST_HXX

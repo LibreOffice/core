@@ -67,8 +67,6 @@ private:
     ScViewData*     pViewData;
     SCTAB           nCurTab;
 
-#ifdef _AREASDLG_CXX
-private:
     void Impl_Reset();
     bool Impl_CheckRefStrings();
     void Impl_FillLists();
@@ -79,7 +77,6 @@ private:
     DECL_LINK( Impl_ModifyHdl,      formula::RefEdit*  );
     DECL_LINK( Impl_BtnHdl,         PushButton* );
     DECL_LINK( Impl_GetFocusHdl,    Control*    );
-#endif
 };
 
 #endif

@@ -77,8 +77,6 @@ private:
     const OUString  errMsgNoFormula;
     const OUString  errMsgInvalidVal;
 
-
-#ifdef _SOLVRDLG_CXX
     void    Init();
     bool    CheckTargetValue( const OUString& rStrVal );
     void    RaiseError( ScSolverErr eError );
@@ -86,7 +84,6 @@ private:
     DECL_LINK( BtnHdl, PushButton* );
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, void* );
-#endif  // _SOLVERDLG_CXX
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_SOLVRDLG_HXX

@@ -92,8 +92,6 @@ class SwLayAction
     // OD 14.04.2003 #106346# - new flag for content formatting on interrupt.
     bool    mbFormatCntntOnInterrupt;
 
-#ifdef _LAYACT_CXX
-
     void PaintCntnt( const SwCntntFrm *, const SwPageFrm *,
                      const SwRect &rOldRect, long nOldBottom );
     bool PaintWithoutFlys( const SwRect &, const SwCntntFrm *,
@@ -119,13 +117,10 @@ class SwLayAction
     inline void CheckIdleEnd();
     inline sal_uLong GetStartTicks() { return nStartTicks; }
 
-#endif
-
 public:
     SwLayAction( SwRootFrm *pRt, SwViewImp *pImp );
     ~SwLayAction();
 
-#ifdef _LAYACT_CXX
     void SetIdle            ( bool bNew )   { bIdle = bNew; }
     void SetCheckPages      ( bool bNew )   { bCheckPages = bNew; }
     void SetBrowseActionStop( bool bNew )   { bBrowseActionStop = bNew; }
@@ -142,7 +137,6 @@ public:
     bool IsInterrupt()          const       { return IsInput(); }
 
     sal_uInt16 GetInputType()    const { return nInputType; }
-#endif
 
     // adjusting Action to the wanted behaviour
     void SetPaint       ( bool bNew )   { bPaint = bNew; }
@@ -197,8 +191,6 @@ class SwLayIdle
     bool m_bIndicator;
 #endif
 
-#ifdef _LAYACT_CXX
-
 #ifdef DBG_UTIL
     void ShowIdle( ColorData eName );
 #endif
@@ -206,8 +198,6 @@ class SwLayIdle
     enum IdleJobType{ ONLINE_SPELLING, AUTOCOMPLETE_WORDS, WORD_COUNT, SMART_TAGS };
     bool _DoIdleJob( const SwCntntFrm*, IdleJobType );
     bool DoIdleJob( IdleJobType, bool bVisAreaOnly );
-
-#endif
 
 public:
     SwLayIdle( SwRootFrm *pRt, SwViewImp *pImp );
