@@ -206,8 +206,6 @@ namespace dbaui
 
     void IndexFieldsControl::Init(const Sequence< OUString >& _rAvailableFields)
     {
-        fprintf(stderr, " _rAvailableFields len is %d\n",  _rAvailableFields.getLength());
-
         RemoveColumns();
 
         // for the width: both columns together should be somewhat smaller than the whole window (without the scrollbar)
@@ -237,9 +235,6 @@ namespace dbaui
             m_pSortingCell->InsertEntry(m_sAscendingText);
             m_pSortingCell->InsertEntry(m_sDescendingText);
             m_pSortingCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_SORTORDER );
-            m_pSortingCell->Show();
-
-            fprintf(stderr, "created m_pSortingCell %p\n", m_pSortingCell);
 
             nFieldNameWidth -= nSortOrderColumnWidth;
         }
@@ -258,11 +253,7 @@ namespace dbaui
         const OUString* pFields = _rAvailableFields.getConstArray();
         const OUString* pFieldsEnd = pFields + _rAvailableFields.getLength();
         for (;pFields < pFieldsEnd; ++pFields)
-        {
-            fprintf(stderr, "foo is %s\n", OUStringToOString(*pFields, RTL_TEXTENCODING_UTF8).getStr());
             m_pFieldNameCell->InsertEntry(*pFields);
-        }
-        m_pFieldNameCell->Show();
     }
 
     CellController* IndexFieldsControl::GetController(long _nRow, sal_uInt16 _nColumnId)
