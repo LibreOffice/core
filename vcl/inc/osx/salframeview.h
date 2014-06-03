@@ -63,11 +63,11 @@
 -(void)unregisterDraggingDestinationHandler:(id)theHandler;
 @end
 
-@interface SalFrameView : AquaA11yWrapper <NSTextInput>
+@interface SalFrameView : AquaA11yWrapper <NSTextInputClient>
 {
     AquaSalFrame*       mpFrame;
 
-    // for NSTextInput
+    // for NSTextInputClient
     NSEvent*        mpLastEvent;
     BOOL            mbNeedSpecialKeyHandle;
     BOOL            mbInKeyInput;
@@ -117,7 +117,7 @@
 /*
     text action methods
 */
--(void)insertText:(id)aString;
+-(void)insertText:(id)aString replacementRange:(NSRange)replacementRange;
 -(void)insertTab: (id)aSender;
 -(void)insertBacktab: (id)aSender;
 -(void)moveLeft: (id)aSender;
