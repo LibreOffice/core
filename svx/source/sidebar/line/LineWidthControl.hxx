@@ -58,7 +58,7 @@ private:
     OUString                            mstrPT;
     long                                mnCustomWidth;
     bool                                mbCustom;
-    bool                                mbColseByEdit;
+    bool                                mbCloseByEdit;
     long                                mnTmpCusomWidth;
     bool                                mbVSFocus;
 

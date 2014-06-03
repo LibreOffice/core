@@ -50,7 +50,7 @@ LineWidthControl::LineWidthControl (
       mstrPT(SVX_RESSTR(STR_PT)),
       mnCustomWidth(0),
       mbCustom(false),
-      mbColseByEdit(false),
+      mbCloseByEdit(false),
       mnTmpCusomWidth(0),
       mbVSFocus(true),
       maIMGCus(SVX_RES(IMG_WIDTH_CUSTOM)),
@@ -198,7 +198,7 @@ void LineWidthControl::SetWidthSelect( long lValue, bool bValuable, SfxMapUnit e
 {
     mbVSFocus = true;
     maVSWidth.SetSelItem(0);
-    mbColseByEdit = false;
+    mbCloseByEdit = false;
     meMapUnit = eMapUnit;
     SvtViewOptions aWinOpt( E_WINDOW, SIDEBAR_LINE_WIDTH_GLOBAL_VALUE );
     if ( aWinOpt.Exists() )
@@ -277,7 +277,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
             mrLinePropertyPanel.SetWidthIcon(iPos);
             mrLinePropertyPanel.SetWidth(nVal);
-            mbColseByEdit = false;
+            mbCloseByEdit = false;
             mnTmpCusomWidth = 0;
         }
         else if(iPos == 9)
@@ -290,7 +290,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
                 XLineWidthItem aWidthItem( nVal );
                 mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
                 mrLinePropertyPanel.SetWidth(nVal);
-                mbColseByEdit = false;
+                mbCloseByEdit = false;
                 mnTmpCusomWidth = 0;
             }
             else
@@ -328,13 +328,13 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
         XLineWidthItem aWidthItem(nNewWidth);
         mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
 
-        mbColseByEdit = true;
+        mbCloseByEdit = true;
         mnTmpCusomWidth = nTmp;
         /*for(sal_uInt16 i = 0; i < 8; i++)
         {
             if(nTmp == (sal_Int32)maVSWidth.GetItemData(i))
             {
-                mbColseByEdit = false;
+                mbCloseByEdit = false;
                 break;
             }
         }*/
@@ -348,7 +348,7 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
 
 bool LineWidthControl::IsCloseByEdit()
 {
-    return mbColseByEdit;
+    return mbCloseByEdit;
 }
 
 
