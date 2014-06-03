@@ -136,6 +136,8 @@ void ImplInitSalGDI()
 {
     SalData* pSalData = GetSalData();
 
+    pSalData->mbResourcesAlreadyFreed = false;
+
     // init stock brushes
     pSalData->maStockPenColorAry[0]     = PALETTERGB( 0, 0, 0 );
     pSalData->maStockPenColorAry[1]     = PALETTERGB( 0xFF, 0xFF, 0xFF );
@@ -315,6 +317,9 @@ void ImplFreeSalGDI()
 {
     SalData*    pSalData = GetSalData();
 
+    if (pSalData->mbResourcesAlreadyFreed)
+        return;
+
     // destroy stock objects
     int i;
     for ( i = 0; i < pSalData->mnStockPenCount; i++ )
@@ -381,6 +386,8 @@ void ImplFreeSalGDI()
 
     // delete temporary font list
     ImplReleaseTempFonts( *pSalData );
+
+    pSalData->mbResourcesAlreadyFreed = true;
 }
 
 // -----------------------------------------------------------------------
