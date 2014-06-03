@@ -50,6 +50,7 @@ public:
 
     void                HideShadowControls();
     virtual void        PageCreated (SfxAllItemSet aSet);
+    void                SetTableMode();
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );

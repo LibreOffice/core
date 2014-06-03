@@ -1194,6 +1194,9 @@ void SvxBorderTabPage::PageCreated (SfxAllItemSet aSet)
             HideShadowControls();
 }
 
-// ============================================================================
+void SvxBorderTabPage::SetTableMode()
+{
+    nSWMode = SW_BORDER_MODE_TABLE;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
