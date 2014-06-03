@@ -519,6 +519,14 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                                     break;
                                 default:
                                     // See EscherPropertyContainer::CreateCustomShapeProperties, by default nSeg is simply the number of points.
+                                    // FIXME: we miss out a significant amount of complexity from
+                                    // the above method here, and do some rather odd things to match.
+                                    int nElems = aVertices.nPropSize / ( nPointSize * 2);
+                                    if (nSeg > nElems)
+                                    {
+                                        SAL_WARN("oox", "Busted escher export " << nSeg << "vs . " << nElems << " truncating point stream");
+                                        nSeg = nElems;
+                                    }
                                     for (int i = 0; i < nSeg; ++i)
                                     {
                                         sal_Int32 nX = impl_GetPointComponent(pVerticesIt, nPointSize);
