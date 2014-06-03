@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -35,8 +32,6 @@
 #include "viewdata.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-
-#define SC_INSTBDLG_CXX
 #include "instbdlg.hxx"
 
 ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )

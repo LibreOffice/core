@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
 #include <comphelper/string.hxx>
@@ -34,10 +33,7 @@
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
-
-#define _TPUSRLST_CXX
 #include "tpusrlst.hxx"
-#undef _TPUSRLST_CXX
 
 // STATIC DATA -----------------------------------------------------------
 
