@@ -16,7 +16,7 @@ $(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen-0.1.dll,src/.libs/libodfgen-0.1.dll))
 else ifeq ($(filter IOS ANDROID,$(OS)),)
-$(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen-0.1.so.1,src/.libs/libodfgen-0.1.so.1.0.0))
+$(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen-0.1.so.1,src/.libs/libodfgen-0.1.so.1.0.1))
 endif
 
 # vim: set noet sw=4 ts=4:
