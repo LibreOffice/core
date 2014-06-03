@@ -22,6 +22,7 @@
 
 #include "address.hxx"
 
+#include <svl/stritem.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include "anyrefdg.hxx"
@@ -67,8 +68,6 @@ private:
     ScViewData*     pViewData;
     SCTAB           nCurTab;
 
-#ifdef _AREASDLG_CXX
-private:
     void Impl_Reset();
     bool Impl_CheckRefStrings();
     void Impl_FillLists();
@@ -79,7 +78,6 @@ private:
     DECL_LINK( Impl_ModifyHdl,      formula::RefEdit*  );
     DECL_LINK( Impl_BtnHdl,         PushButton* );
     DECL_LINK( Impl_GetFocusHdl,    Control*    );
-#endif
 };
 
 #endif

@@ -26,10 +26,7 @@
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
 
-#define _AREASDLG_CXX
 #include "areasdlg.hxx"
-#undef _AREASDLG_CXX
-
 #include "scresid.hxx"
 #include "rangenam.hxx"
 #include "reffact.hxx"

@@ -87,8 +87,6 @@ private:
     formula::RefEdit*   pRefInputEdit;
     bool                bDlgLostFocus;
 
-#ifdef _CONSDLG_CXX
-private:
     void Init               ();
     void FillAreaLists      ();
     bool VerifyEdit         ( formula::RefEdit* pEd );
@@ -101,7 +99,6 @@ private:
 
     ScSubTotalFunc  LbPosToFunc( sal_uInt16 nPos );
     sal_uInt16          FuncToLbPos( ScSubTotalFunc eFunc );
-#endif // _CONSDLG_CXX
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_CONSDLG_HXX

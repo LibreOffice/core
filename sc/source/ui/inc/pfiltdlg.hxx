@@ -82,7 +82,6 @@ private:
 
     std::vector<ScTypedStrData>* pEntryLists[MAXCOLCOUNT];
 
-#ifdef _PFILTDLG_CXX
 private:
     void    Init            ( const SfxItemSet& rArgSet );
     void    FillFieldLists  ();
@@ -94,7 +93,6 @@ private:
     DECL_LINK( LbSelectHdl, ListBox* );
     DECL_LINK( ValModifyHdl, ComboBox* );
     DECL_LINK( CheckBoxHdl,  CheckBox* );
-#endif
 };
 
 

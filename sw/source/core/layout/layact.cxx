@@ -40,7 +40,6 @@
 #include <editeng/opaqitem.hxx>
 #include <SwSmartTagMgr.hxx>
 
-#define _LAYACT_CXX
 #include "layact.hxx"
 #include <swwait.hxx>
 #include <fmtsrnd.hxx>

@@ -17,10 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
-
-
 
 #include <svl/zforlist.hxx>
 #include <vcl/msgbox.hxx>
@@ -30,11 +27,7 @@
 #include "document.hxx"
 #include "globstr.hrc"
 #include "miscdlgs.hrc"
-
-#define _FILLDLG_CXX
 #include "filldlg.hxx"
-#undef _FILLDLG_CXX
-
 
 // class ScFillSeriesDlg
 

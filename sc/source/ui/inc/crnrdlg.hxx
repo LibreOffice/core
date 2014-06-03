@@ -72,8 +72,6 @@ private:
     formula::RefEdit*       pEdActive;
     bool            bDlgLostFocus;
 
-#ifdef _CRNRDLG_CXX
-private:
     void Init               ();
     void UpdateNames        ();
     void UpdateRangeData    ( const ScRange& rRange, bool bColName );
@@ -90,7 +88,6 @@ private:
     DECL_LINK( Range2DataModifyHdl, void * );
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, void* );
-#endif
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_CRNRDLG_HXX

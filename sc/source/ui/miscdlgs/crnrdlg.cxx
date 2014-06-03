@@ -22,10 +22,7 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "docsh.hxx"
-
-#define _CRNRDLG_CXX
 #include "crnrdlg.hxx"
-#undef _CRNRDLG_CXX
 #include <vcl/msgbox.hxx>
 #include <boost/scoped_array.hpp>
 
