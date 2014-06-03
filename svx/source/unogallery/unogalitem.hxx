@@ -80,7 +80,8 @@ protected:
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, ::com::sun::star::uno::Any* pValue )
         throw (css::beans::UnknownPropertyException,
                css::lang::WrappedTargetException,
-               css::uno::RuntimeException) SAL_OVERRIDE;
+               css::uno::RuntimeException,
+               std::exception) SAL_OVERRIDE;
 
 protected:
 
