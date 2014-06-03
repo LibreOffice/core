@@ -7696,7 +7696,7 @@ AS_IF([test "$COM" = "MSC"],
       [librevenge_libdir="${WORKDIR}/LinkTarget/Library"],
       [librevenge_libdir="${WORKDIR}/UnpackedTarball/librevenge/src/lib/.libs"]
 )
-libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0],["-I${WORKDIR}/UnpackedTarball/librevenge/inc"],["-L${librevenge_libdir} -lrevenge-0.0"])
+libo_CHECK_SYSTEM_MODULE([librevenge],[REVENGE],[librevenge-0.0 >= 0.0.1],["-I${WORKDIR}/UnpackedTarball/librevenge/inc"],["-L${librevenge_libdir} -lrevenge-0.0"])
 
 dnl ===================================================================
 dnl Check for system libe-book
