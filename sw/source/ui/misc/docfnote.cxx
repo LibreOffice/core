@@ -36,6 +36,7 @@
 #include <misc.hrc>
 #include <frmui.hrc>
 #include <SwStyleNameMapper.hxx>
+#include <boost/scoped_ptr.hpp>
 
 SwFootNoteOptionDlg::SwFootNoteOptionDlg(Window *pParent, SwWrtShell &rS)
     : SfxTabDialog(pParent, "FootEndnoteDialog", "modules/swriter/ui/footendnotedialog.ui")
@@ -118,8 +119,8 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, bool bEN,
 
 void SwEndNoteOptionPage::Reset( const SfxItemSet& )
 {
-    SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
-                                   : new SwFtnInfo( pSh->GetFtnInfo() );
+    boost::scoped_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
+                                          : new SwFtnInfo( pSh->GetFtnInfo() ));
     SfxObjectShell * pDocSh = SfxObjectShell::Current();
 
     if (PTR_CAST(SwWebDocShell, pDocSh))
@@ -216,7 +217,6 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
     }
 
     m_pPageTemplBox->SelectEntry( pInf->GetPageDesc( *pSh->GetDoc() )->GetName());
-    delete pInf;
 }
 
 SwEndNoteOptionPage::~SwEndNoteOptionPage()
@@ -346,7 +346,7 @@ static SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFmtNa
 
 bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
 {
-    SwEndNoteInfo *pInf = bEndNote ? new SwEndNoteInfo() : new SwFtnInfo();
+    boost::scoped_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo() : new SwFtnInfo());
 
     pInf->nFtnOffset = static_cast< sal_uInt16 >(m_pOffsetFld->GetValue() -1);
     pInf->aFmt.SetNumberingType(m_pNumViewBox->GetSelectedNumberingType() );
@@ -379,7 +379,7 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
     }
     else
     {
-        SwFtnInfo *pI = (SwFtnInfo*)pInf;
+        SwFtnInfo *pI = (SwFtnInfo*)pInf.get();
         pI->ePos = m_pPosPageBox->IsChecked() ? FTNPOS_PAGE : FTNPOS_CHAPTER;
         pI->eNum = (SwFtnNum)GetNumbering();
         pI->aQuoVadis = m_pContEdit->GetText();
@@ -387,7 +387,6 @@ bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
         if ( !(*pI == pSh->GetFtnInfo()) )
             pSh->SetFtnInfo( *pI );
     }
-    delete pInf;
     return true;
 }
 

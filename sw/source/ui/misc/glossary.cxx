@@ -465,8 +465,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     else if (sItemIdent == "rename")
     {
         m_pShortNameEdit->SetText(pGlossaryHdl->GetGlossaryShortName(m_pNameED->GetText()));
-        SwNewGlosNameDlg* pNewNameDlg = new SwNewGlosNameDlg(this, m_pNameED->GetText(),
-                                        m_pShortNameEdit->GetText() );
+        boost::scoped_ptr<SwNewGlosNameDlg> pNewNameDlg(new SwNewGlosNameDlg(this, m_pNameED->GetText(),
+                                                                             m_pShortNameEdit->GetText() ));
         if( RET_OK == pNewNameDlg->Execute() &&
             pGlossaryHdl->Rename( m_pShortNameEdit->GetText(),
                                     pNewNameDlg->GetNewShort(),
@@ -482,7 +482,6 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
             m_pCategoryBox->MakeVisible(pNewEntry);
         }
         GrpSelect(m_pCategoryBox);
-        delete pNewNameDlg;
     }
     else if (sItemIdent == "delete")
     {
@@ -523,8 +522,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
 
         const SfxPoolItem* pItem;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( this, aSet,
-            pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(), SID_EVENTCONFIG );
+        boost::scoped_ptr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet,
+            pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(), SID_EVENTCONFIG ));
         if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
             SFX_ITEM_SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, false, &pItem ) )
         {
@@ -533,8 +532,6 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                                         rTbl.Get( SW_EVENT_START_INS_GLOSSARY ),
                                         rTbl.Get( SW_EVENT_END_INS_GLOSSARY ) );
         }
-
-        delete pMacroDlg;
     }
     else if (sItemIdent == "import")
     {

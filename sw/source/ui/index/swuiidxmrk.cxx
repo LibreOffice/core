@@ -60,6 +60,7 @@
 #include <SwRewriter.hxx>
 
 #include <unomid.h>
+#include <boost/scoped_ptr.hpp>
 
 #define POS_CONTENT 0
 #define POS_INDEX   1
@@ -581,14 +582,13 @@ IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
 
 IMPL_LINK_NOARG(SwIndexMarkPane, NewUserIdxHdl)
 {
-    SwNewUserIdxDlg* pDlg = new SwNewUserIdxDlg(this);
+    boost::scoped_ptr<SwNewUserIdxDlg> pDlg(new SwNewUserIdxDlg(this));
     if(RET_OK == pDlg->Execute())
     {
         OUString sNewName(pDlg->GetName());
         m_pTypeDCB->InsertEntry(sNewName);
         m_pTypeDCB->SelectEntry(sNewName);
     }
-    delete pDlg;
     return 0;
 }
 

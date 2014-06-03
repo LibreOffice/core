@@ -83,6 +83,7 @@ using namespace ::com::sun::star::uno;
 using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 #include <svtools/editbrowsebox.hxx>
+#include <boost/scoped_ptr.hpp>
 
 static const sal_Unicode aDeliStart = '['; // for the form
 static const sal_Unicode aDeliEnd    = ']'; // for the form
@@ -1409,11 +1410,11 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
 
 IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 {
-    SwAddStylesDlg_Impl* pDlg = new SwAddStylesDlg_Impl(pButton,
+    boost::scoped_ptr<SwAddStylesDlg_Impl> pDlg(new SwAddStylesDlg_Impl(pButton,
         ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell(),
-        aStyleArr);
+        aStyleArr));
     pDlg->Execute();
-    delete pDlg;
+    pDlg.reset();
     ModifyHdl(0);
     return 0;
 }
@@ -1445,12 +1446,11 @@ IMPL_LINK(SwTOXSelectTabPage, MenuExecuteHdl, Menu*, pMenu)
                 return 0;
         }
 
-        SwAutoMarkDlg_Impl* pAutoMarkDlg = new SwAutoMarkDlg_Impl(
-                m_pAutoMarkPB, sAutoMarkURL, sAutoMarkType, bNew );
+        boost::scoped_ptr<SwAutoMarkDlg_Impl> pAutoMarkDlg(new SwAutoMarkDlg_Impl(
+                m_pAutoMarkPB, sAutoMarkURL, sAutoMarkType, bNew ));
 
         if( RET_OK != pAutoMarkDlg->Execute() && bNew )
             sAutoMarkURL = sSaveAutoMarkURL;
-        delete pAutoMarkDlg;
     }
     return 0;
 }

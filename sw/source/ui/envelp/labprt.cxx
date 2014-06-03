@@ -27,6 +27,7 @@
 #include "swuilabimp.hxx"
 
 #include <cmdid.h>
+#include <boost/scoped_ptr.hpp>
 
 SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelOptionsPage",
@@ -73,10 +74,10 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
         if (!pPrinter)
             pPrinter = new Printer;
 
-        PrinterSetupDialog* pDlg = new PrinterSetupDialog(this );
+        boost::scoped_ptr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
         pDlg->SetPrinter(pPrinter);
         pDlg->Execute();
-        delete pDlg;
+        pDlg.reset();
         GrabFocus();
         m_pPrinterInfo->SetText(pPrinter->GetName());
         return 0;
