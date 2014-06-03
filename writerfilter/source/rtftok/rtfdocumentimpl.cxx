@@ -3518,14 +3518,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             RTFSprms aFontAttributes;
             aFontAttributes.set(nSprm, RTFValue::Pointer_t(new RTFValue(m_aFontNames[getFontIndex(nParam)])));
-            // In the context of listlevels, \af seems to imply \f.
-            if (nKeyword == RTF_AF)
-                aFontAttributes.set(NS_ooxml::LN_CT_Fonts_ascii, RTFValue::Pointer_t(new RTFValue(m_aFontNames[getFontIndex(nParam)])));
             RTFSprms aRunPropsSprms;
             aRunPropsSprms.set(NS_ooxml::LN_EG_RPrBase_rFonts, RTFValue::Pointer_t(new RTFValue(aFontAttributes)));
-            // If there are multiple \f or \af tokens, only handle the first one.
-            if (!m_aStates.top().aTableSprms.find(NS_ooxml::LN_CT_Lvl_rPr))
-                m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_rPr, RTFValue::Pointer_t(new RTFValue(RTFSprms(), aRunPropsSprms)));
+            m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_rPr,
+                RTFValue::Pointer_t(new RTFValue(RTFSprms(), aRunPropsSprms)),
+                OVERWRITE_NO_APPEND);
         }
         else
         {
