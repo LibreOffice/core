@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_CUSTOMPANEL_CTP_FACTORY_HXX
-#define INCLUDED_CUSTOMPANEL_CTP_FACTORY_HXX
+#ifndef INCLUDED_EXAMPLES_CUSTOMPANEL_CTP_FACTORY_HXX
+#define INCLUDED_EXAMPLES_CUSTOMPANEL_CTP_FACTORY_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
@@ -69,6 +69,6 @@ namespace sd { namespace colortoolpanel
 } } // namespace sd::colortoolpanel
 
 
-#endif // INCLUDED_CUSTOMPANEL_CTP_FACTORY_HXX
+#endif // INCLUDED_EXAMPLES_CUSTOMPANEL_CTP_FACTORY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

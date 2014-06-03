@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef INCLUDED_DATABASE_DRIVERSKELETON_SPREPAREDSTATEMENT_HXX
-#define INCLUDED_DATABASE_DRIVERSKELETON_SPREPAREDSTATEMENT_HXX
+#ifndef INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SPREPAREDSTATEMENT_HXX
+#define INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SPREPAREDSTATEMENT_HXX
 
 #include "SStatement.hxx"
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
@@ -146,6 +146,6 @@ namespace connectivity
     }
 }
 
-#endif // INCLUDED_DATABASE_DRIVERSKELETON_SPREPAREDSTATEMENT_HXX
+#endif // INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SPREPAREDSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
