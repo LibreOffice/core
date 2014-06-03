@@ -116,7 +116,7 @@ namespace frm
         DECLARE_XTYPEPROVIDER()
 
         // XCloneable
-        DECLARE_XCLONEABLE();
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

@@ -204,7 +204,7 @@ protected:
     virtual void    refreshInternalEntryList() SAL_OVERRIDE;
 
 protected:
-    DECLARE_XCLONEABLE();
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void init();
     ::com::sun::star::uno::Any getCurrentSingleValue() const;

@@ -564,10 +564,6 @@ public:
     virtual ~classname() \
 
 
-// XCloneable
-#define DECLARE_XCLONEABLE( ) \
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-
 #define IMPLEMENT_DEFAULT_CLONING( classname ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL classname::createClone( ) throw (::com::sun::star::uno::RuntimeException, std::exception) \
     { \
