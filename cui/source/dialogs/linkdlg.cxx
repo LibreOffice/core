@@ -90,8 +90,10 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, bool bHtml 
     pLinkMgr( NULL ),
     bHtmlMode(bHtml)
 {
-    get(m_pFtFiles, "FILES");
     get(m_pTbLinks, "TB_LINKS");
+    Size aSize(LogicToPixel(Size(257, 87), MAP_APPFONT));
+    m_pTbLinks->set_width_request(aSize.Width());
+    m_pTbLinks->set_height_request(aSize.Height());
     get(m_pFtFullFileName, "FULL_FILE_NAME");
     get(m_pFtFullSourceName, "FULL_SOURCE_NAME");
     get(m_pFtFullTypeName, "FULL_TYPE_NAME");
@@ -102,19 +104,19 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, bool bHtml 
     get(m_pPbChangeSource, "CHANGE_SOURCE");
     get(m_pPbBreakLink, "BREAK_LINK");
 
-    m_pTbLinks->SetHelpId(HID_LINKDLG_TABLB);
     m_pTbLinks->SetSelectionMode( MULTIPLE_SELECTION );
     m_pTbLinks->SetTabs( &nTabs[0], MAP_APPFONT );
+    FixedText *pFtFiles = get<FixedText>("FILES");
+    pFtFiles->set_width_request(LogicToPixel(Size(nTabs[2] - nTabs[1] - 2, 0), MAP_APPFONT).Width());
+    FixedText *pFtLinks = get<FixedText>("LINKS");
+    pFtLinks->set_width_request(LogicToPixel(Size(nTabs[3] - nTabs[2] - 2, 0), MAP_APPFONT).Width());
+    FixedText *pFtTypes = get<FixedText>("TYPE");
+    pFtTypes->set_width_request(LogicToPixel(Size(nTabs[4] - nTabs[3] - 2, 0), MAP_APPFONT).Width());
     m_pTbLinks->Resize();  // OS: hack for correct selection
 
     // UpdateTimer for DDE-/Grf-links, which are waited for
     aUpdateTimer.SetTimeoutHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateTimer.SetTimeout( 1000 );
-
-    // Set the ZOrder, and accessible name to the dialog's title
-    m_pTbLinks->SetZOrder(0, WINDOW_ZORDER_FIRST);
-    m_pTbLinks->SetAccessibleName(this->GetText());
-    m_pTbLinks->SetAccessibleRelationLabeledBy(m_pFtFiles);
 
     m_pPbOpenSource->Hide();
 

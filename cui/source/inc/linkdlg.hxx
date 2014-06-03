@@ -41,7 +41,6 @@ class SvBaseLinksDlg : public ModalDialog
 {
     using Window::SetType;
 
-    FixedText *m_pFtFiles;
     SvTabListBox *m_pTbLinks;
     FixedText *m_pFtFullFileName;
     FixedText *m_pFtFullSourceName;
