@@ -113,7 +113,7 @@ ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive_sdk
 endif
 else # LIBO_TEST_INSTALL
-	$(call instsetoo_native_install_command,openoffice,$(if $(filter WNT,$(OS)),$(instsetoo_native_WITH_LANG),en-US),,,$(PKGFORMAT))
+	$(call instsetoo_native_install_command,openoffice,$(if $(filter WNT MACOSX,$(OS)),$(instsetoo_native_WITH_LANG),en-US),,,$(PKGFORMAT))
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,$(PKGFORMAT))
 endif
@@ -121,7 +121,7 @@ ifeq (HELP,$(filter HELP,$(BUILD_TYPE))$(filter MACOSX,$(OS)))
 	$(foreach lang,$(gb_HELP_LANGS),\
 		$(call instsetoo_native_install_command,ooohelppack,$(lang),,-helppack,$(PKGFORMAT)))
 endif
-ifneq (WNT,$(OS))
+ifeq (,$(filter WNT MACOSX,$(OS)))
 	$(foreach lang,$(instsetoo_native_WITH_LANG),\
 		$(call instsetoo_native_install_command,ooolangpack,$(lang),,-languagepack,$(PKGFORMAT)))
 endif
