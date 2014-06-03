@@ -61,7 +61,7 @@ QuickDiagrammingLayout::QuickDiagrammingLayout( const Reference< XComponentConte
     mpThemePtr(new drawingml::Theme())
 {}
 
-bool QuickDiagrammingLayout::importDocument() throw()
+bool QuickDiagrammingLayout::importDocument() throw (css::uno::RuntimeException)
 {
     Reference<drawing::XShape>  xParentShape(getParentShape(),
                                              UNO_QUERY_THROW);
