@@ -876,7 +876,7 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
     numBytesRead = numBytes;
 
     mpImpl->mnReadBufferPos += numBytesRead;
-    return const_cast<const unsigned char *>(mpImpl->mpReadBuffer);
+    return mpImpl->mpReadBuffer;
 }
 
 long WPXSvInputStream::tell()
