@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __MNSINIPARSER_HXX__
-#define __MNSINIPARSER_HXX__
+
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MNSINIPARSER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MNSINIPARSER_HXX
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/io/IOException.hpp>

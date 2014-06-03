@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
+#define INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
+
 #include <sal/macros.h>
 #ifdef _UWINAPI_
 #   define _KERNEL32_
@@ -54,5 +56,7 @@ inline bool IsValidHandle(HANDLE handle)
 #define IsValidHandle(Handle)   ((DWORD_PTR)(Handle) + 1 > 1)
 
 #endif  /* __cplusplus */
+
+#endif // INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

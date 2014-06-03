@@ -7,14 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef VCL_X11LIMITS
-#define VCL_X11LIMITS
+#ifndef INCLUDED_VCL_INC_UNX_X11_XLIMITS_HXX
+#define INCLUDED_VCL_INC_UNX_X11_XLIMITS_HXX
 
 #include <X11/Xlib.h>
 #include <vclpluginapi.h>
 
 VCLPLUG_GEN_PUBLIC Pixmap limitXCreatePixmap(Display *display, Drawable d, unsigned int width, unsigned int height, unsigned int depth);
 
-#endif
+#endif // INCLUDED_VCL_INC_UNX_X11_XLIMITS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

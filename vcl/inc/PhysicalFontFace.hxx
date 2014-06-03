@@ -16,7 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
+
+#ifndef INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
+#define INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 
 #include <vcl/dllapi.h>
 
@@ -79,6 +81,8 @@ friend class PhysicalFontFamily;
     const int               mnMagic;    // poor man's RTTI
     PhysicalFontFace*       mpNext;
 };
+
+#endif // INCLUDED_VCL_INC_PHYSICALFONTFACE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef MFTXMLDUMP_HXX
-#define MFTXMLDUMP_HXX
+#ifndef INCLUDED_TEST_MTFXMLDUMP_HXX
+#define INCLUDED_TEST_MTFXMLDUMP_HXX
 
 #include <sal/config.h>
 #include <test/testdllapi.hxx>

@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined(AFX_ACCEDITABLETEXT_H__0C41AFBE_5A87_4D9D_A284_CEC264D91F81__INCLUDED_)
-#define AFX_ACCEDITABLETEXT_H__0C41AFBE_5A87_4D9D_A284_CEC264D91F81__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
 
 #include "resource.h"
 #include <com/sun/star/uno/reference.hxx>
@@ -109,6 +105,6 @@ private:
     }
 };
 
-#endif // !defined(AFX_ACCEDITABLETEXT_H__0C41AFBE_5A87_4D9D_A284_CEC264D91F81__INCLUDED_)
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCEDITABLETEXT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

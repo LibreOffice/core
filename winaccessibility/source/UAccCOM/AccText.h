@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined(AFX_ACCTEXT_H__F06C5496_9959_4C7C_873E_A8D50CFB290D__INCLUDED_)
-#define AFX_ACCTEXT_H__F06C5496_9959_4C7C_873E_A8D50CFB290D__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXT_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXT_H
 
 #include "resource.h"       // main symbols
 
@@ -134,6 +130,6 @@ public:
 
 };
 
-#endif // !defined(AFX_ACCTEXT_H__F06C5496_9959_4C7C_873E_A8D50CFB290D__INCLUDED_)
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

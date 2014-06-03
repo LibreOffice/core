@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef XMLOFF_FORMS_FORMCELLBINDING
-#define XMLOFF_FORMS_FORMCELLBINDING
+#ifndef INCLUDED_XMLOFF_SOURCE_FORMS_FORMCELLBINDING_HXX
+#define INCLUDED_XMLOFF_SOURCE_FORMS_FORMCELLBINDING_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -262,6 +262,6 @@ namespace xmloff
 
 }   // namespace xmloff
 
-#endif // XMLOFF_FORMS_FORMCELLBINDING
+#endif // INCLUDED_XMLOFF_SOURCE_FORMS_FORMCELLBINDING_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

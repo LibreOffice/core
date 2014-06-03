@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_OTYPEINFO_HXX_
-#define _CONNECTIVITY_OTYPEINFO_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_OTYPEINFO_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_OTYPEINFO_HXX
 
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -78,7 +78,7 @@ namespace connectivity
         inline OUString getDBName() const { return aTypeName; }
     };
 }
-#endif // _CONNECTIVITY_OTYPEINFO_HXX_
 
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_OTYPEINFO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

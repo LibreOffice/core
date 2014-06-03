@@ -19,14 +19,8 @@
 
 // AccTextBase.h: interface for the CAccTextBase class.
 
-
-
-#if !defined(AFX_ACCTEXTBASE_H__B9AE05F6_E28B_4CF3_A8F2_EEE5D2E00B82__INCLUDED_)
-#define AFX_ACCTEXTBASE_H__B9AE05F6_E28B_4CF3_A8F2_EEE5D2E00B82__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXTBASE_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXTBASE_H
 
 #include <com/sun/star/uno/reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleText.hpp>
@@ -115,6 +109,6 @@ private:
     }
 };
 
-#endif // !defined(AFX_ACCTEXTBASE_H__B9AE05F6_E28B_4CF3_A8F2_EEE5D2E00B82__INCLUDED_)
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCTEXTBASE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

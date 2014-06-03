@@ -19,6 +19,7 @@
 
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSRUNNABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSRUNNABLE_HXX
+
 #include "mozillasrc/MNSDeclares.hxx"
 #include <osl/thread.hxx>
 
@@ -55,6 +56,7 @@ namespace connectivity
         };
     }
 }
-#endif //_CONNECTIVITY_MAB_MOZABHELPER_HXX_
+
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSRUNNABLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

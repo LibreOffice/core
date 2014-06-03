@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SPRMIDS
-#define INCLUDED_SPRMIDS
+
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_SPRMIDS_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_SPRMIDS_HXX
 
 #include <sal/types.h>
 
@@ -311,6 +312,6 @@ const sal_uInt16 LN_TFNoAllowOverlap = 0x3465;
 const sal_uInt16 LN_CCv = 0x6870;
 }
 
-#endif // INCLUDED_SPRMIDS
+#endif // INCLUDED_SW_SOURCE_FILTER_WW8_SPRMIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

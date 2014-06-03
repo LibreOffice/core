@@ -77,6 +77,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_SRESULSETMETADATA_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

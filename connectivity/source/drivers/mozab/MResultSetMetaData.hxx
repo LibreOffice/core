@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_SRESULSETMETADATA_HXX
-#define CONNECTIVITY_SRESULSETMETADATA_HXX
+
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MRESULTSETMETADATA_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MRESULTSETMETADATA_HXX
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -87,6 +88,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_SRESULSETMETADATA_HXX
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MRESULTSETMETADATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

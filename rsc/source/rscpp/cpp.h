@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_RSC_SOURCE_RSCPP_CPP_H
+#define INCLUDED_RSC_SOURCE_RSCPP_CPP_H
 
 #ifndef TRUE
 #define TRUE            1
@@ -397,5 +399,7 @@ void ciwarn( char *format, int n);
 void dumpdef( char *why );
 void dumpadef( char *why, DEFBUF *dp );
 #endif
+
+#endif // INCLUDED_RSC_SOURCE_RSCPP_CPP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

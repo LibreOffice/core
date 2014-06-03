@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_RSC_SOURCE_RSCPP_CPPDEF_H
+#define INCLUDED_RSC_SOURCE_RSCPP_CPPDEF_H
+
 /*
  * This redundant definition of TRUE and FALSE works around
  * a limitation of Decus C.
@@ -319,5 +322,7 @@
 #endif
 #endif
 #endif
+
+#endif // INCLUDED_RSC_SOURCE_RSCPP_CPPDEF_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -190,6 +190,7 @@ namespace connectivity
         };
     }
 }
-#endif // CONNECTIVITY_SRESULTSET_HXX
+
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

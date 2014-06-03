@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_UNO_THREADPOOL_H
+#define INCLUDED_UNO_THREADPOOL_H
+
 #include <cppu/cppudllapi.h>
 #include <rtl/byteseq.h>
 
@@ -181,5 +184,7 @@ uno_threadpool_destroy( uno_ThreadPool hPool ) SAL_THROW_EXTERN_C();
 #ifdef __cplusplus
 }
 #endif
+
+#endif // INCLUDED_UNO_THREADPOOL_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

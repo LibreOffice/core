@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __SAMPLELIB_HXX_
-#define __SAMPLELIB_HXX_
+#ifndef INCLUDED_SALHELPER_TEST_SYMBOLS_SAMPLELIB_HXX
+#define INCLUDED_SALHELPER_TEST_SYMBOLS_SAMPLELIB_HXX
 
 #include <sal/types.h>
 

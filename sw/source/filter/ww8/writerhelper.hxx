@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_WRITERHELPER
-#define SW_WRITERHELPER
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WRITERHELPER_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_WRITERHELPER_HXX
 
 #include <typeinfo>
 #include <vector>

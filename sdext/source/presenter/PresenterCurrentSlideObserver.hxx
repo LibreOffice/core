@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SDEXT_PRESENTER_CURRENT_SLIDE_OBSERVER
-#define SDEXT_PRESENTER_CURRENT_SLIDE_OBSERVER
+#ifndef INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERCURRENTSLIDEOBSERVER_HXX
+#define INCLUDED_SDEXT_SOURCE_PRESENTER_PRESENTERCURRENTSLIDEOBSERVER_HXX
 
 #include "PresenterController.hxx"
 #include <com/sun/star/presentation/XSlideShow.hpp>

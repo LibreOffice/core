@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _SFX_FRMDESCRHXX
-#define _SFX_FRMDESCRHXX
+#ifndef INCLUDED_SFX2_FRMDESCR_HXX
+#define INCLUDED_SFX2_FRMDESCR_HXX
 
 #include <rtl/ustring.hxx>
 #include <sal/config.h>
@@ -253,6 +253,6 @@ public:
                                         { aProperties = rProp; }
 };
 
-#endif // #ifndef _SFX_FRMDESCRHXX
+#endif // INCLUDED_SFX2_FRMDESCR_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

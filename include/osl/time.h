@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _OSL_TIME_H_
-#define _OSL_TIME_H_
+#ifndef INCLUDED_OSL_TIME_H
+#define INCLUDED_OSL_TIME_H
 
 #include <sal/config.h>
 
@@ -154,6 +154,6 @@ SAL_DLLPUBLIC sal_uInt32 SAL_CALL osl_getGlobalTimer(void);
 }
 #endif
 
-#endif  /* _OSL_TIME_H_ */
+#endif // INCLUDED_OSL_TIME_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

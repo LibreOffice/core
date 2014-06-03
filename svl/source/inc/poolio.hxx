@@ -16,6 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#ifndef INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
+#define INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
+
 #include <svl/brdcst.hxx>
 #include <boost/shared_ptr.hpp>
 #include <deque>
@@ -218,5 +222,7 @@ struct SfxItemPool_Impl
 #define SFX_STYLES_REC                  sal_uInt8(0x03)
 #define SFX_STYLES_REC_HEADER       sal_uInt16(0x0010)
 #define SFX_STYLES_REC_STYLES       sal_uInt16(0x0020)
+
+#endif // INCLUDED_SVL_SOURCE_INC_POOLIO_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

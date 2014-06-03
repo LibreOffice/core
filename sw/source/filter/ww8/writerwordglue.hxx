@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SW_WRITERWORDGLUE
-#define SW_WRITERWORDGLUE
+#ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WRITERWORDGLUE_HXX
+#define INCLUDED_SW_SOURCE_FILTER_WW8_WRITERWORDGLUE_HXX
 
 #include "needed_cast.hxx"
 #include "types.hxx"

@@ -17,15 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined(AFX_ACCHYPERLINK_H__59DA79A5_A895_43DB_9495_2B2049CF5C65__INCLUDED_)
-#define AFX_ACCHYPERLINK_H__59DA79A5_A895_43DB_9495_2B2049CF5C65__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCHYPERLINK_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCHYPERLINK_H
 
 #include "resource.h"       // main symbols
-
 
 #include <com/sun/star/accessibility/XAccessibleHyperlink.hpp>
 #include "AccActionBase.h"
@@ -135,6 +130,6 @@ private:
 
 };
 
-#endif // !defined(AFX_ACCHYPERLINK_H__59DA79A5_A895_43DB_9495_2B2049CF5C65__INCLUDED_)
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCHYPERLINK_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

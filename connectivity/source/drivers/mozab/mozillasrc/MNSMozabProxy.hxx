@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_MAB_MOZABHELPER_HXX_
-#define _CONNECTIVITY_MAB_MOZABHELPER_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSMOZABPROXY_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSMOZABPROXY_HXX
 #include "MNSDeclares.hxx"
 #include <osl/thread.hxx>
 
@@ -102,6 +102,6 @@ namespace connectivity
         };
     }
 }
-#endif //_CONNECTIVITY_MAB_MOZABHELPER_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MOZILLASRC_MNSMOZABPROXY_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

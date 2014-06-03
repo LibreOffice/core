@@ -22,7 +22,6 @@
 
 #include "resource.h"       // main symbols
 
-
 #include <com/sun/star/uno/reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include "UNOXWrapper.h"

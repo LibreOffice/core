@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
-#define _CONNECTIVITY_PROPERTYIDS_HXX_
+
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_PROPERTYIDS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_INC_PROPERTYIDS_HXX
 
 // this define has to be set to split the names into different dll's or so's
 // every dll has his own set of property names
@@ -131,6 +132,6 @@ namespace connectivity
 #define PROPERTY_ID_VALUE                           60
 #define PROPERTY_ID_ACTIVE_CONNECTION               61
 
-#endif // _CONNECTIVITY_PROPERTYIDS_HXX_
+#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_PROPERTYIDS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

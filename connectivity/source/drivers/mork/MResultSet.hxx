@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_SRESULTSET_HXX
-#define CONNECTIVITY_SRESULTSET_HXX
+
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MRESULTSET_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MRESULTSET_HXX
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -352,6 +353,7 @@ public:
 
     }
 }
-#endif // CONNECTIVITY_SRESULTSET_HXX
+
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MRESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

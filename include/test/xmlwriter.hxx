@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef XML_WRITER_HXX
-#define XML_WRITER_HXX
+#ifndef INCLUDED_TEST_XMLWRITER_HXX
+#define INCLUDED_TEST_XMLWRITER_HXX
 
 #include <test/testdllapi.hxx>
 
@@ -40,6 +40,6 @@ public:
     void content(const OUString& aValue);
 };
 
-#endif // XML_WRITER_HXX
+#endif // INCLUDED_TEST_XMLWRITER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
