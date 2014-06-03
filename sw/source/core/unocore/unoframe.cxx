@@ -58,6 +58,7 @@
 #include <ndole.hxx>
 #include <frmfmt.hxx>
 #include <frame.hxx>
+#include <textboxhelper.hxx>
 #include <unotextrange.hxx>
 #include <unotextcursor.hxx>
 #include <unoparagraph.hxx>
@@ -1674,7 +1675,10 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
         {
             sal_Int32 nZOrder = - 1;
             aValue >>= nZOrder;
-            if( nZOrder >= 0)
+
+            // Don't set an explicit ZOrder on TextBoxes.
+            std::list<SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
+            if( nZOrder >= 0 && std::find(aTextBoxes.begin(), aTextBoxes.end(), pFmt) == aTextBoxes.end())
             {
                 SdrObject* pObject =
                     GetOrCreateSdrObject( (SwFlyFrmFmt&)*pFmt );
