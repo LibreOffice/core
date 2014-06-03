@@ -44,7 +44,7 @@ $(call gb_CustomTarget_get_workdir,odk/check)/checkbin : \
 	$(call gb_Helper_print_on_error,\
 		$(PERL) $< \
 			$(INSTDIR)/$(SDKDIRNAME) \
-			$(odk_PLATFORM) "$(gb_Executable_EXT)" \
+			$(odk_PLATFORM) '$(gb_Executable_EXT)' \
 		,$@.log \
 	)
 
