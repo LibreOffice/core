@@ -319,7 +319,7 @@ static PyObject* getComponentContext(
     return ret.getAcquired();
 }
 
-static PyObject* initPoniesMode(
+static PyObject* initTestEnvironment(
     SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject*)
 {
     // this tries to bootstrap enough of the soffice from python to run
@@ -841,7 +841,7 @@ static PyObject *setCurrentContext(
 
 struct PyMethodDef PyUNOModule_methods [] =
 {
-    {"experimentalExtraMagic", initPoniesMode, METH_VARARGS, NULL},
+    {"private_initTestEnvironment", initTestEnvironment, METH_VARARGS, NULL},
     {"getComponentContext", getComponentContext, METH_VARARGS, NULL},
     {"_createUnoStructHelper", reinterpret_cast<PyCFunction>(createUnoStructHelper), METH_VARARGS | METH_KEYWORDS, NULL},
     {"getTypeByName", getTypeByName, METH_VARARGS, NULL},
