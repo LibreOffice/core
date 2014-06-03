@@ -177,6 +177,17 @@ OString DbgOutItem(const SfxItemPool& rPool, const SfxPoolItem& rItem)
             aDebStr.append(static_cast<sal_Int32>(aColor.GetBlue()));
         }
         break;
+        case EE_CHAR_BKGCOLOR:
+        {
+            aDebStr.append("FillColor= ");
+            Color aColor( ((SvxColorBackgroundItem&)rItem).GetValue() );
+            aDebStr.append(static_cast<sal_Int32>(aColor.GetRed()));
+            aDebStr.append(", ");
+            aDebStr.append(static_cast<sal_Int32>(aColor.GetGreen()));
+            aDebStr.append(", ");
+            aDebStr.append(static_cast<sal_Int32>(aColor.GetBlue()));
+        }
+        break;
         case EE_CHAR_FONTINFO:
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
