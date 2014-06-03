@@ -231,7 +231,7 @@ public:
         using F2
      */
     void    UseInputStringForFormatting( bool bUseInputStr = true );
-    bool    IsUsingInputStringForFormatting() const;
+    bool    IsUsingInputStringForFormatting() const { return m_bUseInputStringForFormatting;}
 
 protected:
     virtual bool Notify(NotifyEvent& rNEvt) SAL_OVERRIDE;

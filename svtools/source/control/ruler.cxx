@@ -2779,10 +2779,6 @@ long Ruler::GetMargin2() const
     return mpData->nMargin2;
 }
 
-long Ruler::GetRulerVirHeight() const
-{
-    return mnVirHeight;
-}
 
 bool Ruler::GetTextRTL()
 {

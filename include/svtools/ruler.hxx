@@ -707,7 +707,7 @@ private:
     Ruler& operator= (const Ruler &);
 
 protected:
-    long            GetRulerVirHeight() const;
+    long            GetRulerVirHeight() const { return mnVirHeight;}
     MapMode         GetCurrentMapMode() const { return maMapMode; }
     RulerUnitData   GetCurrentRulerUnit() const;
 

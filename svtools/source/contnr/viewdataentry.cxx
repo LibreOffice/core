@@ -51,35 +51,11 @@ SvViewDataEntry::~SvViewDataEntry()
 #endif
 }
 
-bool SvViewDataEntry::IsSelected() const
-{
-    return mbSelected;
-}
 
-bool SvViewDataEntry::IsHighlighted() const
-{
-    return mbHighlighted;
-}
 
-bool SvViewDataEntry::IsExpanded() const
-{
-    return mbExpanded;
-}
 
-bool SvViewDataEntry::HasFocus() const
-{
-    return mbFocused;
-}
 
-bool SvViewDataEntry::IsCursored() const
-{
-    return mbCursored;
-}
 
-bool SvViewDataEntry::IsSelectable() const
-{
-    return mbSelectable;
-}
 
 void SvViewDataEntry::SetFocus( bool bFocus )
 {

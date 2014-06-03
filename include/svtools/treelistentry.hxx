@@ -90,13 +90,13 @@ public:
     const SvLBoxItem* GetFirstItem( sal_uInt16 nId ) const;
     SvLBoxItem* GetFirstItem( sal_uInt16 nId );
     size_t GetPos( const SvLBoxItem* pItem ) const;
-    void*       GetUserData() const;
+    void*       GetUserData() const { return pUserData;}
     void        SetUserData( void* pPtr );
     void        EnableChildrenOnDemand( bool bEnable=true );
     bool        HasChildrenOnDemand() const;
     bool        HasInUseEmphasis() const;
 
-    sal_uInt16 GetFlags() const;
+    sal_uInt16 GetFlags() const { return nEntryFlags;}
     void SetFlags( sal_uInt16 nFlags );
 
     bool GetIsMarked() const { return bIsMarked; }
