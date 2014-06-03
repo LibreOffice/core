@@ -155,6 +155,7 @@
 #define STR_PASSWD_MIN_LEN                  (RID_SFX_START+124)
 #define STR_NONCHECKEDOUT_DOCUMENT          (RID_SFX_START+125)
 #define BT_CHECKOUT                         (RID_SFX_START+126)
+#define STR_PASSWD_MIN_LEN1                 (RID_SFX_START+127)
 #define STR_ACCTITLE_PRODUCTIVITYTOOLS      (RID_SFX_START+157)
 
 #define SFX_THUMBNAIL_TEXT                  (RID_SFX_START+158)
