@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _MNSFOLDERS_HXX_
-#define _MNSFOLDERS_HXX_
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MNSFOLDERS_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MNSFOLDERS_HXX
 
 #include <sal/types.h>
 #include <osl/diagnose.h>

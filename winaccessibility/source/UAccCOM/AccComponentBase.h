@@ -17,16 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // AccComponentBase.h: interface for the CAccComponentBase class.
 
-
-#if !defined(AFX_ACCCOMPONENTBASE_H__946BE230_1DCB_494B_ACF6_32A2E197DD2A__INCLUDED_)
-#define AFX_ACCCOMPONENTBASE_H__946BE230_1DCB_494B_ACF6_32A2E197DD2A__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENTBASE_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENTBASE_H
 
 #include <com/sun/star/uno/reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleComponent.hpp>
@@ -71,6 +65,6 @@ protected:
     }
 };
 
-#endif // !defined(AFX_ACCCOMPONENTBASE_H__946BE230_1DCB_494B_ACF6_32A2E197DD2A__INCLUDED_)
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCCOMPONENTBASE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

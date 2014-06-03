@@ -22,7 +22,6 @@
 
 #include "resource.h"       // main symbols
 
-
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include "UAccCOM.h"
 

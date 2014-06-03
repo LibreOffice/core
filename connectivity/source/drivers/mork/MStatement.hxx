@@ -16,8 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef CONNECTIVITY_SSTATEMENT_HXX
-#define CONNECTIVITY_SSTATEMENT_HXX
+
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MSTATEMENT_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MSTATEMENT_HXX
 
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
@@ -197,6 +198,7 @@ namespace connectivity
         };
     }
 }
-#endif // CONNECTIVITY_SSTATEMENT_HXX
+
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_MSTATEMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

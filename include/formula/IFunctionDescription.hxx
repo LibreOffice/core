@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDE_FUNCTION_DESCRIPTION
-#define INCLUDE_FUNCTION_DESCRIPTION
+#ifndef INCLUDED_FORMULA_IFUNCTIONDESCRIPTION_HXX
+#define INCLUDED_FORMULA_IFUNCTIONDESCRIPTION_HXX
 
 #include <vector>
 #include <memory>
@@ -165,6 +165,6 @@ namespace formula
     };
 
 }
-#endif //INCLUDE_FUNCTION_DESCRIPTION
+#endif // INCLUDED_FORMULA_IFUNCTIONDESCRIPTION_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -18,8 +18,8 @@
  */
 // Simple.h : Declaration of the CSimple
 
-#ifndef __SIMPLE_H_
-#define __SIMPLE_H_
+#ifndef INCLUDED_EXTENSIONS_TEST_OLE_UNOTOCOMCALLS_XCALLBACK_IMPL_SIMPLE_H
+#define INCLUDED_EXTENSIONS_TEST_OLE_UNOTOCOMCALLS_XCALLBACK_IMPL_SIMPLE_H
 
 #include "resource.h"
 
@@ -53,6 +53,6 @@ public:
     STDMETHOD(func)( BSTR message);
 };
 
-#endif //__SIMPLE_H_
+#endif // INCLUDED_EXTENSIONS_TEST_OLE_UNOTOCOMCALLS_XCALLBACK_IMPL_SIMPLE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

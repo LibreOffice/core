@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_QUICKSTARTER_QUICKSTARTER_HXX
+#define INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_QUICKSTARTER_QUICKSTARTER_HXX
 
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
@@ -35,5 +36,7 @@ std::string GetOfficeInstallationPath(MSIHANDLE handle);
 std::string GetOfficeProductName(MSIHANDLE handle);
 std::string GetQuickstarterLinkName(MSIHANDLE handle);
 std::string GetProcessImagePath( DWORD dwProcessId );
+
+#endif // INCLUDED_SETUP_NATIVE_SOURCE_WIN32_CUSTOMACTIONS_QUICKSTARTER_QUICKSTARTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
