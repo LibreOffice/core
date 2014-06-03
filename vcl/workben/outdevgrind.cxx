@@ -139,8 +139,8 @@ void setupMethodStubs( functor_vector_type& res )
 
     /* void DrawTextArray( const Point& rStartPt, const OUString& rStr,
                                        const sal_Int32* pDXAry = NULL,
-                                       xub_StrLen nIndex = 0,
-                                       xub_StrLen nLen = STRING_LEN );
+                                       sal_uInt16 nIndex = 0,
+                                       sal_Int32 nLen = STRING_LEN );
     */
     add(res,
         "DrawTextArray",
