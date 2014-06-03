@@ -33,6 +33,79 @@
 namespace
 {
 
+const char *
+meta_action_name(sal_uInt16 nMetaAction)
+{
+#ifndef SAL_LOG_INFO
+    (void) nMetaAction;
+    return "";
+#else
+    switch( nMetaAction )
+    {
+    case META_NULL_ACTION: return "NULL";
+    case META_PIXEL_ACTION: return "PIXEL";
+    case META_POINT_ACTION: return "POINT";
+    case META_LINE_ACTION: return "LINE";
+    case META_RECT_ACTION: return "RECT";
+    case META_ROUNDRECT_ACTION: return "ROUNDRECT";
+    case META_ELLIPSE_ACTION: return "ELLIPSE";
+    case META_ARC_ACTION: return "ARC";
+    case META_PIE_ACTION: return "PIE";
+    case META_CHORD_ACTION: return "CHORD";
+    case META_POLYLINE_ACTION: return "POLYLINE";
+    case META_POLYGON_ACTION: return "POLYGON";
+    case META_POLYPOLYGON_ACTION: return "POLYPOLYGON";
+    case META_TEXT_ACTION: return "TEXT";
+    case META_TEXTARRAY_ACTION: return "TEXTARRAY";
+    case META_STRETCHTEXT_ACTION: return "STRETCHTEXT";
+    case META_TEXTRECT_ACTION: return "TEXTRECT";
+    case META_BMP_ACTION: return "BMP";
+    case META_BMPSCALE_ACTION: return "BMPSCALE";
+    case META_BMPSCALEPART_ACTION: return "BMPSCALEPART";
+    case META_BMPEX_ACTION: return "BMPEX";
+    case META_BMPEXSCALE_ACTION: return "BMPEXSCALE";
+    case META_BMPEXSCALEPART_ACTION: return "BMPEXSCALEPART";
+    case META_MASK_ACTION: return "MASK";
+    case META_MASKSCALE_ACTION: return "MASKSCALE";
+    case META_MASKSCALEPART_ACTION: return "MASKSCALEPART";
+    case META_GRADIENT_ACTION: return "GRADIENT";
+    case META_HATCH_ACTION: return "HATCH";
+    case META_WALLPAPER_ACTION: return "WALLPAPER";
+    case META_CLIPREGION_ACTION: return "CLIPREGION";
+    case META_ISECTRECTCLIPREGION_ACTION: return "ISECTRECTCLIPREGION";
+    case META_ISECTREGIONCLIPREGION_ACTION: return "ISECTREGIONCLIPREGION";
+    case META_MOVECLIPREGION_ACTION: return "MOVECLIPREGION";
+    case META_LINECOLOR_ACTION: return "LINECOLOR";
+    case META_FILLCOLOR_ACTION: return "FILLCOLOR";
+    case META_TEXTCOLOR_ACTION: return "TEXTCOLOR";
+    case META_TEXTFILLCOLOR_ACTION: return "TEXTFILLCOLOR";
+    case META_TEXTALIGN_ACTION: return "TEXTALIGN";
+    case META_MAPMODE_ACTION: return "MAPMODE";
+    case META_FONT_ACTION: return "FONT";
+    case META_PUSH_ACTION: return "PUSH";
+    case META_POP_ACTION: return "POP";
+    case META_RASTEROP_ACTION: return "RASTEROP";
+    case META_TRANSPARENT_ACTION: return "TRANSPARENT";
+    case META_EPS_ACTION: return "EPS";
+    case META_REFPOINT_ACTION: return "REFPOINT";
+    case META_TEXTLINECOLOR_ACTION: return "TEXTLINECOLOR";
+    case META_TEXTLINE_ACTION: return "TEXTLINE";
+    case META_FLOATTRANSPARENT_ACTION: return "FLOATTRANSPARENT";
+    case META_GRADIENTEX_ACTION: return "GRADIENTEX";
+    case META_LAYOUTMODE_ACTION: return "LAYOUTMODE";
+    case META_TEXTLANGUAGE_ACTION: return "TEXTLANGUAGE";
+    case META_OVERLINECOLOR_ACTION: return "OVERLINECOLOR";
+    case META_COMMENT_ACTION: return "COMMENT";
+    default:
+        // Yes, return a pointer to a static buffer. This is a very
+        // local debugging output function, so no big deal.
+        static char buffer[6];
+        sprintf(buffer, "%u", nMetaAction);
+        return buffer;
+    }
+#endif
+}
+
 inline void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
 {
     rPt.X() = FRound( fScaleX * rPt.X() );
@@ -127,7 +200,7 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
 
     rIStm.ReadUInt16( nType );
 
-    SAL_INFO("vcl.gdi", "ReadMetaAction " << nType);
+    SAL_INFO("vcl.gdi", "ReadMetaAction " << meta_action_name( nType ));
 
     switch( nType )
     {
@@ -197,6 +270,12 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
         pAction->Read( rIStm, pData );
 
     return pAction;
+}
+
+OUString MetaAction::TypeName( sal_uInt16 nType )
+{
+    const char *name = meta_action_name( nType );
+    return OUString( name, strlen( name ), RTL_TEXTENCODING_ASCII_US );
 }
 
 MetaPixelAction::MetaPixelAction() :
