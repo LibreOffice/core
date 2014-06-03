@@ -31,9 +31,8 @@ namespace utl {
     digits per group. If the last group was encountered the iterator will
     always return the last grouping.
 
-    Grouping values are sanitized to be 0 <= value <= SAL_MAX_UINT16, even if
-    originally Int32, to be able to easily cast it down to String's xub_StrLen.
-    This shouldn't make any difference in practice.
+    Grouping values are sanitized to be >= 0, even if originally signed
+    sal_Int32.
 
     Usage example with a string buffer containing a decimal representation of
     an integer number. Note that of course this loop could be optimized to not
@@ -81,11 +80,9 @@ class DigitGroupingIterator
         if (mnGroup < maGroupings.getLength())
         {
             sal_Int32 n = maGroupings[mnGroup];
-            OSL_ENSURE( 0 <= n && n <= SAL_MAX_UINT16, "DigitGroupingIterator::getGrouping: far out");
+            SAL_WARN_IF( n < 0, "unotools", "DigitGroupingIterator::getGrouping: negative grouping");
             if (n < 0)
-                n = 0;                  // sanitize ...
-            else if (n > SAL_MAX_UINT16)
-                n = SAL_MAX_UINT16;     // limit for use with xub_StrLen
+                n = 0;      // sanitize ...
             return n;
         }
         return 0;
