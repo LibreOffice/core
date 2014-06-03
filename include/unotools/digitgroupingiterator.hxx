@@ -80,7 +80,7 @@ class DigitGroupingIterator
         if (mnGroup < maGroupings.getLength())
         {
             sal_Int32 n = maGroupings[mnGroup];
-            SAL_WARN_IF( n < 0, "unotools", "DigitGroupingIterator::getGrouping: negative grouping");
+            SAL_WARN_IF( n < 0, "unotools.i18n", "DigitGroupingIterator::getGrouping: negative grouping");
             if (n < 0)
                 n = 0;      // sanitize ...
             return n;
