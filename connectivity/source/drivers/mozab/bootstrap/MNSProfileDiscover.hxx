@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __MNSProfileDiscover_h___
-#define __MNSProfileDiscover_h___
+#ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDISCOVER_HXX
+#define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDISCOVER_HXX
 
 #ifndef MINIMAL_PROFILEDISCOVER
 #include "mozilla_profile_discover.h"
@@ -111,6 +111,6 @@ namespace connectivity
     }
 }
 
-#endif // __MNSProfileDiscover_h___
+#endif // INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_BOOTSTRAP_MNSPROFILEDISCOVER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

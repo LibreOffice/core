@@ -17,15 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if !defined(AFX_ACCHYPERTEXT_H__6DC133B6_03DB_42C6_A9B7_27AF4FDA00CA__INCLUDED_)
-#define AFX_ACCHYPERTEXT_H__6DC133B6_03DB_42C6_A9B7_27AF4FDA00CA__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCHYPERTEXT_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCHYPERTEXT_H
 
 #include "resource.h"       // main symbols
-
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleHypertext.hpp>
@@ -155,6 +150,6 @@ private:
 
 };
 
-#endif // !defined(AFX_ACCHYPERTEXT_H__6DC133B6_03DB_42C6_A9B7_27AF4FDA00CA__INCLUDED_)
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCHYPERTEXT_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
