@@ -72,7 +72,10 @@ namespace framework
             virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
             // XImageManager
-            virtual void SAL_CALL reset() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual void SAL_CALL reset()
+                throw (css::lang::IllegalAccessException,
+                       css::uno::RuntimeException,
+                       std::exception) SAL_OVERRIDE;
             virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAllImageNames( ::sal_Int16 nImageType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual sal_Bool SAL_CALL hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > SAL_CALL getImages( ::sal_Int16 nImageType, const ::com::sun::star::uno::Sequence< OUString >& aCommandURLSequence ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

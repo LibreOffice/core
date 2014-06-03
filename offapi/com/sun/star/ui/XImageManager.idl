@@ -49,7 +49,7 @@ interface XImageManager
         This means that all user images of the instance will be removed.
         </p>
     */
-    void reset();
+    void reset() raises ( com::sun::star::lang::IllegalArgumentException );
 
     /** retrieves the list of command URLs which have images associated.
 

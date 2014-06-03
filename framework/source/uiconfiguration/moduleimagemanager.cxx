@@ -100,7 +100,9 @@ void SAL_CALL ModuleImageManager::initialize( const Sequence< Any >& aArguments 
 
 // XImageManager
 void SAL_CALL ModuleImageManager::reset()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::lang::IllegalAccessException,
+           css::uno::RuntimeException,
+           std::exception)
 {
     m_pImpl->reset();
 }
