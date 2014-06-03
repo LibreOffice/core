@@ -1017,8 +1017,10 @@ private:
     }
 }
 
--(void)insertText:(id)aString
+-(void)insertText:(id)aString replacementRange:(NSRange)replacementRange
 {
+    (void) replacementRange; // FIXME: surely it must be used
+
     YIELD_GUARD;
     
     if( AquaSalFrame::isAlive( mpFrame ) )
@@ -1538,7 +1540,7 @@ private:
 }
 
 
-// NSTextInput protocol
+// NSTextInputClient protocol
 - (NSArray *)validAttributesForMarkedText
 {
     return [NSArray arrayWithObjects:NSUnderlineStyleAttributeName, nil];
@@ -1589,8 +1591,10 @@ private:
     return mSelectedRange;
 }
 
-- (void)setMarkedText:(id)aString selectedRange:(NSRange)selRange
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selRange replacementRange:(NSRange)replacementRange
 {
+    (void) replacementRange; // FIXME - use it!
+
     if( ![aString isKindOfClass:[NSAttributedString class]] )
         aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
     NSRange rangeToReplace = [self hasMarkedText] ? [self markedRange] : [self selectedRange];
@@ -1658,10 +1662,12 @@ private:
     mSelectedRange = mMarkedRange = NSMakeRange(NSNotFound, 0);
 }
 
-- (NSAttributedString *)attributedSubstringFromRange:(NSRange)theRange
+- (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    (void)theRange;
-    // FIXME
+    (void) aRange;
+    (void) actualRange;
+
+    // FIXME - Implement
     return nil;
 }
 
@@ -1703,9 +1709,12 @@ private:
     mpLastEvent = nil;
 }
 
-- (NSRect)firstRectForCharacterRange:(NSRange)theRange
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
 {
-    (void)theRange;
+     // FIXME - These should probably be used?
+    (void) aRange;
+    (void) actualRange;
+
     SalExtTextInputPosEvent aPosEvent;
     mpFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void *)&aPosEvent );
 
