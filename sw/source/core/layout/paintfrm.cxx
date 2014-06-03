@@ -1649,12 +1649,9 @@ bool MA_FASTCALL DrawFillAttributes(
 
     if(bUseNew && rFillAttributes.get() && rFillAttributes->isUsed())
     {
-        //UUUU Need to substract a half logical pixel unit from TopLeft to get the correct
-        // layering for AAed paints
-        const basegfx::B2DVector aHalfSingleUnit(rOut.GetInverseViewTransformation() * basegfx::B2DVector(0.5, 0.5));
-        const basegfx::B2DRange aPaintRange(
-            rPaintRect.Left() - aHalfSingleUnit.getX(),
-            rPaintRect.Top() - aHalfSingleUnit.getY(),
+        basegfx::B2DRange aPaintRange(
+            rPaintRect.Left(),
+            rPaintRect.Top(),
             rPaintRect.Right(),
             rPaintRect.Bottom());
 
@@ -1662,6 +1659,14 @@ bool MA_FASTCALL DrawFillAttributes(
             !basegfx::fTools::equalZero(aPaintRange.getWidth()) &&
             !basegfx::fTools::equalZero(aPaintRange.getHeight()))
         {
+            //UUUU need to expand for correct AAed and non-AAed visualization as primitive; move
+            // bounds to half-(logical)pixel bounds and add a width/height of one pixel that is missing
+            // from SwRect/Rectangle integer handling
+            const basegfx::B2DVector aSingleUnit(rOut.GetInverseViewTransformation() * basegfx::B2DVector(0.5, 0.5));
+
+            aPaintRange.expand(aPaintRange.getMinimum() - (aSingleUnit * 0.5));
+            aPaintRange.expand(aPaintRange.getMaximum() + (aSingleUnit * 1.5));
+
             const basegfx::B2DRange aDefineRange(
                 rOriginalLayoutRect.Left(),
                 rOriginalLayoutRect.Top(),
