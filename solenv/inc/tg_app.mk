@@ -285,7 +285,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .IF "$(APP$(TNR)TEST)" == "enabled" &&  "$(APP$(TNR)TARGET)" != ""
 
 $(APP$(TNR)TARGET)_run: $(APP$(TNR)TARGETN)
-    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH) $(APP$(TNR)TARGETN) --gtest_output="xml:$(BIN)/$(APP$(TNR)TARGET)_result.xml"
+    $(COMMAND_ECHO) $(AUGMENT_LIBRARY_PATH_LOCAL) $(APP$(TNR)TARGETN) --gtest_output="xml:$(BIN)/$(APP$(TNR)TARGET)_result.xml"
 
 .ENDIF
 
