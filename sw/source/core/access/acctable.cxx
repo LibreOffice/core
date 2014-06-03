@@ -1792,7 +1792,8 @@ void SwAccessibleTable::ClearSelectionCellCache()
     m_vecCellRemove.clear();
 }
 
-void SwAccessibleTable::AddSelectionCell(const SwAccessibleContext* pAccCell ,sal_Bool bAddOrRemove)
+void SwAccessibleTable::AddSelectionCell(
+        SwAccessibleContext *const pAccCell, sal_Bool bAddOrRemove)
 {
     uno::Reference<XAccessible> const xTmp(pAccCell);
     if (bAddOrRemove)

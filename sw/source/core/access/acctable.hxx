@@ -269,7 +269,7 @@ public:
     Cells_t m_vecCellRemove;
     void FireSelectionEvent( );
     void ClearSelectionCellCache();
-    void AddSelectionCell(const SwAccessibleContext* ,sal_Bool bAddOrRemove);
+    void AddSelectionCell(SwAccessibleContext* ,sal_Bool bAddOrRemove);
 };
 
 inline SwAccessibleTableData_Impl& SwAccessibleTable::GetTableData()
