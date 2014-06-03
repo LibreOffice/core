@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SW_SOURCE_CORE_UIBASE_DOCVW_OVERLAYRANGES_HXX
-#define INCLUDED_SW_SOURCE_CORE_UIBASE_DOCVW_OVERLAYRANGES_HXX
+#ifndef INCLUDED_SW_SOURCE_UIBASE_DOCVW_OVERLAYRANGES_HXX
+#define INCLUDED_SW_SOURCE_UIBASE_DOCVW_OVERLAYRANGES_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <basegfx/range/b2drange.hxx>
@@ -73,6 +73,6 @@ namespace sw
     } // end of namespace overlay
 } // end of namespace sw
 
-#endif // INCLUDED_SW_SOURCE_CORE_UIBASE_DOCVW_OVERLAYRANGES_HXX
+#endif // INCLUDED_SW_SOURCE_UIBASE_DOCVW_OVERLAYRANGES_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
