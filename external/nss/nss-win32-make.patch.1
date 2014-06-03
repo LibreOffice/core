@@ -1,0 +1,20 @@
+--- nss/nss/coreconf/rules.mk.orig2	2014-06-03 15:30:01.667200000 +0200
++++ nss/nss/coreconf/rules.mk	2014-06-03 15:30:14.537200000 +0200
+@@ -259,7 +259,7 @@
+ 	@$(MAKE_OBJDIR)
+ 	rm -f $@
+ ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+-	$(AR) $(subst /,\\,$(OBJS))
++	$(AR) $(OBJS)
+ else
+ 	$(AR) cr $@ $(OBJS)
+ endif
+@@ -297,7 +297,7 @@
+ ifdef NS_USE_GCC
+ 	$(LINK_DLL) $(OBJS) $(SUB_SHLOBJS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS) $(LD_LIBS) $(RES)
+ else
+-	$(LINK_DLL) -MAP $(DLLBASE) $(subst /,\\,$(OBJS) $(SUB_SHLOBJS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS) $(LD_LIBS) $(RES))
++	$(LINK_DLL) -MAP $(DLLBASE) $(OBJS) $(SUB_SHLOBJS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS) $(LD_LIBS) $(RES)
+ ifdef MT
+ 	if test -f $@.manifest; then \
+ 		$(MT) -NOLOGO -MANIFEST $@.manifest -OUTPUTRESOURCE:$@\;2; \
