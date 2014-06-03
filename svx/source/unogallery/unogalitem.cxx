@@ -300,7 +300,8 @@ void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValue )
     throw (beans::UnknownPropertyException,
            lang::WrappedTargetException,
-           css::uno::RuntimeException)
+           css::uno::RuntimeException,
+           std::exception)
 {
     const SolarMutexGuard aGuard;
 
