@@ -462,7 +462,7 @@ bool AquaSalInfoPrinter::StartJob( const OUString* i_pFileName,
             {
                 [mpPrintInfo setJobDisposition: NSPrintSaveJob];
                 NSString* pPath = CreateNSString( *i_pFileName );
-                [pPrintDict setObject: pPath forKey: NSPrintSavePath];
+                [pPrintDict setObject:[NSURL fileURLWithPath:pPath] forKey:NSPrintJobSavingURL];
                 [pPath release];
             }
 
