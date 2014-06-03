@@ -141,6 +141,12 @@ struct lt_variant_t : public my_t_impl
     virtual ~lt_variant_t() {}
 };
 
+struct lt_string_t : public my_t_impl
+{
+    explicit lt_string_t() : my_t_impl() {}
+    virtual ~lt_string_t() {}
+};
+
 struct lt_list_t : public my_t_impl
 {
     lt_list_t* mpPrev;
@@ -260,6 +266,7 @@ struct lt_tag_t : public my_t_impl
     lt_script_t maScript;
     lt_region_t maRegion;
     my_t_list   maVariants;
+    lt_string_t maPrivateUse;
     explicit lt_tag_t() : my_t_impl(), maLanguage(), maScript(), maRegion(), maVariants() {}
     virtual ~lt_tag_t() {}
     explicit lt_tag_t( const lt_tag_t& r )
@@ -354,6 +361,13 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
                             {
                                 (*ppSub)->assign( pStart, p);
                                 bPrivate = true;
+                                if (*pStart == 'x')
+                                {
+                                    // Simply copy all to privateuse field, we
+                                    // do not care here what part actually is
+                                    // private.
+                                    tag->maPrivateUse.assign( pStart, pEnd);
+                                }
                             }
                             else
                                 return 0;   // bad
@@ -531,6 +545,11 @@ static const lt_list_t *lt_tag_get_variants(const lt_tag_t  *tag)
     return tag ? tag->maVariants.mpList : NULL;
 }
 
+static const lt_string_t *lt_tag_get_privateuse(const lt_tag_t  *tag)
+{
+    return tag && tag->maPrivateUse.mpStr ? &tag->maPrivateUse : NULL;
+}
+
 static const char *lt_lang_get_tag(const lt_lang_t *lang)
 {
     return lang ? lang->mpStr : NULL;
@@ -549,6 +568,11 @@ static const char *lt_region_get_tag(const lt_region_t *region)
 static const char *lt_variant_get_tag(const lt_variant_t *variant)
 {
     return variant ? variant->mpStr : NULL;
+}
+
+static size_t lt_string_length(const lt_string_t *string)
+{
+    return string ? strlen(string->mpStr) : 0;
 }
 
 #ifdef erDEBUG
