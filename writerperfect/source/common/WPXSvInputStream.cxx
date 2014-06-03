@@ -439,7 +439,7 @@ private:
     bool mbCheckedZip;
 public:
     sal_Int64 mnLength;
-    unsigned char *mpReadBuffer;
+    const unsigned char *mpReadBuffer;
     unsigned long mnReadBufferLength;
     unsigned long mnReadBufferPos;
 };
@@ -865,7 +865,7 @@ const unsigned char *WPXSvInputStream::read(unsigned long numBytes, unsigned lon
         mpImpl->mnReadBufferLength = numBytes;
 
     unsigned long tmpNumBytes(0);
-    mpImpl->mpReadBuffer = const_cast<unsigned char*>(mpImpl->read(mpImpl->mnReadBufferLength, tmpNumBytes));
+    mpImpl->mpReadBuffer = mpImpl->read(mpImpl->mnReadBufferLength, tmpNumBytes);
     if (tmpNumBytes != mpImpl->mnReadBufferLength)
         mpImpl->mnReadBufferLength = tmpNumBytes;
 
