@@ -49,7 +49,8 @@ public:
                           ::com::sun::star::container::XNameContainer >& xTable,
                       const ::com::sun::star::uno::Reference <
                           ::com::sun::star::embed::XStorage > &xStorage,
-                      OUString *pOptName ) throw();
+                      OUString *pOptName )
+        throw (css::uno::RuntimeException);
 
     // methods without content:
     virtual void _ExportAutoStyles() SAL_OVERRIDE;

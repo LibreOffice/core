@@ -209,7 +209,8 @@ bool SvxXMLXTableExportComponent::save(
         const OUString& rURL,
         const uno::Reference<container::XNameContainer >& xTable,
         const uno::Reference<embed::XStorage >& xStorage,
-        OUString *pOptName ) throw()
+        OUString *pOptName )
+    throw (css::uno::RuntimeException)
 {
     bool bRet = false;
     SfxMedium* pMedium = NULL;
