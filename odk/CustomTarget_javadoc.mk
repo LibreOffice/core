@@ -31,7 +31,8 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/%.html : \
 $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : \
 		$(call gb_Jar_get_target,ridl)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JDC,1)
-	$(JAVADOC) -J-Xmx120m -use -splitindex \
+	$(call gb_Helper_abbreviate_dirs,\
+		$(JAVADOC) -J-Xmx120m -use -splitindex \
 		-windowtitle "Java UNO Runtime Reference" \
 		-header "$(PRODUCTNAME) $(PRODUCTVERSION) SDK Java API Reference"\
 		-tag attention:a:"Attention:" \
@@ -42,6 +43,6 @@ $(call gb_CustomTarget_get_workdir,odk/docs/java/ref)/javadoc_log.txt : \
 		-linkoffline http://java.sun.com/j2se/1.5/docs/api $(SRCDIR)/odk/docs/java \
 		$(odk_JAVAPACKAGES) \
 		$(if $(JAVADOCISGJDOC),,-notimestamp) \
-		> $@
+		> $@)
 
 # vim: set noet sw=4 ts=4:
