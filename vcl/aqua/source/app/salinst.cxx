@@ -516,7 +516,8 @@ bool AquaSalInstance::isNSAppThread() const
 
 void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 {
-    switch( [pEvent subtype] )
+    int nSubtype = [pEvent subtype];
+    switch( nSubtype )
     {
     case AppStartTimerEvent:
         AquaSalTimer::handleStartTimerEvent( pEvent );
