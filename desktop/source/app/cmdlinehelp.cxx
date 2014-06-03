@@ -109,14 +109,17 @@ namespace desktop
         "--unaccept=<accept-string>\n"\
         "      Close an acceptor that was created with --accept=<accept-string>\n"\
         "      Use --unnaccept=all to close all open acceptors\n"\
-        "--infilter=<filter>\n"\
+        "--infilter=<filter>[:filter_options]\n"\
         "      Force an input filter type if possible\n"\
         "      Eg. --infilter=\"Calc Office Open XML\"\n"\
-        "--convert-to output_file_extension[:output_filter_name] [--outdir output_dir] files\n"\
+        "          --infilter=\"Text (encoded):UTF8,LF,,,\"\n"\
+        "--convert-to output_file_extension[:output_filter_name[:output_filter_options]] [--outdir output_dir] files\n"\
         "      Batch convert files.\n"\
         "      If --outdir is not specified then current working dir is used as output_dir.\n"\
         "      Eg. --convert-to pdf *.doc\n"\
         "          --convert-to pdf:writer_pdf_Export --outdir /home/user *.doc\n"\
+        "          --convert-to \"html:XHTML Writer File:UTF8\" *.doc\n"\
+        "          --convert-to \"txt:Text (encoded):UTF8\" *.doc\n"\
         "--print-to-file [-printer-name printer_name] [--outdir output_dir] files\n"\
         "      Batch print files to file.\n"\
         "      If --outdir is not specified then current working dir is used as output_dir.\n"\
