@@ -54,7 +54,7 @@ QuickDiagrammingImport::QuickDiagrammingImport( const ::com::sun::star::uno::Ref
     : XmlFilterBase( rxContext )
 {}
 
-bool QuickDiagrammingImport::importDocument() throw()
+bool QuickDiagrammingImport::importDocument() throw (css::uno::RuntimeException)
 {
     /*  to activate the PPTX dumper, define the environment variable
         OOO_PPTXDUMPER and insert the full path to the file
