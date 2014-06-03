@@ -28,6 +28,10 @@
 // include files
 //------------------------------------------------------------------------
 
+#ifdef WNT
+#include <Windows.h>
+#endif
+
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
