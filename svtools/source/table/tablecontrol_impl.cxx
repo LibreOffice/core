@@ -2453,16 +2453,8 @@ namespace svt { namespace table
     }
 
 
-    ScrollBar* TableControl_Impl::getHorzScrollbar()
-    {
-        return m_pHScroll;
-    }
 
 
-    ScrollBar* TableControl_Impl::getVertScrollbar()
-    {
-        return m_pVScroll;
-    }
 
 
     bool TableControl_Impl::isRowSelected( RowPos i_row ) const

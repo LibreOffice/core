@@ -216,10 +216,6 @@ size_t SvTreeListEntry::GetPos( const SvLBoxItem* pItem ) const
     return it == maItems.end() ? ITEM_NOT_FOUND : std::distance(maItems.begin(), it);
 }
 
-void* SvTreeListEntry::GetUserData() const
-{
-    return pUserData;
-}
 
 void SvTreeListEntry::SetUserData( void* pPtr )
 {
@@ -236,10 +232,6 @@ bool SvTreeListEntry::HasInUseEmphasis() const
     return (bool)((nEntryFlags & SV_ENTRYFLAG_IN_USE)!=0);
 }
 
-sal_uInt16 SvTreeListEntry::GetFlags() const
-{
-    return nEntryFlags;
-}
 
 void SvTreeListEntry::SetFlags( sal_uInt16 nFlags )
 {

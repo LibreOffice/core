@@ -300,8 +300,8 @@ namespace svt { namespace table
 
         TableDataWindow&        getDataWindow()       { return *m_pDataWindow; }
         const TableDataWindow&  getDataWindow() const { return *m_pDataWindow; }
-        ScrollBar* getHorzScrollbar();
-        ScrollBar* getVertScrollbar();
+        ScrollBar* getHorzScrollbar() { return m_pHScroll; }
+        ScrollBar* getVertScrollbar() { return m_pVScroll; }
 
         Rectangle calcHeaderRect( bool bColHeader );
         Rectangle calcHeaderCellRect( bool bColHeader, sal_Int32 nPos );
