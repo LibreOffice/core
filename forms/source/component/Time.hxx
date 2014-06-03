@@ -86,7 +86,7 @@ protected:
     virtual void            onConnectedDbColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxForm ) SAL_OVERRIDE;
 
 protected:
-    DECLARE_XCLONEABLE();
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     /** translates the control value (the VCL-internal integer representation of a date) into

@@ -112,7 +112,7 @@ namespace frm
         using OControlModel::getFastPropertyValue;
 
     protected:
-        DECLARE_XCLONEABLE();
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
         void implInitPropertyContainer();

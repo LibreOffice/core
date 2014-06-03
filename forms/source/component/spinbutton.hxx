@@ -43,7 +43,7 @@ namespace frm
         DECLARE_XPERSISTOBJECT()
 
         // XCloneable
-        DECLARE_XCLONEABLE();
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XPropertyState
         virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const SAL_OVERRIDE;

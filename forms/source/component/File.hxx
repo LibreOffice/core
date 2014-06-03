@@ -80,7 +80,7 @@ public:
 protected:
     virtual void _reset();
 
-    DECLARE_XCLONEABLE();
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 

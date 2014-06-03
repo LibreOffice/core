@@ -109,7 +109,7 @@ protected:
 protected:
     virtual sal_uInt16 getPersistenceFlags() const SAL_OVERRIDE;
 
-    DECLARE_XCLONEABLE();
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     bool    implActsAsRichText( ) const;

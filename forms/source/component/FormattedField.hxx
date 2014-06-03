@@ -135,7 +135,7 @@ class OFormattedModel
         virtual void        onDisconnectedDbColumn() SAL_OVERRIDE;
 
     private:
-        DECLARE_XCLONEABLE();
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         void implConstruct();
 

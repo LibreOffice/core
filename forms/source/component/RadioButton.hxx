@@ -65,7 +65,7 @@ protected:
 protected:
     void SetSiblingPropsTo(const OUString& rPropName, const ::com::sun::star::uno::Any& rValue);
 
-    DECLARE_XCLONEABLE( );
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     /** sets the given value as new State at the aggregate
