@@ -736,7 +736,7 @@ IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
         else
         {
             OUString aCanonicalized;
-            bool bValid = LanguageTag::isValidBcp47( aStr, &aCanonicalized);
+            bool bValid = LanguageTag::isValidBcp47( aStr, &aCanonicalized, true);
             meEditedAndValid = (bValid ? EDITED_VALID : EDITED_INVALID);
             if (bValid && aCanonicalized != aStr)
             {
