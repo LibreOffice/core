@@ -87,7 +87,7 @@ class FWE_DLLPUBLIC MenuConfiguration
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > CreateMenuBarConfigurationFromXML(
             ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream )
-            throw ( ::com::sun::star::lang::WrappedTargetException );
+            throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
 
         PopupMenu* CreateBookmarkMenu(css::uno::Reference<css::frame::XFrame >& rFrame, const OUString& aURL)
             throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
