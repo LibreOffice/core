@@ -55,7 +55,7 @@ MenuConfiguration::~MenuConfiguration()
 
 Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     Reference< XInputStream >& rInputStream )
-throw ( WrappedTargetException )
+        throw (WrappedTargetException, RuntimeException)
 {
     Reference< XParser > xParser = Parser::create( m_xContext );
 
