@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #undef SC_DLLIMPLEMENTATION
 
-
-
-#define _TPHF_CXX
 #include "scitems.hxx"
 #include <sfx2/basedlgs.hxx>
 #include <svl/style.hxx>
@@ -40,9 +36,7 @@
 #include "styledlg.hxx"
 #include "scresid.hxx"
 #include "scuitphfedit.hxx"
-#undef _TPHF_CXX
 #include <boost/scoped_ptr.hpp>
-
 
 // class ScHFPage
 

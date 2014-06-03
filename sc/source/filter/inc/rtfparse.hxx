@@ -22,7 +22,6 @@
 
 #include "eeparser.hxx"
 
-#ifdef SC_RTFPARSE_CXX
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <o3tl/sorted_vector.hxx>
 
@@ -43,14 +42,6 @@ struct ScRTFCellDefault
 };
 
 class ScRTFColTwips : public o3tl::sorted_vector<sal_uLong> {};
-
-#else       // SC_RTFPARSE_CXX
-
-struct ScRTFCellDefault;
-class ScRTFColTwips;
-
-#endif      // SC_RTFPARSE_CXX
-
 
 class EditEngine;
 

@@ -31,9 +31,7 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 
-#define _CONSDLG_CXX
 #include "consdlg.hxx"
-#undef _CONSDLG_CXX
 #include <vcl/msgbox.hxx>
 
 #define INFOBOX(id) InfoBox(this, ScGlobal::GetRscString(id)).Execute()
