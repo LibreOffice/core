@@ -801,7 +801,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
         {
             bool bTmp = *(sal_Bool*)rValue.getValue();
-            mpDoc->set(IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, bTmp);
+            mpDoc->getIDocumentSettingAccess().set(IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING, bTmp);
         }
         break;
         default:
@@ -1229,7 +1229,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING:
         {
-            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING );
+            sal_Bool bTmp = mpDoc->getIDocumentSettingAccess().get( IDocumentSettingAccess::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING );
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
