@@ -1051,7 +1051,8 @@ ScDocShell* XclExpXmlStream::getDocShell()
     return 0;
 }
 
-bool XclExpXmlStream::exportDocument() throw(std::exception)
+bool XclExpXmlStream::exportDocument()
+    throw (css::uno::RuntimeException, std::exception)
 {
     ScDocShell* pShell = getDocShell();
     ScDocument* pDoc = pShell->GetDocument();
