@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_libraries,tl,\
     i18nlangtag \
     cppu \
     sal \
+    sax \
 	$(gb_UWINAPI) \
 ))
 

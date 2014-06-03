@@ -26,6 +26,8 @@
 #include <rtl/textenc.h>
 #include <sal/types.h>
 
+class SvMemoryStream;
+
 namespace com { namespace sun { namespace star { namespace util {
     class XStringWidth;
 } } } }
@@ -850,6 +852,9 @@ public:
      */
     OUString getFSysPath(FSysStyle eStyle, sal_Unicode * pDelimiter = 0)
         const;
+
+    // Data URLs:
+    SvMemoryStream* getData();
 
     // POP3 and URLs:
 

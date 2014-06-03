@@ -67,8 +67,8 @@
 #include <numrule.hxx>
 #include <boost/shared_ptr.hpp>
 
-#include <sax/tools/converter.hxx>
 #include <vcl/graphicfilter.hxx>
+#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
 
@@ -695,16 +695,18 @@ IMAGE_SETEVENT:
     aFrmSet.Put( aFrmSize );
 
     Graphic aEmptyGrf;
-    if( sGrfNm.startsWith("data:") )
+    INetURLObject aGraphicURL( sGrfNm );
+    if( aGraphicURL.GetProtocol() == INET_PROT_DATA )
     {
-        // use embedded base64 encoded data
-        ::com::sun::star::uno::Sequence< sal_Int8 > aPass;
-        OUString sBase64Data = sGrfNm.replaceAt(0,22,"");
-        ::sax::Converter::decodeBase64(aPass, sBase64Data);
-        if( aPass.hasElements() )
+        SvMemoryStream* aStream = aGraphicURL.getData();
+        if( aStream )
         {
-                SvMemoryStream aStream(aPass.getArray(), aPass.getLength(), STREAM_READ);
-                GraphicFilter::GetGraphicFilter().ImportGraphic( aEmptyGrf, OUString(), aStream );
+            GraphicFilter::GetGraphicFilter().ImportGraphic( aEmptyGrf, OUString(), *aStream );
+            free( aStream );
+        }
+        else
+        {
+            aEmptyGrf.SetDefaultType();
         }
     }
     else

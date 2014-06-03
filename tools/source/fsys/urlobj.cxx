@@ -20,6 +20,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/inetmime.hxx>
+#include <tools/stream.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <osl/diagnose.h>
@@ -36,6 +37,10 @@
 #include <limits>
 
 #include <string.h>
+
+#include <com/sun/star/uno/Sequence.hxx>
+#include <sax/tools/converter.hxx>
+#include <rtl/uri.hxx>
 
 namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
     // unnamed namespaces don't work well yet...
@@ -581,6 +586,44 @@ void INetURLObject::setInvalid()
     m_aPath.clear();
     m_aQuery.clear();
     m_aFragment.clear();
+}
+
+SvMemoryStream* INetURLObject::getData()
+{
+    if( GetProtocol() != INET_PROT_DATA )
+    {
+        return NULL;
+    }
+
+    OUString sURLPath = GetURLPath( DECODE_WITH_CHARSET, RTL_TEXTENCODING_ISO_8859_1 );
+    OUString sType, sSubType;
+    OUString sBase64Enc(";base64,");
+
+    INetContentTypeParameterList params;
+    sal_Unicode const * pSkippedMediatype = INetMIME::scanContentType( sURLPath.getStr(), sURLPath.getStr() + sURLPath.getLength(), &sType, &sSubType, &params );
+    sal_Int32 nCharactersSkipped = pSkippedMediatype-sURLPath.getStr();
+    sal_Int32 nCommaIndex = sURLPath.indexOf( ",", nCharactersSkipped );
+    sal_Int32 nBase64Index = sURLPath.indexOf( sBase64Enc, nCharactersSkipped );
+    SvMemoryStream* aStream=NULL;
+
+    if( nBase64Index >= 0 && nBase64Index < nCommaIndex )
+    {
+        // base64 decoding
+        OUString sBase64Data = sURLPath.copy( nBase64Index + sBase64Enc.getLength() );
+        css::uno::Sequence< sal_Int8 > aDecodedData;
+        ::sax::Converter::decodeBase64( aDecodedData, sBase64Data );
+        if( aDecodedData.hasElements() )
+        {
+            aStream = new SvMemoryStream( aDecodedData.getArray(), aDecodedData.getLength(), STREAM_READ );
+        }
+    }
+    else
+    {
+        // URL decoding
+        OUString sURLEncodedData = sURLPath.copy( nCommaIndex+1 );
+        aStream = new SvMemoryStream( const_cast< sal_Char * >(OUStringToOString(sURLEncodedData, RTL_TEXTENCODING_UTF8).getStr()), sURLEncodedData.getLength(), STREAM_READ);
+    }
+    return aStream;
 }
 
 namespace unnamed_tools_urlobj {
