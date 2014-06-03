@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef _FILTERDETECT_HXX
-#define _FILTERDETECT_HXX
+#ifndef INCLUDED_OFFICEDEV_FILTERDEVELOPMENT_FLATXMLFILTERDETECTION_FILTERDETECT_HXX
+#define INCLUDED_OFFICEDEV_FILTERDEVELOPMENT_FLATXMLFILTERDETECTION_FILTERDETECT_HXX
 
 
 #include <com/sun/star/document/XFilter.hpp>
