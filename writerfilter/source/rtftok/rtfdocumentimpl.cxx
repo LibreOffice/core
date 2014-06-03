@@ -987,7 +987,7 @@ int RTFDocumentImpl::resolveChars(char ch)
             // fdo#79384: Word will reject Shift-JIS following \loch
             // but apparently OOo could read and (worse) write such documents
             SAL_INFO_IF(m_aStates.top().eRunType != RTFParserState::DBCH,
-                "writerfilter.rtftok", "invalid Shift-JIS without DBCH");
+                "writerfilter.rtf", "invalid Shift-JIS without DBCH");
             unsigned char uch = ch;
             if ((uch >= 0x80 && uch <= 0x9F) || uch >= 0xE0)
             {
