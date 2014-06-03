@@ -202,6 +202,10 @@ uno::Any SwTextBoxHelper::queryInterface(SwFrmFmt* pShape, const uno::Type& rTyp
     {
         lcl_queryInterface<text::XText>(pShape, aRet);
     }
+    else if (rType == cppu::UnoType<css::text::XTextRange>::get())
+    {
+        lcl_queryInterface<text::XTextRange>(pShape, aRet);
+    }
 
 
     return aRet;
