@@ -115,7 +115,7 @@ PyObject* PyUNO_callable_call(
         PyRef temp = runtime.any2PyObject (ret_value);
         if( aOutParam.getLength() )
         {
-            PyRef return_list( PyTuple_New (1+aOutParam.getLength()), SAL_NO_ACQUIRE );
+            PyRef return_list( PyTuple_New (1+aOutParam.getLength()), SAL_NO_ACQUIRE, NOT_NULL );
             PyTuple_SetItem (return_list.get(), 0, temp.getAcquired());
 
             // initialize with defaults in case of exceptions
