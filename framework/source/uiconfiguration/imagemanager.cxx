@@ -102,9 +102,10 @@ void SAL_CALL ImageManager::initialize( const Sequence< Any >& aArguments ) thro
 
 // XImageManager
 void SAL_CALL ImageManager::reset()
-throw (::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::lang::IllegalAccessException,
+           css::uno::RuntimeException,
+           std::exception)
 {
-
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_pImpl->reset();
 }
