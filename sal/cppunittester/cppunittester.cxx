@@ -217,8 +217,6 @@ public:
             return false;
         }
 #endif
-        CppUnit::TestRunner runner;
-        runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
 
         CppUnit::TestResultCollector collector;
         result.addListener(&collector);
@@ -238,7 +236,12 @@ public:
         for (size_t i = 0; i < protectors.size(); ++i)
             result.pushProtector(protectors[i]);
 
-        runner.run(result);
+        {
+            CppUnit::TestRunner runner;
+            runner.addTest(
+                CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+            runner.run(result);
+        }
 
         for (size_t i = 0; i < protectors.size(); ++i)
             result.popProtector();
@@ -310,6 +313,8 @@ SAL_IMPLEMENT_MAIN() {
             fn = (oslGenericFunction) unoexceptionprotector;
         else if (sym == "unobootstrapprotector")
             fn = (oslGenericFunction) unobootstrapprotector;
+        else if (sym == "vclbootstrapprotector")
+            fn = (oslGenericFunction) vclbootstrapprotector;
         else
         {
             std::cerr
