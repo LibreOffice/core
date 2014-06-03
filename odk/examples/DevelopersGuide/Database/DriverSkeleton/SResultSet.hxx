@@ -33,8 +33,8 @@
  *
  *************************************************************************/
 
-#ifndef CONNECTIVITY_SRESULTSET_HXX
-#define CONNECTIVITY_SRESULTSET_HXX
+#ifndef INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SRESULTSET_HXX
+#define INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SRESULTSET_HXX
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -217,6 +217,6 @@ namespace connectivity
     }
 }
 
-#endif // CONNECTIVITY_SRESULTSET_HXX
+#endif // INCLUDED_EXAMPLES_DATABASE_DRIVERSKELETON_SRESULTSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
