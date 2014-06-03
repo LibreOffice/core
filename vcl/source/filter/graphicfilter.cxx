@@ -704,7 +704,7 @@ static bool ImpPeekGraphicFormat( SvStream& rStream, OUString& rFormatExtension,
             {
                 nCheckSize = nStreamLen < 2048 ? nStreamLen : 2048;
                 rStream.Seek(nStreamPos);
-                rStream.Read(sExtendedOrDecompressedFirstBytes, nCheckSize);
+                nCheckSize = rStream.Read(sExtendedOrDecompressedFirstBytes, nCheckSize);
             }
 
             if(ImplSearchEntry(pCheckArray, (sal_uInt8*)"<svg", nCheckSize, 4)) // '<svg'
