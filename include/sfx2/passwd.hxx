@@ -61,6 +61,7 @@ private:
     OKButton*       mpOKBtn;
 
     OUString        maMinLenPwdStr;
+    OUString        maMinLenPwdStr1;
     OUString        maEmptyPwdStr;
     OUString        maMainPwdStr;
     sal_uInt16      mnMinLen;

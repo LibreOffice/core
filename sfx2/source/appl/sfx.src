@@ -29,6 +29,11 @@ String STR_PASSWD_MIN_LEN
     Text [ en-US ] = "(Minimum $(MINLEN) characters)" ;
 };
 
+String STR_PASSWD_MIN_LEN1
+{
+    Text [ en-US ] = "(Minimum 1 character)" ;
+};
+
 String STR_PASSWD_EMPTY
 {
     Text [ en-US ] = "(The password can be empty)" ;

@@ -86,6 +86,7 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
 SfxPasswordDialog::SfxPasswordDialog(Window* pParent, const OUString* pGroupText)
     : ModalDialog(pParent, "PasswordDialog", "sfx/ui/password.ui")
     , maMinLenPwdStr(SFX2_RESSTR(STR_PASSWD_MIN_LEN))
+    , maMinLenPwdStr1(SFX2_RESSTR(STR_PASSWD_MIN_LEN1))
     , maEmptyPwdStr(SFX2_RESSTR(STR_PASSWD_EMPTY))
     , mnMinLen(5)
     , mnExtras(0)
@@ -133,9 +134,14 @@ void SfxPasswordDialog::SetPasswdText( )
         mpMinLengthFT->SetText(maEmptyPwdStr);
     else
     {
-        maMainPwdStr = maMinLenPwdStr;
-        maMainPwdStr = maMainPwdStr.replaceAll( "$(MINLEN)", OUString::number((sal_Int32) mnMinLen ) );
-        mpMinLengthFT->SetText(maMainPwdStr);
+        if( mnMinLen == 1 )
+            mpMinLengthFT->SetText(maMinLenPwdStr1);
+        else
+        {
+            maMainPwdStr = maMinLenPwdStr;
+            maMainPwdStr = maMainPwdStr.replaceAll( "$(MINLEN)", OUString::number((sal_Int32) mnMinLen ) );
+            mpMinLengthFT->SetText(maMainPwdStr);
+        }
     }
 }
 
