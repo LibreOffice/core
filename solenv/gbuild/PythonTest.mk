@@ -33,8 +33,6 @@ $(call gb_PythonTest_get_clean_target,%) :
 
 ifneq ($(DISABLE_PYTHON),TRUE)
 
-# pass a hard-coded 139 to the gdb postprocess script to match soffice.bin
-# signal exit values (assumption: non-0 exit value here means it crashed)
 .PHONY : $(call gb_PythonTest_get_target,%)
 $(call gb_PythonTest_get_target,%) :| $(gb_PythonTest_DEPS)
 	$(call gb_Output_announce,$*,$(true),PYT,2)
@@ -58,10 +56,10 @@ $(call gb_PythonTest_get_target,%) :| $(gb_PythonTest_DEPS)
 			$(MODULES) \
 		$(if $(gb_CppunitTest__interactive),, \
 			> $@.log 2>&1 \
-			|| (cat $@.log \
-				$(if $(value gb_CppunitTest_postprocess), \
-					&& $(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core,139)) \
-				&& $(SRCDIR)/solenv/bin/unittest-failed.sh Python $*))))
+			|| ($(if $(value gb_CppunitTest_postprocess), \
+					RET=$$?; \
+					$(call gb_CppunitTest_postprocess,$(gb_PythonTest_EXECUTABLE_GDB),$@.core,$$RET) >> $@.log 2>&1;) \
+				cat $@.log; $(SRCDIR)/solenv/bin/unittest-failed.sh Python $*))))
 
 # always use udkapi and URE services
 define gb_PythonTest_PythonTest
