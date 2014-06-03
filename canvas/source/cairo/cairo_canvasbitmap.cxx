@@ -221,12 +221,11 @@ namespace cairocanvas
             case 1:
             {
 #ifdef CAIRO_HAS_XLIB_SURFACE
-                X11Surface* pXlibSurface=dynamic_cast<X11Surface*>(mpBufferSurface.get());
-                OSL_ASSERT(pXlibSurface);
+                X11Surface& rXlibSurface=dynamic_cast<X11Surface&>(*mpBufferSurface.get());
                 uno::Sequence< uno::Any > args( 3 );
                 args[0] = uno::Any( false );  // do not call XFreePixmap on it
-                args[1] = uno::Any( pXlibSurface->getPixmap()->mhDrawable );
-                args[2] = uno::Any( sal_Int32( pXlibSurface->getDepth() ) );
+                args[1] = uno::Any( rXlibSurface.getPixmap()->mhDrawable );
+                args[2] = uno::Any( sal_Int32( rXlibSurface.getDepth() ) );
 
                 aRV = uno::Any( args );
 #elif defined CAIRO_HAS_QUARTZ_SURFACE
