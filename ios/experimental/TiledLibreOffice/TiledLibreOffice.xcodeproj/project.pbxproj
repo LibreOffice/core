@@ -741,6 +741,16 @@
 		BECAB371186054DE00F814F9 /* lo.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = lo.mm; sourceTree = "<group>"; };
 		BED2593E18F6B87900C94C72 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		BED2594018F6B89000C94C72 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		BED53168193738D800830918 /* bitmapaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = bitmapaction.cxx; path = ../../../cppcanvas/source/mtfrenderer/bitmapaction.cxx; sourceTree = "<group>"; };
+		BED53169193738D800830918 /* cachedprimitivebase.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = cachedprimitivebase.cxx; path = ../../../cppcanvas/source/mtfrenderer/cachedprimitivebase.cxx; sourceTree = "<group>"; };
+		BED5316A193738D800830918 /* emfplus.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = emfplus.cxx; path = ../../../cppcanvas/source/mtfrenderer/emfplus.cxx; sourceTree = "<group>"; };
+		BED5316B193738D800830918 /* implrenderer.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = implrenderer.cxx; path = ../../../cppcanvas/source/mtfrenderer/implrenderer.cxx; sourceTree = "<group>"; };
+		BED5316C193738D800830918 /* lineaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = lineaction.cxx; path = ../../../cppcanvas/source/mtfrenderer/lineaction.cxx; sourceTree = "<group>"; };
+		BED5316D193738D800830918 /* mtftools.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = mtftools.cxx; path = ../../../cppcanvas/source/mtfrenderer/mtftools.cxx; sourceTree = "<group>"; };
+		BED5316E193738D800830918 /* pointaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = pointaction.cxx; path = ../../../cppcanvas/source/mtfrenderer/pointaction.cxx; sourceTree = "<group>"; };
+		BED5316F193738D800830918 /* polypolyaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = polypolyaction.cxx; path = ../../../cppcanvas/source/mtfrenderer/polypolyaction.cxx; sourceTree = "<group>"; };
+		BED53170193738D800830918 /* textaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = textaction.cxx; path = ../../../cppcanvas/source/mtfrenderer/textaction.cxx; sourceTree = "<group>"; };
+		BED53171193738D800830918 /* transparencygroupaction.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = transparencygroupaction.cxx; path = ../../../cppcanvas/source/mtfrenderer/transparencygroupaction.cxx; sourceTree = "<group>"; };
 		BEDB0F08185B7537009A6F26 /* lo.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = lo.xcconfig; path = ../../../lo.xcconfig; sourceTree = "<group>"; };
 		BEEE02CE1860ABB700FBDE67 /* program */ = {isa = PBXFileReference; lastKnownFileType = folder; name = program; path = Resources/program; sourceTree = SOURCE_ROOT; };
 		BEEE02CF1860ABB700FBDE67 /* share */ = {isa = PBXFileReference; lastKnownFileType = folder; name = share; path = Resources/share; sourceTree = SOURCE_ROOT; };
@@ -802,10 +812,11 @@
 		BE0898E61860D3CD0021A679 /* LibreOffice source files */ = {
 			isa = PBXGroup;
 			children = (
-				BE82C47118CA18D70050EB79 /* drawinglayer */,
 				BE9F45F81868393D00B8BE69 /* bridges */,
 				BE55B10518DAD85E00950228 /* cppu */,
 				BE35B58A188FFA43001B7439 /* cppuhelper */,
+				BED531661937389B00830918 /* cppcanvas */,
+				BE82C47118CA18D70050EB79 /* drawinglayer */,
 				BECA60D9191026BA00B24A7E /* framework */,
 				BE03BF9418FC199B00620DC7 /* i18npool */,
 				BE55B10818DB673300950228 /* oox */,
@@ -1805,6 +1816,31 @@
 				BECA60E81910271F00B24A7E /* urltransformer.cxx */,
 			);
 			name = services;
+			sourceTree = "<group>";
+		};
+		BED531661937389B00830918 /* cppcanvas */ = {
+			isa = PBXGroup;
+			children = (
+				BED53167193738B000830918 /* mtfrenderer */,
+			);
+			name = cppcanvas;
+			sourceTree = "<group>";
+		};
+		BED53167193738B000830918 /* mtfrenderer */ = {
+			isa = PBXGroup;
+			children = (
+				BED53168193738D800830918 /* bitmapaction.cxx */,
+				BED53169193738D800830918 /* cachedprimitivebase.cxx */,
+				BED5316A193738D800830918 /* emfplus.cxx */,
+				BED5316B193738D800830918 /* implrenderer.cxx */,
+				BED5316C193738D800830918 /* lineaction.cxx */,
+				BED5316D193738D800830918 /* mtftools.cxx */,
+				BED5316E193738D800830918 /* pointaction.cxx */,
+				BED5316F193738D800830918 /* polypolyaction.cxx */,
+				BED53170193738D800830918 /* textaction.cxx */,
+				BED53171193738D800830918 /* transparencygroupaction.cxx */,
+			);
+			name = mtfrenderer;
 			sourceTree = "<group>";
 		};
 		BEEEF9681860A21F00FBDE67 /* Resources */ = {
