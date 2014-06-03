@@ -1049,8 +1049,7 @@ NSImage* CreateNSImage( const Image& rImage )
     NSImage* pImage = [[NSImage alloc] initWithSize: NSMakeSize( aSize.Width(), aSize.Height() )];
     if( pImage )
     {
-        [pImage setFlipped: YES];
-        [pImage lockFocus];
+        [pImage lockFocusFlipped:YES];
 
         NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
         CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
