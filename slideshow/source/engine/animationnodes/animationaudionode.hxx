@@ -16,8 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SLIDESHOW_ANIMATIONAUDIONODE_HXX
-#define INCLUDED_SLIDESHOW_ANIMATIONAUDIONODE_HXX
+#ifndef INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONAUDIONODE_HXX
+#define INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONAUDIONODE_HXX
 
 #include "basecontainernode.hxx"
 #include "soundplayer.hxx"
@@ -66,6 +66,6 @@ private:
 } // namespace internal
 } // namespace slideshow
 
-#endif /* INCLUDED_SLIDESHOW_ANIMATIONAUDIONODE_HXX */
+#endif // INCLUDED_SLIDESHOW_SOURCE_ENGINE_ANIMATIONNODES_ANIMATIONAUDIONODE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

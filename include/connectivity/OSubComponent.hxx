@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
-#define _CONNECTIVITY_OSUBCOMPONENT_HXX_
+#ifndef INCLUDED_CONNECTIVITY_OSUBCOMPONENT_HXX
+#define INCLUDED_CONNECTIVITY_OSUBCOMPONENT_HXX
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
@@ -81,6 +81,7 @@ namespace connectivity
         }
     };
 }
-#endif // _CONNECTIVITY_OSUBCOMPONENT_HXX_
+
+#endif // INCLUDED_CONNECTIVITY_OSUBCOMPONENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

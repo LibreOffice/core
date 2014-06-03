@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#pragma once
+#ifndef INCLUDED_SYSTOOLS_WIN32_COMTOOLS_HXX
+#define INCLUDED_SYSTOOLS_WIN32_COMTOOLS_HXX
 
 #include <string>
 #include <stdexcept>
@@ -183,5 +184,7 @@ namespace systools
 typedef sal::systools::COMReference<IDataObject> IDataObjectPtr;
 typedef sal::systools::COMReference<IStream> IStreamPtr;
 typedef sal::systools::COMReference<IEnumFORMATETC> IEnumFORMATETCPtr;
+
+#endif // INCLUDED_SYSTOOLS_WIN32_COMTOOLS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

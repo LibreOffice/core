@@ -16,7 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#pragma once
+
+#ifndef INCLUDED_VCL_INC_PHYSICALFONTFAMILY_HXX
+#define INCLUDED_VCL_INC_PHYSICALFONTFAMILY_HXX
 
 #include <set>
 
@@ -82,3 +84,6 @@ private:
     int                 mnMinQuality;       // quality of the worst font face
 };
 
+#endif // INCLUDED_VCL_INC_PHYSICALFONTFAMILY_HXX
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
