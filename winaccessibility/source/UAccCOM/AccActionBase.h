@@ -17,16 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 // AccActionBase.h: interface for the CAccActionBase class.
 
-
-#if !defined(AFX_ACCACTIONBASE_H__F87FAD24_D66E_4D22_9B24_3304A303DC84__INCLUDED_)
-#define AFX_ACCACTIONBASE_H__F87FAD24_D66E_4D22_9B24_3304A303DC84__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifndef INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTIONBASE_H
+#define INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTIONBASE_H
 
 #include <com/sun/star/uno/reference.hxx>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -85,6 +79,6 @@ private:
     }
 };
 
-#endif // !defined(AFX_ACCACTIONBASE_H__F87FAD24_D66E_4D22_9B24_3304A303DC84__INCLUDED_)
+#endif // INCLUDED_WINACCESSIBILITY_SOURCE_UACCCOM_ACCACTIONBASE_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

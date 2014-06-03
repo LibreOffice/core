@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef CHART2_ABSTRACT_SHAPE_FACTORY
-#define CHART2_ABSTRACT_SHAPE_FACTORY
+#ifndef INCLUDED_CHART2_SOURCE_VIEW_INC_ABSTRACTSHAPEFACTORY_HXX
+#define INCLUDED_CHART2_SOURCE_VIEW_INC_ABSTRACTSHAPEFACTORY_HXX
 
 #include "PropertyMapper.hxx"
 #include "VLineProperties.hxx"

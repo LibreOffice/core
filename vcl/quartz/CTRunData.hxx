@@ -6,8 +6,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef CTRunData_Included
-#define CTRunData_Included
+
+#ifndef INCLUDED_VCL_QUARTZ_CTRUNDATA_HXX
+#define INCLUDED_VCL_QUARTZ_CTRUNDATA_HXX
 
 #include "premac.h"
 #if defined(MACOSX) && MACOSX_SDK_VERSION < 1080
@@ -49,6 +50,6 @@ public:
    ~CTRunData(void);
 };
 
-#endif /* NDef CTRunData_Included */
+#endif // INCLUDED_VCL_QUARTZ_CTRUNDATA_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef _MWAWCALCIMPORTFILTER_HXX
-#define _MWAWCALCIMPORTFILTER_HXX
+#ifndef INCLUDED_WRITERPERFECT_SOURCE_CALC_MWAWCALCIMPORTFILTER_HXX
+#define INCLUDED_WRITERPERFECT_SOURCE_CALC_MWAWCALCIMPORTFILTER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef SC_OPENCL_OPINLINFUN_MATH
-#define SC_OPENCL_OPINLINFUN_MATH
+#ifndef INCLUDED_SC_SOURCE_CORE_OPENCL_OPINLINEFUN_MATH_HXX
+#define INCLUDED_SC_SOURCE_CORE_OPENCL_OPINLINEFUN_MATH_HXX
 
 std::string Math_Intg_Str=
 "\ndouble Intg(double n)\n\
@@ -87,6 +87,6 @@ std::string atan2Content =
 "}\n";
 
 
-#endif //SC_OPENCL_OPINLINFUN_MATH
+#endif // INCLUDED_SC_SOURCE_CORE_OPENCL_OPINLINEFUN_MATH_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

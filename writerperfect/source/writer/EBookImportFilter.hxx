@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef EBOOKIMPORTFILTER_HXX
-#define EBOOKIMPORTFILTER_HXX
+#ifndef INCLUDED_WRITERPERFECT_SOURCE_WRITER_EBOOKIMPORTFILTER_HXX
+#define INCLUDED_WRITERPERFECT_SOURCE_WRITER_EBOOKIMPORTFILTER_HXX
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
