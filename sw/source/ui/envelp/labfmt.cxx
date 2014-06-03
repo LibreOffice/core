@@ -34,6 +34,7 @@
 #include "../../uibase/envelp/label.hrc"
 #include "labfmt.hrc"
 #include <unomid.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace utl;
 using namespace ::com::sun::star::uno;
@@ -557,7 +558,7 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     aRec.lPWidth  = static_cast< long >(GETFLDVAL(*m_pPWidthField ));
     aRec.lPHeight = static_cast< long >(GETFLDVAL(*m_pPHeightField));
     aRec.bCont = aItem.bCont;
-    SwSaveLabelDlg* pSaveDlg = new SwSaveLabelDlg(this, aRec);
+    boost::scoped_ptr<SwSaveLabelDlg> pSaveDlg(new SwSaveLabelDlg(this, aRec));
     pSaveDlg->SetLabel(aItem.aLstMake, aItem.aLstType);
     pSaveDlg->Execute();
     if(pSaveDlg->GetLabel(aItem))
@@ -572,7 +573,6 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
         m_pMakeFI->SetText(aItem.aMake);
         m_pTypeFI->SetText(aItem.aType);
     }
-    delete pSaveDlg;
     return 0;
 }
 

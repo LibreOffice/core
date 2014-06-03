@@ -68,6 +68,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <vcl/graphicfilter.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::sfx2;
@@ -2716,7 +2717,7 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
     const SfxPoolItem* pItem;
     if ( SFX_ITEM_SET == rSet.GetItemState( SID_DOCFRAME, true, &pItem))
     {
-        TargetList* pList = new TargetList;
+        boost::scoped_ptr<TargetList> pList(new TargetList);
         ((const SfxFrameItem*)pItem)->GetFrame()->GetTargetList(*pList);
         if( !pList->empty() )
         {
@@ -2726,7 +2727,6 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
                 pFrameCB->InsertEntry( pList->at( i ) );
             }
         }
-        delete pList;
     }
 
     if ( SFX_ITEM_SET == rSet.GetItemState( RES_URL, true, &pItem ) )
@@ -2756,11 +2756,11 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
 {
     bool bModified = false;
     const SwFmtURL* pOldURL = (SwFmtURL*)GetOldItem(rSet, RES_URL);
-    SwFmtURL* pFmtURL;
+    boost::scoped_ptr<SwFmtURL> pFmtURL;
     if(pOldURL)
-        pFmtURL = (SwFmtURL*)pOldURL->Clone();
+        pFmtURL.reset((SwFmtURL*)pOldURL->Clone());
     else
-        pFmtURL = new SwFmtURL();
+        pFmtURL.reset(new SwFmtURL());
 
     {
         const OUString sText = pURLED->GetText();
@@ -2787,7 +2787,6 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
         bModified = true;
     }
     rSet.Put(*pFmtURL);
-    delete pFmtURL;
     return bModified;
 }
 

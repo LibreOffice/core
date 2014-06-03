@@ -46,6 +46,7 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <boost/scoped_ptr.hpp>
 
 namespace swui
 {
@@ -312,15 +313,14 @@ IMPL_LINK_NOARG(SwFldEditDlg, AddressHdl)
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aSet,
+    boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aSet,
         pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(),
-        RC_DLG_ADDR );
+        RC_DLG_ADDR ));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if(RET_OK == pDlg->Execute())
     {
         pSh->UpdateFlds( *pCurFld );
     }
-    delete pDlg;
     return 0;
 }
 

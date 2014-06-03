@@ -27,6 +27,7 @@
 #include "uitool.hxx"
 
 #include "envprt.hrc"
+#include <boost/scoped_ptr.hpp>
 
 SwEnvPrtPage::SwEnvPrtPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvPrinterPage",
@@ -98,10 +99,10 @@ IMPL_LINK( SwEnvPrtPage, ButtonHdl, Button *, pBtn )
         // Call printer setup
         if (pPrt)
         {
-            PrinterSetupDialog* pDlg = new PrinterSetupDialog(this );
+            boost::scoped_ptr<PrinterSetupDialog> pDlg(new PrinterSetupDialog(this));
             pDlg->SetPrinter(pPrt);
             pDlg->Execute();
-            delete pDlg;
+            pDlg.reset();
             GrabFocus();
             m_pPrinterInfo->SetText(pPrt->GetName());
         }

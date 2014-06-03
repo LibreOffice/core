@@ -893,7 +893,7 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
 {
     const Size aSize(PixelToLogic(GetOutputSizePixel()));
 
-    VirtualDevice* pVDev = new VirtualDevice(*this);
+    boost::scoped_ptr<VirtualDevice> pVDev(new VirtualDevice(*this));
     pVDev->SetMapMode(GetMapMode());
     pVDev->SetOutputSize( aSize );
 
@@ -973,12 +973,12 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 long nBulletWidth = 0;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
                 {
-                    nBulletWidth = lcl_DrawGraphic(pVDev, rFmt, nNumberXPos,
+                    nBulletWidth = lcl_DrawGraphic(pVDev.get(), rFmt, nNumberXPos,
                                                    nYStart, nWidthRelation);
                 }
                 else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
-                    nBulletWidth = lcl_DrawBullet(pVDev, rFmt, nNumberXPos,
+                    nBulletWidth = lcl_DrawBullet(pVDev.get(), rFmt, nNumberXPos,
                                                   nYStart, aStdFont.GetSize());
                 }
                 else
@@ -1069,12 +1069,12 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 long nTextOffset = 2 * nXStep;
                 if( SVX_NUM_BITMAP == rFmt.GetNumberingType() )
                 {
-                    lcl_DrawGraphic(pVDev, rFmt, nXStart, nYStart, nWidthRelation);
+                    lcl_DrawGraphic(pVDev.get(), rFmt, nXStart, nYStart, nWidthRelation);
                     nTextOffset = nLineHeight + nXStep;
                 }
                 else if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() )
                 {
-                    nTextOffset =  lcl_DrawBullet(pVDev, rFmt, nXStart, nYStart, aStdFont.GetSize());
+                    nTextOffset =  lcl_DrawBullet(pVDev.get(), rFmt, nXStart, nYStart, aStdFont.GetSize());
                     nTextOffset += nXStep;
                 }
                 else
@@ -1100,7 +1100,6 @@ void NumberingPreview::Paint( const Rectangle& /*rRect*/ )
     DrawOutDev( Point(0,0), aSize,
                 Point(0,0), aSize,
                         *pVDev );
-    delete pVDev;
 }
 
 NumberingPreview::~NumberingPreview()
