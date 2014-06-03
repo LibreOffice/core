@@ -181,48 +181,48 @@ public:
 //  public interface
 
 
-    bool        IsOverlayBuffer() const;
-    bool        IsPaintBuffer() const;
+    bool        IsOverlayBuffer() const { return m_bOverlayBuffer;}
+    bool        IsPaintBuffer() const { return m_bPaintBuffer;}
     Color       GetStripeColorA() const;
     Color       GetStripeColorB() const;
-    sal_uInt16  GetStripeLength() const;
+    sal_uInt16  GetStripeLength() const { return m_nStripeLength;}
 
     // #i73602#
-    bool        IsOverlayBuffer_Calc() const;
-    bool        IsOverlayBuffer_Writer() const;
-    bool        IsOverlayBuffer_DrawImpress() const;
+    bool        IsOverlayBuffer_Calc() const { return m_bOverlayBuffer_Calc;}
+    bool        IsOverlayBuffer_Writer() const { return m_bOverlayBuffer_Writer;}
+    bool        IsOverlayBuffer_DrawImpress() const { return m_bOverlayBuffer_DrawImpress;}
 
     // #i74769#, #i75172#
-    bool        IsPaintBuffer_Calc() const;
-    bool        IsPaintBuffer_Writer() const;
-    bool        IsPaintBuffer_DrawImpress() const;
+    bool        IsPaintBuffer_Calc() const { return m_bPaintBuffer_Calc;}
+    bool        IsPaintBuffer_Writer() const { return m_bPaintBuffer_Writer;}
+    bool        IsPaintBuffer_DrawImpress() const { return m_bPaintBuffer_DrawImpress;}
 
     // #i4219#
-    sal_uInt32  GetMaximumPaperWidth() const;
-    sal_uInt32  GetMaximumPaperHeight() const;
-    sal_uInt32  GetMaximumPaperLeftMargin() const;
-    sal_uInt32  GetMaximumPaperRightMargin() const;
-    sal_uInt32  GetMaximumPaperTopMargin() const;
-    sal_uInt32  GetMaximumPaperBottomMargin() const;
+    sal_uInt32  GetMaximumPaperWidth() const { return m_nMaximumPaperWidth;}
+    sal_uInt32  GetMaximumPaperHeight() const { return m_nMaximumPaperHeight;}
+    sal_uInt32  GetMaximumPaperLeftMargin() const { return m_nMaximumPaperLeftMargin;}
+    sal_uInt32  GetMaximumPaperRightMargin() const { return m_nMaximumPaperRightMargin;}
+    sal_uInt32  GetMaximumPaperTopMargin() const { return m_nMaximumPaperTopMargin;}
+    sal_uInt32  GetMaximumPaperBottomMargin() const { return m_nMaximumPaperBottomMargin;}
 
     // helper
     bool        IsAAPossibleOnThisSystem() const;
 
     // primitives
-    bool        IsAntiAliasing() const;
-    bool        IsSnapHorVerLinesToDiscrete() const;
-    bool        IsSolidDragCreate() const;
-    bool        IsRenderDecoratedTextDirect() const;
-    bool        IsRenderSimpleTextDirect() const;
-    sal_uInt32  GetQuadratic3DRenderLimit() const;
-    sal_uInt32  GetQuadraticFormControlRenderLimit() const;
+    bool        IsAntiAliasing() const { return m_bAntiAliasing;}
+    bool        IsSnapHorVerLinesToDiscrete() const { return m_bSnapHorVerLinesToDiscrete;}
+    bool        IsSolidDragCreate() const { return m_bSolidDragCreate;}
+    bool        IsRenderDecoratedTextDirect() const { return m_bRenderDecoratedTextDirect;}
+    bool        IsRenderSimpleTextDirect() const { return m_bRenderSimpleTextDirect;}
+    sal_uInt32  GetQuadratic3DRenderLimit() const { return m_nQuadratic3DRenderLimit;}
+    sal_uInt32  GetQuadraticFormControlRenderLimit() const { return m_nQuadraticFormControlRenderLimit;}
 
     void        SetAntiAliasing( bool bState );
 
     // #i97672# selection settings
-    bool        IsTransparentSelection() const;
-    sal_uInt16  GetTransparentSelectionPercent() const;
-    sal_uInt16  GetSelectionMaximumLuminancePercent() const;
+    bool        IsTransparentSelection() const { return m_bTransparentSelection;}
+    sal_uInt16  GetTransparentSelectionPercent() const { return m_nTransparentSelectionPercent;}
+    sal_uInt16  GetSelectionMaximumLuminancePercent() const { return m_nSelectionMaximumLuminancePercent;}
 
     void        SetTransparentSelection( bool bState );
     void        SetTransparentSelectionPercent( sal_uInt16 nPercent );
@@ -693,18 +693,10 @@ void SvtOptionsDrawinglayer_Impl::Notify( const com::sun::star::uno::Sequence<OU
 
 //  public method
 
-bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer() const
-{
-    return m_bOverlayBuffer;
-}
 
 
 //  public method
 
-bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer() const
-{
-    return m_bPaintBuffer;
-}
 
 
 //  public method
@@ -725,73 +717,21 @@ Color SvtOptionsDrawinglayer_Impl::GetStripeColorB() const
 
 //  public method
 
-sal_uInt16 SvtOptionsDrawinglayer_Impl::GetStripeLength() const
-{
-    return m_nStripeLength;
-}
 
 // #i73602#
-bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_Calc() const
-{
-    return m_bOverlayBuffer_Calc;
-}
 
-bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_Writer() const
-{
-    return m_bOverlayBuffer_Writer;
-}
 
-bool SvtOptionsDrawinglayer_Impl::IsOverlayBuffer_DrawImpress() const
-{
-    return m_bOverlayBuffer_DrawImpress;
-}
 
 // #i74769#, #i75172#
-bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_Calc() const
-{
-    return m_bPaintBuffer_Calc;
-}
 
-bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_Writer() const
-{
-    return m_bPaintBuffer_Writer;
-}
 
-bool SvtOptionsDrawinglayer_Impl::IsPaintBuffer_DrawImpress() const
-{
-    return m_bPaintBuffer_DrawImpress;
-}
 
 // #i4219#
-sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperWidth() const
-{
-    return m_nMaximumPaperWidth;
-}
 
-sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperHeight() const
-{
-    return m_nMaximumPaperHeight;
-}
 
-sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperLeftMargin() const
-{
-    return m_nMaximumPaperLeftMargin;
-}
 
-sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperRightMargin() const
-{
-    return m_nMaximumPaperRightMargin;
-}
 
-sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperTopMargin() const
-{
-    return m_nMaximumPaperTopMargin;
-}
 
-sal_uInt32 SvtOptionsDrawinglayer_Impl::GetMaximumPaperBottomMargin() const
-{
-    return m_nMaximumPaperBottomMargin;
-}
 
 // helper
 bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
@@ -819,40 +759,12 @@ bool SvtOptionsDrawinglayer_Impl::IsAAPossibleOnThisSystem() const
 }
 
 // primitives
-bool SvtOptionsDrawinglayer_Impl::IsAntiAliasing() const
-{
-    return m_bAntiAliasing;
-}
 
-bool SvtOptionsDrawinglayer_Impl::IsSnapHorVerLinesToDiscrete() const
-{
-    return m_bSnapHorVerLinesToDiscrete;
-}
 
-bool SvtOptionsDrawinglayer_Impl::IsSolidDragCreate() const
-{
-    return m_bSolidDragCreate;
-}
 
-bool SvtOptionsDrawinglayer_Impl::IsRenderDecoratedTextDirect() const
-{
-    return m_bRenderDecoratedTextDirect;
-}
 
-bool SvtOptionsDrawinglayer_Impl::IsRenderSimpleTextDirect() const
-{
-    return m_bRenderSimpleTextDirect;
-}
 
-sal_uInt32 SvtOptionsDrawinglayer_Impl::GetQuadratic3DRenderLimit() const
-{
-    return m_nQuadratic3DRenderLimit;
-}
 
-sal_uInt32 SvtOptionsDrawinglayer_Impl::GetQuadraticFormControlRenderLimit() const
-{
-    return m_nQuadraticFormControlRenderLimit;
-}
 
 void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( bool bState )
 {
@@ -864,10 +776,6 @@ void SvtOptionsDrawinglayer_Impl::SetAntiAliasing( bool bState )
 }
 
 // #i97672# selection settings
-bool SvtOptionsDrawinglayer_Impl::IsTransparentSelection() const
-{
-    return m_bTransparentSelection;
-}
 
 void SvtOptionsDrawinglayer_Impl::SetTransparentSelection( bool bState )
 {
@@ -887,15 +795,7 @@ void SvtOptionsDrawinglayer_Impl::SetTransparentSelectionPercent( sal_uInt16 nPe
     }
 }
 
-sal_uInt16 SvtOptionsDrawinglayer_Impl::GetTransparentSelectionPercent() const
-{
-    return m_nTransparentSelectionPercent;
-}
 
-sal_uInt16 SvtOptionsDrawinglayer_Impl::GetSelectionMaximumLuminancePercent() const
-{
-    return m_nSelectionMaximumLuminancePercent;
-}
 
 
 //  private method

@@ -58,12 +58,12 @@ public:
     SvViewDataEntry( const SvViewDataEntry& );
     ~SvViewDataEntry();
 
-    bool IsSelected() const;
-    bool IsHighlighted() const;
-    bool IsExpanded() const;
-    bool HasFocus() const;
-    bool IsCursored() const;
-    bool IsSelectable() const;
+    bool IsSelected() const { return mbSelected;}
+    bool IsHighlighted() const { return mbHighlighted;}
+    bool IsExpanded() const { return mbExpanded;}
+    bool HasFocus() const { return mbFocused;}
+    bool IsCursored() const { return mbCursored;}
+    bool IsSelectable() const { return mbSelectable;}
     void SetFocus( bool bFocus );
     void SetSelected( bool bSelected );
     void SetHighlighted( bool bHighlighted );

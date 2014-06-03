@@ -1023,10 +1023,6 @@ void FormattedField::UseInputStringForFormatting( bool bUseInputStr /* = true */
     m_bUseInputStringForFormatting = bUseInputStr;
 }
 
-bool FormattedField::IsUsingInputStringForFormatting() const
-{
-    return m_bUseInputStringForFormatting;
-}
 
 DoubleNumericField::~DoubleNumericField()
 {

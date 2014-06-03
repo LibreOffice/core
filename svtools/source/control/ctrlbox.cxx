@@ -493,8 +493,8 @@ public:
     Color  GetColorDist( const Color& aMain, const Color& rDefault );
 
     /** Returns the minimum width in twips */
-    long   GetMinWidth( );
-    sal_uInt16 GetStyle( );
+    long   GetMinWidth( ) { return m_nMinWidth;}
+    sal_uInt16 GetStyle( ) { return m_nStyle;}
 };
 
 ImpLineListData::ImpLineListData( BorderWidthImpl aWidthImpl,
@@ -509,10 +509,6 @@ ImpLineListData::ImpLineListData( BorderWidthImpl aWidthImpl,
 {
 }
 
-long ImpLineListData::GetMinWidth( )
-{
-    return m_nMinWidth;
-}
 
 Color ImpLineListData::GetColorLine1( const Color& rMain )
 {
@@ -543,10 +539,6 @@ sal_uInt16 LineListBox::GetSelectEntryStyle( sal_Int32 nSelIndex ) const
     return nStyle;
 }
 
-sal_uInt16 ImpLineListData::GetStyle( )
-{
-    return m_nStyle;
-}
 
 
 
