@@ -375,7 +375,21 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
                 aArgs[nIndex].Name = "FilterName";
-                aArgs[nIndex].Value <<= aForcedInputFilter;
+
+                sal_Int32 nFilterOptionsIndex = aForcedInputFilter.indexOf( ':' );
+                if( 0 < nFilterOptionsIndex )
+                {
+                    aArgs[nIndex].Value <<= aForcedInputFilter.copy( 0, nFilterOptionsIndex );
+
+                    nIndex = aArgs.getLength();
+                    aArgs.realloc(nIndex+1);
+                    aArgs[nIndex].Name = "FilterOptions";
+                    aArgs[nIndex].Value <<= aForcedInputFilter.copy( nFilterOptionsIndex+1 );
+                }
+                else
+                {
+                    aArgs[nIndex].Value <<= aForcedInputFilter;
+                }
             }
 
             // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
@@ -449,12 +463,23 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
                                 aFilter = impl_GuessFilter( aName, aOutFile );
                             }
 
-                            Sequence<PropertyValue> conversionProperties( 2 );
+                            sal_Int32 nFilterOptionsIndex = aFilter.indexOf( ':' );
+                            Sequence<PropertyValue> conversionProperties( 0 < nFilterOptionsIndex ? 3 : 2 );
                             conversionProperties[0].Name = "Overwrite";
                             conversionProperties[0].Value <<= sal_True;
 
                             conversionProperties[1].Name = "FilterName";
-                            conversionProperties[1].Value <<= aFilter;
+                            if( 0 < nFilterOptionsIndex )
+                            {
+                                conversionProperties[1].Value <<= aFilter.copy( 0, nFilterOptionsIndex );
+
+                                conversionProperties[2].Name = "FilterOptions";
+                                conversionProperties[2].Value <<= aFilter.copy( nFilterOptionsIndex+1 );
+                            }
+                            else
+                            {
+                                conversionProperties[1].Value <<= aFilter;
+                            }
 
                             OUString aTempName;
                             FileBase::getSystemPathFromFileURL( aName, aTempName );
