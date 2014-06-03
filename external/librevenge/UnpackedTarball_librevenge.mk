@@ -13,8 +13,4 @@ $(eval $(call gb_UnpackedTarball_set_tarball,librevenge,$(REVENGE_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,librevenge,1))
 
-$(eval $(call gb_UnpackedTarball_add_patches,librevenge,\
-	external/librevenge/0001-properly-export-API-symbols.patch \
-))
-
 # vim: set noet sw=4 ts=4:
