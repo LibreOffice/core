@@ -38,7 +38,7 @@ SvxFormatCellsDialog::SvxFormatCellsDialog( Window* pParent, const SfxItemSet* p
 {
     AddTabPage("name", RID_SVXPAGE_CHAR_NAME);
     AddTabPage("effects", RID_SVXPAGE_CHAR_EFFECTS);
-    AddTabPage("border", RID_SVXPAGE_BORDER );
+    m_nBorderPageId = AddTabPage("border", RID_SVXPAGE_BORDER );
     m_nAreaPageId = AddTabPage("area", RID_SVXPAGE_AREA);
 }
 
@@ -56,6 +56,11 @@ void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         rAreaPage.SetPos( 0 );
         rAreaPage.Construct();
         rAreaPage.ActivatePage( mrOutAttrs );
+    }
+    else if (nId == m_nBorderPageId)
+    {
+        SvxBorderTabPage& rBorderPage = ((SvxBorderTabPage&)rPage);
+        rBorderPage.SetTableMode();
     }
     else
         SfxTabDialog::PageCreated( nId, rPage );
