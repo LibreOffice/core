@@ -492,8 +492,14 @@ public:
                 canonicalized form is assigned, which may differ from the
                 original string even if that was a valid tag. If rString is not
                 a valid tag, nothing is assigned.
+
+        @param  bDisallowPrivate
+                If TRUE, valid tags according to BCP 47 but reserved for
+                private use, like 'x-...', are not allowed and FALSE is
+                returned in this case.
      */
-    static bool         isValidBcp47( const OUString& rString, OUString* o_pCanonicalized = NULL );
+    static bool         isValidBcp47( const OUString& rString, OUString* o_pCanonicalized = NULL,
+                                      bool bDisallowPrivate = false );
 
     /** If nLang is a generated on-the-fly LangID */
     static bool         isOnTheFlyID( LanguageType nLang );

@@ -2691,8 +2691,10 @@ com::sun::star::lang::Locale LanguageTag::convertToLocaleWithFallback( const OUS
 
 
 // static
-bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicalized )
+bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicalized, bool bDisallowPrivate )
 {
+    bool bValid = false;
+
     struct guard
     {
         lt_tag_t* mpLangtag;
@@ -2716,17 +2718,24 @@ bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicali
         SAL_WARN_IF( !pTag, "i18nlangtag", "LanguageTag:isValidBcp47: could not canonicalize '" << rString << "'");
         if (pTag)
         {
+            bValid = true;
+            if (bDisallowPrivate)
+            {
+                const lt_string_t* pPrivate = lt_tag_get_privateuse( aVar.mpLangtag);
+                if (pPrivate && lt_string_length( pPrivate) > 0)
+                    bValid = false;
+            }
             if (o_pCanonicalized)
                 *o_pCanonicalized = OUString::createFromAscii( pTag);
             free( pTag);
-            return true;
+            return bValid;
         }
     }
     else
     {
         SAL_INFO( "i18nlangtag", "LanguageTag:isValidBcp47: could not parse '" << rString << "'");
     }
-    return false;
+    return bValid;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
