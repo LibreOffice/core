@@ -369,7 +369,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <config_features.h>
-#include <config_libraries.h>
 #include <config_options.h>
 #include <cppcanvas/basegfxfactory.hxx>
 #include <cppcanvas/vclfactory.hxx>
