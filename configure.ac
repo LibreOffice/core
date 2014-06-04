@@ -39,7 +39,7 @@ PathFormat()
             fi
         done
         if test "$pf_conv_to_dos" = "yes"; then
-            formatted_path=`cygpath -d "$formatted_path"`
+            formatted_path=`cygpath -sm "$formatted_path"`
             if test $? -ne 0;  then
                 AC_MSG_ERROR([path conversion failed for "$1".])
             fi
@@ -2309,15 +2309,15 @@ pathmunge ()
     if test -n "$1"; then
         if test "$build_os" = "cygwin"; then
             PathFormat "$1"
-            new_path=`cygpath -u "$formatted_path"`
+            new_path=`cygpath -sm "$formatted_path"`
         else
             new_path="$1"
         fi
         if ! echo "$LO_PATH" | $EGREP -q "(^|:)$1($|:)"; then
             if test "$2" = "after"; then
-                LO_PATH="$LO_PATH:$new_path"
+                LO_PATH="$LO_PATH${P_SEP}$new_path"
             else
-                LO_PATH="$new_path:$LO_PATH"
+                LO_PATH="$new_path${P_SEP}$LO_PATH"
             fi
         fi
         unset new_path
@@ -3676,8 +3676,7 @@ if test "$_os" = "WINNT"; then
             fi
         fi
 
-        VC_PRODUCT_DIR=`cygpath -d "$VC_PRODUCT_DIR"`
-        VC_PRODUCT_DIR=`cygpath -u "$VC_PRODUCT_DIR"`
+        VC_PRODUCT_DIR=`cygpath -sm "$VC_PRODUCT_DIR"`
         AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
         dnl ===========================================================
@@ -3727,8 +3726,7 @@ if test "$_os" = "WINNT"; then
             fi
 
             # This gives us a posix path with 8.3 filename restrictions
-            CC=`cygpath -d "$CC"`
-            CC=`cygpath -u "$CC"`
+            CC=`cygpath -sm "$CC"`
         fi
 
         if test -n "$CC"; then
@@ -4985,7 +4983,11 @@ for a in "$MAKE" "$GNUMAKE" make gmake gnumake; do
     if test -n "$a"; then
         $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
         if test $? -eq 0;  then
-            GNUMAKE=`which $a`
+            if test "$build_os" = "cygwin"; then
+                GNUMAKE=$(cygpath -m $(which $(cygpath -u $a)))
+            else
+                GNUMAKE=`which $a`
+            fi
             break
         fi
     fi
@@ -5060,6 +5062,9 @@ fi
 # find if gnumake support file function
 AC_MSG_CHECKING([whether GNU make supports the 'file' function])
 TESTGMAKEFILEFUNC="`mktemp -d -t tst.XXXXXX`"
+if test "$build_os" = "cygwin"; then
+    TESTGMAKEFILEFUNC=`cygpath -m $TESTGMAKEFILEFUNC`
+fi
 $SED -e "s/<TAB>/$TAB/" > $TESTGMAKEFILEFUNC/Makefile << EOF
 \$(file >test.txt,Success )
 
@@ -5085,6 +5090,13 @@ make_warning=
 if test "$_make_ver_check" = ""; then
    STALE_MAKE=TRUE
 fi
+
+if test "$build_os" = "cygwin"; then
+    SHELL_BASH=$(cygpath -m $(which bash))
+else
+    SHELL_BASH=`which bash`
+fi
+AC_SUBST(SHELL_BASH)
 
 HAVE_LD_HASH_STYLE=FALSE
 WITH_LINKER_HASH_STYLE=
@@ -5382,8 +5394,7 @@ if test "$build_os" = "cygwin"; then
     fi
 
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
-    MIDL_PATH=`cygpath -d "$MIDL_PATH"`
-    MIDL_PATH=`cygpath -u "$MIDL_PATH"`
+    MIDL_PATH=`cygpath -sm "$MIDL_PATH"`
 
     dnl Check csc.exe
     AC_MSG_CHECKING([for csc.exe])
@@ -5397,8 +5408,7 @@ if test "$build_os" = "cygwin"; then
         AC_MSG_RESULT([$CSC_PATH/csc.exe])
     fi
 
-    CSC_PATH=`cygpath -d "$CSC_PATH"`
-    CSC_PATH=`cygpath -u "$CSC_PATH"`
+    CSC_PATH=`cygpath -sm "$CSC_PATH"`
 
     dnl Check al.exe
     AC_MSG_CHECKING([for al.exe])
@@ -5423,8 +5433,7 @@ if test "$build_os" = "cygwin"; then
         AC_MSG_RESULT([$AL_PATH/al.exe])
     fi
 
-    AL_PATH=`cygpath -d "$AL_PATH"`
-    AL_PATH=`cygpath -u "$AL_PATH"`
+    AL_PATH=`cygpath -sm "$AL_PATH"`
 
     dnl Check mscoree.lib / .NET Framework dir
     AC_MSG_CHECKING(.NET Framework)
@@ -6845,7 +6854,7 @@ if test "$ENABLE_JAVA" != ""; then
                 AC_MSG_ERROR([No JDK found, pass the --with-jdk-home option pointing to a $bitness-bit JDK])
             fi
         else
-            test "$build_os" = "cygwin" && with_jdk_home=`cygpath -u "$with_jdk_home"`
+            test "$build_os" = "cygwin" && with_jdk_home=`cygpath -sm "$with_jdk_home"`
             howfound="you passed"
         fi
     fi
@@ -6885,8 +6894,7 @@ if test "$ENABLE_JAVA" != ""; then
         if test x`echo "$JAVAINTERPRETER" | $GREP -i '\.exe$'` = x; then
             JAVAINTERPRETER="${JAVAINTERPRETER}.exe"
         fi
-        JAVAINTERPRETER=`cygpath -d "$JAVAINTERPRETER"`
-        JAVAINTERPRETER=`cygpath -u "$JAVAINTERPRETER"`
+        JAVAINTERPRETER=`cygpath -sm "$JAVAINTERPRETER"`
     elif test $_os = Darwin -a "$BITNESS_OVERRIDE" = ""; then
         dnl HACK:  There currently is only a 32 bit version of LibreOffice for Mac OS X,
         dnl and Tiger Java complains about -d32 while Snow Leopard Java needs it
@@ -7032,8 +7040,7 @@ if test "$ENABLE_JAVA" != ""; then
         if test x`echo "$JAVACOMPILER" | $GREP -i '\.exe$'` = x; then
             JAVACOMPILER="${JAVACOMPILER}.exe"
         fi
-        JAVACOMPILER=`cygpath -d "$JAVACOMPILER"`
-        JAVACOMPILER=`cygpath -u "$JAVACOMPILER"`
+        JAVACOMPILER=`cygpath -sm "$JAVACOMPILER"`
     fi
 
     if test `$JAVACOMPILER -version 2>&1 | $GREP -c "Eclipse Java Compiler"` -gt 0; then
@@ -7077,8 +7084,7 @@ if test "$ENABLE_JAVA" != ""; then
         if test x`echo "$JAVADOC" | $GREP -i '\.exe$'` = x; then
             JAVADOC="${JAVADOC}.exe"
         fi
-        JAVADOC=`cygpath -d "$JAVADOC"`
-        JAVADOC=`cygpath -u "$JAVADOC"`
+        JAVADOC=`cygpath -sm "$JAVADOC"`
     fi
 
     if test `$JAVADOC --version 2>&1 | $GREP -c "gjdoc"` -gt 0; then
@@ -7499,6 +7505,9 @@ dnl ===================================================================
 AC_PATH_PROG(GPERF, gperf)
 if test -z "$GPERF"; then
     AC_MSG_ERROR([gperf not found but needed. Install it.])
+fi
+if test "$build_os" = "cygwin"; then
+    GPERF=`cygpath -m $GPERF`
 fi
 AC_MSG_CHECKING([gperf version])
 if test "`$GPERF --version | $EGREP ^GNU\ gperf | $AWK '{ print $3 }' | cut -d. -f1`" -ge "3"; then
@@ -9874,6 +9883,9 @@ else
 fi
 
 AC_PATH_PROG(FLEX, flex)
+if test "$build_os" = "cygwin"; then
+    FLEX=`cygpath -m $FLEX`
+fi
 if test -z "$FLEX"; then
     AC_MSG_ERROR([no flex found in \$PATH, install it])
 else
@@ -9914,6 +9926,10 @@ else
     GNUPATCH=$PATCH
 fi
 
+if test "$build_os" = "cygwin"; then
+    GNUPATCH=`cygpath -m $GNUPATCH`
+fi
+
 dnl We also need to check for --with-gnu-cp
 
 if test -z "$with_gnu_cp"; then
@@ -9932,6 +9948,10 @@ else
     else
         AC_MSG_ERROR([--with-gnu-cp did not point to an executable])
     fi
+fi
+
+if test "$build_os" = "cygwin"; then
+    GNUCP=`cygpath -m $GNUCP`
 fi
 
 AC_MSG_CHECKING([whether $GNUCP is GNU cp from coreutils with preserve= support])
@@ -12059,6 +12079,7 @@ if test "$ENABLE_JAVA" != ""; then
         AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd])
     else
         if test "$_os" = "WINNT"; then
+            # AC_PATH_PROGS needs unix path
             with_ant_home=`cygpath -u "$with_ant_home"`
         fi
         AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd],,$with_ant_home/bin:$PATH)
@@ -12131,7 +12152,7 @@ EOF
         PathFormat "$ANT_HOME"
         ANT_HOME="$formatted_path"
         PathFormat "$ANT"
-        ANT="$ANT"
+        ANT="$formatted_path"
     fi
     AC_SUBST(ANT_HOME)
     AC_SUBST(ANT)
@@ -12918,6 +12939,8 @@ else
         ;;
 
     cygwin*)
+        # Win32 make needs native paths
+        LO_PATH=`cygpath -p -m "$PATH"`
         pathmunge "$DOTNET_FRAMEWORK_HOME/bin" "before"
         pathmunge "$ASM_HOME" "before"
         pathmunge "$WINDOWS_SDK_HOME/bin" "before"
