@@ -491,8 +491,16 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
                 m_pRightMF->SetValue( m_pRightMF->Normalize( nRight ), eUnit );
             }
         }
-        m_pExampleWN->SetLeft(nLeft);
-        m_pExampleWN->SetRight(nRight);
+        if (Application::GetSettings().GetLayoutRTL())
+        {
+            m_pExampleWN->SetLeft(nRight);
+            m_pExampleWN->SetRight(nLeft);
+        }
+        else
+        {
+            m_pExampleWN->SetLeft(nLeft);
+            m_pExampleWN->SetRight(nRight);
+        }
         if(bZoom)
         {
             // scale stays, recompute width
