@@ -1471,7 +1471,7 @@ ScXMLDataPilotSubTotalsContext::ScXMLDataPilotSubTotalsContext( ScXMLImport& rIm
 
 ScXMLDataPilotSubTotalsContext::~ScXMLDataPilotSubTotalsContext()
 {
-    delete pFunctions;
+    delete[] pFunctions;
 }
 
 SvXMLImportContext *ScXMLDataPilotSubTotalsContext::CreateChildContext( sal_uInt16 nPrefix,
