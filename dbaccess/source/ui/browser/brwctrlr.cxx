@@ -605,7 +605,7 @@ void SbaXDataBrowserController::onStartLoading( const Reference< XLoadable >& _r
         {
             xWarnings->clearWarnings();
         }
-        catch(const SQLException& e)
+        catch(const SQLException& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
@@ -673,7 +673,7 @@ bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _rxLoa
                 impl_checkForCannotSelectUnfiltered( aInfo );
             }
         }
-        catch(const SQLException& e)
+        catch(const SQLException& )
         {
             DBG_UNHANDLED_EXCEPTION();
         }
