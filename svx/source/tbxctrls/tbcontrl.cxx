@@ -934,7 +934,7 @@ void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     if (  rUDEvt.GetItemId() == rUDEvt.GetStyle() )
     {
         Sequence< PropertyValue > aArgs( 1 );
-        FontInfo aInfo( pFontList->Get( GetEntry( rUDEvt.GetItemId() ),
+        vcl::FontInfo aInfo( pFontList->Get( GetEntry( rUDEvt.GetItemId() ),
             aCurFont.GetWeight(),
             aCurFont.GetItalic() ) );
 
@@ -960,7 +960,7 @@ void SvxFontNameBox_Impl::Select()
     std::auto_ptr<SvxFontItem> pFontItem;
     if ( pFontList )
     {
-        FontInfo aInfo( pFontList->Get( GetText(),
+        vcl::FontInfo aInfo( pFontList->Get( GetText(),
             aCurFont.GetWeight(),
             aCurFont.GetItalic() ) );
         aCurFont = aInfo;

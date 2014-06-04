@@ -1062,7 +1062,7 @@ void FontNameBox::Fill( const FontList* pList )
     sal_uInt16 nFontCount = pList->GetFontNameCount();
     for ( sal_uInt16 i = 0; i < nFontCount; i++ )
     {
-        const FontInfo& rFontInfo = pList->GetFontName( i );
+        const vcl::FontInfo& rFontInfo = pList->GetFontName( i );
         sal_uLong nIndex = InsertEntry( rFontInfo.GetName() );
         if ( nIndex != LISTBOX_ERROR )
         {
@@ -1138,13 +1138,11 @@ namespace
     }
 }
 
-
-
 void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
     assert( mpFontList );
 
-    FontInfo& rInfo = (*mpFontList)[ rUDEvt.GetItemId() ];
+    vcl::FontInfo& rInfo = (*mpFontList)[ rUDEvt.GetItemId() ];
     Point aTopLeft = rUDEvt.GetRect().TopLeft();
     long nX = aTopLeft.X();
     long nH = rUDEvt.GetRect().GetHeight();
@@ -1425,7 +1423,7 @@ void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
         bool        bBold = false;
         bool        bBoldItalic = false;
         bool        bInsert = false;
-        FontInfo    aInfo;
+        vcl::FontInfo    aInfo;
         while ( hFontInfo )
         {
             aInfo = pList->GetFontInfo( hFontInfo );
@@ -1649,7 +1647,7 @@ void FontSizeBox::Modify()
     }
 }
 
-void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
+void FontSizeBox::Fill( const vcl::FontInfo* pInfo, const FontList* pList )
 {
     // remember for relative mode
     pFontList = pList;

@@ -1780,7 +1780,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
                 }
                 if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
                 {
-                    FontInfo aInfo = pList->Get(pLevelSettings->sBulletFont,WEIGHT_NORMAL, ITALIC_NONE);
+                    vcl::FontInfo aInfo = pList->Get(pLevelSettings->sBulletFont,WEIGHT_NORMAL, ITALIC_NONE);
                     Font aFont(aInfo);
                     aFmt.SetBulletFont(&aFont);
                 }

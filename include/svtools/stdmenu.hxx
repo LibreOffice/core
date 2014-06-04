@@ -25,7 +25,9 @@
 #include <vcl/menu.hxx>
 
 class FontList;
-class FontInfo;
+namespace vcl {
+    class FontInfo;
+}
 
 /*************************************************************************
 
@@ -137,7 +139,7 @@ public:
     virtual void    Select() SAL_OVERRIDE;
     virtual void    Highlight() SAL_OVERRIDE;
 
-    void            Fill( const FontInfo& rInfo, const FontList* pList );
+    void            Fill( const vcl::FontInfo& rInfo, const FontList* pList );
 
     void            SetCurHeight( long nHeight );
     long            GetCurHeight() const { return mnCurHeight; }

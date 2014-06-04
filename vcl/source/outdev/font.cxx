@@ -58,12 +58,12 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
-using namespace ::vcl;
 using namespace ::utl;
+using namespace ::vcl;
 
-FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
+vcl::FontInfo OutputDevice::GetDevFont( int nDevFontIndex ) const
 {
-    FontInfo aFontInfo;
+    vcl::FontInfo aFontInfo;
 
     ImplInitFontList();
 

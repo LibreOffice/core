@@ -326,7 +326,7 @@ IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
     sal_uInt16 nFontCount = aFntLst.GetFontNameCount();
     for(sal_uInt16 nFont = 0; nFont < nFontCount; nFont++)
     {
-        const FontInfo& rInfo = aFntLst.GetFontName( nFont );
+        const vcl::FontInfo& rInfo = aFntLst.GetFontName( nFont );
         if(!bNonPropOnly || rInfo.GetPitch() == PITCH_FIXED)
             m_pFontNameLB->InsertEntry(rInfo.GetName());
     }
