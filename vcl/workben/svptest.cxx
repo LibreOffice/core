@@ -241,7 +241,7 @@ void MyWin::Paint( const Rectangle& rRect )
     for( int i = 0; i < nFontSamples; ++i )
     {
 
-        FontInfo aFont = GetDevFont( (i*nFontCount) / nFontSamples );
+        vcl::FontInfo aFont = GetDevFont( (i*nFontCount) / nFontSamples );
         aFont.SetHeight( 400 + (i%7) * 100 );
         aFont.SetOrientation( i * (3600 / nFontSamples) );
         SetFont( aFont );
