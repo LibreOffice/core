@@ -49,6 +49,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_uiwriter,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_uiwriter))
+$(eval $(call gb_CppunitTest_use_vcl,sw_uiwriter))
 
 $(eval $(call gb_CppunitTest_use_components,sw_uiwriter,\
     basic/util/sb \

@@ -44,6 +44,7 @@ $(eval $(call gb_CppunitTest_use_api,vcl_wmf_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_wmf_test))
+$(eval $(call gb_CppunitTest_use_vcl,vcl_wmf_test))
 
 $(eval $(call gb_CppunitTest_use_components,vcl_wmf_test,\
     configmgr/source/configmgr \

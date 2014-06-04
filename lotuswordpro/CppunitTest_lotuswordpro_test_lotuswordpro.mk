@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_api,lotuswordpro_test_lotuswordpro,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,lotuswordpro_test_lotuswordpro))
+$(eval $(call gb_CppunitTest_use_vcl,lotuswordpro_test_lotuswordpro))
 
 $(eval $(call gb_CppunitTest_use_components,lotuswordpro_test_lotuswordpro,\
     configmgr/source/configmgr \

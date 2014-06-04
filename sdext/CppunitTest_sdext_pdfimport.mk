@@ -47,6 +47,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sdext_pdfimport,\
 $(eval $(call gb_CppunitTest_use_executable,sdext_pdfimport,xpdfimport))
 
 $(eval $(call gb_CppunitTest_use_ure,sdext_pdfimport))
+$(eval $(call gb_CppunitTest_use_vcl,sdext_pdfimport))
 
 $(eval $(call gb_CppunitTest_use_components,sdext_pdfimport,\
     comphelper/util/comphelp \

@@ -55,6 +55,7 @@ $(eval $(call gb_CppunitTest_use_api,basic_coverage,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,basic_coverage))
+$(eval $(call gb_CppunitTest_use_vcl,basic_coverage))
 
 $(eval $(call gb_CppunitTest_use_components,basic_coverage,\
     configmgr/source/configmgr \

@@ -56,6 +56,7 @@ $(eval $(call gb_CppunitTest_use_api,basic_vba,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,basic_vba))
+$(eval $(call gb_CppunitTest_use_vcl,basic_vba))
 
 $(eval $(call gb_CppunitTest_use_components,basic_vba,\
 	configmgr/source/configmgr \

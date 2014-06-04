@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_tablesheetobj,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_tablesheetobj))
+$(eval $(call gb_CppunitTest_use_vcl,sc_tablesheetobj))
 
 $(eval $(call gb_CppunitTest_use_components,sc_tablesheetobj,\
     basic/util/sb \

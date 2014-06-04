@@ -28,6 +28,7 @@ $(eval $(call gb_CppunitTest_use_externals,sax_parser, \
 $(eval $(call gb_CppunitTest_use_sdk_api,sax_parser))
 
 $(eval $(call gb_CppunitTest_use_ure,sax_parser))
+$(eval $(call gb_CppunitTest_use_vcl,sax_parser))
 
 $(eval $(call gb_CppunitTest_use_components,sax_parser,\
 	configmgr/source/configmgr \

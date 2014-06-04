@@ -453,6 +453,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 	unobootstrapprotector \
 	unoexceptionprotector \
 	unotest \
+	vclbootstrapprotector \
 	scqahelper \
 	unowinreg \
 ))

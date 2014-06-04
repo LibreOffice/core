@@ -337,6 +337,8 @@ struct ImplSVData
     ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
     boost::unordered_map< int, OUString >*     mpPaperNames;
+
+    Link maDeInitHook;
 };
 
 void        ImplInitSVData();

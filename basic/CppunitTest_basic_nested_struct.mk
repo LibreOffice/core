@@ -52,6 +52,7 @@ $(eval $(call gb_CppunitTest_use_api,basic_nested_struct,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,basic_nested_struct))
+$(eval $(call gb_CppunitTest_use_vcl,basic_nested_struct))
 
 $(eval $(call gb_CppunitTest_use_components,basic_nested_struct,\
     configmgr/source/configmgr \

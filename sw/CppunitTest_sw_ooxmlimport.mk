@@ -46,6 +46,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_ooxmlimport,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_ooxmlimport))
+$(eval $(call gb_CppunitTest_use_vcl,sw_ooxmlimport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_ooxmlimport,\
 	basic/util/sb \

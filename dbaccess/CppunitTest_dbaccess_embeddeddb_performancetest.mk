@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_api,dbaccess_embeddeddb_performancetest,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,dbaccess_embeddeddb_performancetest))
+$(eval $(call gb_CppunitTest_use_vcl,dbaccess_embeddeddb_performancetest))
 
 $(eval $(call gb_CppunitTest_use_components,dbaccess_embeddeddb_performancetest,\
     basic/util/sb \

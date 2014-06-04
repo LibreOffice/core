@@ -64,6 +64,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_macros_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_macros_test))
+$(eval $(call gb_CppunitTest_use_vcl,sw_macros_test))
 
 $(eval $(call gb_CppunitTest_use_components,sw_macros_test,\
 	basic/util/sb \

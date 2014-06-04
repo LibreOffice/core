@@ -48,6 +48,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_rtfimport,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_rtfimport))
+$(eval $(call gb_CppunitTest_use_vcl,sw_rtfimport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_rtfimport,\
 	basic/util/sb \

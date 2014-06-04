@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_annotationsobj,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_annotationsobj))
+$(eval $(call gb_CppunitTest_use_vcl,sc_annotationsobj))
 
 $(eval $(call gb_CppunitTest_use_components,sc_annotationsobj,\
     basic/util/sb \

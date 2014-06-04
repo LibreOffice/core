@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_api,connectivity_mork,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,connectivity_mork))
+$(eval $(call gb_CppunitTest_use_vcl,connectivity_mork))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,connectivity_mork))
 

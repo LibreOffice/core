@@ -15,6 +15,7 @@ $(eval $(call gb_CppunitTest_use_api,filter_xslt,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,filter_xslt))
+$(eval $(call gb_CppunitTest_use_vcl,filter_xslt))
 
 $(eval $(call gb_CppunitTest_use_configuration,filter_xslt))
 

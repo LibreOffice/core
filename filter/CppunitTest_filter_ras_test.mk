@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_api,filter_ras_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,filter_ras_test))
+$(eval $(call gb_CppunitTest_use_vcl,filter_ras_test))
 
 $(eval $(call gb_CppunitTest_use_components,filter_ras_test,\
     configmgr/source/configmgr \

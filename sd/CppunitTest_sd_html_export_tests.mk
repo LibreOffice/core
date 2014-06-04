@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sd_html_export_tests,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sd_html_export_tests))
+$(eval $(call gb_CppunitTest_use_vcl,sd_html_export_tests))
 
 $(eval $(call gb_CppunitTest_use_components,sd_html_export_tests,\
     animations/source/animcore/animcore \

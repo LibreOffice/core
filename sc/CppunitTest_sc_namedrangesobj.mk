@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_namedrangesobj,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_namedrangesobj))
+$(eval $(call gb_CppunitTest_use_vcl,sc_namedrangesobj))
 
 $(eval $(call gb_CppunitTest_use_components,sc_namedrangesobj,\
     basic/util/sb \

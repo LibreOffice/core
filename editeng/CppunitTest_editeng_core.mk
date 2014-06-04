@@ -56,6 +56,7 @@ $(eval $(call gb_CppunitTest_use_api,editeng_core,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,editeng_core))
+$(eval $(call gb_CppunitTest_use_vcl,editeng_core))
 
 $(eval $(call gb_CppunitTest_use_components,editeng_core,\
     configmgr/source/configmgr \

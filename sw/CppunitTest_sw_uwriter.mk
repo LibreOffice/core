@@ -71,6 +71,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_uwriter,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_uwriter))
+$(eval $(call gb_CppunitTest_use_vcl,sw_uwriter))
 
 $(eval $(call gb_CppunitTest_use_components,sw_uwriter,\
     comphelper/util/comphelp \

@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_api,sccomp_lpsolver,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sccomp_lpsolver))
+$(eval $(call gb_CppunitTest_use_vcl,sccomp_lpsolver))
 
 $(eval $(call gb_CppunitTest_use_rdb,sccomp_lpsolver,services))
 

@@ -1541,6 +1541,9 @@ public:
 
     ///@}
 
+    // For vclbootstrapprotector:
+    static void setDeInitHook(Link const & hook);
+
 private:
 
     static void InitSettings();

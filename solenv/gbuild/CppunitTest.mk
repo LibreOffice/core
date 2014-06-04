@@ -57,7 +57,11 @@ $(if $(URE),\
 	-env:LO_JAVA_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER)) \
 	--protector $(call gb_Library_get_target,unoexceptionprotector) unoexceptionprotector \
 	--protector $(call gb_Library_get_target,unobootstrapprotector) unobootstrapprotector \
- ) $(ARGS)
+ ) \
+$(if $(VCL),\
+	--protector $(call gb_Library_get_target,vclbootstrapprotector) vclbootstrapprotector \
+ ) \
+$(ARGS)
 endef
 
 .PHONY : $(call gb_CppunitTest_get_clean_target,%)
@@ -115,6 +119,7 @@ $(call gb_CppunitTest_CppunitTest_platform,$(1),$(2),$(gb_CppunitTest_DLLDIR)/$(
 $(call gb_CppunitTest_get_target,$(1)) : ARGS :=
 $(call gb_CppunitTest_get_target,$(1)) : CONFIGURATION_LAYERS :=
 $(call gb_CppunitTest_get_target,$(1)) : URE := $(false)
+$(call gb_CppunitTest_get_target,$(1)) : VCL := $(false)
 $(call gb_CppunitTest_get_target,$(1)) : UNO_SERVICES :=
 $(call gb_CppunitTest_get_target,$(1)) : UNO_TYPES :=
 $(call gb_CppunitTest_get_target,$(1)) : HEADLESS := --headless
@@ -139,6 +144,12 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,$(gb_CPPU_
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,affine_uno)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,unobootstrapprotector)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,unoexceptionprotector)
+
+endef
+
+define gb_CppunitTest_use_vcl
+$(call gb_CppunitTest_get_target,$(1)) : VCL := $(true)
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,vclbootstrapprotector)
 
 endef
 

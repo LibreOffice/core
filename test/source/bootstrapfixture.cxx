@@ -60,21 +60,6 @@ extern "C"
 void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
         lang::XMultiServiceFactory * pSFactory)
 {
-    // force locale (and resource files loaded) to en-US
-    OUString aLangISO( "en-US" );
-    ResMgr::SetDefaultLocale( LanguageTag( aLangISO) );
-
-    SvtSysLocaleOptions aLocalOptions;
-    aLocalOptions.SetLocaleConfigString( aLangISO );
-    aLocalOptions.SetUILocaleConfigString( aLangISO );
-
-    MsLangId::setConfiguredSystemUILanguage(LANGUAGE_ENGLISH_US);
-    LanguageTag::setConfiguredSystemLanguage(LANGUAGE_ENGLISH_US);
-
-    InitVCL();
-    if (Application::IsHeadlessModeRequested())
-        Application::EnableHeadlessMode(true);
-
     if (bAssertOnDialog)
         ErrorHandler::RegisterDisplay( aBasicErrorFunc );
 
@@ -102,6 +87,22 @@ SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
     try
     {
         ::comphelper::setProcessServiceFactory(pFactory);
+
+        // force locale (and resource files loaded) to en-US
+        OUString aLangISO( "en-US" );
+        ResMgr::SetDefaultLocale( LanguageTag( aLangISO) );
+
+        SvtSysLocaleOptions aLocalOptions;
+        aLocalOptions.SetLocaleConfigString( aLangISO );
+        aLocalOptions.SetUILocaleConfigString( aLangISO );
+
+        MsLangId::setConfiguredSystemUILanguage(LANGUAGE_ENGLISH_US);
+        LanguageTag::setConfiguredSystemLanguage(LANGUAGE_ENGLISH_US);
+
+        InitVCL();
+        if (Application::IsHeadlessModeRequested())
+            Application::EnableHeadlessMode(true);
+
         test_init_impl(false, true, pFactory);
     }
     catch (...) { abort(); }

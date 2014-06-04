@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_api,vcl_complextext,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,vcl_complextext))
+$(eval $(call gb_CppunitTest_use_vcl,vcl_complextext))
 
 $(eval $(call gb_CppunitTest_use_components,vcl_complextext,\
 	configmgr/source/configmgr \

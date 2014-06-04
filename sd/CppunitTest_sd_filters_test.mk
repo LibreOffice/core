@@ -67,6 +67,7 @@ $(eval $(call gb_CppunitTest_use_api,sd_filters_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sd_filters_test))
+$(eval $(call gb_CppunitTest_use_vcl,sd_filters_test))
 
 $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     animations/source/animcore/animcore \

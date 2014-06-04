@@ -72,6 +72,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_filters_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_filters_test))
+$(eval $(call gb_CppunitTest_use_vcl,sc_filters_test))
 
 $(eval $(call gb_CppunitTest_use_components,sc_filters_test,\
     basic/util/sb \

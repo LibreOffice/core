@@ -41,6 +41,7 @@ $(eval $(call gb_CppunitTest_use_api,cppcanvas_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,cppcanvas_test))
+$(eval $(call gb_CppunitTest_use_vcl,cppcanvas_test))
 
 $(eval $(call gb_CppunitTest_use_components,cppcanvas_test,\
 	canvas/source/cairo/cairocanvas \
