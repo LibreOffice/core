@@ -30,8 +30,13 @@ $(call gb_AutoInstall_get_target,%) : $(GBUILDDIR)/AutoInstall.mk \
 		$(foreach exe,$(gb_Executable_MODULE_$*),auto_$*_exe_$(exe)) \
 		$(foreach jar,$(gb_Jar_MODULE_$*),auto_$*_jar_$(jar)) \
 		$(foreach pkg,$(gb_Package_MODULE_$*),auto_$*_pkg_$(pkg)))
-	$(foreach lib,$(gb_Library_MODULE_$*),\
-		echo '$(SCP2LIBTEMPLATE)(auto_$*_lib_$(lib),$(call gb_Library_get_runtime_filename,$(lib))$(if $(SCP2COMPONENTCONDITION),$(COMMA)$(SCP2COMPONENTCONDITION)))' >> $@;)
+	# ugly hack for Win32 8k command line length limit
+	$(foreach lib,$(wordlist 1,70,$(gb_Library_MODULE_$*)),\
+		echo '$(SCP2LIBTEMPLATE)(auto_$*_lib_$(lib),$(call gb_Library_get_runtime_filename,$(lib))$(if $(SCP2COMPONENTCONDITION),$(COMMA)$(SCP2COMPONENTCONDITION)))' >> $@ &&) true
+	$(foreach lib,$(wordlist 71,140,$(gb_Library_MODULE_$*)),\
+		echo '$(SCP2LIBTEMPLATE)(auto_$*_lib_$(lib),$(call gb_Library_get_runtime_filename,$(lib))$(if $(SCP2COMPONENTCONDITION),$(COMMA)$(SCP2COMPONENTCONDITION)))' >> $@ &&) true
+	$(foreach lib,$(wordlist 141,9999,$(gb_Library_MODULE_$*)),\
+		echo '$(SCP2LIBTEMPLATE)(auto_$*_lib_$(lib),$(call gb_Library_get_runtime_filename,$(lib))$(if $(SCP2COMPONENTCONDITION),$(COMMA)$(SCP2COMPONENTCONDITION)))' >> $@ &&) true
 	$(foreach lib,$(gb_SdkLinkLibrary_MODULE_$*),\
 		echo 'SDK_LIBRARY_LINK(auto_$*_link_$(lib),$(notdir $(call gb_Library_get_sdk_link_lib,$(lib))),../../ure-link/lib/$(call gb_Library_get_runtime_filename,$(lib)))' >> $@;)
 	$(foreach exe,$(gb_Executable_MODULE_$*),\
