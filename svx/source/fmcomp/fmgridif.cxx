@@ -90,7 +90,7 @@ using ::com::sun::star::awt::XVclWindowPeer;
     aFD.Pitch = (sal_Int16)rFont.GetPitch();
     aFD.CharacterWidth = VCLUnoHelper::ConvertFontWidth( rFont.GetWidthType() );
     aFD.Weight= VCLUnoHelper::ConvertFontWeight( rFont.GetWeight() );
-    aFD.Slant = (::com::sun::star::awt::FontSlant)rFont.GetItalic();
+    aFD.Slant = VCLUnoHelper::ConvertFontSlant( rFont.GetItalic() );
     aFD.Underline = (sal_Int16)rFont.GetUnderline();
     aFD.Strikeout = (sal_Int16)rFont.GetStrikeout();
     aFD.Orientation = rFont.GetOrientation();
