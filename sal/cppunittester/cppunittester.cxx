@@ -218,38 +218,42 @@ public:
         }
 #endif
 
-        CppUnit::TestResultCollector collector;
-        result.addListener(&collector);
-
-        LogFailuresAsTheyHappen logger;
-        result.addListener(&logger);
-
-#ifdef TIMETESTS
-        TimingListener timer;
-        result.addListener(&timer);
-#endif
-
-#ifdef UNX
-        EyecatcherListener eye;
-        result.addListener(&eye);
-#endif
         for (size_t i = 0; i < protectors.size(); ++i)
             result.pushProtector(protectors[i]);
 
+        bool success;
         {
+            CppUnit::TestResultCollector collector;
+            result.addListener(&collector);
+
+            LogFailuresAsTheyHappen logger;
+            result.addListener(&logger);
+
+#ifdef TIMETESTS
+            TimingListener timer;
+            result.addListener(&timer);
+#endif
+
+#ifdef UNX
+            EyecatcherListener eye;
+            result.addListener(&eye);
+#endif
+
             CppUnit::TestRunner runner;
             runner.addTest(
                 CppUnit::TestFactoryRegistry::getRegistry().makeTest());
             runner.run(result);
+
+            CppUnit::CompilerOutputter outputter(&collector, CppUnit::stdCErr());
+            outputter.setNoWrap();
+            outputter.write();
+            success = collector.wasSuccessful();
         }
 
         for (size_t i = 0; i < protectors.size(); ++i)
             result.popProtector();
 
-        CppUnit::CompilerOutputter outputter(&collector, CppUnit::stdCErr());
-        outputter.setNoWrap();
-        outputter.write();
-        return collector.wasSuccessful();
+        return success;
     }
     virtual bool operator()() const SAL_OVERRIDE
     {
