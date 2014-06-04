@@ -2164,6 +2164,13 @@ DECLARE_OOXMLIMPORT_TEST(testBnc875718, "bnc875718.docx")
     CPPUNIT_ASSERT_EQUAL( OUString( "Text\n" ), text->getString());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testCaption, "caption.docx")
+{
+    uno::Reference<beans::XPropertySet> xStyle(getStyles("ParagraphStyles")->getByName("Caption"), uno::UNO_QUERY);
+    // This was awt::FontSlant_ITALIC: Writer default was used instead of what is in the document.
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xStyle, "CharPosture"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
