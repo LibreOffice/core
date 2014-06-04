@@ -331,7 +331,15 @@ void SAL_CALL ShapeContextHandler::endFastElement(::sal_Int32 Element)
     if (Element == (NMSP_wps | XML_wsp))
     {
         uno::Reference<lang::XServiceInfo> xServiceInfo(mxSavedShape, uno::UNO_QUERY);
-        if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+        bool bTextFrame = xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame");
+        bool bTextBox = false;
+        if (!bTextFrame)
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(mxSavedShape, uno::UNO_QUERY);
+            if (xPropertySet.is())
+                bTextBox = xPropertySet->getPropertyValue("TextBox").get<bool>();
+        }
+        if (bTextFrame || bTextBox)
             mxWpsContext.clear();
         mxSavedShape.clear();
     }
