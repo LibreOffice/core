@@ -22,7 +22,7 @@
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 using namespace osl;
 using namespace com::sun::star;

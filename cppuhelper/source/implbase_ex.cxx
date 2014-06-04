@@ -26,7 +26,7 @@
 #include <rtl/uuid.h>
 #include <cppuhelper/compbase_ex.hxx>
 
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 using namespace ::cppu;
 using namespace ::osl;

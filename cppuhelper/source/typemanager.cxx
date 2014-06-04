@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <cstddef>
@@ -17,47 +17,47 @@
 #include <stack>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/container/ElementExistException.hpp"
-#include "com/sun/star/container/NoSuchElementException.hpp"
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "com/sun/star/reflection/InvalidTypeNameException.hpp"
-#include "com/sun/star/reflection/NoSuchTypeNameException.hpp"
-#include "com/sun/star/reflection/TypeDescriptionSearchDepth.hpp"
-#include "com/sun/star/reflection/XConstantTypeDescription.hpp"
-#include "com/sun/star/reflection/XConstantsTypeDescription.hpp"
-#include "com/sun/star/reflection/XEnumTypeDescription.hpp"
-#include "com/sun/star/reflection/XIndirectTypeDescription.hpp"
-#include "com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp"
-#include "com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp"
-#include "com/sun/star/reflection/XInterfaceTypeDescription2.hpp"
-#include "com/sun/star/reflection/XModuleTypeDescription.hpp"
-#include "com/sun/star/reflection/XPublished.hpp"
-#include "com/sun/star/reflection/XServiceTypeDescription2.hpp"
-#include "com/sun/star/reflection/XSingletonTypeDescription2.hpp"
-#include "com/sun/star/reflection/XStructTypeDescription.hpp"
-#include "com/sun/star/reflection/XTypeDescription.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/DeploymentException.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/Type.hxx"
-#include "com/sun/star/uno/TypeClass.hpp"
-#include "cppu/unotype.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "osl/file.hxx"
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/string.h"
-#include "rtl/ustring.hxx"
-#include "sal/macros.h"
-#include "sal/types.h"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/reflection/InvalidTypeNameException.hpp>
+#include <com/sun/star/reflection/NoSuchTypeNameException.hpp>
+#include <com/sun/star/reflection/TypeDescriptionSearchDepth.hpp>
+#include <com/sun/star/reflection/XConstantTypeDescription.hpp>
+#include <com/sun/star/reflection/XConstantsTypeDescription.hpp>
+#include <com/sun/star/reflection/XEnumTypeDescription.hpp>
+#include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
+#include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
+#include <com/sun/star/reflection/XModuleTypeDescription.hpp>
+#include <com/sun/star/reflection/XPublished.hpp>
+#include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
+#include <com/sun/star/reflection/XSingletonTypeDescription2.hpp>
+#include <com/sun/star/reflection/XStructTypeDescription.hpp>
+#include <com/sun/star/reflection/XTypeDescription.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/TypeClass.hpp>
+#include <cppu/unotype.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <osl/file.hxx>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/string.h>
+#include <rtl/ustring.hxx>
+#include <sal/macros.h>
+#include <sal/types.h>
 
 using rtl::OUString;
 
-#include "unoidl/unoidl.hxx"
+#include <unoidl/unoidl.hxx>
 
 #include "paths.hxx"
 #include "typemanager.hxx"

@@ -18,35 +18,35 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "test/cppuhelper/propertysetmixin/XSupplier.hpp"
-#include "test/cppuhelper/propertysetmixin/XTest3.hpp"
+#include <test/cppuhelper/propertysetmixin/XSupplier.hpp>
+#include <test/cppuhelper/propertysetmixin/XTest3.hpp>
 
-#include "com/sun/star/beans/Ambiguous.hpp"
-#include "com/sun/star/beans/Defaulted.hpp"
-#include "com/sun/star/beans/Optional.hpp"
-#include "com/sun/star/beans/PropertyVetoException.hpp"
-#include "com/sun/star/beans/UnknownPropertyException.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "cppuhelper/propertysetmixin.hxx"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/queryinterface.hxx"
-#include "cppuhelper/weak.hxx"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/Type.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "osl/mutex.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/beans/Ambiguous.hpp>
+#include <com/sun/star/beans/Defaulted.hpp>
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/beans/PropertyVetoException.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <cppuhelper/propertysetmixin.hxx>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/weak.hxx>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <osl/mutex.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     class XEventListener;

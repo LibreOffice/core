@@ -10,31 +10,31 @@
 #ifndef INCLUDED_CPPUHELPER_SOURCE_SERVICEMANAGER_HXX
 #define INCLUDED_CPPUHELPER_SOURCE_SERVICEMANAGER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <map>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-#include "boost/shared_ptr.hpp"
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/beans/XPropertySetInfo.hpp"
-#include "com/sun/star/container/XContentEnumerationAccess.hpp"
-#include "com/sun/star/container/XSet.hpp"
-#include "com/sun/star/lang/XEventListener.hpp"
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XSingleServiceFactory.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "cppuhelper/basemutex.hxx"
-#include "cppuhelper/compbase8.hxx"
-#include "osl/mutex.hxx"
-#include "registry/registry.hxx"
-#include "rtl/ustring.hxx"
-#include "cppuhelper/weak.hxx"
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase8.hxx>
+#include <osl/mutex.hxx>
+#include <registry/registry.hxx>
+#include <rtl/ustring.hxx>
+#include <cppuhelper/weak.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XSingleComponentFactory;

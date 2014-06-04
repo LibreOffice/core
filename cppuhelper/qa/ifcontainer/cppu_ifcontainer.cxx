@@ -24,11 +24,11 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include "com/sun/star/lang/XEventListener.hpp"
-#include "cppuhelper/interfacecontainer.hxx"
-#include "cppuhelper/queryinterface.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/propshlp.hxx"
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/propshlp.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

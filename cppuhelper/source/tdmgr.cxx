@@ -18,7 +18,7 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
@@ -47,9 +47,9 @@
 #include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
 #include <com/sun/star/reflection/XStructTypeDescription.hpp>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 
-#include "boost/scoped_array.hpp"
+#include <boost/scoped_array.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

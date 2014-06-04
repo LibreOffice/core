@@ -51,8 +51,8 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "com/sun/star/uno/DeploymentException.hpp"
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 #define SMGR_SINGLETON "/singletons/com.sun.star.lang.theServiceManager"
 #define TDMGR_SINGLETON "/singletons/com.sun.star.reflection.theTypeDescriptionManager"

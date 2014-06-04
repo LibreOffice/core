@@ -7,50 +7,50 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <cassert>
 #include <vector>
 
-#include "boost/noncopyable.hpp"
-#include "boost/shared_ptr.hpp"
-#include "com/sun/star/beans/NamedValue.hpp"
-#include "com/sun/star/beans/PropertyAttribute.hpp"
-#include "com/sun/star/container/ElementExistException.hpp"
-#include "com/sun/star/container/XEnumeration.hpp"
-#include "com/sun/star/container/XNameContainer.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
-#include "com/sun/star/lang/XSingleServiceFactory.hpp"
-#include "com/sun/star/loader/XImplementationLoader.hpp"
-#include "com/sun/star/registry/InvalidRegistryException.hpp"
-#include "com/sun/star/uno/DeploymentException.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/bootstrap.hxx"
-#include "cppuhelper/component_context.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implbase3.hxx"
-#include "cppuhelper/shlib.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "osl/file.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/uri.hxx"
-#include "rtl/ustring.hxx"
-#include "rtl/strbuf.hxx"
-#include "sal/log.hxx"
-#include "uno/environment.hxx"
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/loader/XImplementationLoader.hpp>
+#include <com/sun/star/registry/InvalidRegistryException.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/component_context.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/shlib.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <osl/file.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/uri.hxx>
+#include <rtl/ustring.hxx>
+#include <rtl/strbuf.hxx>
+#include <sal/log.hxx>
+#include <uno/environment.hxx>
 
-#include <loadsharedlibcomponentfactory.hxx>
+#include "loadsharedlibcomponentfactory.hxx"
 
 using rtl::OUString;
 using rtl::OString;
 using rtl::OStringBuffer;
 
-#include "registry/registry.hxx"
-#include "xmlreader/xmlreader.hxx"
+#include <registry/registry.hxx>
+#include <xmlreader/xmlreader.hxx>
 
 #include "paths.hxx"
 #include "servicemanager.hxx"

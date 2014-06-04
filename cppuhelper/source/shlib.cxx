@@ -29,7 +29,7 @@
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>
 
-#include <loadsharedlibcomponentfactory.hxx>
+#include "loadsharedlibcomponentfactory.hxx"
 
 #if defined DISABLE_DYNLOADING
 #include <osl/detail/component-mapping.h>

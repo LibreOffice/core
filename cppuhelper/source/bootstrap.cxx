@@ -17,28 +17,28 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstring>
 
-#include "rtl/process.h"
-#include "rtl/bootstrap.hxx"
-#include "rtl/random.h"
-#include "rtl/string.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/uri.hxx"
-#include "osl/diagnose.h"
-#include "osl/file.hxx"
-#include "osl/security.hxx"
-#include "osl/thread.hxx"
+#include <rtl/process.h>
+#include <rtl/bootstrap.hxx>
+#include <rtl/random.h>
+#include <rtl/string.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/uri.hxx>
+#include <osl/diagnose.h>
+#include <osl/file.hxx>
+#include <osl/security.hxx>
+#include <osl/thread.hxx>
 
-#include "cppuhelper/bootstrap.hxx"
-#include "cppuhelper/findsofficepath.h"
+#include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/findsofficepath.h>
 
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "com/sun/star/bridge/UnoUrlResolver.hpp"
-#include "com/sun/star/bridge/XUnoUrlResolver.hpp"
+#include <com/sun/star/bridge/UnoUrlResolver.hpp>
+#include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 
 #include "macro_expander.hxx"
 
