@@ -142,7 +142,7 @@ namespace dbaui
         enableSelectHandler();
     }
 
-    bool DbaIndexList::Select( SvTreeListEntry* pEntry, sal_Bool _bSelect )
+    bool DbaIndexList::Select(SvTreeListEntry* pEntry, bool _bSelect)
     {
         bool bReturn = SvTreeListBox::Select(pEntry, _bSelect);
 
