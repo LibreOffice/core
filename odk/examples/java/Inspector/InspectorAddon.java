@@ -72,8 +72,8 @@ public class InspectorAddon {
 
         public XDispatch queryDispatch( /*IN*/com.sun.star.util.URL aURL, /*IN*/String sTargetFrameName, /*IN*/int iSearchFlags ) {
             XDispatch xRet = null;
-            if ( aURL.Protocol.compareTo("org.openoffice.Office.addon.Inspector:") == 0 ) {
-                if ( aURL.Path.compareTo( "inspect" ) == 0 ){
+            if ( aURL.Protocol.equals("org.openoffice.Office.addon.Inspector:") ) {
+                if ( aURL.Path.equals( "inspect" ) ){
                     // Todo: Check if the frame is already administered (use hashtable)
                     xRet = new Dispatcher(m_xFrame);
                 }
@@ -114,7 +114,7 @@ public class InspectorAddon {
             // XDispatch
             public void dispatch( /*IN*/com.sun.star.util.URL _aURL, /*IN*/com.sun.star.beans.PropertyValue[] aArguments ) {
             try{
-                if ( _aURL.Protocol.compareTo("org.openoffice.Office.addon.Inspector:") == 0 ){
+                if ( _aURL.Protocol.equals("org.openoffice.Office.addon.Inspector:") ){
                     if ( _aURL.Path.equals("inspect")){
                         Object oUnoInspectObject = xModel;
                         com.sun.star.lang.XMultiComponentFactory xMCF = m_xContext.getServiceManager();

@@ -55,7 +55,7 @@ public class TextStyleHandler
             for (int i = 0; i < PropCount; i++)
             {
                 CurOptionName = StyleOptions[i].Name;
-                StyleOptions[i].Value = Boolean.valueOf((CurOptionName.compareTo(OptionString) == 0) || (CurOptionName.compareTo("OverwriteStyles") == 0));
+                StyleOptions[i].Value = Boolean.valueOf(CurOptionName.equals(OptionString) || CurOptionName.equals("OverwriteStyles"));
             }
             xStyleLoader.loadStylesFromURL(sTemplateUrl, StyleOptions);
         }

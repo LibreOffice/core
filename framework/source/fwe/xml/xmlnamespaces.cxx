@@ -47,7 +47,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
     sal_Int32 nXMLNamespaceLength = m_aXMLAttributeNamespace.getLength();
 
     // delete preceding "xmlns"
-    if ( aNamespaceName.compareTo( m_aXMLAttributeNamespace, nXMLNamespaceLength ) == 0 )
+    if ( aNamespaceName.startsWith( m_aXMLAttributeNamespace ) )
     {
         if ( aNamespaceName.getLength() == nXMLNamespaceLength )
         {

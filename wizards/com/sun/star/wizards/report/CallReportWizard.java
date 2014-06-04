@@ -82,7 +82,7 @@ public class CallReportWizard
         {
             try
             {
-                if (sEvent.compareTo(PropertyNames.START) == 0)
+                if (sEvent.equals(PropertyNames.START))
                 {
                     if (!bWizardstartedalready)
                     {
@@ -91,7 +91,7 @@ public class CallReportWizard
                     }
                     bWizardstartedalready = false;
                 }
-                else if (sEvent.compareTo("fill") == 0)
+                else if (sEvent.equals("fill"))
                 {
                     Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
                     if (m_wizardContext != null)

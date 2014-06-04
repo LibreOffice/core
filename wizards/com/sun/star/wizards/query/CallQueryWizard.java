@@ -74,7 +74,7 @@ public class CallQueryWizard
         {
             try
             {
-                if (sEvent.compareTo(PropertyNames.START) == 0)
+                if (sEvent.equals(PropertyNames.START))
                 {
                     QueryWizard CurQueryWizard = new QueryWizard( m_serviceFactory, m_wizardContext );
                     Command = CurQueryWizard.start();

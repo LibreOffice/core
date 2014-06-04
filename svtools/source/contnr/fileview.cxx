@@ -249,12 +249,12 @@ HashedEntry::~HashedEntry()
 
 inline bool HashedEntry::operator ==( const HashedEntry& rRef ) const
 {
-    return mnHashCode == rRef.mnHashCode && maName.reverseCompareTo( rRef.maName ) == 0;
+    return mnHashCode == rRef.mnHashCode && maName == rRef.maName;
 }
 
 inline bool HashedEntry::operator !=( const HashedEntry& rRef ) const
 {
-    return mnHashCode != rRef.mnHashCode || maName.reverseCompareTo( rRef.maName ) != 0;
+    return mnHashCode != rRef.mnHashCode || maName != rRef.maName;
 }
 
 inline bool HashedEntry::operator <( const HashedEntry& rRef ) const
@@ -2468,7 +2468,7 @@ bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTit
     while ( nIndex < nEnd )
     {
         SortingData_Impl* pData = maContent[ nIndex ];
-        if ( rTitle.compareTo( pData->GetLowerTitle(), rTitle.getLength() ) == 0 )
+        if ( pData->GetLowerTitle().startsWith( rTitle ) )
             return true;
         nIndex += 1;
     }
@@ -2479,7 +2479,7 @@ bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTit
         while ( nIndex < nEnd && nIndex <= nStart )
         {
             SortingData_Impl* pData = maContent[ nIndex ];
-            if ( rTitle.compareTo( pData->GetLowerTitle(), rTitle.getLength() ) == 0 )
+            if ( pData->GetLowerTitle().startsWith( rTitle ) )
                 return true;
             nIndex += 1;
         }

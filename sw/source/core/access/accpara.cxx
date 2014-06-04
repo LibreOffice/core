@@ -2244,13 +2244,13 @@ void SwAccessibleParagraph::_correctValues( const sal_Int32 nIndex,
     {
         PropertyValue& rValue = pValues[i];
 
-        if (rValue.Name.compareTo( ChangeAttr.Name )==0)
+        if (rValue.Name == ChangeAttr.Name )
         {
             rValue.Value = ChangeAttr.Value;
             continue;
         }
 
-        if (rValue.Name.compareTo( ChangeAttrColor.Name )==0)
+        if (rValue.Name == ChangeAttrColor.Name )
         {
             rValue.Value = ChangeAttrColor.Value;
             continue;

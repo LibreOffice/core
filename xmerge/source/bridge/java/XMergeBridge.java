@@ -157,10 +157,10 @@ public class XMergeBridge {
         {
 
          try{
-             if (pValue[i].Name.compareTo("InputStream")==0){
+             if (pValue[i].Name.equals("InputStream")){
             xis=(com.sun.star.io.XInputStream)AnyConverter.toObject(new Type(com.sun.star.io.XInputStream.class), pValue[i].Value);
              }
-             if (pValue[i].Name.compareTo("FileName")==0){
+             if (pValue[i].Name.equals("FileName")){
              sFileName=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
              }
 
@@ -234,15 +234,15 @@ public class XMergeBridge {
 
 
         try{
-            if (pValue[i].Name.compareTo("OutputStream")==0){
+            if (pValue[i].Name.equals("OutputStream")){
             xos=(com.sun.star.io.XOutputStream)AnyConverter.toObject(new Type(com.sun.star.io.XOutputStream.class), pValue[i].Value);
             }
 
-            if (pValue[i].Name.compareTo("FileName")==0){
+            if (pValue[i].Name.equals("FileName")){
             sFileName=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
             }
 
-            if (pValue[i].Name.compareTo("URL")==0){
+            if (pValue[i].Name.equals("URL")){
             sURL=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
             }
         }

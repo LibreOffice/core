@@ -759,7 +759,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         // provided by picw and pich.
         OString aURLBS(OUStringToOString(aGraphicUrl, RTL_TEXTENCODING_UTF8));
         const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
-        if (aURLBS.compareTo(aURLBegin, RTL_CONSTASCII_LENGTH(aURLBegin)) == 0)
+        if (aURLBS.startsWith(aURLBegin))
         {
             Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
             Size aSize(aGraphic.GetPrefSize());

@@ -287,21 +287,21 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
             {
                 const beans::StringPair &rPair = rSeq[i];
 
-                if (rPair.First.compareTo(sType) == 0 &&
-                    ( rPair.Second.compareTo(sStreamType) == 0 ||
-                      rPair.Second.compareTo(sStreamTypeStrict) == 0))
+                if (rPair.First == sType &&
+                    ( rPair.Second == sStreamType ||
+                      rPair.Second == sStreamTypeStrict ))
                     bFound = true;
-                else if(rPair.First.compareTo(sType) == 0 &&
-                        ((rPair.Second.compareTo(sOleObjectType) == 0 ||
-                          rPair.Second.compareTo(sOleObjectTypeStrict) == 0) &&
+                else if(rPair.First == sType &&
+                        ((rPair.Second == sOleObjectType ||
+                          rPair.Second == sOleObjectTypeStrict) &&
                           nStreamType == EMBEDDINGS))
                 {
                     bFound = true;
                 }
-                else if (rPair.First.compareTo(sId) == 0 &&
-                         rPair.Second.compareTo(rId) == 0)
+                else if (rPair.First == sId &&
+                         rPair.Second == rId)
                     bFound = true;
-                else if (rPair.First.compareTo(sTarget) == 0)
+                else if (rPair.First == sTarget)
                 {
                     // checking item[n].xml or activex[n].xml is not visited already.
                     if(customTarget != rPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType || sStreamType == sChartType || sStreamType == sFooterType || sStreamType == sHeaderType))
@@ -313,8 +313,8 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                         sMyTarget = rPair.Second;
                     }
                 }
-                else if (rPair.First.compareTo(sTargetMode) == 0 &&
-                         rPair.Second.compareTo(sExternal) == 0)
+                else if (rPair.First == sTargetMode &&
+                         rPair.Second == sExternal)
                     bExternalTarget = true;
 
             }

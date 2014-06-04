@@ -563,7 +563,7 @@ void Content::queryChildren( ContentRefList& rChildren )
         OUString aChildURL = xChild->getIdentifier()->getContentIdentifier();
 
         // Is aURL a prefix of aChildURL?
-        if ( ( aChildURL.getLength() > nLen ) && ( aChildURL.compareTo( aURL, nLen ) == 0 ) )
+        if ( ( aChildURL.getLength() > nLen ) && aChildURL.startsWith( aURL ) )
         {
             sal_Int32 nPos = nLen;
             nPos = aChildURL.indexOf( '/', nPos );

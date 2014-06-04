@@ -190,7 +190,7 @@ sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPref
     if (_sNestedPath.getLength() > nPrefixLength)
     {
         bIsPrefix = _sNestedPath[nPrefixLength] == '/' &&
-                    _sNestedPath.compareTo(_sPrefixPath,nPrefixLength) == 0;
+                    _sNestedPath.startsWith(_sPrefixPath);
         ++nPrefixLength;
     }
     else if (_sNestedPath.getLength() == nPrefixLength)

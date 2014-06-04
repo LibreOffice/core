@@ -69,7 +69,7 @@ public class CallFormWizard
         {
             try
             {
-                if (sEvent.compareTo(PropertyNames.START) == 0)
+                if (sEvent.equals(PropertyNames.START))
                 {
                     FormWizard CurFormWizard = new FormWizard( m_serviceFactory, m_wizardContext );
                     CurFormWizard.start();
