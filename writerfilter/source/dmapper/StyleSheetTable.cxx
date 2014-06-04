@@ -41,6 +41,7 @@
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 #include <dmapperLoggers.hxx>
 
@@ -938,6 +939,33 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             continue;
                         }
                         xStyles->getByName( sConvertedStyleName ) >>= xStyle;
+
+                        // See if the existing style has any non-default properties. If so, reset them back to default.
+                        uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY);
+                        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+                        uno::Sequence<beans::Property> aProperties = xPropertySetInfo->getProperties();
+                        comphelper::SequenceAsVector<OUString> aPropertyNames;
+                        for (sal_Int32 i = 0; i < aProperties.getLength(); ++i)
+                        {
+                            aPropertyNames.push_back(aProperties[i].Name);
+                        }
+
+                        uno::Reference<beans::XPropertyState> xPropertyState(xStyle, uno::UNO_QUERY);
+                        uno::Sequence<beans::PropertyState> aStates = xPropertyState->getPropertyStates(aPropertyNames.getAsConstList());
+                        for (sal_Int32 i = 0; i < aStates.getLength(); ++i)
+                        {
+                            if (aStates[i] == beans::PropertyState_DIRECT_VALUE)
+                            {
+                                try
+                                {
+                                    xPropertyState->setPropertyToDefault(aPropertyNames[i]);
+                                }
+                                catch(const uno::Exception& rException)
+                                {
+                                    SAL_INFO("writerfilter", "setPropertyToDefault(" << aPropertyNames[i] << ") failed: " << rException.Message);
+                                }
+                            }
+                        }
                     }
                     else
                     {
