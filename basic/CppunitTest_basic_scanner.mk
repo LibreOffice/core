@@ -24,7 +24,6 @@ $(eval $(call gb_CppunitTest_use_libraries,basic_scanner, \
     sal \
     salhelper \
 	i18nlangtag \
-    sb \
     sot \
     svl \
     svt \
