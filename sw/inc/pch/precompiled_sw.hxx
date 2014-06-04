@@ -466,7 +466,6 @@
 #include <config_features.h>
 #include <config_folders.h>
 #include <config_graphite.h>
-#include <config_libraries.h>
 #include <config_options.h>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/bootstrap.hxx>

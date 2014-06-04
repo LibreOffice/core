@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <config_libraries.h>
 
 #include "comphelper/processfactory.hxx"
 
@@ -1404,7 +1403,7 @@ UnoWrapperBase* Application::GetUnoWrapper( bool bCreateIfNotExist )
     if ( !pSVData->mpUnoWrapper && bCreateIfNotExist && !bAlreadyTriedToCreate )
     {
 #ifndef DISABLE_DYNLOADING
-        OUString aLibName(LIBO_LIBRARY(tk));
+        OUString aLibName(TK_DLL_NAME);
         oslModule hTkLib = osl_loadModuleRelative(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hTkLib )

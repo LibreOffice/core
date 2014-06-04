@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <config_libraries.h>
 
 #include "sdabstdlg.hxx"
 
@@ -43,7 +42,7 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
-    static const OUString sLibName(LIBO_LIBRARY(sdui));
+    static const OUString sLibName(SDUI_DLL_NAME);
     if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, sLibName ) )
         fp = ( SdAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( "SdCreateDialogFactory" );

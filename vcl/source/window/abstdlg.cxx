@@ -18,7 +18,6 @@
  */
 
 #include <config_features.h>
-#include <config_libraries.h>
 
 #include <rtl/ustring.hxx>
 #include <osl/module.hxx>
@@ -38,10 +37,13 @@ VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
 #if HAVE_FEATURE_DESKTOP
 #ifndef DISABLE_DYNLOADING
     static ::osl::Module aDialogLibrary;
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, LIBO_LIBRARY(cui),
-                                                             SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY ) )
+    if (aDialogLibrary.is() ||
+        aDialogLibrary.loadRelative(&thisModule, CUI_DLL_NAME,
+                SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY))
+    {
         fp = ( VclAbstractDialogFactory* (SAL_CALL*)() )
             aDialogLibrary.getFunctionSymbol( OUString("CreateDialogFactory") );
+    }
 #else
     fp = CreateDialogFactory;
 #endif

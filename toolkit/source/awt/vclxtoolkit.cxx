@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_libraries.h>
-
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <stdio.h>
@@ -1223,7 +1221,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
          )
     {
 #ifndef DISABLE_DYNLOADING
-        OUString aLibName(LIBO_LIBRARY(svt));
+        OUString aLibName(SVT_DLL_NAME);
         hSvToolsLib = osl_loadModuleRelative(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hSvToolsLib )

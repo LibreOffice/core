@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_libraries.h>
-
 #include "osl/module.h"
 #include "osl/process.h"
 
@@ -117,7 +115,7 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
 
 static DesktopType get_desktop_environment()
 {
-    OUString aModule(LIBO_LIBRARY(desktop_detector));
+    OUString aModule(DESKTOP_DETECTOR_DLL_NAME);
     oslModule aMod = osl_loadModuleRelative(
         reinterpret_cast< oslGenericFunction >( &tryInstance ), aModule.pData,
         SAL_LOADMODULE_DEFAULT );

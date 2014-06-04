@@ -277,7 +277,6 @@
 #include <config_features.h>
 #include <config_folders.h>
 #include <config_graphite.h>
-#include <config_libraries.h>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/factory.hxx>
