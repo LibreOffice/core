@@ -1771,30 +1771,30 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
             if( pLevelSettings->sBulletFont.getLength() &&
                 pLevelSettings->sBulletFont.compareTo(rActBulletFont.GetName()))
             {
-                        //search for the font
-                        if(!pList)
-                        {
-                                SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-                                const SvxFontListItem* pFontListItem = (const SvxFontListItem* )pCurDocShell->GetItem( SID_ATTR_CHAR_FONTLIST );
-                                pList = pFontListItem ? pFontListItem->GetFontList() : 0;
-                        }
-                        if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
-                        {
+                //search for the font
+                if(!pList)
+                {
+                    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
+                    const SvxFontListItem* pFontListItem = (const SvxFontListItem* )pCurDocShell->GetItem( SID_ATTR_CHAR_FONTLIST );
+                    pList = pFontListItem ? pFontListItem->GetFontList() : 0;
+                }
+                if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
+                {
                     FontInfo aInfo = pList->Get(pLevelSettings->sBulletFont,WEIGHT_NORMAL, ITALIC_NONE);
                     Font aFont(aInfo);
                     aFmt.SetBulletFont(&aFont);
-                        }
-                        else
-                        {
-                         //if it cannot be found then create a new one
-                         Font aCreateFont( pLevelSettings->sBulletFont, OUString(), Size( 0, 14 ) );
-                         aCreateFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
-                         aCreateFont.SetFamily( FAMILY_DONTKNOW );
-                         aCreateFont.SetPitch( PITCH_DONTKNOW );
-                         aCreateFont.SetWeight( WEIGHT_DONTKNOW );
-                         aCreateFont.SetTransparent( true );
-                         aFmt.SetBulletFont( &aCreateFont );
-                        }
+                }
+                else
+                {
+                    //if it cannot be found then create a new one
+                    Font aCreateFont( pLevelSettings->sBulletFont, OUString(), Size( 0, 14 ) );
+                    aCreateFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
+                    aCreateFont.SetFamily( FAMILY_DONTKNOW );
+                    aCreateFont.SetPitch( PITCH_DONTKNOW );
+                    aCreateFont.SetWeight( WEIGHT_DONTKNOW );
+                    aCreateFont.SetTransparent( true );
+                    aFmt.SetBulletFont( &aCreateFont );
+                }
             }else
                 aFmt.SetBulletFont( &rActBulletFont );
 
