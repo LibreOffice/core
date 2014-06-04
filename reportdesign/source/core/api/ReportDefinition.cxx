@@ -822,6 +822,7 @@ void SAL_CALL OReportDefinition::disposing()
     }
     // <--- SYNCHRONIZED
 
+    SolarMutexReleaser rel;
     for (std::vector< rtl::Reference<salhelper::Thread> >::iterator i(
              m_pImpl->m_aFactoryLoaders.begin());
          i != m_pImpl->m_aFactoryLoaders.end(); ++i)
