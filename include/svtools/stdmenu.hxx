@@ -97,10 +97,6 @@ FontList; FontNameMenu; FontSizeBox
 
 *************************************************************************/
 
-
-// - FontNameMenu -
-
-
 class SVT_DLLPUBLIC FontNameMenu : public PopupMenu
 {
 private:
@@ -125,10 +121,6 @@ public:
     void            SetHighlightHdl( const Link& rLink ) { maHighlightHdl = rLink; }
     const Link&     GetHighlightHdl() const { return maHighlightHdl; }
 };
-
-
-// - FontSizeMenu -
-
 
 class SVT_DLLPUBLIC FontSizeMenu : public PopupMenu
 {
