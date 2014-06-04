@@ -738,8 +738,11 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                             switch ( aPlaceholderAtom.nPlaceholderId )
                             {
                                 case PPT_PLACEHOLDER_MASTERSLIDENUMBER :    nHeaderFooterInstance++;
+                                // fall-through
                                 case PPT_PLACEHOLDER_MASTERFOOTER :         nHeaderFooterInstance++;
+                                // fall-through
                                 case PPT_PLACEHOLDER_MASTERHEADER :         nHeaderFooterInstance++;
+                                // fall-through
                                 case PPT_PLACEHOLDER_MASTERDATE :           nHeaderFooterInstance++; break;
                             }
                             if ( ! ( nHeaderFooterInstance & 0xfffc ) )     // is this a valid instance ( 0->3 )
