@@ -3204,7 +3204,8 @@ SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( cons
 SwRedlineExtraData_FormattingChanges::SwRedlineExtraData_FormattingChanges( const SwRedlineExtraData_FormattingChanges& rCpy )
     : SwRedlineExtraData()
 {
-    if( rCpy.pSet->Count() )
+    // Checking pointer pSet before accessing it for Count
+    if( rCpy.pSet && rCpy.pSet->Count() )
     {
         pSet = new SfxItemSet( *(rCpy.pSet) );
     }
