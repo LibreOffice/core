@@ -10,7 +10,7 @@
         <false/>
         <key>^MacOS/postgresql-sdbc.ini$</key>
         <false/>
-        <key>^MacOS/(senddoc|python|gengal|unoinfo)$</key>
+        <key>^MacOS/(senddoc|python|gengal|unoinfo|unopkg)$</key>
         <false/>
         <key>.*\.(png|svg|py|res|rdb)$</key>
         <false/>
