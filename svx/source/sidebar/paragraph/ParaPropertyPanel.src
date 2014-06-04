@@ -203,11 +203,11 @@ Image IMG_SEL_SPACING2
 {
     ImageBitmap = Bitmap{File = "symphony/lpselected-spacing-2.png";};
 };
-Image IMG_CUSTOM
+Image IMG_PARA_CUSTOM
 {
     ImageBitmap = Bitmap{File = "symphony/last_custom_common.png";};
 };
-Image IMG_CUSTOM_GRAY
+Image IMG_PARA_CUSTOM_GRAY
 {
     ImageBitmap = Bitmap{File = "symphony/last_custom_common_grey.png";};
 };

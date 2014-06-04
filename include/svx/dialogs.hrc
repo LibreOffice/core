@@ -980,11 +980,57 @@
 #define RID_SVXBMP_ZOOM_PAGE             (SVX_OOO_BUILD_START + 9) // 1239
 #define RID_SVXSTR_FIT_SLIDE             (SVX_OOO_BUILD_START + 10) // 1240
 
-// sidebar-related resources (defined in the appropriate .hrc's)
+// sidebar-related resources
 #define RID_SVX_SIDEBAR_BEGIN            (RID_SVX_START + 1241)
+#define IMG_SPACE3                       (RID_SVX_SIDEBAR_BEGIN +  0)
+#define IMG_INDENT_HANG                  (RID_SVX_SIDEBAR_BEGIN +  1)
+#define IMG_SPACING1                     (RID_SVX_SIDEBAR_BEGIN +  2)
+#define IMG_SPACING115                   (RID_SVX_SIDEBAR_BEGIN +  3)
+#define IMG_SPACING15                    (RID_SVX_SIDEBAR_BEGIN +  4)
+#define IMG_SPACING2                     (RID_SVX_SIDEBAR_BEGIN +  5)
+#define IMG_SEL_SPACING1                 (RID_SVX_SIDEBAR_BEGIN +  6)
+#define IMG_SEL_SPACING115               (RID_SVX_SIDEBAR_BEGIN +  7)
+#define IMG_SEL_SPACING15                (RID_SVX_SIDEBAR_BEGIN +  8)
+#define IMG_SEL_SPACING2                 (RID_SVX_SIDEBAR_BEGIN +  9)
+#define IMG_PARA_CUSTOM                  (RID_SVX_SIDEBAR_BEGIN + 10)
+#define IMG_PARA_CUSTOM_GRAY             (RID_SVX_SIDEBAR_BEGIN + 11)
+#define IL_NUM_BULLET                    (RID_SVX_SIDEBAR_BEGIN + 12)
+#define IL_NUM_BULLET_RTL                (RID_SVX_SIDEBAR_BEGIN + 13)
+#define IMG_LINE_COLOR                   (RID_SVX_SIDEBAR_BEGIN + 20)
+#define IMG_NONE_ICON                    (RID_SVX_SIDEBAR_BEGIN + 21)
+#define IMG_WIDTH1_ICON                  (RID_SVX_SIDEBAR_BEGIN + 22)
+#define IMG_WIDTH2_ICON                  (RID_SVX_SIDEBAR_BEGIN + 23)
+#define IMG_WIDTH3_ICON                  (RID_SVX_SIDEBAR_BEGIN + 24)
+#define IMG_WIDTH4_ICON                  (RID_SVX_SIDEBAR_BEGIN + 25)
+#define IMG_WIDTH5_ICON                  (RID_SVX_SIDEBAR_BEGIN + 26)
+#define IMG_WIDTH6_ICON                  (RID_SVX_SIDEBAR_BEGIN + 27)
+#define IMG_WIDTH7_ICON                  (RID_SVX_SIDEBAR_BEGIN + 28)
+#define IMG_WIDTH8_ICON                  (RID_SVX_SIDEBAR_BEGIN + 29)
+#define IMG_AXIAL                        (RID_SVX_SIDEBAR_BEGIN + 30)
+#define IMG_ELLI                         (RID_SVX_SIDEBAR_BEGIN + 31)
+#define IMG_QUAD                         (RID_SVX_SIDEBAR_BEGIN + 32)
+#define IMG_RADIAL                       (RID_SVX_SIDEBAR_BEGIN + 33)
+#define IMG_SQUARE                       (RID_SVX_SIDEBAR_BEGIN + 34)
+#define IMG_LINEAR                       (RID_SVX_SIDEBAR_BEGIN + 35)
+#define IMG_AREA_COLOR                   (RID_SVX_SIDEBAR_BEGIN + 36)
+#define IMG_ROT_LEFT                     (RID_SVX_SIDEBAR_BEGIN + 37)
+#define IMG_ROT_RIGHT                    (RID_SVX_SIDEBAR_BEGIN + 38)
+#define RID_SVX_SIDEBAR_END              (RID_SVX_START + 1279)
+
+#define RID_SVXIMG_GREENCHECK            (RID_SVX_START + 1280)
+#define RID_SVXIMG_YELLOWCHECK           (RID_SVX_START + 1281)
+#define RID_SVXIMG_REDCROSS              (RID_SVX_START + 1282)
+#define RID_SVXSTR_SUCCESSRECOV          (RID_SVX_START + 1283)
+#define RID_SVXSTR_ORIGDOCRECOV          (RID_SVX_START + 1284)
+#define RID_SVXSTR_RECOVFAILED           (RID_SVX_START + 1285)
+#define RID_SVXSTR_RECOVINPROGR          (RID_SVX_START + 1286)
+#define RID_SVXSTR_NOTRECOVYET           (RID_SVX_START + 1287)
+#define RID_SVXSTR_RECOVERY_INPROGRESS   (RID_SVX_START + 1288)
+#define RID_SVXSTR_RECOVERYONLY_FINISH_DESCR (RID_SVX_START + 1289)
+#define RID_SVXSTR_RECOVERYONLY_FINISH   (RID_SVX_START + 1290)
 
 // !!! IMPORTANT: consider and update RID_SVXSTR_NEXTFREE when introducing new RIDs for Strings !!!
-#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1271)
+#define RID_SVXSTR_NEXTFREE              (RID_SVX_START + 1291)
 
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be
@@ -1007,8 +1053,6 @@
 #define RID_SVX_MDLG_DOCRECOVERY_BROKEN     ( RID_SVX_START +  12 )
 
 #define RID_SVX_TABDLG_DOCRECOVERY          ( RID_SVX_START +   0 )
-
-#define RID_SVXPAGE_DOCRECOVERY_RECOVER     ( RID_SVX_START +   9 )
 
 // !!!! double defined ID's (see below) !!!
 #define RID_OFA_AUTOCORR_DLG            (RID_OFA_START + 101)

@@ -2089,4 +2089,59 @@ String RID_SVXSTR_VIEW
     Text [ en-US ] = "List" ;
 };
 
+Image RID_SVXIMG_GREENCHECK
+{
+    ImageBitmap = Bitmap { File = "nu01.png"; };
+};
+
+Image RID_SVXIMG_YELLOWCHECK
+{
+    ImageBitmap = Bitmap { File = "nu04.png"; };
+};
+
+Image RID_SVXIMG_REDCROSS
+{
+    ImageBitmap = Bitmap { File = "nu02.png"; };
+};
+
+String RID_SVXSTR_SUCCESSRECOV
+{
+    Text[ en-US ] = "Successfully recovered";
+};
+
+String RID_SVXSTR_ORIGDOCRECOV
+{
+    Text[ en-US ] = "Original document recovered";
+};
+
+String RID_SVXSTR_RECOVFAILED
+{
+    Text[ en-US ] = "Recovery failed";
+};
+
+String RID_SVXSTR_RECOVINPROGR
+{
+    Text[ en-US ] = "Recovery in progress";
+};
+
+String RID_SVXSTR_NOTRECOVYET
+{
+    Text[ en-US ] = "Not recovered yet";
+};
+
+String RID_SVXSTR_RECOVERY_INPROGRESS
+{
+    Text[ en-US ] = "%PRODUCTNAME %PRODUCTVERSION will start to recover your documents. Depending on the size of the documents this process can take some time." ;
+};
+
+String RID_SVXSTR_RECOVERYONLY_FINISH_DESCR
+{
+    Text[ en-US ] = "Recovery of your documents was finished.\nClick 'Finish' to see your documents.";
+};
+
+String RID_SVXSTR_RECOVERYONLY_FINISH
+{
+    Text[ en-US ] = "~Finish";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

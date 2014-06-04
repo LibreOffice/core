@@ -281,11 +281,10 @@ bool RecoveryUI::impl_doEmergencySave()
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create dialog for this operation and bind it to the used core service
-    Dialog* pDialog = new svxdr::SaveDialog(m_pParentWindow, pCore);
+    boost::scoped_ptr<Dialog> xDialog(new svxdr::SaveDialog(m_pParentWindow, pCore));
 
     // start the dialog
-    short nRet = pDialog->Execute();
-    delete pDialog;
+    short nRet = xDialog->Execute();
     return (nRet==DLG_RET_OK_AUTOLUNCH);
 }
 
@@ -297,22 +296,15 @@ void RecoveryUI::impl_doRecovery()
 
     // create all needed dialogs for this operation
     // and bind it to the used core service
-    boost::scoped_ptr<svxdr::TabDialog4Recovery> xWizard(new svxdr::TabDialog4Recovery(m_pParentWindow));
-    svxdr::IExtendedTabPage*   pPage1  = new svxdr::RecoveryDialog(xWizard.get(), pCore );
+    boost::scoped_ptr<Dialog> xDialog(new svxdr::RecoveryDialog(m_pParentWindow, pCore));
 
-    xWizard->addTabPage(pPage1);
-
-    // start the wizard
-    xWizard->Execute();
+    // start the dialog
+    xDialog->Execute();
 
     impl_showAllRecoveredDocs();
 
-    delete pPage1 ;
-
     delete_pending_crash();
 }
-
-
 
 void RecoveryUI::impl_showAllRecoveredDocs()
 {

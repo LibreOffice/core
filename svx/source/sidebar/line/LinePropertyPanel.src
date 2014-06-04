@@ -25,7 +25,7 @@
 #define TOOLBOX_HEIGHT      14
 #define LISTBOX_HEIGHT      99
 
-Image IMG_COLOR
+Image IMG_LINE_COLOR
 {
     ImageBitmap = Bitmap{File = "symphony/Line_color.png";};
 };

@@ -65,68 +65,6 @@ namespace svx{
 using namespace ::rtl;
 using namespace ::osl;
 
-
-TabDialog4Recovery::TabDialog4Recovery(Window* pParent)
-    : TabDialog    (pParent, SVX_RES( RID_SVX_TABDLG_DOCRECOVERY ))
-    , m_pActualPage(m_lTabPages.begin()                           )
-{
-}
-
-
-TabDialog4Recovery::~TabDialog4Recovery()
-{
-    m_lTabPages.clear();
-}
-
-
-void TabDialog4Recovery::addTabPage(IExtendedTabPage* pPage)
-{
-    if (pPage)
-        m_lTabPages.push_back(pPage);
-}
-
-
-short TabDialog4Recovery::Execute()
-{
-    ::SolarMutexGuard aLock;
-
-    Show();
-    m_pActualPage = m_lTabPages.begin();
-    while(true)
-    {
-        IExtendedTabPage* pPage = *m_pActualPage;
-        SetViewWindow(pPage);
-        pPage->Show();
-        pPage->setDefButton();
-        short nRet = pPage->execute();
-        pPage->Hide();
-
-        switch(nRet)
-        {
-            case DLG_RET_OK :
-                {
-                    ++m_pActualPage;
-                    if (m_pActualPage == m_lTabPages.end())
-                        return nRet;
-                }
-                break;
-
-            case DLG_RET_BACK :
-                {
-                    if (m_pActualPage != m_lTabPages.begin())
-                        --m_pActualPage;
-                }
-                break;
-
-            case DLG_RET_UNKNOWN :
-            case DLG_RET_CANCEL :
-            case DLG_RET_OK_AUTOLUNCH :
-                return nRet;
-        }
-    }
-}
-
-
 RecoveryCore::RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                  bool                                            bUsedForSaving)
     : m_xContext        ( rxContext    )
@@ -580,7 +518,6 @@ css::util::URL RecoveryCore::impl_getParsedURL(const OUString& sURL)
     return aURL;
 }
 
-
 PluginProgressWindow::PluginProgressWindow(      Window*                                       pParent  ,
                                            const css::uno::Reference< css::lang::XComponent >& xProgress)
     : Window     (pParent  )
@@ -591,7 +528,6 @@ PluginProgressWindow::PluginProgressWindow(      Window*                        
     // align the progressbar to its parent
     setPosSizePixel( -9, 0, aParentSize.Width() + 15, aParentSize.Height() - 4 );
 }
-
 
 PluginProgressWindow::~PluginProgressWindow()
 {
@@ -679,7 +615,8 @@ void SAL_CALL PluginProgress::reset()
 
 
 SaveDialog::SaveDialog(Window* pParent, RecoveryCore* pCore)
-    : Dialog(pParent, "DocRecoverySaveDialog", "svx/ui/docrecoverysavedialog.ui")
+    : Dialog(pParent, "DocRecoverySaveDialog",
+        "svx/ui/docrecoverysavedialog.ui")
     , m_pCore(pCore)
 {
     get(m_pTitleFT, "title");
@@ -749,7 +686,6 @@ SaveProgressDialog::~SaveProgressDialog()
 {
 }
 
-
 short SaveProgressDialog::Execute()
 {
     ::SolarMutexGuard aLock;
@@ -761,7 +697,6 @@ short SaveProgressDialog::Execute()
     m_pCore->setUpdateListener(0);
     return nRet;
 }
-
 
 void SaveProgressDialog::updateItems()
 {
@@ -858,22 +793,20 @@ void RecovDocListEntry::Paint(
 
 RecovDocList::RecovDocList(SvSimpleTableContainer& rParent, ResMgr &rResMgr)
     : SvSimpleTable      ( rParent )
-    , m_aGreenCheckImg    ( ResId(IMG_GREENCHECK, rResMgr ) )
-    , m_aYellowCheckImg   ( ResId(IMG_YELLOWCHECK, rResMgr ) )
-    , m_aRedCrossImg      ( ResId(IMG_REDCROSS, rResMgr ) )
-    , m_aSuccessRecovStr  ( ResId(STR_SUCCESSRECOV, rResMgr ) )
-    , m_aOrigDocRecovStr  ( ResId(STR_ORIGDOCRECOV, rResMgr ) )
-    , m_aRecovFailedStr   ( ResId(STR_RECOVFAILED, rResMgr ) )
-    , m_aRecovInProgrStr  ( ResId(STR_RECOVINPROGR, rResMgr ) )
-    , m_aNotRecovYetStr   ( ResId(STR_NOTRECOVYET, rResMgr ) )
+    , m_aGreenCheckImg    ( ResId(RID_SVXIMG_GREENCHECK, rResMgr ) )
+    , m_aYellowCheckImg   ( ResId(RID_SVXIMG_YELLOWCHECK, rResMgr ) )
+    , m_aRedCrossImg      ( ResId(RID_SVXIMG_REDCROSS, rResMgr ) )
+    , m_aSuccessRecovStr  ( ResId(RID_SVXSTR_SUCCESSRECOV, rResMgr ) )
+    , m_aOrigDocRecovStr  ( ResId(RID_SVXSTR_ORIGDOCRECOV, rResMgr ) )
+    , m_aRecovFailedStr   ( ResId(RID_SVXSTR_RECOVFAILED, rResMgr ) )
+    , m_aRecovInProgrStr  ( ResId(RID_SVXSTR_RECOVINPROGR, rResMgr ) )
+    , m_aNotRecovYetStr   ( ResId(RID_SVXSTR_NOTRECOVYET, rResMgr ) )
 {
 }
-
 
 RecovDocList::~RecovDocList()
 {
 }
-
 
 void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
                              const OUString& rText,
@@ -899,56 +832,46 @@ short impl_askUserForWizardCancel(Window* pParent, sal_Int16 nRes)
         return DLG_RET_CANCEL;
 }
 
-
-RecoveryDialog::RecoveryDialog(Window*       pParent,
-                               RecoveryCore* pCore  )
-    : IExtendedTabPage( pParent      , SVX_RES( RID_SVXPAGE_DOCRECOVERY_RECOVER ) )
-    , m_aTitleFT            ( this           , SVX_RES  ( FT_RECOV_TITLE                 ) )
-    , m_aTitleWin           ( this           , SVX_RES  ( WIN_RECOV_TITLE                ) )
-    , m_aTitleFL            ( this           , SVX_RES  ( FL_RECOV_TITLE                 ) )
-    , m_aDescrFT            ( this           , SVX_RES  ( FT_RECOV_DESCR                 ) )
-    , m_aProgressFT         ( this           , SVX_RES  ( FT_RECOV_PROGR                 ) )
-    , m_aProgrParent        ( this           , SVX_RES  ( WIN_RECOV_PROGR                ) )
-    , m_aFileListFT         ( this           , SVX_RES  ( FT_RECOV_FILELIST              ) )
-    , m_aFileListLBContainer( this           , SVX_RES  ( LB_RECOV_FILELIST              ) )
-    , m_aFileListLB         (m_aFileListLBContainer, DIALOG_MGR())
-    , m_aBottomFL           ( this           , SVX_RES  ( FL_RECOV_BOTTOM                ) )
-    , m_aNextBtn            ( this           , SVX_RES  ( BTN_RECOV_NEXT                 ) )
-    , m_aCancelBtn          ( this           , SVX_RES  ( BTN_RECOV_CANCEL               ) )
-    , m_aTitleRecoveryInProgress(SVX_RESSTR(STR_RECOVERY_INPROGRESS))
-    , m_aRecoveryOnlyFinish (SVX_RESSTR(STR_RECOVERYONLY_FINISH))
-    , m_aRecoveryOnlyFinishDescr(SVX_RESSTR(STR_RECOVERYONLY_FINISH_DESCR))
-    , m_pDefButton          ( NULL                                                       )
-    , m_pCore               ( pCore                                                      )
-    , m_eRecoveryState      (RecoveryDialog::E_RECOVERY_PREPARED)
-    , m_bWaitForUser        (false)
-    , m_bWaitForCore        (false)
-    , m_bUserDecideNext     (false)
-    , m_bWasRecoveryStarted (false)
+RecoveryDialog::RecoveryDialog(Window* pParent, RecoveryCore* pCore)
+    : Dialog(pParent, "DocRecoveryRecoverDialog",
+        "svx/ui/docrecoveryrecoverdialog.ui")
+    , m_aTitleRecoveryInProgress(SVX_RESSTR(RID_SVXSTR_RECOVERY_INPROGRESS))
+    , m_aRecoveryOnlyFinish (SVX_RESSTR(RID_SVXSTR_RECOVERYONLY_FINISH))
+    , m_aRecoveryOnlyFinishDescr(SVX_RESSTR(RID_SVXSTR_RECOVERYONLY_FINISH_DESCR))
+    , m_pCore(pCore)
+    , m_eRecoveryState(RecoveryDialog::E_RECOVERY_PREPARED)
+    , m_bWaitForCore(false)
+    , m_bWasRecoveryStarted(false)
 {
+    get(m_pTitleFT, "title");
+    get(m_pDescrFT, "desc");
+    get(m_pProgrParent, "progress");
+    m_pProgrParent->set_height_request(LogicToPixel(Size(0, PROGR_HEIGHT), MAP_APPFONT).Height());
+    get(m_pNextBtn, "next");
+    get(m_pCancelBtn, "cancel");
+
+    SvSimpleTableContainer* pFileListLBContainer = get<SvSimpleTableContainer>("filelist");
+    Size aSize(LogicToPixel(Size(RECOV_CONTROLWIDTH, RECOV_FILELISTHEIGHT), MAP_APPFONT));
+    pFileListLBContainer->set_width_request(aSize.Width());
+    pFileListLBContainer->set_height_request(aSize.Height());
+    m_pFileListLB = new RecovDocList(*pFileListLBContainer, DIALOG_MGR());
+
     static long nTabs[] = { 2, 0, 40*RECOV_CONTROLWIDTH/100 };
-    m_aFileListLB.SetTabs( &nTabs[0] );
-    m_aFileListLB.InsertHeaderEntry(SVX_RESSTR(STR_HEADERBAR));
+    m_pFileListLB->SetTabs( &nTabs[0] );
+    m_pFileListLB->InsertHeaderEntry(get<FixedText>("nameft")->GetText() + "\t" + get<FixedText>("statusft")->GetText());
 
-    FreeResource();
-
-    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getComponentContext() );
+    PluginProgress* pProgress   = new PluginProgress(m_pProgrParent, pCore->getComponentContext());
     m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    Wallpaper aBackground( rStyleSettings.GetWindowColor() );
-    m_aTitleWin.SetBackground(aBackground);
-    m_aTitleFT.SetBackground (aBackground);
+    m_pTitleFT->SetBackground(rStyleSettings.GetWindowColor());
+    m_pTitleFT->set_height_request(m_pTitleFT->get_preferred_size().Height() + 48);
 
-    Font aFont(m_aTitleFT.GetFont());
-    aFont.SetWeight(WEIGHT_BOLD);
-    m_aTitleFT.SetFont(aFont);
+    m_pFileListLB->SetBackground( rStyleSettings.GetDialogColor() );
 
-    m_aFileListLB.SetBackground( rStyleSettings.GetDialogColor() );
-
-    m_aNextBtn.Enable(true);
-    m_aNextBtn.SetClickHdl( LINK( this, RecoveryDialog, NextButtonHdl ) );
-    m_aCancelBtn.SetClickHdl( LINK( this, RecoveryDialog, CancelButtonHdl ) );
+    m_pNextBtn->Enable(true);
+    m_pNextBtn->SetClickHdl( LINK( this, RecoveryDialog, NextButtonHdl ) );
+    m_pCancelBtn->SetClickHdl( LINK( this, RecoveryDialog, CancelButtonHdl ) );
 
     // fill list box first time
     TURLList*                pURLList = m_pCore->getURLListAccess();
@@ -962,54 +885,36 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
         OUString sName( rInfo.DisplayName );
         sName += "\t";
         sName += impl_getStatusString( rInfo );
-        SvTreeListEntry* pEntry = m_aFileListLB.InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
+        SvTreeListEntry* pEntry = m_pFileListLB->InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
         pEntry->SetUserData((void*)&rInfo);
     }
 
     // mark first item
-    SvTreeListEntry* pFirst = m_aFileListLB.First();
+    SvTreeListEntry* pFirst = m_pFileListLB->First();
     if (pFirst)
-        m_aFileListLB.SetCursor(pFirst, true);
+        m_pFileListLB->SetCursor(pFirst, true);
 }
-
 
 RecoveryDialog::~RecoveryDialog()
 {
+    delete m_pFileListLB;
 }
-
 
 short RecoveryDialog::execute()
 {
     ::SolarMutexGuard aSolarLock;
 
-    switch(m_eRecoveryState)
+    switch (m_eRecoveryState)
     {
-        case RecoveryDialog::E_RECOVERY_PREPARED :
-             {
-                // Dialog was started first time ...
-                // wait for user decision ("start" or "cancel" recovery)
-                // This decision will be made inside the NextBtn handler.
-                m_aNextBtn.Enable(true);
-                m_aCancelBtn.Enable(true);
-                m_bWaitForUser = true;
-                while(m_bWaitForUser)
-                    Application::Yield();
-                if (m_bUserDecideNext)
-                    m_eRecoveryState = RecoveryDialog::E_RECOVERY_IN_PROGRESS;
-                else
-                    m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
-                return execute();
-             }
-
         case RecoveryDialog::E_RECOVERY_IN_PROGRESS :
              {
                 // user decided to start recovery ...
                 m_bWasRecoveryStarted = true;
                 // do it asynchronous (to allow repaints)
                 // and wait for this asynchronous operation.
-                m_aDescrFT.SetText( m_aTitleRecoveryInProgress );
-                m_aNextBtn.Enable(false);
-                m_aCancelBtn.Enable(false);
+                m_pDescrFT->SetText( m_aTitleRecoveryInProgress );
+                m_pNextBtn->Enable(false);
+                m_pCancelBtn->Enable(false);
                 m_pCore->setProgressHandler(m_xProgress);
                 m_pCore->setUpdateListener(this);
                 m_pCore->doRecovery();
@@ -1027,20 +932,11 @@ short RecoveryDialog::execute()
              {
                  // the core finished it's task.
                  // let the user decide the next step.
-                 m_aDescrFT.SetText(m_aRecoveryOnlyFinishDescr);
-                 m_aNextBtn.SetText(m_aRecoveryOnlyFinish);
-                 m_aNextBtn.Enable(true);
-                 m_aCancelBtn.Enable(false);
-
-                 m_bWaitForUser = true;
-                 while(m_bWaitForUser)
-                     Application::Yield();
-
-                if (m_bUserDecideNext)
-                    m_eRecoveryState = RecoveryDialog::E_RECOVERY_DONE;
-                else
-                    m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
-                return execute();
+                 m_pDescrFT->SetText(m_aRecoveryOnlyFinishDescr);
+                 m_pNextBtn->SetText(m_aRecoveryOnlyFinish);
+                 m_pNextBtn->Enable(true);
+                 m_pCancelBtn->Enable(false);
+                 return 0;
              }
 
         case RecoveryDialog::E_RECOVERY_DONE :
@@ -1167,21 +1063,6 @@ short RecoveryDialog::execute()
                  // THERE IS NO WAY BACK. see impl_askUserForWizardCancel()!
                  return DLG_RET_CANCEL;
              }
-
-        case RecoveryDialog::E_RECOVERY_HANDLED :
-             {
-                 m_bWaitForUser = true;
-                 while(m_bWaitForUser)
-                     Application::Yield();
-
-                 // TODO: show BrokenRecoveryDialog again, ift he user
-                 // doesn't accepted it last time.
-
-                 if (m_bUserDecideNext)
-                     return DLG_RET_OK;
-                 else
-                     return DLG_RET_CANCEL;
-             }
     }
 
     // should never be reached .-)
@@ -1189,28 +1070,17 @@ short RecoveryDialog::execute()
     return DLG_RET_OK;
 }
 
-
-void RecoveryDialog::setDefButton()
-{
-    if ( m_aNextBtn.IsEnabled() )
-        m_aNextBtn.GrabFocus();
-    else
-        m_pDefButton = &m_aNextBtn;
-}
-
-
 void RecoveryDialog::start()
 {
 }
 
-
 void RecoveryDialog::updateItems()
 {
-    sal_uIntPtr c = m_aFileListLB.GetEntryCount();
+    sal_uIntPtr c = m_pFileListLB->GetEntryCount();
     sal_uIntPtr i = 0;
     for ( i=0; i<c; ++i )
     {
-        SvTreeListEntry* pEntry = m_aFileListLB.GetEntry(i);
+        SvTreeListEntry* pEntry = m_pFileListLB->GetEntry(i);
         if ( !pEntry )
             continue;
 
@@ -1220,21 +1090,21 @@ void RecoveryDialog::updateItems()
 
         OUString sStatus = impl_getStatusString( *pInfo );
         if ( !sStatus.isEmpty() )
-            m_aFileListLB.SetEntryText( sStatus, pEntry, 1 );
+            m_pFileListLB->SetEntryText( sStatus, pEntry, 1 );
     }
 
-    m_aFileListLB.Invalidate();
-    m_aFileListLB.Update();
+    m_pFileListLB->Invalidate();
+    m_pFileListLB->Update();
 }
 
 
 void RecoveryDialog::stepNext(TURLInfo* pItem)
 {
-    sal_uIntPtr c = m_aFileListLB.GetEntryCount();
+    sal_uIntPtr c = m_pFileListLB->GetEntryCount();
     sal_uIntPtr i = 0;
     for (i=0; i<c; ++i)
     {
-        SvTreeListEntry* pEntry = m_aFileListLB.GetEntry(i);
+        SvTreeListEntry* pEntry = m_pFileListLB->GetEntry(i);
         if (!pEntry)
             continue;
 
@@ -1242,46 +1112,67 @@ void RecoveryDialog::stepNext(TURLInfo* pItem)
         if (pInfo->ID != pItem->ID)
             continue;
 
-        m_aFileListLB.SetCursor(pEntry, true);
-        m_aFileListLB.MakeVisible(pEntry);
-        m_aFileListLB.Invalidate();
-        m_aFileListLB.Update();
+        m_pFileListLB->SetCursor(pEntry, true);
+        m_pFileListLB->MakeVisible(pEntry);
+        m_pFileListLB->Invalidate();
+        m_pFileListLB->Update();
         break;
     }
 }
 
-
 void RecoveryDialog::end()
 {
-    if ( m_pDefButton )
-    {
-        m_pDefButton->GrabFocus();
-        m_pDefButton = NULL;
-    }
     m_bWaitForCore = false;
 }
 
-
 IMPL_LINK_NOARG(RecoveryDialog, NextButtonHdl)
 {
-    m_bUserDecideNext = true;
-    m_bWaitForUser    = false;
+    switch (m_eRecoveryState)
+    {
+        case RecoveryDialog::E_RECOVERY_PREPARED:
+            m_eRecoveryState = RecoveryDialog::E_RECOVERY_IN_PROGRESS;
+            execute();
+        break;
+        case RecoveryDialog::E_RECOVERY_CORE_DONE:
+            m_eRecoveryState = RecoveryDialog::E_RECOVERY_DONE;
+            execute();
+        break;
+    }
+
+    if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_HANDLED)
+    {
+        EndDialog(DLG_RET_OK);
+        return DLG_RET_OK;
+    }
+
     return 0;
 }
-
 
 IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
 {
-    if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_PREPARED)
+    switch (m_eRecoveryState)
     {
-        if (impl_askUserForWizardCancel(this, RID_SVXQB_EXIT_RECOVERY) == DLG_RET_CANCEL)
-            return 0;
+        case RecoveryDialog::E_RECOVERY_PREPARED:
+            if (impl_askUserForWizardCancel(this, RID_SVXQB_EXIT_RECOVERY) != DLG_RET_CANCEL)
+            {
+                m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
+                execute();
+            }
+            break;
+        case RecoveryDialog::E_RECOVERY_CORE_DONE:
+            m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
+            execute();
+            break;
     }
-    m_bUserDecideNext = false;
-    m_bWaitForUser    = false;
+
+    if (m_eRecoveryState == RecoveryDialog::E_RECOVERY_HANDLED)
+    {
+        EndDialog(DLG_RET_CANCEL);
+        return DLG_RET_CANCEL;
+    }
+
     return 0;
 }
-
 
 OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
 {
@@ -1289,26 +1180,25 @@ OUString RecoveryDialog::impl_getStatusString( const TURLInfo& rInfo ) const
     switch ( rInfo.RecoveryState )
     {
         case E_SUCCESSFULLY_RECOVERED :
-            sStatus = m_aFileListLB.m_aSuccessRecovStr;
+            sStatus = m_pFileListLB->m_aSuccessRecovStr;
             break;
         case E_ORIGINAL_DOCUMENT_RECOVERED :
-            sStatus = m_aFileListLB.m_aOrigDocRecovStr;
+            sStatus = m_pFileListLB->m_aOrigDocRecovStr;
             break;
         case E_RECOVERY_FAILED :
-            sStatus = m_aFileListLB.m_aRecovFailedStr;
+            sStatus = m_pFileListLB->m_aRecovFailedStr;
             break;
         case E_RECOVERY_IS_IN_PROGRESS :
-            sStatus = m_aFileListLB.m_aRecovInProgrStr;
+            sStatus = m_pFileListLB->m_aRecovInProgrStr;
             break;
         case E_NOT_RECOVERED_YET :
-            sStatus = m_aFileListLB.m_aNotRecovYetStr;
+            sStatus = m_pFileListLB->m_aNotRecovYetStr;
             break;
         default:
             break;
     }
     return sStatus;
 }
-
 
 BrokenRecoveryDialog::BrokenRecoveryDialog(Window*       pParent        ,
                                            RecoveryCore* pCore          ,

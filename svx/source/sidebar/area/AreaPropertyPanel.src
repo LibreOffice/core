@@ -48,7 +48,7 @@ Image IMG_LINEAR
 {
     ImageBitmap = Bitmap{File = "symphony/linear.png";};
 };
-Image IMG_COLOR
+Image IMG_AREA_COLOR
 {
     ImageBitmap = Bitmap{File = "symphony/fill_color.png";};
 };
