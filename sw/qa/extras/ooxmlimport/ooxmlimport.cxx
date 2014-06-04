@@ -1700,11 +1700,23 @@ DECLARE_OOXMLIMPORT_TEST(testMceNested, "mce-nested.docx")
     // Vertical position of the textbox was incorrect due to incorrect nested mce handling.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    // positionV's posOffset from the bugdoc, was 0.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(2514600)), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
-    // This was -1 (default), make sure the background color is set.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xFrame, "BackColor"));
+    if (xIndexAccess->getCount())
+    {
+        // TODO TextBox: remove this when TextBox is enabled by default
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+        // positionV's posOffset from the bugdoc, was 0.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(2514600)), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
+        // This was -1 (default), make sure the background color is set.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xFrame, "BackColor"));
+    }
+    else
+    {
+        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        // positionV's posOffset from the bugdoc, was 0.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(6987), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
+        // This was -1 (default), make sure the background color is set.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xShape, "FillColor"));
+    }
 
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(getShape(2), uno::UNO_QUERY);
     // This was a com.sun.star.drawing.CustomShape, due to incorrect handling of wpg elements after a wps textbox.
