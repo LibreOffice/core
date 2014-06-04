@@ -419,7 +419,7 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
                 ( str[idx + 1] == 'c' || str[idx + 1] == 'C' )    &&
                 ( str[idx + 2] == 'f' || str[idx + 2] == 'F' )    &&
                 ( str[idx + 3] == 'g' || str[idx + 3] == 'G' )    &&
-                ( fileName = fileName.copy(0,idx).toAsciiLowerCase() ).compareToAscii( "picture" ) != 0 ) {
+                !( fileName = fileName.copy(0,idx).toAsciiLowerCase() ).equalsAscii( "picture" ) ) {
               if(! m_bShowBasic && fileName.equalsAscii("sbasic") )
                 continue;
               m_avModules.push_back( fileName );

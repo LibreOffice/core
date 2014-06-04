@@ -96,7 +96,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
                     if ( rProp.Value >>= aEventType )
                     {
                         // only "Script" is supported
-                        if ( aEventType.compareToAscii( SC_UNO_SCRIPT ) != 0 )
+                        if ( ! aEventType.equalsAscii( SC_UNO_SCRIPT ) )
                             throw lang::IllegalArgumentException();
                     }
                 }

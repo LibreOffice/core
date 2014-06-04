@@ -771,7 +771,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             const OUString& rVal = *(OUString*)aTmp.getValue();
             if( rVal.isEmpty() )
                 bEmptyValue = true;
-            else if( rVal.compareToAscii( OOO_STRING_SVTOOLS_HTML_on ) != 0 )
+            else if( !rVal.equalsAscii( OOO_STRING_SVTOOLS_HTML_on ) )
                 sValue = rVal;
         }
         break;

@@ -871,8 +871,8 @@ static bool UCBOpenContentSync(
         return _UCBOpenContentSync(
             xLockBytes,xContent,rArg,xSink,xInteract,xProgress,xHandler);
 
-    if ( (aScheme.compareToAscii( "http" ) != 0) ||
-         (aScheme.compareToAscii( "https" ) != 0) )
+    if ( !aScheme.equalsAscii( "http" ) ||
+         !aScheme.equalsAscii( "https" ) )
         xLockBytes->SetStreamValid_Impl();
 
     Reference< XPropertiesChangeListener > xListener;
@@ -1108,7 +1108,7 @@ static bool _UCBOpenContentSync(
 
     // http protocol must be handled in a special way: during the opening process the input stream may change
     // only the last inputstream after notifying the document headers is valid
-    if ( aScheme.compareToAscii("http") != 0 )
+    if ( !aScheme.equalsAscii("http") )
         xLockBytes->SetStreamValid_Impl();
 
     Reference< XPropertiesChangeListener > xListener = new UcbPropertiesChangeListener_Impl( xLockBytes );

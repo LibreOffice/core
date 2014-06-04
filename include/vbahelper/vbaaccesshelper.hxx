@@ -57,7 +57,7 @@ namespace ooo
             const SfxMedium *pMedium = rDocShell.GetMedium();
             const SfxFilter *pFilt = pMedium ? pMedium->GetFilter() : NULL;
             if ( pFilt && pFilt->IsAlienFormat() )
-                bRes = ( pFilt->GetMimeType().compareToAscii( pMimeType ) == 0 );
+                bRes = pFilt->GetMimeType().equalsAscii( pMimeType );
             return bRes;
         }
         VBAHELPER_DLLPRIVATE inline bool isAlienExcelDoc( SfxObjectShell& rDocShell ) { return isAlienDoc( rDocShell, "application/vnd.ms-excel" ); }
