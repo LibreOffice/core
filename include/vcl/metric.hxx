@@ -33,9 +33,10 @@ namespace vcl {
 
 class VCL_DLLPUBLIC FontInfo : public Font
 {
-    friend class OutputDevice;
+    friend class ::OutputDevice;
 
 protected:
+    ImplFontMetric*     mpImplMetric;    // Implementation
 
 public:
                         FontInfo();
@@ -48,7 +49,6 @@ public:
     sal_Bool                operator==( const FontInfo& ) const;
     sal_Bool                operator!=( const FontInfo& rInfo ) const
                             { return !operator==( rInfo ); }
-    ImplFontMetric*     mpImplMetric;    // Implementation
 };
 
 }
