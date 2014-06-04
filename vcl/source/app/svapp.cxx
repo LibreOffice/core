@@ -68,6 +68,7 @@
 #include "comphelper/solarmutex.hxx"
 #include "osl/process.h"
 
+#include <cassert>
 #include <utility>
 
 using namespace ::com::sun::star;
@@ -1652,6 +1653,15 @@ Application::createFolderPicker( const Reference< uno::XComponentContext >& xSM 
 {
     ImplSVData* pSVData = ImplGetSVData();
     return pSVData->mpDefInst->createFolderPicker( xSM );
+}
+
+void Application::setDeInitHook(Link const & hook) {
+    ImplSVData * pSVData = ImplGetSVData();
+    assert(!pSVData->maDeInitHook.IsSet());
+    pSVData->maDeInitHook = hook;
+    // Fake this for VCLXToolkit ctor instantiated from
+    // postprocess/CppunitTest_services.mk:
+    pSVData->maAppData.mbInAppMain = true;
 }
 
 // helper method to allow inline constructor even for pWindow!=NULL case

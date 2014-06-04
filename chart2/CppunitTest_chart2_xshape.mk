@@ -69,6 +69,7 @@ $(eval $(call gb_CppunitTest_use_api,chart2_xshape,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,chart2_xshape))
+$(eval $(call gb_CppunitTest_use_vcl,chart2_xshape))
 
 $(eval $(call gb_CppunitTest_use_components,chart2_xshape,\
     basic/util/sb \

@@ -46,6 +46,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_rtfexport,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_rtfexport))
+$(eval $(call gb_CppunitTest_use_vcl,sw_rtfexport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_rtfexport,\
 	basic/util/sb \

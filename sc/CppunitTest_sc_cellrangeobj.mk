@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_cellrangeobj,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_cellrangeobj))
+$(eval $(call gb_CppunitTest_use_vcl,sc_cellrangeobj))
 
 $(eval $(call gb_CppunitTest_use_components,sc_cellrangeobj,\
 	basic/util/sb \

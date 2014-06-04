@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_api,dbaccess_hsqldb_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,dbaccess_hsqldb_test))
+$(eval $(call gb_CppunitTest_use_vcl,dbaccess_hsqldb_test))
 
 $(eval $(call gb_CppunitTest_use_components,dbaccess_hsqldb_test,\
     basic/util/sb \

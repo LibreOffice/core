@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_editfieldobj_header,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_editfieldobj_header))
+$(eval $(call gb_CppunitTest_use_vcl,sc_editfieldobj_header))
 
 $(eval $(call gb_CppunitTest_use_components,sc_editfieldobj_header,\
     basic/util/sb \

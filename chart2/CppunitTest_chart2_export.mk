@@ -66,6 +66,7 @@ $(eval $(call gb_CppunitTest_use_api,chart2_export,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,chart2_export))
+$(eval $(call gb_CppunitTest_use_vcl,chart2_export))
 
 $(eval $(call gb_CppunitTest_use_components,chart2_export,\
     basic/util/sb \

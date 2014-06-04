@@ -49,6 +49,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_htmlexport,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_htmlexport))
+$(eval $(call gb_CppunitTest_use_vcl,sw_htmlexport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
 	basic/util/sb \

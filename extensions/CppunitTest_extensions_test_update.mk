@@ -47,6 +47,7 @@ $(eval $(call gb_CppunitTest_use_api,extensions_test_update,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,extensions_test_update))
+$(eval $(call gb_CppunitTest_use_vcl,extensions_test_update))
 
 $(eval $(call gb_CppunitTest_use_components,extensions_test_update,\
     configmgr/source/configmgr \

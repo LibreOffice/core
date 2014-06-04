@@ -65,6 +65,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_editfieldobj_cell,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_editfieldobj_cell))
+$(eval $(call gb_CppunitTest_use_vcl,sc_editfieldobj_cell))
 
 $(eval $(call gb_CppunitTest_use_components,sc_editfieldobj_cell,\
     basic/util/sb \

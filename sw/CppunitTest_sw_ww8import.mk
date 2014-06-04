@@ -45,6 +45,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_ww8import,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_ww8import))
+$(eval $(call gb_CppunitTest_use_vcl,sw_ww8import))
 
 $(eval $(call gb_CppunitTest_use_components,sw_ww8import,\
 	basic/util/sb \

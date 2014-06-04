@@ -66,6 +66,7 @@ $(eval $(call gb_CppunitTest_use_api,dbaccess_dialog_save,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,dbaccess_dialog_save))
+$(eval $(call gb_CppunitTest_use_vcl,dbaccess_dialog_save))
 
 $(eval $(call gb_CppunitTest_use_components,dbaccess_dialog_save,\
     basic/util/sb \

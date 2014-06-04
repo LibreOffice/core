@@ -49,6 +49,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_odfimport,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_odfimport))
+$(eval $(call gb_CppunitTest_use_vcl,sw_odfimport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
 	basic/util/sb \

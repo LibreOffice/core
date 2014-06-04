@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "rtl/logfile.hxx"
 
 #include <osl/file.hxx>
@@ -464,13 +468,20 @@ void DeInitVCL()
         }
     }
 
-    if( pSVData->mpApp )
+    if( pSVData->mpApp || pSVData->maDeInitHook.IsSet() )
     {
         sal_uLong nCount = Application::ReleaseSolarMutex();
         // call deinit to deinitialize application class
         // soffice/sfx implementation disposes the global service manager
         // Warning: After this call you can't call uno services
-        pSVData->mpApp->DeInit();
+        if( pSVData->mpApp )
+        {
+            pSVData->mpApp->DeInit();
+        }
+        if( pSVData->maDeInitHook.IsSet() )
+        {
+            pSVData->maDeInitHook.Call(0);
+        }
         Application::AcquireSolarMutex(nCount);
     }
 

@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_libraries,services, \
 $(eval $(call gb_CppunitTest_use_sdk_api,services))
 
 $(eval $(call gb_CppunitTest_use_ure,services))
+$(eval $(call gb_CppunitTest_use_vcl,services))
 
 $(eval $(call gb_CppunitTest_use_rdb,services,services))
 ifneq ($(DISABLE_PYTHON),TRUE)

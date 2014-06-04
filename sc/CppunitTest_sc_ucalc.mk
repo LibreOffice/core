@@ -87,6 +87,7 @@ $(eval $(call gb_CppunitTest_use_api,sc_ucalc,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sc_ucalc))
+$(eval $(call gb_CppunitTest_use_vcl,sc_ucalc))
 
 $(eval $(call gb_CppunitTest_use_components,sc_ucalc,\
     configmgr/source/configmgr \

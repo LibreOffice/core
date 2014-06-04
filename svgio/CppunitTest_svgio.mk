@@ -46,6 +46,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,svgio_import_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,svgio_import_test))
+$(eval $(call gb_CppunitTest_use_vcl,svgio_import_test))
 
 $(eval $(call gb_CppunitTest_use_components,svgio_import_test,\
     configmgr/source/configmgr \

@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_use_api,xmloff_uxmloff,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,xmloff_uxmloff))
+$(eval $(call gb_CppunitTest_use_vcl,xmloff_uxmloff))
 
 $(eval $(call gb_CppunitTest_use_library_objects,xmloff_uxmloff,xo))
 

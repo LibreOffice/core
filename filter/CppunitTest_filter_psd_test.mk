@@ -31,6 +31,7 @@ $(eval $(call gb_CppunitTest_use_api,filter_psd_test,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,filter_psd_test))
+$(eval $(call gb_CppunitTest_use_vcl,filter_psd_test))
 
 $(eval $(call gb_CppunitTest_use_components,filter_psd_test,\
     configmgr/source/configmgr \

@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_ooxmlw14export,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,sw_ooxmlw14export))
+$(eval $(call gb_CppunitTest_use_vcl,sw_ooxmlw14export))
 
 $(eval $(call gb_CppunitTest_use_components,sw_ooxmlw14export,\
 	$(sw_ooxmlexport_components) \
