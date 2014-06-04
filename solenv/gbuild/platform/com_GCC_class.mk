@@ -207,4 +207,14 @@ gb_LinkTarget_get_linksearchpath_for_layer = \
 
 gb_ICU_PRECOMMAND := $(call gb_Helper_extend_ld_path,$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source/lib)
 
+# UIConfig class
+
+# Mac OS X sort(1) cannot read a response file
+define gb_UIConfig__command
+$(call gb_Helper_abbreviate_dirs,\
+	sort -u $(UI_IMAGELISTS) /dev/null > $@ \
+)
+
+endef
+
 # vim: set noet sw=4 ts=4:
