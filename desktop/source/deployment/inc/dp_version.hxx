@@ -20,8 +20,8 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_VERSION_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_VERSION_HXX
 
-#include "sal/config.h"
-#include "com/sun/star/uno/Reference.hxx"
+#include <sal/config.h>
+#include <com/sun/star/uno/Reference.hxx>
 #include "dp_misc_api.hxx"
 
 

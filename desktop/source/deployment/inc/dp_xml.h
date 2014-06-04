@@ -20,12 +20,12 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_XML_H
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_XML_H
 
-#include "rtl/ref.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/xml/input/XRoot.hpp"
-#include "com/sun/star/xml/sax/XDocumentHandler.hpp"
+#include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/input/XRoot.hpp>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 
 namespace ucbhelper

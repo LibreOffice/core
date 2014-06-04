@@ -20,17 +20,17 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_THEEXTMGR_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_THEEXTMGR_HXX
 
-#include "comphelper/sequence.hxx"
+#include <comphelper/sequence.hxx>
 
-#include "cppuhelper/implbase2.hxx"
+#include <cppuhelper/implbase2.hxx>
 
-#include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/deployment/XExtensionManager.hpp"
-#include "com/sun/star/deployment/ExtensionManager.hpp"
-#include "com/sun/star/frame/XDesktop2.hpp"
-#include "com/sun/star/frame/XTerminateListener.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/util/XModifyListener.hpp"
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/deployment/XExtensionManager.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"

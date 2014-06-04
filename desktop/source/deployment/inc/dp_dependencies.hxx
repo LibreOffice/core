@@ -20,10 +20,10 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_DEPENDENCIES_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_DEPENDENCIES_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
 #include "dp_misc_api.hxx"
 
 /// @HTML

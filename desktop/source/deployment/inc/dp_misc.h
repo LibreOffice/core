@@ -20,16 +20,16 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_H
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_MISC_H
 
-#include "rtl/ustrbuf.hxx"
-#include "rtl/instance.hxx"
-#include "osl/mutex.hxx"
-#include "osl/process.h"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/deployment/XPackageRegistry.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
-#include "com/sun/star/awt/XWindow.hpp"
+#include <rtl/ustrbuf.hxx>
+#include <rtl/instance.hxx>
+#include <osl/mutex.hxx>
+#include <osl/process.h>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/deployment/XPackageRegistry.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include "dp_misc_api.hxx"
 
 #define ARLEN(x) (sizeof (x) / sizeof *(x))

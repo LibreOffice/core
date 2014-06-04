@@ -17,41 +17,41 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "boost/noncopyable.hpp"
-#include "com/sun/star/awt/MessageBoxButtons.hpp"
-#include "com/sun/star/awt/Rectangle.hpp"
-#include "com/sun/star/awt/Toolkit.hpp"
-#include "com/sun/star/awt/XMessageBox.hpp"
-#include "com/sun/star/awt/XWindowPeer.hpp"
-#include "com/sun/star/beans/PropertyValue.hpp"
-#include "com/sun/star/frame/DispatchDescriptor.hpp"
-#include "com/sun/star/frame/Desktop.hpp"
-#include "com/sun/star/frame/XDispatch.hpp"
-#include "com/sun/star/frame/XDispatchProvider.hpp"
-#include "com/sun/star/frame/XFrame.hpp"
-#include "com/sun/star/frame/XStatusListener.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/uno/DeploymentException.hpp"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/util/URL.hpp"
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "cppuhelper/weak.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "uno/lbnames.h"
+#include <boost/noncopyable.hpp>
+#include <com/sun/star/awt/MessageBoxButtons.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
+#include <com/sun/star/awt/XMessageBox.hpp>
+#include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/frame/DispatchDescriptor.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XStatusListener.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/util/URL.hpp>
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <cppuhelper/weak.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <uno/lbnames.h>
 
 namespace {
 

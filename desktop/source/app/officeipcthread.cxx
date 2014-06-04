@@ -42,7 +42,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>
-#include "tools/getprocessworkingdir.hxx"
+#include <tools/getprocessworkingdir.hxx>
 #include <boost/scoped_array.hpp>
 
 using namespace desktop;

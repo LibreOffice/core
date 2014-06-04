@@ -10,7 +10,7 @@
 #ifndef INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
 #define INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
 
-#include <liblibreoffice.h>
+#include "liblibreoffice.h"
 
 /*
  * The reasons this C++ code is not as pretty as it could be are:

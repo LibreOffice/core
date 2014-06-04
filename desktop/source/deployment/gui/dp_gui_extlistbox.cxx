@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtools/controldims.hrc"
+#include <svtools/controldims.hrc>
 
 #include "dp_gui.h"
 #include "dp_gui_extlistbox.hxx"
@@ -25,11 +25,11 @@
 #include "dp_gui_dialog2.hxx"
 #include "dp_dependencies.hxx"
 
-#include "comphelper/processfactory.hxx"
-#include "com/sun/star/i18n/CollatorOptions.hpp"
-#include "com/sun/star/deployment/DependencyException.hpp"
-#include "com/sun/star/deployment/DeploymentException.hpp"
-#include "cppuhelper/weakref.hxx"
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
+#include <com/sun/star/deployment/DependencyException.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <cppuhelper/weakref.hxx>
 #include <vcl/settings.hxx>
 
 #define USER_PACKAGE_MANAGER    "user"

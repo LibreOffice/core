@@ -19,17 +19,17 @@
 
 
 #include "dp_misc.h"
-#include "rtl/strbuf.hxx"
-#include "osl/time.h"
-#include "osl/thread.h"
-#include "cppuhelper/compbase1.hxx"
-#include "comphelper/anytostring.hxx"
-#include "comphelper/servicedecl.hxx"
-#include "comphelper/unwrapargs.hxx"
-#include "com/sun/star/deployment/DeploymentException.hpp"
-#include "com/sun/star/ucb/XProgressHandler.hpp"
-#include "com/sun/star/ucb/SimpleFileAccess.hpp"
-#include "com/sun/star/io/XSeekable.hpp"
+#include <rtl/strbuf.hxx>
+#include <osl/time.h>
+#include <osl/thread.h>
+#include <cppuhelper/compbase1.hxx>
+#include <comphelper/anytostring.hxx>
+#include <comphelper/servicedecl.hxx>
+#include <comphelper/unwrapargs.hxx>
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 #include <stdio.h>
 
 

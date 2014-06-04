@@ -19,19 +19,19 @@
 
 #include <config_folders.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/xml/dom/XElement.hpp"
-#include "com/sun/star/xml/dom/XNodeList.hpp"
-#include "rtl/bootstrap.hxx"
-#include "rtl/string.h"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "tools/resid.hxx"
-#include "unotools/configmgr.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/xml/dom/XElement.hpp>
+#include <com/sun/star/xml/dom/XNodeList.hpp>
+#include <rtl/bootstrap.hxx>
+#include <rtl/string.h>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <tools/resid.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "deployment.hrc"
 #include "dp_resource.h"

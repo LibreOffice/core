@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_APP_OFFICEIPCTHREAD_HXX
 #define INCLUDED_DESKTOP_SOURCE_APP_OFFICEIPCTHREAD_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
@@ -34,7 +34,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <osl/conditn.hxx>
 #include <salhelper/thread.hxx>
-#include "boost/optional.hpp"
+#include <boost/optional.hpp>
 
 namespace desktop
 {

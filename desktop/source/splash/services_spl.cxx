@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "cppuhelper/factory.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "sal/types.h"
+#include <cppuhelper/factory.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <sal/types.h>
 
 #include "splash.hxx"
 #include "unxsplash.hxx"

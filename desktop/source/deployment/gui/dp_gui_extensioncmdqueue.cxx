@@ -17,52 +17,52 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 
-#include "com/sun/star/beans/NamedValue.hpp"
+#include <com/sun/star/beans/NamedValue.hpp>
 
-#include "com/sun/star/deployment/DependencyException.hpp"
-#include "com/sun/star/deployment/LicenseException.hpp"
-#include "com/sun/star/deployment/VersionException.hpp"
-#include "com/sun/star/deployment/InstallException.hpp"
-#include "com/sun/star/deployment/PlatformException.hpp"
+#include <com/sun/star/deployment/DependencyException.hpp>
+#include <com/sun/star/deployment/LicenseException.hpp>
+#include <com/sun/star/deployment/VersionException.hpp>
+#include <com/sun/star/deployment/InstallException.hpp>
+#include <com/sun/star/deployment/PlatformException.hpp>
 
-#include "com/sun/star/deployment/ui/LicenseDialog.hpp"
-#include "com/sun/star/deployment/DeploymentException.hpp"
-#include "com/sun/star/deployment/UpdateInformationProvider.hpp"
-#include "com/sun/star/deployment/XPackage.hpp"
+#include <com/sun/star/deployment/ui/LicenseDialog.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
+#include <com/sun/star/deployment/XPackage.hpp>
 
-#include "com/sun/star/task/InteractionHandler.hpp"
-#include "com/sun/star/task/XAbortChannel.hpp"
-#include "com/sun/star/task/XInteractionAbort.hpp"
-#include "com/sun/star/task/XInteractionApprove.hpp"
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/task/XAbortChannel.hpp>
+#include <com/sun/star/task/XInteractionAbort.hpp>
+#include <com/sun/star/task/XInteractionApprove.hpp>
 
-#include "com/sun/star/ucb/CommandAbortedException.hpp"
-#include "com/sun/star/ucb/CommandFailedException.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
-#include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/RuntimeException.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "com/sun/star/uno/XInterface.hpp"
-#include "com/sun/star/uno/TypeClass.hpp"
-#include "osl/diagnose.h"
-#include "osl/mutex.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
-#include "salhelper/thread.hxx"
-#include "ucbhelper/content.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/implbase3.hxx"
-#include "comphelper/anytostring.hxx"
-#include "vcl/msgbox.hxx"
-#include "toolkit/helper/vclunohelper.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/RuntimeException.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/TypeClass.hpp>
+#include <osl/diagnose.h>
+#include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
+#include <salhelper/thread.hxx>
+#include <ucbhelper/content.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase3.hxx>
+#include <comphelper/anytostring.hxx>
+#include <vcl/msgbox.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include "dp_gui.h"
 #include "dp_gui_extensioncmdqueue.hxx"

@@ -20,13 +20,13 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_APP_CMDLINEARGS_HXX
 #define INCLUDED_DESKTOP_SOURCE_APP_CMDLINEARGS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
 
 #include <rtl/ustring.hxx>
-#include "boost/noncopyable.hpp"
-#include "boost/optional.hpp"
+#include <boost/noncopyable.hpp>
+#include <boost/optional.hpp>
 
 namespace desktop
 {

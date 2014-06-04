@@ -20,19 +20,19 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTLISTBOX_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTLISTBOX_HXX
 
-#include "rtl/ustring.hxx"
-#include "vcl/scrbar.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/fixedhyper.hxx"
-#include "vcl/dialog.hxx"
+#include <rtl/ustring.hxx>
+#include <vcl/scrbar.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/fixedhyper.hxx>
+#include <vcl/dialog.hxx>
 
-#include "svtools/extensionlistbox.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "unotools/collatorwrapper.hxx"
+#include <svtools/extensionlistbox.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <unotools/collatorwrapper.hxx>
 
-#include "com/sun/star/lang/Locale.hpp"
-#include "com/sun/star/lang/XEventListener.hpp"
-#include "com/sun/star/deployment/XPackage.hpp"
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/deployment/XPackage.hpp>
 
 #include <boost/shared_ptr.hpp>
 

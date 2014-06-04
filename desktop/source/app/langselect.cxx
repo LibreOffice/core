@@ -17,27 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/shared_ptr.hpp"
-#include "com/sun/star/configuration/theDefaultProvider.hpp"
-#include "com/sun/star/container/XNameAccess.hpp"
-#include "com/sun/star/lang/XLocalizable.hpp"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "comphelper/configuration.hxx"
-#include "comphelper/processfactory.hxx"
-#include "i18nlangtag/lang.h"
-#include "i18nlangtag/languagetag.hxx"
-#include "i18nlangtag/mslangid.hxx"
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/lang/XLocalizable.hpp>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <comphelper/configuration.hxx>
+#include <comphelper/processfactory.hxx>
+#include <i18nlangtag/lang.h>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include "officecfg/Office/Linguistic.hxx"
 #include "officecfg/Setup.hxx"
 #include "officecfg/System.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "sal/types.h"
-#include "svl/languageoptions.hxx"
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
+#include <sal/types.h>
+#include <svl/languageoptions.hxx>
 
 #include "app.hxx"
 

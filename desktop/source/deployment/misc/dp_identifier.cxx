@@ -18,16 +18,16 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "boost/optional.hpp"
-#include "com/sun/star/beans/Optional.hpp"
-#include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "osl/diagnose.h"
-#include "rtl/string.h"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.hxx"
+#include <boost/optional.hpp>
+#include <com/sun/star/beans/Optional.hpp>
+#include <com/sun/star/deployment/XPackage.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <osl/diagnose.h>
+#include <rtl/string.h>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 
 #include "dp_identifier.hxx"
 

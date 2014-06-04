@@ -21,8 +21,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include "osl/file.hxx"
-#include "sfx2/app.hxx"
+#include <osl/file.hxx>
+#include <sfx2/app.hxx>
 #include <svl/fstathelper.hxx>
 
 #include "app.hxx"

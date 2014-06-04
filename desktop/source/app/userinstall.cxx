@@ -17,20 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "boost/shared_ptr.hpp"
-#include "com/sun/star/uno/Exception.hpp"
-#include "comphelper/configuration.hxx"
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/uno/Exception.hpp>
+#include <comphelper/configuration.hxx>
 #include "config_folders.h"
 #include "officecfg/Setup.hxx"
-#include "osl/file.h"
-#include "osl/file.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/log.hxx"
-#include "unotools/bootstrap.hxx"
+#include <osl/file.h>
+#include <osl/file.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/log.hxx>
+#include <unotools/bootstrap.hxx>
 
 #include "userinstall.hxx"
 

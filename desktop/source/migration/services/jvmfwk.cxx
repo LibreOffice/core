@@ -18,31 +18,31 @@
  */
 
 
-#include "cppuhelper/implbase4.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "rtl/bootstrap.hxx"
-#include "sal/types.h"
-#include "sal/config.h"
-#include "boost/noncopyable.hpp"
-#include "boost/scoped_array.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XInitialization.hpp"
-#include "com/sun/star/lang/WrappedTargetException.hpp"
-#include "com/sun/star/task/XJob.hpp"
-#include "com/sun/star/configuration/backend/XLayer.hpp"
-#include "com/sun/star/configuration/backend/XLayerHandler.hpp"
-#include "com/sun/star/configuration/backend/MalformedDataException.hpp"
-#include "com/sun/star/configuration/backend/TemplateIdentifier.hpp"
-#include "jvmfwk/framework.h"
+#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <rtl/bootstrap.hxx>
+#include <sal/types.h>
+#include <sal/config.h>
+#include <boost/noncopyable.hpp>
+#include <boost/scoped_array.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+#include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/configuration/backend/XLayer.hpp>
+#include <com/sun/star/configuration/backend/XLayerHandler.hpp>
+#include <com/sun/star/configuration/backend/MalformedDataException.hpp>
+#include <com/sun/star/configuration/backend/TemplateIdentifier.hpp>
+#include <jvmfwk/framework.h>
 #include "jvmfwk.hxx"
 #include <stack>
 #include <stdio.h>
 
-#include "osl/thread.hxx"
+#include <osl/thread.hxx>
 
 #define SERVICE_NAME "com.sun.star.migration.Java"
 #define IMPL_NAME "com.sun.star.comp.desktop.migration.Java"

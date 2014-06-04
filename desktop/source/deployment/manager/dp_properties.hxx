@@ -22,9 +22,9 @@
 
 
 
-#include "com/sun/star/beans/NamedValue.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
-#include "boost/optional.hpp"
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <boost/optional.hpp>
 
 
 namespace dp_manager {

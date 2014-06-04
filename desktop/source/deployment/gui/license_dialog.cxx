@@ -18,25 +18,25 @@
  */
 
 
-#include "cppuhelper/implbase2.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "unotools/configmgr.hxx"
-#include "comphelper/servicedecl.hxx"
-#include "comphelper/unwrapargs.hxx"
-#include "i18nlangtag/mslangid.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/msgbox.hxx"
-#include "toolkit/helper/vclunohelper.hxx"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "svtools/svmedit.hxx"
-#include "svl/lstner.hxx"
-#include "vcl/xtextedt.hxx"
+#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <unotools/configmgr.hxx>
+#include <comphelper/servicedecl.hxx>
+#include <comphelper/unwrapargs.hxx>
+#include <i18nlangtag/mslangid.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <svtools/svmedit.hxx>
+#include <svl/lstner.hxx>
+#include <vcl/xtextedt.hxx>
 #include <vcl/scrbar.hxx>
-#include "vcl/threadex.hxx"
+#include <vcl/threadex.hxx>
 
 
 
-#include "boost/bind.hpp"
+#include <boost/bind.hpp>
 #include "dp_gui_shared.hxx"
 #include "license_dialog.hxx"
 #include "dp_gui.hrc"

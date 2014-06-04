@@ -19,7 +19,7 @@
 
 #include "dp_misc.h"
 #include "dp_persmap.h"
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 
 #ifndef DISABLE_BDB2PMAP
 #  include <vector>

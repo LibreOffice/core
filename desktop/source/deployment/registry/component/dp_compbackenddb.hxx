@@ -20,8 +20,8 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_COMPONENT_DP_COMPBACKENDDB_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_COMPONENT_DP_COMPBACKENDDB_HXX
 
-#include "rtl/ustring.hxx"
-#include "rtl/string.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 #include <vector>
 #include <list>
 #include "dp_backenddb.hxx"

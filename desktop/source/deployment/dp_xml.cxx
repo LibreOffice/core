@@ -20,9 +20,9 @@
 
 #include "dp_misc.h"
 #include "dp_xml.h"
-#include "rtl/ustrbuf.hxx"
-#include "ucbhelper/content.hxx"
-#include "com/sun/star/xml/sax/Parser.hpp"
+#include <rtl/ustrbuf.hxx>
+#include <ucbhelper/content.hxx>
+#include <com/sun/star/xml/sax/Parser.hpp>
 
 
 using namespace ::com::sun::star;

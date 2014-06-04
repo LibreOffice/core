@@ -20,9 +20,9 @@
 
 #include "dp_manager.h"
 #include "dp_resource.h"
-#include "cppuhelper/compbase1.hxx"
-#include "comphelper/servicedecl.hxx"
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
+#include <cppuhelper/compbase1.hxx>
+#include <comphelper/servicedecl.hxx>
+#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <boost/unordered_map.hpp>
 
 

@@ -31,7 +31,7 @@
 #pragma warning(pop)
 #endif
 
-#include "tools/pathutils.hxx"
+#include <tools/pathutils.hxx>
 
 #define MY_LENGTH(s) (sizeof (s) / sizeof *(s) - 1)
 #define MY_STRING(s) (s), MY_LENGTH(s)

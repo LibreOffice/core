@@ -20,9 +20,9 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_APP_LANGSELECT_HXX
 #define INCLUDED_DESKTOP_SOURCE_APP_LANGSELECT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 namespace desktop { namespace langselect {
 

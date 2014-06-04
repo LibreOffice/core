@@ -17,29 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
 #include "dp_backend.h"
 #include "dp_ucb.h"
-#include "rtl/ustring.hxx"
-#include "rtl/uri.hxx"
-#include "rtl/bootstrap.hxx"
-#include "osl/file.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "comphelper/servicedecl.hxx"
-#include "comphelper/unwrapargs.hxx"
-#include "ucbhelper/content.hxx"
-#include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
-#include "com/sun/star/deployment/InvalidRemovedParameterException.hpp"
-#include "com/sun/star/deployment/thePackageManagerFactory.hpp"
-#include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
-#include "com/sun/star/ucb/IOErrorCode.hpp"
-#include "com/sun/star/beans/StringPair.hpp"
-#include "com/sun/star/sdbc/XResultSet.hpp"
-#include "com/sun/star/sdbc/XRow.hpp"
-#include "unotools/tempfile.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/uri.hxx>
+#include <rtl/bootstrap.hxx>
+#include <osl/file.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <comphelper/servicedecl.hxx>
+#include <comphelper/unwrapargs.hxx>
+#include <ucbhelper/content.hxx>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
+#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
+#include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <com/sun/star/beans/StringPair.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XRow.hpp>
+#include <unotools/tempfile.hxx>
 
 
 using namespace ::dp_misc;

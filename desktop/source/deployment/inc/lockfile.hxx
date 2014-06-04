@@ -35,9 +35,9 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_LOCKFILE_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_LOCKFILE_HXX
 
-#include "sal/types.h"
-#include "rtl/string.hxx"
-#include "rtl/ustring.hxx"
+#include <sal/types.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 
 #include "dp_misc_api.hxx"
 

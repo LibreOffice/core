@@ -23,7 +23,7 @@
 #include <utility>
 #include <vector>
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 
 #include "dp_backenddb.hxx"
 

@@ -24,12 +24,12 @@
 #include "dp_misc.h"
 #include "dp_interact.h"
 #include "dp_activepackages.hxx"
-#include "rtl/ref.hxx"
-#include "cppuhelper/compbase1.hxx"
-#include "ucbhelper/content.hxx"
-#include "com/sun/star/deployment/XPackageRegistry.hpp"
-#include "com/sun/star/deployment/XPackageManager.hpp"
-#include "osl/mutex.hxx"
+#include <rtl/ref.hxx>
+#include <cppuhelper/compbase1.hxx>
+#include <ucbhelper/content.hxx>
+#include <com/sun/star/deployment/XPackageRegistry.hpp>
+#include <com/sun/star/deployment/XPackageManager.hpp>
+#include <osl/mutex.hxx>
 #include <list>
 #include <boost/unordered_map.hpp>
 

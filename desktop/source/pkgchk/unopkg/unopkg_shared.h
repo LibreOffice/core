@@ -18,13 +18,13 @@
  */
 
 #include "dp_misc.h"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
-#include "com/sun/star/deployment/XPackage.hpp"
-#include "tools/resmgr.hxx"
-#include "rtl/ustring.hxx"
-#include "unotools/configmgr.hxx"
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/deployment/XPackage.hpp>
+#include <tools/resmgr.hxx>
+#include <rtl/ustring.hxx>
+#include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #define APP_NAME "unopkg"

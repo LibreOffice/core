@@ -22,12 +22,12 @@
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "dp_interact.h"
-#include "rtl/string.hxx"
-#include "osl/file.hxx"
-#include "ucbhelper/content.hxx"
-#include "comphelper/servicedecl.hxx"
-#include "svl/inettype.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include <rtl/string.hxx>
+#include <osl/file.hxx>
+#include <ucbhelper/content.hxx>
+#include <comphelper/servicedecl.hxx>
+#include <svl/inettype.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include "dp_executablebackenddb.hxx"
 
 using namespace ::com::sun::star;

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTENSIONCMDQUEUE_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_EXTENSIONCMDQUEUE_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "rtl/ref.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 
 #include <vector>
 
