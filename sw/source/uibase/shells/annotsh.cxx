@@ -956,6 +956,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
             {
                 if ( (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()==SwPostItHelper::DELETED) || !pOLV->HasSelection() )
                     rSet.DisableItem( nWhich );
+                break;
             }
             case SID_COPY:
             {
