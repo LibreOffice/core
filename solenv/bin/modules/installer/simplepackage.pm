@@ -270,7 +270,7 @@ sub create_package
 
         my $volume_name = $allvariables->{'PRODUCTNAME'};
         my $volume_name_classic = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
-        my $volume_name_classic_app = $volume_name;  # "app" should not contain version number
+        my $volume_name_classic_app = 'LibreOffice from Collabora';  # "app" should not contain version number
         if ( $allvariables->{'DMG_VOLUMEEXTENSION'} ) {
             $volume_name = $volume_name . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
             $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
@@ -411,10 +411,10 @@ sub create_package
         }
         else
         {
-            if (($volume_name_classic_app eq 'LibreOffice' || $volume_name_classic_app eq 'LibreOfficeDev') &&
+            if (($volume_name_classic_app eq 'LibreOffice from Collabora' || $volume_name_classic_app eq 'LibreOfficeDev') &&
                 defined($ENV{'MACOSX_CODESIGNING_IDENTITY'}) && $ENV{'MACOSX_CODESIGNING_IDENTITY'} ne "" )
             {
-                $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle $localtempdir/$folder/$volume_name_classic_app.app";
+                $systemcall = "$ENV{'SRCDIR'}/solenv/bin/macosx-codesign-app-bundle \"$localtempdir/$folder/$volume_name_classic_app.app\"";
                 print "... $systemcall ...\n";
                 my $returnvalue = system($systemcall);
                 $infoline = "Systemcall: $systemcall\n";
