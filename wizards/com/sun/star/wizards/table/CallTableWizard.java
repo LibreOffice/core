@@ -76,7 +76,7 @@ public class CallTableWizard
         {
             try
             {
-                if ( sEvent.compareTo(PropertyNames.START) == 0 )
+                if ( sEvent.equals(PropertyNames.START) )
                 {
                     TableWizard CurTableWizard = new TableWizard( m_serviceFactory, m_wizardContext );
                     Command = CurTableWizard.startTableWizard();

@@ -537,7 +537,7 @@ void SvtFileViewWindow_Impl::OpenFolder( const OUString& rURL )
     {
         sal_Int32 nSampFoldLen = aSamplesFolderURL.getLength();
         aFileView.EnableNameReplacing(
-                    nSampFoldLen && rURL.compareTo( aSamplesFolderURL, nSampFoldLen ) == 0 );
+                    nSampFoldLen && rURL.startsWith( aSamplesFolderURL ) );
         aFileView.Initialize( rURL, "", NULL );
     }
     aNewFolderLink.Call( this );

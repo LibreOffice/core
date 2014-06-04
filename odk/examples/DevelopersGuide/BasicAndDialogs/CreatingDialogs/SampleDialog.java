@@ -125,7 +125,7 @@ public class SampleDialog extends WeakBase implements XServiceInfo, XJobExecutor
 
     // XJobExecutor
     public void trigger(String sEvent) {
-        if ( sEvent.compareTo( "execute" ) == 0 ) {
+        if ( sEvent.equals( "execute" ) ) {
             try {
                 createDialog();
             }

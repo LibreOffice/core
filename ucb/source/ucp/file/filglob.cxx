@@ -166,7 +166,7 @@ namespace fileaccess {
             ||
             ( ( dstL > srcL )
               &&
-              ( srcUnqPath.compareTo( dstUnqPath, srcL ) == 0 )
+              dstUnqPath.startsWith(srcUnqPath)
               &&
               ( dstUnqPath[ srcL ] == slash ) )
         );

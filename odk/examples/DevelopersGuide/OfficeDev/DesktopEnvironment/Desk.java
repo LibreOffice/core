@@ -75,7 +75,7 @@ public class Desk
                 sFile = lArguments[i].substring(5);
         }
 
-        ViewContainer.mbInplace = (sMode.compareTo("inplace")==0);
+        ViewContainer.mbInplace = sMode.equals("inplace");
 
         // Connect to remote office.
         OfficeConnect.createConnection();

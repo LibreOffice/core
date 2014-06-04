@@ -189,7 +189,7 @@ public class EuroAdaption {
                 // change the numberformat only on cellranges with a
                 // currency numberformat
                 if( ( (fType & com.sun.star.util.NumberFormat.CURRENCY) > 0) &&
-                    ( sCurrencySymbol.compareTo( sOldSymbol ) == 0 ) ) {
+                    ( sCurrencySymbol.equals( sOldSymbol ) ) ) {
                     boolean bThousandSep = AnyConverter.toBoolean(
                         xFormat.getPropertyValue("ThousandsSeparator"));
                     boolean bNegativeRed = AnyConverter.toBoolean(

@@ -428,12 +428,12 @@ void generateXDispatchBodies(std::ostream& o, ProgramOptions const & options)
 
     ProtocolCmdMap::const_iterator iter = options.protocolCmdMap.begin();
     while (iter != options.protocolCmdMap.end()) {
-        o << "         if ( aURL.Protocol.compareTo(\"" << (*iter).first
-          << "\") == 0 )\n        {\n";
+        o << "         if ( aURL.Protocol.equals(\"" << (*iter).first
+          << "\") )\n        {\n";
 
         for (std::vector< OString >::const_iterator i = (*iter).second.begin();
              i != (*iter).second.end(); ++i) {
-            o << "            if ( aURL.Path.compareTo(\"" << (*i) << "\") == 0 )\n"
+            o << "            if ( aURL.Path.equals(\"" << (*i) << "\") )\n"
                 "            {\n                // add your own code here\n"
                 "                return;\n            }\n";
         }
@@ -465,12 +465,12 @@ void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & opt
 
     ProtocolCmdMap::const_iterator iter = options.protocolCmdMap.begin();
     while (iter != options.protocolCmdMap.end()) {
-        o << "        if ( aURL.Protocol.compareTo(\"" << (*iter).first
-          << "\") == 0 )\n        {\n";
+        o << "        if ( aURL.Protocol.equals(\"" << (*iter).first
+          << "\") )\n        {\n";
 
         for (std::vector< OString >::const_iterator i = (*iter).second.begin();
              i != (*iter).second.end(); ++i) {
-            o << "            if ( aURL.Path.compareTo(\"" << (*i) << "\") == 0 )\n"
+            o << "            if ( aURL.Path.equals(\"" << (*i) << "\") )\n"
                 "                return this;\n";
         }
 

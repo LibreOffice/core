@@ -625,11 +625,10 @@ BaseContent::createNewContent(
     if ( Info.Type.isEmpty() )
         return Reference< XContent >();
 
-    bool bFolder
-        = ( Info.Type.compareTo( m_pMyShell->FolderContentType ) == 0 );
+    bool bFolder = Info.Type == m_pMyShell->FolderContentType;
     if ( !bFolder )
     {
-        if ( Info.Type.compareTo( m_pMyShell->FileContentType ) != 0 )
+        if ( Info.Type != m_pMyShell->FileContentType )
         {
             // Neither folder nor file to create!
             return Reference< XContent >();

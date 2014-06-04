@@ -799,7 +799,7 @@ void Content::queryChildren( ContentRefList& rChildren )
 
         // Is aURL a prefix of aChildURL?
         if ( ( aChildURL.getLength() > nLen ) &&
-             ( aChildURL.compareTo( aURL, nLen ) == 0 ) )
+             ( aChildURL.startsWith( aURL ) ) )
         {
             sal_Int32 nPos = nLen;
             nPos = aChildURL.indexOf( '/', nPos );
@@ -1985,8 +1985,7 @@ void Content::transfer(
 
     if ( rInfo.SourceURL.getLength() <= aId.getLength() )
     {
-        if ( aId.compareTo(
-                rInfo.SourceURL, rInfo.SourceURL.getLength() ) == 0 )
+        if ( aId.startsWith( rInfo.SourceURL ) )
         {
             uno::Any aProps
                 = uno::makeAny(beans::PropertyValue(

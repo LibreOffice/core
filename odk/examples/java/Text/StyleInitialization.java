@@ -206,7 +206,7 @@ public class StyleInitialization {
                 sFontname = sFontname.toLowerCase();
 
                 // if the style use the font 'Albany', apply it to the current paragraph
-                if( sFontname.compareTo("albany") == 0 ) {
+                if( sFontname.equals("albany") ) {
                     // create a property set from the current paragraph, to change the paragraph style
                     xPropertySet = UnoRuntime.queryInterface(
                         com.sun.star.beans.XPropertySet.class, xTextRange );

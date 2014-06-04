@@ -2240,7 +2240,7 @@ void Content::queryChildren( ContentRefList& rChildren )
 
         // Is aURL a prefix of aChildURL?
         if ( ( aChildURL.getLength() > nLen ) &&
-             ( aChildURL.compareTo( aURL, nLen ) == 0 ) )
+             ( aChildURL.startsWith( aURL ) ) )
         {
             sal_Int32 nPos = nLen;
             nPos = aChildURL.indexOf( '/', nPos );

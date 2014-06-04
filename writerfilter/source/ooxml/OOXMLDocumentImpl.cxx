@@ -568,10 +568,10 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
                 beans::StringPair aPair = aSeq[i];
                 // Need to resolve only customxml files from document relationships.
                 // Skipping other files.
-                if (aPair.Second.compareTo(sCustomType) == 0 ||
-                        aPair.Second.compareTo(sCustomTypeStrict) == 0)
+                if (aPair.Second == sCustomType ||
+                        aPair.Second == sCustomTypeStrict)
                     bFound = true;
-                else if(aPair.First.compareTo(sTarget) == 0 && bFound)
+                else if(aPair.First == sTarget && bFound)
                 {
                     // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
                     // to ensure customxml target is visited in lcl_getTarget.
@@ -644,26 +644,26 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 
               OOXMLStream::StreamType_t nType(OOXMLStream::UNKNOWN);
               bool bFound = true;
-              if(gType.compareTo(sSettingsType) == 0 ||
-                      gType.compareTo(sSettingsTypeStrict) == 0)
+              if(gType == sSettingsType ||
+                      gType == sSettingsTypeStrict)
               {
                   nType = OOXMLStream::SETTINGS;
                   contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml";
               }
-              else if(gType.compareTo(sStylesType) == 0 ||
-                      gType.compareTo(sStylesTypeStrict) == 0)
+              else if(gType == sStylesType ||
+                      gType == sStylesTypeStrict)
               {
                   nType = OOXMLStream::STYLES;
                   contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml";
               }
-              else if(gType.compareTo(sWebSettings) == 0 ||
-                      gType.compareTo(sWebSettingsStrict) == 0)
+              else if(gType == sWebSettings ||
+                      gType == sWebSettingsStrict)
               {
                   nType = OOXMLStream::WEBSETTINGS;
                   contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml";
               }
-              else if(gType.compareTo(sFonttableType) == 0 ||
-                      gType.compareTo(sFonttableTypeStrict) == 0)
+              else if(gType == sFonttableType ||
+                      gType == sFonttableTypeStrict)
               {
                   nType = OOXMLStream::FONTTABLE;
                   contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml";
@@ -735,24 +735,24 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(OOXMLStream::Pointer_t pStream)
             for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
             {
                 beans::StringPair aPair = aSeq[i];
-                if (aPair.Second.compareTo(sChartType) == 0 ||
-                        aPair.Second.compareTo(sChartTypeStrict) == 0)
+                if (aPair.Second == sChartType ||
+                        aPair.Second == sChartTypeStrict)
                 {
                     bFound = true;
                 }
-                else if(aPair.Second.compareTo(sFootersType) == 0 ||
-                        aPair.Second.compareTo(sFootersTypeStrict) == 0)
+                else if(aPair.Second == sFootersType ||
+                        aPair.Second == sFootersTypeStrict)
                 {
                     bHeaderFooterFound = true;
                     streamType = OOXMLStream::FOOTER;
                 }
-                else if(aPair.Second.compareTo(sHeaderType) == 0 ||
-                        aPair.Second.compareTo(sHeaderTypeStrict) == 0)
+                else if(aPair.Second == sHeaderType ||
+                        aPair.Second == sHeaderTypeStrict)
                 {
                     bHeaderFooterFound = true;
                     streamType = OOXMLStream::HEADER;
                 }
-                else if(aPair.First.compareTo(sTarget) == 0 && ( bFound || bHeaderFooterFound ))
+                else if(aPair.First == sTarget && ( bFound || bHeaderFooterFound ))
                 {
                     // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
                     // to ensure chart.xml target is visited in lcl_getTarget.
@@ -823,10 +823,10 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
                 beans::StringPair aPair = aSeq[i];
                 // Need to resolve only ActiveX files from document relationships.
                 // Skipping other files.
-                if (aPair.Second.compareTo(sCustomType) == 0 ||
-                        aPair.Second.compareTo(sCustomTypeStrict) == 0)
+                if (aPair.Second == sCustomType ||
+                        aPair.Second == sCustomTypeStrict)
                     bFound = true;
-                else if(aPair.First.compareTo(sTarget) == 0 && bFound)
+                else if(aPair.First == sTarget && bFound)
                 {
                     // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
                     // to ensure ActiveX.xml target is visited in lcl_getTarget.

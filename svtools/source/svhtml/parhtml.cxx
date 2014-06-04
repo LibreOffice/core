@@ -883,8 +883,7 @@ int HTMLParser::_GetNextRawToken()
                 {
                     if( !bReadComment )
                     {
-                        if( aTok.compareTo( OOO_STRING_SVTOOLS_HTML_comment, 3 )
-                                == 0 )
+                        if( aTok.startsWith( OOO_STRING_SVTOOLS_HTML_comment ) )
                         {
                             bReadComment = true;
                         }
@@ -893,9 +892,9 @@ int HTMLParser::_GetNextRawToken()
                             // A script has to end with "</SCRIPT>". But
                             // ">" is optional for security reasons
                             bDone = bOffState &&
-                            0 == ( bReadScript
-                                ? aTok.compareTo(OOO_STRING_SVTOOLS_HTML_script)
-                                : aTok.compareTo(aEndToken) );
+                            ( bReadScript
+                                ? aTok.equals(OOO_STRING_SVTOOLS_HTML_script)
+                                : aTok.equals(aEndToken) );
                         }
                     }
                     if( bReadComment && '>'==nNextCh && aTok.endsWith( "--" ) )
@@ -908,13 +907,11 @@ int HTMLParser::_GetNextRawToken()
                 {
                     // Style sheets can be closed by </STYLE>, </HEAD> or <BODY>
                     if( bOffState )
-                        bDone = aTok.compareTo(OOO_STRING_SVTOOLS_HTML_style)
-                                    == 0 ||
-                                aTok.compareTo(OOO_STRING_SVTOOLS_HTML_head)
-                                    == 0;
+                        bDone = aTok.equals(OOO_STRING_SVTOOLS_HTML_style) ||
+                                aTok.equals(OOO_STRING_SVTOOLS_HTML_head);
                     else
                         bDone =
-                            aTok.compareTo(OOO_STRING_SVTOOLS_HTML_body) == 0;
+                            aTok.equals(OOO_STRING_SVTOOLS_HTML_body);
                 }
 
                 if( bDone )
@@ -1958,7 +1955,7 @@ bool HTMLParser::InternalImgToPrivateURL( OUString& rURL )
 
     bool bFound = false;
 
-    if( rURL.compareTo( OOO_STRING_SVTOOLS_HTML_internal_gopher,16) == 0 )
+    if( rURL.startsWith( OOO_STRING_SVTOOLS_HTML_internal_gopher ) )
     {
         OUString aName( rURL.copy(16) );
         switch( aName[0] )
@@ -1986,7 +1983,7 @@ bool HTMLParser::InternalImgToPrivateURL( OUString& rURL )
             break;
         }
     }
-    else if( rURL.compareTo( OOO_STRING_SVTOOLS_HTML_internal_icon,14) == 0 )
+    else if( rURL.startsWith( OOO_STRING_SVTOOLS_HTML_internal_icon ) )
     {
         OUString aName( rURL.copy(14) );
         switch( aName[0] )

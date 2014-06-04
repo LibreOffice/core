@@ -200,7 +200,7 @@ public class JavaTools
         int retvalue = -1;
         for (int i = 0; i < FieldLen; i++)
         {
-            if (SearchList[i].compareTo(SearchString) == 0)
+            if (SearchList[i].equals(SearchString))
             {
                 retvalue = i;
                 break;
@@ -217,7 +217,7 @@ public class JavaTools
         {
             for (int i = StartIndex; i < FieldLen; i++)
             {
-                if (SearchList[i].compareTo(SearchString) == 0)
+                if (SearchList[i].equals(SearchString))
                 {
                     retvalue = i;
                     break;
@@ -238,7 +238,7 @@ public class JavaTools
             {
                 if (SearchList[i][0] != null)
                 {
-                    if (SearchList[i][0].compareTo(SearchString) == 0)
+                    if (SearchList[i][0].equals(SearchString))
                     {
                         retvalue = i;
                         break;

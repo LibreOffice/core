@@ -151,12 +151,12 @@ public class ProtocolHandlerAddon {
                                         /*IN*/String sTargetFrameName,
                                         /*IN*/int iSearchFlags ) {
             XDispatch xRet = null;
-            if ( aURL.Protocol.compareTo("org.openoffice.Office.addon.example:") == 0 ) {
-                if ( aURL.Path.compareTo( "Function1" ) == 0 )
+            if ( aURL.Protocol.equals("org.openoffice.Office.addon.example:") ) {
+                if ( aURL.Path.equals( "Function1" ) )
                     xRet = this;
-                if ( aURL.Path.compareTo( "Function2" ) == 0 )
+                if ( aURL.Path.equals( "Function2" ) )
                     xRet = this;
-                if ( aURL.Path.compareTo( "Help" ) == 0 )
+                if ( aURL.Path.equals( "Help" ) )
                     xRet = this;
             }
             return xRet;
@@ -178,17 +178,17 @@ public class ProtocolHandlerAddon {
         public void dispatch( /*IN*/com.sun.star.util.URL aURL,
                               /*IN*/com.sun.star.beans.PropertyValue[] aArguments ) {
 
-            if ( aURL.Protocol.compareTo("org.openoffice.Office.addon.example:") == 0 )
+            if ( aURL.Protocol.equals("org.openoffice.Office.addon.example:") )
             {
-                if ( aURL.Path.compareTo( "Function1" ) == 0 )
+                if ( aURL.Path.equals( "Function1" ) )
                 {
                     showMessageBox("SDK DevGuide Add-On example", "Function 1 activated");
                 }
-                if ( aURL.Path.compareTo( "Function2" ) == 0 )
+                if ( aURL.Path.equals( "Function2" ) )
                 {
                     showMessageBox("SDK DevGuide Add-On example", "Function 2 activated");
                 }
-                if ( aURL.Path.compareTo( "Help" ) == 0 )
+                if ( aURL.Path.equals( "Help" ) )
                 {
                     showMessageBox("About SDK DevGuide Add-On example", "This is the SDK Add-On example");
                 }

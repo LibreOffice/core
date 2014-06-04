@@ -261,56 +261,56 @@ STDMETHODIMP CAccEditableText::setAttributes(long startOffset, long endOffset, B
  */
 void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const ::rtl::OUString &ouValue, Any &rAny)
 {
-    if(ouName.compareTo(L"CharBackColor") == 0 ||
-            ouName.compareTo(L"CharColor") == 0 ||
-            ouName.compareTo(L"ParaAdjust") == 0 ||
-            ouName.compareTo(L"ParaFirstLineIndent") == 0 ||
-            ouName.compareTo(L"ParaLeftMargin") == 0 ||
-            ouName.compareTo(L"ParaRightMargin") == 0 ||
-            ouName.compareTo(L"ParaTopMargin") == 0 ||
-            ouName.compareTo(L"ParaBottomMargin") == 0 ||
-            ouName.compareTo(L"CharFontPitch") == 0)
+    if(ouName.equals(L"CharBackColor") ||
+            ouName.equals(L"CharColor") ||
+            ouName.equals(L"ParaAdjust") ||
+            ouName.equals(L"ParaFirstLineIndent") ||
+            ouName.equals(L"ParaLeftMargin") ||
+            ouName.equals(L"ParaRightMargin") ||
+            ouName.equals(L"ParaTopMargin") ||
+            ouName.equals(L"ParaBottomMargin") ||
+            ouName.equals(L"CharFontPitch") )
     {
         // Convert to int.
         // NOTE: CharFontPitch is not implemented in java file.
         sal_Int32 nValue = ouValue.toInt32();
         rAny.setValue(&nValue, cppu::UnoType<sal_Int32>::get());
     }
-    else if(ouName.compareTo(L"CharShadowed") == 0 ||
-            ouName.compareTo(L"CharContoured") == 0)
+    else if(ouName.equals(L"CharShadowed") ||
+            ouName.equals(L"CharContoured") )
     {
         // Convert to boolean.
         boolean nValue = (boolean)ouValue.toBoolean();
         rAny.setValue(&nValue, cppu::UnoType<sal_Bool>::get() );
     }
-    else if(ouName.compareTo(L"CharEscapement") == 0 ||
-            ouName.compareTo(L"CharStrikeout") == 0 ||
-            ouName.compareTo(L"CharUnderline") == 0 ||
-            ouName.compareTo(L"CharFontPitch") == 0)
+    else if(ouName.equals(L"CharEscapement") ||
+            ouName.equals(L"CharStrikeout")  ||
+            ouName.equals(L"CharUnderline") ||
+            ouName.equals(L"CharFontPitch") )
     {
         // Convert to short.
         short nValue = (short)ouValue.toInt32();
         rAny.setValue(&nValue, cppu::UnoType<short>::get());
     }
-    else if(ouName.compareTo(L"CharHeight") == 0 ||
-            ouName.compareTo(L"CharWeight") == 0)
+    else if(ouName.equals(L"CharHeight") ||
+            ouName.equals(L"CharWeight") )
     {
         // Convert to float.
         float fValue = ouValue.toFloat();
         rAny.setValue(&fValue, cppu::UnoType<float>::get());
     }
-    else if(ouName.compareTo(L"CharFontName") == 0)
+    else if(ouName.equals(L"CharFontName") )
     {
         // Convert to string.
         rAny.setValue(&ouValue, cppu::UnoType<rtl::OUString>::get());
     }
-    else if(ouName.compareTo(L"CharPosture") == 0)
+    else if(ouName.equals(L"CharPosture") )
     {
         // Convert to FontSlant.
         ::com::sun::star::awt::FontSlant fontSlant = (::com::sun::star::awt::FontSlant)ouValue.toInt32();
         rAny.setValue(&fontSlant, cppu::UnoType<com::sun::star::awt::FontSlant>::get());
     }
-    else if(ouName.compareTo(L"ParaTabStops") == 0)
+    else if(ouName.equals(L"ParaTabStops") )
     {
 
         // Convert to the Sequence with TabStop element.
@@ -420,7 +420,7 @@ void CAccEditableText::get_AnyFromOLECHAR(const ::rtl::OUString &ouName, const :
         // Assign to Any object.
         rAny.setValue(&seqTabStop, getCppuType((Sequence< ::com::sun::star::style::TabStop >*)0));
     }
-    else if(ouName.compareTo(L"ParaLineSpacing") == 0)
+    else if(ouName.equals(L"ParaLineSpacing") )
     {
         // Parse value string.
         ::com::sun::star::style::LineSpacing lineSpacing;

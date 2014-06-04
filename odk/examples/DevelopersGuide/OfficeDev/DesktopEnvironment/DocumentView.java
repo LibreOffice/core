@@ -390,7 +390,7 @@ public class DocumentView extends    JFrame
             String sCommand = aEvent.getActionCommand();
 
             // open any file from disk
-            if( sCommand.compareTo(COMMAND_OPEN) == 0 )
+            if( sCommand.equals(COMMAND_OPEN) )
             {
                 String sURL = FunctionHelper.askUserForFileURL(DocumentView.this,true);
                 if(sURL!=null)
@@ -399,14 +399,14 @@ public class DocumentView extends    JFrame
             else
 
             // save current document
-            if( sCommand.compareTo(COMMAND_SAVE) == 0 )
+            if( sCommand.equals(COMMAND_SAVE) )
             {
                 DocumentView.this.save();
             }
             else
 
             // export current document to html
-            if( sCommand.compareTo(COMMAND_EXPORT) == 0 )
+            if( sCommand.equals(COMMAND_EXPORT))
             {
                 String sURL = FunctionHelper.askUserForFileURL(DocumentView.this,false);
                 if(sURL!=null)
@@ -415,7 +415,7 @@ public class DocumentView extends    JFrame
             else
 
             // exit application
-            if( sCommand.compareTo(COMMAND_EXIT) == 0 )
+            if( sCommand.equals(COMMAND_EXIT) )
             {
                 // This will force deleting of this and
                 // all other currently opened views automatically!
