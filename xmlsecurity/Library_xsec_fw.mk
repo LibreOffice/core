@@ -16,6 +16,8 @@ $(eval $(call gb_Library_set_include,xsec_fw,\
 	-I$(SRCDIR)/xmlsecurity/inc \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,xsec_fw,$(SRCDIR)/xmlsecurity/inc/pch/precompiled_xsec_fw))
+
 $(eval $(call gb_Library_use_sdk_api,xsec_fw))
 
 $(eval $(call gb_Library_use_libraries,xsec_fw,\

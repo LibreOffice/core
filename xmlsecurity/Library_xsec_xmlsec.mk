@@ -32,6 +32,8 @@ $(eval $(call gb_Library_add_defs,xsec_xmlsec,\
 	-DXMLSEC_NO_XSLT \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,xsec_xmlsec,$(SRCDIR)/xmlsecurity/inc/pch/precompiled_xsec_xmlsec))
+
 $(eval $(call gb_Library_use_libraries,xsec_xmlsec,\
 	comphelper \
 	cppu \

@@ -18,6 +18,8 @@ $(eval $(call gb_Library_set_include,deployment,\
 
 $(eval $(call gb_Library_use_external,deployment,boost_headers))
 
+$(eval $(call gb_Library_set_precompiled_header,deployment,$(SRCDIR)/desktop/inc/pch/precompiled_deployment))
+
 $(eval $(call gb_Library_use_sdk_api,deployment))
 
 $(eval $(call gb_Library_use_libraries,deployment,\

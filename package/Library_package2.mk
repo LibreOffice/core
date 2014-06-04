@@ -22,6 +22,8 @@ $(eval $(call gb_Library_add_defs,package2,\
 	-DDLLIMPLEMENTATION_PACKAGE \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,package2,$(SRCDIR)/package/inc/pch/precompiled_package2))
+
 $(eval $(call gb_Library_use_libraries,package2,\
 	comphelper \
 	cppu \

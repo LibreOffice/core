@@ -27,6 +27,8 @@ $(eval $(call gb_Library_set_include,svgio,\
 
 $(eval $(call gb_Library_use_external,svgio,boost_headers))
 
+$(eval $(call gb_Library_set_precompiled_header,svgio,$(SRCDIR)/svgio/inc/pch/precompiled_svgio))
+
 $(eval $(call gb_Library_use_sdk_api,svgio))
 
 $(eval $(call gb_Library_use_libraries,svgio,\

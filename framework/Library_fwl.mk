@@ -29,6 +29,8 @@ $(eval $(call gb_Library_set_include,fwl,\
 
 $(eval $(call gb_Library_use_external,fwl,boost_headers))
 
+$(eval $(call gb_Library_set_precompiled_header,fwl,$(SRCDIR)/framework/inc/pch/precompiled_fwl))
+
 $(eval $(call gb_Library_use_sdk_api,fwl))
 
 $(eval $(call gb_Library_use_libraries,fwl,\

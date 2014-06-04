@@ -32,7 +32,6 @@
 #include "xmlsecuritycontext_mscryptimpl.hxx"
 #include "securityenvironment_mscryptimpl.hxx"
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

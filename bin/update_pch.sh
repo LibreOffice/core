@@ -129,6 +129,7 @@ function filter_ignore()
 # - filter out all files that are not normal headers
 # - unicode/datefm.h is a icu header, clashes with DateFormat definition
 # - gperffasttoken.hxx is not a proper header
+# - comphelper/servicedecl.hxx ignore for now
 # - sores.hxx provides BMP_PLUGIN, which is redefined
 # - some sources play ugly #define tricks with editeng/eeitemid.hxx
 # - jerror.h and jpeglib.h are not self-contained
@@ -137,6 +138,7 @@ function filter_ignore()
     grep -v -F -e '#include <vcl/opengl/OpenGLContext.hxx>' | \
     grep -v -F -e '#include <unicode/datefmt.h>' | \
     grep -v -F -e '#include "gperffasttoken.hxx"' | \
+    grep -v -F -e '#include <comphelper/servicedecl.hxx>' | \
     grep -v -F -e '#include <svtools/sores.hxx>' | \
     grep -v -F -e '#include <editeng/eeitemid.hxx>' | \
     grep -v -F -e '#include <service1.hxx>' | \

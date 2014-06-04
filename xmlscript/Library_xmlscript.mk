@@ -30,11 +30,11 @@ $(eval $(call gb_Library_set_include,xmlscript,\
     $$(INCLUDE) \
 ))
 
-
 $(eval $(call gb_Library_add_defs,xmlscript,\
     -DXMLSCRIPT_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,xmlscript,$(SRCDIR)/xmlscript/inc/pch/precompiled_xmlscript))
 
 $(eval $(call gb_Library_add_exception_objects,xmlscript,\
     xmlscript/source/misc/unoservices \
