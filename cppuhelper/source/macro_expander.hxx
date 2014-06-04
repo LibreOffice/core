@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CPPUHELPER_SOURCE_MACRO_EXPANDER_HXX
 #define INCLUDED_CPPUHELPER_SOURCE_MACRO_EXPANDER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "sal/types.h"
+#include <com/sun/star/uno/Reference.hxx>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XSingleComponentFactory;

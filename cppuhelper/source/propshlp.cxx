@@ -18,13 +18,13 @@
  */
 
 
-#include "osl/diagnose.h"
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/weak.hxx"
-#include "cppuhelper/propshlp.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "com/sun/star/beans/PropertyAttribute.hpp"
-#include "com/sun/star/lang/DisposedException.hpp"
+#include <osl/diagnose.h>
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/weak.hxx>
+#include <cppuhelper/propshlp.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 
 
 using namespace osl;

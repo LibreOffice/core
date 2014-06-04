@@ -18,20 +18,20 @@
  */
 
 
-#include "sal/main.h"
-#include "osl/file.hxx"
+#include <sal/main.h>
+#include <osl/file.hxx>
 
-#include "typelib/typedescription.hxx"
+#include <typelib/typedescription.hxx>
 
-#include "cppuhelper/bootstrap.hxx"
-#include "cppuhelper/shlib.hxx"
+#include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/shlib.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
 
-#include "uno/environment.hxx"
+#include <uno/environment.hxx>
 #include <uno/lbnames.h>
-#include "cppu/EnvDcp.hxx"
-#include "cppu/EnvGuards.hxx"
+#include <cppu/EnvDcp.hxx>
+#include <cppu/EnvGuards.hxx>
 
 #include <iostream>
 

@@ -18,17 +18,17 @@
  */
 
 
-#include "rtl/instance.hxx"
-#include "osl/diagnose.h"
-#include "osl/doublecheckedlocking.h"
-#include "osl/mutex.hxx"
-#include "uno/dispatcher.hxx"
+#include <rtl/instance.hxx>
+#include <osl/diagnose.h>
+#include <osl/doublecheckedlocking.h>
+#include <osl/mutex.hxx>
+#include <uno/dispatcher.hxx>
 #include <uno/lbnames.h>
-#include "uno/mapping.hxx"
-#include "cppuhelper/detail/XExceptionThrower.hpp"
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <uno/mapping.hxx>
+#include <cppuhelper/detail/XExceptionThrower.hpp>
+#include <com/sun/star/uno/RuntimeException.hpp>
 
-#include "cppuhelper/exc_hlp.hxx"
+#include <cppuhelper/exc_hlp.hxx>
 
 using namespace ::osl;
 using namespace ::cppu;

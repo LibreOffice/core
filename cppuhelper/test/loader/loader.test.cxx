@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/main.h"
+#include <sal/main.h>
 #include <cppuhelper/shlib.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppu/EnvDcp.hxx>

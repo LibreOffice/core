@@ -30,7 +30,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/unload.h>
 
-#include "cppuhelper/propshlp.hxx"
+#include <cppuhelper/propshlp.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -40,7 +40,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XUnloadingPreference.hpp>
-#include "com/sun/star/beans/PropertyAttribute.hpp"
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <memory>
 

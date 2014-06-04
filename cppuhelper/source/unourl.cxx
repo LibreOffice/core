@@ -18,17 +18,17 @@
  */
 
 
-#include "cppuhelper/unourl.hxx"
+#include <cppuhelper/unourl.hxx>
 
-#include "osl/diagnose.h"
-#include "rtl/malformeduriexception.hxx"
-#include "rtl/string.h"
-#include "rtl/textenc.h"
-#include "rtl/uri.h"
-#include "rtl/uri.hxx"
-#include "rtl/ustring.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <osl/diagnose.h>
+#include <rtl/malformeduriexception.hxx>
+#include <rtl/string.h>
+#include <rtl/textenc.h>
+#include <rtl/uri.h>
+#include <rtl/uri.hxx>
+#include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 #include <map>
 

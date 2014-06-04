@@ -7,15 +7,15 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "cppuhelper/supportsservice.hxx"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <cppuhelper/supportsservice.hxx>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 bool cppu::supportsService(
     css::lang::XServiceInfo * implementation, rtl::OUString const & name)

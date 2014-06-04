@@ -24,7 +24,7 @@
 #include <rtl/string.hxx>
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 
 using namespace ::osl;
 using namespace ::com::sun::star;

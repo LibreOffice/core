@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 
-#include "com/sun/star/loader/CannotActivateFactoryException.hpp"
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "osl/module.h"
-#include "sal/types.h"
+#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <osl/module.h>
+#include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
     namespace lang {

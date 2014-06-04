@@ -22,13 +22,13 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-#include "cppuhelper/unourl.hxx"
-#include "rtl/malformeduriexception.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/string.h"
-#include "rtl/textenc.h"
-#include "rtl/ustring.hxx"
-#include "sal/types.h"
+#include <cppuhelper/unourl.hxx>
+#include <rtl/malformeduriexception.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.h>
+#include <rtl/textenc.h>
+#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace cppu_unourl
 {

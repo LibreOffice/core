@@ -25,19 +25,19 @@
 
 #include <string.h>
 
-#include "osl/thread.h"
+#include <osl/thread.h>
 
-#include "cppuhelper/implbase1.hxx"
-#include "cppuhelper/implementationentry.hxx"
-#include "cppuhelper/supportsservice.hxx"
+#include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/implementationentry.hxx>
+#include <cppuhelper/supportsservice.hxx>
 
-#include "com/sun/star/lang/XMultiComponentFactory.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 
-#include "cppu/EnvDcp.hxx"
+#include <cppu/EnvDcp.hxx>
 
 #include <uno/environment.hxx>
 #include <uno/lbnames.h>

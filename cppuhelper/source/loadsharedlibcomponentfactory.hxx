@@ -14,7 +14,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
-#include <servicemanager.hxx>
+#include "servicemanager.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }

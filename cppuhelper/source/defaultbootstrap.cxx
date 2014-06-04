@@ -7,20 +7,20 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cassert>
 #include <vector>
 
-#include "com/sun/star/uno/DeploymentException.hpp"
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/bootstrap.hxx"
-#include "cppuhelper/component_context.hxx"
-#include "rtl/bootstrap.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+#include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/component_context.hxx>
+#include <rtl/bootstrap.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 using rtl::OUString;
 

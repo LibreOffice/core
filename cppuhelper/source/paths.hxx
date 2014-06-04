@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CPPUHELPER_SOURCE_PATHS_HXX
 #define INCLUDED_CPPUHELPER_SOURCE_PATHS_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 namespace osl { class Directory; }
 namespace rtl { class OUString; }
