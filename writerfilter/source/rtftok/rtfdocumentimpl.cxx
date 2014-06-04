@@ -986,8 +986,7 @@ int RTFDocumentImpl::resolveChars(char ch)
         {
             // fdo#79384: Word will reject Shift-JIS following \loch
             // but apparently OOo could read and (worse) write such documents
-            SAL_INFO_IF(m_aStates.top().eRunType != RTFParserState::DBCH,
-                "writerfilter.rtf", "invalid Shift-JIS without DBCH");
+            SAL_INFO_IF(m_aStates.top().eRunType != RTFParserState::DBCH, "writerfilter.rtf", "invalid Shift-JIS without DBCH");
             unsigned char uch = ch;
             if ((uch >= 0x80 && uch <= 0x9F) || uch >= 0xE0)
             {
@@ -3495,8 +3494,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
     case RTF_F:
     case RTF_AF:
-        if (m_aStates.top().isRightToLeft
-            || m_aStates.top().eRunType == RTFParserState::HICH)
+        if (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::HICH)
         {
             nSprm = NS_ooxml::LN_CT_Fonts_cs;
         }
@@ -3521,8 +3519,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             RTFSprms aRunPropsSprms;
             aRunPropsSprms.set(NS_ooxml::LN_EG_RPrBase_rFonts, RTFValue::Pointer_t(new RTFValue(aFontAttributes)));
             m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_rPr,
-                RTFValue::Pointer_t(new RTFValue(RTFSprms(), aRunPropsSprms)),
-                OVERWRITE_NO_APPEND);
+                                            RTFValue::Pointer_t(new RTFValue(RTFSprms(), aRunPropsSprms)),
+                                            OVERWRITE_NO_APPEND);
         }
         else
         {

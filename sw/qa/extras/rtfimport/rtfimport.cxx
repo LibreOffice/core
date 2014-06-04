@@ -294,8 +294,7 @@ DECLARE_RTFIMPORT_TEST(testFdo79384, "fdo79384.rtf")
 {
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("Маркеры спискамЫ", 31, RTL_TEXTENCODING_UTF8),
-            xTextRange->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Маркеры спискамЫ", 31, RTL_TEXTENCODING_UTF8), xTextRange->getString());
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo47326, "fdo47326.rtf")
