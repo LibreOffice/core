@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_241a7c6f",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-04T14:44:02Z",
+      "side": 1,
+      "message": "I had to remove the const for pCell to make pCell-\u003eIsValueNoError() possible, because that is not a constant function. Also I moved pCell so that it is only instantiated (is that correct Queen\u0027s English? I doubt it) when there is a filter to be assessed.",
+      "revId": "03e7b3b1e86eeefd35b28736a3ddec5d8f572888",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
