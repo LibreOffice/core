@@ -14,7 +14,6 @@
 #include <boost/shared_ptr.hpp>
 
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/ucb/XSimpleFileAccess.hpp"
@@ -353,7 +352,5 @@ void WPXSvStreamTest::testStructured()
 CPPUNIT_TEST_SUITE_REGISTRATION(WPXSvStreamTest);
 
 }
-
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
