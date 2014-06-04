@@ -52,6 +52,7 @@ $(eval $(call gb_CppunitTest_use_components,writerperfect_stream,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_stream,\
+	writerperfect/qa/unit/stream \
 	writerperfect/qa/unit/WPXSvStreamTest \
 ))
 
