@@ -52,7 +52,11 @@ MAKEFLAGS += r
 ifdef gb_SHELL
 SHELL := $(gb_SHELL)
 else
+ifeq ($(OS_FOR_BUILD),WNT)
+SHELL := $(shell cygpath -m /bin/sh)
+else
 SHELL := /bin/sh
+endif
 endif
 
 true := T

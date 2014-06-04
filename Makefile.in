@@ -15,7 +15,7 @@ build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
  $(if $(filter check,$(MAKECMDGOALS)),subsequentcheck)\
  $(filter all build-l10n-only build-non-l10n-only debugrun help slowcheck translations unitcheck subsequentcheck check packageinfo,$(MAKECMDGOALS))
 
-SHELL=/usr/bin/env bash
+SHELL := @SHELL_BASH@
 SRCDIR := @SRC_ROOT@
 BUILDDIR := @BUILDDIR@
 GIT_BUILD := $(if $(wildcard $(SRCDIR)/.git),T)
