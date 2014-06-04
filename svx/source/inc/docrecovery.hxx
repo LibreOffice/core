@@ -521,7 +521,6 @@ class RecoveryDialog : public Dialog
         OUString        m_aRecoveryOnlyFinish;
         OUString        m_aRecoveryOnlyFinishDescr;
 
-        PushButton*     m_pDefButton;
         RecoveryCore*   m_pCore;
         css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
         enum EInternalRecoveryState
