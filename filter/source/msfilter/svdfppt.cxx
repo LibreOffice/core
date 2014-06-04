@@ -6383,6 +6383,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                 {
                     case PPT_NOTEPAGE :
                         nInstance++;
+                        // fall-through
                     case PPT_MASTERPAGE :
                         nInstance++;
                     case PPT_SLIDEPAGE :
