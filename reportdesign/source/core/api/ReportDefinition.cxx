@@ -492,7 +492,7 @@ namespace
         virtual void execute() SAL_OVERRIDE;
      };
 
-    void SAL_CALL FactoryLoader::execute()
+    void FactoryLoader::execute()
     {
         try
         {
