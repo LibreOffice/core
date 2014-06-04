@@ -89,6 +89,7 @@ if test "$ENABLE_MACOSX_SANDBOX" = "TRUE"; then
 fi
 
 id=`basename "$APP_BUNDLE"`
+id=`echo $id | tr ' ' '-'`
 codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" --resource-rules "$SRCDIR/setup_native/source/mac/CodesignRules.plist" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE"
 
 exit 0
