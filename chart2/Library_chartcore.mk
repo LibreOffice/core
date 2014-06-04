@@ -183,7 +183,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/BaseGFXHelper \
     chart2/source/tools/CachedDataSequence \
     chart2/source/tools/CharacterProperties \
-    chart2/source/tools/ChartDebugTrace \
     chart2/source/tools/ChartModelHelper \
     chart2/source/tools/ChartTypeHelper \
     chart2/source/tools/ChartViewHelper \
