@@ -40,7 +40,7 @@
 
 #include <comphelper/uno3.hxx>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14)
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_14
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 14
 #include <comphelper/implbase_var.hxx>
