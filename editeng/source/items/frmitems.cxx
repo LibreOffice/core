@@ -896,7 +896,7 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     nPropUpper = aUpperLowerMarginScale.ScaleLower;
             }
         }
-
+        break;
         case MID_UP_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
