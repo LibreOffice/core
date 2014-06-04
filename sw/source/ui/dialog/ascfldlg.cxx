@@ -190,7 +190,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             int nFontNames = pPrt->GetDevFontCount();
             for( int i = 0; i < nFontNames; i++ )
             {
-                FontInfo aInf( pPrt->GetDevFont( i ) );
+                vcl::FontInfo aInf( pPrt->GetDevFont( i ) );
                 aFontNames.insert( aInf.GetName() );
             }
 

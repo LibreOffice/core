@@ -207,7 +207,7 @@ void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescripto
 
     if ( !rCurrentFont.Name.isEmpty() )
     {
-        FontInfo _aFontInfo;
+        vcl::FontInfo _aFontInfo;
         _aFontInfo.SetName( rCurrentFont.Name );
         _aFontInfo.SetStyleName( rCurrentFont.StyleName );
         _aFontInfo.SetHeight( rCurrentFont.Height );

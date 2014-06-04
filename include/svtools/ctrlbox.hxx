@@ -37,7 +37,7 @@ class ImpLineListData;
 
 typedef ::std::vector< ImplColorListData*    > ImpColorList;
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
-typedef ::std::vector< FontInfo              > ImplFontList;
+typedef ::std::vector< vcl::FontInfo         > ImplFontList;
 
 #define CHANGE_LINE1               ( ( sal_uInt16 ) 1 )
 #define CHANGE_LINE2               ( ( sal_uInt16 ) 2 )
@@ -457,7 +457,7 @@ inline void FontStyleBox::SetText( const OUString& rText )
 
 class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
-    FontInfo        aFontInfo;
+    vcl::FontInfo       aFontInfo;
     const FontList* pFontList;
     sal_uInt16          nRelMin;
     sal_uInt16          nRelMax;
@@ -483,7 +483,7 @@ public:
     void            Reformat() SAL_OVERRIDE;
     void            Modify() SAL_OVERRIDE;
 
-    void            Fill( const FontInfo* pInfo, const FontList* pList );
+    void            Fill( const vcl::FontInfo* pInfo, const FontList* pList );
 
     void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
                                         sal_uInt16 nStep = 5 );

@@ -1941,7 +1941,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                                 (const SvxFontListItem* )pLclDocShell
                                                     ->GetItem( SID_ATTR_CHAR_FONTLIST );
                         const FontList*  pList = pFontListItem->GetFontList();
-                        FontInfo aInfo = pList->Get(
+                        vcl::FontInfo aInfo = pList->Get(
                             sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE);
                         Font aFont(aInfo);
                         aFmt.SetBulletFont(&aFont);

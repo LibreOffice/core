@@ -81,7 +81,6 @@ class BitmapReadAccess;
 class BitmapEx;
 class Image;
 class TextRectInfo;
-class FontInfo;
 class FontMetric;
 class GDIMetaFile;
 class GfxLink;
@@ -229,6 +228,10 @@ class Printer;
 class FontSelectPattern;
 class ImplFontMetricData;
 class VCLXGraphics;
+
+namespace vcl {
+    class FontInfo;
+}
 
 typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
 
@@ -1124,7 +1127,7 @@ private:
 
 public:
 
-    FontInfo                    GetDevFont( int nDevFontIndex ) const;
+    vcl::FontInfo               GetDevFont( int nDevFontIndex ) const;
     int                         GetDevFontCount() const;
 
     bool                        IsFontAvailable( const OUString& rFontName ) const;

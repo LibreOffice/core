@@ -823,7 +823,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                                                     ->GetItem( SID_ATTR_CHAR_FONTLIST );
                         const FontList*  pList = pFontListItem->GetFontList();
 
-                        FontInfo aInfo = pList->Get(
+                        vcl::FontInfo aInfo = pList->Get(
                             pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
                         Font aFont(aInfo);
                         aFmt.SetBulletFont(&aFont);

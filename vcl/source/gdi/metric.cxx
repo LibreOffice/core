@@ -67,6 +67,8 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
     return true;
 }
 
+namespace vcl {
+
 FontInfo::FontInfo()
 :   mpImplMetric( new ImplFontMetric )
 {}
@@ -113,8 +115,10 @@ FontType FontInfo::GetType() const
     return (mpImplMetric->IsScalable() ? TYPE_SCALABLE : TYPE_RASTER);
 }
 
-FontMetric::FontMetric( const FontMetric& rMetric )
-:    FontInfo( rMetric )
+}
+
+FontMetric::FontMetric( const FontMetric& rMetric ):
+    vcl::FontInfo( rMetric )
 {}
 
 long FontMetric::GetAscent() const
@@ -149,13 +153,13 @@ long FontMetric::GetSlant() const
 
 FontMetric& FontMetric::operator =( const FontMetric& rMetric )
 {
-    FontInfo::operator=( rMetric );
+    vcl::FontInfo::operator=( rMetric );
     return *this;
 }
 
 bool FontMetric::operator==( const FontMetric& rMetric ) const
 {
-    return FontInfo::operator==( rMetric );
+    return vcl::FontInfo::operator==( rMetric );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

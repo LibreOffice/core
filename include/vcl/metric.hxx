@@ -22,18 +22,21 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/font.hxx>
+#include <vcl/outdev.hxx>
 
 class ImplFontMetric;
 class ImplFontCharMap;
 
 typedef sal_uInt32 sal_UCS4;
 
+namespace vcl {
+
+// avoid problems where poppler's FontInfo is picked up
 class VCL_DLLPUBLIC FontInfo : public Font
 {
     friend class OutputDevice;
 
 protected:
-    ImplFontMetric*     mpImplMetric;    // Implementation
 
 public:
                         FontInfo();
@@ -46,9 +49,12 @@ public:
     bool                operator==( const FontInfo& ) const;
     bool                operator!=( const FontInfo& rInfo ) const
                             { return !operator==( rInfo ); }
+    ImplFontMetric*     mpImplMetric;    // Implementation
 };
 
-class VCL_DLLPUBLIC FontMetric : public FontInfo
+}
+
+class VCL_DLLPUBLIC FontMetric : public vcl::FontInfo
 {
 public:
                         FontMetric() {}
