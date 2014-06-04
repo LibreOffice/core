@@ -403,8 +403,8 @@ Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDes
         aFont.SetWidthType( VCLUnoHelper::ConvertFontWidth( rDescr.CharacterWidth ) );
     if ( rDescr.Weight )
         aFont.SetWeight( VCLUnoHelper::ConvertFontWeight( rDescr.Weight ) );
-    if ( (FontItalic)rDescr.Slant != ITALIC_DONTKNOW )
-        aFont.SetItalic( (FontItalic)rDescr.Slant );
+    if ( rDescr.Slant != css::awt::FontSlant_DONTKNOW )
+        aFont.SetItalic( VCLUnoHelper::ConvertFontSlant( rDescr.Slant ) );
     if ( (FontUnderline)rDescr.Underline != UNDERLINE_DONTKNOW )
         aFont.SetUnderline( (FontUnderline)rDescr.Underline );
     if ( (FontStrikeout)rDescr.Strikeout != STRIKEOUT_DONTKNOW )
