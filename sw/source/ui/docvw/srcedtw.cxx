@@ -971,7 +971,7 @@ void SwSrcEditWindow::SetFont()
     const SvxFontListItem* pFontListItem =
         (const SvxFontListItem* )pSrcView->GetDocShell()->GetItem( SID_ATTR_CHAR_FONTLIST );
     const FontList*  pList = pFontListItem->GetFontList();
-    FontInfo aInfo = pList->Get(sFontName,WEIGHT_NORMAL, ITALIC_NONE);
+    vcl::FontInfo aInfo = pList->Get(sFontName,WEIGHT_NORMAL, ITALIC_NONE);
 
     const Font& rFont = GetTextEngine()->GetFont();
     Font aFont(aInfo);
