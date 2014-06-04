@@ -138,7 +138,7 @@ namespace dbaui
     void DbaIndexList::SelectNoHandlerCall( SvTreeListEntry* _pEntry )
     {
         disableSelectHandler();
-        Select(_pEntry, sal_True);
+        Select(_pEntry, true);
         enableSelectHandler();
     }
 
