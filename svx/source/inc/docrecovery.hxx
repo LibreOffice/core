@@ -302,11 +302,8 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 class PluginProgressWindow : public Window
 {
     private:
-
         css::uno::Reference< css::lang::XComponent > m_xProgress;
-
     public:
-
         PluginProgressWindow(      Window*                                       pParent  ,
                              const css::uno::Reference< css::lang::XComponent >& xProgress);
         virtual ~PluginProgressWindow();
@@ -315,11 +312,8 @@ class PluginProgressWindow : public Window
 class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicator ,
                                                        css::lang::XComponent       >
 {
-
-
     // member
     private:
-
         /** @short  TODO */
         css::uno::Reference< css::task::XStatusIndicatorFactory > m_xProgressFactory;
 
@@ -330,8 +324,6 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
 
     // native interface
     public:
-
-
         /** @short  TODO */
         PluginProgress(      Window*                                             pParent,
                        const css::uno::Reference< css::uno::XComponentContext >& xContext  );
@@ -373,60 +365,6 @@ class PluginProgress : public ::cppu::WeakImplHelper2< css::task::XStatusIndicat
         virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener)
             throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
-
-
-class IExtendedTabPage : public TabPage
-{
-
-    // member
-    protected:
-
-        short m_nResult;
-
-
-    // interface
-    public:
-
-        IExtendedTabPage( Window* pParent, WinBits nStyle = 0 )
-            : TabPage( pParent, nStyle )
-            , m_nResult(DLG_RET_UNKNOWN)
-        {}
-
-        IExtendedTabPage( Window* pParent, const ResId& rResId )
-            : TabPage( pParent, rResId )
-            , m_nResult(DLG_RET_UNKNOWN)
-        {}
-
-        virtual ~IExtendedTabPage()
-        {}
-
-        virtual short   execute() = 0;
-        virtual void    setDefButton() = 0;
-};
-
-typedef ::std::vector< IExtendedTabPage* > TTabPageList;
-
-
-class TabDialog4Recovery : public TabDialog
-{
-
-    // member
-    private:
-
-        TTabPageList m_lTabPages;
-        TTabPageList::iterator m_pActualPage;
-
-
-    // interface
-    public:
-
-        TabDialog4Recovery(Window* pParent);
-        virtual ~TabDialog4Recovery();
-
-        virtual void addTabPage(IExtendedTabPage* pPage);
-        virtual short Execute() SAL_OVERRIDE;
-};
-
 
 class SaveDialog : public Dialog
 {
@@ -568,24 +506,17 @@ class RecovDocList : public SvSimpleTable
 };
 
 
-class RecoveryDialog : public IExtendedTabPage
+class RecoveryDialog : public Dialog
                      , public IRecoveryUpdateListener
 {
-
     // member
     private:
-        FixedText       m_aTitleFT;
-        Window          m_aTitleWin;
-        FixedLine       m_aTitleFL;
-        FixedText       m_aDescrFT;
-        FixedText       m_aProgressFT;
-        Window          m_aProgrParent;
-        FixedText       m_aFileListFT;
-        SvSimpleTableContainer m_aFileListLBContainer;
-        RecovDocList    m_aFileListLB;
-        FixedLine       m_aBottomFL;
-        PushButton      m_aNextBtn;
-        CancelButton    m_aCancelBtn;
+        FixedText*      m_pTitleFT;
+        FixedText*      m_pDescrFT;
+        Window*         m_pProgrParent;
+        RecovDocList*   m_pFileListLB;
+        PushButton*     m_pNextBtn;
+        CancelButton*   m_pCancelBtn;
         OUString        m_aTitleRecoveryInProgress;
         OUString        m_aRecoveryOnlyFinish;
         OUString        m_aRecoveryOnlyFinishDescr;
@@ -605,24 +536,16 @@ class RecoveryDialog : public IExtendedTabPage
             E_RECOVERY_HANDLED              // the recovery wizard page was shown already ... and will be shown now again ...
         };
         sal_Int32 m_eRecoveryState;
-        bool  m_bWaitForUser;
         bool  m_bWaitForCore;
-        bool  m_bUserDecideNext;
         bool  m_bWasRecoveryStarted;
-
 
     // member
     public:
-
-
         /** @short TODO */
         RecoveryDialog(Window*       pParent,
                        RecoveryCore* pCore  );
 
-
-        /** @short TODO */
         virtual ~RecoveryDialog();
-
 
         // IRecoveryUpdateListener
         virtual void updateItems() SAL_OVERRIDE;
@@ -630,19 +553,10 @@ class RecoveryDialog : public IExtendedTabPage
         virtual void start() SAL_OVERRIDE;
         virtual void end() SAL_OVERRIDE;
 
-
-        /** @short TODO */
-        virtual short execute() SAL_OVERRIDE;
-
-
-        /** @short  TODO*/
-        virtual void    setDefButton() SAL_OVERRIDE;
-
+        short execute();
 
     // helper
     private:
-
-
         /** @short TODO */
         DECL_LINK(NextButtonHdl, void*);
         DECL_LINK(CancelButtonHdl, void*);

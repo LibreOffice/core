@@ -178,7 +178,7 @@ LinePropertyPanel::LinePropertyPanel(
     mpEndItem(0),
     maColorPopup(this, ::boost::bind(&LinePropertyPanel::CreateColorPopupControl, this, _1)),
     maLineWidthPopup(this, ::boost::bind(&LinePropertyPanel::CreateLineWidthPopupControl, this, _1)),
-    maIMGColor(SVX_RES(IMG_COLOR)),
+    maIMGColor(SVX_RES(IMG_LINE_COLOR)),
     maIMGNone(SVX_RES(IMG_NONE_ICON)),
     mpIMGWidthIcon(),
     mxFrame(rxFrame),

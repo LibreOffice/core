@@ -65,32 +65,6 @@
 #define SAVEPROGR_CONTROLWIDTH      (SAVEPROGR_COL1-SAVEPROGR_COL0)
 #define SAVEPROGR_HEIGHT            (SAVEPROGR_ROW3+RSC_SP_DLG_INNERBORDER_BOTTOM)
 
-// TabPage Recovery
-
-#define WIN_RECOV_TITLE             1
-#define FT_RECOV_TITLE              2
-#define FL_RECOV_TITLE              3
-#define FT_RECOV_DESCR              4
-#define FT_RECOV_PROGR              5
-#define WIN_RECOV_PROGR             6
-#define FT_RECOV_FILELIST           7
-#define LB_RECOV_FILELIST           8
-#define FL_RECOV_BOTTOM             9
-#define BTN_RECOV_NEXT              11
-#define BTN_RECOV_CANCEL            12
-#define STR_HEADERBAR               13
-#define IMG_GREENCHECK              14
-#define IMG_YELLOWCHECK             15
-#define IMG_REDCROSS                16
-#define STR_SUCCESSRECOV            20
-#define STR_ORIGDOCRECOV            21
-#define STR_RECOVFAILED             22
-#define STR_RECOVINPROGR            23
-#define STR_NOTRECOVYET             24
-#define STR_RECOVERY_INPROGRESS     26
-#define STR_RECOVERYONLY_FINISH_DESCR 28
-#define STR_RECOVERYONLY_FINISH     29
-
 #define RECOV_WIDTH                 SAVE_WIDTH
 #define RECOV_HEIGHT                SAVE_HEIGHT
 #define RECOV_TITLEWINHEIGHT        SAVE_TITLEWINHEIGHT
