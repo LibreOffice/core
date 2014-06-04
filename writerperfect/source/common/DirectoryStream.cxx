@@ -105,7 +105,7 @@ DirectoryStream::Impl::Impl(const uno::Reference<ucb::XContent> &rxContent)
 }
 
 DirectoryStream::DirectoryStream(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent)
-    : m_pImpl(new Impl(xContent))
+    : m_pImpl(isDirectory(xContent) ? new Impl(xContent) : 0)
 {
 }
 
@@ -155,6 +155,9 @@ catch (...)
 
 bool DirectoryStream::isStructured()
 {
+    if (!m_pImpl)
+        return false;
+
     return true;
 }
 
@@ -178,14 +181,15 @@ bool DirectoryStream::existsSubStream(const char * /* name */)
 
 librevenge::RVNGInputStream *DirectoryStream::getSubStreamByName(const char *const pName)
 {
-    librevenge::RVNGInputStream *input = 0;
+    if (!m_pImpl)
+        return 0;
 
     ucbhelper::Content aContent(m_pImpl->xContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
     const uno::Reference<io::XInputStream> xInputStream(findStream(aContent, rtl::OUString::createFromAscii(pName)));
     if (xInputStream.is())
-        input = new WPXSvInputStream(xInputStream);
+        return new WPXSvInputStream(xInputStream);
 
-    return input;
+    return 0;
 }
 
 librevenge::RVNGInputStream *DirectoryStream::getSubStreamById(unsigned /* id */)
