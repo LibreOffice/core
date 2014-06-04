@@ -16,6 +16,11 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <sal/config.h>
+
+#include <vector>
+
 #include "ReportDefinition.hxx"
 
 #include "FixedLine.hxx"
@@ -104,7 +109,7 @@
 #include <dbaccess/dbaundomanager.hxx>
 #include <editeng/paperinf.hxx>
 #include <framework/titlehelper.hxx>
-#include <osl/thread.hxx>
+#include <salhelper/thread.hxx>
 #include <svl/itempool.hxx>
 #include <svl/undo.hxx>
 #include <svx/svdlayer.hxx>
@@ -470,25 +475,24 @@ uno::Sequence< uno::Any > SAL_CALL OStyle::getPropertyDefaults( const uno::Seque
 
 namespace
 {
-    class FactoryLoader : public ::osl::Thread
+    class FactoryLoader : public salhelper::Thread
     {
         OUString                          m_sMimeType;
         uno::Reference< uno::XComponentContext > m_xContext;
     public:
         FactoryLoader(const OUString& _sMimeType,uno::Reference< uno::XComponentContext > const & _xContext)
-            :m_sMimeType(_sMimeType)
+            :Thread("FactoryLoader")
+            ,m_sMimeType(_sMimeType)
             ,m_xContext(_xContext)
         {}
 
-    protected:
+    private:
         virtual ~FactoryLoader(){}
 
-        /// Working method which should be overridden.
-        virtual void SAL_CALL run() SAL_OVERRIDE;
-        virtual void SAL_CALL onTerminated() SAL_OVERRIDE;
-    };
+        virtual void execute() SAL_OVERRIDE;
+     };
 
-    void SAL_CALL FactoryLoader::run()
+    void SAL_CALL FactoryLoader::execute()
     {
         try
         {
@@ -527,10 +531,6 @@ namespace
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-    }
-    void SAL_CALL FactoryLoader::onTerminated()
-    {
-        delete this;
     }
 }
 
@@ -573,6 +573,7 @@ struct OReportDefinitionImpl
                                                             m_pObjectContainer;
     ::boost::shared_ptr<rptui::OReportModel>                m_pReportModel;
     ::rtl::Reference< ::dbaui::UndoManager >                m_pUndoManager;
+    std::vector< rtl::Reference<salhelper::Thread> >        m_aFactoryLoaders;
     OUString                                         m_sCaption;
     OUString                                         m_sCommand;
     OUString                                         m_sFilter;
@@ -725,10 +726,8 @@ void OReportDefinition::init()
             const OUString* pEnd  = pIter + aMimeTypes.getLength();
             for ( ; pIter != pEnd; ++pIter )
             {
-                FactoryLoader* pCreatorThread = new FactoryLoader(*pIter,m_aProps->m_xContext);
-                pCreatorThread->createSuspended();
-                pCreatorThread->setPriority(osl_Thread_PriorityBelowNormal);
-                pCreatorThread->resume();
+                m_pImpl->m_aFactoryLoaders.push_back(
+                    new FactoryLoader(*pIter,m_aProps->m_xContext));
             }
         }
 
@@ -782,6 +781,7 @@ void SAL_CALL OReportDefinition::disposing()
     m_pImpl->m_aStorageChangeListeners.disposeAndClear( aDisposeEvent );
 
     // SYNCHRONIZED --->
+    {
     SolarMutexGuard aSolarGuard;
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
 
@@ -818,7 +818,15 @@ void SAL_CALL OReportDefinition::disposing()
     m_pImpl->m_aArgs.realloc(0);
     m_pImpl->m_xTitleHelper.clear();
     m_pImpl->m_xNumberedControllers.clear();
+    }
     // <--- SYNCHRONIZED
+
+    for (std::vector< rtl::Reference<salhelper::Thread> >::iterator i(
+             m_pImpl->m_aFactoryLoaders.begin());
+         i != m_pImpl->m_aFactoryLoaders.end(); ++i)
+    {
+        (*i)->join();
+    }
 }
 
 
