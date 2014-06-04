@@ -413,11 +413,12 @@ void ONthOperator::Exec(OCodeStack& rCodeStack)
         OSL_ENSURE(!rCodeStack.empty(),"Stack must be none empty!");
         pOperand    = rCodeStack.top();
         rCodeStack.pop();
-        if ( !IS_TYPE(OStopOperand,pOperand) )
+        assert(pOperand);
+        if (pOperand && !IS_TYPE(OStopOperand,pOperand))
             aValues.push_back( pOperand->getValue() );
         aOperands.push_back( pOperand );
     }
-    while ( !IS_TYPE(OStopOperand,pOperand) );
+    while (pOperand && !IS_TYPE(OStopOperand,pOperand));
 
     rCodeStack.push(new OOperandResult(operate(aValues)));
 
