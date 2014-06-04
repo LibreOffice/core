@@ -57,6 +57,7 @@
 #include <misc.hrc>
 
 #include <IDocumentFieldsAccess.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -75,7 +76,7 @@ void SwGlossaryHdl::GlossaryDlg()
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "Dialogdiet fail!");
-    AbstractGlossaryDlg* pDlg = pFact->CreateGlossaryDlg(pViewFrame, this, pWrtShell);
+    boost::scoped_ptr<AbstractGlossaryDlg> pDlg(pFact->CreateGlossaryDlg(pViewFrame, this, pWrtShell));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     OUString sName;
     OUString sShortName;
@@ -86,7 +87,7 @@ void SwGlossaryHdl::GlossaryDlg()
         sShortName = pDlg->GetCurrShortName();
     }
 
-    delete pDlg;
+    pDlg.reset();
     DELETEZ(pCurGrp);
     if(HasGlossaryList())
     {
@@ -448,7 +449,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg(0, aShortName);
+                boost::scoped_ptr<AbstractSwSelGlossaryDlg> pDlg(pFact->CreateSwSelGlossaryDlg(0, aShortName));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 for(sal_uInt16 i = 0; i < aFoundArr.size(); ++i)
                 {
@@ -459,7 +460,7 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                 const sal_Int32 nRet = RET_OK == pDlg->Execute()?
                                         pDlg->GetSelectedIdx():
                                         LISTBOX_ENTRY_NOTFOUND;
-                delete pDlg;
+                pDlg.reset();
                 if(LISTBOX_ENTRY_NOTFOUND != nRet)
                 {
                     TextBlockInfo_Impl* pData = &aFoundArr[nRet];
@@ -723,7 +724,7 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
     if( !rName.isEmpty() )
     {
         const SfxFilter* pFilter = 0;
-        SfxMedium* pMed = new SfxMedium( rName, STREAM_READ, 0, 0 );
+        boost::scoped_ptr<SfxMedium> pMed(new SfxMedium( rName, STREAM_READ, 0, 0 ));
         SfxFilterMatcher aMatcher( OUString("swriter") );
         pMed->UseInteractionHandler( true );
         if( !aMatcher.GuessFilter( *pMed, &pFilter, sal_False ) )
@@ -743,7 +744,6 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
                 }
             }
         }
-        DELETEZ(pMed);
     }
     return bRet;
 }

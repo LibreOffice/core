@@ -40,6 +40,7 @@
 
 #include <globals.hrc>
 #include <misc.hrc>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -143,7 +144,7 @@ SfxTabPage* SwFootNotePage::Create(Window *pParent, const SfxItemSet &rSet)
 void SwFootNotePage::Reset(const SfxItemSet &rSet)
 {
     // if no example exists, otherwise Init here in Activate
-    SwPageFtnInfo* pDefFtnInfo = 0;
+    boost::scoped_ptr<SwPageFtnInfo> pDefFtnInfo;
     const SwPageFtnInfo* pFtnInfo;
     const SfxPoolItem* pItem = SfxTabPage::GetItem(rSet, FN_PARAM_FTN_INFO);
     if( pItem )
@@ -154,8 +155,8 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     {
         // when "standard" is being activated the footnote item is deleted,
         // that's why a footnote structure has to be created here
-        pDefFtnInfo = new SwPageFtnInfo();
-        pFtnInfo = pDefFtnInfo;
+        pDefFtnInfo.reset(new SwPageFtnInfo());
+        pFtnInfo = pDefFtnInfo.get();
     }
         // footnote area's height
     SwTwips lHeight = pFtnInfo->GetHeight();
@@ -250,7 +251,6 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     m_pLineDistEdit->SetValue(
         m_pLineDistEdit->Normalize(pFtnInfo->GetBottomDist()), FUNIT_TWIP);
     ActivatePage( rSet );
-    delete pDefFtnInfo;
 }
 
 // stuff attributes into the set, when OK

@@ -486,8 +486,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if ( aFileName.isEmpty() )
                 {
                     SvtPathOptions aPathOpt;
-                    SfxNewFileDialog* pNewFileDlg =
-                        new SfxNewFileDialog(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE);
+                    boost::scoped_ptr<SfxNewFileDialog> pNewFileDlg(
+                        new SfxNewFileDialog(&GetView()->GetViewFrame()->GetWindow(), SFXWB_LOAD_TEMPLATE));
                     pNewFileDlg->SetTemplateFlags(nFlags);
 
                     nRet = pNewFileDlg->Execute();
@@ -551,7 +551,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     nFlags = pNewFileDlg->GetTemplateFlags();
                     rReq.AppendItem( SfxStringItem( SID_TEMPLATE_NAME, aFileName ) );
                     rReq.AppendItem( SfxInt32Item( SID_TEMPLATE_LOAD, (long) nFlags ) );
-                    delete pNewFileDlg;
                 }
 
                 if( !aFileName.isEmpty() )
@@ -1062,17 +1061,15 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 //search for the view that created the call
                                 if(pViewShell->GetObjectShell() == this && pViewShell->GetDispatcher())
                                 {
-                                    SfxFrameItem* pFrameItem = new SfxFrameItem( SID_DOCFRAME,
-                                                        pViewShell->GetViewFrame() );
+                                    boost::scoped_ptr<SfxFrameItem> pFrameItem(new SfxFrameItem( SID_DOCFRAME,
+                                                        pViewShell->GetViewFrame() ));
                                     SfxDispatcher* pDispatch = pViewShell->GetDispatcher();
                                     pDispatch->Execute(
                                             SID_OPENDOC,
                                             SFX_CALLMODE_ASYNCHRON,
                                             &aName,
                                             &aReferer,
-                                            pFrameItem, 0L );
-
-                                    delete pFrameItem;
+                                            pFrameItem.get(), 0L );
                                     break;
                                 }
                                 pViewShell = SfxViewShell::GetNext(*pViewShell);
