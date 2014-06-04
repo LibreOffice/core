@@ -157,9 +157,7 @@ void FontSizeMenu::Highlight()
     mnCurHeight = nTempHeight;
 }
 
-// -----------------------------------------------------------------------
-
-void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
+void FontSizeMenu::Fill( const vcl::FontInfo& rInfo, const FontList* pList )
 {
     Clear();
 

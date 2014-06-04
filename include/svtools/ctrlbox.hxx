@@ -35,7 +35,7 @@ class ImpLineListData;
 
 typedef ::std::vector< ImplColorListData*    > ImpColorList;
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
-typedef ::std::vector< FontInfo              > ImplFontList;
+typedef ::std::vector< vcl::FontInfo         > ImplFontList;
 
 // FIXME: STYLE_* duplicate values from editeng::SvxBorderStyle,
 // which in turn duplicates values from com::sun::star::table::BorderLineStyle:
@@ -488,7 +488,7 @@ inline void FontStyleBox::SetText( const OUString& rText )
 
 class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
-    FontInfo        aFontInfo;
+    vcl::FontInfo       aFontInfo;
     const FontList* pFontList;
     sal_uInt16          nRelMin;
     sal_uInt16          nRelMax;
@@ -514,7 +514,7 @@ public:
     void            Reformat();
     void            Modify();
 
-    void            Fill( const FontInfo* pInfo, const FontList* pList );
+    void            Fill( const vcl::FontInfo* pInfo, const FontList* pList );
 
     void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
                                         sal_uInt16 nStep = 5 );

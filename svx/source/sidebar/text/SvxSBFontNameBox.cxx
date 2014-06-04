@@ -156,7 +156,7 @@ void SvxSBFontNameBox::Select()
     if ( !IsTravelSelect() )
     {
         FillList();
-        FontInfo aInfo( pFontList->Get( GetText(),WEIGHT_NORMAL, ITALIC_NORMAL ) );//meWeight, meItalic
+        vcl::FontInfo aInfo( pFontList->Get( GetText(),WEIGHT_NORMAL, ITALIC_NORMAL ) );//meWeight, meItalic
 
         SvxFontItem aFontItem( aInfo.GetFamily(), aInfo.GetName(), aInfo.GetStyleName(),
             aInfo.GetPitch(), aInfo.GetCharSet(), SID_ATTR_CHAR_FONT );
