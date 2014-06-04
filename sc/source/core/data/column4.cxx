@@ -350,8 +350,7 @@ void ScColumn::CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc
         if (nLen == 1)
         {
             // Single, ungrouped formula cell.
-            ScFormulaCell* pCell =
-                new ScFormulaCell(rSrc, *pDocument, aPos, pDocument->GetGrammar());
+            ScFormulaCell* pCell = new ScFormulaCell(rSrc, *pDocument, aPos);
             pCell->StartListeningTo(aCxt);
             pCell->SetDirty();
             aFormulas.push_back(pCell);
