@@ -216,8 +216,7 @@ namespace osl_Condition
         Result wait(const TimeValue *pTimeout = 0)
     */
     TEST(Sal_Test_Condition, wait_001) {
-        TimeValue tv1;
-        tv1.Seconds = 1;
+        TimeValue tv1 = {1,0};
 
         ::osl::Condition cond1;
         ::osl::Condition cond2;
@@ -232,14 +231,13 @@ namespace osl_Condition
         fprintf(stderr,"%d %d %d\n",r1,r2,r3);
 
         // #test comment#: test three types of wait.
-        ASSERT_TRUE( (cond1.wait(&tv1) == ::osl::Condition::result_ok) &&
-                     (cond2.wait() == ::osl::Condition::result_ok) &&
-                     (cond3.wait(&tv1) == ::osl::Condition::result_timeout) );
+        ASSERT_TRUE( cond1.wait(&tv1) == ::osl::Condition::result_ok );
+        ASSERT_TRUE( cond2.wait() == ::osl::Condition::result_ok );
+        ASSERT_TRUE( cond3.wait(&tv1) == ::osl::Condition::result_timeout );
     }
 
     TEST(Sal_Test_Condition, wait_002) {
-        TimeValue tv1;
-        tv1.Seconds = 1;
+        TimeValue tv1 = {1,0};
 
         ::osl::Condition aCond;
         ::osl::Condition::Result wRes, wRes1;
@@ -253,9 +251,10 @@ namespace osl_Condition
         sal_Bool bRes1 = aCond.check( );
 
         // #test comment#: wait a condition after set/reset.
-        ASSERT_TRUE( !bRes && bRes1 &&
-                     ( ::osl::Condition::result_timeout == wRes ) &&
-                     ( ::osl::Condition::result_ok == wRes1 ) );
+        ASSERT_TRUE( !bRes );
+        ASSERT_TRUE( bRes1 );
+        ASSERT_TRUE( ::osl::Condition::result_timeout == wRes );
+        ASSERT_TRUE( ::osl::Condition::result_ok == wRes1 );
     }
 
 
@@ -288,7 +287,8 @@ namespace osl_Condition
         sal_Bool bRes1 = aCond.check( );
 
         // #test comment#: use threads to set/reset Condition and check it in main routine.
-        ASSERT_TRUE( bRes && !bRes1 );
+        ASSERT_TRUE( bRes );
+        ASSERT_TRUE( !bRes1 );
     }
 
 } // namespace osl_Condition
