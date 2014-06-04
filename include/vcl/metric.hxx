@@ -28,10 +28,6 @@ class ImplFontCharMap;
 
 typedef sal_uInt32 sal_UCS4;
 
-
-// - FontInfo -
-
-
 class VCL_DLLPUBLIC FontInfo : public Font
 {
     friend class OutputDevice;
@@ -51,10 +47,6 @@ public:
     bool                operator!=( const FontInfo& rInfo ) const
                             { return !operator==( rInfo ); }
 };
-
-
-// - FontMetric -
-
 
 class VCL_DLLPUBLIC FontMetric : public FontInfo
 {
@@ -93,8 +85,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream;
 }
 
-// - FontCharMap -
-
 class VCL_DLLPUBLIC FontCharMap
 {
 private:
@@ -126,10 +116,6 @@ private:
                         FontCharMap( const FontCharMap& );
     void                operator=( const FontCharMap& );
 };
-
-
-// - TextRectInfo -
-
 
 class VCL_DLLPUBLIC TextRectInfo
 {
