@@ -343,7 +343,7 @@ namespace pcr
                 const SvxWeightItem& rWeightItem =
                     static_cast<const SvxWeightItem&>(_rSet.Get(CFID_WEIGHT));
 
-                float nWeight = VCLUnoHelper::ConvertFontWeight( rWeightItem.GetWeight());
+                float nWeight = VCLUnoHelper::ConvertFontWeight(rWeightItem.GetWeight());
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_WEIGHT,makeAny(nWeight));
             }
 
@@ -356,7 +356,7 @@ namespace pcr
                 const SvxPostureItem& rPostureItem =
                     static_cast<const SvxPostureItem&>(_rSet.Get(CFID_POSTURE));
 
-                ::com::sun::star::awt::FontSlant eSlant = (::com::sun::star::awt::FontSlant)rPostureItem.GetPosture();
+                ::com::sun::star::awt::FontSlant eSlant = VCLUnoHelper::ConvertFontSlant(rPostureItem.GetPosture());
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_SLANT, makeAny((sal_Int16)eSlant));
             }
 
