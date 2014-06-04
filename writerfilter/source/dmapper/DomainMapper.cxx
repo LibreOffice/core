@@ -2679,6 +2679,7 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
                     return;
                 case 0x07:
                     m_pImpl->getTableManager().text(data_, len);
+                    return;
                 case 0x0d:
                     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH));
                     return;
