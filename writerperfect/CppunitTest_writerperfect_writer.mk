@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_static_libraries,writerperfect_writer,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,writerperfect_writer))
+$(eval $(call gb_CppunitTest_use_vcl,writerperfect_writer))
 
 $(eval $(call gb_CppunitTest_use_rdb,writerperfect_writer,services))
 
