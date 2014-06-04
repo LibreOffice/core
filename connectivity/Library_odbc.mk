@@ -25,6 +25,8 @@ $(eval $(call gb_Library_add_defs,odbc,\
 	-DOOO_DLLIMPLEMENTATION_ODBCBASE \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,odbc,$(SRCDIR)/connectivity/inc/pch/precompiled_odbc))
+
 $(eval $(call gb_Library_use_externals,odbc,\
 	boost_headers \
 	odbc_headers \

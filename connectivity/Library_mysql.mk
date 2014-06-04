@@ -21,6 +21,8 @@ $(eval $(call gb_Library_set_include,mysql,\
 	-I$(SRCDIR)/connectivity/source/inc \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,mysql,$(SRCDIR)/connectivity/inc/pch/precompiled_mysql))
+
 $(eval $(call gb_Library_use_libraries,mysql,\
 	cppu \
 	cppuhelper \

@@ -22,6 +22,8 @@ $(eval $(call gb_Library_set_include,firebird_sdbc,\
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,firebird_sdbc,$(SRCDIR)/connectivity/inc/pch/precompiled_firebird_sdbc))
+
 $(eval $(call gb_Library_use_libraries,firebird_sdbc, \
     comphelper \
     cppu \

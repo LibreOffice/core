@@ -132,6 +132,8 @@ function filter_ignore()
 # - comphelper/servicedecl.hxx ignore for now
 # - sores.hxx provides BMP_PLUGIN, which is redefined
 # - some sources play ugly #define tricks with editeng/eeitemid.hxx
+# - objbase.h and oledb.h break ado
+# - xmlreader.h breaks cppuhelper
 # - jerror.h and jpeglib.h are not self-contained
 # - service1.hxx/service2.hxx are inside comments in frameworks/
     grep -E -e '\.h[">]$' -e '\.hpp[">]$' -e '\.hdl[">]$' -e '\.hxx[">]$' -e '^[^\.]*>$' | \
@@ -143,6 +145,9 @@ function filter_ignore()
     grep -v -F -e '#include <editeng/eeitemid.hxx>' | \
     grep -v -F -e '#include <service1.hxx>' | \
     grep -v -F -e '#include <service2.hxx>' | \
+    grep -v -F -e '#include <objbase.h>' | \
+    grep -v -F -e '#include <oledb.h>' | \
+    grep -v -F -e '#include <xmlreader/xmlreader.hxx>' | \
     grep -v -F -e '#include "jerror.h"' | \
     grep -v -F -e '#include "jpeglib.h"'
 )

@@ -14,7 +14,7 @@
  also fixes all possible problems, so it's usually better to use it).
 */
 
-#include "sal/log.hxx"
+#include <sal/log.hxx>
 #include <algorithm>
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>

@@ -15,6 +15,8 @@ $(eval $(call gb_Library_add_defs,postgresql-sdbc-impl,\
 	-DPQ_SDBC_MICRO=2 \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,postgresql-sdbc-impl,$(SRCDIR)/connectivity/inc/pch/precompiled_postgresql-sdbc-impl))
+
 $(eval $(call gb_Library_use_sdk_api,postgresql-sdbc-impl))
 
 $(eval $(call gb_Library_use_libraries,postgresql-sdbc-impl,\
