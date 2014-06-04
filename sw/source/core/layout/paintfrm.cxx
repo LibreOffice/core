@@ -308,8 +308,7 @@ void SwCalcPixStatics( OutputDevice *pOut )
 //Zum Sichern der statics, damit das Paint (quasi) reentrant wird.
 class SwSavePaintStatics
 {
-    sal_Bool            bSFlyMetafile,
-                        bSPageOnly;
+    sal_Bool            bSFlyMetafile; // not used: bSPageOnly;
     ViewShell          *pSGlobalShell;
     OutputDevice       *pSFlyMetafileOut;
     SwFlyFrm           *pSRetoucheFly,
@@ -3011,7 +3010,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 /// OD 29.08.2002 #102450#
                 /// determine background color of page for <PaintLayer> method
                 /// calls, paint <hell> or <heaven>
-                const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
+                const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
 
                 pPage->PaintBaBo( aPaintRect, pPage, sal_True );
 
@@ -6489,7 +6488,7 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
 
     @return Color
 */
-const Color& SwPageFrm::GetDrawBackgrdColor() const
+const Color SwPageFrm::GetDrawBackgrdColor() const
 {
     const SvxBrushItem* pBrushItem;
     const Color* pDummyColor;
@@ -6605,7 +6604,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
             SwRect aRetouchePart( rRetouche );
             if ( aRetouchePart.HasArea() )
             {
-                const Color aPageBackgrdColor = pPage->GetDrawBackgrdColor();
+                const Color aPageBackgrdColor(pPage->GetDrawBackgrdColor());
                 const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
                 // --> OD #i76669#
                 SwViewObjectContactRedirector aSwRedirector( *pSh );
@@ -6881,7 +6880,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 
         // OD 09.12.2002 #103045# - determine page, fly frame is on
         const SwPageFrm* pFlyPage = pFly->FindPageFrm();
-        const Color aPageBackgrdColor = pFlyPage->GetDrawBackgrdColor();
+        const Color aPageBackgrdColor(pFlyPage->GetDrawBackgrdColor());
         const IDocumentDrawModelAccess* pIDDMA = pSh->getIDocumentDrawModelAccess();
         // --> OD #i76669#
         SwViewObjectContactRedirector aSwRedirector( *pSh );

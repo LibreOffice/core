@@ -317,7 +317,7 @@ public:
 
         @return reference to an instance of class Color
     */
-    const Color& GetDrawBackgrdColor() const;
+    const Color GetDrawBackgrdColor() const;
 
     /** paint margin area of a page
 
