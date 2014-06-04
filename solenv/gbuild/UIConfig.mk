@@ -184,9 +184,7 @@ $(call gb_UIConfig_get_target,%) : $(call gb_UIConfig_get_imagelist_target,%)
 	)
 
 $(call gb_UIConfig_get_imagelist_target,%) :
-	$(call gb_Helper_abbreviate_dirs,\
-		sort -u $(UI_IMAGELISTS) /dev/null > $@ \
-	)
+	$(call gb_UIConfig__command)
 
 .PHONY : $(call gb_UIConfig_get_clean_target,%)
 $(call gb_UIConfig_get_clean_target,%) :

@@ -537,6 +537,19 @@ else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
 
+# UIConfig class
+
+# use responsefile because cui has too many files for command line
+define gb_UIConfig__command
+$(call gb_Helper_abbreviate_dirs,\
+	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),100,$(if $(UI_IMAGELISTS),$(strip $(UI_IMAGELISTS)),/dev/null)) \
+	&& tr " " "\000" < $$RESPONSEFILE | tr -d "\r\n" > $$RESPONSEFILE.0 \
+	&& sort -u --files0-from=$$RESPONSEFILE.0 > $@ \
+	&& rm $$RESPONSEFILE $$RESPONSEFILE.0 \
+)
+
+endef
+
 # UIMenubarTarget class
 
 define gb_UIMenubarTarget__command
