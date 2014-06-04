@@ -726,8 +726,9 @@ void OReportDefinition::init()
             const OUString* pEnd  = pIter + aMimeTypes.getLength();
             for ( ; pIter != pEnd; ++pIter )
             {
-                m_pImpl->m_aFactoryLoaders.push_back(
-                    new FactoryLoader(*pIter,m_aProps->m_xContext));
+                rtl::Reference<salhelper::Thread> xCreatorThread = new FactoryLoader(*pIter,m_aProps->m_xContext);
+                m_pImpl->m_aFactoryLoaders.push_back(xCreatorThread);
+                xCreatorThread->launch();
             }
         }
 
