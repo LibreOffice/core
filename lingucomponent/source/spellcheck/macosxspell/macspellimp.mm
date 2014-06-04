@@ -557,7 +557,7 @@ void * SAL_CALL MacSpellChecker_getFactory( const sal_Char * pImplName,
             XMultiServiceFactory * pServiceManager, void *  )
 {
     void * pRet = 0;
-    if ( !MacSpellChecker::getImplementationName_Static().compareToAscii( pImplName ) )
+    if ( MacSpellChecker::getImplementationName_Static().equalsAscii( pImplName ) )
     {
         Reference< XSingleServiceFactory > xFactory =
             cppu::createOneInstanceFactory(

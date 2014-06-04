@@ -708,8 +708,7 @@ XResultSet_impl::getMetaData(
 {
     for ( sal_Int32 n = 0; n < m_sProperty.getLength(); ++n )
     {
-        if ( m_sProperty.getConstArray()[ n ].Name.compareToAscii( "Title" )
-             == 0 )
+        if ( m_sProperty.getConstArray()[ n ].Name.equalsAscii( "Title" ) )
         {
             // @@@ #82177# - Determine correct value!
             bool bCaseSensitiveChildren = false;

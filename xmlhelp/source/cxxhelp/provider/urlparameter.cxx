@@ -158,7 +158,7 @@ OUString URLParameter::get_title()
 {
     if( isFile() )
         return get_the_title();
-    else if( m_aModule.compareToAscii("") != 0 )
+    else if( !m_aModule.equalsAscii("") )
     {
         StaticModuleInformation* inf =
             m_pDatabases->getStaticInformationForModule( get_module(),

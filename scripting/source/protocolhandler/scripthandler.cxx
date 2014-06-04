@@ -203,7 +203,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                    // Sometimes we get a propertyval with name = "Referer"
                    // this is not an argument to be passed to script, so
                    // ignore.
-                   if ( lArgs[ index ].Name.compareToAscii("Referer") != 0  ||
+                   if ( !lArgs[ index ].Name.equalsAscii("Referer")  ||
                         lArgs[ index ].Name.isEmpty() )
                    {
                        inArgs.realloc( ++argCount );

@@ -1153,7 +1153,7 @@ OUString SAL_CALL AnalysisAddIn::getComplex( double fR, double fI, const uno::An
             {
             const OUString*   pSuff = ( const OUString* ) rSuff.getValue();
             bi = pSuff->equalsAscii( "i" ) || pSuff->isEmpty();
-            if( !bi && pSuff->compareToAscii( "j" ) != 0 )
+            if( !bi && !pSuff->equalsAscii( "j" ) )
                 throw lang::IllegalArgumentException();
             }
             break;
