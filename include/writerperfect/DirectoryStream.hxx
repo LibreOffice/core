@@ -31,6 +31,9 @@ public:
     explicit DirectoryStream(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent);
     virtual ~DirectoryStream();
 
+    static DirectoryStream *createForParent(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent);
+    static bool isDirectory(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent);
+
     virtual bool isStructured() SAL_OVERRIDE;
     virtual unsigned subStreamCount() SAL_OVERRIDE;
     virtual const char *subStreamName(unsigned id) SAL_OVERRIDE;

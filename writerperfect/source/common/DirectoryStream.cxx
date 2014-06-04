@@ -19,6 +19,7 @@
  * For further information visit http://libwpd.sourceforge.net
  */
 
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -38,6 +39,7 @@
 #include <writerperfect/DirectoryStream.hxx>
 #include <writerperfect/WPXSvInputStream.hxx>
 
+namespace container = com::sun::star::container;
 namespace io = com::sun::star::io;
 namespace sdbc = com::sun::star::sdbc;
 namespace ucb = com::sun::star::ucb;
@@ -110,6 +112,45 @@ DirectoryStream::DirectoryStream(const com::sun::star::uno::Reference<com::sun::
 DirectoryStream::~DirectoryStream()
 {
     delete m_pImpl;
+}
+
+DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent) try
+{
+    if (!xContent.is())
+        return 0;
+
+    DirectoryStream *pDir(0);
+
+    const uno::Reference<container::XChild> xChild(xContent, uno::UNO_QUERY);
+    if (xChild.is())
+    {
+        const uno::Reference<ucb::XContent> xDirContent(xChild->getParent(), uno::UNO_QUERY);
+        if (xDirContent.is())
+        {
+            pDir = new writerperfect::DirectoryStream(xDirContent);
+            if (!pDir->isStructured())
+                pDir = 0;
+        }
+    }
+
+    return pDir;
+}
+catch (...)
+{
+return 0;
+}
+
+bool DirectoryStream::isDirectory(const com::sun::star::uno::Reference<com::sun::star::ucb::XContent> &xContent) try
+{
+    if (!xContent.is())
+        return false;
+
+    ucbhelper::Content aContent(xContent, uno::Reference<ucb::XCommandEnvironment>(), comphelper::getProcessComponentContext());
+    return aContent.isFolder();
+}
+catch (...)
+{
+    return false;
 }
 
 bool DirectoryStream::isStructured()
