@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MTABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MTABLE_HXX
 
-#include "connectivity/TTableHelper.hxx"
+#include <connectivity/TTableHelper.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include "MConnection.hxx"
 

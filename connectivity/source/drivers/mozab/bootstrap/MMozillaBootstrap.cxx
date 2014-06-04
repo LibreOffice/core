@@ -24,13 +24,13 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::mozilla;
 using namespace connectivity::mozab;
-#include <MNSFolders.hxx>
+#include "MNSFolders.hxx"
 #include "MNSProfileDiscover.hxx"
 #ifndef MINIMAL_PROFILEDISCOVER
 #  include "MNSProfileManager.hxx"
 #  include "MNSRunnable.hxx"
 #endif
-#include <MNSInit.hxx>
+#include "MNSInit.hxx"
 
 static MozillaBootstrap *pMozillaBootstrap=NULL;
 static Reference<XMozillaBootstrap> xMozillaBootstrap;

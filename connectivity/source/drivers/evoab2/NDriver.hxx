@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase2.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <osl/module.h>
 
 #define EVOAB_EVOLUTION_SCHEMA  "evolution"

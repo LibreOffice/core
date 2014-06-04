@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <functional>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

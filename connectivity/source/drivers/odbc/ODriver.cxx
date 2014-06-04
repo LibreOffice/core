@@ -21,7 +21,7 @@
 #include "odbc/OConnection.hxx"
 #include "odbc/OFunctions.hxx"
 #include "odbc/OTools.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"

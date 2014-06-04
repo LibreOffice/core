@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/TColumnsHelper.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/TColumnsHelper.hxx>
+#include <connectivity/sdbcx/VColumn.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -27,9 +27,9 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <comphelper/types.hxx>
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbtools.hxx>
 #include "TConnection.hxx"
-#include "connectivity/TTableHelper.hxx"
+#include <connectivity/TTableHelper.hxx>
 #include <comphelper/property.hxx>
 
 using namespace ::comphelper;

@@ -18,8 +18,8 @@
  */
 
 
-#include "connectivity/warningscontainer.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/warningscontainer.hxx>
+#include <connectivity/dbexception.hxx>
 
 #include <osl/diagnose.h>
 

@@ -20,8 +20,8 @@
 #include <config_features.h>
 
 #include <stdio.h>
-#include "connectivity/CommonTools.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/dbtools.hxx>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>

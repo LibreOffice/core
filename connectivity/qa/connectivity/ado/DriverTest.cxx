@@ -21,7 +21,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/typeprovider.hxx>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
 #include "resource/ado_res.hrc"
 

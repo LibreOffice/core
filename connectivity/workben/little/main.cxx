@@ -18,7 +18,7 @@
  */
 
 #include <connectivity/sqlparse.hxx>
-#include "connectivity/sqliterator.hxx"
+#include <connectivity/sqliterator.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -31,7 +31,7 @@
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
-#include "connectivity/sqlnode.hxx"
+#include <connectivity/sqlnode.hxx>
 
 using namespace connectivity;
 using namespace com::sun::star::sdbc;

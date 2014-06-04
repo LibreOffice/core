@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/sqliterator.hxx"
-#include "connectivity/sdbcx/VTable.hxx"
+#include <connectivity/sqliterator.hxx>
+#include <connectivity/sdbcx/VTable.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>
@@ -30,8 +30,8 @@
 #ifdef SQL_TEST_PARSETREEITERATOR
 #include <iostream>
 #endif
-#include "connectivity/PColumn.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/PColumn.hxx>
+#include <connectivity/dbtools.hxx>
 #include <tools/diagnose_ex.h>
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>

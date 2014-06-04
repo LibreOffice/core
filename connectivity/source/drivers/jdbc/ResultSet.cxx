@@ -33,14 +33,14 @@
 #include "java/io/Reader.hxx"
 #include "java/tools.hxx"
 #include <comphelper/property.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
-#include "connectivity/dbtools.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 #include "java/LocalRef.hxx"

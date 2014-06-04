@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/sdbcx/VView.hxx"
+#include <connectivity/sdbcx/VView.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbtools.hxx>
 #include "TConnection.hxx"
 
 

@@ -23,7 +23,7 @@
 #include <map>
 
 // Mozilla includes
-#include <MNSInclude.hxx>
+#include "MNSInclude.hxx"
 
 // Star Includes
 #include <rtl/ustring.hxx>

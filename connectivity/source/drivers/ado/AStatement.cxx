@@ -28,7 +28,7 @@
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
 
 #undef max

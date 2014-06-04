@@ -18,7 +18,7 @@
  */
 
 
-#include "connectivity/sqlerror.hxx"
+#include <connectivity/sqlerror.hxx>
 
 #include <com/sun/star/sdbc/SQLException.hpp>
 

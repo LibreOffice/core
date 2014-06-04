@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTABLES_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HTABLES_HXX
 
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 namespace connectivity
 {

@@ -18,8 +18,8 @@
  */
 
 
-#include "connectivity/PColumn.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/PColumn.hxx>
+#include <connectivity/dbtools.hxx>
 #include "TConnection.hxx"
 
 #include <comphelper/types.hxx>

@@ -18,7 +18,7 @@
  */
 
 #include "dbase/dindexnode.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <osl/thread.h>
 #include "dbase/DIndex.hxx"
 #include <tools/debug.hxx>

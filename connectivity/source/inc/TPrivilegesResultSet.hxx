@@ -21,7 +21,7 @@
 
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

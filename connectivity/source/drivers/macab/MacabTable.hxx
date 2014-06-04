@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABTABLE_HXX
 
 #include "MacabConnection.hxx"
-#include "connectivity/sdbcx/VTable.hxx"
+#include <connectivity/sdbcx/VTable.hxx>
 
 namespace connectivity
 {

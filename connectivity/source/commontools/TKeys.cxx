@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/TKeys.hxx"
-#include "connectivity/TKey.hxx"
+#include <connectivity/TKeys.hxx>
+#include <connectivity/TKey.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include <com/sun/star/sdbc/KeyRule.hpp>
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/property.hxx>
 #include "TConnection.hxx"

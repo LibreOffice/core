@@ -23,7 +23,7 @@
 // every dll has his own set of property names
 #include <rtl/ustring.hxx>
 #include <map>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace dbtools
 {

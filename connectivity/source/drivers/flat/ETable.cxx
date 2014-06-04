@@ -41,7 +41,7 @@
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <unotools/configmgr.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include "connectivity/dbconversion.hxx"
+#include <connectivity/dbconversion.hxx>
 #include "file/quotedstring.hxx"
 #include <unotools/syslocale.hxx>
 

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXES_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DINDEXES_HXX
 
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 #include "dbase/DTable.hxx"
 
 namespace connectivity

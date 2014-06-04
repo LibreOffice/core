@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <MNameMapper.hxx>
+#include "MNameMapper.hxx"
 
 #if OSL_DEBUG_LEVEL > 0
 # define OUtoCStr( x ) ( OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())

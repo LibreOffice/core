@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODBCBASEDLLAPI_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_ODBCBASEDLLAPI_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined OOO_DLLIMPLEMENTATION_ODBCBASE
 #define OOO_DLLPUBLIC_ODBCBASE SAL_DLLPUBLIC_EXPORT

@@ -19,7 +19,7 @@
 
 #include "calc/CColumns.hxx"
 #include "calc/CTable.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 
 using namespace connectivity::calc;
 using namespace connectivity;

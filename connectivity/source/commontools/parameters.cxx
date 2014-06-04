@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/parameters.hxx"
+#include <connectivity/parameters.hxx>
 
 #include <com/sun/star/form/DatabaseParameterEvent.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
@@ -29,7 +29,7 @@
 #include <com/sun/star/sdb/ParametersRequest.hpp>
 
 #include <connectivity/dbtools.hxx>
-#include "connectivity/filtermanager.hxx"
+#include <connectivity/filtermanager.hxx>
 #include "TConnection.hxx"
 
 #include <tools/debug.hxx>
@@ -38,7 +38,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/ParameterCont.hxx"
+#include <connectivity/ParameterCont.hxx>
 #include <rtl/ustrbuf.hxx>
 
 

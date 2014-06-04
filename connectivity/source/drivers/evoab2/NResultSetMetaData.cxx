@@ -19,7 +19,7 @@
 
 #include "NResultSetMetaData.hxx"
 #include "NDatabaseMetaData.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "resource/evoab2_res.hrc"
 

@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NCOLUMNS_HXX
 
 #include "NTable.hxx"
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 
 namespace connectivity
 {

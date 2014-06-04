@@ -22,7 +22,7 @@
 #include "hsqldb/HDriver.hxx"
 #include "hsqldb/HConnection.hxx"
 #include <osl/diagnose.h>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>

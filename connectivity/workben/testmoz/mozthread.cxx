@@ -18,7 +18,7 @@
  */
 
 #include <connectivity/sqlparse.hxx>
-#include "connectivity/sqliterator.hxx"
+#include <connectivity/sqliterator.hxx>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -40,7 +40,7 @@
 #include <com/sun/star/sdb/XDatabaseEnvironment.hpp>
 #include <com/sun/star/uno/Any.hxx>
 
-#include "connectivity/sqlnode.hxx"
+#include <connectivity/sqlnode.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/process.h>

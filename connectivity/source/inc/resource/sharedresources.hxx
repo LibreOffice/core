@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <list>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 
 namespace connectivity

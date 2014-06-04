@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/TKey.hxx"
-#include "connectivity/TKeyColumns.hxx"
+#include <connectivity/TKey.hxx>
+#include <connectivity/TKeyColumns.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include "TConnection.hxx"
-#include "connectivity/TTableHelper.hxx"
+#include <connectivity/TTableHelper.hxx>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;

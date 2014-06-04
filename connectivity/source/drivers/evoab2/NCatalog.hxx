@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NCATALOG_HXX
 
-#include "connectivity/sdbcx/VCatalog.hxx"
+#include <connectivity/sdbcx/VCatalog.hxx>
 
 namespace connectivity
 {

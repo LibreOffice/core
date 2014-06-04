@@ -20,8 +20,8 @@
 
 #include "MNSProfileDiscover.hxx"
 
-#include <MNSFolders.hxx>
-#include <MNSINIParser.hxx>
+#include "MNSFolders.hxx"
+#include "MNSINIParser.hxx"
 
 namespace connectivity
 {

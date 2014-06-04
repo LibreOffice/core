@@ -33,8 +33,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/types.hxx>
-#include "connectivity/dbtools.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include "diagnose_ex.h"
 #include <boost/static_assert.hpp>
 

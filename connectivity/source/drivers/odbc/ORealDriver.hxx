@@ -20,10 +20,10 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_ODBC_OREALDRIVER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_ODBC_OREALDRIVER_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/uno/Reference.hxx"
+#include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Reference.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }

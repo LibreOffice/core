@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KCATALOG_HXX
 
-#include "connectivity/sdbcx/VCatalog.hxx"
+#include <connectivity/sdbcx/VCatalog.hxx>
 
 namespace connectivity
 {

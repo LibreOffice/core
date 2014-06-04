@@ -33,8 +33,8 @@
 #include <cppuhelper/compbase12.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "SStatement.hxx"
-#include "connectivity/CommonTools.hxx"
-#include "connectivity/FValue.hxx"
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/FValue.hxx>
 
 namespace connectivity
 {

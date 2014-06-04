@@ -36,9 +36,9 @@
 #include "post_include_mozilla.h"
 
 #include "bootstrap/MNSInit.hxx"
-#include <MNameMapper.hxx>
+#include "MNameMapper.hxx"
 #include "MNSMozabProxy.hxx"
-#include <MNSDeclares.hxx>
+#include "MNSDeclares.hxx"
 
 static ::osl::Mutex m_aMetaMutex;
 

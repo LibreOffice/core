@@ -20,9 +20,9 @@
 #include "NDriver.hxx"
 #include "NConnection.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
-#include "osl/security.hxx"
+#include <osl/security.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/ucb/XContentAccess.hpp>

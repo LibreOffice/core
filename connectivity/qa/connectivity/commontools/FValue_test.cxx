@@ -19,7 +19,7 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include "connectivity/FValue.hxx"
+#include <connectivity/FValue.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;

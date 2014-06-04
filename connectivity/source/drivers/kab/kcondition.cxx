@@ -20,7 +20,7 @@
 
 #include "kcondition.hxx"
 #include "kfields.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 
 using namespace ::connectivity::kab;
 using namespace ::com::sun::star::sdbc;

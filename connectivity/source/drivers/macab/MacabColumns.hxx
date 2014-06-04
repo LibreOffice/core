@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABCOLUMNS_HXX
 
 #include "MacabTable.hxx"
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 
 namespace connectivity
 {

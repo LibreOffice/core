@@ -21,7 +21,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include "ado/Awrapado.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 
 using namespace connectivity;
 using namespace connectivity::ado;

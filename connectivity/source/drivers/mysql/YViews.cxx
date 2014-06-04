@@ -27,10 +27,10 @@
 #include <com/sun/star/sdbcx/CheckOption.hpp>
 #include "mysql/YCatalog.hxx"
 #include <comphelper/extract.hxx>
-#include "connectivity/dbtools.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include "connectivity/sdbcx/VView.hxx"
+#include <connectivity/sdbcx/VView.hxx>
 #include <comphelper/types.hxx>
 #include "TConnection.hxx"
 

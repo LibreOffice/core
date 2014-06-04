@@ -30,7 +30,7 @@
 #include <cppuhelper/compbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 
 
 namespace connectivity

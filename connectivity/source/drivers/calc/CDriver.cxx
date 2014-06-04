@@ -20,10 +20,10 @@
 #include "calc/CDriver.hxx"
 #include "calc/CConnection.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include "resource/sharedresources.hxx"
 #include "resource/calc_res.hrc"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 using namespace connectivity::calc;
 using namespace connectivity::file;

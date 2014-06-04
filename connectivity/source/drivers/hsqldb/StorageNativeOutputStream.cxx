@@ -21,11 +21,11 @@
 #include <config.h>
 #endif
 
-#include "uno/mapping.hxx"
-#include "uno/environment.hxx"
-#include "cppuhelper/bootstrap.hxx"
-#include "cppuhelper/compbase1.hxx"
-#include "cppuhelper/component_context.hxx"
+#include <uno/mapping.hxx>
+#include <uno/environment.hxx>
+#include <cppuhelper/bootstrap.hxx>
+#include <cppuhelper/compbase1.hxx>
+#include <cppuhelper/component_context.hxx>
 #include "accesslog.hxx"
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <comphelper/processfactory.hxx>
@@ -38,8 +38,8 @@
 #include "hsqldb/HStorageAccess.hxx"
 #include "hsqldb/HStorageMap.hxx"
 
-#include "jvmaccess/virtualmachine.hxx"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
+#include <jvmaccess/virtualmachine.hxx>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include "diagnose_ex.h"
 
 using namespace ::com::sun::star::container;

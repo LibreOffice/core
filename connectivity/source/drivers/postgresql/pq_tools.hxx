@@ -46,7 +46,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.hxx>
 
-#include <pq_connection.hxx>
+#include "pq_connection.hxx"
 namespace pq_sdbc_driver
 {
 bool isWhitespace( sal_Unicode c );

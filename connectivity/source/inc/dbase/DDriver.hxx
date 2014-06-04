@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_DBASE_DDRIVER_HXX
 
 #include <cppuhelper/compbase2.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include "file/FDriver.hxx"
 
 namespace connectivity

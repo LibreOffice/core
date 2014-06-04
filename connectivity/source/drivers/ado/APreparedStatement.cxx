@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/sqlparse.hxx"
+#include <connectivity/sqlparse.hxx>
 #include "ado/APreparedStatement.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "ado/AResultSetMetaData.hxx"
@@ -27,8 +27,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
-#include "connectivity/dbexception.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 #include "resource/ado_res.hrc"
 
 #include <limits>

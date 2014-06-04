@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_TKEYVALUE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_TKEYVALUE_HXX
 
-#include "connectivity/FValue.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/FValue.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

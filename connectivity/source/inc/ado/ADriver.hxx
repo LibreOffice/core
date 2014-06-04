@@ -24,7 +24,7 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/compbase3.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 
 namespace connectivity
 {

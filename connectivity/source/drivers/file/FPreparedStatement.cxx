@@ -19,7 +19,7 @@
 
 
 #include <stdio.h>
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 #include <osl/diagnose.h>
 #include "file/FPreparedStatement.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -27,10 +27,10 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/dbconversion.hxx"
-#include "connectivity/dbexception.hxx"
-#include "connectivity/dbtools.hxx"
-#include "connectivity/PColumn.hxx"
+#include <connectivity/dbconversion.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/PColumn.hxx>
 #include "diagnose_ex.h"
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

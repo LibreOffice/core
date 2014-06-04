@@ -30,7 +30,7 @@
 #include "dbase/DCatalog.hxx"
 #include <comphelper/types.hxx>
 #include "resource/dbase_res.hrc"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;
 using namespace connectivity;

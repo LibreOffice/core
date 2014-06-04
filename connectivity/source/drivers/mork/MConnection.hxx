@@ -10,9 +10,9 @@
 #ifndef CONNECTIVITY_SCONNECTION_HXX
 #define CONNECTIVITY_SCONNECTION_HXX
 
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 
-#include "connectivity/OSubComponent.hxx"
+#include <connectivity/OSubComponent.hxx>
 #include "TConnection.hxx"
 #include "MColumnAlias.hxx"
 

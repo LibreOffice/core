@@ -24,7 +24,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/uno3.hxx>
-#include "connectivity/ConnectionWrapper.hxx"
+#include <connectivity/ConnectionWrapper.hxx>
 
 namespace connectivity
 {

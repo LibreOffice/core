@@ -18,9 +18,9 @@
  */
 
 
-#include "connectivity/formattedcolumnvalue.hxx"
-#include "connectivity/dbtools.hxx"
-#include "connectivity/dbconversion.hxx"
+#include <connectivity/formattedcolumnvalue.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbconversion.hxx>
 
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/Date.hpp>

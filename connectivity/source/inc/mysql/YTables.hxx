@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YTABLES_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YTABLES_HXX
 
-#include "connectivity/sdbcx/VCollection.hxx"
-#include "connectivity/SQLStatementHelper.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
+#include <connectivity/SQLStatementHelper.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 namespace connectivity
 {

@@ -28,8 +28,8 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include "hsqldb/HCatalog.hxx"
 #include <comphelper/extract.hxx>
-#include "connectivity/dbtools.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/types.hxx>
 #include "TConnection.hxx"

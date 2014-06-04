@@ -20,7 +20,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_AUTORETRIEVINGBASE_HXX
 
 #include <rtl/ustring.hxx>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

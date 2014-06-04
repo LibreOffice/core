@@ -33,11 +33,11 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
-#include "connectivity/FValue.hxx"
+#include <connectivity/FValue.hxx>
 #include "resource/common_res.hrc"
-#include "connectivity/sqlparse.hxx"
+#include <connectivity/sqlparse.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_same.hpp>

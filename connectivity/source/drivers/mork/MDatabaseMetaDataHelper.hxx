@@ -15,7 +15,7 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #include "MErrorResource.hxx"
 
-#include <MConnection.hxx>
+#include "MConnection.hxx"
 #include <com/sun/star/uno/Sequence.hxx>
 
 

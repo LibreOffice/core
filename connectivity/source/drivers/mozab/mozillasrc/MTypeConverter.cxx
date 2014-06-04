@@ -18,7 +18,7 @@
  */
 
 
-#include <MNSInclude.hxx>
+#include "MNSInclude.hxx"
 #include "MTypeConverter.hxx"
 #include <ucbhelper/content.hxx>
 

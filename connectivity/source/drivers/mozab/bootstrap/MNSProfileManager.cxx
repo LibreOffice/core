@@ -24,8 +24,8 @@
 #ifndef MAXPATHLEN
 #define MAXPATHLEN 1024
 #endif
-#include <MNSFolders.hxx>
-#include <MNSINIParser.hxx>
+#include "MNSFolders.hxx"
+#include "MNSINIParser.hxx"
 
 static ::sal_Int32 nInitCounter=0;
 namespace connectivity

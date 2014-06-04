@@ -28,13 +28,13 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/uno3.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/sqliterator.hxx"
-#include "connectivity/sqlparse.hxx"
+#include <connectivity/sqliterator.hxx>
+#include <connectivity/sqlparse.hxx>
 #include <connectivity/FValue.hxx>
-#include "connectivity/OSubComponent.hxx"
+#include <connectivity/OSubComponent.hxx>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase5.hxx>
 #include <comphelper/propertycontainer.hxx>

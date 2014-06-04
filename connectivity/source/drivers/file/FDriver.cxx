@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/types.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 

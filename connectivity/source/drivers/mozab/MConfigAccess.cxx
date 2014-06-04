@@ -18,8 +18,8 @@
  */
 
 
-#include "com/sun/star/configuration/theDefaultProvider.hpp"
-#include "comphelper/processfactory.hxx"
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <comphelper/processfactory.hxx>
 
 #include "MConfigAccess.hxx"
 #include "MExtConfigAccess.hxx"

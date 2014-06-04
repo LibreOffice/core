@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/TIndex.hxx"
-#include "connectivity/TIndexColumns.hxx"
+#include <connectivity/TIndex.hxx>
+#include <connectivity/TIndexColumns.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include "connectivity/TTableHelper.hxx"
+#include <connectivity/TTableHelper.hxx>
 #include "TConnection.hxx"
 
 using namespace connectivity;

@@ -19,7 +19,7 @@
 
 #include <connectivity/virtualdbtools.hxx>
 #include "staticdbtools_s.hxx"
-#include "connectivity/dbconversion.hxx"
+#include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 

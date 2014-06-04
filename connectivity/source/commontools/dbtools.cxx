@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include "diagnose_ex.h"
 #include "TConnection.hxx"
-#include "connectivity/ParameterCont.hxx"
+#include <connectivity/ParameterCont.hxx>
 
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -79,7 +79,7 @@
 
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
-#include "connectivity/OSubComponent.hxx"
+#include <connectivity/OSubComponent.hxx>
 
 #include <algorithm>
 #include <iterator>

@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/TKeyColumns.hxx"
-#include "connectivity/sdbcx/VKeyColumn.hxx"
+#include <connectivity/TKeyColumns.hxx>
+#include <connectivity/sdbcx/VKeyColumn.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -26,7 +26,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
 #include "TConnection.hxx"
-#include "connectivity/TTableHelper.hxx"
+#include <connectivity/TTableHelper.hxx>
 
 using namespace connectivity;
 using namespace connectivity::sdbcx;

@@ -45,10 +45,10 @@
 #include <unotools/ucbhelper.hxx>
 #include <comphelper/types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include "connectivity/PColumn.hxx"
-#include "connectivity/dbtools.hxx"
-#include "connectivity/FValue.hxx"
-#include "connectivity/dbconversion.hxx"
+#include <connectivity/PColumn.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/FValue.hxx>
+#include <connectivity/dbconversion.hxx>
 #include "resource/dbase_res.hrc"
 #include <rtl/strbuf.hxx>
 

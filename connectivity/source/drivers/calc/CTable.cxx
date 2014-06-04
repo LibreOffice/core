@@ -37,7 +37,7 @@
 #include <svl/converter.hxx>
 #include "calc/CConnection.hxx"
 #include "calc/CColumns.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/thread.h>
 #include <comphelper/sequence.hxx>

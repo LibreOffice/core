@@ -32,7 +32,7 @@
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/seqstream.hxx>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 
 
 #include <oledb.h>

@@ -18,12 +18,12 @@
  */
 
 #include "file/fanalyzer.hxx"
-#include "connectivity/sqlparse.hxx"
+#include <connectivity/sqlparse.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
-#include "connectivity/sqlnode.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/sqlnode.hxx>
+#include <connectivity/dbexception.hxx>
 #include "file/FConnection.hxx"
 #include "resource/file_res.hrc"
 

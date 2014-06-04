@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HUSERS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HUSERS_HXX
 
-#include "connectivity/sdbcx/VCollection.hxx"
-#include "com/sun/star/sdbc/XConnection.hpp"
+#include <connectivity/sdbcx/VCollection.hxx>
+#include <com/sun/star/sdbc/XConnection.hpp>
 namespace connectivity
 {
     namespace sdbcx

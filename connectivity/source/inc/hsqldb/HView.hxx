@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HVIEW_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HVIEW_HXX
 
-#include "connectivity/sdbcx/VView.hxx"
+#include <connectivity/sdbcx/VView.hxx>
 
 #include <com/sun/star/sdbcx/XAlterView.hpp>
 

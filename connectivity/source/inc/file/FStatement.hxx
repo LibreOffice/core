@@ -31,7 +31,7 @@
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <comphelper/uno3.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include "file/FConnection.hxx"
 #include "file/filedllapi.hxx"
 #include <list>

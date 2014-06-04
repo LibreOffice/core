@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FILEDLLAPI_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FILEDLLAPI_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
-#include "sal/types.h"
+#include <sal/types.h>
 
 #if defined OOO_DLLIMPLEMENTATION_FILE
 #define OOO_DLLPUBLIC_FILE SAL_DLLPUBLIC_EXPORT

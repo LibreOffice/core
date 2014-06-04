@@ -21,7 +21,7 @@
 
 #include "MDatabaseMetaDataHelper.hxx"
 #include "MorkParser.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbtools.hxx>
 
 using namespace dbtools;
 using namespace connectivity::mork;

@@ -37,10 +37,10 @@
 #include "nsILDAPConnection.h"
 #include "nsILDAPOperation.h"
 #include "post_include_mozilla.h"
-#include <MQueryHelper.hxx>
+#include "MQueryHelper.hxx"
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/processfactory.hxx>
-#include "com/sun/star/mozilla/XProxyRunner.hpp"
+#include <com/sun/star/mozilla/XProxyRunner.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

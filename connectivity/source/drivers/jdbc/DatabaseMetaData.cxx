@@ -23,7 +23,7 @@
 #include "java/sql/ResultSet.hxx"
 #include "java/tools.hxx"
 #include "java/lang/String.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <comphelper/types.hxx>
 #include "TPrivilegesResultSet.hxx"

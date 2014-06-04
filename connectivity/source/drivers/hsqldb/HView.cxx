@@ -23,8 +23,8 @@
 
 #include "propertyids.hxx"
 
-#include "connectivity/dbexception.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

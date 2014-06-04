@@ -22,7 +22,7 @@
 #include "KTable.hxx"
 #include "KTables.hxx"
 #include "KCatalog.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 
 using namespace connectivity::kab;
 using namespace connectivity::sdbcx;

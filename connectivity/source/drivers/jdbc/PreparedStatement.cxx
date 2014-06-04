@@ -26,9 +26,9 @@
 #include "java/tools.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
-#include "connectivity/dbtools.hxx"
-#include "connectivity/FValue.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/FValue.hxx>
+#include <connectivity/dbexception.hxx>
 #include "resource/jdbc_log.hrc"
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"

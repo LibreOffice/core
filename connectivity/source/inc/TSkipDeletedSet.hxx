@@ -23,7 +23,7 @@
 #include <rtl/alloc.h>
 #include <boost/unordered_map.hpp>
 #include <vector>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 namespace connectivity
 {

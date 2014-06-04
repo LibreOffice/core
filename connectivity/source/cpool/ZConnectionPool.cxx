@@ -27,7 +27,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include "ZPooledConnection.hxx"
 #include "ZPoolCollection.hxx"
-#include "connectivity/ConnectionWrapper.hxx"
+#include <connectivity/ConnectionWrapper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 
