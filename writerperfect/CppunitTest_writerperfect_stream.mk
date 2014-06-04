@@ -34,6 +34,7 @@ $(eval $(call gb_CppunitTest_use_libraries,writerperfect_stream,\
 	sot \
 	test \
 	tl \
+	ucbhelper \
 	unotest \
 	utl \
 	writerperfect \
@@ -51,8 +52,9 @@ $(eval $(call gb_CppunitTest_use_components,writerperfect_stream,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_stream,\
-	writerperfect/qa/unit/stream \
+	writerperfect/qa/unit/DirectoryStreamTest \
 	writerperfect/qa/unit/WPXSvStreamTest \
+	writerperfect/qa/unit/stream \
 ))
 
 # vim: set noet sw=4 ts=4:
