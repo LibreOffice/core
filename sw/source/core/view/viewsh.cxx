@@ -1178,7 +1178,7 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
 
     // #i75172# isolated static conditions
     const bool bOnlyYScroll(!lXDiff && std::abs(lYDiff) != 0 && std::abs(lYDiff) < lMax);
-    const bool bAllowedWithChildWindows(GetWin()->GetWindowClipRegionPixel(WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL).IsNull());
+    const bool bAllowedWithChildWindows(GetWin()->ClipCoversWholeWindow());
     const bool bSmoothScrollAllowed(bOnlyYScroll && mbEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
 
     if(bSmoothScrollAllowed)

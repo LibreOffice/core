@@ -102,42 +102,22 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
     }
 }
 
-Region Window::GetWindowClipRegionPixel( sal_uInt16 nFlags ) const
+bool Window::ClipCoversWholeWindow()
 {
     ClipManager *clipMgr = ClipManager::GetInstance();
 
-    Region aWinClipRegion;
+    bool bCoversWholeWindow = false;
 
-    if ( nFlags & WINDOW_GETCLIPREGION_NOCHILDREN )
-    {
-        if ( mpWindowImpl->mbInitWinClipRegion )
-            clipMgr->InitClipRegion(const_cast<Window *>(this));
-        aWinClipRegion = mpWindowImpl->maWinClipRegion;
-    }
-    else
-    {
-        Region* pWinChildClipRegion = clipMgr->GetChildClipRegion(const_cast<Window*>(this));
-        aWinClipRegion = *pWinChildClipRegion;
-        // --- RTL --- remirror clip region before passing it to somebody
-        if( ImplIsAntiparallel() )
-        {
-            const OutputDevice *pOutDev = GetOutDev();
-            pOutDev->ReMirror( aWinClipRegion );
-        }
-    }
+    if ( mpWindowImpl->mbInitWinClipRegion )
+        clipMgr->InitClipRegion( this );
 
-    if ( nFlags & WINDOW_GETCLIPREGION_NULL )
-    {
-        Rectangle   aWinRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
-        Region      aWinRegion( aWinRect );
+    Region aWinClipRegion = mpWindowImpl->maWinClipRegion;
+    Region aWinRegion( Rectangle ( Point( mnOutOffX, mnOutOffY ), GetOutputSizePixel() ) );
 
-        if ( aWinRegion == aWinClipRegion )
-            aWinClipRegion.SetNull();
-    }
+    if ( aWinRegion == aWinClipRegion )
+        bCoversWholeWindow = true;
 
-    aWinClipRegion.Move( -mnOutOffX, -mnOutOffY );
-
-    return aWinClipRegion;
+    return bCoversWholeWindow;
 }
 
 

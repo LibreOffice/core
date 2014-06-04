@@ -281,10 +281,6 @@ typedef sal_uInt16 StateChangedType;
 #define WINDOW_DLGCTRL_MOD1TAB          ((sal_uInt16)0x0004)
 #define WINDOW_DLGCTRL_FLOATWIN_POPUPMODEEND_CANCEL ((sal_uInt16)0x0008)
 
-// GetWindowClipRegionPixel-Flags
-#define WINDOW_GETCLIPREGION_NULL       ((sal_uInt16)0x0001)
-#define WINDOW_GETCLIPREGION_NOCHILDREN ((sal_uInt16)0x0002)
-
 // EndExtTextInput-Flags
 #define EXTTEXTINPUT_END_COMPLETE       ((sal_uInt16)0x0001)
 #define EXTTEXTINPUT_END_CANCEL         ((sal_uInt16)0x0002)
@@ -775,7 +771,7 @@ public:
     void                                SetWindowRegionPixel( const Region& rRegion );
     const Region&                       GetWindowRegionPixel() const;
     bool                                IsWindowRegionPixel() const;
-    Region                              GetWindowClipRegionPixel( sal_uInt16 nFlags = 0 ) const;
+    bool                                ClipCoversWholeWindow();
     Region                              GetPaintRegion() const;
     bool                                IsInPaint() const;
     // while IsInPaint returns true ExpandPaintClipRegion adds the
