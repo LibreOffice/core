@@ -56,7 +56,7 @@ namespace dbaui
         void SetEndEditHdl(const Link& _rHdl) { m_aEndEditHdl = _rHdl; }
         Link GetEndEditHdl() const { return m_aEndEditHdl; }
 
-        virtual bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect );
+        virtual bool Select(SvTreeListEntry* pEntry, bool bSelect) SAL_OVERRIDE;
 
         void enableSelectHandler();
         void disableSelectHandler();
