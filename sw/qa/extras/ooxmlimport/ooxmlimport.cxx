@@ -2153,6 +2153,17 @@ DECLARE_OOXMLIMPORT_TEST(testFdo78883, "fdo78883.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo79535, "fdo79535.docx")
+{
+    // fdo#79535 : LO was crashing while opening document
+    // Checking there is a single page after loading a doc successfully in LO.
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testBnc875718, "bnc875718.docx")
 {
     // The frame in the footer must not accidentally end up in the document body.
