@@ -20,9 +20,9 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_COMMANDENVIRONMENTS_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_MANAGER_DP_COMMANDENVIRONMENTS_HXX
 
-#include "cppuhelper/compbase3.hxx"
-#include "ucbhelper/content.hxx"
-#include "com/sun/star/uno/Type.hxx"
+#include <cppuhelper/compbase3.hxx>
+#include <ucbhelper/content.hxx>
+#include <com/sun/star/uno/Type.hxx>
 
 namespace dp_manager {
 

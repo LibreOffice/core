@@ -20,14 +20,14 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DEPENDENCYDIALOG_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DEPENDENCYDIALOG_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
-#include "tools/gen.hxx"
-#include "vcl/button.hxx"
-#include "vcl/dialog.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/lstbox.hxx"
+#include <tools/gen.hxx>
+#include <vcl/button.hxx>
+#include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 
 class Window;
 

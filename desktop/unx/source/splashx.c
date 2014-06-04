@@ -17,7 +17,7 @@
 #include <X11/extensions/Xinerama.h>
 #endif
 
-#include "osl/endian.h"
+#include <osl/endian.h>
 #include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>

@@ -20,11 +20,11 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_INTERACT_H
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_INTERACT_H
 
-#include "rtl/ref.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
-#include "com/sun/star/task/XAbortChannel.hpp"
+#include <rtl/ref.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/task/XAbortChannel.hpp>
 #include "dp_misc_api.hxx"
 
 namespace dp_misc

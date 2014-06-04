@@ -19,18 +19,18 @@
 
 #include <config_folders.h>
 
-#include "osl/file.hxx"
-#include "osl/mutex.hxx"
+#include <osl/file.hxx>
+#include <osl/mutex.hxx>
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
-#include "cppuhelper/compbase3.hxx"
+#include <cppuhelper/compbase3.hxx>
 
-#include "vcl/wrkwin.hxx"
-#include "vcl/timer.hxx"
+#include <vcl/wrkwin.hxx>
+#include <vcl/timer.hxx>
 
 #include <unotools/configmgr.hxx>
-#include "toolkit/helper/vclunohelper.hxx"
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
@@ -39,16 +39,16 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/deployment/ExtensionManager.hpp"
-#include "com/sun/star/deployment/LicenseException.hpp"
-#include "com/sun/star/deployment/ui/LicenseDialog.hpp"
+#include <com/sun/star/deployment/XPackage.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
+#include <com/sun/star/deployment/LicenseException.hpp>
+#include <com/sun/star/deployment/ui/LicenseDialog.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 #include "app.hxx"

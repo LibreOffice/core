@@ -20,11 +20,11 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_LICENSE_DIALOG_HXX
 
 #include "dp_gui.h"
-#include "cppuhelper/implbase1.hxx"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
+#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
-#include "boost/bind.hpp"
+#include <boost/bind.hpp>
 
 namespace dp_gui {
 

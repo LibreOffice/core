@@ -25,14 +25,14 @@
 #include <postmac.h>
 #endif
 
-#include <cmdlineargs.hxx>
+#include "cmdlineargs.hxx"
 #include <vcl/svapp.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
-#include "rtl/process.h"
+#include <rtl/process.h>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
-#include "tools/getprocessworkingdir.hxx"
+#include <tools/getprocessworkingdir.hxx>
 
 #include <svl/documentlockfile.hxx>
 

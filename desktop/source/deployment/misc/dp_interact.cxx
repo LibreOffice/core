@@ -19,9 +19,9 @@
 
 
 #include "dp_interact.h"
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/implbase1.hxx"
-#include "com/sun/star/task/XInteractionAbort.hpp"
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/task/XInteractionAbort.hpp>
 
 
 using namespace ::com::sun::star;

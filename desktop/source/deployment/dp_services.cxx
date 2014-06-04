@@ -19,7 +19,7 @@
 
 
 #define COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS 12
-#include "comphelper/servicedecl.hxx"
+#include <comphelper/servicedecl.hxx>
 
 using namespace com::sun::star;
 namespace sdecl = comphelper::service_decl;

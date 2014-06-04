@@ -20,16 +20,16 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_UPDATEDIALOG_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_UPDATEDIALOG_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <vector>
-#include "com/sun/star/uno/Reference.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
-#include "svtools/svlbitm.hxx"
-#include "svx/checklbx.hxx"
-#include "tools/link.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
+#include <svtools/svlbitm.hxx>
+#include <svx/checklbx.hxx>
+#include <tools/link.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>

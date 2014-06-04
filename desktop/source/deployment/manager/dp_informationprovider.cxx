@@ -18,24 +18,24 @@
  */
 
 #include <cppuhelper/implbase3.hxx>
-#include "comphelper/servicedecl.hxx"
+#include <comphelper/servicedecl.hxx>
 
-#include "com/sun/star/deployment/UpdateInformationProvider.hpp"
-#include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/deployment/XPackageInformationProvider.hpp"
-#include "com/sun/star/deployment/ExtensionManager.hpp"
-#include "com/sun/star/deployment/XUpdateInformationProvider.hpp"
-#include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/registry/XRegistryKey.hpp"
-#include "com/sun/star/task/XAbortChannel.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
-#include "com/sun/star/xml/dom/XElement.hpp"
-#include "com/sun/star/xml/dom/XNode.hpp"
+#include <com/sun/star/deployment/UpdateInformationProvider.hpp>
+#include <com/sun/star/deployment/XPackage.hpp>
+#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
+#include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/task/XAbortChannel.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/xml/dom/XElement.hpp>
+#include <com/sun/star/xml/dom/XNode.hpp>
 
-#include "com/sun/star/uno/Reference.hxx"
-#include "rtl/ustring.hxx"
-#include "ucbhelper/content.hxx"
+#include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
+#include <ucbhelper/content.hxx>
 
 #include "dp_dependencies.hxx"
 #include "dp_descriptioninfoset.hxx"

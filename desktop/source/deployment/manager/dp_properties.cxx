@@ -18,14 +18,14 @@
  */
 
 
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
-#include "com/sun/star/lang/IllegalArgumentException.hpp"
-#include "xmlscript/xml_helper.hxx"
-#include "ucbhelper/content.hxx"
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <xmlscript/xml_helper.hxx>
+#include <ucbhelper/content.hxx>
 #include <list>
 
 #include "dp_ucb.h"
-#include "rtl/ustrbuf.hxx"
+#include <rtl/ustrbuf.hxx>
 #include "dp_properties.hxx"
 
 namespace lang  = com::sun::star::lang;

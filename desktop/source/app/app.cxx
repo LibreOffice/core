@@ -20,7 +20,7 @@
 #include <config_features.h>
 #include <config_folders.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <iostream>
 
@@ -54,7 +54,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/view/XPrintable.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#include "com/sun/star/util/URLTransformer.hpp"
+#include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

@@ -20,10 +20,10 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_CONFIGURATION_DP_CONFIGURATIONBACKENDDB_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_REGISTRY_CONFIGURATION_DP_CONFIGURATIONBACKENDDB_HXX
 
-#include "rtl/ustring.hxx"
-#include "rtl/string.hxx"
+#include <rtl/ustring.hxx>
+#include <rtl/string.hxx>
 #include <list>
-#include "boost/optional.hpp"
+#include <boost/optional.hpp>
 #include "dp_backenddb.hxx"
 
 namespace com { namespace sun { namespace star {

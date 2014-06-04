@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_APP_CONFIGINIT_HXX
 #define INCLUDED_DESKTOP_SOURCE_APP_CONFIGINIT_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 

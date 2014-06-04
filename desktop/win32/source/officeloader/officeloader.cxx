@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <systools/win32/uwinapi.h>
 
-#include "rtl/string.h"
+#include <rtl/string.h>
 #include <sal/macros.h>
 
 #include "../../../source/inc/exithelper.h"

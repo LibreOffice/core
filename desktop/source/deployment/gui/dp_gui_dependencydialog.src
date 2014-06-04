@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "svtools/controldims.hrc"
+#include <svtools/controldims.hrc>
 
 #include "dp_gui.hrc"
 

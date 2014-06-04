@@ -20,7 +20,7 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_APP_USERINSTALL_HXX
 #define INCLUDED_DESKTOP_SOURCE_APP_USERINSTALL_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 namespace desktop { namespace userinstall {
 

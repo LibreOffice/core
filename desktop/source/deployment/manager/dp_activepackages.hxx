@@ -22,7 +22,7 @@
 
 #include <config_features.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <utility>
 #include <vector>

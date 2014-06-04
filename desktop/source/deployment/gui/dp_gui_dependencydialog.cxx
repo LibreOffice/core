@@ -18,14 +18,14 @@
  */
 
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <algorithm>
 #include <vector>
 
-#include "rtl/ustring.hxx"
-#include "tools/resid.hxx"
-#include "vcl/dialog.hxx"
+#include <rtl/ustring.hxx>
+#include <tools/resid.hxx>
+#include <vcl/dialog.hxx>
 
 #include "dp_gui.hrc"
 #include "dp_gui_dependencydialog.hxx"

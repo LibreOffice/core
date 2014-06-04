@@ -24,21 +24,21 @@
 #include "dp_identifier.hxx"
 #include "../../deployment/gui/dp_gui.hrc"
 #include "lockfile.hxx"
-#include "vcl/svapp.hxx"
-#include "vcl/msgbox.hxx"
-#include "rtl/bootstrap.hxx"
-#include "rtl/strbuf.hxx"
-#include "rtl/ustrbuf.hxx"
-#include "osl/process.h"
-#include "osl/file.hxx"
-#include "osl/thread.hxx"
-#include "tools/getprocessworkingdir.hxx"
-#include "comphelper/processfactory.hxx"
-#include "unotools/configmgr.hxx"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/ucb/UniversalContentBroker.hpp"
-#include "cppuhelper/bootstrap.hxx"
-#include "comphelper/sequence.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
+#include <rtl/bootstrap.hxx>
+#include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <osl/process.h>
+#include <osl/file.hxx>
+#include <osl/thread.hxx>
+#include <tools/getprocessworkingdir.hxx>
+#include <comphelper/processfactory.hxx>
+#include <unotools/configmgr.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <cppuhelper/bootstrap.hxx>
+#include <comphelper/sequence.hxx>
 #include <stdio.h>
 
 using namespace ::com::sun::star;

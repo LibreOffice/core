@@ -19,19 +19,19 @@
 
 #include <config_features.h>
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstddef>
 #include <utility>
 #include <vector>
 
-#include "osl/diagnose.h"
-#include "rtl/strbuf.hxx"
-#include "rtl/string.hxx"
-#include "rtl/textenc.h"
-#include "rtl/uri.h"
-#include "rtl/uri.hxx"
-#include "rtl/ustring.hxx"
+#include <osl/diagnose.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/string.hxx>
+#include <rtl/textenc.h>
+#include <rtl/uri.h>
+#include <rtl/uri.hxx>
+#include <rtl/ustring.hxx>
 #include <boost/unordered_map.hpp>
 
 #include "dp_identifier.hxx"

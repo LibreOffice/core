@@ -18,10 +18,10 @@
  */
 
 
-#include "vcl/msgbox.hxx"
+#include <vcl/msgbox.hxx>
 #include "desktopresid.hxx"
 #include "desktop.hrc"
-#include "tools/config.hxx"
+#include <tools/config.hxx>
 #include "lockfile.hxx"
 
 

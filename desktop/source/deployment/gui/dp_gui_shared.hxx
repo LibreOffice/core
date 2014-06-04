@@ -20,8 +20,8 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_SHARED_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_SHARED_HXX
 
-#include "rtl/instance.hxx"
-#include "tools/resmgr.hxx"
+#include <rtl/instance.hxx>
+#include <tools/resmgr.hxx>
 
 
 namespace dp_gui {

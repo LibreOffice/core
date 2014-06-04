@@ -18,7 +18,7 @@
  */
 
 
-#include "cppuhelper/implementationentry.hxx"
+#include <cppuhelper/implementationentry.hxx>
 #include "basicmigration.hxx"
 #include "wordbookmigration.hxx"
 

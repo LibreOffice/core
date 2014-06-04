@@ -18,11 +18,11 @@
  */
 
 
-#include "rtl/string.h"
-#include "cppuhelper/exc_hlp.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/xml/dom/XDocument.hpp"
-#include "com/sun/star/xml/xpath/XXPathAPI.hpp"
+#include <rtl/string.h>
+#include <cppuhelper/exc_hlp.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/xpath/XXPathAPI.hpp>
 #include "dp_misc.h"
 #include "dp_scriptbackenddb.hxx"
 

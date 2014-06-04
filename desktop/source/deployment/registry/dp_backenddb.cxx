@@ -18,20 +18,20 @@
  */
 
 
-#include "rtl/string.h"
-#include "rtl/strbuf.hxx"
-#include "rtl/bootstrap.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "osl/file.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/xml/dom/DocumentBuilder.hpp"
-#include "com/sun/star/xml/xpath/XPathAPI.hpp"
-#include "com/sun/star/io/XActiveDataSource.hpp"
-#include "com/sun/star/io/XActiveDataControl.hpp"
+#include <rtl/string.h>
+#include <rtl/strbuf.hxx>
+#include <rtl/bootstrap.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <osl/file.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/io/XActiveDataControl.hpp>
 #include "dp_ucb.h"
 #include "dp_misc.h"
-#include "ucbhelper/content.hxx"
-#include "xmlscript/xml_helper.hxx"
+#include <ucbhelper/content.hxx>
+#include <xmlscript/xml_helper.hxx>
 #include "dp_backenddb.hxx"
 
 

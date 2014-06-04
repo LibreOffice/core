@@ -18,8 +18,8 @@
  */
 
 #include "dp_gui.hrc"
-#include "svtools/controldims.hrc"
-#include "svtools/svtools.hrc"
+#include <svtools/controldims.hrc>
+#include <svtools/svtools.hrc>
 
 #include "dp_gui.h"
 #include "dp_gui_dialog2.hxx"
@@ -33,41 +33,41 @@
 #include "dp_identifier.hxx"
 #include "dp_descriptioninfoset.hxx"
 
-#include "vcl/ctrl.hxx"
-#include "vcl/menu.hxx"
-#include "vcl/msgbox.hxx"
-#include "vcl/scrbar.hxx"
-#include "vcl/svapp.hxx"
+#include <vcl/ctrl.hxx>
+#include <vcl/menu.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/scrbar.hxx>
+#include <vcl/svapp.hxx>
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 
-#include "svtools/extensionlistbox.hxx"
+#include <svtools/extensionlistbox.hxx>
 
-#include "sfx2/sfxdlg.hxx"
+#include <sfx2/sfxdlg.hxx>
 
-#include "comphelper/anytostring.hxx"
-#include "cppuhelper/exc_hlp.hxx"
-#include "cppuhelper/bootstrap.hxx"
+#include <comphelper/anytostring.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/bootstrap.hxx>
 
-#include "comphelper/processfactory.hxx"
-#include "ucbhelper/content.hxx"
-#include "unotools/collatorwrapper.hxx"
-#include "unotools/configmgr.hxx"
+#include <comphelper/processfactory.hxx>
+#include <ucbhelper/content.hxx>
+#include <unotools/collatorwrapper.hxx>
+#include <unotools/configmgr.hxx>
 
-#include "com/sun/star/beans/StringPair.hpp"
+#include <com/sun/star/beans/StringPair.hpp>
 
-#include "com/sun/star/i18n/CollatorOptions.hpp"
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 
-#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
-#include "com/sun/star/system/SystemShellExecute.hpp"
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 
-#include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
-#include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
-#include "com/sun/star/ui/dialogs/FilePicker.hpp"
-#include "com/sun/star/ui/dialogs/XFilterManager.hpp"
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/FilePicker.hpp>
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 
-#include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/XComponentContext.hpp"
+#include <com/sun/star/uno/Any.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <map>
 #include <vector>

@@ -19,9 +19,9 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_UPDATEDATA_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_UPDATEDATA_HXX
 
-#include "sal/config.h"
-#include "rtl/ustring.hxx"
-#include "com/sun/star/uno/Reference.hxx"
+#include <sal/config.h>
+#include <rtl/ustring.hxx>
+#include <com/sun/star/uno/Reference.hxx>
 
 #include <boost/shared_ptr.hpp>
 

@@ -20,28 +20,28 @@
 #ifndef INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DIALOG2_HXX
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_GUI_DP_GUI_DIALOG2_HXX
 
-#include "vcl/dialog.hxx"
-#include "vcl/button.hxx"
-#include "vcl/fixed.hxx"
-#include "vcl/fixedhyper.hxx"
-#include "vcl/prgsbar.hxx"
-#include "vcl/timer.hxx"
+#include <vcl/dialog.hxx>
+#include <vcl/button.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/fixedhyper.hxx>
+#include <vcl/prgsbar.hxx>
+#include <vcl/timer.hxx>
 
-#include "svtools/svmedit.hxx"
+#include <svtools/svmedit.hxx>
 
-#include "osl/conditn.hxx"
-#include "osl/mutex.hxx"
+#include <osl/conditn.hxx>
+#include <osl/mutex.hxx>
 
-#include "rtl/ref.hxx"
-#include "rtl/ustring.hxx"
+#include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
-#include "cppuhelper/implbase1.hxx"
+#include <cppuhelper/implbase1.hxx>
 
-#include "com/sun/star/awt/XWindow.hpp"
-#include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
-#include "com/sun/star/util/XModifyListener.hpp"
+#include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/deployment/XPackage.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/util/XModifyListener.hpp>
 
 namespace dp_gui {
 

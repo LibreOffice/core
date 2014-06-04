@@ -24,7 +24,7 @@
 #include "dp_identifier.hxx"
 #include "dp_descriptioninfoset.hxx"
 
-#include "rtl/bootstrap.hxx"
+#include <rtl/bootstrap.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

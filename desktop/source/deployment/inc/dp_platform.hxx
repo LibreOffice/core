@@ -23,8 +23,8 @@
 
 #include "dp_misc_api.hxx"
 
-#include "com/sun/star/uno/Sequence.hxx"
-#include "rtl/ustring.hxx"
+#include <com/sun/star/uno/Sequence.hxx>
+#include <rtl/ustring.hxx>
 
 namespace dp_misc
 {

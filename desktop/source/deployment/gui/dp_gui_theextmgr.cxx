@@ -17,16 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "vcl/svapp.hxx"
-#include "vcl/msgbox.hxx"
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
 
-#include "osl/mutex.hxx"
+#include <osl/mutex.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/configuration/theDefaultProvider.hpp"
-#include "com/sun/star/frame/Desktop.hpp"
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"

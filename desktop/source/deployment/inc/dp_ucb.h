@@ -21,12 +21,12 @@
 #define INCLUDED_DESKTOP_SOURCE_DEPLOYMENT_INC_DP_UCB_H
 
 #include <list>
-#include "rtl/byteseq.hxx"
-#include "rtl/instance.hxx"
-#include "com/sun/star/sdbc/XResultSet.hpp"
-#include "com/sun/star/ucb/XCommandEnvironment.hpp"
+#include <rtl/byteseq.hxx>
+#include <rtl/instance.hxx>
+#include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include "dp_misc_api.hxx"
-#include "ucbhelper/content.hxx"
+#include <ucbhelper/content.hxx>
 
 namespace ucbhelper
 {
