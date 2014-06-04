@@ -68,7 +68,7 @@ void SvxUnoFontDescriptor::ConvertFromFont( const Font& rFont, awt::FontDescript
     rDesc.Orientation = static_cast< float >(rFont.GetOrientation() / 10);
     rDesc.Kerning = rFont.IsKerning();
     rDesc.Weight = VCLUnoHelper::ConvertFontWeight( rFont.GetWeight() );
-    rDesc.Slant = (awt::FontSlant)rFont.GetItalic();
+    rDesc.Slant = VCLUnoHelper::ConvertFontSlant( rFont.GetItalic() );
     rDesc.Underline = sal::static_int_cast< sal_Int16 >(rFont.GetUnderline());
     rDesc.Strikeout = sal::static_int_cast< sal_Int16 >(rFont.GetStrikeout());
     rDesc.WordLineMode = rFont.IsWordLineMode();
