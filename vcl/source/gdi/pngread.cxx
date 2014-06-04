@@ -1331,7 +1331,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 // BMP_FORMAT_32BIT_TC_RGBA
                 // only use DirectScanline when we have no preview shifting stuff and accesses to content and alpha
                 const bool bDoDirectScanline(
-                    bCkeckDirectScanline && !nXStart && 1 == nXAdd && !mnPreviewShift && mpAcc && mpMaskAcc);
+                    bCkeckDirectScanline && !nXStart && 1 == nXAdd && !mnPreviewShift && mpMaskAcc);
                 const bool bCustomColorTable(mpColorTable != mpDefaultColorTable);
 
                 if(bDoDirectScanline)
