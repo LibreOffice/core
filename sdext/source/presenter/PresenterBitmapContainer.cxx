@@ -334,15 +334,13 @@ PresenterBitmapContainer::BitmapDescriptor::BitmapDescriptor (
 }
 
 css::uno::Reference<css::rendering::XBitmap>
-    PresenterBitmapContainer::BitmapDescriptor::GetNormalBitmap (void) const
+    PresenterBitmapContainer::BitmapDescriptor::GetNormalBitmap() const
 {
     return mxNormalBitmap;
 }
 
 css::uno::Reference<css::rendering::XBitmap>
-    PresenterBitmapContainer::BitmapDescriptor::GetBitmap (
-        const Mode eMode,
-        const bool bMissingDefaultsToNormal) const
+    PresenterBitmapContainer::BitmapDescriptor::GetBitmap(const Mode eMode) const
 {
     switch (eMode)
     {
@@ -353,19 +351,19 @@ css::uno::Reference<css::rendering::XBitmap>
         case MouseOver:
             if (mxMouseOverBitmap.is())
                 return mxMouseOverBitmap;
-            else if (bMissingDefaultsToNormal)
+            else
                 return mxNormalBitmap;
 
         case ButtonDown:
             if (mxButtonDownBitmap.is())
                 return mxButtonDownBitmap;
-            else if (bMissingDefaultsToNormal)
+            else
                 return mxNormalBitmap;
 
         case Disabled:
             if (mxDisabledBitmap.is())
                 return mxDisabledBitmap;
-            else if (bMissingDefaultsToNormal)
+            else
                 return mxNormalBitmap;
 
         case Mask:
