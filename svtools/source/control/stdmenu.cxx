@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -25,28 +24,20 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/stdmenu.hxx>
 
-
-
 FontNameMenu::FontNameMenu()
 {
     SetMenuFlags( GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 }
 
-
-
 FontNameMenu::~FontNameMenu()
 {
 }
-
-
 
 void FontNameMenu::Select()
 {
     maCurName = GetItemText( GetCurItemId() );
     maSelectHdl.Call( this );
 }
-
-
 
 void FontNameMenu::Highlight()
 {
@@ -55,8 +46,6 @@ void FontNameMenu::Highlight()
     maHighlightHdl.Call( this );
     maCurName = aTempName;
 }
-
-
 
 void FontNameMenu::Fill( const FontList* pList )
 {
@@ -90,8 +79,6 @@ void FontNameMenu::Fill( const FontList* pList )
     SetCurName( maCurName );
 }
 
-
-
 void FontNameMenu::SetCurName(const OUString& rName)
 {
     maCurName = rName;
@@ -118,8 +105,6 @@ void FontNameMenu::SetCurName(const OUString& rName)
         CheckItem( nChecked, false );
 }
 
-
-
 FontSizeMenu::FontSizeMenu()
 :    mpHeightAry( NULL )
 ,    mnCurHeight( 100 )
@@ -127,15 +112,11 @@ FontSizeMenu::FontSizeMenu()
     SetMenuFlags( GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 }
 
-
-
 FontSizeMenu::~FontSizeMenu()
 {
     if ( mpHeightAry )
         delete[] mpHeightAry;
 }
-
-
 
 void FontSizeMenu::Select()
 {
@@ -143,8 +124,6 @@ void FontSizeMenu::Select()
     mnCurHeight = mpHeightAry[ nCurItemId - 1 ];
     maSelectHdl.Call( this );
 }
-
-
 
 void FontSizeMenu::Highlight()
 {
@@ -160,8 +139,6 @@ void FontSizeMenu::Highlight()
     maHighlightHdl.Call( this );
     mnCurHeight = nTempHeight;
 }
-
-
 
 void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
 {
@@ -228,8 +205,6 @@ void FontSizeMenu::Fill( const FontInfo& rInfo, const FontList* pList )
 
     SetCurHeight( mnCurHeight );
 }
-
-
 
 void FontSizeMenu::SetCurHeight( long nHeight )
 {
