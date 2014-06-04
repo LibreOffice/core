@@ -30,7 +30,6 @@
 #include "AxisHelper.hxx"
 #include "LegendHelper.hxx"
 #include "DiagramHelper.hxx"
-#include "ChartDebugTrace.hxx"
 #include "AxisIndexDefines.hxx"
 #include <cppuhelper/component_context.hxx>
 #include <com/sun/star/chart/ChartSolidType.hpp>
@@ -304,10 +303,6 @@ void SAL_CALL ChartTypeTemplate::changeDiagramData(
             Reference< XDataSeriesContainer > xDSCnt( aChartTypes[i], uno::UNO_QUERY_THROW );
             xDSCnt->setDataSeries( aSeriesSeq[i] );
         }
-#if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
-    OSL_TRACE( "ChartTypeTemplate::changeDiagramData: Showing Diagram structure" );
-    ::chart::debug::ChartDebugTraceDiagram( xDiagram );
-#endif
     }
     catch( const uno::Exception & ex )
     {
@@ -805,11 +800,6 @@ void ChartTypeTemplate::FillDiagram(
     {
         ASSERT_EXCEPTION( ex );
     }
-
-#if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
-    OSL_TRACE( "ChartTypeTemplate::FillDiagram: Showing Diagram structure" );
-    ::chart::debug::ChartDebugTraceDiagram( xDiagram );
-#endif
 }
 
 void ChartTypeTemplate::createChartTypes(

@@ -19,7 +19,6 @@
 
 #include "ChartModel.hxx"
 #include "MediaDescriptorHelper.hxx"
-#include "ChartDebugTrace.hxx"
 #include "macros.hxx"
 #include "ChartViewHelper.hxx"
 #include "ChartModelHelper.hxx"
@@ -480,11 +479,6 @@ void SAL_CALL ChartModel::initNew()
     }
     setModified( sal_False );
     unlockControllers();
-
-#if OSL_DEBUG_LEVEL >= CHART_TRACE_OSL_DEBUG_LEVEL
-    OSL_TRACE( "ChartModel::initNew: Showing ChartDocument structure" );
-    ::chart::debug::ChartDebugTraceDocument( Reference< chart2::XChartDocument >( this ));
-#endif
 }
 
 void SAL_CALL ChartModel::load(
