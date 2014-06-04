@@ -1370,22 +1370,21 @@ static void SetBorderLine( int nBorderTyp, SvxBoxItem& rItem,
     switch( nBorderTyp )
     {
     case RTF_BOX:           // run through all levels
-
     case RTF_BRDRT:
         rItem.SetLine( &rBorder, BOX_LINE_TOP );
         if( RTF_BOX != nBorderTyp )
             return;
-
+        // fall-through
     case RTF_BRDRB:
         rItem.SetLine( &rBorder, BOX_LINE_BOTTOM );
         if( RTF_BOX != nBorderTyp )
             return;
-
+        // fall-through
     case RTF_BRDRL:
         rItem.SetLine( &rBorder, BOX_LINE_LEFT );
         if( RTF_BOX != nBorderTyp )
             return;
-
+        // fall-through
     case RTF_BRDRR:
         rItem.SetLine( &rBorder, BOX_LINE_RIGHT );
         if( RTF_BOX != nBorderTyp )
