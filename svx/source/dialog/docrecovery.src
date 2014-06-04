@@ -22,17 +22,6 @@
 
 #include "docrecovery.hrc"
 
-TabDialog RID_SVX_TABDLG_DOCRECOVERY
-{
-    Size = MAP_APPFONT( TABDLG_WIDTH, TABDLG_HEIGHT );
-    HelpId = HID_SVX_TABDLG_DOCRECOVERY;
-    OutputSize = TRUE;
-    SVLook = TRUE;
-    Moveable = TRUE;
-    Closeable = FALSE;
-    Text = "%PRODUCTNAME %PRODUCTVERSION";
-};
-
 ModalDialog RID_SVX_MDLG_DOCRECOVERY_PROGR
 {
     Size = MAP_APPFONT( SAVEPROGR_WIDTH, SAVEPROGR_HEIGHT );
