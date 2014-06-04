@@ -209,7 +209,7 @@ namespace pcr
             sal_Int16   nFontCharset        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_CHARSET, aDefaultFont.CharSet);
             float   nFontHeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_HEIGHT, (float)aDefaultFont.Height);
             float   nFontWeight             = aPropExtractor.getFloatFontProperty(PROPERTY_FONT_WEIGHT, aDefaultFont.Weight);
-            sal_Int16 nFontSlant            = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, (sal_Int16)aDefaultFont.Slant);
+            css::awt::FontSlant nFontSlant  = static_cast<css::awt::FontSlant>(aPropExtractor.getInt16FontProperty(PROPERTY_FONT_SLANT, (sal_Int16)aDefaultFont.Slant));
             sal_Int16 nFontUnderline        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_UNDERLINE, aDefaultFont.Underline);
             sal_Int16 nFontStrikeout        = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_STRIKEOUT, aDefaultFont.Strikeout);
 
@@ -228,7 +228,7 @@ namespace pcr
             SvxFontHeightItem aSvxFontHeightItem((sal_uInt32)nFontHeight,100,CFID_HEIGHT);
 
             FontWeight      eWeight=VCLUnoHelper::ConvertFontWeight(nFontWeight);
-            FontItalic      eItalic=(FontItalic)nFontSlant;
+            FontItalic      eItalic=VCLUnoHelper::ConvertFontSlant(nFontSlant);
             FontUnderline   eUnderline=(FontUnderline)nFontUnderline;
             FontStrikeout   eStrikeout=(FontStrikeout)nFontStrikeout;
 
