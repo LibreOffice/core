@@ -723,13 +723,11 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                      if (bMirrorSide0 != bMirrorSide1)
                      {
                          bSuppressChangesOfSelection = true;
-                        if(mpWindow)
-                            mpWindow->EnterWait();
+                         mpWindow->EnterWait();
                          mpView->End3DCreation();
                          bSuppressChangesOfSelection = false;
                          nSlotId = SID_OBJECT_SELECT;
-                        if(mpWindow)
-                            mpWindow->LeaveWait();
+                         mpWindow->LeaveWait();
                          Activate();
                     }
                 }
