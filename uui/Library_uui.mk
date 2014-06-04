@@ -17,6 +17,8 @@ $(eval $(call gb_Library_use_custom_headers,uui,\
     officecfg/registry \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,uui,$(SRCDIR)/uui/inc/pch/precompiled_uui))
+
 $(eval $(call gb_Library_use_sdk_api,uui))
 
 $(eval $(call gb_Library_use_libraries,uui,\

@@ -33,6 +33,8 @@ $(eval $(call gb_Library_set_include,fwi,\
 
 $(eval $(call gb_Library_use_external,fwi,boost_headers))
 
+$(eval $(call gb_Library_set_precompiled_header,fwi,$(SRCDIR)/framework/inc/pch/precompiled_fwi))
+
 $(eval $(call gb_Library_use_libraries,fwi,\
     comphelper \
     cppu \

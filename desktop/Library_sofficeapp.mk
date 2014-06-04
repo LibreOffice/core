@@ -31,6 +31,8 @@ $(eval $(call gb_Library_add_defs,sofficeapp,\
     $(if $(filter TRUE,$(ENABLE_SYSTRAY_GTK)),-DENABLE_QUICKSTART_APPLET) \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,sofficeapp,$(SRCDIR)/desktop/inc/pch/precompiled_sofficeapp))
+
 $(eval $(call gb_Library_use_libraries,sofficeapp,\
     comphelper \
     cppu \

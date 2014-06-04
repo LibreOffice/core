@@ -23,6 +23,8 @@ $(eval $(call gb_Library_add_defs,deploymentmisc,\
     -DDESKTOP_DEPLOYMENTMISC_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,deploymentmisc,$(SRCDIR)/desktop/inc/pch/precompiled_deploymentmisc))
+
 $(eval $(call gb_Library_use_libraries,deploymentmisc,\
     comphelper \
     cppu \

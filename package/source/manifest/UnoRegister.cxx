@@ -32,7 +32,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::packages;
-using namespace ::com::sun::star::packages::manifest;
 
 /**
  * This function is called to get service factories for an implementation.

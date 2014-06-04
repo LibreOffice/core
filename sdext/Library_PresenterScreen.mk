@@ -11,6 +11,8 @@ $(eval $(call gb_Library_Library,PresenterScreen))
 
 $(eval $(call gb_Library_set_componentfile,PresenterScreen,sdext/source/presenter/presenter))
 
+$(eval $(call gb_Library_set_precompiled_header,PresenterScreen,$(SRCDIR)/sdext/inc/pch/precompiled_PresenterScreen))
+
 $(eval $(call gb_Library_use_externals,PresenterScreen,\
 	boost_headers \
 ))

@@ -33,7 +33,6 @@
 #include "xsec_xmlsec.hxx"
 #include "securityenvironment_nssimpl.hxx"
 
-using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

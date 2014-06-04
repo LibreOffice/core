@@ -28,6 +28,8 @@ $(eval $(call gb_Library_add_defs,vbahelper,\
 
 $(eval $(call gb_Library_use_external,vbahelper,boost_headers))
 
+$(eval $(call gb_Library_set_precompiled_header,vbahelper,$(SRCDIR)/vbahelper/inc/pch/precompiled_vbahelper))
+
 $(eval $(call gb_Library_use_api,vbahelper,\
 	udkapi \
 	offapi \

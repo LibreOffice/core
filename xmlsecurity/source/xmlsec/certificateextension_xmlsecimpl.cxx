@@ -20,9 +20,7 @@
 #include <sal/config.h>
 #include <rtl/uuid.h>
 
-#ifndef _certificateextension_nssimpl_hxx_
 #include "certificateextension_xmlsecimpl.hxx"
-#endif
 
 using namespace ::com::sun::star::uno ;
 
