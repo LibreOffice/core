@@ -21,8 +21,10 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+
+#include <ucbhelper/content.hxx>
 
 #include "WpftImportTestBase.hxx"
 
@@ -46,7 +48,6 @@ WpftImportTestBase::WpftImportTestBase(const rtl::OUString &rFactoryURL)
     , ::test::BootstrapFixture()
     , m_aFactoryURL(rFactoryURL)
     , m_xDesktop()
-    , m_xFileAccess()
     , m_xFilter()
     , m_xTypeMap()
 {
@@ -57,7 +58,6 @@ void WpftImportTestBase::setUp()
     ::test::BootstrapFixture::setUp();
 
     m_xDesktop = frame::theDesktop::get(m_xContext);
-    m_xFileAccess = ucb::SimpleFileAccess::create(m_xContext);
 
     const uno::Reference<document::XTypeDetection> xTypeDetection(
             m_xFactory->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
@@ -113,13 +113,15 @@ bool WpftImportTestBase::load(const OUString &, const OUString &rURL, const OUSt
 
         xImporter->setTargetDocument(xDoc);
 
-        uno::Sequence<beans::PropertyValue> aDescriptor(2);
+        uno::Sequence<beans::PropertyValue> aDescriptor(3);
+        ucbhelper::Content aContent(rURL, uno::Reference<ucb::XCommandEnvironment>(), m_xContext);
+
         aDescriptor[0].Name = "URL";
         aDescriptor[0].Value <<= rURL;
-
-        const uno::Reference<io::XInputStream> xInputStream(m_xFileAccess->openFileRead(rURL), uno::UNO_QUERY_THROW);
         aDescriptor[1].Name = "InputStream";
-        aDescriptor[1].Value <<= xInputStream;
+        aDescriptor[1].Value <<= aContent.openStream();
+        aDescriptor[2].Name = "UCBContent";
+        aDescriptor[2].Value <<= aContent.get();
 
         const uno::Reference<document::XExtendedFilterDetection> xDetector(m_xFilter, uno::UNO_QUERY_THROW);
 
