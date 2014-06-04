@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_4181f28e",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 635,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-04T07:52:26Z",
+      "side": 1,
+      "message": "I guess you try to do the reverse of what\u0027s done in LineProperties::pushToPropMap() during import, but then why the std::max part is necessary? Why not just divide the DotLen/DashLen/Distance with the line width?",
+      "revId": "a0991029673bde254c7eef7a761e9befd20b8bf7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
