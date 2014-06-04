@@ -34,9 +34,10 @@ namespace vcl {
 // avoid problems where poppler's FontInfo is picked up
 class VCL_DLLPUBLIC FontInfo : public Font
 {
-    friend class OutputDevice;
+    friend class ::OutputDevice;
 
 protected:
+    ImplFontMetric*     mpImplMetric;    // Implementation
 
 public:
                         FontInfo();
@@ -49,7 +50,6 @@ public:
     bool                operator==( const FontInfo& ) const;
     bool                operator!=( const FontInfo& rInfo ) const
                             { return !operator==( rInfo ); }
-    ImplFontMetric*     mpImplMetric;    // Implementation
 };
 
 }
