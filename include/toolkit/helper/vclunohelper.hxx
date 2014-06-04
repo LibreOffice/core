@@ -25,8 +25,8 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
-
 
 namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;
@@ -106,6 +106,8 @@ public:
     static FontWidth                                ConvertFontWidth( float f );
     static float                                    ConvertFontWeight( FontWeight eWeight );
     static FontWeight                               ConvertFontWeight( float f );
+    static css::awt::FontSlant                      ConvertFontSlant( FontItalic eWeight );
+    static FontItalic                               ConvertFontSlant( css::awt::FontSlant );
 
     // Rectangle
     static bool                                 IsZero( ::com::sun::star::awt::Rectangle rRect );
