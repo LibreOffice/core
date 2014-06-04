@@ -201,11 +201,6 @@ private:
     FontList&               operator =( const FontList& );
 };
 
-
-
-// - FontSizeNames -
-
-
 class SVT_DLLPUBLIC FontSizeNames
 {
 private:
