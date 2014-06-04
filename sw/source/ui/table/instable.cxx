@@ -32,6 +32,7 @@
 #include "table.hrc"
 
 #include "swabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 namespace swui
 {
@@ -190,11 +191,10 @@ IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell, false, pTAutoFmt);
+    boost::scoped_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(pButton,pShell, false, pTAutoFmt));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );
-    delete pDlg;
     return 0;
 }
 

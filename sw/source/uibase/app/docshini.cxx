@@ -84,6 +84,7 @@
 
 // text grid
 #include <tgrditem.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -170,7 +171,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         {
             sal_uInt16 nFontWhich = aFontWhich[i];
             sal_uInt16 nFontId = aFontIds[i];
-            SvxFontItem* pFontItem = 0;
+            boost::scoped_ptr<SvxFontItem> pFontItem;
             const SvxLanguageItem& rLang = (const SvxLanguageItem&)pDoc->GetDefault( aLangTypes[i] );
             LanguageType eLanguage = rLang.GetLanguage();
             if(!pStdFont->IsFontDefault(nFontId))
@@ -183,8 +184,8 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     aFont = pPrt->GetFontMetric( aFont );
                 }
 
-                pFontItem = new SvxFontItem(aFont.GetFamily(), aFont.GetName(),
-                                            aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich);
+                pFontItem.reset(new SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                                                aEmptyOUStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
             }
             else
             {
@@ -200,8 +201,8 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                     nFontTypes[i],
                     eLanguage,
                     DEFAULTFONT_FLAGS_ONLYONE );
-                pFontItem = new SvxFontItem(aLangDefFont.GetFamily(), aLangDefFont.GetName(),
-                                    aEmptyOUStr, aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich);
+                pFontItem.reset(new SvxFontItem(aLangDefFont.GetFamily(), aLangDefFont.GetName(),
+                                                aEmptyOUStr, aLangDefFont.GetPitch(), aLangDefFont.GetCharSet(), nFontWhich));
             }
             pDoc->SetDefault(*pFontItem);
             if( !bHTMLTemplSet )
@@ -209,7 +210,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                 SwTxtFmtColl *pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD);
                 pColl->ResetFmtAttr(nFontWhich);
             }
-            delete pFontItem;
+            pFontItem.reset();
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( FONT_STANDARD, i, eLanguage );
             if(nFontHeight <= 0)
                 nFontHeight = pStdFont->GetDefaultHeightFor( nFontId, eLanguage );

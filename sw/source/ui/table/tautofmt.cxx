@@ -38,6 +38,7 @@
 #include "tblafmt.hxx"
 #include "tautofmt.hxx"
 #include "shellres.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -286,10 +287,10 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
     bool bOk = false, bFmtInserted = false;
     while( !bOk )
     {
-        SwStringInputDlg* pDlg = new SwStringInputDlg( this,
+        boost::scoped_ptr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
                                                        aStrTitle,
                                                        aStrLabel,
-                                                       OUString() );
+                                                       OUString() ));
         if( RET_OK == pDlg->Execute() )
         {
             const OUString aFormatName( pDlg->GetInputString() );
@@ -337,7 +338,6 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
         }
         else
             bOk = true;
-        delete pDlg;
     }
     return 0;
 }
@@ -349,8 +349,8 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
     aMessage += m_pLbFormat->GetSelectEntry();
     aMessage += "\n";
 
-    MessBox* pBox = new MessBox( this, WinBits( WB_OK_CANCEL ),
-                                    aStrDelTitle, aMessage);
+    boost::scoped_ptr<MessBox> pBox(new MessBox( this, WinBits( WB_OK_CANCEL ),
+                                                 aStrDelTitle, aMessage));
 
     if ( pBox->Execute() == RET_OK )
     {
@@ -372,7 +372,7 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
             bCoreDataChanged = true;
         }
     }
-    delete pBox;
+    pBox.reset();
 
     SelFmtHdl( 0 );
 
@@ -384,10 +384,10 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
     bool bOk = false;
     while( !bOk )
     {
-        SwStringInputDlg* pDlg = new SwStringInputDlg( this,
+        boost::scoped_ptr<SwStringInputDlg> pDlg(new SwStringInputDlg( this,
                                                        aStrRenameTitle,
                                                        m_pLbFormat->GetSelectEntry(),
-                                                       OUString() );
+                                                       OUString() ));
         if( pDlg->Execute() == RET_OK )
         {
             bool bFmtRenamed = false;
@@ -439,7 +439,6 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
         }
         else
             bOk = true;
-        delete pDlg;
     }
     return 0;
 }
