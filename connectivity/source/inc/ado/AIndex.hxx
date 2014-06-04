@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AINDEX_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AINDEX_HXX
 
-#include "connectivity/sdbcx/VIndex.hxx"
+#include <connectivity/sdbcx/VIndex.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include "ado/Awrapadox.hxx"
 

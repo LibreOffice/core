@@ -78,8 +78,8 @@
 static NS_DEFINE_CID(kCharsetConverterManagerCID, NS_ICHARSETCONVERTERMANAGER_CID);
 #endif
 
-#include <MNSFolders.hxx>
-#include <MNSINIParser.hxx>
+#include "MNSFolders.hxx"
+#include "MNSINIParser.hxx"
 
 namespace connectivity
 {

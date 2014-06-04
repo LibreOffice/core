@@ -27,12 +27,12 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <comphelper/uno3.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <list>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/sqliterator.hxx"
-#include "connectivity/sqlparse.hxx"
+#include <connectivity/sqliterator.hxx>
+#include <connectivity/sqlparse.hxx>
 #include <connectivity/FValue.hxx>
 #include "TSortIndex.hxx"
 #include "MConnection.hxx"

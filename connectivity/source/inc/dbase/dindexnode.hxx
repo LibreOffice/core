@@ -21,7 +21,7 @@
 
 #include "file/fcode.hxx"
 #include "file/FTable.hxx"
-#include "connectivity/FValue.hxx"
+#include <connectivity/FValue.hxx>
 #include <rtl/ref.hxx>
 #include <tools/ref.hxx>
 #include <tools/stream.hxx>

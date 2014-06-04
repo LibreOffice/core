@@ -62,7 +62,7 @@
 #endif
 
 #include "nsIPlatformCharset.h"
-#include <MNSInit.hxx>
+#include "MNSInit.hxx"
 
 #include "post_include_mozilla.h"
 

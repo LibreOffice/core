@@ -18,8 +18,8 @@
  */
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCOLUMNS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCOLUMNS_HXX
-#include "connectivity/TColumnsHelper.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/TColumnsHelper.hxx>
+#include <connectivity/sdbcx/VColumn.hxx>
 
 namespace connectivity
 {

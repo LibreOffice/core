@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ATABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ATABLE_HXX
 
-#include "connectivity/sdbcx/VTable.hxx"
+#include <connectivity/sdbcx/VTable.hxx>
 #include "ado/Awrapadox.hxx"
 #include "ado/ACatalog.hxx"
 

@@ -25,7 +25,7 @@
 #include <cppuhelper/compbase2.hxx>
 #include "odbc/OFunctiondefs.hxx"
 #include "odbc/odbcbasedllapi.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <osl/module.h>
 
 namespace connectivity

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KORDER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KORDER_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include <shell/kde_headers.h>
 
 #include <vector>

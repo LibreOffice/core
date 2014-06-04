@@ -20,8 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HUSER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HUSER_HXX
 
-#include "connectivity/sdbcx/VUser.hxx"
-#include "com/sun/star/sdbc/XConnection.hpp"
+#include <connectivity/sdbcx/VUser.hxx>
+#include <com/sun/star/sdbc/XConnection.hpp>
 
 namespace connectivity
 {

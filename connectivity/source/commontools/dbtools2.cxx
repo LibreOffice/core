@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/dbtools.hxx"
-#include "connectivity/dbconversion.hxx"
-#include "connectivity/dbcharset.hxx"
-#include "connectivity/SQLStatementHelper.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbconversion.hxx>
+#include <connectivity/dbcharset.hxx>
+#include <connectivity/SQLStatementHelper.hxx>
 #include <unotools/confignode.hxx>
 #include "resource/sharedresources.hxx"
 #include "resource/common_res.hrc"
@@ -39,7 +39,7 @@
 #include <com/sun/star/sdbc/KeyRule.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #include "TConnection.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/container/XChild.hpp>
 

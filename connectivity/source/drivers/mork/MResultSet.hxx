@@ -34,9 +34,9 @@
 #include <comphelper/proparrhlp.hxx>
 #include "MStatement.hxx"
 #include "MQueryHelper.hxx"
-#include "connectivity/CommonTools.hxx"
-#include "connectivity/FValue.hxx"
-#include "connectivity/sqliterator.hxx"
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/FValue.hxx>
+#include <connectivity/sqliterator.hxx>
 #include "TSortIndex.hxx"
 
 namespace connectivity

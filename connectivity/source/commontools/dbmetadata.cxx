@@ -18,9 +18,9 @@
  */
 
 
-#include "connectivity/dbmetadata.hxx"
-#include "connectivity/dbexception.hxx"
-#include "connectivity/DriversConfig.hxx"
+#include <connectivity/dbmetadata.hxx>
+#include <connectivity/dbexception.hxx>
+#include <connectivity/DriversConfig.hxx>
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
 

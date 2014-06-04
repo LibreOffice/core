@@ -31,7 +31,7 @@
 #include "hsqldb/HStorageMap.hxx"
 #include "hsqldb/StorageNativeInputStream.h"
 
-#include "jvmaccess/virtualmachine.hxx"
+#include <jvmaccess/virtualmachine.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include "accesslog.hxx"
 

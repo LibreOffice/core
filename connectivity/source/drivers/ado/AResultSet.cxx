@@ -32,8 +32,8 @@
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/seqstream.hxx>
-#include "connectivity/dbexception.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 
 using namespace ::comphelper;

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_TSORTINDEX_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_TSORTINDEX_HXX
 
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 #include "TKeyValue.hxx"
 
 namespace connectivity

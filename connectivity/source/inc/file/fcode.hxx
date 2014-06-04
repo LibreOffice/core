@@ -20,13 +20,13 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCODE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FCODE_HXX
 
-#include "connectivity/sqliterator.hxx"
+#include <connectivity/sqliterator.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <tools/rtti.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include "connectivity/FValue.hxx"
+#include <connectivity/FValue.hxx>
 #include "file/filedllapi.hxx"
 
 namespace connectivity

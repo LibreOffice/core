@@ -21,7 +21,7 @@
 #ifdef __GNUC__
 #include <iostream>
 #endif
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 #include "file/FResultSet.hxx"
 #include "file/FResultSetMetaData.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -32,8 +32,8 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include "connectivity/dbconversion.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbconversion.hxx>
+#include <connectivity/dbtools.hxx>
 #include <cppuhelper/propshlp.hxx>
 #include <iterator>
 #include <tools/debug.hxx>
@@ -44,7 +44,7 @@
 
 #include <algorithm>
 #include <comphelper/extract.hxx>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <comphelper/types.hxx>
 #include "resource/file_res.hrc"
 #include "resource/sharedresources.hxx"

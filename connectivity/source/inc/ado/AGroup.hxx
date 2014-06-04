@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AGROUP_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AGROUP_HXX
 
-#include "connectivity/sdbcx/VGroup.hxx"
+#include <connectivity/sdbcx/VGroup.hxx>
 #include "ado/Awrapadox.hxx"
 
 namespace connectivity

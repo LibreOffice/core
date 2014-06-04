@@ -34,11 +34,11 @@
 #include <cppuhelper/compbase8.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include "connectivity/CommonTools.hxx"
-#include "connectivity/FValue.hxx"
-#include "connectivity/warningscontainer.hxx"
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/FValue.hxx>
+#include <connectivity/warningscontainer.hxx>
 #include "NStatement.hxx"
-#include "connectivity/OSubComponent.hxx"
+#include <connectivity/OSubComponent.hxx>
 #include "NResultSetMetaData.hxx"
 
 namespace connectivity

@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/TIndexes.hxx"
-#include "connectivity/TIndex.hxx"
+#include <connectivity/TIndexes.hxx>
+#include <connectivity/TIndex.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/IndexType.hpp>
 #include <connectivity/dbtools.hxx>
-#include "connectivity/TTableHelper.hxx"
+#include <connectivity/TTableHelper.hxx>
 #include "TConnection.hxx"
 #include <comphelper/extract.hxx>
 #include <rtl/ustrbuf.hxx>

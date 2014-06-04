@@ -18,7 +18,7 @@
  */
 
 #include "ado/Aolevariant.hxx"
-#include "connectivity/dbconversion.hxx"
+#include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
@@ -26,10 +26,10 @@
 #include "diagnose_ex.h"
 #include "resource/sharedresources.hxx"
 #include "resource/ado_res.hrc"
-#include "com/sun/star/bridge/oleautomation/Date.hpp"
-#include "com/sun/star/bridge/oleautomation/Currency.hpp"
-#include "com/sun/star/bridge/oleautomation/SCode.hpp"
-#include "com/sun/star/bridge/oleautomation/Decimal.hpp"
+#include <com/sun/star/bridge/oleautomation/Date.hpp>
+#include <com/sun/star/bridge/oleautomation/Currency.hpp>
+#include <com/sun/star/bridge/oleautomation/SCode.hpp>
+#include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;

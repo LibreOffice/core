@@ -36,8 +36,8 @@
 #include "odbc/OFunctions.hxx"
 #include "odbc/OStatement.hxx"
 #include "odbc/odbcbasedllapi.hxx"
-#include "connectivity/CommonTools.hxx"
-#include "connectivity/FValue.hxx"
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/FValue.hxx>
 #include "TSkipDeletedSet.hxx"
 
 namespace connectivity

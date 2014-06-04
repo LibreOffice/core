@@ -21,7 +21,7 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KTABLE_HXX
 
 #include "KConnection.hxx"
-#include "connectivity/sdbcx/VTable.hxx"
+#include <connectivity/sdbcx/VTable.hxx>
 
 namespace connectivity
 {

@@ -22,7 +22,7 @@
 
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <rtl/ref.hxx>
 #include "file/filedllapi.hxx"
 

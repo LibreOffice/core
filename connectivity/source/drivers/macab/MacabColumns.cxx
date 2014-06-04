@@ -22,7 +22,7 @@
 #include "MacabTable.hxx"
 #include "MacabTables.hxx"
 #include "MacabCatalog.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 
 using namespace connectivity::macab;
 using namespace connectivity::sdbcx;

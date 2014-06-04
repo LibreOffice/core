@@ -17,15 +17,15 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/sdbcx/VTable.hxx"
+#include <connectivity/sdbcx/VTable.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/sdbcx/VIndex.hxx"
+#include <connectivity/sdbcx/VIndex.hxx>
 #include <comphelper/sequence.hxx>
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 #include "TConnection.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
-#include "connectivity/sdbcx/VKey.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
+#include <connectivity/sdbcx/VKey.hxx>
+#include <connectivity/dbtools.hxx>
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

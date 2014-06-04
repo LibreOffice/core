@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AUSER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AUSER_HXX
 
-#include "connectivity/sdbcx/VUser.hxx"
+#include <connectivity/sdbcx/VUser.hxx>
 #include "ado/Awrapadox.hxx"
 
 namespace connectivity

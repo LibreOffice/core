@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include <MNSInclude.hxx>
+#include "MNSInclude.hxx"
 #include "MErrorResource.hxx"
 #include <sal/types.h>
 #include <rtl/ustring.hxx>

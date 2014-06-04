@@ -37,10 +37,10 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase9.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include "connectivity/FValue.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/FValue.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 #include <comphelper/broadcasthelper.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 

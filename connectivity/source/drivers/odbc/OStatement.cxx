@@ -38,7 +38,7 @@
 #include "diagnose_ex.h"
 #include <algorithm>
 #include "resource/common_res.hrc"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 
 using namespace ::comphelper;
 

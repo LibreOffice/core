@@ -35,7 +35,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/logging.hxx>
 #include <osl/mutex.hxx>
-#include "connectivity/DriversConfig.hxx"
+#include <connectivity/DriversConfig.hxx>
 
 namespace drivermanager
 {

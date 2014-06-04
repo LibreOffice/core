@@ -28,7 +28,7 @@
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include "dbase/DIndex.hxx"
-#include "connectivity/FValue.hxx"
+#include <connectivity/FValue.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <ucbhelper/content.hxx>

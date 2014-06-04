@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "ParameterSubstitution.hxx"
-#include "connectivity/sqlparse.hxx"
+#include <connectivity/sqlparse.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

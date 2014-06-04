@@ -23,7 +23,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <connectivity/dbcharset.hxx>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

@@ -22,10 +22,10 @@
 #include "MNSDeclares.hxx"
 #include <osl/thread.hxx>
 
-#include <MNSInclude.hxx>
+#include "MNSInclude.hxx"
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/mozilla/XCodeProxy.hpp>
-#include "com/sun/star/mozilla/XProxyRunner.hpp"
+#include <com/sun/star/mozilla/XProxyRunner.hpp>
 
 namespace connectivity
 {

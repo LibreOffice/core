@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AKEY_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AKEY_HXX
 
-#include "connectivity/sdbcx/VKey.hxx"
+#include <connectivity/sdbcx/VKey.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include "ado/Awrapadox.hxx"
 

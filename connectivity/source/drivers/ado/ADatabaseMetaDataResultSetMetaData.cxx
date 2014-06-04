@@ -19,7 +19,7 @@
 
 #include "ado/ADatabaseMetaDataResultSetMetaData.hxx"
 #include "ado/Awrapado.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 
 
 using namespace connectivity;

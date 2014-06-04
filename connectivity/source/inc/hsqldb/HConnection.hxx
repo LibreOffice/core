@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCONNECTION_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCONNECTION_HXX
 
-#include "connectivity/ConnectionWrapper.hxx"
+#include <connectivity/ConnectionWrapper.hxx>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>

@@ -32,13 +32,13 @@
 #include <cppuhelper/compbase12.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "file/FStatement.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <comphelper/propertycontainer.hxx>
 #include "file/fanalyzer.hxx"
 #include "file/FTable.hxx"
 #include "file/filedllapi.hxx"
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/StdTypeDefs.hxx"
+#include <connectivity/StdTypeDefs.hxx>
 #include "TSortIndex.hxx"
 #include "TSkipDeletedSet.hxx"
 #include <com/sun/star/lang/XEventListener.hpp>

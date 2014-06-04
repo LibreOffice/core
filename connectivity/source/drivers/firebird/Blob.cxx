@@ -11,7 +11,7 @@
 #include "Connection.hxx"
 #include "Util.hxx"
 
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 

@@ -20,12 +20,12 @@
 #include "dbase/DIndex.hxx"
 #include "dbase/DIndexColumns.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 #include <comphelper/sequence.hxx>
 #include "dbase/DTable.hxx"
 #include "dbase/DIndexIter.hxx"
 #include <tools/config.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>

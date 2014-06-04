@@ -20,9 +20,9 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACOLUMNS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACOLUMNS_HXX
 
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
-#include "connectivity/sdbcx/IRefreshable.hxx"
+#include <connectivity/sdbcx/IRefreshable.hxx>
 #include "ado/Awrapadox.hxx"
 
 namespace connectivity

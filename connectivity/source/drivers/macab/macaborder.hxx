@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABORDER_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MACAB_MACABORDER_HXX
 
-#include "rtl/ustring.hxx"
+#include <rtl/ustring.hxx>
 #include "MacabHeader.hxx"
 #include "MacabRecord.hxx"
 

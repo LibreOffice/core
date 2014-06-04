@@ -35,7 +35,7 @@
 #include "odbc/ODatabaseMetaData.hxx"
 #include "odbc/odbcbasedllapi.hxx"
 #include <comphelper/broadcasthelper.hxx>
-#include "connectivity/StdTypeDefs.hxx"
+#include <connectivity/StdTypeDefs.hxx>
 
 namespace connectivity
 {

@@ -31,7 +31,7 @@
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
 #include <cppuhelper/compbase10.hxx>
 #include <comphelper/proparrhlp.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include "java/sql/JStatement.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "java/sql/ConnectionLog.hxx"

@@ -22,7 +22,7 @@
 #include "NTable.hxx"
 #include "NTables.hxx"
 #include "NCatalog.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 
 using namespace connectivity::sdbcx;
 using namespace connectivity;

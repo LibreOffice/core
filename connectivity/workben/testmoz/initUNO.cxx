@@ -18,8 +18,8 @@
  */
 
 
-#include "rtl/bootstrap.hxx"
-#include "cppuhelper/bootstrap.hxx"
+#include <rtl/bootstrap.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 using namespace cppu;

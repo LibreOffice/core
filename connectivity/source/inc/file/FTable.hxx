@@ -20,13 +20,13 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FTABLE_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_FILE_FTABLE_HXX
 
-#include "connectivity/sdbcx/VTable.hxx"
+#include <connectivity/sdbcx/VTable.hxx>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include "file/FConnection.hxx"
 #include "file/filedllapi.hxx"
 #include <tools/stream.hxx>
-#include "connectivity/FValue.hxx"
+#include <connectivity/FValue.hxx>
 #include "TResultSetHelper.hxx"
 
 namespace connectivity

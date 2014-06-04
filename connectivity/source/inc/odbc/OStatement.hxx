@@ -31,7 +31,7 @@
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase6.hxx>
 #include <comphelper/uno3.hxx>
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 #include "odbc/OFunctions.hxx"
 #include "odbc/OConnection.hxx"
 #include "odbc/odbcbasedllapi.hxx"

@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACOLUMN_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_ACOLUMN_HXX
 
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 #include "ado/Awrapadox.hxx"
 
 namespace connectivity

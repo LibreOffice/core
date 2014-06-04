@@ -21,8 +21,8 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_KAB_KCONNECTION_HXX
 
 #include <map>
-#include "connectivity/OSubComponent.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/OSubComponent.hxx>
+#include <connectivity/CommonTools.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>

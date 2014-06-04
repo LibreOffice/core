@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "connectivity/dbconversion.hxx"
+#include <connectivity/dbconversion.hxx>
 #include <connectivity/dbtools.hxx>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>

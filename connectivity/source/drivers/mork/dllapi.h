@@ -11,8 +11,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_DLLAPI_H
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MORK_DLLAPI_H
 
-#include "sal/config.h"
-#include "sal/types.h"
+#include <sal/config.h>
+#include <sal/types.h>
 
 #if defined LO_DLLIMPLEMENTATION_MORK
 #define LO_DLLPUBLIC_MORK SAL_DLLPUBLIC_EXPORT

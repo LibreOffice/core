@@ -30,9 +30,9 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
-#include "connectivity/dbtools.hxx"
-#include "connectivity/TKeys.hxx"
-#include "connectivity/TIndexes.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/TKeys.hxx>
+#include <connectivity/TIndexes.hxx>
 #include "MCatalog.hxx"
 
 

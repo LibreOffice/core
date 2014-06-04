@@ -31,11 +31,11 @@
 #include <comphelper/property.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
-#include "connectivity/dbtools.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
-#include "connectivity/TKeys.hxx"
-#include "connectivity/TIndexes.hxx"
-#include "connectivity/TColumnsHelper.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/sdbcx/VColumn.hxx>
+#include <connectivity/TKeys.hxx>
+#include <connectivity/TIndexes.hxx>
+#include <connectivity/TColumnsHelper.hxx>
 #include "mysql/YCatalog.hxx"
 #include "mysql/YColumns.hxx"
 #include "TConnection.hxx"

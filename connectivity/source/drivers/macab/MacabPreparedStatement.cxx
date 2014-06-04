@@ -22,7 +22,7 @@
 #include "MacabAddressBook.hxx"
 #include "propertyids.hxx"
 #include <connectivity/dbexception.hxx>
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbtools.hxx>
 #include "resource/macab_res.hrc"
 #include "resource/sharedresources.hxx"
 

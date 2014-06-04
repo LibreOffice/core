@@ -19,8 +19,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_HSQLDB_HCATALOG_HXX
 
-#include "connectivity/sdbcx/VCatalog.hxx"
-#include "connectivity/StdTypeDefs.hxx"
+#include <connectivity/sdbcx/VCatalog.hxx>
+#include <connectivity/StdTypeDefs.hxx>
 
 namespace connectivity
 {

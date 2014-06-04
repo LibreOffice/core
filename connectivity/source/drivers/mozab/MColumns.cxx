@@ -18,7 +18,7 @@
  */
 
 #include "MColumns.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -27,7 +27,7 @@
 #include "MTables.hxx"
 #include "MCatalog.hxx"
 #include <comphelper/types.hxx>
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbtools.hxx>
 
 using namespace ::comphelper;
 

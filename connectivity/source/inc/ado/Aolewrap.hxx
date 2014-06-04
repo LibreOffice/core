@@ -23,7 +23,7 @@
 #include <osl/thread.h>
 #include <map>
 #include <vector>
-#include "connectivity/StdTypeDefs.hxx"
+#include <connectivity/StdTypeDefs.hxx>
 
 namespace rtl
 {

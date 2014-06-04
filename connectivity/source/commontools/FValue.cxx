@@ -20,8 +20,8 @@
 
 #include <string.h>
 #include <stdio.h>
-#include "connectivity/FValue.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/FValue.hxx>
+#include <connectivity/CommonTools.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/io/XInputStream.hpp>

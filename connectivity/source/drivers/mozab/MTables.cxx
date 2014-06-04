@@ -27,8 +27,8 @@
 #include "MCatalog.hxx"
 #include "MConnection.hxx"
 #include <comphelper/extract.hxx>
-#include "connectivity/dbtools.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbexception.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/types.hxx>
 

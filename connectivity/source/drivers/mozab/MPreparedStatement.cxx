@@ -19,15 +19,15 @@
 
 #include <stdio.h>
 #include <osl/diagnose.h>
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/sdbcx/VColumn.hxx>
 #include "MPreparedStatement.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "MResultSetMetaData.hxx"
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/dbexception.hxx"
-#include "connectivity/dbtools.hxx"
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include "diagnose_ex.h"

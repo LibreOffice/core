@@ -19,7 +19,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCATALOG_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_MOZAB_MCATALOG_HXX
 
-#include "connectivity/sdbcx/VCatalog.hxx"
+#include <connectivity/sdbcx/VCatalog.hxx>
 
 namespace connectivity
 {

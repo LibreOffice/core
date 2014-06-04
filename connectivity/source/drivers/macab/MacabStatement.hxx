@@ -23,8 +23,8 @@
 #include "MacabConnection.hxx"
 #include "MacabHeader.hxx"
 #include <list>
-#include "connectivity/sqliterator.hxx"
-#include "connectivity/sqlparse.hxx"
+#include <connectivity/sqliterator.hxx>
+#include <connectivity/sqlparse.hxx>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase4.hxx>

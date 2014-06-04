@@ -20,7 +20,7 @@
 #include <sal/macros.h>
 #include "MDriver.hxx"
 #include "MConnection.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "resource/mozab_res.hrc"
 #include "resource/common_res.hrc"

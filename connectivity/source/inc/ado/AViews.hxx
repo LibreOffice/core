@@ -20,7 +20,7 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AVIEWS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AVIEWS_HXX
 
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 #include "ado/Awrapadox.hxx"
 #include "ado/ACatalog.hxx"
 

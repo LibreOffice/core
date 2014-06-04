@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include "connectivity/TTableHelper.hxx"
+#include <connectivity/TTableHelper.hxx>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbcx/KeyType.hpp>
@@ -31,8 +31,8 @@
 #include <comphelper/implementationreference.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
-#include "connectivity/dbtools.hxx"
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/dbtools.hxx>
+#include <connectivity/sdbcx/VCollection.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include "TConnection.hxx"
 

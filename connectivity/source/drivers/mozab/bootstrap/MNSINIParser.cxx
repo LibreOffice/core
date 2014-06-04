@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <MNSINIParser.hxx>
+#include "MNSINIParser.hxx"
 #include <rtl/byteseq.hxx>
 
 IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOException )

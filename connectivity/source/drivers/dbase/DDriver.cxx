@@ -20,9 +20,9 @@
 #include "dbase/DDriver.hxx"
 #include "dbase/DConnection.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include "resource/dbase_res.hrc"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 using namespace connectivity::dbase;
 using namespace connectivity::file;

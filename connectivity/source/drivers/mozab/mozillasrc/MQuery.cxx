@@ -18,8 +18,8 @@
  */
 
 
-#include <MQueryHelper.hxx>
-#include <MNameMapper.hxx>
+#include "MQueryHelper.hxx"
+#include "MNameMapper.hxx"
 #include <MConnection.hxx>
 #include <connectivity/dbexception.hxx>
 #include "MQuery.hxx"

@@ -24,7 +24,7 @@
 #include "ado/Awrapado.hxx"
 #include "ado/adoimp.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include "resource/ado_res.hrc"
 #include <objbase.h>

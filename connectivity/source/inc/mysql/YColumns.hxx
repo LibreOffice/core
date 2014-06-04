@@ -18,8 +18,8 @@
  */
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YCOLUMNS_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_MYSQL_YCOLUMNS_HXX
-#include "connectivity/TColumnsHelper.hxx"
-#include "connectivity/sdbcx/VColumn.hxx"
+#include <connectivity/TColumnsHelper.hxx>
+#include <connectivity/sdbcx/VColumn.hxx>
 
 namespace connectivity
 {

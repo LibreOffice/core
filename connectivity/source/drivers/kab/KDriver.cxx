@@ -21,7 +21,7 @@
 #include "KDriver.hxx"
 #include "KDEInit.h"
 #include "KConnection.hxx"
-#include "rtl/strbuf.hxx"
+#include <rtl/strbuf.hxx>
 
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>

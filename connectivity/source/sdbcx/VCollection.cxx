@@ -20,9 +20,9 @@
 
 #include <algorithm>
 #include <stdio.h>
-#include "connectivity/sdbcx/VCollection.hxx"
-#include "connectivity/sdbcx/VDescriptor.hxx"
-#include "connectivity/dbexception.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
+#include <connectivity/sdbcx/VDescriptor.hxx>
+#include <connectivity/dbexception.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/container.hxx>
 #include <comphelper/types.hxx>

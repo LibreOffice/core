@@ -23,7 +23,7 @@
 #include "ado/AConnection.hxx"
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include "connectivity/sdbcx/IRefreshable.hxx"
+#include <connectivity/sdbcx/IRefreshable.hxx>
 #include "TConnection.hxx"
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>

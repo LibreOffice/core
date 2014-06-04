@@ -21,7 +21,7 @@
 #include "macabcondition.hxx"
 #include "MacabHeader.hxx"
 #include "MacabRecord.hxx"
-#include "connectivity/CommonTools.hxx"
+#include <connectivity/CommonTools.hxx>
 
 using namespace ::connectivity::macab;
 using namespace ::com::sun::star::sdbc;

@@ -20,11 +20,11 @@
 #include "flat/EDriver.hxx"
 #include "flat/EConnection.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include <comphelper/sequence.hxx>
 #include "resource/common_res.hrc"
 #include "resource/sharedresources.hxx"
-#include "comphelper/processfactory.hxx"
+#include <comphelper/processfactory.hxx>
 
 
 using namespace connectivity::flat;

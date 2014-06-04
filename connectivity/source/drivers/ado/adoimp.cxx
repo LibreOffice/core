@@ -19,7 +19,7 @@
 
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/PrivilegeObject.hpp>
-#include "connectivity/dbexception.hxx"
+#include <connectivity/dbexception.hxx>
 #include "ado/Awrapado.hxx"
 #include "ado/adoimp.hxx"
 #include <osl/diagnose.h>

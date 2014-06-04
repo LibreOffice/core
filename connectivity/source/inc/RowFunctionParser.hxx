@@ -24,7 +24,7 @@
 #include <boost/shared_ptr.hpp>
 #include "FDatabaseMetaDataResultSet.hxx"
 #include <vector>
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/dbtoolsdllapi.hxx>
 
 
 namespace connectivity

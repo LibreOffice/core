@@ -27,8 +27,8 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <cppuhelper/compbase4.hxx>
 #include "propertyids.hxx"
-#include "connectivity/CommonTools.hxx"
-#include "connectivity/dbtoolsdllapi.hxx"
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/dbtoolsdllapi.hxx>
 #include "resource/sharedresources.hxx"
 
 namespace connectivity
