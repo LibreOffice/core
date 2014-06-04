@@ -27,10 +27,11 @@ class MacroSnippet
     bool mbError;
     SbModuleRef mpMod;
     StarBASICRef mpBasic;
+    BasicDLL maDll; // we need a dll instance for resouce manager etc.
 
     void InitSnippet()
     {
-        CPPUNIT_ASSERT_MESSAGE( "No resource manager", basicDLL().GetBasResMgr() != NULL );
+        CPPUNIT_ASSERT_MESSAGE( "No resource manager", maDll.GetBasResMgr() != NULL );
         mpBasic = new StarBASIC();
         StarBASIC::SetGlobalErrorHdl( LINK( this, MacroSnippet, BasicErrorHdl ) );
     }
@@ -140,12 +141,6 @@ class MacroSnippet
     {
         StarBASIC::SetGlobalErrorHdl( Link() );
         mbError = false;
-    }
-
-    BasicDLL& basicDLL()
-    {
-        static BasicDLL maDll; // we need a dll instance for resouce manager etc.
-        return maDll;
     }
 };
 
