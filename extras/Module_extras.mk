@@ -11,6 +11,7 @@ $(eval $(call gb_Module_Module,extras))
 
 $(eval $(call gb_Module_add_targets,extras,\
 	CustomTarget_autocorr \
+	CustomTarget_autotextuser \
 	CustomTarget_glade \
 	Package_autocorr \
 	Package_autotextuser \
