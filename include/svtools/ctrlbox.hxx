@@ -44,8 +44,6 @@ typedef ::std::vector< FontInfo              > ImplFontList;
 #define CHANGE_DIST                ( ( sal_uInt16 ) 4 )
 #define ADAPT_DIST                 ( ( sal_uInt16 ) 8 )
 
-
-
 /*************************************************************************
 
 Description
@@ -147,10 +145,6 @@ FontList; FontNameBox; FontStyleBox; FontSizeMenu
 
 *************************************************************************/
 
-
-// - ColorListBox -
-
-
 class SVT_DLLPUBLIC ColorListBox : public ListBox
 {
     ImpColorList*   pColorList; // separate liste, in case of user data are required from outside
@@ -228,10 +222,6 @@ inline Color ColorListBox::GetSelectEntryColor( sal_Int32  nSelIndex ) const
     return aColor;
 }
 
-
-// - LineListBox -
-
-
 /**
     Class computing border widths shared between Line style listbox and the
     SvxBorderLine implementation.
@@ -283,7 +273,6 @@ inline Color sameDistColor( Color /*rMain*/, Color rDefault )
 {
     return rDefault;
 }
-
 
 class SVT_DLLPUBLIC LineListBox : public ListBox
 {
@@ -401,10 +390,6 @@ inline void LineListBox::SetNone( const OUString& sNone )
     m_sNone = sNone;
 }
 
-
-// - FontNameBox -
-
-
 class SVT_DLLPUBLIC FontNameBox : public ComboBox
 {
 private:
@@ -438,10 +423,6 @@ private:
     FontNameBox&    operator =( const FontNameBox& );
 };
 
-
-// - FontStyleBox -
-
-
 class SVT_DLLPUBLIC FontStyleBox : public ComboBox
 {
     OUString        aLastStyle;
@@ -473,10 +454,6 @@ inline void FontStyleBox::SetText( const OUString& rText )
     aLastStyle = rText;
     ComboBox::SetText( rText );
 }
-
-
-// - FontSizeBox -
-
 
 class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
