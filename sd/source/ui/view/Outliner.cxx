@@ -1364,8 +1364,7 @@ void Outliner::EnterEditMode (bool bGrabFocus)
         mpView->UnmarkAllObj (pPV);
         mpView->MarkObj (mpTextObj, pPV);
 
-        if( mpTextObj )
-            mpTextObj->setActiveText( mnText );
+        mpTextObj->setActiveText( mnText );
 
         // Turn on the edit mode for the text object.
         mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, true, this, pOutlinerView, true, true, bGrabFocus);
