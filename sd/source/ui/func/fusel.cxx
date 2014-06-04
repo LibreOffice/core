@@ -182,13 +182,11 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             * end creation now.
             ******************************************************************/
             bSuppressChangesOfSelection = true;
-            if(mpWindow)
-                mpWindow->EnterWait();
+            mpWindow->EnterWait();
             mpView->End3DCreation();
             bSuppressChangesOfSelection = false;
             mpView->ResetCreationActive();
-            if(mpWindow)
-                mpWindow->LeaveWait();
+            mpWindow->LeaveWait();
         }
 
         bool bTextEdit = false;
