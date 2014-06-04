@@ -78,6 +78,7 @@
 #include <swerror.h>
 #include <rtl/strbuf.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <xmloff/odffields.hxx>
 
 #define MAX_INDENT_LEVEL 20
 
@@ -1067,6 +1068,51 @@ void SwHTMLWriter::OutBookmarks()
         aOutlineMarkPoss.erase( aOutlineMarkPoss.begin()+nPos );
         aOutlineMarks.erase( aOutlineMarks.begin() + nPos );
     }
+}
+
+void SwHTMLWriter::OutPointFieldmarks( const SwPosition& rPos )
+{
+    // "point" fieldmarks that occupy single character space, as opposed to
+    // range fieldmarks that are associated with start and end points.
+
+    const IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
+    if (!pMarkAccess)
+        return;
+
+    const sw::mark::IFieldmark* pMark = pMarkAccess->getFieldmarkFor(rPos);
+    if (!pMark)
+        return;
+
+    if (pMark->GetFieldname() == ODF_FORMCHECKBOX)
+    {
+        const sw::mark::ICheckboxFieldmark* pCheckBox =
+            dynamic_cast<const sw::mark::ICheckboxFieldmark*>(pMark);
+
+        if (pCheckBox)
+        {
+            OString aOut("<");
+            aOut += OOO_STRING_SVTOOLS_HTML_input;
+            aOut += " ";
+            aOut += OOO_STRING_SVTOOLS_HTML_O_type;
+            aOut += "=\"";
+            aOut += OOO_STRING_SVTOOLS_HTML_IT_checkbox;
+            aOut += "\"";
+
+            if (pCheckBox->IsChecked())
+            {
+                aOut += " ";
+                aOut += OOO_STRING_SVTOOLS_HTML_O_checked;
+                aOut += "=\"";
+                aOut += OOO_STRING_SVTOOLS_HTML_O_checked;
+                aOut += "\"";
+            }
+
+            aOut += "/>";
+            Strm().WriteCharPtr(aOut.getStr());
+        }
+    }
+
+    // TODO : Handle other single-point fieldmark types here (if any).
 }
 
 void SwHTMLWriter::OutImplicitMark( const OUString& rMark,

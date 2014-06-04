@@ -2533,6 +2533,14 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                         sOut += ";";
                         rWrt.Strm().WriteCharPtr( sOut.getStr() );
                     }
+                    else if (c == CH_TXT_ATR_FORMELEMENT)
+                    {
+                        // Placeholder for a single-point fieldmark.
+
+                        SwPosition aMarkPos = *rWrt.pCurPam->GetPoint();
+                        aMarkPos.nContent += nStrPos - aMarkPos.nContent.GetIndex();
+                        rHTMLWrt.OutPointFieldmarks(aMarkPos);
+                    }
                     else
                         HTMLOutFuncs::Out_Char( rWrt.Strm(), (sal_Unicode)c, aContext, &rHTMLWrt.aNonConvertableCharacters );
 

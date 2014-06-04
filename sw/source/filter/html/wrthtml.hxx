@@ -410,6 +410,7 @@ public:
     // gebe alle an in aktuellen Ansatz stehenden ::com::sun::star::text::Bookmarks aus
     void OutAnchor( const OUString& rName );
     void OutBookmarks();
+    void OutPointFieldmarks( const SwPosition& rPos );
     void OutImplicitMark( const OUString& rMark, const sal_Char *pMarkType );
     void OutHyperlinkHRefValue( const OUString& rURL );
 
