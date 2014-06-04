@@ -1260,12 +1260,9 @@ void SlideShow::StartFullscreenPresentation( )
         // changes made by the presentation have an effect on the other
         // view shells.
         FrameView* pOriginalFrameView = 0;
-        if (mpCurrentViewShellBase)
-        {
-            ::boost::shared_ptr<ViewShell> xShell(mpCurrentViewShellBase->GetMainViewShell());
-            if (xShell.get())
-                pOriginalFrameView = xShell->GetFrameView();
-        }
+        ::boost::shared_ptr<ViewShell> xShell(mpCurrentViewShellBase->GetMainViewShell());
+        if (xShell.get())
+            pOriginalFrameView = xShell->GetFrameView();
 
         delete mpFullScreenFrameView;
         mpFullScreenFrameView = new FrameView(mpDoc, pOriginalFrameView);
