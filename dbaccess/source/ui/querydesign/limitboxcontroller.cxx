@@ -71,20 +71,15 @@ bool LimitBoxImpl::Notify( NotifyEvent& rNEvt )
             switch ( nCode )
             {
                 case KEY_ESCAPE:
-                {
                     Undo();
-                }
+                    // fall-through
                 case KEY_RETURN:
-                {
                     GrabFocusToDocument();
                     nHandled = true;
                     break;
-                }
                 case KEY_TAB:
-                {
                     Select();
                     break;
-                }
             }
             break;
         }
