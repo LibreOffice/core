@@ -306,6 +306,61 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     return WEIGHT_DONTKNOW;
 }
 
+css::awt::FontSlant VCLUnoHelper::ConvertFontSlant(FontItalic eItalic)
+{
+    css::awt::FontSlant eRet(css::awt::FontSlant_DONTKNOW);
+    switch (eItalic)
+    {
+        case ITALIC_NONE:
+            eRet = css::awt::FontSlant_NONE;
+            break;
+        case ITALIC_OBLIQUE:
+            eRet = css::awt::FontSlant_OBLIQUE;
+            break;
+        case ITALIC_NORMAL:
+            eRet = css::awt::FontSlant_ITALIC;
+            break;
+        case ITALIC_DONTKNOW:
+            eRet = css::awt::FontSlant_DONTKNOW;
+            break;
+        case FontItalic_FORCE_EQUAL_SIZE:
+            eRet = css::awt::FontSlant_MAKE_FIXED_SIZE;
+            break;
+    }
+    return eRet;
+}
+
+FontItalic VCLUnoHelper::ConvertFontSlant(css::awt::FontSlant eSlant)
+{
+    FontItalic eRet = ITALIC_DONTKNOW;
+    switch (eSlant)
+    {
+        case css::awt::FontSlant_NONE:
+            eRet = ITALIC_NONE;
+            break;
+        case css::awt::FontSlant_OBLIQUE:
+            eRet = ITALIC_OBLIQUE;
+            break;
+        case css::awt::FontSlant_ITALIC:
+            eRet = ITALIC_NORMAL;
+            break;
+        case css::awt::FontSlant_DONTKNOW:
+            eRet = ITALIC_DONTKNOW;
+            break;
+        case css::awt::FontSlant_REVERSE_OBLIQUE:
+            //there is no vcl reverse oblique
+            eRet = ITALIC_OBLIQUE;
+            break;
+        case css::awt::FontSlant_REVERSE_ITALIC:
+            //there is no vcl reverse normal
+            eRet = ITALIC_NORMAL;
+            break;
+        case css::awt::FontSlant_MAKE_FIXED_SIZE:
+            eRet = FontItalic_FORCE_EQUAL_SIZE;
+            break;
+    }
+    return eRet;
+}
 
 ::com::sun::star::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const Font& rFont )
 {
@@ -319,7 +374,7 @@ FontWeight VCLUnoHelper::ConvertFontWeight( float f )
     aFD.Pitch = sal::static_int_cast< sal_Int16 >(rFont.GetPitch());
     aFD.CharacterWidth = VCLUnoHelper::ConvertFontWidth( rFont.GetWidthType() );
     aFD.Weight= VCLUnoHelper::ConvertFontWeight( rFont.GetWeight() );
-    aFD.Slant = (::com::sun::star::awt::FontSlant)rFont.GetItalic();
+    aFD.Slant = VCLUnoHelper::ConvertFontSlant( rFont.GetItalic() );
     aFD.Underline = sal::static_int_cast< sal_Int16 >(rFont.GetUnderline());
     aFD.Strikeout = sal::static_int_cast< sal_Int16 >(rFont.GetStrikeout());
     aFD.Orientation = rFont.GetOrientation();
