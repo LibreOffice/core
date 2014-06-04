@@ -279,10 +279,13 @@ else
 	@echo "  instdir/program/soffice"
 endif
 	@echo
+ifneq ($(OS),MACOSX)
 	@echo "(only if you have good reason to test an actual installation: make test-install)"
 	@echo
+endif
 	@false
 
+ifneq ($(OS),MACOSX)
 test-install: build
 	@rm -rf $(TESTINSTALLDIR)
 	@mkdir -p $(TESTINSTALLDIR)
@@ -290,11 +293,9 @@ ifeq ($(OS_FOR_BUILD),WNT)
 	cd $(SRCDIR)/instsetoo_native && $(GNUMAKE) LIBO_TEST_INSTALL=TRUE $(GMAKE_OPTIONS)
 else
 	@ooinstall $(TESTINSTALLDIR)
-ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
-	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice.app
-endif
 endif
 	@$(call gb_Top_InstallFinished,Test Installation,$(TESTINSTALLDIR))
+endif
 
 distro-pack-install: install
 	$(SRCDIR)/bin/distro-install-clean-up
