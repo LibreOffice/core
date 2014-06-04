@@ -89,8 +89,6 @@
 #include <editeng/editrids.hrc>
 #include <svx/xlnclit.hxx>
 
-
-
 #define MAX_MRU_FONTNAME_ENTRIES    5
 #define LOGICAL_EDIT_HEIGHT         12
 
@@ -120,11 +118,6 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxLineColorToolBoxControl, XLineColorItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameToolBoxControl, SvxBoxItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxFrameLineStyleToolBoxControl, SvxLineItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxSimpleUndoRedoController, SfxStringItem );
-
-
-// class SvxStyleBox_Impl -----------------------------------------------------
-
-
 
 class SvxStyleBox_Impl : public ComboBox
 {
@@ -169,10 +162,6 @@ private:
 
     void            ReleaseFocus();
 };
-
-
-// class SvxFontNameBox --------------------------------------------------
-
 
 class SvxFontNameBox_Impl : public FontNameBox
 {
@@ -229,12 +218,7 @@ public:
     SAL_WNODEPRECATED_DECLARATIONS_POP
 };
 
-
-// class SvxFrameWindow_Impl --------------------------------------------------
-
-
 // SelectHdl needs the Modifiers, get them in MouseButtonUp
-
 class SvxFrmValueSet_Impl : public ValueSet
 {
     sal_uInt16          nModifier;
@@ -280,9 +264,6 @@ public:
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
 
-
-// class SvxLineWindow_Impl ---------------------------------------------------
-
 class SvxLineWindow_Impl : public SfxPopupWindow
 {
 private:
@@ -303,11 +284,6 @@ public:
     virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
 };
 
-
-// Helper classes:
-
-// class SfxStyleControllerItem ------------------------------------------
-
 class SvxStyleToolBoxControl;
 
 class SfxStyleControllerItem_Impl : public SfxStatusListener
@@ -324,10 +300,6 @@ class SfxStyleControllerItem_Impl : public SfxStatusListener
     private:
         SvxStyleToolBoxControl& rControl;
 };
-
-
-// class SvxStyleBox_Impl -----------------------------------------------------
-
 
 SvxStyleBox_Impl::SvxStyleBox_Impl(Window* pParent,
                                    const OUString& rCommand,
@@ -359,8 +331,6 @@ SvxStyleBox_Impl::~SvxStyleBox_Impl()
 {
 }
 
-
-
 void SvxStyleBox_Impl::ReleaseFocus()
 {
     if ( !bRelease )
@@ -371,8 +341,6 @@ void SvxStyleBox_Impl::ReleaseFocus()
     if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
         m_xFrame->getContainerWindow()->setFocus();
 }
-
-
 
 void SvxStyleBox_Impl::Select()
 {
@@ -463,13 +431,10 @@ void SvxStyleBox_Impl::Select()
     }
 }
 
-
 void SvxStyleBox_Impl::SetFamily( SfxStyleFamily eNewFamily )
 {
     eStyleFamily = eNewFamily;
 }
-
-
 
 bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -485,8 +450,6 @@ bool SvxStyleBox_Impl::PreNotify( NotifyEvent& rNEvt )
     }
     return ComboBox::PreNotify( rNEvt );
 }
-
-
 
 bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
 {
@@ -706,8 +669,6 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
     }
 }
 
-
-
 IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
 {
     (void)pThis;
@@ -715,8 +676,6 @@ IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
         _pCtrl->GrabFocus();
     return 0;
 }
-
-
 
 static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
 {
@@ -790,10 +749,6 @@ static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl
     return bChanged;
 }
 
-
-// class SvxFontNameBox_Impl --------------------------------------------------
-
-
 SvxFontNameBox_Impl::SvxFontNameBox_Impl( Window* pParent, const Reference< XDispatchProvider >& rDispatchProvider,const Reference< XFrame >& _xFrame, WinBits nStyle ) :
 
     FontNameBox        ( pParent, nStyle | WinBits( WB_DROPDOWN | WB_AUTOHSCROLL ) ),
@@ -817,8 +772,6 @@ SvxFontNameBox_Impl::~SvxFontNameBox_Impl()
 {
     GetSubEdit()->RemoveEventListener( LINK( this, SvxFontNameBox_Impl, CheckAndMarkUnknownFont ));
 }
-
-
 
 void SvxFontNameBox_Impl::FillList()
 {
@@ -859,8 +812,6 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent*, event 
     return 0;
 }
 
-
-
 void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
 {
     if ( pFontItem )
@@ -876,8 +827,6 @@ void SvxFontNameBox_Impl::Update( const SvxFontItem* pFontItem )
         SetText( aCurName );
 }
 
-
-
 bool SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
 {
     sal_uInt16 nType = rNEvt.GetType();
@@ -889,8 +838,6 @@ bool SvxFontNameBox_Impl::PreNotify( NotifyEvent& rNEvt )
     }
     return FontNameBox::PreNotify( rNEvt );
 }
-
-
 
 bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
 {
@@ -935,7 +882,6 @@ bool SvxFontNameBox_Impl::Notify( NotifyEvent& rNEvt )
     return nHandled || FontNameBox::Notify( rNEvt );
 }
 
-
 void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -949,8 +895,6 @@ void SvxFontNameBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     FontNameBox::DataChanged( rDCEvt );
 }
 
-
-
 void SvxFontNameBox_Impl::ReleaseFocus_Impl()
 {
     if ( !bRelease )
@@ -961,8 +905,6 @@ void SvxFontNameBox_Impl::ReleaseFocus_Impl()
     if ( m_xFrame.is() && m_xFrame->getContainerWindow().is() )
         m_xFrame->getContainerWindow()->setFocus();
 }
-
-
 
 void SvxFontNameBox_Impl::EnableControls_Impl()
 {
@@ -980,8 +922,6 @@ void SvxFontNameBox_Impl::EnableControls_Impl()
     bEnable = aFontOpt.IsFontWYSIWYGEnabled();
     EnableWYSIWYG( bEnable );
 }
-
-
 
 void SvxFontNameBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 {
@@ -1068,9 +1008,6 @@ void SvxFontNameBox_Impl::Select()
     }
 }
 
-
-// class SvxColorWindow_Impl --------------------------------------------------
-
 #ifndef WB_NO_DIRECTSELECT
 #define WB_NO_DIRECTSELECT      ((WinBits)0x04000000)
 #endif
@@ -1080,9 +1017,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           const Reference< XFrame >& rFrame,
                                           const OUString&            rWndTitle,
                                           Window*                    pParentWindow ):
-
     SfxPopupWindow( nSlotId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
-
     theSlotId( nSlotId ),
     aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
     maCommand( rCommand )
@@ -1258,16 +1193,10 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     }
 }
 
-
-// class SvxFrameWindow_Impl --------------------------------------------------
-
-
 SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFrame >& rFrame, Window* pParentWindow ) :
-
     SfxPopupWindow( nId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
     aFrameSet   ( this, WinBits( WB_ITEMBORDER | WB_DOUBLEBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT ) ),
     bParagraphMode(false)
-
 {
     BindListener();
     AddStatusListener(OUString(".uno:BorderReducedMode"));
@@ -1349,7 +1278,6 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
             aFrameSet.SetItemImage( i, aImgList.GetImage( i ) );
     }
 }
-
 
 #define FRM_VALID_LEFT      0x01
 #define FRM_VALID_RIGHT     0x02
@@ -1475,19 +1403,13 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
     return 0;
 }
 
-
-
 void SvxFrameWindow_Impl::Resize()
 {
     lcl_ResizeValueSet( *this, aFrameSet);
 }
 
-
-
 void SvxFrameWindow_Impl::StateChanged(
-
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-
 {
     if ( pState && nSID == SID_BORDER_REDUCED_MODE)
     {
@@ -1525,22 +1447,15 @@ void SvxFrameWindow_Impl::StateChanged(
     SfxPopupWindow::StateChanged( nSID, eState, pState );
 }
 
-
-
 void SvxFrameWindow_Impl::StartSelection()
 {
     aFrameSet.StartSelection();
 }
 
-
-
 bool SvxFrameWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
-
-
-// class SvxLineWindow_Impl --------------------------------------------------
 
 static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 {
@@ -1608,8 +1523,6 @@ SfxPopupWindow* SvxLineWindow_Impl::Clone() const
     return new SvxLineWindow_Impl( GetId(), GetFrame(), GetParent() );
 }
 
-
-
 IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
 {
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
@@ -1640,28 +1553,20 @@ IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
     return 0;
 }
 
-
-
 void SvxLineWindow_Impl::Resize()
 {
     m_aLineStyleLb.Resize();
 }
-
-
 
 bool SvxLineWindow_Impl::Close()
 {
     return SfxPopupWindow::Close();
 }
 
-
-
 Window* SvxLineWindow_Impl::GetPreferredKeyInputWindow()
 {
     return &m_aLineStyleLb;
 }
-
-
 
 void SvxLineWindow_Impl::GetFocus()
 {
@@ -1680,15 +1585,6 @@ void SvxLineWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 #endif
 }
 
-
-
-
-// Helper classes
-
-
-// class SfxStyleControllerItem_Impl ------------------------------------------
-
-
 SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
     const Reference< XDispatchProvider >& rDispatchProvider,
     sal_uInt16                                nSlotId,      // Family-ID
@@ -1698,8 +1594,6 @@ SfxStyleControllerItem_Impl::SfxStyleControllerItem_Impl(
         rControl( rTbxCtl )
 {
 }
-
-
 
 void SfxStyleControllerItem_Impl::StateChanged(
     sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
@@ -1727,12 +1621,6 @@ void SfxStyleControllerItem_Impl::StateChanged(
         }
     }
 }
-
-
-
-
-// class SvxStyleToolBoxControl ------------------------------------------
-
 
 struct SvxStyleToolBoxControl::Impl
 {
@@ -1831,7 +1719,6 @@ struct SvxStyleToolBoxControl::Impl
     }
 };
 
-
 // mapping table from bound items. BE CAREFUL this table must be in the
 // same order as the uno commands bound to the slots SID_STYLE_FAMILY1..n
 // MAX_FAMILIES must also be correctly set!
@@ -1859,12 +1746,10 @@ SvxStyleToolBoxControl::SvxStyleToolBoxControl(
     }
 }
 
-
 SvxStyleToolBoxControl::~SvxStyleToolBoxControl()
 {
     delete pImpl;
 }
-
 
 void SAL_CALL SvxStyleToolBoxControl::initialize( const Sequence< Any >& aArguments )
 throw ( Exception, RuntimeException, std::exception)
@@ -1916,7 +1801,6 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     DELETEZ( pImpl );
 }
 
-
 void SAL_CALL SvxStyleToolBoxControl::update() throw (RuntimeException, std::exception)
 {
     // Do nothing, we will start binding our listener when we are visible.
@@ -1930,8 +1814,6 @@ void SAL_CALL SvxStyleToolBoxControl::update() throw (RuntimeException, std::exc
         bindListener();
     }
 }
-
-
 
 SfxStyleFamily SvxStyleToolBoxControl::GetActFamily()
 {
@@ -1948,8 +1830,6 @@ SfxStyleFamily SvxStyleToolBoxControl::GetActFamily()
     }
     return SFX_STYLE_FAMILY_PARA;
 }
-
-
 
 void SvxStyleToolBoxControl::FillStyleBox()
 {
@@ -2066,8 +1946,6 @@ void SvxStyleToolBoxControl::FillStyleBox()
     }
 }
 
-
-
 void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
 {
     SvxStyleBox_Impl* pBox = (SvxStyleBox_Impl*)GetToolBox().GetItemWindow( GetId() );
@@ -2087,8 +1965,6 @@ void SvxStyleToolBoxControl::SelectStyle( const OUString& rStyleName )
         pBox->SaveValue();
     }
 }
-
-
 
 void SvxStyleToolBoxControl::Update()
 {
@@ -2139,8 +2015,6 @@ void SvxStyleToolBoxControl::Update()
         SelectStyle( pItem->GetStyleName() );
 }
 
-
-
 void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
                                              const SfxTemplateItem* pItem )
 {
@@ -2151,8 +2025,6 @@ void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
 
     Update();
 }
-
-
 
 IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification)
 {
@@ -2178,12 +2050,8 @@ IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification)
     return 0;
 }
 
-
-
 void SvxStyleToolBoxControl::StateChanged(
-
     sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
-
 {
     sal_uInt16       nId    = GetId();
     ToolBox&     rTbx   = GetToolBox();
@@ -2218,8 +2086,6 @@ void SvxStyleToolBoxControl::StateChanged(
         Update();
 }
 
-
-
 Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
 {
     SvxStyleBox_Impl* pBox = new SvxStyleBox_Impl( pParent,
@@ -2238,25 +2104,16 @@ Window* SvxStyleToolBoxControl::CreateItemWindow( Window *pParent )
     return pBox;
 }
 
-
-// class SvxFontNameToolBoxControl ---------------------------------------
-
-
 SvxFontNameToolBoxControl::SvxFontNameToolBoxControl(
                                             sal_uInt16          nSlotId,
                                             sal_uInt16          nId,
                                             ToolBox&        rTbx )
-
     :   SfxToolBoxControl( nSlotId, nId, rTbx )
 {
 }
 
-
-
 void SvxFontNameToolBoxControl::StateChanged(
-
     sal_uInt16 , SfxItemState eState, const SfxPoolItem* pState )
-
 {
     sal_uInt16               nId    = GetId();
     ToolBox&             rTbx   = GetToolBox();
@@ -2289,8 +2146,6 @@ void SvxFontNameToolBoxControl::StateChanged(
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
 }
 
-
-
 Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
 {
     SvxFontNameBox_Impl* pBox = new SvxFontNameBox_Impl( pParent,
@@ -2298,10 +2153,6 @@ Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
                                                          m_xFrame,0);
     return pBox;
 }
-
-
-
-// class SvxColorToolBoxControl ----------------------------------------
 
 /* Note:
    The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
@@ -2316,7 +2167,6 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
     ToolBox& rTbx ) :
-
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     mLastColor( COL_AUTO )
 {
@@ -2412,9 +2262,7 @@ IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, Color*, pColor)
 }
 
 void SvxColorToolBoxControl::StateChanged(
-
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-
 {
     ToolBox& rTbx = GetToolBox();
     sal_uInt16 nId = GetId();
@@ -2475,9 +2323,6 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
     Dispatch( aCommand, aArgs );
 }
 
-
-// class SvxLineColorToolBoxControl ----------------------------------------
-
 SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
@@ -2526,9 +2371,7 @@ IMPL_LINK(SvxLineColorToolBoxControl, SelectedHdl, Color*, pColor)
 }
 
 void SvxLineColorToolBoxControl::StateChanged(
-
     sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* /*pState*/ )
-
 {
     ToolBox& rTbx = GetToolBox();
     sal_uInt16 nId = GetId();
@@ -2544,28 +2387,19 @@ void SvxLineColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
     Dispatch( OUString( ".uno:XLineColor" ), aArgs );
 }
 
-
-// class SvxFrameToolBoxControl ------------------------------------------
-
-
 SvxFrameToolBoxControl::SvxFrameToolBoxControl(
     sal_uInt16      nSlotId,
     sal_uInt16      nId,
     ToolBox&    rTbx )
-
     :   SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
-
-
 SfxPopupWindowType SvxFrameToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
-
-
 
 SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
 {
@@ -2582,12 +2416,8 @@ SfxPopupWindow* SvxFrameToolBoxControl::CreatePopupWindow()
     return pFrameWin;
 }
 
-
-
 void SvxFrameToolBoxControl::StateChanged(
-
     sal_uInt16, SfxItemState eState, const SfxPoolItem*  )
-
 {
     sal_uInt16                  nId     = GetId();
     ToolBox&                rTbx    = GetToolBox();
@@ -2597,10 +2427,6 @@ void SvxFrameToolBoxControl::StateChanged(
                             ? TRISTATE_INDET
                             : TRISTATE_FALSE );
 }
-
-
-// class SvxFrameLineStyleToolBoxControl ---------------------------------
-
 
 SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
     sal_uInt16          nSlotId,
@@ -2612,14 +2438,10 @@ SvxFrameLineStyleToolBoxControl::SvxFrameLineStyleToolBoxControl(
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
-
-
 SfxPopupWindowType SvxFrameLineStyleToolBoxControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
-
-
 
 SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
 {
@@ -2633,10 +2455,7 @@ SfxPopupWindow* SvxFrameLineStyleToolBoxControl::CreatePopupWindow()
     return pLineWin;
 }
 
-
-
 void SvxFrameLineStyleToolBoxControl::StateChanged(
-
     sal_uInt16 , SfxItemState eState, const SfxPoolItem*  )
 {
     sal_uInt16       nId    = GetId();
@@ -2648,23 +2467,15 @@ void SvxFrameLineStyleToolBoxControl::StateChanged(
                                 : TRISTATE_FALSE );
 }
 
-
-// class SvxSimpleUndoRedoController -------------------------------------
-
-
 SvxSimpleUndoRedoController::SvxSimpleUndoRedoController( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx  )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     aDefaultText = rTbx.GetItemText( nId );
 }
 
-
-
 SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
 {
 }
-
-
 
 void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -2680,8 +2491,6 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
     rBox.EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
 }
 
-
-
 static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet )
 {
     Size aSize = rWin.GetOutputSizePixel();
@@ -2690,8 +2499,6 @@ static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet )
     rValueSet.SetPosSizePixel( Point(2,2), aSize );
 }
 
-
-
 static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
 {
     Size aSize = rValueSet.CalcWindowSizePixel( aItemSize );
@@ -2699,7 +2506,6 @@ static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size 
     aSize.Height() += 4;
     rWin.SetOutputSizePixel( aSize );
 }
-
 
 Reference< ::com::sun::star::accessibility::XAccessible > SvxFontNameBox_Impl::CreateAccessible()
 {
