@@ -1699,11 +1699,11 @@ void OpenGL3DRenderer::ClearBuffer()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glBegin (GL_QUADS);
-    glColor3f(0.3,0.3,0.3);
+    glColor3f (0.3f, 0.3f, 0.3f);
     glVertex3f (-1.0f, -1.0f, -1.0f);
     glVertex3f (1.0f, -1.0f, -1.0f);
 
-    glColor3f(0.0,0.0,0.0);
+    glColor3f (0.0f, 0.0f, 0.0f);
     glVertex3f (1.0f, 1.0f, -1.0f);
     glVertex3f (-1.0f, 1.0f, -1.0f);
     glEnd ();
