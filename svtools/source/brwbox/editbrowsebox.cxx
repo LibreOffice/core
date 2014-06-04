@@ -466,6 +466,7 @@ namespace svt
                         Control::KeyInput(rEvt);
                     return;
                 }
+                // fall-through
             default:
                 BrowseBox::KeyInput(rEvt);
         }
