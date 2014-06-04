@@ -31,8 +31,6 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
 
-
-
 // Standard Fontgroessen fuer scalierbare Fonts
 static const sal_IntPtr aStdSizeAry[] =
 {
@@ -69,12 +67,6 @@ static const sal_IntPtr aStdSizeAry[] =
     0
 };
 
-
-
-
-// - class ImplFontListFonInfo -
-
-
 class ImplFontListFontInfo : public FontInfo
 {
     friend class FontList;
@@ -93,10 +85,6 @@ public:
 
     OutputDevice*           GetDevice() const { return mpDevice; }
 };
-
-
-// - class ImplFontListNameInfo -
-
 
 class ImplFontListNameInfo
 {
@@ -146,14 +134,10 @@ static sal_Int32 ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
     return pInfo1->GetStyleName().compareTo( pInfo2->GetStyleName() );
 }
 
-
-
 static OUString ImplMakeSearchString(const OUString& rStr)
 {
     return rStr.toAsciiLowerCase();
 }
-
-
 
 static OUString ImplMakeSearchStringFromName(const OUString& rStr)
 {
@@ -164,8 +148,6 @@ static OUString ImplMakeSearchStringFromName(const OUString& rStr)
         return ImplMakeSearchString(rStr.getToken( 0, ':' ));
     return ImplMakeSearchString(rStr.getToken( 0, ';' ));
 }
-
-
 
 ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong* pIndex) const
 {
@@ -337,8 +319,6 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, bool bAll,
     }
 }
 
-
-
 FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, bool bAll )
 {
     // initialise variables
@@ -372,8 +352,6 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, bool bAll )
         ImplInsertFonts( pDevice2, bAll, !bCompareWindow );
 }
 
-
-
 FontList::~FontList()
 {
     // delete SizeArray if required
@@ -400,8 +378,6 @@ FontList* FontList::Clone() const
             mpDev, mpDev2, GetFontNameCount() == mpDev->GetDevFontCount());
     return pReturn;
 }
-
-
 
 const OUString& FontList::GetStyleName(FontWeight eWeight, FontItalic eItalic) const
 {
@@ -441,8 +417,6 @@ const OUString& FontList::GetStyleName(FontWeight eWeight, FontItalic eItalic) c
             return maNormal;
     }
 }
-
-
 
 OUString FontList::GetStyleName(const FontInfo& rInfo) const
 {
@@ -494,8 +468,6 @@ OUString FontList::GetStyleName(const FontInfo& rInfo) const
 
     return aStyleName;
 }
-
-
 
 OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
 {
@@ -671,8 +643,6 @@ FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) const
     return aInfo;
 }
 
-
-
 FontInfo FontList::Get(const OUString& rName,
                         FontWeight eWeight, FontItalic eItalic) const
 {
@@ -709,14 +679,10 @@ FontInfo FontList::Get(const OUString& rName,
     return aInfo;
 }
 
-
-
 bool FontList::IsAvailable(const OUString& rName) const
 {
     return (ImplFindByName( rName ) != 0);
 }
-
-
 
 const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
 {
@@ -724,8 +690,6 @@ const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
 
     return *(maEntries[nFont].mpFirst);
 }
-
-
 
 sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
 {
@@ -736,23 +700,17 @@ sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
         return (sal_Handle)pData->mpFirst;
 }
 
-
-
 sal_Handle FontList::GetNextFontInfo( sal_Handle hFontInfo ) const
 {
     ImplFontListFontInfo* pInfo = (ImplFontListFontInfo*)(void*)hFontInfo;
     return (sal_Handle)(pInfo->mpNext);
 }
 
-
-
 const FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo ) const
 {
     ImplFontListFontInfo* pInfo = (ImplFontListFontInfo*)(void*)hFontInfo;
     return *pInfo;
 }
-
-
 
 const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const
 {
@@ -802,26 +760,16 @@ const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const
     return mpSizeAry;
 }
 
-
-
 const sal_IntPtr* FontList::GetStdSizeAry()
 {
     return aStdSizeAry;
 }
-
-
-
-
-// - FontSizeNames & FsizeNameItem -
-
 
 struct ImplFSNameItem
 {
     long        mnSize;
     const char* mszUtf8Name;
 };
-
-
 
 static const ImplFSNameItem aImplSimplifiedChinese[] =
 {
@@ -843,8 +791,6 @@ static const ImplFSNameItem aImplSimplifiedChinese[] =
     { 420, "\xe5\x88\x9d\xe5\x8f\xb7" }
 };
 
-
-
 FontSizeNames::FontSizeNames( LanguageType eLanguage )
 {
     if ( eLanguage == LANGUAGE_DONTKNOW )
@@ -865,8 +811,6 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     }
 }
 
-
-
 long FontSizeNames::Name2Size( const OUString& rName ) const
 {
     if ( mnElem )
@@ -882,8 +826,6 @@ long FontSizeNames::Name2Size( const OUString& rName ) const
 
     return 0;
 }
-
-
 
 OUString FontSizeNames::Size2Name( long nValue ) const
 {
@@ -907,8 +849,6 @@ OUString FontSizeNames::Size2Name( long nValue ) const
     return aStr;
 }
 
-
-
 OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
 {
     OUString aStr;
@@ -918,8 +858,6 @@ OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
 
     return aStr;
 }
-
-
 
 long FontSizeNames::GetIndexSize( sal_uLong nIndex ) const
 {
