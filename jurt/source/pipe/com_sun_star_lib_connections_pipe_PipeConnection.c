@@ -432,6 +432,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
     {
         case GOTBUFFER:
             free(nbuff);
+            /* fall-through */
         case INMONITOR:
             (*env)->MonitorExit(env, obj_this);
         case START:
