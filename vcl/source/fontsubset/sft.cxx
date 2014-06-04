@@ -44,6 +44,7 @@
 #ifndef NO_TYPE3              /* include CreateT3FromTTGlyphs() */
 #include <rtl/crc.h>
 #endif
+#include <rtl/ustring.hxx>
 
 #include <osl/endian.h>
 #include <algorithm>
@@ -2556,12 +2557,22 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
     NameRecord* rec = (NameRecord*)calloc(n, sizeof(NameRecord));
 
     for (i = 0; i < n; i++) {
+        int nLargestFixedOffsetPos = 6 + 10 + 12 * i;
+        int nMinSize = nLargestFixedOffsetPos + sizeof(sal_uInt16);
+        if (nMinSize > nTableSize)
+        {
+            SAL_WARN( "vcl.fonts", "Font " << OUString::createFromAscii(ttf->fname) << " claimed to have "
+                << n << " name records, but only space for " << i);
+            n = i;
+            break;
+        }
+
         rec[i].platformID = GetUInt16(table, 6 + 0 + 12 * i, 1);
         rec[i].encodingID = GetUInt16(table, 6 + 2 + 12 * i, 1);
         rec[i].languageID = GetUInt16(table, 6 + 4 + 12 * i, 1);
         rec[i].nameID = GetUInt16(table, 6 + 6 + 12 * i, 1);
         rec[i].slen = GetUInt16(table, 6 + 8 + 12 * i, 1);
-        int nStrOffset = GetUInt16(table, 6 + 10 + 12 * i, 1);
+        int nStrOffset = GetUInt16(table, nLargestFixedOffsetPos, 1);
         if (rec[i].slen) {
             if( nStrBase+nStrOffset+rec[i].slen >= nTableSize ) {
                 rec[i].sptr = 0;
