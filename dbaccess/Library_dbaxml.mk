@@ -16,6 +16,8 @@ $(eval $(call gb_Library_set_include,dbaxml,\
 
 $(eval $(call gb_Library_use_external,dbaxml,boost_headers))
 
+$(eval $(call gb_Library_set_precompiled_header,dbaxml,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbaxml))
+
 $(eval $(call gb_Library_use_sdk_api,dbaxml))
 
 $(eval $(call gb_Library_use_libraries,dbaxml,\

@@ -16,6 +16,8 @@ $(eval $(call gb_Library_set_include,dbmm,\
 
 $(eval $(call gb_Library_use_external,dbmm,boost_headers))
 
+$(eval $(call gb_Library_set_precompiled_header,dbmm,$(SRCDIR)/dbaccess/inc/pch/precompiled_dbmm))
+
 $(eval $(call gb_Library_use_sdk_api,dbmm))
 
 $(eval $(call gb_Library_use_libraries,dbmm,\

@@ -23,6 +23,8 @@ $(eval $(call gb_Library_set_include,calc,\
 	-I$(WORKDIR)/YaccTarget/connectivity/source/parse \
 ))
 
+$(eval $(call gb_Library_set_precompiled_header,calc,$(SRCDIR)/connectivity/inc/pch/precompiled_calc))
+
 $(eval $(call gb_Library_use_libraries,calc,\
 	cppu \
 	cppuhelper \
