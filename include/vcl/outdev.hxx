@@ -59,7 +59,6 @@ class BitmapReadAccess;
 class BitmapEx;
 class Image;
 class TextRectInfo;
-class FontInfo;
 class FontMetric;
 class GDIMetaFile;
 class GfxLink;
@@ -256,6 +255,10 @@ class Printer;
 class FontSelectPattern;
 class ImplFontMetricData;
 class VCLXGraphics;
+
+namespace vcl {
+    class FontInfo;
+}
 
 typedef ::std::vector< VCLXGraphics* > VCLXGraphicsList_impl;
 
@@ -1081,7 +1084,7 @@ public:
 
     sal_Bool            AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
     int                 GetDevFontCount() const;
-    FontInfo            GetDevFont( int nDevFontIndex ) const;
+    vcl::FontInfo       GetDevFont( int nDevFontIndex ) const;
     int                 GetDevFontSizeCount( const Font& ) const;
     Size                GetDevFontSize( const Font& rFont, int nSizeIndex ) const;
     sal_Bool            IsFontAvailable( const OUString& rFontName ) const;

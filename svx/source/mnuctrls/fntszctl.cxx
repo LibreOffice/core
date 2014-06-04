@@ -123,7 +123,7 @@ void SvxFontSizeMenuControl::StateChanged(
 
                     if ( pList )
                     {
-                        FontInfo aFntInf = pList->Get( pItem->GetFamilyName(),
+                        vcl::FontInfo aFntInf = pList->Get( pItem->GetFamilyName(),
                                                        pItem->GetStyleName() );
                         pMenu->Fill( aFntInf, pList );
                     }

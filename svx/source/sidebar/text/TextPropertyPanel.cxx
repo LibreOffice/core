@@ -295,7 +295,7 @@ void TextPropertyPanel::Initialize (void)
     }
 
     mpFontNameBox->SetAccessibleName(mpFontNameBox->GetQuickHelpText());
-    const FontInfo aFontInfo (mpFontList->Get( OUString( "" ), OUString( "" )));
+    const vcl::FontInfo aFontInfo (mpFontList->Get( OUString( "" ), OUString( "" )));
     mpFontSizeBox->Fill(&aFontInfo,mpFontList);
     mpFontSizeBox->SetAccessibleName(mpFontSizeBox->GetQuickHelpText());
 

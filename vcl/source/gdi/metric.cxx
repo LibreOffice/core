@@ -76,7 +76,7 @@ bool ImplFontMetric::operator==( const ImplFontMetric& r ) const
     return true;
 }
 
-// =======================================================================
+namespace vcl {
 
 FontInfo::FontInfo()
 :   mpImplMetric( new ImplFontMetric )
@@ -134,8 +134,10 @@ FontType FontInfo::GetType() const
     return (mpImplMetric->IsScalable() ? TYPE_SCALABLE : TYPE_RASTER);
 }
 
-FontMetric::FontMetric( const FontMetric& rMetric )
-:    FontInfo( rMetric )
+}
+
+FontMetric::FontMetric( const FontMetric& rMetric ):
+    vcl::FontInfo( rMetric )
 {}
 
 // -----------------------------------------------------------------------
@@ -184,7 +186,7 @@ long FontMetric::GetSlant() const
 
 FontMetric& FontMetric::operator =( const FontMetric& rMetric )
 {
-    FontInfo::operator=( rMetric );
+    vcl::FontInfo::operator=( rMetric );
     return *this;
 }
 
@@ -192,7 +194,7 @@ FontMetric& FontMetric::operator =( const FontMetric& rMetric )
 
 sal_Bool FontMetric::operator==( const FontMetric& rMetric ) const
 {
-    return FontInfo::operator==( rMetric );
+    return vcl::FontInfo::operator==( rMetric );
 }
 
 // =======================================================================

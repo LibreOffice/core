@@ -75,7 +75,7 @@ scalierbare Schriften abgefragt.
 
 --------------------------------------------------------------------------
 
-String FontList::GetStyleName( const FontInfo& rInfo ) const;
+String FontList::GetStyleName( const vcl::FontInfo& rInfo ) const;
 
 Diese Methode gibt den StyleName von einer FontInfo zurueck. Falls kein
 StyleName gesetzt ist, wird aus den gesetzten Attributen ein entsprechender
@@ -83,14 +83,14 @@ Name generiert, der dem Anwender praesentiert werden kann.
 
 --------------------------------------------------------------------------
 
-OUString FontList::GetFontMapText( const FontInfo& rInfo ) const;
+OUString FontList::GetFontMapText( const vcl::FontInfo& rInfo ) const;
 
 Diese Methode gibt einen Matchstring zurueck, der dem Anwender
 anzeigen soll, welche Probleme es mit diesem Font geben kann.
 
 --------------------------------------------------------------------------
 
-FontInfo FontList::Get( const String& rName, const String& rStyleName ) const;
+vcl::FontInfo FontList::Get( const String& rName, const String& rStyleName ) const;
 
 Diese Methode sucht aus dem uebergebenen Namen und dem uebergebenen StyleName
 die entsprechende FontInfo-Struktur raus. Der Stylename kann in dieser
@@ -106,7 +106,7 @@ FontList::GetStyleName()
 
 --------------------------------------------------------------------------
 
-FontInfo FontList::Get( const String& rName, FontWeight eWeight,
+vcl::FontInfo FontList::Get( const String& rName, FontWeight eWeight,
                         FontItalic eItalic ) const;
 
 Diese Methode sucht aus dem uebergebenen Namen und den uebergebenen Styles
@@ -121,7 +121,7 @@ FontList::GetStyleName()
 
 --------------------------------------------------------------------------
 
-const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const;
+const sal_IntPtr* FontList::GetSizeAry( const vcl::FontInfo& rInfo ) const;
 
 Diese Methode liefert zum uebergebenen Font die vorhandenen Groessen.
 Falls es sich dabei um einen skalierbaren Font handelt, werden Standard-
@@ -178,18 +178,18 @@ public:
 
     OutputDevice*           GetDevice() const { return mpDev; }
     OutputDevice*           GetDevice2() const { return mpDev2; }
-    OUString                GetFontMapText( const FontInfo& rInfo ) const;
+    OUString                GetFontMapText( const vcl::FontInfo& rInfo ) const;
 
     const OUString&         GetNormalStr() const { return maNormal; }
     const OUString&         GetItalicStr() const { return maNormalItalic; }
     const OUString&         GetBoldStr() const { return maBold; }
     const OUString&         GetBoldItalicStr() const { return maBoldItalic; }
     const OUString&         GetStyleName( FontWeight eWeight, FontItalic eItalic ) const;
-    OUString                GetStyleName( const FontInfo& rInfo ) const;
+    OUString                GetStyleName( const vcl::FontInfo& rInfo ) const;
 
-    FontInfo                Get( const OUString& rName,
+    vcl::FontInfo           Get( const OUString& rName,
                                  const OUString& rStyleName ) const;
-    FontInfo                Get( const OUString& rName,
+    vcl::FontInfo           Get( const OUString& rName,
                                  FontWeight eWeight,
                                  FontItalic eItalic ) const;
 
@@ -198,12 +198,12 @@ public:
     {
         return (sal_uInt16)maEntries.size();
     }
-    const FontInfo&         GetFontName( sal_uInt16 nFont ) const;
+    const vcl::FontInfo&    GetFontName( sal_uInt16 nFont ) const;
     sal_Handle              GetFirstFontInfo( const OUString& rName ) const;
     sal_Handle              GetNextFontInfo( sal_Handle hFontInfo ) const;
-    const FontInfo&         GetFontInfo( sal_Handle hFontInfo ) const;
+    const vcl::FontInfo&    GetFontInfo( sal_Handle hFontInfo ) const;
 
-    const sal_IntPtr*       GetSizeAry( const FontInfo& rInfo ) const;
+    const sal_IntPtr*       GetSizeAry( const vcl::FontInfo& rInfo ) const;
     static const sal_IntPtr* GetStdSizeAry();
 
 private:
