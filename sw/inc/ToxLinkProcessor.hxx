@@ -54,7 +54,7 @@ private:
 
     /** Information about a started link */
     struct StartedLink {
-        StartedLink(sal_Int32 startPosition, OUString characterStyle) :
+        StartedLink(sal_Int32 startPosition, const OUString& characterStyle) :
                 mStartPosition(startPosition), mCharacterStyle(characterStyle) {
             ;
         }
