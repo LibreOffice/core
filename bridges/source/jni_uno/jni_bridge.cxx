@@ -190,7 +190,7 @@ namespace jni_uno
 {
 
 
-void Bridge::acquire() const SAL_THROW(())
+void Bridge::acquire() const
 {
     if (1 == osl_atomic_increment( &m_ref ))
     {
@@ -212,7 +212,7 @@ void Bridge::acquire() const SAL_THROW(())
 }
 
 
-void Bridge::release() const SAL_THROW(())
+void Bridge::release() const
 {
     if (! osl_atomic_decrement( &m_ref ))
     {
@@ -255,7 +255,7 @@ Bridge::Bridge(
 }
 
 
-Bridge::~Bridge() SAL_THROW(())
+Bridge::~Bridge()
 {
     (*m_java_env->release)( m_java_env );
     (*((uno_Environment *)m_uno_env)->release)( (uno_Environment *)m_uno_env );

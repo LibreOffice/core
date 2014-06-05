@@ -45,7 +45,7 @@ namespace {
 static OUString * s_pStaticOidPart = 0;
 #endif
 
-const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
+const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart()
 {
 #if ! (defined(__GNUC__) && defined(__APPLE__))
     static OUString * s_pStaticOidPart = 0;
@@ -81,7 +81,6 @@ const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
 extern "C" {
 
 static void s_stub_computeObjectIdentifier(va_list * pParam)
-    SAL_THROW(())
 {
     uno_ExtEnvironment  * pEnv       = va_arg(*pParam, uno_ExtEnvironment *);
     rtl_uString        ** ppOId      = va_arg(*pParam, rtl_uString **);
@@ -136,13 +135,11 @@ static void s_stub_computeObjectIdentifier(va_list * pParam)
 
 static void SAL_CALL computeObjectIdentifier(
     uno_ExtEnvironment * pExtEnv, rtl_uString ** ppOId, void * pInterface )
-    SAL_THROW(())
 {
     uno_Environment_invoke(&pExtEnv->aBase, s_stub_computeObjectIdentifier, pExtEnv, ppOId, pInterface);
 }
 
 static void s_stub_acquireInterface(va_list * pParam)
-    SAL_THROW(())
 {
     /*uno_ExtEnvironment * pExtEnv = */va_arg(*pParam, uno_ExtEnvironment *);
     void               * pCppI   = va_arg(*pParam, void *);
@@ -151,13 +148,11 @@ static void s_stub_acquireInterface(va_list * pParam)
 }
 
 static void SAL_CALL acquireInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
-    SAL_THROW(())
 {
     uno_Environment_invoke(&pExtEnv->aBase, s_stub_acquireInterface, pExtEnv, pCppI);
 }
 
 static void s_stub_releaseInterface(va_list * pParam)
-    SAL_THROW(())
 {
     /*uno_ExtEnvironment * pExtEnv = */va_arg(*pParam, uno_ExtEnvironment *);
     void               * pCppI   = va_arg(*pParam, void *);
@@ -166,13 +161,12 @@ static void s_stub_releaseInterface(va_list * pParam)
 }
 
 static void SAL_CALL releaseInterface( uno_ExtEnvironment * pExtEnv, void * pCppI )
-    SAL_THROW(())
 {
     uno_Environment_invoke(&pExtEnv->aBase, s_stub_releaseInterface, pExtEnv, pCppI);
 }
 
 static void SAL_CALL environmentDisposing(
-    SAL_UNUSED_PARAMETER uno_Environment * ) SAL_THROW(())
+    SAL_UNUSED_PARAMETER uno_Environment * )
 {
 }
 

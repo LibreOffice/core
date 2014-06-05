@@ -128,7 +128,6 @@ sal_Int32 Client::get() throw (css::uno::RuntimeException) {
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
-    SAL_THROW((css::uno::Exception))
 {
     return static_cast< cppu::OWeakObject * >(new Client(context));
 }

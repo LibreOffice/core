@@ -55,7 +55,7 @@ void dummy_can_throw_anything( char const * )
 {
 }
 
-static OUString toUNOname( char const * p ) SAL_THROW(())
+static OUString toUNOname( char const * p )
 {
 #if OSL_DEBUG_LEVEL > 1
     char const * start = p;
@@ -101,22 +101,22 @@ class RTTI
     t_rtti_map m_generatedRttis;
 
 public:
-    RTTI() SAL_THROW(());
-    ~RTTI() SAL_THROW(());
+    RTTI();
+    ~RTTI();
 
-    type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
+    type_info * getRTTI( typelib_CompoundTypeDescription * );
 };
 
-RTTI::RTTI() SAL_THROW(())
+RTTI::RTTI()
 {
 }
 
-RTTI::~RTTI() SAL_THROW(())
+RTTI::~RTTI()
 {
 }
 
 
-type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
+type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 {
     type_info * rtti;
 

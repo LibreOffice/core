@@ -49,7 +49,7 @@ using namespace ::__cxxabiv1;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-static OUString toUNOname( char const * p ) SAL_THROW(())
+static OUString toUNOname( char const * p )
 {
 #if OSL_DEBUG_LEVEL > 1
     char const * start = p;
@@ -97,13 +97,13 @@ class RTTI
     void * m_hApp;
 
 public:
-    RTTI() SAL_THROW(());
-    ~RTTI() SAL_THROW(());
+    RTTI();
+    ~RTTI();
 
-    type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
+    type_info * getRTTI( typelib_CompoundTypeDescription * );
 };
 
-RTTI::RTTI() SAL_THROW(())
+RTTI::RTTI()
 #if defined(FREEBSD) && __FreeBSD_version < 702104
     : m_hApp( dlopen( 0, RTLD_NOW | RTLD_GLOBAL ) )
 #else
@@ -112,13 +112,13 @@ RTTI::RTTI() SAL_THROW(())
 {
 }
 
-RTTI::~RTTI() SAL_THROW(())
+RTTI::~RTTI()
 {
     dlclose( m_hApp );
 }
 
 
-type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
+type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 {
     type_info * rtti;
 
