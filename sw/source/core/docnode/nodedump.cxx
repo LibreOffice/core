@@ -191,6 +191,11 @@ void SwDoc::dumpAsXml( xmlTextWriterPtr w )
     mpRedlineTbl->dumpAsXml( writer );
     mpExtraRedlineTbl->dumpAsXml( writer );
     lcl_dumpSdrModel( writer, getIDocumentDrawModelAccess().GetDrawModel() );
+
+    writer.startElement("mbModified");
+    writer.writeFormatAttribute("value", TMP_FORMAT, mbModified);
+    writer.endElement();
+
     writer.endElement();
 }
 
