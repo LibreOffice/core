@@ -8,11 +8,11 @@
 #
 
 # first line - insert <model>
-1,1i\
+1i\
 <model>
 
 # last line - append </model>
-$,$a\
+$a\
 </model>
 
 # everywhere - replace the input line with <fasttoken>...</fasttoken>
