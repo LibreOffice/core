@@ -781,6 +781,7 @@ class FilterCache : public BaseLock
                         If registration failed by any reason.
                         That does not include double registrations!
          */
+        static
         void impl_resolveItem4TypeRegistration(      CacheItemList*   pList,
                                                const OUString& sItem,
                                                const OUString& sType)
