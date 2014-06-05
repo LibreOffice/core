@@ -1599,6 +1599,7 @@ int HTMLParser::FilterPRE( int nToken )
     // in Netscape they only have impact in not empty paragraphs
     case HTML_PARABREAK_ON:
         nToken = HTML_LINEBREAK;
+        //fall-through
     case HTML_LINEBREAK:
     case HTML_NEWPARA:
         nPre_LinePos = 0;
