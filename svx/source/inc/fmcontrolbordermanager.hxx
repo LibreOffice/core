@@ -158,15 +158,15 @@ namespace svxform
         ~ControlBorderManager();
 
     public:
-        void    focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl ) SAL_THROW(());
-        void    focusLost( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl ) SAL_THROW(());
-        void    mouseEntered( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl ) SAL_THROW(());
-        void    mouseExited( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl ) SAL_THROW(());
+        void    focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
+        void    focusLost( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
+        void    mouseEntered( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
+        void    mouseExited( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl );
 
         void    validityChanged(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::form::validation::XValidatableFormComponent >& _rxValidatable
-                ) SAL_THROW(());
+                );
 
         /// enables dynamic border color for the controls
         void    enableDynamicBorderColor( );
@@ -195,7 +195,7 @@ namespace svxform
         void    controlStatusGained(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl,
                     ControlData& _rControlData
-                ) SAL_THROW(());
+                );
 
         /** called when a control lost one of the two possible statuses (focused, and hovered with the mouse)
             @param _rxControl
@@ -203,7 +203,7 @@ namespace svxform
             @param _rControlData
                 the control's status data, as a reference to our respective member
         */
-        void    controlStatusLost( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl, ControlData& _rControlData ) SAL_THROW(());
+        void    controlStatusLost( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxControl, ControlData& _rControlData );
 
         /** determines whether the border of a given peer can be colored
             @param _rxPeer
@@ -213,7 +213,7 @@ namespace svxform
 
         /** determines the status of the given control
         */
-        ControlStatus   getControlStatus( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl ) SAL_THROW(());
+        ControlStatus   getControlStatus( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
 
         /** retrieves the color associated with a given ControlStatus
             @param _eStatus
@@ -234,7 +234,7 @@ namespace svxform
                             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >& _rxPeer,
                             const BorderDescriptor& _rFallback
-                        ) SAL_THROW(());
+                        );
 
         /** determines the to-be-remembered original border color and type for a control
 

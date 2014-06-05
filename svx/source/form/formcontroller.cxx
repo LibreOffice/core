@@ -1147,7 +1147,7 @@ void SAL_CALL FormController::disposing(const EventObject& e) throw( RuntimeExce
 
 // OComponentHelper
 
-void FormController::disposeAllFeaturesAndDispatchers() SAL_THROW(())
+void FormController::disposeAllFeaturesAndDispatchers()
 {
     for ( DispatcherContainer::iterator aDispatcher = m_aFeatureDispatchers.begin();
           aDispatcher != m_aFeatureDispatchers.end();
@@ -3556,7 +3556,7 @@ Window* FormController::getDialogParentWindow()
     return pParentWindow;
 }
 
-bool FormController::checkFormComponentValidity( OUString& /* [out] */ _rFirstInvalidityExplanation, Reference< XControlModel >& /* [out] */ _rxFirstInvalidModel ) SAL_THROW(())
+bool FormController::checkFormComponentValidity( OUString& /* [out] */ _rFirstInvalidityExplanation, Reference< XControlModel >& /* [out] */ _rxFirstInvalidModel )
 {
     try
     {
@@ -3598,7 +3598,7 @@ bool FormController::checkFormComponentValidity( OUString& /* [out] */ _rFirstIn
 }
 
 
-Reference< XControl > FormController::locateControl( const Reference< XControlModel >& _rxModel ) SAL_THROW(())
+Reference< XControl > FormController::locateControl( const Reference< XControlModel >& _rxModel )
 {
     try
     {

@@ -110,7 +110,7 @@ namespace svx
                 our Mutex is locked - else calling the method would not make sense, since
                 its result could be out-of-date as soon as it's returned to the caller.
         */
-        void    checkAlive() const SAL_THROW((::com::sun::star::lang::DisposedException));
+        void    checkAlive() const;
 
         /** retrieves the current status of our feature, in a format which can be used
             for UNO notifications

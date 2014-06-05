@@ -777,7 +777,7 @@ namespace
         lcl_mapAPIToFormValue( rValue, aMapAdjustToAlign );
     }
 
-    void convertVerticalAdjustToVerticalAlign( Any& _rValue ) SAL_THROW( ( lang::IllegalArgumentException ) )
+    void convertVerticalAdjustToVerticalAlign( Any& _rValue )
     {
         if ( !_rValue.hasValue() )
             return;

@@ -827,7 +827,7 @@ void FmXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > &
 
 
 
-void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _rxContainer, bool _bStartListening ) SAL_THROW(())
+void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _rxContainer, bool _bStartListening )
 {
     OSL_PRECOND( _rxContainer.is(), "FmXUndoEnvironment::switchListening: invalid container!" );
     if ( !_rxContainer.is() )
@@ -884,7 +884,7 @@ void FmXUndoEnvironment::switchListening( const Reference< XIndexContainer >& _r
 }
 
 
-void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(())
+void FmXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening )
 {
     OSL_PRECOND( _rxObject.is(), "FmXUndoEnvironment::switchListening: how should I listen at a NULL object?" );
 
@@ -1083,7 +1083,7 @@ void FmUndoContainerAction::DisposeElement( const Reference< XInterface > & xEle
 }
 
 
-void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
+void FmUndoContainerAction::implReInsert( )
 {
     if ( m_xContainer->getCount() >= m_nIndex )
     {
@@ -1112,7 +1112,7 @@ void FmUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
 }
 
 
-void FmUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
+void FmUndoContainerAction::implReRemove( )
 {
     Reference< XInterface > xElement;
     if ( ( m_nIndex >= 0 ) && ( m_nIndex < m_xContainer->getCount() ) )

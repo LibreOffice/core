@@ -69,14 +69,14 @@ namespace svx
 
         /** dispatches the feature URL to the dispatcher
         */
-        void    dispatch() const SAL_THROW(());
+        void    dispatch() const;
 
         /** dispatches the feature URL to the dispatcher, with passing the given arguments
         */
-        void    dispatch( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs ) const SAL_THROW(());
+        void    dispatch( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArgs ) const;
 
         /// releases any resources associated with this instance
-        void    dispose() SAL_THROW(());
+        void    dispose();
 
     protected:
         virtual ~FmTextControlFeature();

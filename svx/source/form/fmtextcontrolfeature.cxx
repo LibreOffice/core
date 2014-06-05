@@ -63,13 +63,13 @@ namespace svx
     }
 
 
-    void FmTextControlFeature::dispatch() const SAL_THROW(())
+    void FmTextControlFeature::dispatch() const
     {
         dispatch( Sequence< PropertyValue >( ) );
     }
 
 
-    void FmTextControlFeature::dispatch( const Sequence< PropertyValue >& _rArgs ) const SAL_THROW(())
+    void FmTextControlFeature::dispatch( const Sequence< PropertyValue >& _rArgs ) const
     {
         try
         {
@@ -99,7 +99,7 @@ namespace svx
     }
 
 
-    void FmTextControlFeature::dispose() SAL_THROW(())
+    void FmTextControlFeature::dispose()
     {
         try
         {

@@ -109,7 +109,7 @@ namespace svxform
     //= DocumentClassification
 
 
-    DocumentType DocumentClassification::classifyDocument( const Reference< XModel >& _rxDocumentModel ) SAL_THROW(())
+    DocumentType DocumentClassification::classifyDocument( const Reference< XModel >& _rxDocumentModel )
     {
         DocumentType eType( eUnknownDocumentType );
 
@@ -148,7 +148,7 @@ namespace svxform
     }
 
 
-    DocumentType DocumentClassification::classifyHostDocument( const Reference< XInterface >& _rxFormComponent ) SAL_THROW(())
+    DocumentType DocumentClassification::classifyHostDocument( const Reference< XInterface >& _rxFormComponent )
     {
         DocumentType eType( eUnknownDocumentType );
 

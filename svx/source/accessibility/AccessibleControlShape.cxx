@@ -697,7 +697,7 @@ void SAL_CALL AccessibleControlShape::disposing (void)
     AccessibleShape::disposing();
 }
 
-bool AccessibleControlShape::ensureControlModelAccess() SAL_THROW(())
+bool AccessibleControlShape::ensureControlModelAccess()
 {
     if ( m_xControlModel.is() )
         return true;
@@ -755,7 +755,7 @@ void AccessibleControlShape::stopStateMultiplexing()
     }
 }
 
-OUString AccessibleControlShape::getControlModelStringProperty( const OUString& _rPropertyName ) const SAL_THROW(())
+OUString AccessibleControlShape::getControlModelStringProperty( const OUString& _rPropertyName ) const
 {
     OUString sReturn;
     try

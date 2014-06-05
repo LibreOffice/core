@@ -104,8 +104,8 @@ public:
     static void DisposeElement( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xElem );
 
 protected:
-    void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
-    void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+    void    implReInsert( );
+    void    implReRemove( );
 };
 
 
@@ -197,8 +197,8 @@ private:
 
     void    implSetModified();
 
-    void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& _rxContainer, bool _bStartListening ) SAL_THROW(());
-    void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(());
+    void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& _rxContainer, bool _bStartListening );
+    void    switchListening( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, bool _bStartListening );
     ::com::sun::star::uno::Reference< com::sun::star::script::XScriptListener > m_vbaListener;
 public:
     // Methoden zur Zuordnung von Controls zu Forms,

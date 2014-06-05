@@ -435,7 +435,7 @@ namespace svxform
 
         /** disposes all dispatchers in m_aFeatureDispatchers, and empties m_aFeatureDispatchers
         */
-        void    disposeAllFeaturesAndDispatchers() SAL_THROW(());
+        void    disposeAllFeaturesAndDispatchers();
 
         void startFiltering();
         void stopFiltering();
@@ -554,12 +554,12 @@ namespace svxform
         bool    checkFormComponentValidity(
                     OUString& /* [out] */ _rFirstInvalidityExplanation,
                     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& /* [out] */ _rxFirstInvalidModel
-                ) SAL_THROW(());
+                );
 
         /** locates the control which belongs to a given model
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >
-                locateControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel ) SAL_THROW(());
+                locateControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& _rxModel );
 
         // set the text for all filters
         void impl_setTextOnAllFilter_throw();
