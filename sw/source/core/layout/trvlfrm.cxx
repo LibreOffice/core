@@ -1975,8 +1975,6 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
  *        expand end to the left until frame-start, calculate Rect
  *        and if more than two frames are involved add the PrtArea of all
  *        frames which lie in between
- *  4. If it's about a table-selection we have to obtain the CellFrm for every
- *     PaM in the ring - its PrtArea will be added to the Rect.
  *
  * Big reorganization because of the FlyFrm - those need to be locked out.
  * Exceptions:  - The Fly in which the selection took place (if it took place
