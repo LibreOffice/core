@@ -41,7 +41,6 @@ using namespace com::sun::star;
 
 
 static bool relatesToInterface(typelib_TypeDescription * pTypeDescr)
-    SAL_THROW(())
 {
     switch (pTypeDescr->eTypeClass)
     {
@@ -211,7 +210,6 @@ Proxy::Proxy(uno::Mapping                  const & to_from,
              cppu::helper::purpenv::ProbeFun     * probeFun,
              void                                * pProbeContext
 )
-    SAL_THROW(())
         : m_nRef         (1),
           m_from         (pFrom),
           m_to           (pTo),

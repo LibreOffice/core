@@ -103,20 +103,20 @@ class ThreadKey
     oslThreadKeyCallbackFunction _pCallback;
 
 public:
-    inline oslThreadKey getThreadKey() SAL_THROW(());
+    inline oslThreadKey getThreadKey();
 
-    inline ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(());
-    inline ~ThreadKey() SAL_THROW(());
+    inline ThreadKey( oslThreadKeyCallbackFunction pCallback );
+    inline ~ThreadKey();
 };
 
-inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback ) SAL_THROW(())
+inline ThreadKey::ThreadKey( oslThreadKeyCallbackFunction pCallback )
     : _bInit( false )
     , _hThreadKey( 0 )
     , _pCallback( pCallback )
 {
 }
 
-inline ThreadKey::~ThreadKey() SAL_THROW(())
+inline ThreadKey::~ThreadKey()
 {
     if (_bInit)
     {
@@ -124,7 +124,7 @@ inline ThreadKey::~ThreadKey() SAL_THROW(())
     }
 }
 
-inline oslThreadKey ThreadKey::getThreadKey() SAL_THROW(())
+inline oslThreadKey ThreadKey::getThreadKey()
 {
     if (! _bInit)
     {
@@ -160,7 +160,7 @@ extern "C" void SAL_CALL delete_IdContainer( void * p )
     }
 }
 
-IdContainer * getIdContainer() SAL_THROW(())
+IdContainer * getIdContainer()
 {
     static ThreadKey s_key( delete_IdContainer );
     oslThreadKey aKey = s_key.getThreadKey();

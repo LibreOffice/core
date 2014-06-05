@@ -119,14 +119,14 @@ Mapping::Mapping(uno_Environment                 * pFrom,
                  uno_Environment                 * pTo,
                  cppu::helper::purpenv::ProbeFun * probeFun,
                  void                            * pProbeContext
-) SAL_THROW(())
+)
     : m_from    (pFrom),
       m_to      (pTo),
       m_nCount  (1),
       m_probeFun(probeFun),
       m_pContext(pProbeContext)
 {
-    LOG_LIFECYCLE_cppu_helper_purpenv_Mapping_emit(fprintf(stderr, "LIFE: %s -> %p\n", "Mapping::Mapping(uno_Environment * pFrom, uno_Environment * pTo) SAL_THROW(())", this));
+    LOG_LIFECYCLE_cppu_helper_purpenv_Mapping_emit(fprintf(stderr, "LIFE: %s -> %p\n", "Mapping::Mapping(uno_Environment * pFrom, uno_Environment * pTo)", this));
 
     uno_Mapping::acquire      = s_acquire;
     uno_Mapping::release      = s_release;
@@ -189,7 +189,7 @@ void Mapping::mapInterface(
 }
 
 
-void Mapping::acquire() SAL_THROW(())
+void Mapping::acquire()
 {
     if (osl_atomic_increment(&m_nCount) == 1)
     {
@@ -199,7 +199,7 @@ void Mapping::acquire() SAL_THROW(())
     }
 }
 
-void Mapping::release() SAL_THROW(())
+void Mapping::release()
 {
     if (osl_atomic_decrement(&m_nCount) == 0)
         ::uno_revokeMapping(this);

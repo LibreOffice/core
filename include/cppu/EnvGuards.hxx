@@ -59,7 +59,7 @@ namespace cppu
 
             @return  0 == empty, 1 == non empty
         */
-        bool SAL_CALL is() const SAL_THROW(())
+        bool SAL_CALL is() const
         {
             return m_env.is();
         }

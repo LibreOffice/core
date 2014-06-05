@@ -81,7 +81,6 @@ struct AlignSize_Impl
 static sal_Int32 nMaxAlignment = (sal_Int32)( (sal_Size)(&((AlignSize_Impl *) 16)->dDouble) - 16);
 
 static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
-    SAL_THROW(())
 {
     if( nRequestedAlignment > nMaxAlignment )
         nRequestedAlignment = nMaxAlignment;
@@ -93,20 +92,17 @@ static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
  */
 static inline sal_Int32 newAlignedSize(
     sal_Int32 OldSize, sal_Int32 ElementSize, sal_Int32 NeededAlignment )
-    SAL_THROW(())
 {
     NeededAlignment = adjustAlignment( NeededAlignment );
     return (OldSize + NeededAlignment -1) / NeededAlignment * NeededAlignment + ElementSize;
 }
 
 static inline bool reallyWeak( typelib_TypeClass eTypeClass )
-    SAL_THROW(())
 {
     return TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK( eTypeClass );
 }
 
 static inline sal_Int32 getDescriptionSize( typelib_TypeClass eTypeClass )
-    SAL_THROW(())
 {
     OSL_ASSERT( typelib_TypeClass_TYPEDEF != eTypeClass );
 
@@ -159,14 +155,14 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_getByName(
 
 struct equalStr_Impl
 {
-    bool operator()(const sal_Unicode * const & s1, const sal_Unicode * const & s2) const SAL_THROW(())
+    bool operator()(const sal_Unicode * const & s1, const sal_Unicode * const & s2) const
         { return 0 == rtl_ustr_compare( s1, s2 ); }
 };
 
 
 struct hashStr_Impl
 {
-    size_t operator()(const sal_Unicode * const & s) const SAL_THROW(())
+    size_t operator()(const sal_Unicode * const & s) const
         { return rtl_ustr_hashCode( s ); }
 };
 
@@ -195,9 +191,9 @@ struct TypeDescriptor_Init_Impl
     // The mutex to guard all type library accesses
     Mutex *                     pMutex;
 
-    inline Mutex & getMutex() SAL_THROW(());
+    inline Mutex & getMutex();
 
-    inline void callChain( typelib_TypeDescription ** ppRet, rtl_uString * pName ) SAL_THROW(());
+    inline void callChain( typelib_TypeDescription ** ppRet, rtl_uString * pName );
 
 #if OSL_DEBUG_LEVEL > 1
     // only for debugging
@@ -223,10 +219,10 @@ struct TypeDescriptor_Init_Impl
 #endif
     {}
 
-    ~TypeDescriptor_Init_Impl() SAL_THROW(());
+    ~TypeDescriptor_Init_Impl();
 };
 
-inline Mutex & TypeDescriptor_Init_Impl::getMutex() SAL_THROW(())
+inline Mutex & TypeDescriptor_Init_Impl::getMutex()
 {
     if( !pMutex )
     {
@@ -239,7 +235,6 @@ inline Mutex & TypeDescriptor_Init_Impl::getMutex() SAL_THROW(())
 
 inline void TypeDescriptor_Init_Impl::callChain(
     typelib_TypeDescription ** ppRet, rtl_uString * pName )
-    SAL_THROW(())
 {
     assert(ppRet != 0);
     assert(*ppRet == 0);
@@ -258,7 +253,7 @@ inline void TypeDescriptor_Init_Impl::callChain(
 }
 
 
-TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW(())
+TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl()
 {
     if( pCache )
     {
@@ -394,7 +389,6 @@ extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
 
 static inline void typelib_typedescription_initTables(
     typelib_TypeDescription * pTD )
-    SAL_THROW(())
 {
     typelib_InterfaceTypeDescription * pITD = (typelib_InterfaceTypeDescription *)pTD;
 
@@ -1307,7 +1301,6 @@ void deleteExceptions(
 // frees anything except typelib_TypeDescription base!
 static inline void typelib_typedescription_destructExtendedMembers(
     typelib_TypeDescription * pTD )
-    SAL_THROW(())
 {
     OSL_ASSERT( typelib_TypeClass_TYPEDEF != pTD->eTypeClass );
 
@@ -1619,7 +1612,6 @@ extern "C" CPPU_DLLPUBLIC void SAL_CALL typelib_typedescription_register(
 
 static inline bool type_equals(
     typelib_TypeDescriptionReference * p1, typelib_TypeDescriptionReference * p2 )
-    SAL_THROW(())
 {
     return (p1 == p2 ||
             (p1->eTypeClass == p2->eTypeClass &&
