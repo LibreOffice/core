@@ -102,7 +102,7 @@ namespace comphelper
 
             @throw UnknownPropertyException if the given name is not a registered property
         */
-        sal_Int32   getHandleForName( const OUString& _rPropertyName ) SAL_THROW( ( ::com::sun::star::beans::UnknownPropertyException ) );
+        sal_Int32   getHandleForName( const OUString& _rPropertyName );
     };
 
 

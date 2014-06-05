@@ -76,7 +76,7 @@ namespace comphelper
     }
 
 
-    bool OListenerContainer::impl_notify( const EventObject& _rEvent ) SAL_THROW(( Exception ))
+    bool OListenerContainer::impl_notify( const EventObject& _rEvent )
     {
         ::cppu::OInterfaceIteratorHelper aIter( m_aListeners );
         bool bCancelled = false;

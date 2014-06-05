@@ -83,7 +83,7 @@ namespace comphelper
         static  void        revokeClientNotifyDisposing(
                         const TClientId _nClient,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxEventSource
-                    ) SAL_THROW( ( ) );
+                    );
 
         /** registers a listener for the given client
 
@@ -95,7 +95,7 @@ namespace comphelper
         static sal_Int32 addEventListener(
                         const TClientId _nClient,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& _rxListener
-                    ) SAL_THROW( ( ) );
+                    );
 
         /** revokes a listener for the given client
 
@@ -107,7 +107,7 @@ namespace comphelper
         static sal_Int32 removeEventListener(
                         const TClientId _nClient,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener >& _rxListener
-                    ) SAL_THROW( ( ) );
+                    );
 
         /** adds an event, which is to be braodcasted, to the queue
 
@@ -117,7 +117,7 @@ namespace comphelper
         static void addEvent(
                         const TClientId _nClient,
                         const ::com::sun::star::accessibility::AccessibleEventObject& _rEvent
-                    ) SAL_THROW( ( ) );
+                    );
 
     };
 

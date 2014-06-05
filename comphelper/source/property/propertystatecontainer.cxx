@@ -67,7 +67,7 @@ namespace comphelper
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( OPropertyStateContainer, OPropertyContainer, OPropertyStateContainer_TBase )
 
 
-    sal_Int32 OPropertyStateContainer::getHandleForName( const OUString& _rPropertyName ) SAL_THROW( ( UnknownPropertyException ) )
+    sal_Int32 OPropertyStateContainer::getHandleForName( const OUString& _rPropertyName )
     {
         // look up the handle for the name
         ::cppu::IPropertyArrayHelper& rPH = getInfoHelper();

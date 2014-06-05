@@ -132,7 +132,7 @@ private:
     @return
         the iterator pointing to the position indicated by the index
     */
-    ::std::deque<AttacherIndex_Impl>::iterator implCheckIndex( sal_Int32 _nIndex ) SAL_THROW ( ( IllegalArgumentException ) );
+    ::std::deque<AttacherIndex_Impl>::iterator implCheckIndex( sal_Int32 _nIndex );
 };
 
 
@@ -395,7 +395,7 @@ Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exc
 
 
 
-::std::deque<AttacherIndex_Impl>::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex ) SAL_THROW ( ( IllegalArgumentException ) )
+::std::deque<AttacherIndex_Impl>::iterator ImplEventAttacherManager::implCheckIndex( sal_Int32 _nIndex )
 {
     if (_nIndex < 0)
         throw IllegalArgumentException();

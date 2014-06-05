@@ -151,14 +151,12 @@ protected:
                     ::com::sun::star::uno::Any & rOldValue,
                     sal_Int32 nHandle,
                     const ::com::sun::star::uno::Any& rValue
-                )
-                SAL_THROW((::com::sun::star::lang::IllegalArgumentException));
+                );
 
     void        setFastPropertyValue(
                         sal_Int32 nHandle,
                         const ::com::sun::star::uno::Any& rValue
-                    )
-                    SAL_THROW((::com::sun::star::uno::Exception));
+                    );
 
     void        getFastPropertyValue(
                         ::com::sun::star::uno::Any& rValue,
