@@ -162,11 +162,7 @@ void FilterCache::takeOver(const FilterCache& rClone)
 
 
 void FilterCache::load(EFillState eRequired,
-#if OSL_DEBUG_LEVEL > 1
     sal_Bool bByThread
-#else
-    sal_Bool
-#endif
 )
     throw(css::uno::Exception)
 {
@@ -178,12 +174,10 @@ void FilterCache::load(EFillState eRequired,
     if ((m_eFillState & eRequired) == eRequired)
         return;
 
-#if OSL_DEBUG_LEVEL > 1
-    if (!bByThread && ((eRequired & E_CONTAINS_ALL) == E_CONTAINS_ALL))
-    {
-        SAL_WARN( "filter.config", "Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not really needed here!");
-    }
-#endif
+    SAL_WARN_IF(
+        !bByThread && ((eRequired & E_CONTAINS_ALL) == E_CONTAINS_ALL),
+        "filter.config",
+        "Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not really needed here!");
 
     // Otherwise load the missing items.
 
