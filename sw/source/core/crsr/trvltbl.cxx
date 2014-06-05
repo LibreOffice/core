@@ -63,6 +63,9 @@ bool SwCrsrShell::GoNextCell( bool bAppendLine )
             {
                 if ( !pTblNd )
                     pTblNd = IsCrsrInTbl();
+                assert (pTblNd);
+                if (!pTblNd)
+                    return false;
                 pTableBox = & pTableBox->FindEndOfRowSpan( pTblNd->GetTable(),
                                                            (sal_uInt16)(pTableBox->getRowSpan() + pCrsr->GetCrsrRowSpanOffset() ) );
                 pTableBoxStartNode = pTableBox->GetSttNd();
