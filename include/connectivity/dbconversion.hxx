@@ -165,8 +165,7 @@ namespace dbtools
             const OUString& _rSource,
             OString&  _rDest,
             rtl_TextEncoding _eEncoding
-        )
-            SAL_THROW((::com::sun::star::sdbc::SQLException));
+        );
 
         /** converts a Unicode string into a 8-bit string, using the given encoding
 
@@ -196,8 +195,7 @@ namespace dbtools
             OString&  _rDest,
             sal_Int32 _nMaxLen,
             rtl_TextEncoding _eEncoding
-       )
-            SAL_THROW((::com::sun::star::sdbc::SQLException));
+       );
     };
 
 

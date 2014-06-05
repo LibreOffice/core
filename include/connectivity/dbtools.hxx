@@ -149,9 +149,7 @@ namespace dbtools
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
         bool _bSetAsActiveConnection
-    )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
-                    , ::com::sun::star::lang::WrappedTargetException
-                    , ::com::sun::star::uno::RuntimeException ) );
+    );
 
     /** ensures that a row set has a valid ActiveConnection, if possible
 
@@ -180,9 +178,7 @@ namespace dbtools
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
         bool _bUseAutoConnectionDisposer
-    )   SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
-                    , ::com::sun::star::lang::WrappedTargetException
-                    , ::com::sun::star::uno::RuntimeException ) );
+    );
 
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
     */
@@ -191,8 +187,7 @@ namespace dbtools
             const OUString& _rDataSourceName,
             const OUString& _rUser,
             const OUString& _rPwd,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext)
-        SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext);
 
 
     /** determines whether the given component is part of a document which is an embedded database
@@ -266,7 +261,7 @@ namespace dbtools
             const OUString& _rCommand,
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
             SQLExceptionInfo* _pErrorInfo = NULL
-        )   SAL_THROW( ( ) );
+        );
 
 
     /** get fields for a result set given by a "command descriptor"
@@ -302,7 +297,7 @@ namespace dbtools
             const sal_Int32 _nCommandType,
             const OUString& _rCommand,
             SQLExceptionInfo* _pErrorInfo = NULL
-        )   SAL_THROW( ( ) );
+        );
 
 
     /** create a new ::com::sun::star::sdbc::SQLContext, fill it with the given descriptions and the given source,
@@ -559,7 +554,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     bool implUpdateObject(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >& _rxUpdatedObject,
                                 const sal_Int32 _nColumnIndex,
-                                const ::com::sun::star::uno::Any& _rValue)  SAL_THROW   (   (   ::com::sun::star::sdbc::SQLException,   ::com::sun::star::uno::RuntimeException)    );
+                                const ::com::sun::star::uno::Any& _rValue);
 
 
 
@@ -619,7 +614,7 @@ namespace dbtools
     OOO_DLLPUBLIC_DBTOOLS
     bool implSetObject( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters>& _rxParameters,
                             const sal_Int32 _nColumnIndex,
-                            const ::com::sun::star::uno::Any& _rValue) SAL_THROW ( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
+                            const ::com::sun::star::uno::Any& _rValue);
 
     /** creates the standard sql create table statement without the key part.
         @param  descriptor

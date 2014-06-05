@@ -124,7 +124,7 @@ namespace dbtools
     }
 
 
-    void ParameterManager::setAllParametersNull() SAL_THROW( ( SQLException, RuntimeException ) )
+    void ParameterManager::setAllParametersNull()
     {
         OSL_PRECOND( isAlive(), "ParameterManager::setAllParametersNull: not initialized, or already disposed!" );
         if ( !isAlive() )
@@ -243,7 +243,7 @@ namespace dbtools
 
 
     void ParameterManager::classifyLinks( const Reference< XNameAccess >& _rxParentColumns,
-        const Reference< XNameAccess >& _rxColumns, ::std::vector< OUString >& _out_rAdditionalFilterComponents ) SAL_THROW(( Exception ))
+        const Reference< XNameAccess >& _rxColumns, ::std::vector< OUString >& _out_rAdditionalFilterComponents )
     {
         OSL_PRECOND( m_aMasterFields.getLength() == m_aDetailFields.getLength(),
             "ParameterManager::classifyLinks: master and detail fields should have the same length!" );
@@ -758,7 +758,7 @@ namespace dbtools
     }
 
 
-    void ParameterManager::cacheConnectionInfo() SAL_THROW(( ))
+    void ParameterManager::cacheConnectionInfo()
     {
         try
         {
@@ -780,7 +780,7 @@ namespace dbtools
     }
 
 
-    bool ParameterManager::getColumns( Reference< XNameAccess >& /* [out] */ _rxColumns, bool _bFromComposer ) SAL_THROW(( Exception ))
+    bool ParameterManager::getColumns( Reference< XNameAccess >& /* [out] */ _rxColumns, bool _bFromComposer )
     {
         _rxColumns.clear();
 
@@ -850,7 +850,7 @@ namespace dbtools
     }
 
 
-    void ParameterManager::resetParameterValues( ) SAL_THROW(())
+    void ParameterManager::resetParameterValues( )
     {
         OSL_PRECOND( isAlive(), "ParameterManager::resetParameterValues: not initialized, or already disposed!" );
         if ( !isAlive() )

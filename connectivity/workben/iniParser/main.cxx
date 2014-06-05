@@ -31,10 +31,10 @@ struct ini_NameValue
     OUString sName;
     OUString sValue;
 
-    inline ini_NameValue() SAL_THROW(())
+    inline ini_NameValue()
         {}
     inline ini_NameValue(
-        OUString const & name, OUString const & value ) SAL_THROW(())
+        OUString const & name, OUString const & value )
         : sName( name ),
           sValue( value )
         {}

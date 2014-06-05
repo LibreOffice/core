@@ -186,7 +186,7 @@ namespace dbtools
             @precond
                 the instance is alive, i.e. <member>isAlive</member> returns <TRUE/>
         */
-        void    setAllParametersNull() SAL_THROW( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
+        void    setAllParametersNull();
 
         /** resets all detail columns which are, via a parameter, linked to a master column, to
             the value of this master column.
@@ -197,7 +197,7 @@ namespace dbtools
             @precond
                 the instance is alive, i.e. <member>isAlive</member> returns <TRUE/>
         */
-        void    resetParameterValues() SAL_THROW(());
+        void    resetParameterValues();
 
         /** tells the object that it's database component is being disposed
 
@@ -316,7 +316,7 @@ namespace dbtools
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxParentColumns,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxColumns,
                     ::std::vector< OUString >& _out_rAdditionalFilterComponents
-                )   SAL_THROW(( ::com::sun::star::uno::Exception ));
+                );
 
         /** finalizes our <member>m_pOuterParameters</member> so that it can be used for
             external parameter listeners
@@ -390,7 +390,7 @@ namespace dbtools
         bool    getColumns(
                     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& /* [out] */ _rxColumns,
                     bool _bFromComposer
-                ) SAL_THROW(( ::com::sun::star::uno::Exception ));
+                );
 
         /** retrieves the active connection of the database component
         */
@@ -400,7 +400,7 @@ namespace dbtools
 
         /** caches some info about the connection of our database component
         */
-        void    cacheConnectionInfo() SAL_THROW(( ));
+        void    cacheConnectionInfo();
 
     private:
         ParameterManager();                                      // never implemented

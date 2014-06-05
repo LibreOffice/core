@@ -911,7 +911,7 @@ namespace
 }
 
 
-sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OString& _rDest, rtl_TextEncoding _eEncoding ) SAL_THROW((com::sun::star::sdbc::SQLException))
+sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OString& _rDest, rtl_TextEncoding _eEncoding )
 {
     if ( !rtl_convertUStringToString( &_rDest.pData, _rSource.getStr(), _rSource.getLength(),
             _eEncoding,
@@ -940,7 +940,7 @@ sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OStr
 
 
 sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSource, OString&  _rDest,
-   sal_Int32 _nMaxLen, rtl_TextEncoding _eEncoding ) SAL_THROW((SQLException))
+   sal_Int32 _nMaxLen, rtl_TextEncoding _eEncoding )
 {
     sal_Int32 nLen = convertUnicodeString( _rSource, _rDest, _eEncoding );
     if ( nLen > _nMaxLen )
