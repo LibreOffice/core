@@ -164,15 +164,14 @@ void FilterCache::load(EFillState eRequired,
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
+    SAL_WARN_IF(
+        bByThread && (eRequired & ~m_eFillState) == 0, "filter.config",
+        "useless LateInitThread");
+
     // check if required fill state is already reached ...
     // There is nothing to do then.
     if ((m_eFillState & eRequired) == eRequired)
         return;
-
-    SAL_WARN_IF(
-        !bByThread && ((eRequired & E_CONTAINS_ALL) == E_CONTAINS_ALL),
-        "filter.config",
-        "Who disturb our \"fill cache on demand\" feature and force loading of ALL data during office startup? Please optimize your code, so a full filled filter cache is not really needed here!");
 
     // Otherwise load the missing items.
 
