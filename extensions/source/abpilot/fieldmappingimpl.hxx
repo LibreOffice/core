@@ -64,7 +64,7 @@ namespace abp
             class Window* _pParent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxDataSource,
             AddressSettings& _rSettings
-        ) SAL_THROW ( ( ) );
+        );
 
 
         /** creates a default field mapping for usage with the address book SDBC driver
@@ -74,7 +74,7 @@ namespace abp
         void defaultMapping(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             MapString2String& /* [out] */ _rFieldAssignment
-        ) SAL_THROW ( ( ) );
+        );
 
 
         /** writes a field mapping for the template document address source
@@ -82,7 +82,7 @@ namespace abp
         void writeTemplateAddressFieldMapping(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const MapString2String& _rFieldAssignment
-        ) SAL_THROW ( ( ) );
+        );
 
 
     }   // namespace fieldmapping
@@ -101,13 +101,13 @@ namespace abp
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
             const OUString& _rDataSourceName,
             const OUString& _rTableName
-        ) SAL_THROW ( ( ) );
+        );
 
         /** writes the configuration entry which states the pilot has been completed successfully
         */
         void markPilotSuccess(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext
-        ) SAL_THROW ( ( ) );
+        );
 
 
     }   // namespace addressconfig

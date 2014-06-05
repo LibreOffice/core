@@ -68,7 +68,7 @@ namespace pcr
 
 
     bool SubmissionHelper::canTriggerSubmissions( const Reference< XPropertySet >& _rxControlModel,
-        const Reference< frame::XModel >& _rxContextDocument ) SAL_THROW(())
+        const Reference< frame::XModel >& _rxContextDocument )
     {
         if ( !EFormsHelper::isEForm( _rxContextDocument ) )
             return false;

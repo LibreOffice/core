@@ -254,7 +254,7 @@ namespace pcr
         m_aSupportedProperties.realloc( 0 );
     }
 
-    void PropertyHandler::firePropertyChange( const OUString& _rPropName, PropertyId _nPropId, const Any& _rOldValue, const Any& _rNewValue ) SAL_THROW(())
+    void PropertyHandler::firePropertyChange( const OUString& _rPropName, PropertyId _nPropId, const Any& _rOldValue, const Any& _rNewValue )
     {
         PropertyChangeEvent aEvent;
         aEvent.Source = m_xComponent;

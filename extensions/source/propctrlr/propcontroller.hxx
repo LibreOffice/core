@@ -301,8 +301,7 @@ namespace pcr
         void updateViewDataFromActivePage();
 
         /// describes the UI for the given property
-        void describePropertyLine( const ::com::sun::star::beans::Property& _rPropertyName, OLineDescriptor& _rDescriptor )
-            SAL_THROW((::com::sun::star::uno::Exception));
+        void describePropertyLine( const ::com::sun::star::beans::Property& _rPropertyName, OLineDescriptor& _rDescriptor );
 
         /** retrieves the position of the property given by name in m_aProperties
             @return

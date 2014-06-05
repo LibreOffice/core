@@ -121,8 +121,8 @@ public:
     void closeAfterFailure() SAL_OVERRIDE;
 
     // rtl::IReference
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(()) SAL_OVERRIDE;
-    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(()) SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE;
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE;
 
 private:
 

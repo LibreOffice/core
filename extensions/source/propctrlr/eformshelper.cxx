@@ -102,7 +102,7 @@ namespace pcr
     }
 
 
-    bool EFormsHelper::canBindToDataType( sal_Int32 _nDataType ) const SAL_THROW(())
+    bool EFormsHelper::canBindToDataType( sal_Int32 _nDataType ) const
     {
         if ( !m_xBindableControl.is() )
             // cannot bind at all
@@ -196,7 +196,7 @@ namespace pcr
     }
 
 
-    bool EFormsHelper::isListEntrySink() const SAL_THROW(())
+    bool EFormsHelper::isListEntrySink() const
     {
         bool bIs = false;
         try
@@ -298,7 +298,7 @@ namespace pcr
     }
 
 
-    void EFormsHelper::getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const SAL_THROW(())
+    void EFormsHelper::getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const
     {
         if ( m_xDocument.is() )
         {
@@ -325,7 +325,7 @@ namespace pcr
     }
 
 
-    void EFormsHelper::getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const SAL_THROW(())
+    void EFormsHelper::getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const
     {
         _rBindingNames.resize( 0 );
         try
@@ -350,7 +350,7 @@ namespace pcr
     }
 
 
-    Reference< xforms::XModel > EFormsHelper::getFormModelByName( const OUString& _rModelName ) const SAL_THROW(())
+    Reference< xforms::XModel > EFormsHelper::getFormModelByName( const OUString& _rModelName ) const
     {
         Reference< xforms::XModel > xReturn;
         try
@@ -368,7 +368,7 @@ namespace pcr
     }
 
 
-    Reference< xforms::XModel > EFormsHelper::getCurrentFormModel() const SAL_THROW(())
+    Reference< xforms::XModel > EFormsHelper::getCurrentFormModel() const
     {
         Reference< xforms::XModel > xModel;
         try
@@ -387,7 +387,7 @@ namespace pcr
     }
 
 
-    OUString EFormsHelper::getCurrentFormModelName() const SAL_THROW(())
+    OUString EFormsHelper::getCurrentFormModelName() const
     {
         OUString sModelName;
         try
@@ -404,7 +404,7 @@ namespace pcr
     }
 
 
-    Reference< XPropertySet > EFormsHelper::getCurrentBinding() const SAL_THROW(())
+    Reference< XPropertySet > EFormsHelper::getCurrentBinding() const
     {
         Reference< XPropertySet > xBinding;
 
@@ -422,7 +422,7 @@ namespace pcr
     }
 
 
-    OUString EFormsHelper::getCurrentBindingName() const SAL_THROW(())
+    OUString EFormsHelper::getCurrentBindingName() const
     {
         OUString sBindingName;
         try
@@ -439,7 +439,7 @@ namespace pcr
     }
 
 
-    Reference< XListEntrySource > EFormsHelper::getCurrentListSourceBinding() const SAL_THROW(())
+    Reference< XListEntrySource > EFormsHelper::getCurrentListSourceBinding() const
     {
         Reference< XListEntrySource > xReturn;
         try
@@ -457,7 +457,7 @@ namespace pcr
     }
 
 
-    void EFormsHelper::setListSourceBinding( const Reference< XListEntrySource >& _rxListSource ) SAL_THROW(())
+    void EFormsHelper::setListSourceBinding( const Reference< XListEntrySource >& _rxListSource )
     {
         try
         {
@@ -473,7 +473,7 @@ namespace pcr
     }
 
 
-    void EFormsHelper::setBinding( const Reference< ::com::sun::star::beans::XPropertySet >& _rxBinding ) SAL_THROW(())
+    void EFormsHelper::setBinding( const Reference< ::com::sun::star::beans::XPropertySet >& _rxBinding )
     {
         if ( !m_xBindableControl.is() )
             return;
@@ -499,14 +499,14 @@ namespace pcr
     }
 
 
-    Reference< XPropertySet > EFormsHelper::getOrCreateBindingForModel( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(())
+    Reference< XPropertySet > EFormsHelper::getOrCreateBindingForModel( const OUString& _rTargetModel, const OUString& _rBindingName ) const
     {
         OSL_ENSURE( !_rBindingName.isEmpty(), "EFormsHelper::getOrCreateBindingForModel: invalid binding name!" );
         return implGetOrCreateBinding( _rTargetModel, _rBindingName );
     }
 
 
-    Reference< XPropertySet > EFormsHelper::implGetOrCreateBinding( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(())
+    Reference< XPropertySet > EFormsHelper::implGetOrCreateBinding( const OUString& _rTargetModel, const OUString& _rBindingName ) const
     {
         OSL_ENSURE( !( _rTargetModel.isEmpty() && !_rBindingName.isEmpty() ), "EFormsHelper::implGetOrCreateBinding: no model, but a binding name?" );
 
@@ -609,7 +609,7 @@ namespace pcr
     }
 
 
-    OUString EFormsHelper::getModelElementUIName( const EFormsHelper::ModelElementType _eType, const Reference< XPropertySet >& _rxElement ) const SAL_THROW(())
+    OUString EFormsHelper::getModelElementUIName( const EFormsHelper::ModelElementType _eType, const Reference< XPropertySet >& _rxElement ) const
     {
         OUString sUIName;
         try
@@ -635,7 +635,7 @@ namespace pcr
     }
 
 
-    Reference< XPropertySet > EFormsHelper::getModelElementFromUIName( const EFormsHelper::ModelElementType _eType, const OUString& _rUIName ) const SAL_THROW(())
+    Reference< XPropertySet > EFormsHelper::getModelElementFromUIName( const EFormsHelper::ModelElementType _eType, const OUString& _rUIName ) const
     {
         const MapStringToPropertySet& rMapUINameToElement( ( _eType == Submission ) ? m_aSubmissionUINames : m_aBindingUINames );
         MapStringToPropertySet::const_iterator pos = rMapUINameToElement.find( _rUIName );

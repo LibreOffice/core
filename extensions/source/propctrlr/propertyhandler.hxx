@@ -134,7 +134,7 @@ namespace pcr
             @see addPropertyChangeListener
         */
         void    firePropertyChange( const OUString& _rPropName, PropertyId _nPropId,
-                    const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Any& _rNewValue ) SAL_THROW(());
+                    const ::com::sun::star::uno::Any& _rOldValue, const ::com::sun::star::uno::Any& _rNewValue );
 
         /** retrieves a window which can be used as parent for dialogs
         */

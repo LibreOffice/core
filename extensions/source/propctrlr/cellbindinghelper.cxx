@@ -162,7 +162,7 @@ namespace pcr
 
 
     bool CellBindingHelper::doConvertAddressRepresentations( const OUString& _rInputProperty, const Any& _rInputValue,
-        const OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const SAL_THROW(())
+        const OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const
     {
         bool bSuccess = false;
 

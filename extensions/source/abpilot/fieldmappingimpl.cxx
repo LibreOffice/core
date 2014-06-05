@@ -70,7 +70,7 @@ namespace abp
 
 
         bool invokeDialog( const Reference< XComponentContext >& _rxORB, class Window* _pParent,
-            const Reference< XPropertySet >& _rxDataSource, AddressSettings& _rSettings ) SAL_THROW ( ( ) )
+            const Reference< XPropertySet >& _rxDataSource, AddressSettings& _rSettings )
         {
             _rSettings.aFieldMapping.clear();
 
@@ -125,7 +125,7 @@ namespace abp
         }
 
 
-        void defaultMapping(  const Reference< XComponentContext >& _rxContext, MapString2String& _rFieldAssignment ) SAL_THROW ( ( ) )
+        void defaultMapping(  const Reference< XComponentContext >& _rxContext, MapString2String& _rFieldAssignment )
         {
             _rFieldAssignment.clear();
 
@@ -218,7 +218,7 @@ namespace abp
         }
 
 
-        void writeTemplateAddressFieldMapping( const Reference< XComponentContext >& _rxContext, const MapString2String& _rFieldAssignment ) SAL_THROW ( ( ) )
+        void writeTemplateAddressFieldMapping( const Reference< XComponentContext >& _rxContext, const MapString2String& _rFieldAssignment )
         {
             // want to have a non-const map for easier handling
             MapString2String aFieldAssignment( _rFieldAssignment );
@@ -298,7 +298,7 @@ namespace abp
 
 
         void writeTemplateAddressSource( const Reference< XComponentContext >& _rxContext,
-            const OUString& _rDataSourceName, const OUString& _rTableName ) SAL_THROW ( ( ) )
+            const OUString& _rDataSourceName, const OUString& _rTableName )
         {
             // access the configuration information which the driver uses for determining it's column names
             const OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();
@@ -316,7 +316,7 @@ namespace abp
         }
 
 
-        void markPilotSuccess( const Reference< XComponentContext >& _rxContext ) SAL_THROW ( ( ) )
+        void markPilotSuccess( const Reference< XComponentContext >& _rxContext )
         {
             // access the configuration information which the driver uses for determining it's column names
             const OUString& sAddressBookNodeName = lcl_getAddressBookNodeName();

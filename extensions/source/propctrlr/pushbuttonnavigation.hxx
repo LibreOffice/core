@@ -51,35 +51,35 @@ namespace pcr
             the "virtual" button types such as "move-to-next-record button".
         */
         ::com::sun::star::uno::Any
-                getCurrentButtonType() const SAL_THROW(());
+                getCurrentButtonType() const;
 
         /** sets the current value of the "ButtonType" property, taking into account
             the "virtual" button types such as "move-to-next-record button".
         */
-        void    setCurrentButtonType( const ::com::sun::star::uno::Any& _rValue ) const SAL_THROW(());
+        void    setCurrentButtonType( const ::com::sun::star::uno::Any& _rValue ) const;
 
         /** retrieves the current state of the "ButtonType" property, taking into account
             the "virtual" button types such as "move-to-next-record button".
         */
         ::com::sun::star::beans::PropertyState
-                getCurrentButtonTypeState( ) const SAL_THROW(());
+                getCurrentButtonTypeState( ) const;
 
         /** returns the current value of the "TargetURL" property, taking into account
             that some URLs are special values caused by "virtual" ButtonTypes
         */
         ::com::sun::star::uno::Any
-                getCurrentTargetURL() const SAL_THROW(());
+                getCurrentTargetURL() const;
 
         /** sets the current value of the "TargetURL" property, taking into account
             that some URLs are special values caused by "virtual" ButtonTypes
         */
-        void    setCurrentTargetURL( const ::com::sun::star::uno::Any& _rValue ) const SAL_THROW(());
+        void    setCurrentTargetURL( const ::com::sun::star::uno::Any& _rValue ) const;
 
         /** retrieves the current state of the "TargetURL" property, taking into account
             that some URLs are special values caused by "virtual" ButtonTypes
         */
         ::com::sun::star::beans::PropertyState
-                getCurrentTargetURLState( ) const SAL_THROW(());
+                getCurrentTargetURLState( ) const;
 
         /** determines whether the current button tpye is FormButtonType_URL
         */
@@ -90,7 +90,7 @@ namespace pcr
         bool    hasNonEmptyCurrentTargetURL() const;
 
     private:
-        sal_Int32 implGetCurrentButtonType() const SAL_THROW(( ::com::sun::star::uno::Exception ));
+        sal_Int32 implGetCurrentButtonType() const;
     };
 
 

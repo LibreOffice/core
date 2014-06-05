@@ -482,7 +482,7 @@ namespace pcr
     }
 
 
-    bool XSDValidationPropertyHandler::implPrepareCloneDataCurrentType( OUString& _rNewName ) SAL_THROW(())
+    bool XSDValidationPropertyHandler::implPrepareCloneDataCurrentType( OUString& _rNewName )
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implPrepareCloneDataCurrentType: this will crash!" );
 
@@ -505,7 +505,7 @@ namespace pcr
     }
 
 
-    bool XSDValidationPropertyHandler::implDoCloneCurrentDataType( const OUString& _rNewName ) SAL_THROW(())
+    bool XSDValidationPropertyHandler::implDoCloneCurrentDataType( const OUString& _rNewName )
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implDoCloneCurrentDataType: this will crash!" );
 
@@ -521,7 +521,7 @@ namespace pcr
     }
 
 
-    bool XSDValidationPropertyHandler::implPrepareRemoveCurrentDataType() SAL_THROW(())
+    bool XSDValidationPropertyHandler::implPrepareRemoveCurrentDataType()
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implPrepareRemoveCurrentDataType: this will crash!" );
 
@@ -543,7 +543,7 @@ namespace pcr
     }
 
 
-    bool XSDValidationPropertyHandler::implDoRemoveCurrentDataType() SAL_THROW(())
+    bool XSDValidationPropertyHandler::implDoRemoveCurrentDataType()
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implDoRemoveCurrentDataType: this will crash!" );
 
@@ -653,7 +653,7 @@ namespace pcr
     }
 
 
-    void XSDValidationPropertyHandler::implGetAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const SAL_THROW(())
+    void XSDValidationPropertyHandler::implGetAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implGetAvailableDataTypeNames: this will crash!" );
         // start with *all* types which are available at the model

@@ -270,7 +270,7 @@ namespace pcr
                             const OUString& _rOutputProperty,
                                   ::com::sun::star::uno::Any& _rOutputValue,
                             bool _bIsRange
-                        ) const SAL_THROW(());
+                        ) const;
     };
 
 
