@@ -4210,11 +4210,17 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
         sFileExtension = "xls";
     }
-    else if( sProgID.startsWith("PowerPoint.Show") )
+    else if( sProgID == "PowerPoint.Show.12" )
     {
         sMediaType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
         sFileExtension = "pptx";
+    }
+    else if( sProgID.startsWith("PowerPoint.Show") )
+    {
+        sMediaType = "application/vnd.ms-powerpoint";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
+        sFileExtension = "ppt";
     }
     else
     {
