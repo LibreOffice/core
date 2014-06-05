@@ -387,6 +387,7 @@ TOPIC DifParser::GetNextTopic( void )
             case S_UNKNOWN:
                 // 2 Zeilen ueberlesen
                 ReadNextLine( aLine );
+                // fall-through
             case S_ERROR_L2:                // Fehler in Line 2 aufgetreten
                 // eine Zeile ueberlesen
                 ReadNextLine( aLine );
