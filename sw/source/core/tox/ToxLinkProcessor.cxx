@@ -20,7 +20,7 @@ namespace sw {
 void
 ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const OUString& characterStyle)
 {
-    mStartedLinks.push_back(StartedLink(startPosition, characterStyle));
+    mStartedLinks.push_back(new StartedLink(startPosition, characterStyle));
 }
 
 void
@@ -36,12 +36,12 @@ ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url)
         return;
     }
 
-    ClosedLink closedLink(url, startedLink.mStartPosition, endPosition);
+    ClosedLink* closedLink = new ClosedLink(url, startedLink.mStartPosition, endPosition);
 
     const OUString& characterStyle = startedLink.mCharacterStyle;
     sal_uInt16 poolId = ObtainPoolId(characterStyle);
-    closedLink.mINetFmt.SetVisitedFmtAndId(characterStyle, poolId);
-    closedLink.mINetFmt.SetINetFmtAndId(characterStyle, poolId);
+    closedLink->mINetFmt.SetVisitedFmtAndId(characterStyle, poolId);
+    closedLink->mINetFmt.SetINetFmtAndId(characterStyle, poolId);
 
     mClosedLinks.push_back(closedLink);
 }
