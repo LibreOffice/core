@@ -69,6 +69,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/chardialog \
 	sc/uiconfig/scalc/ui/colorrowdialog \
 	sc/uiconfig/scalc/ui/colwidthdialog \
+	sc/uiconfig/scalc/ui/condformatmanager \
 	sc/uiconfig/scalc/ui/conditionalformatdialog \
 	sc/uiconfig/scalc/ui/consolidatedialog \
 	sc/uiconfig/scalc/ui/correlationdialog \

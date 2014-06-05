@@ -8,7 +8,6 @@
  */
 
 #include "condformatmgr.hxx"
-#include "condformatmgr.hrc"
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "condformatdlg.hxx"
@@ -20,7 +19,7 @@
 
 
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList):
-    SvTabListBox(pParent, WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP),
+    SvTabListBox(pParent, WB_BORDER | WB_HSCROLL | WB_SORT | WB_CLIPCHILDREN | WB_TABSTOP),
     maHeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
     mpDoc(pDoc),
     mpFormatList(pFormatList)
@@ -74,6 +73,14 @@ void ScCondFormatManagerWindow::Init()
     SetUpdateMode(true);
 }
 
+void ScCondFormatManagerWindow::ChangeSize(Size aSize)
+{
+    maHeaderBar.SetSizePixel( Size( aSize.Width(), 16 ) );
+    Size aHeadSize( maHeaderBar.GetSizePixel() );
+    SetSizePixel( Size( aSize.Width(), aSize.Height() - aHeadSize.Height() ) );
+    HeaderEndDragHdl(NULL);
+}
+
 void ScCondFormatManagerWindow::DeleteSelection()
 {
     if(GetSelectionCount())
@@ -123,52 +130,37 @@ IMPL_LINK_NOARG(ScCondFormatManagerWindow, HeaderEndDragHdl)
     return 0;
 }
 
-ScCondFormatManagerCtrl::ScCondFormatManagerCtrl(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList):
-    Control(pParent, ScResId(CTRL_TABLE)),
-    maWdManager(this, pDoc, pFormatList)
-{
-}
-
-ScConditionalFormat* ScCondFormatManagerCtrl::GetSelection()
-{
-    return maWdManager.GetSelection();
-}
-
-void ScCondFormatManagerCtrl::DeleteSelection()
-{
-    maWdManager.DeleteSelection();
-}
-
-void ScCondFormatManagerCtrl::Update()
-{
-    maWdManager.Update();
-}
-
 ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos):
-    ModalDialog(pParent, ScResId(RID_SCDLG_COND_FORMAT_MANAGER)),
-    maBtnAdd(this, ScResId(BTN_ADD)),
-    maBtnRemove(this, ScResId(BTN_REMOVE)),
-    maBtnEdit(this, ScResId(BTN_EDIT)),
-    maBtnOk(this, ScResId(BTN_OK)),
-    maBtnCancel(this, ScResId(BTN_CANCEL)),
-    maFlLine(this, ScResId(FL_LINE)),
+    ModalDialog(pParent, "CondFormatManager", "modules/scalc/ui/condformatmanager.ui"),
     mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : NULL),
-    maCtrlManager(this, pDoc, mpFormatList),
     mpDoc(pDoc),
     maPos(rPos),
     mbModified(false)
 {
-    FreeResource();
+    get(m_pGrid, "dialog-vbox1");
+    get(m_pContainer, "CONTAINER");
+    m_pContainer->SetSizePixel(Size(300, 100));
+    m_pCtrlManager = new ScCondFormatManagerWindow(m_pContainer, mpDoc, mpFormatList);
+    get(m_pBtnAdd, "ADD");
+    get(m_pBtnRemove, "REMOVE");
+    get(m_pBtnEdit, "EDIT");
 
-    maBtnRemove.SetClickHdl(LINK(this, ScCondFormatManagerDlg, RemoveBtnHdl));
-    maBtnEdit.SetClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
-    maBtnAdd.SetClickHdl(LINK(this, ScCondFormatManagerDlg, AddBtnHdl));
-    maCtrlManager.GetListControl().SetDoubleClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
+    m_pBtnRemove->SetClickHdl(LINK(this, ScCondFormatManagerDlg, RemoveBtnHdl));
+    m_pBtnEdit->SetClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
+    m_pBtnAdd->SetClickHdl(LINK(this, ScCondFormatManagerDlg, AddBtnHdl));
+    m_pCtrlManager->SetDoubleClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
+}
+
+void ScCondFormatManagerDlg::Resize()
+{
+    m_pGrid->SetSizePixel(Size(GetOutputSizePixel().Width() - 12, GetOutputSizePixel().Height() - 12));
+    m_pCtrlManager->ChangeSize(Size(GetOutputSizePixel().Width() - 18, GetOutputSizePixel().Height() - 100));
 }
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
 {
     delete mpFormatList;
+    delete m_pCtrlManager;
 }
 
 bool ScCondFormatManagerDlg::IsInRefMode() const
@@ -190,14 +182,14 @@ bool ScCondFormatManagerDlg::CondFormatsChanged()
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl)
 {
-    maCtrlManager.DeleteSelection();
+    m_pCtrlManager->DeleteSelection();
     mbModified = true;
     return 0;
 }
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
 {
-    ScConditionalFormat* pFormat = maCtrlManager.GetSelection();
+    ScConditionalFormat* pFormat = m_pCtrlManager->GetSelection();
 
     if(!pFormat)
         return 0;
@@ -219,7 +211,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
             mpFormatList->InsertNew(pNewFormat);
         }
 
-        maCtrlManager.Update();
+        m_pCtrlManager->Update();
         mbModified = true;
     }
     Show(true, 0);
@@ -261,7 +253,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
         {
             mpFormatList->InsertNew(pNewFormat);
             pNewFormat->SetKey(FindKey(mpFormatList));
-            maCtrlManager.Update();
+            m_pCtrlManager->Update();
 
             mbModified = true;
         }
@@ -271,6 +263,5 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
 
     return 0;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
