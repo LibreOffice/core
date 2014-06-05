@@ -26,8 +26,8 @@ namespace sw {
  */
 class SW_DLLPUBLIC ToxLinkProcessor {
 public:
-    ToxLinkProcessor() {;}
-    virtual ~ToxLinkProcessor() {;}
+    ToxLinkProcessor() {}
+    virtual ~ToxLinkProcessor() {}
 
     void
     StartNewLink(sal_Int32 startPosition, const OUString& characterStyle);
@@ -56,7 +56,6 @@ private:
     struct StartedLink {
         StartedLink(sal_Int32 startPosition, const OUString& characterStyle) :
                 mStartPosition(startPosition), mCharacterStyle(characterStyle) {
-            ;
         }
         sal_Int32 mStartPosition;
         OUString mCharacterStyle;
@@ -84,3 +83,5 @@ private:
 }
 
 #endif /* SW_TOXLINKPROCESSOR_HXX_ */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
