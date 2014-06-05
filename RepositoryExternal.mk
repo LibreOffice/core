@@ -1041,6 +1041,8 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(APR_LIBS) \
+	$(if $(filter $(OS),LINUX),-lpthread) \
+	$(if $(filter $(OS),MACOSX),-liconv) \
 )
 
 ifeq ($(SYSTEM_APR),)
