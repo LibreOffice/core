@@ -1,12 +1,12 @@
 [submodule "dictionaries"]
 	path = dictionaries
 	url = git://officebuild/core/clone/dictionaries
-	branch = libreoffice-lhm-41 
+	branch = libreoffice-lhm-416 
 [submodule "helpcontent2"]
 	path = helpcontent2
 	url = git://officebuild/core/clone/help
-	branch = libreoffice-lhm-41
+	branch = libreoffice-lhm-416
 [submodule "translations"]
 	path = translations
 	url = git://officebuild/core/clone/translations
-	branch = libreoffice-lhm-41 
+	branch = libreoffice-lhm-416 
