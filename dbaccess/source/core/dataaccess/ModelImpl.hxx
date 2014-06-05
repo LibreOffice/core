@@ -262,8 +262,7 @@ public:
     bool        commitEmbeddedStorage( bool _bPreventRootCommits = false );
 
     /// commits all sub storages
-    void commitStorages()
-            SAL_THROW(( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException ));
+    void commitStorages();
 
     ODatabaseModelImpl(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
@@ -316,7 +315,7 @@ public:
     void    flushTables();
 
     // disposes all elements in m_aStorages, and clears it
-    void    disposeStorages() SAL_THROW(());
+    void    disposeStorages();
 
     /// creates a ->com::sun::star::embed::StorageFactory
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >
@@ -328,8 +327,7 @@ public:
     /// commits a given storage if it's not readonly, ignoring (but asserting) all errors
     static  bool    commitStorageIfWriteable_ignoreErrors(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
-            )
-            SAL_THROW(());
+            );
 
     void clearConnections();
 

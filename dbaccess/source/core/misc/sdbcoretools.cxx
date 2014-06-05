@@ -129,7 +129,7 @@ namespace dbaccess
         return ( nMode & ElementModes::WRITE ) != 0;
     }
 
-    bool commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
+    bool commitStorageIfWriteable( const Reference< XStorage >& _rxStorage )
     {
         bool bSuccess = false;
         Reference< XTransactedObject > xTrans( _rxStorage, UNO_QUERY );
