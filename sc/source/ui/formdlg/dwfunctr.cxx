@@ -695,7 +695,7 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
                         aString += "www";
                         aTxtSize = Size( aFiFuncDesc.GetTextWidth(aString),
                                             aFiFuncDesc.GetTextHeight() );
-
+                        // fall-through
         default:        Point aTopLeft=aCatBox.GetPosPixel();
                         nMinWidth=aTxtSize.Width()+aTopLeft.X()
                                 +2*aFuncList.GetPosPixel().X();
