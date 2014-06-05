@@ -4381,7 +4381,12 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                         if ( m_postponedDMLDrawing == NULL )
                         {
                             if ( IsAlternateContentChoiceOpen() )
-                                m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrmFmt(), m_anchorId++);
+                            {
+                                if( !(m_rExport.SdrExporter().IsDrawingOpen()) && sShapeType != "com.sun.star.drawing.CustomShape" )
+                                    m_rExport.SdrExporter().writeDMLDrawing( pSdrObj, &rFrame.GetFrmFmt(), m_anchorId++);
+                                else
+                                    m_postponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
+                            }
                             else
                                 m_rExport.SdrExporter().writeDMLAndVMLDrawing( pSdrObj, rFrame.GetFrmFmt(), rNdTopLeft, m_anchorId++);
 
