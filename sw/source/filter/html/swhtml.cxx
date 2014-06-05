@@ -1229,6 +1229,7 @@ void SwHTMLParser::NextToken( int nToken )
             case HTML_UNKNOWNCONTROL_OFF:
                 if( aUnknownToken != sSaveToken )
                     return;
+                //fall-through
             case HTML_FRAMESET_ON:
             case HTML_HEAD_OFF:
             case HTML_BODY_ON:
