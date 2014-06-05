@@ -74,8 +74,8 @@ ToxLinkProcessorTest::AddingAndClosingTwoLinksResultsInTwoClosedLinks()
 
 class ToxLinkProcessorWithOverriddenObtainPoolId : public ToxLinkProcessor {
 public:
-    /*virtual*/ sal_uInt16
-    ObtainPoolId(const OUString& characterStyle) const {
+    virtual sal_uInt16
+    ObtainPoolId(const OUString& characterStyle) const SAL_OVERRIDE {
         if (characterStyle == ToxLinkProcessorTest::STYLE_NAME_1) {
             return ToxLinkProcessorTest::POOL_ID_1;
         }
