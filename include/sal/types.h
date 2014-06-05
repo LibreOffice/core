@@ -347,21 +347,6 @@ typedef struct _sal_Sequence
 
 #if defined __cplusplus
 
-/** Exception specification documentation.
-
-    The original intent of this macro was to control whether or not actual
-    exception specifications are emitted, based on how much they impact code
-    size etc. in a specific scenario.  But it ended up always being disabled
-    (except for MSVC, which effectively ignored it even though being enabled),
-    and used in ways that would make enabling it illegal (e.g., in the
-    cppu::ComponentFactoryFunc typedef, or with necessarily incomplete
-    com::sun::star::uno::RuntimeException in com/sun/star/uno/Reference.h), so
-    has officially been demoted to pure documentation now.
-
-    @deprecated do not use in new code.
-*/
-#define SAL_THROW(x)
-
 /** Nothrow specification for C functions.
 
     This is a macro so it can expand to nothing in C code.
@@ -370,9 +355,6 @@ typedef struct _sal_Sequence
 
 #else
 
-/* SAL_THROW() must not be used in C code, only SAL_THROW_EXTERN_C() is defined
-   there:
-*/
 #define SAL_THROW_EXTERN_C()
 
 #endif
