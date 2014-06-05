@@ -58,8 +58,7 @@ public:
                    typelib_InterfaceTypeDescription       * pTypeDescr,
                    rtl::OUString                    const & rOId,
                    cppu::helper::purpenv::ProbeFun        * probeFun,
-                   void                                   * pProbeContext)
-        SAL_THROW(());
+                   void                                   * pProbeContext);
     ~Proxy(void);
 
     void acquire(void);

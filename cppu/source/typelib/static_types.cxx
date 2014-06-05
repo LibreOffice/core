@@ -89,7 +89,6 @@ struct AlignSize_Impl
 static sal_Int32 nMaxAlignment = (sal_Int32)( (sal_Size)(&((AlignSize_Impl *) 16)->dDouble) - 16);
 
 static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
-    SAL_THROW(())
 {
     if( nRequestedAlignment > nMaxAlignment )
         nRequestedAlignment = nMaxAlignment;
@@ -101,7 +100,6 @@ static inline sal_Int32 adjustAlignment( sal_Int32 nRequestedAlignment )
  */
 static inline sal_Int32 newAlignedSize(
     sal_Int32 OldSize, sal_Int32 ElementSize, sal_Int32 NeededAlignment )
-    SAL_THROW(())
 {
     NeededAlignment = adjustAlignment( NeededAlignment );
     return (OldSize + NeededAlignment -1) / NeededAlignment * NeededAlignment + ElementSize;
@@ -116,7 +114,6 @@ namespace
 
 // !for NOT REALLY WEAK TYPES only!
 static inline typelib_TypeDescriptionReference * igetTypeByName( rtl_uString * pTypeName )
-    SAL_THROW(())
 {
     typelib_TypeDescriptionReference * pRef = 0;
     ::typelib_typedescriptionreference_getByName( &pRef, pTypeName );

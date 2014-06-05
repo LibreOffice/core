@@ -32,13 +32,11 @@ namespace cppu
 
 void defaultConstructStruct(
     void * pMem,
-    typelib_CompoundTypeDescription * pCompType )
-    SAL_THROW(());
+    typelib_CompoundTypeDescription * pCompType );
 
 inline void _defaultConstructStruct(
     void * pMem,
     typelib_CompoundTypeDescription * pTypeDescr )
-    SAL_THROW(())
 {
     if (pTypeDescr->pBaseTypeDescription)
     {
@@ -60,7 +58,6 @@ inline void _defaultConstructData(
     void * pMem,
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr )
-    SAL_THROW(())
 {
     switch (pType->eTypeClass)
     {

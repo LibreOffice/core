@@ -36,7 +36,6 @@ namespace cppu
 inline bool _equalObject(
     void * pI1, void * pI2,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW(())
 {
     if (pI1 == pI2)
         return true;
@@ -66,14 +65,12 @@ inline bool _equalObject(
 bool equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
-    uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW(());
+    uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release );
 
 inline bool _equalStruct(
     void * pDest, void *pSource,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW(())
 {
     if (pTypeDescr->pBaseTypeDescription &&
         !equalStruct( pDest, pSource, pTypeDescr->pBaseTypeDescription, queryInterface, release ))
@@ -103,14 +100,12 @@ inline bool _equalStruct(
 bool equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
-    uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW(());
+    uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release );
 
 inline bool _equalSequence(
     uno_Sequence * pDest, uno_Sequence * pSource,
     typelib_TypeDescriptionReference * pElementType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW(())
 {
     if (pDest == pSource)
         return true;
@@ -269,7 +264,6 @@ inline bool _equalData(
     void * pSource,
     typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
-    SAL_THROW(())
 {
     typelib_TypeClass eSourceTypeClass, eDestTypeClass;
     while (typelib_TypeClass_ANY == (eDestTypeClass = pDestType->eTypeClass))

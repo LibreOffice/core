@@ -39,7 +39,7 @@ struct IdContainer
     sal_Sequence *      pCurrentId;
 };
 
-IdContainer * getIdContainer() SAL_THROW(());
+IdContainer * getIdContainer();
 }
 
 #endif

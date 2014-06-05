@@ -33,14 +33,12 @@ namespace cppu
 void destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
-    uno_ReleaseFunc release )
-    SAL_THROW(());
+    uno_ReleaseFunc release );
 
 inline void _destructStruct(
     void * pValue,
     typelib_CompoundTypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
-    SAL_THROW(())
 {
     if (pTypeDescr->pBaseTypeDescription)
     {
@@ -69,7 +67,6 @@ void destructSequence(
 inline void _destructAny(
     uno_Any * pAny,
     uno_ReleaseFunc release )
-    SAL_THROW(())
 {
     typelib_TypeDescriptionReference * pType = pAny->pType;
 
@@ -142,7 +139,6 @@ inline sal_Int32 idestructElements(
     void * pElements, typelib_TypeDescriptionReference * pElementType,
     sal_Int32 nStartIndex, sal_Int32 nStopIndex,
     uno_ReleaseFunc release )
-    SAL_THROW(())
 {
     switch (pElementType->eTypeClass)
     {
@@ -297,7 +293,6 @@ inline void _destructData(
     typelib_TypeDescriptionReference * pType,
     typelib_TypeDescription * pTypeDescr,
     uno_ReleaseFunc release )
-    SAL_THROW(())
 {
     switch (pType->eTypeClass)
     {
