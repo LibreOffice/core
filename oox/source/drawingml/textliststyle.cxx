@@ -34,6 +34,34 @@ TextListStyle::~TextListStyle()
 {
 }
 
+TextListStyle::TextListStyle(const TextListStyle& rStyle)
+{
+    assert(rStyle.maListStyle.size() == 9);
+    assert(rStyle.maAggregationListStyle.size() == 9);
+    for ( size_t i = 0; i < 9; i++ )
+    {
+        maListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties(*rStyle.maListStyle[i]) ) );
+        maAggregationListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties(*rStyle.maAggregationListStyle[i]) ) );
+    }
+}
+
+TextListStyle& TextListStyle::operator=(const TextListStyle& rStyle)
+{
+    if(this != &rStyle)
+    {
+        assert(rStyle.maListStyle.size() == 9);
+        assert(rStyle.maAggregationListStyle.size() == 9);
+        assert(maListStyle.size() == 9);
+        assert(maAggregationListStyle.size() == 9);
+        for ( size_t i = 0; i < 9; i++ )
+        {
+            *maListStyle[i] = *rStyle.maListStyle[i];
+            *maAggregationListStyle[i] = *rStyle.maAggregationListStyle[i];
+        }
+    }
+    return *this;
+}
+
 void applyStyleList( const TextParagraphPropertiesVector& rSourceListStyle, TextParagraphPropertiesVector& rDestListStyle )
 {
     TextParagraphPropertiesVector::const_iterator aSourceListStyleIter( rSourceListStyle.begin() );
