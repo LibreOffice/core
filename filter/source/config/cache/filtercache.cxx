@@ -19,7 +19,6 @@
 
 
 #include "filtercache.hxx"
-#include "lateinitlistener.hxx"
 #include "macros.hxx"
 #include "constant.hxx"
 #include "cacheupdatelistener.hxx"
@@ -156,17 +155,11 @@ void FilterCache::takeOver(const FilterCache& rClone)
 
 
 
-void FilterCache::load(EFillState eRequired,
-    sal_Bool bByThread
-)
+void FilterCache::load(EFillState eRequired)
     throw(css::uno::Exception)
 {
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
-
-    SAL_WARN_IF(
-        bByThread && (eRequired & ~m_eFillState) == 0, "filter.config",
-        "useless LateInitThread");
 
     // check if required fill state is already reached ...
     // There is nothing to do then.
@@ -193,13 +186,6 @@ void FilterCache::load(EFillState eRequired,
 
         // Support the old configuration support. Read it only one times during office runtime!
         impl_readOldFormat();
-
-        // enable "loadOnDemand" feature ...
-        // Create uno listener, which waits for finishing the office startup
-        // and starts a thread, which calls loadAll() at this filter cache.
-        // Note: Its not a leak to create this listener with new here.
-        // It kills itself after working!
-        /* LateInitListener* pLateInit = */ new LateInitListener(comphelper::getProcessComponentContext());
     }
 
 

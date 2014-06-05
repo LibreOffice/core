@@ -314,32 +314,13 @@ class FilterCache : public BaseLock
                         This method must be called from every user of this cache
                         every time it needs a filled cache. Normally we load
                         only standard information into this cache on startup.
-                        After a few seconds we start a special thread, which
-                        may fill this cache completely. But if someone outside
-                        needs a filled cache before ... it can run into trouble,
-                        if this "load-on-demand" thread does not finished its work before.
-                        This method "load(xxx)" synchronize such load-on-demand requests.
-
-                        Of course it would be possible to supress this special load thread
-                        in general and start it manually inside this load() request.
-                        The outside code decide then, if and when this cache will be filled
-                        with all available information ...
-
-            @param      bByThread
-                        indicates using of this method by our global "load-on-demand-thread".
-                        Its an implementation detail! We use it to check, if this "load()"
-                        request was forced e.g. by one of our derived service container (which need
-                        it to full fill its own operations) or if it was forced by our own
-                        "load-on-demand-thread", which tries to optimize our startup performance
-                        and start this load() only in case the office startup was already finished!
 
             @throw      An exception if the cache could not be filled really
                         or seems to be invalid afterwards. But there is no reaction
                         at all if this method does nothing inside, because the cache
                         is already full filled!
          */
-        virtual void load(EFillState eRequired ,
-                          sal_Bool   bByThread = sal_False)
+        virtual void load(EFillState eRequired)
             throw(css::uno::Exception);
 
 
