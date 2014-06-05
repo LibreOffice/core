@@ -13,6 +13,7 @@
 #include "sc.hrc"
 
 #include <vcl/dialog.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/svtabbx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -38,25 +39,12 @@ private:
     DECL_LINK( HeaderEndDragHdl, void* );
 
 public:
-    ScCondFormatManagerWindow( Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList );
+    ScCondFormatManagerWindow( Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList);
+    void ChangeSize(Size aSize);
 
     void DeleteSelection();
     ScConditionalFormat* GetSelection();
     void Update();
-};
-
-class ScCondFormatManagerCtrl : Control
-{
-public:
-    ScCondFormatManagerCtrl(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList);
-
-    ScConditionalFormat* GetSelection();
-    void DeleteSelection();
-    void Update();
-    ScCondFormatManagerWindow &GetListControl() { return maWdManager; }
-
-private:
-    ScCondFormatManagerWindow maWdManager;
 };
 
 class ScCondFormatManagerDlg : public ModalDialog
@@ -72,18 +60,13 @@ public:
     virtual bool IsInRefMode() const;
 
 private:
-    PushButton maBtnAdd;
-    PushButton maBtnRemove;
-    PushButton maBtnEdit;
-
-    OKButton maBtnOk;
-    CancelButton maBtnCancel;
-
-    FixedLine maFlLine;
-
+    PushButton *m_pBtnAdd;
+    PushButton *m_pBtnRemove;
+    PushButton *m_pBtnEdit;
     ScConditionalFormatList* mpFormatList;
-
-    ScCondFormatManagerCtrl maCtrlManager;
+    Window *m_pContainer;
+    VclVBox *m_pGrid;
+    ScCondFormatManagerWindow *m_pCtrlManager;
 
     ScDocument* mpDoc;
     ScAddress maPos;
@@ -91,6 +74,8 @@ private:
     DECL_LINK(RemoveBtnHdl, void*);
     DECL_LINK(EditBtnHdl, void*);
     DECL_LINK(AddBtnHdl, void*);
+
+    virtual void Resize();
 
     bool mbModified;
 };
