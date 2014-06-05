@@ -61,7 +61,6 @@ namespace CppServer {
 
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const &)
-    SAL_THROW((css::uno::Exception))
 {
     try {
         return static_cast< ::cppu::OWeakObject * >(new Service);

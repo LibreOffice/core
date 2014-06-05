@@ -42,7 +42,6 @@ namespace binaryurp {
 
 css::uno::Reference< css::uno::XInterface > BridgeFactory::static_create(
     css::uno::Reference< css::uno::XComponentContext > const & xContext)
-    SAL_THROW((css::uno::Exception))
 {
     return static_cast< cppu::OWeakObject * >(new BridgeFactory(xContext));
 }

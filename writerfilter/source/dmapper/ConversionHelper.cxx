@@ -411,7 +411,7 @@ com::sun::star::util::DateTime ConvertDateStringToDateTime( const OUString& rDat
 {
     com::sun::star::util::DateTime aDateTime;
     //xsd::DateTime in the format [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm] example: 2008-01-21T10:42:00Z
-    //OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const SAL_THROW(())
+    //OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const
     sal_Int32 nIndex = 0;
     OUString sDate = rDateTime.getToken( 0, 'T', nIndex );
     // HACK: this is broken according to the spec, but MSOffice always treats the time as local,

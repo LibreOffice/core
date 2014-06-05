@@ -827,11 +827,11 @@ class OStorePageObject
 public:
     /** Allocation.
      */
-    static void * operator new (size_t n) SAL_THROW(())
+    static void * operator new (size_t n)
     {
         return rtl_allocateMemory (sal_uInt32(n));
     }
-    static void operator delete (void * p) SAL_THROW(())
+    static void operator delete (void * p)
     {
         rtl_freeMemory (p);
     }

@@ -42,8 +42,7 @@ namespace ucbhelper {
     either a 'root' URL for the most 'local' file content provider, or an
     empty string, if no such URL can meaningfully be constructed.
  */
-UCBHELPER_DLLPUBLIC OUString getLocalFileURL()
-    SAL_THROW((com::sun::star::uno::RuntimeException));
+UCBHELPER_DLLPUBLIC OUString getLocalFileURL();
 
 
 /** Using a specific content provider manager, convert a file path in system
@@ -75,8 +74,7 @@ getFileURLFromSystemPath(
             com::sun::star::ucb::XUniversalContentBroker > const &
         rUcb,
     OUString const & rBaseURL,
-    OUString const & rSystemPath)
-    SAL_THROW((com::sun::star::uno::RuntimeException));
+    OUString const & rSystemPath);
 
 
 /** Using a specific content provider manager, convert a (file) URL to a
@@ -104,8 +102,7 @@ getSystemPathFromFileURL(
     com::sun::star::uno::Reference<
             com::sun::star::ucb::XUniversalContentBroker > const &
         rUcb,
-    OUString const & rURL)
-    SAL_THROW((com::sun::star::uno::RuntimeException));
+    OUString const & rURL);
 
 }
 

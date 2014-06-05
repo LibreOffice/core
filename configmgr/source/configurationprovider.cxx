@@ -481,7 +481,6 @@ createFactory(
     SAL_UNUSED_PARAMETER OUString const &,
     SAL_UNUSED_PARAMETER css::uno::Sequence< OUString > const &,
     SAL_UNUSED_PARAMETER rtl_ModuleCount *)
-    SAL_THROW(())
 {
     return new Factory;
 }

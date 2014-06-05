@@ -83,7 +83,6 @@ void SimpleReferenceComponent::disposing()
 }
 
 void * SimpleReferenceComponent::operator new(std::size_t nSize)
-    SAL_THROW((std::bad_alloc))
 {
     return ::operator new(nSize);
 }
@@ -94,7 +93,6 @@ void * SimpleReferenceComponent::operator new(std::size_t nSize,
                                            rNothrow
 #endif
                                            )
-    SAL_THROW(())
 {
 #if defined WNT
     return ::operator new(nSize);
@@ -104,7 +102,7 @@ void * SimpleReferenceComponent::operator new(std::size_t nSize,
 #endif // WNT
 }
 
-void SimpleReferenceComponent::operator delete(void * pPtr) SAL_THROW(())
+void SimpleReferenceComponent::operator delete(void * pPtr)
 {
     ::operator delete(pPtr);
 }
@@ -115,7 +113,6 @@ void SimpleReferenceComponent::operator delete(void * pPtr,
                                             rNothrow
 #endif
 )
-    SAL_THROW(())
 {
 #if defined WNT
     ::operator delete(pPtr); // WNT lacks a global nothrow operator delete...

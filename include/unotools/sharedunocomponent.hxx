@@ -261,13 +261,13 @@ namespace utl
 
     // conversion to Any
     template < class INTERFACE, class COMPONENT >
-    inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const SharedUNOComponent< INTERFACE, COMPONENT >& value ) SAL_THROW(())
+    inline void SAL_CALL operator <<= ( ::com::sun::star::uno::Any & rAny, const SharedUNOComponent< INTERFACE, COMPONENT >& value )
     {
         rAny <<= value.getTyped();
     }
 
     template < class INTERFACE, class COMPONENT >
-    inline ::com::sun::star::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value ) SAL_THROW(())
+    inline ::com::sun::star::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value )
     {
         return makeAny( value.getTyped() );
     }

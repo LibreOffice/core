@@ -259,7 +259,7 @@ void OXReportControllerObserver::TogglePropertyListening(const uno::Reference< u
 
 
 
-void OXReportControllerObserver::switchListening( const uno::Reference< container::XIndexAccess >& _rxContainer, bool _bStartListening ) SAL_THROW(())
+void OXReportControllerObserver::switchListening( const uno::Reference< container::XIndexAccess >& _rxContainer, bool _bStartListening )
 {
     OSL_PRECOND( _rxContainer.is(), "OXReportControllerObserver::switchListening: invalid container!" );
     if ( !_rxContainer.is() )
@@ -296,7 +296,7 @@ void OXReportControllerObserver::switchListening( const uno::Reference< containe
 }
 
 
-void OXReportControllerObserver::switchListening( const uno::Reference< uno::XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(())
+void OXReportControllerObserver::switchListening( const uno::Reference< uno::XInterface >& _rxObject, bool _bStartListening )
 {
     OSL_PRECOND( _rxObject.is(), "OXReportControllerObserver::switchListening: how should I listen at a NULL object?" );
 

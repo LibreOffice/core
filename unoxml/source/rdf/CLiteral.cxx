@@ -195,7 +195,6 @@ css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
     const css::uno::Reference< css::uno::XComponentContext > & context)
-        SAL_THROW((css::uno::Exception))
 {
     return static_cast< ::cppu::OWeakObject * >(new CLiteral(context));
 }

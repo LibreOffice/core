@@ -46,7 +46,7 @@ namespace framework
  */
 extern "C"
 {
-static int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void *arg2 ) SAL_THROW(())
+static int SAL_CALL compare_OUString_Property_Impl( const void *arg1, const void *arg2 )
 {
    return ((OUString *)arg1)->compareTo( ((Property *)arg2)->Name );
 }
@@ -58,7 +58,7 @@ class OPropertySetHelperInfo_Impl
     Sequence < Property > aInfos;
 
 public:
-    OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ ) SAL_THROW(());
+    OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ );
 
     // XPropertySetInfo-Methoden
     virtual Sequence< Property > SAL_CALL getProperties(void) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -71,7 +71,6 @@ public:
  */
 OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
     IPropertyArrayHelper & rHelper_ )
-    SAL_THROW(())
     :aInfos( rHelper_.getProperties() )
 {
 }
@@ -408,7 +407,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > ConstItem
 }
 
 Reference < XPropertySetInfo > ConstItemContainer::createPropertySetInfo(
-    IPropertyArrayHelper & rProperties ) SAL_THROW(())
+    IPropertyArrayHelper & rProperties )
 {
     return static_cast< XPropertySetInfo * >( new OPropertySetHelperInfo_Impl( rProperties ) );
 }

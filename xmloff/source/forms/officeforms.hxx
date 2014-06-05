@@ -69,7 +69,7 @@ namespace xmloff
         ~OFormsRootExport();
 
     private:
-        void addModelAttributes(SvXMLExport& _rExp) SAL_THROW(());
+        void addModelAttributes(SvXMLExport& _rExp);
 
         void implExportBool(
             SvXMLExport& _rExp,

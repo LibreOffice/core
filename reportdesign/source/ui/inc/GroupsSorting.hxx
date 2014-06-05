@@ -179,7 +179,7 @@ public:
     virtual ImageList getImageList(sal_Int16 _eSymbolsSize) const SAL_OVERRIDE;
 
     // ImageListProvider interface
-    virtual ImageList getImageList(vcl::ImageListType) SAL_THROW ((com::sun::star::lang::IllegalArgumentException )) SAL_OVERRIDE;
+    virtual ImageList getImageList(vcl::ImageListType) SAL_OVERRIDE;
 
 };
 

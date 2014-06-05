@@ -48,7 +48,7 @@ public:
     void RemoveState(sal_Int16 aState)
         throw (uno::RuntimeException);
 
-    inline void AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
+    inline void AddStates( const sal_Int64 _nStates );
 
 private:
     sal_uInt64 maStates;
@@ -100,7 +100,7 @@ inline uno::Sequence<sal_Int16> AccessibleStateSetHelperImpl::GetStates() const
     return aRet;
 }
 
-inline void AccessibleStateSetHelperImpl::AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) )
+inline void AccessibleStateSetHelperImpl::AddStates( const sal_Int64 _nStates )
 {
     maStates |= _nStates;
 }

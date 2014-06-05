@@ -186,18 +186,18 @@ rtl::Bootstrap * getBootstrap()
 class FileHandleGuard: private boost::noncopyable
 {
 public:
-    inline FileHandleGuard(oslFileHandle & rHandle) SAL_THROW(()):
+    inline FileHandleGuard(oslFileHandle & rHandle):
         m_rHandle(rHandle) {}
 
-    inline ~FileHandleGuard() SAL_THROW(());
+    inline ~FileHandleGuard();
 
-    inline oslFileHandle & getHandle() SAL_THROW(()) { return m_rHandle; }
+    inline oslFileHandle & getHandle() { return m_rHandle; }
 
 private:
     oslFileHandle & m_rHandle;
 };
 
-inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
+inline FileHandleGuard::~FileHandleGuard()
 {
     if (m_rHandle != 0)
     {
@@ -219,10 +219,10 @@ public:
         RESULT_ERROR
     };
 
-    inline FileHandleReader(oslFileHandle & rHandle) SAL_THROW(()):
+    inline FileHandleReader(oslFileHandle & rHandle):
         m_aGuard(rHandle), m_nSize(0), m_nIndex(0), m_bLf(false) {}
 
-    Result readLine(OString * pLine) SAL_THROW(());
+    Result readLine(OString * pLine);
 
 private:
     enum { BUFFER_SIZE = 1024 };
@@ -236,7 +236,6 @@ private:
 
 FileHandleReader::Result
 FileHandleReader::readLine(OString * pLine)
-    SAL_THROW(())
 {
     OSL_ENSURE(pLine, "specification violation");
 

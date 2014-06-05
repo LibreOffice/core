@@ -47,8 +47,7 @@ private:
     // helpers ----------------------------------------------------------------
 
     /** Throws an exception, if nIndex is not a valid child index. */
-    void ensureValidIndex( sal_Int32 _nIndex ) const
-        SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) );
+    void ensureValidIndex( sal_Int32 _nIndex ) const;
 
     /** Returns true, if the specified row is selected. */
     bool implIsRowSelected( sal_Int32 _nRow ) const;

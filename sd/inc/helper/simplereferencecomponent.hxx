@@ -54,7 +54,7 @@ public:
 
     /** see general class documentation
      */
-    static void * operator new(std::size_t nSize) SAL_THROW((std::bad_alloc));
+    static void * operator new(std::size_t nSize);
 
     /** see general class documentation
      */

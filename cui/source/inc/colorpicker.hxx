@@ -39,8 +39,7 @@ namespace cui {
 OUString SAL_CALL ColorPicker_getImplementationName();
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL ColorPicker_createInstance(
-    css::uno::Reference<css::uno::XComponentContext> const &)
-    SAL_THROW((css::uno::Exception));
+    css::uno::Reference<css::uno::XComponentContext> const &);
 
 css::uno::Sequence<OUString> SAL_CALL ColorPicker_getSupportedServiceNames()
     throw (css::uno::RuntimeException);

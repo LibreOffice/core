@@ -142,7 +142,7 @@ namespace xmloff
             aValue.makeStringAndClear());
     }
 
-    void OFormsRootExport::addModelAttributes(SvXMLExport& _rExp) SAL_THROW(())
+    void OFormsRootExport::addModelAttributes(SvXMLExport& _rExp)
     {
         try
         {

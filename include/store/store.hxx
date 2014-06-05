@@ -37,13 +37,13 @@ class OStoreStream
 public:
     /** Construction.
      */
-    inline OStoreStream (void) SAL_THROW(())
+    inline OStoreStream (void)
         : m_hImpl (0)
     {}
 
     /** Destruction.
      */
-    inline ~OStoreStream (void) SAL_THROW(())
+    inline ~OStoreStream (void)
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
@@ -51,7 +51,7 @@ public:
 
     /** Copy construction.
      */
-    inline OStoreStream (OStoreStream const & rhs) SAL_THROW(())
+    inline OStoreStream (OStoreStream const & rhs)
         : m_hImpl (rhs.m_hImpl)
     {
         if (m_hImpl)
@@ -60,7 +60,7 @@ public:
 
     /** Assignment.
      */
-    inline OStoreStream & operator= (OStoreStream const & rhs) SAL_THROW(())
+    inline OStoreStream & operator= (OStoreStream const & rhs)
     {
         if (rhs.m_hImpl)
             (void) store_acquireHandle (rhs.m_hImpl);
@@ -72,7 +72,7 @@ public:
 
     /** Construction from Stream Handle.
      */
-    inline explicit OStoreStream (storeStreamHandle Handle) SAL_THROW(())
+    inline explicit OStoreStream (storeStreamHandle Handle)
         : m_hImpl (Handle)
     {
         if (m_hImpl)
@@ -81,7 +81,7 @@ public:
 
     /** Conversion into Stream Handle.
      */
-    inline operator storeStreamHandle (void) const SAL_THROW(())
+    inline operator storeStreamHandle (void) const
     {
         return m_hImpl;
     }
@@ -89,7 +89,7 @@ public:
     /** Check for a valid Stream Handle.
         @return sal_True if valid, sal_False otherwise.
      */
-    inline bool isValid (void) const SAL_THROW(())
+    inline bool isValid (void) const
     {
         return (m_hImpl != 0);
     }
@@ -101,7 +101,7 @@ public:
         storeFileHandle       hFile,
         rtl::OUString const & rPath,
         rtl::OUString const & rName,
-        storeAccessMode       eMode) SAL_THROW(())
+        storeAccessMode       eMode)
     {
         if (m_hImpl)
         {
@@ -114,7 +114,7 @@ public:
     /** Close the stream.
         @see store_closeStream()
      */
-    inline void close (void) SAL_THROW(())
+    inline void close (void)
     {
         if (m_hImpl)
         {
@@ -130,7 +130,7 @@ public:
         sal_uInt32   nOffset,
         void *       pBuffer,
         sal_uInt32   nBytes,
-        sal_uInt32 & rnDone) SAL_THROW(())
+        sal_uInt32 & rnDone)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -145,7 +145,7 @@ public:
         sal_uInt32   nOffset,
         void const * pBuffer,
         sal_uInt32   nBytes,
-        sal_uInt32 & rnDone) SAL_THROW(())
+        sal_uInt32 & rnDone)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -156,7 +156,7 @@ public:
     /** Flush the stream.
         @see store_flushStream()
      */
-    inline storeError flush (void) const SAL_THROW(())
+    inline storeError flush (void) const
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -167,7 +167,7 @@ public:
     /** Get the stream size.
         @see store_getStreamSize()
      */
-    inline storeError getSize (sal_uInt32 & rnSize) const SAL_THROW(())
+    inline storeError getSize (sal_uInt32 & rnSize) const
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -178,7 +178,7 @@ public:
     /** Set the stream size.
         @see store_setStreamSize()
      */
-    inline storeError setSize (sal_uInt32 nSize) SAL_THROW(())
+    inline storeError setSize (sal_uInt32 nSize)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -202,13 +202,13 @@ class OStoreDirectory
 public:
     /** Construction.
      */
-    inline OStoreDirectory (void) SAL_THROW(())
+    inline OStoreDirectory (void)
         : m_hImpl (0)
     {}
 
     /** Destruction.
      */
-    inline ~OStoreDirectory (void) SAL_THROW(())
+    inline ~OStoreDirectory (void)
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
@@ -216,7 +216,7 @@ public:
 
     /** Copy construction.
      */
-    inline OStoreDirectory (OStoreDirectory const & rhs) SAL_THROW(())
+    inline OStoreDirectory (OStoreDirectory const & rhs)
         : m_hImpl (rhs.m_hImpl)
     {
         if (m_hImpl)
@@ -225,7 +225,7 @@ public:
 
     /** Assignment.
      */
-    inline OStoreDirectory & operator= (OStoreDirectory const & rhs) SAL_THROW(())
+    inline OStoreDirectory & operator= (OStoreDirectory const & rhs)
     {
         if (rhs.m_hImpl)
             (void) store_acquireHandle (rhs.m_hImpl);
@@ -237,7 +237,7 @@ public:
 
     /** Construction from Directory Handle.
      */
-    inline explicit OStoreDirectory (storeDirectoryHandle Handle) SAL_THROW(())
+    inline explicit OStoreDirectory (storeDirectoryHandle Handle)
         : m_hImpl (Handle)
     {
         if (m_hImpl)
@@ -246,7 +246,7 @@ public:
 
     /** Conversion into Directory Handle.
      */
-    inline operator storeDirectoryHandle(void) const SAL_THROW(())
+    inline operator storeDirectoryHandle(void) const
     {
         return m_hImpl;
     }
@@ -254,7 +254,7 @@ public:
     /** Check for a valid Directory Handle.
         @return sal_True if valid, sal_False otherwise.
      */
-    inline bool isValid (void) const SAL_THROW(())
+    inline bool isValid (void) const
     {
         return (m_hImpl != 0);
     }
@@ -266,7 +266,7 @@ public:
         storeFileHandle       hFile,
         rtl::OUString const & rPath,
         rtl::OUString const & rName,
-        storeAccessMode       eMode) SAL_THROW(())
+        storeAccessMode       eMode)
     {
         if (m_hImpl)
         {
@@ -279,7 +279,7 @@ public:
     /** Close the directory.
         @see store_closeDirectory()
      */
-    inline void close (void) SAL_THROW(())
+    inline void close (void)
     {
         if (m_hImpl)
         {
@@ -297,7 +297,7 @@ public:
     /** Find first directory entry.
         @see store_findFirst()
      */
-    inline storeError first (iterator& it) SAL_THROW(())
+    inline storeError first (iterator& it)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -308,7 +308,7 @@ public:
     /** Find next directory entry.
         @see store_findNext()
      */
-    inline storeError next (iterator& it) SAL_THROW(())
+    inline storeError next (iterator& it)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -368,13 +368,13 @@ class OStoreFile
 public:
     /** Construction.
      */
-    inline OStoreFile (void) SAL_THROW(())
+    inline OStoreFile (void)
         : m_hImpl (0)
     {}
 
     /** Destruction.
      */
-    inline ~OStoreFile (void) SAL_THROW(())
+    inline ~OStoreFile (void)
     {
         if (m_hImpl)
             (void) store_releaseHandle (m_hImpl);
@@ -382,7 +382,7 @@ public:
 
     /** Copy construction.
      */
-    inline OStoreFile (OStoreFile const & rhs) SAL_THROW(())
+    inline OStoreFile (OStoreFile const & rhs)
         : m_hImpl (rhs.m_hImpl)
     {
         if (m_hImpl)
@@ -391,7 +391,7 @@ public:
 
     /** Assignment.
      */
-    inline OStoreFile & operator= (OStoreFile const & rhs) SAL_THROW(())
+    inline OStoreFile & operator= (OStoreFile const & rhs)
     {
         if (rhs.m_hImpl)
             (void) store_acquireHandle (rhs.m_hImpl);
@@ -403,7 +403,7 @@ public:
 
     /** Construction from File Handle.
      */
-    inline explicit OStoreFile (storeFileHandle Handle) SAL_THROW(())
+    inline explicit OStoreFile (storeFileHandle Handle)
         : m_hImpl (Handle)
     {
         if (m_hImpl)
@@ -412,7 +412,7 @@ public:
 
     /** Conversion into File Handle.
      */
-    inline operator storeFileHandle (void) const SAL_THROW(())
+    inline operator storeFileHandle (void) const
     {
         return m_hImpl;
     }
@@ -420,7 +420,7 @@ public:
     /** Check for a valid File Handle.
         @return sal_True if valid, sal_False otherwise.
      */
-    inline bool isValid (void) const SAL_THROW(())
+    inline bool isValid (void) const
     {
         return (m_hImpl != 0);
     }
@@ -431,7 +431,7 @@ public:
     inline storeError create (
         rtl::OUString const & rFilename,
         storeAccessMode       eAccessMode,
-        sal_uInt16            nPageSize = STORE_DEFAULT_PAGESIZE) SAL_THROW(())
+        sal_uInt16            nPageSize = STORE_DEFAULT_PAGESIZE)
     {
         if (m_hImpl)
         {
@@ -445,7 +445,7 @@ public:
         @see store_createMemoryFile()
      */
     inline storeError createInMemory (
-        sal_uInt16 nPageSize = STORE_DEFAULT_PAGESIZE) SAL_THROW(())
+        sal_uInt16 nPageSize = STORE_DEFAULT_PAGESIZE)
     {
         if (m_hImpl)
         {
@@ -458,7 +458,7 @@ public:
     /** Close the file.
         @see store_closeFile()
      */
-    inline void close (void) SAL_THROW(())
+    inline void close (void)
     {
         if (m_hImpl)
         {
@@ -470,7 +470,7 @@ public:
     /** Flush the file.
         @see store_flushFile()
      */
-    inline storeError flush (void) const SAL_THROW(())
+    inline storeError flush (void) const
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -481,7 +481,7 @@ public:
     /** Get the number of referers to the file.
         @see store_getFileRefererCount()
      */
-    inline storeError getRefererCount (sal_uInt32 & rnRefCount) const SAL_THROW(())
+    inline storeError getRefererCount (sal_uInt32 & rnRefCount) const
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -492,7 +492,7 @@ public:
     /** Get the file size.
         @see store_getFileSize()
      */
-    inline storeError getSize (sal_uInt32 & rnSize) const SAL_THROW(())
+    inline storeError getSize (sal_uInt32 & rnSize) const
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -508,7 +508,7 @@ public:
         rtl::OUString const & rName,
         sal_uInt32            nMask1,
         sal_uInt32            nMask2,
-        sal_uInt32          & rnAttrib) SAL_THROW(())
+        sal_uInt32          & rnAttrib)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -523,7 +523,7 @@ public:
         rtl::OUString const & rPath,
         rtl::OUString const & rName,
         sal_uInt32            nMask1,
-        sal_uInt32            nMask2) SAL_THROW(())
+        sal_uInt32            nMask2)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -536,7 +536,7 @@ public:
      */
     inline storeError link (
         rtl::OUString const & rSrcPath, rtl::OUString const & rSrcName,
-        rtl::OUString const & rDstPath, rtl::OUString const & rDstName) SAL_THROW(())
+        rtl::OUString const & rDstPath, rtl::OUString const & rDstName)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -550,7 +550,7 @@ public:
      */
     inline storeError symlink (
         rtl::OUString const & rSrcPath, rtl::OUString const & rSrcName,
-        rtl::OUString const & rDstPath, rtl::OUString const & rDstName) SAL_THROW(())
+        rtl::OUString const & rDstPath, rtl::OUString const & rDstName)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -563,7 +563,7 @@ public:
      */
     inline storeError rename (
         rtl::OUString const & rSrcPath, rtl::OUString const & rSrcName,
-        rtl::OUString const & rDstPath, rtl::OUString const & rDstName) SAL_THROW(())
+        rtl::OUString const & rDstPath, rtl::OUString const & rDstName)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;
@@ -575,7 +575,7 @@ public:
         @see store_remove()
      */
     inline storeError remove (
-        rtl::OUString const & rPath, rtl::OUString const & rName) SAL_THROW(())
+        rtl::OUString const & rPath, rtl::OUString const & rName)
     {
         if (!m_hImpl)
             return store_E_InvalidHandle;

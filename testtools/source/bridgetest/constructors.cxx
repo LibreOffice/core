@@ -437,7 +437,6 @@ OUString Impl2::fn12( const OUString& arg )
 css::uno::Reference< css::uno::XInterface > SAL_CALL create(
     SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
         const &)
-    SAL_THROW((css::uno::Exception))
 {
     return static_cast< ::cppu::OWeakObject * >(new Impl);
 }
@@ -456,7 +455,6 @@ css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() {
 css::uno::Reference< css::uno::XInterface > SAL_CALL create2(
     SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
         const &)
-    SAL_THROW((css::uno::Exception))
 {
     return static_cast< ::cppu::OWeakObject * >(new Impl2);
 }

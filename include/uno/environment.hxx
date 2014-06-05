@@ -55,17 +55,17 @@ public:
                           respectively to current C++ Environment.
         @since UDK 3.2.7
     */
-    inline static Environment getCurrent(rtl::OUString const & typeName = rtl::OUString(CPPU_CURRENT_LANGUAGE_BINDING_NAME)) SAL_THROW(());
+    inline static Environment getCurrent(rtl::OUString const & typeName = rtl::OUString(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
 
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new ( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete ( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new ( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
 
@@ -73,7 +73,7 @@ public:
 
         @param pEnv environment
     */
-    inline Environment( uno_Environment * pEnv = 0 ) SAL_THROW(());
+    inline Environment( uno_Environment * pEnv = 0 );
 
     /** Gets a specific environment. If the specified environment does not exist, then a default one
         is created and registered.
@@ -81,64 +81,64 @@ public:
         @param envDcp           descriptor of the environment
         @param pContext         context pointer
     */
-    inline explicit Environment( rtl::OUString const & envDcp, void * pContext = NULL ) SAL_THROW(());
+    inline explicit Environment( rtl::OUString const & envDcp, void * pContext = NULL );
 
 
     /** Copy constructor: acquires given environment
 
         @param rEnv another environment
     */
-    inline Environment( const Environment & rEnv ) SAL_THROW(());
+    inline Environment( const Environment & rEnv );
 
     /** Destructor: releases a set environment.
     */
-    inline ~Environment() SAL_THROW(());
+    inline ~Environment();
 
     /** Sets a given environment, i.e. acquires given one and releases a set one.
 
         @param pEnv another environment
         @return this environment
     */
-    inline Environment & SAL_CALL operator = ( uno_Environment * pEnv ) SAL_THROW(());
+    inline Environment & SAL_CALL operator = ( uno_Environment * pEnv );
     /** Sets a given environment, i.e. acquires given one and releases a set one.
 
         @param rEnv another environment
         @return this environment
     */
-    inline Environment & SAL_CALL operator = ( const Environment & rEnv ) SAL_THROW(())
+    inline Environment & SAL_CALL operator = ( const Environment & rEnv )
         { return operator = ( rEnv._pEnv ); }
 
     /** Provides UNacquired pointer to the set C environment.
 
         @return UNacquired pointer to the C environment struct
     */
-    inline uno_Environment * SAL_CALL get() const SAL_THROW(())
+    inline uno_Environment * SAL_CALL get() const
         { return _pEnv; }
 
     /** Gets type name of set environment.
 
         @return type name of set environment
     */
-    inline ::rtl::OUString SAL_CALL getTypeName() const SAL_THROW(())
+    inline ::rtl::OUString SAL_CALL getTypeName() const
         { return _pEnv->pTypeName; }
 
     /** Gets free context pointer of set environment.
 
         @return free context pointer of set environment
     */
-    inline void * SAL_CALL getContext() const SAL_THROW(())
+    inline void * SAL_CALL getContext() const
         { return _pEnv->pContext; }
 
     /** Tests if a environment is set.
 
         @return true, if a environment is set, false otherwise
     */
-    inline bool SAL_CALL is() const SAL_THROW(())
+    inline bool SAL_CALL is() const
         { return (_pEnv != 0); }
 
     /** Releases a set environment.
     */
-    inline void SAL_CALL clear() SAL_THROW(());
+    inline void SAL_CALL clear();
 
     /** Invoke the passed function in this environment.
 
@@ -146,7 +146,7 @@ public:
         @param pParam   the parameter pointer to be passed to the function
         @since UDK 3.2.7
     */
-    inline void SAL_CALL invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const SAL_THROW(());
+    inline void SAL_CALL invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const;
 
     /** Invoke the passed function in this environment.
 
@@ -154,49 +154,49 @@ public:
         @param ...      the parameters to be passed to the function
         @since UDK 3.2.7
     */
-    inline void SAL_CALL invoke(uno_EnvCallee * pCallee, ...) const SAL_THROW(());
+    inline void SAL_CALL invoke(uno_EnvCallee * pCallee, ...) const;
 
     /** Enter this environment explicitly.
 
         @since UDK 3.2.7
     */
-    inline void SAL_CALL enter() const SAL_THROW(());
+    inline void SAL_CALL enter() const;
 
     /** Checks, if it is valid to currently call objects
         belonging to this environment.
 
         @since UDK 3.2.7
     */
-    inline int  SAL_CALL isValid(rtl::OUString * pReason) const SAL_THROW(());
+    inline int  SAL_CALL isValid(rtl::OUString * pReason) const;
 };
 
-inline Environment::Environment( uno_Environment * pEnv ) SAL_THROW(())
+inline Environment::Environment( uno_Environment * pEnv )
     : _pEnv( pEnv )
 {
     if (_pEnv)
         (*_pEnv->acquire)( _pEnv );
 }
 
-inline Environment::Environment( rtl::OUString const & rEnvDcp, void * pContext ) SAL_THROW(())
+inline Environment::Environment( rtl::OUString const & rEnvDcp, void * pContext )
     : _pEnv(NULL)
 {
     uno_getEnvironment(&_pEnv, rEnvDcp.pData, pContext);
 }
 
-inline Environment::Environment( const Environment & rEnv ) SAL_THROW(())
+inline Environment::Environment( const Environment & rEnv )
     : _pEnv( rEnv._pEnv )
 {
     if (_pEnv)
         (*_pEnv->acquire)( _pEnv );
 }
 
-inline Environment::~Environment() SAL_THROW(())
+inline Environment::~Environment()
 {
     if (_pEnv)
         (*_pEnv->release)( _pEnv );
 }
 
-inline void Environment::clear() SAL_THROW(())
+inline void Environment::clear()
 {
     if (_pEnv)
     {
@@ -205,7 +205,7 @@ inline void Environment::clear() SAL_THROW(())
     }
 }
 
-inline Environment & Environment::operator = ( uno_Environment * pEnv ) SAL_THROW(())
+inline Environment & Environment::operator = ( uno_Environment * pEnv )
 {
     if (pEnv != _pEnv)
     {
@@ -218,13 +218,13 @@ inline Environment & Environment::operator = ( uno_Environment * pEnv ) SAL_THRO
     return *this;
 }
 
-inline void SAL_CALL Environment::invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const SAL_THROW(())
+inline void SAL_CALL Environment::invoke_v(uno_EnvCallee * pCallee, va_list * pParam) const
 {
     if (_pEnv)
         uno_Environment_invoke_v(_pEnv, pCallee, pParam);
 }
 
-inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const SAL_THROW(())
+inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const
 {
     if (_pEnv)
     {
@@ -237,17 +237,17 @@ inline void SAL_CALL Environment::invoke(uno_EnvCallee * pCallee, ...) const SAL
 
 }
 
-inline void SAL_CALL Environment::enter() const SAL_THROW(())
+inline void SAL_CALL Environment::enter() const
 {
     uno_Environment_enter(_pEnv);
 }
 
-inline int  SAL_CALL Environment::isValid(rtl::OUString * pReason) const SAL_THROW(())
+inline int  SAL_CALL Environment::isValid(rtl::OUString * pReason) const
 {
     return uno_Environment_isValid(_pEnv, (rtl_uString **)pReason);
 }
 
-inline Environment Environment::getCurrent(rtl::OUString const & typeName) SAL_THROW(())
+inline Environment Environment::getCurrent(rtl::OUString const & typeName)
 {
     Environment environment;
 

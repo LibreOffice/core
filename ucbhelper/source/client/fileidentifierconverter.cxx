@@ -38,7 +38,7 @@ namespace ucbhelper {
 
 
 OUString
-getLocalFileURL() SAL_THROW((uno::RuntimeException))
+getLocalFileURL()
 {
     // If there were more file systems than just "file:///" (e.g., the obsolete
     // "vnd.sun.star.wfs:///"), this code should query all relevant UCPs for
@@ -58,7 +58,6 @@ getFileURLFromSystemPath(
     uno::Reference< ucb::XUniversalContentBroker > const & rUcb,
     OUString const & rBaseURL,
     OUString const & rSystemPath)
-    SAL_THROW((uno::RuntimeException))
 {
     OSL_ASSERT(rUcb.is());
 
@@ -80,7 +79,6 @@ OUString
 getSystemPathFromFileURL(
     uno::Reference< ucb::XUniversalContentBroker > const & rUcb,
     OUString const & rURL)
-    SAL_THROW((uno::RuntimeException))
 {
     OSL_ASSERT(rUcb.is());
 

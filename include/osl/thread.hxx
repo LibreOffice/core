@@ -53,13 +53,13 @@ class Thread
     Thread& operator= ( const Thread& );
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW (())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW (())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW (())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW (())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
 
     Thread(): m_hThread(0){}

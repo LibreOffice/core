@@ -51,7 +51,7 @@ namespace io_TextInputStream {
 
 namespace io_TextOutputStream {
     Reference< XInterface > SAL_CALL TextOutputStream_CreateInstance(SAL_UNUSED_PARAMETER const Reference< XComponentContext > &);
-    OUString TextOutputStream_getImplementationName() SAL_THROW(  () );
+    OUString TextOutputStream_getImplementationName();
     Sequence< OUString > TextOutputStream_getSupportedServiceNames();
 }
 
