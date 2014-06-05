@@ -242,7 +242,7 @@ namespace frm
         void implSubmit(
             const ::com::sun::star::awt::MouseEvent& _rEvent,
             const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler
-        ) SAL_THROW((com::sun::star::util::VetoException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException));
+        );
     };
 
     class OImageProducerThread_Impl: public OComponentEventThread

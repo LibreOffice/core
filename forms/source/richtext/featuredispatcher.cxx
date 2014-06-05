@@ -119,7 +119,7 @@ namespace frm
     }
 
 
-    void ORichTextFeatureDispatcher::doNotify( const Reference< XStatusListener >& _rxListener, const FeatureStateEvent& _rEvent ) const SAL_THROW(())
+    void ORichTextFeatureDispatcher::doNotify( const Reference< XStatusListener >& _rxListener, const FeatureStateEvent& _rEvent ) const
     {
         OSL_PRECOND( _rxListener.is(), "ORichTextFeatureDispatcher::doNotify: invalid listener!" );
         if ( _rxListener.is() )

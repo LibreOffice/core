@@ -74,7 +74,7 @@ namespace xforms
     private:
         /** locates the type with the given name in our repository, or throws an exception if there is no such type
         */
-        Repository::iterator    implLocate( const OUString& _rName, bool _bAllowMiss = false ) SAL_THROW( ( ::com::sun::star::container::NoSuchElementException ) );
+        Repository::iterator    implLocate( const OUString& _rName, bool _bAllowMiss = false );
     };
 
 

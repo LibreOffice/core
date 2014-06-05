@@ -77,7 +77,7 @@ namespace frm
         void    doNotify(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxListener,
                     const ::com::sun::star::frame::FeatureStateEvent& _rEvent
-                ) const SAL_THROW(());
+                ) const;
 
     protected:
         // XDispatch

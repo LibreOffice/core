@@ -71,18 +71,18 @@ namespace frm
         /** queries the interceptor chain for the given dispatch
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-            queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+            queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags );
 
         /** queries the interceptor chain for the given dispatch, with a blank target frame and no frame search flags
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-            queryDispatch( const ::com::sun::star::util::URL& _rURL ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+            queryDispatch( const ::com::sun::star::util::URL& _rURL );
 
         /** queries the interceptor chain for the URL given as ASCII string,
             with a blank target frame and no frame search flags
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
-            queryDispatch( const sal_Char* _pAsciiURL ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+            queryDispatch( const sal_Char* _pAsciiURL );
     };
 
 

@@ -55,7 +55,7 @@ namespace frm
         );
 
         /// notifies a new attribute state
-        void    notifyAttributeState( const AttributeState& _rState ) SAL_THROW (());
+        void    notifyAttributeState( const AttributeState& _rState );
 
     protected:
         virtual ~OAttributeDispatcher( );
@@ -81,7 +81,7 @@ namespace frm
         void    notifyState(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& _rxControl,
                     const AttributeState& _rState
-                ) SAL_THROW (());
+                );
     };
 
 

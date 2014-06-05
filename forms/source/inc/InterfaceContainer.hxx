@@ -263,7 +263,7 @@ protected:
         @throws ::com::sun::star::lang::IndexOutOfBoundsException
             if the given index does not denote a valid position in our children array
     */
-    void implCheckIndex( const sal_Int32 _nIndex ) SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) );
+    void implCheckIndex( const sal_Int32 _nIndex );
 
 private:
     // hack for Vba Events

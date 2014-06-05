@@ -98,7 +98,7 @@ namespace xforms
     }
 
 
-    ODataTypeRepository::Repository::iterator ODataTypeRepository::implLocate( const OUString& _rName, bool _bAllowMiss ) SAL_THROW( ( NoSuchElementException ) )
+    ODataTypeRepository::Repository::iterator ODataTypeRepository::implLocate( const OUString& _rName, bool _bAllowMiss )
     {
         Repository::iterator aTypePos = m_aRepository.find( _rName );
         if ( aTypePos == m_aRepository.end() && !_bAllowMiss )

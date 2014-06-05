@@ -95,8 +95,7 @@ namespace frm
                         ::com::sun::star::uno::Any& _rConvertedValue,
                         ::com::sun::star::uno::Any& _rOldValue,
                         const ::com::sun::star::uno::Any& _rValue
-                    )
-                    SAL_THROW( ( ::com::sun::star::lang::IllegalArgumentException ) );
+                    );
 
         /** helper for implementing setFastPropertyValueNoBroadcast
 
