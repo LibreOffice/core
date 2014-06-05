@@ -1483,9 +1483,7 @@ DECLARE_OOXMLIMPORT_TEST(testDefaultSectBreakCols, "default-sect-break-cols.docx
 DECLARE_OOXMLIMPORT_TEST(testFdo69636, "fdo69636.docx")
 {
     // The problem was that the mso-layout-flow-alt:bottom-to-top VML shape property wasn't handled for sw text frames.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    uno::Reference<text::XTextRange> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(900), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xFrame->getText()), 1), "CharRotation"));
 }
 
