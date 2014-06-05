@@ -257,7 +257,7 @@ public:
 
       @since LibreOffice 4.1
     */
-    bool isEmpty() const SAL_THROW(())
+    bool isEmpty() const
     {
         return pData->length == 0;
     }
@@ -1117,7 +1117,7 @@ public:
                  greater than or equal to fromIndex, or
                  -1 if the character does not occur.
     */
-    sal_Int32 indexOf( sal_Unicode ch, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    sal_Int32 indexOf( sal_Unicode ch, sal_Int32 fromIndex = 0 ) const
     {
         sal_Int32 ret = rtl_ustr_indexOfChar_WithLength( pData->buffer+fromIndex, pData->length-fromIndex, ch );
         return (ret < 0 ? ret : ret+fromIndex);
@@ -1134,7 +1134,7 @@ public:
                  character sequence represented by this string, or
                  -1 if the character does not occur.
     */
-    sal_Int32 lastIndexOf( sal_Unicode ch ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( sal_Unicode ch ) const
     {
         return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, pData->length, ch );
     }
@@ -1153,7 +1153,7 @@ public:
                  is less than fromIndex, or -1
                  if the character does not occur before that point.
     */
-    sal_Int32 lastIndexOf( sal_Unicode ch, sal_Int32 fromIndex ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( sal_Unicode ch, sal_Int32 fromIndex ) const
     {
         return rtl_ustr_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
     }
@@ -1175,7 +1175,7 @@ public:
                  returned. If it does not occur as a substring starting
                  at fromIndex or beyond, -1 is returned.
     */
-    sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    sal_Int32 indexOf( const OUString & str, sal_Int32 fromIndex = 0 ) const
     {
         sal_Int32 ret = rtl_ustr_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                         str.pData->buffer, str.pData->length );
@@ -1189,7 +1189,7 @@ public:
        @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const
     {
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
@@ -1215,7 +1215,7 @@ public:
                  the last such substring is returned. If it does not occur as
                  a substring, -1 is returned.
     */
-    sal_Int32 lastIndexOf( const OUString & str ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( const OUString & str ) const
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, pData->length,
                                                    str.pData->buffer, str.pData->length );
@@ -1240,7 +1240,7 @@ public:
                  of the first character of the last such substring is
                  returned. Otherwise, -1 is returned.
     */
-    sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( const OUString & str, sal_Int32 fromIndex ) const
     {
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                    str.pData->buffer, str.pData->length );
@@ -1252,7 +1252,7 @@ public:
        @since LibreOffice 4.0
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const
     {
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         return rtl_ustr_lastIndexOfAscii_WithLength(
@@ -1335,7 +1335,7 @@ public:
       @return    the specified substring.
       @since LibreOffice 4.1
     */
-    OUStringBuffer copy( sal_Int32 beginIndex ) const SAL_THROW(())
+    OUStringBuffer copy( sal_Int32 beginIndex ) const
     {
         assert(beginIndex >= 0 && beginIndex <= getLength());
         return copy( beginIndex, getLength() - beginIndex );
@@ -1354,7 +1354,7 @@ public:
       @return    the specified substring.
       @since LibreOffice 4.1
     */
-    OUStringBuffer copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
+    OUStringBuffer copy( sal_Int32 beginIndex, sal_Int32 count ) const
     {
         assert(beginIndex >= 0 && beginIndex <= getLength());
         assert(count >= 0 && count <= getLength() - beginIndex);
@@ -1371,7 +1371,7 @@ public:
      @internal
      @since LibreOffice 4.1
     */
-    friend OUString operator+( const OUStringBuffer& str1, const OUStringBuffer& str2  ) SAL_THROW(())
+    friend OUString operator+( const OUStringBuffer& str1, const OUStringBuffer& str2  )
     {
         return OUString( str1.pData ).concat( str2.pData );
     }

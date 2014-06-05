@@ -39,8 +39,7 @@ public:
     static inline rtl::OUString encode(rtl::OUString const & rText,
                                        sal_Bool const * pCharClass,
                                        rtl_UriEncodeMechanism eMechanism,
-                                       rtl_TextEncoding eCharset)
-        SAL_THROW(());
+                                       rtl_TextEncoding eCharset);
 
     /** A wrapper around rtl_uriEncode() from <rtl/uri.h> (see there), using
         a predefined rtl_UriCharClass enumeration member.
@@ -48,15 +47,13 @@ public:
     static inline rtl::OUString encode(rtl::OUString const & rText,
                                        rtl_UriCharClass eCharClass,
                                        rtl_UriEncodeMechanism eMechanism,
-                                       rtl_TextEncoding eCharset)
-        SAL_THROW(());
+                                       rtl_TextEncoding eCharset);
 
     /** A wrapper around rtl_uriDecode() from <rtl/uri.h> (see there).
      */
     static inline rtl::OUString decode(rtl::OUString const & rText,
                                        rtl_UriDecodeMechanism eMechanism,
-                                       rtl_TextEncoding eCharset)
-        SAL_THROW(());
+                                       rtl_TextEncoding eCharset);
 
     /** A wrapper around rtl_uriConvertRelToAbs() from <rtl/uri.h> (see there).
 
@@ -85,7 +82,6 @@ inline rtl::OUString Uri::encode(rtl::OUString const & rText,
                                  sal_Bool const * pCharClass,
                                  rtl_UriEncodeMechanism eMechanism,
                                  rtl_TextEncoding eCharset)
-    SAL_THROW(())
 {
     rtl::OUString aResult;
     rtl_uriEncode(const_cast< rtl::OUString & >(rText).pData,
@@ -100,7 +96,6 @@ inline rtl::OUString Uri::encode(rtl::OUString const & rText,
                                  rtl_UriCharClass eCharClass,
                                  rtl_UriEncodeMechanism eMechanism,
                                  rtl_TextEncoding eCharset)
-    SAL_THROW(())
 {
     rtl::OUString aResult;
     rtl_uriEncode(const_cast< rtl::OUString & >(rText).pData,
@@ -114,7 +109,6 @@ inline rtl::OUString Uri::encode(rtl::OUString const & rText,
 inline rtl::OUString Uri::decode(rtl::OUString const & rText,
                                  rtl_UriDecodeMechanism eMechanism,
                                  rtl_TextEncoding eCharset)
-    SAL_THROW(())
 {
     rtl::OUString aResult;
     rtl_uriDecode(const_cast< rtl::OUString & >(rText).pData,
