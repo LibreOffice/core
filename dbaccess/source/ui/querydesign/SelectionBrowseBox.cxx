@@ -2010,6 +2010,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                 return;
             }
         }
+        //fall-through
         default:
             EditBrowseBox::Command(rEvt);
     }
