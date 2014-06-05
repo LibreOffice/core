@@ -182,6 +182,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             else
                 bRet = false;
         }
+        break;
         case MID_FTN_LINE_STYLE:
         {
             ::editeng::SvxBorderStyle eStyle = table::BorderLineStyle::NONE;
