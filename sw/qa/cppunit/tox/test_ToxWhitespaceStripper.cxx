@@ -48,30 +48,30 @@ ToxWhitespaceStripperTest::MappingCharactersToVariousStrippedStringsWorks()
     {
         OUString test("abc\n");
         ToxWhitespaceStripper sut(test);
-        CPPUNIT_ASSERT_EQUAL(0, sut.GetPositionInStrippedString(0));
-        CPPUNIT_ASSERT_EQUAL(1, sut.GetPositionInStrippedString(1));
-        CPPUNIT_ASSERT_EQUAL(2, sut.GetPositionInStrippedString(2));
-        CPPUNIT_ASSERT_EQUAL(3, sut.GetPositionInStrippedString(3));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(0));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), sut.GetPositionInStrippedString(1));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), sut.GetPositionInStrippedString(2));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), sut.GetPositionInStrippedString(3));
     }
     {
         OUString test("abc\n\n");
         ToxWhitespaceStripper sut(test);
-        CPPUNIT_ASSERT_EQUAL(0, sut.GetPositionInStrippedString(0));
-        CPPUNIT_ASSERT_EQUAL(1, sut.GetPositionInStrippedString(1));
-        CPPUNIT_ASSERT_EQUAL(2, sut.GetPositionInStrippedString(2));
-        CPPUNIT_ASSERT_EQUAL(3, sut.GetPositionInStrippedString(3));
-        CPPUNIT_ASSERT_EQUAL(3, sut.GetPositionInStrippedString(4));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(0));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), sut.GetPositionInStrippedString(1));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), sut.GetPositionInStrippedString(2));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), sut.GetPositionInStrippedString(3));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), sut.GetPositionInStrippedString(4));
     }
     {
         OUString test("abc\ndef");
         ToxWhitespaceStripper sut(test);
-        CPPUNIT_ASSERT_EQUAL(0, sut.GetPositionInStrippedString(0));
-        CPPUNIT_ASSERT_EQUAL(1, sut.GetPositionInStrippedString(1));
-        CPPUNIT_ASSERT_EQUAL(2, sut.GetPositionInStrippedString(2));
-        CPPUNIT_ASSERT_EQUAL(3, sut.GetPositionInStrippedString(3));
-        CPPUNIT_ASSERT_EQUAL(4, sut.GetPositionInStrippedString(4));
-        CPPUNIT_ASSERT_EQUAL(5, sut.GetPositionInStrippedString(5));
-        CPPUNIT_ASSERT_EQUAL(6, sut.GetPositionInStrippedString(6));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(0));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), sut.GetPositionInStrippedString(1));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), sut.GetPositionInStrippedString(2));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), sut.GetPositionInStrippedString(3));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), sut.GetPositionInStrippedString(4));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), sut.GetPositionInStrippedString(5));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), sut.GetPositionInStrippedString(6));
     }
     {
         //             012345 6789
@@ -79,16 +79,16 @@ ToxWhitespaceStripperTest::MappingCharactersToVariousStrippedStringsWorks()
         //             01234567
         //            " abc def"
         ToxWhitespaceStripper sut(test);
-        CPPUNIT_ASSERT_EQUAL(0, sut.GetPositionInStrippedString(0));
-        CPPUNIT_ASSERT_EQUAL(0, sut.GetPositionInStrippedString(1));
-        CPPUNIT_ASSERT_EQUAL(1, sut.GetPositionInStrippedString(2));
-        CPPUNIT_ASSERT_EQUAL(2, sut.GetPositionInStrippedString(3));
-        CPPUNIT_ASSERT_EQUAL(3, sut.GetPositionInStrippedString(4));
-        CPPUNIT_ASSERT_EQUAL(4, sut.GetPositionInStrippedString(5));
-        CPPUNIT_ASSERT_EQUAL(4, sut.GetPositionInStrippedString(6));
-        CPPUNIT_ASSERT_EQUAL(5, sut.GetPositionInStrippedString(7));
-        CPPUNIT_ASSERT_EQUAL(6, sut.GetPositionInStrippedString(8));
-        CPPUNIT_ASSERT_EQUAL(7, sut.GetPositionInStrippedString(9));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(0));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), sut.GetPositionInStrippedString(1));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), sut.GetPositionInStrippedString(2));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), sut.GetPositionInStrippedString(3));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), sut.GetPositionInStrippedString(4));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), sut.GetPositionInStrippedString(5));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), sut.GetPositionInStrippedString(6));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), sut.GetPositionInStrippedString(7));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(6), sut.GetPositionInStrippedString(8));
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(7), sut.GetPositionInStrippedString(9));
     }
 }
 
