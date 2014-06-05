@@ -46,6 +46,7 @@
 #include <SwNodeNum.hxx>
 #include <set>
 #include <vector>
+#include <textboxhelper.hxx>
 #include <boost/foreach.hpp>
 
 #ifdef DBG_UTIL
@@ -1414,9 +1415,21 @@ void SwDoc::CopyFlyInFlyImpl(
     ::std::set< _ZSortFly > aSet;
     sal_uInt16 nArrLen = GetSpzFrmFmts()->size();
 
+    // Old textbox -> old shape map.
+    std::map<const SwFrmFmt*, const SwFrmFmt*> aOldTextBoxes;
+
+    for (size_t i = 0; i < GetSpzFrmFmts()->size(); ++i)
+    {
+        SwFrmFmt* pFmt = (*GetSpzFrmFmts())[i];
+        if (pFmt->Which() != RES_DRAWFRMFMT)
+            continue;
+        if (SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(pFmt))
+            aOldTextBoxes[pTextBox] = pFmt;
+    }
+
     for ( sal_uInt16 n = 0; n < nArrLen; ++n )
     {
-        SwFrmFmt const*const pFmt = (*GetSpzFrmFmts())[n];
+        SwFrmFmt* pFmt = (*GetSpzFrmFmts())[n];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
         SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
         bool bAtCntnt = (pAnchor->GetAnchorId() == FLY_AT_PARA);
@@ -1475,7 +1488,13 @@ void SwDoc::CopyFlyInFlyImpl(
                 }
             }
             if( bAdd )
+            {
+                // Make sure draw formats don't refer to content, so that such
+                // content can be removed without problems.
+                if (pFmt->Which() == RES_DRAWFRMFMT)
+                    pFmt->ResetFmtAttr(RES_CNTNT);
                 aSet.insert( _ZSortFly( pFmt, pAnchor, nArrLen + aSet.size() ));
+            }
         }
     }
 
@@ -1624,6 +1643,20 @@ void SwDoc::CopyFlyInFlyImpl(
                                      static_cast< SwFlyFrmFmt* >(aVecSwFrmFmt[k]) );
                     --nCnt;
                 }
+            }
+        }
+
+        // Re-create content property of draw formats, knowing how old shapes
+        // were paired with old fly formats (aOldTextBoxes) and that aSet is
+        // parallel with aVecSwFrmFmt.
+        size_t i = 0;
+        for (std::set<_ZSortFly>::iterator aSetIt = aSet.begin(); aSetIt != aSet.end(); ++aSetIt, ++i)
+        {
+            std::map<const SwFrmFmt*, const SwFrmFmt*>::iterator aDrawIt = aOldTextBoxes.find(aSetIt->GetFmt());
+            if (aDrawIt != aOldTextBoxes.end())
+            {
+                size_t nDrawIndex = std::distance(aOldTextBoxes.begin(), aDrawIt);
+                aVecSwFrmFmt[nDrawIndex]->SetFmtAttr(aVecSwFrmFmt[i]->GetCntnt());
             }
         }
     }
