@@ -70,7 +70,6 @@ writerfilter_GEN_ooxml_Namespacesmap_xsl=$(writerfilter_WORK)/namespacesmap.xsl
 writerfilter_GEN_ooxml_Preprocess_xsl=$(writerfilter_WORK)/modelpreprocess.xsl
 writerfilter_GEN_ooxml_QNameToStr_cxx=$(writerfilter_WORK)/ooxml/qnametostr.cxx
 writerfilter_GEN_ooxml_ResourceIds_hxx=$(writerfilter_WORK)/ooxml/resourceids.hxx
-writerfilter_GEN_ooxml_Token_tmp=$(writerfilter_WORK)/token.tmp
 writerfilter_GEN_ooxml_Token_xml=$(writerfilter_WORK)/token.xml
 writerfilter_SRC_model_NamespacePreprocess=$(writerfilter_SRC)/resourcemodel/namespace_preprocess.pl
 writerfilter_SRC_ooxml_Analyze_model_xsl=$(writerfilter_SRC)/ooxml/analyzemodel.xsl
@@ -134,14 +133,10 @@ $(writerfilter_GEN_ooxml_ResourceIds_hxx) : $(writerfilter_SRC_ooxml_ResourceIds
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_SRC_ooxml_ResourceIds_xsl) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_GEN_ooxml_Token_tmp) : $(SRCDIR)/oox/source/token/tokens.txt | $(writerfilter_WORK)/.dir
+$(writerfilter_GEN_ooxml_Token_xml) : $(SRCDIR)/oox/source/token/tokens.txt $(writerfilter_SRC)/ooxml/tokens-to-xml.sed | $(writerfilter_WORK)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CAT,1)
-	sed "s/\(.*\)/<fasttoken>\1<\/fasttoken>/" \
+	sed -f $(writerfilter_SRC)/ooxml/tokens-to-xml.sed \
 		< $(SRCDIR)/oox/source/token/tokens.txt > $@
-
-$(writerfilter_GEN_ooxml_Token_xml) : $(writerfilter_SRC)/ooxml/tokenxmlheader $(writerfilter_GEN_ooxml_Token_tmp) $(writerfilter_SRC)/ooxml/tokenxmlfooter
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CAT,1)
-	cat $(writerfilter_SRC)/ooxml/tokenxmlheader $(writerfilter_GEN_ooxml_Token_tmp) $(writerfilter_SRC)/ooxml/tokenxmlfooter > $@
 
 $(writerfilter_WORK)/OOXMLFactory%.cxx : $(writerfilter_SRC)/ooxml/factoryimpl_ns.xsl $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
