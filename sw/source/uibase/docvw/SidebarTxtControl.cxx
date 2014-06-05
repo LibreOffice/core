@@ -52,6 +52,7 @@
 #include <wrtsh.hxx>
 #include <shellres.hxx>
 #include <SwRewriter.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace sw { namespace sidebarwindows {
 
@@ -346,7 +347,7 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
         }
         else
         {
-            SfxPopupMenuManager* pMgr = mrDocView.GetViewFrame()->GetDispatcher()->Popup(0, this,&rCEvt.GetMousePosPixel());
+            boost::scoped_ptr<SfxPopupMenuManager> pMgr(mrDocView.GetViewFrame()->GetDispatcher()->Popup(0, this,&rCEvt.GetMousePosPixel()));
             ((PopupMenu*)pMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTxtControl, Select) );
 
             {
@@ -370,7 +371,6 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
             //!! pointer created in the call to Popup.
             //!! Otherwise we would have a memory leak (see also #i107205#)
             pMgr->Execute( aPos, this );
-            delete pMgr;
         }
     }
     else

@@ -41,6 +41,7 @@
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define BUTTON_WIDTH 30
 #define BUTTON_HEIGHT 19
@@ -197,12 +198,11 @@ void SwPageBreakWin::Paint( const Rectangle& )
 
     // Create the processor and process the primitives
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    drawinglayer::processor2d::BaseProcessor2D * pProcessor =
+    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
-                    *this, aNewViewInfos );
+                    *this, aNewViewInfos ));
 
     pProcessor->process( aGhostedSeq );
-    delete pProcessor;
 }
 
 void SwPageBreakWin::Select( )

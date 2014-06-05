@@ -17,6 +17,7 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <boost/scoped_ptr.hpp>
 
 SwDashedLine::SwDashedLine( Window* pParent, Color& ( *pColorFn )() ) :
     FixedLine( pParent, WB_DIALOGCONTROL | WB_HORZ ),
@@ -31,9 +32,9 @@ SwDashedLine::~SwDashedLine( )
 void SwDashedLine::Paint( const Rectangle& )
 {
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    drawinglayer::processor2d::BaseProcessor2D * pProcessor =
+    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
-                    *this, aNewViewInfos );
+                    *this, aNewViewInfos ));
 
     // Compute the start and end points
     const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
@@ -91,7 +92,6 @@ void SwDashedLine::Paint( const Rectangle& )
     aSeq[ aSeq.getLength() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( pLine );
 
     pProcessor->process( aSeq );
-    delete pProcessor;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

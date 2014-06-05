@@ -83,12 +83,11 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
-        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog(
-            &GetView().GetViewFrame()->GetWindow(), aSet , rSh);
+        boost::scoped_ptr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
+            &GetView().GetViewFrame()->GetWindow(), aSet , rSh));
         OSL_ENSURE(aTabDlg, "Dialogdiet fail!");
         aTabDlg->Execute();
         rReq.Ignore();
-        delete aTabDlg;
     }
     else
     {
@@ -194,13 +193,11 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
-        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog(
-            &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis);
+        boost::scoped_ptr<AbstractInsertSectionTabDialog> aTabDlg(pFact->CreateInsertSectionTabDialog(
+            &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis));
         OSL_ENSURE(aTabDlg, "Dialogdiet fail!");
         aTabDlg->SetSectionData(*xSectionData);
         aTabDlg->Execute();
-
-        delete aTabDlg;
     }
     return 0;
 }
@@ -222,14 +219,13 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractEditRegionDlg* pEditRegionDlg = pFact->CreateEditRegionDlg(pParentWin, rWrtShell);
+                boost::scoped_ptr<AbstractEditRegionDlg> pEditRegionDlg(pFact->CreateEditRegionDlg(pParentWin, rWrtShell));
                 OSL_ENSURE(pEditRegionDlg, "Dialogdiet fail!");
                 if(pItem && pItem->ISA(SfxStringItem))
                 {
                     pEditRegionDlg->SelectSection(((const SfxStringItem*)pItem)->GetValue());
                 }
                 pEditRegionDlg->Execute();
-                delete pEditRegionDlg;
             }
         }
         break;

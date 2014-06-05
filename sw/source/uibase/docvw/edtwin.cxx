@@ -145,6 +145,8 @@
 #include "../../core/inc/rootfrm.hxx"
 
 #include <unotools/syslocaleoptions.hxx>
+#include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
@@ -5099,7 +5101,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
                     if ( m_rView.GetDocShell()->IsReadOnly() )
                     {
-                        SwReadOnlyPopup* pROPopup = new SwReadOnlyPopup( aDocPos, m_rView );
+                        boost::scoped_ptr<SwReadOnlyPopup> pROPopup(new SwReadOnlyPopup( aDocPos, m_rView ));
 
                         ui::ContextMenuExecuteEvent aEvent;
                         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
@@ -5118,7 +5120,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                             else
                                 pROPopup->Execute(this, aPixPos);
                         }
-                        delete pROPopup;
                     }
                     else if ( !m_rView.ExecSpellPopup( aDocPos ) )
                         GetView().GetViewFrame()->GetDispatcher()->ExecutePopup( 0, this, &aPixPos);
@@ -5409,7 +5410,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 }
                 else
                 {
-                    Rectangle* aRects = new Rectangle[ nSize ];
+                    boost::scoped_array<Rectangle> aRects(new Rectangle[ nSize ]);
                     int nRectIndex = 0;
                     for ( SwIndex nIndex = rStart.nContent; nIndex < rEnd.nContent; ++nIndex )
                     {
@@ -5419,8 +5420,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         aRects[ nRectIndex ] = Rectangle( aRect.Left(), aRect.Top(), aRect.Right(), aRect.Bottom() );
                         ++nRectIndex;
                     }
-                    rWin.SetCompositionCharRect( aRects, nSize, bVertical );
-                    delete[] aRects;
+                    rWin.SetCompositionCharRect( aRects.get(), nSize, bVertical );
                 }
             }
             bCallBase = false;

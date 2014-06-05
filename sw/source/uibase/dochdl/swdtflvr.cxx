@@ -124,6 +124,7 @@
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
 
+#include <boost/scoped_array.hpp>
 #include <boost/scoped_ptr.hpp>
 
 extern bool bFrmDrag;
@@ -2632,14 +2633,14 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
         }
         else if( nWh )
         {
-            SfxUsrAnyItem* pConnectionItem  = 0;
-            SfxUsrAnyItem* pCursorItem      = 0;
-            SfxUsrAnyItem* pColumnItem      = 0;
-            SfxUsrAnyItem* pSourceItem      = 0;
-            SfxUsrAnyItem* pCommandItem     = 0;
-            SfxUsrAnyItem* pCommandTypeItem = 0;
-            SfxUsrAnyItem* pColumnNameItem  = 0;
-            SfxUsrAnyItem* pSelectionItem   = 0;
+            boost::scoped_ptr<SfxUsrAnyItem> pConnectionItem;
+            boost::scoped_ptr<SfxUsrAnyItem> pCursorItem;
+            boost::scoped_ptr<SfxUsrAnyItem> pColumnItem;
+            boost::scoped_ptr<SfxUsrAnyItem> pSourceItem;
+            boost::scoped_ptr<SfxUsrAnyItem> pCommandItem;
+            boost::scoped_ptr<SfxUsrAnyItem> pCommandTypeItem;
+            boost::scoped_ptr<SfxUsrAnyItem> pColumnNameItem;
+            boost::scoped_ptr<SfxUsrAnyItem> pSelectionItem;
 
             bool bDataAvailable = true;
             ODataAccessDescriptor aDesc;
@@ -2652,14 +2653,14 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
 
             if ( bDataAvailable )
             {
-                pConnectionItem = new SfxUsrAnyItem(FN_DB_CONNECTION_ANY, aDesc[daConnection]);
-                pColumnItem = new SfxUsrAnyItem(FN_DB_COLUMN_ANY, aDesc[daColumnObject]);
-                pSourceItem = new SfxUsrAnyItem(FN_DB_DATA_SOURCE_ANY, makeAny(aDesc.getDataSource()));
-                pCommandItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_ANY, aDesc[daCommand]);
-                pCommandTypeItem = new SfxUsrAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aDesc[daCommandType]);
-                pColumnNameItem = new SfxUsrAnyItem(FN_DB_DATA_COLUMN_NAME_ANY, aDesc[daColumnName]);
-                pSelectionItem = new SfxUsrAnyItem(FN_DB_DATA_SELECTION_ANY, aDesc[daSelection]);
-                pCursorItem = new SfxUsrAnyItem(FN_DB_DATA_CURSOR_ANY, aDesc[daCursor]);
+                pConnectionItem.reset(new SfxUsrAnyItem(FN_DB_CONNECTION_ANY, aDesc[daConnection]));
+                pColumnItem.reset(new SfxUsrAnyItem(FN_DB_COLUMN_ANY, aDesc[daColumnObject]));
+                pSourceItem.reset(new SfxUsrAnyItem(FN_DB_DATA_SOURCE_ANY, makeAny(aDesc.getDataSource())));
+                pCommandItem.reset(new SfxUsrAnyItem(FN_DB_DATA_COMMAND_ANY, aDesc[daCommand]));
+                pCommandTypeItem.reset(new SfxUsrAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aDesc[daCommandType]));
+                pColumnNameItem.reset(new SfxUsrAnyItem(FN_DB_DATA_COLUMN_NAME_ANY, aDesc[daColumnName]));
+                pSelectionItem.reset(new SfxUsrAnyItem(FN_DB_DATA_SELECTION_ANY, aDesc[daSelection]));
+                pCursorItem.reset(new SfxUsrAnyItem(FN_DB_DATA_CURSOR_ANY, aDesc[daCursor]));
             }
 
             SwView& rView = rSh.GetView();
@@ -2669,17 +2670,9 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             SfxStringItem aDataDesc( nWh, sTxt );
             rView.GetViewFrame()->GetDispatcher()->Execute(
                                 nWh, SFX_CALLMODE_ASYNCHRON, &aDataDesc,
-                                pConnectionItem, pColumnItem,
-                                pSourceItem, pCommandItem, pCommandTypeItem,
-                                pColumnNameItem, pSelectionItem, pCursorItem,0L);
-            delete pConnectionItem;
-            delete pColumnItem;
-            delete pSourceItem;
-            delete pCommandItem;
-            delete pCommandTypeItem;
-            delete pColumnNameItem;
-            delete pSelectionItem;
-            delete pCursorItem;
+                                pConnectionItem.get(), pColumnItem.get(),
+                                pSourceItem.get(), pCommandItem.get(), pCommandTypeItem.get(),
+                                pColumnNameItem.get(), pSelectionItem.get(), pCursorItem.get(), 0L);
         }
         else
         {
@@ -3671,21 +3664,21 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         pDocShell->GetTitle(SFX_TITLE_FULLNAME), eEncoding));
     const OString aName(OUStringToOString(sName, eEncoding));
 
-    sal_Char* pMem = new sal_Char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ];
+    boost::scoped_array<sal_Char> pMem(new sal_Char[ aAppNm.getLength() + aTopic.getLength() + aName.getLength() + 4 ]);
 
     sal_Int32 nLen = aAppNm.getLength();
-    memcpy( pMem, aAppNm.getStr(), nLen );
+    memcpy( pMem.get(), aAppNm.getStr(), nLen );
     pMem[ nLen++ ] = 0;
-    memcpy( pMem + nLen, aTopic.getStr(), aTopic.getLength() );
+    memcpy( pMem.get() + nLen, aTopic.getStr(), aTopic.getLength() );
     nLen = nLen + aTopic.getLength();
     pMem[ nLen++ ] = 0;
-    memcpy( pMem + nLen, aName.getStr(), aName.getLength() );
+    memcpy( pMem.get() + nLen, aName.getStr(), aName.getLength() );
     nLen = nLen + aName.getLength();
     pMem[ nLen++ ] = 0;
     pMem[ nLen++ ] = 0;
 
-    rStrm.Write( pMem, nLen );
-    delete[] pMem;
+    rStrm.Write( pMem.get(), nLen );
+    pMem.reset();
 
     IDocumentMarkAccess* const pMarkAccess = pDocShell->GetDoc()->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);
