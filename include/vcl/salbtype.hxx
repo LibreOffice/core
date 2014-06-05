@@ -22,7 +22,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <osl/endian.h>
 #include <tools/debug.hxx>
 #include <vcl/salgtype.hxx>
 #include <tools/color.hxx>
@@ -782,11 +781,7 @@ inline void ColorMask::SetColorFor8Bit( const BitmapColor& rColor, HPBYTE pPixel
 
 inline void ColorMask::GetColorFor16BitMSB( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
-#ifdef OSL_BIGENDIAN
-    const sal_uInt32 nVal = *(sal_uInt16*) pPixel;
-#else
     const sal_uInt32 nVal = pPixel[ 1 ] | ( (sal_uInt32) pPixel[ 0 ] << 8UL );
-#endif
 
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }
@@ -797,23 +792,15 @@ inline void ColorMask::SetColorFor16BitMSB( const BitmapColor& rColor, HPBYTE pP
 {
     const sal_uInt16 nVal = (sal_uInt16)COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift );
 
-#ifdef OSL_BIGENDIAN
-    *(sal_uInt16*) pPixel = nVal;
-#else
     pPixel[ 0 ] = (sal_uInt8)(nVal >> 8U);
     pPixel[ 1 ] = (sal_uInt8) nVal;
-#endif
 }
 
 
 
 inline void ColorMask::GetColorFor16BitLSB( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
-#ifdef OSL_BIGENDIAN
     const sal_uInt32 nVal = pPixel[ 0 ] | ( (sal_uInt32) pPixel[ 1 ] << 8UL );
-#else
-    const sal_uInt32 nVal = *(sal_uInt16*) pPixel;
-#endif
 
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }
@@ -824,12 +811,8 @@ inline void ColorMask::SetColorFor16BitLSB( const BitmapColor& rColor, HPBYTE pP
 {
     const sal_uInt16 nVal = (sal_uInt16)COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift );
 
-#ifdef OSL_BIGENDIAN
     pPixel[ 0 ] = (sal_uInt8) nVal;
     pPixel[ 1 ] = (sal_uInt8)(nVal >> 8U);
-#else
-    *(sal_uInt16*) pPixel = nVal;
-#endif
 }
 
 
@@ -853,12 +836,8 @@ inline void ColorMask::SetColorFor24Bit( const BitmapColor& rColor, HPBYTE pPixe
 
 inline void ColorMask::GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel ) const
 {
-#ifdef OSL_BIGENDIAN
     const sal_uInt32 nVal = (sal_uInt32) pPixel[ 0 ] | ( (sal_uInt32) pPixel[ 1 ] << 8UL ) |
                         ( (sal_uInt32) pPixel[ 2 ] << 16UL ) | ( (sal_uInt32) pPixel[ 3 ] << 24UL );
-#else
-    const sal_uInt32 nVal = *(sal_uInt32*) pPixel;
-#endif
 
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
 }
@@ -867,12 +846,8 @@ inline void ColorMask::GetColorFor32Bit( BitmapColor& rColor, ConstHPBYTE pPixel
 
 inline void ColorMask::GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8& rAlpha, ConstHPBYTE pPixel ) const
 {
-#ifdef OSL_BIGENDIAN
     const sal_uInt32 nVal = (sal_uInt32) pPixel[ 0 ] | ( (sal_uInt32) pPixel[ 1 ] << 8UL ) |
                         ( (sal_uInt32) pPixel[ 2 ] << 16UL ) | ( (sal_uInt32) pPixel[ 3 ] << 24UL );
-#else
-    const sal_uInt32 nVal = *(sal_uInt32*) pPixel;
-#endif
     rAlpha = (sal_uInt8)(nVal >> 24);
 
     MASK_TO_COLOR( nVal, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift, rColor );
@@ -882,13 +857,9 @@ inline void ColorMask::GetColorAndAlphaFor32Bit( BitmapColor& rColor, sal_uInt8&
 
 inline void ColorMask::SetColorFor32Bit( const BitmapColor& rColor, HPBYTE pPixel ) const
 {
-#ifdef OSL_BIGENDIAN
     const sal_uInt32 nVal = COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift );
     pPixel[ 0 ] = (sal_uInt8) nVal; pPixel[ 1 ] = (sal_uInt8) ( nVal >> 8UL );
     pPixel[ 2 ] = (sal_uInt8) ( nVal >> 16UL ); pPixel[ 3 ] = (sal_uInt8) ( nVal >> 24UL );
-#else
-    *(sal_uInt32*) pPixel = COLOR_TO_MASK( rColor, mnRMask, mnGMask, mnBMask, mnRShift, mnGShift, mnBShift );
-#endif
 }
 
 #endif // INCLUDED_VCL_SALBTYPE_HXX
