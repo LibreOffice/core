@@ -290,6 +290,13 @@ SwTemplateDlg::SwTemplateDlg(Window* pParent,
                 if(!aCJKOptions.IsAsianTypographyEnabled())
                     RemoveTabPage("textgrid");
             }
+            else
+            {
+                RemoveTabPage("borders");
+                RemoveTabPage("columns");
+                RemoveTabPage("footnotes");
+                RemoveTabPage("textgrid");
+            }
         }
         break;
         // numbering styles
