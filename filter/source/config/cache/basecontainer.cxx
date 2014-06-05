@@ -104,9 +104,6 @@ void BaseContainer::impl_loadOnDemand()
             eRequiredState = FilterCache::E_CONTAINS_FILTERS;
             break;
 
-        case FilterCache::E_DETECTSERVICE :
-            break;
-
         case FilterCache::E_FRAMELOADER :
             eRequiredState = FilterCache::E_CONTAINS_FRAMELOADERS;
             break;
