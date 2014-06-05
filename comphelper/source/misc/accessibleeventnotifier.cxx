@@ -189,7 +189,7 @@ namespace comphelper
 
 
     void AccessibleEventNotifier::revokeClientNotifyDisposing( const TClientId _nClient,
-            const Reference< XInterface >& _rxEventSource ) SAL_THROW( ( ) )
+            const Reference< XInterface >& _rxEventSource )
     {
         ::cppu::OInterfaceContainerHelper* pListeners(0);
 
@@ -224,7 +224,7 @@ namespace comphelper
 
 
     sal_Int32 AccessibleEventNotifier::addEventListener(
-        const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener ) SAL_THROW( ( ) )
+        const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( lclMutex::get() );
 
@@ -241,7 +241,7 @@ namespace comphelper
 
 
     sal_Int32 AccessibleEventNotifier::removeEventListener(
-        const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener ) SAL_THROW( ( ) )
+        const TClientId _nClient, const Reference< XAccessibleEventListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( lclMutex::get() );
 
@@ -257,7 +257,7 @@ namespace comphelper
     }
 
 
-    void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent ) SAL_THROW( ( ) )
+    void AccessibleEventNotifier::addEvent( const TClientId _nClient, const AccessibleEventObject& _rEvent )
     {
         Sequence< Reference< XInterface > > aListeners;
 

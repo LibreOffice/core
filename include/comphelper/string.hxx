@@ -179,7 +179,7 @@ COMPHELPER_DLLPUBLIC OUString strip(const OUString &rIn,
                         is returned
 */
 inline OString getToken(const OString &rIn,
-    sal_Int32 nToken, sal_Char cTok) SAL_THROW(())
+    sal_Int32 nToken, sal_Char cTok)
 {
     return rIn.getToken(nToken, cTok);
 }
@@ -195,7 +195,7 @@ inline OString getToken(const OString &rIn,
                         is returned
 */
 inline OUString getToken(const OUString &rIn,
-    sal_Int32 nToken, sal_Unicode cTok) SAL_THROW(())
+    sal_Int32 nToken, sal_Unicode cTok)
 {
     return rIn.getToken(nToken, cTok);
 }
@@ -254,13 +254,13 @@ namespace detail
     @return         rBuf;
  */
 inline OStringBuffer& truncateToLength(
-    OStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
+    OStringBuffer& rBuffer, sal_Int32 nLength)
 {
     return detail::truncateToLength(rBuffer, nLength);
 }
 
 inline OUStringBuffer& truncateToLength(
-    OUStringBuffer& rBuffer, sal_Int32 nLength) SAL_THROW(())
+    OUStringBuffer& rBuffer, sal_Int32 nLength)
 {
     return detail::truncateToLength(rBuffer, nLength);
 }
@@ -296,14 +296,14 @@ namespace detail
  */
 inline OStringBuffer& padToLength(
     OStringBuffer& rBuffer, sal_Int32 nLength,
-    sal_Char cFill = '\0') SAL_THROW(())
+    sal_Char cFill = '\0')
 {
     return detail::padToLength(rBuffer, nLength, cFill);
 }
 
 inline OUStringBuffer& padToLength(
     OUStringBuffer& rBuffer, sal_Int32 nLength,
-    sal_Unicode cFill = '\0') SAL_THROW(())
+    sal_Unicode cFill = '\0')
 {
     return detail::padToLength(rBuffer, nLength, cFill);
 }

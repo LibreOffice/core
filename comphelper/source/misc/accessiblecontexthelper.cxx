@@ -202,7 +202,7 @@ namespace comphelper
     }
 
 
-    void OAccessibleContextHelper::ensureAlive() const SAL_THROW( ( DisposedException ) )
+    void OAccessibleContextHelper::ensureAlive() const
     {
         if( !isAlive() )
             throw DisposedException();
@@ -293,7 +293,7 @@ namespace comphelper
     }
 
 
-    Reference< XAccessibleContext > OAccessibleContextHelper::implGetParentContext() SAL_THROW( ( RuntimeException ) )
+    Reference< XAccessibleContext > OAccessibleContextHelper::implGetParentContext()
     {
         Reference< XAccessible > xParent = getAccessibleParent();
         Reference< XAccessibleContext > xParentContext;

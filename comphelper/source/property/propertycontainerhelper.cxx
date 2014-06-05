@@ -221,7 +221,7 @@ namespace
 
 
 bool OPropertyContainerHelper::convertFastPropertyValue(
-    Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) SAL_THROW( (IllegalArgumentException) )
+    Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
 {
     bool bModified = false;
 
@@ -366,7 +366,7 @@ bool OPropertyContainerHelper::convertFastPropertyValue(
 }
 
 
-void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const Any& _rValue) SAL_THROW( (Exception) )
+void OPropertyContainerHelper::setFastPropertyValue(sal_Int32 _nHandle, const Any& _rValue)
 {
     // get the property somebody is asking for
     PropertiesIterator aPos = searchHandle(_nHandle);

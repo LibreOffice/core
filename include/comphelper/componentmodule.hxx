@@ -44,7 +44,7 @@ namespace comphelper
         OUString const& _rComponentName,
         ::com::sun::star::uno::Sequence< OUString > const & _rServiceNames,
         rtl_ModuleCount*
-    ) SAL_THROW(());
+    );
 
 
     //= ComponentDescription

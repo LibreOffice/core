@@ -75,12 +75,12 @@ namespace comphelper
         /** determines whether the listener container is currently empty
         */
         inline bool
-                empty() const SAL_THROW(());
+                empty() const;
 
         /** determines the number of elements in the container
         */
         inline size_t
-                size() const SAL_THROW(());
+                size() const;
 
         /** creates an iterator for looping through all registered listeners
         */
@@ -110,7 +110,7 @@ namespace comphelper
 
             @see implNotify
         */
-        bool    impl_notify( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_THROW(( ::com::sun::star::uno::Exception ));
+        bool    impl_notify( const ::com::sun::star::lang::EventObject& _rEvent );
 
     protected:
         /** call a single listener
@@ -138,16 +138,16 @@ namespace comphelper
         virtual bool    implNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
-                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) = 0;
+                        ) = 0;
     };
 
 
-    inline bool OListenerContainer::empty() const SAL_THROW(())
+    inline bool OListenerContainer::empty() const
     {
         return ( m_aListeners.getLength() == 0 );
     }
 
-    inline size_t OListenerContainer::size() const SAL_THROW(())
+    inline size_t OListenerContainer::size() const
     {
         return m_aListeners.getLength();
     }
@@ -200,13 +200,13 @@ namespace comphelper
         using OListenerContainer::createIterator;
 
         /// typed notification
-        inline bool    notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ));
+        inline bool    notify( const EventClass& _rEvent, NotificationMethod _pNotify );
 
     protected:
         virtual bool    implNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
-                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) SAL_OVERRIDE
+                        ) SAL_OVERRIDE
         {
             const EventClass& rTypedEvent( static_cast< const EventClass& >( _rEvent ) );
             ListenerClass* pTypedListener( static_cast< ListenerClass* >( _rxListener.get() ) );
@@ -217,7 +217,7 @@ namespace comphelper
 
 
     template< class LISTENER, class EVENT >
-    inline bool OSimpleListenerContainer< LISTENER, EVENT >::notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ))
+    inline bool OSimpleListenerContainer< LISTENER, EVENT >::notify( const EventClass& _rEvent, NotificationMethod _pNotify )
     {
         m_pNotificationMethod = _pNotify;
         bool bRet = OListenerContainer::impl_notify( _rEvent );
@@ -263,7 +263,7 @@ namespace comphelper
         virtual bool    implNotify(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener,
                             const ::com::sun::star::lang::EventObject& _rEvent
-                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) SAL_OVERRIDE
+                        ) SAL_OVERRIDE
         {
             return implTypedNotify(
                 ::com::sun::star::uno::Reference< ListenerClass >( static_cast< ListenerClass* >( _rxListener.get() ) ),
@@ -274,7 +274,7 @@ namespace comphelper
         virtual bool    implTypedNotify(
                             const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener,
                             const EventClass& _rEvent
-                        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) ) = 0;
+                        ) = 0;
     };
 
 } // namespace comphelper

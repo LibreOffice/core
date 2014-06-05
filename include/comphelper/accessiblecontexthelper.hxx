@@ -189,7 +189,7 @@ namespace comphelper
         };
 
         // ensures that the object is alive
-        inline  void            ensureAlive( const OAccessControl& ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
+        inline  void            ensureAlive( const OAccessControl& ) const;
         inline  IMutex*         getExternalLock( const OAccessControl& );
         inline  ::osl::Mutex&   GetMutex( const OAccessControl& );
 
@@ -219,7 +219,7 @@ namespace comphelper
         /// checks whether the object is alive (returns <TRUE/> then) or disposed
         bool    isAlive() const;
         /// checks for beeing alive. If the object is already disposed (i.e. not alive), an exception is thrown.
-        void        ensureAlive() const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
+        void        ensureAlive() const;
 
         /** ensures that the object is disposed.
         @precond
@@ -230,7 +230,7 @@ namespace comphelper
         /** shortcut for retrieving the context of the parent (returned by getAccessibleParent)
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
-                    implGetParentContext() SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
+                    implGetParentContext();
 
         // access to the base class' broadcast helper/mutex
         ::cppu::OBroadcastHelper&       GetBroadcastHelper()        { return rBHelper; }
@@ -240,7 +240,7 @@ namespace comphelper
     };
 
 
-    inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& ) const SAL_THROW( ( ::com::sun::star::lang::DisposedException ) )
+    inline  void OAccessibleContextHelper::ensureAlive( const OAccessControl& ) const
     {
         ensureAlive();
     }
