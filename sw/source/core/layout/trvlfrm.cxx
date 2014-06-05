@@ -1982,9 +1982,6 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
  *         Ende nach links erweitern, bis Frame-Start Rect berechnen
  *         und bei mehr als 2 Frames von allen dazwischen liegenden
  *         Frames die PrtArea dazu.
- *  4. Wenn es sich um eine Tabellenselektion handelt wird fuer jeden
- *     PaM im Ring der CellFrm besorgt, dessen PrtArea wird zu den
- *     Rechtecken addiert.
  *
  * Grosser Umbau wg. der FlyFrm; denn diese muessen ausgespart werden.
  * Ausnahmen: - Der Fly in dem die Selektion stattfindet (wenn sie in einem Fly
