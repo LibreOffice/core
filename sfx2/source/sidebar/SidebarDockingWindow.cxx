@@ -84,7 +84,10 @@ void SidebarDockingWindow::DoDispose (void)
 
 void SidebarDockingWindow::GetFocus()
 {
-    mpSidebarController->GetFocusManager().GrabFocus();
+    if (mpSidebarController.is())
+    {
+        mpSidebarController->GetFocusManager().GrabFocus();
+    }
 }
 
 
