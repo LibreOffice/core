@@ -68,7 +68,6 @@ ActiveMSPList::createNewMSP( const uno::Any& context )
 
 Reference< provider::XScriptProvider >
 ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
-            SAL_THROW(( lang::IllegalArgumentException, RuntimeException ))
 {
     Reference< provider::XScriptProvider > msp;
     OUString sContext;
@@ -112,7 +111,6 @@ ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
 
 Reference< provider::XScriptProvider >
     ActiveMSPList::getMSPFromInvocationContext( const Reference< document::XScriptInvocationContext >& xContext )
-        SAL_THROW(( lang::IllegalArgumentException, RuntimeException ))
 {
     Reference< provider::XScriptProvider > msp;
 
@@ -147,7 +145,6 @@ Reference< provider::XScriptProvider >
 
 Reference< provider::XScriptProvider >
     ActiveMSPList::getMSPFromStringContext( const OUString& context )
-        SAL_THROW(( lang::IllegalArgumentException, RuntimeException ))
 {
     Reference< provider::XScriptProvider > msp;
     try

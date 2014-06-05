@@ -27,12 +27,8 @@ namespace evtlstner
 
     // component operations
 
-
     css::uno::Reference< css::uno::XInterface > SAL_CALL create(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext )
-        SAL_THROW(());
-
-
+        css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
     OUString SAL_CALL getImplementationName();
 
@@ -45,12 +41,8 @@ namespace ooevtdescgen
 
     // component operations
 
-
     css::uno::Reference< css::uno::XInterface > SAL_CALL create(
-        css::uno::Reference< css::uno::XComponentContext > const & xContext )
-        SAL_THROW(());
-
-
+        css::uno::Reference< css::uno::XComponentContext > const & xContext );
 
     OUString SAL_CALL getImplementationName();
 

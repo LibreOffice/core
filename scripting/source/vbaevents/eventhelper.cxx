@@ -1073,7 +1073,6 @@ namespace evtlstner
 
     uno::Reference< XInterface > SAL_CALL create(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new EventListener( xContext ) );
     }
@@ -1103,7 +1102,6 @@ namespace ooevtdescgen
 
     uno::Reference< XInterface > SAL_CALL create(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new VBAToOOEventDescGen( xContext ) );
     }

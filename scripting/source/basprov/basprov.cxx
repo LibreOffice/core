@@ -505,7 +505,6 @@ namespace basprov
 
     static Reference< XInterface > SAL_CALL create_BasicProviderImpl(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new BasicProviderImpl( xContext ) );
     }

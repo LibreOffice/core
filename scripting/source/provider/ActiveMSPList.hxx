@@ -63,16 +63,13 @@ public:
     virtual ~ActiveMSPList();
 
     css::uno::Reference< css::script::provider::XScriptProvider >
-        getMSPFromStringContext( const OUString& context )
-            SAL_THROW(( css::lang::IllegalArgumentException, css::uno::RuntimeException ));
+        getMSPFromStringContext( const OUString& context );
 
     css::uno::Reference< css::script::provider::XScriptProvider >
-        getMSPFromAnyContext( const css::uno::Any& context )
-            SAL_THROW(( css::lang::IllegalArgumentException, css::uno::RuntimeException ));
+        getMSPFromAnyContext( const css::uno::Any& context );
 
     css::uno::Reference< css::script::provider::XScriptProvider >
-        getMSPFromInvocationContext( const css::uno::Reference< css::document::XScriptInvocationContext >& context )
-            SAL_THROW(( css::lang::IllegalArgumentException, css::uno::RuntimeException ));
+        getMSPFromInvocationContext( const css::uno::Reference< css::document::XScriptInvocationContext >& context );
 
     //XEventListener
 
