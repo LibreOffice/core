@@ -1090,6 +1090,8 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
     }
 }
 
+static const long   aMaxWidth = 1024;
+
 bool WMFReader::ReadHeader()
 {
     sal_Size nStrmPos = pWMF->Tell();
@@ -1162,7 +1164,6 @@ bool WMFReader::ReadHeader()
 
             // The image size is not known so normalize the calculated bounds so that the
             // resulting image is not too big
-            const long   aMaxWidth = 1024;
             const double fMaxWidth = static_cast<double>(aMaxWidth);
             if (aPlaceableBound.GetWidth() > aMaxWidth)
             {
@@ -1355,6 +1356,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
     aBound.Top()    = RECT_MAX;
     aBound.Right()  = RECT_MIN;
     aBound.Bottom() = RECT_MIN;
+    bool bBoundsDetermined = false;
 
     sal_uInt32 nPos = pStm->Tell();
     sal_uInt32 nEnd = pStm->Seek( STREAM_SEEK_TO_END );
@@ -1431,6 +1433,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                 case W_META_MOVETO:
                 case W_META_LINETO:
                     GetWinExtMax( ReadYX(), aBound, nMapMode );
+                    bBoundsDetermined = true;
                 break;
 
                 case W_META_RECTANGLE:
@@ -1438,11 +1441,13 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                 case W_META_EXCLUDECLIPRECT :
                 case W_META_ELLIPSE:
                     GetWinExtMax( ReadRectangle(), aBound, nMapMode );
+                    bBoundsDetermined = true;
                 break;
 
                 case W_META_ROUNDRECT:
                     ReadYXExt(); // size
                     GetWinExtMax( ReadRectangle(), aBound, nMapMode );
+                    bBoundsDetermined = true;
                 break;
 
                 case W_META_ARC:
@@ -1451,6 +1456,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     ReadYX(); // end
                     ReadYX(); // start
                     GetWinExtMax( ReadRectangle(), aBound, nMapMode );
+                    bBoundsDetermined = true;
                 break;
 
                 case W_META_POLYGON:
@@ -1458,7 +1464,10 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     sal_uInt16 nPoints;
                     pStm->ReadUInt16( nPoints );
                     for(sal_uInt16 i = 0; i < nPoints; i++ )
+                    {
                         GetWinExtMax( ReadPoint(), aBound, nMapMode );
+                        bBoundsDetermined = true;
+                    }
                 }
                 break;
 
@@ -1491,7 +1500,10 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     }
 
                     for (sal_uInt16 i = 0; i < nPoints; i++ )
+                    {
                         GetWinExtMax( ReadPoint(), aBound, nMapMode );
+                        bBoundsDetermined = true;
+                    }
 
                     bRecordOk &= pStm->good();
 
@@ -1509,7 +1521,10 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     sal_uInt16 nPoints;
                     pStm->ReadUInt16( nPoints );
                     for(sal_uInt16 i = 0; i < nPoints; i++ )
+                    {
                         GetWinExtMax( ReadPoint(), aBound, nMapMode );
+                        bBoundsDetermined = true;
+                    }
                 }
                 break;
 
@@ -1517,6 +1532,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                 {
                     ReadColor();
                     GetWinExtMax( ReadYX(), aBound, nMapMode );
+                    bBoundsDetermined = true;
                 }
                 break;
 
@@ -1529,6 +1545,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     {
                         pStm->SeekRel( ( nLength + 1 ) &~ 1 );
                         GetWinExtMax( ReadYX(), aBound, nMapMode );
+                        bBoundsDetermined = true;
                     }
                 }
                 break;
@@ -1542,7 +1559,10 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     pStm->ReadUInt16( nLen ).ReadUInt16( nOptions );
                     // todo: we also have to take care of the text width
                     if( nLen )
+                    {
                         GetWinExtMax( aPosition, aBound, nMapMode );
+                        bBoundsDetermined = true;
+                    }
                 }
                 break;
                 case W_META_BITBLT:
@@ -1578,6 +1598,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                         {
                             Rectangle aDestRect( ReadYX(), aDestSize );
                             GetWinExtMax( aDestRect, aBound, nMapMode );
+                            bBoundsDetermined = true;
                         }
                     }
                 }
@@ -1589,6 +1610,7 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     pStm->ReadUInt32( nROP );
                     Size aSize = ReadYXExt();
                     GetWinExtMax( Rectangle( ReadYX(), aSize ), aBound, nMapMode );
+                    bBoundsDetermined = true;
                 }
                 break;
             }
@@ -1624,10 +1646,20 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
                     << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
-        else
+        else if (bBoundsDetermined)
         {
             rPlaceableBound = aBound;
-            SAL_INFO("vcl.wmf", "Detemined dimension "
+            SAL_INFO("vcl.wmf", "Determined dimension "
+                    << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
+                    << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
+        }
+        else
+        {
+            rPlaceableBound.Left() = 0;
+            rPlaceableBound.Top() = 0;
+            rPlaceableBound.Right() = aMaxWidth;
+            rPlaceableBound.Bottom() = aMaxWidth;
+            SAL_INFO("vcl.wmf", "Default dimension "
                     << " t: " << rPlaceableBound.Left()  << " l: " << rPlaceableBound.Top()
                     << " b: " << rPlaceableBound.Right() << " r: " << rPlaceableBound.Bottom());
         }
