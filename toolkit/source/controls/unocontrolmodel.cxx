@@ -1371,7 +1371,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
 
 
 void UnoControlModel::ImplNormalizePropertySequence( const sal_Int32, sal_Int32*,
-    uno::Any*, sal_Int32* ) const SAL_THROW(())
+    uno::Any*, sal_Int32* ) const
 {
     // nothing to do here
 }

@@ -67,7 +67,7 @@ namespace toolkit
         */
         void Init(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxCreator
-        )   SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+        );
 
         // OCommonAccessibleComponent overridables
         virtual ::com::sun::star::awt::Rectangle implGetBounds(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
@@ -80,7 +80,7 @@ namespace toolkit
         */
         static OAccessibleControlContext* create(
             const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxCreator
-        ) SAL_THROW( ( ) );
+        );
 
     protected:
         // XInterface
@@ -110,12 +110,12 @@ namespace toolkit
 
     private:
         // retrieves the value of a string property from the model, if the property is present
-        OUString getModelStringProperty( const sal_Char* _pPropertyName ) SAL_THROW( ( ) );
+        OUString getModelStringProperty( const sal_Char* _pPropertyName );
 
         // starts listening at the control model (currently for disposal only)
-        void startModelListening( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+        void startModelListening( );
         // stops listening at the control model
-        void stopModelListening( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+        void stopModelListening( );
 
         Window* implGetWindow( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >* _pxUNOWindow = NULL ) const;
     };

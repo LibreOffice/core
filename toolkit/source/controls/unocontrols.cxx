@@ -2102,7 +2102,7 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
 
 
 void UnoControlListBoxModel::ImplNormalizePropertySequence( const sal_Int32 _nCount, sal_Int32* _pHandles,
-    uno::Any* _pValues, sal_Int32* _pValidHandles ) const SAL_THROW(())
+    uno::Any* _pValues, sal_Int32* _pValidHandles ) const
 {
     // dependencies we know:
     // BASEPROPERTY_STRINGITEMLIST->BASEPROPERTY_SELECTEDITEMS

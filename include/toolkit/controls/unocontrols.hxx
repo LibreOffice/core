@@ -757,7 +757,7 @@ public:
                             sal_Int32*                      _pHandles,      /// the handles of the properties to set
                             ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
                             sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
-                        )   const SAL_THROW(()) SAL_OVERRIDE;
+                        )   const SAL_OVERRIDE;
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

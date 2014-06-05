@@ -94,7 +94,7 @@ namespace toolkit
                         sal_Int32*                      _pHandles,      /// the handles of the properties to set
                         ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
                         sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
-                    )   const SAL_THROW(()) SAL_OVERRIDE;
+                    )   const SAL_OVERRIDE;
     private:
         void    impl_updateTextFromValue_nothrow();
         void    impl_updateCachedFormatter_nothrow();

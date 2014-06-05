@@ -88,7 +88,7 @@ protected:
                     sal_Int32*                      _pHandles,      /// the handles of the properties to set
                     ::com::sun::star::uno::Any*     _pValues,       /// the values of the properties to set
                     sal_Int32*                      _pValidHandles  /// pointer to the valid handles, allowed to be adjusted
-                )   const SAL_THROW(());
+                )   const;
 
     /// ensures that two property values in a sequence have a certain order
     void    ImplEnsureHandleOrder(

@@ -61,7 +61,7 @@ namespace toolkitform
 
         /** determines the FormComponentType of a form control
         */
-        sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel ) SAL_THROW(( Exception ))
+        sal_Int16 classifyFormControl( const Reference< XPropertySet >& _rxModel )
         {
             static const OUString FM_PROP_CLASSID("ClassId");
             sal_Int16 nControlType = FormComponentType::CONTROL;
@@ -120,7 +120,7 @@ namespace toolkitform
             @precond
                 the model must be part of the form component hierarchy in a document
         */
-        sal_Int32 determineRadioGroupId( const Reference< XPropertySet >& _rxRadioModel ) SAL_THROW((Exception))
+        sal_Int32 determineRadioGroupId( const Reference< XPropertySet >& _rxRadioModel )
         {
             OSL_ENSURE( classifyFormControl( _rxRadioModel ) == FormComponentType::RADIOBUTTON,
                 "determineRadioGroupId: this *is* no radio button model!" );
@@ -255,7 +255,7 @@ namespace toolkitform
     /** creates a PDF compatible control descriptor for the given control
     */
     void TOOLKIT_DLLPUBLIC describePDFControl( const Reference< XControl >& _rxControl,
-        ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget >& _rpDescriptor, ::vcl::PDFExtOutDevData& i_pdfExportData ) SAL_THROW(())
+        ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget >& _rpDescriptor, ::vcl::PDFExtOutDevData& i_pdfExportData )
     {
         _rpDescriptor.reset();
         OSL_ENSURE( _rxControl.is(), "describePDFControl: invalid (NULL) control!" );
