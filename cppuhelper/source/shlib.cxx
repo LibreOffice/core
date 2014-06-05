@@ -280,7 +280,6 @@ css::uno::Reference<css::uno::XInterface> cppu::loadSharedLibComponentFactory(
     rtl::OUString const & rImplName,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
     css::uno::Reference<css::registry::XRegistryKey> const & xKey)
-    SAL_THROW((css::loader::CannotActivateFactoryException))
 {
     assert(rPath.isEmpty()); (void) rPath;
     assert(!xKey.is()); (void) xKey;
@@ -308,7 +307,6 @@ void cppu::writeSharedLibComponentInfo(
     rtl::OUString const & uri, rtl::OUString const & rPath,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & xMgr,
     css::uno::Reference<css::registry::XRegistryKey> const & xKey)
-    SAL_THROW((css::registry::CannotRegisterImplementationException))
 {
     assert(rPath.isEmpty()); (void) rPath;
     osl::Module mod(uri, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL);

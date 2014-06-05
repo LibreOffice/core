@@ -183,7 +183,7 @@ namespace cppu
 {
 
 
-void SAL_CALL throwException( Any const & exc ) SAL_THROW( (Exception) )
+void SAL_CALL throwException( Any const & exc )
 {
     if (exc.getValueTypeClass() != TypeClass_EXCEPTION)
     {

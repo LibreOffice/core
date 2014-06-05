@@ -376,7 +376,6 @@ private:
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
-    SAL_THROW((css::uno::Exception))
 {
     return static_cast< cppu::OWeakObject * >(new Supplier(context));
 }

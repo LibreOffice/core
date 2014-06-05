@@ -51,7 +51,7 @@ namespace cppu {
 
 SAL_DLLPUBLIC_EXPORT
 css::uno::Reference< css::lang::XMultiComponentFactory > bootstrapInitialSF(
-    rtl::OUString const &) SAL_THROW((com::sun::star::uno::Exception))
+    rtl::OUString const &)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
@@ -59,26 +59,26 @@ css::uno::Reference< css::lang::XMultiComponentFactory > bootstrapInitialSF(
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::uno::XComponentContext > SAL_CALL
 bootstrap_InitialComponentContext(
     css::uno::Reference< css::registry::XSimpleRegistry > const &,
-    rtl::OUString const &) SAL_THROW((css::uno::Exception))
+    rtl::OUString const &)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::registry::XSimpleRegistry >
-SAL_CALL createNestedRegistry(rtl::OUString const &) SAL_THROW(()) {
+SAL_CALL createNestedRegistry(rtl::OUString const &) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::lang::XMultiServiceFactory >
 SAL_CALL createRegistryServiceFactory(
     rtl::OUString const &, rtl::OUString const &, sal_Bool,
-    rtl::OUString const &) SAL_THROW((css::uno::Exception))
+    rtl::OUString const &)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::registry::XSimpleRegistry >
-SAL_CALL createSimpleRegistry(rtl::OUString const &) SAL_THROW(()) {
+SAL_CALL createSimpleRegistry(rtl::OUString const &) {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
 
@@ -87,7 +87,7 @@ createStandardClassWithSequence(
     css::uno::Reference< css::lang::XMultiServiceFactory > const &,
     rtl::OUString const &,
     css::uno::Reference< css::reflection::XIdlClass > const &,
-    css::uno::Sequence< rtl::OUString > const &) SAL_THROW(())
+    css::uno::Sequence< rtl::OUString > const &)
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
@@ -98,7 +98,6 @@ invokeStaticComponentFactory(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &,
     css::uno::Reference<css::registry::XRegistryKey> const &,
     rtl::OUString const &)
-    SAL_THROW((css::loader::CannotActivateFactoryException))
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }
@@ -109,7 +108,6 @@ loadSharedLibComponentFactory(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &,
     css::uno::Reference<css::registry::XRegistryKey> const &,
     rtl::OUString const &)
-    SAL_THROW((css::loader::CannotActivateFactoryException))
 {
     for (;;) { std::abort(); } // avoid "must return a value" warnings
 }

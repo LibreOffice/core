@@ -51,7 +51,7 @@ protected:
         Despite the fact that a RuntimeException is allowed to be thrown, you must not throw any
         exception upon destruction!
     */
-    virtual ~OWeakObject() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    virtual ~OWeakObject();
 
     /** disposes and resets m_pWeakConnectionPoint
         @pre
@@ -81,13 +81,13 @@ protected:
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
     /// @endcond
 
@@ -95,11 +95,11 @@ public:
     /** Default Constructor.  Sets the reference count to zero.
         Accidentally occurs in msvc mapfile = > had to be outlined.
     */
-    OWeakObject() SAL_THROW(());
+    OWeakObject();
 #else
     /** Default Constructor.  Sets the reference count to zero.
     */
-    inline OWeakObject() SAL_THROW(())
+    inline OWeakObject()
         : m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
         , m_pReserved(0)
@@ -109,7 +109,7 @@ public:
 
         @param rObj dummy param
     */
-    inline OWeakObject( const OWeakObject & rObj ) SAL_THROW(())
+    inline OWeakObject( const OWeakObject & rObj )
         : com::sun::star::uno::XWeak()
         , m_refCount( 0 )
         , m_pWeakConnectionPoint( 0 )
@@ -122,7 +122,6 @@ public:
         @return this OWeakObject
     */
     inline OWeakObject & SAL_CALL operator = ( const OWeakObject &)
-        SAL_THROW(())
         { return *this; }
 
     /** Basic queryInterface() implementation supporting \::com::sun::star::uno::XWeak and
@@ -154,7 +153,7 @@ public:
 
         @return XInterface reference
     */
-    inline SAL_CALL operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () SAL_THROW(())
+    inline SAL_CALL operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ()
         { return this; }
 };
 

@@ -52,7 +52,6 @@ inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::un
   conversion of basic types
 */
 inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::star::uno::Any & a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -94,7 +93,6 @@ inline void SAL_CALL convertPropertyValue( sal_Bool & b   , const ::com::sun::st
 }
 
 inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const ::com::sun::star::uno::Any & a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -148,7 +146,6 @@ inline void SAL_CALL convertPropertyValue( sal_Int64 & i  , const ::com::sun::st
 
 
 inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const ::com::sun::star::uno::Any & a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -203,7 +200,6 @@ inline void SAL_CALL convertPropertyValue( sal_uInt64 & i  , const ::com::sun::s
 // the basic types
 // sal_Int32
 inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const ::com::sun::star::uno::Any & a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -246,7 +242,6 @@ inline void SAL_CALL convertPropertyValue( sal_Int32 & i  , const ::com::sun::st
 }
 
 inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const ::com::sun::star::uno::Any & a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -290,7 +285,6 @@ inline void SAL_CALL convertPropertyValue( sal_uInt32 & i  , const ::com::sun::s
 
 
 inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const ::com::sun::star::uno::Any & a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -323,7 +317,6 @@ inline void SAL_CALL convertPropertyValue( sal_Int16 & i  , const ::com::sun::st
 }
 
 inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const ::com::sun::star::uno::Any & a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -356,7 +349,6 @@ inline void SAL_CALL convertPropertyValue( sal_uInt16 & i  , const ::com::sun::s
 }
 
 inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const ::com::sun::star::uno::Any & a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -374,7 +366,6 @@ inline void SAL_CALL convertPropertyValue( sal_Int8 & i  , const ::com::sun::sta
 }
 
 inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::uno::Any &a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -439,7 +430,6 @@ inline void SAL_CALL convertPropertyValue( float &f , const ::com::sun::star::un
 
 
 inline void SAL_CALL convertPropertyValue( double &d , const ::com::sun::star::uno::Any &a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     const enum ::com::sun::star::uno::TypeClass tc = a.getValueType().getTypeClass();
 
@@ -505,7 +495,6 @@ inline void SAL_CALL convertPropertyValue( double &d , const ::com::sun::star::u
 }
 
 inline void SAL_CALL convertPropertyValue( ::rtl::OUString &ow , const ::com::sun::star::uno::Any &a )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) )
 {
     if( ::com::sun::star::uno::TypeClass_STRING == a.getValueType().getTypeClass() ) {
         a >>= ow;

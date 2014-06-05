@@ -38,50 +38,44 @@ class CPPUHELPER_DLLPUBLIC OTypeCollection
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
     /// @endcond
 
     inline OTypeCollection( const OTypeCollection & rCollection )
-        SAL_THROW(())
         : _aTypes( rCollection._aTypes )
         {}
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
         const ::com::sun::star::uno::Type & rType3,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
         const ::com::sun::star::uno::Type & rType3,
         const ::com::sun::star::uno::Type & rType4,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
         const ::com::sun::star::uno::Type & rType3,
         const ::com::sun::star::uno::Type & rType4,
         const ::com::sun::star::uno::Type & rType5,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
@@ -89,8 +83,7 @@ public:
         const ::com::sun::star::uno::Type & rType4,
         const ::com::sun::star::uno::Type & rType5,
         const ::com::sun::star::uno::Type & rType6,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
@@ -99,8 +92,7 @@ public:
         const ::com::sun::star::uno::Type & rType5,
         const ::com::sun::star::uno::Type & rType6,
         const ::com::sun::star::uno::Type & rType7,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
@@ -110,8 +102,7 @@ public:
         const ::com::sun::star::uno::Type & rType6,
         const ::com::sun::star::uno::Type & rType7,
         const ::com::sun::star::uno::Type & rType8,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
@@ -122,8 +113,7 @@ public:
         const ::com::sun::star::uno::Type & rType7,
         const ::com::sun::star::uno::Type & rType8,
         const ::com::sun::star::uno::Type & rType9,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
@@ -135,8 +125,7 @@ public:
         const ::com::sun::star::uno::Type & rType8,
         const ::com::sun::star::uno::Type & rType9,
         const ::com::sun::star::uno::Type & rType10,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
@@ -149,8 +138,7 @@ public:
         const ::com::sun::star::uno::Type & rType9,
         const ::com::sun::star::uno::Type & rType10,
         const ::com::sun::star::uno::Type & rType11,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
     OTypeCollection(
         const ::com::sun::star::uno::Type & rType1,
         const ::com::sun::star::uno::Type & rType2,
@@ -164,14 +152,13 @@ public:
         const ::com::sun::star::uno::Type & rType10,
         const ::com::sun::star::uno::Type & rType11,
         const ::com::sun::star::uno::Type & rType12,
-        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > & rAddTypes = ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >() );
 
     /** Called upon XTypeProvider::getTypes().
 
         @return type collection
     */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() SAL_THROW(())
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
         { return _aTypes; }
 };
 
@@ -187,16 +174,16 @@ public:
     /// @cond INTERNAL
 
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
 
-    ~OImplementationId() SAL_THROW(());
+    ~OImplementationId();
 
     /// @endcond
 
@@ -204,7 +191,7 @@ public:
 
         @param bUseEthernetAddress whether an ethernet mac address should be taken into account
     */
-    inline OImplementationId( bool bUseEthernetAddress = true ) SAL_THROW(())
+    inline OImplementationId( bool bUseEthernetAddress = true )
         : _pSeq( 0 )
         , _bUseEthernetAddress( bUseEthernetAddress )
         {}
@@ -212,11 +199,11 @@ public:
 
         @param rSeq implementation id
     */
-    inline OImplementationId( const ::com::sun::star::uno::Sequence< sal_Int8 > & rSeq ) SAL_THROW(())
+    inline OImplementationId( const ::com::sun::star::uno::Sequence< sal_Int8 > & rSeq )
         : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rSeq ) )
         , _bUseEthernetAddress( false )
         {}
-    inline OImplementationId( const OImplementationId & rId ) SAL_THROW(())
+    inline OImplementationId( const OImplementationId & rId )
         : _pSeq( new ::com::sun::star::uno::Sequence< sal_Int8 >( rId.getImplementationId() ) )
         , _bUseEthernetAddress( false )
         {}
@@ -225,7 +212,7 @@ public:
 
         @return implementation id
     */
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() const SAL_THROW(());
+    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() const;
 };
 
 }

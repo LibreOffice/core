@@ -266,7 +266,6 @@ static void dumpEntry( OUString const & key, Any const & value )
 #endif
 
 static inline void try_dispose( Reference< XInterface > const & xInstance )
-    SAL_THROW( (RuntimeException) )
 {
     Reference< lang::XComponent > xComp( xInstance, UNO_QUERY );
     if (xComp.is())
@@ -276,7 +275,6 @@ static inline void try_dispose( Reference< XInterface > const & xInstance )
 }
 
 static inline void try_dispose( Reference< lang::XComponent > const & xComp )
-    SAL_THROW( (RuntimeException) )
 {
     if (xComp.is())
     {
@@ -292,15 +290,13 @@ class DisposingForwarder
     Reference< lang::XComponent > m_xTarget;
 
     inline DisposingForwarder( Reference< lang::XComponent > const & xTarget )
-        SAL_THROW(())
         : m_xTarget( xTarget )
         { OSL_ASSERT( m_xTarget.is() ); }
 public:
     // listens at source for disposing, then disposes target
     static inline void listen(
         Reference< lang::XComponent > const & xSource,
-        Reference< lang::XComponent > const & xTarget )
-        SAL_THROW( (RuntimeException) );
+        Reference< lang::XComponent > const & xTarget );
 
     virtual void SAL_CALL disposing( lang::EventObject const & rSource )
         throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -309,7 +305,6 @@ public:
 inline void DisposingForwarder::listen(
     Reference< lang::XComponent > const & xSource,
     Reference< lang::XComponent > const & xTarget )
-    SAL_THROW( (RuntimeException) )
 {
     if (xSource.is())
     {
@@ -356,16 +351,14 @@ protected:
     Reference< lang::XMultiComponentFactory > m_xSMgr;
 
 protected:
-    Any lookupMap( OUString const & rName )
-        SAL_THROW( (RuntimeException) );
+    Any lookupMap( OUString const & rName );
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 public:
     ComponentContext(
         ContextEntry_Init const * pEntries, sal_Int32 nEntries,
         Reference< XComponentContext > const & xDelegate );
-    virtual ~ComponentContext()
-        SAL_THROW(());
+    virtual ~ComponentContext();
 
     // XComponentContext
     virtual Any SAL_CALL getValueByName( OUString const & rName )
@@ -511,7 +504,6 @@ sal_Bool ComponentContext::hasElements() throw (RuntimeException, std::exception
 
 
 Any ComponentContext::lookupMap( OUString const & rName )
-    SAL_THROW( (RuntimeException) )
 {
 #ifdef CONTEXT_DIAG
     if ( rName == "dump_maps" )
@@ -663,7 +655,6 @@ Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
 }
 
 ComponentContext::~ComponentContext()
-    SAL_THROW(())
 {
 #ifdef CONTEXT_DIAG
     ::fprintf( stderr, "> destructed context %p\n", this );
@@ -846,7 +837,6 @@ extern "C" { static void s_createComponentContext_v(va_list * pParam)
 Reference< XComponentContext > SAL_CALL createComponentContext(
     ContextEntry_Init const * pEntries, sal_Int32 nEntries,
     Reference< XComponentContext > const & xDelegate )
-    SAL_THROW(())
 {
     uno::Environment curr_env(Environment::getCurrent());
     uno::Environment source_env(CPPU_CURRENT_LANGUAGE_BINDING_NAME);

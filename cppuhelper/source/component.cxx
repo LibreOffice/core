@@ -40,11 +40,11 @@ namespace cppu
 //  class OComponentHelper
 
 
-OComponentHelper::OComponentHelper( Mutex & rMutex ) SAL_THROW(())
+OComponentHelper::OComponentHelper( Mutex & rMutex )
     : rBHelper( rMutex )
 {
 }
-OComponentHelper::~OComponentHelper() SAL_THROW( (RuntimeException) )
+OComponentHelper::~OComponentHelper()
 {
 }
 

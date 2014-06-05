@@ -41,26 +41,16 @@ inline void SAL_CALL convertPropertyValue( target &value ,  ::com::sun::star::un
 /**
   conversion of basic types
 */
-inline void SAL_CALL convertPropertyValue( sal_Int64 & target ,  const ::com::sun::star::uno::Any & source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const ::com::sun::star::uno::Any & source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_Int32 & target , const ::com::sun::star::uno::Any & source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_uInt32 & target, const ::com::sun::star::uno::Any & source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_Int16 & target , const ::com::sun::star::uno::Any & source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_uInt16 & target, const ::com::sun::star::uno::Any & source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( sal_Int8 & target     , const ::com::sun::star::uno::Any & source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( float & target     , const ::com::sun::star::uno::Any & source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( double &target     , const ::com::sun::star::uno::Any &source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
-inline void SAL_CALL convertPropertyValue( ::rtl::OUString &target  , const ::com::sun::star::uno::Any &source )
-    SAL_THROW( (::com::sun::star::lang::IllegalArgumentException) );
+inline void SAL_CALL convertPropertyValue( sal_Int64 & target , const ::com::sun::star::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_uInt64 & target, const ::com::sun::star::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_Int32 & target , const ::com::sun::star::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_uInt32 & target, const ::com::sun::star::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_Int16 & target , const ::com::sun::star::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_uInt16 & target, const ::com::sun::star::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( sal_Int8 & target  , const ::com::sun::star::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( float & target     , const ::com::sun::star::uno::Any & source );
+inline void SAL_CALL convertPropertyValue( double &target     , const ::com::sun::star::uno::Any &source );
+inline void SAL_CALL convertPropertyValue( ::rtl::OUString &target  , const ::com::sun::star::uno::Any &source );
 
 } // end namespace cppu
 

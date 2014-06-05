@@ -41,14 +41,14 @@ namespace
 namespace cppu
 {
 
-Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW(())
+Mutex & SAL_CALL getImplHelperInitMutex(void)
 {
     return theImplHelperInitMutex::get();
 }
 
 // ClassDataBase
 
-ClassDataBase::ClassDataBase() SAL_THROW(())
+ClassDataBase::ClassDataBase()
     : bOffsetsInit( sal_False )
     , nType2Offset( 0 )
     , nClassCode( 0 )
@@ -57,7 +57,7 @@ ClassDataBase::ClassDataBase() SAL_THROW(())
 {
 }
 
-ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ ) SAL_THROW(())
+ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ )
     : bOffsetsInit( sal_False )
     , nType2Offset( 0 )
     , nClassCode( nClassCode_ )
@@ -66,7 +66,7 @@ ClassDataBase::ClassDataBase( sal_Int32 nClassCode_ ) SAL_THROW(())
 {
 }
 
-ClassDataBase::~ClassDataBase() SAL_THROW(())
+ClassDataBase::~ClassDataBase()
 {
     delete pTypes;
     delete pId;
@@ -80,7 +80,7 @@ ClassDataBase::~ClassDataBase() SAL_THROW(())
 
 // ClassData
 
-void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THROW(())
+void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset )
 {
     arType2Offset[nType2Offset].nOffset = nOffset;
 
@@ -100,7 +100,7 @@ void ClassData::writeTypeOffset( const Type & rType, sal_Int32 nOffset ) SAL_THR
 #endif
 }
 
-void ClassData::initTypeProvider() SAL_THROW(())
+void ClassData::initTypeProvider()
 {
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if (! pTypes)
@@ -137,14 +137,14 @@ void ClassData::initTypeProvider() SAL_THROW(())
     }
 }
 
-Sequence< Type > ClassData::getTypes() SAL_THROW(())
+Sequence< Type > ClassData::getTypes()
 {
     if (! pTypes)
         initTypeProvider();
     return *pTypes;
 }
 
-Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW(())
+Sequence< sal_Int8 > ClassData::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -152,14 +152,13 @@ Sequence< sal_Int8 > ClassData::getImplementationId() SAL_THROW(())
 
 static inline bool td_equals(
     typelib_TypeDescription * pTD, typelib_TypeDescriptionReference * pType )
-    SAL_THROW(())
 {
     return (pTD->pWeakRef == pType ||
             (pTD->pTypeName->length == pType->pTypeName->length &&
              rtl_ustr_compare( pTD->pTypeName->buffer, pType->pTypeName->buffer ) == 0));
 }
 
-Any ClassData::query( const Type & rType, lang::XTypeProvider * pBase ) SAL_THROW(())
+Any ClassData::query( const Type & rType, lang::XTypeProvider * pBase )
 {
     if (rType == ::getCppuType( (const Reference< XInterface > *)0 ))
         return Any( &pBase, ::getCppuType( (const Reference< XInterface > *)0 ) );
@@ -191,13 +190,11 @@ Any ClassData::query( const Type & rType, lang::XTypeProvider * pBase ) SAL_THRO
 // WeakComponentImplHelperBase
 
 WeakComponentImplHelperBase::WeakComponentImplHelperBase( Mutex & rMutex )
-    SAL_THROW(())
     : rBHelper( rMutex )
 {
 }
 
 WeakComponentImplHelperBase::~WeakComponentImplHelperBase()
-    SAL_THROW(())
 {
 }
 
@@ -316,13 +313,11 @@ void WeakComponentImplHelperBase::removeEventListener(
 // WeakAggComponentImplHelperBase
 
 WeakAggComponentImplHelperBase::WeakAggComponentImplHelperBase( Mutex & rMutex )
-    SAL_THROW(())
     : rBHelper( rMutex )
 {
 }
 
 WeakAggComponentImplHelperBase::~WeakAggComponentImplHelperBase()
-    SAL_THROW(())
 {
 }
 

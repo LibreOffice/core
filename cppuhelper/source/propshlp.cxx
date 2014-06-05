@@ -41,15 +41,15 @@ IPropertyArrayHelper::~IPropertyArrayHelper()
 {
 }
 
-inline const ::com::sun::star::uno::Type & getPropertyTypeIdentifier( ) SAL_THROW(())
+inline const ::com::sun::star::uno::Type & getPropertyTypeIdentifier( )
 {
     return ::getCppuType( (Reference< XPropertyChangeListener > *)0 );
 }
-inline const ::com::sun::star::uno::Type & getPropertiesTypeIdentifier() SAL_THROW(())
+inline const ::com::sun::star::uno::Type & getPropertiesTypeIdentifier()
 {
     return ::getCppuType( (Reference< XPropertiesChangeListener > *)0 );
 }
-inline const ::com::sun::star::uno::Type & getVetoableTypeIdentifier() SAL_THROW(())
+inline const ::com::sun::star::uno::Type & getVetoableTypeIdentifier()
 {
     return ::getCppuType( (Reference< XVetoableChangeListener > *)0 );
 }
@@ -74,7 +74,7 @@ class OPropertySetHelperInfo_Impl
     Sequence < Property > aInfos;
 
 public:
-    OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ ) SAL_THROW(());
+    OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ );
 
     // XPropertySetInfo-methods
     virtual Sequence< Property > SAL_CALL getProperties(void) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -88,7 +88,6 @@ public:
  */
 OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
     IPropertyArrayHelper & rHelper_ )
-    SAL_THROW(())
     :aInfos( rHelper_.getProperties() )
 {
 }
@@ -97,7 +96,6 @@ OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
  * Return the sequence of properties, which are provided throug the constructor.
  */
 Sequence< Property > OPropertySetHelperInfo_Impl::getProperties(void) throw(::com::sun::star::uno::RuntimeException, std::exception)
-
 {
     return aInfos;
 }
@@ -159,7 +157,7 @@ public:
 //  class PropertySetHelper
 
 OPropertySetHelper::OPropertySetHelper(
-    OBroadcastHelper  & rBHelper_ ) SAL_THROW(())
+    OBroadcastHelper  & rBHelper_ )
     : rBHelper( rBHelper_ ),
       aBoundLC( rBHelper_.rMutex ),
       aVetoableLC( rBHelper_.rMutex ),
@@ -198,10 +196,10 @@ OPropertySetHelper2::OPropertySetHelper2(
 /**
  * You must call disposing before.
  */
-OPropertySetHelper::~OPropertySetHelper() SAL_THROW(())
+OPropertySetHelper::~OPropertySetHelper()
 {
 }
-OPropertySetHelper2::~OPropertySetHelper2() SAL_THROW(())
+OPropertySetHelper2::~OPropertySetHelper2()
 {
 }
 
@@ -241,7 +239,7 @@ Any OPropertySetHelper2::queryInterface( const ::com::sun::star::uno::Type & rTy
 }
 
 // ComponentHelper
-void OPropertySetHelper::disposing() SAL_THROW(())
+void OPropertySetHelper::disposing()
 {
     // Create an event with this as sender
     Reference < XPropertySet  > rSource( (static_cast< XPropertySet *  >(this)) , UNO_QUERY );
@@ -255,7 +253,7 @@ void OPropertySetHelper::disposing() SAL_THROW(())
 }
 
 Reference < XPropertySetInfo > OPropertySetHelper::createPropertySetInfo(
-    IPropertyArrayHelper & rProperties ) SAL_THROW(())
+    IPropertyArrayHelper & rProperties )
 {
     return static_cast< XPropertySetInfo * >( new OPropertySetHelperInfo_Impl( rProperties ) );
 }
@@ -837,7 +835,6 @@ void OPropertySetHelper::setFastPropertyValues(
     sal_Int32 * pHandles,
     const Any * pValues,
     sal_Int32 nHitCount )
-    SAL_THROW( (::com::sun::star::uno::Exception) )
 {
     OSL_ENSURE( !rBHelper.bInDispose, "do not getFastPropertyValue in the dispose call" );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
@@ -1046,7 +1043,7 @@ static int compare_Property_Impl( const void *arg1, const void *arg2 )
 
 }
 
-void OPropertyArrayHelper::init( sal_Bool bSorted ) SAL_THROW(())
+void OPropertyArrayHelper::init( sal_Bool bSorted )
 {
     sal_Int32 i, nElements = aInfos.getLength();
     const Property* pProperties = aInfos.getConstArray();
@@ -1077,7 +1074,6 @@ OPropertyArrayHelper::OPropertyArrayHelper(
     Property * pProps,
     sal_Int32 nEle,
     sal_Bool bSorted )
-    SAL_THROW(())
     : m_pReserved(NULL)
     , aInfos(pProps, nEle)
     , bRightOrdered( sal_False )
@@ -1088,7 +1084,6 @@ OPropertyArrayHelper::OPropertyArrayHelper(
 OPropertyArrayHelper::OPropertyArrayHelper(
     const Sequence< Property > & aProps,
     sal_Bool bSorted )
-    SAL_THROW(())
     : m_pReserved(NULL)
     , aInfos(aProps)
     , bRightOrdered( sal_False )

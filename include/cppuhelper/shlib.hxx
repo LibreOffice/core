@@ -51,8 +51,7 @@ SAL_CALL loadSharedLibComponentFactory(
     ::rtl::OUString const & uri, ::rtl::OUString const & rPath,
     ::rtl::OUString const & rImplName,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey )
-    SAL_THROW( (::com::sun::star::loader::CannotActivateFactoryException) );
+    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey );
 
 /** Invokes component_writeInfo() function of specified component library.  You can give either
     a fully qualified libname or single lib name. The libname need not be pre/postfixed
@@ -72,8 +71,7 @@ CPPUHELPER_DLLPUBLIC void
 SAL_CALL writeSharedLibComponentInfo(
     ::rtl::OUString const & uri, ::rtl::OUString const & rPath,
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & xMgr,
-    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey )
-    SAL_THROW( (::com::sun::star::registry::CannotRegisterImplementationException) );
+    ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > const & xKey );
 
 } // end namespace cppu
 

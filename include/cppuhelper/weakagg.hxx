@@ -44,7 +44,7 @@ class CPPUHELPER_DLLPUBLIC OWeakAggObject
 public:
     /** Constructor.  No delegator set.
     */
-    inline OWeakAggObject() SAL_THROW(())
+    inline OWeakAggObject()
         {}
 
     /** If a delegator is set, then the delegators gets acquired.  Otherwise call is delegated to
@@ -87,14 +87,14 @@ protected:
         Despite the fact that a RuntimeException is allowed to be thrown, you must not throw any
         exception upon destruction!
     */
-    virtual ~OWeakAggObject() SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    virtual ~OWeakAggObject();
 
     /** weak reference to delegator.
     */
     ::com::sun::star::uno::WeakReferenceHelper xDelegator;
 private:
-    OWeakAggObject( const OWeakAggObject & rObj ) SAL_THROW(());
-    OWeakAggObject & operator = ( const OWeakAggObject & rObj ) SAL_THROW(());
+    OWeakAggObject( const OWeakAggObject & rObj );
+    OWeakAggObject & operator = ( const OWeakAggObject & rObj );
 };
 
 }
