@@ -605,15 +605,6 @@ File gid_Brand_File_Bin_Unopkg
     Name = "unopkg.bin";
 End
 
-#if defined ENABLE_NPAPI_INTO_BROWSER
-File gid_Brand_File_Lib_Npsoplugin
-    BIN_FILE_BODY;
-    Name = SPECIAL_NAME(npsoplugin);
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-End
-#endif
-
 File gid_Brand_File_Bmp_IntroAboutShell
     TXT_FILE_BODY;
     Dir = FILELIST_DIR;

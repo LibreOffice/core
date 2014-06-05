@@ -1867,14 +1867,6 @@ AC_ARG_WITH(system-liblangtag,
         [Use liblangtag library already on system.]),,
     [with_system_liblangtag="$with_system_libs"])
 
-AC_ARG_WITH(system-npapi-headers,
-    AS_HELP_STRING([--with-system-npapi-headers],
-        [Use NPAPI headers provided by system instead of bundled ones. Used in
-         extensions/source/nsplugin (ENABLE_NPAPI_INTO_BROWSER=TRUE) and
-         extensions/source/plugin (ENABLE_NPAPI_FROM_BROWSER=TRUE)]),,
-    [with_system_npapi_headers="$with_system_headers"]
-)
-
 AC_ARG_WITH(webdav,
     AS_HELP_STRING([--with-webdav],
         [Specify which library to use for webdav implementation.
@@ -8978,57 +8970,6 @@ if test "$with_system_nss" = "yes"; then
 fi
 
 dnl ===================================================================
-dnl Check for system mozilla headers
-dnl ===================================================================
-HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION=
-AC_MSG_CHECKING([which NPAPI headers to use])
-
-if test "$with_system_npapi_headers" = "yes"; then
-    AC_MSG_RESULT([external])
-    SYSTEM_NPAPI_HEADERS=TRUE
-    # First try npapi-sdk:
-    PKG_CHECK_MODULES(NPAPI_HEADERS, npapi-sdk, [LOCATED=yes], [LOCATED=no])
-    # Then go with libxul:
-    if test "x$LOCATED" != "xyes"; then
-        PKG_CHECK_MODULES(NPAPI_HEADERS, libxul, [LOCATED=yes], [LOCATED=no])
-    fi
-    if test "x$LOCATED" != "xyes"; then
-        PKG_CHECK_MODULES(NPAPI_HEADERS, mozilla-plugin, [LOCATED=yes], [LOCATED=no])
-    fi
-    # if still not found bail out
-    if test "x$LOCATED" != "xyes"; then
-        AC_MSG_ERROR([npapi.h header file not found])
-    fi
-
-    AC_LANG_PUSH([C])
-    save_CFLAGS=$CFLAGS
-    CFLAGS="$CFLAGS $NPAPI_HEADERS_CFLAGS"
-    AC_MSG_CHECKING([for NPP_GetMIMEDescription return type])
-    AC_COMPILE_IFELSE(
-        [AC_LANG_SOURCE([[
-            #define XP_UNIX
-            #include <npapi.h>
-            const char* NPP_GetMIMEDescription(void) { return "foo"; }
-            ]])],
-        [AC_MSG_RESULT([const char*])],
-        [
-        AC_MSG_RESULT([char*])
-        HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION=TRUE
-        ])
-    CFLAGS=$save_CFLAGS
-    AC_LANG_POP([C])
-    NPAPI_HEADERS_CFLAGS=$(printf '%s' "$NPAPI_HEADERS_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-else
-    AC_MSG_RESULT([internal])
-        dnl ...but will not be built/used unless ENABLE_NPAPI_FROM_BROWSER or
-        dnl ENABLE_NPAPI_INTO_BROWSER is TRUE
-    SYSTEM_NPAPI_HEADERS=
-fi
-AC_SUBST(NPAPI_HEADERS_CFLAGS)
-AC_SUBST(SYSTEM_NPAPI_HEADERS)
-AC_SUBST(HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION)
-
-dnl ===================================================================
 dnl Check for system sane
 dnl ===================================================================
 AC_MSG_CHECKING([which sane header to use])
@@ -9244,38 +9185,6 @@ else
 fi
 AC_SUBST(ENABLE_HARFBUZZ)
 
-dnl ===================================================================
-dnl Check for NPAPI interface to plug browser plugins into LibreOffice documents
-dnl ===================================================================
-AC_MSG_CHECKING([whether to plug browser plugins into LibreOffice documents])
-# Obviously no such thing on iOS or Android. Also not possible when building
-# 64-bit OS X code as the plugin code uses QuickTime and Carbon.
-if test "$_os" != Android -a "$_os" != iOS -a \( $_os != Darwin -o "$BITNESS_OVERRIDE" = "" \) -a \
-        "$enable_headless" != yes -a "$enable_mpl_subset" != yes
-then
-    AC_MSG_RESULT([yes])
-    ENABLE_NPAPI_FROM_BROWSER=TRUE
-else
-    AC_MSG_RESULT([no])
-    ENABLE_NPAPI_FROM_BROWSER=
-fi
-AC_SUBST(ENABLE_NPAPI_FROM_BROWSER)
-
-dnl ===================================================================
-dnl Check for NPAPI interface to plug LibreOffice into browser windows
-dnl ===================================================================
-AC_MSG_CHECKING([whether to plug LibreOffice into browser windows])
-if test "$enable_mpl_subset" != yes -a \( "$_os" = WINNT -o "$_os" != Android -a "$_os" != Darwin -a "$_os" != iOS -a \
-        "$enable_headless" != yes -a "$enable_gtk" != no \)
-then
-    AC_MSG_RESULT([yes])
-    ENABLE_NPAPI_INTO_BROWSER=TRUE
-else
-    AC_MSG_RESULT([no])
-    ENABLE_NPAPI_INTO_BROWSER=
-fi
-AC_SUBST(ENABLE_NPAPI_INTO_BROWSER)
-
 AC_MSG_CHECKING([whether to use X11])
 dnl ***************************************
 dnl testing for X libraries and includes...
@@ -9307,15 +9216,6 @@ else
 fi
 
 if test "$WANT_X11" = "yes"; then
-    dnl ===================================================================
-    dnl Check for Composite.h for Mozilla plugin
-    dnl ===================================================================
-    AC_CHECK_HEADERS(X11/Composite.h,[],[AC_MSG_ERROR([Xt headers not found])],
-     [#include <X11/Intrinsic.h>])
-
-    # ENABLE_NPAPI_FROM_BROWSER requires Xt library
-    AC_CHECK_LIB([Xt], [XtToolkitInitialize], [:],
-        [AC_MSG_ERROR(Xt library not found)])
 
     dnl ===================================================================
     dnl Check for extension headers
