@@ -421,6 +421,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     }
                 }
             }
+            //fall-through
             case SID_STYLE_EDIT:
             case SID_STYLE_DELETE:
             case SID_STYLE_HIDE:
