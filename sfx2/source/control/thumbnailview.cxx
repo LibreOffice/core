@@ -621,6 +621,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
                 if ( bFoundLast )
                     OnItemDblClicked( mFilteredItemList[nLastPos] );
             }
+            //fall-through
         default:
             Control::KeyInput( rKEvt );
     }
