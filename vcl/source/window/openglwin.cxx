@@ -72,7 +72,6 @@ void OpenGLWindow::MouseButtonUp( const MouseEvent& rMEvt )
     if(aPoint == maStartPoint)
     {
         Color aColor = GetPixel(aPoint);
-        SAL_WARN("vcl.opengl", aColor.GetColor());
         mpRenderer->clickedAt(aPoint, rMEvt.GetButtons());
     }
     else
