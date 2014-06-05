@@ -1377,13 +1377,19 @@ bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pStm )
         {
             pStm->ReadUInt32( nRSize ).ReadUInt16( nFunction );
 
-            if( pStm->GetError() || ( nRSize < 3 ) || ( nRSize==3 && nFunction==0 ) || pStm->IsEof() )
+            if( pStm->GetError() )
             {
-                if( pStm->IsEof() )
-                {
-                    pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
-                    bRet = false;
-                }
+                bRet = false;
+                break;
+            }
+            else if ( nRSize==3 && nFunction==0 )
+            {
+                break;
+            }
+            else if ( nRSize < 3 || pStm->IsEof() )
+            {
+                pStm->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                bRet = false;
                 break;
             }
             switch( nFunction )
