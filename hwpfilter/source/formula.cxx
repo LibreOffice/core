@@ -180,8 +180,10 @@ void Formula::makeExpr(Node *res)
              break;
          case ID_BLOCK:
              makeBlock(tmp);
+             //fall-through
          case ID_BEGIN:
              makeBegin(tmp);
+             //fall-through
          case ID_END:
              makeEnd(tmp);
              break;
