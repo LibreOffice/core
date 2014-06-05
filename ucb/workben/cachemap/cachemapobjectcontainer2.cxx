@@ -33,7 +33,7 @@ using namespace com::sun::star;
 ObjectContainer2::ObjectContainer2()
 {}
 
-ObjectContainer2::~ObjectContainer2() SAL_THROW(())
+ObjectContainer2::~ObjectContainer2()
 {}
 
 rtl::Reference< Object2 > ObjectContainer2::get(OUString const & rKey)

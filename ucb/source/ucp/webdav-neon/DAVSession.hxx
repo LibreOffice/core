@@ -54,12 +54,12 @@ namespace webdav_ucp
 class DAVSession
 {
 public:
-    inline void acquire() SAL_THROW(())
+    inline void acquire()
     {
         osl_atomic_increment( &m_nRefCount );
     }
 
-    void release() SAL_THROW(())
+    void release()
     {
         if ( osl_atomic_decrement( &m_nRefCount ) == 0 )
         {

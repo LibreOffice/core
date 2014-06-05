@@ -351,7 +351,7 @@ StorageElementFactory::createStream( const OUString & rUri,
 }
 
 
-void StorageElementFactory::releaseElement( Storage * pElement ) SAL_THROW(())
+void StorageElementFactory::releaseElement( Storage * pElement )
 {
     OSL_ASSERT( pElement );
     osl::MutexGuard aGuard( m_aMutex );

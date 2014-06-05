@@ -84,7 +84,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
     }
 }
 
-void DAVSessionFactory::releaseElement( DAVSession * pElement ) SAL_THROW(())
+void DAVSessionFactory::releaseElement( DAVSession * pElement )
 {
     assert( pElement );
     osl::MutexGuard aGuard( m_aMutex );
