@@ -31,7 +31,6 @@
 #include "OOXMLParserState.hxx"
 #include "OOXMLPropertySetImpl.hxx"
 #include "OOXMLDocumentImpl.hxx"
-#include "RefAndPointer.hxx"
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <svtools/embedhlp.hxx>
 
@@ -61,8 +60,6 @@ class OOXMLFastContextHandler:
         xml::sax::XFastContextHandler>
 {
 public:
-    typedef RefAndPointer<XFastContextHandler, OOXMLFastContextHandler>
-    RefAndPointer_t;
     typedef boost::shared_ptr<OOXMLFastContextHandler> Pointer_t;
 
     enum ResourceEnum_t { UNKNOWN, STREAM, PROPERTIES, TABLE, SHAPE };
@@ -423,7 +420,7 @@ public:
 protected:
     OOXMLTableImpl mTable;
 
-    RefAndPointer_t mCurrentChild;
+    uno::Reference<XFastContextHandler> mCurrentChild;
 
     virtual void lcl_endFastElement(Token_t Element)
         throw (uno::RuntimeException, xml::sax::SAXException) SAL_OVERRIDE;

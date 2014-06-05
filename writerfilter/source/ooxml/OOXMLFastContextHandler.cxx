@@ -1730,8 +1730,7 @@ OOXMLFastContextHandlerTable::createFastChildContext
 {
     addCurrentChild();
 
-    mCurrentChild.set
-        (OOXMLFastContextHandler::createFastChildContext(Element, Attribs));
+    mCurrentChild.set(OOXMLFastContextHandler::createFastChildContext(Element, Attribs));
 
     return mCurrentChild;
 }
@@ -1758,8 +1757,8 @@ void OOXMLFastContextHandlerTable::lcl_endFastElement
 
 void OOXMLFastContextHandlerTable::addCurrentChild()
 {
-    OOXMLFastContextHandler * pHandler = mCurrentChild.getPointer();
-    if ( pHandler != NULL)
+    OOXMLFastContextHandler * pHandler = dynamic_cast<OOXMLFastContextHandler*>(mCurrentChild.get());
+    if (pHandler != NULL)
     {
         OOXMLValue::Pointer_t pValue(pHandler->getValue());
 
