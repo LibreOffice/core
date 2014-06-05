@@ -188,10 +188,6 @@ class FilterCache : public BaseLock
         mutable CacheItemList m_lTypes;
 
 
-        /** @short  contains all well known detect service with its properties. */
-        mutable CacheItemList m_lDetectServices;
-
-
         /** @short  contains all loaded filters with its properties. */
         mutable CacheItemList m_lFilters;
 
