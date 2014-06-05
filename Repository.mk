@@ -88,9 +88,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 $(eval $(call gb_Helper_register_executables,OOO, \
 	$(call gb_Helper_optional,CRASHREP,crashrep) \
 	gnome-open-url.bin \
-	$(if $(ENABLE_NPAPI_INTO_BROWSER),nsplugin) \
 	$(if $(filter-out ANDROID IOS MACOSX WNT,$(OS)),oosplash) \
-	$(if $(ENABLE_NPAPI_FROM_BROWSER),pluginapp.bin) \
 	soffice_bin \
 	$(if $(filter $(GUIBASE)$(ENABLE_GTK),unxTRUE), \
 		xid-fullscreen-on-all-monitors \
@@ -129,12 +127,6 @@ $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	regview \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
-
-ifeq ($(ENABLE_NPAPI_INTO_BROWSER),TRUE)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-	npsoplugin \
-))
-endif
 
 ifeq ($(OS),MACOSX)
 
@@ -330,7 +322,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	oox \
 	passwordcontainer \
 	pcr \
-	$(if $(ENABLE_NPAPI_FROM_BROWSER),pl) \
 	pdffilter \
 	$(if $(DISABLE_SCRIPTING),,protocolhandler) \
 	res \

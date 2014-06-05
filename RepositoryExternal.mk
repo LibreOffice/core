@@ -45,32 +45,6 @@ endef
 
 endif # SYSTEM_MESA_HEADERS
 
-ifneq ($(SYSTEM_NPAPI_HEADERS),)
-
-# yes this uses internal headers too...
-# they are split across 2 dirs for this reason
-define gb_LinkTarget__use_npapi_headers
-$(call gb_LinkTarget_set_include,$(1),\
-	$(NPAPI_HEADERS_CFLAGS) \
-	-I$(SRCDIR)/external/np_sdk \
-	$$(INCLUDE) \
-)
-
-endef
-
-else #!SYSTEM_NPAPI_HEADERS
-
-define gb_LinkTarget__use_npapi_headers
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(SRCDIR)/external/np_sdk/inc \
-	-I$(SRCDIR)/external/np_sdk \
-	$$(INCLUDE) \
-)
-
-endef
-
-endif #SYSTEM_NPAPI_HEADERS
-
 ifneq ($(SYSTEM_ODBC_HEADERS),)
 
 define gb_LinkTarget__use_odbc_headers
