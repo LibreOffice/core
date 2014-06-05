@@ -19,31 +19,23 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
 #include <iostream>
-
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <unotools/ucbstreamhelper.hxx>
-
 #include <algorithm>
-
 #include <map>
 #include <set>
-
 #include <hintids.hxx>
 #include <string.h>             // memcpy()
 #include <osl/endian.h>
 #include <docsh.hxx>
-
 #define _SVSTDARR_BOOLS
 #include <svl/svstdarr.hxx>
-
 #include <unotools/fltrcfg.hxx>
 #include <vcl/salbtype.hxx>
 #include <sot/storage.hxx>
@@ -97,19 +89,14 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/stlunosequence.hxx>
 #include <writerfilter/doctok/sprmids.hxx>
-
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8attributeoutput.hxx"
-
 #include <IDocumentMarkAccess.hxx>
 #include <xmloff/odffields.hxx>
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-
 #include "dbgoutsw.hxx"
-
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>
@@ -123,9 +110,8 @@
 #include <editeng/charrotateitem.hxx>
 #include "WW8FibData.hxx"
 #include "numrule.hxx"
-
 #include <boost/scoped_ptr.hpp>
-
+#include <drawdoc.hxx>
 
 using namespace sw::util;
 using namespace sw::types;

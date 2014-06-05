@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -39,7 +37,6 @@
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <dcontact.hxx>
-
 #include <ndgrf.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -67,13 +64,11 @@
 #include <dflyobj.hxx>
 #include <undoflystrattr.hxx>
 #include <switerator.hxx>
-
-//UUUU
 #include <svx/xbtmpit.hxx>
 #include <svx/xflftrit.hxx>
+#include <drawdoc.hxx>
 
 extern sal_uInt16 GetHtmlMode( const SwDocShell* );
-
 
 using namespace ::com::sun::star;
 
@@ -438,7 +433,7 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
 
 void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
 {
-    SdrModel* pDrawModel = GetOrCreateDrawModel();
+    SwDrawModel* pDrawModel = GetOrCreateDrawModel();
     SfxItemIter aIter(rSet);
 
     for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())

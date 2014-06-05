@@ -19,16 +19,14 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <unodefaults.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unoprov.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 
 /* -----------------------------13.03.01 14:16--------------------------------
 

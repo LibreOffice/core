@@ -19,15 +19,12 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-
 #include <hintids.hxx>
 #include <sfx2/app.hxx>
 #include <svl/whiter.hxx>
@@ -53,11 +50,8 @@
 #include <SwRewriter.hxx>
 #include <numrule.hxx>
 #include <swundo.hxx>
-
-//UUUU
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
-
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "docsh.hxx"
@@ -79,15 +73,12 @@
 #include "swevent.hxx"
 #include "edtwin.hxx"
 #include "unochart.hxx"
-
 #include "app.hrc"
 #include <fmtui.hrc>
 #include "swabstdlg.hxx"
-// --> OD 2008-03-27 #refactorlists#
 #include <list.hxx>
-// <--
-
 #include <paratr.hxx>   //#outline level,add by zhaojianwei
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 
@@ -674,7 +665,7 @@ sal_uInt16 SwDocShell::Edit(
         //UUUU create needed items for XPropertyList entries from the DrawModel so that
         // the Area TabPage can access them
         SfxItemSet& rSet = xTmp->GetItemSet();
-        const SdrModel* pDrawModel = GetDoc()->GetDrawModel();
+        const SwDrawModel* pDrawModel = GetDoc()->GetDrawModel();
 
         rSet.Put(SvxColorTableItem(pDrawModel->GetColorTableFromSdrModel(), SID_COLOR_TABLE));
         rSet.Put(SvxGradientListItem(pDrawModel->GetGradientListFromSdrModel(), SID_GRADIENT_LIST));

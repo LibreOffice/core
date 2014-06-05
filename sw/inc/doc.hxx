@@ -102,7 +102,7 @@ class Outliner;
 class OutputDevice;
 class Point;
 class SbxArray;
-class SdrModel;
+class SwDrawModel;
 class SdrObject;
 class SdrUndoAction;
 class VirtualDevice;
@@ -327,7 +327,7 @@ class SW_DLLPUBLIC SwDoc :
 
     ViewShell       *pCurrentView;  // SwDoc should get a new member pCurrentView//swmod 071225
     boost::shared_ptr<SwRootFrm> pLayoutPtr;
-    SdrModel        *pDrawModel;        // StarView Drawing
+    SwDrawModel*     pDrawModel;        // StarView Drawing
 
     SwDocUpdtFld    *pUpdtFlds;         // Struktur zum Field-Update
     SwFldTypes      *pFldTypes;         // Feldtypen
@@ -957,8 +957,8 @@ public:
 
     /** IDocumentDrawModelAccess
     */
-    virtual const SdrModel* GetDrawModel() const;
-    virtual SdrModel* GetDrawModel();
+    virtual const SwDrawModel* GetDrawModel() const;
+    virtual SwDrawModel* GetDrawModel();
     virtual SdrLayerID GetHeavenId() const;
     virtual SdrLayerID GetHellId() const;
     virtual SdrLayerID GetControlsId() const;
@@ -969,8 +969,8 @@ public:
     virtual bool IsVisibleLayerId( const SdrLayerID& _nLayerId ) const;
     virtual SdrLayerID GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId );
     virtual SdrLayerID GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId );
-    virtual SdrModel* _MakeDrawModel();
-    virtual SdrModel* GetOrCreateDrawModel();
+    virtual SwDrawModel* _MakeDrawModel();
+    virtual SwDrawModel* GetOrCreateDrawModel();
 
     /** IDocumentLayoutAccess
     */

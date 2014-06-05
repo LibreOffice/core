@@ -769,27 +769,25 @@ SfxPrinter& SwDoc::CreatePrinter_() const
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )
 {
-    if( pDocShell != pDSh )
+    if(pDocShell != pDSh)
     {
         if (pDocShell)
         {
             pDocShell->SetUndoManager(0);
         }
+
         pDocShell = pDSh;
+
         if (pDocShell)
         {
             pDocShell->SetUndoManager(& GetUndoManager());
         }
 
-        pLinkMgr->SetPersist( pDocShell );
-        //JP 27.08.98: Bug 55570 - DocShell Pointer auch am DrawModel setzen
-        if( pDrawModel )
-        {
-            ((SwDrawDocument*)pDrawModel)->SetObjectShell( pDocShell );
-            pDrawModel->SetPersist( pDocShell );
-            ASSERT( pDrawModel->GetPersist() == GetPersist(),
-                    "draw model's persist is out of sync" );
-        }
+        pLinkMgr->SetPersist(pDocShell);
+
+        // set DocShell pointer also on DrawModel
+        InitDrawModelAndDocShell(pDocShell, GetDrawModel());
+        OSL_ENSURE(!pDrawModel || pDrawModel->GetPersist() == GetPersist(), "draw model's persist is out of sync");
     }
 }
 

@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -61,14 +59,12 @@
 #include <tools/diagnose_ex.h>
 #include <hash_set>
 #include <stringhash.hxx>
-
-// for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <unotxdoc.hxx>    // for initXForms()
-
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xformsimport.hxx>
+#include <drawdoc.hxx>
 
 using ::rtl::OUString;
 
@@ -759,7 +755,7 @@ void SwXMLImport::startDocument( void )
     // <--
 
     // SJ: #i49801# locking the modell to disable repaints
-    SdrModel* pDrawModel = pDoc->GetDrawModel();
+    SwDrawModel* pDrawModel = pDoc->GetDrawModel();
     if ( pDrawModel )
         pDrawModel->setLock( sal_True );
 
@@ -965,7 +961,7 @@ void SwXMLImport::endDocument( void )
     // SJ: #i49801# -> now permitting repaints
     if ( pDoc )
     {
-        SdrModel* pDrawModel = pDoc->GetDrawModel();
+        SwDrawModel* pDrawModel = pDoc->GetDrawModel();
         if ( pDrawModel )
             pDrawModel->setLock( sal_False );
     }

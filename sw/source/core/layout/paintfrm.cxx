@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -82,23 +80,18 @@
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>
 #include <EnhancedPDFExportHelper.hxx>
-// <--
-// --> OD #i76669#
 #include <svx/sdr/contact/viewobjectcontactredirector.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-// <--
-
 #include <ndole.hxx>
 #include <svx/charthelper.hxx>
 #include <PostItMgr.hxx>
 #include <tools/color.hxx>
 #include <vcl/svapp.hxx>
-
-//UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <ndtxt.hxx>
+#include <drawdoc.hxx>
 
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
@@ -6926,7 +6919,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
 {
     Graphic aRet;
-    SdrModel *pMod = getIDocumentDrawModelAccess()->GetDrawModel();
+    SwDrawModel* pMod = getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMod )
     {
         SdrObject *pObj = FindSdrObject();
@@ -6940,4 +6933,4 @@ Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
     return aRet;
 }
 
-
+//eof

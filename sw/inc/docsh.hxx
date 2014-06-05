@@ -55,7 +55,12 @@ class IDocumentDeviceAccess;
 class IDocumentSettingAccess;
 class IDocumentTimerAccess;
 class IDocumentChartDataProviderAccess;
+class SwDocShell;
+class SwDrawModel;
 
+// initialize DrawModel (in form of a SwDrawModel) and DocShell (in form of a SwDocShell)
+// as needed, one or both parameters may be zero
+void SW_DLLPRIVATE InitDrawModelAndDocShell(SwDocShell* pSwDocShell, SwDrawModel* pSwDrawModel);
 
 class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
 {
@@ -132,7 +137,6 @@ class SW_DLLPUBLIC SwDocShell: public SfxObjectShell, public SfxListener
     SW_DLLPRIVATE sal_uInt16                    MakeByExample(const String &rName,
                                             sal_uInt16 nFamily, sal_uInt16 nMask, SwWrtShell* pShell = 0);
 
-    SW_DLLPRIVATE void                  InitDraw();
     SW_DLLPRIVATE void                  SubInitNew();   // fuer InitNew und HtmlSourceModus
 
     SW_DLLPRIVATE void                  RemoveOLEObjects();

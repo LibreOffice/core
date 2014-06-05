@@ -19,15 +19,12 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <hintids.hxx>
-
 #include <stack>
-
 #include <tools/errinf.hxx>
 #include <tools/stream.hxx>
 #include <svl/itemiter.hxx>
@@ -82,14 +79,11 @@
 #include <statstr.hrc>          // ResId fuer Statusleiste
 #include <SwStyleNameMapper.hxx>
 #include <tblsel.hxx>           // SwSelBoxes
-
 #include <docsh.hxx>
 #include <fmtlsplt.hxx> // SwLayoutSplit
 #include <editeng/keepitem.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdorect.hxx>
-
-
 #include <fmtsrnd.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <svx/svdmodel.hxx>
@@ -101,18 +95,15 @@
 #include <svx/svdoutl.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/paperinf.hxx>
-
 #include <tools/stream.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <vcl/salbtype.hxx>     // FRound
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
-
 
 // einige Hilfs-Funktionen
 // char
@@ -1305,7 +1296,7 @@ void SwRTFParser::ReadDrawingObject()
         aFlySet.Put( aVert );
 
         pDoc->GetOrCreateDrawModel();
-        SdrModel* pDrawModel  = pDoc->GetDrawModel();
+        SwDrawModel* pDrawModel  = pDoc->GetDrawModel();
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
         pDrawPg->InsertObject(pStroke, 0);
 
@@ -1339,7 +1330,7 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
         aFlySet.Put(SvxOpaqueItem(RES_OPAQUE,false));
 
         pDoc->GetOrCreateDrawModel();
-        SdrModel* pDrawModel  = pDoc->GetDrawModel();
+        SwDrawModel* pDrawModel  = pDoc->GetDrawModel();
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
         pDrawPg->InsertObject(pStroke);
         pDrawPg->SetObjectOrdNum(pStroke->GetOrdNum(), _nZOrder);

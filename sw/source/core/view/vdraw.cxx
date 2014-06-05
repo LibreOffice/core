@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
@@ -33,15 +30,10 @@
 #include <svx/svdpagv.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
-
-/// OD 29.08.2002 #102450#
-/// include <svx/svdoutl.hxx>
 #include <svx/svdoutl.hxx>
-
 #ifdef DBG_UTIL
 #include <svx/fmglob.hxx>
 #endif
-
 #include "fesh.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
@@ -53,9 +45,8 @@
 #include "dview.hxx"
 #include "flyfrm.hxx"
 #include <vcl/svapp.hxx>
-
 #include <IDocumentDrawModelAccess.hxx>
-
+#include <drawdoc.hxx>
 
 /*************************************************************************
 |*

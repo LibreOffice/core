@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
 
 #include <vos/ref.hxx>
 #include <cppuhelper/weakref.hxx>
@@ -31,7 +28,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
 #include <tools/debug.hxx>
-
 #include <map>
 #include <list>
 #include <vector>
@@ -61,15 +57,9 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_SVX_SHAPE_TYPES_HXX
 #include <svx/SvxShapeTypes.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -85,6 +75,7 @@
 #include <dflyobj.hxx>
 #include <prevwpage.hxx>
 #include <switerator.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;

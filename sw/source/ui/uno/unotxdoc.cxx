@@ -2088,11 +2088,13 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel* pDrawModel = 0;
             sal_Bool bAuto = *(sal_Bool*) aValue.getValue();
 
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * >( pDocShell->GetDoc()->GetDrawModel() ) ) )
-                pDrawDoc->SetAutoControlFocus( bAuto );
+            if ( 0 != ( pDrawModel = pDocShell->GetDoc()->GetDrawModel() ) )
+            {
+                pDrawModel->SetAutoControlFocus( bAuto );
+            }
             else if (bAuto)
             {
                 // if setting to true, and we don't have an
@@ -2101,19 +2103,21 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 // SdrModel and we are leaving the default at false,
                 // we don't need to make an SdrModel and can do nothing
                 // --> OD 2005-08-08 #i52858# - method name changed
-                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
+                pDrawModel = pDocShell->GetDoc()->GetOrCreateDrawModel();
                 // <--
-                pDrawDoc->SetAutoControlFocus ( bAuto );
+                pDrawModel->SetAutoControlFocus ( bAuto );
             }
         }
         break;
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel* pDrawModel = 0;
             sal_Bool bMode = *(sal_Bool*)aValue.getValue();
 
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
-                pDrawDoc->SetOpenInDesignMode( bMode );
+            if ( 0 != ( pDrawModel = pDocShell->GetDoc()->GetDrawModel() ) )
+            {
+                pDrawModel->SetOpenInDesignMode( bMode );
+            }
             else if (!bMode)
             {
                 // if setting to false, and we don't have an
@@ -2123,9 +2127,9 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
                 // we don't need to make an SdrModel and can do
                 // nothing
                 // --> OD 2005-08-08 #i52858# - method name changed
-                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetOrCreateDrawModel() );
+                pDrawModel = pDocShell->GetDoc()->GetOrCreateDrawModel();
                 // <--
-                pDrawDoc->SetOpenInDesignMode ( bMode );
+                pDrawModel->SetOpenInDesignMode ( bMode );
             }
         }
         break;
@@ -2268,23 +2272,35 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
-            SwDrawDocument * pDrawDoc;
-            sal_Bool bAuto;
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
-                bAuto = pDrawDoc->GetAutoControlFocus();
+            SwDrawModel* pDrawModel = 0;
+            sal_Bool bAuto(sal_False);
+
+            if ( 0 != ( pDrawModel = pDocShell->GetDoc()->GetDrawModel() ) )
+            {
+                bAuto = pDrawModel->GetAutoControlFocus();
+            }
             else
+            {
                 bAuto = sal_False;
+            }
+
             aAny.setValue(&bAuto, ::getBooleanCppuType());
         }
         break;
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
-            SwDrawDocument * pDrawDoc;
-            sal_Bool bMode;
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->GetDrawModel() ) ) )
-                bMode = pDrawDoc->GetOpenInDesignMode();
+            SwDrawModel* pDrawModel = 0;
+            sal_Bool bMode(sal_False);
+
+            if ( 0 != ( pDrawModel = pDocShell->GetDoc()->GetDrawModel() ) )
+            {
+                bMode = pDrawModel->GetOpenInDesignMode();
+            }
             else
+            {
                 bMode = sal_True;
+            }
+
             aAny.setValue(&bMode, ::getBooleanCppuType());
         }
         break;

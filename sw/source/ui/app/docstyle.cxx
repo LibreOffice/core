@@ -19,13 +19,10 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #define _SVSTDARR_USHORTS
-
 #include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
@@ -63,12 +60,11 @@
 #include <fmthdft.hxx>
 #include <svx/svxids.hrc>
 #include <SwRewriter.hxx>
-
-//UUUU
 #include <svx/xfillit0.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
+#include <drawdoc.hxx>
 
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als
 // erstes Zeichen die Familie:
@@ -1115,7 +1111,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
                     //UUUU create needed items for XPropertyList entries from the DrawModel so that
                     // the Area TabPage can access them
-                    const SdrModel* pDrawModel = rDoc.GetDrawModel();
+                    const SwDrawModel* pDrawModel = rDoc.GetDrawModel();
 
                     aCoreSet.Put(SvxColorTableItem(pDrawModel->GetColorTableFromSdrModel(), SID_COLOR_TABLE));
                     aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientListFromSdrModel(), SID_GRADIENT_LIST));

@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include "hintids.hxx"
 #include <svl/itemiter.hxx>
 #include <svtools/imap.hxx>
@@ -85,9 +84,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>     // FRound
 #include "switerator.hxx"
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
-
 
 // OD 2004-03-23 #i26791
 TYPEINIT2(SwFlyFrm,SwLayoutFrm,SwAnchoredObject);
@@ -450,8 +449,7 @@ void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
     if ( !pContact )
     {
         // --> OD 2005-08-08 #i52858# - method name changed
-        pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(),
-                                          pIDDMA->GetOrCreateDrawModel() );
+        pContact = new SwFlyDrawContact( (SwFlyFrmFmt*)GetFmt(), pIDDMA->GetOrCreateDrawModel() );
         // <--
     }
     ASSERT( pContact, "InitDrawObj failed" );

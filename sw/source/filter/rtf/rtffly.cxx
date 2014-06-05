@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <hintids.hxx>
 #include <tools/list.hxx>
@@ -61,15 +60,11 @@
 #include <deque>
 #include <map>
 #include <utility>
-// --> OD 2004-06-30 #i27767#
 #include <fmtwrapinfluenceonobjpos.hxx>
-// <--
 #include <editeng/brshitem.hxx>
 #include <fmtfollowtextflow.hxx>
-// --> OD, FLR 2006-02-16 #131205#
 #include "dcontact.hxx"
-// <--
-
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 

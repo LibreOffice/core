@@ -19,19 +19,13 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #include <UndoManager.hxx>
-
 #include <unotools/undoopt.hxx>
-
 #include <vcl/wrkwin.hxx>
-
 #include <svx/svdmodel.hxx>
-
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <ndarr.hxx>
@@ -44,15 +38,12 @@
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
 #include <limits>
-
-#include <limits>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 
-
 // the undo array should never grow beyond this limit:
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
-
 
 // UndoManager ///////////////////////////////////////////////////////////
 
@@ -98,7 +89,7 @@ void UndoManager::DoUndo(bool const bDoUndo)
     {
         EnableUndo(bDoUndo);
 
-        SdrModel *const pSdrModel = m_rDrawModelAccess.GetDrawModel();
+        SwDrawModel*const pSdrModel = m_rDrawModelAccess.GetDrawModel();
         if( pSdrModel )
         {
             pSdrModel->EnableUndo(bDoUndo);

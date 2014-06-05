@@ -19,17 +19,10 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
@@ -38,7 +31,6 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
-
 #include <sfx2/objface.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/protitem.hxx>
@@ -74,16 +66,14 @@
 #include <swwait.hxx>
 #include <shells.hrc>
 #include <popup.hrc>
-
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <svx/drawitem.hxx>
-
 #define SwGrfShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
-
 #include "swabstdlg.hxx"
+#include <drawdoc.hxx>
 
 #define TOOLBOX_NAME    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "colorbar" ) )
 
@@ -161,7 +151,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             //UUUU create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
-            const SdrModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->GetDrawModel();
+            const SwDrawModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->GetDrawModel();
 
             aSet.Put(SvxColorTableItem(pDrawModel->GetColorTableFromSdrModel(), SID_COLOR_TABLE));
             aSet.Put(SvxGradientListItem(pDrawModel->GetGradientListFromSdrModel(), SID_GRADIENT_LIST));

@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include "hintids.hxx"
@@ -70,9 +68,9 @@
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <switerator.hxx>
 #include <algorithm>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
-
 
 TYPEINIT1( SwContact, SwClient )
 TYPEINIT1( SwFlyDrawContact, SwContact )

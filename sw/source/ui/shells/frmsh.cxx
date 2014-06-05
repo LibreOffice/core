@@ -76,9 +76,9 @@
 #include "swabstdlg.hxx"
 #include "misc.hrc"
 #include <svx/dialogs.hrc>
-
 #include <docsh.hxx>
 #include <svx/drawitem.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -449,7 +449,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 //UUUU create needed items for XPropertyList entries from the DrawModel so that
                 // the Area TabPage can access them
-                const SdrModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->GetDrawModel();
+                const SwDrawModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->GetDrawModel();
 
                 aSet.Put(SvxColorTableItem(pDrawModel->GetColorTableFromSdrModel(), SID_COLOR_TABLE));
                 aSet.Put(SvxGradientListItem(pDrawModel->GetGradientListFromSdrModel(), SID_GRADIENT_LIST));

@@ -637,7 +637,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         }
 
         UpdateFontList();
-        InitDraw();
+        InitDrawModelAndDocShell(this, pDoc ? pDoc->GetDrawModel() : 0);
 
         SetError( nErr, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         bRet = !IsError( nErr );
@@ -736,7 +736,7 @@ void SwDocShell::SubInitNew()
     ASSERT( !mxBasePool.is(), "wer hat seinen Pool nicht zerstoert?" );
     mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
     UpdateFontList();
-    InitDraw();
+    InitDrawModelAndDocShell(this, pDoc ? pDoc->GetDrawModel() : 0);
 
     pDoc->setLinkUpdateMode( GLOBALSETTING );
     pDoc->setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );

@@ -19,13 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-
-
-
 
 #define _SVSTDARR_STRINGS
 #include <rsc/rscsfx.hxx>
@@ -57,7 +52,6 @@
 #include <svx/xmleohlp.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <rtl/logfile.hxx>
-
 #include <sfx2/frame.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
@@ -68,33 +62,21 @@
 #include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
-
 #include <statstr.hrc>
-
-// --> OD 2005-09-06 #i44177#
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
-// <--
-
-// --> OD 2006-02-22 #b6382898#
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
-// <--
-
-// --> OD 2008-12-17 #i70748#
 #include <sfx2/docfilt.hxx>
-// <--
-
 #include <istyleaccess.hxx>
 #define LOGFILE_AUTHOR "mb93740"
-
 #include <sfx2/DocumentMetadataAccess.hxx>
-
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

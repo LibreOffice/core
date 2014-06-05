@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
@@ -54,7 +52,7 @@
 #include <unotextrange.hxx>
 #include <dialog.hrc>
 #include <cmdid.h>
-
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -271,7 +271,7 @@ sal_Bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     }
 
     UpdateFontList();
-    InitDraw();
+    InitDrawModelAndDocShell(this, pDoc ? pDoc->GetDrawModel() : 0);
 
     delete pRdr;
 

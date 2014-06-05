@@ -62,37 +62,16 @@ const String GetPalettePath()
     return aPathOpt.GetPalettePath();
 }
 
-SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
-    FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(), pD->GetDocShell() ),
+SwDrawModel::SwDrawModel( SwDoc* pD )
+:   FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(), pD->GetDocShell() ),
     pDoc( pD )
 {
     SetScaleUnit( MAP_TWIP );
     SetSwapGraphics( sal_True );
 
-    SwDocShell* pDocSh = pDoc->GetDocShell();
-    if ( pDocSh )
-    {
-        SetObjectShell( pDocSh );
-        SvxColorTableItem* pColItem = ( SvxColorTableItem* )
-                                ( pDocSh->GetItem( SID_COLOR_TABLE ) );
-        XColorListSharedPtr aXCol = pColItem ?
-            pColItem->GetColorTable() :
-            XColorList::GetStdColorList();
-        SetColorTableAtSdrModel( aXCol );
-
-        if ( !pColItem )
-            pDocSh->PutItem( SvxColorTableItem( aXCol, SID_COLOR_TABLE ) );
-
-        pDocSh->PutItem( SvxGradientListItem( GetGradientListFromSdrModel(), SID_GRADIENT_LIST ));
-        pDocSh->PutItem( SvxHatchListItem( GetHatchListFromSdrModel(), SID_HATCH_LIST ) );
-        pDocSh->PutItem( SvxBitmapListItem( GetBitmapListFromSdrModel(), SID_BITMAP_LIST ) );
-        pDocSh->PutItem( SvxDashListItem( GetDashListFromSdrModel(), SID_DASH_LIST ) );
-        pDocSh->PutItem( SvxLineEndListItem( GetLineEndListFromSdrModel(), SID_LINEEND_LIST ) );
-        pDocSh->PutItem( SfxUInt16Item(SID_ATTR_LINEEND_WIDTH_DEFAULT, 111) );
-        SetObjectShell( pDocSh );
-    }
-    else
-        SetColorTableAtSdrModel( XColorList::GetStdColorList() );
+    // use common InitDrawModelAndDocShell which will set the associations as needed,
+    // including SvxColorTableItem  with WhichID SID_COLOR_TABLE
+    InitDrawModelAndDocShell(pDoc ? pDoc->GetDocShell() : 0, this);
 
     // copy all the default values to the SdrModel
     SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();
@@ -137,7 +116,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
 \************************************************************************/
 
 
-SwDrawDocument::~SwDrawDocument()
+SwDrawModel::~SwDrawModel()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
@@ -156,7 +135,7 @@ SwDrawDocument::~SwDrawDocument()
 \************************************************************************/
 
 
-SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
+SdrPage* SwDrawModel::AllocPage(FASTBOOL bMasterPage)
 {
     SwDPage* pPage = new SwDPage(*this, 0 != bMasterPage);
     pPage->SetName( String::CreateFromAscii(
@@ -165,7 +144,7 @@ SdrPage* SwDrawDocument::AllocPage(FASTBOOL bMasterPage)
 }
 
 
-SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const
+SvStream* SwDrawModel::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) const
 {
     SvStream* pRet = NULL;
     uno::Reference < embed::XStorage > xRoot( pDoc->GetDocStorage() );
@@ -205,14 +184,14 @@ SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) cons
     return pRet;
 }
 
-SdrLayerID SwDrawDocument::GetControlExportLayerId( const SdrObject & ) const
+SdrLayerID SwDrawModel::GetControlExportLayerId( const SdrObject & ) const
 {
     //fuer Versionen < 5.0, es gab nur Hell und Heaven
     return (SdrLayerID)pDoc->GetHeavenId();
 }
 
 // --> OD 2006-03-01 #b6382898#
-uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
+uno::Reference< uno::XInterface > SwDrawModel::createUnoModel()
 {
 
     uno::Reference< uno::XInterface > xModel;
@@ -226,8 +205,7 @@ uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
     }
     catch( uno::RuntimeException& )
     {
-        ASSERT( false,
-                "<SwDrawDocument::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
+        ASSERT( false, "<SwDrawModel::createUnoModel()> - could *not* retrieve model at <SwDocShell>" );
     }
 
     return xModel;

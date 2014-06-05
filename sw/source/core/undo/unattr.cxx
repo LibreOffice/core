@@ -19,22 +19,16 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
 #include <UndoAttribute.hxx>
-
 #include <svl/itemiter.hxx>
-
 #include <editeng/tstpitem.hxx>
-
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-
 #include <hintids.hxx>
 #include <fmtflcnt.hxx>
 #include <txtftn.hxx>
@@ -63,7 +57,7 @@
 #include <section.hxx>
 #include <charfmt.hxx>
 #include <switerator.hxx>
-
+#include <drawdoc.hxx>
 
 // -----------------------------------------------------
 

@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <fmtfordr.hxx>
@@ -51,6 +50,7 @@
 #include "IDocumentDrawModelAccess.hxx"
 #include <hints.hxx>
 #include <viewopt.hxx>
+#include <drawdoc.hxx>
 
 SwLayVout     *SwRootFrm::pVout = 0;
 sal_Bool           SwRootFrm::bInPaint = sal_False;
@@ -515,7 +515,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );     //Fuer das Erzeugen der Flys durch MakeFrms()   //swmod 071108//swmod 071225
     bCallbackActionEnabled = sal_False; //vor Verlassen auf sal_True setzen!
 
-    SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
+    SwDrawModel* pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )
     {
         // Disable "multiple layout"

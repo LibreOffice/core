@@ -605,7 +605,7 @@ void SwDoc::InitDrawModel()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create DrawDocument" );
     //Das SdrModel gehoert dem Dokument, wir haben immer zwei Layer und eine
     //Seite.
-    pDrawModel = new SwDrawDocument( this );
+    pDrawModel = new SwDrawModel( this );
 
     pDrawModel->EnableUndo( GetIDocumentUndoRedo().DoesUndo() );
 
@@ -825,7 +825,7 @@ void SwDoc::ReleaseDrawModel()
 /*************************************************************************/
 
 
-SdrModel* SwDoc::_MakeDrawModel()
+SwDrawModel* SwDoc::_MakeDrawModel()
 {
     ASSERT( !pDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
@@ -955,15 +955,15 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
 /* TFFDI: The functions formerly declared 'inline'
  */
-const SdrModel* SwDoc::GetDrawModel() const { return pDrawModel; }
-SdrModel* SwDoc::GetDrawModel() { return pDrawModel; }
+const SwDrawModel* SwDoc::GetDrawModel() const { return pDrawModel; }
+SwDrawModel* SwDoc::GetDrawModel() { return pDrawModel; }
 SdrLayerID SwDoc::GetHeavenId() const { return nHeaven; }
 SdrLayerID SwDoc::GetHellId() const { return nHell; }
 SdrLayerID SwDoc::GetControlsId() const { return nControls;   }
 SdrLayerID SwDoc::GetInvisibleHeavenId() const { return nInvisibleHeaven; }
 SdrLayerID SwDoc::GetInvisibleHellId() const { return nInvisibleHell; }
 SdrLayerID SwDoc::GetInvisibleControlsId() const { return nInvisibleControls; }
-SdrModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
+SwDrawModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
 
 // --> OD 2006-03-14 #i62875#
 namespace docfunc

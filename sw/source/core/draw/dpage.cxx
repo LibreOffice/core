@@ -59,7 +59,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::frame;
 
-SwDPage::SwDPage(SwDrawDocument& rNewModel, sal_Bool bMasterPage) :
+SwDPage::SwDPage(SwDrawModel& rNewModel, sal_Bool bMasterPage) :
     FmFormPage(rNewModel, 0, bMasterPage),
     pGridLst( 0 ),
     rDoc(rNewModel.GetDoc())
@@ -114,7 +114,7 @@ void InsertGridFrame( SdrPageGridFrameList *pLst, const SwFrm *pPg )
 const SdrPageGridFrameList*  SwDPage::GetGridFrameList(
                         const SdrPageView* pPV, const Rectangle *pRect ) const
 {
-    ViewShell *pSh = ((SwDrawDocument*)GetModel())->GetDoc().GetCurrentViewShell(); //swmod 071108//swmod 071225
+    ViewShell *pSh = static_cast< SwDrawModel* >(GetModel())->GetDoc().GetCurrentViewShell();   //swmod 071108//swmod 071225
     if ( pSh )
     {
         while ( pSh->Imp()->GetPageView() != pPV )

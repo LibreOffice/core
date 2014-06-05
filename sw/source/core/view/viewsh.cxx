@@ -71,6 +71,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <vcl/dibtools.hxx>
+#include <drawdoc.hxx>
 
 sal_Bool ViewShell::bLstAct = sal_False;
 ShellResource *ViewShell::pShellRes = 0;
@@ -844,7 +845,7 @@ void ViewShell::SetAddExtLeading( bool bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), true );
         pIDSA->set(IDocumentSettingAccess::ADD_EXT_LEADING, bNew );
-        SdrModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
+        SwDrawModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
         if ( pTmpDrawModel )
             pTmpDrawModel->SetAddExtLeading( bNew );
         const sal_uInt8 nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
@@ -978,7 +979,7 @@ void ViewShell::Reformat()
 
  void ViewShell::ChgNumberDigits()
  {
-     SdrModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
+     SwDrawModel* pTmpDrawModel = getIDocumentDrawModelAccess()->GetDrawModel();
      if ( pTmpDrawModel )
             pTmpDrawModel->ReformatAllTextObjects();
      Reformat();

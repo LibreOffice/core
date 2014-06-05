@@ -19,10 +19,9 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <tools/bigint.hxx>
 #include <svx/svdmodel.hxx>
@@ -35,7 +34,6 @@
 #include <editeng/boxitem.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/lspcitem.hxx>
-
 #include <fmtornt.hxx>
 #include <fmtanchr.hxx>
 #include <fmthdft.hxx>
@@ -80,9 +78,8 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <switerator.hxx>
-
-//UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
+#include <drawdoc.hxx>
 
 // ftnfrm.cxx:
 void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
