@@ -77,8 +77,7 @@ class FilterCache : public BaseLock
             E_TYPE          ,
             E_FILTER        ,
             E_FRAMELOADER   ,
-            E_CONTENTHANDLER,
-            E_DETECTSERVICE
+            E_CONTENTHANDLER
         };
 
 

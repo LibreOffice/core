@@ -743,7 +743,6 @@ const CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
         case E_FILTER         : return m_lFilters        ;
         case E_FRAMELOADER    : return m_lFrameLoaders   ;
         case E_CONTENTHANDLER : return m_lContentHandlers;
-        case E_DETECTSERVICE  : return m_lDetectServices ;
 
     }
 
@@ -763,7 +762,6 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType)
         case E_FILTER         : return m_lFilters        ;
         case E_FRAMELOADER    : return m_lFrameLoaders   ;
         case E_CONTENTHANDLER : return m_lContentHandlers;
-        case E_DETECTSERVICE  : return m_lDetectServices ;
 
     }
 
@@ -1265,10 +1263,6 @@ void FilterCache::impl_addItem2FlushList(      EItemType        eType,
 
         case E_CONTENTHANDLER :
                 pList = &m_lChangedContentHandlers;
-                break;
-
-        case E_DETECTSERVICE :
-                pList = &m_lChangedDetectServices;
                 break;
 
         default : throw css::uno::Exception("unsupported item type", 0);
@@ -1793,12 +1787,6 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
             pList   = &m_lContentHandlers;
             xConfig = impl_openConfig(E_PROVIDER_OTHERS);
             sSet    = CFGSET_CONTENTHANDLERS;
-        }
-        break;
-
-        case E_DETECTSERVICE :
-        {
-            SAL_WARN( "filter.config", "Cant load detect services on demand. Who use this unsupported feature?");
         }
         break;
     }
