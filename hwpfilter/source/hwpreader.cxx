@@ -1796,6 +1796,7 @@ void HwpReader::makeColumns(ColumnDef *coldef)
         {
              case 1:                           /* 얇은선 */
                   padd(ascii("style:width"), sXML_CDATA, ascii("0.02mm"));
+                  //fall-through
              case 3:                           /* 점선 */
                   padd(ascii("style:style"), sXML_CDATA, ascii("dotted"));
                   padd(ascii("style:width"), sXML_CDATA, ascii("0.02mm"));
