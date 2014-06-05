@@ -27,7 +27,7 @@
 class SwDoc;
 class SwForm;
 class SwPageDesc;
-class SwTOXSortTabBase;
+struct SwTOXSortTabBase;
 
 namespace sw {
 
