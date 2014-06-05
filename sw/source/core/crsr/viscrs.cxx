@@ -815,13 +815,15 @@ void SwShellCrsr::SetMark()
 void SwShellCrsr::FillRects()
 {
     // die neuen Rechtecke berechnen
-    if( HasMark() &&
-        GetPoint()->nNode.GetNode().IsCntntNode() &&
-        GetPoint()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) &&
-        (GetMark()->nNode == GetPoint()->nNode ||
-        (GetMark()->nNode.GetNode().IsCntntNode() &&
-        GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )    ))
-        GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );  //swmod 071107//swmod 071225
+    if ( HasMark()
+         && GetPoint()->nNode.GetNode().IsCntntNode()
+         && GetPoint()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() )
+         && ( GetMark()->nNode == GetPoint()->nNode
+              || ( GetMark()->nNode.GetNode().IsCntntNode()
+                   && GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) ) ) )
+    {
+        GetShell()->GetLayout()->CalcFrmRects( *this );
+    }
 }
 
 
