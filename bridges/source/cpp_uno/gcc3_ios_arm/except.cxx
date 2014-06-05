@@ -124,7 +124,7 @@ void dummy_can_throw_anything( char const * )
 {
 }
 
-static OUString toUNOname( char const * p ) SAL_THROW(())
+static OUString toUNOname( char const * p )
 {
     // example: N3com3sun4star4lang24IllegalArgumentExceptionE
 
@@ -163,13 +163,13 @@ class RTTI
     void * m_hApp;
 
 public:
-    RTTI() SAL_THROW(());
-    ~RTTI() SAL_THROW(());
+    RTTI();
+    ~RTTI();
 
-    std::type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
+    std::type_info * getRTTI( typelib_CompoundTypeDescription * );
 };
 
-RTTI::RTTI() SAL_THROW(())
+RTTI::RTTI()
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
     // Insert commonly needed type_infos to avoid dlsym() calls
@@ -189,12 +189,12 @@ RTTI::RTTI() SAL_THROW(())
                                             (std::type_info*) &typeid( com::sun::star::ucb::NameClashException ) ) );
 }
 
-RTTI::~RTTI() SAL_THROW(())
+RTTI::~RTTI()
 {
     dlclose( m_hApp );
 }
 
-std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
+std::type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 {
     std::type_info * rtti;
 

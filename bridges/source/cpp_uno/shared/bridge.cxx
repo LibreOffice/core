@@ -143,13 +143,13 @@ void uno2cppMapping(
 
 uno_Mapping * Bridge::createMapping(
     uno_ExtEnvironment * pCppEnv, uno_ExtEnvironment * pUnoEnv,
-    bool bExportCpp2Uno) SAL_THROW(())
+    bool bExportCpp2Uno)
 {
     Bridge * bridge = new Bridge(pCppEnv, pUnoEnv, bExportCpp2Uno);
     return bExportCpp2Uno ? &bridge->aCpp2Uno : &bridge->aUno2Cpp;
 }
 
-void Bridge::acquire() SAL_THROW(())
+void Bridge::acquire()
 {
     if (1 == osl_atomic_increment( &nRef ))
     {
@@ -170,7 +170,7 @@ void Bridge::acquire() SAL_THROW(())
     }
 }
 
-void Bridge::release() SAL_THROW(())
+void Bridge::release()
 {
     if (! osl_atomic_decrement( &nRef ))
     {
@@ -180,7 +180,7 @@ void Bridge::release() SAL_THROW(())
 
 Bridge::Bridge(
     uno_ExtEnvironment * pCppEnv_, uno_ExtEnvironment * pUnoEnv_,
-    bool bExportCpp2Uno_) SAL_THROW(())
+    bool bExportCpp2Uno_)
     : nRef( 1 )
     , pCppEnv( pCppEnv_ )
     , pUnoEnv( pUnoEnv_ )
@@ -200,7 +200,7 @@ Bridge::Bridge(
     (*((uno_Environment *)pUnoEnv)->acquire)( (uno_Environment *)pUnoEnv );
 }
 
-Bridge::~Bridge() SAL_THROW(())
+Bridge::~Bridge()
 {
     (*((uno_Environment *)pUnoEnv)->release)( (uno_Environment *)pUnoEnv );
     (*((uno_Environment *)pCppEnv)->release)( (uno_Environment *)pCppEnv );

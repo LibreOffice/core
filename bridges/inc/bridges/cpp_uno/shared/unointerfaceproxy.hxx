@@ -65,7 +65,7 @@ public:
     static UnoInterfaceProxy * create(
         Bridge * pBridge, com::sun::star::uno::XInterface * pCppI,
         typelib_InterfaceTypeDescription * pTypeDescr,
-        OUString const & rOId) SAL_THROW(());
+        OUString const & rOId);
 
     // Interface for individual CPP--UNO bridges:
 
@@ -79,7 +79,7 @@ private:
     UnoInterfaceProxy(
         Bridge * pBridge_, com::sun::star::uno::XInterface * pCppI_,
         typelib_InterfaceTypeDescription * pTypeDescr_,
-        OUString const & rOId_) SAL_THROW(());
+        OUString const & rOId_);
 
     ~UnoInterfaceProxy();
 

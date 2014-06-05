@@ -402,7 +402,7 @@ const int codeSnippetSize = 24;
 // unwinding info.
 unsigned char * codeSnippet( unsigned char * code,
         sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
-        bool bHasHiddenParam ) SAL_THROW(())
+        bool bHasHiddenParam )
 {
     sal_uInt64 nOffsetAndIndex = ( ( (sal_uInt64) nVtableOffset ) << 32 ) | ( (sal_uInt64) nFunctionIndex );
 

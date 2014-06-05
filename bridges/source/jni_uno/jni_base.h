@@ -149,7 +149,7 @@ public:
           m_jo( jo )
         {}
     inline JLocalAutoRef( JLocalAutoRef & auto_ref );
-    inline ~JLocalAutoRef() SAL_THROW(());
+    inline ~JLocalAutoRef();
 
     inline jobject get() const
         { return m_jo; }
@@ -161,7 +161,7 @@ public:
     inline JLocalAutoRef & operator = ( JLocalAutoRef & auto_ref );
 };
 
-inline JLocalAutoRef::~JLocalAutoRef() SAL_THROW(())
+inline JLocalAutoRef::~JLocalAutoRef()
 {
     if (0 != m_jo)
         m_jni->DeleteLocalRef( m_jo );
@@ -240,7 +240,7 @@ class TypeDescr
 
 public:
     inline explicit TypeDescr( typelib_TypeDescriptionReference * td_ref );
-    inline ~TypeDescr() SAL_THROW(())
+    inline ~TypeDescr()
         { TYPELIB_DANGER_RELEASE( m_td ); }
 
     inline typelib_TypeDescription * get() const

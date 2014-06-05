@@ -61,12 +61,12 @@ public:
 
     static uno_Mapping * createMapping(
         uno_ExtEnvironment * pCppEnv, uno_ExtEnvironment * pUnoEnv,
-        bool bExportCpp2Uno) SAL_THROW(());
+        bool bExportCpp2Uno);
 
     // Interface for Cpp/UnoInterfaceProxy:
 
-    void acquire() SAL_THROW(());
-    void release() SAL_THROW(());
+    void acquire();
+    void release();
 
     // Interface for individual CPP--UNO bridges:
 
@@ -82,9 +82,9 @@ private:
 
     Bridge(
         uno_ExtEnvironment * pCppEnv_, uno_ExtEnvironment * pUnoEnv_,
-        bool bExportCpp2Uno_) SAL_THROW(());
+        bool bExportCpp2Uno_);
 
-    ~Bridge() SAL_THROW(());
+    ~Bridge();
 
     struct Mapping: public uno_Mapping {
         Bridge * pBridge;

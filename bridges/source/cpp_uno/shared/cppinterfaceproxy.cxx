@@ -100,7 +100,6 @@ void freeCppInterfaceProxy(uno_ExtEnvironment * pEnv, void * pInterface)
 com::sun::star::uno::XInterface * CppInterfaceProxy::create(
     bridges::cpp_uno::shared::Bridge * pBridge, uno_Interface * pUnoI,
     typelib_InterfaceTypeDescription * pTypeDescr, OUString const & rOId)
-    SAL_THROW(())
 {
     typelib_typedescription_complete(
         reinterpret_cast< typelib_TypeDescription ** >(&pTypeDescr));
@@ -120,7 +119,7 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::create(
     return castProxyToInterface(pProxy);
 }
 
-void CppInterfaceProxy::acquireProxy() SAL_THROW(())
+void CppInterfaceProxy::acquireProxy()
 {
     if (1 == osl_atomic_increment( &nRef ))
     {
@@ -134,7 +133,7 @@ void CppInterfaceProxy::acquireProxy() SAL_THROW(())
     }
 }
 
-void CppInterfaceProxy::releaseProxy() SAL_THROW(())
+void CppInterfaceProxy::releaseProxy()
 {
     if (! osl_atomic_decrement( &nRef )) // last release
     {
@@ -147,7 +146,6 @@ void CppInterfaceProxy::releaseProxy() SAL_THROW(())
 CppInterfaceProxy::CppInterfaceProxy(
     bridges::cpp_uno::shared::Bridge * pBridge_, uno_Interface * pUnoI_,
     typelib_InterfaceTypeDescription * pTypeDescr_, OUString const & rOId_)
-    SAL_THROW(())
     : nRef( 1 )
     , pBridge( pBridge_ )
     , pUnoI( pUnoI_ )

@@ -56,7 +56,7 @@ struct Bridge
 
     JNI_info const *            m_jni_info;
 
-    ~Bridge() SAL_THROW(());
+    ~Bridge();
     explicit Bridge(
         uno_Environment * java_env, uno_ExtEnvironment * uno_env,
         bool registered_java2uno );

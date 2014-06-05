@@ -51,7 +51,7 @@ namespace CPPU_CURRENT_NAMESPACE
     {
     }
 
-    static OUString toUNOname( char const * p ) SAL_THROW(())
+    static OUString toUNOname( char const * p )
     {
 #if OSL_DEBUG_LEVEL > 1
         char const * start = p;
@@ -101,20 +101,20 @@ namespace CPPU_CURRENT_NAMESPACE
 #endif
 
     public:
-        RTTI() SAL_THROW(());
-        ~RTTI() SAL_THROW(());
+        RTTI();
+        ~RTTI();
 
-        type_info * getRTTI(typelib_CompoundTypeDescription *) SAL_THROW(());
+        type_info * getRTTI(typelib_CompoundTypeDescription *);
     };
 
-    RTTI::RTTI() SAL_THROW(())
+    RTTI::RTTI()
 #ifndef ANDROID
         : m_hApp( dlopen( 0, RTLD_LAZY ) )
 #endif
     {
     }
 
-    RTTI::~RTTI() SAL_THROW(())
+    RTTI::~RTTI()
     {
 #ifndef ANDROID
         dlclose( m_hApp );
@@ -122,7 +122,7 @@ namespace CPPU_CURRENT_NAMESPACE
     }
 
 
-    type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
+    type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
     {
         type_info * rtti;
 

@@ -48,7 +48,7 @@ void dummy_can_throw_anything( char const * )
 {
 }
 
-static OUString toUNOname( char const * p ) SAL_THROW(())
+static OUString toUNOname( char const * p )
 {
 #if defined BRIDGES_DEBUG
     char const * start = p;
@@ -96,24 +96,24 @@ class RTTI
     void * m_hApp;
 
 public:
-    RTTI() SAL_THROW(());
-    ~RTTI() SAL_THROW(());
+    RTTI();
+    ~RTTI();
 
-    type_info * getRTTI( typelib_CompoundTypeDescription * ) SAL_THROW(());
+    type_info * getRTTI( typelib_CompoundTypeDescription * );
 };
 
-RTTI::RTTI() SAL_THROW(())
+RTTI::RTTI()
     : m_hApp( dlopen( 0, RTLD_LAZY ) )
 {
 }
 
-RTTI::~RTTI() SAL_THROW(())
+RTTI::~RTTI()
 {
     dlclose( m_hApp );
 }
 
 
-type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW(())
+type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr )
 {
     type_info * rtti;
 

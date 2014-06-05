@@ -50,7 +50,7 @@ public:
     static com::sun::star::uno::XInterface * create(
         Bridge * pBridge, uno_Interface * pUnoI,
         typelib_InterfaceTypeDescription * pTypeDescr,
-        OUString const & rOId) SAL_THROW(());
+        OUString const & rOId);
 
     // Interface for individual CPP--UNO bridges:
 
@@ -60,8 +60,8 @@ public:
     OUString getOid() { return oid; }
 
     // non virtual methods called on incoming vtable calls #1, #2
-    void acquireProxy() SAL_THROW(());
-    void releaseProxy() SAL_THROW(());
+    void acquireProxy();
+    void releaseProxy();
 
     static CppInterfaceProxy * castInterfaceToProxy(void * pInterface);
 
@@ -72,7 +72,7 @@ private:
     CppInterfaceProxy(
         Bridge * pBridge_, uno_Interface * pUnoI_,
         typelib_InterfaceTypeDescription * pTypeDescr_,
-        OUString const & rOId_) SAL_THROW(());
+        OUString const & rOId_);
 
     ~CppInterfaceProxy();
 
