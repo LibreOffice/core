@@ -368,6 +368,24 @@ void ScTableOp();                                       // repeated operations
 void SetMaxIterationCount(sal_uInt16 n);
 inline void CurFmtToFuncFmt()
     { nFuncFmtType = nCurFmtType; nFuncFmtIndex = nCurFmtIndex; }
+
+/** Check if a double is suitable as string position or length argument.
+
+    If fVal is Inf or NaN it is changed to -1, if it is less than 0 it is
+    sanitized to 0, if it is greater than some implementation defined max
+    string length it is sanitized to that max.
+
+    @return TRUE if double value fVal is suitable as string argument and was
+            not sanitized.
+            FALSE if not and fVal was adapted.
+ */
+inline bool CheckStringPositionArgument( double & fVal );
+
+/** Obtain a double suitable as string position or length argument.
+    Returns -1 if the number is Inf or NaN or less than 0 or greater than some
+    implementation defined max string length. */
+inline double GetStringPositionArgument();
+
 // Check for String overflow of rResult+rAdd and set error and erase rResult
 // if so. Return true if ok, false if overflow
 inline bool CheckStringResultLen( OUString& rResult, const OUString& rAdd );
@@ -919,6 +937,36 @@ inline bool ScInterpreter::MustHaveParamCountMin( short nAct, short nMin )
         return true;
     PushParameterExpected();
     return false;
+}
+
+inline bool ScInterpreter::CheckStringPositionArgument( double & fVal )
+{
+    if (!rtl::math::isFinite( fVal))
+    {
+        fVal = -1.0;
+        return false;
+    }
+    else if (fVal < 0.0)
+    {
+        fVal = 0.0;
+        return false;
+    }
+    else if (fVal > SAL_MAX_UINT16)
+    {
+        fVal = static_cast<double>(SAL_MAX_UINT16);
+        return false;
+    }
+    return true;
+}
+
+inline double ScInterpreter::GetStringPositionArgument()
+{
+    double fVal = rtl::math::approxFloor( GetDouble());
+    if (!CheckStringPositionArgument( fVal))
+    {
+        fVal = -1.0;
+    }
+    return fVal;
 }
 
 inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUString& rAdd )
