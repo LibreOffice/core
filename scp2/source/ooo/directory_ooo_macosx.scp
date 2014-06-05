@@ -21,7 +21,7 @@
 #ifdef MACOSX
 Directory gid_Dir_Bundle
     ParentID = PD_PROGDIR;
-    HostName = "LibreOffice from Collabora.app";
+    HostName = "%PRODUCTNAME.app";
 End
 
 Directory gid_Dir_Bundle_Contents
