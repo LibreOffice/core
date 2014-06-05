@@ -69,7 +69,7 @@ namespace abp
 
 
 
-    static Reference< XDatabaseContext > lcl_getDataSourceContext( const Reference< XComponentContext >& _rxContext ) SAL_THROW (( Exception ))
+    static Reference< XDatabaseContext > lcl_getDataSourceContext( const Reference< XComponentContext >& _rxContext )
     {
         Reference<XDatabaseContext> xContext = DatabaseContext::create(_rxContext);
         return xContext;
@@ -79,7 +79,7 @@ namespace abp
     /// creates a new data source and inserts it into the context
     static void lcl_implCreateAndInsert(
         const Reference< XComponentContext >& _rxContext, const OUString& _rName,
-        Reference< XPropertySet >& /* [out] */ _rxNewDataSource ) SAL_THROW (( ::com::sun::star::uno::Exception ))
+        Reference< XPropertySet >& /* [out] */ _rxNewDataSource )
     {
 
         // get the data source context
@@ -109,7 +109,7 @@ namespace abp
     /// creates and inserts a data source, and sets its URL property to the string given
     static ODataSource lcl_implCreateAndSetURL(
         const Reference< XComponentContext >& _rxORB, const OUString& _rName,
-        const sal_Char* _pInitialAsciiURL ) SAL_THROW (( ))
+        const sal_Char* _pInitialAsciiURL )
     {
         ODataSource aReturn( _rxORB );
         try
@@ -140,7 +140,7 @@ namespace abp
 
     void lcl_registerDataSource(
         const Reference< XComponentContext >& _rxORB, const OUString& _sName,
-        const OUString& _sURL ) SAL_THROW (( ::com::sun::star::uno::Exception ))
+        const OUString& _sURL )
     {
         OSL_ENSURE( !_sName.isEmpty(), "lcl_registerDataSource: invalid name!" );
         OSL_ENSURE( !_sURL.isEmpty(), "lcl_registerDataSource: invalid URL!" );
@@ -225,71 +225,71 @@ namespace abp
     }
 
 
-    void ODataSourceContext::getDataSourceNames( StringBag& _rNames ) const SAL_THROW (( ))
+    void ODataSourceContext::getDataSourceNames( StringBag& _rNames ) const
     {
         _rNames = m_pImpl->aDataSourceNames;
     }
 
 
-    ODataSource ODataSourceContext::createNewLDAP( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewLDAP( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:ldap:" );
     }
 
 
-    ODataSource ODataSourceContext::createNewMORK( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewMORK( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:mozilla" );
     }
 
 
-    ODataSource ODataSourceContext::createNewThunderbird( const OUString& _rName ) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewThunderbird( const OUString& _rName )
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:thunderbird" );
     }
 
 
-    ODataSource ODataSourceContext::createNewEvolutionLdap( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewEvolutionLdap( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:ldap" );
     }
 
-    ODataSource ODataSourceContext::createNewEvolutionGroupwise( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewEvolutionGroupwise( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:groupwise" );
     }
 
-    ODataSource ODataSourceContext::createNewEvolution( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewEvolution( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:evolution:local" );
     }
 
 
-    ODataSource ODataSourceContext::createNewKab( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewKab( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:kab" );
     }
 
 
-    ODataSource ODataSourceContext::createNewMacab( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewMacab( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:macab" );
     }
 
 
-    ODataSource ODataSourceContext::createNewOutlook( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewOutlook( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:outlook" );
     }
 
 
-    ODataSource ODataSourceContext::createNewOE( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewOE( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:address:outlookexp" );
     }
 
 
-    ODataSource ODataSourceContext::createNewDBase( const OUString& _rName) SAL_THROW (( ))
+    ODataSource ODataSourceContext::createNewDBase( const OUString& _rName)
     {
         return lcl_implCreateAndSetURL( m_pImpl->xORB, _rName, "sdbc:dbase:" );
     }
@@ -362,7 +362,7 @@ namespace abp
     }
 
 
-    void ODataSource::store() SAL_THROW (( ))
+    void ODataSource::store()
     {
         if (!isValid())
             // nothing to do
@@ -383,7 +383,7 @@ namespace abp
         }
     }
 
-    void ODataSource::registerDataSource( const OUString& _sRegisteredDataSourceName) SAL_THROW (( ))
+    void ODataSource::registerDataSource( const OUString& _sRegisteredDataSourceName)
     {
         if (!isValid())
             // nothing to do
@@ -415,7 +415,7 @@ namespace abp
     }
 
 
-    void ODataSource::remove() SAL_THROW (( ))
+    void ODataSource::remove()
     {
         if (!isValid())
             // nothing to do
@@ -433,7 +433,7 @@ namespace abp
     }
 
 
-    bool ODataSource::rename( const OUString& _rName ) SAL_THROW (( ))
+    bool ODataSource::rename( const OUString& _rName )
     {
         if (!isValid())
             // nothing to do
@@ -444,7 +444,7 @@ namespace abp
     }
 
 
-    OUString ODataSource::getName() const SAL_THROW (( ))
+    OUString ODataSource::getName() const
     {
         if ( !isValid() )
             return OUString();
@@ -462,7 +462,7 @@ namespace abp
     }
 
 
-    const StringBag& ODataSource::getTableNames() const SAL_THROW (( ))
+    const StringBag& ODataSource::getTableNames() const
     {
         m_pImpl->aTables.clear();
         if ( !isConnected() )
@@ -502,7 +502,7 @@ namespace abp
     }
 
 
-    bool ODataSource::connect( Window* _pMessageParent ) SAL_THROW (( ))
+    bool ODataSource::connect( Window* _pMessageParent )
     {
         if ( isConnected( ) )
             // nothing to do
@@ -593,7 +593,7 @@ namespace abp
     }
 
 
-    void ODataSource::disconnect( ) SAL_THROW (( ))
+    void ODataSource::disconnect( )
     {
         m_pImpl->xConnection.clear();
         m_pImpl->aTables.clear();
@@ -601,18 +601,18 @@ namespace abp
     }
 
 
-    bool ODataSource::isConnected( ) const SAL_THROW (( ))
+    bool ODataSource::isConnected( ) const
     {
         return m_pImpl->xConnection.is();
     }
 
 
-    bool ODataSource::isValid() const SAL_THROW (( ))
+    bool ODataSource::isValid() const
     {
         return m_pImpl && m_pImpl->xDataSource.is();
     }
 
-    Reference< XPropertySet > ODataSource::getDataSource() const SAL_THROW (( ))
+    Reference< XPropertySet > ODataSource::getDataSource() const
     {
         return m_pImpl ? m_pImpl->xDataSource : Reference< XPropertySet >();
     }

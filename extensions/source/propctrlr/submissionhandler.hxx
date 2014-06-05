@@ -56,7 +56,7 @@ namespace pcr
         static bool canTriggerSubmissions(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxControlModel,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
-                ) SAL_THROW(());
+                );
     };
 
 

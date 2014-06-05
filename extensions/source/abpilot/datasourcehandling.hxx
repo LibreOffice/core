@@ -58,43 +58,43 @@ namespace abp
         ~ODataSourceContext();
 
         /// retrieves the names of all data sources
-        void    getDataSourceNames( StringBag& _rNames ) const SAL_THROW (( ));
+        void    getDataSourceNames( StringBag& _rNames ) const;
 
         /// disambiguates the given name by appending auccessive numbers
         OUString& disambiguate(OUString& _rDataSourceName);
 
         /// creates a new MORK data source
-        ODataSource createNewMORK( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewMORK( const OUString& _rName );
 
         /// creates a new Thunderbird data source
-        ODataSource createNewThunderbird( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewThunderbird( const OUString& _rName );
 
         /// creates a new Evolution local data source
-        ODataSource createNewEvolution( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewEvolution( const OUString& _rName );
 
         /// creates a new Evolution LDAP data source
-        ODataSource createNewEvolutionLdap( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewEvolutionLdap( const OUString& _rName );
 
         /// creates a new Evolution GROUPWISE data source
-        ODataSource createNewEvolutionGroupwise( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewEvolutionGroupwise( const OUString& _rName );
 
         /// creates a new KDE address book data source
-        ODataSource createNewKab( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewKab( const OUString& _rName );
 
         /// creates a new Mac OS X address book data source
-        ODataSource createNewMacab( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewMacab( const OUString& _rName );
 
         /// creates a new LDAP data source
-        ODataSource createNewLDAP( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewLDAP( const OUString& _rName );
 
         /// creates a new Outlook data source
-        ODataSource createNewOutlook( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewOutlook( const OUString& _rName );
 
         /// creates a new Outlook express data source
-        ODataSource createNewOE( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewOE( const OUString& _rName );
 
         /// creates a new dBase data source
-        ODataSource createNewDBase( const OUString& _rName ) SAL_THROW (( ));
+        ODataSource createNewDBase( const OUString& _rName );
     };
 
 
@@ -133,19 +133,19 @@ namespace abp
 
 
         /// checks whether or not the object represents a valid data source
-        bool    isValid() const SAL_THROW (( ));
+        bool    isValid() const;
 
 
         /// removes the data source represented by the object from the data source context
-        void        remove() SAL_THROW (( ));
+        void        remove();
             // TODO: put this into the context class
 
         /// returns the name of the data source
         OUString
-                    getName() const SAL_THROW (( ));
+                    getName() const;
 
         /// renames the data source
-        bool    rename( const OUString& _rName ) SAL_THROW (( ));
+        bool    rename( const OUString& _rName );
             // TODO: put this into the context class
 
 
@@ -157,32 +157,32 @@ namespace abp
                 at all.
             @see isConnected
         */
-        bool    connect( Window* _pMessageParent ) SAL_THROW (( ));
+        bool    connect( Window* _pMessageParent );
 
         /// returns <TRUE/> if the object has a valid connection, obtained from it's data source
-        bool    isConnected( ) const SAL_THROW (( ));
+        bool    isConnected( ) const;
 
         /// disconnects from the data source (i.e. disposes the UNO connection hold internally)
-        void        disconnect( ) SAL_THROW (( ));
+        void        disconnect( );
 
         /// stores the database file
-        void        store() SAL_THROW (( ));
+        void        store();
 
         /// register the data source under the given name in the configuration
-        void        registerDataSource( const OUString& _sRegisteredDataSourceName )  SAL_THROW (( ));
+        void        registerDataSource( const OUString& _sRegisteredDataSourceName );
 
 
         /** retrieves the tables names from the connection
             <p>to be called when <method>isConnection</method> returns <TRUE/> only</p>
         */
-        const StringBag&    getTableNames() const SAL_THROW (( ));
+        const StringBag&    getTableNames() const;
 
         /** determines whether a given table exists
         */
         bool    hasTable( const OUString& _rTableName ) const;
 
         /// return the intern data source object
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataSource() const SAL_THROW (( ));
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDataSource() const;
 
 
 

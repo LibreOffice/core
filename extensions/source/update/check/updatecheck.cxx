@@ -1609,7 +1609,7 @@ UpdateCheck::autoCheckIntervalChanged()
 
 
 oslInterlockedCount SAL_CALL
-UpdateCheck::acquire() SAL_THROW(())
+UpdateCheck::acquire()
 {
     return ReferenceObject::acquire();
 }
@@ -1617,7 +1617,7 @@ UpdateCheck::acquire() SAL_THROW(())
 
 
 oslInterlockedCount SAL_CALL
-UpdateCheck::release() SAL_THROW(())
+UpdateCheck::release()
 {
     return ReferenceObject::release();
 }

@@ -3246,7 +3246,7 @@ namespace pcr
     }
 
 
-    bool FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow( const Reference< XPropertySet >& _xFormProperties, bool _bAllowEmptyDataSourceName ) SAL_THROW(())
+    bool FormComponentPropertyHandler::impl_hasValidDataSourceSignature_nothrow( const Reference< XPropertySet >& _xFormProperties, bool _bAllowEmptyDataSourceName )
     {
         bool bHas = false;
         if ( _xFormProperties.is() )

@@ -1130,7 +1130,7 @@ namespace pcr
     }
 
 
-    void OPropertyBrowserController::describePropertyLine( const Property& _rProperty, OLineDescriptor& _rDescriptor ) SAL_THROW((Exception))
+    void OPropertyBrowserController::describePropertyLine( const Property& _rProperty, OLineDescriptor& _rDescriptor )
     {
         try
         {

@@ -78,7 +78,7 @@ namespace pcr
         static  bool
                 isEForm(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxContextDocument
-                ) SAL_THROW(());
+                );
 
         /** registers a listener to be notified when any aspect of the binding changes.
 
@@ -105,63 +105,63 @@ namespace pcr
                 the data type which should be bound. If this is -1, <TRUE/> is returned if the control model
                 can be bound to <em>any</em> data type.
         */
-        bool    canBindToDataType( sal_Int32 _nDataType = -1 ) const SAL_THROW(());
+        bool    canBindToDataType( sal_Int32 _nDataType = -1 ) const;
 
         /** checks whether the control model can be bound to any XSD data type
         */
-        bool    canBindToAnyDataType() const SAL_THROW(()) { return canBindToDataType( -1 ); }
+        bool    canBindToAnyDataType() const { return canBindToDataType( -1 ); }
 
         /** checks whether the control model is a source for list entries, as supplied by XML data bindings
         */
-        bool    isListEntrySink() const SAL_THROW(());
+        bool    isListEntrySink() const;
 
         /** retrieves the names of all XForms models in the document the control lives in
         */
-        void    getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const SAL_THROW(());
+        void    getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const;
 
         /** retrieves the names of all bindings for a given model
             @see getFormModelNames
         */
-        void    getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const SAL_THROW(());
+        void    getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const;
 
         /// retrieves the XForms model (within the control model's document) with the given name
         ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XModel >
-                getFormModelByName( const OUString& _rModelName ) const SAL_THROW(());
+                getFormModelByName( const OUString& _rModelName ) const;
 
         /** retrieves the model which the active binding of the control model belongs to
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::xforms::XModel >
-                getCurrentFormModel() const SAL_THROW(());
+                getCurrentFormModel() const;
 
         /** retrieves the name of the model which the active binding of the control model belongs to
         */
         OUString
-                getCurrentFormModelName() const SAL_THROW(());
+                getCurrentFormModelName() const;
 
         /** retrieves the binding instance which is currently attached to the control model
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                getCurrentBinding() const SAL_THROW(());
+                getCurrentBinding() const;
 
         /** retrieves the name of the binding instance which is currently attached to the control model
         */
         OUString
-                getCurrentBindingName() const SAL_THROW(());
+                getCurrentBindingName() const;
 
         /** sets a new binding at the control model
         */
-        void    setBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxBinding ) SAL_THROW(());
+        void    setBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxBinding );
 
         /** retrieves the binding instance which is currently used as list source for the control model
             @see isListEntrySink
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >
-                getCurrentListSourceBinding() const SAL_THROW(());
+                getCurrentListSourceBinding() const;
 
         /** sets a new list source at the control model
             @see isListEntrySink
         */
-        void    setListSourceBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxListSource ) SAL_THROW(());
+        void    setListSourceBinding( const ::com::sun::star::uno::Reference< ::com::sun::star::form::binding::XListEntrySource >& _rxListSource );
 
         /** retrieves a given binding for a given model, or creates a new one
 
@@ -172,7 +172,7 @@ namespace pcr
                 have a binding with this name, a new binding is created and returned.
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-            getOrCreateBindingForModel( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(());
+            getOrCreateBindingForModel( const OUString& _rTargetModel, const OUString& _rBindingName ) const;
 
         /** types of sub-elements of a model
         */
@@ -190,7 +190,7 @@ namespace pcr
                 getModelElementUIName(
                     const ModelElementType _eType,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxElement
-                ) const SAL_THROW(());
+                ) const;
 
         /** retrieves the submission object for an UI name
 
@@ -203,7 +203,7 @@ namespace pcr
                 getModelElementFromUIName(
                     const ModelElementType _eType,
                     const OUString& _rUIName
-                ) const SAL_THROW(());
+                ) const;
 
         /** retrieves the UI names of all elements of all models in our document
             @param _eType
@@ -240,7 +240,7 @@ namespace pcr
 
         /// implementation for both <member>getOrCreateBindingForModel</member>
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-            implGetOrCreateBinding( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(());
+            implGetOrCreateBinding( const OUString& _rTargetModel, const OUString& _rBindingName ) const;
 
         void
             impl_toggleBindingPropertyListening_throw( bool _bDoListen, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& _rxConcreteListenerOrNull );

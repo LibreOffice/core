@@ -68,19 +68,19 @@ namespace pcr
                 getUnoDataType() const { return m_xDataType; }
 
         /// classifies the data typ
-        sal_Int16 classify() const SAL_THROW(());
+        sal_Int16 classify() const;
 
         // attribute access
-        OUString     getName() const SAL_THROW(());
-        bool                isBasicType() const SAL_THROW(());
+        OUString     getName() const;
+        bool                isBasicType() const;
 
         /// determines whether a given facet exists at the type
-        bool                hasFacet( const OUString& _rFacetName ) const SAL_THROW(());
+        bool                hasFacet( const OUString& _rFacetName ) const;
         /// retrieves a facet value
         ::com::sun::star::uno::Any
-                            getFacet( const OUString& _rFacetName ) SAL_THROW(());
+                            getFacet( const OUString& _rFacetName );
         /// sets a facet value
-        void                setFacet( const OUString& _rFacetName, const ::com::sun::star::uno::Any& _rFacetValue ) SAL_THROW(());
+        void                setFacet( const OUString& _rFacetName, const ::com::sun::star::uno::Any& _rFacetValue );
 
        /** copies as much facets (values, respectively) from a give data type instance
        */

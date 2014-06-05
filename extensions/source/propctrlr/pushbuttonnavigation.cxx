@@ -97,7 +97,7 @@ namespace pcr
     }
 
 
-    sal_Int32 PushButtonNavigation::implGetCurrentButtonType() const SAL_THROW((Exception))
+    sal_Int32 PushButtonNavigation::implGetCurrentButtonType() const
     {
         sal_Int32 nButtonType = FormButtonType_PUSH;
         if ( !m_xControlModel.is() )
@@ -120,7 +120,7 @@ namespace pcr
     }
 
 
-    Any PushButtonNavigation::getCurrentButtonType() const SAL_THROW(())
+    Any PushButtonNavigation::getCurrentButtonType() const
     {
         OSL_ENSURE( m_bIsPushButton, "PushButtonNavigation::getCurrentButtonType: not expected to be called for forms!" );
         Any aReturn;
@@ -137,7 +137,7 @@ namespace pcr
     }
 
 
-    void PushButtonNavigation::setCurrentButtonType( const Any& _rValue ) const SAL_THROW(())
+    void PushButtonNavigation::setCurrentButtonType( const Any& _rValue ) const
     {
         OSL_ENSURE( m_bIsPushButton, "PushButtonNavigation::setCurrentButtonType: not expected to be called for forms!" );
         if ( !m_xControlModel.is() )
@@ -168,7 +168,7 @@ namespace pcr
     }
 
 
-    PropertyState PushButtonNavigation::getCurrentButtonTypeState( ) const SAL_THROW(())
+    PropertyState PushButtonNavigation::getCurrentButtonTypeState( ) const
     {
         OSL_ENSURE( m_bIsPushButton, "PushButtonNavigation::getCurrentButtonTypeState: not expected to be called for forms!" );
         PropertyState eState = PropertyState_DIRECT_VALUE;
@@ -202,7 +202,7 @@ namespace pcr
     }
 
 
-    Any PushButtonNavigation::getCurrentTargetURL() const SAL_THROW(())
+    Any PushButtonNavigation::getCurrentTargetURL() const
     {
         Any aReturn;
         if ( !m_xControlModel.is() )
@@ -232,7 +232,7 @@ namespace pcr
     }
 
 
-    void PushButtonNavigation::setCurrentTargetURL( const Any& _rValue ) const SAL_THROW(())
+    void PushButtonNavigation::setCurrentTargetURL( const Any& _rValue ) const
     {
         if ( !m_xControlModel.is() )
             return;
@@ -248,7 +248,7 @@ namespace pcr
     }
 
 
-    PropertyState PushButtonNavigation::getCurrentTargetURLState( ) const SAL_THROW(())
+    PropertyState PushButtonNavigation::getCurrentTargetURLState( ) const
     {
         PropertyState eState = PropertyState_DIRECT_VALUE;
 

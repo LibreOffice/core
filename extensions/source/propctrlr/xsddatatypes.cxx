@@ -68,7 +68,7 @@ namespace pcr
     }
 
     template< typename FACETTYPE >
-    FACETTYPE getFacet( const Reference< XPropertySet >& _rxFacets, const OUString& _rFacetName ) SAL_THROW(())
+    FACETTYPE getFacet( const Reference< XPropertySet >& _rxFacets, const OUString& _rFacetName )
     {
         FACETTYPE aReturn;
         try
@@ -118,7 +118,7 @@ namespace pcr
     }
 
 
-    sal_Int16 XSDDataType::classify() const SAL_THROW(())
+    sal_Int16 XSDDataType::classify() const
     {
         sal_Int16 nTypeClass = DataTypeClass::STRING;
         try
@@ -134,19 +134,19 @@ namespace pcr
     }
 
 
-    bool XSDDataType::isBasicType() const SAL_THROW(())
+    bool XSDDataType::isBasicType() const
     {
         return getSave( m_xDataType.get(), &XDataType::getIsBasic );
     }
 
 
-    OUString XSDDataType::getName() const SAL_THROW(())
+    OUString XSDDataType::getName() const
     {
         return getSave( m_xDataType.get(), &XDataType::getName );
     }
 
 
-    void XSDDataType::setFacet( const OUString& _rFacetName, const Any& _rValue ) SAL_THROW(())
+    void XSDDataType::setFacet( const OUString& _rFacetName, const Any& _rValue )
     {
         try
         {
@@ -159,7 +159,7 @@ namespace pcr
     }
 
 
-    bool XSDDataType::hasFacet( const OUString& _rFacetName ) const SAL_THROW(())
+    bool XSDDataType::hasFacet( const OUString& _rFacetName ) const
     {
         bool bReturn = false;
         try
@@ -173,7 +173,7 @@ namespace pcr
         return bReturn;
     }
 
-    Any XSDDataType::getFacet( const OUString& _rFacetName ) SAL_THROW(())
+    Any XSDDataType::getFacet( const OUString& _rFacetName )
     {
         Any aReturn;
         try

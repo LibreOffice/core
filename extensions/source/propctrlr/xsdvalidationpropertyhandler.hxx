@@ -73,15 +73,15 @@ namespace pcr
         virtual void onNewComponent() SAL_OVERRIDE;
 
     private:
-        bool    implPrepareRemoveCurrentDataType() SAL_THROW(());
-        bool    implDoRemoveCurrentDataType() SAL_THROW(());
+        bool    implPrepareRemoveCurrentDataType();
+        bool    implDoRemoveCurrentDataType();
 
-        bool    implPrepareCloneDataCurrentType( OUString& _rNewName ) SAL_THROW(());
-        bool    implDoCloneCurrentDataType( const OUString& _rNewName ) SAL_THROW(());
+        bool    implPrepareCloneDataCurrentType( OUString& _rNewName );
+        bool    implDoCloneCurrentDataType( const OUString& _rNewName );
 
         /** retrieves the names of the data types which our introspectee can be validated against
         */
-        void    implGetAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const SAL_THROW(());
+        void    implGetAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const;
     };
 
 
