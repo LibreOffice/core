@@ -194,7 +194,7 @@ class PropertySetInfo_Impl : public WeakImplHelper1< beans::XPropertySetInfo >
     Sequence< beans::Property > m_properties;
 
 public:
-    inline PropertySetInfo_Impl( Sequence< beans::Property > const & properties ) SAL_THROW(())
+    inline PropertySetInfo_Impl( Sequence< beans::Property > const & properties )
         : m_properties( properties )
         {}
 
@@ -452,8 +452,8 @@ public:
         throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    inline bool is_disposed() const SAL_THROW( (lang::DisposedException) );
-    inline void check_undisposed() const SAL_THROW( (lang::DisposedException) );
+    inline bool is_disposed() const;
+    inline void check_undisposed() const;
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
     bool haveFactoryWithThisImplementation(const OUString& aImplName);
@@ -483,7 +483,6 @@ private:
 
 
 inline bool OServiceManager::is_disposed() const
-    SAL_THROW( (lang::DisposedException) )
 {
     // ought to be guarded by m_mutex:
     return (m_bInDisposing || rBHelper.bDisposed);
@@ -491,7 +490,6 @@ inline bool OServiceManager::is_disposed() const
 
 
 inline void OServiceManager::check_undisposed() const
-    SAL_THROW( (lang::DisposedException) )
 {
     if (is_disposed())
     {
@@ -514,7 +512,7 @@ class OServiceManagerWrapper : public OServiceManagerMutex, public t_OServiceMan
 {
     Reference< XComponentContext > m_xContext;
     Reference< XMultiComponentFactory > m_root;
-    inline Reference< XMultiComponentFactory > getRoot() SAL_THROW( (RuntimeException) )
+    inline Reference< XMultiComponentFactory > getRoot()
     {
         if (! m_root.is())
         {
@@ -529,9 +527,8 @@ protected:
 
 public:
     OServiceManagerWrapper(
-        Reference< XComponentContext > const & xContext )
-        SAL_THROW( (RuntimeException) );
-    virtual ~OServiceManagerWrapper() SAL_THROW(());
+        Reference< XComponentContext > const & xContext );
+    virtual ~OServiceManagerWrapper();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) SAL_OVERRIDE
@@ -661,11 +658,10 @@ void OServiceManagerWrapper::disposing()
     m_root.clear();
 }
 
-OServiceManagerWrapper::~OServiceManagerWrapper() SAL_THROW(()) {}
+OServiceManagerWrapper::~OServiceManagerWrapper() {}
 
 OServiceManagerWrapper::OServiceManagerWrapper(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( (RuntimeException) )
     : t_OServiceManagerWrapper_impl( m_mutex )
     , m_xContext( xContext )
     , m_root( xContext->getServiceManager() )

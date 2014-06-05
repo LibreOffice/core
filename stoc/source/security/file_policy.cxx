@@ -71,10 +71,8 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
-    FilePolicy( Reference< XComponentContext > const & xComponentContext )
-        SAL_THROW(());
-    virtual ~FilePolicy()
-        SAL_THROW(());
+    FilePolicy( Reference< XComponentContext > const & xComponentContext );
+    virtual ~FilePolicy();
 
     // XPolicy impl
     virtual Sequence< Any > SAL_CALL getPermissions(
@@ -95,7 +93,6 @@ public:
 };
 
 FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext )
-    SAL_THROW(())
     : t_helper( m_mutex )
     , m_xComponentContext( xComponentContext )
     , m_ac( xComponentContext )
@@ -103,7 +100,6 @@ FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext
 {}
 
 FilePolicy::~FilePolicy()
-    SAL_THROW(())
 {}
 
 void FilePolicy::disposing()
@@ -160,42 +156,31 @@ class PolicyReader
     sal_Int32 m_pos;
     sal_Unicode m_back;
 
-    sal_Unicode get()
-        SAL_THROW( (RuntimeException) );
-    inline void back( sal_Unicode c ) SAL_THROW(())
+    sal_Unicode get();
+    inline void back( sal_Unicode c )
         { m_back = c; }
 
-    inline bool isWhiteSpace( sal_Unicode c ) const SAL_THROW(())
+    inline bool isWhiteSpace( sal_Unicode c ) const
         { return (' ' == c || '\t' == c || '\n' == c || '\r' == c); }
-    void skipWhiteSpace()
-        SAL_THROW( (RuntimeException) );
+    void skipWhiteSpace();
 
-    inline bool isCharToken( sal_Unicode c ) const SAL_THROW(())
+    inline bool isCharToken( sal_Unicode c ) const
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
 
 public:
-    PolicyReader( OUString const & file, AccessControl & ac )
-        SAL_THROW( (RuntimeException) );
-    ~PolicyReader()
-        SAL_THROW(());
+    PolicyReader( OUString const & file, AccessControl & ac );
+    ~PolicyReader();
 
-    void error( OUString const & msg )
-        SAL_THROW( (RuntimeException) );
+    void error( OUString const & msg );
 
-    OUString getToken()
-        SAL_THROW( (RuntimeException) );
-    OUString assureToken()
-        SAL_THROW( (RuntimeException) );
-    OUString getQuotedToken()
-        SAL_THROW( (RuntimeException) );
-    OUString assureQuotedToken()
-        SAL_THROW( (RuntimeException) );
-    void assureToken( sal_Unicode token )
-        SAL_THROW( (RuntimeException) );
+    OUString getToken();
+    OUString assureToken();
+    OUString getQuotedToken();
+    OUString assureQuotedToken();
+    void assureToken( sal_Unicode token );
 };
 
 void PolicyReader::assureToken( sal_Unicode token )
-    SAL_THROW( (RuntimeException) )
 {
     skipWhiteSpace();
     sal_Unicode c = get();
@@ -209,7 +194,6 @@ void PolicyReader::assureToken( sal_Unicode token )
 }
 
 OUString PolicyReader::assureQuotedToken()
-    SAL_THROW( (RuntimeException) )
 {
     OUString token( getQuotedToken() );
     if (token.isEmpty())
@@ -218,7 +202,6 @@ OUString PolicyReader::assureQuotedToken()
 }
 
 OUString PolicyReader::getQuotedToken()
-    SAL_THROW( (RuntimeException) )
 {
     skipWhiteSpace();
     OUStringBuffer buf( 32 );
@@ -235,7 +218,6 @@ OUString PolicyReader::getQuotedToken()
 }
 
 OUString PolicyReader::assureToken()
-    SAL_THROW( (RuntimeException) )
 {
     OUString token( getToken() );
     if ( token.isEmpty())
@@ -244,7 +226,6 @@ OUString PolicyReader::assureToken()
 }
 
 OUString PolicyReader::getToken()
-    SAL_THROW( (RuntimeException) )
 {
     skipWhiteSpace();
     sal_Unicode c = get();
@@ -261,7 +242,6 @@ OUString PolicyReader::getToken()
 }
 
 void PolicyReader::skipWhiteSpace()
-    SAL_THROW( (RuntimeException) )
 {
     sal_Unicode c;
     do
@@ -323,7 +303,6 @@ void PolicyReader::skipWhiteSpace()
 }
 
 sal_Unicode PolicyReader::get()
-    SAL_THROW( (RuntimeException) )
 {
     if ('\0' != m_back) // one char push back possible
     {
@@ -360,7 +339,6 @@ sal_Unicode PolicyReader::get()
 }
 
 void PolicyReader::error( OUString const & msg )
-    SAL_THROW( (RuntimeException) )
 {
     OUStringBuffer buf( 32 );
     buf.append( "error processing file \"" );
@@ -375,7 +353,6 @@ void PolicyReader::error( OUString const & msg )
 }
 
 PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
-    SAL_THROW( (RuntimeException) )
     : m_fileName( fileName )
     , m_linepos( 0 )
     , m_pos( 1 ) // force readline
@@ -393,7 +370,6 @@ PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
 }
 
 PolicyReader::~PolicyReader()
-    SAL_THROW(())
 {
     if ( ::osl_closeFile( m_file ) != osl_File_E_None ) {
         OSL_ASSERT( false );

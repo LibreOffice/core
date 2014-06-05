@@ -37,8 +37,7 @@ namespace VndSunStarPkgUrlReferenceFactory {
     css::uno::Reference< css::uno::XInterface > SAL_CALL
     create(
         css::uno::Reference< css::uno::XComponentContext >
-            const & context)
-        SAL_THROW((css::uno::Exception));
+            const & context);
 
     OUString SAL_CALL getImplementationName();
 

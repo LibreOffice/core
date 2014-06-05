@@ -103,9 +103,8 @@ public:
     Mutex m_mutex;
     t_ptr_map m_receiver2adapters;
 
-    FactoryImpl( Reference< XComponentContext > const & xContext )
-        SAL_THROW( (RuntimeException) );
-    virtual ~FactoryImpl() SAL_THROW(());
+    FactoryImpl( Reference< XComponentContext > const & xContext );
+    virtual ~FactoryImpl();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -161,21 +160,16 @@ struct AdapterImpl
         void * pDest, typelib_TypeDescriptionReference * pType,
         uno_Any * pSource, uno_Any * pExc );
 
-    inline void acquire()
-        SAL_THROW(());
-    inline void release()
-        SAL_THROW(());
-    inline ~AdapterImpl()
-        SAL_THROW(());
+    inline void acquire();
+    inline void release();
+    inline ~AdapterImpl();
     inline AdapterImpl(
         void * key, Reference< script::XInvocation > const & xReceiver,
         const Sequence< Type > & rTypes,
-        FactoryImpl * pFactory )
-        SAL_THROW( (RuntimeException) );
+        FactoryImpl * pFactory );
 };
 
 inline AdapterImpl::~AdapterImpl()
-    SAL_THROW(())
 {
     for ( sal_Int32 nPos = m_nInterfaces; nPos--; )
     {
@@ -189,13 +183,11 @@ inline AdapterImpl::~AdapterImpl()
 }
 
 inline void AdapterImpl::acquire()
-    SAL_THROW(())
 {
     osl_atomic_increment( &m_nRef );
 }
 
 inline void AdapterImpl::release()
-    SAL_THROW(())
 {
     bool delete_this = false;
     {
@@ -234,7 +226,6 @@ static inline void constructRuntimeException(
 static inline bool type_equals(
     typelib_TypeDescriptionReference * pType1,
     typelib_TypeDescriptionReference * pType2 )
-    SAL_THROW(())
 {
     return (pType1 == pType2 ||
             (pType1->pTypeName->length == pType2->pTypeName->length &&
@@ -645,7 +636,6 @@ AdapterImpl::AdapterImpl(
     void * key, Reference< script::XInvocation > const & xReceiver,
     const Sequence< Type > & rTypes,
     FactoryImpl * pFactory )
-    SAL_THROW( (RuntimeException) )
         : m_nRef( 1 ),
           m_pFactory( pFactory ),
           m_key( key )
@@ -693,7 +683,6 @@ AdapterImpl::AdapterImpl(
 
 
 FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
-    SAL_THROW( (RuntimeException) )
     : m_pInvokMethodTD( 0 ),
       m_pSetValueTD( 0 ),
       m_pGetValueTD( 0 ),
@@ -758,7 +747,7 @@ FactoryImpl::FactoryImpl( Reference< XComponentContext > const & xContext )
     }
 }
 
-FactoryImpl::~FactoryImpl() SAL_THROW(())
+FactoryImpl::~FactoryImpl()
 {
     ::typelib_typedescription_release( m_pInvokMethodTD );
     ::typelib_typedescription_release( m_pSetValueTD );
@@ -778,7 +767,6 @@ FactoryImpl::~FactoryImpl() SAL_THROW(())
 static inline AdapterImpl * lookup_adapter(
     t_ptr_set ** pp_adapter_set,
     t_ptr_map & map, void * key, Sequence< Type > const & rTypes )
-    SAL_THROW(())
 {
     t_ptr_set & adapters_set = map[ key ];
     *pp_adapter_set = &adapters_set;

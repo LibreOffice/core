@@ -216,7 +216,6 @@ namespace stoc_services { namespace UriSchemeParser_vndDOTsunDOTstarDOTexpand {
 css::uno::Reference< css::uno::XInterface > create(
     SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
         const &)
-    SAL_THROW((css::uno::Exception))
 {
     //TODO: single instance
     return static_cast< ::cppu::OWeakObject * >(new Parser);
