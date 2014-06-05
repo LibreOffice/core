@@ -136,7 +136,7 @@ namespace svxform
     }
 
 
-    ControlStatus ControlBorderManager::getControlStatus( const Reference< XControl >& _rxControl ) SAL_THROW(())
+    ControlStatus ControlBorderManager::getControlStatus( const Reference< XControl >& _rxControl )
     {
         ControlStatus nStatus = CONTROL_STATUS_NONE;
 
@@ -172,7 +172,7 @@ namespace svxform
     }
 
 
-    void ControlBorderManager::updateBorderStyle( const Reference< XControl >& _rxControl, const Reference< XVclWindowPeer >& _rxPeer, const BorderDescriptor& _rFallback ) SAL_THROW(())
+    void ControlBorderManager::updateBorderStyle( const Reference< XControl >& _rxControl, const Reference< XVclWindowPeer >& _rxPeer, const BorderDescriptor& _rFallback )
     {
         OSL_PRECOND( _rxControl.is() && _rxPeer.is(), "ControlBorderManager::updateBorderStyle: invalid parameters!" );
 
@@ -215,7 +215,7 @@ namespace svxform
     }
 
 
-    void ControlBorderManager::controlStatusGained( const Reference< XInterface >& _rxControl, ControlData& _rControlData ) SAL_THROW(())
+    void ControlBorderManager::controlStatusGained( const Reference< XInterface >& _rxControl, ControlData& _rControlData )
     {
         if ( _rxControl == _rControlData.xControl )
             // nothing to do - though suspicious
@@ -248,7 +248,7 @@ namespace svxform
     }
 
 
-    void ControlBorderManager::controlStatusLost( const Reference< XInterface >& _rxControl, ControlData& _rControlData ) SAL_THROW(())
+    void ControlBorderManager::controlStatusLost( const Reference< XInterface >& _rxControl, ControlData& _rControlData )
     {
         if ( _rxControl != _rControlData.xControl )
             // nothing to do
@@ -330,35 +330,35 @@ namespace svxform
     }
 
 
-    void ControlBorderManager::focusGained( const Reference< XInterface >& _rxControl ) SAL_THROW(())
+    void ControlBorderManager::focusGained( const Reference< XInterface >& _rxControl )
     {
         if ( m_bDynamicBorderColors )
             controlStatusGained( _rxControl, m_aFocusControl );
     }
 
 
-    void ControlBorderManager::focusLost( const Reference< XInterface >& _rxControl ) SAL_THROW(())
+    void ControlBorderManager::focusLost( const Reference< XInterface >& _rxControl )
     {
         if ( m_bDynamicBorderColors )
             controlStatusLost( _rxControl, m_aFocusControl );
     }
 
 
-    void ControlBorderManager::mouseEntered( const Reference< XInterface >& _rxControl ) SAL_THROW(())
+    void ControlBorderManager::mouseEntered( const Reference< XInterface >& _rxControl )
     {
         if ( m_bDynamicBorderColors )
             controlStatusGained( _rxControl, m_aMouseHoverControl );
     }
 
 
-    void ControlBorderManager::mouseExited( const Reference< XInterface >& _rxControl ) SAL_THROW(())
+    void ControlBorderManager::mouseExited( const Reference< XInterface >& _rxControl )
     {
         if ( m_bDynamicBorderColors )
             controlStatusLost( _rxControl, m_aMouseHoverControl );
     }
 
 
-    void ControlBorderManager::validityChanged( const Reference< XControl >& _rxControl, const Reference< XValidatableFormComponent >& _rxValidatable ) SAL_THROW(())
+    void ControlBorderManager::validityChanged( const Reference< XControl >& _rxControl, const Reference< XValidatableFormComponent >& _rxValidatable )
     {
         try
         {

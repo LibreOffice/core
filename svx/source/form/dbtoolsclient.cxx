@@ -198,7 +198,6 @@ namespace svxform
 
     Reference< XConnection> OStaticDataAccessTools::getConnection_withFeedback(const OUString& _rDataSourceName,
         const OUString& _rUser, const OUString& _rPwd, const Reference<XComponentContext>& _rxContext) const
-            SAL_THROW ( (SQLException) )
     {
         Reference< XConnection > xReturn;
         if ( ensureLoaded() )
@@ -209,7 +208,6 @@ namespace svxform
 
     Reference< XConnection > OStaticDataAccessTools::connectRowset( const Reference< XRowSet >& _rxRowSet,
         const Reference< XComponentContext >& _rxContext, bool _bSetAsActiveConnection ) const
-        SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
     {
         Reference< XConnection > xReturn;
         if ( ensureLoaded() )
@@ -218,7 +216,7 @@ namespace svxform
     }
 
 
-    Reference< XConnection > OStaticDataAccessTools::getRowSetConnection(const Reference< XRowSet >& _rxRowSet) const SAL_THROW ( (RuntimeException) )
+    Reference< XConnection > OStaticDataAccessTools::getRowSetConnection(const Reference< XRowSet >& _rxRowSet) const
     {
         Reference< XConnection > xReturn;
         if ( ensureLoaded() )
@@ -282,7 +280,7 @@ namespace svxform
 
     Reference< XNameAccess > OStaticDataAccessTools::getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
         const sal_Int32 _nCommandType, const OUString& _rCommand,
-            Reference< XComponent >& _rxKeepFieldsAlive, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
+            Reference< XComponent >& _rxKeepFieldsAlive, ::dbtools::SQLExceptionInfo* _pErrorInfo )
     {
         Reference< XNameAccess > aFields;
         if ( ensureLoaded() )

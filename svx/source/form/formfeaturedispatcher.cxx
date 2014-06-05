@@ -202,7 +202,7 @@ namespace svx
     }
 
 
-    void OSingleFeatureDispatcher::checkAlive() const SAL_THROW((DisposedException))
+    void OSingleFeatureDispatcher::checkAlive() const
     {
         if ( m_bDisposed )
             throw DisposedException( OUString(), *const_cast< OSingleFeatureDispatcher* >( this ) );

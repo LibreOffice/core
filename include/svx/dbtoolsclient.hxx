@@ -90,19 +90,17 @@ namespace svxform
             const OUString& _rUser,
             const OUString& _rPwd,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
-        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
+        ) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
             bool _bSetAsActiveConnection
-        ) const SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
-                            , ::com::sun::star::lang::WrappedTargetException
-                            , ::com::sun::star::uno::RuntimeException) );
+        ) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
-                const SAL_THROW ( (::com::sun::star::uno::RuntimeException) );
+                const;
 
         void TransferFormComponentProperties(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxOld,
@@ -142,7 +140,7 @@ namespace svxform
                 const OUString& _rCommand,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-            )   SAL_THROW( ( ) );
+            );
 
         bool isEmbeddedInDatabase(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,

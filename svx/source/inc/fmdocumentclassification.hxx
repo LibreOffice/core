@@ -54,11 +54,11 @@ namespace svxform
         */
         static DocumentType classifyDocument(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocumentModel
-                            ) SAL_THROW(());
+                            );
 
         static DocumentType classifyHostDocument(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxFormComponent
-                            ) SAL_THROW(());
+                            );
 
         static  DocumentType getDocumentTypeForModuleIdentifier(
                                 const OUString& _rModuleIdentifier

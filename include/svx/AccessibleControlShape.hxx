@@ -135,10 +135,10 @@ protected:
 #endif // DBG_UTIL
 
     /// (safely) reads the given property from the model of the UNO control
-    OUString getControlModelStringProperty( const OUString& _rPropertyName ) const SAL_THROW(( ));
+    OUString getControlModelStringProperty( const OUString& _rPropertyName ) const;
 
     /// ensure that our control model exists(will be retrieved upon need only)
-    bool ensureControlModelAccess( ) SAL_THROW(( ));
+    bool ensureControlModelAccess( );
 
     /// ensures that we're listening for the given property if(and only if!) necessary
     bool ensureListeningState( const bool _bCurrentlyListening, const bool _bNeedNewListening,
