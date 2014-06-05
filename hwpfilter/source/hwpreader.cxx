@@ -3373,6 +3373,7 @@ void HwpReader::makeDateFormat(DateCode * hbox)
                 break;
             case '_':
                 padd(ascii("number:style"), sXML_CDATA, ascii("long"));
+                //fall-through
             case '6':
             case '^':
                 rstartEl(ascii("number:day-of-week"), rList);
