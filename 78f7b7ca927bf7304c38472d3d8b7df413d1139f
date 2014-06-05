@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_24527cde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-06-05T20:13:29Z",
+      "side": 1,
+      "message": "what \"ActiveX\" thing do you want to remove and what does it have to do with NPAPI?",
+      "revId": "78f7b7ca927bf7304c38472d3d8b7df413d1139f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
