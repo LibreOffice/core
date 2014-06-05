@@ -129,7 +129,10 @@ DirectoryStream *DirectoryStream::createForParent(const com::sun::star::uno::Ref
         {
             pDir = new writerperfect::DirectoryStream(xDirContent);
             if (!pDir->isStructured())
+            {
+                delete pDir;
                 pDir = 0;
+            }
         }
     }
 
