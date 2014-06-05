@@ -15,6 +15,8 @@
 
 #include <vector>
 
+#include <swdllapi.h>
+
 namespace sw {
 
 /** This class helps to remove unwanted whitespaces from a string to use in a Tox.
