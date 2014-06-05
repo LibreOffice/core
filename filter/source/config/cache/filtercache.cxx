@@ -98,7 +98,6 @@ FilterCache* FilterCache::clone() const
 
     pClone->m_lChangedTypes              = m_lChangedTypes;
     pClone->m_lChangedFilters            = m_lChangedFilters;
-    pClone->m_lChangedDetectServices     = m_lChangedDetectServices;
     pClone->m_lChangedFrameLoaders       = m_lChangedFrameLoaders;
     pClone->m_lChangedContentHandlers    = m_lChangedContentHandlers;
 
@@ -132,8 +131,6 @@ void FilterCache::takeOver(const FilterCache& rClone)
 
     if (rClone.m_lChangedTypes.size()>0)
         m_lTypes = rClone.m_lTypes;
-    if (rClone.m_lChangedDetectServices.size()>0)
-        m_lDetectServices = rClone.m_lDetectServices;
     if (rClone.m_lChangedFilters.size()>0)
         m_lFilters = rClone.m_lFilters;
     if (rClone.m_lChangedFrameLoaders.size()>0)
@@ -142,7 +139,6 @@ void FilterCache::takeOver(const FilterCache& rClone)
         m_lContentHandlers = rClone.m_lContentHandlers;
 
     m_lChangedTypes.clear();
-    m_lChangedDetectServices.clear();
     m_lChangedFilters.clear();
     m_lChangedFrameLoaders.clear();
     m_lChangedContentHandlers.clear();

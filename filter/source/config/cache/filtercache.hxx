@@ -236,7 +236,6 @@ class FilterCache : public BaseLock
         /** TODO document me ... */
         OUStringList m_lChangedTypes;
         OUStringList m_lChangedFilters;
-        OUStringList m_lChangedDetectServices;
         OUStringList m_lChangedFrameLoaders;
         OUStringList m_lChangedContentHandlers;
 
