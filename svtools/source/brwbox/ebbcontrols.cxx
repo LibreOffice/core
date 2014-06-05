@@ -116,6 +116,7 @@ namespace svt
                 // drop down the list box
                 else if (rEvt.GetKeyCode().IsMod2() && rEvt.GetKeyCode().GetCode() == KEY_DOWN)
                     return false;
+                // fall-through
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
             case KEY_RETURN:
@@ -213,7 +214,7 @@ namespace svt
                 else
                     if (rEvt.GetKeyCode().IsMod2() && rEvt.GetKeyCode().GetCode() == KEY_DOWN)
                         return false;
-                //fall-through
+                // fall-through
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
                 if (rBox.IsTravelSelect())
