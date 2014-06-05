@@ -46,7 +46,6 @@ rtl::OUString getBootstrapVariable(
 
 css::uno::Reference< css::uno::XComponentContext >
 cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
-    SAL_THROW((css::uno::Exception))
 {
     rtl::Bootstrap bs(iniUri);
     if (bs.getHandle() == 0) {
@@ -103,7 +102,6 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
 
 css::uno::Reference< css::uno::XComponentContext >
 cppu::defaultBootstrap_InitialComponentContext()
-    SAL_THROW((css::uno::Exception))
 {
     return defaultBootstrap_InitialComponentContext(getUnoIniUri());
 }

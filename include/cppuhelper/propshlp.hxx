@@ -48,13 +48,13 @@ class CPPUHELPER_DLLPUBLIC IPropertyArrayHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
 
     /**
@@ -125,8 +125,7 @@ public:
     OPropertyArrayHelper(
         ::com::sun::star::beans::Property *pProps,
         sal_Int32 nElements ,
-        sal_Bool bSorted = sal_True )
-        SAL_THROW(());
+        sal_Bool bSorted = sal_True );
 
      /**
        Create an object which supports the common property interfaces.
@@ -136,13 +135,12 @@ public:
      */
     OPropertyArrayHelper(
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > & aProps,
-        sal_Bool bSorted = sal_True )
-        SAL_THROW(());
+        sal_Bool bSorted = sal_True );
 
     /**
        Return the number of properties.
      */
-    sal_Int32 SAL_CALL getCount() const SAL_THROW(());
+    sal_Int32 SAL_CALL getCount() const;
     /**
        Return the property members Name and Attribute from the handle nHandle.
        @param nHandle   the handle of a property. If the values of the handles
@@ -194,7 +192,7 @@ protected:
     void * m_pReserved;
 
 private:
-    void init( sal_Bool bSorted ) SAL_THROW(());
+    void init( sal_Bool bSorted );
 
     /** The sequence generated from the pProperties array. */
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aInfos;
@@ -212,13 +210,13 @@ private:
 
 struct equalInt32_Impl
 {
-    bool operator()(const sal_Int32 & i1 , const sal_Int32 & i2) const SAL_THROW(())
+    bool operator()(const sal_Int32 & i1 , const sal_Int32 & i2) const
         { return i1 == i2; }
 };
 
 struct hashInt32_Impl
 {
-    size_t operator()(const sal_Int32 & i) const SAL_THROW(())
+    size_t operator()(const sal_Int32 & i) const
         { return i; }
 };
 /** Specialized class for key type sal_Int32,
@@ -228,13 +226,13 @@ class CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelperInt32
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
 
     /**
@@ -244,23 +242,23 @@ public:
                          The lifetime must be longer than the lifetime
                          of this object.
      */
-    OMultiTypeInterfaceContainerHelperInt32( ::osl::Mutex & rMutex ) SAL_THROW(());
+    OMultiTypeInterfaceContainerHelperInt32( ::osl::Mutex & rMutex );
     /**
       Delete all containers.
      */
-    ~OMultiTypeInterfaceContainerHelperInt32() SAL_THROW(());
+    ~OMultiTypeInterfaceContainerHelperInt32();
 
     /**
       Return all id's under which at least one interface is added.
      */
-    ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getContainedTypes() const SAL_THROW(());
+    ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
-    OInterfaceContainerHelper * SAL_CALL getContainer( const sal_Int32 & rKey ) const SAL_THROW(());
+    OInterfaceContainerHelper * SAL_CALL getContainer( const sal_Int32 & rKey ) const;
 
     /**
       Insert an element in the container specified with the key. The position is not specified.
@@ -271,8 +269,7 @@ public:
      */
     sal_Int32 SAL_CALL addInterface(
         const sal_Int32 & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r );
 
     /**
       Remove an element from the container specified with the key.
@@ -283,26 +280,25 @@ public:
      */
     sal_Int32 SAL_CALL removeInterface(
         const sal_Int32 & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
 
     /**
       Call disposing on all objects in the container that
       support XEventListener. Then clear the container.
      */
-    void    SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt ) SAL_THROW(());
+    void    SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt );
     /**
       Remove all elements of all containers. Does not delete the container.
      */
-    void SAL_CALL clear() SAL_THROW(());
+    void SAL_CALL clear();
 
     typedef sal_Int32 keyType;
 private:
     void *m_pMap;
     ::osl::Mutex &  rMutex;
 
-    inline OMultiTypeInterfaceContainerHelperInt32( const OMultiTypeInterfaceContainerHelperInt32 & ) SAL_THROW(());
-    inline OMultiTypeInterfaceContainerHelperInt32 & operator = ( const OMultiTypeInterfaceContainerHelperInt32 & ) SAL_THROW(());
+    inline OMultiTypeInterfaceContainerHelperInt32( const OMultiTypeInterfaceContainerHelperInt32 & );
+    inline OMultiTypeInterfaceContainerHelperInt32 & operator = ( const OMultiTypeInterfaceContainerHelperInt32 & );
 };
 
 
@@ -372,7 +368,7 @@ public:
                           The lifetime must be longer than the lifetime
                           of this object. Stored in the variable rBHelper.
      */
-    OPropertySetHelper( OBroadcastHelper & rBHelper ) SAL_THROW(());
+    OPropertySetHelper( OBroadcastHelper & rBHelper );
 
     /** Constructor.
 
@@ -439,7 +435,7 @@ public:
 
        @see OComponentHelper
      */
-    void SAL_CALL disposing() SAL_THROW(());
+    void SAL_CALL disposing();
 
     /**
        Throw UnknownPropertyException or PropertyVetoException if the property with the name
@@ -523,7 +519,7 @@ public:
        The property sequence is created in the call. The interface isn't used after the call.
      */
     static ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
-        createPropertySetInfo( IPropertyArrayHelper & rProperties ) SAL_THROW(());
+        createPropertySetInfo( IPropertyArrayHelper & rProperties );
 protected:
     /**
        This method fire events to all registered property listeners.
@@ -554,8 +550,7 @@ protected:
         sal_Int32 nSeqLen,
         sal_Int32 * pHandles,
         const ::com::sun::star::uno::Any * pValues,
-        sal_Int32 nHitCount )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
+        sal_Int32 nHitCount );
 
     /**
        This abstract method must return the name to index table. This table contains all property
@@ -655,8 +650,8 @@ protected:
     const std::auto_ptr<Impl> m_pReserved;
 
 private:
-    OPropertySetHelper( const OPropertySetHelper & ) SAL_THROW(());
-    OPropertySetHelper &    operator = ( const OPropertySetHelper & ) SAL_THROW(());
+    OPropertySetHelper( const OPropertySetHelper & );
+    OPropertySetHelper &    operator = ( const OPropertySetHelper & );
 
     /** notifies the given changes in property's values, <em>plus</em> all property changes collected during recent
         |setDependentFastPropertyValue| calls.
@@ -681,7 +676,7 @@ protected:
     /**
        You must call disposing before destruction.
      */
-    ~OPropertySetHelper() SAL_THROW(());
+    ~OPropertySetHelper();
 };
 #if defined _MSC_VER
 #pragma warning(pop)
@@ -714,8 +709,8 @@ public:
 
 
 private:
-    OPropertySetHelper2( const OPropertySetHelper2 & ) SAL_THROW(());
-    OPropertySetHelper2 &    operator = ( const OPropertySetHelper2 & ) SAL_THROW(());
+    OPropertySetHelper2( const OPropertySetHelper2 & );
+    OPropertySetHelper2 &    operator = ( const OPropertySetHelper2 & );
 
 #if defined _MSC_VER // public -> protected changes mangled names there
 public:
@@ -726,7 +721,7 @@ protected:
     /**
        You must call disposing before destruction.
      */
-    virtual ~OPropertySetHelper2() SAL_THROW(());
+    virtual ~OPropertySetHelper2();
 };
 
 } // end namespace cppuhelper

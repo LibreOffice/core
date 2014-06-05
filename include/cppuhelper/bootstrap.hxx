@@ -40,8 +40,7 @@ namespace cppu
     @return true, if successfully registered
 */
 CPPUHELPER_DLLPUBLIC sal_Bool SAL_CALL installTypeDescriptionManager(
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess > const & xTDMgr )
-    SAL_THROW(());
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess > const & xTDMgr );
 
 /** Bootstraps an initial component context with service manager upon
     information from bootstrap variables.
@@ -57,7 +56,7 @@ CPPUHELPER_DLLPUBLIC sal_Bool SAL_CALL installTypeDescriptionManager(
     @return component context
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
-defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Exception) );
+defaultBootstrap_InitialComponentContext();
 
 
 /** Bootstraps an initial component context with service manager upon
@@ -75,7 +74,7 @@ defaultBootstrap_InitialComponentContext() SAL_THROW( (::com::sun::star::uno::Ex
     @return component context
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
-defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile) SAL_THROW( (::com::sun::star::uno::Exception) );
+defaultBootstrap_InitialComponentContext(const ::rtl::OUString & iniFile);
 
 /**
  * An exception indicating a bootstrap error.

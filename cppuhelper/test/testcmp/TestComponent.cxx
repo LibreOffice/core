@@ -63,8 +63,7 @@ class TestComponent: public cppu::WeakImplHelper1<lang::XServiceInfo>
 public:
     static uno::Reference<uno::XInterface> create(
         uno::Reference<uno::XComponentContext> const & xCtx
-    )
-    SAL_THROW((uno::Exception));
+    );
 
 
     static uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames_Static();
@@ -89,9 +88,7 @@ protected:
 
 
 uno::Reference<uno::XInterface> SAL_CALL TestComponent::create(
-    uno::Reference<uno::XComponentContext> const & xCtx
-)
-    SAL_THROW((uno::Exception))
+    uno::Reference<uno::XComponentContext> const & xCtx)
 {
     try
     {

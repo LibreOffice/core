@@ -72,28 +72,28 @@ public:
 
        @param rCont the container of the elements.
      */
-    OInterfaceIteratorHelper( OInterfaceContainerHelper & rCont ) SAL_THROW(());
+    OInterfaceIteratorHelper( OInterfaceContainerHelper & rCont );
 
     /**
       Releases the connection to the container.
      */
-    ~OInterfaceIteratorHelper() SAL_THROW(());
+    ~OInterfaceIteratorHelper();
 
     /** Return true, if there are more elements in the iterator. */
-    bool SAL_CALL hasMoreElements() const SAL_THROW(())
+    bool SAL_CALL hasMoreElements() const
         { return nRemain != 0; }
     /** Return the next element of the iterator. Calling this method if
         hasMoreElements() has returned false, is an error. Cast the
         returned pointer to the
      */
-    ::com::sun::star::uno::XInterface * SAL_CALL next() SAL_THROW(());
+    ::com::sun::star::uno::XInterface * SAL_CALL next();
 
     /** Removes the current element (the last one returned by next())
         from the underlying container. Calling this method before
         next() has been called or calling it twice with no next()
         inbetween is an error.
     */
-    void SAL_CALL remove() SAL_THROW(());
+    void SAL_CALL remove();
 
 private:
     OInterfaceContainerHelper & rCont;
@@ -103,8 +103,8 @@ private:
 
     sal_Int32                   nRemain;
 
-    OInterfaceIteratorHelper( const OInterfaceIteratorHelper & ) SAL_THROW(());
-    OInterfaceIteratorHelper &  operator = ( const OInterfaceIteratorHelper & ) SAL_THROW(());
+    OInterfaceIteratorHelper( const OInterfaceIteratorHelper & );
+    OInterfaceIteratorHelper &  operator = ( const OInterfaceIteratorHelper & );
 };
 
 
@@ -118,13 +118,13 @@ class CPPUHELPER_DLLPUBLIC OInterfaceContainerHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
 
     /**
@@ -134,22 +134,22 @@ public:
        The lifetime must be longer than the lifetime
        of this object.
      */
-    OInterfaceContainerHelper( ::osl::Mutex & rMutex ) SAL_THROW(());
+    OInterfaceContainerHelper( ::osl::Mutex & rMutex );
     /**
       Release all interfaces. All iterators must be destroyed before
       the container is destructed.
      */
-    ~OInterfaceContainerHelper() SAL_THROW(());
+    ~OInterfaceContainerHelper();
     /**
       Return the number of Elements in the container. Only useful if you have acquired
       the mutex.
      */
-    sal_Int32 SAL_CALL getLength() const SAL_THROW(());
+    sal_Int32 SAL_CALL getLength() const;
 
     /**
       Return all interfaces added to this container.
      **/
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getElements() const SAL_THROW(());
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > SAL_CALL getElements() const;
 
     /** Inserts an element into the container.  The position is not specified, thus it is not
         specified in which order events are fired.
@@ -167,7 +167,7 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL addInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace ) SAL_THROW(());
+    sal_Int32 SAL_CALL addInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
     /** Removes an element from the container.  It uses interface equality to remove the interface.
 
         @param rxIFace
@@ -175,16 +175,16 @@ public:
         @return
                 the new count of elements in the container
     */
-    sal_Int32 SAL_CALL removeInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace ) SAL_THROW(());
+    sal_Int32 SAL_CALL removeInterface( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
     /**
       Call disposing on all object in the container that
       support XEventListener. Than clear the container.
      */
-    void SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt ) SAL_THROW(());
+    void SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt );
     /**
       Clears the container without calling disposing().
      */
-    void SAL_CALL clear() SAL_THROW(());
+    void SAL_CALL clear();
 
     /** Executes a functor for each contained listener of specified type, e.g.
         <code>forEach<awt::XPaintListener>(...</code>.
@@ -237,14 +237,14 @@ friend class OInterfaceIteratorHelper;
     /** TRUE -> aData.pAsSequence is of type Sequence< XInterfaceSequence >. */
     sal_Bool                bIsList;
 
-    OInterfaceContainerHelper( const OInterfaceContainerHelper & ) SAL_THROW(());
-    OInterfaceContainerHelper & operator = ( const OInterfaceContainerHelper & ) SAL_THROW(());
+    OInterfaceContainerHelper( const OInterfaceContainerHelper & );
+    OInterfaceContainerHelper & operator = ( const OInterfaceContainerHelper & );
 
     /*
       Dulicate content of the conaitner and release the old one without destroying.
       The mutex must be locked and the memberbInUse must be true.
      */
-    void copyAndResetInUse() SAL_THROW(());
+    void copyAndResetInUse();
 
 private:
     template< typename ListenerT, typename EventT >
@@ -301,13 +301,13 @@ class OMultiTypeInterfaceContainerHelperVar
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
 
     /**
@@ -317,16 +317,16 @@ public:
                          The lifetime must be longer than the lifetime
                          of this object.
      */
-    inline OMultiTypeInterfaceContainerHelperVar( ::osl::Mutex & rMutex ) SAL_THROW(());
+    inline OMultiTypeInterfaceContainerHelperVar( ::osl::Mutex & rMutex );
     /**
       Deletes all containers.
      */
-    inline ~OMultiTypeInterfaceContainerHelperVar() SAL_THROW(());
+    inline ~OMultiTypeInterfaceContainerHelperVar();
 
     /**
       Return all id's under which at least one interface is added.
      */
-    inline ::com::sun::star::uno::Sequence< key > SAL_CALL getContainedTypes() const SAL_THROW(());
+    inline ::com::sun::star::uno::Sequence< key > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.
@@ -334,7 +334,7 @@ public:
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
-    inline OInterfaceContainerHelper * SAL_CALL getContainer( const key & ) const SAL_THROW(());
+    inline OInterfaceContainerHelper * SAL_CALL getContainer( const key & ) const;
 
     /** Inserts an element into the container with the specified key.
         The position is not specified, thus it is not specified in which order events are fired.
@@ -356,8 +356,7 @@ public:
     */
     inline sal_Int32 SAL_CALL addInterface(
         const key & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r );
 
     /** Removes an element from the container with the specified key.
         It uses interface equality to remove the interface.
@@ -371,19 +370,18 @@ public:
     */
     inline sal_Int32 SAL_CALL removeInterface(
         const key & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
 
     /**
       Call disposing on all references in the container, that
       support XEventListener. Then clears the container.
       @param rEvt the event object which is passed during disposing() call
      */
-    inline void SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt ) SAL_THROW(());
+    inline void SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt );
     /**
       Remove all elements of all containers. Does not delete the container.
      */
-    inline void SAL_CALL clear() SAL_THROW(());
+    inline void SAL_CALL clear();
 
     typedef key keyType;
 private:
@@ -406,8 +404,8 @@ private:
         return iter;
     }
 
-    inline OMultiTypeInterfaceContainerHelperVar( const OMultiTypeInterfaceContainerHelperVar & ) SAL_THROW(());
-    inline OMultiTypeInterfaceContainerHelperVar & operator = ( const OMultiTypeInterfaceContainerHelperVar & ) SAL_THROW(());
+    inline OMultiTypeInterfaceContainerHelperVar( const OMultiTypeInterfaceContainerHelperVar & );
+    inline OMultiTypeInterfaceContainerHelperVar & operator = ( const OMultiTypeInterfaceContainerHelperVar & );
 };
 
 
@@ -438,7 +436,7 @@ struct OBroadcastHelperVar
       Initialize the structur. bDispose and bInDispose are set to false.
       @param rMutex_ the mutex reference.
      */
-    OBroadcastHelperVar( ::osl::Mutex & rMutex_ ) SAL_THROW(())
+    OBroadcastHelperVar( ::osl::Mutex & rMutex_ )
         : rMutex( rMutex_ )
         , aLC( rMutex_ )
         , bDisposed( sal_False )
@@ -451,7 +449,6 @@ struct OBroadcastHelperVar
     inline void addListener(
         const keyType &key,
         const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > &r )
-        SAL_THROW(())
     {
         ::osl::MutexGuard guard( rMutex );
         OSL_ENSURE( !bInDispose, "do not add listeners in the dispose call" );
@@ -466,7 +463,6 @@ struct OBroadcastHelperVar
     inline void removeListener(
         const keyType &key,
         const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > & r )
-        SAL_THROW(())
     {
         ::osl::MutexGuard guard( rMutex );
         OSL_ENSURE( !bDisposed, "object is disposed" );
@@ -480,7 +476,7 @@ struct OBroadcastHelperVar
                 was not created, null was returned. This can be used to optimize
               performance ( construction of an event object can be avoided ).
      ***/
-    inline OInterfaceContainerHelper * SAL_CALL getContainer( const keyType &key ) const SAL_THROW(())
+    inline OInterfaceContainerHelper * SAL_CALL getContainer( const keyType &key ) const
         { return aLC.getContainer( key ); }
 };
 
@@ -494,7 +490,7 @@ struct OBroadcastHelperVar
 // helper function call class
 struct hashType_Impl
 {
-    size_t operator()(const ::com::sun::star::uno::Type & s) const SAL_THROW(())
+    size_t operator()(const ::com::sun::star::uno::Type & s) const
     { return (size_t) s.getTypeName().hashCode(); }
 };
 
@@ -506,13 +502,13 @@ class CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
 
     /**
@@ -522,23 +518,23 @@ public:
                          The lifetime must be longer than the lifetime
                          of this object.
      */
-    OMultiTypeInterfaceContainerHelper( ::osl::Mutex & rMutex ) SAL_THROW(());
+    OMultiTypeInterfaceContainerHelper( ::osl::Mutex & rMutex );
     /**
       Delete all containers.
      */
-    ~OMultiTypeInterfaceContainerHelper() SAL_THROW(());
+    ~OMultiTypeInterfaceContainerHelper();
 
     /**
       Return all id's under which at least one interface is added.
      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getContainedTypes() const SAL_THROW(());
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getContainedTypes() const;
 
     /**
       Return the container created under this key.
       @return the container created under this key. If the container
                  was not created, null was returned.
      */
-    OInterfaceContainerHelper * SAL_CALL getContainer( const ::com::sun::star::uno::Type & rKey ) const SAL_THROW(());
+    OInterfaceContainerHelper * SAL_CALL getContainer( const ::com::sun::star::uno::Type & rKey ) const;
 
     /** Inserts an element into the container with the specified key.
         The position is not specified, thus it is not specified in which order events are fired.
@@ -560,8 +556,7 @@ public:
     */
     sal_Int32 SAL_CALL addInterface(
         const ::com::sun::star::uno::Type & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & r );
 
     /** Removes an element from the container with the specified key.
         It uses interface equality to remove the interface.
@@ -575,26 +570,25 @@ public:
     */
     sal_Int32 SAL_CALL removeInterface(
         const ::com::sun::star::uno::Type & rKey,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxIFace );
 
     /**
       Call disposing on all object in the container that
       support XEventListener. Than clear the container.
      */
-    void    SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt ) SAL_THROW(());
+    void    SAL_CALL disposeAndClear( const ::com::sun::star::lang::EventObject & rEvt );
     /**
       Remove all elements of all containers. Does not delete the container.
      */
-    void SAL_CALL clear() SAL_THROW(());
+    void SAL_CALL clear();
 
     typedef ::com::sun::star::uno::Type keyType;
 private:
     void *m_pMap;
     ::osl::Mutex &  rMutex;
 
-    inline OMultiTypeInterfaceContainerHelper( const OMultiTypeInterfaceContainerHelper & ) SAL_THROW(());
-    inline OMultiTypeInterfaceContainerHelper & operator = ( const OMultiTypeInterfaceContainerHelper & ) SAL_THROW(());
+    inline OMultiTypeInterfaceContainerHelper( const OMultiTypeInterfaceContainerHelper & );
+    inline OMultiTypeInterfaceContainerHelper & operator = ( const OMultiTypeInterfaceContainerHelper & );
 };
 
 typedef OBroadcastHelperVar< OMultiTypeInterfaceContainerHelper , OMultiTypeInterfaceContainerHelper::keyType > OBroadcastHelper;

@@ -42,7 +42,7 @@ class CPPUHELPER_DLLPUBLIC WeakReferenceHelper
 public:
     /** Default ctor.  Creates an empty weak reference.
     */
-    inline WeakReferenceHelper() SAL_THROW(())
+    inline WeakReferenceHelper()
         : m_pImpl( 0 )
         {}
 
@@ -50,23 +50,22 @@ public:
 
         @param rWeakRef another weak ref
     */
-    WeakReferenceHelper( const WeakReferenceHelper & rWeakRef ) SAL_THROW(());
+    WeakReferenceHelper( const WeakReferenceHelper & rWeakRef );
     /** Initialize this reference with the hard interface reference xInt. If the implementation
         behind xInt does not support XWeak or XInt is null then this reference will be null.
 
         @param xInt another hard interface reference
     */
-    WeakReferenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xInt )
-        SAL_THROW(());
+    WeakReferenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xInt );
     /** Releases this reference.
     */
-    ~WeakReferenceHelper() SAL_THROW(());
+    ~WeakReferenceHelper();
 
     /** Releases this reference and takes over rWeakRef.
 
         @param rWeakRef another weak ref
     */
-    WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef ) SAL_THROW(());
+    WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef );
 
     /** Releases this reference and takes over hard reference xInt.
         If the implementation behind xInt does not support XWeak
@@ -76,33 +75,33 @@ public:
     */
     WeakReferenceHelper & SAL_CALL operator = (
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XInterface > & xInt ) SAL_THROW(());
+                ::com::sun::star::uno::XInterface > & xInt );
 
     /** Returns true if both weak refs reference to the same object.
 
         @param rObj another weak ref
         @return true, if both weak refs reference to the same object.
     */
-    inline bool SAL_CALL operator == ( const WeakReferenceHelper & rObj ) const SAL_THROW(())
+    inline bool SAL_CALL operator == ( const WeakReferenceHelper & rObj ) const
         { return (get() == rObj.get()); }
 
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL get() const SAL_THROW(());
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL get() const;
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    inline SAL_CALL operator Reference< XInterface > () const SAL_THROW(())
+    inline SAL_CALL operator Reference< XInterface > () const
         { return get(); }
 
     /** Releases this reference.
 
         @since UDK 3.2.12
     */
-    void SAL_CALL clear() SAL_THROW(());
+    void SAL_CALL clear();
 
 protected:
     /// @cond INTERNAL
@@ -121,7 +120,7 @@ class WeakReference : public WeakReferenceHelper
 public:
     /** Default ctor.  Creates an empty weak reference.
     */
-    inline WeakReference() SAL_THROW(())
+    inline WeakReference()
         : WeakReferenceHelper()
         {}
 
@@ -129,7 +128,7 @@ public:
 
         @param rRef another hard ref
     */
-    inline WeakReference( const Reference< interface_type > & rRef ) SAL_THROW(())
+    inline WeakReference( const Reference< interface_type > & rRef )
         : WeakReferenceHelper( rRef )
         {}
 
@@ -143,14 +142,13 @@ public:
     */
     WeakReference & SAL_CALL operator = (
             const ::com::sun::star::uno::Reference< interface_type > & xInt )
-        SAL_THROW(())
         { WeakReferenceHelper::operator=(xInt); return *this; }
 
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
     */
-    inline SAL_CALL operator Reference< interface_type > () const SAL_THROW(())
+    inline SAL_CALL operator Reference< interface_type > () const
         { return Reference< interface_type >::query( get() ); }
 };
 

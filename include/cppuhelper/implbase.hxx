@@ -81,15 +81,15 @@ struct CPPUHELPER_DLLPUBLIC ClassDataBase
 
     /** def ctor
     */
-    ClassDataBase() SAL_THROW(());
+    ClassDataBase();
     /** class code ctor
 
         @param nClassCode class code, see ClassDataBase::nClassCode
     */
-    ClassDataBase( sal_Int32 nClassCode ) SAL_THROW(());
+    ClassDataBase( sal_Int32 nClassCode );
     /** dtor
     */
-    ~ClassDataBase() SAL_THROW(());
+    ~ClassDataBase();
 };
 /** Struct used for inline template implementation helpers:
     There will be versions of this struct with varying arType2Offset[] array sizes, each of which
@@ -105,14 +105,13 @@ struct CPPUHELPER_DLLPUBLIC ClassData : public ClassDataBase
 
     /** init call for supporting com.sun.star.lang.XTypeProvider
     */
-    void SAL_CALL initTypeProvider() SAL_THROW(());
+    void SAL_CALL initTypeProvider();
     /** initial writing type offsets for vtables
 
         @param rType type of interface
         @param nOffset offset to vtable entry
     */
-    void SAL_CALL writeTypeOffset( const ::com::sun::star::uno::Type & rType, sal_Int32 nOffset )
-        SAL_THROW(());
+    void SAL_CALL writeTypeOffset( const ::com::sun::star::uno::Type & rType, sal_Int32 nOffset );
 
     /** Queries for an interface.
 
@@ -121,26 +120,23 @@ struct CPPUHELPER_DLLPUBLIC ClassData : public ClassDataBase
         @return demanded interface or empty any
     */
     ::com::sun::star::uno::Any SAL_CALL query(
-        const ::com::sun::star::uno::Type & rType, ::com::sun::star::lang::XTypeProvider * pBase )
-        SAL_THROW(());
+        const ::com::sun::star::uno::Type & rType, ::com::sun::star::lang::XTypeProvider * pBase );
     /** Gets the types for supporting com.sun.star.lang.XTypeProvider
 
         @return sequence of types supported
     */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()
-        SAL_THROW(());
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes();
     /** Gets the class id of implementation supporting com.sun.star.lang.XTypeProvider
 
         @return class identifier (sequence< byte >)
     */
-    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        SAL_THROW(());
+    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId();
 };
 
 /** Shared mutex for implementation helper initialization.
     Not for public use.
 */
-CPPUHELPER_DLLPUBLIC ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void) SAL_THROW(());
+CPPUHELPER_DLLPUBLIC ::osl::Mutex & SAL_CALL getImplHelperInitMutex(void);
 }
 
 
@@ -174,7 +170,7 @@ namespace cppu \
 struct ClassData##N : public ClassDataBase \
 { \
     Type_Offset arType2Offset[ N ]; \
-    ClassData##N( sal_Int32 nInClassCode ) SAL_THROW(()) \
+    ClassData##N( sal_Int32 nInClassCode ) \
         : ClassDataBase( nInClassCode ) \
         {} \
 }; \
@@ -186,7 +182,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelperBase##N \
 CPPUHELPER_DETAIL_IMPLHELPER_PROTECTED: \
     ~ImplHelperBase##N() throw () {} \
 protected: \
-    ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW(()) \
+    ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) \
     { \
         ClassData & rCD = * static_cast< ClassData * >( &s_aCD ); \
         if (! rCD.bOffsetsInit) \

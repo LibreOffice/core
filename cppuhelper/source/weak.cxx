@@ -33,7 +33,7 @@ namespace cppu
 {
 
 // due to static Reflection destruction from usr, ther must be a mutex leak (#73272#)
-inline static Mutex & getWeakMutex() SAL_THROW(())
+inline static Mutex & getWeakMutex()
 {
     static Mutex * s_pMutex = 0;
     if (! s_pMutex)
@@ -50,7 +50,7 @@ public:
     /**
         Hold the weak object without an acquire (only the pointer).
      */
-    OWeakConnectionPoint( OWeakObject* pObj ) SAL_THROW(())
+    OWeakConnectionPoint( OWeakObject* pObj )
         : m_aRefCount( 0 )
         , m_pObject(pObj)
         , m_aReferences( getWeakMutex() )
@@ -172,7 +172,7 @@ void SAL_CALL OWeakConnectionPoint::removeReference(const Reference< XReference 
 
 #ifdef _MSC_VER
 // Accidentally occurs in msvc mapfile = > had to be outlined.
-OWeakObject::OWeakObject() SAL_THROW(())
+OWeakObject::OWeakObject()
     : m_refCount( 0 ),
       m_pWeakConnectionPoint( 0 )
 {
@@ -224,7 +224,7 @@ void OWeakObject::disposeWeakConnectionPoint()
     }
 }
 
-OWeakObject::~OWeakObject() SAL_THROW( (RuntimeException) )
+OWeakObject::~OWeakObject()
 {
 }
 
@@ -250,7 +250,7 @@ Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
 
 //-- OWeakAggObject ----------------------------------------------------
 
-OWeakAggObject::~OWeakAggObject() SAL_THROW( (RuntimeException) )
+OWeakAggObject::~OWeakAggObject()
 {
 }
 
@@ -319,8 +319,8 @@ namespace uno
 class OWeakRefListener: public XReference, private boost::noncopyable
 {
 public:
-    OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW(());
-    virtual ~OWeakRefListener() SAL_THROW(());
+    OWeakRefListener(const Reference< XInterface >& xInt);
+    virtual ~OWeakRefListener();
 
     // XInterface
     Any SAL_CALL queryInterface( const Type & rType ) throw(RuntimeException, std::exception) SAL_OVERRIDE;
@@ -336,7 +336,7 @@ public:
     Reference< XAdapter >       m_XWeakConnectionPoint;
 };
 
-OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THROW(())
+OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt)
     : m_aRefCount( 1 )
 {
     try
@@ -357,7 +357,7 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt) SAL_THRO
     osl_atomic_decrement( &m_aRefCount );
 }
 
-OWeakRefListener::~OWeakRefListener() SAL_THROW(())
+OWeakRefListener::~OWeakRefListener()
 {
     try
     {
@@ -410,7 +410,7 @@ void SAL_CALL OWeakRefListener::dispose()
 
 //-- WeakReferenceHelper ----------------------------------------------------------
 
-WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt) SAL_THROW(())
+WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt)
     : m_pImpl( 0 )
 {
     if (xInt.is())
@@ -420,7 +420,7 @@ WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt) SA
     }
 }
 
-WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef) SAL_THROW(())
+WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef)
     : m_pImpl( 0 )
 {
     Reference< XInterface > xInt( rWeakRef.get() );
@@ -431,7 +431,7 @@ WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef) SA
     }
 }
 
-void WeakReferenceHelper::clear() SAL_THROW(())
+void WeakReferenceHelper::clear()
 {
     try
     {
@@ -450,7 +450,7 @@ void WeakReferenceHelper::clear() SAL_THROW(())
     catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
 }
 
-WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef) SAL_THROW(())
+WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef)
 {
     if (this == &rWeakRef)
     {
@@ -462,7 +462,6 @@ WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& r
 
 WeakReferenceHelper & SAL_CALL
 WeakReferenceHelper::operator= (const Reference< XInterface > & xInt)
-SAL_THROW(())
 {
     try
     {
@@ -477,12 +476,12 @@ SAL_THROW(())
     return *this;
 }
 
-WeakReferenceHelper::~WeakReferenceHelper() SAL_THROW(())
+WeakReferenceHelper::~WeakReferenceHelper()
 {
     clear();
 }
 
-Reference< XInterface > WeakReferenceHelper::get() const SAL_THROW(())
+Reference< XInterface > WeakReferenceHelper::get() const
 {
     try
     {

@@ -52,7 +52,7 @@ namespace detail {
 ::rtl::OUString expandMacros(rtl::OUString const & text);
 
 com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
-create_bootstrap_macro_expander_factory() SAL_THROW(());
+create_bootstrap_macro_expander_factory();
 
 }
 

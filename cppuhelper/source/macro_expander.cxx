@@ -49,7 +49,7 @@ using rtl::OUString;
 namespace cppu
 {
 
-Bootstrap const & get_unorc() SAL_THROW(())
+Bootstrap const & get_unorc()
 {
     static rtlBootstrapHandle s_bstrap = 0;
     if (! s_bstrap)
@@ -126,11 +126,10 @@ protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
-    inline Bootstrap_MacroExpander() SAL_THROW(())
+    inline Bootstrap_MacroExpander()
         : t_uno_impl( m_mutex )
         {}
-    virtual ~Bootstrap_MacroExpander()
-        SAL_THROW(());
+    virtual ~Bootstrap_MacroExpander();
 
     // XMacroExpander impl
     virtual OUString SAL_CALL expandMacros( OUString const & exp )
@@ -148,7 +147,7 @@ public:
 void Bootstrap_MacroExpander::disposing()
 {}
 
-Bootstrap_MacroExpander::~Bootstrap_MacroExpander() SAL_THROW(())
+Bootstrap_MacroExpander::~Bootstrap_MacroExpander()
 {}
 
 // XServiceInfo impl
@@ -182,7 +181,6 @@ OUString Bootstrap_MacroExpander::expandMacros( OUString const & exp )
 
 Reference< XInterface > SAL_CALL service_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
-    SAL_THROW( (RuntimeException) )
 {
     return static_cast< ::cppu::OWeakObject * >( new Bootstrap_MacroExpander );
 }
@@ -191,7 +189,7 @@ Reference< XInterface > SAL_CALL service_create(
 
 namespace cppuhelper { namespace detail {
 
-Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_factory() SAL_THROW(())
+Reference< lang::XSingleComponentFactory > create_bootstrap_macro_expander_factory()
 {
     Reference< lang::XSingleComponentFactory > free(::cppu::createSingleComponentFactory(
                                                         service_create,

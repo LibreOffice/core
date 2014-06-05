@@ -50,20 +50,20 @@ protected:
 
         @param rMutex mutex to sync upon disposing
     */
-    WeakComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW(());
+    WeakComponentImplHelperBase( ::osl::Mutex & rMutex );
 public:
     /** Destructor
     */
-    virtual ~WeakComponentImplHelperBase() SAL_THROW(());
+    virtual ~WeakComponentImplHelperBase();
 
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -97,18 +97,18 @@ protected:
     */
     virtual void SAL_CALL disposing();
 
-    WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex ) SAL_THROW(());
+    WeakAggComponentImplHelperBase( ::osl::Mutex & rMutex );
 public:
-    virtual ~WeakAggComponentImplHelperBase() SAL_THROW(());
+    virtual ~WeakAggComponentImplHelperBase();
 
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete( void *, void * )
         {}
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -137,13 +137,11 @@ CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakComponentImplHelper
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
     void * that,
-    ::cppu::WeakComponentImplHelperBase * pBase )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    ::cppu::WeakComponentImplHelperBase * pBase );
 /** WeakComponentImplHelper
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakComponentImplHelper_getTypes(
-    class_data * cd )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    class_data * cd );
 
 /** WeakAggComponentImplHelper
 */
@@ -151,13 +149,11 @@ CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakAggComponentImplHel
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
     void * that,
-    ::cppu::WeakAggComponentImplHelperBase * pBase )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    ::cppu::WeakAggComponentImplHelperBase * pBase );
 /** WeakAggComponentImplHelper
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL WeakAggComponentImplHelper_getTypes(
-    class_data * cd )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    class_data * cd );
 
 }
 

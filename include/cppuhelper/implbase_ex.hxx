@@ -46,7 +46,7 @@ namespace cppu
 
 /** function pointer signature for getCppuType
 */
-typedef ::com::sun::star::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * ) SAL_THROW(());
+typedef ::com::sun::star::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * );
 
 /** single type + object offset
 */
@@ -96,34 +96,29 @@ struct class_data
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL ImplHelper_query(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
-    void * that )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    void * that );
 /** ImplHelper
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL ImplHelper_queryNoXInterface(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
-    void * that )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    void * that );
 /** ImplHelper
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
 SAL_CALL ImplHelper_getTypes(
-    class_data * cd )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    class_data * cd );
 /** ImplHelper
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
 SAL_CALL ImplInhHelper_getTypes(
     class_data * cd,
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > const & rAddTypes )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > const & rAddTypes );
 /** ImplHelper
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< sal_Int8 >
 SAL_CALL ImplHelper_getImplementationId(
-    class_data * cd )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    class_data * cd );
 
 /** WeakImplHelper
 */
@@ -131,14 +126,12 @@ CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL WeakImplHelper_query(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
     void * that,
-    ::cppu::OWeakObject * pBase )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    ::cppu::OWeakObject * pBase );
 /** WeakImplHelper
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
 SAL_CALL WeakImplHelper_getTypes(
-    class_data * cd )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    class_data * cd );
 
 /** WeakAggImplHelper
 */
@@ -147,14 +140,12 @@ SAL_CALL WeakAggImplHelper_queryAgg(
     ::com::sun::star::uno::Type const & rType,
     class_data * cd,
     void * that,
-    ::cppu::OWeakAggObject * pBase )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    ::cppu::OWeakAggObject * pBase );
 /** WeakAggImplHelper
 */
 CPPUHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >
 SAL_CALL WeakAggImplHelper_getTypes(
-    class_data * cd )
-    SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    class_data * cd );
 
 }
 

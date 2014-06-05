@@ -33,8 +33,7 @@ namespace cppu
     @param rExc
            exception to be thrown.
 */
-CPPUHELPER_DLLPUBLIC void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc )
-    SAL_THROW( (::com::sun::star::uno::Exception) );
+CPPUHELPER_DLLPUBLIC void SAL_CALL throwException( const ::com::sun::star::uno::Any & rExc );
 
 /** Use this function to get the dynamic type of a caught C++-UNO exception;
     completes the above function throwing exceptions generically.

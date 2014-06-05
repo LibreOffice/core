@@ -43,7 +43,6 @@ namespace cppu
 {
 
 AccessControl::AccessControl( Reference< XComponentContext > const & xContext )
-    SAL_THROW( (RuntimeException) )
 {
     if (! (xContext->getValueByName( str_ac_singleton() ) >>= m_xController))
     {
@@ -53,7 +52,6 @@ AccessControl::AccessControl( Reference< XComponentContext > const & xContext )
 
 AccessControl::AccessControl(
     Reference< security::XAccessController > const & xController )
-    SAL_THROW( (RuntimeException) )
     : m_xController( xController )
 {
     if (! m_xController.is())
@@ -63,7 +61,6 @@ AccessControl::AccessControl(
 }
 
 AccessControl::AccessControl( AccessControl const & ac )
-    SAL_THROW( (RuntimeException) )
     : m_xController( ac.m_xController )
 {
     if (! m_xController.is())
@@ -89,7 +86,6 @@ AccessControl::AccessControl( AccessControl const & ac )
 inline void __checkPermission(
     Reference< security::XAccessController > const & xController,
     Type const & type, rtl_uString * str1, rtl_uString * str2 )
-    SAL_THROW( (RuntimeException) )
 {
     __permission perm;
     perm.m_str1 = str1;
@@ -104,7 +100,6 @@ inline void __checkPermission(
 
 void AccessControl::checkRuntimePermission(
     OUString const & name )
-    SAL_THROW( (RuntimeException) )
 {
     __checkPermission(
         m_xController,
@@ -114,7 +109,6 @@ void AccessControl::checkRuntimePermission(
 void AccessControl::checkFilePermission(
     OUString const & url,
     OUString const & actions )
-    SAL_THROW( (RuntimeException) )
 {
     __checkPermission(
         m_xController,
@@ -124,7 +118,6 @@ void AccessControl::checkFilePermission(
 void AccessControl::checkSocketPermission(
     OUString const & host,
     OUString const & actions )
-    SAL_THROW( (RuntimeException) )
 {
     __checkPermission(
         m_xController,

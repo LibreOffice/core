@@ -38,7 +38,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakComponentImplHelper##N \
 { \
     static ClassData##N s_aCD; \
 public: \
-    WeakComponentImplHelper##N( ::osl::Mutex & rMutex ) SAL_THROW(()) \
+    WeakComponentImplHelper##N( ::osl::Mutex & rMutex ) \
         : WeakComponentImplHelperBase( rMutex ) \
         {} \
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException) \
@@ -64,7 +64,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggComponentImplHelper##N \
 { \
     static ClassData##N s_aCD; \
 public: \
-    WeakAggComponentImplHelper##N( ::osl::Mutex & rMutex ) SAL_THROW(()) \
+    WeakAggComponentImplHelper##N( ::osl::Mutex & rMutex ) \
         : WeakAggComponentImplHelperBase( rMutex ) \
         {} \
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException) \

@@ -80,7 +80,7 @@ class ServiceImpl0
     Reference< XComponentContext > m_xContext;
 
 public:
-    ServiceImpl0( Reference< XComponentContext > const & xContext ) SAL_THROW(());
+    ServiceImpl0( Reference< XComponentContext > const & xContext );
 
     // XInitialization
     virtual void SAL_CALL initialize( const Sequence< Any >& rArgs ) throw (Exception, RuntimeException);
@@ -91,7 +91,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
 };
 
-ServiceImpl0::ServiceImpl0( Reference< XComponentContext > const & xContext ) SAL_THROW(())
+ServiceImpl0::ServiceImpl0( Reference< XComponentContext > const & xContext )
     : m_xContext( xContext )
 {
     sal_Int32 n;
@@ -151,7 +151,7 @@ sal_Bool ServiceImpl0::supportsService( const OUString & rServiceName )
 class ServiceImpl1 : public ServiceImpl0
 {
 public:
-    inline ServiceImpl1( Reference< XComponentContext > const & xContext ) SAL_THROW(())
+    inline ServiceImpl1( Reference< XComponentContext > const & xContext )
         : ServiceImpl0( xContext )
         {}
 
@@ -175,14 +175,12 @@ Sequence< OUString > ServiceImpl1::getSupportedServiceNames()
 
 static Reference< XInterface > SAL_CALL ServiceImpl0_create(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( (Exception) )
 {
     return (OWeakObject *)new ServiceImpl0( xContext );
 }
 
 static Reference< XInterface > SAL_CALL ServiceImpl1_create(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( (Exception) )
 {
     return (OWeakObject *)new ServiceImpl1( xContext );
 }
