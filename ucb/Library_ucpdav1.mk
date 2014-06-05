@@ -67,11 +67,6 @@ $(eval $(call gb_Library_use_externals,ucpdav1,\
 	zlib \
 ))
 
-$(eval $(call gb_Library_add_libs,ucpdav1,\
-	$(if $(filter $(OS),LINUX),-lpthread) \
-	$(if $(filter $(OS),MACOSX),-liconv) \
-))
-
 $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
 	ucb/source/ucp/webdav/AprEnv \
 	ucb/source/ucp/webdav/ContentProperties \
