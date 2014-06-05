@@ -98,8 +98,8 @@ void DocumentDrawModelManager::InitDrawModel()
     m_rSwdoc.GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
 
     SAL_INFO( "sw.doc", "before create DrawDocument" );
-    // The document owns the SwDrawDocument. We always have two layers and one page.
-    mpDrawModel = new SwDrawDocument( &m_rSwdoc );
+    // The document owns the SwDrawModel. We always have two layers and one page.
+    mpDrawModel = new SwDrawModel( &m_rSwdoc );
 
     mpDrawModel->EnableUndo( m_rSwdoc.GetIDocumentUndoRedo().DoesUndo() );
 
@@ -196,17 +196,17 @@ void DocumentDrawModelManager::ReleaseDrawModel()
 
 
 
-const SwDrawDocument* DocumentDrawModelManager::GetDrawModel() const
+const SwDrawModel* DocumentDrawModelManager::GetDrawModel() const
 {
     return mpDrawModel;
 }
 
-SwDrawDocument* DocumentDrawModelManager::GetDrawModel()
+SwDrawModel* DocumentDrawModelManager::GetDrawModel()
 {
     return mpDrawModel;
 }
 
-SwDrawDocument* DocumentDrawModelManager::_MakeDrawModel()
+SwDrawModel* DocumentDrawModelManager::_MakeDrawModel()
 {
     OSL_ENSURE( !mpDrawModel, "_MakeDrawModel: Why?" );
     InitDrawModel();
@@ -229,7 +229,7 @@ SwDrawDocument* DocumentDrawModelManager::_MakeDrawModel()
     return mpDrawModel;
 }
 
-SwDrawDocument* DocumentDrawModelManager::GetOrCreateDrawModel()
+SwDrawModel* DocumentDrawModelManager::GetOrCreateDrawModel()
 {
     return GetDrawModel() ? GetDrawModel() : _MakeDrawModel();
 }

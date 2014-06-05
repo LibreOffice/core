@@ -28,7 +28,6 @@
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
 #include <dcontact.hxx>
-
 #include <ndgrf.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -447,7 +446,7 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
 
 void SwDoc::CheckForUniqueItemForLineFillNameOrIndex(SfxItemSet& rSet)
 {
-    SdrModel* pDrawModel = getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+    SwDrawModel* pDrawModel = getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SfxItemIter aIter(rSet);
 
     for(const SfxPoolItem* pItem = aIter.FirstItem(); pItem; pItem = aIter.NextItem())

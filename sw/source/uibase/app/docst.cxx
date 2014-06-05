@@ -47,11 +47,8 @@
 #include <SwRewriter.hxx>
 #include <numrule.hxx>
 #include <swundo.hxx>
-
-//UUUU
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
-
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "docsh.hxx"
@@ -77,7 +74,6 @@
 #include "swevent.hxx"
 #include "edtwin.hxx"
 #include "unochart.hxx"
-
 #include "app.hrc"
 #include "swabstdlg.hxx"
 
@@ -754,7 +750,7 @@ sal_uInt16 SwDocShell::Edit(
         //UUUU create needed items for XPropertyList entries from the DrawModel so that
         // the Area TabPage can access them
         SfxItemSet& rSet = xTmp->GetItemSet();
-        const SdrModel* pDrawModel = GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+        const SwDrawModel* pDrawModel = GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
 
         rSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
         rSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));

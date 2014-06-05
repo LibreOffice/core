@@ -117,7 +117,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-//UUUU
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xbtmpit.hxx>
@@ -137,6 +136,7 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xfltrit.hxx>
 #include <swunohelper.hxx>
+#include <drawdoc.hxx>
 
 // from fefly1.cxx
 extern bool sw_ChkAndSetNewAnchor( SwEditShell& rEditShell, const SwFlyFrm& rFly, SfxItemSet& rSet );
@@ -1304,7 +1304,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrmFmt &rFmt)
     {
         SwDoc *pDoc = rFmt.GetDoc();
         // #i52858# - method name changed
-        SdrModel *pDrawModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+        SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
         SwFlyDrawContact* pContactObject
                     = new SwFlyDrawContact( &rFmt, pDrawModel );
         pObject = pContactObject->GetMaster();
@@ -1691,7 +1691,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             {
                 SdrObject* pObject =
                     GetOrCreateSdrObject( (SwFlyFrmFmt&)*pFmt );
-                SdrModel *pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+                SwDrawModel *pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
                 pDrawModel->GetPage(0)->
                             SetObjectOrdNum(pObject->GetOrdNum(), nZOrder);
             }

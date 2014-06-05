@@ -22,7 +22,6 @@
 #include <DocumentDrawModelManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
-
 #include <tools/shl.hxx>
 #include <tools/globname.hxx>
 #include <svx/svxids.hrc>
@@ -117,11 +116,9 @@
 
 #include <vector>
 #include <map>
-
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <vbahelper/vbaaccesshelper.hxx>
-
 #include "switerator.hxx"
 
 /* @@@MAINTAINABILITY-HORROR@@@

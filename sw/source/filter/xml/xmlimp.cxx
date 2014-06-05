@@ -672,7 +672,7 @@ void SwXMLImport::startDocument()
     pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel(); // #i52858# - method name changed
 
     // SJ: #i49801# locking the modell to disable repaints
-    SdrModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+    SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
     if ( pDrawModel )
         pDrawModel->setLock(true);
 
@@ -872,7 +872,7 @@ void SwXMLImport::endDocument( void )
                 pDoc->PrtOLENotify( true );
         }
 
-        SdrModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+        SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         if ( pDrawModel )
             pDrawModel->setLock(false);
     }

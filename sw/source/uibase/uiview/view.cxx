@@ -1633,8 +1633,8 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     // regarded while switching from readonly-mode to edit-mode
                     if( !bReadonly )
                     {
-                        SwDrawDocument * pDrawDoc = 0;
-                        if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
+                        SwDrawModel * pDrawDoc = GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+                        if (pDrawDoc)
                         {
                             if( !pDrawDoc->GetOpenInDesignMode() )
                                 break;// don't touch the design mode

@@ -81,7 +81,6 @@
 #include <edtwin.hxx>
 #include <redlndlg.hxx>
 #include "fldmgr.hxx"
-
 #include <globals.hrc>
 #include <shells.hrc>
 #include <app.hrc>
@@ -91,15 +90,12 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/app.hxx>
 #include <breakit.hxx>
-
 #include <SwSmartTagMgr.hxx>
-
 #include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
 #include "chrdlg.hrc"
 #include <IDocumentStatistics.hxx>
-
 #include <sfx2/sfxdlg.hxx>
 #include <unotools/lingucfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -120,10 +116,8 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 
-//UUUU
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
-
 #include <numrule.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -930,7 +924,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             //UUUU create needed items for XPropertyList entries from the DrawModel so that
             // the Area TabPage can access them
             // Do this after GetCurAttr, this resets the ItemSet content again
-            const SdrModel* pDrawModel = GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+            const SwDrawModel* pDrawModel = GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
 
             aCoreSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
             aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));

@@ -1918,7 +1918,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel * pDrawDoc;
             bool bAuto = *(sal_Bool*) aValue.getValue();
 
             if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
@@ -1938,7 +1938,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         break;
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel * pDrawDoc;
             bool bMode = *(sal_Bool*)aValue.getValue();
 
             if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
@@ -2088,7 +2088,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_AUTOMATIC_CONTROL_FOCUS:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel * pDrawDoc;
             bool bAuto;
             if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 bAuto = pDrawDoc->GetAutoControlFocus();
@@ -2099,7 +2099,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_APPLY_FORM_DESIGN_MODE:
         {
-            SwDrawDocument * pDrawDoc;
+            SwDrawModel * pDrawDoc;
             bool bMode;
             if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 bMode = pDrawDoc->GetOpenInDesignMode();

@@ -360,8 +360,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // Ein DrawTxtobj anlegen
     // #i52858# - method name changed
-    SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-
+    SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SdrPage* pPg = pModel->GetPage( 0 );
     pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,
                                              OBJ_TEXT, pPg, pModel );

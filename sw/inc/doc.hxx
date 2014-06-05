@@ -87,7 +87,7 @@ class Outliner;
 class OutputDevice;
 class Point;
 class SbxArray;
-class SdrModel;
+class SwDrawModel;
 class SdrObject;
 class SdrUndoAction;
 class VirtualDevice;

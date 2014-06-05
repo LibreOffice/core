@@ -63,6 +63,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 
 #include <pausethreadstarting.hxx>
+#include <drawdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -230,7 +231,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
         //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
-        SdrModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
+        SwDrawModel* pModel = pDoc->getIDocumentDrawModelAccess().GetDrawModel();
         if( pModel )
             pModel->GetPage( 0 )->RecalcObjOrdNums();
     }

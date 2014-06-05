@@ -445,7 +445,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 //UUUU create needed items for XPropertyList entries from the DrawModel so that
                 // the Area TabPage can access them
-                const SdrModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+                const SwDrawModel* pDrawModel = rSh.GetView().GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
 
                 aSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
                 aSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));

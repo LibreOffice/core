@@ -56,12 +56,11 @@
 #include <svx/svxids.hrc>
 #include <svx/xdef.hxx>
 #include <SwRewriter.hxx>
-
-//UUUU
 #include <svx/xfillit0.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/drawitem.hxx>
+#include <drawdoc.hxx>
 
 // The Format names in the list of all names have the
 // following family as their first character:
@@ -1201,7 +1200,7 @@ SfxItemSet&   SwDocStyleSheet::GetItemSet()
 
                     //UUUU create needed items for XPropertyList entries from the DrawModel so that
                     // the Area TabPage can access them
-                    const SdrModel* pDrawModel = rDoc.getIDocumentDrawModelAccess().GetDrawModel();
+                    const SwDrawModel* pDrawModel = rDoc.getIDocumentDrawModelAccess().GetDrawModel();
 
                     aCoreSet.Put(SvxColorListItem(pDrawModel->GetColorList(), SID_COLOR_TABLE));
                     aCoreSet.Put(SvxGradientListItem(pDrawModel->GetGradientList(), SID_GRADIENT_LIST));

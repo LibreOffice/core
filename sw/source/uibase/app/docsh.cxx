@@ -71,6 +71,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
 #include <pview.hxx>
@@ -281,7 +282,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     }
 
     UpdateFontList();
-    InitDraw();
+    InitDrawModelAndDocShell(this, mpDoc ? mpDoc->getIDocumentDrawModelAccess().GetDrawModel() : 0);
 
     delete pRdr;
 

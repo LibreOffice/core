@@ -23,12 +23,9 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <unotools/ucbstreamhelper.hxx>
-
 #include <algorithm>
-
 #include <map>
 #include <set>
-
 #include <hintids.hxx>
 #include <string.h>
 #include <osl/endian.h>
@@ -94,15 +91,11 @@
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include "ww8attributeoutput.hxx"
-
 #include <IDocumentMarkAccess.hxx>
 #include <xmloff/odffields.hxx>
-
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
-
 #include "dbgoutsw.hxx"
-
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/frame.hxx>

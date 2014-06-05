@@ -413,7 +413,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         {
             sTypeToken = OUString();
             nMemberCount = 0;
-            SdrModel* pModel = pWrtShell->getIDocumentDrawModelAccess()->GetDrawModel();
+            SwDrawModel* pModel = pWrtShell->getIDocumentDrawModelAccess()->GetDrawModel();
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
@@ -741,7 +741,7 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 pMember->DeleteAndDestroyAll();
 
             IDocumentDrawModelAccess* pIDDMA = pWrtShell->getIDocumentDrawModelAccess();
-            SdrModel* pModel = pIDDMA->GetDrawModel();
+            SwDrawModel* pModel = pIDDMA->GetDrawModel();
             if(pModel)
             {
                 SdrPage* pPage = pModel->GetPage(0);
@@ -871,7 +871,7 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
                 SdrView* pDrawView = pActiveShell->GetDrawView();
                 if (pDrawView)
                 {
-                    SdrModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+                    SwDrawModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                     SdrPage* pPage = pDrawModel->GetPage(0);
                     const sal_uInt32 nCount = pPage->GetObjCount();
                     for( sal_uInt32 i=0; i< nCount; i++ )
@@ -964,7 +964,7 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
                 SdrView* pDrawView = pActiveShell->GetDrawView();
                 if (pDrawView)
                 {
-                    SdrModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+                    SwDrawModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                     SdrPage* pPage = pDrawModel->GetPage(0);
                     sal_uInt32 nCount = pPage->GetObjCount();
                     for( sal_uInt32 i=0; i< nCount; i++ )
@@ -1408,7 +1408,7 @@ SdrObject* SwContentTree::GetDrawingObjectsByContent(const SwContent *pCnt)
             SdrView* pDrawView = pActiveShell->GetDrawView();
             if (pDrawView)
             {
-                SdrModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+                SwDrawModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                 SdrPage* pPage = pDrawModel->GetPage(0);
                 sal_uInt32 nCount = pPage->GetObjCount();
 
@@ -2677,7 +2677,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                         {
                             pDrawView->SdrEndTextEdit();//Change from "EndTextEdit" to "SdrEndTextEdit" for acc migration
 
-                            SdrModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+                            SwDrawModel* pDrawModel = pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
                             SdrPage* pPage = pDrawModel->GetPage(0);
                             sal_uInt32 nCount = pPage->GetObjCount();
                             bool hasObjectMarked = false;
@@ -3352,7 +3352,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
             {
                 pDrawView->SdrEndTextEdit();
                 pDrawView->UnmarkAll();
-                SdrModel* _pModel = pActiveShell->getIDocumentDrawModelAccess()->GetDrawModel();
+                SwDrawModel* _pModel = pActiveShell->getIDocumentDrawModelAccess()->GetDrawModel();
                 SdrPage* pPage = _pModel->GetPage(0);
                 sal_uInt32 nCount = pPage->GetObjCount();
                 for( sal_uInt32 i=0; i< nCount; i++ )

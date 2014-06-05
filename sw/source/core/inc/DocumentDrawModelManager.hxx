@@ -25,7 +25,7 @@
 #include <boost/utility.hpp>
 #include <svx/svdtypes.hxx>
 
-class SwDrawDocument;
+class SwDrawModel;
 class SdrPageView;
 class SwDoc;
 
@@ -44,10 +44,10 @@ public:
     void DrawNotifyUndoHdl();
 
     //IDocumentDrawModelAccess
-    virtual const SwDrawDocument* GetDrawModel() const SAL_OVERRIDE;
-    virtual SwDrawDocument* GetDrawModel() SAL_OVERRIDE;
-    virtual SwDrawDocument* _MakeDrawModel() SAL_OVERRIDE;
-    virtual SwDrawDocument* GetOrCreateDrawModel() SAL_OVERRIDE;
+    virtual const SwDrawModel* GetDrawModel() const SAL_OVERRIDE;
+    virtual SwDrawModel* GetDrawModel() SAL_OVERRIDE;
+    virtual SwDrawModel* _MakeDrawModel() SAL_OVERRIDE;
+    virtual SwDrawModel* GetOrCreateDrawModel() SAL_OVERRIDE;
     virtual SdrLayerID GetHeavenId() const SAL_OVERRIDE;
     virtual SdrLayerID GetHellId() const SAL_OVERRIDE;
     virtual SdrLayerID GetControlsId() const SAL_OVERRIDE;
@@ -70,7 +70,7 @@ private:
     SwDoc& m_rSwdoc;
 
 
-    SwDrawDocument* mpDrawModel;
+    SwDrawModel* mpDrawModel;
 
     /** Draw Model Layer IDs
      * LayerIds, Heaven == above document

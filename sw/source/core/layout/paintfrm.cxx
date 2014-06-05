@@ -79,10 +79,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-//UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <ndtxt.hxx>
+#include <drawdoc.hxx>
 
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
@@ -7607,7 +7607,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
 {
     Graphic aRet;
-    SdrModel *pMod = getIDocumentDrawModelAccess()->GetDrawModel();
+    SwDrawModel* pMod = getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMod )
     {
         SdrObject *pObj = FindSdrObject();

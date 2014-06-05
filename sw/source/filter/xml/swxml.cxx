@@ -57,7 +57,6 @@
 #include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
-
 #include <statstr.hrc>
 
 #include <SwStyleNameMapper.hxx>

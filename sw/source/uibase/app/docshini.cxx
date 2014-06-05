@@ -61,6 +61,7 @@
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentDrawModelAccess.hxx>
 #include <docfac.hxx>
 #include <docstyle.hxx>
 #include <shellio.hxx>
@@ -549,7 +550,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         }
 
         UpdateFontList();
-        InitDraw();
+        InitDrawModelAndDocShell(this, mpDoc ? mpDoc->getIDocumentDrawModelAccess().GetDrawModel() : 0);
 
         SetError( nErr, OUString( OSL_LOG_PREFIX ) );
         bRet = !IsError( nErr );
@@ -615,7 +616,7 @@ void SwDocShell::SubInitNew()
     OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
     mxBasePool = new SwDocStyleSheetPool( *mpDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
     UpdateFontList();
-    InitDraw();
+    InitDrawModelAndDocShell(this, mpDoc ? mpDoc->getIDocumentDrawModelAccess().GetDrawModel() : 0);
 
     mpDoc->getIDocumentSettingAccess().setLinkUpdateMode( GLOBALSETTING );
     mpDoc->getIDocumentSettingAccess().setFieldUpdateFlags( AUTOUPD_GLOBALSETTING );

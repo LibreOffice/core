@@ -20,9 +20,7 @@
 #include <UndoManager.hxx>
 
 #include <vcl/wrkwin.hxx>
-
 #include <svx/svdmodel.hxx>
-
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <drawdoc.hxx>
@@ -85,7 +83,7 @@ void UndoManager::DoUndo(bool const bDoUndo)
     {
         EnableUndo(bDoUndo);
 
-        SdrModel *const pSdrModel = m_rDrawModelAccess.GetDrawModel();
+        SwDrawModel*const pSdrModel = m_rDrawModelAccess.GetDrawModel();
         if( pSdrModel )
         {
             pSdrModel->EnableUndo(bDoUndo);
