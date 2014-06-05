@@ -246,7 +246,6 @@ Sequence<OUString> PresenterProtocolHandler::getSupportedServiceNames_static (vo
 
 Reference<XInterface> PresenterProtocolHandler::Create (
     const Reference<uno::XComponentContext>& rxContext)
-    SAL_THROW((Exception))
 {
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterProtocolHandler(rxContext)));
 }
