@@ -274,7 +274,7 @@ namespace toolkit
 
 
     void UnoControlFormattedFieldModel::ImplNormalizePropertySequence( const sal_Int32 _nCount, sal_Int32* _pHandles,
-        Any* _pValues, sal_Int32* _pValidHandles ) const SAL_THROW(())
+        Any* _pValues, sal_Int32* _pValidHandles ) const
     {
         ImplEnsureHandleOrder( _nCount, _pHandles, _pValues, BASEPROPERTY_EFFECTIVE_VALUE, BASEPROPERTY_TEXT );
 

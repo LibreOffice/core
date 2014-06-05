@@ -62,7 +62,7 @@ namespace toolkit
         // (order matters: the first is the class name, the second is the class doing the ref counting)
 
 
-    void OAccessibleControlContext::Init( const Reference< XAccessible >& _rxCreator ) SAL_THROW( ( Exception ) )
+    void OAccessibleControlContext::Init( const Reference< XAccessible >& _rxCreator )
     {
         OContextEntryGuard aGuard( this );
 
@@ -84,7 +84,7 @@ namespace toolkit
     }
 
 
-    OAccessibleControlContext* OAccessibleControlContext::create( const Reference< XAccessible >& _rxCreator ) SAL_THROW( ( ) )
+    OAccessibleControlContext* OAccessibleControlContext::create( const Reference< XAccessible >& _rxCreator )
     {
         OAccessibleControlContext* pNew = NULL;
         try
@@ -100,7 +100,7 @@ namespace toolkit
     }
 
 
-    void OAccessibleControlContext::startModelListening( ) SAL_THROW( ( Exception ) )
+    void OAccessibleControlContext::startModelListening( )
     {
         Reference< XComponent > xModelComp( m_xControlModel, UNO_QUERY );
         OSL_ENSURE( xModelComp.is(), "OAccessibleControlContext::startModelListening: invalid model!" );
@@ -109,7 +109,7 @@ namespace toolkit
     }
 
 
-    void OAccessibleControlContext::stopModelListening( ) SAL_THROW( ( Exception ) )
+    void OAccessibleControlContext::stopModelListening( )
     {
         Reference< XComponent > xModelComp( m_xControlModel, UNO_QUERY );
         OSL_ENSURE( xModelComp.is(), "OAccessibleControlContext::stopModelListening: invalid model!" );
