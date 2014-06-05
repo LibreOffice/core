@@ -47,7 +47,7 @@ class DAVSession;
 class DAVSessionFactory : public salhelper::SimpleReferenceObject
 {
 public:
-    virtual ~DAVSessionFactory() SAL_THROW(());
+    virtual ~DAVSessionFactory();
 
     rtl::Reference< DAVSession >
         createDAVSession( const OUString & inUri,
@@ -63,7 +63,7 @@ private:
     osl::Mutex m_aMutex;
     std::auto_ptr< ucbhelper::InternetProxyDecider > m_xProxyDecider;
 
-    void releaseElement( DAVSession * pElement ) SAL_THROW(());
+    void releaseElement( DAVSession * pElement );
 
     friend class DAVSession;
 };

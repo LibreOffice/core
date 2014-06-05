@@ -39,7 +39,7 @@ class ObjectContainer3: public salhelper::SimpleReferenceObject
 public:
     ObjectContainer3();
 
-    virtual ~ObjectContainer3() SAL_THROW(());
+    virtual ~ObjectContainer3();
 
     rtl::Reference< Object3 > get(OUString const & rKey);
 
@@ -49,7 +49,7 @@ private:
     Map m_aMap;
     osl::Mutex m_aMutex;
 
-    void releaseElement(Object3 * pElement) SAL_THROW(());
+    void releaseElement(Object3 * pElement);
 
     friend class Object3; // to access Map, releaseElement()
 };
@@ -57,10 +57,10 @@ private:
 class Object3
 {
 public:
-    inline void acquire() SAL_THROW(())
+    inline void acquire()
     { osl_atomic_increment(&m_nRefCount); }
 
-    void release() SAL_THROW(());
+    void release();
 
 private:
     rtl::Reference< ObjectContainer3 > m_xContainer;
@@ -69,7 +69,7 @@ private:
 
     inline Object3(rtl::Reference< ObjectContainer3 > const & rContainer);
 
-    inline ~Object3() SAL_THROW(());
+    inline ~Object3();
 
     Object3(Object3 &); // not implemented
     void operator =(Object3); // not implemented

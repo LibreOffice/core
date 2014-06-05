@@ -37,10 +37,10 @@ Object3::Object3(rtl::Reference< ObjectContainer3 > const & rContainer):
     OSL_ASSERT(m_xContainer.is());
 }
 
-inline Object3::~Object3() SAL_THROW(())
+inline Object3::~Object3()
 {}
 
-void Object3::release() SAL_THROW(())
+void Object3::release()
 {
     if (osl_atomic_decrement(&m_nRefCount) == 0)
     {
@@ -49,7 +49,7 @@ void Object3::release() SAL_THROW(())
     }
 }
 
-void ObjectContainer3::releaseElement(Object3 * pElement) SAL_THROW(())
+void ObjectContainer3::releaseElement(Object3 * pElement)
 {
     OSL_ASSERT(pElement);
     osl::MutexGuard aGuard(m_aMutex);
@@ -60,7 +60,7 @@ void ObjectContainer3::releaseElement(Object3 * pElement) SAL_THROW(())
 ObjectContainer3::ObjectContainer3()
 {}
 
-ObjectContainer3::~ObjectContainer3() SAL_THROW(())
+ObjectContainer3::~ObjectContainer3()
 {}
 
 rtl::Reference< Object3 > ObjectContainer3::get(OUString const & rKey)

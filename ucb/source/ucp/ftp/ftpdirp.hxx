@@ -47,7 +47,7 @@ namespace ftp {
                  const sal_uInt16& hours,
                  const sal_uInt16& day,
                  const sal_uInt16& month,
-                 const sal_uInt16& year) SAL_THROW(())
+                 const sal_uInt16& year)
                      : com::sun::star::util::DateTime(nanoSeconds,
                                                       seconds,
                                                       minutes,

@@ -40,7 +40,7 @@ class ObjectContainer2
 public:
     ObjectContainer2();
 
-    ~ObjectContainer2() SAL_THROW(());
+    ~ObjectContainer2();
 
     rtl::Reference< Object2 > get(OUString const & rKey);
 

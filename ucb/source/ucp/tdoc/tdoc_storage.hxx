@@ -97,7 +97,7 @@ namespace tdoc_ucp {
     private:
         friend class Storage;
 
-        void releaseElement( Storage * pElement ) SAL_THROW(());
+        void releaseElement( Storage * pElement );
 
         com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
         queryParentStorage( const OUString & rUri,

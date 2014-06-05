@@ -117,7 +117,6 @@ void ExpandContentProviderImpl::disposing()
 
 static uno::Reference< uno::XInterface > SAL_CALL create(
     uno::Reference< uno::XComponentContext > const & xComponentContext )
-    SAL_THROW( (uno::Exception) )
 {
     return static_cast< ::cppu::OWeakObject * >(
         new ExpandContentProviderImpl( xComponentContext ) );

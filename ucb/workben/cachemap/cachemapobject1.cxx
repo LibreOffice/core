@@ -37,10 +37,10 @@ Object1::Object1(rtl::Reference< ObjectContainer1 > const & rContainer):
     OSL_ASSERT(m_xContainer.is());
 }
 
-inline Object1::~Object1() SAL_THROW(())
+inline Object1::~Object1()
 {}
 
-void ObjectContainer1::releaseElement(Object1 * pElement) SAL_THROW(())
+void ObjectContainer1::releaseElement(Object1 * pElement)
 {
     OSL_ASSERT(pElement);
     bool bDelete = false;
@@ -59,7 +59,7 @@ void ObjectContainer1::releaseElement(Object1 * pElement) SAL_THROW(())
 ObjectContainer1::ObjectContainer1()
 {}
 
-ObjectContainer1::~ObjectContainer1() SAL_THROW(())
+ObjectContainer1::~ObjectContainer1()
 {}
 
 rtl::Reference< Object1 > ObjectContainer1::get(OUString const & rKey)
