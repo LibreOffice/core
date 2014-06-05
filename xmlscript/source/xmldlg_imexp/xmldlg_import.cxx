@@ -73,7 +73,6 @@ ControlElement::ControlElement(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
-    SAL_THROW(())
     : ElementBase(
         pImport->XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
 {
@@ -1659,7 +1658,6 @@ ElementBase::ElementBase(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
-    SAL_THROW(())
     : _pImport( pImport )
     , _pParent( pParent )
     , _nUid( nUid )
@@ -1673,8 +1671,8 @@ ElementBase::ElementBase(
         _pParent->acquire();
     }
 }
+
 ElementBase::~ElementBase()
-    SAL_THROW(())
 {
     _pImport->release();
 
@@ -1741,7 +1739,6 @@ Reference< xml::input::XElement > DialogImport::startRootElement(
 }
 
 DialogImport::~DialogImport()
-    SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("xmlscript.xmldlg", "DialogImport::~DialogImport()." );
@@ -1766,7 +1763,6 @@ Reference< util::XNumberFormatsSupplier > const & DialogImport::getNumberFormats
 void DialogImport::addStyle(
     OUString const & rStyleId,
     Reference< xml::input::XElement > const & xStyle )
-    SAL_THROW(())
 {
     (*_pStyleNames).push_back( rStyleId );
     (*_pStyles).push_back( xStyle );
@@ -1774,7 +1770,6 @@ void DialogImport::addStyle(
 
 Reference< xml::input::XElement > DialogImport::getStyle(
     OUString const & rStyleId ) const
-    SAL_THROW(())
 {
     for ( size_t nPos = 0; nPos < (*_pStyleNames).size(); ++nPos )
     {
@@ -1790,7 +1785,6 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL importDialogModel(
     Reference< container::XNameContainer > const & xDialogModel,
     Reference< XComponentContext > const & xContext,
     Reference< XModel > const & xDocument )
-    SAL_THROW( (Exception) )
 {
     // single set of styles and stylenames apply to all containees
     :: boost::shared_ptr< ::std::vector< OUString > > pStyleNames( new ::std::vector< OUString > );

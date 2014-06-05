@@ -26,20 +26,17 @@ namespace xmlscript
 {
 
 void XMLElement::addAttribute( OUString const & rAttrName, OUString const & rValue )
-    SAL_THROW(())
 {
     _attrNames.push_back( rAttrName );
     _attrValues.push_back( rValue );
 }
 
 void XMLElement::addSubElement( Reference< xml::sax::XAttributeList > const & xElem )
-    SAL_THROW(())
 {
     _subElems.push_back( xElem );
 }
 
 Reference< xml::sax::XAttributeList > XMLElement::getSubElement( sal_Int32 nIndex )
-    SAL_THROW(())
 {
     return _subElems[ (size_t)nIndex ];
 }

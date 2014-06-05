@@ -1108,7 +1108,6 @@ struct StringTriple
 extern StringTriple const * const g_pEventTranslations;
 
 void ElementDescriptor::readEvents()
-    SAL_THROW( (Exception) )
 {
     Reference< script::XScriptEventsSupplier > xSupplier( _xProps, UNO_QUERY );
     if (xSupplier.is())
@@ -1229,8 +1228,8 @@ inline bool equalFont( Style const & style1, Style const & style2 )
         style1._fontEmphasisMark == style2._fontEmphasisMark
         );
 }
+
 OUString StyleBag::getStyleId( Style const & rStyle )
-    SAL_THROW(())
 {
     if (! rStyle._set) // nothin set
     {
@@ -1307,13 +1306,15 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     _styles.push_back( pStyle );
     return pStyle->_id;
 }
-StyleBag::~StyleBag() SAL_THROW(())
+
+StyleBag::~StyleBag()
 {
     for ( size_t nPos = 0; nPos < _styles.size(); ++nPos )
     {
         delete _styles[ nPos ];
     }
 }
+
 void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut )
 {
     if (! _styles.empty())
@@ -1336,7 +1337,6 @@ void SAL_CALL exportDialogModel(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
     Reference< container::XNameContainer > const & xDialogModel,
     Reference< frame::XModel > const & xDocument )
-    SAL_THROW( (Exception) )
 {
     StyleBag all_styles;
     // window

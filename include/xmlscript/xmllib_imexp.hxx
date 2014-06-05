@@ -60,26 +60,22 @@ XMLSCRIPT_DLLPUBLIC void
 SAL_CALL exportLibraryContainer(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XWriter > const & xOut,
-    const LibDescriptorArray* pLibArray )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
+    const LibDescriptorArray* pLibArray );
 
 XMLSCRIPT_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XDocumentHandler >
-SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
+SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray );
 
 
 XMLSCRIPT_DLLPUBLIC void
 SAL_CALL exportLibrary(
     ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XWriter > const & xOut,
-    const LibDescriptor& rLib )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
+    const LibDescriptor& rLib );
 
 XMLSCRIPT_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::xml::sax::XDocumentHandler >
-SAL_CALL importLibrary( LibDescriptor& rLib )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
+SAL_CALL importLibrary( LibDescriptor& rLib );
 
 }
 

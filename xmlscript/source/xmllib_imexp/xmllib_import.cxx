@@ -84,7 +84,6 @@ LibElementBase::LibElementBase(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     LibElementBase * pParent, LibraryImport * pImport )
-    SAL_THROW(())
     : _pImport( pImport )
     , _pParent( pParent )
     , _aLocalName( rLocalName )
@@ -99,7 +98,6 @@ LibElementBase::LibElementBase(
 }
 
 LibElementBase::~LibElementBase()
-    SAL_THROW(())
 {
     _pImport->release();
 
@@ -173,7 +171,6 @@ Reference< xml::input::XElement > LibraryImport::startRootElement(
 }
 
 LibraryImport::~LibraryImport()
-    SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("xmlscript.xmllib", "LibraryImport::~LibraryImport()." );
@@ -266,7 +263,6 @@ void LibraryElement::endElement()
 
 Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
-        SAL_THROW( (Exception) )
 {
     return ::xmlscript::createDocumentHandler(
         static_cast< xml::input::XRoot * >( new LibraryImport( pLibArray ) ) );
@@ -274,7 +270,6 @@ SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >
 SAL_CALL importLibrary( LibDescriptor& rLib )
-        SAL_THROW( (::com::sun::star::uno::Exception) )
 {
     return ::xmlscript::createDocumentHandler(
         static_cast< xml::input::XRoot * >( new LibraryImport( &rLib ) ) );

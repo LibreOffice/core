@@ -84,7 +84,6 @@ ModuleElement::ModuleElement(
     OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ModuleElement * pParent, ModuleImport * pImport )
-    SAL_THROW(())
     : _pImport( pImport )
     , _pParent( pParent )
     , _aLocalName( rLocalName )
@@ -99,7 +98,6 @@ ModuleElement::ModuleElement(
 }
 
 ModuleElement::~ModuleElement()
-    SAL_THROW(())
 {
     _pImport->release();
 
@@ -166,8 +164,8 @@ Reference< xml::input::XElement > ModuleImport::startRootElement(
         throw xml::sax::SAXException("illegal root element (expected module) given: " + rLocalName, Reference< XInterface >(), Any() );
     }
 }
+
 ModuleImport::~ModuleImport()
-    SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
     SAL_INFO("xmlscript.xmlmod", "ModuleImport::~ModuleImport()." );
@@ -176,7 +174,6 @@ ModuleImport::~ModuleImport()
 
 Reference< xml::sax::XDocumentHandler >
 SAL_CALL importScriptModule( ModuleDescriptor& rMod )
-    SAL_THROW( (Exception) )
 {
     return ::xmlscript::createDocumentHandler(
         static_cast< xml::input::XRoot * >( new ModuleImport( rMod ) ) );
