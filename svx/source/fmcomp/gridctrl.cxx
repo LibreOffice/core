@@ -2806,6 +2806,7 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                 return;
             }
         }
+        //fall-through
         default:
             DbGridControl_Base::Command(rEvt);
     }
