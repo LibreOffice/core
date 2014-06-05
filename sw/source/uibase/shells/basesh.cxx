@@ -1955,6 +1955,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
                         nScripts = SvtLanguageOptions::GetScriptTypeOfLanguage( nInputLang );
                 }
             }
+            // fall-through
             case SID_ATTR_CHAR_POSTURE:
             case SID_ATTR_CHAR_WEIGHT:
             {
