@@ -152,7 +152,7 @@ public:
     void disposeStorages();
 
     /// disposes all known sub storages
-    void commitStorages() SAL_THROW(( IOException, RuntimeException ));
+    void commitStorages();
 
     /// commits the dedicated "database" storage
     bool commitEmbeddedStorage( bool _bPreventRootCommits );
@@ -257,7 +257,7 @@ void DocumentStorageAccess::disposeStorages()
     m_bDisposingSubStorages = false;
 }
 
-void DocumentStorageAccess::commitStorages() SAL_THROW(( IOException, RuntimeException ))
+void DocumentStorageAccess::commitStorages()
 {
     try
     {
@@ -783,7 +783,7 @@ void ODatabaseModelImpl::setResource( const OUString& i_rDocumentURL, const Sequ
     return aMutableArgs;
 }
 
-void ODatabaseModelImpl::disposeStorages() SAL_THROW(())
+void ODatabaseModelImpl::disposeStorages()
 {
     getDocumentStorageAccess()->disposeStorages();
 }
@@ -883,7 +883,7 @@ bool ODatabaseModelImpl::commitEmbeddedStorage( bool _bPreventRootCommits )
     return getDocumentStorageAccess()->commitEmbeddedStorage( _bPreventRootCommits );
 }
 
-bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference< XStorage >& _rxStorage ) SAL_THROW(())
+bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference< XStorage >& _rxStorage )
 {
     bool bSuccess = false;
     try
@@ -1001,7 +1001,7 @@ oslInterlockedCount SAL_CALL ODatabaseModelImpl::release()
     return m_refCount;
 }
 
-void ODatabaseModelImpl::commitStorages() SAL_THROW(( IOException, RuntimeException ))
+void ODatabaseModelImpl::commitStorages()
 {
     getDocumentStorageAccess()->commitStorages();
 }

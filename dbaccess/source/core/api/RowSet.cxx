@@ -1046,7 +1046,7 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException, std::
     fireRowcount();
 }
 
-void ORowSet::implCancelRowUpdates( bool _bNotifyModified ) SAL_THROW( ( SQLException, RuntimeException ) )
+void ORowSet::implCancelRowUpdates( bool _bNotifyModified )
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 

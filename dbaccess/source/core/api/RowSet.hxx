@@ -414,7 +414,7 @@ namespace dbaccess
         /// set m_xActiveConnection, fire a PropertyChangeEvent if necessary, do the event listener handling etc
         void setActiveConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxNewConn, bool _bFireEvent = true );
 
-        void implCancelRowUpdates( bool _bNotifyModified ) SAL_THROW( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
+        void implCancelRowUpdates( bool _bNotifyModified );
 
         /** sets the given result set type/concurrency at the given statement, while respecting
             possibly related data source settings

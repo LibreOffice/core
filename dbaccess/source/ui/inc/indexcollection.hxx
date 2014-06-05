@@ -70,10 +70,10 @@ namespace dbaui
         Indexes::iterator insert(const OUString& _rName);
         // commit a new index, which is already part if the collection, but does not have an equivalent in the
         // data source, yet
-        void commitNewIndex(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        void commitNewIndex(const Indexes::iterator& _rPos);
 
         // reset the data for the given index
-        void resetIndex(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        void resetIndex(const Indexes::iterator& _rPos);
 
         // attach to a new key container
         void attach(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
@@ -86,14 +86,14 @@ namespace dbaui
         sal_Int32   size() const { return m_aIndexes.size(); }
 
         /// drop an index, and remove it from the collection
-        bool    drop(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        bool    drop(const Indexes::iterator& _rPos);
         /// simply drop the index described by the name, but don't remove the descriptor from the collection
-        bool    dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((::com::sun::star::sdbc::SQLException));
+        bool    dropNoRemove(const Indexes::iterator& _rPos);
 
     protected:
         void implConstructFrom(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxIndexes);
-        void implFillIndexInfo(OIndex& _rIndex, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxDescriptor) SAL_THROW((::com::sun::star::uno::Exception));
-        void implFillIndexInfo(OIndex& _rIndex) SAL_THROW((::com::sun::star::uno::Exception));
+        void implFillIndexInfo(OIndex& _rIndex, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxDescriptor);
+        void implFillIndexInfo(OIndex& _rIndex);
     };
 
 }   // namespace dbaui

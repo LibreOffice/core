@@ -121,7 +121,7 @@ namespace dbaui
         return aSearch;
     }
 
-    void OIndexCollection::commitNewIndex(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
+    void OIndexCollection::commitNewIndex(const Indexes::iterator& _rPos)
     {
         OSL_ENSURE(_rPos->isNew(), "OIndexCollection::commitNewIndex: index must be new!");
 
@@ -190,7 +190,7 @@ namespace dbaui
         }
     }
 
-    bool OIndexCollection::dropNoRemove(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
+    bool OIndexCollection::dropNoRemove(const Indexes::iterator& _rPos)
     {
         try
         {
@@ -223,7 +223,7 @@ namespace dbaui
         return true;
     }
 
-    bool OIndexCollection::drop(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
+    bool OIndexCollection::drop(const Indexes::iterator& _rPos)
     {
         OSL_ENSURE((_rPos >= m_aIndexes.begin()) && (_rPos < m_aIndexes.end()),
             "OIndexCollection::drop: invalid position (fasten your seatbelt .... this will crash)!");
@@ -237,7 +237,7 @@ namespace dbaui
         return true;
     }
 
-    void OIndexCollection::implFillIndexInfo(OIndex& _rIndex) SAL_THROW((Exception))
+    void OIndexCollection::implFillIndexInfo(OIndex& _rIndex)
     {
         // get the UNO descriptor for the index
         Reference< XPropertySet > xIndex;
@@ -250,7 +250,7 @@ namespace dbaui
             implFillIndexInfo(_rIndex, xIndex);
     }
 
-    void OIndexCollection::implFillIndexInfo(OIndex& _rIndex, Reference< XPropertySet > _rxDescriptor) SAL_THROW((Exception))
+    void OIndexCollection::implFillIndexInfo(OIndex& _rIndex, Reference< XPropertySet > _rxDescriptor)
     {
         static const OUString s_sPrimaryIndexPropertyName = "IsPrimaryKeyIndex";
         static const OUString s_sUniquePropertyName = "IsUnique";
@@ -299,7 +299,7 @@ namespace dbaui
         }
     }
 
-    void OIndexCollection::resetIndex(const Indexes::iterator& _rPos) SAL_THROW((SQLException))
+    void OIndexCollection::resetIndex(const Indexes::iterator& _rPos)
     {
         OSL_ENSURE(_rPos >= m_aIndexes.begin() && _rPos < m_aIndexes.end(),
             "OIndexCollection::resetIndex: invalid position!");
