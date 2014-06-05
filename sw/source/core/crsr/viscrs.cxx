@@ -533,7 +533,7 @@ void SwShellCrsr::FillRects()
         (GetMark()->nNode == GetPoint()->nNode ||
         (GetMark()->nNode.GetNode().IsCntntNode() &&
          GetMark()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) )   ))
-        GetShell()->GetLayout()->CalcFrmRects( *this, GetShell()->IsTableMode() );
+        GetShell()->GetLayout()->CalcFrmRects( *this );
 }
 
 void SwShellCrsr::Show()

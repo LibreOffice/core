@@ -1988,9 +1988,7 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
  *              inverted rectangles are available.
  *              In the end the Flys are cut out of the section.
  */
-void SwRootFrm::CalcFrmRects(
-    SwShellCrsr &rCrsr,
-    const bool bIsTblMode)
+void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
 {
     SwPosition *pStartPos = rCrsr.Start(),
                *pEndPos   = rCrsr.GetPoint() == pStartPos ? rCrsr.GetMark() : rCrsr.GetPoint();
@@ -2035,45 +2033,49 @@ void SwRootFrm::CalcFrmRects(
         }
     }
 
-    //Case 4: Table selection
-    if( bIsTblMode )
-    {
-        const SwFrm *pCell = pStartFrm->GetUpper();
-        while ( !pCell->IsCellFrm() )
-            pCell = pCell->GetUpper();
-        SwRect aTmp( pCell->Prt() );
-        aTmp.Pos() += pCell->Frm().Pos();
-        aRegion.ChangeOrigin( aTmp );
-        aRegion.clear();
-        aRegion.push_back( aTmp);
-    }
-    else
-    {
-        // if a selection which is not allowed exists, we correct what is not
-        // allowed (header/footer/table-headline) for two pages.
-        do {    // middle check loop
-            const SwLayoutFrm* pSttLFrm = pStartFrm->GetUpper();
-            const sal_uInt16 cHdFtTblHd = FRM_HEADER | FRM_FOOTER | FRM_TAB;
-            while( pSttLFrm &&
-                ! (cHdFtTblHd & pSttLFrm->GetType() ))
-                pSttLFrm = pSttLFrm->GetUpper();
-            if( !pSttLFrm )
-                break;
-            const SwLayoutFrm* pEndLFrm = pEndFrm->GetUpper();
-            while( pEndLFrm &&
-                ! (cHdFtTblHd & pEndLFrm->GetType() ))
-                pEndLFrm = pEndLFrm->GetUpper();
-            if( !pEndLFrm )
-                break;
+    // if a selection which is not allowed exists, we correct what is not
+    // allowed (header/footer/table-headline) for two pages.
+    do {    // middle check loop
+        const SwLayoutFrm* pSttLFrm = pStartFrm->GetUpper();
+        const sal_uInt16 cHdFtTblHd = FRM_HEADER | FRM_FOOTER | FRM_TAB;
+        while( pSttLFrm &&
+            ! (cHdFtTblHd & pSttLFrm->GetType() ))
+            pSttLFrm = pSttLFrm->GetUpper();
+        if( !pSttLFrm )
+            break;
+        const SwLayoutFrm* pEndLFrm = pEndFrm->GetUpper();
+        while( pEndLFrm &&
+            ! (cHdFtTblHd & pEndLFrm->GetType() ))
+            pEndLFrm = pEndLFrm->GetUpper();
+        if( !pEndLFrm )
+            break;
 
-            OSL_ENSURE( pEndLFrm->GetType() == pSttLFrm->GetType(),
-                "Selection over different content" );
-            switch( pSttLFrm->GetType() )
+        OSL_ENSURE( pEndLFrm->GetType() == pSttLFrm->GetType(),
+            "Selection over different content" );
+        switch( pSttLFrm->GetType() )
+        {
+        case FRM_HEADER:
+        case FRM_FOOTER:
+            // On different pages? Then always on the start-page
+            if( pEndLFrm->FindPageFrm() != pSttLFrm->FindPageFrm() )
             {
-            case FRM_HEADER:
-            case FRM_FOOTER:
-                // On different pages? Then always on the start-page
-                if( pEndLFrm->FindPageFrm() != pSttLFrm->FindPageFrm() )
+                // Set end- to the start-CntntFrame
+                if( pStartPos == rCrsr.GetPoint() )
+                    pEndFrm = pStartFrm;
+                else
+                    pStartFrm = pEndFrm;
+            }
+            break;
+        case FRM_TAB:
+            // On different pages? Then check for table-headline
+            {
+                const SwTabFrm* pTabFrm = (SwTabFrm*)pSttLFrm;
+                if( ( pTabFrm->GetFollow() ||
+                    ((SwTabFrm*)pEndLFrm)->GetFollow() ) &&
+                    pTabFrm->GetTable()->GetRowsToRepeat() > 0 &&
+                    pTabFrm->GetLower() != ((SwTabFrm*)pEndLFrm)->GetLower() &&
+                    ( lcl_IsInRepeatedHeadline( pStartFrm ) ||
+                    lcl_IsInRepeatedHeadline( pEndFrm ) ) )
                 {
                     // Set end- to the start-CntntFrame
                     if( pStartPos == rCrsr.GetPoint() )
@@ -2081,477 +2083,458 @@ void SwRootFrm::CalcFrmRects(
                     else
                         pStartFrm = pEndFrm;
                 }
-                break;
-            case FRM_TAB:
-                // On different pages? Then check for table-headline
-                {
-                    const SwTabFrm* pTabFrm = (SwTabFrm*)pSttLFrm;
-                    if( ( pTabFrm->GetFollow() ||
-                        ((SwTabFrm*)pEndLFrm)->GetFollow() ) &&
-                        pTabFrm->GetTable()->GetRowsToRepeat() > 0 &&
-                        pTabFrm->GetLower() != ((SwTabFrm*)pEndLFrm)->GetLower() &&
-                        ( lcl_IsInRepeatedHeadline( pStartFrm ) ||
-                        lcl_IsInRepeatedHeadline( pEndFrm ) ) )
-                    {
-                        // Set end- to the start-CntntFrame
-                        if( pStartPos == rCrsr.GetPoint() )
-                            pEndFrm = pStartFrm;
-                        else
-                            pStartFrm = pEndFrm;
-                    }
-                }
-                break;
             }
-        } while( false );
-
-        SwCrsrMoveState aTmpState( MV_NONE );
-        aTmpState.b2Lines = true;
-        aTmpState.bNoScroll = true;
-        aTmpState.nCursorBidiLevel = pStartFrm->IsRightToLeft() ? 1 : 0;
-
-        //CntntRects to Start- and EndFrms.
-        SwRect aStRect, aEndRect;
-        pStartFrm->GetCharRect( aStRect, *pStartPos, &aTmpState );
-        Sw2LinesPos *pSt2Pos = aTmpState.p2Lines;
-        aTmpState.p2Lines = NULL;
-        aTmpState.nCursorBidiLevel = pEndFrm->IsRightToLeft() ? 1 : 0;
-
-        pEndFrm->GetCharRect( aEndRect, *pEndPos, &aTmpState );
-        Sw2LinesPos *pEnd2Pos = aTmpState.p2Lines;
-
-        SwRect aStFrm ( pStartFrm->UnionFrm( true ) );
-        aStFrm.Intersection( pStartFrm->PaintArea() );
-        SwRect aEndFrm( pStartFrm == pEndFrm ? aStFrm : pEndFrm->UnionFrm( true ) );
-        if( pStartFrm != pEndFrm )
-        {
-            aEndFrm.Intersection( pEndFrm->PaintArea() );
+            break;
         }
-        SWRECTFN( pStartFrm )
-        const bool bR2L = pStartFrm->IsRightToLeft();
-        const bool bEndR2L = pEndFrm->IsRightToLeft();
+    } while( false );
 
-        // If there's no doubleline portion involved or start and end are both
-        // in the same doubleline portion, all works fine, but otherwise
-        // we need the following...
-        if( pSt2Pos != pEnd2Pos && ( !pSt2Pos || !pEnd2Pos ||
-            pSt2Pos->aPortion != pEnd2Pos->aPortion ) )
+    SwCrsrMoveState aTmpState( MV_NONE );
+    aTmpState.b2Lines = true;
+    aTmpState.bNoScroll = true;
+    aTmpState.nCursorBidiLevel = pStartFrm->IsRightToLeft() ? 1 : 0;
+
+    //CntntRects to Start- and EndFrms.
+    SwRect aStRect, aEndRect;
+    pStartFrm->GetCharRect( aStRect, *pStartPos, &aTmpState );
+    Sw2LinesPos *pSt2Pos = aTmpState.p2Lines;
+    aTmpState.p2Lines = NULL;
+    aTmpState.nCursorBidiLevel = pEndFrm->IsRightToLeft() ? 1 : 0;
+
+    pEndFrm->GetCharRect( aEndRect, *pEndPos, &aTmpState );
+    Sw2LinesPos *pEnd2Pos = aTmpState.p2Lines;
+
+    SwRect aStFrm ( pStartFrm->UnionFrm( true ) );
+    aStFrm.Intersection( pStartFrm->PaintArea() );
+    SwRect aEndFrm( pStartFrm == pEndFrm ? aStFrm : pEndFrm->UnionFrm( true ) );
+    if( pStartFrm != pEndFrm )
+    {
+        aEndFrm.Intersection( pEndFrm->PaintArea() );
+    }
+    SWRECTFN( pStartFrm )
+    const bool bR2L = pStartFrm->IsRightToLeft();
+    const bool bEndR2L = pEndFrm->IsRightToLeft();
+
+    // If there's no doubleline portion involved or start and end are both
+    // in the same doubleline portion, all works fine, but otherwise
+    // we need the following...
+    if( pSt2Pos != pEnd2Pos && ( !pSt2Pos || !pEnd2Pos ||
+        pSt2Pos->aPortion != pEnd2Pos->aPortion ) )
+    {
+        // If we have a start(end) position inside a doubleline portion
+        // the surrounded part of the doubleline portion is subtracted
+        // from the region and the aStRect(aEndRect) is set to the
+        // end(start) of the doubleline portion.
+        if( pSt2Pos )
         {
-            // If we have a start(end) position inside a doubleline portion
-            // the surrounded part of the doubleline portion is subtracted
-            // from the region and the aStRect(aEndRect) is set to the
-            // end(start) of the doubleline portion.
-            if( pSt2Pos )
+            SwRect aTmp( aStRect );
+
+            // BiDi-Portions are swimming against the current.
+            const bool bPorR2L = ( MT_BIDI == pSt2Pos->nMultiType ) ?
+                ! bR2L :
+            bR2L;
+
+            if( MT_BIDI == pSt2Pos->nMultiType &&
+                (pSt2Pos->aPortion2.*fnRect->fnGetWidth)() )
             {
-                SwRect aTmp( aStRect );
-
-                // BiDi-Portions are swimming against the current.
-                const bool bPorR2L = ( MT_BIDI == pSt2Pos->nMultiType ) ?
-                    ! bR2L :
-                bR2L;
-
-                if( MT_BIDI == pSt2Pos->nMultiType &&
-                    (pSt2Pos->aPortion2.*fnRect->fnGetWidth)() )
-                {
-                    // nested bidi portion
-                    long nRightAbs = (pSt2Pos->aPortion.*fnRect->fnGetRight)();
-                    nRightAbs -= (pSt2Pos->aPortion2.*fnRect->fnGetLeft)();
-                    long nLeftAbs = nRightAbs - (pSt2Pos->aPortion2.*fnRect->fnGetWidth)();
-
-                    (aTmp.*fnRect->fnSetRight)( nRightAbs );
-
-                    if ( ! pEnd2Pos || pEnd2Pos->aPortion != pSt2Pos->aPortion )
-                    {
-                        SwRect aTmp2( pSt2Pos->aPortion );
-                        (aTmp2.*fnRect->fnSetRight)( nLeftAbs );
-                        aTmp2.Intersection( aEndFrm );
-                        Sub( aRegion, aTmp2 );
-                    }
-                }
-                else
-                {
-                    if( bPorR2L )
-                        (aTmp.*fnRect->fnSetLeft)(
-                            (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
-                    else
-                        (aTmp.*fnRect->fnSetRight)(
-                            (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
-                }
-
-                if( MT_ROT_90 == pSt2Pos->nMultiType ||
-                    (pSt2Pos->aPortion.*fnRect->fnGetTop)() ==
-                    (aTmp.*fnRect->fnGetTop)() )
-                {
-                    (aTmp.*fnRect->fnSetTop)(
-                        (pSt2Pos->aLine.*fnRect->fnGetTop)() );
-                }
-
-                aTmp.Intersection( aStFrm );
-                Sub( aRegion, aTmp );
-
-                SwTwips nTmp = (pSt2Pos->aLine.*fnRect->fnGetBottom)();
-                if( MT_ROT_90 != pSt2Pos->nMultiType &&
-                    (aStRect.*fnRect->fnBottomDist)( nTmp ) > 0 )
-                {
-                    (aTmp.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetBottom)() );
-                    (aTmp.*fnRect->fnSetBottom)( nTmp );
-                    if( (aStRect.*fnRect->fnBottomDist)(
-                        (pSt2Pos->aPortion.*fnRect->fnGetBottom)() ) > 0 )
-                    {
-                        if( bPorR2L )
-                            (aTmp.*fnRect->fnSetRight)(
-                                (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
-                        else
-                            (aTmp.*fnRect->fnSetLeft)(
-                                (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
-                    }
-                    aTmp.Intersection( aStFrm );
-                    Sub( aRegion, aTmp );
-                }
-
-                aStRect = pSt2Pos->aLine;
-                (aStRect.*fnRect->fnSetLeft)( bR2L ?
-                        (pSt2Pos->aPortion.*fnRect->fnGetLeft)() :
-                        (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
-                (aStRect.*fnRect->fnSetWidth)( 1 );
-            }
-
-            if( pEnd2Pos )
-            {
-                SWRECTFNX( pEndFrm )
-                SwRect aTmp( aEndRect );
-
-                // BiDi-Portions are swimming against the current.
-                const bool bPorR2L = ( MT_BIDI == pEnd2Pos->nMultiType ) ?
-                                           ! bEndR2L :
-                                             bEndR2L;
-
-                if( MT_BIDI == pEnd2Pos->nMultiType &&
-                    (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)() )
-                {
-                    // nested bidi portion
-                    long nRightAbs = (pEnd2Pos->aPortion.*fnRectX->fnGetRight)();
-                    nRightAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetLeft)();
-                    long nLeftAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)();
-
-                    (aTmp.*fnRectX->fnSetLeft)( nLeftAbs );
-
-                    if ( ! pSt2Pos || pSt2Pos->aPortion != pEnd2Pos->aPortion )
-                    {
-                        SwRect aTmp2( pEnd2Pos->aPortion );
-                        (aTmp2.*fnRectX->fnSetLeft)( nRightAbs );
-                        aTmp2.Intersection( aEndFrm );
-                        Sub( aRegion, aTmp2 );
-                    }
-                }
-                else
-                {
-                    if ( bPorR2L )
-                        (aTmp.*fnRectX->fnSetRight)(
-                            (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
-                    else
-                        (aTmp.*fnRectX->fnSetLeft)(
-                            (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
-                }
-
-                if( MT_ROT_90 == pEnd2Pos->nMultiType ||
-                    (pEnd2Pos->aPortion.*fnRectX->fnGetBottom)() ==
-                    (aEndRect.*fnRectX->fnGetBottom)() )
-                {
-                    (aTmp.*fnRectX->fnSetBottom)(
-                        (pEnd2Pos->aLine.*fnRectX->fnGetBottom)() );
-                }
-
-                aTmp.Intersection( aEndFrm );
-                Sub( aRegion, aTmp );
-
-                // The next statement means neither ruby nor rotate(90):
-                if( !( MT_RUBY & pEnd2Pos->nMultiType ) )
-                {
-                    SwTwips nTmp = (pEnd2Pos->aLine.*fnRectX->fnGetTop)();
-                    if( (aEndRect.*fnRectX->fnGetTop)() != nTmp )
-                    {
-                        (aTmp.*fnRectX->fnSetBottom)(
-                            (aTmp.*fnRectX->fnGetTop)() );
-                        (aTmp.*fnRectX->fnSetTop)( nTmp );
-                        if( (aEndRect.*fnRectX->fnGetTop)() !=
-                            (pEnd2Pos->aPortion.*fnRectX->fnGetTop)() )
-                        {
-                            if( bPorR2L )
-                                (aTmp.*fnRectX->fnSetLeft)(
-                                    (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
-                            else
-                                (aTmp.*fnRectX->fnSetRight)(
-                                    (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
-                        }
-                        aTmp.Intersection( aEndFrm );
-                        Sub( aRegion, aTmp );
-                    }
-                }
-
-                aEndRect = pEnd2Pos->aLine;
-                (aEndRect.*fnRectX->fnSetLeft)( bEndR2L ?
-                        (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() :
-                        (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
-                (aEndRect.*fnRectX->fnSetWidth)( 1 );
-            }
-        }
-        else if( pSt2Pos && pEnd2Pos &&
-                 MT_BIDI == pSt2Pos->nMultiType &&
-                 MT_BIDI == pEnd2Pos->nMultiType &&
-                 pSt2Pos->aPortion == pEnd2Pos->aPortion &&
-                 pSt2Pos->aPortion2 != pEnd2Pos->aPortion2 )
-        {
-            // This is the ugly special case, where the selection starts and
-            // ends in the same bidi portion but one start or end is inside a
-            // nested bidi portion.
-
-            if ( (pSt2Pos->aPortion2.*fnRect->fnGetWidth)() )
-            {
-                SwRect aTmp( aStRect );
+                // nested bidi portion
                 long nRightAbs = (pSt2Pos->aPortion.*fnRect->fnGetRight)();
                 nRightAbs -= (pSt2Pos->aPortion2.*fnRect->fnGetLeft)();
                 long nLeftAbs = nRightAbs - (pSt2Pos->aPortion2.*fnRect->fnGetWidth)();
 
                 (aTmp.*fnRect->fnSetRight)( nRightAbs );
-                aTmp.Intersection( aStFrm );
-                Sub( aRegion, aTmp );
 
-                aStRect = pSt2Pos->aLine;
-                (aStRect.*fnRect->fnSetLeft)( bR2L ? nRightAbs : nLeftAbs );
-                (aStRect.*fnRect->fnSetWidth)( 1 );
+                if ( ! pEnd2Pos || pEnd2Pos->aPortion != pSt2Pos->aPortion )
+                {
+                    SwRect aTmp2( pSt2Pos->aPortion );
+                    (aTmp2.*fnRect->fnSetRight)( nLeftAbs );
+                    aTmp2.Intersection( aEndFrm );
+                    Sub( aRegion, aTmp2 );
+                }
+            }
+            else
+            {
+                if( bPorR2L )
+                    (aTmp.*fnRect->fnSetLeft)(
+                        (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
+                else
+                    (aTmp.*fnRect->fnSetRight)(
+                        (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
             }
 
-            SWRECTFNX( pEndFrm )
-            if ( (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)() )
+            if( MT_ROT_90 == pSt2Pos->nMultiType ||
+                (pSt2Pos->aPortion.*fnRect->fnGetTop)() ==
+                (aTmp.*fnRect->fnGetTop)() )
             {
-                SwRect aTmp( aEndRect );
+                (aTmp.*fnRect->fnSetTop)(
+                    (pSt2Pos->aLine.*fnRect->fnGetTop)() );
+            }
+
+            aTmp.Intersection( aStFrm );
+            Sub( aRegion, aTmp );
+
+            SwTwips nTmp = (pSt2Pos->aLine.*fnRect->fnGetBottom)();
+            if( MT_ROT_90 != pSt2Pos->nMultiType &&
+                (aStRect.*fnRect->fnBottomDist)( nTmp ) > 0 )
+            {
+                (aTmp.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetBottom)() );
+                (aTmp.*fnRect->fnSetBottom)( nTmp );
+                if( (aStRect.*fnRect->fnBottomDist)(
+                    (pSt2Pos->aPortion.*fnRect->fnGetBottom)() ) > 0 )
+                {
+                    if( bPorR2L )
+                        (aTmp.*fnRect->fnSetRight)(
+                            (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
+                    else
+                        (aTmp.*fnRect->fnSetLeft)(
+                            (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
+                }
+                aTmp.Intersection( aStFrm );
+                Sub( aRegion, aTmp );
+            }
+
+            aStRect = pSt2Pos->aLine;
+            (aStRect.*fnRect->fnSetLeft)( bR2L ?
+                    (pSt2Pos->aPortion.*fnRect->fnGetLeft)() :
+                    (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
+            (aStRect.*fnRect->fnSetWidth)( 1 );
+        }
+
+        if( pEnd2Pos )
+        {
+            SWRECTFNX( pEndFrm )
+            SwRect aTmp( aEndRect );
+
+            // BiDi-Portions are swimming against the current.
+            const bool bPorR2L = ( MT_BIDI == pEnd2Pos->nMultiType ) ?
+                                       ! bEndR2L :
+                                         bEndR2L;
+
+            if( MT_BIDI == pEnd2Pos->nMultiType &&
+                (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)() )
+            {
+                // nested bidi portion
                 long nRightAbs = (pEnd2Pos->aPortion.*fnRectX->fnGetRight)();
-                nRightAbs -= (pEnd2Pos->aPortion2.*fnRectX->fnGetLeft)();
+                nRightAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetLeft)();
                 long nLeftAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)();
 
                 (aTmp.*fnRectX->fnSetLeft)( nLeftAbs );
-                aTmp.Intersection( aEndFrm );
-                Sub( aRegion, aTmp );
 
-                aEndRect = pEnd2Pos->aLine;
-                (aEndRect.*fnRectX->fnSetLeft)( bEndR2L ? nLeftAbs : nRightAbs );
-                (aEndRect.*fnRectX->fnSetWidth)( 1 );
-            }
-        }
-
-        // The charrect may be outside the paintarea (for cursortravelling)
-        // but the selection has to be restricted to the paintarea
-        if( aStRect.Left() < aStFrm.Left() )
-            aStRect.Left( aStFrm.Left() );
-        else if( aStRect.Left() > aStFrm.Right() )
-            aStRect.Left( aStFrm.Right() );
-        SwTwips nTmp = aStRect.Right();
-        if( nTmp < aStFrm.Left() )
-            aStRect.Right( aStFrm.Left() );
-        else if( nTmp > aStFrm.Right() )
-            aStRect.Right( aStFrm.Right() );
-        if( aEndRect.Left() < aEndFrm.Left() )
-            aEndRect.Left( aEndFrm.Left() );
-        else if( aEndRect.Left() > aEndFrm.Right() )
-            aEndRect.Left( aEndFrm.Right() );
-        nTmp = aEndRect.Right();
-        if( nTmp < aEndFrm.Left() )
-            aEndRect.Right( aEndFrm.Left() );
-        else if( nTmp > aEndFrm.Right() )
-            aEndRect.Right( aEndFrm.Right() );
-
-        if( pStartFrm == pEndFrm )
-        {
-            bool bSameRotatedOrBidi = pSt2Pos && pEnd2Pos &&
-                ( MT_BIDI & pSt2Pos->nMultiType ) &&
-                pSt2Pos->aPortion == pEnd2Pos->aPortion;
-            //case 1: (Same frame and same row)
-            if( bSameRotatedOrBidi ||
-                (aStRect.*fnRect->fnGetTop)() == (aEndRect.*fnRect->fnGetTop)() )
-            {
-                Point aTmpSt( aStRect.Pos() );
-                Point aTmpEnd( aEndRect.Right(), aEndRect.Bottom() );
-                if( bSameRotatedOrBidi || bR2L )
+                if ( ! pSt2Pos || pSt2Pos->aPortion != pEnd2Pos->aPortion )
                 {
-                    if( aTmpSt.Y() > aTmpEnd.Y() )
-                    {
-                        long nTmpY = aTmpEnd.Y();
-                        aTmpEnd.Y() = aTmpSt.Y();
-                        aTmpSt.Y() = nTmpY;
-                    }
-                    if( aTmpSt.X() > aTmpEnd.X() )
-                    {
-                        long nTmpX = aTmpEnd.X();
-                        aTmpEnd.X() = aTmpSt.X();
-                        aTmpSt.X() = nTmpX;
-                    }
+                    SwRect aTmp2( pEnd2Pos->aPortion );
+                    (aTmp2.*fnRectX->fnSetLeft)( nRightAbs );
+                    aTmp2.Intersection( aEndFrm );
+                    Sub( aRegion, aTmp2 );
                 }
-
-                SwRect aTmp = SwRect( aTmpSt, aTmpEnd );
-                // Bug 34888: If content is selected which doesn't take space
-                //            away (i.e. PostIts, RefMarks, TOXMarks), then at
-                //            least set the width of the Crsr.
-                if( 1 == (aTmp.*fnRect->fnGetWidth)() &&
-                    pStartPos->nContent.GetIndex() !=
-                    pEndPos->nContent.GetIndex() )
-                {
-                    OutputDevice* pOut = pSh->GetOut();
-                    long nCrsrWidth = pOut->GetSettings().GetStyleSettings().
-                        GetCursorSize();
-                    (aTmp.*fnRect->fnSetWidth)( pOut->PixelToLogic(
-                        Size( nCrsrWidth, 0 ) ).Width() );
-                }
-                aTmp.Intersection( aStFrm );
-                Sub( aRegion, aTmp );
             }
-            //case 2: (Same frame, but not the same line)
             else
             {
-                SwTwips lLeft, lRight;
-                if( pSt2Pos && pEnd2Pos && pSt2Pos->aPortion == pEnd2Pos->aPortion )
-                {
-                    lLeft = (pSt2Pos->aPortion.*fnRect->fnGetLeft)();
-                    lRight = (pSt2Pos->aPortion.*fnRect->fnGetRight)();
-                }
+                if ( bPorR2L )
+                    (aTmp.*fnRectX->fnSetRight)(
+                        (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
                 else
-                {
-                    lLeft = (pStartFrm->Frm().*fnRect->fnGetLeft)() +
-                        (pStartFrm->Prt().*fnRect->fnGetLeft)();
-                    lRight = (pStartFrm->Frm().*fnRect->fnGetLeft)() +
-                        (pStartFrm->Prt().*fnRect->fnGetRight)();
-                }
-                if( lLeft < (aStFrm.*fnRect->fnGetLeft)() )
-                    lLeft = (aStFrm.*fnRect->fnGetLeft)();
-                if( lRight > (aStFrm.*fnRect->fnGetRight)() )
-                    lRight = (aStFrm.*fnRect->fnGetRight)();
-                SwRect aSubRect( aStRect );
-                //First line
-                if( bR2L )
-                    (aSubRect.*fnRect->fnSetLeft)( lLeft );
-                else
-                    (aSubRect.*fnRect->fnSetRight)( lRight );
-                Sub( aRegion, aSubRect );
-
-                //If there's at least a twips between start- and endline,
-                //so the whole area between will be added.
-                SwTwips aTmpBottom = (aStRect.*fnRect->fnGetBottom)();
-                SwTwips aTmpTop = (aEndRect.*fnRect->fnGetTop)();
-                if( aTmpBottom != aTmpTop )
-                {
-                    (aSubRect.*fnRect->fnSetLeft)( lLeft );
-                    (aSubRect.*fnRect->fnSetRight)( lRight );
-                    (aSubRect.*fnRect->fnSetTop)( aTmpBottom );
-                    (aSubRect.*fnRect->fnSetBottom)( aTmpTop );
-                    Sub( aRegion, aSubRect );
-                }
-                //and the last line
-                aSubRect = aEndRect;
-                if( bR2L )
-                    (aSubRect.*fnRect->fnSetRight)( lRight );
-                else
-                    (aSubRect.*fnRect->fnSetLeft)( lLeft );
-                Sub( aRegion, aSubRect );
+                    (aTmp.*fnRectX->fnSetLeft)(
+                        (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
             }
+
+            if( MT_ROT_90 == pEnd2Pos->nMultiType ||
+                (pEnd2Pos->aPortion.*fnRectX->fnGetBottom)() ==
+                (aEndRect.*fnRectX->fnGetBottom)() )
+            {
+                (aTmp.*fnRectX->fnSetBottom)(
+                    (pEnd2Pos->aLine.*fnRectX->fnGetBottom)() );
+            }
+
+            aTmp.Intersection( aEndFrm );
+            Sub( aRegion, aTmp );
+
+            // The next statement means neither ruby nor rotate(90):
+            if( !( MT_RUBY & pEnd2Pos->nMultiType ) )
+            {
+                SwTwips nTmp = (pEnd2Pos->aLine.*fnRectX->fnGetTop)();
+                if( (aEndRect.*fnRectX->fnGetTop)() != nTmp )
+                {
+                    (aTmp.*fnRectX->fnSetBottom)(
+                        (aTmp.*fnRectX->fnGetTop)() );
+                    (aTmp.*fnRectX->fnSetTop)( nTmp );
+                    if( (aEndRect.*fnRectX->fnGetTop)() !=
+                        (pEnd2Pos->aPortion.*fnRectX->fnGetTop)() )
+                    {
+                        if( bPorR2L )
+                            (aTmp.*fnRectX->fnSetLeft)(
+                                (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
+                        else
+                            (aTmp.*fnRectX->fnSetRight)(
+                                (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
+                    }
+                    aTmp.Intersection( aEndFrm );
+                    Sub( aRegion, aTmp );
+                }
+            }
+
+            aEndRect = pEnd2Pos->aLine;
+            (aEndRect.*fnRectX->fnSetLeft)( bEndR2L ?
+                    (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() :
+                    (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
+            (aEndRect.*fnRectX->fnSetWidth)( 1 );
         }
-        //case 3: (Different frames, maybe with other frames between)
+    }
+    else if( pSt2Pos && pEnd2Pos &&
+             MT_BIDI == pSt2Pos->nMultiType &&
+             MT_BIDI == pEnd2Pos->nMultiType &&
+             pSt2Pos->aPortion == pEnd2Pos->aPortion &&
+             pSt2Pos->aPortion2 != pEnd2Pos->aPortion2 )
+    {
+        // This is the ugly special case, where the selection starts and
+        // ends in the same bidi portion but one start or end is inside a
+        // nested bidi portion.
+
+        if ( (pSt2Pos->aPortion2.*fnRect->fnGetWidth)() )
+        {
+            SwRect aTmp( aStRect );
+            long nRightAbs = (pSt2Pos->aPortion.*fnRect->fnGetRight)();
+            nRightAbs -= (pSt2Pos->aPortion2.*fnRect->fnGetLeft)();
+            long nLeftAbs = nRightAbs - (pSt2Pos->aPortion2.*fnRect->fnGetWidth)();
+
+            (aTmp.*fnRect->fnSetRight)( nRightAbs );
+            aTmp.Intersection( aStFrm );
+            Sub( aRegion, aTmp );
+
+            aStRect = pSt2Pos->aLine;
+            (aStRect.*fnRect->fnSetLeft)( bR2L ? nRightAbs : nLeftAbs );
+            (aStRect.*fnRect->fnSetWidth)( 1 );
+        }
+
+        SWRECTFNX( pEndFrm )
+        if ( (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)() )
+        {
+            SwRect aTmp( aEndRect );
+            long nRightAbs = (pEnd2Pos->aPortion.*fnRectX->fnGetRight)();
+            nRightAbs -= (pEnd2Pos->aPortion2.*fnRectX->fnGetLeft)();
+            long nLeftAbs = nRightAbs - (pEnd2Pos->aPortion2.*fnRectX->fnGetWidth)();
+
+            (aTmp.*fnRectX->fnSetLeft)( nLeftAbs );
+            aTmp.Intersection( aEndFrm );
+            Sub( aRegion, aTmp );
+
+            aEndRect = pEnd2Pos->aLine;
+            (aEndRect.*fnRectX->fnSetLeft)( bEndR2L ? nLeftAbs : nRightAbs );
+            (aEndRect.*fnRectX->fnSetWidth)( 1 );
+        }
+    }
+
+    // The charrect may be outside the paintarea (for cursortravelling)
+    // but the selection has to be restricted to the paintarea
+    if( aStRect.Left() < aStFrm.Left() )
+        aStRect.Left( aStFrm.Left() );
+    else if( aStRect.Left() > aStFrm.Right() )
+        aStRect.Left( aStFrm.Right() );
+    SwTwips nTmp = aStRect.Right();
+    if( nTmp < aStFrm.Left() )
+        aStRect.Right( aStFrm.Left() );
+    else if( nTmp > aStFrm.Right() )
+        aStRect.Right( aStFrm.Right() );
+    if( aEndRect.Left() < aEndFrm.Left() )
+        aEndRect.Left( aEndFrm.Left() );
+    else if( aEndRect.Left() > aEndFrm.Right() )
+        aEndRect.Left( aEndFrm.Right() );
+    nTmp = aEndRect.Right();
+    if( nTmp < aEndFrm.Left() )
+        aEndRect.Right( aEndFrm.Left() );
+    else if( nTmp > aEndFrm.Right() )
+        aEndRect.Right( aEndFrm.Right() );
+
+    if( pStartFrm == pEndFrm )
+    {
+        bool bSameRotatedOrBidi = pSt2Pos && pEnd2Pos &&
+            ( MT_BIDI & pSt2Pos->nMultiType ) &&
+            pSt2Pos->aPortion == pEnd2Pos->aPortion;
+        //case 1: (Same frame and same row)
+        if( bSameRotatedOrBidi ||
+            (aStRect.*fnRect->fnGetTop)() == (aEndRect.*fnRect->fnGetTop)() )
+        {
+            Point aTmpSt( aStRect.Pos() );
+            Point aTmpEnd( aEndRect.Right(), aEndRect.Bottom() );
+            if( bSameRotatedOrBidi || bR2L )
+            {
+                if( aTmpSt.Y() > aTmpEnd.Y() )
+                {
+                    long nTmpY = aTmpEnd.Y();
+                    aTmpEnd.Y() = aTmpSt.Y();
+                    aTmpSt.Y() = nTmpY;
+                }
+                if( aTmpSt.X() > aTmpEnd.X() )
+                {
+                    long nTmpX = aTmpEnd.X();
+                    aTmpEnd.X() = aTmpSt.X();
+                    aTmpSt.X() = nTmpX;
+                }
+            }
+
+            SwRect aTmp = SwRect( aTmpSt, aTmpEnd );
+            // Bug 34888: If content is selected which doesn't take space
+            //            away (i.e. PostIts, RefMarks, TOXMarks), then at
+            //            least set the width of the Crsr.
+            if( 1 == (aTmp.*fnRect->fnGetWidth)() &&
+                pStartPos->nContent.GetIndex() !=
+                pEndPos->nContent.GetIndex() )
+            {
+                OutputDevice* pOut = pSh->GetOut();
+                long nCrsrWidth = pOut->GetSettings().GetStyleSettings().
+                    GetCursorSize();
+                (aTmp.*fnRect->fnSetWidth)( pOut->PixelToLogic(
+                    Size( nCrsrWidth, 0 ) ).Width() );
+            }
+            aTmp.Intersection( aStFrm );
+            Sub( aRegion, aTmp );
+        }
+        //case 2: (Same frame, but not the same line)
         else
         {
-            //The startframe first...
+            SwTwips lLeft, lRight;
+            if( pSt2Pos && pEnd2Pos && pSt2Pos->aPortion == pEnd2Pos->aPortion )
+            {
+                lLeft = (pSt2Pos->aPortion.*fnRect->fnGetLeft)();
+                lRight = (pSt2Pos->aPortion.*fnRect->fnGetRight)();
+            }
+            else
+            {
+                lLeft = (pStartFrm->Frm().*fnRect->fnGetLeft)() +
+                    (pStartFrm->Prt().*fnRect->fnGetLeft)();
+                lRight = (pStartFrm->Frm().*fnRect->fnGetLeft)() +
+                    (pStartFrm->Prt().*fnRect->fnGetRight)();
+            }
+            if( lLeft < (aStFrm.*fnRect->fnGetLeft)() )
+                lLeft = (aStFrm.*fnRect->fnGetLeft)();
+            if( lRight > (aStFrm.*fnRect->fnGetRight)() )
+                lRight = (aStFrm.*fnRect->fnGetRight)();
             SwRect aSubRect( aStRect );
+            //First line
             if( bR2L )
-                (aSubRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)());
+                (aSubRect.*fnRect->fnSetLeft)( lLeft );
             else
-                (aSubRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)());
+                (aSubRect.*fnRect->fnSetRight)( lRight );
             Sub( aRegion, aSubRect );
-            SwTwips nTmpTwips = (aStRect.*fnRect->fnGetBottom)();
-            if( (aStFrm.*fnRect->fnGetBottom)() != nTmpTwips )
+
+            //If there's at least a twips between start- and endline,
+            //so the whole area between will be added.
+            SwTwips aTmpBottom = (aStRect.*fnRect->fnGetBottom)();
+            SwTwips aTmpTop = (aEndRect.*fnRect->fnGetTop)();
+            if( aTmpBottom != aTmpTop )
             {
-                aSubRect = aStFrm;
-                (aSubRect.*fnRect->fnSetTop)( nTmpTwips );
+                (aSubRect.*fnRect->fnSetLeft)( lLeft );
+                (aSubRect.*fnRect->fnSetRight)( lRight );
+                (aSubRect.*fnRect->fnSetTop)( aTmpBottom );
+                (aSubRect.*fnRect->fnSetBottom)( aTmpTop );
                 Sub( aRegion, aSubRect );
             }
-
-            //Now the frames between, if there are any
-            bool const bBody = pStartFrm->IsInDocBody();
-            const SwTableBox* pCellBox = pStartFrm->GetUpper()->IsCellFrm() ?
-                ((SwCellFrm*)pStartFrm->GetUpper())->GetTabBox() : 0;
-            if (pSh->IsSelectAll())
-                pCellBox = 0;
-
-            const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
-            SwRect aPrvRect;
-
-            OSL_ENSURE( pCntnt,
-                "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
-            while ( pCntnt && pCntnt != pEndFrm )
-            {
-                if ( pCntnt->IsInFly() )
-                {
-                    const SwAnchoredObject* pObj = pCntnt->FindFlyFrm();
-                    aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
-                }
-
-                // Consider only frames which have the same IsInDocBody value like pStartFrm
-                // If pStartFrm is inside a SwCellFrm, consider only frames which are inside the
-                // same cell frame (or its follow cell)
-                const SwTableBox* pTmpCellBox = pCntnt->GetUpper()->IsCellFrm() ?
-                    ((SwCellFrm*)pCntnt->GetUpper())->GetTabBox() : 0;
-                if (pSh->IsSelectAll())
-                    pTmpCellBox = 0;
-                if ( bBody == pCntnt->IsInDocBody() &&
-                    ( !pCellBox || pCellBox == pTmpCellBox ) )
-                {
-                    SwRect aCRect( pCntnt->UnionFrm( true ) );
-                    aCRect.Intersection( pCntnt->PaintArea() );
-                    if( aCRect.IsOver( aRegion.GetOrigin() ))
-                    {
-                        SwRect aTmp( aPrvRect );
-                        aTmp.Union( aCRect );
-                        if ( (aPrvRect.Height() * aPrvRect.Width() +
-                            aCRect.Height()   * aCRect.Width()) ==
-                            (aTmp.Height() * aTmp.Width()) )
-                        {
-                            aPrvRect.Union( aCRect );
-                        }
-                        else
-                        {
-                            if ( aPrvRect.HasArea() )
-                                Sub( aRegion, aPrvRect );
-                            aPrvRect = aCRect;
-                        }
-                    }
-                }
-                pCntnt = pCntnt->GetNextCntntFrm();
-                OSL_ENSURE( pCntnt,
-                    "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect!" );
-            }
-            if ( aPrvRect.HasArea() )
-                Sub( aRegion, aPrvRect );
-
-            //At least the endframe...
-            bVert = pEndFrm->IsVertical();
-            bRev = pEndFrm->IsReverse();
-            fnRect = bVert ? ( bRev ? fnRectVL2R : ( pEndFrm->IsVertLR() ? fnRectVertL2R : fnRectVert ) ) :
-                ( bRev ? fnRectB2T : fnRectHori );
-            nTmpTwips = (aEndRect.*fnRect->fnGetTop)();
-            if( (aEndFrm.*fnRect->fnGetTop)() != nTmpTwips )
-            {
-                aSubRect = aEndFrm;
-                (aSubRect.*fnRect->fnSetBottom)( nTmpTwips );
-                Sub( aRegion, aSubRect );
-            }
+            //and the last line
             aSubRect = aEndRect;
-            if( bEndR2L )
-                (aSubRect.*fnRect->fnSetRight)((aEndFrm.*fnRect->fnGetRight)());
+            if( bR2L )
+                (aSubRect.*fnRect->fnSetRight)( lRight );
             else
-                (aSubRect.*fnRect->fnSetLeft)( (aEndFrm.*fnRect->fnGetLeft)() );
+                (aSubRect.*fnRect->fnSetLeft)( lLeft );
+            Sub( aRegion, aSubRect );
+        }
+    }
+    //case 3: (Different frames, maybe with other frames between)
+    else
+    {
+        //The startframe first...
+        SwRect aSubRect( aStRect );
+        if( bR2L )
+            (aSubRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)());
+        else
+            (aSubRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)());
+        Sub( aRegion, aSubRect );
+        SwTwips nTmpTwips = (aStRect.*fnRect->fnGetBottom)();
+        if( (aStFrm.*fnRect->fnGetBottom)() != nTmpTwips )
+        {
+            aSubRect = aStFrm;
+            (aSubRect.*fnRect->fnSetTop)( nTmpTwips );
             Sub( aRegion, aSubRect );
         }
 
-        aRegion.Invert();
-        delete pSt2Pos;
-        delete pEnd2Pos;
+        //Now the frames between, if there are any
+        bool const bBody = pStartFrm->IsInDocBody();
+        const SwTableBox* pCellBox = pStartFrm->GetUpper()->IsCellFrm() ?
+            ((SwCellFrm*)pStartFrm->GetUpper())->GetTabBox() : 0;
+        if (pSh->IsSelectAll())
+            pCellBox = 0;
+
+        const SwCntntFrm *pCntnt = pStartFrm->GetNextCntntFrm();
+        SwRect aPrvRect;
+
+        OSL_ENSURE( pCntnt,
+            "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect -> please inform OD" );
+        while ( pCntnt && pCntnt != pEndFrm )
+        {
+            if ( pCntnt->IsInFly() )
+            {
+                const SwAnchoredObject* pObj = pCntnt->FindFlyFrm();
+                aSortObjs.Insert( *(const_cast<SwAnchoredObject*>(pObj)) );
+            }
+
+            // Consider only frames which have the same IsInDocBody value like pStartFrm
+            // If pStartFrm is inside a SwCellFrm, consider only frames which are inside the
+            // same cell frame (or its follow cell)
+            const SwTableBox* pTmpCellBox = pCntnt->GetUpper()->IsCellFrm() ?
+                ((SwCellFrm*)pCntnt->GetUpper())->GetTabBox() : 0;
+            if (pSh->IsSelectAll())
+                pTmpCellBox = 0;
+            if ( bBody == pCntnt->IsInDocBody() &&
+                ( !pCellBox || pCellBox == pTmpCellBox ) )
+            {
+                SwRect aCRect( pCntnt->UnionFrm( true ) );
+                aCRect.Intersection( pCntnt->PaintArea() );
+                if( aCRect.IsOver( aRegion.GetOrigin() ))
+                {
+                    SwRect aTmp( aPrvRect );
+                    aTmp.Union( aCRect );
+                    if ( (aPrvRect.Height() * aPrvRect.Width() +
+                        aCRect.Height()   * aCRect.Width()) ==
+                        (aTmp.Height() * aTmp.Width()) )
+                    {
+                        aPrvRect.Union( aCRect );
+                    }
+                    else
+                    {
+                        if ( aPrvRect.HasArea() )
+                            Sub( aRegion, aPrvRect );
+                        aPrvRect = aCRect;
+                    }
+                }
+            }
+            pCntnt = pCntnt->GetNextCntntFrm();
+            OSL_ENSURE( pCntnt,
+                "<SwRootFrm::CalcFrmRects(..)> - no content frame. This is a serious defect!" );
+        }
+        if ( aPrvRect.HasArea() )
+            Sub( aRegion, aPrvRect );
+
+        //At least the endframe...
+        bVert = pEndFrm->IsVertical();
+        bRev = pEndFrm->IsReverse();
+        fnRect = bVert ? ( bRev ? fnRectVL2R : ( pEndFrm->IsVertLR() ? fnRectVertL2R : fnRectVert ) ) :
+            ( bRev ? fnRectB2T : fnRectHori );
+        nTmpTwips = (aEndRect.*fnRect->fnGetTop)();
+        if( (aEndFrm.*fnRect->fnGetTop)() != nTmpTwips )
+        {
+            aSubRect = aEndFrm;
+            (aSubRect.*fnRect->fnSetBottom)( nTmpTwips );
+            Sub( aRegion, aSubRect );
+        }
+        aSubRect = aEndRect;
+        if( bEndR2L )
+            (aSubRect.*fnRect->fnSetRight)((aEndFrm.*fnRect->fnGetRight)());
+        else
+            (aSubRect.*fnRect->fnSetLeft)( (aEndFrm.*fnRect->fnGetLeft)() );
+        Sub( aRegion, aSubRect );
     }
+
+    aRegion.Invert();
+    delete pSt2Pos;
+    delete pEnd2Pos;
 
     // Cut out Flys during loop. We don't cut out Flys when:
     // - the Lower is StartFrm/EndFrm (FlyInCnt and all other Flys which again
