@@ -90,8 +90,7 @@ public:
                 xSupplyAuthentication,
         OUString const & rURL,
         com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionHandler2 > const & xIH )
-    SAL_THROW( (com::sun::star::uno::RuntimeException) );
+            com::sun::star::task::XInteractionHandler2 > const & xIH );
 
     /** This member function adds credentials for the given URL to the password
         container.
@@ -126,8 +125,7 @@ public:
                     rPasswords,
                     com::sun::star::uno::Reference<
                         com::sun::star::task::XInteractionHandler2 > const & xIH,
-                    bool bPersist )
-        SAL_THROW( (com::sun::star::uno::RuntimeException) );
+                    bool bPersist );
 
 
 

@@ -33,7 +33,6 @@ bool
 getStringRequestArgument(uno::Sequence< uno::Any > const & rArguments,
                          OUString const & rKey,
                          OUString * pValue)
-    SAL_THROW(())
 {
     for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
     {
@@ -56,7 +55,6 @@ bool
 getBoolRequestArgument(uno::Sequence< uno::Any > const & rArguments,
                        OUString const & rKey,
                        bool * pValue)
-    SAL_THROW(())
 {
     for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
     {
@@ -78,7 +76,6 @@ getBoolRequestArgument(uno::Sequence< uno::Any > const & rArguments,
 bool
 getResourceNameRequestArgument(uno::Sequence< uno::Any > const & rArguments,
                                OUString * pValue)
-    SAL_THROW(())
 {
     if (!getStringRequestArgument(rArguments, "Uri",  pValue))
         return false;
@@ -98,7 +95,6 @@ UUIInteractionHelper::handleInteractiveIOException(
         bool bObtainErrorStringOnly,
         bool & bHasErrorString,
         OUString & rErrorString)
-    SAL_THROW((uno::RuntimeException))
 {
     uno::Any aAnyRequest(rRequest->getRequest());
     bHasErrorString = false;

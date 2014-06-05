@@ -46,10 +46,9 @@ private:
 public:
     UUIInteractionHandler(com::sun::star::uno::Reference<
                   com::sun::star::uno::XComponentContext >
-                  const & rxContext)
-        SAL_THROW(());
+                  const & rxContext);
 
-    virtual ~UUIInteractionHandler() SAL_THROW(());
+    virtual ~UUIInteractionHandler();
 
     virtual OUString SAL_CALL getImplementationName()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -83,7 +82,6 @@ public:
 UUIInteractionHandler::UUIInteractionHandler(
     uno::Reference< uno::XComponentContext > const &
         rxContext)
-    SAL_THROW(())
         : m_pImpl(new UUIInteractionHelper(rxContext))
 {
 }

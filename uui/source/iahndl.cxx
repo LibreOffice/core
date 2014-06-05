@@ -132,8 +132,7 @@ UUIInteractionHelper::UUIInteractionHelper(
     uno::Reference< uno::XComponentContext > const & rxContext,
     uno::Reference< awt::XWindow > const & rxWindowParam,
     const OUString & rContextParam)
-    SAL_THROW(()):
-        m_xContext(rxContext),
+    :   m_xContext(rxContext),
         m_xWindowParam(rxWindowParam),
         m_aContextParam(rContextParam)
 {
@@ -141,8 +140,7 @@ UUIInteractionHelper::UUIInteractionHelper(
 
 UUIInteractionHelper::UUIInteractionHelper(
     uno::Reference< uno::XComponentContext > const & rxContext)
-    SAL_THROW(()):
-        m_xContext(rxContext)
+    :  m_xContext(rxContext)
 {
 }
 
@@ -169,7 +167,6 @@ UUIInteractionHelper::handlerequest(
 bool
 UUIInteractionHelper::handleRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
-    SAL_THROW((uno::RuntimeException))
 {
     Application* pApp = 0;
     if(
@@ -212,7 +209,6 @@ UUIInteractionHelper::getstringfromrequest(
 beans::Optional< OUString >
 UUIInteractionHelper::getStringFromRequest_impl(
     uno::Reference< task::XInteractionRequest > const & rRequest)
-    SAL_THROW((uno::RuntimeException))
 {
     bool bSuccess = false;
     OUString aMessage;
@@ -230,7 +226,6 @@ UUIInteractionHelper::getStringFromRequest_impl(
 beans::Optional< OUString >
 UUIInteractionHelper::getStringFromRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
-    SAL_THROW((uno::RuntimeException))
 {
     Application* pApp = 0;
     if(
@@ -320,7 +315,6 @@ UUIInteractionHelper::isInformationalErrorMessageRequest(
 bool
 UUIInteractionHelper::tryOtherInteractionHandler(
     uno::Reference< task::XInteractionRequest > const & rRequest)
-    SAL_THROW((uno::RuntimeException))
 {
     InteractionHandlerDataList dataList;
     getInteractionHandlerList(dataList);
@@ -449,7 +443,6 @@ UUIInteractionHelper::handleRequest_impl(
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
     OUString & rErrorString)
-    SAL_THROW((uno::RuntimeException))
 {
     try
     {
@@ -934,7 +927,6 @@ UUIInteractionHelper::handleRequest_impl(
 void
 UUIInteractionHelper::getInteractionHandlerList(
     InteractionHandlerDataList &rdataList)
-    SAL_THROW((uno::RuntimeException))
 {
     try
     {
@@ -1028,7 +1020,6 @@ UUIInteractionHelper::getInteractionHandlerList(
 
 Window *
 UUIInteractionHelper::getParentProperty()
-    SAL_THROW(())
 {
     uno::Reference< awt::XWindow > xWindow = getParentXWindow();
     if ( xWindow.is() )
@@ -1039,21 +1030,18 @@ UUIInteractionHelper::getParentProperty()
 
 uno::Reference< awt::XWindow>
 UUIInteractionHelper::getParentXWindow() const
-    SAL_THROW(())
 {
     return m_xWindowParam;
 }
 
 OUString
 UUIInteractionHelper::getContextProperty()
-    SAL_THROW(())
 {
     return m_aContextParam;
 }
 
 uno::Reference< task::XInteractionHandler2 >
 UUIInteractionHelper::getInteractionHandler()
-    SAL_THROW((uno::RuntimeException))
 {
     return InteractionHandler::createWithParentAndContext(
         m_xContext, m_xWindowParam,
@@ -1068,7 +1056,6 @@ executeMessageBox(
     OUString const & rTitle,
     OUString const & rMessage,
     WinBits nButtonMask )
-    SAL_THROW((uno::RuntimeException))
 {
     SolarMutexGuard aGuard;
 
@@ -1122,7 +1109,6 @@ UUIInteractionHelper::handleNameClashResolveRequest(
     ucb::NameClashResolveRequest const & rRequest,
     uno::Sequence< uno::Reference<
         task::XInteractionContinuation > > const & rContinuations)
-  SAL_THROW((uno::RuntimeException))
 {
     OSL_ENSURE(!rRequest.TargetFolderURL.isEmpty(),
         "NameClashResolveRequest must not contain empty TargetFolderURL" );
@@ -1180,7 +1166,6 @@ UUIInteractionHelper::handleGenericErrorRequest(
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
     OUString & rErrorString)
-    SAL_THROW((uno::RuntimeException))
 {
     if (bObtainErrorStringOnly)
     {
@@ -1246,7 +1231,6 @@ UUIInteractionHelper::handleMacroConfirmRequest(
     const uno::Sequence< security::DocumentSignatureInformation >& aSignInfo,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations )
-    SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< task::XInteractionApprove > xApprove;
@@ -1285,7 +1269,6 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
     const task::FutureDocumentVersionProductUpdateRequest& _rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations )
-    SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< task::XInteractionApprove > xApprove;
@@ -1358,7 +1341,6 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
     OUString & rErrorString)
-    SAL_THROW((uno::RuntimeException))
 {
     if (bObtainErrorStringOnly)
     {
@@ -1450,7 +1432,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
 
 bool
 ErrorResource::getString(ErrCode nErrorCode, OUString &rString)
-    const SAL_THROW(())
+    const
 {
     ResId aResId(static_cast< sal_uInt16 >(nErrorCode & ERRCODE_RES_MASK),
                  *m_pResMgr);
