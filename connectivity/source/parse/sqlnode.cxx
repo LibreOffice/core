@@ -502,6 +502,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(OUStringBuffer& rString, const 
         }
         bHandled = true;
     }
+    //fall-through
     case odbc_call_spec:
     case subquery:
     case term:
