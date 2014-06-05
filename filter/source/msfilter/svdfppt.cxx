@@ -6271,11 +6271,13 @@ void PPTFieldEntry::GetDateTime( const sal_uInt32 nVal, SvxDateFormat& eDateForm
         break;
         case 7:
             eDateFormat = SVXDATEFORMAT_A;
+            //fall-through
         case 9:
             eTimeFormat = SVXTIMEFORMAT_24_HM;
         break;
         case 8:
             eDateFormat = SVXDATEFORMAT_A;
+            //fall-through
         case 11:
             eTimeFormat = SVXTIMEFORMAT_12_HM;
         break;
