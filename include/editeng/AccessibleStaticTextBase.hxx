@@ -122,7 +122,7 @@ namespace accessibility
             should only be called from the main office thread.
 
         */
-        virtual const SvxEditSource& GetEditSource() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        virtual const SvxEditSource& GetEditSource() const;
 
         /** Set the current edit source
 
@@ -152,7 +152,7 @@ namespace accessibility
             from the caller to the callee.
         */
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        virtual void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        virtual void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource );
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
         /** Set the event source
@@ -211,7 +211,7 @@ namespace accessibility
             internally. Normally, there should not be a need to call
             this method.
         */
-        virtual void UpdateChildren() SAL_THROW((::com::sun::star::uno::RuntimeException));
+        virtual void UpdateChildren();
 
         /** Drop all references and enter disposed state
 

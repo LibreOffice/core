@@ -145,7 +145,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        sal_Int32 GetParagraphIndex() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        sal_Int32 GetParagraphIndex() const;
 
         /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
         virtual void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
@@ -164,7 +164,7 @@ namespace accessibility
         void SetState( const sal_Int16 nStateId );
         void UnSetState( const sal_Int16 nStateId );
 
-        SvxEditSource& GetEditSource() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxEditSource& GetEditSource() const;
 
         int getNotifierClientId() const;
 
@@ -175,7 +175,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxTextForwarder&   GetTextForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxTextForwarder&   GetTextForwarder() const;
 
         /** Query the SvxViewForwarder for EditEngine access.
 
@@ -184,7 +184,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxViewForwarder&   GetViewForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxViewForwarder&   GetViewForwarder() const;
 
         const Point& GetEEOffset() const;
 

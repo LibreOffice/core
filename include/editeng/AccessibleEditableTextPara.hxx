@@ -203,7 +203,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        sal_Int32 GetParagraphIndex() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        sal_Int32 GetParagraphIndex() const;
 
         /** Set the edit engine offset
 
@@ -239,7 +239,7 @@ namespace accessibility
 
         static Rectangle LogicToPixel( const Rectangle& rRect, const MapMode& rMapMode, SvxViewForwarder& rForwarder );
 
-        SvxEditSourceAdapter& GetEditSource() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxEditSourceAdapter& GetEditSource() const;
 
         /** Query the SvxTextForwarder for EditEngine access.
 
@@ -248,7 +248,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxAccessibleTextAdapter&   GetTextForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxAccessibleTextAdapter&   GetTextForwarder() const;
 
         /** Query the SvxViewForwarder for EditEngine access.
 
@@ -257,7 +257,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxViewForwarder&   GetViewForwarder() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxViewForwarder&   GetViewForwarder() const;
 
         /** Query whether a GetEditViewForwarder( sal_False ) will return a forwarder
 
@@ -275,7 +275,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        SvxAccessibleTextEditViewAdapter& GetEditViewForwarder( bool bCreate = false ) const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        SvxAccessibleTextEditViewAdapter& GetEditViewForwarder( bool bCreate = false ) const;
 
         /** Send a TEXT_CHANGED event for this paragraph
 
@@ -318,14 +318,14 @@ namespace accessibility
         const Point& GetEEOffset() const;
 
         // Get text from forwarder
-        OUString GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((::com::sun::star::uno::RuntimeException));
-        sal_uInt16 GetTextLen() const SAL_THROW((::com::sun::star::uno::RuntimeException));
+        OUString GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex );
+        sal_uInt16 GetTextLen() const;
 
         /** Get the current selection of this paragraph
 
             @return sal_False, if nothing in this paragraph is selected
          */
-        bool GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos ) SAL_THROW((::com::sun::star::uno::RuntimeException));
+        bool GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos );
 
         /** create selection from Accessible selection.
 
@@ -337,11 +337,11 @@ namespace accessibility
         // check whether index value is within permitted range
 
         /// Check whether 0<=nIndex<=n-1
-        void CheckIndex( sal_Int32 nIndex ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
+        void CheckIndex( sal_Int32 nIndex );
         /// Check whether 0<=nIndex<=n
-        void CheckPosition( sal_Int32 nIndex ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
+        void CheckPosition( sal_Int32 nIndex );
         /// Check whether 0<=nStart<=n and 0<=nEnd<=n
-        void CheckRange( sal_Int32 nStart, sal_Int32 nEnd ) SAL_THROW((::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException));
+        void CheckRange( sal_Int32 nStart, sal_Int32 nEnd );
 
         void _correctValues( const sal_Int32 nIndex, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rValues );
         sal_Int32 SkipField(sal_Int32 nIndex, bool bForward);
