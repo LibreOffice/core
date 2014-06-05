@@ -78,6 +78,7 @@
 #include "swabstdlg.hxx"
 #include "swevent.hxx"
 #include "switerator.hxx"
+#include <boost/scoped_ptr.hpp>
 
 // distance between Anchor Y and initial note position
 #define POSTIT_INITIAL_ANCHOR_DISTANCE      20
@@ -1270,14 +1271,14 @@ void SwPostItMgr::ExecuteFormatAllDialog(SwView& rView)
     SfxItemSet aDlgAttr(*pPool, EE_ITEMS_START, EE_ITEMS_END);
     aDlgAttr.Put(aEditAttr);
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-    SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg(rView.GetWindow(), rView, aDlgAttr, DLG_CHAR_ANN);
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(rView.GetWindow(), rView, aDlgAttr, DLG_CHAR_ANN));
     sal_uInt16 nRet = pDlg->Execute();
     if (RET_OK == nRet)
     {
         aDlgAttr.Put(*pDlg->GetOutputItemSet());
         FormatAll(aDlgAttr);
     }
-    delete pDlg;
+    pDlg.reset();
     SetActiveSidebarWin(pOrigActiveWin);
 }
 

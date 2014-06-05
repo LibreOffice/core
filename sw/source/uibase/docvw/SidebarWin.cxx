@@ -79,6 +79,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace sw { namespace sidebarwindows {
 
@@ -262,15 +263,15 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
     mpSidebarTxtControl->Draw(pDev, rPt, rSz, nInFlags);
 
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
-    drawinglayer::processor2d::BaseProcessor2D * pProcessor =
+    boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
-            *pDev, aNewViewInfos );
+            *pDev, aNewViewInfos ));
 
     if (mpAnchor)
         pProcessor->process(mpAnchor->getOverlayObjectPrimitive2DSequence());
     if (mpTextRangeOverlay)
         pProcessor->process(mpTextRangeOverlay->getOverlayObjectPrimitive2DSequence());
-    delete pProcessor;
+    pProcessor.reset();
 
     if (mpVScrollbar->IsVisible())
     {
