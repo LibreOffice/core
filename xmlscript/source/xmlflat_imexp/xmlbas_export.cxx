@@ -451,14 +451,12 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     Reference< XInterface > SAL_CALL create_XMLBasicExporter(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new XMLBasicExporter( xContext ) );
     }
 
     Reference< XInterface > SAL_CALL create_XMLOasisBasicExporter(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new XMLOasisBasicExporter( xContext ) );
     }

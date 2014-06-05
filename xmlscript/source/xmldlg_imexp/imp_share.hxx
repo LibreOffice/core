@@ -44,7 +44,7 @@
 namespace xmlscript
 {
 
-inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW(())
+inline sal_Int32 toInt32( OUString const & rStr )
 {
     sal_Int32 nVal;
     if (rStr.getLength() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
@@ -135,14 +135,12 @@ public:
 
     void addStyle(
         OUString const & rStyleId,
-        css::uno::Reference< css::xml::input::XElement > const & xStyle )
-        SAL_THROW(());
+        css::uno::Reference< css::xml::input::XElement > const & xStyle );
     css::uno::Reference< css::xml::input::XElement > getStyle(
-        OUString const & rStyleId ) const
-        SAL_THROW(());
+        OUString const & rStyleId ) const;
 
     inline css::uno::Reference< css::uno::XComponentContext >
-    const & getComponentContext() SAL_THROW(()) { return _xContext; }
+    const & getComponentContext()  { return _xContext; }
     css::uno::Reference< css::util::XNumberFormatsSupplier >
     const & getNumberFormatsSupplier();
 
@@ -153,7 +151,6 @@ public:
         ::boost::shared_ptr< ::std::vector< OUString > >& pStyleNames,
         ::boost::shared_ptr< ::std::vector< css::uno::Reference< css::xml::input::XElement > > >& pStyles,
         css::uno::Reference<css::frame::XModel> const & xDoc )
-        SAL_THROW(())
         : _xContext( xContext )
         , _pStyleNames( pStyleNames )
         , _pStyles( pStyles )
@@ -175,8 +172,7 @@ public:
         , XMLNS_DIALOGS_UID( rOther.XMLNS_DIALOGS_UID )
         , XMLNS_SCRIPT_UID( rOther.XMLNS_SCRIPT_UID ) {}
 
-    virtual ~DialogImport()
-        SAL_THROW(());
+    virtual ~DialogImport();
 
     inline css::uno::Reference< css::frame::XModel > getDocOwner() { return _xDoc; }
 
@@ -215,10 +211,8 @@ public:
     ElementBase(
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
-        ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(());
-    virtual ~ElementBase()
-        SAL_THROW(());
+        ElementBase * pParent, DialogImport * pImport );
+    virtual ~ElementBase();
 
     // XElement
     virtual css::uno::Reference<css::xml::input::XElement> SAL_CALL getParent()
@@ -260,7 +254,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ElementBase( pImport->XMLNS_DIALOGS_UID,
                        rLocalName, xAttributes, pParent, pImport )
         {}
@@ -314,7 +307,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ElementBase( pImport->XMLNS_DIALOGS_UID,
                        rLocalName, xAttributes, pParent, pImport )
         , _backgroundColor(0)
@@ -351,7 +343,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ElementBase( pImport->XMLNS_DIALOGS_UID,
                        rLocalName, xAttributes, pParent, pImport )
         {}
@@ -376,13 +367,12 @@ protected:
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
 public:
     ::std::vector<css::uno::Reference< css::xml::input::XElement> > *getEvents()
-        SAL_THROW(()) { return &_events; }
+         { return &_events; }
 
     ControlElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
-        ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(());
+        ElementBase * pParent, DialogImport * pImport );
 };
 
 class ImportContext
@@ -524,7 +514,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -540,7 +529,6 @@ public:
         sal_Int32 nUid, OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ElementBase( nUid, rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -558,8 +546,7 @@ public:
     BulletinBoardElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
-        ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(());
+        ElementBase * pParent, DialogImport * pImport );
 };
 
 class ButtonElement
@@ -578,7 +565,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -599,7 +585,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -621,7 +606,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -643,7 +627,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -662,7 +645,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -684,7 +666,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -707,7 +688,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : BulletinBoardElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -728,7 +708,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -748,7 +727,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -769,7 +747,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -790,7 +767,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -811,7 +787,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -832,7 +807,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -853,7 +827,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -874,7 +847,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -895,7 +867,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -916,7 +887,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -937,7 +907,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -958,7 +927,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -979,7 +947,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -1000,7 +967,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -1021,7 +987,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -1042,7 +1007,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {
             m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoMultiPageModel" ), css::uno::UNO_QUERY );
@@ -1068,7 +1032,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 private:
@@ -1091,7 +1054,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {
             m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoPageModel" ), css::uno::UNO_QUERY );
@@ -1116,7 +1078,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        SAL_THROW(())
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };

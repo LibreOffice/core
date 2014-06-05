@@ -53,7 +53,7 @@ struct ModuleImport
     sal_Int32 XMLNS_XLINK_UID;
 
 public:
-    ModuleImport(ModuleDescriptor& rModuleDesc) SAL_THROW(())
+    ModuleImport(ModuleDescriptor& rModuleDesc)
         : mrModuleDesc(rModuleDesc)
         , XMLNS_SCRIPT_UID(0)
         , XMLNS_LIBRARY_UID(0)
@@ -61,7 +61,7 @@ public:
     {
     }
 
-    virtual ~ModuleImport() SAL_THROW(());
+    virtual ~ModuleImport();
 
     // XRoot
     virtual void SAL_CALL startDocument(
@@ -96,10 +96,8 @@ public:
     ModuleElement(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
-        ModuleElement * pParent, ModuleImport * pImport )
-        SAL_THROW(());
-    virtual ~ModuleElement()
-        SAL_THROW(());
+        ModuleElement * pParent, ModuleImport * pImport );
+    virtual ~ModuleElement();
 
     // XElement
     virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL getParent()

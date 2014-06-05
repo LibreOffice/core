@@ -37,7 +37,7 @@
 
 namespace xmlscript
 {
-inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW(())
+inline sal_Int32 toInt32( OUString const & rStr )
 {
     sal_Int32 nVal;
     if (rStr.getLength() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
@@ -114,7 +114,7 @@ struct LibraryImport
     sal_Int32 XMLNS_XLINK_UID;
 
 public:
-    LibraryImport( LibDescriptorArray* pLibArray ) SAL_THROW(())
+    LibraryImport( LibDescriptorArray* pLibArray )
         : mpLibArray(pLibArray)
         , mpLibDesc(NULL)
         , XMLNS_LIBRARY_UID(0)
@@ -123,7 +123,7 @@ public:
     }
 
     // Single library mode
-    LibraryImport(LibDescriptor* pLibDesc) SAL_THROW(())
+    LibraryImport(LibDescriptor* pLibDesc)
         : mpLibArray(NULL)
         , mpLibDesc(pLibDesc)
         , XMLNS_LIBRARY_UID(0)
@@ -131,8 +131,7 @@ public:
     {
     }
 
-    virtual ~LibraryImport()
-        SAL_THROW(());
+    virtual ~LibraryImport();
 
     // XRoot
     virtual void SAL_CALL startDocument(
@@ -166,10 +165,8 @@ public:
     LibElementBase(
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
-        LibElementBase * pParent, LibraryImport * pImport )
-        SAL_THROW(());
-    virtual ~LibElementBase()
-        SAL_THROW(());
+        LibElementBase * pParent, LibraryImport * pImport );
+    virtual ~LibElementBase();
 
     // XElement
     virtual css::uno::Reference< css::xml::input::XElement > SAL_CALL getParent()
@@ -215,7 +212,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport )
-        SAL_THROW(())
         : LibElementBase( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -238,7 +234,6 @@ public:
         OUString const & rLocalName,
         css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
         LibElementBase * pParent, LibraryImport * pImport )
-        SAL_THROW(())
         : LibElementBase( rLocalName, xAttributes, pParent, pImport )
     {}
 };

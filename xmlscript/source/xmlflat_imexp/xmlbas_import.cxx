@@ -730,14 +730,12 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
 
     Reference< XInterface > SAL_CALL create_XMLBasicImporter(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new XMLBasicImporter( xContext ) );
     }
 
     Reference< XInterface > SAL_CALL create_XMLOasisBasicImporter(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new XMLOasisBasicImporter( xContext ) );
     }

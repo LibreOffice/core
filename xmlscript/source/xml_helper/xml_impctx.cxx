@@ -63,7 +63,7 @@ struct PrefixEntry
 {
     ::std::vector< sal_Int32 > m_Uids;
 
-    inline PrefixEntry() SAL_THROW(())
+    inline PrefixEntry()
         { m_Uids.reserve( 4 ); }
 };
 
@@ -797,7 +797,6 @@ OUString ExtendedAttributes::getValueByUidName(
 Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
     Reference< xml::input::XRoot > const & xRoot,
     bool bSingleThreadedUse )
-    SAL_THROW(())
 {
     SAL_WARN_IF( !xRoot.is(), "xmlscript.xmlhelper", "xRoot is NULL" );
     if (xRoot.is())
@@ -810,7 +809,6 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
 
 Reference< XInterface > SAL_CALL create_DocumentHandlerImpl(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
-    SAL_THROW( (Exception) )
 {
     return static_cast< ::cppu::OWeakObject * >(
         new DocumentHandlerImpl(

@@ -40,8 +40,7 @@ getSupportedServiceNames_DocumentHandlerImpl();
 OUString SAL_CALL getImplementationName_DocumentHandlerImpl();
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL create_DocumentHandlerImpl(
-    css::uno::Reference<css::uno::XComponentContext> const & xContext)
-    SAL_THROW((css::uno::Exception));
+    css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
 css::uno::Sequence<OUString> SAL_CALL
 getSupportedServiceNames_XMLBasicExporter();
@@ -49,8 +48,7 @@ getSupportedServiceNames_XMLBasicExporter();
 OUString SAL_CALL getImplementationName_XMLBasicExporter();
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL create_XMLBasicExporter(
-    css::uno::Reference<css::uno::XComponentContext> const & xContext)
-    SAL_THROW((css::uno::Exception));
+    css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
 css::uno::Sequence<OUString> SAL_CALL
 getSupportedServiceNames_XMLOasisBasicExporter();
@@ -58,8 +56,7 @@ getSupportedServiceNames_XMLOasisBasicExporter();
 OUString SAL_CALL getImplementationName_XMLOasisBasicExporter();
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL create_XMLOasisBasicExporter(
-    css::uno::Reference<css::uno::XComponentContext> const & xContext)
-    SAL_THROW((css::uno::Exception));
+    css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
 css::uno::Sequence<OUString> SAL_CALL
 getSupportedServiceNames_XMLBasicImporter();
@@ -67,8 +64,7 @@ getSupportedServiceNames_XMLBasicImporter();
 OUString SAL_CALL getImplementationName_XMLBasicImporter();
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL create_XMLBasicImporter(
-    css::uno::Reference<css::uno::XComponentContext> const & xContext)
-    SAL_THROW((css::uno::Exception));
+    css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
 css::uno::Sequence<OUString> SAL_CALL
 getSupportedServiceNames_XMLOasisBasicImporter();
@@ -76,8 +72,7 @@ getSupportedServiceNames_XMLOasisBasicImporter();
 OUString SAL_CALL getImplementationName_XMLOasisBasicImporter();
 
 css::uno::Reference<css::uno::XInterface> SAL_CALL create_XMLOasisBasicImporter(
-    css::uno::Reference<css::uno::XComponentContext> const & xContext)
-        SAL_THROW((css::uno::Exception));
+    css::uno::Reference<css::uno::XComponentContext> const & xContext);
 
 }
 
