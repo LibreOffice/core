@@ -266,6 +266,16 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
 
 IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
 {
+    //Resolves: fdo#79021 At this point we are still inside the ListBox Select.
+    //If we call maEntries.replace here then the pBox will be deleted before it
+    //has finished Select and will crash on accessing its deleted this. So Post
+    //to do the real work after the Select has completed
+    Application::PostUserEvent(LINK(this, ScCondFormatList, AfterTypeListHdl), pBox);
+    return 0;
+}
+
+IMPL_LINK(ScCondFormatList, AfterTypeListHdl, ListBox*, pBox)
+{
     EntryContainer::iterator itr = maEntries.begin();
     for(; itr != maEntries.end(); ++itr)
     {
