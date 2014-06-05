@@ -289,7 +289,7 @@ public:
 
       @since LibreOffice 4.1
     */
-    bool isEmpty() const SAL_THROW(())
+    bool isEmpty() const
     {
         return pData->length == 0;
     }
@@ -923,7 +923,7 @@ public:
      @internal
      @since LibreOffice 4.1
     */
-    friend OString operator+( const OStringBuffer& str1, const OStringBuffer& str2  ) SAL_THROW(())
+    friend OString operator+( const OStringBuffer& str1, const OStringBuffer& str2  )
     {
         return OString( str1.pData ).concat( str2.pData );
     }

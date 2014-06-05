@@ -70,8 +70,7 @@ namespace rtl
 
             @see rtl_bootstrap_set()
         */
-        static inline void set( ::rtl::OUString const & name, ::rtl::OUString const & value )
-            SAL_THROW(());
+        static inline void set( ::rtl::OUString const & name, ::rtl::OUString const & value );
 
         /** default ctor.
          */
@@ -116,21 +115,21 @@ namespace rtl
 
             @param macro    [inout]  The macro to be expanded
         */
-        inline void expandMacrosFrom( ::rtl::OUString & macro ) const SAL_THROW(())
+        inline void expandMacrosFrom( ::rtl::OUString & macro ) const
             { rtl_bootstrap_expandMacros_from_handle( _handle, &macro.pData ); }
 
         /** Expands a macro using default bootstrap variables.
 
             @param macro    [inout]  The macro to be expanded
         */
-        static inline void expandMacros( ::rtl::OUString & macro ) SAL_THROW(())
+        static inline void expandMacros( ::rtl::OUString & macro )
             { rtl_bootstrap_expandMacros( &macro.pData ); }
 
         /** Provides the bootstrap internal handle.
 
             @return bootstrap handle
         */
-        inline rtlBootstrapHandle getHandle() const SAL_THROW(())
+        inline rtlBootstrapHandle getHandle() const
             { return _handle; }
 
         /** Escapes special characters ("$" and "\").
@@ -144,8 +143,7 @@ namespace rtl
 
             @since UDK 3.2.9
         */
-        static inline ::rtl::OUString encode( ::rtl::OUString const & value )
-            SAL_THROW(());
+        static inline ::rtl::OUString encode( ::rtl::OUString const & value );
     };
 
 
@@ -170,7 +168,6 @@ namespace rtl
     }
 
     inline void Bootstrap::set( ::rtl::OUString const & name, ::rtl::OUString const & value )
-        SAL_THROW(())
     {
         rtl_bootstrap_set( name.pData, value.pData );
     }
@@ -214,7 +211,6 @@ namespace rtl
     }
 
     inline ::rtl::OUString Bootstrap::encode( ::rtl::OUString const & value )
-        SAL_THROW(())
     {
         ::rtl::OUString encoded;
         rtl_bootstrap_encode(value.pData, &encoded.pData);

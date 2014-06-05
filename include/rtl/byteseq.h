@@ -167,29 +167,29 @@ class SAL_WARN_UNUSED ByteSequence
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new ( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete ( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new ( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
 
     /** Default constructor: Creates an empty sequence.
     */
-    inline ByteSequence() SAL_THROW(());
+    inline ByteSequence();
     /** Copy constructor: Creates a copy of given sequence.
 
         @param rSeq another byte sequence
     */
-    inline ByteSequence( const ByteSequence & rSeq ) SAL_THROW(());
+    inline ByteSequence( const ByteSequence & rSeq );
     /** Copy constructor Creates a copy from the C-Handle.
 
         @param pSequence another byte sequence handle
     */
-    inline ByteSequence( sal_Sequence *pSequence ) SAL_THROW(());
+    inline ByteSequence( sal_Sequence *pSequence );
     /** Constructor: Creates a copy of given data bytes.
 
         @param pElements an array of bytes
@@ -217,23 +217,23 @@ public:
         @param pSequence sequence handle to be taken over
         @param noacquire dummy parameter forcing explicit BYTESEQ_NOACQUIRE
     */
-    inline ByteSequence( sal_Sequence *pSequence , enum __ByteSequence_NoAcquire noacquire ) SAL_THROW(());
+    inline ByteSequence( sal_Sequence *pSequence , enum __ByteSequence_NoAcquire noacquire );
     /** Destructor: Releases sequence handle. Last handle will free memory.
     */
-    inline ~ByteSequence() SAL_THROW(());
+    inline ~ByteSequence();
 
     /** Assignment operator: Acquires given sequence handle and releases a previously set handle.
 
         @param rSeq another byte sequence
         @return this sequence
     */
-    inline ByteSequence & SAL_CALL operator = ( const ByteSequence & rSeq ) SAL_THROW(());
+    inline ByteSequence & SAL_CALL operator = ( const ByteSequence & rSeq );
 
     /** Gets the length of sequence.
 
         @return length of sequence
     */
-    inline sal_Int32 SAL_CALL getLength() const SAL_THROW(())
+    inline sal_Int32 SAL_CALL getLength() const
         { return _pSequence->nElements; }
 
     /** Gets a pointer to byte array for READING. If the sequence has a length of 0, then the
@@ -241,7 +241,7 @@ public:
 
         @return pointer to byte array
     */
-    inline const sal_Int8 * SAL_CALL getConstArray() const SAL_THROW(())
+    inline const sal_Int8 * SAL_CALL getConstArray() const
         { return (const sal_Int8 *)_pSequence->elements; }
     /** Gets a pointer to elements array for READING AND WRITING. In general if the sequence
         has a handle acquired by other sequences (reference count > 1), then a new sequence is
@@ -272,7 +272,7 @@ public:
         @param nIndex index
         @return const C++ reference to byte at element of indenx nIndex
     */
-    inline const sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex ) const SAL_THROW(())
+    inline const sal_Int8 & SAL_CALL operator [] ( sal_Int32 nIndex ) const
         { return getConstArray()[ nIndex ]; }
 
     /** Equality operator: Compares two sequences.
@@ -280,13 +280,13 @@ public:
         @param rSeq another byte sequence (right side)
         @return true if both sequences are equal, false otherwise
     */
-    inline bool SAL_CALL operator == ( const ByteSequence & rSeq ) const SAL_THROW(());
+    inline bool SAL_CALL operator == ( const ByteSequence & rSeq ) const;
     /** Unequality operator: Compares two sequences.
 
         @param rSeq another byte sequence (right side)
         @return false if both sequences are equal, true otherwise
     */
-    inline bool SAL_CALL operator != ( const ByteSequence & rSeq ) const SAL_THROW(());
+    inline bool SAL_CALL operator != ( const ByteSequence & rSeq ) const;
 
     /** Reallocates sequence to new length. If the sequence has a handle acquired by other sequences
         (reference count > 1), then the remaining elements are copied to a new sequence handle to
@@ -300,13 +300,13 @@ public:
 
         @return UNacquired handle of the sequence
     */
-    inline sal_Sequence * SAL_CALL getHandle() const SAL_THROW(())
+    inline sal_Sequence * SAL_CALL getHandle() const
         { return _pSequence; }
     /** Returns the UNnacquired C handle of the sequence (for compatibility reasons)
 
         @return UNacquired handle of the sequence
     */
-    inline sal_Sequence * SAL_CALL get() const SAL_THROW(())
+    inline sal_Sequence * SAL_CALL get() const
         { return _pSequence; }
 };
 

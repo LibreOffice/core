@@ -96,7 +96,7 @@ public:
     /**
       New string containing no characters.
     */
-    OString() SAL_THROW(())
+    OString()
     {
         pData = 0;
         rtl_string_new( &pData );
@@ -107,7 +107,7 @@ public:
 
       @param    str         a OString.
     */
-    OString( const OString & str ) SAL_THROW(())
+    OString( const OString & str )
     {
         pData = str.pData;
         rtl_string_acquire( pData );
@@ -118,7 +118,7 @@ public:
 
       @param    str         a OString data.
     */
-    OString( rtl_String * str ) SAL_THROW(())
+    OString( rtl_String * str )
     {
         pData = str;
         rtl_string_acquire( pData );
@@ -131,7 +131,7 @@ public:
 
       @param    str         a OString data.
     */
-    inline OString( rtl_String * str, __sal_NoAcquire ) SAL_THROW(())
+    inline OString( rtl_String * str, __sal_NoAcquire )
     {
         pData = str;
     }
@@ -141,7 +141,7 @@ public:
 
       @param    value       a character.
     */
-    explicit OString( sal_Char value ) SAL_THROW(())
+    explicit OString( sal_Char value )
         : pData (0)
     {
         rtl_string_newFromStr_WithLength( &pData, &value, 1 );
@@ -156,14 +156,14 @@ public:
       @param    value       a NULL-terminated character array.
     */
     template< typename T >
-    OString( const T& value, typename internal::CharPtrDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
+    OString( const T& value, typename internal::CharPtrDetector< T, internal::Dummy >::Type = internal::Dummy() )
     {
         pData = 0;
         rtl_string_newFromStr( &pData, value );
     }
 
     template< typename T >
-    OString( T& value, typename internal::NonConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
+    OString( T& value, typename internal::NonConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
     {
         pData = 0;
         rtl_string_newFromStr( &pData, value );
@@ -180,7 +180,7 @@ public:
       @param    literal       a string literal
     */
     template< typename T >
-    OString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
+    OString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
     {
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
         pData = 0;
@@ -201,7 +201,7 @@ public:
                             The character array length must be greater or
                             equal than this value.
     */
-    OString( const sal_Char * value, sal_Int32 length ) SAL_THROW(())
+    OString( const sal_Char * value, sal_Int32 length )
     {
         pData = 0;
         rtl_string_newFromStr_WithLength( &pData, value, length );
@@ -254,7 +254,7 @@ public:
     /**
       Release the string data.
     */
-    ~OString() SAL_THROW(())
+    ~OString()
     {
         rtl_string_release( pData );
     }
@@ -264,7 +264,7 @@ public:
 
       @param    str         a OString.
     */
-    OString & operator=( const OString & str ) SAL_THROW(())
+    OString & operator=( const OString & str )
     {
         rtl_string_assign( &pData, str.pData );
         return *this;
@@ -276,7 +276,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& literal ) SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& literal )
     {
         RTL_STRING_CONST_FUNCTION
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
@@ -292,7 +292,7 @@ public:
 
       @param    str         a OString.
     */
-    OString & operator+=( const OString & str ) SAL_THROW(())
+    OString & operator+=( const OString & str )
     {
         rtl_string_newConcat( &pData, pData, str.pData );
         return *this;
@@ -324,7 +324,7 @@ public:
       @return   the length of the sequence of characters represented by this
                 object.
     */
-    sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
+    sal_Int32 getLength() const { return pData->length; }
 
     /**
       Checks if a string is empty.
@@ -334,7 +334,7 @@ public:
 
       @since LibreOffice 3.4
     */
-    bool isEmpty() const SAL_THROW(())
+    bool isEmpty() const
     {
         return pData->length == 0;
     }
@@ -350,7 +350,7 @@ public:
       @return a pointer to a null-terminated byte string representing the
       characters of this string object.
     */
-    const sal_Char * getStr() const SAL_THROW(()) { return pData->buffer; }
+    const sal_Char * getStr() const { return pData->buffer; }
 
     /**
       Access to individual characters.
@@ -379,7 +379,7 @@ public:
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
     */
-    sal_Int32 compareTo( const OString & str ) const SAL_THROW(())
+    sal_Int32 compareTo( const OString & str ) const
     {
         return rtl_str_compare_WithLength( pData->buffer, pData->length,
                                            str.pData->buffer, str.pData->length );
@@ -398,7 +398,7 @@ public:
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
     */
-    sal_Int32 compareTo( const OString & rObj, sal_Int32 maxLength ) const SAL_THROW(())
+    sal_Int32 compareTo( const OString & rObj, sal_Int32 maxLength ) const
     {
         return rtl_str_shortenedCompare_WithLength( pData->buffer, pData->length,
                                                     rObj.pData->buffer, rObj.pData->length, maxLength );
@@ -416,7 +416,7 @@ public:
                 < 0 - if this string is less than the string argument
                 > 0 - if this string is greater than the string argument
     */
-    sal_Int32 reverseCompareTo( const OString & str ) const SAL_THROW(())
+    sal_Int32 reverseCompareTo( const OString & str ) const
     {
         return rtl_str_reverseCompare_WithLength( pData->buffer, pData->length,
                                                   str.pData->buffer, str.pData->length );
@@ -433,7 +433,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equals( const OString & str ) const SAL_THROW(())
+    bool equals( const OString & str ) const
     {
         if ( pData->length != str.pData->length )
             return false;
@@ -458,7 +458,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsL( const sal_Char* value, sal_Int32 length ) const SAL_THROW(())
+    bool equalsL( const sal_Char* value, sal_Int32 length ) const
     {
         if ( pData->length != length )
             return false;
@@ -481,7 +481,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsIgnoreAsciiCase( const OString & str ) const SAL_THROW(())
+    bool equalsIgnoreAsciiCase( const OString & str ) const
     {
         if ( pData->length != str.pData->length )
             return false;
@@ -513,13 +513,13 @@ public:
                 false, otherwise.
     */
     template< typename T >
-    typename internal::CharPtrDetector< T, bool >::Type equalsIgnoreAsciiCase( const T& asciiStr ) const SAL_THROW(())
+    typename internal::CharPtrDetector< T, bool >::Type equalsIgnoreAsciiCase( const T& asciiStr ) const
     {
         return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
     }
 
     template< typename T >
-    typename internal::NonConstCharArrayDetector< T, bool >::Type equalsIgnoreAsciiCase( T& asciiStr ) const SAL_THROW(())
+    typename internal::NonConstCharArrayDetector< T, bool >::Type equalsIgnoreAsciiCase( T& asciiStr ) const
     {
         return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
     }
@@ -530,7 +530,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type  equalsIgnoreAsciiCase( T& literal ) const SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, bool >::Type  equalsIgnoreAsciiCase( T& literal ) const
     {
         RTL_STRING_CONST_FUNCTION
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
@@ -559,7 +559,7 @@ public:
       @return   true if the strings are equal;
                 false, otherwise.
     */
-    bool equalsIgnoreAsciiCaseL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const SAL_THROW(())
+    bool equalsIgnoreAsciiCaseL( const sal_Char * asciiStr, sal_Int32 asciiStrLength ) const
     {
         if ( pData->length != asciiStrLength )
             return false;
@@ -583,7 +583,7 @@ public:
                 at the given position;
                 false, otherwise.
     */
-    bool match( const OString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    bool match( const OString & str, sal_Int32 fromIndex = 0 ) const
     {
         return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                     str.pData->buffer, str.pData->length, str.pData->length ) == 0;
@@ -595,7 +595,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, bool >::Type  match( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, bool >::Type  match( T& literal, sal_Int32 fromIndex = 0 ) const
     {
         RTL_STRING_CONST_FUNCTION
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
@@ -655,7 +655,7 @@ public:
                 at the given position;
                 false, otherwise.
     */
-    bool matchIgnoreAsciiCase( const OString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    bool matchIgnoreAsciiCase( const OString & str, sal_Int32 fromIndex = 0 ) const
     {
         return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                                    str.pData->buffer, str.pData->length,
@@ -778,39 +778,39 @@ public:
             && matchL(str, strLength, getLength() - strLength);
     }
 
-    friend bool     operator == ( const OString& rStr1, const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator == ( const OString& rStr1, const OString& rStr2 )
                         { return rStr1.equals(rStr2); }
-    friend bool     operator != ( const OString& rStr1,     const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator != ( const OString& rStr1,     const OString& rStr2 )
                         { return !(operator == ( rStr1, rStr2 )); }
-    friend bool     operator <  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator <  ( const OString& rStr1,    const OString& rStr2 )
                         { return rStr1.compareTo( rStr2 ) < 0; }
-    friend bool     operator >  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator >  ( const OString& rStr1,    const OString& rStr2 )
                         { return rStr1.compareTo( rStr2 ) > 0; }
-    friend bool     operator <= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator <= ( const OString& rStr1,    const OString& rStr2 )
                         { return rStr1.compareTo( rStr2 ) <= 0; }
-    friend bool     operator >= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
+    friend bool     operator >= ( const OString& rStr1,    const OString& rStr2 )
                         { return rStr1.compareTo( rStr2 ) >= 0; }
 
     template< typename T >
-    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const OString& rStr1, const T& value ) SAL_THROW(())
+    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const OString& rStr1, const T& value )
     {
         return rStr1.compareTo( value ) == 0;
     }
 
     template< typename T >
-    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr1, T& value ) SAL_THROW(())
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr1, T& value )
     {
         return rStr1.compareTo( value ) == 0;
     }
 
     template< typename T >
-    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const T& value, const OString& rStr2 ) SAL_THROW(())
+    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const T& value, const OString& rStr2 )
     {
         return rStr2.compareTo( value ) == 0;
     }
 
     template< typename T >
-    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( T& value, const OString& rStr2 ) SAL_THROW(())
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( T& value, const OString& rStr2 )
     {
         return rStr2.compareTo( value ) == 0;
     }
@@ -821,7 +821,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr, T& literal ) SAL_THROW(())
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr, T& literal )
     {
         RTL_STRING_CONST_FUNCTION
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
@@ -836,7 +836,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OString& rStr ) SAL_THROW(())
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OString& rStr )
     {
         RTL_STRING_CONST_FUNCTION
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
@@ -846,25 +846,25 @@ public:
     }
 
     template< typename T >
-    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const OString& rStr1, const T& value ) SAL_THROW(())
+    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const OString& rStr1, const T& value )
     {
         return !(operator == ( rStr1, value ));
     }
 
     template< typename T >
-    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr1, T& value ) SAL_THROW(())
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr1, T& value )
     {
         return !(operator == ( rStr1, value ));
     }
 
     template< typename T >
-    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const T& value,   const OString& rStr2 ) SAL_THROW(())
+    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const T& value,   const OString& rStr2 )
     {
         return !(operator == ( value, rStr2 ));
     }
 
     template< typename T >
-    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( T& value,   const OString& rStr2 ) SAL_THROW(())
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( T& value,   const OString& rStr2 )
     {
         return !(operator == ( value, rStr2 ));
     }
@@ -875,7 +875,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr, T& literal ) SAL_THROW(())
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr, T& literal )
     {
         return !( rStr == literal );
     }
@@ -886,7 +886,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OString& rStr ) SAL_THROW(())
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OString& rStr )
     {
         return !( literal == rStr );
     }
@@ -898,7 +898,7 @@ public:
 
       @see rtl::OStringHash for convenient use of boost::unordered_map
     */
-    sal_Int32 hashCode() const SAL_THROW(())
+    sal_Int32 hashCode() const
     {
         return rtl_str_hashCode_WithLength( pData->buffer, pData->length );
     }
@@ -916,7 +916,7 @@ public:
                 greater than or equal to fromIndex, or
                 -1 if the character does not occur.
     */
-    sal_Int32 indexOf( sal_Char ch, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    sal_Int32 indexOf( sal_Char ch, sal_Int32 fromIndex = 0 ) const
     {
         sal_Int32 ret = rtl_str_indexOfChar_WithLength( pData->buffer+fromIndex, pData->length-fromIndex, ch );
         return (ret < 0 ? ret : ret+fromIndex);
@@ -931,7 +931,7 @@ public:
                 character sequence represented by this string, or
                 -1 if the character does not occur.
     */
-    sal_Int32 lastIndexOf( sal_Char ch ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( sal_Char ch ) const
     {
         return rtl_str_lastIndexOfChar_WithLength( pData->buffer, pData->length, ch );
     }
@@ -948,7 +948,7 @@ public:
                 is less than fromIndex, or -1
                 if the character does not occur before that point.
     */
-    sal_Int32 lastIndexOf( sal_Char ch, sal_Int32 fromIndex ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( sal_Char ch, sal_Int32 fromIndex ) const
     {
         return rtl_str_lastIndexOfChar_WithLength( pData->buffer, fromIndex, ch );
     }
@@ -968,7 +968,7 @@ public:
                 returned. If it does not occur as a substring starting
                 at fromIndex or beyond, -1 is returned.
     */
-    sal_Int32 indexOf( const OString & str, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    sal_Int32 indexOf( const OString & str, sal_Int32 fromIndex = 0 ) const
     {
         sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                        str.pData->buffer, str.pData->length );
@@ -981,7 +981,7 @@ public:
      @since LibreOffice 3.6
     */
     template< typename T >
-    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const
     {
         RTL_STRING_CONST_FUNCTION
         assert( strlen( literal ) == internal::ConstCharArrayDetector< T >::size - 1 );
@@ -1009,7 +1009,7 @@ public:
       @since LibreOffice 3.6
     */
     sal_Int32 indexOfL(char const * str, sal_Int32 len, sal_Int32 fromIndex = 0)
-        const SAL_THROW(())
+        const
     {
         sal_Int32 n = rtl_str_indexOfStr_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex, str, len);
@@ -1039,7 +1039,7 @@ public:
                 the last such substring is returned. If it does not occur as
                 a substring, -1 is returned.
     */
-    sal_Int32 lastIndexOf( const OString & str ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( const OString & str ) const
     {
         return rtl_str_lastIndexOfStr_WithLength( pData->buffer, pData->length,
                                                   str.pData->buffer, str.pData->length );
@@ -1062,7 +1062,7 @@ public:
                 of the first character of the last such substring is
                 returned. Otherwise, -1 is returned.
     */
-    sal_Int32 lastIndexOf( const OString & str, sal_Int32 fromIndex ) const SAL_THROW(())
+    sal_Int32 lastIndexOf( const OString & str, sal_Int32 fromIndex ) const
     {
         return rtl_str_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                   str.pData->buffer, str.pData->length );
@@ -1078,7 +1078,7 @@ public:
       @param     beginIndex   the beginning index, inclusive.
       @return    the specified substring.
     */
-    SAL_WARN_UNUSED_RESULT OString copy( sal_Int32 beginIndex ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString copy( sal_Int32 beginIndex ) const
     {
         rtl_String *pNew = 0;
         rtl_string_newFromSubString( &pNew, pData, beginIndex, getLength() - beginIndex );
@@ -1097,7 +1097,7 @@ public:
       @param     count        the number of characters.
       @return    the specified substring.
     */
-    SAL_WARN_UNUSED_RESULT OString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString copy( sal_Int32 beginIndex, sal_Int32 count ) const
     {
         rtl_String *pNew = 0;
         rtl_string_newFromSubString( &pNew, pData, beginIndex, count );
@@ -1112,7 +1112,7 @@ public:
       @return   a string that represents the concatenation of this string
                 followed by the string argument.
     */
-    SAL_WARN_UNUSED_RESULT OString concat( const OString & str ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString concat( const OString & str ) const
     {
         rtl_String* pNew = 0;
         rtl_string_newConcat( &pNew, pData, str.pData );
@@ -1120,7 +1120,7 @@ public:
     }
 
 #ifndef RTL_FAST_STRING
-    friend OString operator+( const OString & str1, const OString & str2  ) SAL_THROW(())
+    friend OString operator+( const OString & str1, const OString & str2  )
     {
         return str1.concat( str2 );
     }
@@ -1139,7 +1139,7 @@ public:
       @param  newStr  the new substring.
       @return the new string.
     */
-    SAL_WARN_UNUSED_RESULT OString replaceAt( sal_Int32 index, sal_Int32 count, const OString& newStr ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString replaceAt( sal_Int32 index, sal_Int32 count, const OString& newStr ) const
     {
         rtl_String* pNew = 0;
         rtl_string_newReplaceStrAt( &pNew, pData, index, count, newStr.pData );
@@ -1159,7 +1159,7 @@ public:
       @return   a string derived from this string by replacing every
                 occurrence of oldChar with newChar.
     */
-    SAL_WARN_UNUSED_RESULT OString replace( sal_Char oldChar, sal_Char newChar ) const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString replace( sal_Char oldChar, sal_Char newChar ) const
     {
         rtl_String* pNew = 0;
         rtl_string_newReplace( &pNew, pData, oldChar, newChar );
@@ -1226,7 +1226,7 @@ public:
 
       @return   the string, converted to ASCII lowercase.
     */
-    SAL_WARN_UNUSED_RESULT OString toAsciiLowerCase() const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString toAsciiLowerCase() const
     {
         rtl_String* pNew = 0;
         rtl_string_newToAsciiLowerCase( &pNew, pData );
@@ -1243,7 +1243,7 @@ public:
 
       @return   the string, converted to ASCII uppercase.
     */
-    SAL_WARN_UNUSED_RESULT OString toAsciiUpperCase() const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString toAsciiUpperCase() const
     {
         rtl_String* pNew = 0;
         rtl_string_newToAsciiUpperCase( &pNew, pData );
@@ -1261,7 +1261,7 @@ public:
 
       @return   the string, with white space removed from the front and end.
     */
-    SAL_WARN_UNUSED_RESULT OString trim() const SAL_THROW(())
+    SAL_WARN_UNUSED_RESULT OString trim() const
     {
         rtl_String* pNew = 0;
         rtl_string_newTrim( &pNew, pData );
@@ -1292,7 +1292,7 @@ public:
       @return   the token; if either token or index is negative, an empty token
                 is returned (and index is set to -1)
     */
-    OString getToken( sal_Int32 token, sal_Char cTok, sal_Int32& index ) const SAL_THROW(())
+    OString getToken( sal_Int32 token, sal_Char cTok, sal_Int32& index ) const
     {
         rtl_String * pNew = 0;
         index = rtl_string_getToken( &pNew, pData, token, cTok, index );
@@ -1325,7 +1325,7 @@ public:
       @return   true, if the string is 1 or "True" in any ASCII case.
                 false in any other case.
     */
-    bool toBoolean() const SAL_THROW(())
+    bool toBoolean() const
     {
         return rtl_str_toBoolean( pData->buffer );
     }
@@ -1336,7 +1336,7 @@ public:
       @return   the first character from this string or 0, if this string
                 is emptry.
     */
-    sal_Char toChar() const SAL_THROW(())
+    sal_Char toChar() const
     {
         return pData->buffer[0];
     }
@@ -1351,7 +1351,7 @@ public:
                 0 if this string represents no number or one of too large
                 magnitude.
     */
-    sal_Int32 toInt32( sal_Int16 radix = 10 ) const SAL_THROW(())
+    sal_Int32 toInt32( sal_Int16 radix = 10 ) const
     {
         return rtl_str_toInt32( pData->buffer, radix );
     }
@@ -1368,7 +1368,7 @@ public:
 
       @since LibreOffice 4.2
     */
-    sal_uInt32 toUInt32( sal_Int16 radix = 10 ) const SAL_THROW(())
+    sal_uInt32 toUInt32( sal_Int16 radix = 10 ) const
     {
         return rtl_str_toUInt32( pData->buffer, radix );
     }
@@ -1383,7 +1383,7 @@ public:
                 0 if this string represents no number or one of too large
                 magnitude.
     */
-    sal_Int64 toInt64( sal_Int16 radix = 10 ) const SAL_THROW(())
+    sal_Int64 toInt64( sal_Int16 radix = 10 ) const
     {
         return rtl_str_toInt64( pData->buffer, radix );
     }
@@ -1400,7 +1400,7 @@ public:
 
       @since LibreOffice 4.1
     */
-    sal_uInt64 toUInt64( sal_Int16 radix = 10 ) const SAL_THROW(())
+    sal_uInt64 toUInt64( sal_Int16 radix = 10 ) const
     {
         return rtl_str_toUInt64( pData->buffer, radix );
     }
@@ -1413,7 +1413,7 @@ public:
       @return   the float represented from this string.
                 0.0 if this string represents no number.
     */
-    float toFloat() const SAL_THROW(())
+    float toFloat() const
     {
         return rtl_str_toFloat( pData->buffer );
     }
@@ -1426,7 +1426,7 @@ public:
       @return   the double represented from this string.
                 0.0 if this string represents no number.
     */
-    double toDouble() const SAL_THROW(())
+    double toDouble() const
     {
         return rtl_str_toDouble( pData->buffer );
     }
@@ -1527,7 +1527,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use boolean()
     */
-    SAL_DEPRECATED("use boolean()") static OString valueOf( sal_Bool b ) SAL_THROW(())
+    SAL_DEPRECATED("use boolean()") static OString valueOf( sal_Bool b )
     {
         return boolean(b);
     }
@@ -1543,7 +1543,7 @@ public:
       @return   a string with the string representation of the argument.
       @since LibreOffice 4.1
     */
-    static OString boolean( bool b ) SAL_THROW(())
+    static OString boolean( bool b )
     {
         sal_Char aBuf[RTL_STR_MAX_VALUEOFBOOLEAN];
         rtl_String* pNewData = 0;
@@ -1558,7 +1558,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use operator, function or constructor taking char or sal_Unicode argument
     */
-    SAL_DEPRECATED("convert to OString or use directly") static OString valueOf( sal_Char c ) SAL_THROW(())
+    SAL_DEPRECATED("convert to OString or use directly") static OString valueOf( sal_Char c )
     {
         return OString( &c, 1 );
     }
@@ -1573,7 +1573,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED("use number()") static OString valueOf( sal_Int32 i, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED("use number()") static OString valueOf( sal_Int32 i, sal_Int16 radix = 10 )
     {
         return number( i, radix );
     }
@@ -1588,7 +1588,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED("use number()") static OString valueOf( sal_Int64 ll, sal_Int16 radix = 10 ) SAL_THROW(())
+    SAL_DEPRECATED("use number()") static OString valueOf( sal_Int64 ll, sal_Int16 radix = 10 )
     {
         return number( ll, radix );
     }
@@ -1602,7 +1602,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED("use number()") static OString valueOf( float f ) SAL_THROW(())
+    SAL_DEPRECATED("use number()") static OString valueOf( float f )
     {
         return number(f);
     }
@@ -1616,7 +1616,7 @@ public:
       @return   a string with the string representation of the argument.
       @deprecated use number()
     */
-    SAL_DEPRECATED("use number()") static OString valueOf( double d ) SAL_THROW(())
+    SAL_DEPRECATED("use number()") static OString valueOf( double d )
     {
         return number(d);
     }

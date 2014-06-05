@@ -122,10 +122,10 @@ struct rtl_bootstrap_NameValue
     OUString sName;
     OUString sValue;
 
-    inline rtl_bootstrap_NameValue() SAL_THROW( () )
+    inline rtl_bootstrap_NameValue()
         {}
     inline rtl_bootstrap_NameValue(
-        OUString const & name, OUString const & value ) SAL_THROW( () )
+        OUString const & name, OUString const & value )
         : sName( name ),
           sValue( value )
         {}
@@ -316,9 +316,9 @@ struct Bootstrap_Impl
     explicit Bootstrap_Impl (OUString const & rIniName);
     ~Bootstrap_Impl();
 
-    static void * operator new (std::size_t n) SAL_THROW(())
+    static void * operator new (std::size_t n)
         { return rtl_allocateMemory (sal_uInt32(n)); }
-    static void operator delete (void * p , std::size_t) SAL_THROW(())
+    static void operator delete (void * p , std::size_t)
         { rtl_freeMemory (p); }
 
     bool getValue(
@@ -410,7 +410,7 @@ Bootstrap_Impl::~Bootstrap_Impl()
 
 namespace {
 
-Bootstrap_Impl * get_static_bootstrap_handle() SAL_THROW(())
+Bootstrap_Impl * get_static_bootstrap_handle()
 {
     osl::MutexGuard guard( osl::Mutex::getGlobalMutex() );
     static Bootstrap_Impl * s_handle = 0;

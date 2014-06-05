@@ -33,11 +33,11 @@ struct AllocatorTraits
     typedef char const signature_type[8];
     const signature_type & m_signature;
 
-    explicit AllocatorTraits (signature_type const & s) SAL_THROW(())
+    explicit AllocatorTraits (signature_type const & s)
         : m_signature (s)
     {}
 
-    std::size_t size (std::size_t n) const SAL_THROW(())
+    std::size_t size (std::size_t n) const
     {
         n = std::max(n, std::size_t(1));
 #if OSL_DEBUG_LEVEL > 0
@@ -46,7 +46,7 @@ struct AllocatorTraits
         return n;
     }
 
-    void* init (void * p) const SAL_THROW(())
+    void* init (void * p) const
     {
 #if OSL_DEBUG_LEVEL > 0
         memcpy (p, m_signature, sizeof(signature_type));
@@ -55,7 +55,7 @@ struct AllocatorTraits
         return p;
     }
 
-    void* fini (void * p) const SAL_THROW(())
+    void* fini (void * p) const
     {
 #if OSL_DEBUG_LEVEL > 0
         p = static_cast<char*>(p) - sizeof(signature_type);
@@ -72,7 +72,7 @@ struct VectorTraits : public AllocatorTraits
 {
     static const signature_type g_signature;
 
-    VectorTraits() SAL_THROW(())
+    VectorTraits()
         : AllocatorTraits (g_signature)
     {}
 };
@@ -81,7 +81,7 @@ struct ScalarTraits : public AllocatorTraits
 {
     static const signature_type g_signature;
 
-    ScalarTraits() SAL_THROW(())
+    ScalarTraits()
         : AllocatorTraits (g_signature)
     {}
 };
@@ -101,7 +101,6 @@ static void default_handler (void)
 
 static void* allocate (
     std::size_t n, AllocatorTraits const & rTraits)
-    SAL_THROW((std::bad_alloc))
 {
     n = rTraits.size (n);
     for (;;)
@@ -122,7 +121,6 @@ static void* allocate (
 
 static void* allocate_nothrow (
     std::size_t n, AllocatorTraits const & rTraits)
-    SAL_THROW(())
 {
     try
     {
@@ -135,7 +133,6 @@ static void* allocate_nothrow (
 }
 
 static void deallocate (void * p, AllocatorTraits const & rTraits)
-    SAL_THROW(())
 {
     if (p)
     {
