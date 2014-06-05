@@ -27,7 +27,6 @@ using namespace css;
 UUIInteractionRequestStringResolver::UUIInteractionRequestStringResolver(
     uno::Reference< uno::XComponentContext > const &
         rxContext)
-    SAL_THROW(())
         : m_pImpl(new UUIInteractionHelper(rxContext))
 {
 }
@@ -90,7 +89,6 @@ uno::Reference< uno::XInterface > SAL_CALL
 UUIInteractionRequestStringResolver::createInstance(
     uno::Reference< lang::XMultiServiceFactory > const &
         rServiceFactory)
-    SAL_THROW((uno::Exception))
 {
     try
     {

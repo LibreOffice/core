@@ -61,7 +61,6 @@ executeLoginDialog(
     Window * pParent,
     LoginErrorInfo & rInfo,
     OUString const & rRealm)
-    SAL_THROW((uno::RuntimeException))
 {
     try
     {
@@ -190,7 +189,6 @@ handleAuthenticationRequest_(
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     const OUString & rURL)
-    SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionRetry > xRetry;
     uno::Reference< task::XInteractionAbort > xAbort;
@@ -408,7 +406,6 @@ executeMasterPasswordDialog(
     Window * pParent,
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode)
-        SAL_THROW((uno::RuntimeException))
 {
     OString aMaster;
     try
@@ -465,7 +462,6 @@ handleMasterPasswordRequest_(
     task::PasswordRequestMode nMode,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
-    SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionRetry > xRetry;
     uno::Reference< task::XInteractionAbort > xAbort;
@@ -509,7 +505,6 @@ executePasswordDialog(
     bool bMSCryptoMode,
     bool bIsPasswordToModify,
     bool bIsSimplePasswordRequest )
-       SAL_THROW((uno::RuntimeException))
 {
     try
     {
@@ -571,7 +566,6 @@ handlePasswordRequest_(
     bool bMSCryptoMode,
     bool bIsPasswordToModify,
     bool bIsSimplePasswordRequest = false )
-    SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionRetry > xRetry;
     uno::Reference< task::XInteractionAbort > xAbort;
@@ -621,7 +615,6 @@ handlePasswordRequest_(
 bool
 UUIInteractionHelper::handleAuthenticationRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
-    SAL_THROW((uno::RuntimeException))
 {
     uno::Any aAnyRequest(rRequest->getRequest());
 
@@ -654,7 +647,6 @@ UUIInteractionHelper::handleAuthenticationRequest(
 bool
 UUIInteractionHelper::handleMasterPasswordRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
-    SAL_THROW((uno::RuntimeException))
 {
     uno::Any aAnyRequest(rRequest->getRequest());
 
@@ -672,7 +664,6 @@ UUIInteractionHelper::handleMasterPasswordRequest(
 bool
 UUIInteractionHelper::handlePasswordRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
-    SAL_THROW((uno::RuntimeException))
 {
     // parameters to be filled for the call to handlePasswordRequest_
     Window * pParent = getParentProperty();

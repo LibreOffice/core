@@ -122,7 +122,6 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
         xSupplyAuthentication,
     OUString const & rURL,
     uno::Reference< task::XInteractionHandler2 > const & xIH )
-        SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionHandler > xIH1(xIH, uno::UNO_QUERY);
 
@@ -228,7 +227,6 @@ bool PasswordContainerHelper::addRecord(
     uno::Sequence< OUString > const & rPasswords,
     uno::Reference< task::XInteractionHandler2 > const & xIH,
     bool bPersist )
-        SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionHandler > xIH1(xIH, uno::UNO_QUERY);
 

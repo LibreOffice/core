@@ -43,8 +43,7 @@ public:
     createInstance(
         com::sun::star::uno::Reference<
         com::sun::star::lang::XMultiServiceFactory > const &
-    rServiceFactory)
-        SAL_THROW((com::sun::star::uno::Exception));
+    rServiceFactory);
 
 private:
     UUIInteractionHelper * m_pImpl;
@@ -55,10 +54,9 @@ private:
     UUIInteractionRequestStringResolver(
         com::sun::star::uno::Reference<
             com::sun::star::uno::XComponentContext >
-                const & rxContext)
-        SAL_THROW(());
+                const & rxContext);
 
-    virtual ~UUIInteractionRequestStringResolver() SAL_THROW(());
+    virtual ~UUIInteractionRequestStringResolver();
 
     virtual OUString SAL_CALL getImplementationName()
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
