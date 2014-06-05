@@ -1004,6 +1004,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     case EXC_BIFF3:
                     case EXC_BIFF4: nIgnore = 10;   break;
                     case EXC_BIFF5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1A does not exist in Biff5!" );
+                                    //fall-through
                     default:        DBG_WARNING( "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 break;
@@ -1014,6 +1015,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
                     case EXC_BIFF3:
                     case EXC_BIFF4: nIgnore = 4;        break;
                     case EXC_BIFF5: DBG_WARNING( "-ExcelToSc::Convert(): 0x1B does not exist in Biff5!" );
+                                    //fall-through
                     default:        DBG_WARNING( "-ExcelToSc::Convert(): A little oblivious?" );
                 }
                 break;
