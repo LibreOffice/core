@@ -126,7 +126,7 @@ namespace frm
         }
     }
 
-    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags ) SAL_THROW((RuntimeException))
+    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL, const OUString& _rTargetFrameName, ::sal_Int32 _nSearchFlags )
     {
         Reference< XDispatch > xDispatcher;
         if ( m_xFirstDispatchInterceptor.is() )
@@ -135,13 +135,13 @@ namespace frm
     }
 
 
-    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL ) SAL_THROW((RuntimeException))
+    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const URL& _rURL )
     {
         return queryDispatch( _rURL, OUString(), 0 );
     }
 
 
-    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const sal_Char* _pAsciiURL ) SAL_THROW((RuntimeException))
+    Reference< XDispatch > ControlFeatureInterception::queryDispatch( const sal_Char* _pAsciiURL )
     {
         return queryDispatch( m_pUrlTransformer->getStrictURLFromAscii( _pAsciiURL ) );
     }

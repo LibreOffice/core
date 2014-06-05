@@ -381,7 +381,7 @@ namespace frm
     }
 
 
-    void OClickableImageBaseControl::implSubmit( const MouseEvent& _rEvent, const Reference< XInteractionHandler >& _rxHandler ) SAL_THROW((VetoException, WrappedTargetException, RuntimeException))
+    void OClickableImageBaseControl::implSubmit( const MouseEvent& _rEvent, const Reference< XInteractionHandler >& _rxHandler )
     {
         try
         {

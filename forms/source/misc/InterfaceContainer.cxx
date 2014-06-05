@@ -1018,7 +1018,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
 }
 
 
-void OInterfaceContainer::implCheckIndex( const sal_Int32 _nIndex ) SAL_THROW( ( ::com::sun::star::lang::IndexOutOfBoundsException ) )
+void OInterfaceContainer::implCheckIndex( const sal_Int32 _nIndex )
 {
     if (_nIndex < 0 || _nIndex >= (sal_Int32)m_aItems.size())
         throw IndexOutOfBoundsException();

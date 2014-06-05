@@ -285,7 +285,7 @@ namespace frm
 
 
     bool OEntryListHelper::convertNewListSourceProperty( Any& _rConvertedValue,
-        Any& _rOldValue, const Any& _rValue ) SAL_THROW( ( IllegalArgumentException ) )
+        Any& _rOldValue, const Any& _rValue )
     {
         if ( hasExternalListSource() )
             throw IllegalArgumentException( );
