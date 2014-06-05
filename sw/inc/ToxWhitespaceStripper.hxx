@@ -30,7 +30,8 @@ namespace sw {
  *
  * @note One leading whitespace is preserved.
  */
-class SAL_DLLPUBLIC ToxWhitespaceStripper {
+class SW_DLLPUBLIC ToxWhitespaceStripper
+{
 public:
     ToxWhitespaceStripper(const OUString&);
 
