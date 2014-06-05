@@ -509,13 +509,13 @@ namespace accessibility
         catch( const uno::Exception& ) {} // optional behaviour
     }
 
-    sal_Int32 AccessibleImageBullet::GetParagraphIndex() const SAL_THROW((uno::RuntimeException))
+    sal_Int32 AccessibleImageBullet::GetParagraphIndex() const
     {
 
         return mnParagraphIndex;
     }
 
-    SvxEditSource& AccessibleImageBullet::GetEditSource() const SAL_THROW((uno::RuntimeException))
+    SvxEditSource& AccessibleImageBullet::GetEditSource() const
     {
 
         if( mpEditSource )
@@ -527,7 +527,7 @@ namespace accessibility
                                           ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
     }
 
-    SvxTextForwarder& AccessibleImageBullet::GetTextForwarder() const SAL_THROW((uno::RuntimeException))
+    SvxTextForwarder& AccessibleImageBullet::GetTextForwarder() const
     {
 
         SvxEditSource& rEditSource = GetEditSource();
@@ -548,7 +548,7 @@ namespace accessibility
                                           ( const_cast< AccessibleImageBullet* > (this) ) ) );  // disambiguate hierarchy
     }
 
-    SvxViewForwarder& AccessibleImageBullet::GetViewForwarder() const SAL_THROW((uno::RuntimeException))
+    SvxViewForwarder& AccessibleImageBullet::GetViewForwarder() const
     {
 
         SvxEditSource& rEditSource = GetEditSource();

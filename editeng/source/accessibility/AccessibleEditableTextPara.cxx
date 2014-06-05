@@ -302,7 +302,7 @@ namespace accessibility
         }
     }
 
-    sal_Int32 AccessibleEditableTextPara::GetParagraphIndex() const SAL_THROW((uno::RuntimeException))
+    sal_Int32 AccessibleEditableTextPara::GetParagraphIndex() const
     {
         return mnParagraphIndex;
     }
@@ -385,7 +385,7 @@ namespace accessibility
         return MakeSelection( nEEIndex, nEEIndex );
     }
 
-    void AccessibleEditableTextPara::CheckIndex( sal_Int32 nIndex ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
+    void AccessibleEditableTextPara::CheckIndex( sal_Int32 nIndex )
     {
         if( nIndex < 0 || nIndex >= getCharacterCount() )
             throw lang::IndexOutOfBoundsException("AccessibleEditableTextPara: character index out of bounds",
@@ -393,7 +393,7 @@ namespace accessibility
                                                   ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
     }
 
-    void AccessibleEditableTextPara::CheckPosition( sal_Int32 nIndex ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
+    void AccessibleEditableTextPara::CheckPosition( sal_Int32 nIndex )
     {
         if( nIndex < 0 || nIndex > getCharacterCount() )
             throw lang::IndexOutOfBoundsException("AccessibleEditableTextPara: character position out of bounds",
@@ -401,13 +401,13 @@ namespace accessibility
                                                   ( static_cast< ::cppu::OWeakObject* > (this) ) ); // disambiguate hierarchy
     }
 
-    void AccessibleEditableTextPara::CheckRange( sal_Int32 nStart, sal_Int32 nEnd ) SAL_THROW((lang::IndexOutOfBoundsException, uno::RuntimeException))
+    void AccessibleEditableTextPara::CheckRange( sal_Int32 nStart, sal_Int32 nEnd )
     {
         CheckPosition( nStart );
         CheckPosition( nEnd );
     }
 
-    bool AccessibleEditableTextPara::GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos ) SAL_THROW((uno::RuntimeException))
+    bool AccessibleEditableTextPara::GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos )
     {
         ESelection aSelection;
         sal_Int32 nPara = GetParagraphIndex();
@@ -450,17 +450,17 @@ namespace accessibility
         return true;
     }
 
-    OUString AccessibleEditableTextPara::GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) SAL_THROW((uno::RuntimeException))
+    OUString AccessibleEditableTextPara::GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
         return GetTextForwarder().GetText( MakeSelection(nStartIndex, nEndIndex) );
     }
 
-    sal_uInt16 AccessibleEditableTextPara::GetTextLen() const SAL_THROW((uno::RuntimeException))
+    sal_uInt16 AccessibleEditableTextPara::GetTextLen() const
     {
         return GetTextForwarder().GetTextLen( static_cast< sal_uInt16 >( GetParagraphIndex() ) );
     }
 
-    SvxEditSourceAdapter& AccessibleEditableTextPara::GetEditSource() const SAL_THROW((uno::RuntimeException))
+    SvxEditSourceAdapter& AccessibleEditableTextPara::GetEditSource() const
     {
         if( mpEditSource )
             return *mpEditSource;
@@ -471,7 +471,7 @@ namespace accessibility
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
     }
 
-    SvxAccessibleTextAdapter& AccessibleEditableTextPara::GetTextForwarder() const SAL_THROW((uno::RuntimeException))
+    SvxAccessibleTextAdapter& AccessibleEditableTextPara::GetTextForwarder() const
     {
         SvxEditSourceAdapter& rEditSource = GetEditSource();
         SvxAccessibleTextAdapter* pTextForwarder = rEditSource.GetTextForwarderAdapter();
@@ -491,7 +491,7 @@ namespace accessibility
                                           ( const_cast< AccessibleEditableTextPara* > (this) ) ) ); // disambiguate hierarchy
     }
 
-    SvxViewForwarder& AccessibleEditableTextPara::GetViewForwarder() const SAL_THROW((uno::RuntimeException))
+    SvxViewForwarder& AccessibleEditableTextPara::GetViewForwarder() const
     {
         SvxEditSource& rEditSource = GetEditSource();
         SvxViewForwarder* pViewForwarder = rEditSource.GetViewForwarder();
@@ -513,7 +513,7 @@ namespace accessibility
                                           ( const_cast< AccessibleEditableTextPara* > (this) )  ) );    // disambiguate hierarchy
     }
 
-    SvxAccessibleTextEditViewAdapter& AccessibleEditableTextPara::GetEditViewForwarder( bool bCreate ) const SAL_THROW((uno::RuntimeException))
+    SvxAccessibleTextEditViewAdapter& AccessibleEditableTextPara::GetEditViewForwarder( bool bCreate ) const
     {
         SvxEditSourceAdapter& rEditSource = GetEditSource();
         SvxAccessibleTextEditViewAdapter* pTextEditViewForwarder = rEditSource.GetEditViewForwarderAdapter( bCreate );

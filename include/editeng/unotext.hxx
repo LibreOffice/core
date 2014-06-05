@@ -346,7 +346,7 @@ public:
     // ::com::sun::star::lang::XServiceInfo
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static( ) SAL_THROW(());
+    static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static( );
 };
 
 
@@ -450,7 +450,7 @@ public:
     // ::com::sun::star::lang::XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static( ) SAL_THROW(());
+    static  ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static( );
 
     // ::com::sun::star::lang::XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

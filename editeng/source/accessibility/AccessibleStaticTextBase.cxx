@@ -120,13 +120,13 @@ namespace accessibility
         AccessibleStaticTextBase_Impl();
         ~AccessibleStaticTextBase_Impl();
 
-        SvxEditSourceAdapter& GetEditSource() const SAL_THROW((uno::RuntimeException))
+        SvxEditSourceAdapter& GetEditSource() const
         {
 
             return maEditSource;
         }
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException));
+        void SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource );
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
         void SetEventSource( const uno::Reference< XAccessible >& rInterface )
@@ -232,7 +232,7 @@ namespace accessibility
     }
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    void AccessibleStaticTextBase_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((uno::RuntimeException))
+    void AccessibleStaticTextBase_Impl::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource )
     {
 
         maEditSource.SetEditSource( pEditSource );
@@ -512,7 +512,7 @@ namespace accessibility
     {
     }
 
-    const SvxEditSource& AccessibleStaticTextBase::GetEditSource() const SAL_THROW((::com::sun::star::uno::RuntimeException))
+    const SvxEditSource& AccessibleStaticTextBase::GetEditSource() const
     {
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
@@ -528,7 +528,7 @@ namespace accessibility
     }
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    void AccessibleStaticTextBase::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((::com::sun::star::uno::RuntimeException))
+    void AccessibleStaticTextBase::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource )
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
@@ -604,7 +604,7 @@ namespace accessibility
 #endif
     }
 
-    void AccessibleStaticTextBase::UpdateChildren() SAL_THROW((::com::sun::star::uno::RuntimeException))
+    void AccessibleStaticTextBase::UpdateChildren()
     {
 #ifdef DBG_UTIL
         // precondition: solar mutex locked
