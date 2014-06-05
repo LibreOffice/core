@@ -85,7 +85,6 @@ FilterCache* FilterCache::clone() const
     // if they are needed.
 
     pClone->m_lTypes                     = m_lTypes;
-    pClone->m_lDetectServices            = m_lDetectServices;
     pClone->m_lFilters                   = m_lFilters;
     pClone->m_lFrameLoaders              = m_lFrameLoaders;
     pClone->m_lContentHandlers           = m_lContentHandlers;
@@ -1007,13 +1006,6 @@ void FilterCache::impl_validateAndOptimize()
     {
         OUString sType = pIt->first;
         CacheItem       aType = pIt->second;
-
-        // create list of all known detect services / frame loader / content handler on demand
-        // Because these information are available as type properties!
-        OUString sDetectService;
-        aType[PROPNAME_DETECTSERVICE ] >>= sDetectService;
-        if (!sDetectService.isEmpty())
-            impl_resolveItem4TypeRegistration(&m_lDetectServices, sDetectService, sType);
 
         // get its registration for file Extensions AND(!) URLPattern ...
         // It doesn't matter if these items exists or if our
