@@ -52,8 +52,7 @@ public:
     static OUString getImplementationName_static (void);
     static css::uno::Sequence< OUString > getSupportedServiceNames_static (void);
     static css::uno::Reference<css::uno::XInterface> Create(
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
-        SAL_THROW((css::uno::Exception));
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
 
     // XPane
 

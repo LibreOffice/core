@@ -56,7 +56,6 @@ Sequence<OUString> PresenterPaneBorderManager::getSupportedServiceNames_static (
 }
 
 Reference<XInterface> PresenterPaneBorderManager::Create (const Reference<uno::XComponentContext>& rxContext)
-    SAL_THROW((css::uno::Exception))
 {
     return Reference<XInterface>(static_cast<XWeak*>(
         new PresenterPaneBorderManager(rxContext, NULL)));
