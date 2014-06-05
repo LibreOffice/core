@@ -655,9 +655,13 @@ const SwRect SwAnchoredDrawObject::GetObjBoundRect() const
 
         if ( nTargetWidth != aCurrObjRect.GetWidth( ) || nTargetHeight != aCurrObjRect.GetHeight( ) )
         {
+            SwDoc* pDoc = const_cast<SwDoc*>(GetPageFrm()->GetFmt()->GetDoc());
+            bool bModified = pDoc->IsModified();
             const_cast< SdrObject* >( GetDrawObj() )->Resize( aCurrObjRect.TopLeft(),
                     Fraction( nTargetWidth, aCurrObjRect.GetWidth() ),
                     Fraction( nTargetHeight, aCurrObjRect.GetHeight() ), false );
+            if (!bModified)
+                pDoc->ResetModified();
         }
     }
     return GetDrawObj()->GetCurrentBoundRect();
