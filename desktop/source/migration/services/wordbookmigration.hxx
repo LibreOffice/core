@@ -41,8 +41,7 @@ namespace migration
     OUString SAL_CALL WordbookMigration_getImplementationName();
     ::com::sun::star::uno::Sequence< OUString > SAL_CALL WordbookMigration_getSupportedServiceNames();
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL WordbookMigration_create(
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext )
-        SAL_THROW( (::com::sun::star::uno::Exception) );
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext );
 
 
 

@@ -63,7 +63,6 @@ class Provider:
 public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL static_create(
         css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        SAL_THROW((css::uno::Exception))
     { return static_cast< cppu::OWeakObject * >(new Provider(xContext)); }
 
     static OUString SAL_CALL static_getImplementationName();
@@ -155,7 +154,6 @@ class Dispatch:
 public:
     static css::uno::Reference< css::uno::XInterface > SAL_CALL static_create(
         css::uno::Reference< css::uno::XComponentContext > const & xContext)
-        SAL_THROW((css::uno::Exception))
     { return static_cast< cppu::OWeakObject * >(new Dispatch(xContext)); }
 
     static OUString SAL_CALL static_getImplementationName();
