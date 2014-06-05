@@ -78,7 +78,7 @@ namespace comp_DialogModelProvider
         return s;
     }
 
-    uno::Reference< uno::XInterface > SAL_CALL _create(const uno::Reference< uno::XComponentContext > & context) SAL_THROW((uno::Exception))
+    uno::Reference< uno::XInterface > SAL_CALL _create(const uno::Reference< uno::XComponentContext > & context)
     {
         return static_cast< ::cppu::OWeakObject * >(new dlgprov::DialogModelProvider(context));
     }
@@ -791,7 +791,6 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
     static Reference< XInterface > SAL_CALL create_DialogProviderImpl(
         Reference< XComponentContext > const & xContext )
-        SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new DialogProviderImpl( xContext ) );
     }

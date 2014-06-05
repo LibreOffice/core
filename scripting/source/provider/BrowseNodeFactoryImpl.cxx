@@ -712,7 +712,6 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy()
 
 Sequence< OUString > SAL_CALL
 bnf_getSupportedServiceNames( )
-    SAL_THROW(())
 {
     OUString str_name(
         "com.sun.star.script.browse.BrowseNodeFactory");
@@ -722,7 +721,6 @@ bnf_getSupportedServiceNames( )
 
 OUString SAL_CALL
 bnf_getImplementationName( )
-    SAL_THROW(())
 {
     return OUString(
         "com.sun.star.script.browse.BrowseNodeFactory" );
@@ -730,7 +728,6 @@ bnf_getImplementationName( )
 
 Reference< XInterface > SAL_CALL
 bnf_create( Reference< XComponentContext > const & xComponentContext )
-    SAL_THROW( (Exception) )
 {
     return static_cast< ::cppu::OWeakObject * >(
         new BrowseNodeFactoryImpl( xComponentContext ) );

@@ -818,7 +818,6 @@ Reference< XInterface > SAL_CALL sp_create(
 
 
 Sequence< OUString > sp_getSupportedServiceNames( )
-    SAL_THROW(())
 {
     OUString names[3];
 
@@ -831,7 +830,6 @@ Sequence< OUString > sp_getSupportedServiceNames( )
 
 
 OUString sp_getImplementationName( )
-SAL_THROW(())
 {
     return OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
 }
@@ -845,7 +843,6 @@ Reference< XInterface > SAL_CALL urihelper_create(
 }
 
 Sequence< OUString > urihelper_getSupportedServiceNames( )
-    SAL_THROW(())
 {
     OUString serviceNameList[] = {
         OUString(
@@ -858,7 +855,6 @@ Sequence< OUString > urihelper_getSupportedServiceNames( )
 }
 
 OUString urihelper_getImplementationName( )
-    SAL_THROW(())
 {
     return OUString(
         "com.sun.star.script.provider.ScriptURIHelper");
