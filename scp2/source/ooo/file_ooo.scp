@@ -122,19 +122,6 @@ File gid_File_Basic_Tutorials
     Name = "wizards_basicsrvtutorials.filelist";
 End
 
-#if defined ENABLE_NPAPI_INTO_BROWSER
-File gid_File_Exe_Nsplugin
-        BIN_FILE_BODY;
-        Styles          = (PACKED);
-        Dir             = gid_Brand_Dir_Program;
- #ifdef UNX
-        Name            = "nsplugin";
- #else
-    Name = "nsplugin.exe";
-  #endif
-End
-#endif
-
 File gid_File_Bin_UIPreviewer
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -153,17 +140,6 @@ File gid_File_Script_Gengal
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "gengal";
-End
-
-#endif
-
-#if defined ENABLE_NPAPI_FROM_BROWSER && defined UNX && !defined MACOSX
-
-File gid_File_Bin_Pluginapp
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "pluginapp.bin";
-    Styles = (PACKED);
 End
 
 #endif
