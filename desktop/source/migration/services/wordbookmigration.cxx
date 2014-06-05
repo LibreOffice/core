@@ -294,7 +294,6 @@ bool IsUserWordbook( const OUString& rFile )
 
     Reference< XInterface > SAL_CALL WordbookMigration_create(
         Reference< XComponentContext > const & )
-        SAL_THROW(())
     {
         return static_cast< lang::XTypeProvider * >( new WordbookMigration() );
     }
