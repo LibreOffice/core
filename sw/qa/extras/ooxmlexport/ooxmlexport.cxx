@@ -3510,6 +3510,23 @@ DECLARE_OOXMLEXPORT_TEST(testfdo76934, "fdo76934.docx")
     assertXPath ( pXmlDoc, "/w:styles[1]/w:style[36]/w:pPr[1]/w:spacing[1]", "beforeAutospacing", "1" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79540, "fdo79540.docx")
+{
+    /* Issue was, <w:drawing> was getting written inside <w:drawing>.
+     * So Postone the writing of Inner Drawing tag.
+     * MS Office does not allow Nestimg of drawing tags.
+     */
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+        return;
+
+    // Ensure that two separate w:drawing tags are written after the code changes.
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing",1);
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing",1);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
 {
     xmlDocPtr pXmlFootNotes = parseExport("word/footnotes.xml");
