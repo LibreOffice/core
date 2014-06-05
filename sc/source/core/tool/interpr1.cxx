@@ -7801,7 +7801,7 @@ void ScInterpreter::ScLeft()
         if (nParamCount == 2)
         {
             double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
+            if ( rtl::math::isNan(nVal) || nVal < 0.0 || nVal > STRING_MAXLEN )
             {
                 PushIllegalArgument();
                 return ;
@@ -7909,7 +7909,7 @@ void ScInterpreter::ScRightB()
         if (nParamCount == 2)
         {
             double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
+            if ( rtl::math::isNan(nVal) || nVal < 0.0 || nVal > STRING_MAXLEN )
             {
                 PushIllegalArgument();
                 return ;
