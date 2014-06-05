@@ -7761,11 +7761,10 @@ void ScInterpreter::ScReplace()
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
         OUString aNewStr = GetString().getString();
-        double fCount = ::rtl::math::approxFloor( GetDouble());
-        double fPos   = ::rtl::math::approxFloor( GetDouble());
+        double fCount = GetStringPositionArgument();
+        double fPos   = GetStringPositionArgument();
         OUString aOldStr = GetString().getString();
-        if (fPos < 1.0 || fPos > static_cast<double>(SAL_MAX_UINT16)
-                || fCount < 0.0 || fCount > static_cast<double>(SAL_MAX_UINT16))
+        if (fPos < 1.0 || fCount < 0.0)
             PushIllegalArgument();
         else
         {
@@ -7888,8 +7887,8 @@ void ScInterpreter::ScLeft()
         sal_Int32 n;
         if (nParamCount == 2)
         {
-            double nVal = ::rtl::math::approxFloor(GetDouble());
-            if (rtl::math::isNan(nVal) || nVal < 0.0 || nVal > SAL_MAX_UINT16)
+            double nVal = GetStringPositionArgument();
+            if (nVal < 0.0)
             {
                 PushIllegalArgument();
                 return ;
@@ -7996,8 +7995,8 @@ void ScInterpreter::ScRightB()
         sal_Int32 n;
         if (nParamCount == 2)
         {
-            double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( nVal < 0.0 || nVal > SAL_MAX_UINT16 )
+            double nVal = GetStringPositionArgument();
+            if ( nVal < 0.0 )
             {
                 PushIllegalArgument();
                 return ;
@@ -8047,8 +8046,8 @@ void ScInterpreter::ScLeftB()
         sal_Int32 n;
         if (nParamCount == 2)
         {
-            double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( nVal < 0.0 || nVal > SAL_MAX_UINT16 )
+            double nVal = GetStringPositionArgument();
+            if ( nVal < 0.0 )
             {
                 PushIllegalArgument();
                 return ;
@@ -8066,10 +8065,10 @@ void ScInterpreter::ScMidB()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double fAnz    = ::rtl::math::approxFloor(GetDouble());
-        double fAnfang = ::rtl::math::approxFloor(GetDouble());
+        double fAnz    = GetStringPositionArgument();
+        double fAnfang = GetStringPositionArgument();
         OUString aStr = GetString().getString();
-        if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(SAL_MAX_UINT16) || fAnz > double(SAL_MAX_UINT16))
+        if (fAnfang < 1.0 || fAnz < 0.0)
             PushIllegalArgument();
         else
         {
@@ -8090,8 +8089,8 @@ void ScInterpreter::ScRight()
         sal_Int32 n;
         if (nParamCount == 2)
         {
-            double nVal = ::rtl::math::approxFloor(GetDouble());
-            if ( rtl::math::isNan(nVal) || nVal < 0.0 || nVal > SAL_MAX_UINT16 )
+            double nVal = GetStringPositionArgument();
+            if (nVal < 0.0)
             {
                 PushIllegalArgument();
                 return ;
@@ -8117,8 +8116,15 @@ void ScInterpreter::ScSearch()
         double fAnz;
         if (nParamCount == 3)
         {
-            fAnz = ::rtl::math::approxFloor(GetDouble());
-            if (fAnz > double(SAL_MAX_UINT16))
+            // This should use GetStringPositionArgument() but old versions up
+            // to LibreOffice 4.2.5 allowed and ignored 0 and negative values.
+            // It is unnecessary to break existing documents that "rely" on
+            // that behavior. Though ODFF constrains Start to be >=1.
+            /* TODO: fix this and possibly break those broken documents? */
+            fAnz = rtl::math::approxFloor( GetDouble());
+            if (fAnz < 1.0)
+                fAnz = 1.0;
+            else if (!CheckStringPositionArgument( fAnz))
             {
                 PushIllegalArgument();
                 return;
@@ -8152,10 +8158,10 @@ void ScInterpreter::ScMid()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double fAnz    = ::rtl::math::approxFloor(GetDouble());
-        double fAnfang = ::rtl::math::approxFloor(GetDouble());
+        double fAnz    = GetStringPositionArgument();
+        double fAnfang = GetStringPositionArgument();
         OUString aStr = GetString().getString();
-        if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(SAL_MAX_UINT16) || fAnz > double(SAL_MAX_UINT16))
+        if (fAnfang < 1.0 || fAnz < 0.0)
             PushIllegalArgument();
         else
         {
@@ -8250,8 +8256,8 @@ void ScInterpreter::ScSubstitute()
         sal_Int32 nAnz;
         if (nParamCount == 4)
         {
-            double fAnz = ::rtl::math::approxFloor(GetDouble());
-            if( fAnz < 1 || fAnz > SAL_MAX_UINT16 )
+            double fAnz = GetStringPositionArgument();
+            if( fAnz < 1 )
             {
                 PushIllegalArgument();
                 return;
@@ -8300,7 +8306,7 @@ void ScInterpreter::ScRept()
 {
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fAnz = ::rtl::math::approxFloor(GetDouble());
+        double fAnz = GetStringPositionArgument();
         OUString aStr = GetString().getString();
         if ( fAnz < 0.0 )
             PushIllegalArgument();
