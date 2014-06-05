@@ -310,7 +310,6 @@ Reference< XConnection > getConnection_allowException(
 
 Reference< XConnection> getConnection_withFeedback(const OUString& _rDataSourceName,
         const OUString& _rUser, const OUString& _rPwd, const Reference< XComponentContext>& _rxContext)
-    SAL_THROW ( (SQLException) )
 {
     Reference< XConnection > xReturn;
     try
@@ -343,7 +342,6 @@ Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) thro
 // not needed anymore, the whole implementation can be moved into ensureRowSetConnection then)
 SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
         bool _bSetAsActiveConnection, bool _bAttachAutoDisposer )
-    SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
 {
     SharedConnection xConnection;
 
@@ -458,14 +456,14 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
 }
 
 Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext,
-    bool _bSetAsActiveConnection )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
+    bool _bSetAsActiveConnection )
 {
     SharedConnection xConnection = lcl_connectRowSet( _rxRowSet, _rxContext, _bSetAsActiveConnection, true );
     return xConnection.getTyped();
 }
 
 SharedConnection ensureRowSetConnection(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext>& _rxContext,
-    bool _bUseAutoConnectionDisposer )  SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
+    bool _bUseAutoConnectionDisposer )
 {
     return lcl_connectRowSet( _rxRowSet, _rxContext, true, _bUseAutoConnectionDisposer );
 }
@@ -526,7 +524,7 @@ namespace
 
 Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
     const sal_Int32 _nCommandType, const OUString& _rCommand,
-    Reference< XComponent >& _rxKeepFieldsAlive, SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
+    Reference< XComponent >& _rxKeepFieldsAlive, SQLExceptionInfo* _pErrorInfo )
 {
     OSL_PRECOND( _rxConnection.is(), "::dbtools::getFieldsByCommandDescriptor: invalid connection!" );
     OSL_PRECOND( ( CommandType::TABLE == _nCommandType ) || ( CommandType::QUERY == _nCommandType ) || ( CommandType::COMMAND == _nCommandType ),
@@ -721,7 +719,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
 
 Sequence< OUString > getFieldNamesByCommandDescriptor( const Reference< XConnection >& _rxConnection,
     const sal_Int32 _nCommandType, const OUString& _rCommand,
-    SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
+    SQLExceptionInfo* _pErrorInfo )
 {
     // get the container for the fields
     Reference< XComponent > xKeepFieldsAlive;
@@ -1230,7 +1228,6 @@ Reference< XDataSource> findDataSource(const Reference< XInterface >& _xParent)
 }
 
 Reference< XSingleSelectQueryComposer > getComposedRowSetStatement( const Reference< XPropertySet >& _rxRowSet, const Reference< XComponentContext >& _rxContext )
-    SAL_THROW( ( SQLException ) )
 {
     Reference< XSingleSelectQueryComposer > xComposer;
     try
@@ -1448,7 +1445,7 @@ void showError(const SQLExceptionInfo& _rInfo,
 }
 
 bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
-    const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
+    const sal_Int32 _nColumnIndex, const Any& _rValue)
 {
     bool bSuccessfullyReRouted = true;
     switch (_rValue.getValueTypeClass())
@@ -1541,7 +1538,7 @@ bool implUpdateObject(const Reference< XRowUpdate >& _rxUpdatedObject,
 }
 
 bool implSetObject( const Reference< XParameters >& _rxParameters,
-                        const sal_Int32 _nColumnIndex, const Any& _rValue) SAL_THROW ( ( SQLException, RuntimeException ) )
+                        const sal_Int32 _nColumnIndex, const Any& _rValue)
 {
     bool bSuccessfullyReRouted = true;
     switch (_rValue.getValueTypeClass())

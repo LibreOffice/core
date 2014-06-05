@@ -120,19 +120,17 @@ namespace connectivity
                 const OUString& _rUser,
                 const OUString& _rPwd,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
-            ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) ) = 0;
+            ) const = 0;
 
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
                 sal_Bool _bSetAsActiveConnection
-            ) const SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
-                                , ::com::sun::star::lang::WrappedTargetException
-                                , ::com::sun::star::uno::RuntimeException ) ) = 0;
+            ) const = 0;
 
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
-                const SAL_THROW ( (::com::sun::star::uno::RuntimeException) ) = 0;
+                const = 0;
 
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
@@ -187,7 +185,7 @@ namespace connectivity
                     const OUString& _rCommand,
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
                     ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-                )   SAL_THROW( ( ) ) = 0;
+                ) = 0;
 
             virtual ::com::sun::star::uno::Sequence< OUString >
                 getFieldNamesByCommandDescriptor(
@@ -195,7 +193,7 @@ namespace connectivity
                     const sal_Int32 _nCommandType,
                     const OUString& _rCommand,
                     ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-                )   SAL_THROW( ( ) ) = 0;
+                ) = 0;
 
             /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
                 @param      _rxCursorSet    the property set

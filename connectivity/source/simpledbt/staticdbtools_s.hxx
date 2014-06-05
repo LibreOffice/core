@@ -71,21 +71,19 @@ namespace connectivity
             const OUString& _rUser,
             const OUString& _rPwd,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
-        ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) ) SAL_OVERRIDE;
+        ) const SAL_OVERRIDE;
 
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
             sal_Bool _bSetAsActiveConnection
-        ) const SAL_THROW ( ( ::com::sun::star::sdbc::SQLException
-                            , ::com::sun::star::lang::WrappedTargetException
-                            , ::com::sun::star::uno::RuntimeException ) ) SAL_OVERRIDE;
+        ) const SAL_OVERRIDE;
 
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getRowSetConnection(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet)
-                const SAL_THROW ( (::com::sun::star::uno::RuntimeException) ) SAL_OVERRIDE;
+                const SAL_OVERRIDE;
 
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
@@ -167,7 +165,7 @@ namespace connectivity
                 const OUString& _rCommand,
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-            )   SAL_THROW( ( ) ) SAL_OVERRIDE;
+            ) SAL_OVERRIDE;
 
 
         virtual ::com::sun::star::uno::Sequence< OUString >
@@ -176,7 +174,7 @@ namespace connectivity
                 const sal_Int32 _nCommandType,
                 const OUString& _rCommand,
                 ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
-            )   SAL_THROW( ( ) ) SAL_OVERRIDE;
+            ) SAL_OVERRIDE;
 
 
         virtual bool isEmbeddedInDatabase(

@@ -84,14 +84,13 @@ namespace connectivity
 
 
     Reference< XConnection> ODataAccessStaticTools::getConnection_withFeedback(const OUString& _rDataSourceName, const OUString& _rUser,
-        const OUString& _rPwd, const Reference< XComponentContext>& _rxContext) const SAL_THROW ( (SQLException) )
+        const OUString& _rPwd, const Reference< XComponentContext>& _rxContext) const
     {
         return ::dbtools::getConnection_withFeedback(_rDataSourceName, _rUser, _rPwd, _rxContext);
     }
 
 
     Reference< XConnection> ODataAccessStaticTools::connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext, sal_Bool _bSetAsActiveConnection) const
-        SAL_THROW ( (SQLException, WrappedTargetException, RuntimeException) )
     {
         return ::dbtools::connectRowset( _rxRowSet, _rxContext, _bSetAsActiveConnection);
     }
@@ -99,7 +98,7 @@ namespace connectivity
 
     Reference< XConnection> ODataAccessStaticTools::getRowSetConnection(
                 const Reference< XRowSet>& _rxRowSet)
-                const SAL_THROW ( (RuntimeException) )
+                const
     {
         return ::dbtools::getConnection(_rxRowSet);
     }
@@ -175,7 +174,7 @@ namespace connectivity
 
     Reference< XNameAccess > ODataAccessStaticTools::getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
         const sal_Int32 _nCommandType, const OUString& _rCommand,
-            Reference< XComponent >& _rxKeepFieldsAlive, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
+            Reference< XComponent >& _rxKeepFieldsAlive, ::dbtools::SQLExceptionInfo* _pErrorInfo )
     {
         return ::dbtools::getFieldsByCommandDescriptor( _rxConnection, _nCommandType, _rCommand,
             _rxKeepFieldsAlive, _pErrorInfo );
@@ -184,7 +183,7 @@ namespace connectivity
 
     Sequence< OUString > ODataAccessStaticTools::getFieldNamesByCommandDescriptor(
         const Reference< XConnection >& _rxConnection, const sal_Int32 _nCommandType,
-        const OUString& _rCommand, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
+        const OUString& _rCommand, ::dbtools::SQLExceptionInfo* _pErrorInfo )
     {
         return ::dbtools::getFieldNamesByCommandDescriptor( _rxConnection, _nCommandType,
             _rCommand, _pErrorInfo );
