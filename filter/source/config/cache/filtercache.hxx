@@ -102,10 +102,9 @@ class FilterCache : public BaseLock
             E_CONTAINS_STANDARD         = 1,
             E_CONTAINS_TYPES            = 2,
             E_CONTAINS_FILTERS          = 4,
-            E_CONTAINS_DETECTSERVICES   = 8,
-            E_CONTAINS_FRAMELOADERS     = 16,
-            E_CONTAINS_CONTENTHANDLERS  = 32,
-            E_CONTAINS_ALL              = 63 // must be a combination of all excepting E_CONTAINS_NOTHING! Please update if items will be added or removed ...
+            E_CONTAINS_FRAMELOADERS     = 8,
+            E_CONTAINS_CONTENTHANDLERS  = 16,
+            E_CONTAINS_ALL              = 31 // must be a combination of all excepting E_CONTAINS_NOTHING! Please update if items will be added or removed ...
         };
 
 
