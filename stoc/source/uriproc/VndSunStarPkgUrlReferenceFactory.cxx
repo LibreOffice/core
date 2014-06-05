@@ -126,7 +126,6 @@ namespace stoc_services { namespace VndSunStarPkgUrlReferenceFactory
 
 css::uno::Reference< css::uno::XInterface > create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
-    SAL_THROW((css::uno::Exception))
 {
     return static_cast< cppu::OWeakObject * >(new Factory(context));
 }

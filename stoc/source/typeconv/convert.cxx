@@ -81,7 +81,7 @@ static const sal_Int64 SAL_INT64_MIN =
 #ifdef _MSC_VER
 static const double DOUBLE_SAL_UINT64_MAX = ((((double)SAL_INT64_MAX) * 2) + 1);
 
-static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW(())
+static inline double unsigned_int64_to_double( sal_uInt64 n )
 {
     sal_uInt64 n2 = (n / 3);
     n -= (2 * n2);
@@ -91,7 +91,7 @@ static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW(())
 static const double DOUBLE_SAL_UINT64_MAX =
     (double)((((sal_uInt64)0xffffffff) << 32) | (sal_uInt64)0xffffffff);
 
-static inline double unsigned_int64_to_double( sal_uInt64 n ) SAL_THROW(())
+static inline double unsigned_int64_to_double( sal_uInt64 n )
 {
     return (double)n;
 }

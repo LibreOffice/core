@@ -42,8 +42,7 @@ namespace stoc_services
     namespace ExternalUriReferenceTranslator
     {
     css::uno::Reference< css::uno::XInterface > SAL_CALL create(
-        css::uno::Reference< css::uno::XComponentContext > const & context)
-        SAL_THROW((css::uno::Exception));
+        css::uno::Reference< css::uno::XComponentContext > const & context);
     OUString SAL_CALL getImplementationName();
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
@@ -51,8 +50,7 @@ namespace stoc_services
     namespace UriReferenceFactory
     {
     css::uno::Reference< css::uno::XInterface > SAL_CALL create(
-        css::uno::Reference< css::uno::XComponentContext >  const & context)
-        SAL_THROW((css::uno::Exception));
+        css::uno::Reference< css::uno::XComponentContext >  const & context);
     OUString SAL_CALL getImplementationName();
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
@@ -60,8 +58,7 @@ namespace stoc_services
     namespace UriSchemeParser_vndDOTsunDOTstarDOTexpand
     {
     css::uno::Reference< css::uno::XInterface > SAL_CALL create(
-        css::uno::Reference< css::uno::XComponentContext > const &)
-        SAL_THROW((css::uno::Exception));
+        css::uno::Reference< css::uno::XComponentContext > const &);
     OUString SAL_CALL getImplementationName();
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
@@ -69,8 +66,7 @@ namespace stoc_services
     namespace UriSchemeParser_vndDOTsunDOTstarDOTscript
     {
     css::uno::Reference< css::uno::XInterface > SAL_CALL create(
-        css::uno::Reference< css::uno::XComponentContext > const &)
-        SAL_THROW((css::uno::Exception));
+        css::uno::Reference< css::uno::XComponentContext > const &);
     OUString SAL_CALL getImplementationName();
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }
@@ -78,8 +74,7 @@ namespace stoc_services
     namespace VndSunStarPkgUrlReferenceFactory
     {
     css::uno::Reference< css::uno::XInterface > SAL_CALL create(
-        css::uno::Reference< css::uno::XComponentContext > const & context)
-        SAL_THROW((css::uno::Exception));
+        css::uno::Reference< css::uno::XComponentContext > const & context);
     OUString SAL_CALL getImplementationName();
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames();
     }

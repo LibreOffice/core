@@ -37,8 +37,7 @@ namespace UriSchemeParser_vndDOTsunDOTstarDOTscript {
     css::uno::Reference< css::uno::XInterface > SAL_CALL
     create(
         css::uno::Reference< css::uno::XComponentContext >
-            const &)
-        SAL_THROW((css::uno::Exception));
+            const &);
 
     OUString SAL_CALL getImplementationName();
 

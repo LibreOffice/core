@@ -40,13 +40,12 @@ public:
     inline Permission(
         t_type type,
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
-        SAL_THROW(())
         : m_next( next )
         , m_type( type )
         {}
 
-    virtual bool implies( Permission const & perm ) const SAL_THROW(()) = 0;
-    virtual OUString toString() const SAL_THROW(()) = 0;
+    virtual bool implies( Permission const & perm ) const = 0;
+    virtual OUString toString() const = 0;
 };
 
 class AllPermission : public Permission
@@ -54,12 +53,11 @@ class AllPermission : public Permission
 public:
     inline AllPermission(
         ::rtl::Reference< Permission > const & next = ::rtl::Reference< Permission >() )
-        SAL_THROW(())
         : Permission( ALL, next )
         {}
 
-    virtual bool implies( Permission const & ) const SAL_THROW(()) SAL_OVERRIDE;
-    virtual OUString toString() const SAL_THROW(()) SAL_OVERRIDE;
+    virtual bool implies( Permission const & ) const SAL_OVERRIDE;
+    virtual OUString toString() const SAL_OVERRIDE;
 };
 
 
@@ -67,23 +65,21 @@ class PermissionCollection
 {
     ::rtl::Reference< Permission > m_head;
 public:
-    inline PermissionCollection() SAL_THROW(())
+    inline PermissionCollection()
         {}
-    inline PermissionCollection( PermissionCollection const & collection ) SAL_THROW(())
+    inline PermissionCollection( PermissionCollection const & collection )
         : m_head( collection.m_head )
         {}
-    inline PermissionCollection( ::rtl::Reference< Permission > const & single ) SAL_THROW(())
+    inline PermissionCollection( ::rtl::Reference< Permission > const & single )
         : m_head( single )
         {}
     PermissionCollection(
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > const & permissions,
-        PermissionCollection const & addition = PermissionCollection() )
-        SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+        PermissionCollection const & addition = PermissionCollection() );
 #ifdef __DIAGNOSE
-    ::com::sun::star::uno::Sequence< OUString > toStrings() const SAL_THROW(());
+    ::com::sun::star::uno::Sequence< OUString > toStrings() const;
 #endif
-    void checkPermission( ::com::sun::star::uno::Any const & perm ) const
-        SAL_THROW( (::com::sun::star::uno::RuntimeException) );
+    void checkPermission( ::com::sun::star::uno::Any const & perm ) const;
 };
 
 }

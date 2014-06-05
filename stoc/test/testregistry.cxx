@@ -56,14 +56,12 @@ namespace stoc_impreg
 {
 void SAL_CALL mergeKeys(
 Reference< registry::XRegistryKey > const & xDest,
-Reference< registry::XRegistryKey > const & xSource )
-SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) );
+Reference< registry::XRegistryKey > const & xSource );
 }
 static void mergeKeys(
 Reference< registry::XSimpleRegistry > const & xDest,
 OUString const & rBaseNode,
 OUString const & rURL )
-SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
 {
 Reference< registry::XRegistryKey > xDestRoot( xDest->getRootKey() );
 Reference< registry::XRegistryKey > xDestKey;

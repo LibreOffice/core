@@ -78,17 +78,14 @@ class acc_Intersection
 
     inline acc_Intersection(
         Reference< security::XAccessControlContext > const & x1,
-        Reference< security::XAccessControlContext > const & x2 )
-        SAL_THROW(());
+        Reference< security::XAccessControlContext > const & x2 );
 
 public:
-    virtual ~acc_Intersection()
-        SAL_THROW(());
+    virtual ~acc_Intersection();
 
     static inline Reference< security::XAccessControlContext > create(
         Reference< security::XAccessControlContext > const & x1,
-        Reference< security::XAccessControlContext > const & x2 )
-        SAL_THROW(());
+        Reference< security::XAccessControlContext > const & x2 );
 
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
@@ -99,19 +96,16 @@ public:
 inline acc_Intersection::acc_Intersection(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
-    SAL_THROW(())
     : m_x1( x1 )
     , m_x2( x2 )
 {}
 
 acc_Intersection::~acc_Intersection()
-    SAL_THROW(())
 {}
 
 inline Reference< security::XAccessControlContext > acc_Intersection::create(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
-    SAL_THROW(())
 {
     if (! x1.is())
         return x2;
@@ -137,17 +131,14 @@ class acc_Union
 
     inline acc_Union(
         Reference< security::XAccessControlContext > const & x1,
-        Reference< security::XAccessControlContext > const & x2 )
-        SAL_THROW(());
+        Reference< security::XAccessControlContext > const & x2 );
 
 public:
-    virtual ~acc_Union()
-        SAL_THROW(());
+    virtual ~acc_Union();
 
     static inline Reference< security::XAccessControlContext > create(
         Reference< security::XAccessControlContext > const & x1,
-        Reference< security::XAccessControlContext > const & x2 )
-        SAL_THROW(());
+        Reference< security::XAccessControlContext > const & x2 );
 
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
@@ -158,19 +149,16 @@ public:
 inline acc_Union::acc_Union(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
-    SAL_THROW(())
     : m_x1( x1 )
     , m_x2( x2 )
 {}
 
 acc_Union::~acc_Union()
-    SAL_THROW(())
 {}
 
 inline Reference< security::XAccessControlContext > acc_Union::create(
     Reference< security::XAccessControlContext > const & x1,
     Reference< security::XAccessControlContext > const & x2 )
-    SAL_THROW(())
 {
     if (! x1.is())
         return Reference< security::XAccessControlContext >(); // unrestricted
@@ -202,10 +190,8 @@ class acc_Policy
 
 public:
     inline acc_Policy(
-        PermissionCollection const & permissions )
-        SAL_THROW(());
-    virtual ~acc_Policy()
-        SAL_THROW(());
+        PermissionCollection const & permissions );
+    virtual ~acc_Policy();
 
     // XAccessControlContext impl
     virtual void SAL_CALL checkPermission(
@@ -215,12 +201,10 @@ public:
 
 inline acc_Policy::acc_Policy(
     PermissionCollection const & permissions )
-    SAL_THROW(())
     : m_permissions( permissions )
 {}
 
 acc_Policy::~acc_Policy()
-    SAL_THROW(())
 {}
 
 void acc_Policy::checkPermission(
@@ -243,9 +227,8 @@ class acc_CurrentContext
 public:
     inline acc_CurrentContext(
         Reference< XCurrentContext > const & xDelegate,
-        Reference< security::XAccessControlContext > const & xRestriction )
-        SAL_THROW(());
-    virtual ~acc_CurrentContext() SAL_THROW(());
+        Reference< security::XAccessControlContext > const & xRestriction );
+    virtual ~acc_CurrentContext();
 
     // XInterface impl
     virtual void SAL_CALL acquire()
@@ -261,7 +244,6 @@ public:
 inline acc_CurrentContext::acc_CurrentContext(
     Reference< XCurrentContext > const & xDelegate,
     Reference< security::XAccessControlContext > const & xRestriction )
-    SAL_THROW(())
     : m_refcount( 0 )
     , m_xDelegate( xDelegate )
 {
@@ -273,7 +255,6 @@ inline acc_CurrentContext::acc_CurrentContext(
 }
 
 acc_CurrentContext::~acc_CurrentContext()
-    SAL_THROW(())
 {}
 
 void acc_CurrentContext::acquire()
@@ -312,7 +293,6 @@ Any acc_CurrentContext::getValueByName( OUString const & name )
 
 static inline Reference< security::XAccessControlContext > getDynamicRestriction(
     Reference< XCurrentContext > const & xContext )
-    SAL_THROW( (RuntimeException) )
 {
     if (xContext.is())
     {
@@ -341,9 +321,9 @@ class cc_reset
 {
     void * m_cc;
 public:
-    inline cc_reset( void * cc ) SAL_THROW(())
+    inline cc_reset( void * cc )
         : m_cc( cc ) {}
-    inline ~cc_reset() SAL_THROW(())
+    inline ~cc_reset()
         { ::uno_setCurrentContext( m_cc, s_envType.pData, 0 ); }
 };
 
@@ -364,8 +344,7 @@ class AccessController
     Reference< XComponentContext > m_xComponentContext;
 
     Reference< security::XPolicy > m_xPolicy;
-    Reference< security::XPolicy > const & getPolicy()
-        SAL_THROW( (RuntimeException) );
+    Reference< security::XPolicy > const & getPolicy();
 
     // mode
     enum Mode { OFF, ON, DYNAMIC_ONLY, SINGLE_USER, SINGLE_DEFAULT_USER } m_mode;
@@ -382,22 +361,19 @@ class AccessController
 
     ThreadData m_rec;
     typedef vector< pair< OUString, Any > > t_rec_vec;
-    inline void clearPostPoned() SAL_THROW(());
-    void checkAndClearPostPoned() SAL_THROW( (RuntimeException) );
+    inline void clearPostPoned();
+    void checkAndClearPostPoned();
 
     PermissionCollection getEffectivePermissions(
         Reference< XCurrentContext > const & xContext,
-        Any const & demanded_perm )
-        SAL_THROW( (RuntimeException) );
+        Any const & demanded_perm );
 
 protected:
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
 public:
-    AccessController( Reference< XComponentContext > const & xComponentContext )
-        SAL_THROW( (RuntimeException) );
-    virtual ~AccessController()
-        SAL_THROW(());
+    AccessController( Reference< XComponentContext > const & xComponentContext );
+    virtual ~AccessController();
 
     //  XInitialization impl
     virtual void SAL_CALL initialize(
@@ -429,7 +405,6 @@ public:
 };
 
 AccessController::AccessController( Reference< XComponentContext > const & xComponentContext )
-    SAL_THROW( (RuntimeException) )
     : t_helper( m_mutex )
     , m_xComponentContext( xComponentContext )
     , m_mode( ON ) // default
@@ -492,7 +467,6 @@ AccessController::AccessController( Reference< XComponentContext > const & xComp
 }
 
 AccessController::~AccessController()
-    SAL_THROW(())
 {}
 
 void AccessController::disposing()
@@ -529,7 +503,6 @@ void AccessController::initialize(
 
 
 Reference< security::XPolicy > const & AccessController::getPolicy()
-    SAL_THROW( (RuntimeException) )
 {
     // get policy singleton
     if (! m_xPolicy.is())
@@ -556,7 +529,7 @@ Reference< security::XPolicy > const & AccessController::getPolicy()
 
 #ifdef __DIAGNOSE
 static void dumpPermissions(
-    PermissionCollection const & collection, OUString const & userId = OUString() ) SAL_THROW(())
+    PermissionCollection const & collection, OUString const & userId = OUString() )
 {
     OUStringBuffer buf( 48 );
     if (!userId.isEmpty())
@@ -584,13 +557,13 @@ static void dumpPermissions(
 
 
 
-inline void AccessController::clearPostPoned() SAL_THROW(())
+inline void AccessController::clearPostPoned()
 {
     delete reinterpret_cast< t_rec_vec * >( m_rec.getData() );
     m_rec.setData( 0 );
 }
 
-void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
+void AccessController::checkAndClearPostPoned()
 {
     // check postponed permissions
     boost::scoped_ptr< t_rec_vec > rec( reinterpret_cast< t_rec_vec * >( m_rec.getData() ) );
@@ -658,7 +631,6 @@ void AccessController::checkAndClearPostPoned() SAL_THROW( (RuntimeException) )
 PermissionCollection AccessController::getEffectivePermissions(
     Reference< XCurrentContext > const & xContext,
     Any const & demanded_perm )
-    SAL_THROW( (RuntimeException) )
 {
     OUString userId;
 

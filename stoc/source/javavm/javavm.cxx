@@ -210,7 +210,6 @@ css::uno::Sequence< OUString > serviceGetSupportedServiceNames()
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL serviceCreateInstance(
     css::uno::Reference< css::uno::XComponentContext > const & rContext)
-    SAL_THROW((css::uno::Exception))
 {
     // Only one single instance of this service is ever constructed, and is
     // available until the component context used to create this instance is
