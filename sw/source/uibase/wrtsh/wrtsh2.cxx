@@ -91,7 +91,10 @@ void SwWrtShell::Insert(SwField &rFld)
                 GetTblCrs()->Normalize( false );
                 const SwPosition rStartPos( *(GetTblCrs()->GetMark()->nNode.GetNode().GetCntntNode()), 0 );
                 KillPams();
-                EndPara();
+                if ( !IsEndOfPara() )
+                {
+                    EndPara();
+                }
                 const SwPosition rEndPos( *GetCurrentShellCursor().GetPoint() );
                 pAnnotationTextRange = new SwPaM( rStartPos, rEndPos );
             }
