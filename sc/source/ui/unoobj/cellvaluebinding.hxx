@@ -125,12 +125,9 @@ namespace calc
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     private:
-        void    checkDisposed( ) const
-                    SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
-        void    checkValueType( const ::com::sun::star::uno::Type& _rType ) const
-                    SAL_THROW( ( ::com::sun::star::form::binding::IncompatibleTypesException ) );
-        void    checkInitialized()
-                    SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
+        void    checkDisposed( ) const;
+        void    checkValueType( const ::com::sun::star::uno::Type& _rType ) const;
+        void    checkInitialized();
 
         /** notifies our modify listeners
             @precond

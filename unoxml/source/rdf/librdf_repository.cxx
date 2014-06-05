@@ -2435,7 +2435,6 @@ uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames()
 
 uno::Reference< uno::XInterface > SAL_CALL _create(
     const uno::Reference< uno::XComponentContext > & context)
-        SAL_THROW((uno::Exception))
 {
     return static_cast< ::cppu::OWeakObject * >(new librdf_Repository(context));
 }

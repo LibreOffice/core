@@ -82,13 +82,13 @@ AquaA11yFocusListener::focusedObjectChanged(const Reference< XAccessible >& xAcc
 }
 
 oslInterlockedCount SAL_CALL
-AquaA11yFocusListener::acquire() SAL_THROW(())
+AquaA11yFocusListener::acquire()
 {
     return ReferenceObject::acquire();
 }
 
 oslInterlockedCount SAL_CALL
-AquaA11yFocusListener::release() SAL_THROW(())
+AquaA11yFocusListener::release()
 {
     return ReferenceObject::release();
 }

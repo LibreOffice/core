@@ -151,7 +151,7 @@ OUndoContainerAction::~OUndoContainerAction()
     }
 }
 
-void OUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
+void OUndoContainerAction::implReInsert( )
 {
     if ( m_xContainer.is() )
     {
@@ -163,7 +163,7 @@ void OUndoContainerAction::implReInsert( ) SAL_THROW( ( Exception ) )
 }
 
 
-void OUndoContainerAction::implReRemove( ) SAL_THROW( ( Exception ) )
+void OUndoContainerAction::implReRemove( )
 {
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try
@@ -258,7 +258,7 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
 {
 }
 
-void OUndoGroupSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
+void OUndoGroupSectionAction::implReInsert( )
 {
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try
@@ -275,7 +275,7 @@ void OUndoGroupSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
 }
 
 
-void OUndoGroupSectionAction::implReRemove( ) SAL_THROW( ( Exception ) )
+void OUndoGroupSectionAction::implReRemove( )
 {
         OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try
@@ -304,7 +304,7 @@ OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
 {
 }
 
-void OUndoReportSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
+void OUndoReportSectionAction::implReInsert( )
 {
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try
@@ -327,7 +327,7 @@ void OUndoReportSectionAction::implReInsert( ) SAL_THROW( ( Exception ) )
 }
 
 
-void OUndoReportSectionAction::implReRemove( ) SAL_THROW( ( Exception ) )
+void OUndoReportSectionAction::implReRemove( )
 {
     OXUndoEnvironment& rEnv = static_cast< OReportModel& >( rMod ).GetUndoEnv();
     try

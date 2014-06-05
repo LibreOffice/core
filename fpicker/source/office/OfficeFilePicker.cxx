@@ -1082,7 +1082,7 @@ void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
 }
 
 
-bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
+bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue )
 {
     if ( _rName == "TemplateDescription" )
     {

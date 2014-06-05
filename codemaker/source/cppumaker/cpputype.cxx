@@ -361,7 +361,7 @@ void CppuType::dumpGetCppuTypePostamble(FileStream & out) {
             " getCppuType(SAL_UNUSED_PARAMETER ");
     dumpType(out, name_);
     dumpTemplateParameters(out);
-    out << " const *) SAL_THROW(()) {\n";
+    out << " const *) {\n";
     inc();
     out << indent() << "return ::cppu::UnoType< ";
     dumpType(out, name_);
@@ -565,7 +565,7 @@ void CppuType::dumpHFileContent(
     out << "inline ::css::uno::Type const & SAL_CALL getCppuType(";
     dumpType(out, name_, true);
     dumpTemplateParameters(out);
-    out << " *) SAL_THROW(());\n\n#endif\n";
+    out << " *);\n\n#endif\n";
 }
 
 void CppuType::dumpGetCppuType(FileStream & out) {
@@ -574,7 +574,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
             << ("inline ::css::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, true);
-        out << " *) SAL_THROW(()) {\n";
+        out << " *) {\n";
         inc();
         out << indent()
             << ("return ::cppu::UnoType< ::css::uno::XInterface"
@@ -586,7 +586,7 @@ void CppuType::dumpGetCppuType(FileStream & out) {
             << ("inline ::css::uno::Type const & SAL_CALL"
                 " getCppuType(SAL_UNUSED_PARAMETER ");
         dumpType(out, name_, true);
-        out << " *) SAL_THROW(()) {\n";
+        out << " *) {\n";
         inc();
         out << indent()
             << ("return ::cppu::UnoType< ::css::uno::Exception"
@@ -1823,7 +1823,7 @@ void PlainStructType::dumpDeclaration(FileStream & out) {
     }
     out << " {\n";
     inc();
-    out << indent() << "inline " << id_ << "() SAL_THROW(());\n";
+    out << indent() << "inline " << id_ << "();\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << "\n" << indent() << "inline " << id_ << "(";
         bool first = !dumpBaseMembers(out, base, true);
@@ -1838,7 +1838,7 @@ void PlainStructType::dumpDeclaration(FileStream & out) {
             out << " " << i->name << "_";
             first = false;
         }
-        out << ") SAL_THROW(());\n";
+        out << ");\n";
     }
     if (!entity_->getDirectMembers().empty()) {
         out << "\n";
@@ -1873,7 +1873,7 @@ void PlainStructType::dumpHxxFile(
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
         out << "\n";
     }
-    out << "\ninline " << id_ << "::" << id_ << "() SAL_THROW(())\n";
+    out << "\ninline " << id_ << "::" << id_ << "()\n";
     inc();
     OUString base(entity_->getDirectBase());
     bool first = true;
@@ -1908,7 +1908,7 @@ void PlainStructType::dumpHxxFile(
             out << " " << i->name << "_";
             first = false;
         }
-        out << ") SAL_THROW(())\n";
+        out << ")\n";
         inc();
         first = true;
         if (!base.isEmpty()) {
@@ -2202,7 +2202,7 @@ void PolyStructType::dumpDeclaration(FileStream & out) {
     dumpTemplateHead(out);
     out << "struct " << id_ << " {\n";
     inc();
-    out << indent() << "inline " << id_ << "() SAL_THROW(());\n";
+    out << indent() << "inline " << id_ << "();\n";
     if (!entity_->getMembers().empty()) {
         out << "\n" << indent() << "inline " << id_ << "(";
         for (std::vector<
@@ -2221,7 +2221,7 @@ void PolyStructType::dumpDeclaration(FileStream & out) {
             }
             out << " " << i->name << "_";
         }
-        out << ") SAL_THROW(());\n\n";
+        out << ");\n\n";
         for (std::vector<
                  unoidl::PolymorphicStructTypeTemplateEntity::Member >::
                  const_iterator i(entity_->getMembers().begin());
@@ -2254,7 +2254,7 @@ void PolyStructType::dumpHxxFile(
     dumpTemplateHead(out);
     out << "inline " << id_;
     dumpTemplateParameters(out);
-    out << "::" << id_ << "() SAL_THROW(())\n";
+    out << "::" << id_ << "()\n";
     inc();
     for (std::vector< unoidl::PolymorphicStructTypeTemplateEntity::Member >::
              const_iterator i(entity_->getMembers().begin());
@@ -2288,7 +2288,7 @@ void PolyStructType::dumpHxxFile(
             }
             out << " " << i->name << "_";
         }
-        out << ") SAL_THROW(())\n";
+        out << ")\n";
         inc();
         for (std::vector<
                  unoidl::PolymorphicStructTypeTemplateEntity::Member >::
@@ -2320,7 +2320,7 @@ void PolyStructType::dumpHxxFile(
             }
             out << " " << i->name << "_";
         }
-        out << ") SAL_THROW(())\n" << indent() << "{\n";
+        out << ")\n" << indent() << "{\n";
         inc();
         out << indent() << "return " << id_;
         dumpTemplateParameters(out);
@@ -2700,7 +2700,7 @@ void ExceptionType::dumpHxxFile(
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
         out << "\n";
     }
-    out << "\ninline " << id_ << "::" << id_ << "() SAL_THROW(())\n";
+    out << "\ninline " << id_ << "::" << id_ << "()\n";
     inc();
     OUString base(entity_->getDirectBase());
     bool first = true;
@@ -2744,7 +2744,7 @@ void ExceptionType::dumpHxxFile(
             out << " " << i->name << "_";
             first = false;
         }
-        out << ") SAL_THROW(())\n";
+        out << ")\n";
         inc();
         first = true;
         if (!base.isEmpty()) {
@@ -2983,7 +2983,7 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
     out << "\n{\npublic:\n";
     inc();
     out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_
-        << "() SAL_THROW(());\n\n";
+        << "();\n\n";
     if (!entity_->getDirectMembers().empty() || getInheritedMemberCount() > 0) {
         out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(";
         bool eligibleForDefaults = entity_->getDirectMembers().empty();
@@ -2999,7 +2999,7 @@ void ExceptionType::dumpDeclaration(FileStream & out) {
             out << " " << i->name << "_";
             first = false;
         }
-        out << ") SAL_THROW(());\n\n";
+        out << ");\n\n";
     }
     out << indent() << "inline CPPU_GCC_DLLPRIVATE " << id_ << "(" << id_
         << " const &);\n\n" << indent() << "inline CPPU_GCC_DLLPRIVATE ~"

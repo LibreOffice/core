@@ -49,8 +49,7 @@ getSupportedServiceNames();
 com::sun::star::uno::Reference< com::sun::star::lang::XSingleComponentFactory >
 SAL_CALL createFactory(
     cppu::ComponentFactoryFunc, OUString const &,
-    com::sun::star::uno::Sequence< OUString > const &, rtl_ModuleCount *)
-    SAL_THROW(());
+    com::sun::star::uno::Sequence< OUString > const &, rtl_ModuleCount *);
 
 } }
 

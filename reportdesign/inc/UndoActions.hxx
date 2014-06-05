@@ -196,8 +196,8 @@ namespace rptui
         virtual void Redo() SAL_OVERRIDE;
 
     protected:
-        virtual void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
-        virtual void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
+        virtual void    implReInsert( );
+        virtual void    implReRemove( );
     };
 
 
@@ -218,8 +218,8 @@ namespace rptui
                             ,sal_uInt16 _nCommentId);
 
     protected:
-        virtual void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) ) SAL_OVERRIDE;
-        virtual void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) ) SAL_OVERRIDE;
+        virtual void    implReInsert( ) SAL_OVERRIDE;
+        virtual void    implReRemove( ) SAL_OVERRIDE;
     };
 
 
@@ -239,8 +239,8 @@ namespace rptui
                             ,sal_uInt16 _nCommentId);
 
     protected:
-        virtual void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) ) SAL_OVERRIDE;
-        virtual void    implReRemove( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) ) SAL_OVERRIDE;
+        virtual void    implReInsert( ) SAL_OVERRIDE;
+        virtual void    implReRemove( ) SAL_OVERRIDE;
     };
 
     // ORptUndoPropertyAction

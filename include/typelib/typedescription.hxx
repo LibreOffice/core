@@ -48,13 +48,13 @@ class TypeDescription
 public:
     /// @cond INTERNAL
     // these are here to force memory de/allocation to sal lib.
-    inline static void * SAL_CALL operator new ( size_t nSize ) SAL_THROW(())
+    inline static void * SAL_CALL operator new ( size_t nSize )
         { return ::rtl_allocateMemory( nSize ); }
-    inline static void SAL_CALL operator delete ( void * pMem ) SAL_THROW(())
+    inline static void SAL_CALL operator delete ( void * pMem )
         { ::rtl_freeMemory( pMem ); }
-    inline static void * SAL_CALL operator new ( size_t, void * pMem ) SAL_THROW(())
+    inline static void * SAL_CALL operator new ( size_t, void * pMem )
         { return pMem; }
-    inline static void SAL_CALL operator delete ( void *, void * ) SAL_THROW(())
+    inline static void SAL_CALL operator delete ( void *, void * )
         {}
     /// @endcond
 
@@ -62,48 +62,48 @@ public:
 
         @param pTypeDescr a type description
     */
-    inline TypeDescription( typelib_TypeDescription * pTypeDescr = 0 ) SAL_THROW(());
+    inline TypeDescription( typelib_TypeDescription * pTypeDescr = 0 );
     /** Constructor:
 
         @param pTypeDescrRef a type description reference
     */
-    inline TypeDescription( typelib_TypeDescriptionReference * pTypeDescrRef ) SAL_THROW(());
+    inline TypeDescription( typelib_TypeDescriptionReference * pTypeDescrRef );
     /** Constructor:
 
         @param rType a type
     */
-    inline TypeDescription( const ::com::sun::star::uno::Type & rType ) SAL_THROW(());
+    inline TypeDescription( const ::com::sun::star::uno::Type & rType );
     /** Copy constructor:
 
         @param rDescr another TypeDescription
     */
-    inline TypeDescription( const TypeDescription & rDescr ) SAL_THROW(());
+    inline TypeDescription( const TypeDescription & rDescr );
     /** Constructor:
 
         @param pTypeName a type name
     */
-    inline TypeDescription( rtl_uString * pTypeName ) SAL_THROW(());
+    inline TypeDescription( rtl_uString * pTypeName );
     /** Constructor:
 
         @param rTypeName a type name
     */
-    inline TypeDescription( const ::rtl::OUString & rTypeName ) SAL_THROW(());
+    inline TypeDescription( const ::rtl::OUString & rTypeName );
     /** Destructor: releases type description
     */
-    inline ~TypeDescription() SAL_THROW(());
+    inline ~TypeDescription();
 
     /** Assignment operator: acquires given type description and releases a set one.
 
         @param pTypeDescr another type description
         @return this TypeDescription
     */
-    inline TypeDescription & SAL_CALL operator = ( typelib_TypeDescription * pTypeDescr ) SAL_THROW(());
+    inline TypeDescription & SAL_CALL operator = ( typelib_TypeDescription * pTypeDescr );
     /** Assignment operator: acquires given type description and releases a set one.
 
         @param rTypeDescr another type description
         @return this TypeDescription
     */
-    inline TypeDescription & SAL_CALL operator =( const TypeDescription & rTypeDescr ) SAL_THROW(())
+    inline TypeDescription & SAL_CALL operator =( const TypeDescription & rTypeDescr )
         { return this->operator =( rTypeDescr.get() ); }
 
     /** Tests whether two type descriptions are equal.
@@ -111,80 +111,80 @@ public:
         @param pTypeDescr another type description
         @return true, if both type descriptions are equal, false otherwise
     */
-    inline bool SAL_CALL equals( const typelib_TypeDescription * pTypeDescr ) const SAL_THROW(());
+    inline bool SAL_CALL equals( const typelib_TypeDescription * pTypeDescr ) const;
     /** Tests whether two type descriptions are equal.
 
         @param rTypeDescr another type description
         @return true, if both type descriptions are equal, false otherwise
     */
-    inline bool SAL_CALL equals( const TypeDescription & rTypeDescr ) const SAL_THROW(())
+    inline bool SAL_CALL equals( const TypeDescription & rTypeDescr ) const
         { return equals( rTypeDescr._pTypeDescr ); }
 
     /** Makes stored type description complete.
     */
-    inline void SAL_CALL makeComplete() const SAL_THROW(());
+    inline void SAL_CALL makeComplete() const;
 
     /** Gets the UNacquired type description pointer.
 
         @return stored pointer of type description
     */
-    inline typelib_TypeDescription * SAL_CALL get() const SAL_THROW(())
+    inline typelib_TypeDescription * SAL_CALL get() const
         { return _pTypeDescr; }
     /** Tests if a type description is set.
 
         @return true, if a type description is set, false otherwise
     */
-    inline bool SAL_CALL is() const SAL_THROW(())
+    inline bool SAL_CALL is() const
         { return (_pTypeDescr != 0); }
 };
 
-inline TypeDescription::TypeDescription( typelib_TypeDescription * pTypeDescr ) SAL_THROW(())
+inline TypeDescription::TypeDescription( typelib_TypeDescription * pTypeDescr )
     : _pTypeDescr( pTypeDescr )
 {
     if (_pTypeDescr)
         typelib_typedescription_acquire( _pTypeDescr );
 }
 
-inline TypeDescription::TypeDescription( typelib_TypeDescriptionReference * pTypeDescrRef ) SAL_THROW(())
+inline TypeDescription::TypeDescription( typelib_TypeDescriptionReference * pTypeDescrRef )
     : _pTypeDescr( 0 )
 {
     if (pTypeDescrRef)
         typelib_typedescriptionreference_getDescription( &_pTypeDescr, pTypeDescrRef );
 }
 
-inline TypeDescription::TypeDescription( const ::com::sun::star::uno::Type & rType ) SAL_THROW(())
+inline TypeDescription::TypeDescription( const ::com::sun::star::uno::Type & rType )
     : _pTypeDescr( 0 )
 {
     if (rType.getTypeLibType())
         typelib_typedescriptionreference_getDescription( &_pTypeDescr, rType.getTypeLibType() );
 }
 
-inline TypeDescription::TypeDescription( const TypeDescription & rTypeDescr ) SAL_THROW(())
+inline TypeDescription::TypeDescription( const TypeDescription & rTypeDescr )
     : _pTypeDescr( rTypeDescr._pTypeDescr )
 {
     if (_pTypeDescr)
         typelib_typedescription_acquire( _pTypeDescr );
 }
 
-inline TypeDescription::TypeDescription( rtl_uString * pTypeName ) SAL_THROW(())
+inline TypeDescription::TypeDescription( rtl_uString * pTypeName )
     : _pTypeDescr( 0 )
 {
     typelib_typedescription_getByName( &_pTypeDescr , pTypeName );
 }
 
-inline TypeDescription::TypeDescription( const ::rtl::OUString & rTypeName ) SAL_THROW(())
+inline TypeDescription::TypeDescription( const ::rtl::OUString & rTypeName )
     : _pTypeDescr( 0 )
 {
     typelib_typedescription_getByName( &_pTypeDescr , rTypeName.pData );
 }
 
-inline TypeDescription::~TypeDescription() SAL_THROW(())
+inline TypeDescription::~TypeDescription()
 {
     if (_pTypeDescr)
         typelib_typedescription_release( _pTypeDescr );
 }
 
-inline TypeDescription & TypeDescription::operator = ( typelib_TypeDescription * pTypeDescr ) SAL_THROW(())
+inline TypeDescription & TypeDescription::operator = ( typelib_TypeDescription * pTypeDescr )
 {
     if (pTypeDescr)
         typelib_typedescription_acquire( pTypeDescr );
@@ -194,13 +194,13 @@ inline TypeDescription & TypeDescription::operator = ( typelib_TypeDescription *
     return *this;
 }
 
-inline bool TypeDescription::equals( const typelib_TypeDescription * pTypeDescr ) const SAL_THROW(())
+inline bool TypeDescription::equals( const typelib_TypeDescription * pTypeDescr ) const
 {
     return (_pTypeDescr && pTypeDescr &&
             typelib_typedescription_equals( _pTypeDescr, pTypeDescr ));
 }
 
-inline void TypeDescription::makeComplete() const SAL_THROW(())
+inline void TypeDescription::makeComplete() const
 {
     if (_pTypeDescr && !_pTypeDescr->bComplete)
         ::typelib_typedescription_complete( &_pTypeDescr );

@@ -24,20 +24,18 @@
 
 using salhelper::SimpleReferenceObject;
 
-SimpleReferenceObject::~SimpleReferenceObject() SAL_THROW(())
+SimpleReferenceObject::~SimpleReferenceObject()
 {
     OSL_ASSERT(m_nCount == 0);
 }
 
 void * SimpleReferenceObject::operator new(std::size_t nSize)
-    SAL_THROW((std::bad_alloc))
 {
     return ::operator new(nSize);
 }
 
 void * SimpleReferenceObject::operator new(std::size_t nSize,
                                            std::nothrow_t const &)
-    SAL_THROW(())
 {
 #if defined WNT
     return ::operator new(nSize);
@@ -47,13 +45,12 @@ void * SimpleReferenceObject::operator new(std::size_t nSize,
 #endif // WNT
 }
 
-void SimpleReferenceObject::operator delete(void * pPtr) SAL_THROW(())
+void SimpleReferenceObject::operator delete(void * pPtr)
 {
     ::operator delete(pPtr);
 }
 
 void SimpleReferenceObject::operator delete(void * pPtr, std::nothrow_t const &)
-    SAL_THROW(())
 {
 #if defined WNT
     ::operator delete(pPtr); // WNT lacks a global nothrow operator delete...

@@ -542,7 +542,7 @@ void OXUndoEnvironment::TogglePropertyListening(const Reference< XInterface > & 
 
 
 
-void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxContainer, bool _bStartListening ) SAL_THROW(())
+void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxContainer, bool _bStartListening )
 {
     OSL_PRECOND( _rxContainer.is(), "OXUndoEnvironment::switchListening: invalid container!" );
     if ( !_rxContainer.is() )
@@ -579,7 +579,7 @@ void OXUndoEnvironment::switchListening( const Reference< XIndexAccess >& _rxCon
 }
 
 
-void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening ) SAL_THROW(())
+void OXUndoEnvironment::switchListening( const Reference< XInterface >& _rxObject, bool _bStartListening )
 {
     OSL_PRECOND( _rxObject.is(), "OXUndoEnvironment::switchListening: how should I listen at a NULL object?" );
 

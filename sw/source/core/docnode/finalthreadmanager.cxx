@@ -454,7 +454,6 @@ namespace comp_FinalThreadManager {
 
     css::uno::Reference< css::uno::XInterface > SAL_CALL _create(
         const css::uno::Reference< css::uno::XComponentContext > & context)
-            SAL_THROW((css::uno::Exception))
     {
         return static_cast< ::cppu::OWeakObject * >(new FinalThreadManager(context));
     }

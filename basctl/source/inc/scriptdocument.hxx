@@ -247,8 +247,7 @@ namespace basctl
                 if there is no script library with the given name
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                    getLibrary( LibraryContainerType _eType, const OUString& _rLibName, bool _bLoadLibrary ) const
-                        SAL_THROW((::com::sun::star::container::NoSuchElementException));
+                    getLibrary( LibraryContainerType _eType, const OUString& _rLibName, bool _bLoadLibrary ) const;
 
         /** creates a script or dialog library in the document, or returns an existing one
 

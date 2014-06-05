@@ -50,7 +50,6 @@ DEFINE_INIT_SERVICE(
 void flatten_struct_members(
     ::std::vector< Any > * vec, void const * data,
     typelib_CompoundTypeDescription * pTD )
-    SAL_THROW(())
 {
     if (pTD->pBaseTypeDescription)
     {
@@ -65,7 +64,6 @@ void flatten_struct_members(
 
 Sequence< Any > make_seq_out_of_struct(
     Any const & val )
-    SAL_THROW( (RuntimeException) )
 {
     Type const & type = val.getValueType();
     TypeClass eTypeClass = type.getTypeClass();

@@ -444,7 +444,6 @@ css::uno::Sequence < OUString > OTempFileService::getSupportedServiceNames_Stati
 }
 css::uno::Reference < css::uno::XInterface >SAL_CALL XTempFile_createInstance(
     css::uno::Reference< css::uno::XComponentContext > const & context)
-    SAL_THROW( ( css::uno::Exception ) )
 {
     return static_cast< ::cppu::OWeakObject * >( new OTempFileService(context) );
 }

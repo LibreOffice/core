@@ -214,14 +214,13 @@ Sequence< OUString > MyService1Impl::getSupportedServiceNames()
 
 Reference< XInterface > SAL_CALL create_MyService1Impl(
     Reference< XComponentContext > const & xContext )
-    SAL_THROW(())
 {
     return static_cast< lang::XTypeProvider * >( new MyService1Impl( xContext) );
 }
 
 // forward decl: implemented in service2_impl.cxx
 Reference< XInterface > SAL_CALL create_MyService2Impl(
-    Reference< XComponentContext > const & ) SAL_THROW(());
+    Reference< XComponentContext > const & );
 
 }
 

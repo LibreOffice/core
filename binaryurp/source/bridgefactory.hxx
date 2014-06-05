@@ -63,8 +63,7 @@ public:
     static com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
     SAL_CALL static_create(
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-            const & xContext)
-        SAL_THROW((com::sun::star::uno::Exception));
+            const & xContext);
 
     static OUString SAL_CALL static_getImplementationName();
 

@@ -197,7 +197,7 @@ namespace xmloff
         /** determines if our document is a spreadsheet document, *and* can supply
             the given service
         */
-        bool            isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const  SAL_THROW(());
+        bool            isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const;
 
         /** determines if our document is a spreadsheet document, *and* can supply
             the given service
@@ -205,7 +205,7 @@ namespace xmloff
         static bool     isSpreadsheetDocumentWhichSupplies(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& _rxDocument,
                             const OUString& _rService
-                        ) SAL_THROW(());
+                        );
 
         /** checkes whether a given component supports a given servive
         */
@@ -257,7 +257,7 @@ namespace xmloff
                             const OUString& _rOutputProperty,
                                   ::com::sun::star::uno::Any& _rOutputValue,
                             bool _bIsRange
-                        ) const SAL_THROW(());
+                        ) const;
     };
 
 }   // namespace xmloff

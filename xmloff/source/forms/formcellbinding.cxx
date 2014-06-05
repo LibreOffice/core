@@ -236,7 +236,7 @@ OUString FormCellBindingHelper::getStringAddressFromCellListSource( const Refere
     return sAddress;
 }
 
-bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference< XSpreadsheetDocument >& _rxDocument, const OUString& _rService ) SAL_THROW(())
+bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference< XSpreadsheetDocument >& _rxDocument, const OUString& _rService )
 {
     bool bYesItIs = false;
 
@@ -271,7 +271,7 @@ bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const Reference<
     return bYesItIs;
 }
 
-bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const SAL_THROW(())
+bool FormCellBindingHelper::isSpreadsheetDocumentWhichSupplies( const OUString& _rService ) const
 {
     return isSpreadsheetDocumentWhichSupplies( m_xDocument, _rService );
 }
@@ -412,7 +412,7 @@ Reference< XInterface > FormCellBindingHelper::createDocumentDependentInstance( 
 }
 
 bool FormCellBindingHelper::doConvertAddressRepresentations( const OUString& _rInputProperty, const Any& _rInputValue,
-    const OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const SAL_THROW(())
+    const OUString& _rOutputProperty, Any& _rOutputValue, bool _bIsRange ) const
 {
     bool bSuccess = false;
 

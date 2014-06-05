@@ -45,36 +45,36 @@ class ReferenceObject : public rtl::IReference
 public:
     /** Allocation.
      */
-    static void* operator new (size_t n) SAL_THROW(())
+    static void* operator new (size_t n)
     {
         return ::rtl_allocateMemory (n);
     }
-    static void operator delete (void* p) SAL_THROW(())
+    static void operator delete (void* p)
     {
         ::rtl_freeMemory (p);
     }
-    static void* operator new (size_t, void* p) SAL_THROW(())
+    static void* operator new (size_t, void* p)
     {
         return (p);
     }
-    static void operator delete (void*, void*) SAL_THROW(())
+    static void operator delete (void*, void*)
     {}
 
 public:
     /** Construction.
      */
-    inline ReferenceObject() SAL_THROW(()) : m_nReferenceCount (0)
+    inline ReferenceObject() : m_nReferenceCount (0)
     {}
 
 
     /** IReference.
      */
-    virtual oslInterlockedCount SAL_CALL acquire() SAL_THROW(()) SAL_OVERRIDE
+    virtual oslInterlockedCount SAL_CALL acquire() SAL_OVERRIDE
     {
         return osl_atomic_increment (&m_nReferenceCount);
     }
 
-    virtual oslInterlockedCount SAL_CALL release() SAL_THROW(()) SAL_OVERRIDE
+    virtual oslInterlockedCount SAL_CALL release() SAL_OVERRIDE
     {
         oslInterlockedCount result;
         result = ::osl_atomic_decrement (&m_nReferenceCount);
@@ -89,7 +89,7 @@ public:
 protected:
     /** Destruction.
      */
-    virtual ~ReferenceObject() SAL_THROW(())
+    virtual ~ReferenceObject()
     {
         OSL_ASSERT(m_nReferenceCount == 0);
     }

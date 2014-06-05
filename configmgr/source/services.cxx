@@ -41,7 +41,6 @@ namespace {
 css::uno::Reference< css::uno::XInterface > SAL_CALL dummy(
     SAL_UNUSED_PARAMETER css::uno::Reference< css::uno::XComponentContext >
         const &)
-    SAL_THROW((css::uno::Exception))
 {
     assert(false);
     return css::uno::Reference< css::uno::XInterface >();

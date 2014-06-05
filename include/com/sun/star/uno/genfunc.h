@@ -36,22 +36,19 @@ namespace uno
 
     @param pCppI C++ interface pointer
 */
-inline void SAL_CALL cpp_acquire( void * pCppI )
-    SAL_THROW(());
+inline void SAL_CALL cpp_acquire( void * pCppI );
 /** Function to release a C++ interface.
 
     @param pCppI C++ interface pointer
 */
-inline void SAL_CALL cpp_release( void * pCppI )
-    SAL_THROW(());
+inline void SAL_CALL cpp_release( void * pCppI );
 /** Function to query for a C++ interface.
 
     @param pCppI C++ interface pointer
     @param pType demanded interface type
     @return acquired C++ interface pointer or null
 */
-inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType )
-    SAL_THROW(());
+inline void * SAL_CALL cpp_queryInterface( void * pCppI, typelib_TypeDescriptionReference * pType );
 
 }
 }

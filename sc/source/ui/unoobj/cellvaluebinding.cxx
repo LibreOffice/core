@@ -419,7 +419,7 @@ namespace calc
     }
 
 
-    void OCellValueBinding::checkDisposed( ) const SAL_THROW( ( DisposedException ) )
+    void OCellValueBinding::checkDisposed( ) const
     {
         if ( OCellValueBinding_Base::rBHelper.bInDispose || OCellValueBinding_Base::rBHelper.bDisposed )
             throw DisposedException();
@@ -427,7 +427,7 @@ namespace calc
     }
 
 
-    void OCellValueBinding::checkInitialized() SAL_THROW( ( RuntimeException ) )
+    void OCellValueBinding::checkInitialized()
     {
         if ( !m_bInitialized )
             throw RuntimeException();
@@ -435,7 +435,7 @@ namespace calc
     }
 
 
-    void OCellValueBinding::checkValueType( const Type& _rType ) const SAL_THROW( ( IncompatibleTypesException ) )
+    void OCellValueBinding::checkValueType( const Type& _rType ) const
     {
         OCellValueBinding* pNonConstThis = const_cast< OCellValueBinding* >( this );
         if ( !pNonConstThis->supportsType( _rType ) )

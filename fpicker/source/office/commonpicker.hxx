@@ -166,7 +166,7 @@ namespace svt
 
         // misc
 
-        void checkAlive() const SAL_THROW( (::com::sun::star::lang::DisposedException) );
+        void checkAlive() const;
 
         void prepareDialog();
 
@@ -180,8 +180,7 @@ namespace svt
         virtual bool    implHandleInitializationArgument(
                                 const OUString& _rName,
                                 const ::com::sun::star::uno::Any& _rValue
-                            )
-                            SAL_THROW( ( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException ) );
+                            );
 
     private:
         void        stopWindowListening();

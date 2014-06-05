@@ -210,8 +210,7 @@ protected:
     virtual bool            implHandleInitializationArgument(
                                 const OUString& _rName,
                                 const ::com::sun::star::uno::Any& _rValue
-                            )
-                            SAL_THROW( ( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException ) ) SAL_OVERRIDE;
+                            ) SAL_OVERRIDE;
 
 private:
     WinBits             getWinBits( WinBits& rExtraBits );

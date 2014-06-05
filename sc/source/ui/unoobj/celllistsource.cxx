@@ -147,14 +147,14 @@ namespace calc
     }
 
 
-    void OCellListSource::checkDisposed( ) const SAL_THROW( ( DisposedException ) )
+    void OCellListSource::checkDisposed( ) const
     {
         if ( OCellListSource_Base::rBHelper.bInDispose || OCellListSource_Base::rBHelper.bDisposed )
             throw DisposedException();
             // TODO: is it worth having an error message here?
     }
 
-    void OCellListSource::checkInitialized() SAL_THROW( ( RuntimeException ) )
+    void OCellListSource::checkInitialized()
     {
         if ( !m_bInitialized )
             throw RuntimeException();

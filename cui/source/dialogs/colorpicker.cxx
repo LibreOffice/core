@@ -1417,7 +1417,7 @@ OUString SAL_CALL ColorPicker_getImplementationName()
     return OUString( "com.sun.star.cui.ColorPicker" );
 }
 
-Reference< XInterface > SAL_CALL ColorPicker_createInstance( Reference< XComponentContext > const & xContext ) SAL_THROW( (Exception) )
+Reference< XInterface > SAL_CALL ColorPicker_createInstance( Reference< XComponentContext > const & xContext )
 {
     return static_cast<XWeak*>( new ColorPicker( xContext ) );
 }

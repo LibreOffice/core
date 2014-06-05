@@ -177,7 +177,7 @@ namespace cli_uno
     calls acquire then they must have kept an unacquired pointer which is
     illegal.
  */
-void Bridge::acquire()  const SAL_THROW(())
+void Bridge::acquire()  const
 {
     if (1 == osl_atomic_increment( &m_ref ))
     {
@@ -196,7 +196,7 @@ void Bridge::acquire()  const SAL_THROW(())
     }
 }
 
-void Bridge::release() const  SAL_THROW(())
+void Bridge::release() const
 {
     if (! osl_atomic_decrement( &m_ref ))
     {
@@ -233,7 +233,7 @@ Bridge::Bridge(
 }
 
 
-Bridge::~Bridge() SAL_THROW(())
+Bridge::~Bridge()
 {
     //System::GC::Collect();
     (*m_uno_cli_env->release)( m_uno_cli_env );

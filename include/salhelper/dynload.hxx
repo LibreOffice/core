@@ -106,7 +106,7 @@ class ODynamicLoader
 {
 public:
     /// Default constructor
-    ODynamicLoader() SAL_THROW(())
+    ODynamicLoader()
     {
         m_pLoader = 0;
     }
@@ -118,7 +118,7 @@ public:
         @param strInitFunction specifies the name of the initialization function.
      */
     ODynamicLoader( const ::rtl::OUString& strModuleName,
-                       const ::rtl::OUString& strInitFunction ) SAL_THROW(())
+                       const ::rtl::OUString& strInitFunction )
     {
         if (!m_pStaticLoader)
         {
@@ -136,7 +136,7 @@ public:
     }
 
     /// Copy constructor
-    ODynamicLoader(const ODynamicLoader<API>& toCopy) SAL_THROW(())
+    ODynamicLoader(const ODynamicLoader<API>& toCopy)
     {
         m_pLoader = toCopy.m_pLoader;
         if( m_pLoader )
@@ -144,14 +144,14 @@ public:
     }
 
     /// Destructor, decrease the reference count and unload the library if it is tha last instance.
-    ~ODynamicLoader() SAL_THROW(())
+    ~ODynamicLoader()
     {
         if( m_pLoader )
             m_pLoader->release();
     }
 
     /// Assign operator
-    ODynamicLoader<API>& SAL_CALL operator = (const ODynamicLoader<API>& toAssign) SAL_THROW(())
+    ODynamicLoader<API>& SAL_CALL operator = (const ODynamicLoader<API>& toAssign)
     {
         if( m_pLoader != toAssign.m_pLoader )
         {
@@ -170,19 +170,19 @@ public:
     }
 
     /// returns a poiner to the initialized API function structure.
-    API* SAL_CALL getApi() const SAL_THROW(())
+    API* SAL_CALL getApi() const
     {
         return (API*)m_pLoader->getApi();
     }
 
     /// cast operator, which cast to a poiner with the initialized API function structure.
-    API* SAL_CALL operator->() const SAL_THROW(())
+    API* SAL_CALL operator->() const
     {
         return (API*)m_pLoader->getApi();
     }
 
     /// checks if the loader works on a loaded and initialized library.
-    bool SAL_CALL isLoaded() const SAL_THROW(())
+    bool SAL_CALL isLoaded() const
     {
         return (m_pLoader != NULL);
     }

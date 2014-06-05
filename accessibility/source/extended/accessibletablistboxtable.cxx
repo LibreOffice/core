@@ -264,7 +264,6 @@ namespace accessibility
     // helpers --------------------------------------------------------------------
 
     void AccessibleTabListBoxTable::ensureValidIndex( sal_Int32 _nIndex ) const
-            SAL_THROW( ( IndexOutOfBoundsException ) )
     {
         if ( ( _nIndex < 0 ) || ( _nIndex >= implGetCellCount() ) )
             throw IndexOutOfBoundsException();

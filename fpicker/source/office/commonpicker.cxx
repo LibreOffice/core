@@ -91,7 +91,7 @@ namespace svt
 
     // XComponent related methods
 
-    void OCommonPicker::checkAlive() const SAL_THROW( (DisposedException) )
+    void OCommonPicker::checkAlive() const
     {
         if ( GetBroadcastHelper().bInDispose || GetBroadcastHelper().bDisposed )
             throw DisposedException();
@@ -476,7 +476,7 @@ namespace svt
     }
 
 
-    bool OCommonPicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue ) SAL_THROW( ( Exception, RuntimeException ) )
+    bool OCommonPicker::implHandleInitializationArgument( const OUString& _rName, const Any& _rValue )
     {
         bool bKnown = true;
         if ( _rName == "ParentWindow" )

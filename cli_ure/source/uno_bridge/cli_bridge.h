@@ -64,11 +64,11 @@ struct Bridge
     Mapping                     m_uno2cli;
     bool                        m_registered_cli2uno;
 
-    ~Bridge() SAL_THROW(());
+    ~Bridge();
     Bridge( uno_Environment * java_env, uno_ExtEnvironment * uno_env, bool registered_java2uno );
 
-    void acquire() const SAL_THROW(());
-    void release() const SAL_THROW(());
+    void acquire() const;
+    void release() const;
 
     void  map_to_uno(
         void * uno_data, System::Object^ cli_data,

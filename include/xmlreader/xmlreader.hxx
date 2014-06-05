@@ -41,10 +41,7 @@ class OOO_DLLPUBLIC_XMLREADER XmlReader: private boost::noncopyable {
 public:
     XmlReader(char const *sStr, size_t nLength);
 
-    explicit XmlReader(OUString const & fileUrl)
-        SAL_THROW((
-            com::sun::star::container::NoSuchElementException,
-            com::sun::star::uno::RuntimeException));
+    explicit XmlReader(OUString const & fileUrl);
 
     ~XmlReader();
 

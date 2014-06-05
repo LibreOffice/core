@@ -58,7 +58,7 @@ namespace salhelper {
 class SALHELPER_DLLPUBLIC SimpleReferenceObject
 {
 public:
-    inline SimpleReferenceObject() SAL_THROW(()): m_nCount(0) {}
+    inline SimpleReferenceObject(): m_nCount(0) {}
 
     /** @attention
         The results are undefined if, for any individual instance of
@@ -66,33 +66,31 @@ public:
         the total number of calls to release() by a platform dependent amount
         (which, hopefully, is quite large).
      */
-    inline void acquire() SAL_THROW(())
+    inline void acquire()
     { osl_atomic_increment(&m_nCount); }
 
-    inline void release() SAL_THROW(())
+    inline void release()
     { if (osl_atomic_decrement(&m_nCount) == 0) delete this; }
 
     /** see general class documentation
      */
-    static void * operator new(std::size_t nSize) SAL_THROW((std::bad_alloc));
+    static void * operator new(std::size_t nSize);
 
     /** see general class documentation
      */
     static void * operator new(std::size_t nSize,
-                               std::nothrow_t const & rNothrow)
-        SAL_THROW(());
+                               std::nothrow_t const & rNothrow);
 
     /** see general class documentation
      */
-    static void operator delete(void * pPtr) SAL_THROW(());
+    static void operator delete(void * pPtr);
 
     /** see general class documentation
      */
-    static void operator delete(void * pPtr, std::nothrow_t const & rNothrow)
-        SAL_THROW(());
+    static void operator delete(void * pPtr, std::nothrow_t const & rNothrow);
 
 protected:
-    virtual ~SimpleReferenceObject() SAL_THROW(());
+    virtual ~SimpleReferenceObject();
 
 private:
     oslInterlockedCount m_nCount;

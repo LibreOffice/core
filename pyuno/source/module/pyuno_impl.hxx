@@ -160,7 +160,7 @@ void logException( RuntimeCargo *cargo, const char *intro,
                    const void * data, const com::sun::star::uno::Type & type );
 static const sal_Int32 VAL2STR_MODE_DEEP = 0;
 static const sal_Int32 VAL2STR_MODE_SHALLOW = 1;
-OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP ) SAL_THROW(());
+OUString val2str( const void * pVal, typelib_TypeDescriptionReference * pTypeRef, sal_Int32 mode = VAL2STR_MODE_DEEP );
 
 
 typedef ::boost::unordered_map

@@ -248,7 +248,7 @@ Reference< XInterface > SAL_CALL TextOutputStream_CreateInstance(
     return Reference < XInterface >( ( OWeakObject * ) new OTextOutputStream() );
 }
 
-OUString TextOutputStream_getImplementationName() SAL_THROW(  () )
+OUString TextOutputStream_getImplementationName()
 {
     return OUString( IMPLEMENTATION_NAME );
 }

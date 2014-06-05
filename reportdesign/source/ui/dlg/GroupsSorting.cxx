@@ -1428,7 +1428,7 @@ void OGroupsSortingDialog::resizeControls(const Size& _rDiff)
 
 
 // load the images
-ImageList OGroupsSortingDialog::getImageList(vcl::ImageListType) SAL_THROW (( com::sun::star::lang::IllegalArgumentException ))
+ImageList OGroupsSortingDialog::getImageList(vcl::ImageListType)
 {
     return ImageList(ModuleRes(IMGLST_GROUPSORT_DLG_SC));
 }
