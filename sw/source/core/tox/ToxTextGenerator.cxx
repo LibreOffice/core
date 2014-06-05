@@ -29,16 +29,23 @@
 #include "pagedesc.hxx"
 #include "tox.hxx"
 #include "txmsrt.hxx"
+#include "fmtautofmt.hxx"
 #include "fmtfsize.hxx"
 #include "fmtpdsc.hxx"
 #include "DocumentSettingManager.hxx"
 #include "SwStyleNameMapper.hxx"
+#include "swatrset.hxx"
 #include "ToxWhitespaceStripper.hxx"
 #include "ToxLinkProcessor.hxx"
+#include "txatbase.hxx"
 
 #include "editeng/tstpitem.hxx"
 #include "editeng/lrspitem.hxx"
 #include "rtl/ustring.hxx"
+#include "svl/itemiter.hxx"
+
+#include <boost/foreach.hpp>
+#include <boost/make_shared.hpp>
 
 /// Generate String according to the Form and remove the
 /// special characters 0-31 and 255.
@@ -107,12 +114,10 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
                 rTxt += lcl_GetNumString( rBase, aToken.nChapterFormat == CF_NUMBER, static_cast<sal_uInt8>(aToken.nOutlineLevel - 1) ) ;
                 break;
 
-            case TOKEN_ENTRY_TEXT:
-                {
-                    SwIndex aIdx( pTOXNd, std::min(pTOXNd->GetTxt().getLength(),rTxt.getLength()) );
-                    ToxWhitespaceStripper stripper(rBase.GetTxt().sText);
-                    pTOXNd->InsertText(stripper.GetStrippedString(), aIdx);
-                }
+            case TOKEN_ENTRY_TEXT: {
+                HandledTextToken htt = HandleTextToken(rBase, pDoc->GetAttrPool());
+                ApplyHandledTextToken(htt, *pTOXNd);
+            }
                 break;
 
             case TOKEN_ENTRY:
@@ -306,6 +311,73 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
         pTOXNd->SetAttr( aTStops );
     }
     mLinkProcessor->InsertLinkAttributes(*pTOXNd);
+}
+
+/*static*/ boost::shared_ptr<SfxItemSet>
+ToxTextGenerator::CollectAttributesForTox(const SwTxtAttr& hint, SwAttrPool& pool)
+{
+    boost::shared_ptr<SfxItemSet> retval = boost::make_shared<SfxItemSet>(pool);
+    if (hint.Which() != RES_TXTATR_AUTOFMT) {
+        return retval;
+    }
+    const SwFmtAutoFmt& afmt = hint.GetAutoFmt();
+    SfxItemIter aIter( *afmt.GetStyleHandle());
+    const SfxPoolItem* pItem = aIter.GetCurItem();
+    while (true) {
+        if (pItem->Which() == RES_CHRATR_ESCAPEMENT ||
+            pItem->Which() == RES_CHRATR_POSTURE ||
+            pItem->Which() == RES_CHRATR_CJK_POSTURE ||
+            pItem->Which() == RES_CHRATR_CTL_POSTURE) {
+            SfxPoolItem* clonedItem = pItem->Clone(NULL);
+            retval->Put(*clonedItem);
+        }
+        if (aIter.IsAtEnd()) {
+            break;
+        }
+        pItem = aIter.NextItem();
+    }
+    return retval;
+}
+
+ToxTextGenerator::HandledTextToken
+ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& pool)
+{
+    HandledTextToken result;
+    ToxWhitespaceStripper stripper(source.GetTxt().sText);
+    result.text = stripper.GetStrippedString();
+
+    const SwTxtNode* pSrc = source.aTOXSources.at(0).pNd->GetTxtNode();
+    if (!pSrc->HasHints()) {
+        return result;
+    }
+    const SwpHints& hints = pSrc->GetSwpHints();
+    for (sal_uInt16 i = 0; i < hints.Count(); ++i) {
+        const SwTxtAttr* hint = hints[i];
+        boost::shared_ptr<SfxItemSet> attributesToClone = CollectAttributesForTox(*hint, pool);
+        if (attributesToClone->Count() <= 0) {
+            continue;
+        }
+        SwFmtAutoFmt* clone = static_cast<SwFmtAutoFmt*>(hint->GetAutoFmt().Clone());
+        clone->SetStyleHandle(attributesToClone);
+
+        result.autoFormats.push_back(clone);
+        result.startPositions.push_back(stripper.GetPositionInStrippedString(*hint->GetStart()));
+        result.endPositions.push_back(stripper.GetPositionInStrippedString(*hint->GetAnyEnd()));
+    }
+    return result;
+}
+
+/*static*/ void
+ToxTextGenerator::ApplyHandledTextToken(const HandledTextToken& htt, SwTxtNode& targetNode)
+{
+    sal_Int32 offset = targetNode.GetTxt().getLength();
+    SwIndex aIdx(&targetNode, offset);
+    targetNode.InsertText(htt.text, aIdx);
+    for (size_t i=0; i < htt.autoFormats.size(); ++i) {
+        targetNode.InsertItem(*htt.autoFormats.at(i),
+                htt.startPositions.at(i) + offset,
+                htt.endPositions.at(i) + offset);
+    }
 }
 
 } // end namespace sw
