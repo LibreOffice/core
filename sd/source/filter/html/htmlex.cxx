@@ -372,6 +372,8 @@ HtmlExport::HtmlExport(
         mbSlideSound(true),
         mbHiddenSlides(true),
         mbUserAttr(false),
+        maTextColor(COL_BLACK),
+        maBackColor(COL_WHITE),
         mbDocColors(false),
         maHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION)),
         maIndexUrl("index"),
