@@ -2295,7 +2295,7 @@ void MathType::HandleSubSupScript(SmNode *pNode,int nLevel)
         if (pNode->GetSubNode(RSUB+1))
             nVariation=2;
     }
-    else if (NULL != (pTemp = pNode->GetSubNode(RSUB+1)))
+    else if (NULL != pNode->GetSubNode(RSUB+1))
         nVariation=1;
 
     if (nVariation!=0xff)
