@@ -71,12 +71,12 @@ namespace o3tl
     needs to define a non-inline destructor. Else the compiler will
     complain.
 */
-template <class T>
+template <class T, class Deleter = boost::checked_deleter<T> >
 class heap_ptr
 {
   public:
     typedef T               element_type;       /// Provided for generic programming.
-    typedef heap_ptr<T>     self;
+    typedef heap_ptr<T, Deleter> self;
 
     typedef T * (self::*    safe_bool )();
 
@@ -139,10 +139,10 @@ class heap_ptr
 /** Supports the semantic of std::swap(). Provided as an aid to
     generic programming.
 */
-template<class T>
+template<class T, class Deleter>
 inline void
-swap( heap_ptr<T> &       io_a,
-      heap_ptr<T> &       io_b )
+swap( heap_ptr<T, Deleter> &       io_a,
+      heap_ptr<T, Deleter> &       io_b )
 {
     io_a.swap(io_b);
 }
@@ -151,9 +151,9 @@ swap( heap_ptr<T> &       io_a,
 
 // IMPLEMENTATION
 
-template <class T>
+template <class T, class Deleter>
 inline void
-heap_ptr<T>::internal_delete()
+heap_ptr<T, Deleter>::internal_delete()
 {
     ::boost::checked_delete(pHeapObject);
 
@@ -162,72 +162,72 @@ heap_ptr<T>::internal_delete()
     //   where internal_delete() is used.
 }
 
-template <class T>
+template <class T, class Deleter>
 inline
-heap_ptr<T>::heap_ptr( T * pass_heapObject )
+heap_ptr<T, Deleter>::heap_ptr( T * pass_heapObject )
     : pHeapObject(pass_heapObject)
 {
 }
 
-template <class T>
+template <class T, class Deleter>
 inline
-heap_ptr<T>::~heap_ptr()
+heap_ptr<T, Deleter>::~heap_ptr()
 {
     internal_delete();
 }
 
-template <class T>
-inline heap_ptr<T> &
-heap_ptr<T>::operator=(T * pass_heapObject)
+template <class T, class Deleter>
+inline heap_ptr<T, Deleter> &
+heap_ptr<T, Deleter>::operator=(T * pass_heapObject)
 {
     reset(pass_heapObject);
     return *this;
 }
 
-template <class T>
+template <class T, class Deleter>
 inline const T &
-heap_ptr<T>::operator*() const
+heap_ptr<T, Deleter>::operator*() const
 {
     BOOST_ASSERT( pHeapObject != 0
                   && "Accessing a heap_ptr<>(0)." );
     return *pHeapObject;
 }
 
-template <class T>
+template <class T, class Deleter>
 inline T &
-heap_ptr<T>::operator*()
+heap_ptr<T, Deleter>::operator*()
 {
     BOOST_ASSERT( pHeapObject != 0
                   && "Accessing a heap_ptr<>(0)." );
     return *pHeapObject;
 }
 
-template <class T>
+template <class T, class Deleter>
 inline const T *
-heap_ptr<T>::operator->() const
+heap_ptr<T, Deleter>::operator->() const
 {
     return pHeapObject;
 }
 
-template <class T>
+template <class T, class Deleter>
 inline T *
-heap_ptr<T>::operator->()
+heap_ptr<T, Deleter>::operator->()
 {
     return pHeapObject;
 }
 
-template <class T>
+template <class T, class Deleter>
 inline
-heap_ptr<T>::operator typename heap_ptr<T>::safe_bool() const
+heap_ptr<T, Deleter>::operator typename heap_ptr<T, Deleter>::safe_bool() const
 {
     return is()
             ? safe_bool(&self::get)
             : safe_bool(0);
 }
 
-template <class T>
+template <class T, class Deleter>
 void
-heap_ptr<T>::reset(T * pass_heapObject)
+heap_ptr<T, Deleter>::reset(T * pass_heapObject)
 {
     if (    pHeapObject != 0
         &&  pHeapObject == pass_heapObject)
@@ -237,41 +237,41 @@ heap_ptr<T>::reset(T * pass_heapObject)
     pHeapObject = pass_heapObject;
 }
 
-template <class T>
+template <class T, class Deleter>
 T *
-heap_ptr<T>::release()
+heap_ptr<T, Deleter>::release()
 {
     T * ret = pHeapObject;
     pHeapObject = 0;
     return ret;
 }
 
-template <class T>
+template <class T, class Deleter>
 void
-heap_ptr<T>::swap(self & io_other)
+heap_ptr<T, Deleter>::swap(self & io_other)
 {
     T * temp = io_other.pHeapObject;
     io_other.pHeapObject = pHeapObject;
     pHeapObject = temp;
 }
 
-template <class T>
+template <class T, class Deleter>
 inline bool
-heap_ptr<T>::is() const
+heap_ptr<T, Deleter>::is() const
 {
     return pHeapObject != 0;
 }
 
-template <class T>
+template <class T, class Deleter>
 inline const T *
-heap_ptr<T>::get() const
+heap_ptr<T, Deleter>::get() const
 {
     return pHeapObject;
 }
 
-template <class T>
+template <class T, class Deleter>
 inline T *
-heap_ptr<T>::get()
+heap_ptr<T, Deleter>::get()
 {
     return pHeapObject;
 }
