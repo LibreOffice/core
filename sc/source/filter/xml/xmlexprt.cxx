@@ -2934,7 +2934,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     GetColumnRowHeader(bHasColumnHeader, aColumnHeaderRange, bHasRowHeader, aRowHeaderRange, sPrintRanges);
     if( !sPrintRanges.isEmpty() )
         AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT_RANGES, sPrintRanges );
-    else if (!pDoc->IsPrintEntireSheet(static_cast<SCTAB>(nTable)))
+    else if (pDoc && !pDoc->IsPrintEntireSheet(static_cast<SCTAB>(nTable)))
         AddAttribute( XML_NAMESPACE_TABLE, XML_PRINT, XML_FALSE);
     SvXMLElementExport aElemT(*this, sElemTab, true, true);
 
