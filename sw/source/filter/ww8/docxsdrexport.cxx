@@ -29,6 +29,7 @@
 
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
+#include <textboxhelper.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
@@ -155,6 +156,8 @@ struct DocxSdrExport::Impl
     sal_Int32 m_nId ;
     sal_Int32 m_nSeq ;
     bool m_bDMLAndVMLDrawingOpen;
+    /// List of TextBoxes in this document: they are exported as part of their shape, never alone.
+    std::list<SwFrmFmt*> m_aTextBoxes;
 
     Impl(DocxSdrExport& rSdrExport, DocxExport& rExport, sax_fastparser::FSHelperPtr pSerializer, oox::drawingml::DrawingML* pDrawingML)
         : m_rSdrExport(rSdrExport),
@@ -176,7 +179,8 @@ struct DocxSdrExport::Impl
           m_pDashLineStyleAttr(0),
           m_nId(0),
           m_nSeq(0),
-          m_bDMLAndVMLDrawingOpen(false)
+          m_bDMLAndVMLDrawingOpen(false),
+          m_aTextBoxes(SwTextBoxHelper::findTextBoxes(m_rExport.pDoc))
     {
     }
 
@@ -1520,6 +1524,11 @@ bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttri
         }
     }
     return false;
+}
+
+bool DocxSdrExport::isTextBox(const SwFrmFmt& rFrmFmt)
+{
+    return std::find(m_pImpl->m_aTextBoxes.begin(), m_pImpl->m_aTextBoxes.end(), &rFrmFmt) != m_pImpl->m_aTextBoxes.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4415,6 +4415,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             break;
         case sw::Frame::eTxtBox:
             {
+                // If this is a TextBox of a shape, then ignore: it's handled in WriteTextBox().
+                if (m_rExport.SdrExporter().isTextBox(rFrame.GetFrmFmt()))
+                    break;
+
                 // The frame output is postponed to the end of the anchor paragraph
                 bool bDuplicate = false;
                 const OUString& rName = rFrame.GetFrmFmt().GetName();

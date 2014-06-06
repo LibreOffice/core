@@ -97,6 +97,8 @@ public:
     void writeVMLTextFrame(sw::Frame* pParentFrame);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
     bool checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList = 0);
+    /// Is this a standalone TextFrame, or used as a TextBox of a shape?
+    bool isTextBox(const SwFrmFmt& rFrmFmt);
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXSDREXPORT_HXX
