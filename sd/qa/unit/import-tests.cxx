@@ -458,12 +458,12 @@ void SdFiltersTest::testBnc870233_1()
             const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
             if( pWeight )
             {
-                CPPUNIT_ASSERT_EQUAL( FontWeight::WEIGHT_BOLD, pWeight->GetWeight());
+                CPPUNIT_ASSERT_EQUAL( WEIGHT_BOLD, pWeight->GetWeight());
             }
             const SvxPostureItem *pPosture = dynamic_cast<const SvxPostureItem *>((*it).pAttr);
             if( pPosture )
             {
-                CPPUNIT_ASSERT_EQUAL( FontItalic::ITALIC_NONE, pPosture->GetPosture());
+                CPPUNIT_ASSERT_EQUAL( ITALIC_NONE, pPosture->GetPosture());
             }
         }
     }
@@ -485,12 +485,12 @@ void SdFiltersTest::testBnc870233_1()
             const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
             if( pWeight )
             {
-                CPPUNIT_ASSERT_EQUAL( FontWeight::WEIGHT_NORMAL, pWeight->GetWeight());
+                CPPUNIT_ASSERT_EQUAL( WEIGHT_NORMAL, pWeight->GetWeight());
             }
             const SvxPostureItem *pPosture = dynamic_cast<const SvxPostureItem *>((*it).pAttr);
             if( pPosture )
             {
-                CPPUNIT_ASSERT_EQUAL( FontItalic::ITALIC_NORMAL, pPosture->GetPosture());
+                CPPUNIT_ASSERT_EQUAL( ITALIC_NORMAL, pPosture->GetPosture());
             }
         }
     }
