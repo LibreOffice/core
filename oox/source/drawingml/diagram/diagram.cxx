@@ -320,7 +320,6 @@ void Diagram::build(  )
 #endif
 }
 
-
 void Diagram::addTo( const ShapePtr & pParentShape )
 {
     // collect data, init maps
@@ -432,7 +431,7 @@ void loadDiagram( ShapePtr& pShape,
     }
 
     // extLst is present, lets bet on that and ignore the rest of the data from here
-    if( !pData->getExtDrawings().size() )
+    if( pData->getExtDrawings().empty() )
     {
         // layout
         if( !rLayoutPath.isEmpty() )
@@ -459,25 +458,33 @@ void loadDiagram( ShapePtr& pShape,
                     pDiagram,
                     xRefQStyle);
         }
-
-        // colors
-        if( !rColorStylePath.isEmpty() )
-        {
-            rtl::Reference< core::FragmentHandler > xRefColorStyle(
-                    new ColorFragmentHandler( rFilter, rColorStylePath, pDiagram->getColors() ));
-
-            importFragment(rFilter,
-                    loadFragment(rFilter,xRefColorStyle),
-                    "OOXColor",
-                    pDiagram,
-                    xRefColorStyle);
-        }
     } else {
         // We still want to add the XDocuments to the DiagramDomMap
         DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
         rMainDomMap[OUString("OOXLayout")] = loadFragment(rFilter,rLayoutPath);
         rMainDomMap[OUString("OOXStyle")] = loadFragment(rFilter,rQStylePath);
-        rMainDomMap[OUString("OOXColor")] = loadFragment(rFilter,rColorStylePath);
+    }
+
+    // colors
+    if( !rColorStylePath.isEmpty() )
+    {
+        rtl::Reference< core::FragmentHandler > xRefColorStyle(
+            new ColorFragmentHandler( rFilter, rColorStylePath, pDiagram->getColors() ));
+
+        importFragment(rFilter,
+            loadFragment(rFilter,xRefColorStyle),
+            "OOXColor",
+            pDiagram,
+            xRefColorStyle);
+    }
+
+    if( !pData->getExtDrawings().empty() )
+    {
+        const DiagramColorMap::const_iterator aColor = pDiagram->getColors().find("node0");
+        if( aColor != pDiagram->getColors().end() )
+        {
+            pShape->setFontRefColorForNodes(aColor->second.maTextFillColor);
+        }
     }
 
     // diagram loaded. now lump together & attach to shape
