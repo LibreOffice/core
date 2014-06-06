@@ -76,6 +76,7 @@ public:
     void testMediaEmbedding();
     void testBnc870237();
     void testBnc870233_1();
+    void testBnc870233_2();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -102,6 +103,7 @@ public:
     CPPUNIT_TEST(testMediaEmbedding);
     CPPUNIT_TEST(testBnc870237);
     CPPUNIT_TEST(testBnc870233_1);
+    CPPUNIT_TEST(testBnc870233_2);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -825,6 +827,72 @@ void SdFiltersTest::testBnc870233_1()
             if( pPosture )
             {
                 CPPUNIT_ASSERT_EQUAL( FontItalic::ITALIC_NORMAL, pPosture->GetPosture());
+            }
+        }
+    }
+
+    xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testBnc870233_2()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870233_2.pptx"));
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    // The problem was in some SmartArts font color was wrong
+
+    // First smart art has blue font color (direct formatting)
+    {
+        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 0 ) );
+        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+        const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
+        std::vector<EECharAttrib> rLst;
+        aEdit.GetCharAttribs(0, rLst);
+        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
+        {
+            const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
+            if( pCharColor )
+            {
+                CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x0000ff), pCharColor->GetValue().GetColor());
+            }
+        }
+    }
+
+    // Second smart art has "dk2" font color (style)
+    {
+        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 1 ) );
+        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+        const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
+        std::vector<EECharAttrib> rLst;
+        aEdit.GetCharAttribs(0, rLst);
+        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
+        {
+            const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
+            if( pCharColor )
+            {
+                CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x1F497D), pCharColor->GetValue().GetColor());
+            }
+        }
+    }
+
+    // Third smart art has white font color (style)
+    {
+        const SdrTextObj *pObj = dynamic_cast<SdrTextObj *>( pPage->GetObj( 2 ) );
+        CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+        const EditTextObject& aEdit = pObj->GetOutlinerParaObject()->GetTextObject();
+        std::vector<EECharAttrib> rLst;
+        aEdit.GetCharAttribs(0, rLst);
+        for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
+        {
+            const SvxColorItem *pCharColor = dynamic_cast<const SvxColorItem *>((*it).pAttr);
+            if( pCharColor )
+            {
+                CPPUNIT_ASSERT_EQUAL( sal_uInt32(0xffffff), pCharColor->GetValue().GetColor());
             }
         }
     }
