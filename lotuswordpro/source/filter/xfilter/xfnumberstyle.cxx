@@ -79,7 +79,7 @@ bool XFNumberStyle::Equal(IXFStyle *pStyle)
 {
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStyleNumber )
         return false;
-    XFNumberStyle *pOther = (XFNumberStyle*)pStyle;
+    XFNumberStyle *pOther = dynamic_cast<XFNumberStyle*>(pStyle);
     if( !pOther )
         return false;
 
