@@ -604,12 +604,13 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             if ( pDoc )
             {
                 uno::Any aGlobs;
-                if ( !pDoc->GetDocShell()->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
+                BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
+                if (pBasicMan && !pBasicMan->GetGlobalUNOConstant("VBAGlobals", aGlobs))
                 {
                     uno::Sequence< uno::Any > aArgs(1);
                     aArgs[ 0 ] <<= pDoc->GetDocShell()->GetModel();
                     aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
-                    pDoc->GetDocShell()->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
+                    pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
                 }
                 aGlobs >>= xRet;
             }
