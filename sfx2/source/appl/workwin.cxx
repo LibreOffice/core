@@ -1785,7 +1785,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     {
         case SFX_SETDOCKINGRECTS :
         {
-            if ( nPos == USHRT_MAX )
+            if (nPos == USHRT_MAX || !pDockWin)
                 return;
 
             Rectangle aOuterRect( GetTopRect_Impl() );
