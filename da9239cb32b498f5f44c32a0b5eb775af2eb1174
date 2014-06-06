@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_04a1b8a9",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4385,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-06T08:30:53Z",
+      "side": 1,
+      "message": "Do you mean \"is TextFrame\" here? If so, please test against com.sun.star.text.TextFrame equality, not !\u003d CustomShape, which may be problematic, e.g. it returns false for RectangleShape as well, which is probably the same \"not textframe\" from your point of view.",
+      "revId": "da9239cb32b498f5f44c32a0b5eb775af2eb1174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
