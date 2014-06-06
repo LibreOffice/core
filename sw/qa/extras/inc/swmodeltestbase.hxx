@@ -275,6 +275,7 @@ private:
 
         // create the dump
         SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+        CPPUNIT_ASSERT(pTxtDoc);
         SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
         SwRootFrm* pLayout = pDoc->GetCurrentLayout();
         pLayout->dumpAsXml(pXmlWriter);
