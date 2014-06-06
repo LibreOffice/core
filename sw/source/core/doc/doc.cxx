@@ -578,7 +578,6 @@ SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                             mpDfltGrfFmtColl );
     SwFlyFrmFmt* pSwFlyFrmFmt = _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode,
                             pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-    pSwGrfNode->onGraphicChanged();
     return pSwFlyFrmFmt;
 }
 
@@ -594,7 +593,6 @@ SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
                             rGrfObj, mpDfltGrfFmtColl );
     SwFlyFrmFmt* pSwFlyFrmFmt = _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode,
                             pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-    pSwGrfNode->onGraphicChanged();
     return pSwFlyFrmFmt;
 }
 
