@@ -2927,11 +2927,11 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, bool bOn )
     const SvxMacroTableDtor *pMacTable = rINetFmt.GetMacroTbl();
     bool bEvents = pMacTable != 0 && !pMacTable->empty();
 
-    // Gibt es ueberhaupt etwas auszugeben?
+    // Anything to output at all?
     if( aURL.isEmpty() && !bEvents && rINetFmt.GetName().isEmpty() )
         return rWrt;
 
-    // Tag aus? Dann nur ein </A> ausgeben.
+    // bOn controls if we are writing the opening or closing tag
     if( !bOn )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, false );
