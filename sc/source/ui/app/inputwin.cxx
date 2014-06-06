@@ -1096,15 +1096,14 @@ IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
 void ScInputBarGroup::TriggerToolboxLayout()
 {
     Window *w=GetParent();
-    ScInputWindow *pParent;
-    pParent=dynamic_cast<ScInputWindow*>(w);
+    ScInputWindow &rParent = dynamic_cast<ScInputWindow&>(*w);
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
     // Capture the vertical position of this window in the toolbar, when we increase
     // the size of the toolbar to accomadate expanded line input we need to take this
     // into account
     if ( !nVertOffset )
-        nVertOffset = pParent->GetItemPosRect( pParent->GetItemCount() - 1 ).Top();
+        nVertOffset = rParent.GetItemPosRect( rParent.GetItemCount() - 1 ).Top();
 
     if ( pViewFrm )
     {
@@ -1120,9 +1119,9 @@ void ScInputBarGroup::TriggerToolboxLayout()
         if ( xLayoutManager.is() )
         {
             if ( aMultiTextWnd.GetNumLines() > 1)
-                pParent->SetToolbarLayoutMode( TBX_LAYOUT_LOCKVERT );
+                rParent.SetToolbarLayoutMode( TBX_LAYOUT_LOCKVERT );
             else
-                pParent->SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
+                rParent.SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
             xLayoutManager->lock();
             DataChangedEvent aFakeUpdate( DATACHANGED_SETTINGS, NULL,  SETTINGS_STYLE );
             // this basically will trigger the reposititioning of the
@@ -1131,11 +1130,11 @@ void ScInputBarGroup::TriggerToolboxLayout()
             // controlled by mbCalc. Additionally the ImplFormat above is
             // controlled via mbFormat. It seems the easiest way to get these
             // booleans set is to send in the fake event below.
-            pParent->DataChanged( aFakeUpdate);
+            rParent.DataChanged( aFakeUpdate);
             // highest item in toolbar will have been calculated via the
             // event above. Call resize on InputBar to pick up the height
             // change
-            pParent->Resize();
+            rParent.Resize();
             // unlock relayouts the toolbars in the 4 quadrants
             xLayoutManager->unlock();
         }
