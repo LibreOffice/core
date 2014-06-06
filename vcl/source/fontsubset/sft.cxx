@@ -1226,16 +1226,19 @@ static void FindCmap(TrueTypeFont *ttf)
     sal_uInt32 ThreeSix   = 0;              /* MS Johab             */
 
     for (i = 0; i < ncmaps; i++) {
-        sal_uInt32 offset;
-        sal_uInt16 pID, eID;
-
         /* sanity check, cmap entry must lie within table */
-        if( i*8+4 > table_size )
+        sal_uInt32 nLargestFixedOffsetPos = 8 + i * 8;
+        sal_uInt32 nMinSize = nLargestFixedOffsetPos + sizeof(sal_uInt32);
+        if (nMinSize > table_size)
+        {
+            SAL_WARN( "vcl.fonts", "Font " << OUString::createFromAscii(ttf->fname) << " claimed to have "
+                << ncmaps << " cmaps, but only space for " << i);
             break;
+        }
 
-        pID = GetUInt16(table, 4 + i * 8, 1);
-        eID = GetUInt16(table, 6 + i * 8, 1);
-        offset = GetUInt32(table, 8 + i * 8, 1);
+        sal_uInt16 pID = GetUInt16(table, 4 + i * 8, 1);
+        sal_uInt16 eID = GetUInt16(table, 6 + i * 8, 1);
+        sal_uInt32 offset = GetUInt32(table, nLargestFixedOffsetPos, 1);
 
          /* sanity check, cmap must lie within file */
         if( (table - ttf->ptr) + offset > (sal_uInt32)ttf->fsize )
