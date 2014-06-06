@@ -513,8 +513,8 @@ DECLARE_OOXMLEXPORT_TEST(test1Table1Page, "1-table-1-page.docx")
 DECLARE_OOXMLEXPORT_TEST(testTextFrames, "textframes.odt")
 {
     // The frames were simply missing, so let's check if all 3 frames were imported back.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
 }
 
