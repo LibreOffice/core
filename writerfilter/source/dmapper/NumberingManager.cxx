@@ -643,13 +643,6 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1] = MAKE_PROPVAL( PROP_POSITION_AND_SPACE_MODE,
                             sal_Int16( text::PositionAndSpaceMode::LABEL_ALIGNMENT ) );
 
-                StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
-                if( pParaStyle.get())
-                {
-                    aLvlProps.realloc( aLvlProps.getLength() + 1 );
-                    aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1] = MAKE_PROPVAL( PROP_PARAGRAPH_STYLE_NAME,
-                        pParaStyle->sConvertedStyleName );
-                }
 
                 // Replace the numbering rules for the level
                 m_xNumRules->replaceByIndex( nLevel, uno::makeAny( aLvlProps ) );
@@ -662,6 +655,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                     uno::Reference< container::XIndexReplace > xOutlineRules =
                         xOutlines->getChapterNumberingRules( );
 
+                    StyleSheetEntryPtr pParaStyle = pAbsLevel->GetParaStyle( );
                     aLvlProps.realloc( aLvlProps.getLength() + 1 );
                     aLvlProps[sal::static_int_cast<sal_uInt32>(aLvlProps.getLength()) - 1] = MAKE_PROPVAL( PROP_HEADING_STYLE_NAME,
                         pParaStyle->sConvertedStyleName );
