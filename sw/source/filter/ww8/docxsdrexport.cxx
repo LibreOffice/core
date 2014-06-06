@@ -1172,7 +1172,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
     }
 }
 
-void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
+void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly)
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
@@ -1188,21 +1188,24 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     // to lots of contents, this size contains the real size.
     const Size aSize = pParentFrame->GetSize();
 
-    startDMLAnchorInline(&rFrmFmt, aSize);
+    if (!bTextBoxOnly)
+    {
+        startDMLAnchorInline(&rFrmFmt, aSize);
 
-    sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
-    pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-    pDocPrAttrList->add(XML_name, OUStringToOString(rFrmFmt.GetName(), RTL_TEXTENCODING_UTF8).getStr());
-    sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
-    pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
+        sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
+        pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
+        pDocPrAttrList->add(XML_name, OUStringToOString(rFrmFmt.GetName(), RTL_TEXTENCODING_UTF8).getStr());
+        sax_fastparser::XFastAttributeListRef xDocPrAttrListRef(pDocPrAttrList);
+        pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
-    pFS->startElementNS(XML_a, XML_graphic,
-                        FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
-                        FSEND);
-    pFS->startElementNS(XML_a, XML_graphicData,
-                        XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
-                        FSEND);
-    pFS->startElementNS(XML_wps, XML_wsp, FSEND);
+        pFS->startElementNS(XML_a, XML_graphic,
+                            FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                            FSEND);
+        pFS->startElementNS(XML_a, XML_graphicData,
+                            XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
+                            FSEND);
+        pFS->startElementNS(XML_wps, XML_wsp, FSEND);
+    }
     pFS->singleElementNS(XML_wps, XML_cNvSpPr,
                          XML_txBox, "1",
                          FSEND);
@@ -1362,33 +1365,36 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     pFS->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
     pFS->endElementNS(XML_wps, XML_bodyPr);
 
-    pFS->endElementNS(XML_wps, XML_wsp);
-    pFS->endElementNS(XML_a, XML_graphicData);
-    pFS->endElementNS(XML_a, XML_graphic);
-
-    // Relative size of the Text Frame.
-    if (rSize.GetWidthPercent())
+    if (!bTextBoxOnly)
     {
-        pFS->startElementNS(XML_wp14, XML_sizeRelH,
-                            XML_relativeFrom, (rSize.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
-                            FSEND);
-        pFS->startElementNS(XML_wp14, XML_pctWidth, FSEND);
-        pFS->writeEscaped(OUString::number(rSize.GetWidthPercent() * oox::drawingml::PER_PERCENT));
-        pFS->endElementNS(XML_wp14, XML_pctWidth);
-        pFS->endElementNS(XML_wp14, XML_sizeRelH);
-    }
-    if (rSize.GetHeightPercent())
-    {
-        pFS->startElementNS(XML_wp14, XML_sizeRelV,
-                            XML_relativeFrom, (rSize.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
-                            FSEND);
-        pFS->startElementNS(XML_wp14, XML_pctHeight, FSEND);
-        pFS->writeEscaped(OUString::number(rSize.GetHeightPercent() * oox::drawingml::PER_PERCENT));
-        pFS->endElementNS(XML_wp14, XML_pctHeight);
-        pFS->endElementNS(XML_wp14, XML_sizeRelV);
-    }
+        pFS->endElementNS(XML_wps, XML_wsp);
+        pFS->endElementNS(XML_a, XML_graphicData);
+        pFS->endElementNS(XML_a, XML_graphic);
 
-    endDMLAnchorInline(&rFrmFmt);
+        // Relative size of the Text Frame.
+        if (rSize.GetWidthPercent())
+        {
+            pFS->startElementNS(XML_wp14, XML_sizeRelH,
+                                XML_relativeFrom, (rSize.GetWidthPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
+                                FSEND);
+            pFS->startElementNS(XML_wp14, XML_pctWidth, FSEND);
+            pFS->writeEscaped(OUString::number(rSize.GetWidthPercent() * oox::drawingml::PER_PERCENT));
+            pFS->endElementNS(XML_wp14, XML_pctWidth);
+            pFS->endElementNS(XML_wp14, XML_sizeRelH);
+        }
+        if (rSize.GetHeightPercent())
+        {
+            pFS->startElementNS(XML_wp14, XML_sizeRelV,
+                                XML_relativeFrom, (rSize.GetHeightPercentRelation() == text::RelOrientation::PAGE_FRAME ? "page" : "margin"),
+                                FSEND);
+            pFS->startElementNS(XML_wp14, XML_pctHeight, FSEND);
+            pFS->writeEscaped(OUString::number(rSize.GetHeightPercent() * oox::drawingml::PER_PERCENT));
+            pFS->endElementNS(XML_wp14, XML_pctHeight);
+            pFS->endElementNS(XML_wp14, XML_sizeRelV);
+        }
+
+        endDMLAnchorInline(&rFrmFmt);
+    }
 }
 
 void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)

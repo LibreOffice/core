@@ -71,6 +71,8 @@ class OOX_DLLPUBLIC DMLTextExport
 {
 public:
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) = 0;
+    /// Write the contents of the textbox that is associated to this shape.
+    virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) = 0;
 protected:
     DMLTextExport() {}
     virtual ~DMLTextExport() {}
@@ -120,6 +122,8 @@ public:
     ::sax_fastparser::FSHelperPtr GetFS() { return mpFS; }
     ::oox::core::XmlFilterBase* GetFB() { return mpFB; }
     DocumentType GetDocumentType() { return meDocumentType; }
+    /// The application-specific text exporter callback, if there is one.
+    DMLTextExport* GetTextExport() { return mpTextExport; }
 
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
     OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false);
