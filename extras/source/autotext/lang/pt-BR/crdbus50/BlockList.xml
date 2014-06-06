@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Cartões de Visita, Trabalho (31/2 x 2)">
+ <block-list:block block-list:abbreviated-name="ELE1" block-list:package-name="ELE1" block-list:name="Elegante, Somente a Empresa" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ELE2" block-list:package-name="ELE2" block-list:name="Elegante, Com Nome" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ELE3" block-list:package-name="ELE3" block-list:name="Elegante, Com Nome, Sem Slogan" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="MOD1" block-list:package-name="MOD1" block-list:name="Moderno, Somente a Empresa" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="MOD2" block-list:package-name="MOD2" block-list:name="Moderno, com Nome" block-list:unformatted-text="false"/>
+</block-list:block-list>

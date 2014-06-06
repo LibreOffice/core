@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Kartvizit (iş) (85 x 50)">
+ <block-list:block block-list:abbreviated-name="CĞD1" block-list:package-name="C+AR4-D1" block-list:name="Çağdaş, nur Şirket" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CĞD2" block-list:package-name="C+AR4-D2" block-list:name="Çağdaş, isimli" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PRO1" block-list:package-name="PRO1" block-list:name="Profesyonel, yalnızcı şirket isimli" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PRO2" block-list:package-name="PRO2" block-list:name="Profesyonel, isimli" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PRO3" block-list:package-name="PRO3" block-list:name="Profesyonel, isimli, slogansız" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ZAR1" block-list:package-name="ZAR1" block-list:name="Zarif, yalnızca şirket isimli" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ZAR2" block-list:package-name="ZAR2" block-list:name="Zarif, isimli" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ZAR3" block-list:package-name="ZAR3" block-list:name="Zarif, isimli, slogansız" block-list:unformatted-text="false"/>
+</block-list:block-list>

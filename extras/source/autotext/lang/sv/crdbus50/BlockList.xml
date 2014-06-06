@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+ <block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Visitkort, arbete (85 x 50)">
+  <block-list:block block-list:abbreviated-name="KLA1" block-list:package-name="KLA1" block-list:name="Klassiskt, bara företag" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="KLA2" block-list:package-name="KLA2" block-list:name="Klassiskt, med namn" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="KLA3" block-list:package-name="KLA3" block-list:name="Klassiskt, med namn, utan slogan" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="MOD1" block-list:package-name="MOD1" block-list:name="Modernt, bara företag" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="MOD2" block-list:package-name="MOD2" block-list:name="Modernt, med namn" block-list:unformatted-text="false"/>
+ </block-list:block-list>

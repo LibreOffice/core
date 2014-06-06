@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Tarjetas de visita, trab. (85 x 50)">
+ <block-list:block block-list:abbreviated-name="CLA1" block-list:package-name="CLA1" block-list:name="Clásico, solo empresa" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CLA2" block-list:package-name="CLA2" block-list:name="Clásico, con nombre" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CLA3" block-list:package-name="CLA3" block-list:name="Clásico, con nombre, sin eslogan" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="MOD1" block-list:package-name="MOD1" block-list:name="Moderno, solo empresa" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="MOD2" block-list:package-name="MOD2" block-list:name="Moderno, con nombre" block-list:unformatted-text="false"/>
+</block-list:block-list>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:block-list="http://openoffice.org/2001/block-list" xmlns:text="http://openoffice.org/2000/text" xmlns:office="http://openoffice.org/2000/office" block-list:list-name="Padrão">
+ <office:body>
+  <text:p>Obrigado pelo seu interesse em &lt;field:company&gt; e sua recente ficha de pedido de emprego.</text:p>
+  <text:p>Neste momento, nós não estamos em condições de lhe oferecer uma posição que corresponda às suas metas e habilidades. Contudo, talvez tenhamos uma vaga para você no futuro.</text:p>
+  <text:p>Com sua permissão, gostaríamos de manter seus dados e currículo em nossos registros, a fim de contactá-lo no futuro se uma posição mais apropriada aparecer.</text:p>
+ </office:body>
+</office:document>

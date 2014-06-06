@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:block-list="http://openoffice.org/2001/block-list" xmlns:text="http://openoffice.org/2000/text" xmlns:office="http://openoffice.org/2000/office" block-list:list-name="Standard">
+ <office:body>
+  <text:p>Thank you for your inquiry of &lt;placeholder:&quot;November 21, 2004&quot;:&quot;Click placeholder and overwrite&quot;&gt;.</text:p>
+  <text:p/>
+  <text:p>We are enclosing our catalog and current price list for your review. If there is additional information you would like to have regarding our products, please do not hesitate to contact us.</text:p>
+ </office:body>
+</office:document>
