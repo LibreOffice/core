@@ -611,7 +611,7 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
                     break;
                 case XYWIDTH:
                     /* PROBLEM: Should be no Y-WIDTH when doing "quick & dirty" */
-                    keyword = token(fp,tokenlen); keyword = token(fp,tokenlen); /* eat values */
+                    token(fp,tokenlen); keyword = token(fp,tokenlen); /* eat values */
                     error = parseError;
                     break;
                 case CODEHEX:
@@ -634,14 +634,14 @@ static int parseCharWidths( FileInputStream* fp, int* cwi)
                     error = normalEOF;
                     break;
                 case CHARNAME:  /* eat values (so doesn't cause parseError) */
-                    keyword = token(fp,tokenlen);
+                    token(fp,tokenlen);
                     break;
                 case CHARBBOX:
-                    keyword = token(fp,tokenlen); keyword = token(fp,tokenlen);
-                    keyword = token(fp,tokenlen); keyword = token(fp,tokenlen);
+                    token(fp,tokenlen); keyword = token(fp,tokenlen);
+                    token(fp,tokenlen); keyword = token(fp,tokenlen);
                     break;
                 case LIGATURE:
-                    keyword = token(fp,tokenlen); keyword = token(fp,tokenlen);
+                    token(fp,tokenlen); keyword = token(fp,tokenlen);
                     break;
                 case VVECTOR:
                     token(fp,tokenlen); /*eat token*/
