@@ -289,6 +289,8 @@ void DomainMapper_Impl::RemoveDummyParaForTableInSection()
     SetIsDummyParaAddedForTableInSection(false);
     PropertyMapPtr pContext = GetTopContextOfType(CONTEXT_SECTION);
     SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pContext.get() );
+    if (!pSectionContext)
+        return;
     uno::Reference< text::XTextCursor > xCursor = GetTopTextAppend()->createTextCursorByRange(pSectionContext->GetStartingRange());
 
     uno::Reference<container::XEnumerationAccess> xEnumerationAccess(xCursor, uno::UNO_QUERY);
