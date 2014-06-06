@@ -2190,6 +2190,23 @@ DECLARE_OOXMLIMPORT_TEST(testCaption, "caption.docx")
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xStyle, "CharPosture"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo78939, "fdo78939.docx")
+{
+    // fdo#78939 : LO hanged while opening issue document
+
+    // Whenever a para-style was applied to a Numbering format level,
+    // LO incorrectly also changed the para-style..
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    // check that file opens and does not hang while opening and also
+    // check that an incorrect numbering style is not applied ...
+    // earlier it was "WWNum5", for which para_style was "Noraml" / "Default Style"
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
