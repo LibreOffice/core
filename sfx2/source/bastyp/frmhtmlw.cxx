@@ -44,9 +44,7 @@
 
 #include <rtl/bootstrap.hxx>
 #include <rtl/strbuf.hxx>
-
-
-
+#include <sax/tools/converter.hxx>
 
 using namespace ::com::sun::star;
 
@@ -164,12 +162,10 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 
         // created
         ::util::DateTime uDT = i_xDocProps->getCreationDate();
-        Date aD(uDT.Day, uDT.Month, uDT.Year);
-        Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-        OUString sOut = OUString::number(aD.GetDate());
-        sOut += ";";
-        sOut += OUString::number(aT.GetTime());
-        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_created, sOut, false,
+        OUStringBuffer aBuffer;
+        ::sax::Converter::convertTimeOrDateTime(aBuffer, uDT, 0);
+
+        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_created, aBuffer.makeStringAndClear(), false,
                  eDestEnc, pNonConvertableChars );
 
         // changedby
@@ -180,12 +176,9 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 
         // changed
         uDT = i_xDocProps->getModificationDate();
-        Date aD2(uDT.Day, uDT.Month, uDT.Year);
-        Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
-        sOut = OUString::number(aD2.GetDate());
-        sOut += ";";
-        sOut += OUString::number(aT2.GetTime());
-        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changed, sOut, false,
+        ::sax::Converter::convertTimeOrDateTime(aBuffer, uDT, 0);
+
+        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changed, aBuffer.makeStringAndClear(), false,
                  eDestEnc, pNonConvertableChars );
 
         // Subject
