@@ -16,7 +16,7 @@
 
 #include "editeng/tstpitem.hxx"
 
-class SwFormToken;
+struct SwFormToken;
 class SwPageDesc;
 class SwRootFrm;
 class SwTxtNode;
