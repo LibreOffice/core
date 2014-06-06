@@ -4816,7 +4816,8 @@ if test -z "$TARFILE_LOCATION"; then
     TARFILE_LOCATION="$SRC_ROOT/external/tarballs"
 else
     AbsolutePath "$TARFILE_LOCATION"
-    TARFILE_LOCATION="${absolute_path}"
+    PathFormat "${absolute_path}"
+    TARFILE_LOCATION="${formatted_path}"
 fi
 AC_SUBST(TARFILE_LOCATION)
 
