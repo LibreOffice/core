@@ -1930,9 +1930,7 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     // check theme font color value has been preserved
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color", "themeColor", "accent3");
     OUString sThemeShade = getXPath(pXmlDocument, "/w:document/w:body/w:p[4]/w:r[1]/w:rPr/w:color", "themeShade");
-    CPPUNIT_ASSERT_EQUAL(sThemeShade.toInt32(16), sal_Int32(0xbf));
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[7]/w:r[1]/w:rPr/w:color", "themeColor", "accent1");
-    assertXPath(pXmlDocument, "/w:document/w:body/w:p[7]/w:r[1]/w:rPr/w:color", "themeTint", "99");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xbf), sThemeShade.toInt32(16));
 
     // check the themeFontLang values in settings file
     xmlDocPtr pXmlSettings = parseExport("word/settings.xml");
@@ -1956,8 +1954,12 @@ DECLARE_OOXMLEXPORT_TEST(testThemePreservation, "theme-preservation.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Trebuchet MS"),
                          getProperty<OUString>(getParagraph(5, "Major theme font"), "CharFontName"));
 
-    // check the paragraph background theme color has been preserved
+    // check the paragraph background pattern has been preserved including theme colors
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "val", "thinHorzStripe");
     assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeFill", "text2");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeFillTint", "33");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeColor", "accent1");
+    assertXPath(pXmlDocument, "/w:document/w:body/w:p[6]/w:pPr/w:shd", "themeShade", "80");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTableThemePreservation, "table-theme-preservation.docx")
