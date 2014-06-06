@@ -1459,7 +1459,7 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
         if ( pTblNd && pTblNd->GetTable().GetFrmFmt() )
             pModify = pTblNd->GetTable().GetFrmFmt();
 
-        SwFrm* pFrm = SwIterator<SwFrm,SwModify>::FirstElement( *pModify );
+        SwFrm* pFrm = pModify ? SwIterator<SwFrm,SwModify>::FirstElement(*pModify) : NULL;
         while ( pFrm && !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         if ( pFrm )
