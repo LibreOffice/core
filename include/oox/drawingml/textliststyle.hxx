@@ -34,6 +34,9 @@ public:
     TextListStyle();
     ~TextListStyle();
 
+    TextListStyle(const TextListStyle& rStyle);
+    TextListStyle& operator=(const TextListStyle& rStyle);
+
     void apply( const TextListStyle& rTextListStyle );
 
     const TextParagraphPropertiesVector& getListStyle() const { return maListStyle; };
