@@ -865,8 +865,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66773, "fdo66773.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo58577, "fdo58577.odt")
 {
     // The second frame was simply missing, so let's check if both frames were imported back.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
