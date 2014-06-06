@@ -210,6 +210,37 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
     rSet.Put(aSet,false);
 }
 
+::Outliner* DrawViewShell::GetOutlinerForMasterPageOutlineTextObj(ESelection &rSel)
+{
+    if( !mpDrawView )
+        return NULL;
+
+    //when there is one object selected
+    if (!mpDrawView->AreObjectsMarked() || (mpDrawView->GetMarkedObjectList().GetMarkCount() != 1))
+        return NULL;
+
+    //and we are editing the outline object
+    if (!mpDrawView->IsTextEdit())
+        return NULL;
+
+    SdrPageView* pPageView = mpDrawView->GetSdrPageView();
+    if (!pPageView)
+        return NULL;
+
+    SdPage* pPage = (SdPage*)pPageView->GetPage();
+    //only show these in a normal master page
+    if (!pPage || (pPage->GetPageKind() != PK_STANDARD) || !pPage->IsMasterPage())
+        return NULL;
+
+    OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+    ::Outliner* pOL = pOLV ? pOLV->GetOutliner() : NULL;
+    if (!pOL)
+        return NULL;
+    rSel = pOLV->GetSelection();
+
+    return pOL;
+}
+
 void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if (mpDrawView == NULL)
@@ -1562,6 +1593,41 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if ( bDisableEditHyperlink )
         rSet.DisableItem( SID_OPEN_HYPERLINK );
+
+    //fdo#78151 enable show next level/hide last level if editing a master page
+    //PRESOBJ_OUTLINE object and the current selection allow that to happen
+    {
+        bool bDisableShowNextLevel = true;
+        bool bDisableHideLastLevel = true;
+
+        ESelection aSel;
+        ::Outliner* pOL = GetOutlinerForMasterPageOutlineTextObj(aSel);
+        if (pOL)
+        {
+            //and are on the last paragraph
+            aSel.Adjust();
+            if (aSel.nEndPara == pOL->GetParagraphCount() - 1)
+            {
+                sal_uInt16 nDepth = pOL->GetDepth(aSel.nEndPara);
+                if (nDepth != sal_uInt16(-1))
+                {
+                    //there exists another numbering level that
+                    //is currently hidden
+                    if (nDepth < 8)
+                        bDisableShowNextLevel = false;
+                    //there exists a previous numbering level
+                    if (nDepth > 0)
+                        bDisableHideLastLevel = false;
+                }
+            }
+        }
+
+        if (bDisableShowNextLevel)
+            rSet.DisableItem(SID_SHOW_NEXT_LEVEL);
+
+        if (bDisableHideLastLevel)
+            rSet.DisableItem(SID_HIDE_LAST_LEVEL);
+    }
 
 #if defined WNT || defined UNX
     if( !mxScannerManager.is() )

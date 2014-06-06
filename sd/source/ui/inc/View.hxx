@@ -63,6 +63,24 @@ struct SdViewRedrawRec
     Rectangle     aRect;
 };
 
+//For master view we want to force that master
+//textboxes have readonly text, because the
+//text is the auto-generated click-here-to-edit
+//and it doesn't help to change it
+class OutlinerMasterViewFilter
+{
+private:
+    SdrOutliner *m_pOutl;
+    bool m_bReadOnly;
+public:
+    OutlinerMasterViewFilter()
+        : m_pOutl(0)
+        , m_bReadOnly(false)
+    {
+    }
+    void Start(SdrOutliner *pOutl);
+    void End();
+};
 
 class View : public FmFormView
 {
@@ -272,6 +290,7 @@ protected:
 
 private:
     ::std::auto_ptr<ViewClipboard> mpClipboard;
+    OutlinerMasterViewFilter maMasterViewFilter;
 };
 
 

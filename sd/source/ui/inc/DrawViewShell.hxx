@@ -31,6 +31,7 @@
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <unotools/caserotate.hxx>
 
+class Outliner;
 class SdPage;
 class DrawDocShell;
 class TabBar;
@@ -41,6 +42,7 @@ class TransferableClipboardListener;
 class AbstractSvxNameDialog;
 class SdrLayer;
 class SvxClipboardFmtItem;
+struct ESelection;
 
 namespace sd {
 
@@ -160,6 +162,10 @@ public:
     virtual void    UIDeactivated( SfxInPlaceClient* ) SAL_OVERRIDE;
     virtual OUString GetSelectionText( bool bCompleteWords = false );
     virtual bool    HasSelection( bool bText = true ) const;
+
+    //If we are editing an PRESOBJ_OUTLINE return the Outliner and fill rSel
+    //with the current selection
+    ::Outliner*     GetOutlinerForMasterPageOutlineTextObj(ESelection &rSel);
 
     void            ExecCtrl(SfxRequest& rReq);
     void            GetCtrlState(SfxItemSet& rSet);

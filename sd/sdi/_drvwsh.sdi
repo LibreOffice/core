@@ -2309,6 +2309,16 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_HIDE_LAST_LEVEL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SHOW_NEXT_LEVEL // ole : no, status : ?
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_TRANSLITERATE_UPPER // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

@@ -584,6 +584,16 @@
           <value xml:lang="en-US">H~yperlink...</value>
         </prop>
       </node>
+      <node oor:name=".uno:HideLastLevel" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Hide Last Level</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:ShowNextLevel" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Show Next Level</value>
+        </prop>
+      </node>
       <node oor:name=".uno:PageSetup" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Page...</value>

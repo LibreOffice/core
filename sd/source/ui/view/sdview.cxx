@@ -654,12 +654,33 @@ static void SetSpellOptions( const SdDrawDocument& rDoc, sal_uLong& rCntrl )
         rCntrl &= ~EE_CNTRL_ONLINESPELLING;
 }
 
+void OutlinerMasterViewFilter::Start(SdrOutliner *pOutl)
+{
+    m_pOutl = pOutl;
+    OutlinerView* pOutlView = m_pOutl->GetView(0);
+    m_bReadOnly = pOutlView->IsReadOnly();
+    pOutlView->SetReadOnly(true);
+}
+
+void OutlinerMasterViewFilter::End()
+{
+    if (m_pOutl)
+    {
+        OutlinerView* pOutlView = m_pOutl->GetView(0);
+        pOutlView->SetReadOnly(m_bReadOnly);
+        m_pOutl = NULL;
+    }
+}
+
 bool View::SdrBeginTextEdit(
     SdrObject* pObj, SdrPageView* pPV, ::Window* pWin,
     bool bIsNewObj,
     SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
     bool bDontDeleteOutliner, bool bOnlyOneView, bool bGrabFocus )
 {
+    SdrPage* pPage = pObj->GetPage();
+    bool bMasterPage = pPage && pPage->IsMasterPage();
+
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
         sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, (void*)pObj );
 
@@ -732,12 +753,17 @@ bool View::SdrBeginTextEdit(
         }
     }
 
-    return(bReturn);
+    if (bMasterPage && bReturn)
+        maMasterViewFilter.Start(pOutl);
+
+    return bReturn;
 }
 
 /** ends current text editing */
-SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally )
+SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
 {
+    maMasterViewFilter.End();
+
     SdrObjectWeakRef xObj( GetTextEditObject() );
 
     bool bDefaultTextRestored = RestoreDefaultText( dynamic_cast< SdrTextObj* >( GetTextEditObject() ) );

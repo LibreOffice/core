@@ -33,6 +33,19 @@ Menu RID_DRAW_TEXTOBJ_INSIDE_POPUP
 {
     ItemList =
     {
+        MenuItem
+        {
+            Identifier = SID_HIDE_LAST_LEVEL;
+            Command = CMD_SID_HIDE_LAST_LEVEL;
+            Text [ en-US ] = "~Hide Last Level";
+        };
+        MenuItem
+        {
+            Identifier = SID_SHOW_NEXT_LEVEL;
+            Command = CMD_SID_SHOW_NEXT_LEVEL;
+            Text [ en-US ] = "~Show Next Level";
+        };
+        SEPARATOR
         MN_SET_DEFAULT
         SEPARATOR
         MN_TEXTATTR

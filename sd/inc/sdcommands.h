@@ -119,6 +119,8 @@
 #define CMD_SID_INSERTPAGE_LAYOUT_MENU              ".uno:TaskPaneInsertPage"
 #define CMD_SID_PHOTOALBUM                          ".uno:PhotoAlbumDialog"
 #define CMD_SID_PRESENTATION_MINIMIZER              ".uno:PresentationMinimizer"
+#define CMD_SID_HIDE_LAST_LEVEL                     ".uno:HideLastLevel"
+#define CMD_SID_SHOW_NEXT_LEVEL                     ".uno:ShowNextLevel"
 
 #endif
 
