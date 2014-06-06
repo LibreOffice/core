@@ -202,7 +202,11 @@ class HtmlExport
     void InitProgress( sal_uInt16 nProgrCount );
     void ResetProgress();
 
+    /// Output only the charset metadata, title etc. will be handled separately.
     OUString CreateMetaCharset() const;
+
+    /// Output document metadata.
+    OUString DocumentMetadata() const;
 
     void InitExportParameters( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams);
     void ExportHtml();
