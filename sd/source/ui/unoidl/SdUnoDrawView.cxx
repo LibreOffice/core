@@ -381,7 +381,7 @@ void SdUnoDrawView::setFastPropertyValue (
                 rValue >>= bValue;
                 setLayerMode( bValue );
             }
-
+            break;
         case DrawController::PROPERTY_ACTIVE_LAYER:
             {
                 Reference<drawing::XLayer> xLayer;
