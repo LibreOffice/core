@@ -459,7 +459,7 @@ void LwpGraphicObject::CreateGrafObject()
     // set scale and crop styles
     LwpAssociatedLayouts* pLayoutWithMe = GetLayoutsWithMe();
     LwpFrameLayout* pMyFrameLayout =
-        static_cast<LwpFrameLayout*>(pLayoutWithMe->GetOnlyLayout()->obj(VO_FRAMELAYOUT));
+        static_cast<LwpFrameLayout*>(pLayoutWithMe->GetOnlyLayout()->obj(VO_FRAMELAYOUT).get());
     if (pMyFrameLayout)
     {
         LwpLayoutScale* pMyScale = pMyFrameLayout->GetLayoutScale();

@@ -180,13 +180,13 @@ void Lwp9Reader::ParseDocument()
     WriteDocHeader();
 
     //Get root document
-    LwpDocument* doc = dynamic_cast<LwpDocument*> ( m_LwpFileHdr.GetDocID()->obj() );
+    LwpDocument* doc = dynamic_cast<LwpDocument*> ( m_LwpFileHdr.GetDocID()->obj().get() );
 
     if (!doc)
         return;
 
     //Parse Doc Data
-    LwpDocData *pDocData = dynamic_cast<LwpDocData*>((doc->GetDocData())->obj());
+    LwpDocData *pDocData = dynamic_cast<LwpDocData*>((doc->GetDocData())->obj().get());
     if (pDocData!=NULL)
         pDocData->Parse(m_pStream);
 

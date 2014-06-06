@@ -94,7 +94,7 @@ void LwpFribCHBlock::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 
 LwpCHBlkMarker* LwpFribCHBlock::GetMarker()
 {
-    return dynamic_cast<LwpCHBlkMarker*>(m_objMarker.obj());
+    return dynamic_cast<LwpCHBlkMarker*>(m_objMarker.obj().get());
 }
 
 void LwpFribCHBlock::XFConvert(XFContentContainer* pXFPara,LwpStory* pStory)
@@ -147,7 +147,7 @@ void  LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
         LwpObjectID* pID = pDoc->GetDivInfoID();
         if (!pID->IsNull())
         {
-            LwpDivInfo *pDivInvo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO));
+            LwpDivInfo *pDivInvo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO).get());
             if (pDivInvo)
                 sDivision = pDivInvo->GetDivName();
         }
@@ -237,7 +237,7 @@ void LwpFribField::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 
 LwpFieldMark* LwpFribField::GetMarker()
 {
-    return dynamic_cast<LwpFieldMark*>(m_objMarker.obj());
+    return dynamic_cast<LwpFieldMark*>(m_objMarker.obj().get());
 }
 
 void LwpFribField::XFConvert(XFContentContainer* pXFPara)
@@ -1428,7 +1428,7 @@ LwpFribRubyMarker::LwpFribRubyMarker( LwpPara* pPara )
 
 LwpRubyMarker* LwpFribRubyMarker::GetMarker()
 {
-    return dynamic_cast<LwpRubyMarker*>(m_objMarker.obj(VO_RUBYMARKER));
+    return dynamic_cast<LwpRubyMarker*>(m_objMarker.obj(VO_RUBYMARKER).get());
 }
 
 void LwpFribRubyMarker::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)

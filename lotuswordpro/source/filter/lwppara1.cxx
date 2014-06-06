@@ -175,13 +175,13 @@ LwpPara* LwpPara::GetParent()
 
     if (level != 1)
     {
-        pPara = dynamic_cast<LwpPara*>(GetPrevious()->obj());
+        pPara = dynamic_cast<LwpPara*>(GetPrevious()->obj().get());
         while (pPara)
         {
             otherlevel = pPara->GetLevel();
             if ((otherlevel < level) || (otherlevel && (level == 0)))
                 return pPara;
-            pPara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj());
+            pPara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj().get());
         }
     }
     return NULL;
@@ -336,7 +336,7 @@ void LwpPara::OverrideSpacing(LwpSpacingOverride* base,LwpSpacingOverride* over,
  */
 LwpParaStyle* LwpPara::GetParaStyle()
 {
-    return dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj(VO_PARASTYLE));
+    return dynamic_cast<LwpParaStyle*>(m_ParaStyle.obj(VO_PARASTYLE).get());
 }
 
 /**
@@ -491,7 +491,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             m_pBullOver = pFinalBullet.release();
             if (!aSilverBulletID.IsNull())
             {
-                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(aSilverBulletID.obj(VO_SILVERBULLET));
+                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(aSilverBulletID.obj(VO_SILVERBULLET).get());
                 if (m_pSilverBullet)
                     m_pSilverBullet->SetFoundry(m_pFoundry);
             }
@@ -510,7 +510,7 @@ void LwpPara::OverrideParaBullet(LwpParaProperty* pProps)
             {
                 m_bHasBullet = true;
 
-                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(m_aSilverBulletID.obj(VO_SILVERBULLET));
+                m_pSilverBullet = dynamic_cast<LwpSilverBullet*>(m_aSilverBulletID.obj(VO_SILVERBULLET).get());
                 if (m_pSilverBullet)
                     m_pSilverBullet->SetFoundry(m_pFoundry);
             }
@@ -569,7 +569,7 @@ void LwpPara::FindLayouts()
 {
     m_Fribs.SetPara(this);
     m_Fribs.FindLayouts();
-    LwpPara* pNextPara = dynamic_cast<LwpPara*>(GetNext()->obj());
+    LwpPara* pNextPara = dynamic_cast<LwpPara*>(GetNext()->obj().get());
     if(pNextPara)
     {
         pNextPara->FindLayouts();

@@ -80,7 +80,7 @@ void LwpFribFrame::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 *  @descr:  Get the layout object which the frib points to
 *
 */
-LwpObject* LwpFribFrame::GetLayout()
+rtl::Reference<LwpObject> LwpFribFrame::GetLayout()
 {
     return m_objLayout.obj();
 }
@@ -92,11 +92,11 @@ LwpObject* LwpFribFrame::GetLayout()
 */
 void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
 {
-    LwpObject *pObject = m_objLayout.obj();
+    rtl::Reference<LwpObject> pObject = m_objLayout.obj();
 
-    if (pObject && pObject->GetTag() == VO_DROPCAPLAYOUT)
+    if (pObject.is() && pObject->GetTag() == VO_DROPCAPLAYOUT)
     {
-        LwpDropcapLayout *pLayout = dynamic_cast<LwpDropcapLayout*>(pObject);
+        LwpDropcapLayout *pLayout = dynamic_cast<LwpDropcapLayout*>(pObject.get());
         if (!pLayout)
             return;
         pLayout->RegisterStyle(pFoundry);
@@ -104,7 +104,7 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
     else
     {
         //register frame style
-        LwpPlacableLayout* pLayout = dynamic_cast<LwpPlacableLayout*>(pObject);
+        LwpPlacableLayout* pLayout = dynamic_cast<LwpPlacableLayout*>(pObject.get());
         if (!pLayout)
             return;
         pLayout->SetFoundry(pFoundry);
@@ -132,12 +132,12 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
 }
 void LwpFribFrame::SetParaDropcap(LwpPara* pPara)
 {
-    LwpObject *pObject = m_objLayout.obj();
+    rtl::Reference<LwpObject> pObject = m_objLayout.obj();
 
-    if (pObject && pObject->GetTag() == VO_DROPCAPLAYOUT)
+    if (pObject.is() && pObject->GetTag() == VO_DROPCAPLAYOUT)
     {
         pPara->SetParaDropcap(true);
-        pPara->SetDropcapLayout(dynamic_cast<LwpDropcapLayout*>(pObject));
+        pPara->SetDropcapLayout(dynamic_cast<LwpDropcapLayout*>(pObject.get()));
     }
     else
         pPara->SetParaDropcap(false);
@@ -150,7 +150,7 @@ void LwpFribFrame::SetParaDropcap(LwpPara* pPara)
 void LwpFribFrame::XFConvert(XFContentContainer* pCont)
 {
     XFContentContainer* pXFContentContainer = pCont;
-    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetLayout());
+    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetLayout().get());
     if (!pLayout)
         return;
     sal_uInt8 nType = pLayout->GetRelativeType();
@@ -243,7 +243,7 @@ void LwpFribRubyFrame::XFConvert(XFContentContainer* /*pCont*/)
 
 LwpRubyLayout* LwpFribRubyFrame::GetLayout()
 {
-    return dynamic_cast<LwpRubyLayout*>(m_objLayout.obj());
+    return dynamic_cast<LwpRubyLayout*>(m_objLayout.obj().get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

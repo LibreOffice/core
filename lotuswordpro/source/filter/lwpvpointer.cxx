@@ -73,8 +73,8 @@ void LwpVersionedPointer::Parse(IXFStream* /*pOutputStream*/)
 
 void LwpVersionedPointer::RegisterStyle()
 {
-    LwpObject* pObj = m_PointerID.obj();
-    if( pObj )
+    rtl::Reference<LwpObject> pObj = m_PointerID.obj();
+    if( pObj.is() )
     {
         pObj->SetFoundry(m_pFoundry);
         pObj->RegisterStyle();

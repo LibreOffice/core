@@ -107,7 +107,7 @@ void  LwpCellList::Parse(IXFStream* /*pOutputStream*/)
 void LwpCellList::Convert(XFCell * pCell, LwpTableLayout* /*pCellsMap*/)
 {
     LwpObjectID aValueID = GetValueID();
-    LwpNumericValue* pValue = (LwpNumericValue*)aValueID.obj();
+    LwpNumericValue* pValue = (LwpNumericValue*)aValueID.obj().get();
     if (pValue)
     {
         pCell->SetValue( pValue->GetValue() );

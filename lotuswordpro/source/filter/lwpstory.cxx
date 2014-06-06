@@ -105,7 +105,7 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     XFConvertFrameInFrame(pCont);
     //process para list
     XFContentContainer* pParaCont = pCont;
-    LwpPara* pPara = dynamic_cast<LwpPara*> ( GetFirstPara()->obj() );
+    LwpPara* pPara = dynamic_cast<LwpPara*> ( GetFirstPara()->obj().get() );
     while(pPara)
     {
         pPara->SetFoundry(m_pFoundry);
@@ -113,7 +113,7 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
 
         //Get the xfcontainer for the next para
         pParaCont = pPara->GetXFContainer();
-        pPara = dynamic_cast<LwpPara*> ( pPara->GetNext()->obj() );
+        pPara = dynamic_cast<LwpPara*> ( pPara->GetNext()->obj().get() );
     }
 
     //process frame which anchor is to cell after converter all the para
@@ -121,12 +121,12 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     XFConvertFrameInHeaderFooter(pCont);
 
     //Release Lwp Objects
-    LwpPara* pCur = dynamic_cast<LwpPara*> (GetFirstPara()->obj());
+    LwpPara* pCur = dynamic_cast<LwpPara*> (GetFirstPara()->obj().get());
     LwpPara* pNext;
     while(pCur)
     {
         pCur->Release();
-        pNext = dynamic_cast<LwpPara*> ( pCur->GetNext()->obj() );
+        pNext = dynamic_cast<LwpPara*> ( pCur->GetNext()->obj().get() );
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
         pObjMgr->ReleaseObject(*pCur->GetObjectID());
@@ -136,12 +136,12 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
 
 void LwpStory::RegisterStyle()
 {
-    LwpPara* pPara = dynamic_cast<LwpPara*>( GetFirstPara()->obj() );
+    LwpPara* pPara = dynamic_cast<LwpPara*>( GetFirstPara()->obj().get() );
     while(pPara)
     {
         pPara->SetFoundry(m_pFoundry);
         pPara->RegisterStyle();
-        pPara = dynamic_cast<LwpPara*>(pPara->GetNext()->obj());
+        pPara = dynamic_cast<LwpPara*>(pPara->GetNext()->obj().get());
     }
 }
 
@@ -340,7 +340,7 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
     LwpVirtualLayout* pLayout = GetLayout(NULL);
     while(pLayout)
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj().get());
         while(pFrameLayout)
         {
 
@@ -352,7 +352,7 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
                 if(pXFFirtPara)
                     pFrameLayout->XFConvert(pXFFirtPara);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj());
+            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj().get());
         }
         pLayout = GetLayout(pLayout);
     }
@@ -369,7 +369,7 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
     LwpVirtualLayout* pLayout = GetLayout(NULL);
     while(pLayout)
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj().get());
         while(pFrameLayout)
         {
             if((pFrameLayout->IsAnchorPage()
@@ -379,7 +379,7 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
             {
                 pFrameLayout->XFConvert(pCont);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj());
+            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj().get());
         }
         pLayout = GetLayout(pLayout);
     }
@@ -395,14 +395,14 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
     LwpVirtualLayout* pLayout = GetLayout(NULL);
     while(pLayout)
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj().get());
         while(pFrameLayout)
         {
             if(pFrameLayout->IsAnchorFrame())
             {
                 pFrameLayout->XFConvert(pCont);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj());
+            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj().get());
         }
         pLayout = GetLayout(pLayout);
     }
@@ -418,7 +418,7 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
     LwpVirtualLayout* pLayout = GetLayout(NULL);
     while(pLayout)
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj().get());
         while(pFrameLayout)
         {
             if(pFrameLayout->IsAnchorPage() && (pLayout->IsHeader() || pLayout->IsFooter()))
@@ -428,7 +428,7 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
                 if(pXFFirtPara)
                     pFrameLayout->XFConvert(pXFFirtPara);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj());
+            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj().get());
         }
         pLayout = GetLayout(pLayout);
     }
@@ -470,21 +470,21 @@ OUString LwpStory::GetContentText(bool bAllText)
     {
         OUString sText("");
         //process para list
-        LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara()->obj());
+        LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara()->obj().get());
         while (pPara)
         {
             pPara->SetFoundry(m_pFoundry);
             sText += pPara->GetContentText(true);
-            pPara = dynamic_cast<LwpPara*>(pPara->GetNext()->obj());
+            pPara = dynamic_cast<LwpPara*>(pPara->GetNext()->obj().get());
         }
         return sText;
     }
     else //only the first text frib
     {
-        LwpObject* pObj = GetFirstPara()->obj();
-        if(pObj)
+        rtl::Reference<LwpObject> pObj = GetFirstPara()->obj();
+        if(pObj.is())
         {
-            LwpPara* pPara = dynamic_cast<LwpPara*>(pObj);
+            LwpPara* pPara = dynamic_cast<LwpPara*>(pObj.get());
             if (!pPara || pPara->GetNext()->obj() != NULL)
                 return OUString("");
             pPara->SetFoundry(m_pFoundry);
@@ -496,7 +496,7 @@ OUString LwpStory::GetContentText(bool bAllText)
 }
 OUString LwpStory::RegisterFirstFribStyle()
 {
-    LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara()->obj());
+    LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara()->obj().get());
     if (!pPara)
         return OUString("");
     pPara->SetFoundry(m_pFoundry);

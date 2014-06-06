@@ -143,7 +143,7 @@ bool LwpVirtualLayout::HonorProtection()
     if(!(m_nAttributes2 & STYLE2_HONORPROTECTION))
         return false;
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
+    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj().get());
     if(pParent && !pParent->IsHeader())
     {
         return pParent->HonorProtection();
@@ -171,7 +171,7 @@ bool LwpVirtualLayout::IsProtected()
 {
     bool bProtected = (m_nAttributes & STYLE_PROTECTED)!=0;
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
+    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj().get());
     if(pParent && !pParent->IsHeader())
     {
         if(pParent->HonorProtection()&&(pParent->HasProtection()||bProtected))
@@ -203,7 +203,7 @@ bool LwpVirtualLayout::HasProtection()
     if(m_nAttributes & STYLE_PROTECTED)
         return true;
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
+    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj().get());
     if(pParent && !pParent->IsHeader())
     {
         return pParent->HasProtection();
@@ -234,7 +234,7 @@ LwpUseWhen* LwpVirtualLayout::GetUseWhen()
     if(GetLayoutType()!=LWP_PAGE_LAYOUT)
     {
         //get parent
-        LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
+        LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj().get());
         if(pParent && !pParent->IsHeader()&& (pParent->GetLayoutType()!=LWP_PAGE_LAYOUT))
             return pParent->GetUseWhen();
 
@@ -346,7 +346,7 @@ bool LwpVirtualLayout::IsMinimumHeight()
 */
 LwpVirtualLayout* LwpVirtualLayout::GetParentLayout()
 {
-    return dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
+    return dynamic_cast<LwpVirtualLayout*> (GetParent()->obj().get());
 }
 
 /**
@@ -356,12 +356,12 @@ LwpVirtualLayout* LwpVirtualLayout::GetParentLayout()
 void LwpVirtualLayout::RegisterChildStyle()
 {
     //Register all children styles
-    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj());
+    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj().get());
     while(pLayout)
     {
         pLayout->SetFoundry(m_pFoundry);
         pLayout->RegisterStyle();
-        pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj());
+        pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj().get());
     }
 }
 
@@ -375,7 +375,7 @@ bool LwpVirtualLayout::IsStyleLayout()
     if (m_nAttributes3 & STYLE3_STYLELAYOUT)
         return true;
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*>(GetParent()->obj());
+    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*>(GetParent()->obj().get());
     if (pParent)
         return pParent->IsStyleLayout();
     return false;
@@ -391,7 +391,7 @@ LwpVirtualLayout* LwpVirtualLayout::FindChildByType(LWP_LAYOUT_TYPE eType)
 
     while(pID && !pID->IsNull())
     {
-        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(pID->obj());
+        LwpVirtualLayout * pLayout = dynamic_cast<LwpVirtualLayout *>(pID->obj().get());
         if(!pLayout)
         {
             break;
@@ -451,30 +451,30 @@ LwpVirtualLayout* LwpAssociatedLayouts::GetLayout(LwpVirtualLayout *pStartLayout
 
     if (!pStartLayout && !m_OnlyLayout.IsNull())
         /* Looking for the first layout and there's only one layout in  the list.*/
-        return dynamic_cast<LwpVirtualLayout*>(m_OnlyLayout.obj());
+        return dynamic_cast<LwpVirtualLayout*>(m_OnlyLayout.obj().get());
 
-    LwpObjectHolder* pObjHolder = dynamic_cast<LwpObjectHolder*>(m_Layouts.GetHead()->obj());
+    LwpObjectHolder* pObjHolder = dynamic_cast<LwpObjectHolder*>(m_Layouts.GetHead()->obj().get());
     if(pObjHolder)
     {
-        pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject()->obj());
+        pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject()->obj().get());
         if(!pStartLayout )
             return pLayout;
 
         while(pObjHolder && pStartLayout != pLayout)
         {
-            pObjHolder = dynamic_cast<LwpObjectHolder*>(pObjHolder->GetNext()->obj());
+            pObjHolder = dynamic_cast<LwpObjectHolder*>(pObjHolder->GetNext()->obj().get());
             if(pObjHolder)
             {
-                pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject()->obj());
+                pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject()->obj().get());
             }
         }
 
         if(pObjHolder)
         {
-            pObjHolder = dynamic_cast<LwpObjectHolder*>(pObjHolder->GetNext()->obj());
+            pObjHolder = dynamic_cast<LwpObjectHolder*>(pObjHolder->GetNext()->obj().get());
             if(pObjHolder)
             {
-                pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject()->obj());
+                pLayout = dynamic_cast<LwpVirtualLayout*>(pObjHolder->GetObject()->obj().get());
                 return pLayout;
             }
         }
@@ -501,7 +501,7 @@ void LwpHeadLayout::Read()
 void LwpHeadLayout::RegisterStyle()
 {
     //Register all children styles
-    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj());
+    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj().get());
     while(pLayout)
     {
         pLayout->SetFoundry(m_pFoundry);
@@ -515,7 +515,7 @@ void LwpHeadLayout::RegisterStyle()
             }
             pLayout->RegisterStyle();
         }
-        LwpVirtualLayout *pNext = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj());
+        LwpVirtualLayout *pNext = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj().get());
         if (pNext == pLayout)
         {
             OSL_FAIL("Layout points to itself");
@@ -531,14 +531,14 @@ void LwpHeadLayout::RegisterStyle()
  */
 LwpVirtualLayout* LwpHeadLayout::FindEnSuperTableLayout()
 {
-    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj());
+    LwpVirtualLayout* pLayout = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj().get());
     while(pLayout)
     {
         if(pLayout->GetLayoutType() == LWP_ENDNOTE_SUPERTABLE_LAYOUT)
         {
             return pLayout;
         }
-        pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj());
+        pLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj().get());
     }
     return NULL;
 }
@@ -660,11 +660,11 @@ LwpLayoutGeometry* LwpMiddleLayout::GetGeometry()
 {
     if( !m_LayGeometry.IsNull() )
     {
-        return ( dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj()) );
+        return ( dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj().get()) );
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->GetGeometry() : NULL;
     }
     return NULL;
@@ -712,7 +712,7 @@ bool LwpMiddleLayout::MarginsSameAsParent()
     }
     if(!m_BasedOnStyle.IsNull())
     {
-        LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj());
+        LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj().get());
         if (pLay)
             pLay->MarginsSameAsParent();
     }
@@ -731,7 +731,7 @@ double LwpMiddleLayout::GetMarginsValue(const sal_uInt8 &nWhichSide)
     {
         if ( MarginsSameAsParent() )
         {
-            LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
+            LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj().get());
             if(pParent && !pParent->IsHeader())
             {
                 fValue = pParent->GetMarginsValue(nWhichSide);
@@ -742,14 +742,14 @@ double LwpMiddleLayout::GetMarginsValue(const sal_uInt8 &nWhichSide)
 
     if(m_nOverrideFlag & OVER_MARGINS)
     {
-        LwpLayoutMargins* pMar1 = dynamic_cast<LwpLayoutMargins*> (m_LayMargins.obj());
+        LwpLayoutMargins* pMar1 = dynamic_cast<LwpLayoutMargins*> (m_LayMargins.obj().get());
         if(pMar1)
         {
             fValue = pMar1->GetMargins()->GetMarginsValue(nWhichSide);
             return fValue;
         }
     }
-    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj());
+    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj().get());
     if(pStyle)
     {
         fValue = pStyle->GetMarginsValue(nWhichSide);
@@ -768,14 +768,14 @@ double LwpMiddleLayout::GetExtMarginsValue(const sal_uInt8 &nWhichSide)
     double fValue = 0;
     if(m_nOverrideFlag & OVER_MARGINS)
     {
-        LwpLayoutMargins* pMar1 = dynamic_cast<LwpLayoutMargins*> (m_LayMargins.obj());
+        LwpLayoutMargins* pMar1 = dynamic_cast<LwpLayoutMargins*> (m_LayMargins.obj().get());
         if(pMar1)
         {
             fValue = pMar1->GetExtMargins()->GetMarginsValue(nWhichSide);
             return fValue;
         }
     }
-    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj());
+    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj().get());
     if(pStyle)
     {
         fValue = pStyle->GetExtMarginsValue(nWhichSide);
@@ -793,12 +793,12 @@ LwpBorderStuff* LwpMiddleLayout::GetBorderStuff()
 {
     if(m_nOverrideFlag & OVER_BORDERS)
     {
-        LwpLayoutBorder* pLayoutBorder = dynamic_cast<LwpLayoutBorder*>(m_LayBorderStuff.obj());
+        LwpLayoutBorder* pLayoutBorder = dynamic_cast<LwpLayoutBorder*>(m_LayBorderStuff.obj().get());
         return pLayoutBorder ? pLayoutBorder->GetBorderStuff() : NULL;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->GetBorderStuff() :  NULL;
     }
     return NULL;
@@ -814,12 +814,12 @@ LwpBackgroundStuff* LwpMiddleLayout::GetBackgroundStuff()
 {
     if(m_nOverrideFlag & OVER_BACKGROUND)
     {
-        LwpLayoutBackground* pLayoutBackground = dynamic_cast<LwpLayoutBackground*>(m_LayBackgroundStuff.obj());
+        LwpLayoutBackground* pLayoutBackground = dynamic_cast<LwpLayoutBackground*>(m_LayBackgroundStuff.obj().get());
         return pLayoutBackground ? pLayoutBackground->GetBackgoudStuff() : NULL;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->GetBackgroundStuff() : NULL;
     }
     return NULL;
@@ -922,14 +922,14 @@ LwpTabOverride* LwpMiddleLayout::GetTabOverride()
     {
         if(!m_TabPiece.IsNull())
         {
-            LwpTabPiece *pPiece = dynamic_cast<LwpTabPiece*>(m_TabPiece.obj());
+            LwpTabPiece *pPiece = dynamic_cast<LwpTabPiece*>(m_TabPiece.obj().get());
             return (LwpTabOverride*)(pPiece ? pPiece->GetOverride() : NULL);
         }
         return NULL;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->GetTabOverride() : NULL;
     }
     return NULL;
@@ -943,62 +943,62 @@ LwpTabOverride* LwpMiddleLayout::GetTabOverride()
 */
 sal_uInt16 LwpMiddleLayout::GetScaleMode(void)
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return GetLayoutScale()->GetScaleMode();
-    else if (m_BasedOnStyle.obj())
-        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScaleMode();
+    else if (m_BasedOnStyle.obj().is())
+        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj().get())->GetScaleMode();
     else
         return (LwpLayoutScale::FIT_IN_FRAME | LwpLayoutScale::MAINTAIN_ASPECT_RATIO);
 }
 
 sal_uInt16 LwpMiddleLayout::GetScaleTile(void)
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::TILED)
             ? 1 : 0;
-    else if (m_BasedOnStyle.obj())
-        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScaleTile();
+    else if (m_BasedOnStyle.obj().is())
+        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj().get())->GetScaleTile();
     else
         return 0;
 }
 
 sal_uInt16 LwpMiddleLayout::GetScaleCenter(void)
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return (GetLayoutScale()->GetPlacement() & LwpLayoutScale::CENTERED)
             ? 1 : 0;
-    else if (m_BasedOnStyle.obj())
-        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScaleCenter();
+    else if (m_BasedOnStyle.obj().is())
+        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj().get())->GetScaleCenter();
     else
         return 0;
 }
 
 sal_uInt32 LwpMiddleLayout::GetScalePercentage(void)
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return GetLayoutScale()->GetScalePercentage()/10;//m_nScalePercentage 1000 = 100%
-    else if (m_BasedOnStyle.obj())
-        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScalePercentage();
+    else if (m_BasedOnStyle.obj().is())
+        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj().get())->GetScalePercentage();
     else
         return 100;
 }
 
 double LwpMiddleLayout::GetScaleWidth(void)
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleWidth());
-    else if (m_BasedOnStyle.obj())
-        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScaleWidth();
+    else if (m_BasedOnStyle.obj().is())
+        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj().get())->GetScaleWidth();
     else
         return 0;
 }
 
 double LwpMiddleLayout::GetScaleHeight(void)
 {
-    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj())
+    if ((m_nOverrideFlag & OVER_SCALING) && m_LayScale.obj().is())
         return LwpTools::ConvertFromUnits(GetLayoutScale()->GetScaleHeight());
-    else if (m_BasedOnStyle.obj())
-        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj())->GetScaleHeight();
+    else if (m_BasedOnStyle.obj().is())
+        return dynamic_cast<LwpMiddleLayout*>(m_BasedOnStyle.obj().get())->GetScaleHeight();
     else
         return 0;
 }
@@ -1053,9 +1053,9 @@ bool LwpMiddleLayout::IsSizeRightToContainer(void)
                         << SHIFT_RIGHT))
         == ((LAY_USEDIRECTION | LAY_TOCONTAINER | LAY_AUTOSIZE) << SHIFT_RIGHT);
     }
-    else if (m_BasedOnStyle.obj())
+    else if (m_BasedOnStyle.obj().is())
     {
-        LwpMiddleLayout * pLayout = dynamic_cast<LwpMiddleLayout *>(m_BasedOnStyle.obj());
+        LwpMiddleLayout * pLayout = dynamic_cast<LwpMiddleLayout *>(m_BasedOnStyle.obj().get());
         return pLayout ? pLayout->IsSizeRightToContainer() : sal_False;
     }
     else
@@ -1072,9 +1072,9 @@ bool LwpMiddleLayout::IsSizeRightToContent(void)
                             << SHIFT_RIGHT))
                 == ((LAY_USEDIRECTION | LAY_AUTOSIZE) << SHIFT_RIGHT);
     }
-    else if (m_BasedOnStyle.obj())
+    else if (m_BasedOnStyle.obj().is())
     {
-        LwpMiddleLayout * pLayout = dynamic_cast<LwpMiddleLayout *>(m_BasedOnStyle.obj());
+        LwpMiddleLayout * pLayout = dynamic_cast<LwpMiddleLayout *>(m_BasedOnStyle.obj().get());
         return pLayout ? pLayout->IsSizeRightToContent() : sal_False;
     }
     else
@@ -1167,7 +1167,7 @@ bool LwpMiddleLayout::IsAutoGrow()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->IsAutoGrow() : sal_False;
     }
     return LwpVirtualLayout::IsAutoGrow();
@@ -1185,7 +1185,7 @@ bool LwpMiddleLayout::IsAutoGrowDown()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->IsAutoGrowDown() : sal_False;
     }
     return LwpVirtualLayout::IsAutoGrowDown();
@@ -1203,7 +1203,7 @@ bool LwpMiddleLayout::IsAutoGrowUp()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->IsAutoGrowUp() : sal_False;
     }
     return LwpVirtualLayout::IsAutoGrowUp();
@@ -1221,7 +1221,7 @@ bool LwpMiddleLayout::IsAutoGrowLeft()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         if (pLay)
             return pLay->IsAutoGrowLeft();
     }
@@ -1240,7 +1240,7 @@ bool LwpMiddleLayout::IsAutoGrowRight()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->IsAutoGrowRight() : sal_False;
     }
     return LwpVirtualLayout::IsAutoGrowRight();
@@ -1255,13 +1255,13 @@ sal_uInt8 LwpMiddleLayout::GetContentOrientation()
     //content orientation in Graphic objects and OLE objects not supported now
     if((m_nOverrideFlag & OVER_ROTATION)&& !m_LayGeometry.IsNull())
     {
-        LwpLayoutGeometry* pLayGeometry = dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj());
+        LwpLayoutGeometry* pLayGeometry = dynamic_cast<LwpLayoutGeometry*> (m_LayGeometry.obj().get());
         if (pLayGeometry)
             return pLayGeometry->GetContentOrientation();
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         if (pLay)
             return pLay->GetContentOrientation();
     }
@@ -1279,7 +1279,7 @@ bool LwpMiddleLayout::HonorProtection()
         if(!(m_nAttributes2 & STYLE2_HONORPROTECTION))
             return false;
 
-        LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
+        LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj().get());
         if(pParent && !pParent->IsHeader())
         {
             return pParent->HonorProtection();
@@ -1296,7 +1296,7 @@ bool LwpMiddleLayout::HonorProtection()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         if (pLay)
             return pLay->HonorProtection();
     }
@@ -1317,13 +1317,13 @@ bool LwpMiddleLayout::IsProtected()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         bProtected = pLay ? pLay->IsProtected() : sal_False;
     }
     else
         bProtected = LwpVirtualLayout::IsProtected();
 
-    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj());
+    LwpVirtualLayout* pParent = dynamic_cast<LwpVirtualLayout*> (GetParent()->obj().get());
     if(pParent && !pParent->IsHeader())
     {
         /* If a parent's protected then none of its children can be accessed. */
@@ -1359,14 +1359,14 @@ bool LwpMiddleLayout::IsProtected()
 */
 LwpVirtualLayout* LwpMiddleLayout::GetWaterMarkLayout()
 {
-    LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj());
+    LwpVirtualLayout* pLay = dynamic_cast<LwpVirtualLayout*>(GetChildHead()->obj().get());
     while(pLay)
     {
         if( pLay->IsForWaterMark())
         {
             return pLay;
         }
-        pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext()->obj());
+        pLay = dynamic_cast<LwpVirtualLayout*> (pLay->GetNext()->obj().get());
     }
     return NULL;
 }
@@ -1381,7 +1381,7 @@ XFBGImage* LwpMiddleLayout::GetXFBGImage()
     if(pLay)
     {
         //test BGImage
-        LwpGraphicObject* pGrfObj = dynamic_cast<LwpGraphicObject*>(pLay->GetContent()->obj());
+        LwpGraphicObject* pGrfObj = dynamic_cast<LwpGraphicObject*>(pLay->GetContent()->obj().get());
         if(pGrfObj)
         {
             XFBGImage* pXFBGImage = new XFBGImage();
@@ -1443,7 +1443,7 @@ bool LwpMiddleLayout::GetUsePrinterSettings()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj() );
+        LwpMiddleLayout* pLay = dynamic_cast<LwpMiddleLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->GetUsePrinterSettings() : sal_False;
     }
     return false;
@@ -1452,8 +1452,8 @@ bool LwpMiddleLayout::GetUsePrinterSettings()
 //Check whether there are contents in the layout
 bool LwpMiddleLayout::HasContent()
 {
-    LwpObject* content = m_Content.obj();
-    if(content)
+    rtl::Reference<LwpObject> content = m_Content.obj();
+    if(content.is())
         return true;
     return false;
 }
@@ -1514,14 +1514,14 @@ sal_uInt16 LwpLayout::GetNumCols()
 {
     if(m_nOverrideFlag & OVER_COLUMNS)
     {
-        LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj());
+        LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get());
         if(pLayColumns)
         {
             return pLayColumns->GetNumCols();
         }
     }
 
-    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj());
+    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj().get());
     if(pStyle)
     {
         return pStyle->GetNumCols();
@@ -1539,14 +1539,14 @@ double LwpLayout::GetColWidth(sal_uInt16 nIndex)
 {
     if((m_nOverrideFlag & OVER_COLUMNS)||(m_nAttributes2 & STYLE2_LOCALCOLUMNINFO))
     {
-        LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj());
+        LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get());
         if(pLayColumns)
         {
             return pLayColumns->GetColWidth(nIndex);
         }
     }
 
-    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj());
+    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj().get());
     if(pStyle)
     {
         return pStyle->GetColWidth(nIndex);
@@ -1564,14 +1564,14 @@ double LwpLayout::GetColGap(sal_uInt16 nIndex)
 {
     if((m_nOverrideFlag & OVER_COLUMNS)||(m_nAttributes2 & STYLE2_LOCALCOLUMNINFO))
     {
-        LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj());
+        LwpLayoutColumns* pLayColumns = dynamic_cast<LwpLayoutColumns*>(m_LayColumns.obj().get());
         if(pLayColumns)
         {
             return pLayColumns->GetColGap(nIndex);
         }
     }
 
-    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj());
+    LwpVirtualLayout* pStyle = dynamic_cast<LwpVirtualLayout*> (m_BasedOnStyle.obj().get());
     if(pStyle)
     {
         return pStyle->GetColGap(nIndex);
@@ -1640,7 +1640,7 @@ XFColumnSep* LwpLayout::GetColumnSep()
 {
 
     //Get LwpLayoutGutters
-    LwpLayoutGutters* pLayoutGutters = dynamic_cast<LwpLayoutGutters*>(m_LayGutterStuff.obj());
+    LwpLayoutGutters* pLayoutGutters = dynamic_cast<LwpLayoutGutters*>(m_LayGutterStuff.obj().get());
     if(!pLayoutGutters)
     {
         return NULL;
@@ -1723,7 +1723,7 @@ sal_uInt16 LwpLayout::GetUsePage()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj() );
+        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->GetUsePage() : 0;
     }
     return 0;
@@ -1741,7 +1741,7 @@ LwpUseWhen* LwpLayout::VirtualGetUseWhen()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj() );
+        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->VirtualGetUseWhen() : NULL;
     }
     return LwpVirtualLayout::VirtualGetUseWhen();
@@ -1763,7 +1763,7 @@ bool LwpLayout::IsUseOnAllPages()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj() );
+        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj().get() );
         if (pLay)
             return pLay->IsUseOnAllPages();
     }
@@ -1786,7 +1786,7 @@ bool LwpLayout::IsUseOnAllEvenPages()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj() );
+        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj().get() );
         if (pLay)
             return pLay->IsUseOnAllEvenPages();
     }
@@ -1809,7 +1809,7 @@ bool LwpLayout::IsUseOnAllOddPages()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj() );
+        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj().get() );
         if (pLay)
             return pLay->IsUseOnAllOddPages();
     }
@@ -1832,7 +1832,7 @@ bool LwpLayout::IsUseOnPage()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj() );
+        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj().get() );
         if (pLay)
             return pLay->IsUseOnPage();
     }
@@ -1849,12 +1849,12 @@ LwpShadow* LwpLayout::GetShadow()
 {
     if(m_nOverrideFlag & OVER_SHADOW)
     {
-        LwpLayoutShadow* pLayoutShadow = dynamic_cast<LwpLayoutShadow*>(m_LayShadow.obj());
+        LwpLayoutShadow* pLayoutShadow = dynamic_cast<LwpLayoutShadow*>(m_LayShadow.obj().get());
         return pLayoutShadow ? pLayoutShadow->GetShadow() : NULL;
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj() );
+        LwpLayout* pLay = dynamic_cast<LwpLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->GetShadow() : NULL;
     }
     return NULL;
@@ -1923,7 +1923,7 @@ LwpVirtualLayout* LwpLayout::GetContainerLayout()
     if(IsRelativeAnchored())
     {
         //get position
-        LwpPara* pPara = dynamic_cast<LwpPara*>(GetPosition()->obj());
+        LwpPara* pPara = dynamic_cast<LwpPara*>(GetPosition()->obj().get());
         if(pPara)
         {
             LwpStory* pStory = pPara->GetStory();
@@ -2001,7 +2001,7 @@ sal_uInt8 LwpPlacableLayout::GetWrapType()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpPlacableLayout* pLay = dynamic_cast<LwpPlacableLayout*> ( m_BasedOnStyle.obj() );
+        LwpPlacableLayout* pLay = dynamic_cast<LwpPlacableLayout*> ( m_BasedOnStyle.obj().get() );
         if (pLay)
             return pLay->GetWrapType();
     }
@@ -2019,12 +2019,12 @@ LwpLayoutRelativity* LwpPlacableLayout::GetRelativityPiece()
     {
         if(m_nOverrideFlag & OVER_PLACEMENT)
         {
-            return dynamic_cast<LwpLayoutRelativity*>(m_LayRelativity.obj());
+            return dynamic_cast<LwpLayoutRelativity*>(m_LayRelativity.obj().get());
         }
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpPlacableLayout* pLay = dynamic_cast<LwpPlacableLayout*> ( m_BasedOnStyle.obj() );
+        LwpPlacableLayout* pLay = dynamic_cast<LwpPlacableLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->GetRelativityPiece() : NULL;
     }
     return NULL;
@@ -2066,7 +2066,7 @@ sal_Int32 LwpPlacableLayout::GetBaseLineOffset()
     }
     else if( !m_BasedOnStyle.IsNull() )
     {
-        LwpPlacableLayout* pLay = dynamic_cast<LwpPlacableLayout*> ( m_BasedOnStyle.obj() );
+        LwpPlacableLayout* pLay = dynamic_cast<LwpPlacableLayout*> ( m_BasedOnStyle.obj().get() );
         return pLay ? pLay->GetBaseLineOffset() : 0;
     }
     return 0;

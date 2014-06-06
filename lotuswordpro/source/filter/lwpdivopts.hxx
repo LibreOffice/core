@@ -108,10 +108,11 @@ class LwpDivisionOptions : public LwpObject
 {
 public:
     LwpDivisionOptions(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDivisionOptions();
 protected:
     void Read() SAL_OVERRIDE;
 private:
+    virtual ~LwpDivisionOptions();
+
     LwpHyphenOptions m_HyphOpts;
     sal_uInt16 m_nOptionFlag;
     LwpTextLanguage m_Lang;

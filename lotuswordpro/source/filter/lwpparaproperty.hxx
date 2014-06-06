@@ -95,7 +95,7 @@ public:
     inline  LwpParaProperty* GetNext(void);
     inline  LwpParaProperty* GetPrevious(void);
 
-    static LwpParaProperty* ReadPropertyList(LwpObjectStream* pFile,LwpObject* Whole);
+    static LwpParaProperty* ReadPropertyList(LwpObjectStream* pFile,rtl::Reference<LwpObject> const & Whole);
 
 };
 

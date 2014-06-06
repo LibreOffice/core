@@ -74,8 +74,9 @@ class LwpDLVList : public LwpObject
 {
 public:
     LwpDLVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDLVList(){}
 protected:
+    virtual ~LwpDLVList(){}
+
     LwpObjectID m_ListPrevious;
     LwpObjectID m_ListNext;
 protected:
@@ -99,8 +100,9 @@ class LwpDLNFVList : public LwpDLVList
 {
 public:
     LwpDLNFVList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDLNFVList(){}
 protected:
+    virtual ~LwpDLNFVList(){}
+
     LwpObjectID m_ChildHead;
     LwpObjectID m_ChildTail;
     LwpObjectID m_Parent;

@@ -87,12 +87,6 @@ public:
         m_pOverride = NULL;
     }
 
-    virtual ~LwpVirtualPiece()
-    {
-        if( m_pOverride )
-            delete m_pOverride;
-    }
-
     virtual void Read() SAL_OVERRIDE
     {
         LwpDLVList::Read();
@@ -105,6 +99,12 @@ public:
         return m_pOverride;
     }
 protected:
+    virtual ~LwpVirtualPiece()
+    {
+        if( m_pOverride )
+            delete m_pOverride;
+    }
+
     LwpOverride     *m_pOverride;
 };
 
@@ -115,6 +115,9 @@ public:
     {
         m_pOverride = new LwpParaBorderOverride();
     }
+
+private:
+    virtual ~LwpParaBorderPiece() {}
 };
 
 class LwpBreaksPiece : public LwpVirtualPiece
@@ -124,6 +127,9 @@ public:
     {
         m_pOverride = new LwpBreaksOverride();
     }
+
+private:
+    virtual ~LwpBreaksPiece() {}
 };
 
 class LwpNumberingPiece : public LwpVirtualPiece
@@ -133,6 +139,9 @@ public:
     {
         m_pOverride = new LwpNumberingOverride();
     }
+
+private:
+    virtual ~LwpNumberingPiece() {}
 };
 
 class LwpTabPiece : public LwpVirtualPiece
@@ -142,6 +151,9 @@ public:
     {
         m_pOverride = new LwpTabOverride();
     }
+
+private:
+    virtual ~LwpTabPiece() {}
 };
 
 class LwpBackgroundPiece : public LwpVirtualPiece
@@ -151,6 +163,9 @@ public:
     {
         m_pOverride = new LwpBackgroundOverride();
     }
+
+private:
+    virtual ~LwpBackgroundPiece() {}
 };
 
 class LwpAlignmentPiece : public LwpVirtualPiece
@@ -160,6 +175,9 @@ public:
     {
         m_pOverride = new LwpAlignmentOverride();
     }
+
+private:
+    virtual ~LwpAlignmentPiece() {}
 };
 
 class LwpIndentPiece : public LwpVirtualPiece
@@ -169,6 +187,9 @@ public:
     {
         m_pOverride = new LwpIndentOverride();
     }
+
+private:
+    virtual ~LwpIndentPiece() {}
 };
 
 class LwpSpacingPiece : public LwpVirtualPiece
@@ -178,6 +199,9 @@ public:
     {
         m_pOverride = new LwpSpacingOverride();
     }
+
+private:
+    virtual ~LwpSpacingPiece() {}
 };
 
 class LwpAmikakePiece : public LwpVirtualPiece
@@ -187,6 +211,9 @@ public:
     {
         m_pOverride = new LwpAmikakeOverride();
     }
+
+private:
+    virtual ~LwpAmikakePiece() {}
 };
 
 class LwpCharacterBorderPiece : public LwpVirtualPiece
@@ -196,6 +223,9 @@ public:
     {
         m_pOverride = new LwpCharacterBorderOverride();
     }
+
+private:
+    virtual ~LwpCharacterBorderPiece() {}
 };
 
 #endif

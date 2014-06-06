@@ -148,8 +148,7 @@ class LwpPara : public LwpDLVList
 {
 public:
     LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpPara();
-public:
+
     void Read() SAL_OVERRIDE;
     void RegisterStyle() SAL_OVERRIDE;
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
@@ -276,6 +275,8 @@ protected:
         MAX_INDENT_LEVELS   = 10
     };
 private:
+    virtual ~LwpPara();
+
     void OverrideAlignment(LwpAlignmentOverride* base,LwpAlignmentOverride* over,XFParaStyle* pOverStyle);//add by  1-24
     void OverrideIndent(LwpIndentOverride* base,LwpIndentOverride* over,XFParaStyle* pOverStyle);
     void OverrideSpacing(LwpSpacingOverride* base,LwpSpacingOverride* over,XFParaStyle* pOverStyle);
@@ -367,8 +368,8 @@ inline LwpObjectID* LwpPara::GetStoryID()
 }
 inline LwpStory* LwpPara::GetStory()
 {
-    if (m_Story.obj())
-        return dynamic_cast<LwpStory*>(m_Story.obj());
+    if (m_Story.obj().is())
+        return dynamic_cast<LwpStory*>(m_Story.obj().get());
     return NULL;
 }
 

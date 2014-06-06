@@ -78,7 +78,6 @@ class LwpDivInfo : public LwpObject
 {
 public:
     LwpDivInfo(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDivInfo();
     LwpObjectID* GetInitialLayoutID(){ return &m_InitialLayoutID;}
     LwpObjectID* GetFillerPageTextID(){ return &m_FillerPageTextID;}
     // add by  ,03/14/2004
@@ -97,6 +96,8 @@ public:
 protected:
     void Read() SAL_OVERRIDE;
 private:
+    virtual ~LwpDivInfo();
+
     LwpObjectID m_ParentID;
     LwpAtomHolder m_Name;
     LwpObjectID m_LayoutID;
@@ -161,7 +162,7 @@ inline bool LwpDivInfo::IsGotoable()
 
 inline LwpDocument* LwpDivInfo::GetDivision()
 {
-    return dynamic_cast<LwpDocument*>(m_ParentID.obj());
+    return dynamic_cast<LwpDocument*>(m_ParentID.obj().get());
 }
 #endif
 

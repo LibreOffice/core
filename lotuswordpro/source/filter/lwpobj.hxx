@@ -65,6 +65,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJ_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJ_HXX
 
+#include <sal/config.h>
+
+#include <salhelper/simplereferenceobject.hxx>
+
 #include "lwpheader.hxx"
 
 #include "lwpobjhdr.hxx"
@@ -77,14 +81,14 @@ class LwpFoundry;
 /**
  * @brief   Base class of all Lwp VO objects
 */
-class LwpObject
+class LwpObject: public salhelper::SimpleReferenceObject
 {
 private:
     LwpObject();//Don't permit to create an object without header
 public:
     LwpObject(LwpObjectHeader objHdr, LwpSvStream* pStrm);
-    virtual ~LwpObject();
 protected:
+    virtual ~LwpObject();
     LwpObjectHeader m_ObjHdr;
     LwpObjectStream* m_pObjStrm;
     LwpFoundry* m_pFoundry;

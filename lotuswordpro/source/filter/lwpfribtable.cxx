@@ -73,7 +73,7 @@ void LwpFribTable::Read(LwpObjectStream* pObjStrm, sal_uInt16 /*len*/)
 
 LwpSuperTableLayout* LwpFribTable::GetSuperTable()
 {
-    return static_cast<LwpSuperTableLayout*>(m_objTable.obj());
+    return static_cast<LwpSuperTableLayout*>(m_objTable.obj().get());
 }
 
 void LwpFribTable::RegisterNewStyle()

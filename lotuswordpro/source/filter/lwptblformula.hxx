@@ -198,7 +198,6 @@ class LwpFormulaInfo : public LwpCellList
 {
 public:
     LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpFormulaInfo();
     bool IsFormula() SAL_OVERRIDE {return true;}
     void SetRow(sal_uInt16 nRow){ m_nFormulaRow = nRow;}
     OUString Convert(LwpTableLayout* pCellsMap);
@@ -212,6 +211,8 @@ protected:
     bool ReadArguments(LwpFormulaFunc& aFunc);
     bool m_bSupported;
 private:
+    virtual ~LwpFormulaInfo();
+
     std::vector<LwpFormulaArg*> m_aStack;
     bool ReadConst();
     void MarkUnsupported(sal_uInt16 TokenType);

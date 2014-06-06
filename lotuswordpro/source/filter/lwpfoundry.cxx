@@ -195,8 +195,8 @@ void LwpFoundry::RegisterAllLayouts()
     m_bRegisteredAll = true;
 
     //Register CellStyle
-    LwpObject* pStyle = m_CellStyle.obj();
-    if( pStyle )
+    rtl::Reference<LwpObject> pStyle = m_CellStyle.obj();
+    if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
         pStyle->RegisterStyle();
@@ -204,7 +204,7 @@ void LwpFoundry::RegisterAllLayouts()
 
     //register content page layout list: Layout
     pStyle = m_Layout.obj();
-    if( pStyle )
+    if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
         pStyle->RegisterStyle();
@@ -212,7 +212,7 @@ void LwpFoundry::RegisterAllLayouts()
 
     //Register page style layout list: PageStyle, such as "Default Page"
     pStyle = m_PageStyle.obj();
-    if( pStyle )
+    if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
         pStyle->RegisterStyle();
@@ -220,7 +220,7 @@ void LwpFoundry::RegisterAllLayouts()
 
     //Register FrameStyle
     pStyle = m_FrameStyle.obj();
-    if( pStyle )
+    if( pStyle.is() )
     {
         pStyle->SetFoundry(this);
         pStyle->RegisterStyle();
@@ -231,11 +231,11 @@ void LwpFoundry::RegisterAllLayouts()
 LwpBookMark* LwpFoundry::GetBookMark(LwpObjectID objMarker)
 {
     LwpDLVListHeadHolder* pHeadHolder= static_cast
-                    <LwpDLVListHeadHolder*>(m_BookMarkHead.obj());
+                    <LwpDLVListHeadHolder*>(m_BookMarkHead.obj().get());
     LwpObjectID* pObjID = pHeadHolder->GetHeadID();
     LwpBookMark* pBookMark;
     if (pObjID)
-        pBookMark = static_cast<LwpBookMark*>(pObjID->obj());
+        pBookMark = static_cast<LwpBookMark*>(pObjID->obj().get());
     else
         return NULL;
 
@@ -245,7 +245,7 @@ LwpBookMark* LwpFoundry::GetBookMark(LwpObjectID objMarker)
             return pBookMark;
         pObjID = pBookMark->GetNext();
         if (pObjID)
-            pBookMark = static_cast<LwpBookMark*>(pObjID->obj());
+            pBookMark = static_cast<LwpBookMark*>(pObjID->obj().get());
         else
             return NULL;
     }
@@ -276,7 +276,7 @@ LwpSection* LwpFoundry::EnumSections(LwpSection * pSection)
 */
 LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 {
-    LwpVersionedPointer * pPointer = static_cast<LwpVersionedPointer *>(m_DefaultTextStyle.obj());
+    LwpVersionedPointer * pPointer = static_cast<LwpVersionedPointer *>(m_DefaultTextStyle.obj().get());
     if (!pPointer)
         return NULL;
 
@@ -290,16 +290,16 @@ LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 LwpObjectID * LwpFoundry::FindParaStyleByName(const OUString& name)
 {
     //Register all text styles: para styles, character styles
-    LwpDLVListHeadHolder* pParaStyleHolder = static_cast<LwpDLVListHeadHolder*>(GetTextStyleHead()->obj());
+    LwpDLVListHeadHolder* pParaStyleHolder = static_cast<LwpDLVListHeadHolder*>(GetTextStyleHead()->obj().get());
     if(pParaStyleHolder)
     {
-        LwpTextStyle* pParaStyle = static_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID()->obj());
+        LwpTextStyle* pParaStyle = static_cast<LwpTextStyle*> (pParaStyleHolder->GetHeadID()->obj().get());
         while(pParaStyle)
         {
             OUString strName = pParaStyle->GetName()->str();
             if(strName == name)
                 return pParaStyle->GetObjectID();
-            pParaStyle = static_cast<LwpTextStyle*>(pParaStyle->GetNext()->obj());
+            pParaStyle = static_cast<LwpTextStyle*>(pParaStyle->GetNext()->obj().get());
         }
     }
 
@@ -408,8 +408,8 @@ LwpContent* LwpContentManager::EnumContents(LwpContent* pContent)
 {
     if(pContent)
         return pContent->GetNextEnumerated();
-    LwpVersionedPointer* pPointer = static_cast<LwpVersionedPointer*>(m_EnumHead.obj());
-    return pPointer ? static_cast<LwpContent*>(pPointer->GetPointer()->obj()) : NULL;
+    LwpVersionedPointer* pPointer = static_cast<LwpVersionedPointer*>(m_EnumHead.obj().get());
+    return pPointer ? static_cast<LwpContent*>(pPointer->GetPointer()->obj().get()) : NULL;
 }
 
 void LwpPieceManager::Read(LwpObjectStream *pStrm)
@@ -460,14 +460,14 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
 {
     // If Last has a next, return it.
     if(pLast && !pLast->GetNext()->IsNull())
-        return static_cast<LwpOrderedObject*>(pLast->GetNext()->obj());
+        return static_cast<LwpOrderedObject*>(pLast->GetNext()->obj().get());
 
     LwpListList* pList = NULL;
     if(pLast)
     {
         // We're at the end of Last's list (not Liszt's list).
         // Start with the next active list
-        pList = static_cast<LwpListList*>(pLast->GetListList()->obj());
+        pList = static_cast<LwpListList*>(pLast->GetListList()->obj().get());
         pList= GetNextActiveListList(pList);
     }
     else
@@ -478,7 +478,7 @@ LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
 
     if(pList)
     {
-        return static_cast<LwpOrderedObject*>(pList->GetHead()->obj());
+        return static_cast<LwpOrderedObject*>(pList->GetHead()->obj().get());
     }
 
     return NULL;
@@ -493,23 +493,23 @@ LwpListList* LwpOrderedObjectManager::GetNextActiveListList(LwpListList * pLast)
     LwpListList* pList = NULL;
     LwpContent* pContent = NULL;
     if(pLast)
-        pList = static_cast<LwpListList*>(pLast->GetNext()->obj());
+        pList = static_cast<LwpListList*>(pLast->GetNext()->obj().get());
     else
     {
-        LwpDLVListHeadHolder* pHeadHolder= static_cast<LwpDLVListHeadHolder*>(m_Head.obj());
+        LwpDLVListHeadHolder* pHeadHolder= static_cast<LwpDLVListHeadHolder*>(m_Head.obj().get());
         if(pHeadHolder)
         {
-            pList = static_cast<LwpListList*>(pHeadHolder->GetHeadID()->obj());
+            pList = static_cast<LwpListList*>(pHeadHolder->GetHeadID()->obj().get());
         }
     }
 
     while(pList)
     {
-        pContent = static_cast<LwpContent*>(pList->GetObject()->obj());
+        pContent = static_cast<LwpContent*>(pList->GetObject()->obj().get());
         if(pContent && pContent->HasNonEmbeddedLayouts() &&
             !pContent->IsStyleContent())
             return pList;
-        pList = static_cast<LwpListList*>(pList->GetNext()->obj());
+        pList = static_cast<LwpListList*>(pList->GetNext()->obj().get());
     }
     return NULL;
 }

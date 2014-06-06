@@ -368,7 +368,7 @@ void LwpFormulaInfo::Read()
 {
     LwpCellList::Read();
     {
-        LwpRowList* pRowList =(LwpRowList*)cParent.obj();
+        LwpRowList* pRowList =(LwpRowList*)cParent.obj().get();
         if (pRowList)
         {
             m_nFormulaRow = pRowList->GetRowID();
