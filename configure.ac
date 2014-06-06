@@ -1237,6 +1237,11 @@ AC_ARG_WITH(macosx-bundle-identifier,
          org.libreoffice.script ("script", huh?).]),
 ,with_macosx_bundle_identifier=org.libreoffice.script)
 
+AC_ARG_WITH(macosx-app-name,
+    AS_HELP_STRING([--with-macosx-app-name='My Own Office Suite'],
+        [Define the OS X app name. Default is AC_PACKAGE_NAME.]),
+,with_macosx_app_name=$PRODUCTNAME)
+
 AC_ARG_ENABLE(libc++,
     AS_HELP_STRING([--enable-libc++],
         [Use the libc++ C++ library instead of GNU libstdc++ on OS X. Only effective
@@ -2890,10 +2895,12 @@ if test $_os = Darwin; then
     fi
 
     AC_MSG_CHECKING([what OS X app bundle identifier to use])
-
     MACOSX_BUNDLE_IDENTIFIER=$with_macosx_bundle_identifier
-
     AC_MSG_RESULT([$MACOSX_BUNDLE_IDENTIFIER])
+
+    AC_MSG_CHECKING([what OS X app name to use])
+    MACOSX_APP_NAME="$with_macosx_app_name"
+    AC_MSG_RESULT([$MACOSX_APP_NAME])
 fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_SDK_VERSION)
@@ -2905,6 +2912,7 @@ AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libto
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
+AC_SUBST(MACOSX_APP_NAME)
 
 dnl ===================================================================
 dnl Check iOS SDK and compiler
