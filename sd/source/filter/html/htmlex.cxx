@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "htmlex.hxx"
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
@@ -32,6 +32,11 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/fcontnr.hxx>
+#include <sfx2/frmhtmlw.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/aeitem.hxx>
@@ -40,13 +45,11 @@
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
 #include <vcl/msgbox.hxx>
-#include <sfx2/app.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svtools/htmlout.hxx>
-#include <sfx2/docfile.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <svtools/colorcfg.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -57,8 +60,6 @@
 #include <editeng/postitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 #include <editeng/flditem.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <svl/style.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
@@ -648,7 +649,8 @@ void HtmlExport::ExportSingleDocument()
     InitProgress(mnSdPageCount);
 
     OUStringBuffer aStr(maHTMLHeader);
-    aStr.append(CreateMetaCharset());
+    aStr.append(DocumentMetadata());
+    aStr.append("\r\n");
     aStr.append("</head>\r\n");
     aStr.append(CreateBodyTag());
 
@@ -1082,6 +1084,29 @@ OUString HtmlExport::CreateMetaCharset() const
                OUString::createFromAscii(pCharSet) + "\">\r\n";
     }
     return aStr;
+}
+
+OUString HtmlExport::DocumentMetadata() const
+{
+    SvMemoryStream aStream;
+
+    uno::Reference<document::XDocumentProperties> xDocProps;
+    if (mpDocSh)
+    {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+            mpDocSh->GetModel(), uno::UNO_QUERY_THROW);
+        xDocProps.set(xDPS->getDocumentProperties());
+    }
+
+    OUString aNonConvertableCharacters;
+
+    SfxFrameHTMLWriter::Out_DocInfo(aStream, maDocFileName, xDocProps,
+            "  ", RTL_TEXTENCODING_UTF8,
+            &aNonConvertableCharacters);
+
+    OString aData(reinterpret_cast<const char*>(aStream.GetData()), aStream.GetSize());
+
+    return OStringToOUString(aData, RTL_TEXTENCODING_UTF8);
 }
 
 bool HtmlExport::CreateHtmlTextForPresPages()
