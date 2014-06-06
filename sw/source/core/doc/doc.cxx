@@ -952,38 +952,42 @@ SwFlyFrmFmt* SwDoc::_InsNoTxtNode( const SwPosition& rPos, SwNoTxtNode* pNode,
     return pFmt;
 }
 
-SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg,
-                            const String& rGrfName,
-                            const String& rFltName,
-                            const Graphic* pGraphic,
-                            const SfxItemSet* pFlyAttrSet,
-                            const SfxItemSet* pGrfAttrSet,
-                            SwFrmFmt* pFrmFmt )
+
+SwFlyFrmFmt* SwDoc::Insert(
+    const SwPaM &rRg,
+    const String& rGrfName,
+    const String& rFltName,
+    const Graphic* pGraphic,
+    const SfxItemSet* pFlyAttrSet,
+    const SfxItemSet* pGrfAttrSet,
+    SwFrmFmt* pFrmFmt )
 {
-    if( !pFrmFmt )
+    if ( !pFrmFmt )
         pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = GetNodes().MakeGrfNode(
-                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                            rGrfName, rFltName, pGraphic,
-                            pDfltGrfFmtColl );
-    SwFlyFrmFmt* pSwFlyFrmFmt = _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode,
-                            pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-    pSwGrfNode->onGraphicChanged();
+        SwNodeIndex( GetNodes().GetEndOfAutotext() ),
+        rGrfName, rFltName, pGraphic,
+        pDfltGrfFmtColl );
+    SwFlyFrmFmt* pSwFlyFrmFmt =
+        _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode, pFlyAttrSet, pGrfAttrSet, pFrmFmt );
     return pSwFlyFrmFmt;
 }
-SwFlyFrmFmt* SwDoc::Insert( const SwPaM &rRg, const GraphicObject& rGrfObj,
-                            const SfxItemSet* pFlyAttrSet,
-                            const SfxItemSet* pGrfAttrSet,
-                            SwFrmFmt* pFrmFmt )
+
+
+SwFlyFrmFmt* SwDoc::Insert(
+    const SwPaM &rRg,
+    const GraphicObject& rGrfObj,
+    const SfxItemSet* pFlyAttrSet,
+    const SfxItemSet* pGrfAttrSet,
+    SwFrmFmt* pFrmFmt )
 {
-    if( !pFrmFmt )
+    if ( !pFrmFmt )
         pFrmFmt = GetFrmFmtFromPool( RES_POOLFRM_GRAPHIC );
     SwGrfNode* pSwGrfNode = GetNodes().MakeGrfNode(
-                            SwNodeIndex( GetNodes().GetEndOfAutotext() ),
-                            rGrfObj, pDfltGrfFmtColl );
+        SwNodeIndex( GetNodes().GetEndOfAutotext() ),
+        rGrfObj, pDfltGrfFmtColl );
     SwFlyFrmFmt* pSwFlyFrmFmt = _InsNoTxtNode( *rRg.GetPoint(), pSwGrfNode,
-                            pFlyAttrSet, pGrfAttrSet, pFrmFmt );
-    pSwGrfNode->onGraphicChanged();
+        pFlyAttrSet, pGrfAttrSet, pFrmFmt );
     return pSwFlyFrmFmt;
 }
 
