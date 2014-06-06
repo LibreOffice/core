@@ -25,6 +25,7 @@ public:
     void OneAtSignIsReturnedForPageNumberPlaceholderOfOneItem();
     void TwoAtSignsAreReturnedForPageNumberPlaceholderOfOneItem();
     void EmptyStringIsReturnedAsNumStringIfNoTextMarkIsSet();
+    void EmptyStringIsReturnedAsNumStringIfToxSourcesIsEmpty();
 
     CPPUNIT_TEST_SUITE(ToxTextGeneratorTest);
     CPPUNIT_TEST(EmptyStringIsReturnedForPageNumberPlaceholderOfZeroItems);
