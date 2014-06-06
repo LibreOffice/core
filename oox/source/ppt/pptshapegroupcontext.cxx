@@ -109,8 +109,6 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
         return new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) );
     case PPT_TOKEN( graphicFrame ): // CT_GraphicalObjectFrame
         {
-            if( pGraphicShape )
-                importExtDrawings();
             pGraphicShape = oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.OLE2Shape" ) );
             return new oox::drawingml::GraphicalObjectFrameContext( *this, mpGroupShapePtr, pGraphicShape, true );
         }
@@ -148,11 +146,6 @@ void PPTShapeGroupContext::applyFontRefColor(oox::drawingml::ShapePtr pShape, co
     {
         applyFontRefColor( *aIter ,rFontRefColor);
     }
-}
-
-void PPTShapeGroupContext::onEndElement()
-{
-    importExtDrawings();
 }
 
 } }

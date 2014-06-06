@@ -36,6 +36,7 @@
 #include "oox/drawingml/transform2dcontext.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
+#include "oox/ppt/pptshapegroupcontext.hxx"
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
@@ -103,7 +104,8 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
 
 GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart ) :
     ShapeContext( rParent, pMasterShapePtr, pShapePtr ),
-    mbEmbedShapesInChart( bEmbedShapesInChart )
+    mbEmbedShapesInChart( bEmbedShapesInChart ),
+    mpParent(&rParent)
 {
 }
 
@@ -146,7 +148,15 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
     return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
-
+void GraphicalObjectFrameContext::onEndElement()
+{
+    if( getCurrentElement() == PPT_TOKEN( graphicFrame ) && mpParent )
+    {
+        oox::ppt::PPTShapeGroupContext* pParent = dynamic_cast<oox::ppt::PPTShapeGroupContext*>(mpParent);
+        if( pParent )
+            pParent->importExtDrawings();
+    }
+}
 
 OleObjectGraphicDataContext::OleObjectGraphicDataContext( ContextHandler2Helper& rParent, ShapePtr xShape ) :
     ShapeContext( rParent, ShapePtr(), xShape ),

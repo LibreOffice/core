@@ -44,9 +44,11 @@ public:
     GraphicalObjectFrameContext( ::oox::core::ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onEndElement() SAL_OVERRIDE;
 
 private:
     bool                mbEmbedShapesInChart;
+    ::oox::core::ContextHandler2Helper* mpParent;
 };
 
 

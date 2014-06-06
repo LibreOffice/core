@@ -32,7 +32,6 @@ class PPTShapeGroupContext : public ::oox::drawingml::ShapeGroupContext
     ShapeLocation       meShapeLocation;
     oox::drawingml::ShapePtr    pGraphicShape;
 
-    void                importExtDrawings();
     void                applyFontRefColor(oox::drawingml::ShapePtr pShape, const oox::drawingml::Color& rFontRefColor);
 
 public:
@@ -46,7 +45,7 @@ public:
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
-    virtual void onEndElement() SAL_OVERRIDE;
+    void importExtDrawings();
 
 protected:
 

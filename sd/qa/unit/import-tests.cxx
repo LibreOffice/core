@@ -77,6 +77,7 @@ public:
     void testBnc870237();
     void testBnc870233_1();
     void testBnc870233_2();
+    void testBnc880763();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -104,6 +105,7 @@ public:
     CPPUNIT_TEST(testBnc870237);
     CPPUNIT_TEST(testBnc870233_1);
     CPPUNIT_TEST(testBnc870233_2);
+    CPPUNIT_TEST(testBnc880763);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -293,7 +295,7 @@ void SdFiltersTest::testN862510_2()
     const SdrPage *pPage = pDoc->GetPage(1);
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
     {
-        SdrObjGroup *pGrpObj = dynamic_cast<SdrObjGroup *>( pPage->GetObj( 1 ) );
+        SdrObjGroup *pGrpObj = dynamic_cast<SdrObjGroup *>( pPage->GetObj( 0 ) );
         CPPUNIT_ASSERT( pGrpObj );
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>( pGrpObj->GetSubList()->GetObj( 0 ) );
         CPPUNIT_ASSERT( pObj );
@@ -312,7 +314,7 @@ void SdFiltersTest::testN862510_3()
     const SdrPage *pPage = pDoc->GetPage( 1 );
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
     {
-        SdrObjGroup *pGrpObj = dynamic_cast<SdrObjGroup *>( pPage->GetObj( 1 ) );
+        SdrObjGroup *pGrpObj = dynamic_cast<SdrObjGroup *>( pPage->GetObj( 0 ) );
         CPPUNIT_ASSERT( pGrpObj );
         SdrObjCustomShape *pObj = dynamic_cast<SdrObjCustomShape *>( pGrpObj->GetSubList()->GetObj( 0 ) );
         CPPUNIT_ASSERT( pObj );
@@ -755,7 +757,7 @@ void SdFiltersTest::testBnc870237()
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
 
     // Simulate a:ext inside dsp:txXfrm with changing the lower distance
-    const SdrObjGroup* pObj = dynamic_cast<SdrObjGroup*>( pPage->GetObj( 1 ) );
+    const SdrObjGroup* pObj = dynamic_cast<SdrObjGroup*>( pPage->GetObj( 0 ) );
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextUpperDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(9919), (static_cast< const SdrTextLowerDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
@@ -900,6 +902,30 @@ void SdFiltersTest::testBnc870233_2()
     xDocShRef->DoClose();
 }
 
+void SdFiltersTest::testBnc880763()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc880763.pptx"));
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    // Check z-order of the two shapes, use background color to identify them
+    // First object in the background has blue background color
+    const SdrObject *pObj = dynamic_cast<SdrObject *>( pPage->GetObj( 0 ) );
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x0000ff),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
+
+    // Second object at the front has green background color
+    pObj = dynamic_cast<SdrObject *>( pPage->GetObj( 1 ) );
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x00ff00),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
+
+
+    xDocShRef->DoClose();
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
 
