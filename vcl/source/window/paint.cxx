@@ -24,6 +24,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <sal/types.h>
 
@@ -31,7 +32,6 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <svdata.hxx>
-#include <clipmgr.hxx>
 
 #define IMPL_PAINT_PAINT            ((sal_uInt16)0x0001)
 #define IMPL_PAINT_PAINTALL         ((sal_uInt16)0x0002)

@@ -20,11 +20,11 @@
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <sal/types.h>
 
 #include <salobj.hxx>
-#include <clipmgr.hxx>
 #include <window.h>
 
 bool ClipManager::instanceFlag = false;
@@ -171,7 +171,6 @@ void ClipManager::ClipAllChildren( Window *pWindow, Region& rRegion )
     }
 }
 
-
 Region* ClipManager::GetChildClipRegion( Window* pWindow )
 {
     if ( pWindow->mpWindowImpl->mbInitWinClipRegion )
@@ -206,6 +205,24 @@ void ClipManager::Exclude( Window *pWindow, Region& rRegion )
         rRegion.Exclude( Rectangle( Point ( pWindow->mnOutOffX, pWindow->mnOutOffY ),
                                     pWindow->GetOutputSizePixel() ) );
     }
+}
+
+bool ClipManager::ClipCoversWholeWindow( Window *pWindow )
+{
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
+    bool bCoversWholeWindow = false;
+
+    if ( pWindow->mpWindowImpl->mbInitWinClipRegion )
+        clipMgr->InitClipRegion( pWindow );
+
+    Region aWinClipRegion = pWindow->mpWindowImpl->maWinClipRegion;
+    Region aWinRegion( Rectangle ( Point( pWindow->mnOutOffX, pWindow->mnOutOffY ), pWindow->GetOutputSizePixel() ) );
+
+    if ( aWinRegion == aWinClipRegion )
+        bCoversWholeWindow = true;
+
+    return bCoversWholeWindow;
 }
 
 void ClipManager::initChildClipRegion( Window *pWindow )

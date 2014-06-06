@@ -43,6 +43,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <salframe.hxx>
 #include <salobj.hxx>
@@ -56,7 +57,6 @@
 #include <brdwin.hxx>
 #include <helpwin.hxx>
 #include <dndlcon.hxx>
-#include <clipmgr.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XDisplayConnection.hpp>

@@ -19,12 +19,12 @@
 
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <sal/types.h>
 
 #include <salobj.hxx>
 #include <window.h>
-#include <clipmgr.hxx>
 
 #define IMPL_MAXSAVEBACKSIZE    (640*480)
 #define IMPL_MAXALLSAVEBACKSIZE (800*600*2)
@@ -101,25 +101,6 @@ void Window::ExpandPaintClipRegion( const Region& rRegion )
         }
     }
 }
-
-bool Window::ClipCoversWholeWindow()
-{
-    ClipManager *clipMgr = ClipManager::GetInstance();
-
-    bool bCoversWholeWindow = false;
-
-    if ( mpWindowImpl->mbInitWinClipRegion )
-        clipMgr->InitClipRegion( this );
-
-    Region aWinClipRegion = mpWindowImpl->maWinClipRegion;
-    Region aWinRegion( Rectangle ( Point( mnOutOffX, mnOutOffY ), GetOutputSizePixel() ) );
-
-    if ( aWinRegion == aWinClipRegion )
-        bCoversWholeWindow = true;
-
-    return bCoversWholeWindow;
-}
-
 
 Region Window::GetActiveClipRegion() const
 {

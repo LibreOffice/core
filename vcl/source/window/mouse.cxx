@@ -28,6 +28,7 @@
 #include <vcl/floatwin.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <sal/types.h>
 
@@ -39,7 +40,6 @@
 #include <salframe.hxx>
 #include <dndlcon.hxx>
 #include <dndevdis.hxx>
-#include <clipmgr.hxx>
 
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>

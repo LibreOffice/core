@@ -21,11 +21,11 @@
 #include <vcl/window.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <window.h>
 #include <svdata.hxx>
 #include <salframe.hxx>
-#include <clipmgr.hxx>
 
 #include <com/sun/star/awt/MouseEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>

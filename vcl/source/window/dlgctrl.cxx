@@ -20,7 +20,7 @@
 #include <tools/debug.hxx>
 
 #include <svdata.hxx>
-#include <clipmgr.hxx>
+
 
 #include <dlgctrl.hxx>
 #include <vcl/event.hxx>
@@ -33,6 +33,7 @@
 #include <vcl/button.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/unohelp.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 

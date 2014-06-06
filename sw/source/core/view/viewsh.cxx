@@ -61,6 +61,7 @@
 #include <svtools/colorcfg.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/alpha.hxx>
+#include <vcl/clipmgr.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <accessibilityoptions.hxx>
 #include <statstr.hrc>
@@ -1176,9 +1177,11 @@ bool SwViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect
         lMult = 12;
     }
 
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+
     // #i75172# isolated static conditions
     const bool bOnlyYScroll(!lXDiff && std::abs(lYDiff) != 0 && std::abs(lYDiff) < lMax);
-    const bool bAllowedWithChildWindows(GetWin()->ClipCoversWholeWindow());
+    const bool bAllowedWithChildWindows( pClipMgr->ClipCoversWholeWindow( GetWin() ) );
     const bool bSmoothScrollAllowed(bOnlyYScroll && mbEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
 
     if(bSmoothScrollAllowed)

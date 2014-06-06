@@ -34,6 +34,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <window.h>
 #include <outfont.hxx>
@@ -44,7 +45,6 @@
 #include <salgdi.hxx>
 #include <salframe.hxx>
 #include <scrwnd.hxx>
-#include <clipmgr.hxx>
 
 using namespace com::sun::star;
 

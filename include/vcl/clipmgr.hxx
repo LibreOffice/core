@@ -25,10 +25,8 @@
 
 #include <sal/types.h>
 
-#include <salobj.hxx>
-#include <window.h>
 
-class ClipManager
+class VCL_DLLPUBLIC ClipManager
 {
 private:
     static bool instanceFlag;
@@ -54,6 +52,7 @@ public:
     bool ClipChildren( Window *pWindow, Region& rRegion );
     void ClipAllChildren( Window *pWindow, Region& rRegion );
     Region* GetChildClipRegion( Window* pWindow );
+    bool ClipCoversWholeWindow( Window *pWindow );
 
     void Intersect( Window* pWindow, Region& rRegion );
     void Exclude( Window *pWindow, Region& rRegion );

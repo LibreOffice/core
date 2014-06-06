@@ -19,6 +19,7 @@
 
 #include <vcl/window.hxx>
 #include <vcl/taskpanelist.hxx>
+#include <vcl/clipmgr.hxx>
 
 // declare system types in sysdata.hxx
 #include <vcl/sysdata.hxx>
@@ -30,7 +31,6 @@
 #include <window.h>
 #include <brdwin.hxx>
 #include <helpwin.hxx>
-#include <clipmgr.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 
