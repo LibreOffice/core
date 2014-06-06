@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="CondFormatManager">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -18,13 +20,14 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="OK">
+              <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -34,13 +37,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="HELP">
-                <property name="label">gtk-help</property>
+              <object class="GtkButton" id="cancel">
+                <property name="label">gtk-cancel</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -72,13 +74,12 @@
                 <property name="spacing">6</property>
                 <property name="layout_style">start</property>
                 <child>
-                  <object class="GtkButton" id="ADD">
+                  <object class="GtkButton" id="add">
                     <property name="label" translatable="yes">Add</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -87,13 +88,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="EDIT">
+                  <object class="GtkButton" id="edit">
                     <property name="label" translatable="yes">Edit...</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -102,13 +102,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="REMOVE">
+                  <object class="GtkButton" id="remove">
                     <property name="label" translatable="yes">Remove</property>
                     <property name="use_action_appearance">False</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -125,13 +124,14 @@
               </packing>
             </child>
             <child>
-              <object class="GtkDrawingArea" id="CONTAINER">
-                <property name="width_request">300</property>
-                <property name="height_request">200</property>
+              <object class="svtlo-SvSimpleTableContainer" id="CONTAINER">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Simple Table Container-selection1"/>
+                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -150,8 +150,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">OK</action-widget>
-      <action-widget response="0">HELP</action-widget>
+      <action-widget response="0">ok</action-widget>
+      <action-widget response="0">cancel</action-widget>
     </action-widgets>
   </object>
 </interface>

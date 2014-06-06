@@ -18,36 +18,22 @@
 #define ITEMID_CONDITION 2
 
 
-ScCondFormatManagerWindow::ScCondFormatManagerWindow(Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList):
-    SvTabListBox(pParent, WB_BORDER | WB_HSCROLL | WB_SORT | WB_CLIPCHILDREN | WB_TABSTOP),
-    maHeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER ),
-    mpDoc(pDoc),
-    mpFormatList(pFormatList)
+ScCondFormatManagerWindow::ScCondFormatManagerWindow(SvSimpleTableContainer& rParent,
+    ScDocument* pDoc, ScConditionalFormatList* pFormatList)
+    : SvSimpleTable(rParent, WB_HSCROLL | WB_SORT | WB_TABSTOP)
+    , mpDoc(pDoc)
+    , mpFormatList(pFormatList)
 {
-    Size aBoxSize( pParent->GetOutputSizePixel() );
-
-    maHeaderBar.SetPosSizePixel( Point(0, 0), Size( aBoxSize.Width(), 16 ) );
-
     OUString aConditionStr(ScGlobal::GetRscString(STR_HEADER_COND));
     OUString aRangeStr(ScGlobal::GetRscString(STR_HEADER_RANGE));
 
-    long nTabSize = aBoxSize.Width()/2;
-    maHeaderBar.InsertItem( ITEMID_RANGE, aRangeStr, nTabSize, HIB_LEFT| HIB_VCENTER );
-    maHeaderBar.InsertItem( ITEMID_CONDITION, aConditionStr, nTabSize, HIB_LEFT| HIB_VCENTER );
-
-    static long nTabs[] = {2, 0, nTabSize };
-    Size aHeadSize( maHeaderBar.GetSizePixel() );
-
-    //pParent->SetFocusControl( this );
-    SetPosSizePixel( Point( 0, aHeadSize.Height() ), Size( aBoxSize.Width(), aBoxSize.Height() - aHeadSize.Height() ) );
-    SetTabs( &nTabs[0], MAP_PIXEL );
-
-    maHeaderBar.SetEndDragHdl( LINK(this, ScCondFormatManagerWindow, HeaderEndDragHdl ) );
-    HeaderEndDragHdl(NULL);
+    OUStringBuffer sHeader;
+    sHeader.append(aRangeStr).append("\t").append(aConditionStr);
+    InsertHeaderEntry(sHeader.makeStringAndClear(), HEADERBAR_APPEND, HIB_LEFT | HIB_VCENTER);
+    setColSizes();
 
     Init();
     Show();
-    maHeaderBar.Show();
     SetSelectionMode(MULTIPLE_SELECTION);
 }
 
@@ -70,15 +56,18 @@ void ScCondFormatManagerWindow::Init()
         SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(*itr), TREELIST_APPEND, 0xffff );
         maMapLBoxEntryToCondIndex.insert(std::pair<SvTreeListEntry*,sal_Int32>(pEntry,itr->GetKey()));
     }
+
     SetUpdateMode(true);
+
+    if (mpFormatList->size())
+        SelectRow(0);
 }
 
-void ScCondFormatManagerWindow::ChangeSize(Size aSize)
+void ScCondFormatManagerWindow::Resize()
 {
-    maHeaderBar.SetSizePixel( Size( aSize.Width(), 16 ) );
-    Size aHeadSize( maHeaderBar.GetSizePixel() );
-    SetSizePixel( Size( aSize.Width(), aSize.Height() - aHeadSize.Height() ) );
-    HeaderEndDragHdl(NULL);
+    SvSimpleTable::Resize();
+    if (GetParentDialog()->isCalculatingInitialLayoutSize())
+        setColSizes();
 }
 
 void ScCondFormatManagerWindow::DeleteSelection()
@@ -111,23 +100,14 @@ void ScCondFormatManagerWindow::Update()
     Init();
 }
 
-IMPL_LINK_NOARG(ScCondFormatManagerWindow, HeaderEndDragHdl)
+void ScCondFormatManagerWindow::setColSizes()
 {
-    long aTableSize = maHeaderBar.GetSizePixel().Width();
-    long aItemRangeSize = maHeaderBar.GetItemSize(ITEMID_RANGE);
-
-    //calculate column size based on user input and minimum size
-    long aItemCondSize = aTableSize - aItemRangeSize;
-
-    Size aSz;
-    aSz.Width() = aItemRangeSize;
-    SetTab( ITEMID_RANGE, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
-    maHeaderBar.SetItemSize(ITEMID_RANGE, aItemRangeSize);
-    aSz.Width() += aItemCondSize;
-    SetTab( ITEMID_CONDITION, PixelToLogic( aSz, MapMode(MAP_APPFONT) ).Width(), MAP_APPFONT );
-    maHeaderBar.SetItemSize(ITEMID_CONDITION, aItemCondSize);
-
-    return 0;
+    HeaderBar &rBar = GetTheHeaderBar();
+    if (rBar.GetItemCount() < 2)
+        return;
+    long aStaticTabs[]= { 2, 0, 0 };
+    aStaticTabs[2] = rBar.GetSizePixel().Width() / 2;
+    SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
 }
 
 ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList, const ScAddress& rPos):
@@ -137,13 +117,14 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc
     maPos(rPos),
     mbModified(false)
 {
-    get(m_pGrid, "dialog-vbox1");
-    get(m_pContainer, "CONTAINER");
-    m_pContainer->SetSizePixel(Size(300, 100));
-    m_pCtrlManager = new ScCondFormatManagerWindow(m_pContainer, mpDoc, mpFormatList);
-    get(m_pBtnAdd, "ADD");
-    get(m_pBtnRemove, "REMOVE");
-    get(m_pBtnEdit, "EDIT");
+    SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("CONTAINER");
+    Size aSize(LogicToPixel(Size(290, 220), MAP_APPFONT));
+    pContainer->set_width_request(aSize.Width());
+    pContainer->set_height_request(aSize.Height());
+    m_pCtrlManager = new ScCondFormatManagerWindow(*pContainer, mpDoc, mpFormatList);
+    get(m_pBtnAdd, "add");
+    get(m_pBtnRemove, "remove");
+    get(m_pBtnEdit, "edit");
 
     m_pBtnRemove->SetClickHdl(LINK(this, ScCondFormatManagerDlg, RemoveBtnHdl));
     m_pBtnEdit->SetClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
@@ -151,16 +132,10 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc
     m_pCtrlManager->SetDoubleClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
 }
 
-void ScCondFormatManagerDlg::Resize()
-{
-    m_pGrid->SetSizePixel(Size(GetOutputSizePixel().Width() - 12, GetOutputSizePixel().Height() - 12));
-    m_pCtrlManager->ChangeSize(Size(GetOutputSizePixel().Width() - 18, GetOutputSizePixel().Height() - 100));
-}
-
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
 {
-    delete mpFormatList;
     delete m_pCtrlManager;
+    delete mpFormatList;
 }
 
 bool ScCondFormatManagerDlg::IsInRefMode() const
