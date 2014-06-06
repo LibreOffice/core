@@ -1935,7 +1935,7 @@ static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
             pFlyFmt->GetName().Match( aName ) == nNmLen )
         {
             // Only get and set the Flag
-            nNum = static_cast< sal_uInt16 >( pFlyFmt->GetName().Copy( nNmLen ).ToInt32() );
+            nNum = static_cast< sal_uInt16 >( rtl_ustr_toInt32( pFlyFmt->GetName().GetBuffer() + nNmLen, 10 ) );
             if( nNum-- && nNum < rFmts.size() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }
