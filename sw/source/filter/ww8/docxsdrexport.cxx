@@ -1188,6 +1188,23 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
     // to lots of contents, this size contains the real size.
     const Size aSize = pParentFrame->GetSize();
 
+    uno::Reference< drawing::XShape > xShape;
+    const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
+    if (pSdrObj)
+        xShape = uno::Reference< drawing::XShape >(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+    if (xPropertySet.is())
+        xPropSetInfo = xPropertySet->getPropertySetInfo();
+
+    m_pImpl->m_pBodyPrAttrList = pFS->createAttrList();
+    {
+        drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
+        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("TextVerticalAdjust"))
+            xPropertySet->getPropertyValue("TextVerticalAdjust") >>= eAdjust;
+        m_pImpl->m_pBodyPrAttrList->add(XML_anchor, oox::drawingml::GetTextVerticalAdjust(eAdjust));
+    }
+
     if (!bTextBoxOnly)
     {
         startDMLAnchorInline(&rFrmFmt, aSize);
@@ -1205,94 +1222,79 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
                             XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
                             FSEND);
         pFS->startElementNS(XML_wps, XML_wsp, FSEND);
-    }
-    pFS->singleElementNS(XML_wps, XML_cNvSpPr,
-                         XML_txBox, "1",
-                         FSEND);
+        pFS->singleElementNS(XML_wps, XML_cNvSpPr,
+                             XML_txBox, "1",
+                             FSEND);
 
-    uno::Any aRotation ;
-    uno::Reference< drawing::XShape > xShape;
-    const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
-    if (pSdrObj)
-        xShape = uno::Reference< drawing::XShape >(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
-    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-    if (xPropertySet.is())
-        xPropSetInfo = xPropertySet->getPropertySetInfo();
-    sal_Int32 nRotation = 0;
-    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
-    {
-        uno::Sequence< beans::PropertyValue > propList;
-        xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+        uno::Any aRotation ;
+        sal_Int32 nRotation = 0;
+        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
         {
-            OUString propName = propList[nProp].Name;
-            if (propName == "mso-rotation-angle")
+            uno::Sequence< beans::PropertyValue > propList;
+            xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
+            for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
             {
-                aRotation = propList[nProp].Value ;
-                break;
+                OUString propName = propList[nProp].Name;
+                if (propName == "mso-rotation-angle")
+                {
+                    aRotation = propList[nProp].Value ;
+                    break;
+                }
             }
         }
-    }
-    aRotation >>= nRotation ;
-    OString sRotation(OString::number(nRotation));
-    // Shape properties
-    pFS->startElementNS(XML_wps, XML_spPr, FSEND);
-    if (nRotation)
-    {
-        pFS->startElementNS(XML_a, XML_xfrm,
-                            XML_rot, sRotation.getStr(),
-                            FSEND);
-    }
-    else
-    {
-        pFS->startElementNS(XML_a, XML_xfrm, FSEND);
-    }
-    pFS->singleElementNS(XML_a, XML_off,
-                         XML_x, "0",
-                         XML_y, "0",
-                         FSEND);
-    OString aWidth(OString::number(TwipsToEMU(aSize.Width())));
-    OString aHeight(OString::number(TwipsToEMU(aSize.Height())));
-    pFS->singleElementNS(XML_a, XML_ext,
-                         XML_cx, aWidth.getStr(),
-                         XML_cy, aHeight.getStr(),
-                         FSEND);
-    pFS->endElementNS(XML_a, XML_xfrm);
-    OUString shapeType = "rect";
-    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
-    {
-        uno::Sequence< beans::PropertyValue > propList;
-        xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
-        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+        aRotation >>= nRotation ;
+        OString sRotation(OString::number(nRotation));
+        // Shape properties
+        pFS->startElementNS(XML_wps, XML_spPr, FSEND);
+        if (nRotation)
         {
-            OUString propName = propList[nProp].Name;
-            if (propName == "mso-orig-shape-type")
+            pFS->startElementNS(XML_a, XML_xfrm,
+                                XML_rot, sRotation.getStr(),
+                                FSEND);
+        }
+        else
+        {
+            pFS->startElementNS(XML_a, XML_xfrm, FSEND);
+        }
+        pFS->singleElementNS(XML_a, XML_off,
+                             XML_x, "0",
+                             XML_y, "0",
+                             FSEND);
+        OString aWidth(OString::number(TwipsToEMU(aSize.Width())));
+        OString aHeight(OString::number(TwipsToEMU(aSize.Height())));
+        pFS->singleElementNS(XML_a, XML_ext,
+                             XML_cx, aWidth.getStr(),
+                             XML_cy, aHeight.getStr(),
+                             FSEND);
+        pFS->endElementNS(XML_a, XML_xfrm);
+        OUString shapeType = "rect";
+        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+        {
+            uno::Sequence< beans::PropertyValue > propList;
+            xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
+            for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
             {
-                propList[nProp].Value >>= shapeType;
-                break;
+                OUString propName = propList[nProp].Name;
+                if (propName == "mso-orig-shape-type")
+                {
+                    propList[nProp].Value >>= shapeType;
+                    break;
+                }
             }
         }
-    }
-    //Empty shapeType will lead to corruption so to avoid that shapeType is set to default i.e. "rect"
-    if (shapeType.isEmpty())
-        shapeType = "rect";
+        //Empty shapeType will lead to corruption so to avoid that shapeType is set to default i.e. "rect"
+        if (shapeType.isEmpty())
+            shapeType = "rect";
 
-    pFS->singleElementNS(XML_a, XML_prstGeom,
-                         XML_prst, OUStringToOString(shapeType, RTL_TEXTENCODING_UTF8).getStr(),
-                         FSEND);
-    m_pImpl->m_bDMLTextFrameSyntax = true;
-    m_pImpl->m_pBodyPrAttrList = pFS->createAttrList();
-    {
-        drawing::TextVerticalAdjust eAdjust = drawing::TextVerticalAdjust_TOP;
-        if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("TextVerticalAdjust"))
-            xPropertySet->getPropertyValue("TextVerticalAdjust") >>= eAdjust;
-        m_pImpl->m_pBodyPrAttrList->add(XML_anchor, oox::drawingml::GetTextVerticalAdjust(eAdjust));
+        pFS->singleElementNS(XML_a, XML_prstGeom,
+                             XML_prst, OUStringToOString(shapeType, RTL_TEXTENCODING_UTF8).getStr(),
+                             FSEND);
+        m_pImpl->m_bDMLTextFrameSyntax = true;
+        m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
+        m_pImpl->m_bDMLTextFrameSyntax = false;
+        writeDMLEffectLst(rFrmFmt);
+        pFS->endElementNS(XML_wps, XML_spPr);
     }
-    m_pImpl->m_rExport.OutputFormat(pParentFrame->GetFrmFmt(), false, false, true);
-    m_pImpl->m_bDMLTextFrameSyntax = false;
-    writeDMLEffectLst(rFrmFmt);
-    pFS->endElementNS(XML_wps, XML_spPr);
 
     m_pImpl->m_rExport.mpParentFrame = NULL;
     bool skipTxBxContent = false ;
