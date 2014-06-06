@@ -578,7 +578,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
     const sal_Int32 nLength = rSequence.getLength();
     if (nLength)
     {
-        const bool bImpress = dynamic_cast< SdDrawDocument* >(GetModel())->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+        SdDrawDocument* pDrawDocument = dynamic_cast<SdDrawDocument*>(GetModel());
+        const bool bImpress = pDrawDocument && pDrawDocument->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 
         bool bBool = false;
         sal_Int32 nInt32 = 0;
