@@ -3688,7 +3688,8 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         // the mark is still a DdeBookmark
         // we replace it with a Bookmark, so it will get saved etc.
         ::sw::mark::IMark* const pMark = ppMark->get();
-        SwServerObject* const pServerObject = dynamic_cast<SwServerObject *>(&refObj);
+        ::sfx2::SvLinkSource* p = &refObj;
+        SwServerObject& rServerObject = dynamic_cast<SwServerObject&>(*p);
 
         // collecting state of old mark
         SwPaM aPaM(pMark->GetMarkStart());
@@ -3701,7 +3702,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
         OUString sMarkName = pMark->GetName();
 
         // remove mark
-        pServerObject->SetNoServer(); // this removes the connection between SwServerObject and mark
+        rServerObject.SetNoServer(); // this removes the connection between SwServerObject and mark
         // N.B. ppMark was not loaded from file and cannot have xml:id
         pMarkAccess->deleteMark(ppMark);
 
@@ -3710,7 +3711,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
             aPaM,
             sMarkName,
             IDocumentMarkAccess::BOOKMARK);
-        pServerObject->SetDdeBookmark(*pNewMark);
+        rServerObject.SetDdeBookmark(*pNewMark);
     }
 
     bDelBookmrk = false;
