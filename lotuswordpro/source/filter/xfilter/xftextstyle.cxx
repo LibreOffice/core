@@ -84,7 +84,7 @@ bool    XFTextStyle::Equal(IXFStyle *pStyle)
         return false;
     }
 
-    XFTextStyle *pOther = (XFTextStyle*)pStyle;
+    XFTextStyle *pOther = dynamic_cast<XFTextStyle*>(pStyle);
     if( !pOther )
     {
         return false;
