@@ -126,15 +126,6 @@ void Window::ClipToPaintRegion(Rectangle& rDstRect)
         rDstRect.Intersection(LogicToPixel(aPaintRgn.GetBoundRect()));
 }
 
-void Window::EnableClipSiblings( bool bClipSiblings )
-{
-
-    if ( mpWindowImpl->mpBorderWindow )
-        mpWindowImpl->mpBorderWindow->EnableClipSiblings( bClipSiblings );
-
-    mpWindowImpl->mbClipSiblings = bClipSiblings;
-}
-
 bool Window::ImplSysObjClip( const Region* pOldRegion )
 {
     ClipManager *clipMgr = ClipManager::GetInstance();

@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -77,6 +78,7 @@ OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type&
           ,m_nSizingFlags( SIZING_NONE )
           ,m_bActive( false )
 {
+    ClipManager *pClipMgr = ClipManager::GetInstance();
 
     // Set position and size
     if( GetData()->HasPosition() )
@@ -92,7 +94,7 @@ OTableWindow::OTableWindow( Window* pParent, const TTableWindowData::value_type&
     // because derived classes might need it
     SetTextColor(aSystemStyle.GetButtonTextColor());
 
-    EnableClipSiblings();
+    pClipMgr->EnableClipSiblings( this );
 }
 
 OTableWindow::~OTableWindow()

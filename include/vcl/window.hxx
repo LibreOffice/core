@@ -706,8 +706,6 @@ public:
     Size                                CalcOutputSize( const Size& rWinSz ) const;
     long                                CalcTitleWidth() const;
 
-    void                                EnableClipSiblings( bool bClipSiblings = true );
-
     void                                EnableChildTransparentMode( bool bEnable = true );
     bool                                IsChildTransparentModeEnabled() const;
 

@@ -26,6 +26,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/clipmgr.hxx>
 #include <vector>
 #include "FieldDescriptions.hxx"
 #include "dlgattr.hxx"
@@ -190,6 +191,8 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
 
 void OFieldDescControl::Contruct()
 {
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+
     m_pVertScroll = new ScrollBar(this, WB_VSCROLL | WB_REPEAT | WB_DRAG);
     m_pHorzScroll = new ScrollBar(this, WB_HSCROLL | WB_REPEAT | WB_DRAG);
     m_pVertScroll->SetScrollHdl(LINK(this, OFieldDescControl, OnScroll));
@@ -197,8 +200,8 @@ void OFieldDescControl::Contruct()
     m_pVertScroll->Show();
     m_pHorzScroll->Show();
 
-    m_pVertScroll->EnableClipSiblings();
-    m_pHorzScroll->EnableClipSiblings();
+    pClipMgr->EnableClipSiblings( m_pVertScroll );
+    pClipMgr->EnableClipSiblings( m_pHorzScroll );
 
     m_pVertScroll->SetLineSize(1);
     m_pVertScroll->SetPageSize(1);
@@ -983,20 +986,24 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
 void OFieldDescControl::InitializeControl(Control* _pControl,const OString& _sHelpId,bool _bAddChangeHandler)
 {
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+
     _pControl->SetHelpId(_sHelpId);
     if ( _bAddChangeHandler )
         ((OPropListBoxCtrl*)_pControl)->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
     _pControl->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
     _pControl->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
-    _pControl->EnableClipSiblings();
+    pClipMgr->EnableClipSiblings( _pControl );
 }
 
 FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
 {
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+
     FixedText* pFixedText = new FixedText( this );
     pFixedText->SetText( ModuleRes(_nTextRes) );
-    pFixedText->EnableClipSiblings();
+    pClipMgr->EnableClipSiblings( pFixedText );
     return pFixedText;
 }
 

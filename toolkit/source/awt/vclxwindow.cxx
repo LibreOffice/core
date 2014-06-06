@@ -46,6 +46,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
+#include <vcl/clipmgr.hxx>
 #include <tools/color.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -1200,8 +1201,10 @@ void VCLXWindow::enableClipSiblings( sal_Bool bClip ) throw(::com::sun::star::un
 {
     SolarMutexGuard aGuard;
 
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+
     if ( GetWindow() )
-        GetWindow()->EnableClipSiblings( bClip );
+        pClipMgr->EnableClipSiblings( GetWindow(), bClip );
 }
 
 void VCLXWindow::setForeground( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException, std::exception)

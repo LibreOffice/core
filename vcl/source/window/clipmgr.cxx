@@ -68,6 +68,15 @@ sal_uInt16 ClipManager::GetParentClipMode( Window* pWindow ) const
         return pWindow->mpWindowImpl->mnParentClipMode;
 }
 
+void ClipManager::EnableClipSiblings( Window *pWindow, bool bClipSiblings )
+{
+
+    if ( pWindow->mpWindowImpl->mpBorderWindow )
+        EnableClipSiblings( pWindow->mpWindowImpl->mpBorderWindow, bClipSiblings );
+
+    pWindow->mpWindowImpl->mbClipSiblings = bClipSiblings;
+}
+
 void ClipManager::InitClipRegion( Window *pWindow )
 {
     // Build Window region
