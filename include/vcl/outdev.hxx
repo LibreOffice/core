@@ -1040,7 +1040,7 @@ public:
     void                        SetTextFillColor();
     void                        SetTextFillColor( const Color& rColor );
     Color                       GetTextFillColor() const;
-    bool                        IsTextFillColor() const {  return return !maFont.IsTransparent(); }
+    bool                        IsTextFillColor() const { return !maFont.IsTransparent(); }
 
     void                        SetTextLineColor();
     void                        SetTextLineColor( const Color& rColor );
