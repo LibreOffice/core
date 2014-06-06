@@ -18,6 +18,7 @@ $(eval $(call gb_Library_use_libraries,lwpft,\
     cppu \
     cppuhelper \
     sal \
+    salhelper \
 	i18nlangtag \
     sfx \
     sot \

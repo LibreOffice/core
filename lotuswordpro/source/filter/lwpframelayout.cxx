@@ -691,8 +691,8 @@ void LwpFrame::ParseAnchorType(XFFrame *pXFFrame)
             //because of the different feature between Word Pro and SODC, I simulate the vertical base offset
             //between anchor and frame orgin using the font height.
             //LwpPara* pPara = static_cast<LwpPara*>(m_pLayout->GetPosition()->obj());
-            XFFont* pFont = m_pLayout->GetFont();
-            if(pFont)
+            rtl::Reference<XFFont> pFont = m_pLayout->GetFont();
+            if(pFont.is())
             {
                 offset = (double)(pFont->GetFontSize())*CM_PER_INCH/POINTS_PER_INCH;
             }

@@ -242,7 +242,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
     //we only read four modifiers, in these modifiers,CodePage and LangOverride are not styles,
     //so we can only handle fontid and characstyle, if others ,we should not reg style
     //note by ,1-27
-    XFFont* pFont;
+    rtl::Reference<XFFont> pFont;
     XFTextStyle* pStyle = NULL;
     m_StyleName = "";
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -412,9 +412,9 @@ void LwpFrib::ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyp
 *  @descr:   Get the current frib font style
 *  @return:  XFFont pointer
 */
-XFFont* LwpFrib::GetFont()
+rtl::Reference<XFFont> LwpFrib::GetFont()
 {
-    XFFont* pFont = NULL;
+    rtl::Reference<XFFont> pFont;
     if(m_pModifiers&&m_pModifiers->FontID)
     {
         LwpFoundry* pFoundry = m_pPara->GetFoundry();

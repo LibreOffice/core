@@ -71,7 +71,7 @@ void LwpFontAttrEntry::Read(LwpObjectStream *pStrm)
 }
 
 #include "xfilter/xfdefs.hxx"
-void LwpFontAttrEntry::Override( XFFont*pFont )
+void LwpFontAttrEntry::Override( rtl::Reference<XFFont> const & pFont )
 {
     if (IsBoldOverridden())
         pFont->SetBold(Is(BOLD));
@@ -293,7 +293,7 @@ void LwpFontNameEntry::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 #include "xfilter/xfcolor.hxx"
-void LwpFontNameEntry::Override(XFFont* pFont)
+void LwpFontNameEntry::Override(rtl::Reference<XFFont> const & pFont)
 {
     if (IsPointSizeOverridden())
         pFont->SetFontSize(static_cast<sal_uInt8>(m_nPointSize/65536L));
@@ -387,7 +387,7 @@ void LwpFontNameManager::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-void    LwpFontNameManager::Override(sal_uInt16 index, XFFont* pFont)
+void    LwpFontNameManager::Override(sal_uInt16 index, rtl::Reference<XFFont> const & pFont)
     //index: start from 1
 {
     if (index > m_nCount || index < 1)
@@ -417,7 +417,7 @@ void LwpFontAttrManager::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-void    LwpFontAttrManager::Override(sal_uInt16 index, XFFont* pFont)
+void    LwpFontAttrManager::Override(sal_uInt16 index, rtl::Reference<XFFont> const & pFont)
     //index: start from 1
 {
     if (index > m_nCount || index < 1)
@@ -477,9 +477,9 @@ Prerequisite: pStyle has been created and the paragraph properties has been set 
 /*
 Create XFFont based on the fotID
 */
-XFFont* LwpFontManager::CreateFont(sal_uInt32 fontID)
+rtl::Reference<XFFont> LwpFontManager::CreateFont(sal_uInt32 fontID)
 {
-    XFFont* pFont = new XFFont();
+    rtl::Reference<XFFont> pFont = new XFFont();
     m_FNMgr.Override(GetFontNameIndex(fontID), pFont);
     m_AttrMgr.Override(GetFontAttrIndex(fontID), pFont);
     return pFont;
@@ -490,9 +490,9 @@ Called XFFont based on the override result of two font ids.
 Refer to CFontManager::OverrideID
 */
 //OUString LwpFontManager::GetOverrideStyle(sal_uInt32 fontID, sal_uInt32 overID)
-XFFont* LwpFontManager::CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID)
+rtl::Reference<XFFont> LwpFontManager::CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID)
 {
-    XFFont* pFont = new XFFont();   //To be deleted by XFFontFactory
+    rtl::Reference<XFFont> pFont = new XFFont();   //To be deleted by XFFontFactory
     if(fontID)
     {
         Override(fontID, pFont);
@@ -504,7 +504,7 @@ XFFont* LwpFontManager::CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID)
     return pFont;
 }
 
-void LwpFontManager::Override(sal_uInt32 fontID, XFFont* pFont)
+void LwpFontManager::Override(sal_uInt32 fontID, rtl::Reference<XFFont> const & pFont)
 {
     m_FNMgr.Override(GetFontNameIndex(fontID), pFont);
     m_AttrMgr.Override(GetFontAttrIndex(fontID), pFont);

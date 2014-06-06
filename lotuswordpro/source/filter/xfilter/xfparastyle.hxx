@@ -62,6 +62,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPARASTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFPARASTYLE_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"
 #include "xfcolor.hxx"
@@ -110,12 +114,12 @@ public:
      * @param   font font object to be setted.Font object are deleted by font-factory,so
      *          dont't delete it in the destructure function of para style.
      */
-    void    SetFont(XFFont *font);
+    void    SetFont(rtl::Reference<XFFont> const & font);
 
     /**
      * @descr   get the font object.
      */
-    XFFont* GetFont(){ return m_pFont; }
+    rtl::Reference<XFFont> GetFont(){ return m_pFont; }
 
     /**
      * @descr   Set the indent of the paragraph.This is the indent for
@@ -252,7 +256,7 @@ protected:
     XFMargins   m_aMargin;
     XFPadding   m_aPadding;
     XFStyleContainer m_aTabs;
-    XFFont      *m_pFont;
+    rtl::Reference<XFFont> m_pFont;
     XFShadow    m_aShadow;
     XFBorders   *m_pBorders;
     XFBGImage   *m_pBGImage;

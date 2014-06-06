@@ -66,14 +66,13 @@
 
 XFTextStyle::XFTextStyle()
 {
-    m_pFont = NULL;
 }
 
 XFTextStyle::~XFTextStyle()
 {
 }
 
-void    XFTextStyle::SetFont(XFFont *font)
+void    XFTextStyle::SetFont(rtl::Reference<XFFont> const & font)
 {
     m_pFont = font;
 }
@@ -91,14 +90,14 @@ bool    XFTextStyle::Equal(IXFStyle *pStyle)
         return false;
     }
 
-    if( m_pFont )
+    if( m_pFont.is() )
     {
-        if( !pOther->m_pFont )
+        if( !pOther->m_pFont.is() )
             return false;
         if( *m_pFont != *pOther->m_pFont )
             return false;
     }
-    else if( pOther->m_pFont )
+    else if( pOther->m_pFont.is() )
         return false;
 
     return true;
@@ -126,7 +125,7 @@ void    XFTextStyle::ToXml(IXFStream *strm)
     //Font properties:
     pAttrList->Clear();
     //font name:
-    if( m_pFont )
+    if( m_pFont.is() )
         m_pFont->ToXml(strm);
 
     strm->StartElement("style:properties");

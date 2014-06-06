@@ -60,6 +60,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTFACTORY_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFFONTFACTORY_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "xfglobal.hxx"
 #include "xffont.hxx"
 #include <vector>
@@ -88,17 +92,17 @@ private:
      * @descr   Add a font. if there exist a font with same properties with pFont, them the font object
      *          will not be added.
      */
-    void    AddFont(XFFont *pFont);
+    void    AddFont(rtl::Reference<XFFont> const & pFont);
 
     /**
      * @descr   Find whether same font object exists.
      */
-    XFFont* FindSameFont(XFFont *pFont);
+    rtl::Reference<XFFont> FindSameFont(rtl::Reference<XFFont> const & pFont);
 
     friend class XFStyleContainer;
 
 private:
-    std::vector<XFFont*>    s_aFonts;
+    std::vector< rtl::Reference<XFFont> > s_aFonts;
 };
 
 #endif

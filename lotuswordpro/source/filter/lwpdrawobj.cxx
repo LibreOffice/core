@@ -972,7 +972,7 @@ LwpDrawTextBox::~LwpDrawTextBox()
     }
 }
 
-void LwpDrawTextBox::SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec)
+void LwpDrawTextBox::SetFontStyle(rtl::Reference<XFFont> const & pFont, SdwTextBoxRecord* pRec)
 {
     // color
     XFColor aXFColor(pRec->aTextColor.nR, pRec->aTextColor.nG,
@@ -1065,7 +1065,7 @@ OUString LwpDrawTextBox::RegisterStyle()
 
     // font style
     // the pFont need to be deleted myself?
-    XFFont* pFont = new XFFont();
+    rtl::Reference<XFFont> pFont = new XFFont();
 
     rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
     OUString aFontName = OUString((sal_Char*)m_aTextRec.tmpTextFaceName,
@@ -1257,7 +1257,7 @@ OUString LwpDrawTextArt::RegisterStyle()
 
     // font style
     // the pFont need to be deleted myself?
-    XFFont* pFont = new XFFont();
+    rtl::Reference<XFFont> pFont = new XFFont();
 
     rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
     OUString aFontName = OUString((sal_Char*)m_aTextArtRec.tmpTextFaceName,

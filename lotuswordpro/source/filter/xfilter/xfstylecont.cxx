@@ -209,8 +209,8 @@ void    XFStyleContainer::ToXml(IXFStream *pStrm)
 
 void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
 {
-    XFFont *pStyleFont = NULL;
-    XFFont *pFactoryFont = NULL;
+    rtl::Reference<XFFont> pStyleFont;
+    rtl::Reference<XFFont> pFactoryFont;
 
     if( !pStyle )
         return;
@@ -219,17 +219,15 @@ void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
     {
         XFTextStyle *pTS = (XFTextStyle*)pStyle;
         pStyleFont = pTS->GetFont();
-        if( !pStyleFont )
+        if( !pStyleFont.is() )
             return;
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         XFFontFactory* pFontFactory = pGlobal->GetXFFontFactory();
         pFactoryFont = pFontFactory->FindSameFont(pStyleFont);
         //this font has been exists in the factory:
-        if( pFactoryFont )
+        if( pFactoryFont.is() )
         {
             pTS->SetFont(pFactoryFont);
-            if( pStyleFont != pFactoryFont )
-                delete pStyleFont;
         }
         else
         {
@@ -240,17 +238,15 @@ void    XFStyleContainer::ManageStyleFont(IXFStyle *pStyle)
     {
         XFParaStyle *pPS = (XFParaStyle*)pStyle;
         pStyleFont = pPS->GetFont();
-        if( !pStyleFont )
+        if( !pStyleFont.is() )
             return;
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         XFFontFactory* pFontFactory = pGlobal->GetXFFontFactory();
         pFactoryFont = pFontFactory->FindSameFont(pStyleFont);
         //this font has been exists in the factory:
-        if( pFactoryFont )
+        if( pFactoryFont.is() )
         {
             pPS->SetFont(pFactoryFont);
-            if( pFactoryFont != pStyleFont )
-                delete pStyleFont;
         }
         else
         {

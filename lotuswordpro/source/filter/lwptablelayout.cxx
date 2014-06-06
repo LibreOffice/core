@@ -1214,11 +1214,11 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
 
                 if (bColorMod)
                 {
-                    XFFont* pFont = pOverStyle->GetFont();
+                    rtl::Reference<XFFont> pFont = pOverStyle->GetFont();
                     XFColor aColor = pFont->GetColor();
                     if ( aColor == aNullColor )
                     {
-                        XFFont* pNewFont = new XFFont;
+                        rtl::Reference<XFFont> pNewFont = new XFFont;
                         aColor = pNumStyle->GetColor();
                         pNewFont->SetColor(aColor);
                         pOverStyle->SetFont(pNewFont);
