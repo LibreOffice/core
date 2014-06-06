@@ -564,7 +564,7 @@ OUString SwAuthorityField::ConditionalExpand(ToxAuthorityField eField) const
         if(pEntry)
             sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
     }
-    if(pAuthType->GetSuffix())
+    if(pAuthType->GetSuffix() && eField != AUTH_FIELD_TITLE)
         sRet += OUString(pAuthType->GetSuffix());
     return sRet;
 }
