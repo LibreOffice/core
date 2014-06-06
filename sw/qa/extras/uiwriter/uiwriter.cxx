@@ -229,6 +229,16 @@ void SwUiWriterTest::testExportRTF()
     aWrt.Write(xWrt);
 
     OString aData(static_cast<const sal_Char*>(aStream.GetBuffer()), aStream.GetSize());
+
+    //Amusingly eventually there was a commit id with "ccc" in it, and so the rtf contained
+    //{\*\generator LibreOfficeDev/4.4.0.0.alpha0$Linux_X86_64 LibreOffice_project/f70664ccc6837f2cc21a29bb4f44e41e100efe6b}
+    //so the test fell over. so strip the generator tag
+    sal_Int32 nGeneratorStart = aData.indexOf("{\\*\\generator ");
+    CPPUNIT_ASSERT(nGeneratorStart != -1);
+    sal_Int32 nGeneratorEnd = aData.indexOf('}', nGeneratorStart + 1);
+    CPPUNIT_ASSERT(nGeneratorEnd != -1);
+    aData = aData.replaceAt(nGeneratorStart, nGeneratorEnd-nGeneratorStart+1, "");
+
     CPPUNIT_ASSERT(aData.startsWith("{\\rtf1"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aData.indexOf("aaa"));
     CPPUNIT_ASSERT(aData.indexOf("bbb") != -1);
