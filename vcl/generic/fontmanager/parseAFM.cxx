@@ -1151,7 +1151,7 @@ static int parseCompCharData( FileInputStream* fp, FontInfo* fi)
                     break;
                 case COMMENT:
                 case COMPCHAR:
-                    keyword = linetoken(fp);
+                    linetoken(fp);
                     break;
                 default:
                     break;
