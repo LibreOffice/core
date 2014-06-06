@@ -345,9 +345,6 @@ SwGrfNode::~SwGrfNode()
 /// allow reaction on change of content of GraphicObject
 void SwGrfNode::onGraphicChanged()
 {
-    if (GetGrfObj().IsSwappedOut()) // don't force swap-in for this
-        return;
-
     // try to access SwFlyFrmFmt; since title/desc/name are set there, there is no
     // use to continue if it is not yet set. If not yet set, call onGraphicChanged()
     // when it is set.
