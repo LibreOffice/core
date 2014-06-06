@@ -1140,14 +1140,9 @@ bool ImpSvNumberInputScan::MayBeMonthDate()
                 }
                 else if (bDay1 && bDay2)
                 {
-                    if (bYear1 && !bYear2)
-                    {
-                        nMayBeMonthDate = 3;    // yy-month-dd
-                    }
-                    else if (!bYear1 && bYear2)
-                    {
-                        nMayBeMonthDate = 2;    // dd-month-yy
-                    }
+                    // Ambiguous ##-MMM-## date, but some big vendor's database
+                    // reports write this crap, assume this always to be
+                    nMayBeMonthDate = 2;        // dd-month-yy
                 }
             }
         }
