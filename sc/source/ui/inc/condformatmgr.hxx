@@ -17,7 +17,7 @@
 #include <svtools/svtabbx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
-#include <svtools/headbar.hxx>
+#include <svtools/simptabl.hxx>
 
 #include "conditio.hxx"
 
@@ -25,26 +25,24 @@
 
 class ScDocument;
 
-class ScCondFormatManagerWindow : public SvTabListBox
+class ScCondFormatManagerWindow : public SvSimpleTable
 {
 private:
     void Init();
     OUString createEntryString(const ScConditionalFormat& rFormat);
+    void setColSizes();
 
-    HeaderBar maHeaderBar;
     ScDocument* mpDoc;
     ScConditionalFormatList* mpFormatList;
     std::map<SvTreeListEntry*, sal_Int32> maMapLBoxEntryToCondIndex;
 
-    DECL_LINK( HeaderEndDragHdl, void* );
-
 public:
-    ScCondFormatManagerWindow( Window* pParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList);
-    void ChangeSize(Size aSize);
+    ScCondFormatManagerWindow(SvSimpleTableContainer& rParent, ScDocument* pDoc, ScConditionalFormatList* pFormatList);
 
     void DeleteSelection();
     ScConditionalFormat* GetSelection();
     void Update();
+    virtual void Resize() SAL_OVERRIDE;
 };
 
 class ScCondFormatManagerDlg : public ModalDialog
@@ -64,8 +62,6 @@ private:
     PushButton *m_pBtnRemove;
     PushButton *m_pBtnEdit;
     ScConditionalFormatList* mpFormatList;
-    Window *m_pContainer;
-    VclVBox *m_pGrid;
     ScCondFormatManagerWindow *m_pCtrlManager;
 
     ScDocument* mpDoc;
@@ -74,8 +70,6 @@ private:
     DECL_LINK(RemoveBtnHdl, void*);
     DECL_LINK(EditBtnHdl, void*);
     DECL_LINK(AddBtnHdl, void*);
-
-    virtual void Resize();
 
     bool mbModified;
 };
