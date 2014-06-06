@@ -29,10 +29,13 @@
 #include "fchrfmt.hxx"
 #include "tgrditem.hxx"
 #include "fmtruby.hxx"
+#include "fmtanchr.hxx"
 #include "breakit.hxx"
 #include "redline.hxx"
 #include "unocoll.hxx"
 #include "unoframe.hxx"
+#include "unodraw.hxx"
+#include "textboxhelper.hxx"
 #include "wrtww8.hxx"
 
 #include "wrtww8.hxx"
@@ -4547,6 +4550,14 @@ void DocxAttributeOutput::WriteOutliner(const OutlinerParaObject& rParaObj)
         --m_nTextFrameLevel;
     }
     m_pSerializer->endElementNS( XML_w, XML_txbxContent );
+}
+
+void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
+{
+    SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(xShape);
+    const SwPosition* pAnchor = pTextBox->GetAnchor().GetCntntAnchor();
+    sw::Frame aFrame(*pTextBox, *pAnchor);
+    m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
 }
 
 oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()

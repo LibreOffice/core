@@ -812,6 +812,21 @@ ShapeExport& ShapeExport::WriteShape( Reference< XShape > xShape )
 
 ShapeExport& ShapeExport::WriteTextBox( Reference< XInterface > xIface, sal_Int32 nXmlNamespace )
 {
+    // In case this shape has an associated textbox, then export that, and we're done.
+    if (GetDocumentType() == DOCUMENT_DOCX && GetTextExport())
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xIface, uno::UNO_QUERY);
+        if (xPropertySet.is())
+        {
+            uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
+            if (xPropertySetInfo->hasPropertyByName("TextBox") && xPropertySet->getPropertyValue("TextBox").get<bool>())
+            {
+                GetTextExport()->WriteTextBox(uno::Reference<drawing::XShape>(xIface, uno::UNO_QUERY_THROW));
+                return *this;
+            }
+        }
+    }
+
     if( NonEmptyText( xIface ) )
     {
         FSHelperPtr pFS = GetFS();

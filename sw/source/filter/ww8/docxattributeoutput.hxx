@@ -918,6 +918,8 @@ public:
 
     /// VMLTextExport
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) SAL_OVERRIDE;
+    /// DMLTextExport
+    virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) SAL_OVERRIDE;
     virtual oox::drawingml::DrawingML& GetDrawingML() SAL_OVERRIDE;
     virtual void switchHeaderFooter(bool isHeaderFooter, sal_Int32 index);
 

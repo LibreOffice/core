@@ -92,7 +92,7 @@ public:
                           com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOutStream, const OUString& sGrabBagProperyName,
                           int nAnchorId);
     /// Writes text frame in DML format.
-    void writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId);
+    void writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly = false);
     /// Writes text frame in VML format.
     void writeVMLTextFrame(sw::Frame* pParentFrame);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
