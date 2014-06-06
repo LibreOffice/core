@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standard">
+  <block-list:block block-list:abbreviated-name="2011" block-list:package-name="2011" block-list:name="2011. hónap nap" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="2012" block-list:package-name="2012" block-list:name="2012. hónap nap" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="2013" block-list:package-name="2013" block-list:name="2013. hónap nap" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="2014" block-list:package-name="2014" block-list:name="2014. hónap nap" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="2010" block-list:package-name="2010" block-list:name="2010. hónap nap" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="AL" block-list:package-name="AL" block-list:name="AJÁNLOTT LEVÉL" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="B" block-list:package-name="B" block-list:name="BIZALMAS" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="EL" block-list:package-name="EL" block-list:name="Előzmény:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="EX" block-list:package-name="EX" block-list:name="EXPRESSZ KÉZBESÍTÉS" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Képletszámozás" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="HI" block-list:package-name="HI" block-list:name="Hivatkozás:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="I" block-list:package-name="I" block-list:name="Illetékes:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="K" block-list:package-name="K" block-list:name="Köszönettel:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="KH" block-list:package-name="KH" block-list:name="Kedves Hölgyem!" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="KHU" block-list:package-name="KHU" block-list:name="Kedves Hölgyem, Uram!" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="KU" block-list:package-name="KU" block-list:name="Kedves Uram!" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="LP" block-list:package-name="LP" block-list:name="LÉGIPOSTA" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="MJ" block-list:package-name="MJ" block-list:name="Minden jót!" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ML" block-list:package-name="ML" block-list:name="MAGÁNLEVÉL" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="SZ" block-list:package-name="SZ" block-list:name="Szívélyes üdvözlettel:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="T" block-list:package-name="T" block-list:name="Tárgy:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="TC" block-list:package-name="TC" block-list:name="Tisztelt Címzett!" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="TH" block-list:package-name="TH" block-list:name="Tisztelt Hölgyem!" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="THU" block-list:package-name="THU" block-list:name="Tisztelt Hölgyem, Uram!" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="TI" block-list:package-name="TI" block-list:name="Tisztelettel:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="TL" block-list:package-name="TL" block-list:name="TÉRTIVEVÉNYES LEVÉL" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="TU" block-list:package-name="TU" block-list:name="Tisztelt Uram!" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="U" block-list:package-name="U" block-list:name="Üdvözlettel:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="PL" block-list:package-name="PL" block-list:name="Példaszöveg" block-list:unformatted-text="true"/>
+  </block-list:block-list>

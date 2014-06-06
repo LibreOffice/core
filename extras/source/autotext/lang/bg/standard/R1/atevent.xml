@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ooo:auto-text-events xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:ooo="http://openoffice.org/2004/office" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <office:event-listeners>
+  <script:event-listener script:language="ooo:StarBasic" script:event-name="office:insert-done" script:macro-name="application:Template.Autotext.Main"/>
+ </office:event-listeners>
+</ooo:auto-text-events>

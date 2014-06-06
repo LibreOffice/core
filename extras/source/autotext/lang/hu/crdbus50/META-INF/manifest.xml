@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "../../../../../../../package/dtd/Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+ <manifest:file-entry manifest:media-type="" manifest:full-path="/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE1/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE1/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE1/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CLE1/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CON1/Pictures/2000001B00000CD200000CED91A0BB03.svm"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CON1/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON1/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON1/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON1/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CON1/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE2/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE2/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE2/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CLE2/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE3/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE3/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE3/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE3/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CLE3/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CLE3/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CON2/Pictures/2000001B00000CD200000CED91A0BB03.svm"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CON2/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON2/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON2/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CON2/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CON2/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="BlockList.xml"/>
+</manifest:manifest>

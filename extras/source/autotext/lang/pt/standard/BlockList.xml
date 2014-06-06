@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standard">
+  <block-list:block block-list:abbreviated-name="1L" block-list:package-name="1L" block-list:name="1º lembrete" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="2L" block-list:package-name="2L" block-list:name="2º lembrete" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="AG" block-list:package-name="AG" block-list:name="Agradecimentos" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ANE" block-list:package-name="ANE" block-list:name="Anexo" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="AQPD" block-list:package-name="AQPD" block-list:name="A quem possa dizer respeito:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="AS" block-list:package-name="AS" block-list:name="Assunto:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="AT" block-list:package-name="AT" block-list:name="Atenção:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ATE" block-list:package-name="ATE" block-list:name="Atentamente" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="AV" block-list:package-name="AV" block-list:name="Aviso de recepção" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CCE" block-list:package-name="CCE" block-list:name="CORREIO CERTIFICADO" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CGE" block-list:package-name="CGE" block-list:name="Cancelamento, Geral" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CI" block-list:package-name="CI" block-list:name="Citação" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CO" block-list:package-name="CO" block-list:name="CONFIDENCIAL" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CON" block-list:package-name="CON" block-list:name="Consulta" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="COR" block-list:package-name="COR" block-list:name="Cordialmente," block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CR" block-list:package-name="CR" block-list:name="CORREIO REGISTADO" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CRMC" block-list:package-name="CRMC" block-list:name="Candidatura de trabalho: Rejeição, mantendo a candidatura" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CSS" block-list:package-name="CSS" block-list:name="Cara senhora ou senhor" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CTC" block-list:package-name="CTC" block-list:name="Candidatura de trabalho: Carta" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CTCE" block-list:package-name="CTCE" block-list:name="Candidatura de trabalho: Convite para entrevista" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CTCR" block-list:package-name="CTCR" block-list:name="Candidatura de trabalho: Carta de rejeição" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CTCRE" block-list:package-name="CTCRE" block-list:name="Candidatura de trabalho: Confirmação de recepção" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="EE" block-list:package-name="EE" block-list:name="ENTREGA ESPECIAL" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="EN" block-list:package-name="EN" block-list:name="Encomenda" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ERA" block-list:package-name="ERA" block-list:name="Em resposta a:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="INQ" block-list:package-name="INQ" block-list:name="Inquérito" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="LAC" block-list:package-name="LAC" block-list:name="Literatura de aviso de Copyright" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="MC" block-list:package-name="MC" block-list:name="Melhores cumprimentos," block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ME" block-list:package-name="ME" block-list:name="Melhoras" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="NF" block-list:package-name="NF" block-list:name="Números de fórmulas" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="OB" block-list:package-name="OB" block-list:name="Obrigado" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="PCA" block-list:package-name="PCA" block-list:name="POR CORREIO AÉREO" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="PCN" block-list:package-name="PCN" block-list:name="POR CORREIO NOCTURNO" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="PE" block-list:package-name="PE" block-list:name="PESSOAL" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="REF" block-list:package-name="REF" block-list:name="Referência:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="RES" block-list:package-name="RES" block-list:name="Respeitosamente" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="SIN" block-list:package-name="SIN" block-list:name="Sinceramente" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="SS" block-list:package-name="SS" block-list:name="Senhoras e senhores:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="TE" block-list:package-name="TE" block-list:name="Texto exemplo" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="TP" block-list:package-name="TP" block-list:name="Termos de pagamento" block-list:unformatted-text="true"/>
+</block-list:block-list>

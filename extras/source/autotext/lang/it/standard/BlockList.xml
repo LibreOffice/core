@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standard">
+  <block-list:block block-list:abbreviated-name="A" block-list:package-name="A" block-list:name="Allegati" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CP" block-list:package-name="CP" block-list:name="Condizioni di pagamento" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CR" block-list:package-name="CR" block-list:name="Conferma di ricezione" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CS" block-list:package-name="CS" block-list:name="Cordiali saluti" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="DA" block-list:package-name="DA" block-list:name="Diritti di autore" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="DG" block-list:package-name="DG" block-list:name="Disdetta generale" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="DIRIF" block-list:package-name="DIRIF" block-list:name="Domanda di impiego: rifiuto" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Numerazione della formula" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="ICOLL" block-list:package-name="ICOLL" block-list:name="Domanda di impiego: invito ad un colloquio" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="IDOC" block-list:package-name="IDOC" block-list:name="Domanda di impiego: rifiuto, documentazione non restituita" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="IMP" block-list:package-name="IMP" block-list:name="Testo per una domanda di impiego" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="IRIC" block-list:package-name="IRIC" block-list:name="Domanda di impiego: conferma di ricevimento" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="O" block-list:package-name="O" block-list:name="Ordine" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="P" block-list:package-name="P" block-list:name="Preventivo" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="R" block-list:package-name="R" block-list:name="Richiesta di informazioni" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="S1" block-list:package-name="S1" block-list:name="Sollecito 1" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="S2" block-list:package-name="S2" block-list:name="Sollecito 2" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="SD" block-list:package-name="SD" block-list:name="Spettabile Ditta," block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="TE" block-list:package-name="TE" block-list:name="Testo esempio" block-list:unformatted-text="true"/>
+  </block-list:block-list>

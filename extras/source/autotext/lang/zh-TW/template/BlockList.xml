@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="僅適用於範本">
+ <block-list:block block-list:abbreviated-name="H1B" block-list:package-name="H1B" block-list:name="介紹手冊，首頁的頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1C" block-list:package-name="H1C" block-list:name="紀念文章第一頁的頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1N" block-list:package-name="H1N" block-list:name="新聞簡報第一頁的首頁" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HB" block-list:package-name="HB" block-list:name="介紹手冊的頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HC" block-list:package-name="HC" block-list:name="紀念文章的頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLB" block-list:package-name="HLB" block-list:name="介紹手冊的左向頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLC" block-list:package-name="HLC" block-list:name="紀念文章的左向頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLN" block-list:package-name="HLN" block-list:name="新聞簡報的左向頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HN" block-list:package-name="HN" block-list:name="新聞簡報的頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRB" block-list:package-name="HRB" block-list:name="介紹手冊的右向頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRC" block-list:package-name="HRC" block-list:name="紀念文章的右向頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRN" block-list:package-name="HRN" block-list:name="新聞簡報的右向頁首" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT1" block-list:package-name="PT1" block-list:name="記錄：議程事項結果" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT2" block-list:package-name="PT2" block-list:name="記錄：議程事項進程" block-list:unformatted-text="false"/>
+</block-list:block-list>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "../../../../../../../package/dtd/Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+ <manifest:file-entry manifest:media-type="" manifest:full-path="/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="MOD1/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="MOD2/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="ELE1/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELE1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELE1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="ELE1/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELE2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELE2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="ELE2/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELE3/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELE3/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="ELE3/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="BlockList.xml"/>
+</manifest:manifest>

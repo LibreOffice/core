@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "../../../../../../../package/dtd/Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+ <manifest:file-entry manifest:media-type="" manifest:full-path="/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="META-INF/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-1/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-1/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-1/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="+BCEEHgQd-1/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-2/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-2/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-2/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="+BCEEHgQd-2/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-3/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-3/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-3/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-3/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCEEHgQd-3/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="+BCEEHgQd-3/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+BCgEGAQd-1/Pictures/2000001B00000CD200000CED91A0BB03.svm"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+BCgEGAQd-1/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-1/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-1/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-1/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="+BCgEGAQd-1/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+BCgEGAQd-2/Pictures/2000001B00000CD200000CED91A0BB03.svm"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+BCgEGAQd-2/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-2/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-2/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+BCgEGAQd-2/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="+BCgEGAQd-2/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="BlockList.xml"/>
+</manifest:manifest>

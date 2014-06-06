@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "../../../../../../../package/dtd/Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+ <manifest:file-entry manifest:media-type="" manifest:full-path="/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="MOD1/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD1/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD1/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="MOD1/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD2/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MOD2/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="MOD2/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA1/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA1/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="KLA1/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA2/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA2/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="KLA2/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA3/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA3/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA3/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLA3/settings.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="KLA3/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="BlockList.xml"/>
+</manifest:manifest>

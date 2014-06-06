@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Estándar">
+ <block-list:block block-list:abbreviated-name="A" block-list:package-name="A" block-list:name="Anexo" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="AR" block-list:package-name="AR" block-list:name="Acuse de recibo" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="ATEN" block-list:package-name="ATEN" block-list:name="Atentamente" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="AV1" block-list:package-name="AV1" block-list:name="1. Aviso" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="AV2" block-list:package-name="AV2" block-list:name="2. Aviso" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CDP" block-list:package-name="CDP" block-list:name="Condiciones de pago" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="DA" block-list:package-name="DA" block-list:name="Anotación sobre derechos de autor" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="ESYS" block-list:package-name="ESYS" block-list:name="Estimados señoras y señores" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="NÚM" block-list:package-name="N+ANo-M" block-list:name="Numeración de fórmulas" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="O" block-list:package-name="O" block-list:name="Oferta" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="P" block-list:package-name="P" block-list:name="Pedido" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="RE" block-list:package-name="RE" block-list:name="Rescisión, general" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="S" block-list:package-name="S" block-list:name="Solicitud" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="SENT" block-list:package-name="SENT" block-list:name="Solicitud: Confirmación de entrada" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="SINV" block-list:package-name="SINV" block-list:name="Solicitud: Invitación a una entrevista personal" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="SMAN" block-list:package-name="SMAN" block-list:name="Solicitud: Rechazo, mantener documentos" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="SOL" block-list:package-name="SOL" block-list:name="Escrito de solicitud" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="SRECH" block-list:package-name="SRECH" block-list:name="Solicitud: Rechazo" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="TE" block-list:package-name="TE" block-list:name="Texto ejemplo" block-list:unformatted-text="true"/>
+</block-list:block-list>

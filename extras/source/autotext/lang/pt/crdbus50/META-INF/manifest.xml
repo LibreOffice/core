@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "../../../../../../../package/dtd/Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+ <manifest:file-entry manifest:media-type="" manifest:full-path="/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="MEA/Pictures/2000001B00000CD200000CED91A0BB03.svm"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="MEA/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MEA/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MEA/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MEA/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MEA/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MEA/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="MEA/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELCN/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELCN/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELCN/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELCN/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELCN/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="ELCN/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="META-INF/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELSS/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELSS/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELSS/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELSS/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELSS/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="ELSS/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELEA/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELEA/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELEA/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELEA/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="ELEA/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="ELEA/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="MCN/Pictures/2000001B00000CD200000CED91A0BB03.svm"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="MCN/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MCN/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MCN/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MCN/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MCN/meta.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="MCN/settings.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="MCN/"/>
+ <manifest:file-entry manifest:media-type="image/png" manifest:full-path="CSL/Pictures/10000000000000400000004077CDC8F9.png"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="CSL/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CSL/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CSL/styles.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="CSL/atevent.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="CSL/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="BlockList.xml"/>
+</manifest:manifest>

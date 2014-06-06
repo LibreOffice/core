@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standardní">
+    <block-list:block block-list:abbreviated-name="A" block-list:package-name="A" block-list:name="Upozornění:" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="BW" block-list:package-name="BW" block-list:name="Všechno nejlepší," block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="C" block-list:package-name="C" block-list:name="DŮVĚRNÉ" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="CAN" block-list:package-name="CAN" block-list:name="Zrušení předplatného apod." block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="CD" block-list:package-name="CD" block-list:name="Srdečně," block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="CM" block-list:package-name="CM" block-list:name="OVĚŘENÁ ZÁSILKA" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="CNL" block-list:package-name="CNL" block-list:name="Upozornění na autorská práva k literárnímu dílu" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="DMS" block-list:package-name="DMS" block-list:name="Vážená paní, vážený pane" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="DT" block-list:package-name="DT" block-list:name="Textová výplň" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Číslování vzorců" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="IRT" block-list:package-name="IRT" block-list:name="Odpovídajíce na:" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="J" block-list:package-name="J" block-list:name="Žádost o zaměstnání: Odmítnutí, Materiály žádosti si ponecháme" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="JACL" block-list:package-name="JACL" block-list:name="Žádost o zaměstnání: Průvodní dopis" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="JACR" block-list:package-name="JACR" block-list:name="Žádost o zaměstnání: Potvrzení přijetí" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="JAINV" block-list:package-name="JAINV" block-list:name="Žádost o zaměstnání: Pozvánka k pohovoru" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="JARL" block-list:package-name="JARL" block-list:name="Žádost o zaměstnání: Zamítavý dopis" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="LAG" block-list:package-name="LAG" block-list:name="Dámy a pánové:" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="P" block-list:package-name="P" block-list:name="OSOBNÍ" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="R1" block-list:package-name="R1" block-list:name="První upomínka" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="R2" block-list:package-name="R2" block-list:name="Druhá upomínka" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="RE" block-list:package-name="RE" block-list:name="Značka:" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="RF" block-list:package-name="RF" block-list:name="S úctou" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="RG" block-list:package-name="RG" block-list:name="Zdravím" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="RM" block-list:package-name="RM" block-list:name="DOPORUČENĚ" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="S" block-list:package-name="S" block-list:name="Věc:" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="SD" block-list:package-name="SD" block-list:name="ZVLÁŠTNÍ ZÁSILKA" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="SI" block-list:package-name="SI" block-list:name="S přátelským pozdravem" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="TC" block-list:package-name="TC" block-list:name="Měj se" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="TOP" block-list:package-name="TOP" block-list:name="Platební podmínky" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="TWIMC" block-list:package-name="TWIMC" block-list:name="K rukám odpovědné osoby:" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="TY" block-list:package-name="TY" block-list:name="Děkuji" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="VA" block-list:package-name="VA" block-list:name="LETECKY" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="VOM" block-list:package-name="VOM" block-list:name="NOČNÍM EXPRESEM" block-list:unformatted-text="true"/>
+    <block-list:block block-list:abbreviated-name="YT" block-list:package-name="YT" block-list:name="S pozdravem" block-list:unformatted-text="false"/>
+    <block-list:block block-list:abbreviated-name="LIC" block-list:package-name="LIC" block-list:name="Licenční ujednání" block-list:unformatted-text="false"/>
+</block-list:block-list>

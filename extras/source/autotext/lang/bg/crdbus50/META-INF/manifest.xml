@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "../../../../../../../package/dtd/Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+ <manifest:file-entry manifest:full-path="/" manifest:media-type=""/>
+ <manifest:file-entry manifest:full-path="BlockList.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-1/Pictures/2000001B00000CD200000CED91A0BB03.svm" manifest:media-type=""/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-1/meta.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-1/atevent.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-1/settings.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-1/content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-1/manifest.rdf" manifest:media-type="application/rdf+xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-1/styles.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-1/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-2/Pictures/2000001B00000CD200000CED91A0BB03.svm" manifest:media-type=""/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-2/meta.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-2/atevent.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-2/settings.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-2/content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-2/manifest.rdf" manifest:media-type="application/rdf+xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-2/styles.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BCEEKgQS-2/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-1/meta.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-1/atevent.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-1/settings.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-1/content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-1/manifest.rdf" manifest:media-type="application/rdf+xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-1/styles.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-1/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-2/meta.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-2/atevent.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-2/settings.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-2/content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-2/manifest.rdf" manifest:media-type="application/rdf+xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-2/styles.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-2/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-3/meta.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-3/atevent.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-3/settings.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-3/content.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-3/manifest.rdf" manifest:media-type="application/rdf+xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-3/styles.xml" manifest:media-type="text/xml"/>
+ <manifest:file-entry manifest:full-path="+BBUEGwQV-3/" manifest:media-type="application/vnd.oasis.opendocument.text"/>
+</manifest:manifest>
