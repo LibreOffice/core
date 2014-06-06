@@ -497,7 +497,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                     break;
                 case EM:
                     // skip one token
-                    keyword = token(fp,tokenlen);
+                    token(fp,tokenlen);
                     break;
                 case STARTDIRECTION:
                     if ((keyword = token(fp,tokenlen)) != NULL)
@@ -506,22 +506,22 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                 case ENDDIRECTION:
                     break; /* ignore this for now */
                 case MAPPINGSCHEME:
-                    keyword = token(fp,tokenlen);
+                    token(fp,tokenlen);
                     break; /* ignore     this for now */
                 case CHARACTERS:
-                    keyword = token(fp,tokenlen);
+                    token(fp,tokenlen);
                     break; /* ignore this for now */
                 case ISBASEFONT:
-                    keyword = token(fp,tokenlen);
+                    token(fp,tokenlen);
                     break; /* ignore this for now */
                 case CHARACTERSET:
-                    keyword=token(fp,tokenlen); //ignore
+                    token(fp,tokenlen); //ignore
                     break;
                 case STDHW:
-                    keyword=token(fp,tokenlen); //ignore
+                    token(fp,tokenlen); //ignore
                     break;
                 case STDVW:
-                    keyword=token(fp,tokenlen); //ignore
+                    token(fp,tokenlen); //ignore
                     break;
                 case CHARWIDTH:
                     if ((keyword = token(fp,tokenlen)) != NULL)
@@ -529,7 +529,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                         if (direction == 0)
                             gfi->charwidth = atoi(keyword);
                     }
-                    keyword = token(fp,tokenlen);
+                    token(fp,tokenlen);
                     /* ignore y-width for now */
                     break;
                 case METRICSSETS:
