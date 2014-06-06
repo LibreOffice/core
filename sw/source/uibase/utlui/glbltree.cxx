@@ -832,9 +832,12 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         case CTX_EDIT_LINK:
         {
             OSL_ENSURE(pCont, "edit without entry ? " );
-            SfxStringItem aName(FN_EDIT_REGION,
-                    pCont->GetSection()->GetSectionName());
-            rDispatch.Execute(FN_EDIT_REGION, SFX_CALLMODE_ASYNCHRON, &aName, 0L);
+            if (pCont)
+            {
+                SfxStringItem aName(FN_EDIT_REGION,
+                        pCont->GetSection()->GetSectionName());
+                rDispatch.Execute(FN_EDIT_REGION, SFX_CALLMODE_ASYNCHRON, &aName, 0L);
+            }
         }
         break;
         case CTX_DELETE:
