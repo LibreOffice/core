@@ -219,7 +219,6 @@ bool SwGrfNode::ReRead(
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     ModifyNotification( &aMsgHint, &aMsgHint );
                 }
-                // #i59688# - do not load linked graphic, if it isn't a new linked graphic.
                 else if ( bNewGrf )
                 {
                     //TODO refLink->setInputStream(getInputStream());
@@ -284,12 +283,10 @@ bool SwGrfNode::ReRead(
             }
             else
             {
-                // reset data of the old graphic so that the correct placeholder is
-                // shown in case the new link could not be loaded
-                Graphic aGrf; aGrf.SetDefaultType();
+                Graphic aGrf;
+                aGrf.SetDefaultType();
                 maGrfObj.SetGraphic( aGrf, rGrfName );
                 onGraphicChanged();
-                // #i59688# - do not load linked graphic, if it isn't a new linked graphic.
                 if ( bNewGrf )
                 {
                     ((SwBaseLink*)&refLink)->SwapIn();
@@ -358,6 +355,7 @@ void SwGrfNode::onGraphicChanged()
 
     if(pFlyFmt)
     {
+        const bool bWasSwappedOut = GetGrfObj().IsSwappedOut();
         OUString aName;
         OUString aTitle;
         OUString aDesc;
@@ -389,10 +387,19 @@ void SwGrfNode::onGraphicChanged()
         {
             SetTitle(aTitle);
         }
+        else if (!aName.isEmpty())
+        {
+            SetTitle(aName);
+        }
 
         if(!aDesc.isEmpty())
         {
             SetDescription(aDesc);
+        }
+
+        if (bWasSwappedOut)
+        {
+            SwapOut();
         }
     }
 }
@@ -736,7 +743,6 @@ void SwGrfNode::ReleaseLink()
 {
     if( refLink.Is() )
     {
-        // #i15508# remember some stuff from the linked graphic
         const OUString aFileName(maGrfObj.GetLink());
         const Graphic aLocalGraphic(maGrfObj.GetGraphic());
         const bool bHasOriginalData(aLocalGraphic.IsLink());
@@ -1118,20 +1124,32 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     {
         switch( rMirror.GetValue() )
         {
-        case RES_MIRROR_GRAPH_DONT:     nMirror = BMP_MIRROR_HORZ; break;
-        case RES_MIRROR_GRAPH_VERT:     nMirror = BMP_MIRROR_NONE; break;
-        case RES_MIRROR_GRAPH_HOR:  nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
-                                    break;
-        default:                    nMirror = BMP_MIRROR_VERT; break;
+        case RES_MIRROR_GRAPH_DONT:
+            nMirror = BMP_MIRROR_HORZ;
+            break;
+        case RES_MIRROR_GRAPH_VERT:
+            nMirror = BMP_MIRROR_NONE;
+            break;
+        case RES_MIRROR_GRAPH_HOR:
+            nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
+            break;
+        default:
+            nMirror = BMP_MIRROR_VERT;
+            break;
         }
     }
     else
         switch( rMirror.GetValue() )
         {
-        case RES_MIRROR_GRAPH_BOTH:     nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
-                                    break;
-        case RES_MIRROR_GRAPH_VERT: nMirror = BMP_MIRROR_HORZ; break;
-        case RES_MIRROR_GRAPH_HOR:  nMirror = BMP_MIRROR_VERT; break;
+        case RES_MIRROR_GRAPH_BOTH:
+            nMirror = BMP_MIRROR_HORZ|BMP_MIRROR_VERT;
+            break;
+        case RES_MIRROR_GRAPH_VERT:
+            nMirror = BMP_MIRROR_HORZ;
+            break;
+        case RES_MIRROR_GRAPH_HOR:
+            nMirror = BMP_MIRROR_VERT;
+            break;
         }
 
     rGA.SetMirrorFlags( nMirror );

@@ -117,6 +117,10 @@ class SW_DLLPUBLIC SwGrfNode: public SwNoTxtNode
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > _GetDocSubstorageOrRoot(
                                                 const OUString& aStgName ) const;
 
+    /// allow reaction on change of content of GraphicObject, so always call
+    /// when GraphicObject content changes
+    void onGraphicChanged();
+
 public:
     virtual ~SwGrfNode();
     const Graphic&          GetGrf() const      { return maGrfObj.GetGraphic(); }
@@ -131,10 +135,6 @@ public:
     void ReleaseGraphicFromCache() { maGrfObj.ReleaseFromCache(); }
     void StartGraphicAnimation(OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0, const GraphicAttr* pAttr = NULL, sal_uLong nFlags = GRFMGR_DRAW_STANDARD, OutputDevice* pFirstFrameOutDev = NULL) { maGrfObj.StartAnimation(pOut, rPt, rSz, nExtraData, pAttr, nFlags, pFirstFrameOutDev); }
     void StopGraphicAnimation(OutputDevice* pOut = NULL, long nExtraData = 0) { maGrfObj.StopAnimation(pOut, nExtraData); }
-
-    /// allow reaction on change of content of GraphicObject, so always call
-    /// when GraphicObject content changes
-    void onGraphicChanged();
 
     virtual Size GetTwipSize() const SAL_OVERRIDE;
     void SetTwipSize( const Size& rSz );
