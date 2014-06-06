@@ -1280,9 +1280,16 @@ AC_ARG_ENABLE(macosx-retina,
 ,)
 
 AC_ARG_ENABLE(macosx-code-signing,
-    AS_HELP_STRING([--enable-macosx-code-signing<=identity>],
+    AS_HELP_STRING([--enable-macosx-code-signing=<identity>],
         [Sign executables, dylibs, frameworks and the app bundle. If you
          don't provide an identity the first suitable certificate
+         in your keychain is used.]),
+,)
+
+AC_ARG_ENABLE(macosx-package-signing,
+    AS_HELP_STRING([--enable-macosx-package-signing=<identity>],
+        [Create a .pkg suitable for uploading to the Mac App Store and sign
+         it. If you don't provide an identity the first suitable certificate
          in your keychain is used.]),
 ,)
 
@@ -2984,6 +2991,34 @@ if test $_os = Darwin; then
         AC_MSG_RESULT([no])
     fi
 
+    AC_MSG_CHECKING([whether to create a Mac App Store package])
+
+    if test -n "$enable_macosx_package_signing" -a -z "$MACOSX_CODESIGNING_IDENTITY"; then
+        AC_MSG_ERROR([You forgot --enable-macosx-code-signing])
+    elif test "$enable_macosx_package_signing" = yes; then
+        # By default use the first suitable certificate.
+        # It should be a "3rd Party Mac Developer Installer" one
+
+        identity=`security find-identity -v 2>/dev/null | grep '3rd Party Mac Developer Installer:' | awk '{print $2}' |head -1`
+        if test -n "$identity"; then
+            MACOSX_PACKAGE_SIGNING_IDENTITY=$identity
+            pretty_name=`security find-identity -v | grep "$MACOSX_PACKAGE_SIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
+            AC_MSG_RESULT([yes, using the identity $MACOSX_PACKAGE_SIGNING_IDENTITY for $pretty_name])
+        else
+            AC_MSG_ERROR([Could not find any suitable '3rd Party Mac Developer Installer' certificate])
+        fi
+    elif test -n "$enable_macosx_package_signing"; then
+        MACOSX_PACKAGE_SIGNING_IDENTITY=$enable_macosx_package_signing
+        pretty_name=`security find-identity -v | grep "$MACOSX_PACKAGE_SIGNING_IDENTITY" | sed -e 's/^[[^"]]*"//' -e 's/"//'`
+        AC_MSG_RESULT([yes, using the identity $MACOSX_PACKAGE_SIGNING_IDENTITY for $pretty_name])
+    else
+        AC_MSG_RESULT([no])
+    fi
+
+    if test -n "$MACOSX_CODESIGNING_IDENTITY" -a -n "$MACOSX_PACKAGE_SIGNING_IDENTITY" -a "$MACOSX_CODESIGNING_IDENTITY" = "$MACOSX_PACKAGE_SIGNING_IDENTITY"; then
+        AC_MSG_ERROR([You should not use the same identity for code and package signing])
+    fi
+
     AC_MSG_CHECKING([whether to sandbox the application])
 
     if test -z "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
@@ -3022,6 +3057,7 @@ AC_SUBST(MAC_OS_X_VERSION_MAX_ALLOWED)
 AC_SUBST(INSTALL_NAME_TOOL)
 AC_SUBST(LIBTOOL) # Note that the OS X libtool command is unrelated to GNU libtool
 AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
+AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
 AC_SUBST(MACOSX_APP_NAME)
