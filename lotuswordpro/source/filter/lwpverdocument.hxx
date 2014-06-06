@@ -75,10 +75,11 @@ class LwpVerDocument : public LwpObject
 {
 public:
     LwpVerDocument(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpVerDocument(){}
     void Read() SAL_OVERRIDE;
     virtual void RegisterStyle() SAL_OVERRIDE;
 private:
+    virtual ~LwpVerDocument(){}
+
     sal_uInt32 m_nTabSpacing;
 };
 #endif

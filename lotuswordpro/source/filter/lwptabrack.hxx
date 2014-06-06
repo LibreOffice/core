@@ -137,13 +137,14 @@ class   LwpTabRack : public LwpObject
 {
 public:
     LwpTabRack(LwpObjectHeader objHdr, LwpSvStream* pStrm);
-    virtual ~LwpTabRack(){}
 public:
     void Read() SAL_OVERRIDE;
     sal_uInt16 GetNumTabs();
     LwpTab* Lookup(sal_uInt16 nIndex);
     LwpTabRack* GetNext();
 private:
+    virtual ~LwpTabRack(){}
+
     enum{
         MaxTabs = 15
     };

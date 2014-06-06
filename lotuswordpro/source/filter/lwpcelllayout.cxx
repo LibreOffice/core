@@ -91,7 +91,7 @@ LwpCellLayout::~LwpCellLayout()
  */
 LwpTableLayout * LwpCellLayout::GetTableLayout()
 {
-    LwpRowLayout * pRow = dynamic_cast<LwpRowLayout *>(GetParent()->obj());
+    LwpRowLayout * pRow = dynamic_cast<LwpRowLayout *>(GetParent()->obj().get());
     if(!pRow)
     {
         return NULL;
@@ -265,14 +265,14 @@ void LwpCellLayout::ApplyBackColor(XFCellStyle *pCellStyle)
  */
 void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
 {
-    LwpLayoutNumerics* pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(cLayNumerics.obj());
+    LwpLayoutNumerics* pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(cLayNumerics.obj().get());
     if (!pLayoutNumerics)
     {
         // if current layout doesn't have format, go to based on layout
-        LwpCellLayout* pCellLayout = dynamic_cast<LwpCellLayout*>(m_BasedOnStyle.obj());
+        LwpCellLayout* pCellLayout = dynamic_cast<LwpCellLayout*>(m_BasedOnStyle.obj().get());
         if (pCellLayout)
         {
-            pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(pCellLayout->GetNumericsObject()->obj());
+            pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(pCellLayout->GetNumericsObject()->obj().get());
         }
     }
 
@@ -314,7 +314,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
 {
     // if cell layout is aTableID's default cell layout
     // it can't have any content, bypass these code
-    LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj());
+    LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
     if (!pTable)
     {
         assert(false);
@@ -331,7 +331,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
     }
 
     // content of cell
-    LwpStory* pStory = dynamic_cast<LwpStory*>(m_Content.obj());
+    LwpStory* pStory = dynamic_cast<LwpStory*>(m_Content.obj().get());
     if (pStory)
     {
         pStory->XFConvert(pXFCell);
@@ -347,8 +347,8 @@ LwpPara* LwpCellLayout::GetLastParaOfPreviousStory()
     LwpObjectID* pPreStoryID = this->GetPreviousCellStory();
     if (pPreStoryID && !(pPreStoryID->IsNull()))
     {
-        LwpStory* pPreStory = dynamic_cast<LwpStory*>(pPreStoryID->obj(VO_STORY));
-        return dynamic_cast<LwpPara*>(pPreStory->GetLastPara()->obj(VO_PARA));
+        LwpStory* pPreStory = dynamic_cast<LwpStory*>(pPreStoryID->obj(VO_STORY).get());
+        return dynamic_cast<LwpPara*>(pPreStory->GetLastPara()->obj(VO_PARA).get());
     }
     else
     {
@@ -571,7 +571,7 @@ void LwpCellLayout::RegisterDefaultCell()
  */
 void LwpCellLayout::RegisterStyle()
 {
-    LwpVirtualLayout * pParent = dynamic_cast<LwpVirtualLayout *>(GetParent()->obj());
+    LwpVirtualLayout * pParent = dynamic_cast<LwpVirtualLayout *>(GetParent()->obj().get());
     if (!pParent || pParent->GetLayoutType() != LWP_ROW_LAYOUT)
     {
         // default cell layout, we must register 4 styles for it
@@ -595,8 +595,8 @@ void LwpCellLayout::RegisterStyle()
     m_StyleName = pXFStyleManager->AddStyle(pCellStyle)->GetStyleName();
 
     // content object register styles
-    LwpObject * pObj = m_Content.obj();
-    if (pObj)
+    rtl::Reference<LwpObject> pObj = m_Content.obj();
+    if (pObj.is())
     {
         pObj->SetFoundry(m_pFoundry);
         pObj->RegisterStyle();
@@ -657,7 +657,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
     else
     {
         // judge base on
-        LwpCellLayout * pBase = dynamic_cast<LwpCellLayout *>(m_BasedOnStyle.obj());
+        LwpCellLayout * pBase = dynamic_cast<LwpCellLayout *>(m_BasedOnStyle.obj().get());
         if (pBase && pBase->IsProtected())
         {
             bProtected = true;
@@ -665,7 +665,7 @@ void LwpCellLayout::ApplyProtect(XFCell * pCell, LwpObjectID aTableID)
         else
         {
             // judge whole table
-            LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj());
+            LwpTable * pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
             LwpTableLayout * pTableLayout = pTable ? static_cast<LwpTableLayout *>(pTable->GetTableLayout()) : NULL;
             LwpSuperTableLayout * pSuper = pTableLayout ? pTableLayout->GetSuperTableLayout() : NULL;
             if (pSuper && pSuper->IsProtected())
@@ -877,19 +877,19 @@ void LwpHiddenCellLayout::Read()
 
 XFCell* LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uInt16 nCol)
 {
-    if (!cconnectedlayout.obj())
+    if (!cconnectedlayout.obj().is())
         return NULL;
-    LwpConnectedCellLayout* pConnCell = dynamic_cast<LwpConnectedCellLayout* >(cconnectedlayout.obj());
+    LwpConnectedCellLayout* pConnCell = dynamic_cast<LwpConnectedCellLayout* >(cconnectedlayout.obj().get());
 
     if (!pConnCell || nRow < (pConnCell->GetNumrows()+pConnCell->GetRowID()))
         return NULL;
     // if the hidden cell should be displayed for limit of SODC
     // use the default cell layout
     XFCell* pXFCell = NULL;
-    LwpTable *pTable = dynamic_cast<LwpTable *>(aTableID.obj());
+    LwpTable *pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
     if (pTable)
     {
-        LwpCellLayout *pDefault = dynamic_cast<LwpCellLayout *>(pTable->GetDefaultCellStyle()->obj());
+        LwpCellLayout *pDefault = dynamic_cast<LwpCellLayout *>(pTable->GetDefaultCellStyle()->obj().get());
         if (pDefault)
         {
             pXFCell = pDefault->ConvertCell(aTableID, nRow, nCol);

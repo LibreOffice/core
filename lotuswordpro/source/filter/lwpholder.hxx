@@ -75,10 +75,11 @@ class LwpDLVListHeadHolder : public LwpObject
 {
 public:
     LwpDLVListHeadHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDLVListHeadHolder(){}
     void Read() SAL_OVERRIDE;
     LwpObjectID* GetHeadID() { return &m_DLVHead;}
 private:
+    virtual ~LwpDLVListHeadHolder(){}
+
     LwpObjectID m_DLVHead;
 };
 /**
@@ -89,12 +90,13 @@ class LwpDLVListHeadTailHolder : public LwpObject
 {
 public:
     LwpDLVListHeadTailHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpDLVListHeadTailHolder(){}
     void Read() SAL_OVERRIDE;
     LwpObjectID* GetHead(){ return m_HeadTail.GetHead();}
     LwpObjectID* GetTail(){ return m_HeadTail.GetTail();}
 protected:
     LwpDLVListHeadTail m_HeadTail;
+private:
+    virtual ~LwpDLVListHeadTailHolder(){}
 };
 /**
  * @brief   LwpObjectHolder, which is LwpDLVList, contains an id to an object
@@ -104,10 +106,11 @@ class LwpObjectHolder : public LwpDLVList
 {
 public:
     LwpObjectHolder(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpObjectHolder(){}
     void Read() SAL_OVERRIDE;
     LwpObjectID* GetObject(){return &m_Object;}
 protected:
+    virtual ~LwpObjectHolder(){}
+
     LwpObjectID m_Object;
 };
 
@@ -119,12 +122,13 @@ class LwpListList : public LwpObjectHolder
 {
 public:
     LwpListList(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpListList(){}
     void Read() SAL_OVERRIDE;
     LwpObjectID* GetHead(){ return m_HeadTail.GetHead();}
     LwpObjectID* GetTail(){ return m_HeadTail.GetTail();}
 protected:
     LwpDLVListHeadTail m_HeadTail;
+private:
+    virtual ~LwpListList(){}
 };
 
 #endif

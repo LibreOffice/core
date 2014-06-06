@@ -239,13 +239,13 @@ LwpPara* LwpSilverBullet::GetBulletPara()
 {
     if (!m_pBulletPara)
     {
-        LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY));
+        LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY).get());
         if (!pStory)
         {
             return NULL;
         }
 
-        m_pBulletPara = dynamic_cast<LwpPara*>(pStory->GetFirstPara()->obj(VO_PARA));
+        m_pBulletPara = dynamic_cast<LwpPara*>(pStory->GetFirstPara()->obj(VO_PARA).get());
     }
 
     return m_pBulletPara;
@@ -438,7 +438,7 @@ OUString LwpSilverBullet::GetDivisionName()
         LwpObjectID* pID = pDoc->GetDivInfoID();
         if (!pID->IsNull())
         {
-            LwpDivInfo *pInfo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO));
+            LwpDivInfo *pInfo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO).get());
             if (pInfo)
                 aRet = pInfo->GetDivName();
         }
@@ -450,7 +450,7 @@ OUString LwpSilverBullet::GetDivisionName()
 OUString LwpSilverBullet::GetSectionName()
 {
     OUString aEmpty;
-    LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY));
+    LwpStory* pStory = dynamic_cast<LwpStory*>(m_aStory.obj(VO_STORY).get());
     if (!pStory)
     {
         return aEmpty;

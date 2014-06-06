@@ -146,8 +146,8 @@ void LwpCHBlkMarker::Read()
 OUString LwpCHBlkMarker::GetPromptText()
 {
     LwpStory* pStory = NULL;
-    if (m_objPromptStory.obj())
-        pStory = dynamic_cast<LwpStory*>(m_objPromptStory.obj());
+    if (m_objPromptStory.obj().is())
+        pStory = dynamic_cast<LwpStory*>(m_objPromptStory.obj().get());
     if (pStory)
         return pStory->GetContentText();
     return OUString("");

@@ -65,7 +65,7 @@
 #include "lwpobjtags.hxx"
 #include "lwppara.hxx"
 
-LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,LwpObject* Whole)
+LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,rtl::Reference<LwpObject> const & Whole)
 {
     LwpParaProperty* Prop= NULL;
     LwpParaProperty* NewProp= NULL;
@@ -115,7 +115,7 @@ LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,LwpObj
 
             case TAG_PARA_BULLET:
                 NewProp = new LwpParaBulletProperty(pFile);
-                static_cast<LwpPara*>(Whole)->SetBulletFlag(true);
+                static_cast<LwpPara*>(Whole.get())->SetBulletFlag(true);
                 break;
 
             case TAG_PARA_NUMBERING:
@@ -146,7 +146,7 @@ LwpParaAlignProperty::LwpParaAlignProperty(LwpObjectStream* pFile)
     LwpObjectID align;
     align.ReadIndexed(pFile);
 
-    LwpAlignmentPiece *pAlignmentPiece = dynamic_cast<LwpAlignmentPiece*>(align.obj(VO_ALIGNMENTPIECE));
+    LwpAlignmentPiece *pAlignmentPiece = dynamic_cast<LwpAlignmentPiece*>(align.obj(VO_ALIGNMENTPIECE).get());
     m_pAlignment = pAlignmentPiece ? dynamic_cast<LwpAlignmentOverride*>(pAlignmentPiece->GetOverride()) : NULL;
 
 }
@@ -164,7 +164,7 @@ LwpParaIndentProperty::LwpParaIndentProperty(LwpObjectStream* pFile)
 {
     m_aIndentID.ReadIndexed(pFile);
 
-    LwpIndentPiece *pIndentPiece = dynamic_cast<LwpIndentPiece*>(m_aIndentID.obj(VO_INDENTPIECE));
+    LwpIndentPiece *pIndentPiece = dynamic_cast<LwpIndentPiece*>(m_aIndentID.obj(VO_INDENTPIECE).get());
     m_pIndent = pIndentPiece ? dynamic_cast<LwpIndentOverride*>(pIndentPiece->GetOverride()) : NULL;
 }
 
@@ -182,7 +182,7 @@ LwpParaSpacingProperty::LwpParaSpacingProperty(LwpObjectStream* pFile)
     LwpObjectID spacing;
     spacing.ReadIndexed(pFile);
 
-    LwpSpacingPiece *pSpacingPiece = dynamic_cast<LwpSpacingPiece*>(spacing.obj(VO_SPACINGPIECE));
+    LwpSpacingPiece *pSpacingPiece = dynamic_cast<LwpSpacingPiece*>(spacing.obj(VO_SPACINGPIECE).get());
     m_pSpacing = pSpacingPiece ? dynamic_cast<LwpSpacingOverride*>(pSpacingPiece->GetOverride()) : NULL;
 }
 
@@ -204,7 +204,7 @@ m_pParaBorderOverride(NULL)
 
     if (!aParaBorder.IsNull())
     {
-        LwpParaBorderPiece *pParaBorderPiece = dynamic_cast<LwpParaBorderPiece*>(aParaBorder.obj());
+        LwpParaBorderPiece *pParaBorderPiece = dynamic_cast<LwpParaBorderPiece*>(aParaBorder.obj().get());
         m_pParaBorderOverride = pParaBorderPiece ? dynamic_cast<LwpParaBorderOverride*>(pParaBorderPiece->GetOverride()) : NULL;
     }
 }
@@ -217,7 +217,7 @@ m_pBreaks(NULL)
 
     if (!aBreaks.IsNull())
     {
-        LwpBreaksPiece *pBreaksPiece = dynamic_cast<LwpBreaksPiece*>(aBreaks.obj());
+        LwpBreaksPiece *pBreaksPiece = dynamic_cast<LwpBreaksPiece*>(aBreaks.obj().get());
         m_pBreaks = pBreaksPiece ? dynamic_cast<LwpBreaksOverride*>(pBreaksPiece->GetOverride()) : NULL;
     }
 }
@@ -243,7 +243,7 @@ LwpParaNumberingProperty::LwpParaNumberingProperty(LwpObjectStream * pStrm)
         return;
     }
 
-    LwpNumberingPiece *pNumberingPiece = dynamic_cast<LwpNumberingPiece*>(aNumberingPiece.obj(VO_NUMBERINGPIECE));
+    LwpNumberingPiece *pNumberingPiece = dynamic_cast<LwpNumberingPiece*>(aNumberingPiece.obj(VO_NUMBERINGPIECE).get());
     m_pNumberingOverride = pNumberingPiece ? dynamic_cast<LwpNumberingOverride*>(pNumberingPiece->GetOverride()) : NULL;
 }
 //end
@@ -253,7 +253,7 @@ LwpParaTabRackProperty::LwpParaTabRackProperty(LwpObjectStream* pFile)
     LwpObjectID aTabRack;
     aTabRack.ReadIndexed(pFile);
 
-    LwpTabPiece *pTabPiece = dynamic_cast<LwpTabPiece*>(aTabRack.obj());
+    LwpTabPiece *pTabPiece = dynamic_cast<LwpTabPiece*>(aTabRack.obj().get());
     m_pTabOverride = pTabPiece ? dynamic_cast<LwpTabOverride*>(pTabPiece->GetOverride()) : NULL;
 }
 
@@ -266,7 +266,7 @@ LwpParaBackGroundProperty::LwpParaBackGroundProperty(LwpObjectStream* pFile)
     LwpObjectID background;
     background.ReadIndexed(pFile);
 
-    LwpBackgroundPiece *pBackgroundPiece = dynamic_cast<LwpBackgroundPiece*>(background.obj());
+    LwpBackgroundPiece *pBackgroundPiece = dynamic_cast<LwpBackgroundPiece*>(background.obj().get());
     m_pBackground = pBackgroundPiece ? dynamic_cast<LwpBackgroundOverride*>(pBackgroundPiece->GetOverride()) : NULL;
 }
 

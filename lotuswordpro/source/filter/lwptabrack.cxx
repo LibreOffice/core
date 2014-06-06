@@ -115,7 +115,7 @@ LwpTab* LwpTabRack::Lookup(sal_uInt16 nIndex)
 
 LwpTabRack* LwpTabRack::GetNext()
 {
-    LwpTabRack* pTabRack = dynamic_cast<LwpTabRack*>(m_NextID.obj());
+    LwpTabRack* pTabRack = dynamic_cast<LwpTabRack*>(m_NextID.obj().get());
     return pTabRack;
 }
 

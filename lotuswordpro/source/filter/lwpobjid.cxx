@@ -192,7 +192,7 @@ sal_uInt32 LwpObjectID::DiskSize() const
 /**
  * @descr       get object from object factory per the object id
 */
-LwpObject* LwpObjectID::obj(VO_TYPE tag) const
+rtl::Reference<LwpObject> LwpObjectID::obj(VO_TYPE tag) const
 {
     LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
     LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
@@ -200,12 +200,12 @@ LwpObject* LwpObjectID::obj(VO_TYPE tag) const
     {
         return NULL;
     }
-    LwpObject* pObj = pObjMgr->QueryObject(*this);
-    if( tag!=VO_INVALID &&  (pObj) )
+    rtl::Reference<LwpObject> pObj = pObjMgr->QueryObject(*this);
+    if( tag!=VO_INVALID &&  (pObj.is()) )
     {
         if(static_cast<sal_uInt32>(tag) != pObj->GetTag())
         {
-            pObj=NULL;
+            pObj.clear();
         }
     }
     return(pObj);

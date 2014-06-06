@@ -74,7 +74,7 @@ public:
     LwpFribFrame( LwpPara* pPara) : LwpFrib(pPara){}
     virtual ~LwpFribFrame(){}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
-    LwpObject* GetLayout();
+    rtl::Reference<LwpObject> GetLayout();
     void RegisterStyle(LwpFoundry* pFoundry) SAL_OVERRIDE;
     void SetParaDropcap(LwpPara* pPara);
     void XFConvert(XFContentContainer* pCont);

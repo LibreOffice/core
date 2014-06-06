@@ -85,8 +85,8 @@ void LwpFribNote::Read(LwpObjectStream *pObjStrm, sal_uInt16 /*len*/)
  */
 void LwpFribNote::RegisterNewStyle()
 {
-    LwpObject* pLayout = m_Layout.obj();
-    if(pLayout)
+    rtl::Reference<LwpObject> pLayout = m_Layout.obj();
+    if(pLayout.is())
     {
         //register font style
         LwpFrib::RegisterStyle(m_pPara->GetFoundry());
@@ -101,7 +101,7 @@ void LwpFribNote::RegisterNewStyle()
  */
 void LwpFribNote::XFConvert(XFContentContainer* pCont)
 {
-    LwpNoteLayout* pLayout =static_cast<LwpNoteLayout*>(m_Layout.obj());
+    LwpNoteLayout* pLayout =static_cast<LwpNoteLayout*>(m_Layout.obj().get());
     if(pLayout)
     {
         XFAnnotation* pXFNote = new XFAnnotation;
@@ -217,10 +217,10 @@ OUString LwpNoteLayout::GetAuthor()
     LwpNoteHeaderLayout* pTextLayout = static_cast<LwpNoteHeaderLayout*>(FindChildByType(LWP_NOTEHEADER_LAYOUT));
     if(pTextLayout)
     {
-        LwpStory* pStory = static_cast<LwpStory*>(pTextLayout->GetContent()->obj());
+        LwpStory* pStory = static_cast<LwpStory*>(pTextLayout->GetContent()->obj().get());
         if(pStory)
         {
-            LwpPara* pFirst = static_cast<LwpPara*>(pStory->GetFirstPara()->obj());
+            LwpPara* pFirst = static_cast<LwpPara*>(pStory->GetFirstPara()->obj().get());
             if(pFirst)
                 return pFirst->GetContentText(true);
         }
@@ -280,8 +280,8 @@ void LwpNoteTextLayout::Read()
  */
 void LwpNoteTextLayout::RegisterStyle()
 {
-    LwpObject* pContent = m_Content.obj();
-    if(pContent)
+    rtl::Reference<LwpObject> pContent = m_Content.obj();
+    if(pContent.is())
     {
         pContent->SetFoundry(GetFoundry());
         pContent->RegisterStyle();
@@ -290,8 +290,8 @@ void LwpNoteTextLayout::RegisterStyle()
 
 void LwpNoteTextLayout::XFConvert(XFContentContainer * pCont)
 {
-    LwpObject* pContent = m_Content.obj();
-    if(pContent)
+    rtl::Reference<LwpObject> pContent = m_Content.obj();
+    if(pContent.is())
     {
         pContent->XFConvert(pCont);
     }

@@ -263,7 +263,7 @@ void LwpPara::XFConvert(XFContentContainer* pCont)
 {
     m_pXFContainer = pCont;
 
-    LwpStory *pStory = dynamic_cast<LwpStory*>(m_Story.obj());
+    LwpStory *pStory = dynamic_cast<LwpStory*>(m_Story.obj().get());
 
     if (pStory && pStory->GetDropcapFlag())
     {
@@ -318,7 +318,7 @@ bool LwpPara::RegisterMasterPage(XFParaStyle* pBaseStyle)
 {
     bool bSuccess = false;
     //get story
-    LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj());
+    LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj().get());
     //if pagelayout is modified, register the pagelayout
     if(pStory && pStory->IsPMModified())
     {
@@ -691,7 +691,7 @@ void LwpPara::RegisterStyle()
                         }
 
                         if (pPara->GetPrevious())
-                            pPrePara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj(VO_PARA));
+                            pPrePara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj(VO_PARA).get());
                         else
                             pPrePara=NULL;
 
@@ -750,7 +750,7 @@ void LwpPara::RegisterStyle()
 
     if (noSpacing && GetPrevious())
     {
-        LwpPara* pPrePara = dynamic_cast<LwpPara*>(GetPrevious()->obj());
+        LwpPara* pPrePara = dynamic_cast<LwpPara*>(GetPrevious()->obj().get());
         if (pPrePara && pPrePara->GetBelowSpacing()!=0)
         {
             pOverStyle = new XFParaStyle;
@@ -831,7 +831,7 @@ void LwpPara::RegisterTabStyle(XFParaStyle* pXFParaStyle)
     LwpTabOverride aFinaOverride;
     LwpTabOverride* pBase = NULL;
     //get the tabrack from the current layout
-    LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj());
+    LwpStory* pStory = dynamic_cast<LwpStory*>(m_Story.obj().get());
     LwpMiddleLayout* pLayout = pStory ? pStory->GetTabLayout() : NULL;
     if(pLayout)
     {

@@ -245,13 +245,14 @@ class LwpFootnoteOptions : public LwpObject
 {
 public:
     LwpFootnoteOptions(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpFootnoteOptions();
     void RegisterStyle() SAL_OVERRIDE;
 protected:
     void Read() SAL_OVERRIDE;
     void RegisterFootnoteStyle();
     void RegisterEndnoteStyle();
 private:
+    virtual ~LwpFootnoteOptions();
+
     sal_uInt16 m_nFlag;
     LwpFootnoteNumberOptions m_FootnoteNumbering;
     LwpFootnoteNumberOptions m_EndnoteDivisionNumbering;

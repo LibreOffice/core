@@ -833,8 +833,8 @@ void LwpFrameLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
         //if it is a link frame, parse contents only once
         if(!HasPreviousLinkLayout())
         {
-            LwpObject* content = m_Content.obj();
-            if (content)
+            rtl::Reference<LwpObject> content = m_Content.obj();
+            if (content.is())
             {
                 content->XFConvert(pXFFrame);
                 //set frame size according to ole size
@@ -863,8 +863,8 @@ void  LwpFrameLayout::RegisterStyle()
     m_pFrame->RegisterStyle(pFrameStyle);
 
     //register content style
-    LwpObject* content = m_Content.obj();
-    if (content)
+    rtl::Reference<LwpObject> content = m_Content.obj();
+    if (content.is())
     {
         content->SetFoundry(m_pFoundry);
         content->RegisterStyle();
@@ -884,7 +884,7 @@ OUString LwpFrameLayout::GetNextLinkName()
     LwpObjectID* pObjectID = m_Link.GetNextLayout();
     if(!pObjectID->IsNull())
     {
-        LwpLayout* pLayout = dynamic_cast<LwpLayout*>(pObjectID->obj());
+        LwpLayout* pLayout = dynamic_cast<LwpLayout*>(pObjectID->obj().get());
         if (pLayout)
         {
             LwpAtomHolder *pHolder = pLayout->GetName();
@@ -981,11 +981,11 @@ double LwpFrameLayout::GetMaxWidth()
  */
 void LwpFrameLayout::ApplyGraphicSize(XFFrame * pXFFrame)
 {
-    LwpObject* content = m_Content.obj();
-    if(content && (content->GetTag() == VO_GRAPHIC
+    rtl::Reference<LwpObject> content = m_Content.obj();
+    if(content.is() && (content->GetTag() == VO_GRAPHIC
                 || content->GetTag() == VO_OLEOBJECT ))
     {
-        LwpGraphicOleObject* pGraOle = static_cast<LwpGraphicOleObject*>(content);
+        LwpGraphicOleObject* pGraOle = static_cast<LwpGraphicOleObject*>(content.get());
         //Get frame geometry size
         double fWidth = 0;
         double fHeight = 0;
@@ -1097,11 +1097,11 @@ void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
         m_pFrame->Parse(pXFFrame, nStart);
 
         //add child frame into group
-        LwpVirtualLayout* pLayout = static_cast<LwpVirtualLayout*>(GetChildHead()->obj());
+        LwpVirtualLayout* pLayout = static_cast<LwpVirtualLayout*>(GetChildHead()->obj().get());
         while(pLayout)
         {
             pLayout->XFConvert(pXFFrame);
-            pLayout = static_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj());
+            pLayout = static_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj().get());
         }
 
         pCont ->Add(pXFFrame);
@@ -1147,11 +1147,11 @@ void LwpDropcapLayout::Read()
 
 void LwpDropcapLayout::Parse(IXFStream* pOutputStream)
 {
-    LwpStory* pStory = static_cast<LwpStory*>(m_Content.obj(VO_STORY));
+    LwpStory* pStory = static_cast<LwpStory*>(m_Content.obj(VO_STORY).get());
     if (!pStory)
         return;
-    LwpObject* pPara = pStory->GetFirstPara()->obj(VO_PARA);
-    if(pPara)
+    rtl::Reference<LwpObject> pPara = pStory->GetFirstPara()->obj(VO_PARA);
+    if(pPara.is())
     {
         pPara->SetFoundry(m_pFoundry);
         pPara->Parse(pOutputStream);
@@ -1160,7 +1160,7 @@ void LwpDropcapLayout::Parse(IXFStream* pOutputStream)
 
 void LwpDropcapLayout::XFConvert(XFContentContainer* pCont)
 {
-    LwpStory* pStory = static_cast<LwpStory*>(m_Content.obj(VO_STORY));
+    LwpStory* pStory = static_cast<LwpStory*>(m_Content.obj(VO_STORY).get());
     if (pStory)
     {
         pStory->SetFoundry(m_pFoundry);
@@ -1170,7 +1170,7 @@ void LwpDropcapLayout::XFConvert(XFContentContainer* pCont)
 
 LwpStory* LwpDropcapLayout::GetContentStory()
 {
-    return static_cast<LwpStory*>(m_Content.obj(VO_STORY));
+    return static_cast<LwpStory*>(m_Content.obj(VO_STORY).get());
 }
 
 void LwpDropcapLayout::RegisterStyle(LwpFoundry* pFoundry)
@@ -1180,12 +1180,12 @@ void LwpDropcapLayout::RegisterStyle(LwpFoundry* pFoundry)
     {
         pStory->SetDropcapFlag(true);
         pStory->SetFoundry(pFoundry);
-        LwpPara* pPara = static_cast<LwpPara*>(pStory->GetFirstPara()->obj());
+        LwpPara* pPara = static_cast<LwpPara*>(pStory->GetFirstPara()->obj().get());
         while(pPara)
         {
             pPara->SetFoundry(pFoundry);
             pPara->RegisterStyle();
-            pPara = static_cast<LwpPara*>(pPara->GetNext()->obj());
+            pPara = static_cast<LwpPara*>(pPara->GetNext()->obj().get());
         }
     }
 }
@@ -1222,12 +1222,12 @@ void LwpRubyLayout::Read()
 
 LwpRubyMarker* LwpRubyLayout::GetMarker()
 {
-    return static_cast<LwpRubyMarker*>(m_objRubyMarker.obj(VO_RUBYMARKER));
+    return static_cast<LwpRubyMarker*>(m_objRubyMarker.obj(VO_RUBYMARKER).get());
 }
 
 LwpStory* LwpRubyLayout::GetContentStory()
 {
-    return static_cast<LwpStory*>(m_Content.obj(VO_STORY));
+    return static_cast<LwpStory*>(m_Content.obj(VO_STORY).get());
 }
 
 void LwpRubyLayout::ConvertContentText()

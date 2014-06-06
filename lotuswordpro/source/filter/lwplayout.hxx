@@ -301,7 +301,7 @@ public:
     XFBGImage* GetXFBGImage();
     virtual bool GetUsePrinterSettings();
 
-    LwpLayoutScale* GetLayoutScale(){return dynamic_cast<LwpLayoutScale*>(m_LayScale.obj());}
+    LwpLayoutScale* GetLayoutScale(){return dynamic_cast<LwpLayoutScale*>(m_LayScale.obj().get());}
         sal_uInt16 GetScaleMode(void);
     sal_uInt16 GetScaleTile(void);
     sal_uInt16 GetScaleCenter(void);

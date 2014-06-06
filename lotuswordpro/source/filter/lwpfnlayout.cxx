@@ -119,14 +119,14 @@ void LwpFnRowLayout::RegisterStyle()
 {
     // register cells' style
     LwpObjectID *pCellID= GetChildHead();
-    LwpCellLayout * pCellLayout = static_cast<LwpCellLayout *>(pCellID->obj());
+    LwpCellLayout * pCellLayout = static_cast<LwpCellLayout *>(pCellID->obj().get());
 
     while(pCellLayout)
     {
         pCellLayout->SetFoundry(m_pFoundry);
         pCellLayout->RegisterStyle();
         pCellID = pCellLayout->GetNext();
-        pCellLayout = static_cast<LwpCellLayout *>(pCellID->obj());
+        pCellLayout = static_cast<LwpCellLayout *>(pCellID->obj().get());
     }
 }
 
@@ -160,8 +160,8 @@ void LwpFnCellLayout::Read()
 void LwpFnCellLayout::RegisterStyle()
 {
     // content object register styles
-    LwpObject * pObj = m_Content.obj();
-    if (pObj)
+    rtl::Reference<LwpObject> pObj = m_Content.obj();
+    if (pObj.is())
     {
         pObj->SetFoundry(m_pFoundry);
         pObj->RegisterStyle();
@@ -199,14 +199,14 @@ void LwpEndnoteLayout::RegisterStyle()
 {
     // register style of rows
     LwpObjectID *pRowID = GetChildHead();
-    LwpRowLayout * pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj());
+    LwpRowLayout * pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj().get());
     while (pRowLayout)
     {
         pRowLayout->SetFoundry(m_pFoundry);
         pRowLayout->RegisterStyle();
 
         pRowID = pRowLayout->GetNext();
-        pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj());
+        pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj().get());
     }
 }
 
@@ -262,7 +262,7 @@ void LwpEnSuperTableLayout::XFConvert(XFContentContainer * /*pCont*/)
 
     while(pID && !pID->IsNull())
     {
-        LwpVirtualLayout * pLayout = static_cast<LwpVirtualLayout *>(pID->obj());
+        LwpVirtualLayout * pLayout = static_cast<LwpVirtualLayout *>(pID->obj().get());
         if(!pLayout)
         {
             break;
@@ -318,7 +318,7 @@ LwpVirtualLayout* LwpFnSuperTableLayout::GetMainTableLayout()
 
     while(pID && !pID->IsNull())
     {
-        LwpVirtualLayout * pLayout = static_cast<LwpVirtualLayout *>(pID->obj());
+        LwpVirtualLayout * pLayout = static_cast<LwpVirtualLayout *>(pID->obj().get());
         if(!pLayout)
         {
             break;

@@ -65,6 +65,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJID_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPOBJID_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "lwpheader.hxx"
 #include "lwpobjstrm.hxx"
 #include "lwpdefs.hxx"
@@ -102,7 +106,7 @@ public:
 
     bool operator == (const LwpObjectID &Other) const;
     bool operator != (const LwpObjectID &Other) const;
-    LwpObject* obj(VO_TYPE tag=VO_INVALID) const;
+    rtl::Reference<LwpObject> obj(VO_TYPE tag=VO_INVALID) const;
     size_t HashCode() const;
 };
 

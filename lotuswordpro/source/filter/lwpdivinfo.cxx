@@ -166,10 +166,10 @@ sal_uInt16 LwpDivInfo::GetMaxNumberOfPages()
     LwpDocument* pDiv = GetDivision();
     if(!pDiv)
         return 0;
-    LwpDLVListHeadTailHolder* pHeadTail = static_cast<LwpDLVListHeadTailHolder*>(pDiv->GetPageHintsID()->obj());
+    LwpDLVListHeadTailHolder* pHeadTail = static_cast<LwpDLVListHeadTailHolder*>(pDiv->GetPageHintsID()->obj().get());
     if(pHeadTail)
     {
-        LwpPageHint* pPageHint =static_cast<LwpPageHint*>(pHeadTail->GetTail()->obj());
+        LwpPageHint* pPageHint =static_cast<LwpPageHint*>(pHeadTail->GetTail()->obj().get());
         if(pPageHint && !pPageHint->GetPageLayoutID()->IsNull())
         {
             return pPageHint->GetPageNumber();

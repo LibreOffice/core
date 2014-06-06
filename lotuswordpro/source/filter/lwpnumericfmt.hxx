@@ -309,12 +309,14 @@ class LwpLayoutNumerics : public LwpVirtualPiece
 public:
     LwpLayoutNumerics(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     :LwpVirtualPiece(objHdr, pStrm),cNumerics(m_pObjStrm){}
-    virtual ~LwpLayoutNumerics(){}
     XFStyle* Convert();
     virtual void Read() SAL_OVERRIDE;
 
 protected:
     LwpNumericFormat cNumerics;
+
+private:
+    virtual ~LwpLayoutNumerics(){}
 };
 
 #endif
