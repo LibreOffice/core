@@ -1962,7 +1962,7 @@ OUString SwFEShell::GetObjDescription() const
             const SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {
-                return dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjDescription();
+                return dynamic_cast<const SwFlyFrmFmt&>(*pFmt).GetObjDescription();
             }
             return pObj->GetDescription();
         }
