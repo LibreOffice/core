@@ -62,6 +62,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPDRAWOBJ_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "lwpsdwdrawheader.hxx"
 
 class SvStream;
@@ -303,7 +307,7 @@ private:
 public:
     LwpDrawTextBox(SvStream* pStream);
     virtual ~LwpDrawTextBox();
-    static void SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec);
+    static void SetFontStyle(rtl::Reference<XFFont> const & pFont, SdwTextBoxRecord* pRec);
 
 protected:
     virtual void Read() SAL_OVERRIDE;

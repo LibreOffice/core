@@ -70,23 +70,17 @@ XFFontFactory::~XFFontFactory()
 
 void XFFontFactory::Reset()
 {
-    std::vector<XFFont*>::iterator it;
-    for( it = s_aFonts.begin(); it != s_aFonts.end(); ++it )
-    {
-        XFFont *pFont = (*it);
-        delete pFont;
-    }
     s_aFonts.clear();
 }
 
-void XFFontFactory::AddFont(XFFont *pFont)
+void XFFontFactory::AddFont(rtl::Reference<XFFont> const & pFont)
 {
     s_aFonts.push_back( pFont );
 }
 
-XFFont* XFFontFactory::FindSameFont(XFFont *pFont)
+rtl::Reference<XFFont> XFFontFactory::FindSameFont(rtl::Reference<XFFont> const & pFont)
 {
-    std::vector<XFFont*>::iterator it;
+    std::vector< rtl::Reference<XFFont> >::iterator it;
     for( it = s_aFonts.begin(); it != s_aFonts.end(); ++it )
     {
         if( *pFont == **it )

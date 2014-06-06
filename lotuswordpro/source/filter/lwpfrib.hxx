@@ -120,7 +120,7 @@ public:
     bool HasNextFrib();
     void ConvertChars(XFContentContainer* pXFPara,const OUString& text);
     void ConvertHyperLink(XFContentContainer* pXFPara,LwpHyperlinkMgr* pHyperlink,const OUString& text);
-    XFFont* GetFont();
+    rtl::Reference<XFFont> GetFont();
 
     sal_uInt8 GetRevisionType(){return m_nRevisionType;}
     bool GetRevisionFlag(){return m_bRevisionFlag;}

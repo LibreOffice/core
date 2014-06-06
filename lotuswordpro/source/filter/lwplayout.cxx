@@ -1939,7 +1939,6 @@ LwpPlacableLayout::LwpPlacableLayout( LwpObjectHeader &objHdr, LwpSvStream* pStr
     , m_nBuoyancy(0)
     , m_nBaseLineOffset(0)
     , m_nPageNumber(0)
-    , m_pFont(NULL)
 {}
 
 LwpPlacableLayout::~LwpPlacableLayout()
@@ -2127,7 +2126,7 @@ bool LwpPlacableLayout::IsAnchorCell()
 * @descr:   Get font style for setting position of frame
 *
 */
-XFFont* LwpPlacableLayout::GetFont()
+rtl::Reference<XFFont> LwpPlacableLayout::GetFont()
 {
     return m_pFont;
 }
@@ -2135,7 +2134,7 @@ XFFont* LwpPlacableLayout::GetFont()
 * @descr:   Set font style for setting position of frame
 *
 */
-void LwpPlacableLayout::SetFont(XFFont * pFont)
+void LwpPlacableLayout::SetFont(rtl::Reference<XFFont> const & pFont)
 {
     m_pFont = pFont;
 }

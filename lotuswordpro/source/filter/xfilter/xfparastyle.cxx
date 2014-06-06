@@ -71,7 +71,6 @@ XFParaStyle::XFParaStyle()
     , m_bJustSingleWord(false)
     , m_bKeepWithNext(false)
     , m_fTextIndent(0)
-    , m_pFont(NULL)
     , m_pBorders(NULL)
     , m_pBGImage(NULL)
     , m_nPageNumber(0)
@@ -149,10 +148,7 @@ XFParaStyle& XFParaStyle::operator=(const XFParaStyle& other)
         m_nLineNumberRestart = other.m_nLineNumberRestart;
         m_bNumberRight = other.m_bNumberRight;
 
-        if( other.m_pFont )
-            m_pFont = other.m_pFont;
-        else
-            m_pFont = NULL;
+        m_pFont = other.m_pFont;
 
         if( other.m_pBorders )
             m_pBorders = new XFBorders(*other.m_pBorders);
@@ -201,7 +197,7 @@ enumXFStyle XFParaStyle::GetStyleFamily()
     return enumXFStylePara;
 }
 
-void    XFParaStyle::SetFont(XFFont *pFont)
+void    XFParaStyle::SetFont(rtl::Reference<XFFont> const & pFont)
 {
     m_pFont = pFont;
 }
@@ -360,14 +356,14 @@ bool    XFParaStyle::Equal(IXFStyle *pStyle)
         return false;
 
     //font:
-    if( m_pFont )
+    if( m_pFont.is() )
     {
-        if( !pOther->m_pFont )
+        if( !pOther->m_pFont.is() )
             return false;
         if(*m_pFont != *pOther->m_pFont )
             return false;
     }
-    else if( pOther->m_pFont )
+    else if( pOther->m_pFont.is() )
         return false;
 
     //border:
@@ -466,7 +462,7 @@ void    XFParaStyle::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute("fo:background-color", m_aBackColor.ToString() );
     }
     //Font properties:
-    if( m_pFont )
+    if( m_pFont.is() )
         m_pFont->ToXml(pStrm);
 
     //page number:

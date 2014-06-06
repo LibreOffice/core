@@ -65,6 +65,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPLAYOUT_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "lwpheader.hxx"
 #include "lwpobj.hxx"
 #include "lwpobjhdr.hxx"
@@ -406,8 +410,8 @@ public:
     virtual bool IsAnchorFrame() SAL_OVERRIDE;
     virtual bool IsAnchorCell() SAL_OVERRIDE;
     virtual void XFConvertFrame(XFContentContainer* /*pCont*/, sal_Int32 /*nStart*/ = 0, sal_Int32 /*nEnd*/ = 0, bool /*bAll*/ = false) {}
-    XFFont* GetFont();
-    void SetFont(XFFont* pFont);
+    rtl::Reference<XFFont> GetFont();
+    void SetFont(rtl::Reference<XFFont> const & pFont);
     enum WrapType
     {
         LAY_WRAP_AROUND = 1,
@@ -430,7 +434,7 @@ protected:
     LwpAtomHolder m_Script;
     LwpObjectID m_LayRelativity;
     sal_uInt16 m_nPageNumber;//for frame anchored to page
-    XFFont* m_pFont;//for frame position
+    rtl::Reference<XFFont> m_pFont;//for frame position
 };
 #endif
 

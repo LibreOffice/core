@@ -60,6 +60,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCELLSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCELLSTYLE_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "xfstyle.hxx"
 #include "xfcolor.hxx"
 #include "xfmargins.hxx"
@@ -142,7 +146,7 @@ private:
     XFBGImage   *m_pBackImage;
     XFMargins   m_aMargin;
     XFPadding   m_aPadding;
-    XFFont      *m_pFont;
+    rtl::Reference<XFFont> m_pFont;
     XFShadow    m_aShadow;
     XFBorders   *m_pBorders;
     bool    m_bWrapText;

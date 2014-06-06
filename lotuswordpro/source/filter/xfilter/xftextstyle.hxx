@@ -61,6 +61,10 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTSTYLE_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTSTYLE_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
+
 #include "xfglobal.hxx"
 #include "xfstyle.hxx"
 
@@ -78,9 +82,9 @@ public:
     /**
      * @descr:  set the font for the text span.
      */
-    void    SetFont(XFFont *font);
+    void    SetFont(rtl::Reference<XFFont> const & font);
 
-    XFFont* GetFont(){ return m_pFont; }
+    rtl::Reference<XFFont> GetFont(){ return m_pFont; }
 
     virtual enumXFStyle GetStyleFamily() SAL_OVERRIDE;
 
@@ -89,7 +93,7 @@ public:
     virtual void        ToXml(IXFStream *strm) SAL_OVERRIDE;
 
 private:
-    XFFont              *m_pFont;
+    rtl::Reference<XFFont> m_pFont;
 };
 
 #endif

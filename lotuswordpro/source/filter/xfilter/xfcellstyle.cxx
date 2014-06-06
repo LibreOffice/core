@@ -68,7 +68,6 @@ XFCellStyle::XFCellStyle()
     m_eVertAlign = enumXFAlignNone;
     m_fTextIndent = 0;
     m_pBorders = NULL;
-    m_pFont = NULL;
     m_pBackImage = NULL;
     m_bWrapText = false;
 }
@@ -160,14 +159,14 @@ bool    XFCellStyle::Equal(IXFStyle *pStyle)
         return false;
 
     //font:
-    if( m_pFont )
+    if( m_pFont.is() )
     {
-        if( !pOther->m_pFont )
+        if( !pOther->m_pFont.is() )
             return false;
         if(*m_pFont != *pOther->m_pFont )
             return false;
     }
-    else if( pOther->m_pFont )
+    else if( pOther->m_pFont.is() )
         return false;
 
     //border:
@@ -255,7 +254,7 @@ void XFCellStyle::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute("fo:background-color", m_aBackColor.ToString() );
     }
     //Font properties:
-    if( m_pFont )
+    if( m_pFont.is() )
         m_pFont->ToXml(pStrm);
 
     pStrm->StartElement("style:properties");

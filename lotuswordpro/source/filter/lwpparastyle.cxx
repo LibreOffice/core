@@ -693,7 +693,7 @@ void LwpParaStyle::RegisterStyle()
 
     //Create font
     LwpFontManager* pFontMgr = m_pFoundry->GetFontManger();
-    XFFont* pFont = pFontMgr->CreateFont(m_nFinalFontID);
+    rtl::Reference<XFFont> pFont = pFontMgr->CreateFont(m_nFinalFontID);
     pStyle->SetFont(pFont);
 
     //Set other paragraph properties...
