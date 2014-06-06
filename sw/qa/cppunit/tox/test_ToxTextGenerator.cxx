@@ -113,7 +113,7 @@ public:
 private:
     SwChapterField
     ObtainChapterField(SwChapterFieldType* chapterFieldType, const SwFormToken* chapterToken,
-            const SwCntntFrm* contentFrame, const SwCntntNode *contentNode) const {
+            const SwCntntFrm* contentFrame, const SwCntntNode *contentNode) const SAL_OVERRIDE {
         // get rid of 'unused-parameters' warnings
         (void)(chapterFieldType);(void)(chapterToken);(void)(contentFrame);(void)(contentNode);
         return mChapterField;
