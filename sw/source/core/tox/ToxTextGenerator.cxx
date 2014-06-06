@@ -311,7 +311,7 @@ void ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabB
 /*static*/ boost::shared_ptr<SfxItemSet>
 ToxTextGenerator::CollectAttributesForTox(const SwTxtAttr& hint, SwAttrPool& pool)
 {
-    boost::shared_ptr<SfxItemSet> retval = boost::make_shared<SfxItemSet>(pool);
+    boost::shared_ptr<SfxItemSet> retval(new SfxItemSet(pool));
     if (hint.Which() != RES_TXTATR_AUTOFMT) {
         return retval;
     }
