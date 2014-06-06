@@ -441,7 +441,8 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
 
     sal_uInt16 instLen = GetUInt16(ptr, 10 + numberOfContours*2, 1);
     const sal_uInt8* p = ptr + 10 + 2 * numberOfContours + 2 + instLen;
-    ControlPoint* pa = (ControlPoint*)calloc(lastPoint+1, sizeof(ControlPoint));
+    sal_uInt16 palen = lastPoint+1;
+    ControlPoint* pa = (ControlPoint*)calloc(palen, sizeof(ControlPoint));
 
     i = 0;
     while (i <= lastPoint) {
@@ -491,7 +492,13 @@ static int GetSimpleTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoin
     }
 
     for (i=0; i<numberOfContours; i++) {
-        pa[GetUInt16(ptr, 10 + i * 2, 1)].flags |= 0x00008000;      /*- set the end contour flag */
+        sal_uInt16 offset = GetUInt16(ptr, 10 + i * 2, 1);
+        SAL_WARN_IF(offset >= palen, "vcl.fonts", "Font " << OUString::createFromAscii(ttf->fname) <<
+            " contour " << i << " claimed an illegal offset of "
+            << offset << " but max offset is " << palen-1);
+        if (offset >= palen)
+            continue;
+        pa[offset].flags |= 0x00008000;      /*- set the end contour flag */
     }
 
     *pointArray = pa;
