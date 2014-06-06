@@ -132,7 +132,9 @@ void ScMacroManager::InitUserFuncData()
 
     Reference< container::XContainer > xModuleContainer;
     SfxObjectShell* pShell = mpDoc->GetDocumentShell();
-    if (pShell && !pShell->GetBasicManager()->GetName().isEmpty())
+    if (!pShell)
+        return;
+    if (!pShell->GetBasicManager()->GetName().isEmpty())
     {
         sProjectName = pShell->GetBasicManager()->GetName();
     }
@@ -151,7 +153,7 @@ void ScMacroManager::InitUserFuncData()
             xModuleContainer->addContainerListener( mxContainerListener );
         }
     }
-    catch( uno::Exception& )
+    catch (const uno::Exception&)
     {
     }
 }
