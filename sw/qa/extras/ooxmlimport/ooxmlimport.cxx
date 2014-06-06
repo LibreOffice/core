@@ -2051,6 +2051,18 @@ DECLARE_OOXMLIMPORT_TEST(testFdo75722vml, "fdo75722-vml.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int64(3100), nRot);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo78939, "fdo78939.docx")
+{
+    // fdo#78939 : LO hanged while opening issue document
+
+    // Whenever a para-style was applied to a Numbering format level,
+    // LO incorrectly also changed the para-style..
+
+    // check that file opens and does not hang while opening and also
+    // check that an incorrect numbering style is not applied ...
+    CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo75722dml, "fdo75722-dml.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
