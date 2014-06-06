@@ -1940,7 +1940,7 @@ void SwFEShell::SetObjTitle( const OUString& rTitle )
             SwFrmFmt* pFmt = FindFrmFmt( pObj );
             if ( pFmt->Which() == RES_FLYFRMFMT )
             {
-                GetDoc()->SetFlyFrmTitle( *(dynamic_cast<SwFlyFrmFmt*>(pFmt)),
+                GetDoc()->SetFlyFrmTitle( dynamic_cast<SwFlyFrmFmt&>(*pFmt),
                                           rTitle );
             }
             else
