@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE document-content  PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN"  "../../../../../../../xmloff/dtd/office.dtd"><office:document-content office:class="text" office:version="0.9" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:form="http://openoffice.org/2000/form" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:office="http://openoffice.org/2000/office" xmlns:script="http://openoffice.org/2000/script" xmlns:style="http://openoffice.org/2000/style" xmlns:svg="http://www.w3.org/2000/svg" xmlns:table="http://openoffice.org/2000/table" xmlns:text="http://openoffice.org/2000/text" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <office:script/>
+ <office:font-decls>
+  <style:font-decl fo:font-family="&apos;Andale WT UI&apos;, &apos;MS Mincho&apos;, &apos;HG Mincho L&apos;, &apos;MS PGothic&apos;, &apos;Arial Unicode MS&apos;" style:name="Andale WT UI"/>
+  <style:font-decl fo:font-family="&apos;Simplified Arabic&apos;, &apos;Andale WT UI&apos;, &apos;Arial Unicode MS&apos;" style:name="Simplified Arabic"/>
+  <style:font-decl fo:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable" style:name="Times New Roman"/>
+ </office:font-decls>
+ <office:automatic-styles/>
+ <office:body>
+  <text:sequence-decls>
+   <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+   <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+   <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+   <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+  </text:sequence-decls>
+  <text:p text:style-name="Standard">Tak for din interesse for &lt;field:company&gt;.</text:p>
+  <text:p text:style-name="Standard">Efter grundig vurdering af alle ansøgere, må vi desværre meddele, at vi har tilbudt stillingen til en bedre kvalificeret ansøger.</text:p>
+  <text:p text:style-name="Standard">Det har været en svær beslutning, og den afspejler på ingen måde en negativ vurdering af dine personlige egenskaber. Beslutningen afspejler derimod vores ønske om at ansætte en kandidat, hvis kvalifikationer passer bedst til vores ønsker. Originalerne af dine ansøgningspapirer er vedlagt.</text:p>
+  <text:p text:style-name="Standard">Vi ønsker dig det bedste i din fremtidige karriereplaner.</text:p>
+ </office:body>
+</office:document-content>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standard">
+  <block-list:block block-list:abbreviated-name="APA" block-list:package-name="APA" block-list:name="Adnotacja dotycząca praw autorskich książki" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Numeracja formuł" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="O" block-list:package-name="O" block-list:name="Oferta" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="PO" block-list:package-name="PO" block-list:name="Potwierdzenie odbioru" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="POD" block-list:package-name="POD" block-list:name="Oferta pracy: Podanie o pracę" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="PODDOK" block-list:package-name="PODDOK" block-list:name="Podanie: Odpowiedź odmowna, zatrzymanie dokumentów" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="PODODM" block-list:package-name="PODODM" block-list:name="Podanie: Odpowiedź odmowna" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="PODPOTW" block-list:package-name="PODPOTW" block-list:name="Podanie: Potwierdzenie wpłynięcia" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="PODZAPR" block-list:package-name="PODZAPR" block-list:name="Podanie: Zaproszenie na rozmowę kwalifikacyjną" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="SZPA" block-list:package-name="SZPA" block-list:name="Szanowni Państwo," block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="TW" block-list:package-name="TW" block-list:name="Przykładowy tekst-wypełniacz" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="U1" block-list:package-name="U1" block-list:name="Pierwsze wezwanie do zapłaty (upomnienie)" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="U2" block-list:package-name="U2" block-list:name="Drugie wezwanie do zapłaty (upomnienie)" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="WPŁA" block-list:package-name="WP+AUE-A" block-list:name="Warunki płatności" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="WYP" block-list:package-name="WYP" block-list:name="Ogólne wypowiedzenie" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="Z" block-list:package-name="Z" block-list:name="Załącznik" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="ZA" block-list:package-name="ZA" block-list:name="Zamówienie" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ZO" block-list:package-name="ZO" block-list:name="Zapytanie ofertowe" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="ZPO" block-list:package-name="ZPO" block-list:name="Z poważaniem" block-list:unformatted-text="false"/>
+</block-list:block-list>

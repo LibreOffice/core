@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Céges névjegykártyák (3 ½ x 2)">
+ <block-list:block block-list:abbreviated-name="CLE1" block-list:package-name="CLE1" block-list:name="Elegáns, csak céges" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CLE2" block-list:package-name="CLE2" block-list:name="Elegáns, névvel" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CLE3" block-list:package-name="CLE3" block-list:name="Elegáns, névvel, szlogen nélkül" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CON1" block-list:package-name="CON1" block-list:name="Modern, csak céges" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CON2" block-list:package-name="CON2" block-list:name="Modern, névvel" block-list:unformatted-text="false"/>
+</block-list:block-list>

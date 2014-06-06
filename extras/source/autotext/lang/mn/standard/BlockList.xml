@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Стандарт">
+  <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Formula Numbering" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="АШ" block-list:package-name="+BBAEKA-" block-list:name="АГААРЫН ШУУДАНГААР" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="АӨБ" block-list:package-name="+BBAE6AQR-" block-list:name="Ажлын өргөдөл бичих" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="АӨТ" block-list:package-name="+BBAE6AQi-" block-list:name="Ажлын өргөдөл: Татгалзал" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="АӨТБ" block-list:package-name="+BBAE6AQiBBE-" block-list:name="Ажлын өргөдөл: Татгалзал, материал буцаахгүй" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="АӨЯУ" block-list:package-name="+BBAE6AQvBCM-" block-list:name="Ажлын өргөдөл: Ярилцлагын урилга" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="БШ" block-list:package-name="+BBEEKA-" block-list:name="БАТАЛГААТ ШУУДАН" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="БЯ" block-list:package-name="+BBEELw-" block-list:name="Баярлалаа" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ГХ" block-list:package-name="+BBMEJQ-" block-list:name="Гүнээ хүндэтгэсэн" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="И" block-list:package-name="+BBg-" block-list:name="Ишлэл" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ЛА" block-list:package-name="+BBsEEA-" block-list:name="Лавалгаа:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="НӨШ" block-list:package-name="+BB0E6AQo-" block-list:name="НЭГ ӨДРИЙН ШУУДАНГААР" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="С" block-list:package-name="+BCE-" block-list:name="Сэдэв:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="С1" block-list:package-name="+BCE-1" block-list:name="1-р сануулга" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="С2" block-list:package-name="+BCE-2" block-list:name="2-р сануулга" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="ССХ" block-list:package-name="+BCEEIQQl-" block-list:name="Сайн сайхныг хүсье" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ТН" block-list:package-name="+BCIEHQ-" block-list:name="Төлбөрийн нөхцөл" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ТНИ" block-list:package-name="+BCIEHQQY-" block-list:name="ТУСГАЙ НИЙЛҮҮЛЭЛТ" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="Х" block-list:package-name="+BCU-" block-list:name="ХУВИЙН" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ХАБ" block-list:package-name="+BCUEEAQR-" block-list:name="Хүлээн авсны батламж" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ХБ" block-list:package-name="+BCUEEQ-" block-list:name="Хуурмаг бичвэр" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ХБН" block-list:package-name="+BCUEEQQd-" block-list:name="Хатагтай ба ноён:" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ХН" block-list:package-name="+BCUEHQ-" block-list:name="Хүндэтгэсэн" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ЦЕ" block-list:package-name="+BCYEFQ-" block-list:name="Цуцлалт, Ерөнхий" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="ЭХН" block-list:package-name="+BC0EJQQd-" block-list:name="Эрхэм хатагтай эсвэл ноён" block-list:unformatted-text="false"/>
+  </block-list:block-list>

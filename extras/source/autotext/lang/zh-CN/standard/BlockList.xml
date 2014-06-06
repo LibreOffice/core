@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="标准">
+ <block-list:block block-list:abbreviated-name="AR" block-list:package-name="AR" block-list:name="回执" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="CAN" block-list:package-name="CAN" block-list:name="解约通知书" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CP" block-list:package-name="CP" block-list:name="有关版权的文献" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="DMS" block-list:package-name="DMS" block-list:name="尊敬的女士们和先生们，" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="DT" block-list:package-name="DT" block-list:name="样本文字" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="E" block-list:package-name="E" block-list:name="随附" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="公式编号" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="I" block-list:package-name="I" block-list:name="查询" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="JACL" block-list:package-name="JACL" block-list:name="求职信" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JACR" block-list:package-name="JACR" block-list:name="求职申请：确认收到申请材料" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JAINV" block-list:package-name="JAINV" block-list:name="求职申请：面谈邀请信" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JARL" block-list:package-name="JARL" block-list:name="求职申请：回绝信" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JARWPR" block-list:package-name="JARWPR" block-list:name="求职申请：暂时回绝" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="O" block-list:package-name="O" block-list:name="订购" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="Q" block-list:package-name="Q" block-list:name="报价" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="R1" block-list:package-name="R1" block-list:name="第一次催款" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="R2" block-list:package-name="R2" block-list:name="第二次催款" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="TOP" block-list:package-name="TOP" block-list:name="支付条件" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="YT" block-list:package-name="YT" block-list:name="顺致友好的问候" block-list:unformatted-text="false"/>
+</block-list:block-list>

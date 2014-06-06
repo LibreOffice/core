@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:auto-text-events xmlns:office="http://openoffice.org/2000/office" xmlns:text="http://openoffice.org/2000/text" xmlns:script="http://openoffice.org/2000/script" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:ooo="http://openoffice.org/2004/office">
+ <office:events>
+  <script:event script:language="StarBasic" script:event-name="on-insert-done" script:macro-name="Template.Autotext.Main" script:location="application"/>
+ </office:events>
+</office:auto-text-events>

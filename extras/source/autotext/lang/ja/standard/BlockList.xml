@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="標準">
+ <block-list:block block-list:abbreviated-name="AR" block-list:package-name="AR" block-list:name="受領確認通知" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="CAN" block-list:package-name="CAN" block-list:name="解約届（一般）" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CP" block-list:package-name="CP" block-list:name="著作権" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="DT" block-list:package-name="DT" block-list:name="ダミーテキスト" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="E" block-list:package-name="E" block-list:name="同封" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="数式の番号付け" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HK" block-list:package-name="HK" block-list:name="拝啓" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="I" block-list:package-name="I" block-list:name="照会" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="JACL" block-list:package-name="JACL" block-list:name="応募の手紙" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JAINV" block-list:package-name="JAINV" block-list:name="面接日時通知" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JARL" block-list:package-name="JARL" block-list:name="不採用通知" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JARWPR" block-list:package-name="JARWPR" block-list:name="不採用通知: 書類返送なし" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="KG" block-list:package-name="KG" block-list:name="敬具" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="O" block-list:package-name="O" block-list:name="発注" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="Q" block-list:package-name="Q" block-list:name="見積もり" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="R1" block-list:package-name="R1" block-list:name="催促状 1" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="R2" block-list:package-name="R2" block-list:name="催促状 2" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="TOP" block-list:package-name="TOP" block-list:name="お支払い条件" block-list:unformatted-text="false"/>
+</block-list:block-list>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE office:document-settings PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "../../../../../../../xmloff/dtd/office.dtd">
+<office:document-settings xmlns:office="http://openoffice.org/2000/office" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:config="http://openoffice.org/2001/config" office:class="text" office:version="1.1">
+ <office:settings>
+  <config:config-item-set config:name="view-settings">
+   <config:config-item config:name="ViewAreaTop" config:type="int">0</config:config-item>
+   <config:config-item config:name="ViewAreaLeft" config:type="int">0</config:config-item>
+   <config:config-item config:name="ViewAreaWidth" config:type="int">0</config:config-item>
+   <config:config-item config:name="ViewAreaHeight" config:type="int">0</config:config-item>
+   <config:config-item config:name="ShowRedlineChanges" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="RecordRedlineChanges" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ShowHeaderWhileBrowsing" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="ShowFooterWhileBrowsing" config:type="boolean">false</config:config-item>
+  </config:config-item-set>
+  <config:config-item-set config:name="configuration-settings">
+   <config:config-item config:name="LinkUpdateMode" config:type="short">1</config:config-item>
+   <config:config-item config:name="FieldAutoUpdate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="ChartAutoUpdate" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="AddParaTableSpacing" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="AddParaTableSpacingAtStart" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="PrinterName" config:type="string"/>
+   <config:config-item config:name="IsKernAsianPunctuation" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="CharacterCompressionType" config:type="short">0</config:config-item>
+   <config:config-item config:name="ApplyUserData" config:type="boolean">true</config:config-item>
+   <config:config-item config:name="SaveGlobalDocumentLinks" config:type="boolean">false</config:config-item>
+   <config:config-item config:name="CurrentDatabaseDataSource" config:type="string"/>
+   <config:config-item config:name="CurrentDatabaseCommand" config:type="string"/>
+   <config:config-item config:name="CurrentDatabaseCommandType" config:type="int">0</config:config-item>
+  </config:config-item-set>
+ </office:settings>
+</office:document-settings>

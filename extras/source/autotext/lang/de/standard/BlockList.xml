@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standard">
+  <block-list:block block-list:abbreviated-name="AF" block-list:package-name="AF" block-list:name="Anfrage" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="AG" block-list:package-name="AG" block-list:name="Angebot" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="AL" block-list:package-name="AL" block-list:name="Anlage" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="BEW" block-list:package-name="BEW" block-list:name="Bewerbungsanschreiben" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="BEWABS" block-list:package-name="BEWABS" block-list:name="Bewerbung: Absage" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="BEWEIN" block-list:package-name="BEWEIN" block-list:name="Bewerbung: Eingangsbestätigung" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="BEWUNT" block-list:package-name="BEWUNT" block-list:name="Bewerbung: Absage, Unterlagen behalten" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="BEWVOR" block-list:package-name="BEWVOR" block-list:name="Bewerbung: Einladung zum Vorstellungsgespräch" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="BS" block-list:package-name="BS" block-list:name="Bestellung" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="BT" block-list:package-name="BT" block-list:name="Blindtext" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="EB" block-list:package-name="EB" block-list:name="Eingangsbestätigung" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Formel-Nummerierung" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="KÜ" block-list:package-name="K+ANw-" block-list:name="Kündigung" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="M1" block-list:package-name="M1" block-list:name="1. Mahnung" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="M2" block-list:package-name="M2" block-list:name="2. Mahnung" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="MFG" block-list:package-name="MFG" block-list:name="Mit freundlichen Grüßen" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="SGDH" block-list:package-name="SGDH" block-list:name="Sehr geehrte Damen und Herren," block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="UL" block-list:package-name="UL" block-list:name="Urheberrechtsvermerk Literatur" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="ZBED" block-list:package-name="ZBED" block-list:name="Zahlungsbedingung" block-list:unformatted-text="true"/>
+  </block-list:block-list>

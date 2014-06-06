@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "../../../../../../../package/dtd/Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+ <manifest:file-entry manifest:media-type="" manifest:full-path="/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="META-INF/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="WSP1/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="WSP1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="WSP1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="WSP1/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="WSP2/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="WSP2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="WSP2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="WSP2/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="KLAS1/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLAS1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLAS1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="KLAS1/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="KLAS2/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLAS2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLAS2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="KLAS2/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="KLAS3/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLAS3/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="KLAS3/styles.xml"/>
+ <manifest:file-entry manifest:media-type="application/vnd.oasis.opendocument.text" manifest:full-path="KLAS3/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="BlockList.xml"/>
+</manifest:manifest>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE office:document-settings PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "../../../../../../../xmloff/dtd/office.dtd">
+<office:document-styles xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" office:class="text" office:version="0.9">
+ <office:font-decls>
+  <style:font-decl style:name="Andale WT UI" fo:font-family="&apos;Andale WT UI&apos;, &apos;MS Mincho&apos;, &apos;HG Mincho L&apos;, &apos;MS PGothic&apos;, &apos;Arial Unicode MS&apos;"/>
+  <style:font-decl style:name="Simplified Arabic" fo:font-family="&apos;Simplified Arabic&apos;, &apos;Andale WT UI&apos;, &apos;Arial Unicode MS&apos;"/>
+  <style:font-decl style:name="Times New Roman" fo:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-decls>
+ <office:styles>
+  <style:default-style style:family="graphics">
+   <style:properties fo:color="#000000" style:font-name="Times New Roman" fo:font-size="6pt" fo:language="de" fo:country="DE" style:font-name-asian="Andale WT UI" style:font-size-asian="6pt" style:language-asian="none" style:country-asian="none" style:font-name-complex="Simplified Arabic" style:font-size-complex="6pt" style:language-complex="none" style:country-complex="none" style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:properties style:font-name="Times New Roman" style:font-pitch-asian="fixed" style:font-pitch-complex="fixed" style:tab-stop-distance="2.205cm"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+  <style:style style:name="Form of Address" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:properties fo:margin-top="0cm" fo:margin-bottom="0.63cm" fo:line-height="200%">
+    <style:tab-stops>
+     <style:tab-stop style:position="2cm" style:type="default"/>
+    </style:tab-stops>
+   </style:properties>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-master style:name="pm1">
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-master>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-master-name="pm1"/>
+ </office:master-styles>
+</office:document-styles>

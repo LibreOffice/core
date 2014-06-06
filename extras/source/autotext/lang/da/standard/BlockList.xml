@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><block-list:block-list block-list:list-name="Standard" xmlns:block-list="http://openoffice.org/2001/block-list">
+ <block-list:block block-list:abbreviated-name="A" block-list:name="Attention:" block-list:package-name="A" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="AR" block-list:name="Bekræftelse af modtagelse" block-list:package-name="AR" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="BW" block-list:name="De bedste ønsker," block-list:package-name="BW" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="C" block-list:name="FORTROLIGT" block-list:package-name="C" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="CAN" block-list:name="Aflysning, generel" block-list:package-name="CAN" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CD" block-list:name="Med hjertlig hilsen," block-list:package-name="CD" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="CM" block-list:name="ATTESTERET BREV" block-list:package-name="CM" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="CNL" block-list:name="Notits om ophavsret" block-list:package-name="CNL" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="DMS" block-list:name="Kære hr. eller fr." block-list:package-name="DMS" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="DT" block-list:name="Dummytekst" block-list:package-name="DT" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="E" block-list:name="Vedlagt" block-list:package-name="E" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="FN" block-list:name="Formelnummerering" block-list:package-name="FN" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="I" block-list:name="Forespørgsel" block-list:package-name="I" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="IRT" block-list:name="Som svar på:" block-list:package-name="IRT" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="J" block-list:name="Jobansøgning: Afslag, beholder jobansøgningen" block-list:package-name="J" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JACL" block-list:name="Jobansøgning: Følgebrev" block-list:package-name="JACL" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JACR" block-list:name="Jobansøgning: Bekræftelse af modtagelse" block-list:package-name="JACR" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JAINV" block-list:name="Jobansøgning: Invitation til samtale" block-list:package-name="JAINV" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="JARL" block-list:name="Jobansøgning: Afslagsbrev" block-list:package-name="JARL" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="LAG" block-list:name="Damer og herrer:" block-list:package-name="LAG" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="O" block-list:name="Ordre" block-list:package-name="O" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="P" block-list:name="PERSONLIGT" block-list:package-name="P" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="Q" block-list:name="Citat" block-list:package-name="Q" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="R1" block-list:name="1. påmindelse" block-list:package-name="R1" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="R2" block-list:name="2. påmindelse" block-list:package-name="R2" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="RE" block-list:name="Reference:" block-list:package-name="RE" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="RF" block-list:name="Ærbødigst" block-list:package-name="RF" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="RG" block-list:name="Venlig hilsen" block-list:package-name="RG" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="RM" block-list:name="ANBEFALET BREV" block-list:package-name="RM" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="S" block-list:name="Emne:" block-list:package-name="S" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="SD" block-list:name="SPECIAL UDBRINGNING" block-list:package-name="SD" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="SI" block-list:name="Venlig hilsen" block-list:package-name="SI" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="TC" block-list:name="Pas på dig selv" block-list:package-name="TC" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="TOP" block-list:name="Betalingsbetingelser" block-list:package-name="TOP" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="TWIMC" block-list:name="Til rette vedkommende:" block-list:package-name="TWIMC" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="TY" block-list:name="Tak" block-list:package-name="TY" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="VA" block-list:name="VIA AIRMAIL" block-list:package-name="VA" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="VOM" block-list:name="VIA NÆSTEDAGSLEVERING" block-list:package-name="VOM" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="YT" block-list:name="Kærlig hilsen" block-list:package-name="YT" block-list:unformatted-text="false"/>
+</block-list:block-list>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE document-styles  PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN"  "../../../../../../../xmloff/dtd/office.dtd"><office:document-styles office:class="text" office:version="0.9" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:form="http://openoffice.org/2000/form" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:office="http://openoffice.org/2000/office" xmlns:script="http://openoffice.org/2000/script" xmlns:style="http://openoffice.org/2000/style" xmlns:svg="http://www.w3.org/2000/svg" xmlns:table="http://openoffice.org/2000/table" xmlns:text="http://openoffice.org/2000/text" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <office:font-decls>
+  <style:font-decl fo:font-family="&apos;Andale WT UI&apos;, &apos;MS Mincho&apos;, &apos;HG Mincho L&apos;, &apos;MS PGothic&apos;, &apos;Arial Unicode MS&apos;" style:name="Andale WT UI"/>
+  <style:font-decl fo:font-family="&apos;Simplified Arabic&apos;, &apos;Andale WT UI&apos;, &apos;Arial Unicode MS&apos;" style:name="Simplified Arabic"/>
+  <style:font-decl fo:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable" style:name="Times New Roman"/>
+ </office:font-decls>
+ <office:styles>
+  <style:default-style style:family="graphics">
+   <style:properties fo:color="#000000" fo:country="DK" fo:font-size="6pt" fo:language="da" style:country-asian="none" style:country-complex="none" style:font-name="Times New Roman" style:font-name-asian="Andale WT UI" style:font-name-complex="Simplified Arabic" style:font-size-asian="6pt" style:font-size-complex="6pt" style:language-asian="none" style:language-complex="none" style:line-break="strict" style:punctuation-wrap="simple" style:text-autospace="ideograph-alpha"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:properties style:font-name="Times New Roman" style:font-pitch-asian="fixed" style:font-pitch-complex="fixed" style:tab-stop-distance="2.205cm"/>
+  </style:default-style>
+  <style:style style:class="text" style:family="paragraph" style:name="Standard"/>
+  <style:style style:class="text" style:family="paragraph" style:name="Salutation" style:parent-style-name="Standard">
+   <style:properties fo:keep-with-next="true" fo:margin-bottom="1.48cm" fo:margin-top="0.63cm"/>
+  </style:style>
+  <style:style style:class="text" style:family="paragraph" style:name="Signature" style:parent-style-name="Standard">
+   <style:properties fo:keep-with-next="true"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-master style:name="pm1">
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-master>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-master-name="pm1"/>
+ </office:master-styles>
+</office:document-styles>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Jen pro šablony">
+ <block-list:block block-list:abbreviated-name="H1B" block-list:package-name="H1B" block-list:name="Záhlaví první stánky brožury" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1C" block-list:package-name="H1C" block-list:name="Záhlaví první stránky pamětní publikace" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1N" block-list:package-name="H1N" block-list:name="Záhlaví první stránky novin" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HB" block-list:package-name="HB" block-list:name="Záhlaví brožury" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HC" block-list:package-name="HC" block-list:name="Záhlaví pamětní publikace" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLB" block-list:package-name="HLB" block-list:name="Záhlaví brožury vlevo" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLC" block-list:package-name="HLC" block-list:name="Záhlaví pamětní publikace vlevo" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLN" block-list:package-name="HLN" block-list:name="Záhlaví novin vlevo" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HN" block-list:package-name="HN" block-list:name="Záhlaví novin" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRB" block-list:package-name="HRB" block-list:name="Záhlaví brožury vpravo" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRC" block-list:package-name="HRC" block-list:name="Záhlaví pamětní publikace vpravo" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRN" block-list:package-name="HRN" block-list:name="Záhlaví novin vpravo" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT1" block-list:package-name="PT1" block-list:name="Zápis z porady: výsledky" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT2" block-list:package-name="PT2" block-list:name="Zápis z porady: vyhodnocení úkolů" block-list:unformatted-text="false"/>
+</block-list:block-list>

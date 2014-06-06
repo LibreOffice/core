@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE manifest:manifest PUBLIC "-//OpenOffice.org//DTD Manifest 1.0//EN" "../../../../../../../package/dtd/Manifest.dtd">
+<manifest:manifest xmlns:manifest="http://openoffice.org/2001/manifest">
+ <manifest:file-entry manifest:media-type="" manifest:full-path="/"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+rODIBA-1/Pictures/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+rODIBA-1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+rODIBA-1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+rODIBA-1/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+rODIBA-2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+rODIBA-2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+rODIBA-2/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+rODIBA-3/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+rODIBA-3/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+rODIBA-3/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+1gSzAA-1/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+1gSzAA-1/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+1gSzAA-1/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+1gSzAA-2/content.xml"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="+1gSzAA-2/styles.xml"/>
+ <manifest:file-entry manifest:media-type="" manifest:full-path="+1gSzAA-2/"/>
+ <manifest:file-entry manifest:media-type="text/xml" manifest:full-path="BlockList.xml"/>
+</manifest:manifest>

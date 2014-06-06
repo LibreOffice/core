@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" office:version="1.0">
+    <office:scripts/>
+    <office:font-face-decls>
+        <style:font-face style:name="Lucida Sans Unicode" svg:font-family="&apos;Lucida Sans Unicode&apos;" style:font-pitch="variable"/>
+        <style:font-face style:name="Tahoma" svg:font-family="Tahoma" style:font-pitch="variable"/>
+        <style:font-face style:name="Times New Roman" svg:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+    </office:font-face-decls>
+    <office:automatic-styles/>
+    <office:body>
+        <office:text>
+            <text:sequence-decls>
+                <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+                <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+                <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+                <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+            </text:sequence-decls>
+            <text:p text:style-name="Standard">Uslyšel za sebou tiché kroky. To nevěštilo nic dobrého. Kdo by ho mohl sledovat tak pozdě v noci, v tomhle zapomenutém koutě města? A právě teď, když se mu tak zadařilo a prchal s prachama. Je to další ničema, který měl stejný nápad a teď ho sleduje a čeká na svou šanci, aby mu vzal plody jeho práce? Nebo to byly kroky jednoho z mnoha policistů ve městě, který ho sleduje, aby ho drapnul a nasadil mu želízka? Nervózně se rozhlédl. Náhle uviděl uličku. Jako blesk se vrhnul doleva a zmizel mezi dvěma skladišti. Málem přitom zakopl o popelnici, která ležela na chodníku. Nervózně se snažil našmátrat cestu tmou černou jako inkoust. Náhle ztuhl. Byla to slepá ulička. Musí se vrátit odkud přišel. Kroky byly stále hlasitější. Už viděl tmavou siluetu muže přicházejícího zpoza rohu. Tak to je konec, pomyslel si. Tisknul se ke zdi a snažil se s ní splynout. Bylo všechno to plánování a energie vynaložena na nic? Strach, studený a lepkavý jako pot, prostupoval jeho šaty. Náhle, se sotva slyšitelným vrznutím, pootevřel noční vánek dveře vedle něho. Je to útočiště, za které se modlil? Pomalu se sunul ke dveřím. Víc a víc se snažil vtlačit do zdi, do tmy, pryč od nepřítele. Poskytnou mu tyto dveře úkryt?</text:p>
+        </office:text>
+    </office:body>
+</office:document-content>

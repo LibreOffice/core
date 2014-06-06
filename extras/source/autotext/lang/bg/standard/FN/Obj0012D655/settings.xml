@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE office:document-settings PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "../../../../../../../../xmloff/dtd/office.dtd">
+<office:document-settings xmlns:office="http://openoffice.org/2000/office" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:config="http://openoffice.org/2001/config" office:class="math" office:version="0.9">
+ <office:settings>
+  <config:config-item-set config:name="view-settings">
+   <config:config-item config:name="ViewAreaTop" config:type="int">0</config:config-item>
+   <config:config-item config:name="ViewAreaLeft" config:type="int">0</config:config-item>
+   <config:config-item config:name="ViewAreaWidth" config:type="int">1496</config:config-item>
+   <config:config-item config:name="ViewAreaHeight" config:type="int">577</config:config-item>
+  </config:config-item-set>
+  <config:config-item-set config:name="configuration-settings">
+   <config:config-item config:name="Formula" config:type="string">E=mc^2</config:config-item>
+   <config:config-item config:name="PrinterName" config:type="string"/>
+  </config:config-item-set>
+ </office:settings>
+</office:document-settings>
