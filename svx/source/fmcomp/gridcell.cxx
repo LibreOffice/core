@@ -1067,18 +1067,14 @@ void DbLimitedLengthField::implAdjustGenericFieldSetting( const Reference< XProp
     }
 }
 
-
 void DbLimitedLengthField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
 {
-    dynamic_cast< Edit* >( m_pWindow )->SetMaxTextLen( _nMaxLen );
-    if ( m_pPainter )
-        dynamic_cast< Edit* >( m_pPainter )->SetMaxTextLen( _nMaxLen );
+    dynamic_cast<Edit&>(*m_pWindow).SetMaxTextLen(_nMaxLen);
+    if (m_pPainter)
+        dynamic_cast<Edit&>(*m_pPainter).SetMaxTextLen(_nMaxLen);
 }
 
-
 //= DbTextField
-
-
 DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
             ,m_pEdit( NULL )
