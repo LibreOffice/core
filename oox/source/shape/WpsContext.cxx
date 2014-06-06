@@ -75,8 +75,9 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
 
             uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
             uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-            if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+            if (xServiceInfo.is())
             {
+                bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
                 // Handle inset attributes for Writer textframes.
                 sal_Int32 aInsets[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
                 boost::optional<sal_Int32> oInsets[4];
@@ -87,9 +88,10 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         oInsets[i] = oox::drawingml::GetCoordinate(oValue.get());
                 }
                 OUString aProps[] = { OUString("LeftBorderDistance"), OUString("TopBorderDistance"), OUString("RightBorderDistance"), OUString("BottomBorderDistance") };
-                for (size_t i = 0; i < SAL_N_ELEMENTS(aProps); ++i)
+                OUString aShapeProps[] = { OUString("TextLeftDistance"), OUString("TextUpperDistance"), OUString("TextRightDistance"), OUString("TextLowerDistance") };
+                for (size_t i = 0; i < SAL_N_ELEMENTS(bTextFrame ? aProps : aShapeProps); ++i)
                     if (oInsets[i])
-                        xPropertySet->setPropertyValue(aProps[i], uno::makeAny(*oInsets[i]));
+                        xPropertySet->setPropertyValue((bTextFrame ? aProps : aShapeProps)[i], uno::makeAny(*oInsets[i]));
             }
 
             // Handle text vertical adjustment inside a text frame
