@@ -1815,6 +1815,56 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
+        case SID_HIDE_LAST_LEVEL:
+        {
+            ESelection aSel;
+            // fdo#78151 editing a PRESOBJ_OUTLINE in a master page ?
+            ::Outliner* pOL = GetOutlinerForMasterPageOutlineTextObj(aSel);
+            if (pOL)
+            {
+                //we are on the last paragraph
+                aSel.Adjust();
+                if (aSel.nEndPara == pOL->GetParagraphCount() - 1)
+                {
+                    sal_uInt16 nDepth = pOL->GetDepth(aSel.nEndPara);
+                    //there exists a previous numbering level
+                    if (nDepth != sal_uInt16(-1) && nDepth > 0)
+                    {
+                        Paragraph* pPara = pOL->GetParagraph(aSel.nEndPara);
+                        pOL->Remove(pPara, 1);
+                    }
+                }
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
+        case SID_SHOW_NEXT_LEVEL:
+        {
+            ESelection aSel;
+            // fdo#78151 editing a PRESOBJ_OUTLINE in a master page ?
+            ::Outliner* pOL = GetOutlinerForMasterPageOutlineTextObj(aSel);
+            if (pOL)
+            {
+                //we are on the last paragraph
+                aSel.Adjust();
+                if (aSel.nEndPara == pOL->GetParagraphCount() - 1)
+                {
+                    sal_uInt16 nDepth = pOL->GetDepth(aSel.nEndPara);
+                    //there exists a previous numbering level
+                    if (nDepth != sal_uInt16(-1) && nDepth < 8)
+                    {
+                        sal_uInt16 nNewDepth = nDepth+1;
+                        pOL->Insert(SD_RESSTR(STR_PRESOBJ_MPOUTLINE+nNewDepth), EE_PARA_APPEND, nNewDepth);
+                    }
+                }
+            }
+            Cancel();
+            rReq.Done ();
+        }
+        break;
+
         case SID_INSERT_FLD_DATE_FIX:
         case SID_INSERT_FLD_DATE_VAR:
         case SID_INSERT_FLD_TIME_FIX:
