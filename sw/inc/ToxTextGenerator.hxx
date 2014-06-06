@@ -36,7 +36,7 @@ class SwCntntFrm;
 class SwCntntNode;
 class SwDoc;
 class SwForm;
-class SwFormToken;
+struct SwFormToken;
 class SwPageDesc;
 class SwTxtAttr;
 class SwTxtNode;
