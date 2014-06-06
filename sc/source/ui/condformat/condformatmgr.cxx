@@ -14,10 +14,6 @@
 #include <vcl/msgbox.hxx>
 #include "document.hxx"
 
-#define ITEMID_RANGE 1
-#define ITEMID_CONDITION 2
-
-
 ScCondFormatManagerWindow::ScCondFormatManagerWindow(SvSimpleTableContainer& rParent,
     ScDocument* pDoc, ScConditionalFormatList* pFormatList)
     : SvSimpleTable(rParent, WB_HSCROLL | WB_SORT | WB_TABSTOP)
