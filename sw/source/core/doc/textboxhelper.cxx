@@ -15,6 +15,7 @@
 #include <docary.hxx>
 #include <unocoll.hxx>
 #include <unoframe.hxx>
+#include <unodraw.hxx>
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
 #include <unomid.h>
@@ -154,6 +155,15 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::list
     }
     assert(pRet);
     return pRet ? uno::makeAny(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY)) : uno::Any();
+}
+
+SwFrmFmt* SwTextBoxHelper::findTextBox(uno::Reference<drawing::XShape> xShape)
+{
+    SwXShape* pShape = dynamic_cast<SwXShape*>(xShape.get());
+    if (!pShape)
+        return 0;
+
+    return findTextBox(pShape->GetFrmFmt());
 }
 
 SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)

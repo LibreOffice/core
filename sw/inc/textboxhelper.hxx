@@ -12,9 +12,12 @@
 
 #include <list>
 
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+
+#include <swdllapi.h>
 
 class SdrPage;
 class SwFrmFmt;
@@ -27,7 +30,7 @@ class Rectangle;
  * This class provides helper methods to create, query and maintain such
  * TextBoxes.
  */
-class SwTextBoxHelper
+class SW_DLLPUBLIC SwTextBoxHelper
 {
 public:
     /// Create a TextBox for a shape.
@@ -44,6 +47,7 @@ public:
 
     /// If we have an associated TextFrame, then return that.
     static SwFrmFmt* findTextBox(SwFrmFmt* pShape);
+    static SwFrmFmt* findTextBox(css::uno::Reference<css::drawing::XShape> xShape);
     /// Return the textbox rectangle of a draw shape (in twips).
     static Rectangle getTextRectangle(SwFrmFmt* pShape, bool bAbsolute = true);
 
