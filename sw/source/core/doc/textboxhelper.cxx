@@ -153,7 +153,7 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::list
         ++nCount;
     }
     assert(pRet);
-    return uno::makeAny(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY));
+    return pRet ? uno::makeAny(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY)) : uno::Any();
 }
 
 SwFrmFmt* SwTextBoxHelper::findTextBox(SwFrmFmt* pShape)
