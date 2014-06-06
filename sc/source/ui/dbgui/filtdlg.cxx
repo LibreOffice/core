@@ -294,7 +294,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         }
         else if ( i == 0 )
         {
-            nFieldSelPos = GetFieldSelPos( pViewData->GetCurX() );
+            nFieldSelPos = pViewData ? GetFieldSelPos(pViewData->GetCurX()) : 0;
             rEntry.nField = nFieldSelPos ? (theQueryData.nCol1 +
                 static_cast<SCCOL>(nFieldSelPos) - 1) : static_cast<SCCOL>(0);
             rEntry.bDoQuery=true;
