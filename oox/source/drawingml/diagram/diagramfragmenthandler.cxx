@@ -166,7 +166,7 @@ DiagramQStylesFragmentHandler::DiagramQStylesFragmentHandler( XmlFilterBase& rFi
 
 void DiagramQStylesFragmentHandler::onStartElement( const AttributeList& rAttribs )
 {
-    if( getCurrentElement() == DGM_TOKEN( styleDef ) )
+    if( getCurrentElement() == DGM_TOKEN( styleLbl ) )
     {
         maStyleName = rAttribs.getString( XML_name, OUString() );
         maStyleEntry = mrStylesMap[maStyleName];
@@ -203,30 +203,29 @@ ColorFragmentHandler::ColorFragmentHandler( ::oox::core::XmlFilterBase& rFilter,
         case DGM_TOKEN(colorsDef):
             return nElement == DGM_TOKEN(styleLbl) ? this : NULL;
         case DGM_TOKEN(styleLbl):
-            return ((nElement == DGM_TOKEN(fillClrLst)) ||
-                    (nElement == DGM_TOKEN(linClrLst)) ||
-                    (nElement == DGM_TOKEN(effectClrLst)) ||
-                    (nElement == DGM_TOKEN(txLinClrLst)) ||
-                    (nElement == DGM_TOKEN(txFillClrLst)) ||
-                    (nElement == DGM_TOKEN(txEffectClrLst))) ? this : NULL;
+        {
+            switch( nElement )
+            {
+                // the actual colors - defer to color fragment handlers.
 
-        // the actual colors - defer to color fragment handlers.
-
-        // TODO(F1): well, actually, there might be *several* color
-        // definitions in it, after all its called list. but
-        // apparently colorChoiceContext doesn't handle that anyway...
-        case DGM_TOKEN(fillClrLst):
-            return new ColorContext( *this, maColorEntry.maFillColor );
-        case DGM_TOKEN(linClrLst):
-            return new ColorContext( *this, maColorEntry.maLineColor );
-        case DGM_TOKEN(effectClrLst):
-            return new ColorContext( *this, maColorEntry.maEffectColor );
-        case DGM_TOKEN(txFillClrLst):
-            return new ColorContext( *this, maColorEntry.maTextFillColor );
-        case DGM_TOKEN(txLinClrLst):
-            return new ColorContext( *this, maColorEntry.maTextLineColor );
-        case DGM_TOKEN(txEffectClrLst):
-            return new ColorContext( *this, maColorEntry.maTextEffectColor );
+                // TODO(F1): well, actually, there might be *several* color
+                // definitions in it, after all its called list. but
+                // apparently ColorContext doesn't handle that anyway...
+                case DGM_TOKEN(fillClrLst):
+                    return new ColorContext( *this, maColorEntry.maFillColor );
+                case DGM_TOKEN(linClrLst):
+                    return new ColorContext( *this, maColorEntry.maLineColor );
+                case DGM_TOKEN(effectClrLst):
+                    return new ColorContext( *this, maColorEntry.maEffectColor );
+                case DGM_TOKEN(txFillClrLst):
+                    return new ColorContext( *this, maColorEntry.maTextFillColor );
+                case DGM_TOKEN(txLinClrLst):
+                    return new ColorContext( *this, maColorEntry.maTextLineColor );
+                case DGM_TOKEN(txEffectClrLst):
+                    return new ColorContext( *this, maColorEntry.maTextEffectColor );
+            }
+            break;
+        }
     }
 
     return 0;
