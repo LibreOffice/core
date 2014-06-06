@@ -74,12 +74,28 @@ float fMultiplier = 1.2f;
 const Color aButtonsBackground(114, 168, 84); // TDF green
 const Color aButtonsText(COL_WHITE);
 
+/***
+ *
+ * Order items in ascending order (useful for the selection sets and move/copy operations since the associated ids
+ * change when processed by the SfxDocumentTemplates class so we want to process to ones with higher id first)
+ *
+ ***/
+
+static bool cmpSelectionItems (const ThumbnailViewItem *pItem1, const ThumbnailViewItem *pItem2)
+{
+    return pItem1->mnId > pItem2->mnId;
+}
+
+
 BackingWindow::BackingWindow( Window* i_pParent ) :
     Window( i_pParent ),
     mxDesktop( Desktop::create(comphelper::getProcessComponentContext()) ),
     mbInitControls( false ),
     mnHideExternalLinks( 0 ),
-    mpAccExec( NULL )
+    mpAccExec( NULL ),
+    maSelTemplates(cmpSelectionItems),
+    maSelFolders(cmpSelectionItems)
+
 {
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" );
 
