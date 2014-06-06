@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document xmlns:block-list="http://openoffice.org/2001/block-list" xmlns:text="http://openoffice.org/2000/text" xmlns:office="http://openoffice.org/2000/office" block-list:list-name="기본">
+ <office:body>
+  <text:p>&lt;placeholder:&quot;정기구독 이와 유사한것&quot;:&quot;와일드카드를 클릭한 다음, 덮어씌웁니다&quot;&gt; 다음 번 유효한 사직서 제출기간에 맞추어, 이에 사직서를 제출합니다. 동시에 바로 지금부터 부여된 권한을 반환합니다.</text:p>
+  <text:p>이 서신의 수취에 대해 서면 확인하여 주시고, 사직이 유효하게 되는 시점을 서면으로 알려 주십시오.</text:p>
+ </office:body>
+</office:document>

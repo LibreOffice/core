@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Visitekaartjes, zaak (85 x 50)">
+ <block-list:block block-list:abbreviated-name="ACT1" block-list:package-name="ACT1" block-list:name="Actueel, alleen firma" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ACT2" block-list:package-name="ACT2" block-list:name="Actueel, met naam" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ELEG1" block-list:package-name="ELEG1" block-list:name="Elegant, alleen firma" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ELEG2" block-list:package-name="ELEG2" block-list:name="Elegant, met naam" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ELEG3" block-list:package-name="ELEG3" block-list:name="Elegant, met naam, zonder slogan" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PRO1" block-list:package-name="PRO1" block-list:name="Professioneel, alleen firma" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PRO2" block-list:package-name="PRO2" block-list:name="Professioneel, met naam" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PRO3" block-list:package-name="PRO3" block-list:name="Professioneel, met naam, zonder slogan" block-list:unformatted-text="false"/>
+</block-list:block-list>

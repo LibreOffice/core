@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standard">
+  <block-list:block block-list:abbreviated-name="AR" block-list:package-name="AR" block-list:name="Accusé de réception" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="C" block-list:package-name="C" block-list:name="Commande" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CDOS" block-list:package-name="CDOS" block-list:name="Candidature : rejet, mais conserver le dossier" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CINVI" block-list:package-name="CINVI" block-list:name="Candidature : Invitation à un entretien" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CLET" block-list:package-name="CLET" block-list:name="Candidature : Lettre d&apos;accompagnement" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="CNON" block-list:package-name="CNON" block-list:name="Candidature : rejet" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="COP" block-list:package-name="COP" block-list:name="Mention de copyright" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="CREC" block-list:package-name="CREC" block-list:name="Candidature : Accusé de réception" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="D" block-list:package-name="D" block-list:name="Demande de renseignements" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="D" block-list:package-name="D" block-list:name="Demande de renseignements" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="MM" block-list:package-name="MM" block-list:name="Madame, Monsieur," block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="NF" block-list:package-name="NF" block-list:name="Numérotation de formule" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="O" block-list:package-name="O" block-list:name="Offre" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="P" block-list:package-name="P" block-list:name="Pièce jointe" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="PAI" block-list:package-name="PAI" block-list:name="Conditions de paiement" block-list:unformatted-text="true"/>
+  <block-list:block block-list:abbreviated-name="R1" block-list:package-name="R1" block-list:name="1ère relance" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="R2" block-list:package-name="R2" block-list:name="2e relance" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="RESI" block-list:package-name="RESI" block-list:name="Résiliation" block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="SALU" block-list:package-name="SALU" block-list:name="Veuillez agréer, Madame, Monsieur, nos sincères salutations." block-list:unformatted-text="false"/>
+  <block-list:block block-list:abbreviated-name="TEX" block-list:package-name="TEX" block-list:name="Texte pour exemple" block-list:unformatted-text="true"/>
+</block-list:block-list>

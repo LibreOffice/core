@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Padrão">
+ <block-list:block block-list:abbreviated-name="A" block-list:package-name="A" block-list:name="Atenciosamente" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="AN" block-list:package-name="AN" block-list:name="Anexo" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="CAN" block-list:package-name="CAN" block-list:name="Cancelamento, geral" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CDP" block-list:package-name="CDP" block-list:name="Condições de pagamento" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CR" block-list:package-name="CR" block-list:name="Confirmação de Recebimento" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Numeração de Fórmula" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="L1" block-list:package-name="L1" block-list:name="1º Lembrete" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="L2" block-list:package-name="L2" block-list:name="2º Lembrete" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="LDA" block-list:package-name="LDA" block-list:name="Literatura sobre Direitos Autorais" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="OC" block-list:package-name="OC" block-list:name="Ordem de Compra" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="P" block-list:package-name="P" block-list:name="Preço" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="PC" block-list:package-name="PC" block-list:name="Pedido de Consulta" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="PECA" block-list:package-name="PECA" block-list:name="Pedido de Emprego: Carta de Apresentação" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PECE" block-list:package-name="PECE" block-list:name="Pedido de Emprego: Convite para Entrevista" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PECR" block-list:package-name="PECR" block-list:name="Pedido de Emprego: Confirmação de Recibo" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PECRE" block-list:package-name="PECRE" block-list:name="Pedido de Emprego: Carta de Rejeição" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PERGF" block-list:package-name="PERGF" block-list:name="Pedido de Emprego: Rejeição, guardar a ficha" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="PSS" block-list:package-name="PSS" block-list:name="Prezado Sr. ou Sra." block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="TP" block-list:package-name="TP" block-list:name="Texto Provisório" block-list:unformatted-text="false"/>
+</block-list:block-list>

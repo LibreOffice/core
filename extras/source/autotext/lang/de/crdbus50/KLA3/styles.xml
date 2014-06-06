@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<office:document-styles xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.org/2000/style" xmlns:text="http://openoffice.org/2000/text" xmlns:table="http://openoffice.org/2000/table" xmlns:draw="http://openoffice.org/2000/drawing" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:number="http://openoffice.org/2000/datastyle" xmlns:svg="http://www.w3.org/2000/svg" xmlns:chart="http://openoffice.org/2000/chart" xmlns:dr3d="http://openoffice.org/2000/dr3d" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="http://openoffice.org/2000/form" xmlns:script="http://openoffice.org/2000/script" office:class="text" office:version="0.9">
+ <office:font-decls>
+  <style:font-decl style:name="Andale WT UI" fo:font-family="&apos;Andale WT UI&apos;, &apos;MS Mincho&apos;, &apos;HG Mincho L&apos;, &apos;MS PGothic&apos;, &apos;Arial Unicode MS&apos;"/>
+  <style:font-decl style:name="Simplified Arabic" fo:font-family="&apos;Simplified Arabic&apos;, &apos;Andale WT UI&apos;, &apos;Arial Unicode MS&apos;"/>
+  <style:font-decl style:name="Times New Roman" fo:font-family="&apos;Times New Roman&apos;" style:font-family-generic="roman" style:font-pitch="variable"/>
+ </office:font-decls>
+ <office:styles>
+  <style:default-style style:family="graphics">
+   <style:properties fo:color="#000000" style:font-name="Times New Roman" fo:font-size="6pt" fo:language="de" fo:country="DE" style:font-name-asian="Andale WT UI" style:font-size-asian="6pt" style:language-asian="none" style:country-asian="none" style:font-name-complex="Simplified Arabic" style:font-size-complex="6pt" style:language-complex="none" style:country-complex="none" style:text-autospace="ideograph-alpha" style:punctuation-wrap="simple" style:line-break="strict"/>
+  </style:default-style>
+  <style:default-style style:family="paragraph">
+   <style:properties style:font-name="Times New Roman" style:font-pitch-asian="fixed" style:font-pitch-complex="fixed" style:tab-stop-distance="2.205cm"/>
+  </style:default-style>
+  <style:style style:name="Standard" style:family="paragraph" style:class="text">
+   <style:properties fo:font-size="11pt" fo:letter-spacing="0.004cm" style:letter-kerning="true" fo:line-height="115%"/>
+  </style:style>
+  <style:style style:name="Erste Zeile" style:family="paragraph" style:parent-style-name="Standard">
+   <style:properties fo:font-size="11pt"/>
+  </style:style>
+  <style:style style:name="Firma" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:properties fo:font-weight="bold" fo:text-align="center" style:justify-single-word="false" fo:margin-left="0.499cm" fo:margin-right="0.499cm" fo:text-indent="0cm" fo:margin-top="0cm" fo:margin-bottom="0.63cm" fo:padding="0.049cm" fo:border-top="0.002cm solid #000000" fo:border-bottom="0.002cm solid #000000"/>
+  </style:style>
+  <style:style style:name="Name" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:properties fo:font-size="14pt" fo:text-align="center" style:justify-single-word="false" fo:margin-top="0cm" fo:margin-bottom="0.109cm"/>
+  </style:style>
+  <style:style style:name="Position" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+   <style:properties fo:font-size="9pt" fo:font-style="italic" fo:font-weight="normal" fo:text-align="center" style:justify-single-word="false" fo:margin-top="0cm" fo:margin-bottom="0.801cm"/>
+  </style:style>
+  <style:style style:name="Adresse links" style:family="paragraph" style:parent-style-name="Standard" style:class="extra">
+   <style:properties fo:font-size="6pt" fo:margin-left="1cm" fo:margin-right="0cm" fo:text-indent="0cm"/>
+  </style:style>
+  <style:style style:name="Adresse rechts" style:family="paragraph" style:parent-style-name="Adresse links" style:class="extra">
+   <style:properties fo:text-align="end" style:justify-single-word="false" fo:margin-left="0cm" fo:margin-right="1cm" fo:text-indent="0cm"/>
+  </style:style>
+  <text:outline-style>
+   <text:outline-level-style text:level="1" style:num-format=""/>
+   <text:outline-level-style text:level="2" style:num-format=""/>
+   <text:outline-level-style text:level="3" style:num-format=""/>
+   <text:outline-level-style text:level="4" style:num-format=""/>
+   <text:outline-level-style text:level="5" style:num-format=""/>
+   <text:outline-level-style text:level="6" style:num-format=""/>
+   <text:outline-level-style text:level="7" style:num-format=""/>
+   <text:outline-level-style text:level="8" style:num-format=""/>
+   <text:outline-level-style text:level="9" style:num-format=""/>
+   <text:outline-level-style text:level="10" style:num-format=""/>
+  </text:outline-style>
+  <text:footnotes-configuration style:num-format="1" text:offset="0" text:footnotes-position="page" text:start-numbering-at="document"/>
+  <text:endnotes-configuration style:num-format="i" text:offset="0"/>
+  <text:bibliography-configuration text:prefix="[" text:suffix="]"/>
+  <text:linenumbering-configuration text:style-name="Zeichenformat" text:number-lines="false" text:offset="0.499cm" style:num-format="1" text:number-position="left" text:increment="5"/>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-master style:name="pm1">
+   <style:properties fo:page-width="20.999cm" fo:page-height="29.699cm" style:num-format="1" style:print-orientation="portrait" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm" style:footnote-max-height="0cm">
+    <style:footnote-sep style:width="0.018cm" style:distance-before-sep="0.101cm" style:distance-after-sep="0.101cm" style:adjustment="left" style:rel-width="25%" style:color="#000000"/>
+   </style:properties>
+   <style:header-style/>
+   <style:footer-style/>
+  </style:page-master>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-master-name="pm1"/>
+ </office:master-styles>
+</office:document-styles>

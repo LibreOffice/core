@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><block-list:block-list block-list:list-name="Visitkort, arbejde (90 x 50 mm)" xmlns:block-list="http://openoffice.org/2001/block-list">
+ <block-list:block block-list:abbreviated-name="CON1" block-list:name="Moderne, kun firma" block-list:package-name="CON1" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="CON2" block-list:name="Moderne, med navn" block-list:package-name="CON2" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ELE1" block-list:name="Elegant, kun firma" block-list:package-name="ELE1" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ELE2" block-list:name="Elegant, med navn" block-list:package-name="ELE2" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ELE3" block-list:name="Elegant, med navn, uden slogan" block-list:package-name="ELE3" block-list:unformatted-text="false"/>
+</block-list:block-list>

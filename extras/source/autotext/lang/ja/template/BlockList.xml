@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="テンプレートのみ">
+ <block-list:block block-list:abbreviated-name="H1B" block-list:package-name="H1B" block-list:name="チラシ広告１ページ目のヘッダ" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1C" block-list:package-name="H1C" block-list:name="記念刊行物１ページ目のヘッダ" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1N" block-list:package-name="H1N" block-list:name="ニュースレター１ページ目のヘッダ" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HB" block-list:package-name="HB" block-list:name="チラシ広告のヘッダ" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HC" block-list:package-name="HC" block-list:name="記念刊行物のヘッダ" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLB" block-list:package-name="HLB" block-list:name="チラシ広告のヘッダ左" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLC" block-list:package-name="HLC" block-list:name="記念刊行物のヘッダ左" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLN" block-list:package-name="HLN" block-list:name="新聞のヘッダ左" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HN" block-list:package-name="HN" block-list:name="新聞のヘッダ" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRB" block-list:package-name="HRB" block-list:name="チラシ広告のヘッダ右" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRC" block-list:package-name="HRC" block-list:name="記念刊行物のヘッダ右" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRN" block-list:package-name="HRN" block-list:name="新聞のヘッダ右" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT1" block-list:package-name="PT1" block-list:name="会議録: 結論 TOP" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT2" block-list:package-name="PT2" block-list:name="会議録: 経過 TOP" block-list:unformatted-text="false"/>
+</block-list:block-list>

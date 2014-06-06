@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<math:math xmlns:math="http://www.w3.org/1998/Math/MathML">
+ <math:semantics>
+  <math:mrow>
+   <math:mi>E</math:mi>
+   <math:mo math:stretchy="false">=</math:mo>
+   <math:msup>
+    <math:mi math:fontstyle="italic">mc</math:mi>
+    <math:mn>2</math:mn>
+   </math:msup>
+  </math:mrow>
+  <math:annotation math:encoding="StarMath 5.0">E=mc^2</math:annotation>
+ </math:semantics>
+</math:math>

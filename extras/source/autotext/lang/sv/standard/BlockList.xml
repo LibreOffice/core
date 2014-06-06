@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="Standard">
+ <block-list:block block-list:abbreviated-name="AA" block-list:package-name="AA" block-list:name="Ansökan: Avslag" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ABM" block-list:package-name="ABM" block-list:name="Ansökan: Bekräftelse om mottagning" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="AI" block-list:package-name="AI" block-list:name="Ansökan: Inbjudan till intervju" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ANS" block-list:package-name="ANS" block-list:name="Ansökan: Platsansökan" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="ANY" block-list:package-name="ANY" block-list:name="Ansökan: Avslag med önskan om ny kontakt" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="B" block-list:package-name="B" block-list:name="Bilaga" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="BT" block-list:package-name="BT" block-list:name="Blindtext" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="BV" block-list:package-name="BV" block-list:name="Betalningsvillkor" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="F" block-list:package-name="F" block-list:name="Förfrågan" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="FN" block-list:package-name="FN" block-list:name="Formelnumrering" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="K" block-list:package-name="K" block-list:name="Kvittens" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="LOREM" block-list:package-name="LOREM" block-list:name="Lorem Ipsum" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="MVH" block-list:package-name="MVH" block-list:name="Med vänlig hälsning" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="O" block-list:package-name="O" block-list:name="Offert" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="OR" block-list:package-name="OR" block-list:name="Order" block-list:unformatted-text="true"/>
+ <block-list:block block-list:abbreviated-name="P1" block-list:package-name="P1" block-list:name="1:a påminnelsen" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="P2" block-list:package-name="P2" block-list:name="2:a påminnelsen" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="UA" block-list:package-name="UA" block-list:name="Uppsägning, allmän" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="UL" block-list:package-name="UL" block-list:name="Upphovsrätt, litteratur" block-list:unformatted-text="true"/>
+</block-list:block-list>

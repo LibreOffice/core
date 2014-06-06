@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="仅用于样式">
+ <block-list:block block-list:abbreviated-name="H1B" block-list:package-name="H1B" block-list:name="手册首页页眉" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1C" block-list:package-name="H1C" block-list:name="纪念文章首页页眉" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1N" block-list:package-name="H1N" block-list:name="新闻简报首页页眉" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HB" block-list:package-name="HB" block-list:name="手册页眉" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HC" block-list:package-name="HC" block-list:name="纪念文章页眉" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLB" block-list:package-name="HLB" block-list:name="手册页眉左向" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLC" block-list:package-name="HLC" block-list:name="纪念文章页眉左向" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLN" block-list:package-name="HLN" block-list:name="新闻简报页眉左向" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HN" block-list:package-name="HN" block-list:name="新闻简报页眉" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRB" block-list:package-name="HRB" block-list:name="手册页眉右向" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRC" block-list:package-name="HRC" block-list:name="纪念文章页眉右向" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRN" block-list:package-name="HRN" block-list:name="新闻简报页眉右向" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT1" block-list:package-name="PT1" block-list:name="记录：议程事项结果" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT2" block-list:package-name="PT2" block-list:name="记录：议程事项的进程" block-list:unformatted-text="false"/>
+</block-list:block-list>

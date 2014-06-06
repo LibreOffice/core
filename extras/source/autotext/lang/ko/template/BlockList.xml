@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<block-list:block-list xmlns:block-list="http://openoffice.org/2001/block-list" block-list:list-name="서식파일용으로만">
+ <block-list:block block-list:abbreviated-name="H1B" block-list:package-name="H1B" block-list:name="머리글, 첫번째 페이지 팜플렛" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1C" block-list:package-name="H1C" block-list:name="머리글, 첫번째 페이지 기념 간행물" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="H1N" block-list:package-name="H1N" block-list:name="머리글, 첫번째 페이지 신문" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HB" block-list:package-name="HB" block-list:name="머리글, 팜플렛" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HC" block-list:package-name="HC" block-list:name="머리글, 기념 간행물" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLB" block-list:package-name="HLB" block-list:name="머리글 좌측, 팜플렛" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLC" block-list:package-name="HLC" block-list:name="머리글 좌측, 기념 간행물" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HLN" block-list:package-name="HLN" block-list:name="머리글 좌측, 신문" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HN" block-list:package-name="HN" block-list:name="머리글, 신문" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRB" block-list:package-name="HRB" block-list:name="머리글 우측 팜플렛" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRC" block-list:package-name="HRC" block-list:name="머리글 우측, 기념 간행물" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="HRN" block-list:package-name="HRN" block-list:name="머리글 우측, 신문" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT1" block-list:package-name="PT1" block-list:name="프로토콜: 결과 TOP" block-list:unformatted-text="false"/>
+ <block-list:block block-list:abbreviated-name="PT2" block-list:package-name="PT2" block-list:name="프로토콜: TOP 과정" block-list:unformatted-text="false"/>
+</block-list:block-list>

@@ -43,6 +43,7 @@ $(eval $(call gb_Module_add_targets,extras,\
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,extras,\
+	AllLangCustomTarget_autotextshare \
 	AllLangPackage_autotextshare \
 ))
 
