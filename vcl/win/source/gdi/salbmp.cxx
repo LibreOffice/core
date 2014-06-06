@@ -317,24 +317,32 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap()
 
         if(pRetval)
         {
-            sal_uInt8* pSrcRGB(pRGB->mpBits);
-            const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
-            const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
-            const Gdiplus::Rect aAllRect(0, 0, nW, nH);
-            Gdiplus::BitmapData aGdiPlusBitmapData;
-            pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat24bppRGB, &aGdiPlusBitmapData);
-
-            // copy data to Gdiplus::Bitmap; format is BGR here in both cases, so memcpy is possible
-            for(sal_uInt32 y(0); y < nH; y++)
+            if ( pRetval->GetLastStatus() == Gdiplus::Ok )
             {
-                const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
-                sal_uInt8* targetPixels = (sal_uInt8*)aGdiPlusBitmapData.Scan0 + (nYInsert * aGdiPlusBitmapData.Stride);
+                sal_uInt8* pSrcRGB(pRGB->mpBits);
+                const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
+                const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
+                const Gdiplus::Rect aAllRect(0, 0, nW, nH);
+                Gdiplus::BitmapData aGdiPlusBitmapData;
+                pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat24bppRGB, &aGdiPlusBitmapData);
 
-                memcpy(targetPixels, pSrcRGB, nW * 3);
-                pSrcRGB += nW * 3 + nExtraRGB;
+                // copy data to Gdiplus::Bitmap; format is BGR here in both cases, so memcpy is possible
+                for(sal_uInt32 y(0); y < nH; y++)
+                {
+                    const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
+                    sal_uInt8* targetPixels = (sal_uInt8*)aGdiPlusBitmapData.Scan0 + (nYInsert * aGdiPlusBitmapData.Stride);
+
+                    memcpy(targetPixels, pSrcRGB, nW * 3);
+                    pSrcRGB += nW * 3 + nExtraRGB;
+                }
+
+                pRetval->UnlockBits(&aGdiPlusBitmapData);
             }
-
-            pRetval->UnlockBits(&aGdiPlusBitmapData);
+            else
+            {
+                delete pRetval;
+                pRetval = NULL;
+            }
         }
     }
 
