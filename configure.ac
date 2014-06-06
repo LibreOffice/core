@@ -1461,7 +1461,7 @@ AC_ARG_WITH(package-format,
         [Specify package format(s) for LibreOffice installation sets. The
          implicit --without-package-format leads to no installation sets being
          generated. Possible values: aix, archive, bsd, deb, dmg,
-         installed, msi, native, osx, pkg, portable, and rpm.
+         installed, msi, native, pkg, portable, and rpm.
          Example: --with-package-format='deb rpm']),
 ,)
 
@@ -4526,14 +4526,13 @@ AC_MSG_CHECKING([which package format to use])
 if test -n "$with_package_format" -a "$with_package_format" != no; then
     for i in $with_package_format; do
         case "$i" in
-        aix | bsd | deb | osx | pkg | rpm | native | portable | archive | dmg | installed | msi)
+        aix | bsd | deb | pkg | rpm | native | portable | archive | dmg | installed | msi)
             ;;
         *)
             AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
 aix - AIX software distribution
 bsd - FreeBSD, NetBSD, or OpenBSD software distribution
 deb - Debian software distribution
-osx - MacOS X software distribution
 pkg - Solaris software distribution
 rpm - RedHat software distribution
 native - "Native" software distribution for the platform
@@ -7343,18 +7342,6 @@ if test "$enable_epm" = "yes"; then
             AC_MSG_ERROR([dpkg needed for deb creation. Install dpkg.])
         fi
     fi
-    if echo "$PKGFORMAT" | $EGREP osx 2>&1 >/dev/null; then
-        if test "$_os" = "Darwin"; then
-            AC_MSG_CHECKING([for PackageMaker availability])
-            if ! test -x /Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker; then
-                AC_MSG_ERROR([not installed. Please install Apples Dev Tools])
-            else
-                AC_MSG_RESULT([ok])
-            fi
-        else
-            AC_MSG_ERROR([PackageMaker needed to build OSX packages and you are not on OSX...])
-        fi
-    fi
     if echo "$PKGFORMAT" | $EGREP rpm 2>&1 >/dev/null || \
        echo "$PKGFORMAT" | $EGREP pkg 2>&1 >/dev/null; then
         if test "$with_epm" = "no" -a "$_os" != "Darwin"; then
@@ -7393,7 +7380,7 @@ if test "$enable_epm" = "yes"; then
 else
     for i in $PKGFORMAT; do
         case "$i" in
-        aix | bsd | deb | osx | pkg | rpm | native | portable)
+        aix | bsd | deb | pkg | rpm | native | portable)
             AC_MSG_ERROR(
                 [--with-package-format='$PKGFORMAT' requires --enable-epm])
             ;;
