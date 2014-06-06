@@ -42,6 +42,11 @@ public:
         assertXPath(htmlDoc, "/html/body/table/tr", 5);
         assertXPath(htmlDoc, "/html/body/ul", 1);
         assertXPath(htmlDoc, "/html/body/ul/li", 2);
+
+        assertXPath(htmlDoc, "/html/head/meta[1]", "content", "text/html; charset=utf-8");
+        assertXPath(htmlDoc, "/html/head/meta[2]", "name", "generator");
+        assertXPath(htmlDoc, "/html/head/meta[3]", "name", "created");
+        assertXPath(htmlDoc, "/html/head/meta[3]", "content", "20140409;170541987922038");
     }
 
     CPPUNIT_TEST_SUITE(SdHTMLFilterTest);
