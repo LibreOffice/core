@@ -76,7 +76,7 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
     sOut.append("\" ").append(OOO_STRING_SVTOOLS_HTML_O_content).append("=\"");
     rStrm.WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-    HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ).WriteCharPtr( "\">" );
+    HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ).WriteCharPtr( "\"/>" );
 }
 
 void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
