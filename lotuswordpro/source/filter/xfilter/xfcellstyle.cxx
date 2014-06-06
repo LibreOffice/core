@@ -124,7 +124,7 @@ bool    XFCellStyle::Equal(IXFStyle *pStyle)
     if( !pStyle || pStyle->GetStyleFamily() != enumXFStyleTableCell )
         return false;
 
-    XFCellStyle *pOther = static_cast<XFCellStyle*>(pStyle);
+    XFCellStyle *pOther = dynamic_cast<XFCellStyle*>(pStyle);
     if( !pOther )
         return false;
 
