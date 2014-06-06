@@ -843,10 +843,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66688, "fdo66688.docx")
 {
     // The problem was that TextFrame imported and exported the wrong value for transparency
     // (was stored as 'FillTransparence' instead of 'BackColorTransparency'
-    uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 80 ), getProperty< sal_Int32 >( xFrame, "BackColorTransparency" ) );
+    uno::Reference<beans::XPropertySet> xFrame(getShape(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32( 80 ), getProperty< sal_Int32 >( xFrame, "FillTransparence" ) );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo66773, "fdo66773.docx")
