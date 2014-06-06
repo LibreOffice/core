@@ -171,6 +171,9 @@ public:
     const ::std::vector<OUString>&
                         getExtDrawings() { return maExtDrawings; }
     void                addExtDrawingRelId( const OUString &rRelId ) { maExtDrawings.push_back( rRelId ); }
+    // Set font color only for extdrawings.
+    void                setFontRefColorForNodes(const Color& rColor) { maFontRefColorForNodes = rColor; }
+    const Color&        getFontRefColorForNodes() const { return maFontRefColorForNodes; }
     void                setLockedCanvas(bool bLockedCanvas);
     bool                getLockedCanvas();
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &
@@ -246,6 +249,7 @@ protected:
     com::sun::star::awt::Size       maSize;
     com::sun::star::awt::Point      maPosition;
     ::std::vector<OUString>    maExtDrawings;
+    Color                           maFontRefColorForNodes;
 
 private:
     enum FrameType

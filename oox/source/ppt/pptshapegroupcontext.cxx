@@ -132,8 +132,21 @@ void PPTShapeGroupContext::importExtDrawings( )
                                                                            mpMasterShapePtr,
                                                                            mpGroupShapePtr,
                                                                            pGraphicShape ) );
+                // Apply font color imported from color fragment
+                if( pGraphicShape->getFontRefColorForNodes().isUsed() )
+                    applyFontRefColor(mpGroupShapePtr, pGraphicShape->getFontRefColorForNodes());
             }
             pGraphicShape = oox::drawingml::ShapePtr( (PPTShape *)NULL );
+    }
+}
+
+void PPTShapeGroupContext::applyFontRefColor(oox::drawingml::ShapePtr pShape, const oox::drawingml::Color& rFontRefColor)
+{
+    pShape->getShapeStyleRefs()[XML_fontRef].maPhClr = rFontRefColor;
+    std::vector< oox::drawingml::ShapePtr >& vChildren = pShape->getChildren();
+    for( std::vector< oox::drawingml::ShapePtr >::iterator aIter = vChildren.begin(); aIter != vChildren.end(); ++aIter )
+    {
+        applyFontRefColor( *aIter ,rFontRefColor);
     }
 }
 
