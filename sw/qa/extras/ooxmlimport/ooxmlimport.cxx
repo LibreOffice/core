@@ -2190,6 +2190,18 @@ DECLARE_OOXMLIMPORT_TEST(testCaption, "caption.docx")
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xStyle, "CharPosture"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFdo78939, "fdo78939.docx")
+{
+    // fdo#78939 : LO hanged while opening issue document
+
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(12), xCursor->getPage());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
