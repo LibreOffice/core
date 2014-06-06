@@ -2217,6 +2217,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 endif
 $(call gb_LinkTarget_set_include,$(1),\
    -I$(call gb_UnpackedTarball_get_dir,coinmp)/CoinMP/src \
+   -I$(call gb_UnpackedTarball_get_dir,coinmp)/CoinUtils/src \
    $$(INCLUDE) \
 )
 

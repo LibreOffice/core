@@ -18,6 +18,7 @@
  */
 
 #include <CoinMP.h>
+#include <CoinError.hpp>
 
 #include "SolverComponent.hxx"
 #include "solver.hrc"
@@ -313,7 +314,15 @@ void SAL_CALL CoinMPSolver::solve() throw(uno::RuntimeException, std::exception)
     // solve model
 
     nResult = CoinCheckProblem( hProb );
-    nResult = CoinOptimizeProblem( hProb, 0 );
+
+    try
+    {
+        nResult = CoinOptimizeProblem( hProb, 0 );
+    }
+    catch (const CoinError& e)
+    {
+        throw std::runtime_error(e.message());
+    }
 
     mbSuccess = ( nResult == SOLV_CALL_SUCCESS );
     if ( mbSuccess )
