@@ -62,6 +62,11 @@
 using namespace com::sun::star;
 
 
+// As Writer graphics are no longer painted via the graphic manager - see <SwNoTxtFrm::PaintPicture(..)> -
+// it is needed to swap out the Writer graphics automatically after a certain amount of time.
+// --> 5000ms
+#define TIMETOSWAPOUTGRAPHICAUTOMATICALLY 5000
+
 // --------------------
 // SwGrfNode
 // --------------------
@@ -78,7 +83,7 @@ SwGrfNode::SwGrfNode(
           mbLinkedInputStreamReady( false ),
           mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
+    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ), TIMETOSWAPOUTGRAPHICAUTOMATICALLY );
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf = bFrameInPaint = bScaleImageMap = sal_False;
 
     bGrafikArrived = sal_True;
@@ -97,7 +102,7 @@ SwGrfNode::SwGrfNode(
           mbIsStreamReadOnly( sal_False )
 {
     maGrfObj = rGrfObj;
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
+    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ), TIMETOSWAPOUTGRAPHICAUTOMATICALLY );
     if ( rGrfObj.HasUserData() && rGrfObj.IsSwappedOut() )
         maGrfObj.SetSwapState();
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf = bFrameInPaint = bScaleImageMap = sal_False;
@@ -120,7 +125,7 @@ SwGrfNode::SwGrfNode(
           mbLinkedInputStreamReady( false ),
           mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
+    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ), TIMETOSWAPOUTGRAPHICAUTOMATICALLY );
 
     Graphic aGrf;
     aGrf.SetDefaultType();
