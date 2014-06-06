@@ -107,7 +107,7 @@ class MockedToxTabStopTokenHandler : public ToxTabStopTokenHandler {
 public:
     virtual HandledTabStopToken
     HandleTabStopToken(const SwFormToken& aToken, const SwTxtNode& targetNode,
-            const SwRootFrm *currentLayout) const {
+            const SwRootFrm *currentLayout) const SAL_OVERRIDE {
         (void)(aToken); (void)(targetNode); (void)(currentLayout); // avoid unused warnings.
         return HandledTabStopToken();
     }
