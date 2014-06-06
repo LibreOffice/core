@@ -6784,14 +6784,13 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     }
     else if ( !m_rExport.bOutPageDescs )
     {
-        if( !m_pBackgroundAttrList )
-            m_pBackgroundAttrList = m_pSerializer->createAttrList();
-
         // compare fill color with the original fill color
         OString sOriginalFill = rtl::OUStringToOString(
-                m_pBackgroundAttrList->getOptionalValue( FSNS( XML_w, XML_fill ) ), RTL_TEXTENCODING_UTF8 );
-        if( sOriginalFill.isEmpty() )
+                m_sOriginalBackgroundColor, RTL_TEXTENCODING_UTF8 );
+
+        if( !m_pBackgroundAttrList )
         {
+            m_pBackgroundAttrList = m_pSerializer->createAttrList();
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
@@ -6803,6 +6802,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
+        m_sOriginalBackgroundColor = "";
     }
 }
 
@@ -7189,7 +7189,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             i->second >>= aGrabBagSeq;
-            OUString sVal, sOriginalFill, sShdColor,
+            OUString sVal, sShdFill, sShdColor,
                     sThemeColor, sThemeTint, sThemeShade,
                     sThemeFill, sThemeFillTint, sThemeFillShade;
             for (sal_Int32 j=0; j < aGrabBagSeq.getLength(); ++j)
@@ -7205,13 +7205,15 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 else if (aGrabBagSeq[j].Name == "themeShade")
                     aGrabBagSeq[j].Value >>= sThemeShade;
                 else if (aGrabBagSeq[j].Name == "fill")
-                    aGrabBagSeq[j].Value >>= sOriginalFill;
+                    aGrabBagSeq[j].Value >>= sShdFill;
                 else if (aGrabBagSeq[j].Name == "themeFill")
                     aGrabBagSeq[j].Value >>= sThemeFill;
                 else if (aGrabBagSeq[j].Name == "themeFillTint")
                     aGrabBagSeq[j].Value >>= sThemeFillTint;
                 else if (aGrabBagSeq[j].Name == "themeFillShade")
                     aGrabBagSeq[j].Value >>= sThemeFillShade;
+                else if (aGrabBagSeq[j].Name == "originalColor")
+                    aGrabBagSeq[j].Value >>= m_sOriginalBackgroundColor;
             }
             AddToAttrList(m_pBackgroundAttrList, 9,
                     FSNS(XML_w, XML_val), OUStringToOString(sVal, RTL_TEXTENCODING_UTF8).getStr(),
@@ -7219,7 +7221,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                     FSNS(XML_w, XML_themeColor), OUStringToOString(sThemeColor, RTL_TEXTENCODING_UTF8).getStr(),
                     FSNS(XML_w, XML_themeTint), OUStringToOString(sThemeTint, RTL_TEXTENCODING_UTF8).getStr(),
                     FSNS(XML_w, XML_themeShade), OUStringToOString(sThemeShade, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_fill), OUStringToOString(sOriginalFill, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSNS(XML_w, XML_fill), OUStringToOString(sShdFill, RTL_TEXTENCODING_UTF8).getStr(),
                     FSNS(XML_w, XML_themeFill), OUStringToOString(sThemeFill, RTL_TEXTENCODING_UTF8).getStr(),
                     FSNS(XML_w, XML_themeFillTint), OUStringToOString(sThemeFillTint, RTL_TEXTENCODING_UTF8).getStr(),
                     FSNS(XML_w, XML_themeFillShade), OUStringToOString(sThemeFillShade, RTL_TEXTENCODING_UTF8).getStr());
