@@ -2091,7 +2091,6 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     assert(numTables <= 9);                                 /* Type42 has 9 required tables */
 
     sal_uInt32* offs = (sal_uInt32*)scalloc(numTables, sizeof(sal_uInt32));
-//    sal_uInt32* lens = (sal_uInt32*)scalloc(numTables, sizeof(sal_uInt32));
 
     fputs("/sfnts [", outf);
     HexFmtOpenString(h);
@@ -2099,9 +2098,18 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
     HexFmtBlockWrite(h, sfntP+12, 16 * numTables);          /* stream out the Table Directory */
 
     for (i=0; i<numTables; i++) {
-        sal_uInt32 tag = GetUInt32(sfntP + 12, 16 * i, 1);
-        sal_uInt32 off = GetUInt32(sfntP + 12, 16 * i + 8, 1);
-        sal_uInt32 len = GetUInt32(sfntP + 12, 16 * i + 12, 1);
+        sal_uInt32 nLargestFixedOffsetPos = 12 + 16 * i + 12;
+        sal_uInt32 nMinSize = nLargestFixedOffsetPos + sizeof(sal_uInt32);
+        if (nMinSize > sfntLen)
+        {
+            SAL_WARN( "vcl.fonts", "DumpSfnts claimed to have "
+                << numTables  << " tables, but only space for " << i);
+            break;
+        }
+
+        sal_uInt32 tag = GetUInt32(sfntP, 12 + 16 * i, 1);
+        sal_uInt32 off = GetUInt32(sfntP, 12 + 16 * i + 8, 1);
+        sal_uInt32 len = GetUInt32(sfntP, 12 + 16 * i + 12, 1);
 
         if (tag != T_glyf) {
             HexFmtBlockWrite(h, sfntP + off, len);
