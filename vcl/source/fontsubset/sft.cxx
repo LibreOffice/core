@@ -2026,7 +2026,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 #endif
 
 #ifndef NO_TYPE42
-static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP)
+static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 {
     GlyphOffsets* res = (GlyphOffsets*)smalloc(sizeof(GlyphOffsets));
     sal_uInt8 *loca = NULL;
@@ -2035,9 +2035,18 @@ static GlyphOffsets *GlyphOffsetsNew(sal_uInt8 *sfntP)
     sal_Int16 indexToLocFormat = 0;
 
     for (i = 0; i < numTables; i++) {
-        sal_uInt32 tag = GetUInt32(sfntP + 12, 16 * i, 1);
-        sal_uInt32 off = GetUInt32(sfntP + 12, 16 * i + 8, 1);
-        sal_uInt32 len = GetUInt32(sfntP + 12, 16 * i + 12, 1);
+        sal_uInt32 nLargestFixedOffsetPos = 12 + 16 * i + 12;
+        sal_uInt32 nMinSize = nLargestFixedOffsetPos + sizeof(sal_uInt32);
+        if (nMinSize > sfntLen)
+        {
+            SAL_WARN( "vcl.fonts", "GlyphOffsetsNew claimed to have "
+                << numTables  << " tables, but only space for " << i);
+            break;
+        }
+
+        sal_uInt32 tag = GetUInt32(sfntP, 12 + 16 * i, 1);
+        sal_uInt32 off = GetUInt32(sfntP, 12 + 16 * i + 8, 1);
+        sal_uInt32 len = GetUInt32(sfntP, nLargestFixedOffsetPos, 1);
 
         if (tag == T_loca) {
             loca = sfntP + off;
@@ -2069,11 +2078,11 @@ static void GlyphOffsetsDispose(GlyphOffsets *_this)
     }
 }
 
-static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP)
+static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 {
     HexFmt *h = HexFmtNew(outf);
     sal_uInt16 i, numTables = GetUInt16(sfntP, 4, 1);
-    GlyphOffsets *go = GlyphOffsetsNew(sfntP);
+    GlyphOffsets *go = GlyphOffsetsNew(sfntP, sfntLen);
     sal_uInt8 pad[] = {0,0,0,0};                     /* zeroes                       */
 
     assert(numTables <= 9);                                 /* Type42 has 9 required tables */
@@ -2207,7 +2216,7 @@ int  CreateT42FromTTGlyphs(TrueTypeFont  *ttf,
     }
     fprintf(outf, "/XUID [103 0 1 16#%08X %d 16#%08X 16#%08X] def\n", (unsigned int)rtl_crc32(0, ttf->ptr, ttf->fsize), (unsigned int)nGlyphs, (unsigned int)rtl_crc32(0, glyphArray, nGlyphs * 2), (unsigned int)rtl_crc32(0, encoding, nGlyphs));
 
-    DumpSfnts(outf, sfntP);
+    DumpSfnts(outf, sfntP, sfntLen);
 
     /* dump charstrings */
     fprintf(outf, "/CharStrings %d dict dup begin\n", nGlyphs);
