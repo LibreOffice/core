@@ -16,6 +16,24 @@
       "revId": "da9239cb32b498f5f44c32a0b5eb775af2eb1174",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_a4b44cd1",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4385,
+      "author": {
+        "id": 1000275
+      },
+      "writtenOn": "2014-06-06T12:30:45Z",
+      "side": 1,
+      "message": "Okay.\nMy concern is if w:drawing is already open then do not start a new drawing. So instead of negting the conditions should I modify it like;\nif(IsDrawingOpen() \u0026\u0026 SahpeType\u003d\"CustomShape\")\n  //Postpone output of drawing\nelse\n  writeDMLDrawing();\n\nWill it be the correct apporach ?",
+      "parentUuid": "da9b358b_04a1b8a9",
+      "revId": "da9239cb32b498f5f44c32a0b5eb775af2eb1174",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
