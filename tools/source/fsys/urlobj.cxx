@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <boost/checked_delete.hpp>
+#include <o3tl/heap_ptr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/inetmime.hxx>
@@ -588,6 +592,21 @@ void INetURLObject::setInvalid()
     m_aFragment.clear();
 }
 
+namespace {
+
+SvMemoryStream * memoryStream(void const * data, sal_Int32 length) {
+    o3tl::heap_ptr<char, boost::checked_array_deleter<char> > b(
+        new char[length]);
+    memcpy(b.get(), data, length);
+    o3tl::heap_ptr<SvMemoryStream> s(
+        new SvMemoryStream(b.get(), length, STREAM_READ));
+    s->ObjectOwnsMemory(true);
+    b.release();
+    return s.release();
+}
+
+}
+
 SvMemoryStream* INetURLObject::getData()
 {
     if( GetProtocol() != INET_PROT_DATA )
@@ -596,34 +615,32 @@ SvMemoryStream* INetURLObject::getData()
     }
 
     OUString sURLPath = GetURLPath( DECODE_WITH_CHARSET, RTL_TEXTENCODING_ISO_8859_1 );
-    OUString sType, sSubType;
-    OUString sBase64Enc(";base64,");
-
-    INetContentTypeParameterList params;
-    sal_Unicode const * pSkippedMediatype = INetMIME::scanContentType( sURLPath.getStr(), sURLPath.getStr() + sURLPath.getLength(), &sType, &sSubType, &params );
-    sal_Int32 nCharactersSkipped = pSkippedMediatype-sURLPath.getStr();
-    sal_Int32 nCommaIndex = sURLPath.indexOf( ",", nCharactersSkipped );
-    sal_Int32 nBase64Index = sURLPath.indexOf( sBase64Enc, nCharactersSkipped );
-    SvMemoryStream* aStream=NULL;
-
-    if( nBase64Index >= 0 && nBase64Index < nCommaIndex )
+    sal_Unicode const * pSkippedMediatype = INetMIME::scanContentType( sURLPath.getStr(), sURLPath.getStr() + sURLPath.getLength(), NULL, NULL, NULL );
+    sal_Int32 nCharactersSkipped = pSkippedMediatype == NULL
+        ? 0 : pSkippedMediatype-sURLPath.getStr();
+    if (sURLPath.match(",", nCharactersSkipped))
     {
-        // base64 decoding
-        OUString sBase64Data = sURLPath.copy( nBase64Index + sBase64Enc.getLength() );
+        nCharactersSkipped += strlen(",");
+        OString sURLEncodedData(
+            sURLPath.getStr() + nCharactersSkipped,
+            sURLPath.getLength() - nCharactersSkipped,
+            RTL_TEXTENCODING_ISO_8859_1, OUSTRING_TO_OSTRING_CVTFLAGS);
+        return memoryStream(
+            sURLEncodedData.getStr(), sURLEncodedData.getLength());
+    }
+    else if (sURLPath.matchIgnoreAsciiCase(";base64,", nCharactersSkipped))
+    {
+        nCharactersSkipped += strlen(";base64,");
+        OUString sBase64Data = sURLPath.copy( nCharactersSkipped );
         css::uno::Sequence< sal_Int8 > aDecodedData;
-        ::sax::Converter::decodeBase64( aDecodedData, sBase64Data );
-        if( aDecodedData.hasElements() )
+        if (sax::Converter::decodeBase64SomeChars(aDecodedData, sBase64Data)
+            == sBase64Data.getLength())
         {
-            aStream = new SvMemoryStream( aDecodedData.getArray(), aDecodedData.getLength(), STREAM_READ );
+            return memoryStream(
+                aDecodedData.getArray(), aDecodedData.getLength());
         }
     }
-    else
-    {
-        // URL decoding
-        OUString sURLEncodedData = sURLPath.copy( nCommaIndex+1 );
-        aStream = new SvMemoryStream( const_cast< sal_Char * >(OUStringToOString(sURLEncodedData, RTL_TEXTENCODING_UTF8).getStr()), sURLEncodedData.getLength(), STREAM_READ);
-    }
-    return aStream;
+    return NULL;
 }
 
 namespace unnamed_tools_urlobj {

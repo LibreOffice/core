@@ -12,6 +12,7 @@
 #include <sal/types.h>
 #include "cppunit/TestFixture.h"
 #include <cppunit/extensions/HelperMacros.h>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 
 #define OUSTR_TO_STDSTR( oustr ) std::string( OUStringToOString( oustr, RTL_TEXTENCODING_ASCII_US ).getStr() )
@@ -243,6 +244,94 @@ namespace tools_urlobj
             }
         }
 
+        void urlobjTest_data() {
+            INetURLObject url;
+            SvMemoryStream * strm;
+            unsigned char const * buf;
+
+            url = INetURLObject("data:");
+            //TODO: CPPUNIT_ASSERT(url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm == 0);
+
+            url = INetURLObject("data:,");
+            CPPUNIT_ASSERT(!url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(0), strm->GetSize());
+            delete strm;
+
+            url = INetURLObject("data:,,%C3%A4%90");
+            CPPUNIT_ASSERT(!url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(4), strm->GetSize());
+            buf = static_cast<unsigned char const *>(strm->GetData());
+            CPPUNIT_ASSERT_EQUAL(0x2C, int(buf[0]));
+            CPPUNIT_ASSERT_EQUAL(0xC3, int(buf[1]));
+            CPPUNIT_ASSERT_EQUAL(0xA4, int(buf[2]));
+            CPPUNIT_ASSERT_EQUAL(0x90, int(buf[3]));
+            delete strm;
+
+            url = INetURLObject("data:base64,");
+            //TODO: CPPUNIT_ASSERT(url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm == 0);
+
+            url = INetURLObject("data:;base64,");
+            CPPUNIT_ASSERT(!url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(0), strm->GetSize());
+            delete strm;
+
+            url = INetURLObject("data:;bAsE64,");
+            CPPUNIT_ASSERT(!url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(0), strm->GetSize());
+            delete strm;
+
+            url = INetURLObject("data:;base64,YWJjCg==");
+            CPPUNIT_ASSERT(!url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(4), strm->GetSize());
+            buf = static_cast<unsigned char const *>(strm->GetData());
+            CPPUNIT_ASSERT_EQUAL(0x61, int(buf[0]));
+            CPPUNIT_ASSERT_EQUAL(0x62, int(buf[1]));
+            CPPUNIT_ASSERT_EQUAL(0x63, int(buf[2]));
+            CPPUNIT_ASSERT_EQUAL(0x0A, int(buf[3]));
+            delete strm;
+
+            url = INetURLObject("data:;base64,YWJjCg=");
+            CPPUNIT_ASSERT(!url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm == 0);
+
+            url = INetURLObject("data:;base64,YWJ$Cg==");
+            CPPUNIT_ASSERT(!url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm == 0);
+
+            url = INetURLObject("data:text/plain;param=%22;base64,%22,YQ==");
+            CPPUNIT_ASSERT(!url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm != 0);
+            CPPUNIT_ASSERT_EQUAL(sal_uIntPtr(4), strm->GetSize());
+            buf = static_cast<unsigned char const *>(strm->GetData());
+            CPPUNIT_ASSERT_EQUAL(0x59, int(buf[0]));
+            CPPUNIT_ASSERT_EQUAL(0x51, int(buf[1]));
+            CPPUNIT_ASSERT_EQUAL(0x3D, int(buf[2]));
+            CPPUNIT_ASSERT_EQUAL(0x3D, int(buf[3]));
+            delete strm;
+
+            url = INetURLObject("http://example.com");
+            CPPUNIT_ASSERT(!url.HasError());
+            strm = url.getData();
+            CPPUNIT_ASSERT(strm == 0);
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -256,6 +345,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( urlobjTest_006 );
         CPPUNIT_TEST( urlobjCmisTest );
         CPPUNIT_TEST( urlobjTest_emptyPath );
+        CPPUNIT_TEST( urlobjTest_data );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
 
