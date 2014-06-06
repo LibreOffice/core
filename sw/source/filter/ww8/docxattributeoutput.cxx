@@ -6876,6 +6876,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
         if( sOriginalFill.isEmpty() )
         {
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
+            m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
         else if ( sOriginalFill != sColor )
         {
@@ -6883,8 +6884,8 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
             delete m_pBackgroundAttrList;
             m_pBackgroundAttrList = m_pSerializer->createAttrList();
             m_pBackgroundAttrList->add( FSNS( XML_w, XML_fill ), sColor.getStr() );
+            m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
         }
-        m_pBackgroundAttrList->add( FSNS( XML_w, XML_val ), "clear" );
     }
 }
 
@@ -7271,17 +7272,40 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSeq;
             i->second >>= aGrabBagSeq;
-            OUString sThemeFill, sOriginalFill;
+            OUString sVal, sOriginalFill, sShdColor,
+                    sThemeColor, sThemeTint, sThemeShade,
+                    sThemeFill, sThemeFillTint, sThemeFillShade;
             for (sal_Int32 j=0; j < aGrabBagSeq.getLength(); ++j)
             {
-                if (aGrabBagSeq[j].Name == "themeFill")
-                    aGrabBagSeq[j].Value >>= sThemeFill;
+                if (aGrabBagSeq[j].Name == "val")
+                    aGrabBagSeq[j].Value >>= sVal;
+                else if (aGrabBagSeq[j].Name == "color")
+                    aGrabBagSeq[j].Value >>= sShdColor;
+                else if (aGrabBagSeq[j].Name == "themeColor")
+                    aGrabBagSeq[j].Value >>= sThemeColor;
+                else if (aGrabBagSeq[j].Name == "themeTint")
+                    aGrabBagSeq[j].Value >>= sThemeTint;
+                else if (aGrabBagSeq[j].Name == "themeShade")
+                    aGrabBagSeq[j].Value >>= sThemeShade;
                 else if (aGrabBagSeq[j].Name == "fill")
                     aGrabBagSeq[j].Value >>= sOriginalFill;
+                else if (aGrabBagSeq[j].Name == "themeFill")
+                    aGrabBagSeq[j].Value >>= sThemeFill;
+                else if (aGrabBagSeq[j].Name == "themeFillTint")
+                    aGrabBagSeq[j].Value >>= sThemeFillTint;
+                else if (aGrabBagSeq[j].Name == "themeFillShade")
+                    aGrabBagSeq[j].Value >>= sThemeFillShade;
             }
-            AddToAttrList(m_pBackgroundAttrList, 2,
+            AddToAttrList(m_pBackgroundAttrList, 9,
+                    FSNS(XML_w, XML_val), OUStringToOString(sVal, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSNS(XML_w, XML_color), OUStringToOString(sShdColor, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSNS(XML_w, XML_themeColor), OUStringToOString(sThemeColor, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSNS(XML_w, XML_themeTint), OUStringToOString(sThemeTint, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSNS(XML_w, XML_themeShade), OUStringToOString(sThemeShade, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSNS(XML_w, XML_fill), OUStringToOString(sOriginalFill, RTL_TEXTENCODING_UTF8).getStr(),
                     FSNS(XML_w, XML_themeFill), OUStringToOString(sThemeFill, RTL_TEXTENCODING_UTF8).getStr(),
-                    FSNS(XML_w, XML_fill), OUStringToOString(sOriginalFill, RTL_TEXTENCODING_UTF8).getStr());
+                    FSNS(XML_w, XML_themeFillTint), OUStringToOString(sThemeFillTint, RTL_TEXTENCODING_UTF8).getStr(),
+                    FSNS(XML_w, XML_themeFillShade), OUStringToOString(sThemeFillShade, RTL_TEXTENCODING_UTF8).getStr());
         }
         else if (i->first == "SdtPr")
         {
