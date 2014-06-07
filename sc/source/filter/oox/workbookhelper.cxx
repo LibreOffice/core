@@ -434,7 +434,7 @@ ScRangeData* WorkbookGlobals::createLocalNamedRangeObject(
         ScDocument& rDoc =  getScDocument();
         ScRangeName* pNames = rDoc.GetRangeName( nTab );
         if(!pNames)
-            throw RuntimeException("invalid sheet index used");
+            throw RuntimeException();
         // find an unused name
         orName = findUnusedName( pNames, orName );
         // create the named range
