@@ -62,10 +62,13 @@ https://addons.mozilla.org/firefox/themes ...
 class SelectPersonaDialog : public ModalDialog
 {
 private:
-    Edit *m_pEdit;                          ///< The input line for the Persona URL
-    PushButton *m_pButton;
-    FixedText *m_pProgressLabel;
-    PushButton *m_vResultList[9];
+    Edit *m_pEdit;                          ///< The input line for the search term
+    PushButton *m_pSearchButton;            ///< The search button
+    FixedText *m_pProgressLabel;            ///< The label for showing progress of search
+    PushButton *m_vResultList[9];           ///< List of buttons to show search results
+
+    std::vector<OUString> m_vPersonaSettings;
+    OUString m_aSelectedPersona;
 
 public:
     SelectPersonaDialog( Window *pParent );
@@ -77,7 +80,7 @@ public:
     void SetImages( std::vector<Image> &);
 
 private:
-    /// Handle the [Visit Firefox Personas] button
+    /// Handle the Search button
     DECL_LINK( VisitPersonas, PushButton* );
 };
 
