@@ -1709,7 +1709,6 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 {
     //  This is the scenario table, the data is copied into it
-    sc::CopyToDocContext aCxt(*pDocument);
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
@@ -1718,6 +1717,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
         if ( ((ScMergeFlagAttr&)pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
         {
             DeleteArea( nStart, nEnd, IDF_CONTENTS );
+            sc::CopyToDocContext aCxt(*pDocument);
             ((ScColumn&)rSrcCol).
                 CopyToColumn(aCxt, nStart, nEnd, IDF_CONTENTS, false, *this);
 
@@ -1741,7 +1741,6 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
 void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
 {
     //  This is the scenario table, the data is copied to the other
-    sc::CopyToDocContext aCxt(*rDestCol.pDocument);
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
     SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
@@ -1750,6 +1749,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
         if ( ((ScMergeFlagAttr&)pPattern->GetItem( ATTR_MERGE_FLAG )).IsScenario() )
         {
             rDestCol.DeleteArea( nStart, nEnd, IDF_CONTENTS );
+            sc::CopyToDocContext aCxt(*rDestCol.pDocument);
             CopyToColumn(aCxt, nStart, nEnd, IDF_CONTENTS, false, rDestCol);
 
             //  UpdateUsed not needed, is already done in TestCopyScenario (obsolete comment ?)
