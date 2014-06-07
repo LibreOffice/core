@@ -255,7 +255,7 @@ public:
     RTFDrawingObject aDrawingObject;
     RTFFrame aFrame;
 
-    /// CJK or CTL?
+    /// Maps to OOXML's ascii, cs or eastAsia.
     enum { LOCH, HICH, DBCH } eRunType;
     /// ltrch or rtlch
     bool isRightToLeft;
