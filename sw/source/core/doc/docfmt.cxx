@@ -1372,8 +1372,8 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
-    delete (*mpCharFmtTbl)[nFmt];
     mpCharFmtTbl->erase(mpCharFmtTbl->begin() + nFmt);
+    delete pDel;
 
     SetModified();
 }
@@ -1395,10 +1395,8 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
     }
     else
     {
-
         // The format has to be in the one or the other, we'll see in which one.
-        SwFrmFmts::iterator it = std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), pFmt );
-        if ( it != mpFrmFmtTbl->end() )
+        if ( mpFrmFmtTbl->Contains( pFmt ) )
         {
             if (bBroadcast)
                 BroadcastStyleOperation(pFmt->GetName(),
@@ -1412,17 +1410,17 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
-            delete *it;
-            mpFrmFmtTbl->erase(it);
+            mpFrmFmtTbl->erase( pFmt );
+            delete pFmt;
         }
         else
         {
-            SwFrmFmts::iterator it2 = std::find( GetSpzFrmFmts()->begin(), GetSpzFrmFmts()->end(), pFmt );
-            OSL_ENSURE( it2 != GetSpzFrmFmts()->end(), "FrmFmt not found." );
-            if( it2 != GetSpzFrmFmts()->end() )
+            bool contains = GetSpzFrmFmts()->Contains( pFmt );
+            OSL_ENSURE( contains, "FrmFmt not found." );
+            if( contains )
             {
-                delete *it2;
-                GetSpzFrmFmts()->erase( it2 );
+                GetSpzFrmFmts()->erase( pFmt );
+                delete pFmt;
             }
         }
     }
@@ -1430,10 +1428,10 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
 
 void SwDoc::DelTblFrmFmt( SwTableFmt *pFmt )
 {
-    SwFrmFmts::iterator it = std::find( mpTblFrmFmtTbl->begin(), mpTblFrmFmtTbl->end(), pFmt );
+    SwFrmFmts::const_iterator it = mpTblFrmFmtTbl->find( pFmt );
     OSL_ENSURE( it != mpTblFrmFmtTbl->end(), "Fmt not found," );
-    delete *it;
-    mpTblFrmFmtTbl->erase(it);
+    mpTblFrmFmtTbl->erase( it );
+    delete pFmt;
 }
 
 /// Create the formats
@@ -1441,7 +1439,7 @@ SwFlyFrmFmt *SwDoc::MakeFlyFrmFmt( const String &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
     SwFlyFrmFmt *pFmt = new SwFlyFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
-    GetSpzFrmFmts()->push_back(pFmt);
+    GetSpzFrmFmts()->insert(pFmt);
     SetModified();
     return pFmt;
 }
@@ -1450,7 +1448,7 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const String &rFmtName,
                                      SwFrmFmt *pDerivedFrom )
 {
     SwDrawFrmFmt *pFmt = new SwDrawFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom);
-    GetSpzFrmFmts()->push_back(pFmt);
+    GetSpzFrmFmts()->insert(pFmt);
     SetModified();
     return pFmt;
 }
@@ -1494,7 +1492,7 @@ SwTableFmt* SwDoc::MakeTblFrmFmt( const String &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
     SwTableFmt* pFmt = new SwTableFmt( GetAttrPool(), rFmtName, pDerivedFrom );
-    mpTblFrmFmtTbl->push_back( pFmt );
+    mpTblFrmFmtTbl->insert( pFmt );
     SetModified();
 
     return pFmt;
@@ -1508,7 +1506,7 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
     SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
 
     pFmt->SetAuto(bAuto);
-    mpFrmFmtTbl->push_back( pFmt );
+    mpFrmFmtTbl->insert( pFmt );
     SetModified();
 
     if (bBroadcast)
@@ -2653,6 +2651,89 @@ namespace docfunc
         }
         return bRet;
     }
+}
+
+SwFrmFmts::~SwFrmFmts()
+{
+    DeleteAndDestroyAll();
+}
+
+void SwFrmFmts::DeleteAndDestroyAll( bool keepDefault )
+{
+    if ( empty() )
+        return;
+    const int _offset = keepDefault ? 1 : 0;
+    for( const_iterator it = begin() + _offset; it != end(); ++it )
+        delete *it;
+    if ( _offset )
+        SwFrmFmtsBase::erase( begin_nonconst() + _offset, end_nonconst() );
+    else
+        clear();
+}
+
+SwFrmFmts::find_insert_type SwFrmFmts::insert( const value_type& x )
+{
+    SwFrmFmtsBase::push_back( x );
+    SAL_WARN_IF(x->list != 0, "sw", "Inserting already assigned item");
+    x->list = this;
+    return std::make_pair(end() - 1 , true);
+}
+
+SwFrmFmts::size_type SwFrmFmts::erase( const value_type& x )
+{
+    const_iterator const ret = find( x );
+    SAL_WARN_IF(x->list != this, "sw", "Removing invalid / unassigned item");
+    if (ret != end()) {
+        SwFrmFmtsBase::erase( begin_nonconst() + (ret - begin()) );
+        x->list = 0;
+        return 1;
+    }
+    return 0;
+}
+
+void SwFrmFmts::erase( size_type index )
+{
+    erase( begin_nonconst() + index );
+}
+
+void SwFrmFmts::erase( const_iterator const& position )
+{
+    (*position)->list = 0;
+    SwFrmFmtsBase::erase( begin_nonconst() + (position - begin()) );
+}
+
+SwFrmFmts::const_iterator SwFrmFmts::find( const value_type& x ) const
+{
+    return std::find( begin(), end(), x );
+}
+
+bool SwFrmFmts::Contains( const SwFrmFmts::value_type& x ) const
+{
+    return (x->list == this);
+}
+
+bool SwFrmFmts::newDefault( const value_type& x )
+{
+    bool inserted = false;
+    const_iterator it = find( x );
+    if (it == end()) {
+        push_back( x );
+        it = end() - 1;
+        inserted = true;
+    }
+    newDefault( it );
+    return inserted;
+}
+
+void SwFrmFmts::newDefault( const_iterator const& position )
+{
+    if (position == begin())
+        return;
+    SwFrmFmt *tmp;
+    tmp = front();
+    erase( position );
+    SwFrmFmtsBase::operator[]( 0 ) = *position;
+    insert( tmp );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

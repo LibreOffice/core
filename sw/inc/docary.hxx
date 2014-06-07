@@ -59,7 +59,7 @@ template<typename Value>
 class SwFmtsBaseModify : public std::vector<Value>, public SwFmtsBase
 {
 public:
-    typedef std::vector<Value>::const_iterator const_iterator;
+    typedef typename std::vector<Value>::const_iterator const_iterator;
 
 private:
     const bool mCleanup;
@@ -99,12 +99,65 @@ public:
     virtual ~SwGrfFmtColls() {}
 };
 
+typedef std::vector<SwFrmFmt*> SwFrmFmtsBase;
+
 /// Specific frame formats (frames, DrawObjects).
-class SW_DLLPUBLIC SwFrmFmts : public SwFmtsBaseModify<SwFrmFmt*>
+/// Mimics o3tl::sorted_vector interface
+class SW_DLLPUBLIC SwFrmFmts : private SwFrmFmtsBase, public SwFmtsBase
 {
 public:
-    virtual ~SwFrmFmts() {}
+    typedef SwFrmFmtsBase::const_iterator const_iterator;
+    typedef SwFrmFmtsBase::size_type size_type;
+    typedef SwFrmFmtsBase::value_type value_type;
+    typedef std::pair<const_iterator,bool> find_insert_type;
+
+    virtual ~SwFrmFmts();
+
+    void DeleteAndDestroyAll( bool offset = false );
+
+    using SwFrmFmtsBase::clear;
+    using SwFrmFmtsBase::empty;
+    using SwFrmFmtsBase::reserve;
+    using SwFrmFmtsBase::size;
+
+    find_insert_type insert( const value_type& x );
+    size_type erase( const value_type& x );
+    void erase( size_type index );
+    void erase( const_iterator const& position );
+
+    const value_type& front() const { return SwFrmFmtsBase::front(); }
+    const value_type& back() const { return SwFrmFmtsBase::back(); }
+    const value_type& operator[]( size_t index ) const
+        { return SwFrmFmtsBase::operator[]( index ); }
+
+    const_iterator find( const value_type& x ) const;
+
+    const_iterator begin() const { return SwFrmFmtsBase::begin(); }
+    const_iterator end() const { return SwFrmFmtsBase::end(); }
+
+    bool Contains( const value_type& x ) const;
+
+    virtual size_t GetFmtCount() const SAL_OVERRIDE
+        { return SwFrmFmtsBase::size(); }
+    virtual SwFmt* GetFmt(size_t idx) const SAL_OVERRIDE
+        { return (SwFmt*) SwFrmFmtsBase::operator[](idx); }
+
     void dumpAsXml(xmlTextWriterPtr w, const char* pName);
+
+    bool newDefault( const value_type& x );
+
+private:
+    typedef SwFrmFmtsBase::iterator iterator;
+    iterator begin_nonconst() { return SwFrmFmtsBase::begin(); }
+    iterator end_nonconst() { return SwFrmFmtsBase::end(); }
+    void newDefault( const_iterator const& position );
+};
+
+/// Unsorted, undeleting SwFrmFmt vector
+class SwFrmFmtsV : public SwFmtsBaseModify<SwFrmFmt*>
+{
+public:
+    virtual ~SwFrmFmtsV() {}
 };
 
 class SwCharFmts : public SwFmtsBaseModify<SwCharFmt*>

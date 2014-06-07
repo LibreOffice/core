@@ -1157,14 +1157,15 @@ static void lcl_AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
     //because we neither use character bound frames nor objects which
     //are anchored to character bounds.
 
-    SwFrmFmts aCpy( *pTbl );
+    SwFrmFmtsV aCpy;
+    aCpy.insert(aCpy.end(), pTbl->begin(), pTbl->end());
 
     sal_uInt16 nOldCnt = USHRT_MAX;
 
     while ( !aCpy.empty() && aCpy.size() != nOldCnt )
     {
         nOldCnt = aCpy.size();
-        SwFrmFmts::iterator it = aCpy.begin();
+        SwFrmFmtsV::iterator it = aCpy.begin();
         while ( it != aCpy.end() )
         {
             SwFrmFmt *pFmt = *it;

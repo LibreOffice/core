@@ -2420,6 +2420,28 @@ SwFrmFmt::~SwFrmFmt()
     }
 }
 
+void SwFrmFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
+{
+    SwFrmFmts *_list = list;
+    SwFrmFmts::const_iterator it;
+    bool move_entry = false;
+
+    if (list) {
+        it = list->find( this );
+        SAL_WARN_IF( list->end() == it, "sw", "SwFrmFmt not found in expected list" );
+//        move_entry = (it != list->begin());
+        if (move_entry)
+            // Clears list
+            list->erase( it );
+    }
+
+    SwFmt::SetName( rNewName, bBroadcast );
+
+    if (_list && move_entry)
+        // Sets list
+        _list->insert( this );
+}
+
 void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     SwFmtHeader *pH = 0;

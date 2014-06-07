@@ -356,7 +356,7 @@ SwDoc::SwDoc()
      * DefaultFormats and are also in the list.
      */
     /* Formats */
-    mpFrmFmtTbl->push_back(mpDfltFrmFmt);
+    mpFrmFmtTbl->insert(mpDfltFrmFmt);
     mpCharFmtTbl->push_back(mpDfltCharFmt);
 
     /* FmtColls */
@@ -423,16 +423,6 @@ SwDoc::SwDoc()
     mnRsidRoot = mnRsid;
 
     ResetModified();
-}
-
-static void DeleteAndDestroy(SwFrmFmts& rFmts, int aStartIdx, int aEndIdx)
-{
-    if (aEndIdx < aStartIdx)
-        return;
-    for( SwFrmFmts::const_iterator it = rFmts.begin() + aStartIdx;
-         it != rFmts.begin() + aEndIdx; ++it )
-             delete *it;
-    rFmts.erase( rFmts.begin() + aStartIdx, rFmts.begin() + aEndIdx);
 }
 
 static void DeleteAndDestroy(SwTxtFmtColls& rFmts, int aStartIdx, int aEndIdx)
@@ -580,10 +570,10 @@ SwDoc::~SwDoc()
 
     // Any of the FrmFormats can still have indices registered.
     // These need to be destroyed now at the latest.
-    BOOST_FOREACH( SwFrmFmt* pFmt, *mpFrmFmtTbl )
-        lcl_DelFmtIndizes( pFmt );
-    BOOST_FOREACH( SwFrmFmt* pFmt, *mpSpzFrmFmtTbl )
-        lcl_DelFmtIndizes( pFmt );
+    for (SwFrmFmts::const_iterator it = mpFrmFmtTbl->begin(); it != mpFrmFmtTbl->end(); it++)
+        lcl_DelFmtIndizes( *it );
+    for (SwFrmFmts::const_iterator it = mpSpzFrmFmtTbl->begin(); it != mpSpzFrmFmtTbl->end(); it++)
+        lcl_DelFmtIndizes( *it );
     BOOST_FOREACH( SwSectionFmt* pFmt, *mpSectionFmtTbl )
         lcl_DelFmtIndizes( pFmt );
 
@@ -638,7 +628,7 @@ SwDoc::~SwDoc()
     // All Flys need to be destroyed before the Drawing Model,
     // because Flys can still contain DrawContacts, when no
     // Layout could be constructed due to a read error.
-    DeleteAndDestroy( *mpSpzFrmFmtTbl, 0, mpSpzFrmFmtTbl->size() );
+    mpSpzFrmFmtTbl->DeleteAndDestroyAll();
 
     // Only now destroy the Model, the drawing objects - which are also
     // contained in the Undo - need to remove their attributes from the
@@ -881,12 +871,12 @@ void SwDoc::ClearDoc()
     if( mpCurrentView )
     {
         // search the FrameFormat of the root frm. This is not allowed to delete
-        mpFrmFmtTbl->erase( std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), mpCurrentView->GetLayout()->GetFmt() ) );
-        DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
-        mpFrmFmtTbl->push_back( mpCurrentView->GetLayout()->GetFmt() );
+        mpFrmFmtTbl->erase( mpCurrentView->GetLayout()->GetFmt() );
+        mpFrmFmtTbl->DeleteAndDestroyAll( true );
+        mpFrmFmtTbl->insert( mpCurrentView->GetLayout()->GetFmt() );
     }
-    else    //swmod 071029//swmod 071225
-        DeleteAndDestroy(*mpFrmFmtTbl, 1, mpFrmFmtTbl->size());
+    else
+        mpFrmFmtTbl->DeleteAndDestroyAll( true );
 
     mxForbiddenCharsTable.clear();
 

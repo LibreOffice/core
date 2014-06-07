@@ -240,7 +240,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
 
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
-        rFlyFmts.push_back( rSave.pFmt );
+        rFlyFmts.insert( rSave.pFmt );
 
         pObj = rSave.pObj;
 
@@ -289,7 +289,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
 
     // re-insert group object
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
-    rFlyFmts.push_back( pObjArr->pFmt );
+    rFlyFmts.insert( pObjArr->pFmt );
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
     // #i26791# - correction: connect object to layout
@@ -391,7 +391,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
 
     // re-insert group object
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
-    rFlyFmts.push_back( pObjArr->pFmt );
+    rFlyFmts.insert( pObjArr->pFmt );
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
     pContact->ConnectToLayout();
@@ -434,7 +434,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
 
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
-        rFlyFmts.push_back( rSave.pFmt );
+        rFlyFmts.insert( rSave.pFmt );
 
         // #i45952# - notify that position attributes are already set
         OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
@@ -532,7 +532,7 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
-        rFlyFmts.push_back( rSave.pFmt );
+        rFlyFmts.insert( rSave.pFmt );
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->_Changed( *pObj, SDRUSERCALL_INSERTED, NULL );

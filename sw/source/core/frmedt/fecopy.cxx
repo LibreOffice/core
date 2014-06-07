@@ -149,11 +149,8 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
         SwFrmFmts& rSpzFrmFmts = *(SwFrmFmts*)pClpDoc->GetSpzFrmFmts();
         if( rSpzFrmFmts[ 0 ] != pFlyFmt )
         {
-            SwFrmFmts::iterator it = std::find( rSpzFrmFmts.begin(), rSpzFrmFmts.end(), pFlyFmt );
-            OSL_ENSURE( it != rSpzFrmFmts.end(), "Fly not contained in Spz-Array" );
-
-            rSpzFrmFmts.erase( it );
-            rSpzFrmFmts.insert( rSpzFrmFmts.begin(), pFlyFmt );
+            bool inserted = rSpzFrmFmts.newDefault( pFlyFmt );
+            OSL_ENSURE( !inserted, "Fly not contained in Spz-Array" );
         }
 
         if ( FLY_AS_CHAR == aAnchor.GetAnchorId() )

@@ -2031,7 +2031,7 @@ void SwDoc::SetAllUniqueFlyNames()
 
     if( 255 < ( n = GetSpzFrmFmts()->size() ))
         n = 255;
-    SwFrmFmts aArr;
+    SwFrmFmtsV aArr;
     aArr.reserve( n );
     SwFrmFmt* pFlyFmt;
     bool bContainsAtPageObjWithContentAnchor = false;
