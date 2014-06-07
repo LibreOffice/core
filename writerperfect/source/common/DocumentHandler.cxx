@@ -46,8 +46,8 @@ void DocumentHandler::startElement(const char *psName, const librevenge::RVNGPro
     librevenge::RVNGPropertyList::Iter i(xPropList);
     for (i.rewind(); i.next(); )
     {
-        // filter out libwpd elements
-        if (strncmp(i.key(), "libwpd", 6) != 0)
+        // filter out librevenge elements
+        if (strncmp(i.key(), "librevenge", 10) != 0)
         {
             OUString sName(i.key(), strlen(i.key()),  RTL_TEXTENCODING_UTF8);
             OUString sValue(i()->getStr().cstr(), strlen(i()->getStr().cstr()), RTL_TEXTENCODING_UTF8);
