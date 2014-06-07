@@ -51,16 +51,6 @@
   
   <xsl:include href="factorytools.xsl"/>
 
-  <xsl:template name="factorynamespaceiddecls">
-    <xsl:for-each select="/model/namespace">
-      <xsl:sort select="@name"/>
-      <xsl:text>
-extern const Id </xsl:text>
-<xsl:call-template name="idfornamespace"/>
-<xsl:text>;</xsl:text>
-    </xsl:for-each>
-  </xsl:template>
-
   <xsl:template name="factorynamespaceidimpls">
     <xsl:for-each select="/model/namespace">
       <xsl:sort select="@name"/>

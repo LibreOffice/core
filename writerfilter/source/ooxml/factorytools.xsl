@@ -198,8 +198,8 @@ case NN_<namesapce/@name> | DEFINE_<rng:define/@name>:
     
     If id does not contain ":" the result is just id.
 -->
-<xsl:template name='idtoqname'>
-  <xsl:param name='id'/>
+<xsl:template name="idtoqname">
+  <xsl:param name="id"/>
   <xsl:choose>
     <xsl:when test="contains($id, ':')">
       <xsl:text>NS_</xsl:text>
@@ -290,18 +290,6 @@ NS_<namespace/@alias>
     </xsl:for-each>
 </xsl:template>
 
-<xsl:template name="factorydefineiddecls">
-    <xsl:for-each select="//rng:define">
-        <xsl:sort select="@name"/>
-        <xsl:if test="generate-id(key('definename', @name)[1]) = generate-id(.)">
-            <xsl:text>
-extern const Id </xsl:text>
-            <xsl:call-template name="localidfordefine"/>
-            <xsl:text>;</xsl:text>
-        </xsl:if>
-    </xsl:for-each>
-</xsl:template>
-
 <xsl:template name="factorydefineidimpls">
     <xsl:for-each select="//rng:define">
         <xsl:sort select="@name"/>
@@ -312,16 +300,6 @@ const Id </xsl:text>
             <xsl:text> = </xsl:text>
             <xsl:value-of select="position()"/>
             <xsl:text>;</xsl:text>
-        </xsl:if>
-    </xsl:for-each>
-</xsl:template>
-
-<xsl:template name="resources">
-    <xsl:for-each select="/model/namespace/resource">
-        <xsl:if test="generate-id(key('resources', @resource)[1])=generate-id(.)">
-            <xsl:text>RT_</xsl:text>
-            <xsl:value-of select="@resource"/>
-            <xsl:text>,&#xa;</xsl:text>
         </xsl:if>
     </xsl:for-each>
 </xsl:template>
