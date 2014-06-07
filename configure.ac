@@ -7880,7 +7880,7 @@ else
     SYSTEM_LIBXSLT=
     BUILD_TYPE="$BUILD_TYPE LIBXSLT"
 
-    if test "$cross_compiling" = "yes"; then
+    if test "$cross_compiling" = "yes" -o "$_os" = "Darwin"; then
         AC_PATH_PROG(XSLTPROC, xsltproc, no)
         if test "$XSLTPROC" = "no"; then
             AC_MSG_ERROR([xsltproc is required])
