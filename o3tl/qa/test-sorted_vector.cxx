@@ -349,6 +349,10 @@ public:
         CPPUNIT_ASSERT( aVec[4] == p3 );
         CPPUNIT_ASSERT( aVec[5] == p4 );
 
+        aVec.DeleteAndDestroyAll( true );
+        CPPUNIT_ASSERT( aVec.size() == 1 );
+        aVec.DeleteAndDestroyAll( true );
+        CPPUNIT_ASSERT( aVec.size() == 1 );
         aVec.DeleteAndDestroyAll();
     }
 

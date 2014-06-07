@@ -195,11 +195,18 @@ public:
     }
 
     /* Clear() elements in the vector, and free them one by one. */
-    void DeleteAndDestroyAll()
+    void DeleteAndDestroyAll( bool keepDefault=false )
     {
-        for( const_iterator it = begin(); it != end(); ++it )
+        if ( empty() )
+            return;
+
+        const int _Offset = (keepDefault && mOffset) ? mOffset : 0;
+        for( const_iterator it = begin() + _Offset; it != end(); ++it )
             delete *it;
-        clear();
+        if ( _Offset )
+            base_t::erase( begin_nonconst() + _Offset, end_nonconst() );
+        else
+            clear();
     }
 
     // fdo#58793: some existing code in Writer (SwpHintsArray)
