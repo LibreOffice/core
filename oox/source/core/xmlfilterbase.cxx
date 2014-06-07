@@ -142,7 +142,7 @@ struct NamespaceIds: public rtl::StaticWithInit<
             NMSP_xlsExtLst
         };
 
-        Sequence< beans::Pair< OUString, sal_Int32 > > aRet(STATIC_ARRAY_SIZE(namespaceIds));
+        Sequence< beans::Pair< OUString, sal_Int32 > > aRet(SAL_N_ELEMENTS(namespaceIds));
         for( sal_Int32 i=0; i<aRet.getLength(); ++i )
             aRet[i] = make_Pair(
                 OUString::createFromAscii(namespaceURIs[i]),
