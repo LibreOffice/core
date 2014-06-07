@@ -3004,7 +3004,6 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         // These should be mapped to NS_ooxml::LN_EG_SectPrContents_pgNumType, but dmapper has no API for that at the moment.
         break;
     case RTF_LOCH:
-        // Noop, dmapper detects this automatically.
         m_aStates.top().eRunType = RTFParserState::LOCH;
         break;
     case RTF_HICH:
