@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <limits>
 #include <boost/static_assert.hpp>
+#include <sal/macros.h>
 #include <osl/endian.h>
 #include <rtl/math.hxx>
 #include <rtl/string.hxx>
@@ -33,19 +34,15 @@ namespace oox {
 
 // Helper macros ==============================================================
 
-/** Expands to the number of elements in a STATIC data array. */
-#define STATIC_ARRAY_SIZE( array ) \
-    (sizeof(array)/sizeof(*(array)))
-
 /** Expands to a pointer behind the last element of a STATIC data array (like
     STL end()). */
 #define STATIC_ARRAY_END( array ) \
-    ((array)+STATIC_ARRAY_SIZE(array))
+    ((array)+SAL_N_ELEMENTS(array))
 
 /** Expands to the 'index'-th element of a STATIC data array, or to 'def', if
     'index' is out of the array limits. */
 #define STATIC_ARRAY_SELECT( array, index, def ) \
-    ((static_cast<size_t>(index) < STATIC_ARRAY_SIZE(array)) ? ((array)[static_cast<size_t>(index)]) : (def))
+    ((static_cast<size_t>(index) < SAL_N_ELEMENTS(array)) ? ((array)[static_cast<size_t>(index)]) : (def))
 
 /** Expands to a temporary OString, created from a literal(!) character
     array. */

@@ -337,7 +337,7 @@ void BiffDrawingObjectBase::convertFillProperties( ShapePropertyMap& rPropMap, c
             { 0x88, 0x00, 0x22, 0x00, 0x88, 0x00, 0x22, 0x00 },
             { 0x80, 0x00, 0x08, 0x00, 0x80, 0x00, 0x08, 0x00 }
         };
-        const sal_uInt8* const pnPattern = sppnPatterns[ ::std::min< size_t >( rFillData.mnPattern - 2, STATIC_ARRAY_SIZE( sppnPatterns ) ) ];
+        const sal_uInt8* const pnPattern = sppnPatterns[ ::std::min< size_t >( rFillData.mnPattern - 2, SAL_N_ELEMENTS( sppnPatterns ) ) ];
         // create 2-colored 8x8 DIB
         SvMemoryStream aMemStrm;
 //      { 0x0C, 0x00, 0x00, 0x00, 0x08, 0x00, 0x08, 0x00, 0x01, 0x00, 0x01, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00 }
