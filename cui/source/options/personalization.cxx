@@ -35,8 +35,8 @@ using namespace ::com::sun::star::ucb;
 SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     : ModalDialog( pParent, "SelectPersonaDialog", "cui/ui/select_persona_dialog.ui" )
 {
-    get( m_pButton, "search_personas" );
-    m_pButton->SetClickHdl( LINK( this, SelectPersonaDialog, VisitPersonas ) );
+    get( m_pSearchButton, "search_personas" );
+    m_pSearchButton->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
     get( m_pEdit, "search_term" );
     m_pEdit->SetPlaceholderText( "Search term..." );
@@ -64,11 +64,11 @@ OUString SelectPersonaDialog::GetPersonaURL() const
     return OUString();
 }
 
-IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
+IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, /*pButton*/ )
 {
     OUString searchTerm = m_pEdit->GetText();
-    OUString rURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
-    m_aSearchThread = new SearchAndParseThread( this, rURL );
+    OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
+    m_aSearchThread = new SearchAndParseThread( this, rSearchURL );
     m_aSearchThread->launch();
     return 0;
 }
