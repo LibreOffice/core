@@ -1249,7 +1249,8 @@ void Shape::finalizeXShape( XmlFilterBase& rFilter, const Reference< XShapes >& 
                     {
                         Reference< chart2::data::XDataReceiver > xDataRec( xChartDoc, UNO_QUERY );
                         Reference< chart2::data::XDataSource > xData( xDataRec->getUsedData(), UNO_QUERY );
-                        if( xData->getDataSequences().getLength() <= 0 || xData->getDataSequences()[0]->getValues()->getData().getLength() <= 0 )
+                        if( xData->getDataSequences().getLength() <= 0 || !xData->getDataSequences()[0]->getValues().is() ||
+                                xData->getDataSequences()[0]->getValues()->getData().getLength() <= 0 )
                         {
                             rFilter.useInternalChartDataTable( true );
                             rFilter.getChartConverter()->convertFromModel( rFilter, aModel, xChartDoc, xExternalPage, mxShape->getPosition(), mxShape->getSize() );
