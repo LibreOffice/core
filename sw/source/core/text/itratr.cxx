@@ -621,8 +621,8 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
         if( pTmp )
         {
             aNodeArgs.nIndx = nIndex;
-            BOOST_FOREACH( SwFrmFmt *pFmt, *pTmp )
-                lcl_MinMaxNode( pFmt, &aNodeArgs );
+            for (SwFrmFmts::const_iterator it = pTmp->begin(); it != pTmp->end(); it++ )
+                lcl_MinMaxNode( *it, &aNodeArgs );
         }
     }
     if( aNodeArgs.nLeftRest < 0 )

@@ -781,7 +781,7 @@ sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrmFmt& rFmt ) const
     {
         // no Layout for this format, then recalc the ordnum
         SwFrmFmt* pFmt = (SwFrmFmt*)&rFmt;
-        nOrdNum = pDoc->GetSpzFrmFmts()->GetPos( pFmt );
+        nOrdNum = std::distance(pDoc->GetSpzFrmFmts()->begin(), pDoc->GetSpzFrmFmts()->find( pFmt ) );
 
         const SdrModel* pModel = pDoc->GetDrawModel();
         if( pModel )

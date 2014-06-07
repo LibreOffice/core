@@ -56,7 +56,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 
     // add again into array
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
-    rFlyFmts.push_back( pFrmFmt );
+    rFlyFmts.insert( pFrmFmt );
 
     // OD 26.06.2003 #108784# - insert 'master' drawing object into drawing page
     if ( RES_DRAWFRMFMT == pFrmFmt->Which() )
@@ -216,7 +216,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
     // delete from array
     SwFrmFmts& rFlyFmts = *(SwFrmFmts*)pDoc->GetSpzFrmFmts();
-    rFlyFmts.erase( std::find( rFlyFmts.begin(), rFlyFmts.end(), pFrmFmt ));
+    rFlyFmts.erase( pFrmFmt );
 }
 
 SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, sal_uLong nNodeIdx, xub_StrLen nCntIdx )
@@ -533,7 +533,7 @@ void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (SwFrmFmt*) pOldFmt ) )
+    if( rDoc.GetFrmFmts()->Contains( (SwFrmFmt*) pOldFmt ) )
     {
         if( bAnchorChgd )
             pFrmFmt->DelFrms();
@@ -606,7 +606,7 @@ void SwUndoSetFlyFmt::RedoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
 
     // Is the new Format still existent?
-    if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (SwFrmFmt*) pNewFmt ) )
+    if( rDoc.GetFrmFmts()->find( (SwFrmFmt*) pNewFmt ) != rDoc.GetFrmFmts()->end() )
     {
 
         if( bAnchorChgd )

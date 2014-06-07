@@ -102,7 +102,7 @@ public:
     inline sal_Bool IsDefault() const { return DerivedFrom() == 0; }
 
     inline const String& GetName() const        { return aFmtName; }
-    void SetName( const String& rNewName, sal_Bool bBroadcast=sal_False );
+    virtual void SetName( const String& rNewName, sal_Bool bBroadcast=sal_False );
     inline void SetName( const sal_Char* pNewName,
                          sal_Bool bBroadcast=sal_False);
 

@@ -181,7 +181,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
         aPos.nContent.Assign( 0, 0 );
         SwFmtAnchor aAnchor( pFmt->GetAnchor() );
         aAnchor.SetAnchor( &aPos );
-        pFmt->GetDoc()->GetSpzFrmFmts()->push_back( pFmt );
+        pFmt->GetDoc()->GetSpzFrmFmts()->insert( pFmt );
         pFmt->SetFmtAttr( aAnchor );
         SwCntntNode* pCNd = aPos.nNode.GetNode().GetCntntNode();
         if( pCNd && pCNd->getLayoutFrm( pFmt->GetDoc()->GetCurrentLayout(), 0, 0, sal_False ) )
@@ -315,7 +315,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     if( i > rTbl.size() )
                         i = rTbl.size();
                     else if( pFmt != rTbl[i] )
-                        i = rTbl.GetPos( pFmt );
+                        i = std::distance(rTbl.begin(), rTbl.find( pFmt ));
                 }
 
                 pDoc->DelLayoutFmt( pFmt );

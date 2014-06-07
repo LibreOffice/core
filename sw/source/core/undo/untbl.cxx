@@ -117,7 +117,7 @@ class _SaveTable
     _SaveLine* pLine;
     const SwTable* pSwTable;
     SfxItemSets aSets;
-    SwFrmFmts aFrmFmts;
+    SwFrmFmtsV aFrmFmts;
     sal_uInt16 nLineCount;
     bool bModifyBox : 1;
     bool bSaveFormula : 1;
