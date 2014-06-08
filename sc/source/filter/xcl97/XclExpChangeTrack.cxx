@@ -1338,7 +1338,8 @@ public:
 
 void EndXmlElement::SaveXml( XclExpXmlStream& rStrm )
 {
-    rStrm.GetCurrentStream()->endElement( mnElement );
+    sax_fastparser::FSHelperPtr pStream = rStrm.GetCurrentStream();
+    pStream->write("</")->writeId(mnElement)->write(">");
 }
 
 class EndHeaderElement : public EndXmlElement
