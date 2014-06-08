@@ -74,14 +74,15 @@ public:
     SelectPersonaDialog( Window *pParent );
     ::rtl::Reference< SearchAndParseThread > m_aSearchThread;
 
-    /// Get the URL from the Edit field.
-    OUString GetPersonaURL() const;
+    OUString GetSelectedPersona() const;
     void SetProgress( OUString& );
-    void SetImages( std::vector<Image> &);
+    void SetImages( std::vector<Image>&);
+    void AddPersonaSetting( OUString& );
 
 private:
     /// Handle the Search button
-    DECL_LINK( VisitPersonas, PushButton* );
+    DECL_LINK( SearchPersonas, PushButton* );
+    DECL_LINK( SelectPersona, PushButton* );
 };
 
 class SearchAndParseThread: public salhelper::Thread
@@ -93,7 +94,7 @@ private:
 
     virtual ~SearchAndParseThread();
     virtual void execute() SAL_OVERRIDE;
-    OUString getPreviewFile( const OUString& );
+    void getPreviewFile( const OUString&, OUString *, OUString * );
 
 public:
 
