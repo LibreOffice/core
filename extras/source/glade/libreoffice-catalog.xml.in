@@ -30,6 +30,9 @@
     <glade-widget-class title="Font PickListBox" name="smlo-SmFontPickListBox"
                         generic-name="SmFontPickListBox" parent="GtkComboBoxText"
                         icon-name="widget-gtk-comboboxtext"/>
+    <glade-widget-class title="Address Control" name="swuilo-SwAddressControlImpl"
+                        generic-name="SwAddressControlImpl" parent="GtkComboBoxText"
+                        icon-name="widget-gtk-comboboxtext"/>
     <glade-widget-class title="Thesaurus View" name="cuilo-ThesaurusAlternativesCtrl"
                         generic-name="ThesaurusAlternativesCtrl" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
