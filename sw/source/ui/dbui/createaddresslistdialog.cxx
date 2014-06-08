@@ -36,7 +36,6 @@
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <tools/urlobj.hxx>
-#include <createaddresslistdialog.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
 #include <unomid.h>
@@ -47,8 +46,8 @@ using namespace ::com::sun::star::ui::dialogs;
 
 class SwAddressControl_Impl : public Control
 {
-    ScrollBar                       m_aScrollBar;
-    Window                          m_aWindow;
+    ScrollBar                       *m_pScrollBar;
+    Window                          *m_pWindow;
 
     ::std::vector<FixedText*>       m_aFixedTexts;
     ::std::vector<Edit*>            m_aEdits;
@@ -68,11 +67,12 @@ class SwAddressControl_Impl : public Control
 
     virtual bool        PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        Command( const CommandEvent& rCEvt ) SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
     using Window::SetData;
 
 public:
-    SwAddressControl_Impl(Window* pParent, const ResId& rResId );
+    SwAddressControl_Impl(Window* pParent , WinBits nBits );
     virtual ~SwAddressControl_Impl();
 
     void        SetData(SwCSVData& rDBData);
@@ -80,24 +80,35 @@ public:
     void        SetCurrentDataSet(sal_uInt32 nSet);
     sal_uInt32  GetCurrentDataSet() const { return m_nCurrentDataSet;}
     void        SetCursorTo(sal_uInt32 nElement);
+    virtual void Resize();
 };
 
-SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, const ResId& rResId ) :
-    Control(pParent, rResId),
-    m_aScrollBar(this, ResId(SCR_1,*rResId.GetResMgr())),
-    m_aWindow(this, ResId(WIN_DATA,*rResId.GetResMgr())),
+SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, WinBits nBits ) :
+    Control(pParent, nBits),
+    m_pScrollBar(new ScrollBar(this)),
+    m_pWindow(new Window(this, WB_DIALOGCONTROL)),
     m_pData(0),
-    m_aWinOutputSize( m_aWindow.GetOutputSizePixel() ),
     m_nLineHeight(0),
     m_nCurrentDataSet(0),
     m_bNoDataSet(true)
 {
-    FreeResource();
-    Link aScrollLink = LINK(this, SwAddressControl_Impl, ScrollHdl_Impl);
-    m_aScrollBar.SetScrollHdl(aScrollLink);
-    m_aScrollBar.SetEndScrollHdl(aScrollLink);
-    m_aScrollBar.EnableDrag();
+    long nScrollBarWidth = m_pScrollBar->GetOutputSize().Width();
+    Size aSize = GetOutputSizePixel();
 
+    m_pWindow->SetSizePixel(Size(aSize.Width() - nScrollBarWidth, aSize.Height()));
+    m_aWinOutputSize = m_pWindow->GetOutputSizePixel();
+    m_pWindow->Show();
+    m_pScrollBar->Show();
+
+    Link aScrollLink = LINK(this, SwAddressControl_Impl, ScrollHdl_Impl);
+    m_pScrollBar->SetScrollHdl(aScrollLink);
+    m_pScrollBar->SetEndScrollHdl(aScrollLink);
+    m_pScrollBar->EnableDrag();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwAddressControlImpl(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwAddressControl_Impl(pParent, WB_BORDER | WB_DIALOGCONTROL);
 }
 
 SwAddressControl_Impl::~SwAddressControl_Impl()
@@ -108,6 +119,8 @@ SwAddressControl_Impl::~SwAddressControl_Impl()
     ::std::vector<Edit*>::iterator aEditIter;
     for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
         delete *aEditIter;
+    delete m_pScrollBar;
+    delete m_pWindow;
 }
 
 void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
@@ -130,8 +143,8 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
 
     ::std::vector< OUString >::iterator  aHeaderIter;
 
-    long nFTXPos = m_aWindow.LogicToPixel(Point(RSC_SP_CTRL_X, RSC_SP_CTRL_X), MAP_APPFONT).X();
-    long nFTHeight = m_aWindow.LogicToPixel(Size(RSC_BS_CHARHEIGHT, RSC_BS_CHARHEIGHT), MAP_APPFONT).Height();
+    long nFTXPos = m_pWindow->LogicToPixel(Point(RSC_SP_CTRL_X, RSC_SP_CTRL_X), MAP_APPFONT).X();
+    long nFTHeight = m_pWindow->LogicToPixel(Size(RSC_BS_CHARHEIGHT, RSC_BS_CHARHEIGHT), MAP_APPFONT).Height();
     long nFTWidth = 0;
 
     //determine the width of the FixedTexts
@@ -139,19 +152,19 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
                 aHeaderIter != m_pData->aDBColumnHeaders.end();
                 ++aHeaderIter)
     {
-        sal_Int32 nTemp = m_aWindow.GetTextWidth(*aHeaderIter);
+        sal_Int32 nTemp = m_pWindow->GetTextWidth(*aHeaderIter);
         if(nTemp > nFTWidth)
           nFTWidth = nTemp;
     }
     //add some pixels
     nFTWidth += 2;
     long nEDXPos = nFTWidth + nFTXPos +
-            m_aWindow.LogicToPixel(Size(RSC_SP_CTRL_DESC_X, RSC_SP_CTRL_DESC_X), MAP_APPFONT).Width();
-    long nEDHeight = m_aWindow.LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT).Height();
+            m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_DESC_X, RSC_SP_CTRL_DESC_X), MAP_APPFONT).Width();
+    long nEDHeight = m_pWindow->LogicToPixel(Size(RSC_CD_TEXTBOX_HEIGHT, RSC_CD_TEXTBOX_HEIGHT), MAP_APPFONT).Height();
     long nEDWidth = m_aWinOutputSize.Width() - nEDXPos - nFTXPos;
-    m_nLineHeight = nEDHeight + m_aWindow.LogicToPixel(Size(RSC_SP_CTRL_GROUP_Y, RSC_SP_CTRL_GROUP_Y), MAP_APPFONT).Height();
+    m_nLineHeight = nEDHeight + m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_GROUP_Y, RSC_SP_CTRL_GROUP_Y), MAP_APPFONT).Height();
 
-    long nEDYPos = m_aWindow.LogicToPixel(Size(RSC_SP_CTRL_DESC_Y, RSC_SP_CTRL_DESC_Y), MAP_APPFONT).Height();
+    long nEDYPos = m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_DESC_Y, RSC_SP_CTRL_DESC_Y), MAP_APPFONT).Height();
     long nFTYPos = nEDYPos + nEDHeight - nFTHeight;
 
     Link aFocusLink = LINK(this, SwAddressControl_Impl, GotFocusHdl_Impl);
@@ -163,8 +176,8 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
                 aHeaderIter != m_pData->aDBColumnHeaders.end();
                 ++aHeaderIter, nEDYPos += m_nLineHeight, nFTYPos += m_nLineHeight, nLines++)
     {
-        FixedText* pNewFT = new FixedText(&m_aWindow, WB_RIGHT);
-        Edit* pNewED = new Edit(&m_aWindow, WB_BORDER);
+        FixedText* pNewFT = new FixedText(m_pWindow, WB_RIGHT);
+        Edit* pNewED = new Edit(m_pWindow, WB_BORDER);
         //set nLines a position identifier - used in the ModifyHdl
         pNewED->SetData((void*)nLines);
         pNewED->SetGetFocusHdl(aFocusLink);
@@ -188,37 +201,38 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     {
         //the m_aWindow has to be at least as high as the ScrollBar and it must include the last Edit
         sal_Int32 nContentHeight = pLastEdit->GetPosPixel().Y() + nEDHeight +
-                m_aWindow.LogicToPixel(Size(RSC_SP_CTRL_GROUP_Y, RSC_SP_CTRL_GROUP_Y), MAP_APPFONT).Height();
-        if(nContentHeight < m_aScrollBar.GetSizePixel().Height())
+                m_pWindow->LogicToPixel(Size(RSC_SP_CTRL_GROUP_Y, RSC_SP_CTRL_GROUP_Y), MAP_APPFONT).Height();
+        if(nContentHeight < m_pScrollBar->GetSizePixel().Height())
         {
-            nContentHeight = m_aScrollBar.GetSizePixel().Height();
+            nContentHeight = m_pScrollBar->GetSizePixel().Height();
             // Reset the scrollbar's thumb to the top before it is disabled.
-            m_aScrollBar.DoScroll(0);
-            m_aScrollBar.SetThumbPos(0);
-            m_aScrollBar.Enable(false);
+            m_pScrollBar->DoScroll(0);
+            m_pScrollBar->SetThumbPos(0);
+            m_pScrollBar->Enable(false);
         }
         else
         {
-            m_aScrollBar.Enable(true);
-            m_aScrollBar.SetRange(Range(0, nLines));
-            m_aScrollBar.SetThumbPos(0);
-            m_aScrollBar.SetVisibleSize(nVisibleLines);
+            m_pScrollBar->Enable(true);
+            m_pScrollBar->SetRange(Range(0, nLines));
+            m_pScrollBar->SetThumbPos(0);
+            m_pScrollBar->SetVisibleSize(nVisibleLines);
             // Reset the scroll bar position (especially if items deleted)
-            m_aScrollBar.DoScroll(m_aScrollBar.GetRangeMax());
-            m_aScrollBar.DoScroll(0);
+            m_pScrollBar->DoScroll(m_pScrollBar->GetRangeMax());
+            m_pScrollBar->DoScroll(0);
         }
         Size aWinOutputSize(m_aWinOutputSize);
         aWinOutputSize.Height() = nContentHeight;
-        m_aWindow.SetOutputSizePixel(aWinOutputSize);
+        m_pWindow->SetOutputSizePixel(aWinOutputSize);
 
     }
     // Even if no items in m_aEdits, the scrollbar will still exist;
     // we might as well disable it.
     if (m_aEdits.size() < 1) {
-        m_aScrollBar.DoScroll(0);
-        m_aScrollBar.SetThumbPos(0);
-        m_aScrollBar.Enable(false);
+        m_pScrollBar->DoScroll(0);
+        m_pScrollBar->SetThumbPos(0);
+        m_pScrollBar->Enable(false);
     }
+    Resize();
 }
 
 void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
@@ -245,7 +259,7 @@ void SwAddressControl_Impl::SetCurrentDataSet(sal_uInt32 nSet)
 IMPL_LINK(SwAddressControl_Impl, ScrollHdl_Impl, ScrollBar*, pScroll)
 {
     long nThumb = pScroll->GetThumbPos();
-    m_aWindow.SetPosPixel(Point(0, - (m_nLineHeight * nThumb)));
+    m_pWindow->SetPosPixel(Point(0, - (m_nLineHeight * nThumb)));
 
     return 0;
 }
@@ -262,10 +276,10 @@ IMPL_LINK(SwAddressControl_Impl, GotFocusHdl_Impl, Edit*, pEdit)
 
 void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
 {
-    long nThumb = m_aScrollBar.GetThumbPos();
+    long nThumb = m_pScrollBar->GetThumbPos();
     //determine range of visible positions
-    long nMinVisiblePos = - m_aWindow.GetPosPixel().Y();
-    long nMaxVisiblePos = m_aScrollBar.GetSizePixel().Height() + nMinVisiblePos;
+    long nMinVisiblePos = - m_pWindow->GetPosPixel().Y();
+    long nMaxVisiblePos = m_pScrollBar->GetSizePixel().Height() + nMinVisiblePos;
     if( rRect.TopLeft().Y() < nMinVisiblePos)
     {
         nThumb -= 1 + ((nMinVisiblePos - rRect.TopLeft().Y()) / m_nLineHeight);
@@ -274,10 +288,10 @@ void SwAddressControl_Impl::MakeVisible(const Rectangle & rRect)
     {
         nThumb += 1 + ((nMaxVisiblePos - rRect.BottomLeft().Y()) / m_nLineHeight);
     }
-    if(nThumb != m_aScrollBar.GetThumbPos())
+    if(nThumb != m_pScrollBar->GetThumbPos())
     {
-        m_aScrollBar.SetThumbPos(nThumb);
-        ScrollHdl_Impl(&m_aScrollBar);
+        m_pScrollBar->SetThumbPos(nThumb);
+        ScrollHdl_Impl(m_pScrollBar);
     }
 }
 
@@ -318,7 +332,7 @@ void SwAddressControl_Impl::Command( const CommandEvent& rCEvt )
             const CommandWheelData* pWheelData = rCEvt.GetWheelData();
             if(pWheelData && !pWheelData->IsHorz() && COMMAND_WHEEL_ZOOM != pWheelData->GetMode())
             {
-                HandleScrollCommand( rCEvt, 0, &m_aScrollBar );
+                HandleScrollCommand( rCEvt, 0, m_pScrollBar );
             }
         }
         break;
@@ -342,46 +356,73 @@ bool SwAddressControl_Impl::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
+Size SwAddressControl_Impl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(250, 160), MAP_APPFONT);
+}
+
+void SwAddressControl_Impl::Resize()
+{
+    Window::Resize();
+    m_pScrollBar->SetSizePixel(Size(m_pScrollBar->GetOutputSizePixel().Width(), GetOutputSizePixel().Height()));
+
+    if(m_nLineHeight)
+        m_pScrollBar->SetVisibleSize(m_pScrollBar->GetOutputSize().Height() / m_nLineHeight);
+    m_pScrollBar->DoScroll(0);
+
+    long nScrollBarWidth = m_pScrollBar->GetOutputSize().Width();
+    Size aSize = GetOutputSizePixel();
+
+    m_pWindow->SetSizePixel(Size(aSize.Width() - nScrollBarWidth, m_pWindow->GetOutputSizePixel().Height()));
+    m_pScrollBar->SetPosPixel(Point(aSize.Width() - nScrollBarWidth, 0));
+
+    if(m_aEdits.size())
+    {
+        long nNewEditSize = aSize.Width() - (*m_aEdits.begin())->GetPosPixel().X() - nScrollBarWidth - 6;
+
+        ::std::vector<Edit*>::iterator aEditIter;
+        for(aEditIter = m_aEdits.begin(); aEditIter != m_aEdits.end(); ++aEditIter)
+        {
+            (*aEditIter)->SetSizePixel(Size(nNewEditSize, (*aEditIter)->GetSizePixel().Height()));
+        }
+    }
+
+}
+
 SwCreateAddressListDialog::SwCreateAddressListDialog(
         Window* pParent, const OUString& rURL, SwMailMergeConfigItem& rConfig) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_CREATEADDRESSLIST)),
-    m_aAddressInformation( this, SW_RES(  FI_ADDRESSINFORMATION)),
-    m_pAddressControl(new SwAddressControl_Impl(this, SW_RES(CT_ADDRESS))),
-    m_aNewPB( this, SW_RES(               PB_NEW)),
-    m_aDeletePB( this, SW_RES(            PB_DELETE)),
-    m_aFindPB( this, SW_RES(              PB_FIND)),
-    m_aCustomizePB( this, SW_RES(         PB_CUSTOMIZE)),
-
-    m_aViewEntriesFI( this, SW_RES(       FI_VIEWENTRIES)),
-    m_aStartPB( this, SW_RES(             PB_START)),
-    m_aPrevPB( this, SW_RES(              PB_PREV)),
-    m_aSetNoNF( this, SW_RES(             NF_SETNO)),
-    m_aNextPB( this, SW_RES(              PB_NEXT  )),
-    m_aEndPB( this, SW_RES(               PB_END)),
-
-    m_aSeparatorFL( this, SW_RES(         FL_SEPARATOR)),
-
-    m_aOK( this, SW_RES(                  PB_OK)),
-    m_aCancel( this, SW_RES(              PB_CANCEL)),
-    m_aHelp( this, SW_RES(                PB_HELP)),
+    SfxModalDialog(pParent, "CreateAddressList", "modules/swriter/ui/createaddresslist.ui"),
     m_sAddressListFilterName( SW_RES(    ST_FILTERNAME)),
     m_sURL(rURL),
     m_pCSVData( new SwCSVData ),
     m_pFindDlg(0)
 {
-    FreeResource();
-    m_aNewPB.SetClickHdl(LINK(this, SwCreateAddressListDialog, NewHdl_Impl));
-    m_aDeletePB.SetClickHdl(LINK(this, SwCreateAddressListDialog, DeleteHdl_Impl));
-    m_aFindPB.SetClickHdl(LINK(this, SwCreateAddressListDialog, FindHdl_Impl));
-    m_aCustomizePB.SetClickHdl(LINK(this, SwCreateAddressListDialog, CustomizeHdl_Impl));
-    m_aOK.SetClickHdl(LINK(this, SwCreateAddressListDialog, OkHdl_Impl));
+    get(m_pNewPB, "NEW");
+    get(m_pDeletePB, "DELETE");
+    get(m_pFindPB, "FIND");
+    get(m_pCustomizePB, "CUSTOMIZE");
+    get(m_pStartPB, "START");
+    get(m_pPrevPB, "PREV");
+    get(m_pSetNoNF, "SETNO-nospin");
+    m_pSetNoNF->SetFirst(1);
+    m_pSetNoNF->SetMin(1);
+    get(m_pNextPB, "NEXT");
+    get(m_pEndPB, "END");
+    get(m_pOK, "OK");
+    get(m_pAddressControl, "CONTAINER");
+
+    m_pNewPB->SetClickHdl(LINK(this, SwCreateAddressListDialog, NewHdl_Impl));
+    m_pDeletePB->SetClickHdl(LINK(this, SwCreateAddressListDialog, DeleteHdl_Impl));
+    m_pFindPB->SetClickHdl(LINK(this, SwCreateAddressListDialog, FindHdl_Impl));
+    m_pCustomizePB->SetClickHdl(LINK(this, SwCreateAddressListDialog, CustomizeHdl_Impl));
+    m_pOK->SetClickHdl(LINK(this, SwCreateAddressListDialog, OkHdl_Impl));
 
     Link aLk = LINK(this, SwCreateAddressListDialog, DBCursorHdl_Impl);
-    m_aStartPB.SetClickHdl(aLk);
-    m_aPrevPB.SetClickHdl(aLk);
-    m_aSetNoNF.SetModifyHdl(LINK(this, SwCreateAddressListDialog, DBNumCursorHdl_Impl));
-    m_aNextPB.SetClickHdl(aLk);
-    m_aEndPB.SetClickHdl(aLk);
+    m_pStartPB->SetClickHdl(aLk);
+    m_pPrevPB->SetClickHdl(aLk);
+    m_pSetNoNF->SetModifyHdl(LINK(this, SwCreateAddressListDialog, DBNumCursorHdl_Impl));
+    m_pNextPB->SetClickHdl(aLk);
+    m_pEndPB->SetClickHdl(aLk);
 
     if(!m_sURL.isEmpty())
     {
@@ -448,13 +489,12 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     //now fill the address control
     m_pAddressControl->SetData(*m_pCSVData);
     m_pAddressControl->SetCurrentDataSet(0);
-    m_aSetNoNF.SetMax(m_pCSVData->aDBData.size());
+    m_pSetNoNF->SetMax(m_pCSVData->aDBData.size());
     UpdateButtons();
 }
 
 SwCreateAddressListDialog::~SwCreateAddressListDialog()
 {
-    delete m_pAddressControl;
     delete m_pCSVData;
     delete m_pFindDlg;
 }
@@ -466,9 +506,9 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, NewHdl_Impl)
     OUString sTemp;
     aNewData.insert(aNewData.begin(), m_pCSVData->aDBColumnHeaders.size(), sTemp);
     m_pCSVData->aDBData.insert(m_pCSVData->aDBData.begin() + ++nCurrent, aNewData);
-    m_aSetNoNF.SetMax(m_pCSVData->aDBData.size());
+    m_pSetNoNF->SetMax(m_pCSVData->aDBData.size());
     //the NumericField start at 1
-    m_aSetNoNF.SetValue(nCurrent + 1);
+    m_pSetNoNF->SetValue(nCurrent + 1);
     //the address control starts at 0
     m_pAddressControl->SetCurrentDataSet(nCurrent);
     UpdateButtons();
@@ -489,10 +529,10 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl)
         // if only one set is available then clear the data
         OUString sTemp;
         m_pCSVData->aDBData[0].assign(m_pCSVData->aDBData[0].size(), sTemp);
-        m_aDeletePB.Enable(false);
+        m_pDeletePB->Enable(false);
     }
     m_pAddressControl->SetCurrentDataSet(nCurrent);
-    m_aSetNoNF.SetMax(m_pCSVData->aDBData.size());
+    m_pSetNoNF->SetMax(m_pCSVData->aDBData.size());
     UpdateButtons();
     return 0;
 }
@@ -610,46 +650,46 @@ IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
 
 IMPL_LINK(SwCreateAddressListDialog, DBCursorHdl_Impl, PushButton*, pButton)
 {
-    sal_uInt32 nValue = static_cast< sal_uInt32 >(m_aSetNoNF.GetValue());
+    sal_uInt32 nValue = static_cast< sal_uInt32 >(m_pSetNoNF->GetValue());
 
-    if(pButton == &m_aStartPB)
+    if(pButton == m_pStartPB)
         nValue = 1;
-    else if(pButton == &m_aPrevPB)
+    else if(pButton == m_pPrevPB)
     {
         if(nValue > 1)
             --nValue;
     }
-    else if(pButton == &m_aNextPB)
+    else if(pButton == m_pNextPB)
     {
-        if(nValue < (sal_uInt32)m_aSetNoNF.GetMax())
+        if(nValue < (sal_uInt32)m_pSetNoNF->GetMax())
             ++nValue;
     }
     else //m_aEndPB
-        nValue = static_cast< sal_uInt32 >(m_aSetNoNF.GetMax());
-    if(nValue != m_aSetNoNF.GetValue())
+        nValue = static_cast< sal_uInt32 >(m_pSetNoNF->GetMax());
+    if(nValue != m_pSetNoNF->GetValue())
     {
-        m_aSetNoNF.SetValue(nValue);
-        DBNumCursorHdl_Impl(&m_aSetNoNF);
+        m_pSetNoNF->SetValue(nValue);
+        DBNumCursorHdl_Impl(m_pSetNoNF);
     }
     return 0;
 }
 
 IMPL_LINK_NOARG(SwCreateAddressListDialog, DBNumCursorHdl_Impl)
 {
-    m_pAddressControl->SetCurrentDataSet( static_cast< sal_uInt32 >(m_aSetNoNF.GetValue() - 1) );
+    m_pAddressControl->SetCurrentDataSet( static_cast< sal_uInt32 >(m_pSetNoNF->GetValue() - 1) );
     UpdateButtons();
     return 0;
 }
 
 void SwCreateAddressListDialog::UpdateButtons()
 {
-    sal_uInt32 nCurrent = static_cast< sal_uInt32 >(m_aSetNoNF.GetValue() );
+    sal_uInt32 nCurrent = static_cast< sal_uInt32 >(m_pSetNoNF->GetValue() );
     sal_uInt32 nSize = (sal_uInt32 )m_pCSVData->aDBData.size();
-    m_aStartPB.Enable(nCurrent != 1);
-    m_aPrevPB.Enable(nCurrent != 1);
-    m_aNextPB.Enable(nCurrent != nSize);
-    m_aEndPB.Enable(nCurrent != nSize);
-    m_aDeletePB.Enable(nSize > 0);
+    m_pStartPB->Enable(nCurrent != 1);
+    m_pPrevPB->Enable(nCurrent != 1);
+    m_pNextPB->Enable(nCurrent != nSize);
+    m_pEndPB->Enable(nCurrent != nSize);
+    m_pDeletePB->Enable(nSize > 0);
 }
 
 void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
@@ -690,7 +730,7 @@ void SwCreateAddressListDialog::Find(const OUString& rSearch, sal_Int32 nColumn)
     if(bFound)
     {
         m_pAddressControl->SetCurrentDataSet(nPos);
-        m_aSetNoNF.SetValue( nPos + 1 );
+        m_pSetNoNF->SetValue( nPos + 1 );
         UpdateButtons();
         m_pAddressControl->SetCursorTo(nElement);
     }
