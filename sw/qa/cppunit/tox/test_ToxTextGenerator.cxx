@@ -9,6 +9,7 @@
 
 #include "rtl/ustring.hxx"
 #include "chpfld.hxx"
+#include "ndtxt.hxx"
 #include "tox.hxx"
 #include "txmsrt.hxx"
 #include "ToxTextGenerator.hxx"
