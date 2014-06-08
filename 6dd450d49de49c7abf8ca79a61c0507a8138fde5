@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_a448cc88",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-06-08T06:51:29Z",
+      "side": 1,
+      "message": "This test file contains framePr. So now after my changes framePr is gets preserved and textbox is removed now from export side. \n\nSo I checked for negative unit test case. framePr should not be convert to textbox while conversion.",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_845ee843",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-06-08T06:51:29Z",
+      "side": 1,
+      "message": "This test file contains framePr. So now after my changes framePr is gets preserved and textbox is removed now from export side. \n\nSo I checked for negative unit test case. framePr should not be convert to textbox while conversion.",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
