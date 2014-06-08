@@ -107,19 +107,26 @@ void lclConvertCustomDash( LineDash& orLineDash, const LineProperties::DashStopV
     sal_Int16 nDashes = 0;
     sal_Int32 nDashLen = 0;
     sal_Int32 nDistance = 0;
+    sal_Int32 nConvertedLen = 0;
+    sal_Int32 nConvertedDistance = 0;
     for( LineProperties::DashStopVector::const_iterator aIt = rCustomDash.begin(), aEnd = rCustomDash.end(); aIt != aEnd; ++aIt )
     {
-        if( aIt->first <= 2 )
+        // Get from "1000th of percent" ==> percent ==> multiplier
+        nConvertedLen      = aIt->first  / 1000 / 100;
+        nConvertedDistance = aIt->second / 1000 / 100;
+
+        // Check if it is a dot (100% = dot)
+        if( nConvertedLen == 1 )
         {
             ++nDots;
-            nDotLen += aIt->first;
+            nDotLen += nConvertedLen;
         }
         else
         {
             ++nDashes;
-            nDashLen += aIt->first;
+            nDashLen += nConvertedLen;
         }
-        nDistance += aIt->second;
+        nDistance += nConvertedDistance;
     }
     orLineDash.DotLen = (nDots > 0) ? ::std::max< sal_Int32 >( nDotLen / nDots, 1 ) : 0;
     orLineDash.Dots = nDots;

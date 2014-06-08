@@ -626,24 +626,45 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     if( bDashSet && aStyleLineStyle != drawing::LineStyle_DASH ) {
         // line style is a dash and it was not set by the shape style
-        // TODO: the XML_d and XML_sp values seem insane
+
         mpFS->startElementNS( XML_a, XML_custDash, FSEND );
 
-        aLineDash.DotLen = aLineDash.DotLen / nLineWidth;
-        aLineDash.DashLen = aLineDash.DashLen / nLineWidth;
-        aLineDash.Distance = aLineDash.Distance / nLineWidth;
+        // Check that line-width is positive and distance between dashes\dots is positive
+        if ( nLineWidth > 0 && aLineDash.Distance > 0 )
+        {
+            // Write 'dashes' first, and then 'dots'
+            int i;
+            if ( aLineDash.Dashes > 0 )
+            {
+                for( i = 0; i < aLineDash.Dashes; i ++ )
+                    mpFS->singleElementNS( XML_a , XML_ds,
+                                           XML_d , write1000thOfAPercent( aLineDash.DashLen  > 0 ? aLineDash.DashLen  / nLineWidth * 100 : 100 ),
+                                           XML_sp, write1000thOfAPercent( aLineDash.Distance > 0 ? aLineDash.Distance / nLineWidth * 100 : 100 ),
+                                           FSEND );
+            }
+            if ( aLineDash.Dots > 0 )
+            {
+                for( i = 0; i < aLineDash.Dots; i ++ )
+                    mpFS->singleElementNS( XML_a, XML_ds,
+                                           XML_d , write1000thOfAPercent( aLineDash.DotLen   > 0 ? aLineDash.DotLen   / nLineWidth * 100 : 100 ),
+                                           XML_sp, write1000thOfAPercent( aLineDash.Distance > 0 ? aLineDash.Distance / nLineWidth * 100 : 100 ),
+                                           FSEND );
+            }
+        }
 
-        int i;
-        for( i = 0; i < aLineDash.Dots; i ++ )
-            mpFS->singleElementNS( XML_a, XML_ds,
-                                   XML_d, aLineDash.DotLen ? writePercentage( aLineDash.DotLen*1000 ) : "100000%",
-                                   XML_sp, writePercentage( aLineDash.Distance*1000 ),
-                                   FSEND );
-        for( i = 0; i < aLineDash.Dashes; i ++ )
-            mpFS->singleElementNS( XML_a, XML_ds,
-                                   XML_d, aLineDash.DashLen ? writePercentage( aLineDash.DashLen*1000 ) : "100000%",
-                                   XML_sp, writePercentage( aLineDash.Distance*1000 ),
-                                   FSEND );
+        if ( nLineWidth <= 0 )
+            SAL_WARN("oox", "while writing outline - custom dash - line width was < 0  : " << nLineWidth);
+        if ( aLineDash.Dashes < 0 )
+            SAL_WARN("oox", "while writing outline - custom dash - number of dashes was < 0  : " << aLineDash.Dashes);
+        if ( aLineDash.Dashes > 0 && aLineDash.DashLen <= 0 )
+            SAL_WARN("oox", "while writing outline - custom dash - dash length was < 0  : " << aLineDash.DashLen);
+        if ( aLineDash.Dots < 0 )
+            SAL_WARN("oox", "while writing outline - custom dash - number of dots was < 0  : " << aLineDash.Dots);
+        if ( aLineDash.Dots > 0 && aLineDash.DotLen <= 0 )
+            SAL_WARN("oox", "while writing outline - custom dash - dot length was < 0  : " << aLineDash.DotLen);
+        if ( aLineDash.Distance <= 0 )
+            SAL_WARN("oox", "while writing outline - custom dash - distance was < 0  : " << aLineDash.Distance);
+
         mpFS->endElementNS( XML_a, XML_custDash );
     }
 
