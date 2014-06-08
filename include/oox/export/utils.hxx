@@ -49,9 +49,9 @@ static inline sal_Int64 TwipsToEMU( sal_Int32 nTwips )
 }
 
 template <typename T>
-OString writePercentage(T number)
+OString write1000thOfAPercent(T number)
 {
-    return OString::number(number) + "%";
+    return OString::number( number * 1000 );
 }
 
 #endif

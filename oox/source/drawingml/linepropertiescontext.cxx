@@ -66,8 +66,50 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
             return this;
         break;
         case A_TOKEN( ds ):
-            mrLineProperties.maCustomDash.push_back( LineProperties::DashStop(
-                rAttribs.getInteger( XML_d, 0 ), rAttribs.getInteger( XML_sp, 0 ) ) );
+        {
+            // 'a:ds' has 2 attributes : 'd' and 'sp'
+            // both are of type 'a:ST_PositivePercentage'
+            // according to the specs Office will read percentages formatted with a trailing percent sign
+            // or formatted as 1000th of a percent without a trailing percent sign, but only write percentages
+            // as 1000th's of a percent without a trailing percent sign.
+            // The code below takes care of both scenarios by converting to '1000th of a percent' always
+            OUString aStr;
+            sal_Int32 nDash = 0;
+            aStr = rAttribs.getString( XML_d, "" );
+            if ( aStr.endsWith("%") )
+            {
+                // Ends with a '%'
+                aStr = aStr.copy(0, aStr.getLength() - 1);
+                aStr = aStr.trim();
+                nDash = aStr.toInt32();
+
+                // Convert to 1000th of a percent
+                nDash *= 1000;
+            }
+            else
+            {
+                nDash = rAttribs.getInteger( XML_d, 0 );
+            }
+
+            sal_Int32 nSp = 0;
+            aStr = rAttribs.getString( XML_sp, "" );
+            if ( aStr.endsWith("%") )
+            {
+                // Ends with a '%'
+                aStr = aStr.copy(0, aStr.getLength() - 1);
+                aStr = aStr.trim();
+                nSp = aStr.toInt32();
+
+                // Convert to 1000th of a percent
+                nSp *= 1000;
+            }
+            else
+            {
+                nSp = rAttribs.getInteger( XML_sp, 0 );
+            }
+
+            mrLineProperties.maCustomDash.push_back( LineProperties::DashStop( nDash, nSp ) );
+        }
         break;
 
         // LineJoinPropertiesGroup
