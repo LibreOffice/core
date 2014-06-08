@@ -1210,7 +1210,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
     }
 
     // chart element
-    SvXMLElementExport* pElChart = 0;
+    boost::scoped_ptr<SvXMLElementExport> pElChart;
 
     // get property states for autostyles
     if( mxExpPropMapper.is())
@@ -1283,7 +1283,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         AddAutoStyleAttribute( aPropertyStates );
 
         //element
-        pElChart = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_CHART, true, true );
+        pElChart.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_CHART, true, true ));
     }
     else    // autostyles
     {
@@ -1540,10 +1540,6 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         // #85929# always export table, otherwise clipboard may lose data
         exportTable();
     }
-
-    // close <chart:chart> element
-    if( pElChart )
-        delete pElChart;
 }
 
 static void lcl_exportComplexLabel( const Sequence< uno::Any >& rComplexLabel, SvXMLExport& rExport )
@@ -1866,7 +1862,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
 
     // plot-area element
 
-    SvXMLElementExport* pElPlotArea = 0;
+    boost::scoped_ptr<SvXMLElementExport> pElPlotArea;
     // get property states for autostyles
     xPropSet = Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY );
     if( xPropSet.is())
@@ -1956,7 +1952,7 @@ void SchXMLExportHelper_Impl::exportPlotArea(
         }
 
         // plot-area element
-        pElPlotArea = new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_PLOT_AREA, true, true );
+        pElPlotArea.reset(new SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_PLOT_AREA, true, true ));
 
         //inner position rectangle element
         exportCoordinateRegion( xDiagram );
@@ -2111,9 +2107,6 @@ void SchXMLExportHelper_Impl::exportPlotArea(
             }
         }
     }
-
-    if( pElPlotArea )
-        delete pElPlotArea;
 }
 
 void SchXMLExportHelper_Impl::exportCoordinateRegion( const uno::Reference< chart::XDiagram >& xDiagram )
