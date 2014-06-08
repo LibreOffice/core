@@ -27,6 +27,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -244,6 +245,8 @@ namespace vclcanvas
     bool SpriteCanvasHelper::updateScreen( bool bUpdateAll,
                                            bool&    io_bSurfaceDirty )
     {
+        ClipManager *clipMgr = ClipManager::GetInstance();
+
         if( !mpRedrawManager ||
             !mpOwningSpriteCanvas ||
             !mpOwningSpriteCanvas->getFrontBuffer() ||
@@ -277,7 +280,7 @@ namespace vclcanvas
             // be redrawn otherwise)
             const Region aFullWindowRegion( Rectangle(aEmptyPoint,
                                                       aOutDevSize) );
-            pTargetWindow->ExpandPaintClipRegion(aFullWindowRegion);
+            clipMgr->ExpandPaintClipRegion( pTargetWindow, aFullWindowRegion);
         }
 
         // TODO(P1): Might be worthwile to track areas of background

@@ -216,7 +216,9 @@ void Window::ImplToBottomChild()
 
 void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
 {
-    DBG_ASSERT( ClipManager::GetInstance()->IsOverlapWindow(this), "Window::ImplCalcToTop(): Is not a OverlapWindow" );
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
+    DBG_ASSERT( clipMgr->IsOverlapWindow(this), "Window::ImplCalcToTop(): Is not a OverlapWindow" );
 
     if ( !mpWindowImpl->mbFrame )
     {
@@ -227,7 +229,7 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
             Region  aRegion( Rectangle( aPoint,
                                         Size( mnOutWidth, mnOutHeight ) ) );
             Region  aInvalidateRegion;
-            ImplCalcOverlapRegionOverlaps( aRegion, aInvalidateRegion );
+            clipMgr->CalcOverlapRegionOverlaps( this, aRegion, aInvalidateRegion );
 
             if ( !aInvalidateRegion.IsEmpty() )
             {
@@ -243,7 +245,9 @@ void Window::ImplCalcToTop( ImplCalcToTopData* pPrevData )
 
 void Window::ImplToTop( sal_uInt16 nFlags )
 {
-    DBG_ASSERT( ClipManager::GetInstance()->IsOverlapWindow(this), "Window::ImplToTop(): Is not a OverlapWindow" );
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
+    DBG_ASSERT( clipMgr->IsOverlapWindow(this), "Window::ImplToTop(): Is not a OverlapWindow" );
 
     if ( mpWindowImpl->mbFrame )
     {
@@ -324,8 +328,8 @@ void Window::ImplToTop( sal_uInt16 nFlags )
             {
                 // reset background storage
                 if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-                    ImplInvalidateAllOverlapBackgrounds();
-                mpWindowImpl->mpOverlapWindow->ImplSetClipFlagOverlapWindows();
+                    clipMgr->InvalidateAllOverlapBackgrounds( this );
+                clipMgr->SetClipFlagOverlapWindows( mpWindowImpl->mpOverlapWindow );
             }
         }
     }
@@ -566,12 +570,12 @@ void Window::SetZOrder( Window* pRefWindow, sal_uInt16 nFlags )
     {
         // restore background storage
         if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-            ImplInvalidateAllOverlapBackgrounds();
+            clipMgr->InvalidateAllOverlapBackgrounds( this );
 
         if ( mpWindowImpl->mbInitWinClipRegion || !mpWindowImpl->maWinClipRegion.IsEmpty() )
         {
             bool bInitWinClipRegion = mpWindowImpl->mbInitWinClipRegion;
-            ImplSetClipFlag();
+            clipMgr->SetClipFlag( this );
 
             // When ClipRegion was not initialised, assume
             // the window has not been sent, therefore do not

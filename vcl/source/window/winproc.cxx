@@ -35,6 +35,8 @@
 #include <vcl/help.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/clipmgr.hxx>
+
 #include <touch/touch.h>
 
 #include <svdata.hxx>
@@ -1508,6 +1510,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
 
 static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
     // give up background save when system paints arrive
     Window* pSaveBackWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFirstBackWin;
     while ( pSaveBackWin )
@@ -1516,7 +1519,7 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool 
         Rectangle aRect( Point( pSaveBackWin->GetOutOffXPixel(), pSaveBackWin->GetOutOffYPixel() ),
                          Size( pSaveBackWin->GetOutputWidthPixel(), pSaveBackWin->GetOutputHeightPixel() ) );
         if ( aRect.IsOver( rBoundRect ) )
-            pSaveBackWin->ImplDeleteOverlapBackground();
+            clipMgr->DeleteOverlapBackground( pSaveBackWin );
         pSaveBackWin = pNext;
     }
 
@@ -1550,6 +1553,8 @@ static void KillOwnPopups( Window* pWindow )
 
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
+
     if( pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE) )
     {
         KillOwnPopups( pWindow );
@@ -1568,7 +1573,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
             pWindow->mnOutHeight = nNewHeight;
             pWindow->ImplGetWindowImpl()->mbWaitSystemResize = false;
             if ( pWindow->IsReallyVisible() )
-                pWindow->ImplSetClipFlag();
+                clipMgr->SetClipFlag( pWindow );
             if ( pWindow->IsVisible() || pWindow->ImplGetWindow()->ImplGetWindowImpl()->mbAllResize ||
                 ( pWindow->ImplGetWindowImpl()->mbFrame && pWindow->ImplGetWindowImpl()->mpClientWindow ) )   // propagate resize for system border windows
             {

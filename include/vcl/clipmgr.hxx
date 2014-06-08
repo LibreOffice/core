@@ -35,28 +35,59 @@ private:
 
     void clipSiblings( Window* pWindow, Region& rRegion );
     void intersectClipRegion( Window* pWindow, Region& rRegion );
+    void intersectAndUnionOverlapWindows(Window* pWindow, const Region& rInterRegion, Region& rRegion);
     void excludeOverlapWindows( Window *pWindow, Region& rRegion );
     void initChildClipRegion( Window *pWindow );
+
+    bool clipSysObject( Window *pWindow, const Region* pOldRegion );
+    void updateSysObjChildrenClip( Window *pWindow );
+    void updateSysObjOverlapsClip( Window *pWindow );
 
 public:
     ~ClipManager() { instanceFlag = false; }
     static ClipManager *GetInstance();
+
+    void Init( Window *pWindow );
+    void InitClipRegion( Window *pWindow );
+
+    Region GetActiveClipRegion( const Window *pWindow ) const;
+    void ClipToPaintRegion( Window *pWindow, Rectangle& rDstRect );
+
+    bool SetClipFlag( Window *pWindow, bool bSysObjOnlySmaller = false );
+    bool SetClipFlagChildren( Window *pWindow, bool bSysObjOnlySmaller = false );
+    bool SetClipFlagOverlapWindows( Window *pWindow, bool bSysObjOnlySmaller = false );
 
     void EnableClipSiblings( Window *pWindow, bool bClipSiblings = true );
     void SetParentClipMode( Window* pWindow, sal_uInt16 nMode );
     sal_uInt16 GetParentClipMode( Window* pWindow ) const;
 
     bool IsOverlapWindow( Window* pWindow ) const;
+    void CalcOverlapRegionOverlaps( Window* pWindow, const Region& rInterRegion, Region& rRegion );
+    void CalcOverlapRegion( Window* pWindow, const Rectangle& rSourceRect, Region& rRegion,
+                            bool bChildren, bool bParent, bool bSiblings );
 
-    void InitClipRegion( Window *pWindow );
     void ClipBoundaries( Window* pWindow, Region& rRegion, bool bThis, bool bOverlaps );
     bool ClipChildren( Window *pWindow, Region& rRegion );
     void ClipAllChildren( Window *pWindow, Region& rRegion );
     Region* GetChildClipRegion( Window* pWindow );
     bool ClipCoversWholeWindow( Window *pWindow );
 
+    void SaveBackground( Window *pWindow, const Point& rPos, const Size& rSize,
+                         const Point& rDestOff, VirtualDevice& rSaveDevice );
+    void SaveOverlapBackground( Window *pWindow );
+    bool RestoreOverlapBackground( Window *pWindow, Region& rInvRegion );
+    void DeleteOverlapBackground( Window *pWindow );
+    void InvalidateAllOverlapBackgrounds( Window *pWindow );
+
+    void UpdateSysObjClip( Window *pWindow );
+
     void Intersect( Window* pWindow, Region& rRegion );
     void Exclude( Window *pWindow, Region& rRegion );
+
+    /** Adds the submitted region to the paint clip region so you can
+        paint additional parts of your window if necessary.
+     */
+    void ExpandPaintClipRegion( Window *pWindow, const Region& rRegion );
 };
 
 #endif

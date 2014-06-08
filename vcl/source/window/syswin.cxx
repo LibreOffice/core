@@ -29,6 +29,7 @@
 #include <vcl/syswin.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/unowrap.hxx>
+#include <vcl/clipmgr.hxx>
 
 #include <rtl/strbuf.hxx>
 
@@ -247,6 +248,8 @@ void SystemWindow::SetIcon( sal_uInt16 nIcon )
 
 void SystemWindow::EnableSaveBackground( bool bSave )
 {
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+
     if( ImplGetSVData()->maWinData.mbNoSaveBackground )
         bSave = false;
 
@@ -257,7 +260,7 @@ void SystemWindow::EnableSaveBackground( bool bSave )
     {
         pWindow->mpWindowImpl->mpOverlapData->mbSaveBack = bSave;
         if ( !bSave )
-            pWindow->ImplDeleteOverlapBackground();
+            pClipMgr->DeleteOverlapBackground( pWindow );
     }
 }
 

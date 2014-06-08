@@ -1525,7 +1525,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
     if ( IsReallyVisible() )
     {
         if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-            ImplInvalidateAllOverlapBackgrounds();
+            clipMgr->InvalidateAllOverlapBackgrounds( this );
 
         Rectangle aOldWinRect( Point( nOldOutOffX, nOldOutOffY ),
                                Size( nOldOutWidth, nOldOutHeight ) );
@@ -1615,9 +1615,9 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             if ( bCopyBits && !pOverlapRegion )
             {
                 pOverlapRegion = new Region();
-                ImplCalcOverlapRegion( Rectangle( Point( mnOutOffX, mnOutOffY ),
+                clipMgr->CalcOverlapRegion( this, Rectangle( Point( mnOutOffX, mnOutOffY ),
                                                   Size( mnOutWidth, mnOutHeight ) ),
-                                       *pOverlapRegion, false, true, true );
+                                            *pOverlapRegion, false, true, true );
             }
             mpWindowImpl->mnX = nX;
             mpWindowImpl->maPos.X() = nOrgX;
@@ -1633,9 +1633,9 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             if ( bCopyBits && !pOverlapRegion )
             {
                 pOverlapRegion = new Region();
-                ImplCalcOverlapRegion( Rectangle( Point( mnOutOffX, mnOutOffY ),
+                clipMgr->CalcOverlapRegion( this, Rectangle( Point( mnOutOffX, mnOutOffY ),
                                                   Size( mnOutWidth, mnOutHeight ) ),
-                                       *pOverlapRegion, false, true, true );
+                                            *pOverlapRegion, false, true, true );
             }
             mpWindowImpl->mnY = nY;
             mpWindowImpl->maPos.Y() = nY;
@@ -1705,11 +1705,11 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             {
                 // reset background storage
                 if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mpSaveBackDev )
-                    ImplDeleteOverlapBackground();
+                    clipMgr->DeleteOverlapBackground( this );
                 if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-                    ImplInvalidateAllOverlapBackgrounds();
+                    clipMgr->InvalidateAllOverlapBackgrounds( this );
                 // set Clip-Flag
-                bUpdateSysObjClip = !ImplSetClipFlag( true );
+                bUpdateSysObjClip = !clipMgr->SetClipFlag( this, true );
             }
 
             // invalidate window content ?
@@ -1802,7 +1802,7 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 
         // adapt system objects
         if ( bUpdateSysObjClip )
-            ImplUpdateSysObjClip();
+            clipMgr->UpdateSysObjClip( this );
         if ( bUpdateSysObjPos )
             ImplUpdateSysObjPos();
         if ( bNewSize && mpWindowImpl->mpSysObj )
@@ -2291,7 +2291,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
             if ( clipMgr->IsOverlapWindow( this ) && !mpWindowImpl->mbFrame )
             {
-                if ( ImplRestoreOverlapBackground( aInvRegion ) )
+                if ( clipMgr->RestoreOverlapBackground( this, aInvRegion ) )
                     bSaveBack = true;
             }
 
@@ -2307,7 +2307,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
             bRealVisibilityChanged = mpWindowImpl->mbReallyVisible;
             ImplResetReallyVisible();
-            ImplSetClipFlag();
+            clipMgr->SetClipFlag( this );
 
             if ( clipMgr->IsOverlapWindow( this ) && !mpWindowImpl->mbFrame )
             {
@@ -2393,13 +2393,13 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
 
             // save background
             if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mbSaveBack )
-                ImplSaveOverlapBackground();
+                clipMgr->SaveOverlapBackground( this );
             // adjust mpWindowImpl->mbReallyVisible
             bRealVisibilityChanged = !mpWindowImpl->mbReallyVisible;
             ImplSetReallyVisible();
 
             // assure clip rectangles will be recalculated
-            ImplSetClipFlag();
+            clipMgr->SetClipFlag( this );
 
             if ( !mpWindowImpl->mbFrame )
             {
@@ -2469,7 +2469,7 @@ void Window::Show( bool bVisible, sal_uInt16 nFlags )
         return;
     // invalidate all saved backgrounds
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-        ImplInvalidateAllOverlapBackgrounds();
+        clipMgr->InvalidateAllOverlapBackgrounds( this );
 
     // the SHOW/HIDE events also serve as indicators to send child creation/destroy events to the access bridge
     // However, the access bridge only uses this event if the data member is not NULL (it's kind of a hack that

@@ -20,6 +20,8 @@
 #include "impanmvw.hxx"
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
+#include <vcl/clipmgr.hxx>
+
 #include <tools/helpers.hxx>
 #include <boost/scoped_ptr.hpp>
 
@@ -42,6 +44,8 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         mbHMirr         ( maSz.Width() < 0L ),
         mbVMirr         ( maSz.Height() < 0L )
 {
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+
     Animation::ImplIncAnimCount();
 
     // Mirrored horizontally?
@@ -78,7 +82,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         MapMode aTempMap( mpOut->GetMapMode() );
         aTempMap.SetOrigin( Point() );
         mpBackground->SetMapMode( aTempMap );
-        ( (Window*) mpOut )->SaveBackground( maDispPt, maDispSz, Point(), *mpBackground );
+        pClipMgr->SaveBackground( (Window*) mpOut, maDispPt, maDispSz, Point(), *mpBackground );
         mpBackground->SetMapMode( MapMode() );
     }
     else
@@ -289,6 +293,8 @@ void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 
 void ImplAnimView::ImplRepaint()
 {
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+
     const bool bOldPause = mbPause;
 
     if( mpOut->GetOutDevType() == OUTDEV_WINDOW )
@@ -296,7 +302,7 @@ void ImplAnimView::ImplRepaint()
         MapMode aTempMap( mpOut->GetMapMode() );
         aTempMap.SetOrigin( Point() );
         mpBackground->SetMapMode( aTempMap );
-        ( (Window*) mpOut )->SaveBackground( maDispPt, maDispSz, Point(), *mpBackground );
+        pClipMgr->SaveBackground( (Window*) mpOut, maDispPt, maDispSz, Point(), *mpBackground );
         mpBackground->SetMapMode( MapMode() );
     }
     else

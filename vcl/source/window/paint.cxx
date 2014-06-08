@@ -417,7 +417,7 @@ void Window::ImplInvalidate( const Region* pRegion, sal_uInt16 nFlags )
 
     // reset background storage
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-        ImplInvalidateAllOverlapBackgrounds();
+        clipMgr->InvalidateAllOverlapBackgrounds( this );
 
     // check what has to be redrawn
     bool bInvalidateAll = !pRegion;
@@ -701,6 +701,7 @@ void Window::SetPaintTransparent( bool bTransparent )
 
 void Window::SetWindowRegionPixel()
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetWindowRegionPixel();
@@ -716,15 +717,15 @@ void Window::SetWindowRegionPixel()
         {
             mpWindowImpl->maWinRegion = Region(true);
             mpWindowImpl->mbWinRegion = false;
-            ImplSetClipFlag();
+            clipMgr->SetClipFlag( this );
 
             if ( IsReallyVisible() )
             {
                 // restore background storage
                 if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mpSaveBackDev )
-                    ImplDeleteOverlapBackground();
+                    clipMgr->DeleteOverlapBackground( this );
                 if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-                    ImplInvalidateAllOverlapBackgrounds();
+                    clipMgr->InvalidateAllOverlapBackgrounds( this );
                 Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
                 Region      aRegion( aRect );
                 ImplInvalidateParentFrameRegion( aRegion );
@@ -735,6 +736,7 @@ void Window::SetWindowRegionPixel()
 
 void Window::SetWindowRegionPixel( const Region& rRegion )
 {
+    ClipManager *clipMgr = ClipManager::GetInstance();
 
     if ( mpWindowImpl->mpBorderWindow )
         mpWindowImpl->mpBorderWindow->SetWindowRegionPixel( rRegion );
@@ -795,23 +797,23 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
             {
                 mpWindowImpl->maWinRegion = Region(true);
                 mpWindowImpl->mbWinRegion = false;
-                ImplSetClipFlag();
+                clipMgr->SetClipFlag( this );
             }
         }
         else
         {
             mpWindowImpl->maWinRegion = rRegion;
             mpWindowImpl->mbWinRegion = true;
-            ImplSetClipFlag();
+            clipMgr->SetClipFlag( this );
         }
 
         if ( IsReallyVisible() )
         {
             // restore background storage
             if ( mpWindowImpl->mpOverlapData && mpWindowImpl->mpOverlapData->mpSaveBackDev )
-                ImplDeleteOverlapBackground();
+                clipMgr->DeleteOverlapBackground( this );
             if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-                ImplInvalidateAllOverlapBackgrounds();
+                clipMgr->InvalidateAllOverlapBackgrounds( this );
             Rectangle   aRect( Point( mnOutOffX, mnOutOffY ), Size( mnOutWidth, mnOutHeight ) );
             Region      aRegion( aRect );
             ImplInvalidateParentFrameRegion( aRegion );
@@ -1209,7 +1211,7 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     // restore background storage
     if ( mpWindowImpl->mpFrameData->mpFirstBackWin )
-        ImplInvalidateAllOverlapBackgrounds();
+        clipMgr->InvalidateAllOverlapBackgrounds( this );
 
     if ( mpWindowImpl->mpCursor )
         mpWindowImpl->mpCursor->ImplSuspend();
@@ -1248,7 +1250,7 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     if ( !(nFlags & SCROLL_NOINVALIDATE) )
     {
-        ImplCalcOverlapRegion( aRectMirror, aInvalidateRegion, !bScrollChildren, true, false );
+        clipMgr->CalcOverlapRegion( this, aRectMirror, aInvalidateRegion, !bScrollChildren, true, false );
 
         // --- RTL ---
         // if the scrolling on the device is performed in the opposite direction

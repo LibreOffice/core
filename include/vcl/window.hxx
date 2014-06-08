@@ -401,8 +401,6 @@ public:
     SAL_DLLPRIVATE void                 ImplInvalidateFrameRegion( const Region* pRegion, sal_uInt16 nFlags );
     SAL_DLLPRIVATE void                 ImplInvalidateOverlapFrameRegion( const Region& rRegion );
 
-    SAL_DLLPRIVATE bool                 ImplSetClipFlag( bool bSysObjOnlySmaller = false );
-
     SAL_DLLPRIVATE bool                 ImplIsWindowOrChild( const Window* pWindow, bool bSystemWindow = false ) const;
     SAL_DLLPRIVATE bool                 ImplIsChild( const Window* pWindow, bool bSystemWindow = false ) const;
     SAL_DLLPRIVATE bool                 ImplIsFloatingWindow() const;
@@ -428,8 +426,6 @@ public:
     SAL_DLLPRIVATE void                 ImplNotifyIconifiedState( bool bIconified );
 
     SAL_DLLPRIVATE void                 ImplUpdateAll( bool bOverlapWindows = true );
-
-    SAL_DLLPRIVATE void                 ImplDeleteOverlapBackground();
 
     SAL_DLLPRIVATE void                 ImplControlFocus( sal_uInt16 nFlags = 0 );
 
@@ -470,13 +466,6 @@ protected:
 
     SAL_DLLPRIVATE void                 ImplScroll( const Rectangle& rRect, long nHorzScroll, long nVertScroll, sal_uInt16 nFlags );
 
-    SAL_DLLPRIVATE void                 ImplSaveOverlapBackground();
-    SAL_DLLPRIVATE bool                 ImplRestoreOverlapBackground( Region& rInvRegion );
-    SAL_DLLPRIVATE void                 ImplInvalidateAllOverlapBackgrounds();
-
-    SAL_DLLPRIVATE bool                 ImplSetClipFlagChildren( bool bSysObjOnlySmaller = false );
-    SAL_DLLPRIVATE bool                 ImplSetClipFlagOverlapWindows( bool bSysObjOnlySmaller = false );
-
     SAL_DLLPRIVATE WinBits              ImplInitRes( const ResId& rResId );
     SAL_DLLPRIVATE WindowResHeader      ImplLoadResHeader( const ResId& rResId );
     SAL_DLLPRIVATE void                 ImplLoadRes( const ResId& rResId );
@@ -511,17 +500,6 @@ private:
 
     SAL_DLLPRIVATE void                 ImplPointToLogic( Font& rFont ) const;
     SAL_DLLPRIVATE void                 ImplLogicToPoint( Font& rFont ) const;
-
-    SAL_DLLPRIVATE bool                 ImplSysObjClip( const Region* pOldRegion );
-    SAL_DLLPRIVATE void                 ImplUpdateSysObjChildrenClip();
-    SAL_DLLPRIVATE void                 ImplUpdateSysObjOverlapsClip();
-    SAL_DLLPRIVATE void                 ImplUpdateSysObjClip();
-
-    SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows( const Region& rInterRegion, Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplIntersectAndUnionOverlapWindows2( const Region& rInterRegion, Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplCalcOverlapRegionOverlaps( const Region& rInterRegion, Region& rRegion );
-    SAL_DLLPRIVATE void                 ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegion,
-                                                               bool bChildren, bool bParent, bool bSiblings );
 
     SAL_DLLPRIVATE void                 ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags );
     SAL_DLLPRIVATE void                 ImplCallOverlapPaint();
@@ -772,10 +750,6 @@ public:
     bool                                ClipCoversWholeWindow();
     Region                              GetPaintRegion() const;
     bool                                IsInPaint() const;
-    // while IsInPaint returns true ExpandPaintClipRegion adds the
-    // submitted region to the paint clip region so you can
-    // paint additional parts of your window if necessary
-    void                                ExpandPaintClipRegion( const Region& rRegion );
 
     void                                SetParent( Window* pNewParent );
     Window*                             GetParent() const;
@@ -1036,9 +1010,6 @@ public:
     bool                                HandleScrollCommand( const CommandEvent& rCmd,
                                                              ScrollBar* pHScrl = NULL,
                                                              ScrollBar* pVScrl = NULL );
-
-    void                                SaveBackground( const Point& rPos, const Size& rSize,
-                                                        const Point& rDestOff, VirtualDevice& rSaveDevice );
 
     const SystemEnvData*                GetSystemData() const;
     ::com::sun::star::uno::Any          GetSystemDataAny() const;
