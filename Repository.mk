@@ -209,6 +209,10 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(ENABLE_KDE),kdebe1) \
 	$(if $(ENABLE_KDE4),kde4be1) \
+	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
+		$(if $(ENABLE_KDE),vclplug_kde) \
+		$(if $(ENABLE_KDE4),vclplug_kde4) \
+	) \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
@@ -366,8 +370,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
 		vclplug_gen \
 		$(if $(ENABLE_TDE),vclplug_tde) \
-		$(if $(ENABLE_KDE),vclplug_kde) \
-		$(if $(ENABLE_KDE4),vclplug_kde4) \
 		$(if $(ENABLE_HEADLESS),,vclplug_svp) \
 	) \
 	writerperfect \
