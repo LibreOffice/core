@@ -77,6 +77,7 @@ public:
     using base_t::clear;
     using base_t::empty;
     using base_t::size;
+    using base_t::reserve;
 
     sorted_vector( bool FirstDefault=false )
     {
@@ -217,6 +218,16 @@ public:
     void Resort()
     {
         std::stable_sort(begin_nonconst() + mOffset, end_nonconst(), Compare());
+    }
+
+    void newDefault( const_iterator const& position )
+    {
+        if ( !mOffset || position == begin() || position == end() )
+            return;
+        value_type tmp = front();
+        base_t::operator[]( 0 ) = *position;
+        erase( position );
+        insert( tmp );
     }
 
 private:

@@ -2653,87 +2653,88 @@ namespace docfunc
     }
 }
 
+SwFrmFmts::SwFrmFmts() : SwFrmFmtsBase( true )
+{
+}
+
 SwFrmFmts::~SwFrmFmts()
 {
     DeleteAndDestroyAll();
 }
 
-void SwFrmFmts::DeleteAndDestroyAll( bool keepDefault )
+SwFrmFmts::const_iterator SwFrmFmts::find( const value_type& x ) const
 {
-    if ( empty() )
-        return;
-    const int _offset = keepDefault ? 1 : 0;
-    for( const_iterator it = begin() + _offset; it != end(); ++it )
-        delete *it;
-    if ( _offset )
-        SwFrmFmtsBase::erase( begin_nonconst() + _offset, end_nonconst() );
-    else
-        clear();
+    return SwFrmFmtsBase::find( x );
 }
 
-SwFrmFmts::find_insert_type SwFrmFmts::insert( const value_type& x )
+bool CompareSwFrmFmts::operator()(SwFrmFmt* const& lhs, SwFrmFmt* const& rhs) const
 {
-    SwFrmFmtsBase::push_back( x );
-    SAL_WARN_IF(x->list != 0, "sw", "Inserting already assigned item");
+    if (lhs->Which() < rhs->Which())
+        return true;
+    if (lhs->Which() > rhs->Which())
+        return false;
+    return (lhs->GetName().CompareTo( rhs->GetName() ) < 0);
+}
+
+SwFrmFmts::find_insert_type SwFrmFmts::insert( const value_type& x, bool isNewRoot )
+{
+    find_insert_type ret = SwFrmFmtsBase::insert( x );
+    SAL_WARN_IF(x->list != 0, "sw", "Inserting already assigned SwFrmFmt");
+    SAL_WARN_IF(isNewRoot == ret.second, "sw", "Error condition in insert SwFrmFmt");
     x->list = this;
-    return std::make_pair(end() - 1 , true);
+    return ret;
+}
+
+std::pair<SwFrmFmts::const_iterator,bool> SwFrmFmts::insert( const value_type& x )
+{
+    return insert( x, false );
 }
 
 SwFrmFmts::size_type SwFrmFmts::erase( const value_type& x )
 {
-    const_iterator const ret = find( x );
-    SAL_WARN_IF(x->list != this, "sw", "Removing invalid / unassigned item");
-    if (ret != end()) {
-        SwFrmFmtsBase::erase( begin_nonconst() + (ret - begin()) );
+    size_type ret = SwFrmFmtsBase::erase( x );
+    if (ret) {
+        SAL_WARN_IF(x->list != this, "sw", "Removed invalid / unassigned SwFrmFmt");
         x->list = 0;
-        return 1;
     }
-    return 0;
+    return ret;
 }
 
 void SwFrmFmts::erase( size_type index )
 {
-    erase( begin_nonconst() + index );
+    erase( begin() + index );
 }
 
 void SwFrmFmts::erase( const_iterator const& position )
 {
+    SAL_WARN_IF((*position)->list != this, "sw", "Removing invalid / unassigned SwFrmFmt");
     (*position)->list = 0;
-    SwFrmFmtsBase::erase( begin_nonconst() + (position - begin()) );
+    SwFrmFmtsBase::erase( position );
 }
-
-SwFrmFmts::const_iterator SwFrmFmts::find( const value_type& x ) const
+/*
+std::pair<SwFrmFmts::const_iterator, SwFrmFmts::const_iterator>
+    SwFrmFmts::find( const value_type& x, bool &root ) const
 {
-    return std::find( begin(), end(), x );
+    if ( emptry() ) {
+        root = false;
+        return std::pair<const_iterator, const_iterator>( end(), end() );
+    }
+    std::pair<const_iterator, const_iterator> const its =
+            std::equal_range(begin(), end(), x, CompareSwFrmFmts());
+    root = CompareSwPageDescs()(x, front());
+    return its;
 }
-
-bool SwFrmFmts::Contains( const SwFrmFmts::value_type& x ) const
+*/
+bool SwFrmFmts::Contains( const value_type& x ) const
 {
     return (x->list == this);
 }
 
 bool SwFrmFmts::newDefault( const value_type& x )
 {
-    bool inserted = false;
-    const_iterator it = find( x );
-    if (it == end()) {
-        push_back( x );
-        it = end() - 1;
-        inserted = true;
-    }
-    newDefault( it );
-    return inserted;
-}
-
-void SwFrmFmts::newDefault( const_iterator const& position )
-{
-    if (position == begin())
-        return;
-    SwFrmFmt *tmp;
-    tmp = front();
-    erase( position );
-    SwFrmFmtsBase::operator[]( 0 ) = *position;
-    insert( tmp );
+    find_insert_type ret = insert( x, true );
+    SwFrmFmtsBase::newDefault( ret.first );
+    return ret.second;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

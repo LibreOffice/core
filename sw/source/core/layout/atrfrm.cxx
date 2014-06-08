@@ -2426,10 +2426,10 @@ void SwFrmFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
     SwFrmFmts::const_iterator it;
     bool move_entry = false;
 
-    if (list) {
-        it = list->find( this );
-        SAL_WARN_IF( list->end() == it, "sw", "SwFrmFmt not found in expected list" );
-//        move_entry = (it != list->begin());
+    if (_list) {
+        it = _list->find( this );
+        SAL_WARN_IF( _list->end() == it, "sw", "SwFrmFmt not found in expected list" );
+        move_entry = (it != list->begin());
         if (move_entry)
             // Clears list
             list->erase( it );
