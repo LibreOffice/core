@@ -809,7 +809,8 @@ DECLARE_OOXMLEXPORT_TEST(testFDO73546, "FDO73546.docx")
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
     if (!pXmlDoc)
         return;
-    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "distL","0");
+
+    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:pPr/w:framePr");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo69616, "fdo69616.docx")
@@ -1022,12 +1023,10 @@ DECLARE_OOXMLEXPORT_TEST(testFdo76249, "fdo76249.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo76979, "fdo76979.docx")
 {
-    // The problem was that black was exported as "auto" fill color, resulting in well-formed, but invalid XML.
     xmlDocPtr pXmlDoc = parseExport("word/header2.xml");
     if (!pXmlDoc)
        return;
-    // This was "auto", not "FFFFFF".
-    assertXPath(pXmlDoc, "//wps:spPr/a:solidFill/a:srgbClr", "val", "FFFFFF");
+    assertXPath(pXmlDoc, "/w:hdr/w:p[1]/w:pPr/w:framePr");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testShapeEffectPreservation, "shape-effect-preservation.docx")
