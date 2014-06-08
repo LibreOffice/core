@@ -40,26 +40,21 @@ struct SwCSVData
 class SwFindEntryDialog;
 class SwCreateAddressListDialog : public SfxModalDialog
 {
-    FixedInfo               m_aAddressInformation;
     SwAddressControl_Impl*  m_pAddressControl;
 
-    PushButton              m_aNewPB;
-    PushButton              m_aDeletePB;
-    PushButton              m_aFindPB;
-    PushButton              m_aCustomizePB;
+    PushButton              *m_pNewPB;
+    PushButton              *m_pDeletePB;
+    PushButton              *m_pFindPB;
+    PushButton              *m_pCustomizePB;
 
-    FixedInfo               m_aViewEntriesFI;
-    PushButton              m_aStartPB;
-    PushButton              m_aPrevPB;
-    NumericField            m_aSetNoNF;
-    PushButton              m_aNextPB;
-    PushButton              m_aEndPB;
+    PushButton              *m_pStartPB;
+    PushButton              *m_pPrevPB;
+    NumericField            *m_pSetNoNF;
+    PushButton              *m_pNextPB;
+    PushButton              *m_pEndPB;
 
-    FixedLine               m_aSeparatorFL;
 
-    OKButton                m_aOK;
-    CancelButton            m_aCancel;
-    HelpButton              m_aHelp;
+    OKButton                *m_pOK;
 
     OUString                m_sAddressListFilterName;
     OUString                m_sURL;

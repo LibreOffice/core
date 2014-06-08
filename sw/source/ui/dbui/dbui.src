@@ -120,4 +120,9 @@ String ST_CONFIGUREMAIL
     Text[ en-US ] = "In order to be able to send mail merge documents by e-mail, %PRODUCTNAME requires information about the e-mail account to be used.\n\nDo you want to enter e-mail account information now?";
 };
 
+String ST_FILTERNAME
+{
+    Text [ en-US ] = "%PRODUCTNAME Address List (.csv)";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
