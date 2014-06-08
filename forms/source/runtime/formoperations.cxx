@@ -481,6 +481,8 @@ namespace frm
         bool commit1Form(Reference< XFormController > xCntrl, bool &needConfirmation, bool &shouldCommit)
         {
             Reference< XFormOperations > xFrmOps(xCntrl->getFormOperations());
+            if (!xFrmOps.is())
+                return true;
             if (!xFrmOps->commitCurrentControl())
                 return false;
 
