@@ -2190,6 +2190,14 @@ DECLARE_OOXMLIMPORT_TEST(testCaption, "caption.docx")
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xStyle, "CharPosture"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testGroupshapeTrackedchanges, "groupshape-trackedchanges.docx")
+{
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    // Shape text was completely missing, ensure inserted text is available.
+    CPPUNIT_ASSERT_EQUAL(OUString(" Inserted"), xShape->getString());
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
