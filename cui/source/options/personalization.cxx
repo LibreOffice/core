@@ -44,22 +44,37 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     get( m_pProgressLabel, "progress_label" );
 
     get(m_vResultList[0], "result1");
+    m_vResultList[0]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+
     get(m_vResultList[1], "result2");
+    m_vResultList[1]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+
     get(m_vResultList[2], "result3");
+    m_vResultList[2]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+
     get(m_vResultList[3], "result4");
+    m_vResultList[3]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+
     get(m_vResultList[4], "result5");
+    m_vResultList[4]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+
     get(m_vResultList[5], "result6");
+    m_vResultList[5]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+
     get(m_vResultList[6], "result7");
+    m_vResultList[6]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+
     get(m_vResultList[7], "result8");
+    m_vResultList[7]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
+
     get(m_vResultList[8], "result9");
+    m_vResultList[8]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 }
 
-OUString SelectPersonaDialog::GetPersonaURL() const
+OUString SelectPersonaDialog::GetSelectedPersona() const
 {
-    OUString aText( m_pEdit->GetText() );
-
-    if ( aText.startsWith( "https://addons.mozilla.org/" ) )
-        return aText;
+    if( !m_aSelectedPersona.isEmpty( ) )
+        return m_aSelectedPersona;
 
     return OUString();
 }
@@ -67,9 +82,71 @@ OUString SelectPersonaDialog::GetPersonaURL() const
 IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, /*pButton*/ )
 {
     OUString searchTerm = m_pEdit->GetText();
+    if( searchTerm.isEmpty( ) )
+        return 0;
+
     OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
     m_aSearchThread = new SearchAndParseThread( this, rSearchURL );
     m_aSearchThread->launch();
+    return 0;
+}
+
+IMPL_LINK( SelectPersonaDialog, SelectPersona, PushButton*, pButton )
+{
+    if( pButton == m_vResultList[0] )
+    {
+        if( !m_vPersonaSettings[0].isEmpty() )
+            m_aSelectedPersona = m_vPersonaSettings[0];
+    }
+
+    else if( pButton == m_vResultList[1] )
+    {
+        if( !m_vPersonaSettings[1].isEmpty() )
+            m_aSelectedPersona = m_vPersonaSettings[1];
+    }
+
+    else if( pButton == m_vResultList[2] )
+    {
+        if( !m_vPersonaSettings[2].isEmpty() )
+            m_aSelectedPersona = m_vPersonaSettings[2];
+    }
+
+    else if( pButton == m_vResultList[3] )
+    {
+        if( !m_vPersonaSettings[3].isEmpty() )
+            m_aSelectedPersona = m_vPersonaSettings[3];
+    }
+
+    else if( pButton == m_vResultList[4] )
+    {
+        if( !m_vPersonaSettings[4].isEmpty() )
+            m_aSelectedPersona = m_vPersonaSettings[4];
+    }
+
+    else if( pButton == m_vResultList[5] )
+    {
+        if( !m_vPersonaSettings[5].isEmpty() )
+            m_aSelectedPersona = m_vPersonaSettings[5];
+    }
+
+    else if( pButton == m_vResultList[6] )
+    {
+        if( !m_vPersonaSettings[6].isEmpty() )
+            m_aSelectedPersona = m_vPersonaSettings[6];
+    }
+
+    else if( pButton == m_vResultList[7] )
+    {
+        if( !m_vPersonaSettings[7].isEmpty() )
+            m_aSelectedPersona = m_vPersonaSettings[7];
+    }
+
+    else if( pButton == m_vResultList[8] )
+    {
+        if( !m_vPersonaSettings[8].isEmpty() )
+            m_aSelectedPersona = m_vPersonaSettings[8];
+    }
+
     return 0;
 }
 
@@ -90,6 +167,11 @@ void SelectPersonaDialog::SetImages( std::vector<Image> &rImageList )
         m_vResultList[nCount]->SetModeImage( *it );
         nCount++;
     }
+}
+
+void SelectPersonaDialog::AddPersonaSetting( OUString& rPersonaSetting )
+{
+    m_vPersonaSettings.push_back( rPersonaSetting );
 }
 
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
@@ -138,7 +220,6 @@ bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
 
     officecfg::Office::Common::Misc::Persona::set( aPersona, batch );
     officecfg::Office::Common::Misc::PersonaSettings::set( m_aPersonaSettings, batch );
-
     batch->commit();
 
     if ( bModified )
@@ -177,7 +258,7 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 
     while ( aDialog.Execute() == RET_OK )
     {
-        OUString aURL( aDialog.GetPersonaURL() );
+        OUString aURL( aDialog.GetSelectedPersona() );
         if ( !aURL.isEmpty() )
         {
             if ( CopyPersonaToGallery( aURL ) )
@@ -245,11 +326,11 @@ static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUSt
         return false;
 
     *pPreviewURL = searchValue( rBuffer, persona, "&#34;previewURL&#34;:&#34;" );
-    if ( pAccentColor->isEmpty() )
+    if ( pPreviewURL->isEmpty() )
         return false;
 
     *pName = searchValue( rBuffer, persona, "&#34;name&#34;:&#34;" );
-    if ( pAccentColor->isEmpty() )
+    if ( pName->isEmpty() )
         return false;
 
     return true;
@@ -262,43 +343,34 @@ bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
     if ( !xFileAccess.is() )
         return false;
 
-    uno::Reference< io::XInputStream > xStream;
-    try {
-        xStream = xFileAccess->openFileRead( rURL );
-    }
-    catch (...)
-    {
-        return false;
-    }
-    if ( !xStream.is() )
-        return false;
+    OUString aName, aHeaderURL, aFooterURL, aTextColor, aAccentColor;
 
-    // read the persona specification
-    // NOTE: Parsing for real is an overkill here; and worse - I tried, and
-    // the HTML the site provides is not 100% valid ;-)
-    const sal_Int32 BUF_LEN = 8000;
-    uno::Sequence< sal_Int8 > buffer( BUF_LEN );
-    OStringBuffer aBuffer( 64000 );
+    // get the required fields from rURL
+    sal_Int32 nOldIndex = 0;
+    sal_Int32 nNewIndex = rURL.indexOf( ';', nOldIndex );
+    aName = rURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
 
-    sal_Int32 nRead = 0;
-    while ( ( nRead = xStream->readBytes( buffer, BUF_LEN ) ) == BUF_LEN )
-        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+    nOldIndex = nNewIndex + 1;
+    nNewIndex = rURL.indexOf( ';', nOldIndex );
+    aHeaderURL = rURL.copy(nOldIndex , ( nNewIndex - nOldIndex ) );
 
-    if ( nRead > 0 )
-        aBuffer.append( reinterpret_cast< const char* >( buffer.getConstArray() ), nRead );
+    nOldIndex = nNewIndex + 1;
+    nNewIndex = rURL.indexOf( ';', nOldIndex );
+    aFooterURL = rURL.copy( nOldIndex,  ( nNewIndex - nOldIndex ) );
 
-    xStream->closeInput();
+    nOldIndex = nNewIndex + 1;
+    nNewIndex = rURL.indexOf( ';', nOldIndex );
+    aTextColor = rURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
 
-    // get the important bits of info
-    OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName;
-
-    if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName ) ) // Temp
-        return false;
+    nOldIndex = nNewIndex + 1;
+    nNewIndex = rURL.getLength();
+    aAccentColor = rURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
 
     // copy the images to the user's gallery
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( gallery );
     gallery += "/user/gallery/personas/";
+    // gallery += aName + "/";
     osl::Directory::createPath( gallery );
 
     OUString aHeaderFile( INetURLObject( aHeaderURL ).getName() );
@@ -365,11 +437,13 @@ void SearchAndParseThread::execute()
 
     for( it = vLearnmoreURLs.begin(); it!=vLearnmoreURLs.end(); ++it )
     {
-        OUString sHeaderFile = getPreviewFile( *it );
+        OUString sHeaderFile, aPersonaSetting;
+        getPreviewFile( *it, &sHeaderFile, &aPersonaSetting );
         INetURLObject aURLObj( sHeaderFile );
         aFilter.ImportGraphic( aGraphic, aURLObj );
         Bitmap aBmp = aGraphic.GetBitmap();
         vResultList.push_back( Image( aBmp ) );
+        m_pPersonaDialog->AddPersonaSetting(aPersonaSetting);
     }
 
     // for VCL to be able to do visual changes in the thread
@@ -381,12 +455,11 @@ void SearchAndParseThread::execute()
     m_pPersonaDialog->setOptimalLayoutSize();
 }
 
-// TODO: Think of some way to retrieve only the preview image and skip the rest!
-OUString SearchAndParseThread::getPreviewFile( const OUString& rURL )
+void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pHeaderFile, OUString *pPersonaSetting )
 {
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
     if ( !xFileAccess.is() )
-        return OUString();
+        return;
 
     uno::Reference< io::XInputStream > xStream;
     try {
@@ -394,10 +467,10 @@ OUString SearchAndParseThread::getPreviewFile( const OUString& rURL )
     }
     catch (...)
     {
-        return OUString();
+        return;
     }
     if ( !xStream.is() )
-        return OUString();
+        return;
 
     // read the persona specification
     // NOTE: Parsing for real is an overkill here; and worse - I tried, and
@@ -419,7 +492,7 @@ OUString SearchAndParseThread::getPreviewFile( const OUString& rURL )
     OUString aHeaderURL, aFooterURL, aTextColor, aAccentColor, aPreviewURL, aName;
 
     if ( !parsePersonaInfo( aBuffer.makeStringAndClear(), &aHeaderURL, &aFooterURL, &aTextColor, &aAccentColor, &aPreviewURL, &aName ) )
-        return OUString();
+        return;
 
     // copy the images to the user's gallery
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
@@ -435,8 +508,9 @@ OUString SearchAndParseThread::getPreviewFile( const OUString& rURL )
     }
     catch ( const uno::Exception & )
     {
-        return OUString();
+        return;
     }
-    return gallery + aPreviewFile;
+    *pHeaderFile = gallery + aPreviewFile;
+    *pPersonaSetting = aName + ";" + aHeaderURL + ";" + aFooterURL + ";" + aTextColor + ";" + aAccentColor;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
