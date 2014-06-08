@@ -99,9 +99,6 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 		tdefilepicker \
 	) \
 	uri-encode \
-	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
-		kdefilepicker \
-	) \
 	ui-previewer \
 	tiledrendering \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),unopkg_bin) \
@@ -209,6 +206,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,gnome, \
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	$(if $(ENABLE_KDE),kdebe1) \
 	$(if $(ENABLE_KDE4),kde4be1) \
+	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
+		kdefilepicker \
+	) \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
 		$(if $(ENABLE_KDE),vclplug_kde) \
 		$(if $(ENABLE_KDE4),vclplug_kde4) \
