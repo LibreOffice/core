@@ -945,13 +945,13 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 // checks if this window has dialog control
 bool Window::ImplHasDlgCtrl()
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
+    ClipManager *pClipMgr = ClipManager::GetInstance();
     Window* pDlgCtrlParent;
 
     // lookup window for dialog control
     pDlgCtrlParent = ImplGetParent();
     while ( pDlgCtrlParent &&
-            !clipMgr->IsOverlapWindow( pDlgCtrlParent ) &&
+            !pClipMgr->IsOverlapWindow( pDlgCtrlParent ) &&
             ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
         pDlgCtrlParent = pDlgCtrlParent->ImplGetParent();
 
@@ -963,7 +963,7 @@ bool Window::ImplHasDlgCtrl()
 
 void Window::ImplDlgCtrlNextWindow()
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
+    ClipManager *pClipMgr = ClipManager::GetInstance();
 
     Window* pDlgCtrlParent;
     Window* pDlgCtrl;
@@ -976,7 +976,7 @@ void Window::ImplDlgCtrlNextWindow()
     pDlgCtrl = this;
     pDlgCtrlParent = ImplGetParent();
     while ( pDlgCtrlParent &&
-            !clipMgr->IsOverlapWindow( pDlgCtrlParent ) &&
+            !pClipMgr->IsOverlapWindow( pDlgCtrlParent ) &&
             ((pDlgCtrlParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
         pDlgCtrlParent = pDlgCtrlParent->ImplGetParent();
 

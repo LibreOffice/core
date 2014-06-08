@@ -91,7 +91,7 @@ bool Window::ImplTestMousePointerSet()
 
 PointerStyle Window::ImplGetMousePointer() const
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
+    ClipManager *pClipMgr = ClipManager::GetInstance();
 
     PointerStyle    ePointerStyle;
     bool            bWait = false;
@@ -123,7 +123,7 @@ PointerStyle Window::ImplGetMousePointer() const
             }
         }
 
-        if ( clipMgr->IsOverlapWindow( const_cast<Window*>(pWindow) ) )
+        if ( pClipMgr->IsOverlapWindow( const_cast<Window*>(pWindow) ) )
             break;
 
         pWindow = pWindow->ImplGetParent();

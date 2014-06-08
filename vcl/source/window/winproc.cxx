@@ -1510,7 +1510,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
 
 static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
+    ClipManager *pClipMgr = ClipManager::GetInstance();
     // give up background save when system paints arrive
     Window* pSaveBackWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFirstBackWin;
     while ( pSaveBackWin )
@@ -1519,7 +1519,7 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool 
         Rectangle aRect( Point( pSaveBackWin->GetOutOffXPixel(), pSaveBackWin->GetOutOffYPixel() ),
                          Size( pSaveBackWin->GetOutputWidthPixel(), pSaveBackWin->GetOutputHeightPixel() ) );
         if ( aRect.IsOver( rBoundRect ) )
-            clipMgr->DeleteOverlapBackground( pSaveBackWin );
+            pClipMgr->DeleteOverlapBackground( pSaveBackWin );
         pSaveBackWin = pNext;
     }
 
@@ -1553,7 +1553,7 @@ static void KillOwnPopups( Window* pWindow )
 
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
+    ClipManager *pClipMgr = ClipManager::GetInstance();
 
     if( pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE) )
     {
@@ -1573,7 +1573,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
             pWindow->mnOutHeight = nNewHeight;
             pWindow->ImplGetWindowImpl()->mbWaitSystemResize = false;
             if ( pWindow->IsReallyVisible() )
-                clipMgr->SetClipFlag( pWindow );
+                pClipMgr->SetClipFlag( pWindow );
             if ( pWindow->IsVisible() || pWindow->ImplGetWindow()->ImplGetWindowImpl()->mbAllResize ||
                 ( pWindow->ImplGetWindowImpl()->mbFrame && pWindow->ImplGetWindowImpl()->mpClientWindow ) )   // propagate resize for system border windows
             {

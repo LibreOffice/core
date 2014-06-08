@@ -50,10 +50,10 @@ void Window::NotifyAllChildren( DataChangedEvent& rDCEvt )
 
 bool Window::PreNotify( NotifyEvent& rNEvt )
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
+    ClipManager *pClipMgr = ClipManager::GetInstance();
 
     bool bDone = false;
-    if ( mpWindowImpl->mpParent && !clipMgr->IsOverlapWindow( this ) )
+    if ( mpWindowImpl->mpParent && !pClipMgr->IsOverlapWindow( this ) )
         bDone = mpWindowImpl->mpParent->PreNotify( rNEvt );
 
     if ( !bDone )
@@ -93,7 +93,7 @@ bool Window::PreNotify( NotifyEvent& rNEvt )
 
 bool Window::Notify( NotifyEvent& rNEvt )
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
+    ClipManager *pClipMgr = ClipManager::GetInstance();
 
     bool nRet = false;
 
@@ -171,7 +171,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
         // if the parent also has dialog control activated, the parent takes over control
         if ( (rNEvt.GetType() == EVENT_KEYINPUT) || (rNEvt.GetType() == EVENT_KEYUP) )
         {
-            if ( clipMgr->IsOverlapWindow( this ) ||
+            if ( pClipMgr->IsOverlapWindow( this ) ||
                  ((getNonLayoutRealParent(this)->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) != WB_DIALOGCONTROL) )
             {
                 nRet = ImplDlgCtrl( *rNEvt.GetKeyEvent(), rNEvt.GetType() == EVENT_KEYINPUT );
@@ -193,7 +193,7 @@ bool Window::Notify( NotifyEvent& rNEvt )
 
     if ( !nRet )
     {
-        if ( mpWindowImpl->mpParent && !clipMgr->IsOverlapWindow( this ) )
+        if ( mpWindowImpl->mpParent && !pClipMgr->IsOverlapWindow( this ) )
             nRet = mpWindowImpl->mpParent->Notify( rNEvt );
     }
 

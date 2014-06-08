@@ -30,26 +30,26 @@ void Window::InitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
 
-    ClipManager *clipMgr = ClipManager::GetInstance();
-    clipMgr->Init( this );
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+    pClipMgr->Init( this );
 }
 
 void Window::SetParentClipMode( sal_uInt16 nMode )
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
-    clipMgr->SetParentClipMode( this, nMode );
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+    pClipMgr->SetParentClipMode( this, nMode );
 }
 
 sal_uInt16 Window::GetParentClipMode() const
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
-    return clipMgr->GetParentClipMode( const_cast<Window*>(this) );
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+    return pClipMgr->GetParentClipMode( const_cast<Window*>(this) );
 }
 
 Region Window::GetActiveClipRegion() const
 {
-    ClipManager *clipMgr = ClipManager::GetInstance();
-    return clipMgr->GetActiveClipRegion( this );
+    ClipManager *pClipMgr = ClipManager::GetInstance();
+    return pClipMgr->GetActiveClipRegion( this );
 }
 
 void Window::ClipToPaintRegion(Rectangle& rDstRect)
