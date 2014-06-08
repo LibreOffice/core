@@ -150,6 +150,7 @@ $(eval $(foreach method,\
 # gb_Executable_add_runtime_dependencies executable dependencies
 define gb_Executable_add_runtime_dependencies
 $(call gb_Executable_get_runtime_target,$(1)) : $(2)
+$(call gb_Executable_get_runtime_target,$(1)) :| $(dir $(call gb_Executable_get_runtime_target,$(1))).dir
 
 endef
 
