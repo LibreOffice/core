@@ -416,7 +416,8 @@ private:
     void EndTableCell( );
     void EndTableRow( );
     void EndTable();
-
+    void PopulateFrameProperties(const SwFrmFmt* pFrmFmt, const Size& rSize);
+    bool TextBoxIsFramePr(const SwFrmFmt& rFrmFmt);
     /// End cell, row, and even the entire table if necessary.
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false );
 
