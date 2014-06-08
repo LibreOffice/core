@@ -410,7 +410,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 
         msTarget = XclXmlUtils::ToOUString( aUrl );
     }
-    else if( rUrl[0] == '#' )     // hack for #89066#
+    else if( !rUrl.isEmpty() && rUrl[0] == '#' )     // hack for #89066#
     {
         OUString aTextMark( rUrl.copy( 1 ) );
 
