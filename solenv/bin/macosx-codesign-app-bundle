@@ -72,6 +72,7 @@ if test "$ENABLE_MACOSX_SANDBOX" = "TRUE"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
 fi
 
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$(basename ${APP_BUNDLE})" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
+id=`echo ${MACOSX_APP_NAME} | tr ' ' '-'`
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
 
 exit 0
