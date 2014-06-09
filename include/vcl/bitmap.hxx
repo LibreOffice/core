@@ -323,7 +323,7 @@ public:
 
     SAL_DLLPRIVATE void                 ImplReleaseRef();
     SAL_DLLPRIVATE void                 ImplMakeUnique();
-                   ImpBitmap*           ImplGetImpBitmap() const;
+                   ImpBitmap*           ImplGetImpBitmap() const { return mpImpBmp;}
     SAL_DLLPRIVATE void                 ImplSetImpBitmap( ImpBitmap* pImpBmp );
     SAL_DLLPRIVATE void                 ImplAssignWithSize( const Bitmap& rBitmap );
 

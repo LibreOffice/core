@@ -67,10 +67,6 @@ Paint Paint::Create (const cssu::Any& rValue)
 
 
 
-Paint::Type Paint::GetType (void) const
-{
-    return meType;
-}
 
 
 

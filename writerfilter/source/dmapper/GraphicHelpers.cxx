@@ -147,15 +147,7 @@ sal_Int16 PositionHandler::orientation() const
     return m_nOrient;
 }
 
-sal_Int16 PositionHandler::relation() const
-{
-    return m_nRelation;
-}
 
-sal_Int32 PositionHandler::position() const
-{
-    return m_nPosition;
-}
 
 void PositionHandler::setPositionOffset(const OUString & sText, bool vertical)
 {

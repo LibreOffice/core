@@ -65,10 +65,6 @@ void Properties::HandleDataChangeEvent (void)
 
 
 
-bool Properties::IsHighlightCurrentSlide (void) const
-{
-    return mbIsHighlightCurrentSlide;
-}
 
 
 
@@ -81,10 +77,6 @@ void Properties::SetHighlightCurrentSlide (const bool bIsHighlightCurrentSlide)
 
 
 
-bool Properties::IsShowSelection (void) const
-{
-    return mbIsShowSelection;
-}
 
 
 
@@ -97,10 +89,6 @@ void Properties::SetShowSelection (const bool bIsShowSelection)
 
 
 
-bool Properties::IsShowFocus (void) const
-{
-    return mbIsShowFocus;
-}
 
 
 
@@ -113,10 +101,6 @@ void Properties::SetShowFocus (const bool bIsShowFocus)
 
 
 
-bool Properties::IsCenterSelection (void) const
-{
-    return mbIsCenterSelection;
-}
 
 
 
@@ -129,10 +113,6 @@ void Properties::SetCenterSelection (const bool bIsCenterSelection)
 
 
 
-bool Properties::IsSmoothSelectionScrolling (void) const
-{
-    return mbIsSmoothSelectionScrolling;
-}
 
 
 
@@ -145,10 +125,6 @@ void Properties::SetSmoothSelectionScrolling (const bool bIsSmoothSelectionScrol
 
 
 
-bool Properties::IsSuspendPreviewUpdatesDuringFullScreenPresentation (void) const
-{
-    return mbIsSuspendPreviewUpdatesDuringFullScreenPresentation;
-}
 
 
 
@@ -224,10 +200,6 @@ void Properties::SetHighlightColor (const Color& rColor)
 
 
 
-bool Properties::IsUIReadOnly (void) const
-{
-    return mbIsUIReadOnly;
-}
 
 
 
@@ -240,10 +212,6 @@ void Properties::SetUIReadOnly (const bool bIsUIReadOnly)
 
 
 
-bool Properties::IsOnlyPreviewTriggersMouseOver (void) const
-{
-    return mbIsOnlyPreviewTriggersMouseOver;
-}
 
 
 } } } // end of namespace ::sd::slidesorter::controller

@@ -69,7 +69,7 @@ public:
 
     virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    bool IsSelected() const;
+    bool IsSelected() const { return mbActive;}
     void SetIndex(sal_Int32 nIndex);
     sal_Int32 GetIndex() const { return mnIndex; }
     void SetHeight();

@@ -77,8 +77,8 @@ public:
             xReferenceResolvedListener);
     virtual ~ElementCollector() {};
 
-    com::sun::star::xml::crypto::sax::ElementMarkPriority getPriority() const;
-    bool getModify() const;
+    com::sun::star::xml::crypto::sax::ElementMarkPriority getPriority() const { return m_nPriority;}
+    bool getModify() const { return m_bToModify;}
     void notifyListener();
     void setReferenceResolvedListener(
         const com::sun::star::uno::Reference<

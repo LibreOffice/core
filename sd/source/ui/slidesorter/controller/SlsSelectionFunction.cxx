@@ -174,7 +174,7 @@ public:
         const Point& rMousePosition,
         const InsertionIndicatorHandler::Mode eMode);
 
-    bool IsMouseOverIndicatorAllowed (void) const;
+    bool IsMouseOverIndicatorAllowed (void) const { return mbIsMouseOverIndicatorAllowed;}
 
 protected:
     SlideSorter& mrSlideSorter;
@@ -1173,10 +1173,6 @@ void SelectionFunction::ModeHandler::StartDrag (
 
 
 
-bool SelectionFunction::ModeHandler::IsMouseOverIndicatorAllowed (void) const
-{
-    return mbIsMouseOverIndicatorAllowed;
-}
 
 
 

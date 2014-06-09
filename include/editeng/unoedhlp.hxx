@@ -50,8 +50,8 @@ public:
             SvxEditSourceHint( sal_uLong nId, sal_uLong nValue, sal_Int32 nStart=0, sal_Int32 nEnd=0 );
 
     sal_uLong   GetValue() const;
-    sal_Int32   GetStartValue() const;
-    sal_Int32   GetEndValue() const;
+    sal_Int32   GetStartValue() const { return mnStart;}
+    sal_Int32   GetEndValue() const { return mnEnd;}
 };
 class SvxEditSourceHintEndPara :public SvxEditSourceHint
 {

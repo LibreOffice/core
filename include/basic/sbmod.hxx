@@ -125,7 +125,7 @@ public:
     bool ExceedsLegacyModuleSize();
     void     fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
     bool     HasExeCode();
-    bool     IsVBACompat() const;
+    bool     IsVBACompat() const { return mbVBACompat;}
     void     SetVBACompat( bool bCompat );
     sal_Int32 GetModuleType() { return mnType; }
     void     SetModuleType( sal_Int32 nType ) { mnType = nType; }

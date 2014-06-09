@@ -161,7 +161,7 @@ public:
     void                SetComment4Entry(short nEntry, const OUString& aCommentString);
 
     void                SetCurrencySymbol(sal_uInt32 nPos);
-    sal_uInt32          GetCurrencySymbol();
+    sal_uInt32          GetCurrencySymbol() { return nCurCurrencyEntryPos;}
     sal_uInt16          FindCurrencyFormat( const OUString& rFmtString );
     sal_uInt16          FindCurrencyFormat(const NfCurrencyEntry* pTmpCurrencyEntry,bool bTmpBanking);
     void                SetCurCurrencyEntry(NfCurrencyEntry*);

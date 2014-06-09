@@ -83,7 +83,7 @@ public:
     SbiParser( StarBASIC*, SbModule* );
     bool Parse();
     void SetCodeCompleting( const bool& b );
-    bool IsCodeCompleting() const;
+    bool IsCodeCompleting() const { return bCodeCompleting;}
     SbiExprNode* GetWithVar();
 
     // from 31.3.1996, search symbol in the runtime-library

@@ -531,20 +531,12 @@ WinBits Dialog::init(Window *pParent, const ResId& rResId)
     return nStyle;
 }
 
-VclButtonBox* Dialog::get_action_area()
-{
-    return mpActionArea;
-}
 
 void Dialog::set_action_area(VclButtonBox* pActionArea)
 {
     mpActionArea = pActionArea;
 }
 
-VclBox* Dialog::get_content_area()
-{
-    return mpContentArea;
-}
 
 void Dialog::set_content_area(VclBox* pContentArea)
 {

@@ -131,7 +131,7 @@ public:
     void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);
 
     void            SetHeaderLayout(bool bUseGrid);
-    bool            GetHeaderLayout() const;
+    bool            GetHeaderLayout() const { return mbHeaderLayout;}
 
     static void GetDataDimensionNames(
         OUString& rSourceName, OUString& rGivenName,

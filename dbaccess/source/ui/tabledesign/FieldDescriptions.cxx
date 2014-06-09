@@ -600,15 +600,7 @@ bool                    OFieldDescription::IsAutoIncrement()        const
         return m_bIsAutoIncrement;
 }
 
-bool                    OFieldDescription::IsPrimaryKey()           const
-{
-    return m_bIsPrimaryKey;
-}
 
-bool                    OFieldDescription::IsCurrency()             const
-{
-        return m_bIsCurrency;
-}
 
 bool                    OFieldDescription::IsNullable()             const
 {

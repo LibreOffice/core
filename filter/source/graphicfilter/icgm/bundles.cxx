@@ -37,10 +37,6 @@ void Bundle::SetColor( sal_uInt32 nColor )
     mnColor = nColor;
 }
 
-sal_uInt32 Bundle::GetColor() const
-{
-    return mnColor;
-}
 
 
 

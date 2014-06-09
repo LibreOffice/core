@@ -88,10 +88,10 @@ public:
 
     bool isECOfBeforeModifyIncluded(sal_Int32 nIgnoredSecurityId) const;
         void setReceivedAll();
-        bool isAllReceived() const;
+        bool isAllReceived() const { return m_bAllReceived;}
     void addElementCollector(const ElementCollector* pElementCollector);
     void removeElementCollector(const ElementCollector* pElementCollector);
-    ElementMark* getBlocker() const;
+    ElementMark* getBlocker() const { return m_pBlocker;}
     void setBlocker(const ElementMark* pBlocker);
     OUString printChildren() const;
     bool hasAnything() const;

@@ -123,7 +123,7 @@ public:
     /** Returns true, if the series in this chart type group are stacked on each other as percentage. */
     bool                isPercent() const;
     /** Returns true, if the chart is three-dimensional. */
-    bool                is3dChart() const;
+    bool                is3dChart() const { return mb3dChart;}
     /** Returns true, if chart type supports wall and floor format in 3D mode. */
     bool                isWall3dChart() const;
     /** Returns true, if the series in this chart type group are ordered on the Z axis. */

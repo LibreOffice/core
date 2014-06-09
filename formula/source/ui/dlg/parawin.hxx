@@ -135,7 +135,7 @@ public:
         bool            IsRefMode() {return bRefMode;}
         void            SetRefMode(bool bFlag) {bRefMode=bFlag;}
 
-        sal_uInt16          GetActiveLine();
+        sal_uInt16          GetActiveLine() { return nActiveLine;}
         void            SetActiveLine(sal_uInt16 no);
         RefEdit*        GetActiveEdit();
         OUString        GetActiveArgName();

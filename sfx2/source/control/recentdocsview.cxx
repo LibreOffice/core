@@ -293,10 +293,6 @@ void RecentDocsView::LoseFocus()
     ThumbnailView::LoseFocus();
 }
 
-long RecentDocsView::GetThumbnailSize() const
-{
-    return mnItemMaxSize;
-}
 
 void RecentDocsView::Clear()
 {

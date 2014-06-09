@@ -255,7 +255,7 @@ protected:
     void SetOwner(bool bNew);
 
 private:
-    sal_uInt32 GetOrdNum() const;
+    sal_uInt32 GetOrdNum() const { return nOrdNum;}
     void SetOrdNum(sal_uInt32 nOrdNum_);
 };
 

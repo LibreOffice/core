@@ -127,15 +127,15 @@ public:
 
         @return the transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
      */
-    double          getTransparency     () const;
+    double          getTransparency     () const { return mfTransparency;}
     /// Get width of the stroke
-    double          getStrokeWidth      () const;
+    double          getStrokeWidth      () const { return mfStrokeWidth;}
     /// Get the style in which open stroke ends are drawn
-    CapType         getCapType          () const;
+    CapType         getCapType          () const { return maCapType;}
     /// Get the style in which the stroke segments are joined
-    JoinType        getJoinType         () const;
+    JoinType        getJoinType         () const { return maJoinType;}
     /// Get the maximum length of mitered joins
-    double          getMiterLimit       () const;
+    double          getMiterLimit       () const { return mfMiterLimit;}
     /// Get an array of "on" and "off" lengths for stroke dashing
     void            getDashArray        ( DashArray& ) const;
 
@@ -305,16 +305,16 @@ public:
 
         @return the transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)
      */
-    double          getTransparency     () const;
+    double          getTransparency     () const { return mfTransparency;}
     /// Get fill rule used
-    FillRule        getFillRule         () const;
+    FillRule        getFillRule         () const { return maFillRule;}
     /** Get fill type used
 
         Currently, only one of the fill types can be used
         simultaneously. If you specify e.g. FillRule::fillGradient,
         hatching, texture and solid fill color are ignored.
      */
-    FillType        getFillType         () const;
+    FillType        getFillType         () const { return maFillType;}
     /** Get transformation applied to hatch, gradient or texture during fill
 
         A fill operation generally starts at the top left position of
@@ -328,14 +328,14 @@ public:
      */
     void            getTransform        ( Transform& ) const;
     /// deprecated
-    bool            IsTiling            () const;
+    bool            IsTiling            () const { return mbTiling;}
     /** Query state of texture tiling
 
         @return true, if texture is tiled, false, if output only once.
      */
-    bool            isTiling            () const;
+    bool            isTiling            () const { return mbTiling;}
     /// Get type of gradient used
-    GradientType    getGradientType     () const;
+    GradientType    getGradientType     () const { return maGradientType;}
 
     /** Get the texture graphic used
 

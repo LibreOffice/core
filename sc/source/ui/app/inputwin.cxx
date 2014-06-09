@@ -1723,10 +1723,6 @@ void ScTextWnd::UpdateAutoCorrFlag()
     }
 }
 
-ScTabViewShell* ScTextWnd::GetViewShell()
-{
-    return mpViewShell;
-}
 
 void ScTextWnd::StartEditEngine()
 {

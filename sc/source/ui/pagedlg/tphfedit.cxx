@@ -350,10 +350,6 @@ void ScExtIButton::SetPopupMenu(PopupMenu* pPopUp)
     pPopupMenu=pPopUp;
 }
 
-sal_uInt16 ScExtIButton::GetSelected() const
-{
-    return nSelected;
-}
 
 OString ScExtIButton::GetSelectedIdent() const
 {

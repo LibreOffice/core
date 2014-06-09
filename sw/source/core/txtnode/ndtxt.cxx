@@ -3752,10 +3752,6 @@ void SwTxtNode::SetAttrOutlineLevel(int nLevel)
 }
 
 // #i70748#
-bool SwTxtNode::IsEmptyListStyleDueToSetOutlineLevelAttr()
-{
-    return mbEmptyListStyleSetDueToSetOutlineLevelAttr;
-}
 
 void SwTxtNode::SetEmptyListStyleDueToSetOutlineLevelAttr()
 {

@@ -151,7 +151,7 @@ public:
         EDITED_INVALID
     };
 
-    EditedAndValid      GetEditedAndValid() const;
+    EditedAndValid      GetEditedAndValid() const { return meEditedAndValid;}
     sal_Int32           SaveEditedAsEntry();
 
 

@@ -81,7 +81,7 @@ public:
     DictionaryEntry* getFirstSelectedEntry() const;
 
     void sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ );
-    sal_uInt16 getSortColumn() const;
+    sal_uInt16 getSortColumn() const { return m_nSortColumnIndex;}
 
 private:
     OUString getPropertyTypeName( sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/ ) const;

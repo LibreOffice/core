@@ -484,15 +484,7 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
 #endif
 }
 
-sal_Int32 InternalData::getRowCount() const
-{
-    return m_nRowCount;
-}
 
-sal_Int32 InternalData::getColumnCount() const
-{
-    return m_nColumnCount;
-}
 
 void InternalData::setComplexRowLabels( const vector< vector< uno::Any > >& rNewRowLabels )
 {

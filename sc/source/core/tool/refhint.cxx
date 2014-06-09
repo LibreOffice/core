@@ -14,7 +14,6 @@ namespace sc {
 RefHint::RefHint( Type eType ) : SfxSimpleHint(SC_HINT_REFERENCE), meType(eType) {}
 RefHint::~RefHint() {}
 
-RefHint::Type RefHint::getType() const { return meType; }
 
 RefMovedHint::RefMovedHint( const ScRange& rRange, const ScAddress& rMove ) :
     RefHint(Moved), maRange(rRange), maMoveDelta(rMove) {}
@@ -41,20 +40,8 @@ const sc::ColReorderMapType& RefColReorderHint::getColMap() const
     return mrColMap;
 }
 
-SCTAB RefColReorderHint::getTab() const
-{
-    return mnTab;
-}
 
-SCROW RefColReorderHint::getStartRow() const
-{
-    return mnRow1;
-}
 
-SCROW RefColReorderHint::getEndRow() const
-{
-    return mnRow2;
-}
 
 }
 

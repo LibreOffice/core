@@ -291,7 +291,7 @@ private:
 public:
     MergeData( const OString &rTyp, const OString &rGID, const OString &rLID , const OString &rFilename );
     ~MergeData();
-    MergeEntrys* GetMergeEntries();
+    MergeEntrys* GetMergeEntries() { return pMergeEntrys;}
 
     bool operator==( ResData *pData );
 };

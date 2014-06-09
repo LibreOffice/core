@@ -123,7 +123,7 @@ public:
     const SwFrmFmt  *GetFmt() const
         { return (const SwFrmFmt*)GetRegisteredIn(); }
 
-    bool IsInDTOR() const;
+    bool IsInDTOR() const { return mbInDTOR;}
 
     /** method to move drawing object to corresponding visible layer
 

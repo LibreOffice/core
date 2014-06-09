@@ -194,7 +194,7 @@ public:
     void Put( SbxVariable*, const short* );
     SbxVariable* Get( SbxArray* );
 
-    short  GetDims() const;
+    short  GetDims() const { return nDim;}
     void   AddDim( short, short );
     void   unoAddDim( short, short );
     bool   GetDim( short, short&, short& ) const;

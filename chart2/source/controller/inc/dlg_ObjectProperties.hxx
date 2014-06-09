@@ -34,33 +34,33 @@ public:
     virtual ~ObjectPropertiesDialogParameter();
 
     void            init( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
-    ObjectType      getObjectType() const;
+    ObjectType      getObjectType() const { return m_eObjectType;}
     OUString   getLocalizedName() const;
 
-    bool HasGeometryProperties() const;
-    bool HasStatisticProperties() const;
-    bool ProvidesSecondaryYAxis() const;
-    bool ProvidesOverlapAndGapWidth() const;
-    bool ProvidesBarConnectors() const;
-    bool HasAreaProperties() const;
-    bool HasSymbolProperties() const;
-    bool HasNumberProperties() const;
-    bool ProvidesStartingAngle() const;
-    bool ProvidesMissingValueTreatments() const;
+    bool HasGeometryProperties() const { return m_bHasGeometryProperties;}
+    bool HasStatisticProperties() const { return m_bHasStatisticProperties;}
+    bool ProvidesSecondaryYAxis() const { return m_bProvidesSecondaryYAxis;}
+    bool ProvidesOverlapAndGapWidth() const { return m_bProvidesOverlapAndGapWidth;}
+    bool ProvidesBarConnectors() const { return m_bProvidesBarConnectors;}
+    bool HasAreaProperties() const { return m_bHasAreaProperties;}
+    bool HasSymbolProperties() const { return m_bHasSymbolProperties;}
+    bool HasNumberProperties() const { return m_bHasNumberProperties;}
+    bool ProvidesStartingAngle() const { return m_bProvidesStartingAngle;}
+    bool ProvidesMissingValueTreatments() const { return m_bProvidesMissingValueTreatments;}
 
-    bool HasScaleProperties() const;
-    bool CanAxisLabelsBeStaggered() const;
-    bool IsSupportingAxisPositioning() const;
-    bool ShowAxisOrigin() const;
-    bool IsCrossingAxisIsCategoryAxis() const;
+    bool HasScaleProperties() const { return m_bHasScaleProperties;}
+    bool CanAxisLabelsBeStaggered() const { return m_bCanAxisLabelsBeStaggered;}
+    bool IsSupportingAxisPositioning() const { return m_bSupportingAxisPositioning;}
+    bool ShowAxisOrigin() const { return m_bShowAxisOrigin;}
+    bool IsCrossingAxisIsCategoryAxis() const { return m_bIsCrossingAxisIsCategoryAxis;}
     const ::com::sun::star::uno::Sequence< OUString >& GetCategories() const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
         getDocument() const;
 
-    bool IsComplexCategoriesAxis() const;
+    bool IsComplexCategoriesAxis() const { return m_bComplexCategoriesAxis;}
 
-    sal_Int32 getNbPoints() const;
+    sal_Int32 getNbPoints() const { return m_nNbPoints;}
 
 private:
     OUString   m_aObjectCID;
@@ -140,7 +140,7 @@ public:
 
     void SetAxisMinorStepWidthForErrorBarDecimals( double fMinorStepWidth );
 
-    bool DialogWasClosedWithOK() const;
+    bool DialogWasClosedWithOK() const { return m_bOKPressed;}
 };
 
 } //namespace chart

@@ -49,10 +49,6 @@ ScDocument& EndListeningContext::getDoc()
     return mrDoc;
 }
 
-ScTokenArray* EndListeningContext::getOldCode()
-{
-    return mpOldCode;
-}
 
 ScAddress EndListeningContext::getOldPosition( const ScAddress& rPos ) const
 {

@@ -63,32 +63,32 @@ public:
 
     // - type (static; default: xsd:string)
     //        (currently default implemented as empty string)
-    bool hasTypeName() const;
+    bool hasTypeName() const { return mbHasTypeName; }
     OUString getTypeName() const;
     void setTypeName( const OUString& );
     void resetTypeName();
 
     // - readonly (computed XPath; default: false; true if calculate exists)
-    bool hasReadonly() const;
+    bool hasReadonly() const { return mbHasReadonly; }
     bool isReadonly() const;
     void setReadonly( bool );
     void resetReadonly();
 
     // - required (computed XPath; default: false)
-    bool hasRequired() const;
-    bool isRequired() const;
+    bool hasRequired() const { return mbHasRequired; }
+    bool isRequired() const { return mbRequired; }
     void setRequired( bool );
     void resetRequired();
 
     // - relevant (computed XPath; default: true)
-    bool hasRelevant() const;
-    bool isRelevant() const;
+    bool hasRelevant() const { return mbHasRelevant; }
+    bool isRelevant() const { return mbRelevant; }
     void setRelevant( bool );
     void resetRelevant();
 
     // - constraing (computed XPath; default: true)
-    bool hasConstraint() const;
-    bool isConstraint() const;
+    bool hasConstraint() const { return mbHasConstraint; }
+    bool isConstraint() const { return mbConstraint; }
     void setConstraint( bool );
     void resetConstraint();
 
@@ -100,7 +100,7 @@ public:
     //   (for calculate, we only store whether a calculate MIP is present;
     //    the actual calculate value is handled my changing the instance
     //    directly)
-    bool hasCalculate() const;
+    bool hasCalculate() const { return mbHasCalculate; }
     void setHasCalculate( bool );
     void resetCalculate();
 

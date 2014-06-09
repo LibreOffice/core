@@ -624,10 +624,6 @@ void DlgEditor::SetInsertObj( sal_uInt16 eObj )
 }
 
 
-sal_uInt16 DlgEditor::GetInsertObj() const
-{
-    return eActObj;
-}
 
 
 void DlgEditor::CreateDefaultObject()

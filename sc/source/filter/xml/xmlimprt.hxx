@@ -1111,7 +1111,7 @@ public:
     const SvXMLTokenMap& GetDataStreamAttrTokenMap();
 
     void SetPostProcessData( sc::ImportPostProcessData* p );
-    sc::ImportPostProcessData* GetPostProcessData();
+    sc::ImportPostProcessData* GetPostProcessData() { return mpPostProcessData;}
 
     sc::PivotTableSources& GetPivotTableSources();
 

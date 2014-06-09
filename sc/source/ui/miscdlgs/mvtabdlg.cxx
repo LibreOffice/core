@@ -70,13 +70,9 @@ ScMoveTableDlg::~ScMoveTableDlg()
 {
 }
 
-sal_uInt16 ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
 
-SCTAB ScMoveTableDlg::GetSelectedTable    () const { return nTable;     }
 
-bool   ScMoveTableDlg::GetCopyTable        () const { return bCopyTable; }
 
-bool   ScMoveTableDlg::GetRenameTable        () const { return bRenameTable; }
 
 void ScMoveTableDlg::GetTabNameString( OUString& rString ) const
 {

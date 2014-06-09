@@ -75,7 +75,7 @@ public:
 
     /** Returns the preview size.
     */
-    PreviewSize GetPreviewSize (void) const;
+    PreviewSize GetPreviewSize (void) const { return mePreviewSize;}
 
     /** Return the preview size in pixels.
     */

@@ -154,10 +154,6 @@ SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, long nYPo
 {
 }
 
-sal_uInt8 SwTypeNumber::GetTypeId() const
-{
-    return nTypeId;
-}
 
 SwTypeNumber::~SwTypeNumber()
 {

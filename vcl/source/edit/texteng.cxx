@@ -155,10 +155,6 @@ TextView* TextEngine::GetView( sal_uInt16 nView ) const
     return (*mpViews)[ nView ];
 }
 
-TextView* TextEngine::GetActiveView() const
-{
-    return mpActiveView;
-}
 
 void TextEngine::SetActiveView( TextView* pTextView )
 {

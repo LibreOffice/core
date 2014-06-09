@@ -32,9 +32,9 @@ public:
     ScTypedStrData( const ScTypedStrData& rCpy );
 
     bool IsStrData() const;
-    bool IsDate() const;
+    bool IsDate() const { return mbIsDate;}
     SC_DLLPUBLIC const OUString& GetString() const;
-    StringType GetStringType() const;
+    StringType GetStringType() const { return meStrType;}
     double GetValue() const { return mfValue; }
 
     struct LessCaseSensitive : std::binary_function<ScTypedStrData, ScTypedStrData, bool>

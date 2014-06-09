@@ -158,8 +158,8 @@ public:
     bool        HasTemplate() const { return m_bHasTemplate; }
     void        SetDeleteUserData( bool bSet );
     void        SetUseUserData( bool bSet );
-    bool        IsDeleteUserData() const;
-    bool        IsUseUserData() const;
+    bool        IsDeleteUserData() const { return m_bDeleteUserData;}
+    bool        IsUseUserData() const { return m_bUseUserData;}
 
     std::vector< CustomProperty* >  GetCustomProperties() const;
     void        ClearCustomProperties();

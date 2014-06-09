@@ -826,11 +826,6 @@ void SwDoc::SetPreviewPrtData( const SwPagePreviewPrtData* pNew )
     SetModified();
 }
 
-SwModify*   SwDoc::GetUnoCallBack() const
-{
-    return mpUnoCallBack;
-}
-
 /** SwDoc: Reading and writing of the layout cache. */
 void SwDoc::ReadLayoutCache( SvStream& rStream )
 {

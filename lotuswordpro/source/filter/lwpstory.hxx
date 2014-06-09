@@ -112,13 +112,13 @@ public:
      XFContentContainer* GetXFContent();
     void AddXFContent(XFContent* pContent);
 
-    inline bool GetDropcapFlag();
-    inline LwpPageLayout* GetCurrentLayout();
+    bool GetDropcapFlag() { return m_bDropcap; }
+    LwpPageLayout* GetCurrentLayout() { return m_pCurrentLayout; }
     inline LwpMiddleLayout* GetTabLayout();//for register tab style
-    inline OUString GetSectionName();
-    inline LwpHyperlinkMgr* GetHyperlinkMgr();
+    OUString GetSectionName() { return m_CurrSectionName; }
+    LwpHyperlinkMgr* GetHyperlinkMgr() { return m_pHyperlinkMgr; }
 
-    inline bool IsPMModified();
+    inline bool IsPMModified() { return m_bPMModified; }
     inline void SetPMModified(bool bPMModified);
     inline void SetDropcapFlag(bool bFlag);
     inline void SetTabLayout(LwpLayout* pLayout);
@@ -151,10 +151,6 @@ LwpObjectID* LwpStory::GetLastPara()
 {
     return m_ParaList.GetTail();
 }
-bool LwpStory::GetDropcapFlag()
-{
-    return m_bDropcap;
-}
 LwpMiddleLayout* LwpStory::GetTabLayout()
 {
     if(m_pTabLayout)
@@ -176,22 +172,6 @@ void LwpStory::SetTabLayout(LwpLayout* pLayout)
 void LwpStory::SetSectionName(const OUString& StyleName)
 {
     m_CurrSectionName = StyleName;
-}
-OUString LwpStory::GetSectionName()
-{
-    return m_CurrSectionName;
-}
-bool LwpStory::IsPMModified()
-{
-    return m_bPMModified;
-}
-LwpPageLayout* LwpStory::GetCurrentLayout()
-{
-    return m_pCurrentLayout;
-}
-LwpHyperlinkMgr* LwpStory::GetHyperlinkMgr()
-{
-    return m_pHyperlinkMgr;
 }
 inline void LwpStory::AddBullStyleName2List(const OUString& rStyleName, const sal_uInt8& nPos)
 {

@@ -401,10 +401,6 @@ void GalleryTheme::implReleaseItems( GalleryObject* pObj )
 
 
 
-::GalleryTheme* GalleryTheme::implGetTheme() const
-{
-    return mpTheme;
-}
 
 
 

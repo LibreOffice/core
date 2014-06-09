@@ -183,10 +183,6 @@ OUStringBuffer& SdtHelper::getLocale()
     return m_sLocale;
 }
 
-bool SdtHelper::hasElements()
-{
-    return m_bHasElements;
-}
 
 void SdtHelper::appendToInteropGrabBag(com::sun::star::beans::PropertyValue rValue)
 {

@@ -336,10 +336,6 @@ namespace pcr
     }
 
 
-    bool OPropertyEditor::HasHelpSection() const
-    {
-        return m_bHasHelpSection;
-    }
 
 
     void OPropertyEditor::SetHelpText( const OUString& _rHelpText )

@@ -195,16 +195,10 @@ namespace sdr
             return true;
         }
 
-        // check if asynchronious graphis loading is allowed. Default is false.
+        // check if asynchronous graphics loading is allowed. Default is false.
         bool ObjectContact::IsAsynchronGraphicsLoadingAllowed() const
         {
             return false;
-        }
-
-        // access to ViewObjectContactRedirector
-        ViewObjectContactRedirector* ObjectContact::GetViewObjectContactRedirector() const
-        {
-            return mpViewObjectContactRedirector;
         }
 
         void ObjectContact::SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew)

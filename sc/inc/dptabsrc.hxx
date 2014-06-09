@@ -416,9 +416,9 @@ public:
     void setOrientation(sal_uInt16 nNew);
     long getPosition() const;
     bool getIsDataLayoutDimension() const;
-    sal_uInt16 getFunction() const;
+    sal_uInt16 getFunction() const { return nFunction;}
     void setFunction(sal_uInt16 nNew);       // for data dimension
-    long getUsedHierarchy() const;
+    long getUsedHierarchy() const { return nUsedHier;}
     void setUsedHierarchy(long nNew);
 
     bool                        HasSelectedPage() const     { return bHasSelectedPage; }
@@ -638,7 +638,7 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     com::sun::star::uno::Sequence<com::sun::star::sheet::GeneralFunction> getSubTotals() const;
-    bool getShowEmpty() const;
+    bool getShowEmpty() const { return bShowEmpty;}
 
     const ::com::sun::star::sheet::DataPilotFieldSortInfo& GetSortInfo() const      { return aSortInfo; }
     const ::com::sun::star::sheet::DataPilotFieldAutoShowInfo& GetAutoShow() const  { return aAutoShowInfo; }
@@ -717,7 +717,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    long getCount() const;
+    long getCount() const { return nMbrCount;}
     ScDPMember* getByIndex(long nIndex) const;
 
     long                    getMinMembers() const;
@@ -757,7 +757,7 @@ public:
     bool IsNamedItem(SCROW nIndex) const;
 
     SC_DLLPUBLIC const OUString* GetLayoutName() const;
-    long GetDim() const;
+    long GetDim() const { return nDim;}
 
     sal_Int32               Compare( const ScDPMember& rOther ) const;      // visible order
 
@@ -815,8 +815,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    bool isVisible() const;
-    bool getShowDetails() const;
+    bool isVisible() const { return bVisible;}
+    bool getShowDetails() const { return bShowDet;}
 };
 
 

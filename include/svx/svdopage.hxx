@@ -48,7 +48,7 @@ public:
     virtual ~SdrPageObj();
 
     // #111111#
-    SdrPage* GetReferencedPage() const;
+    SdrPage* GetReferencedPage() const { return mpShownPage;}
     void SetReferencedPage(SdrPage* pNewPage);
 
     // #i96598#

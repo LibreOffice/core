@@ -207,10 +207,6 @@ void Model::setNamespaces( const XNameContainer_t& rNamespaces )
         mxNamespaces = rNamespaces;
 }
 
-bool Model::getExternalData() const
-{
-    return mbExternalData;
-}
 
 void Model::setExternalData( bool _bData )
 {
@@ -426,10 +422,6 @@ void Model::loadInstances()
     }
 }
 
-bool Model::isInitialized() const
-{
-    return mbInitialized;
-}
 
 bool Model::isValid() const
 {

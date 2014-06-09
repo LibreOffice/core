@@ -84,7 +84,7 @@ public:
         Calling this method should be necessary only during startup and
         shutdown (when that can be detected).
     */
-    bool IsValid (void) const;
+    bool IsValid (void) const { return mbIsValid;}
 
     /** Create a new slide sorter that is strongly coupled to the given view
         shell.  Use this function for a slide sorter in the left pane.
@@ -150,7 +150,7 @@ public:
         @return
             May be empty.
     */
-    ViewShell* GetViewShell (void) const;
+    ViewShell* GetViewShell (void) const { return mpViewShell;}
 
     /** Return the XController object of the main view.
     */
@@ -161,7 +161,7 @@ public:
         @return
             May be empty.
     */
-    ViewShellBase* GetViewShellBase (void) const;
+    ViewShellBase* GetViewShellBase (void) const { return mpViewShellBase;}
 
     void Paint (const Rectangle& rRepaintArea);
 

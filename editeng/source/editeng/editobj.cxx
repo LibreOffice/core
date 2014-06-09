@@ -620,10 +620,6 @@ EditTextObjectImpl::~EditTextObjectImpl()
     }
 }
 
-sal_uInt16 EditTextObjectImpl::GetUserType() const
-{
-    return nUserType;
-}
 
 void EditTextObjectImpl::SetUserType( sal_uInt16 n )
 {
@@ -653,10 +649,6 @@ std::vector<svl::SharedString> EditTextObjectImpl::GetSharedStrings() const
     return aSSs;
 }
 
-bool EditTextObjectImpl::IsVertical() const
-{
-    return bVertical;
-}
 
 void EditTextObjectImpl::SetVertical( bool b )
 {
@@ -667,10 +659,6 @@ void EditTextObjectImpl::SetVertical( bool b )
     }
 }
 
-sal_uInt16 EditTextObjectImpl::GetScriptType() const
-{
-    return nScriptType;
-}
 
 void EditTextObjectImpl::SetScriptType( sal_uInt16 nType )
 {

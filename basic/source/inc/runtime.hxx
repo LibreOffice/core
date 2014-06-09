@@ -407,7 +407,7 @@ public:
     SbModule* GetModule()  { return pMod;    }
     sal_uInt16 GetDebugFlags() { return nFlags;  }
     void SetDebugFlags( sal_uInt16 nFl ) { nFlags = nFl;  }
-    SbMethod* GetCaller();
+    SbMethod* GetCaller() { return pMeth;}
     SbxVariable* GetExternalCaller(){ return mpExtCaller; }
 
     SbiForStack* FindForStackItemForCollection( class BasicCollection* pCollection );

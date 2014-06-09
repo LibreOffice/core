@@ -829,10 +829,6 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
 }
 
 
-bool ViewShell::HasRuler (void)
-{
-    return mbHasRulers;
-}
 
 
 
@@ -1447,10 +1443,6 @@ void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)
 
 
 
-::sd::Window* ViewShell::GetActiveWindow (void) const
-{
-    return mpActiveWindow;
-}
 
 
 
@@ -1476,10 +1468,6 @@ void ViewShell::Draw(OutputDevice &, const Region &)
 
 
 
-ZoomList* ViewShell::GetZoomList (void)
-{
-    return mpZoomList;
-}
 
 
 

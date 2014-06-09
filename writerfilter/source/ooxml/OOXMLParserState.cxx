@@ -54,35 +54,19 @@ void OOXMLParserState::setLastParagraphInSection(bool bLastParagraphInSection)
     mbLastParagraphInSection = bLastParagraphInSection;
 }
 
-bool OOXMLParserState::isLastParagraphInSection() const
-{
-    return mbLastParagraphInSection;
-}
 
-bool OOXMLParserState::isInSectionGroup() const
-{
-    return mbInSectionGroup;
-}
 
 void OOXMLParserState::setInSectionGroup(bool bInSectionGroup)
 {
     mbInSectionGroup = bInSectionGroup;
 }
 
-bool OOXMLParserState::isInParagraphGroup() const
-{
-    return mbInParagraphGroup;
-}
 
 void OOXMLParserState::setInParagraphGroup(bool bInParagraphGroup)
 {
     mbInParagraphGroup = bInParagraphGroup;
 }
 
-bool OOXMLParserState::isInCharacterGroup() const
-{
-    return mbInCharacterGroup;
-}
 
 void OOXMLParserState::setInCharacterGroup(bool bInCharacterGroup)
 {
@@ -94,10 +78,6 @@ void OOXMLParserState::setForwardEvents(bool bForwardEvents)
     mbForwardEvents = bForwardEvents;
 }
 
-bool OOXMLParserState::isForwardEvents() const
-{
-    return mbForwardEvents;
-}
 
 const std::string OOXMLParserState::getHandle() const
 {
@@ -118,10 +98,6 @@ void OOXMLParserState::setDocument(OOXMLDocumentImpl* pDocument)
     mpDocument = pDocument;
 }
 
-OOXMLDocumentImpl* OOXMLParserState::getDocument() const
-{
-    return mpDocument;
-}
 
 void OOXMLParserState::setXNoteId(const sal_Int32 nId)
 {

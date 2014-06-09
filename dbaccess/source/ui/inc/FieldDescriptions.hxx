@@ -105,8 +105,8 @@ namespace dbaui
         TOTypeInfoSP                getTypeInfo()           const;
         TOTypeInfoSP                getSpecialTypeInfo()    const;
         bool                    IsAutoIncrement()       const;
-        bool                    IsPrimaryKey()          const;
-        bool                    IsCurrency()            const;
+        bool                    IsPrimaryKey()          const { return m_bIsPrimaryKey;}
+        bool                    IsCurrency()            const { return m_bIsCurrency;}
         bool                    IsNullable()            const;
     };
 }

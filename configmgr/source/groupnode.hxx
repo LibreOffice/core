@@ -44,7 +44,7 @@ public:
 
     virtual int getMandatory() const SAL_OVERRIDE;
 
-    bool isExtensible() const;
+    bool isExtensible() const { return extensible_;}
 
 private:
     GroupNode(GroupNode const & other, bool keepTemplateName);

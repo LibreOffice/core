@@ -57,15 +57,7 @@ const OUString & FFDataHandler::getStatusText() const
     return m_sStatusText;
 }
 
-sal_uInt32 FFDataHandler::getCheckboxHeight() const
-{
-    return m_nCheckboxHeight;
-}
 
-bool FFDataHandler::getCheckboxAutoHeight() const
-{
-    return m_bCheckboxAutoHeight;
-}
 
 bool FFDataHandler::getCheckboxChecked() const
 {

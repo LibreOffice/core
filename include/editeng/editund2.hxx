@@ -53,7 +53,7 @@ public:
     EditUndo(sal_uInt16 nI, EditEngine* pEE);
     virtual ~EditUndo();
 
-    EditEngine* GetEditEngine();
+    EditEngine* GetEditEngine() { return mpEditEngine;}
 
     virtual void    Undo() SAL_OVERRIDE      = 0;
     virtual void    Redo() SAL_OVERRIDE      = 0;

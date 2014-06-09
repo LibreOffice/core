@@ -121,10 +121,6 @@ bool RTFLookahead::isSubstream() const
     return false;
 }
 
-bool RTFLookahead::hasTable()
-{
-    return m_bHasTable;
-}
 
 } // namespace rtftok
 } // namespace writerfilter

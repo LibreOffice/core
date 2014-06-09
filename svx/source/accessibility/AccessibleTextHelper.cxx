@@ -156,7 +156,12 @@ namespace accessibility
         void FireEvent( const AccessibleEventObject& rEvent ) const;
 
         void SetFocus( bool bHaveFocus );
-        bool HaveFocus();
+        bool HaveFocus()
+        {
+            // No locking of solar mutex here, since we rely on the fact
+            // that sal_Bool access is atomic
+            return mbThisHasFocus;
+        }
         void SetChildFocus( sal_Int32 nChild, bool bHaveFocus );
         void SetShapeFocus( bool bHaveFocus );
         void ChangeChildFocus( sal_Int32 nNewChild );
@@ -524,13 +529,6 @@ namespace accessibility
         OSL_TRACE("AccessibleTextHelper_Impl::SetFocus: focus changed, Object %p, state: %s", this, bHaveFocus ? "focused" : "not focused");
     }
 
-    bool AccessibleTextHelper_Impl::HaveFocus()
-    {
-
-        // No locking of solar mutex here, since we rely on the fact
-        // that sal_Bool access is atomic
-        return mbThisHasFocus;
-    }
 
     bool AccessibleTextHelper_Impl::IsActive() const
     {

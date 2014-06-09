@@ -74,7 +74,7 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) SAL_OVERRIDE;
 
-    SfxBindings* GetBindings();
+    SfxBindings* GetBindings() { return mpBindings;}
 
     void SetWidth(long nWidth);
     void SetWidthIcon(int n);

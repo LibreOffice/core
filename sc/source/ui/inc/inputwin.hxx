@@ -107,7 +107,7 @@ protected:
     void            ImplInitSettings();
     void            UpdateAutoCorrFlag();
 
-    ScTabViewShell* GetViewShell();
+    ScTabViewShell* GetViewShell() { return mpViewShell;}
 
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 

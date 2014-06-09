@@ -103,10 +103,6 @@ namespace frm
     }
 
 
-    bool RichTextViewPort::GetHideInactiveSelection() const
-    {
-        return m_bHideInactiveSelection;
-    }
 
 
 }   // namespace frm

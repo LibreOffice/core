@@ -333,10 +333,6 @@ Sequence< Sequence< com::sun::star::beans::PropertyValue > > ToolbarsMenuControl
     return aSeq;
 }
 
-bool ToolbarsMenuController::isContextSensitiveToolbarNonVisible()
-{
-    return m_bResetActive;
-}
 
 void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {

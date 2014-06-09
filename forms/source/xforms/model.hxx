@@ -156,7 +156,7 @@ public:
     void setNamespaces( const XNameContainer_t& );
 
     // get/set the ExternalData property
-    bool getExternalData() const;
+    bool getExternalData() const { return mbExternalData;}
     void setExternalData( bool _bData );
 
 
@@ -194,7 +194,7 @@ public:
     void loadInstances();
 
     /// has model been initialized?
-    bool isInitialized() const;
+    bool isInitialized() const { return mbInitialized;}
 
     /// is model currently valid (for submission)?
     bool isValid() const;

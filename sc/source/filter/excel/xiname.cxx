@@ -203,11 +203,6 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
         InsertName(pTokArr);
 }
 
-bool XclImpName::IsMacro() const
-{
-    return mbMacro;
-}
-
 void XclImpName::ConvertTokens()
 {
     if (!mpTokensData)

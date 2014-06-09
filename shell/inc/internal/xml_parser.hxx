@@ -102,7 +102,7 @@ public:
 
     /** Returns the currently used document handler or null if
         no document handler was set before. */
-    i_xml_parser_event_handler* get_document_handler() const;
+    i_xml_parser_event_handler* get_document_handler() const { return document_handler_;}
 private:
 
     void init();

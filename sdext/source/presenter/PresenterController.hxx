@@ -121,7 +121,7 @@ public:
     bool HasTransition (css::uno::Reference<css::drawing::XDrawPage>& rxPage);
     bool HasCustomAnimation (css::uno::Reference<css::drawing::XDrawPage>& rxPage);
     void SetAccessibilityActiveState (const bool bIsActive);
-    bool IsAccessibilityActive (void) const;
+    bool IsAccessibilityActive (void) const { return mbIsAccessibilityActive;}
 
     void HandleMouseClick (const css::awt::MouseEvent& rEvent);
     void UpdatePaneTitles (void);

@@ -22,15 +22,7 @@ RowHeightContext::RowHeightContext(
 
 RowHeightContext::~RowHeightContext() {}
 
-double RowHeightContext::getPPTX() const
-{
-    return mfPPTX;
-}
 
-double RowHeightContext::getPPTY() const
-{
-    return mfPPTY;
-}
 
 const Fraction& RowHeightContext::getZoomX() const
 {
@@ -42,30 +34,18 @@ const Fraction& RowHeightContext::getZoomY() const
     return maZoomY;
 }
 
-OutputDevice* RowHeightContext::getOutputDevice()
-{
-    return mpOutDev;
-}
 
 void RowHeightContext::setExtraHeight( sal_uInt16 nH )
 {
     mnExtraHeight = nH;
 }
 
-sal_uInt16 RowHeightContext::getExtraHeight() const
-{
-    return mnExtraHeight;
-}
 
 void RowHeightContext::setForceAutoSize( bool b )
 {
     mbForceAutoSize = b;
 }
 
-bool RowHeightContext::isForceAutoSize() const
-{
-    return mbForceAutoSize;
-}
 
 }
 

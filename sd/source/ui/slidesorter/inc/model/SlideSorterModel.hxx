@@ -78,8 +78,8 @@ public:
     /** Set the edit mode to that currently used by the controller.
     */
     bool SetEditModeFromController (void);
-    EditMode GetEditMode (void) const;
-    PageKind GetPageType (void) const;
+    EditMode GetEditMode (void) const { return meEditMode;}
+    PageKind GetPageType (void) const { return mePageKind;}
 
     /** Return the number of slides in the document regardless of whether
         they are visible or not or whether they are hidden or not.

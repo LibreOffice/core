@@ -74,7 +74,10 @@ namespace dbaui
         using MultiLineEditSyntaxHighlight::SetText;
 
         // own functionality
-        bool IsInAccelAct();
+        // Cut, Copy, Paste by Accel. runs the action in the Edit but also the
+        // corresponding slot in the View. Therefore, the action occurs twice.
+       // To prevent this, SlotExec in View can call this function.
+        bool IsInAccelAct() { return m_bAccelAction; }
 
         void SetTextModifyHdl(const Link& lnk) { m_lnkTextModifyHdl = lnk; }
             // please don't use SetModifyHdl, I need it for myself, this here is called from the handler set with that

@@ -469,7 +469,7 @@ public:
 
         @see <member>mbIsGraphicLoadOnDemandSupported</member>
      */
-    bool isGraphicLoadOnDemandSupported() const;
+    bool isGraphicLoadOnDemandSupported() const { return mbIsGraphicLoadOnDemandSupported;}
 
     /**
         Returns true if the embedded font document URL has already been processed.

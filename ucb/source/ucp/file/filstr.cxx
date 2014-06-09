@@ -84,17 +84,9 @@ XStream_impl::~XStream_impl()
 }
 
 
-sal_Int32 SAL_CALL XStream_impl::CtorSuccess()
-{
-    return m_nErrorCode;
-}
 
 
 
-sal_Int32 SAL_CALL XStream_impl::getMinorError()
-{
-    return m_nMinorErrorCode;
-}
 
 
 

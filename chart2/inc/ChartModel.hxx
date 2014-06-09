@@ -593,13 +593,13 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > getChartView();
 
-    bool isTimeBased() const;
+    bool isTimeBased() const { return mbTimeBased;}
     void setTimeBased(bool bTimeBased);
 
     void getNextTimePoint();
     void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
 
-    OpenGLWindow* getOpenGLWindow();
+    OpenGLWindow* getOpenGLWindow() { return mpOpenGLWindow;}
 
 private:
     sal_Int32 mnStart;

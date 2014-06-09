@@ -647,10 +647,6 @@ bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com:
     return bRet;
 }
 
-SdDrawDocument* DrawDocShell::GetDoc()
-{
-    return mpDoc;
-}
 
 SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
 {

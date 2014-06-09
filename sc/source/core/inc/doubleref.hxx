@@ -71,7 +71,7 @@ public:
 
 protected:
     ScDBRangeBase(ScDocument* pDoc, RefType eType);
-    ScDocument* getDoc() const;
+    ScDocument* getDoc() const { return mpDoc;}
 
     /**
      * Populate query options that are always the same for all database

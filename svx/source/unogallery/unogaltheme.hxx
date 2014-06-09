@@ -91,7 +91,7 @@ private:
     ::Gallery*      mpGallery;
     ::GalleryTheme* mpTheme;
 
-    ::GalleryTheme* implGetTheme() const;
+    ::GalleryTheme* implGetTheme() const { return mpTheme;}
 
     void            implReleaseItems( GalleryObject* pObj );
 

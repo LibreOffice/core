@@ -115,9 +115,9 @@ public:
 
     void                    UpdateSelectionClipboard( bool bForceDeselect );
 
-    inline DrawDocShell* GetDocSh(void) const;
+    inline DrawDocShell* GetDocSh(void) const { return mpDocSh; }
     inline SdDrawDocument& GetDoc(void) const;
-    inline ViewShell* GetViewShell(void) const;
+    inline ViewShell* GetViewShell(void) const { return mpViewSh; }
 
     virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = 0L, ::Window* pWin = 0L, bool bIsNewObj = false,
         SdrOutliner* pGivenOutliner = 0L, OutlinerView* pGivenOutlinerView = 0L,
@@ -275,18 +275,9 @@ private:
 };
 
 
-DrawDocShell* View::GetDocSh (void) const
-{
-    return mpDocSh;
-}
 SdDrawDocument& View::GetDoc (void) const
 {
     return mrDoc;
-}
-
-ViewShell* View::GetViewShell (void) const
-{
-    return mpViewSh;
 }
 
 } // end of namespace sd

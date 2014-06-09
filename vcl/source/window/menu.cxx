@@ -1570,10 +1570,6 @@ void Menu::SetHighlightItem( sal_uInt16 nItem )
     nHighlightedItem = nItem;
 }
 
-sal_uInt16 Menu::GetCurItemId() const
-{
-    return nSelectedId;
-}
 
 OString Menu::GetCurItemIdent() const
 {

@@ -65,14 +65,14 @@ public:
     void clearSelectedMenuItem();
     ScMenuFloatingWindow* getSubMenuWindow(size_t nPos) const;
     bool isMenuItemSelected(size_t nPos) const;
-    size_t getSelectedMenuItem() const;
+    size_t getSelectedMenuItem() const { return mnSelectedMenu;}
 
     void setName(const OUString& rName);
     const OUString& getName() const;
 
     void executeMenuItem(size_t nPos);
     void getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const;
-    ScMenuFloatingWindow* getParentMenuWindow() const;
+    ScMenuFloatingWindow* getParentMenuWindow() const { return mpParentMenu;}
 
 protected:
     virtual void handlePopupEnd();
@@ -90,7 +90,7 @@ protected:
 
     void fillMenuItemsToAccessible(ScAccessibleFilterMenu* pAccMenu) const;
 
-    ScDocument* getDoc();
+    ScDocument* getDoc() { return mpDoc;}
 
 protected:
     ::com::sun::star::uno::Reference<

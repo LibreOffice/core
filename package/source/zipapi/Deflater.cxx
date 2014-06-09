@@ -154,10 +154,6 @@ void SAL_CALL Deflater::finish(  )
 {
     bFinish = true;
 }
-bool SAL_CALL Deflater::finished(  )
-{
-    return bFinished;
-}
 sal_Int32 SAL_CALL Deflater::doDeflateSegment( uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
 {
     OSL_ASSERT( !(nNewOffset < 0 || nNewLength < 0 || nNewOffset + nNewLength > rBuffer.getLength()));

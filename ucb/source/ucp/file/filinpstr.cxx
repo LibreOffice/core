@@ -73,20 +73,6 @@ XInputStream_impl::~XInputStream_impl()
 }
 
 
-sal_Int32 SAL_CALL XInputStream_impl::CtorSuccess()
-{
-    return m_nErrorCode;
-};
-
-
-
-sal_Int32 SAL_CALL XInputStream_impl::getMinorError()
-{
-    return m_nMinorErrorCode;
-}
-
-
-
 //  XTypeProvider
 
 

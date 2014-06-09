@@ -52,10 +52,6 @@ StockDataInterpreter::StockDataInterpreter(
 StockDataInterpreter::~StockDataInterpreter()
 {}
 
-StockChartTypeTemplate::StockVariant StockDataInterpreter::GetStockVariant() const
-{
-    return m_eStockVariant;
-}
 
 // ____ XDataInterpreter ____
 InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(

@@ -39,7 +39,7 @@ public:
 
     void ActivateCurrentSlideTracking (void);
     void DeactivateCurrentSlideTracking (void);
-    bool IsCurrentSlideTrackingActive (void) const;
+    bool IsCurrentSlideTrackingActive (void) const { return mbIsCurrentSlideTrackingActive;}
 
     /** Request the current slide to be moved into the visible area.
         This request is only obeyed when the current slide tracking is

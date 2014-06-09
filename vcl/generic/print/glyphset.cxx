@@ -59,23 +59,8 @@ GlyphSet::~GlyphSet ()
     /* FIXME delete the glyphlist ??? */
 }
 
-sal_Int32
-GlyphSet::GetFontID ()
-{
-    return mnFontID;
-}
 
-fonttype::type
-GlyphSet::GetFontType ()
-{
-    return meBaseType;
-}
 
-bool
-GlyphSet::IsVertical ()
-{
-    return mbVertical;
-}
 
 bool
 GlyphSet::GetCharID (

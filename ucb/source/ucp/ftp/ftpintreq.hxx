@@ -44,7 +44,7 @@ namespace ftp {
             throw (css::uno::RuntimeException,
                    std::exception) SAL_OVERRIDE;
 
-        bool isSelected() const;
+        bool isSelected() const { return m_bSelected;}
 
     private:
 

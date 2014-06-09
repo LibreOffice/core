@@ -110,10 +110,6 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
 ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
 {
 }
-ObjectType ObjectPropertiesDialogParameter::getObjectType() const
-{
-    return m_eObjectType;
-}
 OUString ObjectPropertiesDialogParameter::getLocalizedName() const
 {
     return m_aLocalizedName;
@@ -313,81 +309,13 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
     }
 }
 
-bool ObjectPropertiesDialogParameter::HasGeometryProperties() const
-{
-    return m_bHasGeometryProperties;
-}
-bool ObjectPropertiesDialogParameter::HasStatisticProperties() const
-{
-    return m_bHasStatisticProperties;
-}
-bool ObjectPropertiesDialogParameter::ProvidesSecondaryYAxis() const
-{
-    return m_bProvidesSecondaryYAxis;
-}
-bool ObjectPropertiesDialogParameter::ProvidesOverlapAndGapWidth() const
-{
-    return m_bProvidesOverlapAndGapWidth;
-}
-bool ObjectPropertiesDialogParameter::ProvidesBarConnectors() const
-{
-    return m_bProvidesBarConnectors;
-}
-bool ObjectPropertiesDialogParameter::HasAreaProperties() const
-{
-    return m_bHasAreaProperties;
-}
-bool ObjectPropertiesDialogParameter::HasSymbolProperties() const
-{
-    return m_bHasSymbolProperties;
-}
-bool ObjectPropertiesDialogParameter::HasScaleProperties() const
-{
-    return m_bHasScaleProperties;
-}
-bool ObjectPropertiesDialogParameter::CanAxisLabelsBeStaggered() const
-{
-    return m_bCanAxisLabelsBeStaggered;
-}
-bool ObjectPropertiesDialogParameter::ShowAxisOrigin() const
-{
-    return m_bShowAxisOrigin;
-}
-bool ObjectPropertiesDialogParameter::IsSupportingAxisPositioning() const
-{
-    return m_bSupportingAxisPositioning;
-}
-bool ObjectPropertiesDialogParameter::IsCrossingAxisIsCategoryAxis() const
-{
-    return m_bIsCrossingAxisIsCategoryAxis;
-}
 const uno::Sequence< OUString >& ObjectPropertiesDialogParameter::GetCategories() const
 {
     return m_aCategories;
 }
-bool ObjectPropertiesDialogParameter::HasNumberProperties() const
-{
-    return m_bHasNumberProperties;
-}
-bool ObjectPropertiesDialogParameter::ProvidesStartingAngle() const
-{
-    return m_bProvidesStartingAngle;
-}
-bool ObjectPropertiesDialogParameter::ProvidesMissingValueTreatments() const
-{
-    return m_bProvidesMissingValueTreatments;
-}
 uno::Reference< chart2::XChartDocument > ObjectPropertiesDialogParameter::getDocument() const
 {
     return m_xChartDocument;
-}
-bool ObjectPropertiesDialogParameter::IsComplexCategoriesAxis() const
-{
-    return m_bComplexCategoriesAxis;
-}
-sal_Int32 ObjectPropertiesDialogParameter::getNbPoints() const
-{
-    return m_nNbPoints;
 }
 
 const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
@@ -723,10 +651,6 @@ IMPL_LINK_NOARG(SchAttribTabDlg, OKPressed)
     return m_aOriginalOKClickHdl.Call( this );
 }
 
-bool SchAttribTabDlg::DialogWasClosedWithOK() const
-{
-    return m_bOKPressed;
-}
 
 } //namespace chart
 

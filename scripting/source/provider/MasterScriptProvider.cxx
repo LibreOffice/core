@@ -361,11 +361,6 @@ throw ( provider::ScriptFrameworkErrorException,
     return xScript;
 }
 
-bool
-MasterScriptProvider::isValid()
-{
-    return m_bIsValid;
-}
 
 
 ProviderCache*

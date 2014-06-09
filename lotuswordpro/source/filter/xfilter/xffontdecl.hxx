@@ -84,7 +84,7 @@ public:
      */
     OUString   GetFontFamily();
 
-    bool        GetFontPitchFixed();
+    bool        GetFontPitchFixed() { return m_bPitchFixed;}
 
 private:
     OUString   m_strFontName;

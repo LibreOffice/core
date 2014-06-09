@@ -210,10 +210,6 @@ void PresenterScrollBar::SetThumbPosition (
     }
 }
 
-double PresenterScrollBar::GetThumbPosition (void) const
-{
-    return mnThumbPosition;
-}
 
 void PresenterScrollBar::SetTotalSize (const double nTotalSize)
 {
@@ -236,20 +232,12 @@ void PresenterScrollBar::SetThumbSize (const double nThumbSize)
     }
 }
 
-double PresenterScrollBar::GetThumbSize (void) const
-{
-    return mnThumbSize;
-}
 
 void PresenterScrollBar::SetLineHeight (const double nLineHeight)
 {
     mnLineHeight = nLineHeight;
 }
 
-double PresenterScrollBar::GetLineHeight (void) const
-{
-    return mnLineHeight;
-}
 
 void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rxCanvas)
 {

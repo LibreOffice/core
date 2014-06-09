@@ -102,10 +102,6 @@ bool StorageBase::isRootStorage() const
     return implIsStorage() && maStorageName.isEmpty();
 }
 
-bool StorageBase::isReadOnly() const
-{
-    return mbReadOnly;
-}
 
 Reference< XStorage > StorageBase::getXStorage() const
 {

@@ -1480,10 +1480,6 @@ SfxPoolItem*  SwFmtAnchor::Clone( SfxItemPool* ) const
 sal_uInt32 SwFmtAnchor::mnOrderCounter = 0;
 
 // OD 2004-05-05 #i28701#
-sal_uInt32 SwFmtAnchor::GetOrder() const
-{
-    return mnOrder;
-}
 
 bool SwFmtAnchor::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {

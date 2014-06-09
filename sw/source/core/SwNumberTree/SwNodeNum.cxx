@@ -44,15 +44,7 @@ SwNodeNum::~SwNodeNum()
 {
 }
 
-SwTxtNode * SwNodeNum::GetTxtNode() const
-{
-    return mpTxtNode;
-}
 
-SwNumRule * SwNodeNum::GetNumRule() const
-{
-    return mpNumRule;
-}
 
 void SwNodeNum::ChangeNumRule( SwNumRule& rNumRule )
 {

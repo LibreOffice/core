@@ -387,10 +387,6 @@ void Bitmap::ImplAssignWithSize( const Bitmap& rBitmap )
     maPrefMapMode = aOldMapMode;
 }
 
-ImpBitmap* Bitmap::ImplGetImpBitmap() const
-{
-    return mpImpBmp;
-}
 
 void Bitmap::ImplSetImpBitmap( ImpBitmap* pImpBmp )
 {

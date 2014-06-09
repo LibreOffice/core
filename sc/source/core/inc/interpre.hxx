@@ -140,7 +140,7 @@ public:
         NOT_VOLATILE
     };
 
-    VolatileType GetVolatileType() const;
+    VolatileType GetVolatileType() const { return meVolatileType;}
 
 private:
     static ScCalcConfig maGlobalConfig;

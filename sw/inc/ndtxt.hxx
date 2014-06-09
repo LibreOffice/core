@@ -594,7 +594,7 @@ public:
      */
     void SetAttrOutlineLevel(int nLevel);
 
-    bool IsEmptyListStyleDueToSetOutlineLevelAttr();
+    bool IsEmptyListStyleDueToSetOutlineLevelAttr() { return mbEmptyListStyleSetDueToSetOutlineLevelAttr;}
     void SetEmptyListStyleDueToSetOutlineLevelAttr();
     void ResetEmptyListStyleDueToResetOutlineLevelAttr();
 

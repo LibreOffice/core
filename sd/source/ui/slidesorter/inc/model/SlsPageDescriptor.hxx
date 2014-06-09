@@ -69,7 +69,7 @@ public:
 
     /** Return the page that is represented by the descriptor as SdPage pointer .
     */
-    SdPage* GetPage (void) const;
+    SdPage* GetPage (void) const { return mpPage;}
 
     /** Return the page that is represented by the descriptor as XDrawPage reference.
     */
@@ -80,7 +80,7 @@ public:
         XDrawPage when there are hidden slides and the XIndexAccess used to
         access the model filters them out.
     */
-    sal_Int32 GetPageIndex (void) const;
+    sal_Int32 GetPageIndex (void) const { return mnIndex;}
     void SetPageIndex (const sal_Int32 nIndex);
 
     bool UpdateMasterPage (void);

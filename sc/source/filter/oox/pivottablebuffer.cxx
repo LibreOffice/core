@@ -1291,11 +1291,6 @@ sal_Int32 PivotTable::getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const
     return mpPivotCache ? mpPivotCache->getCacheDatabaseIndex( nFieldIdx ) : -1;
 }
 
-ScDPObject* PivotTable::getDPObject()
-{
-    return mpDPObject;
-}
-
 // private --------------------------------------------------------------------
 
 PivotTableField* PivotTable::getTableField( sal_Int32 nFieldIdx )

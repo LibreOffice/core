@@ -525,65 +525,33 @@ void PDFExtOutDevData::SetDocumentLocale( const com::sun::star::lang::Locale& rL
 {
     maDocLocale = rLoc;
 }
-sal_Int32 PDFExtOutDevData::GetCurrentPageNumber() const
-{
-    return mnPage;
-}
 void PDFExtOutDevData::SetCurrentPageNumber( const sal_Int32 nPage )
 {
     mnPage = nPage;
-}
-bool PDFExtOutDevData::GetIsLosslessCompression() const
-{
-    return mbUseLosslessCompression;
 }
 void PDFExtOutDevData::SetIsLosslessCompression( const bool bUseLosslessCompression )
 {
     mbUseLosslessCompression = bUseLosslessCompression;
 }
-bool PDFExtOutDevData::GetIsReduceImageResolution() const
-{
-    return mbReduceImageResolution;
-}
 void PDFExtOutDevData::SetIsReduceImageResolution( const bool bReduceImageResolution )
 {
     mbReduceImageResolution = bReduceImageResolution;
-}
-bool PDFExtOutDevData::GetIsExportNotes() const
-{
-    return mbExportNotes;
 }
 void PDFExtOutDevData::SetIsExportNotes( const bool bExportNotes )
 {
     mbExportNotes = bExportNotes;
 }
-bool PDFExtOutDevData::GetIsExportNotesPages() const
-{
-    return mbExportNotesPages;
-}
 void PDFExtOutDevData::SetIsExportNotesPages( const bool bExportNotesPages )
 {
     mbExportNotesPages = bExportNotesPages;
-}
-bool PDFExtOutDevData::GetIsExportTaggedPDF() const
-{
-    return mbTaggedPDF;
 }
 void PDFExtOutDevData::SetIsExportTaggedPDF( const bool bTaggedPDF )
 {
     mbTaggedPDF = bTaggedPDF;
 }
-bool PDFExtOutDevData::GetIsExportTransitionEffects() const
-{
-    return mbTransitionEffects;
-}
 void PDFExtOutDevData::SetIsExportTransitionEffects( const bool bTransitionEffects )
 {
     mbTransitionEffects = bTransitionEffects;
-}
-bool PDFExtOutDevData::GetIsExportFormFields() const
-{
-    return mbExportFormFields;
 }
 void PDFExtOutDevData::SetIsExportFormFields( const bool bExportFomtFields )
 {
@@ -593,17 +561,9 @@ void PDFExtOutDevData::SetFormsFormat( const sal_Int32 nFormsFormat )
 {
     mnFormsFormat = nFormsFormat;
 }
-bool PDFExtOutDevData::GetIsExportBookmarks() const
-{
-    return mbExportBookmarks;
-}
 void PDFExtOutDevData::SetIsExportBookmarks( const bool bExportBookmarks )
 {
     mbExportBookmarks = bExportBookmarks;
-}
-bool PDFExtOutDevData::GetIsExportHiddenSlides() const
-{
-    return mbExportHiddenSlides;
 }
 void PDFExtOutDevData::SetIsExportHiddenSlides( const bool bExportHiddenSlides )
 {
@@ -612,10 +572,6 @@ void PDFExtOutDevData::SetIsExportHiddenSlides( const bool bExportHiddenSlides )
 std::vector< PDFExtOutDevBookmarkEntry >& PDFExtOutDevData::GetBookmarks()
 {
     return maBookmarks;
-}
-bool PDFExtOutDevData::GetIsExportNamedDestinations() const
-{
-    return mbExportNDests;
 }
 void PDFExtOutDevData::SetIsExportNamedDestinations( const bool bExportNDests )
 {

@@ -60,7 +60,7 @@ class SwTypeNumber
         SwTypeNumber(sal_uInt8 nId) :nTypeId(nId){}
         virtual ~SwTypeNumber();
 
-        sal_uInt8 GetTypeId() const;
+        sal_uInt8 GetTypeId() const { return nTypeId;}
 };
 
 class SwContent : public SwTypeNumber

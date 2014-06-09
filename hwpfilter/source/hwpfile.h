@@ -116,7 +116,7 @@ class DLLEXPORT HWPFile
  * Say current state
  * @returns 0 if normal, otherwise error code. If it's  bigger than USER_ERROR_BIT, it is internally using error, otherwise it's system error which is able to get the message @ref strerror() method.
  */
-        int State( void ) const;
+        int State( void ) const { return error_code;}
 /**
  * Sets the current state
  */

@@ -1262,10 +1262,6 @@ bool SvxShapePolyPolygon::getPropertyValueImpl( const OUString& rName, const Sfx
 }
 
 
-drawing::PolygonKind SvxShapePolyPolygon::GetPolygonKind() const throw()
-{
-    return mePolygonKind;
-}
 
 
 void SvxShapePolyPolygon::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(uno::RuntimeException)
@@ -1397,10 +1393,6 @@ bool SvxShapePolyPolygonBezier::getPropertyValueImpl( const OUString& rName, con
 }
 
 
-drawing::PolygonKind SvxShapePolyPolygonBezier::GetPolygonKind() const throw()
-{
-    return mePolygonKind;
-}
 
 
 void SvxShapePolyPolygonBezier::SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(uno::RuntimeException)

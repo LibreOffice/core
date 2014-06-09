@@ -204,13 +204,14 @@ class SvtSecurityOptions_Impl : public ConfigItem
         bool                m_bROExecutePlugins;
         bool                m_bROBasicMode;
         public:
-        bool IsWarningEnabled() const;
+        bool IsWarningEnabled() const { return m_bWarning;}
         void SetWarningEnabled( bool bSet );
-        bool IsConfirmationEnabled() const;
+        bool IsConfirmationEnabled() const { return m_bConfirmation;}
         void SetConfirmationEnabled( bool bSet );
-        bool    IsExecutePlugins() const;
+        bool    IsExecutePlugins() const { return m_bExecutePlugins;}
         void        SetExecutePlugins( bool bSet );
-        EBasicSecurityMode      GetBasicMode    (                                               ) const;
+        // xmlsec05 deprecated
+        EBasicSecurityMode      GetBasicMode    (                                               ) const { return m_eBasicMode;}
         void                    SetBasicMode    (           EBasicSecurityMode      eMode       );
 };
 
@@ -1109,13 +1110,6 @@ Mutex& SvtSecurityOptions::GetInitMutex()
     return theSecurityOptionsMutex::get();
 }
 
-// xmlsec05 deprecated
-
-EBasicSecurityMode SvtSecurityOptions_Impl::GetBasicMode() const
-{
-    return m_eBasicMode;
-}
-
 void SvtSecurityOptions_Impl::SetBasicMode( EBasicSecurityMode eMode )
 {
     DBG_ASSERT(!m_bROBasicMode, "SvtSecurityOptions_Impl::SetBasicMode()\nYou tried to write on a readonly value!\n");
@@ -1126,10 +1120,6 @@ void SvtSecurityOptions_Impl::SetBasicMode( EBasicSecurityMode eMode )
     }
 }
 
-bool SvtSecurityOptions_Impl::IsExecutePlugins() const
-{
-    return m_bExecutePlugins;
-}
 
 void SvtSecurityOptions_Impl::SetExecutePlugins( bool bSet )
 {
@@ -1141,10 +1131,6 @@ void SvtSecurityOptions_Impl::SetExecutePlugins( bool bSet )
     }
 }
 
-bool SvtSecurityOptions_Impl::IsWarningEnabled() const
-{
-    return m_bWarning;
-}
 
 void SvtSecurityOptions_Impl::SetWarningEnabled( bool bSet )
 {
@@ -1156,10 +1142,6 @@ void SvtSecurityOptions_Impl::SetWarningEnabled( bool bSet )
     }
 }
 
-bool SvtSecurityOptions_Impl::IsConfirmationEnabled() const
-{
-    return m_bConfirmation;
-}
 
 void SvtSecurityOptions_Impl::SetConfirmationEnabled( bool bSet )
 {

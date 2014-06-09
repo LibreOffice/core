@@ -130,20 +130,12 @@ void GfxLink::ImplCopy( const GfxLink& rGfxLink )
         mpSwap->mnRefCount++;
 }
 
-GfxLinkType GfxLink::GetType() const
-{
-    return meType;
-}
 
 bool GfxLink::IsNative() const
 {
     return( meType >= GFX_LINK_FIRST_NATIVE_ID && meType <= GFX_LINK_LAST_NATIVE_ID );
 }
 
-sal_uInt32 GfxLink::GetDataSize() const
-{
-    return mnBufSize;
-}
 
 const sal_uInt8* GfxLink::GetData() const
 {

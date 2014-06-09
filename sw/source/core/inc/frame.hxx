@@ -549,14 +549,14 @@ public:
     inline bool IsVertical() const;
 
     inline bool IsVertLR() const;
-    inline bool GetVerticalFlag() const;
+    inline bool GetVerticalFlag() const { return mbVertical; }
     inline void SetVertical( bool bNew ){ mbVertical = bNew ? 1 : 0; }
 
     inline void SetbVertLR( bool bNew ) { mbVertLR = bNew ? 1 : 0; }
     inline void SetDerivedVert( bool bNew ){ mbDerivedVert = bNew ? 1 : 0; }
     inline void SetInvalidVert( bool bNew) { mbInvalidVert = bNew ? 1 : 0; }
     inline bool IsRightToLeft() const;
-    inline bool GetRightToLeftFlag() const;
+    inline bool GetRightToLeftFlag() const { return mbRightToLeft; }
     inline void SetRightToLeft( bool bNew ){ mbRightToLeft = bNew ? 1 : 0; }
     inline void SetDerivedR2L( bool bNew ) { mbDerivedR2L  = bNew ? 1 : 0; }
     inline void SetInvalidR2L( bool bNew ) { mbInvalidR2L  = bNew ? 1 : 0; }
@@ -935,18 +935,10 @@ inline bool SwFrm::IsVertLR() const
 {
     return mbVertLR;
 }
-bool SwFrm::GetVerticalFlag() const
-{
-    return mbVertical;
-}
 inline bool SwFrm::IsRightToLeft() const
 {
     if( mbInvalidR2L )
         ((SwFrm*)this)->SetDirFlags( false );
-    return mbRightToLeft;
-}
-bool SwFrm::GetRightToLeftFlag() const
-{
     return mbRightToLeft;
 }
 

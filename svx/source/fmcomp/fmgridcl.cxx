@@ -2005,10 +2005,6 @@ void FmGridControl::Select()
     }
 }
 
-sal_Int32 FmGridControl::GetSelectedColumn() const
-{
-    return m_nCurrentSelectedColumn;
-}
 
 void FmGridControl::KeyInput( const KeyEvent& rKEvt )
 {

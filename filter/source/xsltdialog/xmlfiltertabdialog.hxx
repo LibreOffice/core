@@ -39,7 +39,7 @@ public:
 
     bool onOk();
 
-    filter_info_impl* getNewFilterInfo() const;
+    filter_info_impl* getNewFilterInfo() const { return mpNewInfo;}
 
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;

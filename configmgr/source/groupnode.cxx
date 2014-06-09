@@ -55,9 +55,6 @@ int GroupNode::getMandatory() const {
     return mandatory_;
 }
 
-bool GroupNode::isExtensible() const {
-    return extensible_;
-}
 
 GroupNode::GroupNode(GroupNode const & other, bool keepTemplateName):
     Node(other), extensible_(other.extensible_), mandatory_(other.mandatory_)

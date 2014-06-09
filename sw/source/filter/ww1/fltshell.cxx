@@ -873,10 +873,6 @@ const SwFrmFmt * SwFltAnchor::GetFrmFmt() const
     return pFrmFmt;
 }
 
-SwFrmFmt * SwFltAnchor::GetFrmFmt()
-{
-    return pFrmFmt;
-}
 
 bool SwFltAnchor::operator==(const SfxPoolItem& rItem) const
 {

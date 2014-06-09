@@ -273,10 +273,6 @@ bool XMLFilterTabDialog::onOk()
 
 
 
-filter_info_impl* XMLFilterTabDialog::getNewFilterInfo() const
-{
-    return mpNewInfo;
-}
 
 
 

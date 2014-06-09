@@ -76,30 +76,10 @@ void SvtGraphicStroke::getEndArrow( PolyPolygon& rPath ) const
     rPath = maEndArrow;
 }
 
-double SvtGraphicStroke::getTransparency() const
-{
-    return mfTransparency;
-}
 
-double SvtGraphicStroke::getStrokeWidth() const
-{
-    return mfStrokeWidth;
-}
 
-SvtGraphicStroke::CapType SvtGraphicStroke::getCapType() const
-{
-    return maCapType;
-}
 
-SvtGraphicStroke::JoinType SvtGraphicStroke::getJoinType() const
-{
-    return maJoinType;
-}
 
-double SvtGraphicStroke::getMiterLimit() const
-{
-    return mfMiterLimit;
-}
 
 void SvtGraphicStroke::getDashArray( DashArray& rDashArray ) const
 {
@@ -242,40 +222,16 @@ Color SvtGraphicFill::getFillColor() const
     return maFillColor;
 }
 
-double SvtGraphicFill::getTransparency() const
-{
-    return mfTransparency;
-}
 
-SvtGraphicFill::FillRule SvtGraphicFill::getFillRule() const
-{
-    return maFillRule;
-}
 
-SvtGraphicFill::FillType SvtGraphicFill::getFillType() const
-{
-    return maFillType;
-}
 
 void SvtGraphicFill::getTransform( Transform& rTrans ) const
 {
     rTrans = maFillTransform;
 }
 
-bool SvtGraphicFill::IsTiling() const
-{
-    return mbTiling;
-}
 
-bool SvtGraphicFill::isTiling() const
-{
-    return mbTiling;
-}
 
-SvtGraphicFill::GradientType SvtGraphicFill::getGradientType() const
-{
-    return maGradientType;
-}
 
 void SvtGraphicFill::getGraphic( Graphic& rGraphic ) const
 {

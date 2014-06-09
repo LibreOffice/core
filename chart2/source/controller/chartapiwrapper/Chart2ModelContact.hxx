@@ -58,7 +58,7 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XModel > getChartModel() const;
 
-    ChartModel* getModel() const;
+    ChartModel* getModel() const { return mpModel;}
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XChartDocument > getChart2Document() const;

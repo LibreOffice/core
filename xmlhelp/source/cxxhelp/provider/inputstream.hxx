@@ -48,7 +48,7 @@ namespace chelp {
          *  Returns an error code as given by filerror.hxx
          */
 
-        bool SAL_CALL CtorSuccess();
+        bool SAL_CALL CtorSuccess() { return m_bIsOpen;}
 
         virtual com::sun::star::uno::Any SAL_CALL
         queryInterface(

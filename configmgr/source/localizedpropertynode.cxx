@@ -44,13 +44,7 @@ NodeMap & LocalizedPropertyNode::getMembers() {
     return members_;
 }
 
-Type LocalizedPropertyNode::getStaticType() const {
-    return staticType_;
-}
 
-bool LocalizedPropertyNode::isNillable() const {
-    return nillable_;
-}
 
 LocalizedPropertyNode::LocalizedPropertyNode(
     LocalizedPropertyNode const & other):

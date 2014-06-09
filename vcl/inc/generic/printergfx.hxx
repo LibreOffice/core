@@ -325,7 +325,7 @@ public:
     void            Clear();
 
     // query depth
-    sal_uInt16      GetBitCount ();
+    sal_uInt16      GetBitCount () { return mnDepth;}
 
     // clip region
     void            ResetClipRegion ();

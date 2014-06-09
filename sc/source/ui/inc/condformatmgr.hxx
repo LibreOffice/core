@@ -53,7 +53,7 @@ public:
 
     ScConditionalFormatList* GetConditionalFormatList();
 
-    bool CondFormatsChanged();
+    bool CondFormatsChanged() { return mbModified;}
 
     virtual bool IsInRefMode() const;
 

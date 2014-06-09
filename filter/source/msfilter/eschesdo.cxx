@@ -1268,10 +1268,6 @@ bool ImplEESdrObject::ImplHasText() const
     return xXText.is() && !xXText->getString().isEmpty();
 }
 
-bool ImplEESdrObject::GetOOXML() const
-{
-    return mbOOXML;
-}
 
 void ImplEESdrObject::SetOOXML(bool bOOXML)
 {

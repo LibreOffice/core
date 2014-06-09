@@ -913,10 +913,6 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl)
     return bFinish ? 1 : 0;
 }
 
-bool OCopyTableWizard::shouldCreatePrimaryKey() const
-{
-    return m_bCreatePrimaryKeyColumn;
-}
 
 void OCopyTableWizard::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName )
 {
@@ -1379,10 +1375,6 @@ void OCopyTableWizard::setOperation( const sal_Int16 _nOperation )
     m_nOperation = _nOperation;
 }
 
-sal_Int16 OCopyTableWizard::getOperation() const
-{
-    return m_nOperation;
-}
 
 OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFunctor,
                                                     const OUString&  _sColumnName,

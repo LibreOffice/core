@@ -79,8 +79,8 @@ class SvtLocalisationOptions_Impl : public ConfigItem
                         It's not used in the moment - but it's possible for the feature!
         *//*-*****************************************************************************************************/
 
-        bool    IsAutoMnemonic  (                   ) const;
-        sal_Int32   GetDialogScale  (                   ) const;
+        bool    IsAutoMnemonic  (                   ) const { return m_bAutoMnemonic;}
+        sal_Int32   GetDialogScale  (                   ) const { return m_nDialogScale;}
 
     private:
 
@@ -216,17 +216,6 @@ void SvtLocalisationOptions_Impl::Commit()
 
 //  public method
 
-bool SvtLocalisationOptions_Impl::IsAutoMnemonic() const
-{
-    return m_bAutoMnemonic;
-}
-
-//  public method
-
-sal_Int32 SvtLocalisationOptions_Impl::GetDialogScale() const
-{
-    return m_nDialogScale;
-}
 
 Sequence< OUString > SvtLocalisationOptions_Impl::GetPropertyNames()
 {

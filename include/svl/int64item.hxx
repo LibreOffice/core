@@ -45,7 +45,7 @@ public:
 
     virtual SfxPoolItem* Clone( SfxItemPool* pOther = NULL ) const SAL_OVERRIDE;
 
-    sal_Int64 GetValue() const;
+    sal_Int64 GetValue() const { return mnValue;}
 
     void SetValue( sal_Int64 nVal );
 };

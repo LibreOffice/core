@@ -209,7 +209,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    bool                    IsModifyAndBroadcast() const;
+    bool                    IsModifyAndBroadcast() const { return mbModifyAndBroadcast;}
 
                             /// XNamedRanges
     virtual void SAL_CALL   addNewByName( const OUString& aName, const OUString& aContent,

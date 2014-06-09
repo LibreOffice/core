@@ -432,10 +432,6 @@ void LongCurrencyFormatter::SetDecimalDigits( sal_uInt16 nDigits )
     ReformatAll();
 }
 
-sal_uInt16 LongCurrencyFormatter::GetDecimalDigits() const
-{
-    return mnDecimalDigits;
-}
 
 void ImplNewLongCurrencyFieldValue( LongCurrencyField* pField, BigInt nNewValue )
 {

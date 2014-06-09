@@ -112,7 +112,7 @@ struct ScDBQueryParamBase : public ScQueryParamBase
     SCCOL   mnField;    /// the field in which the values are processed during iteration.
     bool    mbSkipString;
 
-    DataType        GetType() const;
+    DataType        GetType() const { return meType;}
 
     virtual ~ScDBQueryParamBase();
 

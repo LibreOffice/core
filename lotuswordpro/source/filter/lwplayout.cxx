@@ -2123,14 +2123,6 @@ bool LwpPlacableLayout::IsAnchorCell()
 }
 
 /**
-* @descr:   Get font style for setting position of frame
-*
-*/
-rtl::Reference<XFFont> LwpPlacableLayout::GetFont()
-{
-    return m_pFont;
-}
-/**
 * @descr:   Set font style for setting position of frame
 *
 */

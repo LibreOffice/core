@@ -474,11 +474,6 @@ namespace accessibility
         }
     }
 
-    int AccessibleImageBullet::getNotifierClientId() const
-    {
-
-        return mnNotifierClientId;
-    }
 
     void AccessibleImageBullet::SetParagraphIndex( sal_Int32 nIndex )
     {
@@ -509,11 +504,6 @@ namespace accessibility
         catch( const uno::Exception& ) {} // optional behaviour
     }
 
-    sal_Int32 AccessibleImageBullet::GetParagraphIndex() const
-    {
-
-        return mnParagraphIndex;
-    }
 
     SvxEditSource& AccessibleImageBullet::GetEditSource() const
     {

@@ -1063,10 +1063,6 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
         ClearUnoObjectsInRTL_Impl_Rek( (StarBASIC*)p );
 }
 
-bool SbModule::IsVBACompat() const
-{
-    return mbVBACompat;
-}
 
 void SbModule::SetVBACompat( bool bCompat )
 {

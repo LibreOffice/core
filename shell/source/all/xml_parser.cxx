@@ -192,9 +192,5 @@ void xml_parser::set_document_handler(
     document_handler_ = event_handler;
 }
 
-i_xml_parser_event_handler* xml_parser::get_document_handler() const
-{
-    return document_handler_;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

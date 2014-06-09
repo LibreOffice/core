@@ -210,7 +210,7 @@ public:
                                     com::sun::star::uno::XInterface>& rInterface );
     void                SetCallerFromObjectShell( SfxObjectShell* pSh );
 
-    bool                ValidParamCount();
+    bool                ValidParamCount() { return bValidCount;}
     ScAddInArgumentType GetArgType( long nPos );
     void                SetParam( long nPos, const com::sun::star::uno::Any& rValue );
 

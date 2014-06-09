@@ -102,10 +102,6 @@ void ImplFontCharMap::DeReference( void) const
             delete this;
 }
 
-int ImplFontCharMap::GetCharCount() const
-{
-    return mnCharCount;
-}
 
 int ImplFontCharMap::ImplFindRangeIndex( sal_UCS4 cChar ) const
 {

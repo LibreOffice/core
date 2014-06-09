@@ -36,7 +36,7 @@ public:
     NumberFormatterWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier );
     virtual ~NumberFormatterWrapper();
 
-    SvNumberFormatter* getSvNumberFormatter() const;
+    SvNumberFormatter* getSvNumberFormatter() const { return m_pNumberFormatter;}
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
                 getNumberFormatsSupplier() { return m_xNumberFormatsSupplier; };
 

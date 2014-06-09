@@ -40,7 +40,7 @@ public:
     virtual ~LightButton();
 
     void switchLightOn(bool bOn);
-    bool isLightOn() const;
+    bool isLightOn() const { return m_bLightOn;}
 
 private:
     bool m_bLightOn;

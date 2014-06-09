@@ -83,7 +83,7 @@ class CGMBitmap
     public:
                                 CGMBitmap( CGM& rCGM );
                                 ~CGMBitmap();
-        CGMBitmapDescriptor*    GetBitmap();
+        CGMBitmapDescriptor*    GetBitmap() { return pCGMBitmapDescriptor;}
         CGMBitmap*              GetNext();
 };
 #endif

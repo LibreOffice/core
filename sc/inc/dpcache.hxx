@@ -129,7 +129,7 @@ public:
     const OUString* InternString(const OUString& rStr) const;
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;
-    const ObjectSetType& GetAllReferences() const;
+    const ObjectSetType& GetAllReferences() const { return maRefObjects;}
 
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
     OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
@@ -160,15 +160,15 @@ public:
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(DBConnector& rDB);
 
-    SCROW GetRowCount() const;
+    SCROW GetRowCount() const { return mnRowCount;}
     SCROW GetDataSize() const;
     SCROW GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
     OUString GetDimensionName(LabelsType::size_type nDim) const;
     bool IsRowEmpty(SCROW nRow) const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 
-    ScDocument* GetDoc() const;
-    long GetColumnCount() const;
+    ScDocument* GetDoc() const { return mpDoc;}
+    long GetColumnCount() const { return mnColumnCount;}
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 

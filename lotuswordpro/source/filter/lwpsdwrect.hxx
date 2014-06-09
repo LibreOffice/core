@@ -108,7 +108,11 @@ public:
     ~SdwRectangle();
 
 public:
-    bool IsRectRotated() const;
+    /*
+     * @short:  Get the flag whether if the rectangle has been rotated.
+     * @return: m_bRotated rotation flag.
+     */
+    bool IsRectRotated() const { return m_bRotated;}
 
     Point GetRectCenter() const ;
 

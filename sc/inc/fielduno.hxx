@@ -241,7 +241,7 @@ public:
         ScEditSource* pEditSrc, sal_Int32 eType, const ESelection& rSel);
     virtual ~ScEditFieldObj();
 
-    sal_Int32 GetFieldType() const;
+    sal_Int32 GetFieldType() const { return meType;}
     void DeleteField();
     bool IsInserted() const;
     SvxFieldItem CreateFieldItem();

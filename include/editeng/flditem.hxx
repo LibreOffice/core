@@ -232,7 +232,7 @@ public:
     explicit SvxTableField(int nTab);
 
     void SetTab(int nTab);
-    int GetTab() const;
+    int GetTab() const { return mnTab;}
 
     virtual SvxFieldData*   Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const SvxFieldData& ) const SAL_OVERRIDE;

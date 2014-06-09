@@ -620,10 +620,6 @@ const OString* ServerFont::GetFontFileName() const
     return mpFontInfo->GetFontFileName();
 }
 
-bool ServerFont::TestFont() const
-{
-    return mbFaceOk;
-}
 
 ServerFont::~ServerFont()
 {

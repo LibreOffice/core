@@ -1185,10 +1185,6 @@ const ContentNode* EditPaM::GetNode() const
     return pNode;
 }
 
-ContentNode* EditPaM::GetNode()
-{
-    return pNode;
-}
 
 void EditPaM::SetNode(ContentNode* p)
 {

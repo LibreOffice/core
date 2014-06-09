@@ -41,15 +41,7 @@ void WW8FibData::setWriteReservation(bool bWriteReservation)
     m_bWriteReservation = bWriteReservation;
 }
 
-bool WW8FibData::getReadOnlyRecommended() const
-{
-    return m_bReadOnlyRecommended;
-}
 
-bool WW8FibData::getWriteReservation() const
-{
-    return m_bWriteReservation;
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -118,7 +118,7 @@ public:
     virtual ~NumPicBullet();
 
     void SetId(sal_Int32 nId);
-    sal_Int32 GetId();
+    sal_Int32 GetId() { return m_nId;}
     void SetShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape);
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> GetShape();
 private:

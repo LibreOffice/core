@@ -69,7 +69,7 @@ public:
         const cssu::Reference<css::ui::XSidebar>& rxSidebar);
 
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
-    SfxBindings* GetBindings();
+    SfxBindings* GetBindings() { return mpBindings;}
 
     virtual void HandleContextChange (
         const ::sfx2::sidebar::EnumContext aContext) SAL_OVERRIDE;

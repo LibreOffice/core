@@ -991,9 +991,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
     }
 }
 
-bool ScFormulaCell::GetDirty() const { return bDirty; }
 void ScFormulaCell::ResetDirty() { bDirty = bTableOpDirty = mbPostponedDirty = false; }
-bool ScFormulaCell::NeedsListening() const { return bNeedListening; }
 void ScFormulaCell::SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
 
 void ScFormulaCell::SetNeedsDirty( bool bVar )
@@ -1003,12 +1001,7 @@ void ScFormulaCell::SetNeedsDirty( bool bVar )
 
 void ScFormulaCell::SetNeedNumberFormat( bool bVal ) { mbNeedsNumberFormat = bVal; }
 
-bool ScFormulaCell::NeedsNumberFormat() const
-{
-    return mbNeedsNumberFormat;
-}
 
-short ScFormulaCell::GetFormatType() const { return nFormatType; }
 
 void ScFormulaCell::Compile( const OUString& rFormula, bool bNoListening,
                             const FormulaGrammar::Grammar eGrammar )
@@ -1582,8 +1575,6 @@ void ScFormulaCell::Interpret()
     }
 }
 
-bool ScFormulaCell::IsIterCell() const { return bIsIterCell; }
-sal_uInt16 ScFormulaCell::GetSeenInIteration() const { return nSeenInIteration; }
 
 void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 {
@@ -1908,10 +1899,6 @@ void ScFormulaCell::SetCompile( bool bVal )
     bCompile = bVal;
 }
 
-ScDocument* ScFormulaCell::GetDocument() const
-{
-    return pDocument;
-}
 
 void ScFormulaCell::SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag )
 {
@@ -1945,10 +1932,6 @@ void ScFormulaCell::SetInChangeTrack( bool bVal )
     bInChangeTrack = bVal;
 }
 
-bool ScFormulaCell::IsInChangeTrack() const
-{
-    return bInChangeTrack;
-}
 
 void ScFormulaCell::Notify( const SfxHint& rHint )
 {
@@ -3398,30 +3381,14 @@ void ScFormulaCell::FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const
     lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument->GetRangeName() );
 }
 
-bool ScFormulaCell::IsSubTotal() const
-{
-    return bSubTotal;
-}
 
-bool ScFormulaCell::IsChanged() const
-{
-    return bChanged;
-}
 
 void ScFormulaCell::SetChanged(bool b)
 {
     bChanged = b;
 }
 
-sal_uInt8 ScFormulaCell::GetMatrixFlag() const
-{
-    return cMatrixFlag;
-}
 
-ScTokenArray* ScFormulaCell::GetCode()
-{
-    return pCode;
-}
 
 const ScTokenArray* ScFormulaCell::GetCode() const
 {
@@ -3435,10 +3402,6 @@ void ScFormulaCell::SetCode( ScTokenArray* pNew )
     pCode = pNew; // takes ownership.
 }
 
-bool ScFormulaCell::IsRunning() const
-{
-    return bRunning;
-}
 
 void ScFormulaCell::SetRunning( bool bVal )
 {
@@ -3526,12 +3489,8 @@ void ScFormulaCell::CompileColRowNameFormula( sc::CompileFormulaContext& rCxt )
     }
 }
 
-ScFormulaCell*  ScFormulaCell::GetPrevious() const                 { return pPrevious; }
-ScFormulaCell*  ScFormulaCell::GetNext() const                     { return pNext; }
 void            ScFormulaCell::SetPrevious( ScFormulaCell* pF )    { pPrevious = pF; }
 void            ScFormulaCell::SetNext( ScFormulaCell* pF )        { pNext = pF; }
-ScFormulaCell*  ScFormulaCell::GetPreviousTrack() const                { return pPreviousTrack; }
-ScFormulaCell*  ScFormulaCell::GetNextTrack() const                    { return pNextTrack; }
 void            ScFormulaCell::SetPreviousTrack( ScFormulaCell* pF )   { pPreviousTrack = pF; }
 void            ScFormulaCell::SetNextTrack( ScFormulaCell* pF )       { pNextTrack = pF; }
 
@@ -4090,9 +4049,5 @@ void ScFormulaCell::SyncSharedCode()
     pCode = mxGroup->mpCode;
 }
 
-bool ScFormulaCell::IsPostponedDirty() const
-{
-    return mbPostponedDirty;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

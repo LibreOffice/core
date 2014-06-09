@@ -247,7 +247,7 @@ public:
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
     //better performance for big data
     void setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
-    bool PointsWereSkipped() const;
+    bool PointsWereSkipped() const { return m_bPointsWereSkipped;}
 
     //return the depth for a logic 1
     double  getTransformedDepth() const;

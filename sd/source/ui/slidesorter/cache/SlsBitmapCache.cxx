@@ -165,18 +165,10 @@ void BitmapCache::Clear (void)
 
 
 
-bool BitmapCache::IsFull (void) const
-{
-    return mbIsFull;
-}
 
 
 
 
-sal_Int32 BitmapCache::GetSize (void)
-{
-    return mnNormalCacheSize;
-}
 
 
 

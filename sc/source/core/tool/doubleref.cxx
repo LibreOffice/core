@@ -266,10 +266,6 @@ void ScDBRangeBase::fillQueryOptions(ScQueryParamBase* pParam)
     pParam->bDuplicate = true;
 }
 
-ScDocument* ScDBRangeBase::getDoc() const
-{
-    return mpDoc;
-}
 
 ScDBInternalRange::ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange) :
     ScDBRangeBase(pDoc, INTERNAL), maRange(rRange)

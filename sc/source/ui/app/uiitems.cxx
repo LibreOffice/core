@@ -100,10 +100,6 @@ void ScInputStatusItem::SetMisspellRanges( const std::vector<editeng::MisspellRa
     mpMisspellRanges = pRanges;
 }
 
-const std::vector<editeng::MisspellRanges>* ScInputStatusItem::GetMisspellRanges() const
-{
-    return mpMisspellRanges;
-}
 
 
 // ScPaintHint was moved to schints.cxx

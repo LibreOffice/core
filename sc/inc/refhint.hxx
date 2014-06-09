@@ -31,7 +31,7 @@ protected:
 public:
     virtual ~RefHint() = 0;
 
-    Type getType() const;
+    Type getType() const { return meType; }
 };
 
 class RefMovedHint : public RefHint
@@ -68,9 +68,9 @@ public:
 
     const sc::ColReorderMapType& getColMap() const;
 
-    SCTAB getTab() const;
-    SCROW getStartRow() const;
-    SCROW getEndRow() const;
+    SCTAB getTab() const { return mnTab;}
+    SCROW getStartRow() const { return mnRow1;}
+    SCROW getEndRow() const { return mnRow2;}
 };
 
 }

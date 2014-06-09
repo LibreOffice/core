@@ -51,7 +51,7 @@ public:
         animation is marked as expired to prevent another run.
     */
     void Expire (void);
-    bool IsExpired (void);
+    bool IsExpired (void) { return mbIsExpired;}
 
     Animator::AnimationFunctor maAnimation;
     Animator::FinishFunctor maFinishFunctor;
@@ -342,10 +342,6 @@ void Animator::Animation::Expire (void)
 
 
 
-bool Animator::Animation::IsExpired (void)
-{
-    return mbIsExpired;
-}
 
 
 

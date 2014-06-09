@@ -59,7 +59,7 @@ public:
     // Create a Paint object for the given gradient.
     explicit Paint (const Gradient& rGradient);
 
-    Type GetType (void) const;
+    Type GetType (void) const { return meType;}
     const Color& GetColor (void) const;
     const Gradient& GetGradient (void) const;
 

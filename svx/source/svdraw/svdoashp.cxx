@@ -535,10 +535,6 @@ void SdrObjCustomShape::SetMirroredY( const bool bMirrorY )
     SetMergedItem( aGeometryItem );
 }
 
-double SdrObjCustomShape::GetObjectRotation() const
-{
-    return fObjectRotation;
-}
 
 bool SdrObjCustomShape::IsPostRotate() const
 {

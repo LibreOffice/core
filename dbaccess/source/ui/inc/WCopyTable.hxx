@@ -353,7 +353,7 @@ namespace dbaui
 
         /** returns whether a primary key should be created in the target database
         */
-        bool            shouldCreatePrimaryKey() const;
+        bool            shouldCreatePrimaryKey() const { return m_bCreatePrimaryKeyColumn;}
         void            setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggestedName );
 
         static bool     supportsPrimaryKey( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
@@ -393,7 +393,7 @@ namespace dbaui
         sal_Int32 getMaxColumnNameLength() const;
 
         void setOperation( const sal_Int16 _nOperation );
-        sal_Int16 getOperation() const;
+        sal_Int16 getOperation() const { return m_nOperation;}
 
         OUString convertColumnName(  const TColumnFindFunctor&   _rCmpFunctor,
                                             const OUString&  _sColumnName,

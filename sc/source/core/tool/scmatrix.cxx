@@ -206,7 +206,7 @@ public:
 
     void Clear();
     void SetImmutable(bool bVal);
-    bool IsImmutable() const;
+    bool IsImmutable() const { return mbCloneIfConst;}
     void Resize(SCSIZE nC, SCSIZE nR);
     void Resize(SCSIZE nC, SCSIZE nR, double fVal);
     void SetErrorInterpreter( ScInterpreter* p);
@@ -314,10 +314,6 @@ void ScMatrixImpl::SetImmutable(bool bVal)
     mbCloneIfConst = bVal;
 }
 
-bool ScMatrixImpl::IsImmutable() const
-{
-    return mbCloneIfConst;
-}
 
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {

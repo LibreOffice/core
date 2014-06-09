@@ -66,8 +66,8 @@ public:
     /// @return the index of the newly appended row
     sal_Int32 appendRow();
 
-    sal_Int32 getRowCount() const;
-    sal_Int32 getColumnCount() const;
+    sal_Int32 getRowCount() const { return m_nRowCount;}
+    sal_Int32 getColumnCount() const { return m_nColumnCount;}
 
     typedef ::std::vector< ::std::vector< ::com::sun::star::uno::Any > > tVecVecAny; //inner index is hierarchical level
 

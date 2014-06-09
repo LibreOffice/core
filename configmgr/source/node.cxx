@@ -57,17 +57,11 @@ void Node::setLayer(int layer) {
     layer_ = layer;
 }
 
-int Node::getLayer() const {
-    return layer_;
-}
 
 void Node::setFinalized(int layer) {
     finalized_ = layer;
 }
 
-int Node::getFinalized() const {
-    return finalized_;
-}
 
 rtl::Reference< Node > Node::getMember(OUString const & name) {
     NodeMap const & members = getMembers();

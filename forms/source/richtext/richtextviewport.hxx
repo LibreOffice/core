@@ -41,7 +41,7 @@ namespace frm
         inline void    setAttributeInvalidationHandler( const Link& _rHandler ) { m_aInvalidationHandler = _rHandler; }
 
         void    SetHideInactiveSelection( bool _bHide );
-        bool    GetHideInactiveSelection() const;
+        bool    GetHideInactiveSelection() const { return m_bHideInactiveSelection; }
 
     protected:
         virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;

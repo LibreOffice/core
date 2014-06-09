@@ -123,7 +123,7 @@ public:
 
     void            SetPopupMenu(PopupMenu* pPopUp);
 
-    sal_uInt16      GetSelected() const;
+    sal_uInt16      GetSelected() const { return nSelected;}
     OString         GetSelectedIdent() const;
 
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }

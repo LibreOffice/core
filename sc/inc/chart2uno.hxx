@@ -379,7 +379,7 @@ private:
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType) SAL_OVERRIDE;
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        const ::boost::unordered_set<sal_uInt16>& getAllFileIds();
+        const ::boost::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
 
     private:
         ExternalRefListener();

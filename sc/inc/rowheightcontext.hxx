@@ -36,18 +36,18 @@ public:
 
     ~RowHeightContext();
 
-    double getPPTX() const;
-    double getPPTY() const;
+    double getPPTX() const { return mfPPTX;}
+    double getPPTY() const { return mfPPTY;}
     const Fraction& getZoomX() const;
     const Fraction& getZoomY() const;
 
-    OutputDevice* getOutputDevice();
+    OutputDevice* getOutputDevice() { return mpOutDev;}
 
     void setExtraHeight( sal_uInt16 nH );
-    sal_uInt16 getExtraHeight() const;
+    sal_uInt16 getExtraHeight() const { return mnExtraHeight;}
 
     void setForceAutoSize( bool b );
-    bool isForceAutoSize() const;
+    bool isForceAutoSize() const { return mbForceAutoSize;}
 };
 
 }

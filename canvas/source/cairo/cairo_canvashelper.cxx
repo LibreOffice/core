@@ -2321,10 +2321,6 @@ namespace cairocanvas
         return aLayout;
     }
 
-    bool CanvasHelper::hasAlpha() const
-    {
-        return mbHaveAlpha;
-    }
 
     bool CanvasHelper::repaint( const SurfaceSharedPtr&          pSurface,
                                 const rendering::ViewState&      viewState,

@@ -73,7 +73,7 @@ public:
     LwpDropcapMgr();
     ~LwpDropcapMgr();
     void SetXFPara(XFParagraph* pXFPara);
-    XFParagraph* GetXFPara();
+    XFParagraph* GetXFPara() { return m_pXFPara;}
 private:
     XFParagraph* m_pXFPara;
 };

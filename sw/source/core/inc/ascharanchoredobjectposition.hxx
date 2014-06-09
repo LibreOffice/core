@@ -131,13 +131,13 @@ namespace objectpositioning
         Point GetAnchorPos() const;
 
         // calculated relative position to base line for object position type AS_CHAR
-        SwTwips GetRelPosY() const;
+        SwTwips GetRelPosY() const { return mnRelPos;}
 
         // determined object rectangle including spacing for object position type AS_CHAR
         SwRect GetObjBoundRectInclSpacing() const;
 
         // determined line alignment relative to line height
-        sal_uInt8 GetLineAlignment() const;
+        sal_uInt8 GetLineAlignment() const { return mnLineAlignment;}
     };
 }
 

@@ -315,25 +315,9 @@ ScDPRunningTotalState::ScDPRunningTotalState( ScDPResultMember* pColRoot, ScDPRe
     maRowSorted.push_back(-1);
 }
 
-const ScDPRunningTotalState::IndexArray& ScDPRunningTotalState::GetColVisible() const
-{
-    return maColVisible;
-}
 
-const ScDPRunningTotalState::IndexArray& ScDPRunningTotalState::GetColSorted() const
-{
-    return maColSorted;
-}
 
-const ScDPRunningTotalState::IndexArray& ScDPRunningTotalState::GetRowVisible() const
-{
-    return maRowVisible;
-}
 
-const ScDPRunningTotalState::IndexArray& ScDPRunningTotalState::GetRowSorted() const
-{
-    return maRowSorted;
-}
 
 void ScDPRunningTotalState::AddColIndex( long nVisible, long nSorted )
 {
@@ -907,10 +891,6 @@ bool ScDPResultData::HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
         return false;
 }
 
-const ScDPSource& ScDPResultData::GetSource() const
-{
-    return mrSource;
-}
 
 ResultMembers* ScDPResultData::GetDimResultMembers(long nDim, ScDPDimension* pDim, ScDPLevel* pLevel) const
 {
@@ -1225,14 +1205,6 @@ bool ScDPResultMember::IsValid() const
         return false;
 
     return true;
-}
-
-bool ScDPResultMember::HasHiddenDetails() const
-{
-    // bHasHiddenDetails is set only if the "show details" flag is off,
-    // and there was a child dimension to skip
-
-    return bHasHiddenDetails;
 }
 
 long ScDPResultMember::GetSubTotalCount( long* pUserSubStart ) const

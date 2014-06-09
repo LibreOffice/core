@@ -858,10 +858,6 @@ double ScTabView::GetRelTabBarWidth() const
     return 0.0;
 }
 
-double ScTabView::GetPendingRelTabBarWidth() const
-{
-    return mfPendingTabBarWidth;
-}
 
 ScGridWindow* ScTabView::GetActiveWin()
 {

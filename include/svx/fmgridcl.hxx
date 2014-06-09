@@ -128,7 +128,7 @@ public:
     void markColumn(sal_uInt16 nId);
     bool isColumnMarked(sal_uInt16 nId) const;
 
-    sal_Int32   GetSelectedColumn() const;
+    sal_Int32   GetSelectedColumn() const { return m_nCurrentSelectedColumn;}
 
     /** return the name of the specified object.
         @param  eObjType

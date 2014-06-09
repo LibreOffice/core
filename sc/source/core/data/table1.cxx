@@ -2076,10 +2076,6 @@ ScRefCellValue ScTable::VisibleDataCellIterator::next()
     return ScRefCellValue();
 }
 
-SCROW ScTable::VisibleDataCellIterator::getRow() const
-{
-    return mnCurRow;
-}
 
 void ScTable::SetAnonymousDBData(ScDBData* pDBData)
 {
@@ -2087,10 +2083,6 @@ void ScTable::SetAnonymousDBData(ScDBData* pDBData)
     pDBDataNoName = pDBData;
 }
 
-ScDBData* ScTable::GetAnonymousDBData()
-{
-    return pDBDataNoName;
-}
 
 sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
 {

@@ -207,10 +207,6 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
     updateItems(aItems);
 }
 
-sal_uInt16 TemplateAbstractView::getCurRegionId() const
-{
-    return mnCurRegionId;
-}
 
 const OUString &TemplateAbstractView::getCurRegionName() const
 {

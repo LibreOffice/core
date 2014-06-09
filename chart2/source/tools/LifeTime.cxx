@@ -316,10 +316,6 @@ void CloseableLifeTimeManager::impl_setOwnership( bool bDeliverOwnership, bool b
     m_bOwnership            = bDeliverOwnership && bMyVeto;
 }
 
-bool CloseableLifeTimeManager::impl_shouldCloseAtNextChance()
-{
-    return m_bOwnership;
-}
 
     void CloseableLifeTimeManager
 ::impl_apiCallCountReachedNull()

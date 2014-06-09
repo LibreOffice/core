@@ -52,7 +52,7 @@ public:
     void setPositionDelta( const ScAddress& rDelta );
 
     ScDocument& getDoc();
-    ScTokenArray* getOldCode();
+    ScTokenArray* getOldCode() { return mpOldCode;}
     ScAddress getOldPosition( const ScAddress& rPos ) const;
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);

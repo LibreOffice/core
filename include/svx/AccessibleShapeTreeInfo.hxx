@@ -118,7 +118,7 @@ public:
         @return
             The returned value may be NULL.
     */
-    SdrView* GetSdrView (void) const;
+    SdrView* GetSdrView (void) const { return mpView;}
 
     /** Set a new controller.  This will usually but not necessarily
         correspond to the SdrView.
@@ -146,7 +146,7 @@ public:
         @return
             The returned value may be NULL.
     */
-    Window* GetWindow (void) const;
+    Window* GetWindow (void) const { return mpWindow;}
 
     /** The view forwarder allows the transformation between internal
         and pixel coordinates and can be asked for the visible area.
@@ -159,7 +159,7 @@ public:
         @return
             The returned pointer may be NULL.
     */
-    const IAccessibleViewForwarder* GetViewForwarder (void) const;
+    const IAccessibleViewForwarder* GetViewForwarder (void) const { return mpViewForwarder;}
 
 private:
     /** Deprecated.

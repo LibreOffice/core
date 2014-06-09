@@ -894,10 +894,6 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
 
 
-SfxBindings* PosSizePropertyPanel::GetBindings()
-{
-    return mpBindings;
-}
 
 
 

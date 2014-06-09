@@ -113,10 +113,6 @@ void BufferNode::setReceivedAll()
     elementCollectorNotify();
 }
 
-bool BufferNode::isAllReceived() const
-{
-    return m_bAllReceived;
-}
 
 void BufferNode::addElementCollector(const ElementCollector* pElementCollector)
 /****** BufferNode/addElementCollector ***************************************
@@ -182,10 +178,6 @@ void BufferNode::removeElementCollector(const ElementCollector* pElementCollecto
     }
 }
 
-ElementMark* BufferNode::getBlocker() const
-{
-    return m_pBlocker;
-}
 
 void BufferNode::setBlocker(const ElementMark* pBlocker)
 /****** BufferNode/setBlocker ************************************************

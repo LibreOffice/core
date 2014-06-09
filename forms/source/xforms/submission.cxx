@@ -175,10 +175,6 @@ void Submission::setVersion( const OUString& sVersion )
     msVersion = sVersion;
 }
 
-bool Submission::getIndent() const
-{
-    return mbIndent;
-}
 
 void Submission::setIndent( bool bIndent )
 {
@@ -205,20 +201,12 @@ void Submission::setEncoding( const OUString& sEncoding )
     msEncoding = sEncoding;
 }
 
-bool Submission::getOmitXmlDeclaration() const
-{
-    return mbOmitXmlDeclaration;
-}
 
 void Submission::setOmitXmlDeclaration( bool bOmitXmlDeclaration )
 {
     mbOmitXmlDeclaration = bOmitXmlDeclaration;
 }
 
-bool Submission::getStandalone() const
-{
-    return mbStandalone;
-}
 
 void Submission::setStandalone( bool bStandalone )
 {

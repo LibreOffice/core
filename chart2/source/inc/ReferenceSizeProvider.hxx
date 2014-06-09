@@ -96,7 +96,7 @@ public:
     void setValuesAtAllDataSeries();
 
 private:
-    SAL_DLLPRIVATE bool useAutoScale() const;
+    SAL_DLLPRIVATE bool useAutoScale() const { return m_bUseAutoScale;}
 
     /** sets the auto-resize at all objects that support this feature for text.
         eNewState must be either AUTO_RESIZE_YES or AUTO_RESIZE_NO

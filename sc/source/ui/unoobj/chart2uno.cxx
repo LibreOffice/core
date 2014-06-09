@@ -3016,10 +3016,6 @@ void ScChart2DataSequence::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
     maFileIds.erase(nFileId);
 }
 
-const boost::unordered_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListener::getAllFileIds()
-{
-    return maFileIds;
-}
 
 uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
     throw (uno::RuntimeException, std::exception)

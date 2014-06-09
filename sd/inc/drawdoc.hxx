@@ -267,10 +267,10 @@ public:
                             ::sd::DrawDocShell* pBookmarkDocSh, bool bCopy,
                             Point* pObjPos);
 
-    bool IsStartWithPresentation() const;
+    bool IsStartWithPresentation() const { return mbStartWithPresentation;}
     void SetStartWithPresentation( bool bStartWithPresentation );
 
-    bool IsExitAfterPresenting() const;
+    bool IsExitAfterPresenting() const { return mbExitAfterPresenting;}
     void SetExitAfterPresenting( bool bExitAfterPresenting );
 
     /// load xml-based impress layout definitions into document
@@ -401,7 +401,7 @@ public:
             scope="com::sun::star::document::PrinterIndependentLayout">DISABLED</const>
             when formatting depends on the current printer metrics.
     */
-    sal_Int32 GetPrinterIndependentLayout (void);
+    sal_Int32 GetPrinterIndependentLayout (void) { return mnPrinterIndependentLayout;}
 
     void                SetOnlineSpell( bool bIn );
     bool                GetOnlineSpell() const { return mbOnlineSpell; }

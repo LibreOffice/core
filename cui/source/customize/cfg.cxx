@@ -2763,10 +2763,6 @@ IMPL_LINK( SvxMainMenuOrganizerDialog, MoveHdl, Button *, pButton )
     return 0;
 }
 
-SvxEntries* SvxMainMenuOrganizerDialog::GetEntries()
-{
-    return pEntries;
-}
 
 SvxConfigEntry* SvxMainMenuOrganizerDialog::GetSelectedEntry()
 {

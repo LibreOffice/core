@@ -738,10 +738,6 @@ sal_Int64 SAL_CALL SdTransferable::getSomething( const ::com::sun::star::uno::Se
 }
 
 
-SdDrawDocument* SdTransferable::GetSourceDoc (void) const
-{
-    return mpSourceDoc;
-}
 
 void SdTransferable::AddUserData (const ::boost::shared_ptr<UserData>& rpData)
 {

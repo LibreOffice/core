@@ -380,10 +380,6 @@ void FrameView::SetViewShEditModeOnLoad (EditMode eMode)
 
 
 
-EditMode FrameView::GetViewShEditModeOnLoad (void) const
-{
-    return meEditModeOnLoad;
-}
 
 
 
@@ -959,10 +955,6 @@ void FrameView::SetPreviousViewShellType (ViewShell::ShellType eType)
 
 
 
-ViewShell::ShellType FrameView::GetPreviousViewShellType (void) const
-{
-    return mePreviousViewShellType;
-}
 
 
 
@@ -975,10 +967,6 @@ void FrameView::SetViewShellTypeOnLoad (ViewShell::ShellType eType)
 
 
 
-ViewShell::ShellType FrameView::GetViewShellTypeOnLoad (void) const
-{
-    return meViewShellTypeOnLoad;
-}
 
 
 
@@ -991,10 +979,6 @@ void FrameView::SetSelectedPage(sal_uInt16 nPage)
 
 
 
-sal_uInt16 FrameView::GetSelectedPage (void) const
-{
-    return mnSelectedPage;
-}
 
 
 
@@ -1007,10 +991,6 @@ void FrameView::SetIsNavigatorShowingAllShapes (const bool bIsNavigatorShowingAl
 
 
 
-bool FrameView::IsNavigatorShowingAllShapes (void) const
-{
-    return mbIsNavigatorShowingAllShapes;
-}
 
 
 } // end of namespace sd

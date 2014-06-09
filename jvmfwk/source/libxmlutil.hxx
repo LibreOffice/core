@@ -39,8 +39,8 @@ public:
     /** Takes ownership of xmlXPathObject
      */
     CXPathObjectPtr & operator = (xmlXPathObject* pObj);
-    xmlXPathObject* operator -> ();
-    operator xmlXPathObject* () const;
+    xmlXPathObject* operator -> () { return _object;}
+    operator xmlXPathObject* () const { return _object;}
 };
 
 
@@ -55,8 +55,8 @@ public:
     CXPathContextPtr(xmlXPathContextPtr aContext);
     CXPathContextPtr & operator = (xmlXPathContextPtr pObj);
     ~CXPathContextPtr();
-    xmlXPathContext* operator -> ();
-    operator xmlXPathContext* () const;
+    xmlXPathContext* operator -> () { return _object;}
+    operator xmlXPathContext* () const { return _object;}
 };
 
 
@@ -74,8 +74,8 @@ public:
      */
     CXmlDocPtr & operator = (xmlDoc* pObj);
     ~CXmlDocPtr();
-    xmlDoc* operator -> ();
-    operator xmlDoc* () const;
+    xmlDoc* operator -> () { return _object;}
+    operator xmlDoc* () const { return _object;}
 };
 
 
@@ -91,7 +91,7 @@ public:
     CXmlCharPtr(const OUString &);
     ~CXmlCharPtr();
     CXmlCharPtr & operator = (xmlChar* pObj);
-    operator xmlChar* () const;
+    operator xmlChar* () const { return _object;}
     operator OUString ();
     operator OString ();
 };

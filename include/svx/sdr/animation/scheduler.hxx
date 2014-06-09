@@ -45,11 +45,11 @@ namespace sdr
             SVX_DLLPUBLIC virtual ~Event();
 
             // access to mpNext
-            Event* GetNext() const;
+            Event* GetNext() const {  return mpNext; }
             void SetNext(Event* pNew);
 
             // get/set time
-            sal_uInt32 GetTime() const;
+            sal_uInt32 GetTime() const {  return mnTime; }
             void SVX_DLLPUBLIC SetTime(sal_uInt32 nNew);
 
             // execute event
@@ -83,7 +83,7 @@ namespace sdr
             void Clear();
 
             // get first
-            Event* GetFirst();
+            Event* GetFirst() {  return mpHead; }
         };
     } // end of namespace animation
 } // end of namespace sdr
@@ -119,7 +119,7 @@ namespace sdr
             SVX_DLLPUBLIC virtual void Timeout() SAL_OVERRIDE;
 
             // get time
-            sal_uInt32 GetTime();
+            sal_uInt32 GetTime() {  return mnTime; }
 
             // #i38135#
             void SetTime(sal_uInt32 nTime);

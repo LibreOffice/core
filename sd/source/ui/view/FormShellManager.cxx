@@ -137,10 +137,6 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
 
 
 
-FmFormShell* FormShellManager::GetFormShell (void)
-{
-    return mpFormShell;
-}
 
 
 

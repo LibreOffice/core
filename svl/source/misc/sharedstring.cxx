@@ -100,20 +100,12 @@ OUString SharedString::getString() const
     return mpData ? OUString(mpData) : OUString();
 }
 
-rtl_uString* SharedString::getData()
-{
-    return mpData;
-}
 
 const rtl_uString* SharedString::getData() const
 {
     return mpData;
 }
 
-rtl_uString* SharedString::getDataIgnoreCase()
-{
-    return mpDataIgnoreCase;
-}
 
 const rtl_uString* SharedString::getDataIgnoreCase() const
 {

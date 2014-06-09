@@ -63,7 +63,7 @@ public:
 
     bool IsFirstPage() const;
 
-    int  GetCurrentPage() const;
+    int  GetCurrentPage() const { return mnCurrentPage;}
 };
 
 

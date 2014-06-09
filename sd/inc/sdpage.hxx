@@ -242,19 +242,19 @@ public:
     void        SetStopSound( bool bStopSound ) { mbStopSound = bStopSound; }
     bool        IsStopSound() const             { return mbStopSound; }
 
-    sal_Int16   getTransitionType() const;
+    sal_Int16   getTransitionType() const { return mnTransitionType;}
     void        setTransitionType( sal_Int16 nTransitionType );
 
-    sal_Int16   getTransitionSubtype() const;
+    sal_Int16   getTransitionSubtype() const { return mnTransitionSubtype;}
     void        setTransitionSubtype( sal_Int16 nTransitionSubtype );
 
-    bool    getTransitionDirection() const;
+    bool    getTransitionDirection() const { return mbTransitionDirection;}
     void        setTransitionDirection( bool bTransitionbDirection );
 
-    sal_Int32   getTransitionFadeColor() const;
+    sal_Int32   getTransitionFadeColor() const { return mnTransitionFadeColor;}
     void        setTransitionFadeColor( sal_Int32 nTransitionFadeColor );
 
-    double      getTransitionDuration() const;
+    double      getTransitionDuration() const { return mfTransitionDuration;}
     void        setTransitionDuration( double fTranstionDuration );
 
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType,
@@ -371,7 +371,7 @@ public:
             When this method returns <TRUE/> for a master page then this
             master page should not be deleted automatically.
     */
-    bool IsPrecious (void) const;
+    bool IsPrecious (void) const { return mbIsPrecious; }
 
     void createAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
     void addAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, int nIndex = -1 );

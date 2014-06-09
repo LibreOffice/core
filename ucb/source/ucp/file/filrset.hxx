@@ -93,8 +93,8 @@ class XResultSet_impl : public Notifier,
             return m_aBaseDirectory;
         }
 
-        sal_Int32 SAL_CALL CtorSuccess();
-        sal_Int32 SAL_CALL getMinorError();
+        sal_Int32 SAL_CALL CtorSuccess() { return m_nErrorCode;}
+        sal_Int32 SAL_CALL getMinorError() { return m_nMinorErrorCode;}
 
         // XEventListener
         virtual void SAL_CALL

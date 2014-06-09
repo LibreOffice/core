@@ -35,9 +35,9 @@ public:
     explicit SwNodeNum( SwNumRule* pNumRule );
     virtual ~SwNodeNum();
 
-    SwNumRule* GetNumRule() const;
+    SwNumRule* GetNumRule() const { return mpNumRule;}
     void ChangeNumRule( SwNumRule& rNumRule );
-    SwTxtNode* GetTxtNode() const;
+    SwTxtNode* GetTxtNode() const { return mpTxtNode;}
 
     virtual bool IsNotificationEnabled() const SAL_OVERRIDE;
 

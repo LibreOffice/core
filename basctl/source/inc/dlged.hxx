@@ -190,7 +190,7 @@ public:
 
     void            SetMode (Mode eMode);
     void            SetInsertObj( sal_uInt16 eObj );
-    sal_uInt16      GetInsertObj() const;
+    sal_uInt16      GetInsertObj() const { return eActObj;}
     void            CreateDefaultObject();
     Mode            GetMode() const { return eMode; }
     bool            IsCreateOK() const { return bCreateOK; }

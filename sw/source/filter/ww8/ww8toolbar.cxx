@@ -429,10 +429,6 @@ bool TBDelta::ControlDropsToolBar()
     return !( CiTBDE & 0x8000 );
 }
 
-sal_Int32 TBDelta::TBCStreamOffset()
-{
-    return fc;
-}
 
 sal_Int16 TBDelta::CustomizationIndex()
 {

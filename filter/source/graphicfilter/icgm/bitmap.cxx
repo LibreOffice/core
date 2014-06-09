@@ -393,9 +393,5 @@ CGMBitmap* CGMBitmap::GetNext()
 
 
 
-CGMBitmapDescriptor* CGMBitmap::GetBitmap()
-{
-    return pCGMBitmapDescriptor;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

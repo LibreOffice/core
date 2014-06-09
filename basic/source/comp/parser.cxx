@@ -314,10 +314,6 @@ void SbiParser::SetCodeCompleting( const bool& b )
     bCodeCompleting = b;
 }
 
-bool SbiParser::IsCodeCompleting() const
-{
-    return bCodeCompleting;
-}
 
 bool SbiParser::Parse()
 {

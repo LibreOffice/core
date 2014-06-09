@@ -316,10 +316,6 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
     }
 }
 
-SfxBindings* NumberFormatPropertyPanel::GetBindings()
-{
-    return mpBindings;
-}
 
 }} // end of namespace ::sc::sidebar
 

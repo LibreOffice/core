@@ -230,7 +230,7 @@ public:
     const OUString&             GetAppName() const { return aAppName;   }
 
     SfxItemPool&                GetPool();
-    const SfxItemPool&          GetPool() const;
+    const SfxItemPool&          GetPool() const { return rPool;}
 
     virtual SfxStyleSheetIteratorPtr CreateIterator(SfxStyleFamily, sal_uInt16 nMask);
     virtual sal_uInt16              Count();
@@ -265,7 +265,7 @@ public:
                                 { return Find(rStr, nSearchFamily, nMask); }
 
     void                        SetSearchMask(SfxStyleFamily eFam, sal_uInt16 n=SFXSTYLEBIT_ALL );
-    sal_uInt16                      GetSearchMask() const;
+    sal_uInt16                      GetSearchMask() const { return nMask;}
     SfxStyleFamily              GetSearchFamily() const  { return nSearchFamily; }
 
     void                        Reindex();

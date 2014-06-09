@@ -426,10 +426,6 @@ void NumPicBullet::SetShape(uno::Reference<drawing::XShape> xShape)
     m_xShape = xShape;
 }
 
-sal_Int32 NumPicBullet::GetId()
-{
-    return m_nId;
-}
 
 uno::Reference<drawing::XShape> NumPicBullet::GetShape()
 {

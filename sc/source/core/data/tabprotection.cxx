@@ -94,11 +94,11 @@ public:
     explicit ScTableProtectionImpl(SCSIZE nOptSize);
     explicit ScTableProtectionImpl(const ScTableProtectionImpl& r);
 
-    bool isProtected() const;
+    bool isProtected() const { return mbProtected;}
     bool isProtectedWithPass() const;
     void setProtected(bool bProtected);
 
-    bool isPasswordEmpty() const;
+    bool isPasswordEmpty() const { return mbEmptyPass;}
     bool hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2 = PASSHASH_UNSPECIFIED) const;
     void setPassword(const OUString& aPassText);
     ::com::sun::star::uno::Sequence<sal_Int8> getPasswordHash(
@@ -189,10 +189,6 @@ ScTableProtectionImpl::ScTableProtectionImpl(const ScTableProtectionImpl& r) :
 {
 }
 
-bool ScTableProtectionImpl::isProtected() const
-{
-    return mbProtected;
-}
 
 bool ScTableProtectionImpl::isProtectedWithPass() const
 {
@@ -224,10 +220,6 @@ void ScTableProtectionImpl::setPassword(const OUString& aPassText)
     }
 }
 
-bool ScTableProtectionImpl::isPasswordEmpty() const
-{
-    return mbEmptyPass;
-}
 
 bool ScTableProtectionImpl::hasPasswordHash(ScPasswordHash eHash, ScPasswordHash eHash2) const
 {

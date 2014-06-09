@@ -110,31 +110,6 @@ cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedSe
     return XMLElementWrapper_XmlSecImpl_getSupportedServiceNames();
 }
 
-xmlNodePtr XMLElementWrapper_XmlSecImpl::getNativeElement(  ) const
-/****** XMLElementWrapper_XmlSecImpl/getNativeElement *************************
- *
- *   NAME
- *  getNativeElement -- Retrieves the libxml2 node wrapped by this object
- *
- *   SYNOPSIS
- *  pNode = getNativeElement();
- *
- *   FUNCTION
- *  see NAME
- *
- *   INPUTS
- *  empty
- *
- *   RESULT
- *  pNode - the libxml2 node wrapped by this object
- *
- *   AUTHOR
- *  Michael Mi
- *  Email: michael.mi@sun.com
- ******************************************************************************/
-{
-    return m_pElement;
-}
 
 void XMLElementWrapper_XmlSecImpl::setNativeElement(const xmlNodePtr pNode)
 /****** XMLElementWrapper_XmlSecImpl/setNativeElement *************************

@@ -96,7 +96,7 @@ public:
 
     /** Test if the version is compatible tu SUN's versioning scheme
      */
-    operator bool ();
+    operator bool () { return m_bValid;}
 
     /** Will always contain a value if the object has been constructed with
         a version string.

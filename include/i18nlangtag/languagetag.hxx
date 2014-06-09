@@ -235,7 +235,7 @@ public:
 
     /** If this tag was contructed as an empty tag denoting the system locale.
       */
-    bool                            isSystemLocale() const;
+    bool                            isSystemLocale() const { return mbSystemLocale;}
 
 
     /** Reset with existing BCP 47 language tag string. See ctor. */

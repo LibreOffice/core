@@ -50,7 +50,7 @@ public:
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList ) SAL_OVERRIDE;
     virtual void EndElement() SAL_OVERRIDE;
 
-    bool IsCategoryAxis() const;
+    bool IsCategoryAxis() const { return m_bHasCategories;}
 
 private:
     ::rtl::Reference< XMLPersAttrListTContext > &   m_rCategoriesContext;
@@ -186,10 +186,6 @@ void XMLAxisOASISContext::EndElement()
         Export();
 }
 
-bool XMLAxisOASISContext::IsCategoryAxis() const
-{
-    return m_bHasCategories;
-}
 
 
 TYPEINIT1( XMLChartPlotAreaOASISTContext, XMLProcAttrTransformerContext );

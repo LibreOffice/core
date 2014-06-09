@@ -386,30 +386,18 @@ void DomainMapper_Impl::SetSymbolData( sal_Int32 nSymbolData )
     m_nSymboldata = nSymbolData;
 }
 
-sal_Int32 DomainMapper_Impl::GetSymbolData()
-{
-    return m_nSymboldata;
-}
 
 void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
 {
     m_bIsLastParaInSection = bIsLast;
 }
 
-bool DomainMapper_Impl::GetIsLastParagraphInSection()
-{
-    return m_bIsLastParaInSection;
-}
 
 void DomainMapper_Impl::SetIsFirstParagraphInSection( bool bIsFirst )
 {
     m_bIsFirstParaInSection = bIsFirst;
 }
 
-bool DomainMapper_Impl::GetIsFirstParagraphInSection()
-{
-    return m_bIsFirstParaInSection;
-}
 
 
 void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
@@ -417,55 +405,31 @@ void DomainMapper_Impl::SetIsDummyParaAddedForTableInSection( bool bIsAdded )
     m_bDummyParaAddedForTableInSection = bIsAdded;
 }
 
-bool DomainMapper_Impl::GetIsDummyParaAddedForTableInSection()
-{
-    return m_bDummyParaAddedForTableInSection;
-}
 
 void DomainMapper_Impl::SetIsTextFrameInserted( bool bIsInserted )
 {
     m_bTextFrameInserted  = bIsInserted;
 }
 
-bool DomainMapper_Impl::GetIsTextFrameInserted()
-{
-    return m_bTextFrameInserted;
-}
 
 void DomainMapper_Impl::SetParaSectpr(bool bParaSectpr)
 {
     m_bParaSectpr = bParaSectpr;
 }
 
-bool DomainMapper_Impl::GetParaSectpr()
-{
-    return m_bParaSectpr;
-}
 
 void DomainMapper_Impl::SetSdt(bool bSdt)
 {
     m_bSdt = bSdt;
 }
 
-bool DomainMapper_Impl::GetSdt()
-{
-    return m_bSdt;
-}
 
 void DomainMapper_Impl::SetIsTableHasDirectFormatting(bool bIsTableHasDirectFormatting)
 {
     m_bIsTableHasDirectFormatting = bIsTableHasDirectFormatting;
 }
 
-bool DomainMapper_Impl::GetIsTableHasDirectFormatting()
-{
-    return m_bIsTableHasDirectFormatting;
-}
 
-bool DomainMapper_Impl::GetParaChanged()
-{
-    return m_bParaChanged;
-}
 
 void    DomainMapper_Impl::PushProperties(ContextType eId)
 {
@@ -4757,10 +4721,6 @@ sal_Int32 DomainMapper_Impl::getCurrentNumberingProperty(const OUString& aProp)
     return nRet;
 }
 
-bool DomainMapper_Impl::IsNewDoc()
-{
-    return m_bIsNewDoc;
-}
 
 void DomainMapper_Impl::enableInteropGrabBag(const OUString& aName)
 {

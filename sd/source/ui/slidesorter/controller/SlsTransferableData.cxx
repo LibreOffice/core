@@ -124,10 +124,6 @@ const ::std::vector<TransferableData::Representative>& TransferableData::GetRepr
 
 
 
-SlideSorterViewShell* TransferableData::GetSourceViewShell (void) const
-{
-    return mpViewShell;
-}
 
 } } } // end of namespace ::sd::slidesorter::controller
 

@@ -76,9 +76,5 @@ OUString   XFFontDecl::GetFontFamily()
     return m_strFontFamily;
 }
 
-bool    XFFontDecl::GetFontPitchFixed()
-{
-    return m_bPitchFixed;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,7 @@ public:
         explicit ForwardIterator(ScFlatBoolRowSegments& rSegs);
 
         bool getValue(SCROW nPos, bool& rVal);
-        SCROW getLastPos() const;
+        SCROW getLastPos() const { return mnLastPos;}
 
     private:
         ScFlatBoolRowSegments&  mrSegs;
@@ -124,7 +124,7 @@ public:
         explicit ForwardIterator(ScFlatUInt16RowSegments& rSegs);
 
         bool getValue(SCROW nPos, sal_uInt16& rVal);
-        SCROW getLastPos() const;
+        SCROW getLastPos() const { return mnLastPos;}
 
     private:
         ScFlatUInt16RowSegments&  mrSegs;

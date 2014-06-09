@@ -925,25 +925,13 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
     }
 }
 
-sal_Int32 SdDrawDocument::GetPrinterIndependentLayout (void)
-{
-    return mnPrinterIndependentLayout;
-}
 
-bool SdDrawDocument::IsStartWithPresentation() const
-{
-    return mbStartWithPresentation;
-}
 
 void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
 {
     mbStartWithPresentation = bStartWithPresentation;
 }
 
-bool SdDrawDocument::IsExitAfterPresenting() const
-{
-    return mbExitAfterPresenting;
-}
 
 void SdDrawDocument::SetExitAfterPresenting( bool bExitAfterPresenting )
 {

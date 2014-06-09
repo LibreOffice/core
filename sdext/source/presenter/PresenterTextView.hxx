@@ -52,13 +52,13 @@ public:
     void ShowCaret (void);
     void HideCaret (void);
 
-    sal_Int32 GetParagraphIndex (void) const;
-    sal_Int32 GetCharacterIndex (void) const;
+    sal_Int32 GetParagraphIndex (void) const { return mnParagraphIndex;}
+    sal_Int32 GetCharacterIndex (void) const { return mnCharacterIndex;}
     void SetPosition (
         const sal_Int32 nParagraphIndex,
         const sal_Int32 nCharacterIndex);
 
-    bool IsVisible (void) const;
+    bool IsVisible (void) const { return mbIsCaretVisible;}
 
     /** Set a (possibly empty) functor that broadcasts changes of the caret
         position.  This is used when a PresenterTextView object is set at

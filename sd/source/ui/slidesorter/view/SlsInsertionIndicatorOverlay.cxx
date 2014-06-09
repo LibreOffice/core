@@ -354,10 +354,6 @@ void InsertionIndicatorOverlay::SetLayerInvalidator (const SharedILayerInvalidat
 
 
 
-bool InsertionIndicatorOverlay::IsVisible (void) const
-{
-    return mbIsVisible;
-}
 
 
 

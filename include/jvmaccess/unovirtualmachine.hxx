@@ -85,7 +85,7 @@ public:
         different for different JDK versions, so that the mangled C++ name of
         the function would depend on the JDK version used at compile time.
      */
-    void * getClassLoader() const;
+    void * getClassLoader() const { return m_classLoader;}
 
 private:
     UnoVirtualMachine(UnoVirtualMachine &); // not defined

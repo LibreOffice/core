@@ -34,10 +34,10 @@ public:
     ScMoveTableDlg(Window* pParent, const OUString& rDefault);
     virtual ~ScMoveTableDlg();
 
-    sal_uInt16  GetSelectedDocument     () const;
-    SCTAB   GetSelectedTable        () const;
-    bool    GetCopyTable            () const;
-    bool    GetRenameTable          () const;
+    sal_uInt16  GetSelectedDocument     () const { return nDocument; }
+    SCTAB   GetSelectedTable        () const { return nTable; }
+    bool    GetCopyTable            () const { return bCopyTable; }
+    bool    GetRenameTable          () const { return bRenameTable; }
     void    GetTabNameString( OUString& rString ) const;
     void    SetForceCopyTable       ();
     void    EnableCopyTable         (bool bFlag=true);

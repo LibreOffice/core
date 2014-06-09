@@ -822,10 +822,6 @@ namespace slideshow
                                     eNodeType );
         }
 
-        const VectorOfDocTreeNodes& DrawShapeSubsetting::getActiveSubsets() const
-        {
-            return maCurrentSubsets;
-        }
 
     }
 }

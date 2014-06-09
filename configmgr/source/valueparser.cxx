@@ -436,9 +436,6 @@ void ValueParser::start(
     state_ = STATE_TEXT;
 }
 
-int ValueParser::getLayer() const {
-    return layer_;
-}
 
 template< typename T > css::uno::Any ValueParser::convertItems() {
     css::uno::Sequence< T > seq(items_.size());

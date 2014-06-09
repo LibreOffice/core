@@ -72,7 +72,7 @@ public:
         OutputDevice& rDevice,
         const Rectangle& rRepaintArea) SAL_OVERRIDE;
 
-    bool IsVisible (void) const;
+    bool IsVisible (void) const { return mbIsVisible;}
     void Hide (void);
     void Show (void);
 

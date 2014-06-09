@@ -1069,10 +1069,6 @@ void AreaPropertyPanel::NotifyItemUpdate(
 
 
 
-SfxBindings* AreaPropertyPanel::GetBindings()
-{
-    return mpBindings;
-}
 
 
 

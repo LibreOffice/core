@@ -491,10 +491,6 @@ void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-bool ScNamedRangesObj::IsModifyAndBroadcast() const
-{
-    return mbModifyAndBroadcast;
-}
 
 // sheet::XNamedRanges
 

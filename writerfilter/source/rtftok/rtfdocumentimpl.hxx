@@ -361,7 +361,7 @@ public:
     /// If this is the first run of the document, starts the initial paragraph.
     void checkFirstRun();
     /// If the initial paragraph is started.
-    bool getFirstRun();
+    bool getFirstRun() { return m_bFirstRun;}
     /// If we need to add a dummy paragraph before a section break.
     void setNeedPar(bool bNeedPar);
     /// Return the dmapper index of an RTF index for fonts.

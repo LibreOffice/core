@@ -46,13 +46,7 @@ rtl::Reference< Node > PropertyNode::clone(bool) const {
     return new PropertyNode(*this);
 }
 
-Type PropertyNode::getStaticType() const {
-    return staticType_;
-}
 
-bool PropertyNode::isNillable() const {
-    return nillable_;
-}
 
 css::uno::Any PropertyNode::getValue(Components & components) {
     if (!externalDescriptor_.isEmpty()) {
@@ -81,9 +75,6 @@ void PropertyNode::setExternal(int layer, OUString const & descriptor) {
     externalDescriptor_ = descriptor;
 }
 
-bool PropertyNode::isExtension() const {
-    return extension_;
-}
 
 PropertyNode::PropertyNode(PropertyNode const & other):
     Node(other), staticType_(other.staticType_), nillable_(other.nillable_),

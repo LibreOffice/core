@@ -99,9 +99,6 @@ void PlacesListBox::AppendPlace( PlacePtr pPlace )
     }
 }
 
-sal_Int32 PlacesListBox::GetNbEditablePlaces() {
-    return mnNbEditables;
-}
 
 bool PlacesListBox::IsUpdated() {
     if(mbUpdated) {
@@ -111,9 +108,6 @@ bool PlacesListBox::IsUpdated() {
     return false;
 }
 
-const std::vector<PlacePtr>& PlacesListBox::GetPlaces() {
-    return maPlaces;
-}
 
 void PlacesListBox::RemovePlace( sal_uInt16 nPos )
 {

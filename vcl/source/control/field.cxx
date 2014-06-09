@@ -539,10 +539,6 @@ void NumericFormatter::SetShowTrailingZeros( bool bShowTrailingZeros )
     }
 }
 
-sal_uInt16 NumericFormatter::GetDecimalDigits() const
-{
-    return mnDecimalDigits;
-}
 
 void NumericFormatter::SetValue( sal_Int64 nNewValue )
 {

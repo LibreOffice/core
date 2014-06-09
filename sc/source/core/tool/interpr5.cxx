@@ -334,10 +334,6 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR, bool bEmpty)
     return pMat;
 }
 
-ScInterpreter::VolatileType ScInterpreter::GetVolatileType() const
-{
-    return meVolatileType;
-}
 
 ScMatrixRef ScInterpreter::CreateMatrixFromDoubleRef( const FormulaToken* pToken,
         SCCOL nCol1, SCROW nRow1, SCTAB nTab1,

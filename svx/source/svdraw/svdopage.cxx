@@ -96,10 +96,6 @@ SdrPageObj::~SdrPageObj()
     }
 }
 
-SdrPage* SdrPageObj::GetReferencedPage() const
-{
-    return mpShownPage;
-}
 
 void SdrPageObj::SetReferencedPage(SdrPage* pNewPage)
 {

@@ -304,10 +304,6 @@ SdrModel::~SdrModel()
     delete mpImpl;
 }
 
-bool SdrModel::IsInDestruction() const
-{
-    return mbInDestruction;
-}
 
 // not yet implemented
 void SdrModel::operator=(const SdrModel&)
@@ -2060,19 +2056,7 @@ void SdrHint::SetKind(SdrHintKind eNewKind)
     meHint = eNewKind;
 }
 
-const SdrPage* SdrHint::GetPage() const
-{
-    return mpPage;
-}
 
-const SdrObject* SdrHint::GetObject() const
-{
-    return mpObj;
-}
 
-SdrHintKind SdrHint::GetKind() const
-{
-    return meHint;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -146,10 +146,6 @@ ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
     return pList;
 }
 
-bool ScCondFormatManagerDlg::CondFormatsChanged()
-{
-    return mbModified;
-}
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl)
 {

@@ -36,7 +36,7 @@ public:
     ScUnitConverterData( const ScUnitConverterData& );
     ~ScUnitConverterData();
 
-    double GetValue() const;
+    double GetValue() const { return mfValue;}
     const OUString& GetIndexString() const;
 
     static OUString BuildIndexString(

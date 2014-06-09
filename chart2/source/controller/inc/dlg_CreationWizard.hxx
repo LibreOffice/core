@@ -50,7 +50,7 @@ public:
         , sal_Int32 nOnePageOnlyIndex=-1 );//if nOnePageOnlyIndex is an index of an exsisting  page starting with 0, then only this page is displayed without next/previous and roadmap
     virtual ~CreationWizard();
 
-    bool isClosable();
+    bool isClosable() { /*@todo*/ return m_bIsClosable;}
 
     // TabPageNotifiable
     virtual void setInvalidPage( TabPage * pTabPage ) SAL_OVERRIDE;

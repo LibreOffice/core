@@ -542,7 +542,7 @@ public:
     ScRangePairListRef& GetColNameRangesRef() { return xColNameRanges; }
     ScRangePairListRef& GetRowNameRangesRef() { return xRowNameRanges; }
 
-    SC_DLLPUBLIC ScDBCollection*    GetDBCollection() const;
+    SC_DLLPUBLIC ScDBCollection*    GetDBCollection() const { return pDBCollection;}
     void            SetDBCollection( ScDBCollection* pNewDBCollection,
                                         bool bRemoveAutoFilter = false );
     const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly = false) const;
@@ -558,7 +558,7 @@ public:
     SC_DLLPUBLIC ScDPObject* GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
 
-    SC_DLLPUBLIC ScChartCollection* GetChartCollection() const;
+    SC_DLLPUBLIC ScChartCollection* GetChartCollection() const { return pChartCollection;}
 
     void                StopTemporaryChartLock();
 
@@ -629,7 +629,7 @@ public:
 
     SC_DLLPUBLIC bool GetMatrixFormulaRange( const ScAddress& rCellPos, ScRange& rMatrix );
 
-    bool            IsEmbedded() const;
+    bool            IsEmbedded() const { return bIsEmbedded;}
     void            GetEmbedded( ScRange& rRange ) const;
     void            SetEmbedded( const ScRange& rRange );
     void            ResetEmbedded();
@@ -687,7 +687,7 @@ public:
     SC_DLLPUBLIC bool           IsActiveScenario( SCTAB nTab ) const;
     SC_DLLPUBLIC void           SetActiveScenario( SCTAB nTab, bool bActive );      // only for Undo etc.
     SC_DLLPUBLIC formula::FormulaGrammar::AddressConvention GetAddressConvention() const;
-    SC_DLLPUBLIC formula::FormulaGrammar::Grammar GetGrammar() const;
+    SC_DLLPUBLIC formula::FormulaGrammar::Grammar GetGrammar() const { return eGrammar;}
     SC_DLLPUBLIC void SetGrammar( formula::FormulaGrammar::Grammar eGram );
     SC_DLLPUBLIC sal_uInt8          GetLinkMode( SCTAB nTab ) const;
     bool            IsLinked( SCTAB nTab ) const;
@@ -762,7 +762,7 @@ public:
 
     SfxBindings*    GetViewBindings();
     SfxObjectShell* GetDocumentShell() const    { return pShell; }
-    SC_DLLPUBLIC ScDrawLayer* GetDrawLayer();
+    SC_DLLPUBLIC ScDrawLayer* GetDrawLayer() { return pDrawLayer;  }
     SfxBroadcaster* GetDrawBroadcaster();       // to avoid header
     void            BeginDrawUndo();
 
@@ -1185,7 +1185,7 @@ public:
     void            EnableExecuteLink( bool bVal )              { mbExecuteLinkEnabled = bVal; }
     bool            IsChangeReadOnlyEnabled() const             { return mbChangeReadOnlyEnabled; }
     void            EnableChangeReadOnly( bool bVal )           { mbChangeReadOnlyEnabled = bVal; }
-    SC_DLLPUBLIC bool IsUserInteractionEnabled() const;
+    SC_DLLPUBLIC bool IsUserInteractionEnabled() const { return mbUserInteractionEnabled;}
     SC_DLLPUBLIC void EnableUserInteraction( bool bVal );
     SC_DLLPUBLIC sal_Int16       GetNamedRangesLockCount() const             { return mnNamedRangesLockCount; }
     void            SetNamedRangesLockCount( sal_Int16 nCount ) { mnNamedRangesLockCount = nCount; }
@@ -1411,7 +1411,7 @@ public:
     SC_DLLPUBLIC ScConditionalFormatList* GetCondFormList( SCTAB nTab ) const;
 
     const ScValidationDataList* GetValidationList() const;
-    ScValidationDataList* GetValidationList();
+    ScValidationDataList* GetValidationList() { return pValidationList;}
 
     SC_DLLPUBLIC void           ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const SfxPoolItem& rAttr );
@@ -1759,7 +1759,7 @@ public:
     bool            GetNoListening() const { return bNoListening; }
     ScBroadcastAreaSlotMachine* GetBASM() const { return pBASM; }
 
-    SC_DLLPUBLIC ScChartListenerCollection* GetChartListenerCollection() const;
+    SC_DLLPUBLIC ScChartListenerCollection* GetChartListenerCollection() const { return pChartListenerCollection;}
     void            SetChartListenerCollection( ScChartListenerCollection*,
                         bool bSetChartRangeLists = false );
     void            UpdateChart( const OUString& rName );
@@ -1955,10 +1955,10 @@ public:
                                 return *pRecursionHelper;
                             }
     bool                IsInDtorClear() const { return bInDtorClear; }
-    void SetExpandRefs( bool bVal );
-    bool IsExpandRefs() const;
+    void                SetExpandRefs( bool bVal );
+    bool                IsExpandRefs() const { return bExpandRefs; }
 
-    sal_uLong               GetXMLImportedFormulaCount() const { return nXMLImportedFormulaCount; }
+    sal_uLong           GetXMLImportedFormulaCount() const { return nXMLImportedFormulaCount; }
     void                IncXMLImportedFormulaCount( sal_uLong nVal )
                             {
                                 if ( nXMLImportedFormulaCount + nVal > nXMLImportedFormulaCount )

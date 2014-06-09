@@ -46,7 +46,7 @@ public:
 
     void insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId);
 
-    long GetThumbnailSize() const;
+    long GetThumbnailSize() const { return mnItemMaxSize;}
 
     static bool typeMatchesExtension(ApplicationType type, const OUString &rExt);
     static BitmapEx getDefaultThumbnail(const OUString &rURL);

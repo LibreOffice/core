@@ -100,7 +100,7 @@ public:
     void SetBackgroundColor (const Color aColor);
     void SetTextColor (const Color aColor);
     void SetFontDescriptor (const awt::FontDescriptor& rFontDescriptor);
-    sal_Int32 GetTop (void) const;
+    sal_Int32 GetTop (void) const { return mnTop;}
     void SetTop (const sal_Int32 nTop);
     void SetText (const OUString& Text);
     sal_Int32 ParseDistance (const OUString& rsDistance) const;
@@ -492,10 +492,6 @@ void PresenterTextView::Implementation::SetFontDescriptor (
 
 
 
-sal_Int32 PresenterTextView::Implementation::GetTop (void) const
-{
-    return mnTop;
-}
 
 
 

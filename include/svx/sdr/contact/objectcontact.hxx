@@ -161,7 +161,7 @@ namespace sdr
             virtual bool IsAsynchronGraphicsLoadingAllowed() const;
 
             // access to ViewObjectContactRedirector
-            ViewObjectContactRedirector* GetViewObjectContactRedirector() const;
+            ViewObjectContactRedirector* GetViewObjectContactRedirector() const {  return mpViewObjectContactRedirector; }
             void SetViewObjectContactRedirector(ViewObjectContactRedirector* pNew);
 
             // check if buffering of MasterPages is allowed. Default is sal_False.

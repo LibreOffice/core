@@ -66,7 +66,7 @@ public:
     sal_uInt16 GetPageNum() const { return nPageNum; }
     const SwPosition *GetCntntAnchor() const { return m_pCntntAnchor.get(); }
     // #i28701#
-    sal_uInt32 GetOrder() const;
+    sal_uInt32 GetOrder() const { return mnOrder;}
 
     void SetType( RndStdIds nRndId ) { nAnchorId = nRndId; }
     void SetPageNum( sal_uInt16 nNew ) { nPageNum = nNew; }

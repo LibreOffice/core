@@ -146,9 +146,9 @@ public:
     /** Return the window that is the parent of all controls of this view
         shell.  This may or may not be the window of the frame.
     */
-    inline ::Window* GetParentWindow (void) const;
+    inline ::Window* GetParentWindow (void) const { return mpParentWindow; }
 
-    inline ::sd::View* GetView (void) const;
+    inline ::sd::View* GetView (void) const { return mpView; }
     inline SdrView* GetDrawView (void) const;
     SD_DLLPUBLIC DrawDocShell* GetDocSh (void) const;
 
@@ -159,7 +159,7 @@ public:
     /** The active window is usually the mpContentWindow.  When there is a
         show running then the active window is a ShowWindow.
     */
-    ::sd::Window* GetActiveWindow (void) const;
+    ::sd::Window* GetActiveWindow (void) const { return mpActiveWindow;}
 
     /** Set the active window.  When the shell is displayed in the center
         pane then the window of the ViewShellBase is also set to the given
@@ -196,7 +196,7 @@ public:
 
     const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId);
 
-    bool HasRuler (void);
+    bool HasRuler (void) { return mbHasRulers;}
     void SetRuler(bool bRuler);
 
     /** Set internal values of all scroll bars that determine thumb size and
@@ -222,9 +222,9 @@ public:
 
     void    ExecReq( SfxRequest &rReq );
 
-    ZoomList* GetZoomList (void);
+    ZoomList* GetZoomList (void) { return mpZoomList;}
 
-    FrameView* GetFrameView (void);
+    FrameView* GetFrameView (void) { return mpFrameView; }
     /** Setting a frame view triggers ReadFrameViewData() for the new
         frame.
         @param pFrameView
@@ -593,16 +593,6 @@ private:
 
 
 
-
-::Window* ViewShell::GetParentWindow (void) const
-{
-    return mpParentWindow;
-}
-
-::sd::View* ViewShell::GetView (void) const
-{
-    return mpView;
-}
 
 SdrView* ViewShell::GetDrawView (void) const
 {

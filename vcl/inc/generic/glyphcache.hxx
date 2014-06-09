@@ -168,7 +168,7 @@ public:
     virtual ~ServerFont();
 
     const OString* GetFontFileName() const;
-    bool                TestFont() const;
+    bool                TestFont() const { return mbFaceOk;}
     FT_Face             GetFtFace() const;
     int                 GetLoadFlags() const { return (mnLoadFlags & ~FT_LOAD_IGNORE_TRANSFORM); }
     void                SetFontOptions( boost::shared_ptr<ImplFontOptions> );

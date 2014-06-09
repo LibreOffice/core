@@ -776,10 +776,6 @@ StringRangeEnumerator::Iterator& StringRangeEnumerator::Iterator::operator++()
     return *this;
 }
 
-sal_Int32 StringRangeEnumerator::Iterator::operator*() const
-{
-    return nCurrent;
-}
 
 bool StringRangeEnumerator::Iterator::operator==( const Iterator& i_rCompare ) const
 {

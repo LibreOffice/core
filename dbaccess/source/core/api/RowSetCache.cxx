@@ -691,15 +691,7 @@ bool ORowSetCache::next(  )
     return !m_bAfterLast;
 }
 
-bool ORowSetCache::isBeforeFirst(  )
-{
-    return m_bBeforeFirst;
-}
 
-bool ORowSetCache::isAfterLast(  )
-{
-    return m_bAfterLast;
-}
 
 bool ORowSetCache::isFirst(  )
 {

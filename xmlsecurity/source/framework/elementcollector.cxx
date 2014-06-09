@@ -80,15 +80,7 @@ ElementCollector::ElementCollector(
     m_type = cssxc::sax::ElementMarkType_ELEMENTCOLLECTOR;
 }
 
-cssxc::sax::ElementMarkPriority ElementCollector::getPriority() const
-{
-    return m_nPriority;
-}
 
-bool ElementCollector::getModify() const
-{
-    return m_bToModify;
-}
 
 void ElementCollector::notifyListener()
 /****** ElementCollector/notifyListener ***************************************

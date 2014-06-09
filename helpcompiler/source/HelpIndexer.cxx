@@ -79,9 +79,6 @@ bool HelpIndexer::indexDocuments()
     return true;
 }
 
-OUString const & HelpIndexer::getErrorMessage() {
-    return d_error;
-}
 
 bool HelpIndexer::scanForFiles() {
     if (!scanForFiles(d_contentDir)) {

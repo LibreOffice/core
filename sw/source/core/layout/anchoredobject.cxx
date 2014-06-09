@@ -117,20 +117,12 @@ const SdrObject* SwAnchoredObject::GetDrawObj() const
     return mpDrawObj;
 }
 
-SdrObject* SwAnchoredObject::DrawObj()
-{
-    return mpDrawObj;
-}
 
 const SwFrm* SwAnchoredObject::GetAnchorFrm() const
 {
     return mpAnchorFrm;
 }
 
-SwFrm* SwAnchoredObject::AnchorFrm()
-{
-    return mpAnchorFrm;
-}
 
 void SwAnchoredObject::ChgAnchorFrm( SwFrm* _pNewAnchorFrm )
 {
@@ -161,10 +153,6 @@ SwFrm* SwAnchoredObject::GetAnchorFrmContainingAnchPos()
     return pAnchorFrmContainingAnchPos;
 }
 
-SwPageFrm* SwAnchoredObject::GetPageFrm()
-{
-    return mpPageFrm;
-}
 
 const SwPageFrm* SwAnchoredObject::GetPageFrm() const
 {
@@ -227,10 +215,6 @@ void SwAnchoredObject::SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFr
     RegisterAtCorrectPage();
 }
 
-SwTwips SwAnchoredObject::GetLastTopOfLine() const
-{
-    return mnLastTopOfLine;
-}
 
 // #i28701# - follow-up of #i22341#
 void SwAnchoredObject::AddLastTopOfLineY( SwTwips _nDiff )
@@ -799,10 +783,6 @@ void SwAnchoredObject::SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrap
     }
 }
 
-bool SwAnchoredObject::IsTmpConsiderWrapInfluence() const
-{
-    return mbTmpConsiderWrapInfluence;
-}
 
 void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpConsiderWrapInfluence )
 {

@@ -133,10 +133,6 @@ int HWPFile::Open(HStream & stream)
 }
 
 
-int HWPFile::State(void) const
-{
-    return error_code;
-}
 
 
 int HWPFile::SetState(int errcode)

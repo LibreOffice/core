@@ -110,7 +110,7 @@ public:
             When there is no page that currently has the focus then -1 is
             returned.
     */
-    sal_Int32 GetFocusedPageIndex (void) const;
+    sal_Int32 GetFocusedPageIndex (void) const { return mnPageIndex;}
 
     /** Set the focused page to the one described by the given page
         descriptor.  The visibility of the focus indicator is not modified.

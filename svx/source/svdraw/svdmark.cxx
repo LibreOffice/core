@@ -117,10 +117,6 @@ void SdrMark::SetMarkedSdrObj(SdrObject* pNewObj)
     }
 }
 
-SdrObject* SdrMark::GetMarkedSdrObj() const
-{
-    return mpSelectedSdrObject;
-}
 
 SdrMark& SdrMark::operator=(const SdrMark& rMark)
 {

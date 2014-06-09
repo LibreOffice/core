@@ -107,40 +107,40 @@ public :
 
 
 
-    bool    GetIsExportNotes() const;
+    bool    GetIsExportNotes() const { return mbExportNotes;}
     void        SetIsExportNotes( const bool bExportNotes );
 
-    bool    GetIsExportNotesPages() const;
+    bool    GetIsExportNotesPages() const { return mbExportNotesPages;}
     void        SetIsExportNotesPages( const bool bExportNotesPages );
 
-    bool    GetIsExportTaggedPDF() const;
+    bool    GetIsExportTaggedPDF() const { return mbTaggedPDF;}
     void        SetIsExportTaggedPDF( const bool bTaggedPDF );
 
-    bool    GetIsExportTransitionEffects() const;
+    bool    GetIsExportTransitionEffects() const { return mbTransitionEffects;}
     void        SetIsExportTransitionEffects( const bool bTransitionalEffects );
 
-    bool    GetIsExportFormFields() const;
+    bool    GetIsExportFormFields() const { return mbExportFormFields;}
     void        SetIsExportFormFields( const bool bExportFormFields );
 
     void        SetFormsFormat( const sal_Int32 nFormsFormat );
 
-    bool    GetIsExportBookmarks() const;
+    bool    GetIsExportBookmarks() const { return mbExportBookmarks;}
     void        SetIsExportBookmarks( const bool bExportBookmarks );
 
-    bool    GetIsExportHiddenSlides() const;
+    bool    GetIsExportHiddenSlides() const { return mbExportHiddenSlides;}
     void        SetIsExportHiddenSlides( const bool bExportHiddenSlides );
 
-    bool    GetIsExportNamedDestinations() const; //i56629
+    bool    GetIsExportNamedDestinations() const { return mbExportNDests;} //i56629
     void        SetIsExportNamedDestinations( const bool bExportNDests ); //i56629
 
     // PageNumber, Compression is being set by the PDFExport
-    sal_Int32   GetCurrentPageNumber() const;
+    sal_Int32   GetCurrentPageNumber() const { return mnPage;}
     void        SetCurrentPageNumber( const sal_Int32 nPage );
 
-    bool    GetIsLosslessCompression() const;
+    bool    GetIsLosslessCompression() const { return mbUseLosslessCompression;}
     void        SetIsLosslessCompression( const bool bLosslessCompression );
 
-    bool    GetIsReduceImageResolution() const;
+    bool    GetIsReduceImageResolution() const { return mbReduceImageResolution;}
     void        SetIsReduceImageResolution( const bool bReduceImageResolution );
 
     const com::sun::star::lang::Locale& GetDocumentLocale() const;

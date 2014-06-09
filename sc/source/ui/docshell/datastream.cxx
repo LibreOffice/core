@@ -378,15 +378,7 @@ ScRange DataStream::GetRange() const
     return aRange;
 }
 
-bool DataStream::IsRefreshOnEmptyLine() const
-{
-    return mbRefreshOnEmptyLine;
-}
 
-DataStream::MoveType DataStream::GetMove() const
-{
-    return meOrigMove;
-}
 
 void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
         sal_Int32 nLimit, MoveType eMove, const sal_uInt32 nSettings)

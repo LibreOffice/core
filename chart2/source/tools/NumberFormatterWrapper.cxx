@@ -67,10 +67,6 @@ NumberFormatterWrapper::~NumberFormatterWrapper()
 {
 }
 
-SvNumberFormatter* NumberFormatterWrapper::getSvNumberFormatter() const
-{
-    return m_pNumberFormatter;
-}
 
 Date NumberFormatterWrapper::getNullDate() const
 {

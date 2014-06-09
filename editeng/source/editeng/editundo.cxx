@@ -126,10 +126,6 @@ EditUndo::~EditUndo()
 {
 }
 
-EditEngine* EditUndo::GetEditEngine()
-{
-    return mpEditEngine;
-}
 
 sal_uInt16 EditUndo::GetId() const
 {

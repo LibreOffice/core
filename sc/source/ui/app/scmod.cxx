@@ -1472,10 +1472,6 @@ void ScModule::SetRefInputHdl( ScInputHandler* pNew )
     pRefInputHandler = pNew;
 }
 
-ScInputHandler* ScModule::GetRefInputHdl()
-{
-    return pRefInputHandler;
-}
 
 
 void ScModule::InputGetSelection( sal_Int32& rStart, sal_Int32& rEnd )

@@ -628,10 +628,6 @@ void PresenterController::SetAccessibilityActiveState (const bool bIsActive)
     }
 }
 
-bool PresenterController::IsAccessibilityActive (void) const
-{
-    return mbIsAccessibilityActive;
-}
 
 void PresenterController::HandleMouseClick (const awt::MouseEvent& rEvent)
 {

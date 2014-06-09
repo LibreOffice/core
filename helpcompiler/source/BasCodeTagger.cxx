@@ -48,10 +48,6 @@ bool LibXmlTreeWalker::end()
     return m_pCurrentNode->next == NULL && m_Queue.empty();
 }
 
-xmlNodePtr LibXmlTreeWalker::currentNode()
-{
-    return m_pCurrentNode;
-}
 
 
 

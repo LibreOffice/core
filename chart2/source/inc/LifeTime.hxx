@@ -106,7 +106,7 @@ protected:
     virtual void        impl_apiCallCountReachedNull() SAL_OVERRIDE;
 
     void        impl_setOwnership( bool bDeliverOwnership, bool bMyVeto );
-    bool    impl_shouldCloseAtNextChance();
+    bool    impl_shouldCloseAtNextChance() { return m_bOwnership;}
     void        impl_doClose();
 
     void        impl_init()

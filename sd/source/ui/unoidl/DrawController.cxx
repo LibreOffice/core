@@ -617,10 +617,6 @@ void DrawController::BroadcastContextChange (void) const
 
 
 
-ViewShellBase* DrawController::GetViewShellBase (void)
-{
-    return mpBase;
-}
 
 
 

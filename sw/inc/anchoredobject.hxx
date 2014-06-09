@@ -215,11 +215,11 @@ class SW_DLLPUBLIC SwAnchoredObject
         // accessors to member <mpDrawObj>
         void SetDrawObj( SdrObject& _rDrawObj );
         const SdrObject* GetDrawObj() const;
-        SdrObject* DrawObj();
+        SdrObject* DrawObj() { return mpDrawObj;}
 
         // accessors to member <mpAnchorFrm>
         const SwFrm* GetAnchorFrm() const;
-        SwFrm* AnchorFrm();
+        SwFrm* AnchorFrm() { return mpAnchorFrm;}
         void ChgAnchorFrm( SwFrm* _pNewAnchorFrm );
         /** determine anchor frame containing the anchor position
 
@@ -232,7 +232,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         */
         SwFrm* GetAnchorFrmContainingAnchPos();
 
-        SwPageFrm* GetPageFrm();
+        SwPageFrm* GetPageFrm() { return mpPageFrm;}
         const SwPageFrm* GetPageFrm() const;
         void SetPageFrm( SwPageFrm* _pNewPageFrm );
 
@@ -298,7 +298,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         void ResetLastCharRectHeight();
 
         // accessor to member <nmLastTopOfLine>
-        SwTwips GetLastTopOfLine() const;
+        SwTwips GetLastTopOfLine() const { return mnLastTopOfLine;}
         void AddLastTopOfLineY( SwTwips _nDiff );
 
         /** reset members <maLastCharRect> and <mnLastTopOfLine>
@@ -468,7 +468,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to member <mbTmpConsiderWrapInfluence>
         void SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrapInfluence );
-        bool IsTmpConsiderWrapInfluence() const;
+        bool IsTmpConsiderWrapInfluence() const { return mbTmpConsiderWrapInfluence;}
 
         /** method to determine, if the anchored object is overlapping with a
             previous column

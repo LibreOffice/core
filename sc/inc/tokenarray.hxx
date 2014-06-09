@@ -60,9 +60,9 @@ public:
     ScTokenArray* Clone() const;    /// True copy!
 
     void GenHash();
-    size_t GetHash() const;
+    size_t GetHash() const { return mnHashValue;}
 
-    ScFormulaVectorState GetVectorState() const;
+    ScFormulaVectorState GetVectorState() const { return meVectorState;}
 
     /**
      * If the array contains at least one relative row reference or named

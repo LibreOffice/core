@@ -140,7 +140,7 @@ public:
     const ScRange&      GetOutRange() const     { return aOutRange; }
 
     void                SetHeaderLayout(bool bUseGrid);
-    bool                GetHeaderLayout() const;
+    bool                GetHeaderLayout() const { return mbHeaderLayout;}
 
     void                SetSheetDesc(const ScSheetSourceDesc& rDesc, bool bFromRefUpdate = false);
     void                SetImportDesc(const ScImportSourceDesc& rDesc);

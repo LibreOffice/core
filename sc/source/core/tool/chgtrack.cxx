@@ -883,8 +883,6 @@ bool ScChangeActionDel::IsTabDeleteCol() const
     return p && p->GetType() == SC_CAT_DELETE_TABS;
 }
 
-SCsCOL ScChangeActionDel::GetDx() const { return nDx; }
-SCsROW ScChangeActionDel::GetDy() const { return nDy; }
 
 ScChangeActionDelMoveEntry* ScChangeActionDel::AddCutOffMove(
     ScChangeActionMove* pMove, short nFrom, short nTo )

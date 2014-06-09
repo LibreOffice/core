@@ -1069,10 +1069,6 @@ void ChartDocumentWrapper::setUpdateAddIn( bool bUpdateAddIn )
 {
     m_bUpdateAddIn = bUpdateAddIn;
 }
-bool ChartDocumentWrapper::getUpdateAddIn() const
-{
-    return m_bUpdateAddIn;
-}
 
 Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
 {

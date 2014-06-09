@@ -89,10 +89,6 @@ void SmartTag::deselect()
 
 
 
-bool SmartTag::isSelected() const
-{
-    return mbSelected;
-}
 
 
 

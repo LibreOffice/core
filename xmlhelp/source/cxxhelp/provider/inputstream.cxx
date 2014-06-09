@@ -41,12 +41,6 @@ XInputStream_impl::~XInputStream_impl()
 }
 
 
-bool SAL_CALL XInputStream_impl::CtorSuccess()
-{
-    return m_bIsOpen;
-};
-
-
 uno::Any SAL_CALL
 XInputStream_impl::queryInterface(
     const uno::Type& rType )

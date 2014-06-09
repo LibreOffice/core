@@ -294,7 +294,7 @@ public:
     void        SetName( const OUString& rNewName );
 
     void        SetAnonymousDBData(ScDBData* pDBData);
-    ScDBData*   GetAnonymousDBData();
+    ScDBData*   GetAnonymousDBData() { return pDBDataNoName;}
 
     void        GetCodeName( OUString& rName ) const {  rName = aCodeName; }
     void        SetCodeName( const OUString& rNewName ) { aCodeName = rNewName; }
@@ -1105,7 +1105,7 @@ private:
          * @return Current row position, or ROW_NOT_FOUND if the iterator
          *         doesn't point to a valid data cell position.
          */
-        SCROW getRow() const;
+        SCROW getRow() const { return mnCurRow;}
 
     private:
         ScFlatBoolRowSegments& mrRowSegs;

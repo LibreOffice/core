@@ -41,29 +41,13 @@ ScOutlineEntry::ScOutlineEntry( const ScOutlineEntry& rEntry ) :
 {
 }
 
-SCCOLROW ScOutlineEntry::GetStart() const
-{
-    return nStart;
-}
 
-SCSIZE ScOutlineEntry::GetSize() const
-{
-    return nSize;
-}
 
 SCCOLROW ScOutlineEntry::GetEnd() const
 {
     return nStart+nSize-1;
 }
-bool ScOutlineEntry::IsHidden() const
-{
-    return bHidden;
-}
 
-bool ScOutlineEntry::IsVisible() const
-{
-    return bVisible;
-}
 
 void ScOutlineEntry::Move( SCsCOLROW nDelta )
 {
@@ -305,10 +289,6 @@ bool ScOutlineArray::Insert(
     return true;
 }
 
-size_t ScOutlineArray::GetDepth() const
-{
-    return nDepth;
-}
 
 bool ScOutlineArray::FindTouchedLevel(
     SCCOLROW nBlockStart, SCCOLROW nBlockEnd, size_t& rFindLevel) const
@@ -884,10 +864,6 @@ ScOutlineEntry* ScSubOutlineIterator::GetNext()
     return pEntry;                  // nSubLevel gueltig, wenn pEntry != 0
 }
 
-size_t ScSubOutlineIterator::LastLevel() const
-{
-    return nSubLevel;
-}
 
 size_t ScSubOutlineIterator::LastEntry() const
 {

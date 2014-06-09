@@ -44,15 +44,6 @@ CXPathObjectPtr & CXPathObjectPtr::operator = (xmlXPathObject* pObj)
     _object = pObj;
     return *this;
 }
-xmlXPathObject* CXPathObjectPtr::operator ->()
-
-{
-    return _object;
-}
-CXPathObjectPtr::operator xmlXPathObject*() const
-{
-    return _object;
-}
 
 CXPathContextPtr::CXPathContextPtr(xmlXPathContextPtr aContext)
     : _object(aContext)
@@ -76,15 +67,7 @@ CXPathContextPtr & CXPathContextPtr::operator = (xmlXPathContextPtr pObj)
     _object = pObj;
     return *this;
 }
-xmlXPathContext* CXPathContextPtr::operator ->()
-{
-    return _object;
-}
 
-CXPathContextPtr::operator xmlXPathContext*() const
-{
-    return _object;
-}
 
 CXmlDocPtr::CXmlDocPtr(xmlDoc* aDoc)
     : _object(aDoc)
@@ -108,15 +91,7 @@ CXmlDocPtr & CXmlDocPtr::operator = (xmlDoc* pObj)
     return *this;
 }
 
-xmlDoc* CXmlDocPtr::operator ->()
-{
-    return _object;
-}
 
-CXmlDocPtr::operator xmlDoc*() const
-{
-    return _object;
-}
 
 
 CXmlCharPtr::CXmlCharPtr(xmlChar * aChar)
@@ -148,10 +123,6 @@ CXmlCharPtr & CXmlCharPtr::operator = (xmlChar* pObj)
     return *this;
 }
 
-CXmlCharPtr::operator xmlChar*() const
-{
-    return _object;
-}
 
 CXmlCharPtr::operator OUString()
 {

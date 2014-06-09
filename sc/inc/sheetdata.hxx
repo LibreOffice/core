@@ -169,7 +169,7 @@ public:
     const std::vector<ScTextStyleEntry>& GetNoteTextStyles() const { return maNoteTextStyles; }
     const std::vector<ScTextStyleEntry>& GetTextStyles() const   { return maTextStyles; }
 
-    bool        IsInSupportedSave() const;
+    bool        IsInSupportedSave() const { return mbInSupportedSave;}
     void        SetInSupportedSave( bool bSet );
 };
 

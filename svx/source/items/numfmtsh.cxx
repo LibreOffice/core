@@ -1605,10 +1605,6 @@ void SvxNumberFormatShell::SetCurrencySymbol(sal_uInt32 nPos)
     }
 }
 
-sal_uInt32 SvxNumberFormatShell::GetCurrencySymbol()
-{
-    return nCurCurrencyEntryPos;
-}
 
 void SvxNumberFormatShell::SetCurCurrencyEntry(NfCurrencyEntry* pCEntry)
 {

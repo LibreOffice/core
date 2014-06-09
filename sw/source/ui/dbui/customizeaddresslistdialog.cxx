@@ -171,10 +171,6 @@ void SwCustomizeAddressListDialog::UpdateButtons()
     m_pRenamePB->Enable(nEntries > 0);
 }
 
-SwCSVData*    SwCustomizeAddressListDialog::GetNewData()
-{
-    return m_pNewData;
-}
 
 SwAddRenameEntryDialog::SwAddRenameEntryDialog(
         Window* pParent, const OString& rID, const OUString& rUIXMLDescription,

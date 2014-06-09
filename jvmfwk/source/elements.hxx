@@ -291,7 +291,7 @@ public:
 
     /** the default is true.
      */
-    bool getEnabled() const;
+    bool getEnabled() const { return m_bEnabled;}
 
     const OUString & getUserClassPath() const;
 

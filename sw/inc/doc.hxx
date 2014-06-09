@@ -1801,7 +1801,7 @@ public:
     bool ContainsHiddenChars() const;
 
     // call back for API wrapper
-    SwModify*   GetUnoCallBack() const;
+    SwModify*   GetUnoCallBack() const { return mpUnoCallBack; }
 
     IGrammarContact* getGrammarContact() const { return mpGrammarContact; }
 

@@ -983,11 +983,6 @@ IMPL_LINK( SfxVirtualMenu, Select, Menu *, pMenu )
 
 // returns the associated StarView-menu
 
-Menu* SfxVirtualMenu::GetSVMenu() const
-{
-
-    return pSVMenu;
-}
 
 
 

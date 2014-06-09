@@ -252,7 +252,7 @@ namespace cairocanvas
         */
         void modifying() {}
 
-        bool hasAlpha() const;
+        bool hasAlpha() const { return mbHaveAlpha; }
 
         enum ColorType
         {

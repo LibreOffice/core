@@ -60,10 +60,6 @@ bool ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     return bRet;
 }
 
-bool ScDocShell::IsEmpty() const
-{
-    return bIsEmpty;
-}
 
 
 void ScDocShell::SetEmpty(bool bSet)

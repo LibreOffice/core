@@ -280,11 +280,6 @@ void ScDocShell::UnlockDocument_Impl(sal_uInt16 nNew)
     }
 }
 
-sal_uInt16 ScDocShell::GetLockCount() const
-{
-    return nDocumentLock;
-}
-
 void ScDocShell::SetLockCount(sal_uInt16 nNew)
 {
     if (nNew)                   // setzen
@@ -388,11 +383,6 @@ void ScDocShell::CalcOutputFactor()
         OSL_FAIL("GetTextSize gibt 0 ??");
         nPrtToScreenFactor = 1.0;
     }
-}
-
-double ScDocShell::GetOutputFactor() const
-{
-    return nPrtToScreenFactor;
 }
 
 void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and Load

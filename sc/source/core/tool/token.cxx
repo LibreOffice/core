@@ -1675,15 +1675,7 @@ void ScTokenArray::GenHash()
     mnHashValue = nHash;
 }
 
-size_t ScTokenArray::GetHash() const
-{
-    return mnHashValue;
-}
 
-ScFormulaVectorState ScTokenArray::GetVectorState() const
-{
-    return meVectorState;
-}
 
 bool ScTokenArray::IsInvariant() const
 {

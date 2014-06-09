@@ -27,7 +27,7 @@ public:
                const OUString& rValue );
     bool operator== (const SvXMLAttr &rCmp) const;
 
-    sal_uInt16       getPrefixPos() const;
+    sal_uInt16       getPrefixPos() const { return aPrefixPos;}
     const OUString& getLName() const;
     const OUString& getValue() const;
 };

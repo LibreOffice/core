@@ -85,7 +85,7 @@ public:
     size_t      GetItemCount() const { return aItems.size(); }
 
     void SetDateDimension();
-    bool IsDateDimension() const;
+    bool IsDateDimension() const { return mbDateDimension;}
 };
 
 typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
@@ -112,7 +112,7 @@ public:
 
     void        DisposeData();
 
-    bool IsDateDimension() const;
+    bool IsDateDimension() const { return mbDateDimension;}
 };
 
 

@@ -45,10 +45,10 @@ public:
     const OUString & getStatusText() const;
 
     // member: checkboxHeight
-    sal_uInt32 getCheckboxHeight() const;
+    sal_uInt32 getCheckboxHeight() const { return m_nCheckboxHeight;}
 
     // member: checkboxAutoHeight
-    bool getCheckboxAutoHeight() const;
+    bool getCheckboxAutoHeight() const { return m_bCheckboxAutoHeight;}
 
     // member: checkboxChecked or checkboxDefault (if the previous is not set)
     bool getCheckboxChecked() const;

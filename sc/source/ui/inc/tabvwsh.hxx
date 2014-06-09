@@ -252,7 +252,7 @@ public:
     bool            IsRefInputMode() const;
     void            ExecuteInputDirect();
 
-    ScInputHandler* GetInputHandler() const;
+    ScInputHandler* GetInputHandler() const { return pInputHandler;}
     void            UpdateInputHandler( bool bForce = false, bool bStopEditing = true );
     void            UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust );
     bool            TabKeyInput(const KeyEvent& rKEvt);
@@ -330,7 +330,7 @@ public:
 
     void            SetFormShellAtTop( bool bSet );
 
-    ObjectSelectionType GetCurObjectSelectionType();
+    ObjectSelectionType GetCurObjectSelectionType() { return eCurOST; }
 
     virtual ErrCode DoVerb(long nVerb) SAL_OVERRIDE;
     virtual void Initialize() SAL_OVERRIDE;

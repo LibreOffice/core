@@ -76,10 +76,6 @@ void LineWidthValueSet::SetSelItem(sal_uInt16 nSel)
 
 
 
-sal_uInt16 LineWidthValueSet::GetSelItem()
-{
-    return nSelItem;
-}
 
 
 

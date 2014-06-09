@@ -76,7 +76,7 @@ public:
     const ScTokenArray* GetFormula() const;
     OUString GetFormula( formula::FormulaGrammar::Grammar eGrammar ) const;
 
-    ScColorScaleEntryType GetType() const;
+    ScColorScaleEntryType GetType() const { return meType;}
     void SetType( ScColorScaleEntryType eType );
 
     bool NeedsRepaint() const;

@@ -66,7 +66,7 @@ public:
     }
 
     void SetMarkedSdrObj(SdrObject* pNewObj);
-    SdrObject* GetMarkedSdrObj() const;
+    SdrObject* GetMarkedSdrObj() const { return mpSelectedSdrObject;}
 
     SdrPageView* GetPageView() const
     {

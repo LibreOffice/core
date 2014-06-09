@@ -403,7 +403,7 @@ public:
 
     // StyleSheet access
     void SetStyleSheet(SfxStyleSheet* pStyleSheet);
-    SfxStyleSheet* GetStyleSheet() const;
+    SfxStyleSheet* GetStyleSheet() const { return mpStyleSheet;}
 };
 
 

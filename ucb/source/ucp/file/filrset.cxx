@@ -93,17 +93,9 @@ XResultSet_impl::~XResultSet_impl()
 
 
 
-sal_Int32 SAL_CALL XResultSet_impl::CtorSuccess()
-{
-    return m_nErrorCode;
-}
 
 
 
-sal_Int32 SAL_CALL XResultSet_impl::getMinorError()
-{
-    return m_nMinorErrorCode;
-}
 
 
 void SAL_CALL

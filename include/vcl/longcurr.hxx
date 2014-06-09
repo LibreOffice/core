@@ -66,7 +66,7 @@ public:
     BigInt                  GetMax() const { return mnMax; }
 
     void                    SetDecimalDigits( sal_uInt16 nDigits );
-    sal_uInt16                  GetDecimalDigits() const;
+    sal_uInt16                  GetDecimalDigits() const { return mnDecimalDigits;}
     void                    SetValue( BigInt nNewValue );
     void                    SetUserValue( BigInt nNewValue );
     BigInt                  GetValue() const;

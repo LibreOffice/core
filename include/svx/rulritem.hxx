@@ -52,8 +52,8 @@ public:
     SvxLongLRSpaceItem(const SvxLongLRSpaceItem &);
     SvxLongLRSpaceItem();
 
-    long GetLeft() const;
-    long GetRight() const;
+    long GetLeft() const { return mlLeft;}
+    long GetRight() const { return mlRight;}
     void SetLeft(long lArgLeft);
     void SetRight(long lArgRight);
 };
@@ -86,8 +86,8 @@ public:
     SvxLongULSpaceItem(const SvxLongULSpaceItem &);
     SvxLongULSpaceItem();
 
-    long GetUpper() const;
-    long GetLower() const;
+    long GetUpper() const { return mlLeft;}
+    long GetLower() const { return mlRight;}
     void SetUpper(long lArgLeft);
     void SetLower(long lArgRight);
 };
@@ -194,12 +194,12 @@ public:
     void        Append(const SvxColumnDescription& rDesc);
     void        SetLeft(long aLeft);
     void        SetRight(long aRight);
-    sal_uInt16  GetActColumn() const;
+    sal_uInt16  GetActColumn() const { return nActColumn;}
     bool        IsFirstAct() const;
     bool        IsLastAct() const;
-    long        GetLeft();
-    long        GetRight();
-    bool        IsTable() const;
+    long        GetLeft() { return nLeft;}
+    long        GetRight() { return nRight;}
+    bool        IsTable() const { return bTable;}
     bool        CalcOrtho() const;
     void        SetOrtho(bool bVal);
     bool        IsConsistent() const;
@@ -239,12 +239,12 @@ public:
                   bool bLimits = false);
     SvxObjectItem(const SvxObjectItem& rCopy);
 
-    bool HasLimits() const;
+    bool HasLimits() const { return bLimits;}
 
-    long GetStartX() const;
-    long GetEndX() const;
-    long GetStartY() const;
-    long GetEndY() const;
+    long GetStartX() const { return nStartX;}
+    long GetEndX() const { return nEndX;}
+    long GetStartY() const { return nStartY;}
+    long GetEndY() const { return nEndY;}
 
     void SetStartX(long lValue);
     void SetEndX(long lValue);

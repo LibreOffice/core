@@ -44,10 +44,6 @@ void SAL_CALL XInteractionApproveImpl::select()
 }
 
 
-bool XInteractionApproveImpl::isSelected() const
-{
-    return m_bSelected;
-}
 
 
 // XInteractionDisapproveImpl

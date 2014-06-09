@@ -5581,10 +5581,6 @@ WW8Fib::WW8Fib(sal_uInt8 nVer, bool bDot)
     nNumDecimalSep = aLocaleWrapper.getNumDecimalSep()[0];
 }
 
-sal_Unicode WW8Fib::getNumDecimalSep() const
-{
-    return nNumDecimalSep;
-}
 
 bool WW8Fib::WriteHeader(SvStream& rStrm)
 {

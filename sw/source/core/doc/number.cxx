@@ -1003,11 +1003,6 @@ void SwNumRule::Validate()
     SetInvalidRule(false);
 }
 
-bool SwNumRule::IsCountPhantoms() const
-{
-    return mbCountPhantoms;
-}
-
 void SwNumRule::SetCountPhantoms(bool bCountPhantoms)
 {
     mbCountPhantoms = bCountPhantoms;

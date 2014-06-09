@@ -75,7 +75,6 @@ ScCollection::~ScCollection()
 }
 
 
-sal_uInt16 ScCollection::GetCount() const { return nCount; }
 
 bool ScCollection::AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject)
 {

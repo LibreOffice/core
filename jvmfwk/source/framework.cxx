@@ -1223,10 +1223,6 @@ CJavaInfo::~CJavaInfo()
     jfw_freeJavaInfo(pInfo);
 }
 
-CJavaInfo::operator ::JavaInfo* ()
-{
-    return pInfo;
-}
 
 JavaInfo * CJavaInfo::copyJavaInfo(const JavaInfo * pInfo)
 {

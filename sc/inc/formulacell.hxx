@@ -210,14 +210,14 @@ public:
     void ResetTableOpDirtyVar();
     void            SetTableOpDirty();
     bool            IsDirtyOrInTableOpDirty() const;
-    bool GetDirty() const;
+    bool GetDirty() const { return bDirty; }
     void ResetDirty();
-    bool NeedsListening() const;
+    bool NeedsListening() const { return bNeedListening; }
     void SetNeedsListening( bool bVar );
     void SetNeedsDirty( bool bVar );
     void SetNeedNumberFormat( bool bVal );
-    bool NeedsNumberFormat() const;
-    short GetFormatType() const;
+    bool NeedsNumberFormat() const { return mbNeedsNumberFormat;}
+    short GetFormatType() const { return nFormatType; }
     void            Compile(const OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
@@ -230,8 +230,8 @@ public:
     void CalcAfterLoad( sc::CompileFormulaContext& rCxt );
     bool            MarkUsedExternalReferences();
     void            Interpret();
-    bool IsIterCell() const;
-    sal_uInt16 GetSeenInIteration() const;
+    bool IsIterCell() const { return bIsIterCell; }
+    sal_uInt16 GetSeenInIteration() const { return nSeenInIteration; }
 
     bool            HasOneReference( ScRange& r ) const;
     /* Checks if the formula contains reference list that can be
@@ -281,8 +281,8 @@ public:
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
-    bool IsSubTotal() const;
-    bool            IsChanged() const;
+    bool IsSubTotal() const { return bSubTotal;}
+    bool            IsChanged() const { return bChanged;}
     void SetChanged(bool b);
     bool            IsEmpty();      // formula::svEmptyCell result
                     // display as empty string if formula::svEmptyCell result
@@ -300,35 +300,35 @@ public:
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
     bool GetErrorOrValue( sal_uInt16& rErr, double& rVal );
     sc::FormulaResultValue GetResult();
-    sal_uInt8       GetMatrixFlag() const;
-    ScTokenArray* GetCode();
+    sal_uInt8       GetMatrixFlag() const { return cMatrixFlag;}
+    ScTokenArray* GetCode() { return pCode;}
     const ScTokenArray* GetCode() const;
 
     void SetCode( ScTokenArray* pNew );
 
-    bool            IsRunning() const;
+    bool            IsRunning() const { return bRunning;}
     void            SetRunning( bool bVal );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt );
     void CompileDBFormula( sc::CompileFormulaContext& rCxt, bool bCreateFormulaString );
     void CompileColRowNameFormula( sc::CompileFormulaContext& rCxt );
-    ScFormulaCell*  GetPrevious() const;
-    ScFormulaCell*  GetNext() const;
+    ScFormulaCell*  GetPrevious() const { return pPrevious; }
+    ScFormulaCell*  GetNext() const { return pNext; }
     void            SetPrevious( ScFormulaCell* pF );
     void            SetNext( ScFormulaCell* pF );
-    ScFormulaCell*  GetPreviousTrack() const;
-    ScFormulaCell*  GetNextTrack() const;
+    ScFormulaCell*  GetPreviousTrack() const { return pPreviousTrack; }
+    ScFormulaCell*  GetNextTrack() const { return pNextTrack; }
     void            SetPreviousTrack( ScFormulaCell* pF );
     void            SetNextTrack( ScFormulaCell* pF );
 
     virtual void Notify( const SfxHint& rHint ) SAL_OVERRIDE;
     void SetCompile( bool bVal );
-    ScDocument* GetDocument() const;
+    ScDocument* GetDocument() const { return pDocument;}
     void            SetMatColsRows( SCCOL nCols, SCROW nRows, bool bDirtyFlag=true );
     void            GetMatColsRows( SCCOL& nCols, SCROW& nRows ) const;
 
                     // cell belongs to ChangeTrack and not to the real document
     void SetInChangeTrack( bool bVal );
-    bool IsInChangeTrack() const;
+    bool IsInChangeTrack() const { return bInChangeTrack;}
 
     // For import filters!
     void            AddRecalcMode( formula::ScRecalcMode );
@@ -399,7 +399,7 @@ public:
 
     void SyncSharedCode();
 
-    bool IsPostponedDirty() const;
+    bool IsPostponedDirty() const { return mbPostponedDirty;}
 };
 
 #endif

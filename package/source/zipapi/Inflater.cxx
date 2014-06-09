@@ -67,15 +67,7 @@ void SAL_CALL Inflater::setInput( const Sequence< sal_Int8 >& rBuffer )
     nLength = rBuffer.getLength();
 }
 
-bool SAL_CALL Inflater::needsDictionary(  )
-{
-    return bNeedDict;
-}
 
-bool SAL_CALL Inflater::finished(  )
-{
-    return bFinished;
-}
 
 sal_Int32 SAL_CALL Inflater::doInflateSegment( Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
 {

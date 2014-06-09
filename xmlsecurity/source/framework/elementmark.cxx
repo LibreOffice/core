@@ -58,35 +58,19 @@ ElementMark::ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId)
 {
 }
 
-BufferNode* ElementMark::getBufferNode() const
-{
-    return m_pBufferNode;
-}
 
 void ElementMark::setBufferNode(const BufferNode* pBufferNode)
 {
     m_pBufferNode = (BufferNode*)pBufferNode;
 }
 
-sal_Int32 ElementMark::getSecurityId() const
-{
-    return m_nSecurityId;
-}
 
 void ElementMark::setSecurityId(sal_Int32 nSecurityId)
 {
     m_nSecurityId = nSecurityId;
 }
 
-com::sun::star::xml::crypto::sax::ElementMarkType ElementMark::getType() const
-{
-    return m_type;
-}
 
-sal_Int32 ElementMark::getBufferId() const
-{
-    return m_nBufferId;
-}
 
 
 

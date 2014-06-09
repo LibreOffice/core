@@ -2968,10 +2968,6 @@ std::vector< OUString > UnoTypeCodeCompletetor::GetXIdlClassFields() const
     return aRetVect;//this is empty when cannot code complete
 }
 
-bool UnoTypeCodeCompletetor::CanCodeComplete() const
-{
-    return bCanComplete;
-}
 
 bool UnoTypeCodeCompletetor::CheckField( const OUString& sFieldName )
 {// modifies xClass!!!

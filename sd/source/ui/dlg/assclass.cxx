@@ -142,10 +142,6 @@ bool Assistent::IsFirstPage() const
     return nPage == 0;
 }
 
-int Assistent::GetCurrentPage() const
-{
-    return mnCurrentPage;
-}
 
 bool Assistent::IsEnabled( int nPage ) const
 {

@@ -441,20 +441,12 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
 }
 
 
-bool SfxDocumentInfoItem::IsDeleteUserData() const
-{
-    return m_bDeleteUserData;
-}
 
 void SfxDocumentInfoItem::SetDeleteUserData( bool bSet )
 {
     m_bDeleteUserData = bSet;
 }
 
-bool SfxDocumentInfoItem::IsUseUserData() const
-{
-    return m_bUseUserData;
-}
 
 void SfxDocumentInfoItem::SetUseUserData( bool bSet )
 {

@@ -1754,10 +1754,6 @@ static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
     }
 }
 
-SdrMarkView* SdrHdlList::GetView() const
-{
-    return pView;
-}
 
 // Helper struct for re-sorting handles
 struct ImplHdlAndIndex

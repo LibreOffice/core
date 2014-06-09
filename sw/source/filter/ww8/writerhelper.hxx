@@ -147,7 +147,7 @@ namespace sw
             @return
             whether this is inline or not
         */
-        bool IsInline() const;
+        bool IsInline() const { return mbIsInline; }
 
         /** Even if the frame isn't an inline frame, force it to behave as one
 

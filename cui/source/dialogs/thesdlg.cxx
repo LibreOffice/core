@@ -547,10 +547,6 @@ OUString SvxThesaurusDialog::GetWord()
     return m_pReplaceEdit->GetText();
 }
 
-sal_uInt16 SvxThesaurusDialog::GetLanguage() const
-{
-    return nLookUpLanguage;
-}
 
 void SvxThesaurusDialog::Apply()
 {

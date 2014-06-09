@@ -4508,10 +4508,6 @@ const ScValidationDataList* ScDocument::GetValidationList() const
     return pValidationList;
 }
 
-ScValidationDataList* ScDocument::GetValidationList()
-{
-    return pValidationList;
-}
 
 void ScDocument::ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, const SfxPoolItem& rAttr )
 {
@@ -6083,10 +6079,6 @@ void ScDocument::EnableUndo( bool bVal )
     mbUndoEnabled = bVal;
 }
 
-bool ScDocument::IsUserInteractionEnabled() const
-{
-    return mbUserInteractionEnabled;
-}
 
 void ScDocument::EnableUserInteraction( bool bVal )
 {
