@@ -457,7 +457,8 @@ endef
 define gb_LinkTarget__command_impl
 	$(if $(gb_FULLDEPS),\
 		$(if $(findstring concat-deps,$(2)),,\
-			$(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$(2)),$(2))))
+			$(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$(2)).tmp,$(2)) \
+			mv $(call gb_LinkTarget_get_dep_target,$(2)).tmp $(call gb_LinkTarget_get_dep_target,$(2))))
 	$(if $(filter $(2),$(foreach lib,$(gb_MERGEDLIBS) $(gb_URELIBS),$(call gb_Library__get_workdir_linktargetname,$(lib)))),\
 		$(if $(filter $(true),$(call gb_LinkTarget__is_build_lib,$(2))),\
 			$(call gb_LinkTarget__command,$(1),$(2)),\
