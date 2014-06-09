@@ -125,6 +125,7 @@
 
 #include <wordcountdialog.hxx>
 #include <tools/diagnose_ex.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -417,10 +418,9 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg(rView.GetWindow(), rView.GetWrtShell());
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(rView.GetWindow(), rView.GetWrtShell()));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
             break;
         }
         case FN_NUMBERING_OUTLINE_DLG:
@@ -428,11 +428,11 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
-                                                        rView.GetWindow(), &aTmp, rView.GetWrtShell());
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+                                                        rView.GetWindow(), &aTmp, rView.GetWrtShell()));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
+            pDlg.reset();
             rReq.Done();
         }
         break;
@@ -485,7 +485,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( rView.GetWindow(), rView, aDlgAttr, DLG_CHAR_ANN);
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg( rView.GetWindow(), rView, aDlgAttr, DLG_CHAR_ANN));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
@@ -497,7 +497,6 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                     rReq.Done( *( pDlg->GetOutputItemSet() ) );
                     aNewAttr.Put(*pDlg->GetOutputItemSet());
                 }
-                delete( pDlg );
                 if(RET_OK != nRet)
                     return ;
             }
@@ -535,7 +534,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, 0, true );
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( rView.GetWindow(), rView, aDlgAttr,DLG_STD, 0, true ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
@@ -543,7 +542,6 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                     rReq.Done( *( pDlg->GetOutputItemSet() ) );
                     aNewAttr.Put(*pDlg->GetOutputItemSet());
                 }
-                delete( pDlg );
                 if(RET_OK != nRet)
                     return;
             }
@@ -891,7 +889,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
             if (pPostItMgr->GetActiveSidebarWin()->GetLayoutStatus()!=SwPostItHelper::DELETED)
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( &rView.GetEditWin() );
+                boost::scoped_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( &rView.GetEditWin() ));
 
                 pDlg->Insert( SOT_FORMAT_STRING, OUString() );
                 pDlg->Insert( SOT_FORMAT_RTF,    OUString() );
@@ -907,7 +905,6 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
                     else
                         pOLV->PasteSpecial();
                 }
-                delete pDlg;
             }
             break;
         }
@@ -1685,8 +1682,8 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aSetDlgFont.GetFamilyName() ) );
 
         // If character is selected then it can be shown.
-        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
-            rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
+        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
+            rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
 
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
@@ -1708,8 +1705,6 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
                 SW_MOD()->ApplyUsrPref(aOpt, &rView);
             }
         }
-
-        delete( pDlg );
     }
 
     if( !sSym.isEmpty() )

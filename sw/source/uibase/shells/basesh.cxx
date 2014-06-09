@@ -109,6 +109,7 @@
 #include <unomid.h>
 #include <svx/galleryitem.hxx>
 #include <com/sun/star/gallery/GalleryItemType.hpp>
+#include <boost/scoped_ptr.hpp>
 
 FlyMode SwBaseShell::eFrameMode = FLY_DRAG_END;
 
@@ -159,16 +160,14 @@ static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     GraphicType nGrfType = aGrf.GetType();
     void* pEditObj = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType
                         ? rSh.GetIMapInventor() : 0;
-    TargetList* pList = new TargetList;
+    boost::scoped_ptr<TargetList> pList(new TargetList);
     rSh.GetView().GetViewFrame()->GetTopFrame().GetTargetList(*pList);
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
     rSh.GetFlyFrmAttr( aSet );
     const SwFmtURL &rURL = (SwFmtURL&)aSet.Get( RES_URL );
     SvxIMapDlgChildWindow::UpdateIMapDlg(
-            aGrf, rURL.GetMap(), pList, pEditObj );
-
-    delete pList;
+            aGrf, rURL.GetMap(), pList.get(), pEditObj );
 }
 
 static bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
@@ -772,7 +771,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 bToTable = true;
             SwInsertTableOptions aInsTblOpts( tabopts::ALL_TBL_INS_ATTR, 1 );
             SwTableAutoFmt const* pTAFmt = 0;
-            SwTableAutoFmtTbl* pAutoFmtTbl = 0;
+            boost::scoped_ptr<SwTableAutoFmtTbl> pAutoFmtTbl;
             bool bDeleteFormat = true;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_1, true, &pItem))
             {
@@ -786,7 +785,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 {
                     OUString sAutoFmt = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
-                    pAutoFmtTbl = new SwTableAutoFmtTbl;
+                    pAutoFmtTbl.reset(new SwTableAutoFmtTbl);
                     pAutoFmtTbl->Load();
 
                     for( sal_uInt16 i = 0, nCount = pAutoFmtTbl->size(); i < nCount; i++ )
@@ -822,14 +821,13 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSwConvertTableDlg* pDlg = pFact->CreateSwConvertTableDlg(GetView(), bToTable);
+                boost::scoped_ptr<AbstractSwConvertTableDlg> pDlg(pFact->CreateSwConvertTableDlg(GetView(), bToTable));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
                     pDlg->GetValues( cDelim, aInsTblOpts, pTAFmt );
 
                 }
-                delete pDlg;
             }
 
             if( cDelim )
@@ -868,7 +866,6 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             }
             if(bDeleteFormat)
                 delete pTAFmt;
-            delete pAutoFmtTbl;
         }
         break;
         case SID_STYLE_WATERCAN:
@@ -1931,7 +1928,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
     if( pArgs)
     {
         SwWrtShell &rSh = GetShell();
-        SvxScriptSetItem* pSSetItem = 0;
+        boost::scoped_ptr<SvxScriptSetItem> pSSetItem;
         sal_uInt16 nSlot = rReq.GetSlot();
         SfxItemPool& rPool = rSh.GetAttrPool();
         sal_uInt16 nWhich = rPool.GetWhich( nSlot );
@@ -1959,7 +1956,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
             case SID_ATTR_CHAR_POSTURE:
             case SID_ATTR_CHAR_WEIGHT:
             {
-                pSSetItem = new SvxScriptSetItem( nSlot, rPool );
+                pSSetItem.reset(new SvxScriptSetItem( nSlot, rPool ));
                 pSSetItem->PutItemForScriptType( nScripts, pArgs->Get( nWhich ));
                 pArgs = &pSSetItem->GetItemSet();
             }
@@ -1968,7 +1965,7 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
             {
                 if(rSh.HasSelection())
                 {
-                    pSSetItem = new SvxScriptSetItem( nSlot, rPool );
+                    pSSetItem.reset(new SvxScriptSetItem( nSlot, rPool ));
                     pSSetItem->PutItemForScriptType( nScripts, pArgs->Get( nWhich ));
                     pArgs = &pSSetItem->GetItemSet();
                 }
@@ -2043,7 +2040,6 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
                 rSh.SetAttrSet( *pArgs );
             }
         }
-        delete pSSetItem;
     }
     else
         GetView().GetViewFrame()->GetDispatcher()->Execute( SID_CHAR_DLG, sal_False);
@@ -2060,7 +2056,7 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
 {
     SwWrtShell &rSh = GetShell();
     bool bFirst = true;
-    SfxItemSet* pFntCoreSet = 0;
+    boost::scoped_ptr<SfxItemSet> pFntCoreSet;
     sal_uInt16 nScriptType = SCRIPTTYPE_LATIN;
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -2075,8 +2071,8 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
             {
                 if( !pFntCoreSet )
                 {
-                    pFntCoreSet = new SfxItemSet( *rSet.GetPool(),
-                                    RES_CHRATR_BEGIN, RES_CHRATR_END-1 );
+                    pFntCoreSet.reset(new SfxItemSet( *rSet.GetPool(),
+                                    RES_CHRATR_BEGIN, RES_CHRATR_END-1 ));
                     rSh.GetCurAttr( *pFntCoreSet );
                     nScriptType = rSh.GetScriptType();
                     // #i42732# input language should be preferred over
@@ -2133,7 +2129,6 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
         }
         nWhich = aIter.NextWhich();
     }
-    delete pFntCoreSet;
 }
 
 void SwBaseShell::GetBckColState(SfxItemSet &rSet)
@@ -2414,9 +2409,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         case FN_FORMAT_TITLEPAGE_DLG:
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-            VclAbstractDialog* pDlg = pFact->CreateTitlePageDlg( pMDI );
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateTitlePageDlg( pMDI ));
             pDlg->Execute();
-            delete pDlg;
         }
         break;
         case FN_FORMAT_PAGE_DLG:
@@ -2454,7 +2448,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                                RES_BOX              , RES_SHADOW,
                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                                0 );
-            SfxAbstractDialog * pDlg = 0;
+            boost::scoped_ptr<SfxAbstractDialog> pDlg;
             // Table cell(s) selected?
             if ( rSh.IsTableMode() )
             {
@@ -2464,7 +2458,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE, RC_DLG_SWBORDERDLG );
+                pDlg.reset(pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_TABLE, RC_DLG_SWBORDERDLG ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2481,7 +2475,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME, RC_DLG_SWBORDERDLG );
+                pDlg.reset(pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_FRAME, RC_DLG_SWBORDERDLG ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2499,7 +2493,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg = pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA, RC_DLG_SWBORDERDLG );
+                pDlg.reset(pFact->CreateSwBorderDlg( pMDI, aSet, SW_BORDER_MODE_PARA, RC_DLG_SWBORDERDLG ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2512,7 +2506,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rReq.Done(*pOutSet);
                 bDone = true;
             }
-            delete pDlg;
         }
         break;
         case FN_FORMAT_BACKGROUND_DLG:
@@ -2520,7 +2513,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
             SfxItemSet aSet( rSh.GetAttrPool(),
                              RES_BACKGROUND, RES_BACKGROUND );
 
-            SfxAbstractDialog * pDlg = 0;
+            boost::scoped_ptr<SfxAbstractDialog> pDlg;
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
@@ -2530,9 +2523,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Get background attributes of the table and put it in the set
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
-                pDlg = pFact->CreateSfxDialog( pMDI, aSet,
+                pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
-                    RC_SWDLG_BACKGROUND );
+                    RC_SWDLG_BACKGROUND ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 aSet.Put( aBrush );
                 if ( pDlg->Execute() == RET_OK )
@@ -2548,9 +2541,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
 
                 rSh.GetFlyFrmAttr( aSet );
 
-                pDlg = pFact->CreateSfxDialog( pMDI, aSet,
+                pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
-                    RC_SWDLG_BACKGROUND );
+                    RC_SWDLG_BACKGROUND ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2563,9 +2556,9 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 // Set border attributes Umrandungsattribute with the shell quite normal.
                 rSh.GetCurAttr( aSet );
 
-                pDlg = pFact->CreateSfxDialog( pMDI, aSet,
+                pDlg.reset(pFact->CreateSfxDialog( pMDI, aSet,
                     rView.GetViewFrame()->GetFrame().GetFrameInterface(),
-                    RC_SWDLG_BACKGROUND );
+                    RC_SWDLG_BACKGROUND ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2578,8 +2571,6 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rReq.Done(*pOutSet);
                 bDone = true;
             }
-            delete pDlg;
-
         }
         break;
         default:OSL_FAIL("wrong Dispatcher (basesh.cxx)");
@@ -2678,7 +2669,7 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg(rTempView);
+                boost::scoped_ptr<AbstractInsTableDlg> pDlg(pFact->CreateInsTableDlg(rTempView));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if( RET_OK == pDlg->Execute() )
                 {
@@ -2686,7 +2677,6 @@ void SwBaseShell::InsertTable( SfxRequest& _rRequest )
                 }
                 else
                     _rRequest.Ignore();
-                delete pDlg;
             }
 
             if( nCols && nRows )
@@ -2893,10 +2883,9 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateSwChangeDBDlg(GetView());
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwChangeDBDlg(GetView()));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
         }
         break;
         default:

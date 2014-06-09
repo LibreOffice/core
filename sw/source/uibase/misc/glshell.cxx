@@ -51,6 +51,7 @@
 
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -103,14 +104,14 @@ static bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
                 const OUString& rShortNm, const OUString& rLongNm )
 {
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
-    SwTextBlocks * pBlock = ::GetGlossaries()->GetGroupDoc( rGroupName );
+    boost::scoped_ptr<SwTextBlocks> pBlock(::GetGlossaries()->GetGroupDoc( rGroupName ));
 
     SvxMacro aStart(aEmptyOUStr, aEmptyOUStr);
     SvxMacro aEnd(aEmptyOUStr, aEmptyOUStr);
     SwGlossaryHdl* pGlosHdl;
 
     pGlosHdl = rSh.GetView().GetGlosHdl();
-    pGlosHdl->GetMacros( rShortNm, aStart, aEnd, pBlock );
+    pGlosHdl->GetMacros( rShortNm, aStart, aEnd, pBlock.get() );
 
     sal_uInt16 nRet = rSh.SaveGlossaryDoc( *pBlock, rLongNm, rShortNm,
                                 rCfg.IsSaveRelFile(),
@@ -120,13 +121,12 @@ static bool lcl_Save( SwWrtShell& rSh, const OUString& rGroupName,
     {
         SvxMacro* pStart = aStart.HasMacro() ? &aStart : 0;
         SvxMacro* pEnd = aEnd.HasMacro() ? &aEnd : 0;
-        pGlosHdl->SetMacros( rShortNm, pStart, pEnd, pBlock );
+        pGlosHdl->SetMacros( rShortNm, pStart, pEnd, pBlock.get() );
     }
 
     rSh.EnterStdMode();
     if( USHRT_MAX != nRet )
         rSh.ResetModified();
-    delete pBlock;
     return nRet != USHRT_MAX;
 }
 
