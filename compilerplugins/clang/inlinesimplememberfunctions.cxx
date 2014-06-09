@@ -153,6 +153,32 @@ bool InlineSimpleMemberFunctions::VisitCXXMethodDecl(const CXXMethodDecl * funct
              MemberExpr
                CXXThisExpr
     */
+    childStmt = *(*compoundStmt->child_begin())->child_begin();
+    while (1) {
+        if (! oneAndOnlyOne( childStmt->children() ))
+            return true;
+        if (dyn_cast<CXXThisExpr>( childStmt ) != nullptr) {
+
+            compoundStmt->dump();
+                if (!rewrite(functionDecl))
+                {
+                    report(
+                        DiagnosticsEngine::Warning,
+                        "inlinesimpleaccessmethods",
+                        functionDecl->getSourceRange().getBegin())
+                      << functionDecl->getSourceRange();
+                    // display the location of the class member declaration
+                    report(
+                        DiagnosticsEngine::Note,
+                        "inlinesimpleaccessmethods",
+                        functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
+                      << functionDecl->getCanonicalDecl()->getSourceRange();
+                }
+             return true;
+        }
+        childStmt = *childStmt->child_begin();
+    }
+/*
     if (dyn_cast<ImplicitCastExpr>( childStmt ) != nullptr
         && oneAndOnlyOne( childStmt->children() ))
     {
@@ -182,7 +208,7 @@ bool InlineSimpleMemberFunctions::VisitCXXMethodDecl(const CXXMethodDecl * funct
             }
         }
     }
-
+*/
     return true;
 }
 
@@ -288,7 +314,7 @@ bool InlineSimpleMemberFunctions::rewrite(const CXXMethodDecl * functionDecl) {
     return replaceText(canonicalDecl->getLocEnd().getLocWithOffset(p2 - p1 + 1), 1, s1);
 }
 
-loplugin::Plugin::Registration< InlineSimpleMemberFunctions > X("inlinesimplememberfunctions");
+loplugin::Plugin::Registration< InlineSimpleMemberFunctions > X("inlinesimplememberfunctions", true);
 
 }
 
