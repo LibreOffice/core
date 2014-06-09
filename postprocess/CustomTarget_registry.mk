@@ -427,6 +427,7 @@ postprocess_FILES_writer := \
 	$(postprocess_MOD)/org/openoffice/Setup-writer.xcu
 
 postprocess_DEPS_xsltfilter := main
+postprocess_OPTDEPS_xsltfilter := calc writer
 postprocess_FILES_xsltfilter := \
 	$(call gb_XcuFilterFiltersTarget_get_target,fcfg_xslt_filters.xcu) \
 	$(call gb_XcuFilterTypesTarget_get_target,fcfg_xslt_types.xcu)

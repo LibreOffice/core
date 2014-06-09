@@ -357,7 +357,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	pdf_Portable_Document_Format \
 	writer8_template \
 	writer8 \
-	writer_MS_Word_2003_XML \
 	writer_MS_Word_2007_XML \
 	writer_MS_Word_2007_XML_Template \
 	writer_OOXML \
@@ -419,7 +418,6 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	writer_pdf_Export\
 	writer8\
 	writer8_template \
-	MS_Word_2003_XML \
 	MS_Word_2007_XML \
 	MS_Word_2007_XML_Template \
 	OOXML_Text \
@@ -444,7 +442,6 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	writer_StarOffice_XML_Writer_Template_ui \
 	writer8_ui \
 	writer8_template_ui \
-	MS_Word_2003_XML_ui \
 	MS_Word_2007_XML_ui \
 	MS_Word_2007_XML_Template_ui \
 	OOXML_Text_ui \
@@ -535,7 +532,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/s
 	calc_dBase\
 	calc8 \
 	calc8_template \
-	calc_MS_Excel_2003_XML \
 	MS_Excel_2007_XML \
 	MS_Excel_2007_XML_Template \
 	MS_Excel_2007_Binary \
@@ -574,7 +570,6 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filt
 	dBase \
 	calc8 \
 	calc8_template \
-	MS_Excel_2003_XML \
 	calc_MS_Excel_2007_XML \
 	calc_MS_Excel_2007_XML_Template \
 	calc_MS_Excel_2007_Binary \
@@ -601,7 +596,6 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	calc_StarOffice_XML_Calc_Template_ui \
 	calc8_ui \
 	calc8_template_ui \
-	MS_Excel_2003_XML_ui \
 	calc_MS_Excel_2007_XML_ui \
 	calc_MS_Excel_2007_XML_Template_ui \
 	calc_MS_Excel_2007_Binary_ui \
@@ -993,7 +987,9 @@ $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_internalgrap
 
 # fcfg_xslt
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/source/config/fragments/types,\
+	calc_MS_Excel_2003_XML \
 	writer_DocBook_File \
+	writer_MS_Word_2003_XML \
 	XHTML_File \
 	Unified_Office_Format_text \
 	Unified_Office_Format_spreadsheet \
@@ -1002,6 +998,8 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/s
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.xcu,filter/source/config/fragments/filters,\
 	DocBook_File \
+	MS_Excel_2003_XML \
+	MS_Word_2003_XML \
 	XHTML_Calc_File \
 	XHTML_Draw_File \
 	XHTML_Impress_File \
@@ -1009,6 +1007,11 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.xcu,filt
 	UOF_text \
 	UOF_spreadsheet \
 	UOF_presentation \
+)
+
+$(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fragments/filters,\
+	MS_Excel_2003_XML_ui \
+	MS_Word_2003_XML_ui \
 )
 
 # vim: set noet sw=4 ts=4:

@@ -598,13 +598,6 @@ End
 
 #endif
 
-File gid_File_filter_xslt
-    TXT_FILE_BODY;
-    Styles = (FILELIST, PACKED);
-    Dir = FILELIST_DIR;
-    Name = "filter_xslt.filelist";
-End
-
 File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";

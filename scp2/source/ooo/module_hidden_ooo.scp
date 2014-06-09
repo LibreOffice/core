@@ -274,7 +274,6 @@ Module gid_Module_Root_Files_6
     gid_File_Share_Registry_Main_Xcd,
     gid_File_Share_Registry_Forcedefault_Xcd,
 	gid_File_Pymailmerge,
-	gid_File_filter_xslt,
 	gid_File_Extra_Fontunxpsprint,
 	gid_File_Extra_Fontunxppds,
 	gid_File_Extra_Fontunxafm);
