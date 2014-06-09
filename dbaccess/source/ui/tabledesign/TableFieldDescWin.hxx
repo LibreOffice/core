@@ -29,8 +29,8 @@ namespace dbaui
     class OFieldDescGenWin;
     class OTableDesignHelpBar;
     class OFieldDescription;
-    // Ableitung von TabPage ist ein Trick von TH,
-    // um Aenderungen der Systemfarben zu bemerken
+    // derivitive of TabPage is a trick of TH,
+    // to notice a change in system colours
     class OTableFieldDescWin : public TabPage
                                 ,public IClipboardTest
     {
@@ -72,8 +72,8 @@ namespace dbaui
         OUString GetControlText( sal_uInt16 nControlId )
                 { return m_pGenPage->GetControlText(nControlId); }
 
-        //  short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }
-            // liefert zum am Feld eingestellten Format einen der CAT_xxx-Werte (CAT_NUMBER, CAT_DATE ...)
+        // short GetFormatCategory(OFieldDescription* pFieldDescr) { return m_pGenPage ? m_pGenPage->GetFormatCategory(pFieldDescr) : -1; }
+        // delivers a CAT_xxx (CAT_NUMBER, CAT_DATE ...) value to a Format set in the field
 
         OUString  BoolStringPersistent(const OUString& rUIString) const { return m_pGenPage->BoolStringPersistent(rUIString); }
         OUString  BoolStringUI(const OUString& rPersistentString) const { return m_pGenPage->BoolStringUI(rPersistentString); }

@@ -71,7 +71,7 @@ namespace dbaui
         */
     private:
         OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
-            // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
+            // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~OConnectionTabPage();
 
         // <method>OGenericAdministrationPage::fillControls</method>

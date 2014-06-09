@@ -88,9 +88,9 @@ void ORelationTableView::ReSync()
         if ( xContainer.is() )
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
     }
-    // Es kann sein, dass in der DB Tabellen ausgeblendet wurden, die eigentlich Bestandteil einer Relation sind. Oder eine Tabelle
-    // befand sich im Layout (durchaus ohne Relation), existiert aber nicht mehr. In beiden Faellen wird das Anlegen des TabWins schief
-    // gehen, und alle solchen TabWinDatas oder darauf bezogenen ConnDatas muss ich dann loeschen.
+    // Tables could have been hidden in the database, which are part of a relation. Or a table was in layout
+    // (quite often without a relation) and does not exist anymore. In both cases creation of TabWins will fail
+    // and all TabWinDatas and related ConnDates should be deleted.
     ::std::vector< OUString> arrInvalidTables;
 
     // create and insert windows
@@ -103,8 +103,8 @@ void ORelationTableView::ReSync()
 
         if (!pTabWin->Init())
         {
-            // das Initialisieren ging schief, dass heisst, dieses TabWin steht nicht zur Verfuegung, also muss ich es inklusive
-            // seiner Daten am Dokument aufraeumen
+            // initialisation failed, which means this TabWin is not available, therefore,
+            // it should be cleaned up, including its data in the document
             pTabWin->clearListBox();
             delete pTabWin;
             arrInvalidTables.push_back(pData->GetTableName());
@@ -113,7 +113,7 @@ void ORelationTableView::ReSync()
             continue;
         }
 
-        (*GetTabWinMap())[pData->GetComposedName()] = pTabWin;  // am Anfang einfuegen, da ich die DataList ja rueckwaerts durchlaufe
+        (*GetTabWinMap())[pData->GetComposedName()] = pTabWin;  // insert at the beginning, as the Datalist is walked through backward
         // if there's no position or size contained in the data -> Default
         if (!pData->HasPosition() && !pData->HasSize())
             SetDefaultTabWinPosSize(pTabWin);
@@ -130,7 +130,7 @@ void ORelationTableView::ReSync()
         ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(aConIter->get());
         if ( !arrInvalidTables.empty() )
         {
-            // gibt es die beiden Tabellen zur Connection ?
+            // do the tables to the  connection exist?
             OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetTableName();
             bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
             strTabExistenceTest = pTabConnData->getReferencedTable()->GetTableName();
@@ -138,7 +138,7 @@ void ORelationTableView::ReSync()
 
             if (bInvalid)
             {
-                // no -> bad luck, die Connection faellt weg
+                // no -> bad luck, the connection is gone
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 continue;
             }
@@ -159,7 +159,7 @@ bool ORelationTableView::IsAddAllowed()
 
 void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
 {
-    // Aus selektierten Feldnamen LineDataObject setzen
+    // Set LineDataObject based on selected fieldname
     // check if relation already exists
     OTableWindow* pSourceWin = jxdSource.pListBox->GetTabWin();
     OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
@@ -250,7 +250,7 @@ void ORelationTableView::AddNewRelation()
     if (bSuccess)
     {
         // already updated by the dialog
-        // dem Dokument bekanntgeben
+        // announce it to the document
         addConnection( new ORelationTableConnection(this, pNewConnData) );
     }
 }
@@ -292,7 +292,7 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
     pNewTabWinData->ShowAll(false);
 
-    // Neues Fenster in Fensterliste eintragen
+    // link new window into the window list
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
     if(pNewTabWin->Init())
     {
