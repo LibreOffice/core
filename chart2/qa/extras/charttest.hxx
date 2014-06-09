@@ -78,17 +78,17 @@ OUString ChartTest::getFileExtension( const OUString& aFileName )
 {
     sal_Int32 nDotLocation = aFileName.lastIndexOf('.');
     CPPUNIT_ASSERT(nDotLocation != -1);
-    return aFileName.copy(nDotLocation);
+    return aFileName.copy(nDotLocation+1); // Skip the dot.
 }
 
 void ChartTest::load( const OUString& aDir, const OUString& aName )
 {
     OUString extension = getFileExtension(aName);
-    if(extension == "ods" || extension == "xlsx")
+    if (extension == "ods" || extension == "xlsx" || extension == "fods")
     {
         maServiceName = "com.sun.star.sheet.SpreadsheetDocument";
     }
-    else if(extension == "docx")
+    else if (extension == "docx")
     {
         maServiceName = "com.sun.star.text.TextDocument";
     }
