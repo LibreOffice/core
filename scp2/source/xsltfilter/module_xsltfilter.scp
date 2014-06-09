@@ -26,6 +26,7 @@ Module gid_Module_Optional_Xsltfiltersamples
     ParentID = gid_Module_Optional;
     Files = ( gid_File_filter_docbook,
     gid_File_filter_xhtml,
+        gid_File_filter_xslt,
     gid_File_Share_Registry_Xsltfilter_Xcd );
     Minimal = NO;
     Default = YES;
