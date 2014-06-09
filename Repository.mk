@@ -212,7 +212,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,kde, \
 	) \
 ))
 
-$(eval $(call gb_Helper_register_executables_for_install,KDE,kde, \
+$(eval $(call gb_Helper_register_executables_for_install,OOO,kde, \
 	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
 		kdefilepicker \
 	) \
