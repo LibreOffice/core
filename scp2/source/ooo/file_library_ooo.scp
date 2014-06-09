@@ -93,10 +93,13 @@ End
 #endif
 
 #ifdef MACOSX
+
+#ifndef ENABLE_MACOSX_SANDBOX
 File gid_File_Lib_avmediaQuickTime
 	PACKED_LIB_FILE_BODY;
 	Name = LIBNAME(avmediaQuickTime);
 End
+#endif
 
 #if MAXOSX_SDK_VERSION >= 1070
 File gid_File_Lib_avmediaMacAVF
