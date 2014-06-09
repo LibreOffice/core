@@ -145,7 +145,7 @@ public:
 
     bool                        operator==(const SfxItemSet &) const;
     sal_Int32                   getHash() const;
-    virtual OString             stringify() const;
+    OString                     stringify() const;
 };
 
 inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
