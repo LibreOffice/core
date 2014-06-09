@@ -319,13 +319,13 @@ namespace accessibility
 
         // Get text from forwarder
         OUString GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex );
-        sal_uInt16 GetTextLen() const;
+        sal_Int32 GetTextLen() const;
 
         /** Get the current selection of this paragraph
 
             @return sal_False, if nothing in this paragraph is selected
          */
-        bool GetSelection( sal_uInt16& nStartPos, sal_uInt16& nEndPos );
+        bool GetSelection(sal_Int32& nStartPos, sal_Int32& nEndPos );
 
         /** create selection from Accessible selection.
 
