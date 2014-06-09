@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
-#define INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_HXX
+#ifndef INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_HXX
+#define INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_HXX
 
-#include "liblibreoffice.h"
+#include "LibreOfficeKit.h"
 
 /*
  * The reasons this C++ code is not as pretty as it could be are:

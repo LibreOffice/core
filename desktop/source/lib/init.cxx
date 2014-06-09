@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "liblibreoffice.h"
+#include <LibreOfficeKit/LibreOfficeKit.h>
 
 #include <tools/errinf.hxx>
 #include <osl/file.hxx>

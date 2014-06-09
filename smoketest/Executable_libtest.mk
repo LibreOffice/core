@@ -19,7 +19,7 @@ $(eval $(call gb_Executable_use_libraries,libtest,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,libtest,\
-	libreoffice \
+	libreofficekit \
 ))
 
 $(eval $(call gb_Executable_add_libs,libtest,\
