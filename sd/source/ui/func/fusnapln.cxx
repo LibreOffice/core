@@ -166,8 +166,8 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
     }
     Point aHlpPos;
 
-    aHlpPos.X() = ((const SfxUInt32Item&) pArgs->Get(ATTR_SNAPLINE_X)).GetValue();
-    aHlpPos.Y() = ((const SfxUInt32Item&) pArgs->Get(ATTR_SNAPLINE_Y)).GetValue();
+    aHlpPos.X() = ((const SfxInt32Item&) pArgs->Get(ATTR_SNAPLINE_X)).GetValue();
+    aHlpPos.Y() = ((const SfxInt32Item&) pArgs->Get(ATTR_SNAPLINE_Y)).GetValue();
     pPV->PagePosToLogic(aHlpPos);
 
     if ( bCreateNew )
