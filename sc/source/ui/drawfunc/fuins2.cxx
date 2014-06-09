@@ -779,7 +779,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     {
         // add undo action the same way as in SdrEditView::InsertObjectAtView
         // (using UndoActionHdl etc.)
-        pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+        pView->AddUndo(new SdrUndoNewObj(*pObj));
     }
 
     // BM/IHA --
