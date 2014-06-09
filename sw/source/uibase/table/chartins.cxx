@@ -22,6 +22,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 
 #include <sfx2/app.hxx>
 #include <swtypes.hxx>

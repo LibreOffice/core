@@ -765,7 +765,7 @@ const IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() const { return Ge
 IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() { return GetDoc(); }
 IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return GetDoc(); }
 IDocumentFieldsAccess* SwFmt::getIDocumentFieldsAccess() { return GetDoc(); }
-IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() { return GetDoc(); }
+IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() { return & GetDoc()->getIDocumentChartDataProviderAccess(); }
 
 void SwFmt::GetGrabBagItem(uno::Any& rVal) const
 {

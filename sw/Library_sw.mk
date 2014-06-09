@@ -188,6 +188,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/docxforms \
     sw/source/core/doc/DocumentSettingManager \
     sw/source/core/doc/DocumentDrawModelManager \
+    sw/source/core/doc/DocumentChartDataProviderManager \
     sw/source/core/doc/extinput \
     sw/source/core/doc/fmtcol \
     sw/source/core/doc/ftnidx \

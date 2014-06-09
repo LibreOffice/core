@@ -97,6 +97,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>

@@ -30,6 +30,7 @@
 #include <fmtornt.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 #include <cntfrm.hxx>
 #include <tabfrm.hxx>
 #include <frmtool.hxx>
@@ -537,7 +538,7 @@ bool SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt,
         bRes = true;
     }
 
-    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+    SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
     if (pPCD && nCnt)
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrmFmt()->GetName() );
@@ -637,7 +638,7 @@ bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     CHECKBOXWIDTH;
     CHECKTABLELAYOUT;
 
-    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+    SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
     if (pPCD && nCnt)
         pPCD->AddRowCols( *this, rBoxes, nCnt, bBehind );
     pDoc->UpdateCharts( GetFrmFmt()->GetName() );
@@ -1005,7 +1006,7 @@ bool SwTable::DeleteSel(
 
     PrepareDelBoxes( rBoxes );
 
-    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+    SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
     // Delete boxes from last to first
     for (size_t n = 0; n < rBoxes.size(); ++n)
     {
@@ -1047,7 +1048,7 @@ bool SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCn
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
     // the table too complex to be handled with chart.
     // Thus we tell the charts to use their own data provider and forget about this table
-    pDoc->CreateChartInternalDataProviders( this );
+    pDoc->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
 
     SetHTMLTableLayout( 0 );    // Delete HTML Layout
 
@@ -1189,7 +1190,7 @@ bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
     // the table too complex to be handled with chart.
     // Thus we tell the charts to use their own data provider and forget about this table
-    pDoc->CreateChartInternalDataProviders( this );
+    pDoc->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
 
     SetHTMLTableLayout( 0 );    // Delete HTML Layout
     SwSelBoxes aSelBoxes(rBoxes);
@@ -1641,7 +1642,7 @@ bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     // TL_CHART2: splitting/merging of a number of cells or rows will usually make
     // the table too complex to be handled with chart.
     // Thus we tell the charts to use their own data provider and forget about this table
-    pDoc->CreateChartInternalDataProviders( this );
+    pDoc->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( this );
 
     SetHTMLTableLayout( 0 );    // Delete HTML Layout
 

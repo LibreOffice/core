@@ -31,6 +31,7 @@
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -149,7 +150,7 @@ bool SwEditShell::TableToText( sal_Unicode cCh )
 
     // TL_CHART2:
     // tell the charts about the table to be deleted and have them use their own data
-    GetDoc()->CreateChartInternalDataProviders( &pTblNd->GetTable() );
+    GetDoc()->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( &pTblNd->GetTable() );
 
     StartAllAction();
 

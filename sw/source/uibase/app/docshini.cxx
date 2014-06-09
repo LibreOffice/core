@@ -62,6 +62,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 #include <docfac.hxx>
 #include <docstyle.hxx>
 #include <shellio.hxx>
@@ -366,8 +367,8 @@ SwDocShell::~SwDocShell()
     // disable chart related objects now because in ~SwDoc it may be to late for this
     if( mpDoc )
     {
-        mpDoc->GetChartControllerHelper().Disconnect();
-        SwChartDataProvider *pPCD = mpDoc->GetChartDataProvider();
+        mpDoc->getIDocumentChartDataProviderAccess().GetChartControllerHelper().Disconnect();
+        SwChartDataProvider *pPCD = mpDoc->getIDocumentChartDataProvdiderAccess().GetChartDataProvider();
         if (pPCD)
             pPCD->dispose();
     }
@@ -682,6 +683,6 @@ void SwDocShell::SubInitNew()
  */
 IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return &mpDoc->getIDocumentDeviceAccess(); }
 const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return &mpDoc->getIDocumentSettingAccess(); }
-IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return mpDoc; }
+IDocumentChartDataProviderAccess* SwDocShell::getIDocumentChartDataProviderAccess() { return &mpDoc->getIDocumentChartDataProviderAccess(); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

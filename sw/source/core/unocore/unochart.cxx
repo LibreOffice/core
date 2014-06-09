@@ -37,6 +37,7 @@
 #include <unocrsr.hxx>
 #include <unotbl.hxx>
 #include <doc.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 #include <frmfmt.hxx>
 #include <docsh.hxx>
 #include <ndole.hxx>
@@ -1523,7 +1524,7 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
     if (pTable)
     {
         if (!bDisposed)
-           pTable->GetFrmFmt()->GetDoc()->GetChartControllerHelper().StartOrContinueLocking();
+           pTable->GetFrmFmt()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
         const Set_DataSequenceRef_t &rSet = aDataSequences[ pTable ];
         Set_DataSequenceRef_t::const_iterator aIt( rSet.begin() );
@@ -1548,7 +1549,7 @@ bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox &rB
     if (pTable)
     {
         if (!bDisposed)
-            pTable->GetFrmFmt()->GetDoc()->GetChartControllerHelper().StartOrContinueLocking();
+            pTable->GetFrmFmt()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
         Set_DataSequenceRef_t &rSet = aDataSequences[ pTable ];
 
@@ -1604,7 +1605,7 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
     if (pTable)
     {
         if (!bDisposed)
-            pTable->GetFrmFmt()->GetDoc()->GetChartControllerHelper().StartOrContinueLocking();
+            pTable->GetFrmFmt()->GetDoc()->getIDocumentChartDataProviderAccess().GetChartControllerHelper().StartOrContinueLocking();
 
         //! make a copy of the STL container!
         //! This is necessary since calling 'dispose' will implicitly remove an element

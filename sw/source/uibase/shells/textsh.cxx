@@ -69,6 +69,7 @@
 #include <view.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 #include <uitool.hxx>
 #include <cmdid.h>
 #include <globals.hrc>

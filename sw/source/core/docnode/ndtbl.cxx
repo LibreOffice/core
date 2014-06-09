@@ -41,6 +41,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <UndoManager.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
@@ -3520,7 +3521,7 @@ bool SwNodes::MergeTable( const SwNodeIndex& rPos, bool bWithPrev,
 
     // TL_CHART2:
     // tell the charts about the table to be deleted and have them use their own data
-    GetDoc()->CreateChartInternalDataProviders( &rDelTbl );
+    GetDoc()->getIDocumentChartDataProviderAccess().CreateChartInternalDataProviders( &rDelTbl );
 
     // Sync the TableFormat's Width
     {

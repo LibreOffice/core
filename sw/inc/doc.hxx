@@ -32,7 +32,6 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentTimerAccess.hxx>
-#include <IDocumentChartDataProviderAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
 
@@ -55,12 +54,9 @@ class SwList;
 #include <chcmprse.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
-#include <rtl/ref.hxx>
-#include <svx/svdtypes.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/style.hxx>
 #include <editeng/numitem.hxx>
-#include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 
@@ -207,6 +203,7 @@ namespace sw {
     class DocumentSettingManager;
     class DocumentDeviceManager;
     class DocumentDrawModelManager;
+    class DocumentChartDataProviderManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -254,7 +251,6 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentState,
     public IDocumentLayoutAccess,
     public IDocumentTimerAccess,
-    public IDocumentChartDataProviderAccess,
     public IDocumentListItems,
     public IDocumentOutlineNodes,
     public IDocumentListsAccess,
@@ -288,6 +284,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentDrawModelManager > m_pDocumentDrawModelManager;
     const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
     const ::boost::scoped_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
+    const ::boost::scoped_ptr< ::sw::DocumentChartDataProviderManager > m_pDocumentChartDataProviderManager;
     ::boost::scoped_ptr< ::sw::DocumentDeviceManager > m_pDeviceAccess;
 
     // Pointer
@@ -363,9 +360,6 @@ class SW_DLLPUBLIC SwDoc :
 
     SwModify *mpUnoCallBack;
     IGrammarContact *mpGrammarContact;   //< for grammar checking in paragraphs during editing
-
-    mutable rtl::Reference<SwChartDataProvider> maChartDataProviderImplRef;
-    SwChartLockController_Helper  *mpChartControllerHelper;
 
     // table of forbidden characters of this document
     rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
@@ -789,9 +783,8 @@ public:
     virtual void StartBackgroundJobs() SAL_OVERRIDE;
 
     // IDocumentChartDataProviderAccess
-    virtual SwChartDataProvider * GetChartDataProvider( bool bCreate = false ) const SAL_OVERRIDE;
-    virtual void CreateChartInternalDataProviders( const SwTable *pTable ) SAL_OVERRIDE;
-    virtual SwChartLockController_Helper & GetChartControllerHelper() SAL_OVERRIDE;
+    IDocumentChartDataProviderAccess const & getIDocumentChartDataProviderAccess() const;
+    IDocumentChartDataProviderAccess & getIDocumentChartDataProviderAccess();
 
     // IDocumentListItems
     virtual void addListItem( const SwNodeNum& rNodeNum ) SAL_OVERRIDE;

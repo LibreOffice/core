@@ -90,6 +90,7 @@
 #include <DocumentDeviceManager.hxx>
 #include <DocumentSettingManager.hxx>
 #include <DocumentDrawModelManager.hxx>
+#include <DocumentChartDataProviderManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -195,6 +196,7 @@ SwDoc::SwDoc()
     m_pUndoManager(new ::sw::UndoManager(
             boost::shared_ptr<SwNodes>(new SwNodes(this)), *m_pDocumentDrawModelManager, *this, *this)),
     m_pDocumentSettingManager(new ::sw::DocumentSettingManager(*this)),
+    m_pDocumentChartDataProviderManager( new sw::DocumentChartDataProviderManager( *this ) ),
     m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
@@ -240,8 +242,6 @@ SwDoc::SwDoc()
     mpLayoutCache( 0 ),
     mpUnoCallBack(new SwModify(0)),
     mpGrammarContact(createGrammarContact()),
-    maChartDataProviderImplRef(),
-    mpChartControllerHelper( 0 ),
     mpListItemsList( new tImplSortedNodeNumList() ), // #i83479#
     m_pXmlIdRegistry(),
     mnAutoFmtRedlnCommentNo( 0 ),
@@ -444,13 +444,6 @@ SwDoc::~SwDoc()
     // #i83479#
     delete mpListItemsList;
     mpListItemsList = 0;
-
-    // clean up chart related structures...
-    // Note: the chart data provider gets already disposed in ~SwDocShell
-    // since all UNO API related functionality requires an existing SwDocShell
-    // this assures that dipose gets called if there is need for it.
-    maChartDataProviderImplRef.clear();
-    delete mpChartControllerHelper;
 
     delete mpGrammarContact;
     mpGrammarContact = 0;

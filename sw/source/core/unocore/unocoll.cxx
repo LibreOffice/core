@@ -22,6 +22,7 @@
 #include <hintids.hxx>
 #include <svx/svxids.hrc>
 #include <doc.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 #include <docary.hxx>
 #include <fmtcol.hxx>
 #include <poolfmt.hxx>
@@ -820,7 +821,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             // charts using table data.
             OSL_ASSERT( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED );
             if( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-                xRet = (cppu::OWeakObject*) pDoc->GetChartDataProvider( true /* create - if not yet available */ );
+                xRet = (cppu::OWeakObject*) pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ );
         break;
         case SW_SERVICE_TYPE_META:
             xRet = static_cast< ::cppu::OWeakObject* >( new SwXMeta(pDoc) );

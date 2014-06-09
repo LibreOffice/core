@@ -110,6 +110,7 @@
 #include <view.hxx>
 #include <DocumentDeviceManager.hxx>
 #include <DocumentSettingManager.hxx>
+#include <DocumentChartDataProviderManager.hxx>
 
 #include <wdocsh.hxx>
 #include <prtopt.hxx>
@@ -213,6 +214,17 @@ IDocumentSettingAccess & SwDoc::getIDocumentSettingAccess()
 ::sw::DocumentSettingManager const & SwDoc::GetDocumentSettingManager() const
 {
     return *m_pDocumentSettingManager;
+}
+
+/* IDocumentChartDataProviderAccess */
+IDocumentChartDataProviderAccess const & SwDoc::getIDocumentChartDataProviderAccess() const
+{
+    return *m_pDocumentChartDataProviderManager;
+}
+
+IDocumentChartDataProviderAccess & SwDoc::getIDocumentChartDataProviderAccess()
+{
+    return *m_pDocumentChartDataProviderManager;
 }
 
 sal_uInt32 SwDoc::getRsid() const

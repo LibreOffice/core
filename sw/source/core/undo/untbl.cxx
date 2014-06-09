@@ -35,6 +35,7 @@
 #include <doc.hxx>
 #include <docredln.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentChartDataProviderAccess.hxx>
 #include <editsh.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
@@ -1008,7 +1009,8 @@ void _SaveTable::CreateNew( SwTable& rTbl, bool bCreateFrms,
         : nLineCount;
 
     SwDoc *pDoc = rTbl.GetFrmFmt()->GetDoc();
-    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+<<<<<<< HEAD
+    SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
     size_t n = 0;
     for( ; n < aParent.GetTabLines().size(); ++n )
     {
@@ -1691,7 +1693,7 @@ void SwUndoTblNdsChg::UndoImpl(::sw::UndoRedoContext & rContext)
     _FndBox aTmpBox( 0, 0 );
     // ? TL_CHART2: notification or locking of controller required ?
 
-    SwChartDataProvider *pPCD = rDoc.GetChartDataProvider();
+    SwChartDataProvider *pPCD = rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider();
     SwSelBoxes aDelBoxes;
     std::vector< std::pair<SwTableBox *, sal_uLong> > aDelNodes;
     if( IsDelBox() )
@@ -1984,7 +1986,7 @@ CHECKTABLE(pTblNd->GetTable())
 
 CHECKTABLE(pTblNd->GetTable())
 
-    SwChartDataProvider *pPCD = rDoc.GetChartDataProvider();
+    SwChartDataProvider *pPCD = rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider();
     // 2. deleted the inserted boxes
     // delete nodes (from last to first)
     for( size_t n = aNewSttNds.size(); n; )
@@ -3065,7 +3067,7 @@ void SwUndoMergeTbl::UndoImpl(::sw::UndoRedoContext & rContext)
     ClearFEShellTabCols();
 
     // TL_CHART2: need to inform chart of probably changed cell names
-    SwChartDataProvider *pPCD = pDoc->GetChartDataProvider();
+    SwChartDataProvider *pPCD = pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider();
     if (pPCD)
     {
         pDoc->UpdateCharts( pTbl->GetFrmFmt()->GetName() );
