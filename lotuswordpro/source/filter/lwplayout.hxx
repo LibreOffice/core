@@ -79,6 +79,7 @@
 
 #include "lwplayoutdef.hxx"
 #include "xfilter/xfdefs.hxx"
+#include "xfilter/xffont.hxx"
 #include "xfilter/xfpagemaster.hxx"
 #include "xfilter/xfcolumns.hxx"
 #include "xfilter/xfborders.hxx"
@@ -397,7 +398,6 @@ public:
     virtual LwpVirtualLayout* GetContainerLayout() SAL_OVERRIDE;
 };
 
-class XFFont;
 class LwpPlacableLayout : public LwpLayout
 {
 public:
