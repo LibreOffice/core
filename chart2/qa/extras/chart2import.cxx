@@ -39,6 +39,7 @@ public:
     void testBnc864396();
     void testSimpleStrictXLSX();
     void testDelayedCellImport(); // chart range referencing content on later sheets
+    void testFlatODSStackedColumnChart();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -63,6 +64,7 @@ public:
     CPPUNIT_TEST(testBnc864396);
     CPPUNIT_TEST(testSimpleStrictXLSX);
     CPPUNIT_TEST(testDelayedCellImport);
+    CPPUNIT_TEST(testFlatODSStackedColumnChart);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -349,6 +351,23 @@ void Chart2ImportTest::testDelayedCellImport()
 
     OUString aRange = xDataSeq->getSourceRangeRepresentation();
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet2.$C$5:$C$9"), aRange);
+}
+
+void Chart2ImportTest::testFlatODSStackedColumnChart()
+{
+    load("/chart2/qa/extras/data/fods/", "stacked-column-chart.fods");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc, 0, 0);
+    CPPUNIT_ASSERT(xChartType.is());
+
+    Reference<chart2::XDataSeriesContainer> xDSCont(xChartType, UNO_QUERY);
+    CPPUNIT_ASSERT(xDSCont.is());
+    Sequence<Reference<chart2::XDataSeries> > aSeriesSeq = xDSCont->getDataSeries();
+
+    // The stacked column chart should consist of 5 data series.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aSeriesSeq.getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
