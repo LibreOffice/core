@@ -51,47 +51,38 @@ private:
 
     Link            maOldLink;
 
-    OKButton        maOKButton;
-    CancelButton    maCancelButton;
-    PushButton      maDeviceInfoButton;
-    PushButton      maPreviewButton;
-    PushButton      maScanButton;
-    PushButton      maButtonOption;
+    OKButton*       mpOKButton;
+    CancelButton*   mpCancelButton;
+    PushButton*     mpDeviceInfoButton;
+    PushButton*     mpPreviewButton;
+    PushButton*     mpScanButton;
+    PushButton*     mpButtonOption;
 
-    FixedText       maOptionsTxt;
-    FixedText       maOptionTitle;
-    FixedText       maOptionDescTxt;
-    FixedText       maVectorTxt;
+    FixedText*      mpOptionTitle;
+    FixedText*      mpOptionDescTxt;
+    FixedText*      mpVectorTxt;
 
-    FixedText       maScanLeftTxt;
-    MetricField     maLeftField;
-    FixedText       maScanTopTxt;
-    MetricField     maTopField;
-    FixedText       maRightTxt;
-    MetricField     maRightField;
-    FixedText       maBottomTxt;
-    MetricField     maBottomField;
+    MetricField*    mpLeftField;
+    MetricField*    mpTopField;
+    MetricField*    mpRightField;
+    MetricField*    mpBottomField;
 
-    FixedText       maDeviceBoxTxt;
-    ListBox         maDeviceBox;
-    FixedText       maReslTxt;
-    NumericBox      maReslBox;
-    FixedText       maAdvancedTxt;
-    CheckBox        maAdvancedBox;
+    ListBox*        mpDeviceBox;
+    NumericBox*     mpReslBox;
+    CheckBox*       mpAdvancedBox;
 
-    NumericField    maVectorBox;
-    ListBox         maQuantumRangeBox;
-    ListBox         maStringRangeBox;
+    NumericField*   mpVectorBox;
+    ListBox*        mpQuantumRangeBox;
+    ListBox*        mpStringRangeBox;
 
-    FixedLine       maPreviewBox;
-    FixedLine       maAreaBox;
+    CheckBox*       mpBoolCheckBox;
 
-    CheckBox        maBoolCheckBox;
+    Edit*           mpStringEdit;
+    Edit*           mpNumericEdit;
 
-    Edit            maStringEdit;
-    Edit            maNumericEdit;
+    SvTreeListBox*  mpOptionBox;
 
-    SvTreeListBox   maOptionBox;
+    Window*         mpPreview;
 
     int             mnCurrentOption;
     int             mnCurrentElement;

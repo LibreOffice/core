@@ -26,7 +26,6 @@ $(eval $(call gb_SrsTarget_set_include,scn/res,\
 
 $(eval $(call gb_SrsTarget_add_files,scn/res,\
 	extensions/source/scanner/grid.src \
-	extensions/source/scanner/sanedlg.src \
 ))
 
 # vim:set noet sw=4 ts=4:

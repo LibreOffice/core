@@ -22,6 +22,7 @@ $(eval $(call gb_Module_add_l10n_targets,extensions,\
 	AllLangResTarget_scn \
 	AllLangResTarget_upd \
 	UIConfig_sabpilot \
+	UIConfig_scanner \
 ))
 
 ifneq ($(filter-out IOS ANDROID,$(OS)),)

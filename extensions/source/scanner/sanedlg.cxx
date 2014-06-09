@@ -37,7 +37,7 @@ ResId SaneResId( sal_uInt32 nID )
 }
 
 SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
-        ModalDialog( pParent, SaneResId( RID_SANE_DIALOG ) ),
+        ModalDialog(pParent, "SaneDialog", "modules/scanner/ui/sanedialog.ui"),
         mrSane( rSane ),
         mbDragEnable( false ),
         mbIsDragging( false ),
@@ -45,39 +45,6 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
         mbDragDrawn( false ),
         meDragDirection( TopLeft ),
         maMapMode( MAP_APPFONT ),
-        maOKButton( this, SaneResId( RID_SCAN_OK ) ),
-        maCancelButton( this, SaneResId( RID_SCAN_CANCEL ) ),
-        maDeviceInfoButton( this, SaneResId( RID_DEVICEINFO_BTN ) ),
-        maPreviewButton( this, SaneResId( RID_PREVIEW_BTN ) ),
-        maScanButton( this, SaneResId( RID_SCAN_BTN ) ),
-        maButtonOption( this, SaneResId( RID_SCAN_BUTTON_OPTION_BTN ) ),
-        maOptionsTxt( this, SaneResId( RID_SCAN_OPTION_TXT ) ),
-        maOptionTitle( this, SaneResId( RID_SCAN_OPTIONTITLE_TXT ) ),
-        maOptionDescTxt( this, SaneResId( RID_SCAN_OPTION_DESC_TXT ) ),
-        maVectorTxt( this, SaneResId( RID_SCAN_NUMERIC_VECTOR_TXT ) ),
-        maScanLeftTxt( this, SaneResId( RID_SCAN_LEFT_TXT ) ),
-        maLeftField( this, SaneResId( RID_SCAN_LEFT_BOX ) ),
-        maScanTopTxt( this, SaneResId( RID_SCAN_TOP_TXT ) ),
-        maTopField( this, SaneResId( RID_SCAN_TOP_BOX ) ),
-        maRightTxt( this, SaneResId( RID_SCAN_RIGHT_TXT ) ),
-        maRightField( this, SaneResId( RID_SCAN_RIGHT_BOX ) ),
-        maBottomTxt( this, SaneResId( RID_SCAN_BOTTOM_TXT ) ),
-        maBottomField( this, SaneResId( RID_SCAN_BOTTOM_BOX ) ),
-        maDeviceBoxTxt( this, SaneResId( RID_DEVICE_BOX_TXT ) ),
-        maDeviceBox( this, SaneResId( RID_DEVICE_BOX ) ),
-        maReslTxt( this, SaneResId( RID_SCAN_RESOLUTION_TXT ) ),
-        maReslBox( this, SaneResId( RID_SCAN_RESOLUTION_BOX ) ),
-        maAdvancedTxt( this, SaneResId( RID_SCAN_ADVANCED_TXT ) ),
-        maAdvancedBox( this, SaneResId( RID_SCAN_ADVANCED_BOX ) ),
-        maVectorBox( this, SaneResId( RID_SCAN_NUMERIC_VECTOR_BOX ) ),
-        maQuantumRangeBox( this, SaneResId( RID_SCAN_QUANTUM_RANGE_BOX ) ),
-        maStringRangeBox( this, SaneResId( RID_SCAN_STRING_RANGE_BOX ) ),
-        maPreviewBox( this, SaneResId( RID_PREVIEW_BOX ) ),
-        maAreaBox( this, SaneResId( RID_SCANAREA_BOX ) ),
-        maBoolCheckBox( this, SaneResId( RID_SCAN_BOOL_OPTION_BOX ) ),
-        maStringEdit( this, SaneResId( RID_SCAN_STRING_OPTION_EDT ) ),
-        maNumericEdit( this, SaneResId( RID_SCAN_NUMERIC_OPTION_EDT ) ),
-        maOptionBox( this, SaneResId( RID_SCAN_OPTION_BOX ) ),
         mnCurrentOption(0),
         mnCurrentElement(0),
         mpRange(0),
@@ -85,6 +52,39 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
         mfMax(0.0),
         doScan(false)
 {
+    get(mpOKButton, "ok");
+    get(mpCancelButton, "cancel");
+    get(mpDeviceInfoButton, "deviceInfoButton");
+    get(mpPreviewButton, "previewButton");
+    get(mpScanButton, "scanButton");
+    get(mpButtonOption, "optionsButton");
+    get(mpOptionTitle, "optionTitleLabel");
+    Size aSize(LogicToPixel(Size(130, 102), MAP_APPFONT));
+    mpOptionTitle->set_width_request(aSize.Width());
+    mpOptionTitle->set_height_request(aSize.Height() / 2);
+    get(mpOptionDescTxt, "optionsDescLabel");
+    get(mpVectorTxt, "vectorLabel");
+    get(mpLeftField, "leftSpinbutton");
+    get(mpTopField, "topSpinbutton");
+    get(mpRightField, "rightSpinbutton");
+    get(mpBottomField, "bottomSpinbutton");
+    get(mpDeviceBox, "deviceCombobox");
+    mpDeviceBox->SetStyle(mpDeviceBox->GetStyle() | WB_SORT);
+    get(mpReslBox, "reslCombobox");
+    get(mpAdvancedBox, "advancedCheckbutton");
+    get(mpVectorBox, "vectorSpinbutton-nospin");
+    get(mpQuantumRangeBox, "quantumRangeCombobox");
+    get(mpStringRangeBox, "stringRangeCombobox");
+    get(mpStringEdit, "stringEntry");
+    get(mpNumericEdit, "numericEntry");
+    get(mpOptionBox, "optionSvTreeListBox");
+    mpOptionBox->set_width_request(aSize.Width());
+    mpOptionBox->set_height_request(aSize.Height());
+    get(mpBoolCheckBox, "boolCheckbutton");
+    get(mpPreview, "preview");
+    aSize = LogicToPixel(Size(PREVIEW_WIDTH, PREVIEW_HEIGHT), MAP_APPFONT);
+    mpPreview->set_width_request(aSize.Width());
+    mpPreview->set_height_request(aSize.Height());
     if( Sane::IsSane() )
     {
         InitDevices(); // opens first sane device
@@ -92,41 +92,38 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
         InitFields();
     }
 
-    maDeviceInfoButton.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    maPreviewButton.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    maScanButton.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    maButtonOption.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    maDeviceBox.SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
-    maOptionBox.SetSelectHdl( LINK( this, SaneDlg, OptionsBoxSelectHdl ) );
-    maOKButton.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    maCancelButton.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    maBoolCheckBox.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
-    maStringEdit.SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    maNumericEdit.SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    maVectorBox.SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    maReslBox.SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    maStringRangeBox.SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
-    maQuantumRangeBox.SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
-    maLeftField.SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    maRightField.SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    maTopField.SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    maBottomField.SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
-    maAdvancedBox.SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mpDeviceInfoButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mpPreviewButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mpScanButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mpButtonOption->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mpDeviceBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
+    mpOptionBox->SetSelectHdl( LINK( this, SaneDlg, OptionsBoxSelectHdl ) );
+    mpOKButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mpCancelButton->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mpBoolCheckBox->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
+    mpStringEdit->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mpNumericEdit->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mpVectorBox->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mpReslBox->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mpStringRangeBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
+    mpQuantumRangeBox->SetSelectHdl( LINK( this, SaneDlg, SelectHdl ) );
+    mpLeftField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mpRightField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mpTopField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mpBottomField->SetModifyHdl( LINK( this, SaneDlg, ModifyHdl ) );
+    mpAdvancedBox->SetClickHdl( LINK( this, SaneDlg, ClickBtnHdl ) );
 
     maOldLink = mrSane.SetReloadOptionsHdl( LINK( this, SaneDlg, ReloadSaneOptionsHdl ) );
 
-    maOptionBox.SetNodeBitmaps(
-        Image(Bitmap( SaneResId(RID_SCAN_BITMAP_PLUS) )),
-        Image(Bitmap( SaneResId(RID_SCAN_BITMAP_MINUS) ))
-        );
-    maOptionBox.SetStyle( maOptionBox.GetStyle()|
+    mpOptionBox->SetNodeBitmaps(get<FixedImage>("plus")->GetImage(),
+        get<FixedImage>("minus")->GetImage());
+    mpOptionBox->SetStyle( mpOptionBox->GetStyle()|
                           WB_HASLINES           |
                           WB_HASBUTTONS         |
                           WB_NOINITIALSELECTION |
                           WB_HASBUTTONSATROOT   |
                           WB_HASLINESATROOT
                         );
-    FreeResource();
 }
 
 SaneDlg::~SaneDlg()
@@ -139,7 +136,7 @@ short SaneDlg::Execute()
     if( ! Sane::IsSane() )
     {
         ErrorBox aErrorBox( NULL, WB_OK | WB_DEF_OK,
-                            SaneResId(RID_SANE_NOSANELIB_TXT).toString() );
+                            "The SANE interface could not be initialized. Scanning is not possible." );
         aErrorBox.Execute();
         return sal_False;
     }
@@ -155,13 +152,13 @@ void SaneDlg::InitDevices()
     if( mrSane.IsOpen() )
         mrSane.Close();
     mrSane.ReloadDevices();
-    maDeviceBox.Clear();
+    mpDeviceBox->Clear();
     for( int i = 0; i < Sane::CountDevices(); i++ )
-        maDeviceBox.InsertEntry( Sane::GetName( i ) );
+        mpDeviceBox->InsertEntry( Sane::GetName( i ) );
     if( Sane::CountDevices() )
     {
         mrSane.Open( 0 );
-        maDeviceBox.SelectEntry( Sane::GetName( 0 ) );
+        mpDeviceBox->SelectEntry( Sane::GetName( 0 ) );
 
     }
 }
@@ -184,10 +181,10 @@ void SaneDlg::InitFields()
     };
 
     mbDragEnable = true;
-    maReslBox.Clear();
+    mpReslBox->Clear();
     maMinTopLeft = Point( 0, 0 );
     maMaxBottomRight = Point( PREVIEW_WIDTH,  PREVIEW_HEIGHT );
-    maScanButton.Show( mbScanEnabled );
+    mpScanButton->Show( mbScanEnabled );
 
     if( ! mrSane.IsOpen() )
         return;
@@ -201,28 +198,28 @@ void SaneDlg::InitFields()
         bSuccess = mrSane.GetOptionValue( nOption, fRes );
         if( bSuccess )
         {
-            maReslBox.Enable( true );
+            mpReslBox->Enable( true );
 
-            maReslBox.SetValue( (long)fRes );
+            mpReslBox->SetValue( (long)fRes );
             double *pDouble = NULL;
             nValue = mrSane.GetRange( nOption, pDouble );
             if( nValue > -1 )
             {
                 if( nValue )
                 {
-                    maReslBox.SetMin( (long)pDouble[0] );
-                    maReslBox.SetMax( (long)pDouble[ nValue-1 ] );
+                    mpReslBox->SetMin( (long)pDouble[0] );
+                    mpReslBox->SetMax( (long)pDouble[ nValue-1 ] );
                     for( i=0; i<nValue; i++ )
                     {
                         if( i == 0 || i == nValue-1 || ! ( ((int)pDouble[i]) % 20) )
-                            maReslBox.InsertValue( (long)pDouble[i] );
+                            mpReslBox->InsertValue( (long)pDouble[i] );
                     }
                 }
                 else
                 {
-                    maReslBox.SetMin( (long)pDouble[0] );
-                    maReslBox.SetMax( (long)pDouble[1] );
-                    maReslBox.InsertValue( (long)pDouble[0] );
+                    mpReslBox->SetMin( (long)pDouble[0] );
+                    mpReslBox->SetMax( (long)pDouble[1] );
+                    mpReslBox->InsertValue( (long)pDouble[0] );
                     // Can only select 75 and 2400 dpi in Scanner dialogue
                     // scanner allows random setting of dpi resolution, a slider might be useful
                     // support that
@@ -234,18 +231,18 @@ void SaneDlg::InitFields()
                         if ( !bGot300 && nRes > 300 ) {
                             nRes = 300; bGot300 = 1;
                         }
-                        maReslBox.InsertValue(nRes);
+                        mpReslBox->InsertValue(nRes);
                     }
-                    maReslBox.InsertValue( (long)pDouble[1] );
+                    mpReslBox->InsertValue( (long)pDouble[1] );
                 }
             }
             else
-                maReslBox.Enable( false );
+                mpReslBox->Enable( false );
             delete [] pDouble;
         }
     }
     else
-        maReslBox.Enable( false );
+        mpReslBox->Enable( false );
 
     // set scan area
     for( i = 0; i < 4; i++ )
@@ -256,19 +253,19 @@ void SaneDlg::InitFields()
         {
             case 0:
                 pOptionName = "tl-x";
-                pField = &maLeftField;
+                pField = mpLeftField;
                 break;
             case 1:
                 pOptionName = "tl-y";
-                pField = &maTopField;
+                pField = mpTopField;
                 break;
             case 2:
                 pOptionName = "br-x";
-                pField = &maRightField;
+                pField = mpRightField;
                 break;
             case 3:
                 pOptionName = "br-y";
-                pField = &maBottomField;
+                pField = mpBottomField;
         }
         nOption = pOptionName ? mrSane.GetOptionByName( pOptionName ) : -1;
         bSuccess = false;
@@ -365,7 +362,7 @@ void SaneDlg::InitFields()
                                      maBottomRight.Y() - maTopLeft.Y() )
                                );
     // fill OptionBox
-    maOptionBox.Clear();
+    mpOptionBox->Clear();
     SvTreeListEntry* pParentEntry = 0;
     bool bGroupRejected = false;
     for( i = 1; i < mrSane.CountOptions(); i++ )
@@ -373,13 +370,13 @@ void SaneDlg::InitFields()
         OUString aOption=mrSane.GetOptionName( i );
         bool bInsertAdvanced =
             mrSane.GetOptionCap( i ) & SANE_CAP_ADVANCED &&
-            ! maAdvancedBox.IsChecked() ? sal_False : sal_True;
+            ! mpAdvancedBox->IsChecked() ? sal_False : sal_True;
         if( mrSane.GetOptionType( i ) == SANE_TYPE_GROUP )
         {
             if( bInsertAdvanced )
             {
                 aOption = mrSane.GetOptionTitle( i );
-                pParentEntry = maOptionBox.InsertEntry( aOption );
+                pParentEntry = mpOptionBox->InsertEntry( aOption );
                 bGroupRejected = false;
             }
             else
@@ -403,9 +400,9 @@ void SaneDlg::InitFields()
             if( ! bIsSpecial )
             {
                 if( pParentEntry )
-                    maOptionBox.InsertEntry( aOption, pParentEntry );
+                    mpOptionBox->InsertEntry( aOption, pParentEntry );
                 else
-                    maOptionBox.InsertEntry( aOption );
+                    mpOptionBox->InsertEntry( aOption );
             }
         }
     }
@@ -415,9 +412,9 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
 {
     if( mrSane.IsOpen() )
     {
-        if( pButton == &maDeviceInfoButton )
+        if( pButton == mpDeviceInfoButton )
         {
-            OUString aString(SaneResId(RID_SANE_DEVICEINFO_TXT).toString());
+            OUString aString("Device: %s\nVendor: %s\nModel: %s\nType: %s");
             aString = aString.replaceFirst( "%s", Sane::GetName( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetVendor( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetModel( mrSane.GetDeviceNumber() ) );
@@ -425,14 +422,14 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
             InfoBox aInfoBox( this, aString );
             aInfoBox.Execute();
         }
-        else if( pButton == &maPreviewButton )
+        else if( pButton == mpPreviewButton )
             AcquirePreview();
-        else if( pButton == &maBoolCheckBox )
+        else if( pButton == mpBoolCheckBox )
         {
             mrSane.SetOptionValue( mnCurrentOption,
-                                   maBoolCheckBox.IsChecked() );
+                                   mpBoolCheckBox->IsChecked() );
         }
-        else if( pButton == &maButtonOption )
+        else if( pButton == mpButtonOption )
         {
 
             SANE_Value_Type nType = mrSane.GetOptionType( mnCurrentOption );
@@ -464,21 +461,21 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
                     break;
             }
         }
-        else if( pButton == &maAdvancedBox )
+        else if( pButton == mpAdvancedBox )
         {
             ReloadSaneOptionsHdl( NULL );
         }
     }
-    if( pButton == &maOKButton || pButton == &maScanButton )
+    if( pButton == mpOKButton || pButton == mpScanButton )
     {
-        double fRes = (double)maReslBox.GetValue();
+        double fRes = (double)mpReslBox->GetValue();
         SetAdjustedNumericalValue( "resolution", fRes );
         UpdateScanArea( true );
         SaveState();
         EndDialog( mrSane.IsOpen() ? 1 : 0 );
-        doScan = (pButton == &maScanButton);
+        doScan = (pButton == mpScanButton);
     }
-    else if( pButton == &maCancelButton )
+    else if( pButton == mpCancelButton )
     {
         mrSane.Close();
         EndDialog( 0 );
@@ -488,9 +485,9 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
 
 IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
 {
-    if( pListBox == &maDeviceBox && Sane::IsSane() && Sane::CountDevices() )
+    if( pListBox == mpDeviceBox && Sane::IsSane() && Sane::CountDevices() )
     {
-        OUString aNewDevice = maDeviceBox.GetSelectEntry();
+        OUString aNewDevice = mpDeviceBox->GetSelectEntry();
         int nNumber;
         if( aNewDevice == Sane::GetName( nNumber = mrSane.GetDeviceNumber() ) )
         {
@@ -501,16 +498,16 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
     }
     if( mrSane.IsOpen() )
     {
-        if( pListBox == &maQuantumRangeBox )
+        if( pListBox == mpQuantumRangeBox )
         {
-            OString aValue(OUStringToOString(maQuantumRangeBox.GetSelectEntry(),
+            OString aValue(OUStringToOString(mpQuantumRangeBox->GetSelectEntry(),
                 osl_getThreadTextEncoding()));
             double fValue = atof(aValue.getStr());
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
-        else if( pListBox == &maStringRangeBox )
+        else if( pListBox == mpStringRangeBox )
         {
-            mrSane.SetOptionValue( mnCurrentOption, maStringRangeBox.GetSelectEntry() );
+            mrSane.SetOptionValue( mnCurrentOption, mpStringRangeBox->GetSelectEntry() );
         }
     }
     return 0;
@@ -518,17 +515,17 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
 
 IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
 {
-    if( pBox == &maOptionBox && Sane::IsSane() )
+    if( pBox == mpOptionBox && Sane::IsSane() )
     {
         OUString aOption =
-            maOptionBox.GetEntryText( maOptionBox.FirstSelected() );
+            mpOptionBox->GetEntryText( mpOptionBox->FirstSelected() );
         int nOption = mrSane.GetOptionByName(OUStringToOString(aOption,
             osl_getThreadTextEncoding()).getStr());
         if( nOption != -1 && nOption != mnCurrentOption )
         {
             DisableOption();
             mnCurrentOption = nOption;
-            maOptionTitle.SetText( mrSane.GetOptionTitle( mnCurrentOption ) );
+            mpOptionTitle->SetText( mrSane.GetOptionTitle( mnCurrentOption ) );
             SANE_Value_Type nType = mrSane.GetOptionType( mnCurrentOption );
             SANE_Constraint_Type nConstraint;
             switch( nType )
@@ -559,12 +556,12 @@ IMPL_LINK( SaneDlg, OptionsBoxSelectHdl, SvTreeListBox*, pBox )
                     {
                         if( nElements <= 10 )
                         {
-                            maVectorBox.SetValue( 1 );
-                            maVectorBox.SetMin( 1 );
-                            maVectorBox.SetMax(
+                            mpVectorBox->SetValue( 1 );
+                            mpVectorBox->SetMin( 1 );
+                            mpVectorBox->SetMax(
                                 mrSane.GetOptionElements( mnCurrentOption ) );
-                            maVectorBox.Show( true );
-                            maVectorTxt.Show( true );
+                            mpVectorBox->Show( true );
+                            mpVectorTxt->Show( true );
                         }
                         else
                         {
@@ -589,13 +586,13 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
 {
     if( mrSane.IsOpen() )
     {
-        if( pEdit == &maStringEdit )
+        if( pEdit == mpStringEdit )
         {
-            mrSane.SetOptionValue( mnCurrentOption, maStringEdit.GetText() );
+            mrSane.SetOptionValue( mnCurrentOption, mpStringEdit->GetText() );
         }
-        else if( pEdit == &maReslBox )
+        else if( pEdit == mpReslBox )
         {
-            double fRes = (double)maReslBox.GetValue();
+            double fRes = (double)mpReslBox->GetValue();
             int nOption = mrSane.GetOptionByName( "resolution" );
             if( nOption != -1 )
             {
@@ -620,13 +617,13 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
                         fRes = pDouble[ 1 ];
                 }
                 delete[] pDouble;
-                maReslBox.SetValue( (sal_uLong)fRes );
+                mpReslBox->SetValue( (sal_uLong)fRes );
             }
         }
-        else if( pEdit == &maNumericEdit )
+        else if( pEdit == mpNumericEdit )
         {
             double fValue;
-            OString aContents(OUStringToOString(maNumericEdit.GetText(),
+            OString aContents(OUStringToOString(mpNumericEdit->GetText(),
                 osl_getThreadTextEncoding()));
             fValue = atof(aContents.getStr());
             if( mfMin != mfMax && ( fValue < mfMin || fValue > mfMax ) )
@@ -637,45 +634,45 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
                 else if( fValue > mfMax )
                     fValue = mfMax;
                 sprintf( pBuf, "%g", fValue );
-                maNumericEdit.SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
+                mpNumericEdit->SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
             }
             mrSane.SetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
         }
-        else if( pEdit == &maVectorBox )
+        else if( pEdit == mpVectorBox )
         {
             char pBuf[256];
-            mnCurrentElement = maVectorBox.GetValue()-1;
+            mnCurrentElement = mpVectorBox->GetValue()-1;
             double fValue;
             mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement );
             sprintf( pBuf, "%g", fValue );
             OUString aValue( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
-            maNumericEdit.SetText( aValue );
-            maQuantumRangeBox.SelectEntry( aValue );
+            mpNumericEdit->SetText( aValue );
+            mpQuantumRangeBox->SelectEntry( aValue );
         }
-        else if( pEdit == &maTopField )
+        else if( pEdit == mpTopField )
         {
-            Point aPoint( 0, maTopField.GetValue() );
+            Point aPoint( 0, mpTopField->GetValue() );
             aPoint = GetPixelPos( aPoint );
             maTopLeft.Y() = aPoint.Y();
             DrawDrag();
         }
-        else if( pEdit == &maLeftField )
+        else if( pEdit == mpLeftField )
         {
-            Point aPoint( maLeftField.GetValue(), 0 );
+            Point aPoint( mpLeftField->GetValue(), 0 );
             aPoint = GetPixelPos( aPoint );
             maTopLeft.X() = aPoint.X();
             DrawDrag();
         }
-        else if( pEdit == &maBottomField )
+        else if( pEdit == mpBottomField )
         {
-            Point aPoint( 0, maBottomField.GetValue() );
+            Point aPoint( 0, mpBottomField->GetValue() );
             aPoint = GetPixelPos( aPoint );
             maBottomRight.Y() = aPoint.Y();
             DrawDrag();
         }
-        else if( pEdit == &maRightField )
+        else if( pEdit == mpRightField )
         {
-            Point aPoint( maRightField.GetValue(), 0 );
+            Point aPoint( mpRightField->GetValue(), 0 );
             aPoint = GetPixelPos( aPoint );
             maBottomRight.X() = aPoint.X();
             DrawDrag();
@@ -706,13 +703,13 @@ void SaneDlg::AcquirePreview()
 
     UpdateScanArea( true );
     // set small resolution for preview
-    double fResl = (double)maReslBox.GetValue();
+    double fResl = (double)mpReslBox->GetValue();
     SetAdjustedNumericalValue( "resolution", 30.0 );
 
     int nOption = mrSane.GetOptionByName( "preview" );
     if( nOption == -1 )
     {
-        OUString aString(SaneResId(RID_SANE_NORESOLUTIONOPTION_TXT).toString());
+        OUString aString("The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time." );
         WarningBox aBox( this, WB_OK_CANCEL | WB_DEF_OK, aString );
         if( aBox.Execute() == RET_CANCEL )
             return;
@@ -724,7 +721,7 @@ void SaneDlg::AcquirePreview()
     if( ! mrSane.Start( aTransporter ) )
     {
         ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK,
-                            SaneResId( RID_SANE_SCANERROR_TXT).toString() );
+                            "An error occurred while scanning." );
         aErrorBox.Execute();
     }
     else
@@ -738,7 +735,7 @@ void SaneDlg::AcquirePreview()
     }
 
     SetAdjustedNumericalValue( "resolution", fResl );
-    maReslBox.SetValue( (sal_uLong)fResl );
+    mpReslBox->SetValue( (sal_uLong)fResl );
 
     if( mbDragEnable )
     {
@@ -789,15 +786,15 @@ void SaneDlg::Paint( const Rectangle& rRect )
 
 void SaneDlg::DisableOption()
 {
-    maBoolCheckBox.Show( false );
-    maStringEdit.Show( false );
-    maNumericEdit.Show( false );
-    maQuantumRangeBox.Show( false );
-    maStringRangeBox.Show( false );
-    maButtonOption.Show( false );
-    maVectorBox.Show( false );
-    maVectorTxt.Show( false );
-    maOptionDescTxt.Show( false );
+    mpBoolCheckBox->Show( false );
+    mpStringEdit->Show( false );
+    mpNumericEdit->Show( false );
+    mpQuantumRangeBox->Show( false );
+    mpStringRangeBox->Show( false );
+    mpButtonOption->Show( false );
+    mpVectorBox->Show( false );
+    mpVectorTxt->Show( false );
+    mpOptionDescTxt->Show( false );
 }
 
 void SaneDlg::EstablishBoolOption()
@@ -807,10 +804,9 @@ void SaneDlg::EstablishBoolOption()
     bSuccess = mrSane.GetOptionValue( mnCurrentOption, bValue );
     if( bSuccess )
     {
-        maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-        maOptionDescTxt.Show( true );
-        maBoolCheckBox.Check( bValue );
-        maBoolCheckBox.Show( true );
+        mpBoolCheckBox->SetText( mrSane.GetOptionName( mnCurrentOption ) );
+        mpBoolCheckBox->Check( bValue );
+        mpBoolCheckBox->Show( true );
     }
 }
 
@@ -822,25 +818,25 @@ void SaneDlg::EstablishStringOption()
     bSuccess = mrSane.GetOptionValue( mnCurrentOption, aValue );
     if( bSuccess )
     {
-        maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-        maOptionDescTxt.Show( true );
-        maStringEdit.SetText(OStringToOUString(aValue, osl_getThreadTextEncoding()));
-        maStringEdit.Show( true );
+        mpOptionDescTxt->SetText( mrSane.GetOptionName( mnCurrentOption ) );
+        mpOptionDescTxt->Show( true );
+        mpStringEdit->SetText(OStringToOUString(aValue, osl_getThreadTextEncoding()));
+        mpStringEdit->Show( true );
     }
 }
 
 void SaneDlg::EstablishStringRange()
 {
     const char** ppStrings = mrSane.GetStringConstraint( mnCurrentOption );
-    maStringRangeBox.Clear();
+    mpStringRangeBox->Clear();
     for( int i = 0; ppStrings[i] != 0; i++ )
-        maStringRangeBox.InsertEntry( OUString( ppStrings[i], strlen(ppStrings[i]), osl_getThreadTextEncoding() ) );
+        mpStringRangeBox->InsertEntry( OUString( ppStrings[i], strlen(ppStrings[i]), osl_getThreadTextEncoding() ) );
     OString aValue;
     mrSane.GetOptionValue( mnCurrentOption, aValue );
-    maStringRangeBox.SelectEntry(OStringToOUString(aValue, osl_getThreadTextEncoding()));
-    maStringRangeBox.Show( true );
-    maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-    maOptionDescTxt.Show( true );
+    mpStringRangeBox->SelectEntry(OStringToOUString(aValue, osl_getThreadTextEncoding()));
+    mpStringRangeBox->Show( true );
+    mpOptionDescTxt->SetText( mrSane.GetOptionName( mnCurrentOption ) );
+    mpOptionDescTxt->Show( true );
 }
 
 void SaneDlg::EstablishQuantumRange()
@@ -862,26 +858,26 @@ void SaneDlg::EstablishQuantumRange()
     else if( nValues > 0 )
     {
         char pBuf[ 256 ];
-        maQuantumRangeBox.Clear();
+        mpQuantumRangeBox->Clear();
         mfMin = mpRange[ 0 ];
         mfMax = mpRange[ nValues-1 ];
         for( int i = 0; i < nValues; i++ )
         {
             sprintf( pBuf, "%g", mpRange[ i ] );
-            maQuantumRangeBox.InsertEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
+            mpQuantumRangeBox->InsertEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
         double fValue;
         if( mrSane.GetOptionValue( mnCurrentOption, fValue, mnCurrentElement ) )
         {
             sprintf( pBuf, "%g", fValue );
-            maQuantumRangeBox.SelectEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
+            mpQuantumRangeBox->SelectEntry( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
         }
-        maQuantumRangeBox.Show( true );
+        mpQuantumRangeBox->Show( true );
         OUString aText( mrSane.GetOptionName( mnCurrentOption ) );
         aText += " ";
         aText += mrSane.GetOptionUnitName( mnCurrentOption );
-        maOptionDescTxt.SetText( aText );
-        maOptionDescTxt.Show( true );
+        mpOptionDescTxt->SetText( aText );
+        mpOptionDescTxt->Show( true );
     }
 }
 
@@ -903,18 +899,18 @@ void SaneDlg::EstablishNumericOption()
         sprintf( pBuf, " < %g ; %g >", mfMin, mfMax );
         aText += OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() );
     }
-    maOptionDescTxt.SetText( aText );
-    maOptionDescTxt.Show( true );
+    mpOptionDescTxt->SetText( aText );
+    mpOptionDescTxt->Show( true );
     sprintf( pBuf, "%g", fValue );
-    maNumericEdit.SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
-    maNumericEdit.Show( true );
+    mpNumericEdit->SetText( OUString( pBuf, strlen(pBuf), osl_getThreadTextEncoding() ) );
+    mpNumericEdit->Show( true );
 }
 
 void SaneDlg::EstablishButtonOption()
 {
-    maOptionDescTxt.SetText( mrSane.GetOptionName( mnCurrentOption ) );
-    maOptionDescTxt.Show( true );
-    maButtonOption.Show( true );
+    mpOptionDescTxt->SetText( mrSane.GetOptionName( mnCurrentOption ) );
+    mpOptionDescTxt->Show( true );
+    mpButtonOption->Show( true );
 }
 
 #define RECT_SIZE_PIX 7
@@ -1149,10 +1145,10 @@ void SaneDlg::UpdateScanArea( bool bSend )
     Point aUL = GetLogicPos( maTopLeft );
     Point aBR = GetLogicPos( maBottomRight );
 
-    maLeftField.SetValue( aUL.X() );
-    maTopField.SetValue( aUL.Y() );
-    maRightField.SetValue( aBR.X() );
-    maBottomField.SetValue( aBR.Y() );
+    mpLeftField->SetValue( aUL.X() );
+    mpTopField->SetValue( aUL.Y() );
+    mpRightField->SetValue( aBR.X() );
+    mpBottomField->SetValue( aBR.Y() );
 
     if( ! bSend )
         return;
@@ -1255,7 +1251,7 @@ void SaneDlg::SaveState()
     aConfig.DeleteGroup( "SANE" );
     aConfig.SetGroup( "SANE" );
     aConfig.WriteKey( "SO_LastSANEDevice",
-        OUStringToOString(maDeviceBox.GetSelectEntry(), RTL_TEXTENCODING_UTF8) );
+        OUStringToOString(mpDeviceBox->GetSelectEntry(), RTL_TEXTENCODING_UTF8) );
 
     static char const* pSaveOptions[] = {
         "resolution",
