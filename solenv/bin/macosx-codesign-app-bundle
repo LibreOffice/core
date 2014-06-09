@@ -19,6 +19,8 @@ for V in \
     fi
 done
 
+echo "codesigning using MACSOX_CODESIGNING_IDENTITY=[${MACOSX_CODESIGNING_IDENTITY?}]"
+
 APP_BUNDLE="$1"
 
 # Sign dylibs
@@ -33,8 +35,15 @@ APP_BUNDLE="$1"
 # First sign all files that can use the default identifier in the hope
 # that codesign will contact the timestamp server just once for all
 # mentioned on the command line.
+#
+# On Mavericks also would like to have data files signed...
+# add some where it makes sense. Make a depth-first search to sign the contents
+# of e.g. the spotlight plugin before attempting to sign the plugin itself
 
-find $APP_BUNDLE \( -name '*.dylib' -or -name '*.so' \) ! -type l | \
+find -d $APP_BUNDLE \( -name '*.dylib' -or -name '*.so' -or -name '*.fodt' \
+        -or -name 'schema.strings' -or -name 'schema.xml' -or -name '*.mdimporter' \
+        -or -name '*.jar' -or -name '*.jnilib' -or -name 'LICENSE' -or -name 'LICENSE.html' \
+        -or -name '*.applescript' \) ! -type l | grep -v "LibreOfficePython\.framework" | \
 xargs codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY"
 
 find $APP_BUNDLE -name '*.dylib.*' ! -type l | \
@@ -55,8 +64,13 @@ done
 # completeness.
 
 for framework in `find $APP_BUNDLE -name '*.framework' -type d`; do \
+    fn="$(basename $framework)"
+    fn=${fn%.*}
     for version in $framework/Versions/*; do \
-        if test ! -L $version -a -d $version; then codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version; fi; \
+        if test ! -L $version -a -d $version; then
+            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version/$fn
+            codesign --force --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" $version
+        fi; \
     done; \
 done
 
@@ -67,12 +81,16 @@ done
 # all of our non-code "resources").
 #
 # At this stage we also attach the entitlements in the sandboxing case
+#
+# Also omit some files from the Bunlde's seal via the resource-rules
+# (bootstraprc and similar that the user might adjust and image files)
+# See also https://developer.apple.com/library/mac/technotes/tn2206/
 
 if test "$ENABLE_MACOSX_SANDBOX" = "TRUE"; then
     entitlements="--entitlements $BUILDDIR/lo.xcent"
 fi
 
 id=`echo ${MACOSX_APP_NAME} | tr ' ' '-'`
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" --resource-rules "$SRCDIR/setup_native/source/mac/CodesignRules.plist" --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements $APP_BUNDLE
 
 exit 0
