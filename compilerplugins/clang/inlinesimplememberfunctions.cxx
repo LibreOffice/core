@@ -171,6 +171,12 @@ bool InlineSimpleMemberFunctions::VisitCXXMethodDecl(const CXXMethodDecl * funct
                         "inlinesimpleaccessmethods",
                         functionDecl->getSourceRange().getBegin())
                       << functionDecl->getSourceRange();
+                    // display the location of the class member declaration
+                    report(
+                        DiagnosticsEngine::Note,
+                        "inlinesimpleaccessmethods",
+                        functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
+                      << functionDecl->getCanonicalDecl()->getSourceRange();
                 }
                 return true;
             }
@@ -197,6 +203,7 @@ bool InlineSimpleMemberFunctions::isInUnoIncludeFile(SourceLocation spellingLoca
            || name.startswith(SRCDIR "/include/systools/")
            || name.startswith(SRCDIR "/include/typelib/")
            || name.startswith(SRCDIR "/include/uno/")
+           || name.startswith(SRCDIR "/workdir/")
            || name == SRCDIR "/include/comphelper/implbase_var.hxx");
 }
 
@@ -239,6 +246,12 @@ bool InlineSimpleMemberFunctions::rewrite(const CXXMethodDecl * functionDecl) {
     p1 = compiler.getSourceManager().getCharacterData( functionDecl->getBody()->getLocStart() );
     p2 = compiler.getSourceManager().getCharacterData( functionDecl->getBody()->getLocEnd() );
     std::string s1( p1, p2 - p1 + 1);
+
+    /* we can't safely move around stuff containing comments, we mess up the resulting code */
+    if ( s1.find("/*") != std::string::npos || s1.find("//") != std::string::npos ) {
+        return false;
+    }
+
     // strip linefeeds and any double-spaces, so we have a max of one space between tokens
     s1 = ReplaceString(s1, "\r", "");
     s1 = ReplaceString(s1, "\n", "");
