@@ -102,8 +102,8 @@ SdSnapLineDlg::SdSnapLineDlg(
     m_pMtrFldY->SetLast( nValue );
 
     // set values
-    nXValue = ((const SfxUInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
-    nYValue = ((const SfxUInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_Y)).GetValue();
+    nXValue = ((const SfxInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
+    nYValue = ((const SfxInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_Y)).GetValue();
     nXValue = Fraction(nXValue) / aUIScale;
     nYValue = Fraction(nYValue) / aUIScale;
     SetMetricValue( *m_pMtrFldX, nXValue, SFX_MAPUNIT_100TH_MM);
