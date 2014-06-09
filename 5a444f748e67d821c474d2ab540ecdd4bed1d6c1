@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_271a7e6f",
+        "filename": "dbaccess/source/ui/dlg/advancedsettings.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-06-09T08:02:45Z",
+      "side": 1,
+      "message": "\"os\" -\u003e \"is\"",
+      "revId": "5a444f748e67d821c474d2ab540ecdd4bed1d6c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
