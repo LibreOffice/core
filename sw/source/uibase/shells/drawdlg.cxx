@@ -33,6 +33,7 @@
 #include "drawsh.hxx"
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
+#include <boost/scoped_ptr.hpp>
 
 void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 {
@@ -54,7 +55,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, pView );
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog( NULL, &aNewAttr, pView ));
                 sal_uInt16 nResult = pDlg->Execute();
 
                 if (nResult == RET_OK)
@@ -67,8 +68,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                         pSh->EndAction();
                     }
                 }
-
-                delete( pDlg );
             }
         }
         break;
@@ -78,10 +77,10 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             bool bHasMarked = pView->AreObjectsMarked();
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
+            boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog( NULL,
                                                                             &aNewAttr,
                                                                             pDoc,
-                                                                            true);
+                                                                            true));
             if (pDlg->Execute() == RET_OK)
             {
                 pSh->StartAction();
@@ -106,7 +105,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                 rBnd.Update(SID_ATTR_FILL_TRANSPARENCE);
                 rBnd.Update(SID_ATTR_FILL_FLOATTRANSPARENCE);
             }
-            delete pDlg;
         }
         break;
 
@@ -121,11 +119,11 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet Factory fail!");
-            SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( NULL,
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxLineTabDialog( NULL,
                     &aNewAttr,
                 pDoc,
                 pObj,
-                bHasMarked);
+                bHasMarked));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if (pDlg->Execute() == RET_OK)
             {
@@ -152,7 +150,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
 
                 GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
             }
-            delete pDlg;
         }
         break;
 
