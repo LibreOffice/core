@@ -3563,6 +3563,15 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79822, "fdo79822.docx")
         return;
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79817,"fdo79817.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:dataBinding", "storeItemID","{9222E47B-A68B-4AEB-9855-21C912B9D3D2}");
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:dataBinding", "xpath","/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

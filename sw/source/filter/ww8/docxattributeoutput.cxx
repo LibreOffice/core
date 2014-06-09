@@ -7518,7 +7518,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
                                            rtl::OUStringToOString( sValue, RTL_TEXTENCODING_UTF8 ).getStr() );
                     }
                 }
-                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding")
+                else if (aPropertyValue.Name == "ooxml:CT_SdtPr_dataBinding" && m_pRunSdtPrDataBindingAttrs == NULL)
                 {
                     uno::Sequence<beans::PropertyValue> aGrabBag;
                     aPropertyValue.Value >>= aGrabBag;
