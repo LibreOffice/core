@@ -81,15 +81,6 @@ File gid_File_Bin_TdeFilePicker
 End
 #endif
 
-#ifdef ENABLE_KDE
-File gid_File_Bin_KdeFilePicker
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Brand_Dir_Program;
-    Name = "kdefilepicker";
-End
-#endif
-
 #ifdef ENABLE_GTK
 File gid_File_Bin_XidFullscreen
     BIN_FILE_BODY;
