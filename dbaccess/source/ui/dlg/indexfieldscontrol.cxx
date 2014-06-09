@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
 #include <vcl/settings.hxx>
+#include <vcl/builder.hxx>
 
 namespace dbaui
 {
@@ -89,17 +90,20 @@ namespace dbaui
     }
 
     // IndexFieldsControl
-    IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix)
-        :EditBrowseBox(_pParent, _rId, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
+    IndexFieldsControl::IndexFieldsControl( Window* _pParent, WinBits nWinStyle)
+        :EditBrowseBox(_pParent, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, nWinStyle, BROWSER_STANDARD_FLAGS)
         ,m_aSeekRow(m_aFields.end())
         ,m_pSortingCell(NULL)
         ,m_pFieldNameCell(NULL)
-        ,m_nMaxColumnsInIndex(_nMaxColumnsInIndex)
-        ,m_bAddIndexAppendix(_bAddIndexAppendix)
     {
 
         SetUniqueId( UID_DLGINDEX_INDEXDETAILS_BACK );
         GetDataWindow().SetUniqueId( UID_DLGINDEX_INDEXDETAILS_MAIN );
+    }
+
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDbaIndexFieldsControl(Window *pParent, VclBuilder::stringmap &)
+    {
+        return new IndexFieldsControl (pParent, WB_BORDER | WB_NOTABSTOP);
     }
 
     IndexFieldsControl::~IndexFieldsControl()
@@ -204,8 +208,11 @@ namespace dbaui
         return EditBrowseBox::GetTotalCellWidth(_nRow, _nColId);
     }
 
-    void IndexFieldsControl::Init(const Sequence< OUString >& _rAvailableFields)
+    void IndexFieldsControl::Init(const Sequence< OUString >& _rAvailableFields, sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix)
     {
+        m_nMaxColumnsInIndex = _nMaxColumnsInIndex;
+        m_bAddIndexAppendix = _bAddIndexAppendix;
+
         RemoveColumns();
 
         // for the width: both columns together should be somewhat smaller than the whole window (without the scrollbar)
