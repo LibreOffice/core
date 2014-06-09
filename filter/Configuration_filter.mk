@@ -318,6 +318,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_writer_types.xcu,filter
 	writer_MS_Word_95_Vorlage \
 	writer_MS_Word_97 \
 	writer_MS_Word_97_Vorlage \
+	writer_ODT_FlatXML \
 	writer_Rich_Text_Format \
 	writer_StarOffice_XML_Writer \
 	writer_WordPerfect_Document \
@@ -378,6 +379,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_writer_filters.xcu,fi
 	MS_Word_95_Vorlage \
 	MS_Word_97 \
 	MS_Word_97_Vorlage \
+	ODT_FlatXML \
 	Rich_Text_Format \
 	StarOffice_XML__Writer_ \
 	WordPerfect \
@@ -511,6 +513,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 # fcfg_calc
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/source/config/fragments/types,\
 	calc_DIF \
+	calc_ODS_FlatXML \
 	generic_HTML \
 	generic_Text \
 	calc_Lotus \
@@ -549,6 +552,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_calc_types.xcu,filter/s
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_calc_filters.xcu,filter/source/config/fragments/filters,\
 	DIF \
 	HTML__StarCalc_ \
+	ODS_FlatXML \
 	Lotus \
 	QPro \
 	MS_Excel_4_0 \
@@ -606,6 +610,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 
 # fcfg_draw
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/source/config/fragments/types,\
+	draw_ODG_FlatXML \
 	draw_StarOffice_XML_Draw \
 	draw_StarOffice_XML_Draw_Template \
 	pdf_Portable_Document_Format \
@@ -627,6 +632,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_draw_types.xcu,filter/s
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_draw_filters.xcu,filter/source/config/fragments/filters,\
+	ODG_FlatXML \
 	StarOffice_XML__Draw_ \
 	draw_StarOffice_XML_Draw_Template \
 	draw_pdf_Export \
@@ -660,6 +666,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_impress_types.xcu,filte
 	impress_MS_PowerPoint_97 \
 	impress_MS_PowerPoint_97_AutoPlay \
 	impress_MS_PowerPoint_97_Vorlage \
+	impress_ODP_FlatXML \
 	impress_StarOffice_XML_Impress \
 	impress_StarOffice_XML_Impress_Template \
 	pdf_Portable_Document_Format \
@@ -681,6 +688,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_impress_filters.xcu,f
 	MS_PowerPoint_97_AutoPlay \
 	MS_PowerPoint_97_Vorlage \
 	impress_StarOffice_XML_Draw \
+	ODP_FlatXML \
 	StarOffice_XML__Impress_ \
 	impress_StarOffice_XML_Impress_Template \
 	impress_pdf_Export \
@@ -984,11 +992,7 @@ $(call filter_Configuration_add_internal_filters,fcfg_langpack,fcfg_internalgrap
 
 # fcfg_xslt
 $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/source/config/fragments/types,\
-	calc_ODS_FlatXML \
-	draw_ODG_FlatXML \
-	impress_ODP_FlatXML \
 	writer_DocBook_File \
-	writer_ODT_FlatXML \
 	XHTML_File \
 	Unified_Office_Format_text \
 	Unified_Office_Format_spreadsheet \
@@ -997,10 +1001,6 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_xslt_types.xcu,filter/s
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_xslt_filters.xcu,filter/source/config/fragments/filters,\
 	DocBook_File \
-	ODG_FlatXML \
-	ODP_FlatXML \
-	ODS_FlatXML \
-	ODT_FlatXML \
 	XHTML_Calc_File \
 	XHTML_Draw_File \
 	XHTML_Impress_File \
