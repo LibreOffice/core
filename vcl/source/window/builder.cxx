@@ -1420,11 +1420,15 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkLabel")
     {
+        WinBits nWinStyle = WB_CENTER|WB_VCENTER|WB_3DLOOK;
+        OString sBorder = extractCustomProperty(rMap);
+        if (!sBorder.isEmpty())
+            nWinStyle |= WB_BORDER;
         extractMnemonicWidget(id, rMap);
         if (extractSelectable(rMap))
-            pWindow = new SelectableFixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+            pWindow = new SelectableFixedText(pParent, nWinStyle);
         else
-            pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+            pWindow = new FixedText(pParent, nWinStyle);
     }
     else if (name == "GtkImage")
     {
