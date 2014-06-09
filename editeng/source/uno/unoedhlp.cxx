@@ -45,15 +45,7 @@ sal_uLong SvxEditSourceHint::GetValue() const
     return TextHint::GetValue();
 }
 
-sal_Int32 SvxEditSourceHint::GetStartValue() const
-{
-    return mnStart;
-}
 
-sal_Int32 SvxEditSourceHint::GetEndValue() const
-{
-    return mnEnd;
-}
 TYPEINIT1( SvxEditSourceHintEndPara , SvxEditSourceHint );
 
 

@@ -72,7 +72,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable > getAddIn() const;
 
     void setUpdateAddIn( bool bUpdateAddIn );
-    bool getUpdateAddIn() const;
+    bool getUpdateAddIn() const { return m_bUpdateAddIn;}
 
     void setBaseDiagram( const OUString& rBaseDiagram );
     OUString getBaseDiagram() const;

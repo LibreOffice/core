@@ -185,10 +185,6 @@ awt::Point SAL_CALL DummyXShape::getPosition()
     return maPosition;
 }
 
-const awt::Point& DummyXShape::getPos()
-{
-    return maPosition;
-}
 
 void SAL_CALL DummyXShape::setPosition( const awt::Point& rPoint )
     throw(uno::RuntimeException, std::exception)

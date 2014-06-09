@@ -70,7 +70,7 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) SAL_OVERRIDE;
 
-    SfxBindings* GetBindings();
+    SfxBindings* GetBindings() { return mpBindings;}
 
     const static sal_Int32 DEFAULT_CENTERX;
     const static sal_Int32 DEFAULT_CENTERY;

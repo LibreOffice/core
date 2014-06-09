@@ -394,10 +394,6 @@ ScDBQueryParamBase::~ScDBQueryParamBase()
 {
 }
 
-ScDBQueryParamBase::DataType ScDBQueryParamBase::GetType() const
-{
-    return meType;
-}
 
 ScDBQueryParamInternal::ScDBQueryParamInternal() :
     ScDBQueryParamBase(ScDBQueryParamBase::INTERNAL),

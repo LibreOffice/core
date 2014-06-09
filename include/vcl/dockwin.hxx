@@ -140,7 +140,7 @@ public:
 
     void            Lock();
     void            Unlock();
-    bool            IsLocked() const;
+    bool            IsLocked() const { return mbLocked;}
 
     void            StartPopupMode( ToolBox* pParentToolBox, sal_uLong nPopupModeFlags );
     bool            IsInPopupMode() const;
@@ -170,7 +170,7 @@ public:
     FloatingWindow* GetFloatingWindow() const { return mpFloatWin; }
 
     void            SetFloatStyle( WinBits nWinStyle );
-    WinBits         GetFloatStyle() const;
+    WinBits         GetFloatStyle() const { return mnFloatBits;}
 
     virtual void    setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,

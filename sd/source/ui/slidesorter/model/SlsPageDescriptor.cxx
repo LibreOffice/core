@@ -73,10 +73,6 @@ PageDescriptor::~PageDescriptor (void)
 
 
 
-SdPage* PageDescriptor::GetPage (void) const
-{
-    return mpPage;
-}
 
 
 
@@ -89,10 +85,6 @@ Reference<drawing::XDrawPage> PageDescriptor::GetXDrawPage (void) const
 
 
 
-sal_Int32 PageDescriptor::GetPageIndex (void) const
-{
-    return mnIndex;
-}
 
 
 

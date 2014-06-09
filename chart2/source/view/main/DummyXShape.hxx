@@ -169,7 +169,7 @@ public:
      */
     virtual void render();
 
-    const com::sun::star::awt::Point& getPos(); // internal API
+    const com::sun::star::awt::Point& getPos() { return maPosition;} // internal API
 
 protected:
 

@@ -39,9 +39,9 @@ public:
 
     virtual NodeMap & getMembers() SAL_OVERRIDE;
 
-    Type getStaticType() const;
+    Type getStaticType() const { return staticType_;}
 
-    bool isNillable() const;
+    bool isNillable() const { return nillable_;}
 
 private:
     LocalizedPropertyNode(LocalizedPropertyNode const & other);

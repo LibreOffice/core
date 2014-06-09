@@ -102,8 +102,8 @@ public:
     */
     static ViewShellBase* GetViewShellBase (SfxViewFrame* pFrame);
 
-    DrawDocShell* GetDocShell (void) const;
-    SdDrawDocument* GetDocument (void) const;
+    DrawDocShell* GetDocShell (void) const { return mpDocShell;}
+    SdDrawDocument* GetDocument (void) const { return mpDocument;}
 
     /** Callback function for general slot calls.  At the moment these are
         slots for switching the pane docking windows on and off.

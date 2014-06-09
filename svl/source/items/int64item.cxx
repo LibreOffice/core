@@ -95,10 +95,6 @@ SfxPoolItem* SfxInt64Item::Clone( SfxItemPool* /*pOther*/ ) const
     return new SfxInt64Item(*this);
 }
 
-sal_Int64 SfxInt64Item::GetValue() const
-{
-    return mnValue;
-}
 
 void SfxInt64Item::SetValue( sal_Int64 nVal )
 {

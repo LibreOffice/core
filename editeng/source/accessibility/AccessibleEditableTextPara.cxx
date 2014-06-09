@@ -252,20 +252,12 @@ namespace accessibility
         }
     }
 
-    int AccessibleEditableTextPara::getNotifierClientId() const
-    {
-        return mnNotifierClientId;
-    }
 
     void AccessibleEditableTextPara::SetIndexInParent( sal_Int32 nIndex )
     {
         mnIndexInParent = nIndex;
     }
 
-    sal_Int32 AccessibleEditableTextPara::GetIndexInParent() const
-    {
-        return mnIndexInParent;
-    }
 
     void AccessibleEditableTextPara::SetParagraphIndex( sal_Int32 nIndex )
     {
@@ -302,10 +294,6 @@ namespace accessibility
         }
     }
 
-    sal_Int32 AccessibleEditableTextPara::GetParagraphIndex() const
-    {
-        return mnParagraphIndex;
-    }
 
     void AccessibleEditableTextPara::Dispose()
     {

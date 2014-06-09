@@ -1187,10 +1187,6 @@ SvxFieldItem ScEditFieldObj::CreateFieldItem()
     return SvxFieldItem(*getData(), EE_FEATURE_FIELD);
 }
 
-sal_Int32 ScEditFieldObj::GetFieldType() const
-{
-    return meType;
-}
 
 void ScEditFieldObj::DeleteField()
 {

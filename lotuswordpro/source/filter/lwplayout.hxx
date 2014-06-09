@@ -410,7 +410,11 @@ public:
     virtual bool IsAnchorFrame() SAL_OVERRIDE;
     virtual bool IsAnchorCell() SAL_OVERRIDE;
     virtual void XFConvertFrame(XFContentContainer* /*pCont*/, sal_Int32 /*nStart*/ = 0, sal_Int32 /*nEnd*/ = 0, bool /*bAll*/ = false) {}
-    rtl::Reference<XFFont> GetFont();
+    /**
+     * @descr:   Get font style for setting position of frame
+     *
+     */
+    rtl::Reference<XFFont> GetFont() { return m_pFont; }
     void SetFont(rtl::Reference<XFFont> const & pFont);
     enum WrapType
     {

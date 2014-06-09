@@ -1236,10 +1236,6 @@ void SdrPageProperties::SetStyleSheet(SfxStyleSheet* pStyleSheet)
     ImpPageChange(*mpSdrPage);
 }
 
-SfxStyleSheet* SdrPageProperties::GetStyleSheet() const
-{
-    return mpStyleSheet;
-}
 
 
 

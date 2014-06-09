@@ -47,10 +47,10 @@ public:
     virtual int getMandatory() const;
 
     void setLayer(int layer);
-    int getLayer() const;
+    int getLayer() const { return layer_;}
 
     void setFinalized(int layer);
-    int getFinalized() const;
+    int getFinalized() const { return finalized_;}
 
     rtl::Reference< Node > getMember(OUString const & name);
 

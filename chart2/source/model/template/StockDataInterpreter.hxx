@@ -52,7 +52,7 @@ protected:
 private:
     StockChartTypeTemplate::StockVariant m_eStockVariant;
 
-    StockChartTypeTemplate::StockVariant GetStockVariant() const;
+    StockChartTypeTemplate::StockVariant GetStockVariant() const { return m_eStockVariant;}
 };
 
 } // namespace chart

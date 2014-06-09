@@ -285,7 +285,7 @@ public:
 
     void            ScannerEvent( const ::com::sun::star::lang::EventObject& rEventObject );
 
-    bool IsLayerModeActive (void) const;
+    bool IsLayerModeActive (void) const { return mbIsLayerModeActive;}
 
     sal_uInt16*         GetSlotArray() const { return mpSlotArray; }
 

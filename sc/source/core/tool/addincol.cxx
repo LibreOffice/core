@@ -1346,10 +1346,6 @@ ScUnoAddInCall::~ScUnoAddInCall()
     // pFuncData is deleted with ScUnoAddInCollection
 }
 
-bool ScUnoAddInCall::ValidParamCount()
-{
-    return bValidCount;
-}
 
 ScAddInArgumentType ScUnoAddInCall::GetArgType( long nPos )
 {

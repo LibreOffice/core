@@ -84,7 +84,7 @@ private:
     void                ImplClearGraphics( bool bCreateSwapInfo );
     void                ImplClear();
 
-    GraphicType         ImplGetType() const;
+    GraphicType         ImplGetType() const { return meType;}
     void                ImplSetDefaultType();
     bool                ImplIsSupportedGraphic() const;
 
@@ -127,14 +127,14 @@ private:
 
 private:
 
-    GraphicReader*      ImplGetContext();
+    GraphicReader*      ImplGetContext() { return mpContext;}
     void                ImplSetContext( GraphicReader* pReader );
 
 private:
 
     void                ImplSetDocFileName( const OUString& rName, sal_uLong nFilePos );
     const OUString&     ImplGetDocFileName() const;
-    sal_uLong               ImplGetDocFilePos() const;
+    sal_uLong               ImplGetDocFilePos() const { return mnDocFilePos;}
 
     bool                ImplReadEmbedded( SvStream& rIStream, bool bSwap = false );
     bool                ImplWriteEmbedded( SvStream& rOStream );
@@ -145,7 +145,7 @@ private:
     bool                ImplSwapOut();
     bool                ImplSwapOut( SvStream* pOStm );
 
-    bool                ImplIsSwapOut() const;
+    bool                ImplIsSwapOut() const { return mbSwapOut;}
 
     void                ImplSetLink( const GfxLink& );
     GfxLink             ImplGetLink();

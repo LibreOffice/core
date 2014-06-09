@@ -49,8 +49,8 @@ public:
     //virtual void Paint(const Rectangle& rect);
 
     //add
-    short GetLastCustomState();
-    long  GetLastCustomValue();
+    short GetLastCustomState() { return mnLastCus;}
+    long  GetLastCustomValue() { return mnCustomKern;}
     //add end
 
 private:

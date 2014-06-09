@@ -1972,9 +1972,6 @@ void Access::initBroadcasterAndChanges(
     }
 }
 
-bool Access::isDisposed() const {
-    return disposed_;
-}
 
 Access::ModifiedChild::ModifiedChild():
     directlyModified(false)

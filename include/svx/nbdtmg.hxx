@@ -231,7 +231,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         void SetItems(const SfxItemSet* pArg) { pSet = pArg;StoreBulCharFmtName_impl();StoreMapUnit_impl();}
     protected:
         OUString GetBulCharFmtName();
-        SfxMapUnit GetMapUnit();
+        SfxMapUnit GetMapUnit() { return eCoreUnit;}
     protected:
         bool    bIsLoading;
         void    ImplLoad(const OUString& filename);

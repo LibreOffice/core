@@ -42,7 +42,7 @@ public:
 
     virtual void StartElement( const Reference< xml::sax::XAttributeList >& rAttrList ) SAL_OVERRIDE;
 
-    bool IsCategoryAxis() const;
+    bool IsCategoryAxis() const { return m_bIsCategoryAxis;}
 
 private:
     bool m_bIsCategoryAxis;
@@ -118,10 +118,6 @@ void XMLAxisOOoContext::StartElement(
     XMLPersElemContentTContext::StartElement( xAttrList );
 }
 
-bool XMLAxisOOoContext::IsCategoryAxis() const
-{
-    return m_bIsCategoryAxis;
-}
 
 
 TYPEINIT1( XMLChartPlotAreaOOoTContext, XMLProcAttrTransformerContext )

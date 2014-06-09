@@ -75,7 +75,7 @@ public:
 
     OUString getLocale() const;
 
-    bool isUpdate() const;
+    bool isUpdate() const { return update_;}
 
     void setAlive(bool b);
 

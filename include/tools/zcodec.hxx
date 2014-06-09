@@ -75,7 +75,7 @@ public:
     void            SetBreak( sal_uIntPtr );
     sal_uIntPtr     GetBreak();
     void            SetCRC( sal_uIntPtr nCurrentCRC );
-    sal_uIntPtr     GetCRC();
+    sal_uIntPtr     GetCRC() { return mnCRC;}
 };
 
 #endif

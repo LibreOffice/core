@@ -198,10 +198,6 @@ bool TypeGroupConverter::isPercent() const
     return maTypeInfo.mbSupportsStacking && (mrModel.mnGrouping == XML_percentStacked);
 }
 
-bool TypeGroupConverter::is3dChart() const
-{
-    return mb3dChart;
-}
 
 bool TypeGroupConverter::isWall3dChart() const
 {

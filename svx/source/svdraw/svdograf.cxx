@@ -1210,10 +1210,6 @@ void SdrGrafObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     ImpSetAttrToGrafInfo();
 }
 
-bool SdrGrafObj::IsMirrored() const
-{
-    return bMirrored;
-}
 
 void SdrGrafObj::SetMirrored( bool _bMirrored )
 {

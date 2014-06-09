@@ -441,14 +441,6 @@ IMPL_LINK(TextCharacterSpacingControl, KerningModifyHdl, MetricField*, EMPTYARG)
     mpBindings->GetDispatcher()->Execute(SID_ATTR_CHAR_KERNING, SFX_CALLMODE_RECORD, &aKernItem, 0L);
     return 0;
 }
-short  TextCharacterSpacingControl::GetLastCustomState()
-{
-    return mnLastCus;
-}
-long  TextCharacterSpacingControl::GetLastCustomValue()
-{
-    return mnCustomKern;
-}
 
 }} // end of namespace sidebar
 

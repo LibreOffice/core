@@ -88,7 +88,7 @@ namespace framework
             OUString getUINameFromCommand( const OUString& rCommandURL );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > getDispatchFromCommandURL( const OUString& rCommandURL );
             void addCommand( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const OUString& rCommandURL, const OUString& aLabel );
-            bool isContextSensitiveToolbarNonVisible();
+            bool isContextSensitiveToolbarNonVisible() { return m_bResetActive;}
 
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >                m_xContext;
             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                m_xPersistentWindowState;

@@ -52,9 +52,9 @@ class SwAccessibleChild
 
         bool IsValid() const;
 
-        const SwFrm* GetSwFrm() const;
-        const SdrObject* GetDrawObject() const;
-        Window* GetWindow() const;
+        const SwFrm* GetSwFrm() const { return mpFrm; }
+        const SdrObject* GetDrawObject() const { return mpDrawObj; }
+        Window* GetWindow() const { return mpWindow; }
 
         const SwFrm* GetParent( const bool bInPagePreview ) const;
 

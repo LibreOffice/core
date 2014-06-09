@@ -85,17 +85,17 @@ public:
     void setTable(const SwTable * pTable);
     void setRect(const SwRect & rRect);
 
-    sal_uInt32 getDepth() const;
-    sal_uInt32 getCell() const;
-    sal_uInt32 getRow() const;
-    sal_uInt32 getShadowsBefore() const;
-    sal_uInt32 getShadowsAfter() const;
-    bool isEndOfCell() const;
-    bool isEndOfLine() const;
-    bool isFirstInTable() const;
+    sal_uInt32 getDepth() const { return mnDepth;}
+    sal_uInt32 getCell() const { return mnCell;}
+    sal_uInt32 getRow() const { return mnRow;}
+    sal_uInt32 getShadowsBefore() const { return mnShadowsBefore;}
+    sal_uInt32 getShadowsAfter() const { return mnShadowsAfter;}
+    bool isEndOfCell() const { return mbEndOfCell;}
+    bool isEndOfLine() const { return mbEndOfLine;}
+    bool isFirstInTable() const { return mbFirstInTable;}
     bool isVertMerge() const;
-    const SwTableBox * getTableBox() const;
-    const SwTable * getTable() const;
+    const SwTableBox * getTableBox() const { return mpTableBox;}
+    const SwTable * getTable() const { return mpTable;}
     const SwRect & getRect() const;
 
     const SwNode * getNode() const;
@@ -194,15 +194,15 @@ public:
     void setNextNode(const SwNode * pNode);
     void setRect(const SwRect & rRect);
 
-    WW8TableInfo * getParent() const;
+    WW8TableInfo * getParent() const { return mpParent;}
     sal_uInt32 getDepth() const;
     bool isEndOfLine() const;
     bool isEndOfCell() const;
     bool isFirstInTable() const;
-    const SwNode * getNode() const;
+    const SwNode * getNode() const { return mpNode;}
     const SwTableBox * getTableBox() const;
-    WW8TableNodeInfo * getNext() const;
-    const SwNode * getNextNode() const;
+    WW8TableNodeInfo * getNext() const { return mpNext;}
+    const SwNode * getNextNode() const { return mpNextNode;}
     const SwRect & getRect() const;
 
     const Inners_t & getInners() const;

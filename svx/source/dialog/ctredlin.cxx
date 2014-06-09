@@ -509,10 +509,6 @@ void SvxTPView::EnableUndo(bool nFlag)
     m_pUndo->Enable(nFlag);
 }
 
-SvxRedlinTable* SvxTPView::GetTableControl()
-{
-    return m_pViewData;
-}
 
 IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
 {
@@ -888,10 +884,6 @@ void SvxTPFilter::ShowAction(bool bShow)
     }
 }
 
-ListBox* SvxTPFilter::GetLbAction()
-{
-    return m_pLbAction;
-}
 
 IMPL_LINK( SvxTPFilter, SelDateHdl, ListBox*, pLb )
 {
@@ -1123,15 +1115,7 @@ void SvxAcceptChgCtr::ShowViewPage()
     SetCurPageId(m_nViewPageId);
 }
 
-SvxTPFilter* SvxAcceptChgCtr::GetFilterPage()
-{
-    return pTPFilter;
-}
 
-SvxTPView* SvxAcceptChgCtr::GetViewPage()
-{
-    return pTPView;
-}
 
 SvxRedlinTable* SvxAcceptChgCtr::GetViewTable()
 {

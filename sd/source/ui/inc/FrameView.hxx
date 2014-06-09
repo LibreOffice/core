@@ -94,7 +94,7 @@ public:
     PageKind GetPageKindOnLoad() const { return mePageKindOnLoad; }
 
     void SetSelectedPage (sal_uInt16 nPage);
-    sal_uInt16 GetSelectedPage () const;
+    sal_uInt16 GetSelectedPage () const { return mnSelectedPage;}
 
     /** is used in FrameView::ReadUserDataSequence() only to store the
         page that was selected while last saving this document */
@@ -114,7 +114,7 @@ public:
     /** Return the value of the edit mode as it was when the document was
         loaded.
     */
-    EditMode GetViewShEditModeOnLoad (void) const;
+    EditMode GetViewShEditModeOnLoad (void) const { return meEditModeOnLoad;}
 
     void SetLayerMode(bool bMode)
                  { mbLayerMode = bMode; }
@@ -141,14 +141,14 @@ public:
     /** Return the type of the view shell previously associated with this
         frame view.
     */
-    ViewShell::ShellType GetPreviousViewShellType (void) const;
+    ViewShell::ShellType GetPreviousViewShellType (void) const { return mePreviousViewShellType;}
 
     /** Remember the type of the view shell at the time when the document is
         loaded or, rather, when the ViewShellBase is constructed.
     */
     void SetViewShellTypeOnLoad (ViewShell::ShellType eType);
 
-    ViewShell::ShellType GetViewShellTypeOnLoad (void) const;
+    ViewShell::ShellType GetViewShellTypeOnLoad (void) const { return meViewShellTypeOnLoad;}
 
     void SetPresentationViewShellId(sal_uInt16 nId)
                  { mnPresViewShellId = nId; }
@@ -167,7 +167,7 @@ public:
     double GetTabCtrlPercent() const { return mnTabCtrlPercent; }
 
     void SetIsNavigatorShowingAllShapes (const bool bIsNavigatorShowingAllShapes);
-    bool IsNavigatorShowingAllShapes (void) const;
+    bool IsNavigatorShowingAllShapes (void) const { return mbIsNavigatorShowingAllShapes;}
 
     virtual void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );

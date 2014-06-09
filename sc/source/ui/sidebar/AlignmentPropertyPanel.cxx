@@ -372,10 +372,6 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     }
 }
 
-SfxBindings* AlignmentPropertyPanel::GetBindings()
-{
-    return mpBindings;
-}
 
 void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
 {

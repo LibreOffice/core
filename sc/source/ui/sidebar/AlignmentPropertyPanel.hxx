@@ -56,7 +56,7 @@ public:
         const SfxPoolItem* pState,
         const bool bIsEnabled) SAL_OVERRIDE;
 
-    SfxBindings* GetBindings();
+    SfxBindings* GetBindings() { return mpBindings;}
 
 private:
     //ui controls

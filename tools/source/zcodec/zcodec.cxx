@@ -318,10 +318,6 @@ void ZCodec::SetCRC( sal_uIntPtr nCRC )
     mnCRC = nCRC;
 }
 
-sal_uIntPtr ZCodec::GetCRC()
-{
-    return mnCRC;
-}
 
 void ZCodec::InitCompress()
 {

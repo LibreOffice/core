@@ -166,18 +166,10 @@ bool SlideSorterModel::SetEditMode (EditMode eEditMode)
 
 
 
-EditMode SlideSorterModel::GetEditMode (void) const
-{
-    return meEditMode;
-}
 
 
 
 
-PageKind SlideSorterModel::GetPageType (void) const
-{
-    return mePageKind;
-}
 
 
 

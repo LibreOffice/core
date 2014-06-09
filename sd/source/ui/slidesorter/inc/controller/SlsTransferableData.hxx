@@ -75,7 +75,7 @@ public:
 
     /** Return the view shell for which the transferable was created.
     */
-    SlideSorterViewShell* GetSourceViewShell (void) const;
+    SlideSorterViewShell* GetSourceViewShell (void) const { return mpViewShell;}
 
 private:
     SlideSorterViewShell* mpViewShell;

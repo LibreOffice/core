@@ -408,10 +408,6 @@ void ScDPObject::SetHeaderLayout (bool bUseGrid)
     mbHeaderLayout = bUseGrid;
 }
 
-bool ScDPObject::GetHeaderLayout() const
-{
-    return mbHeaderLayout;
-}
 
 void ScDPObject::SetOutRange(const ScRange& rRange)
 {

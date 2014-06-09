@@ -88,10 +88,6 @@ void VisibleAreaManager::DeactivateCurrentSlideTracking (void)
 
 
 
-bool VisibleAreaManager::IsCurrentSlideTrackingActive (void) const
-{
-    return mbIsCurrentSlideTrackingActive;
-}
 
 
 

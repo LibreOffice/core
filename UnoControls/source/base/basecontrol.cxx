@@ -737,20 +737,6 @@ const Reference< XGraphics > BaseControl::impl_getGraphicsPeer()
 
 //  protected method
 
-const sal_Int32& BaseControl::impl_getWidth()
-{
-    return m_nWidth;
-}
-
-//  protected method
-
-const sal_Int32& BaseControl::impl_getHeight()
-{
-    return m_nHeight;
-}
-
-//  protected method
-
 WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
     // - used from "createPeer()" to set the values of an ::com::sun::star::awt::WindowDescriptor !!!

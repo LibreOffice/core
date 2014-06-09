@@ -151,7 +151,7 @@ public:
     FileDoesNotExistFilter(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
-    bool exist();
+    bool exist() { return m_bExist;}
     // XCommandEnvironment
     virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
     getInteractionHandler() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -263,10 +263,6 @@ FileDoesNotExistFilter::~FileDoesNotExistFilter()
 {
 };
 
-bool FileDoesNotExistFilter::exist()
-{
-    return m_bExist;
-}
     // XCommandEnvironment
 Reference<css::task::XInteractionHandler >
     FileDoesNotExistFilter::getInteractionHandler() throw (css::uno::RuntimeException, std::exception)

@@ -61,7 +61,7 @@ namespace svt
 
         // some generic functions
         void     enableInterceptions( EInterceptedInteractions eInterceptions );
-        bool wasUsed            () const;
+        bool wasUsed            () const { return m_bUsed; }
         void     resetUseState      ();
         void     forgetRequest      ();
 

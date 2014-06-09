@@ -202,7 +202,7 @@ public:
     GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
 
     boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer();
-    bool IsLinkedInputStreamReady() const;
+    bool IsLinkedInputStreamReady() const { return mbLinkedInputStreamReady;}
     void TriggerAsyncRetrieveInputStream();
     void ApplyInputStream(
         com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,

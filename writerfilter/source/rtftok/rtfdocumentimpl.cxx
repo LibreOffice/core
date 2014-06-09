@@ -413,10 +413,6 @@ void RTFDocumentImpl::checkFirstRun()
     }
 }
 
-bool RTFDocumentImpl::getFirstRun()
-{
-    return m_bFirstRun;
-}
 
 void RTFDocumentImpl::setNeedPar(bool bNeedPar)
 {

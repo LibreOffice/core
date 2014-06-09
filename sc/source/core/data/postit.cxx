@@ -509,10 +509,6 @@ ScPostIt* ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const
     return bCloneCaption ? new ScPostIt( rDestDoc, rDestPos, *this ) : new ScPostIt( rDestDoc, rDestPos, maNoteData, false );
 }
 
-const ScNoteData& ScPostIt::GetNoteData() const
-{
-    return maNoteData;
-}
 
 const OUString& ScPostIt::GetDate() const
 {

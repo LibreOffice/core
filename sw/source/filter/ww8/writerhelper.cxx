@@ -258,10 +258,6 @@ namespace sw
         }
     }
 
-    bool Frame::IsInline() const
-    {
-        return mbIsInline;
-    }
 
     void Frame::ForceTreatAsInline()
     {

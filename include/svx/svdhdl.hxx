@@ -468,7 +468,7 @@ public:
     void ResetFocusHdl();
 
     // Access to View
-    SdrMarkView* GetView() const;
+    SdrMarkView* GetView() const { return pView;}
 
     // Sortierung: 1.Level Erst Refpunkt-Handles, dann normale Handles, dann Glue, dann User, dann Plushandles
     //             2.Level PageView (Pointer)

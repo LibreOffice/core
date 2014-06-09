@@ -517,10 +517,6 @@ void OOXMLFastContextHandler::setDefine(Id nDefine)
     mnDefine = nDefine;
 }
 
-Id OOXMLFastContextHandler::getDefine() const
-{
-    return mnDefine;
-}
 
 OOXMLParserState::Pointer_t OOXMLFastContextHandler::getParserState() const
 {

@@ -119,10 +119,6 @@ bool LineNumberWindow::SyncYOffset()
     return true;
 }
 
-int LineNumberWindow::GetWidth()
-{
-    return m_nWidth;
-}
 
 } // namespace basctl
 

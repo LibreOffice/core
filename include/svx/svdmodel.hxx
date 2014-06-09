@@ -132,9 +132,9 @@ public:
     void SetObject(const SdrObject* pNewObj);
     void SetKind(SdrHintKind eNewKind);
 
-    const SdrPage* GetPage() const;
-    const SdrObject* GetObject() const;
-    SdrHintKind GetKind() const;
+    const SdrPage* GetPage() const { return mpPage;}
+    const SdrObject* GetObject() const { return mpObj;}
+    SdrHintKind GetKind() const { return meHint;}
 };
 
 
@@ -650,7 +650,7 @@ public:
 
     void MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel );
 
-    bool IsInDestruction() const;
+    bool IsInDestruction() const { return mbInDestruction;}
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelImplementationId();
 

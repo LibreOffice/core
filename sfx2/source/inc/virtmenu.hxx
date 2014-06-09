@@ -88,7 +88,7 @@ public:
     void            SetItemText( sal_uInt16 nItemId, const OUString& rText );
 
     sal_uInt16          GetItemCount() const;
-    Menu*           GetSVMenu() const;
+    Menu*           GetSVMenu() const { return pSVMenu;}
     SfxMenuControl& operator[]( sal_uInt16 nPos ) const;
 
     sal_uInt16          GetItemId( sal_uInt16 nPos ) const;

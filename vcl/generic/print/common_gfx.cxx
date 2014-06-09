@@ -87,11 +87,6 @@ PrinterGfx::Init (const JobData& rData)
     return true;
 }
 
-sal_uInt16
-PrinterGfx::GetBitCount ()
-{
-    return mnDepth;
-}
 
 PrinterGfx::PrinterGfx()
     : mfScaleX(0.0)

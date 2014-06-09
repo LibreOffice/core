@@ -53,10 +53,6 @@ awt::Size ReferenceSizeProvider::getPageSize() const
     return m_aPageSize;
 }
 
-bool ReferenceSizeProvider::useAutoScale() const
-{
-    return m_bUseAutoScale;
-}
 
 void ReferenceSizeProvider::impl_setValuesAtTitled(
     const Reference< XTitled > & xTitled )

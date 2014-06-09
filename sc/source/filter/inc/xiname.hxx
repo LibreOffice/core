@@ -55,7 +55,7 @@ public:
     inline const ScRangeData* GetScRangeData() const { return mpScData; }
     inline bool         IsGlobal() const { return mnScTab == SCTAB_MAX; }
     inline bool         IsVBName() const { return mbVBName; }
-    bool IsMacro() const;
+    bool IsMacro() const { return mbMacro; }
     void ConvertTokens();
 
 private:

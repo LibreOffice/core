@@ -174,10 +174,6 @@ SwContact::~SwContact()
     SetInDTOR();
 }
 
-bool SwContact::IsInDTOR() const
-{
-    return mbInDTOR;
-}
 
 void SwContact::SetInDTOR()
 {

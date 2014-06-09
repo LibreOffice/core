@@ -476,10 +476,6 @@ void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, 
     fireMenuHighlightedEvent();
 }
 
-size_t ScMenuFloatingWindow::getSelectedMenuItem() const
-{
-    return mnSelectedMenu;
-}
 
 void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItemData* pTimer)
 {
@@ -741,10 +737,6 @@ void ScMenuFloatingWindow::getMenuItemPosSize(size_t nPos, Point& rPos, Size& rS
     rSize = Size(aWndSize.Width() - nLeftMargin*2, nH);
 }
 
-ScMenuFloatingWindow* ScMenuFloatingWindow::getParentMenuWindow() const
-{
-    return mpParentMenu;
-}
 
 size_t ScMenuFloatingWindow::getEnclosingMenuItem(const Point& rPos) const
 {
@@ -850,10 +842,6 @@ void ScMenuFloatingWindow::terminateAllPopupMenus()
         mpParentMenu->terminateAllPopupMenus();
 }
 
-ScDocument* ScMenuFloatingWindow::getDoc()
-{
-    return mpDoc;
-}
 
 ScCheckListMenuWindow::Config::Config() :
     mbAllowEmptySet(true), mbRTL(false)

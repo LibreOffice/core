@@ -184,10 +184,6 @@ void MailDispatcher::shutdown()
     wakening_call_.set();
 }
 
-bool MailDispatcher::isStarted() const
-{
-    return run_;
-}
 
 void MailDispatcher::addListener(::rtl::Reference<IMailDispatcherListener> listener)
 {

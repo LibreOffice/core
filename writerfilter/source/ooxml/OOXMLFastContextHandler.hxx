@@ -174,7 +174,7 @@ public:
     virtual Id getId() const;
 
     void setDefine(Id nDefine);
-    Id getDefine() const;
+    Id getDefine() const { return mnDefine;}
 
     OOXMLParserState::Pointer_t getParserState() const;
 

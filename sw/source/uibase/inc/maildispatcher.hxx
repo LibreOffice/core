@@ -116,7 +116,7 @@ public:
         @return
         <TRUE/> if the sending thread is running.
     */
-    bool isStarted() const;
+    bool isStarted() const { return run_;}
 
     /** returns if the thread is still running
     */

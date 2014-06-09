@@ -58,10 +58,6 @@ void StructListBox::SetActiveFlag(bool bFlag)
     bActiveFlag=bFlag;
 }
 
-bool StructListBox::GetActiveFlag()
-{
-    return bActiveFlag;
-}
 
 void StructListBox::MouseButtonDown( const MouseEvent& rMEvt )
 {

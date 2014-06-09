@@ -839,10 +839,6 @@ void OOXMLPropertySetEntryToInteger::attribute(Id nId, Value & rValue)
         mnValue = rValue.getInt();
 }
 
-int OOXMLPropertySetEntryToInteger::getValue() const
-{
-    return mnValue;
-}
 
 }}
 

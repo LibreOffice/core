@@ -29,7 +29,7 @@ public:
     AstStack();
     virtual ~AstStack();
 
-    sal_uInt32 depth();
+    sal_uInt32 depth() { return m_top;}
     AstScope* top();
     AstScope* bottom();
     AstScope* nextToTop();

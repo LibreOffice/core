@@ -759,10 +759,6 @@ LwpBreaksOverride* LwpParaStyle::GetBreaks() const
     return NULL;
 }
 
-LwpBulletOverride* LwpParaStyle::GetBulletOverride() const
-{
-    return m_pBulletOverride;
-}
 
 LwpNumberingOverride* LwpParaStyle::GetNumberingOverride() const
 {

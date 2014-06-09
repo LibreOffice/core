@@ -276,10 +276,6 @@ void DictionaryList::sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ )
         GetModel()->SetSortMode(SortNone);
 }
 
-sal_uInt16 DictionaryList::getSortColumn() const
-{
-    return m_nSortColumnIndex;
-}
 
 IMPL_LINK( DictionaryList, CompareHdl, SvSortData*, pData )
 {

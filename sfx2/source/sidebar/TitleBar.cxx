@@ -129,18 +129,10 @@ void TitleBar::setPosSizePixel (
 
 
 
-ToolBox& TitleBar::GetToolBox (void)
-{
-    return maToolBox;
-}
 
 
 
 
-const ToolBox& TitleBar::GetToolBox (void) const
-{
-    return maToolBox;
-}
 
 
 

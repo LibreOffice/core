@@ -186,7 +186,7 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-    bool IsMirrored() const;
+    bool IsMirrored() const { return bMirrored;}
     void SetMirrored( bool _bMirrored );
 
     // #111096#

@@ -201,7 +201,7 @@ public:
     explicit XclExpBiff8Encrypter( const XclExpRoot& rRoot );
     ~XclExpBiff8Encrypter();
 
-    bool IsValid() const;
+    bool IsValid() const { return mbValid; }
 
     void GetSaltDigest( sal_uInt8 pnSaltDigest[16] ) const;
     void GetSalt( sal_uInt8 pnSalt[16] ) const;

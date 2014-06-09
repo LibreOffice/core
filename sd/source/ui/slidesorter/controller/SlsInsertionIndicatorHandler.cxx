@@ -161,10 +161,6 @@ void InsertionIndicatorHandler::UpdatePosition (
 
 
 
-bool InsertionIndicatorHandler::IsActive (void) const
-{
-    return mbIsActive;
-}
 
 
 

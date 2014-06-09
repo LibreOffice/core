@@ -92,7 +92,7 @@ namespace canvas
         ::basegfx::B2DPoint  getPosPixel() const;
         ::basegfx::B2DVector getSizePixel() const;
         ::basegfx::B2DRange  getUpdateArea() const;
-        double               getPriority() const;
+        double               getPriority() const { return mfPriority; }
 
         // redraw must be implemented by derived - non sensible default implementation
         // void redraw( const Sprite::Reference& rSprite,

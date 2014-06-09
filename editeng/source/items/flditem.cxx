@@ -721,10 +721,6 @@ void SvxTableField::SetTab(int nTab)
     mnTab = nTab;
 }
 
-int SvxTableField::GetTab() const
-{
-    return mnTab;
-}
 
 SvxFieldData* SvxTableField::Clone() const
 {

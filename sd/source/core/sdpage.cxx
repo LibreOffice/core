@@ -3077,14 +3077,6 @@ void SdPage::SetPrecious (const bool bIsPrecious)
 
 
 
-bool SdPage::IsPrecious (void) const
-{
-    return mbIsPrecious;
-}
-
-
-
-
 HeaderFooterSettings::HeaderFooterSettings()
 {
     mbHeaderVisible = true;

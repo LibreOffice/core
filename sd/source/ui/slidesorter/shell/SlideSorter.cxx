@@ -248,10 +248,6 @@ SlideSorter::~SlideSorter (void)
 
 
 
-bool SlideSorter::IsValid (void) const
-{
-    return mbIsValid;
-}
 
 
 
@@ -335,18 +331,10 @@ void SlideSorter::Paint (const Rectangle& rRepaintArea)
 
 
 
-ViewShellBase* SlideSorter::GetViewShellBase (void) const
-{
-    return mpViewShellBase;
-}
 
 
 
 
-ViewShell* SlideSorter::GetViewShell (void) const
-{
-    return mpViewShell;
-}
 
 
 

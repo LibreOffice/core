@@ -56,40 +56,40 @@ class CommandLineArgs: private boost::noncopyable
         boost::optional< OUString > getCwdUrl() const { return m_cwdUrl; }
 
         // Access to bool parameters
-        bool                IsMinimized() const;
-        bool                IsInvisible() const;
-        bool                IsNoRestore() const;
-        bool                IsNoDefault() const;
-        bool                IsHeadless() const;
-        bool                IsQuickstart() const;
-        bool                IsNoQuickstart() const;
-        bool                IsTerminateAfterInit() const;
-        bool                IsNoLogo() const;
-        bool                IsNoLockcheck() const;
-        bool                IsHelp() const;
-        bool                IsHelpWriter() const;
-        bool                IsHelpCalc() const;
-        bool                IsHelpDraw() const;
-        bool                IsHelpImpress() const;
-        bool                IsHelpBase() const;
-        bool                IsHelpMath() const;
-        bool                IsHelpBasic() const;
-        bool                IsWriter() const;
-        bool                IsCalc() const;
-        bool                IsDraw() const;
-        bool                IsImpress() const;
-        bool                IsBase() const;
-        bool                IsGlobal() const;
-        bool                IsMath() const;
-        bool                IsWeb() const;
-        bool                IsVersion() const;
+        bool                IsMinimized() const { return m_minimized;}
+        bool                IsInvisible() const { return m_invisible;}
+        bool                IsNoRestore() const { return m_norestore;}
+        bool                IsNoDefault() const { return m_nodefault;}
+        bool                IsHeadless() const { return m_headless;}
+        bool                IsQuickstart() const { return m_quickstart;}
+        bool                IsNoQuickstart() const { return m_noquickstart;}
+        bool                IsTerminateAfterInit() const { return m_terminateafterinit;}
+        bool                IsNoLogo() const { return m_nologo;}
+        bool                IsNoLockcheck() const { return m_nolockcheck;}
+        bool                IsHelp() const { return m_help;}
+        bool                IsHelpWriter() const { return m_helpwriter;}
+        bool                IsHelpCalc() const { return m_helpcalc;}
+        bool                IsHelpDraw() const { return m_helpdraw;}
+        bool                IsHelpImpress() const { return m_helpimpress;}
+        bool                IsHelpBase() const { return m_helpbase;}
+        bool                IsHelpMath() const { return m_helpmath;}
+        bool                IsHelpBasic() const { return m_helpbasic;}
+        bool                IsWriter() const { return m_writer;}
+        bool                IsCalc() const { return m_calc;}
+        bool                IsDraw() const { return m_draw;}
+        bool                IsImpress() const { return m_impress;}
+        bool                IsBase() const { return m_base;}
+        bool                IsGlobal() const { return m_global;}
+        bool                IsMath() const { return m_math;}
+        bool                IsWeb() const { return m_web;}
+        bool                IsVersion() const { return m_version;}
         bool                HasModuleParam() const;
-        bool                WantsToLoadDocument() const;
+        bool                WantsToLoadDocument() const { return m_bDocumentArgs;}
 
         OUString            GetUnknown() const;
 
         // Access to string parameters
-        bool                    HasSplashPipe() const;
+        bool                    HasSplashPipe() const { return m_splashpipe;}
         std::vector< OUString > const & GetAccept() const;
         std::vector< OUString > const & GetUnaccept() const;
         std::vector< OUString > GetOpenList() const;
@@ -108,7 +108,7 @@ class CommandLineArgs: private boost::noncopyable
         OUString       GetPidfileName() const;
 
         // Special analyzed states (does not match directly to a command line parameter!)
-        bool IsEmpty() const;
+        bool IsEmpty() const { return m_bEmpty;}
 
     private:
         void                    ParseCommandLine_Impl( Supplier& supplier );

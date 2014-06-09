@@ -255,10 +255,6 @@ bool ScSheetSaveData::AddLoadedNamespaces( SvXMLNamespaceMap& rNamespaces ) cons
     return true;    // success
 }
 
-bool ScSheetSaveData::IsInSupportedSave() const
-{
-    return mbInSupportedSave;
-}
 
 void ScSheetSaveData::SetInSupportedSave( bool bSet )
 {

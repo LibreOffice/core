@@ -106,8 +106,8 @@ public:
     bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
     virtual void queue_resize() SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
-    VclButtonBox* get_action_area();
-    VclBox* get_content_area();
+    VclButtonBox* get_action_area() { return mpActionArea;}
+    VclBox* get_content_area() { return mpContentArea;}
 
     virtual bool    Close() SAL_OVERRIDE;
 

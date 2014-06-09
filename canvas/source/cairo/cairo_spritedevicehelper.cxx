@@ -134,10 +134,6 @@ namespace cairocanvas
         mpSpriteCanvas->setSizePixel( maSize );
     }
 
-    const ::basegfx::B2ISize& SpriteDeviceHelper::getSizePixel()
-    {
-        return maSize;
-    }
 
     void SpriteDeviceHelper::notifySizeUpdate( const awt::Rectangle& rBounds )
     {

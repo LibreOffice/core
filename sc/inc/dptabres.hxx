@@ -114,10 +114,10 @@ public:
     ScDPResultMember*   GetColResRoot() const   { return pColResRoot; }
     ScDPResultMember*   GetRowResRoot() const   { return pRowResRoot; }
 
-    const IndexArray& GetColVisible() const;
-    const IndexArray& GetColSorted() const;
-    const IndexArray& GetRowVisible() const;
-    const IndexArray& GetRowSorted() const;
+    const IndexArray& GetColVisible() const { return maColVisible;}
+    const IndexArray& GetColSorted() const { return maColSorted;}
+    const IndexArray& GetRowVisible() const { return maRowVisible;}
+    const IndexArray& GetRowSorted() const { return maRowSorted;}
 
     void    AddColIndex( long nVisible, long nSorted );
     void    AddRowIndex( long nVisible, long nSorted );
@@ -339,7 +339,7 @@ public:
 
     ResultMembers* GetDimResultMembers(long nDim, ScDPDimension* pDim, ScDPLevel* pLevel) const;
 
-    const ScDPSource& GetSource() const;
+    const ScDPSource& GetSource() const { return mrSource;}
 };
 
 class ScDPResultMember
@@ -381,7 +381,9 @@ public:
     bool IsValid() const;
     bool IsVisible() const;
     long                GetSize(long nMeasure) const;
-    bool HasHiddenDetails() const;
+    // bHasHiddenDetails is set only if the "show details" flag is off,
+    // and there was a child dimension to skip
+    bool HasHiddenDetails() const { return bHasHiddenDetails; }
     bool IsSubTotalInTitle(long nMeasure) const;
 
     long                GetSubTotalCount( long* pUserSubStart = NULL ) const;

@@ -234,7 +234,7 @@ public:
     sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
     OString             GetItemIdent(sal_uInt16 nItemId) const;
     MenuItemType        GetItemType( sal_uInt16 nPos ) const;
-    sal_uInt16          GetCurItemId() const;
+    sal_uInt16          GetCurItemId() const { return nSelectedId;}
     OString             GetCurItemIdent() const;
 
     void                SetHighlightItem(sal_uInt16 nHighlightedItem);

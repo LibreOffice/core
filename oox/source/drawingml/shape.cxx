@@ -270,20 +270,12 @@ void Shape::setLockedCanvas(bool bLockedCanvas)
     mbLockedCanvas = bLockedCanvas;
 }
 
-bool Shape::getLockedCanvas()
-{
-    return mbLockedCanvas;
-}
 
 void Shape::setWps(bool bWps)
 {
     mbWps = bWps;
 }
 
-bool Shape::getWps()
-{
-    return mbWps;
-}
 
 void Shape::setTextBox(bool bTextBox)
 {

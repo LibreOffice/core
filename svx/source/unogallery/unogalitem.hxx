@@ -92,7 +92,7 @@ private:
     ::unogallery::GalleryTheme* mpTheme;
     const ::GalleryObject*      mpGalleryObject;
 
-    const ::GalleryObject*      implGetObject() const;
+    const ::GalleryObject*      implGetObject() const { return mpGalleryObject;}
     void                        implSetInvalid();
 
                                 // not available

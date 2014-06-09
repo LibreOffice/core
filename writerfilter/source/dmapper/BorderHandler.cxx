@@ -188,10 +188,6 @@ table::BorderLine2 BorderHandler::getBorderLine()
     return aBorderLine;
 }
 
-bool BorderHandler::getShadow()
-{
-    return m_bShadow;
-}
 
 void BorderHandler::enableInteropGrabBag(const OUString& aName)
 {

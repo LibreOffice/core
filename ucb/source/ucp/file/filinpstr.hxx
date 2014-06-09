@@ -53,8 +53,8 @@ namespace fileaccess {
          *  Returns an error code as given by filerror.hxx
          */
 
-        sal_Int32 SAL_CALL CtorSuccess();
-        sal_Int32 SAL_CALL getMinorError();
+        sal_Int32 SAL_CALL CtorSuccess() { return m_nErrorCode;}
+        sal_Int32 SAL_CALL getMinorError() { return m_nMinorErrorCode;}
 
 
         // XTypeProvider

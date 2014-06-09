@@ -259,7 +259,7 @@ public:
     /** Returns the current tab bar width relative to the frame window width (0.0 ... 1.0). */
     SC_DLLPUBLIC double          GetRelTabBarWidth() const;
     /** Returns the pending tab bar width relative to the frame window width (0.0 ... 1.0). */
-    double          GetPendingRelTabBarWidth() const;
+    double          GetPendingRelTabBarWidth() const { return mfPendingTabBarWidth;}
 
     void            DoResize( const Point& rOffset, const Size& rSize, bool bInner = false );
     void            RepeatResize( bool bUpdateFix = true );

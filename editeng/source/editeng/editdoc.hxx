@@ -306,7 +306,7 @@ public:
     EditPaM(ContentNode* p, sal_Int32 n);
 
     const ContentNode* GetNode() const;
-    ContentNode* GetNode();
+    ContentNode* GetNode() { return pNode;}
     void SetNode(ContentNode* p);
 
     sal_Int32  GetIndex() const         { return nIndex; }

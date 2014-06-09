@@ -549,8 +549,8 @@ public:
     // is col, belonging to a TabDelete
     bool IsTabDeleteCol() const;
 
-    SCsCOL GetDx() const;
-    SCsROW GetDy() const;
+    SCsCOL GetDx() const { return nDx; }
+    SCsROW GetDy() const { return nDy; }
     ScBigRange          GetOverAllRange() const;    // BigRange + (nDx, nDy)
 
     const ScChangeActionCellListEntry* GetFirstCellEntry() const

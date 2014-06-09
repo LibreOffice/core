@@ -1059,10 +1059,6 @@ IMPL_LINK_NOARG(ScTabViewShell, FormControlActivated)
     return 0;
 }
 
-ObjectSelectionType ScTabViewShell::GetCurObjectSelectionType()
-{
-    return eCurOST;
-}
 
 //  GetMySubShell / SetMySubShell: altes Verhalten simulieren,
 //  dass es nur eine SubShell gibt (nur innerhalb der 5 eignenen SubShells)

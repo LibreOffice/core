@@ -56,10 +56,6 @@ namespace pcr
     }
 
 
-    ::sal_Int16 SAL_CALL ControlHelper::getControlType() throw (RuntimeException)
-    {
-        return m_nControlType;
-    }
 
 
     Reference< XPropertyControlContext > SAL_CALL ControlHelper::getControlContext() throw (RuntimeException)
@@ -80,10 +76,6 @@ namespace pcr
     }
 
 
-    bool SAL_CALL ControlHelper::isModified(  ) throw (RuntimeException)
-    {
-        return m_bModified;
-    }
 
 
     void SAL_CALL ControlHelper::notifyModifiedValue(  ) throw (RuntimeException)

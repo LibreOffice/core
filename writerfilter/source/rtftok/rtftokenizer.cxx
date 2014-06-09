@@ -197,10 +197,6 @@ int RTFTokenizer::asHex(char ch)
     return ret;
 }
 
-int RTFTokenizer::getGroup() const
-{
-    return m_nGroup;
-}
 
 void RTFTokenizer::pushGroup()
 {
@@ -360,10 +356,6 @@ OUString RTFTokenizer::getPosition()
     return aRet.makeStringAndClear();
 }
 
-sal_Size RTFTokenizer::getGroupStart()
-{
-    return m_nGroupStart;
-}
 
 } // namespace rtftok
 } // namespace writerfilter

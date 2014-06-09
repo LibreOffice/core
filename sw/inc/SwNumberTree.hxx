@@ -162,7 +162,7 @@ public:
      */
     SwNumberTree::tSwNumTreeNumber GetNumber( bool bValidate = true ) const;
 
-    bool IsContinueingPreviousSubTree() const;
+    bool IsContinueingPreviousSubTree() const { return mbContinueingPreviousSubTree;}
 
     /**
        Returns level numbers of this node.
@@ -223,7 +223,7 @@ public:
        @retval true this node is a phantom
        @retval false this node is NOT a phantom
      */
-    bool IsPhantom() const;
+    bool IsPhantom() const { return mbPhantom;}
 
     /** set level of this node
 

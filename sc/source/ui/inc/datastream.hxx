@@ -81,9 +81,9 @@ public:
     ScRange GetRange() const;
     const OUString& GetURL() const { return msURL; }
     const sal_Int32& GetLimit() const { return mnLimit; }
-    MoveType GetMove() const;
+    MoveType GetMove() const { return meOrigMove;}
     const sal_uInt32& GetSettings() const { return mnSettings; }
-    bool IsRefreshOnEmptyLine() const;
+    bool IsRefreshOnEmptyLine() const { return mbRefreshOnEmptyLine;}
 
     void Decode(
         const OUString& rURL, const ScRange& rRange, sal_Int32 nLimit,

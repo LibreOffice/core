@@ -1426,20 +1426,12 @@ bool ScDPDimension::getIsDataLayoutDimension() const
     return pSource->GetData()->getIsDataLayoutDimension( nDim );
 }
 
-sal_uInt16 ScDPDimension::getFunction() const
-{
-    return nFunction;
-}
 
 void ScDPDimension::setFunction(sal_uInt16 nNew)
 {
     nFunction = nNew;
 }
 
-long ScDPDimension::getUsedHierarchy() const
-{
-    return nUsedHier;
-}
 
 void ScDPDimension::setUsedHierarchy(long /* nNew */)
 {
@@ -2207,10 +2199,6 @@ uno::Sequence<sheet::GeneralFunction> ScDPLevel::getSubTotals() const
     return aSubTotals;
 }
 
-bool ScDPLevel::getShowEmpty() const
-{
-    return bShowEmpty;
-}
 
 // XPropertySet
 
@@ -2447,10 +2435,6 @@ sal_Bool SAL_CALL ScDPMembers::hasElements() throw(uno::RuntimeException, std::e
 
 // end of XNameAccess implementation
 
-long ScDPMembers::getCount() const
-{
-    return nMbrCount;
-}
 
 long ScDPMembers::getMinMembers() const
 {
@@ -2645,10 +2629,6 @@ const OUString* ScDPMember::GetLayoutName() const
     return mpLayoutName.get();
 }
 
-long ScDPMember::GetDim() const
-{
-    return nDim;
-}
 
 OUString ScDPMember::GetNameStr() const
 {
@@ -2668,15 +2648,7 @@ void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ ) throw(uno::R
     OSL_FAIL("not implemented");        //! exception?
 }
 
-bool ScDPMember::isVisible() const
-{
-    return bVisible;
-}
 
-bool ScDPMember::getShowDetails() const
-{
-    return bShowDet;
-}
 
 // XPropertySet
 

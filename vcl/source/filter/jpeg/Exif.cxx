@@ -28,9 +28,6 @@ Exif::Exif() :
 Exif::~Exif()
 {}
 
-Orientation Exif::getOrientation() {
-    return maOrientation;
-}
 
 void Exif::setOrientation(Orientation aOrientation) {
     maOrientation = aOrientation;
@@ -68,10 +65,6 @@ sal_Int32 Exif::getRotation()
     return 0;
 }
 
-bool Exif::hasExif()
-{
-    return mbExifPresent;
-}
 
 bool Exif::read(SvStream& rStream)
 {

@@ -180,9 +180,9 @@ public:
     void                setFontRefColorForNodes(const Color& rColor) { maFontRefColorForNodes = rColor; }
     const Color&        getFontRefColorForNodes() const { return maFontRefColorForNodes; }
     void                setLockedCanvas(bool bLockedCanvas);
-    bool                getLockedCanvas();
+    bool                getLockedCanvas() { return mbLockedCanvas;}
     void                setWps(bool bWps);
-    bool                getWps();
+    bool                getWps() { return mbWps;}
     void                setTextBox(bool bTextBox);
     const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> &
                         getDiagramDoms() { return maDiagramDoms; }

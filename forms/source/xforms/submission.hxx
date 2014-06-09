@@ -126,7 +126,7 @@ public:
     OUString getVersion() const;
     void setVersion( const OUString& );
 
-    bool getIndent() const;
+    bool getIndent() const { return mbIndent;}
     void setIndent( bool );
 
     OUString getMediaType() const;
@@ -135,10 +135,10 @@ public:
     OUString getEncoding() const;
     void setEncoding( const OUString& );
 
-    bool getOmitXmlDeclaration() const;
+    bool getOmitXmlDeclaration() const { return mbOmitXmlDeclaration;}
     void setOmitXmlDeclaration( bool );
 
-    bool getStandalone() const;
+    bool getStandalone() const { return mbStandalone;}
     void setStandalone( bool );
 
     OUString getCDataSectionElement() const;

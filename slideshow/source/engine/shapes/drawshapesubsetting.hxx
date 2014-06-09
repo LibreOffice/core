@@ -138,7 +138,7 @@ namespace slideshow
                 are currently hidden, because displayed by child
                 shapes).
              */
-            const VectorOfDocTreeNodes& getActiveSubsets() const;
+            const VectorOfDocTreeNodes& getActiveSubsets() const {  return maCurrentSubsets; }
 
             /** This enum classifies each action index in the
                 metafile.

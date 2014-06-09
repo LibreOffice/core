@@ -673,10 +673,6 @@ void LinePropertyPanel::NotifyItemUpdate(
 
 
 
-SfxBindings* LinePropertyPanel::GetBindings()
-{
-    return mpBindings;
-}
 
 
 

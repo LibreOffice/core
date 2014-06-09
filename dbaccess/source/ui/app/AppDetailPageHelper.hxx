@@ -321,7 +321,7 @@ namespace dbaui
                             ,const OUString& _rName );
 
         /// returns the preview mode
-        PreviewMode getPreviewMode();
+        PreviewMode getPreviewMode() { return m_ePreviewMode;}
 
         /// <TRUE/> if the preview is enabled
         bool isPreviewEnabled();

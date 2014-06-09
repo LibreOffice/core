@@ -610,137 +610,29 @@ void CommandLineArgs::InitParamValues()
     m_bDocumentArgs  = false;
 }
 
-bool CommandLineArgs::IsMinimized() const
-{
-    return m_minimized;
-}
 
-bool CommandLineArgs::IsInvisible() const
-{
-    return m_invisible;
-}
 
-bool CommandLineArgs::IsNoRestore() const
-{
-    return m_norestore;
-}
 
-bool CommandLineArgs::IsNoDefault() const
-{
-    return m_nodefault;
-}
 
-bool CommandLineArgs::IsHeadless() const
-{
-    return m_headless;
-}
 
-bool CommandLineArgs::IsQuickstart() const
-{
-    return m_quickstart;
-}
 
-bool CommandLineArgs::IsNoQuickstart() const
-{
-    return m_noquickstart;
-}
 
-bool CommandLineArgs::IsTerminateAfterInit() const
-{
-    return m_terminateafterinit;
-}
 
-bool CommandLineArgs::IsNoLogo() const
-{
-    return m_nologo;
-}
 
-bool CommandLineArgs::IsNoLockcheck() const
-{
-    return m_nolockcheck;
-}
 
-bool CommandLineArgs::IsHelp() const
-{
-    return m_help;
-}
-bool CommandLineArgs::IsHelpWriter() const
-{
-    return m_helpwriter;
-}
 
-bool CommandLineArgs::IsHelpCalc() const
-{
-    return m_helpcalc;
-}
 
-bool CommandLineArgs::IsHelpDraw() const
-{
-    return m_helpdraw;
-}
 
-bool CommandLineArgs::IsHelpImpress() const
-{
-    return m_helpimpress;
-}
 
-bool CommandLineArgs::IsHelpBase() const
-{
-    return m_helpbase;
-}
-bool CommandLineArgs::IsHelpMath() const
-{
-    return m_helpmath;
-}
-bool CommandLineArgs::IsHelpBasic() const
-{
-    return m_helpbasic;
-}
 
-bool CommandLineArgs::IsWriter() const
-{
-    return m_writer;
-}
 
-bool CommandLineArgs::IsCalc() const
-{
-    return m_calc;
-}
 
-bool CommandLineArgs::IsDraw() const
-{
-    return m_draw;
-}
 
-bool CommandLineArgs::IsImpress() const
-{
-    return m_impress;
-}
 
-bool CommandLineArgs::IsBase() const
-{
-    return m_base;
-}
 
-bool CommandLineArgs::IsGlobal() const
-{
-    return m_global;
-}
 
-bool CommandLineArgs::IsMath() const
-{
-    return m_math;
-}
 
-bool CommandLineArgs::IsWeb() const
-{
-    return m_web;
-}
 
-bool CommandLineArgs::IsVersion() const
-{
-    return m_version;
-}
 
 OUString CommandLineArgs::GetUnknown() const
 {
@@ -753,10 +645,6 @@ bool CommandLineArgs::HasModuleParam() const
         || m_web || m_base;
 }
 
-bool CommandLineArgs::HasSplashPipe() const
-{
-    return m_splashpipe;
-}
 
 std::vector< OUString > const & CommandLineArgs::GetAccept() const
 {
@@ -832,15 +720,7 @@ OUString CommandLineArgs::GetConversionOut() const
     return translateExternalUris(m_conversionout);
 }
 
-bool CommandLineArgs::IsEmpty() const
-{
-    return m_bEmpty;
-}
 
-bool CommandLineArgs::WantsToLoadDocument() const
-{
-    return m_bDocumentArgs;
-}
 
 OUString CommandLineArgs::GetPidfileName() const
 {

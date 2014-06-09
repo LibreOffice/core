@@ -316,10 +316,6 @@ OUString ODesignView::GetInsertObjString() const
 }
 
 
-sal_uInt16 ODesignView::GetInsertObj() const
-{
-    return m_eActObj;
-}
 
 
 void ODesignView::Cut()

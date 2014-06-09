@@ -216,21 +216,6 @@ bool SwAccessibleChild::IsValid() const
            mpWindow != 0;
 }
 
-const SdrObject* SwAccessibleChild::GetDrawObject() const
-{
-    return mpDrawObj;
-}
-
-const SwFrm *SwAccessibleChild::GetSwFrm() const
-{
-    return mpFrm;
-}
-
-Window* SwAccessibleChild::GetWindow() const
-{
-    return mpWindow;
-}
-
 bool SwAccessibleChild::IsVisibleChildrenOnly() const
 {
     bool bRet( false );

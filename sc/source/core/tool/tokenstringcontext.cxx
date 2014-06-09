@@ -128,10 +128,6 @@ void CompileFormulaContext::updateTabNames()
     }
 }
 
-formula::FormulaGrammar::Grammar CompileFormulaContext::getGrammar() const
-{
-    return meGram;
-}
 
 void CompileFormulaContext::setGrammar( formula::FormulaGrammar::Grammar eGram )
 {
@@ -146,10 +142,6 @@ const std::vector<OUString>& CompileFormulaContext::getTabNames() const
     return maTabNames;
 }
 
-ScDocument* CompileFormulaContext::getDoc()
-{
-    return mpDoc;
-}
 
 }
 

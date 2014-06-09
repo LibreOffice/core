@@ -472,7 +472,7 @@ protected:
         Modifications::Node const & modifications, Broadcaster * broadcaster,
         std::vector< com::sun::star::util::ElementChange > * changes);
 
-    bool isDisposed() const;
+    bool isDisposed() const { return disposed_;}
 
 private:
     struct ModifiedChild {

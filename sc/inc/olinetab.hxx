@@ -41,19 +41,19 @@ public:
     ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden = false );
     ScOutlineEntry( const ScOutlineEntry& rEntry );
 
-    SC_DLLPUBLIC SCCOLROW GetStart() const;
-    SCSIZE GetSize() const;
+    SC_DLLPUBLIC SCCOLROW GetStart() const { return nStart;}
+    SCSIZE GetSize() const { return nSize;}
     SC_DLLPUBLIC SCCOLROW GetEnd() const;
 
     /**
      * @return true is the group is hidden, false otherwise.
      */
-    SC_DLLPUBLIC bool IsHidden() const;
+    SC_DLLPUBLIC bool IsHidden() const { return bHidden;}
 
     /**
      * @return true if the control is visible, false otherwise.
      */
-    SC_DLLPUBLIC bool IsVisible() const;
+    SC_DLLPUBLIC bool IsVisible() const { return bVisible;}
 
     void                    Move( SCsCOLROW nDelta );
     void                    SetSize( SCSIZE nNewSize );
@@ -106,7 +106,7 @@ public:
     ScOutlineArray();
     ScOutlineArray( const ScOutlineArray& rArray );
 
-    size_t GetDepth() const;
+    size_t GetDepth() const { return nDepth;}
 
     bool FindTouchedLevel(
         SCCOLROW nBlockStart, SCCOLROW nBlockEnd, size_t& rFindLevel) const;
@@ -180,7 +180,7 @@ public:
     ScSubOutlineIterator( ScOutlineArray* pOutlineArray, size_t nLevel, size_t nEntry );
 
     ScOutlineEntry* GetNext();
-    size_t LastLevel() const;
+    size_t LastLevel() const { return nSubLevel;}
     size_t LastEntry() const;
     void DeleteLast();
 };

@@ -348,7 +348,7 @@ public:
     bool IsValid( const ScAddress& rPos ) const;
 
     void SetDateType(condformat::ScCondFormatDateType eType);
-    condformat::ScCondFormatDateType GetDateType() const;
+    condformat::ScCondFormatDateType GetDateType() const { return meType;}
 
     const OUString& GetStyleName() const;
     void SetStyleName( const OUString& rStyleName );

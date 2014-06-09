@@ -74,10 +74,6 @@ AccessibleSlideSorterObject::~AccessibleSlideSorterObject (void)
 
 
 
-sal_uInt16 AccessibleSlideSorterObject::GetPageNumber (void) const
-{
-    return mnPageNumber;
-}
 
 
 

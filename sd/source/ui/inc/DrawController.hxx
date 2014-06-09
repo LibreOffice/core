@@ -153,7 +153,7 @@ public:
             The returned pointer is <NULL/> after a call to
             ReleaseViewShellBase().
     */
-    ViewShellBase* GetViewShellBase (void);
+    ViewShellBase* GetViewShellBase (void) { return mpBase;}
 
     /** This method is typically called from the destructor of ViewShellBase
         to tell the DrawController that it and its members must not access

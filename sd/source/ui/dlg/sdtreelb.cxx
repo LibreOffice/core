@@ -160,10 +160,6 @@ void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 
 
 
-NavigatorDragType SdPageObjsTLB::SdPageObjsTransferable::GetDragType() const
-{
-    return meDragType;
-}
 
 
 
@@ -837,10 +833,6 @@ void SdPageObjsTLB::SetShowAllShapes (
 
 
 
-bool SdPageObjsTLB::GetShowAllShapes (void) const
-{
-    return mbShowAllShapes;
-}
 
 
 

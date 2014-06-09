@@ -36,10 +36,6 @@ VectorRefArray::VectorRefArray( const double* pNumArray, rtl_uString** pStrArray
     mpStringArray(pStrArray),
     mbValid(true) {}
 
-bool VectorRefArray::isValid() const
-{
-    return mbValid;
-}
 
 SingleVectorRefToken::SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength ) :
     FormulaToken(svSingleVectorRef, ocPush), maArray(rArray), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength) {}

@@ -95,7 +95,7 @@ public:
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     virtual ~SvxSearchDialogWrapper ();
-    SvxSearchDialog *getDialog ();
+    SvxSearchDialog *getDialog () { return dialog;}
     static void SetSearchLabel(const SearchLabel& rSL);
     SFX_DECL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper);
 };

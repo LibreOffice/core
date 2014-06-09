@@ -41,10 +41,6 @@ AstStack::~AstStack()
     rtl_freeMemory(m_stack);
 }
 
-sal_uInt32 AstStack::depth()
-{
-    return m_top;
-}
 
 AstScope* AstStack::top()
 {

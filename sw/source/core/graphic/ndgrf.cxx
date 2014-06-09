@@ -1232,10 +1232,6 @@ void SwGrfNode::TriggerAsyncRetrieveInputStream()
     }
 }
 
-bool SwGrfNode::IsLinkedInputStreamReady() const
-{
-    return mbLinkedInputStreamReady;
-}
 
 void SwGrfNode::ApplyInputStream(
     com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xInputStream,

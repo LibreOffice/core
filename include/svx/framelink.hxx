@@ -125,7 +125,7 @@ public:
     inline double       Prim() const { return mfPrim; }
     inline double       Dist() const { return mfDist; }
     inline double       Secn() const { return mfSecn; }
-    double PatternScale() const;
+    double PatternScale() const { return mfPatternScale;}
     void SetPatternScale( double fScale );
     inline editeng::SvxBorderStyle Type() const { return mnType; }
 

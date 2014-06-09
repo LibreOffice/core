@@ -767,10 +767,6 @@ IMPL_LINK( SvxLanguageComboBox, EditModifyHdl, SvxLanguageComboBox*, /*pEd*/ )
 }
 
 
-SvxLanguageComboBox::EditedAndValid SvxLanguageComboBox::GetEditedAndValid() const
-{
-    return meEditedAndValid;
-}
 
 
 sal_Int32 SvxLanguageComboBox::SaveEditedAsEntry()

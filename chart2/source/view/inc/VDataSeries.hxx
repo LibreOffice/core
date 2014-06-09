@@ -78,7 +78,7 @@ public:
     void setGlobalSeriesIndex( sal_Int32 nGlobalSeriesIndex );
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
 
-    sal_Int32   getTotalPointCount() const;
+    sal_Int32   getTotalPointCount() const { return m_nPointCount;}
     double      getXValue( sal_Int32 index ) const;
     double      getYValue( sal_Int32 index ) const;
 
@@ -129,20 +129,20 @@ public:
 
     bool hasPointOwnColor( sal_Int32 index ) const;
 
-    ::com::sun::star::chart2::StackingDirection getStackingDirection() const;
-    sal_Int32 getAttachedAxisIndex() const;
+    ::com::sun::star::chart2::StackingDirection getStackingDirection() const { return m_eStackingDirection;}
+    sal_Int32 getAttachedAxisIndex() const { return m_nAxisIndex;}
     void setAttachedAxisIndex( sal_Int32 nAttachedAxisIndex );
 
     void doSortByXValues();
 
     void setConnectBars( bool bConnectBars );
-    bool getConnectBars() const;
+    bool getConnectBars() const { return m_bConnectBars;}
 
     void setGroupBarsPerAxis( bool bGroupBarsPerAxis );
-    bool getGroupBarsPerAxis() const;
+    bool getGroupBarsPerAxis() const { return m_bGroupBarsPerAxis;}
 
     void setStartingAngle( sal_Int32 nStartingAngle );
-    sal_Int32 getStartingAngle() const;
+    sal_Int32 getStartingAngle() const { return m_nStartingAngle;}
 
     void setRoleOfSequenceForDataLabelNumberFormatDetection( const OUString& rRole );
 
@@ -175,7 +175,7 @@ public:
     void releaseShapes();
 
     void setMissingValueTreatment( sal_Int32 nMissingValueTreatment );
-    sal_Int32 getMissingValueTreatment() const;
+    sal_Int32 getMissingValueTreatment() const { return m_nMissingValueTreatment;}
 
     void setOldTimeBased( VDataSeries* pOldSeries, double nPercent );
     VDataSeries* createCopyForTimeBased() const;

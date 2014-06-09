@@ -528,10 +528,6 @@ void SdPage::RemoveEmptyPresentationObjects()
     }
 }
 
-sal_Int16 SdPage::getTransitionType (void) const
-{
-    return mnTransitionType;
-}
 
 void SdPage::setTransitionType( sal_Int16 nTransitionType )
 {
@@ -539,10 +535,6 @@ void SdPage::setTransitionType( sal_Int16 nTransitionType )
     ActionChanged();
 }
 
-sal_Int16 SdPage::getTransitionSubtype (void) const
-{
-    return mnTransitionSubtype;
-}
 
 void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
 {
@@ -550,10 +542,6 @@ void SdPage::setTransitionSubtype ( sal_Int16 nTransitionSubtype )
     ActionChanged();
 }
 
-bool SdPage::getTransitionDirection (void) const
-{
-    return mbTransitionDirection;
-}
 
 void SdPage::setTransitionDirection ( bool bTransitionbDirection )
 {
@@ -561,10 +549,6 @@ void SdPage::setTransitionDirection ( bool bTransitionbDirection )
     ActionChanged();
 }
 
-sal_Int32 SdPage::getTransitionFadeColor (void) const
-{
-    return mnTransitionFadeColor;
-}
 
 void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor )
 {
@@ -572,10 +556,6 @@ void SdPage::setTransitionFadeColor ( sal_Int32 nTransitionFadeColor )
     ActionChanged();
 }
 
-double SdPage::getTransitionDuration (void) const
-{
-    return mfTransitionDuration;
-}
 
 void SdPage::setTransitionDuration ( double fTranstionDuration )
 {

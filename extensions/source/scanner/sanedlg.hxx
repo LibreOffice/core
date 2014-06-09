@@ -138,7 +138,7 @@ public:
     virtual ~SaneDlg();
 
     virtual short Execute() SAL_OVERRIDE;
-    bool getDoScan();
+    bool getDoScan() { return doScan;}
 };
 
 

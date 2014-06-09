@@ -154,7 +154,7 @@ public:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     void        SetEditSource( ::std::auto_ptr< SvxEditSource > pAdaptee );
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    bool        IsValid() const;
+    bool        IsValid() const { return mbEditSourceValid;}
 
 private:
     // declared, but not defined

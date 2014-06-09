@@ -72,19 +72,7 @@ const EditTextObject* ScEditDataArray::Item::GetNewData() const
     return mpNewData.get();
 }
 
-SCTAB ScEditDataArray::Item::GetTab() const
-{
-    return mnTab;
-}
 
-SCCOL ScEditDataArray::Item::GetCol() const
-{
-    return mnCol;
-}
 
-SCROW ScEditDataArray::Item::GetRow() const
-{
-    return mnRow;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

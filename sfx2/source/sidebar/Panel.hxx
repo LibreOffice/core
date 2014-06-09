@@ -54,12 +54,12 @@ public:
     void Dispose (void);
 
     PanelTitleBar* GetTitleBar (void) const;
-    bool IsTitleBarOptional (void) const;
+    bool IsTitleBarOptional (void) const { return mbIsTitleBarOptional;}
     void SetUIElement (const cssu::Reference<css::ui::XUIElement>& rxElement);
     cssu::Reference<css::ui::XSidebarPanel> GetPanelComponent (void) const;
     cssu::Reference<css::awt::XWindow> GetElementWindow (void);
     void SetExpanded (const bool bIsExpanded);
-    bool IsExpanded (void) const;
+    bool IsExpanded (void) const { return mbIsExpanded;}
     bool HasIdPredicate (const ::rtl::OUString& rsId) const;
     const ::rtl::OUString& GetId (void) const;
 

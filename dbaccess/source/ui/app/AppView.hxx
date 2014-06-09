@@ -60,9 +60,9 @@ namespace dbaui
         virtual void GetFocus() SAL_OVERRIDE;
         virtual void Resize() SAL_OVERRIDE;
 
-        OApplicationView*       getView() const;
+        OApplicationView*       getView() const { return m_pView;}
         OApplicationSwapWindow* getPanel() const;
-        OApplicationDetailView* getDetailView() const;
+        OApplicationDetailView* getDetailView() const { return m_pDetailView;}
     };
 
     class OApplicationView : public ODataView

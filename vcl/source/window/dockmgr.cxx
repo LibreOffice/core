@@ -1338,10 +1338,6 @@ void ImplDockingWindowWrapper::SetFloatStyle( WinBits nStyle )
     mnFloatBits = nStyle;
 }
 
-WinBits ImplDockingWindowWrapper::GetFloatStyle() const
-{
-    return mnFloatBits;
-}
 
 void ImplDockingWindowWrapper::setPosSizePixel( long nX, long nY,
                                      long nWidth, long nHeight,
@@ -1418,9 +1414,5 @@ void ImplDockingWindowWrapper::Unlock()
         pToolBox->Lock( mbLocked );
 }
 
-bool ImplDockingWindowWrapper::IsLocked() const
-{
-    return mbLocked;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

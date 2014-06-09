@@ -412,17 +412,9 @@ ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
 
 
 
-DrawDocShell* ViewShellBase::GetDocShell (void) const
-{
-    return mpDocShell;
-}
 
 
 
-SdDrawDocument* ViewShellBase::GetDocument (void) const
-{
-    return mpDocument;
-}
 
 
 

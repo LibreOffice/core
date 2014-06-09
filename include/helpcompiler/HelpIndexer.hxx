@@ -59,7 +59,7 @@ class L10N_DLLPUBLIC HelpIndexer {
 	/**
 	 * Get the error string (empty if no error occurred).
 	 */
-        OUString const & getErrorMessage();
+        OUString const & getErrorMessage() { return d_error;}
 
 	private:
 

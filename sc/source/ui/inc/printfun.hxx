@@ -292,7 +292,7 @@ public:
     ScPrintHFParam  GetHeader(){return aHdr;}
     ScPrintHFParam  GetFooter(){return aFtr;}
 
-    bool HasPrintRange() const;
+    bool HasPrintRange() const { return mbHasPrintRange;}
 
 private:
     void            Construct( const ScPrintOptions* pOptions );

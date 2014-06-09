@@ -80,10 +80,10 @@ class SvtFontOptions_Impl : public ConfigItem
                         It's not used in the moment - but it's possible for the feature!
         *//*-*****************************************************************************************************/
 
-        bool    IsFontHistoryEnabled        (                   ) const;
+        bool    IsFontHistoryEnabled        (                   ) const { return m_bFontHistory;}
         void        EnableFontHistory           ( bool bState   );
 
-        bool    IsFontWYSIWYGEnabled        (                   ) const;
+        bool    IsFontWYSIWYGEnabled        (                   ) const { return m_bFontWYSIWYG;}
         void        EnableFontWYSIWYG           ( bool bState   );
 
     private:
@@ -234,24 +234,10 @@ void SvtFontOptions_Impl::Commit()
 
 //  public method
 
-bool SvtFontOptions_Impl::IsFontHistoryEnabled() const
-{
-    return m_bFontHistory;
-}
-
-//  public method
-
 void SvtFontOptions_Impl::EnableFontHistory( bool bState )
 {
     m_bFontHistory = bState;
     SetModified();
-}
-
-//  public method
-
-bool SvtFontOptions_Impl::IsFontWYSIWYGEnabled() const
-{
-    return m_bFontWYSIWYG;
 }
 
 //  public method

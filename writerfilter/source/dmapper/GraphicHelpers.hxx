@@ -40,8 +40,8 @@ public:
     static void setAlignH(const OUString & sText);
     static void setAlignV(const OUString & sText);
     sal_Int16 orientation() const;
-    sal_Int16 relation() const;
-    sal_Int32 position() const;
+    sal_Int16 relation() const { return m_nRelation;}
+    sal_Int32 position() const { return m_nPosition;}
  private:
     virtual void lcl_attribute( Id aName, Value& rVal ) SAL_OVERRIDE;
     virtual void lcl_sprm( Sprm& rSprm ) SAL_OVERRIDE;

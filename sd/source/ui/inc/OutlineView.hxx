@@ -111,7 +111,7 @@ public:
     DECL_LINK( EndDropHdl, void * );
     DECL_LINK( PaintingFirstLineHdl, PaintFirstLineInfo* );
 
-    sal_uLong         GetPaperWidth();
+    sal_uLong         GetPaperWidth() { return mnPaperWidth;}
 
     bool          PrepareClose(bool bUI = true);
 

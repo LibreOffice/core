@@ -166,7 +166,7 @@ public:
 
     void            SetWindowTitle( LanguageType nLanguage );
     OUString        GetWord();
-    sal_uInt16      GetLanguage() const;
+    sal_uInt16      GetLanguage() const { return nLookUpLanguage;}
 };
 
 #endif

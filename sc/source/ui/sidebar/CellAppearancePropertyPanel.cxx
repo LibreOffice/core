@@ -656,10 +656,6 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
     }
 }
 
-SfxBindings* CellAppearancePropertyPanel::GetBindings()
-{
-    return mpBindings;
-}
 
 void CellAppearancePropertyPanel::SetStyleIcon()
 {

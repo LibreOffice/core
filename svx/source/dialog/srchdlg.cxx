@@ -2244,10 +2244,6 @@ SvxSearchDialogWrapper::~SvxSearchDialogWrapper ()
 {
 }
 
-SvxSearchDialog *SvxSearchDialogWrapper::getDialog ()
-{
-    return dialog;
-}
 
 
 

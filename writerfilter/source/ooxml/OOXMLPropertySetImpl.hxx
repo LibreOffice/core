@@ -296,7 +296,7 @@ public:
     virtual void sprm(Sprm & rSprm) SAL_OVERRIDE;
     virtual void attribute(Id nId, Value & rValue) SAL_OVERRIDE;
 
-    int getValue() const;
+    int getValue() const { return mnValue;}
 };
 
 Sprm::Kind SprmKind(sal_uInt32 nSprmCode);

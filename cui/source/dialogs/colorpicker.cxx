@@ -311,8 +311,8 @@ public:
     void                Modify();
 
     void                SetValues( Color aColor, ColorMode eMode, double x, double y );
-    double              GetX();
-    double              GetY();
+    double              GetX() { return mdX;}
+    double              GetY() { return mdY;}
 
     void                KeyMove( int dx, int dy );
 
@@ -649,15 +649,7 @@ void ColorFieldControl::SetValues( Color aColor, ColorMode eMode, double x, doub
     }
 }
 
-double ColorFieldControl::GetX()
-{
-    return mdX;
-}
 
-double ColorFieldControl::GetY()
-{
-    return mdY;
-}
 
 void ColorFieldControl::UpdatePosition()
 {

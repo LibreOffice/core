@@ -94,15 +94,15 @@ public:
     GlyphSet (sal_Int32 nFontID, bool bVertical);
     ~GlyphSet ();
 
-    sal_Int32       GetFontID ();
-    fonttype::type  GetFontType ();
+    sal_Int32       GetFontID () { return mnFontID;}
+    fonttype::type  GetFontType () { return meBaseType;}
     static OString
     GetReencodedFontName (rtl_TextEncoding nEnc,
                           const OString &rFontName);
     static OString
     GetGlyphSetEncodingName (rtl_TextEncoding nEnc,
                              const OString &rFontName);
-    bool            IsVertical ();
+    bool            IsVertical () { return mbVertical;}
 
     void            DrawText (PrinterGfx &rGfx, const Point& rPoint,
                               const sal_Unicode* pStr, sal_Int16 nLen,

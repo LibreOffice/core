@@ -92,7 +92,7 @@ public:
     bool XOr( const Region& rRegion );
 
     bool IsEmpty() const;
-    bool IsNull() const;
+    bool IsNull() const { return mbIsNull;}
 
     void SetEmpty();
     void SetNull();

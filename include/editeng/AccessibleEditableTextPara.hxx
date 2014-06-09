@@ -185,7 +185,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        sal_Int32 GetIndexInParent() const;
+        sal_Int32 GetIndexInParent() const { return mnIndexInParent; }
 
         /** Set the current paragraph number
 
@@ -203,7 +203,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        sal_Int32 GetParagraphIndex() const;
+        sal_Int32 GetParagraphIndex() const { return mnParagraphIndex; }
 
         /** Set the edit engine offset
 
@@ -310,7 +310,7 @@ namespace accessibility
         void GotPropertyEvent( const ::com::sun::star::uno::Any& rNewValue, const sal_Int16 nEventId ) const;
         void LostPropertyEvent( const ::com::sun::star::uno::Any& rOldValue, const sal_Int16 nEventId ) const;
 
-        int getNotifierClientId() const;
+        int getNotifierClientId() const { return mnNotifierClientId; }
 
         /// Do we have children? This is the case for image bullets
         bool HaveChildren();

@@ -43,8 +43,8 @@ public:
     virtual void Paint(const Rectangle& rect) SAL_OVERRIDE;
 
     void SetWidthSelect( long lValue, bool bValuable, SfxMapUnit eMapUnit);
-    bool IsCloseByEdit();
-    long GetTmpCustomWidth();
+    bool IsCloseByEdit() { return mbCloseByEdit;}
+    long GetTmpCustomWidth() { return mnTmpCusomWidth;}
 
 private:
     LinePropertyPanel& mrLinePropertyPanel;

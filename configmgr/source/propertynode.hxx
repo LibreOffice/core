@@ -41,9 +41,9 @@ public:
 
     virtual rtl::Reference< Node > clone(bool keepTemplateName) const SAL_OVERRIDE;
 
-    Type getStaticType() const;
+    Type getStaticType() const { return staticType_;}
 
-    bool isNillable() const;
+    bool isNillable() const { return nillable_;}
 
     com::sun::star::uno::Any getValue(Components & components);
 
@@ -51,7 +51,7 @@ public:
 
     void setExternal(int layer, OUString const & descriptor);
 
-    bool isExtension() const;
+    bool isExtension() const { return extension_;}
 
 private:
     PropertyNode(PropertyNode const & other);

@@ -94,7 +94,7 @@ public:
     void setNamespaces( const com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>& );
 
     /// do we have an actual expression?
-    bool isEmptyExpression() const;
+    bool isEmptyExpression() const { return mbIsEmpty;}
 
     /// heuristically determine whether this expression is 'simple',
     /// i.e. whether its value will change depending on the values

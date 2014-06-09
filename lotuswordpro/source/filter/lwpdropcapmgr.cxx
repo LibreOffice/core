@@ -77,8 +77,4 @@ void LwpDropcapMgr::SetXFPara(XFParagraph* pXFPara)
     m_pXFPara = pXFPara;
 }
 
-XFParagraph* LwpDropcapMgr::GetXFPara()
-{
-    return m_pXFPara;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

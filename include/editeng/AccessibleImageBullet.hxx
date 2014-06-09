@@ -145,7 +145,7 @@ namespace accessibility
             there potential deadlock situations can be resolved. Thus,
             make sure SolarMutex is locked when calling this.
          */
-        sal_Int32 GetParagraphIndex() const;
+        sal_Int32 GetParagraphIndex() const { return mnParagraphIndex; }
 
         /// Calls all Listener objects to tell them the change. Don't hold locks when calling this!
         virtual void FireEvent(const sal_Int16 nEventId, const ::com::sun::star::uno::Any& rNewValue = ::com::sun::star::uno::Any(), const ::com::sun::star::uno::Any& rOldValue = ::com::sun::star::uno::Any() ) const;
@@ -166,7 +166,7 @@ namespace accessibility
 
         SvxEditSource& GetEditSource() const;
 
-        int getNotifierClientId() const;
+        int getNotifierClientId() const { return mnNotifierClientId; }
 
         /** Query the SvxTextForwarder for EditEngine access.
 

@@ -65,7 +65,7 @@ struct SC_DLLPUBLIC ScQueryEntry
     utl::TextSearch* GetSearchTextPtr( bool bCaseSens ) const;
 
     QueryItemsType& GetQueryItems();
-    const QueryItemsType& GetQueryItems() const;
+    const QueryItemsType& GetQueryItems() const { return maQueryItems;}
     void SetQueryByEmpty();
     bool IsQueryByEmpty() const;
     void SetQueryByNonEmpty();

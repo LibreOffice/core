@@ -38,10 +38,6 @@ namespace sdr
         {
         }
 
-        Event* Event::GetNext() const
-        {
-            return mpNext;
-        }
 
         void Event::SetNext(Event* pNew)
         {
@@ -51,10 +47,6 @@ namespace sdr
             }
         }
 
-        sal_uInt32 Event::GetTime() const
-        {
-            return mnTime;
-        }
 
         void Event::SetTime(sal_uInt32 nNew)
         {
@@ -145,10 +137,6 @@ namespace sdr
             }
         }
 
-        Event* EventList::GetFirst()
-        {
-            return mpHead;
-        }
     } // end of namespace animation
 } // end of namespace sdr
 
@@ -230,10 +218,6 @@ namespace sdr
             }
         }
 
-        sal_uInt32 Scheduler::GetTime()
-        {
-            return mnTime;
-        }
 
         // #i38135#
         void Scheduler::SetTime(sal_uInt32 nTime)

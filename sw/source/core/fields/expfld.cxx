@@ -1136,15 +1136,7 @@ void SwInputField::SetFmtFld( SwFmtFld& rFmtFld )
     mpFmtFld = &rFmtFld;
 }
 
-SwFmtFld* SwInputField::GetFmtFld()
-{
-    return mpFmtFld;
-}
 
-const OUString& SwInputField::getContent() const
-{
-    return aContent;
-}
 
 void SwInputField::LockNotifyContentChange()
 {

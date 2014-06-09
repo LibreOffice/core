@@ -1850,10 +1850,6 @@ bool SvXMLImport::isGeneratorVersionOlderThan(
         :   nGeneratorVersion < nOOoVersion;
 }
 
-bool SvXMLImport::isGraphicLoadOnDemandSupported() const
-{
-    return mbIsGraphicLoadOnDemandSupported;
-}
 
 OUString SvXMLImport::GetODFVersion() const
 {

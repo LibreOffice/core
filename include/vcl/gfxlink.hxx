@@ -144,12 +144,12 @@ public:
     GfxLink&            operator=( const GfxLink& );
     bool            IsEqual( const GfxLink& ) const;
 
-    GfxLinkType         GetType() const;
+    GfxLinkType         GetType() const { return meType;}
 
     void                SetUserId( sal_uInt32 nUserId ) { mnUserId = nUserId; }
     sal_uInt32          GetUserId() const { return mnUserId; }
 
-    sal_uInt32          GetDataSize() const;
+    sal_uInt32          GetDataSize() const { return mnBufSize;}
     void                SetData( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, bool bOwns );
     const sal_uInt8*            GetData() const;
 

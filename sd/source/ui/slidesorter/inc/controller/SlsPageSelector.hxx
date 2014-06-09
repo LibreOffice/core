@@ -109,7 +109,7 @@ public:
         deselect them.
     */
     int GetPageCount (void) const;
-    int GetSelectedPageCount (void) const;
+    int GetSelectedPageCount (void) const { return mnSelectedPageCount;}
 
     /** Return the anchor for a range selection.  This usually is the first
         selected page after all pages have been deselected.

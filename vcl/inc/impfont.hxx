@@ -172,7 +172,7 @@ public:
     bool                IsDefaultMap() const;
     bool                HasChar( sal_uInt32 ) const;
     int                 CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const;
-    int                 GetCharCount() const;
+    int                 GetCharCount() const { return mnCharCount;}
 
     sal_uInt32          GetFirstChar() const;
     sal_uInt32          GetLastChar() const;

@@ -67,10 +67,6 @@ void LightButton::switchLightOn(bool bOn)
     }
 }
 
-bool LightButton::isLightOn() const
-{
-    return m_bLightOn;
-}
 
 struct LightSource
 {

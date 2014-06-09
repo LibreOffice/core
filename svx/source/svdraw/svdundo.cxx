@@ -778,10 +778,6 @@ void SdrUndoObjList::SetOwner(bool bNew)
     bOwner = bNew;
 }
 
-sal_uInt32 SdrUndoObjList::GetOrdNum() const
-{
-    return nOrdNum;
-}
 
 void SdrUndoObjList::SetOrdNum(sal_uInt32 nOrdNum_)
 {

@@ -226,10 +226,6 @@ bool Region::IsEmpty() const
     return !mbIsNull && !mpB2DPolyPolygon.get() && !mpPolyPolygon.get() && !mpRegionBand.get();
 }
 
-bool Region::IsNull() const
-{
-    return mbIsNull;
-}
 
 RegionBand* ImplCreateRegionBandFromPolyPolygon(const PolyPolygon& rPolyPolygon)
 {

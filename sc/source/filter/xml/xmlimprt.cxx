@@ -1944,10 +1944,6 @@ void ScXMLImport::SetPostProcessData( sc::ImportPostProcessData* p )
     mpPostProcessData = p;
 }
 
-sc::ImportPostProcessData* ScXMLImport::GetPostProcessData()
-{
-    return mpPostProcessData;
-}
 
 sc::PivotTableSources& ScXMLImport::GetPivotTableSources()
 {

@@ -49,8 +49,8 @@ public:
         long nHeight,
         sal_uInt16 nFlags = WINDOW_POSSIZE_ALL) SAL_OVERRIDE;
 
-    ToolBox& GetToolBox (void);
-    const ToolBox& GetToolBox (void) const;
+    ToolBox& GetToolBox (void) { return maToolBox;}
+    const ToolBox& GetToolBox (void) const { return maToolBox;}
 
 protected:
     SidebarToolBox maToolBox;

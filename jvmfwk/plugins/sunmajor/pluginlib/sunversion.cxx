@@ -311,10 +311,6 @@ bool SunVersion::operator == (const SunVersion& ver) const
     return bRet;
 }
 
-SunVersion::operator bool()
-{
-    return m_bValid;
-}
 
 #if OSL_DEBUG_LEVEL >= 2
 SelfTest::SelfTest()

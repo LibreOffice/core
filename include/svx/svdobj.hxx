@@ -197,8 +197,8 @@ public:
     virtual ~SdrObjUserData();
 
     virtual SdrObjUserData* Clone(SdrObject* pObj1) const = 0; // #i71039# NULL -> 0
-    sal_uInt32 GetInventor() const;
-    sal_uInt16 GetId() const;
+    sal_uInt32 GetInventor() const { return nInventor;}
+    sal_uInt16 GetId() const { return nIdentifier;}
 
     virtual bool HasMacro (const SdrObject* pObj) const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
@@ -460,13 +460,13 @@ public:
     virtual void SetBoundRectDirty();
 
     virtual void SetObjList(SdrObjList* pNewObjList);
-    SdrObjList* GetObjList() const;
+    SdrObjList* GetObjList() const { return pObjList;}
 
     virtual void SetPage(SdrPage* pNewPage);
-    SdrPage* GetPage() const;
+    SdrPage* GetPage() const { return pPage;}
 
     virtual void SetModel(SdrModel* pNewModel);
-    SdrModel* GetModel() const;
+    SdrModel* GetModel() const { return pModel;}
     SdrItemPool* GetObjectItemPool() const;
 
     void AddListener(SfxListener& rListener);
@@ -488,7 +488,7 @@ public:
 
     // UserCall interface
     void SetUserCall(SdrObjUserCall* pUser);
-    SdrObjUserCall* GetUserCall() const;
+    SdrObjUserCall* GetUserCall() const { return pUserCall;}
     void SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect) const;
 
     // Such a reference point is for instance:
@@ -523,7 +523,7 @@ public:
     sal_uInt32 GetOrdNum() const;
 
     // Warning: this method should only be used if you really knows what you're doing
-    sal_uInt32 GetOrdNumDirect() const;
+    sal_uInt32 GetOrdNumDirect() const { return nOrdNum;}
 
     // setting the order number should only happen from the model or from the page
     void SetOrdNum(sal_uInt32 nNum);
@@ -881,38 +881,38 @@ public:
     SdrObject* ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDash = false) const;
 
     // if true, reference onto an object
-    bool IsVirtualObj() const;
+    bool IsVirtualObj() const { return bVirtObj;}
 
     // is true, if object can probably be filled
     // is false, if object has probably line ends
     // is invalid, if this is a group object
-    bool IsClosedObj() const;
+    bool IsClosedObj() const { return bClosedObj;}
 
-    bool IsEdgeObj() const;
-    bool Is3DObj() const;
-    bool IsUnoObj() const;
+    bool IsEdgeObj() const { return bIsEdge;}
+    bool Is3DObj() const { return bIs3DObj;}
+    bool IsUnoObj() const { return bIsUnoObj;}
     void SetMarkProtect(bool bProt);
-    bool IsMarkProtect() const;
+    bool IsMarkProtect() const { return bMarkProt;}
     void SetInserted(bool bIns);
-    bool IsInserted() const;
+    bool IsInserted() const { return bInserted;}
     void SetMoveProtect(bool bProt);
-    bool IsMoveProtect() const;
+    bool IsMoveProtect() const { return bMovProt;}
     void SetResizeProtect(bool bProt);
-    bool IsResizeProtect() const;
+    bool IsResizeProtect() const { return bSizProt;}
     void SetPrintable(bool bPrn);
     bool IsPrintable() const;
     void SetVisible(bool bVisible);
-    bool IsVisible() const;
+    bool IsVisible() const { return mbVisible;}
     void SetEmptyPresObj(bool bEpt);
-    bool IsEmptyPresObj() const;
+    bool IsEmptyPresObj() const { return bEmptyPresObj;}
     void SetNotVisibleAsMaster(bool bFlg);
-    bool IsNotVisibleAsMaster() const;
+    bool IsNotVisibleAsMaster() const { return bNotVisibleAsMaster;}
 
     // #i25616#
-    bool LineIsOutsideGeometry() const;
+    bool LineIsOutsideGeometry() const { return mbLineIsOutsideGeometry;}
 
     // #i25616#
-    bool DoesSupportTextIndentingOnLineWidthChange() const;
+    bool DoesSupportTextIndentingOnLineWidthChange() const { return mbSupportTextIndentingOnLineWidthChange;}
 
     // application specific data
     sal_uInt16 GetUserDataCount() const;
@@ -990,7 +990,7 @@ public:
     /// @see mbDoNotInsertIntoPageAutomatically
     void SetDoNotInsertIntoPageAutomatically(bool bSet);
     /// @see mbDoNotInsertIntoPageAutomatically
-    bool IsDoNotInsertIntoPageAutomatically() const;
+    bool IsDoNotInsertIntoPageAutomatically() const { return mbDoNotInsertIntoPageAutomatically;}
 
     // #i121917#
     virtual bool HasText() const;

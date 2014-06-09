@@ -104,20 +104,12 @@ bool ScTypedStrData::IsStrData() const
     return meStrType != Value;
 }
 
-bool ScTypedStrData::IsDate() const
-{
-    return mbIsDate;
-}
 
 const OUString& ScTypedStrData::GetString() const
 {
     return maStrValue;
 }
 
-ScTypedStrData::StringType ScTypedStrData::GetStringType() const
-{
-    return meStrType;
-}
 
 FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :
     maVal(rVal), mbCaseSens(bCaseSens) {}

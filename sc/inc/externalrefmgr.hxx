@@ -168,7 +168,7 @@ public:
         void setReferenced( bool bReferenced );
         /// Unconditionally set the reference status flag.
         void setReferencedFlag( ReferencedFlag eFlag );
-        ReferencedFlag getReferencedFlag() const;
+        ReferencedFlag getReferencedFlag() const { return meReferenced;}
         bool isReferenced() const;
         /// Obtain a sorted vector of rows.
         void getAllRows(::std::vector<SCROW>& rRows, SCROW nLow = 0, SCROW nHigh = MAXROW) const;

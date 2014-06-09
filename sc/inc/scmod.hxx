@@ -214,7 +214,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     ScInputHandler*     GetInputHdl( ScTabViewShell* pViewSh = NULL, bool bUseRef = true );
 
     void                SetRefInputHdl( ScInputHandler* pNew );
-    ScInputHandler*     GetRefInputHdl();
+    ScInputHandler*     GetRefInputHdl() { return pRefInputHandler;}
 
     void                ViewShellGone(ScTabViewShell* pViewSh);
     void                ViewShellChanged();

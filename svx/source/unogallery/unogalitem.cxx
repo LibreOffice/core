@@ -405,10 +405,6 @@ void GalleryItem::_getPropertyValues( const comphelper::PropertyMapEntry** ppEnt
 
 
 
-const ::GalleryObject* GalleryItem::implGetObject() const
-{
-    return mpGalleryObject;
-}
 
 
 

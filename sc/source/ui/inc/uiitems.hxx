@@ -83,7 +83,7 @@ public:
     const EditTextObject*   GetEditData() const { return pEditData; }
 
     void SetMisspellRanges( const std::vector<editeng::MisspellRanges>* pRanges );
-    const std::vector<editeng::MisspellRanges>* GetMisspellRanges() const;
+    const std::vector<editeng::MisspellRanges>* GetMisspellRanges() const { return mpMisspellRanges;}
 };
 
 

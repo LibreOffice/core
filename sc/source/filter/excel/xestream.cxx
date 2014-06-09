@@ -473,11 +473,6 @@ XclExpBiff8Encrypter::~XclExpBiff8Encrypter()
 {
 }
 
-bool XclExpBiff8Encrypter::IsValid() const
-{
-    return mbValid;
-}
-
 void XclExpBiff8Encrypter::GetSaltDigest( sal_uInt8 pnSaltDigest[16] ) const
 {
     if ( sizeof( mpnSaltDigest ) == 16 )

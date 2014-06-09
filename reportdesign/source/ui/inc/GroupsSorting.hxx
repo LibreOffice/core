@@ -119,7 +119,7 @@ private:
 
     /** returns <TRUE/> when the dialog should be read only
     */
-    bool isReadOnly( ) const;
+    bool isReadOnly( ) const { return m_bReadOnly;}
 
     /** returns the data type for the given column name
         @param _sColumnName

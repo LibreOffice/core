@@ -2001,10 +2001,6 @@ void VSeriesPlotter::setCoordinateSystemResolution( const Sequence< sal_Int32 >&
     m_aCoordinateSystemResolution = rCoordinateSystemResolution;
 }
 
-bool VSeriesPlotter::PointsWereSkipped() const
-{
-    return m_bPointsWereSkipped;
-}
 
 bool VSeriesPlotter::WantToPlotInFrontOfAxisLine()
 {

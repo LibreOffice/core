@@ -76,7 +76,7 @@ public:
             NavigatorDragType eDragType,
             const ::com::sun::star::uno::Any& rTreeListBoxData );
         ::sd::DrawDocShell&     GetDocShell() const;
-        NavigatorDragType   GetDragType() const;
+        NavigatorDragType   GetDragType() const { return meDragType;}
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
         static SdPageObjsTransferable* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
@@ -201,7 +201,7 @@ public:
     void                    Fill( const SdDrawDocument*, bool bAllPages, const OUString& rDocName );
     void                    Fill( const SdDrawDocument*, SfxMedium* pSfxMedium, const OUString& rDocName );
     void                    SetShowAllShapes (const bool bShowAllShapes, const bool bFill);
-    bool                    GetShowAllShapes (void) const;
+    bool                    GetShowAllShapes (void) const { return mbShowAllShapes;}
     bool                    IsEqualToDoc( const SdDrawDocument* pInDoc = NULL );
     bool                    HasSelectedChildren( const OUString& rName );
     bool                    SelectEntry( const OUString& rName );

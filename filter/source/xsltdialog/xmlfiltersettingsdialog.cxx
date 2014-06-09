@@ -157,10 +157,6 @@ IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl)
     return 0;
 }
 
-bool XMLFilterSettingsDialog::isClosable()
-{
-    return m_bIsClosable;
-}
 
 
 

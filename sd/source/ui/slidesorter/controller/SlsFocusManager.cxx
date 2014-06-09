@@ -211,10 +211,6 @@ model::SharedPageDescriptor FocusManager::GetFocusedPageDescriptor (void) const
 
 
 
-sal_Int32 FocusManager::GetFocusedPageIndex (void) const
-{
-    return mnPageIndex;
-}
 
 
 void FocusManager::SetFocusedPage (const model::SharedPageDescriptor& rpDescriptor)

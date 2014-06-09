@@ -611,7 +611,7 @@ public:
     virtual ~SvxShapePolyPolygon() throw();
 
     // Local support functions
-    ::com::sun::star::drawing::PolygonKind GetPolygonKind() const throw();
+    ::com::sun::star::drawing::PolygonKind GetPolygonKind() const throw() { return mePolygonKind;}
     void SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(css::uno::RuntimeException);
     basegfx::B2DPolyPolygon GetPolygon() const throw();
 
@@ -641,7 +641,7 @@ public:
     virtual ~SvxShapePolyPolygonBezier() throw();
 
     // Local support functions
-    ::com::sun::star::drawing::PolygonKind GetPolygonKind() const throw();
+    ::com::sun::star::drawing::PolygonKind GetPolygonKind() const throw() { return mePolygonKind;}
     void SetPolygon(const basegfx::B2DPolyPolygon & rNew) throw(css::uno::RuntimeException);
     basegfx::B2DPolyPolygon GetPolygon() const throw();
 

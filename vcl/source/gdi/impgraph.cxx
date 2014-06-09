@@ -402,10 +402,6 @@ void ImpGraphic::ImplClear()
     mnSizeBytes = 0;
 }
 
-GraphicType ImpGraphic::ImplGetType() const
-{
-    return meType;
-}
 
 void ImpGraphic::ImplSetDefaultType()
 {
@@ -951,10 +947,6 @@ sal_uLong ImpGraphic::ImplGetAnimationLoopCount() const
     return( mpAnimation ? mpAnimation->GetLoopCount() : 0UL );
 }
 
-GraphicReader* ImpGraphic::ImplGetContext()
-{
-    return mpContext;
-}
 
 void ImpGraphic::ImplSetContext( GraphicReader* pReader )
 {
@@ -976,10 +968,6 @@ const OUString& ImpGraphic::ImplGetDocFileName() const
     return maDocFileURLStr;
 }
 
-sal_uLong ImpGraphic::ImplGetDocFilePos() const
-{
-    return mnDocFilePos;
-}
 
 bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
 {
@@ -1493,10 +1481,6 @@ bool ImpGraphic::ImplSwapIn( SvStream* pIStm )
     return bRet;
 }
 
-bool ImpGraphic::ImplIsSwapOut() const
-{
-    return mbSwapOut;
-}
 
 void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
 {

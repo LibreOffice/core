@@ -169,20 +169,12 @@ void OAppBorderWindow::ImplInitSettings()
         SetBackground( rStyleSettings.GetDialogColor() );
 }
 
-OApplicationView* OAppBorderWindow::getView() const
-{
-    return m_pView;
-}
 
 OApplicationSwapWindow* OAppBorderWindow::getPanel() const
 {
     return static_cast< OApplicationSwapWindow* >( m_pPanel->getChildWindow() );
 }
 
-OApplicationDetailView* OAppBorderWindow::getDetailView() const
-{
-    return m_pDetailView;
-}
 
 // class OApplicationView
 OApplicationView::OApplicationView( Window* pParent

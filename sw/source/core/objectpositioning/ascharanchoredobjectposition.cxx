@@ -400,10 +400,6 @@ Point SwAsCharAnchoredObjectPosition::GetAnchorPos() const
 }
 
 /** calculated relative position to base line for object position */
-SwTwips SwAsCharAnchoredObjectPosition::GetRelPosY() const
-{
-    return mnRelPos;
-}
 
 /** determined object rectangle including spacing for object */
 SwRect SwAsCharAnchoredObjectPosition::GetObjBoundRectInclSpacing() const
@@ -412,9 +408,5 @@ SwRect SwAsCharAnchoredObjectPosition::GetObjBoundRectInclSpacing() const
 }
 
 /** determined line alignment */
-sal_uInt8 SwAsCharAnchoredObjectPosition::GetLineAlignment() const
-{
-    return mnLineAlignment;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

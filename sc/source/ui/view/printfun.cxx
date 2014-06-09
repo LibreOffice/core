@@ -312,10 +312,6 @@ void ScPrintFunc::GetPrintState( ScPrintState& rState )
     rState.nDocPages    = nDocPages;
 }
 
-bool ScPrintFunc::HasPrintRange() const
-{
-    return mbHasPrintRange;
-}
 
 bool ScPrintFunc::GetLastSourceRange( ScRange& rRange ) const
 {

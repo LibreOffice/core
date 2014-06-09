@@ -638,10 +638,6 @@ SwTxtMeta * Meta::GetTxtAttr() const
     return (m_pFmt) ? m_pFmt->GetTxtAttr() : 0;
 }
 
-SwTxtNode * Meta::GetTxtNode() const
-{
-    return m_pTxtNode;
-}
 
 void Meta::NotifyChangeTxtNodeImpl()
 {

@@ -95,7 +95,7 @@ public:
     /** Return the OutlinerView that was provided by the last call to
         ProvideOutlinerView() (or NULL when there was no such call.)
     */
-    OutlinerView* GetOutlinerView (void);
+    OutlinerView* GetOutlinerView (void) { return mpOutlineView;}
 
     /** Provide in the member mpOutlineView an instance of OutlinerView that
         is either taken from the ViewShell, when it is an OutlineViewShell,
@@ -1742,10 +1742,6 @@ Outliner::Implementation::~Implementation (void)
 
 
 
-OutlinerView* Outliner::Implementation::GetOutlinerView ()
-{
-    return mpOutlineView;
-}
 
 
 

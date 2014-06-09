@@ -40,9 +40,9 @@ public:
 
         const EditTextObject* GetOldData() const;
         const EditTextObject* GetNewData() const;
-        SCTAB GetTab() const;
-        SCCOL GetCol() const;
-        SCROW GetRow() const;
+        SCTAB GetTab() const { return mnTab;}
+        SCCOL GetCol() const { return mnCol;}
+        SCROW GetRow() const { return mnRow;}
 
     private:
         Item(); // disabled

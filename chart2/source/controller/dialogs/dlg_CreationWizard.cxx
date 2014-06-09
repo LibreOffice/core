@@ -179,11 +179,6 @@ void CreationWizard::enterState(WizardState nState)
         svt::RoadmapWizard::enterState(nState);
 }
 
-bool CreationWizard::isClosable()
-{
-    //@todo
-    return m_bIsClosable;
-}
 
 void CreationWizard::setInvalidPage( TabPage * /* pTabPage */ )
 {

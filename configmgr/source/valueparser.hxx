@@ -63,7 +63,7 @@ public:
         rtl::Reference< Node > const & property,
         OUString const & localizedName = OUString());
 
-    int getLayer() const;
+    int getLayer() const { return layer_;}
 
     Type type_;
     OString separator_;

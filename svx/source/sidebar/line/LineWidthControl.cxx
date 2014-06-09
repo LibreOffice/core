@@ -346,18 +346,10 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
 
 
 
-bool LineWidthControl::IsCloseByEdit()
-{
-    return mbCloseByEdit;
-}
 
 
 
 
-long LineWidthControl::GetTmpCustomWidth()
-{
-    return mnTmpCusomWidth;
-}
 
 
 

@@ -67,9 +67,10 @@
 
 #include "lwpatomholder.hxx"
 #include "lwpobj.hxx"
+
 /**
  * @brief   Double Linked Virtual List
-*/
+ */
 class LwpDLVList : public LwpObject
 {
 public:
@@ -82,20 +83,13 @@ protected:
 protected:
     void Read() SAL_OVERRIDE;
 public:
-    inline LwpObjectID* GetNext();
-    inline LwpObjectID* GetPrevious();
+    LwpObjectID* GetNext() { return &m_ListNext; }
+    LwpObjectID* GetPrevious() { return &m_ListPrevious; }
 };
-LwpObjectID* LwpDLVList::GetNext()
-{
-    return &m_ListNext;
-}
-LwpObjectID* LwpDLVList::GetPrevious()
-{
-    return &m_ListPrevious;
-}
+
 /**
  * @brief   Double Linked Named Family Virtual List
-*/
+ */
 class LwpDLNFVList : public LwpDLVList
 {
 public:
@@ -112,32 +106,13 @@ protected:
     void ReadName(LwpObjectStream* pObjStrm);
 public:
     // 01/17/2005
-    inline LwpAtomHolder* GetName();
+    LwpAtomHolder* GetName() { return &m_Name; }
     //end
-    inline LwpObjectID* GetChildHead();
-    inline LwpObjectID* GetChildTail();
-    inline LwpObjectID* GetParent();
+    LwpObjectID* GetChildHead() { return &m_ChildHead; }
+    LwpObjectID* GetChildTail() { return &m_ChildTail; }
+    LwpObjectID* GetParent() { return &m_Parent; }
 };
 
-LwpAtomHolder* LwpDLNFVList::GetName()
-{
-    return &m_Name;
-}
-
-LwpObjectID* LwpDLNFVList::GetChildHead()
-{
-    return &m_ChildHead;
-}
-
-LwpObjectID* LwpDLNFVList::GetChildTail()
-{
-    return &m_ChildTail;
-}
-
-LwpObjectID* LwpDLNFVList::GetParent()
-{
-    return &m_Parent;
-}
 
 class LwpPropList;
 /**
@@ -155,13 +130,8 @@ protected:
     void Read() SAL_OVERRIDE;
     void ReadPropertyList(LwpObjectStream* pObjStrm);
 public:
-    inline LwpPropList* GetPropList();
+    LwpPropList* GetPropList() { return m_pPropList; }
 };
-
-LwpPropList* LwpDLNFPVList::GetPropList()
-{
-    return m_pPropList;
-}
 
 /**
  * @brief   Double Linked Virtual List Head Tail
@@ -175,17 +145,9 @@ private:
     LwpObjectID m_ListHead;
     LwpObjectID m_ListTail;
 public:
-    inline LwpObjectID* GetHead();
-    inline LwpObjectID* GetTail();
+    LwpObjectID* GetHead() { return &m_ListHead; }
+    LwpObjectID* GetTail() { return &m_ListTail; }
 };
-LwpObjectID* LwpDLVListHeadTail::GetHead()
-{
-    return &m_ListHead;
-}
-LwpObjectID* LwpDLVListHeadTail::GetTail()
-{
-    return &m_ListTail;
-}
 
 /**
  * @brief   Double Linked Virtual List Head
@@ -196,14 +158,10 @@ public:
     LwpDLVListHead(){}
     ~LwpDLVListHead(){}
     void Read(LwpObjectStream* pObjStrm);
-    inline LwpObjectID* GetFirst();
+    LwpObjectID* GetFirst() { return &m_objHead; }
 protected:
     LwpObjectID m_objHead;//LwpDLVList
 };
-LwpObjectID* LwpDLVListHead::GetFirst()
-{
-    return &m_objHead;
-}
 
 #endif
 

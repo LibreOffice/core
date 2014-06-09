@@ -66,7 +66,7 @@ public:
             The result may be <NULL/> when the SetFormShell() method has not
             yet been called or was last called with <NULL/>.
     */
-    FmFormShell* GetFormShell (void);
+    FmFormShell* GetFormShell (void) { return mpFormShell;}
 
 private:
     ViewShellBase& mrBase;

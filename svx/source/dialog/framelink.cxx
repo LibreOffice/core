@@ -1161,10 +1161,6 @@ Style::Style( const editeng::SvxBorderLine* pBorder, double fScale, sal_uInt16 n
     Set( pBorder, fScale, nMaxWidth );
 }
 
-double Style::PatternScale() const
-{
-    return mfPatternScale;
-}
 
 void Style::SetPatternScale( double fScale )
 {

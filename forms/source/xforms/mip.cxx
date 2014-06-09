@@ -77,23 +77,16 @@ void MIP::join( const MIP& rMip )
     inherit( rMip );
 }
 
-bool MIP::hasReadonly() const     { return mbHasReadonly; }
 bool MIP::isReadonly() const      { return mbHasReadonly ? mbReadonly : mbHasCalculate; }
 void MIP::setReadonly( bool b )   { mbHasReadonly = true; mbReadonly = b; }
 void MIP::resetReadonly()         { mbHasReadonly = false; mbReadonly = false; }
 
-bool MIP::hasRequired() const     { return mbHasRequired; }
-bool MIP::isRequired() const      { return mbRequired; }
 void MIP::setRequired( bool b )   { mbHasRequired = true; mbRequired = b; }
 void MIP::resetRequired()         { mbHasRequired = false; mbRequired = false; }
 
-bool MIP::hasRelevant() const     { return mbHasRelevant; }
-bool MIP::isRelevant() const      { return mbRelevant; }
 void MIP::setRelevant( bool b )   { mbHasRelevant = true; mbRelevant = b; }
 void MIP::resetRelevant()         { mbHasRelevant = false; mbRelevant = true; }
 
-bool MIP::hasConstraint() const   { return mbHasConstraint; }
-bool MIP::isConstraint() const    { return mbConstraint; }
 void MIP::setConstraint( bool b ) { mbHasConstraint = true; mbConstraint = b; msConstraintExplanation = OUString(); }
 void MIP::resetConstraint()       { mbHasConstraint = false; mbConstraint = true; msConstraintExplanation = OUString(); }
 
@@ -101,11 +94,9 @@ void MIP::setConstraintExplanation( const OUString& s ) { msConstraintExplanatio
 OUString MIP::getConstraintExplanation() const { return msConstraintExplanation; }
 
 
-bool MIP::hasCalculate() const    { return mbHasCalculate; }
 void MIP::setHasCalculate( bool b ) { mbHasCalculate = b; }
 void MIP::resetCalculate()        { mbHasCalculate = false; }
 
-bool MIP::hasTypeName() const     { return mbHasTypeName; }
     OUString MIP::getTypeName() const      { return msTypeName; }
 void MIP::setTypeName( const OUString& s ) { msTypeName = s; mbHasTypeName = true; }
 void MIP::resetTypeName()         { msTypeName = OUString(); mbHasTypeName = false; }

@@ -102,7 +102,7 @@ public:
     sal_Int32 getCategoryLevelCount() const;
 
     const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference<
-        ::com::sun::star::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList();
+        ::com::sun::star::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList() { return m_aSplitCategoriesList;}
 
     bool isDateAxis();
     const std::vector< DatePlusIndex >&  getDateCategories();

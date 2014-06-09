@@ -35,7 +35,7 @@ class Bundle
 
 public:
     void                SetColor( sal_uInt32 nColor ) ;
-    sal_uInt32          GetColor() const;
+    sal_uInt32          GetColor() const { return mnColor;}
     long                GetIndex() const { return mnBundleIndex; } ;
     void                SetIndex( long nBundleIndex ) { mnBundleIndex = nBundleIndex; } ;
 

@@ -160,7 +160,7 @@ namespace dbaui
         bool IsCutAllowed( long nRow = -1 );
         bool IsCopyAllowed( long nRow = -1 );
         bool IsPasteAllowed( long nRow = -1 );
-        bool IsReadOnly();
+        bool IsReadOnly() { return bReadOnly;}
         OFieldDescription* GetFieldDescr( long nRow );
 
         // window overloads

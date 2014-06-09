@@ -1097,10 +1097,6 @@ void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
         m_JRELocations = * share.getJRELocations();
 }
 
-bool MergedSettings::getEnabled() const
-{
-    return m_bEnabled;
-}
 const OUString&  MergedSettings::getUserClassPath() const
 {
     return m_sClassPath;

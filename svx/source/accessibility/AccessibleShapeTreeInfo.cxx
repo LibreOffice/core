@@ -139,10 +139,6 @@ void AccessibleShapeTreeInfo::SetSdrView (SdrView* pView)
 
 
 
-SdrView* AccessibleShapeTreeInfo::GetSdrView (void) const
-{
-    return mpView;
-}
 
 
 
@@ -173,10 +169,6 @@ void AccessibleShapeTreeInfo::SetWindow (Window* pWindow)
 
 
 
-Window* AccessibleShapeTreeInfo::GetWindow (void) const
-{
-    return mpWindow;
-}
 
 
 
@@ -189,10 +181,6 @@ void AccessibleShapeTreeInfo::SetViewForwarder (const IAccessibleViewForwarder* 
 
 
 
-const IAccessibleViewForwarder* AccessibleShapeTreeInfo::GetViewForwarder (void) const
-{
-    return mpViewForwarder;
-}
 
 
 } // end of namespace accessibility

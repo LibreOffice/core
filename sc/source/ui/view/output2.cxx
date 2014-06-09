@@ -155,7 +155,9 @@ public:
     const Size&             GetTextSize() const      { return aTextSize; }
     long                    GetOriginalWidth() const { return nOriginalWidth; }
 
-    sal_uLong GetResultValueFormat() const;
+    // Get the effective number format, including formula result types.
+    // This assumes that a formula cell has already been calculated.
+    sal_uLong GetResultValueFormat() const { return nValueFormat;}
 
     sal_uLong   GetValueFormat() const                  { return nValueFormat; }
     bool    GetLineBreak() const                    { return bLineBreak; }
@@ -792,14 +794,6 @@ bool ScDrawStringsVars::HasEditCharacters() const
     }
 
     return false;
-}
-
-sal_uLong ScDrawStringsVars::GetResultValueFormat() const
-{
-    // Get the effective number format, including formula result types.
-    // This assumes that a formula cell has already been calculated.
-
-    return nValueFormat;
 }
 
 double ScOutputData::GetStretch()

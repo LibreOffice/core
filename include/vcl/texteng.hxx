@@ -248,7 +248,7 @@ public:
     TextView*           GetView( sal_uInt16 nView ) const;
     void                InsertView( TextView* pTextView );
     void                RemoveView( TextView* pTextView );
-    TextView*           GetActiveView() const;
+    TextView*           GetActiveView() const { return mpActiveView;}
     void                SetActiveView( TextView* pView );
 
     void                SetMaxTextLen( sal_uLong nLen );

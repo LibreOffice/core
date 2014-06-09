@@ -205,16 +205,16 @@ public:
     EditTextObjectImpl( EditTextObject* pFront, const EditTextObjectImpl& r );
     ~EditTextObjectImpl();
 
-    sal_uInt16 GetUserType() const;
+    sal_uInt16 GetUserType() const { return nUserType;}
     void SetUserType( sal_uInt16 n );
 
     void NormalizeString( svl::SharedStringPool& rPool );
     std::vector<svl::SharedString> GetSharedStrings() const;
 
-    bool                    IsVertical() const;
+    bool                    IsVertical() const { return bVertical;}
     void                    SetVertical( bool b );
 
-    sal_uInt16                  GetScriptType() const;
+    sal_uInt16                  GetScriptType() const { return nScriptType;}
     void                    SetScriptType( sal_uInt16 nType );
 
     ContentInfo*            CreateAndInsertContent();

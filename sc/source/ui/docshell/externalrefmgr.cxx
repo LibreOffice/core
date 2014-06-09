@@ -274,10 +274,6 @@ void ScExternalRefCache::Table::setReferenced( bool bReferenced )
         meReferenced = (bReferenced ? REFERENCED_MARKED : UNREFERENCED);
 }
 
-ScExternalRefCache::Table::ReferencedFlag ScExternalRefCache::Table::getReferencedFlag() const
-{
-    return meReferenced;
-}
 
 bool ScExternalRefCache::Table::isReferenced() const
 {

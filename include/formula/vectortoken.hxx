@@ -47,7 +47,7 @@ struct FORMULA_DLLPUBLIC VectorRefArray
     VectorRefArray( rtl_uString** pArray );
     VectorRefArray( const double* pNumArray, rtl_uString** pStrArray );
 
-    bool isValid() const;
+    bool isValid() const { return mbValid;}
 };
 
 /**

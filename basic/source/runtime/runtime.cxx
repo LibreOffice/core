@@ -977,13 +977,6 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, OUString& rMsg )
     return nVBAErrorNumber;
 }
 
-//  Parameter, Locals, Caller
-
-SbMethod* SbiRuntime::GetCaller()
-{
-    return pMeth;
-}
-
 //  Stacks
 
 // The expression-stack is available for the continuous evaluation

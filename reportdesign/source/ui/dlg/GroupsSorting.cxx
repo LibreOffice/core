@@ -1014,10 +1014,6 @@ OGroupsSortingDialog::~OGroupsSortingDialog()
         m_pCurrentGroupListener->dispose();
 }
 
-bool OGroupsSortingDialog::isReadOnly( ) const
-{
-    return m_bReadOnly;
-}
 
 void OGroupsSortingDialog::UpdateData( )
 {

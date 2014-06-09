@@ -179,8 +179,8 @@ namespace dbaccess
 
     // ::com::sun::star::sdbc::XResultSet
         bool next(  );
-        bool isBeforeFirst(  );
-        bool isAfterLast(  );
+        bool isBeforeFirst(  ) { return m_bBeforeFirst;}
+        bool isAfterLast(  ) { return m_bAfterLast;}
         bool isFirst(  );
         bool isLast(  );
         bool beforeFirst(  );

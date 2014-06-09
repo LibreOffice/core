@@ -215,7 +215,7 @@ public:
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
     void SetFrmFmt(SwFrmFmt * _pFrmFmt);
     const SwFrmFmt* GetFrmFmt() const;
-          SwFrmFmt* GetFrmFmt();
+          SwFrmFmt* GetFrmFmt() { return pFrmFmt;}
 };
 
 class SwFltAnchorClient : public SwClient

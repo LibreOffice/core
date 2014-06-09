@@ -87,7 +87,7 @@ public:
 
     /** Return whether the insertion marker is active.
     */
-    bool IsActive (void) const;
+    bool IsActive (void) const { return mbIsActive;}
 
     /** Return the insertion index that corresponds with the current
         graphical location of the insertion indicator.

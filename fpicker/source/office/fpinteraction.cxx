@@ -115,10 +115,6 @@ namespace svt
     }
 
 
-    bool OFilePickerInteractionHandler::wasUsed() const
-    {
-        return m_bUsed;
-    }
 
 
     void OFilePickerInteractionHandler::resetUseState()

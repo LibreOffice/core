@@ -114,10 +114,6 @@ PanelTitleBar* Panel::GetTitleBar (void) const
 
 
 
-bool Panel::IsTitleBarOptional (void) const
-{
-    return mbIsTitleBarOptional;
-}
 
 
 
@@ -152,10 +148,6 @@ void Panel::SetExpanded (const bool bIsExpanded)
 
 
 
-bool Panel::IsExpanded (void) const
-{
-    return mbIsExpanded;
-}
 
 
 

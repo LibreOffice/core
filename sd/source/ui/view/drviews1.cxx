@@ -471,10 +471,6 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
 
 
-bool DrawViewShell::IsLayerModeActive (void) const
-{
-    return mbIsLayerModeActive;
-}
 
 
 /**

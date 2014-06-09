@@ -51,9 +51,5 @@ const OString Options::getOption(const OString& option) const
     return i->second;
 }
 
-const StringVector& Options::getInputFiles()
-{
-    return m_inputFiles;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

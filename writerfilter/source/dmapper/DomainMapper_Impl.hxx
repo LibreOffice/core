@@ -457,27 +457,27 @@ public:
     void AddDummyParaForTableInSection();
     void RemoveLastParagraph( );
     void SetIsLastParagraphInSection( bool bIsLast );
-    bool GetIsLastParagraphInSection();
+    bool GetIsLastParagraphInSection() { return m_bIsLastParaInSection;}
     void SetIsFirstParagraphInSection( bool bIsFirst );
-    bool GetIsFirstParagraphInSection();
+    bool GetIsFirstParagraphInSection() { return m_bIsFirstParaInSection;}
     void SetIsDummyParaAddedForTableInSection( bool bIsAdded );
-    bool GetIsDummyParaAddedForTableInSection();
+    bool GetIsDummyParaAddedForTableInSection() { return m_bDummyParaAddedForTableInSection;}
     void SetIsTextFrameInserted( bool bIsInserted );
-    bool GetIsTextFrameInserted();
+    bool GetIsTextFrameInserted() { return m_bTextFrameInserted;}
     void SetParaSectpr(bool bParaSectpr);
-    bool GetParaSectpr();
+    bool GetParaSectpr() { return m_bParaSectpr;}
 
     void SetSymbolData( sal_Int32 nSymbolData );
-    sal_Int32 GetSymbolData();
+    sal_Int32 GetSymbolData() { return m_nSymboldata;}
     /// Setter method for m_bSdt.
     void SetSdt(bool bSdt);
     /// Getter method for m_bSdt.
-    bool GetSdt();
+    bool GetSdt() { return m_bSdt;}
     /// Getter method for m_bIsTableHasDirectFormatting
-    bool GetIsTableHasDirectFormatting();
+    bool GetIsTableHasDirectFormatting() { return m_bIsTableHasDirectFormatting;}
     /// Setter method for m_bIsTableHasDirectFormatting
     void SetIsTableHasDirectFormatting(bool bIsTableHasDirectFormatting);
-    bool GetParaChanged();
+    bool GetParaChanged() { return m_bParaChanged;}
 
     void deferBreak( BreakType deferredBreakType );
     bool isBreakDeferred( BreakType deferredBreakType );
@@ -736,7 +736,7 @@ public:
     sal_Int32 getCurrentNumberingProperty(const OUString& aProp);
 
     /// If we're importing into a new document, or just pasting to an existing one.
-    bool IsNewDoc();
+    bool IsNewDoc() { return m_bIsNewDoc;}
 
     /// If we're inside <w:rPr>, inside <w:style w:type="table">
     bool m_bInTableStyleRunProps;

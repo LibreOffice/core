@@ -471,10 +471,6 @@ namespace canvas
                 maPosition + maCurrClipBounds.getMaximum() );
     }
 
-    double CanvasCustomSpriteHelper::getPriority() const
-    {
-        return mfPriority;
-    }
 
     ::basegfx::B2DRange CanvasCustomSpriteHelper::getFullSpriteRect() const
     {

@@ -41,10 +41,6 @@ ScUnitConverterData::ScUnitConverterData( const ScUnitConverterData& r ) :
 
 ScUnitConverterData::~ScUnitConverterData() {}
 
-double ScUnitConverterData::GetValue() const
-{
-    return mfValue;
-}
 
 const OUString& ScUnitConverterData::GetIndexString() const
 {

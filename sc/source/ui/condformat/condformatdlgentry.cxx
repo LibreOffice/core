@@ -124,10 +124,6 @@ void ScCondFrmtEntry::Deselect()
     SetHeight();
 }
 
-bool ScCondFrmtEntry::IsSelected() const
-{
-    return mbActive;
-}
 
 IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
 {

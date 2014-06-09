@@ -621,10 +621,6 @@ bool SlideSorterView::SetOrientation (const Layouter::Orientation eOrientation)
 
 
 
-Layouter::Orientation SlideSorterView::GetOrientation (void) const
-{
-    return meOrientation;
-}
 
 
 

@@ -94,7 +94,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         bool isPreviewFrame();
 
         // layouting
-        bool isLayoutDirty();
+        bool isLayoutDirty() { return m_bLayoutDirty;}
         void doLayout(const ::Size& aContainerSize);
 
         // creation/destruction

@@ -33,10 +33,6 @@ ViewShellHint::ViewShellHint (HintId eHintId)
 
 
 
-ViewShellHint::HintId ViewShellHint::GetHintId (void) const
-{
-    return meHintId;
-}
 
 
 } // end of namespace sd

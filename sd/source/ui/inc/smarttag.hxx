@@ -63,7 +63,7 @@ public:
     virtual bool Command( const CommandEvent& rCEvt );
 
     /** returns true if this smart tag is currently selected */
-    bool isSelected() const;
+    bool isSelected() const { return mbSelected;}
 
     ::sd::View& getView() const { return mrView; }
 

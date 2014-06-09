@@ -93,7 +93,7 @@ public:
     bool ControlIsInserted();
     bool ControlIsChanged();
     bool ControlDropsToolBar();
-    sal_Int32 TBCStreamOffset();
+    sal_Int32 TBCStreamOffset() { return fc;}
     sal_Int16 CustomizationIndex();
 
 };

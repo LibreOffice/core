@@ -31,7 +31,7 @@ public:
     virtual ~GraphicNativeMetadata();
 
     bool read(Graphic& rGraphic);
-    sal_uInt16 getRotation();
+    sal_uInt16 getRotation() { return mRotation;}
 };
 
 #endif // INCLUDED_VCL_GRAPHICNATIVEMETADATA_HXX

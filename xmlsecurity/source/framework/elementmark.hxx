@@ -62,12 +62,12 @@ public:
     ElementMark(sal_Int32 nSecurityId, sal_Int32 nBufferId);
     virtual ~ElementMark() {};
 
-    BufferNode* getBufferNode() const;
+    BufferNode* getBufferNode() const { return m_pBufferNode;}
     void setBufferNode(const BufferNode* pBufferNode);
-    sal_Int32 getSecurityId() const;
+    sal_Int32 getSecurityId() const { return m_nSecurityId;}
     void setSecurityId(sal_Int32 nSecurityId);
-    com::sun::star::xml::crypto::sax::ElementMarkType getType() const;
-    sal_Int32 getBufferId() const;
+    com::sun::star::xml::crypto::sax::ElementMarkType getType() const { return m_type;}
+    sal_Int32 getBufferId() const { return m_nBufferId;}
 };
 
 #endif

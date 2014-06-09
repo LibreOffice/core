@@ -192,7 +192,7 @@ public:
     sal_Int64               GetSpinSize() const               { return mnSpinSize; }
 
     void                    SetDecimalDigits( sal_uInt16 nDigits );
-    sal_uInt16                  GetDecimalDigits() const;
+    sal_uInt16                  GetDecimalDigits() const { return mnDecimalDigits;}
 
     void                    SetUseThousandSep( bool b );
     bool                    IsUseThousandSep() const { return mbThousandSep; }

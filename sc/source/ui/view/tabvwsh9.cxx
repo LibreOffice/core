@@ -98,10 +98,6 @@ void ScTabViewShell::GetGalleryState( SfxItemSet& /* rSet */ )
 {
 }
 
-ScInputHandler* ScTabViewShell::GetInputHandler() const
-{
-    return pInputHandler;
-}
 
 OUString ScTabViewShell::GetDescription() const
 {

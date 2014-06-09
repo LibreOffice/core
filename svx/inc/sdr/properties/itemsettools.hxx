@@ -45,7 +45,7 @@ namespace sdr
             explicit ItemChangeBroadcaster(const SdrObject& rObj);
             ~ItemChangeBroadcaster();
 
-            sal_uInt32 GetRectangleCount() const;
+            sal_uInt32 GetRectangleCount() const {  return mnCount; }
             const Rectangle& GetRectangle(sal_uInt32 nIndex) const;
         };
     } // end of namespace properties

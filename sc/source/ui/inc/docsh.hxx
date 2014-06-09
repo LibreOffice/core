@@ -353,7 +353,7 @@ public:
 
     void            LockPaint();
     void            UnlockPaint();
-    sal_uInt16          GetLockCount() const;
+    sal_uInt16          GetLockCount() const { return nDocumentLock;}
     void            SetLockCount(sal_uInt16 nNew);
 
     void            LockDocument();
@@ -364,14 +364,14 @@ public:
     virtual SfxStyleSheetBasePool*  GetStyleSheetPool() SAL_OVERRIDE;
 
     void            SetInplace( bool bInplace );
-    bool            IsEmpty() const;
+    bool            IsEmpty() const { return bIsEmpty; }
     void            SetEmpty(bool bSet);
 
     bool            IsInUndo() const                { return bIsInUndo; }
     void            SetInUndo(bool bSet);
 
     void            CalcOutputFactor();
-    double          GetOutputFactor() const;
+    double          GetOutputFactor() const { return nPrtToScreenFactor;}
     void            GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
                                                SCTAB             nCurTab,
                                                bool&             rbHeader,

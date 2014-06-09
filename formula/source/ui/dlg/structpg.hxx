@@ -59,7 +59,7 @@ public:
                         IFormulaToken* pToken = NULL );
 
     void            SetActiveFlag(bool bFlag=true);
-    bool            GetActiveFlag();
+    bool            GetActiveFlag() { return bActiveFlag;}
     void            GetFocus() SAL_OVERRIDE;
     void            LoseFocus() SAL_OVERRIDE;
 };

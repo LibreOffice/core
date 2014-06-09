@@ -75,7 +75,7 @@ public:
         double nPosition,
         const bool bAsynchronousRepaint);
 
-    double GetThumbPosition (void) const;
+    double GetThumbPosition (void) const { return mnThumbPosition;}
 
     /** Set the upper border of the slider range.
     */
@@ -86,10 +86,10 @@ public:
             A value not larger than the last value given to SetTotalSize().
     */
     void SetThumbSize (const double nThumbSize);
-    double GetThumbSize (void) const;
+    double GetThumbSize (void) const { return mnThumbSize;}
 
     void SetLineHeight (const double nLineHeight);
-    double GetLineHeight (void) const;
+    double GetLineHeight (void) const { return mnLineHeight;}
 
     /** Set the canvas that is used for painting the scroll bar.
     */

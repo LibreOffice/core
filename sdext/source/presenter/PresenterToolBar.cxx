@@ -187,7 +187,7 @@ namespace {
         virtual awt::Size CreateBoundingSize (
             const Reference<rendering::XCanvas>& rxCanvas) = 0;
 
-        bool IsEnabled (void) const;
+        bool IsEnabled (void) const { return mbIsEnabled;}
     private:
         bool mbIsEnabled;
     };
@@ -1343,10 +1343,6 @@ bool Element::IsOutside (const awt::Rectangle& rBox)
         return false;
 }
 
-bool Element::IsEnabled (void) const
-{
-    return mbIsEnabled;
-}
 
 bool Element::IsFilling (void) const
 {

@@ -107,7 +107,7 @@ public:
             The returned pointer is NULL when the device could not be
             created when this modules was instantiated.
     */
-    OutputDevice* GetVirtualRefDevice (void);
+    OutputDevice* GetVirtualRefDevice (void) { return mpVirtualRefDevice;}
 
     /** Deprecated alias to <member>GetVirtualRefDevice</member>.
         @param rDocShell

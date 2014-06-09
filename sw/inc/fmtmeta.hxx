@@ -135,7 +135,7 @@ protected:
     SwTxtNode * m_pTxtNode;
 
     SwTxtMeta * GetTxtAttr() const;
-    SwTxtNode * GetTxtNode() const; ///< @return 0 if not in document (undo)
+    SwTxtNode * GetTxtNode() const { return m_pTxtNode;} ///< @return 0 if not in document (undo)
 
     SwFmtMeta * GetFmtMeta() const { return m_pFmt; }
     void SetFmtMeta( SwFmtMeta * const i_pFmt ) { m_pFmt = i_pFmt; };

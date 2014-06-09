@@ -164,14 +164,14 @@ namespace utl
 
             const OUString&         GetSubTreeName() const {return sSubTree;}
 
-            bool IsModified() const;
+            bool IsModified() const { return m_bIsModified;}
 
             /** writes the changed values into the sub tree. Always called in the Dtor of the derived class.  */
             virtual void            Commit()=0;
 
             bool IsInValueChange() const;
 
-            sal_Int16               GetMode() const;
+            sal_Int16               GetMode() const { return m_nMode;}
     };
 }//namespace utl
 #endif // INCLUDED_UNOTOOLS_CONFIGITEM_HXX

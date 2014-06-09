@@ -96,7 +96,7 @@ public:
                             bool bCloneCaption ) const;
 
     /** Returns the data struct containing all note settings. */
-    const ScNoteData& GetNoteData() const;
+    const ScNoteData& GetNoteData() const { return maNoteData;}
 
     /** Returns the creation date of this note. */
     const OUString& GetDate() const;

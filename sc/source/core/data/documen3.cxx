@@ -229,10 +229,6 @@ const ScRangeData* ScDocument::GetRangeAtBlock( const ScRange& rBlock, OUString*
     return pData;
 }
 
-ScDBCollection* ScDocument::GetDBCollection() const
-{
-    return pDBCollection;
-}
 
 void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, bool bRemoveAutoFilter )
 {
@@ -362,10 +358,6 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
     return NULL;
 }
 
-ScChartCollection* ScDocument::GetChartCollection() const
-{
-    return pChartCollection;
-}
 
 void ScDocument::StopTemporaryChartLock()
 {
@@ -373,10 +365,6 @@ void ScDocument::StopTemporaryChartLock()
         apTemporaryChartLock->StopLocking();
 }
 
-ScChartListenerCollection* ScDocument::GetChartListenerCollection() const
-{
-    return pChartListenerCollection;
-}
 
 void ScDocument::SetChartListenerCollection(
             ScChartListenerCollection* pNewChartListenerCollection,
@@ -466,10 +454,6 @@ formula::FormulaGrammar::AddressConvention ScDocument::GetAddressConvention() co
     return formula::FormulaGrammar::extractRefConvention(eGrammar);
 }
 
-formula::FormulaGrammar::Grammar ScDocument::GetGrammar() const
-{
-    return eGrammar;
-}
 
 void ScDocument::SetGrammar( formula::FormulaGrammar::Grammar eGram )
 {
@@ -1628,10 +1612,6 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
 }
 
 
-bool ScDocument::IsEmbedded() const
-{
-    return bIsEmbedded;
-}
 
 void ScDocument::GetEmbedded( ScRange& rRange ) const
 {

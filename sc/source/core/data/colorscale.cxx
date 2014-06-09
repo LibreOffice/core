@@ -343,10 +343,6 @@ void ScColorScaleEntry::SetType( ScColorScaleEntryType eType )
     }
 }
 
-ScColorScaleEntryType ScColorScaleEntry::GetType() const
-{
-    return meType;
-}
 
 double ScColorScaleFormat::GetMinValue() const
 {

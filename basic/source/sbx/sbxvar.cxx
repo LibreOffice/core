@@ -138,10 +138,6 @@ SbxArray* SbxVariable::GetParameters() const
     return mpPar;
 }
 
-SbxObject* SbxVariable::GetParent()
-{
-    return pParent;
-}
 
 // Perhaps some day one could cut the parameter 0.
 // then the copying will be dropped ...

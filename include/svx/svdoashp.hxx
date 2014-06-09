@@ -147,7 +147,7 @@ public:
     void SetMirroredX( const bool bMirroredX );
     void SetMirroredY( const bool bMirroredY );
 
-    double GetObjectRotation() const;
+    double GetObjectRotation() const { return fObjectRotation;}
     double GetExtraTextRotation( const bool bPreRotation = false ) const;
 
     TYPEINFO_OVERRIDE();

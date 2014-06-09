@@ -169,10 +169,6 @@ SfxUndoManager& OTableEditorCtrl::GetUndoManager() const
     return GetView()->getController().GetUndoManager();
 }
 
-bool OTableEditorCtrl::IsReadOnly()
-{
-    return bReadOnly;
-}
 
 void OTableEditorCtrl::SetReadOnly( bool bRead )
 {

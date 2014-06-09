@@ -199,7 +199,7 @@ public:
     void            SetGraphicSize(const Size& rSet) {aGraphicSize = rSet;}
     const Size&     GetGraphicSize() const {return aGraphicSize;}
 
-    SvxNumPositionAndSpaceMode GetPositionAndSpaceMode() const;
+    SvxNumPositionAndSpaceMode GetPositionAndSpaceMode() const { return mePositionAndSpaceMode;}
     void SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode );
 
     void            SetLSpace(short nSet) {nLSpace = nSet;}
@@ -212,13 +212,13 @@ public:
     short           GetCharTextDistance() const;
 
     void SetLabelFollowedBy( const LabelFollowedBy eLabelFollowedBy );
-    LabelFollowedBy GetLabelFollowedBy() const;
+    LabelFollowedBy GetLabelFollowedBy() const { return meLabelFollowedBy;}
     void SetListtabPos( const long nListtabPos );
-    long GetListtabPos() const;
+    long GetListtabPos() const { return mnListtabPos;}
     void SetFirstLineIndent( const long nFirstLineIndent );
-    long GetFirstLineIndent() const;
+    long GetFirstLineIndent() const { return mnFirstLineIndent;}
     void SetIndentAt( const long nIndentAt );
-    long GetIndentAt() const;
+    long GetIndentAt() const { return mnIndentAt;}
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
     static OUString CreateRomanString( sal_uLong nNo, bool bUpper );

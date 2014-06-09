@@ -107,7 +107,7 @@ public:
     // Return if we can import templates to the current region
     virtual bool isImportAllowed () const = 0;
 
-    sal_uInt16 getCurRegionId () const;
+    sal_uInt16 getCurRegionId () const { return mnCurRegionId;}
 
     const OUString& getCurRegionName () const;
 

@@ -62,26 +62,26 @@ public:
     OOXMLParserState();
     virtual ~OOXMLParserState();
 
-    bool isInSectionGroup() const;
+    bool isInSectionGroup() const { return mbInSectionGroup;}
     void setInSectionGroup(bool bInSectionGroup);
 
     void setLastParagraphInSection(bool bLastParagraphInSection);
-    bool isLastParagraphInSection() const;
+    bool isLastParagraphInSection() const { return mbLastParagraphInSection;}
 
-    bool isInParagraphGroup() const;
+    bool isInParagraphGroup() const { return mbInParagraphGroup;}
     void setInParagraphGroup(bool bInParagraphGroup);
 
-    bool isInCharacterGroup() const;
+    bool isInCharacterGroup() const { return mbInCharacterGroup;}
     void setInCharacterGroup(bool bInCharacterGroup);
 
     void setForwardEvents(bool bForwardEvents);
-    bool isForwardEvents() const;
+    bool isForwardEvents() const { return mbForwardEvents;}
 
     const std::string getHandle() const;
     void setHandle();
 
     void setDocument(OOXMLDocumentImpl* pDocument);
-    OOXMLDocumentImpl* getDocument() const;
+    OOXMLDocumentImpl* getDocument() const { return mpDocument;}
 
     void setXNoteId(const sal_Int32 rId);
     sal_Int32 getXNoteId() const;

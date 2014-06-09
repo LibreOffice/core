@@ -75,9 +75,9 @@ public :
     Exif();
     virtual ~Exif();
 
-    bool hasExif();
+    bool hasExif() { return mbExifPresent;}
 
-    Orientation getOrientation();
+    Orientation getOrientation() { return maOrientation;}
     sal_Int32 getRotation();
 
     void setOrientation(Orientation orientation);

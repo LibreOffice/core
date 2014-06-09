@@ -217,10 +217,6 @@ ParaWin::~ParaWin()
     aBtnFx4.SetGetFocusHdl( aEmptyLink );
 }
 
-sal_uInt16 ParaWin::GetActiveLine()
-{
-    return nActiveLine;
-}
 
 void ParaWin::SetActiveLine(sal_uInt16 no)
 {

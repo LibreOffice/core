@@ -275,10 +275,6 @@ int PageSelector::GetPageCount (void) const
 
 
 
-int PageSelector::GetSelectedPageCount (void) const
-{
-    return mnSelectedPageCount;
-}
 
 
 

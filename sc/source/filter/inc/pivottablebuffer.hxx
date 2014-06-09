@@ -346,7 +346,7 @@ public:
     /** Returns the source column index of the pivot field with the passed index, or -1. */
     sal_Int32           getCacheDatabaseIndex( sal_Int32 nFieldIdx ) const;
 
-    ScDPObject* getDPObject();
+    ScDPObject* getDPObject() { return mpDPObject; }
 
 private:
     typedef RefVector< PivotTableField >        PivotTableFieldVector;

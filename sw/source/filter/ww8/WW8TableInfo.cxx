@@ -113,45 +113,13 @@ void WW8TableNodeInfoInner::setRect(const SwRect & rRect)
     maRect = rRect;
 }
 
-sal_uInt32 WW8TableNodeInfoInner::getDepth() const
-{
-    return mnDepth;
-}
 
-sal_uInt32 WW8TableNodeInfoInner::getCell() const
-{
-    return mnCell;
-}
 
-sal_uInt32 WW8TableNodeInfoInner::getRow() const
-{
-    return mnRow;
-}
 
-sal_uInt32 WW8TableNodeInfoInner::getShadowsBefore() const
-{
-    return mnShadowsBefore;
-}
 
-sal_uInt32 WW8TableNodeInfoInner::getShadowsAfter() const
-{
-    return mnShadowsAfter;
-}
 
-bool WW8TableNodeInfoInner::isEndOfCell() const
-{
-    return mbEndOfCell;
-}
 
-bool WW8TableNodeInfoInner::isEndOfLine() const
-{
-    return mbEndOfLine;
-}
 
-bool WW8TableNodeInfoInner::isFirstInTable() const
-{
-    return mbFirstInTable;
-}
 
 const SwNode * WW8TableNodeInfoInner::getNode() const
 {
@@ -376,15 +344,7 @@ RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow()
     return pResult;
  }
 
-const SwTableBox * WW8TableNodeInfoInner::getTableBox() const
-{
-    return mpTableBox;
-}
 
-const SwTable * WW8TableNodeInfoInner::getTable() const
-{
-    return mpTable;
-}
 
 const SwRect & WW8TableNodeInfoInner::getRect() const
 {
@@ -559,10 +519,6 @@ void WW8TableNodeInfo::setShadowsAfter(sal_uInt32 nShadowsAfter)
     getInnerForDepth(mnDepth)->setShadowsAfter(nShadowsAfter);
 }
 
-WW8TableInfo * WW8TableNodeInfo::getParent() const
-{
-    return mpParent;
-}
 
 sal_uInt32 WW8TableNodeInfo::getDepth() const
 {
@@ -572,25 +528,13 @@ sal_uInt32 WW8TableNodeInfo::getDepth() const
     return mnDepth;
 }
 
-const SwNode * WW8TableNodeInfo::getNode() const
-{
-    return mpNode;
-}
 
 const SwTableBox * WW8TableNodeInfo::getTableBox() const
 {
     return getInnerForDepth(mnDepth)->getTableBox();
 }
 
-WW8TableNodeInfo * WW8TableNodeInfo::getNext() const
-{
-    return mpNext;
-}
 
-const SwNode * WW8TableNodeInfo::getNextNode() const
-{
-    return mpNextNode;
-}
 
 sal_uInt32 WW8TableNodeInfo::getCell() const
 {

@@ -303,7 +303,7 @@ class SW_DLLPUBLIC SwInputField : public SwField
     virtual SwField*        Copy() const SAL_OVERRIDE;
 
     // Accessing Input Field's content
-    const OUString& getContent() const;
+    const OUString& getContent() const { return aContent;}
 
     void LockNotifyContentChange();
     void UnlockNotifyContentChange();
@@ -320,7 +320,7 @@ public:
     virtual ~SwInputField();
 
     void SetFmtFld( SwFmtFld& rFmtFld );
-    SwFmtFld* GetFmtFld();
+    SwFmtFld* GetFmtFld() { return mpFmtFld;}
 
     // Providing new Input Field's content:
     // Fill Input Field's content depending on <nSupType>.

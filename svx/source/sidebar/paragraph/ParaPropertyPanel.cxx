@@ -209,10 +209,6 @@ void ParaPropertyPanel::HandleContextChange (
     }
 }
 
-SfxBindings* ParaPropertyPanel::GetBindings()
-{
-    return mpBindings;
-}
 
 
 

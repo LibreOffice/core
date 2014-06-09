@@ -1436,7 +1436,7 @@ public:
     static rtl_TextEncoding GetFIBCharset(sal_uInt16 chs);
     ww::WordVersion GetFIBVersion() const;
     WW8_CP GetBaseCp(ManTypes nType) const;
-    sal_Unicode getNumDecimalSep() const;
+    sal_Unicode getNumDecimalSep() const { return nNumDecimalSep;}
 };
 
 class WW8Style

@@ -434,10 +434,6 @@ void ScDPGroupDimension::SetDateDimension()
     mbDateDimension = true;
 }
 
-bool ScDPGroupDimension::IsDateDimension() const
-{
-    return mbDateDimension;
-}
 
 ScDPNumGroupDimension::ScDPNumGroupDimension() : mbDateDimension(false) {}
 
@@ -460,10 +456,6 @@ void ScDPNumGroupDimension::DisposeData()
     maMemberEntries.clear();
 }
 
-bool ScDPNumGroupDimension::IsDateDimension() const
-{
-    return mbDateDimension;
-}
 
 ScDPNumGroupDimension::~ScDPNumGroupDimension()
 {

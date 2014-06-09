@@ -1133,15 +1133,7 @@ void PresenterTextCaret::HideCaret (void)
     mnCharacterIndex = -1;
 }
 
-sal_Int32 PresenterTextCaret::GetParagraphIndex (void) const
-{
-    return mnParagraphIndex;
-}
 
-sal_Int32 PresenterTextCaret::GetCharacterIndex (void) const
-{
-    return mnCharacterIndex;
-}
 
 void PresenterTextCaret::SetPosition (
     const sal_Int32 nParagraphIndex,
@@ -1176,10 +1168,6 @@ void PresenterTextCaret::SetPosition (
     }
 }
 
-bool PresenterTextCaret::IsVisible (void) const
-{
-    return mbIsCaretVisible;
-}
 
 void PresenterTextCaret::SetCaretMotionBroadcaster (
     const ::boost::function<void(sal_Int32,sal_Int32,sal_Int32,sal_Int32)>& rBroadcaster)

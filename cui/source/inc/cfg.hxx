@@ -518,7 +518,7 @@ public:
 
     virtual ~SvxMainMenuOrganizerDialog ();
 
-    SvxEntries*     GetEntries();
+    SvxEntries*     GetEntries() { return pEntries;}
     void            SetEntries( SvxEntries* );
     SvxConfigEntry* GetSelectedEntry();
 };

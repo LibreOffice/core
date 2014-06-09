@@ -449,10 +449,6 @@ void SvxNumberFormat::SetBulletFont(const Font* pFont)
     pBulletFont = pFont ? new Font(*pFont): 0;
 }
 
-SvxNumberFormat::SvxNumPositionAndSpaceMode SvxNumberFormat::GetPositionAndSpaceMode() const
-{
-    return mePositionAndSpaceMode;
-}
 void SvxNumberFormat::SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode )
 {
     mePositionAndSpaceMode = ePositionAndSpaceMode;
@@ -483,33 +479,17 @@ void SvxNumberFormat::SetLabelFollowedBy( const LabelFollowedBy eLabelFollowedBy
 {
     meLabelFollowedBy = eLabelFollowedBy;
 }
-SvxNumberFormat::LabelFollowedBy SvxNumberFormat::GetLabelFollowedBy() const
-{
-    return meLabelFollowedBy;
-}
 void SvxNumberFormat::SetListtabPos( const long nListtabPos )
 {
     mnListtabPos = nListtabPos;
-}
-long SvxNumberFormat::GetListtabPos() const
-{
-    return mnListtabPos;
 }
 void SvxNumberFormat::SetFirstLineIndent( const long nFirstLineIndent )
 {
     mnFirstLineIndent = nFirstLineIndent;
 }
-long SvxNumberFormat::GetFirstLineIndent() const
-{
-    return mnFirstLineIndent;
-}
 void SvxNumberFormat::SetIndentAt( const long nIndentAt )
 {
     mnIndentAt = nIndentAt;
-}
-long SvxNumberFormat::GetIndentAt() const
-{
-    return mnIndentAt;
 }
 
 IMPL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void *, EMPTYARG )

@@ -31,10 +31,6 @@ GraphicNativeMetadata::GraphicNativeMetadata() :
 GraphicNativeMetadata::~GraphicNativeMetadata()
 {}
 
-sal_uInt16 GraphicNativeMetadata::getRotation()
-{
-    return mRotation;
-}
 
 bool GraphicNativeMetadata::read(Graphic& rGraphic)
 {

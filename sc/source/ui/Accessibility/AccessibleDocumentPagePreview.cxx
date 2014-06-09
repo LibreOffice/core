@@ -89,7 +89,7 @@ public:
     ~ScNotesChildren();
     void Init(const Rectangle& rVisRect, sal_Int32 nOffset);
 
-    sal_Int32 GetChildrenCount() const;
+    sal_Int32 GetChildrenCount() const { return mnParagraphs;}
     uno::Reference<XAccessible> GetChild(sal_Int32 nIndex) const;
     uno::Reference<XAccessible> GetAt(const awt::Point& rPoint) const;
 
@@ -212,10 +212,6 @@ void ScNotesChildren::Init(const Rectangle& rVisRect, sal_Int32 nOffset)
     }
 }
 
-sal_Int32 ScNotesChildren::GetChildrenCount() const
-{
-    return mnParagraphs;
-}
 
 struct ScParaFound
 {

@@ -422,10 +422,6 @@ void SvxEditSourceAdapter::SetEditSource( ::std::auto_ptr< SvxEditSource > pAdap
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-bool SvxEditSourceAdapter::IsValid() const
-{
-    return mbEditSourceValid;
-}
 
 
 

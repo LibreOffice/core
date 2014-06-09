@@ -209,10 +209,6 @@ MergeData::~MergeData()
     delete pMergeEntrys;
 }
 
-MergeEntrys* MergeData::GetMergeEntries()
-{
-    return pMergeEntrys;
-}
 
 bool MergeData::operator==( ResData *pData )
 {

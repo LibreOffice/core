@@ -267,10 +267,6 @@ void MasterPageContainer::SetPreviewSize (PreviewSize eSize)
 
 
 
-MasterPageContainer::PreviewSize MasterPageContainer::GetPreviewSize (void) const
-{
-    return mePreviewSize;
-}
 
 
 

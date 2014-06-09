@@ -1775,10 +1775,6 @@ void ScCondDateFormatEntry::SetDateType( condformat::ScCondFormatDateType eType 
     meType = eType;
 }
 
-condformat::ScCondFormatDateType ScCondDateFormatEntry::GetDateType() const
-{
-    return meType;
-}
 
 const OUString& ScCondDateFormatEntry::GetStyleName() const
 {

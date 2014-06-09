@@ -106,12 +106,6 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
         && ( nStart == 0  &&  nEnd == nLength );
 }
 
-/// do we have an actual expression?
-bool ComputedExpression::isEmptyExpression() const
-{
-    return mbIsEmpty;
-}
-
 bool ComputedExpression::isSimpleExpression() const
 {
     // actual work is done by setExpression

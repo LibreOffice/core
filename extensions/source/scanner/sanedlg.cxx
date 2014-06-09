@@ -1379,9 +1379,5 @@ bool SaneDlg::SetAdjustedNumericalValue(
     return true;
 }
 
-bool SaneDlg::getDoScan()
-{
-    return doScan;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

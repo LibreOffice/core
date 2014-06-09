@@ -77,7 +77,17 @@ public:
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
-    xmlNodePtr getNativeElement( ) const;
+    /*
+    *   NAME
+    *  getNativeElement -- Retrieves the libxml2 node wrapped by this object
+    *
+    *   SYNOPSIS
+    *  pNode = getNativeElement();
+    *
+    *   RESULT
+    *  pNode - the libxml2 node wrapped by this object
+    */
+    xmlNodePtr getNativeElement( ) const { return m_pElement;}
     void setNativeElement(const xmlNodePtr pNode);
 };
 

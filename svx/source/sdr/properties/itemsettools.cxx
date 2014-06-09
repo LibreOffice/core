@@ -72,10 +72,6 @@ namespace sdr
             }
         }
 
-        sal_uInt32 ItemChangeBroadcaster::GetRectangleCount() const
-        {
-            return mnCount;
-        }
 
         const Rectangle& ItemChangeBroadcaster::GetRectangle(sal_uInt32 nIndex) const
         {

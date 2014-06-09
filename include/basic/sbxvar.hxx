@@ -337,7 +337,7 @@ public:
     virtual void Broadcast( sal_uIntPtr nHintId ) SAL_OVERRIDE;
 
     inline const SbxObject* GetParent() const { return pParent; }
-    SbxObject* GetParent();
+    SbxObject* GetParent() { return pParent;}
     virtual void SetParent( SbxObject* );
 
     const OUString& GetDeclareClassName( void );

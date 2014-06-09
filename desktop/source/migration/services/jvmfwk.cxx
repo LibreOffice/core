@@ -64,7 +64,7 @@ public:
     JavaInfo* pData;
     CJavaInfo();
     ~CJavaInfo();
-    operator JavaInfo* () const;
+    operator JavaInfo* () const { return pData;}
 };
 
 CJavaInfo::CJavaInfo(): pData(NULL)
@@ -76,10 +76,6 @@ CJavaInfo::~CJavaInfo()
     jfw_freeJavaInfo(pData);
 }
 
-CJavaInfo::operator JavaInfo*() const
-{
-    return pData;
-}
 
 
 class JavaMigration : public ::cppu::WeakImplHelper4<

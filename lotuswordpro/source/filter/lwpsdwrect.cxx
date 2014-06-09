@@ -116,15 +116,6 @@ SdwRectangle::~SdwRectangle()
 }
 /**************************************************************************
  * @date:   11/19/2004
- * @short:  Get the flag whether if the rectangle has been rotated.
- * @return: m_bRotated rotation flag.
-**************************************************************************/
-bool SdwRectangle::IsRectRotated() const
-{
-    return m_bRotated;
-}
-/**************************************************************************
- * @date:   11/19/2004
  * @short:  Calculate and return center point of the rectangle.
  * @return: center point
 **************************************************************************/

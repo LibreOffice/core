@@ -79,12 +79,12 @@ public:
     /** Return <TRUE/> when the cache is full, i.e. the cache compactor had
         to be run.
     */
-    bool IsFull (void) const;
+    bool IsFull (void) const { return mbIsFull;}
 
     /** Return the memory size that is occupied by all non-precious bitmaps
         in the cache.
     */
-    sal_Int32 GetSize (void);
+    sal_Int32 GetSize (void) { return mnNormalCacheSize;}
 
     /** Return <TRUE/> when a preview bitmap exists for the given key.
     */

@@ -188,10 +188,6 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 }
 
 
-HWPPara *HWPPara::Next(void)
-{
-    return _next;
-}
 
 
 CharShape *HWPPara::GetCharShape(int pos)

@@ -30,7 +30,7 @@ public:
     virtual ~SdrOpenGLObj();
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() SAL_OVERRIDE;
 
-    OpenGLContext* getOpenGLContext();
+    OpenGLContext* getOpenGLContext() { return mpContext;}
 
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
 

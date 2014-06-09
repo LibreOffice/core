@@ -291,10 +291,6 @@ bool ScFlatBoolRowSegments::ForwardIterator::getValue(SCROW nPos, bool& rVal)
     return true;
 }
 
-SCROW ScFlatBoolRowSegments::ForwardIterator::getLastPos() const
-{
-    return mnLastPos;
-}
 
 ScFlatBoolRowSegments::RangeIterator::RangeIterator(ScFlatBoolRowSegments& rSegs) :
     mrSegs(rSegs)
@@ -460,10 +456,6 @@ bool ScFlatUInt16RowSegments::ForwardIterator::getValue(SCROW nPos, sal_uInt16& 
     return true;
 }
 
-SCROW ScFlatUInt16RowSegments::ForwardIterator::getLastPos() const
-{
-    return mnLastPos;
-}
 
 ScFlatUInt16RowSegments::ScFlatUInt16RowSegments(sal_uInt16 nDefault) :
     mpImpl(new ScFlatUInt16SegmentsImpl(static_cast<SCCOLROW>(MAXROW), nDefault))

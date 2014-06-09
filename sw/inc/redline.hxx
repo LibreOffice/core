@@ -100,7 +100,7 @@ public:
     virtual SwRedlineExtraData* CreateNew() const SAL_OVERRIDE;
     virtual void Reject( SwPaM& rPam ) const SAL_OVERRIDE;
     virtual bool operator == ( const SwRedlineExtraData& ) const SAL_OVERRIDE;
-    SfxItemSet* GetItemSet( ) const;
+    SfxItemSet* GetItemSet( ) const { return pSet; }
 };
 
 class SW_DLLPUBLIC SwRedlineData

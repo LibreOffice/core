@@ -702,10 +702,6 @@ SwNumberTree::tSwNumTreeNumber SwNumberTreeNode::GetNumber(bool bValidate)
     return mnNumber;
 }
 
-bool SwNumberTreeNode::IsContinueingPreviousSubTree() const
-{
-    return mbContinueingPreviousSubTree;
-}
 
 vector<SwNumberTree::tSwNumTreeNumber> SwNumberTreeNode::GetNumberVector() const
 {
@@ -731,10 +727,6 @@ bool SwNumberTreeNode::IsValid(const SwNumberTreeNode * pChild) const
   return bResult;
 }
 
-bool SwNumberTreeNode::IsPhantom() const
-{
-    return mbPhantom;
-}
 
 void SwNumberTreeNode::SetPhantom(bool _bPhantom)
 {

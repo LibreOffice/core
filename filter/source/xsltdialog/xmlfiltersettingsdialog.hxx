@@ -106,7 +106,7 @@ public:
 
     virtual bool Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    bool    isClosable();
+    bool    isClosable() { return m_bIsClosable;}
 
 private:
     void    initFilterList();

@@ -66,7 +66,7 @@ public:
 
     /** Returns true, if the storage operates in read-only mode (based on an
         input stream). */
-    bool                isReadOnly() const;
+    bool                isReadOnly() const { return mbReadOnly;}
 
     /** Returns the com.sun.star.embed.XStorage interface of the current storage. */
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >

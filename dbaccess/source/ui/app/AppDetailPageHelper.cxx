@@ -988,10 +988,6 @@ void OAppDetailPageHelper::Resize()
     }
 }
 
-PreviewMode OAppDetailPageHelper::getPreviewMode()
-{
-    return m_ePreviewMode;
-}
 
 bool OAppDetailPageHelper::isPreviewEnabled()
 {

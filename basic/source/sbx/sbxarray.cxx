@@ -649,10 +649,6 @@ void SbxDimArray::AddDimImpl32( sal_Int32 lb, sal_Int32 ub, bool bAllowSize0 )
         SetError( eRes );
 }
 
-short SbxDimArray::GetDims() const
-{
-    return nDim;
-}
 
 void SbxDimArray::AddDim( short lb, short ub )
 {

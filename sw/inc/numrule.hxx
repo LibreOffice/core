@@ -246,7 +246,7 @@ public:
 
     bool IsOutlineRule() const { return meRuleType == OUTLINE_RULE; }
 
-    bool IsCountPhantoms() const;
+    bool IsCountPhantoms() const        { return mbCountPhantoms; }
     void SetCountPhantoms(bool bCountPhantoms);
 
     /// Query and set PoolFormat IDs.

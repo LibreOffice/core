@@ -554,7 +554,7 @@ public:
     std::vector< OUString > GetXIdlClassMethods() const;
     std::vector< OUString > GetXIdlClassFields() const;
 
-    bool CanCodeComplete() const;
+    bool CanCodeComplete() const { return bCanComplete;}
 };
 
 } // namespace basctl

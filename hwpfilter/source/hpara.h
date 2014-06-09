@@ -139,7 +139,7 @@ class DLLEXPORT HWPPara
 /**
  * Returns next paragraph.
  */
-        HWPPara *Next(void);
+        HWPPara *Next(void) { return _next;}
 
         int HomePos(int line) const;
         int EndPos(int line) const;

@@ -113,7 +113,7 @@ public:
     rtl::Reference<FuPoor> GetDocShellFunction() const { return mxDocShellFunction; }
     void SetDocShellFunction( const rtl::Reference<FuPoor>& xFunction );
 
-    SdDrawDocument*         GetDoc();
+    SdDrawDocument*         GetDoc() { return mpDoc;}
     DocumentType            GetDocumentType() const { return meDocType; }
 
     SfxPrinter*             GetPrinter(bool bCreate);

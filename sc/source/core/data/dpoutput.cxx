@@ -1229,10 +1229,6 @@ void ScDPOutput::SetHeaderLayout(bool bUseGrid)
     bSizesValid = false;
 }
 
-bool ScDPOutput::GetHeaderLayout() const
-{
-    return mbHeaderLayout;
-}
 
 namespace {
 

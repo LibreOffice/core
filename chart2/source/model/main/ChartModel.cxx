@@ -1357,10 +1357,6 @@ OUString SAL_CALL ChartModel::dump()
     return OUString();
 }
 
-bool ChartModel::isTimeBased() const
-{
-    return mbTimeBased;
-}
 
 void ChartModel::setTimeBased(bool bTimeBased)
 {
@@ -1433,10 +1429,6 @@ void ChartModel::update()
     mpChartView->update();
 }
 
-OpenGLWindow* ChartModel::getOpenGLWindow()
-{
-    return mpOpenGLWindow;
-}
 
 }  // namespace chart
 

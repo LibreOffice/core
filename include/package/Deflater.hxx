@@ -50,7 +50,7 @@ public:
     void SAL_CALL setLevel( sal_Int32 nNewLevel );
     bool SAL_CALL needsInput(  );
     void SAL_CALL finish(  );
-    bool SAL_CALL finished(  );
+    bool SAL_CALL finished(  ) { return bFinished;}
     sal_Int32 SAL_CALL doDeflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
     sal_Int64 SAL_CALL getTotalIn(  );
     sal_Int64 SAL_CALL getTotalOut(  );

@@ -92,7 +92,7 @@ public:
 
     /// @return old state
     bool SetReadOnly( bool bNewState );
-    bool IsReadOnly() const;
+    bool IsReadOnly() const { return m_bIsReadOnly;}
 
     /// reset the dirty status, if changes have been saved
     void SetClean();
@@ -140,7 +140,7 @@ public:
 
     sal_uInt32 GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) const;
 
-    bool IsEnableItem();
+    bool IsEnableItem() { return m_bDataValid;}
     bool IsDataValid();
     void ShowWarningBox();
     bool ShowQueryBox();

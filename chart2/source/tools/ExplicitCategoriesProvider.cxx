@@ -139,10 +139,6 @@ Reference< chart2::data::XDataSequence > ExplicitCategoriesProvider::getOriginal
     return 0;
 }
 
-const Sequence< Reference< data::XLabeledDataSequence> >& ExplicitCategoriesProvider::getSplitCategoriesList()
-{
-    return m_aSplitCategoriesList;
-}
 
 bool ExplicitCategoriesProvider::hasComplexCategories() const
 {

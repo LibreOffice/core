@@ -3249,11 +3249,6 @@ bool SwRedlineExtraData_FormattingChanges::operator == ( const SwRedlineExtraDat
     return false;
 }
 
-SfxItemSet* SwRedlineExtraData_FormattingChanges::GetItemSet( ) const
-{
-    return pSet;
-}
-
 SwRedlineData::SwRedlineData( RedlineType_t eT, sal_uInt16 nAut )
     : pNext( 0 ), pExtraData( 0 ),
     aStamp( DateTime::SYSTEM ),

@@ -84,7 +84,7 @@ public:
         method does not trigger any repaints or layouts.
     */
     bool SetOrientation (const Layouter::Orientation eOrientation);
-    Layouter::Orientation GetOrientation (void) const;
+    Layouter::Orientation GetOrientation (void) const { return meOrientation;}
 
     void RequestRepaint (void);
     void RequestRepaint (const model::SharedPageDescriptor& rDescriptor);

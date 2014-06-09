@@ -202,10 +202,6 @@ void ToolbarLayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangl
     }
 }
 
-bool ToolbarLayoutManager::isLayoutDirty()
-{
-    return m_bLayoutDirty;
-}
 
 void ToolbarLayoutManager::doLayout(const ::Size& aContainerSize)
 {

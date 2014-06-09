@@ -152,15 +152,7 @@ SvxLongLRSpaceItem::SvxLongLRSpaceItem(const SvxLongLRSpaceItem &rCpy) :
     mlRight     (rCpy.mlRight)
 {}
 
-long SvxLongLRSpaceItem::GetLeft() const
-{
-    return mlLeft;
-}
 
-long SvxLongLRSpaceItem::GetRight() const
-{
-    return mlRight;
-}
 
 void SvxLongLRSpaceItem::SetLeft(long lArgLeft)
 {
@@ -293,15 +285,7 @@ SvxLongULSpaceItem::SvxLongULSpaceItem() :
     mlRight     (0)
 {}
 
-long SvxLongULSpaceItem::GetUpper() const
-{
-    return mlLeft;
-}
 
-long SvxLongULSpaceItem::GetLower() const
-{
-    return mlRight;
-}
 
 void SvxLongULSpaceItem::SetUpper(long lArgLeft)
 {
@@ -646,10 +630,6 @@ void SvxColumnItem::SetRight(long right)
     nRight = right;
 }
 
-sal_uInt16 SvxColumnItem::GetActColumn() const
-{
-    return nActColumn;
-}
 
 bool SvxColumnItem::IsFirstAct() const
 {
@@ -661,20 +641,8 @@ bool SvxColumnItem::IsLastAct() const
     return nActColumn == Count() - 1;
 }
 
-long SvxColumnItem::GetLeft()
-{
-    return nLeft;
-}
 
-long SvxColumnItem::GetRight()
-{
-    return nRight;
-}
 
-bool SvxColumnItem::IsTable() const
-{
-    return bTable;
-}
 
 /* SvxColumnDescription */
 
@@ -844,30 +812,10 @@ bool SvxObjectItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nM
     return bRet;
 }
 
-bool SvxObjectItem::HasLimits() const
-{
-    return bLimits;
-}
 
-long SvxObjectItem::GetStartX() const
-{
-    return nStartX;
-}
 
-long SvxObjectItem::GetEndX() const
-{
-    return nEndX;
-}
 
-long SvxObjectItem::GetStartY() const
-{
-    return nStartY;
-}
 
-long SvxObjectItem::GetEndY() const
-{
-    return nEndY;
-}
 
 void SvxObjectItem::SetStartX(long lValue)
 {

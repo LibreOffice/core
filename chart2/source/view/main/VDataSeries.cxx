@@ -421,38 +421,18 @@ void VDataSeries::setPageReferenceSize( const awt::Size & rPageRefSize )
     m_aReferenceSize = rPageRefSize;
 }
 
-StackingDirection VDataSeries::getStackingDirection() const
-{
-    return m_eStackingDirection;
-}
-sal_Int32 VDataSeries::getAttachedAxisIndex() const
-{
-    return m_nAxisIndex;
-}
 void VDataSeries::setConnectBars( bool bConnectBars )
 {
     m_bConnectBars = bConnectBars;
-}
-bool VDataSeries::getConnectBars() const
-{
-    return m_bConnectBars;
 }
 void VDataSeries::setGroupBarsPerAxis( bool bGroupBarsPerAxis )
 {
     m_bGroupBarsPerAxis = bGroupBarsPerAxis;
 }
-bool VDataSeries::getGroupBarsPerAxis() const
-{
-    return m_bGroupBarsPerAxis;
-}
 
 void VDataSeries::setStartingAngle( sal_Int32 nStartingAngle )
 {
     m_nStartingAngle = nStartingAngle;
-}
-sal_Int32 VDataSeries::getStartingAngle() const
-{
-    return m_nStartingAngle;
 }
 
 void VDataSeries::setAttachedAxisIndex( sal_Int32 nAttachedAxisIndex )
@@ -462,10 +442,6 @@ void VDataSeries::setAttachedAxisIndex( sal_Int32 nAttachedAxisIndex )
     m_nAxisIndex = nAttachedAxisIndex;
 }
 
-sal_Int32 VDataSeries::getTotalPointCount() const
-{
-    return m_nPointCount;
-}
 
 double VDataSeries::getXValue( sal_Int32 index ) const
 {
@@ -1056,10 +1032,6 @@ void VDataSeries::setMissingValueTreatment( sal_Int32 nMissingValueTreatment )
     m_nMissingValueTreatment = nMissingValueTreatment;
 }
 
-sal_Int32 VDataSeries::getMissingValueTreatment() const
-{
-    return m_nMissingValueTreatment;
-}
 
 VDataSeries::VDataSeries()
     : m_nPolygonIndex(0)

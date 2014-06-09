@@ -106,7 +106,7 @@ public:
     virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 
     void setStartColumn( sal_Int32 nStartColumn );
-    sal_Int32 getStartColumn() const;
+    sal_Int32 getStartColumn() const { return m_nStartColumn;}
     void SetShowWarningBox( bool bShowWarning = true );
 
 private:
@@ -130,10 +130,6 @@ void SeriesHeaderEdit::setStartColumn( sal_Int32 nStartColumn )
     m_nStartColumn = nStartColumn;
 }
 
-sal_Int32 SeriesHeaderEdit::getStartColumn() const
-{
-    return m_nStartColumn;
-}
 
 void SeriesHeaderEdit::SetShowWarningBox( bool bShowWarning )
 {
@@ -164,8 +160,8 @@ public:
 
     void SetPixelWidth( sal_Int32 nWidth );
 
-    sal_Int32 GetStartColumn() const;
-    sal_Int32 GetEndColumn() const;
+    sal_Int32 GetStartColumn() const { return m_nStartCol;}
+    sal_Int32 GetEndColumn() const { return m_nEndCol;}
 
     static sal_Int32 GetRelativeAppFontXPosForNameField();
 
@@ -316,15 +312,7 @@ void SeriesHeader::SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol )
     m_spSeriesName->setStartColumn( nStartCol );
 }
 
-sal_Int32 SeriesHeader::GetStartColumn() const
-{
-    return m_nStartCol;
-}
 
-sal_Int32 SeriesHeader::GetEndColumn() const
-{
-    return m_nEndCol;
-}
 
 void SeriesHeader::Show()
 {
@@ -740,10 +728,6 @@ bool DataBrowser::SetReadOnly( bool bNewState )
     return bResult;
 }
 
-bool DataBrowser::IsReadOnly() const
-{
-    return m_bIsReadOnly;
-}
 
 void DataBrowser::SetClean()
 {
@@ -815,10 +799,6 @@ bool DataBrowser::IsDataValid()
     return bValid;
 }
 
-bool DataBrowser::IsEnableItem()
-{
-    return m_bDataValid;
-}
 
 void DataBrowser::CellModified()
 {

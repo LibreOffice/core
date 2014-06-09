@@ -34,10 +34,6 @@ bool SvXMLAttr::operator== (const SvXMLAttr &rCmp) const
            ( rCmp.aValue == aValue );
 }
 
-sal_uInt16 SvXMLAttr::getPrefixPos() const
-{
-    return aPrefixPos;
-}
 
 const OUString& SvXMLAttr::getLName() const
 {

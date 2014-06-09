@@ -103,7 +103,7 @@ public:
     enum HintType { SVX_HINT_VIEWCHANGED };
     TYPEINFO_OVERRIDE();
     explicit SvxViewHint (HintType eType);
-    HintType GetHintType (void) const;
+    HintType GetHintType (void) const { return meHintType;}
 
 private:
     HintType meHintType;
@@ -223,7 +223,7 @@ public:
     void SetBufferedOverlayAllowed(bool bNew);
 
     // allow page painting at all?
-    bool IsPagePaintingAllowed() const;
+    bool IsPagePaintingAllowed() const { return mbPagePaintingAllowed;}
     void SetPagePaintingAllowed(bool bNew);
 
 protected:

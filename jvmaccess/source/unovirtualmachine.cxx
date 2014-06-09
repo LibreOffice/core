@@ -63,9 +63,6 @@ UnoVirtualMachine::getVirtualMachine() const {
     return m_virtualMachine;
 }
 
-void * UnoVirtualMachine::getClassLoader() const {
-    return m_classLoader;
-}
 
 UnoVirtualMachine::~UnoVirtualMachine() {
     try {

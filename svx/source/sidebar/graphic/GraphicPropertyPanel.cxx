@@ -461,10 +461,6 @@ void GraphicPropertyPanel::NotifyItemUpdate(
 
 
 
-SfxBindings* GraphicPropertyPanel::GetBindings()
-{
-    return mpBindings;
-}
 
 
 // namespace close

@@ -252,7 +252,7 @@ public:
     void            CheckAction(bool bFlag=true);
     void            CheckComment(bool bFlag=true);
 
-    ListBox*        GetLbAction();
+    ListBox*        GetLbAction() { return m_pLbAction;}
 
     void            SetReadyHdl( const Link& rLink ) { aReadyLink= rLink; }
     const Link&     GetReadyHdl() const { return aReadyLink; }
@@ -319,7 +319,7 @@ public:
 
     void            InsertWriterHeader();
     void            InsertCalcHeader();
-    SvxRedlinTable* GetTableControl();
+    SvxRedlinTable* GetTableControl() { return m_pViewData;}
 
     void            EnableAccept(bool nFlag=true);
     void            EnableAcceptAll(bool nFlag=true);
@@ -380,8 +380,8 @@ public:
     void            ShowFilterPage();
     void            ShowViewPage();
 
-    SvxTPFilter*    GetFilterPage();
-    SvxTPView*      GetViewPage();
+    SvxTPFilter*    GetFilterPage() { return pTPFilter;}
+    SvxTPView*      GetViewPage() { return pTPView;}
     SvxRedlinTable* GetViewTable();
 };
 

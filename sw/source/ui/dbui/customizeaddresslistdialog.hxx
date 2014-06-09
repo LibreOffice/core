@@ -50,7 +50,7 @@ public:
     SwCustomizeAddressListDialog(Window* pParent, const SwCSVData& rOldData);
     virtual ~SwCustomizeAddressListDialog();
 
-    SwCSVData*    GetNewData();
+    SwCSVData*    GetNewData() { return m_pNewData;}
 };
 
 class SwAddRenameEntryDialog : public SfxModalDialog

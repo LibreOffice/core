@@ -167,15 +167,7 @@ SdrObjUserData::SdrObjUserData(const SdrObjUserData& rData) :
 
 SdrObjUserData::~SdrObjUserData() {}
 
-sal_uInt32 SdrObjUserData::GetInventor() const
-{
-    return nInventor;
-}
 
-sal_uInt16 SdrObjUserData::GetId() const
-{
-    return nIdentifier;
-}
 
 bool SdrObjUserData::HasMacro(const SdrObject* /*pObj*/) const
 {
@@ -570,20 +562,12 @@ void SdrObject::SetModel(SdrModel* pNewModel)
     pModel = pNewModel;
 }
 
-SdrModel* SdrObject::GetModel() const
-{
-    return pModel;
-}
 
 void SdrObject::SetObjList(SdrObjList* pNewObjList)
 {
     pObjList=pNewObjList;
 }
 
-SdrObjList* SdrObject::GetObjList() const
-{
-    return pObjList;
-}
 
 void SdrObject::SetPage(SdrPage* pNewPage)
 {
@@ -611,10 +595,6 @@ void SdrObject::SetPage(SdrPage* pNewPage)
     }
 }
 
-SdrPage* SdrObject::GetPage() const
-{
-    return pPage;
-}
 
 // init global static itempool
 SdrItemPool* SdrObject::mpGlobalItemPool = NULL;
@@ -900,10 +880,6 @@ sal_uInt32 SdrObject::GetOrdNum() const
     return nOrdNum;
 }
 
-sal_uInt32 SdrObject::GetOrdNumDirect() const
-{
-    return nOrdNum;
-}
 
 void SdrObject::SetOrdNum(sal_uInt32 nNum)
 {
@@ -2690,95 +2666,39 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
     return pRet;
 }
 
-bool SdrObject::IsVirtualObj() const
-{
-    return bVirtObj;
-}
 
-bool SdrObject::IsClosedObj() const
-{
-    return bClosedObj;
-}
 
-bool SdrObject::IsEdgeObj() const
-{
-    return bIsEdge;
-}
 
-bool SdrObject::Is3DObj() const
-{
-    return bIs3DObj;
-}
 
-bool SdrObject::IsUnoObj() const
-{
-    return bIsUnoObj;
-}
 
 void SdrObject::SetMarkProtect(bool bProt)
 {
     bMarkProt = bProt;
 }
 
-bool SdrObject::IsMarkProtect() const
-{
-    return bMarkProt;
-}
 
-bool SdrObject::IsInserted() const
-{
-    return bInserted;
-}
 
-bool SdrObject::IsMoveProtect() const
-{
-    return bMovProt;
-}
 
-bool SdrObject::IsResizeProtect() const
-{
-    return bSizProt;
-}
 
 bool SdrObject::IsPrintable() const
 {
     return !bNoPrint;
 }
 
-bool SdrObject::IsVisible() const
-{
-    return mbVisible;
-}
 
 void SdrObject::SetEmptyPresObj(bool bEpt)
 {
     bEmptyPresObj = bEpt;
 }
 
-bool SdrObject::IsEmptyPresObj() const
-{
-    return bEmptyPresObj;
-}
 
 void SdrObject::SetNotVisibleAsMaster(bool bFlg)
 {
     bNotVisibleAsMaster=bFlg;
 }
 
-bool SdrObject::IsNotVisibleAsMaster() const
-{
-    return bNotVisibleAsMaster;
-}
 
-bool SdrObject::LineIsOutsideGeometry() const
-{
-    return mbLineIsOutsideGeometry;
-}
 
-bool SdrObject::DoesSupportTextIndentingOnLineWidthChange() const
-{
-    return mbSupportTextIndentingOnLineWidthChange;
-}
 
 // convert this path object to contour object, even when it is a group
 SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) const
@@ -2966,10 +2886,6 @@ void SdrObject::SetUserCall(SdrObjUserCall* pUser)
     pUserCall = pUser;
 }
 
-SdrObjUserCall* SdrObject::GetUserCall() const
-{
-    return pUserCall;
-}
 
 void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundRect) const
 {
@@ -3335,10 +3251,6 @@ void SdrObject::SetDoNotInsertIntoPageAutomatically(const bool bSet)
     mbDoNotInsertIntoPageAutomatically = bSet;
 }
 
-bool SdrObject::IsDoNotInsertIntoPageAutomatically() const
-{
-    return mbDoNotInsertIntoPageAutomatically;
-}
 
 // #i121917#
 bool SdrObject::HasText() const

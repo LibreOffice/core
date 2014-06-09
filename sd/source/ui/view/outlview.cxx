@@ -1042,10 +1042,6 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
     return GetOutlineTextObject(pPage);
 }
 
-sal_uLong OutlineView::GetPaperWidth()
-{
-    return mnPaperWidth;
-}
 
 /** updates draw model with all changes from outliner model */
 bool OutlineView::PrepareClose(bool)

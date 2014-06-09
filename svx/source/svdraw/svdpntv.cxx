@@ -127,10 +127,6 @@ SvxViewHint::SvxViewHint (HintType eHintType)
 {
 }
 
-SvxViewHint::HintType SvxViewHint::GetHintType (void) const
-{
-    return meHintType;
-}
 
 
 
@@ -1318,10 +1314,6 @@ void SdrPaintView::SetBufferedOverlayAllowed(bool bNew)
     }
 }
 
-bool SdrPaintView::IsPagePaintingAllowed() const
-{
-    return mbPagePaintingAllowed;
-}
 
 void SdrPaintView::SetPagePaintingAllowed(bool bNew)
 {

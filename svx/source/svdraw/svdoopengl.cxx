@@ -34,10 +34,6 @@ sdr::contact::ViewContact* SdrOpenGLObj::CreateObjectSpecificViewContact()
     return new sdr::contact::ViewContactOfOpenGLObj(*this);
 }
 
-OpenGLContext* SdrOpenGLObj::getOpenGLContext()
-{
-    return mpContext;
-}
 
 void SdrOpenGLObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {

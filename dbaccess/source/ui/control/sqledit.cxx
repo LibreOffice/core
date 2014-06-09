@@ -135,14 +135,6 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
         m_bAccelAction = false;
 }
 
-bool OSqlEdit::IsInAccelAct()
-{
-    // Cut, Copy, Paste by Accel. runs the action in the Edit but also the
-    // corresponding slot in the View. Therefore, the action occurs twice.
-    // To prevent this, SlotExec in View can call this function.
-
-    return m_bAccelAction;
-}
 
 void OSqlEdit::GetFocus()
 {

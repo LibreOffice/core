@@ -77,7 +77,7 @@ public:
 
     /** The page number as given to the constructor.
     */
-    sal_uInt16 GetPageNumber (void) const;
+    sal_uInt16 GetPageNumber (void) const { return mnPageNumber;}
 
     void FireAccessibleEvent (
         short nEventId,
