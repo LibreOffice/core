@@ -50,6 +50,8 @@
 
 #include "mutexholder.hxx"
 
+#include <list>
+
 namespace com { namespace sun { namespace star { namespace uno {
     class XComponentContext;
 } } } }
@@ -89,7 +91,6 @@ public:
                                 ~SotElement_Impl();
 };
 
-#include <list>
 typedef ::std::list< SotElement_Impl* > SotElementList_Impl;
 
 // Main storage implementation
@@ -115,15 +116,15 @@ struct StorageHolder_Impl
     }
 };
 
-typedef ::std::list< StorageHolder_Impl > OStorageList_Impl;
-
 class SwitchablePersistenceStream;
 struct OStorage_Impl
 {
+    typedef std::list<StorageHolder_Impl> StorageHoldersType;
+
     SotMutexHolderRef           m_rMutexRef;
 
     OStorage*                   m_pAntiImpl;         // only valid if external references exists
-    OStorageList_Impl           m_aReadOnlyWrapList; // only valid if readonly external reference exists
+    StorageHoldersType      m_aReadOnlyWrapList; // only valid if readonly external reference exists
 
     sal_Int32                   m_nStorageMode; // open mode ( read/write/trunc/nocreate )
     bool                    m_bIsModified;  // only modified elements will be sent to the original content
