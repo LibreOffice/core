@@ -57,7 +57,8 @@ $(call gb_Configuration_get_target,$(1)) : $(5)
 $(call gb_Configuration_get_clean_target,$(1)) : $(6)
 $(if $(4),,$(error filter_Configuration__add_module: no input files))
 $(5) : \
-	$(addprefix $(SRCDIR)/$(3)/,$(addsuffix .xcu,$(4)))
+	$(addprefix $(SRCDIR)/$(3)/,$(addsuffix .xcu,$(4))) \
+	$(gb_Module_CURRENTMAKEFILE)
 endef
 
 # $(call filter_Configuration_add_types,configuration,typesfile,prefix,xcufiles)
