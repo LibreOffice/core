@@ -123,6 +123,10 @@ interface XChartDocument : ::com::sun::star::frame::XModel
         XDiagram::getWall().</p>
      */
     com::sun::star::beans::XPropertySet getPageBackground();
+
+    /** Creates a default chart type for a brand-new chart object.
+     */
+    void createDefaultChart();
 };
 
 } ; // chart2

@@ -381,12 +381,7 @@ void ChartModel::impl_store(
     }
 }
 
-// frame::XLoadable
-void SAL_CALL ChartModel::initNew()
-    throw (frame::DoubleInitializationException,
-           io::IOException,
-           uno::Exception,
-           uno::RuntimeException, std::exception)
+void ChartModel::insertDefaultChart()
 {
     lockControllers();
     createInternalDataProvider( sal_False );
@@ -485,6 +480,15 @@ void SAL_CALL ChartModel::initNew()
     OSL_TRACE( "ChartModel::initNew: Showing ChartDocument structure" );
     ::chart::debug::ChartDebugTraceDocument( Reference< chart2::XChartDocument >( this ));
 #endif
+}
+
+// frame::XLoadable
+void SAL_CALL ChartModel::initNew()
+    throw (frame::DoubleInitializationException,
+           io::IOException,
+           uno::Exception,
+           uno::RuntimeException, std::exception)
+{
 }
 
 void SAL_CALL ChartModel::load(
