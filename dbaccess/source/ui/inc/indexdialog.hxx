@@ -48,7 +48,7 @@ namespace dbaui
         bool    m_bSuspendSelectHdl;
 
     public:
-        DbaIndexList(Window* _pParent, const ResId& _rId);
+        DbaIndexList(Window* _pParent, WinBits nWinBits);
 
         void SetSelectHdl(const Link& _rHdl) { m_aSelectHdl = _rHdl; }
         Link GetSelectHdl() const { return m_aSelectHdl; }
@@ -85,16 +85,15 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > m_xConnection;
         SvtViewOptions          m_aGeometrySettings;
 
-        ToolBox                 m_aActions;
-        DbaIndexList            m_aIndexes;
-        FixedLine               m_aIndexDetails;
-        FixedText               m_aDescriptionLabel;
-        FixedText               m_aDescription;
-        CheckBox                m_aUnique;
-        FixedText               m_aFieldsLabel;
-        IndexFieldsControl*     m_pFields;
-        PushButton              m_aClose;
-        HelpButton              m_aHelp;
+        ToolBox                 *m_pActions;
+        DbaIndexList            *m_pIndexList;
+        FixedText               *m_pIndexDetails;
+        FixedText               *m_pDescriptionLabel;
+        FixedText               *m_pDescription;
+        CheckBox                *m_pUnique;
+        FixedText               *m_pFieldsLabel;
+        IndexFieldsControl      *m_pFields;
+        PushButton              *m_pClose;
 
         OIndexCollection*       m_pIndexes;
         SvTreeListEntry*            m_pPreviousSelection;

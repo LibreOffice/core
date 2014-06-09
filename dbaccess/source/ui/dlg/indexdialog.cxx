@@ -24,7 +24,6 @@
 #include "indexdialog.hxx"
 #include "dbu_dlg.hrc"
 #include "dbaccess_helpid.hrc"
-#include "indexdialog.hrc"
 #include "indexfieldscontrol.hxx"
 #include "indexcollection.hxx"
 #include <vcl/msgbox.hxx>
@@ -36,6 +35,13 @@
 #include "browserids.hxx"
 #include <connectivity/dbtools.hxx>
 #include <osl/diagnose.h>
+
+const char INDEX_NEW_CMD[] = ".index:createNew";
+const char INDEX_DROP_CMD[] = ".index:dropCurrent";
+const char INDEX_RENAME_CMD[] = ".index:renameCurrent";
+const char INDEX_SAVE_CMD[] = ".index:saveCurrent";
+const char INDEX_RESET_CMD[] = ".index:resetCurrent";
+
 namespace dbaui
 {
 
@@ -81,8 +87,8 @@ namespace dbaui
     }
 
     // DbaIndexList
-    DbaIndexList::DbaIndexList(Window* _pParent, const ResId& _rId)
-        :SvTreeListBox(_pParent, _rId)
+    DbaIndexList::DbaIndexList(Window* _pParent, WinBits nWinBits)
+        :SvTreeListBox(_pParent, nWinBits)
         ,m_bSuspendSelectHdl(false)
     {
     }
@@ -152,43 +158,46 @@ namespace dbaui
         return bReturn;
     }
 
+    extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeDbaIndexList(Window *pParent, VclBuilder::stringmap &)
+    {
+        return new DbaIndexList (pParent, WB_BORDER);
+    }
+
     // DbaIndexDialog
     DbaIndexDialog::DbaIndexDialog( Window* _pParent, const Sequence< OUString >& _rFieldNames,
                                     const Reference< XNameAccess >& _rxIndexes,
                                     const Reference< XConnection >& _rxConnection,
                                     const Reference< XComponentContext >& _rxContext,sal_Int32 _nMaxColumnsInIndex)
-        :ModalDialog( _pParent, ModuleRes(DLG_INDEXDESIGN))
+        :ModalDialog( _pParent, "IndexDesignDialog", "dbaccess/ui/indexdesigndialog.ui")
         ,m_xConnection(_rxConnection)
         ,m_aGeometrySettings(E_DIALOG, OUString("dbaccess.tabledesign.indexdialog"))
-        ,m_aActions                         (this, ModuleRes(TLB_ACTIONS))
-        ,m_aIndexes                         (this, ModuleRes(CTR_INDEXLIST))
-        ,m_aIndexDetails                    (this, ModuleRes(FL_INDEXDETAILS))
-        ,m_aDescriptionLabel                (this, ModuleRes(FT_DESC_LABEL))
-        ,m_aDescription                     (this, ModuleRes(FT_DESCRIPTION))
-        ,m_aUnique                          (this, ModuleRes(CB_UNIQUE))
-        ,m_aFieldsLabel                     (this, ModuleRes(FT_FIELDS))
-        ,m_pFields(new IndexFieldsControl   (this, ModuleRes(CTR_FIELDS),_nMaxColumnsInIndex,::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" )))
-        ,m_aClose                           (this, ModuleRes(PB_CLOSE))
-        ,m_aHelp                            (this, ModuleRes(HB_HELP))
         ,m_pIndexes(NULL)
         ,m_pPreviousSelection(NULL)
         ,m_bEditAgain(false)
         ,m_xContext(_rxContext)
     {
+        get(m_pActions, "ACTIONS");
+        get(m_pIndexList, "INDEX_LIST");
+        get(m_pIndexDetails, "INDEX_DETAILS");
+        get(m_pDescriptionLabel, "DESC_LABEL");
+        get(m_pDescription, "DESCRIPTION");
+        get(m_pUnique, "UNIQUE");
+        get(m_pFieldsLabel, "FIELDS_LABEL");
+        get(m_pFields, "FIELDS");
+        get(m_pClose, "CLOSE");
 
-        FreeResource();
+        m_pActions->SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexAction));
 
-        m_aActions.SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexAction));
+        m_pIndexList->SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexSelected));
+        m_pIndexList->SetEndEditHdl(LINK(this, DbaIndexDialog, OnEntryEdited));
+        m_pIndexList->SetSelectionMode(SINGLE_SELECTION);
+        m_pIndexList->SetHighlightRange();
+        m_pIndexList->setConnection(m_xConnection);
 
-        m_aIndexes.SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexSelected));
-        m_aIndexes.SetEndEditHdl(LINK(this, DbaIndexDialog, OnEntryEdited));
-        m_aIndexes.SetSelectionMode(SINGLE_SELECTION);
-        m_aIndexes.SetHighlightRange();
-        m_aIndexes.setConnection(m_xConnection);
+        m_pFields->SetSizePixel(Size(300, 100));
+        m_pFields->Init(_rFieldNames, _nMaxColumnsInIndex, ::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" ));
 
-        m_pFields->Init(_rFieldNames);
-
-        setToolBox(&m_aActions);
+        setToolBox(m_pActions);
 
         m_pIndexes = new OIndexCollection();
         try
@@ -206,10 +215,10 @@ namespace dbaui
 
         fillIndexList();
 
-        m_aUnique.SetClickHdl(LINK(this, DbaIndexDialog, OnModified));
+        m_pUnique->SetClickHdl(LINK(this, DbaIndexDialog, OnModified));
         m_pFields->SetModifyHdl(LINK(this, DbaIndexDialog, OnModified));
 
-        m_aClose.SetClickHdl(LINK(this, DbaIndexDialog, OnCloseDialog));
+        m_pClose->SetClickHdl(LINK(this, DbaIndexDialog, OnCloseDialog));
 
         // if all of the indexes have an empty description, we're not interested in displaying it
         Indexes::const_iterator aCheck;
@@ -225,82 +234,61 @@ namespace dbaui
 
         if (aCheck == m_pIndexes->end())
         {
-            sal_Int32 nMoveUp = m_aUnique.GetPosPixel().Y() - m_aDescriptionLabel.GetPosPixel().Y();
-
             // hide the controls which are necessary for the description
-            m_aDescription.Hide();
-            m_aDescriptionLabel.Hide();
-
-            // move other controls up
-            Point aPos = m_aUnique.GetPosPixel();
-            aPos.Y() -= nMoveUp;
-            m_aUnique.SetPosPixel(aPos);
-
-            aPos = m_aFieldsLabel.GetPosPixel();
-            aPos.Y() -= nMoveUp;
-            m_aFieldsLabel.SetPosPixel(aPos);
-
-            aPos = m_pFields->GetPosPixel();
-            aPos.Y() -= nMoveUp;
-            m_pFields->SetPosPixel(aPos);
-
-            // and enlarge the fields list
-            Size aSize = m_pFields->GetSizePixel();
-            aSize.Height() += nMoveUp;
-            m_pFields->SetSizePixel(aSize);
+            m_pDescription->Hide();
+            m_pDescriptionLabel->Hide();
         }
     }
 
     void DbaIndexDialog::updateToolbox()
     {
-        m_aActions.EnableItem(ID_INDEX_NEW, !m_aIndexes.IsEditingActive());
+        m_pActions->EnableItem(m_pActions->GetItemId(INDEX_NEW_CMD), !m_pIndexList->IsEditingActive());
 
-        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
         bool bSelectedAnything = NULL != pSelected;
 
         if (pSelected)
         {
             // is the current entry modified?
             Indexes::const_iterator aSelectedPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
-            m_aActions.EnableItem(ID_INDEX_SAVE, aSelectedPos->isModified() || aSelectedPos->isNew());
-            m_aActions.EnableItem(ID_INDEX_RESET, aSelectedPos->isModified() || aSelectedPos->isNew());
+            m_pActions->EnableItem(m_pActions->GetItemId(INDEX_SAVE_CMD), aSelectedPos->isModified() || aSelectedPos->isNew());
+            m_pActions->EnableItem(m_pActions->GetItemId(INDEX_RESET_CMD), aSelectedPos->isModified() || aSelectedPos->isNew());
             bSelectedAnything = bSelectedAnything && !aSelectedPos->bPrimaryKey;
         }
         else
         {
-            m_aActions.EnableItem(ID_INDEX_SAVE, false);
-            m_aActions.EnableItem(ID_INDEX_RESET, false);
+            m_pActions->EnableItem(m_pActions->GetItemId(INDEX_SAVE_CMD), false);
+            m_pActions->EnableItem(m_pActions->GetItemId(INDEX_RESET_CMD), false);
         }
-        m_aActions.EnableItem(ID_INDEX_DROP, bSelectedAnything);
-        m_aActions.EnableItem(ID_INDEX_RENAME, bSelectedAnything);
+        m_pActions->EnableItem(m_pActions->GetItemId(INDEX_DROP_CMD), bSelectedAnything);
+        m_pActions->EnableItem(m_pActions->GetItemId(INDEX_RENAME_CMD), bSelectedAnything);
     }
 
     void DbaIndexDialog::fillIndexList()
     {
         Image aPKeyIcon(ModuleRes( IMG_PKEYICON ));
         // fill the list with the index names
-        m_aIndexes.Clear();
+        m_pIndexList->Clear();
         Indexes::iterator aIndexLoop = m_pIndexes->begin();
         Indexes::iterator aEnd = m_pIndexes->end();
         for (; aIndexLoop != aEnd; ++aIndexLoop)
         {
             SvTreeListEntry* pNewEntry = NULL;
             if (aIndexLoop->bPrimaryKey)
-                pNewEntry = m_aIndexes.InsertEntry(aIndexLoop->sName, aPKeyIcon, aPKeyIcon);
+                pNewEntry = m_pIndexList->InsertEntry(aIndexLoop->sName, aPKeyIcon, aPKeyIcon);
             else
-                pNewEntry = m_aIndexes.InsertEntry(aIndexLoop->sName);
+                pNewEntry = m_pIndexList->InsertEntry(aIndexLoop->sName);
 
             pNewEntry->SetUserData(reinterpret_cast< void* >(sal_Int32(aIndexLoop - m_pIndexes->begin())));
         }
 
-        OnIndexSelected(&m_aIndexes);
+        OnIndexSelected(m_pIndexList);
     }
 
     DbaIndexDialog::~DbaIndexDialog( )
     {
         setToolBox(NULL);
         delete m_pIndexes;
-        delete m_pFields;
 
     }
 
@@ -333,7 +321,7 @@ namespace dbaui
             showError(aExceptionInfo, this, m_xContext);
         else
         {
-            m_aUnique.SaveValue();
+            m_pUnique->SaveValue();
             m_pFields->SaveValue();
         }
 
@@ -365,29 +353,29 @@ namespace dbaui
             return;
         }
 
-        SvTreeListEntry* pNewEntry = m_aIndexes.InsertEntry(sNewIndexName);
+        SvTreeListEntry* pNewEntry = m_pIndexList->InsertEntry(sNewIndexName);
         m_pIndexes->insert(sNewIndexName);
 
         // update the user data on the entries in the list box:
         // they're iterators of the index collection, and thus they have changed when removing the index
-        for (SvTreeListEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
+        for (SvTreeListEntry* pAdjust = m_pIndexList->First(); pAdjust; pAdjust = m_pIndexList->Next(pAdjust))
         {
-            Indexes::iterator aAfterInsertPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
+            Indexes::iterator aAfterInsertPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
             OSL_ENSURE(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
             pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterInsertPos - m_pIndexes->begin())));
         }
 
         // select the entry and start in-place editing
-        m_aIndexes.SelectNoHandlerCall(pNewEntry);
-        OnIndexSelected(&m_aIndexes);
-        m_aIndexes.EditEntry(pNewEntry);
+        m_pIndexList->SelectNoHandlerCall(pNewEntry);
+        OnIndexSelected(m_pIndexList);
+        m_pIndexList->EditEntry(pNewEntry);
         updateToolbox();
     }
 
     void DbaIndexDialog::OnDropIndex(bool _bConfirm)
     {
         // the selected index
-        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
         OSL_ENSURE(pSelected, "DbaIndexDialog::OnDropIndex: invalid call!");
         if (pSelected)
         {
@@ -395,7 +383,7 @@ namespace dbaui
             if (_bConfirm)
             {
                 OUString sConfirm(ModuleRes(STR_CONFIRM_DROP_INDEX));
-                sConfirm = sConfirm.replaceFirst("$name$", m_aIndexes.GetEntryText(pSelected));
+                sConfirm = sConfirm.replaceFirst("$name$", m_pIndexList->GetEntryText(pSelected));
                 QueryBox aConfirm(this, WB_YES_NO, sConfirm);
                 if (RET_YES != aConfirm.Execute())
                     return;
@@ -432,17 +420,17 @@ namespace dbaui
             showError(aExceptionInfo, this, m_xContext);
         else if (bSuccess && _bRemoveFromCollection)
         {
-            SvTreeList* pModel = m_aIndexes.GetModel();
+            SvTreeList* pModel = m_pIndexList->GetModel();
 
-            m_aIndexes.disableSelectHandler();
+            m_pIndexList->disableSelectHandler();
             pModel->Remove(_pEntry);
-            m_aIndexes.enableSelectHandler();
+            m_pIndexList->enableSelectHandler();
 
             // update the user data on the entries in the list box:
             // they're iterators of the index collection, and thus they have changed when removing the index
-            for (SvTreeListEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
+            for (SvTreeListEntry* pAdjust = m_pIndexList->First(); pAdjust; pAdjust = m_pIndexList->Next(pAdjust))
             {
-                Indexes::iterator aAfterDropPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
+                Indexes::iterator aAfterDropPos = m_pIndexes->find(m_pIndexList->GetEntryText(pAdjust));
                 OSL_ENSURE(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with on of the remaining entries!");
                 pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterDropPos - m_pIndexes->begin())));
             }
@@ -453,7 +441,7 @@ namespace dbaui
 
             // the Remove automatically selected another entry (if possible), but we disabled the calling of the handler
             // to prevent that we missed something ... call the handler directly
-            OnIndexSelected(&m_aIndexes);
+            OnIndexSelected(m_pIndexList);
         }
 
         return !aExceptionInfo.isValid();
@@ -462,7 +450,7 @@ namespace dbaui
     void DbaIndexDialog::OnRenameIndex()
     {
         // the selected index
-        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
         OSL_ENSURE(pSelected, "DbaIndexDialog::OnRenameIndex: invalid call!");
 
         // save the changes made 'til here
@@ -470,7 +458,7 @@ namespace dbaui
         // settings from the current entry
         implSaveModified(false);
 
-        m_aIndexes.EditEntry(pSelected);
+        m_pIndexList->EditEntry(pSelected);
         updateToolbox();
     }
 
@@ -478,7 +466,7 @@ namespace dbaui
     {
         // the selected index
 #if OSL_DEBUG_LEVEL > 0
-        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
         OSL_ENSURE( pSelected, "DbaIndexDialog::OnSaveIndex: invalid call!" );
 #endif
 
@@ -489,7 +477,7 @@ namespace dbaui
     void DbaIndexDialog::OnResetIndex()
     {
         // the selected index
-        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
         OSL_ENSURE(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
 
         Indexes::iterator aResetPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
@@ -512,7 +500,7 @@ namespace dbaui
         if (aExceptionInfo.isValid())
             showError(aExceptionInfo, this, m_xContext);
         else
-            m_aIndexes.SetEntryText(pSelected, aResetPos->sName);
+            m_pIndexList->SetEntryText(pSelected, aResetPos->sName);
 
         updateControls(pSelected);
         updateToolbox();
@@ -520,43 +508,37 @@ namespace dbaui
 
     IMPL_LINK( DbaIndexDialog, OnIndexAction, ToolBox*, /*NOTINTERESTEDIN*/ )
     {
-        sal_uInt16 nClicked = m_aActions.GetCurItemId();
-        switch (nClicked)
-        {
-            case ID_INDEX_NEW:
-                OnNewIndex();
-                break;
-            case ID_INDEX_DROP:
-                OnDropIndex();
-                break;
-            case ID_INDEX_RENAME:
-                OnRenameIndex();
-                break;
-            case ID_INDEX_SAVE:
-                OnSaveIndex();
-                break;
-            case ID_INDEX_RESET:
-                OnResetIndex();
-                break;
-        }
+        const OUString sClicked(m_pActions->GetItemCommand(m_pActions->GetCurItemId()));
+
+        if(sClicked == INDEX_NEW_CMD)
+            OnNewIndex();
+        else if(sClicked == INDEX_DROP_CMD)
+            OnDropIndex();
+        else if(sClicked == INDEX_RENAME_CMD)
+            OnRenameIndex();
+        else if(sClicked == INDEX_SAVE_CMD)
+            OnSaveIndex();
+        else if(sClicked == INDEX_RESET_CMD)
+            OnResetIndex();
+
         return 0L;
     }
 
     IMPL_LINK( DbaIndexDialog, OnCloseDialog, void*, /*NOTINTERESTEDIN*/ )
     {
-        if (m_aIndexes.IsEditingActive())
+        if (m_pIndexList->IsEditingActive())
         {
             OSL_ENSURE(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
                 // this means somebody entered a new name, which was invalid, which cause us to posted us an event,
                 // and before the event arrived the user clicked onto "close". VERY fast, this user ....
-            m_aIndexes.EndEditing(false);
+            m_pIndexList->EndEditing(false);
             if (m_bEditAgain)
                 // could not commit the new name (started a new - asynchronous - edit trial)
                 return 1L;
         }
 
         // the currently selected entry
-        const SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
+        const SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
         OSL_ENSURE(pSelected == m_pPreviousSelection, "DbaIndexDialog::OnCloseDialog: inconsistence!");
 
         sal_Int32 nResponse = RET_NO;
@@ -592,7 +574,7 @@ namespace dbaui
     IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, SvTreeListEntry*, _pEntry )
     {
         m_bEditAgain = false;
-        m_aIndexes.EditEntry(_pEntry);
+        m_pIndexList->EditEntry(_pEntry);
         return 0L;
     }
 
@@ -603,7 +585,7 @@ namespace dbaui
         OSL_ENSURE(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
 
-        OUString sNewName = m_aIndexes.GetEntryText(_pEntry);
+        OUString sNewName = m_pIndexList->GetEntryText(_pEntry);
 
         Indexes::const_iterator aSameName = m_pIndexes->find(sNewName);
         if ((aSameName != aPosition) && (m_pIndexes->end() != aSameName))
@@ -649,8 +631,8 @@ namespace dbaui
             Indexes::iterator aPreviouslySelected = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
             // the unique flag
-            aPreviouslySelected->bUnique = m_aUnique.IsChecked();
-            if (m_aUnique.GetSavedValue() != m_aUnique.GetState())
+            aPreviouslySelected->bUnique = m_pUnique->IsChecked();
+            if (m_pUnique->GetSavedValue() != m_pUnique->GetState())
                 aPreviouslySelected->setModified(true);
 
             // the fields
@@ -736,57 +718,57 @@ namespace dbaui
             Indexes::const_iterator aSelectedIndex = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
             // fill the controls
-            m_aUnique.Check(aSelectedIndex->bUnique);
-            m_aUnique.Enable(!aSelectedIndex->bPrimaryKey);
-            m_aUnique.SaveValue();
+            m_pUnique->Check(aSelectedIndex->bUnique);
+            m_pUnique->Enable(!aSelectedIndex->bPrimaryKey);
+            m_pUnique->SaveValue();
 
             m_pFields->initializeFrom(aSelectedIndex->aFields);
             m_pFields->Enable(!aSelectedIndex->bPrimaryKey);
             m_pFields->SaveValue();
 
-            m_aDescription.SetText(aSelectedIndex->sDescription);
-            m_aDescription.Enable(!aSelectedIndex->bPrimaryKey);
+            m_pDescription->SetText(aSelectedIndex->sDescription);
+            m_pDescription->Enable(!aSelectedIndex->bPrimaryKey);
 
-            m_aDescriptionLabel.Enable(!aSelectedIndex->bPrimaryKey);
+            m_pDescriptionLabel->Enable(!aSelectedIndex->bPrimaryKey);
         }
         else
         {
-            m_aUnique.Check(false);
+            m_pUnique->Check(false);
             m_pFields->initializeFrom(IndexFields());
-            m_aDescription.SetText(OUString());
+            m_pDescription->SetText(OUString());
         }
     }
 
     IMPL_LINK( DbaIndexDialog, OnIndexSelected, DbaIndexList*, /*NOTINTERESTEDIN*/ )
     {
-        m_aIndexes.EndSelection();
+        m_pIndexList->EndSelection();
 
-        if (m_aIndexes.IsEditingActive())
-            m_aIndexes.EndEditing(false);
+        if (m_pIndexList->IsEditingActive())
+            m_pIndexList->EndEditing(false);
 
         // commit the old data
-        if (m_aIndexes.FirstSelected() != m_pPreviousSelection)
+        if (m_pIndexList->FirstSelected() != m_pPreviousSelection)
         {   // (this call may happen in case somebody ended an in-place edit with 'return', so we need to check this before committing)
             if (!implCommitPreviouslySelected())
             {
-                m_aIndexes.SelectNoHandlerCall(m_pPreviousSelection);
+                m_pIndexList->SelectNoHandlerCall(m_pPreviousSelection);
                 return 1L;
             }
         }
 
-        bool bHaveSelection = (NULL != m_aIndexes.FirstSelected());
+        bool bHaveSelection = (NULL != m_pIndexList->FirstSelected());
 
         // disable/enable the detail controls
-        m_aIndexDetails.Enable(bHaveSelection);
-        m_aUnique.Enable(bHaveSelection);
-        m_aDescriptionLabel.Enable(bHaveSelection);
-        m_aFieldsLabel.Enable(bHaveSelection);
+        m_pIndexDetails->Enable(bHaveSelection);
+        m_pUnique->Enable(bHaveSelection);
+        m_pDescriptionLabel->Enable(bHaveSelection);
+        m_pFieldsLabel->Enable(bHaveSelection);
         m_pFields->Enable(bHaveSelection);
 
-        SvTreeListEntry* pNewSelection = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pNewSelection = m_pIndexList->FirstSelected();
         updateControls(pNewSelection);
         if (bHaveSelection)
-            m_aIndexes.GrabFocus();
+            m_pIndexList->GrabFocus();
 
         m_pPreviousSelection = pNewSelection;
 
@@ -833,33 +815,6 @@ namespace dbaui
     }
     void DbaIndexDialog::resizeControls(const Size& _rDiff)
     {
-        // we use large images so we must change them
-        if ( _rDiff.Width() || _rDiff.Height() )
-        {
-            Size aDlgSize = GetSizePixel();
-            // adjust size of dlg
-            SetSizePixel(Size(aDlgSize.Width() + _rDiff.Width(),
-                              aDlgSize.Height() + _rDiff.Height())
-                        );
-            Size aIndexSize = m_aIndexes.GetSizePixel();
-            m_aIndexes.SetPosSizePixel(m_aIndexes.GetPosPixel() + Point(0,_rDiff.Height()),
-                                    Size(aIndexSize.Width() + _rDiff.Width(),
-                                         aIndexSize.Height()));
-
-            //now move the rest to the left side
-            Point aMove(_rDiff.Width(),_rDiff.Height());
-            m_aIndexDetails.SetPosPixel(m_aIndexDetails.GetPosPixel() + aMove);
-            m_aDescriptionLabel.SetPosPixel(m_aDescriptionLabel.GetPosPixel() + aMove);
-            m_aDescription.SetPosPixel(m_aDescription.GetPosPixel() + aMove);
-            m_aUnique.SetPosPixel(m_aUnique.GetPosPixel() + aMove);
-            m_aFieldsLabel.SetPosPixel(m_aFieldsLabel.GetPosPixel() + aMove);
-            OSL_ENSURE(m_pFields,"NO valid fields!");
-            m_pFields->SetPosPixel(m_pFields->GetPosPixel() + aMove);
-            m_aClose.SetPosPixel(m_aClose.GetPosPixel() + aMove);
-            m_aHelp.SetPosPixel(m_aHelp.GetPosPixel() + aMove);
-
-            Invalidate();
-        }
     }
 
 }   // namespace dbaui

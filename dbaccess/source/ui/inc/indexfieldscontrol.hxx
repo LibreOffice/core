@@ -50,10 +50,10 @@ namespace dbaui
         bool                    m_bAddIndexAppendix;
 
     public:
-        IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix);
+        IndexFieldsControl( Window* _pParent, WinBits nWinStyle);
         virtual ~IndexFieldsControl();
 
-        void Init(const ::com::sun::star::uno::Sequence< OUString >& _rAvailableFields);
+        void Init(const ::com::sun::star::uno::Sequence< OUString >& _rAvailableFields, sal_Int32 _nMaxColumnsInIndex,bool _bAddIndexAppendix);
 
         void initializeFrom(const IndexFields& _rFields);
         void commitTo(IndexFields& _rFields);
