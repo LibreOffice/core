@@ -38,7 +38,7 @@ private:
 
     Sane&           mrSane;
     Bitmap          maPreviewBitmap;
-    Rectangle       maPreviewRect;
+    Rectangle       maPreviewRect;//Preview alatti cucc
     Point           maTopLeft, maBottomRight;
     Point           maMinTopLeft, maMaxBottomRight;
     bool            mbDragEnable;
@@ -51,47 +51,36 @@ private:
 
     Link            maOldLink;
 
-    OKButton        maOKButton;
-    CancelButton    maCancelButton;
-    PushButton      maDeviceInfoButton;
-    PushButton      maPreviewButton;
-    PushButton      maScanButton;
-    PushButton      maButtonOption;
+    OKButton*       mpOKButton;
+    CancelButton*   mpCancelButton;
+    PushButton*     mpDeviceInfoButton;
+    PushButton*     mpPreviewButton;
+    PushButton*     mpScanButton;
+    PushButton*     mpButtonOption;//Set gomb a keret alatt --pipa
 
-    FixedText       maOptionsTxt;
-    FixedText       maOptionTitle;
-    FixedText       maOptionDescTxt;
-    FixedText       maVectorTxt;
+    FixedText*      mpOptionTitle;//SvTree alatt lévő keretben a szöveg --pipa
+    FixedText*      mpOptionDescTxt;//Keret alatti szöveg --pipa
+    FixedText*      mpVectorTxt;//Keret alatti rész, lejjebb van mint a többi --pipa
 
-    FixedText       maScanLeftTxt;
-    MetricField     maLeftField;
-    FixedText       maScanTopTxt;
-    MetricField     maTopField;
-    FixedText       maRightTxt;
-    MetricField     maRightField;
-    FixedText       maBottomTxt;
-    MetricField     maBottomField;
+    MetricField*    mpLeftField;
+    MetricField*    mpTopField;
+    MetricField*    mpRightField;
+    MetricField*    mpBottomField;
 
-    FixedText       maDeviceBoxTxt;
-    ListBox         maDeviceBox;
-    FixedText       maReslTxt;
-    NumericBox      maReslBox;
-    FixedText       maAdvancedTxt;
-    CheckBox        maAdvancedBox;
+    ListBox*        mpDeviceBox;
+    NumericBox*     mpReslBox;
+    CheckBox*       mpAdvancedBox;
 
-    NumericField    maVectorBox;
-    ListBox         maQuantumRangeBox;
-    ListBox         maStringRangeBox;
+    NumericField*   mpVectorBox;//Keret alatt maVectorTxt-hez tartozik --pipa
+    ListBox*        mpQuantumRangeBox;//Keret alatti Combobox(nem látom valszeg Geometry) --pipa
+    ListBox*        mpStringRangeBox;//Keret alatti Combobox(ScanMode) --pipa
 
-    FixedLine       maPreviewBox;
-    FixedLine       maAreaBox;
+    CheckBox*       mpBoolCheckBox;//Keret alatti checkbox(mindegyik), a szöveget itt kell beállítani, nem a maOptionDescTxt-ben --pipa
 
-    CheckBox        maBoolCheckBox;
+    Edit*           mpStringEdit;//Keret alatti LineEdit(nekem nincs az opt ban olyan lehetőség hogy lássam, valszeg Geometrys) --pipa
+    Edit*           mpNumericEdit;//Keret alatt LineEdit (Buttons) --pipa
 
-    Edit            maStringEdit;
-    Edit            maNumericEdit;
-
-    SvTreeListBox   maOptionBox;
+    SvTreeListBox*  mpOptionBox;
 
     int             mnCurrentOption;
     int             mnCurrentElement;

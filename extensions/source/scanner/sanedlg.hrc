@@ -19,56 +19,12 @@
 #ifndef _SVT_SANEDLG_HRC
 #define _SVT_SANEDLG_HRC
 
-#define RID_SANE_DIALOG                 1000
-#define RID_SCAN_OK                        1
-#define RID_SCAN_CANCEL                    2
-#define RID_DEVICEINFO_BTN                 3
-#define RID_PREVIEW_BOX                    4
-#define RID_DEVICE_BOX_TXT                 5
-#define RID_DEVICE_BOX                     6
-#define RID_SCANAREA_BOX                   7
-#define RID_SCAN_LEFT_TXT                  8
-#define RID_SCAN_LEFT_BOX                  9
-#define RID_SCAN_TOP_BOX                  10
-#define RID_SCAN_TOP_TXT                  11
-#define RID_SCAN_RIGHT_TXT                12
-#define RID_SCAN_RIGHT_BOX                13
-#define RID_SCAN_BOTTOM_TXT               14
-#define RID_SCAN_BOTTOM_BOX               15
-#define RID_SCAN_RESOLUTION_TXT           16
-#define RID_SCAN_RESOLUTION_BOX           17
-#define RID_PREVIEW_BTN                   18
-#define RID_SCAN_OPTION_BOX               19
-#define RID_SCAN_OPTIONTITLE_TXT          20
-#define RID_SCAN_OPTION_DESC_TXT          21
-#define RID_SCAN_BOOL_OPTION_BOX          22
-#define RID_SCAN_OPTION_TXT               23
-#define RID_SCAN_STRING_OPTION_EDT        24
-#define RID_SCAN_QUANTUM_RANGE_BOX        25
-#define RID_SCAN_STRING_RANGE_BOX         26
-#define RID_SCAN_NUMERIC_OPTION_EDT       27
-#define RID_SCAN_BUTTON_OPTION_BTN        28
-#define RID_SCAN_NUMERIC_VECTOR_BOX       29
-#define RID_SCAN_NUMERIC_VECTOR_TXT       30
-#define RID_SCAN_BITMAP_PLUS              31
-#define RID_SCAN_BITMAP_MINUS             32
-#define RID_SCAN_ADVANCED_BOX             33
-#define RID_SCAN_ADVANCED_TXT             34
-#define RID_SCAN_BTN                      35
-
-#define RID_SANE_DEVICEINFO_TXT         1001
-#define RID_SANE_SCANERROR_TXT          1002
-#define RID_SANE_NORESOLUTIONOPTION_TXT 1003
-#define RID_SANE_NOSANELIB_TXT          1004
-
 #define SCAN_AREA_TOP       17
 #define SCAN_AREA_LEFT      8
 #define PREVIEW_UPPER_LEFT  SCAN_AREA_LEFT
 #define PREVIEW_UPPER_TOP   SCAN_AREA_TOP + 80
 #define PREVIEW_WIDTH       113
 #define PREVIEW_HEIGHT      160
-#define SECOND_COLUMN       PREVIEW_WIDTH + 20
-#define THIRD_COLUMN        SECOND_COLUMN + 135
 
 #endif
 
