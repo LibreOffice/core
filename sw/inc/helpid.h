@@ -367,7 +367,6 @@
 #define HID_MM_SELECTDBTABLEDDIALOG                             "SW_HID_MM_SELECTDBTABLEDDIALOG"
 #define HID_MM_SELECTDBTABLEDDIALOG_LISTBOX                     "SW_HID_MM_SELECTDBTABLEDDIALOG_LISTBOX"
 #define HID_MM_DBTABLEPREVIEWDIALOG                             "SW_HID_MM_DBTABLEPREVIEWDIALOG"
-#define HID_MM_CREATEADDRESSLIST                                "SW_HID_MM_CREATEADDRESSLIST"
 #define HID_MM_ASSIGNFIELDS                                     "SW_HID_MM_ASSIGNFIELDS"
 #define HID_MM_ADDRESSLIST_HB                                   "SW_HID_MM_ADDRESSLIST_HB"
 #define HID_MM_MAILBODY                                         "SW_HID_MM_MAILBODY"
