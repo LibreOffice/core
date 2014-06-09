@@ -40,11 +40,14 @@ APP_BUNDLE="$1"
 # add some where it makes sense. Make a depth-first search to sign the contents
 # of e.g. the spotlight plugin before attempting to sign the plugin itself
 
-find -d $APP_BUNDLE \( -name '*.dylib' -or -name '*.so' -or -name '*.fodt' \
+find -d "$APP_BUNDLE" \( -name '*.dylib' -or -name '*.so' -or -name '*.fodt' \
         -or -name 'schema.strings' -or -name 'schema.xml' -or -name '*.mdimporter' \
         -or -name '*.jar' -or -name '*.jnilib' -or -name 'LICENSE' -or -name 'LICENSE.html' \
         -or -name '*.applescript' \) ! -type l | grep -v "LibreOfficePython\.framework" | \
-xargs codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY"
+while read file; do
+    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
+    codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file"
+done
 
 find $APP_BUNDLE -name '*.dylib.*' ! -type l | \
 while read dylib; do \
