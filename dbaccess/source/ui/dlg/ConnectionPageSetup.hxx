@@ -69,7 +69,7 @@ namespace dbaui
     protected:
         OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId);
         virtual bool checkTestConnection() SAL_OVERRIDE;
-            // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
+            // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~OConnectionTabPageSetup();
     };
 
