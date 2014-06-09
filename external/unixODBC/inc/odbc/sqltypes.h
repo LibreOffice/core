@@ -27,13 +27,13 @@
 #endif
 
 /*
- * if thi sis set, then use a 4 byte unicode definition, insteead of the 2 bye that MS use
+ * if this is set, then use a 4 byte unicode definition, instead of the 2 bytes that MS uses
  */
 
 #ifdef SQL_WCHART_CONVERT
 /*
  * Use this if you want to use the C/C++ portable definition of  a wide char, wchar_t
- *  Microsoft hardcoded a definition of  unsigned short which may not be compatible with
+ *  Microsoft hardcoded a definition of unsigned short which may not be compatible with
  *  your platform specific wide char definition.
  */
 #include <wchar.h>
@@ -145,7 +145,7 @@ typedef double          SQLFLOAT;
 
 /*
  * Hopefully by now it should be safe to assume most drivers know about SQLLEN now
- * and the defaukt is now sizeof( SQLLEN ) = 8 on 64 bit platforms
+ * and the default is now sizeof( SQLLEN ) = 8 on 64 bit platforms
  *
  */
 
@@ -157,7 +157,7 @@ typedef unsigned int    SQLUINTEGER;
 #define SQLULEN         SQLUINTEGER
 #define SQLSETPOSIROW   SQLUSMALLINT
 /*
- * These are not supprted on 64bit ODBC according to MS, removed, so use at your peril
+ * These are not supported on 64bit ODBC according to MS, removed, so use at your peril
  *
  typedef SQLULEN         SQLROWCOUNT;
  typedef SQLULEN         SQLROWSETSIZE;
@@ -171,7 +171,7 @@ typedef long            SQLLEN;
 typedef unsigned long   SQLULEN;
 typedef unsigned long   SQLSETPOSIROW;
 /*
- * These are not supprted on 64bit ODBC according to MS, removed, so use at your peril
+ * These are not supported on 64bit ODBC according to MS, removed, so use at your peril
  *
  typedef SQLULEN        SQLTRANSID;
  typedef SQLULEN        SQLROWCOUNT;
