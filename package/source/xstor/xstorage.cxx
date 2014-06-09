@@ -176,11 +176,8 @@ SotElement_Impl::SotElement_Impl( const OUString& rName, bool bStor, bool bNew )
 
 SotElement_Impl::~SotElement_Impl()
 {
-    if ( m_pStorage )
-        delete m_pStorage;
-
-    if ( m_pStream )
-        delete m_pStream;
+    delete m_pStorage;
+    delete m_pStream;
 }
 
 // most of properties are holt by the storage but are not used
