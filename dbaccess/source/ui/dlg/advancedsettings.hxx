@@ -113,7 +113,7 @@ namespace dbaui
         GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
 
-        // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
+        // nControlFlags is a combination of the CBTP_xxx-constants
         virtual ~GeneratedValuesPage();
 
         // must be overloaded by subclasses, but it isn't pure virtual
