@@ -379,7 +379,7 @@ public:
     const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
     bool hasAnnotations() const { return !maAnnotations.empty(); }
     sal_Int32 getHash() const;
-    virtual OString stringify() const;
+    OString stringify() const;
 
 
 private:
