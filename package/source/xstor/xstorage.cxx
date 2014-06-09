@@ -317,7 +317,7 @@ OStorage_Impl::~OStorage_Impl()
         }
         else if ( !m_aReadOnlyWrapList.empty() )
         {
-            for ( OStorageList_Impl::iterator pStorageIter = m_aReadOnlyWrapList.begin();
+            for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapList.begin();
                   pStorageIter != m_aReadOnlyWrapList.end(); ++pStorageIter )
             {
                 uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
@@ -416,7 +416,7 @@ void OStorage_Impl::SetReadOnlyWrap( OStorage& aStorage )
 
 void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
 {
-    for ( OStorageList_Impl::iterator pStorageIter = m_aReadOnlyWrapList.begin();
+    for ( StorageHoldersType::iterator pStorageIter = m_aReadOnlyWrapList.begin();
       pStorageIter != m_aReadOnlyWrapList.end();)
     {
         uno::Reference< embed::XStorage > xTmp = pStorageIter->m_xWeakRef;
@@ -430,7 +430,7 @@ void OStorage_Impl::RemoveReadOnlyWrap( OStorage& aStorage )
                 AddLog( rException.Message );
             }
 
-            OStorageList_Impl::iterator pIterToDelete( pStorageIter );
+            StorageHoldersType::iterator pIterToDelete( pStorageIter );
             ++pStorageIter;
             m_aReadOnlyWrapList.erase( pIterToDelete );
         }
