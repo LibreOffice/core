@@ -383,17 +383,17 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         }
     }
 
-    sw::mark::CntntIdxStore aBkmkArr;
+   const boost::shared_ptr<sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
     _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
-                    aBkmkArr, SAVEFLY_SPLIT );
+                    *aBkmkArr.get(), SAVEFLY_SPLIT );
     // FIXME: only SwTxtNode has a valid implementation of SplitCntntNode!
     OSL_ENSURE(pNode->IsTxtNode(), "splitting non-text node?");
     pNode = pNode->SplitCntntNode( rPos );
     if (pNode)
     {
         // move all bookmarks, TOXMarks, FlyAtCnt
-        if( !aBkmkArr.empty() )
-            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, true );
+        if( !aBkmkArr.get()->empty() )
+            _RestoreCntntIdx( this, *aBkmkArr.get(), rPos.nNode.GetIndex()-1, 0, true );
 
         // To-Do - add 'SwExtraRedlineTbl' also ?
         if( IsRedlineOn() || (!IsIgnoreRedline() && !mpRedlineTbl->empty() ))

@@ -1503,6 +1503,11 @@ void _DelBookmarks(
     }
 }
 
+boost::shared_ptr< ::sw::mark::CntntIdxStore> sw::mark::CreateCntntIdxStore()
+{
+    return boost::shared_ptr< ::sw::mark::CntntIdxStore>(new sw::mark::CntntIdxStore());
+}
+
 void _SaveCntntIdx(SwDoc* pDoc,
     sal_uLong nNode,
     sal_Int32 nCntnt,
