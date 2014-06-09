@@ -22,6 +22,7 @@
 #include "formulacell.hxx"
 #include "document.hxx"
 #include "docpool.hxx"
+#include "drwlayer.hxx"
 #include "attarray.hxx"
 #include "patattr.hxx"
 #include "cellform.hxx"
@@ -1834,8 +1835,19 @@ public:
 void ScColumn::CopyCellNotesToDocument(
     SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption, SCROW nRowOffsetDest ) const
 {
+    ScDrawLayer *pDrawLayer = rDestCol.GetDoc().GetDrawLayer();
+    bool bWasLocked;
+    if (pDrawLayer)
+    {
+        // Avoid O(n^2) by temporary locking SdrModel which disables broadcasting.
+        // Each cell note adds undo listener, and all of them would be woken up in ScPostIt::CreateCaption.
+        bWasLocked = pDrawLayer->isLocked();
+        pDrawLayer->setLock(true);
+    }
     CopyCellNotesHandler aFunc(*this, rDestCol, nRowOffsetDest, bCloneCaption);
     sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
+    if (pDrawLayer)
+        pDrawLayer->setLock(bWasLocked);
 }
 
 void ScColumn::DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol, sc::ColumnBlockPosition& maDestBlockPos,
