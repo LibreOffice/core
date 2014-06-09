@@ -92,8 +92,7 @@ namespace accessibility
                    nEndIndex >= 0 && nEndIndex <= USHRT_MAX ,
                    "AccessibleStaticTextBase_Impl::MakeSelection: index value overflow");
 
-        return ESelection( nStartPara, static_cast< sal_uInt16 >(nStartIndex),
-                           nEndPara, static_cast< sal_uInt16 >(nEndIndex) );
+        return ESelection(nStartPara, nStartIndex, nEndPara, nEndIndex);
     }
 
 
@@ -360,7 +359,7 @@ namespace accessibility
                            nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                            "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-                return EPosition( nCurrPara, static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
+                return EPosition(nCurrPara, nFlatIndex - nCurrIndex + nCurrCount);
             }
         }
 
@@ -372,7 +371,7 @@ namespace accessibility
                        nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                        "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
 
-            return EPosition( nCurrPara-1, static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
+            return EPosition(nCurrPara-1, nFlatIndex - nCurrIndex + nCurrCount);
         }
 
         // not found? Out of bounds
@@ -744,8 +743,7 @@ namespace accessibility
 
             // #112814# Use correct index offset
             if ( ( nIndex = rPara.getIndexAtPoint( aPoint ) ) != -1 )
-                return mpImpl->Internal2Index( EPosition(sal::static_int_cast<sal_uInt16>(i),
-                                                         sal::static_int_cast<sal_uInt16>(nIndex)) );
+                return mpImpl->Internal2Index(EPosition(i, nIndex));
         }
 
         return -1;

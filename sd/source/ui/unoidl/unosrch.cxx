@@ -601,8 +601,8 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
     {
         if( nStartPos <= nTextLen && nEndPos <= nTextLen )
         {
-            ESelection aSelection( pConvertPara[nStartPos], (sal_uInt16)pConvertPos[nStartPos],
-                             pConvertPara[nEndPos], (sal_uInt16)pConvertPos[nEndPos] );
+            ESelection aSelection( pConvertPara[nStartPos], pConvertPos[nStartPos],
+                             pConvertPara[nEndPos], pConvertPos[nEndPos] );
             SvxUnoTextRange *pRange;
 
             SvxUnoTextBase* pParent = SvxUnoTextBase::getImplementation( xParent );

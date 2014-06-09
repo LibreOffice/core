@@ -323,7 +323,7 @@ void View::DoPaste (::Window* pWindow)
 
                     for( sal_Int32 nPara = nParaCount - 2; nPara >= 0; nPara-- )
                     {
-                        const sal_uInt16 nParaLen = (sal_uInt16)rEdit.GetTextLen( nPara );
+                        const sal_Int32 nParaLen = rEdit.GetTextLen( nPara );
                         pOutliner->QuickDelete( ESelection( nPara, nParaLen, nPara+1, 0 ) );
                         pOutliner->QuickInsertLineBreak( ESelection( nPara, nParaLen, nPara, nParaLen ) );
                     }
