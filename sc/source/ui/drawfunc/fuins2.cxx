@@ -55,6 +55,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -501,6 +502,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
         if( xCompSupp.is())
             xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+
+        uno::Reference<chart2::XChartDocument> xChartDoc(xReceiver, uno::UNO_QUERY);
+        if (xChartDoc.is())
+            xChartDoc->createDefaultChart();
 
         // lock the model to suppress any internal updates
         uno::Reference< frame::XModel > xChartModel( xReceiver, uno::UNO_QUERY );
