@@ -2074,6 +2074,8 @@ void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_F);
     m_aStylesEnd.append((sal_Int32)m_rExport.maFontHelper.GetId(rFont));
     m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(rtl_getBestWindowsCharsetFromTextEncoding(rFont.GetCharSet()));
+    if (m_rExport.eCurrentEncoding == RTL_TEXTENCODING_DONTKNOW)
+        m_rExport.eCurrentEncoding = m_rExport.eDefaultEncoding;
 }
 
 void RtfAttributeOutput::CharFontSize(const SvxFontHeightItem& rFontSize)
