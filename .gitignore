@@ -105,3 +105,4 @@ xcuserdata
 
 # gdb config
 /.gdbinit
+/.gdb_history
