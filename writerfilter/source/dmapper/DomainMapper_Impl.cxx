@@ -1548,8 +1548,11 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
             aFontProperties = aFontProps->GetPropertyValues();
         }
         appendTextContent( uno::Reference< text::XTextContent >( xFootnoteText, uno::UNO_QUERY_THROW ), aFontProperties );
+        // fdo#78885 : File was crashing import due to empty textCursor was inserted here.
+        // If field contain footnote reference it throws exception at PopFieldContext().
+        uno::Reference<text::XTextCursor> xCrsr = xFootnoteText->createTextCursorByRange(xFootnoteText->getStart());
         m_aTextAppendStack.push(TextAppendContext(uno::Reference< text::XTextAppend >( xFootnoteText, uno::UNO_QUERY_THROW ),
-                    m_bIsNewDoc ? uno::Reference<text::XTextCursor>() : xFootnoteText->createTextCursorByRange(xFootnoteText->getStart())));
+                (m_bIsNewDoc && !xCrsr.is()) ? uno::Reference<text::XTextCursor>() : xCrsr));
 
         // Redlines for the footnote anchor
         CheckRedline( xFootnote->getAnchor( ) );
