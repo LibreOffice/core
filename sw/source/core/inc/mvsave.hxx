@@ -72,6 +72,7 @@ namespace sw { namespace mark
     };
 
     typedef std::vector<sal_uLong> CntntIdxStore;
+    boost::shared_ptr<CntntIdxStore> CreateCntntIdxStore();
 }}
 
 #define SAVEFLY 1

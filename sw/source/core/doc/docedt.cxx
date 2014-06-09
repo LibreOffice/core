@@ -905,14 +905,14 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         bSplit = true;
         const sal_Int32 nMkCntnt = rPaM.GetMark()->nContent.GetIndex();
 
-        sw::mark::CntntIdxStore aBkmkArr;
+        const boost::shared_ptr<sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
         _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
-                        aBkmkArr, SAVEFLY_SPLIT );
+                        *aBkmkArr.get(), SAVEFLY_SPLIT );
 
         pTNd = static_cast<SwTxtNode*>(pTNd->SplitCntntNode( rPos ));
 
-        if( !aBkmkArr.empty() )
-            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, true );
+        if( !aBkmkArr.get()->empty() )
+            _RestoreCntntIdx( this, *aBkmkArr.get(), rPos.nNode.GetIndex()-1, 0, true );
 
         // correct the PaM!
         if( rPos.nNode == rPaM.GetMark()->nNode )
@@ -1328,9 +1328,9 @@ void sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 }
                 pOldTxtNd->FmtToTxtAttr( pTxtNd );
 
-                sw::mark::CntntIdxStore aBkmkArr;
+                const boost::shared_ptr< sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
                 ::_SaveCntntIdx( pDoc, aOldIdx.GetIndex(),
-                                    pOldTxtNd->Len(), aBkmkArr );
+                                    pOldTxtNd->Len(), *aBkmkArr.get() );
 
                 SwIndex aAlphaIdx(pTxtNd);
                 pOldTxtNd->CutText( pTxtNd, aAlphaIdx, SwIndex(pOldTxtNd),
@@ -1339,8 +1339,8 @@ void sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 pDoc->CorrRel( rPam.GetPoint()->nNode, aAlphaPos, 0, true );
 
                 // move all Bookmarks/TOXMarks
-                if( !aBkmkArr.empty() )
-                    ::_RestoreCntntIdx( pDoc, aBkmkArr, aIdx.GetIndex() );
+                if( !aBkmkArr.get()->empty() )
+                    ::_RestoreCntntIdx( pDoc, *aBkmkArr.get(), aIdx.GetIndex() );
 
                 // If the passed PaM is not in the Crsr ring,
                 // treat it separately (e.g. when it's being called from AutoFormat)

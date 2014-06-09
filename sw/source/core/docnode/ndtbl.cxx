@@ -1048,9 +1048,9 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         SwStartNode* pSttNd;
         SwPosition aCntPos( aSttIdx, SwIndex( pTxtNd ));
 
-        sw::mark::CntntIdxStore aBkmkArr;
+        const boost::shared_ptr< sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
         _SaveCntntIdx( pDoc, aSttIdx.GetIndex(), pTxtNd->GetTxt().getLength(),
-                       aBkmkArr );
+                       *aBkmkArr.get() );
 
         if( T2T_PARA != cCh )
         {
@@ -1061,8 +1061,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     aCntPos.nContent = nChPos;
                     SwCntntNode* pNewNd = pTxtNd->SplitCntntNode( aCntPos );
 
-                    if( !aBkmkArr.empty() )
-                        _RestoreCntntIdx( aBkmkArr, *pNewNd, nChPos,
+                    if( !aBkmkArr.get()->empty() )
+                        _RestoreCntntIdx( *aBkmkArr.get(), *pNewNd, nChPos,
                                             nChPos + 1 );
 
                     // Delete separator and correct search string
@@ -1088,8 +1088,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         }
 
         // Now for the last substring
-        if( !aBkmkArr.empty() )
-            _RestoreCntntIdx( aBkmkArr, *pTxtNd, pTxtNd->GetTxt().getLength(),
+        if( !aBkmkArr.get()->empty() )
+            _RestoreCntntIdx( *aBkmkArr.get(), *pTxtNd, pTxtNd->GetTxt().getLength(),
                                 pTxtNd->GetTxt().getLength()+1 );
 
         pSttNd = new SwStartNode( aCntPos.nNode, ND_STARTNODE, SwTableBoxStartNode );
@@ -1519,15 +1519,15 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );
 
-                sw::mark::CntntIdxStore aBkmkArr;
+                const boost::shared_ptr<sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
                 const sal_Int32 nOldTxtLen = aCntIdx.GetIndex();
                 _SaveCntntIdx( pDoc, nNdIdx, pCurTxtNd->GetTxt().getLength(),
-                                aBkmkArr );
+                                *aBkmkArr.get() );
 
                 pDelPara->pLastNd->JoinNext();
 
-                if( !aBkmkArr.empty() )
-                    _RestoreCntntIdx( pDoc, aBkmkArr,
+                if( !aBkmkArr.get()->empty() )
+                    _RestoreCntntIdx( pDoc, *aBkmkArr.get(),
                                         pDelPara->pLastNd->GetIndex(),
                                         nOldTxtLen );
             }
