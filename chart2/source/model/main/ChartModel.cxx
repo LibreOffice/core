@@ -958,6 +958,12 @@ uno::Reference< beans::XPropertySet > SAL_CALL ChartModel::getPageBackground()
     return m_xPageBackground;
 }
 
+void SAL_CALL ChartModel::createDefaultChart()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    insertDefaultChart();
+}
+
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL ChartModel::getTitleObject()
     throw (uno::RuntimeException, std::exception)

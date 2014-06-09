@@ -385,12 +385,7 @@ void ChartModel::impl_store(
     }
 }
 
-// frame::XLoadable
-void SAL_CALL ChartModel::initNew()
-    throw (frame::DoubleInitializationException,
-           io::IOException,
-           uno::Exception,
-           uno::RuntimeException, std::exception)
+void ChartModel::insertDefaultChart()
 {
     lockControllers();
     createInternalDataProvider( sal_False );
@@ -484,6 +479,15 @@ void SAL_CALL ChartModel::initNew()
     }
     setModified( sal_False );
     unlockControllers();
+}
+
+// frame::XLoadable
+void SAL_CALL ChartModel::initNew()
+    throw (frame::DoubleInitializationException,
+           io::IOException,
+           uno::Exception,
+           uno::RuntimeException, std::exception)
+{
 }
 
 void SAL_CALL ChartModel::load(
