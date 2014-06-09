@@ -540,7 +540,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     SwTableLine* pLine = new SwTableLine( pLineFmt, rSavedData.size(), 0 );
     pTblNd->GetTable().GetTabLines().insert( pTblNd->GetTable().GetTabLines().begin(), pLine );
 
-    std::vector<sal_uLong> aBkmkArr;
+    sw::mark::CntntIdxStore aBkmkArr;
     for( sal_uInt16 n = rSavedData.size(); n; )
     {
         const SwTblToTxtSave* pSave = &rSavedData[ --n ];

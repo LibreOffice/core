@@ -905,7 +905,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         bSplit = true;
         const sal_Int32 nMkCntnt = rPaM.GetMark()->nContent.GetIndex();
 
-        std::vector<sal_uLong> aBkmkArr;
+        sw::mark::CntntIdxStore aBkmkArr;
         _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
                         aBkmkArr, SAVEFLY_SPLIT );
 
@@ -1328,7 +1328,7 @@ void sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 }
                 pOldTxtNd->FmtToTxtAttr( pTxtNd );
 
-                std::vector<sal_uLong> aBkmkArr;
+                sw::mark::CntntIdxStore aBkmkArr;
                 ::_SaveCntntIdx( pDoc, aOldIdx.GetIndex(),
                                     pOldTxtNd->Len(), aBkmkArr );
 

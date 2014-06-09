@@ -70,6 +70,8 @@ namespace sw { namespace mark
             sal_Int32 m_nCntnt2;
             ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
     };
+
+    typedef std::vector<sal_uLong> CntntIdxStore;
 }}
 
 #define SAVEFLY 1
@@ -80,12 +82,13 @@ void _DelBookmarks(const SwNodeIndex& rStt,
     ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =0,
     const SwIndex* pSttIdx =0,
     const SwIndex* pEndIdx =0);
+
 void _SaveCntntIdx( SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
-                    std::vector<sal_uLong>& rSaveArr, sal_uInt8 nSaveFly = 0 );
-void _RestoreCntntIdx( SwDoc* pDoc, std::vector<sal_uLong>& rSaveArr,
+                    sw::mark::CntntIdxStore& rSaveArr, sal_uInt8 nSaveFly = 0 );
+void _RestoreCntntIdx( SwDoc* pDoc, sw::mark::CntntIdxStore& rSaveArr,
                         sal_uLong nNode, sal_Int32 nOffset = 0,
                         bool bAuto = false );
-void _RestoreCntntIdx( std::vector<sal_uLong>& rSaveArr, const SwNode& rNd,
+void _RestoreCntntIdx( sw::mark::CntntIdxStore& rSaveArr, const SwNode& rNd,
                         sal_Int32 nLen, sal_Int32 nCorrLen );
 
 /** data structure to temporarily hold fly anchor positions relative to some
