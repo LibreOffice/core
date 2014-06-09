@@ -29,12 +29,6 @@ $(eval $(call gb_Module_add_l10n_targets,desktop,\
     UIConfig_deployment \
 ))
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Module_add_targets,desktop,\
-	Library_libreoffice \
-))
-endif
-
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 $(eval $(call gb_Module_add_targets,desktop,\
     Executable_soffice_bin \

@@ -11,7 +11,6 @@ $(eval $(call gb_Executable_Executable,libtest))
 
 $(eval $(call gb_Executable_set_include,libtest,\
 	$$(INCLUDE) \
-	-I$(SRCDIR)/desktop/inc \
 ))
 
 $(eval $(call gb_Executable_use_libraries,libtest,\
@@ -19,7 +18,7 @@ $(eval $(call gb_Executable_use_libraries,libtest,\
 ))
 
 $(eval $(call gb_Executable_use_static_libraries,libtest,\
-	libreoffice \
+	libreofficekit \
 ))
 
 $(eval $(call gb_Executable_add_libs,libtest,\

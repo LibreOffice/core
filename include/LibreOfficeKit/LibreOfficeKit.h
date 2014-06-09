@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_H
-#define INCLUDED_DESKTOP_INC_LIBLIBREOFFICE_H
+#ifndef INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_H
+#define INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_H
 
 #ifdef __cplusplus
 extern "C"
