@@ -28,8 +28,9 @@ $(eval $(call gb_Module_add_targets,postprocess,\
 ))
 endif
 
+$(if $(filter-out $(OS),WNT), \
 $(eval $(call gb_Module_add_check_targets,postprocess,\
 	CppunitTest_services \
-))
+)))
 
 # vim: set noet sw=4 ts=4:
