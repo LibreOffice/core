@@ -408,7 +408,7 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
     m_pSetNoNF->SetMin(1);
     get(m_pNextPB, "NEXT");
     get(m_pEndPB, "END");
-    get(m_pOK, "OK");
+    get(m_pOK, "ok");
     get(m_pAddressControl, "CONTAINER");
 
     m_pNewPB->SetClickHdl(LINK(this, SwCreateAddressListDialog, NewHdl_Impl));
