@@ -2434,7 +2434,12 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                     aFile = aElementName;
                     aFile += ".";
                     aFile += maLibElementFileExtension;
-                    xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );
+                    try
+                    {
+                        xElementStream = xLibraryStor->openStreamElement( aFile, embed::ElementModes::READ );
+                    }
+                    catch(const uno::Exception& )
+                    {}
                 }
 
                 if ( xElementStream.is() )
