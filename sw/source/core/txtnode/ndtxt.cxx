@@ -619,7 +619,7 @@ SwCntntNode *SwTxtNode::JoinNext()
     if( SwCntntNode::CanJoinNext( &aIdx ) )
     {
         SwDoc* pDoc = rNds.GetDoc();
-        std::vector<sal_uLong> aBkmkArr;
+        sw::mark::CntntIdxStore aBkmkArr;
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), SAL_MAX_INT32, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         sal_Int32 nOldLen = m_Text.getLength();
@@ -713,7 +713,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
     if( SwCntntNode::CanJoinPrev( &aIdx ) )
     {
         SwDoc* pDoc = rNds.GetDoc();
-        std::vector<sal_uLong> aBkmkArr;
+        sw::mark::CntntIdxStore aBkmkArr;
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), SAL_MAX_INT32, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         const sal_Int32 nLen = pTxtNode->Len();

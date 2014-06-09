@@ -1048,7 +1048,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         SwStartNode* pSttNd;
         SwPosition aCntPos( aSttIdx, SwIndex( pTxtNd ));
 
-        std::vector<sal_uLong> aBkmkArr;
+        sw::mark::CntntIdxStore aBkmkArr;
         _SaveCntntIdx( pDoc, aSttIdx.GetIndex(), pTxtNd->GetTxt().getLength(),
                        aBkmkArr );
 
@@ -1519,7 +1519,7 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );
 
-                std::vector<sal_uLong> aBkmkArr;
+                sw::mark::CntntIdxStore aBkmkArr;
                 const sal_Int32 nOldTxtLen = aCntIdx.GetIndex();
                 _SaveCntntIdx( pDoc, nNdIdx, pCurTxtNd->GetTxt().getLength(),
                                 aBkmkArr );

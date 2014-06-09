@@ -383,7 +383,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
         }
     }
 
-    std::vector<sal_uLong> aBkmkArr;
+    sw::mark::CntntIdxStore aBkmkArr;
     _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
                     aBkmkArr, SAVEFLY_SPLIT );
     // FIXME: only SwTxtNode has a valid implementation of SplitCntntNode!
