@@ -223,6 +223,8 @@ private:
     void impl_adjustAdditionalShapesPositionAndSize(
         const ::com::sun::star::awt::Size& aVisualAreaSize );
 
+    void insertDefaultChart();
+
 public:
     //no default constructor
     ChartModel(::com::sun::star::uno::Reference<
@@ -433,6 +435,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL
         getPageBackground()
             throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    virtual void SAL_CALL createDefaultChart() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ____ XDataReceiver (public API) ____
     virtual void SAL_CALL
