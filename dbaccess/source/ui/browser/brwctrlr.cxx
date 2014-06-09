@@ -43,6 +43,7 @@
 #include <com/sun/star/form/XSubmit.hpp>
 #include <com/sun/star/form/XSubmitListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
+#include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/ParametersRequest.hpp>
@@ -93,6 +94,7 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::form::runtime;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
@@ -258,8 +260,7 @@ SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl()
 
 Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getFormOperations() throw (RuntimeException)
 {
-    SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::getFormOperations: not supported!" );
-    return NULL;
+    return FormOperations::createWithFormController( m_pOwner->m_xContext, this );
 }
 
 Reference< ::com::sun::star::awt::XControl >  SbaXDataBrowserController::FormControllerImpl::getCurrentControl(void) throw( RuntimeException )
