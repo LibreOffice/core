@@ -229,7 +229,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
     // check if the connection type requires a password
     if (hasAuthentication(*m_pItemSetHelper->getOutputSet()))
     {
-        // password: DSID_PASSWORD -> "password"
+        // password: DSID_PASSWORD -> password
         SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPassword, SfxStringItem, DSID_PASSWORD, true);
         OUString sPassword = pPassword ? pPassword->GetValue() : OUString();
         SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPasswordRequired, SfxBoolItem, DSID_PASSWORDREQUIRED, true);
