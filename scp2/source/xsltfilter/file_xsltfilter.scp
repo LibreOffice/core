@@ -38,3 +38,10 @@ File gid_File_filter_xhtml
     Dir = FILELIST_DIR;
     Name = "filter_xhtml.filelist";
 End
+
+File gid_File_filter_xslt
+    TXT_FILE_BODY;
+    Styles = (FILELIST, PACKED);
+    Dir = FILELIST_DIR;
+    Name = "filter_xslt.filelist";
+End
