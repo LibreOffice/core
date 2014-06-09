@@ -80,7 +80,7 @@ public:
     void        SetCurrentDataSet(sal_uInt32 nSet);
     sal_uInt32  GetCurrentDataSet() const { return m_nCurrentDataSet;}
     void        SetCursorTo(sal_uInt32 nElement);
-    virtual void Resize();
+    virtual void Resize() SAL_OVERRIDE;
 };
 
 SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, WinBits nBits ) :
