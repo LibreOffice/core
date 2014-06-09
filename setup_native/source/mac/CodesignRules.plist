@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>rules</key>
+    <dict>
+        <key>^MacOS/(bootstraprc|fundamentalrc|setuprc|sofficerc|unorc|versionrc)$</key>
+        <false/>
+        <key>^MacOS/pythonloader.unorc$</key>
+        <false/>
+        <key>^MacOS/postgresql-sdbc.ini$</key>
+        <false/>
+        <key>^MacOS/(senddoc|python|gengal|unoinfo)$</key>
+        <false/>
+        <key>.*\.(png|svg|py|res|rdb)$</key>
+        <false/>
+    </dict>
+</dict>
+</plist>
