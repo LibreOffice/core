@@ -13,7 +13,7 @@
 #include <assert.h>
 #include <math.h>
 #include <sys/time.h>
-#include <liblibreoffice.hxx>
+#include <LibreOfficeKit/LibreOfficeKit.hxx>
 
 long getTimeMS()
 {
