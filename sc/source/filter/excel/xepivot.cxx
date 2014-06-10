@@ -1734,6 +1734,8 @@ void XclExpPivotTable::WriteQsiSxTag( XclExpStream& rStrm ) const
     // Feature-specific options.  The value differs depending on the table
     // type, but we assume the table type is always pivot table.
     sal_uInt32 nOptions = 0x00000000;
+#if 0
+    // documentation for which bit is for what
     bool bNoStencil = false;
     bool bHideTotal = false;
     bool bEmptyRows = false;
@@ -1742,6 +1744,7 @@ void XclExpPivotTable::WriteQsiSxTag( XclExpStream& rStrm ) const
     if (bHideTotal) nOptions |= 0x00000002;
     if (bEmptyRows) nOptions |= 0x00000008;
     if (bEmptyCols) nOptions |= 0x00000010;
+#endif
     rStrm << nOptions;
 
     enum ExcelVersion
