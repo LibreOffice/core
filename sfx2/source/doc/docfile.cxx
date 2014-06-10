@@ -2785,7 +2785,7 @@ void SfxMedium::CompleteReOpen()
         if ( pImp->pTempFile )
             pImp->m_aName = pImp->pTempFile->GetFileName();
     }
-    else
+    else if (pTmpFile)
     {
         pTmpFile->EnableKillingFile( true );
         delete pTmpFile;
