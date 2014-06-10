@@ -91,6 +91,7 @@
 #include <DocumentSettingManager.hxx>
 #include <DocumentDrawModelManager.hxx>
 #include <DocumentChartDataProviderManager.hxx>
+#include <DocumentTimerManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -198,6 +199,7 @@ SwDoc::SwDoc()
     m_pDocumentSettingManager(new ::sw::DocumentSettingManager(*this)),
     m_pDocumentChartDataProviderManager( new sw::DocumentChartDataProviderManager( *this ) ),
     m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
+    m_pDocumentTimerManager( new ::sw::DocumentTimerManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -247,7 +249,6 @@ SwDoc::SwDoc()
     mnAutoFmtRedlnCommentNo( 0 ),
     meRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)),
     mReferenceCount(0),
-    mIdleBlockCount(0),
     mnLockExpFld( 0 ),
     mbGlossDoc(false),
     mbModified(false),
@@ -280,7 +281,6 @@ SwDoc::SwDoc()
 #endif
     mbContainsAtPageObjWithContentAnchor(false), //#i119292#, fdo#37024
 
-    mbStartIdleTimer(false),
     mbReadOnly(false),
     meDocType(DOCTYPE_NATIVE)
 {
@@ -340,10 +340,6 @@ SwDoc::SwDoc()
             mpDfltTxtFmtColl );
     new SwTxtNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
                     GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
-
-    // set the own IdleTimer
-    maIdleTimer.SetTimeout( 600 );
-    maIdleTimer.SetTimeoutHdl( LINK(this, SwDoc, DoIdleJobs) );
 
     maOLEModifiedTimer.SetTimeout( 1000 );
     maOLEModifiedTimer.SetTimeoutHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
@@ -458,7 +454,7 @@ SwDoc::~SwDoc()
     SwFmtCharFmt aCharFmt(NULL);
     SetDefault(aCharFmt);
 
-    StopIdling();   // stop idle timer
+    getIDocumentTimerAccess().StopIdling();   // stop idle timer
     maStatsUpdateTimer.Stop();
 
     delete mpUnoCallBack, mpUnoCallBack = 0;

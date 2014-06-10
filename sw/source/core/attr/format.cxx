@@ -19,6 +19,7 @@
 
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx> //For SwFmt::getIDocumentSettingAccess()
+#include <IDocumentTimerAccess.hxx>
 #include <fmtcolfunc.hxx>
 #include <frame.hxx>
 #include <format.hxx>
@@ -763,7 +764,7 @@ const IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() const { ret
 IDocumentDrawModelAccess* SwFmt::getIDocumentDrawModelAccess() { return & GetDoc()->getIDocumentDrawModelAccess(); }
 const IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() const { return GetDoc(); }
 IDocumentLayoutAccess* SwFmt::getIDocumentLayoutAccess() { return GetDoc(); }
-IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return GetDoc(); }
+IDocumentTimerAccess* SwFmt::getIDocumentTimerAccess() { return & GetDoc()->getIDocumentTimerAccess(); }
 IDocumentFieldsAccess* SwFmt::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentChartDataProviderAccess* SwFmt::getIDocumentChartDataProviderAccess() { return & GetDoc()->getIDocumentChartDataProviderAccess(); }
 

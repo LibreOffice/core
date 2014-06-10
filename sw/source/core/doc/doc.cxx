@@ -20,6 +20,9 @@
 #include <doc.hxx>
 #include <DocumentSettingManager.hxx>
 #include <DocumentDrawModelManager.hxx>
+#include <DocumentTimerManager.hxx>
+#include <DocumentDeviceManager.hxx>
+#include <DocumentChartDataProviderManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -108,9 +111,6 @@
 #include <txtfrm.hxx>
 #include <attrhint.hxx>
 #include <view.hxx>
-#include <DocumentDeviceManager.hxx>
-#include <DocumentSettingManager.hxx>
-#include <DocumentChartDataProviderManager.hxx>
 
 #include <wdocsh.hxx>
 #include <prtopt.hxx>
@@ -216,17 +216,6 @@ IDocumentSettingAccess & SwDoc::getIDocumentSettingAccess()
     return *m_pDocumentSettingManager;
 }
 
-/* IDocumentChartDataProviderAccess */
-IDocumentChartDataProviderAccess const & SwDoc::getIDocumentChartDataProviderAccess() const
-{
-    return *m_pDocumentChartDataProviderManager;
-}
-
-IDocumentChartDataProviderAccess & SwDoc::getIDocumentChartDataProviderAccess()
-{
-    return *m_pDocumentChartDataProviderManager;
-}
-
 sal_uInt32 SwDoc::getRsid() const
 {
     return mnRsid;
@@ -259,6 +248,16 @@ void SwDoc::setRsidRoot( sal_uInt32 nVal )
     mnRsidRoot = nVal;
 }
 
+/* IDocumentChartDataProviderAccess */
+IDocumentChartDataProviderAccess const & SwDoc::getIDocumentChartDataProviderAccess() const
+{
+    return *m_pDocumentChartDataProviderManager;
+}
+
+IDocumentChartDataProviderAccess & SwDoc::getIDocumentChartDataProviderAccess()
+{
+    return *m_pDocumentChartDataProviderManager;
+}
 
 // IDocumentDeviceAccess
 IDocumentDeviceAccess const & SwDoc::getIDocumentDeviceAccess() const
@@ -269,6 +268,17 @@ IDocumentDeviceAccess const & SwDoc::getIDocumentDeviceAccess() const
 IDocumentDeviceAccess & SwDoc::getIDocumentDeviceAccess()
 {
     return *m_pDeviceAccess;
+}
+
+//IDocumentTimerAccess
+IDocumentTimerAccess const & SwDoc::getIDocumentTimerAccess() const
+{
+    return *m_pDocumentTimerManager;
+}
+
+IDocumentTimerAccess & SwDoc::getIDocumentTimerAccess()
+{
+    return *m_pDocumentTimerManager;
 }
 
 

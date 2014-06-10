@@ -62,6 +62,7 @@
 #include <objectformatter.hxx>
 #include <switerator.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentTimerAccess.hxx>
 
 //UUUU
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
@@ -1178,7 +1179,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                              sal_uLong nIndex, bool bPages, sal_uLong nEndIndex,
                              SwFrm *pPrv )
 {
-    pDoc->BlockIdling();
+    pDoc->getIDocumentTimerAccess().BlockIdling();
     SwRootFrm* pLayout = pLay->getRootFrm();
     const bool bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
     if( bOldCallbackActionEnabled )
@@ -1563,7 +1564,7 @@ void _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         }
     }
 
-    pDoc->UnblockIdling();
+    pDoc->getIDocumentTimerAccess().UnblockIdling();
     if( bOldCallbackActionEnabled )
         pLayout->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }

@@ -22,6 +22,7 @@
 #include "layfrm.hxx"
 #include <viewsh.hxx>
 #include <doc.hxx>
+#include <IDocumentTimerAccess.hxx>
 
 class SwCntntFrm;
 class SwViewShell;
@@ -211,7 +212,7 @@ public:
         // May be NULL if called from SfxBaseModel::dispose
         // (this happens in the build test 'rtfexport').
         if (lcl_pCurrShell != NULL)
-            lcl_pCurrShell->GetDoc()->StartBackgroundJobs();
+            lcl_pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
     }
     bool IsIdleFormat()  const { return bIdleFormat; }
     void ResetIdleFormat()     { bIdleFormat = false; }
@@ -227,7 +228,7 @@ public:
             // May be NULL if called from SfxBaseModel::dispose
             // (this happens in the build test 'rtfexport').
             if (lcl_pCurrShell != NULL)
-                lcl_pCurrShell->GetDoc()->StartBackgroundJobs();
+                lcl_pCurrShell->GetDoc()->getIDocumentTimerAccess().StartBackgroundJobs();
         }
     }
 

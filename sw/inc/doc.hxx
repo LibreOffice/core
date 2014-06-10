@@ -31,7 +31,6 @@
 #include <IDocumentStatistics.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
-#include <IDocumentTimerAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
 #include <IDocumentListItems.hxx>
 
@@ -204,6 +203,7 @@ namespace sw {
     class DocumentDeviceManager;
     class DocumentDrawModelManager;
     class DocumentChartDataProviderManager;
+    class DocumentTimerManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -250,7 +250,6 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentStatistics,
     public IDocumentState,
     public IDocumentLayoutAccess,
-    public IDocumentTimerAccess,
     public IDocumentListItems,
     public IDocumentOutlineNodes,
     public IDocumentListsAccess,
@@ -268,7 +267,6 @@ class SW_DLLPUBLIC SwDoc :
     /* @@@MAINTAINABILITY-HORROR@@@
        Timer should not be members of the model
     */
-    Timer       maIdleTimer;             //< Own IdleTimer
     Timer       maOLEModifiedTimer;      //< Timer for update modified OLE-Objecs
     Timer       maStatsUpdateTimer;      //< Timer for asynchronous stats calculation
     SwDBData    maDBData;                //< database descriptor
@@ -286,6 +284,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentSettingManager > m_pDocumentSettingManager;
     const ::boost::scoped_ptr< ::sw::DocumentChartDataProviderManager > m_pDocumentChartDataProviderManager;
     ::boost::scoped_ptr< ::sw::DocumentDeviceManager > m_pDeviceAccess;
+    const ::boost::scoped_ptr< ::sw::DocumentTimerManager > m_pDocumentTimerManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -392,7 +391,6 @@ private:
     sal_uInt32  mnRsidRoot;          //< session ID when the document was created
 
     sal_Int32   mReferenceCount;
-    sal_Int32   mIdleBlockCount;
     sal_Int8    mnLockExpFld;        //< If != 0 UpdateExpFlds() has no effect!
 
     bool mbGlossDoc              : 1;    //< TRUE: glossary document.
@@ -436,8 +434,6 @@ private:
     // true: Document contains at least one anchored object, which is anchored AT_PAGE with a content position.
     //       Thus, certain adjustment needed during formatting for these kind of anchored objects.
     bool mbContainsAtPageObjWithContentAnchor : 1;
-
-    bool mbStartIdleTimer;                    //< idle timer mode start/stop
 
     static SwAutoCompleteWord *mpACmpltWords;  //< List of all words for AutoComplete
 
@@ -510,8 +506,6 @@ private:
     bool _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
                                 sal_uInt16 nMode );
 
-    // Our own 'IdleTimer' calls the following method
-    DECL_LINK( DoIdleJobs, Timer * );
     // CharTimer calls this method.
     void DoUpdateAllCharts();
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
@@ -776,11 +770,9 @@ public:
     void ClearSwLayouterEntries();
 
     // IDocumentTimerAccess
-    virtual void StartIdling() SAL_OVERRIDE;
-    virtual void StopIdling() SAL_OVERRIDE;
-    virtual void BlockIdling() SAL_OVERRIDE;
-    virtual void UnblockIdling() SAL_OVERRIDE;
-    virtual void StartBackgroundJobs() SAL_OVERRIDE;
+    // Our own 'IdleTimer' calls the following method
+    IDocumentTimerAccess const & getIDocumentTimerAccess() const;
+    IDocumentTimerAccess & getIDocumentTimerAccess();
 
     // IDocumentChartDataProviderAccess
     IDocumentChartDataProviderAccess const & getIDocumentChartDataProviderAccess() const;

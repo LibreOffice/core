@@ -22,6 +22,7 @@
 
 #include <calc.hxx>
 #include <doc.hxx>
+#include <IDocumentTimerAccess.hxx>
 #include <o3tl/sorted_vector.hxx>
 
 class SwTxtFld;
@@ -175,7 +176,7 @@ public:
 
         if (b)
         {
-            pDocument->StartBackgroundJobs();
+            pDocument->getIDocumentTimerAccess().StartBackgroundJobs();
         }
     }
 
