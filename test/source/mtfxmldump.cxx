@@ -167,7 +167,7 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
     if (rTempStreamName.isEmpty())
         pStream = new SvMemoryStream();
     else
-        pStream = new SvFileStream(rTempStreamName, STREAM_STD_READWRITE);
+        pStream = new SvFileStream(rTempStreamName, STREAM_STD_READWRITE | STREAM_TRUNC);
 
     xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, pStream, NULL);
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
@@ -332,6 +332,25 @@ xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& 
             case META_MAPMODE_ACTION:
             {
                 aWriter.startElement("mapmode");
+                aWriter.endElement();
+            }
+            break;
+
+            case META_CLIPREGION_ACTION:
+            {
+                const MetaClipRegionAction* pA = static_cast< const MetaClipRegionAction* >(pAction);
+
+                aWriter.startElement("clipregion");
+
+                // FIXME for now we dump only the bounding box; this is
+                // enough for the tests we have, but may need extending to
+                // dumping the real polypolygon in the future
+                Rectangle aRectangle = pA->GetRegion().GetBoundRect();
+                aWriter.attribute("top",    aRectangle.Top());
+                aWriter.attribute("left",   aRectangle.Left());
+                aWriter.attribute("bottom", aRectangle.Bottom());
+                aWriter.attribute("right",  aRectangle.Right());
+
                 aWriter.endElement();
             }
             break;
