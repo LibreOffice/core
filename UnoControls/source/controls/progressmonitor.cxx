@@ -884,12 +884,8 @@ bool ProgressMonitor::impl_debug_checkParameter (
     const OUString& rText,
     bool /*bbeforeProgress*/
 ) {
-    // Check "rTopic"
-    if ( &rTopic        ==  NULL    ) return false;    // NULL-pointer for reference ???!!!
     if ( rTopic.isEmpty()       ) return false;    // ""
 
-    // Check "rText"
-    if ( &rText         ==  NULL    ) return false;    // NULL-pointer for reference ???!!!
     if ( rText.isEmpty()       ) return false;    // ""
 
     // "bbeforeProgress" is valid in everyway!
@@ -901,8 +897,6 @@ bool ProgressMonitor::impl_debug_checkParameter (
 // removeText
 bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, bool /*bbeforeProgress*/ )
 {
-    // Check "rTopic"
-    if ( &rTopic        ==  NULL    ) return false;    // NULL-pointer for reference ???!!!
     if ( rTopic.isEmpty()      ) return false;    // ""
 
     // "bbeforeProgress" is valid in everyway!
