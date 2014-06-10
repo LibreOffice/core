@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_004d2672",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-06-10T10:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_27bb9e10",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_845ee843",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
         "patchSetId": 3
@@ -71,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_6010724f",
+        "filename": "sw/source/core/unocore/unoframe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3058,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-06-10T10:48:25Z",
+      "side": 1,
+      "message": "Yes :)",
+      "parentUuid": "da9b358b_07377ab1",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_e73b769b",
         "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
         "patchSetId": 3
@@ -82,6 +118,24 @@
       "writtenOn": "2014-06-10T07:39:49Z",
       "side": 1,
       "message": "May I suggest two renames:\n\n- populate -\u003e Populate, as all the other method names are starting with a capital latter, just for consistency.\n- IsTextBoxIsFramePr -\u003e TextBoxIsFramePr, so in case you spell out the method name, you get something that\u0027s a meaningful English statement.",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_8013765c",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-06-10T10:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_e73b769b",
       "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -105,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_401d6e65",
+        "filename": "sw/source/filter/ww8/docxsdrexport.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-06-10T10:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_c740720a",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_a7456e18",
         "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
         "patchSetId": 3
@@ -116,6 +188,24 @@
       "writtenOn": "2014-06-10T07:39:49Z",
       "side": 1,
       "message": "If you know that the grab-bag will always have exactly one element, then just use \"aGrabBag(1)\" during declaration, no need for a separate realloc().",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_40344edd",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1000531
+      },
+      "writtenOn": "2014-06-10T10:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da9b358b_a7456e18",
       "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
