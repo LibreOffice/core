@@ -338,8 +338,8 @@ SwVbaFields::Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, 
         throw uno::RuntimeException("Not implemented" );
     }
 
-    SwVbaRange* pVbaRange = dynamic_cast< SwVbaRange* >( Range.get() );
-    uno::Reference< text::XTextRange > xTextRange = pVbaRange->getXTextRange();
+    SwVbaRange& rVbaRange = dynamic_cast<SwVbaRange&>(*Range.get());
+    uno::Reference< text::XTextRange > xTextRange = rVbaRange.getXTextRange();
     uno::Reference< text::XText > xText = xTextRange->getText();
     xText->insertTextContent( xTextRange, xTextField, true );
     return uno::Reference< word::XField >( new SwVbaField( mxParent, mxContext, uno::Reference< text::XTextDocument >( mxModel, uno::UNO_QUERY_THROW ), uno::Reference< text::XTextField >( xTextField, uno::UNO_QUERY_THROW ) ) );
