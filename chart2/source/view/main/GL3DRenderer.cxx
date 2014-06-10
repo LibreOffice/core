@@ -93,6 +93,11 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     , mnPickingFbo(0)
     , mnPickingRboDepth(0)
     , mnPickingRboColor(0)
+    , m_BatchModelMatrixBuf(0)
+    , m_BatchNormalMatrixBuf(0)
+    , m_BatchColorBuf(0)
+    , m_Batch3DUBOBuffer(0)
+    , m_Batch3DActualSizeLight(0)
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
