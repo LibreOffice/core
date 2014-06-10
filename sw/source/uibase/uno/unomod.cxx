@@ -603,7 +603,9 @@ void SwXViewSettings::_preSetValues ()
 }
 
 void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+    throw (UnknownPropertyException, PropertyVetoException,
+           IllegalArgumentException, WrappedTargetException,
+           RuntimeException)
 {
     bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle ?
         *(sal_Bool*)rValue.getValue() : sal_False;
