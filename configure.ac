@@ -4235,7 +4235,7 @@ freebsd*)
         PLATFORMID=freebsd_x86
         OUTPATH=unxfbsdi
         ;;
-    x86_64)
+    x86_64|amd64)
         CPUNAME=X86_64
         RTL_ARCH=X86_64
         PLATFORMID=freebsd_x86_64
