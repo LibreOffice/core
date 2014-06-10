@@ -48,6 +48,7 @@
 #include <osl/process.h>
 #include <osl/file.hxx>
 
+#include <BasCodeTagger.hxx>
 #include <helpcompiler/compilehelp.hxx>
 
 #if OSL_DEBUG_LEVEL > 2
@@ -237,7 +238,7 @@ public:
                 const std::string &in_module,
                 const std::string &in_lang,
                 bool in_bExtensionMode);
-    bool compile( void ) throw (HelpProcessingException);
+    bool compile() throw (HelpProcessingException, BasicCodeTagger::TaggerException);
     void addEntryToJarFile(const std::string &prefix,
         const std::string &entryName, const std::string &bytesToAdd);
     void addEntryToJarFile(const std::string &prefix,

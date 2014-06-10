@@ -415,7 +415,8 @@ void myparser::traverse( xmlNodePtr parentNode )
     }
 }
 
-bool HelpCompiler::compile( void ) throw( HelpProcessingException )
+bool HelpCompiler::compile()
+    throw (HelpProcessingException, BasicCodeTagger::TaggerException)
 {
     // we now have the jaroutputstream, which will contain the document.
     // now determine the document as a dom tree in variable docResolved
