@@ -2263,7 +2263,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const OUString& rStr,
 
                 *aDelPam.GetPoint() = pBkmk->GetMarkPos();
                 if(pBkmk->IsExpanded())
-                    *aDelPam.GetMark() = pBkmk->GetOtherMarkPos();
+                    *aDelPam.GetMark() = *pBkmk->GetOtherMarkPos();
                 getIDocumentMarkAccess()->deleteMark(pBkmk);
                 pStt = aDelPam.Start();
                 pTxtNd = pStt->nNode.GetNode().GetTxtNode();
@@ -2360,7 +2360,7 @@ SetRedlineMode( eOld );
 
                 *rPam.GetPoint() = pBkmk->GetMarkPos();
                 if(pBkmk->IsExpanded())
-                    *rPam.GetMark() = pBkmk->GetOtherMarkPos();
+                    *rPam.GetMark() = *pBkmk->GetOtherMarkPos();
                 getIDocumentMarkAccess()->deleteMark(pBkmk);
             }
             bJoinTxt = false;

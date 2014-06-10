@@ -96,9 +96,9 @@ void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 
     aBkmkNodePos.insert( SwBookmarkNodeTable::value_type( nNd, &rBkmk ) );
 
-    if(rBkmk.IsExpanded() && rBkmk.GetOtherMarkPos().nNode != nNd)
+    if(rBkmk.IsExpanded() && rBkmk.GetOtherMarkPos()->nNode != nNd)
     {
-        nNd = rBkmk.GetOtherMarkPos().nNode.GetIndex();
+        nNd = rBkmk.GetOtherMarkPos()->nNode.GetIndex();
         aBkmkNodePos.insert( SwBookmarkNodeTable::value_type( nNd, &rBkmk ));
     }
 }
@@ -417,8 +417,8 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
                     rArr.push_back( &rBkmk );
                 }
                 else if( rBkmk.IsExpanded() && nNd ==
-                        rBkmk.GetOtherMarkPos().nNode.GetIndex() && (nCntnt =
-                        rBkmk.GetOtherMarkPos().nContent.GetIndex() ) >= nStt &&
+                        rBkmk.GetOtherMarkPos()->nNode.GetIndex() && (nCntnt =
+                        rBkmk.GetOtherMarkPos()->nContent.GetIndex() ) >= nStt &&
                         nCntnt < nEnd )
                 {
                     rArr.push_back( &rBkmk );

@@ -569,11 +569,11 @@ SwHistoryBookmark::SwHistoryBookmark(
     , m_nNode(bSavePos ?
         rBkmk.GetMarkPos().nNode.GetIndex() : 0)
     , m_nOtherNode(bSaveOtherPos ?
-        rBkmk.GetOtherMarkPos().nNode.GetIndex() : 0)
+        rBkmk.GetOtherMarkPos()->nNode.GetIndex() : 0)
     , m_nCntnt(bSavePos ?
         rBkmk.GetMarkPos().nContent.GetIndex() : 0)
     , m_nOtherCntnt(bSaveOtherPos ?
-        rBkmk.GetOtherMarkPos().nContent.GetIndex() :0)
+        rBkmk.GetOtherMarkPos()->nContent.GetIndex() :0)
     , m_bSavePos(bSavePos)
     , m_bSaveOtherPos(bSaveOtherPos)
     , m_bHadOtherPos(rBkmk.IsExpanded())
@@ -642,7 +642,7 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
             "<SwHistoryBookmark::SetInDoc(..)>"
             " - missing pos on old mark");
         pPam->SetMark();
-        *pPam->GetMark() = pMark->GetOtherMarkPos();
+        *pPam->GetMark() = *pMark->GetOtherMarkPos();
     }
 
     if(pPam.get())

@@ -288,7 +288,7 @@ throw (uno::RuntimeException, std::exception)
             *m_pImpl->m_pDoc,
             m_pImpl->m_pRegisteredBookmark->GetMarkPos(),
             (m_pImpl->m_pRegisteredBookmark->IsExpanded())
-                ? &m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos() : NULL);
+                ? m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos() : NULL);
 }
 
 void SAL_CALL SwXBookmark::dispose()
@@ -351,7 +351,7 @@ throw (uno::RuntimeException, std::exception)
     if (m_pImpl->m_pRegisteredBookmark->IsExpanded())
     {
         aPam.SetMark();
-        *aPam.GetMark() = m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos();
+        *aPam.GetMark() = *m_pImpl->m_pRegisteredBookmark->GetOtherMarkPos();
     }
 
     SwRewriter aRewriter;

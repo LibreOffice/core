@@ -41,7 +41,7 @@ namespace sw { namespace mark
             virtual const SwPosition& GetMarkPos() const =0;
             // GetOtherMarkPos() is only guaranteed to return a valid
             // reference if IsExpanded() returned true
-            virtual const SwPosition& GetOtherMarkPos() const =0;
+            virtual const SwPosition* GetOtherMarkPos() const =0;
             virtual const SwPosition& GetMarkStart() const =0;
             virtual const SwPosition& GetMarkEnd() const =0;
             virtual const OUString& GetName() const =0;

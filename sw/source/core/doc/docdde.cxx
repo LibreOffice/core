@@ -386,7 +386,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
             if(pBkmk->IsExpanded())
                 rpPam = new SwPaM(
                     pBkmk->GetMarkPos(),
-                    pBkmk->GetOtherMarkPos());
+                    *pBkmk->GetOtherMarkPos());
             return static_cast<bool>(rpPam);
         }
 
