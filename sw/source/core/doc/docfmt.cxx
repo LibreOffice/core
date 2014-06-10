@@ -2668,14 +2668,21 @@ SwFrmFmts::const_iterator SwFrmFmts::find( const value_type& x ) const
 }
 
 std::pair<SwFrmFmts::const_iterator,SwFrmFmts::const_iterator>
-SwFrmFmts::findRange( sal_uInt16 type, const OUString& name, bool& root ) const
+SwFrmFmts::findRange( sal_uInt16 type, const OUString& name, bool& root, sal_Int32 length ) const
 {
-    SwFrmFmtSearch x( type, name );
+    SwFrmFmtSearch x( type, name, length );
     std::pair<const_iterator, const_iterator> ret(end(), end());
     if ( !empty() ) {
-        ret = std::equal_range(begin() + GetOffset(), end(), x, CompareSwFrmFmts());
-        root = (front()->Which() == type
-             && front()->GetName().CompareTo( name ) == 0);
+        if ( length >= 0 ) {
+            ret = std::equal_range(begin() + GetOffset(), end(), x, PrefixCompareSwFrmFmts());
+            root = (front()->Which() == type
+                 && front()->GetName().CompareTo( name, length ) == 0);
+        }
+        else {
+            ret = std::equal_range(begin() + GetOffset(), end(), x, CompareSwFrmFmts());
+            root = (front()->Which() == type
+                 && front()->GetName().CompareTo( name ) == 0);
+        }
     }
     else
         root = false;
@@ -2683,9 +2690,9 @@ SwFrmFmts::findRange( sal_uInt16 type, const OUString& name, bool& root ) const
 }
 
 std::pair<SwFrmFmts::const_iterator,SwFrmFmts::const_iterator>
-SwFrmFmts::findRange( const value_type& x, bool& root ) const
+SwFrmFmts::findRange( const value_type& x, bool& root, sal_Int32 length ) const
 {
-    return findRange( x->Which(), x->GetName(), root );
+    return findRange( x->Which(), x->GetName(), root, length );
 }
 
 bool CompareSwFrmFmts::operator()(SwFrmFmt* const& lhs, SwFrmFmt* const& rhs) const
@@ -2713,6 +2720,24 @@ bool CompareSwFrmFmts::operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rh
     if (lhs.type > rhs->Which())
         return false;
     return (lhs.name.compareTo( rhs->GetName() ) < 0);
+}
+
+bool PrefixCompareSwFrmFmts::operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const
+{
+    if (lhs->Which() < rhs.type)
+        return true;
+    if (lhs->Which() > rhs.type)
+        return false;
+    return (lhs->GetName().CompareTo( rhs.name, rhs.length ) < 0);
+}
+
+bool PrefixCompareSwFrmFmts::operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rhs) const
+{
+    if (lhs.type < rhs->Which())
+        return true;
+    if (lhs.type > rhs->Which())
+        return false;
+    return (lhs.name.compareTo( rhs->GetName(), lhs.length ) < 0);
 }
 
 SwFrmFmts::find_insert_type SwFrmFmts::insert( const value_type& x, bool isNewRoot )

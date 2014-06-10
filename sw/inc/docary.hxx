@@ -103,14 +103,22 @@ struct SwFrmFmtSearch
 {
     sal_uInt16 type;
     const OUString& name;
+    sal_Int32 length;
 
-    SwFrmFmtSearch( sal_uInt16 _type, const OUString& _name )
-        :type( _type ), name( _name ) {}
+    SwFrmFmtSearch( sal_uInt16 _type,
+                    const OUString& _name, sal_Int32 _length )
+        :type( _type ), name( _name ), length( _length ) {}
 };
 
 struct CompareSwFrmFmts
 {
     bool operator()(SwFrmFmt* const& lhs, SwFrmFmt* const& rhs) const;
+    bool operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const;
+    bool operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rhs) const;
+};
+
+struct PrefixCompareSwFrmFmts
+{
     bool operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const;
     bool operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rhs) const;
 };
@@ -142,9 +150,11 @@ public:
 
     const_iterator find( const value_type& x ) const;
     std::pair<const_iterator,const_iterator>
-        findRange( const value_type& x, bool& root ) const;
+        findRange( const value_type& x,
+                   bool& root, sal_Int32 length=-1 ) const;
     std::pair<const_iterator,const_iterator>
-        findRange( sal_uInt16 type, const OUString& name, bool& root ) const;
+        findRange( sal_uInt16 type, const OUString& name,
+                   bool& root, sal_Int32 length=-1 ) const;
 
     bool Contains( const value_type& x ) const;
 
