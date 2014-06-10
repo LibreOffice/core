@@ -894,7 +894,8 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
             std::vector<OUString>::const_iterator itr = maMultiValues.begin(), itrEnd = maMultiValues.end();
             for (; itr != itrEnd; ++itr)
             {
-                const char* pz = OUStringToOString(*itr, RTL_TEXTENCODING_UTF8).getStr();
+                OString aStr = OUStringToOString(*itr, RTL_TEXTENCODING_UTF8);
+                const char* pz = aStr.getStr();
                 rWorksheet->singleElement(XML_filter, XML_val, pz, FSEND);
             }
             rWorksheet->endElement(XML_filters);
