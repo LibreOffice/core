@@ -1084,11 +1084,24 @@ DECLARE_OOXMLEXPORT_TEST(testTableFloating, "table-floating.docx")
 
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    // This was 0, should be the the opposite of (left margin + half of the border width).
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-199), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
-    // Was 0 as well, should be the right margin.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xFrame, "RightMargin"));
+    if (xIndexAccess->getCount())
+    {
+        // After import, table is inside a TextFrame.
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+        // This was 0, should be the the opposite of (left margin + half of the border width).
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-199), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+        // Was 0 as well, should be the right margin.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xFrame, "RightMargin"));
+    }
+    else
+    {
+        // After import, table is inside a TextFrame.
+        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        // This was 0, should be the the opposite of (left margin + half of the border width).
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-198), getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
+        // Was 0 as well, should be the right margin.
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xShape, "RightMargin"));
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo44689_start_page_0, "fdo44689_start_page_0.docx")
