@@ -41,6 +41,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 
 #include <ucbhelper/content.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -126,7 +127,11 @@ Reference< embed::XStorage > lcl_createStorage(
             xStorageFact->createInstanceWithArguments( aStorageArgs ), uno::UNO_QUERY_THROW );
         OSL_ENSURE( xStorage.is(), "No Storage" );
     }
-    catch( const ::com::sun::star::ucb::ContentCreationException & rEx )
+    catch(const css::ucb::ContentCreationException& rEx)
+    {
+        ASSERT_EXCEPTION( rEx );
+    }
+    catch(const css::ucb::CommandFailedException& rEx)
     {
         ASSERT_EXCEPTION( rEx );
     }
