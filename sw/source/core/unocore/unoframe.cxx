@@ -991,23 +991,24 @@ inline void lcl_FillMirror ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, 
     }
 }
 
-sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
-            SwDoc* pDoc,
-            SfxItemSet& rFrmSet,
-            SfxItemSet& rGrSet,
-            sal_Bool& rSizeFound)
+sal_Bool SwGraphicProperties_Impl::AnyToItemSet(
+    SwDoc* pDoc,
+    SfxItemSet& rFrmSet,
+    SfxItemSet& rGrSet,
+    sal_Bool& rSizeFound )
 {
-    //Properties fuer alle Frames
-    sal_Bool bRet;
-    const ::uno::Any *pStyleName;
-    SwDocStyleSheet* pStyle = NULL;
+    sal_Bool bRet = sal_False;
 
-    if ( GetProperty ( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
+    SwDocStyleSheet* pStyle = NULL;
+    const ::uno::Any *pStyleName;
+    if ( GetProperty( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
     {
-        OUString sStyle;
-        *pStyleName >>= sStyle;
-        pStyle = (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
-                                                    SFX_STYLE_FAMILY_FRAME);
+        OUString sTmpStylename;
+        *pStyleName >>= sTmpStylename;
+        String sStylename;
+        SwStyleNameMapper::FillUIName( String(sTmpStylename), sStylename, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, sal_True );
+        pStyle =
+            (SwDocStyleSheet*) pDoc->GetDocShell()->GetStyleSheetPool()->Find( sStylename, SFX_STYLE_FAMILY_FRAME );
     }
 
     const ::uno::Any* pHEvenMirror = 0;
@@ -1017,24 +1018,22 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_HORZ_ODD_PAGES, pHOddMirror);
     GetProperty(RES_GRFATR_MIRRORGRF, MID_MIRROR_VERT, pVMirror);
 
-    if ( pStyle )
+    if ( pStyle != NULL )
     {
         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet(*pStyle) );
         const :: SfxItemSet *pItemSet = &xStyle->GetItemSet();
-        //Begin Bug 119922
         sal_Bool bOasis = sal_False;
         {
             const SfxMedium* pMedium = pDoc->GetDocShell()->GetMedium();
-            const SfxFilter * pFilter = pMedium
-                ? pMedium->GetFilter()
-                : NULL;
-            if ( pMedium && pFilter )
+            const SfxFilter * pFilter = pMedium != NULL
+                                        ? pMedium->GetFilter()
+                                        : NULL;
+            if ( pFilter != NULL )
             {
                 bOasis = pFilter->GetVersion() > SOFFICE_FILEFORMAT_60;
             }
         }
         bRet = FillBaseProperties( rFrmSet, *pItemSet, rSizeFound, bOasis );
-        //End Bug 119922
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
     else
@@ -1044,8 +1043,7 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
         lcl_FillMirror ( rGrSet, *pItemSet, pHEvenMirror, pHOddMirror, pVMirror, bRet );
     }
 
-
-    static const :: sal_uInt16 nIDs[] =
+    static const ::sal_uInt16 nIDs[] =
     {
         RES_GRFATR_CROPGRF,
         RES_GRFATR_ROTATION,
@@ -1061,20 +1059,21 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
         0
     };
     const ::uno::Any* pAny;
-    for(sal_Int16 nIndex = 0; nIDs[nIndex]; nIndex++)
+    for ( sal_Int16 nIndex = 0; nIDs[nIndex]; nIndex++ )
     {
-        sal_uInt8 nMId = RES_GRFATR_CROPGRF == nIDs[nIndex] ? CONVERT_TWIPS : 0;
-        if(GetProperty(nIDs[nIndex], nMId, pAny ))
+        const sal_uInt8 nMId = RES_GRFATR_CROPGRF == nIDs[nIndex] ? CONVERT_TWIPS : 0;
+        if ( GetProperty( nIDs[nIndex], nMId, pAny ) )
         {
             SfxPoolItem* pItem = ::GetDfltAttr( nIDs[nIndex] )->Clone();
-            bRet &= pItem->PutValue(*pAny, nMId );
-            rGrSet.Put(*pItem);
+            bRet &= pItem->PutValue( *pAny, nMId );
+            rGrSet.Put( *pItem );
             delete pItem;
         }
     }
 
     return bRet;
 }
+
 
 class SwOLEProperties_Impl : public SwFrameProperties_Impl
 {
@@ -1086,16 +1085,21 @@ public:
     virtual sal_Bool        AnyToItemSet( SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound);
 };
 
-sal_Bool  SwOLEProperties_Impl::AnyToItemSet(
-        SwDoc* pDoc, SfxItemSet& rFrmSet, SfxItemSet& rSet, sal_Bool& rSizeFound)
+
+sal_Bool SwOLEProperties_Impl::AnyToItemSet(
+    SwDoc* pDoc,
+    SfxItemSet& rFrmSet,
+    SfxItemSet& rSet,
+    sal_Bool& rSizeFound )
 {
     const ::uno::Any* pTemp;
-    if(!GetProperty(FN_UNO_CLSID, 0, pTemp) && !GetProperty(FN_UNO_STREAM_NAME, 0, pTemp) )
+    if ( !GetProperty( FN_UNO_CLSID, 0, pTemp ) && !GetProperty( FN_UNO_STREAM_NAME, 0, pTemp ) )
         return sal_False;
-    SwFrameProperties_Impl::AnyToItemSet( pDoc, rFrmSet, rSet, rSizeFound);
-    //
+    SwFrameProperties_Impl::AnyToItemSet( pDoc, rFrmSet, rSet, rSizeFound );
+
     return sal_True;
 }
+
 
 /******************************************************************
  *  SwXFrame
