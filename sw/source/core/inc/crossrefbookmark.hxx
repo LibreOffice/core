@@ -37,7 +37,7 @@ namespace sw {
                 const OUString& rPrefix);
 
             // getters
-            virtual SwPosition& GetOtherMarkPos() const SAL_OVERRIDE;
+            virtual SwPosition* GetOtherMarkPos() const SAL_OVERRIDE;
             virtual SwPosition& GetMarkStart() const SAL_OVERRIDE
                 { return *m_pPos1; }
             virtual SwPosition& GetMarkEnd() const SAL_OVERRIDE

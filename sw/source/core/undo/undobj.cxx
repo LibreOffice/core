@@ -710,8 +710,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         bSavePos = true;
                     }
                     if ( pBkmk->IsExpanded()
-                         && pStt->nNode <= pBkmk->GetOtherMarkPos().nNode
-                         && pBkmk->GetOtherMarkPos().nNode < pEnd->nNode )
+                         && pStt->nNode <= pBkmk->GetOtherMarkPos()->nNode
+                         && pBkmk->GetOtherMarkPos()->nNode < pEnd->nNode )
                     {
                         bSaveOtherPos = true;
                     }
@@ -737,10 +737,10 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                             bSavePos = true;
                     }
                     if( pBkmk->IsExpanded() &&
-                        *pStt <= pBkmk->GetOtherMarkPos() && pBkmk->GetOtherMarkPos() <= *pEnd )
+                        *pStt <= *pBkmk->GetOtherMarkPos() && *pBkmk->GetOtherMarkPos() <= *pEnd )
                     {
                         if ( bSavePos || bSaveOtherPos
-                             || ( pBkmk->GetOtherMarkPos() < *pEnd && pBkmk->GetOtherMarkPos() > *pStt ) )
+                             || ( *pBkmk->GetOtherMarkPos() < *pEnd && *pBkmk->GetOtherMarkPos() > *pStt ) )
                         {
                             if( bMaybe )
                                 bSavePos = true;
