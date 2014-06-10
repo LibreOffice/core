@@ -1085,8 +1085,8 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
                 aFamily = aName;
             }
         }
-        DisposeNameRecords( pNameRecords, nNameRecords );
     }
+    DisposeNameRecords( pNameRecords, nNameRecords );
     if( !aFamily.isEmpty() )
     {
         rNames.push_front( aFamily );
