@@ -722,9 +722,4 @@ String STR_CAPTION_OLE
     Text [ en-US ] = "Other OLE Objects";
 };
 
-String STR_CATEGORY_NONE
-{
-    Text [ en-US ] = "<None>" ;
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -252,17 +252,15 @@ public:
 class SwAssignFieldsControl;
 class SwAssignFieldsDialog : public SfxModalDialog
 {
-    FixedInfo               m_aMatchingFI;
-    SwAssignFieldsControl*  m_pFieldsControl;
+    FixedText               *m_pMatchingFI;
+    SwAssignFieldsControl   *m_pFieldsControl;
 
-    FixedInfo               m_aPreviewFI;
-    SwAddressPreview        m_aPreviewWIN;
+    FixedText               *m_pPreviewFI;
+    SwAddressPreview        *m_pPreviewWIN;
 
-    FixedLine               m_aSeparatorFL;
 
-    OKButton                m_aOK;
-    CancelButton            m_aCancel;
-    HelpButton              m_aHelp;
+    OKButton                *m_pOK;
+    CancelButton            *m_pCancel;
 
     OUString                m_sNone;
     OUString                m_rPreviewString;
