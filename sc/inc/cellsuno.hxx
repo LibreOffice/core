@@ -657,7 +657,7 @@ protected:
             void            SetArrayFormula_Impl( const OUString& rFormula,
                                 const OUString& rFormulaNmsp,
                                 const formula::FormulaGrammar::Grammar eGrammar )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw (css::uno::RuntimeException, std::exception);
 
 public:
                             ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
