@@ -522,17 +522,34 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
 {
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), getProperty<sal_Int32>(xFrame, "BackColor"));
+    if (xIndexAccess->getCount())
+    {
+        // After import, a TextFrame is created by the VML import.
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), getProperty<sal_Int32>(xFrame, "BackColor"));
 
-    table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xFrame, "TopBorder");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), aBorder.Color);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), aBorder.LineWidth);
+        table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xFrame, "TopBorder");
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), aBorder.Color);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(35), aBorder.LineWidth);
 
-    table::ShadowFormat aShadowFormat = getProperty<table::ShadowFormat>(xFrame, "ShadowFormat");
-    CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadowFormat.Location);
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(48), aShadowFormat.ShadowWidth);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
+        table::ShadowFormat aShadowFormat = getProperty<table::ShadowFormat>(xFrame, "ShadowFormat");
+        CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadowFormat.Location);
+        CPPUNIT_ASSERT_EQUAL(sal_Int16(48), aShadowFormat.ShadowWidth);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), aShadowFormat.Color);
+    }
+    else
+    {
+        // After export and import, the result is a shape.
+        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xD99594), getProperty<sal_Int32>(xShape, "FillColor"));
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0xC0504D), getProperty<sal_Int32>(xShape, "LineColor"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(35), getProperty<sal_Int32>(xShape, "LineWidth"));
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(48), getProperty<sal_Int32>(xShape, "ShadowXDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(48), getProperty<sal_Int32>(xShape, "ShadowYDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x622423), getProperty<sal_Int32>(xShape, "ShadowColor"));
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTextframeGradient, "textframe-gradient.docx")
