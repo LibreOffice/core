@@ -380,7 +380,8 @@ sal_Bool SAL_CALL OStatement_Base::execute( const OUString& sql ) throw(SQLExcep
 // getResultSet returns the current result as a ResultSet.  It
 // returns NULL if the current result is not a ResultSet.
 
-Reference< XResultSet > OStatement_Base::getResultSet (bool checkCount) throw( SQLException)
+Reference< XResultSet > OStatement_Base::getResultSet(bool checkCount)
+    throw (SQLException, css::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);

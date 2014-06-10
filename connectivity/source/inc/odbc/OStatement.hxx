@@ -114,7 +114,8 @@ namespace connectivity
             // getResultSet returns the current result as a ResultSet.  It
             // returns NULL if the current result is not a ResultSet.
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > getResultSet (bool checkCount) throw( ::com::sun::star::sdbc::SQLException);
+            css::uno::Reference<css::sdbc::XResultSet> getResultSet(bool checkCount)
+                throw (css::sdbc::SQLException, css::uno::RuntimeException);
             /**
                 creates the driver specific resultset (factory)
             */
