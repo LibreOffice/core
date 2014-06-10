@@ -177,14 +177,38 @@ namespace dbaui
         ,m_xContext(_rxContext)
     {
         get(m_pActions, "ACTIONS");
+
+        mnNewCmdId = m_pActions->GetItemId(INDEX_NEW_CMD);
+        mnDropCmdId = m_pActions->GetItemId(INDEX_DROP_CMD);
+        mnRenameCmdId = m_pActions->GetItemId(INDEX_RENAME_CMD);
+        mnSaveCmdId = m_pActions->GetItemId(INDEX_SAVE_CMD);
+        mnResetCmdId = m_pActions->GetItemId(INDEX_RESET_CMD);
+
+        maScNewCmdImg = m_pActions->GetItemImage(mnNewCmdId);
+        maScDropCmdImg = m_pActions->GetItemImage(mnDropCmdId);
+        maScRenameCmdImg = m_pActions->GetItemImage(mnRenameCmdId);
+        maScSaveCmdImg = m_pActions->GetItemImage(mnSaveCmdId);
+        maScResetCmdImg = m_pActions->GetItemImage(mnResetCmdId);
+        maLcNewCmdImg = get<FixedImage>("image1")->GetImage();
+        maLcDropCmdImg = get<FixedImage>("image2")->GetImage();
+        maLcRenameCmdImg = get<FixedImage>("image3")->GetImage();
+        maLcSaveCmdImg = get<FixedImage>("image4")->GetImage();
+        maLcResetCmdImg = get<FixedImage>("image5")->GetImage();
+
         get(m_pIndexList, "INDEX_LIST");
+        Size aSize(LogicToPixel(Size(70, 97), MAP_APPFONT));
+        m_pIndexList->set_width_request(aSize.Width());
+        m_pIndexList->set_height_request(aSize.Height());
         get(m_pIndexDetails, "INDEX_DETAILS");
         get(m_pDescriptionLabel, "DESC_LABEL");
         get(m_pDescription, "DESCRIPTION");
         get(m_pUnique, "UNIQUE");
         get(m_pFieldsLabel, "FIELDS_LABEL");
         get(m_pFields, "FIELDS");
-        get(m_pClose, "CLOSE");
+        aSize = LogicToPixel(Size(128, 61), MAP_APPFONT);
+        m_pFields->set_width_request(aSize.Width());
+        m_pFields->set_height_request(aSize.Height());
+        get(m_pClose, "close");
 
         m_pActions->SetSelectHdl(LINK(this, DbaIndexDialog, OnIndexAction));
 
@@ -242,7 +266,7 @@ namespace dbaui
 
     void DbaIndexDialog::updateToolbox()
     {
-        m_pActions->EnableItem(m_pActions->GetItemId(INDEX_NEW_CMD), !m_pIndexList->IsEditingActive());
+        m_pActions->EnableItem(mnNewCmdId, !m_pIndexList->IsEditingActive());
 
         SvTreeListEntry* pSelected = m_pIndexList->FirstSelected();
         bool bSelectedAnything = NULL != pSelected;
@@ -251,17 +275,17 @@ namespace dbaui
         {
             // is the current entry modified?
             Indexes::const_iterator aSelectedPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
-            m_pActions->EnableItem(m_pActions->GetItemId(INDEX_SAVE_CMD), aSelectedPos->isModified() || aSelectedPos->isNew());
-            m_pActions->EnableItem(m_pActions->GetItemId(INDEX_RESET_CMD), aSelectedPos->isModified() || aSelectedPos->isNew());
+            m_pActions->EnableItem(mnSaveCmdId, aSelectedPos->isModified() || aSelectedPos->isNew());
+            m_pActions->EnableItem(mnResetCmdId, aSelectedPos->isModified() || aSelectedPos->isNew());
             bSelectedAnything = bSelectedAnything && !aSelectedPos->bPrimaryKey;
         }
         else
         {
-            m_pActions->EnableItem(m_pActions->GetItemId(INDEX_SAVE_CMD), false);
-            m_pActions->EnableItem(m_pActions->GetItemId(INDEX_RESET_CMD), false);
+            m_pActions->EnableItem(mnSaveCmdId, false);
+            m_pActions->EnableItem(mnResetCmdId, false);
         }
-        m_pActions->EnableItem(m_pActions->GetItemId(INDEX_DROP_CMD), bSelectedAnything);
-        m_pActions->EnableItem(m_pActions->GetItemId(INDEX_RENAME_CMD), bSelectedAnything);
+        m_pActions->EnableItem(mnDropCmdId, bSelectedAnything);
+        m_pActions->EnableItem(mnRenameCmdId, bSelectedAnything);
     }
 
     void DbaIndexDialog::fillIndexList()
@@ -508,17 +532,16 @@ namespace dbaui
 
     IMPL_LINK( DbaIndexDialog, OnIndexAction, ToolBox*, /*NOTINTERESTEDIN*/ )
     {
-        const OUString sClicked(m_pActions->GetItemCommand(m_pActions->GetCurItemId()));
-
-        if(sClicked == INDEX_NEW_CMD)
+        sal_uInt16 nClicked = m_pActions->GetCurItemId();
+        if (nClicked == mnNewCmdId)
             OnNewIndex();
-        else if(sClicked == INDEX_DROP_CMD)
+        else if (nClicked == mnDropCmdId)
             OnDropIndex();
-        else if(sClicked == INDEX_RENAME_CMD)
+        else if (nClicked == mnRenameCmdId)
             OnRenameIndex();
-        else if(sClicked == INDEX_SAVE_CMD)
+        else if (nClicked == mnSaveCmdId)
             OnSaveIndex();
-        else if(sClicked == INDEX_RESET_CMD)
+        else if (nClicked == mnResetCmdId)
             OnResetIndex();
 
         return 0L;
@@ -804,16 +827,28 @@ namespace dbaui
             checkImageList();
         }
     }
-    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet) const
+
+    void DbaIndexDialog::setImageList(sal_Int16 _eBitmapSet)
     {
-        sal_Int16 nN = IMG_INDEX_DLG_SC;
         if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
         {
-            nN = IMG_INDEX_DLG_LC;
+            m_pActions->SetItemImage(mnNewCmdId, maLcNewCmdImg);
+            m_pActions->SetItemImage(mnDropCmdId, maLcDropCmdImg);
+            m_pActions->SetItemImage(mnRenameCmdId, maLcRenameCmdImg);
+            m_pActions->SetItemImage(mnSaveCmdId, maLcSaveCmdImg);
+            m_pActions->SetItemImage(mnResetCmdId, maLcResetCmdImg);
         }
-        return ImageList(ModuleRes(nN));
+        else
+        {
+            m_pActions->SetItemImage(mnNewCmdId, maScNewCmdImg);
+            m_pActions->SetItemImage(mnDropCmdId, maScDropCmdImg);
+            m_pActions->SetItemImage(mnRenameCmdId, maScRenameCmdImg);
+            m_pActions->SetItemImage(mnSaveCmdId, maScSaveCmdImg);
+            m_pActions->SetItemImage(mnResetCmdId, maScResetCmdImg);
+        }
     }
-    void DbaIndexDialog::resizeControls(const Size& _rDiff)
+
+    void DbaIndexDialog::resizeControls(const Size&)
     {
     }
 

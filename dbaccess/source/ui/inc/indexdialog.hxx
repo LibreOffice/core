@@ -115,18 +115,14 @@ namespace dbaui
         virtual void StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-        /** will be called whenthe id of the image list is needed.
+        //TO-DO, remove when all other OToolBoxHelper are converted to .ui
+        virtual void resizeControls(const Size&) SAL_OVERRIDE;
+
+        /** will be called when the id of the image list needs to change
             @param  _eBitmapSet
                 <svtools/imgdef.hxx>
-            @param  _bHiContast
-                <TRUE/> when in high contrast mode.
         */
-        virtual ImageList getImageList(sal_Int16 _eBitmapSet) const SAL_OVERRIDE;
-
-        /** will be called when the controls need to be resized.
-        */
-        virtual void resizeControls(const Size& _rDiff) SAL_OVERRIDE;
-
+        virtual void setImageList(sal_Int16 _eBitmapSet) SAL_OVERRIDE;
     protected:
         void fillIndexList();
         void updateToolbox();
@@ -142,6 +138,23 @@ namespace dbaui
         DECL_LINK( OnEditIndexAgain, SvTreeListEntry* );
 
     private:
+        sal_uInt16 mnNewCmdId;
+        sal_uInt16 mnDropCmdId;
+        sal_uInt16 mnRenameCmdId;
+        sal_uInt16 mnSaveCmdId;
+        sal_uInt16 mnResetCmdId;
+
+        Image maScNewCmdImg;
+        Image maScDropCmdImg;
+        Image maScRenameCmdImg;
+        Image maScSaveCmdImg;
+        Image maScResetCmdImg;
+        Image maLcNewCmdImg;
+        Image maLcDropCmdImg;
+        Image maLcRenameCmdImg;
+        Image maLcSaveCmdImg;
+        Image maLcResetCmdImg;
+
         void OnNewIndex();
         void OnDropIndex(bool _bConfirm = true);
         void OnRenameIndex();

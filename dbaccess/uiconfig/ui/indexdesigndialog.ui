@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="IndexDesignDialog">
-    <property name="width_request">500</property>
-    <property name="height_request">300</property>
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
+    <property name="border_width">6</property>
     <property name="title" translatable="yes">Indexes</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -18,13 +18,12 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="CLOSE">
-                <property name="label">gtk-cancel</property>
+              <object class="GtkButton" id="close">
+                <property name="label">gtk-close</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -34,13 +33,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="HELP">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
               </object>
               <packing>
@@ -64,92 +62,175 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkToolbar" id="ACTIONS">
+              <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkToolButton" id="ID_INDEX_NEW">
-                    <property name="use_action_appearance">False</property>
+                  <object class="GtkToolbar" id="ACTIONS">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="action_name">.index:createNew</property>
-                    <property name="label" translatable="yes">New Index</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">dbaccess/res/lc036.png</property>
+                    <child>
+                      <object class="GtkToolButton" id="ID_INDEX_NEW">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">start</property>
+                        <property name="action_name">.index:createNew</property>
+                        <property name="label" translatable="yes">New Index</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_name">dbaccess/res/sc036.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="ID_INDEX_DROP">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">start</property>
+                        <property name="action_name">.index:dropCurrent</property>
+                        <property name="label" translatable="yes">Delete Current Index</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_name">dbaccess/res/sc037.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="ID_INDEX_RENAME">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">start</property>
+                        <property name="action_name">.index:renameCurrent</property>
+                        <property name="label" translatable="yes">Rename Current Index</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_name">dbaccess/res/sc038.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="ID_INDEX_SAVE">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">start</property>
+                        <property name="action_name">.index:saveCurrent</property>
+                        <property name="label" translatable="yes">Save Current Index</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_name">dbaccess/res/sc039.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="ID_INDEX_RESET">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">start</property>
+                        <property name="action_name">.index:resetCurrent</property>
+                        <property name="label" translatable="yes">Reset Current Index</property>
+                        <property name="use_underline">True</property>
+                        <property name="icon_name">dbaccess/res/sc040.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="ID_INDEX_DROP">
-                    <property name="use_action_appearance">False</property>
-                    <property name="visible">True</property>
+                  <object class="GtkGrid" id="grid2">
                     <property name="can_focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="action_name">.index:dropCurrent</property>
-                    <property name="label" translatable="yes">Delete Current Index</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">dbaccess/res/lc037.png</property>
+                    <property name="no_show_all">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">center</property>
+                    <property name="hexpand">True</property>
+                    <property name="column_spacing">12</property>
+                    <child>
+                      <object class="GtkImage" id="image1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="pixbuf">dbaccess/res/lc036.png</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image2">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="pixbuf">dbaccess/res/lc037.png</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="pixbuf">dbaccess/res/lc038.png</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="pixbuf">dbaccess/res/lc039.png</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">3</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image5">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="pixbuf">dbaccess/res/lc040.png</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">4</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="ID_INDEX_RENAME">
-                    <property name="use_action_appearance">False</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="action_name">.index:renameCurrent</property>
-                    <property name="label" translatable="yes">Rename Current Index</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">dbaccess/res/lc038.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="ID_INDEX_SAVE">
-                    <property name="use_action_appearance">False</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="action_name">.index:saveCurrent</property>
-                    <property name="label" translatable="yes">Save Current Index</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">dbaccess/res/lc039.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="ID_INDEX_RESET">
-                    <property name="use_action_appearance">False</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="valign">start</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="action_name">.index:resetCurrent</property>
-                    <property name="label" translatable="yes">Reset Current Index</property>
-                    <property name="use_underline">True</property>
-                    <property name="icon_name">dbaccess/res/lc040.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -231,7 +312,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="draw_indicator">True</property>
@@ -248,6 +328,8 @@
                         <property name="can_focus">False</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">Fields</property>
+                        <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">FIELDS</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -257,12 +339,13 @@
                     </child>
                     <child>
                       <object class="dbulo-DbaIndexFieldsControl" id="FIELDS">
-                        <property name="width_request">210</property>
-                        <property name="height_request">100</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="IndexFieldsControl-selection1"/>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
@@ -284,6 +367,9 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="DbaIndexList-selection1"/>
+                    </child>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -309,8 +395,8 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">CLOSE</action-widget>
-      <action-widget response="0">HELP</action-widget>
+      <action-widget response="0">close</action-widget>
+      <action-widget response="0">help</action-widget>
     </action-widgets>
   </object>
 </interface>

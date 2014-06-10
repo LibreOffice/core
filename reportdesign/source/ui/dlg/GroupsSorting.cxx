@@ -1404,14 +1404,13 @@ void OGroupsSortingDialog::checkButtons(sal_Int32 _nRow)
     }
 }
 
-ImageList OGroupsSortingDialog::getImageList(sal_Int16 _eBitmapSet) const
+void OGroupsSortingDialog::setImageList(sal_Int16 _eBitmapSet)
 {
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
         nN = IMG_CONDFORMAT_DLG_LC;
-    return ImageList(ModuleRes( nN ));
+    m_aToolBox.SetImageList(ImageList(ModuleRes(nN)));
 }
-
 
 void OGroupsSortingDialog::resizeControls(const Size& _rDiff)
 {

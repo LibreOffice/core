@@ -98,11 +98,11 @@ namespace rptui
         Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rptui::OReportController& _rController );
         virtual ~Condition();
 
-        /** will be called when the id of the image list is needed.
+        /** will be called when the id of the image list needs to change.
             @param  _eBitmapSet
                 <svtools/imgdef.hxx>
         */
-        virtual ImageList getImageList(sal_Int16 _eBitmapSet) const SAL_OVERRIDE;
+        virtual void setImageList(sal_Int16 _eBitmapSet) SAL_OVERRIDE;
 
         /** will be called when the controls need to be resized.
         */

@@ -365,7 +365,6 @@ IMPL_LINK( Condition, OnConditionAction, Button*, _pClickedButton )
     return 0L;
 }
 
-
 void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
 {
     if ( _nCommandId == SID_ATTR_CHAR_COLOR2 )
@@ -376,12 +375,12 @@ void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
     m_rAction.applyCommand( m_nCondIndex, _nCommandId, _rColor );
 }
 
-ImageList Condition::getImageList(sal_Int16 _eBitmapSet) const
+void Condition::setImageList(sal_Int16 _eBitmapSet)
 {
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
         nN = IMG_CONDFORMAT_DLG_LC;
-    return ImageList(ModuleRes(nN));
+    m_aActions.SetImageList(ImageList(ModuleRes(nN)));
 }
 
 void Condition::resizeControls(const Size& _rDiff)
