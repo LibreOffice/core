@@ -706,7 +706,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( uno::Refer
 
 UNO3_GETIMPLEMENTATION_IMPL( SdUnoSearchReplaceDescriptor );
 
-SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( bool bReplace ) throw()
+SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( bool bReplace ) throw (css::uno::RuntimeException)
 {
     mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool());
 

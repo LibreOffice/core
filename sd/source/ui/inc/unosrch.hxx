@@ -90,7 +90,7 @@ protected:
     OUString maReplaceStr;
 
 public:
-    SdUnoSearchReplaceDescriptor( bool bReplace ) throw();
+    SdUnoSearchReplaceDescriptor(bool bReplace) throw (css::uno::RuntimeException);
     virtual ~SdUnoSearchReplaceDescriptor() throw();
 
     bool IsBackwards() const throw() { return mbBackwards; }
