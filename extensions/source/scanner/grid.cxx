@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 #include <osl/thread.h>
-#include <grid.hrc>
 #include <cstdio>
 #include <math.h>
 
@@ -41,7 +40,7 @@ ResId SaneResId( sal_uInt32 );
 
 
 GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* pParent, bool bCutValues )
-:   ModalDialog( pParent, SaneResId( GRID_DIALOG ) ),
+:   ModalDialog( pParent, "GridDialog", "modules/scanner/ui/griddialog.ui" ),
     m_aGridArea( 50, 15, 100, 100 ),
     m_pXValues( pXValues ),
     m_pOrigYValues( pYValues ),
@@ -50,31 +49,30 @@ GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* 
     m_bCutValues( bCutValues ),
     m_aHandles(),
     m_nDragIndex( 0xffffffff ),
-    m_aMarkerBitmap( Bitmap( SaneResId( GRID_DIALOG_HANDLE_BMP ) ), Color( 255, 255, 255 ) ),
-    m_aOKButton( this, SaneResId( GRID_DIALOG_OK_BTN ) ),
-    m_aCancelButton( this, SaneResId( GRID_DIALOG_CANCEL_BTN ) ),
-    m_aResetTypeBox( this, SaneResId( GRID_DIALOG_TYPE_BOX ) ),
-    m_aResetButton( this, SaneResId( GRID_DIALOG_RESET_BTN ) )
+    m_aMarkerBitmap( FixedImage::loadThemeImage("extensions/source/scanner/handle.png").GetBitmapEx() )
 {
-    sal_uInt16 nPos = m_aResetTypeBox.InsertEntry( SaneResId( RESET_TYPE_LINEAR_ASCENDING ).toString() );
-    m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_LINEAR_ASCENDING );
+    get(m_pOKButton, "ok");
+    get(m_pResetTypeBox, "resetTypeCombobox");
+    get(m_pResetButton, "resetButton");
+    sal_uInt16 nPos = m_pResetTypeBox->InsertEntry( "Linear ascending" );
+    m_pResetTypeBox->SetEntryData( nPos, (void *)LINEAR_ASCENDING );
 
-    nPos = m_aResetTypeBox.InsertEntry( SaneResId( RESET_TYPE_LINEAR_DESCENDING ).toString() );
-    m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_LINEAR_DESCENDING );
+    nPos = m_pResetTypeBox->InsertEntry( "Linear descending" );
+    m_pResetTypeBox->SetEntryData( nPos, (void *)LINEAR_DESCENDING );
 
-    nPos = m_aResetTypeBox.InsertEntry( SaneResId( RESET_TYPE_RESET ).toString() );
-    m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_RESET );
+    nPos = m_pResetTypeBox->InsertEntry( "Original values" );
+    m_pResetTypeBox->SetEntryData( nPos, (void *)RESET );
 
-    nPos = m_aResetTypeBox.InsertEntry( SaneResId( RESET_TYPE_EXPONENTIAL ).toString() );
-    m_aResetTypeBox.SetEntryData( nPos, (void *)RESET_TYPE_EXPONENTIAL );
+    nPos = m_pResetTypeBox->InsertEntry( "Exponential increasing" );
+    m_pResetTypeBox->SetEntryData( nPos, (void *)EXPONENTIAL );
 
-    m_aResetTypeBox.SelectEntryPos( 0 );
+    m_pResetTypeBox->SelectEntryPos( 0 );
 
-    m_aResetButton.SetClickHdl( LINK( this, GridWindow, ClickButtonHdl ) );
+    m_pResetButton->SetClickHdl( LINK( this, GridWindow, ClickButtonHdl ) );
 
     SetMapMode( MapMode( MAP_PIXEL ) );
     Size aSize = GetOutputSizePixel();
-    Size aBtnSize = m_aOKButton.GetOutputSizePixel();
+    Size aBtnSize = m_pOKButton->GetOutputSizePixel();
     m_aGridArea.setWidth( aSize.Width() - aBtnSize.Width() - 80 );
     m_aGridArea.setHeight( aSize.Height() - 40 );
 
@@ -92,8 +90,6 @@ GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* 
     m_BmOffY = sal_uInt16(m_aMarkerBitmap.GetSizePixel().Height() >> 1);
     m_aHandles.push_back(impHandle(transform(findMinX(), findMinY()), m_BmOffX, m_BmOffY));
     m_aHandles.push_back(impHandle(transform(findMaxX(), findMaxY()), m_BmOffX, m_BmOffY));
-
-    FreeResource();
 }
 
 GridWindow::~GridWindow()
@@ -520,12 +516,12 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
 
 IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
 {
-    if( pButton == &m_aResetButton )
+    if( pButton == m_pResetButton )
     {
-        int nType = (int)(sal_IntPtr)m_aResetTypeBox.GetEntryData( m_aResetTypeBox.GetSelectEntryPos() );
+        int nType = (int)(sal_IntPtr)m_pResetTypeBox->GetEntryData( m_pResetTypeBox->GetSelectEntryPos() );
         switch( nType )
         {
-            case RESET_TYPE_LINEAR_ASCENDING:
+            case LINEAR_ASCENDING:
             {
                 for( int i = 0; i < m_nValues; i++ )
                 {
@@ -533,7 +529,7 @@ IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
                 }
             }
             break;
-            case RESET_TYPE_LINEAR_DESCENDING:
+            case LINEAR_DESCENDING:
             {
                 for( int i = 0; i < m_nValues; i++ )
                 {
@@ -541,13 +537,13 @@ IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
                 }
             }
             break;
-            case RESET_TYPE_RESET:
+            case RESET:
             {
                 if( m_pOrigYValues && m_pNewYValues && m_nValues )
                     memcpy( m_pNewYValues, m_pOrigYValues, m_nValues*sizeof(double) );
             }
             break;
-            case RESET_TYPE_EXPONENTIAL:
+            case EXPONENTIAL:
             {
                 for( int i = 0; i < m_nValues; i++ )
                 {
