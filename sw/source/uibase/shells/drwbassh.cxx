@@ -64,6 +64,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 
 #include <IDocumentDrawModelAccess.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -152,7 +153,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                        SfxAbstractDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, true, RC_DLG_SWWRAPDLG );
+                        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, true, RC_DLG_SWWRAPDLG ));
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                         if (pDlg->Execute() == RET_OK)
@@ -170,7 +171,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                             pSh->SetObjAttr(*pOutSet);
                         }
-                    delete pDlg;
                     }
                 }
             }
@@ -187,7 +187,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     if( rMarkList.GetMark(0) != 0 )
                     {
                         SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                        SfxAbstractTabDialog *pDlg=NULL;
+                        boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
                         bool bCaption = false;
 
                         // Allowed anchorages:
@@ -207,7 +207,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             AbstractSvxCaptionDialog* pCaptionDlg =
                                     pFact->CreateCaptionDialog( NULL, pSdrView, nAllowedAnchors );
                             pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
-                            pDlg = pCaptionDlg;
+                            pDlg.reset(pCaptionDlg);
                         }
                         else
                         {
@@ -215,7 +215,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             AbstractSvxTransformTabDialog* pTransform =
                                         pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, nAllowedAnchors );
                             pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
-                            pDlg = pTransform;
+                            pDlg.reset(pTransform);
                         }
                         SfxItemSet aNewAttr(pSdrView->GetGeoAttrFromMarked());
 
@@ -347,8 +347,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                             pSh->EndAllAction();
                         }
-                        delete pDlg;
-
                     }
                 }
                 else
@@ -529,7 +527,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName);
+                boost::scoped_ptr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(NULL, aName));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
@@ -540,8 +538,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                     pSelected->SetName(aName);
                     pSh->SetModified();
                 }
-
-                delete pDlg;
             }
 
             break;
@@ -561,7 +557,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription);
+                boost::scoped_ptr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if(RET_OK == pDlg->Execute())
@@ -574,8 +570,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                     pSh->SetModified();
                 }
-
-                delete pDlg;
             }
 
             break;

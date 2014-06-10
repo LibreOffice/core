@@ -79,6 +79,7 @@
 #include "swslots.hxx"
 
 #include "swabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 #define TOOLBOX_NAME "colorbar"
 
@@ -339,10 +340,10 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "no dialog factory!");
-            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog("PictureDialog",
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog("PictureDialog",
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
-                                                    aSet, false);
+                                                    aSet, false));
             OSL_ENSURE(pDlg, "no tab dialog!");
 
             if (nSlot == FN_DRAW_WRAP_DLG)
@@ -456,7 +457,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 rSh.EndUndo(UNDO_END);
                 rSh.EndAllAction();
             }
-            delete pDlg;
         }
         break;
 

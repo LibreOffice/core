@@ -73,6 +73,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -459,9 +460,9 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog(
+                    boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTextTabDialog(
                                 &(GetView().GetViewFrame()->GetWindow()),
-                                &aNewAttr, pSdrView );
+                                &aNewAttr, pSdrView ));
                     sal_uInt16 nResult = pDlg->Execute();
 
                     if (nResult == RET_OK)
@@ -472,8 +473,6 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
                             rReq.Done(*(pDlg->GetOutputItemSet()));
                         }
                     }
-
-                    delete( pDlg );
                 }
             }
             break;
@@ -741,8 +740,8 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 
         // If character is selected, it can be shown
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
-            rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
+        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
+            rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
         sal_uInt16 nResult = pDlg->Execute();
         if( nResult == RET_OK )
         {
@@ -763,8 +762,6 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
                 SW_MOD()->ApplyUsrPref(aOpt, &rView);
             }
         }
-
-        delete( pDlg );
     }
 
     if( !sSym.isEmpty() )
