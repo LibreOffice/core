@@ -1942,7 +1942,7 @@ GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
 
 namespace pict {
 
-SAL_DLLPUBLIC_EXPORT void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile)
+void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile)
 {
     PictReader aPictReader;
     aPictReader.ReadPict(rStreamPict, rGDIMetaFile);

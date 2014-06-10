@@ -10,13 +10,22 @@
 #ifndef INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_HXX
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_HXX
 
+#include <sal/config.h>
+#include <sal/types.h>
+
+#if defined PCT_DLLIMPLEMENTATION
+#define PCT_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define PCT_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
+
 class GDIMetaFile;
 class SvStream;
 
 namespace pict {
 
 /// Function to access PictReader::ReadPict for unit testing.
-void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile);
+PCT_DLLPUBLIC void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile);
 
 }
 
