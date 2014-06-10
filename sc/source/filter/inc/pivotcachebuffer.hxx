@@ -289,7 +289,7 @@ public:
     /** Returns the names of all shared or group items. */
     void                getCacheItemNames( ::std::vector< OUString >& orItemNames ) const;
     /** Returns shared or group items. */
-    PivotCacheItemList  getCacheItems() const;
+    const PivotCacheItemList&  getCacheItems() const;
 
     /** Creates inplace numeric grouping settings. */
     void                convertNumericGrouping(
