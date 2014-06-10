@@ -2055,23 +2055,23 @@ namespace
     struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
     {
         std::vector<sal_uLong> aSaveArr;
-        virtual void Clear()
+        virtual void Clear() SAL_OVERRIDE
         {
             aSaveArr.clear();
         }
-        virtual bool Empty()
+        virtual bool Empty() SAL_OVERRIDE
         {
             return aSaveArr.empty();
         }
-        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0)
+        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) SAL_OVERRIDE
         {
             return _SaveCntntIdx(pDoc, nNode, nCntnt, aSaveArr, nSaveFly);
         }
-        virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false)
+        virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
         {
             return _RestoreCntntIdx(pDoc, aSaveArr, nNode, nOffset, bAuto);
         }
-        virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen)
+        virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
             return _RestoreCntntIdx(aSaveArr, rNd, nLen, nCorrLen);
         }
