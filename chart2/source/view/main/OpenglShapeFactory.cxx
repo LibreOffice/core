@@ -96,7 +96,7 @@ uno::Reference< drawing::XShapes > getChartShape(
                 xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
                 if( aRet.equals("com.sun.star.chart2.shapes") )
                 {
-                    xRet = dynamic_cast<SvxDummyShapeContainer*>(xShape.get())->getWrappedShape();
+                    xRet = dynamic_cast<SvxDummyShapeContainer&>(*xShape.get()).getWrappedShape();
                     break;
                 }
             }
