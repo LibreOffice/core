@@ -35,11 +35,7 @@ using namespace ::rtl;
 OComponentEnumeration::OComponentEnumeration( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
         :   m_nPosition     ( 0                             )   // 0 is the first position for a valid list and the right value for an invalid list to!
         ,   m_seqComponents ( seqComponents                 )
-{
-    // Safe impossible states
-    // "Method" not defined for ALL parameters!
-    SAL_WARN_IF( !impldbg_checkParameter_OComponentEnumerationCtor( seqComponents ), "fwk", "OComponentEnumeration::OComponentEnumeration(): Invalid parameter detected!" );
-}
+{}
 
 //  destructor
 
@@ -57,7 +53,7 @@ void SAL_CALL OComponentEnumeration::disposing( const EventObject& aEvent ) thro
     // Safe impossible cases
     // This method is not specified for all incoming parameters.
     (void) aEvent;
-    SAL_WARN_IF( !impldbg_checkParameter_disposing( aEvent ), "fwk", "OComponentEnumeration::disposing(): Invalid parameter detected!" );
+    SAL_WARN_IF( !aEvent.Source.is(), "fwk", "OComponentEnumeration::disposing(): Invalid parameter detected!" );
 
     // Reset instance to defaults, release references and free memory.
     impl_resetObject();
@@ -117,39 +113,6 @@ void OComponentEnumeration::impl_resetObject()
     // End of enumeration is arrived!
     // (see hasMoreElements() for more details...)
     m_nPosition = 0;
-}
-
-//  debug methods
-
-/*-----------------------------------------------------------------------------------------------------------------
-    The follow methods checks the parameter for other functions. If a parameter or his value is non valid,
-    we return "sal_False". (else sal_True) This mechanism is used to throw an ASSERT!
-
-    ATTENTION
-
-        If you miss a test for one of this parameters, contact the author or add it himself !(?)
-        But ... look for right testing! See using of this methods!
------------------------------------------------------------------------------------------------------------------*/
-
-// An empty list is allowed ... hasMoreElements() will return false then!
-bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
-{
-    // Set default return value.
-    bool bOK = true;
-    // Check parameter.
-    if  (
-            ( &seqComponents == NULL )
-        )
-    {
-        bOK = false;
-    }
-    // Return result of check.
-    return bOK;
-}
-
-bool OComponentEnumeration::impldbg_checkParameter_disposing( const EventObject& aEvent )
-{
-    return aEvent.Source.is();
 }
 
 }       //  namespace framework

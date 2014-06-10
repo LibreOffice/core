@@ -161,14 +161,6 @@ class OComponentEnumeration :   public ::cppu::WeakImplHelper2< ::com::sun::star
 
     private:
 
-        static bool impldbg_checkParameter_OComponentEnumerationCtor    (   const   css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >& seqComponents   );
-        static bool impldbg_checkParameter_disposing                    (   const   css::lang::EventObject&                                             aEvent          );
-
-    //  variables
-    //  (should be private everyway!)
-
-    private:
-
         sal_uInt32                                                              m_nPosition;   /// current position in enumeration
         css::uno::Sequence< css::uno::Reference< css::lang::XComponent > >      m_seqComponents;   /// list of current components
 
