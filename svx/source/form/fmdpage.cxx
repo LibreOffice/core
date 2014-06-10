@@ -83,7 +83,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  SvxFmDrawPage::_CreateShape( SdrObject *pObj ) const
-    throw (std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     if( FmFormInventor == pObj->GetObjInventor() )
     {

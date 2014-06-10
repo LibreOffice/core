@@ -101,7 +101,7 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< ::com::sun:
     // The following method is called if a SvxShape object is to be created.
     // Derived classes can create a derivation or an SvxShape aggregating object.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > _CreateShape( SdrObject *pObj ) const
-        throw (std::exception);
+        throw (css::uno::RuntimeException, std::exception);
 
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )
 
