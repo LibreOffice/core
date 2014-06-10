@@ -1346,14 +1346,15 @@ SwPageDesc *SwCSS1Parser::GetMasterPageDesc()
     return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 }
 
-static SwPageDesc *FindPageDesc( SwDoc *pDoc, sal_uInt16 nPoolId, sal_uInt16& rPage )
+static SwPageDesc *FindPageDesc(SwDoc *pDoc, sal_uInt16 nPoolId)
 {
     sal_uInt16 nPageDescs = pDoc->GetPageDescCnt();
-    for( rPage=0; rPage < nPageDescs &&
-         pDoc->GetPageDesc(rPage).GetPoolFmtId() != nPoolId; rPage++ )
+    sal_uInt16 nPage;
+    for (nPage=0; nPage < nPageDescs &&
+         pDoc->GetPageDesc(nPage).GetPoolFmtId() != nPoolId; ++nPage)
          ;
 
-    return rPage < nPageDescs ? &pDoc->GetPageDesc( rPage ) : 0;
+    return nPage < nPageDescs ? &pDoc->GetPageDesc(nPage) : 0;
 }
 
 const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
@@ -1361,15 +1362,14 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
     if( RES_POOLPAGE_HTML == nPoolId )
         return pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
-    sal_uInt16 nPage;
-    const SwPageDesc *pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
+    const SwPageDesc *pPageDesc = FindPageDesc(pDoc, nPoolId);
     if( !pPageDesc && bCreate )
     {
         // Die erste Seite wird aus der rechten Seite erzeugt, wenn es die
         // gibt.
         SwPageDesc *pMasterPageDesc = 0;
         if( RES_POOLPAGE_FIRST == nPoolId )
-            pMasterPageDesc = FindPageDesc( pDoc, RES_POOLPAGE_RIGHT, nPage );
+            pMasterPageDesc = FindPageDesc(pDoc, RES_POOLPAGE_RIGHT);
         if( !pMasterPageDesc )
             pMasterPageDesc = pDoc->GetPageDescFromPool( RES_POOLPAGE_HTML, false );
 
@@ -1378,7 +1378,7 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
             GetPageDescFromPool( nPoolId, false );
 
         // dazu brauchen wir auch die Nummer der neuen Vorlage
-        pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
+        pPageDesc = FindPageDesc(pDoc, nPoolId);
         OSL_ENSURE( pPageDesc==pNewPageDesc, "Seitenvorlage nicht gefunden" );
 
         pDoc->CopyPageDesc( *pMasterPageDesc, *pNewPageDesc, false );
