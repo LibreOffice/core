@@ -8,6 +8,7 @@
  */
 
 #include <test/mtfxmldump.hxx>
+#include <test/xmltesttools.hxx>
 #include <test/xmlwriter.hxx>
 
 #include <vcl/metaact.hxx>
@@ -137,9 +138,8 @@ OUString convertLineStyleToString(LineStyle eAlign)
 
 } // anonymous namespace
 
-MetafileXmlDump::MetafileXmlDump(SvStream& rStream) :
-    maFilter(512, false),
-    mrStream(rStream)
+MetafileXmlDump::MetafileXmlDump() :
+    maFilter(512, false)
 {}
 
 MetafileXmlDump::~MetafileXmlDump()
@@ -160,9 +160,16 @@ void MetafileXmlDump::filterNoneActionTypes()
     maFilter.assign(512, false);
 }
 
-void MetafileXmlDump::dump(GDIMetaFile& rMetaFile)
+xmlDocPtr MetafileXmlDump::dumpAndParse(GDIMetaFile& rMetaFile, const OUString& rTempStreamName)
 {
-    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, &mrStream, NULL);
+    SvStream *pStream = NULL;
+
+    if (rTempStreamName.isEmpty())
+        pStream = new SvMemoryStream();
+    else
+        pStream = new SvFileStream(rTempStreamName, STREAM_STD_READWRITE);
+
+    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO(lclWriteCallback, lclCloseCallback, pStream, NULL);
     xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
     xmlTextWriterSetIndent( xmlWriter, 1 );
 
@@ -392,6 +399,14 @@ void MetafileXmlDump::dump(GDIMetaFile& rMetaFile)
 
     aWriter.endElement();
     aWriter.endDocument();
+
+    pStream->Seek(STREAM_SEEK_TO_BEGIN);
+
+    xmlDocPtr pDoc = XmlTestTools::parseXmlStream(pStream);
+
+    delete pStream;
+
+    return pDoc;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

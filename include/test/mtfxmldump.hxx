@@ -13,23 +13,30 @@
 #include <sal/config.h>
 #include <test/testdllapi.hxx>
 
+#include <libxml/tree.h>
 #include <vcl/gdimtf.hxx>
 #include <vector>
 
 class OOO_DLLPUBLIC_TEST MetafileXmlDump
 {
     std::vector<bool> maFilter;
-    SvStream& mrStream;
 
 public:
-    MetafileXmlDump(SvStream& rStream);
+    MetafileXmlDump();
     virtual ~MetafileXmlDump();
 
     void filterActionType(const sal_uInt16 nActionType, bool bShouldFilter);
     void filterAllActionTypes();
     void filterNoneActionTypes();
 
-    void dump(GDIMetaFile& rMetaFile);
+    /** The actual result that will be used for testing.
+
+        This function normally uses a SvMemoryStream for its operation; but
+        can use a physical file when a filename is specified in
+        pTempStreamName - this is useful when creating the test, to dump the
+        file for examination.
+    */
+    xmlDocPtr dumpAndParse(GDIMetaFile& rMetaFile, const OUString& rTempStreamName = OUString());
 };
 
 #endif

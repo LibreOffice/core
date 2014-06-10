@@ -57,16 +57,10 @@ void WmfTest::testNonPlaceableWmf()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    SvMemoryStream aStream;
-
-    MetafileXmlDump dumper(aStream);
+    MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
     dumper.filterActionType(META_POLYLINE_ACTION, false);
-    dumper.dump(aGDIMetaFile);
-
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
-
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
@@ -92,16 +86,10 @@ void WmfTest::testSine()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    SvMemoryStream aStream;
-
-    MetafileXmlDump dumper(aStream);
+    MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
     dumper.filterActionType(META_ISECTRECTCLIPREGION_ACTION, false);
-    dumper.dump(aGDIMetaFile);
-
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
-
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
@@ -122,16 +110,10 @@ void WmfTest::testEmfProblem()
     GDIMetaFile aGDIMetaFile;
     ReadWindowMetafile(aFileStream, aGDIMetaFile);
 
-    SvMemoryStream aStream;
-
-    MetafileXmlDump dumper(aStream);
+    MetafileXmlDump dumper;
     dumper.filterAllActionTypes();
     dumper.filterActionType(META_ISECTRECTCLIPREGION_ACTION, false);
-    dumper.dump(aGDIMetaFile);
-
-    aStream.Seek(STREAM_SEEK_TO_BEGIN);
-
-    xmlDocPtr pDoc = parseXmlStream(&aStream);
+    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
 
     CPPUNIT_ASSERT (pDoc);
 
