@@ -243,6 +243,7 @@ void ScNameDefDlg::AddPushed()
                     if (nTab != -1)
                         mpDoc->SetStreamValid(nTab, false);
                     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+                    mpDocShell->SetDocumentModified();
                     Close();
                 }
                 else
