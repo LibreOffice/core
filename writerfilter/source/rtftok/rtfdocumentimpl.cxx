@@ -3743,7 +3743,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     break;
     case RTF_HIGHLIGHT:
     {
-        RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+        RTFValue::Pointer_t pValue(new RTFValue(nParam ? getColorTable(nParam) : COL_AUTO));
         m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_highlight, pValue);
     }
     break;

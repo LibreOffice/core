@@ -544,6 +544,59 @@ DECLARE_RTFIMPORT_TEST(testFdo50539, "fdo50539.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharBackColor"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo79599, "fdo79599.rtf")
+{
+    // test for \highlightNN, document has full \colortbl (produced in MS Word 2003 or 2007)
+
+    // ignore \highlight0
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharBackColor"));
+
+    // test \highlight2 = yellow
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xFFFF00), getProperty<sal_uInt32>(getRun(getParagraph(2), 1), "CharBackColor"));
+
+    // test \highlight3 = green
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x00FF00), getProperty<sal_uInt32>(getRun(getParagraph(3), 1), "CharBackColor"));
+
+    // test \highlight4 = cyan
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x00FFFF), getProperty<sal_uInt32>(getRun(getParagraph(4), 1), "CharBackColor"));
+
+    // test \highlight5 = magenta
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xFF00FF), getProperty<sal_uInt32>(getRun(getParagraph(5), 1), "CharBackColor"));
+
+    // test \highlight6 = blue
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x0000FF), getProperty<sal_uInt32>(getRun(getParagraph(6), 1), "CharBackColor"));
+
+    // test \highlight7 = red
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xFF0000), getProperty<sal_uInt32>(getRun(getParagraph(7), 1), "CharBackColor"));
+
+    // test \highlight8 = dark blue
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x000080), getProperty<sal_uInt32>(getRun(getParagraph(8), 1), "CharBackColor"));
+
+    // test \highlight9 = dark cyan
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x008080), getProperty<sal_uInt32>(getRun(getParagraph(9), 1), "CharBackColor"));
+
+    // test \highlight10 = dark green
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x008000), getProperty<sal_uInt32>(getRun(getParagraph(10), 1), "CharBackColor"));
+
+    // test \highlight11 = dark magenta
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x800080), getProperty<sal_uInt32>(getRun(getParagraph(11), 1), "CharBackColor"));
+
+    // test \highlight12 = dark red
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x800000), getProperty<sal_uInt32>(getRun(getParagraph(12), 1), "CharBackColor"));
+
+    // test \highlight13 = dark yellow
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x808000), getProperty<sal_uInt32>(getRun(getParagraph(13), 1), "CharBackColor"));
+
+    // test \highlight14 = dark gray
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x808080), getProperty<sal_uInt32>(getRun(getParagraph(14), 1), "CharBackColor"));
+
+    // test \highlight15 = light gray
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xC0C0C0), getProperty<sal_uInt32>(getRun(getParagraph(15), 1), "CharBackColor"));
+
+    // test \highlight1 = black
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0x000000), getProperty<sal_uInt32>(getRun(getParagraph(16), 1), "CharBackColor"));
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo50665, "fdo50665.rtf")
 {
     // Access the second run, which is a textfield
@@ -1091,8 +1144,8 @@ DECLARE_RTFIMPORT_TEST(testFdo61909, "fdo61909.rtf")
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
     // Was the Writer default font.
     CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xTextRange, "CharFontName"));
-    // Was 0x008000.
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<sal_uInt32>(xTextRange, "CharBackColor"));
+    // It is white (0xFFFFFF) in document
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xFFFFFF), getProperty<sal_uInt32>(xTextRange, "CharBackColor"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo62288, "fdo62288.rtf")
