@@ -5457,7 +5457,7 @@ void DocxAttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
            FSNS( XML_w, XML_val ), sIss.getStr(), FSEND );
 
     const SvxFontHeightItem& rItem = static_cast<const SvxFontHeightItem&>(m_rExport.GetItem(RES_CHRATR_FONTSIZE));
-    if (&rItem != NULL && (sIss.isEmpty() || sIss.match(OString("baseline"))))
+    if (sIss.isEmpty() || sIss.match(OString("baseline")))
     {
         long nHeight = rItem.GetHeight();
         OString sPos = OString::number( ( nHeight * nEsc + 500 ) / 1000 );
