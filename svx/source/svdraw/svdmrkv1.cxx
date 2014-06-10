@@ -102,7 +102,7 @@ sal_uIntPtr SdrMarkView::GetMarkedPointCount() const
 
 bool SdrMarkView::IsPointMarkable(const SdrHdl& rHdl) const
 {
-    return !ImpIsFrameHandles() && &rHdl!=NULL && !rHdl.IsPlusHdl() && rHdl.GetKind()!=HDL_GLUE && rHdl.GetKind()!=HDL_SMARTTAG && rHdl.GetObj()!=NULL && rHdl.GetObj()->IsPolyObj();
+    return !ImpIsFrameHandles() && !rHdl.IsPlusHdl() && rHdl.GetKind()!=HDL_GLUE && rHdl.GetKind()!=HDL_SMARTTAG && rHdl.GetObj()!=NULL && rHdl.GetObj()->IsPolyObj();
 }
 
 bool SdrMarkView::MarkPointHelper(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
@@ -189,7 +189,6 @@ bool SdrMarkView::ImpMarkPoint(SdrHdl* pHdl, SdrMark* pMark, bool bUnmark)
 
 bool SdrMarkView::MarkPoint(SdrHdl& rHdl, bool bUnmark)
 {
-    if (&rHdl==NULL) return false;
     ForceUndirtyMrkPnt();
     bool bRet=false;
     const SdrObject* pObj=rHdl.GetObj();
