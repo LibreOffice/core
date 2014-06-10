@@ -11,6 +11,7 @@ $(eval $(call gb_UIConfig_UIConfig,modules/scanner))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/scanner,\
 	extensions/uiconfig/scanner/ui/sanedialog \
+	extensions/uiconfig/scanner/ui/griddialog \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -23,6 +23,7 @@
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/fixed.hxx>
 
 class GridWindow : public ModalDialog
 {
@@ -57,6 +58,14 @@ class GridWindow : public ModalDialog
         }
     };
 
+    enum resetType
+    {
+        LINEAR_ASCENDING = 10,
+        LINEAR_DESCENDING,
+        RESET,
+        EXPONENTIAL
+    };
+
     Rectangle       m_aGridArea;
 
     double          m_fMinX;
@@ -85,11 +94,10 @@ class GridWindow : public ModalDialog
 
     BitmapEx        m_aMarkerBitmap;
 
-    OKButton        m_aOKButton;
-    CancelButton    m_aCancelButton;
+    OKButton*       m_pOKButton;
 
-    ListBox         m_aResetTypeBox;
-    PushButton      m_aResetButton;
+    ListBox*        m_pResetTypeBox;
+    PushButton*     m_pResetButton;
 
 
     Point transform( double x, double y );
@@ -99,6 +107,8 @@ class GridWindow : public ModalDialog
     double findMinY();
     double findMaxX();
     double findMaxY();
+
+    void updateRectSize();
 
     void drawGrid();
     void drawOriginal();
