@@ -82,6 +82,7 @@
 
 #include <docsh.hxx>
 #include <svx/drawitem.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -240,10 +241,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), GetView().GetWrtShell());
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), GetView().GetWrtShell()));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
             break;
         }
         case FN_NUMBERING_OUTLINE_DLG:
@@ -251,11 +251,11 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
-                                                        GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+                                                        GetView().GetWindow(), &aTmp, GetView().GetWrtShell()));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
+            pDlg.reset();
             rReq.Done();
             break;
         }
@@ -497,7 +497,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog(
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog(
                                                         nSel & nsSelectionType::SEL_GRF ? "PictureDialog" :
                                                         nSel & nsSelectionType::SEL_OLE ? "ObjectDialog":
                                                                                         "FrameDialog",
@@ -505,7 +505,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                                         GetView().GetWindow(),
                                                         aSet, false,
                                                         false,
-                                                        sDefPage);
+                                                        sDefPage));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if ( nSlot == FN_DRAW_WRAP_DLG )
@@ -627,7 +627,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 }
                 else
                     bUpdateMgr = false;
-                delete pDlg;
             }
         }
         break;
@@ -656,10 +655,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectTitleDescDialog* pDlg =
+                boost::scoped_ptr<AbstractSvxObjectTitleDescDialog> pDlg(
                     pFact->CreateSvxObjectTitleDescDialog( NULL,
                                                            aTitle,
-                                                           aDescription );
+                                                           aDescription ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if ( pDlg->Execute() == RET_OK )
@@ -670,8 +669,6 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     rSh.SetObjDescription(aDescription);
                     rSh.SetObjTitle(aTitle);
                 }
-
-                delete pDlg;
             }
         }
         break;
@@ -1291,11 +1288,11 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet Factory fail!");
-                AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog(
+                boost::scoped_ptr<AbstractSvxAreaTabDialog> pDlg(pFact->CreateSvxAreaTabDialog(
                     NULL,
                     &aNewAttr,
                     pDoc,
-                    false);
+                    false));
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
                 if(RET_OK == pDlg->Execute())
@@ -1320,8 +1317,6 @@ void SwFrameShell::ExecDrawDlgTextFrame(SfxRequest& rReq)
                     rBnd.Update(SID_ATTR_FILL_TRANSPARENCE);
                     rBnd.Update(SID_ATTR_FILL_FLOATTRANSPARENCE);
                 }
-
-                delete pDlg;
             }
 
             break;

@@ -99,6 +99,7 @@
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
 #include "misc.hrc"
+#include <boost/scoped_ptr.hpp>
 
 const sal_uInt32 nFontInc = 40;      // 2pt
 const sal_uInt32 nFontMaxSz = 19998; // 999.9pt
@@ -323,7 +324,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg(pView->GetWindow(), *pView, aDlgAttr, DLG_CHAR_DRAW);
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwCharDlg(pView->GetWindow(), *pView, aDlgAttr, DLG_CHAR_DRAW));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
@@ -335,7 +336,6 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     rReq.Done( *( pDlg->GetOutputItemSet() ) );
                     aNewAttr.Put(*pDlg->GetOutputItemSet());
                 }
-                delete( pDlg );
                 if(RET_OK != nRet)
                     return ;
             }
@@ -348,10 +348,9 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), rView.GetWrtShell());
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), rView.GetWrtShell()));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
             break;
         }
         case FN_NUMBERING_OUTLINE_DLG:
@@ -359,11 +358,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
-                                                        GetView().GetWindow(), &aTmp, GetView().GetWrtShell());
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+                                                        GetView().GetWindow(), &aTmp, GetView().GetWrtShell()));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
+            pDlg.reset();
             rReq.Done();
         }
         break;
@@ -422,7 +421,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, 0, true );
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwParaDlg( GetView().GetWindow(), GetView(), aDlgAttr,DLG_STD, 0, true ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet)
@@ -430,7 +429,6 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                     rReq.Done( *( pDlg->GetOutputItemSet() ) );
                     aNewAttr.Put(*pDlg->GetOutputItemSet());
                 }
-                delete( pDlg );
                 if(RET_OK != nRet)
                     return;
             }
