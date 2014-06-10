@@ -39,7 +39,7 @@ class SfxItemPool;
  * Deprecated: This will be replaced with a function returning XShape.
  */
 SVX_DLLPUBLIC SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, sal_uInt32 nInventor, OUString const & referer)
-    throw (css::uno::RuntimeException);
+    throw (css::uno::RuntimeException, std::exception);
 
 /** Returns a StarOffice API wrapper for the given SdrObject */
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ();
