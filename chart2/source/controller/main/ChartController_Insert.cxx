@@ -204,8 +204,8 @@ void ChartController::executeDispatch_DeleteLegend()
             ActionDescriptionProvider::DELETE, SCH_RESSTR( STR_OBJECT_LEGEND )),
         m_xUndoManager );
 
-    ChartModel* pModel = dynamic_cast<ChartModel*>(getModel().get());
-    LegendHelper::hideLegend( *pModel );
+    ChartModel& rModel = dynamic_cast<ChartModel&>(*getModel().get());
+    LegendHelper::hideLegend(rModel);
     aUndoGuard.commit();
 }
 
