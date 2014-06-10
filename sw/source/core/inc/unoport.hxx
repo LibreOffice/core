@@ -145,9 +145,9 @@ protected:
     void GetPropertyValue( ::com::sun::star::uno::Any &rVal,
                 const SfxItemPropertySimpleEntry& rEntry, SwUnoCrsr *pUnoCrsr, SfxItemSet *&pSet );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::GetDirectPropertyTolerantResult > SAL_CALL GetPropertyValuesTolerant_Impl(
-        const ::com::sun::star::uno::Sequence< OUString >& rPropertyNames,
-        bool bDirectValuesOnly ) throw (::com::sun::star::uno::RuntimeException);
+    css::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> SAL_CALL GetPropertyValuesTolerant_Impl(
+        const css::uno::Sequence< OUString >& rPropertyNames, bool bDirectValuesOnly )
+            throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
     virtual ~SwXTextPortion();
 
