@@ -83,7 +83,6 @@
 #include "xfilter/xfpagemaster.hxx"
 #include "xfilter/xfcolumns.hxx"
 #include "xfilter/xfborders.hxx"
-#include "xfilter/xffont.hxx"
 #include "xfilter/xfframestyle.hxx"
 #include "xfilter/xfframe.hxx"
 #include "xfilter/xfbgimage.hxx"
