@@ -1378,8 +1378,7 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, bool bCreate )
             GetPageDescFromPool( nPoolId, false );
 
         // dazu brauchen wir auch die Nummer der neuen Vorlage
-        pPageDesc = FindPageDesc(pDoc, nPoolId);
-        OSL_ENSURE( pPageDesc==pNewPageDesc, "Seitenvorlage nicht gefunden" );
+        OSL_ENSURE(pNewPageDesc == FindPageDesc(pDoc, nPoolId), "Seitenvorlage nicht gefunden");
 
         pDoc->CopyPageDesc( *pMasterPageDesc, *pNewPageDesc, false );
 
