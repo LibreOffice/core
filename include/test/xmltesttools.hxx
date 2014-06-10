@@ -27,12 +27,15 @@
 
 class OOO_DLLPUBLIC_TEST XmlTestTools
 {
+public:
+    /// Return xmlDocPtr representation of the XML stream read from pStream.
+    static xmlDocPtr parseXmlStream(SvStream* pStream);
+
 protected:
     XmlTestTools();
     virtual ~XmlTestTools();
 
     htmlDocPtr parseXml(utl::TempFile& aTempFile);
-    htmlDocPtr parseXmlStream(SvStream* pStream);
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXpathCtx);
 
