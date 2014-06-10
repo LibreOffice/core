@@ -912,43 +912,50 @@ inline void lcl_FillCol ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, con
         rToSet.Put(aCol);
     }
 }
-sal_Bool    SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItemSet&, sal_Bool& rSizeFound)
+sal_Bool SwFrameProperties_Impl::AnyToItemSet(
+    SwDoc *pDoc,
+    SfxItemSet& rSet,
+    SfxItemSet&,
+    sal_Bool& rSizeFound )
 {
-    //Properties fuer alle Frames
-    const ::uno::Any *pStyleName;
-    SwDocStyleSheet* pStyle = NULL;
-    sal_Bool bRet;
+    sal_Bool bRet = sal_False;
 
-    if ( GetProperty ( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
+    SwDocStyleSheet* pStyle = NULL;
+    const ::uno::Any *pStyleName;
+    if ( GetProperty( FN_UNO_FRAME_STYLE_NAME, 0, pStyleName ) )
     {
-        OUString sStyle;
-        *pStyleName >>= sStyle;
-        pStyle = (SwDocStyleSheet*)pDoc->GetDocShell()->GetStyleSheetPool()->Find(sStyle,
-                                                    SFX_STYLE_FAMILY_FRAME);
+        OUString sTmpStylename;
+        *pStyleName >>= sTmpStylename;
+        String sStylename;
+        SwStyleNameMapper::FillUIName( String(sTmpStylename), sStylename, nsSwGetPoolIdFromName::GET_POOLID_FRMFMT, sal_True );
+        pStyle =
+            (SwDocStyleSheet*) pDoc->GetDocShell()->GetStyleSheetPool()->Find( sStylename, SFX_STYLE_FAMILY_FRAME );
     }
 
     const ::uno::Any* pColumns = NULL;
-    GetProperty (RES_COL, MID_COLUMNS, pColumns);
-    if ( pStyle )
+    GetProperty( RES_COL, MID_COLUMNS, pColumns );
+    if ( pStyle != NULL )
     {
         rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *pStyle ) );
-        const :: SfxItemSet *pItemSet = &xStyle->GetItemSet();
-           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
-        lcl_FillCol ( rSet, *pItemSet, pColumns );
+        const ::SfxItemSet *pItemSet = &xStyle->GetItemSet();
+        bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
+        lcl_FillCol( rSet, *pItemSet, pColumns );
     }
     else
     {
-        const :: SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
-           bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
-        lcl_FillCol ( rSet, *pItemSet, pColumns );
+        const ::SfxItemSet *pItemSet = &pDoc->GetFrmFmtFromPool( RES_POOLFRM_FRAME )->GetAttrSet();
+        bRet = FillBaseProperties( rSet, *pItemSet, rSizeFound );
+        lcl_FillCol( rSet, *pItemSet, pColumns );
     }
+
     const ::uno::Any* pEdit;
-    if(GetProperty(RES_EDIT_IN_READONLY, 0, pEdit))
+    if ( GetProperty( RES_EDIT_IN_READONLY, 0, pEdit ) )
     {
-        SfxBoolItem aBool(RES_EDIT_IN_READONLY);
-        ((SfxPoolItem&)aBool).PutValue(*pEdit, 0);
-        rSet.Put(aBool);
+        SfxBoolItem aBool( RES_EDIT_IN_READONLY );
+        ( (SfxPoolItem&) aBool ).PutValue( *pEdit, 0 );
+        rSet.Put( aBool );
     }
+
     return bRet;
 }
 /****************************************************************************
