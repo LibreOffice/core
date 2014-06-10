@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_c07bbe7a",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-06-10T13:16:26Z",
+      "side": 0,
+      "message": "actually - why would we _ever_ insert a null cursor for a footnote? is this some kind of refactoring gone wrong?",
+      "revId": "ee710b09f820aea01ec49521fad7d9525c5f9fa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
