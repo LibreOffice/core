@@ -23,9 +23,9 @@
 
 #define TARGET_LIB SAL_MODULENAME( "sofficeapp" )
 
-typedef LibreOffice *(HookFunction)(void);
+typedef LibreOfficeKit *(HookFunction)(void);
 
-SAL_DLLPUBLIC_EXPORT LibreOffice *lo_init( const char *install_path )
+SAL_DLLPUBLIC_EXPORT LibreOfficeKit *lok_init( const char *install_path )
 {
     char *imp_lib;
     void *dlhandle;

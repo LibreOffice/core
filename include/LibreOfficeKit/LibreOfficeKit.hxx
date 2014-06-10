@@ -22,10 +22,10 @@
 class LODocument
 {
 private:
-    LibreOfficeDocument* mpDoc;
+    LibreOfficeKitDocument* mpDoc;
 
 public:
-    inline LODocument(LibreOfficeDocument* pDoc) :
+    inline LODocument(LibreOfficeKitDocument* pDoc) :
         mpDoc(pDoc)
     {}
 
@@ -53,10 +53,10 @@ public:
 class LibLibreOffice
 {
 private:
-    LibreOffice* mpThis;
+    LibreOfficeKit* mpThis;
 
 public:
-    inline LibLibreOffice(LibreOffice* pThis) :
+    inline LibLibreOffice(LibreOfficeKit* pThis) :
         mpThis(pThis)
     {}
 
@@ -72,7 +72,7 @@ public:
 
     inline LODocument* documentLoad(const char* pUrl)
     {
-        LibreOfficeDocument* pDoc = mpThis->documentLoad(mpThis, pUrl);
+        LibreOfficeKitDocument* pDoc = mpThis->documentLoad(mpThis, pUrl);
         if (pDoc == NULL)
             return NULL;
         return new LODocument(pDoc);
@@ -87,7 +87,7 @@ public:
 
 inline LibLibreOffice* lo_cpp_init(const char* pInstallPath)
 {
-    LibreOffice* pThis = lo_init(pInstallPath);
+    LibreOfficeKit* pThis = lok_init(pInstallPath);
     if (pThis == NULL || pThis->nSize == 0)
         return NULL;
     return new LibLibreOffice(pThis);
