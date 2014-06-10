@@ -69,8 +69,12 @@ namespace comphelper
                    css::lang::IllegalArgumentException,
                    css::lang::WrappedTargetException,
                    css::uno::RuntimeException) = 0;
-        virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
-            throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException ) = 0;
+        virtual void _setSingleValue(const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue)
+            throw (css::beans::UnknownPropertyException,
+                   css::beans::PropertyVetoException,
+                   css::lang::IllegalArgumentException,
+                   css::lang::WrappedTargetException,
+                   css::uno::RuntimeException) = 0;
         virtual void _postSetValues ()
             throw (css::beans::UnknownPropertyException,
                    css::beans::PropertyVetoException,
