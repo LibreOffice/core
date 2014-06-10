@@ -61,6 +61,7 @@ public:
     void testBnc870233_1();
     void testBnc870233_2();
     void testBnc880763();
+    void testBnc862510_5();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -76,6 +77,7 @@ public:
     CPPUNIT_TEST(testBnc870233_1);
     CPPUNIT_TEST(testBnc870233_2);
     CPPUNIT_TEST(testBnc880763);
+    CPPUNIT_TEST(testBnc862510_5);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -587,6 +589,27 @@ void SdFiltersTest::testBnc880763()
     CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
     CPPUNIT_ASSERT_EQUAL( sal_uInt32(0x00ff00),(static_cast< const XColorItem& >(pObj->GetMergedItem(XATTR_FILLCOLOR))).GetColorValue().GetColor());
 
+
+    xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testBnc862510_5()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc862510_5.pptx"));
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    // Same as testBnc870237, but here we check the horizontal spacing
+    const SdrObject* pObj = dynamic_cast<SdrObject*>( pPage->GetObj( 1 ) );
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextUpperDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextLowerDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(7510), (static_cast< const SdrTextRightDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextLeftDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
 
     xDocShRef->DoClose();
 }
