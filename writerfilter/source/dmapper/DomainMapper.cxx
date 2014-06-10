@@ -1340,6 +1340,8 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                 rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::makeAny( nColor ));
             else if (mnBackgroundColor)
                 rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
+            else
+                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nIntValue ));
         }
         break;
     case NS_ooxml::LN_EG_RPrBase_em:
