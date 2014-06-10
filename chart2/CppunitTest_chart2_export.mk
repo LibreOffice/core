@@ -13,7 +13,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,chart2_export))
 
 $(eval $(call gb_CppunitTest_use_externals,chart2_export, \
 	boost_headers \
-    libxml2 \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,chart2_export, \
@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,chart2_export, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,chart2_export, \
+    $(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
     cppu \
@@ -31,12 +32,15 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_export, \
     forui \
     i18nlangtag \
     msfilter \
+    vcl \
     oox \
     sal \
     salhelper \
     sax \
     sb \
     sc \
+    sw \
+    sd \
     sfx \
     sot \
     svl \
@@ -50,7 +54,6 @@ $(eval $(call gb_CppunitTest_use_libraries,chart2_export, \
     unotest \
     utl \
     vbahelper \
-    vcl \
     xo \
     sw \
     $(gb_UWINAPI) \
@@ -70,15 +73,20 @@ $(eval $(call gb_CppunitTest_use_vcl,chart2_export))
 
 $(eval $(call gb_CppunitTest_use_components,chart2_export,\
     basic/util/sb \
+    animations/source/animcore/animcore \
     chart2/source/controller/chartcontroller \
     chart2/source/chartcore \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
+    dtrans/util/mcnttype \
     dbaccess/util/dba \
     embeddedobj/util/embobj \
     eventattacher/source/evtatt \
     filter/source/config/cache/filterconfig1 \
+    filter/source/odfflatxml/odfflatxml \
     filter/source/storagefilterdetect/storagefd \
+    filter/source/xmlfilteradaptor/xmlfa \
+    filter/source/xmlfilterdetect/xmlfd \
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
@@ -93,6 +101,9 @@ $(eval $(call gb_CppunitTest_use_components,chart2_export,\
     sw/util/sw \
     sw/util/swd \
     sw/util/msword \
+    sd/util/sd \
+    sd/util/sdfilt \
+    sd/util/sdd \
     $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
 	    sc/util/vbaobj) \
     scaddins/source/analysis/analysis \
@@ -115,6 +126,7 @@ $(eval $(call gb_CppunitTest_use_components,chart2_export,\
     unoxml/source/service/unoxml \
     writerfilter/util/writerfilter \
     xmloff/util/xo \
+    xmlscript/util/xmlscript \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,chart2_export))
