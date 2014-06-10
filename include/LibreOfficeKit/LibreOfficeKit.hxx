@@ -18,18 +18,20 @@
  *  b) allow ABI stability - C++ vtables are not good for that.
  *  c) avoid C++ types as part of the API.
  */
+namespace lok
+{
 
-class LODocument
+class Document
 {
 private:
     LibreOfficeKitDocument* mpDoc;
 
 public:
-    inline LODocument(LibreOfficeKitDocument* pDoc) :
+    inline Document(LibreOfficeKitDocument* pDoc) :
         mpDoc(pDoc)
     {}
 
-    inline ~LODocument()
+    inline ~Document()
     {
         mpDoc->destroy(mpDoc);
     }
@@ -50,17 +52,17 @@ public:
     }
 };
 
-class LibLibreOffice
+class Office
 {
 private:
     LibreOfficeKit* mpThis;
 
 public:
-    inline LibLibreOffice(LibreOfficeKit* pThis) :
+    inline Office(LibreOfficeKit* pThis) :
         mpThis(pThis)
     {}
 
-    inline ~LibLibreOffice()
+    inline ~Office()
     {
         mpThis->destroy(mpThis);
     }
@@ -70,12 +72,12 @@ public:
         return mpThis->initialize(mpThis, pInstallPath);
     }
 
-    inline LODocument* documentLoad(const char* pUrl)
+    inline Document* documentLoad(const char* pUrl)
     {
         LibreOfficeKitDocument* pDoc = mpThis->documentLoad(mpThis, pUrl);
         if (pDoc == NULL)
             return NULL;
-        return new LODocument(pDoc);
+        return new Document(pDoc);
     }
 
     // return the last error as a string, free me.
@@ -85,12 +87,14 @@ public:
     }
 };
 
-inline LibLibreOffice* lo_cpp_init(const char* pInstallPath)
+}
+
+inline ::lok::Office* lo_cpp_init(const char* pInstallPath)
 {
     LibreOfficeKit* pThis = lok_init(pInstallPath);
     if (pThis == NULL || pThis->nSize == 0)
         return NULL;
-    return new LibLibreOffice(pThis);
+    return new ::lok::Office(pThis);
 }
 
 #endif
