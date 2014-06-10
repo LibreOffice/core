@@ -757,51 +757,58 @@ namespace
 }
 #endif
 
-
 Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 {
 #ifndef DISABLE_SCRIPTING
-    if ( !pImp->m_bNoBasicCapabilities )
-        return lcl_getOrCreateLibraryContainer( false, pImp->xDialogLibraries, GetModel() );
+    try
+    {
+        if ( !pImp->m_bNoBasicCapabilities )
+            return lcl_getOrCreateLibraryContainer( false, pImp->xDialogLibraries, GetModel() );
 
-    BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
-    if ( pBasMgr )
-        return pBasMgr->GetDialogLibraryContainer().get();
+        BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
+        if ( pBasMgr )
+            return pBasMgr->GetDialogLibraryContainer().get();
+    }
+    catch (const css::ucb::ContentCreationException& e)
+    {
+        SAL_WARN("sfx.doc", "caught exception " << e.Message);
+    }
 
-    OSL_FAIL( "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?" );
+    SAL_WARN("sfx.doc", "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?");
 #endif
     return SFX_APP()->GetDialogContainer();
 }
 
-
-
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
 #ifndef DISABLE_SCRIPTING
-    if ( !pImp->m_bNoBasicCapabilities )
-        return lcl_getOrCreateLibraryContainer( true, pImp->xBasicLibraries, GetModel() );
+    try
+    {
+        if ( !pImp->m_bNoBasicCapabilities )
+            return lcl_getOrCreateLibraryContainer( true, pImp->xBasicLibraries, GetModel() );
 
-    BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
-    if ( pBasMgr )
-        return pBasMgr->GetScriptLibraryContainer().get();
-
-    OSL_FAIL( "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?" );
+        BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
+        if ( pBasMgr )
+            return pBasMgr->GetScriptLibraryContainer().get();
+    }
+    catch (const css::ucb::ContentCreationException& e)
+    {
+        SAL_WARN("sfx.doc", "caught exception " << e.Message);
+    }
+    SAL_WARN("sfx.doc", "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?");
 #endif
     return SFX_APP()->GetBasicContainer();
 }
-
-
 
 StarBASIC* SfxObjectShell::GetBasic() const
 {
 #ifdef DISABLE_SCRIPTING
     return NULL;
 #else
-    return GetBasicManager()->GetLib(0);
+    BasicManager * pMan = GetBasicManager();
+    return pMan ? pMan->GetLib(0) : NULL;
 #endif
 }
-
-
 
 void SfxObjectShell::InitBasicManager_Impl()
 /*  [Description]
