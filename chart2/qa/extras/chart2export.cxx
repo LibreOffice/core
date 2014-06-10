@@ -57,9 +57,9 @@ public:
     void testGapWidthXLSX();
     void testSmoothedLines();
     void testLabelStringODS();
-    void testfdo78290_Line_Chart_Marker_x();
-    void testfdo78290_Scatter_Chart_Marker_x();
-    void testfdo78290_Combination_Chart_Marker_x();
+    void testFdo78290LineChartMarkerX();
+    void testFdo78290ScatterChartMarkerX();
+    void testFdo78290CombinationChartMarkerX();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -89,9 +89,9 @@ public:
     CPPUNIT_TEST(testGapWidthXLSX);
     CPPUNIT_TEST(testSmoothedLines);
     CPPUNIT_TEST(testLabelStringODS);
-    CPPUNIT_TEST(testfdo78290_Line_Chart_Marker_x);
-    CPPUNIT_TEST(testfdo78290_Scatter_Chart_Marker_x);
-    CPPUNIT_TEST(testfdo78290_Combination_Chart_Marker_x);
+    CPPUNIT_TEST(testFdo78290LineChartMarkerX);
+    CPPUNIT_TEST(testFdo78290ScatterChartMarkerX);
+    CPPUNIT_TEST(testFdo78290CombinationChartMarkerX);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -637,7 +637,7 @@ void Chart2ExportTest::testFdo74115WallBitmapFill()
 
 //The below test case tests the built in marker 'x' for Office 2010 in Line charts
 
-void Chart2ExportTest::testfdo78290_Line_Chart_Marker_x()
+void Chart2ExportTest::testFdo78290LineChartMarkerX()
 {
     load("/chart2/qa/extras/data/docx/", "fdo78290_Line_Chart_Marker_x.docx");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -648,7 +648,7 @@ void Chart2ExportTest::testfdo78290_Line_Chart_Marker_x()
 
 // We can also use the built in marker 'x' in scatter chart, hence writing the test case for the same.
 
-void Chart2ExportTest::testfdo78290_Scatter_Chart_Marker_x()
+void Chart2ExportTest::testFdo78290ScatterChartMarkerX()
 {
     load("/chart2/qa/extras/data/docx/", "fdo78290_Scatter_Chart_Marker_x.docx");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
@@ -660,7 +660,7 @@ void Chart2ExportTest::testfdo78290_Scatter_Chart_Marker_x()
 // Also in a combination of charts like a column chart and line chart, we can use the built in marker 'x'
 // for the line chart too. hence put a test case for the combination chart also.
 
-void Chart2ExportTest::testfdo78290_Combination_Chart_Marker_x()
+void Chart2ExportTest::testFdo78290CombinationChartMarkerX()
 {
     load("/chart2/qa/extras/data/docx/", "fdo78290_Combination_Chart_Marker_x.docx");
     xmlDocPtr pXmlDoc = parseExport("word/charts/chart", "Office Open XML Text");
