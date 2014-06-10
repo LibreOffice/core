@@ -976,6 +976,9 @@ SwHistory::SwHistory( sal_uInt16 nInitSz )
 
 SwHistory::~SwHistory()
 {
+    std::vector<SwHistoryHint*>::const_iterator it;
+    for(it = m_SwpHstry.begin(); it != m_SwpHstry.end(); ++it)
+        delete *it;
     Delete( 0 );
 }
 
@@ -1429,11 +1432,4 @@ void SwRegHistory::_MakeSetWhichIds()
         }
     }
 }
-
-SwpHstry::~SwpHstry()
-{
-    for(const_iterator it = begin(); it != end(); ++it)
-        delete *it;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
