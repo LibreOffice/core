@@ -1922,36 +1922,72 @@ static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 
     const SwFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
 
+    // prepare the bitfield to flag found numbers
     sal_uInt16 nNum, nTmp, nFlagSize = ( rFmts.size() / 8 ) +2;
     sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
-    sal_uInt16 n;
-
     memset( pSetFlags, 0, nFlagSize );
 
-    for( n = 0; n < rFmts.size(); ++n )
-    {
-        const SwFrmFmt* pFlyFmt = rFmts[ n ];
-        if( RES_FLYFRMFMT == pFlyFmt->Which() &&
-            pFlyFmt->GetName().Match( aName ) == nNmLen )
-        {
-            // Only get and set the Flag
-            nNum = static_cast< sal_uInt16 >( rtl_ustr_toInt32( pFlyFmt->GetName().GetBuffer() + nNmLen, 10 ) );
-            if( nNum-- && nNum < rFmts.size() )
-                pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
+    // find the range of fly names with common prefix
+    bool root;
+    const std::pair<SwFrmFmts::const_iterator,SwFrmFmts::const_iterator>
+        range = rFmts.findRange( RES_FLYFRMFMT, aName, root, nNmLen );
+    SwFrmFmts::const_iterator it = range.first;
+    sal_uInt16 n = 0;
+    bool found = false;
+
+    // check all number postfixes to find the first free number
+    while ( root || (it != range.second) ) {
+        const SwFrmFmt* pFlyFmt;
+        if ( root )
+            pFlyFmt = rFmts[ 0 ];
+        else {
+            pFlyFmt = *it;
+            it++;
+        }
+
+        // get / set the flag for the number
+        nNum = static_cast< sal_uInt16 >( rtl_ustr_toInt32( pFlyFmt->GetName().GetBuffer() + nNmLen, 10 ) );
+        if( nNum-- && nNum < rFmts.size() ) {
+            pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
+            if ( root ) {
+                // don't inc n for root; number can be everywhere
+                root = false;
+                continue;
+            }
+            else
+                n++;
+        }
+        else {
+            if ( root )
+                root = false;
+            continue;
+        }
+
+        // after 8 conversions, we can check for a hole, because the list is sorted
+        if( 0 == n % 8 ) {
+            if( 0xff != ( nTmp = pSetFlags[ n / 8 - 1 ] ))
+            {
+                // so determine the number
+                nNum = n - 8;
+                while( nTmp & 1 )
+                    ++nNum, nTmp >>= 1;
+                found = true;
+                break;
+            }
         }
     }
 
-    // All numbers are flagged accordingly, so determine the right one
-    nNum = rFmts.size();
-    for( n = 0; n < nFlagSize; ++n )
-        if( 0xff != ( nTmp = pSetFlags[ n ] ))
+    if ( !found ) {
+        if( 0xff != ( nTmp = pSetFlags[ n / 8 ] ))
         {
             // so determine the number
-            nNum = n * 8;
+            nNum = n - n % 8;
             while( nTmp & 1 )
                 ++nNum, nTmp >>= 1;
-            break;
         }
+        else
+            nNum = n;
+    }
 
     delete [] pSetFlags;
     return aName += OUString::number( ++nNum );
