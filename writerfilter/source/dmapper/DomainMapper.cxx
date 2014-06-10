@@ -1334,13 +1334,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
             pSectionContext->Insert(PROP_WRITING_MODE, uno::makeAny( text::WritingMode2::RL_TB));
         break;
     case NS_ooxml::LN_EG_RPrBase_highlight:
-        {
-            sal_Int32 nColor = 0;
-            if( (mbIsHighlightSet = getColorFromIndex(nIntValue, nColor)) )
-                rContext->Insert(PROP_CHAR_HIGHLIGHT, uno::makeAny( nColor ));
-            else if (mnBackgroundColor)
-                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
-        }
+        rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nIntValue ));
         break;
     case NS_ooxml::LN_EG_RPrBase_em:
         rContext->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
