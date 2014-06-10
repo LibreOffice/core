@@ -148,6 +148,7 @@ template< typename     PixelType,
 
 template< typename     PixelType,
           typename     ColorType,
+          unsigned int BaseValue,
           unsigned int RedMask,
           unsigned int GreenMask,
           unsigned int BlueMask,
@@ -174,6 +175,7 @@ template< typename     PixelType,
         const typename base_type::unsigned_pixel_type blue (c.getBlue());
 
         typename base_type::unsigned_pixel_type res(
+            BaseValue |
             (shiftLeft(red,
                        base_type::red_shift-8*
                        (signed)sizeof(typename base_type::component_type)+
@@ -194,6 +196,7 @@ template< typename     PixelType,
 
 
 template< typename     PixelType,
+          unsigned int BaseValue,
           unsigned int RedMask,
           unsigned int GreenMask,
           unsigned int BlueMask,
@@ -209,6 +212,7 @@ template< typename     PixelType,
                           SwapBytes>            getter_type;
     typedef RGBMaskSetter<pixel_type,
                           Color,
+                          BaseValue,
                           RedMask,
                           GreenMask,
                           BlueMask,
@@ -256,6 +260,7 @@ template< typename     PixelType,
 // 16bpp MSB RGB
 typedef PixelFormatTraitsTemplate_RGBMask<
     sal_uInt16,
+    0,
     0xF800,
     0x07E0,
     0x001F,
@@ -266,6 +271,7 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_RGB16_565_MSB::getter_type,
 // 16bpp LSB RGB
 typedef PixelFormatTraitsTemplate_RGBMask<
     sal_uInt16,
+    0,
     0xF800,
     0x07E0,
     0x001F,
@@ -286,6 +292,7 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_RGB16_565_LSB::getter_type,
 
 typedef PixelFormatTraitsTemplate_RGBMask<
     sal_uInt32,
+    0xFF000000,
     0x00FF0000,
     0x0000FF00,
     0x000000FF,
@@ -297,6 +304,7 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_BGRX32_8888::getter_type,
 
 typedef PixelFormatTraitsTemplate_RGBMask<
     sal_uInt32,
+    0xFF000000,
     0x00FF0000,
     0x0000FF00,
     0x000000FF,
@@ -308,6 +316,7 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_XRGB32_8888::getter_type,
 
 typedef PixelFormatTraitsTemplate_RGBMask<
     sal_uInt32,
+    0x000000FF,
     0xFF000000,
     0x00FF0000,
     0x0000FF00,
@@ -317,6 +326,7 @@ BASEBMP_SPECIALIZE_ACCESSORTRAITS(PixelFormatTraits_XBGR32_8888::getter_type,
 
 typedef PixelFormatTraitsTemplate_RGBMask<
     sal_uInt32,
+    0x000000FF,
     0xFF000000,
     0x00FF0000,
     0x0000FF00,
