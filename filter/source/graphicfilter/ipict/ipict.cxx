@@ -1852,6 +1852,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
         pPict->Seek(nPos);
     }
 
+    pVirDev->SetClipRegion();
     rGDIMetaFile.Stop();
     delete pVirDev;
 
