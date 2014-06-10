@@ -9,9 +9,11 @@
 
 $(eval $(call gb_Executable_Executable,xid-fullscreen-on-all-monitors))
 
+ifeq ($(filter ANDROID WNT DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)
 $(eval $(call gb_Executable_add_libs,xid-fullscreen-on-all-monitors,\
     -ldl \
 ))
+endif
 
 $(eval $(call gb_Executable_add_cobjects,xid-fullscreen-on-all-monitors,\
     vcl/unx/gtk/window/xid_fullscreen_on_all_monitors \
