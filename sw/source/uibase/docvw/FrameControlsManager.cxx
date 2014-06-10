@@ -121,11 +121,11 @@ void SwFrameControlsManager::SetHeaderFooterControl( const SwPageFrm* pPageFrm, 
 
     Rectangle aPageRect = m_pEditWin->LogicToPixel( pPageFrm->Frm().SVRect() );
 
-    SwHeaderFooterWin* pHFWin = dynamic_cast< SwHeaderFooterWin* >( pControl.get() );
-    assert(pHFWin->IsHeader() == bHeader);
-    pHFWin->SetOffset( aOffset, aPageRect.Left(), aPageRect.Right() );
+    SwHeaderFooterWin& rHFWin = dynamic_cast<SwHeaderFooterWin&>(*pControl.get());
+    assert(rHFWin.IsHeader() == bHeader);
+    rHFWin.SetOffset( aOffset, aPageRect.Left(), aPageRect.Right() );
 
-    if ( !pHFWin->IsVisible() )
+    if (!rHFWin.IsVisible())
         pControl->ShowAll( true );
 }
 
