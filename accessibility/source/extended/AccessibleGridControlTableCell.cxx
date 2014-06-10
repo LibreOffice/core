@@ -145,11 +145,7 @@ namespace accessibility
         if ( !implIsValidIndex( nIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
-        ::com::sun::star::awt::Rectangle aRect;
-
-        if ( &m_aTable )
-            aRect = AWTRectangle( m_aTable.GetFieldCharacterBounds( getRowPos(), getColumnPos(), nIndex ) );
-        return aRect;
+        return AWTRectangle( m_aTable.GetFieldCharacterBounds( getRowPos(), getColumnPos(), nIndex ) );
     }
 
     sal_Int32 SAL_CALL AccessibleGridControlTableCell::getIndexAtPoint( const ::com::sun::star::awt::Point& _aPoint ) throw (RuntimeException, std::exception)

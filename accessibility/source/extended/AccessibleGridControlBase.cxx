@@ -320,7 +320,7 @@ bool AccessibleGridControlBase::implIsShowing()
 bool AccessibleGridControlBase::isAlive() const
 {
     ::osl::MutexGuard g(m_aMutex); // guards rBHelper members
-    return !rBHelper.bDisposed && !rBHelper.bInDispose && &m_aTable;
+    return !rBHelper.bDisposed && !rBHelper.bInDispose;
 }
 
 void AccessibleGridControlBase::ensureIsAlive() const
