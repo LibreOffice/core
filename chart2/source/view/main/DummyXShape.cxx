@@ -1028,9 +1028,8 @@ DummyGraphic2D::DummyGraphic2D(const drawing::Position3D& rPos, const drawing::D
 DummyChart* DummyXShape::getRootShape()
 {
     assert(mxParent.is());
-    DummyXShape* pParent = dynamic_cast<DummyXShape*>(mxParent.get());
-    assert(pParent);
-    return pParent->getRootShape();
+    DummyXShape& rParent = dynamic_cast<DummyXShape&>(*mxParent.get());
+    return rParent.getRootShape();
 }
 
 DummyChart* DummyChart::getRootShape()
