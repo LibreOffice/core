@@ -99,9 +99,20 @@ public:
     virtual ~SwGrfFmtColls() {}
 };
 
+struct SwFrmFmtSearch
+{
+    sal_uInt16 type;
+    const OUString& name;
+
+    SwFrmFmtSearch( sal_uInt16 _type, const OUString& _name )
+        :type( _type ), name( _name ) {}
+};
+
 struct CompareSwFrmFmts
 {
     bool operator()(SwFrmFmt* const& lhs, SwFrmFmt* const& rhs) const;
+    bool operator()(SwFrmFmt* const& lhs, SwFrmFmtSearch const& rhs) const;
+    bool operator()(SwFrmFmtSearch const& lhs, SwFrmFmt* const& rhs) const;
 };
 
 typedef o3tl::sorted_vector<SwFrmFmt*, CompareSwFrmFmts,
@@ -130,6 +141,10 @@ public:
     void erase( const_iterator const& position );
 
     const_iterator find( const value_type& x ) const;
+    std::pair<const_iterator,const_iterator>
+        findRange( const value_type& x, bool& root ) const;
+    std::pair<const_iterator,const_iterator>
+        findRange( sal_uInt16 type, const OUString& name, bool& root ) const;
 
     bool Contains( const value_type& x ) const;
 
