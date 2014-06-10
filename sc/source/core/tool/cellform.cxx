@@ -41,11 +41,6 @@ void ScCellFormat::GetString( ScRefCellValue& rCell, sal_uLong nFormat, OUString
                               bool bUseStarFormat )
 {
     *ppColor = NULL;
-    if (&rFormatter==NULL)
-    {
-        rString = EMPTY_OUSTRING;
-        return;
-    }
 
     switch (rCell.meType)
     {
@@ -231,12 +226,6 @@ OUString ScCellFormat::GetString(
 void ScCellFormat::GetInputString(
     ScRefCellValue& rCell, sal_uLong nFormat, OUString& rString, SvNumberFormatter& rFormatter, const ScDocument* pDoc )
 {
-    if (&rFormatter == NULL)
-    {
-        rString = EMPTY_OUSTRING;
-        return;
-    }
-
     OUString aString = rString;
     switch (rCell.meType)
     {
