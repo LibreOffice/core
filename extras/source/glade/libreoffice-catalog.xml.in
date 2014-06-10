@@ -432,6 +432,9 @@
     <glade-widget-class title="Address Preview" name="swlo-SwAddressPreview"
                         generic-name="Address Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Assign Fields Control" name="swuilo-SwAssignFieldsControl"
+                        generic-name="Assign Fields Control" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Rectangle Control" name="svxlo-SvxRectCtl"
                         generic-name="Rectangle Control" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>

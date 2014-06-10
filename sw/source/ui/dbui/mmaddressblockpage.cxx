@@ -65,14 +65,14 @@ SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pP
     get(m_pSettingsFI, "settingsft");
     get(m_pAddressCB, "address");
     get(m_pSettingsWIN, "settingspreview");
-    Size aSize(LogicToPixel(Size(164 , 45), MapMode(MAP_APPFONT)));
+    Size aSize(LogicToPixel(Size(164 , 45), MAP_APPFONT));
     m_pSettingsWIN->set_width_request(aSize.Width());
     m_pSettingsWIN->set_height_request(aSize.Height());
     get(m_pSettingsPB, "settings");
     get(m_pHideEmptyParagraphsCB, "hideempty");
     get(m_pAssignPB, "assign");
     get(m_pPreviewWIN, "addresspreview");
-    aSize = LogicToPixel(Size(176, 46), MapMode(MAP_APPFONT));
+    aSize = LogicToPixel(Size(176, 46), MAP_APPFONT);
     m_pPreviewWIN->set_width_request(aSize.Width());
     m_pPreviewWIN->set_height_request(aSize.Height());
     get(m_pDocumentIndexFI, "documentindex");
@@ -304,7 +304,7 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
     , m_rConfig(rConfig)
 {
     get(m_pPreview, "preview");
-    Size aSize(m_pPreview->LogicToPixel(Size(192, 100), MapMode(MAP_APPFONT)));
+    Size aSize(m_pPreview->LogicToPixel(Size(192, 100), MAP_APPFONT));
     m_pPreview->set_width_request(aSize.Width());
     m_pPreview->set_height_request(aSize.Height());
     get(m_pNewPB, "new");
@@ -796,11 +796,11 @@ class SwAssignFieldsControl : public Control
     HeaderBar                   m_aHeaderHB;
     Window                      m_aWindow;
 
-    ::std::vector<FixedInfo*>   m_aFieldNames;
+    ::std::vector<FixedText*>   m_aFieldNames;
     ::std::vector<ListBox*>     m_aMatches;
-    ::std::vector<FixedInfo*>   m_aPreviews;
+    ::std::vector<FixedText*>   m_aPreviews;
 
-    SwMailMergeConfigItem&      m_rConfigItem;
+    SwMailMergeConfigItem*      m_rConfigItem;
 
     Link                        m_aModifyHdl;
 
@@ -817,38 +817,56 @@ class SwAssignFieldsControl : public Control
 
     void                MakeVisible( sal_Int32 nIndex );
 public:
-    SwAssignFieldsControl(Window* pParent, const ResId& rResId,
-                                SwMailMergeConfigItem& rConfigItem);
+    SwAssignFieldsControl(Window* pParent, WinBits nBits);
     virtual ~SwAssignFieldsControl();
 
+    void        Init(SwMailMergeConfigItem& rConfigItem);
     void        SetModifyHdl(const Link& rModifyHdl)
                 {
                     m_aModifyHdl = rModifyHdl;
                     m_aModifyHdl.Call(this);
                 }
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
-SwAssignFieldsControl::SwAssignFieldsControl(
-        Window* pParent, const ResId& rResId, SwMailMergeConfigItem& rConfigItem) :
-    Control(pParent, rResId),
-    m_aVScroll(this,  ResId(SCR_1, *rResId.GetResMgr()     )),
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwAssignFieldsControl(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwAssignFieldsControl(pParent, WB_BORDER);
+}
+
+SwAssignFieldsControl::SwAssignFieldsControl(Window* pParent, WinBits nBits) :
+    Control(pParent, nBits | WB_DIALOGCONTROL | WB_TABSTOP | WB_DIALOGCONTROL),
+    m_aVScroll(this),
     m_aHeaderHB(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    m_aWindow(this, ResId(WIN_DATA, *rResId.GetResMgr())),
-    m_rConfigItem(rConfigItem),
+    m_aWindow(this, WB_BORDER | WB_DIALOGCONTROL),
+    m_rConfigItem(NULL),
     m_nLBStartTopPos(0),
     m_nYOffset(0),
     m_nFirstYPos(0)
 {
-    SetStyle(GetStyle()|WB_TABSTOP|WB_DIALOGCONTROL);
     SetHelpId(HID_MM_ASSIGN_FIELDS);
     long nHBHeight = m_aHeaderHB.CalcWindowSizePixel().Height();
     Size aOutputSize(GetOutputSize());
+    m_aVScroll.Show();
     m_aHeaderHB.SetSizePixel(
         Size(aOutputSize.Width(), nHBHeight));
     m_aHeaderHB.Show();
     m_aWindow.SetPosPixel(Point( 0, nHBHeight) );
     m_aWindow.SetSizePixel(Size(aOutputSize.Width() - m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
     m_aWindow.Show();
+}
+
+Size SwAssignFieldsControl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(248 , 120), MAP_APPFONT);
+}
+
+void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
+{
+    m_rConfigItem = &rConfigItem;
+    Size aOutputSize(GetOutputSize());
+    long nHBHeight = m_aHeaderHB.CalcWindowSizePixel().Height();
 
     //get the name of the default headers
     const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
@@ -887,17 +905,24 @@ SwAssignFieldsControl::SwAssignFieldsControl(
     };
 
     //fill the controls
+    long nControlWidth = aOutputSize.Width() / 3;
+    long nControlHeight = 24;
     for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
     {
         const OUString rHeader = rHeaders.GetString( i );
-        FixedInfo* pNewText = new FixedInfo(&m_aWindow, ResId( FT_FIELDS, *rResId.GetResMgr()));
+        FixedText* pNewText = new FixedText(&m_aWindow, WB_VCENTER);
         pNewText->SetText("<" + rHeader + ">");
-        ListBox* pNewLB = new ListBox(&m_aWindow, ResId(LB_FIELDS, *rResId.GetResMgr()));
+        ListBox* pNewLB = new ListBox(&m_aWindow, WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
+        pNewLB->InsertEntry(SW_RESSTR(SW_STR_NONE));
         pNewLB->SetHelpId( aHIDs[i] );
         pNewLB->SelectEntryPos(0);
+        pNewLB->SetDropDownLineCount(5);
         for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
             pNewLB->InsertEntry(pFields[nField]);
-        FixedInfo* pNewPreview = new FixedInfo(&m_aWindow, ResId( FT_PREVIEW, *rResId.GetResMgr() ));
+        FixedText* pNewPreview = new FixedText(&m_aWindow, WB_VCENTER);
+        pNewText->SetSizePixel(Size(nControlWidth - 6, nControlHeight));
+        pNewLB->SetSizePixel(Size(nControlWidth - 6, nControlHeight));
+        pNewPreview->SetSizePixel(Size(aOutputSize.Width() - 2 * nControlWidth, nControlHeight));
         //select the ListBox
         //if there is an assignment
         if(static_cast<sal_uInt32>(aAssignments.getLength()) > i && !aAssignments[i].isEmpty())
@@ -927,20 +952,22 @@ SwAssignFieldsControl::SwAssignFieldsControl(
             //determine the vertical offset, use the bottom position of the ListBox
             m_nFirstYPos = m_nYOffset = pNewLB->GetPosPixel().Y();
             m_nLBStartTopPos = m_nYOffset;
-            m_nYOffset += pNewLB->GetSizePixel().Height();
+            m_nYOffset += pNewLB->GetSizePixel().Height() + 6;
         }
 
         long nMove = m_nYOffset * i;
-        lcl_Move(pNewText, nMove);
-        lcl_Move(pNewLB, nMove);
-        lcl_Move(pNewPreview, nMove);
-        //set the select handler
         pNewLB->SetSelectHdl(aMatchHdl);
         pNewLB->SetGetFocusHdl(aFocusHdl);
 
         m_aFieldNames.push_back(pNewText);
         m_aMatches.push_back(pNewLB);
         m_aPreviews.push_back(pNewPreview);
+        pNewText->Show();
+        pNewText->SetPosPixel(Point(6, nMove));
+        pNewLB->Show();
+        pNewLB->SetPosPixel(Point(nControlWidth, nMove));
+        pNewPreview->Show();
+        pNewPreview->SetPosPixel(Point(2 * nControlWidth + 6, nMove));
     }
     m_aVScroll.SetRange(Range(0, rHeaders.Count()));
     m_aVScroll.SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
@@ -948,15 +975,13 @@ SwAssignFieldsControl::SwAssignFieldsControl(
     m_aVScroll.SetVisibleSize(m_aVScroll.GetPageSize());
     m_aVScroll.SetScrollHdl(LINK(this, SwAssignFieldsControl, ScrollHdl_Impl));
 
-    FreeResource();
     m_aVScroll.SetPosPixel(Point(aOutputSize.Width() - m_aVScroll.GetSizePixel().Width(), nHBHeight));
     m_aVScroll.SetSizePixel(Size(m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
-
 }
 
 SwAssignFieldsControl::~SwAssignFieldsControl()
 {
-    ::std::vector<FixedInfo*>::iterator aFIIter;
+    ::std::vector<FixedText*>::iterator aFIIter;
     for(aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
         delete *aFIIter;
     ::std::vector<ListBox*>::iterator aLBIter;
@@ -964,6 +989,45 @@ SwAssignFieldsControl::~SwAssignFieldsControl()
         delete *aLBIter;
     for(aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
         delete *aFIIter;
+}
+
+void SwAssignFieldsControl::Resize()
+{
+    Window::Resize();
+
+    Size aOutputSize = GetOutputSize();
+    long nHBHeight = m_aHeaderHB.CalcWindowSizePixel().Height();
+    long nControlHeight = 24;
+
+    m_aWindow.SetSizePixel(Size(aOutputSize.Width() - m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
+
+    m_aVScroll.SetPosPixel(Point(aOutputSize.Width() - m_aVScroll.GetSizePixel().Width(), nHBHeight));
+    m_aVScroll.SetSizePixel(Size(m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
+    if(m_nYOffset)
+        m_aVScroll.SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
+    m_aVScroll.SetVisibleSize(m_aVScroll.GetPageSize());
+    m_aVScroll.DoScroll(0);
+
+    sal_Int32 nColWidth = aOutputSize.Width() / 3;
+    m_aHeaderHB.SetSizePixel(Size(aOutputSize.Width(), nHBHeight));
+    m_aHeaderHB.SetItemSize( 1, nColWidth);
+    m_aHeaderHB.SetItemSize( 2, nColWidth);
+    m_aHeaderHB.SetItemSize( 3, nColWidth);
+
+    ::std::vector<FixedText*>::iterator aFIIter;
+    for(aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
+        (*aFIIter)->SetSizePixel(Size(nColWidth - 6, nControlHeight));
+    ::std::vector<ListBox*>::iterator aLBIter;
+    for(aLBIter = m_aMatches.begin(); aLBIter != m_aMatches.end(); ++aLBIter)
+    {
+        long nPosY = (*aLBIter)->GetPosPixel().Y();
+        (*aLBIter)->SetPosSizePixel(Point(nColWidth, nPosY), Size(nColWidth - 6, nControlHeight));
+    }
+    for(aFIIter = m_aPreviews.begin(); aFIIter != m_aPreviews.end(); ++aFIIter)
+    {
+        long nPosY = (*aFIIter)->GetPosPixel().Y();
+        (*aFIIter)->SetPosSizePixel(Point(2 * nColWidth + 6, nPosY), Size(nColWidth, nControlHeight));
+    }
 }
 
 void SwAssignFieldsControl::Command( const CommandEvent& rCEvt )
@@ -1025,7 +1089,7 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
 
     SetUpdateMode(false);
     long nIndex;
-    ::std::vector<FixedInfo*>::iterator aFIIter;
+    ::std::vector<FixedText*>::iterator aFIIter;
     for(nIndex = 0, aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter, ++nIndex)
         lcl_Move(*aFIIter, nMove);
     ::std::vector<ListBox*>::iterator aLBIter;
@@ -1041,7 +1105,7 @@ IMPL_LINK(SwAssignFieldsControl, ScrollHdl_Impl, ScrollBar*, pScroll)
 IMPL_LINK(SwAssignFieldsControl, MatchHdl_Impl, ListBox*, pBox)
 {
     const OUString sColumn = pBox->GetSelectEntry();
-    uno::Reference< XColumnsSupplier > xColsSupp( m_rConfigItem.GetResultSet(), uno::UNO_QUERY);
+    uno::Reference< XColumnsSupplier > xColsSupp( m_rConfigItem->GetResultSet(), uno::UNO_QUERY);
     uno::Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
     OUString sPreview;
     if(xColAccess.is() && xColAccess->hasByName(sColumn))
@@ -1096,30 +1160,31 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
         Window* pParent, SwMailMergeConfigItem& rConfigItem,
         const OUString& rPreview,
         bool bIsAddressBlock) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_ASSIGNFIELDS)),
-    m_aMatchingFI( this, SW_RES(     FI_MATCHING)),
-    m_pFieldsControl( new SwAssignFieldsControl(this, SW_RES(  CT_FIELDS  ), rConfigItem)),
-    m_aPreviewFI( this, SW_RES(      FI_PREVIEW )),
-    m_aPreviewWIN( this, SW_RES(     WIN_PREVIEW )),
-    m_aSeparatorFL( this, SW_RES(    FL_SEPARATOR)),
-    m_aOK( this, SW_RES(             PB_OK       )),
-    m_aCancel( this, SW_RES(         PB_CANCEL   )),
-    m_aHelp( this, SW_RES(           PB_HELP     )),
+    SfxModalDialog(pParent, "AssignFieldsDialog", "modules/swriter/ui/assignfieldsdialog.ui"),
     m_sNone(SW_RESSTR(SW_STR_NONE)),
     m_rPreviewString(rPreview),
     m_rConfigItem(rConfigItem)
 {
+    get(m_pMatchingFI, "MATCHING_LABEL");
+    get(m_pPreviewFI, "PREVIEW_LABEL");
+    get(m_pOK, "ok");
+    get(m_pPreviewWIN, "PREVIEW");
+    Size aSize(LogicToPixel(Size(248 , 45), MAP_APPFONT));
+    m_pPreviewWIN->set_width_request(aSize.Width());
+    m_pPreviewWIN->set_height_request(aSize.Height());
+    get(m_pFieldsControl, "FIELDS");
+    m_pFieldsControl->Init(rConfigItem);
     //resize the HeaderBar
     OUString sAddressElement( SW_RESSTR(ST_ADDRESSELEMENT) );
     const OUString sMatchesTo( SW_RESSTR(ST_MATCHESTO) );
     const OUString sPreview( SW_RESSTR(ST_PREVIEW) );
     if(!bIsAddressBlock)
     {
-        m_aPreviewFI.SetText(SW_RESSTR(ST_SALUTATIONPREVIEW));
-        m_aMatchingFI.SetText(SW_RESSTR(ST_SALUTATIONMATCHING));
+        m_pPreviewFI->SetText(SW_RESSTR(ST_SALUTATIONPREVIEW));
+        m_pMatchingFI->SetText(SW_RESSTR(ST_SALUTATIONMATCHING));
         sAddressElement = SW_RESSTR(ST_SALUTATIONELEMENT);
     }
-    FreeResource();
+
     Size aOutputSize(m_pFieldsControl->m_aHeaderHB.GetSizePixel());
     sal_Int32 nFirstWidth;
     sal_Int32 nSecondWidth = nFirstWidth = aOutputSize.Width() / 3;
@@ -1131,14 +1196,13 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
 
     m_pFieldsControl->SetModifyHdl(LINK(this, SwAssignFieldsDialog, AssignmentModifyHdl_Impl ));
 
-    m_aMatchingFI.SetText(m_aMatchingFI.GetText().replaceAll("%1", sMatchesTo));
+    m_pMatchingFI->SetText(m_pMatchingFI->GetText().replaceAll("%1", sMatchesTo));
 
-    m_aOK.SetClickHdl(LINK(this, SwAssignFieldsDialog, OkHdl_Impl));
+    m_pOK->SetClickHdl(LINK(this, SwAssignFieldsDialog, OkHdl_Impl));
 }
 
 SwAssignFieldsDialog::~SwAssignFieldsDialog()
 {
-    delete m_pFieldsControl;
 }
 
 uno::Sequence< OUString > SwAssignFieldsDialog::CreateAssignments()
@@ -1172,7 +1236,7 @@ IMPL_LINK_NOARG(SwAssignFieldsDialog, AssignmentModifyHdl_Impl)
     uno::Sequence< OUString > aAssignments = CreateAssignments();
     const OUString sPreview = SwAddressPreview::FillData(
             m_rPreviewString, m_rConfigItem, &aAssignments);
-    m_aPreviewWIN.SetAddress(sPreview);
+    m_pPreviewWIN->SetAddress(sPreview);
     return 0;
 }
 
@@ -1237,7 +1301,7 @@ AddressMultiLineEdit::AddressMultiLineEdit(Window* pParent, WinBits nBits)
 
 Size AddressMultiLineEdit::GetOptimalSize() const
 {
-    return LogicToPixel(Size(160, 60), MapMode(MAP_APPFONT));
+    return LogicToPixel(Size(160, 60), MAP_APPFONT);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeAddressMultiLineEdit(Window *pParent, VclBuilder::stringmap &rMap)

@@ -420,7 +420,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     , m_sEnd(SW_RESSTR(STR_CAPTION_END))
     , m_sAbove(SW_RESSTR(STR_CAPTION_ABOVE))
     , m_sBelow(SW_RESSTR(STR_CAPTION_BELOW))
-    , m_sNone(SW_RESSTR(STR_CATEGORY_NONE))
+    , m_sNone(SW_RESSTR(SW_STR_NONE))
     , pMgr(new SwFldMgr())
     , bHTMLMode(false)
 {

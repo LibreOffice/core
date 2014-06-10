@@ -20,12 +20,6 @@
 #include <dbui.hrc>
 #include <helpid.h>
 
-#define  _ST_NONE_LIST              \
-        StringList [en-US]=    \
-        {                           \
-            < "< none >" ; > ;        \
-        };
-
 #define WORKAROUND\
     Text [ en-US ] = "New Address Block";
 
@@ -90,117 +84,34 @@ StringArray RA_PUNCTUATION
     };
 };
 
-ModalDialog DLG_MM_ASSIGNFIELDS
+String ST_SALUTATIONMATCHING
 {
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    HelpID = HID_MM_ASSIGNFIELDS;
-    Size = MAP_APPFONT ( 260 , 245 ) ;
-    Moveable = TRUE ;
+    Text[ en-US ] = "Assign the fields from your data source to match the salutation elements." ;
+};
 
-    Text [ en-US ] = "Match Fields";
+String ST_SALUTATIONPREVIEW
+{
+    Text[ en-US ] = "Salutation preview";
+};
 
-    FixedText FI_MATCHING
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 240 , 20 ) ;
-        WordBreak = TRUE;
-        Text[ en-US ] = "Assign the fields from your data source to match the address elements." ;
-    };
-    String ST_SALUTATIONMATCHING
-    {
-        Text[ en-US ] = "Assign the fields from your data source to match the salutation elements." ;
-    };
-    Control CT_FIELDS
-    {
-        Pos = MAP_APPFONT ( 6 , 26 ) ;
-        Size = MAP_APPFONT ( 248 , 120 ) ;
-        Border = TRUE;
-        DialogControl = TRUE;
-        ScrollBar SCR_1
-        {
-            Pos = MAP_APPFONT ( 238 , 10 ) ;
-            Size = MAP_APPFONT ( 10 , 110 ) ;
-        };
-        FixedText FT_FIELDS
-        {
-            Pos = MAP_APPFONT ( 6 , 6 ) ;
-            Size = MAP_APPFONT ( 70 , 8 ) ;
-        };
-        Window WIN_DATA
-        {
-            Pos = MAP_APPFONT ( 0 , 0 ) ;
-            Size = MAP_APPFONT ( 248 , 120 ) ;
-            DialogControl = TRUE;
-        };
-        ListBox LB_FIELDS
-        {
-            HelpID = "sw:ListBox:DLG_MM_ASSIGNFIELDS:LB_FIELDS";
-            Pos = MAP_APPFONT ( 83 , 4 ) ;
-            Size = MAP_APPFONT ( 74 , 50 ) ;
-            TabStop = TRUE;
-            Border = TRUE;
-            DropDown = TRUE;
-            _ST_NONE_LIST
-        };
-        FixedText FT_PREVIEW
-        {
-            Pos = MAP_APPFONT ( 165 , 6 ) ;
-            Size = MAP_APPFONT ( 70 , 8 ) ;
-        };
-    };
-    FixedText       FI_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 6 , 152 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text[ en-US ] = "Address block preview";
-    };
-    String ST_SALUTATIONPREVIEW
-    {
-        Text[ en-US ] = "Salutation preview";
-    };
-    Window WIN_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 6 , 163 ) ;
-        Size = MAP_APPFONT ( 248 , 45 ) ;
-        Border = TRUE;
-    };
-    FixedLine       FL_SEPARATOR
-    {
-        Pos = MAP_APPFONT ( 0 , 214 ) ;
-        Size = MAP_APPFONT ( 260 , 8 ) ;
-    };
-    OKButton        PB_OK
-    {
-        Pos = MAP_APPFONT ( 95 , 225 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    CancelButton    PB_CANCEL
-    {
-        Pos = MAP_APPFONT ( 148 , 225 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton      PB_HELP
-    {
-        Pos = MAP_APPFONT ( 204 , 225 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    String ST_ADDRESSELEMENT
-    {
-        Text[ en-US ] = "Address elements" ;
-    };
-    String ST_SALUTATIONELEMENT
-    {
-        Text[ en-US ] = "Salutation elements" ;
-    };
-    String ST_MATCHESTO
-    {
-        Text[ en-US ] = "Matches to field:" ;
-    };
-    String ST_PREVIEW
-    {
-        Text[ en-US ] = "Preview" ;
-    };
+String ST_ADDRESSELEMENT
+{
+    Text[ en-US ] = "Address elements" ;
+};
+
+String ST_SALUTATIONELEMENT
+{
+    Text[ en-US ] = "Salutation elements" ;
+};
+
+String ST_MATCHESTO
+{
+    Text[ en-US ] = "Matches to field:" ;
+};
+
+String ST_PREVIEW
+{
+    Text[ en-US ] = "Preview" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
