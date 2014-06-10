@@ -885,7 +885,7 @@ uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames() throw
 }
 
 SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, sal_uInt32 nInventor, OUString const & referer)
-    throw (css::uno::RuntimeException)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return SvxDrawPage::CreateShapeByTypeAndInventor( nType, nInventor, 0, 0, referer );
 }
