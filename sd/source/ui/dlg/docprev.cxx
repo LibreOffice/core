@@ -90,9 +90,9 @@ void SdDocPreviewWin::CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rP
     if( nHeight < 0 ) nHeight = 0;
 
     double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
-    double dRatioPreV=((double) nWidth ) / nHeight;
+    double dRatioPreV = nHeight ? (((double) nWidth ) / nHeight) : 0.0;
 
-    if (dRatio>dRatioPreV)
+    if (dRatio > dRatioPreV)
     {
         rSize=Size(nWidth, (sal_uInt16)(nWidth/dRatio));
         rPoint=Point( 0, (sal_uInt16)((nHeight-rSize.Height())/2));
