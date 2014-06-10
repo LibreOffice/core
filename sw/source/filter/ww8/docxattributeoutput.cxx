@@ -649,6 +649,11 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
 {
     // Call the 'Redline' function. This will add redline (change-tracking) information that regards to paragraph properties.
     // This includes changes like 'Bold', 'Underline', 'Strikethrough' etc.
+
+    // If there is RedlineData present, call WriteCollectedParagraphProperties() for writting pPr before calling Redline().
+    // As there will be another pPr for redline and LO might mix both.
+    if(pRedlineData)
+        WriteCollectedParagraphProperties();
     Redline( pRedlineData );
 
     WriteCollectedParagraphProperties();
