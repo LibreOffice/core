@@ -2737,13 +2737,9 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                             {
                                 SwEditWin& pEditWindow =
                                     pActiveShell->GetView().GetEditWin();
-                                if( &pEditWindow )
-                                {
-                                    KeyCode tempKeycode( KEY_ESCAPE );
-                                    KeyEvent rKEvt( 0 , tempKeycode );
-                                    ((Window*)&pEditWindow)->KeyInput( rKEvt );
-
-                                }
+                                KeyCode tempKeycode( KEY_ESCAPE );
+                                KeyEvent rKEvt( 0 , tempKeycode );
+                                ((Window*)&pEditWindow)->KeyInput( rKEvt );
                                 //rView.GetEditWin().GrabFocus();
                             }
                         }
