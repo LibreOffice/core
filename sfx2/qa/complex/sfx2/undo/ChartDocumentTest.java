@@ -74,6 +74,10 @@ public class ChartDocumentTest implements DocumentTest
 
         // retrieve the chart model
         XChartDocument chartDoc = UnoRuntime.queryInterface( XChartDocument.class, shapeProps.getPropertyValue( "Model" ) );
+        // insert default chart for the test to use.
+        com.sun.star.chart2.XChartDocument xCD2 =
+            UnoRuntime.queryInterface(com.sun.star.chart2.XChartDocument.class, chartDoc);
+        xCD2.createDefaultChart();
         m_chartDocument = new OfficeDocument( i_orb, chartDoc );
 
         // actually activate the object
