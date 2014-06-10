@@ -28,7 +28,7 @@ import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 public class SimpleTypeReference
     extends Node
@@ -46,9 +46,9 @@ public class SimpleTypeReference
 
 
 
-    public SimpleType GetReferencedSimpleType (final Schema aSchema)
+    public SimpleType GetReferencedSimpleType (final SchemaBase aSchemaBase)
     {
-        final Node aType = aSchema.GetTypeForName(maReferencedTypeName);
+        final Node aType = aSchemaBase.GetTypeForName(maReferencedTypeName);
         if (aType == null)
             throw new RuntimeException("there is no type named '"+maReferencedTypeName+"' in the schema");
         else if (aType.GetNodeType()!=NodeType.SimpleType && aType.GetNodeType()!=NodeType.BuiltIn)
@@ -61,9 +61,9 @@ public class SimpleTypeReference
 
 
     @Override
-    public INode GetReferencedNode (final Schema aSchema)
+    public INode GetReferencedNode (final SchemaBase aSchemaBase)
     {
-        return GetReferencedSimpleType(aSchema);
+        return GetReferencedSimpleType(aSchemaBase);
     }
 
 

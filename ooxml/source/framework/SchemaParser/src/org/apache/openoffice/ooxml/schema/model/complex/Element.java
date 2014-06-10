@@ -76,6 +76,7 @@ public class Element
 
 
 
+
     @Override
     public NodeType GetNodeType ()
     {

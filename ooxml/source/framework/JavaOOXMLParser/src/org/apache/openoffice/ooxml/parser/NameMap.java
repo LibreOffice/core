@@ -21,44 +21,26 @@
 
 package org.apache.openoffice.ooxml.parser;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
 public class NameMap
 {
-    NameMap (final File aDataLocation)
+    NameMap (final Vector<String[]> aData)
     {
         maNameToIdMap = new HashMap<>();
         maIdToNameMap = new Vector<>();
 
-        try
+        for (final String[] aLine : aData)
         {
-            final BufferedReader aReader = new BufferedReader(
-                new FileReader(
-                    new File(aDataLocation, "names.lst")));
+            final int nId = Integer.parseInt(aLine[1]);
 
-            while (true)
-            {
-                final String sLine = aReader.readLine();
-                if (sLine == null)
-                    break;
-                final String aParts[] = sLine.split("\\s+");
-                final int nId = Integer.parseInt(aParts[0]);
-                maNameToIdMap.put(aParts[1], nId);
-                if (maIdToNameMap.size() <= nId)
-                    maIdToNameMap.setSize(nId+1);
-                maIdToNameMap.set(nId, aParts[1]);
-            }
+            maNameToIdMap.put(aLine[2], nId);
 
-            aReader.close();
-        }
-        catch (final Exception aException)
-        {
-            throw new RuntimeException(aException);
+            if (maIdToNameMap.size() <= nId)
+                maIdToNameMap.setSize(nId+1);
+            maIdToNameMap.set(nId, aLine[2]);
         }
 
         if (Log.Dbg != null)
@@ -89,7 +71,10 @@ public class NameMap
 
     public String GetNameForId (final int nId)
     {
-        return maIdToNameMap.get(nId);
+        if (nId == -1)
+            return "<none>";
+        else
+            return maIdToNameMap.get(nId);
     }
 
 

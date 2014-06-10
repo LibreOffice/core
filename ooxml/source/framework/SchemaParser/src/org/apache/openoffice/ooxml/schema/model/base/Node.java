@@ -100,8 +100,14 @@ public abstract class Node
 
 
 
+    public void ClearChildren ()
+    {
+        maChildren.clear();
+    }
 
-    public void AddChild (final Node aChild)
+
+
+    public void AddChild (final INode aChild)
     {
         maChildren.add(aChild);
     }

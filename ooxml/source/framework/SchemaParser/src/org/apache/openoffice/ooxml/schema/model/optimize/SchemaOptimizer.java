@@ -12,36 +12,37 @@ import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 import org.apache.openoffice.ooxml.schema.model.complex.Element;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 public class SchemaOptimizer
 {
-    public SchemaOptimizer (final Schema aOriginalSchema)
+    public SchemaOptimizer (
+        final SchemaBase aOriginalSchemaBase)
     {
-        maOriginalSchema = aOriginalSchema;
-        maOptimizedSchema = new Schema();
+        maOriginalSchemaBase = aOriginalSchemaBase;
+        maOptimizedSchemaBase = new SchemaBase();
         maTodoList = new LinkedList<>();
         maProcessedTypes = new HashSet<>();
 
-        maRequestVisitor = new RequestVisitor(maOriginalSchema, this);
+        maRequestVisitor = new RequestVisitor(maOriginalSchemaBase, this);
+
+        // Copy over the top-level elements.  They are the seeds in the use chain of types.
+        for (final Element aElement : aOriginalSchemaBase.TopLevelElements.GetUnsorted())
+        {
+            maOptimizedSchemaBase.TopLevelElements.Add(aElement);
+            RequestType(aElement.GetTypeName());
+        }
     }
 
 
 
 
-    public Schema Run ()
+    public SchemaBase Run ()
     {
-        // Copy over the top-level elements.  They are the seeds in the use chain of types.
-        for (final Element aElement : maOriginalSchema.TopLevelElements.GetUnsorted())
-            maOptimizedSchema.TopLevelElements.Add(aElement);
-
-        // Seed the todo list with the types to which the top-level elements lead.
-        for (final Element aElement : maOriginalSchema.TopLevelElements.GetUnsorted())
-            RequestType(aElement.GetTypeName());
 
         ProcessTodoList();
 
-        return maOptimizedSchema;
+        return maOptimizedSchemaBase;
     }
 
 
@@ -49,7 +50,7 @@ public class SchemaOptimizer
 
     void RequestType (final QualifiedName aName)
     {
-        final Node aNode = maOriginalSchema.GetTypeForName(aName);
+        final Node aNode = maOriginalSchemaBase.GetTypeForName(aName);
         if (aNode == null)
             throw new RuntimeException("there is no type named '"+aName+"' in the schema");
         else
@@ -79,8 +80,8 @@ public class SchemaOptimizer
     private void ProcessTodoList ()
     {
         final INodeVisitor aVisitor = new ProcessTypeVisitor(
-            maOriginalSchema,
-            maOptimizedSchema,
+            maOriginalSchemaBase,
+            maOptimizedSchemaBase,
             this);
         while ( ! maTodoList.isEmpty())
         {
@@ -90,7 +91,7 @@ public class SchemaOptimizer
             // Request used namespaces.
             final QualifiedName aName = aNode.GetName();
             if (aName != null)
-                maOptimizedSchema.Namespaces.ProvideNamespace(aName.GetNamespaceURI(), aName.GetNamespacePrefix());
+                maOptimizedSchemaBase.Namespaces.ProvideNamespace(aName.GetNamespaceURI(), aName.GetNamespacePrefix());
         }
     }
 
@@ -111,8 +112,8 @@ public class SchemaOptimizer
 
 
 
-    private final Schema maOriginalSchema;
-    private final Schema maOptimizedSchema;
+    private final SchemaBase maOriginalSchemaBase;
+    private final SchemaBase maOptimizedSchemaBase;
     private final Queue<INode> maTodoList;
     private final Set<INode> maProcessedTypes;
     private final RequestVisitor maRequestVisitor;

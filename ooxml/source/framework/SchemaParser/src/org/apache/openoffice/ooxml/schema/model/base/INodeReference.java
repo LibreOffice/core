@@ -21,12 +21,12 @@
 
 package org.apache.openoffice.ooxml.schema.model.base;
 
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 /** Interface implemented by all references to INodes.
  */
 public interface INodeReference
     extends INode
 {
-    INode GetReferencedNode (final Schema aSchema);
+    INode GetReferencedNode (final SchemaBase aSchema);
 }

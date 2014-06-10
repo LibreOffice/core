@@ -53,4 +53,13 @@ public class ComplexContent
     {
         return NodeType.ComplexContent;
     }
+
+
+
+
+    @Override
+    public String toString ()
+    {
+        return "complex content";
+    }
 }

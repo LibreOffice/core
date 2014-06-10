@@ -29,7 +29,7 @@ import org.apache.openoffice.ooxml.schema.model.base.INode;
 import org.apache.openoffice.ooxml.schema.model.base.NodeVisitorAdapter;
 import org.apache.openoffice.ooxml.schema.model.complex.ComplexType;
 import org.apache.openoffice.ooxml.schema.model.complex.Group;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.model.simple.SimpleType;
 
 /** This visitor is called to process individual type nodes.
@@ -40,12 +40,12 @@ public class ProcessTypeVisitor
     extends NodeVisitorAdapter
 {
     ProcessTypeVisitor (
-        final Schema aSourceSchema,
-        final Schema aTargetSchema,
+        final SchemaBase aSourceSchemaBase,
+        final SchemaBase aTargetSchemaBase,
         final SchemaOptimizer aSchemaOptimizer)
     {
-        maSourceSchema = aSourceSchema;
-        maTargetSchema = aTargetSchema;
+        maSourceSchemaBase = aSourceSchemaBase;
+        maTargetSchemaBase = aTargetSchemaBase;
         maSchemaOptimizer = aSchemaOptimizer;
     }
 
@@ -54,7 +54,7 @@ public class ProcessTypeVisitor
 
     @Override public void Visit (final ComplexType aComplexType)
     {
-        maTargetSchema.ComplexTypes.Add(aComplexType);
+        maTargetSchemaBase.ComplexTypes.Add(aComplexType);
 
         // Add requests for types referenced by child nodes (sequences, elements, etc.)
         maSchemaOptimizer.RequestReferencedTypes(aComplexType);
@@ -62,12 +62,12 @@ public class ProcessTypeVisitor
 
     @Override public void Visit (final Group aGroup)
     {
-        maTargetSchema.Groups.Add(aGroup);
+        maTargetSchemaBase.Groups.Add(aGroup);
         maSchemaOptimizer.RequestReferencedTypes(aGroup);
     }
     @Override public void Visit (final SimpleType aSimpleType)
     {
-        maTargetSchema.SimpleTypes.Add(aSimpleType);
+        maTargetSchemaBase.SimpleTypes.Add(aSimpleType);
         maSchemaOptimizer.RequestReferencedTypes(aSimpleType);
     }
 
@@ -77,17 +77,17 @@ public class ProcessTypeVisitor
     }
     @Override public void Visit (final AttributeGroup aAttributeGroup)
     {
-        maTargetSchema.AttributeGroups.Add(aAttributeGroup);
+        maTargetSchemaBase.AttributeGroups.Add(aAttributeGroup);
     }
     @Override public void Visit (final AttributeReference aAttributeReference)
     {
-        maTargetSchema.Attributes.Add(
-            aAttributeReference.GetReferencedAttribute(maSourceSchema));
+        maTargetSchemaBase.Attributes.Add(
+            aAttributeReference.GetReferencedAttribute(maSourceSchemaBase));
     }
     @Override public void Visit (final AttributeGroupReference aAttributeGroupReference)
     {
-        maTargetSchema.AttributeGroups.Add(
-            aAttributeGroupReference.GetReferencedAttributeGroup(maSourceSchema));
+        maTargetSchemaBase.AttributeGroups.Add(
+            aAttributeGroupReference.GetReferencedAttributeGroup(maSourceSchemaBase));
     }
     @Override public void Default (final INode aNode)
     {
@@ -104,7 +104,7 @@ public class ProcessTypeVisitor
 
 
 
-    private final Schema maSourceSchema;
-    private final Schema maTargetSchema;
+    private final SchemaBase maSourceSchemaBase;
+    private final SchemaBase maTargetSchemaBase;
     private final SchemaOptimizer maSchemaOptimizer;
 }

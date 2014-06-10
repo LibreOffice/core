@@ -19,16 +19,19 @@
 *
 *************************************************************/
 
-package org.apache.openoffice.ooxml.schema.generator.automaton;
+package org.apache.openoffice.ooxml.schema.automaton;
 
 import java.io.PrintStream;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.iterator.AttributeIterator;
+import org.apache.openoffice.ooxml.schema.iterator.DereferencingNodeIterator;
+import org.apache.openoffice.ooxml.schema.iterator.PermutationIterator;
 import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
 import org.apache.openoffice.ooxml.schema.model.base.INode;
+import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.NodeVisitorAdapter;
 import org.apache.openoffice.ooxml.schema.model.complex.All;
 import org.apache.openoffice.ooxml.schema.model.complex.Any;
@@ -42,17 +45,22 @@ import org.apache.openoffice.ooxml.schema.model.complex.Group;
 import org.apache.openoffice.ooxml.schema.model.complex.GroupReference;
 import org.apache.openoffice.ooxml.schema.model.complex.OccurrenceIndicator;
 import org.apache.openoffice.ooxml.schema.model.complex.Sequence;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.model.simple.SimpleContent;
 
+/** A helper class of the ValidatingCreator.
+ *
+ *  A visitor is called by the ValidatingCreator for each complex type.
+ *  Further instances are created and called while iterating over all nodes
+ *  of these types.
+ */
 public class ValidatingCreatorVisitor
     extends NodeVisitorAdapter
 {
     public ValidatingCreatorVisitor (
         final Map<State,Vector<Attribute>> aAttributes,
         final StateContext aStateContext,
-        final Set<Transition> aTransitions,
-        final Schema aSchema,
+        final SchemaBase aSchemaBase,
         final PrintStream aLog,
         final String sLogIndentation,
         final State aBaseState,
@@ -61,8 +69,7 @@ public class ValidatingCreatorVisitor
     {
         maAttributes = aAttributes;
         maStateContext = aStateContext;
-        maTransitions = aTransitions;
-        maSchema = aSchema;
+        maSchemaBase = aSchemaBase;
         maLog = aLog;
         msLogIndentation = sLogIndentation;
         maBaseState = aBaseState;
@@ -77,7 +84,24 @@ public class ValidatingCreatorVisitor
     public void Visit (final All aAll)
     {
         AddComment("All");
-        System.out.printf("all has %d child nodes\n", aAll.GetChildCount());
+
+        // Make a transformation of the children into a choice of sequences that
+        // can then be processed by already existing Visit() methods.
+        // These sequences enumerate all permutations of the original children.
+        final INode aReplacement = GetAllReplacement(aAll);
+
+        final State aLocalStartState = maStateContext.CreateState(maBaseState, "As");
+        final State aLocalEndState = maStateContext.CreateState(maBaseState, "Ae");
+
+        StartBlock();
+        AddEpsilonTransition(maStartState, aLocalStartState);
+        ProcessType(
+            aReplacement,
+            maStateContext.CreateState(maBaseState, "A"),
+            aLocalStartState,
+            aLocalEndState);
+        AddEpsilonTransition(aLocalEndState, maEndState);
+        EndBlock();
     }
 
 
@@ -89,7 +113,12 @@ public class ValidatingCreatorVisitor
         assert(aAny.GetChildCount() == 0);
 
         AddComment("Any");
-        AddSkipTransition(maStartState, maEndState);
+        AddSkipTransition(
+            maStartState,
+            new SkipData(
+                aAny.GetProcessContentsFlag(),
+                aAny.GetNamespaces()));
+        AddEpsilonTransition(maStartState, maEndState);
     }
 
 
@@ -100,17 +129,22 @@ public class ValidatingCreatorVisitor
     {
         AddComment("Choice");
 
+        final State aLocalStartState = maStateContext.CreateState(maBaseState, "Cs");
+        final State aLocalEndState = maStateContext.CreateState(maBaseState, "Ce");
+        StartBlock();
+        AddEpsilonTransition(maStartState, aLocalStartState);
+
         int nStateIndex = 0;
         for (final INode aChild : aChoice.GetChildren())
         {
-            StartBlock();
             ProcessType(
                 aChild,
                 maStateContext.CreateState(maBaseState, "C"+nStateIndex++),
-                maStartState,
-                maEndState);
-            EndBlock();
+                aLocalStartState,
+                aLocalEndState);
         }
+        AddEpsilonTransition(aLocalEndState, maEndState);
+        EndBlock();
     }
 
 
@@ -149,10 +183,20 @@ public class ValidatingCreatorVisitor
 
         StartBlock();
         maLog.printf("%sstarting at state %s\n", msLogIndentation, maStartState.GetFullname());
-        for (final Attribute aAttribute : new AttributeIterator(aComplexType, maSchema))
+        for (final Attribute aAttribute : new AttributeIterator(aComplexType, maSchemaBase))
             ProcessAttribute(aAttribute);
+
+        if (GetElementCount(aComplexType) == 0)
+        {
+            // There are elements. Therefore there will be no transitions.
+            // The start state is accepting and the end state is not necessary.
+            maStartState.SetIsAccepting();
+            maStateContext.RemoveState(maEndState);
+        }
+
         for (final INode aChild : aComplexType.GetChildren())
             ProcessType(aChild, maBaseState, maStartState, maEndState);
+
         EndBlock();
     }
 
@@ -170,14 +214,12 @@ public class ValidatingCreatorVisitor
             maEndState.GetFullname(),
             aElement.GetTypeName().GetStateName());
 
-        final Transition aTransition = Transition.CreateElementTransition(
+        final Transition aTransition = new Transition(
             maStartState,
             maEndState,
             aElement.GetElementName(),
-            new ParseElementAction(
-                maStateContext.GetStateForTypeName(aElement.GetTypeName())));
+            aElement.GetTypeName().GetStateName());
         maStartState.AddTransition(aTransition);
-        maTransitions.add(aTransition);
     }
 
 
@@ -190,7 +232,7 @@ public class ValidatingCreatorVisitor
 
         AddComment("Element reference to %s", aReference.GetReferencedElementName());
 
-        final Element aElement = aReference.GetReferencedElement(maSchema);
+        final Element aElement = aReference.GetReferencedElement(maSchemaBase);
         if (aElement == null)
             throw new RuntimeException("can't find referenced element "+aReference.GetReferencedElementName());
         StartBlock();
@@ -210,12 +252,9 @@ public class ValidatingCreatorVisitor
 
         AddComment("Extension of base type %s", aExtension.GetBaseTypeName());
 
-        final Vector<INode> aNodes = aExtension.GetTypeNodes(maSchema);
-
+        final Vector<INode> aNodes = aExtension.GetTypeNodes(maSchemaBase);
 
         StartBlock();
-
-
         int nStateIndex = 0;
         State aCurrentState = maStateContext.CreateState(maBaseState, "E"+nStateIndex++);
         AddEpsilonTransition(maStartState, aCurrentState);
@@ -256,7 +295,7 @@ public class ValidatingCreatorVisitor
     public void Visit (final GroupReference aReference)
     {
         AddComment("Group reference to %s", aReference.GetReferencedGroupName());
-        final Group aGroup = aReference.GetReferencedGroup(maSchema);
+        final Group aGroup = aReference.GetReferencedGroup(maSchemaBase);
         if (aGroup == null)
             throw new RuntimeException("can't find referenced group "+aReference.GetReferencedGroupName());
         StartBlock();
@@ -301,9 +340,6 @@ public class ValidatingCreatorVisitor
             {
                 // Add transition i-1 -> i (i == nIndex).
                 final State aNextState = maStateContext.CreateState(maBaseState, "O"+nIndex);
-                aCurrentState.SetShortCircuit(aNextState, maEndState);
-                AddComment("Adding short circuit from %s to %s instead of %s",
-                    aCurrentState, maEndState, aNextState);
                 AddComment("Occurrence: move from %d -> %d (%s -> %s) (minimum)",
                     nIndex-1,
                     nIndex,
@@ -349,9 +385,6 @@ public class ValidatingCreatorVisitor
 
                 // i-1 -> i
                 final State aNextState = maStateContext.CreateState(maBaseState, "O"+nIndex);
-                aCurrentState.SetShortCircuit(aNextState, maEndState);
-                AddComment("Adding short circuit from %s to %s instead of %s",
-                    aCurrentState, maEndState, aNextState);
                 AddComment("Occurrence: %d -> %d (%s -> %s) (maximum)",
                     nIndex-1,
                     nIndex,
@@ -428,8 +461,7 @@ public class ValidatingCreatorVisitor
             new ValidatingCreatorVisitor(
                 maAttributes,
                 maStateContext,
-                maTransitions,
-                maSchema,
+                maSchemaBase,
                 maLog,
                 msLogIndentation,
                 aBaseState,
@@ -469,11 +501,10 @@ public class ValidatingCreatorVisitor
             return;
         else
         {
-            final Transition aTransition = Transition.CreateEpsilonTransition(
+            final EpsilonTransition aTransition = new EpsilonTransition(
                 aStartState,
                 aEndState);
-            aStartState.AddTransition(aTransition);
-            maTransitions.add(aTransition);
+            aStartState.AddEpsilonTransition(aTransition);
 
             if (maLog != null)
             {
@@ -489,21 +520,16 @@ public class ValidatingCreatorVisitor
 
 
     private void AddSkipTransition (
-        final State aStartState,
-        final State aEndState)
+        final State aState,
+        final SkipData aSkipData)
     {
-        final Transition aTransition = Transition.CreateSkipTransition(
-            maStartState,
-            maEndState);
-        aStartState.AddTransition(aTransition);
-        maTransitions.add(aTransition);
+        aState.AddSkipData(aSkipData);
 
         if (maLog != null)
         {
-            maLog.printf("%skip transition from %s to %s\n",
+            maLog.printf("%sskip state %s\n",
                 msLogIndentation,
-                aStartState.GetFullname(),
-                aEndState.GetFullname());
+                aState.GetFullname());
         }
     }
 
@@ -544,10 +570,74 @@ public class ValidatingCreatorVisitor
 
 
 
+    private int GetElementCount (final INode aNode)
+    {
+
+        class Visitor extends NodeVisitorAdapter
+        {
+            int nElementCount = 0;
+            @Override public void Visit (final Element aElement)
+            {
+                ++nElementCount;
+            }
+            int GetElementCount ()
+            {
+                return nElementCount;
+            }
+        };
+        final Visitor aVisitor = new Visitor();
+        for (final INode aChildNode : new DereferencingNodeIterator(aNode, maSchemaBase, false))
+        {
+            aChildNode.AcceptVisitor(aVisitor);
+        }
+        return aVisitor.GetElementCount();
+    }
+
+
+
+
+    private INode GetAllReplacement (final All aAll)
+    {
+        // By default each child of this node can appear exactly once, however
+        // the order is undefined.  This corresponds to an enumeration of all
+        // permutations of the children.
+
+        // Set up an array of all children.  This array will be modified to contain
+        // all permutations.
+        final INode[] aNodes = new INode[aAll.GetChildCount()];
+        final Iterator<INode> aChildren = aAll.GetChildren().iterator();
+        for (int nIndex=0; aChildren.hasNext(); ++nIndex)
+            aNodes[nIndex] = aChildren.next();
+
+        final Location aLocation = aAll.GetLocation();
+        final Choice aChoice = new Choice(aAll, aLocation);
+
+        // Treat every permutation as sequence so that the whole set of permutations
+        // is equivalent to a choice of sequences.
+        int nCount = 0;
+        for (final PermutationIterator<INode> aIterator = new PermutationIterator<>(aNodes); aIterator.HasMore(); aIterator.Next())
+        {
+            // Create a Sequence node for the current permutation and add it as
+            // choice to the Choice node.
+            final Sequence aSequence = new Sequence(aChoice, null, aLocation);
+            aChoice.AddChild(aSequence);
+
+            for (final INode aNode : aNodes)
+                aSequence.AddChild(aNode);
+
+            ++nCount;
+        }
+        System.out.printf("there are %d permutations\n", nCount);
+
+        return aChoice;
+    }
+
+
+
+
     private final Map<State,Vector<Attribute>> maAttributes;
     private final StateContext maStateContext;
-    private final Set<Transition> maTransitions;
-    private final Schema maSchema;
+    private final SchemaBase maSchemaBase;
     private final State maBaseState;
     private final State maStartState;
     private final State maEndState;

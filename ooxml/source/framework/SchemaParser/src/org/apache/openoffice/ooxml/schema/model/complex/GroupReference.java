@@ -28,7 +28,7 @@ import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 public class GroupReference
     extends Node
@@ -55,9 +55,9 @@ public class GroupReference
 
 
 
-    public Group GetReferencedGroup (final Schema aSchema)
+    public Group GetReferencedGroup (final SchemaBase aSchemaBase)
     {
-        final Node aType = aSchema.GetTypeForName(maReferencedGroupName);
+        final Node aType = aSchemaBase.GetTypeForName(maReferencedGroupName);
         if (aType == null)
             throw new RuntimeException("there is no type named '"+maReferencedGroupName+"' in the schema");
         else if (aType.GetNodeType()!=NodeType.Group)
@@ -70,9 +70,9 @@ public class GroupReference
 
 
     @Override
-    public INode GetReferencedNode (final Schema aSchema)
+    public INode GetReferencedNode (final SchemaBase aSchemaBase)
     {
-        return GetReferencedGroup(aSchema);
+        return GetReferencedGroup(aSchemaBase);
     }
 
 

@@ -19,28 +19,33 @@
 *
 *************************************************************/
 
-package org.apache.openoffice.ooxml.schema.generator.automaton;
+package org.apache.openoffice.ooxml.schema.automaton;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 
-/** Represents a set of state.
- *  There is a single start state.
+/** Represents the set of states of a single complex type.
+ *
+ *  Because states have to be unique, the state container is an object shared
+ *  by all StateContext objects.
+ *
+ *  There is a single start state but there can be more than one accepting state.
  */
 public class StateContext
 {
     public StateContext (
-        final String sStartStateName,
-        final String sEndStateName)
+        final StateContainer aStateContainer,
+        final String sBaseStateName)
     {
-        maStates = new HashMap<>();
-        maStartState = CreateState(new QualifiedName(null, null, sStartStateName), null);
-        maEndState = CreateState(new QualifiedName(null, null, sEndStateName), null);
+        maStateContainer = aStateContainer;
+        maStates = new HashSet<>();
+        maStartState = GetOrCreateState(new QualifiedName(null, null, sBaseStateName), null);
     }
+
 
 
 
@@ -54,6 +59,13 @@ public class StateContext
         final State aState = new State(aBasename, sSuffix);
         AddState(aState);
         return aState;
+    }
+
+
+
+    public State CreateState (final String sBasename)
+    {
+        return CreateState(new QualifiedName(sBasename), null);
     }
 
 
@@ -80,7 +92,7 @@ public class StateContext
         final QualifiedName aBasename,
         final String sSuffix)
     {
-        return maStates.get(State.GetStateName(aBasename, sSuffix));
+        return maStateContainer.GetStateForFullname(State.GetStateName(aBasename, sSuffix));
     }
 
 
@@ -90,10 +102,10 @@ public class StateContext
         final QualifiedName aBasename,
         final String sSuffix)
     {
-        State aState = maStates.get(State.GetStateName(aBasename, sSuffix));
+        State aState = GetState(aBasename, sSuffix);
         if (aState == null)
         {
-            aState = new State(aBasename, sSuffix);
+            aState = CreateState(aBasename, sSuffix);
             AddState(aState);
         }
         return aState;
@@ -102,15 +114,42 @@ public class StateContext
 
 
 
-    public State GetStateForTypeName (final QualifiedName aName)
+    public State GetStartStateForTypeName (final QualifiedName aName)
     {
-        State aState = maStates.get(aName.GetStateName());
-        if (aState == null)
-        {
-            aState = new State(aName, null);
-            AddState(aState);
-        }
-        return aState;
+        return GetOrCreateState(aName, null);
+    }
+
+
+
+
+    public State CreateEndState ()
+    {
+        final State aEndState = CreateState(
+            maStartState.GetBasename(),
+            "end");
+        aEndState.SetIsAccepting();
+        return aEndState;
+    }
+
+
+
+
+    public boolean HasState (
+        final QualifiedName aBasename,
+        final String sSuffix)
+    {
+        return maStateContainer.HasState(State.GetStateName(aBasename, sSuffix));
+    }
+
+
+
+
+    /** Return whether a state with the given name already belongs to the state
+     *  context.
+     */
+    public boolean HasState (final String sFullname)
+    {
+        return maStateContainer.HasState(sFullname);
     }
 
 
@@ -126,20 +165,13 @@ public class StateContext
 
 
 
-    public State GetEndState ()
+    public Iterable<State> GetAcceptingStates ()
     {
-        return maEndState;
-    }
-
-
-
-
-    /** Return whether a state with the given name already belongs to the state
-     *  context.
-     */
-    public boolean HasState (final String sFullname)
-    {
-        return maStates.containsKey(sFullname);
+        final Vector<State> aAcceptingStates = new Vector<>();
+        for (final State aState : maStates)
+            if (aState.IsAccepting())
+                aAcceptingStates.add(aState);
+        return aAcceptingStates;
     }
 
 
@@ -149,7 +181,17 @@ public class StateContext
      */
     public void AddState (final State aState)
     {
-        maStates.put(aState.GetFullname(), aState);
+        maStateContainer.AddState(aState);
+        maStates.add(aState);
+    }
+
+
+
+
+    public void RemoveState (final State aState)
+    {
+        maStateContainer.RemoveState(aState);
+        maStates.remove(aState);
     }
 
 
@@ -166,14 +208,33 @@ public class StateContext
     public Iterable<State> GetStatesSorted()
     {
         final Set<State> aSortedStates = new TreeSet<>();
-        aSortedStates.addAll(maStates.values());
+        aSortedStates.addAll(maStates);
         return aSortedStates;
     }
 
 
 
 
-    private final Map<String,State> maStates;
+    public Iterable<State> GetStates()
+    {
+        return maStates;
+    }
+
+
+
+
+    public int GetTransitionCount ()
+    {
+        int nStateCount = 0;
+        for (final State aState : maStates)
+            nStateCount += aState.GetTransitionCount();
+        return nStateCount;
+    }
+
+
+
+
+    private final StateContainer maStateContainer;
+    private final Set<State> maStates;
     private final State maStartState;
-    private final State maEndState;
 }

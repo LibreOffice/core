@@ -21,38 +21,19 @@
 
 package org.apache.openoffice.ooxml.parser;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 public class NamespaceMap
 {
-    NamespaceMap (final File aDataLocation)
+    NamespaceMap (final Vector<String[]> aData)
     {
         maUriToPrefixMap = new HashMap<>();
 
-        try
+        for (final String[] aLine : aData)
         {
-            final BufferedReader aReader = new BufferedReader(
-                new FileReader(
-                    new File(aDataLocation, "namespaces.lst")));
-
-            while (true)
-            {
-                final String sLine = aReader.readLine();
-                if (sLine == null)
-                    break;
-                final String aParts[] = sLine.split("\\s+");
-                maUriToPrefixMap.put(aParts[0], aParts[1]);
-            }
-
-            aReader.close();
-        }
-        catch (final Exception aException)
-        {
-            throw new RuntimeException(aException);
+            maUriToPrefixMap.put(aLine[2], aLine[1]);
         }
 
         if (Log.Dbg != null)

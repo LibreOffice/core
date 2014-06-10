@@ -21,8 +21,6 @@
 
 package org.apache.openoffice.ooxml.schema.model.attribute;
 
-import java.util.Vector;
-
 import org.apache.openoffice.ooxml.schema.model.base.INode;
 import org.apache.openoffice.ooxml.schema.model.base.INodeReference;
 import org.apache.openoffice.ooxml.schema.model.base.INodeVisitor;
@@ -30,7 +28,7 @@ import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 public class AttributeGroupReference
     extends Node
@@ -73,18 +71,18 @@ public class AttributeGroupReference
 
 
 
-    public AttributeGroup GetReferencedAttributeGroup (final Schema aSchema)
+    public AttributeGroup GetReferencedAttributeGroup (final SchemaBase aSchemaBase)
     {
-        return aSchema.AttributeGroups.Get(maReferencedElement);
+        return aSchemaBase.AttributeGroups.Get(maReferencedElement);
     }
 
 
 
 
     @Override
-    public INode GetReferencedNode (final Schema aSchema)
+    public INode GetReferencedNode (final SchemaBase aSchemaBase)
     {
-        return GetReferencedAttributeGroup(aSchema);
+        return GetReferencedAttributeGroup(aSchemaBase);
     }
 
 

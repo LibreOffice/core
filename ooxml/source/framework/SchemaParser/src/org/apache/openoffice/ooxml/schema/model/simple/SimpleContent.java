@@ -53,4 +53,13 @@ public class SimpleContent
     {
         return NodeType.SimpleContent;
     }
+
+
+
+
+    @Override
+    public String toString ()
+    {
+        return "simple content";
+    }
 }

@@ -30,7 +30,7 @@ import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 /** Representation of the 'extension' XML schema element.
  *  It extends a complex base type.
@@ -77,7 +77,7 @@ public class Extension
 
 
 
-    public INode GetBaseType (final Schema aSchema)
+    public INode GetBaseType (final SchemaBase aSchema)
     {
         return aSchema.GetTypeForName(maBaseTypeName);
     }
@@ -86,7 +86,7 @@ public class Extension
 
 
     @Override
-    public INode GetReferencedNode (final Schema aSchema)
+    public INode GetReferencedNode (final SchemaBase aSchema)
     {
         return GetBaseType(aSchema);
     }
@@ -94,15 +94,24 @@ public class Extension
 
 
 
-    public Vector<INode> GetTypeNodes (final Schema aSchema)
+    public Vector<INode> GetTypeNodes (final SchemaBase aSchemaBase)
     {
         final Vector<INode> aNodes = new Vector<>();
 
-        AddNodes(aSchema.GetTypeForName(maBaseTypeName), aNodes, aSchema);
+        AddNodes(aSchemaBase.GetTypeForName(maBaseTypeName), aNodes, aSchemaBase);
         for (final INode aChild : GetChildren())
-            AddNodes(aChild, aNodes, aSchema);
+            AddNodes(aChild, aNodes, aSchemaBase);
 
         return aNodes;
+    }
+
+
+
+
+    @Override
+    public String toString ()
+    {
+        return "extension of base type "+maBaseTypeName.GetDisplayName();
     }
 
 
@@ -111,7 +120,7 @@ public class Extension
     private void AddNodes (
         final INode aParent,
         final Vector<INode> aNodes,
-        final Schema aSchema)
+        final SchemaBase aSchemaBase)
     {
         INode aNode = aParent;
         while (true)
@@ -119,10 +128,9 @@ public class Extension
             switch (aNode.GetNodeType())
             {
                 case Extension:
-                    aNode = ((Extension)aNode).GetBaseType(aSchema);
+                    aNode = ((Extension)aNode).GetBaseType(aSchemaBase);
                     break;
 
-                case OccurrenceIndicator:
                 case ComplexContent:
                 case SimpleContent:
                 case ComplexType:

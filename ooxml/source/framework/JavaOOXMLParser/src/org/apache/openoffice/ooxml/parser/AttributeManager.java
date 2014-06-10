@@ -21,14 +21,14 @@
 
 package org.apache.openoffice.ooxml.parser;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 public class AttributeManager
 {
-    public AttributeManager (final File aDataLocation)
+    public AttributeManager (final Vector<String[]> aData)
     {
         maStateIdToAttributesMap = new HashMap<>();
     }

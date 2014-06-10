@@ -27,13 +27,11 @@ class Transition
         final int nStartStateId,
         final int nEndStateId,
         final int nElementId,
-        final String sAction,
         final int nActionStateId)
     {
         mnStartStateId = nStartStateId;
         mnEndStateId = nEndStateId;
         mnElementId = nElementId;
-        mcAction = sAction.charAt(0);
         mnActionStateId = nActionStateId;
     }
 
@@ -64,14 +62,6 @@ class Transition
 
 
 
-    public char GetAction ()
-    {
-        return mcAction;
-    }
-
-
-
-
     public int GetActionId ()
     {
         return mnActionStateId;
@@ -83,6 +73,5 @@ class Transition
     private final int mnStartStateId;
     private final int mnEndStateId;
     private final int mnElementId;
-    private final char mcAction;
     private final int mnActionStateId;
 }

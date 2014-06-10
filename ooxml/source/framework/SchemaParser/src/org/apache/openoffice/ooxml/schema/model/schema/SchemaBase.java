@@ -28,28 +28,33 @@ import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 import org.apache.openoffice.ooxml.schema.model.complex.ComplexType;
 import org.apache.openoffice.ooxml.schema.model.complex.Element;
 import org.apache.openoffice.ooxml.schema.model.complex.Group;
+import org.apache.openoffice.ooxml.schema.model.optimize.SchemaOptimizer;
+import org.apache.openoffice.ooxml.schema.model.simple.BuiltIn;
 import org.apache.openoffice.ooxml.schema.model.simple.SimpleType;
 
-/** Front end of a shared SchemaBase object of a single master schema file (such
- *  as wml.xsd).
- *  Most important member is the TopLevelElements list of top level elements,
- *  which are unique to each master schema.
- */
-public class Schema
-{
-    public Schema (
-            final String sShortName,
-            final SchemaBase aBase)
-    {
-        msShortName = sShortName;
-        TopLevelElements = new TypeContainer<>();
 
-        Namespaces = aBase.Namespaces;
-        ComplexTypes = aBase.ComplexTypes;
-        SimpleTypes = aBase.SimpleTypes;
-        Groups = aBase.Groups;
-        AttributeGroups = aBase.AttributeGroups;
-        Attributes = aBase.Attributes;
+/** Container of elements, complex types, simple types, etc for a set of
+ *  master schema files and the included and imported secondary schema files.
+ *
+ *  See Schema objects for the set of top level elements that are unique to
+ *  each master schema file.
+ */
+public class SchemaBase
+{
+    public SchemaBase ()
+    {
+        Namespaces = new NamespaceMap();
+        TopLevelElements = new TypeContainer<>();
+        ComplexTypes = new TypeContainer<>();
+        SimpleTypes = new TypeContainer<>();
+        Groups = new TypeContainer<>();
+        AttributeGroups = new TypeContainer<>();
+        Attributes = new TypeContainer<>();
+
+        // Initialize the list of simple types with all known built ins (
+        // these are implicitly defined).
+        for (final BuiltIn aType : BuiltIn.GetTypes())
+            SimpleTypes.Add(aType);
     }
 
 
@@ -65,8 +70,6 @@ public class Schema
             return SimpleTypes.Get(sTypeName);
         else if (Groups.Contains(sTypeName))
             return Groups.Get(sTypeName);
-        else if (TopLevelElements.Contains(sTypeName))
-            return TopLevelElements.Get(sTypeName);
         else
             return null;
     }
@@ -74,31 +77,20 @@ public class Schema
 
 
 
-    public String GetShortName ()
+    /** Create a new schema object that contains only the used types, i.e.
+     *  types that are reachable via element transitions, starting with the
+     *  top level elements.
+     */
+    public SchemaBase GetOptimizedSchema (final Iterable<Schema> aTopLevelSchemas)
     {
-        return msShortName;
+        return new SchemaOptimizer(this).Run();
     }
 
 
 
 
-    public Schema GetOptimizedSchema (final SchemaBase aSchemaBase)
-    {
-        final Schema aOptimizedSchema = new Schema(msShortName, aSchemaBase);
-        for (final Element aElement : TopLevelElements.GetUnsorted())
-        {
-            aOptimizedSchema.TopLevelElements.Add(aElement);
-        }
-
-        return aOptimizedSchema;
-    }
-
-
-
-
-    private final String msShortName;
-    public final TypeContainer<Element> TopLevelElements;
     public final NamespaceMap Namespaces;
+    public final TypeContainer<Element> TopLevelElements;
     public final TypeContainer<ComplexType> ComplexTypes;
     public final TypeContainer<SimpleType> SimpleTypes;
     public final TypeContainer<Group> Groups;

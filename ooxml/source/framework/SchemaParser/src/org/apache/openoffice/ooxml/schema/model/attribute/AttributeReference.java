@@ -27,7 +27,7 @@ import org.apache.openoffice.ooxml.schema.model.base.INodeVisitor;
 import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 public class AttributeReference
     extends AttributeBase
@@ -48,9 +48,9 @@ public class AttributeReference
 
 
 
-    public Attribute GetReferencedAttribute (final Schema aSchema)
+    public Attribute GetReferencedAttribute (final SchemaBase aSchemaBase)
     {
-        final Attribute aAttribute = aSchema.Attributes.Get(maReferencedName);
+        final Attribute aAttribute = aSchemaBase.Attributes.Get(maReferencedName);
         if (aAttribute == null)
             throw new RuntimeException(
                 String.format(
@@ -64,9 +64,9 @@ public class AttributeReference
 
 
     @Override
-    public INode GetReferencedNode (final Schema aSchema)
+    public INode GetReferencedNode (final SchemaBase aSchemaBase)
     {
-        return GetReferencedAttribute(aSchema);
+        return GetReferencedAttribute(aSchemaBase);
     }
 
 

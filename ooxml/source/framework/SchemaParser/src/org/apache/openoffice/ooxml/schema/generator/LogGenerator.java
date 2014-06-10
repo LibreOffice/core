@@ -35,6 +35,7 @@ import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.complex.ComplexType;
 import org.apache.openoffice.ooxml.schema.model.complex.Element;
 import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.model.simple.Restriction;
 import org.apache.openoffice.ooxml.schema.model.simple.SimpleType;
 import org.apache.openoffice.ooxml.schema.model.simple.SimpleTypeReference;
@@ -42,8 +43,9 @@ import org.apache.openoffice.ooxml.schema.model.simple.SimpleTypeReference;
 public class LogGenerator
 {
     public static void Write (
-        final Schema aSchema,
-        final File aOutputFile)
+            final File aOutputFile,
+            final SchemaBase aSchemaBase,
+            final Iterable<Schema> aTopLevelSchemas)
     {
         final long nStartTime = System.currentTimeMillis();
 
@@ -51,15 +53,15 @@ public class LogGenerator
         {
             final LogGenerator aGenerator = new LogGenerator(
                 new PrintStream(aOutputFile),
-                aSchema);
+                aSchemaBase);
 
-            aGenerator.WriteNamespaces(aSchema);
-            aGenerator.WriteTopLevelElements(aSchema);
-            aGenerator.WriteComplexTypes(aSchema);
-            aGenerator.WriteGroups(aSchema);
-            aGenerator.WriteSimpleTypes(aSchema);
-            aGenerator.WriteAttributeGroups(aSchema);
-            aGenerator.WriteAttributes(aSchema);
+            aGenerator.WriteNamespaces(aSchemaBase);
+            aGenerator.WriteTopLevelElements(aTopLevelSchemas);
+            aGenerator.WriteComplexTypes(aSchemaBase);
+            aGenerator.WriteGroups(aSchemaBase);
+            aGenerator.WriteSimpleTypes(aSchemaBase);
+            aGenerator.WriteAttributeGroups(aSchemaBase);
+            aGenerator.WriteAttributes(aSchemaBase);
         }
         catch (final FileNotFoundException aException)
         {
@@ -77,9 +79,9 @@ public class LogGenerator
 
     private LogGenerator (
         final PrintStream aOut,
-        final Schema aSchema)
+        final SchemaBase aSchemaBase)
     {
-        maSchema = aSchema;
+        maSchemaBase = aSchemaBase;
         maOut = aOut;
     }
 
@@ -94,11 +96,11 @@ public class LogGenerator
 
 
 
-    private void WriteNamespaces (final Schema aSchema)
+    private void WriteNamespaces (final SchemaBase aSchema)
     {
         // Write namespace definitions.
         WriteComment("%d Namespaces.", aSchema.Namespaces.GetCount());
-        for (final Entry<String,String> aEntry : aSchema.Namespaces)
+        for (final Entry<String,String> aEntry : aSchema.Namespaces.GetSorted())
         {
             maOut.printf("    %s -> %s\n",
                 aEntry.getValue()==null ? "<no-prefix>" : aEntry.getValue(),
@@ -108,20 +110,24 @@ public class LogGenerator
 
 
 
-    private void WriteTopLevelElements (final Schema aSchema)
+    private void WriteTopLevelElements (final Iterable<Schema> aTopLevelSchemas)
     {
         // Write top level elements.
         WriteComment("Top-level elements.");
-        for (final Element aElement : aSchema.TopLevelElements.GetSorted())
-            maOut.printf("    \"%s\" -> %s\n",
-                aElement.GetElementName().GetDisplayName(),
-                aElement.GetTypeName().GetDisplayName());
+        for (final Schema aSchema : aTopLevelSchemas)
+        {
+            WriteComment(" Schema %s.", aSchema.GetShortName());
+            for (final Element aElement : aSchema.TopLevelElements.GetSorted())
+                maOut.printf("    \"%s\" -> %s\n",
+                        aElement.GetElementName().GetDisplayName(),
+                        aElement.GetTypeName().GetDisplayName());
+        }
     }
 
 
 
 
-    private void WriteComplexTypes (final Schema aSchema)
+    private void WriteComplexTypes (final SchemaBase aSchema)
     {
         WriteComment(" %d Complex Types.", aSchema.ComplexTypes.GetCount());
         for (final ComplexType aType : aSchema.ComplexTypes.GetSorted())
@@ -133,7 +139,7 @@ public class LogGenerator
 
 
 
-    private void WriteSimpleTypes (final Schema aSchema)
+    private void WriteSimpleTypes (final SchemaBase aSchema)
     {
         WriteComment(" %d Simple Types.", aSchema.SimpleTypes.GetCount());
         for (final SimpleType aType : aSchema.SimpleTypes.GetSorted())
@@ -145,7 +151,7 @@ public class LogGenerator
 
 
 
-    private void WriteGroups (final Schema aSchema)
+    private void WriteGroups (final SchemaBase aSchema)
     {
         WriteComment(" %d Groups.", aSchema.Groups.GetCount());
         for (final Node aType : aSchema.Groups.GetSorted())
@@ -157,7 +163,7 @@ public class LogGenerator
 
 
 
-    private void WriteAttributeGroups (final Schema aSchema)
+    private void WriteAttributeGroups (final SchemaBase aSchema)
     {
         WriteComment(" %d Attribute Groups.", aSchema.AttributeGroups.GetCount());
         for (final Node aType : aSchema.AttributeGroups.GetSorted())
@@ -169,7 +175,7 @@ public class LogGenerator
 
 
 
-    private void WriteAttributes (final Schema aSchema)
+    private void WriteAttributes (final SchemaBase aSchema)
     {
         WriteComment(" %d Attributes.", aSchema.Attributes.GetCount());
         for (final Node aType : aSchema.Attributes.GetSorted())
@@ -217,7 +223,10 @@ public class LogGenerator
                     break;
 
                 case SimpleTypeReference:
-                    WriteType(sIndentation+"    ", ((SimpleTypeReference)aType).GetReferencedSimpleType(maSchema), false);
+                    WriteType(
+                            sIndentation+"    ",
+                            ((SimpleTypeReference)aType).GetReferencedSimpleType(maSchemaBase),
+                            false);
                     break;
 
                 default:
@@ -264,7 +273,7 @@ public class LogGenerator
                     "%sreference to attribute group %s {\n",
                     sIndentation,
                     ((AttributeGroupReference)aAttribute).GetReferencedName().GetDisplayName());
-                WriteAttribute(sIndentation+"    ", ((AttributeGroupReference)aAttribute).GetReferencedAttributeGroup(maSchema));
+                WriteAttribute(sIndentation+"    ", ((AttributeGroupReference)aAttribute).GetReferencedAttributeGroup(maSchemaBase));
                 maOut.printf("%s}\n", sIndentation);
                 break;
 
@@ -273,7 +282,7 @@ public class LogGenerator
                     "%sreference to attribute %s {\n",
                     sIndentation,
                     ((AttributeReference)aAttribute).GetReferencedName().GetDisplayName());
-                WriteAttribute(sIndentation+"    ", ((AttributeReference)aAttribute).GetReferencedAttribute(maSchema));
+                WriteAttribute(sIndentation+"    ", ((AttributeReference)aAttribute).GetReferencedAttribute(maSchemaBase));
                 maOut.printf("%s}\n", sIndentation);
                 break;
             default:
@@ -318,6 +327,6 @@ public class LogGenerator
 
 
 
-    private final Schema maSchema;
+    private final SchemaBase maSchemaBase;
     private final PrintStream maOut;
 }

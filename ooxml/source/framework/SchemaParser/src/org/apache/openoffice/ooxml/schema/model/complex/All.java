@@ -84,4 +84,13 @@ public class All
     {
         return NodeType.All;
     }
+
+
+
+
+    @Override
+    public String toString ()
+    {
+        return "all";
+    }
 }

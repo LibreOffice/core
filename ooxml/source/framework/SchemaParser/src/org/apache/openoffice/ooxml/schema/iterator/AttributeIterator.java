@@ -34,7 +34,7 @@ import org.apache.openoffice.ooxml.schema.model.attribute.AttributeReference;
 import org.apache.openoffice.ooxml.schema.model.base.INode;
 import org.apache.openoffice.ooxml.schema.model.base.INodeVisitor;
 import org.apache.openoffice.ooxml.schema.model.base.NodeVisitorAdapter;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 /** Iterate over all attributes of a given node.
  *  References to attributes and attribute groups and their references are resolved.
@@ -46,10 +46,10 @@ public class AttributeIterator
 {
     public AttributeIterator (
         final INode aNode,
-        final Schema aSchema)
+        final SchemaBase aSchemaBase)
     {
         maAttributes = new TreeSet<Attribute>();
-        CollectAttributes(aNode, aSchema);
+        CollectAttributes(aNode, aSchemaBase);
     }
 
 
@@ -65,7 +65,7 @@ public class AttributeIterator
 
     private void CollectAttributes (
         final INode aType,
-        final Schema aSchema)
+        final SchemaBase aSchemaBase)
     {
         final Queue<INode> aTodo = new LinkedList<>();
         for (final INode aAttribute : aType.GetAttributes())
@@ -78,7 +78,7 @@ public class AttributeIterator
             }
             @Override public void Visit (final AttributeReference aAttributeReference)
             {
-                aTodo.add(aAttributeReference.GetReferencedAttribute(aSchema));
+                aTodo.add(aAttributeReference.GetReferencedAttribute(aSchemaBase));
             }
             @Override public void Visit (final AttributeGroup aAttributeGroup)
             {
@@ -87,7 +87,7 @@ public class AttributeIterator
             }
             @Override public void Visit (final AttributeGroupReference aAttributeGroupReference)
             {
-                aTodo.add(aAttributeGroupReference.GetReferencedAttributeGroup(aSchema));
+                aTodo.add(aAttributeGroupReference.GetReferencedAttributeGroup(aSchemaBase));
             }
             @Override public void Default (final INode aNode)
             {

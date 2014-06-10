@@ -28,7 +28,7 @@ import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 public class ElementReference
     extends Element
@@ -55,16 +55,19 @@ public class ElementReference
 
 
 
-    public Element GetReferencedElement (final Schema aSchema)
+    public Element GetReferencedElement (final SchemaBase aSchema)
     {
-        return aSchema.TopLevelElements.Get(maReferencedElementName);
+        final Element aElement = aSchema.TopLevelElements.Get(maReferencedElementName);
+        if (aElement == null)
+            throw new RuntimeException("can not find element "+maReferencedElementName.GetDisplayName());
+        return aElement;
     }
 
 
 
 
     @Override
-    public INode GetReferencedNode (final Schema aSchema)
+    public INode GetReferencedNode (final SchemaBase aSchema)
     {
         return GetReferencedElement(aSchema);
     }

@@ -29,7 +29,7 @@ import org.apache.openoffice.ooxml.schema.model.complex.Element;
 import org.apache.openoffice.ooxml.schema.model.complex.ElementReference;
 import org.apache.openoffice.ooxml.schema.model.complex.Extension;
 import org.apache.openoffice.ooxml.schema.model.complex.GroupReference;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.model.simple.List;
 import org.apache.openoffice.ooxml.schema.model.simple.SimpleTypeReference;
 import org.apache.openoffice.ooxml.schema.model.simple.Union;
@@ -41,10 +41,10 @@ public class RequestVisitor
     extends NodeVisitorAdapter
 {
     RequestVisitor (
-        final Schema aSourceSchema,
+        final SchemaBase aSourceSchema,
         final SchemaOptimizer aOptimizer)
     {
-        maSourceSchema = aSourceSchema;
+        maSourceSchemaBase = aSourceSchema;
         maSchemaOptimizer = aOptimizer;
     }
 
@@ -67,7 +67,7 @@ public class RequestVisitor
     }
     @Override public void Visit (final ElementReference aElementReference)
     {
-        Visit(aElementReference.GetReferencedElement(maSourceSchema));
+        Visit(aElementReference.GetReferencedElement(maSourceSchemaBase));
     }
     @Override public void Visit (final Extension aExtension)
     {
@@ -75,7 +75,7 @@ public class RequestVisitor
     }
     @Override public void Visit (final GroupReference aReference)
     {
-        maSchemaOptimizer.RequestType(aReference.GetReferencedGroup(maSourceSchema));
+        maSchemaOptimizer.RequestType(aReference.GetReferencedGroup(maSourceSchemaBase));
     }
     @Override public void Visit (final List aList)
     {
@@ -83,7 +83,7 @@ public class RequestVisitor
     }
     @Override public void Visit (final SimpleTypeReference aReference)
     {
-        maSchemaOptimizer.RequestType(aReference.GetReferencedSimpleType(maSourceSchema));
+        maSchemaOptimizer.RequestType(aReference.GetReferencedSimpleType(maSourceSchemaBase));
     }
     @Override public void Visit (final Union aUnion)
     {
@@ -114,6 +114,6 @@ public class RequestVisitor
         }
     }
 
-    private final Schema maSourceSchema;
+    private final SchemaBase maSourceSchemaBase;
     private final SchemaOptimizer maSchemaOptimizer;
 }

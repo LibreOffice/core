@@ -26,7 +26,7 @@ import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.model.base.INode;
 import org.apache.openoffice.ooxml.schema.model.base.INodeReference;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 /** Iterate over all nodes in a node tree.  References to groups and elements
  *  are resolved and the referenced nodes are included in the iteration.
@@ -37,11 +37,11 @@ public class DereferencingNodeIterator
 {
     public DereferencingNodeIterator (
         final INode aRoot,
-        final Schema aSchema,
+        final SchemaBase aSchemaBase,
         final boolean bIncludeReferencingNodes)
     {
         maRoot = aRoot;
-        maSchema = aSchema;
+        maSchemaBase = aSchemaBase;
         mbIncludeReferencingNodes = bIncludeReferencingNodes;
     }
 
@@ -88,8 +88,8 @@ public class DereferencingNodeIterator
                     if (mbIncludeReferencingNodes)
                         aNodes.add(aNode);
                     for (final INode aChild : new DereferencingNodeIterator(
-                        ((INodeReference)aNode).GetReferencedNode(maSchema),
-                        maSchema,
+                        ((INodeReference)aNode).GetReferencedNode(maSchemaBase),
+                        maSchemaBase,
                         bIncludeReferencingNodes))
                     {
                         aNodes.add(aChild);
@@ -106,6 +106,6 @@ public class DereferencingNodeIterator
 
 
     private final INode maRoot;
-    private final Schema maSchema;
+    private final SchemaBase maSchemaBase;
     private final boolean mbIncludeReferencingNodes;
 }

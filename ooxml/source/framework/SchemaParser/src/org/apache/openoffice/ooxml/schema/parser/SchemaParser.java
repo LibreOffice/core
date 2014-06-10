@@ -52,6 +52,7 @@ import org.apache.openoffice.ooxml.schema.model.complex.GroupReference;
 import org.apache.openoffice.ooxml.schema.model.complex.OccurrenceIndicator;
 import org.apache.openoffice.ooxml.schema.model.complex.Sequence;
 import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.model.simple.List;
 import org.apache.openoffice.ooxml.schema.model.simple.Restriction;
 import org.apache.openoffice.ooxml.schema.model.simple.SimpleContent;
@@ -77,9 +78,11 @@ public class SchemaParser
 {
     public SchemaParser (
         final File aSchemaFile,
-        final Schema aSchema)
+        final Schema aSchema,
+        final SchemaBase aSchemaBase)
     {
         maSchema = aSchema;
+        maSchemaBase = aSchemaBase;
         maReader = GetStreamReader(aSchemaFile);
         msBasename = aSchemaFile.getName();
         maDirectory = aSchemaFile.getParentFile();
@@ -172,11 +175,11 @@ public class SchemaParser
             final String sPrefix = maReader.getNamespacePrefix(nIndex);
             final String sURI = maReader.getNamespaceURI(nIndex);
             maLocalNamespaceMap.put(sPrefix, sURI);
-            maSchema.Namespaces.ProvideNamespace(sURI, sPrefix);
+            maSchemaBase.Namespaces.ProvideNamespace(sURI, sPrefix);
         }
         msTargetNamespace = GetAttributeValue("targetNamespace");
         maLocalNamespaceMap.put(null, msTargetNamespace);
-        maSchema.Namespaces.ProvideNamespace(msTargetNamespace, null);
+        maSchemaBase.Namespaces.ProvideNamespace(msTargetNamespace, null);
     }
 
 
@@ -214,23 +217,26 @@ public class SchemaParser
         switch (maReader.getLocalName())
         {
             case "attribute":
-                maSchema.Attributes.Add(ParseAttribute());
+                maSchemaBase.Attributes.Add(ParseAttribute());
                 break;
 
             case "attributeGroup":
-                maSchema.AttributeGroups.Add(ParseAttributeGroup());
+                maSchemaBase.AttributeGroups.Add(ParseAttributeGroup());
                 break;
 
             case "complexType":
-                maSchema.ComplexTypes.Add(ParseComplexType());
+                maSchemaBase.ComplexTypes.Add(ParseComplexType());
                 break;
 
             case "element":
-                maSchema.TopLevelElements.Add(ParseElement(null));
+                final Element aElement = ParseElement(null);
+                if (maSchema != null)
+                    maSchema.TopLevelElements.Add(aElement);
+                maSchemaBase.TopLevelElements.Add(aElement);
                 break;
 
             case "group":
-                maSchema.Groups.Add(ParseGroup(null));
+                maSchemaBase.Groups.Add(ParseGroup(null));
                 break;
 
             case "import":
@@ -242,7 +248,7 @@ public class SchemaParser
                 break;
 
             case "simpleType":
-                maSchema.SimpleTypes.Add(ParseSimpleType(null));
+                maSchemaBase.SimpleTypes.Add(ParseSimpleType(null));
                 break;
 
             default:
@@ -389,7 +395,11 @@ public class SchemaParser
     {
         assert(HasOnlyAttributes("minOccurs", "maxOccurs", "namespace", "processContents"));
 
-        final Any aAny = new Any(aParent, GetAttributeValue("processContents"), GetLocation());
+        final Any aAny = new Any(
+            aParent,
+            GetLocation(),
+            GetOptionalAttributeValue("processContents", "strict"),
+            GetOptionalAttributeValue("namespace", "##any"));
         ExpectEndElement("ParseAny");
         return aAny;
     }
@@ -888,7 +898,7 @@ public class SchemaParser
             final String sNamespaceName = GetAttributeValue("namespace");
             if (sNamespaceName.equals(XmlNamespace.NamespaceURI))
             {
-                XmlNamespace.Apply(maSchema);
+                XmlNamespace.Apply(maSchemaBase);
                 maLocalNamespaceMap.put(XmlNamespace.NamespacePrefix, XmlNamespace.NamespaceURI);
             }
             else
@@ -1058,8 +1068,8 @@ public class SchemaParser
         {
             case 1:
                 // sName only consists of a local part.
-                // Set the namespace URL to that of the default namespace.
-                sNamespaceURL = maLocalNamespaceMap.get(null);
+                // Use the target namespace as namespace.
+                sNamespaceURL = msTargetNamespace;
                 sLocalPart = aParts[0];
                 break;
 
@@ -1078,7 +1088,7 @@ public class SchemaParser
         // Transform the local namespace prefix into a global namespace prefix
         // (different schema files can use different prefixes for the same
         // namespace URI).
-        final String sGlobalNamespacePrefix = maSchema.Namespaces.GetNamespacePrefix(sNamespaceURL);
+        final String sGlobalNamespacePrefix = maSchemaBase.Namespaces.GetNamespacePrefix(sNamespaceURL);
         return new QualifiedName(
             sNamespaceURL,
             sGlobalNamespacePrefix,
@@ -1172,6 +1182,7 @@ public class SchemaParser
 
 
     private final Schema maSchema;
+    private final SchemaBase maSchemaBase;
     private final XMLStreamReader maReader;
     private final String msBasename;
     private final File maDirectory;

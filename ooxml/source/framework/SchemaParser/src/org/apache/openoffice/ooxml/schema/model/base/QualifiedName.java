@@ -53,6 +53,14 @@ public class QualifiedName
 
 
 
+    public QualifiedName (final String sLocalPart)
+    {
+        this(null, null, sLocalPart);
+    }
+
+
+
+
     /** Return a textual representation for informal (and informative) display.
      */
     public String GetDisplayName ()

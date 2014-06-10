@@ -19,7 +19,7 @@
 *
 *************************************************************/
 
-package org.apache.openoffice.ooxml.schema.generator.automaton;
+package org.apache.openoffice.ooxml.schema.automaton;
 
 import java.util.Vector;
 
@@ -34,13 +34,9 @@ public class State
     implements Comparable<State>
 {
     /** Create a new state from a basename and an optional suffix.
-     *  When a state with the resulting name already exists in the state context
-     *  then a RuntimeException is thrown.
      *
-     *  Call this method instead of GetState() when it is clear from the context
-     *  that the state must not yet exist.
-     */
-    /** State objects can only be created via the GetState... methods.
+     *  Don't call this constructor directly.  Use methods in StateContext instead.
+     *  They ensure that states are unique per context.
      */
     State (
         final QualifiedName aBasename,
@@ -50,6 +46,9 @@ public class State
         msSuffix = sSuffix;
         msFullname = GetStateName(aBasename, msSuffix);
         maTransitions = new Vector<>();
+        maEpsilonTransitions = new Vector<>();
+        maSkipData = new Vector<>();
+        mbIsAccepting = false;
     }
 
 
@@ -116,35 +115,58 @@ public class State
 
 
 
-    /** Define how the optimizer will handle short circuits (epsilon paths)
-     *  to the end state of an OOXML type.
-     *  When there is an epsilon path from this state to aEndState then replace
-     *  it with aReplacementState.
-     *  It is an error to set two short circuits.
-     */
-    public void SetShortCircuit (
-        final State aEndState,
-        final State aReplacementState)
+    public int GetTransitionCount ()
     {
-        assert(maShortCircuitEnd == null);
-        maShortCircuitEnd = aEndState;
-        maShortCircuitReplacement = aReplacementState;
+        return maTransitions.size();
     }
 
 
 
 
-    public State GetShortCircuitEnd ()
+    public void AddEpsilonTransition (final EpsilonTransition aTransition)
     {
-        return maShortCircuitEnd;
+        assert(this == aTransition.GetStartState());
+        maEpsilonTransitions.add(aTransition);
     }
 
 
 
 
-    public State GetShortCircuitReplacement ()
+    public Iterable<EpsilonTransition> GetEpsilonTransitions()
     {
-        return maShortCircuitReplacement;
+        return maEpsilonTransitions;
+    }
+
+
+
+
+    public void AddSkipData (final SkipData aSkipData)
+    {
+        maSkipData.add(aSkipData);
+    }
+
+
+
+
+    public Iterable<SkipData> GetSkipData ()
+    {
+        return maSkipData;
+    }
+
+
+
+
+    public void SetIsAccepting ()
+    {
+        mbIsAccepting = true;
+    }
+
+
+
+
+    public boolean IsAccepting ()
+    {
+        return mbIsAccepting;
     }
 
 
@@ -186,11 +208,7 @@ public class State
     private final String msSuffix;
     private final String msFullname;
     private final Vector<Transition> maTransitions;
-    /** Used in the optimization phase.
-     *  When there is a way to reach the short circuit end only via epsilon transitions
-     *  then replace it with the replacement state.
-     *  This is to avoid jumps in sequences (or occurrences, etc.) when transitions become effectively optional.
-     */
-    private State maShortCircuitEnd;
-    private State maShortCircuitReplacement;
+    private final Vector<EpsilonTransition> maEpsilonTransitions;
+    private final Vector<SkipData> maSkipData;
+    private boolean mbIsAccepting;
 }

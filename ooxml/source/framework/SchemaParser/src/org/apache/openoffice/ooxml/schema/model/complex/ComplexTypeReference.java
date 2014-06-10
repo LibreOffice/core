@@ -28,7 +28,7 @@ import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
-import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
 public class ComplexTypeReference
     extends Node
@@ -46,7 +46,7 @@ public class ComplexTypeReference
 
 
 
-    public ComplexType GetReferencedComplexType (final Schema aSchema)
+    public ComplexType GetReferencedComplexType (final SchemaBase aSchema)
     {
         final Node aType = aSchema.GetTypeForName(maReferencedTypeName);
         if (aType == null)
@@ -61,7 +61,7 @@ public class ComplexTypeReference
 
 
     @Override
-    public INode GetReferencedNode (final Schema aSchema)
+    public INode GetReferencedNode (final SchemaBase aSchema)
     {
         return GetReferencedComplexType(aSchema);
     }

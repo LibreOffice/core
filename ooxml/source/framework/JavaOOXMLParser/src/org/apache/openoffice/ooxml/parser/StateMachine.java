@@ -22,7 +22,6 @@
 package org.apache.openoffice.ooxml.parser;
 
 import java.io.File;
-import java.util.Set;
 import java.util.Stack;
 
 import javax.xml.stream.Location;
@@ -32,16 +31,19 @@ import javax.xml.stream.Location;
  */
 public class StateMachine
 {
-    public StateMachine (final File aDataLocation)
+    public StateMachine (final File aParseTableFile)
     {
-        maNamespaceMap = new NamespaceMap(aDataLocation);
-        maNameMap = new NameMap(aDataLocation);
-        maTransitions = new TransitionTable(aDataLocation);
-        maSkipStates = maTransitions.GetSkipStates();
-        maAttributeManager = new AttributeManager(aDataLocation);
+        final ParseTableReader aReader = new ParseTableReader(aParseTableFile);
+        maNamespaceMap = new NamespaceMap(aReader.GetSection("namespace"));
+        maElementNameMap = new NameMap(aReader.GetSection("element-name"));
+        maStateNameMap = new NameMap(aReader.GetSection("state-name"));
+        maTransitions = new TransitionTable(aReader.GetSection("transition"));
+        maSkipStates = new SkipStateTable(aReader.GetSection("skip"));
+        maAcceptingStates = new AcceptingStateTable(aReader.GetSection("accepting-state"));
+        maAttributeManager = new AttributeManager(aReader.GetSection("attribute"));
 
-        mnStartStateId = maNameMap.GetIdForName(null, "_start_");
-        mnEndStateId = maNameMap.GetIdForName(null, "_end_");
+        mnStartStateId = Integer.parseInt(aReader.GetSection("start-state").firstElement()[1]);
+        mnEndStateId = Integer.parseInt(aReader.GetSection("end-state").firstElement()[1]);
         mnCurrentStateId = mnStartStateId;
         maStateStack = new Stack<>();
         Log.Dbg.printf("starting in state _start_ (%d)\n", mnCurrentStateId);
@@ -56,12 +58,13 @@ public class StateMachine
         final Location aLocation,
         final AttributeProvider aAttributes)
     {
-        final String sPrefix = maNamespaceMap.GetPrefixForURI(sNamespaceURI);
         boolean bResult = false;
+
         try
         {
-            final int nElementId = maNameMap.GetIdForName(sPrefix, sElementName);
-            Log.Dbg.printf("%s:%s(%d, aArgumentList) L%dC%d\n",
+            final String sPrefix = maNamespaceMap.GetPrefixForURI(sNamespaceURI);
+            final int nElementId = maElementNameMap.GetIdForName(sPrefix, sElementName);
+            Log.Dbg.printf("%s:%s(%d) L%dC%d\n",
                 sPrefix,
                 sElementName,
                 nElementId,
@@ -73,21 +76,25 @@ public class StateMachine
                 nElementId);
             if (aTransition == null)
             {
-                Log.Err.printf(
-                    "can not find transition for state %s and element %s at L%dC%d\n",
-                    maNameMap.GetNameForId(mnCurrentStateId),
-                    maNameMap.GetNameForId(nElementId),
+                final String sText = String.format(
+                    "can not find transition for state %s(%d) and element %s(%d) at L%dC%d\n",
+                    maStateNameMap.GetNameForId(mnCurrentStateId),
+                    mnCurrentStateId,
+                    maElementNameMap.GetNameForId(nElementId),
+                    nElementId,
                     aLocation.getLineNumber(),
                     aLocation.getColumnNumber());
+                Log.Err.printf(sText);
+                Log.Dbg.printf(sText);
             }
             else
             {
                 Log.Dbg.printf(" %s(%d) -> %s(%d) via %s(%d)",
-                    maNameMap.GetNameForId(mnCurrentStateId),
+                    maStateNameMap.GetNameForId(mnCurrentStateId),
                     mnCurrentStateId,
-                    maNameMap.GetNameForId(aTransition.GetEndStateId()),
+                    maStateNameMap.GetNameForId(aTransition.GetEndStateId()),
                     aTransition.GetEndStateId(),
-                    maNameMap.GetNameForId(aTransition.GetActionId()),
+                    maStateNameMap.GetNameForId(aTransition.GetActionId()),
                     aTransition.GetActionId());
                 Log.Dbg.printf("\n");
 
@@ -101,7 +108,10 @@ public class StateMachine
         }
         catch (RuntimeException aException)
         {
-            aException.printStackTrace();
+            System.err.printf("error at line %d and column %d\n",
+                aLocation.getLineNumber(),
+                aLocation.getColumnNumber());
+            throw aException;
         }
         return bResult;
     }
@@ -114,6 +124,15 @@ public class StateMachine
         final String sElementName,
         final Location aLocation)
     {
+        if ( ! maAcceptingStates.Contains(mnCurrentStateId)
+            && mnCurrentStateId!=-1)
+        {
+            Log.Dbg.printf("current state %s(%d) is not an accepting state\n",
+                maStateNameMap.GetNameForId(mnCurrentStateId),
+                mnCurrentStateId);
+            throw new RuntimeException("not expecting end element "+sElementName);
+        }
+
         final String sPrefix = maNamespaceMap.GetPrefixForURI(sNamespaceURI);
 
         final int nOldStateId = mnCurrentStateId;
@@ -126,9 +145,9 @@ public class StateMachine
             aLocation.getLineNumber(),
             aLocation.getColumnNumber());
         Log.Dbg.printf(" %s(%d) <- %s(%d)\n",
-            maNameMap.GetNameForId(nOldStateId),
+            maStateNameMap.GetNameForId(nOldStateId),
             nOldStateId,
-            maNameMap.GetNameForId(mnCurrentStateId),
+            maStateNameMap.GetNameForId(mnCurrentStateId),
             mnCurrentStateId);
     }
 
@@ -145,7 +164,7 @@ public class StateMachine
 
     public boolean IsInSkipState ()
     {
-        return maSkipStates.contains(mnCurrentStateId);
+        return maSkipStates.Contains(mnCurrentStateId);
     }
 
 
@@ -171,32 +190,25 @@ public class StateMachine
         final int nOldState,
         final int nNewState)
     {
-        switch(aTransition.GetAction())
-        {
-            case 'p' :
-                // Parse action.
-                maStateStack.push(mnCurrentStateId);
-                Log.Dbg.IncreaseIndentation();
-                final int nActionId = aTransition.GetActionId();
-                SetCurrentState(nActionId);
-                maAttributeManager.ParseAttributes(nActionId, aAttributes);
-                break;
-
-            default:
-                throw new RuntimeException();
-        }
+        maStateStack.push(mnCurrentStateId);
+        Log.Dbg.IncreaseIndentation();
+        final int nActionId = aTransition.GetActionId();
+        SetCurrentState(nActionId);
+        maAttributeManager.ParseAttributes(nActionId, aAttributes);
     }
 
 
 
 
     private final NamespaceMap maNamespaceMap;
-    private final NameMap maNameMap;
+    private final NameMap maElementNameMap;
+    private final NameMap maStateNameMap;
     private final TransitionTable maTransitions;
     private final AttributeManager maAttributeManager;
     private int mnCurrentStateId;
     private Stack<Integer> maStateStack;
     private final int mnStartStateId;
     private final int mnEndStateId;
-    private static Set<Integer> maSkipStates;
+    private SkipStateTable maSkipStates;
+    private AcceptingStateTable maAcceptingStates;
 }

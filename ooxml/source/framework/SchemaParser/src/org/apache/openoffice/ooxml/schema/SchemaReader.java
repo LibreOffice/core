@@ -24,23 +24,26 @@ package org.apache.openoffice.ooxml.schema;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.openoffice.ooxml.schema.automaton.FiniteAutomatonContainer;
+import org.apache.openoffice.ooxml.schema.automaton.NonValidatingCreator;
+import org.apache.openoffice.ooxml.schema.automaton.FiniteAutomaton;
+import org.apache.openoffice.ooxml.schema.automaton.ValidatingCreator;
 import org.apache.openoffice.ooxml.schema.generator.LogGenerator;
 import org.apache.openoffice.ooxml.schema.generator.ParserTablesGenerator;
-import org.apache.openoffice.ooxml.schema.generator.automaton.NonValidatingCreator;
-import org.apache.openoffice.ooxml.schema.generator.automaton.StackAutomaton;
 import org.apache.openoffice.ooxml.schema.model.schema.Schema;
+import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.parser.SchemaParser;
-import org.apache.openoffice.ooxml.schema.parser.XmlNamespace;
 
 public class SchemaReader
 {
@@ -49,6 +52,15 @@ public class SchemaReader
         if (aArgumentList.length != 1)
         {
             System.err.printf("usage: SchemaParser <driver-file>\n");
+            System.err.printf(" driver file can contain these lines:\n");
+            System.err.printf("# Comments\n");
+            System.err.printf("    are ignored\n");
+            System.err.printf("schema <mark> <file-name>\n");
+            System.err.printf("    specifies a top-level schema file to read\n");
+            System.err.printf("output-schema <file-name>\n");
+            System.err.printf("    write schema information to file\n");
+            System.err.printf("output-optimized-schema <file-name>\n");
+            System.err.printf("    write information about optimized schema to file\n");
             System.exit(1);
         }
 
@@ -61,14 +73,14 @@ public class SchemaReader
 
     private SchemaReader (final File aDriverFile)
     {
-        maSchema = new Schema();
+        maSchemaBase = new SchemaBase();
+        maTopLevelSchemas = new HashMap<>();
         maMainSchemaFiles = new Vector<>();
         maSchemaFiles = new HashSet<>();
-        maTodo = new LinkedList<String>();
+        maWorkList = new LinkedList<>();
+        maOutputOperations = new Vector<>();
         mnTotalLineCount = 0;
         mnTotalByteCount = 0;
-
-        XmlNamespace.Apply(maSchema);
 
         ParseDriverFile(aDriverFile);
     }
@@ -87,43 +99,80 @@ public class SchemaReader
             System.exit(1);
         }
 
-        final Pattern aSchemaPattern = Pattern.compile("^\\s*schema\\s+(.*)\\s+(.*)");
-        final Pattern aOutputPattern = Pattern.compile("^\\s*output-directory\\s+(.*)");
         try
         {
             final BufferedReader aIn = new BufferedReader(new FileReader(aDriverFile));
             while(true)
             {
-                final String sLine = aIn.readLine();
+                String sLine = aIn.readLine();
                 if (sLine == null)
                     break;
                 // Lines starting with # are comment lines and are ignored.
-                if (sLine.matches("^\\s*#"))
+                if (sLine.matches("^\\s*#.*"))
                     continue;
                 // Lines containing only whitespace are also ignored.
                 else if (sLine.matches("^\\s*$"))
                     continue;
 
-                Matcher aMatcher = aSchemaPattern.matcher(sLine);
-                if (aMatcher.matches())
+                // Handle line continuation.
+                while (sLine.endsWith("\\"))
+                    sLine = sLine.substring(0, sLine.length()-1) + aIn.readLine();
+
+                final Vector<String> aParts = SplitLine(sLine);
+                switch (aParts.get(0))
                 {
-                    maMainSchemaFiles.add(new String[]{aMatcher.group(1), aMatcher.group(2)});
-                }
-                else
-                {
-                    aMatcher = aOutputPattern.matcher(sLine);
-                    if (aMatcher.matches())
-                    {
-                        maOutputDirectory = new File(aMatcher.group(1));
-                        if (maOutputDirectory.exists() && ! maOutputDirectory.canWrite())
+                    case "schema":
+                        maMainSchemaFiles.add(new String[]{aParts.get(1), aParts.get(2)});
+                        break;
+
+                    case "output-schema":
+                        maOutputOperations.add(new Runnable()
                         {
-                            System.err.printf("can not write output file '%s' \n", maOutputDirectory.toString());
-                            System.exit(1);
-                        }
-                    }
+                            final File maFile = CreateCheckedOutputFile(aParts.get(1));
+                            @Override public void run()
+                            {
+                                WriteSchema(maFile);
+                            }
+                        });
+                        break;
+
+                    case "output-optimized-schema":
+                        maOutputOperations.add(new Runnable()
+                        {
+                            final File maFile = CreateCheckedOutputFile(aParts.get(1));
+                            @Override public void run()
+                            {
+                                WriteOptimizedSchema(maFile);
+                            }
+                        });
+                        break;
+
+                    case "output-nonvalidating-parse-tables":
+                        maOutputOperations.add(new Runnable()
+                        {
+                            final File maAutomatonLogFile = CreateCheckedOutputFile(aParts.get(1));
+                            final File maParseTableFile = CreateCheckedOutputFile(aParts.get(2));
+                            @Override public void run() {WriteNonValidatingParseTables(
+                                maAutomatonLogFile,
+                                maParseTableFile);}
+                        });
+                        break;
+
+                    case "output-validating-parse-tables":
+                        maOutputOperations.add(new Runnable()
+                        {
+                            final File maAutomatonLogFile = CreateCheckedOutputFile(aParts.get(1));
+                            final File maParseTableFile = CreateCheckedOutputFile(aParts.get(2));
+                            @Override public void run() {WriteValidatingParseTables(
+                                maAutomatonLogFile,
+                                maParseTableFile);}
+                        });
+                        break;
+
+                    default:
+                        System.err.printf("unknown command '%s' in driver file", aParts.get(0));
+                        System.exit(1);
                 }
-
-
             }
             aIn.close();
         }
@@ -146,20 +195,19 @@ public class SchemaReader
         {
             aException.printStackTrace();
         }
-        final Schema aOptimizedSchema = maSchema.GetOptimizedSchema();
 
-        System.out.printf("    used are %d complex types, %d simple types, %d groups and %d top level elements\n",
-            aOptimizedSchema.ComplexTypes.GetCount(),
-            aOptimizedSchema.SimpleTypes.GetCount(),
-            aOptimizedSchema.Groups.GetCount(),
-            aOptimizedSchema.TopLevelElements.GetCount());
+        maOptimizedSchemaBase = maSchemaBase.GetOptimizedSchema(maTopLevelSchemas.values());
+        for (final Entry<String, Schema> aEntry : maTopLevelSchemas.entrySet())
+            aEntry.setValue(aEntry.getValue().GetOptimizedSchema(maOptimizedSchemaBase));
 
-        LogGenerator.Write(maSchema, new File(maOutputDirectory, "original-schema.txt"));
-        LogGenerator.Write(aOptimizedSchema, new File(maOutputDirectory, "bla.txt"));
+        System.out.printf("    optimization left %d complex types and %d simple types\n",
+            maOptimizedSchemaBase.ComplexTypes.GetCount(),
+            maOptimizedSchemaBase.SimpleTypes.GetCount());
 
-        final StackAutomaton aAutomaton = CreateStackAutomaton(aOptimizedSchema);
-
-        new ParserTablesGenerator(aAutomaton).Generate(new File("/tmp/ooxml-parser"));
+        for (final Runnable aOperation : maOutputOperations)
+        {
+            aOperation.run();
+        }
     }
 
 
@@ -172,7 +220,7 @@ public class SchemaReader
 
         for (final String[] aEntry : maMainSchemaFiles)
         {
-            final String sShortName = aEntry[0];
+            final String sMainSchemaShortname = aEntry[0];
             final String sMainSchemaFile = aEntry[1];
             final File aMainSchemaFile = new File(sMainSchemaFile);
             if ( ! aMainSchemaFile.exists())
@@ -186,36 +234,53 @@ public class SchemaReader
                 System.exit(1);
             }
 
-            AddSchemaReference(sMainSchemaFile);
+            final Schema aSchema = new Schema(sMainSchemaShortname, maSchemaBase);
+            ParseSchemaFile(sMainSchemaFile, aSchema);
+            maTopLevelSchemas.put(sMainSchemaShortname, aSchema);
         }
 
         long nStartTime = System.currentTimeMillis();
-
-        while ( ! maTodo.isEmpty())
+        while ( ! maWorkList.isEmpty())
         {
-            final String sSchemaName = maTodo.poll();
-            System.out.printf("parsing %s\n", sSchemaName);
-            maSchemaFiles.add(sSchemaName);
-
-            final SchemaParser aParser = new SchemaParser(new File(sSchemaName), maSchema);
-            aParser.Parse();
-
-            mnTotalLineCount += aParser.GetLineCount();
-            mnTotalByteCount += aParser.GetByteCount();
-            for (final File aFile : aParser.GetImportedSchemaFilenames())
-                AddSchemaReference(aFile.getAbsolutePath());
+            ParseSchemaFile(maWorkList.poll(), null);
         }
         long nEndTime = System.currentTimeMillis();
+
         System.out.printf("parsed %d schema files with a total of %d lines and %d bytes in %fs\n",
             maSchemaFiles.size(),
             mnTotalLineCount,
             mnTotalByteCount,
             (nEndTime-nStartTime)/1000.0);
-        System.out.printf("    found %d complex types, %d simple types, %d groups and %d top level elements\n",
-            maSchema.ComplexTypes.GetCount(),
-            maSchema.SimpleTypes.GetCount(),
-            maSchema.Groups.GetCount(),
-            maSchema.TopLevelElements.GetCount());
+        System.out.printf("    found %d complex types and %d simple types\n",
+            maSchemaBase.ComplexTypes.GetCount(),
+            maSchemaBase.SimpleTypes.GetCount());
+
+        int nTopLevelElementCount = 0;
+        for (final Schema aSchema : maTopLevelSchemas.values())
+            nTopLevelElementCount += aSchema.TopLevelElements.GetCount();
+        System.out.printf("    the %d top level schemas have %d elements\n",
+                maTopLevelSchemas.size(),
+                nTopLevelElementCount);
+    }
+
+
+
+
+    private void ParseSchemaFile (
+            final String sSchemaFilename,
+            final Schema aSchema)
+                    throws XMLStreamException
+    {
+        System.out.printf("parsing %s\n", sSchemaFilename);
+        maSchemaFiles.add(sSchemaFilename);
+
+        final SchemaParser aParser = new SchemaParser(new File(sSchemaFilename), aSchema, maSchemaBase);
+        aParser.Parse();
+
+        mnTotalLineCount += aParser.GetLineCount();
+        mnTotalByteCount += aParser.GetByteCount();
+        for (final File aFile : aParser.GetImportedSchemaFilenames())
+            AddSchemaReference(aFile.getAbsolutePath());
     }
 
 
@@ -230,45 +295,148 @@ public class SchemaReader
 
             // We don't know yet the file name of the schema, so just store null to mark the schema name as 'known'.
             maSchemaFiles.add(sSchemaFilename);
-            maTodo.add(sSchemaFilename);
+            maWorkList.add(sSchemaFilename);
         }
     }
 
 
 
 
-    private static StackAutomaton CreateStackAutomaton (final Schema aSchema)
+    /** Split the given string at whitespace but not at whitespace inside double quotes.
+     *
+     */
+    private Vector<String> SplitLine (final String sLine)
     {
-        long nStartTime = System.currentTimeMillis();
-        StackAutomaton aAutomaton = new NonValidatingCreator(aSchema).Create(new File("/tmp/schema.log"));
-        long nEndTime = System.currentTimeMillis();
-        System.out.printf(
-            "created stack automaton in %fs, it has %d states and %d transitions\n",
-            (nEndTime-nStartTime)/1000.0,
-            aAutomaton.GetStateCount(),
-            aAutomaton.GetTransitionCount());
+        final Vector<String> aParts = new Vector<>();
 
-        /*
-        nStartTime = System.currentTimeMillis();
-        aAutomaton = aAutomaton.Optimize();
-        nEndTime = System.currentTimeMillis();
-        System.out.printf(
-            "optimized stack automaton in %fs, it now has %d states and %d transitions\n",
-            (nEndTime-nStartTime)/1000.0,
-            aAutomaton.GetStateCount(),
-            aAutomaton.GetTransitionCount());
-        */
-        return aAutomaton;
+        boolean bIsInsideQuotes = false;
+        for (final String sPart : sLine.split("\""))
+        {
+            if (bIsInsideQuotes)
+                aParts.add(sPart);
+            else
+                for (final String sInnerPart : sPart.split("\\s+"))
+                {
+                    if (sInnerPart == null)
+                        throw new RuntimeException();
+                    else if ( ! sInnerPart.isEmpty())
+                        aParts.add(sInnerPart);
+                }
+
+            bIsInsideQuotes = ! bIsInsideQuotes;
+        }
+
+        return aParts;
     }
 
 
 
 
-    private final Schema maSchema;
+    /** Create a File object for a given file name.
+     *  Check that the file is writable, i.e. its directory exists and that if
+     *  the file already exists it can be replaced.
+     *  Throws a RuntimeException when a check fails.
+     */
+    private File CreateCheckedOutputFile (final String sFilename)
+    {
+        final File aFile = new File(sFilename);
+        if ( ! aFile.getParentFile().exists())
+            throw new RuntimeException("directory of "+sFilename+" does not exist: can not create file");
+        if (aFile.exists() && ! aFile.canWrite())
+            throw new RuntimeException("file "+sFilename+" already exists and can not be replaced");
+        return aFile;
+    }
+
+
+
+
+    private void WriteSchema (final File aOutputFile)
+    {
+        LogGenerator.Write(aOutputFile, maSchemaBase, maTopLevelSchemas.values());
+    }
+
+
+
+
+    private void WriteOptimizedSchema (final File aOutputFile)
+    {
+        LogGenerator.Write(aOutputFile, maOptimizedSchemaBase, maTopLevelSchemas.values());
+    }
+
+
+
+
+    private void WriteNonValidatingParseTables (
+        final File aAutomatonLogFile,
+        final File aParseTableFile)
+    {
+        long nStartTime = System.currentTimeMillis();
+        final NonValidatingCreator aCreator = new NonValidatingCreator(maOptimizedSchemaBase, aAutomatonLogFile);
+        FiniteAutomatonContainer aAutomatons = aCreator.Create(maTopLevelSchemas.values());
+        long nEndTime = System.currentTimeMillis();
+        System.out.printf(
+            "created %d non-validating automatons with %d states and %d transitions in %fs\n",
+            aAutomatons.GetAutomatonCount(),
+            aAutomatons.GetStateCount(),
+            aAutomatons.GetTransitionCount(),
+            (nEndTime-nStartTime)/1000.0);
+
+        new ParserTablesGenerator(aAutomatons, maOptimizedSchemaBase.Namespaces)
+            .Generate(aParseTableFile);
+    }
+
+
+
+
+    private void WriteValidatingParseTables (
+        final File aAutomatonLogFile,
+        final File aParseTableFile)
+    {
+        long nStartTime = System.currentTimeMillis();
+        final ValidatingCreator aCreator = new ValidatingCreator(maOptimizedSchemaBase, aAutomatonLogFile);
+        FiniteAutomatonContainer aAutomatons = aCreator.Create();
+        long nEndTime = System.currentTimeMillis();
+        System.out.printf(
+            "created %d validating stack automatons with %d states and %d transitions in %fs\n",
+            aAutomatons.GetAutomatonCount(),
+            aAutomatons.GetStateCount(),
+            aAutomatons.GetTransitionCount(),
+            (nEndTime-nStartTime)/1000.0);
+
+
+        nStartTime = System.currentTimeMillis();
+        aAutomatons = aAutomatons.CreateDFAs();
+        nEndTime = System.currentTimeMillis();
+        System.out.printf(
+            "created %d deterministic automatons with %d states and %d transitions in %fs\n",
+            aAutomatons.GetAutomatonCount(),
+            aAutomatons.GetStateCount(),
+            aAutomatons.GetTransitionCount(),
+            (nEndTime-nStartTime)/1000.0);
+
+        nStartTime = System.currentTimeMillis();
+        aAutomatons = aAutomatons.MinimizeDFAs();
+        nEndTime = System.currentTimeMillis();
+        System.out.printf(
+            "minimized automaton in %fs, there are now %d states and %d transitions\n",
+            (nEndTime-nStartTime)/1000.0,
+            aAutomatons.GetStateCount(),
+            aAutomatons.GetTransitionCount());
+
+        new ParserTablesGenerator(aAutomatons, maOptimizedSchemaBase.Namespaces)
+            .Generate(aParseTableFile);
+    }
+
+
+
+
+    private final SchemaBase maSchemaBase;
+    private SchemaBase maOptimizedSchemaBase;
+    private final Map<String,Schema> maTopLevelSchemas;
     private final Vector<String[]> maMainSchemaFiles;
-    private File maOutputDirectory;
+    private final Queue<String> maWorkList;
+    private final Vector<Runnable> maOutputOperations;
     private final Set<String> maSchemaFiles;
-    private final Queue<String> maTodo;
     private int mnTotalLineCount;
     private int mnTotalByteCount;
 }

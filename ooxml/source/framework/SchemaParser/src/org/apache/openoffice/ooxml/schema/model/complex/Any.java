@@ -33,13 +33,22 @@ import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 public class Any
     extends Node
 {
+    public enum ProcessContents
+    {
+        lax,
+        skip,
+        strict
+    }
+
     public Any (
         final Node aParent,
+        final Location aLocation,
         final String sProcessContents,
-        final Location aLocation)
+        final String sNamespace)
     {
         super(aParent, null, aLocation);
-        msProcessContents = sProcessContents;
+        meProcessContents = ProcessContents.valueOf(sProcessContents);
+        maNamespaces = sNamespace.split("\\s+");
     }
 
 
@@ -60,16 +69,44 @@ public class Any
     }
 
 
-
-
-    @Override
-    public String toString ()
+    public ProcessContents GetProcessContentsFlag ()
     {
-        return String.format("any processContents=%s", msProcessContents);
+        return meProcessContents;
     }
 
 
 
 
-    private final String msProcessContents;
+    public String[] GetNamespaces ()
+    {
+        return maNamespaces;
+    }
+
+
+
+
+    @Override
+    public String toString ()
+    {
+        final StringBuffer aBuffer = new StringBuffer();
+        aBuffer.append("any processContents=");
+        aBuffer.append(meProcessContents.toString());
+        aBuffer.append(", namespaces=");
+        boolean bFirst = true;
+        for (final String sNamespace : maNamespaces)
+        {
+            if (bFirst)
+                bFirst = false;
+            else
+                aBuffer.append('|');
+            aBuffer.append(sNamespace);
+        }
+        return aBuffer.toString();
+    }
+
+
+
+
+    private final ProcessContents meProcessContents;
+    private final String[] maNamespaces;
 }

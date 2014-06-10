@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 /** Map between namespace prefixes and URIs.
  *  While namespace URIs can have different prefixes in different schemas,
@@ -38,7 +39,9 @@ public class NamespaceMap
     {
         maURIToPrefixMap = new HashMap<>(maPredefinedURIToPrefixMap);
 
-        // Hack to cover the older file format.
+        // Predefine namespace prefixes.
+        // If possible then use the ones already in use in the schema files or documents written by MS Office,
+        // appended with a 06 or 12 for the ECMA-376 standards of 2006 (1st edition) or 2012 (4th edition).
         maURIToPrefixMap.put("http://schemas.openxmlformats.org/drawingml/2006/main", "a06");
         maURIToPrefixMap.put("http://purl.oclc.org/ooxml/drawingml/main", "a12");
 
@@ -54,7 +57,22 @@ public class NamespaceMap
         maURIToPrefixMap.put("http://schemas.openxmlformats.org/officeDocument/2006/math", "m06");
         maURIToPrefixMap.put("http://purl.oclc.org/ooxml/officeDocument/math", "m12");
 
+        maURIToPrefixMap.put("http://schemas.openxmlformats.org/officeDocument/2006/relationships", "r06");
         maURIToPrefixMap.put("http://purl.oclc.org/ooxml/officeDocument/relationships", "r12");
+
+        // Invent prefixes that are not in use.
+        maURIToPrefixMap.put("http://schemas.openxmlformats.org/spreadsheetml/2006/main", "s06");
+        maURIToPrefixMap.put("http://purl.oclc.org/ooxml/spreadsheetml/main", "s12");
+
+        maURIToPrefixMap.put("http://schemas.openxmlformats.org/presentationml/2006/main", "p06");
+        maURIToPrefixMap.put("http://purl.oclc.org/ooxml/presentationml/main", "p12");
+
+        maURIToPrefixMap.put("http://schemas.openxmlformats.org/schemaLibrary/2006/main", "sl06");
+        maURIToPrefixMap.put("http://purl.oclc.org/ooxml/schemaLibrary/main", "sl12");
+
+        maURIToPrefixMap.put("http://purl.oclc.org/ooxml/drawingml/diagram", "dd12");
+        maURIToPrefixMap.put("http://purl.oclc.org/ooxml/drawingml/chart", "dc12");
+        maURIToPrefixMap.put("http://purl.oclc.org/ooxml/drawingml/lockedCanvas", "dlc12");
     }
 
 
@@ -67,25 +85,25 @@ public class NamespaceMap
         if ( ! maURIToPrefixMap.containsKey(sNamespaceURI))
         {
             final String sPrefix;
-            if (sDefaultPrefix != null)
+            // Check if we can use the given prefix.
+            if (sDefaultPrefix==null || IsPrefixUsed(sDefaultPrefix))
             {
-                // Check if we can use the given prefix.
-                if (IsPrefixUsed(sDefaultPrefix))
+                // Prefix is already used.  We have to create a new and unique one.
+                String sCandidate = null;
+                for (int nIndex=0; nIndex<=26; ++nIndex)
                 {
-                    // Prefix is already used.  We have to create a new and unique one.
-                    sPrefix = new String(new byte[]{(byte)('A'+maURIToPrefixMap.size())});
+                    if (nIndex == 26)
+                        throw new RuntimeException("can not invent more than 26 namespace names");
+                    sCandidate= new String(new byte[]{(byte)('A'+nIndex)});
+                    if ( ! maURIToPrefixMap.containsKey(sCandidate))
+                        break;
                 }
-                else
-                {
-                    // Use the given prefix.
-                    sPrefix = sDefaultPrefix;
-                }
+                sPrefix = sCandidate;
             }
             else
             {
-                // Namespace is used without prefix.  Don't invent one.
-                // It is OK that the resulting null value is not unique.
-                sPrefix = null;
+                // Use the given prefix.
+                sPrefix = sDefaultPrefix;
             }
 
             maURIToPrefixMap.put(sNamespaceURI, sPrefix);
@@ -114,6 +132,22 @@ public class NamespaceMap
     public Object GetCount()
     {
         return maURIToPrefixMap.size();
+    }
+
+
+
+
+    /** Return all namespace entries sorted on the prefix.
+     */
+    public Iterable<Entry<String,String>> GetSorted ()
+    {
+        final Map<String,Entry<String,String>> aSortedEntries = new TreeMap<>();
+        for (final Entry<String,String> aEntry : maURIToPrefixMap.entrySet())
+            if (aEntry.getValue() == null)
+                aSortedEntries.put("", aEntry);
+            else
+                aSortedEntries.put(aEntry.getValue(), aEntry);
+        return aSortedEntries.values();
     }
 
 

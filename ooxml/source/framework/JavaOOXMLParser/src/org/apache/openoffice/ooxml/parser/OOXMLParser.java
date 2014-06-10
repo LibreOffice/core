@@ -77,8 +77,6 @@ public class OOXMLParser
     }
 
 
-
-
     private static InputStream GetInputStream (final String sInputName)
     {
         final InputStream aIn;
@@ -165,13 +163,17 @@ public class OOXMLParser
                     case XMLStreamReader.START_ELEMENT:
                         ++nElementCount;
                         if (aMachine.IsInSkipState())
+                        {
+                            Log.Dbg.printf("is skip state -> starting to skip\n");
                             nElementCount += Skip(aReader);
+                        }
                         else if ( ! aMachine.ProcessStartElement(
                             aReader.getNamespaceURI(),
                             aReader.getLocalName(),
                             aReader.getLocation(),
                             aAttributeProvider))
                         {
+                            Log.Dbg.printf("starting to skip to recover from error\n");
                             nElementCount += Skip(aReader);
                         }
                         break;
@@ -185,7 +187,7 @@ public class OOXMLParser
 
                     case XMLStreamReader.CHARACTERS:
                         final String sText = aReader.getText();
-                        Log.Dbg.printf("text [%s]\n", sText);
+                        Log.Dbg.printf("text [%s]\n", sText.replace("\n", "\\n"));
                         aMachine.ProcessCharacters(sText);
                         break;
 
@@ -251,7 +253,7 @@ public class OOXMLParser
                         throw new RuntimeException("saw end of document while skipping elements\n");
 
                     case XMLStreamReader.CHARACTERS:
-                        Log.Dbg.printf("skipping text [%s]\n", aReader.getText());
+                        SkipText(aReader.getText());
                         break;
 
                     default:
@@ -264,5 +266,12 @@ public class OOXMLParser
             aException.printStackTrace();
         }
         return nElementCount;
+    }
+
+
+
+    private static void SkipText (final String sText)
+    {
+        Log.Dbg.printf("skipping text [%s]\n", sText.replace("\n", "\\n"));
     }
 }
