@@ -2116,7 +2116,7 @@ static void DumpSfnts(FILE *outf, sal_uInt8 *sfntP, sal_uInt32 sfntLen)
 
         sal_uInt32 tag = GetUInt32(sfntP, 12 + 16 * i, 1);
         sal_uInt32 off = GetUInt32(sfntP, 12 + 16 * i + 8, 1);
-        sal_uInt32 len = GetUInt32(sfntP, 12 + 16 * i + 12, 1);
+        sal_uInt32 len = GetUInt32(sfntP, nLargestFixedOffsetPos, 1);
 
         if (tag != T_glyf) {
             HexFmtBlockWrite(h, sfntP + off, len);
