@@ -3540,6 +3540,19 @@ DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
     assertXPath(pXmlEndNotes, "/w:endnotes", "Ignorable", "w14 wp14");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79668,"fdo79668.docx")
+{
+    // fdo#79668: Document was Crashing on DebugUtil build while Saving
+    // because of repeated attribute value in same element.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // w:pPr's  w:shd attributes were getting added to w:pPrChange/w:pPr's w:shd hence checking
+    // w:fill for both shd elements
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:shd", "fill", "FFFFFF" );
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:pPrChange/w:pPr/w:shd", "fill", "FFFFFF" );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo78907,"fdo78907.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
