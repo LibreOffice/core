@@ -199,7 +199,7 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 	$(if $(filter TRUE,$(HAVE_GCC_AVX)),-mno-avx) \
 ))
 
-ifeq ($(filter ANDROID WNT,$(OS)),)
+ifeq ($(filter ANDROID WNT DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)
 $(eval $(call gb_Library_add_libs,gcc3_uno,\
 	-ldl \
 ))
