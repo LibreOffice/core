@@ -1021,12 +1021,14 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
         else if (propName == "OOXColor")
             propList[nProp].Value >>= colorDom;
         else if (propName == "OOXDrawing")
+        {
             propList[nProp].Value >>= diagramDrawing;
+            diagramDrawing[0] >>= drawingDom; // if there is OOXDrawing property then set drawingDom here only.
+        }
         else if (propName == "OOXDiagramDataRels")
             propList[nProp].Value >>= xDataRelSeq;
     }
 
-    diagramDrawing[0] >>= drawingDom;
     // check that we have the 4 mandatory XDocuments
     // if not, there was an error importing and we won't output anything
     if (!dataDom.is() || !layoutDom.is() || !styleDom.is() || !colorDom.is())
