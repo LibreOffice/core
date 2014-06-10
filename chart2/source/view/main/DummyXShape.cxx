@@ -1081,11 +1081,10 @@ void DummyXShapes::release()
 void SAL_CALL DummyXShapes::add( const uno::Reference< drawing::XShape>& xShape )
     throw(uno::RuntimeException, std::exception)
 {
-    DummyXShape* pChild = dynamic_cast<DummyXShape*>(xShape.get());
-    assert(pChild);
+    DummyXShape& rChild = dynamic_cast<DummyXShape&>(*xShape.get());
     maUNOShapes.push_back(xShape);
-    pChild->setParent(static_cast< ::cppu::OWeakObject* >( this ));
-    maShapes.push_back(pChild);
+    rChild.setParent(static_cast< ::cppu::OWeakObject* >( this ));
+    maShapes.push_back(&rChild);
 }
 
 void SAL_CALL DummyXShapes::remove( const uno::Reference< drawing::XShape>& xShape )
