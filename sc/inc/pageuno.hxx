@@ -27,11 +27,11 @@
 class ScPageObj : public SvxFmDrawPage
 {
 public:
-                            ScPageObj( SdrPage* pPage );
-        virtual                                 ~ScPageObj() throw();
+    ScPageObj(SdrPage* pPage);
+    virtual ~ScPageObj() throw();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                            _CreateShape( SdrObject *pObj ) const throw(std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XShape> _CreateShape(SdrObject *pObj) const
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
                             // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()

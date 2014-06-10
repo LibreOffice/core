@@ -33,7 +33,8 @@ ScPageObj::~ScPageObj() throw()
 {
 }
 
-uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) const throw(std::exception)
+uno::Reference<drawing::XShape > ScPageObj::_CreateShape( SdrObject *pObj ) const
+    throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference<drawing::XShape> xShape(SvxFmDrawPage::_CreateShape( pObj ));
 
