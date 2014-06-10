@@ -3485,6 +3485,16 @@ DECLARE_OOXMLEXPORT_TEST(testfdo78907,"fdo78907.docx")
     assertXPath ( pXmlDoc1, "/w:ftr[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl", 0 );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79822, "fdo79822.docx")
+{
+    /* File getting crash while saving in LO.
+     * The Docx contain smartart and the file was created in ms word 2007
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
