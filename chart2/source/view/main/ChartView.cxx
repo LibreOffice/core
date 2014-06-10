@@ -158,7 +158,7 @@ class GL2DRenderer : public IRenderer
 {
 public:
     GL2DRenderer(ChartView* pView);
-    virtual ~GL2DRenderer() SAL_OVERRIDE;
+    virtual ~GL2DRenderer();
 
     virtual void update() SAL_OVERRIDE;
     virtual void clickedAt(const Point& rPos, sal_uInt16 nButton) SAL_OVERRIDE;
