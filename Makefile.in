@@ -294,7 +294,7 @@ ifeq ($(OS_FOR_BUILD),WNT)
 else
 	@ooinstall $(TESTINSTALLDIR)
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
-	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice.app
+	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELASE_BUILD),,Dev).app
 endif
 endif
 	@$(call gb_Top_InstallFinished,Test Installation,$(TESTINSTALLDIR))
