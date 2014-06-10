@@ -2244,7 +2244,7 @@ void RtfAttributeOutput::CharBackground(const SvxBrushItem& rBrush)
 {
     if (!rBrush.GetColor().GetTransparency())
     {
-        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CHCBPAT);
+        m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HIGHLIGHT);
         m_aStyles.append((sal_Int32)m_rExport.GetColor(rBrush.GetColor()));
     }
 }
