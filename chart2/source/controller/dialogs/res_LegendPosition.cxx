@@ -126,8 +126,8 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
     try
     {
         bool bShowLegend = m_pCbxShow && m_pCbxShow->IsChecked();
-        ChartModel* pModel = dynamic_cast<ChartModel*>(xChartModel.get());
-        uno::Reference< beans::XPropertySet > xProp( LegendHelper::getLegend( *pModel,m_xCC,bShowLegend ), uno::UNO_QUERY );
+        ChartModel& rModel = dynamic_cast<ChartModel&>(*xChartModel.get());
+        uno::Reference< beans::XPropertySet > xProp(LegendHelper::getLegend(rModel, m_xCC, bShowLegend), uno::UNO_QUERY);
         if( xProp.is() )
         {
             //show
