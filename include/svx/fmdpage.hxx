@@ -40,7 +40,7 @@ protected:
     // The following method is called when a SvxShape object should be created.
     // Derived classes can create a derivation or an object aggregating SvxShape.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const
-        throw (std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 public:
     SvxFmDrawPage( SdrPage* pPage );

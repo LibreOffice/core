@@ -838,7 +838,7 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
 }
 
 Reference< drawing::XShape >  SvxDrawPage::_CreateShape( SdrObject *pObj ) const
-    throw (std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xShape( CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),
                                               pObj->GetObjInventor(),
