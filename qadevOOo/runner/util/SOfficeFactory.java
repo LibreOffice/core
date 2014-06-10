@@ -225,7 +225,12 @@ public class SOfficeFactory {
 
         if (oDoc != null) {
             DesktopTools.bringWindowToFront(oDoc);
-            return UnoRuntime.queryInterface(XChartDocument.class, oDoc);
+            XChartDocument xChartDoc = UnoRuntime.queryInterface(XChartDocument.class, oDoc);
+            // Create a default chart which many chart tests rely on.
+            com.sun.star.chart2.XChartDocument xCD2 =
+                UnoRuntime.queryInterface(com.sun.star.chart2.XChartDocument.class, oDoc);
+            xCD2.createDefaultChart();
+            return xChartDoc;
         } else {
             return null;
         }
