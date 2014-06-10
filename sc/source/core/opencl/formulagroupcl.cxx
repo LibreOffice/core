@@ -411,7 +411,7 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
     else
     {
         if (nStrings == 0)
-        szHostBuffer = sizeof(cl_int); // a dummy small value
+            szHostBuffer = sizeof(cl_int); // a dummy small value
         // Marshal as a buffer of NANs
         mpClmem = clCreateBuffer(kEnv.mpkContext,
                 (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
@@ -419,7 +419,7 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
 
-            pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
+        pHashBuffer = (cl_uint*)clEnqueueMapBuffer(
                 kEnv.mpkCmdQueue, mpClmem, CL_TRUE, CL_MAP_WRITE, 0,
                 szHostBuffer, 0, NULL, NULL, &err);
         if (CL_SUCCESS != err)
@@ -1489,7 +1489,7 @@ public:
         ss << "\tint i;\n\t";
         ss << "int currentCount0;\n";
         for ( unsigned i = 0; i < vSubArguments.size()-1; i++)
-        ss << "int currentCount"<<i+1<<";\n";
+            ss << "int currentCount"<<i+1<<";\n";
         std::stringstream temp3,temp4;
         int outLoopSize = UNROLLING_FACTOR;
         if (nCurWindowSize/outLoopSize != 0){
