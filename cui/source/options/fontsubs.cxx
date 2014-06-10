@@ -150,7 +150,7 @@ SfxTabPage*  SvxFontSubstTabPage::Create( Window* pParent,
     return new SvxFontSubstTabPage(pParent, rAttrSet);
 }
 
-bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
+bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
 {
     pConfig->ClearSubstitutions();// remove all entries
 

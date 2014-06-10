@@ -254,7 +254,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
 }
 
 // stuff attributes into the set, when OK
-bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
+bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 {
     SwPageFtnInfoItem aItem((const SwPageFtnInfoItem&)GetItemSet().Get(FN_PARAM_FTN_INFO));
 
@@ -294,9 +294,9 @@ bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
     rFtnInfo.SetWidth(Fraction( static_cast< long >(m_pLineLengthEdit->GetValue()), 100));
 
     const SfxPoolItem* pOldItem;
-    if(0 == (pOldItem = GetOldItem( rSet, FN_PARAM_FTN_INFO )) ||
+    if(0 == (pOldItem = GetOldItem( *rSet, FN_PARAM_FTN_INFO )) ||
                 aItem != *pOldItem )
-        rSet.Put(aItem);
+        rSet->Put(aItem);
 
     return true;
 }
@@ -352,7 +352,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
 int SwFootNotePage::DeactivatePage( SfxItemSet* _pSet)
 {
     if(_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
 
     return sal_True;
 }

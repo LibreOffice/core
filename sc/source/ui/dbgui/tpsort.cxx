@@ -224,7 +224,7 @@ void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
         SetLastSortKey( nSortKeyCount );
 }
 
-bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
+bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
 {
     ScSortParam aNewSortData = aSortData;
 
@@ -283,7 +283,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
             aNewSortData.maKeyState[i].bDoSort = false;
     }
 
-    rArgSet.Put( ScSortItem( SCITEM_SORTDATA, NULL, &aNewSortData ) );
+    rArgSet->Put( ScSortItem( SCITEM_SORTDATA, NULL, &aNewSortData ) );
 
     return true;
 }
@@ -324,7 +324,7 @@ int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
     }
 
     if ( pSetP )
-        FillItemSet( *pSetP );
+        FillItemSet( pSetP );
 
     return SfxTabPage::LEAVE_PAGE;
 }
@@ -688,7 +688,7 @@ void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
     }
 }
 
-bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
+bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
 {
     // Create local copy of ScParam
     ScSortParam aNewSortData = aSortData;
@@ -730,7 +730,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
     }
     aNewSortData.aCollatorAlgorithm = sAlg;
 
-    rArgSet.Put( ScSortItem( SCITEM_SORTDATA, &aNewSortData ) );
+    rArgSet->Put( ScSortItem( SCITEM_SORTDATA, &aNewSortData ) );
 
     return true;
 }
@@ -806,7 +806,7 @@ int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
     }
 
     if ( pSetP && bPosInputOk )
-        FillItemSet( *pSetP );
+        FillItemSet( pSetP );
 
     return bPosInputOk ? SfxTabPage::LEAVE_PAGE : SfxTabPage::KEEP_PAGE;
 }

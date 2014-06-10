@@ -221,7 +221,7 @@ int SvxHatchTabPage::DeactivatePage( SfxItemSet* _pSet )
         return KEEP_PAGE;
 
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return LEAVE_PAGE;
 }
@@ -278,7 +278,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
 
 
 
-bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( nDlgType == 0 && *pbAreaTP == false ) // area dialog
     {
@@ -303,8 +303,8 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
                                  static_cast<long>(m_pMtrAngle->GetValue() * 10) );
             }
             DBG_ASSERT( pXHatch, "XHatch konnte nicht erzeugt werden" );
-            rSet.Put( XFillStyleItem( XFILL_HATCH ) );
-            rSet.Put( XFillHatchItem( aString, *pXHatch ) );
+            rSet->Put( XFillStyleItem( XFILL_HATCH ) );
+            rSet->Put( XFillHatchItem( aString, *pXHatch ) );
 
             delete pXHatch;
         }

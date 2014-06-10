@@ -756,7 +756,7 @@ IMPL_LINK_NOARG(SwFldRefPage, ModifyHdl)
     return 0;
 }
 
-bool SwFldRefPage::FillItemSet(SfxItemSet& )
+bool SwFldRefPage::FillItemSet(SfxItemSet* )
 {
     bool bModified = false;
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());

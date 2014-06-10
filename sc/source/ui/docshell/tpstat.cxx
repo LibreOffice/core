@@ -60,7 +60,7 @@ ScDocStatPage::~ScDocStatPage()
 {
 }
 
-bool ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
+bool ScDocStatPage::FillItemSet( SfxItemSet* /* rSet */ )
 {
     return false;
 }

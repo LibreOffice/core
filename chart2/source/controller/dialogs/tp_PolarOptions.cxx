@@ -53,19 +53,19 @@ SfxTabPage* PolarOptionsTabPage::Create( Window* pWindow,const SfxItemSet& rOutA
     return new PolarOptionsTabPage( pWindow, rOutAttrs );
 }
 
-bool PolarOptionsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
     if( m_pAngleDial->IsVisible() )
     {
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_STARTING_ANGLE,
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_STARTING_ANGLE,
             static_cast< sal_Int32 >(m_pAngleDial->GetRotation()/100)));
     }
 
     if( m_pCB_Clockwise->IsVisible() )
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_CLOCKWISE,m_pCB_Clockwise->IsChecked()));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_CLOCKWISE,m_pCB_Clockwise->IsChecked()));
 
     if (m_pCB_IncludeHiddenCells->IsVisible())
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_pCB_IncludeHiddenCells->IsChecked()));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_pCB_IncludeHiddenCells->IsChecked()));
 
     return true;
 }

@@ -65,7 +65,7 @@ SfxTabPage* ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& 
     return new ScRedlineOptionsTabPage( pParent, rSet );
 }
 
-bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
+bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 

@@ -314,7 +314,7 @@ void _SvxMacroTabPage::InitResources()
 
 // the following method is called when the user clicks OK
 // We use the contents of the hashes to replace the settings
-bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
+bool _SvxMacroTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     try
     {
@@ -888,7 +888,7 @@ AssignComponentDialog::~AssignComponentDialog()
 IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
 {
     (void)pButton; //unused
-    GetTabPage()->FillItemSet( *(SfxItemSet*)0 );
+    GetTabPage()->FillItemSet( 0 );
     EndDialog( RET_OK );
     return 0;
 }

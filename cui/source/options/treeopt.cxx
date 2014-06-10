@@ -696,7 +696,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
             {
                 OptionsGroupInfo* pGroupInfo =
                     (OptionsGroupInfo*)aTreeLB.GetParent(pEntry)->GetUserData();
-                pPageInfo->m_pPage->FillItemSet(*pGroupInfo->m_pOutItemSet);
+                pPageInfo->m_pPage->FillItemSet(pGroupInfo->m_pOutItemSet);
             }
 
             if ( pPageInfo->m_pExtPage )

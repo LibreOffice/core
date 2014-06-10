@@ -238,7 +238,7 @@ void SfxSaveTabPage::DetectHiddenControls()
 
 }
 
-bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
+bool SfxSaveTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
     SvtSaveOptions aSaveOpt;
@@ -258,55 +258,55 @@ bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 
     if ( aDocInfoCB->IsValueChangedFromSaved() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_DOCINFO ),
+        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_DOCINFO ),
                                aDocInfoCB->IsChecked() ) );
         bModified |= true;
     }
 
     if ( aBackupCB->IsEnabled() && aBackupCB->IsValueChangedFromSaved() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
+        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
                                aBackupCB->IsChecked() ) );
         bModified |= true;
     }
 
     if ( aAutoSaveCB->IsValueChangedFromSaved() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVE ),
+        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_AUTOSAVE ),
                                aAutoSaveCB->IsChecked() ) );
         bModified |= true;
     }
     if ( aWarnAlienFormatCB->IsValueChangedFromSaved() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_WARNALIENFORMAT ),
+        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_WARNALIENFORMAT ),
                                aWarnAlienFormatCB->IsChecked() ) );
         bModified |= true;
     }
 
     if ( aAutoSaveEdit->IsValueChangedFromSaved() )
     {
-        rSet.Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
+        rSet->Put( SfxUInt16Item( GetWhich( SID_ATTR_AUTOSAVEMINUTE ),
                                  (sal_uInt16)aAutoSaveEdit->GetValue() ) );
         bModified |= true;
     }
 
     if ( aUserAutoSaveCB->IsValueChangedFromSaved() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_USERAUTOSAVE ),
+        rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_USERAUTOSAVE ),
                                aUserAutoSaveCB->IsChecked() ) );
         bModified |= true;
     }
     // save relatively
     if ( aRelativeFsysCB->IsValueChangedFromSaved() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
+        rSet->Put( SfxBoolItem( GetWhich( SID_SAVEREL_FSYS ),
                                aRelativeFsysCB->IsChecked() ) );
         bModified |= true;
     }
 
     if ( aRelativeInetCB->IsValueChangedFromSaved() )
     {
-        rSet.Put( SfxBoolItem( GetWhich( SID_SAVEREL_INET ),
+        rSet->Put( SfxBoolItem( GetWhich( SID_SAVEREL_INET ),
                                aRelativeInetCB->IsChecked() ) );
         bModified |= true;
     }

@@ -219,7 +219,7 @@ IMPL_LINK_NOARG(SwFldEditDlg, OKHdl)
         SfxTabPage* pTabPage = GetTabPage();
         if (pTabPage)
         {
-            pTabPage->FillItemSet(*(SfxItemSet*)0);
+            pTabPage->FillItemSet(0);
 
         }
         EndDialog( RET_OK );
@@ -247,7 +247,7 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     //#112462# FillItemSet may delete the current field
     //that's why it has to be called before accessing the current field
     if( GetOKButton()->IsEnabled() )
-        pTabPage->FillItemSet(*(SfxItemSet*)0);
+        pTabPage->FillItemSet(0);
 
     SwFldMgr& rMgr = pTabPage->GetFldMgr();
     SwField *pCurFld = rMgr.GetCurFld();

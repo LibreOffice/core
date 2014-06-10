@@ -158,7 +158,7 @@ SfxTabPage *SwTextGridPage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SwTextGridPage(pParent, rSet);
 }
 
-bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
+bool    SwTextGridPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
     if(m_pNoGridRB->IsValueChangedFromSaved() ||
@@ -174,7 +174,7 @@ bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
         m_pPrintCB->IsValueChangedFromSaved() ||
         m_pColorLB->IsValueChangedFromSaved())
     {
-        PutGridItem(rSet);
+        PutGridItem(*rSet);
         bRet = true;
     }
 

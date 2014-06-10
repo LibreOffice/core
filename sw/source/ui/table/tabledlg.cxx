@@ -374,7 +374,7 @@ SfxTabPage*  SwFormatTablePage::Create( Window* pParent,
     return new SwFormatTablePage( pParent, rAttrSet );
 }
 
-bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
+bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
 {
     //Test if one of the controls still has the focus
     if (m_aWidthMF.HasFocus())
@@ -396,13 +396,13 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
             SvxULSpaceItem aULSpace(RES_UL_SPACE);
             aULSpace.SetUpper( m_pTopMF->Denormalize(m_pTopMF->GetValue( FUNIT_TWIP )));
             aULSpace.SetLower( m_pBottomMF->Denormalize(m_pBottomMF->GetValue( FUNIT_TWIP )));
-            rCoreSet.Put(aULSpace);
+            rCoreSet->Put(aULSpace);
         }
 
     }
     if(m_pNameED->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxStringItem( FN_PARAM_TABLE_NAME, m_pNameED->GetText()));
+        rCoreSet->Put(SfxStringItem( FN_PARAM_TABLE_NAME, m_pNameED->GetText()));
         bModified = true;
     }
 
@@ -413,7 +413,7 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet& rCoreSet )
         {
             const sal_uInt32 nDirection =
                              (sal_uInt32)(sal_uIntPtr)m_pTextDirectionLB->GetEntryData( nPos );
-            rCoreSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
+            rCoreSet->Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
             bModified = true;
         }
     }
@@ -609,7 +609,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     }
     if(_pSet)
     {
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
         if(bModified)
         {
             SwTwips lLeft  = static_cast< SwTwips >(m_aLeftMF.DenormalizePercent(m_aLeftMF.GetValue( FUNIT_TWIP )));
@@ -906,7 +906,7 @@ IMPL_LINK( SwTableColumnPage, ModeHdl, CheckBox*, pBox )
     return 0;
 }
 
-bool  SwTableColumnPage::FillItemSet( SfxItemSet& )
+bool  SwTableColumnPage::FillItemSet( SfxItemSet* )
 {
     for( sal_uInt16 i = 0; i < MET_FIELDS; i++ )
     {
@@ -1109,7 +1109,7 @@ int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
     {
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
         if(text::HoriOrientation::FULL != pTblData->GetAlign() && pTblData->GetWidth() != nTableWidth)
         {
             pTblData->SetWidth(nTableWidth);
@@ -1321,7 +1321,7 @@ SfxTabPage*   SwTextFlowPage::Create( Window* pParent,
     return new SwTextFlowPage(pParent, rAttrSet);
 }
 
-bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
+bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
 
@@ -1329,20 +1329,20 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     if(m_pHeadLineCB->IsValueChangedFromSaved() ||
        m_pRepeatHeaderNF->IsValueChangedFromSaved() )
     {
-        bModified |= 0 != rSet.Put(
+        bModified |= 0 != rSet->Put(
             SfxUInt16Item(FN_PARAM_TABLE_HEADLINE, m_pHeadLineCB->IsChecked()? sal_uInt16(m_pRepeatHeaderNF->GetValue()) : 0 ));
     }
     if(m_pKeepCB->IsValueChangedFromSaved())
-        bModified |= 0 != rSet.Put( SvxFmtKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
+        bModified |= 0 != rSet->Put( SvxFmtKeepItem( m_pKeepCB->IsChecked(), RES_KEEP));
 
     if(m_pSplitCB->IsValueChangedFromSaved())
-        bModified |= 0 != rSet.Put( SwFmtLayoutSplit( m_pSplitCB->IsChecked()));
+        bModified |= 0 != rSet->Put( SwFmtLayoutSplit( m_pSplitCB->IsChecked()));
 
     if(m_pSplitRowCB->IsValueChangedFromSaved())
-        bModified |= 0 != rSet.Put( SwFmtRowSplit( m_pSplitRowCB->IsChecked()));
+        bModified |= 0 != rSet->Put( SwFmtRowSplit( m_pSplitRowCB->IsChecked()));
 
-    const SvxFmtBreakItem* pBreak = (const SvxFmtBreakItem*)GetOldItem( rSet, RES_BREAK );
-    const SwFmtPageDesc* pDesc = (const SwFmtPageDesc*) GetOldItem( rSet, RES_PAGEDESC );
+    const SvxFmtBreakItem* pBreak = (const SvxFmtBreakItem*)GetOldItem( *rSet, RES_BREAK );
+    const SwFmtPageDesc* pDesc = (const SwFmtPageDesc*) GetOldItem( *rSet, RES_PAGEDESC );
 
     bool bState = m_pPageCollCB->IsChecked();
 
@@ -1366,7 +1366,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
         {
             SwFmtPageDesc aFmt( pShell->FindPageDescByName( sPage, true ) );
             aFmt.SetNumOffset(bState ? nPgNum : 0);
-            bModified |= 0 != rSet.Put( aFmt );
+            bModified |= 0 != rSet->Put( aFmt );
             bPageItemPut = bState;
         }
     }
@@ -1406,13 +1406,13 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 
         if ( !pBreak || !( *(const SvxFmtBreakItem*)pBreak == aBreak ) )
         {
-            bModified |= 0 != rSet.Put( aBreak );
+            bModified |= 0 != rSet->Put( aBreak );
         }
     }
 
     if(m_pTextDirectionLB->IsValueChangedFromSaved())
     {
-          bModified |= 0 != rSet.Put(
+          bModified |= 0 != rSet->Put(
                     SvxFrameDirectionItem(
                         (SvxFrameDirection)(sal_uLong)m_pTextDirectionLB->GetEntryData(m_pTextDirectionLB->GetSelectEntryPos())
                         , FN_TABLE_BOX_TEXTORIENTATION));
@@ -1428,7 +1428,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
             case 2 : nOrient = text::VertOrientation::BOTTOM; break;
         }
         if(nOrient != USHRT_MAX)
-            bModified |= 0 != rSet.Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, nOrient));
+            bModified |= 0 != rSet->Put(SfxUInt16Item(FN_TABLE_SET_VERT_ALIGN, nOrient));
     }
 
     return bModified;

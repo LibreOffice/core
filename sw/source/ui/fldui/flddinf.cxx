@@ -414,7 +414,7 @@ sal_Int32 SwFldDokInfPage::FillSelectionLB(sal_uInt16 nSubType)
     return nSize;
 }
 
-bool SwFldDokInfPage::FillItemSet(SfxItemSet& )
+bool SwFldDokInfPage::FillItemSet(SfxItemSet* )
 {
     if (!pSelEntry || (sal_uInt16)(sal_uLong)pSelEntry->GetUserData() == USHRT_MAX)
         return false;

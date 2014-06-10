@@ -66,7 +66,7 @@ void SvxBasicIDEOptionsPage::LoadConfig()
     pUseExtendedTypesChk->Check( bExtended );
 }
 
-bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
+bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 {
     bool bModified = false;
     boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );

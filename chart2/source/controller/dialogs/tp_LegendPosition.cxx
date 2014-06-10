@@ -46,12 +46,12 @@ SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow, const SfxItemSet& rOutA
     return new SchLegendPosTabPage(pWindow, rOutAttrs);
 }
 
-bool SchLegendPosTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
-    m_aLegendPositionResources.writeToItemSet(rOutAttrs);
+    m_aLegendPositionResources.writeToItemSet(*rOutAttrs);
 
     if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
-        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLbTextDirection->GetSelectEntryValue() ) );
+        rOutAttrs->Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLbTextDirection->GetSelectEntryValue() ) );
 
     return true;
 }

@@ -237,14 +237,14 @@ void SvxShadowTabPage::ActivatePage( const SfxItemSet& rSet )
 int SvxShadowTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return( LEAVE_PAGE );
 }
 
 
 
-bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
+bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     const SfxPoolItem*  pOld = NULL;
     bool                bModified = false;
@@ -255,10 +255,10 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         if( m_pTsbShowShadow->IsValueChangedFromSaved() )
         {
             SdrShadowItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
-            pOld = GetOldItem( rAttrs, SDRATTR_SHADOW );
+            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOW );
             if ( !pOld || !( *(const SdrShadowItem*)pOld == aItem ) )
             {
-                rAttrs.Put( aItem );
+                rAttrs->Put( aItem );
                 bModified = true;
             }
         }
@@ -301,19 +301,19 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
                                     Get( SDRATTR_SHADOWYDIST ) ).GetValue();
             }
             SdrShadowXDistItem aXItem( nX );
-            pOld = GetOldItem( rAttrs, SDRATTR_SHADOWXDIST );
+            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWXDIST );
             if ( nX != nOldX &&
                 ( !pOld || !( *(const SdrShadowXDistItem*)pOld == aXItem ) ) )
             {
-                rAttrs.Put( aXItem );
+                rAttrs->Put( aXItem );
                 bModified = true;
             }
             SdrShadowYDistItem aYItem( nY );
-            pOld = GetOldItem( rAttrs, SDRATTR_SHADOWYDIST );
+            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWYDIST );
             if ( nY != nOldY &&
                 ( !pOld || !( *(const SdrShadowYDistItem*)pOld == aYItem ) ) )
             {
-                rAttrs.Put( aYItem );
+                rAttrs->Put( aYItem );
                 bModified = true;
             }
         }
@@ -324,10 +324,10 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
             m_pLbShadowColor->IsValueChangedFromSaved() )
         {
             SdrShadowColorItem aItem(m_pLbShadowColor->GetSelectEntryColor());
-            pOld = GetOldItem( rAttrs, SDRATTR_SHADOWCOLOR );
+            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWCOLOR );
             if ( !pOld || !( *(const SdrShadowColorItem*)pOld == aItem ) )
             {
-                rAttrs.Put( aItem );
+                rAttrs->Put( aItem );
                 bModified = true;
             }
         }
@@ -337,16 +337,16 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet& rAttrs )
         if( m_pMtrTransparent->IsValueChangedFromSaved() )
         {
             SdrShadowTransparenceItem aItem( nVal );
-            pOld = GetOldItem( rAttrs, SDRATTR_SHADOWTRANSPARENCE );
+            pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWTRANSPARENCE );
             if ( !pOld || !( *(const SdrShadowTransparenceItem*)pOld == aItem ) )
             {
-                rAttrs.Put( aItem );
+                rAttrs->Put( aItem );
                 bModified = true;
             }
         }
     }
 
-    rAttrs.Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
+    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
 
     return( bModified );
 }

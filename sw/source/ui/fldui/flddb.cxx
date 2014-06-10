@@ -178,7 +178,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
     }
 }
 
-bool SwFldDBPage::FillItemSet(SfxItemSet& )
+bool SwFldDBPage::FillItemSet(SfxItemSet* )
 {
     OUString sTableName;
     OUString sColumnName;

@@ -1156,7 +1156,7 @@ SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
 
 
 
-bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
+bool SvxLinguTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bModified = true; // !!!!
 
@@ -1301,17 +1301,17 @@ bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             SfxHyphenRegionItem aHyp( GetWhich( SID_ATTR_HYPHENREGION ) );
             aHyp.GetMinLead()  = (sal_uInt8) aPreBreakData.GetNumericValue();
             aHyp.GetMinTrail() = (sal_uInt8) aPostBreakData.GetNumericValue();
-            rCoreSet.Put( aHyp );
+            rCoreSet->Put( aHyp );
         }
     }
 
 
     // automatic spell checking
     bool bNewAutoCheck = m_pLinguOptionsCLB->IsChecked( (sal_uLong) EID_SPELL_AUTO );
-    const SfxPoolItem* pOld = GetOldItem( rCoreSet, SID_AUTOSPELL_CHECK );
+    const SfxPoolItem* pOld = GetOldItem( *rCoreSet, SID_AUTOSPELL_CHECK );
     if ( !pOld || ( (SfxBoolItem*)pOld )->GetValue() != bNewAutoCheck )
     {
-        rCoreSet.Put( SfxBoolItem( GetWhich( SID_AUTOSPELL_CHECK ),
+        rCoreSet->Put( SfxBoolItem( GetWhich( SID_AUTOSPELL_CHECK ),
                                 bNewAutoCheck ) );
         bModified |= true;
     }

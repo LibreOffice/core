@@ -198,11 +198,11 @@ SfxTabPage* SvxStdParagraphTabPage::Create( Window* pParent, const SfxItemSet& r
     return new SvxStdParagraphTabPage( pParent, rSet );
 }
 
-bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
+bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 {
     SfxItemState eState = SFX_ITEM_UNKNOWN;
     const SfxPoolItem* pOld = 0;
-    SfxItemPool* pPool = rOutSet.GetPool();
+    SfxItemPool* pPool = rOutSet->GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
     bool bModified = false;
@@ -245,12 +245,12 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
                 break;
         }
         eState = GetItemSet().GetItemState( nWhich );
-        pOld = GetOldItem( rOutSet, SID_ATTR_PARA_LINESPACE );
+        pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_LINESPACE );
 
         if ( !pOld || !( *(const SvxLineSpacingItem*)pOld == aSpacing ) ||
              SFX_ITEM_DONTCARE == eState )
         {
-            rOutSet.Put( aSpacing );
+            rOutSet->Put( aSpacing );
             bModified = true;
         }
     }
@@ -260,7 +260,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     {
         nWhich = GetWhich( SID_ATTR_ULSPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
-        pOld = GetOldItem( rOutSet, SID_ATTR_ULSPACE );
+        pOld = GetOldItem( *rOutSet, SID_ATTR_ULSPACE );
         SvxULSpaceItem aMargin( nWhich );
 
         if ( bRelativeMode )
@@ -294,7 +294,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         if ( !pOld || !( *(const SvxULSpaceItem*)pOld == aMargin ) ||
              SFX_ITEM_DONTCARE == eState )
         {
-            rOutSet.Put( aMargin );
+            rOutSet->Put( aMargin );
             bModified = true;
         }
     }
@@ -308,7 +308,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         nWhich = GetWhich( SID_ATTR_LRSPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
         SvxLRSpaceItem aMargin( nWhich );
-        pOld = GetOldItem( rOutSet, SID_ATTR_LRSPACE );
+        pOld = GetOldItem( *rOutSet, SID_ATTR_LRSPACE );
 
         if ( bRelativeMode )
         {
@@ -351,7 +351,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         if ( !pOld || !( *(const SvxLRSpaceItem*)pOld == aMargin ) ||
              SFX_ITEM_DONTCARE == eState )
         {
-            rOutSet.Put( aMargin );
+            rOutSet->Put( aMargin );
             bModified = true;
         }
     }
@@ -373,14 +373,14 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
                 SvxTabStopItem aNullTab( rTabItem );
                 SvxTabStop aNull( 0, SVX_TAB_ADJUST_DEFAULT );
                 aNullTab.Insert( aNull );
-                rOutSet.Put( aNullTab );
+                rOutSet->Put( aNullTab );
             }
         }
     }
     if( m_pRegisterCB->IsVisible())
     {
         const SfxBoolItem* pBoolItem = (SfxBoolItem*)GetOldItem(
-                            rOutSet, SID_ATTR_PARA_REGISTER);
+                            *rOutSet, SID_ATTR_PARA_REGISTER);
         if (!pBoolItem)
             return bModified;
         SfxBoolItem* pRegItem = (SfxBoolItem*)pBoolItem->Clone();
@@ -390,11 +390,11 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         if(m_pRegisterCB->IsChecked() != bSet )
         {
             pRegItem->SetValue(!bSet);
-            rOutSet.Put(*pRegItem);
+            rOutSet->Put(*pRegItem);
             bModified = true;
         }
         else if ( SFX_ITEM_DEFAULT == GetItemSet().GetItemState( _nWhich, false ) )
-            rOutSet.ClearItem(_nWhich);
+            rOutSet->ClearItem(_nWhich);
         delete pRegItem;
     }
 
@@ -614,7 +614,7 @@ int SvxStdParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
     ELRLoseFocusHdl( NULL );
 
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return LEAVE_PAGE;
 }
 
@@ -1042,7 +1042,7 @@ SvxParaAlignTabPage::~SvxParaAlignTabPage()
 int SvxParaAlignTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return LEAVE_PAGE;
 }
 
@@ -1056,7 +1056,7 @@ const sal_uInt16* SvxParaAlignTabPage::GetRanges()
     return pAlignRanges;
 }
 
-bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
+bool SvxParaAlignTabPage::FillItemSet( SfxItemSet* rOutSet )
 {
     bool bModified = false;
 
@@ -1093,7 +1093,7 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
 
     if ( bAdj )
     {
-        const SvxAdjustItem* pOld = (const SvxAdjustItem*)GetOldItem( rOutSet, SID_ATTR_PARA_ADJUST );
+        const SvxAdjustItem* pOld = (const SvxAdjustItem*)GetOldItem( *rOutSet, SID_ATTR_PARA_ADJUST );
 
         SvxAdjust eOneWord = m_pExpandCB->IsChecked() ? SVX_ADJUST_BLOCK : SVX_ADJUST_LEFT;
 
@@ -1120,17 +1120,17 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
             aAdj.SetAdjust( eAdjust );
             aAdj.SetOneWord( eOneWord );
             aAdj.SetLastBlock( eLastBlock );
-            rOutSet.Put( aAdj );
+            rOutSet->Put( aAdj );
         }
     }
     if(m_pSnapToGridCB->IsValueChangedFromSaved())
     {
-        rOutSet.Put(SvxParaGridItem(m_pSnapToGridCB->IsChecked(), GetWhich( SID_ATTR_PARA_SNAPTOGRID )));
+        rOutSet->Put(SvxParaGridItem(m_pSnapToGridCB->IsChecked(), GetWhich( SID_ATTR_PARA_SNAPTOGRID )));
         bModified = true;
     }
     if(m_pVertAlignLB->IsValueChangedFromSaved())
     {
-        rOutSet.Put(SvxParaVertAlignItem(m_pVertAlignLB->GetSelectEntryPos(), GetWhich( SID_PARA_VERTALIGN )));
+        rOutSet->Put(SvxParaVertAlignItem(m_pVertAlignLB->GetSelectEntryPos(), GetWhich( SID_PARA_VERTALIGN )));
         bModified = true;
     }
 
@@ -1139,7 +1139,7 @@ bool SvxParaAlignTabPage::FillItemSet( SfxItemSet& rOutSet )
         SvxFrameDirection eDir = m_pTextDirectionLB->GetSelectEntryValue();
         if( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
-            rOutSet.Put( SvxFrameDirectionItem( eDir, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
+            rOutSet->Put( SvxFrameDirectionItem( eDir, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
             bModified = true;
         }
     }
@@ -1326,12 +1326,12 @@ SfxTabPage* SvxExtParagraphTabPage::Create( Window* pParent,
     return new SvxExtParagraphTabPage( pParent, rSet );
 }
 
-bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
+bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 {
     bool bModified = false;
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_HYPHENZONE );
     const TriState eHyphenState = m_pHyphenBox->GetState();
-    const SfxPoolItem* pOld = GetOldItem( rOutSet, SID_ATTR_PARA_HYPHENZONE );
+    const SfxPoolItem* pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_HYPHENZONE );
 
     if ( m_pHyphenBox->IsValueChangedFromSaved()     ||
          m_pExtHyphenBeforeBox->IsValueModified()          ||
@@ -1353,7 +1353,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             !( *(SvxHyphenZoneItem*)pOld == aHyphen ) ||
                 m_pHyphenBox->IsValueChangedFromSaved())
         {
-            rOutSet.Put( aHyphen );
+            rOutSet->Put( aHyphen );
             bModified = true;
         }
     }
@@ -1363,11 +1363,11 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         SfxUInt16Item aPageNum( SID_ATTR_PARA_PAGENUM,
                                 (sal_uInt16)m_pPagenumEdit->GetValue() );
 
-        pOld = GetOldItem( rOutSet, SID_ATTR_PARA_PAGENUM );
+        pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_PAGENUM );
 
         if ( !pOld || ( (const SfxUInt16Item*)pOld )->GetValue() != aPageNum.GetValue() )
         {
-            rOutSet.Put( aPageNum );
+            rOutSet->Put( aPageNum );
             bModified = true;
         }
     }
@@ -1388,11 +1388,11 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             sPage = m_pApplyCollBox->GetSelectEntry();
             bIsPageModel = !sPage.isEmpty();
         }
-        pOld = GetOldItem( rOutSet, SID_ATTR_PARA_MODEL );
+        pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_MODEL );
 
         if ( !pOld || ( (const SvxPageModelItem*)pOld )->GetValue() != sPage )
         {
-            rOutSet.Put( SvxPageModelItem( sPage, false, _nWhich ) );
+            rOutSet->Put( SvxPageModelItem( sPage, false, _nWhich ) );
             bModified = true;
         }
         else
@@ -1401,13 +1401,13 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     else if(TRISTATE_TRUE == eState && m_pApplyCollBtn->IsEnabled())
         bIsPageModel = true;
     else
-        rOutSet.Put( SvxPageModelItem( sPage, false, _nWhich ) );
+        rOutSet->Put( SvxPageModelItem( sPage, false, _nWhich ) );
 
     _nWhich = GetWhich( SID_ATTR_PARA_PAGEBREAK );
 
     if ( bIsPageModel )
         // if PageModel is turned on, always turn off PageBreak
-        rOutSet.Put( SvxFmtBreakItem( SVX_BREAK_NONE, _nWhich ) );
+        rOutSet->Put( SvxFmtBreakItem( SVX_BREAK_NONE, _nWhich ) );
     else
     {
         eState = m_pPageBreakBox->GetState();
@@ -1450,13 +1450,13 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
                     break;
                 default: ; //prevent warning
             }
-            pOld = GetOldItem( rOutSet, SID_ATTR_PARA_PAGEBREAK );
+            pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_PAGEBREAK );
 
             if ( eState != m_pPageBreakBox->GetSavedValue()                ||
                     !pOld || !( *(const SvxFmtBreakItem*)pOld == aBreak ) )
             {
                 bModified = true;
-                rOutSet.Put( aBreak );
+                rOutSet->Put( aBreak );
             }
         }
     }
@@ -1467,12 +1467,12 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
 
     if ( m_pKeepTogetherBox->IsValueChangedFromSaved() )
     {
-        pOld = GetOldItem( rOutSet, SID_ATTR_PARA_SPLIT );
+        pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_SPLIT );
 
         if ( !pOld || ( (const SvxFmtSplitItem*)pOld )->GetValue() !=
                       ( eState == TRISTATE_FALSE ) )
         {
-            rOutSet.Put( SvxFmtSplitItem( eState == TRISTATE_FALSE, _nWhich ) );
+            rOutSet->Put( SvxFmtSplitItem( eState == TRISTATE_FALSE, _nWhich ) );
             bModified = true;
         }
     }
@@ -1484,7 +1484,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     if ( m_pKeepParaBox->IsValueChangedFromSaved() )
     {
         // if the status has changed, putting is necessary
-        rOutSet.Put( SvxFmtKeepItem( eState == TRISTATE_TRUE, _nWhich ) );
+        rOutSet->Put( SvxFmtKeepItem( eState == TRISTATE_TRUE, _nWhich ) );
         bModified = true;
     }
 
@@ -1497,11 +1497,11 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     {
         SvxWidowsItem rItem( eState == TRISTATE_TRUE ?
                              (sal_uInt8)m_pWidowRowNo->GetValue() : 0, _nWhich );
-        pOld = GetOldItem( rOutSet, SID_ATTR_PARA_WIDOWS );
+        pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_WIDOWS );
 
         if ( m_pWidowBox->IsValueChangedFromSaved() || !pOld || !( *(const SvxWidowsItem*)pOld == rItem ) )
         {
-            rOutSet.Put( rItem );
+            rOutSet->Put( rItem );
             bModified = true;
         }
     }
@@ -1514,13 +1514,13 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
     {
         SvxOrphansItem rItem( eState == TRISTATE_TRUE ?
                              (sal_uInt8)m_pOrphanRowNo->GetValue() : 0, _nWhich );
-        pOld = GetOldItem( rOutSet, SID_ATTR_PARA_ORPHANS );
+        pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_ORPHANS );
 
         if ( m_pOrphanBox->IsValueChangedFromSaved() ||
                 !pOld ||
                     !( *(const SvxOrphansItem*)pOld == rItem ) )
         {
-            rOutSet.Put( rItem );
+            rOutSet->Put( rItem );
             bModified = true;
         }
     }
@@ -1809,7 +1809,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet& rSet )
 int SvxExtParagraphTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return LEAVE_PAGE;
 }
 
@@ -2149,34 +2149,34 @@ const sal_uInt16*     SvxAsianTabPage::GetRanges()
     return pRanges;
 }
 
-bool SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxAsianTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bRet = false;
-    SfxItemPool* pPool = rSet.GetPool();
+    SfxItemPool* pPool = rSet->GetPool();
     if (m_pScriptSpaceCB->IsEnabled() && m_pScriptSpaceCB->IsValueChangedFromSaved())
     {
-        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
+        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet->Get(
             pPool->GetWhich(SID_ATTR_PARA_SCRIPTSPACE)).Clone();
         pNewItem->SetValue(m_pScriptSpaceCB->IsChecked());
-        rSet.Put(*pNewItem);
+        rSet->Put(*pNewItem);
         delete pNewItem;
         bRet = true;
     }
     if (m_pHangingPunctCB->IsEnabled() && m_pHangingPunctCB->IsValueChangedFromSaved())
     {
-        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
+        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet->Get(
             pPool->GetWhich(SID_ATTR_PARA_HANGPUNCTUATION)).Clone();
         pNewItem->SetValue(m_pHangingPunctCB->IsChecked());
-        rSet.Put(*pNewItem);
+        rSet->Put(*pNewItem);
         delete pNewItem;
         bRet = true;
     }
     if (m_pForbiddenRulesCB->IsEnabled() && m_pForbiddenRulesCB->IsValueChangedFromSaved())
     {
-        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet.Get(
+        SfxBoolItem* pNewItem = (SfxBoolItem*)rSet->Get(
             pPool->GetWhich(SID_ATTR_PARA_FORBIDDEN_RULES)).Clone();
         pNewItem->SetValue(m_pForbiddenRulesCB->IsChecked());
-        rSet.Put(*pNewItem);
+        rSet->Put(*pNewItem);
         delete pNewItem;
         bRet = true;
     }

@@ -264,7 +264,7 @@ SfxTabPage* SvxPathTabPage::Create( Window* pParent,
 
 
 
-bool SvxPathTabPage::FillItemSet( SfxItemSet& )
+bool SvxPathTabPage::FillItemSet( SfxItemSet* )
 {
     for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
     {

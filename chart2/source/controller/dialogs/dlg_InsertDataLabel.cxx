@@ -45,7 +45,7 @@ void DataLabelsDialog::Reset()
 
 void DataLabelsDialog::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    m_apDataLabelResources->FillItemSet(rOutAttrs);
+    m_apDataLabelResources->FillItemSet(&rOutAttrs);
 }
 
 } //namespace chart

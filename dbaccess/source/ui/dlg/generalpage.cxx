@@ -466,7 +466,7 @@ namespace dbaui
         m_pDatasourceType->Enable( bValid );
     }
 
-    bool OGeneralPageDialog::FillItemSet( SfxItemSet& _rCoreAttrs )
+    bool OGeneralPageDialog::FillItemSet( SfxItemSet* _rCoreAttrs )
     {
         bool bChangedSomething = false;
 
@@ -475,7 +475,7 @@ namespace dbaui
 
         if ( m_pDatasourceType->IsValueChangedFromSaved() )
         {
-            _rCoreAttrs.Put( SfxStringItem( DSID_CONNECTURL, sURLPrefix ) );
+            _rCoreAttrs->Put( SfxStringItem( DSID_CONNECTURL, sURLPrefix ) );
             bChangedSomething = true;
         }
 
@@ -626,7 +626,7 @@ namespace dbaui
         return OGeneralPage::approveDatasourceType( eType, _inout_rDisplayName );
     }
 
-    bool OGeneralPageWizard::FillItemSet(SfxItemSet& _rCoreAttrs)
+    bool OGeneralPageWizard::FillItemSet(SfxItemSet* _rCoreAttrs)
     {
         bool bChangedSomething = false;
 
@@ -634,7 +634,7 @@ namespace dbaui
 
         if ( m_pRB_CreateDatabase->IsChecked() )
         {
-            _rCoreAttrs.Put( SfxStringItem( DSID_CONNECTURL, OUString( "sdbc:dbase:" ) ) );
+            _rCoreAttrs->Put( SfxStringItem( DSID_CONNECTURL, OUString( "sdbc:dbase:" ) ) );
             bChangedSomething = true;
             bCommitTypeSelection = false;
         }
@@ -656,7 +656,7 @@ namespace dbaui
                 || ( GetDatabaseCreationMode() != m_eOriginalCreationMode )
                 )
             {
-                _rCoreAttrs.Put( SfxStringItem( DSID_CONNECTURL,sURLPrefix ) );
+                _rCoreAttrs->Put( SfxStringItem( DSID_CONNECTURL,sURLPrefix ) );
                 bChangedSomething = true;
             }
             else

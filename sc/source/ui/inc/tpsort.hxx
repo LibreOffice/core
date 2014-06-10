@@ -54,7 +54,7 @@ public:
 
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 
     virtual void SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation) SAL_OVERRIDE;
@@ -116,7 +116,7 @@ public:
 #define SfxTabPage ::SfxTabPage
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 
 protected:

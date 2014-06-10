@@ -172,7 +172,7 @@ void _SfxMacroTabPage::ScriptChanged()
     EnableButtons();
 }
 
-bool _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
+bool _SfxMacroTabPage::FillItemSet( SfxItemSet* rSet )
 {
     SvxMacroItem aItem( GetWhich( aPageRg[0] ) );
     ((SvxMacroTableDtor&)aItem.GetMacroTable()) = aTbl;
@@ -181,7 +181,7 @@ bool _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
     if( SFX_ITEM_SET != GetItemSet().GetItemState( aItem.Which(), true, &pItem )
         || aItem != *(SvxMacroItem*)pItem )
     {
-        rSet.Put( aItem );
+        rSet->Put( aItem );
         return true;
     }
     return false;

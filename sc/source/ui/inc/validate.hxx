@@ -182,7 +182,7 @@ public:
     static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rArgSet );
     static const sal_uInt16*              GetRanges();
 
-    virtual bool                FillItemSet( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void                Reset( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 
 private:
@@ -276,7 +276,7 @@ public:
             virtual ~ScTPValidationHelp();
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };
 
@@ -301,7 +301,7 @@ public:
             virtual ~ScTPValidationError();
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
-    virtual bool        FillItemSet ( SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
 };
 

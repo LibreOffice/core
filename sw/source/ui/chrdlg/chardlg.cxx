@@ -233,7 +233,7 @@ void SwCharURLPage::Reset(const SfxItemSet& rSet)
     }
 }
 
-bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
+bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
 {
     OUString sURL = m_pURLED->GetText();
     if(!sURL.isEmpty())
@@ -271,10 +271,10 @@ bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     if(m_pTextED->IsModified())
     {
         bModified = true;
-        rSet.Put(SfxStringItem(FN_PARAM_SELECTION, m_pTextED->GetText()));
+        rSet->Put(SfxStringItem(FN_PARAM_SELECTION, m_pTextED->GetText()));
     }
     if(bModified)
-        rSet.Put(aINetFmt);
+        rSet->Put(aINetFmt);
     return bModified;
 }
 

@@ -637,7 +637,7 @@ SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet &rItem
 }
 
 
-bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
+bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
 {
     // Test whether a change is present
     const bool bTitleMod = m_pTitleEd->IsModified();
@@ -685,7 +685,7 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
     {
         pInfo->setDescription( m_pCommentEd->GetText() );
     }
-    rSet.Put( SfxDocumentInfoItem( *pInfo ) );
+    rSet->Put( SfxDocumentInfoItem( *pInfo ) );
     if ( pInfo != m_pInfoItem )
     {
         delete pInfo;
@@ -928,7 +928,7 @@ void SfxDocumentPage::EnableUseUserData()
 
 
 
-bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
+bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bRet = false;
 
@@ -944,7 +944,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             SfxDocumentInfoItem* m_pInfoItem = (SfxDocumentInfoItem*)pItem;
             bool bUseData = ( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
             m_pInfoItem->SetUseUserData( bUseData );
-            rSet.Put( SfxDocumentInfoItem( *m_pInfoItem ) );
+            rSet->Put( SfxDocumentInfoItem( *m_pInfoItem ) );
             bRet = true;
         }
     }
@@ -965,20 +965,20 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
             newItem.SetUseUserData( TRISTATE_TRUE == m_pUseUserDataCB->GetState() );
 
             newItem.SetDeleteUserData( true );
-            rSet.Put( newItem );
+            rSet->Put( newItem );
             bRet = true;
         }
     }
 
     if ( m_pNameED->IsModified() && !m_pNameED->GetText().isEmpty() )
     {
-        rSet.Put( SfxStringItem( ID_FILETP_TITLE, m_pNameED->GetText() ) );
+        rSet->Put( SfxStringItem( ID_FILETP_TITLE, m_pNameED->GetText() ) );
         bRet = true;
     }
 
     if ( /* m_pReadOnlyCB->IsModified() */ true )
     {
-        rSet.Put( SfxBoolItem( ID_FILETP_READONLY, m_pReadOnlyCB->IsChecked() ) );
+        rSet->Put( SfxBoolItem( ID_FILETP_READONLY, m_pReadOnlyCB->IsChecked() ) );
         bRet = true;
     }
 
@@ -2043,7 +2043,7 @@ IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl)
     return 0;
 }
 
-bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
+bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
     const SfxPoolItem* pItem = NULL;
@@ -2054,7 +2054,7 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
     {
         if ( SFX_ITEM_SET !=
                 GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
-            pInfo = &( SfxDocumentInfoItem& )rSet.Get( SID_DOCINFO );
+            pInfo = &( SfxDocumentInfoItem& )rSet->Get( SID_DOCINFO );
         else
         {
             bMustDelete = true;
@@ -2087,7 +2087,7 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
     if (pInfo)
     {
         if ( bModified )
-            rSet.Put( *pInfo );
+            rSet->Put( *pInfo );
         if ( bMustDelete )
             delete pInfo;
     }
@@ -2516,7 +2516,7 @@ SfxCmisPropertiesPage::SfxCmisPropertiesPage( Window* pParent, const SfxItemSet&
 {
 }
 
-bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
+bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem = NULL;
     SfxDocumentInfoItem* pInfo = NULL;
@@ -2526,7 +2526,7 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
     {
         if ( SFX_ITEM_SET !=
                 GetTabDialog()->GetExampleSet()->GetItemState( SID_DOCINFO, true, &pItem ) )
-            pInfo = &( SfxDocumentInfoItem& )rSet.Get( SID_DOCINFO );
+            pInfo = &( SfxDocumentInfoItem& )rSet->Get( SID_DOCINFO );
         else
         {
             bMustDelete = true;
@@ -2577,7 +2577,7 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
             pIter != changedProps.end( ); ++pIter )
                 aModifiedProps[ nCount++ ] = *pIter;
         pInfo->SetCmisProperties( aModifiedProps );
-        rSet.Put( *pInfo );
+        rSet->Put( *pInfo );
         if ( bMustDelete )
             delete pInfo;
     }

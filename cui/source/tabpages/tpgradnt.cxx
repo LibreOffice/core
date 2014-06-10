@@ -232,7 +232,7 @@ int SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
         return KEEP_PAGE;
 
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return LEAVE_PAGE;
 }
@@ -306,7 +306,7 @@ long SvxGradientTabPage::CheckChanges_Impl()
 
 
 
-bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( nDlgType == 0 && *pPageType == PT_GRADIENT && *pbAreaTP == false )
     {
@@ -335,8 +335,8 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet& rSet )
                         (sal_uInt16) m_pMtrColorTo->GetValue() );
         }
         DBG_ASSERT( pXGradient, "XGradient konnte nicht erzeugt werden" );
-        rSet.Put( XFillStyleItem( XFILL_GRADIENT ) );
-        rSet.Put( XFillGradientItem( aString, *pXGradient ) );
+        rSet->Put( XFillStyleItem( XFILL_GRADIENT ) );
+        rSet->Put( XFillGradientItem( aString, *pXGradient ) );
 
         delete pXGradient;
     }

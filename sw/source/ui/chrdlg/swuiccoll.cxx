@@ -132,7 +132,7 @@ SwCondCollPage::~SwCondCollPage()
 int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if( _pSet )
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
 
     return LEAVE_PAGE;
 }
@@ -142,7 +142,7 @@ SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SwCondCollPage(pParent, rSet);
 }
 
-bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
+bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bModified = true;
     SwCondCollItem aCondItem;
@@ -151,7 +151,7 @@ bool SwCondCollPage::FillItemSet(SfxItemSet &rSet)
         const OUString sEntry = m_pTbLinks->GetEntryText(i, 1);
         aCondItem.SetStyle( &sEntry, i);
     }
-    rSet.Put(aCondItem);
+    rSet->Put(aCondItem);
     return bModified;
 }
 

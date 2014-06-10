@@ -113,7 +113,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
 
@@ -172,7 +172,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     public:
         static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
-        virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+        virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
         virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
         virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
 };
@@ -265,7 +265,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
@@ -324,7 +324,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
@@ -390,7 +390,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
 };
@@ -440,7 +440,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
 
@@ -506,7 +506,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
 };

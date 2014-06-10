@@ -269,7 +269,7 @@ void SvxAngleTabPage::Construct()
     }
 }
 
-bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
+bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
 {
     bool bModified = false;
 
@@ -279,9 +279,9 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet& rSet)
         const double fTmpX((GetCoreValue(*m_pMtrPosX, ePoolUnit) + maAnchor.getX()) * fUIScale);
         const double fTmpY((GetCoreValue(*m_pMtrPosY, ePoolUnit) + maAnchor.getY()) * fUIScale);
 
-        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_pCtlAngle->GetRotation()));
-        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
-        rSet.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
+        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ANGLE), m_pCtlAngle->GetRotation()));
+        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_X), basegfx::fround(fTmpX)));
+        rSet->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_ROT_Y), basegfx::fround(fTmpY)));
 
         bModified = true;
     }
@@ -355,7 +355,7 @@ int SvxAngleTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
     {
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     }
 
     return LEAVE_PAGE;
@@ -469,7 +469,7 @@ void SvxSlantTabPage::Construct()
 
 
 
-bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
+bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 {
     bool  bModified = false;
     OUString aStr = m_pMtrRadius->GetText();
@@ -480,7 +480,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
         long nTmp = GetCoreValue( *m_pMtrRadius, ePoolUnit );
         nTmp = Fraction( nTmp ) * aUIScale;
 
-        rAttrs.Put( SdrEckenradiusItem( nTmp ) );
+        rAttrs->Put( SdrEckenradiusItem( nTmp ) );
         bModified = true;
     }
 
@@ -489,7 +489,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
     if( m_pMtrAngle->IsValueChangedFromSaved() )
     {
         sal_Int32 nValue = static_cast<sal_Int32>(m_pMtrAngle->GetValue());
-        rAttrs.Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
+        rAttrs->Put( SfxInt32Item( SID_ATTR_TRANSFORM_SHEAR, nValue ) );
         bModified = true;
     }
 
@@ -501,9 +501,9 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet& rAttrs)
         pView->GetSdrPageView()->LogicToPagePos(aObjectRect);
         Point aPt = aObjectRect.Center();
 
-        rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, aPt.X()));
-        rAttrs.Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y()));
-        rAttrs.Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, false ) );
+        rAttrs->Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_X, aPt.X()));
+        rAttrs->Put(SfxInt32Item(SID_ATTR_TRANSFORM_SHEAR_Y, aPt.Y()));
+        rAttrs->Put( SfxBoolItem( SID_ATTR_TRANSFORM_SHEAR_VERTICAL, false ) );
     }
 
     return( bModified );
@@ -596,7 +596,7 @@ int SvxSlantTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if(_pSet)
     {
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     }
 
     return LEAVE_PAGE;
@@ -773,7 +773,7 @@ void SvxPositionSizeTabPage::Construct()
 
 
 
-bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
     bool bModified(false);
 
@@ -804,8 +804,8 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             // #101581# GetTopLeftPosition(...) needs coordinates after UI scaling, in real PagePositions
             GetTopLeftPosition(fX, fY, maRange);
 
-            rOutAttrs.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_X), basegfx::fround(fX)));
-            rOutAttrs.Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_Y), basegfx::fround(fY)));
+            rOutAttrs->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_X), basegfx::fround(fX)));
+            rOutAttrs->Put(SfxInt32Item(GetWhich(SID_ATTR_TRANSFORM_POS_Y), basegfx::fround(fY)));
 
             bModified = true;
         }
@@ -814,11 +814,11 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         {
             if( m_pTsbPosProtect->GetState() == TRISTATE_INDET )
             {
-                rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
+                rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_POS );
             }
             else
             {
-                rOutAttrs.Put(
+                rOutAttrs->Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_POS ),
                     m_pTsbPosProtect->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
             }
@@ -846,18 +846,18 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         lHeight = static_cast<long>(m_pMtrHeight->Denormalize( lHeight ));
 
         // put Width & Height to itemset
-        rOutAttrs.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), (sal_uInt32) lWidth ) );
-        rOutAttrs.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), (sal_uInt32) lHeight ) );
-        rOutAttrs.Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal::static_int_cast< sal_uInt16 >( meRP ) ) );
+        rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_WIDTH ), (sal_uInt32) lWidth ) );
+        rOutAttrs->Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ), (sal_uInt32) lHeight ) );
+        rOutAttrs->Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), sal::static_int_cast< sal_uInt16 >( meRP ) ) );
         bModified = true;
     }
 
     if ( m_pTsbSizeProtect->IsValueChangedFromSaved() )
     {
         if ( m_pTsbSizeProtect->GetState() == TRISTATE_INDET )
-            rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
+            rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_PROTECT_SIZE );
         else
-            rOutAttrs.Put(
+            rOutAttrs->Put(
                 SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_PROTECT_SIZE ),
                 m_pTsbSizeProtect->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         bModified = true;
@@ -868,9 +868,9 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         if ( !m_pTsbAutoGrowWidth->IsTriStateEnabled() )
         {
             if( m_pTsbAutoGrowWidth->GetState() == TRISTATE_INDET )
-                rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_AUTOWIDTH );
+                rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_AUTOWIDTH );
             else
-                rOutAttrs.Put(
+                rOutAttrs->Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOWIDTH ),
                     m_pTsbAutoGrowWidth->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         }
@@ -882,9 +882,9 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet& rOutAttrs )
         if ( !m_pTsbAutoGrowHeight->IsTriStateEnabled() )
         {
             if( m_pTsbAutoGrowHeight->GetState() == TRISTATE_INDET )
-                rOutAttrs.InvalidateItem( SID_ATTR_TRANSFORM_AUTOHEIGHT );
+                rOutAttrs->InvalidateItem( SID_ATTR_TRANSFORM_AUTOHEIGHT );
             else
-                rOutAttrs.Put(
+                rOutAttrs->Put(
                     SfxBoolItem( GetWhich( SID_ATTR_TRANSFORM_AUTOHEIGHT ),
                     m_pTsbAutoGrowHeight->GetState() == TRISTATE_TRUE ? sal_True : sal_False ) );
         }
@@ -1048,7 +1048,7 @@ int SvxPositionSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
             basegfx::fround(fX + maRange.getWidth()), basegfx::fround(fY + maRange.getHeight()));
         _pSet->Put(SfxRectangleItem(SID_ATTR_TRANSFORM_INTERN, aOutRectangle));
 
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     }
 
     return LEAVE_PAGE;

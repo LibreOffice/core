@@ -191,7 +191,7 @@ SfxTabPage* SvxGridTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
 
 
 
-bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
+bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     if ( bAttrModified )
     {
@@ -202,7 +202,7 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aGridItem.bGridVisible  = pCbxGridVisible->IsChecked();
 
         SfxMapUnit eUnit =
-            rCoreSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
+            rCoreSet->GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
         long nX =GetCoreValue(  *pMtrFldDrawX, eUnit );
         long nY = GetCoreValue( *pMtrFldDrawY, eUnit );
 
@@ -211,7 +211,7 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aGridItem.nFldDivisionX = static_cast<long>(pNumFldDivisionX->GetValue()-1);
         aGridItem.nFldDivisionY = static_cast<long>(pNumFldDivisionY->GetValue()-1);
 
-        rCoreSet.Put( aGridItem );
+        rCoreSet->Put( aGridItem );
     }
     return bAttrModified;
 }
@@ -292,7 +292,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return( LEAVE_PAGE );
 }
 

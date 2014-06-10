@@ -1089,7 +1089,7 @@ IMPL_LINK_NOARG(SwFldVarPage, SeparatorHdl)
     return 0;
 }
 
-bool SwFldVarPage::FillItemSet(SfxItemSet& )
+bool SwFldVarPage::FillItemSet(SfxItemSet* )
 {
     const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 

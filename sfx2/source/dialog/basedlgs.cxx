@@ -680,7 +680,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialog, OKHdl_Impl)
             bModified = ( GetOutputItemSet()->Count() > 0 );
     }
     else
-        bModified = pImpl->m_pSfxPage->FillItemSet( *GetOutputSetImpl() );
+        bModified = pImpl->m_pSfxPage->FillItemSet( GetOutputSetImpl() );
 
     if ( bModified )
     {

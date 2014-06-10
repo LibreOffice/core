@@ -79,7 +79,7 @@ friend class SfxStyleDialog;
     static SfxTabPage*  Create(Window *pParent, const SfxItemSet &rAttrSet );
 
 protected:
-    virtual bool        FillItemSet(SfxItemSet &) SAL_OVERRIDE;
+    virtual bool        FillItemSet(SfxItemSet *) SAL_OVERRIDE;
     virtual void        Reset(const SfxItemSet &) SAL_OVERRIDE;
 
     using TabPage::ActivatePage;

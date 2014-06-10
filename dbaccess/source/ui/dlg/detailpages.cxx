@@ -183,18 +183,18 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet& _rSet)
+    bool OCommonBehaviourTabPage::FillItemSet(SfxItemSet* _rSet)
     {
         bool bChangedSomething = false;
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
         {
-            fillString(_rSet,m_pOptions,DSID_ADDITIONALOPTIONS,bChangedSomething);
+            fillString(*_rSet,m_pOptions,DSID_ADDITIONALOPTIONS,bChangedSomething);
         }
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
-            if ( m_pCharset->StoreSelectedCharSet( _rSet, DSID_CHARSET ) )
+            if ( m_pCharset->StoreSelectedCharSet( *_rSet, DSID_CHARSET ) )
                 bChangedSomething = true;
         }
 
@@ -266,11 +266,11 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    bool ODbaseDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool ODbaseDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        fillBool(_rSet,&m_aShowDeleted,DSID_SHOWDELETEDROWS,bChangedSomething);
+        fillBool(*_rSet,&m_aShowDeleted,DSID_SHOWDELETEDROWS,bChangedSomething);
         return bChangedSomething;
     }
 
@@ -330,10 +330,10 @@ namespace dbaui
         return ( new OOdbcDetailsPage( pParent, _rAttrSet ) );
     }
 
-    bool OOdbcDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool OOdbcDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
-        fillBool(_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
+        fillBool(*_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
         return bChangedSomething;
     }
     void OOdbcDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -378,13 +378,13 @@ namespace dbaui
         return ( new OUserDriverDetailsPage( pParent, _rAttrSet ) );
     }
 
-    bool OUserDriverDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool OUserDriverDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_PORTNUMBER,bChangedSomething);
-        fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
-        fillBool(_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
+        fillInt32(*_rSet,&m_aNFPortNumber,DSID_CONN_PORTNUMBER,bChangedSomething);
+        fillString(*_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
+        fillBool(*_rSet,&m_aUseCatalog,DSID_USECATALOG,bChangedSomething);
 
         return bChangedSomething;
     }
@@ -511,14 +511,14 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedLine>(&m_aFL_1));
     }
 
-    bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool OGeneralSpecialJDBCDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
         if ( m_bUseClass )
-            fillString(_rSet,&m_aEDDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
-        fillString(_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
-        fillString(_rSet,&m_aEDSocket,DSID_CONN_SOCKET,bChangedSomething);
-        fillInt32(_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
+            fillString(*_rSet,&m_aEDDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
+        fillString(*_rSet,&m_aEDHostname,DSID_CONN_HOSTNAME,bChangedSomething);
+        fillString(*_rSet,&m_aEDSocket,DSID_CONN_SOCKET,bChangedSomething);
+        fillInt32(*_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
 
         return bChangedSomething;
     }
@@ -638,7 +638,7 @@ namespace dbaui
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aUserNameLabel));
     }
 
-    bool MySQLNativePage::FillItemSet( SfxItemSet& _rSet )
+    bool MySQLNativePage::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet( _rSet );
 
@@ -646,11 +646,11 @@ namespace dbaui
 
         if ( m_aUserName.IsValueChangedFromSaved() )
         {
-            _rSet.Put( SfxStringItem( DSID_USER, m_aUserName.GetText() ) );
-            _rSet.Put( SfxStringItem( DSID_PASSWORD, OUString()));
+            _rSet->Put( SfxStringItem( DSID_USER, m_aUserName.GetText() ) );
+            _rSet->Put( SfxStringItem( DSID_PASSWORD, OUString()));
             bChangedSomething = true;
         }
-        fillBool(_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
 
         return bChangedSomething;
     }
@@ -718,14 +718,14 @@ namespace dbaui
         return ( new OLDAPDetailsPage( pParent, _rAttrSet ) );
     }
 
-    bool OLDAPDetailsPage::FillItemSet( SfxItemSet& _rSet )
+    bool OLDAPDetailsPage::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(_rSet);
 
-        fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN,bChangedSomething);
-        fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
-        fillInt32(_rSet,&m_aNFRowCount,DSID_CONN_LDAP_ROWCOUNT,bChangedSomething);
-        fillBool(_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
+        fillString(*_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN,bChangedSomething);
+        fillInt32(*_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
+        fillInt32(*_rSet,&m_aNFRowCount,DSID_CONN_LDAP_ROWCOUNT,bChangedSomething);
+        fillBool(*_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
     IMPL_LINK( OLDAPDetailsPage, OnCheckBoxClick, CheckBox*, pCheckBox )
@@ -826,10 +826,10 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    bool OTextDetailsPage::FillItemSet( SfxItemSet& rSet )
+    bool OTextDetailsPage::FillItemSet( SfxItemSet* rSet )
     {
         bool bChangedSomething = OCommonBehaviourTabPage::FillItemSet(rSet);
-        bChangedSomething = m_pTextConnectionHelper->FillItemSet(rSet, bChangedSomething);
+        bChangedSomething = m_pTextConnectionHelper->FillItemSet(*rSet, bChangedSomething);
         return bChangedSomething;
     }
 

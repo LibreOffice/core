@@ -219,7 +219,7 @@ private:
 protected:
     SfxDocumentPage( Window* pParent, const SfxItemSet& );
 
-    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
 public:
@@ -242,7 +242,7 @@ private:
 protected:
     SfxDocumentDescPage( Window* pParent, const SfxItemSet& );
 
-    virtual bool            FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual bool            FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
 public:
@@ -506,7 +506,7 @@ private:
 protected:
     SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& );
 
-    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
@@ -628,7 +628,7 @@ private:
 protected:
     SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& );
 
-    virtual bool        FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 

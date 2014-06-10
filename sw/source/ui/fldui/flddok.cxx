@@ -540,7 +540,7 @@ IMPL_LINK_NOARG(SwFldDokPage, FormatHdl)
     return 0;
 }
 
-bool SwFldDokPage::FillItemSet(SfxItemSet& )
+bool SwFldDokPage::FillItemSet(SfxItemSet* )
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 

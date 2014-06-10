@@ -48,7 +48,7 @@ SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,
     return new SchLayoutTabPage(pWindow, rOutAttrs);
 }
 
-bool SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
 
     if(m_pGeometryResources && m_pGeometryResources->GetSelectEntryCount())
@@ -59,8 +59,8 @@ bool SchLayoutTabPage::FillItemSet(SfxItemSet& rOutAttrs)
         if(nShape==CHART_SHAPE3D_PYRAMID)
             nSegs=4;
 
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nShape));
-        rOutAttrs.Put(Svx3DHorizontalSegmentsItem(nSegs));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nShape));
+        rOutAttrs->Put(Svx3DHorizontalSegmentsItem(nSegs));
     }
     return true;
 }

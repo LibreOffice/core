@@ -116,11 +116,11 @@ void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
     UpdateButtons();
 }
 
-bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
+bool ScTabPageProtection::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     bool                bAttrsChanged   = false;
     sal_uInt16              nWhich          = GetWhich( SID_SCATTR_PROTECTION );
-    const SfxPoolItem*  pOldItem        = GetOldItem( rCoreAttrs, SID_SCATTR_PROTECTION );
+    const SfxPoolItem*  pOldItem        = GetOldItem( *rCoreAttrs, SID_SCATTR_PROTECTION );
     const SfxItemSet&   rOldSet         = GetItemSet();
     SfxItemState        eItemState      = rOldSet.GetItemState( nWhich, false );
     ScProtectionAttr    aProtAttr;
@@ -139,9 +139,9 @@ bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
     }
 
     if ( bAttrsChanged )
-        rCoreAttrs.Put( aProtAttr );
+        rCoreAttrs->Put( aProtAttr );
     else if ( eItemState == SFX_ITEM_DEFAULT )
-        rCoreAttrs.ClearItem( nWhich );
+        rCoreAttrs->ClearItem( nWhich );
 
     return bAttrsChanged;
 }
@@ -149,7 +149,7 @@ bool ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 int ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
-        FillItemSet( *pSetP );
+        FillItemSet( pSetP );
 
     return LEAVE_PAGE;
 }

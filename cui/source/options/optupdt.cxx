@@ -157,7 +157,7 @@ SvxOnlineUpdateTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 
 
 
-bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
+bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
 

@@ -483,7 +483,7 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 }
 
 // Fill output-ItemSet
-bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
+bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet* rOut)
 {
     OUString aStrURL, aStrName, aStrIntName, aStrFrame;
     SvxLinkInsertMode eMode;
@@ -497,7 +497,7 @@ bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
 
     SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
                             aStrIntName, eMode, nEvents, pTable );
-    rOut.Put (aItem);
+    rOut->Put (aItem);
 
     return true;
 }

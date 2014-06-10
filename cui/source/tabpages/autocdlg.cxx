@@ -197,7 +197,7 @@ SfxTabPage* OfaAutocorrOptionsPage::Create( Window* pParent,
     return new OfaAutocorrOptionsPage(pParent, rSet);
 }
 
-bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet& )
+bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     long nFlags = pAutoCorrect->GetFlags();
@@ -481,7 +481,7 @@ SfxTabPage* OfaSwAutoFmtOptionsPage::Create( Window* pParent,
     return new OfaSwAutoFmtOptionsPage(pParent, rAttrSet);
 }
 
-bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet&  )
+bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
 {
     bool bModified = false;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -921,7 +921,7 @@ int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
     return LEAVE_PAGE;
 }
 
-bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
+bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
@@ -1422,7 +1422,7 @@ int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
     return LEAVE_PAGE;
 }
 
-bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
+bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet*  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     for(StringsTable::reverse_iterator it1 = aStringsTable.rbegin(); it1 != aStringsTable.rend(); ++it1)
@@ -1827,7 +1827,7 @@ SfxTabPage* OfaQuoteTabPage::Create( Window* pParent,
     return new OfaQuoteTabPage(pParent, rAttrSet);
 }
 
-bool OfaQuoteTabPage::FillItemSet( SfxItemSet&  )
+bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
@@ -2152,7 +2152,7 @@ SfxTabPage* OfaAutoCompleteTabPage::Create( Window* pParent,
     return new OfaAutoCompleteTabPage( pParent, rSet );
 }
 
-bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet& )
+bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false, bCheck;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
@@ -2523,7 +2523,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
 
 /** Propagates the current settings to the smart tag manager.
 */
-bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
+bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();

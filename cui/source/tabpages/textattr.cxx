@@ -322,9 +322,9 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
 |*
 \************************************************************************/
 
-bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
+bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
 {
-    SfxItemPool* pPool = rAttrs.GetPool();
+    SfxItemPool* pPool = rAttrs->GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     SfxMapUnit eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
@@ -334,55 +334,55 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
     if( m_pMtrFldLeft->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLeft, eUnit );
-        rAttrs.Put( SdrTextLeftDistItem( nValue ) );
+        rAttrs->Put( SdrTextLeftDistItem( nValue ) );
     }
 
     if( m_pMtrFldRight->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldRight, eUnit );
-        rAttrs.Put( SdrTextRightDistItem( nValue ) );
+        rAttrs->Put( SdrTextRightDistItem( nValue ) );
     }
 
     if( m_pMtrFldTop->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldTop, eUnit );
-        rAttrs.Put( SdrTextUpperDistItem( nValue ) );
+        rAttrs->Put( SdrTextUpperDistItem( nValue ) );
     }
 
     if( m_pMtrFldBottom->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldBottom, eUnit );
-        rAttrs.Put( SdrTextLowerDistItem( nValue ) );
+        rAttrs->Put( SdrTextLowerDistItem( nValue ) );
     }
 
     eState = m_pTsbAutoGrowHeight->GetState();
     if( m_pTsbAutoGrowHeight->IsValueChangedFromSaved() )
     {
-        rAttrs.Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbAutoGrowWidth->GetState();
     if( m_pTsbAutoGrowWidth->IsValueChangedFromSaved() )
     {
-        rAttrs.Put( SdrTextAutoGrowWidthItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( SdrTextAutoGrowWidthItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbAutoGrowSize->GetState();
     if( m_pTsbAutoGrowSize->IsValueChangedFromSaved() )
     {
-        rAttrs.Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( SdrTextAutoGrowHeightItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbWordWrapText->GetState();
     if( m_pTsbWordWrapText->IsValueChangedFromSaved() )
     {
-        rAttrs.Put( SdrTextWordWrapItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( SdrTextWordWrapItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbContour->GetState();
     if( m_pTsbContour->IsValueChangedFromSaved() )
     {
-        rAttrs.Put( SdrTextContourFrameItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( SdrTextContourFrameItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbFitToSize->GetState();
@@ -397,7 +397,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
             case TRISTATE_FALSE: eFTS = SDRTEXTFIT_NONE; break;
             case TRISTATE_TRUE: eFTS = SDRTEXTFIT_AUTOFIT; break;
         }
-        rAttrs.Put( SdrTextFitToSizeTypeItem( eFTS ) );
+        rAttrs->Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
 
     // centered
@@ -446,20 +446,20 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
             eOldTVA = (SdrTextVertAdjust)
                         ( ( const SdrTextVertAdjustItem& )rOutAttrs.Get( SDRATTR_TEXT_VERTADJUST ) ).GetValue();
             if( eOldTVA != eTVA )
-                rAttrs.Put( SdrTextVertAdjustItem( eTVA ) );
+                rAttrs->Put( SdrTextVertAdjustItem( eTVA ) );
         }
         else
-            rAttrs.Put( SdrTextVertAdjustItem( eTVA ) );
+            rAttrs->Put( SdrTextVertAdjustItem( eTVA ) );
 
         if ( rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST ) != SFX_ITEM_DONTCARE )
         {
             eOldTHA = (SdrTextHorzAdjust)
                         ( ( const SdrTextHorzAdjustItem& )rOutAttrs.Get( SDRATTR_TEXT_HORZADJUST ) ).GetValue();
             if( eOldTHA != eTHA )
-                rAttrs.Put( SdrTextHorzAdjustItem( eTHA ) );
+                rAttrs->Put( SdrTextHorzAdjustItem( eTHA ) );
         }
         else
-            rAttrs.Put( SdrTextHorzAdjustItem( eTHA ) );
+            rAttrs->Put( SdrTextHorzAdjustItem( eTHA ) );
     }
 
     return true;

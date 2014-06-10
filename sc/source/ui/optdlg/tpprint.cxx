@@ -52,7 +52,7 @@ SfxTabPage* ScTpPrintOptions::Create( Window* pParent, const SfxItemSet& rAttrSe
 int ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
-        FillItemSet( *pSetP );
+        FillItemSet( pSetP );
 
     return LEAVE_PAGE;
 }
@@ -87,9 +87,9 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     m_pForceBreaksCB->SaveValue();
 }
 
-bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+bool ScTpPrintOptions::FillItemSet( SfxItemSet* rCoreAttrs )
 {
-    rCoreAttrs.ClearItem( SID_PRINT_SELECTEDSHEET );
+    rCoreAttrs->ClearItem( SID_PRINT_SELECTEDSHEET );
 
     bool bSkipEmptyChanged = m_pSkipEmptyPagesCB->IsValueChangedFromSaved();
     bool bSelectedSheetsChanged = m_pSelectedSheetsCB->IsValueChangedFromSaved();
@@ -101,10 +101,10 @@ bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
         aOpt.SetSkipEmpty( m_pSkipEmptyPagesCB->IsChecked() );
         aOpt.SetAllSheets( !m_pSelectedSheetsCB->IsChecked() );
         aOpt.SetForceBreaks( m_pForceBreaksCB->IsChecked() );
-        rCoreAttrs.Put( ScTpPrintItem( SID_SCPRINTOPTIONS, aOpt ) );
+        rCoreAttrs->Put( ScTpPrintItem( SID_SCPRINTOPTIONS, aOpt ) );
         if ( bSelectedSheetsChanged )
         {
-            rCoreAttrs.Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, m_pSelectedSheetsCB->IsChecked() ) );
+            rCoreAttrs->Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, m_pSelectedSheetsCB->IsChecked() ) );
         }
         return true;
     }

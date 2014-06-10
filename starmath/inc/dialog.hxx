@@ -63,7 +63,7 @@ class SmPrintOptionsTabPage : public SfxTabPage
 
     DECL_LINK(SizeButtonClickHdl, Button *);
 
-    virtual bool    FillItemSet(SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual bool    FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
     virtual void    Reset(const SfxItemSet& rSet) SAL_OVERRIDE;
 
 public:

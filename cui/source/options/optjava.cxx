@@ -642,7 +642,7 @@ SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet& rAttr
 
 
 
-bool SvxJavaOptionsPage::FillItemSet( SfxItemSet& /*rCoreSet*/ )
+bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 {
     bool bModified = false;
 

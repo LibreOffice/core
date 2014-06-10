@@ -66,7 +66,7 @@ SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrS
     return new SvxCTLOptionsPage( pParent, rAttrSet );
 }
 
-bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
+bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
     SvtCTLOptions aCTLOptions;

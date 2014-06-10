@@ -76,7 +76,7 @@ SfxTabPage* OfaMSFilterTabPage::Create( Window* pParent,
     return new OfaMSFilterTabPage( pParent, rAttrSet );
 }
 
-bool OfaMSFilterTabPage::FillItemSet( SfxItemSet& )
+bool OfaMSFilterTabPage::FillItemSet( SfxItemSet* )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
@@ -169,7 +169,7 @@ SfxTabPage* OfaMSFilterTabPage2::Create( Window* pParent,
     return new OfaMSFilterTabPage2( pParent, rAttrSet );
 }
 
-bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
+bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 

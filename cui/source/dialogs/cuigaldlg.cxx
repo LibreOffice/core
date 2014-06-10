@@ -679,7 +679,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
 
 
-bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet& /*rSet*/ )
+bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     pData->aEditedTitle = m_pEdtMSName->GetText();
     return true;

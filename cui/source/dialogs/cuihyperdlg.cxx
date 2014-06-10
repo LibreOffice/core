@@ -227,7 +227,7 @@ IMPL_LINK_NOARG(SvxHpLinkDlg, ClickApplyHdl_Impl)
 
     if ( pCurrentPage->AskApply() )
     {
-        pCurrentPage->FillItemSet( aItemSet );
+        pCurrentPage->FillItemSet( &aItemSet );
 
         SvxHyperlinkItem *aItem = (SvxHyperlinkItem *)
                                   aItemSet.GetItem (SID_HYPERLINK_SETLINK);

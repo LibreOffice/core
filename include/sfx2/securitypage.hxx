@@ -36,7 +36,7 @@ protected:
     SfxSecurityPage( Window* pParent, const SfxItemSet& );
     virtual ~SfxSecurityPage();
 
-    virtual bool            FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual bool            FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void            Reset( const SfxItemSet& ) SAL_OVERRIDE;
 
 public:

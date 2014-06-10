@@ -225,7 +225,7 @@ SfxTabPage* ScTpFormulaOptions::Create(Window* pParent, const SfxItemSet& rCoreS
     return new ScTpFormulaOptions(pParent, rCoreSet);
 }
 
-bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
+bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
 {
     bool bRet = false;
     ScFormulaOptions aOpt;
@@ -279,7 +279,7 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
         aOpt.SetOOXMLRecalcOptions(eOOXMLRecalc);
         aOpt.SetODFRecalcOptions(eODFRecalc);
 
-        rCoreSet.Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOpt ) );
+        rCoreSet->Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOpt ) );
         bRet = true;
     }
     return bRet;

@@ -239,7 +239,7 @@ short SfxPrintOptionsDialog::Execute()
 
     short nRet = ModalDialog::Execute();
     if ( nRet == RET_OK )
-        pPage->FillItemSet( *pOptions );
+        pPage->FillItemSet( pOptions );
     else
         pPage->Reset( *pOptions );
     return nRet;

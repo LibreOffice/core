@@ -413,10 +413,10 @@ void ScTpSubTotalGroup2::Reset( const SfxItemSet& rArgSet ) { RESET(2); }
 void ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
 #undef RESET
 
-#define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), rArgSet ))
-bool ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
-bool ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
-bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
+#define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), *rArgSet ))
+bool ScTpSubTotalGroup1::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(1); }
+bool ScTpSubTotalGroup2::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(2); }
+bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet* rArgSet ) { return FILLSET(3); }
 #undef FILL
 
 
@@ -499,7 +499,7 @@ void ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
     CheckHdl( pBtnSort );
 }
 
-bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
+bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
 {
     ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
     SfxTabDialog* pDlg = GetTabDialog();
@@ -522,7 +522,7 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
                                     ? pLbUserDef->GetSelectEntryPos()
                                     : 0;
 
-    rArgSet.Put( ScSubTotalItem( nWhichSubTotals, &theSubTotalData ) );
+    rArgSet->Put( ScSubTotalItem( nWhichSubTotals, &theSubTotalData ) );
 
     return true;
 }

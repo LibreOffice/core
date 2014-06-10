@@ -185,7 +185,7 @@ IMPL_LINK_NOARG(SwFldDlg, OKHdl)
     if (GetOKButton().IsEnabled())
     {
         SfxTabPage* pPage = GetTabPage(GetCurPageId());
-        pPage->FillItemSet(*(SfxItemSet*)0);
+        pPage->FillItemSet(0);
 
         GetOKButton().GrabFocus();  // because of InputField-Dlg
     }

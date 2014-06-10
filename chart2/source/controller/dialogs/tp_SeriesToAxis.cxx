@@ -81,36 +81,36 @@ SfxTabPage* SchOptionTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs
     return new SchOptionTabPage(pWindow, rOutAttrs);
 }
 
-bool SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     if(m_pRbtAxis2->IsChecked())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_SECONDARY_Y));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_SECONDARY_Y));
     else
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_PRIMARY_Y));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_PRIMARY_Y));
 
     if(m_pMTGap->IsVisible())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,static_cast< sal_Int32 >( m_pMTGap->GetValue())));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_BAR_GAPWIDTH,static_cast< sal_Int32 >( m_pMTGap->GetValue())));
 
     if(m_pMTOverlap->IsVisible())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_BAR_OVERLAP,static_cast< sal_Int32 >( m_pMTOverlap->GetValue())));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_BAR_OVERLAP,static_cast< sal_Int32 >( m_pMTOverlap->GetValue())));
 
     if(m_pCBConnect->IsVisible())
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_BAR_CONNECT,m_pCBConnect->IsChecked()));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_BAR_CONNECT,m_pCBConnect->IsChecked()));
 
     // model property is "group bars per axis", UI feature is the other way
     // round: "show bars side by side"
     if(m_pCBAxisSideBySide->IsVisible())
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, ! m_pCBAxisSideBySide->IsChecked()));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, ! m_pCBAxisSideBySide->IsChecked()));
 
     if(m_pRB_DontPaint->IsChecked())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP));
     else if(m_pRB_AssumeZero->IsChecked())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::USE_ZERO));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::USE_ZERO));
     else if(m_pRB_ContinueLine->IsChecked())
-        rOutAttrs.Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::CONTINUE));
+        rOutAttrs->Put(SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT,::com::sun::star::chart::MissingValueTreatment::CONTINUE));
 
     if (m_pCBIncludeHiddenCells->IsVisible())
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_pCBIncludeHiddenCells->IsChecked()));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_pCBIncludeHiddenCells->IsChecked()));
 
     return true;
 }

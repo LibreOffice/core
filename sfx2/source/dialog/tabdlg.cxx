@@ -204,9 +204,9 @@ SfxTabPage::~SfxTabPage()
 
 
 
-bool SfxTabPage::FillItemSet( SfxItemSet& rSet )
+bool SfxTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    return pImpl->maItemConn.DoFillItemSet( rSet, GetItemSet() );
+    return pImpl->maItemConn.DoFillItemSet( *rSet, GetItemSet() );
 }
 
 
@@ -882,13 +882,13 @@ short SfxTabDialog::Ok()
             {
                 SfxItemSet& rSet = (SfxItemSet&)pTabPage->GetItemSet();
                 rSet.ClearItem();
-                bModified |= pTabPage->FillItemSet( rSet );
+                bModified |= pTabPage->FillItemSet( &rSet );
             }
             else if ( pSet && !pTabPage->HasExchangeSupport() )
             {
                 SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
 
-                if ( pTabPage->FillItemSet( aTmp ) )
+                if ( pTabPage->FillItemSet( &aTmp ) )
                 {
                     bModified |= true;
                     if (pExampleSet)

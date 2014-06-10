@@ -278,25 +278,25 @@ namespace dbaui
         OConnectionHelper::fillControls(_rControlList);
     }
 
-    bool OConnectionTabPage::FillItemSet(SfxItemSet& _rSet)
+    bool OConnectionTabPage::FillItemSet(SfxItemSet* _rSet)
     {
         bool bChangedSomething = false;
 
         if (m_aUserName.IsValueChangedFromSaved())
         {
-            _rSet.Put(SfxStringItem(DSID_USER, m_aUserName.GetText()));
-            _rSet.Put(SfxStringItem(DSID_PASSWORD, OUString()));
+            _rSet->Put(SfxStringItem(DSID_USER, m_aUserName.GetText()));
+            _rSet->Put(SfxStringItem(DSID_PASSWORD, OUString()));
             bChangedSomething = true;
         }
 
-        fillBool(_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,&m_aPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
 
         if ( m_pCollection->determineType(m_eType) ==  ::dbaccess::DST_JDBC )
         {
-            fillString(_rSet,&m_aJavaDriver, DSID_JDBCDRIVERCLASS, bChangedSomething);
+            fillString(*_rSet,&m_aJavaDriver, DSID_JDBCDRIVERCLASS, bChangedSomething);
         }
 
-        fillString(_rSet,&m_aConnectionURL, DSID_CONNECTURL, bChangedSomething);
+        fillString(*_rSet,&m_aConnectionURL, DSID_CONNECTURL, bChangedSomething);
 
         return bChangedSomething;
     }

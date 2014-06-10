@@ -71,7 +71,7 @@ class ScTpContentOptions : public SfxTabPage
 public:
     static  SfxTabPage* Create          ( Window*               pParent,
                                           const SfxItemSet&     rCoreSet );
-    virtual bool        FillItemSet     ( SfxItemSet& rCoreSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet& rCoreSet ) SAL_OVERRIDE;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
@@ -119,7 +119,7 @@ class ScTpLayoutOptions : public SfxTabPage
 public:
     static  SfxTabPage* Create          ( Window*               pParent,
                                           const SfxItemSet&     rCoreSet );
-    virtual bool        FillItemSet     ( SfxItemSet& rCoreSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet& rCoreSet ) SAL_OVERRIDE;
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

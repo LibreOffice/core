@@ -264,7 +264,7 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    bool SpecialSettingsPage::FillItemSet( SfxItemSet& _rSet )
+    bool SpecialSettingsPage::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
 
@@ -276,7 +276,7 @@ namespace dbaui
         {
             if ( !*setting->ppControl )
                 continue;
-            fillBool( _rSet, *setting->ppControl, setting->nItemId, bChangedSomething, setting->bInvertedDisplay );
+            fillBool( *_rSet, *setting->ppControl, setting->nItemId, bChangedSomething, setting->bInvertedDisplay );
         }
 
         // the non-boolean items
@@ -284,13 +284,13 @@ namespace dbaui
         {
             if ( m_pBooleanComparisonMode->IsValueChangedFromSaved() )
             {
-                _rSet.Put( SfxInt32Item( DSID_BOOLEANCOMPARISON, m_pBooleanComparisonMode->GetSelectEntryPos() ) );
+                _rSet->Put( SfxInt32Item( DSID_BOOLEANCOMPARISON, m_pBooleanComparisonMode->GetSelectEntryPos() ) );
                 bChangedSomething = true;
             }
         }
         if ( m_bHasMaxRowScan )
         {
-            fillInt32(_rSet,m_pMaxRowScan,DSID_MAX_ROW_SCAN,bChangedSomething);
+            fillInt32(*_rSet,m_pMaxRowScan,DSID_MAX_ROW_SCAN,bChangedSomething);
         }
         return bChangedSomething;
     }
@@ -357,13 +357,13 @@ namespace dbaui
         OGenericAdministrationPage::implInitControls( _rSet, _bSaveValue );
     }
 
-    bool GeneratedValuesPage::FillItemSet(SfxItemSet& _rSet)
+    bool GeneratedValuesPage::FillItemSet(SfxItemSet* _rSet)
     {
         bool bChangedSomething = false;
 
-        fillString( _rSet, m_pAutoIncrement, DSID_AUTOINCREMENTVALUE, bChangedSomething );
-        fillBool( _rSet, m_pAutoRetrievingEnabled, DSID_AUTORETRIEVEENABLED, bChangedSomething );
-        fillString( _rSet, m_pAutoRetrieving, DSID_AUTORETRIEVEVALUE, bChangedSomething );
+        fillString( *_rSet, m_pAutoIncrement, DSID_AUTOINCREMENTVALUE, bChangedSomething );
+        fillBool( *_rSet, m_pAutoRetrievingEnabled, DSID_AUTORETRIEVEENABLED, bChangedSomething );
+        fillString( *_rSet, m_pAutoRetrieving, DSID_AUTORETRIEVEVALUE, bChangedSomething );
 
         return bChangedSomething;
     }

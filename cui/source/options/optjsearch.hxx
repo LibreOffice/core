@@ -67,7 +67,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
 
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
 
     bool                IsSaveOptions() const           { return bSaveOptions; }
     void                EnableSaveOptions( bool bVal )  { bSaveOptions = bVal; }

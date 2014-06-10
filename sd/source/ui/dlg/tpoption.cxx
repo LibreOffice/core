@@ -59,7 +59,7 @@ SdTpOptionsSnap::~SdTpOptionsSnap()
 
 
 
-bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
+bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
@@ -75,7 +75,7 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
     aOptsItem.GetOptionsSnap().SetAngle( (sal_Int16) pMtrFldAngle->GetValue() );
     aOptsItem.GetOptionsSnap().SetEliminatePolyPointLimitAngle( (sal_Int16) pMtrFldBezAngle->GetValue() );
 
-    rAttrs.Put( aOptsItem );
+    rAttrs->Put( aOptsItem );
 
     // we get a possible existing GridItem, this ensures that we do net set
     // some default values by accident
@@ -136,7 +136,7 @@ SdTpOptionsContents::~SdTpOptionsContents()
 
 
 
-bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
+bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
 {
     bool bModified = false;
 
@@ -152,7 +152,7 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.GetOptionsLayout().SetDragStripes( m_pCbxDragStripes->IsChecked() );
         aOptsItem.GetOptionsLayout().SetHandlesBezier( m_pCbxHandlesBezier->IsChecked() );
 
-        rAttrs.Put( aOptsItem );
+        rAttrs->Put( aOptsItem );
         bModified = true;
     }
     return( bModified );
@@ -347,7 +347,7 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
     if( SetScale( m_pCbScale->GetText(), nX, nY ) )
     {
         if( pActiveSet )
-            FillItemSet( *pActiveSet );
+            FillItemSet( pActiveSet );
         return( LEAVE_PAGE );
     }
     WarningBox aWarnBox( GetParent(), WB_YES_NO, SD_RESSTR( STR_WARN_SCALE_FAIL ) );
@@ -357,14 +357,14 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
         return( KEEP_PAGE );
 
     if( pActiveSet )
-        FillItemSet( *pActiveSet );
+        FillItemSet( pActiveSet );
 
     return( LEAVE_PAGE );
 }
 
 
 
-bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
+bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
 {
     bool bModified = false;
 
@@ -394,7 +394,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
             m_pCbxUsePrinterMetrics->IsChecked()
             ? ::com::sun::star::document::PrinterIndependentLayout::DISABLED
             : ::com::sun::star::document::PrinterIndependentLayout::ENABLED);
-        rAttrs.Put( aOptsItem );
+        rAttrs->Put( aOptsItem );
 
         bModified = true;
     }
@@ -404,7 +404,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     if ( m_pLbMetric->IsValueChangedFromSaved() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pLbMetric->GetEntryData( nMPos );
-        rAttrs.Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ),
+        rAttrs->Put( SfxUInt16Item( GetWhich( SID_ATTR_METRIC ),
                                      (sal_uInt16)nFieldUnit ) );
         bModified = true;
     }
@@ -413,17 +413,17 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     if( m_pMtrFldTabstop->IsValueChangedFromSaved() )
     {
         sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
-        SfxMapUnit eUnit = rAttrs.GetPool()->GetMetric( nWh );
+        SfxMapUnit eUnit = rAttrs->GetPool()->GetMetric( nWh );
         SfxUInt16Item aDef( nWh,(sal_uInt16)GetCoreValue( *m_pMtrFldTabstop, eUnit ) );
-        rAttrs.Put( aDef );
+        rAttrs->Put( aDef );
         bModified = true;
     }
 
     sal_Int32 nX, nY;
     if( SetScale( m_pCbScale->GetText(), nX, nY ) )
     {
-        rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
-        rAttrs.Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
+        rAttrs->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_X, nX ) );
+        rAttrs->Put( SfxInt32Item( ATTR_OPTIONS_SCALE_Y, nY ) );
 
         bModified = true;
     }

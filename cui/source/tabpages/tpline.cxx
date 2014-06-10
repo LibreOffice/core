@@ -661,14 +661,14 @@ int SvxLineTabPage::DeactivatePage( SfxItemSet* _pSet )
     }
 
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return( LEAVE_PAGE );
 }
 
 
 
-bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
+bool SvxLineTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     const SfxPoolItem* pOld = NULL;
     sal_Int32  nPos;
@@ -696,18 +696,18 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
                 {
                     XLineDashItem aDashItem( m_pLbLineStyle->GetSelectEntry(),
                                         pDashList->GetDash( nPos - 2 )->GetDash() );
-                    pOld = GetOldItem( rAttrs, XATTR_LINEDASH );
+                    pOld = GetOldItem( *rAttrs, XATTR_LINEDASH );
                     if ( !pOld || !( *(const XLineDashItem*)pOld == aDashItem ) )
                     {
-                        rAttrs.Put( aDashItem );
+                        rAttrs->Put( aDashItem );
                         bModified = true;
                     }
                 }
             }
-            pOld = GetOldItem( rAttrs, XATTR_LINESTYLE );
+            pOld = GetOldItem( *rAttrs, XATTR_LINESTYLE );
             if ( !pOld || !( *(const XLineStyleItem*)pOld == *pStyleItem ) )
             {
-                rAttrs.Put( *pStyleItem );
+                rAttrs->Put( *pStyleItem );
                 bModified = true;
             }
             delete pStyleItem;
@@ -718,10 +718,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( m_pMtrLineWidth->IsValueChangedFromSaved() )
     {
         XLineWidthItem aItem( GetCoreValue( *m_pMtrLineWidth, ePoolUnit ) );
-        pOld = GetOldItem( rAttrs, XATTR_LINEWIDTH );
+        pOld = GetOldItem( *rAttrs, XATTR_LINEWIDTH );
         if ( !pOld || !( *(const XLineWidthItem*)pOld == aItem ) )
         {
-            rAttrs.Put( aItem );
+            rAttrs->Put( aItem );
             bModified = true;
         }
     }
@@ -729,10 +729,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( m_pMtrStartWidth->IsValueChangedFromSaved() )
     {
         XLineStartWidthItem aItem( GetCoreValue( *m_pMtrStartWidth, ePoolUnit ) );
-        pOld = GetOldItem( rAttrs, XATTR_LINESTARTWIDTH );
+        pOld = GetOldItem( *rAttrs, XATTR_LINESTARTWIDTH );
         if ( !pOld || !( *(const XLineStartWidthItem*)pOld == aItem ) )
         {
-            rAttrs.Put( aItem );
+            rAttrs->Put( aItem );
             bModified = true;
         }
     }
@@ -740,10 +740,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( m_pMtrEndWidth->IsValueChangedFromSaved() )
     {
         XLineEndWidthItem aItem( GetCoreValue( *m_pMtrEndWidth, ePoolUnit ) );
-        pOld = GetOldItem( rAttrs, XATTR_LINEENDWIDTH );
+        pOld = GetOldItem( *rAttrs, XATTR_LINEENDWIDTH );
         if ( !pOld || !( *(const XLineEndWidthItem*)pOld == aItem ) )
         {
-            rAttrs.Put( aItem );
+            rAttrs->Put( aItem );
             bModified = true;
         }
     }
@@ -752,10 +752,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( m_pLbColor->IsValueChangedFromSaved() )
     {
         XLineColorItem aItem( m_pLbColor->GetSelectEntry(), m_pLbColor->GetSelectEntryColor() );
-        pOld = GetOldItem( rAttrs, XATTR_LINECOLOR );
+        pOld = GetOldItem( *rAttrs, XATTR_LINECOLOR );
         if ( !pOld || !( *(const XLineColorItem*)pOld == aItem ) )
         {
-            rAttrs.Put( aItem );
+            rAttrs->Put( aItem );
             bModified = true;
         }
     }
@@ -771,10 +771,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
                 pItem = new XLineStartItem();
             else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
                 pItem = new XLineStartItem( m_pLbStartStyle->GetSelectEntry(), pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
-            pOld = GetOldItem( rAttrs, XATTR_LINESTART );
+            pOld = GetOldItem( *rAttrs, XATTR_LINESTART );
             if( pItem && ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
             {
-                rAttrs.Put( *pItem );
+                rAttrs->Put( *pItem );
                 bModified = true;
             }
             delete pItem;
@@ -788,11 +788,11 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
                 pItem = new XLineEndItem();
             else if( pLineEndList->Count() > (long) ( nPos - 1 ) )
                 pItem = new XLineEndItem( m_pLbEndStyle->GetSelectEntry(), pLineEndList->GetLineEnd( nPos - 1 )->GetLineEnd() );
-            pOld = GetOldItem( rAttrs, XATTR_LINEEND );
+            pOld = GetOldItem( *rAttrs, XATTR_LINEEND );
             if( pItem &&
                 ( !pOld || !( *(const XLineEndItem*)pOld == *pItem ) ) )
             {
-                rAttrs.Put( *pItem );
+                rAttrs->Put( *pItem );
                 bModified = true;
             }
             delete pItem;
@@ -804,10 +804,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( m_pTsbCenterStart->IsValueChangedFromSaved() )
     {
         XLineStartCenterItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
-        pOld = GetOldItem( rAttrs, XATTR_LINESTARTCENTER );
+        pOld = GetOldItem( *rAttrs, XATTR_LINESTARTCENTER );
         if ( !pOld || !( *(const XLineStartCenterItem*)pOld == aItem ) )
         {
-            rAttrs.Put( aItem );
+            rAttrs->Put( aItem );
             bModified = true;
         }
     }
@@ -815,10 +815,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( m_pTsbCenterEnd->IsValueChangedFromSaved() )
     {
         XLineEndCenterItem aItem( sal::static_int_cast< sal_Bool >( eState ) );
-        pOld = GetOldItem( rAttrs, XATTR_LINEENDCENTER );
+        pOld = GetOldItem( *rAttrs, XATTR_LINEENDCENTER );
         if ( !pOld || !( *(const XLineEndCenterItem*)pOld == aItem ) )
         {
-            rAttrs.Put( aItem );
+            rAttrs->Put( aItem );
             bModified = true;
         }
     }
@@ -828,10 +828,10 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     if( m_pMtrTransparent->IsValueChangedFromSaved() )
     {
         XLineTransparenceItem aItem( nVal );
-        pOld = GetOldItem( rAttrs, XATTR_LINETRANSPARENCE );
+        pOld = GetOldItem( *rAttrs, XATTR_LINETRANSPARENCE );
         if ( !pOld || !( *(const XLineTransparenceItem*)pOld == aItem ) )
         {
-            rAttrs.Put( aItem );
+            rAttrs->Put( aItem );
             bModified = true;
         }
     }
@@ -868,11 +868,11 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
         if(pNew)
         {
-            pOld = GetOldItem( rAttrs, XATTR_LINEJOINT );
+            pOld = GetOldItem( *rAttrs, XATTR_LINEJOINT );
 
             if(!pOld || !(*(const XLineJointItem*)pOld == *pNew))
             {
-                rAttrs.Put( *pNew );
+                rAttrs->Put( *pNew );
                 bModified = true;
             }
 
@@ -907,11 +907,11 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
 
         if(pNew)
         {
-            pOld = GetOldItem( rAttrs, XATTR_LINECAP );
+            pOld = GetOldItem( *rAttrs, XATTR_LINECAP );
 
             if(!pOld || !(*(const XLineCapItem*)pOld == *pNew))
             {
-                rAttrs.Put( *pNew );
+                rAttrs->Put( *pNew );
                 bModified = true;
             }
 
@@ -922,40 +922,40 @@ bool SvxLineTabPage::FillItemSet( SfxItemSet& rAttrs )
     if(nSymbolType!=SVX_SYMBOLTYPE_UNKNOWN || bNewSize)
     {
         // Was set by selection or the size is different
-        SvxSizeItem  aSItem(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),aSymbolSize);
-        const SfxPoolItem* pSOld = GetOldItem( rAttrs, rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE) );
+        SvxSizeItem  aSItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),aSymbolSize);
+        const SfxPoolItem* pSOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE) );
         bNewSize  = pSOld ? *(const SvxSizeItem *)pSOld != aSItem : bNewSize ;
         if(bNewSize)
         {
-            rAttrs.Put(aSItem);
+            rAttrs->Put(aSItem);
             bModified=true;
         }
 
-        SfxInt32Item aTItem(rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),nSymbolType);
-        const SfxPoolItem* pTOld = GetOldItem( rAttrs, rAttrs.GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE) );
+        SfxInt32Item aTItem(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),nSymbolType);
+        const SfxPoolItem* pTOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE) );
         bool bNewType = pTOld == NULL || *(const SfxInt32Item*)pTOld != aTItem;
         if(bNewType && nSymbolType==SVX_SYMBOLTYPE_UNKNOWN)
             bNewType=false; // a small fix, type wasn't set -> don't create a type item after all!
         if(bNewType)
         {
-            rAttrs.Put(aTItem);
+            rAttrs->Put(aTItem);
             bModified=true;
         }
 
         if(nSymbolType!=SVX_SYMBOLTYPE_NONE)
         {
-            SvxBrushItem aBItem(aSymbolGraphic,GPOS_MM,rAttrs.GetPool()->GetWhich(SID_ATTR_BRUSH));
-            const SfxPoolItem* pBOld = GetOldItem( rAttrs, rAttrs.GetPool()->GetWhich(SID_ATTR_BRUSH) );
+            SvxBrushItem aBItem(aSymbolGraphic,GPOS_MM,rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH));
+            const SfxPoolItem* pBOld = GetOldItem( *rAttrs, rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH) );
             bool bNewBrush =
                 pBOld == NULL || *(const SvxBrushItem*)pBOld != aBItem;
             if(bNewBrush)
             {
-                rAttrs.Put(aBItem);
+                rAttrs->Put(aBItem);
                 bModified=true;
             }
         }
     }
-    rAttrs.Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
+    rAttrs->Put (CntUInt16Item(SID_PAGE_TYPE,nPageType));
     return( bModified );
 }
 

@@ -87,19 +87,19 @@ void ScHFPage::Reset( const SfxItemSet& rSet )
     TurnOnHdl( 0 );
 }
 
-bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
+bool ScHFPage::FillItemSet( SfxItemSet* rOutSet )
 {
     bool bResult = SvxHFPage::FillItemSet( rOutSet );
 
     if ( nId == SID_ATTR_PAGE_HEADERSET )
     {
-        rOutSet.Put( aDataSet.Get( ATTR_PAGE_HEADERLEFT ) );
-        rOutSet.Put( aDataSet.Get( ATTR_PAGE_HEADERRIGHT ) );
+        rOutSet->Put( aDataSet.Get( ATTR_PAGE_HEADERLEFT ) );
+        rOutSet->Put( aDataSet.Get( ATTR_PAGE_HEADERRIGHT ) );
     }
     else
     {
-        rOutSet.Put( aDataSet.Get( ATTR_PAGE_FOOTERLEFT ) );
-        rOutSet.Put( aDataSet.Get( ATTR_PAGE_FOOTERRIGHT ) );
+        rOutSet->Put( aDataSet.Get( ATTR_PAGE_FOOTERLEFT ) );
+        rOutSet->Put( aDataSet.Get( ATTR_PAGE_FOOTERRIGHT ) );
     }
 
     return bResult;
@@ -125,7 +125,7 @@ int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( LEAVE_PAGE == SvxHFPage::DeactivatePage( pSetP ) )
         if ( pSetP )
-            FillItemSet( *pSetP );
+            FillItemSet( pSetP );
 
     return LEAVE_PAGE;
 }

@@ -247,7 +247,7 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
     }
     if(pBox)
     {
-        pTabPage->FillItemSet(*pSet);
+        pTabPage->FillItemSet(pSet);
     }
     nOldSelection = (sal_IntPtr)m_pApplyToLB->GetEntryData(m_pApplyToLB->GetSelectEntryPos());
     long nWidth = nSelectionWidth;
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
             bFrameChanged = true;
         break;
     }
-    pTabPage->FillItemSet(*pSet);
+    pTabPage->FillItemSet(pSet);
 
     if(pSelectionSet && SFX_ITEM_SET == pSelectionSet->GetItemState(RES_COL))
     {
@@ -627,7 +627,7 @@ SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SwColumnPage(pParent, rSet);
 }
 // stuff attributes into the Set when OK
-bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
+bool SwColumnPage::FillItemSet(SfxItemSet *rSet)
 {
     if(m_pCLNrEdt->HasChildPathFocus())
         m_pCLNrEdt->GetDownHdl().Call(m_pCLNrEdt);
@@ -636,13 +636,13 @@ bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
 
     const SfxPoolItem* pOldItem;
     const SwFmtCol& rCol = pColMgr->GetColumns();
-    if(0 == (pOldItem = GetOldItem( rSet, RES_COL )) ||
+    if(0 == (pOldItem = GetOldItem( *rSet, RES_COL )) ||
                 rCol != *pOldItem )
-        rSet.Put(rCol);
+        rSet->Put(rCol);
 
     if(m_pBalanceColsCB->IsVisible() )
     {
-        rSet.Put(SwFmtNoBalancedColumns(!m_pBalanceColsCB->IsChecked() ));
+        rSet->Put(SwFmtNoBalancedColumns(!m_pBalanceColsCB->IsChecked() ));
     }
     if( m_pTextDirectionLB->IsVisible())
     {
@@ -650,7 +650,7 @@ bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
         if ( m_pTextDirectionLB->IsValueChangedFromSaved() )
         {
             sal_uInt32 nDirection = (sal_uInt32)(sal_IntPtr)m_pTextDirectionLB->GetEntryData( nPos );
-            rSet.Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
+            rSet->Put( SvxFrameDirectionItem( (SvxFrameDirection)nDirection, RES_FRAMEDIR));
         }
     }
     return true;
@@ -1229,7 +1229,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
 int SwColumnPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
 
     return sal_True;
 }

@@ -194,7 +194,7 @@ int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
     CheckChanges_Impl();
 
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return( LEAVE_PAGE );
 }
@@ -257,7 +257,7 @@ void SvxLineDefTabPage::CheckChanges_Impl()
 
 
 
-bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
+bool SvxLineDefTabPage::FillItemSet( SfxItemSet* rAttrs )
 {
     if( nDlgType == 0 ) // line dialog
     {
@@ -266,8 +266,8 @@ bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
             FillDash_Impl();
 
             OUString aString( m_pLbLineStyles->GetSelectEntry() );
-            rAttrs.Put( XLineStyleItem( XLINE_DASH ) );
-            rAttrs.Put( XLineDashItem( aString, aDash ) );
+            rAttrs->Put( XLineStyleItem( XLINE_DASH ) );
+            rAttrs->Put( XLineDashItem( aString, aDash ) );
         }
     }
     return true;

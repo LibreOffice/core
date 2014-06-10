@@ -107,7 +107,7 @@ void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )
 int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if ( _pSet )
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
 
     return sal_True;
 }
@@ -120,12 +120,12 @@ void SwLabPrtPage::FillItem(SwLabItem& rItem)
     rItem.bSynchron = m_pSynchronCB->IsChecked() && m_pSynchronCB->IsEnabled();
 }
 
-bool SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
+bool SwLabPrtPage::FillItemSet(SfxItemSet* rSet)
 {
     SwLabItem aItem;
     GetParentSwLabDlg()->GetLabItem(aItem);
     FillItem(aItem);
-    rSet.Put(aItem);
+    rSet->Put(aItem);
 
     return true;
 }

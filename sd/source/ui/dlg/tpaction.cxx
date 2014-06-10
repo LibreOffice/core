@@ -265,7 +265,7 @@ void SdTPAction::Construct()
 
 
 
-bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
+bool SdTPAction::FillItemSet( SfxItemSet* rAttrs )
 {
     bool bModified = false;
     presentation::ClickAction eCA = presentation::ClickAction_NONE;
@@ -275,15 +275,15 @@ bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
 
     if( m_pLbAction->IsValueChangedFromSaved() )
     {
-        rAttrs.Put( SfxAllEnumItem( ATTR_ACTION, (sal_uInt16)eCA ) );
+        rAttrs->Put( SfxAllEnumItem( ATTR_ACTION, (sal_uInt16)eCA ) );
         bModified = true;
     }
     else
-        rAttrs.InvalidateItem( ATTR_ACTION );
+        rAttrs->InvalidateItem( ATTR_ACTION );
 
     OUString aFileName = GetEditText( true );
     if( aFileName.isEmpty() )
-        rAttrs.InvalidateItem( ATTR_ACTION_FILENAME );
+        rAttrs->InvalidateItem( ATTR_ACTION_FILENAME );
     else
     {
         if( mpDoc && mpDoc->GetDocSh() && mpDoc->GetDocSh()->GetMedium() )
@@ -296,7 +296,7 @@ bool SdTPAction::FillItemSet( SfxItemSet& rAttrs )
                                                         INetURLObject::WAS_ENCODED,
                                                         INetURLObject::DECODE_UNAMBIGUOUS );
 
-            rAttrs.Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );
+            rAttrs->Put( SfxStringItem( ATTR_ACTION_FILENAME, aFileName ) );
             bModified = true;
         }
         else
@@ -368,7 +368,7 @@ void SdTPAction::ActivatePage( const SfxItemSet& )
 int SdTPAction::DeactivatePage( SfxItemSet* pPageSet )
 {
     if( pPageSet )
-        FillItemSet( *pPageSet );
+        FillItemSet( pPageSet );
 
     return( LEAVE_PAGE );
 }
