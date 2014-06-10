@@ -336,7 +336,7 @@ public:
     bool MarkPoints(const Rectangle& rRect, bool bUnmark=false) { return MarkPoints(&rRect,bUnmark); }
     bool UnmarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,true); }
     bool UnMarkPoint(SdrHdl& rHdl) { return MarkPoint(rHdl,true); }
-    bool IsPointMarked(const SdrHdl& rHdl) const { ForceUndirtyMrkPnt(); return &rHdl!=NULL && rHdl.IsSelected(); }
+    bool IsPointMarked(const SdrHdl& rHdl) const { ForceUndirtyMrkPnt(); return rHdl.IsSelected(); }
     bool MarkAllPoints() { return MarkPoints(NULL,false); }
     bool UnmarkAllPoints() { return MarkPoints(NULL,true); }
     bool UnMarkAllPoints() { return MarkPoints(NULL,true); }
@@ -393,7 +393,7 @@ public:
     // Get the Hdl (handle) of a marked GluePoint. Non-marked
     // GluePoints don`t have handles
     SdrHdl* GetGluePointHdl(const SdrObject* pObj, sal_uInt16 nId) const;
-    bool IsGluePoint(const SdrHdl& rHdl) const { return &rHdl!=NULL && rHdl.GetKind()==HDL_GLUE; }
+    bool IsGluePoint(const SdrHdl& rHdl) const { return rHdl.GetKind()==HDL_GLUE; }
 
     // Mark all points within this rectangular (View coordinates)
     bool MarkGluePoints(const Rectangle& rRect) { return MarkGluePoints(&rRect,false); }
