@@ -158,6 +158,7 @@ class GL2DRenderer : public IRenderer
 {
 public:
     GL2DRenderer(ChartView* pView);
+    virtual ~GL2DRenderer() SAL_OVERRIDE;
 
     virtual void update() SAL_OVERRIDE;
     virtual void clickedAt(const Point& rPos, sal_uInt16 nButton) SAL_OVERRIDE;
@@ -171,6 +172,13 @@ private:
 GL2DRenderer::GL2DRenderer(ChartView* pView):
     mpView(pView)
 {
+}
+
+GL2DRenderer::~GL2DRenderer()
+{
+    OpenGLWindow* pWindow = mpView->mrChartModel.getOpenGLWindow();
+    if(pWindow)
+        pWindow->setRenderer(NULL);
 }
 
 void GL2DRenderer::update()
