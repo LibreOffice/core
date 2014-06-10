@@ -628,7 +628,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
 uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPropertyValuesTolerant_Impl(
         const uno::Sequence< OUString >& rPropertyNames,
         bool bDirectValuesOnly )
-    throw (uno::RuntimeException)
+    throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
