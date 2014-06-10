@@ -230,8 +230,9 @@ private:
     getTruncatedOutputStream(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
-        throw ( ::com::sun::star::ucb::CommandFailedException,
-                ::com::sun::star::task::DocumentPasswordRequest );
+        throw ( css::ucb::CommandFailedException,
+                css::task::DocumentPasswordRequest,
+                css::uno::RuntimeException );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
     queryChildContent( const OUString & rRelativeChildUri );

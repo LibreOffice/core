@@ -2876,7 +2876,8 @@ static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
 uno::Reference< io::XOutputStream > Content::getTruncatedOutputStream(
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw ( ucb::CommandFailedException,
-            task::DocumentPasswordRequest )
+            task::DocumentPasswordRequest,
+            css::uno::RuntimeException )
 {
     OSL_ENSURE( m_aProps.getType() == STREAM,
                 "Content::getTruncatedOutputStream - content is no stream!" );
