@@ -374,6 +374,8 @@ private:
     MaterialParameters m_Batchmaterial;
     GLuint m_Batch3DUBOBuffer;
     GLint m_Batch3DActualSizeLight;
+
+    glm::mat4 m_GlobalScaleMatrix;
 };
 
 }
