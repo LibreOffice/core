@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da9b358b_27bb9e10",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 812,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-10T07:39:49Z",
+      "side": 1,
+      "message": "But then you should assert for the existence of \"framePr\" instead. Such \"negative\" asserts are rarely the right tests, there are so many cases when they will succeed and the document itself won\u0027t be what you want.",
+      "parentUuid": "da9b358b_a448cc88",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da9b358b_845ee843",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlsdrexport.cxx",
         "patchSetId": 3
@@ -30,6 +48,74 @@
       "writtenOn": "2014-06-08T06:51:29Z",
       "side": 1,
       "message": "This test file contains framePr. So now after my changes framePr is gets preserved and textbox is removed now from export side. \n\nSo I checked for negative unit test case. framePr should not be convert to textbox while conversion.",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_07377ab1",
+        "filename": "sw/source/core/unocore/unoframe.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3058,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-10T07:39:49Z",
+      "side": 1,
+      "message": "Aha, nice catch, that was the root cause of your problems, I assume. :)",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_e73b769b",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-10T07:39:49Z",
+      "side": 1,
+      "message": "May I suggest two renames:\n\n- populate -\u003e Populate, as all the other method names are starting with a capital latter, just for consistency.\n- IsTextBoxIsFramePr -\u003e TextBoxIsFramePr, so in case you spell out the method name, you get something that\u0027s a meaningful English statement.",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_c740720a",
+        "filename": "sw/source/filter/ww8/docxsdrexport.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-10T07:39:49Z",
+      "side": 1,
+      "message": "Could you add a comment here that this is used for \u003cw:framePr\u003e? Just so that it\u0027s easier to see how this is different from DocxSdrExport::writeDMLTextFrame(bTextBoxOnly \u003d true), which also does a similar \"write only text content\" action.",
+      "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_a7456e18",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 936,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-10T07:39:49Z",
+      "side": 1,
+      "message": "If you know that the grab-bag will always have exactly one element, then just use \"aGrabBag(1)\" during declaration, no need for a separate realloc().",
       "revId": "6dd450d49de49c7abf8ca79a61c0507a8138fde5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
