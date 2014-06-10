@@ -337,21 +337,16 @@ public:
 
 };
 
-class SwpHstry : public std::vector<SwHistoryHint*> {
-public:
-    // the destructor will free all objects still in the vector
-    ~SwpHstry();
-};
-
 class SwHistory
 {
     friend class SwDoc;         // actually only SwDoc::DelUndoObj may access
     friend class SwRegHistory;  // for inserting History attributes
 
-    SwpHstry m_SwpHstry;
+    std::vector<SwHistoryHint*> m_SwpHstry;
     sal_uInt16 m_nEndDiff;
 
 public:
+    typedef std::vector<SwHistoryHint*>::iterator SwpHstry_iterator;
     SwHistory( sal_uInt16 nInitSz = 0 );
     ~SwHistory();
 
@@ -383,8 +378,8 @@ public:
     void Move( sal_uInt16 nPos, SwHistory *pIns,
                sal_uInt16 const nStart = 0)
     {
-        SwpHstry::iterator itSourceBegin = pIns->m_SwpHstry.begin() + nStart;
-        SwpHstry::iterator itSourceEnd = pIns->m_SwpHstry.end();
+        SwpHstry_iterator itSourceBegin = pIns->m_SwpHstry.begin() + nStart;
+        SwpHstry_iterator itSourceEnd = pIns->m_SwpHstry.end();
         if (itSourceBegin == itSourceEnd) return;
         m_SwpHstry.insert(m_SwpHstry.begin() + nPos, itSourceBegin, itSourceEnd);
         pIns->m_SwpHstry.erase( itSourceBegin, itSourceEnd );
