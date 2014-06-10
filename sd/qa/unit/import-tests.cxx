@@ -30,6 +30,7 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/xflclit.hxx>
+#include <svtools/miscopt.hxx>
 #include <animations/animationnodehelper.hxx>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
@@ -710,8 +711,8 @@ void SdFiltersTest::testFdo71961()
 
 void SdFiltersTest::testMediaEmbedding()
 {
+    SvtMiscOptions().SetExperimentalMode(true);
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"));
-    xDocShRef = saveAndReload( xDocShRef, ODP );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -724,12 +725,21 @@ void SdFiltersTest::testMediaEmbedding()
     CPPUNIT_ASSERT_MESSAGE( "missing model", pModelObj != NULL);
     CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Model/jeep/jeep.json" ), pModelObj->getMediaProperties().getURL());
     CPPUNIT_ASSERT_EQUAL( OUString( "application/vnd.gltf+json" ), pModelObj->getMediaProperties().getMimeType());
-#else
+
+    // Check the case when experimental mode is disabled
+    xDocShRef->DoClose();
+    SvtMiscOptions().SetExperimentalMode(false);
+    xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"));
+    pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+#endif
+
     // If glTF is not supported, then the fallback image is imported
     SdrGrafObj *pGrafic = dynamic_cast<SdrGrafObj*>( pPage->GetObj( 2 ));
     CPPUNIT_ASSERT_MESSAGE( "Could not load glTF fallback image", pGrafic != NULL);
-    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Pictures/jeep.png" ), pGrafic->GetGrafStreamURL());
-#endif
+    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Model/Fallback/jeep.png" ), pGrafic->GetGrafStreamURL());
 
     // Second object is a sound
     SdrMediaObj *pMediaObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 3 ));

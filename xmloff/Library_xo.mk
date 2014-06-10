@@ -50,6 +50,7 @@ $(eval $(call gb_Library_use_libraries,xo,\
     salhelper \
 	sax \
     svl \
+    svt \
     tl \
     utl \
     vcl \

@@ -43,6 +43,8 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 
+#include <svtools/miscopt.hxx>
+
 // #UndoRedo#
 #include <svl/slstitm.hxx>
 #include <sfx2/app.hxx>
@@ -1660,13 +1662,18 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
+    bool bDisableInsert3DModel = false;
 #if !HAVE_FEATURE_GLTF
-    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_INSERT_3DMODEL))
+    bDisableInsert3DModel = true;
+#else
+    bDisableInsert3DModel = !SvtMiscOptions().IsExperimentalMode();
+#endif
+
+    if (bDisableInsert3DModel && SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_INSERT_3DMODEL))
     {
         rSet.DisableItem(SID_INSERT_3DMODEL);
         rSet.Put(SfxVisibilityItem(SID_INSERT_3DMODEL, false));
     }
-#endif
 
     GetModeSwitchingMenuState (rSet);
 }
