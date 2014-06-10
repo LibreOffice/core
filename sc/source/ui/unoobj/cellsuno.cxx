@@ -5054,8 +5054,9 @@ OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeException,
     return aFormula;
 }
 
-void ScCellRangeObj::SetArrayFormula_Impl( const OUString& rFormula,
-        const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar ) throw(uno::RuntimeException)
+void ScCellRangeObj::SetArrayFormula_Impl(const OUString& rFormula,
+    const OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
+        throw (uno::RuntimeException, std::exception)
 {
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
