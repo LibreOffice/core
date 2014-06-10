@@ -1464,7 +1464,8 @@ ScVbaRange::ScVbaRange( const uno::Reference< XHelperInterface >& xParent, const
 
 }
 
-ScVbaRange::ScVbaRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows, bool bIsColumns  ) throw ( lang::IllegalArgumentException )
+ScVbaRange::ScVbaRange(const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows, bool bIsColumns)
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
 : ScVbaRange_BASE( xParent, xContext, uno::Reference< beans::XPropertySet >( xRanges, uno::UNO_QUERY_THROW ), getModelFromXIf( uno::Reference< uno::XInterface >( xRanges, uno::UNO_QUERY_THROW ) ), true ), mxRanges( xRanges ),mbIsRows( bIsRows ), mbIsColumns( bIsColumns )
 
 {
