@@ -337,10 +337,31 @@ public:
 
 };
 
-class SwpHstry : public std::vector<SwHistoryHint*> {
-public:
+class SwpHstry{
+    std::vector<SwHistoryHint*> v_SwpHstry;
+    public:
+    typedef std::vector<SwHistoryHint*>::size_type size_type;
+    typedef std::vector<SwHistoryHint*>::iterator Sw_iterator;
+    typedef std::vector<SwHistoryHint*>::const_iterator Sw_constIterator;
+    typedef SwHistoryHint* SwHistoryHintPtr;
     // the destructor will free all objects still in the vector
     ~SwpHstry();
+    //function for size,getObj,beginIterator,endIterator,insert,erase,push_back,reserve
+    size_type size() const;
+    void push_back(SwHistoryHintPtr newElement);
+    void reserve(size_type reserveQty);
+    Sw_iterator begin();
+    Sw_constIterator beginConstIt() const;
+    Sw_iterator end();
+    Sw_iterator erase(Sw_iterator startIterator,Sw_iterator endIterator);
+    Sw_iterator erase(Sw_iterator position);
+    void insert(Sw_iterator pos,Sw_iterator first,Sw_iterator last);
+    Sw_iterator insert(Sw_iterator pos,const SwHistoryHintPtr &val);
+    //operator[] function to be added.
+    SwHistoryHintPtr operator[](size_type n) const
+    {
+        return this->v_SwpHstry[n];
+    }
 };
 
 class SwHistory
@@ -383,8 +404,8 @@ public:
     void Move( sal_uInt16 nPos, SwHistory *pIns,
                sal_uInt16 const nStart = 0)
     {
-        SwpHstry::iterator itSourceBegin = pIns->m_SwpHstry.begin() + nStart;
-        SwpHstry::iterator itSourceEnd = pIns->m_SwpHstry.end();
+        SwpHstry::Sw_iterator itSourceBegin = pIns->m_SwpHstry.begin() + nStart;
+        SwpHstry::Sw_iterator itSourceEnd = pIns->m_SwpHstry.end();
         if (itSourceBegin == itSourceEnd) return;
         m_SwpHstry.insert(m_SwpHstry.begin() + nPos, itSourceBegin, itSourceEnd);
         pIns->m_SwpHstry.erase( itSourceBegin, itSourceEnd );

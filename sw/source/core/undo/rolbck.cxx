@@ -967,6 +967,47 @@ void SwHistoryChangeCharFmt::SetInDoc(SwDoc * pDoc, bool )
 }
 // <- #i27615#
 
+SwpHstry::size_type SwpHstry::size() const{
+    return this->v_SwpHstry.size();
+}
+
+void SwpHstry::push_back(SwpHstry::SwHistoryHintPtr newElement){
+    this->v_SwpHstry.push_back(newElement);
+}
+
+void SwpHstry::reserve(SwpHstry::size_type reserveQty){
+    this->v_SwpHstry.reserve(reserveQty);
+}
+
+SwpHstry::Sw_iterator SwpHstry::begin(){
+    return this->v_SwpHstry.begin();
+}
+
+SwpHstry::Sw_iterator SwpHstry::end(){
+    return this->v_SwpHstry.end();
+}
+
+SwpHstry::Sw_iterator SwpHstry::erase(SwpHstry::Sw_iterator startIt,SwpHstry::Sw_iterator endIt){
+    return this->v_SwpHstry.erase(startIt,endIt);
+}
+
+SwpHstry::Sw_iterator SwpHstry::erase(SwpHstry::Sw_iterator position){
+    return this->v_SwpHstry.erase(position);
+}
+
+SwpHstry::Sw_iterator SwpHstry::insert(SwpHstry::Sw_iterator pos,const SwHistoryHintPtr &val){
+    return (this->v_SwpHstry).insert(pos,val);
+}
+
+void SwpHstry::insert(SwpHstry::Sw_iterator pos,SwpHstry::Sw_iterator first,SwpHstry::Sw_iterator last){
+    this->v_SwpHstry.insert(pos,first,last);
+}
+
+SwpHstry::Sw_constIterator SwpHstry::beginConstIt() const{
+    SwpHstry::Sw_constIterator it = this->v_SwpHstry.begin();
+    return it;
+}
+
 SwHistory::SwHistory( sal_uInt16 nInitSz )
     : m_SwpHstry()
     , m_nEndDiff( 0 )
@@ -1432,7 +1473,7 @@ void SwRegHistory::_MakeSetWhichIds()
 
 SwpHstry::~SwpHstry()
 {
-    for(const_iterator it = begin(); it != end(); ++it)
+    for(SwpHstry::Sw_constIterator it = beginConstIt(); it != end(); ++it)
         delete *it;
 }
 
