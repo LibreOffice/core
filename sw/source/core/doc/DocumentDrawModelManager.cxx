@@ -45,8 +45,17 @@ class XSpellChecker1;
 namespace sw
 {
 
-DocumentDrawModelManager::DocumentDrawModelManager( SwDoc& i_rSwdoc ) : m_rSwdoc(i_rSwdoc), mpDrawModel(0) {}
-
+DocumentDrawModelManager::DocumentDrawModelManager(SwDoc& i_rSwdoc)
+    : m_rSwdoc(i_rSwdoc)
+    , mpDrawModel(0)
+    , mnHeaven(0)
+    , mnHell(0)
+    , mnControls(0)
+    , mnInvisibleHeaven(0)
+    , mnInvisibleHell(0)
+    , mnInvisibleControls(0)
+{
+}
 
 // Is also called by the Sw3 Reader, if there was an error when reading the
 // drawing layer. If it is called by the Sw3 Reader the layer is rebuilt
