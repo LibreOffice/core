@@ -103,9 +103,8 @@
 #define STR_CAPTION_FRAME               (RC_APP_BEGIN + 134)
 #define STR_CAPTION_GRAPHIC             (RC_APP_BEGIN + 135)
 #define STR_CAPTION_OLE                 (RC_APP_BEGIN + 136)
-#define STR_CATEGORY_NONE               (RC_APP_BEGIN + 137)
 
-#define APP_ACT_END                     STR_CATEGORY_NONE
+#define APP_ACT_END                     STR_CAPTION_OLE
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line
