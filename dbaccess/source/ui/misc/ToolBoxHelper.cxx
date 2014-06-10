@@ -29,7 +29,7 @@
 namespace dbaui
 {
     OToolBoxHelper::OToolBoxHelper()
-        : m_nSymbolsSize(-1 )
+        : m_nSymbolsSize(-1)
         , m_pToolBox(NULL)
     {
 
@@ -51,8 +51,8 @@ namespace dbaui
             if ( nCurSymbolsSize != m_nSymbolsSize )
             {
                 m_nSymbolsSize  = nCurSymbolsSize;
+                setImageList(m_nSymbolsSize);
 
-                m_pToolBox->SetImageList( getImageList(m_nSymbolsSize) );
                 Size aTbOldSize = m_pToolBox->GetSizePixel();
                 adjustToolBoxSize(m_pToolBox);
                 Size aTbNewSize = m_pToolBox->GetSizePixel();
@@ -62,6 +62,7 @@ namespace dbaui
             }
         }
     }
+
     IMPL_LINK(OToolBoxHelper, ConfigOptionsChanged, SvtMiscOptions*, /*_pOptions*/)
     {
         if ( m_pToolBox )

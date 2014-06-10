@@ -172,11 +172,11 @@ public:
         */
         virtual void resizeControls(const Size& _rDiff) SAL_OVERRIDE;
 
-        /** will be called when the image list is needed.
+        /** will be called when the image list needs to change
             @param  _eSymbolsSize
                 <svtools/imgdef.hxx>
         */
-    virtual ImageList getImageList(sal_Int16 _eSymbolsSize) const SAL_OVERRIDE;
+    virtual void setImageList(sal_Int16 _eSymbolsSize) SAL_OVERRIDE;
 
     // ImageListProvider interface
     virtual ImageList getImageList(vcl::ImageListType) SAL_OVERRIDE;

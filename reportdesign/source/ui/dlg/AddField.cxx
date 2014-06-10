@@ -490,12 +490,12 @@ IMPL_LINK( OAddFieldWindow, OnDoubleClickHdl, void* ,/*_pAddFieldDlg*/)
     return 0L;
 }
 
-ImageList OAddFieldWindow::getImageList(sal_Int16 _eBitmapSet) const
+void OAddFieldWindow::setImageList(sal_Int16 _eBitmapSet)
 {
     sal_Int16 nN = IMG_ADDFIELD_DLG_SC;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
         nN = IMG_ADDFIELD_DLG_LC;
-    return ImageList(ModuleRes(nN));
+    m_aActions.SetImageList(ImageList(ModuleRes(nN)));
 }
 
 void OAddFieldWindow::resizeControls(const Size& _rDiff)

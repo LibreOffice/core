@@ -42,16 +42,17 @@ namespace dbaui
         /** will be called when the controls need to be resized.
             @param  _rDiff
                 Contains the difference of the old and new toolbox size.
+
+                TO-DO: remove this when all implmentations
+                are converted to .ui format
         */
         virtual void resizeControls(const Size& _rDiff) = 0;
 
-        /** will be called when the image list is needed.
+        /** will be called when the image list needs to change
             @param  _eSymbolsSize
                 <svtools/imgdef.hxx>
-            @param  _bHiContast
-                <TRUE/> when in high contrast mode.
         */
-        virtual ImageList getImageList(sal_Int16 _eSymbolsSize) const = 0;
+        virtual void setImageList(sal_Int16 _eSymbolsSize) = 0;
 
         /** only the member will be set, derived classes can overload this function and do what need to be done.
             @param  _pTB
