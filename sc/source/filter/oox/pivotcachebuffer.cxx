@@ -749,7 +749,7 @@ void PivotCacheField::getCacheItemNames( ::std::vector< OUString >& orItemNames 
         maSharedItems.getCacheItemNames( orItemNames );
 }
 
-PivotCacheItemList PivotCacheField::getCacheItems() const
+const PivotCacheItemList& PivotCacheField::getCacheItems() const
 {
     if( hasGroupItems() )
         return maGroupItems;
