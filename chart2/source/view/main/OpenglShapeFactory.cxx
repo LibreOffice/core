@@ -473,9 +473,8 @@ void OpenglShapeFactory::postRender(OpenGLWindow* pWindow)
 
 void OpenglShapeFactory::clearPage(uno::Reference< drawing::XShapes > xRootShape)
 {
-    dummy::DummyChart* pChart = dynamic_cast<dummy::DummyChart*>(xRootShape.get());
-    assert(pChart);
-    pChart->clear();
+    dummy::DummyChart& rChart = dynamic_cast<dummy::DummyChart&>(*xRootShape.get());
+    rChart.clear();
 }
 
 } //namespace dummy
