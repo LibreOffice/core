@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <string.h>
 #include <osl/thread.h>
 #include <vcl/bmpacc.hxx>
@@ -26,6 +25,7 @@
 #include <vcl/virdev.hxx>
 #include <math.h>
 
+#include "ipict.hxx"
 #include "shape.hxx"
 #include <boost/scoped_array.hpp>
 
@@ -1940,5 +1940,14 @@ GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
     return bRet;
 }
 
+namespace pict {
+
+SAL_DLLPUBLIC_EXPORT void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile)
+{
+    PictReader aPictReader;
+    aPictReader.ReadPict(rStreamPict, rGDIMetaFile);
+}
+
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
