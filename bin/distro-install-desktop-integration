@@ -115,7 +115,7 @@ sed -i \
     export KDEMAINDIR=$PREFIXDIR
     export GNOMEDIR=$PREFIXDIR
     export GNOME_MIME_THEME=hicolor
-    /bin/bash ./create_tree.sh
+    bash ./create_tree.sh
 )
 cd -
 rm -rf $sysui_temp
