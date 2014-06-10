@@ -1367,14 +1367,14 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
     }
     sax_fastparser::XFastAttributeListRef xBodyPrAttrList(m_pImpl->m_pBodyPrAttrList);
     m_pImpl->m_pBodyPrAttrList = NULL;
-    pFS->startElementNS(XML_wps, XML_bodyPr, xBodyPrAttrList);
-    // AutoSize of the Text Frame.
-    const SwFmtFrmSize& rSize = rFrmFmt.GetFrmSize();
-    pFS->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
-    pFS->endElementNS(XML_wps, XML_bodyPr);
-
     if (!bTextBoxOnly)
     {
+        pFS->startElementNS(XML_wps, XML_bodyPr, xBodyPrAttrList);
+        // AutoSize of the Text Frame.
+        const SwFmtFrmSize& rSize = rFrmFmt.GetFrmSize();
+        pFS->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
+        pFS->endElementNS(XML_wps, XML_bodyPr);
+
         pFS->endElementNS(XML_wps, XML_wsp);
         pFS->endElementNS(XML_a, XML_graphicData);
         pFS->endElementNS(XML_a, XML_graphic);

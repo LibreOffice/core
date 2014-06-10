@@ -900,11 +900,24 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66929, "fdo66929.docx")
     // This is wrong because the original node denotes a specific 'left' inset, and a default 'top','right','bottom' inset
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 )  , getProperty< sal_Int32 >( xFrame, "LeftBorderDistance" ) );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ) );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 254 ), getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ) );
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
+    if (xIndexAccess->getCount())
+    {
+        // VML import -> TextFrame
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL( sal_Int32( 0 )  , getProperty< sal_Int32 >( xFrame, "LeftBorderDistance" ) );
+        CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "TopBorderDistance" ) );
+        CPPUNIT_ASSERT_EQUAL( sal_Int32( 254 ), getProperty< sal_Int32 >( xFrame, "RightBorderDistance" ) );
+        CPPUNIT_ASSERT_EQUAL( sal_Int32( 127 ), getProperty< sal_Int32 >( xFrame, "BottomBorderDistance" ) );
+    }
+    else
+    {
+        // drawingML import -> shape with TextBox
+        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xShape, "TextLeftDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(127), getProperty<sal_Int32>(xShape, "TextUpperDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(254), getProperty<sal_Int32>(xShape, "TextRightDistance"));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(127), getProperty<sal_Int32>(xShape, "TextLowerDistance"));
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testPageBorderSpacingExportCase2, "page-borders-export-case-2.docx")
