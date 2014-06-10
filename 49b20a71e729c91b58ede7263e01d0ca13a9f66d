@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_27527ede",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2203,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-10T07:51:16Z",
+      "side": 1,
+      "message": "So now these are not necessary, I guess. :-)",
+      "revId": "49b20a71e729c91b58ede7263e01d0ca13a9f66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_075e5ae9",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2206,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-10T07:51:16Z",
+      "side": 1,
+      "message": "The previous test outcome was \"hang\", so no need to mention \"WWNum5\" here.",
+      "revId": "49b20a71e729c91b58ede7263e01d0ca13a9f66d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
