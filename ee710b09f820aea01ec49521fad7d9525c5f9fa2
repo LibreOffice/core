@@ -16,6 +16,24 @@
       "revId": "ee710b09f820aea01ec49521fad7d9525c5f9fa2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_8096d692",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1000542
+      },
+      "writtenOn": "2014-06-10T13:29:30Z",
+      "side": 0,
+      "message": "Hi Michael,\n\nActually I don\u0027t know what went wrong. m_bIsNewDoc is always true so it was inserting empty value. I dont know the purpose of m_bIsNewDoc. I think if footer note start node has value then we should update appendstack with actual value. It was causing exception at popfieldcontext. While debugging I found this was the root cause so made changes here.\n\nThanks.",
+      "parentUuid": "baa041b7_c07bbe7a",
+      "revId": "ee710b09f820aea01ec49521fad7d9525c5f9fa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
