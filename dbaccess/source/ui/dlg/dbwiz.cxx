@@ -300,7 +300,7 @@ bool ODbTypeWizDialog::leaveState(WizardState _nState)
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(_nState));
     if ( pPage )
-        pPage->FillItemSet(*m_pOutSet);
+        pPage->FillItemSet(m_pOutSet);
     return true;
 }
 
@@ -324,7 +324,7 @@ bool ODbTypeWizDialog::saveDatasource()
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
     if ( pPage )
-        pPage->FillItemSet(*m_pOutSet);
+        pPage->FillItemSet(m_pOutSet);
 
     OUString sOldURL;
     if ( m_pImpl->getCurrentDataSource().is() )

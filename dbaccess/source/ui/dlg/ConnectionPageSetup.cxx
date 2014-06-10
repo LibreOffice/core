@@ -180,10 +180,10 @@ namespace dbaui
         return commitURL();
     }
 
-    bool OConnectionTabPageSetup::FillItemSet(SfxItemSet& _rSet)
+    bool OConnectionTabPageSetup::FillItemSet(SfxItemSet* _rSet)
     {
         bool bChangedSomething = false;
-        fillString(_rSet,&m_aConnectionURL, DSID_CONNECTURL, bChangedSomething);
+        fillString(*_rSet,&m_aConnectionURL, DSID_CONNECTURL, bChangedSomething);
         return bChangedSomething;
     }
     bool OConnectionTabPageSetup::checkTestConnection()

@@ -402,20 +402,20 @@ int  SwNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     SwOutlineTabDialog::SetActNumLevel(nActNumLvl);
     if(_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return sal_True;
 
 }
 
-bool SwNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
+bool SwNumPositionTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if(pOutlineDlg)
         *pOutlineDlg->GetNumRule() = *pActNum;
     else if(bModified && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet.Put(SwUINumRuleItem( *pSaveNum ));
-        rSet.Put(SfxBoolItem(FN_PARAM_NUM_PRESET, false));
+        rSet->Put(SwUINumRuleItem( *pSaveNum ));
+        rSet->Put(SfxBoolItem(FN_PARAM_NUM_PRESET, false));
     }
     return bModified;
 }

@@ -160,7 +160,7 @@ SfxTabPage* SvxAsianLayoutPage::Create( Window* pParent, const SfxItemSet& rAttr
     return new SvxAsianLayoutPage(pParent, rAttrSet);
 }
 
-bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
+bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
 {
     if(m_pCharKerningRB->IsValueChangedFromSaved())
     {

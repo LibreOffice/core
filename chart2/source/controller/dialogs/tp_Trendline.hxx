@@ -33,7 +33,7 @@ public:
     virtual ~TrendlineTabPage ();
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual bool FillItemSet( SfxItemSet& rOutAttrs ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet& rInAttrs ) SAL_OVERRIDE;
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;

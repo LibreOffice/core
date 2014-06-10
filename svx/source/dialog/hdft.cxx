@@ -215,7 +215,7 @@ SvxHFPage::~SvxHFPage()
 
 
 
-bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
+bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
 {
     const sal_uInt16        nWSize      = GetWhich( SID_ATTR_PAGE_SIZE );
     const sal_uInt16        nWLRSpace   = GetWhich( SID_ATTR_LRSPACE );
@@ -313,7 +313,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
 
     // Flush the SetItem
     SvxSetItem aSetItem( GetWhich( nId ), aSet );
-    rSet.Put( aSetItem );
+    rSet->Put( aSetItem );
 
     return true;
 }
@@ -873,7 +873,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return LEAVE_PAGE;
 }
 

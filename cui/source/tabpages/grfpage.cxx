@@ -236,15 +236,15 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     bReset = false;
 }
 
-bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
+bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
 {
-    const SfxItemPool& rPool = *rSet.GetPool();
+    const SfxItemPool& rPool = *rSet->GetPool();
     bool bModified = false;
     if( m_pWidthMF->IsValueChangedFromSaved() ||
         m_pHeightMF->IsValueChangedFromSaved() )
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_FRMSIZE );
-        FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
+        FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
 
         SvxSizeItem aSz( nW );
 
@@ -267,11 +267,11 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
         m_pWidthMF->SaveValue();
         m_pHeightMF->SaveValue();
 
-        bModified |= 0 != rSet.Put( aSz );
+        bModified |= 0 != rSet->Put( aSz );
 
         if( bSetOrigSize )
         {
-            bModified |= 0 != rSet.Put( SvxSizeItem( rPool.GetWhich(
+            bModified |= 0 != rSet->Put( SvxSizeItem( rPool.GetWhich(
                         SID_ATTR_GRAF_FRMSIZE_PERCENT ), Size( 0, 0 )) );
         }
     }
@@ -279,20 +279,20 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
         m_pTopMF->IsModified()  || m_pBottomMF->IsModified() )
     {
         sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
-        FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
-        SvxGrfCrop* pNew = (SvxGrfCrop*)rSet.Get( nW ).Clone();
+        FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
+        SvxGrfCrop* pNew = (SvxGrfCrop*)rSet->Get( nW ).Clone();
 
         pNew->SetLeft( lcl_GetValue( *m_pLeftMF, eUnit ) );
         pNew->SetRight( lcl_GetValue( *m_pRightMF, eUnit ) );
         pNew->SetTop( lcl_GetValue( *m_pTopMF, eUnit ) );
         pNew->SetBottom( lcl_GetValue( *m_pBottomMF, eUnit ) );
-        bModified |= 0 != rSet.Put( *pNew );
+        bModified |= 0 != rSet->Put( *pNew );
         delete pNew;
     }
 
     if( m_pZoomConstRB->IsValueChangedFromSaved() )
     {
-        bModified |= 0 != rSet.Put( SfxBoolItem( rPool.GetWhich(
+        bModified |= 0 != rSet->Put( SfxBoolItem( rPool.GetWhich(
                     SID_ATTR_GRAF_KEEP_ZOOM), m_pZoomConstRB->IsChecked() ) );
     }
 
@@ -385,7 +385,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 int SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return sal_True;
 }
 

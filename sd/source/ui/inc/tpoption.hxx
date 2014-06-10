@@ -40,7 +40,7 @@ public:
             virtual ~SdTpOptionsSnap();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
 };
@@ -62,7 +62,7 @@ public:
             virtual ~SdTpOptionsContents();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 };
 
@@ -135,7 +135,7 @@ public:
             virtual ~SdTpOptionsMisc();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    virtual bool FillItemSet( SfxItemSet& ) SAL_OVERRIDE;
+    virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
 
     /** Hide Impress specific controls, make Draw specific controls visible

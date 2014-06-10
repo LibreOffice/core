@@ -44,7 +44,7 @@ class SVX_DLLPUBLIC SvxHFPage: public SfxTabPage
 
 public:
 
-    virtual bool    FillItemSet( SfxItemSet& rOutSet ) SAL_OVERRIDE;
+    virtual bool    FillItemSet( SfxItemSet* rOutSet ) SAL_OVERRIDE;
     virtual void    Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
     virtual         ~SvxHFPage();

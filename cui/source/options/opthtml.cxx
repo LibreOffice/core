@@ -94,7 +94,7 @@ SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
     return new OfaHtmlTabPage(pParent, rAttrSet);
 }
 
-bool OfaHtmlTabPage::FillItemSet( SfxItemSet& )
+bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
 {
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     if(aSize1NF->IsValueChangedFromSaved())

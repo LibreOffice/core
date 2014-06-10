@@ -510,7 +510,7 @@ IMPL_LINK( SwFldFuncPage, MacroHdl, Button *, pBtn )
     return 0;
 }
 
-bool SwFldFuncPage::FillItemSet(SfxItemSet& )
+bool SwFldFuncPage::FillItemSet(SfxItemSet* )
 {
     const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 

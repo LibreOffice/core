@@ -1079,7 +1079,7 @@ SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& r
     return ( new SvxColorOptionsTabPage( pParent, rAttrSet ) );
 }
 
-bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
+bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet*  )
 {
     bFillItemSetCalled = true;
     if(m_pColorSchemeLB->IsValueChangedFromSaved())
@@ -1131,7 +1131,7 @@ void SvxColorOptionsTabPage::Reset( const SfxItemSet& )
 int SvxColorOptionsTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
     if ( pSet_ )
-        FillItemSet( *pSet_ );
+        FillItemSet( pSet_ );
     return( LEAVE_PAGE );
 }
 

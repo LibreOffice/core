@@ -108,7 +108,7 @@ SfxTabPage* SvxPersonalizationTabPage::Create( Window *pParent, const SfxItemSet
     return new SvxPersonalizationTabPage( pParent, rSet );
 }
 
-bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet & )
+bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
 {
     // persona
     OUString aPersona( "default" );

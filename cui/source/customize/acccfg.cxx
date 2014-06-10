@@ -1425,7 +1425,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const OUString& r
 }
 
 
-bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
+bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet* )
 {
     Apply(m_xAct);
     try

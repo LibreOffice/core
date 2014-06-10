@@ -90,23 +90,23 @@ SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet& rOutA
     return new AxisPositionsTabPage(pWindow, rOutAttrs);
 }
 
-bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     // axis line
     sal_Int32 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
-    rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_POSITION, nPos+1 ));
+    rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_POSITION, nPos+1 ));
     if( 2==nPos )
     {
         double fCrossover = m_pED_CrossesAt->GetValue();
         if( m_bCrossingAxisIsCategoryAxis )
             fCrossover = m_pED_CrossesAtCategory->GetSelectEntryPos()+1;
-        rOutAttrs.Put(SvxDoubleItem(fCrossover,SCHATTR_AXIS_POSITION_VALUE));
+        rOutAttrs->Put(SvxDoubleItem(fCrossover,SCHATTR_AXIS_POSITION_VALUE));
     }
 
     // labels
     sal_Int32 nLabelPos = m_pLB_PlaceLabels->GetSelectEntryPos();
     if( nLabelPos != LISTBOX_ENTRY_NOTFOUND )
-        rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_LABEL_POSITION, nLabelPos ));
+        rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_LABEL_POSITION, nLabelPos ));
 
     // tick marks
     long nTicks=0;
@@ -121,12 +121,12 @@ bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     if(m_pCB_TicksOuter->IsChecked())
         nTicks|=CHAXIS_MARK_OUTER;
 
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_TICKS,nTicks));
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_HELPTICKS,nMinorTicks));
+    rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_TICKS,nTicks));
+    rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_HELPTICKS,nMinorTicks));
 
     sal_Int32 nMarkPos = m_pLB_PlaceTicks->GetSelectEntryPos();
     if( nMarkPos != LISTBOX_ENTRY_NOTFOUND )
-        rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_MARK_POSITION, nMarkPos ));
+        rOutAttrs->Put( SfxInt32Item( SCHATTR_AXIS_MARK_POSITION, nMarkPos ));
 
     return true;
 }
@@ -256,7 +256,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
 int AxisPositionsTabPage::DeactivatePage(SfxItemSet* pItemSet)
 {
     if( pItemSet )
-        FillItemSet( *pItemSet );
+        FillItemSet( pItemSet );
 
     return LEAVE_PAGE;
 }

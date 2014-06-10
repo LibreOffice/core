@@ -87,7 +87,7 @@ public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
     static const sal_uInt16* GetRanges();
 
-    virtual bool    FillItemSet(SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual bool    FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void    Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
 
     virtual void    ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;

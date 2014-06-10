@@ -546,10 +546,10 @@ namespace dbaui
         return pReturn;
     }
 
-    bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
+    bool OTableSubscriptionPage::FillItemSet( SfxItemSet* _rCoreAttrs )
     {
         bool bValid, bReadonly;
-        getFlags(_rCoreAttrs, bValid, bReadonly);
+        getFlags(*_rCoreAttrs, bValid, bReadonly);
 
         if (!bValid || bReadonly)
             // don't store anything if the data we're working with is invalid or readonly
@@ -568,7 +568,7 @@ namespace dbaui
             {
                 aTableFilter = collectDetailedSelection();
             }
-            _rCoreAttrs.Put( OStringListItem(DSID_TABLEFILTER, aTableFilter) );
+            _rCoreAttrs->Put( OStringListItem(DSID_TABLEFILTER, aTableFilter) );
         }
 
         return true;

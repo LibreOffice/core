@@ -1120,13 +1120,13 @@ short IconChoiceDialog::Ok()
             {
                 SfxItemSet& rSet = (SfxItemSet&)pPage->GetItemSet();
                 rSet.ClearItem();
-                _bModified |= pPage->FillItemSet( rSet );
+                _bModified |= pPage->FillItemSet( &rSet );
             }
             else if ( pSet && !pPage->HasExchangeSupport() )
             {
                 SfxItemSet aTmp( *pSet->GetPool(), pSet->GetRanges() );
 
-                if ( pPage->FillItemSet( aTmp ) )
+                if ( pPage->FillItemSet( &aTmp ) )
                 {
                     _bModified |= true;
                     pExampleSet->Put( aTmp );

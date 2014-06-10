@@ -106,7 +106,7 @@ using namespace ::utl;
 int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
     if ( pSet_ )
-        FillItemSet( *pSet_ );
+        FillItemSet( pSet_ );
     return LEAVE_PAGE;
 }
 
@@ -243,7 +243,7 @@ SfxTabPage* OfaMiscTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
 
 
 
-bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
+bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
 
@@ -283,12 +283,12 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     }
 
     const SfxUInt16Item* pUInt16Item =
-        PTR_CAST( SfxUInt16Item, GetOldItem( rSet, SID_ATTR_YEAR2000 ) );
+        PTR_CAST( SfxUInt16Item, GetOldItem( *rSet, SID_ATTR_YEAR2000 ) );
     sal_uInt16 nNum = (sal_uInt16)m_pYearValueField->GetText().toInt32();
     if ( pUInt16Item && pUInt16Item->GetValue() != nNum )
     {
         bModified = true;
-        rSet.Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
+        rSet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, nNum ) );
     }
 
     return bModified;
@@ -652,7 +652,7 @@ SfxTabPage* OfaViewTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet 
     return new OfaViewTabPage(pParent, rAttrSet);
 }
 
-bool OfaViewTabPage::FillItemSet( SfxItemSet& )
+bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 {
     SvtFontOptions aFontOpt;
     SvtMenuOptions aMenuOpt;
@@ -1177,7 +1177,7 @@ static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBool
     }
 }
 
-bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
+bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
 {
     // lock configuration broadcasters so that we can coordinate the notifications
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( true );
@@ -1270,7 +1270,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         // this will happen after releasing the lock on the ConfigurationBroadcaster at
         // the end of this method
         pLangConfig->aSysLocaleOptions.SetLocaleConfigString( sNewLang );
-        rSet.Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, true ) );
+        rSet->Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, true ) );
 
         sal_uInt16 nNewType = SvtLanguageOptions::GetScriptTypeOfLanguage( eNewLocale );
         bool bNewCJK = ( nNewType & SCRIPTTYPE_ASIAN ) != 0;
@@ -1324,7 +1324,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
         if(pCurrentDocShell)
         {
-            rSet.Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::LATIN),
+            rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::LATIN),
                 SID_ATTR_LANGUAGE));
         }
     }
@@ -1344,7 +1344,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
         if(pCurrentDocShell)
         {
-            rSet.Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::ASIAN),
+            rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::ASIAN),
                 SID_ATTR_CHAR_CJK_LANGUAGE));
         }
     }
@@ -1364,7 +1364,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         }
         if(pCurrentDocShell)
         {
-            rSet.Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::COMPLEX),
+            rSet->Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::COMPLEX),
                 SID_ATTR_CHAR_CTL_LANGUAGE));
         }
     }

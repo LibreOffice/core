@@ -243,41 +243,41 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     }
 }
 
-bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
+bool TrendlineResources::FillItemSet(SfxItemSet* rOutAttrs) const
 {
     if( m_bTrendLineUnique )
-        rOutAttrs.Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_REGRESSION_TYPE ));
+        rOutAttrs->Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_REGRESSION_TYPE ));
 
     if( m_pCB_ShowEquation->GetState() != TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_EQUATION, m_pCB_ShowEquation->IsChecked() ));
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_EQUATION, m_pCB_ShowEquation->IsChecked() ));
 
     if( m_pCB_ShowCorrelationCoeff->GetState() != TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_COEFF, m_pCB_ShowCorrelationCoeff->IsChecked() ));
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_COEFF, m_pCB_ShowCorrelationCoeff->IsChecked() ));
 
     OUString aName = m_pEE_Name->GetText();
-    rOutAttrs.Put(SfxStringItem(SCHATTR_REGRESSION_CURVE_NAME, aName));
+    rOutAttrs->Put(SfxStringItem(SCHATTR_REGRESSION_CURVE_NAME, aName));
 
     sal_Int32 aDegree = m_pNF_Degree->GetValue();
-    rOutAttrs.Put(SfxInt32Item( SCHATTR_REGRESSION_DEGREE, aDegree ) );
+    rOutAttrs->Put(SfxInt32Item( SCHATTR_REGRESSION_DEGREE, aDegree ) );
 
     sal_Int32 aPeriod = m_pNF_Period->GetValue();
-    rOutAttrs.Put(SfxInt32Item( SCHATTR_REGRESSION_PERIOD, aPeriod ) );
+    rOutAttrs->Put(SfxInt32Item( SCHATTR_REGRESSION_PERIOD, aPeriod ) );
 
     sal_uInt32 nIndex = 0;
     double aValue = 0.0;
     m_pNumFormatter->IsNumberFormat(m_pFmtFld_ExtrapolateForward->GetText(),nIndex,aValue);
-    rOutAttrs.Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD ) );
+    rOutAttrs->Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_EXTRAPOLATE_FORWARD ) );
 
     aValue = 0.0;
     m_pNumFormatter->IsNumberFormat(m_pFmtFld_ExtrapolateBackward->GetText(),nIndex,aValue);
-    rOutAttrs.Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD ) );
+    rOutAttrs->Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_EXTRAPOLATE_BACKWARD ) );
 
     if( m_pCB_SetIntercept->GetState() != TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SET_INTERCEPT, m_pCB_SetIntercept->IsChecked() ));
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_REGRESSION_SET_INTERCEPT, m_pCB_SetIntercept->IsChecked() ));
 
     aValue = 0.0;
     m_pNumFormatter->IsNumberFormat(m_pFmtFld_InterceptValue->GetText(),nIndex,aValue);
-    rOutAttrs.Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_INTERCEPT_VALUE ) );
+    rOutAttrs->Put(SvxDoubleItem( aValue, SCHATTR_REGRESSION_INTERCEPT_VALUE ) );
 
     return true;
 }

@@ -172,7 +172,7 @@ int SvxLineEndDefTabPage::DeactivatePage( SfxItemSet* _pSet )
     CheckChanges_Impl();
 
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return( LEAVE_PAGE );
 }
@@ -205,7 +205,7 @@ void SvxLineEndDefTabPage::CheckChanges_Impl()
 
 
 
-bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( nDlgType == 0 ) // line dialog
     {
@@ -216,8 +216,8 @@ bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet& rSet )
             long nPos = m_pLbLineEnds->GetSelectEntryPos();
             XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
 
-            rSet.Put( XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
-            rSet.Put( XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
+            rSet->Put( XLineStartItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
+            rSet->Put( XLineEndItem( pEntry->GetName(), pEntry->GetLineEnd() ) );
         }
     }
     return true;

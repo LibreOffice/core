@@ -46,7 +46,7 @@ class EditEngine;
 class ScHFEditPage : public SfxTabPage
 {
 public:
-    virtual bool    FillItemSet ( SfxItemSet& rCoreSet ) SAL_OVERRIDE;
+    virtual bool    FillItemSet ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet& rCoreSet ) SAL_OVERRIDE;
 
     void            SetNumType(SvxNumType eNumType);

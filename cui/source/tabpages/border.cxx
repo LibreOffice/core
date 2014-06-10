@@ -586,24 +586,24 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 int SvxBorderTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return LEAVE_PAGE;
 }
 
 
 
-bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
+bool SvxBorderTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     bool bAttrsChanged = SfxTabPage::FillItemSet( rCoreAttrs );
 
     bool                  bPut          = true;
     sal_uInt16                nBoxWhich     = GetWhich( SID_ATTR_BORDER_OUTER );
-    sal_uInt16                nBoxInfoWhich = rCoreAttrs.GetPool()->GetWhich( SID_ATTR_BORDER_INNER, false );
+    sal_uInt16                nBoxInfoWhich = rCoreAttrs->GetPool()->GetWhich( SID_ATTR_BORDER_INNER, false );
     const SfxItemSet&     rOldSet       = GetItemSet();
     SvxBoxItem            aBoxItem      ( nBoxWhich );
     SvxBoxInfoItem        aBoxInfoItem  ( nBoxInfoWhich );
-    SvxBoxItem* pOldBoxItem = (SvxBoxItem*)GetOldItem( rCoreAttrs, SID_ATTR_BORDER_OUTER );
+    SvxBoxItem* pOldBoxItem = (SvxBoxItem*)GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_OUTER );
 
     SfxMapUnit eCoreUnit = rOldSet.GetPool()->GetMetric( nBoxWhich );
 
@@ -657,7 +657,7 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                      || m_pFrameSel->GetFrameBorderState( svx::FRAMEBORDER_RIGHT ) != svx::FRAMESTATE_HIDE )
                 {
                     SvxBoxInfoItem* pOldBoxInfoItem = (SvxBoxInfoItem*)GetOldItem(
-                                                        rCoreAttrs, SID_ATTR_BORDER_INNER );
+                                                        *rCoreAttrs, SID_ATTR_BORDER_INNER );
                     if (
                         !pOldBoxItem ||
                         m_pLeftMF->IsValueChangedFromSaved() ||
@@ -724,21 +724,21 @@ bool SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
     {
         if ( !pOldBoxItem || !( *pOldBoxItem == aBoxItem ) )
         {
-            rCoreAttrs.Put( aBoxItem );
+            rCoreAttrs->Put( aBoxItem );
             bAttrsChanged |= true;
         }
-        const SfxPoolItem* pOld = GetOldItem( rCoreAttrs, SID_ATTR_BORDER_INNER, false );
+        const SfxPoolItem* pOld = GetOldItem( *rCoreAttrs, SID_ATTR_BORDER_INNER, false );
 
         if ( !pOld || !( *(const SvxBoxInfoItem*)pOld == aBoxInfoItem ) )
         {
-            rCoreAttrs.Put( aBoxInfoItem );
+            rCoreAttrs->Put( aBoxInfoItem );
             bAttrsChanged |= true;
         }
     }
     else
     {
-        rCoreAttrs.ClearItem( nBoxWhich );
-        rCoreAttrs.ClearItem( nBoxInfoWhich );
+        rCoreAttrs->ClearItem( nBoxWhich );
+        rCoreAttrs->ClearItem( nBoxInfoWhich );
     }
 
     return bAttrsChanged;

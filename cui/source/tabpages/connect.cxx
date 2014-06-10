@@ -307,7 +307,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 |*
 \************************************************************************/
 
-bool SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
+bool SvxConnectionPage::FillItemSet( SfxItemSet* rAttrs)
 {
     bool         bModified = false;
     sal_Int32    nValue;
@@ -315,49 +315,49 @@ bool SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
     if( m_pMtrFldHorz1->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHorz1, eUnit );
-        rAttrs.Put( SdrEdgeNode1HorzDistItem( nValue ) );
+        rAttrs->Put( SdrEdgeNode1HorzDistItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldHorz2->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldHorz2, eUnit );
-        rAttrs.Put( SdrEdgeNode2HorzDistItem( nValue ) );
+        rAttrs->Put( SdrEdgeNode2HorzDistItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldVert1->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldVert1, eUnit );
-        rAttrs.Put( SdrEdgeNode1VertDistItem( nValue ) );
+        rAttrs->Put( SdrEdgeNode1VertDistItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldVert2->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldVert2, eUnit );
-        rAttrs.Put( SdrEdgeNode2VertDistItem( nValue ) );
+        rAttrs->Put( SdrEdgeNode2VertDistItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldLine1->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLine1, eUnit );
-        rAttrs.Put( SdrEdgeLine1DeltaItem( nValue ) );
+        rAttrs->Put( SdrEdgeLine1DeltaItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldLine2->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLine2, eUnit );
-        rAttrs.Put( SdrEdgeLine2DeltaItem( nValue ) );
+        rAttrs->Put( SdrEdgeLine2DeltaItem( nValue ) );
         bModified = true;
     }
 
     if( m_pMtrFldLine3->IsValueChangedFromSaved() )
     {
         nValue = GetCoreValue( *m_pMtrFldLine3, eUnit );
-        rAttrs.Put( SdrEdgeLine3DeltaItem( nValue ) );
+        rAttrs->Put( SdrEdgeLine3DeltaItem( nValue ) );
         bModified = true;
     }
 
@@ -367,7 +367,7 @@ bool SvxConnectionPage::FillItemSet( SfxItemSet& rAttrs)
     {
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
-            rAttrs.Put( SdrEdgeKindItem( (SdrEdgeKind) nPos ) );
+            rAttrs->Put( SdrEdgeKindItem( (SdrEdgeKind) nPos ) );
             bModified = true;
         }
     }

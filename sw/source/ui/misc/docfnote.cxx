@@ -61,10 +61,10 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
     SfxItemSet aDummySet(rSh.GetAttrPool(), 1, 1 );
     SfxTabPage *pPage = GetTabPage( m_nFootNoteId );
     if ( pPage )
-        pPage->FillItemSet( aDummySet );
+        pPage->FillItemSet( &aDummySet );
     pPage = GetTabPage( m_nEndNoteId );
     if ( pPage )
-        pPage->FillItemSet( aDummySet );
+        pPage->FillItemSet( &aDummySet );
     aOldOkHdl.Call( pBtn );
     return 0;
 }
@@ -344,7 +344,7 @@ static SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const OUString& rCharFmtNa
     return pFmt;
 }
 
-bool SwEndNoteOptionPage::FillItemSet( SfxItemSet & )
+bool SwEndNoteOptionPage::FillItemSet( SfxItemSet * )
 {
     boost::scoped_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo() : new SwFtnInfo());
 

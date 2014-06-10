@@ -138,7 +138,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl)
     return 0;
 }
 
-bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
+bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bRet = false;
     SwModule* pMod = SW_MOD();
@@ -180,13 +180,13 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     {
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
-        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
+        rSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
 
     if(m_pTabMF->IsVisible() && m_pTabMF->IsValueChangedFromSaved())
     {
-        rSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
+        rSet->Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
                     (sal_uInt16)m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP))));
         bRet = true;
     }
@@ -196,7 +196,7 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     bIsUseCharUnitFlag = bIsUseCharUnitFlag && aCJKOptions.IsAsianTypographyEnabled();
     if( (bIsUseCharUnitFlag ? 1 : 0) != m_pUseCharUnit->GetSavedValue())
     {
-        rSet.Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));
+        rSet->Put(SfxBoolItem(SID_ATTR_APPLYCHARUNIT, bIsUseCharUnitFlag ));
         bRet = true;
     }
 
@@ -529,7 +529,7 @@ SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
     return new SwCaptionOptPage(pParent, rAttrSet );
 }
 
-bool SwCaptionOptPage::FillItemSet( SfxItemSet&  )
+bool SwCaptionOptPage::FillItemSet( SfxItemSet*  )
 {
     bool bRet = false;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();

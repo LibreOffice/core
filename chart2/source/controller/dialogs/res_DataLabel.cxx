@@ -266,49 +266,49 @@ void DataLabelResources::EnableControls()
     m_pBxOrientation->Enable( bEnableRotation );
 }
 
-bool DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
+bool DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
 {
     if( m_pCBNumber->IsChecked() )
     {
         if( !m_bNumberFormatMixedState )
-            rOutAttrs.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, m_nNumberFormatForValue ));
+            rOutAttrs->Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, m_nNumberFormatForValue ));
         if( !m_bSourceFormatMixedState )
-            rOutAttrs.Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, m_bSourceFormatForValue ));
+            rOutAttrs->Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, m_bSourceFormatForValue ));
     }
     if( m_pCBPercent->IsChecked() )
     {
         if( !m_bPercentFormatMixedState )
-            rOutAttrs.Put( SfxUInt32Item( SCHATTR_PERCENT_NUMBERFORMAT_VALUE, m_nNumberFormatForPercent ));
+            rOutAttrs->Put( SfxUInt32Item( SCHATTR_PERCENT_NUMBERFORMAT_VALUE, m_nNumberFormatForPercent ));
         if( !m_bPercentSourceMixedState )
-            rOutAttrs.Put( SfxBoolItem( SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_bSourceFormatForPercent ));
+            rOutAttrs->Put( SfxBoolItem( SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_bSourceFormatForPercent ));
     }
 
     if( m_pCBNumber->GetState()!= TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_NUMBER, m_pCBNumber->IsChecked() ) );
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_NUMBER, m_pCBNumber->IsChecked() ) );
     if( m_pCBPercent->GetState()!= TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_PERCENTAGE, m_pCBPercent->IsChecked() ) );
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_PERCENTAGE, m_pCBPercent->IsChecked() ) );
     if( m_pCBCategory->GetState()!= TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_CATEGORY, m_pCBCategory->IsChecked() ) );
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_CATEGORY, m_pCBCategory->IsChecked() ) );
     if( m_pCBSymbol->GetState()!= TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_pCBSymbol->IsChecked()) );
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_pCBSymbol->IsChecked()) );
 
     OUString aSep = m_aEntryMap[m_pLB_Separator->GetSelectEntryPos()];
-    rOutAttrs.Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, aSep) );
+    rOutAttrs->Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, aSep) );
 
     ::std::map< sal_uInt16, sal_Int32 >::const_iterator aIt( m_aListBoxToPlacementMap.find(m_pLB_LabelPlacement->GetSelectEntryPos()) );
     if(aIt!=m_aListBoxToPlacementMap.end())
     {
         sal_Int32 nValue = aIt->second;
-        rOutAttrs.Put( SfxInt32Item( SCHATTR_DATADESCR_PLACEMENT, nValue ) );
+        rOutAttrs->Put( SfxInt32Item( SCHATTR_DATADESCR_PLACEMENT, nValue ) );
     }
 
     if( m_pLB_TextDirection->GetSelectEntryCount() > 0 )
-        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLB_TextDirection->GetSelectEntryValue() ) );
+        rOutAttrs->Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLB_TextDirection->GetSelectEntryValue() ) );
 
     if( m_pDC_Dial->IsVisible() )
     {
         sal_Int32 nDegrees = m_pDC_Dial->GetRotation();
-        rOutAttrs.Put(SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
+        rOutAttrs->Put(SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
 
     return true;

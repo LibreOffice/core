@@ -61,7 +61,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet* pSet = 0) SAL_OVERRIDE;
             void FillItem(SwLabItem& rItem);
-    virtual bool FillItemSet(SfxItemSet& rSet) SAL_OVERRIDE;
+    virtual bool FillItemSet(SfxItemSet* rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet& rSet) SAL_OVERRIDE;
     inline Printer* GetPrt() { return (pPrinter); }
 };

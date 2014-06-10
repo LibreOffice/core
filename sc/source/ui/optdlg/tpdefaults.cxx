@@ -39,7 +39,7 @@ SfxTabPage* ScTpDefaultsOptions::Create(Window *pParent, const SfxItemSet &rCore
     return new ScTpDefaultsOptions(pParent, rCoreAttrs);
 }
 
-bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreSet)
+bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)
 {
     bool bRet = false;
     ScDefaultsOptions aOpt;
@@ -54,7 +54,7 @@ bool ScTpDefaultsOptions::FillItemSet(SfxItemSet &rCoreSet)
         aOpt.SetInitTabCount( nTabCount );
         aOpt.SetInitTabPrefix( aSheetPrefix );
 
-        rCoreSet.Put( ScTpDefaultsItem( SID_SCDEFAULTSOPTIONS, aOpt ) );
+        rCoreSet->Put( ScTpDefaultsItem( SID_SCDEFAULTSOPTIONS, aOpt ) );
         bRet = true;
     }
     return bRet;

@@ -1572,7 +1572,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     }
 }
 
-bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
+bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
 {
     SwSectionData aSection(CONTENT_SECTION, m_pCurName->GetText());
     aSection.SetCondition(m_pConditionED->GetText());
@@ -1837,7 +1837,7 @@ SwSectionFtnEndTabPage::~SwSectionFtnEndTabPage()
 {
 }
 
-bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
+bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet* rSet )
 {
     SwFmtFtnAtTxtEnd aFtn( pFtnNtAtTextEndCB->IsChecked()
                             ? ( pFtnNtNumCB->IsChecked()
@@ -1881,8 +1881,8 @@ bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
         // no break;
     }
 
-    rSet.Put( aFtn );
-    rSet.Put( aEnd );
+    rSet->Put( aFtn );
+    rSet->Put( aEnd );
 
     return true;
 }
@@ -2098,7 +2098,7 @@ SwSectionIndentTabPage::~SwSectionIndentTabPage()
 {
 }
 
-bool SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
+bool SwSectionIndentTabPage::FillItemSet( SfxItemSet* rSet)
 {
     if(m_pBeforeMF->IsValueModified() ||
             m_pAfterMF->IsValueModified())
@@ -2106,7 +2106,7 @@ bool SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
         SvxLRSpaceItem aLRSpace(
                 static_cast< long >(m_pBeforeMF->Denormalize(m_pBeforeMF->GetValue(FUNIT_TWIP))) ,
                 static_cast< long >(m_pAfterMF->Denormalize(m_pAfterMF->GetValue(FUNIT_TWIP))), 0, 0, RES_LR_SPACE);
-        rSet.Put(aLRSpace);
+        rSet->Put(aLRSpace);
     }
     return true;
 }

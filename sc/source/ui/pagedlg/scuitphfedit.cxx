@@ -183,7 +183,7 @@ void ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
     }
 }
 
-bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
+bool ScHFEditPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     ScPageHFItem    aItem( nWhich );
     EditTextObject* pLeft   = m_pWndLeft->CreateTextObject();
@@ -197,7 +197,7 @@ bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
     delete pCenter;
     delete pRight;
 
-    rCoreSet.Put( aItem );
+    rCoreSet->Put( aItem );
 
     return true;
 }

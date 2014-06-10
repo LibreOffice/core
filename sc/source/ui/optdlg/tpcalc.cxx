@@ -133,7 +133,7 @@ void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 }
 
 
-bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+bool ScTpCalcOptions::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
     pLocalOptions->SetIterCount( (sal_uInt16)m_pEdSteps->GetValue() );
@@ -151,7 +151,7 @@ bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 
     if ( *pLocalOptions != *pOldOptions )
     {
-        rCoreAttrs.Put( ScTpCalcItem( nWhichCalc, *pLocalOptions ) );
+        rCoreAttrs->Put( ScTpCalcItem( nWhichCalc, *pLocalOptions ) );
         return true;
     }
     else
@@ -179,7 +179,7 @@ int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
         m_pEdEps->GrabFocus();
     }
     else if ( pSetP )
-        FillItemSet( *pSetP );
+        FillItemSet( pSetP );
 
     return nReturn;
 }

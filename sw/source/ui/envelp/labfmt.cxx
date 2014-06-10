@@ -478,7 +478,7 @@ void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)
 int SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
 
     return sal_True;
 }
@@ -503,10 +503,10 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
     }
 }
 
-bool SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
+bool SwLabFmtPage::FillItemSet(SfxItemSet* rSet)
 {
     FillItem(aItem);
-    rSet.Put(aItem);
+    rSet->Put(aItem);
 
     return true;
 }

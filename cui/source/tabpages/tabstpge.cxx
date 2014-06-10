@@ -201,7 +201,7 @@ const sal_uInt16* SvxTabulatorTabPage::GetRanges()
 
 
 
-bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
 
@@ -214,9 +214,9 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
     GetFillCharHdl_Impl( m_pFillChar );
 
     FillUpWithDefTabs_Impl( nDefDist, aNewTabs );
-    SfxItemPool* pPool = rSet.GetPool();
+    SfxItemPool* pPool = rSet->GetPool();
     MapUnit eUnit = (MapUnit)pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
-    const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_TABSTOP );
+    const SfxPoolItem* pOld = GetOldItem( *rSet, SID_ATTR_TABSTOP );
 
     if ( MAP_100TH_MM != eUnit )
     {
@@ -224,8 +224,8 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
         // the TabStopItem needs to have a DefTab at position 0.
         const SfxPoolItem* pLRSpace;
         // If not in the new set, then maybe in the old one
-        if ( SFX_ITEM_SET != rSet.GetItemState( GetWhich( SID_ATTR_LRSPACE ), true, &pLRSpace ) )
-            pLRSpace = GetOldItem( rSet, SID_ATTR_LRSPACE );
+        if ( SFX_ITEM_SET != rSet->GetItemState( GetWhich( SID_ATTR_LRSPACE ), true, &pLRSpace ) )
+            pLRSpace = GetOldItem( *rSet, SID_ATTR_LRSPACE );
 
         if ( pLRSpace && ( (SvxLRSpaceItem*)pLRSpace )->GetTxtFirstLineOfst() < 0 )
         {
@@ -246,13 +246,13 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
 
         if ( !pOld || !( *( (SvxTabStopItem*)pOld ) == aTmp ) )
         {
-            rSet.Put( aTmp );
+            rSet->Put( aTmp );
             bModified = true;
         }
     }
     else if ( !pOld || !( *( (SvxTabStopItem*)pOld ) == aNewTabs ) )
     {
-        rSet.Put( aNewTabs );
+        rSet->Put( aNewTabs );
         bModified = true;
     }
     return bModified;
@@ -364,7 +364,7 @@ void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
 int SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return LEAVE_PAGE;
 }
 

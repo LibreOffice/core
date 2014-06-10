@@ -269,7 +269,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 }
 
 // stuff attributes into the set when OK
-bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
+bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bModified = false;
     const SfxPoolItem* pOldItem;
@@ -309,19 +309,19 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     if ( bContour )
         aSur.SetOutside(m_pWrapOutsideCB->IsChecked());
 
-    if(0 == (pOldItem = GetOldItem( rSet, RES_SURROUND )) ||
+    if(0 == (pOldItem = GetOldItem( *rSet, RES_SURROUND )) ||
                 aSur != *pOldItem )
     {
-        rSet.Put(aSur);
+        rSet->Put(aSur);
         bModified = true;
     }
 
     if (!bDrawMode)
     {
-        if(0 == (pOldItem = GetOldItem( rSet, FN_OPAQUE )) ||
+        if(0 == (pOldItem = GetOldItem( *rSet, FN_OPAQUE )) ||
                     aOp != *pOldItem )
         {
-            rSet.Put(aOp);
+            rSet->Put(aOp);
             bModified = true;
         }
     }
@@ -335,10 +335,10 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 
     if ( bTopMod || bBottomMod )
     {
-        if(0 == (pOldItem = GetOldItem(rSet, RES_UL_SPACE)) ||
+        if(0 == (pOldItem = GetOldItem(*rSet, RES_UL_SPACE)) ||
                 aUL != *pOldItem )
         {
-            rSet.Put( aUL, RES_UL_SPACE );
+            rSet->Put( aUL, RES_UL_SPACE );
             bModified = true;
         }
     }
@@ -352,10 +352,10 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 
     if ( bLeftMod || bRightMod )
     {
-        if( 0 == (pOldItem = GetOldItem(rSet, RES_LR_SPACE)) ||
+        if( 0 == (pOldItem = GetOldItem(*rSet, RES_LR_SPACE)) ||
                 aLR != *pOldItem )
         {
-            rSet.Put(aLR, RES_LR_SPACE);
+            rSet->Put(aLR, RES_LR_SPACE);
             bModified = true;
         }
     }
@@ -364,7 +364,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     {
         bool bChecked = m_pWrapTransparentCB->IsChecked() && m_pWrapTransparentCB->IsEnabled();
         if ((m_pWrapTransparentCB->GetSavedValue() == 1) != bChecked)
-            bModified |= 0 != rSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
+            bModified |= 0 != rSet->Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
     }
 
     return bModified;
@@ -559,7 +559,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if(_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
 
     return sal_True;
 }

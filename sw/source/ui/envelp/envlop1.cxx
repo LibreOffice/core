@@ -323,7 +323,7 @@ int SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 {
     FillItem(GetParentSwEnvDlg()->aEnvItem);
     if( _pSet )
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
 
@@ -334,10 +334,10 @@ void SwEnvPage::FillItem(SwEnvItem& rItem)
     rItem.aSendText = m_pSenderEdit->GetText();
 }
 
-bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
+bool SwEnvPage::FillItemSet(SfxItemSet* rSet)
 {
     FillItem(GetParentSwEnvDlg()->aEnvItem);
-    rSet.Put(GetParentSwEnvDlg()->aEnvItem);
+    rSet->Put(GetParentSwEnvDlg()->aEnvItem);
     return true;
 }
 

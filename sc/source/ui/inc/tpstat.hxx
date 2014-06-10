@@ -37,7 +37,7 @@ private:
             virtual ~ScDocStatPage();
 
 protected:
-    virtual bool    FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool    FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void    Reset      ( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 private:

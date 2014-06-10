@@ -238,37 +238,37 @@ SfxTabPage* ScaleTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
     return new ScaleTabPage(pWindow, rOutAttrs);
 }
 
-bool ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)
 {
     OSL_PRECOND( pNumFormatter, "No NumberFormatter available" );
 
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_AXISTYPE, m_nAxisType));
+    rOutAttrs->Put(SfxInt32Item(SCHATTR_AXISTYPE, m_nAxisType));
     if(m_bAllowDateAxis)
-        rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_DATEAXIS, TYPE_AUTO==m_pLB_AxisType->GetSelectEntryPos()));
+        rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_DATEAXIS, TYPE_AUTO==m_pLB_AxisType->GetSelectEntryPos()));
 
     bool bAutoScale = false;
     if( m_nAxisType==chart2::AxisType::CATEGORY )
         bAutoScale = true;//reset scaling for category charts
 
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MIN      ,bAutoScale || m_pCbxAutoMin->IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MAX      ,bAutoScale || m_pCbxAutoMax->IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_HELP,bAutoScale || m_pCbxAutoStepHelp->IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_ORIGIN   ,bAutoScale || m_pCbxAutoOrigin->IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_LOGARITHM     ,m_pCbxLogarithm->IsChecked()));
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_REVERSE       ,m_pCbxReverse->IsChecked()));
-    rOutAttrs.Put(SvxDoubleItem(fMax     , SCHATTR_AXIS_MAX));
-    rOutAttrs.Put(SvxDoubleItem(fMin     , SCHATTR_AXIS_MIN));
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_STEP_HELP, nStepHelp));
-    rOutAttrs.Put(SvxDoubleItem(fOrigin  , SCHATTR_AXIS_ORIGIN));
+    rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MIN      ,bAutoScale || m_pCbxAutoMin->IsChecked()));
+    rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_MAX      ,bAutoScale || m_pCbxAutoMax->IsChecked()));
+    rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_HELP,bAutoScale || m_pCbxAutoStepHelp->IsChecked()));
+    rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_ORIGIN   ,bAutoScale || m_pCbxAutoOrigin->IsChecked()));
+    rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_LOGARITHM     ,m_pCbxLogarithm->IsChecked()));
+    rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_REVERSE       ,m_pCbxReverse->IsChecked()));
+    rOutAttrs->Put(SvxDoubleItem(fMax     , SCHATTR_AXIS_MAX));
+    rOutAttrs->Put(SvxDoubleItem(fMin     , SCHATTR_AXIS_MIN));
+    rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_STEP_HELP, nStepHelp));
+    rOutAttrs->Put(SvxDoubleItem(fOrigin  , SCHATTR_AXIS_ORIGIN));
 
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_MAIN,bAutoScale || m_pCbxAutoStepMain->IsChecked()));
-    rOutAttrs.Put(SvxDoubleItem(fStepMain,SCHATTR_AXIS_STEP_MAIN));
+    rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_MAIN,bAutoScale || m_pCbxAutoStepMain->IsChecked()));
+    rOutAttrs->Put(SvxDoubleItem(fStepMain,SCHATTR_AXIS_STEP_MAIN));
 
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,bAutoScale || m_pCbx_AutoTimeResolution->IsChecked()));
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_TIME_RESOLUTION,m_nTimeResolution));
+    rOutAttrs->Put(SfxBoolItem(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,bAutoScale || m_pCbx_AutoTimeResolution->IsChecked()));
+    rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_TIME_RESOLUTION,m_nTimeResolution));
 
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_MAIN_TIME_UNIT,m_nMainTimeUnit));
-    rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_HELP_TIME_UNIT,m_nHelpTimeUnit));
+    rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_MAIN_TIME_UNIT,m_nMainTimeUnit));
+    rOutAttrs->Put(SfxInt32Item(SCHATTR_AXIS_HELP_TIME_UNIT,m_nHelpTimeUnit));
 
     return true;
 }
@@ -493,7 +493,7 @@ int ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
         return KEEP_PAGE;
 
     if( pItemSet )
-        FillItemSet( *pItemSet );
+        FillItemSet( pItemSet );
 
     return LEAVE_PAGE;
 }

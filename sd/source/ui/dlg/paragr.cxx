@@ -43,7 +43,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static const sal_uInt16*  GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
 
 private:
@@ -90,7 +90,7 @@ const sal_uInt16* SdParagraphNumTabPage::GetRanges()
     return aRange;
 }
 
-bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
+bool SdParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if(m_pNewStartCB->IsValueChangedFromSaved() ||
        m_pNewStartNumberCB->IsValueChangedFromSaved()||
@@ -99,10 +99,10 @@ bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         mbModified = true;
         bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();
         bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
-        rSet.Put(SfxBoolItem(ATTR_NUMBER_NEWSTART, bNewStartChecked));
+        rSet->Put(SfxBoolItem(ATTR_NUMBER_NEWSTART, bNewStartChecked));
 
         const sal_Int16 nStartAt = (sal_Int16)m_pNewStartNF->GetValue();
-        rSet.Put(SfxInt16Item(ATTR_NUMBER_NEWSTART_AT, bNumberNewStartChecked && bNewStartChecked ? nStartAt : -1));
+        rSet->Put(SfxInt16Item(ATTR_NUMBER_NEWSTART_AT, bNumberNewStartChecked && bNewStartChecked ? nStartAt : -1));
     }
 
     return mbModified;

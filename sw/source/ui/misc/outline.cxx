@@ -817,7 +817,7 @@ int SwOutlineSettingsTabPage::DeactivatePage(SfxItemSet*)
     return LEAVE_PAGE;
 }
 
-bool SwOutlineSettingsTabPage::FillItemSet( SfxItemSet&  )
+bool SwOutlineSettingsTabPage::FillItemSet( SfxItemSet*  )
 {
     return true;
 }

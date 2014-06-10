@@ -1024,7 +1024,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 }
 
 // stuff attributes into the set when OK
-bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
+bool SwFrmPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
@@ -1037,11 +1037,11 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 
     if ( !bFormat )
     {
-        pOldItem = GetOldItem(rSet, RES_ANCHOR);
+        pOldItem = GetOldItem(*rSet, RES_ANCHOR);
         if (bNew || !pOldItem || eAnchorId != ((const SwFmtAnchor*)pOldItem)->GetAnchorId())
         {
             SwFmtAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
-            bRet = 0 != rSet.Put( aAnc );
+            bRet = 0 != rSet->Put( aAnc );
         }
     }
 
@@ -1068,7 +1068,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
             aHoriOrient.SetPos( nX );
         }
 
-        pOldItem = GetOldItem(rSet, FN_HORI_ORIENT);
+        pOldItem = GetOldItem(*rSet, FN_HORI_ORIENT);
         bool bSame = false;
         if ((bNew == bFormat) && pOldItem)
         {
@@ -1076,7 +1076,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         }
         if ((bNew && !bFormat) || ((bAtHorzPosModified || bMod) && !bSame))
         {
-            bRet |= 0 != rSet.Put( aHoriOrient );
+            bRet |= 0 != rSet->Put( aHoriOrient );
         }
     }
 
@@ -1107,7 +1107,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
             }
             aVertOrient.SetPos( nY );
         }
-        pOldItem = GetOldItem(rSet, FN_VERT_ORIENT);
+        pOldItem = GetOldItem(*rSet, FN_VERT_ORIENT);
         bool bSame = false;
         if((bNew == bFormat) && pOldItem)
         {
@@ -1119,7 +1119,7 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         }
         if( ( bNew && !bFormat ) || ((bAtVertPosModified || bMod) && !bSame ))
         {
-            bRet |= 0 != rSet.Put( aVertOrient );
+            bRet |= 0 != rSet->Put( aVertOrient );
         }
     }
 
@@ -1198,9 +1198,9 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         }
     }
     if( !bFormat && m_pFixedRatioCB->IsValueChangedFromSaved() )
-        bRet |= 0 != rSet.Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO, m_pFixedRatioCB->IsChecked()));
+        bRet |= 0 != rSet->Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO, m_pFixedRatioCB->IsChecked()));
 
-    pOldItem = GetOldItem(rSet, RES_FRM_SIZE);
+    pOldItem = GetOldItem(*rSet, RES_FRM_SIZE);
 
     if ((pOldItem && aSz != *pOldItem) || (!pOldItem && !bFormat) ||
             (bFormat &&
@@ -1210,11 +1210,11 @@ bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
         if (aSz.GetHeightSizeType() == ATT_VAR_SIZE)    // there is no VAR_SIZE in frames
             aSz.SetHeightSizeType(ATT_MIN_SIZE);
 
-        bRet |= 0 != rSet.Put( aSz );
+        bRet |= 0 != rSet->Put( aSz );
     }
     if(m_pFollowTextFlowCB->IsValueChangedFromSaved())
     {
-        bRet |= 0 != rSet.Put(SwFmtFollowTextFlow(m_pFollowTextFlowCB->IsChecked()));
+        bRet |= 0 != rSet->Put(SwFmtFollowTextFlow(m_pFollowTextFlowCB->IsChecked()));
     }
     return bRet;
 }
@@ -1710,7 +1710,7 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if ( _pSet )
     {
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
         //FillItemSet doesn't set the anchor into the set when it matches
         //the original. But for the other pages we need the current anchor.
@@ -2485,7 +2485,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
     m_pBmpWin->Invalidate();
 }
 
-bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
+bool SwGrfExtPage::FillItemSet( SfxItemSet *rSet )
 {
     bool bModified = false;
     if ( m_pMirrorHorzBox->IsValueChangedFromSaved() ||
@@ -2511,14 +2511,14 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
         bool bMirror = !m_pAllPagesRB->IsChecked();
         SwMirrorGrf aMirror( eMirror );
         aMirror.SetGrfToggle(bMirror );
-        rSet.Put( aMirror );
+        rSet->Put( aMirror );
     }
 
     if( aGrfName != aNewGrfName || m_pConnectED->IsModified() )
     {
         bModified = true;
         aGrfName = m_pConnectED->GetText();
-        rSet.Put( SvxBrushItem( aGrfName, aFilterName, GPOS_LT,
+        rSet->Put( SvxBrushItem( aGrfName, aFilterName, GPOS_LT,
                                 SID_ATTR_GRAF_GRAPHIC ));
     }
     return bModified;
@@ -2527,7 +2527,7 @@ bool SwGrfExtPage::FillItemSet( SfxItemSet &rSet )
 int SwGrfExtPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return sal_True;
 }
 
@@ -2752,10 +2752,10 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
     pClientCB->SaveValue();
 }
 
-bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
+bool SwFrmURLPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bModified = false;
-    const SwFmtURL* pOldURL = (SwFmtURL*)GetOldItem(rSet, RES_URL);
+    const SwFmtURL* pOldURL = (SwFmtURL*)GetOldItem(*rSet, RES_URL);
     boost::scoped_ptr<SwFmtURL> pFmtURL;
     if(pOldURL)
         pFmtURL.reset((SwFmtURL*)pOldURL->Clone());
@@ -2786,7 +2786,7 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet &rSet)
         pFmtURL->SetTargetFrameName(pFrameCB->GetText());
         bModified = true;
     }
-    rSet.Put(*pFmtURL);
+    rSet->Put(*pFmtURL);
     return bModified;
 }
 
@@ -3043,28 +3043,28 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     m_pVertAlignLB->SaveValue();
 }
 
-bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
+bool SwFrmAddPage::FillItemSet(SfxItemSet *rSet)
 {
     bool bRet = false;
     if (pNameED->IsValueChangedFromSaved())
-        bRet |= 0 != rSet.Put(SfxStringItem(FN_SET_FRM_NAME, pNameED->GetText()));
+        bRet |= 0 != rSet->Put(SfxStringItem(FN_SET_FRM_NAME, pNameED->GetText()));
     if (pAltNameED->IsValueChangedFromSaved())
-        bRet |= 0 != rSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, pAltNameED->GetText()));
+        bRet |= 0 != rSet->Put(SfxStringItem(FN_SET_FRM_ALT_NAME, pAltNameED->GetText()));
 
     const SfxPoolItem* pOldItem;
     SvxProtectItem aProt ( (const SvxProtectItem& )GetItemSet().Get(RES_PROTECT) );
     aProt.SetCntntProtect( pProtectContentCB->IsChecked() );
     aProt.SetSizeProtect ( pProtectSizeCB->IsChecked() );
     aProt.SetPosProtect  ( pProtectFrameCB->IsChecked() );
-    if ( 0 == (pOldItem = GetOldItem(rSet, FN_SET_PROTECT)) ||
+    if ( 0 == (pOldItem = GetOldItem(*rSet, FN_SET_PROTECT)) ||
                 aProt != *pOldItem )
-        bRet |= 0 != rSet.Put( aProt);
+        bRet |= 0 != rSet->Put( aProt);
 
     if ( pEditInReadonlyCB->IsValueChangedFromSaved() )
-        bRet |= 0 != rSet.Put( SwFmtEditInReadonly( RES_EDIT_IN_READONLY, pEditInReadonlyCB->IsChecked()));
+        bRet |= 0 != rSet->Put( SwFmtEditInReadonly( RES_EDIT_IN_READONLY, pEditInReadonlyCB->IsChecked()));
 
     if ( pPrintFrameCB->IsValueChangedFromSaved() )
-        bRet |= 0 != rSet.Put( SvxPrintItem( RES_PRINT, pPrintFrameCB->IsChecked()));
+        bRet |= 0 != rSet->Put( SvxPrintItem( RES_PRINT, pPrintFrameCB->IsChecked()));
 
     // textflow
     if( pTextFlowLB->IsVisible() )
@@ -3073,7 +3073,7 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
         if( pTextFlowLB->IsValueChangedFromSaved() )
         {
             sal_uInt16 nData = (sal_uInt16)(sal_IntPtr)pTextFlowLB->GetEntryData( nPos );
-            bRet |= 0 != rSet.Put( SvxFrameDirectionItem(
+            bRet |= 0 != rSet->Put( SvxFrameDirectionItem(
                                     (SvxFrameDirection)nData, RES_FRAMEDIR ));
         }
     }
@@ -3096,9 +3096,9 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
             if ((pFlyFmt = rChain.GetNext()) != 0)
                 sNextChain = pFlyFmt->GetName();
             if(sPrevChain != sCurrentPrevChain)
-                bRet |= 0 != rSet.Put(SfxStringItem(FN_PARAM_CHAIN_PREVIOUS, sCurrentPrevChain));
+                bRet |= 0 != rSet->Put(SfxStringItem(FN_PARAM_CHAIN_PREVIOUS, sCurrentPrevChain));
             if(sNextChain != sCurrentNextChain)
-                bRet |= 0 != rSet.Put(SfxStringItem(FN_PARAM_CHAIN_NEXT, sCurrentNextChain));
+                bRet |= 0 != rSet->Put(SfxStringItem(FN_PARAM_CHAIN_NEXT, sCurrentNextChain));
         }
     }
 
@@ -3112,7 +3112,7 @@ bool SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
             case 1 : nAdjust = SDRTEXTVERTADJUST_CENTER; break;
             case 2 : nAdjust = SDRTEXTVERTADJUST_BOTTOM; break;
         }
-        bRet |= 0 != rSet.Put(SdrTextVertAdjustItem(nAdjust, RES_TEXT_VERT_ADJUST));
+        bRet |= 0 != rSet->Put(SdrTextVertAdjustItem(nAdjust, RES_TEXT_VERT_ADJUST));
     }
 
     return bRet;

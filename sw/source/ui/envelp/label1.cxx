@@ -473,7 +473,7 @@ void SwLabPage::ActivatePage(const SfxItemSet& rSet)
 int SwLabPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
 
     return sal_True;
 }
@@ -494,10 +494,10 @@ void SwLabPage::FillItem(SwLabItem& rItem)
     rItem.aLstType = m_pTypeBox->GetSelectEntry();
 }
 
-bool SwLabPage::FillItemSet(SfxItemSet& rSet)
+bool SwLabPage::FillItemSet(SfxItemSet* rSet)
 {
     FillItem( aItem );
-    rSet.Put( aItem );
+    rSet->Put( aItem );
 
     return true;
 }
@@ -610,11 +610,11 @@ void SwVisitingCardPage::ActivatePage(const SfxItemSet& rSet)
 int  SwVisitingCardPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return LEAVE_PAGE;
 }
 
-bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
+bool SwVisitingCardPage::FillItemSet(SfxItemSet* rSet)
 {
     const OUString* pGroup = (const OUString*)m_pAutoTextGroupLB->GetEntryData(
                                     m_pAutoTextGroupLB->GetSelectEntryPos());
@@ -626,7 +626,7 @@ bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
     SvTreeListEntry* pSelEntry = m_pAutoTextLB->FirstSelected();
     if(pSelEntry)
         aLabItem.sGlossaryBlockName = *(OUString*)pSelEntry->GetUserData();
-    rSet.Put(aLabItem);
+    rSet->Put(aLabItem);
     return true;
 }
 
@@ -743,11 +743,11 @@ void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
 int  SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return LEAVE_PAGE;
 }
 
-bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
+bool SwPrivateDataPage::FillItemSet(SfxItemSet* rSet)
 {
 
     SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
@@ -770,7 +770,7 @@ bool SwPrivateDataPage::FillItemSet(SfxItemSet& rSet)
     aItem.aPrivWWW       = m_pHomePageED->GetText(  );
     aItem.aPrivMail      = m_pMailED->GetText(  );
 
-    rSet.Put(aItem);
+    rSet->Put(aItem);
     return true;
 }
 
@@ -831,11 +831,11 @@ void SwBusinessDataPage::ActivatePage(const SfxItemSet& rSet)
 int  SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if (_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return LEAVE_PAGE;
 }
 
-bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
+bool SwBusinessDataPage::FillItemSet(SfxItemSet* rSet)
 {
     SwLabItem aItem = (const SwLabItem&) GetTabDialog()->GetExampleSet()->Get(FN_LABEL);
 
@@ -854,7 +854,7 @@ bool SwBusinessDataPage::FillItemSet(SfxItemSet& rSet)
     aItem.aCompWWW       = m_pHomePageED->GetText();
     aItem.aCompMail      = m_pMailED->GetText();
 
-    rSet.Put(aItem);
+    rSet->Put(aItem);
     return true;
 }
 

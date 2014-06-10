@@ -231,7 +231,7 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     m_pEdScalePageNum->SaveValue();
 }
 
-bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
+bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
 {
     const SfxItemSet&   rOldSet      = GetItemSet();
     sal_uInt16              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
@@ -239,32 +239,32 @@ bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 
     // sal_Bool flags
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NOTES),
-                                     rCoreSet, rOldSet,
+                                     *rCoreSet, rOldSet,
                                      m_pBtnNotes->IsChecked(),
                                      m_pBtnNotes->GetSavedValue() != TRISTATE_FALSE );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_GRID),
-                                     rCoreSet, rOldSet,
+                                     *rCoreSet, rOldSet,
                                      m_pBtnGrid->IsChecked(),
                                      m_pBtnGrid->GetSavedValue() != TRISTATE_FALSE );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_HEADERS),
-                                     rCoreSet, rOldSet,
+                                     *rCoreSet, rOldSet,
                                      m_pBtnHeaders->IsChecked(),
                                      m_pBtnHeaders->GetSavedValue() != TRISTATE_FALSE );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_TOPDOWN),
-                                     rCoreSet, rOldSet,
+                                     *rCoreSet, rOldSet,
                                      m_pBtnTopDown->IsChecked(),
                                      m_pBtnTopDown->GetSavedValue() );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_FORMULAS),
-                                     rCoreSet, rOldSet,
+                                     *rCoreSet, rOldSet,
                                      m_pBtnFormulas->IsChecked(),
                                      m_pBtnFormulas->GetSavedValue() != TRISTATE_FALSE );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NULLVALS),
-                                     rCoreSet, rOldSet,
+                                     *rCoreSet, rOldSet,
                                      m_pBtnNullVals->IsChecked(),
                                      m_pBtnNullVals->GetSavedValue() != TRISTATE_FALSE );
 
@@ -276,7 +276,7 @@ bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
             || (   bUseValue && (bUseValue ? 1 : 0) == m_pBtnPageNo->GetSavedValue()
                    && ! m_pEdPageNo->IsValueChangedFromSaved() ) ) )
     {
-            rCoreSet.ClearItem( nWhichPageNo );
+            rCoreSet->ClearItem( nWhichPageNo );
     }
     else
     {
@@ -284,19 +284,19 @@ bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
                                     ? m_pEdPageNo->GetValue()
                                     : 0 );
 
-        rCoreSet.Put( SfxUInt16Item( nWhichPageNo, nPage ) );
+        rCoreSet->Put( SfxUInt16Item( nWhichPageNo, nPage ) );
         bDataChanged = true;
     }
 
     // object representation:
     bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_CHARTS),
-                                         rCoreSet, rOldSet, *m_pBtnCharts );
+                                         *rCoreSet, rOldSet, *m_pBtnCharts );
 
     bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_OBJECTS),
-                                         rCoreSet, rOldSet, *m_pBtnObjects );
+                                         *rCoreSet, rOldSet, *m_pBtnObjects );
 
     bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_DRAWINGS),
-                                         rCoreSet, rOldSet, *m_pBtnDrawings );
+                                         *rCoreSet, rOldSet, *m_pBtnDrawings );
 
     // scaling:
     if( !m_pEdScalePageWidth->GetValue() && !m_pEdScalePageHeight->GetValue() )
@@ -306,17 +306,17 @@ bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     }
 
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALE),
-                                      rCoreSet, rOldSet,
+                                      *rCoreSet, rOldSet,
                                       *m_pLbScaleMode, SC_TPTABLE_SCALE_PERCENT,
                                       *m_pEdScaleAll, (sal_uInt16)m_pEdScaleAll->GetValue() );
 
     bDataChanged |= lcl_PutScaleItem2( GetWhich(SID_SCATTR_PAGE_SCALETO),
-                                      rCoreSet, rOldSet,
+                                      *rCoreSet, rOldSet,
                                       *m_pLbScaleMode, SC_TPTABLE_SCALE_TO,
                                       *m_pEdScalePageWidth, *m_pEdScalePageHeight );
 
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALETOPAGES),
-                                      rCoreSet, rOldSet,
+                                      *rCoreSet, rOldSet,
                                       *m_pLbScaleMode, SC_TPTABLE_SCALE_TO_PAGES,
                                       *m_pEdScalePageNum, (sal_uInt16)m_pEdScalePageNum->GetValue() );
 
@@ -326,7 +326,7 @@ bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 int ScTablePage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
-        FillItemSet( *pSetP );
+        FillItemSet( pSetP );
 
     return LEAVE_PAGE;
 }

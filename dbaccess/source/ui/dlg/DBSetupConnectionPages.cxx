@@ -116,10 +116,10 @@ using namespace ::com::sun::star;
         m_pTextConnectionHelper->implInitControls(_rSet, bValid);
     }
 
-    bool OTextConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OTextConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
-        bChangedSomething = m_pTextConnectionHelper->FillItemSet(_rSet, bChangedSomething);
+        bChangedSomething = m_pTextConnectionHelper->FillItemSet(*_rSet, bChangedSomething);
         return bChangedSomething;
     }
 
@@ -156,15 +156,15 @@ using namespace ::com::sun::star;
         FreeResource();
     }
 
-    bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OLDAPConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
-        fillString(_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
-        fillInt32(_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
+        fillString(*_rSet,&m_aETBaseDN,DSID_CONN_LDAP_BASEDN, bChangedSomething);
+        fillInt32(*_rSet,&m_aNFPortNumber,DSID_CONN_LDAP_PORTNUMBER,bChangedSomething);
 
         if ( m_aETHostServer.IsValueChangedFromSaved() )
         {
-            DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet.GetItem(DSID_TYPECOLLECTION));
+            DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _rSet->GetItem(DSID_TYPECOLLECTION));
             ::dbaccess::ODsnTypeCollection* pCollection = NULL;
             if (pCollectionItem)
                 pCollection = pCollectionItem->getCollection();
@@ -173,12 +173,12 @@ using namespace ::com::sun::star;
             {
                 OUString sUrl = pCollection->getPrefix( OUString("sdbc:address:ldap:"));
                 sUrl += m_aETHostServer.GetText();
-                _rSet.Put(SfxStringItem(DSID_CONNECTURL, sUrl));
+                _rSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
                 bChangedSomething = true;
             }
         }
 
-        fillBool(_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
+        fillBool(*_rSet,&m_aCBUseSSL,DSID_CONN_LDAP_USESSL,bChangedSomething);
         return bChangedSomething;
     }
     void OLDAPConnectionPageSetup::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -283,7 +283,7 @@ using namespace ::com::sun::star;
     {
     }
 
-    bool OMySQLIntroPageSetup::FillItemSet(SfxItemSet& /*_rSet*/)
+    bool OMySQLIntroPageSetup::FillItemSet(SfxItemSet* /*_rSet*/)
     {
         OSL_FAIL("Who called me?! Please ask oj for more information.");
         return true;
@@ -331,7 +331,7 @@ using namespace ::com::sun::star;
         m_aMySQLSettings.fillWindows( _rControlList );
     }
 
-    bool MySQLNativeSetupPage::FillItemSet( SfxItemSet& _rSet )
+    bool MySQLNativeSetupPage::FillItemSet( SfxItemSet* _rSet )
     {
         return m_aMySQLSettings.FillItemSet( _rSet );
     }
@@ -441,13 +441,13 @@ using namespace ::com::sun::star;
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
     }
 
-    bool OGeneralSpecialJDBCConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OGeneralSpecialJDBCConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
-        fillString(_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
-        fillString(_rSet,&m_aETHostname,DSID_CONN_HOSTNAME,bChangedSomething);
-        fillString(_rSet,&m_aETDatabasename,DSID_DATABASENAME,bChangedSomething);
-        fillInt32(_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
+        fillString(*_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
+        fillString(*_rSet,&m_aETHostname,DSID_CONN_HOSTNAME,bChangedSomething);
+        fillString(*_rSet,&m_aETDatabasename,DSID_DATABASENAME,bChangedSomething);
+        fillInt32(*_rSet,&m_aNFPortNumber,m_nPortId,bChangedSomething );
         return bChangedSomething;
     }
 
@@ -553,10 +553,10 @@ using namespace ::com::sun::star;
         _rControlList.push_back(new ODisableWrapper<FixedText>(&m_aFTDriverClass));
     }
 
-    bool OJDBCConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OJDBCConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
-        fillString(_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
+        fillString(*_rSet,&m_aETDriverClass,DSID_JDBCDRIVERCLASS,bChangedSomething);
         return bChangedSomething;
     }
 
@@ -670,10 +670,10 @@ using namespace ::com::sun::star;
         OConnectionTabPageSetup::implInitControls(_rSet, _bSaveValue);
     }
 
-    bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OSpreadSheetConnectionPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = OConnectionTabPageSetup::FillItemSet(_rSet);
-        fillBool(_rSet,&m_aCBPasswordrequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,&m_aCBPasswordrequired,DSID_PASSWORDREQUIRED,bChangedSomething);
         return bChangedSomething;
     }
 
@@ -734,17 +734,17 @@ using namespace ::com::sun::star;
         m_aETUserName.ClearModifyFlag();
     }
 
-    bool OAuthentificationPageSetup::FillItemSet( SfxItemSet& _rSet )
+    bool OAuthentificationPageSetup::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
 
         if (m_aETUserName.IsValueChangedFromSaved())
         {
-            _rSet.Put(SfxStringItem(DSID_USER, m_aETUserName.GetText()));
-            _rSet.Put(SfxStringItem(DSID_PASSWORD, OUString()));
+            _rSet->Put(SfxStringItem(DSID_USER, m_aETUserName.GetText()));
+            _rSet->Put(SfxStringItem(DSID_PASSWORD, OUString()));
             bChangedSomething = true;
         }
-        fillBool(_rSet,&m_aCBPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
+        fillBool(*_rSet,&m_aCBPasswordRequired,DSID_PASSWORDREQUIRED,bChangedSomething);
         return bChangedSomething;
     }
 
@@ -818,7 +818,7 @@ using namespace ::com::sun::star;
         m_pCBStartTableWizard->Enable(_bSupportsTableCreation);
     }
 
-    bool OFinalDBPageSetup::FillItemSet( SfxItemSet& /*_rSet*/ )
+    bool OFinalDBPageSetup::FillItemSet( SfxItemSet* /*_rSet*/ )
     {
         return true;
     }

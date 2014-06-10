@@ -66,7 +66,7 @@ SfxTabPage* SvxAccessibilityOptionsTabPage::Create( Window* pParent, const SfxIt
     return new SvxAccessibilityOptionsTabPage(pParent, rAttrSet);
 }
 
-bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet& )
+bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     //aConfig.Set... from controls
 

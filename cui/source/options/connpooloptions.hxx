@@ -56,7 +56,7 @@ namespace offapp
     protected:
         virtual bool        Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;
 
-        virtual bool        FillItemSet(SfxItemSet& _rSet) SAL_OVERRIDE;
+        virtual bool        FillItemSet(SfxItemSet* _rSet) SAL_OVERRIDE;
         virtual void        Reset(const SfxItemSet& _rSet) SAL_OVERRIDE;
         virtual void        ActivatePage( const SfxItemSet& _rSet) SAL_OVERRIDE;
 

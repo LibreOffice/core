@@ -457,7 +457,7 @@ void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
 int SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return SfxTabPage::LEAVE_PAGE;
 }
 
@@ -485,10 +485,10 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     }
 }
 
-bool SwEnvFmtPage::FillItemSet(SfxItemSet& rSet)
+bool SwEnvFmtPage::FillItemSet(SfxItemSet* rSet)
 {
     FillItem(GetParentSwEnvDlg()->aEnvItem);
-    rSet.Put(GetParentSwEnvDlg()->aEnvItem);
+    rSet->Put(GetParentSwEnvDlg()->aEnvItem);
     return true;
 }
 

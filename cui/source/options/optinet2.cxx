@@ -391,7 +391,7 @@ void SvxProxyTabPage::Reset(const SfxItemSet&)
     EnableControls_Impl( m_pProxyModeLB->GetSelectEntryPos() == 2 );
 }
 
-bool SvxProxyTabPage::FillItemSet(SfxItemSet& )
+bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
 {
     bool bModified = false;
 
@@ -865,7 +865,7 @@ void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
 int SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return LEAVE_PAGE;
 }
 
@@ -888,7 +888,7 @@ namespace
     }
 }
 
-bool SvxSecurityTabPage::FillItemSet( SfxItemSet& )
+bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
 {
     bool bModified = false;
 
@@ -929,7 +929,7 @@ SfxTabPage* MozPluginTabPage::Create( Window* pParent,
     return new MozPluginTabPage( pParent, rAttrSet );
 }
 
-bool MozPluginTabPage::FillItemSet( SfxItemSet& )
+bool MozPluginTabPage::FillItemSet( SfxItemSet* )
 {
     bool hasInstall = isInstalled();
     bool hasChecked = m_pWBasicCodeCB->IsChecked();
@@ -1232,7 +1232,7 @@ SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
 
 /* -------------------------------------------------------------------------*/
 
-bool SvxEMailTabPage::FillItemSet( SfxItemSet& )
+bool SvxEMailTabPage::FillItemSet( SfxItemSet* )
 {
     bool bMailModified = false;
     if(!pImpl->aMailConfig.bROProgram && m_pMailerURLED->IsValueChangedFromSaved())

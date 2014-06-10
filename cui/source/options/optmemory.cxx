@@ -105,7 +105,7 @@ inline void OfaMemoryOptionsPage::SetNfGraphicObjectCacheLast( long nSizeInBytes
 int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return LEAVE_PAGE;
 }
 
@@ -155,7 +155,7 @@ SfxTabPage* OfaMemoryOptionsPage::Create( Window* pParent, const SfxItemSet& rAt
 
 
 
-bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
+bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
 
@@ -198,7 +198,7 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet& rSet )
 
     if( m_pQuickLaunchCB->IsValueChangedFromSaved())
     {
-        rSet.Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_pQuickLaunchCB->IsChecked()));
+        rSet->Put(SfxBoolItem(SID_ATTR_QUICKLAUNCHER, m_pQuickLaunchCB->IsChecked()));
         bModified = true;
     }
 

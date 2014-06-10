@@ -902,7 +902,7 @@ void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
     }
 }
 
-bool SwTOXSelectTabPage::FillItemSet( SfxItemSet& )
+bool SwTOXSelectTabPage::FillItemSet( SfxItemSet* )
 {
     return true;
 }
@@ -1894,7 +1894,7 @@ SwTOXEntryTabPage::~SwTOXEntryTabPage()
 {
 }
 
-bool SwTOXEntryTabPage::FillItemSet( SfxItemSet& )
+bool SwTOXEntryTabPage::FillItemSet( SfxItemSet* )
 {
     // nothing to do
     return true;
@@ -3512,7 +3512,7 @@ SwTOXStylesTabPage::~SwTOXStylesTabPage()
     delete m_pCurrentForm;
 }
 
-bool SwTOXStylesTabPage::FillItemSet( SfxItemSet& )
+bool SwTOXStylesTabPage::FillItemSet( SfxItemSet* )
 {
     return true;
 }

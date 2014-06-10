@@ -642,7 +642,7 @@ bool ODbTypeWizDialogSetup::saveDatasource()
 {
     SfxTabPage* pPage = static_cast<SfxTabPage*>(WizardDialog::GetPage(getCurrentState()));
     if ( pPage )
-        pPage->FillItemSet(*m_pOutSet);
+        pPage->FillItemSet(m_pOutSet);
     return true;
 }
 

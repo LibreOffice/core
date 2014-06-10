@@ -85,21 +85,21 @@ SfxTabPage* SchAxisLabelTabPage::Create( Window* pParent, const SfxItemSet& rAtt
     return new SchAxisLabelTabPage( pParent, rAttrs );
 }
 
-bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 {
     bool bStacked = false;
     if( m_pOrientHlp->GetStackedState() != TRISTATE_INDET )
     {
         bStacked = m_pOrientHlp->GetStackedState() == TRISTATE_TRUE;
         if( !m_bHasInitialStacking || (bStacked != m_bInitialStacking) )
-            rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
+            rOutAttrs->Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
     }
 
     if( m_pCtrlDial->HasRotation() )
     {
         sal_Int32 nDegrees = bStacked ? 0 : m_pCtrlDial->GetRotation();
         if( !m_bHasInitialDegrees || (nDegrees != m_nInitialDegrees) )
-            rOutAttrs.Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
+            rOutAttrs->Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
     }
 
     if( m_bShowStaggeringControls )
@@ -119,18 +119,18 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet& rOutAttrs )
             bRadioButtonChecked = false;
 
         if( bRadioButtonChecked )
-            rOutAttrs.Put( SvxChartTextOrderItem( eOrder, SCHATTR_AXIS_LABEL_ORDER ));
+            rOutAttrs->Put( SvxChartTextOrderItem( eOrder, SCHATTR_AXIS_LABEL_ORDER ));
     }
 
     if( m_pCbTextOverlap->GetState() != TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_OVERLAP, m_pCbTextOverlap->IsChecked() ) );
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_LABEL_OVERLAP, m_pCbTextOverlap->IsChecked() ) );
     if( m_pCbTextBreak->GetState() != TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_LABEL_BREAK, m_pCbTextBreak->IsChecked() ) );
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_LABEL_BREAK, m_pCbTextBreak->IsChecked() ) );
     if( m_pCbShowDescription->GetState() != TRISTATE_INDET )
-        rOutAttrs.Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_pCbShowDescription->IsChecked() ) );
+        rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_pCbShowDescription->IsChecked() ) );
 
     if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
-        rOutAttrs.Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLbTextDirection->GetSelectEntryValue() ) );
+        rOutAttrs->Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLbTextDirection->GetSelectEntryValue() ) );
 
     return true;
 }

@@ -717,7 +717,7 @@ void SvxBackgroundTabPage::FillUserData()
 
 
 
-bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
+bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     if ( pPageImpl->pLoadTimer && pPageImpl->pLoadTimer->IsActive() )
     {
@@ -729,8 +729,8 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
 //  const SfxPoolItem* pX = GetOldItem( rCoreSet, SID_VIEW_FLD_PIC );
 //  if( pX && pX->ISA(SfxWallpaperItem))
-    if(SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
-        return FillItemSetWithWallpaperItem( rCoreSet, SID_VIEW_FLD_PIC );
+    if(SFX_ITEM_AVAILABLE <= rCoreSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
+        return FillItemSetWithWallpaperItem( *rCoreSet, SID_VIEW_FLD_PIC );
 
     bool bModified = false;
     sal_uInt16 nSlot = SID_ATTR_BRUSH;
@@ -764,8 +764,8 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     }
     sal_uInt16 nWhich = GetWhich( nSlot );
 
-    const SfxPoolItem* pOld = GetOldItem( rCoreSet, nSlot );
-    SfxItemState eOldItemState = rCoreSet.GetItemState(nSlot, false);
+    const SfxPoolItem* pOld = GetOldItem( *rCoreSet, nSlot );
+    SfxItemState eOldItemState = rCoreSet->GetItemState(nSlot, false);
     const SfxItemSet& rOldSet = GetItemSet();
 
     bool bGraphTransparencyChanged = bGraphTransparency && m_pGraphTransMF->IsValueChangedFromSaved();
@@ -793,10 +793,10 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                      (SFX_ITEM_AVAILABLE >= eOldItemState && !m_pBackgroundColorSet->IsNoSelection()))
                 {
                     bModified = true;
-                    rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
+                    rCoreSet->Put( SvxBrushItem( aBgdColor, nWhich ) );
                 }
                 else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-                    rCoreSet.ClearItem( nWhich );
+                    rCoreSet->ClearItem( nWhich );
             }
             else
             {
@@ -835,17 +835,17 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                                         nWhich );
                     lcl_SetTransparency(aTmpBrush, static_cast<long>(m_pGraphTransMF->GetValue()));
 
-                    rCoreSet.Put(aTmpBrush);
+                    rCoreSet->Put(aTmpBrush);
                 }
                 else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, false ) )
-                    rCoreSet.ClearItem( nWhich );
+                    rCoreSet->ClearItem( nWhich );
             }
         }
         else // Brush <-> Bitmap changed!
         {
             if ( bIsBrush )
             {
-                rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
+                rCoreSet->Put( SvxBrushItem( aBgdColor, nWhich ) );
             }
             else
             {
@@ -870,7 +870,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 if(pTmpBrush)
                 {
                     lcl_SetTransparency(*pTmpBrush, static_cast<long>(m_pGraphTransMF->GetValue()));
-                    rCoreSet.Put(*pTmpBrush);
+                    rCoreSet->Put(*pTmpBrush);
                     delete pTmpBrush;
                 }
             }
@@ -879,7 +879,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     }
     else if ( SID_ATTR_BRUSH_CHAR == nSlot && aBgdColor != Color( COL_WHITE ) )
     {
-        rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
+        rCoreSet->Put( SvxBrushItem( aBgdColor, nWhich ) );
         bModified = true;
     }
 
@@ -889,11 +889,11 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if( nSlot != SID_ATTR_BRUSH && pTableBck_Impl->pCellBrush)
         {
             const SfxPoolItem* pOldCell =
-                GetOldItem( rCoreSet, SID_ATTR_BRUSH );
+                GetOldItem( *rCoreSet, SID_ATTR_BRUSH );
 
             if ( *pTableBck_Impl->pCellBrush != *pOldCell )
             {
-                rCoreSet.Put( *pTableBck_Impl->pCellBrush );
+                rCoreSet->Put( *pTableBck_Impl->pCellBrush );
                 bModified |= true;
             }
         }
@@ -901,11 +901,11 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if( nSlot != SID_ATTR_BRUSH_ROW && pTableBck_Impl->pRowBrush)
         {
             const SfxPoolItem* pOldRow =
-                GetOldItem( rCoreSet, SID_ATTR_BRUSH_ROW );
+                GetOldItem( *rCoreSet, SID_ATTR_BRUSH_ROW );
 
             if ( *pTableBck_Impl->pRowBrush != *pOldRow )
             {
-                rCoreSet.Put( *pTableBck_Impl->pRowBrush );
+                rCoreSet->Put( *pTableBck_Impl->pRowBrush );
                 bModified |= true;
             }
         }
@@ -913,18 +913,18 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if( nSlot != SID_ATTR_BRUSH_TABLE && pTableBck_Impl->pTableBrush)
         {
             const SfxPoolItem* pOldTable =
-                GetOldItem( rCoreSet, SID_ATTR_BRUSH_TABLE );
+                GetOldItem( *rCoreSet, SID_ATTR_BRUSH_TABLE );
 
             if ( *pTableBck_Impl->pTableBrush != *pOldTable )
             {
-                rCoreSet.Put( *pTableBck_Impl->pTableBrush );
+                rCoreSet->Put( *pTableBck_Impl->pTableBrush );
                 bModified |= true;
             }
         }
 
         if( m_pTblLBox->IsValueChangedFromSaved() )
         {
-            rCoreSet.Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
+            rCoreSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                          m_pTblLBox->GetSelectEntryPos() ) );
             bModified |= true;
         }
@@ -935,11 +935,11 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if( nSlot != SID_ATTR_BRUSH && m_pParaLBox->IsVisible()) // not in search format dialog
         {
             const SfxPoolItem* pOldPara =
-                GetOldItem( rCoreSet, SID_ATTR_BRUSH );
+                GetOldItem( *rCoreSet, SID_ATTR_BRUSH );
 
             if ( *pParaBck_Impl->pParaBrush != *pOldPara )
             {
-                rCoreSet.Put( *pParaBck_Impl->pParaBrush );
+                rCoreSet->Put( *pParaBck_Impl->pParaBrush );
                 bModified |= true;
             }
         }
@@ -947,7 +947,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         if( nSlot != SID_ATTR_BRUSH_CHAR )
         {
             const SfxPoolItem* pOldChar =
-                GetOldItem( rCoreSet, SID_ATTR_BRUSH_CHAR );
+                GetOldItem( *rCoreSet, SID_ATTR_BRUSH_CHAR );
             DBG_ASSERT(pParaBck_Impl, "pParaBck_Impl == NULL ?");
             if ( pOldChar &&
                     //#111173#  crash report shows that pParaBck_Impl can be NULL, the cause is unknown
@@ -955,14 +955,14 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                         (*pParaBck_Impl->pCharBrush != *pOldChar ||
                 *pParaBck_Impl->pCharBrush != SvxBrushItem(SID_ATTR_BRUSH_CHAR)))
             {
-                rCoreSet.Put( *pParaBck_Impl->pCharBrush );
+                rCoreSet->Put( *pParaBck_Impl->pCharBrush );
                 bModified |= true;
             }
         }
 
         if( m_pParaLBox->IsValueChangedFromSaved() )
         {
-            rCoreSet.Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
+            rCoreSet->Put( SfxUInt16Item( SID_BACKGRND_DESTINATION,
                                          m_pParaLBox->GetSelectEntryPos() ) );
             bModified |= true;
         }
@@ -1062,7 +1062,7 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
         return KEEP_PAGE;
 
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return LEAVE_PAGE;
 }

@@ -211,7 +211,7 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
     AnyRulerHdl(m_pAnyRulerCB);
 }
 
-bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
+bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
 {
     const SwElemItem*   pOldAttr = (const SwElemItem*)
                         GetOldItem(GetItemSet(), FN_PARAM_ELEM);
@@ -235,7 +235,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
 
     bool bRet = !pOldAttr || aElem != *pOldAttr;
     if(bRet)
-        bRet = 0 != rSet.Put(aElem);
+        bRet = 0 != rSet->Put(aElem);
 
     sal_Int32 nMPos = m_pMetricLB->GetSelectEntryPos();
     sal_Int32 nGlobalMetricPos = nMPos;
@@ -243,7 +243,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     {
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
-        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
+        rSet->Put( SfxUInt16Item( SID_ATTR_METRIC, nFieldUnit ) );
         bRet = true;
     }
 
@@ -252,7 +252,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     {
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pHMetric->GetEntryData( nMPos );
-        rSet.Put( SfxUInt16Item( FN_HSCROLL_METRIC, nFieldUnit ) );
+        rSet->Put( SfxUInt16Item( FN_HSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
     nMPos = m_pVMetric->GetSelectEntryPos();
@@ -260,7 +260,7 @@ bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     {
         // Double-Cast for VA3.0
         const sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pVMetric->GetEntryData( nMPos );
-        rSet.Put( SfxUInt16Item( FN_VSCROLL_METRIC, nFieldUnit ) );
+        rSet->Put( SfxUInt16Item( FN_VSCROLL_METRIC, nFieldUnit ) );
         bRet = true;
     }
     return bRet;
@@ -367,7 +367,7 @@ SfxTabPage* SwAddPrinterTabPage::Create( Window* pParent,
     return ( new SwAddPrinterTabPage( pParent, rAttrSet ) );
 }
 
-bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
+bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
     if ( bAttrModified )
     {
@@ -403,7 +403,7 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
         const OUString sFax = m_pFaxLB->GetSelectEntry();
         aAddPrinterAttr.sFaxName = sNone == sFax ? aEmptyOUStr : sFax;
-        rCoreSet.Put(aAddPrinterAttr);
+        rCoreSet->Put(aAddPrinterAttr);
     }
     return bAttrModified;
 }
@@ -614,7 +614,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
     pColl->SetFmtAttr(SvxFontHeightItem(nHeight, 100, nFontHeightWhich));
 }
 
-bool SwStdFontTabPage::FillItemSet( SfxItemSet& )
+bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
 {
     bool bNotDocOnly = !pDocOnlyCB->IsChecked();
     SW_MOD()->GetModuleConfig()->SetDefaultFontInCurrDocOnly(!bNotDocOnly);
@@ -1097,7 +1097,7 @@ SfxTabPage* SwTableOptionsTabPage::Create( Window* pParent,
     return new SwTableOptionsTabPage(pParent, rAttrSet );
 }
 
-bool SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
+bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -1337,7 +1337,7 @@ void SwShdwCrsrOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
         SetWrtShell(pWrtSh->GetValue());
 }
 
-bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
+bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 {
     SwShadowCursorItem aOpt;
     aOpt.SetOn( m_pOnOffCB->IsChecked() );
@@ -1355,10 +1355,10 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 
     bool bRet = false;
     const SfxPoolItem* pItem = 0;
-    if( SFX_ITEM_SET != rSet.GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem )
+    if( SFX_ITEM_SET != rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem )
         ||  ((SwShadowCursorItem&)*pItem) != aOpt )
     {
-        rSet.Put( aOpt );
+        rSet->Put( aOpt );
         bRet = true;
     }
 
@@ -1370,7 +1370,7 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 
     if( m_pCrsrInProtCB->IsValueChangedFromSaved())
     {
-        rSet.Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_pCrsrInProtCB->IsChecked()));
+        rSet->Put(SfxBoolItem(FN_PARAM_CRSR_IN_PROTECTED, m_pCrsrInProtCB->IsChecked()));
         bRet = true;
     }
 
@@ -1393,7 +1393,7 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet& rSet )
 
     bRet |= (!pOldAttr || aDisp != *pOldAttr);
     if(bRet)
-        bRet = 0 != rSet.Put(aDisp);
+        bRet = 0 != rSet->Put(aDisp);
 
     return bRet;
 }
@@ -1733,7 +1733,7 @@ SfxTabPage* SwRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& 
     return new SwRedlineOptionsTabPage( pParent, rSet );
 }
 
-bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& )
+bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     CharAttr *pAttr;
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
@@ -2233,7 +2233,7 @@ SfxTabPage* SwCompareOptionsTabPage::Create( Window* pParent, const SfxItemSet& 
     return new SwCompareOptionsTabPage( pParent, rAttrSet );
 }
 
-bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet& )
+bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
 {
     bool bRet = false;
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
@@ -2358,7 +2358,7 @@ SfxTabPage* SwTestTabPage::Create( Window* pParent,
     return new SwTestTabPage(pParent, rAttrSet);
 }
 
-bool    SwTestTabPage::FillItemSet( SfxItemSet& rCoreSet )
+bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )
 {
 
     if ( bAttrModified )
@@ -2374,7 +2374,7 @@ bool    SwTestTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aTestItem.bTest8=m_pTest8CBox->IsChecked();
         aTestItem.bTest9=m_pTest9CBox->IsChecked();
         aTestItem.bTest10=m_pTest10CBox->IsChecked();
-        rCoreSet.Put(aTestItem);
+        rCoreSet->Put(aTestItem);
     }
     return bAttrModified;
 }

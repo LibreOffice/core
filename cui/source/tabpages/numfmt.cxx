@@ -686,7 +686,7 @@ void SvxNumberFormatTabPage::HideLanguage(bool nFlag)
 #*
 #************************************************************************/
 
-bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
+bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     bool bDataChanged   = m_pFtLanguage->IsEnabled() || m_pCbSourceFormat->IsEnabled();
     if ( bDataChanged )
@@ -722,11 +722,11 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 
             if (bDataChanged)
             {
-                rCoreAttrs.Put( SfxUInt32Item( nWhich, nCurKey ) );
+                rCoreAttrs->Put( SfxUInt32Item( nWhich, nCurKey ) );
             }
             else if(SFX_ITEM_DEFAULT == eItemState)
             {
-                rCoreAttrs.ClearItem( nWhich );
+                rCoreAttrs->ClearItem( nWhich );
             }
         }
 
@@ -744,7 +744,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 
             if(bNumItemFlag)
             {
-                rCoreAttrs.Put( *pNumItem );
+                rCoreAttrs->Put( *pNumItem );
             }
             else
             {
@@ -768,7 +768,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
             const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
                         GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE );
             bool bOld = pBoolItem && pBoolItem->GetValue();
-            rCoreAttrs.Put( SfxBoolItem( _nWhich, m_pCbSourceFormat->IsChecked() ) );
+            rCoreAttrs->Put( SfxBoolItem( _nWhich, m_pCbSourceFormat->IsChecked() ) );
             if ( !bDataChanged )
                 bDataChanged = (bOld != m_pCbSourceFormat->IsChecked() ||
                     _eItemState != SFX_ITEM_SET);
@@ -779,7 +779,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
         pNumFmtShell->ValidateNewEntries();
         if(m_pLbLanguage->IsVisible() &&
                 LISTBOX_ENTRY_NOTFOUND != m_pLbLanguage->GetEntryPos(sAutomaticEntry))
-                rCoreAttrs.Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO,
+                rCoreAttrs->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ADD_AUTO,
                     m_pLbLanguage->GetSelectEntry() == sAutomaticEntry));
     }
 
@@ -790,7 +790,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 int SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return LEAVE_PAGE;
 }
 

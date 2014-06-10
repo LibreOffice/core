@@ -405,7 +405,7 @@ SfxTabPage* SwCompatibilityOptPage::Create( Window* pParent, const SfxItemSet& r
     return new SwCompatibilityOptPage( pParent, rAttrSet );
 }
 
-bool SwCompatibilityOptPage::FillItemSet( SfxItemSet&  )
+bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
 {
     bool bModified = false;
     if ( m_pWrtShell )

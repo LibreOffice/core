@@ -130,7 +130,7 @@ void SvxDistributePage::Reset(const SfxItemSet& )
 |*
 \************************************************************************/
 
-bool SvxDistributePage::FillItemSet( SfxItemSet& )
+bool SvxDistributePage::FillItemSet( SfxItemSet* )
 {
     SvxDistributeHorizontal eDistributeHor(SvxDistributeHorizontalNone);
     SvxDistributeVertical eDistributeVer(SvxDistributeVerticalNone);

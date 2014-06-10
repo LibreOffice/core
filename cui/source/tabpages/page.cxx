@@ -659,7 +659,7 @@ void SvxPageDescPage::FillUserData()
 
 
 
-bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
+bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bModified = false;
     const SfxItemSet& rOldSet = GetItemSet();
@@ -691,10 +691,10 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     // set left and right margins
     if ( bModified )
     {
-        pOld = GetOldItem( rSet, SID_ATTR_LRSPACE );
+        pOld = GetOldItem( *rSet, SID_ATTR_LRSPACE );
 
         if ( !pOld || !( *(const SvxLRSpaceItem*)pOld == aMargin ) )
-            rSet.Put( aMargin );
+            rSet->Put( aMargin );
         else
             bModified = false;
     }
@@ -717,12 +717,12 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
     if ( bMod )
     {
-        pOld = GetOldItem( rSet, SID_ATTR_ULSPACE );
+        pOld = GetOldItem( *rSet, SID_ATTR_ULSPACE );
 
         if ( !pOld || !( *(const SvxULSpaceItem*)pOld == aTopMargin ) )
         {
             bModified = true;
-            rSet.Put( aTopMargin );
+            rSet->Put( aTopMargin );
         }
     }
 
@@ -730,11 +730,11 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_PAGE_PAPERBIN );
     sal_Int32 nPos = m_pPaperTrayBox->GetSelectEntryPos();
     sal_uInt16 nBin = (sal_uInt16)(sal_uLong)m_pPaperTrayBox->GetEntryData( nPos );
-    pOld = GetOldItem( rSet, SID_ATTR_PAGE_PAPERBIN );
+    pOld = GetOldItem( *rSet, SID_ATTR_PAGE_PAPERBIN );
 
     if ( !pOld || ( (const SvxPaperBinItem*)pOld )->GetValue() != nBin )
     {
-        rSet.Put( SvxPaperBinItem( nWhich, (sal_uInt8)nBin ) );
+        rSet->Put( SvxPaperBinItem( nWhich, (sal_uInt8)nBin ) );
         bModified = true;
     }
 
@@ -752,11 +752,11 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         {
             Size aSize( GetCoreValue( *m_pPaperWidthEdit, eUnit ),
                         GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
-            pOld = GetOldItem( rSet, SID_ATTR_PAGE_SIZE );
+            pOld = GetOldItem( *rSet, SID_ATTR_PAGE_SIZE );
 
             if ( !pOld || ( (const SvxSizeItem*)pOld )->GetSize() != aSize )
             {
-                rSet.Put( SvxSizeItem( GetWhich(SID_ATTR_PAGE_SIZE), aSize ) );
+                rSet->Put( SvxSizeItem( GetWhich(SID_ATTR_PAGE_SIZE), aSize ) );
                 bModified = true;
             }
         }
@@ -770,11 +770,11 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             if ( bChecked )
                 Swap( aSize );
 
-            pOld = GetOldItem( rSet, SID_ATTR_PAGE_SIZE );
+            pOld = GetOldItem( *rSet, SID_ATTR_PAGE_SIZE );
 
             if ( !pOld || ( (const SvxSizeItem*)pOld )->GetSize() != aSize )
             {
-                rSet.Put( SvxSizeItem( GetWhich(SID_ATTR_PAGE_SIZE), aSize ) );
+                rSet->Put( SvxSizeItem( GetWhich(SID_ATTR_PAGE_SIZE), aSize ) );
                 bModified = true;
             }
         }
@@ -805,18 +805,18 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
     if ( bMod )
     {
-        pOld = GetOldItem( rSet, SID_ATTR_PAGE );
+        pOld = GetOldItem( *rSet, SID_ATTR_PAGE );
 
         if ( !pOld || !( *(const SvxPageItem*)pOld == aPage ) )
         {
-            rSet.Put( aPage );
+            rSet->Put( aPage );
             bModified = true;
         }
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich ) )
-        rSet.ClearItem( nWhich );
+        rSet->ClearItem( nWhich );
     else
-        rSet.Put( rOldSet.Get( nWhich ) );
+        rSet->Put( rOldSet.Get( nWhich ) );
 
     // evaluate mode specific controls
 
@@ -828,7 +828,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             {
                 SfxBoolItem aHorz( GetWhich( SID_ATTR_PAGE_EXT1 ),
                                    m_pHorzBox->IsChecked() );
-                rSet.Put( aHorz );
+                rSet->Put( aHorz );
                 bModified = true;
             }
 
@@ -836,7 +836,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             {
                 SfxBoolItem aVert( GetWhich( SID_ATTR_PAGE_EXT2 ),
                                    m_pVertBox->IsChecked() );
-                rSet.Put( aVert );
+                rSet->Put( aVert );
                 bModified = true;
             }
             break;
@@ -845,7 +845,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         case SVX_PAGE_MODE_PRESENTATION:
         {
             // always put so that draw can evaluate this
-            rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PAGE_EXT1 ),
+            rSet->Put( SfxBoolItem( GetWhich( SID_ATTR_PAGE_EXT1 ),
                       m_pAdaptBox->IsChecked() ) );
             bModified = true;
             break;
@@ -861,12 +861,12 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         SfxBoolItem* pRegItem = (SfxBoolItem*)rRegItem.Clone();
         bool bCheck = m_pRegisterCB->IsChecked();
         pRegItem->SetValue(bCheck);
-        rSet.Put(*pRegItem);
+        rSet->Put(*pRegItem);
         bModified = true;
         if(bCheck)
         {
             bModified = true;
-            rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
+            rSet->Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
                             m_pRegisterLB->GetSelectEntry()));
         }
         delete pRegItem;
@@ -875,7 +875,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     SvxFrameDirection eDirection = m_pTextFlowBox->GetSelectEntryValue();
     if( m_pTextFlowBox->IsVisible() && m_pTextFlowBox->IsValueChangedFromSaved() )
     {
-        rSet.Put( SvxFrameDirectionItem( eDirection, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
+        rSet->Put( SvxFrameDirectionItem( eDirection, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
         bModified = true;
     }
 
@@ -1415,7 +1415,7 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 
     if ( _pSet )
     {
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
         // put portray/landscape if applicable
         sal_uInt16 nWh = GetWhich( SID_ATTR_PAGE_SIZE );

@@ -352,7 +352,7 @@ IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
 
 
-bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
+bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
 
 /*  [Description]
 
@@ -391,7 +391,7 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
     if(m_pAutoCB->IsVisible() &&
        m_pAutoCB->IsValueChangedFromSaved())
     {
-        rSet.Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pAutoCB->IsChecked()));
+        rSet->Put(SfxBoolItem(SID_ATTR_AUTO_STYLE_UPDATE, m_pAutoCB->IsChecked()));
     }
 
     return bModified;
@@ -592,7 +592,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
     }
 
     if ( pItemSet )
-        FillItemSet( *pItemSet );
+        FillItemSet( pItemSet );
 
     return nRet;
 }

@@ -180,7 +180,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static const sal_uInt16*      GetRanges();
 
-    virtual bool        FillItemSet( SfxItemSet& rOutSet ) SAL_OVERRIDE;
+    virtual bool        FillItemSet( SfxItemSet* rOutSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual void        FillUserData() SAL_OVERRIDE;
 

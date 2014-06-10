@@ -72,7 +72,7 @@ namespace dbaui
         bool                m_bHasMaxRowScan;
 
     public:
-        virtual bool        FillItemSet ( SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
+        virtual bool        FillItemSet ( SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
         SpecialSettingsPage(Window* pParent, const SfxItemSet& _rCoreAttrs, const DataSourceMetaData& _rDSMeta );
 
@@ -108,7 +108,7 @@ namespace dbaui
                     m_aControlDependencies;
 
     public:
-        virtual bool        FillItemSet (SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
+        virtual bool        FillItemSet (SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
 
         GeneratedValuesPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:

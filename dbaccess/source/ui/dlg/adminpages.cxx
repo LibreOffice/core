@@ -92,7 +92,7 @@ namespace dbaui
         {
             if (!prepareLeave())
                 return KEEP_PAGE;
-            FillItemSet(*_pSet);
+            FillItemSet(_pSet);
         }
 
         return LEAVE_PAGE;

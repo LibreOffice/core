@@ -80,7 +80,7 @@ SdPrintOptions::~SdPrintOptions()
 
 
 
-bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
+bool SdPrintOptions::FillItemSet( SfxItemSet* rAttrs )
 {
     if( m_pCbxDraw->IsValueChangedFromSaved() ||
         m_pCbxNotes->IsValueChangedFromSaved() ||
@@ -124,7 +124,7 @@ bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
             nQuality = 2;
         aOptions.GetOptionsPrint().SetOutputQuality( nQuality );
 
-        rAttrs.Put( aOptions );
+        rAttrs->Put( aOptions );
 
         return true;
     }

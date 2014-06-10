@@ -147,21 +147,21 @@ void SvxCaptionTabPage::Construct()
 
 
 
-bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
+bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 {
-    SfxItemPool*    pPool = _rOutAttrs.GetPool();
+    SfxItemPool*    pPool = _rOutAttrs->GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
     SfxMapUnit      eUnit;
 
     nCaptionType = m_pCT_CAPTTYPE->GetSelectItemId()-1;
 
-    _rOutAttrs.Put( SdrCaptionTypeItem( (SdrCaptionType) nCaptionType ) );
+    _rOutAttrs->Put( SdrCaptionTypeItem( (SdrCaptionType) nCaptionType ) );
 
     if( m_pMF_ABSTAND->IsValueModified() )
     {
         eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONGAP ) );
-        _rOutAttrs.Put( SdrCaptionGapItem( GetCoreValue(*m_pMF_ABSTAND, eUnit ) ) );
+        _rOutAttrs->Put( SdrCaptionGapItem( GetCoreValue(*m_pMF_ABSTAND, eUnit ) ) );
     }
 
     // special treatment!!! XXX
@@ -174,10 +174,10 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
         }
     }
 
-    _rOutAttrs.Put( SdrCaptionEscDirItem( (SdrCaptionEscDir)nEscDir ) );
+    _rOutAttrs->Put( SdrCaptionEscDirItem( (SdrCaptionEscDir)nEscDir ) );
 
     bEscRel = m_pLB_ANSATZ_REL->IsVisible();
-    _rOutAttrs.Put( SdrCaptionEscIsRelItem( bEscRel ) );
+    _rOutAttrs->Put( SdrCaptionEscIsRelItem( bEscRel ) );
 
     if( bEscRel )
     {
@@ -189,26 +189,26 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
             case AT_MITTE:  nVal=5000;break;
             case AT_UNTEN:  nVal=10000;break;
         }
-        _rOutAttrs.Put( SdrCaptionEscRelItem( nVal ) );
+        _rOutAttrs->Put( SdrCaptionEscRelItem( nVal ) );
     }
     else
     {
         if( m_pMF_ANSATZ->IsValueModified() )
         {
             eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONESCABS ) );
-            _rOutAttrs.Put( SdrCaptionEscAbsItem( GetCoreValue(*m_pMF_ANSATZ, eUnit ) ) );
+            _rOutAttrs->Put( SdrCaptionEscAbsItem( GetCoreValue(*m_pMF_ANSATZ, eUnit ) ) );
         }
     }
 
     bFitLineLen = m_pCB_LAENGE->IsChecked();
-    _rOutAttrs.Put( SdrCaptionFitLineLenItem( bFitLineLen ) );
+    _rOutAttrs->Put( SdrCaptionFitLineLenItem( bFitLineLen ) );
 
     if( ! bFitLineLen )
     {
         if( m_pMF_LAENGE->IsValueModified() )
         {
             eUnit = pPool->GetMetric( GetWhich( SDRATTR_CAPTIONLINELEN ) );
-            _rOutAttrs.Put( SdrCaptionLineLenItem( GetCoreValue(*m_pMF_LAENGE, eUnit ) ) );
+            _rOutAttrs->Put( SdrCaptionLineLenItem( GetCoreValue(*m_pMF_LAENGE, eUnit ) ) );
         }
     }
 

@@ -265,7 +265,7 @@ const sal_uInt16* AlignmentTabPage::GetRanges()
     return s_pRanges;
 }
 
-bool AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
+bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
 {
     bool bChanged = SfxTabPage::FillItemSet(rSet);
 
@@ -273,14 +273,14 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
     // method to 'distribute' to distinguish from the normal justification.
 
     sal_uInt16 nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
-    lcl_SetJustifyMethodToItemSet(rSet, nWhichHorJM, *m_pLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
+    lcl_SetJustifyMethodToItemSet(*rSet, nWhichHorJM, *m_pLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
     if (!bChanged)
-        bChanged = HasAlignmentChanged(rSet, nWhichHorJM);
+        bChanged = HasAlignmentChanged(*rSet, nWhichHorJM);
 
     sal_uInt16 nWhichVerJM = GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD);
-    lcl_SetJustifyMethodToItemSet(rSet, nWhichVerJM, *m_pLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED);
+    lcl_SetJustifyMethodToItemSet(*rSet, nWhichVerJM, *m_pLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED);
     if (!bChanged)
-        bChanged = HasAlignmentChanged(rSet, nWhichVerJM);
+        bChanged = HasAlignmentChanged(*rSet, nWhichVerJM);
 
     return bChanged;
 }
@@ -308,7 +308,7 @@ void AlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
 int AlignmentTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
     return LEAVE_PAGE;
 }
 

@@ -143,7 +143,7 @@ SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrS
     return new SwMailConfigPage(pParent, rAttrSet);
 }
 
-bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
+bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     if(m_pDisplayNameED->IsValueChangedFromSaved())
         m_pConfigItem->SetMailDisplayName(m_pDisplayNameED->GetText());

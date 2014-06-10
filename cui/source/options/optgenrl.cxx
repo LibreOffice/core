@@ -304,7 +304,7 @@ SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrS
 
 
 
-bool SvxGeneralTabPage::FillItemSet( SfxItemSet& )
+bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )
 {
     // remove leading and trailing whitespaces
     for (unsigned i = 0; i != vFields.size(); ++i)
@@ -435,7 +435,7 @@ void SvxGeneralTabPage::SetAddress_Impl()
 int SvxGeneralTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
     if ( pSet_ )
-        FillItemSet( *pSet_ );
+        FillItemSet( pSet_ );
     return LEAVE_PAGE;
 }
 

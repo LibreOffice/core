@@ -229,13 +229,13 @@ SfxTabPage*  SvxSingleNumPickTabPage::Create( Window* pParent,
     return new SvxSingleNumPickTabPage(pParent, rAttrSet);
 }
 
-bool  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet& rSet )
+bool  SvxSingleNumPickTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( (bPreset || bModified) && pSaveNum)
     {
         *pSaveNum = *pActNum;
-        rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
-        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
+        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
     }
 
     return bModified;
@@ -279,7 +279,7 @@ void  SvxSingleNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
 int  SvxSingleNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return sal_True;
 }
 
@@ -390,13 +390,13 @@ SfxTabPage*  SvxBulletPickTabPage::Create( Window* pParent,
     return new SvxBulletPickTabPage(pParent, rAttrSet);
 }
 
-bool  SvxBulletPickTabPage::FillItemSet( SfxItemSet& rSet )
+bool  SvxBulletPickTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( (bPreset || bModified) && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
-        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
+        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
     }
     return bModified;
 }
@@ -438,7 +438,7 @@ void  SvxBulletPickTabPage::ActivatePage(const SfxItemSet& rSet)
 int  SvxBulletPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return sal_True;
 }
 
@@ -587,13 +587,13 @@ SfxTabPage*  SvxNumPickTabPage::Create( Window* pParent,
     return new SvxNumPickTabPage(pParent, rAttrSet);
 }
 
-bool  SvxNumPickTabPage::FillItemSet( SfxItemSet& rSet )
+bool  SvxNumPickTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( (bPreset || bModified) && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
-        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
+        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
     }
     return bModified;
 }
@@ -635,7 +635,7 @@ void  SvxNumPickTabPage::ActivatePage(const SfxItemSet& rSet)
 int  SvxNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return sal_True;
 }
 
@@ -866,11 +866,11 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
 int  SvxBitmapPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 {
     if(_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return sal_True;
 }
 
-bool  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
+bool  SvxBitmapPickTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if ( aGrfNames.empty() )
     {
@@ -879,8 +879,8 @@ bool  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
     if( (bPreset || bModified) && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
-        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
+        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, bPreset));
     }
 
     return bModified;
@@ -1191,18 +1191,18 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
 int     SvxNumOptionsTabPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if(_pSet)
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     return sal_True;
 }
 
-bool    SvxNumOptionsTabPage::FillItemSet( SfxItemSet& rSet )
+bool    SvxNumOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    rSet.Put(SfxUInt16Item(SID_PARAM_CUR_NUM_LEVEL, nActNumLvl));
+    rSet->Put(SfxUInt16Item(SID_PARAM_CUR_NUM_LEVEL, nActNumLvl));
     if(bModified && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
-        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, false));
+        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, false));
     }
     return bModified;
 };
@@ -2953,20 +2953,20 @@ int  SvxNumPositionTabPage::DeactivatePage(SfxItemSet *_pSet)
         if(m_pDistBorderMF->IsEnabled())
             DistanceHdl_Impl(m_pDistBorderMF);
         DistanceHdl_Impl(m_pIndentMF);
-        FillItemSet(*_pSet);
+        FillItemSet(_pSet);
     }
     return sal_True;
 }
 
-bool SvxNumPositionTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxNumPositionTabPage::FillItemSet( SfxItemSet* rSet )
 {
-    rSet.Put(SfxUInt16Item(SID_PARAM_CUR_NUM_LEVEL, nActNumLvl));
+    rSet->Put(SfxUInt16Item(SID_PARAM_CUR_NUM_LEVEL, nActNumLvl));
 
     if(bModified && pActNum)
     {
         *pSaveNum = *pActNum;
-        rSet.Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
-        rSet.Put(SfxBoolItem(SID_PARAM_NUM_PRESET, false));
+        rSet->Put(SvxNumBulletItem( *pSaveNum ), nNumItemId);
+        rSet->Put(SfxBoolItem(SID_PARAM_NUM_PRESET, false));
     }
     return bModified;
 }

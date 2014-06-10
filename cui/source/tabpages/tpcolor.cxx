@@ -483,7 +483,7 @@ int SvxColorTabPage::DeactivatePage( SfxItemSet* _pSet )
         return( KEEP_PAGE );
 
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return( LEAVE_PAGE );
 }
@@ -556,7 +556,7 @@ long SvxColorTabPage::CheckChanges_Impl()
 
 
 
-bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
+bool SvxColorTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( ( nDlgType != 0 ) ||
         ( *pPageType == PT_COLOR && *pbAreaTP == false ) )
@@ -574,8 +574,8 @@ bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
         {
             aColor.SetColor (aCurrentColor.GetColor());
         }
-        rSet.Put( XFillColorItem( aString, aColor ) );
-        rSet.Put( XFillStyleItem( XFILL_SOLID ) );
+        rSet->Put( XFillColorItem( aString, aColor ) );
+        rSet->Put( XFillStyleItem( XFILL_SOLID ) );
     }
 
     return true;

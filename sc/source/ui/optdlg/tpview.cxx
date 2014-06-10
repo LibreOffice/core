@@ -106,7 +106,7 @@ SfxTabPage* ScTpContentOptions::Create( Window*     pParent,
     return new ScTpContentOptions(pParent, rCoreSet);
 }
 
-bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
+bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bRet = false;
     if( pFormulaCB ->IsValueChangedFromSaved() ||
@@ -130,17 +130,17 @@ bool    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
     {
         pLocalOptions->SetGridColor( pColorLB->GetSelectEntryColor(),
                                      pColorLB->GetSelectEntry() );
-        rCoreSet.Put(ScTpViewItem(SID_SCVIEWOPTIONS, *pLocalOptions));
+        rCoreSet->Put(ScTpViewItem(SID_SCVIEWOPTIONS, *pLocalOptions));
         bRet = true;
     }
     if(pRangeFindCB->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_RANGEFINDER, pRangeFindCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_RANGEFINDER, pRangeFindCB->IsChecked()));
         bRet = true;
     }
     if(pSyncZoomCB->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, pSyncZoomCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, pSyncZoomCB->IsChecked()));
         bRet = true;
     }
 
@@ -216,7 +216,7 @@ void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
 int ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     if(pSetP)
-        FillItemSet(*pSetP);
+        FillItemSet(pSetP);
     return SfxTabPage::LEAVE_PAGE;
 }
 
@@ -423,21 +423,21 @@ SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
     return pNew;
 }
 
-bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
+bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
 {
     bool bRet = true;
     const sal_Int32 nMPos = m_pUnitLB->GetSelectEntryPos();
     if ( m_pUnitLB->IsValueChangedFromSaved() )
     {
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pUnitLB->GetEntryData( nMPos );
-        rCoreSet.Put( SfxUInt16Item( SID_ATTR_METRIC,
+        rCoreSet->Put( SfxUInt16Item( SID_ATTR_METRIC,
                                      (sal_uInt16)nFieldUnit ) );
         bRet = true;
     }
 
     if(m_pTabMF->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
+        rCoreSet->Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
                     sal::static_int_cast<sal_uInt16>( m_pTabMF->Denormalize(m_pTabMF->GetValue(FUNIT_TWIP)) )));
         bRet = true;
     }
@@ -465,56 +465,56 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
     }
     if(m_pAlignCB->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_SELECTION, m_pAlignCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_SELECTION, m_pAlignCB->IsChecked()));
         bRet = true;
     }
 
     if(m_pAlignLB->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, m_pAlignLB->GetSelectEntryPos()));
+        rCoreSet->Put(SfxUInt16Item(SID_SC_INPUT_SELECTIONPOS, m_pAlignLB->GetSelectEntryPos()));
         bRet = true;
     }
 
     if(m_pEditModeCB->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_EDITMODE, m_pEditModeCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_EDITMODE, m_pEditModeCB->IsChecked()));
         bRet = true;
     }
 
     if(m_pFormatCB->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_FMT_EXPAND, m_pFormatCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_FMT_EXPAND, m_pFormatCB->IsChecked()));
         bRet = true;
     }
 
 
     if(m_pExpRefCB->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_REF_EXPAND, m_pExpRefCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_REF_EXPAND, m_pExpRefCB->IsChecked()));
         bRet = true;
     }
 
     if(m_pMarkHdrCB->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, m_pMarkHdrCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, m_pMarkHdrCB->IsChecked()));
         bRet = true;
     }
 
     if(m_pTextFmtCB->IsValueChangedFromSaved())
     {
-        rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, m_pTextFmtCB->IsChecked()));
+        rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_TEXTWYSIWYG, m_pTextFmtCB->IsChecked()));
         bRet = true;
     }
 
     if( m_pReplWarnCB->IsValueChangedFromSaved() )
     {
-        rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, m_pReplWarnCB->IsChecked() ) );
+        rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_REPLCELLSWARN, m_pReplWarnCB->IsChecked() ) );
         bRet = true;
     }
 
     if( m_pLegacyCellSelectionCB->IsValueChangedFromSaved() )
     {
-        rCoreSet.Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, m_pLegacyCellSelectionCB->IsChecked() ) );
+        rCoreSet->Put( SfxBoolItem( SID_SC_INPUT_LEGACY_CELL_SELECTION, m_pLegacyCellSelectionCB->IsChecked() ) );
         bRet = true;
     }
 
@@ -627,7 +627,7 @@ void    ScTpLayoutOptions::ActivatePage( const SfxItemSet& /* rCoreSet */ )
 int ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     if(pSetP)
-        FillItemSet(*pSetP);
+        FillItemSet(pSetP);
     return SfxTabPage::LEAVE_PAGE;
 }
 

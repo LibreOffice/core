@@ -218,33 +218,33 @@ int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
         return KEEP_PAGE;
 
     if( _pSet )
-        FillItemSet( *_pSet );
+        FillItemSet( _pSet );
 
     return LEAVE_PAGE;
 }
 
 
 
-bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
+bool SvxBitmapTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
 {
     if( nDlgType == 0 && *pbAreaTP == false ) // area dialog
     {
         if(PT_BITMAP == *pPageType)
         {
-            _rOutAttrs.Put(XFillStyleItem(XFILL_BITMAP));
+            _rOutAttrs->Put(XFillStyleItem(XFILL_BITMAP));
             sal_Int32 nPos = m_pLbBitmaps->GetSelectEntryPos();
             if(LISTBOX_ENTRY_NOTFOUND != nPos)
             {
                 const XBitmapEntry* pXBitmapEntry = pBitmapList->GetBitmap(nPos);
                 const OUString aString(m_pLbBitmaps->GetSelectEntry());
 
-                _rOutAttrs.Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
+                _rOutAttrs->Put(XFillBitmapItem(aString, pXBitmapEntry->GetGraphicObject()));
             }
             else
             {
                 const BitmapEx aBitmapEx(m_pBitmapCtl->GetBitmapEx());
 
-                _rOutAttrs.Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
+                _rOutAttrs->Put(XFillBitmapItem(OUString(), Graphic(aBitmapEx)));
             }
         }
     }

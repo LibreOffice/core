@@ -581,10 +581,10 @@ SfxTabPage*  SwDropCapsPage::Create(Window *pParent,
     return new SwDropCapsPage(pParent, rSet);
 }
 
-bool  SwDropCapsPage::FillItemSet(SfxItemSet &rSet)
+bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)
 {
     if(bModified)
-        FillSet(rSet);
+        FillSet(*rSet);
     return bModified;
 }
 

@@ -114,7 +114,7 @@ Window* SfxCommonPrintOptionsTabPage::GetParentLabelFor( const Window* pWindow )
         return SfxTabPage::GetParentLabelFor( pWindow );
 }
 
-bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
+bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 {
     SvtPrintWarningOptions  aWarnOptions;
     SvtPrinterOptions       aPrinterOptions;
@@ -162,7 +162,7 @@ void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet& /*rSet*/ )
 int SfxCommonPrintOptionsTabPage::DeactivatePage( SfxItemSet* pItemSet )
 {
     if( pItemSet )
-        FillItemSet( *pItemSet );
+        FillItemSet( pItemSet );
 
     return LEAVE_PAGE;
 }

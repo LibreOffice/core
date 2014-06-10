@@ -96,7 +96,7 @@ public :
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 
-    virtual bool        FillItemSet( SfxItemSet& ) = 0;
+    virtual bool        FillItemSet( SfxItemSet* ) = 0;
     virtual void        Reset( const SfxItemSet& ) = 0;
 
     bool                HasExchangeSupport() const              { return bHasExchangeSupport; }

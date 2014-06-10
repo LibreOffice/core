@@ -30,7 +30,7 @@ public:
     static  SfxTabPage* Create          ( Window*               pParent,
                                           const SfxItemSet&     rAttrSet );
     static  const sal_uInt16*     GetRanges       ();
-    virtual bool        FillItemSet     ( SfxItemSet& rCoreAttrs ) SAL_OVERRIDE;
+    virtual bool        FillItemSet     ( SfxItemSet* rCoreAttrs ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet& ) SAL_OVERRIDE;
 
 protected:

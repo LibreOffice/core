@@ -192,7 +192,7 @@ void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
     }
 }
 
-bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
+bool ScTpUserLists::FillItemSet( SfxItemSet* rCoreAttrs )
 {
     // Modifikationen noch nicht uebernommen?
     // -> Click auf Add-Button simulieren
@@ -225,7 +225,7 @@ bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
         if ( pUserLists )
             aULItem.SetUserList( *pUserLists );
 
-        rCoreAttrs.Put( aULItem );
+        rCoreAttrs->Put( aULItem );
     }
 
     return bDataModified;
@@ -234,7 +234,7 @@ bool ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
 int ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
-        FillItemSet( *pSetP );
+        FillItemSet( pSetP );
 
     return LEAVE_PAGE;
 }

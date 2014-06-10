@@ -428,20 +428,20 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
     CheckHdl( NULL );
 }
 
-bool ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
+bool ScTPValidationValue::FillItemSet( SfxItemSet* rArgSet )
 {
     sal_Int16 nListType = m_pCbShow->IsChecked() ?
         (m_pCbSort->IsChecked() ? ValidListType::SORTEDASCENDING : ValidListType::UNSORTED) :
         ValidListType::INVISIBLE;
 
-    rArgSet.Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>(
+    rArgSet->Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<sal_uInt16>(
                     lclGetValModeFromPos( m_pLbAllow->GetSelectEntryPos() ) ) ) );
-    rArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>(
+    rArgSet->Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<sal_uInt16>(
                     lclGetCondModeFromPos( m_pLbValue->GetSelectEntryPos() ) ) ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
-    rArgSet.Put( SfxBoolItem( FID_VALID_BLANK, m_pCbAllow->IsChecked() ) );
-    rArgSet.Put( SfxInt16Item( FID_VALID_LISTTYPE, nListType ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
+    rArgSet->Put( SfxBoolItem( FID_VALID_BLANK, m_pCbAllow->IsChecked() ) );
+    rArgSet->Put( SfxInt16Item( FID_VALID_LISTTYPE, nListType ) );
     return true;
 }
 
@@ -697,11 +697,11 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
         pEdInputHelp->SetText( EMPTY_OUSTRING );
 }
 
-bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
+bool ScTPValidationHelp::FillItemSet( SfxItemSet* rArgSet )
 {
-    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWHELP, pTsbHelp->GetState() == TRISTATE_TRUE ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_HELPTITLE, pEdtTitle->GetText() ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_HELPTEXT, pEdInputHelp->GetText() ) );
+    rArgSet->Put( SfxBoolItem( FID_VALID_SHOWHELP, pTsbHelp->GetState() == TRISTATE_TRUE ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_HELPTITLE, pEdtTitle->GetText() ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_HELPTEXT, pEdInputHelp->GetText() ) );
 
     return true;
 }
@@ -774,12 +774,12 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     SelectActionHdl( NULL );
 }
 
-bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
+bool ScTPValidationError::FillItemSet( SfxItemSet* rArgSet )
 {
-    rArgSet.Put( SfxBoolItem( FID_VALID_SHOWERR, m_pTsbShow->GetState() == TRISTATE_TRUE ) );
-    rArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_pLbAction->GetSelectEntryPos() ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_ERRTITLE, m_pEdtTitle->GetText() ) );
-    rArgSet.Put( SfxStringItem( FID_VALID_ERRTEXT, m_pEdError->GetText() ) );
+    rArgSet->Put( SfxBoolItem( FID_VALID_SHOWERR, m_pTsbShow->GetState() == TRISTATE_TRUE ) );
+    rArgSet->Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, m_pLbAction->GetSelectEntryPos() ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_ERRTITLE, m_pEdtTitle->GetText() ) );
+    rArgSet->Put( SfxStringItem( FID_VALID_ERRTEXT, m_pEdError->GetText() ) );
 
     return true;
 }

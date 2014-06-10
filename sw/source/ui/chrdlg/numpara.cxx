@@ -101,17 +101,17 @@ const sal_uInt16* SwParagraphNumTabPage::GetRanges()
     return aPageRg;
 }
 
-bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
+bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
 {
     if( m_pOutlineLvLB->IsValueChangedFromSaved())
     {
         const sal_uInt16 aOutlineLv = m_pOutlineLvLB->GetSelectEntryPos();
-        const SfxUInt16Item* pOldOutlineLv = (const SfxUInt16Item*)GetOldItem( rSet, SID_ATTR_PARA_OUTLINE_LEVEL);
+        const SfxUInt16Item* pOldOutlineLv = (const SfxUInt16Item*)GetOldItem( *rSet, SID_ATTR_PARA_OUTLINE_LEVEL);
         if (pOldOutlineLv)
         {
             SfxUInt16Item* pOutlineLv = (SfxUInt16Item*)pOldOutlineLv->Clone();
             pOutlineLv->SetValue( aOutlineLv );
-            rSet.Put(*pOutlineLv);
+            rSet->Put(*pOutlineLv);
             delete pOutlineLv;
             bModified = true;
         }
@@ -122,12 +122,12 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         OUString aStyle;
         if(m_pNumberStyleLB->GetSelectEntryPos())
             aStyle = m_pNumberStyleLB->GetSelectEntry();
-        const SfxStringItem* pOldRule = (const SfxStringItem*)GetOldItem( rSet, SID_ATTR_PARA_NUMRULE);
+        const SfxStringItem* pOldRule = (const SfxStringItem*)GetOldItem( *rSet, SID_ATTR_PARA_NUMRULE);
         SfxStringItem* pRule = pOldRule ? (SfxStringItem*)pOldRule->Clone() : NULL;
         if (pRule)
         {
             pRule->SetValue(aStyle);
-            rSet.Put(*pRule);
+            rSet->Put(*pRule);
             delete pRule;
             bModified = true;
         }
@@ -139,8 +139,8 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         bModified = true;
         bool bNewStartChecked = TRISTATE_TRUE == m_pNewStartCB->GetState();
         bool bNumberNewStartChecked = TRISTATE_TRUE == m_pNewStartNumberCB->GetState();
-        rSet.Put(SfxBoolItem(FN_NUMBER_NEWSTART, bNewStartChecked));
-        rSet.Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
+        rSet->Put(SfxBoolItem(FN_NUMBER_NEWSTART, bNewStartChecked));
+        rSet->Put(SfxUInt16Item(FN_NUMBER_NEWSTART_AT,
                   bNumberNewStartChecked && bNewStartChecked ? (sal_uInt16)m_pNewStartNF->GetValue() : USHRT_MAX));
     }
 
@@ -152,7 +152,7 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
         aFmt.SetStartValue( static_cast< sal_uLong >(m_pRestartParaCountCB->GetState() == TRISTATE_TRUE ?
                                 m_pRestartNF->GetValue() : 0 ));
         aFmt.SetCountLines( m_pCountParaCB->IsChecked() );
-        rSet.Put(aFmt);
+        rSet->Put(aFmt);
         bModified = true;
     }
     return bModified;

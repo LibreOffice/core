@@ -30,7 +30,7 @@ public:
     virtual         ~ScHFPage();
 
     virtual void    Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
-    virtual bool    FillItemSet( SfxItemSet& rOutSet ) SAL_OVERRIDE;
+    virtual bool    FillItemSet( SfxItemSet* rOutSet ) SAL_OVERRIDE;
 
     void            SetPageStyle( const OUString& rName )    { aStrPageStyle = rName; }
     void            SetStyleDlg ( const ScStyleDlg* pDlg ) { pStyleDlg = pDlg; }

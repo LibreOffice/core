@@ -192,17 +192,17 @@ namespace dbaui
         _rControlList.push_back( new ODisableWrapper< RadioButton >( &m_aNamedPipeRadio ) );
     }
 
-    bool MySQLNativeSettings::FillItemSet( SfxItemSet& _rSet )
+    bool MySQLNativeSettings::FillItemSet( SfxItemSet* _rSet )
     {
         bool bChangedSomething = false;
 
-        OGenericAdministrationPage::fillString( _rSet, &m_aHostName,     DSID_CONN_HOSTNAME,    bChangedSomething );
-        OGenericAdministrationPage::fillString( _rSet, &m_aDatabaseName, DSID_DATABASENAME,     bChangedSomething );
-        OGenericAdministrationPage::fillInt32 ( _rSet, &m_aPort,         DSID_MYSQL_PORTNUMBER, bChangedSomething );
+        OGenericAdministrationPage::fillString( *_rSet, &m_aHostName,     DSID_CONN_HOSTNAME,    bChangedSomething );
+        OGenericAdministrationPage::fillString( *_rSet, &m_aDatabaseName, DSID_DATABASENAME,     bChangedSomething );
+        OGenericAdministrationPage::fillInt32 ( *_rSet, &m_aPort,         DSID_MYSQL_PORTNUMBER, bChangedSomething );
 #ifdef UNX
-        OGenericAdministrationPage::fillString( _rSet, &m_aSocket,       DSID_CONN_SOCKET,      bChangedSomething );
+        OGenericAdministrationPage::fillString( *_rSet, &m_aSocket,       DSID_CONN_SOCKET,      bChangedSomething );
 #else
-        OGenericAdministrationPage::fillString( _rSet, &m_aNamedPipe,    DSID_NAMED_PIPE,       bChangedSomething );
+        OGenericAdministrationPage::fillString( *_rSet, &m_aNamedPipe,    DSID_NAMED_PIPE,       bChangedSomething );
 #endif
 
         return bChangedSomething;

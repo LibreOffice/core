@@ -178,7 +178,7 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &
 }
 
 
-bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet& rSet)
+bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
 {
     sal_uInt16  nPrintSize;
     if (m_pSizeNormal->IsChecked())
@@ -188,13 +188,13 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet& rSet)
     else
         nPrintSize = PRINT_SIZE_ZOOMED;
 
-    rSet.Put(SfxUInt16Item(GetWhich(SID_PRINTSIZE), (sal_uInt16) nPrintSize));
-    rSet.Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), (sal_uInt16) m_pZoom->GetValue()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_PRINTTITLE), m_pTitle->IsChecked()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), m_pText->IsChecked()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), m_pFrame->IsChecked()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_NO_RIGHT_SPACES), m_pNoRightSpaces->IsChecked()));
-    rSet.Put(SfxBoolItem(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), m_pSaveOnlyUsedSymbols->IsChecked()));
+    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTSIZE), (sal_uInt16) nPrintSize));
+    rSet->Put(SfxUInt16Item(GetWhich(SID_PRINTZOOM), (sal_uInt16) m_pZoom->GetValue()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTITLE), m_pTitle->IsChecked()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), m_pText->IsChecked()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), m_pFrame->IsChecked()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_NO_RIGHT_SPACES), m_pNoRightSpaces->IsChecked()));
+    rSet->Put(SfxBoolItem(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), m_pSaveOnlyUsedSymbols->IsChecked()));
 
     return true;
 }
