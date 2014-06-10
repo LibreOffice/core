@@ -172,6 +172,7 @@ certain functionality.
 @li @c filter.ms - escher import/export
 @li @c filter.odfflatxml
 @li @c filter.os2met
+@li @c filter.pict
 @li @c filter.tiff
 @li @c filter.xslt - xslt import/export
 @li @c oox.cscode - see oox/source/drawingml/customshapes/README

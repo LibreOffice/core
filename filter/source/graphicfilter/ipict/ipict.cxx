@@ -371,8 +371,11 @@ Point PictReader::ReadPoint()
 
     pPict->ReadInt16( ny ).ReadInt16( nx );
 
-   return Point( (long)nx - aBoundingRect.Left(),
+   Point aPoint( (long)nx - aBoundingRect.Left(),
                  (long)ny - aBoundingRect.Top() );
+
+   SAL_INFO("filter.pict", "ReadPoint: " << aPoint);
+   return aPoint;
 }
 
 Point PictReader::ReadDeltaH(Point aBase)
@@ -458,6 +461,8 @@ void PictReader::ReadRectangle(Rectangle & rRect)
     aTopLeft=ReadPoint();
     aBottomRight=ReadPoint();
     rRect=Rectangle(aTopLeft,aBottomRight);
+
+    SAL_INFO("filter.pict", "ReadRectangle: " << rRect);
 }
 
 
@@ -1198,6 +1203,38 @@ void PictReader::ReadHeader()
     pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
 }
 
+#if OSL_DEBUG_LEVEL > 0
+static const char* operationName(sal_uInt16 nOpcode)
+{
+    // add here whatever makes the debugging easier for you, otherwise you'll
+    // see only the operation's opcode
+    switch (nOpcode)
+    {
+        case 0x0001: return "Clip";
+        case 0x0003: return "TxFont";
+        case 0x0004: return "TxFace";
+        case 0x0008: return "PnMode";
+        case 0x0009: return "PnPat";
+        case 0x000d: return "TxSize";
+        case 0x001a: return "RGBFgCol";
+        case 0x001d: return "HiliteColor";
+        case 0x0020: return "Line";
+        case 0x0022: return "ShortLine";
+        case 0x0028: return "LongText";
+        case 0x0029: return "DHText";
+        case 0x002a: return "DVText";
+        case 0x002c: return "fontName";
+        case 0x002e: return "glyphState";
+        case 0x0031: return "paintRect";
+        case 0x0038: return "frameSameRect";
+        case 0x0070: return "framePoly";
+        case 0x0071: return "paintPoly";
+        case 0x00a1: return "LongComment";
+        default:     return "";
+    }
+}
+#endif
+
 sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
 {
     sal_uInt16 nUSHORT;
@@ -1212,6 +1249,10 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
     case 4: shapeDMethod = PDM_FILL; break;
     default: break;
     }
+
+#if OSL_DEBUG_LEVEL > 0
+    SAL_INFO("filter.pict", "Operation: 0x" << OUString::number(nOpcode, 16) << " [" << operationName(nOpcode) << "]");
+#endif
 
     switch(nOpcode) {
 
@@ -1228,16 +1269,16 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         // I do that because the clipping is often used to clean a region,
         //   before drawing some text and also to draw this text.
         // So using a too small region can lead to clip the end of the text ;
-               //     but this can be discutable...
-                aRect.setWidth(aRect.getWidth()+1);
+        //   but this can be discutable...
+        aRect.setWidth(aRect.getWidth()+1);
         aRect.setHeight(aRect.getHeight()+1);
         pVirDev->SetClipRegion( Region( aRect ) );
         break;
     }
     case 0x0002:   // BkPat
-      nDataSize=eActBackPattern.read(*pPict);
-      eActMethod=PDM_UNDEFINED;
-      break;
+        nDataSize = eActBackPattern.read(*pPict);
+        eActMethod = PDM_UNDEFINED;
+        break;
 
     case 0x0003:   // TxFont
         pPict->ReadUInt16( nUSHORT );
@@ -1305,12 +1346,12 @@ sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
         break;
 
     case 0x0009:   // PnPat
-      nDataSize=eActPenPattern.read(*pPict);
+        nDataSize=eActPenPattern.read(*pPict);
         eActMethod=PDM_UNDEFINED;
         break;
 
     case 0x000a:   // FillPat
-      nDataSize=eActFillPattern.read(*pPict);
+        nDataSize=eActFillPattern.read(*pPict);
         eActMethod=PDM_UNDEFINED;
         break;
 
