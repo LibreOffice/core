@@ -642,9 +642,15 @@ void scale24bitBGR2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 else if ( nLineRange == i )
                     nWeightY = pMapFY[ nBottom ];
 
-                nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
-                nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
-                nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
+                if (nTotalWeightX)
+                {
+                    nSumRowB /= nTotalWeightX;
+                    nSumRowG /= nTotalWeightX;
+                    nSumRowR /= nTotalWeightX;
+                }
+                nSumB += nWeightY * nSumRowB;
+                nSumG += nWeightY * nSumRowG;
+                nSumR += nWeightY * nSumRowR;
                 nTotalWeightY += nWeightY;
             }
 
