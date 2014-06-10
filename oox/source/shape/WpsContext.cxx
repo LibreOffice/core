@@ -86,6 +86,9 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     OptValue<OUString> oValue = rAttribs.getString(aInsets[i]);
                     if (oValue.has())
                         oInsets[i] = oox::drawingml::GetCoordinate(oValue.get());
+                    else
+                        // Defaults from the spec: left/right: 91440 EMU, top/bottom: 45720 EMU
+                        oInsets[i] = (aInsets[i] == XML_lIns || aInsets[i] == XML_rIns) ? 254 : 127;
                 }
                 OUString aProps[] = { OUString("LeftBorderDistance"), OUString("TopBorderDistance"), OUString("RightBorderDistance"), OUString("BottomBorderDistance") };
                 OUString aShapeProps[] = { OUString("TextLeftDistance"), OUString("TextUpperDistance"), OUString("TextRightDistance"), OUString("TextLowerDistance") };
