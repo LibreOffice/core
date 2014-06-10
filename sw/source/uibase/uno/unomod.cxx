@@ -786,8 +786,10 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
     }
 }
 
-void SwXViewSettings::_postSetValues ()
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+void SwXViewSettings::_postSetValues()
+    throw (UnknownPropertyException, PropertyVetoException,
+           IllegalArgumentException, WrappedTargetException,
+           RuntimeException )
 {
     if( pView )
     {
