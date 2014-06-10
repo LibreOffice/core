@@ -10,11 +10,16 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <vcl/FilterConfigItem.hxx>
+#include <test/mtfxmldump.hxx>
+#include <test/xmltesttools.hxx>
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/metaactiontypes.hxx>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
+
+#include "../../source/graphicfilter/ipict/ipict.hxx"
 
 extern "C"
 {
@@ -30,6 +35,7 @@ using namespace ::com::sun::star;
 class PictFilterTest
     : public test::FiltersTest
     , public test::BootstrapFixture
+    , public XmlTestTools
 {
 public:
     PictFilterTest() : BootstrapFixture(true, false) {}
@@ -38,13 +44,21 @@ public:
         const OUString &rURL, const OUString &,
         unsigned int, unsigned int, unsigned int) SAL_OVERRIDE;
 
+    OUString pictURL()
+    {
+        return getURLFromSrc("/filter/qa/cppunit/data/pict/");
+    }
+
     /**
      * Ensure CVEs remain unbroken
      */
     void testCVEs();
 
+    void testDontClipTooMuch();
+
     CPPUNIT_TEST_SUITE(PictFilterTest);
     CPPUNIT_TEST(testCVEs);
+    CPPUNIT_TEST(testDontClipTooMuch);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -60,8 +74,27 @@ bool PictFilterTest::load(const OUString &,
 void PictFilterTest::testCVEs()
 {
     testDir(OUString(),
-        getURLFromSrc("/filter/qa/cppunit/data/pict/"),
+        pictURL(),
         OUString());
+}
+
+void PictFilterTest::testDontClipTooMuch()
+{
+    SvFileStream aFileStream(pictURL() + "clipping-problem.pct", STREAM_READ);
+    GDIMetaFile aGDIMetaFile;
+    pict::ReadPictFile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    dumper.filterAllActionTypes();
+    dumper.filterActionType(META_CLIPREGION_ACTION, false);
+    xmlDocPtr pDoc = dumper.dumpAndParse(aGDIMetaFile);
+
+    CPPUNIT_ASSERT (pDoc);
+
+    assertXPath(pDoc, "/metafile/clipregion[5]", "top", "0");
+    assertXPath(pDoc, "/metafile/clipregion[5]", "left", "0");
+    assertXPath(pDoc, "/metafile/clipregion[5]", "bottom", "-32767");
+    assertXPath(pDoc, "/metafile/clipregion[5]", "right", "-32767");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PictFilterTest);
