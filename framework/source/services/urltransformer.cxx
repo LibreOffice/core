@@ -128,8 +128,7 @@ namespace
 sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception )
 {
     // Safe impossible cases.
-    if  (( &aURL                        ==  NULL    )   ||
-         ( aURL.Complete.isEmpty() ) )
+    if ( aURL.Complete.isEmpty() )
     {
         return sal_False;
     }
@@ -181,8 +180,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
                                                 const   OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException, std::exception )
 {
     // Safe impossible cases.
-    if  (( &aURL                            ==  NULL    ) ||
-         ( aURL.Complete.isEmpty() ) )
+    if ( aURL.Complete.isEmpty() )
     {
         return sal_False;
     }
@@ -233,10 +231,6 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
 //  XURLTransformer
 sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception )
 {
-    // Safe impossible cases.
-    if  ( &aURL == NULL )
-        return sal_False;
-
     // Initialize parser.
     INetURLObject aParser;
 
@@ -297,8 +291,7 @@ OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
                                                             sal_Bool    bWithPassword   ) throw( css::uno::RuntimeException, std::exception )
 {
     // Safe impossible cases.
-    if  (( &aURL                        ==  NULL        )   ||
-         ( aURL.Complete.isEmpty()                      )   ||
+    if  (( aURL.Complete.isEmpty()                      )   ||
             (( bWithPassword            !=  sal_True    )   &&
              ( bWithPassword            !=  sal_False   )       ) )
     {

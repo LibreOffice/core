@@ -58,13 +58,6 @@ using namespace ::cppu;
 
 const sal_uInt16 SLOTID_MDIWINDOWLIST = 5610;
 
-static bool impldbg_checkParameter_MenuDispatcher      (   const   css::uno::Reference< css::uno::XComponentContext >& xContext        ,
-                                                               const   css::uno::Reference< css::frame::XFrame >&              xOwner          );
-static bool impldbg_checkParameter_addStatusListener    (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
-                                                                const   css::util::URL&                                         aURL            );
-static bool impldbg_checkParameter_removeStatusListener (   const   css::uno::Reference< css::frame::XStatusListener >&     xControl        ,
-                                                                const   css::util::URL&                                         aURL            );
-
 //  constructor
 
 MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
@@ -78,7 +71,7 @@ MenuDispatcher::MenuDispatcher(   const   uno::Reference< XComponentContext >&  
 {
     // Safe impossible cases
     // We need valid information about our owner for work.
-    SAL_WARN_IF( !impldbg_checkParameter_MenuDispatcher( xContext, xOwner ), "fwk", "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!" );
+    SAL_WARN_IF( !( xContext.is() && xOwner.is() ), "fwk", "MenuDispatcher::MenuDispatcher()\nInvalid parameter detected!" );
 
     m_bActivateListener = true;
     xOwner->addFrameActionListener( uno::Reference< XFrameActionListener >( (OWeakObject *)this, UNO_QUERY ));
@@ -108,7 +101,7 @@ void SAL_CALL MenuDispatcher::addStatusListener(   const   uno::Reference< XStat
     SolarMutexGuard g;
     // Safe impossible cases
     // Method not defined for all incoming parameter
-    SAL_WARN_IF( !impldbg_checkParameter_addStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::addStatusListener(): Invalid parameter detected." );
+    SAL_WARN_IF( !xControl.is() || aURL.Complete.isEmpty(), "fwk", "MenuDispatcher::addStatusListener(): Invalid parameter detected." );
     // Add listener to container.
     m_aListenerContainer.addInterface( aURL.Complete, xControl );
 }
@@ -121,7 +114,7 @@ void SAL_CALL MenuDispatcher::removeStatusListener(    const   uno::Reference< X
     SolarMutexGuard g;
     // Safe impossible cases
     // Method not defined for all incoming parameter
-    SAL_WARN_IF( !impldbg_checkParameter_removeStatusListener( xControl, aURL ), "fwk", "MenuDispatcher::removeStatusListener(): Invalid parameter detected." );
+    SAL_WARN_IF( !xControl.is() || aURL.Complete.isEmpty(), "fwk", "MenuDispatcher::removeStatusListener(): Invalid parameter detected." );
     // Add listener to container.
     m_aListenerContainer.removeInterface( aURL.Complete, xControl );
 }
@@ -285,52 +278,6 @@ bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, bool bMenuFromResource 
     }
 
     return false;
-}
-
-static bool impldbg_checkParameter_MenuDispatcher(   const   uno::Reference< XComponentContext >&  xContext    ,
-                                                                  const   uno::Reference< XFrame >&             xOwner      )
-{
-    return xContext.is() && xOwner.is();
-}
-
-// We need a valid URL. What is meaning with "register for nothing"?!
-// xControl must correct to - nobody can advised otherwise!
-static bool impldbg_checkParameter_addStatusListener( const   uno::Reference< XStatusListener >&   xControl,
-                                                          const   URL&                                 aURL    )
-{
-    // Set default return value.
-    bool bOK = true;
-    // Check parameter.
-    if  (
-            ( &xControl                 ==  NULL    )   ||
-            ( &aURL                     ==  NULL    )   ||
-            ( aURL.Complete.isEmpty()               )
-        )
-    {
-        bOK = false;
-    }
-    // Return result of check.
-    return bOK;
-}
-
-// The same goes for these case! We have added valid listener for correct URL only.
-// We can't remove invalid listener for nothing!
-static bool impldbg_checkParameter_removeStatusListener(  const   uno::Reference< XStatusListener >&   xControl,
-                                                              const   URL&                                 aURL    )
-{
-    // Set default return value.
-    bool bOK = true;
-    // Check parameter.
-    if  (
-            ( &xControl                 ==  NULL    )   ||
-            ( &aURL                     ==  NULL    )   ||
-            ( aURL.Complete.isEmpty()               )
-        )
-    {
-        bOK = false;
-    }
-    // Return result of check.
-    return bOK;
 }
 
 }       //  namespace framework
