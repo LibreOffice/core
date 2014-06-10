@@ -2254,12 +2254,9 @@ OUString HtmlExport::getDocumentTitle()
                 {
                     const EditTextObject& rEditTextObject =
                         pParaObject->GetTextObject();
-                    if (&rEditTextObject)
-                    {
-                        OUString aTest(rEditTextObject.GetText(0));
-                        if (!aTest.isEmpty())
-                            mDocTitle = aTest;
-                    }
+                    OUString aTest(rEditTextObject.GetText(0));
+                    if (!aTest.isEmpty())
+                        mDocTitle = aTest;
                 }
             }
 
