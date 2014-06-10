@@ -23,9 +23,11 @@ $(eval $(call gb_Library_use_static_libraries,npsoplugin,\
 
 ifneq ($(OS),WNT)
 
+ifeq ($(filter ANDROID DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)
 $(eval $(call gb_Library_add_libs,npsoplugin,\
 	-ldl \
 ))
+endif
 
 $(eval $(call gb_Library_use_external,npsoplugin,gtk))
 
