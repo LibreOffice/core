@@ -62,6 +62,8 @@ public:
 
     uno::Reference< chart::XChartDocument > getChartDocFromImpress( const char* pDir, const char* pName );
 
+    uno::Reference<chart::XChartDocument> getChartDocFromDrawImpress( sal_Int32 nPage, sal_Int32 nShape );
+
     virtual void setUp() SAL_OVERRIDE;
     virtual void tearDown() SAL_OVERRIDE;
 
@@ -88,6 +90,10 @@ void ChartTest::load( const OUString& aDir, const OUString& aName )
     else if (extension == "docx")
     {
         maServiceName = "com.sun.star.text.TextDocument";
+    }
+    else if (extension == "odg")
+    {
+        maServiceName = "com.sun.star.drawing.DrawingDocument";
     }
 
     mxComponent = loadFromDesktop(getURLFromSrc(aDir) + aName, maServiceName);
@@ -298,6 +304,33 @@ uno::Reference< chart::XChartDocument > ChartTest::getChartDocFromImpress( const
     CPPUNIT_ASSERT(xDocModel.is());
     uno::Reference< chart::XChartDocument > xChartDoc( xDocModel, uno::UNO_QUERY_THROW );
 
+    return xChartDoc;
+}
+
+uno::Reference<chart::XChartDocument> ChartTest::getChartDocFromDrawImpress(
+    sal_Int32 nPage, sal_Int32 nShape )
+{
+    uno::Reference<chart::XChartDocument> xEmpty;
+
+    uno::Reference<drawing::XDrawPagesSupplier> xPages(mxComponent, uno::UNO_QUERY);
+    if (!xPages.is())
+        return xEmpty;
+
+    uno::Reference<drawing::XDrawPage> xPage(
+        xPages->getDrawPages()->getByIndex(nPage), uno::UNO_QUERY_THROW);
+    if (!xPage.is())
+        return xEmpty;
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xPage->getByIndex(nShape), uno::UNO_QUERY);
+    if (!xShapeProps.is())
+        return xEmpty;
+
+    uno::Reference<frame::XModel> xDocModel;
+    xShapeProps->getPropertyValue("Model") >>= xDocModel;
+    if (!xDocModel.is())
+        return xEmpty;
+
+    uno::Reference<chart::XChartDocument> xChartDoc(xDocModel, uno::UNO_QUERY);
     return xChartDoc;
 }
 
