@@ -3870,7 +3870,10 @@ void ScOpenclTest::testMathFormulaMod()
     {
         double fLibre = pDoc->GetValue(ScAddress(2,i,0));
         double fExcel = pDocRes->GetValue(ScAddress(2,i,0));
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
+        if(fExcel == 0.0f)
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, 1e-10);
+        else
+            CPPUNIT_ASSERT_DOUBLES_EQUAL(fExcel, fLibre, fabs(0.0001*fExcel));
     }
     xDocSh->DoClose();
     xDocShRes->DoClose();
