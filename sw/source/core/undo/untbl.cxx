@@ -540,7 +540,7 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
     SwTableLine* pLine = new SwTableLine( pLineFmt, rSavedData.size(), 0 );
     pTblNd->GetTable().GetTabLines().insert( pTblNd->GetTable().GetTabLines().begin(), pLine );
 
-    const boost::shared_ptr<sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
+    const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
     for( sal_uInt16 n = rSavedData.size(); n; )
     {
         const SwTblToTxtSave* pSave = &rSavedData[ --n ];
@@ -558,16 +558,14 @@ SwTableNode* SwNodes::UndoTableToText( sal_uLong nSttNd, sal_uLong nEndNd,
             pTxtNd->EraseText( aCntPos, 1 );
             SwCntntNode* pNewNd = pTxtNd->SplitCntntNode(
                                         SwPosition( aSttIdx, aCntPos ));
-            if( !aBkmkArr.get()->empty() )
-                _RestoreCntntIdx( *aBkmkArr.get(), *pNewNd, pSave->m_nCntnt,
-                                                     pSave->m_nCntnt + 1 );
+            if( !pCntntStore->Empty() )
+                pCntntStore->Restore( *pNewNd, pSave->m_nCntnt, pSave->m_nCntnt + 1 );
         }
         else
         {
-            aBkmkArr.get()->clear();
+            pCntntStore->Clear();
             if( pTxtNd )
-                _SaveCntntIdx( GetDoc(), aSttIdx.GetIndex(),
-                                pTxtNd->GetTxt().getLength(), *aBkmkArr.get() );
+                pCntntStore->Save( GetDoc(), aSttIdx.GetIndex(), pTxtNd->GetTxt().getLength() );
         }
 
         if( pTxtNd )

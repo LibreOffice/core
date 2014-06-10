@@ -619,8 +619,8 @@ SwCntntNode *SwTxtNode::JoinNext()
     if( SwCntntNode::CanJoinNext( &aIdx ) )
     {
         SwDoc* pDoc = rNds.GetDoc();
-        const boost::shared_ptr<sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
-        _SaveCntntIdx( pDoc, aIdx.GetIndex(), SAL_MAX_INT32, *aBkmkArr.get(), SAVEFLY );
+        const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+        pCntntStore->Save(pDoc, aIdx.GetIndex(), SAL_MAX_INT32, SAVEFLY);
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         sal_Int32 nOldLen = m_Text.getLength();
 
@@ -685,8 +685,8 @@ SwCntntNode *SwTxtNode::JoinNext()
             pTxtNode->CutText( this, SwIndex(pTxtNode), pTxtNode->Len() );
         }
         // verschiebe noch alle Bookmarks/TOXMarks
-        if( !aBkmkArr.get()->empty() )
-            _RestoreCntntIdx( pDoc, *aBkmkArr.get(), GetIndex(), nOldLen );
+        if( !pCntntStore->Empty())
+            pCntntStore->Restore( pDoc, GetIndex(), nOldLen );
 
         if( pTxtNode->HasAnyIndex() )
         {
@@ -713,8 +713,8 @@ SwCntntNode *SwTxtNode::JoinPrev()
     if( SwCntntNode::CanJoinPrev( &aIdx ) )
     {
         SwDoc* pDoc = rNds.GetDoc();
-        const boost::shared_ptr<sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
-        _SaveCntntIdx( pDoc, aIdx.GetIndex(), SAL_MAX_INT32, *aBkmkArr.get(), SAVEFLY );
+        const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+        pCntntStore->Save( pDoc, aIdx.GetIndex(), SAL_MAX_INT32, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         const sal_Int32 nLen = pTxtNode->Len();
 
@@ -779,8 +779,8 @@ SwCntntNode *SwTxtNode::JoinPrev()
             pTxtNode->CutText( this, SwIndex(this), SwIndex(pTxtNode), nLen );
         }
         // verschiebe noch alle Bookmarks/TOXMarks
-        if( !aBkmkArr.get()->empty() )
-            _RestoreCntntIdx( pDoc, *aBkmkArr.get(), GetIndex() );
+        if( !pCntntStore->Empty() )
+            pCntntStore->Restore( pDoc, GetIndex() );
 
         if( pTxtNode->HasAnyIndex() )
         {

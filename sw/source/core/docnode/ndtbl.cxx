@@ -1048,9 +1048,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         SwStartNode* pSttNd;
         SwPosition aCntPos( aSttIdx, SwIndex( pTxtNd ));
 
-        const boost::shared_ptr< sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
-        _SaveCntntIdx( pDoc, aSttIdx.GetIndex(), pTxtNd->GetTxt().getLength(),
-                       *aBkmkArr.get() );
+        const boost::shared_ptr< sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
+        pCntntStore->Save( pDoc, aSttIdx.GetIndex(), pTxtNd->GetTxt().getLength() );
 
         if( T2T_PARA != cCh )
         {
@@ -1061,9 +1060,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                     aCntPos.nContent = nChPos;
                     SwCntntNode* pNewNd = pTxtNd->SplitCntntNode( aCntPos );
 
-                    if( !aBkmkArr.get()->empty() )
-                        _RestoreCntntIdx( *aBkmkArr.get(), *pNewNd, nChPos,
-                                            nChPos + 1 );
+                    if( !pCntntStore->Empty() )
+                        pCntntStore->Restore( *pNewNd, nChPos, nChPos + 1 );
 
                     // Delete separator and correct search string
                     pTxtNd->EraseText( aCntPos.nContent, 1 );
@@ -1088,9 +1086,8 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
         }
 
         // Now for the last substring
-        if( !aBkmkArr.get()->empty() )
-            _RestoreCntntIdx( *aBkmkArr.get(), *pTxtNd, pTxtNd->GetTxt().getLength(),
-                                pTxtNd->GetTxt().getLength()+1 );
+        if( !pCntntStore->Empty())
+            pCntntStore->Restore( *pTxtNd, pTxtNd->GetTxt().getLength(), pTxtNd->GetTxt().getLength()+1 );
 
         pSttNd = new SwStartNode( aCntPos.nNode, ND_STARTNODE, SwTableBoxStartNode );
         const SwNodeIndex aTmpIdx( aCntPos.nNode, 1 );
@@ -1519,17 +1516,14 @@ static void lcl_DelBox( SwTableBox* pBox, _DelTabPara* pDelPara )
                     pDelPara->pUndo->AddBoxPos( *pDoc, nNdIdx, aDelRg.aEnd.GetIndex(),
                                                 aCntIdx.GetIndex() );
 
-                const boost::shared_ptr<sw::mark::CntntIdxStore> aBkmkArr(sw::mark::CreateCntntIdxStore());
+                const boost::shared_ptr<sw::mark::CntntIdxStore> pCntntStore(sw::mark::CntntIdxStore::Create());
                 const sal_Int32 nOldTxtLen = aCntIdx.GetIndex();
-                _SaveCntntIdx( pDoc, nNdIdx, pCurTxtNd->GetTxt().getLength(),
-                                *aBkmkArr.get() );
+                pCntntStore->Save( pDoc, nNdIdx, pCurTxtNd->GetTxt().getLength() );
 
                 pDelPara->pLastNd->JoinNext();
 
-                if( !aBkmkArr.get()->empty() )
-                    _RestoreCntntIdx( pDoc, *aBkmkArr.get(),
-                                        pDelPara->pLastNd->GetIndex(),
-                                        nOldTxtLen );
+                if( !pCntntStore->Empty() )
+                    pCntntStore->Restore( pDoc, pDelPara->pLastNd->GetIndex(), nOldTxtLen );
             }
             else if( pDelPara->pUndo )
             {

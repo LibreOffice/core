@@ -71,8 +71,17 @@ namespace sw { namespace mark
             ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
     };
 
-    typedef std::vector<sal_uLong> CntntIdxStore;
-    boost::shared_ptr<CntntIdxStore> CreateCntntIdxStore();
+    class CntntIdxStore
+    {
+        public:
+            virtual void Clear() =0;
+            virtual bool Empty() =0;
+            virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) =0;
+            virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) =0;
+            virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) =0;
+            virtual ~CntntIdxStore() {};
+            static boost::shared_ptr<CntntIdxStore> Create();
+    };
 }}
 
 #define SAVEFLY 1
@@ -83,14 +92,6 @@ void _DelBookmarks(const SwNodeIndex& rStt,
     ::std::vector< ::sw::mark::SaveBookmark> * SaveBkmk =0,
     const SwIndex* pSttIdx =0,
     const SwIndex* pEndIdx =0);
-
-void _SaveCntntIdx( SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt,
-                    sw::mark::CntntIdxStore& rSaveArr, sal_uInt8 nSaveFly = 0 );
-void _RestoreCntntIdx( SwDoc* pDoc, sw::mark::CntntIdxStore& rSaveArr,
-                        sal_uLong nNode, sal_Int32 nOffset = 0,
-                        bool bAuto = false );
-void _RestoreCntntIdx( sw::mark::CntntIdxStore& rSaveArr, const SwNode& rNd,
-                        sal_Int32 nLen, sal_Int32 nCorrLen );
 
 /** data structure to temporarily hold fly anchor positions relative to some
  *  location. */

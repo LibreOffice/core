@@ -1503,10 +1503,6 @@ void _DelBookmarks(
     }
 }
 
-boost::shared_ptr< ::sw::mark::CntntIdxStore> sw::mark::CreateCntntIdxStore()
-{
-    return boost::shared_ptr< ::sw::mark::CntntIdxStore>(new sw::mark::CntntIdxStore());
-}
 
 void _SaveCntntIdx(SwDoc* pDoc,
     sal_uLong nNode,
@@ -2054,4 +2050,39 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
     }
 }
 
+namespace
+{
+    struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
+    {
+        std::vector<sal_uLong> aSaveArr;
+        virtual void Clear()
+        {
+            aSaveArr.clear();
+        }
+        virtual bool Empty()
+        {
+            return aSaveArr.empty();
+        }
+        virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0)
+        {
+            return _SaveCntntIdx(pDoc, nNode, nCntnt, aSaveArr, nSaveFly);
+        }
+        virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false)
+        {
+            return _RestoreCntntIdx(pDoc, aSaveArr, nNode, nOffset, bAuto);
+        }
+        virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen)
+        {
+            return _RestoreCntntIdx(aSaveArr, rNd, nLen, nCorrLen);
+        }
+        virtual ~CntntIdxStoreImpl(){};
+    };
+}
+
+namespace sw { namespace mark {
+    boost::shared_ptr<CntntIdxStore> CntntIdxStore::Create()
+    {
+       return boost::shared_ptr<CntntIdxStore>(new CntntIdxStoreImpl());
+    }
+}}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
