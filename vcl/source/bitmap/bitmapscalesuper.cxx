@@ -378,9 +378,14 @@ void scalePallete8bit2(BitmapReadAccess* pAcc, BitmapWriteAccess* pWAcc,
                 nTotalWeightY += nWeightY;
             }
 
-            BitmapColor aColRes ( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ),
-                    ( sal_uInt8 ) (( nSumG / nTotalWeightY) ),
-                    ( sal_uInt8 ) (( nSumB / nTotalWeightY) ) );
+            if (nTotalWeightY)
+            {
+                nSumR /= nTotalWeightY;
+                nSumG /= nTotalWeightY;
+                nSumB /= nTotalWeightY;
+            }
+
+            BitmapColor aColRes((sal_uInt8)nSumR, (sal_uInt8)nSumG, (sal_uInt8)nSumB);
             pWAcc->SetPixel( nYDst, nXDst++, aColRes );
         }
     }
