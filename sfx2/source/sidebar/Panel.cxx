@@ -154,10 +154,7 @@ void Panel::SetExpanded (const bool bIsExpanded)
 
 bool Panel::HasIdPredicate (const ::rtl::OUString& rsId) const
 {
-    if (this == NULL)
-        return false;
-    else
-        return msPanelId.equals(rsId);
+    return msPanelId.equals(rsId);
 }
 
 
