@@ -54,6 +54,7 @@ public:
     void testFdo71075();
     void testN828390();
     void testFdo71961();
+    void testBnc870237();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -65,6 +66,7 @@ public:
     CPPUNIT_TEST(testFdo71075);
     CPPUNIT_TEST(testN828390);
     CPPUNIT_TEST(testFdo71961);
+    CPPUNIT_TEST(testBnc870237);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -398,6 +400,26 @@ void SdFiltersTest::testFdo71961()
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
     CPPUNIT_ASSERT_EQUAL( OUString( "Custom shape wrapped text" ), pTxtObj->GetOutlinerParaObject()->GetTextObject().GetText(0));
     CPPUNIT_ASSERT_EQUAL( true, (static_cast<const SdrTextWordWrapItem&>(pTxtObj->GetMergedItem(SDRATTR_TEXT_WORDWRAP))).GetValue());
+}
+
+void SdFiltersTest::testBnc870237()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc870237.pptx"));
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage (1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    // Simulate a:ext inside dsp:txXfrm with changing the lower distance
+    const SdrObjGroup* pObj = dynamic_cast<SdrObjGroup*>( pPage->GetObj( 1 ) );
+    CPPUNIT_ASSERT_MESSAGE( "no object", pObj != NULL);
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextUpperDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_UPPERDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(9919), (static_cast< const SdrTextLowerDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextRightDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextLeftDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
