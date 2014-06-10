@@ -150,9 +150,9 @@ void SwFrameControlsManager::SetPageBreakControl( const SwPageFrm* pPageFrm )
         pControl.swap( pNewControl );
     }
 
-    SwPageBreakWin* pWin = dynamic_cast< SwPageBreakWin* >( pControl.get() );
-    pWin->UpdatePosition();
-    if ( !pWin->IsVisible() )
+    SwPageBreakWin& rWin = dynamic_cast<SwPageBreakWin&>(*pControl.get());
+    rWin.UpdatePosition();
+    if (!rWin.IsVisible())
         pControl->ShowAll( true );
 }
 
