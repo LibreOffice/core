@@ -52,8 +52,6 @@ class SVL_DLLPUBLIC SfxItemSet
     sal_uInt16*                     _pWhichRanges;  // Array von Which-Bereichen
     sal_uInt16                      _nCount;        // Anzahl Items
 
-#ifndef _SFXITEMS_HXX
-
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
 friend const char *DbgCheckItemSet( const void* );
@@ -65,8 +63,6 @@ private:
 
 public:
     SfxItemArray                GetItems_Impl() const { return _aItems; }
-
-#endif
 
 private:
     const SfxItemSet&           operator=(const SfxItemSet &);   // n.i.!!
