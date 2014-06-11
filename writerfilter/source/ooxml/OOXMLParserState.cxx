@@ -20,7 +20,6 @@
 #include <stdio.h>
 #include <iostream>
 #include "OOXMLParserState.hxx"
-#include "ooxmlLoggers.hxx"
 
 namespace writerfilter {
 namespace ooxml
@@ -118,16 +117,8 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
 {
     if (mpCharacterProps.get() != NULL)
     {
-#ifdef DEBUG_PROPERTIES
-        debug_logger->startElement("resolveCharacterProperties");
-#endif
-
         rStream.props(mpCharacterProps);
         mpCharacterProps.reset(new OOXMLPropertySetImpl());
-
-#ifdef DEBUG_PROPERTIES
-        debug_logger->endElement();
-#endif
     }
 }
 

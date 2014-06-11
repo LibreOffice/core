@@ -243,10 +243,6 @@ protected:
     Id mnDefine;
     Token_t mnToken;
 
-#ifdef DEBUG_CONTEXT_HANDLER
-    string msTokenString;
-#endif
-
     // the stream to send the stream events to.
     Stream * mpStream;
 
@@ -274,10 +270,7 @@ protected:
         throw (uno::RuntimeException, xml::sax::SAXException);
 
     void startAction(Token_t Element);
-    virtual void lcl_startAction(Token_t Element);
     void endAction(Token_t Element);
-    virtual void lcl_endAction(Token_t Element);
-
 
     virtual OOXMLPropertySet * getPicturePropSet
     (const OUString & rId);
