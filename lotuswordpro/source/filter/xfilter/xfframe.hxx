@@ -90,7 +90,7 @@ public:
     /**
      * @descr   override the add function to adjust z-index.
      */
-    virtual void    Add(IXFContent *pContent) SAL_OVERRIDE;
+    virtual void    Add(XFContent *pContent) SAL_OVERRIDE;
 
     /**
      * @descr:  Set the anchor type for the frame object.
