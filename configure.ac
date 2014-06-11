@@ -48,9 +48,11 @@ PathFormat()
         fp_count_slash=`echo "$formatted_path" | $GREP -c "[/]"`
         if test "$fp_count_slash$fp_count_colon" != "00"; then
             if test "$fp_count_colon" = "0"; then
-                formatted_path=`realpath "$formatted_path"`
+                new_formatted_path=`realpath "$formatted_path"`
                 if test $? -ne 0;  then
-                    AC_MSG_ERROR([realpath failed for "$1".])
+                    AC_MSG_WARNING([realpath failed for "$1", not necessarily a problem.])
+                else
+                    formatted_path="$new_formatted_path"
                 fi
             fi
             formatted_path=`cygpath -m "$formatted_path"`
