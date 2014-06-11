@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_c0fdfe6f",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-11T11:21:44Z",
+      "side": 1,
+      "message": "I misuse the macro for traces, and have not removed all of them yet (as there still is some work to be done).\nI intend to remove all SAL_WARN calls in the next patch set.",
+      "parentUuid": "baa041b7_40c8ce74",
+      "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_20c14a2f",
         "filename": "sc/source/filter/excel/xlformula.cxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2014-06-11T10:16:15Z",
       "side": 1,
       "message": "This probably causes the missing function name error in .xls export/import. The parameters should be identical to those of the other functions in this section, see comment above ocIsEven.",
+      "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a002fa6d",
+        "filename": "sc/source/filter/excel/xlformula.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-11T11:21:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_20c14a2f",
       "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_80f8167e",
+        "filename": "sc/source/filter/oox/formulabase.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 636,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-11T11:21:44Z",
+      "side": 1,
+      "message": "Must have thought I was working on a Calc-function table instead of oox-function table.\nReverted.",
+      "parentUuid": "da9b358b_c4d070cc",
+      "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_c0aa9e85",
         "filename": "sc/source/ui/src/scfuncs.src",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2014-06-11T10:16:15Z",
       "side": 1,
       "message": "This duplicates the resource for NETWORKDAYS, with the effect that in the Function Wizard you can select only the first listed, which happens to be the old one.\n\nIn scaddins, the resource name needs the _ADD added to have two distinct functions, see scaddins/source/analysis/analysis.cxx AnalysisAddIn::getDisplayFunctionName() and scaddins/source/analysis/analysishelper.cxx FuncDataBase pFuncDatas",
+      "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a039da43",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 690,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-11T11:21:44Z",
+      "side": 1,
+      "message": "I haven\u0027t understood fully yet the meaning of this, let alone the way out. I will study similar functions that are both Excel add-in and native Calc functions.",
+      "parentUuid": "baa041b7_c0aa9e85",
       "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_20ef0ab2",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 720,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-11T11:21:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_409fae5f",
+      "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_c0817efd",
         "filename": "sc/source/ui/src/scfuncs.src",
         "patchSetId": 2
@@ -98,6 +188,24 @@
       "writtenOn": "2014-06-11T10:16:15Z",
       "side": 1,
       "message": "I\u0027d rather call this \"array of holidays\".",
+      "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_002be6ec",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 722,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-11T11:21:44Z",
+      "side": 1,
+      "message": "Sound inviting, \u0027array of holidays\u0027 ;)\nDone.",
+      "parentUuid": "baa041b7_c0817efd",
       "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_e02fe2f4",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-11T11:21:44Z",
+      "side": 1,
+      "message": "Neither could I...",
+      "parentUuid": "baa041b7_a0867a11",
+      "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_008f6624",
         "filename": "sc/source/ui/src/scfuncs.src",
         "patchSetId": 2
@@ -138,6 +264,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_c034de4b",
+        "filename": "sc/source/ui/src/scfuncs.src",
+        "patchSetId": 2
+      },
+      "lineNbr": 734,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-11T11:21:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_008f6624",
+      "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_80ced681",
         "filename": "scaddins/source/analysis/analysis.cxx",
         "patchSetId": 2
@@ -149,6 +293,24 @@
       "writtenOn": "2014-06-11T10:16:15Z",
       "side": 1,
       "message": "The first argument of SAL_WARN macros needs to be a log area, so here for example \"scaddin\". As that doesn\u0027t exist yet it must also be added to include/sal/log-areas.dox",
+      "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_60f51282",
+        "filename": "scaddins/source/analysis/analysis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-11T11:21:44Z",
+      "side": 1,
+      "message": "Removed macro.",
+      "parentUuid": "baa041b7_80ced681",
       "revId": "0acd1b3432ca00b14eae93ebb84586df74a4b744",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
