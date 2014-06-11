@@ -2712,16 +2712,17 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
         }
     }
 
-    // all additional format codes provided by I18N that are not old standard index
+    // All additional format codes provided by I18N that are not old standard
+    // index. Additional formats may define defaults, currently there is no
+    // check if more than one default of a usage/type combination is provided,
+    // like it is done for usage groups with ImpAdjustFormatCodeDefault().
+    // There is no harm though, on first invocation ImpGetDefaultFormat() will
+    // use the first default encountered.
     aFormatSeq = rNumberFormatCode.getAllFormatCodes();
     nCodes = aFormatSeq.getLength();
     if ( nCodes )
     {
         pFormatArr = aFormatSeq.getArray();
-        // don't check ALL
-        sal_Int32 nDef = ImpAdjustFormatCodeDefault( pFormatArr, nCodes, false);
-        // don't have any defaults here
-        pFormatArr[nDef].Default = false;
         for ( j = 0; j < nCodes; j++ )
         {
             if ( nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET )
@@ -2730,10 +2731,12 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( sal_uInt32 CLOffset,
                 break;  // for
             }
             if ( pFormatArr[j].Index >= NF_INDEX_TABLE_LOCALE_DATA_DEFAULTS )
+            {
                 if ( ImpInsertNewStandardFormat( pFormatArr[j], nPos+1,
                         SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS,
                         bAfterChangingSystemCL ) )
                     nPos++;
+            }
         }
     }
 
