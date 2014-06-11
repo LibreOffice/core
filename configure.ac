@@ -50,7 +50,7 @@ PathFormat()
             if test "$fp_count_colon" = "0"; then
                 new_formatted_path=`realpath "$formatted_path"`
                 if test $? -ne 0;  then
-                    AC_MSG_WARNING([realpath failed for "$1", not necessarily a problem.])
+                    AC_MSG_WARN([realpath failed for "$1", not necessarily a problem.])
                 else
                     formatted_path="$new_formatted_path"
                 fi
