@@ -77,7 +77,7 @@ writerfilter_SRC_ooxml_Analyze_model_xsl=$(writerfilter_SRC)/ooxml/analyzemodel.
 writerfilter_SRC_ooxml_FactoryTools_xsl=$(writerfilter_SRC)/ooxml/factorytools.xsl
 writerfilter_SRC_ooxml_FactoryValues_xsl=$(writerfilter_SRC)/ooxml/factory_values.xsl
 writerfilter_SRC_ooxml_FastTokens_py=$(writerfilter_SRC)/ooxml/fasttokens.py
-writerfilter_SRC_ooxml_GperfFastTokenHandler_xsl=$(writerfilter_SRC)/ooxml/gperffasttokenhandler.xsl
+writerfilter_SRC_ooxml_GperfFastTokenHandler_py=$(writerfilter_SRC)/ooxml/gperffasttokenhandler.py
 writerfilter_SRC_ooxml_Model=$(writerfilter_SRC)/ooxml/model.xml
 writerfilter_SRC_ooxml_NamespaceIds_xsl=$(writerfilter_SRC)/ooxml/namespaceids.xsl
 writerfilter_SRC_ooxml_Preprocess_xsl=$(writerfilter_SRC)/ooxml/modelpreprocess.xsl
@@ -100,9 +100,9 @@ $(writerfilter_GEN_ooxml_FastTokens_hxx) : $(writerfilter_SRC_ooxml_FastTokens_p
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_FastTokens_py) $(writerfilter_GEN_ooxml_Token_xml)) > $@
 
-$(writerfilter_GEN_ooxml_GperfFastToken_hxx) : $(writerfilter_SRC_ooxml_GperfFastTokenHandler_xsl) $(writerfilter_GEN_ooxml_Token_xml)
+$(writerfilter_GEN_ooxml_GperfFastToken_hxx) : $(writerfilter_SRC_ooxml_GperfFastTokenHandler_py) $(writerfilter_GEN_ooxml_Token_xml)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,GPF,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_SRC_ooxml_GperfFastTokenHandler_xsl) $(writerfilter_GEN_ooxml_Token_xml)) \
+	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_GperfFastTokenHandler_py) $(writerfilter_GEN_ooxml_Token_xml)) \
 	| tr -d '\r' | $(GPERF) -c -E -G -I  -LC++ -S1 -t  > $@
 
 $(writerfilter_GEN_ooxml_Model_analyzed) : $(writerfilter_SRC_ooxml_Analyze_model_xsl) $(writerfilter_SRC_ooxml_Model) | $(writerfilter_WORK)/ooxml/.dir
