@@ -18,8 +18,6 @@
 
 #include "macros.inc"
 
-#include "AutoInstall/extensions_bsh"
-#include "AutoInstall/extensions_rhino"
 
 Module gid_Module_Optional_Extensions
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS);
@@ -245,6 +243,8 @@ End
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
 
+#include "AutoInstall/extensions_bsh"
+
 Module gid_Module_Optional_Extensions_Script_Provider_For_BS
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL);
@@ -261,6 +261,8 @@ End
 /* ** Script provider for JavaScript ** */
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT
+
+#include "AutoInstall/extensions_rhino"
 
 Module gid_Module_Optional_Extensions_Script_Provider_For_JS
     PackageInfo = "packinfo_extensions.txt";
