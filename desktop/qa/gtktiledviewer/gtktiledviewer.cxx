@@ -75,11 +75,6 @@ bool drawCallback(GtkWidget* /* The eventbox */, void* /* cairo_t* cr */, gpoint
     // wrong.
     (void) nRowStride;
 
-    for (int i = 3; i < nRowStride*nRenderHeight; i += 4)
-    {
-        pBuffer[i] = 0xFF;
-    }
-
     gtk_image_set_from_pixbuf( GTK_IMAGE( ourCanvas ), ourPixBuf );
 
     return true;
