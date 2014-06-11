@@ -1751,7 +1751,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
             if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.TextShape"))
                 pWrap = "square";
         }
-        mpFS->singleElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
+        mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                                XML_wrap, pWrap,
                                XML_lIns, (nLeft != DEFLRINS) ? IS( MM100toEMU( nLeft ) ) : NULL,
                                XML_rIns, (nRight != DEFLRINS) ? IS( MM100toEMU( nRight ) ) : NULL,
@@ -1761,6 +1761,13 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
                                XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
                                XML_vert, sWritingMode,
                                FSEND );
+        if (GetDocumentType() == DOCUMENT_DOCX)
+        {
+            sal_Bool bTextAutoGrowHeight = sal_False;
+            GET(bTextAutoGrowHeight, TextAutoGrowHeight);
+            mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit), FSEND);
+        }
+        mpFS->endElementNS((nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr);
     }
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
