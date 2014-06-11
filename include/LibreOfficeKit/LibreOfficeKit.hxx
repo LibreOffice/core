@@ -87,9 +87,7 @@ public:
     }
 };
 
-}
-
-inline ::lok::Office* lo_cpp_init(const char* pInstallPath)
+inline Office* lok_cpp_init(const char* pInstallPath)
 {
     LibreOfficeKit* pThis = lok_init(pInstallPath);
     if (pThis == NULL || pThis->nSize == 0)
@@ -97,5 +95,6 @@ inline ::lok::Office* lo_cpp_init(const char* pInstallPath)
     return new ::lok::Office(pThis);
 }
 
+}
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
