@@ -114,8 +114,13 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
         // is a child context of bodyPr, so the shape is already sent: we need
         // to alter the XShape directly.
         uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
-        if (xPropertySet.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
-            xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(getBaseToken(nElementToken) == XML_spAutoFit));
+        if (xPropertySet.is())
+        {
+            if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+                xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(getBaseToken(nElementToken) == XML_spAutoFit));
+            else
+                xPropertySet->setPropertyValue("TextAutoGrowHeight", uno::makeAny(getBaseToken(nElementToken) == XML_spAutoFit));
+        }
     }
     break;
     case XML_txbx:

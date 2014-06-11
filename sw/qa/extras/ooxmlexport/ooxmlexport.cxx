@@ -2166,8 +2166,19 @@ DECLARE_OOXMLEXPORT_TEST(testGroupshapePicture, "groupshape-picture.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testAutofit, "autofit.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(getShape(1), "FrameIsAutomaticHeight")));
-    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "FrameIsAutomaticHeight")));
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    if (xIndexAccess->getCount())
+    {
+        // TODO TextBox: remove this when TextBox is enabled by default
+        CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(getShape(1), "FrameIsAutomaticHeight")));
+        CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "FrameIsAutomaticHeight")));
+    }
+    else
+    {
+        CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(getShape(1), "TextAutoGrowHeight")));
+        CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "TextAutoGrowHeight")));
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
