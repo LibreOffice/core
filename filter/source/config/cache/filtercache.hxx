@@ -732,41 +732,6 @@ class FilterCache : public BaseLock
         void impl_validateAndOptimize()
             throw(css::uno::Exception);
 
-
-
-        /** @short      register the specified item for the given type.
-
-            @descr      Because detect services, frame loader or content handler
-                        are not listed inside the xml configuration as separated
-                        items (they are properties of any type entry!), this method update
-                        the internal lists of such items. Thats necessary to have
-                        it accessible for our container interfaces of detect, frame loader
-                        and content handler services.
-
-            @param      pList
-                        points to a CacheItemList of this filter cache, where
-                        this item registration should be updated or added.
-
-            @param      sItem
-                        specify the detect service, frame loader or content handler,
-                        which should be registered for the given type.
-
-            @param      sType
-                        contains the internal type name, where the item should be registered for.
-
-            @throw      [css::uno::Exception]
-                        If registration failed by any reason.
-                        That does not include double registrations!
-         */
-        static
-        void impl_resolveItem4TypeRegistration(      CacheItemList*   pList,
-                                               const OUString& sItem,
-                                               const OUString& sType)
-            throw(css::uno::Exception);
-
-
-    // static helper
-
     private:
 
 

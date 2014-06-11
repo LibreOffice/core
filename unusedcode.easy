@@ -14,9 +14,11 @@ MenuBar::AddMenuBarButton(Image const&, Link const&, rtl::OUString const&, unsig
 MenuBar::GetMenuBarButtonRectPixel(unsigned short)
 MenuBar::RemoveMenuBarButton(unsigned short)
 MenuBar::SetMenuBarButtonHighlightHdl(unsigned short, Link const&)
+MetaAction::TypeName(unsigned short)
 MetafileXmlDump::filterNoneActionTypes()
 OpenGLContext::renderToFile()
 OpenGLRender::CreateTextTexture(rtl::OUString const&, Font, long, com::sun::star::awt::Point, com::sun::star::awt::Size, long)
+OpenGLRender::GetAsBitmap()
 OutputDevice::GetCanvas() const
 OutputDevice::HasAlpha()
 OutputDevice::LogicToLogic(basegfx::B2DPolyPolygon const&, MapMode const&, MapMode const&)
@@ -30,7 +32,6 @@ RenderPrimitive::copyVertexBufferData(char const*, unsigned int)
 SalGraphics::drawTransformedBitmap(basegfx::B2DPoint const&, basegfx::B2DPoint const&, basegfx::B2DPoint const&, SalBitmap const&, SalBitmap const*)
 ScDocument::AreaBroadcastInRange(ScRange const&, ScHint const&)
 ScDocument::CreateFormatTable() const
-ScExtIButton::GetSelected() const
 ScFormulaCellGroup::scheduleCompilation()
 ScRawToken::Clone() const
 ScRawToken::Delete()
@@ -53,9 +54,10 @@ StyleSettings::SetUseFlatBorders(bool)
 StyleSettings::SetUseFlatMenus(bool)
 SvpSalInstance::PostedEventsInQueue()
 SvtListener::IsListening(SvtBroadcaster&) const
-SvxDummyShapeContainer::SvxDummyShapeContainer(com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>)
 SvxFontListBox::GetSelectEntry() const
 SvxNumberFormatShell::IsAdded_Impl(unsigned long)
+SvxOpenGLObject::getRenderer()
+SvxOpenGLObject::setRenderer(IOpenGLRenderer*)
 TextDoc::IsValidPaM(TextPaM const&)
 Texture::setSamplerParameter(unsigned int, unsigned int)
 UnoApiTest::closeDocument(com::sun::star::uno::Reference<com::sun::star::lang::XComponent>)

@@ -213,14 +213,6 @@ TabDialog::TabDialog( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-TabDialog::TabDialog( Window* pParent, const ResId& rResId ) :
-    Dialog( WINDOW_TABDIALOG )
-{
-    ImplInitTabDialogData();
-    rResId.SetRT( RSC_TABDIALOG );
-    init(pParent, rResId);
-}
-
 TabDialog::TabDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
     Dialog(pParent, rID, rUIXMLDescription, WINDOW_TABDIALOG)
 {
