@@ -1,0 +1,310 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_e016c2a6",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "You can directly access pCol-\u003eGetDoc().maTabs[maCurPos.Tab()]-\u003eRowHidden(...) here, as in the call to RowFiltered(). Calling ScDocument::RowHidden() unnecessarily checks for a valid tab parameter again, which we can assume valid here.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a010baa9",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "ScFormulaCell::IsValueNoError() returns false also for string results (or any other than double, empty or hybrid cell). Use ScFormulaCell::GetErrCode() instead.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6023d206",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "Maybe I missed something, but now we completely ignore subtotal flags in this ScHorizontalValueIterator, don\u0027t we? Shouldn\u0027t that add the new flags instead?",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_0079a6fc",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "We can simplify this a little and replace the entire block (including the mpCode-\u003eReset()) with\n\n mbSubTotal \u003d mpCode-\u003eHasOpCodeRPN( ocSubTotal ) || mpCode-\u003eHasOpCodeRPN( ocAggregate )",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_e07da2e8",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_806db634",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_606ab21c",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "Missing subtotal flags now?",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_2074aafb",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "This extra condition is superfluous, the exact same condition was already checked above when we entered the containing if block.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_00608634",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "The check for (nGlobalError \u0026\u0026 ( mnSubTotalFlags \u0026 SUBTOTAL_IGN_ERR_VAL )) is unnecessary because further above there\u0027s already a break in this case and code here is never reached.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_e064824a",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "Same as above, condition was already checked in the containing if.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_c0597e90",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "Same as above, code is never reached in case of (nGlobalError \u0026\u0026 ( mnSubTotalFlags \u0026 SUBTOTAL_IGN_ERR_VAL ))",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a05e7a74",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "This condition misses the extra || (mnSubTotalFlags \u0026 SUBTOTAL_IGN_ERR_VAL) that is done in the other two cases above, but I think the intention was the same, and actually this condition is superfluous.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_80549654",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "Same as in the other two cases, if the extra condition above is removed and we break unconditionally, code here will never be reached for the condition checked here.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_60519262",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "For performance reasons, rather than checking the condition on every loop, I suggest to create extra loop blocks, with and without condition, for all these function blocks.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_404e8ec2",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "This also would need a (mnSubTotalFlags \u0026 SUBTOTAL_IGN_ERR_VAL) handling, wouldn\u0027t it?",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_204b8ab2",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "Ignoring an error here probably won\u0027t work. Getting an error during PopExternalDoubleRef() will leave us without a valid matrix.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a0d55aba",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "Please don\u0027t substitute code like ScSum() with IterateParameters(), The ScSum() code is optimized to use ColumnSpanSet in the case of svDoubleRef and svRefList, the main use cases with SUM().",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_20e26aa0",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 1,
+      "message": "Same here, please don\u0027t substitute the ColumnSpanSet optimized code.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_60d872f0",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 0,
+      "message": "This MarkSubTotalCells() will need adaption.",
+      "revId": "ee212bf4db7e38279d8c236c944ef3e09e3c0b72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_40e56ea6",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 837,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-06-11T13:40:47Z",
+      "side": 0,
+      "message": "This is the optimized ColumnSpanSet action not present in IterateParameters().",
+      "revId": "ee212bf4db7e38279d8c236c944ef3e09e3c0b72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
