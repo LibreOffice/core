@@ -2052,23 +2052,33 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
 
 namespace
 {
+    struct BkmkEntry
+    {
+        long int m_nBkmkIdx;
+        bool m_bOther;
+        sal_Int32 m_nCntnt;
+    };
     struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
     {
         std::vector<sal_uLong> aSaveArr;
+        std::vector<BkmkEntry> aBkmkEntries;
         virtual void Clear() SAL_OVERRIDE
         {
+            aBkmkEntries.clear();
             aSaveArr.clear();
         }
         virtual bool Empty() SAL_OVERRIDE
         {
-            return aSaveArr.empty();
+            return aBkmkEntries.empty() && aSaveArr.empty();
         }
         virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) SAL_OVERRIDE
         {
+            SaveBkmks(pDoc, nNode, nCntnt);
             return _SaveCntntIdx(pDoc, nNode, nCntnt, aSaveArr, nSaveFly);
         }
         virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
         {
+            RestoreBkmks(pDoc, nNode, nOffset);
             return _RestoreCntntIdx(pDoc, aSaveArr, nNode, nOffset, bAuto);
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
@@ -2076,7 +2086,79 @@ namespace
             return _RestoreCntntIdx(aSaveArr, rNd, nLen, nCorrLen);
         }
         virtual ~CntntIdxStoreImpl(){};
+        private:
+            inline void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
+            inline void RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
     };
+}
+
+void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
+{
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    const IDocumentMarkAccess::const_iterator_t ppBkmkEnd = pMarkAccess->getAllMarksEnd();
+    for(
+        IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->getAllMarksBegin();
+        ppBkmk != ppBkmkEnd;
+        ++ppBkmk)
+    {
+        const ::sw::mark::IMark* pBkmk = ppBkmk->get();
+        bool bMarkPosEqual = false;
+        if(pBkmk->GetMarkPos().nNode.GetIndex() == nNode
+            && pBkmk->GetMarkPos().nContent.GetIndex() <= nCntnt)
+        {
+            if(pBkmk->GetMarkPos().nContent.GetIndex() < nCntnt)
+            {
+                const BkmkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
+                aBkmkEntries.push_back(aEntry);
+            }
+            else // if a bookmark position is equal nCntnt, the other position
+                bMarkPosEqual = true; // has to decide if it is added to the array
+        }
+        if(pBkmk->IsExpanded()
+            && pBkmk->GetOtherMarkPos().nNode.GetIndex() == nNode
+            && pBkmk->GetOtherMarkPos().nContent.GetIndex() <= nCntnt)
+        {
+            if(bMarkPosEqual)
+            { // the other position is before, the (main) position is equal
+                const BkmkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
+                aBkmkEntries.push_back(aEntry);
+            }
+            const BkmkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), true, pBkmk->GetOtherMarkPos().nContent.GetIndex() };
+            aBkmkEntries.push_back(aEntry);
+        }
+    }
+}
+
+void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset)
+{
+    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
+    SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
+    for(
+        std::vector<BkmkEntry>::const_iterator pEntry = aBkmkEntries.begin();
+        pEntry != aBkmkEntries.end();
+        ++pEntry)
+    {
+        if(pEntry->m_bOther)
+        {
+            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
+            {
+                SwPosition aNewPos(pMark->GetOtherMarkPos());
+                aNewPos.nNode = *pCNd;
+                aNewPos.nContent.Assign(pCNd, pEntry->m_nCntnt + nOffset);
+                pMark->SetOtherMarkPos(aNewPos);
+            }
+        }
+        else
+        {
+            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
+            {
+                SwPosition aNewPos(pMark->GetMarkPos());
+                aNewPos.nNode = *pCNd;
+                aNewPos.nContent.Assign(pCNd, pEntry->m_nCntnt + nOffset);
+                pMark->SetMarkPos(aNewPos);
+            }
+        }
+    }
 }
 
 namespace sw { namespace mark {
