@@ -30,24 +30,13 @@
 
 #include <sane.hxx>
 
+class ScanPreview;
+
 class SaneDlg : public ModalDialog
 {
 private:
-    enum DragDirection { TopLeft, Top, TopRight, Right, BottomRight, Bottom,
-                         BottomLeft, Left };
-
     Sane&           mrSane;
-    Bitmap          maPreviewBitmap;
-    Rectangle       maPreviewRect;
-    Point           maTopLeft, maBottomRight;
-    Point           maMinTopLeft, maMaxBottomRight;
-    bool            mbDragEnable;
-    bool            mbIsDragging;
     bool            mbScanEnabled;
-    bool            mbDragDrawn;
-    DragDirection   meDragDirection;
-
-    MapMode         maMapMode;
 
     Link            maOldLink;
 
@@ -82,7 +71,7 @@ private:
 
     SvTreeListBox*  mpOptionBox;
 
-    Window*         mpPreview;
+    ScanPreview*    mpPreview;
 
     int             mnCurrentOption;
     int             mnCurrentElement;
@@ -111,24 +100,14 @@ private:
     void EstablishNumericOption();
     void EstablishButtonOption();
 
-    void DrawRectangles( Point&, Point& );
-    void DrawDrag();
-    Point GetPixelPos( const Point& );
-    Point GetLogicPos( const Point& );
-    void UpdateScanArea( bool );
-
     // helper
     bool SetAdjustedNumericalValue( const char* pOption, double fValue, int nElement = 0 );
-
-    virtual void Paint( const Rectangle& ) SAL_OVERRIDE;
-    virtual void MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& rMEvt ) SAL_OVERRIDE;
 public:
     SaneDlg( Window*, Sane&, bool );
     virtual ~SaneDlg();
 
     virtual short Execute() SAL_OVERRIDE;
+    void UpdateScanArea( bool );
     bool getDoScan() { return doScan;}
 };
 

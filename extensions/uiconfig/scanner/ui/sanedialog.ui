@@ -190,9 +190,11 @@
                     <property name="top_padding">6</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkDrawingArea" id="preview">
+                      <object class="scnlo-ScanPreview" id="preview">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">start</property>
                         <property name="hexpand">True</property>
                         <property name="vexpand">True</property>
                       </object>
