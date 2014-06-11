@@ -194,6 +194,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
         free(pOutSqlda);
         pOutSqlda = (XSQLDA*) malloc(XSQLDA_LENGTH(n));
         pOutSqlda->version = SQLDA_VERSION1;
+        pOutSqlda->sqln = n;
         aErr = isc_dsql_describe(m_statusVector,
                                  &m_aStatementHandle,
                                  1,
