@@ -20,6 +20,7 @@
 #include <MarkManager.hxx>
 #include <bookmrk.hxx>
 #include <boost/bind.hpp>
+#include <boost/foreach.hpp>
 #include <cntfrm.hxx>
 #include <crossrefbookmark.hxx>
 #include <annotationmark.hxx>
@@ -2057,17 +2058,14 @@ void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOf
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
-    for(
-        std::vector<BkmkEntry>::const_iterator pEntry = m_aBkmkEntries.begin();
-        pEntry != m_aBkmkEntries.end();
-        ++pEntry)
+    BOOST_FOREACH(const BkmkEntry& aEntry, m_aBkmkEntries)
     {
-        if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
+        if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nBkmkIdx].get()))
         {
-            SwPosition aNewPos(GetRightMarkPos(pMark, pEntry->m_bOther));
+            SwPosition aNewPos(GetRightMarkPos(pMark, aEntry.m_bOther));
             aNewPos.nNode = *pCNd;
-            aNewPos.nContent.Assign(pCNd, pEntry->m_nCntnt + nOffset);
-            SetRightMarkPos(pMark, pEntry->m_bOther, &aNewPos);
+            aNewPos.nContent.Assign(pCNd, aEntry.m_nCntnt + nOffset);
+            SetRightMarkPos(pMark, aEntry.m_bOther, &aNewPos);
         }
     }
 }
