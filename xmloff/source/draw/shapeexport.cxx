@@ -3275,7 +3275,7 @@ void XMLShapeExport::ImpExportMediaShape(
         OUString const persistentURL =
             lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL, sMimeType);
 #if HAVE_FEATURE_GLTF
-        if( sMimeType == "application/vnd.gltf+json" )
+        if( sMimeType == "model/vnd.gltf+json" )
             lcl_StoreJsonExternalsAndFallback(GetExport(), xPropSet, aMediaURL);
 #endif
 
