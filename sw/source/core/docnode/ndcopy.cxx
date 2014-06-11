@@ -173,8 +173,8 @@ namespace
             if(pMark->IsExpanded())
             {
                 aTmpPam.SetMark();
-                lcl_NonCopyCount(rPam, aCorrIdx, pMark->GetOtherMarkPos()->nNode.GetIndex(), nDelCount);
-                lcl_SetCpyPos(*pMark->GetOtherMarkPos(), rStt, *pCpyStt, *aTmpPam.GetMark(), nDelCount);
+                lcl_NonCopyCount(rPam, aCorrIdx, pMark->GetOtherMarkPos().nNode.GetIndex(), nDelCount);
+                lcl_SetCpyPos(pMark->GetOtherMarkPos(), rStt, *pCpyStt, *aTmpPam.GetMark(), nDelCount);
             }
 
             ::sw::mark::IMark* const pNewMark = pDestDoc->getIDocumentMarkAccess()->makeMark(

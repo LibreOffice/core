@@ -53,26 +53,26 @@ namespace sw {
                 { return *m_pPos1; }
             virtual const OUString& GetName() const SAL_OVERRIDE
                 { return m_aName; }
-            virtual SwPosition* GetOtherMarkPos() const SAL_OVERRIDE
+            virtual SwPosition& GetOtherMarkPos() const SAL_OVERRIDE
             {
                 OSL_PRECOND(IsExpanded(), "<SwPosition::GetOtherMarkPos(..)> - I have no other Pos set." );
-                return m_pPos2.get();
+                return *m_pPos2;
             }
             virtual SwPosition& GetMarkStart() const SAL_OVERRIDE
             {
                 if( !IsExpanded() ) return GetMarkPos( );
-                if ( GetMarkPos( ) < *GetOtherMarkPos( ) )
+                if ( GetMarkPos( ) < GetOtherMarkPos( ) )
                     return GetMarkPos();
                 else
-                    return *GetOtherMarkPos( );
+                    return GetOtherMarkPos( );
             }
             virtual SwPosition& GetMarkEnd() const SAL_OVERRIDE
             {
                 if( !IsExpanded() ) return GetMarkPos();
-                if ( GetMarkPos( ) >= *GetOtherMarkPos( ) )
+                if ( GetMarkPos( ) >= GetOtherMarkPos( ) )
                     return GetMarkPos( );
                 else
-                    return *GetOtherMarkPos( );
+                    return GetOtherMarkPos( );
             }
 
             virtual bool IsCoveringPosition(const SwPosition& rPos) const SAL_OVERRIDE;

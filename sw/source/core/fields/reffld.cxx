@@ -880,7 +880,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                             *pEnd = pTxtNd->Len();
                         }
                     }
-                    else if(pBkmk->GetOtherMarkPos()->nNode == pBkmk->GetMarkPos().nNode)
+                    else if(pBkmk->GetOtherMarkPos().nNode == pBkmk->GetMarkPos().nNode)
                         *pEnd = pBkmk->GetMarkEnd().nContent.GetIndex();
                     else
                         *pEnd = -1;

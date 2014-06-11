@@ -188,12 +188,12 @@ namespace
 
         if ( ( bChangedPos || bChangedOPos )
              && io_pMark->IsExpanded()
-             && io_pMark->GetOtherMarkPos()->nNode.GetNode().FindTableBoxStartNode() !=
+             && io_pMark->GetOtherMarkPos().nNode.GetNode().FindTableBoxStartNode() !=
                     io_pMark->GetMarkPos().nNode.GetNode().FindTableBoxStartNode() )
         {
             if ( !bChangedOPos )
             {
-                io_pMark->SetMarkPos( *io_pMark->GetOtherMarkPos() );
+                io_pMark->SetMarkPos( io_pMark->GetOtherMarkPos() );
             }
             io_pMark->ClearOtherMarkPos();
             DdeBookmark * const pDdeBkmk = dynamic_cast< DdeBookmark*>(io_pMark);
@@ -584,7 +584,7 @@ namespace sw { namespace mark
             }
             bool bChangedOPos = false;
             if (pMark->IsExpanded() &&
-                &pMark->GetOtherMarkPos()->nNode.GetNode() == pOldNode)
+                &pMark->GetOtherMarkPos().nNode.GetNode() == pOldNode)
             {
                 pMark->SetMarkPos(aNewPos);
                 bChangedOPos= true;
@@ -626,10 +626,10 @@ namespace sw { namespace mark
                 bChangedPos = true;
             }
             if(pMark->IsExpanded() &&
-                &pMark->GetOtherMarkPos()->nNode.GetNode() == pOldNode)
+                &pMark->GetOtherMarkPos().nNode.GetNode() == pOldNode)
             {
                 SwPosition aNewPosRel(aNewPos);
-                aNewPosRel.nContent += pMark->GetOtherMarkPos()->nContent.GetIndex();
+                aNewPosRel.nContent += pMark->GetOtherMarkPos().nContent.GetIndex();
                 pMark->SetOtherMarkPos(aNewPosRel);
                 bChangedOPos = true;
             }
@@ -679,8 +679,8 @@ namespace sw { namespace mark
             bool bIsPosInRange = lcl_GreaterThan(pMark->GetMarkPos(), rStt, pSttIdx)
                                  && lcl_Lower(pMark->GetMarkPos(), rEnd, pEndIdx);
             bool bIsOtherPosInRange = pMark->IsExpanded()
-                                      && lcl_GreaterThan(*pMark->GetOtherMarkPos(), rStt, pSttIdx)
-                                      && lcl_Lower(*pMark->GetOtherMarkPos(), rEnd, pEndIdx);
+                                      && lcl_GreaterThan(pMark->GetOtherMarkPos(), rStt, pSttIdx)
+                                      && lcl_Lower(pMark->GetOtherMarkPos(), rEnd, pEndIdx);
             // special case: completely in range, touching the end?
             if ( pEndIdx != NULL
                  && ( ( bIsOtherPosInRange
@@ -688,8 +688,8 @@ namespace sw { namespace mark
                         && pMark->GetMarkPos().nContent == *pEndIdx )
                       || ( bIsPosInRange
                            && pMark->IsExpanded()
-                           && pMark->GetOtherMarkPos()->nNode == rEnd
-                           && pMark->GetOtherMarkPos()->nContent == *pEndIdx ) ) )
+                           && pMark->GetOtherMarkPos().nNode == rEnd
+                           && pMark->GetOtherMarkPos().nContent == *pEndIdx ) ) )
             {
                 bIsPosInRange = true, bIsOtherPosInRange = true;
             }
@@ -747,7 +747,7 @@ namespace sw { namespace mark
                     else
                     {
                         pNewPos =
-                            lcl_FindExpelPosition( rStt, rEnd, bIsPosInRange ? *pMark->GetOtherMarkPos() : pMark->GetMarkPos() );
+                            lcl_FindExpelPosition( rStt, rEnd, bIsPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos() );
                     }
                 }
 
@@ -1341,8 +1341,8 @@ SaveBookmark::SaveBookmark(
 
     if(rBkmk.IsExpanded())
     {
-        m_nNode2 = rBkmk.GetOtherMarkPos()->nNode.GetIndex();
-        m_nCntnt2 = rBkmk.GetOtherMarkPos()->nContent.GetIndex();
+        m_nNode2 = rBkmk.GetOtherMarkPos().nNode.GetIndex();
+        m_nCntnt2 = rBkmk.GetOtherMarkPos().nContent.GetIndex();
 
         if(m_bSaveOtherPos)
         {
@@ -1533,15 +1533,15 @@ void _SaveCntntIdx(SwDoc* pDoc,
         }
 
         if(pBkmk->IsExpanded()
-            && pBkmk->GetOtherMarkPos()->nNode.GetIndex() == nNode
-            && pBkmk->GetOtherMarkPos()->nContent.GetIndex() <= nCntnt)
+            && pBkmk->GetOtherMarkPos().nNode.GetIndex() == nNode
+            && pBkmk->GetOtherMarkPos().nContent.GetIndex() <= nCntnt)
         {
             if(bMarkPosEqual)
             { // the other position is before, the (main) position is equal
                 aSave.SetContent(pBkmk->GetMarkPos().nContent.GetIndex());
                 aSave.Add(rSaveArr);
             }
-            aSave.SetContent(pBkmk->GetOtherMarkPos()->nContent.GetIndex());
+            aSave.SetContent(pBkmk->GetOtherMarkPos().nContent.GetIndex());
             aSave.IncType();
             aSave.Add(rSaveArr);
             aSave.DecType();
@@ -1746,7 +1746,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
             case 0x8001:
             if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get()))
             {
-                SwPosition aNewPos(*pMark->GetOtherMarkPos());
+                SwPosition aNewPos(pMark->GetOtherMarkPos());
                 aNewPos.nNode = *pCNd;
                 aNewPos.nContent.Assign(pCNd, aSave.GetContent() + nOffset);
                 pMark->SetOtherMarkPos(aNewPos);
@@ -1919,7 +1919,7 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
                 MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get());
                 if (pMark)
                 {
-                    SwPosition aNewPos(*pMark->GetOtherMarkPos());
+                    SwPosition aNewPos(pMark->GetOtherMarkPos());
                     aNewPos.nNode = rNd;
                     aNewPos.nContent.Assign(pCNd, std::min(aSave.GetContent(), nLen));
                     pMark->SetOtherMarkPos(aNewPos);
