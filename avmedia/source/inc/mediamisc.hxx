@@ -46,7 +46,7 @@ class ResMgr;
 #define AVMEDIA_MIMETYPE_COMMON           "application/vnd.sun.star.media"
 
 #if HAVE_FEATURE_GLTF
-#define AVMEDIA_MIMETYPE_JSON             "application/vnd.gltf+json"
+#define AVMEDIA_MIMETYPE_JSON             "model/vnd.gltf+json"
 #endif
 
 

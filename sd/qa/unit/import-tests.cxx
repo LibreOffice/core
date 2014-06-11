@@ -713,6 +713,7 @@ void SdFiltersTest::testMediaEmbedding()
 {
     SvtMiscOptions().SetExperimentalMode(true);
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"));
+    xDocShRef = saveAndReload( xDocShRef, ODP );
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -724,7 +725,7 @@ void SdFiltersTest::testMediaEmbedding()
     SdrMediaObj *pModelObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 2 ));
     CPPUNIT_ASSERT_MESSAGE( "missing model", pModelObj != NULL);
     CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Model/jeep/jeep.json" ), pModelObj->getMediaProperties().getURL());
-    CPPUNIT_ASSERT_EQUAL( OUString( "application/vnd.gltf+json" ), pModelObj->getMediaProperties().getMimeType());
+    CPPUNIT_ASSERT_EQUAL( OUString( "model/vnd.gltf+json" ), pModelObj->getMediaProperties().getMimeType());
 
     // Check the case when experimental mode is disabled
     xDocShRef->DoClose();

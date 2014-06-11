@@ -3071,7 +3071,7 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
             if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.sun.star.media" ) )
                 mbMedia = true;
 #if HAVE_FEATURE_GLTF
-            if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.gltf+json" ) && SvtMiscOptions().IsExperimentalMode() )
+            if( xAttrList->getValueByIndex( n ).equalsAscii( "model/vnd.gltf+json" ) && SvtMiscOptions().IsExperimentalMode() )
                 mbMedia = true;
 #endif
             // leave this loop
