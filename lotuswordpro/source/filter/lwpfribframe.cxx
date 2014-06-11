@@ -165,7 +165,9 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
         else if(pContainerLayout && pContainerLayout->IsCell())
         {
             //same page as text and in cell, get the first xfpara
-            XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(pCont->FindFirstContent(enumXFContentPara));
+            rtl::Reference<XFContent> first(
+                pCont->FindFirstContent(enumXFContentPara));
+            XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
             if(pXFFirtPara)
                 pXFContentContainer = pXFFirtPara;
         }

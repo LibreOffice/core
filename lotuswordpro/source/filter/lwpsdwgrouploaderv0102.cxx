@@ -93,7 +93,7 @@ LwpSdwGroupLoaderV0102::~LwpSdwGroupLoaderV0102()
  *      the corresponding drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.
  */
-void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector <XFFrame*>* pDrawObjVector)
+void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector)
 {
     // save the container
     m_pDrawObjVector = pDrawObjVector;

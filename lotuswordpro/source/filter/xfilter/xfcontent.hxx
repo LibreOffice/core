@@ -63,6 +63,7 @@
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
+#include <salhelper/simplereferenceobject.hxx>
 
 #include "xfdefs.hxx"
 
@@ -73,11 +74,9 @@ class IXFStream;
  * Base class for all content object.
  * There is only two properties:style name and content type in this class.
  */
-class XFContent
+class XFContent: public salhelper::SimpleReferenceObject
 {
 public:
-    virtual ~XFContent() {}
-
     /**
      * @short:  return the content type.
      */
@@ -97,6 +96,8 @@ public:
 
 protected:
     XFContent() {}
+
+    virtual ~XFContent() {}
 
     OUString   m_strStyleName;
 };

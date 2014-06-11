@@ -66,13 +66,6 @@ XFContentContainer::XFContentContainer()
 
 XFContentContainer::~XFContentContainer()
 {
-    std::vector<XFContent*>::iterator it;
-
-    for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
-    {
-        XFContent *pContent = *it;
-        delete pContent;
-    }
 }
 
 void    XFContentContainer::Add(XFContent *pContent)
@@ -102,26 +95,18 @@ int     XFContentContainer::GetCount() const
 
 void    XFContentContainer::Reset()
 {
-    std::vector<XFContent*>::iterator it;
-
-    for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
-    {
-        XFContent *pContent = *it;
-        if( pContent )
-            delete pContent;
-    }
     m_aContents.clear();
 }
 
-XFContent* XFContentContainer::FindFirstContent(enumXFContent type)
+rtl::Reference<XFContent> XFContentContainer::FindFirstContent(enumXFContent type)
 {
-    XFContent *pRet = NULL;
-    XFContent  *pContent = NULL;
+    rtl::Reference<XFContent> pRet;
+    rtl::Reference<XFContent> pContent;
 
     for( int i=0; i<GetCount(); i++ )
     {
         pContent = GetContent(i);
-        if( !pContent )
+        if( !pContent.is() )
             continue;
 
         enumXFContent eType = pContent->GetContentType();
@@ -129,11 +114,11 @@ XFContent* XFContentContainer::FindFirstContent(enumXFContent type)
             return pContent;
         else
         {
-            XFContentContainer *pChildCont = static_cast<XFContentContainer*>(pContent);
+            XFContentContainer *pChildCont = static_cast<XFContentContainer*>(pContent.get());
             if( pChildCont )
             {
                 pRet = pChildCont->FindFirstContent(type);
-                if( pRet )
+                if( pRet.is() )
                     return pRet;
             }
         }
@@ -148,17 +133,17 @@ enumXFContent   XFContentContainer::GetContentType()
 
 void    XFContentContainer::ToXml(IXFStream *pStrm)
 {
-    std::vector<XFContent*>::iterator it;
+    std::vector< rtl::Reference<XFContent> >::iterator it;
 
     for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
-        XFContent *pContent = *it;
+        XFContent *pContent = it->get();
         if( pContent )
             pContent->ToXml(pStrm);
     }
 }
 
-XFContent* XFContentContainer::GetLastContent()
+rtl::Reference<XFContent> XFContentContainer::GetLastContent()
 {
     sal_uInt32 index = m_aContents.size()-1;
     if(index >0)

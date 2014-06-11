@@ -60,9 +60,14 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTSPAN_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTSPAN_HXX
 
+#include <sal/config.h>
+
+#include <vector>
+
+#include <rtl/ref.hxx>
+
 #include "xfglobal.hxx"
 #include "xfcontent.hxx"
-#include <vector>
 
 class IXFStream;
 
@@ -80,7 +85,7 @@ public:
     virtual enumXFContent GetContentType() SAL_OVERRIDE;
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 protected:
-    std::vector<XFContent*>    m_aContents;
+    std::vector< rtl::Reference<XFContent> > m_aContents;
 };
 
 class XFTextSpanStart : public XFTextSpan //for adding style of power field

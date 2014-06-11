@@ -194,12 +194,12 @@ void    XFFrame::AdjustZIndex()
 {
     for( int i=0; i<GetCount(); i++ )
     {
-        XFContent *pContent = GetContent(i);
-        if( pContent )
+        rtl::Reference<XFContent> pContent = GetContent(i);
+        if( pContent.is() )
         {
             if( pContent->GetContentType() == enumXFContentFrame )
             {
-                XFFrame *pFrame = (XFFrame*)pContent;
+                XFFrame *pFrame = (XFFrame*)pContent.get();
                 pFrame->m_nZIndex = m_nZIndex + 1;
                 pFrame->AdjustZIndex();
             }
