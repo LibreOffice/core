@@ -59,9 +59,7 @@ public:
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-#ifndef _NOTIFY_HXX
     void RemoveBroadcaster_Impl( SfxBroadcaster& rBC );
-#endif
 };
 
 #endif
