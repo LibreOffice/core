@@ -73,35 +73,6 @@ XFRow::XFRow()
 {
 }
 
-XFRow::XFRow(const XFRow& other):XFContent(other)
-{
-    m_pOwnerTable = NULL;
-    m_nRepeat = other.m_nRepeat;
-    m_nRow = other.m_nRow;
-
-    for( int i=1; i<=other.GetCellCount(); i++ )
-    {
-        XFCell *pCell = new XFCell;
-        *pCell = *other.GetCell(i);
-        AddCell(pCell);
-    }
-}
-
-XFRow& XFRow::operator=(const XFRow& other)
-{
-    m_pOwnerTable = NULL;
-    m_nRepeat = other.m_nRepeat;
-    m_nRow = other.m_nRow;
-
-    for( int i=1; i<=other.GetCellCount(); i++ )
-    {
-        XFCell *pCell = new XFCell;
-        *pCell = *other.GetCell(i);
-        AddCell(pCell);
-    }
-    return *this;
-}
-
 XFRow::~XFRow()
 {
     std::map<sal_Int32,XFCell*>::iterator it;

@@ -76,10 +76,6 @@ class XFCell : public XFContentContainer
 public:
     XFCell();
 
-    XFCell(const XFCell& other);
-
-    XFCell& operator=(const XFCell& other);
-
     virtual ~XFCell();
 
 public:

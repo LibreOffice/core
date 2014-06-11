@@ -92,10 +92,6 @@ public:
      */
     OUString   GetStyleName() {return m_strStyleName;}
 
-    /**
-     */
-    XFContent*     Clone() {return NULL;}
-
 protected:
     XFContent() {}
 

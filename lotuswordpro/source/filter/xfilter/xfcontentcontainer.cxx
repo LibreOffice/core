@@ -64,39 +64,6 @@ XFContentContainer::XFContentContainer()
 {
 }
 
-XFContentContainer::XFContentContainer(const XFContentContainer& other):XFContent(other)
-{
-    std::vector<XFContent*>::const_iterator it;
-
-    for( it = other.m_aContents.begin(); it != other.m_aContents.end(); ++it )
-    {
-        XFContent *pContent = *it;
-        if( pContent )
-        {
-            XFContent *pClone = pContent->Clone();
-            if( pClone )
-                Add(pClone);
-        }
-    }
-}
-
-XFContentContainer& XFContentContainer::operator=(const XFContentContainer& other)
-{
-    std::vector<XFContent*>::const_iterator it;
-
-    for( it = other.m_aContents.begin(); it != other.m_aContents.end(); ++it )
-    {
-        XFContent *pContent = *it;
-        if( pContent )
-        {
-            XFContent *pClone = pContent->Clone();
-            if( pClone )
-                Add(pClone);
-        }
-    }
-    return *this;
-}
-
 XFContentContainer::~XFContentContainer()
 {
     std::vector<XFContent*>::iterator it;
