@@ -65,10 +65,6 @@ XFShadow::XFShadow():m_aColor(128,128,0)
     m_fOffset = 0.18;
 }
 
-XFShadow::~XFShadow()
-{
-}
-
 OUString XFShadow::ToString()
 {
     OUString   buf;

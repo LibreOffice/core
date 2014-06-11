@@ -61,13 +61,12 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFNUMFMT_HXX
 
 #include "xfglobal.hxx"
-#include "ixfproperty.hxx"
 
 /**
  * @brief
  * Bullet number format.
  */
-class XFNumFmt : public IXFProperty
+class XFNumFmt
 {
 public:
     XFNumFmt()
