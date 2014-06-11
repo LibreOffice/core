@@ -64,7 +64,7 @@ bool SwServerObject::GetData( uno::Any & rData,
             {
                 // Span area
                 pPam = new SwPaM( CNTNT_TYPE.pBkmk->GetMarkPos(),
-                                *CNTNT_TYPE.pBkmk->GetOtherMarkPos() );
+                                CNTNT_TYPE.pBkmk->GetOtherMarkPos() );
             }
             break;
 

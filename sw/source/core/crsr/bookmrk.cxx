@@ -311,7 +311,7 @@ namespace sw { namespace mark
 
     void Fieldmark::SetMarkStartPos( const SwPosition& rNewStartPos )
     {
-        if ( GetMarkPos( ) <= *GetOtherMarkPos( ) )
+        if ( GetMarkPos( ) <= GetOtherMarkPos( ) )
             return SetMarkPos( rNewStartPos );
         else
             return SetOtherMarkPos( rNewStartPos );
@@ -319,7 +319,7 @@ namespace sw { namespace mark
 
     void Fieldmark::SetMarkEndPos( const SwPosition& rNewEndPos )
     {
-        if ( GetMarkPos( ) <= *GetOtherMarkPos( ) )
+        if ( GetMarkPos( ) <= GetOtherMarkPos( ) )
             return SetOtherMarkPos( rNewEndPos );
         else
             return SetMarkPos( rNewEndPos );
@@ -330,15 +330,15 @@ namespace sw { namespace mark
         return "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " + m_aName + ", "
             + m_aFieldname + ", [ " + OUString::number( GetMarkPos().nNode.GetIndex( ) )
             + ", " + OUString::number( GetMarkPos( ).nContent.GetIndex( ) ) + " ], ["
-            + OUString::number( GetOtherMarkPos()->nNode.GetIndex( ) ) + ", "
-            + OUString::number( GetOtherMarkPos( )->nContent.GetIndex( ) ) + " ] ) ";
+            + OUString::number( GetOtherMarkPos().nNode.GetIndex( ) ) + ", "
+            + OUString::number( GetOtherMarkPos( ).nContent.GetIndex( ) ) + " ] ) ";
     }
 
     void Fieldmark::Invalidate( )
     {
         // TODO: Does exist a better solution to trigger a format of the
         //       fieldmark portion? If yes, please use it.
-        SwPaM aPaM( this->GetMarkPos(), *this->GetOtherMarkPos() );
+        SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
         aPaM.InvalidatePaM();
     }
 
@@ -405,8 +405,8 @@ namespace sw { namespace mark
             + m_aName + ", " + GetFieldname() + ", [ "
             + OUString::number(GetMarkPos().nNode.GetIndex( ) ) + ", "
             + OUString::number( GetMarkPos( ).nContent.GetIndex( ) ) + " ], ["
-            + OUString::number( GetOtherMarkPos()->nNode.GetIndex( ) ) + ", "
-            + OUString::number( GetOtherMarkPos( )->nContent.GetIndex( ) ) + " ] ) ";
+            + OUString::number( GetOtherMarkPos().nNode.GetIndex( ) ) + ", "
+            + OUString::number( GetOtherMarkPos( ).nContent.GetIndex( ) ) + " ] ) ";
     }
 }}
 

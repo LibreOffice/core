@@ -54,12 +54,12 @@ namespace sw { namespace mark
         MarkBase::SetMarkPos(rNewPos);
     }
 
-    SwPosition* CrossRefBookmark::GetOtherMarkPos() const
+    SwPosition& CrossRefBookmark::GetOtherMarkPos() const
     {
         OSL_PRECOND(false,
             "<sw::mark::CrossRefBookmark::GetOtherMarkPos(..)>"
             " - this should never be called!");
-        return NULL;
+        return *static_cast<SwPosition*>(NULL);
     }
 
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,

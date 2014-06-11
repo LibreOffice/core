@@ -1021,7 +1021,7 @@ bool SwXTextRange::GetPositions(SwPaM& rToFill) const
         if(pBkmk->IsExpanded())
         {
             rToFill.SetMark();
-            *rToFill.GetMark() = *pBkmk->GetOtherMarkPos();
+            *rToFill.GetMark() = pBkmk->GetOtherMarkPos();
         }
         else
         {
