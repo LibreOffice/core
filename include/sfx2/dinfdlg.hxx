@@ -223,7 +223,7 @@ protected:
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* );
 
     void                EnableUseUserData();
 };
@@ -246,7 +246,7 @@ protected:
     virtual void            Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*      Create( Window* pParent, const SfxItemSet* );
 };
 
 // class SfxDocumentInfoDialog -------------------------------------------
@@ -511,7 +511,7 @@ protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* );
 };
 
 struct CmisValue : public VclBuilderContainer
@@ -633,7 +633,7 @@ protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* );
 };
 
 #endif // #ifndef _ INCLUDED_SFX2_DINFDLG_HXX

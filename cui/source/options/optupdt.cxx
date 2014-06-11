@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 // class SvxOnlineUpdateTabPage --------------------------------------------------
 
 SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptOnlineUpdatePage", "cui/ui/optonlineupdatepage.ui", rSet)
+    : SfxTabPage(pParent, "OptOnlineUpdatePage", "cui/ui/optonlineupdatepage.ui", &rSet)
 {
     m_aNeverChecked = get<FixedText>("neverchecked")->GetText();
     get(m_pAutoCheckCheckBox, "autocheck");
@@ -149,9 +149,9 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
 
 
 SfxTabPage*
-SvxOnlineUpdateTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SvxOnlineUpdateTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxOnlineUpdateTabPage( pParent, rAttrSet );
+    return new SvxOnlineUpdateTabPage( pParent, *rAttrSet );
 }
 
 

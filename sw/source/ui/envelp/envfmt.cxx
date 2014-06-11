@@ -122,7 +122,7 @@ static long lUserH = 5669; // 10 cm
 
 SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvFormatPage",
-        "modules/swriter/ui/envformatpage.ui", rSet)
+        "modules/swriter/ui/envformatpage.ui", &rSet)
 {
     get(m_pAddrLeftField, "leftaddr");
     get(m_pAddrTopField, "topaddr");
@@ -442,9 +442,9 @@ void SwEnvFmtPage::SetMinMax()
     m_pSizeHeightField->Reformat();
 }
 
-SfxTabPage* SwEnvFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwEnvFmtPage::Create(Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwEnvFmtPage(pParent, rSet);
+    return new SwEnvFmtPage(pParent, *rSet);
 }
 
 void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)

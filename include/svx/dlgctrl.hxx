@@ -47,7 +47,7 @@ public:
     {
     }
     SvxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
-        : SfxTabPage(pParent, rID, rUIXMLDescription, rAttrSet)
+        : SfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
     {
     }
     virtual void PointChanged( Window* pWindow, RECT_POINT eRP ) = 0;

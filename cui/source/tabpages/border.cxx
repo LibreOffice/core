@@ -86,7 +86,7 @@ static void lcl_SetDecimalDigitsTo1(MetricField& rField)
 
 
 SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs)
-    : SfxTabPage(pParent, "BorderPage", "cui/ui/borderpage.ui", rCoreAttrs)
+    : SfxTabPage(pParent, "BorderPage", "cui/ui/borderpage.ui", &rCoreAttrs)
 
 ,
 
@@ -350,9 +350,9 @@ const sal_uInt16* SvxBorderTabPage::GetRanges()
 
 
 SfxTabPage* SvxBorderTabPage::Create( Window* pParent,
-                                      const SfxItemSet& rAttrSet )
+                                      const SfxItemSet* rAttrSet )
 {
-    return ( new SvxBorderTabPage( pParent, rAttrSet ) );
+    return ( new SvxBorderTabPage( pParent, *rAttrSet ) );
 }
 
 

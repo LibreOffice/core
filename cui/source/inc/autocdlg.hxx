@@ -111,7 +111,7 @@ public:
     OfaAutocorrOptionsPage(Window* pParent, const SfxItemSet& rSet);
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -171,7 +171,7 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
 
     public:
         static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
         virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
         virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
         virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
@@ -263,7 +263,7 @@ public:
                         OfaAutocorrReplacePage( Window* pParent, const SfxItemSet& rSet );
                         virtual ~OfaAutocorrReplacePage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -322,7 +322,7 @@ public:
                         virtual ~OfaAutocorrExceptPage();
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -388,7 +388,7 @@ public:
                         virtual ~OfaQuoteTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -438,7 +438,7 @@ public:
                         virtual ~OfaAutoCompleteTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -504,7 +504,7 @@ public:
 
     virtual ~OfaSmartTagOptionsTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

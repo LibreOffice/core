@@ -62,7 +62,7 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
                             const SfxItemSet&   rCoreAttrs,
                             sal_uInt16          nWhichId,
                             bool                bHeader  )
-    : SfxTabPage( pParent, "HeaderFooterContent", "modules/scalc/ui/headerfootercontent.ui", rCoreAttrs )
+    : SfxTabPage( pParent, "HeaderFooterContent", "modules/scalc/ui/headerfootercontent.ui", &rCoreAttrs )
     , nWhich( nWhichId )
 {
     get(m_pWndLeft,"textviewWND_LEFT");
@@ -843,8 +843,8 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet&
                     true )
     {}
 
-SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-    { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
+SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
+    { return ( new ScRightHeaderEditPage( pParent, *rCoreSet ) ); };
 
 
 // class ScLeftHeaderEditPage
@@ -857,8 +857,8 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& r
                     true )
     {}
 
-SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-    { return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
+SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
+    { return ( new ScLeftHeaderEditPage( pParent, *rCoreSet ) ); };
 
 
 // class ScRightFooterEditPage
@@ -871,8 +871,8 @@ ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet&
                     false )
     {}
 
-SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-    { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
+SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
+    { return ( new ScRightFooterEditPage( pParent, *rCoreSet ) ); };
 
 
 // class ScLeftFooterEditPage
@@ -885,7 +885,7 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& r
                     false )
     {}
 
-SfxTabPage* ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
-    { return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };
+SfxTabPage* ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
+    { return ( new ScLeftFooterEditPage( pParent, *rCoreSet ) ); };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

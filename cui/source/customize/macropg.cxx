@@ -214,7 +214,7 @@ void _SvxMacroTabPage::EnableButtons()
 
 _SvxMacroTabPage::_SvxMacroTabPage(Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription, const SfxItemSet& rAttrSet)
-    : SfxTabPage( pParent, rID, rUIXMLDescription, rAttrSet ),
+    : SfxTabPage( pParent, rID, rUIXMLDescription, &rAttrSet ),
     m_xAppEvents(0),
     m_xDocEvents(0),
     bReadOnly(false),

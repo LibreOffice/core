@@ -114,9 +114,9 @@ const sal_uInt16* SvxHeaderPage::GetRanges()
 
 
 
-SfxTabPage* SvxHeaderPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SvxHeaderPage::Create( Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxHeaderPage( pParent, rSet );
+    return new SvxHeaderPage( pParent, *rSet );
 }
 
 
@@ -128,9 +128,9 @@ const sal_uInt16* SvxFooterPage::GetRanges()
 
 
 
-SfxTabPage* SvxFooterPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SvxFooterPage::Create( Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxFooterPage( pParent, rSet );
+    return new SvxFooterPage( pParent, *rSet );
 }
 
 
@@ -155,7 +155,7 @@ SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 SvxHFPage::SvxHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId ) :
 
-    SfxTabPage( pParent, "HFFormatPage", "svx/ui/headfootformatpage.ui", rSet ),
+    SfxTabPage( pParent, "HFFormatPage", "svx/ui/headfootformatpage.ui", &rSet ),
     nId                         ( nSetId ),
     pBBSet                      ( NULL ),
     bDisableQueryBox            ( false ),

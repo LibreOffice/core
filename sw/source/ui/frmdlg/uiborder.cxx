@@ -41,7 +41,7 @@ SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
 
     if ( fnCreatePage )
     {
-        SfxTabPage* pNewPage = (*fnCreatePage)( get_content_area(), rSet );
+        SfxTabPage* pNewPage = (*fnCreatePage)( get_content_area(), &rSet );
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,nType));
         if(SW_BORDER_MODE_TABLE == nType)

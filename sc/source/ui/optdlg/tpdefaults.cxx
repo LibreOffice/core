@@ -19,7 +19,7 @@
 
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(Window *pParent, const SfxItemSet &rCoreSet) :
-    SfxTabPage(pParent, "OptDefaultPage", "modules/scalc/ui/optdefaultpage.ui", rCoreSet)
+    SfxTabPage(pParent, "OptDefaultPage", "modules/scalc/ui/optdefaultpage.ui", &rCoreSet)
 
 {
     get( m_pEdNSheets, "sheetsnumber");
@@ -34,9 +34,9 @@ ScTpDefaultsOptions::~ScTpDefaultsOptions()
 {
 }
 
-SfxTabPage* ScTpDefaultsOptions::Create(Window *pParent, const SfxItemSet &rCoreAttrs)
+SfxTabPage* ScTpDefaultsOptions::Create(Window *pParent, const SfxItemSet *rCoreAttrs)
 {
-    return new ScTpDefaultsOptions(pParent, rCoreAttrs);
+    return new ScTpDefaultsOptions(pParent, *rCoreAttrs);
 }
 
 bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)

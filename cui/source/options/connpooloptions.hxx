@@ -51,7 +51,7 @@ namespace offapp
         ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet);
 
     public:
-        static SfxTabPage*  Create(Window* _pParent, const SfxItemSet& _rAttrSet);
+        static SfxTabPage*  Create(Window* _pParent, const SfxItemSet* _rAttrSet);
 
     protected:
         virtual bool        Notify( NotifyEvent& _rNEvt ) SAL_OVERRIDE;

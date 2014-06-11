@@ -46,7 +46,7 @@ AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rIn
     : SfxTabPage(pWindow
                 ,"tp_AxisPositions"
                 ,"modules/schart/ui/tp_AxisPositions.ui"
-                , rInAttrs)
+                , &rInAttrs)
     , m_pNumFormatter(NULL)
     , m_bCrossingAxisIsCategoryAxis(false)
     , m_aCategories()
@@ -85,9 +85,9 @@ AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rIn
     m_pLB_PlaceTicks->SetDropDownLineCount( m_pLB_PlaceTicks->GetEntryCount() );
 }
 
-SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
+SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet* rOutAttrs)
 {
-    return new AxisPositionsTabPage(pWindow, rOutAttrs);
+    return new AxisPositionsTabPage(pWindow, *rOutAttrs);
 }
 
 bool AxisPositionsTabPage::FillItemSet(SfxItemSet* rOutAttrs)

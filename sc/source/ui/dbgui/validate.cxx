@@ -311,7 +311,7 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
 
 ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet )
     : SfxTabPage( pParent, "ValidationCriteriaPage",
-        "modules/scalc/ui/validationcriteriapage.ui", rArgSet)
+        "modules/scalc/ui/validationcriteriapage.ui", &rArgSet)
     , maStrMin(ScResId(SCSTR_VALID_MINIMUM))
     , maStrMax(ScResId(SCSTR_VALID_MAXIMUM))
     , maStrValue(ScResId(SCSTR_VALID_VALUE))
@@ -375,9 +375,9 @@ void ScTPValidationValue::Init()
     CheckHdl( NULL );
 }
 
-SfxTabPage* ScTPValidationValue::Create( Window* pParent, const SfxItemSet& rArgSet )
+SfxTabPage* ScTPValidationValue::Create( Window* pParent, const SfxItemSet* rArgSet )
 {
-    return( new ScTPValidationValue( pParent, rArgSet ) );
+    return( new ScTPValidationValue( pParent, *rArgSet ) );
 }
 
 const sal_uInt16* ScTPValidationValue::GetRanges()
@@ -652,7 +652,7 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
 
     :   SfxTabPage      ( pParent,
                           "ValidationHelpTabPage" , "modules/scalc/ui/validationhelptabpage.ui" ,
-                          rArgSet )
+                          &rArgSet )
 {
     get(pTsbHelp,"tsbhelp");
     get(pEdtTitle,"title");
@@ -672,9 +672,9 @@ void ScTPValidationHelp::Init()
 }
 
 SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
-                                         const SfxItemSet&  rArgSet )
+                                         const SfxItemSet*  rArgSet )
 {
-    return ( new ScTPValidationHelp( pParent, rArgSet ) );
+    return ( new ScTPValidationHelp( pParent, *rArgSet ) );
 }
 
 void ScTPValidationHelp::Reset( const SfxItemSet* rArgSet )
@@ -713,7 +713,7 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
 
     :   SfxTabPage      ( pParent,
                           "ErrorAlertTabPage" , "modules/scalc/ui/erroralerttabpage.ui" ,
-                          rArgSet )
+                          &rArgSet )
 {
     get(m_pTsbShow,"tsbshow");
     get(m_pLbAction,"actionCB");
@@ -742,9 +742,9 @@ void ScTPValidationError::Init()
 }
 
 SfxTabPage* ScTPValidationError::Create( Window*    pParent,
-                                         const SfxItemSet&  rArgSet )
+                                         const SfxItemSet*  rArgSet )
 {
-    return ( new ScTPValidationError( pParent, rArgSet ) );
+    return ( new ScTPValidationError( pParent, *rArgSet ) );
 }
 
 void ScTPValidationError::Reset( const SfxItemSet* rArgSet )

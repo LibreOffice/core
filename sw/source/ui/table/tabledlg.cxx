@@ -62,7 +62,7 @@
 using namespace ::com::sun::star;
 
 SwFormatTablePage::SwFormatTablePage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", rSet)
+    : SfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", &rSet)
     , pTblData(0)
     , nSaveWidth(0)
     , nMinTableWidth(MINLAY)
@@ -369,9 +369,9 @@ void  SwFormatTablePage::ModifyHdl(const Edit * pEdit)
 }
 
 SfxTabPage*  SwFormatTablePage::Create( Window* pParent,
-                                   const SfxItemSet& rAttrSet)
+                                   const SfxItemSet* rAttrSet)
 {
-    return new SwFormatTablePage( pParent, rAttrSet );
+    return new SwFormatTablePage( pParent, *rAttrSet );
 }
 
 bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
@@ -711,7 +711,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
 //Description: Page column configuration
 SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableColumnPage",
-        "modules/swriter/ui/tablecolumnpage.ui", rSet)
+        "modules/swriter/ui/tablecolumnpage.ui", &rSet)
     , pTblData(0)
     , nTableWidth(0)
     , nMinWidth(MINLAY)
@@ -755,9 +755,9 @@ SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
 }
 
 SfxTabPage*   SwTableColumnPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new SwTableColumnPage( pParent, rAttrSet );
+    return new SwTableColumnPage( pParent, *rAttrSet );
 }
 
 void  SwTableColumnPage::Reset( const SfxItemSet* )
@@ -1245,7 +1245,7 @@ void  SwTableTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 
 SwTextFlowPage::SwTextFlowPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "TableTextFlowPage",
-        "modules/swriter/ui/tabletextflowpage.ui", rSet)
+        "modules/swriter/ui/tabletextflowpage.ui", &rSet)
     , pShell(0)
     , bPageBreak(true)
     , bHtmlMode(false)
@@ -1316,9 +1316,9 @@ SwTextFlowPage::SwTextFlowPage(Window* pParent, const SfxItemSet& rSet)
 }
 
 SfxTabPage*   SwTextFlowPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new SwTextFlowPage(pParent, rAttrSet);
+    return new SwTextFlowPage(pParent, *rAttrSet);
 }
 
 bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )

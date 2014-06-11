@@ -125,7 +125,7 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     void                SetOutlineTabDialog(SwOutlineTabDialog* pDlg){pOutlineDlg = pDlg;}
     void                SetWrtShell(SwWrtShell* pSh);

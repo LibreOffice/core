@@ -74,7 +74,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, bool bEN,
     : SfxTabPage(pParent,
         bEN ? OString("EndnotePage") : OString("FootnotePage"),
         bEN ? OUString("modules/swriter/ui/endnotepage.ui") : OUString("modules/swriter/ui/footnotepage.ui"),
-        rSet)
+        &rSet)
     , m_pNumCountBox(NULL)
     , m_pPosFT(NULL)
     , m_pPosPageBox(NULL)
@@ -223,9 +223,9 @@ SwEndNoteOptionPage::~SwEndNoteOptionPage()
 {
 }
 
-SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet &rSet )
+SfxTabPage *SwEndNoteOptionPage::Create( Window *pParent, const SfxItemSet *rSet )
 {
-    return new SwEndNoteOptionPage( pParent, true, rSet );
+    return new SwEndNoteOptionPage( pParent, true, *rSet );
 }
 
 // Different kinds of numbering; because the Listbox has varying numbers of
@@ -399,9 +399,9 @@ SwFootNoteOptionPage::~SwFootNoteOptionPage()
 {
 }
 
-SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet &rSet )
+SfxTabPage *SwFootNoteOptionPage::Create(Window *pParent, const SfxItemSet *rSet )
 {
-    return new SwFootNoteOptionPage( pParent, rSet );
+    return new SwFootNoteOptionPage( pParent, *rSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

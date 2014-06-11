@@ -71,7 +71,7 @@ public:
     virtual ~SvxNumberFormatTabPage();
 
     static SfxTabPage*      Create( Window* pParent,
-                                    const SfxItemSet& rAttrSet );
+                                    const SfxItemSet* rAttrSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

@@ -184,7 +184,7 @@ namespace
 
 
 OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", rSet)
+    : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", &rSet)
 {
     get(m_pToolTipsCB, "tooltips");
     get(m_pExtHelpCB, "exthelp");
@@ -236,9 +236,9 @@ OfaMiscTabPage::~OfaMiscTabPage()
 
 
 
-SfxTabPage* OfaMiscTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* OfaMiscTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new OfaMiscTabPage( pParent, rAttrSet );
+    return new OfaMiscTabPage( pParent, *rAttrSet );
 }
 
 
@@ -536,7 +536,7 @@ void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
 // class OfaViewTabPage --------------------------------------------------
 
 OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", rSet)
+    : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", &rSet)
     , nSizeLB_InitialSelection(0)
     , nStyleLB_InitialSelection(0)
     , pAppearanceCfg(new SvtTabAppearanceCfg)
@@ -647,9 +647,9 @@ IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
     return 0;
 }
 
-SfxTabPage* OfaViewTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* OfaViewTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new OfaViewTabPage(pParent, rAttrSet);
+    return new OfaViewTabPage(pParent, *rAttrSet);
 }
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
@@ -998,7 +998,7 @@ static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocal
 }
 
 OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet ) :
-      SfxTabPage( pParent,"OptLanguagesPage","cui/ui/optlanguagespage.ui", rSet ),
+      SfxTabPage( pParent,"OptLanguagesPage","cui/ui/optlanguagespage.ui", &rSet ),
      pLangConfig(new LanguageConfig_Impl)
 {
     get(m_pUserInterfaceLB, "userinterface");
@@ -1149,9 +1149,9 @@ OfaLanguagesTabPage::~OfaLanguagesTabPage()
     delete pLangConfig;
 }
 
-SfxTabPage* OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new OfaLanguagesTabPage(pParent, rAttrSet);
+    return new OfaLanguagesTabPage(pParent, *rAttrSet);
 }
 
 static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)

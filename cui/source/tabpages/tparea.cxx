@@ -287,9 +287,9 @@ void SvxTransparenceTabPage::Construct()
 {
 }
 
-SfxTabPage* SvxTransparenceTabPage::Create(Window* pWindow, const SfxItemSet& rAttrs)
+SfxTabPage* SvxTransparenceTabPage::Create(Window* pWindow, const SfxItemSet* rAttrs)
 {
-    return(new SvxTransparenceTabPage(pWindow, rAttrs));
+    return(new SvxTransparenceTabPage(pWindow, *rAttrs));
 }
 
 const sal_uInt16* SvxTransparenceTabPage::GetRanges()
@@ -1755,9 +1755,9 @@ void SvxAreaTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 SfxTabPage* SvxAreaTabPage::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SvxAreaTabPage( pWindow, rAttrs ) );
+    return( new SvxAreaTabPage( pWindow, *rAttrs ) );
 }
 
 

@@ -212,7 +212,7 @@ public:
 
 SvxGeneralTabPage::SvxGeneralTabPage(Window* pParent, const SfxItemSet& rCoreSet)
 
-    : SfxTabPage(pParent, "OptUserPage", "cui/ui/optuserpage.ui", rCoreSet)
+    : SfxTabPage(pParent, "OptUserPage", "cui/ui/optuserpage.ui", &rCoreSet)
 {
     get(m_pUseDataCB, "usefordocprop");
     InitControls();
@@ -297,9 +297,9 @@ void SvxGeneralTabPage::SetLinks ()
 
 
 
-SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxGeneralTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new SvxGeneralTabPage( pParent, rAttrSet ) );
+    return ( new SvxGeneralTabPage( pParent, *rAttrSet ) );
 }
 
 

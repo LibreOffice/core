@@ -229,7 +229,7 @@ Printer *SwLabDlg::GetPrt()
 
 SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "CardMediumPage",
-        "modules/swriter/ui/cardmediumpage.ui", rSet)
+        "modules/swriter/ui/cardmediumpage.ui", &rSet)
     , pDBManager(NULL)
     , aItem((const SwLabItem&)rSet.Get(FN_LABEL))
     , m_bLabel(false)
@@ -460,9 +460,9 @@ void SwLabPage::InitDatabaseBox()
     }
 }
 
-SfxTabPage* SwLabPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwLabPage::Create(Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwLabPage(pParent, rSet);
+    return new SwLabPage(pParent, *rSet);
 }
 
 void SwLabPage::ActivatePage(const SfxItemSet& rSet)
@@ -565,7 +565,7 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
 
 SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "CardFormatPage",
-        "modules/swriter/ui/cardformatpage.ui", rSet)
+        "modules/swriter/ui/cardformatpage.ui", &rSet)
     , pExampleFrame(0)
 {
     get(m_pAutoTextLB, "treeview");
@@ -596,9 +596,9 @@ SwVisitingCardPage::~SwVisitingCardPage()
     delete pExampleFrame;
 }
 
-SfxTabPage* SwVisitingCardPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwVisitingCardPage::Create(Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwVisitingCardPage(pParent, rSet);
+    return new SwVisitingCardPage(pParent, *rSet);
 }
 
 void SwVisitingCardPage::ActivatePage(const SfxItemSet& rSet)
@@ -706,7 +706,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
 
 SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "PrivateUserPage",
-        "modules/swriter/ui/privateuserpage.ui", rSet)
+        "modules/swriter/ui/privateuserpage.ui", &rSet)
 {
     get(m_pFirstNameED, "firstname");
     get(m_pNameED, "lastname");
@@ -730,9 +730,9 @@ SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 }
 
-SfxTabPage* SwPrivateDataPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwPrivateDataPage::Create(Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwPrivateDataPage(pParent, rSet);
+    return new SwPrivateDataPage(pParent, *rSet);
 }
 
 void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
@@ -799,7 +799,7 @@ void SwPrivateDataPage::Reset(const SfxItemSet* rSet)
 
 SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "BusinessDataPage",
-        "modules/swriter/ui/businessdatapage.ui", rSet)
+        "modules/swriter/ui/businessdatapage.ui", &rSet)
 {
     get(m_pCompanyED, "company");
     get(m_pCompanyExtED, "company2");
@@ -818,9 +818,9 @@ SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 }
 
-SfxTabPage* SwBusinessDataPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwBusinessDataPage::Create(Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwBusinessDataPage(pParent, rSet);
+    return new SwBusinessDataPage(pParent, *rSet);
 }
 
 void SwBusinessDataPage::ActivatePage(const SfxItemSet& rSet)

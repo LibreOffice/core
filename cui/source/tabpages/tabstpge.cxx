@@ -99,7 +99,7 @@ void TabWin_Impl::Paint( const Rectangle& )
 
 SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAttr ):
 
-    SfxTabPage( pParent, "ParagraphTabsPage","cui/ui/paratabspage.ui", rAttr ),
+    SfxTabPage( pParent, "ParagraphTabsPage","cui/ui/paratabspage.ui", &rAttr ),
 
     aAktTab     ( 0 ),
     aNewTabs    ( 0, 0, SVX_TAB_ADJUST_LEFT, GetWhich( SID_ATTR_TABSTOP ) ),
@@ -261,9 +261,9 @@ bool SvxTabulatorTabPage::FillItemSet( SfxItemSet* rSet )
 
 
 SfxTabPage* SvxTabulatorTabPage::Create( Window* pParent,
-                                         const SfxItemSet& rSet)
+                                         const SfxItemSet* rSet)
 {
-    return ( new SvxTabulatorTabPage( pParent, rSet ) );
+    return ( new SvxTabulatorTabPage( pParent, *rSet ) );
 }
 
 

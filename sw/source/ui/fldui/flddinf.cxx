@@ -451,9 +451,9 @@ bool SwFldDokInfPage::FillItemSet(SfxItemSet* )
 }
 
 SfxTabPage* SwFldDokInfPage::Create(    Window* pParent,
-                        const SfxItemSet& rAttrSet )
+                        const SfxItemSet* rAttrSet )
 {
-    return ( new SwFldDokInfPage( pParent, rAttrSet ) );
+    return ( new SwFldDokInfPage( pParent, *rAttrSet ) );
 }
 
 sal_uInt16 SwFldDokInfPage::GetGroup()

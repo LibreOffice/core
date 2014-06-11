@@ -38,7 +38,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent,
                                       const SfxItemSet& rArgSet )
         :   SfxTabPage      ( pParent,
                               "SubTotalGrpPage", "modules/scalc/ui/subtotalgrppage.ui",
-                              rArgSet ),
+                              &rArgSet ),
             aStrNone        ( SC_RESSTR( SCSTR_NONE ) ),
             aStrColumn      ( SC_RESSTR( SCSTR_COLUMN ) ),
             pViewData       ( NULL ),
@@ -383,16 +383,16 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 // Derived Group TabPages:
 
 SfxTabPage* ScTpSubTotalGroup1::Create( Window*         pParent,
-                                                 const SfxItemSet&  rArgSet )
-    { return ( new ScTpSubTotalGroup1( pParent, rArgSet ) ); }
+                                                 const SfxItemSet*  rArgSet )
+    { return ( new ScTpSubTotalGroup1( pParent, *rArgSet ) ); }
 
 SfxTabPage* ScTpSubTotalGroup2::Create( Window*          pParent,
-                                       const SfxItemSet&    rArgSet )
-    { return ( new ScTpSubTotalGroup2( pParent, rArgSet ) ); }
+                                       const SfxItemSet*    rArgSet )
+    { return ( new ScTpSubTotalGroup2( pParent, *rArgSet ) ); }
 
 SfxTabPage* ScTpSubTotalGroup3::Create( Window*          pParent,
-                                       const SfxItemSet&    rArgSet )
-    { return ( new ScTpSubTotalGroup3( pParent, rArgSet ) ); }
+                                       const SfxItemSet*    rArgSet )
+    { return ( new ScTpSubTotalGroup3( pParent, *rArgSet ) ); }
 
 ScTpSubTotalGroup1::ScTpSubTotalGroup1( Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
@@ -427,7 +427,7 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
 
         :   SfxTabPage      ( pParent,
                               "SubTotalOptionsPage", "modules/scalc/ui/subtotaloptionspage.ui" ,
-                              rArgSet ),
+                              &rArgSet ),
             pViewData       ( NULL ),
             pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
@@ -469,9 +469,9 @@ void ScTpSubTotalOptions::Init()
 }
 
 SfxTabPage* ScTpSubTotalOptions::Create( Window*                 pParent,
-                                          const SfxItemSet&     rArgSet )
+                                          const SfxItemSet*     rArgSet )
 {
-    return ( new ScTpSubTotalOptions( pParent, rArgSet ) );
+    return ( new ScTpSubTotalOptions( pParent, *rArgSet ) );
 }
 
 void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )

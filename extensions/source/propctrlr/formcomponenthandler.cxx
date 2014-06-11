@@ -2728,7 +2728,7 @@ namespace pcr
             if ( !fnCreatePage )
                 throw RuntimeException();   // caught below
 
-            SfxTabPage* pPage = (*fnCreatePage)( xDialog->get_content_area(), aCoreSet );
+            SfxTabPage* pPage = (*fnCreatePage)( xDialog->get_content_area(), &aCoreSet );
             xDialog->SetTabPage( pPage );
 
             _rClearBeforeDialog.clear();

@@ -81,7 +81,7 @@ SvxTextAnimationPage::SvxTextAnimationPage( Window* pWindow, const SfxItemSet& r
                 SfxTabPage      ( pWindow
                                   ,"TextAnimation"
                                   ,"cui/ui/textanimtabpage.ui"
-                                  ,rInAttrs ),
+                                  ,&rInAttrs ),
                 rOutAttrs       ( rInAttrs ),
                 eAniKind        ( SDRTEXTANI_NONE )
 {
@@ -452,9 +452,9 @@ const sal_uInt16* SvxTextAnimationPage::GetRanges()
 \************************************************************************/
 
 SfxTabPage* SvxTextAnimationPage::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SvxTextAnimationPage( pWindow, rAttrs ) );
+    return( new SvxTextAnimationPage( pWindow, *rAttrs ) );
 }
 
 IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)

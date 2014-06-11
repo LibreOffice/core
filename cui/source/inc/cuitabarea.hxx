@@ -162,7 +162,7 @@ public:
     SvxTransparenceTabPage(Window* pParent, const SfxItemSet& rInAttrs);
     void Construct();
 
-    static SfxTabPage* Create(Window*, const SfxItemSet&);
+    static SfxTabPage* Create(Window*, const SfxItemSet*);
     static const sal_uInt16* GetRanges();
 
     virtual bool FillItemSet(SfxItemSet*) SAL_OVERRIDE;
@@ -292,7 +292,7 @@ public:
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -357,7 +357,7 @@ public:
     SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 
     void    Construct();
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
@@ -437,7 +437,7 @@ public:
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -513,7 +513,7 @@ public:
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -599,7 +599,7 @@ public:
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -734,7 +734,7 @@ public:
 
     void    Construct();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 

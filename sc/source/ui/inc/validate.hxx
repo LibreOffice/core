@@ -179,7 +179,7 @@ class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
 public:
     explicit                    ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet );
 
-    static SfxTabPage*          Create( Window* pParent, const SfxItemSet& rArgSet );
+    static SfxTabPage*          Create( Window* pParent, const SfxItemSet* rArgSet );
     static const sal_uInt16*              GetRanges();
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
@@ -275,7 +275,7 @@ public:
             ScTPValidationHelp( Window* pParent, const SfxItemSet& rArgSet );
             virtual ~ScTPValidationHelp();
 
-    static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
+    static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
@@ -300,7 +300,7 @@ public:
             ScTPValidationError( Window* pParent, const SfxItemSet& rArgSet );
             virtual ~ScTPValidationError();
 
-    static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
+    static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet* rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };

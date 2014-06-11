@@ -108,9 +108,9 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 
 
 SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SdTpOptionsSnap( pWindow, rAttrs ) );
+    return( new SdTpOptionsSnap( pWindow, *rAttrs ) );
 }
 
 /*************************************************************************
@@ -120,7 +120,7 @@ SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
 \************************************************************************/
 
 SdTpOptionsContents::SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  ) :
-    SfxTabPage ( pParent, "SdViewPage", "modules/simpress/ui/sdviewpage.ui", rInAttrs )
+    SfxTabPage ( pParent, "SdViewPage", "modules/simpress/ui/sdviewpage.ui", &rInAttrs )
 {
     get( m_pCbxRuler, "ruler");
     get( m_pCbxDragStripes, "dragstripes");
@@ -182,9 +182,9 @@ void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
 
 
 SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SdTpOptionsContents( pWindow, rAttrs ) );
+    return( new SdTpOptionsContents( pWindow, *rAttrs ) );
 }
 
 /*************************************************************************
@@ -196,7 +196,7 @@ SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
 #define TOKEN ':'
 
 SdTpOptionsMisc::SdTpOptionsMisc(Window* pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "OptSavePage", "modules/simpress/ui/optimpressgeneralpage.ui", rInAttrs)
+    : SfxTabPage(pParent, "OptSavePage", "modules/simpress/ui/optimpressgeneralpage.ui", &rInAttrs)
     , nWidth(0)
     , nHeight(0)
 {
@@ -514,9 +514,9 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 
 
 SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SdTpOptionsMisc( pWindow, rAttrs ) );
+    return( new SdTpOptionsMisc( pWindow, *rAttrs ) );
 }
 
 

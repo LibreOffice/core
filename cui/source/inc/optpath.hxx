@@ -72,7 +72,7 @@ public:
     SvxPathTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~SvxPathTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

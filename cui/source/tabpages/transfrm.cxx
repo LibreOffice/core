@@ -331,9 +331,9 @@ void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
 
 
 
-SfxTabPage* SvxAngleTabPage::Create( Window* pWindow, const SfxItemSet& rSet)
+SfxTabPage* SvxAngleTabPage::Create( Window* pWindow, const SfxItemSet* rSet)
 {
-    return(new SvxAngleTabPage(pWindow, rSet));
+    return(new SvxAngleTabPage(pWindow, *rSet));
 }
 
 
@@ -565,9 +565,9 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 
 
 
-SfxTabPage* SvxSlantTabPage::Create( Window* pWindow, const SfxItemSet& rOutAttrs )
+SfxTabPage* SvxSlantTabPage::Create( Window* pWindow, const SfxItemSet* rOutAttrs )
 {
-    return( new SvxSlantTabPage( pWindow, rOutAttrs ) );
+    return( new SvxSlantTabPage( pWindow, *rOutAttrs ) );
 }
 
 
@@ -1004,9 +1004,9 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 
 
 
-SfxTabPage* SvxPositionSizeTabPage::Create( Window* pWindow, const SfxItemSet& rOutAttrs )
+SfxTabPage* SvxPositionSizeTabPage::Create( Window* pWindow, const SfxItemSet* rOutAttrs )
 {
-    return( new SvxPositionSizeTabPage( pWindow, rOutAttrs ) );
+    return( new SvxPositionSizeTabPage( pWindow, *rOutAttrs ) );
 }
 
 

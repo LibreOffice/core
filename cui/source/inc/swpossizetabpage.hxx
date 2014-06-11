@@ -125,7 +125,7 @@ public:
     SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
     virtual ~SvxSwPosSizeTabPage();
 
-    static SfxTabPage* Create( Window*, const SfxItemSet& );
+    static SfxTabPage* Create( Window*, const SfxItemSet* );
     static const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

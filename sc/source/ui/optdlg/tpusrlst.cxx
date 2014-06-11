@@ -51,7 +51,7 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
 
     :   SfxTabPage      ( pParent,
                           "OptSortLists", "modules/scalc/ui/optsortlists.ui",
-                          rCoreAttrs ),
+                          &rCoreAttrs ),
         aStrQueryRemove ( ScGlobal::GetRscString( STR_QUERYREMOVE ) ),
         aStrCopyList    ( ScGlobal::GetRscString( STR_COPYLIST ) ),
         aStrCopyFrom    ( ScGlobal::GetRscString( STR_COPYFROM ) ),
@@ -137,9 +137,9 @@ void ScTpUserLists::Init()
 
 }
 
-SfxTabPage* ScTpUserLists::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* ScTpUserLists::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new ScTpUserLists( pParent, rAttrSet ) );
+    return ( new ScTpUserLists( pParent, *rAttrSet ) );
 }
 
 void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )

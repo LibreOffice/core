@@ -244,39 +244,39 @@ TabPage* ODbTypeWizDialog::createPage(WizardState _nState)
         }
         break;
         case CONNECTION_PAGE:
-            pPage = OConnectionTabPage::Create(this,*m_pOutSet);
+            pPage = OConnectionTabPage::Create(this,m_pOutSet);
             nStringId = STR_PAGETITLE_CONNECTION;
             break;
 
         case ADDITIONAL_PAGE_DBASE:
-            pPage = ODriversSettings::CreateDbase(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateDbase(this,m_pOutSet);
             break;
         case ADDITIONAL_PAGE_FLAT:
-            pPage = ODriversSettings::CreateText(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateText(this,m_pOutSet);
             break;
         case ADDITIONAL_PAGE_LDAP:
-            pPage = ODriversSettings::CreateLDAP(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateLDAP(this,m_pOutSet);
             break;
         case ADDITIONAL_PAGE_MYSQL_JDBC:
-            pPage = ODriversSettings::CreateMySQLJDBC(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateMySQLJDBC(this,m_pOutSet);
             break;
         case ADDITIONAL_PAGE_MYSQL_NATIVE:
-            pPage = ODriversSettings::CreateMySQLNATIVE(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateMySQLNATIVE(this,m_pOutSet);
             break;
         case ADDITIONAL_PAGE_MYSQL_ODBC:
-            pPage = ODriversSettings::CreateMySQLODBC(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateMySQLODBC(this,m_pOutSet);
             break;
         case ADDITIONAL_PAGE_ORACLE_JDBC:
-            pPage = ODriversSettings::CreateOracleJDBC(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateOracleJDBC(this,m_pOutSet);
             break;
         case ADDITIONAL_PAGE_ADO:
-            pPage = ODriversSettings::CreateAdo(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateAdo(this,m_pOutSet);
             break;
         case ADDITIONAL_PAGE_ODBC:
-            pPage = ODriversSettings::CreateODBC(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateODBC(this,m_pOutSet);
             break;
         case ADDITIONAL_USERDEFINED:
-            pPage = ODriversSettings::CreateUser(this,*m_pOutSet);
+            pPage = ODriversSettings::CreateUser(this,m_pOutSet);
             break;
         default:
             OSL_FAIL("Wrong state!");

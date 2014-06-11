@@ -299,7 +299,7 @@ struct SvxColorTabPageShadow
 
 
 SvxColorTabPage::SvxColorTabPage(Window* pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", rInAttrs)
+    : SfxTabPage(pParent, "ColorPage", "cui/ui/colorpage.ui", &rInAttrs)
     , meType( XCOLOR_LIST )
     , mpXPool( (XOutdevItemPool*) rInAttrs.GetPool() )
     , mpTopDlg( GetParentDialog() )
@@ -621,9 +621,9 @@ void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 
 
 SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
-                const SfxItemSet& rOutAttrs )
+                const SfxItemSet* rOutAttrs )
 {
-    return( new SvxColorTabPage( pWindow, rOutAttrs ) );
+    return( new SvxColorTabPage( pWindow, *rOutAttrs ) );
 }
 
 // is called when the content of the MtrFields is changed for color values

@@ -113,7 +113,7 @@ public:
 };
 
 SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, "MailConfigPage" , "modules/swriter/ui/mailconfigpage.ui", rSet),
+    SfxTabPage(pParent, "MailConfigPage" , "modules/swriter/ui/mailconfigpage.ui", &rSet),
 
     m_pConfigItem( new SwMailMergeConfigItem )
 {
@@ -138,9 +138,9 @@ SwMailConfigPage::~SwMailConfigPage()
     delete m_pConfigItem;
 }
 
-SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrSet)
+SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet* rAttrSet)
 {
-    return new SwMailConfigPage(pParent, rAttrSet);
+    return new SwMailConfigPage(pParent, *rAttrSet);
 }
 
 bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
@@ -355,7 +355,7 @@ SwMailConfigDlg::SwMailConfigDlg(Window* pParent, SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet)
 {
     // create TabPage
-    SetTabPage(SwMailConfigPage::Create(get_content_area(), rSet));
+    SetTabPage(SwMailConfigPage::Create(get_content_area(), &rSet));
 }
 
 SwAuthenticationSettingsDialog::SwAuthenticationSettingsDialog(

@@ -47,7 +47,7 @@ SvxGradientTabPage::SvxGradientTabPage
     Window* pParent,
     const SfxItemSet& rInAttrs
 ) :
-    SfxTabPage          ( pParent, "GradientPage", "cui/ui/gradientpage.ui", rInAttrs ),
+    SfxTabPage          ( pParent, "GradientPage", "cui/ui/gradientpage.ui", &rInAttrs ),
 
     rOutAttrs           ( rInAttrs ),
 
@@ -368,9 +368,9 @@ void SvxGradientTabPage::Reset( const SfxItemSet* )
 
 
 SfxTabPage* SvxGradientTabPage::Create( Window* pWindow,
-                const SfxItemSet& rOutAttrs )
+                const SfxItemSet* rOutAttrs )
 {
-    return new SvxGradientTabPage( pWindow, rOutAttrs );
+    return new SvxGradientTabPage( pWindow, *rOutAttrs );
 }
 
 

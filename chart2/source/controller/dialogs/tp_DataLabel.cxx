@@ -29,7 +29,7 @@ DataLabelsTabPage::DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs
         : SfxTabPage(pWindow
         , "tp_DataLabel"
         , "modules/schart/ui/tp_DataLabel.ui"
-        , rInAttrs)
+        , &rInAttrs)
         , m_aDataLabelResources(this, this, rInAttrs)
 {
 }
@@ -38,9 +38,9 @@ DataLabelsTabPage::~DataLabelsTabPage()
 {
 }
 
-SfxTabPage* DataLabelsTabPage::Create(Window* pWindow, const SfxItemSet& rOutAttrs)
+SfxTabPage* DataLabelsTabPage::Create(Window* pWindow, const SfxItemSet* rOutAttrs)
 {
-    return new DataLabelsTabPage(pWindow, rOutAttrs);
+    return new DataLabelsTabPage(pWindow, *rOutAttrs);
 }
 
 bool DataLabelsTabPage::FillItemSet(SfxItemSet* rOutAttrs)

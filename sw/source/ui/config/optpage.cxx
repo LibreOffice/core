@@ -74,7 +74,7 @@ using namespace ::com::sun::star;
 SwContentOptPage::SwContentOptPage( Window* pParent,
                                       const SfxItemSet& rCoreSet ) :
     SfxTabPage(pParent, "ViewOptionsPage",
-               "modules/swriter/ui/viewoptionspage.ui", rCoreSet)
+               "modules/swriter/ui/viewoptionspage.ui", &rCoreSet)
 {
     get (m_pCrossCB, "helplines");
 
@@ -159,9 +159,9 @@ SwContentOptPage::~SwContentOptPage()
 }
 
 SfxTabPage* SwContentOptPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new SwContentOptPage(pParent, rAttrSet);
+    return new SwContentOptPage(pParent, *rAttrSet);
 }
 
 static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
@@ -287,7 +287,7 @@ IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
 SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
     const SfxItemSet& rCoreSet)
     : SfxTabPage(pParent, "PrintOptionsPage",
-        "modules/swriter/ui/printoptionspage.ui", rCoreSet)
+        "modules/swriter/ui/printoptionspage.ui", &rCoreSet)
     , sNone(SW_RESSTR(SW_STR_NONE))
     , bAttrModified(false)
     , bPreview(false)
@@ -362,9 +362,9 @@ void SwAddPrinterTabPage::SetPreview(bool bPrev)
 }
 
 SfxTabPage* SwAddPrinterTabPage::Create( Window* pParent,
-                                       const SfxItemSet& rAttrSet )
+                                       const SfxItemSet* rAttrSet )
 {
-    return ( new SwAddPrinterTabPage( pParent, rAttrSet ) );
+    return ( new SwAddPrinterTabPage( pParent, *rAttrSet ) );
 }
 
 bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
@@ -508,7 +508,7 @@ void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
 // Tabpage Standardfonts
 SwStdFontTabPage::SwStdFontTabPage( Window* pParent,
                                        const SfxItemSet& rSet ) :
-    SfxTabPage( pParent, "OptFontTabPage" , "modules/swriter/ui/optfonttabpage.ui" , rSet),
+    SfxTabPage( pParent, "OptFontTabPage" , "modules/swriter/ui/optfonttabpage.ui" , &rSet),
     pPrt(0),
     pFontList(0),
     pFontConfig(0),
@@ -588,9 +588,9 @@ SwStdFontTabPage::~SwStdFontTabPage()
 }
 
 SfxTabPage* SwStdFontTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet )
+                                const SfxItemSet* rAttrSet )
 {
-    return new SwStdFontTabPage(pParent, rAttrSet);
+    return new SwStdFontTabPage(pParent, *rAttrSet);
 }
 
 static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
@@ -1062,7 +1062,7 @@ void SwStdFontTabPage::PageCreated( const SfxAllItemSet& aSet)
 }
 
 SwTableOptionsTabPage::SwTableOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, "OptTablePage", "modules/swriter/ui/opttablepage.ui", rSet),
+    SfxTabPage(pParent, "OptTablePage", "modules/swriter/ui/opttablepage.ui", &rSet),
     pWrtShell(0),
     bHTMLMode(false)
 {
@@ -1092,9 +1092,9 @@ SwTableOptionsTabPage::~SwTableOptionsTabPage()
 }
 
 SfxTabPage* SwTableOptionsTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet )
+                                const SfxItemSet* rAttrSet )
 {
-    return new SwTableOptionsTabPage(pParent, rAttrSet );
+    return new SwTableOptionsTabPage(pParent, *rAttrSet );
 }
 
 bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -1262,7 +1262,7 @@ void SwTableOptionsTabPage::PageCreated( const SfxAllItemSet& aSet)
 SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
    : SfxTabPage(pParent, "OptFormatAidsPage",
-                "modules/swriter/ui/optformataidspage.ui", rSet),
+                "modules/swriter/ui/optformataidspage.ui", &rSet),
     m_pWrtShell( NULL )
 {
     get(m_pParaCB, "paragraph");
@@ -1325,9 +1325,9 @@ SwShdwCrsrOptionsTabPage::~SwShdwCrsrOptionsTabPage()
 {
 }
 
-SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SwShdwCrsrOptionsTabPage::Create( Window* pParent, const SfxItemSet* rSet )
 {
-    return new SwShdwCrsrOptionsTabPage( pParent, rSet );
+    return new SwShdwCrsrOptionsTabPage( pParent, *rSet );
 }
 
 void SwShdwCrsrOptionsTabPage::PageCreated( const SfxAllItemSet& aSet )
@@ -1656,7 +1656,7 @@ namespace
 SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, "OptRedLinePage",
-        "modules/swriter/ui/optredlinepage.ui" , rSet)
+        "modules/swriter/ui/optredlinepage.ui" , &rSet)
     , sNone(SW_RESSTR(SW_STR_NONE))
 {
     Size aPreviewSize(getPreviewOptionsSize(this));
@@ -1728,9 +1728,9 @@ SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()
 {
 }
 
-SfxTabPage* SwRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwRedlineOptionsTabPage( pParent, rSet );
+    return new SwRedlineOptionsTabPage( pParent, *rSet );
 }
 
 bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2206,7 +2206,7 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 }
 
 SwCompareOptionsTabPage::SwCompareOptionsTabPage(  Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage( pParent,"OptComparison","modules/swriter/ui/optcomparison.ui", rSet )
+    : SfxTabPage( pParent,"OptComparison","modules/swriter/ui/optcomparison.ui", &rSet )
 {
     get(m_pAutoRB,"auto");
     get(m_pWordRB, "byword");
@@ -2228,9 +2228,9 @@ SwCompareOptionsTabPage::~SwCompareOptionsTabPage()
 {
 }
 
-SfxTabPage* SwCompareOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SwCompareOptionsTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SwCompareOptionsTabPage( pParent, rAttrSet );
+    return new SwCompareOptionsTabPage( pParent, *rAttrSet );
 }
 
 bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
@@ -2334,7 +2334,7 @@ IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl)
 #ifdef DBG_UTIL
 
 SwTestTabPage::SwTestTabPage(Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage( pParent, "OptTestPage", "modules/swriter/ui/opttestpage.ui", rCoreSet)
+    : SfxTabPage( pParent, "OptTestPage", "modules/swriter/ui/opttestpage.ui", &rCoreSet)
     , bAttrModified( false )
 {
     get(m_pTest1CBox, "unused");
@@ -2353,9 +2353,9 @@ SwTestTabPage::SwTestTabPage(Window* pParent, const SfxItemSet& rCoreSet)
 }
 
 SfxTabPage* SwTestTabPage::Create( Window* pParent,
-                                       const SfxItemSet& rAttrSet )
+                                       const SfxItemSet* rAttrSet )
 {
-    return new SwTestTabPage(pParent, rAttrSet);
+    return new SwTestTabPage(pParent, *rAttrSet);
 }
 
 bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )

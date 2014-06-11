@@ -43,7 +43,7 @@
  *  initializes the list box with the templates
  */
 SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pParent, "ManageStylePage", "sfx/ui/managestylepage.ui", rAttrSet)
+    : SfxTabPage(pParent, "ManageStylePage", "sfx/ui/managestylepage.ui", &rAttrSet)
     , pStyle(&((SfxStyleDialog*)GetParentDialog())->GetStyleSheet())
     , pItem(0)
     , bModified(false)
@@ -469,7 +469,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
 
 
 SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
-                                             const SfxItemSet &rAttrSet )
+                                             const SfxItemSet *rAttrSet )
 
 /*  [Description]
 
@@ -481,7 +481,7 @@ SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
 */
 
 {
-    return new SfxManageStyleSheetPage( pParent, rAttrSet );
+    return new SfxManageStyleSheetPage( pParent, *rAttrSet );
 }
 
 

@@ -66,7 +66,7 @@ public:
     SwLoadOptPage(Window* pParent, const SfxItemSet& rSet);
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -167,7 +167,7 @@ public:
                         virtual ~SwCaptionOptPage();
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

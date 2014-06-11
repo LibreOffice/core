@@ -153,7 +153,7 @@ bool SvxNoSpaceEdit::set_property(const OString &rKey, const OString &rValue)
 /********************************************************************/
 
 SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptProxyPage","cui/ui/optproxypage.ui", rSet)
+    : SfxTabPage(pParent, "OptProxyPage","cui/ui/optproxypage.ui", &rSet)
     , aProxyModePN("ooInetProxyType")
     , aHttpProxyPN("ooInetHTTPProxyName")
     , aHttpPortPN("ooInetHTTPProxyPort")
@@ -214,9 +214,9 @@ SvxProxyTabPage::~SvxProxyTabPage()
 {
 }
 
-SfxTabPage* SvxProxyTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxProxyTabPage::Create(Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxProxyTabPage(pParent, rAttrSet);
+    return new SvxProxyTabPage(pParent, *rAttrSet);
 }
 
 void SvxProxyTabPage::ReadConfigData_Impl()
@@ -575,7 +575,7 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 /********************************************************************/
 
 SvxSecurityTabPage::SvxSecurityTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptSecurityPage", "cui/ui/optsecuritypage.ui", rSet)
+    : SfxTabPage(pParent, "OptSecurityPage", "cui/ui/optsecuritypage.ui", &rSet)
     , mpSecOptions(new SvtSecurityOptions)
     , mpSecOptDlg(NULL)
     , mpCertPathDlg(NULL)
@@ -853,9 +853,9 @@ void SvxSecurityTabPage::InitControls()
     }
 }
 
-SfxTabPage* SvxSecurityTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxSecurityTabPage::Create(Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxSecurityTabPage(pParent, rAttrSet);
+    return new SvxSecurityTabPage(pParent, *rAttrSet);
 }
 
 void SvxSecurityTabPage::ActivatePage( const SfxItemSet& )
@@ -914,7 +914,7 @@ void SvxSecurityTabPage::Reset( const SfxItemSet* )
 }
 
 MozPluginTabPage::MozPluginTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptBrowserPage", "cui/ui/optbrowserpage.ui", rSet)
+    : SfxTabPage(pParent, "OptBrowserPage", "cui/ui/optbrowserpage.ui", &rSet)
 {
     get(m_pWBasicCodeCB, "display");
 }
@@ -924,9 +924,9 @@ MozPluginTabPage::~MozPluginTabPage()
 }
 
 SfxTabPage* MozPluginTabPage::Create( Window* pParent,
-                                        const SfxItemSet& rAttrSet )
+                                        const SfxItemSet* rAttrSet )
 {
-    return new MozPluginTabPage( pParent, rAttrSet );
+    return new MozPluginTabPage( pParent, *rAttrSet );
 }
 
 bool MozPluginTabPage::FillItemSet( SfxItemSet* )
@@ -1205,7 +1205,7 @@ struct SvxEMailTabPage_Impl
 };
 
 SvxEMailTabPage::SvxEMailTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage( pParent, "OptEmailPage", "cui/ui/optemailpage.ui", rSet)
+    : SfxTabPage( pParent, "OptEmailPage", "cui/ui/optemailpage.ui", &rSet)
     , pImpl(new SvxEMailTabPage_Impl)
 {
     get(m_pMailContainer, "OptEmailPage");
@@ -1225,9 +1225,9 @@ SvxEMailTabPage::~SvxEMailTabPage()
 
 /* -------------------------------------------------------------------------*/
 
-SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage*  SvxEMailTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxEMailTabPage(pParent, rAttrSet);
+    return new SvxEMailTabPage(pParent, *rAttrSet);
 }
 
 /* -------------------------------------------------------------------------*/

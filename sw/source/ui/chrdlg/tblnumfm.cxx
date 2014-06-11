@@ -40,7 +40,7 @@ SwNumFmtDlg::SwNumFmtDlg(Window* pParent, const SfxItemSet& rSet)
 
     if ( fnCreatePage )
     {
-        SfxTabPage* pNewPage = (*fnCreatePage)( get_content_area(), rSet );
+        SfxTabPage* pNewPage = (*fnCreatePage)( get_content_area(), &rSet );
         SfxAllItemSet aSet(*(rSet.GetPool()));
         aSet.Put ( SvxNumberInfoItem( (const SvxNumberInfoItem&)pNewPage->GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO )));
         pNewPage->PageCreated(aSet);

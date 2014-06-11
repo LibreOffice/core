@@ -1491,7 +1491,7 @@ short   SwInsertSectionTabDialog::Ok()
 SwInsertSectionTabPage::SwInsertSectionTabPage(
                             Window *pParent, const SfxItemSet &rAttrSet)
     : SfxTabPage(pParent, "SectionPage",
-        "modules/swriter/ui/sectionpage.ui", rAttrSet)
+        "modules/swriter/ui/sectionpage.ui", &rAttrSet)
     , m_pWrtSh(0)
     , m_pDocInserter(NULL)
     , m_pOldDefDlgParent(NULL)
@@ -1636,9 +1636,9 @@ void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 }
 
 SfxTabPage* SwInsertSectionTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new SwInsertSectionTabPage(pParent, rAttrSet);
+    return new SwInsertSectionTabPage(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
@@ -1795,7 +1795,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
 
 SwSectionFtnEndTabPage::SwSectionFtnEndTabPage( Window *pParent,
                                                 const SfxItemSet &rAttrSet)
-    : SfxTabPage( pParent, "FootnotesEndnotesTabPage", "modules/swriter/ui/footnotesendnotestabpage.ui", rAttrSet )
+    : SfxTabPage( pParent, "FootnotesEndnotesTabPage", "modules/swriter/ui/footnotesendnotestabpage.ui", &rAttrSet )
 
 {
     get(pFtnNtAtTextEndCB,"ftnntattextend");
@@ -1976,9 +1976,9 @@ void SwSectionFtnEndTabPage::Reset( const SfxItemSet* rSet )
 }
 
 SfxTabPage* SwSectionFtnEndTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new SwSectionFtnEndTabPage(pParent, rAttrSet);
+    return new SwSectionFtnEndTabPage(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwSectionFtnEndTabPage, FootEndHdl, CheckBox *, pBox )
@@ -2084,7 +2084,7 @@ void SwSectionPropertyTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage 
 }
 
 SwSectionIndentTabPage::SwSectionIndentTabPage(Window *pParent, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pParent, "IndentPage", "modules/swriter/ui/indentpage.ui", rAttrSet)
+    : SfxTabPage(pParent, "IndentPage", "modules/swriter/ui/indentpage.ui", &rAttrSet)
 {
     get(m_pBeforeMF, "before");
     get(m_pAfterMF, "after");
@@ -2137,9 +2137,9 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     IndentModifyHdl(0);
 }
 
-SfxTabPage*  SwSectionIndentTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet)
+SfxTabPage*  SwSectionIndentTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet)
 {
-    return new SwSectionIndentTabPage(pParent, rAttrSet);
+    return new SwSectionIndentTabPage(pParent, *rAttrSet);
 }
 
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)

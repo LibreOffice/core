@@ -84,7 +84,7 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
 
 ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
-        SfxTabPage( pParent, "SheetPrintPage","modules/scalc/ui/sheetprintpage.ui", rCoreAttrs )
+        SfxTabPage( pParent, "SheetPrintPage","modules/scalc/ui/sheetprintpage.ui", &rCoreAttrs )
 {
     get(m_pBtnTopDown,"radioBTN_TOPDOWN");
     get(m_pBtnLeftRight,"radioBTN_LEFTRIGHT");
@@ -135,9 +135,9 @@ const sal_uInt16* ScTablePage::GetRanges()
     return pPageTableRanges;
 }
 
-SfxTabPage* ScTablePage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScTablePage::Create( Window* pParent, const SfxItemSet* rCoreSet )
 {
-    return ( new ScTablePage( pParent, rCoreSet ) );
+    return ( new ScTablePage( pParent, *rCoreSet ) );
 }
 
 void ScTablePage::Reset( const SfxItemSet* rCoreSet )

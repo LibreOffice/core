@@ -243,7 +243,7 @@ public:
 
     virtual ~ImpPDFTabGeneralPage();
     static SfxTabPage*          Create( Window* pParent,
-                                        const SfxItemSet& rAttrSet);
+                                        const SfxItemSet* rAttrSet);
 
     void    GetFilterConfigItem(ImpPDFTabDialog* paParent);
     void    SetFilterConfigItem(const ImpPDFTabDialog* paParent);
@@ -282,7 +282,7 @@ public:
 
     virtual ~ImpPDFTabOpnFtrPage();
     static SfxTabPage*          Create( Window* pParent,
-                                        const SfxItemSet& rAttrSet );
+                                        const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -315,7 +315,7 @@ public:
 
     virtual ~ImpPDFTabViewerPage();
     static SfxTabPage*          Create( Window* pParent,
-                                        const SfxItemSet& rAttrSet );
+                                        const SfxItemSet* rAttrSet );
 
     void                        GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void                        SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -370,7 +370,7 @@ public:
 
     virtual ~ImpPDFTabSecurityPage();
     static SfxTabPage*      Create( Window* pParent,
-                                    const SfxItemSet& rAttrSet );
+                                    const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -401,7 +401,7 @@ public:
 
     virtual ~ImpPDFTabLinksPage();
     static SfxTabPage*      Create( Window* pParent,
-                                    const SfxItemSet& rAttrSet );
+                                    const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
@@ -430,7 +430,7 @@ public:
 
     virtual ~ImpPDFTabSigningPage();
     static SfxTabPage*      Create( Window* pParent,
-                                    const SfxItemSet& rAttrSet );
+                                    const SfxItemSet* rAttrSet );
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );

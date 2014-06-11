@@ -39,7 +39,7 @@ static const sal_uInt16 aPageRg[] = {
 };
 
 SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent, const SfxItemSet& rAttr ) :
-    SfxTabPage(pParent, "NumParaPage", "modules/swriter/ui/numparapage.ui", rAttr),
+    SfxTabPage(pParent, "NumParaPage", "modules/swriter/ui/numparapage.ui", &rAttr),
 
     msOutlineNumbering( SW_RES( STR_OUTLINE_NUMBERING ) ),
     bModified(false),
@@ -91,9 +91,9 @@ SwParagraphNumTabPage::~SwParagraphNumTabPage()
 }
 
 SfxTabPage* SwParagraphNumTabPage::Create(  Window* pParent,
-                                const SfxItemSet& rSet )
+                                const SfxItemSet* rSet )
 {
-    return new SwParagraphNumTabPage(pParent, rSet);
+    return new SwParagraphNumTabPage(pParent, *rSet);
 }
 
 const sal_uInt16* SwParagraphNumTabPage::GetRanges()

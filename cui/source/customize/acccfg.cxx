@@ -730,7 +730,7 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
 
 
 SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxItemSet& aSet )
-    : SfxTabPage(pParent, "AccelConfigPage", "cui/ui/accelconfigpage.ui", aSet)
+    : SfxTabPage(pParent, "AccelConfigPage", "cui/ui/accelconfigpage.ui", &aSet)
     , m_pMacroInfoItem()
     , m_pStringItem()
     , m_pFontItem()

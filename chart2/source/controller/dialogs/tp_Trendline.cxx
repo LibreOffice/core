@@ -26,7 +26,7 @@ namespace chart
 {
 
 TrendlineTabPage::TrendlineTabPage( Window* pParent, const SfxItemSet& rInAttrs ) :
-        SfxTabPage( pParent, "TP_TRENDLINE", "modules/schart/ui/tp_Trendline.ui", rInAttrs ),
+        SfxTabPage( pParent, "TP_TRENDLINE", "modules/schart/ui/tp_Trendline.ui", &rInAttrs ),
         m_aTrendlineResources( this, rInAttrs )
 {
 }
@@ -36,9 +36,9 @@ TrendlineTabPage::~TrendlineTabPage()
 }
 
 SfxTabPage* TrendlineTabPage::Create(
-    Window* pParent, const SfxItemSet& rOutAttrs )
+    Window* pParent, const SfxItemSet* rOutAttrs )
 {
-    return new TrendlineTabPage( pParent, rOutAttrs );
+    return new TrendlineTabPage( pParent, *rOutAttrs );
 }
 
 bool TrendlineTabPage::FillItemSet( SfxItemSet* rOutAttrs )

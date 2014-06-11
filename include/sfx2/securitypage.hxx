@@ -40,7 +40,7 @@ protected:
     virtual void            Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* );
 };
 
 

@@ -229,7 +229,7 @@ public:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     void                SelectType(TOXTypes eSet);  //preset TOXType, GlobalDoc
     void                SetWrtShell(SwWrtShell& rSh);
@@ -441,7 +441,7 @@ public:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
     void                SetWrtShell(SwWrtShell& rSh);
 
     OUString            GetLevelHelp(sal_uInt16 nLevel) const;
@@ -488,7 +488,7 @@ public:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
 };
 

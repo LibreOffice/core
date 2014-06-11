@@ -55,7 +55,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     SfxTabPage( pParent
               , "LineStylePage"
               , "cui/ui/linestyletabpage.ui"
-              , rInAttrs ),
+              , &rInAttrs ),
     rOutAttrs       ( rInAttrs ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
@@ -321,9 +321,9 @@ void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 
-SfxTabPage* SvxLineDefTabPage::Create( Window* pWindow, const SfxItemSet& rOutAttrs )
+SfxTabPage* SvxLineDefTabPage::Create( Window* pWindow, const SfxItemSet* rOutAttrs )
 {
-    return( new SvxLineDefTabPage( pWindow, rOutAttrs ) );
+    return( new SvxLineDefTabPage( pWindow, *rOutAttrs ) );
 }
 
 

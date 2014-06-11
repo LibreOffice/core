@@ -1033,7 +1033,7 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, bool bEnable 
 // class SvxLinguTabPage -------------------------------------------------
 
 SvxLinguTabPage::SvxLinguTabPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, "OptLinguPage", "cui/ui/optlingupage.ui", rSet),
+    SfxTabPage(pParent, "OptLinguPage", "cui/ui/optlingupage.ui", &rSet),
 
     sCapitalWords   (CUI_RES(RID_SVXSTR_CAPITAL_WORDS)),
     sWordsWithDigits(CUI_RES(RID_SVXSTR_WORDS_WITH_DIGITS)),
@@ -1149,9 +1149,9 @@ const sal_uInt16* SvxLinguTabPage::GetRanges()
 
 
 SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
-                                     const SfxItemSet& rAttrSet )
+                                     const SfxItemSet* rAttrSet )
 {
-    return ( new SvxLinguTabPage( pParent, rAttrSet ) );
+    return ( new SvxLinguTabPage( pParent, *rAttrSet ) );
 }
 
 

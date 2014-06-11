@@ -301,7 +301,7 @@ namespace offapp
 
 
     ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet)
-        : SfxTabPage(_pParent, "ConnPoolPage", "cui/ui/connpooloptions.ui", _rAttrSet)
+        : SfxTabPage(_pParent, "ConnPoolPage", "cui/ui/connpooloptions.ui", &_rAttrSet)
     {
         get(m_pEnablePooling, "connectionpooling");
         get(m_pDriversLabel, "driverslabel");
@@ -326,9 +326,9 @@ namespace offapp
     }
 
 
-    SfxTabPage* ConnectionPoolOptionsPage::Create(Window* _pParent, const SfxItemSet& _rAttrSet)
+    SfxTabPage* ConnectionPoolOptionsPage::Create(Window* _pParent, const SfxItemSet* _rAttrSet)
     {
-        return new ConnectionPoolOptionsPage(_pParent, _rAttrSet);
+        return new ConnectionPoolOptionsPage(_pParent, *_rAttrSet);
     }
 
 

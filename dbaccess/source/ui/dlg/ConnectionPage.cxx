@@ -83,9 +83,9 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::svt;
 
-    SfxTabPage* OConnectionTabPage::Create( Window* pParent,    const SfxItemSet& _rAttrSet )
+    SfxTabPage* OConnectionTabPage::Create( Window* pParent,    const SfxItemSet* _rAttrSet )
     {
-        return ( new OConnectionTabPage( pParent, _rAttrSet ) );
+        return ( new OConnectionTabPage( pParent, *_rAttrSet ) );
     }
     // OConnectionTabPage
     OConnectionTabPage::OConnectionTabPage(Window* pParent, const SfxItemSet& _rCoreAttrs)

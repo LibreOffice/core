@@ -182,9 +182,9 @@ void OUserAdmin::FillUserNames()
 
 }
 
-SfxTabPage* OUserAdmin::Create( Window* pParent, const SfxItemSet& _rAttrSet )
+SfxTabPage* OUserAdmin::Create( Window* pParent, const SfxItemSet* _rAttrSet )
 {
-    return ( new OUserAdmin( pParent, _rAttrSet ) );
+    return ( new OUserAdmin( pParent, *_rAttrSet ) );
 }
 
 IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )

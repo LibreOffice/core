@@ -726,14 +726,14 @@ SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
             case SID_SI_TP_CONTENTS:
             {   ::CreateTabPage fnCreatePage = pFact->GetSdOptionsContentsTabPageCreatorFunc();
                 if( fnCreatePage )
-                    pRet = (*fnCreatePage)( pParent, rSet );
+                    pRet = (*fnCreatePage)( pParent, &rSet );
             }
             break;
             case SID_SD_TP_SNAP:
             case SID_SI_TP_SNAP:
             {   ::CreateTabPage fnCreatePage = pFact->GetSdOptionsSnapTabPageCreatorFunc();
                 if( fnCreatePage )
-                    pRet = (*fnCreatePage)( pParent, rSet );
+                    pRet = (*fnCreatePage)( pParent, &rSet );
             }
             break;
             case SID_SD_TP_PRINT:
@@ -742,7 +742,7 @@ SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
                 ::CreateTabPage fnCreatePage = pFact->GetSdPrintOptionsTabPageCreatorFunc();
                 if( fnCreatePage )
                 {
-                    pRet = (*fnCreatePage)( pParent, rSet );
+                    pRet = (*fnCreatePage)( pParent, &rSet );
                     if(SID_SD_TP_PRINT == nId)
                         aSet.Put (SfxUInt32Item(SID_SDMODE_FLAG,SD_DRAW_MODE));
                     pRet->PageCreated(aSet);
@@ -755,7 +755,7 @@ SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
                 ::CreateTabPage fnCreatePage = pFact->GetSdOptionsMiscTabPageCreatorFunc();
                 if( fnCreatePage )
                 {
-                    pRet = (*fnCreatePage)( pParent, rSet );
+                    pRet = (*fnCreatePage)( pParent, &rSet );
                     if(SID_SD_TP_MISC == nId)
                         aSet.Put (SfxUInt32Item(SID_SDMODE_FLAG,SD_DRAW_MODE));
                     else
@@ -771,7 +771,7 @@ SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxI
                 {
                     ::CreateTabPage fnCreatePage = pSfxFact->GetTabPageCreatorFunc( nId );
                     if ( fnCreatePage )
-                        pRet = (*fnCreatePage)( pParent, rSet );
+                        pRet = (*fnCreatePage)( pParent, &rSet );
                 }
             }
             break;

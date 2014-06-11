@@ -52,7 +52,7 @@ static long nTabs[] =
 
 SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "ConditionPage",
-        "modules/swriter/ui/conditionpage.ui", rSet)
+        "modules/swriter/ui/conditionpage.ui", &rSet)
     ,
     rSh(::GetActiveView()->GetWrtShell()),
     pCmds( SwCondCollItem::GetCmds() ),
@@ -137,9 +137,9 @@ int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwCondCollPage(pParent, rSet);
+    return new SwCondCollPage(pParent, *rSet);
 }
 
 bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)

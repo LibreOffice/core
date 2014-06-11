@@ -68,7 +68,7 @@ public:
     OfaMiscTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaMiscTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -123,7 +123,7 @@ public:
     OfaViewTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaViewTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -167,7 +167,7 @@ public:
     OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSet );
     virtual ~OfaLanguagesTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

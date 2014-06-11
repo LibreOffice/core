@@ -29,7 +29,7 @@
  *  dialog to adjust print options
  */
 SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
-    SfxTabPage          ( pParent, "prntopts" , "modules/simpress/ui/prntopts.ui" , rInAttrs ),
+    SfxTabPage          ( pParent, "prntopts" , "modules/simpress/ui/prntopts.ui" , &rInAttrs ),
         rOutAttrs               ( rInAttrs )
 {
     get( m_pFrmContent , "contentframe" );
@@ -191,9 +191,9 @@ void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
 
 
 SfxTabPage* SdPrintOptions::Create( Window* pWindow,
-                const SfxItemSet& rOutAttrs )
+                const SfxItemSet* rOutAttrs )
 {
-    return( new SdPrintOptions( pWindow, rOutAttrs ) );
+    return( new SdPrintOptions( pWindow, *rOutAttrs ) );
 }
 
 

@@ -39,7 +39,7 @@
 
 SvxFontSubstTabPage::SvxFontSubstTabPage( Window* pParent,
                                 const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "OptFontsPage", "cui/ui/optfontspage.ui", rSet)
+    : SfxTabPage(pParent, "OptFontsPage", "cui/ui/optfontspage.ui", &rSet)
     , pConfig(new SvtFontSubstConfig)
     , pCheckButtonData(0)
 {
@@ -145,9 +145,9 @@ SvxFontSubstTabPage::~SvxFontSubstTabPage()
 }
 
 SfxTabPage*  SvxFontSubstTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new SvxFontSubstTabPage(pParent, rAttrSet);
+    return new SvxFontSubstTabPage(pParent, *rAttrSet);
 }
 
 bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )

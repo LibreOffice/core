@@ -191,7 +191,7 @@ public:
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 };
 
 class SwSectionFtnEndTabPage : public SfxTabPage
@@ -233,7 +233,7 @@ public:
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 };
 
 class SwSectionIndentTabPage : public SfxTabPage
@@ -251,7 +251,7 @@ public:
     virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     void    SetWrtShell(SwWrtShell& rSh);
 };

@@ -101,7 +101,7 @@ public:
     virtual Window*     GetParentLabeledBy( const Window* pLabel ) const SAL_OVERRIDE;
     virtual Window*     GetParentLabelFor( const Window* pLabel ) const SAL_OVERRIDE;
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
 };
 
 #endif // INCLUDED_SFX2_PRINTOPT_HXX

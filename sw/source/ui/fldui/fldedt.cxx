@@ -148,13 +148,13 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
     switch (nGroup)
     {
         case GRP_DOC:
-            pTabPage = SwFldDokPage::Create(get_content_area(), *(SfxItemSet*)0);
+            pTabPage = SwFldDokPage::Create(get_content_area(), 0);
             break;
         case GRP_FKT:
-            pTabPage = SwFldFuncPage::Create(get_content_area(), *(SfxItemSet*)0);
+            pTabPage = SwFldFuncPage::Create(get_content_area(), 0);
             break;
         case GRP_REF:
-            pTabPage = SwFldRefPage::Create(get_content_area(), *(SfxItemSet*)0);
+            pTabPage = SwFldRefPage::Create(get_content_area(), 0);
             break;
         case GRP_REG:
             {
@@ -169,15 +169,15 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
                     xDocProps->getUserDefinedProperties(),
                     uno::UNO_QUERY_THROW);
                 pSet->Put( SfxUnoAnyItem( SID_DOCINFO, uno::makeAny(xUDProps) ) );
-                pTabPage = SwFldDokInfPage::Create(get_content_area(), *pSet);
+                pTabPage = SwFldDokInfPage::Create(get_content_area(), pSet);
                 break;
             }
         case GRP_DB:
-            pTabPage = SwFldDBPage::Create(get_content_area(), *(SfxItemSet*)0);
+            pTabPage = SwFldDBPage::Create(get_content_area(), 0);
             static_cast<SwFldDBPage*>(pTabPage)->SetWrtShell(*pSh);
             break;
         case GRP_VAR:
-            pTabPage = SwFldVarPage::Create(get_content_area(), *(SfxItemSet*)0);
+            pTabPage = SwFldVarPage::Create(get_content_area(), 0);
             break;
 
     }

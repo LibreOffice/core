@@ -98,7 +98,7 @@ SdActionDlg::SdActionDlg (
  */
 SdTPAction::SdTPAction(Window* pWindow, const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow, "InteractionPage",
-        "modules/simpress/ui/interactionpage.ui", rInAttrs)
+        "modules/simpress/ui/interactionpage.ui", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , mpView(NULL)
     , mpDoc(NULL)

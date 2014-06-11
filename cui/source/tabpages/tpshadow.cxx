@@ -457,9 +457,9 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 SfxTabPage* SvxShadowTabPage::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SvxShadowTabPage( pWindow, rAttrs ) );
+    return( new SvxShadowTabPage( pWindow, *rAttrs ) );
 }
 
 

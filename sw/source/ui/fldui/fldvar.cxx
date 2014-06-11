@@ -1217,9 +1217,9 @@ bool SwFldVarPage::FillItemSet(SfxItemSet* )
 }
 
 SfxTabPage* SwFldVarPage::Create(   Window* pParent,
-                        const SfxItemSet& rAttrSet )
+                        const SfxItemSet* rAttrSet )
 {
-    return ( new SwFldVarPage( pParent, rAttrSet ) );
+    return ( new SwFldVarPage( pParent, *rAttrSet ) );
 }
 
 sal_uInt16 SwFldVarPage::GetGroup()

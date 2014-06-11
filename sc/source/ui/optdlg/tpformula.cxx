@@ -39,7 +39,7 @@ using ::com::sun::star::lang::Locale;
 using ::com::sun::star::i18n::LocaleDataItem;
 
 ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreAttrs) :
-    SfxTabPage(pParent, "OptFormula", "modules/scalc/ui/optformula.ui", rCoreAttrs),
+    SfxTabPage(pParent, "OptFormula", "modules/scalc/ui/optformula.ui", &rCoreAttrs),
     mnDecSep(0)
 {
     get(mpLbFormulaSyntax, "formulasyntax");
@@ -220,9 +220,9 @@ IMPL_LINK( ScTpFormulaOptions, SepEditOnFocusHdl, Edit*, pEdit )
     return 0;
 }
 
-SfxTabPage* ScTpFormulaOptions::Create(Window* pParent, const SfxItemSet& rCoreSet)
+SfxTabPage* ScTpFormulaOptions::Create(Window* pParent, const SfxItemSet* rCoreSet)
 {
-    return new ScTpFormulaOptions(pParent, rCoreSet);
+    return new ScTpFormulaOptions(pParent, *rCoreSet);
 }
 
 bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)

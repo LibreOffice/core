@@ -185,7 +185,7 @@ class SwFrmPage: public SfxTabPage
 
 public:
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
+    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16* GetRanges();
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
@@ -232,7 +232,7 @@ class SwGrfExtPage: public SfxTabPage
 
 public:
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
+    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
@@ -261,7 +261,7 @@ class SwFrmURLPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
+    static SfxTabPage *Create(Window *pParent, const SfxItemSet *rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
     virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
@@ -308,7 +308,7 @@ class SwFrmAddPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage*  Create(Window *pParent, const SfxItemSet &rSet);
+    static SfxTabPage*  Create(Window *pParent, const SfxItemSet *rSet);
     static const sal_uInt16*      GetRanges();
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;

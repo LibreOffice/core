@@ -225,7 +225,7 @@ void SvxNumberPreview::DataChanged( const DataChangedEvent& rDCEvt )
 SvxNumberFormatTabPage::SvxNumberFormatTabPage(Window* pParent,
     const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "NumberingFormatPage",
-        "cui/ui/numberingformatpage.ui", rCoreAttrs)
+        "cui/ui/numberingformatpage.ui", &rCoreAttrs)
     , pNumItem(NULL)
     , pNumFmtShell(NULL)
     , nInitFormat(ULONG_MAX)
@@ -360,9 +360,9 @@ const sal_uInt16* SvxNumberFormatTabPage::GetRanges()
 #************************************************************************/
 
 SfxTabPage* SvxNumberFormatTabPage::Create( Window* pParent,
-                                            const SfxItemSet& rAttrSet )
+                                            const SfxItemSet* rAttrSet )
 {
-    return ( new SvxNumberFormatTabPage( pParent, rAttrSet ) );
+    return ( new SvxNumberFormatTabPage( pParent, *rAttrSet ) );
 }
 
 

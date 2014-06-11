@@ -341,9 +341,9 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 
 
 SfxTabPage* SvxHatchTabPage::Create( Window* pWindow,
-                const SfxItemSet& rSet )
+                const SfxItemSet* rSet )
 {
-    return new SvxHatchTabPage( pWindow, rSet );
+    return new SvxHatchTabPage( pWindow, *rSet );
 }
 
 

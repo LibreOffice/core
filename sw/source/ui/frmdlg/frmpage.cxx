@@ -598,7 +598,7 @@ namespace
 
 SwFrmPage::SwFrmPage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "FrmTypePage",
-        "modules/swriter/ui/frmtypepage.ui", rSet)
+        "modules/swriter/ui/frmtypepage.ui", &rSet)
     ,
     bAtHorzPosModified( false ),
     bAtVertPosModified( false ),
@@ -821,9 +821,9 @@ SwFrmPage::~SwFrmPage()
 {
 }
 
-SfxTabPage* SwFrmPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* SwFrmPage::Create(Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwFrmPage( pParent, rSet );
+    return new SwFrmPage( pParent, *rSet );
 }
 
 void SwFrmPage::EnableGraficMode( void )
@@ -2350,7 +2350,7 @@ void SwFrmPage::EnableVerticalPositioning( bool bEnable )
 
 SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "PicturePage",
-        "modules/swriter/ui/picturepage.ui", rSet)
+        "modules/swriter/ui/picturepage.ui", &rSet)
     , pGrfDlg(0)
     , bHtmlMode(false)
 {
@@ -2376,9 +2376,9 @@ SwGrfExtPage::~SwGrfExtPage()
     delete pGrfDlg;
 }
 
-SfxTabPage* SwGrfExtPage::Create( Window *pParent, const SfxItemSet &rSet )
+SfxTabPage* SwGrfExtPage::Create( Window *pParent, const SfxItemSet *rSet )
 {
-    return new SwGrfExtPage( pParent, rSet );
+    return new SwGrfExtPage( pParent, *rSet );
 }
 
 void SwGrfExtPage::Reset(const SfxItemSet *rSet)
@@ -2695,7 +2695,7 @@ void BmpWindow::SetBitmapEx(const BitmapEx& rBmp)
 
 // set URL and ImageMap at frames
 SwFrmURLPage::SwFrmURLPage( Window *pParent, const SfxItemSet &rSet ) :
-    SfxTabPage(pParent, "FrmURLPage" , "modules/swriter/ui/frmurlpage.ui", rSet)
+    SfxTabPage(pParent, "FrmURLPage" , "modules/swriter/ui/frmurlpage.ui", &rSet)
 {
     get(pURLED,"url");
     get(pSearchPB,"search");
@@ -2790,9 +2790,9 @@ bool SwFrmURLPage::FillItemSet(SfxItemSet *rSet)
     return bModified;
 }
 
-SfxTabPage* SwFrmURLPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* SwFrmURLPage::Create(Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwFrmURLPage( pParent, rSet );
+    return new SwFrmURLPage( pParent, *rSet );
 }
 
 IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
@@ -2819,7 +2819,7 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
 }
 
 SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "FrmAddPage" , "modules/swriter/ui/frmaddpage.ui", rSet)
+    : SfxTabPage(pParent, "FrmAddPage" , "modules/swriter/ui/frmaddpage.ui", &rSet)
     , pWrtSh(0)
     , bHtmlMode(false)
     , bFormat(false)
@@ -2855,9 +2855,9 @@ SwFrmAddPage::~SwFrmAddPage()
 {
 }
 
-SfxTabPage* SwFrmAddPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* SwFrmAddPage::Create(Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwFrmAddPage(pParent, rSet);
+    return new SwFrmAddPage(pParent, *rSet);
 }
 
 void SwFrmAddPage::Reset(const SfxItemSet *rSet )

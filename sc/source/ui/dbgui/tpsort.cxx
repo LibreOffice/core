@@ -71,7 +71,7 @@ using namespace com::sun::star;
 ScTabPageSortFields::ScTabPageSortFields(Window* pParent,
                                           const SfxItemSet& rArgSet)
     : SfxTabPage(pParent, "SortCriteriaPage",
-        "modules/scalc/ui/sortcriteriapage.ui", rArgSet)
+        "modules/scalc/ui/sortcriteriapage.ui", &rArgSet)
     ,
 
         aStrUndefined   ( SC_RESSTR( SCSTR_UNDEFINED ) ),
@@ -137,9 +137,9 @@ void ScTabPageSortFields::Init()
 }
 
 SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
-                                         const SfxItemSet&  rArgSet )
+                                         const SfxItemSet*  rArgSet )
 {
-    return ( new ScTabPageSortFields( pParent, rArgSet ) );
+    return ( new ScTabPageSortFields( pParent, *rArgSet ) );
 }
 
 void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
@@ -486,7 +486,7 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, ListBox *, pLb )
 ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
                                             const SfxItemSet&   rArgSet )
     : SfxTabPage(pParent, "SortOptionsPage",
-        "modules/scalc/ui/sortoptionspage.ui", rArgSet)
+        "modules/scalc/ui/sortoptionspage.ui", &rArgSet)
     , aStrRowLabel(SC_RESSTR(SCSTR_ROW_LABEL))
     , aStrColLabel(SC_RESSTR(SCSTR_COL_LABEL))
     , aStrUndefined(SC_RESSTR(SCSTR_UNDEFINED))
@@ -616,9 +616,9 @@ void ScTabPageSortOptions::Init()
 
 SfxTabPage* ScTabPageSortOptions::Create(
                                             Window*             pParent,
-                                            const SfxItemSet&   rArgSet )
+                                            const SfxItemSet*   rArgSet )
 {
-    return ( new ScTabPageSortOptions( pParent, rArgSet ) );
+    return ( new ScTabPageSortOptions( pParent, *rArgSet ) );
 }
 
 void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )

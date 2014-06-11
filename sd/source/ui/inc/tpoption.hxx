@@ -39,7 +39,7 @@ public:
             SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  );
             virtual ~SdTpOptionsSnap();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
@@ -61,7 +61,7 @@ public:
             SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  );
             virtual ~SdTpOptionsContents();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 };
@@ -134,7 +134,7 @@ public:
             SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  );
             virtual ~SdTpOptionsMisc();
 
-    static  SfxTabPage* Create( Window*, const SfxItemSet& );
+    static  SfxTabPage* Create( Window*, const SfxItemSet* );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 

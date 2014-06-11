@@ -36,7 +36,7 @@ SchOptionTabPage::SchOptionTabPage(Window* pWindow,const SfxItemSet& rInAttrs)
     : SfxTabPage(pWindow,
                "TP_OPTIONS",
                "modules/schart/ui/tp_SeriesToAxis.ui",
-               rInAttrs)
+               &rInAttrs)
     , m_nAllSeriesAxisIndex(0)
     , m_bProvidesSecondaryYAxis(true)
     , m_bProvidesOverlapAndGapWidth(false)
@@ -76,9 +76,9 @@ IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
     return 0;
 }
 
-SfxTabPage* SchOptionTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
+SfxTabPage* SchOptionTabPage::Create(Window* pWindow,const SfxItemSet* rOutAttrs)
 {
-    return new SchOptionTabPage(pWindow, rOutAttrs);
+    return new SchOptionTabPage(pWindow, *rOutAttrs);
 }
 
 bool SchOptionTabPage::FillItemSet(SfxItemSet* rOutAttrs)

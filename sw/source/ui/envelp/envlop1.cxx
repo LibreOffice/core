@@ -192,7 +192,7 @@ short SwEnvDlg::Ok()
 
 SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "EnvAddressPage",
-        "modules/swriter/ui/envaddresspage.ui", rSet)
+        "modules/swriter/ui/envaddresspage.ui", &rSet)
 {
     get(m_pAddrEdit, "addredit");
     get(m_pDatabaseLB, "database");
@@ -307,9 +307,9 @@ void SwEnvPage::InitDatabaseBox()
     }
 }
 
-SfxTabPage* SwEnvPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwEnvPage::Create(Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwEnvPage(pParent, rSet);
+    return new SwEnvPage(pParent, *rSet);
 }
 
 void SwEnvPage::ActivatePage(const SfxItemSet& rSet)

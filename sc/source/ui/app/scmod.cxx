@@ -2120,14 +2120,14 @@ SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const Sfx
                                 {
                                     ::CreateTabPage ScTpLayoutOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_LAYOUT );
                                     if ( ScTpLayoutOptionsCreate )
-                                        pRet =  (*ScTpLayoutOptionsCreate) (pParent, rSet);
+                                        pRet =  (*ScTpLayoutOptionsCreate) (pParent, &rSet);
                                 }
                                 break;
         case SID_SC_TP_CONTENT:
                                 {
                                     ::CreateTabPage ScTpContentOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SCPAGE_CONTENT);
                                     if ( ScTpContentOptionsCreate )
-                                        pRet = (*ScTpContentOptionsCreate)(pParent, rSet);
+                                        pRet = (*ScTpContentOptionsCreate)(pParent, &rSet);
                                 }
                                 break;
         case SID_SC_TP_GRID:            pRet = SvxGridTabPage::Create(pParent, rSet); break;
@@ -2135,49 +2135,49 @@ SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const Sfx
                                 {
                                     ::CreateTabPage ScTpUserListsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_USERLISTS );
                                     if ( ScTpUserListsCreate )
-                                            pRet = (*ScTpUserListsCreate)( pParent, rSet);
+                                            pRet = (*ScTpUserListsCreate)( pParent, &rSet);
                                 }
                                 break;
         case SID_SC_TP_CALC:
                                 {
                                     ::CreateTabPage ScTpCalcOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_CALC );
                                     if ( ScTpCalcOptionsCreate )
-                                            pRet = (*ScTpCalcOptionsCreate)(pParent, rSet);
+                                            pRet = (*ScTpCalcOptionsCreate)(pParent, &rSet);
                                 }
                                 break;
         case SID_SC_TP_FORMULA:
         {
             ::CreateTabPage ScTpFormulaOptionsCreate = pFact->GetTabPageCreatorFunc (RID_SCPAGE_FORMULA);
             if (ScTpFormulaOptionsCreate)
-                pRet = (*ScTpFormulaOptionsCreate)(pParent, rSet);
+                pRet = (*ScTpFormulaOptionsCreate)(pParent, &rSet);
         }
         break;
         case SID_SC_TP_COMPATIBILITY:
         {
             ::CreateTabPage ScTpCompatOptionsCreate = pFact->GetTabPageCreatorFunc (RID_SCPAGE_COMPATIBILITY);
             if (ScTpCompatOptionsCreate)
-                pRet = (*ScTpCompatOptionsCreate)(pParent, rSet);
+                pRet = (*ScTpCompatOptionsCreate)(pParent, &rSet);
         }
         break;
         case SID_SC_TP_CHANGES:
                                 {
                                    ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_OPREDLINE );
                                    if ( ScRedlineOptionsTabPageCreate )
-                                           pRet =(*ScRedlineOptionsTabPageCreate)(pParent, rSet);
+                                           pRet =(*ScRedlineOptionsTabPageCreate)(pParent, &rSet);
                                 }
                         break;
         case RID_SC_TP_PRINT:
                                 {
                                    ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
                                    if ( ScTpPrintOptionsCreate )
-                                          pRet = (*ScTpPrintOptionsCreate)( pParent, rSet);
+                                          pRet = (*ScTpPrintOptionsCreate)( pParent, &rSet);
                                 }
             break;
         case RID_SC_TP_DEFAULTS:
             {
                 ::CreateTabPage ScTpDefaultsOptionsCreate = pFact->GetTabPageCreatorFunc( RID_SCPAGE_DEFAULTS );
                 if ( ScTpDefaultsOptionsCreate )
-                    pRet = (*ScTpDefaultsOptionsCreate)( pParent, rSet);
+                    pRet = (*ScTpDefaultsOptionsCreate)( pParent, &rSet);
             }
             break;
     }

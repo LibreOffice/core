@@ -1491,9 +1491,9 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
 
 
 SfxTabPage* SvxLineTabPage::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SvxLineTabPage( pWindow, rAttrs ) );
+    return( new SvxLineTabPage( pWindow, *rAttrs ) );
 }
 
 

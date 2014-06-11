@@ -33,7 +33,7 @@ SwBackgroundDlg::SwBackgroundDlg(Window* pParent, const SfxItemSet& rSet)
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND );
     if ( fnCreatePage )
     {
-        SetTabPage((*fnCreatePage)(get_content_area(), rSet));
+        SetTabPage((*fnCreatePage)(get_content_area(), &rSet));
     }
 
 }

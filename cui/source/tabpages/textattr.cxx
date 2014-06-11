@@ -522,9 +522,9 @@ void SvxTextAttrPage::Construct()
 \************************************************************************/
 
 SfxTabPage* SvxTextAttrPage::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SvxTextAttrPage( pWindow, rAttrs ) );
+    return( new SvxTextAttrPage( pWindow, *rAttrs ) );
 }
 
 const sal_uInt16* SvxTextAttrPage::GetRanges()

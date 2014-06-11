@@ -56,14 +56,14 @@ SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bD
 
 {
     // create TabPage
-    SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(get_content_area(), rSet);
+    SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(get_content_area(), &rSet);
     pNewPage->SetFormatUsed(false, bDrawMode);
     pNewPage->SetShell(pWrtShell);
     SetTabPage(pNewPage);
 }
 
 SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "WrapPage" , "modules/swriter/ui/wrappage.ui", rSet)
+    : SfxTabPage(pParent, "WrapPage" , "modules/swriter/ui/wrappage.ui", &rSet)
     , nOldLeftMargin(0)
     , nOldRightMargin(0)
     , nOldUpperMargin(0)
@@ -134,9 +134,9 @@ SwWrapTabPage::~SwWrapTabPage()
 {
 }
 
-SfxTabPage* SwWrapTabPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* SwWrapTabPage::Create(Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwWrapTabPage(pParent, rSet);
+    return new SwWrapTabPage(pParent, *rSet);
 }
 
 void SwWrapTabPage::Reset(const SfxItemSet *rSet)

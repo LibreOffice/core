@@ -509,13 +509,13 @@ void SwDropCapsPict::_InitPrinter()
 SwDropCapsDlg::SwDropCapsDlg(Window *pParent, const SfxItemSet &rSet )
     : SfxSingleTabDialog(pParent, rSet)
 {
-    SwDropCapsPage* pNewPage = (SwDropCapsPage*) SwDropCapsPage::Create(get_content_area(), rSet);
+    SwDropCapsPage* pNewPage = (SwDropCapsPage*) SwDropCapsPage::Create(get_content_area(), &rSet);
     pNewPage->SetFormat(false);
     SetTabPage(pNewPage);
 }
 
 SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "DropCapPage","modules/swriter/ui/dropcapspage.ui", rSet)
+    : SfxTabPage(pParent, "DropCapPage","modules/swriter/ui/dropcapspage.ui", &rSet)
     , bModified(false)
     , bFormat(true)
     , rSh(::GetActiveView()->GetWrtShell())
@@ -576,9 +576,9 @@ int  SwDropCapsPage::DeactivatePage(SfxItemSet * _pSet)
 }
 
 SfxTabPage*  SwDropCapsPage::Create(Window *pParent,
-    const SfxItemSet &rSet)
+    const SfxItemSet *rSet)
 {
-    return new SwDropCapsPage(pParent, rSet);
+    return new SwDropCapsPage(pParent, *rSet);
 }
 
 bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)
