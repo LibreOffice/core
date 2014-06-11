@@ -188,36 +188,36 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000 );
+                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000, 0x000000ff );
 #else
-                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
+                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 );
 #endif
                 break;
             case FORMAT_THIRTYTWO_BIT_TC_MASK_ARGB:
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff );
+                pBuf->maColorMask = ColorMask( 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 );
 #else
-                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000 );
+                pBuf->maColorMask = ColorMask( 0x0000ff00, 0x00ff0000, 0xff000000, 0x000000ff );
 #endif
                 break;
             case FORMAT_THIRTYTWO_BIT_TC_MASK_ABGR:
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0x000000ff, 0x0000ff00, 0x00ff0000 );
+                pBuf->maColorMask = ColorMask( 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
 #else
-                pBuf->maColorMask = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00 );
+                pBuf->maColorMask = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff );
 #endif
                 break;
             case FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA:
                 nBitCount = 32;
                 pBuf->mnFormat = BMP_FORMAT_32BIT_TC_MASK;
 #ifdef OSL_BIGENDIAN
-                pBuf->maColorMask = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00 );
+                pBuf->maColorMask = ColorMask( 0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff );
 #else
-                pBuf->maColorMask = ColorMask( 0x000000ff, 0x0000ff00, 0x00ff0000 );
+                pBuf->maColorMask = ColorMask( 0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000 );
 #endif
                 break;
 
