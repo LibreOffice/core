@@ -114,6 +114,8 @@
 #include "XMLImageMapExport.hxx"
 #include <boost/scoped_ptr.hpp>
 
+#include <config_features.h>
+
 using namespace ::com::sun::star;
 using namespace ::xmloff::EnhancedCustomShapeToken;
 using namespace ::xmloff::token;
@@ -3157,6 +3159,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
     }
 }
 
+#if HAVE_FEATURE_GLTF
 static void lcl_StoreJsonExternalsAndFallback(
     SvXMLExport& rExport,
     const uno::Reference<beans::XPropertySet> xPropSet,
@@ -3243,6 +3246,7 @@ static void lcl_StoreJsonExternalsAndFallback(
         }
     }
 }
+#endif
 
 void XMLShapeExport::ImpExportMediaShape(
     const uno::Reference< drawing::XShape >& xShape,
@@ -3270,8 +3274,10 @@ void XMLShapeExport::ImpExportMediaShape(
 
         OUString const persistentURL =
             lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL, sMimeType);
+#if HAVE_FEATURE_GLTF
         if( sMimeType == "application/vnd.gltf+json" )
             lcl_StoreJsonExternalsAndFallback(GetExport(), xPropSet, aMediaURL);
+#endif
 
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, persistentURL );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );

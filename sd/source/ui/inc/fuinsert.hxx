@@ -21,6 +21,7 @@
 #define INCLUDED_SD_SOURCE_UI_INC_FUINSERT_HXX
 
 #include "fupoor.hxx"
+#include <config_features.h>
 
 namespace sd {
 
@@ -104,7 +105,7 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 };
-
+#if HAVE_FEATURE_GLTF
 class FuInsert3DModel
     : public FuPoor
 {
@@ -122,7 +123,7 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 };
-
+#endif
 } // end of namespace sd
 
 #endif

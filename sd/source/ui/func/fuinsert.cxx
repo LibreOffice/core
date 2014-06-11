@@ -85,6 +85,8 @@
 #include <boost/scoped_ptr.hpp>
 #include "glob.hrc"
 
+#include <config_features.h>
+
 using namespace com::sun::star;
 
 namespace sd {
@@ -93,7 +95,6 @@ TYPEINIT1( FuInsertGraphic, FuPoor );
 TYPEINIT1( FuInsertClipboard, FuPoor );
 TYPEINIT1( FuInsertOLE, FuPoor );
 TYPEINIT1( FuInsertAVMedia, FuPoor );
-TYPEINIT1( FuInsert3DModel, FuPoor );
 
 FuInsertGraphic::FuInsertGraphic (
     ViewShell* pViewSh,
@@ -763,6 +764,9 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
     }
 }
 
+#if HAVE_FEATURE_GLTF
+TYPEINIT1( FuInsert3DModel, FuPoor );
+
 FuInsert3DModel::FuInsert3DModel(
     ViewShell* pViewSh,
     ::sd::Window* pWin,
@@ -826,7 +830,7 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
             mpWindow->LeaveWait();
     }
 }
-
+#endif
 } // end of namespace sd
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

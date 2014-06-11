@@ -47,6 +47,12 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	$(gb_UWINAPI) \
 ))
 
+ifeq ($(ENABLE_GLTF),TRUE)
+$(eval $(call gb_Library_add_exception_objects,avmedia,\
+	avmedia/source/framework/modeltools \
+))
+endif
+
 ifneq (,$(filter COLLADA2GLTF,$(BUILD_TYPE)))
 $(eval $(call gb_Library_set_warnings_not_errors,avmedia))
 
@@ -74,7 +80,6 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 	avmedia/source/framework/mediamisc \
 	avmedia/source/framework/mediaplayer \
 	avmedia/source/framework/mediatoolbox \
-	avmedia/source/framework/modeltools \
 	avmedia/source/framework/soundhandler \
 	avmedia/source/viewer/mediaevent_impl \
 	avmedia/source/viewer/mediawindow \
