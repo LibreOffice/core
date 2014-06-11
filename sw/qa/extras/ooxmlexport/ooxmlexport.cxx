@@ -2243,7 +2243,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextBoxPictureFill, "textbox_picturefill.docx")
 {
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_BITMAP, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
-    CPPUNIT_ASSERT(!(getProperty<OUString>(xFrame,"BackGraphicURL")).isEmpty());
+    CPPUNIT_ASSERT(!(getProperty<OUString>(xFrame,"FillBitmapURL")).isEmpty());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO73034, "FDO73034.docx")
