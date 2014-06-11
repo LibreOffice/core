@@ -111,8 +111,10 @@ sed -i \
     export PREFIX=$INSTALLDIRNAME
     export ICON_PREFIX=$INSTALLDIRNAME
     export ICON_SOURCE_DIR=$builddir/sysui/desktop/icons
+    export APPDATA_SOURCE_DIR=$builddir/sysui/desktop/appstream-appdata
     export PRODUCTVERSION=
     export KDEMAINDIR=$PREFIXDIR
+    export PREFIXDIR=${PREFIXDIR}
     export GNOMEDIR=$PREFIXDIR
     export GNOME_MIME_THEME=hicolor
     bash ./create_tree.sh
