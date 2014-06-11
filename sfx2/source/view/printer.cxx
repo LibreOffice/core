@@ -215,7 +215,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(Window *pParent,
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
     {
-        pPage->Reset( *pOptions );
+        pPage->Reset( pOptions );
         SetHelpId( pPage->GetHelpId() );
         pPage->Show();
     }
@@ -241,7 +241,7 @@ short SfxPrintOptionsDialog::Execute()
     if ( nRet == RET_OK )
         pPage->FillItemSet( pOptions );
     else
-        pPage->Reset( *pOptions );
+        pPage->Reset( pOptions );
     return nRet;
 }
 

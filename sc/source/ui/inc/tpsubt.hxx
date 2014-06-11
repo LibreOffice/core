@@ -85,7 +85,7 @@ public:
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
 
 class ScTpSubTotalGroup2 : public ScTpSubTotalGroup
@@ -100,7 +100,7 @@ public:
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
 
 class ScTpSubTotalGroup3 : public ScTpSubTotalGroup
@@ -115,7 +115,7 @@ public:
     static  SfxTabPage* Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
 
 class ScTpSubTotalOptions : public SfxTabPage
@@ -130,7 +130,7 @@ public:
     static SfxTabPage*  Create      ( Window*               pParent,
                                       const SfxItemSet&     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 
 private:
     CheckBox*    pBtnPagebreak;

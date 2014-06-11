@@ -218,11 +218,11 @@ bool SvxGridTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
 
 
-void SvxGridTabPage::Reset( const SfxItemSet& rSet )
+void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pAttr = 0;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , false,
+    if( SFX_ITEM_SET == rSet->GetItemState( SID_ATTR_GRID_OPTIONS , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*)pAttr;
@@ -231,7 +231,7 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
         pCbxGridVisible->Check( pGridAttr->bGridVisible );
 
         SfxMapUnit eUnit =
-            rSet.GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
+            rSet->GetPool()->GetMetric( GetWhich( SID_ATTR_GRID_OPTIONS ) );
         SetMetricValue( *pMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
         SetMetricValue( *pMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 

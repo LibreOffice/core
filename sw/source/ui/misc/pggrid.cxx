@@ -187,11 +187,11 @@ bool    SwTextGridPage::FillItemSet(SfxItemSet *rSet)
     return bRet;
 }
 
-void    SwTextGridPage::Reset(const SfxItemSet &rSet)
+void    SwTextGridPage::Reset(const SfxItemSet *rSet)
 {
-    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, true))
+    if(SFX_ITEM_AVAILABLE <= rSet->GetItemState(RES_TEXTGRID, true))
     {
-        const SwTextGridItem& rGridItem = (const SwTextGridItem&)rSet.Get(RES_TEXTGRID);
+        const SwTextGridItem& rGridItem = (const SwTextGridItem&)rSet->Get(RES_TEXTGRID);
         RadioButton* pButton = 0;
         switch(rGridItem.GetGridType())
         {
@@ -214,7 +214,7 @@ void    SwTextGridPage::Reset(const SfxItemSet &rSet)
         m_pPrintCB->Check(rGridItem.IsPrintGrid());
         m_pColorLB->SelectEntry(rGridItem.GetColor());
     }
-    UpdatePageSize(rSet);
+    UpdatePageSize(*rSet);
 
     m_pNoGridRB->SaveValue();
     m_pLinesGridRB->SaveValue();

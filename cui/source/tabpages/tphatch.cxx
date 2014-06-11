@@ -314,7 +314,7 @@ bool SvxHatchTabPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-void SvxHatchTabPage::Reset( const SfxItemSet& rSet )
+void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 {
     ChangeHatchHdl_Impl( this );
 
@@ -332,8 +332,8 @@ void SvxHatchTabPage::Reset( const SfxItemSet& rSet )
         m_pBtnSave->Disable();
     }
 
-    rXFSet.Put ( ( XFillColorItem& )    rSet.Get(XATTR_FILLCOLOR) );
-    rXFSet.Put ( ( XFillBackgroundItem&)rSet.Get(XATTR_FILLBACKGROUND) );
+    rXFSet.Put ( ( XFillColorItem& )    rSet->Get(XATTR_FILLCOLOR) );
+    rXFSet.Put ( ( XFillBackgroundItem&)rSet->Get(XATTR_FILLBACKGROUND) );
     m_pCtlPreview->SetAttributes( aXFillAttr.GetItemSet() );
     m_pCtlPreview->Invalidate();
 }
@@ -695,7 +695,7 @@ IMPL_LINK_NOARG(SvxHatchTabPage, ClickLoadHdl_Impl)
 
                 m_pLbHatchings->Clear();
                 m_pLbHatchings->Fill( pHatchingList );
-                Reset( rOutAttrs );
+                Reset( &rOutAttrs );
 
                 pHatchingList->SetName( aURL.getName() );
 

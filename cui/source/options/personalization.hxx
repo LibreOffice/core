@@ -35,7 +35,7 @@ public:
     virtual bool FillItemSet( SfxItemSet *rSet ) SAL_OVERRIDE;
 
     /// Reset to default settings ([Revert] button).
-    virtual void Reset( const SfxItemSet &rSet ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet *rSet ) SAL_OVERRIDE;
 
 private:
     /// Handle the Persona selection

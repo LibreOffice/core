@@ -82,7 +82,7 @@ SwFldDokPage::~SwFldDokPage()
 {
 }
 
-void SwFldDokPage::Reset(const SfxItemSet& )
+void SwFldDokPage::Reset(const SfxItemSet* )
 {
     SavePos(m_pTypeLB);
     Init(); // general initialisation

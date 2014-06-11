@@ -120,7 +120,7 @@ bool SvxBasicIDEOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
     return bModified;
 }
 
-void SvxBasicIDEOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
+void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
 {
     LoadConfig();
     pCodeCompleteChk->SaveValue();

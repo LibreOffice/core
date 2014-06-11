@@ -139,7 +139,7 @@ SfxTabPage* SwWrapTabPage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SwWrapTabPage(pParent, rSet);
 }
 
-void SwWrapTabPage::Reset(const SfxItemSet &rSet)
+void SwWrapTabPage::Reset(const SfxItemSet *rSet)
 {
     // contour for Draw, Graphic and OLE (Insert/Graphic/Properties still missing!)
     if( bDrawMode )
@@ -147,7 +147,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
         m_pWrapOutlineCB->Show();
         m_pWrapOutsideCB->Show();
 
-        m_pWrapTransparentCB->Check( 0 == ((const SfxInt16Item&)rSet.Get(
+        m_pWrapTransparentCB->Check( 0 == ((const SfxInt16Item&)rSet->Get(
                                         FN_DRAW_WRAP_DLG)).GetValue() );
         m_pWrapTransparentCB->SaveValue();
     }
@@ -178,10 +178,10 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     SetMetric(*m_pTopMarginED, aMetric);
     SetMetric(*m_pBottomMarginED, aMetric);
 
-    const SwFmtSurround& rSurround = (const SwFmtSurround&)rSet.Get(RES_SURROUND);
+    const SwFmtSurround& rSurround = (const SwFmtSurround&)rSet->Get(RES_SURROUND);
 
     SwSurround nSur = rSurround.GetSurround();
-    const SwFmtAnchor &rAnch = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
+    const SwFmtAnchor &rAnch = (const SwFmtAnchor&)rSet->Get(RES_ANCHOR);
     nAnchorId = rAnch.GetAnchorId();
 
     if (((nAnchorId == FLY_AT_PARA) || (nAnchorId == FLY_AT_CHAR))
@@ -217,7 +217,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 
             if (!bDrawMode)
             {
-                const SvxOpaqueItem& rOpaque = (const SvxOpaqueItem&)rSet.Get(RES_OPAQUE);
+                const SvxOpaqueItem& rOpaque = (const SvxOpaqueItem&)rSet->Get(RES_OPAQUE);
                 m_pWrapTransparentCB->Check(!rOpaque.GetValue());
             }
             break;
@@ -255,8 +255,8 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     }
     m_pWrapTransparentCB->Enable( pBtn == m_pWrapThroughRB && !bHtmlMode );
 
-    const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
-    const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
+    const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet->Get(RES_UL_SPACE);
+    const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet->Get(RES_LR_SPACE);
 
     // gap to text
     m_pLeftMarginED->SetValue(m_pLeftMarginED->Normalize(rLR.GetLeft()), FUNIT_TWIP);
@@ -265,7 +265,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     m_pBottomMarginED->SetValue(m_pBottomMarginED->Normalize(rUL.GetLower()), FUNIT_TWIP);
 
     ContourHdl(0);
-    ActivatePage( rSet );
+    ActivatePage( *rSet );
 }
 
 // stuff attributes into the set when OK

@@ -141,7 +141,7 @@ void SwFldRefPage::SaveSelectedTxtNode()
     }
 }
 
-void SwFldRefPage::Reset(const SfxItemSet& )
+void SwFldRefPage::Reset(const SfxItemSet* )
 {
     if (!IsFldEdit())
     {

@@ -36,7 +36,7 @@ public:
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet& rInAttrs ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet* rInAttrs ) SAL_OVERRIDE;
     using TabPage::DeactivatePage;
     virtual int DeactivatePage( SfxItemSet* pItemSet = NULL ) SAL_OVERRIDE;
 

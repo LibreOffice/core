@@ -219,7 +219,7 @@ bool SvxCaptionTabPage::FillItemSet( SfxItemSet*  _rOutAttrs)
 
 
 
-void SvxCaptionTabPage::Reset( const SfxItemSet&  )
+void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 {
 
     //------------set metric-----------------------------

@@ -209,7 +209,7 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     ShowPage( m_nMainPageID );
     SfxTabPage* pConnectionPage = GetTabPage( m_nMainPageID );
     if ( pConnectionPage )
-        pConnectionPage->Reset(*GetInputSetImpl());
+        pConnectionPage->Reset(GetInputSetImpl());
     // if this is NULL, the page has not been created yet, which means we're called before the
     // dialog was displayed (probably from inside the ctor)
 

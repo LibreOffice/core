@@ -140,45 +140,45 @@ SfxTabPage* ScTablePage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     return ( new ScTablePage( pParent, rCoreSet ) );
 }
 
-void ScTablePage::Reset( const SfxItemSet& rCoreSet )
+void ScTablePage::Reset( const SfxItemSet* rCoreSet )
 {
-    bool    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
+    bool    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, *rCoreSet );
     sal_uInt16  nWhich   = 0;
 
     // sal_Bool flags
-    m_pBtnNotes->Check( GET_BOOL(SID_SCATTR_PAGE_NOTES,rCoreSet) );
-    m_pBtnGrid->Check( GET_BOOL(SID_SCATTR_PAGE_GRID,rCoreSet) );
-    m_pBtnHeaders->Check( GET_BOOL(SID_SCATTR_PAGE_HEADERS,rCoreSet) );
-    m_pBtnFormulas->Check( GET_BOOL(SID_SCATTR_PAGE_FORMULAS,rCoreSet) );
-    m_pBtnNullVals->Check( GET_BOOL(SID_SCATTR_PAGE_NULLVALS,rCoreSet) );
+    m_pBtnNotes->Check( GET_BOOL(SID_SCATTR_PAGE_NOTES,*rCoreSet) );
+    m_pBtnGrid->Check( GET_BOOL(SID_SCATTR_PAGE_GRID,*rCoreSet) );
+    m_pBtnHeaders->Check( GET_BOOL(SID_SCATTR_PAGE_HEADERS,*rCoreSet) );
+    m_pBtnFormulas->Check( GET_BOOL(SID_SCATTR_PAGE_FORMULAS,*rCoreSet) );
+    m_pBtnNullVals->Check( GET_BOOL(SID_SCATTR_PAGE_NULLVALS,*rCoreSet) );
     m_pBtnTopDown->Check( bTopDown );
     m_pBtnLeftRight->Check( !bTopDown );
 
     // first printed page:
-    sal_uInt16 nPage = GET_USHORT(SID_SCATTR_PAGE_FIRSTPAGENO,rCoreSet);
+    sal_uInt16 nPage = GET_USHORT(SID_SCATTR_PAGE_FIRSTPAGENO,*rCoreSet);
     m_pBtnPageNo->Check( nPage != 0 );
     m_pEdPageNo->SetValue( (nPage != 0) ? nPage : 1 );
     PageNoHdl( NULL );
 
     // object representation:
-    m_pBtnCharts->Check( GET_SHOW( SID_SCATTR_PAGE_CHARTS, rCoreSet ) );
-    m_pBtnObjects->Check( GET_SHOW( SID_SCATTR_PAGE_OBJECTS, rCoreSet ) );
-    m_pBtnDrawings->Check( GET_SHOW( SID_SCATTR_PAGE_DRAWINGS, rCoreSet ) );
+    m_pBtnCharts->Check( GET_SHOW( SID_SCATTR_PAGE_CHARTS, *rCoreSet ) );
+    m_pBtnObjects->Check( GET_SHOW( SID_SCATTR_PAGE_OBJECTS, *rCoreSet ) );
+    m_pBtnDrawings->Check( GET_SHOW( SID_SCATTR_PAGE_DRAWINGS, *rCoreSet ) );
 
     // scaling:
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALE);
-    if ( rCoreSet.GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet->GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
     {
-        sal_uInt16 nScale = ((const SfxUInt16Item&)rCoreSet.Get(nWhich)).GetValue();
+        sal_uInt16 nScale = ((const SfxUInt16Item&)rCoreSet->Get(nWhich)).GetValue();
         if( nScale > 0 )
             m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
         m_pEdScaleAll->SetValue( (nScale > 0) ? nScale : 100 );
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETO);
-    if ( rCoreSet.GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet->GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
     {
-        const ScPageScaleToItem& rItem = static_cast< const ScPageScaleToItem& >( rCoreSet.Get( nWhich ) );
+        const ScPageScaleToItem& rItem = static_cast< const ScPageScaleToItem& >( rCoreSet->Get( nWhich ) );
         sal_uInt16 nWidth = rItem.GetWidth();
         sal_uInt16 nHeight = rItem.GetHeight();
 
@@ -192,9 +192,9 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);
-    if ( rCoreSet.GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet->GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
     {
-        sal_uInt16 nPages = ((const SfxUInt16Item&)rCoreSet.Get(nWhich)).GetValue();
+        sal_uInt16 nPages = ((const SfxUInt16Item&)rCoreSet->Get(nWhich)).GetValue();
         if( nPages > 0 )
             m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_TO_PAGES );
         m_pEdScalePageNum->SetValue( (nPages > 0) ? nPages : 1 );

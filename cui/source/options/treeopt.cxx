@@ -651,9 +651,9 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl)
             OptionsGroupInfo* pGroupInfo =
                 (OptionsGroupInfo*)aTreeLB.GetParent( pCurrentPageEntry )->GetUserData();
             if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
-                pPageInfo->m_pPage->Reset( *pColorPageItemSet );
+                pPageInfo->m_pPage->Reset( pColorPageItemSet );
             else
-                pPageInfo->m_pPage->Reset( *pGroupInfo->m_pInItemSet );
+                pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
         }
         else if ( pPageInfo->m_pExtPage )
             pPageInfo->m_pExtPage->ResetPage();
@@ -1117,12 +1117,12 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             pPageInfo->m_pPage->SetPosPixel( aPagePos );
             if ( RID_SVXPAGE_COLOR == pPageInfo->m_nPageId )
             {
-                pPageInfo->m_pPage->Reset( *pColorPageItemSet );
+                pPageInfo->m_pPage->Reset( pColorPageItemSet );
                 pPageInfo->m_pPage->ActivatePage( *pColorPageItemSet );
             }
             else
             {
-                pPageInfo->m_pPage->Reset( *pGroupInfo->m_pInItemSet );
+                pPageInfo->m_pPage->Reset( pGroupInfo->m_pInItemSet );
             }
             if (::isLayoutEnabled(pPageInfo->m_pPage))
                 SetPaneSize(pPageInfo->m_pPage);

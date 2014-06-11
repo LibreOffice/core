@@ -44,7 +44,7 @@ public:
     static const sal_uInt16*  GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
 private:
     TriStateBox*     m_pNewStartCB;
@@ -108,12 +108,12 @@ bool SdParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
     return mbModified;
 }
 
-void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
+void SdParagraphNumTabPage::Reset( const SfxItemSet* rSet )
 {
-    SfxItemState eItemState = rSet.GetItemState( ATTR_NUMBER_NEWSTART );
+    SfxItemState eItemState = rSet->GetItemState( ATTR_NUMBER_NEWSTART );
     if(eItemState > SFX_ITEM_AVAILABLE )
     {
-        const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(ATTR_NUMBER_NEWSTART);
+        const SfxBoolItem& rStart = (const SfxBoolItem&)rSet->Get(ATTR_NUMBER_NEWSTART);
         m_pNewStartCB->SetState( rStart.GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pNewStartCB->EnableTriState(false);
     }
@@ -124,10 +124,10 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     }
     m_pNewStartCB->SaveValue();
 
-    eItemState = rSet.GetItemState( ATTR_NUMBER_NEWSTART_AT);
+    eItemState = rSet->GetItemState( ATTR_NUMBER_NEWSTART_AT);
     if( eItemState > SFX_ITEM_AVAILABLE )
     {
-        sal_Int16 nNewStart = ((const SfxInt16Item&)rSet.Get(ATTR_NUMBER_NEWSTART_AT)).GetValue();
+        sal_Int16 nNewStart = ((const SfxInt16Item&)rSet->Get(ATTR_NUMBER_NEWSTART_AT)).GetValue();
         m_pNewStartNumberCB->Check(-1 != nNewStart);
         if(-1 == nNewStart)
             nNewStart = 1;

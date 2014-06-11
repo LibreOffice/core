@@ -268,13 +268,13 @@ SfxTabPage* SvxTabulatorTabPage::Create( Window* pParent,
 
 
 
-void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
+void SvxTabulatorTabPage::Reset( const SfxItemSet* rSet )
 {
-    SfxItemPool* pPool = rSet.GetPool();
+    SfxItemPool* pPool = rSet->GetPool();
     MapUnit eUnit = (MapUnit)pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
 
     // Current tabs
-    const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_TABSTOP );
+    const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_TABSTOP );
 
     if ( pItem )
     {
@@ -298,7 +298,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
 
     // Defaul tab distance
     nDefDist = SVX_TAB_DEFDIST;
-    pItem = GetItem( rSet, SID_ATTR_TABSTOP_DEFAULTS );
+    pItem = GetItem( *rSet, SID_ATTR_TABSTOP_DEFAULTS );
 
     if ( pItem )
         nDefDist = LogicToLogic(
@@ -306,7 +306,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
 
     // Tab pos currently selected
     sal_uInt16 nTabPos = 0;
-    pItem = GetItem( rSet, SID_ATTR_TABSTOP_POS );
+    pItem = GetItem( *rSet, SID_ATTR_TABSTOP_POS );
 
     if ( pItem )
         nTabPos = ( (const SfxUInt16Item*)pItem )->GetValue();

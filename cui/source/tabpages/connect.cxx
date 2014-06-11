@@ -158,10 +158,10 @@ SvxConnectionPage::~SvxConnectionPage()
 |*
 \************************************************************************/
 
-void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
+void SvxConnectionPage::Reset( const SfxItemSet* rAttrs )
 {
-    const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_EDGENODE1HORZDIST );
-    const SfxItemPool* pPool = rAttrs.GetPool();
+    const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_EDGENODE1HORZDIST );
+    const SfxItemPool* pPool = rAttrs->GetPool();
 
     // SdrEdgeNode1HorzDistItem
     if( !pItem )
@@ -177,7 +177,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldHorz1->SaveValue();
 
     // SdrEdgeNode2HorzDistItem
-    pItem = GetItem( rAttrs, SDRATTR_EDGENODE2HORZDIST );
+    pItem = GetItem( *rAttrs, SDRATTR_EDGENODE2HORZDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2HORZDIST );
     if( pItem )
@@ -191,7 +191,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldHorz2->SaveValue();
 
     // SdrEdgeNode1VertDistItem
-    pItem = GetItem( rAttrs, SDRATTR_EDGENODE1VERTDIST );
+    pItem = GetItem( *rAttrs, SDRATTR_EDGENODE1VERTDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE1VERTDIST );
     if( pItem )
@@ -205,7 +205,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldVert1->SaveValue();
 
     // SdrEdgeNode2VertDistItem
-    pItem = GetItem( rAttrs, SDRATTR_EDGENODE2VERTDIST );
+    pItem = GetItem( *rAttrs, SDRATTR_EDGENODE2VERTDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGENODE2VERTDIST );
     if( pItem )
@@ -219,7 +219,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldVert2->SaveValue();
 
     // SdrEdgeLine1DeltaItem
-    pItem = GetItem( rAttrs, SDRATTR_EDGELINE1DELTA );
+    pItem = GetItem( *rAttrs, SDRATTR_EDGELINE1DELTA );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE1DELTA );
     if( pItem )
@@ -233,7 +233,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldLine1->SaveValue();
 
     // SdrEdgeLine2DeltaItem
-    pItem = GetItem( rAttrs, SDRATTR_EDGELINE2DELTA );
+    pItem = GetItem( *rAttrs, SDRATTR_EDGELINE2DELTA );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE2DELTA );
     if( pItem )
@@ -247,7 +247,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldLine2->SaveValue();
 
     // SdrEdgeLine3DeltaItem
-    pItem = GetItem( rAttrs, SDRATTR_EDGELINE3DELTA );
+    pItem = GetItem( *rAttrs, SDRATTR_EDGELINE3DELTA );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINE3DELTA );
     if( pItem )
@@ -261,7 +261,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldLine3->SaveValue();
 
     // SdrEdgeLineDeltaAnzItem
-    pItem = GetItem( rAttrs, SDRATTR_EDGELINEDELTAANZ );
+    pItem = GetItem( *rAttrs, SDRATTR_EDGELINEDELTAANZ );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGELINEDELTAANZ );
     if( pItem )
@@ -288,7 +288,7 @@ void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
     }
 
     // SdrEdgeKindItem
-    pItem = GetItem( rAttrs, SDRATTR_EDGEKIND );
+    pItem = GetItem( *rAttrs, SDRATTR_EDGEKIND );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_EDGEKIND );
     if( pItem )

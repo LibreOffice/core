@@ -588,10 +588,10 @@ bool  SwDropCapsPage::FillItemSet(SfxItemSet *rSet)
     return bModified;
 }
 
-void  SwDropCapsPage::Reset(const SfxItemSet &rSet)
+void  SwDropCapsPage::Reset(const SfxItemSet *rSet)
 {
     // Characters, lines, gap and text
-    SwFmtDrop aFmtDrop((SwFmtDrop &) rSet.Get(RES_PARATR_DROP));
+    SwFmtDrop aFmtDrop((SwFmtDrop &) rSet->Get(RES_PARATR_DROP));
     if (aFmtDrop.GetLines() > 1)
     {
         m_pDropCapsField->SetValue(aFmtDrop.GetChars());

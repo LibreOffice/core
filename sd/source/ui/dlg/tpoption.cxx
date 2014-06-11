@@ -84,11 +84,11 @@ bool SdTpOptionsSnap::FillItemSet( SfxItemSet* rAttrs )
 
 
 
-void SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
+void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 {
     SvxGridTabPage::Reset(rAttrs);
 
-    SdOptionsSnapItem aOptsItem( (const SdOptionsSnapItem&) rAttrs.
+    SdOptionsSnapItem aOptsItem( (const SdOptionsSnapItem&) rAttrs->
                         Get( ATTR_OPTIONS_SNAP ) );
 
     pCbxSnapHelplines->Check( aOptsItem.GetOptionsSnap().IsSnapHelplines() );
@@ -160,12 +160,12 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
 
 
 
-void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
+void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
 {
-    SdOptionsContentsItem aOptsItem( (const SdOptionsContentsItem&) rAttrs.
+    SdOptionsContentsItem aOptsItem( (const SdOptionsContentsItem&) rAttrs->
                         Get( ATTR_OPTIONS_CONTENTS ) );
 
-    SdOptionsLayoutItem aLayoutItem( (const SdOptionsLayoutItem&) rAttrs.
+    SdOptionsLayoutItem aLayoutItem( (const SdOptionsLayoutItem&) rAttrs->
                         Get( ATTR_OPTIONS_LAYOUT ) );
 
     m_pCbxRuler->Check( aLayoutItem.GetOptionsLayout().IsRulerVisible() );
@@ -433,9 +433,9 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
 
 
 
-void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
+void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 {
-    SdOptionsMiscItem aOptsItem( (const SdOptionsMiscItem&) rAttrs.
+    SdOptionsMiscItem aOptsItem( (const SdOptionsMiscItem&) rAttrs->
                         Get( ATTR_OPTIONS_MISC ) );
 
     m_pCbxStartWithTemplate->Check( aOptsItem.GetOptionsMisc().IsStartWithTemplate() );
@@ -464,9 +464,9 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
     m_pLbMetric->SetNoSelection();
 
-    if ( rAttrs.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    if ( rAttrs->GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
     {
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs.Get( nWhich );
+        const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs->Get( nWhich );
         long nFieldUnit = (long)rItem.GetValue();
 
         for ( sal_Int32 i = 0; i < m_pLbMetric->GetEntryCount(); ++i )
@@ -481,22 +481,22 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 
     // tabulator space
     nWhich = GetWhich( SID_ATTR_DEFTABSTOP );
-    if( rAttrs.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+    if( rAttrs->GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
     {
-        SfxMapUnit eUnit = rAttrs.GetPool()->GetMetric( nWhich );
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs.Get( nWhich );
+        SfxMapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich );
+        const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs->Get( nWhich );
         SetMetricValue( *m_pMtrFldTabstop, rItem.GetValue(), eUnit );
     }
     m_pLbMetric->SaveValue();
     m_pMtrFldTabstop->SaveValue();
     //Scale
-    sal_Int32 nX = ( (const SfxInt32Item&) rAttrs.
+    sal_Int32 nX = ( (const SfxInt32Item&) rAttrs->
                  Get( ATTR_OPTIONS_SCALE_X ) ).GetValue();
-    sal_Int32 nY = ( (const SfxInt32Item&) rAttrs.
+    sal_Int32 nY = ( (const SfxInt32Item&) rAttrs->
                  Get( ATTR_OPTIONS_SCALE_Y ) ).GetValue();
-    nWidth = ( (const SfxUInt32Item&) rAttrs.
+    nWidth = ( (const SfxUInt32Item&) rAttrs->
                     Get( ATTR_OPTIONS_SCALE_WIDTH ) ).GetValue();
-    nHeight = ( (const SfxUInt32Item&) rAttrs.
+    nHeight = ( (const SfxUInt32Item&) rAttrs->
                     Get( ATTR_OPTIONS_SCALE_HEIGHT ) ).GetValue();
 
     m_pCbScale->SetText( GetScale( nX, nY ) );

@@ -278,7 +278,7 @@ bool SvxPathTabPage::FillItemSet( SfxItemSet* )
 
 
 
-void SvxPathTabPage::Reset( const SfxItemSet& )
+void SvxPathTabPage::Reset( const SfxItemSet* )
 {
     pPathBox->Clear();
 

@@ -220,7 +220,7 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
 
 
 
-void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
+void SvxOnlineUpdateTabPage::Reset( const SfxItemSet* )
 {
     bool bValue = false;
     m_xUpdateAccess->getByName( "AutoCheckEnabled" ) >>= bValue;

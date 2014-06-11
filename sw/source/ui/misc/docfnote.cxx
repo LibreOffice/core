@@ -117,7 +117,7 @@ SwEndNoteOptionPage::SwEndNoteOptionPage(Window *pParent, bool bEN,
     get(m_pFtnCharTextTemplBox, "charstylelb");
 }
 
-void SwEndNoteOptionPage::Reset( const SfxItemSet& )
+void SwEndNoteOptionPage::Reset( const SfxItemSet* )
 {
     boost::scoped_ptr<SwEndNoteInfo> pInf(bEndNote ? new SwEndNoteInfo( pSh->GetEndNoteInfo() )
                                           : new SwFtnInfo( pSh->GetFtnInfo() ));

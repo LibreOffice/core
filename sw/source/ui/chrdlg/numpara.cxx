@@ -158,16 +158,16 @@ bool    SwParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
     return bModified;
 }
 
-void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
+void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
 {
     bool bHasNumberStyle = false;
 
-    SfxItemState eItemState = rSet.GetItemState( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) );
+    SfxItemState eItemState = rSet->GetItemState( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) );
 
     sal_Int16 nOutlineLv;
     if( eItemState >= SFX_ITEM_AVAILABLE )
     {
-        nOutlineLv = ((const SfxUInt16Item &)rSet.Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
+        nOutlineLv = ((const SfxUInt16Item &)rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
         m_pOutlineLvLB->SelectEntryPos( nOutlineLv ) ;
     }
     else
@@ -176,11 +176,11 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     }
     m_pOutlineLvLB->SaveValue();
 
-    eItemState = rSet.GetItemState( GetWhich(SID_ATTR_PARA_NUMRULE) );
+    eItemState = rSet->GetItemState( GetWhich(SID_ATTR_PARA_NUMRULE) );
 
     if( eItemState >= SFX_ITEM_AVAILABLE )
     {
-        OUString aStyle = ((const SfxStringItem &)rSet.Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
+        OUString aStyle = ((const SfxStringItem &)rSet->Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
         if(aStyle.isEmpty())
             aStyle = m_pNumberStyleLB->GetEntry(0);
 
@@ -203,11 +203,11 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 
     m_pNumberStyleLB->SaveValue();
 
-    eItemState = rSet.GetItemState( FN_NUMBER_NEWSTART );
+    eItemState = rSet->GetItemState( FN_NUMBER_NEWSTART );
     if(eItemState > SFX_ITEM_AVAILABLE )
     {
         bCurNumrule = true;
-        const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(FN_NUMBER_NEWSTART);
+        const SfxBoolItem& rStart = (const SfxBoolItem&)rSet->Get(FN_NUMBER_NEWSTART);
 
         m_pNewStartCB->SetState(rStart.GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
 
@@ -218,10 +218,10 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
 
     m_pNewStartCB->SaveValue();
 
-    eItemState = rSet.GetItemState( FN_NUMBER_NEWSTART_AT);
+    eItemState = rSet->GetItemState( FN_NUMBER_NEWSTART_AT);
     if( eItemState > SFX_ITEM_AVAILABLE )
     {
-        const sal_uInt16 nNewStart = ((const SfxUInt16Item&)rSet.Get(FN_NUMBER_NEWSTART_AT)).GetValue();
+        const sal_uInt16 nNewStart = ((const SfxUInt16Item&)rSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
         const bool bNotMax = USHRT_MAX != nNewStart;
         m_pNewStartNumberCB->Check(bNotMax);
         m_pNewStartNF->SetValue(bNotMax ? nNewStart : 1);
@@ -233,9 +233,9 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     m_pNewStartNF->SaveValue();
     m_pNewStartNumberCB->SaveValue();
     StyleHdl_Impl(m_pNumberStyleLB);
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_LINENUMBER))
+    if( SFX_ITEM_AVAILABLE <= rSet->GetItemState(RES_LINENUMBER))
     {
-        SwFmtLineNumber& rNum = (SwFmtLineNumber&)rSet.Get(RES_LINENUMBER);
+        SwFmtLineNumber& rNum = (SwFmtLineNumber&)rSet->Get(RES_LINENUMBER);
         sal_uLong nStartValue = rNum.GetStartValue();
         bool bCount = rNum.IsCount();
         m_pCountParaCB->SetState( bCount ? TRISTATE_TRUE : TRISTATE_FALSE );

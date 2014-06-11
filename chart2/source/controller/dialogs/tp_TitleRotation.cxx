@@ -87,18 +87,18 @@ bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     return true;
 }
 
-void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
+void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
 {
-    const SfxPoolItem* pItem = GetItem( rInAttrs, SCHATTR_TEXT_DEGREES );
+    const SfxPoolItem* pItem = GetItem( *rInAttrs, SCHATTR_TEXT_DEGREES );
 
     sal_Int32 nDegrees = pItem ? ((const SfxInt32Item*)pItem)->GetValue() : 0;
     m_pCtrlDial->SetRotation( nDegrees );
 
-    pItem = GetItem( rInAttrs, SCHATTR_TEXT_STACKED );
+    pItem = GetItem( *rInAttrs, SCHATTR_TEXT_STACKED );
     bool bStacked = pItem && ((const SfxBoolItem*)pItem)->GetValue();
     m_pOrientHlp->SetStackedState( bStacked ? TRISTATE_TRUE : TRISTATE_FALSE );
 
-    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SFX_ITEM_SET)
+    if( rInAttrs->GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SFX_ITEM_SET)
         m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );
 }
 

@@ -174,7 +174,7 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &
     m_pSizeScaled->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
     m_pSizeZoomed->SetClickHdl(LINK(this, SmPrintOptionsTabPage, SizeButtonClickHdl));
 
-    Reset(rOptions);
+    Reset(&rOptions);
 }
 
 
@@ -200,9 +200,9 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
 }
 
 
-void SmPrintOptionsTabPage::Reset(const SfxItemSet& rSet)
+void SmPrintOptionsTabPage::Reset(const SfxItemSet* rSet)
 {
-    SmPrintSize ePrintSize = (SmPrintSize)((const SfxUInt16Item &)rSet.Get(GetWhich(SID_PRINTSIZE))).GetValue();
+    SmPrintSize ePrintSize = (SmPrintSize)((const SfxUInt16Item &)rSet->Get(GetWhich(SID_PRINTSIZE))).GetValue();
 
     m_pSizeNormal->Check(ePrintSize == PRINT_SIZE_NORMAL);
     m_pSizeScaled->Check(ePrintSize == PRINT_SIZE_SCALED);
@@ -210,13 +210,13 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet& rSet)
 
     m_pZoom->Enable(m_pSizeZoomed->IsChecked());
 
-    m_pZoom->SetValue(((const SfxUInt16Item &)rSet.Get(GetWhich(SID_PRINTZOOM))).GetValue());
+    m_pZoom->SetValue(((const SfxUInt16Item &)rSet->Get(GetWhich(SID_PRINTZOOM))).GetValue());
 
-    m_pTitle->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTTITLE))).GetValue());
-    m_pText->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTTEXT))).GetValue());
-    m_pFrame->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTFRAME))).GetValue());
-    m_pNoRightSpaces->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
-    m_pSaveOnlyUsedSymbols->Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
+    m_pTitle->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_PRINTTITLE))).GetValue());
+    m_pText->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_PRINTTEXT))).GetValue());
+    m_pFrame->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_PRINTFRAME))).GetValue());
+    m_pNoRightSpaces->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
+    m_pSaveOnlyUsedSymbols->Check(((const SfxBoolItem &)rSet->Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
 }
 
 

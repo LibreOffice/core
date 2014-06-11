@@ -91,7 +91,7 @@ SwFldDokInfPage::~SwFldDokInfPage()
 {
 }
 
-void SwFldDokInfPage::Reset(const SfxItemSet& )
+void SwFldDokInfPage::Reset(const SfxItemSet* )
 {
     Init(); // general initialisation
 

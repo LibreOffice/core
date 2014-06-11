@@ -390,7 +390,7 @@ namespace dbaui
         m_eCurrentSelection = _eType;
     }
 
-    void OGeneralPage::Reset(const SfxItemSet& _rCoreAttrs)
+    void OGeneralPage::Reset(const SfxItemSet* _rCoreAttrs)
     {
         // reset all locale data
         implSetCurrentType(  OUString() );

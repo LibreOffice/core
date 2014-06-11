@@ -291,11 +291,11 @@ bool SvxAngleTabPage::FillItemSet(SfxItemSet* rSet)
 
 
 
-void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
+void SvxAngleTabPage::Reset(const SfxItemSet* rAttrs)
 {
     const double fUIScale(double(pView->GetModel()->GetUIScale()));
 
-    const SfxPoolItem* pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ROT_X );
+    const SfxPoolItem* pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ROT_X );
     if(pItem)
     {
         const double fTmp(((double)((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getX()) / fUIScale);
@@ -306,7 +306,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
         m_pMtrPosX->SetText( OUString() );
     }
 
-    pItem = GetItem(rAttrs, SID_ATTR_TRANSFORM_ROT_Y);
+    pItem = GetItem(*rAttrs, SID_ATTR_TRANSFORM_ROT_Y);
     if(pItem)
     {
         const double fTmp(((double)((const SfxInt32Item*)pItem)->GetValue() - maAnchor.getY()) / fUIScale);
@@ -317,7 +317,7 @@ void SvxAngleTabPage::Reset(const SfxItemSet& rAttrs)
         m_pMtrPosY->SetText( OUString() );
     }
 
-    pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_ANGLE );
+    pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_ANGLE );
     if(pItem)
     {
         m_pCtlAngle->SetRotation(((const SfxInt32Item*)pItem)->GetValue());
@@ -511,7 +511,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 
 
 
-void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
+void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 {
     // if the view has selected objects, items with SFX_ITEM_DEFAULT need to be disabled
     const SfxPoolItem* pItem;
@@ -524,7 +524,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
     }
     else
     {
-        pItem = GetItem( rAttrs, SDRATTR_ECKENRADIUS );
+        pItem = GetItem( *rAttrs, SDRATTR_ECKENRADIUS );
 
         if( pItem )
         {
@@ -548,7 +548,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet& rAttrs)
     }
     else
     {
-        pItem = GetItem( rAttrs, SID_ATTR_TRANSFORM_SHEAR );
+        pItem = GetItem( *rAttrs, SID_ATTR_TRANSFORM_SHEAR );
 
         if( pItem )
         {
@@ -897,7 +897,7 @@ bool SvxPositionSizeTabPage::FillItemSet( SfxItemSet* rOutAttrs )
 
 
 
-void SvxPositionSizeTabPage::Reset( const SfxItemSet&  )
+void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
 {
     const SfxPoolItem* pItem;
     const double fUIScale(double(mpView->GetModel()->GetUIScale()));

@@ -771,7 +771,7 @@ void SfxSingleTabDialog::SetTabPage(SfxTabPage* pTabPage,
         OUString sUserData;
         aUserItem >>= sUserData;
         pImpl->m_pSfxPage->SetUserData(sUserData);
-        pImpl->m_pSfxPage->Reset( *GetInputItemSet() );
+        pImpl->m_pSfxPage->Reset( GetInputItemSet() );
         pImpl->m_pSfxPage->Show();
 
         pHelpBtn->Show(Help::IsContextHelpEnabled());

@@ -285,7 +285,7 @@ bool AlignmentTabPage::FillItemSet( SfxItemSet* rSet )
     return bChanged;
 }
 
-void AlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
+void AlignmentTabPage::Reset( const SfxItemSet* rCoreAttrs )
 {
     SfxTabPage::Reset( rCoreAttrs );
 
@@ -293,12 +293,12 @@ void AlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
     // method to 'distribute' to distinguish from the normal justification.
 
     lcl_MaybeResetAlignToDistro<SvxCellHorJustify, SvxCellHorJustify>(
-        *m_pLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, rCoreAttrs,
+        *m_pLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, *rCoreAttrs,
         GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY), GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD),
         SVX_HOR_JUSTIFY_BLOCK);
 
     lcl_MaybeResetAlignToDistro<SvxCellVerJustify, SvxCellVerJustify>(
-        *m_pLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, rCoreAttrs,
+        *m_pLbVerAlign, ALIGNDLG_VERALIGN_DISTRIBUTED, *rCoreAttrs,
         GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY), GetWhich(SID_ATTR_ALIGN_VER_JUSTIFY_METHOD),
         SVX_VER_JUSTIFY_BLOCK);
 

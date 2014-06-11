@@ -46,9 +46,9 @@ bool TrendlineTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     return m_aTrendlineResources.FillItemSet( rOutAttrs );
 }
 
-void TrendlineTabPage::Reset( const SfxItemSet& rInAttrs )
+void TrendlineTabPage::Reset( const SfxItemSet* rInAttrs )
 {
-    m_aTrendlineResources.Reset( rInAttrs );
+    m_aTrendlineResources.Reset( *rInAttrs );
 }
 
 void TrendlineTabPage::DataChanged( const DataChangedEvent& rDCEvt )

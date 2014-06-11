@@ -407,10 +407,10 @@ ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgS
 {}
 
 
-#define RESET(i) (ScTpSubTotalGroup::DoReset( (i), rArgSet ))
-void ScTpSubTotalGroup1::Reset( const SfxItemSet& rArgSet ) { RESET(1); }
-void ScTpSubTotalGroup2::Reset( const SfxItemSet& rArgSet ) { RESET(2); }
-void ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
+#define RESET(i) (ScTpSubTotalGroup::DoReset( (i), *rArgSet ))
+void ScTpSubTotalGroup1::Reset( const SfxItemSet* rArgSet ) { RESET(1); }
+void ScTpSubTotalGroup2::Reset( const SfxItemSet* rArgSet ) { RESET(2); }
+void ScTpSubTotalGroup3::Reset( const SfxItemSet* rArgSet ) { RESET(3); }
 #undef RESET
 
 #define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), *rArgSet ))
@@ -474,7 +474,7 @@ SfxTabPage* ScTpSubTotalOptions::Create( Window*                 pParent,
     return ( new ScTpSubTotalOptions( pParent, rArgSet ) );
 }
 
-void ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
+void ScTpSubTotalOptions::Reset( const SfxItemSet* /* rArgSet */ )
 {
     pBtnPagebreak->Check ( rSubTotalData.bPagebreak );
     pBtnCase->Check      ( rSubTotalData.bCaseSens );

@@ -116,7 +116,7 @@ bool SvxDefaultColorOptPage::FillItemSet( SfxItemSet* rOutAttrs )
     return true;
 }
 
-void SvxDefaultColorOptPage::Reset( const SfxItemSet& )
+void SvxDefaultColorOptPage::Reset( const SfxItemSet* )
 {
     m_pLbChartColors->SelectEntryPos( 0 );
     ListClickedHdl(m_pLbChartColors);

@@ -73,18 +73,18 @@ SfxTabPage* ScTabPageProtection::Create( Window* pParent, const SfxItemSet& rAtt
     return ( new ScTabPageProtection( pParent, rAttrSet ) );
 }
 
-void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
+void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )
 {
     //  Initialize variables
 
     sal_uInt16 nWhich = GetWhich( SID_SCATTR_PROTECTION );
     const ScProtectionAttr* pProtAttr = NULL;
-    SfxItemState eItemState = rCoreAttrs.GetItemState( nWhich, false,
+    SfxItemState eItemState = rCoreAttrs->GetItemState( nWhich, false,
                                           (const SfxPoolItem**)&pProtAttr );
 
     // Is this a Default-Item?
     if ( eItemState == SFX_ITEM_DEFAULT )
-        pProtAttr = (const ScProtectionAttr*)&(rCoreAttrs.Get(nWhich));
+        pProtAttr = (const ScProtectionAttr*)&(rCoreAttrs->Get(nWhich));
     // At SFX_ITEM_DONTCARE let to 0
 
     bTriEnabled = ( pProtAttr == NULL );                // TriState, when DontCare

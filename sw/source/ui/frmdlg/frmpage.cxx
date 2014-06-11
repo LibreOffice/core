@@ -848,7 +848,7 @@ SwWrtShell *SwFrmPage::getFrmDlgParentShell()
     return ((SwFrmDlg*)GetParentDialog())->GetWrtShell();
 }
 
-void SwFrmPage::Reset( const SfxItemSet &rSet )
+void SwFrmPage::Reset( const SfxItemSet *rSet )
 {
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell() :
             getFrmDlgParentShell();
@@ -863,11 +863,11 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     SetMetric( *m_pAtVertPosED, aMetric );
 
     const SfxPoolItem* pItem = NULL;
-    const SwFmtAnchor& rAnchor = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
+    const SwFmtAnchor& rAnchor = (const SwFmtAnchor&)rSet->Get(RES_ANCHOR);
 
-    if (SFX_ITEM_SET == rSet.GetItemState(FN_OLE_IS_MATH, false, &pItem))
+    if (SFX_ITEM_SET == rSet->GetItemState(FN_OLE_IS_MATH, false, &pItem))
         m_bIsMathOLE = ((const SfxBoolItem*)pItem)->GetValue();
-    if (SFX_ITEM_SET == rSet.GetItemState(FN_MATH_BASELINE_ALIGNMENT, false, &pItem))
+    if (SFX_ITEM_SET == rSet->GetItemState(FN_MATH_BASELINE_ALIGNMENT, false, &pItem))
         m_bIsMathBaselineAlignment = ((const SfxBoolItem*)pItem)->GetValue();
     EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
             && FLY_AS_CHAR == rAnchor.GetAnchorId()) );
@@ -897,7 +897,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     {
         OSL_ENSURE(pSh , "shell not found");
         //OS: only for the variant Insert/Graphic/Properties
-        if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_GRF_REALSIZE, false, &pItem))
+        if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_GRF_REALSIZE, false, &pItem))
             aGrfSize = ((const SvxSizeItem*)pItem)->GetSize();
         else
             pSh->GetGrfSize( aGrfSize );
@@ -920,7 +920,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     }
     else
     {
-        aGrfSize = ((const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE)).GetSize();
+        aGrfSize = ((const SwFmtFrmSize&)rSet->Get(RES_FRM_SIZE)).GetSize();
     }
 
     // entering procent value made possible
@@ -929,7 +929,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     //the available space is not yet known so the RefValue has to be calculated from size and relative size values
     //this is needed only if relative values are already set
 
-    const SwFmtFrmSize& rFrmSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
+    const SwFmtFrmSize& rFrmSize = (const SwFmtFrmSize&)rSet->Get(RES_FRM_SIZE);
 
     m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::FRAME));
     m_pRelWidthRelationLB->InsertEntry(aFramePosString.GetString(SwFPos::REL_PG_FRAME));
@@ -975,7 +975,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     // i#18732 - init checkbox value
     {
         const bool bFollowTextFlow =
-            static_cast<const SwFmtFollowTextFlow&>(rSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
+            static_cast<const SwFmtFollowTextFlow&>(rSet->Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
         m_pFollowTextFlowCB->Check( bFollowTextFlow );
     }
 
@@ -1002,7 +1002,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
                                   m_pAnchorAtFrameRB->IsChecked() );
     }
 
-    Init( rSet, true );
+    Init( *rSet, true );
     m_pAtVertPosED->SaveValue();
     m_pAtHorzPosED->SaveValue();
     m_pFollowTextFlowCB->SaveValue();
@@ -2381,20 +2381,20 @@ SfxTabPage* SwGrfExtPage::Create( Window *pParent, const SfxItemSet &rSet )
     return new SwGrfExtPage( pParent, rSet );
 }
 
-void SwGrfExtPage::Reset(const SfxItemSet &rSet)
+void SwGrfExtPage::Reset(const SfxItemSet *rSet)
 {
     const SfxPoolItem* pItem;
     const sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_GRF_CONNECT, true, &pItem)
+    if( SFX_ITEM_SET == rSet->GetItemState( FN_PARAM_GRF_CONNECT, true, &pItem)
         && ((const SfxBoolItem *)pItem)->GetValue() )
     {
         m_pBrowseBT->Enable();
         m_pConnectED->SetReadOnly(false);
     }
 
-    ActivatePage(rSet);
+    ActivatePage(*rSet);
 }
 
 void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
@@ -2712,10 +2712,10 @@ SwFrmURLPage::~SwFrmURLPage()
 {
 }
 
-void SwFrmURLPage::Reset( const SfxItemSet &rSet )
+void SwFrmURLPage::Reset( const SfxItemSet *rSet )
 {
     const SfxPoolItem* pItem;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_DOCFRAME, true, &pItem))
+    if ( SFX_ITEM_SET == rSet->GetItemState( SID_DOCFRAME, true, &pItem))
     {
         boost::scoped_ptr<TargetList> pList(new TargetList);
         ((const SfxFrameItem*)pItem)->GetFrame()->GetTargetList(*pList);
@@ -2729,7 +2729,7 @@ void SwFrmURLPage::Reset( const SfxItemSet &rSet )
         }
     }
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( RES_URL, true, &pItem ) )
+    if ( SFX_ITEM_SET == rSet->GetItemState( RES_URL, true, &pItem ) )
     {
         const SwFmtURL* pFmtURL = (const SwFmtURL*)pItem;
         pURLED->SetText( INetURLObject::decode( pFmtURL->GetURL(),
@@ -2860,7 +2860,7 @@ SfxTabPage* SwFrmAddPage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SwFrmAddPage(pParent, rSet);
 }
 
-void SwFrmAddPage::Reset(const SfxItemSet &rSet )
+void SwFrmAddPage::Reset(const SfxItemSet *rSet )
 {
     const SfxPoolItem* pItem;
     sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
@@ -2881,7 +2881,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         m_pContentAlignFrame->Hide();
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_ALT_NAME, false, &pItem))
+    if(SFX_ITEM_SET == rSet->GetItemState(FN_SET_FRM_ALT_NAME, false, &pItem))
     {
         pAltNameED->SetText(((const SfxStringItem*)pItem)->GetValue());
         pAltNameED->SaveValue();
@@ -2892,7 +2892,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         // insert graphic - properties
         // bNew is not set, so recognise by selection
         OUString aTmpName1;
-        if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_NAME, false, &pItem))
+        if(SFX_ITEM_SET == rSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
         {
             aTmpName1 = ((const SfxStringItem*)pItem)->GetValue();
         }
@@ -2984,23 +2984,23 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         }
     }
     // Pos Protected
-    const SvxProtectItem& rProt = (const SvxProtectItem& )rSet.Get(RES_PROTECT);
+    const SvxProtectItem& rProt = (const SvxProtectItem& )rSet->Get(RES_PROTECT);
     pProtectFrameCB->Check(rProt.IsPosProtected());
     pProtectContentCB->Check(rProt.IsCntntProtected());
     pProtectSizeCB->Check(rProt.IsSizeProtected());
 
-    const SwFmtEditInReadonly& rEdit = (const SwFmtEditInReadonly& )rSet.Get(RES_EDIT_IN_READONLY);
+    const SwFmtEditInReadonly& rEdit = (const SwFmtEditInReadonly& )rSet->Get(RES_EDIT_IN_READONLY);
     pEditInReadonlyCB->Check(rEdit.GetValue());          pEditInReadonlyCB->SaveValue();
 
     // print
-    const SvxPrintItem& rPrt = (const SvxPrintItem&)rSet.Get(RES_PRINT);
+    const SvxPrintItem& rPrt = (const SvxPrintItem&)rSet->Get(RES_PRINT);
     pPrintFrameCB->Check(rPrt.GetValue());               pPrintFrameCB->SaveValue();
 
     // textflow
     SfxItemState eState;
     if( (!bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
             && sDlgType != "PictureDialog" && sDlgType != "ObjectDialog" &&
-        SFX_ITEM_UNKNOWN != ( eState = rSet.GetItemState(
+        SFX_ITEM_UNKNOWN != ( eState = rSet->GetItemState(
                                         RES_FRAMEDIR, true )) )
     {
         pTextFlowFT->Show();
@@ -3012,7 +3012,7 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
             sal_uLong nData = FRMDIR_VERT_TOP_RIGHT;
             pTextFlowLB->RemoveEntry(pTextFlowLB->GetEntryPos((void*)nData));
         }
-        sal_uInt16 nVal = ((SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR)).GetValue();
+        sal_uInt16 nVal = ((SvxFrameDirectionItem&)rSet->Get(RES_FRAMEDIR)).GetValue();
         sal_Int32 nPos;
         for( nPos = pTextFlowLB->GetEntryCount(); nPos; )
             if( (sal_uInt16)(sal_IntPtr)pTextFlowLB->GetEntryData( --nPos ) == nVal )
@@ -3027,9 +3027,9 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     }
 
     // Content alignment
-    if ( rSet.GetItemState(RES_TEXT_VERT_ADJUST) > SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState(RES_TEXT_VERT_ADJUST) > SFX_ITEM_AVAILABLE )
     {
-        SdrTextVertAdjust nAdjust = ((const SdrTextVertAdjustItem&)rSet.Get(RES_TEXT_VERT_ADJUST)).GetValue();
+        SdrTextVertAdjust nAdjust = ((const SdrTextVertAdjustItem&)rSet->Get(RES_TEXT_VERT_ADJUST)).GetValue();
         sal_Int32 nPos = 0;
         switch(nAdjust)
         {

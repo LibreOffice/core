@@ -74,7 +74,7 @@ namespace dbaui
 
     protected:
         // SfxTabPage overridables
-        virtual void Reset( const SfxItemSet& _rCoreAttrs ) SAL_OVERRIDE;
+        virtual void Reset( const SfxItemSet* _rCoreAttrs ) SAL_OVERRIDE;
 
         virtual void implInitControls( const SfxItemSet& _rSet, bool _bSaveValue ) SAL_OVERRIDE;
         virtual OUString getDatasourceName( const SfxItemSet& _rSet );

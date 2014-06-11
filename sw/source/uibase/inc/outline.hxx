@@ -128,7 +128,7 @@ public:
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
 };

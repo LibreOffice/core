@@ -81,7 +81,7 @@ ScHFPage::~ScHFPage()
 {
 }
 
-void ScHFPage::Reset( const SfxItemSet& rSet )
+void ScHFPage::Reset( const SfxItemSet* rSet )
 {
     SvxHFPage::Reset( rSet );
     TurnOnHdl( 0 );

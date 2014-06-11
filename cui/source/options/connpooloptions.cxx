@@ -397,9 +397,9 @@ namespace offapp
     }
 
 
-    void ConnectionPoolOptionsPage::Reset(const SfxItemSet& _rSet)
+    void ConnectionPoolOptionsPage::Reset(const SfxItemSet* _rSet)
     {
-        implInitControls(_rSet, true);
+        implInitControls(*_rSet, true);
     }
 
 

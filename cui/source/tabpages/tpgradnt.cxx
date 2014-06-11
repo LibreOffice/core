@@ -345,7 +345,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-void SvxGradientTabPage::Reset( const SfxItemSet& )
+void SvxGradientTabPage::Reset( const SfxItemSet* )
 {
     // m_pLbGradients->SelectEntryPos( 0 );
     ChangeGradientHdl_Impl( this );
@@ -656,7 +656,7 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ClickLoadHdl_Impl)
 
                 m_pLbGradients->Clear();
                 m_pLbGradients->Fill( pGradientList );
-                Reset( rOutAttrs );
+                Reset( &rOutAttrs );
 
                 pGradientList->SetName( aURL.getName() );
 

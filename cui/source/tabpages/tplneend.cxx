@@ -225,7 +225,7 @@ bool SvxLineEndDefTabPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-void SvxLineEndDefTabPage::Reset( const SfxItemSet& )
+void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
 {
     m_pLbLineEnds->SelectEntryPos( 0 );
 
@@ -578,7 +578,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl)
                 ( (SvxLineTabDialog*) GetParentDialog() )->SetNewLineEndList( pLineEndList );
                 m_pLbLineEnds->Clear();
                 m_pLbLineEnds->Fill( pLineEndList );
-                Reset( rOutAttrs );
+                Reset( &rOutAttrs );
 
                 pLineEndList->SetName( aURL.getName() );
 

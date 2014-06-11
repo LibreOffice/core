@@ -279,7 +279,7 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
     pTabPage->SetFrmMode(true);
     pTabPage->SetPageWidth(nWidth);
     if( pSet )
-        pTabPage->Reset(*pSet);
+        pTabPage->Reset(pSet);
     return 0;
 }
 
@@ -565,7 +565,7 @@ void SwColumnPage::connectPercentField(PercentField &rWrap, const OString &rName
     m_aPercentFieldsMap[pFld] = &rWrap;
 }
 
-void SwColumnPage::Reset(const SfxItemSet &rSet)
+void SwColumnPage::Reset(const SfxItemSet *rSet)
 {
     const sal_uInt16 nHtmlMode =
         ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
@@ -582,7 +582,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
     aDistEd2.SetMetric(aMetric);
 
     delete pColMgr;
-    pColMgr = new SwColMgr(rSet);
+    pColMgr = new SwColMgr(*rSet);
     nCols   = pColMgr->GetCount() ;
     m_pCLNrEdt->SetMax(std::max((sal_uInt16)m_pCLNrEdt->GetMax(), nCols));
     m_pCLNrEdt->SetLast(std::max(nCols,(sal_uInt16)m_pCLNrEdt->GetMax()));
@@ -593,24 +593,24 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
             pColMgr->SetActualWidth(FRAME_FORMAT_WIDTH);
         else
         {
-            const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
-            const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
+            const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)rSet->Get(RES_FRM_SIZE);
+            const SvxBoxItem& rBox = (const SvxBoxItem&) rSet->Get(RES_BOX);
             pColMgr->SetActualWidth((sal_uInt16)rSize.GetSize().Width() - rBox.GetDistance());
         }
     }
     if(m_pBalanceColsCB->IsVisible())
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_COLUMNBALANCE, false, &pItem ))
+        if( SFX_ITEM_SET == rSet->GetItemState( RES_COLUMNBALANCE, false, &pItem ))
             m_pBalanceColsCB->Check(!((const SwFmtNoBalancedColumns*)pItem)->GetValue());
         else
             m_pBalanceColsCB->Check( true );
     }
 
     //text direction
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR ) )
+    if( SFX_ITEM_AVAILABLE <= rSet->GetItemState( RES_FRAMEDIR ) )
     {
-        const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
+        const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rSet->Get(RES_FRAMEDIR);
         sal_uIntPtr nVal  = rItem.GetValue();
         const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( (void*) nVal );
         m_pTextDirectionLB->SelectEntryPos( nPos );
@@ -618,7 +618,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
     }
 
     Init();
-    ActivatePage( rSet );
+    ActivatePage( *rSet );
 }
 
 // create TabPage

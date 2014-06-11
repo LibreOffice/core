@@ -40,7 +40,7 @@ public:
 
     void SetNumberFormatter( SvNumberFormatter* pFormatter );
 
-    virtual void Reset(const SfxItemSet& rInAttrs) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet* rInAttrs) SAL_OVERRIDE;
     virtual bool FillItemSet(SfxItemSet* rOutAttrs) SAL_OVERRIDE;
 
 private:

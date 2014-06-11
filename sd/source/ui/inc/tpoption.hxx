@@ -41,7 +41,7 @@ public:
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
 };
 
@@ -63,7 +63,7 @@ public:
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 };
 
 /**
@@ -136,7 +136,7 @@ public:
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
     /** Hide Impress specific controls, make Draw specific controls visible
         and arrange the visible controls.  Do not call this method or the

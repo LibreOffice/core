@@ -77,7 +77,7 @@ SwFldDBPage::~SwFldDBPage()
 }
 
 // initialise TabPage
-void SwFldDBPage::Reset(const SfxItemSet&)
+void SwFldDBPage::Reset(const SfxItemSet*)
 {
     Init(); // Allgemeine initialisierung
 

@@ -135,12 +135,12 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     return true;
 }
 
-void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
+void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
 {
    const SfxPoolItem* pPoolItem = NULL;
 
     // show description
-    SfxItemState aState = rInAttrs.GetItemState( SCHATTR_AXIS_SHOWDESCR, false, &pPoolItem );
+    SfxItemState aState = rInAttrs->GetItemState( SCHATTR_AXIS_SHOWDESCR, false, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCbShowDescription->EnableTriState( true );
@@ -162,7 +162,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
 
     // check new degree item
     m_nInitialDegrees = 0;
-    aState = rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, false, &pPoolItem );
+    aState = rInAttrs->GetItemState( SCHATTR_TEXT_DEGREES, false, &pPoolItem );
     if( aState == SFX_ITEM_SET )
         m_nInitialDegrees = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
 
@@ -174,7 +174,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
 
     // check stacked item
     m_bInitialStacking = false;
-    aState = rInAttrs.GetItemState( SCHATTR_TEXT_STACKED, false, &pPoolItem );
+    aState = rInAttrs->GetItemState( SCHATTR_TEXT_STACKED, false, &pPoolItem );
     if( aState == SFX_ITEM_SET )
         m_bInitialStacking = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
 
@@ -184,11 +184,11 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     else
         m_pOrientHlp->SetStackedState( TRISTATE_INDET );
 
-    if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs->GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SFX_ITEM_SET )
         m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 
     // Text overlap ----------
-    aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );
+    aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCbTextOverlap->EnableTriState( true );
@@ -207,7 +207,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     }
 
     // text break ----------
-    aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_BREAK, false, &pPoolItem );
+    aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_BREAK, false, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
         m_pCbTextBreak->EnableTriState( true );
@@ -232,7 +232,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     // text order ----------
     if( m_bShowStaggeringControls )
     {
-        aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_ORDER, false, &pPoolItem );
+        aState = rInAttrs->GetItemState( SCHATTR_AXIS_LABEL_ORDER, false, &pPoolItem );
         if( aState == SFX_ITEM_SET )
         {
             SvxChartTextOrder eOrder = static_cast< const SvxChartTextOrderItem * >( pPoolItem )->GetValue();

@@ -75,7 +75,7 @@ public:
                                 const SfxItemSet& rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
 };
 
@@ -123,7 +123,7 @@ public:
                                 const SfxItemSet& rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     void                SetFax( const std::vector<OUString>& );
     void                SelectFax( const OUString& );
     void                SetPreview(bool bPrev);
@@ -195,7 +195,7 @@ public:
                                 const SfxItemSet& rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void    SetFontMode(sal_uInt8 nGroup) {nFontGroup = nGroup;}
     virtual void        PageCreated( const SfxAllItemSet& aSet ) SAL_OVERRIDE;
@@ -237,7 +237,7 @@ public:
                                 const SfxItemSet& rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void SetWrtShell(SwWrtShell* pSh) {pWrtShell = pSh;}
     virtual void        PageCreated( const SfxAllItemSet& aSet) SAL_OVERRIDE;
@@ -281,7 +281,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void    SetWrtShell( SwWrtShell * pSh ) { m_pWrtShell = pSh; }
     virtual void        PageCreated( const SfxAllItemSet& aSet ) SAL_OVERRIDE;
@@ -361,7 +361,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
 // TabPage test settings for SW
@@ -378,7 +378,7 @@ public:
                                 const SfxItemSet& rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
 private:
     CheckBox* m_pTest1CBox;
@@ -421,7 +421,7 @@ public:
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
 
     virtual bool FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
 #endif

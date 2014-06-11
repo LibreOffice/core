@@ -52,9 +52,9 @@ bool ErrorBarsTabPage::FillItemSet( SfxItemSet* rOutAttrs )
     return m_aErrorBarResources.FillItemSet( *rOutAttrs );
 }
 
-void ErrorBarsTabPage::Reset( const SfxItemSet& rInAttrs )
+void ErrorBarsTabPage::Reset( const SfxItemSet* rInAttrs )
 {
-    m_aErrorBarResources.Reset( rInAttrs );
+    m_aErrorBarResources.Reset( *rInAttrs );
 }
 
 void ErrorBarsTabPage::DataChanged( const DataChangedEvent& rDCEvt )

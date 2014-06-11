@@ -227,7 +227,7 @@ void    OfaAutocorrOptionsPage::ActivatePage( const SfxItemSet& )
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(false);
 }
 
-void OfaAutocorrOptionsPage::Reset( const SfxItemSet& )
+void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
@@ -602,7 +602,7 @@ void    OfaSwAutoFmtOptionsPage::ActivatePage( const SfxItemSet& )
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(false);
 }
 
-void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet& )
+void OfaSwAutoFmtOptionsPage::Reset( const SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
@@ -1073,7 +1073,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(bool bFromReset,
     }
 }
 
-void OfaAutocorrReplacePage::Reset( const SfxItemSet& )
+void OfaAutocorrReplacePage::Reset( const SfxItemSet* )
 {
     RefillReplaceBox(true, eLang, eLang);
     m_pShortED->GrabFocus();
@@ -1606,7 +1606,7 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(bool bFromReset,
     }
 }
 
-void OfaAutocorrExceptPage::Reset( const SfxItemSet& )
+void OfaAutocorrExceptPage::Reset( const SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     RefillReplaceBoxes(true, eLang, eLang);
@@ -1900,7 +1900,7 @@ void OfaQuoteTabPage::ActivatePage( const SfxItemSet& )
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage(false);
 }
 
-void OfaQuoteTabPage::Reset( const SfxItemSet& )
+void OfaQuoteTabPage::Reset( const SfxItemSet* )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     const long nFlags = pAutoCorrect->GetFlags();
@@ -2205,7 +2205,7 @@ bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
     return true;
 }
 
-void OfaAutoCompleteTabPage::Reset( const SfxItemSet&  )
+void OfaAutoCompleteTabPage::Reset( const SfxItemSet*  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();
@@ -2566,7 +2566,7 @@ bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet* )
 
 /** Sets the controls based on the current settings at SmartTagMgr.
 */
-void OfaSmartTagOptionsTabPage::Reset( const SfxItemSet&  )
+void OfaSmartTagOptionsTabPage::Reset( const SfxItemSet*  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     SvxSwAutoFmtFlags *pOpt = &pAutoCorrect->GetSwFlags();

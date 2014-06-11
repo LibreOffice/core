@@ -93,7 +93,7 @@ SwFldFuncPage::~SwFldFuncPage()
 {
 }
 
-void SwFldFuncPage::Reset(const SfxItemSet& )
+void SwFldFuncPage::Reset(const SfxItemSet* )
 {
     SavePos(m_pTypeLB);
     Init(); // general initialisation

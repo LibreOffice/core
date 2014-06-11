@@ -112,13 +112,13 @@ SvxTextAttrPage::~SvxTextAttrPage()
 |*
 \************************************************************************/
 
-void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
+void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
 {
-    SfxItemPool* pPool = rAttrs.GetPool();
+    SfxItemPool* pPool = rAttrs->GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     SfxMapUnit eUnit = pPool->GetMetric( SDRATTR_TEXT_LEFTDIST );
 
-    const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_TEXT_LEFTDIST );
+    const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_TEXT_LEFTDIST );
 
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_LEFTDIST );
@@ -131,7 +131,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pMtrFldLeft->SetText( "" );
     m_pMtrFldLeft->SaveValue();
 
-    pItem = GetItem( rAttrs, SDRATTR_TEXT_RIGHTDIST );
+    pItem = GetItem( *rAttrs, SDRATTR_TEXT_RIGHTDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_RIGHTDIST );
     if( pItem )
@@ -143,7 +143,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pMtrFldRight->SetText( "" );
     m_pMtrFldRight->SaveValue();
 
-    pItem = GetItem( rAttrs, SDRATTR_TEXT_UPPERDIST );
+    pItem = GetItem( *rAttrs, SDRATTR_TEXT_UPPERDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_UPPERDIST );
     if( pItem )
@@ -155,7 +155,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pMtrFldTop->SetText( "" );
     m_pMtrFldTop->SaveValue();
 
-    pItem = GetItem( rAttrs, SDRATTR_TEXT_LOWERDIST );
+    pItem = GetItem( *rAttrs, SDRATTR_TEXT_LOWERDIST );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_LOWERDIST );
     if( pItem )
@@ -168,9 +168,9 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldBottom->SaveValue();
 
     // adjust to height
-    if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SFX_ITEM_DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbAutoGrowHeight->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
+        m_pTsbAutoGrowHeight->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbAutoGrowHeight->EnableTriState( false );
     }
@@ -179,9 +179,9 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     m_pTsbAutoGrowHeight->SaveValue();
 
     // adjust to width
-    if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWWIDTH ) != SFX_ITEM_DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWWIDTH ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbAutoGrowWidth->SetState( ( ( const SdrTextAutoGrowWidthItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
+        m_pTsbAutoGrowWidth->SetState( ( ( const SdrTextAutoGrowWidthItem& )rAttrs->Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbAutoGrowWidth->EnableTriState( false );
     }
@@ -190,9 +190,9 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     m_pTsbAutoGrowWidth->SaveValue();
 
     // autogrowsize
-    if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) != SFX_ITEM_DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbAutoGrowSize->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
+        m_pTsbAutoGrowSize->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs->Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbAutoGrowSize->EnableTriState( false );
     }
@@ -201,9 +201,9 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     m_pTsbAutoGrowSize->SaveValue();
 
     // wordwrap text
-    if ( rAttrs.GetItemState( SDRATTR_TEXT_WORDWRAP ) != SFX_ITEM_DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_TEXT_WORDWRAP ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbWordWrapText->SetState( ( ( const SdrTextWordWrapItem& )rAttrs.Get( SDRATTR_TEXT_WORDWRAP ) ).
+        m_pTsbWordWrapText->SetState( ( ( const SdrTextWordWrapItem& )rAttrs->Get( SDRATTR_TEXT_WORDWRAP ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbWordWrapText->EnableTriState( false );
     }
@@ -214,14 +214,14 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
 
     // #103516# Do the setup based on states of hor/ver adjust
     // Setup center field and FullWidth
-    SfxItemState eVState = rAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
-    SfxItemState eHState = rAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
+    SfxItemState eVState = rAttrs->GetItemState( SDRATTR_TEXT_VERTADJUST );
+    SfxItemState eHState = rAttrs->GetItemState( SDRATTR_TEXT_HORZADJUST );
 
     if(SFX_ITEM_DONTCARE != eVState && SFX_ITEM_DONTCARE != eHState)
     {
         // VertAdjust and HorAdjust are unequivocal, thus
-        SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)rAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
-        SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)((const SdrTextHorzAdjustItem&)rAttrs.Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
+        SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)rAttrs->Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
+        SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)((const SdrTextHorzAdjustItem&)rAttrs->Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
         RECT_POINT eRP = RP_LB;
 
         m_pTsbFullWidth->EnableTriState( false );
@@ -292,10 +292,10 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     }
 
     // adjust to border
-    if ( rAttrs.GetItemState( SDRATTR_TEXT_FITTOSIZE ) != SFX_ITEM_DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_TEXT_FITTOSIZE ) != SFX_ITEM_DONTCARE )
     {
         SdrFitToSizeType eFTS = (SdrFitToSizeType)
-                    ( ( const SdrTextFitToSizeTypeItem& )rAttrs.Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
+                    ( ( const SdrTextFitToSizeTypeItem& )rAttrs->Get( SDRATTR_TEXT_FITTOSIZE ) ).GetValue();
         m_pTsbFitToSize->SetState( eFTS == SDRTEXTFIT_NONE ? TRISTATE_FALSE : TRISTATE_TRUE );
         m_pTsbFitToSize->EnableTriState( false );
     }
@@ -303,9 +303,9 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbFitToSize->SetState( TRISTATE_INDET );
     m_pTsbFitToSize->SaveValue();
 
-    if( rAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_TEXT_CONTOURFRAME ) != SFX_ITEM_DONTCARE )
     {
-        bool bContour = ( ( const SdrTextContourFrameItem& )rAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+        bool bContour = ( ( const SdrTextContourFrameItem& )rAttrs->Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
         m_pTsbContour->SetState( bContour ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbContour->EnableTriState( false );
     }

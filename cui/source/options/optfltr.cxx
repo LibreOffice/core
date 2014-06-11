@@ -102,7 +102,7 @@ bool OfaMSFilterTabPage::FillItemSet( SfxItemSet* )
     return false;
 }
 
-void OfaMSFilterTabPage::Reset( const SfxItemSet& )
+void OfaMSFilterTabPage::Reset( const SfxItemSet* )
 {
     const SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 
@@ -223,7 +223,7 @@ bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet* )
     return true;
 }
 
-void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
+void OfaMSFilterTabPage2::Reset( const SfxItemSet* )
 {
     SvtFilterOptions& rOpt = SvtFilterOptions::Get();
 

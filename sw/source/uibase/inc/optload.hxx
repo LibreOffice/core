@@ -69,7 +69,7 @@ public:
                                 const SfxItemSet& rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
 class SwCaptionOptDlg : public SfxSingleTabDialog
@@ -170,7 +170,7 @@ public:
                                 const SfxItemSet& rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
 #endif

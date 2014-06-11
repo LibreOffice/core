@@ -165,7 +165,7 @@ bool SwMailConfigPage::FillItemSet( SfxItemSet* /*rSet*/ )
     return true;
 }
 
-void SwMailConfigPage::Reset( const SfxItemSet& /*rSet*/ )
+void SwMailConfigPage::Reset( const SfxItemSet* /*rSet*/ )
 {
     m_pDisplayNameED->SetText(m_pConfigItem->GetMailDisplayName());
     m_pAddressED->SetText(m_pConfigItem->GetMailAddress());

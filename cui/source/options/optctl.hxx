@@ -49,7 +49,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTCTL_HXX

@@ -489,7 +489,7 @@ bool SwCompatibilityOptPage::FillItemSet( SfxItemSet*  )
     return bModified;
 }
 
-void SwCompatibilityOptPage::Reset( const SfxItemSet&  )
+void SwCompatibilityOptPage::Reset( const SfxItemSet*  )
 {
     m_pOptionsLB->SelectEntryPos( 0 );
 

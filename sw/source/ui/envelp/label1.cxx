@@ -467,7 +467,7 @@ SfxTabPage* SwLabPage::Create(Window* pParent, const SfxItemSet& rSet)
 
 void SwLabPage::ActivatePage(const SfxItemSet& rSet)
 {
-    Reset( rSet );
+    Reset( &rSet );
 }
 
 int SwLabPage::DeactivatePage(SfxItemSet* _pSet)
@@ -502,9 +502,9 @@ bool SwLabPage::FillItemSet(SfxItemSet* rSet)
     return true;
 }
 
-void SwLabPage::Reset(const SfxItemSet& rSet)
+void SwLabPage::Reset(const SfxItemSet* rSet)
 {
-    aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
+    aItem = (const SwLabItem&) rSet->Get(FN_LABEL);
     OUString sDBName  = aItem.sDBName;
 
     OUString aWriting(convertLineEnd(aItem.aWriting, GetSystemLineEnd()));
@@ -603,7 +603,7 @@ SfxTabPage* SwVisitingCardPage::Create(Window* pParent, const SfxItemSet& rSet)
 
 void SwVisitingCardPage::ActivatePage(const SfxItemSet& rSet)
 {
-    Reset( rSet );
+    Reset( &rSet );
     UpdateFields();
 }
 
@@ -660,9 +660,9 @@ static bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const OUString& rBlockName
     return false;
 }
 
-void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
+void SwVisitingCardPage::Reset(const SfxItemSet* rSet)
 {
-    aLabItem = (const SwLabItem&) rSet.Get(FN_LABEL);
+    aLabItem = (const SwLabItem&) rSet->Get(FN_LABEL);
 
     bool bFound = false;
     sal_Int32 i;
@@ -737,7 +737,7 @@ SfxTabPage* SwPrivateDataPage::Create(Window* pParent, const SfxItemSet& rSet)
 
 void SwPrivateDataPage::ActivatePage(const SfxItemSet& rSet)
 {
-    Reset(rSet);
+    Reset(&rSet);
 }
 
 int  SwPrivateDataPage::DeactivatePage(SfxItemSet* _pSet)
@@ -774,9 +774,9 @@ bool SwPrivateDataPage::FillItemSet(SfxItemSet* rSet)
     return true;
 }
 
-void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
+void SwPrivateDataPage::Reset(const SfxItemSet* rSet)
 {
-    const SwLabItem& aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
+    const SwLabItem& aItem = (const SwLabItem&) rSet->Get(FN_LABEL);
     m_pFirstNameED->SetText(aItem.aPrivFirstName);
     m_pNameED->SetText(aItem.aPrivName);
     m_pShortCutED->SetText(aItem.aPrivShortCut);
@@ -825,7 +825,7 @@ SfxTabPage* SwBusinessDataPage::Create(Window* pParent, const SfxItemSet& rSet)
 
 void SwBusinessDataPage::ActivatePage(const SfxItemSet& rSet)
 {
-    Reset(rSet);
+    Reset(&rSet);
 }
 
 int  SwBusinessDataPage::DeactivatePage(SfxItemSet* _pSet)
@@ -858,9 +858,9 @@ bool SwBusinessDataPage::FillItemSet(SfxItemSet* rSet)
     return true;
 }
 
-void SwBusinessDataPage::Reset(const SfxItemSet& rSet)
+void SwBusinessDataPage::Reset(const SfxItemSet* rSet)
 {
-    const SwLabItem& aItem = (const SwLabItem&) rSet.Get(FN_LABEL);
+    const SwLabItem& aItem = (const SwLabItem&) rSet->Get(FN_LABEL);
     m_pCompanyED->SetText(aItem.aCompCompany);
     m_pCompanyExtED->SetText(aItem.aCompCompanyExt);
     m_pSloganED->SetText(aItem.aCompSlogan);

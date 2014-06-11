@@ -155,7 +155,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static const sal_uInt16*      GetRanges();
 
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void                SetFontList( const SvxFontListItem& rItem );
@@ -234,7 +234,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static const sal_uInt16*      GetRanges();
 
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void                DisableControls( sal_uInt16 nDisable );
@@ -313,7 +313,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static const sal_uInt16*      GetRanges();
 
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        FillUserData() SAL_OVERRIDE;
     ///                  the writer uses SID_ATTR_BRUSH as font background
@@ -356,7 +356,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
     static const sal_uInt16*      GetRanges();
 
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     ///                  the writer uses SID_ATTR_BRUSH as font background
     void                SetPreviewBackgroundToCharacter();

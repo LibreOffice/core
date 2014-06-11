@@ -98,9 +98,9 @@ namespace dbaui
         return LEAVE_PAGE;
     }
 
-    void OGenericAdministrationPage::Reset(const SfxItemSet& _rCoreAttrs)
+    void OGenericAdministrationPage::Reset(const SfxItemSet* _rCoreAttrs)
     {
-        implInitControls(_rCoreAttrs, false);
+        implInitControls(*_rCoreAttrs, false);
     }
     void OGenericAdministrationPage::ActivatePage()
     {
@@ -181,7 +181,7 @@ namespace dbaui
     {
         OSL_ENSURE(m_pItemSetHelper,"NO ItemSetHelper set!");
         if ( m_pItemSetHelper )
-            Reset(*m_pItemSetHelper->getOutputSet());
+            Reset(m_pItemSetHelper->getOutputSet());
     }
     bool OGenericAdministrationPage::commitPage( ::svt::WizardTypes::CommitPageReason )
     {

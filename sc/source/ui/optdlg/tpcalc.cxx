@@ -84,7 +84,7 @@ SfxTabPage* ScTpCalcOptions::Create( Window* pParent, const SfxItemSet& rAttrSet
     return ( new ScTpCalcOptions( pParent, rAttrSet ) );
 }
 
-void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
+void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
 {
     sal_uInt16  d,m,y;
 

@@ -472,7 +472,7 @@ SfxTabPage* SwLabFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
 void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
-    Reset(aSet);
+    Reset(&aSet);
 }
 
 int SwLabFmtPage::DeactivatePage(SfxItemSet* _pSet)
@@ -511,7 +511,7 @@ bool SwLabFmtPage::FillItemSet(SfxItemSet* rSet)
     return true;
 }
 
-void SwLabFmtPage::Reset(const SfxItemSet& )
+void SwLabFmtPage::Reset(const SfxItemSet* )
 {
     // Initialise fields
     GetParentSwLabDlg()->GetLabItem(aItem);

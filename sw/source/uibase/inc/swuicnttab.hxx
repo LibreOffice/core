@@ -223,7 +223,7 @@ public:
     virtual ~SwTOXSelectTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
@@ -436,7 +436,7 @@ public:
     virtual ~SwTOXEntryTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
@@ -482,7 +482,7 @@ public:
     virtual ~SwTOXStylesTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     virtual void        ActivatePage( const SfxItemSet& ) SAL_OVERRIDE;
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;

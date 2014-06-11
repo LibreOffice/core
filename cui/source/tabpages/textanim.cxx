@@ -139,12 +139,12 @@ SvxTextAnimationPage::~SvxTextAnimationPage()
 |*
 \************************************************************************/
 
-void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
+void SvxTextAnimationPage::Reset( const SfxItemSet* rAttrs )
 {
-    const SfxItemPool* pPool = rAttrs.GetPool();
+    const SfxItemPool* pPool = rAttrs->GetPool();
 
     // animation type
-    const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIKIND );
+    const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANIKIND );
 
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIKIND );
@@ -158,7 +158,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     m_pLbEffect->SaveValue();
 
     // animation direction
-    pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIDIRECTION );
+    pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANIDIRECTION );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDIRECTION );
     if( pItem )
@@ -179,7 +179,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     m_pBtnDown->SaveValue();
 
     // Start inside
-    pItem = GetItem( rAttrs, SDRATTR_TEXT_ANISTARTINSIDE );
+    pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANISTARTINSIDE );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTARTINSIDE );
     if( pItem )
@@ -196,7 +196,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     m_pTsbStartInside->SaveValue();
 
     // Stop inside
-    pItem = GetItem( rAttrs, SDRATTR_TEXT_ANISTOPINSIDE );
+    pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANISTOPINSIDE );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTOPINSIDE );
     if( pItem )
@@ -213,7 +213,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     m_pTsbStopInside->SaveValue();
 
     // quantity
-    pItem = GetItem( rAttrs, SDRATTR_TEXT_ANICOUNT );
+    pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANICOUNT );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANICOUNT );
     if( pItem )
@@ -246,7 +246,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     m_pNumFldCount->SaveValue();
 
     // delay
-    pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIDELAY );
+    pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANIDELAY );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDELAY );
     if( pItem )
@@ -271,7 +271,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldDelay->SaveValue();
 
     // step size
-    pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIAMOUNT );
+    pItem = GetItem( *rAttrs, SDRATTR_TEXT_ANIAMOUNT );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIAMOUNT );
     if( pItem )

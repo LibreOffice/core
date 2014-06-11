@@ -116,7 +116,7 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
 };
@@ -152,7 +152,7 @@ class SvxBulletPickTabPage : public SfxTabPage
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void                SetCharFmtName(const OUString& rName){sBulletCharFmtName = rName;}
     virtual void        PageCreated(const SfxAllItemSet& aSet) SAL_OVERRIDE;
@@ -195,7 +195,7 @@ class SvxNumPickTabPage : public SfxTabPage
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void                SetCharFmtNames(const OUString& rCharName, const OUString& rBulName)
                             {   sNumCharFmtName = rCharName;
@@ -240,7 +240,7 @@ class SvxBitmapPickTabPage : public SfxTabPage
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void                SetNumCharFmtName(const OUString& rName){sNumCharFmtName = rName;}
 };
@@ -352,7 +352,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     void                SetCharFmts(const OUString& rNumName, const OUString& rBulletName)
                         {
@@ -452,7 +452,7 @@ public:
     virtual void        ActivatePage(const SfxItemSet& rSet) SAL_OVERRIDE;
     virtual int         DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);

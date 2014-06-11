@@ -189,7 +189,7 @@ public:
     static const sal_uInt16* GetRanges();
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 
     void            SetNewFrame(bool bNewFrame) { bNew      = bNewFrame; }
     void            SetFormatUsed(bool bFmt);
@@ -235,7 +235,7 @@ public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
     virtual int  DeactivatePage(SfxItemSet *pSet) SAL_OVERRIDE;
 };
 
@@ -264,7 +264,7 @@ public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 };
 
 class SwFrmAddPage : public SfxTabPage
@@ -312,7 +312,7 @@ public:
     static const sal_uInt16*      GetRanges();
 
     virtual bool FillItemSet(SfxItemSet *rSet) SAL_OVERRIDE;
-    virtual void Reset(const SfxItemSet &rSet) SAL_OVERRIDE;
+    virtual void Reset(const SfxItemSet *rSet) SAL_OVERRIDE;
 
     void            SetFormatUsed(bool bFmt);
     void            SetFrmType(const OString &rType) { sDlgType = rType; }

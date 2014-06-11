@@ -57,12 +57,12 @@ int ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
+void ScTpPrintOptions::Reset( const SfxItemSet* rCoreSet )
 {
     ScPrintOptions aOptions;
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCPRINTOPTIONS, false , &pItem))
+    if(SFX_ITEM_SET == rCoreSet->GetItemState(SID_SCPRINTOPTIONS, false , &pItem))
         aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
     else
     {
@@ -70,7 +70,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
         aOptions = SC_MOD()->GetPrintOptions();
     }
 
-    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, false , &pItem ) )
+    if ( SFX_ITEM_SET == rCoreSet->GetItemState( SID_PRINT_SELECTEDSHEET, false , &pItem ) )
     {
         bool bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
         m_pSelectedSheetsCB->Check( bChecked );

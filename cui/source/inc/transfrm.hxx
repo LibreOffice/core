@@ -151,7 +151,7 @@ public:
     static const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
@@ -206,7 +206,7 @@ public:
     static const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;
@@ -250,7 +250,7 @@ public:
     static const sal_uInt16*     GetRanges();
 
     virtual bool FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void Reset( const SfxItemSet & ) SAL_OVERRIDE;
+    virtual void Reset( const SfxItemSet * ) SAL_OVERRIDE;
 
     virtual void ActivatePage( const SfxItemSet& rSet ) SAL_OVERRIDE;
     virtual int  DeactivatePage( SfxItemSet* pSet ) SAL_OVERRIDE;

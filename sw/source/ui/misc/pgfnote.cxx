@@ -141,12 +141,12 @@ SfxTabPage* SwFootNotePage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SwFootNotePage(pParent, rSet);
 }
 
-void SwFootNotePage::Reset(const SfxItemSet &rSet)
+void SwFootNotePage::Reset(const SfxItemSet *rSet)
 {
     // if no example exists, otherwise Init here in Activate
     boost::scoped_ptr<SwPageFtnInfo> pDefFtnInfo;
     const SwPageFtnInfo* pFtnInfo;
-    const SfxPoolItem* pItem = SfxTabPage::GetItem(rSet, FN_PARAM_FTN_INFO);
+    const SfxPoolItem* pItem = SfxTabPage::GetItem(*rSet, FN_PARAM_FTN_INFO);
     if( pItem )
     {
         pFtnInfo = &((const SwPageFtnInfoItem*)pItem)->GetPageFtnInfo();
@@ -250,7 +250,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     m_pDistEdit->SetValue(m_pDistEdit->Normalize(pFtnInfo->GetTopDist()),FUNIT_TWIP);
     m_pLineDistEdit->SetValue(
         m_pLineDistEdit->Normalize(pFtnInfo->GetBottomDist()), FUNIT_TWIP);
-    ActivatePage( rSet );
+    ActivatePage( *rSet );
 }
 
 // stuff attributes into the set, when OK

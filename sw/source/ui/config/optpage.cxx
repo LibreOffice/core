@@ -182,11 +182,11 @@ static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemS
     rMetric->SaveValue();
 }
 
-void SwContentOptPage::Reset(const SfxItemSet& rSet)
+void SwContentOptPage::Reset(const SfxItemSet* rSet)
 {
     const SwElemItem* pElemAttr = 0;
 
-    rSet.GetItemState( FN_PARAM_ELEM , false,
+    rSet->GetItemState( FN_PARAM_ELEM , false,
                                     (const SfxPoolItem**)&pElemAttr );
     if(pElemAttr)
     {
@@ -205,9 +205,9 @@ void SwContentOptPage::Reset(const SfxItemSet& rSet)
         m_pSmoothCBox->Check (pElemAttr->bSmoothScroll);
     }
     m_pMetricLB->SetNoSelection();
-    lcl_SelectMetricLB(m_pMetricLB, SID_ATTR_METRIC, rSet);
-    lcl_SelectMetricLB(m_pHMetric, FN_HSCROLL_METRIC, rSet);
-    lcl_SelectMetricLB(m_pVMetric, FN_VSCROLL_METRIC, rSet);
+    lcl_SelectMetricLB(m_pMetricLB, SID_ATTR_METRIC, *rSet);
+    lcl_SelectMetricLB(m_pHMetric, FN_HSCROLL_METRIC, *rSet);
+    lcl_SelectMetricLB(m_pVMetric, FN_VSCROLL_METRIC, *rSet);
     AnyRulerHdl(m_pAnyRulerCB);
 }
 
@@ -408,7 +408,7 @@ bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet* rCoreSet )
     return bAttrModified;
 }
 
-void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
+void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
 {
     const   SfxItemSet&         rSet = GetItemSet();
     const   SwAddPrinterItem*   pAddPrinterAttr = 0;
@@ -493,7 +493,7 @@ void SwAddPrinterTabPage::PageCreated( const SfxAllItemSet& aSet)
     if (pPreviewItem)
     {
         SetPreview(pPreviewItem->GetValue());
-        Reset(aSet);
+        Reset(&aSet);
     }
     if (pListItem && pListItem->GetValue())
     {
@@ -745,13 +745,13 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
     return false;
 }
 
-void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
+void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
 {
     const SfxPoolItem* pLang;
     const sal_uInt16 nLangSlot = nFontGroup == FONT_GROUP_DEFAULT  ? SID_ATTR_LANGUAGE :
         FONT_GROUP_CJK == nFontGroup ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_CHAR_CTL_LANGUAGE;
 
-    if( SFX_ITEM_SET == rSet.GetItemState(nLangSlot, false, &pLang))
+    if( SFX_ITEM_SET == rSet->GetItemState(nLangSlot, false, &pLang))
         eLanguage = ((const SvxLanguageItem*)pLang)->GetValue();
 
     OUString sToReplace = sScriptWestern;
@@ -768,13 +768,13 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
         delete pPrt;
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_PRINTER, false, &pItem))
+    if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))
     {
         pPrt = (SfxPrinter*)((const SwPtrItem*)pItem)->GetValue();
     }
     else
     {
-        SfxItemSet* pPrinterSet = new SfxItemSet( *rSet.GetPool(),
+        SfxItemSet* pPrinterSet = new SfxItemSet( *rSet->GetPool(),
                     SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                     SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                     0 );
@@ -805,12 +805,12 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
             pIdxBox->InsertEntry( *it );
         }
     }
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_STDFONTS, false, &pItem))
+    if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_STDFONTS, false, &pItem))
     {
          pFontConfig = (SwStdFontConfig*)((const SwPtrItem*)pItem)->GetValue();
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
+    if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
     {
         pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
     }
@@ -1184,12 +1184,12 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
     return bRet;
 }
 
-void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
+void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
 {
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-    if ( rSet.GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_AVAILABLE )
     {
-        const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet.Get( SID_ATTR_METRIC );
+        const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
         ::SetFieldUnit( *pRowMoveMF, eFieldUnit );
         ::SetFieldUnit( *pColMoveMF, eFieldUnit );
@@ -1209,7 +1209,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
         case TBLVAR_CHGABS:     pVarRB->Check(); break;
     }
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
+    if(SFX_ITEM_SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
     {
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }
@@ -1398,12 +1398,12 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
     return bRet;
 }
 
-void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
+void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem = 0;
 
     SwShadowCursorItem aOpt;
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
+    if( SFX_ITEM_SET == rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
         aOpt = *(SwShadowCursorItem*)pItem;
     m_pOnOffCB->Check( aOpt.IsOn() );
 
@@ -1420,13 +1420,13 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
         m_pMathBaselineAlignmentCB->Hide();
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, false, &pItem ))
+    if( SFX_ITEM_SET == rSet->GetItemState( FN_PARAM_CRSR_IN_PROTECTED, false, &pItem ))
         m_pCrsrInProtCB->Check(((const SfxBoolItem*)pItem)->GetValue());
     m_pCrsrInProtCB->SaveValue();
 
     const SwDocDisplayItem* pDocDisplayAttr = 0;
 
-    rSet.GetItemState( FN_PARAM_DOCDISP, false,
+    rSet->GetItemState( FN_PARAM_DOCDISP, false,
                                     (const SfxPoolItem**)&pDocDisplayAttr );
     if(pDocDisplayAttr)
     {
@@ -1860,7 +1860,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     return false;
 }
 
-void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
+void SwRedlineOptionsTabPage::Reset( const SfxItemSet*  )
 {
     const SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
 
@@ -2273,7 +2273,7 @@ bool SwCompareOptionsTabPage::FillItemSet( SfxItemSet* )
     return bRet;
 }
 
-void SwCompareOptionsTabPage::Reset( const SfxItemSet& )
+void SwCompareOptionsTabPage::Reset( const SfxItemSet* )
 {
     SwModuleOptions *pOpt = SW_MOD()->GetModuleConfig();
 
@@ -2379,7 +2379,7 @@ bool    SwTestTabPage::FillItemSet( SfxItemSet* rCoreSet )
     return bAttrModified;
 }
 
-void SwTestTabPage::Reset( const SfxItemSet& )
+void SwTestTabPage::Reset( const SfxItemSet* )
 {
     const SfxItemSet& rSet = GetItemSet();
     const SwTestItem* pTestAttr = 0;

@@ -323,15 +323,15 @@ bool SvxGeneralTabPage::FillItemSet( SfxItemSet* )
 
 
 
-void SvxGeneralTabPage::Reset( const SfxItemSet& rSet )
+void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 {
     SetAddress_Impl();
 
     sal_uInt16 const nWhich = GetWhich(SID_FIELD_GRABFOCUS);
 
-    if (rSet.GetItemState(nWhich) == SFX_ITEM_SET)
+    if (rSet->GetItemState(nWhich) == SFX_ITEM_SET)
     {
-        if (sal_uInt16 const nField = ((SfxUInt16Item&)rSet.Get(nWhich)).GetValue())
+        if (sal_uInt16 const nField = ((SfxUInt16Item&)rSet->Get(nWhich)).GetValue())
         {
             for (unsigned i = 0; i != vFields.size(); ++i)
                 if (nField == vFieldInfo[vFields[i]->iField].nGrabFocusId)

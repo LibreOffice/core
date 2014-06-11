@@ -112,7 +112,7 @@ bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )
     return bModified;
 }
 
-void SvxCTLOptionsPage::Reset( const SfxItemSet& )
+void SvxCTLOptionsPage::Reset( const SfxItemSet* )
 {
     SvtCTLOptions aCTLOptions;
 

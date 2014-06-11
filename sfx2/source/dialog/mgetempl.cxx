@@ -399,7 +399,7 @@ bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
+void SfxManageStyleSheetPage::Reset( const SfxItemSet* /*rAttrSet*/ )
 
 /*  [Description]
 
