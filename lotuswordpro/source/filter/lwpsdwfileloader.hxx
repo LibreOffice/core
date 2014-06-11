@@ -62,11 +62,15 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWFILELOADER_HXX
 
-#include <assert.h>
+#include <sal/config.h>
+
+#include <vector>
+
+#include <rtl/ref.hxx>
 #include <tools/stream.hxx>
+
 #include "lwpheader.hxx"
 #include "xfilter/ixfstream.hxx"
-#include <vector>
 
 class XFFrame;
 class LwpGraphicObject;
@@ -83,7 +87,7 @@ public:
 //  void RegisterStyle(void);
 
     // add by  ,03/25/2005
-    void CreateDrawObjects(std::vector <XFFrame*>* pDrawObjVector);
+    void CreateDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector);
     // end add
 };
 

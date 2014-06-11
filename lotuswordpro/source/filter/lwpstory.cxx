@@ -348,7 +348,9 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
             if(pFrameLayout->IsAnchorCell() && pFrameLayout->HasContent())
             {
                 //get the first xfpara
-                XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(pCont->FindFirstContent(enumXFContentPara));
+                rtl::Reference<XFContent> first(
+                    pCont->FindFirstContent(enumXFContentPara));
+                XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
                 if(pXFFirtPara)
                     pFrameLayout->XFConvert(pXFFirtPara);
             }
@@ -424,7 +426,9 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
             if(pFrameLayout->IsAnchorPage() && (pLayout->IsHeader() || pLayout->IsFooter()))
             {
                 //The frame must be included by <text:p>
-                XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(pCont->FindFirstContent(enumXFContentPara));
+                rtl::Reference<XFContent> first(
+                    pCont->FindFirstContent(enumXFContentPara));
+                XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(first.get());
                 if(pXFFirtPara)
                     pFrameLayout->XFConvert(pXFFirtPara);
             }

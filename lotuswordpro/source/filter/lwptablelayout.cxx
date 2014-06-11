@@ -1183,8 +1183,9 @@ void LwpTableLayout::PostProcessParagraph(XFCell *pCell, sal_uInt16 nRowID, sal_
     LwpCellLayout * pCellLayout = GetCellByRowCol(nRowID, nColID);
     if(pCellLayout)
     {
-        XFParagraph * pXFPara = NULL;
-        pXFPara = static_cast<XFParagraph*>(pCell->FindFirstContent(enumXFContentPara));
+        rtl::Reference<XFContent> first(
+            pCell->FindFirstContent(enumXFContentPara));
+        XFParagraph * pXFPara = static_cast<XFParagraph*>(first.get());
         if (!pXFPara)
             return;
         XFColor aNullColor = XFColor();

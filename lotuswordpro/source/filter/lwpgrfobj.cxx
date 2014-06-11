@@ -197,15 +197,15 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 {
     if ((m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w'))
     {
-        std::vector <XFFrame*>::iterator iter;
+        std::vector< rtl::Reference<XFFrame> >::iterator iter;
         for (iter = m_vXFDrawObjects.begin(); iter != m_vXFDrawObjects.end(); ++iter)
         {
-            pCont->Add(*iter);
+            pCont->Add(iter->get());
         }
     }
     else if (this->IsGrafFormatValid())
     {
-        XFImage* pImage = static_cast<XFImage*>(m_vXFDrawObjects.front());
+        XFImage* pImage = static_cast<XFImage*>(m_vXFDrawObjects.front().get());
 
         if (m_bIsLinked)
         {
@@ -438,7 +438,7 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
  */
 void LwpGraphicObject::CreateGrafObject()
 {
-    XFImage* pImage = new XFImage();
+    rtl::Reference<XFImage> pImage = new XFImage();
 
     // set image processing styles
     XFImageStyle* pImageStyle = new XFImageStyle();
@@ -660,7 +660,7 @@ void LwpGraphicObject::CreateGrafObject()
     }
 
     // insert image object into array
-    m_vXFDrawObjects.push_back(pImage);
+    m_vXFDrawObjects.push_back(pImage.get());
 
 }
 

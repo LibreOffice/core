@@ -77,16 +77,6 @@ XFTextSpan::XFTextSpan(const OUString& text,
 
 XFTextSpan::~XFTextSpan()
 {
-    std::vector<XFContent*>::iterator it;
-    for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
-    {
-        XFContent  *pContent = *it;
-        if( pContent )
-        {
-            delete pContent;
-        }
-    }
-    m_aContents.clear();
 }
 
 enumXFContent XFTextSpan::GetContentType()
@@ -117,10 +107,10 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( "text:style-name", GetStyleName() );
     pStrm->StartElement( "text:span" );
 
-    std::vector<XFContent*>::iterator it;
+    std::vector< rtl::Reference<XFContent> >::iterator it;
     for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
-        XFContent *pContent = *it;
+        XFContent *pContent = it->get();
         if( pContent )
             pContent->ToXml(pStrm);
     }
@@ -140,20 +130,20 @@ void    XFTextSpanStart::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( "text:style-name", GetStyleName() );
     pStrm->StartElement( "text:span" );
 
-    std::vector<XFContent*>::iterator it;
+    std::vector< rtl::Reference<XFContent> >::iterator it;
     for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
-        XFContent *pContent = *it;
+        XFContent *pContent = it->get();
         if( pContent )
             pContent->ToXml(pStrm);
     }
 }
 void    XFTextSpanEnd::ToXml(IXFStream *pStrm)
 {
-    std::vector<XFContent*>::iterator it;
+    std::vector< rtl::Reference<XFContent> >::iterator it;
     for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
-        XFContent *pContent = *it;
+        XFContent *pContent = it->get();
         if( pContent )
             pContent->ToXml(pStrm);
     }

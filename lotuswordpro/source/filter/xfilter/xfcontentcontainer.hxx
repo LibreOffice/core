@@ -64,7 +64,7 @@
 
 #include <vector>
 
-#include <boost/noncopyable.hpp>
+#include <rtl/ref.hxx>
 
 #include "xfcontent.hxx"
 
@@ -73,7 +73,7 @@
  * A container for content.
  * The contents will be deleted when delete container.
  */
-class XFContentContainer : public XFContent, private boost::noncopyable
+class XFContentContainer : public XFContent
 {
 public:
     XFContentContainer();
@@ -91,7 +91,7 @@ public:
 
     virtual void    InsertAtBegin(XFContent *pContent);
     virtual void    RemoveAt(sal_uInt32 nPos);
-    virtual XFContent* GetLastContent();
+    virtual rtl::Reference<XFContent> GetLastContent();
     virtual void    RemoveLastContent();
     /**
      * @descr   convience function for add text content.
@@ -106,7 +106,7 @@ public:
     /**
      * @descr   get content by index.
      */
-    XFContent* GetContent(sal_uInt32 index) const;
+    rtl::Reference<XFContent> GetContent(sal_uInt32 index) const;
 
     /**
      * @descr   clear all contents in the container.
@@ -116,7 +116,7 @@ public:
     /**
      * @descr   helper function, find first content by type.
      */
-    XFContent* FindFirstContent(enumXFContent type);
+    rtl::Reference<XFContent> FindFirstContent(enumXFContent type);
 
     /**
      * @descr   return the content type.
@@ -128,10 +128,10 @@ public:
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
-    std::vector<XFContent*>    m_aContents;
+    std::vector< rtl::Reference<XFContent> >    m_aContents;
 };
 
-inline XFContent* XFContentContainer::GetContent(sal_uInt32 index) const
+inline rtl::Reference<XFContent> XFContentContainer::GetContent(sal_uInt32 index) const
 {
     if (index > m_aContents.size()-1)
         return NULL;

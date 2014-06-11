@@ -62,9 +62,12 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_LWPSDWGROUPLOADERV0102_HXX
 
+#include <sal/config.h>
+
+#include <rtl/ref.hxx>
 #include <tools/stream.hxx>
+
 #include "lwpheader.hxx"
-#include "assert.h"
 #include "lwpsdwdrawheader.hxx"
 
 class XFFrame;
@@ -75,7 +78,7 @@ class LwpSdwGroupLoaderV0102
 private:
     SvStream* m_pStream;
     LwpGraphicObject* m_pGraphicObj;
-    std::vector <XFFrame*>* m_pDrawObjVector;
+    std::vector< rtl::Reference<XFFrame> >* m_pDrawObjVector;
 
     DrawingOffsetAndScale m_aTransformData;
 
@@ -84,7 +87,7 @@ public:
     ~LwpSdwGroupLoaderV0102();
 public:
 
-    void BeginDrawObjects(std::vector <XFFrame*>* pDrawObjVector);
+    void BeginDrawObjects(std::vector< rtl::Reference<XFFrame> >* pDrawObjVector);
     XFDrawGroup* CreateDrawGroupObject(void);
     XFFrame* CreateDrawObject(void);
     // end add

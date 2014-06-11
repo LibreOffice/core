@@ -110,7 +110,7 @@ private:
     void ParseChart(IXFStream* pOutputStream);
     bool IsGrafFormatValid();
     // add by , 03/25/2005
-    std::vector <XFFrame*> m_vXFDrawObjects;
+    std::vector< rtl::Reference<XFFrame> > m_vXFDrawObjects;
     // end add
 
 public:
