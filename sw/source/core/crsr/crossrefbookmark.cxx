@@ -59,7 +59,7 @@ namespace sw { namespace mark
         OSL_PRECOND(false,
             "<sw::mark::CrossRefBookmark::GetOtherMarkPos(..)>"
             " - this should never be called!");
-        return *static_cast<SwPosition*>(NULL);
+        abort();
     }
 
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
