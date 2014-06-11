@@ -88,7 +88,7 @@ public:
     /**
      * @descr   Add content for table cell.
      */
-    void    Add(IXFContent *pContent) SAL_OVERRIDE;
+    void    Add(XFContent *pContent) SAL_OVERRIDE;
 
     /**
      * @descr   If cell spans more the one column, then set column span.

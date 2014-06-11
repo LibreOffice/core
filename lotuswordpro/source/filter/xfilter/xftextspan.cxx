@@ -77,10 +77,10 @@ XFTextSpan::XFTextSpan(const OUString& text,
 
 XFTextSpan::~XFTextSpan()
 {
-    std::vector<IXFContent*>::iterator it;
+    std::vector<XFContent*>::iterator it;
     for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
-        IXFContent  *pContent = *it;
+        XFContent  *pContent = *it;
         if( pContent )
         {
             delete pContent;
@@ -94,14 +94,14 @@ enumXFContent XFTextSpan::GetContentType()
     return enumXFContentSpan;
 }
 
-void    XFTextSpan::Add(IXFContent *pContent)
+void    XFTextSpan::Add(XFContent *pContent)
 {
     m_aContents.push_back(pContent);
 }
 
 void    XFTextSpan::Add(const OUString& text)
 {
-    IXFContent *pText = new XFTextContent(text);
+    XFContent *pText = new XFTextContent(text);
     Add(pText);
 }
 
@@ -117,10 +117,10 @@ void    XFTextSpan::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( "text:style-name", GetStyleName() );
     pStrm->StartElement( "text:span" );
 
-    std::vector<IXFContent*>::iterator it;
+    std::vector<XFContent*>::iterator it;
     for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
-        IXFContent *pContent = *it;
+        XFContent *pContent = *it;
         if( pContent )
             pContent->ToXml(pStrm);
     }
@@ -140,20 +140,20 @@ void    XFTextSpanStart::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( "text:style-name", GetStyleName() );
     pStrm->StartElement( "text:span" );
 
-    std::vector<IXFContent*>::iterator it;
+    std::vector<XFContent*>::iterator it;
     for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
-        IXFContent *pContent = *it;
+        XFContent *pContent = *it;
         if( pContent )
             pContent->ToXml(pStrm);
     }
 }
 void    XFTextSpanEnd::ToXml(IXFStream *pStrm)
 {
-    std::vector<IXFContent*>::iterator it;
+    std::vector<XFContent*>::iterator it;
     for( it= m_aContents.begin(); it!= m_aContents.end(); ++it )
     {
-        IXFContent *pContent = *it;
+        XFContent *pContent = *it;
         if( pContent )
             pContent->ToXml(pStrm);
     }

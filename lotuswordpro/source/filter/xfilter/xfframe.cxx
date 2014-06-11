@@ -90,7 +90,7 @@ XFFrame::~XFFrame()
 {
 }
 
-void    XFFrame::Add(IXFContent *pContent)
+void    XFFrame::Add(XFContent *pContent)
 {
     if (!pContent)
         return;
@@ -194,7 +194,7 @@ void    XFFrame::AdjustZIndex()
 {
     for( int i=0; i<GetCount(); i++ )
     {
-        IXFContent *pContent = GetContent(i);
+        XFContent *pContent = GetContent(i);
         if( pContent )
         {
             if( pContent->GetContentType() == enumXFContentFrame )

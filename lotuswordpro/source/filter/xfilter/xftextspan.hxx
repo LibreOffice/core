@@ -74,13 +74,13 @@ public:
 
     virtual ~XFTextSpan();
 
-    void            Add(IXFContent *pContent);
+    void            Add(XFContent *pContent);
     void            Add(const OUString& text);
 
     virtual enumXFContent GetContentType() SAL_OVERRIDE;
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 protected:
-    std::vector<IXFContent*>    m_aContents;
+    std::vector<XFContent*>    m_aContents;
 };
 
 class XFTextSpanStart : public XFTextSpan //for adding style of power field

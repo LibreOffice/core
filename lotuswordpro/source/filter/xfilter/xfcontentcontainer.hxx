@@ -86,11 +86,11 @@ public:
     /**
      * @descr   Add conent.
      */
-    virtual void    Add(IXFContent *pContent);
+    virtual void    Add(XFContent *pContent);
 
-    virtual void    InsertAtBegin(IXFContent *pContent);
+    virtual void    InsertAtBegin(XFContent *pContent);
     virtual void    RemoveAt(sal_uInt32 nPos);
-    virtual IXFContent* GetLastContent();
+    virtual XFContent* GetLastContent();
     virtual void    RemoveLastContent();
     /**
      * @descr   convience function for add text content.
@@ -105,7 +105,7 @@ public:
     /**
      * @descr   get content by index.
      */
-    IXFContent* GetContent(sal_uInt32 index) const;
+    XFContent* GetContent(sal_uInt32 index) const;
 
     /**
      * @descr   clear all contents in the container.
@@ -115,7 +115,7 @@ public:
     /**
      * @descr   helper function, find first content by type.
      */
-    IXFContent* FindFirstContent(enumXFContent type);
+    XFContent* FindFirstContent(enumXFContent type);
 
     /**
      * @descr   return the content type.
@@ -127,10 +127,10 @@ public:
     virtual void ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
 private:
-    std::vector<IXFContent*>    m_aContents;
+    std::vector<XFContent*>    m_aContents;
 };
 
-inline IXFContent* XFContentContainer::GetContent(sal_uInt32 index) const
+inline XFContent* XFContentContainer::GetContent(sal_uInt32 index) const
 {
     if (index > m_aContents.size()-1)
         return NULL;

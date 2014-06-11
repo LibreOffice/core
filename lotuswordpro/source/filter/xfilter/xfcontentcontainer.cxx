@@ -66,14 +66,14 @@ XFContentContainer::XFContentContainer()
 
 XFContentContainer::XFContentContainer(const XFContentContainer& other):XFContent(other)
 {
-    std::vector<IXFContent*>::const_iterator it;
+    std::vector<XFContent*>::const_iterator it;
 
     for( it = other.m_aContents.begin(); it != other.m_aContents.end(); ++it )
     {
-        IXFContent *pContent = *it;
+        XFContent *pContent = *it;
         if( pContent )
         {
-            IXFContent *pClone = pContent->Clone();
+            XFContent *pClone = pContent->Clone();
             if( pClone )
                 Add(pClone);
         }
@@ -82,14 +82,14 @@ XFContentContainer::XFContentContainer(const XFContentContainer& other):XFConten
 
 XFContentContainer& XFContentContainer::operator=(const XFContentContainer& other)
 {
-    std::vector<IXFContent*>::const_iterator it;
+    std::vector<XFContent*>::const_iterator it;
 
     for( it = other.m_aContents.begin(); it != other.m_aContents.end(); ++it )
     {
-        IXFContent *pContent = *it;
+        XFContent *pContent = *it;
         if( pContent )
         {
-            IXFContent *pClone = pContent->Clone();
+            XFContent *pClone = pContent->Clone();
             if( pClone )
                 Add(pClone);
         }
@@ -99,21 +99,21 @@ XFContentContainer& XFContentContainer::operator=(const XFContentContainer& othe
 
 XFContentContainer::~XFContentContainer()
 {
-    std::vector<IXFContent*>::iterator it;
+    std::vector<XFContent*>::iterator it;
 
     for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
-        IXFContent *pContent = *it;
+        XFContent *pContent = *it;
         delete pContent;
     }
 }
 
-void    XFContentContainer::Add(IXFContent *pContent)
+void    XFContentContainer::Add(XFContent *pContent)
 {
     m_aContents.push_back(pContent);
 }
 
-void XFContentContainer::InsertAtBegin(IXFContent * pContent)
+void XFContentContainer::InsertAtBegin(XFContent * pContent)
 {
     m_aContents.insert(m_aContents.begin(), pContent);
 }
@@ -135,21 +135,21 @@ int     XFContentContainer::GetCount() const
 
 void    XFContentContainer::Reset()
 {
-    std::vector<IXFContent*>::iterator it;
+    std::vector<XFContent*>::iterator it;
 
     for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
-        IXFContent *pContent = *it;
+        XFContent *pContent = *it;
         if( pContent )
             delete pContent;
     }
     m_aContents.clear();
 }
 
-IXFContent* XFContentContainer::FindFirstContent(enumXFContent type)
+XFContent* XFContentContainer::FindFirstContent(enumXFContent type)
 {
-    IXFContent *pRet = NULL;
-    IXFContent  *pContent = NULL;
+    XFContent *pRet = NULL;
+    XFContent  *pContent = NULL;
 
     for( int i=0; i<GetCount(); i++ )
     {
@@ -181,17 +181,17 @@ enumXFContent   XFContentContainer::GetContentType()
 
 void    XFContentContainer::ToXml(IXFStream *pStrm)
 {
-    std::vector<IXFContent*>::iterator it;
+    std::vector<XFContent*>::iterator it;
 
     for( it = m_aContents.begin(); it != m_aContents.end(); ++it )
     {
-        IXFContent *pContent = *it;
+        XFContent *pContent = *it;
         if( pContent )
             pContent->ToXml(pStrm);
     }
 }
 
-IXFContent* XFContentContainer::GetLastContent()
+XFContent* XFContentContainer::GetLastContent()
 {
     sal_uInt32 index = m_aContents.size()-1;
     if(index >0)

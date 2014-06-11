@@ -60,36 +60,45 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENT_HXX
 
-#include "ixfcontent.hxx"
+#include <sal/config.h>
+
+#include <rtl/ustring.hxx>
+
+#include "ixfobject.hxx"
+#include "xfdefs.hxx"
 
 /**
  * @descr
  * Base class for all content object.
  * There is only two properties:style name and content type in this class.
  */
-class XFContent : public IXFContent
+class XFContent : public IXFObject
 {
 public:
+    virtual ~XFContent() {}
+
     /**
      * @short:  return the content type.
      */
-    virtual enumXFContent   GetContentType() SAL_OVERRIDE { return enumXFContentUnknown; }
+    virtual enumXFContent   GetContentType() { return enumXFContentUnknown; }
 
     /**
      * @short:  All content except XFTextContent can have a style.
      */
-    virtual void    SetStyleName(const OUString& style) SAL_OVERRIDE {m_strStyleName = style;}
+    virtual void    SetStyleName(const OUString& style) {m_strStyleName = style;}
 
     /**
      * @short:  return the style name.
      */
-    virtual OUString   GetStyleName() SAL_OVERRIDE {return m_strStyleName;}
+    OUString   GetStyleName() {return m_strStyleName;}
 
     /**
      */
-    virtual IXFContent*     Clone() SAL_OVERRIDE {return NULL;}
+    XFContent*     Clone() {return NULL;}
 
 protected:
+    XFContent() {}
+
     OUString   m_strStyleName;
 };
 

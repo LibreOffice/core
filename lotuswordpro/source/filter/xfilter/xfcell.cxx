@@ -121,7 +121,7 @@ XFCell::~XFCell()
         delete m_pSubTable;
 }
 
-void    XFCell::Add(IXFContent *pContent)
+void    XFCell::Add(XFContent *pContent)
 {
     if( m_eValueType != enumXFValueTypeNone )
     {

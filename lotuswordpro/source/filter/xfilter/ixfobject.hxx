@@ -80,7 +80,7 @@ public:
      * The funciton to serial the object to the sax stream.
      * The objects that must implements ToXml is divided into two types:
      *          1.  IXFStyle objects that has something to do with styles.
-     *          2.  IXFContent objects that contents text or picture.
+     *          2.  XFContent objects that contents text or picture.
      */
     virtual void    ToXml(IXFStream     *pSaxStream) = 0;
 };
