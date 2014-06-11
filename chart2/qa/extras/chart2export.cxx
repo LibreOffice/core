@@ -50,7 +50,7 @@ public:
     void testShapeFollowedByChart();
     void testPieChartDataLabels();
     void testSeriesIdxOrder();
-    void testScatterPlotLabels();
+    // void testScatterPlotLabels();
     void testErrorBarDataRangeODS();
     void testChartCrash();
     void testPieChartRotation();
@@ -714,46 +714,46 @@ void Chart2ExportTest::testSeriesIdxOrder()
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:order[1]", "val", "1");
 }
 
-void Chart2ExportTest::testScatterPlotLabels()
-{
-    load("/chart2/qa/extras/data/odg/", "scatter-plot-labels.odg");
-    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xChartDoc.is());
-
-    Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
-    CPPUNIT_ASSERT(xCT.is());
-
-    OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
-
-    Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xDSCont.is());
-    Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aDataSeriesSeq.getLength());
-
-    for (sal_Int32 i = 0; i < aDataSeriesSeq.getLength(); ++i)
-    {
-        uno::Reference<chart2::data::XDataSource> xDSrc(aDataSeriesSeq[i], uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xDSrc.is());
-        uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
-        for (sal_Int32 j = 0; j < aDataSeqs.getLength(); ++j)
-        {
-            Reference<chart2::data::XDataSequence> xValues = aDataSeqs[j]->getValues();
-            CPPUNIT_ASSERT(xValues.is());
-            Reference<beans::XPropertySet> xPropSet(xValues, uno::UNO_QUERY);
-            if (!xPropSet.is())
-                continue;
-
-            OUString aRoleName;
-            xPropSet->getPropertyValue("Role") >>= aRoleName;
-            if (aRoleName == aLabelRole)
-            {
-                // TODO : Check the data series labels.
-            }
-        }
-    }
-
-    CPPUNIT_ASSERT(false);
-}
+// void Chart2ExportTest::testScatterPlotLabels()
+// {
+//     load("/chart2/qa/extras/data/odg/", "scatter-plot-labels.odg");
+//     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+//     CPPUNIT_ASSERT(xChartDoc.is());
+//
+//     Reference<chart2::XChartType> xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
+//     CPPUNIT_ASSERT(xCT.is());
+//
+//     OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
+//
+//     Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
+//     CPPUNIT_ASSERT(xDSCont.is());
+//     Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
+//     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aDataSeriesSeq.getLength());
+//
+//     for (sal_Int32 i = 0; i < aDataSeriesSeq.getLength(); ++i)
+//     {
+//         uno::Reference<chart2::data::XDataSource> xDSrc(aDataSeriesSeq[i], uno::UNO_QUERY);
+//         CPPUNIT_ASSERT(xDSrc.is());
+//         uno::Sequence<Reference<chart2::data::XLabeledDataSequence> > aDataSeqs = xDSrc->getDataSequences();
+//         for (sal_Int32 j = 0; j < aDataSeqs.getLength(); ++j)
+//         {
+//             Reference<chart2::data::XDataSequence> xValues = aDataSeqs[j]->getValues();
+//             CPPUNIT_ASSERT(xValues.is());
+//             Reference<beans::XPropertySet> xPropSet(xValues, uno::UNO_QUERY);
+//             if (!xPropSet.is())
+//                 continue;
+//
+//             OUString aRoleName;
+//             xPropSet->getPropertyValue("Role") >>= aRoleName;
+//             if (aRoleName == aLabelRole)
+//             {
+//                 // TODO : Check the data series labels.
+//             }
+//         }
+//     }
+//
+//     CPPUNIT_ASSERT(false);
+// }
 
 void Chart2ExportTest::testErrorBarDataRangeODS()
 {
