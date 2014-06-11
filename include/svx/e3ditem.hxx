@@ -24,9 +24,6 @@
 #include <basegfx/vector/b3dvector.hxx>
 #include <svx/svxdllapi.h>
 
-#ifndef _SVXVECT3DITEM_HXX
-#define _SVXVECT3DITEM_HXX
-
 class SvStream;
 
 class SVX_DLLPUBLIC SvxB3DVectorItem : public SfxPoolItem
@@ -58,8 +55,5 @@ public:
 };
 
 #endif
-
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
