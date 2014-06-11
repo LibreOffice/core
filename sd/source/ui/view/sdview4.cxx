@@ -310,7 +310,7 @@ SdrMediaObj* View::Insert3DModelURL(
         if (!bRet) { return 0; }
     }
 
-    SdrMediaObj* pRetObject = InsertMediaObj( sRealURL, "application/vnd.gltf+json", rAction, rPos, rSize );
+    SdrMediaObj* pRetObject = InsertMediaObj( sRealURL, "model/vnd.gltf+json", rAction, rPos, rSize );
     avmedia::MediaItem aItem = pRetObject->getMediaProperties();
     aItem.setLoop(true);
     pRetObject->setMediaProperties(aItem);
