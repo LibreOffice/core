@@ -2060,30 +2060,30 @@ namespace
     };
     struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
     {
-        std::vector<sal_uLong> aSaveArr;
-        std::vector<BkmkEntry> aBkmkEntries;
+        std::vector<sal_uLong> m_aSaveArr;
+        std::vector<BkmkEntry> m_aBkmkEntries;
         virtual void Clear() SAL_OVERRIDE
         {
-            aBkmkEntries.clear();
-            aSaveArr.clear();
+            m_aBkmkEntries.clear();
+            m_aSaveArr.clear();
         }
         virtual bool Empty() SAL_OVERRIDE
         {
-            return aBkmkEntries.empty() && aSaveArr.empty();
+            return m_aBkmkEntries.empty() && m_aSaveArr.empty();
         }
         virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) SAL_OVERRIDE
         {
             SaveBkmks(pDoc, nNode, nCntnt);
-            return _SaveCntntIdx(pDoc, nNode, nCntnt, aSaveArr, nSaveFly);
+            return _SaveCntntIdx(pDoc, nNode, nCntnt, m_aSaveArr, nSaveFly);
         }
         virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
         {
             RestoreBkmks(pDoc, nNode, nOffset);
-            return _RestoreCntntIdx(pDoc, aSaveArr, nNode, nOffset, bAuto);
+            return _RestoreCntntIdx(pDoc, m_aSaveArr, nNode, nOffset, bAuto);
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
-            return _RestoreCntntIdx(aSaveArr, rNd, nLen, nCorrLen);
+            return _RestoreCntntIdx(m_aSaveArr, rNd, nLen, nCorrLen);
         }
         virtual ~CntntIdxStoreImpl(){};
         private:
@@ -2109,7 +2109,7 @@ void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt
             if(pBkmk->GetMarkPos().nContent.GetIndex() < nCntnt)
             {
                 const BkmkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
-                aBkmkEntries.push_back(aEntry);
+                m_aBkmkEntries.push_back(aEntry);
             }
             else // if a bookmark position is equal nCntnt, the other position
                 bMarkPosEqual = true; // has to decide if it is added to the array
@@ -2121,10 +2121,10 @@ void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt
             if(bMarkPosEqual)
             { // the other position is before, the (main) position is equal
                 const BkmkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
-                aBkmkEntries.push_back(aEntry);
+                m_aBkmkEntries.push_back(aEntry);
             }
             const BkmkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), true, pBkmk->GetOtherMarkPos().nContent.GetIndex() };
-            aBkmkEntries.push_back(aEntry);
+            m_aBkmkEntries.push_back(aEntry);
         }
     }
 }
@@ -2134,8 +2134,8 @@ void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOf
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     for(
-        std::vector<BkmkEntry>::const_iterator pEntry = aBkmkEntries.begin();
-        pEntry != aBkmkEntries.end();
+        std::vector<BkmkEntry>::const_iterator pEntry = m_aBkmkEntries.begin();
+        pEntry != m_aBkmkEntries.end();
         ++pEntry)
     {
         if(pEntry->m_bOther)
