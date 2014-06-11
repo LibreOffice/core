@@ -2009,6 +2009,10 @@ namespace
             inline void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
             inline void RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen);
+            inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
+                { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
+            inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
+                { bOther ? pMark->SetOtherMarkPos(*pPos) : pMark->SetMarkPos(*pPos); };
     };
 }
 
@@ -2060,20 +2064,10 @@ void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOf
     {
         if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
         {
-            if(pEntry->m_bOther)
-            {
-                SwPosition aNewPos(pMark->GetOtherMarkPos());
-                aNewPos.nNode = *pCNd;
-                aNewPos.nContent.Assign(pCNd, pEntry->m_nCntnt + nOffset);
-                pMark->SetOtherMarkPos(aNewPos);
-            }
-            else
-            {
-                SwPosition aNewPos(pMark->GetMarkPos());
-                aNewPos.nNode = *pCNd;
-                aNewPos.nContent.Assign(pCNd, pEntry->m_nCntnt + nOffset);
-                pMark->SetMarkPos(aNewPos);
-            }
+            SwPosition aNewPos(GetRightMarkPos(pMark, pEntry->m_bOther));
+            aNewPos.nNode = *pCNd;
+            aNewPos.nContent.Assign(pCNd, pEntry->m_nCntnt + nOffset);
+            SetRightMarkPos(pMark, pEntry->m_bOther, &aNewPos);
         }
     }
 }
@@ -2092,20 +2086,10 @@ void CntntIdxStoreImpl::RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 n
         {
             if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
             {
-                if(pEntry->m_bOther)
-                {
-                    SwPosition aNewPos(pMark->GetOtherMarkPos());
-                    aNewPos.nNode = *pCNd;
-                    aNewPos.nContent.Assign(pCNd, ::std::min(pEntry->m_nCntnt, static_cast<sal_Int32>(nLen)));
-                    pMark->SetOtherMarkPos(aNewPos);
-                }
-                else
-                {
-                    SwPosition aNewPos(pMark->GetMarkPos());
-                    aNewPos.nNode = *pCNd;
-                    aNewPos.nContent.Assign(pCNd, ::std::min(pEntry->m_nCntnt, static_cast<sal_Int32>(nLen)));
-                    pMark->SetMarkPos(aNewPos);
-                }
+                SwPosition aNewPos(GetRightMarkPos(pMark, pEntry->m_bOther));
+                aNewPos.nNode = *pCNd;
+                aNewPos.nContent.Assign(pCNd, ::std::min(pEntry->m_nCntnt, static_cast<sal_Int32>(nLen)));
+                SetRightMarkPos(pMark, pEntry->m_bOther, &aNewPos);
             }
         }
     }
