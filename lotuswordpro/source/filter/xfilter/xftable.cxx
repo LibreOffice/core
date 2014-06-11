@@ -70,47 +70,6 @@ XFTable::XFTable()
     m_pOwnerCell = NULL;
 }
 
-XFTable::XFTable(const XFTable& other):XFContent(other)
-{
-    m_strName = other.m_strName;
-    m_bSubTable = other.m_bSubTable;
-    m_pOwnerCell = NULL;
-    for( int i=1; i<=other.m_aHeaderRows.GetCount(); i++ )
-    {
-        XFRow *pRow = (XFRow*)other.m_aHeaderRows.GetContent(i+1);
-        if( pRow )
-        {
-            m_aHeaderRows.Add( new XFRow(*pRow) );
-        }
-    }
-
-    m_aColumns = other.m_aColumns;
-    m_strDefCellStyle = other.m_strDefCellStyle;
-    m_strDefRowStyle = other.m_strDefRowStyle;
-    m_strDefColStyle = other.m_strDefColStyle;
-}
-
-XFTable& XFTable::operator =(const XFTable& other)
-{
-    m_strName = other.m_strName;
-    m_bSubTable = other.m_bSubTable;
-    m_pOwnerCell = NULL;
-    for( int i=1; i<=other.m_aHeaderRows.GetCount(); i++ )
-    {
-        XFRow *pRow = (XFRow*)other.m_aHeaderRows.GetContent(i);
-        if( pRow )
-        {
-            m_aHeaderRows.Add( new XFRow(*pRow) );
-        }
-    }
-
-    m_aColumns = other.m_aColumns;
-    m_strDefCellStyle = other.m_strDefCellStyle;
-    m_strDefRowStyle = other.m_strDefRowStyle;
-    m_strDefColStyle = other.m_strDefColStyle;
-    return *this;
-}
-
 XFTable::~XFTable()
 {
     std::map<sal_uInt16, XFRow*>::iterator it;

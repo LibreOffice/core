@@ -72,10 +72,6 @@ class XFTable : public XFContent
 public:
     XFTable();
 
-    XFTable(const XFTable& other);
-
-    XFTable& operator=(const XFTable& other);
-
     virtual ~XFTable();
 
 public:
