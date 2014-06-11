@@ -55,7 +55,7 @@
 #define RSC_WINDOW              (RSC_NOTYPE + 0x35)
 #define RSC_SYSWINDOW           (RSC_NOTYPE + 0x36)
 #define RSC_WORKWIN             (RSC_NOTYPE + 0x37)
-#define RSC_MDIWINDOW           (RSC_NOTYPE + 0x38)
+
 #define RSC_FLOATINGWINDOW      (RSC_NOTYPE + 0x39)
 #define RSC_DIALOG              (RSC_NOTYPE + 0x3a)
 #define RSC_MODELESSDIALOG      (RSC_NOTYPE + 0x3b)
@@ -85,17 +85,16 @@
 #define RSC_FIXEDIMAGE          (RSC_NOTYPE + 0x5a)
 #define RSC_GROUPBOX            (RSC_NOTYPE + 0x5c)
 #define RSC_SCROLLBAR           (RSC_NOTYPE + 0x5d)
-#define RSC_SCROLLBARBOX        (RSC_NOTYPE + 0x5e)
+
 #define RSC_SPLITTER            (RSC_NOTYPE + 0x5f)
 #define RSC_SPLITWINDOW         (RSC_NOTYPE + 0x60)
 #define RSC_SPINFIELD           (RSC_NOTYPE + 0x61)
-#define RSC_PATTERNFIELD        (RSC_NOTYPE + 0x62)
+
 #define RSC_NUMERICFIELD        (RSC_NOTYPE + 0x63)
 #define RSC_METRICFIELD         (RSC_NOTYPE + 0x64)
 
 #define RSC_DATEFIELD           (RSC_NOTYPE + 0x66)
 #define RSC_TIMEFIELD           (RSC_NOTYPE + 0x67)
-#define RSC_PATTERNBOX          (RSC_NOTYPE + 0x68)
 #define RSC_NUMERICBOX          (RSC_NOTYPE + 0x69)
 
 
@@ -106,12 +105,11 @@
 #define RSC_TOOLBOXITEM         (RSC_NOTYPE + 0x70)
 #define RSC_TOOLBOX             (RSC_NOTYPE + 0x71)
 #define RSC_DOCKINGWINDOW       (RSC_NOTYPE + 0x72)
-#define RSC_STATUSBAR           (RSC_NOTYPE + 0x73)
+
 #define RSC_TABPAGE             (RSC_NOTYPE + 0x74)
 #define RSC_TABCONTROL          (RSC_NOTYPE + 0x75)
-#define RSC_TABDIALOG           (RSC_NOTYPE + 0x76)
 #define RSC_TABCONTROLITEM      (RSC_NOTYPE + 0x77)
-#define RSC_TREELISTBOX         (RSC_NOTYPE + 0x78)
+
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
 
 // (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) reserved for Sfx
