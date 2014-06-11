@@ -71,6 +71,7 @@ namespace sw { namespace mark
             ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
     };
 
+    /// Takes care of storing relevant attributes of an SwTxtNode before split, then restore them on the new node.
     class CntntIdxStore
     {
         public:
