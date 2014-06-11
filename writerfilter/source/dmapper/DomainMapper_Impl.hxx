@@ -359,6 +359,7 @@ private:
     bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
     bool                            m_bInHeaderFooterImport;
     bool                            m_bDiscardHeaderFooter;
+    bool                            m_bInFootOrEndnote;
 
     bool                            m_bLineNumberingSet;
     bool                            m_bIsInFootnoteProperties;
@@ -571,6 +572,7 @@ public:
 
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
+    bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }
 
     void PushAnnotation();
     void PopAnnotation();
