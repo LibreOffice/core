@@ -78,8 +78,6 @@ private:
     // Search for temporary evaluated Todos
     SAL_DLLPRIVATE bool CheckVirtualStack( const SfxShell& rShell, bool bDeep );
 
-#ifndef _SFX_HXX
-
 friend class SfxApplication;
 friend class SfxViewFrame;
 
@@ -104,7 +102,7 @@ friend class SfxHelp;
     void                _Execute( SfxShell &rShell, const SfxSlot &rSlot,
                                   SfxRequest &rReq,
                                   SfxCallMode eCall = SFX_CALLMODE_STANDARD);
-#endif
+
 protected:
     void FlushImpl();
 

@@ -72,16 +72,12 @@ class SFX2_DLLPUBLIC SfxViewFrame: public SfxShell, public SfxListener
     sal_uInt16                      nAdjustPosPixelLock;
 
 private:
-#ifndef _SFX_HXX
     SAL_DLLPRIVATE void Construct_Impl( SfxObjectShell *pObjSh=NULL );
-#endif
 
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-#ifndef _SFX_HXX
     SAL_DLLPRIVATE void KillDispatcher_Impl();
-#endif
 
     virtual                 ~SfxViewFrame();
 
