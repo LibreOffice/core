@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_20d82a1d",
+        "filename": "bin/distro-install-desktop-integration",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-06-11T10:38:14Z",
+      "side": 1,
+      "message": "that should be defined by CustomTarget_share.mk already which mangles create_tree.sh (not that that is particularly intuitive ...)",
+      "revId": "c9464ecb3dd05d3f11504866c0ffc6845ab83ce9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
