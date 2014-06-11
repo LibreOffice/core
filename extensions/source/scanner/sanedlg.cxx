@@ -182,7 +182,6 @@ SaneDlg::SaneDlg( Window* pParent, Sane& rSane, bool bScanEnabled ) :
     get(mpRightField, "rightSpinbutton");
     get(mpBottomField, "bottomSpinbutton");
     get(mpDeviceBox, "deviceCombobox");
-    mpDeviceBox->SetStyle(mpDeviceBox->GetStyle() | WB_SORT);
     get(mpReslBox, "reslCombobox");
     get(mpAdvancedBox, "advancedCheckbutton");
     get(mpVectorBox, "vectorSpinbutton-nospin");
@@ -264,13 +263,12 @@ void SaneDlg::InitDevices()
         mrSane.Close();
     mrSane.ReloadDevices();
     mpDeviceBox->Clear();
-    for( int i = 0; i < Sane::CountDevices(); i++ )
-        mpDeviceBox->InsertEntry( Sane::GetName( i ) );
+    for (int i = 0; i < Sane::CountDevices(); ++i)
+        mpDeviceBox->InsertEntry(Sane::GetName(i));
     if( Sane::CountDevices() )
     {
-        mrSane.Open( 0 );
-        mpDeviceBox->SelectEntry( Sane::GetName( 0 ) );
-
+        mrSane.Open(0);
+        mpDeviceBox->SelectEntryPos(0);
     }
 }
 
@@ -599,12 +597,12 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
 {
     if( pListBox == mpDeviceBox && Sane::IsSane() && Sane::CountDevices() )
     {
-        OUString aNewDevice = mpDeviceBox->GetSelectEntry();
-        int nNumber;
-        if( aNewDevice == Sane::GetName( nNumber = mrSane.GetDeviceNumber() ) )
+        int nNewNumber = mpDeviceBox->GetSelectEntryPos();
+        int nOldNumber = mrSane.GetDeviceNumber();
+        if (nNewNumber != nOldNumber)
         {
             mrSane.Close();
-            mrSane.Open( nNumber );
+            mrSane.Open(nNewNumber);
             InitFields();
         }
     }
