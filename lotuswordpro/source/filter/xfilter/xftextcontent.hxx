@@ -53,10 +53,7 @@
  *
  *
  ************************************************************************/
-/*************************************************************************
- * @file
- * Text content, it's an adapter for string to IXFObject.
- ************************************************************************/
+
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTCONTENT_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFTEXTCONTENT_HXX
 

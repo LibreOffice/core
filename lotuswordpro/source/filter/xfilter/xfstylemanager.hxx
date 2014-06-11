@@ -80,7 +80,7 @@ class XFEndnoteConfig;
  * Style manager for the filter.
  * This is a global object, all styles will be placed here before output.
  */
-class XFStyleManager// : public IXFObject
+class XFStyleManager
 {
 public:
     XFStyleManager();

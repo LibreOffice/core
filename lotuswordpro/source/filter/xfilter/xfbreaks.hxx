@@ -82,7 +82,7 @@ public:
     /**
      * @descr   Output breaks object.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    void    ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFBreaks& b1, XFBreaks& b2);
     friend bool operator!=(XFBreaks& b1, XFBreaks& b2);

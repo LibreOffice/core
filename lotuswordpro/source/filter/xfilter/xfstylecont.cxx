@@ -70,7 +70,7 @@ XFStyleContainer::XFStyleContainer(const OUString& strStyleNamePrefix)
 {
 }
 
-XFStyleContainer::XFStyleContainer(const XFStyleContainer& other):IXFObject(other),
+XFStyleContainer::XFStyleContainer(const XFStyleContainer& other):
     m_aStyles(other.m_aStyles), m_strStyleNamePrefix(other.m_strStyleNamePrefix)
 {
 }
