@@ -1191,13 +1191,13 @@ const sal_uInt16* SvxCharNamePage::GetRanges()
 
 
 
-void SvxCharNamePage::Reset( const SfxItemSet& rSet )
+void SvxCharNamePage::Reset( const SfxItemSet* rSet )
 {
-    Reset_Impl( rSet, Western );
-    Reset_Impl( rSet, Asian );
-    Reset_Impl( rSet, Ctl );
+    Reset_Impl( *rSet, Western );
+    Reset_Impl( *rSet, Asian );
+    Reset_Impl( *rSet, Ctl );
 
-    SetPrevFontWidthScale( rSet );
+    SetPrevFontWidthScale( *rSet );
     UpdatePreview_Impl();
 }
 
@@ -1738,7 +1738,7 @@ const sal_uInt16* SvxCharEffectsPage::GetRanges()
 
 
 
-void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
+void SvxCharEffectsPage::Reset( const SfxItemSet* rSet )
 {
     SvxFont& rFont = GetPreviewFont();
     SvxFont& rCJKFont = GetPreviewCJKFont();
@@ -1753,7 +1753,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     rCTLFont.SetUnderline( UNDERLINE_NONE );
 
     m_pUnderlineLB->SelectEntryPos( 0 );
-    SfxItemState eState = rSet.GetItemState( nWhich );
+    SfxItemState eState = rSet->GetItemState( nWhich );
 
     if ( eState >= SFX_ITEM_DONTCARE )
     {
@@ -1761,7 +1761,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             m_pUnderlineLB->SetNoSelection();
         else
         {
-            const SvxUnderlineItem& rItem = (SvxUnderlineItem&)rSet.Get( nWhich );
+            const SvxUnderlineItem& rItem = (SvxUnderlineItem&)rSet->Get( nWhich );
             FontUnderline eUnderline = (FontUnderline)rItem.GetValue();
             rFont.SetUnderline( eUnderline );
             rCJKFont.SetUnderline( eUnderline );
@@ -1810,7 +1810,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     rCTLFont.SetOverline( UNDERLINE_NONE );
 
     m_pOverlineLB->SelectEntryPos( 0 );
-    eState = rSet.GetItemState( nWhich );
+    eState = rSet->GetItemState( nWhich );
 
     if ( eState >= SFX_ITEM_DONTCARE )
     {
@@ -1818,7 +1818,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             m_pOverlineLB->SetNoSelection();
         else
         {
-            const SvxOverlineItem& rItem = (SvxOverlineItem&)rSet.Get( nWhich );
+            const SvxOverlineItem& rItem = (SvxOverlineItem&)rSet->Get( nWhich );
             FontUnderline eOverline = (FontUnderline)rItem.GetValue();
             rFont.SetOverline( eOverline );
             rCJKFont.SetOverline( eOverline );
@@ -1867,7 +1867,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     rCTLFont.SetStrikeout( STRIKEOUT_NONE );
 
     m_pStrikeoutLB->SelectEntryPos( 0 );
-    eState = rSet.GetItemState( nWhich );
+    eState = rSet->GetItemState( nWhich );
 
     if ( eState >= SFX_ITEM_DONTCARE )
     {
@@ -1875,7 +1875,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
             m_pStrikeoutLB->SetNoSelection();
         else
         {
-            const SvxCrossedOutItem& rItem = (SvxCrossedOutItem&)rSet.Get( nWhich );
+            const SvxCrossedOutItem& rItem = (SvxCrossedOutItem&)rSet->Get( nWhich );
             FontStrikeout eStrikeout = (FontStrikeout)rItem.GetValue();
             rFont.SetStrikeout( eStrikeout );
             rCJKFont.SetStrikeout( eStrikeout );
@@ -1916,7 +1916,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         case SFX_ITEM_DEFAULT:
         case SFX_ITEM_SET:
         {
-            const SvxWordLineModeItem& rItem = (SvxWordLineModeItem&)rSet.Get( nWhich );
+            const SvxWordLineModeItem& rItem = (SvxWordLineModeItem&)rSet->Get( nWhich );
             rFont.SetWordLineMode( rItem.GetValue() );
             rCJKFont.SetWordLineMode( rItem.GetValue() );
             rCTLFont.SetWordLineMode( rItem.GetValue() );
@@ -1929,11 +1929,11 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
     // Emphasis
     nWhich = GetWhich( SID_ATTR_CHAR_EMPHASISMARK );
-    eState = rSet.GetItemState( nWhich );
+    eState = rSet->GetItemState( nWhich );
 
     if ( eState >= SFX_ITEM_DEFAULT )
     {
-        const SvxEmphasisMarkItem& rItem = (SvxEmphasisMarkItem&)rSet.Get( nWhich );
+        const SvxEmphasisMarkItem& rItem = (SvxEmphasisMarkItem&)rSet->Get( nWhich );
         FontEmphasisMark eMark = rItem.GetEmphasisMark();
         rFont.SetEmphasisMark( eMark );
         rCJKFont.SetEmphasisMark( eMark );
@@ -1987,7 +1987,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     // Effects
     SvxCaseMap eCaseMap = SVX_CASEMAP_END;
     nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
-    eState = rSet.GetItemState( nWhich );
+    eState = rSet->GetItemState( nWhich );
     switch ( eState )
     {
         case SFX_ITEM_UNKNOWN:
@@ -2008,7 +2008,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         case SFX_ITEM_DEFAULT:
         case SFX_ITEM_SET:
         {
-            const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet.Get( nWhich );
+            const SvxCaseMapItem& rItem = (const SvxCaseMapItem&)rSet->Get( nWhich );
             eCaseMap = (SvxCaseMap)rItem.GetValue();
             break;
         }
@@ -2017,7 +2017,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
     //Relief
     nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
-    eState = rSet.GetItemState( nWhich );
+    eState = rSet->GetItemState( nWhich );
     switch ( eState )
     {
         case SFX_ITEM_UNKNOWN:
@@ -2038,7 +2038,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         case SFX_ITEM_DEFAULT:
         case SFX_ITEM_SET:
         {
-            const SvxCharReliefItem& rItem = (const SvxCharReliefItem&)rSet.Get( nWhich );
+            const SvxCharReliefItem& rItem = (const SvxCharReliefItem&)rSet->Get( nWhich );
             m_pReliefLB->SelectEntryPos(rItem.GetValue());
             SelectHdl_Impl(m_pReliefLB);
             break;
@@ -2047,7 +2047,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
     // Outline
     nWhich = GetWhich( SID_ATTR_CHAR_CONTOUR );
-    eState = rSet.GetItemState( nWhich );
+    eState = rSet->GetItemState( nWhich );
     switch ( eState )
     {
         case SFX_ITEM_UNKNOWN:
@@ -2066,7 +2066,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         case SFX_ITEM_DEFAULT:
         case SFX_ITEM_SET:
         {
-            const SvxContourItem& rItem = (SvxContourItem&)rSet.Get( nWhich );
+            const SvxContourItem& rItem = (SvxContourItem&)rSet->Get( nWhich );
             m_pOutlineBtn->SetState( (TriState)rItem.GetValue() );
             m_pOutlineBtn->EnableTriState( false );
             break;
@@ -2075,7 +2075,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
     // Shadow
     nWhich = GetWhich( SID_ATTR_CHAR_SHADOWED );
-    eState = rSet.GetItemState( nWhich );
+    eState = rSet->GetItemState( nWhich );
 
     switch ( eState )
     {
@@ -2095,7 +2095,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         case SFX_ITEM_DEFAULT:
         case SFX_ITEM_SET:
         {
-            const SvxShadowedItem& rItem = (SvxShadowedItem&)rSet.Get( nWhich );
+            const SvxShadowedItem& rItem = (SvxShadowedItem&)rSet->Get( nWhich );
             m_pShadowBtn->SetState( (TriState)rItem.GetValue() );
             m_pShadowBtn->EnableTriState( false );
             break;
@@ -2104,7 +2104,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
 
     // Blinking
     nWhich = GetWhich( SID_ATTR_FLASH );
-    eState = rSet.GetItemState( nWhich );
+    eState = rSet->GetItemState( nWhich );
 
     switch ( eState )
     {
@@ -2124,7 +2124,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         case SFX_ITEM_DEFAULT:
         case SFX_ITEM_SET:
         {
-            const SvxBlinkItem& rItem = (SvxBlinkItem&)rSet.Get( nWhich );
+            const SvxBlinkItem& rItem = (SvxBlinkItem&)rSet->Get( nWhich );
             m_pBlinkingBtn->SetState( (TriState)rItem.GetValue() );
             m_pBlinkingBtn->EnableTriState( false );
             break;
@@ -2132,7 +2132,7 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     }
     // Hidden
     nWhich = GetWhich( SID_ATTR_CHAR_HIDDEN );
-    eState = rSet.GetItemState( nWhich );
+    eState = rSet->GetItemState( nWhich );
 
     switch ( eState )
     {
@@ -2152,15 +2152,15 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         case SFX_ITEM_DEFAULT:
         case SFX_ITEM_SET:
         {
-            const SvxCharHiddenItem& rItem = (SvxCharHiddenItem&)rSet.Get( nWhich );
+            const SvxCharHiddenItem& rItem = (SvxCharHiddenItem&)rSet->Get( nWhich );
             m_pHiddenBtn->SetState( (TriState)rItem.GetValue() );
             m_pHiddenBtn->EnableTriState( false );
             break;
         }
     }
 
-    SetPrevFontWidthScale( rSet );
-    ResetColor_Impl( rSet );
+    SetPrevFontWidthScale( *rSet );
+    ResetColor_Impl( *rSet );
 
     // preview update
     m_pPreviewWin->Invalidate();
@@ -2911,7 +2911,7 @@ const sal_uInt16* SvxCharPositionPage::GetRanges()
 }
 
 
-void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
+void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
 {
     OUString sUser = GetUserData();
 
@@ -2957,9 +2957,9 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     SvxFont& rCTLFont = GetPreviewCTLFont();
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_ESCAPEMENT );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
-        const SvxEscapementItem& rItem = (SvxEscapementItem&)rSet.Get( nWhich );
+        const SvxEscapementItem& rItem = (SvxEscapementItem&)rSet->Get( nWhich );
         nEsc = rItem.GetEsc();
         nEscProp = rItem.GetProp();
 
@@ -3028,10 +3028,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     // Kerning
     nWhich = GetWhich( SID_ATTR_CHAR_KERNING );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
-        const SvxKerningItem& rItem = (SvxKerningItem&)rSet.Get( nWhich );
-        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
+        const SvxKerningItem& rItem = (SvxKerningItem&)rSet->Get( nWhich );
+        SfxMapUnit eUnit = rSet->GetPool()->GetMetric( nWhich );
         MapUnit eOrgUnit = (MapUnit)eUnit;
         MapUnit ePntUnit( MAP_POINT );
         long nBig = static_cast<long>(m_pKerningMF->Normalize( static_cast<long>(rItem.GetValue()) ));
@@ -3071,9 +3071,9 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     // Pair kerning
     nWhich = GetWhich( SID_ATTR_CHAR_AUTOKERN );
 
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
-        const SvxAutoKernItem& rItem = (SvxAutoKernItem&)rSet.Get( nWhich );
+        const SvxAutoKernItem& rItem = (SvxAutoKernItem&)rSet->Get( nWhich );
         m_pPairKerningBtn->Check( rItem.GetValue() );
     }
     else
@@ -3081,9 +3081,9 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
     // Scale Width
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
-        const SvxCharScaleWidthItem& rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
+        const SvxCharScaleWidthItem& rItem = ( SvxCharScaleWidthItem& ) rSet->Get( nWhich );
         m_nScaleWidthInitialVal = rItem.GetValue();
         m_pScaleWidthMF->SetValue( m_nScaleWidthInitialVal );
     }
@@ -3091,12 +3091,12 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         m_pScaleWidthMF->SetValue( 100 );
 
     nWhich = GetWhich( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE );
-    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
-        m_nScaleWidthItemSetVal = ((SfxUInt16Item&) rSet.Get( nWhich )).GetValue();
+    if ( rSet->GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+        m_nScaleWidthItemSetVal = ((SfxUInt16Item&) rSet->Get( nWhich )).GetValue();
 
     // Rotation
     nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
-    SfxItemState eState = rSet.GetItemState( nWhich );
+    SfxItemState eState = rSet->GetItemState( nWhich );
     if( SFX_ITEM_UNKNOWN == eState )
     {
         m_pRotationContainer->Hide();
@@ -3114,7 +3114,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         if( eState >= SFX_ITEM_DEFAULT )
         {
             const SvxCharRotateItem& rItem =
-                    (SvxCharRotateItem&) rSet.Get( nWhich );
+                    (SvxCharRotateItem&) rSet->Get( nWhich );
             if (rItem.IsBottomToTop())
                 m_p90degRB->Check( true );
             else if (rItem.IsTopToBotton())
@@ -3143,7 +3143,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         m_pFitToLineCB->Enable( !m_p0degRB->IsChecked() );
 
         // is this value set?
-        if( SFX_ITEM_UNKNOWN == rSet.GetItemState( GetWhich(
+        if( SFX_ITEM_UNKNOWN == rSet->GetItemState( GetWhich(
                                         SID_ATTR_CHAR_WIDTH_FIT_TO_LINE ) ))
             m_pFitToLineCB->Hide();
     }
@@ -3485,15 +3485,15 @@ const sal_uInt16* SvxCharTwoLinesPage::GetRanges()
 
 
 
-void SvxCharTwoLinesPage::Reset( const SfxItemSet& rSet )
+void SvxCharTwoLinesPage::Reset( const SfxItemSet* rSet )
 {
     m_pTwoLinesBtn->Check( false );
     sal_uInt16 nWhich = GetWhich( SID_ATTR_CHAR_TWO_LINES );
-    SfxItemState eState = rSet.GetItemState( nWhich );
+    SfxItemState eState = rSet->GetItemState( nWhich );
 
     if ( eState >= SFX_ITEM_DONTCARE )
     {
-        const SvxTwoLinesItem& rItem = (SvxTwoLinesItem&)rSet.Get( nWhich );
+        const SvxTwoLinesItem& rItem = (SvxTwoLinesItem&)rSet->Get( nWhich );
         m_pTwoLinesBtn->Check( rItem.GetValue() );
 
         if ( rItem.GetValue() )
@@ -3504,7 +3504,7 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet& rSet )
     }
     TwoLinesHdl_Impl( NULL );
 
-    SetPrevFontWidthScale( rSet );
+    SetPrevFontWidthScale( *rSet );
 }
 
 

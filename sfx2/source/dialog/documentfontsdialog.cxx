@@ -34,7 +34,7 @@ SfxDocumentFontsPage::SfxDocumentFontsPage( Window* parent, const SfxItemSet& se
     get( embedFontsCheckbox, "embedFonts" );
 }
 
-void SfxDocumentFontsPage::Reset( const SfxItemSet& )
+void SfxDocumentFontsPage::Reset( const SfxItemSet* )
 {
     bool bVal = false;
     SfxObjectShell* pDocSh = SfxObjectShell::Current();

@@ -398,14 +398,14 @@ void SvxPageDescPage::Init_Impl()
 
 
 
-void SvxPageDescPage::Reset( const SfxItemSet& rSet )
+void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 {
-    SfxItemPool* pPool = rSet.GetPool();
+    SfxItemPool* pPool = rSet->GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     SfxMapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) );
 
     // adjust margins (right/left)
-    const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_LRSPACE );
+    const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_LRSPACE );
 
     if ( pItem )
     {
@@ -419,7 +419,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     }
 
     // adjust margins (top/bottom)
-    pItem = GetItem( rSet, SID_ATTR_ULSPACE );
+    pItem = GetItem( *rSet, SID_ATTR_ULSPACE );
 
     if ( pItem )
     {
@@ -436,7 +436,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     SvxNumType eNumType = SVX_ARABIC;
     bLandscape = ( pImpl->mpDefPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
     sal_uInt16 nUse = (sal_uInt16)SVX_PAGE_ALL;
-    pItem = GetItem( rSet, SID_ATTR_PAGE );
+    pItem = GetItem( *rSet, SID_ATTR_PAGE );
 
     if ( pItem )
     {
@@ -461,7 +461,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
     m_pPaperTrayBox->Clear();
     sal_uInt8 nPaperBin = PAPERBIN_PRINTER_SETTINGS;
-    pItem = GetItem( rSet, SID_ATTR_PAGE_PAPERBIN );
+    pItem = GetItem( *rSet, SID_ATTR_PAGE_PAPERBIN );
 
     if ( pItem )
     {
@@ -483,7 +483,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     m_pPaperTrayBox->SelectEntry( aBinName );
 
     Size aPaperSize = SvxPaperInfo::GetPaperSize( pImpl->mpDefPrinter );
-    pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE );
+    pItem = GetItem( *rSet, SID_ATTR_PAGE_SIZE );
 
     if ( pItem )
         aPaperSize = ( (const SvxSizeItem*)pItem )->GetSize();
@@ -555,12 +555,12 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             DisableVerticalPageDir();
 
             // horizontal alignment
-            pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
+            pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT1 );
             m_pHorzBox->Check( pItem ? ( (const SfxBoolItem*)pItem )->GetValue()
                                   : sal_False );
 
             // vertical alignment
-            pItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
+            pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT2 );
             m_pVertBox->Check( pItem ? ( (const SfxBoolItem*)pItem )->GetValue()
                                   : sal_False );
 
@@ -576,7 +576,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         {
             DisableVerticalPageDir();
             m_pAdaptBox->Show();
-            pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
+            pItem = GetItem( *rSet, SID_ATTR_PAGE_EXT1 );
             m_pAdaptBox->Check( pItem ?
                 ( (const SfxBoolItem*)pItem )->GetValue() : sal_False );
 
@@ -591,11 +591,11 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 
 
     // display background and border in the example
-    ResetBackground_Impl( rSet );
+    ResetBackground_Impl( *rSet );
 //! UpdateExample_Impl();
     RangeHdl_Impl( 0 );
 
-    InitHeadFoot_Impl( rSet );
+    InitHeadFoot_Impl( *rSet );
 
     bBorderModified = false;
     SwapFirstValues_Impl( false );
@@ -620,21 +620,21 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     CheckMarginEdits( true );
 
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_SWREGISTER_MODE))
+    if(SFX_ITEM_SET == rSet->GetItemState(SID_SWREGISTER_MODE))
     {
-        m_pRegisterCB->Check(((const SfxBoolItem&)rSet.Get(
+        m_pRegisterCB->Check(((const SfxBoolItem&)rSet->Get(
                                 SID_SWREGISTER_MODE)).GetValue());
         m_pRegisterCB->SaveValue();
         RegisterModify(m_pRegisterCB);
     }
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_SWREGISTER_COLLECTION))
+    if(SFX_ITEM_SET == rSet->GetItemState(SID_SWREGISTER_COLLECTION))
     {
         m_pRegisterLB->SelectEntry(
-                ((const SfxStringItem&)rSet.Get(SID_SWREGISTER_COLLECTION)).GetValue());
+                ((const SfxStringItem&)rSet->Get(SID_SWREGISTER_COLLECTION)).GetValue());
         m_pRegisterLB->SaveValue();
     }
 
-    SfxItemState eState = rSet.GetItemState( GetWhich( SID_ATTR_FRAMEDIRECTION ),
+    SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_FRAMEDIRECTION ),
                                                 true, &pItem );
     if( SFX_ITEM_UNKNOWN != eState )
     {

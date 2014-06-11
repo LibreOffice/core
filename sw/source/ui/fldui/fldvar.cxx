@@ -88,7 +88,7 @@ SwFldVarPage::~SwFldVarPage()
 {
 }
 
-void SwFldVarPage::Reset(const SfxItemSet& )
+void SwFldVarPage::Reset(const SfxItemSet* )
 {
     SavePos(m_pTypeLB);
 

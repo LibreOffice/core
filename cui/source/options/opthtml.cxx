@@ -142,7 +142,7 @@ bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
     return false;
 }
 
-void OfaHtmlTabPage::Reset( const SfxItemSet& )
+void OfaHtmlTabPage::Reset( const SfxItemSet* )
 {
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
     aSize1NF->SetValue(rHtmlOpt.GetFontSize(0));

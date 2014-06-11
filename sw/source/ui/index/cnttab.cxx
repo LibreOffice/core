@@ -1192,7 +1192,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
         rDesc.SetSortAlgorithm(*pEntryData);
 }
 
-void SwTOXSelectTabPage::Reset( const SfxItemSet& )
+void SwTOXSelectTabPage::Reset( const SfxItemSet* )
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     SwWrtShell& rSh = pTOXDlg->GetWrtShell();
@@ -1900,7 +1900,7 @@ bool SwTOXEntryTabPage::FillItemSet( SfxItemSet* )
     return true;
 }
 
-void SwTOXEntryTabPage::Reset( const SfxItemSet& )
+void SwTOXEntryTabPage::Reset( const SfxItemSet* )
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
@@ -3517,9 +3517,9 @@ bool SwTOXStylesTabPage::FillItemSet( SfxItemSet* )
     return true;
 }
 
-void SwTOXStylesTabPage::Reset( const SfxItemSet& rSet )
+void SwTOXStylesTabPage::Reset( const SfxItemSet* rSet )
 {
-    ActivatePage(rSet);
+    ActivatePage(*rSet);
 }
 
 void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )

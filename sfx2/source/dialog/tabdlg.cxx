@@ -211,10 +211,10 @@ bool SfxTabPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-void SfxTabPage::Reset( const SfxItemSet& rSet )
+void SfxTabPage::Reset( const SfxItemSet* rSet )
 {
-    pImpl->maItemConn.DoApplyFlags( rSet );
-    pImpl->maItemConn.DoReset( rSet );
+    pImpl->maItemConn.DoApplyFlags( *rSet );
+    pImpl->maItemConn.DoReset( *rSet );
 }
 
 
@@ -1060,10 +1060,10 @@ IMPL_LINK_NOARG(SfxTabDialog, ResetHdl)
     {
         // CSet on AIS has problems here, thus separated
         const SfxItemSet* pItemSet = &pDataObject->pTabPage->GetItemSet();
-        pDataObject->pTabPage->Reset( *(SfxItemSet*)pItemSet );
+        pDataObject->pTabPage->Reset( pItemSet );
     }
     else
-        pDataObject->pTabPage->Reset( *pSet );
+        pDataObject->pTabPage->Reset( pSet );
     return 0;
 }
 
@@ -1139,7 +1139,7 @@ IMPL_LINK_NOARG(SfxTabDialog, BaseFmtHdl)
         }
         // Set all Items as new  -> the call the current Page Reset()
         DBG_ASSERT( pDataObject->pTabPage, "the Page is gone" );
-        pDataObject->pTabPage->Reset( aTmpSet );
+        pDataObject->pTabPage->Reset( &aTmpSet );
         pDataObject->pTabPage->pImpl->mbStandard = true;
     }
     return 1;
@@ -1228,14 +1228,14 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         PageCreated( nId, *pTabPage );
 
         if ( pDataObject->bOnDemand )
-            pTabPage->Reset( (SfxItemSet &)pTabPage->GetItemSet() );
+            pTabPage->Reset( &pTabPage->GetItemSet() );
         else
-            pTabPage->Reset( *pSet );
+            pTabPage->Reset( pSet );
 
         pTabCtrl->SetTabPage( nId, pTabPage );
     }
     else if ( pDataObject->bRefresh )
-        pTabPage->Reset( *pSet );
+        pTabPage->Reset( pSet );
     pDataObject->bRefresh = false;
 
     if ( pExampleSet )

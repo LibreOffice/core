@@ -97,7 +97,7 @@ public:
                         virtual ~SfxCommonPrintOptionsTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual Window*     GetParentLabeledBy( const Window* pLabel ) const SAL_OVERRIDE;
     virtual Window*     GetParentLabelFor( const Window* pLabel ) const SAL_OVERRIDE;
 

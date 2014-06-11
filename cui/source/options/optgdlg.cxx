@@ -296,7 +296,7 @@ bool OfaMiscTabPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
+void OfaMiscTabPage::Reset( const SfxItemSet* rSet )
 {
     SvtHelpOptions aHelpOptions;
     m_pToolTipsCB->Check( aHelpOptions.IsHelpTips() );
@@ -318,7 +318,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     m_pDocStatusCB->SaveValue();
 
     const SfxPoolItem* pItem = NULL;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
+    if ( SFX_ITEM_SET == rSet->GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
     {
         m_pYearValueField->SetValue( ((SfxUInt16Item*)pItem)->GetValue() );
         TwoFigureConfigHdl(m_pYearValueField);
@@ -851,7 +851,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     return bModified;
 }
 
-void OfaViewTabPage::Reset( const SfxItemSet& )
+void OfaViewTabPage::Reset( const SfxItemSet* )
 {
     SvtMiscOptions aMiscOptions;
 
@@ -1416,7 +1416,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     return false;
 }
 
-void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
+void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
 {
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
     if ( !sLang.isEmpty() )
@@ -1509,21 +1509,21 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         m_pCurrentDocCB->Enable(true);
         m_pCurrentDocCB->Check(bLanguageCurrentDoc_Impl);
         const SfxPoolItem* pLang;
-        if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_LANGUAGE, false, &pLang))
+        if( SFX_ITEM_SET == rSet->GetItemState(SID_ATTR_LANGUAGE, false, &pLang))
         {
             LanguageType eTempCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
             if (MsLangId::resolveSystemLanguageByScriptType(eCurLang, ::com::sun::star::i18n::ScriptType::LATIN) != eTempCurLang)
                 eCurLang = eTempCurLang;
         }
 
-        if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_CHAR_CJK_LANGUAGE, false, &pLang))
+        if( SFX_ITEM_SET == rSet->GetItemState(SID_ATTR_CHAR_CJK_LANGUAGE, false, &pLang))
         {
             LanguageType eTempCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
             if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCJK, ::com::sun::star::i18n::ScriptType::ASIAN) != eTempCurLang)
                 eCurLangCJK = eTempCurLang;
         }
 
-        if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, false, &pLang))
+        if( SFX_ITEM_SET == rSet->GetItemState(SID_ATTR_CHAR_CTL_LANGUAGE, false, &pLang))
         {
             LanguageType eTempCurLang = ((const SvxLanguageItem*)pLang)->GetValue();
             if (MsLangId::resolveSystemLanguageByScriptType(eCurLangCTL, ::com::sun::star::i18n::ScriptType::COMPLEX) != eTempCurLang)
@@ -1568,7 +1568,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     // check the box "For the current document only"
     // set the focus to the Western Language box
     const SfxPoolItem* pLang = 0;
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_SET_DOCUMENT_LANGUAGE, false, &pLang ) && ((const SfxBoolItem*)pLang)->GetValue() )
+    if ( SFX_ITEM_SET == rSet->GetItemState(SID_SET_DOCUMENT_LANGUAGE, false, &pLang ) && ((const SfxBoolItem*)pLang)->GetValue() )
     {
         m_pWesternLanguageLB->GrabFocus();
         m_pCurrentDocCB->Enable(true);

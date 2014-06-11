@@ -192,7 +192,7 @@ bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet* )
     return false;
 }
 
-void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
+void  SvxFontSubstTabPage::Reset( const SfxItemSet* )
 {
     m_pCheckLB->SetUpdateMode(false);
     m_pCheckLB->Clear();

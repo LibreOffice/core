@@ -379,7 +379,7 @@ bool SvxBorderTabPage::IsBorderLineStyleAllowed( sal_Int16 nStyle ) const
 
 
 
-void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
+void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 {
     SfxTabPage::Reset( rSet );
 
@@ -388,11 +388,11 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     sal_uInt16                  nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
     SfxMapUnit              eCoreUnit;
 
-    pBoxItem  = (const SvxBoxItem*)GetItem( rSet, SID_ATTR_BORDER_OUTER );
+    pBoxItem  = (const SvxBoxItem*)GetItem( *rSet, SID_ATTR_BORDER_OUTER );
 
-    pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( rSet, SID_ATTR_BORDER_INNER, false );
+    pBoxInfoItem = (const SvxBoxInfoItem*)GetItem( *rSet, SID_ATTR_BORDER_INNER, false );
 
-    eCoreUnit = rSet.GetPool()->GetMetric( nWhichBox );
+    eCoreUnit = rSet->GetPool()->GetMetric( nWhichBox );
 
     if ( pBoxItem && pBoxInfoItem ) // -> Don't Care
     {
@@ -427,7 +427,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
                 if ( pBoxInfoItem->IsDist() )
                 {
-                    if( rSet.GetItemState( nWhichBox, true ) >= SFX_ITEM_DEFAULT )
+                    if( rSet->GetItemState( nWhichBox, true ) >= SFX_ITEM_DEFAULT )
                     {
                         bool bIsAnyBorderVisible = m_pFrameSel->IsAnyBorderVisible();
                         if( !bIsAnyBorderVisible || !pBoxInfoItem->IsMinDist() )
@@ -552,7 +552,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
 
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
+    if(SFX_ITEM_SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {

@@ -80,7 +80,7 @@ friend class SfxStyleDialog;
 
 protected:
     virtual bool        FillItemSet(SfxItemSet *) SAL_OVERRIDE;
-    virtual void        Reset(const SfxItemSet &) SAL_OVERRIDE;
+    virtual void        Reset(const SfxItemSet *) SAL_OVERRIDE;
 
     using TabPage::ActivatePage;
         virtual void        ActivatePage(const SfxItemSet &) SAL_OVERRIDE;

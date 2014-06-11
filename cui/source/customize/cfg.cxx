@@ -1545,7 +1545,7 @@ SvxConfigPage::SvxConfigPage(Window *pParent, const SfxItemSet& rSet)
     m_pDescriptionField->EnableCursor( false );
 }
 
-void SvxConfigPage::Reset( const SfxItemSet& )
+void SvxConfigPage::Reset( const SfxItemSet* )
 {
     // If we haven't initialised our XMultiServiceFactory reference
     // then Reset is being called at the opening of the dialog.

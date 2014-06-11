@@ -188,7 +188,7 @@ public:
     void    SetWrtShell(SwWrtShell& rSh);
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -230,7 +230,7 @@ public:
     virtual ~SwSectionFtnEndTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);
@@ -248,7 +248,7 @@ public:
     virtual ~SwSectionIndentTabPage();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet);

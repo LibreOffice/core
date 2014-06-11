@@ -468,15 +468,15 @@ SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
 
 
 
-void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
+void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 {
 // os: Such a nonsense! One will always find such an item somewhere,
 //     but it must be existing in the rSet!
 //  const SfxPoolItem* pX = GetOldItem( rSet, SID_VIEW_FLD_PIC );
 //  if( pX && pX->ISA(SfxWallpaperItem))
-    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
+    if(SFX_ITEM_AVAILABLE <= rSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
     {
-        ResetFromWallpaperItem( rSet );
+        ResetFromWallpaperItem( *rSet );
         return;
     }
 
@@ -494,7 +494,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
     const SfxPoolItem* pItem;
     sal_uInt16 nDestValue = USHRT_MAX;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_BACKGRND_DESTINATION,
+    if ( SFX_ITEM_SET == rSet->GetItemState( SID_BACKGRND_DESTINATION,
                                             false, &pItem ) )
     {
         nDestValue = ((const SfxUInt16Item*)pItem)->GetValue();
@@ -513,7 +513,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             break;
         }
     }
-    else if( SFX_ITEM_SET == rSet.GetItemState(
+    else if( SFX_ITEM_SET == rSet->GetItemState(
                 SID_PARA_BACKGRND_DESTINATION, false, &pItem ) )
     {
         nDestValue = ((const SfxUInt16Item*)pItem)->GetValue();
@@ -541,8 +541,8 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
         nDestValue = 0;
     sal_uInt16 nWhich = GetWhich( nSlot );
 
-    if ( rSet.GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
-        pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
+    if ( rSet->GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
+        pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
 
     m_pBtnTile->Check();
 
@@ -558,7 +558,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
         lcl_setFillStyle(m_pLbSelect, XFILL_SOLID);
         ShowColorUI_Impl();
 
-        const SfxPoolItem* pOld = GetOldItem( rSet, SID_ATTR_BRUSH );
+        const SfxPoolItem* pOld = GetOldItem( *rSet, SID_ATTR_BRUSH );
 
         if ( pOld )
             aBgdColor = ( (SvxBrushItem*)pOld )->GetColor();
@@ -582,23 +582,23 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             pTableBck_Impl->nActPos = nValue;
 
             nWhich = GetWhich( SID_ATTR_BRUSH );
-            if ( rSet.GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet->GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
+                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
                 pTableBck_Impl->pCellBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nCellWhich = nWhich;
 
-            if ( rSet.GetItemState( SID_ATTR_BRUSH_ROW, false ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet->GetItemState( SID_ATTR_BRUSH_ROW, false ) >= SFX_ITEM_AVAILABLE )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet.Get( SID_ATTR_BRUSH_ROW ) );
+                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( SID_ATTR_BRUSH_ROW ) );
                 pTableBck_Impl->pRowBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nRowWhich = SID_ATTR_BRUSH_ROW;
 
-            if ( rSet.GetItemState( SID_ATTR_BRUSH_TABLE, false ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet->GetItemState( SID_ATTR_BRUSH_TABLE, false ) >= SFX_ITEM_AVAILABLE )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet.Get( SID_ATTR_BRUSH_TABLE ) );
+                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( SID_ATTR_BRUSH_TABLE ) );
                 pTableBck_Impl->pTableBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nTableWhich = SID_ATTR_BRUSH_TABLE;
@@ -621,18 +621,18 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             pParaBck_Impl->nActPos = nValue;
 
             nWhich = GetWhich( SID_ATTR_BRUSH );
-            if ( rSet.GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet->GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
+                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
                 pParaBck_Impl->pParaBrush = new SvxBrushItem(*pBgdAttr);
             }
 
             nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
-            rSet.GetItemState( nWhich, true );
-            rSet.GetItemState( nWhich, false );
-            if ( rSet.GetItemState( nWhich, true ) > SFX_ITEM_AVAILABLE )
+            rSet->GetItemState( nWhich, true );
+            rSet->GetItemState( nWhich, false );
+            if ( rSet->GetItemState( nWhich, true ) > SFX_ITEM_AVAILABLE )
             {
-                pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
+                pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
                 pParaBck_Impl->pCharBrush = new SvxBrushItem(*pBgdAttr);
             }
             else

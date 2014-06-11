@@ -378,7 +378,7 @@ SfxTabPage* SvxNumberFormatTabPage::Create( Window* pParent,
 #*
 #************************************************************************/
 
-void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
+void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxUInt32Item*        pValFmtAttr     = NULL;
     const SfxPoolItem*          pItem           = NULL;
@@ -392,12 +392,12 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     double                      nValDouble      = 0;
     OUString                    aValString;
 
-    SfxItemState eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ),true,&pItem);
+    SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ),true,&pItem);
 
     if(eState==SFX_ITEM_SET)
     {
         const SfxBoolItem* pBoolLangItem = (const SfxBoolItem*)
-                      GetItem( rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE);
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE);
 
         if(pBoolLangItem!=NULL && pBoolLangItem->GetValue())
         {
@@ -410,7 +410,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
 
     }
 
-    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_INFO ),true,&pItem);
+    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_INFO ),true,&pItem);
 
     if(eState==SFX_ITEM_SET)
     {
@@ -430,12 +430,12 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     }
 
 
-    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ONE_AREA ));
+    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ONE_AREA ));
 
     if(eState==SFX_ITEM_SET)
     {
         const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
-                      GetItem( rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA);
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA);
 
         if(pBoolItem!=NULL)
         {
@@ -443,12 +443,12 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
         }
     }
 
-    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE ) );
+    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE ) );
 
     if ( eState == SFX_ITEM_SET )
     {
         const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
-                      GetItem( rSet, SID_ATTR_NUMBERFORMAT_SOURCE );
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_SOURCE );
         if ( pBoolItem )
             m_pCbSourceFormat->Check( pBoolItem->GetValue() );
         else
@@ -467,11 +467,11 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     // pNumItem must have been set from outside!
     DBG_ASSERT( pNumItem, "No NumberInfo, no NumberFormatter, good bye.CRASH. :-(" );
 
-    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_VALUE ) );
+    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_VALUE ) );
 
     if ( SFX_ITEM_DONTCARE != eState )
         pValFmtAttr = (const SfxUInt32Item*)
-                      GetItem( rSet, SID_ATTR_NUMBERFORMAT_VALUE );
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_VALUE );
 
     eValType = pNumItem->GetValueType();
 
@@ -545,10 +545,10 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
     {
         SetCategory(nCatLbSelPos );
     }
-    eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ADD_AUTO ) );
+    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ADD_AUTO ) );
     if(SFX_ITEM_SET == eState)
          pAutoEntryAttr = (const SfxBoolItem*)
-                      GetItem( rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO );
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO );
     // no_NO is an alias for nb_NO and normally isn't listed, we need it for
     // backwards compatibility, but only if the format passed is of
     // LanguageType no_NO.

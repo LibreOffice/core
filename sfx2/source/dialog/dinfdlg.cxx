@@ -695,16 +695,16 @@ bool SfxDocumentDescPage::FillItemSet(SfxItemSet *rSet)
 }
 
 
-void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
+void SfxDocumentDescPage::Reset(const SfxItemSet *rSet)
 {
-    m_pInfoItem = &(SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
+    m_pInfoItem = &(SfxDocumentInfoItem &)rSet->Get(SID_DOCINFO);
 
     m_pTitleEd->SetText( m_pInfoItem->getTitle() );
     m_pThemaEd->SetText( m_pInfoItem->getSubject() );
     m_pKeywordsEd->SetText( m_pInfoItem->getKeywords() );
     m_pCommentEd->SetText( m_pInfoItem->getDescription() );
 
-    SFX_ITEMSET_ARG( &rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, false );
+    SFX_ITEMSET_ARG( rSet, pROItem, SfxBoolItem, SID_DOC_READONLY, false );
     if ( pROItem && pROItem->GetValue() )
     {
         m_pTitleEd->SetReadOnly( true );
@@ -987,11 +987,11 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-void SfxDocumentPage::Reset( const SfxItemSet& rSet )
+void SfxDocumentPage::Reset( const SfxItemSet* rSet )
 {
     // Determine the document information
     const SfxDocumentInfoItem *m_pInfoItem =
-        &(const SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
+        &(const SfxDocumentInfoItem &)rSet->Get(SID_DOCINFO);
 
     // template data
     if ( m_pInfoItem->HasTemplate() )
@@ -1015,7 +1015,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     // determine name
     OUString aName;
     const SfxPoolItem* pItem = 0;
-    if ( SFX_ITEM_SET != rSet.GetItemState( ID_FILETP_TITLE, false, &pItem ) )
+    if ( SFX_ITEM_SET != rSet->GetItemState( ID_FILETP_TITLE, false, &pItem ) )
     {
         INetURLObject aURL(aFile);
         aName = aURL.GetName( INetURLObject::DECODE_WITH_CHARSET );
@@ -1032,7 +1032,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     m_pNameED->ClearModifyFlag();
 
     // determine RO-Flag
-    if ( SFX_ITEM_UNKNOWN == rSet.GetItemState( ID_FILETP_READONLY, false, &pItem )
+    if ( SFX_ITEM_UNKNOWN == rSet->GetItemState( ID_FILETP_READONLY, false, &pItem )
          || !pItem )
         m_pReadOnlyCB->Hide();
     else
@@ -2094,10 +2094,10 @@ bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet* rSet )
     return bModified;
 }
 
-void SfxCustomPropertiesPage::Reset( const SfxItemSet& rItemSet )
+void SfxCustomPropertiesPage::Reset( const SfxItemSet* rItemSet )
 {
     m_pPropertiesCtrl->ClearAllLines();
-    const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet.Get(SID_DOCINFO);
+    const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet->Get(SID_DOCINFO);
     std::vector< CustomProperty* > aCustomProps = m_pInfoItem->GetCustomProperties();
     for ( sal_uInt32 i = 0; i < aCustomProps.size(); i++ )
     {
@@ -2585,10 +2585,10 @@ bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet* rSet )
     return modifiedNum;
 }
 
-void SfxCmisPropertiesPage::Reset( const SfxItemSet& rItemSet )
+void SfxCmisPropertiesPage::Reset( const SfxItemSet* rItemSet )
 {
     m_pPropertiesCtrl.ClearAllLines();
-    const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet.Get(SID_DOCINFO);
+    const SfxDocumentInfoItem* m_pInfoItem = &(const SfxDocumentInfoItem &)rItemSet->Get(SID_DOCINFO);
     uno::Sequence< document::CmisProperty > aCmisProps = m_pInfoItem->GetCmisProperties();
     for ( sal_Int32 i = 0; i < aCmisProps.getLength(); i++ )
     {

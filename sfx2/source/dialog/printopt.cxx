@@ -138,7 +138,7 @@ bool SfxCommonPrintOptionsTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
     return bModified;
 }
 
-void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet& /*rSet*/ )
+void SfxCommonPrintOptionsTabPage::Reset( const SfxItemSet* /*rSet*/ )
 {
     SvtPrintWarningOptions  aWarnOptions;
     SvtPrinterOptions       aPrinterOptions;

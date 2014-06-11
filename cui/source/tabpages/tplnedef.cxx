@@ -275,11 +275,11 @@ bool SvxLineDefTabPage::FillItemSet( SfxItemSet* rAttrs )
 
 
 
-void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
+void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
 {
-    if( rAttrs.GetItemState( GetWhich( XATTR_LINESTYLE ) ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( GetWhich( XATTR_LINESTYLE ) ) != SFX_ITEM_DONTCARE )
     {
-        XLineStyle eXLS = (XLineStyle) ( ( const XLineStyleItem& ) rAttrs.Get( GetWhich( XATTR_LINESTYLE ) ) ).GetValue();
+        XLineStyle eXLS = (XLineStyle) ( ( const XLineStyleItem& ) rAttrs->Get( GetWhich( XATTR_LINESTYLE ) ) ).GetValue();
 
         switch( eXLS )
         {
@@ -290,7 +290,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
 
             case XLINE_DASH:
             {
-                const XLineDashItem& rDashItem = ( const XLineDashItem& ) rAttrs.Get( XATTR_LINEDASH );
+                const XLineDashItem& rDashItem = ( const XLineDashItem& ) rAttrs->Get( XATTR_LINEDASH );
                 aDash = rDashItem.GetDashValue();
 
                 m_pLbLineStyles->SetNoSelection();
@@ -759,7 +759,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 
                 m_pLbLineStyles->Clear();
                 m_pLbLineStyles->Fill( pDashList );
-                Reset( rOutAttrs );
+                Reset( &rOutAttrs );
 
                 pDashList->SetName( aURL.getName() );
 

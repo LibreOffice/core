@@ -94,7 +94,7 @@ bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )
     return false;
 }
 
-void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet& )
+void SvxAccessibilityOptionsTabPage::Reset( const SfxItemSet* )
 {
     //set controls from aConfig.Get...
 

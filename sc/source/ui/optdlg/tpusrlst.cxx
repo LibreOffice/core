@@ -81,7 +81,7 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
 
     SetExchangeSupport();
     Init();
-    Reset(rCoreAttrs);
+    Reset(&rCoreAttrs);
 }
 
 ScTpUserLists::~ScTpUserLists()
@@ -142,10 +142,10 @@ SfxTabPage* ScTpUserLists::Create( Window* pParent, const SfxItemSet& rAttrSet )
     return ( new ScTpUserLists( pParent, rAttrSet ) );
 }
 
-void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
+void ScTpUserLists::Reset( const SfxItemSet* rCoreAttrs )
 {
     const ScUserListItem& rUserListItem = (const ScUserListItem&)
-                                           rCoreAttrs.Get( nWhichUserLists );
+                                           rCoreAttrs->Get( nWhichUserLists );
     const ScUserList*     pCoreList     = rUserListItem.GetUserList();
 
     OSL_ENSURE( pCoreList, "UserList not found :-/" );

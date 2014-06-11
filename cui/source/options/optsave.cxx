@@ -379,7 +379,7 @@ bool isODFFormat( const OUString& sFilter )
     return bRet;
 }
 
-void SfxSaveTabPage::Reset( const SfxItemSet& )
+void SfxSaveTabPage::Reset( const SfxItemSet* )
 {
     SvtSaveOptions aSaveOpt;
     aLoadUserSettingsCB->Check(aSaveOpt.IsLoadUserSettings());

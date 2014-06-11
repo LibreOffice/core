@@ -48,9 +48,9 @@ bool DataLabelsTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     return m_aDataLabelResources.FillItemSet(rOutAttrs);
 }
 
-void DataLabelsTabPage::Reset(const SfxItemSet& rInAttrs)
+void DataLabelsTabPage::Reset(const SfxItemSet* rInAttrs)
 {
-    m_aDataLabelResources.Reset(rInAttrs);
+    m_aDataLabelResources.Reset(*rInAttrs);
 }
 
 void DataLabelsTabPage::SetNumberFormatter( SvNumberFormatter* pFormatter )

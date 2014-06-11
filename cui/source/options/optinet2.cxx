@@ -375,7 +375,7 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
     }
 }
 
-void SvxProxyTabPage::Reset(const SfxItemSet&)
+void SvxProxyTabPage::Reset(const SfxItemSet*)
 {
     ReadConfigData_Impl();
 
@@ -909,7 +909,7 @@ bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
 
 /*--------------------------------------------------------------------*/
 
-void SvxSecurityTabPage::Reset( const SfxItemSet& )
+void SvxSecurityTabPage::Reset( const SfxItemSet* )
 {
 }
 
@@ -947,7 +947,7 @@ bool MozPluginTabPage::FillItemSet( SfxItemSet* )
     return true;
 }
 
-void MozPluginTabPage::Reset( const SfxItemSet& )
+void MozPluginTabPage::Reset( const SfxItemSet* )
 {
         m_pWBasicCodeCB->Check( isInstalled());
         m_pWBasicCodeCB->SaveValue();
@@ -1248,7 +1248,7 @@ bool SvxEMailTabPage::FillItemSet( SfxItemSet* )
 
 /* -------------------------------------------------------------------------*/
 
-void SvxEMailTabPage::Reset( const SfxItemSet& )
+void SvxEMailTabPage::Reset( const SfxItemSet* )
 {
     m_pMailerURLED->Enable(true );
     m_pMailerURLPB->Enable(true );

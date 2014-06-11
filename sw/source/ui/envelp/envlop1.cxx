@@ -316,7 +316,7 @@ void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
     aSet.Put(GetParentSwEnvDlg()->aEnvItem);
-    Reset(aSet);
+    Reset(&aSet);
 }
 
 int SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
@@ -341,9 +341,9 @@ bool SwEnvPage::FillItemSet(SfxItemSet* rSet)
     return true;
 }
 
-void SwEnvPage::Reset(const SfxItemSet& rSet)
+void SwEnvPage::Reset(const SfxItemSet* rSet)
 {
-    SwEnvItem aItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
+    SwEnvItem aItem = (const SwEnvItem&) rSet->Get(FN_ENVELOP);
     m_pAddrEdit->SetText(convertLineEnd(aItem.aAddrText, GetSystemLineEnd()));
     m_pSenderEdit->SetText(convertLineEnd(aItem.aSendText, GetSystemLineEnd()));
     m_pSenderBox->Check  (aItem.bSend);

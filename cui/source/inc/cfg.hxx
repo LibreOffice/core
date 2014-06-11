@@ -437,7 +437,7 @@ public:
                                     SvTreeListEntry* pTargetEntry );
 
     bool            FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    void            Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    void            Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     virtual bool    DeleteSelectedContent() = 0;
     virtual void    DeleteSelectedTopLevel() = 0;

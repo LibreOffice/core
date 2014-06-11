@@ -106,7 +106,7 @@ private:
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
 // #98647# class SvxScriptExecListBox ------------------------------------
@@ -176,7 +176,7 @@ protected:
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
 class MozPluginTabPage : public SfxTabPage
@@ -196,7 +196,7 @@ public:
                                 const SfxItemSet& rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 
 };
 
@@ -221,7 +221,7 @@ public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet& rSet ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_CUI_SOURCE_OPTIONS_OPTINET2_HXX

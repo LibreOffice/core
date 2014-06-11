@@ -301,7 +301,7 @@ IMPL_LINK( SwOutlineTabDialog, MenuSelectHdl, Menu *, pMenu )
 
     sal_uInt16  nPageId = GetCurPageId();
     SfxTabPage* pPage = GetTabPage( nPageId );
-    pPage->Reset(*GetOutputItemSet());
+    pPage->Reset(GetOutputItemSet());
 
     return 0;
 }
@@ -822,9 +822,9 @@ bool SwOutlineSettingsTabPage::FillItemSet( SfxItemSet*  )
     return true;
 }
 
-void SwOutlineSettingsTabPage::Reset( const SfxItemSet& rSet )
+void SwOutlineSettingsTabPage::Reset( const SfxItemSet* rSet )
 {
-    ActivatePage(rSet);
+    ActivatePage(*rSet);
 }
 
 SfxTabPage* SwOutlineSettingsTabPage::Create( Window* pParent,

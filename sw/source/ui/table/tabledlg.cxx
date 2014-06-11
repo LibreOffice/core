@@ -421,7 +421,7 @@ bool  SwFormatTablePage::FillItemSet( SfxItemSet* rCoreSet )
     return bModified;
 }
 
-void  SwFormatTablePage::Reset( const SfxItemSet& )
+void  SwFormatTablePage::Reset( const SfxItemSet* )
 {
     const SfxItemSet& rSet = GetItemSet();
     const SfxPoolItem*  pItem;
@@ -760,7 +760,7 @@ SfxTabPage*   SwTableColumnPage::Create( Window* pParent,
     return new SwTableColumnPage( pParent, rAttrSet );
 }
 
-void  SwTableColumnPage::Reset( const SfxItemSet& )
+void  SwTableColumnPage::Reset( const SfxItemSet* )
 {
     const SfxItemSet& rSet = GetItemSet();
 
@@ -1435,7 +1435,7 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
 
 }
 
-void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
+void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem;
     SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
@@ -1457,12 +1457,12 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
                     aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName ) ))
                 m_pPageCollLB->InsertEntry( aFmtName );
 
-        if(SFX_ITEM_SET == rSet.GetItemState( RES_KEEP, false, &pItem ))
+        if(SFX_ITEM_SET == rSet->GetItemState( RES_KEEP, false, &pItem ))
         {
             m_pKeepCB->Check( ((const SvxFmtKeepItem*)pItem)->GetValue() );
             m_pKeepCB->SaveValue();
         }
-        if(SFX_ITEM_SET == rSet.GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
+        if(SFX_ITEM_SET == rSet->GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
         {
             m_pSplitCB->Check( ((const SwFmtLayoutSplit*)pItem)->GetValue() );
         }
@@ -1472,7 +1472,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         m_pSplitCB->SaveValue();
         SplitHdl_Impl(m_pSplitCB);
 
-        if(SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, false, &pItem ))
+        if(SFX_ITEM_SET == rSet->GetItemState( RES_ROW_SPLIT, false, &pItem ))
         {
             m_pSplitRowCB->Check( ((const SwFmtRowSplit*)pItem)->GetValue() );
         }
@@ -1482,7 +1482,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 
         if(bPageBreak)
         {
-            if(SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC, false, &pItem ))
+            if(SFX_ITEM_SET == rSet->GetItemState( RES_PAGEDESC, false, &pItem ))
             {
                 OUString sPageDesc;
                 const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
@@ -1522,7 +1522,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
                 }
             }
 
-            if(SFX_ITEM_SET == rSet.GetItemState( RES_BREAK, false, &pItem ))
+            if(SFX_ITEM_SET == rSet->GetItemState( RES_BREAK, false, &pItem ))
             {
                 const SvxFmtBreakItem* pPageBreak = (const SvxFmtBreakItem*)pItem;
                 SvxBreak eBreak = (SvxBreak)pPageBreak->GetValue();
@@ -1585,7 +1585,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         m_pPageCollLB->Enable(false);
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem ))
+    if(SFX_ITEM_SET == rSet->GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem ))
     {
         sal_uInt16 nRep = ((const SfxUInt16Item*)pItem)->GetValue();
         m_pHeadLineCB->Check( nRep > 0 );
@@ -1593,15 +1593,15 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         m_pRepeatHeaderNF->SetValue( nRep );
         m_pRepeatHeaderNF->SaveValue();
     }
-    if ( rSet.GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SFX_ITEM_AVAILABLE )
     {
-        sal_uLong nDirection = ((const SvxFrameDirectionItem&)rSet.Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
+        sal_uLong nDirection = ((const SvxFrameDirectionItem&)rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
         m_pTextDirectionLB->SelectEntryPos(m_pTextDirectionLB->GetEntryPos( (const void*)nDirection ));
     }
 
-    if ( rSet.GetItemState(FN_TABLE_SET_VERT_ALIGN) > SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SFX_ITEM_AVAILABLE )
     {
-        sal_uInt16 nVert = ((const SfxUInt16Item&)rSet.Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
+        sal_uInt16 nVert = ((const SfxUInt16Item&)rSet->Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
         sal_uInt16 nPos = 0;
         switch(nVert)
         {

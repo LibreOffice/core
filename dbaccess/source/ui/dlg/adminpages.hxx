@@ -156,7 +156,7 @@ namespace dbaui
         virtual int DeactivatePage(SfxItemSet* pSet) SAL_OVERRIDE;
         using SfxTabPage::DeactivatePage;
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_False
-        virtual void Reset(const SfxItemSet& _rCoreAttrs) SAL_OVERRIDE;
+        virtual void Reset(const SfxItemSet* _rCoreAttrs) SAL_OVERRIDE;
         /// default implementation: call implInitControls with the given item set and _bSaveValue = sal_True
         virtual void ActivatePage(const SfxItemSet& _rSet) SAL_OVERRIDE;
 

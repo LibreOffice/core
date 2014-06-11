@@ -319,10 +319,10 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
 }
 
 
-void SvxHFPage::Reset( const SfxItemSet& rSet )
+void SvxHFPage::Reset( const SfxItemSet* rSet )
 {
-    ActivatePage( rSet );
-    ResetBackground_Impl( rSet );
+    ActivatePage( *rSet );
+    ResetBackground_Impl( *rSet );
 
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Where is the pool" );
@@ -330,8 +330,8 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
     //hide "same content on first page when this is calc
     bool bIsCalc = false;
-    const SfxPoolItem* pExt1 = GetItem(rSet, SID_ATTR_PAGE_EXT1);
-    const SfxPoolItem* pExt2 = GetItem(rSet, SID_ATTR_PAGE_EXT2);
+    const SfxPoolItem* pExt1 = GetItem(*rSet, SID_ATTR_PAGE_EXT1);
+    const SfxPoolItem* pExt2 = GetItem(*rSet, SID_ATTR_PAGE_EXT2);
     if (pExt1 && pExt1->ISA(SfxBoolItem) && pExt2 && pExt2->ISA(SfxBoolItem))
         bIsCalc = true;
     m_pCntSharedFirstBox->Show(!bIsCalc);
@@ -339,7 +339,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
     // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = 0;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich(nId), false,
+    if ( SFX_ITEM_SET == rSet->GetItemState( GetWhich(nId), false,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -423,7 +423,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
 
     const SfxPoolItem* pItem = 0;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
+    if(SFX_ITEM_SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {

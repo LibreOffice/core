@@ -174,7 +174,7 @@ public:
     virtual                     ~SfxAcceleratorConfigPage();
 
     virtual bool                FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void                Reset( const SfxItemSet& ) SAL_OVERRIDE;
+    virtual void                Reset( const SfxItemSet* ) SAL_OVERRIDE;
 
     void                        Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
 };

@@ -65,7 +65,7 @@ bool ScDocStatPage::FillItemSet( SfxItemSet* /* rSet */ )
     return false;
 }
 
-void ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
+void ScDocStatPage::Reset( const SfxItemSet* /* rSet */ )
 {
 }
 

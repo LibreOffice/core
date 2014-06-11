@@ -285,12 +285,12 @@ bool ScTpFormulaOptions::FillItemSet(SfxItemSet* rCoreSet)
     return bRet;
 }
 
-void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
+void ScTpFormulaOptions::Reset(const SfxItemSet* rCoreSet)
 {
     ScFormulaOptions aOpt;
     const SfxPoolItem* pItem = NULL;
 
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCFORMULAOPTIONS, false , &pItem))
+    if(SFX_ITEM_SET == rCoreSet->GetItemState(SID_SCFORMULAOPTIONS, false , &pItem))
         aOpt = ((const ScTpFormulaItem*)pItem)->GetFormulaOptions();
 
     // formula grammar.

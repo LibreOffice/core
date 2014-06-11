@@ -165,13 +165,13 @@ SvxMeasurePage::~SvxMeasurePage()
 |*
 \************************************************************************/
 
-void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
+void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
 {
-    SfxItemPool* pPool = rAttrs.GetPool();
+    SfxItemPool* pPool = rAttrs->GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     eUnit = pPool->GetMetric( SDRATTR_MEASURELINEDIST );
 
-    const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_MEASURELINEDIST );
+    const SfxPoolItem* pItem = GetItem( *rAttrs, SDRATTR_MEASURELINEDIST );
 
     // SdrMeasureLineDistItem
     if( pItem == NULL )
@@ -188,7 +188,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldLineDist->SaveValue();
 
     // SdrMeasureHelplineOverhangItem
-    pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINEOVERHANG );
+    pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEOVERHANG );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG );
     if( pItem )
@@ -203,7 +203,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldHelplineOverhang->SaveValue();
 
     // SdrMeasureHelplineDistItem
-    pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINEDIST );
+    pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINEDIST );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEDIST );
     if( pItem )
@@ -218,7 +218,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldHelplineDist->SaveValue();
 
     // SdrMeasureHelpline1LenItem
-    pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINE1LEN );
+    pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE1LEN );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE1LEN );
     if( pItem )
@@ -233,7 +233,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldHelpline1Len->SaveValue();
 
     // SdrMeasureHelpline2LenItem
-    pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINE2LEN );
+    pItem = GetItem( *rAttrs, SDRATTR_MEASUREHELPLINE2LEN );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE2LEN );
     if( pItem )
@@ -248,9 +248,9 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     m_pMtrFldHelpline2Len->SaveValue();
 
     // SdrMeasureBelowRefEdgeItem
-    if( rAttrs.GetItemState( SDRATTR_MEASUREBELOWREFEDGE ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_MEASUREBELOWREFEDGE ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbBelowRefEdge->SetState( ( ( const SdrMeasureBelowRefEdgeItem& )rAttrs.Get( SDRATTR_MEASUREBELOWREFEDGE ) ).
+        m_pTsbBelowRefEdge->SetState( ( ( const SdrMeasureBelowRefEdgeItem& )rAttrs->Get( SDRATTR_MEASUREBELOWREFEDGE ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbBelowRefEdge->EnableTriState( false );
     }
@@ -261,7 +261,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     m_pTsbBelowRefEdge->SaveValue();
 
     // SdrMeasureDecimalPlacesItem
-    pItem = GetItem( rAttrs, SDRATTR_MEASUREDECIMALPLACES );
+    pItem = GetItem( *rAttrs, SDRATTR_MEASUREDECIMALPLACES );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES );
     if( pItem )
@@ -277,9 +277,9 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 
     // SdrMeasureTextRota90Item
     // Attention: negate !
-    if( rAttrs.GetItemState( SDRATTR_MEASURETEXTROTA90 ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_MEASURETEXTROTA90 ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbParallel->SetState( ( ( const SdrMeasureTextRota90Item& )rAttrs.Get( SDRATTR_MEASURETEXTROTA90 ) ).
+        m_pTsbParallel->SetState( ( ( const SdrMeasureTextRota90Item& )rAttrs->Get( SDRATTR_MEASURETEXTROTA90 ) ).
                         GetValue() ? TRISTATE_FALSE : TRISTATE_TRUE );
         m_pTsbParallel->EnableTriState( false );
     }
@@ -290,9 +290,9 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     m_pTsbParallel->SaveValue();
 
     // SdrMeasureShowUnitItem
-    if( rAttrs.GetItemState( SDRATTR_MEASURESHOWUNIT ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_MEASURESHOWUNIT ) != SFX_ITEM_DONTCARE )
     {
-        m_pTsbShowUnit->SetState( ( ( const SdrMeasureShowUnitItem& )rAttrs.Get( SDRATTR_MEASURESHOWUNIT ) ).
+        m_pTsbShowUnit->SetState( ( ( const SdrMeasureShowUnitItem& )rAttrs->Get( SDRATTR_MEASURESHOWUNIT ) ).
                         GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbShowUnit->EnableTriState( false );
     }
@@ -303,9 +303,9 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     m_pTsbShowUnit->SaveValue();
 
     // SdrMeasureUnitItem
-    if( rAttrs.GetItemState( SDRATTR_MEASUREUNIT ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( SDRATTR_MEASUREUNIT ) != SFX_ITEM_DONTCARE )
     {
-        long nFieldUnit = (long) ( ( const SdrMeasureUnitItem& )rAttrs.
+        long nFieldUnit = (long) ( ( const SdrMeasureUnitItem& )rAttrs->
                                     Get( SDRATTR_MEASUREUNIT ) ).GetValue();
 
         for( sal_Int32 i = 0; i < m_pLbUnit->GetEntryCount(); ++i )
@@ -324,18 +324,18 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     m_pLbUnit->SaveValue();
 
     // Position
-    if ( rAttrs.GetItemState( SDRATTR_MEASURETEXTVPOS ) != SFX_ITEM_DONTCARE )
+    if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SFX_ITEM_DONTCARE )
     {
         SdrMeasureTextVPos eVPos = (SdrMeasureTextVPos)
-                    ( ( const SdrMeasureTextVPosItem& )rAttrs.Get( SDRATTR_MEASURETEXTVPOS ) ).GetValue();
+                    ( ( const SdrMeasureTextVPosItem& )rAttrs->Get( SDRATTR_MEASURETEXTVPOS ) ).GetValue();
         {
-            if ( rAttrs.GetItemState( SDRATTR_MEASURETEXTHPOS ) != SFX_ITEM_DONTCARE )
+            if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SFX_ITEM_DONTCARE )
             {
                 m_pTsbAutoPosV->EnableTriState( false );
                 m_pTsbAutoPosH->EnableTriState( false );
 
                 SdrMeasureTextHPos eHPos = (SdrMeasureTextHPos)
-                            ( ( const SdrMeasureTextHPosItem& )rAttrs.Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();
+                            ( ( const SdrMeasureTextHPosItem& )rAttrs->Get( SDRATTR_MEASURETEXTHPOS ) ).GetValue();
                 RECT_POINT eRP = RP_MM;
                 switch( eVPos )
                 {
@@ -408,7 +408,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     // otherwise the control don't know about
     // the settings of the dialog (#67930)
     ChangeAttrHdl_Impl( m_pTsbShowUnit );
-    m_pCtlPreview->SetAttributes( rAttrs );
+    m_pCtlPreview->SetAttributes( *rAttrs );
 
     bPositionModified = false;
 }

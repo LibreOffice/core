@@ -420,7 +420,7 @@ bool SwNumPositionTabPage::FillItemSet( SfxItemSet* rSet )
     return bModified;
 }
 
-void SwNumPositionTabPage::Reset( const SfxItemSet& rSet )
+void SwNumPositionTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pItem;
     if(pOutlineDlg)
@@ -428,7 +428,7 @@ void SwNumPositionTabPage::Reset( const SfxItemSet& rSet )
         pSaveNum = pOutlineDlg->GetNumRule();
         m_pLevelLB->EnableMultiSelection(false);
     }
-    else if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_ACT_NUMBER, false, &pItem))
+    else if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_ACT_NUMBER, false, &pItem))
         pSaveNum = ((SwUINumRuleItem*)pItem)->GetNumRule();
 
     nActNumLvl = SwOutlineTabDialog::GetActNumLevel();

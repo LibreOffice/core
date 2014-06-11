@@ -144,7 +144,7 @@ bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )
     return bModified;
 }
 
-void SvxPersonalizationTabPage::Reset( const SfxItemSet & )
+void SvxPersonalizationTabPage::Reset( const SfxItemSet * )
 {
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 

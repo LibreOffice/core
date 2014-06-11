@@ -1631,7 +1631,7 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
     return true;
 }
 
-void SwInsertSectionTabPage::Reset( const SfxItemSet& )
+void SwInsertSectionTabPage::Reset( const SfxItemSet* )
 {
 }
 
@@ -1967,11 +1967,11 @@ void SwSectionFtnEndTabPage::ResetState( bool bFtn,
     }
 }
 
-void SwSectionFtnEndTabPage::Reset( const SfxItemSet& rSet )
+void SwSectionFtnEndTabPage::Reset( const SfxItemSet* rSet )
 {
-    ResetState( true, (const SwFmtFtnAtTxtEnd&)rSet.Get(
+    ResetState( true, (const SwFmtFtnAtTxtEnd&)rSet->Get(
                                     RES_FTN_AT_TXTEND, false ));
-    ResetState( false, (const SwFmtEndAtTxtEnd&)rSet.Get(
+    ResetState( false, (const SwFmtEndAtTxtEnd&)rSet->Get(
                                     RES_END_AT_TXTEND, false ));
 }
 
@@ -2111,18 +2111,18 @@ bool SwSectionIndentTabPage::FillItemSet( SfxItemSet* rSet)
     return true;
 }
 
-void SwSectionIndentTabPage::Reset( const SfxItemSet& rSet)
+void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
 {
     //this page doesn't show up in HTML mode
     FieldUnit aMetric = ::GetDfltMetric(false);
     SetMetric(*m_pBeforeMF, aMetric);
     SetMetric(*m_pAfterMF , aMetric);
 
-    SfxItemState eItemState = rSet.GetItemState( RES_LR_SPACE );
+    SfxItemState eItemState = rSet->GetItemState( RES_LR_SPACE );
     if ( eItemState >= SFX_ITEM_AVAILABLE )
     {
         const SvxLRSpaceItem& rSpace =
-            (const SvxLRSpaceItem&)rSet.Get( RES_LR_SPACE );
+            (const SvxLRSpaceItem&)rSet->Get( RES_LR_SPACE );
 
         m_pBeforeMF->SetValue( m_pBeforeMF->Normalize(rSpace.GetLeft()), FUNIT_TWIP );
         m_pAfterMF->SetValue( m_pAfterMF->Normalize(rSpace.GetRight()), FUNIT_TWIP );

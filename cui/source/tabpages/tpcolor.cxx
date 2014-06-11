@@ -257,7 +257,7 @@ void SvxColorTabPage::Update(bool bLoaded)
         m_pLbColor->Clear();
         m_pValSetColorList->Clear();
         Construct();
-        Reset( rOutAttrs );
+        Reset( &rOutAttrs );
 
         if( m_pLbColor->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
             m_pLbColor->SelectEntryPos( 0 );
@@ -592,15 +592,15 @@ void SvxColorTabPage::UpdateModified()
 
 
 
-void SvxColorTabPage::Reset( const SfxItemSet& rSet )
+void SvxColorTabPage::Reset( const SfxItemSet* rSet )
 {
-    sal_uInt16 nState = rSet.GetItemState( XATTR_FILLCOLOR );
+    sal_uInt16 nState = rSet->GetItemState( XATTR_FILLCOLOR );
 
     Color aNewColor;
 
     if ( nState >= SFX_ITEM_DEFAULT )
     {
-        XFillColorItem aColorItem( (const XFillColorItem&)rSet.Get( XATTR_FILLCOLOR ) );
+        XFillColorItem aColorItem( (const XFillColorItem&)rSet->Get( XATTR_FILLCOLOR ) );
         aNewColor = aColorItem.GetColorValue();
         m_pLbColor->SelectEntry(aNewColor);
         m_pValSetColorList->SelectItem( m_pLbColor->GetSelectEntryPos() + 1 );

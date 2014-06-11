@@ -155,7 +155,7 @@ bool SwCondCollPage::FillItemSet(SfxItemSet *rSet)
     return bModified;
 }
 
-void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
+void SwCondCollPage::Reset(const SfxItemSet */*rSet*/)
 {
     if(bNewTemplate)
         m_pConditionCB->Enable();

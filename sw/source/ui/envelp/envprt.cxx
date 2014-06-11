@@ -170,10 +170,10 @@ bool SwEnvPrtPage::FillItemSet(SfxItemSet* rSet)
     return true;
 }
 
-void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
+void SwEnvPrtPage::Reset(const SfxItemSet* rSet)
 {
     // Read item
-    const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
+    const SwEnvItem& rItem = (const SwEnvItem&) rSet->Get(FN_ENVELOP);
     m_pAlignBox->CheckItem(m_aIds[rItem.eAlign]);
 
     if (rItem.bPrintFromAbove)
@@ -184,7 +184,7 @@ void SwEnvPrtPage::Reset(const SfxItemSet& rSet)
     SetFldVal(*m_pRightField, rItem.lShiftRight);
     SetFldVal(*m_pDownField , rItem.lShiftDown );
 
-    ActivatePage(rSet);
+    ActivatePage(*rSet);
     ClickHdl(m_pTopButton);
 }
 

@@ -142,7 +142,7 @@ SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
     return ( new ScTabPageSortFields( pParent, rArgSet ) );
 }
 
-void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
+void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
 {
     bSortByRows = aSortData.bByRow;
     bHasHeader  = aSortData.bHasHeader;
@@ -621,7 +621,7 @@ SfxTabPage* ScTabPageSortOptions::Create(
     return ( new ScTabPageSortOptions( pParent, rArgSet ) );
 }
 
-void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
+void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
 {
     if ( aSortData.bUserDef )
     {

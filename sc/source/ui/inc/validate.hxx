@@ -183,7 +183,7 @@ public:
     static const sal_uInt16*              GetRanges();
 
     virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void                Reset( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void                Reset( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 
 private:
     void                        Init();
@@ -277,7 +277,7 @@ public:
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
 
 class ScTPValidationError : public SfxTabPage
@@ -302,7 +302,7 @@ public:
 
     static  SfxTabPage* Create      ( Window* pParent, const SfxItemSet& rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void        Reset       ( const SfxItemSet& rArgSet ) SAL_OVERRIDE;
+    virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_VALIDATE_HXX

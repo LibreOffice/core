@@ -369,7 +369,7 @@ bool _SvxMacroTabPage::FillItemSet( SfxItemSet* /*rSet*/ )
 }
 
 // the following method clears the bindings in the hashes for both doc & app
-void _SvxMacroTabPage::Reset( const SfxItemSet& )
+void _SvxMacroTabPage::Reset( const SfxItemSet* )
 {
     // called once in creation - don't reset the data this time
     if(!bInitialized)

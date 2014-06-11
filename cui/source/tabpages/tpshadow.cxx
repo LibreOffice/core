@@ -353,7 +353,7 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
 
 
 
-void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
+void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 {
     if( !bDisable )
     {
@@ -361,11 +361,11 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         // at the moment there are only 8 possible positions where a shadow can be set
 
         // has a shadow been set?
-        if( rAttrs.GetItemState( SDRATTR_SHADOW ) != SFX_ITEM_DONTCARE )
+        if( rAttrs->GetItemState( SDRATTR_SHADOW ) != SFX_ITEM_DONTCARE )
         {
             m_pTsbShowShadow->EnableTriState( false );
 
-            if( ( ( const SdrShadowItem& ) rAttrs.Get( SDRATTR_SHADOW ) ).GetValue() )
+            if( ( ( const SdrShadowItem& ) rAttrs->Get( SDRATTR_SHADOW ) ).GetValue() )
                 m_pTsbShowShadow->SetState( TRISTATE_TRUE );
             else
             {
@@ -378,11 +378,11 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
         // distance (only 8 possible positions),
         // so there is only one item evaluated
 
-        if( rAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
-            rAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
+        if( rAttrs->GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
+            rAttrs->GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
         {
-            sal_Int32 nX = ( ( const SdrShadowXDistItem& ) rAttrs.Get( SDRATTR_SHADOWXDIST ) ).GetValue();
-            sal_Int32 nY = ( ( const SdrShadowYDistItem& ) rAttrs.Get( SDRATTR_SHADOWYDIST ) ).GetValue();
+            sal_Int32 nX = ( ( const SdrShadowXDistItem& ) rAttrs->Get( SDRATTR_SHADOWXDIST ) ).GetValue();
+            sal_Int32 nY = ( ( const SdrShadowYDistItem& ) rAttrs->Get( SDRATTR_SHADOWYDIST ) ).GetValue();
 
             if( nX != 0 )
                 SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, ePoolUnit );
@@ -424,16 +424,16 @@ void SvxShadowTabPage::Reset( const SfxItemSet& rAttrs )
             m_pCtlPosition->SetActualRP( RP_MM );
         }
 
-        if( rAttrs.GetItemState( SDRATTR_SHADOWCOLOR ) != SFX_ITEM_DONTCARE )
+        if( rAttrs->GetItemState( SDRATTR_SHADOWCOLOR ) != SFX_ITEM_DONTCARE )
         {
-            m_pLbShadowColor->SelectEntry( ( ( const SdrShadowColorItem& ) rAttrs.Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
+            m_pLbShadowColor->SelectEntry( ( ( const SdrShadowColorItem& ) rAttrs->Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
         }
         else
             m_pLbShadowColor->SetNoSelection();
 
-        if( rAttrs.GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SFX_ITEM_DONTCARE )
+        if( rAttrs->GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SFX_ITEM_DONTCARE )
         {
-            sal_uInt16 nTransp = ( ( const SdrShadowTransparenceItem& ) rAttrs.Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
+            sal_uInt16 nTransp = ( ( const SdrShadowTransparenceItem& ) rAttrs->Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
             m_pMtrTransparent->SetValue( nTransp );
         }
         else

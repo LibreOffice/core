@@ -82,7 +82,7 @@ bool  SwDocStatPage::FillItemSet(SfxItemSet * /*rSet*/)
     return false;
 }
 
-void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
+void  SwDocStatPage::Reset(const SfxItemSet */*rSet*/)
 {
 }
 

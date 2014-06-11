@@ -128,7 +128,7 @@ bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )
     return false;
 }
 
-void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
+void ScRedlineOptionsTabPage::Reset( const SfxItemSet* /* rSet */ )
 {
     m_pContentColorLB->InsertEntry(aAuthorStr);
     m_pMoveColorLB->InsertEntry(aAuthorStr);

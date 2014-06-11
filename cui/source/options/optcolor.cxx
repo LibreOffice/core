@@ -1094,7 +1094,7 @@ bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet*  )
     return true;
 }
 
-void SvxColorOptionsTabPage::Reset( const SfxItemSet& )
+void SvxColorOptionsTabPage::Reset( const SfxItemSet* )
 {
     if(pColorConfig)
     {

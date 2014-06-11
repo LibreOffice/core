@@ -110,7 +110,7 @@ void SwFldPage::EditNewField( bool bOnlyActivate )
     }
     m_nSelectionSel = LISTBOX_ENTRY_NOTFOUND;
     m_bRefresh = true;
-    Reset(*(SfxItemSet*)0);
+    Reset(0);
     m_bRefresh = false;
 }
 

@@ -207,7 +207,7 @@ bool OfaMemoryOptionsPage::FillItemSet( SfxItemSet* rSet )
 
 
 
-void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
+void OfaMemoryOptionsPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem*  pItem;
 
@@ -239,7 +239,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
             (officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::
              get())));
 
-    SfxItemState eState = rSet.GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
+    SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
     if ( SFX_ITEM_SET == eState )
         m_pQuickLaunchCB->Check( ( (SfxBoolItem*)pItem )->GetValue() );
     else if ( SFX_ITEM_DISABLED == eState )

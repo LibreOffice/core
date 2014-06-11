@@ -254,7 +254,7 @@ bool SvxBitmapTabPage::FillItemSet( SfxItemSet* _rOutAttrs )
 
 
 
-void SvxBitmapTabPage::Reset( const SfxItemSet&  )
+void SvxBitmapTabPage::Reset( const SfxItemSet*  )
 {
     // aLbBitmaps.SelectEntryPos( 0 );
 
@@ -801,7 +801,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickLoadHdl_Impl)
 
                 m_pLbBitmaps->Clear();
                 m_pLbBitmaps->Fill( pBitmapList );
-                Reset( rOutAttrs );
+                Reset( &rOutAttrs );
 
                 pBitmapList->SetName( aURL.getName() );
 

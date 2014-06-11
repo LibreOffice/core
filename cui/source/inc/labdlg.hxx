@@ -79,7 +79,7 @@ public:
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet & ) SAL_OVERRIDE;
+    virtual void        Reset( const SfxItemSet * ) SAL_OVERRIDE;
     void                Construct();
     void                SetView( const SdrView* pSdrView )
                             { pView = pSdrView; }

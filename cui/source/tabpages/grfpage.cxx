@@ -134,12 +134,12 @@ SfxTabPage* SvxGrfCropPage::Create(Window *pParent, const SfxItemSet &rSet)
     return new SvxGrfCropPage( pParent, rSet );
 }
 
-void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
+void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
 {
     const SfxPoolItem* pItem;
-    const SfxItemPool& rPool = *rSet.GetPool();
+    const SfxItemPool& rPool = *rSet->GetPool();
 
-    if(SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich(
+    if(SFX_ITEM_SET == rSet->GetItemState( rPool.GetWhich(
                                     SID_ATTR_GRAF_KEEP_ZOOM ), true, &pItem ))
     {
         if( ((const SfxBoolItem*)pItem)->GetValue() )
@@ -150,9 +150,9 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     }
 
     sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
-    if( SFX_ITEM_SET == rSet.GetItemState( nW, true, &pItem))
+    if( SFX_ITEM_SET == rSet->GetItemState( nW, true, &pItem))
     {
-        FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
+        FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
 
         SvxGrfCrop* pCrop =  (SvxGrfCrop*)pItem;
 
@@ -175,10 +175,10 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     }
 
     nW = rPool.GetWhich( SID_ATTR_PAGE_SIZE );
-    if ( SFX_ITEM_SET == rSet.GetItemState( nW, false, &pItem ) )
+    if ( SFX_ITEM_SET == rSet->GetItemState( nW, false, &pItem ) )
     {
         // orientation and size from the PageItem
-        FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
+        FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
 
         aPageSize = ((const SvxSizeItem*)pItem)->GetSize();
 
@@ -195,15 +195,15 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
         aPageSize = OutputDevice::LogicToLogic(
                         Size( CM_1_TO_TWIP,  CM_1_TO_TWIP ),
                         MapMode( MAP_TWIP ),
-                        MapMode( (MapUnit)rSet.GetPool()->GetMetric( nW ) ) );
+                        MapMode( (MapUnit)rSet->GetPool()->GetMetric( nW ) ) );
     }
 
     bool bFound = false;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
+    if( SFX_ITEM_SET == rSet->GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {
         OUString referer;
         SfxStringItem const * it = static_cast<SfxStringItem const *>(
-            rSet.GetItem(SID_REFERER));
+            rSet->GetItem(SID_REFERER));
         if (it != 0) {
             referer = it->GetValue();
         }
@@ -232,7 +232,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
 
     GraphicHasChanged( bFound );
     bReset = true;
-    ActivatePage( rSet );
+    ActivatePage( *rSet );
     bReset = false;
 }
 

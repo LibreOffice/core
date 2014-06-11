@@ -451,7 +451,7 @@ void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
     aSet.Put(GetParentSwEnvDlg()->aEnvItem);
-    Reset(aSet);
+    Reset(&aSet);
 }
 
 int SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
@@ -492,9 +492,9 @@ bool SwEnvFmtPage::FillItemSet(SfxItemSet* rSet)
     return true;
 }
 
-void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
+void SwEnvFmtPage::Reset(const SfxItemSet* rSet)
 {
-    const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
+    const SwEnvItem& rItem = (const SwEnvItem&) rSet->Get(FN_ENVELOP);
 
     Paper ePaper = SvxPaperInfo::GetSvxPaper(
         Size( std::min(rItem.lWidth, rItem.lHeight),

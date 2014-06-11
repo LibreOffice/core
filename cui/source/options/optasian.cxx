@@ -215,7 +215,7 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
     return false;
 }
 
-void SvxAsianLayoutPage::Reset( const SfxItemSet& )
+void SvxAsianLayoutPage::Reset( const SfxItemSet* )
 {
     SfxViewFrame* pCurFrm = SfxViewFrame::Current();
     SfxObjectShell* pDocSh = pCurFrm ? pCurFrm->GetObjectShell() : 0;

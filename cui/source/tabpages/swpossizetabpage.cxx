@@ -882,9 +882,9 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
     return bModified;
 }
 
-void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
+void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
 {
-    const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_TRANSFORM_ANCHOR );
+    const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_ANCHOR );
     bool bInvalidateAnchor = false;
     short nAnchorType = TextContentAnchorType_AT_PARAGRAPH;
     if(pItem)
@@ -914,7 +914,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
         m_pToFrameRB->Enable( false );
     }
 
-    pItem = GetItem( rSet, SID_ATTR_TRANSFORM_PROTECT_POS );
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_PROTECT_POS );
     if ( pItem )
     {
         bool bProtected = ( ( const SfxBoolItem* )pItem )->GetValue();
@@ -929,7 +929,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
 
     m_pPositionCB->SaveValue();
 
-    pItem = GetItem( rSet, SID_ATTR_TRANSFORM_PROTECT_SIZE );
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_PROTECT_SIZE );
 
     if ( pItem )
     {
@@ -941,7 +941,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
         m_pSizeCB->SetState( TRISTATE_INDET );
     m_pSizeCB->SaveValue();
 
-    pItem = GetItem( rSet, SID_HTML_MODE );
+    pItem = GetItem( *rSet, SID_HTML_MODE );
     if(pItem)
     {
         m_bHtmlMode =
@@ -949,7 +949,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
             != 0;
     }
 
-    pItem = GetItem( rSet, SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT );
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT );
     if(pItem && static_cast<const SfxBoolItem*>(pItem)->GetValue())
     {
         OUString sHLabel = m_pHoriFT->GetText();
@@ -957,11 +957,11 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
         m_pVertFT->SetText(sHLabel);
         m_bIsVerticalFrame = true;
     }
-    pItem = GetItem( rSet, SID_ATTR_TRANSFORM_IN_RTL_TEXT);
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_IN_RTL_TEXT);
     if(pItem)
         m_bIsInRightToLeft = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
-    pItem = GetItem( rSet, SID_SW_FOLLOW_TEXT_FLOW);
+    pItem = GetItem( *rSet, SID_SW_FOLLOW_TEXT_FLOW);
     if(pItem)
     {
         const bool bFollowTextFlow =
@@ -987,52 +987,52 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
                                   m_pToCharRB->IsChecked() );
     }
 
-    pItem = GetItem( rSet, SID_ATTR_TRANSFORM_WIDTH );
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_WIDTH );
     sal_Int32 nWidth = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, (sal_uInt32)1 );
 
     m_pWidthMF->SetValue(m_pWidthMF->Normalize(nWidth), FUNIT_TWIP);
 
-    pItem = GetItem( rSet, SID_ATTR_TRANSFORM_HEIGHT );
+    pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HEIGHT );
     sal_Int32 nHeight = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, (sal_uInt32)1 );
     m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FUNIT_TWIP);
     m_fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
 
     if(!m_bPositioningDisabled)
     {
-        pItem = GetItem( rSet, SID_ATTR_TRANSFORM_HORI_ORIENT);
+        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_ORIENT);
         if(pItem)
         {
             short nHoriOrientation = static_cast< const SfxInt16Item*>(pItem)->GetValue();
             m_nOldH = nHoriOrientation;
         }
-        pItem = GetItem( rSet, SID_ATTR_TRANSFORM_VERT_ORIENT);
+        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_VERT_ORIENT);
         if(pItem)
         {
             short nVertOrientation = static_cast< const SfxInt16Item*>(pItem)->GetValue();
             m_nOldV = nVertOrientation;
         }
-        pItem = GetItem( rSet, SID_ATTR_TRANSFORM_HORI_RELATION);
+        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_RELATION);
         if(pItem)
         {
             m_nOldHRel = static_cast< const SfxInt16Item*>(pItem)->GetValue();
         }
 
-        pItem = GetItem( rSet, SID_ATTR_TRANSFORM_VERT_RELATION);
+        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_VERT_RELATION);
         if(pItem)
         {
             m_nOldVRel = static_cast< const SfxInt16Item*>(pItem)->GetValue();
         }
-        pItem = GetItem( rSet, SID_ATTR_TRANSFORM_HORI_MIRROR);
+        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_MIRROR);
         if(pItem)
             m_pHoriMirrorCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
         m_pHoriMirrorCB->SaveValue();
 
         sal_Int32 nHoriPos = 0;
         sal_Int32 nVertPos = 0;
-        pItem = GetItem( rSet, SID_ATTR_TRANSFORM_HORI_POSITION);
+        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HORI_POSITION);
         if(pItem)
             nHoriPos = static_cast<const SfxInt32Item*>(pItem)->GetValue();
-        pItem = GetItem( rSet, SID_ATTR_TRANSFORM_VERT_POSITION);
+        pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_VERT_POSITION);
         if(pItem)
             nVertPos = static_cast<const SfxInt32Item*>(pItem)->GetValue();
 

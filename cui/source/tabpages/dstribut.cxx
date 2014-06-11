@@ -91,7 +91,7 @@ void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)
 |*
 \************************************************************************/
 
-void SvxDistributePage::Reset(const SfxItemSet& )
+void SvxDistributePage::Reset(const SfxItemSet* )
 {
     m_pBtnHorNone->SetState(false);
     m_pBtnHorLeft->SetState(false);

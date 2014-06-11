@@ -749,7 +749,7 @@ bool SvxJavaOptionsPage::FillItemSet( SfxItemSet* /*rCoreSet*/ )
 
 
 
-void SvxJavaOptionsPage::Reset( const SfxItemSet& /*rSet*/ )
+void SvxJavaOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
 {
     ClearJavaInfo();
     ClearJavaList();

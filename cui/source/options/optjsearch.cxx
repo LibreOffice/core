@@ -160,7 +160,7 @@ sal_Int32 SvxJSearchOptionsPage::GetTransliterationFlags_Impl()
 }
 
 
-void SvxJSearchOptionsPage::Reset( const SfxItemSet& )
+void SvxJSearchOptionsPage::Reset( const SfxItemSet* )
 {
     SvtSearchOptions aOpt;
 

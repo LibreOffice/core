@@ -1406,7 +1406,7 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
 
 
 
-void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
+void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 {
     // if not HideGroups was called with GROUP_MODULES...
     if (m_pLinguModulesCLB->IsVisible())
@@ -1435,7 +1435,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 
     pEntry = CreateEntry( sSpellAuto,       CBCOL_FIRST );
     aLngCfg.GetProperty( UPN_IS_SPELL_AUTO ) >>= bVal;
-    const SfxPoolItem* pItem = GetItem( rSet, SID_AUTOSPELL_CHECK );
+    const SfxPoolItem* pItem = GetItem( *rSet, SID_AUTOSPELL_CHECK );
     if (pItem)
         bVal = ((SfxBoolItem *) pItem)->GetValue();
     nUserData = OptionsUserData( EID_SPELL_AUTO, false, 0, true, bVal).GetUserData();
@@ -1479,8 +1479,8 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
 
     const SfxHyphenRegionItem *pHyp = NULL;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_HYPHENREGION );
-    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
-        pHyp = &( (const SfxHyphenRegionItem &) rSet.Get( nWhich ) );
+    if ( rSet->GetItemState( nWhich, false ) == SFX_ITEM_SET )
+        pHyp = &( (const SfxHyphenRegionItem &) rSet->Get( nWhich ) );
 
     pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );
     aLngCfg.GetProperty( UPN_HYPH_MIN_LEADING ) >>= nVal;
