@@ -469,6 +469,7 @@ namespace slideshow
                                                                   rRangePix.getMinY(),
                                                                     rRangePix.getMaxX() - rRangePix.getMinX(),
                                                                     rRangePix.getMaxY() - rRangePix.getMinY() );
+#if HAVE_FEATURE_GLTF
                             if( avmedia::IsModel(rMimeType) )
                             {
                                 mpEventHandlerParent.reset(new Window(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL));
@@ -482,6 +483,7 @@ namespace slideshow
                                                            Size( aAWTRect.Width, aAWTRect.Height ) );
                             }
                             else
+#endif
                             {
                                 mpMediaWindow.reset( new SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
                                 mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),

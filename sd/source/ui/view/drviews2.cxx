@@ -32,6 +32,8 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <config_features.h>
+
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
@@ -1164,7 +1166,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Invalidate(SID_DRAWTBX_INSERT);
         }
         break;
-
+#if HAVE_FEATURE_GLTF
         case SID_INSERT_3DMODEL:
         {
             SetCurrentFunction( FuInsert3DModel::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
@@ -1175,6 +1177,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             Invalidate(SID_DRAWTBX_INSERT);
         }
         break;
+#endif
 
         case SID_COPYOBJECTS:
         {

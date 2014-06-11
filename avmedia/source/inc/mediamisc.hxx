@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #ifndef INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 #define INCLUDED_AVMEDIA_SOURCE_INC_MEDIAMISC_HXX
 
@@ -42,7 +44,10 @@ class ResMgr;
 
 // Mime types
 #define AVMEDIA_MIMETYPE_COMMON           "application/vnd.sun.star.media"
+
+#if HAVE_FEATURE_GLTF
 #define AVMEDIA_MIMETYPE_JSON             "application/vnd.gltf+json"
+#endif
 
 
 namespace avmedia
