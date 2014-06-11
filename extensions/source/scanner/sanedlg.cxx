@@ -160,8 +160,8 @@ void SaneDlg::InitDevices()
         maDeviceBox.InsertEntry( Sane::GetName( i ) );
     if( Sane::CountDevices() )
     {
-        mrSane.Open( 0 );
-        maDeviceBox.SelectEntry( Sane::GetName( 0 ) );
+        mrSane.Open(0);
+        maDeviceBox.SelectEntryPos(0);
 
     }
 }
@@ -490,12 +490,12 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
 {
     if( pListBox == &maDeviceBox && Sane::IsSane() && Sane::CountDevices() )
     {
-        OUString aNewDevice = maDeviceBox.GetSelectEntry();
-        int nNumber;
-        if( aNewDevice == Sane::GetName( nNumber = mrSane.GetDeviceNumber() ) )
+        int nNewNumber = maDeviceBox.GetSelectEntryPos();
+        int nOldNumber = mrSane.GetDeviceNumber();
+        if (nNewNumber != nOldNumber)
         {
             mrSane.Close();
-            mrSane.Open( nNumber );
+            mrSane.Open(nNewNumber);
             InitFields();
         }
     }
