@@ -2083,12 +2083,14 @@ namespace
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
+            RestoreBkmksLen(rNd, nLen, nCorrLen);
             return _RestoreCntntIdx(m_aSaveArr, rNd, nLen, nCorrLen);
         }
         virtual ~CntntIdxStoreImpl(){};
         private:
             inline void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
+            inline void RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen);
     };
 }
 
@@ -2156,6 +2158,42 @@ void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOf
                 aNewPos.nNode = *pCNd;
                 aNewPos.nContent.Assign(pCNd, pEntry->m_nCntnt + nOffset);
                 pMark->SetMarkPos(aNewPos);
+            }
+        }
+    }
+}
+
+void CntntIdxStoreImpl::RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen)
+{
+    const SwDoc* pDoc = rNd.GetDoc();
+    IDocumentMarkAccess* const pMarkAccess = const_cast<IDocumentMarkAccess*>(pDoc->getIDocumentMarkAccess());
+    SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
+    for(
+        std::vector<BkmkEntry>::const_iterator pEntry = m_aBkmkEntries.begin();
+        pEntry != m_aBkmkEntries.end();
+        ++pEntry)
+    {
+        if( !pEntry->m_nCntnt >= nCorrLen )
+        {
+            if(pEntry->m_bOther)
+            {
+                if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
+                {
+                    SwPosition aNewPos(pMark->GetOtherMarkPos());
+                    aNewPos.nNode = *pCNd;
+                    aNewPos.nContent.Assign(pCNd, ::std::min(pEntry->m_nCntnt, static_cast<sal_Int32>(nLen)));
+                    pMark->SetOtherMarkPos(aNewPos);
+                }
+            }
+            else
+            {
+                if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
+                {
+                    SwPosition aNewPos(pMark->GetMarkPos());
+                    aNewPos.nNode = *pCNd;
+                    aNewPos.nContent.Assign(pCNd, ::std::min(pEntry->m_nCntnt, static_cast<sal_Int32>(nLen)));
+                    pMark->SetMarkPos(aNewPos);
+                }
             }
         }
     }
