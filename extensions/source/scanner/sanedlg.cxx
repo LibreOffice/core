@@ -71,6 +71,13 @@ public:
     {
         mpParentDialog = pParent;
     }
+    void ResetForNewScanner()
+    {
+        maTopLeft = Point();
+        maBottomRight = Point();
+        maMinTopLeft = Point();
+        maMaxBottomRight = Point(PREVIEW_WIDTH,  PREVIEW_HEIGHT);
+    }
     void EnableDrag() { mbDragEnable = true; }
     void DisableDrag() { mbDragEnable = false; }
     bool IsDragEnabled() { return mbDragEnable; }
@@ -603,6 +610,7 @@ IMPL_LINK( SaneDlg, SelectHdl, ListBox*, pListBox )
         {
             mrSane.Close();
             mrSane.Open(nNewNumber);
+            mpPreview->ResetForNewScanner();
             InitFields();
         }
     }
