@@ -3576,6 +3576,15 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79822, "fdo79822.docx")
         return;
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO79915, "fdo79915.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[8]/w:t", "How much buoyancy does the water provide?");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo79817,"fdo79817.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
