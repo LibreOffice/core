@@ -214,12 +214,10 @@ class RscTypCont
                                         RscEnum * pTimeFieldFormat );
 
     RscTop *    InitClassSpinField( RscTop * pSuper );
-    RscTop *    InitClassPatternField( RscTop * pSuper );
     RscTop *    InitClassNumericField( RscTop * pSuper );
     RscTop *    InitClassMetricField( RscTop * pSuper );
     RscTop *    InitClassDateField( RscTop * pSuper, RscTop * pClassDate );
     RscTop *    InitClassTimeField( RscTop * pSuper, RscTop * pClassTime );
-    RscTop *    InitClassPatternBox( RscTop * pSuper );
     RscTop *    InitClassNumericBox( RscTop * pSuper );
 
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
@@ -229,7 +227,6 @@ class RscTypCont
                                       RscEnum * pTriState );
     RscTop *    InitClassToolBox( RscTop * pSuper, RscTop * pClassToolBoxItem,
                                   RscTop * pClassImageList );
-    RscTop *    InitClassStatusBar( RscTop * pSuper );
     RscTop *    InitClassFloatingWindow( RscTop * pSuper,
                                          RscEnum * pMapUnit );
     RscTop *    InitClassTabControlItem( RscTop * pSuper );

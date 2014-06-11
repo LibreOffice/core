@@ -112,24 +112,19 @@ void RscTypCont::Init()
     RscTop   *  pClassTime;
     RscTop   *  pClassDate;
     RscTop   *  pClassSpinField;
-    RscTop   *  pClassPatternField;
     RscTop   *  pClassNumericField;
     RscTop   *  pClassMetricField;
     RscTop   *  pClassDateField;
     RscTop   *  pClassTimeField;
-    RscTop   *  pClassPatternBox;
     RscTop   *  pClassNumericBox;
     RscTop   *  pClassDockingWindow;
     RscTop   *  pClassToolBoxItem;
     RscTop   *  pClassToolBox;
-    RscTop   *  pClassStatusBar;
     RscTop   *  pClassFloatingWindow;
     RscTop   *  pClassTabPage;
-    RscTop   *  pClassTabDialog;
     RscTop   *  pClassTabControlItem;
     RscTop   *  pClassTabControl;
     RscTop   *  pClassFixedLine;
-    RscTop   *  pClassScrollBarBox;
     RscTop *    pClassSfxStyleFamilyItem;
     RscTop *    pClassSfxTemplateDialog;
     RscTop *    pClassSfxSlotInfo;
@@ -586,13 +581,6 @@ void RscTypCont::Init()
 }
 {
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassPatternFormatter( pClassSpinField );
-    aBaseLst.push_back( pClassTmp );
-
-    pClassPatternField = InitClassPatternField( pClassTmp );
-    pRoot->Insert( pClassPatternField );
-    }
-    { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassSpinField );
     aBaseLst.push_back( pClassTmp );
 
@@ -624,13 +612,6 @@ void RscTypCont::Init()
     pRoot->Insert( pClassTimeField );
     }
     { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassPatternFormatter( pClassComboBox );
-    aBaseLst.push_back( pClassTmp );
-
-    pClassPatternBox = InitClassPatternBox( pClassTmp );
-    pRoot->Insert( pClassPatternBox );
-    }
-    { // Mehrfachvererbung von Hand
     RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
     aBaseLst.push_back( pClassTmp );
 
@@ -650,9 +631,6 @@ void RscTypCont::Init()
                                       pClassImageList );
     pRoot->Insert( pClassToolBox );
 
-    pClassStatusBar = InitClassStatusBar( pClassWindow );
-    pRoot->Insert( pClassStatusBar );
-
     pClassFloatingWindow = InitClassFloatingWindow( pClassSystemWindow,
                                                     pMapUnit );
     pRoot->Insert( pClassFloatingWindow );
@@ -664,14 +642,6 @@ void RscTypCont::Init()
     pClassTabPage->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassTabPage );
     pRoot->Insert( pClassTabPage );
-
-    // Klasse anlegen
-    nId = pHS->getID( "TabDialog" );
-    pClassTabDialog =
-          new RscClass( nId, RSC_TABDIALOG, pClassModalDialog );
-    pClassTabDialog->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassTabDialog );
-    pRoot->Insert( pClassTabDialog );
 
     pClassTabControlItem = InitClassTabControlItem( pClassMgr );
     pRoot->Insert( pClassTabControlItem );
@@ -690,15 +660,6 @@ void RscTypCont::Init()
 
     aNmTb.Put( nId, CLASSNAME, pClassFixedLine );
     pRoot->Insert( pClassFixedLine );
-
-    // Klasse anlegen
-    nId = pHS->getID( "ScrollBarBox" );
-    pClassScrollBarBox =
-          new RscClass( nId, RSC_SCROLLBARBOX, pClassWindow );
-    pClassScrollBarBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassScrollBarBox );
-    pRoot->Insert( pClassScrollBarBox );
-    INS_WINBIT(pClassScrollBarBox,Sizeable)
 
     pClassSfxStyleFamilyItem = InitClassSfxStyleFamilyItem( pClassMgr,
                                                    pClassBitmap,

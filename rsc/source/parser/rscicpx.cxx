@@ -1376,21 +1376,6 @@ RscTop * RscTypCont::InitClassSpinField( RscTop * pSuper )
     return pClassSpinField;
 }
 
-RscTop * RscTypCont::InitClassPatternField( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassPatternField;
-
-    // Klasse anlegen
-    nId = pHS->getID( "PatternField" );
-    pClassPatternField = new RscClass( nId, RSC_PATTERNFIELD, pSuper );
-    pClassPatternField->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassPatternField );
-
-    return pClassPatternField;
-}
-
 RscTop * RscTypCont::InitClassNumericField( RscTop * pSuper )
 {
     Atom        nId;
@@ -1482,21 +1467,6 @@ RscTop * RscTypCont::InitClassTimeField( RscTop * pSuper, RscTop * pClassTime )
     pClassTimeField->SetVariable( nId, pClassTime, NULL, 0, TIMEFIELD_LAST );
 
     return pClassTimeField;
-}
-
-RscTop * RscTypCont::InitClassPatternBox( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassPatternBox;
-
-    // Klasse anlegen
-    nId = pHS->getID( "PatternBox" );
-    pClassPatternBox = new RscClass( nId, RSC_PATTERNBOX, pSuper );
-    pClassPatternBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassPatternBox );
-
-    return pClassPatternBox;
 }
 
 RscTop * RscTypCont::InitClassNumericBox( RscTop * pSuper )
@@ -1762,24 +1732,6 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
     INS_WINBIT(pClassToolBox,Tabstop)
 
     return pClassToolBox;
-}
-
-RscTop * RscTypCont::InitClassStatusBar( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassStatusBar;
-
-    // Klasse anlegen
-    nId = pHS->getID( "StatusBar" );
-    pClassStatusBar = new RscClass( nId, RSC_STATUSBAR, pSuper );
-    pClassStatusBar->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassStatusBar );
-
-    // Variablen anlegen
-    INS_WINBIT(pClassStatusBar,Left)
-    INS_WINBIT(pClassStatusBar,Right)
-
-    return pClassStatusBar;
 }
 
 RscTop * RscTypCont::InitClassFloatingWindow( RscTop * pSuper,
