@@ -70,10 +70,6 @@ class XFRow : public XFContent
 public:
     XFRow();
 
-    XFRow(const XFRow& other);
-
-    XFRow& operator=(const XFRow& other);
-
     virtual ~XFRow();
 
 public:

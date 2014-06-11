@@ -60,22 +60,23 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENTCONTAINER_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFCONTENTCONTAINER_HXX
 
-#include "xfcontent.hxx"
+#include <sal/config.h>
+
 #include <vector>
+
+#include <boost/noncopyable.hpp>
+
+#include "xfcontent.hxx"
 
 /**
  * @brief
  * A container for content.
  * The contents will be deleted when delete container.
  */
-class XFContentContainer : public XFContent
+class XFContentContainer : public XFContent, private boost::noncopyable
 {
 public:
     XFContentContainer();
-
-    XFContentContainer(const XFContentContainer& other);
-
-    XFContentContainer& operator=(const XFContentContainer& other);
 
     /**
      * @descr   Destructure, all contents will be deleted too.
