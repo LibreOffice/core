@@ -61,14 +61,13 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFMARGINS_HXX
 
 #include "xfglobal.hxx"
-#include "ixfproperty.hxx"
 
 #define     XFMARGINS_FLAG_LEFT     0x00000001
 #define     XFMARGINS_FLAG_RIGHT    0x00000002
 #define     XFMARGINS_FLAG_TOP      0x00000004
 #define     XFMARGINS_FLAG_BOTTOM   0x00000008
 
-class XFMargins : public IXFProperty
+class XFMargins
 {
 public:
     XFMargins();

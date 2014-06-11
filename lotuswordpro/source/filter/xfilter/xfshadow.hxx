@@ -61,19 +61,16 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFSHADOW_HXX
 
 #include "xfglobal.hxx"
-#include "ixfproperty.hxx"
 #include "xfcolor.hxx"
 
 /**
  * @brief
  * Shadow object.
  */
-class XFShadow : public IXFProperty
+class XFShadow
 {
 public:
     XFShadow();
-
-    virtual ~XFShadow();
 
 public:
     /**

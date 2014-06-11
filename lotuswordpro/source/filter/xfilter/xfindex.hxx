@@ -63,7 +63,6 @@
 #include <vector>
 
 #include "xfcontent.hxx"
-#include "ixfproperty.hxx"
 #include "xfcontentcontainer.hxx"
 #include "xftabstop.hxx"
 

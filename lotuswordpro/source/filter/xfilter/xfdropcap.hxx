@@ -61,9 +61,8 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFDROPCAP_HXX
 
 #include "xfglobal.hxx"
-#include "ixfproperty.hxx"
 
-class XFDropcap : public IXFProperty
+class XFDropcap
 {
 public:
     XFDropcap()

@@ -61,12 +61,11 @@
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFBREAKS_HXX
 
 #include "xfglobal.hxx"
-#include "ixfproperty.hxx"
 
 /**
  * @descr   Page|Column break object.
  */
-class XFBreaks : public IXFProperty
+class XFBreaks
 {
 public:
     XFBreaks();
