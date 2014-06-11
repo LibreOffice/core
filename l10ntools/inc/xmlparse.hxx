@@ -155,7 +155,7 @@ public:
     virtual ~XMLFile();
 
     void Print( XMLNode *pCur = NULL, sal_uInt16 nLevel = 0 );
-    virtual void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
+    virtual void SearchL10NElements( XMLChildNode *pCur, int pos = 0 );
     void Extract( XMLFile *pCur = NULL );
 
     XMLHashMap* GetStrings(){ return m_pXMLStrings; }
