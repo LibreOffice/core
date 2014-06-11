@@ -172,6 +172,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bInAnyTableImport( false ),
         m_bInHeaderFooterImport( false ),
         m_bDiscardHeaderFooter( false ),
+        m_bInFootOrEndnote(false),
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( false ),
         m_bIsCustomFtnMark( false ),
@@ -1515,6 +1516,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
 
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
+    m_bInFootOrEndnote = true;
     try
     {
         // Redlines outside the footnote should not affect footnote content
@@ -1685,6 +1687,7 @@ void DomainMapper_Impl::PopFootOrEndnote()
         return;
     }
     m_aRedlines.pop();
+    m_bInFootOrEndnote = false;
 }
 
 

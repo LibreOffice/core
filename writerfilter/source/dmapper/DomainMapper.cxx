@@ -2502,7 +2502,9 @@ void DomainMapper::lcl_endSectionGroup()
     {
         m_pImpl->CheckUnregisteredFrameConversion();
         m_pImpl->ExecuteFrameConversion();
-        if(m_pImpl->GetIsFirstParagraphInSection())
+        // First paragraph in a footnote doesn't count: that would create
+        // additional paragraphs before and after the real footnote content.
+        if(m_pImpl->GetIsFirstParagraphInSection() && !m_pImpl->IsInFootOrEndnote())
         {
             // This section has no paragraph at all (e.g. they are all actually in a frame).
             // If this section has a page break, there would be nothing to apply to the page
