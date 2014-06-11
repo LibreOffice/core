@@ -303,8 +303,8 @@ uno::Reference< xml::sax::XFastContextHandler >
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastContextHandler::createUnknownChildContext
-(const OUString & Namespace,
- const OUString & Name,
+(const OUString &,
+ const OUString &,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
