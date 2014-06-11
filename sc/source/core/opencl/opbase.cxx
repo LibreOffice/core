@@ -64,10 +64,10 @@ std::string VectorRef::GenSlidingWindowDeclRef(bool nested) const
     std::stringstream ss;
     formula::SingleVectorRefToken *pSVR =
         dynamic_cast<formula::SingleVectorRefToken*>(DynamicKernelArgument::GetFormulaToken());
-    if (pSVR&&nested)
+    if (pSVR&&!nested)
         ss << "(gid0 < " << pSVR->GetArrayLength() << "?";
     ss << mSymName << "[gid0]";
-    if (pSVR&&nested)
+    if (pSVR&&!nested)
         ss << ":NAN)";
     return ss.str();
 }
@@ -155,7 +155,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
          ss<< "    if(";
      }
     ss<< "isNan(";
-    ss<< vSubArguments[i]->GenSlidingWindowDeclRef(false);
+    ss<< vSubArguments[i]->GenSlidingWindowDeclRef(true);
     ss<<"))\n";
     ss<< "        tmp";
     ss<< i;
@@ -164,7 +164,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
     ss <<"        tmp";
     ss <<i;
     ss << "=";
-    ss << vSubArguments[i]->GenSlidingWindowDeclRef(false);
+    ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
     ss<<";\n";
 }
 
