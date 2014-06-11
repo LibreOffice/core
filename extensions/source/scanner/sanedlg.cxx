@@ -30,12 +30,6 @@
 #include <rtl/strbuf.hxx>
 #include <boost/scoped_array.hpp>
 
-ResId SaneResId( sal_uInt32 nID )
-{
-    static ResMgr* pResMgr = ResMgr::CreateResMgr( "scn" );
-    return ResId( nID, *pResMgr );
-}
-
 #define PREVIEW_WIDTH       113
 #define PREVIEW_HEIGHT      160
 
