@@ -90,7 +90,8 @@ struct _LibreOfficeKitDocumentClass
   // for its internal buffer, i.e. the rowstride for the buffer may be larger
   // than the desired width, hence we need to be able to return the
   // rowstride too.
-  unsigned char* (*paintTile) (LibreOfficeKitDocument* pThis,
+  void (*paintTile)       (LibreOfficeKitDocument* pThis,
+                           unsigned char* pBuffer,
                            const int nCanvasWidth,
                            const int nCanvasHeight,
                            int* pRowStride,
