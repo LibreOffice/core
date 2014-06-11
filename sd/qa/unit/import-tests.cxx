@@ -25,6 +25,7 @@
 
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
@@ -45,6 +46,8 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+
+#include <config_features.h>
 
 using namespace ::com::sun::star;
 
@@ -715,17 +718,26 @@ void SdFiltersTest::testMediaEmbedding()
     const SdrPage *pPage = pDoc->GetPage (1);
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
 
+#if HAVE_FEATURE_GLTF
     // First object is a glTF model
-    SdrMediaObj *pModelObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 1 ));
+    SdrMediaObj *pModelObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 2 ));
     CPPUNIT_ASSERT_MESSAGE( "missing model", pModelObj != NULL);
-    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Model/duck/duck.json" ), pModelObj->getMediaProperties().getURL());
+    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Model/jeep/jeep.json" ), pModelObj->getMediaProperties().getURL());
     CPPUNIT_ASSERT_EQUAL( OUString( "application/vnd.gltf+json" ), pModelObj->getMediaProperties().getMimeType());
+#else
+    // If glTF is not supported, then the fallback image is imported
+    SdrGrafObj *pGrafic = dynamic_cast<SdrGrafObj*>( pPage->GetObj( 2 ));
+    CPPUNIT_ASSERT_MESSAGE( "Could not load glTF fallback image", pGrafic != NULL);
+    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Pictures/jeep.png" ), pGrafic->GetGrafStreamURL());
+#endif
 
     // Second object is a sound
-    SdrMediaObj *pMediaObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 2 ));
+    SdrMediaObj *pMediaObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 3 ));
     CPPUNIT_ASSERT_MESSAGE( "missing media object", pMediaObj != NULL);
     CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Media/button-1.wav" ), pMediaObj->getMediaProperties().getURL());
     CPPUNIT_ASSERT_EQUAL( OUString( "application/vnd.sun.star.media" ), pMediaObj->getMediaProperties().getMimeType());
+
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testBnc870237()

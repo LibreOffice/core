@@ -10526,12 +10526,18 @@ AC_SUBST(ENABLE_OPENCL)
 dnl ===================================================================
 dnl Check whether to enable glTF support
 dnl ===================================================================
+AC_MSG_CHECKING([whether to enable glTF support])
+if test "$ENABLE_RELEASE_BUILD" = "TRUE"; then
+    if test $_os == iOS -o $_os == Android -o $_os = Darwin; then
+        enable_gltf=no
+    fi
+fi
 
 ENABLE_GLTF=
-AC_MSG_CHECKING([whether to enable glTF support])
 if test "x$enable_gltf" != "xno"; then
     ENABLE_GLTF=TRUE
     AC_MSG_RESULT([yes])
+    AC_DEFINE(HAVE_FEATURE_GLTF,1)
     BUILD_TYPE="$BUILD_TYPE LIBGLTF"
     if test "$test_freetype" = "no"; then
         BUILD_TYPE="$BUILD_TYPE FREETYPE"

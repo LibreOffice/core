@@ -16,6 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+
+#include <config_features.h>
+
 #include <iostream>
 #include "mediawindow_impl.hxx"
 #include "mediaevent_impl.hxx"
@@ -83,10 +86,12 @@ MediaChildWindow::MediaChildWindow( Window* pParent ) :
 {
 }
 
+#if HAVE_FEATURE_GLTF
 MediaChildWindow::MediaChildWindow( Window* pParent, SystemWindowData* pData ) :
     SystemChildWindow( pParent, WB_CLIPCHILDREN, pData )
 {
 }
+#endif
 
 MediaChildWindow::~MediaChildWindow()
 {
@@ -242,10 +247,12 @@ uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer( const OUString& 
             xPlayer = createPlayer(rURL, aServiceName, xContext);
         }
     }
+#if HAVE_FEATURE_GLTF
     else if ( *pMimeType == AVMEDIA_MIMETYPE_JSON )
     {
         xPlayer = createPlayer(rURL, AVMEDIA_OPENGL_MANAGER_SERVICE_NAME, xContext);
     }
+#endif
 
     return xPlayer;
 }
@@ -507,12 +514,14 @@ void MediaWindowImpl::onURLChanged()
     {
         mpChildWindow.reset(new MediaChildWindow(this) );
     }
+#if HAVE_FEATURE_GLTF
     else if ( m_sMimeType == AVMEDIA_MIMETYPE_JSON )
     {
         SystemWindowData aWinData = OpenGLContext::generateWinData(this);
         mpChildWindow.reset(new MediaChildWindow(this,&aWinData));
         mbEventTransparent = false;
     }
+#endif
     if( !mpChildWindow )
         return;
     mpChildWindow->SetHelpId( HID_AVMEDIA_PLAYERWINDOW );

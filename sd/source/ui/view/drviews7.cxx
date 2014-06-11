@@ -80,6 +80,8 @@
 #include "fubullet.hxx"
 #include "fuformatpaintbrush.hxx"
 
+#include <config_features.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -1591,6 +1593,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                     aVisibleLayers.IsSet(aObjectId)));
         }
     }
+
+#if !HAVE_FEATURE_GLTF
+    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_INSERT_3DMODEL))
+    {
+        rSet.DisableItem(SID_INSERT_3DMODEL);
+        rSet.Put(SfxVisibilityItem(SID_INSERT_3DMODEL, false));
+    }
+#endif
 
     GetModeSwitchingMenuState (rSet);
 }

@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <svx/svdomedia.hxx>
 
 #include <rtl/ustring.hxx>
@@ -263,6 +265,7 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
     return tempFile.openStream();
 }
 
+#if HAVE_FEATURE_GLTF
 static bool lcl_HandleJsonPackageURL(
     const OUString& rURL,
     SdrModel* const pModel,
@@ -321,6 +324,7 @@ static bool lcl_HandleJsonPackageURL(
     }
     return true;
 }
+#endif
 
 /// copy a stream from XStorage to temp file
 static bool lcl_HandlePackageURL(
@@ -401,9 +405,11 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
             {
                 OUString tempFileURL;
                 bool bSuccess;
+#if HAVE_FEATURE_GLTF
                 if( url.endsWith(".json") )
                     bSuccess = lcl_HandleJsonPackageURL(url, GetModel(), tempFileURL);
                 else
+#endif
                     bSuccess = lcl_HandlePackageURL( url, GetModel(), tempFileURL);
                 if (bSuccess)
                 {

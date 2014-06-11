@@ -82,6 +82,8 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 
+#include <config_features.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing;
@@ -3065,10 +3067,12 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
         if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( aLocalName, XML_MIME_TYPE ) )
         {
-            if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.sun.star.media" ) ||
-                xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.gltf+json" ))
+            if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.sun.star.media" ) )
                 mbMedia = true;
-
+#if HAVE_FEATURE_GLTF
+            if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.gltf+json" ) )
+                mbMedia = true;
+#endif
             // leave this loop
             n = nAttrCount - 1;
         }
@@ -3584,6 +3588,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
             }
         }
     }
+#if HAVE_FEATURE_GLTF
     // For glTF models the fallback image is placed before the real shape.
     // So we need to remove the fallback image after real shape is detected.
     else if ( mxImplContext.Is() && IsXMLToken(mxImplContext->GetLocalName(), XML_IMAGE) &&
@@ -3596,7 +3601,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
         if( pContext )
             removeGraphicFromImportContext(*mxImplContext);
     }
-
+#endif
     // call parent for content
     if(!pContext)
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );

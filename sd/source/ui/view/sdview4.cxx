@@ -61,6 +61,8 @@
 #include <svx/svdoashp.hxx>
 #include "glob.hrc"
 
+#include <config_features.h>
+
 using namespace com::sun::star;
 
 namespace sd {
@@ -289,6 +291,7 @@ SdrMediaObj* View::InsertMediaURL( const OUString& rMediaURL, sal_Int8& rAction,
     return InsertMediaObj( realURL, "application/vnd.sun.star.media", rAction, rPos, rSize );
 }
 
+#if HAVE_FEATURE_GLTF
 SdrMediaObj* View::Insert3DModelURL(
     const OUString& rModelURL, sal_Int8& rAction,
     const Point& rPos, const Size& rSize,
@@ -313,6 +316,7 @@ SdrMediaObj* View::Insert3DModelURL(
     pRetObject->setMediaProperties(aItem);
     return pRetObject;
 }
+#endif
 
 SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rMimeType, sal_Int8& rAction,
                                    const Point& rPos, const Size& rSize )
