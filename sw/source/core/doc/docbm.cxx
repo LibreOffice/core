@@ -2058,19 +2058,16 @@ void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOf
         pEntry != m_aBkmkEntries.end();
         ++pEntry)
     {
-        if(pEntry->m_bOther)
+        if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
         {
-            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
+            if(pEntry->m_bOther)
             {
                 SwPosition aNewPos(pMark->GetOtherMarkPos());
                 aNewPos.nNode = *pCNd;
                 aNewPos.nContent.Assign(pCNd, pEntry->m_nCntnt + nOffset);
                 pMark->SetOtherMarkPos(aNewPos);
             }
-        }
-        else
-        {
-            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
+            else
             {
                 SwPosition aNewPos(pMark->GetMarkPos());
                 aNewPos.nNode = *pCNd;
@@ -2093,19 +2090,16 @@ void CntntIdxStoreImpl::RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 n
     {
         if( !pEntry->m_nCntnt >= nCorrLen )
         {
-            if(pEntry->m_bOther)
+            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
             {
-                if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
+                if(pEntry->m_bOther)
                 {
                     SwPosition aNewPos(pMark->GetOtherMarkPos());
                     aNewPos.nNode = *pCNd;
                     aNewPos.nContent.Assign(pCNd, ::std::min(pEntry->m_nCntnt, static_cast<sal_Int32>(nLen)));
                     pMark->SetOtherMarkPos(aNewPos);
                 }
-            }
-            else
-            {
-                if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[pEntry->m_nBkmkIdx].get()))
+                else
                 {
                     SwPosition aNewPos(pMark->GetMarkPos());
                     aNewPos.nNode = *pCNd;
