@@ -72,7 +72,7 @@ static const sal_uInt16 pCaptionRanges[] =
 };
 
 SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs)
-    : SfxTabPage(pParent, "CalloutPage", "cui/ui/calloutpage.ui", rInAttrs)
+    : SfxTabPage(pParent, "CalloutPage", "cui/ui/calloutpage.ui", &rInAttrs)
     , nCaptionType(0)
     , nGap(0)
     , nEscDir(0)
@@ -338,9 +338,9 @@ void SvxCaptionTabPage::Reset( const SfxItemSet*  )
 
 
 SfxTabPage* SvxCaptionTabPage::Create( Window* pWindow,
-                const SfxItemSet& rOutAttrs )
+                const SfxItemSet* rOutAttrs )
 {
-    return( new SvxCaptionTabPage( pWindow, rOutAttrs ) );
+    return( new SvxCaptionTabPage( pWindow, *rOutAttrs ) );
 }
 
 

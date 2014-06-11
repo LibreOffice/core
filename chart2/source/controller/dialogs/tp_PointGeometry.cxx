@@ -43,9 +43,9 @@ SchLayoutTabPage::~SchLayoutTabPage()
 }
 
 SfxTabPage* SchLayoutTabPage::Create(Window* pWindow,
-                                        const SfxItemSet& rOutAttrs)
+                                        const SfxItemSet* rOutAttrs)
 {
-    return new SchLayoutTabPage(pWindow, rOutAttrs);
+    return new SchLayoutTabPage(pWindow, *rOutAttrs);
 }
 
 bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)

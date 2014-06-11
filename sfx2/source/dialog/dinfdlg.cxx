@@ -619,7 +619,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
 }
 
 SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rItemSet )
-    : SfxTabPage(pParent, "DescriptionInfoPage", "sfx/ui/descriptioninfopage.ui", rItemSet)
+    : SfxTabPage(pParent, "DescriptionInfoPage", "sfx/ui/descriptioninfopage.ui", &rItemSet)
     , m_pInfoItem   ( NULL )
 
 {
@@ -631,9 +631,9 @@ SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rI
     m_pCommentEd->set_height_request(m_pCommentEd->GetTextHeight() * 16);
 }
 
-SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet &rItemSet)
+SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet *rItemSet)
 {
-     return new SfxDocumentDescPage(pParent, rItemSet);
+     return new SfxDocumentDescPage(pParent, *rItemSet);
 }
 
 
@@ -750,7 +750,7 @@ namespace
 }
 
 SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
-    : SfxTabPage(pParent, "DocumentInfoPage", "sfx/ui/documentinfopage.ui", rItemSet)
+    : SfxTabPage(pParent, "DocumentInfoPage", "sfx/ui/documentinfopage.ui", &rItemSet)
     , bEnableUseUserData( false )
     , bHandleDelete( false )
 {
@@ -912,9 +912,9 @@ void SfxDocumentPage::ImplCheckPasswordState()
 
 
 
-SfxTabPage* SfxDocumentPage::Create( Window* pParent, const SfxItemSet& rItemSet )
+SfxTabPage* SfxDocumentPage::Create( Window* pParent, const SfxItemSet* rItemSet )
 {
-     return new SfxDocumentPage( pParent, rItemSet );
+     return new SfxDocumentPage( pParent, *rItemSet );
 }
 
 
@@ -2029,7 +2029,7 @@ void CustomPropertiesControl::AddLine( const OUString& sName, Any& rAny, bool bI
 
 // class SfxCustomPropertiesPage -----------------------------------------
 SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& rItemSet )
-    : SfxTabPage(pParent, "CustomInfoPage", "sfx/ui/custominfopage.ui", rItemSet)
+    : SfxTabPage(pParent, "CustomInfoPage", "sfx/ui/custominfopage.ui", &rItemSet)
 {
     get(m_pPropertiesCtrl, "properties");
     m_pPropertiesCtrl->Init(*this);
@@ -2113,9 +2113,9 @@ int SfxCustomPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return nRet;
 }
 
-SfxTabPage* SfxCustomPropertiesPage::Create( Window* pParent, const SfxItemSet& rItemSet )
+SfxTabPage* SfxCustomPropertiesPage::Create( Window* pParent, const SfxItemSet* rItemSet )
 {
-    return new SfxCustomPropertiesPage( pParent, rItemSet );
+    return new SfxCustomPropertiesPage( pParent, *rItemSet );
 }
 
 CmisValue::CmisValue( Window* pParent, const OUString& aStr )
@@ -2511,7 +2511,7 @@ void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
 
 // class SfxCmisPropertiesPage -----------------------------------------
 SfxCmisPropertiesPage::SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& rItemSet )
-    : SfxTabPage(pParent, "CmisInfoPage", "sfx/ui/cmisinfopage.ui", rItemSet)
+    : SfxTabPage(pParent, "CmisInfoPage", "sfx/ui/cmisinfopage.ui", &rItemSet)
     , m_pPropertiesCtrl( this )
 {
 }
@@ -2610,9 +2610,9 @@ int SfxCmisPropertiesPage::DeactivatePage( SfxItemSet* /*pSet*/ )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SfxCmisPropertiesPage::Create( Window* pParent, const SfxItemSet& rItemSet )
+SfxTabPage* SfxCmisPropertiesPage::Create( Window* pParent, const SfxItemSet* rItemSet )
 {
-    return new SfxCmisPropertiesPage( pParent, rItemSet );
+    return new SfxCmisPropertiesPage( pParent, *rItemSet );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

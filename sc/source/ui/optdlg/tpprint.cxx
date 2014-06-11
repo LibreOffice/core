@@ -33,7 +33,7 @@ ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
     :   SfxTabPage      ( pParent,
                           "optCalcPrintPage",
                           "modules/scalc/ui/optdlg.ui",
-                          rCoreAttrs )
+                          &rCoreAttrs )
 {
     get( m_pSkipEmptyPagesCB , "suppressCB" );
     get( m_pSelectedSheetsCB , "printCB" );
@@ -44,9 +44,9 @@ ScTpPrintOptions::~ScTpPrintOptions()
 {
 }
 
-SfxTabPage* ScTpPrintOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* ScTpPrintOptions::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new ScTpPrintOptions( pParent, rAttrSet );
+    return new ScTpPrintOptions( pParent, *rAttrSet );
 }
 
 int ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )

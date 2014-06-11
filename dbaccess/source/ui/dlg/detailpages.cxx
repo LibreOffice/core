@@ -224,9 +224,9 @@ namespace dbaui
 
     }
 
-    SfxTabPage* ODriversSettings::CreateDbase( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateDbase( Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return ( new ODbaseDetailsPage( pParent, _rAttrSet ) );
+        return ( new ODbaseDetailsPage( pParent, *_rAttrSet ) );
     }
 
     void ODbaseDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
@@ -302,9 +302,9 @@ namespace dbaui
     {
 
     }
-    SfxTabPage* ODriversSettings::CreateAdo( Window* pParent,   const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateAdo( Window* pParent,   const SfxItemSet* _rAttrSet )
     {
-        return ( new OAdoDetailsPage( pParent, _rAttrSet ) );
+        return ( new OAdoDetailsPage( pParent, *_rAttrSet ) );
     }
 
     // OOdbcDetailsPage
@@ -325,9 +325,9 @@ namespace dbaui
             pWindows[i]->SetZOrder(pWindows[i-1], WINDOW_ZORDER_BEHIND);
     }
 
-    SfxTabPage* ODriversSettings::CreateODBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateODBC( Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return ( new OOdbcDetailsPage( pParent, _rAttrSet ) );
+        return ( new OOdbcDetailsPage( pParent, *_rAttrSet ) );
     }
 
     bool OOdbcDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -373,9 +373,9 @@ namespace dbaui
         FreeResource();
     }
 
-    SfxTabPage* ODriversSettings::CreateUser( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateUser( Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return ( new OUserDriverDetailsPage( pParent, _rAttrSet ) );
+        return ( new OUserDriverDetailsPage( pParent, *_rAttrSet ) );
     }
 
     bool OUserDriverDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -430,9 +430,9 @@ namespace dbaui
     {
     }
 
-    SfxTabPage* ODriversSettings::CreateMySQLODBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateMySQLODBC( Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return ( new OMySQLODBCDetailsPage( pParent, _rAttrSet ) );
+        return ( new OMySQLODBCDetailsPage( pParent, *_rAttrSet ) );
     }
 
     // OMySQLJDBCDetailsPage
@@ -675,18 +675,18 @@ namespace dbaui
         OCommonBehaviourTabPage::implInitControls(_rSet, _bSaveValue);
     }
 
-    SfxTabPage* ODriversSettings::CreateMySQLJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateMySQLJDBC( Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_MYSQL_JDBC, _rAttrSet,DSID_MYSQL_PORTNUMBER ) );
+        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_MYSQL_JDBC, *_rAttrSet,DSID_MYSQL_PORTNUMBER ) );
     }
-    SfxTabPage* ODriversSettings::CreateMySQLNATIVE( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateMySQLNATIVE( Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return ( new MySQLNativePage( pParent, _rAttrSet ) );
+        return ( new MySQLNativePage( pParent, *_rAttrSet ) );
     }
 
-    SfxTabPage* ODriversSettings::CreateOracleJDBC( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateOracleJDBC( Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_ORACLE_JDBC, _rAttrSet,DSID_ORACLE_PORTNUMBER) );
+        return ( new OGeneralSpecialJDBCDetailsPage( pParent,PAGE_ORACLE_JDBC, *_rAttrSet,DSID_ORACLE_PORTNUMBER) );
     }
 
     // OLDAPDetailsPage
@@ -713,9 +713,9 @@ namespace dbaui
         FreeResource();
     }
 
-    SfxTabPage* ODriversSettings::CreateLDAP( Window* pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateLDAP( Window* pParent, const SfxItemSet* _rAttrSet )
     {
-        return ( new OLDAPDetailsPage( pParent, _rAttrSet ) );
+        return ( new OLDAPDetailsPage( pParent, *_rAttrSet ) );
     }
 
     bool OLDAPDetailsPage::FillItemSet( SfxItemSet* _rSet )
@@ -800,9 +800,9 @@ namespace dbaui
 
     }
 
-    SfxTabPage* ODriversSettings::CreateText( Window* pParent,  const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateText( Window* pParent,  const SfxItemSet* _rAttrSet )
     {
-        return ( new OTextDetailsPage( pParent, _rAttrSet ) );
+        return ( new OTextDetailsPage( pParent, *_rAttrSet ) );
     }
     void OTextDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
     {
@@ -838,16 +838,16 @@ namespace dbaui
         return m_pTextConnectionHelper->prepareLeave();
     }
 
-    SfxTabPage* ODriversSettings::CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet* _rAttrSet )
     {
-        return new GeneratedValuesPage( _pParent, _rAttrSet );
+        return new GeneratedValuesPage( _pParent, *_rAttrSet );
     }
 
-    SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet )
+    SfxTabPage* ODriversSettings::CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet* _rAttrSet )
     {
-        OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( _rAttrSet );
+        OUString eType = ODbDataSourceAdministrationHelper::getDatasourceType( *_rAttrSet );
         DataSourceMetaData aMetaData( eType );
-        return new SpecialSettingsPage( _pParent, _rAttrSet, aMetaData );
+        return new SpecialSettingsPage( _pParent, *_rAttrSet, aMetaData );
     }
 }   // namespace dbaui
 

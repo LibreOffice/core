@@ -158,7 +158,7 @@ IMPL_LINK_INLINE_END( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, pButt
 
 
 SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &rOptions)
-    : SfxTabPage(pParent, "SmathSettings", "modules/smath/ui/smathsettings.ui", rOptions)
+    : SfxTabPage(pParent, "SmathSettings", "modules/smath/ui/smathsettings.ui", &rOptions)
 {
     get( m_pTitle,               "title");
     get( m_pText,                "text");

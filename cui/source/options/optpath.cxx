@@ -197,7 +197,7 @@ bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 // class SvxPathTabPage --------------------------------------------------
 
 SvxPathTabPage::SvxPathTabPage(Window* pParent, const SfxItemSet& rSet)
-    :SfxTabPage( pParent, "OptPathsPage", "cui/ui/optpathspage.ui", rSet)
+    :SfxTabPage( pParent, "OptPathsPage", "cui/ui/optpathspage.ui", &rSet)
     , xDialogListener ( new ::svt::DialogClosedListener() )
 {
     pImpl = new OptPath_Impl(get<FixedImage>("lock")->GetImage(),
@@ -257,9 +257,9 @@ SvxPathTabPage::~SvxPathTabPage()
 
 
 SfxTabPage* SvxPathTabPage::Create( Window* pParent,
-                                    const SfxItemSet& rAttrSet )
+                                    const SfxItemSet* rAttrSet )
 {
-    return ( new SvxPathTabPage( pParent, rAttrSet ) );
+    return ( new SvxPathTabPage( pParent, *rAttrSet ) );
 }
 
 

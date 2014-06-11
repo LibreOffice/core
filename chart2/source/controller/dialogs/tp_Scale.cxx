@@ -55,7 +55,7 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow
                , "tp_Scale"
                , "modules/schart/ui/tp_Scale.ui"
-               , rInAttrs),
+               , &rInAttrs),
     fMin(0.0),
     fMax(0.0),
     fStepMain(0.0),
@@ -233,9 +233,9 @@ IMPL_LINK_NOARG(ScaleTabPage, SelectAxisTypeHdl)
     return 0;
 }
 
-SfxTabPage* ScaleTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)
+SfxTabPage* ScaleTabPage::Create(Window* pWindow,const SfxItemSet* rOutAttrs)
 {
-    return new ScaleTabPage(pWindow, rOutAttrs);
+    return new ScaleTabPage(pWindow, *rOutAttrs);
 }
 
 bool ScaleTabPage::FillItemSet(SfxItemSet* rOutAttrs)

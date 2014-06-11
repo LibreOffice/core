@@ -76,7 +76,7 @@ friend class SfxStyleDialog;
     SfxManageStyleSheetPage(Window *pParent, const SfxItemSet &rAttrSet );
     virtual ~SfxManageStyleSheetPage();
 
-    static SfxTabPage*  Create(Window *pParent, const SfxItemSet &rAttrSet );
+    static SfxTabPage*  Create(Window *pParent, const SfxItemSet *rAttrSet );
 
 protected:
     virtual bool        FillItemSet(SfxItemSet *) SAL_OVERRIDE;

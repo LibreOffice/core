@@ -259,7 +259,7 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
     if (!fnCreatePage)
         return NULL;
 
-    SfxTabPage* pPage = (*fnCreatePage)(pParent, rOptions);
+    SfxTabPage* pPage = (*fnCreatePage)(pParent, &rOptions);
     OSL_ENSURE(pPage, "No page");
     if (!pPage)
         return NULL;

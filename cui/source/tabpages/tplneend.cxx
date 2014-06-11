@@ -57,7 +57,7 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     SfxTabPage( pParent
               , "LineEndPage"
               , "cui/ui/lineendstabpage.ui"
-              , rInAttrs ),
+              , &rInAttrs ),
     rOutAttrs           ( rInAttrs ),
     pPolyObj            ( NULL ),
 
@@ -264,9 +264,9 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
 
 
 
-SfxTabPage* SvxLineEndDefTabPage::Create( Window* pWindow, const SfxItemSet& rSet )
+SfxTabPage* SvxLineEndDefTabPage::Create( Window* pWindow, const SfxItemSet* rSet )
 {
-    return( new SvxLineEndDefTabPage( pWindow, rSet ) );
+    return( new SvxLineEndDefTabPage( pWindow, *rSet ) );
 }
 
 

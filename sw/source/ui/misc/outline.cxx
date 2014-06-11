@@ -405,7 +405,7 @@ short SwOutlineTabDialog::Ok()
 SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent,
     const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OutlineNumberingPage",
-        "modules/swriter/ui/outlinenumberingpage.ui", rSet)
+        "modules/swriter/ui/outlinenumberingpage.ui", &rSet)
     , aNoFmtName(SW_RESSTR(SW_STR_NONE))
     , pSh(NULL)
     , pNumRule(NULL)
@@ -828,9 +828,9 @@ void SwOutlineSettingsTabPage::Reset( const SfxItemSet* rSet )
 }
 
 SfxTabPage* SwOutlineSettingsTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new SwOutlineSettingsTabPage(pParent, rAttrSet);
+    return new SwOutlineSettingsTabPage(pParent, *rAttrSet);
 }
 
 void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType)

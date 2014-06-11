@@ -33,7 +33,7 @@ class ScTpFormulaOptions : public SfxTabPage
 public:
     using SfxTabPage::DeactivatePage;
 
-    static  SfxTabPage* Create (Window* pParent, const SfxItemSet& rCoreSet);
+    static  SfxTabPage* Create (Window* pParent, const SfxItemSet* rCoreSet);
 
     virtual bool FillItemSet(SfxItemSet* rCoreSet) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;

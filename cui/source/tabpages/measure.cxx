@@ -595,9 +595,9 @@ void SvxMeasurePage::Construct()
 \************************************************************************/
 
 SfxTabPage* SvxMeasurePage::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SvxMeasurePage( pWindow, rAttrs ) );
+    return( new SvxMeasurePage( pWindow, *rAttrs ) );
 }
 
 const sal_uInt16* SvxMeasurePage::GetRanges()

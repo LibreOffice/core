@@ -40,7 +40,7 @@ IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
 
 SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, "OptCTLPage", "cui/ui/optctlpage.ui", rSet  )
+    SfxTabPage( pParent, "OptCTLPage", "cui/ui/optctlpage.ui", &rSet  )
 
 {
     get( m_pSequenceCheckingCB, "sequencechecking");
@@ -61,9 +61,9 @@ SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
 }
 
-SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxCTLOptionsPage( pParent, rAttrSet );
+    return new SvxCTLOptionsPage( pParent, *rAttrSet );
 }
 
 bool SvxCTLOptionsPage::FillItemSet( SfxItemSet* )

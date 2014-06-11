@@ -768,7 +768,7 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
 
 SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "TocIndexPage",
-        "modules/swriter/ui/tocindexpage.ui", rAttrSet)
+        "modules/swriter/ui/tocindexpage.ui", &rAttrSet)
     , aFromNames(SW_RES(RES_SRCTYPES))
     , pIndexRes(0)
     , sAutoMarkType(SW_RESSTR(STR_AUTOMARK_TYPE))
@@ -1247,9 +1247,9 @@ int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXSelectTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet)
+SfxTabPage* SwTOXSelectTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet)
 {
-    return new SwTOXSelectTabPage(pParent, rAttrSet);
+    return new SwTOXSelectTabPage(pParent, *rAttrSet);
 }
 
 IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
@@ -1724,7 +1724,7 @@ void SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
 
 SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet)
     : SfxTabPage(pParent, "TocEntriesPage",
-        "modules/swriter/ui/tocentriespage.ui", rAttrSet)
+        "modules/swriter/ui/tocentriespage.ui", &rAttrSet)
     , sDelimStr(SW_RESSTR(STR_DELIM))
     , sNoCharStyle(SW_RESSTR(STR_NO_CHAR_STYLE))
     , sNoCharSortKey(SW_RESSTR(STR_NOSORTKEY))
@@ -2077,9 +2077,9 @@ int SwTOXEntryTabPage::DeactivatePage( SfxItemSet* /*pSet*/)
     return LEAVE_PAGE;
 }
 
-SfxTabPage* SwTOXEntryTabPage::Create( Window* pParent,     const SfxItemSet& rAttrSet)
+SfxTabPage* SwTOXEntryTabPage::Create( Window* pParent,     const SfxItemSet* rAttrSet)
 {
-    return new SwTOXEntryTabPage(pParent, rAttrSet);
+    return new SwTOXEntryTabPage(pParent, *rAttrSet);
 }
 
 IMPL_LINK(SwTOXEntryTabPage, EditStyleHdl, PushButton*, pBtn)
@@ -3484,7 +3484,7 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
 
 SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrSet )
     : SfxTabPage(pParent, "TocStylesPage",
-        "modules/swriter/ui/tocstylespage.ui", rAttrSet)
+        "modules/swriter/ui/tocstylespage.ui", &rAttrSet)
     , m_pCurrentForm(0)
 {
     get(m_pLevelLB, "levels");
@@ -3593,9 +3593,9 @@ int SwTOXStylesTabPage::DeactivatePage( SfxItemSet* /*pSet*/  )
 }
 
 SfxTabPage* SwTOXStylesTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new SwTOXStylesTabPage(pParent, rAttrSet);
+    return new SwTOXStylesTabPage(pParent, *rAttrSet);
 }
 
 IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )

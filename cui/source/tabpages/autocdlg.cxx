@@ -178,7 +178,7 @@ IMPL_LINK(OfaAutoCorrDlg, SelectLanguageHdl, ListBox*, pBox)
 }
 
 OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "AutocorrectOptionsPage", "cui/ui/acoroptionspage.ui", rSet)
+    : SfxTabPage(pParent, "AutocorrectOptionsPage", "cui/ui/acoroptionspage.ui", &rSet)
     , m_sInput(CUI_RESSTR(RID_SVXSTR_USE_REPLACE))
     , m_sDoubleCaps(CUI_RESSTR(RID_SVXSTR_CPTL_STT_WORD))
     , m_sStartCap(CUI_RESSTR(RID_SVXSTR_CPTL_STT_SENT))
@@ -192,9 +192,9 @@ OfaAutocorrOptionsPage::OfaAutocorrOptionsPage(Window* pParent, const SfxItemSet
 }
 
 SfxTabPage* OfaAutocorrOptionsPage::Create( Window* pParent,
-                                const SfxItemSet& rSet)
+                                const SfxItemSet* rSet)
 {
-    return new OfaAutocorrOptionsPage(pParent, rSet);
+    return new OfaAutocorrOptionsPage(pParent, *rSet);
 }
 
 bool OfaAutocorrOptionsPage::FillItemSet( SfxItemSet* )
@@ -387,7 +387,7 @@ enum OfaAutoFmtOptions
 
 OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
                                 const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "ApplyAutoFmtPage", "cui/ui/applyautofmtpage.ui", rSet)
+    : SfxTabPage(pParent, "ApplyAutoFmtPage", "cui/ui/applyautofmtpage.ui", &rSet)
     , sDeleteEmptyPara(CUI_RESSTR(RID_SVXSTR_DEL_EMPTY_PARA))
     , sUseReplaceTbl(CUI_RESSTR(RID_SVXSTR_USE_REPLACE))
     , sCptlSttWord(CUI_RESSTR(RID_SVXSTR_CPTL_STT_WORD))
@@ -476,9 +476,9 @@ OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 }
 
 SfxTabPage* OfaSwAutoFmtOptionsPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new OfaSwAutoFmtOptionsPage(pParent, rAttrSet);
+    return new OfaSwAutoFmtOptionsPage(pParent, *rAttrSet);
 }
 
 bool OfaSwAutoFmtOptionsPage::FillItemSet( SfxItemSet*  )
@@ -832,7 +832,7 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
 
 OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
                                                 const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "AcorReplacePage", "cui/ui/acorreplacepage.ui", rSet)
+    : SfxTabPage(pParent, "AcorReplacePage", "cui/ui/acorreplacepage.ui", &rSet)
     , eLang(eLastDialogLanguage)
     , bHasSelectionText(false)
     , bFirstSelect(true)
@@ -904,9 +904,9 @@ OfaAutocorrReplacePage::~OfaAutocorrReplacePage()
     delete pCharClass;
 }
 
-SfxTabPage* OfaAutocorrReplacePage::Create( Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* OfaAutocorrReplacePage::Create( Window* pParent, const SfxItemSet* rSet)
 {
-    return new OfaAutocorrReplacePage(pParent, rSet);
+    return new OfaAutocorrReplacePage(pParent, *rSet);
 }
 
 void OfaAutocorrReplacePage::ActivatePage( const SfxItemSet& )
@@ -1361,7 +1361,7 @@ static bool lcl_FindInArray(std::vector<OUString>& rStrings, const OUString& rSt
 }
 
 OfaAutocorrExceptPage::OfaAutocorrExceptPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "AcorExceptPage", "cui/ui/acorexceptpage.ui", rSet)
+    : SfxTabPage(pParent, "AcorExceptPage", "cui/ui/acorexceptpage.ui", &rSet)
     , eLang(eLastDialogLanguage)
 {
     get(m_pAbbrevED, "abbrev");
@@ -1405,9 +1405,9 @@ OfaAutocorrExceptPage::~OfaAutocorrExceptPage()
 }
 
 SfxTabPage* OfaAutocorrExceptPage::Create( Window* pParent,
-                                const SfxItemSet& rSet)
+                                const SfxItemSet* rSet)
 {
-    return new OfaAutocorrExceptPage(pParent, rSet);
+    return new OfaAutocorrExceptPage(pParent, *rSet);
 }
 
 void    OfaAutocorrExceptPage::ActivatePage( const SfxItemSet& )
@@ -1740,7 +1740,7 @@ SvTreeListEntry* OfaQuoteTabPage::CreateEntry(OUString& rTxt, sal_uInt16 nCol)
 }
 
 OfaQuoteTabPage::OfaQuoteTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "ApplyLocalizedPage", "cui/ui/applylocalizedpage.ui", rSet)
+    : SfxTabPage(pParent, "ApplyLocalizedPage", "cui/ui/applylocalizedpage.ui", &rSet)
     , sNonBrkSpace(CUI_RESSTR(RID_SVXSTR_NON_BREAK_SPACE))
     , sOrdinal(CUI_RESSTR(RID_SVXSTR_ORDINAL))
     , pCheckButtonData(NULL)
@@ -1822,9 +1822,9 @@ OfaQuoteTabPage::~OfaQuoteTabPage()
 }
 
 SfxTabPage* OfaQuoteTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new OfaQuoteTabPage(pParent, rAttrSet);
+    return new OfaQuoteTabPage(pParent, *rAttrSet);
 }
 
 bool OfaQuoteTabPage::FillItemSet( SfxItemSet*  )
@@ -2088,7 +2088,7 @@ OUString OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(Window* pParent,
     const SfxItemSet& rSet)
     : SfxTabPage(pParent, "WordCompletionPage",
-        "cui/ui/wordcompletionpage.ui", rSet)
+        "cui/ui/wordcompletionpage.ui", &rSet)
     , m_pAutoCompleteList(0)
     , m_nAutoCmpltListCnt(0)
 {
@@ -2147,9 +2147,9 @@ OfaAutoCompleteTabPage::~OfaAutoCompleteTabPage()
 }
 
 SfxTabPage* OfaAutoCompleteTabPage::Create( Window* pParent,
-                                            const SfxItemSet& rSet)
+                                            const SfxItemSet* rSet)
 {
-    return new OfaAutoCompleteTabPage( pParent, rSet );
+    return new OfaAutoCompleteTabPage( pParent, *rSet );
 }
 
 bool OfaAutoCompleteTabPage::FillItemSet( SfxItemSet* )
@@ -2361,7 +2361,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeAutoCompleteMultiListBox(Wi
 
 OfaSmartTagOptionsTabPage::OfaSmartTagOptionsTabPage( Window* pParent,
                                                       const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "SmartTagOptionsPage", "cui/ui/smarttagoptionspage.ui", rSet)
+    : SfxTabPage(pParent, "SmartTagOptionsPage", "cui/ui/smarttagoptionspage.ui", &rSet)
 {
     get(m_pMainCB, "main");
     get(m_pSmartTagTypesLB, "list");
@@ -2385,9 +2385,9 @@ OfaSmartTagOptionsTabPage::~OfaSmartTagOptionsTabPage()
 
 }
 
-SfxTabPage* OfaSmartTagOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* OfaSmartTagOptionsTabPage::Create( Window* pParent, const SfxItemSet* rSet)
 {
-    return new OfaSmartTagOptionsTabPage( pParent, rSet );
+    return new OfaSmartTagOptionsTabPage( pParent, *rSet );
 }
 
 /** This struct is used to associate list box entries with smart tag data

@@ -63,7 +63,7 @@ static bool bLastRelative = false;
 SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OutlinePositionPage",
-        "modules/swriter/ui/outlinepositionpage.ui", rSet)
+        "modules/swriter/ui/outlinepositionpage.ui", &rSet)
     , pActNum(0)
     , pSaveNum(0)
     , pWrtSh(0)
@@ -513,9 +513,9 @@ void SwNumPositionTabPage::ShowControlsDependingOnPosAndSpaceMode()
 }
 
 SfxTabPage* SwNumPositionTabPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet)
+                                const SfxItemSet* rAttrSet)
 {
-    return new SwNumPositionTabPage(pParent, rAttrSet);
+    return new SwNumPositionTabPage(pParent, *rAttrSet);
 }
 
 void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)

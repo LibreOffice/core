@@ -29,7 +29,7 @@ public:
     SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet );
     virtual ~SvxPersonalizationTabPage();
 
-    static SfxTabPage* Create( Window *pParent, const SfxItemSet &rSet );
+    static SfxTabPage* Create( Window *pParent, const SfxItemSet *rSet );
 
     /// Apply the settings ([OK] button).
     virtual bool FillItemSet( SfxItemSet *rSet ) SAL_OVERRIDE;

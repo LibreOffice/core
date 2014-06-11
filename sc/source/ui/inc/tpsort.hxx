@@ -53,7 +53,7 @@ public:
     virtual ~ScTabPageSortFields();
 
     static  SfxTabPage* Create      ( Window*               pParent,
-                                      const SfxItemSet&     rArgSet );
+                                      const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 
@@ -115,7 +115,7 @@ public:
 #undef SfxTabPage
 #define SfxTabPage ::SfxTabPage
     static  SfxTabPage* Create      ( Window*               pParent,
-                                      const SfxItemSet&     rArgSet );
+                                      const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 

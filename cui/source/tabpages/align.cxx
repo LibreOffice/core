@@ -154,7 +154,7 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const 
 
 AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
-    SfxTabPage( pParent, "CellAlignPage","cui/ui/cellalignment.ui", rCoreAttrs )
+    SfxTabPage( pParent, "CellAlignPage","cui/ui/cellalignment.ui", &rCoreAttrs )
 
 {
     // text alignment
@@ -255,9 +255,9 @@ AlignmentTabPage::~AlignmentTabPage()
     delete m_pOrientHlp;
 }
 
-SfxTabPage* AlignmentTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* AlignmentTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new AlignmentTabPage( pParent, rAttrSet );
+    return new AlignmentTabPage( pParent, *rAttrSet );
 }
 
 const sal_uInt16* AlignmentTabPage::GetRanges()

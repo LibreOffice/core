@@ -421,14 +421,14 @@ IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
 }
 
 
-SfxTabPage* SfxSecurityPage::Create( Window * pParent, const SfxItemSet & rItemSet )
+SfxTabPage* SfxSecurityPage::Create( Window * pParent, const SfxItemSet * rItemSet )
 {
-    return new SfxSecurityPage( pParent, rItemSet );
+    return new SfxSecurityPage( pParent, *rItemSet );
 }
 
 
 SfxSecurityPage::SfxSecurityPage( Window* pParent, const SfxItemSet& rItemSet )
-    : SfxTabPage(pParent, "SecurityInfoPage", "sfx/ui/securityinfopage.ui", rItemSet)
+    : SfxTabPage(pParent, "SecurityInfoPage", "sfx/ui/securityinfopage.ui", &rItemSet)
 {
     m_pImpl.reset(new SfxSecurityPage_Impl( *this, rItemSet ));
 }

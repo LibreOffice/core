@@ -123,7 +123,7 @@ void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
 static LanguageType eLastUsedLanguageTypeForForbiddenCharacters = USHRT_MAX;
 
 SvxAsianLayoutPage::SvxAsianLayoutPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, "OptAsianPage", "cui/ui/optasianpage.ui", rSet),
+    SfxTabPage(pParent, "OptAsianPage", "cui/ui/optasianpage.ui", &rSet),
     pImpl(new SvxAsianLayoutPage_Impl)
 {
     get(m_pCharKerningRB, "charkerning");
@@ -155,9 +155,9 @@ SvxAsianLayoutPage::~SvxAsianLayoutPage()
     delete pImpl;
 }
 
-SfxTabPage* SvxAsianLayoutPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxAsianLayoutPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxAsianLayoutPage(pParent, rAttrSet);
+    return new SvxAsianLayoutPage(pParent, *rAttrSet);
 }
 
 bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )

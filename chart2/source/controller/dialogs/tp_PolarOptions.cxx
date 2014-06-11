@@ -32,7 +32,7 @@ PolarOptionsTabPage::PolarOptionsTabPage( Window* pWindow,const SfxItemSet& rInA
     SfxTabPage( pWindow
     ,"tp_PolarOptions"
     ,"modules/schart/ui/tp_PolarOptions.ui"
-    ,rInAttrs)
+    ,&rInAttrs)
 {
     get(m_pCB_Clockwise, "CB_CLOCKWISE");
     get(m_pFL_StartingAngle, "frameANGLE");
@@ -48,9 +48,9 @@ PolarOptionsTabPage::~PolarOptionsTabPage()
 {
 }
 
-SfxTabPage* PolarOptionsTabPage::Create( Window* pWindow,const SfxItemSet& rOutAttrs )
+SfxTabPage* PolarOptionsTabPage::Create( Window* pWindow,const SfxItemSet* rOutAttrs )
 {
-    return new PolarOptionsTabPage( pWindow, rOutAttrs );
+    return new PolarOptionsTabPage( pWindow, *rOutAttrs );
 }
 
 bool PolarOptionsTabPage::FillItemSet( SfxItemSet* rOutAttrs )

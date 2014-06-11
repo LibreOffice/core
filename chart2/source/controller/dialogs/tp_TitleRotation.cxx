@@ -33,7 +33,7 @@ namespace chart
 
 SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs, bool bWithRotation) :
-    SfxTabPage(pWindow, "TitleRotationTabPage","modules/schart/ui/titlerotationtabpage.ui", rInAttrs)
+    SfxTabPage(pWindow, "TitleRotationTabPage","modules/schart/ui/titlerotationtabpage.ui", &rInAttrs)
 {
     get(m_pCtrlDial,"dialCtrl");
     get(m_pFtRotate,"degreeL");
@@ -61,15 +61,15 @@ SchAlignmentTabPage::~SchAlignmentTabPage()
 }
 
 SfxTabPage* SchAlignmentTabPage::Create(Window* pParent,
-                                        const SfxItemSet& rInAttrs)
+                                        const SfxItemSet* rInAttrs)
 {
-    return new SchAlignmentTabPage(pParent, rInAttrs);
+    return new SchAlignmentTabPage(pParent, *rInAttrs);
 }
 
 SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
-                                        const SfxItemSet& rInAttrs)
+                                        const SfxItemSet* rInAttrs)
 {
-    return new SchAlignmentTabPage(pParent, rInAttrs, false);
+    return new SchAlignmentTabPage(pParent, *rInAttrs, false);
 }
 
 bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)

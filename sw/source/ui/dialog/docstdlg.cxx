@@ -35,14 +35,14 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/settings.hxx>
 
-SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage *  SwDocStatPage::Create(Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwDocStatPage(pParent, rSet);
+    return new SwDocStatPage(pParent, *rSet);
 }
 
 SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet)
 
-    : SfxTabPage(pParent, "StatisticsInfoPage", "modules/swriter/ui/statisticsinfopage.ui", rSet)
+    : SfxTabPage(pParent, "StatisticsInfoPage", "modules/swriter/ui/statisticsinfopage.ui", &rSet)
 
 {
     get(m_pPageNo, "nopages");

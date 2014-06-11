@@ -31,7 +31,7 @@ class SfxDocumentFontsPage: public SfxTabPage
 {
 public:
     SfxDocumentFontsPage( Window* parent, const SfxItemSet& set );
-    static SfxTabPage* Create( Window* parent, const SfxItemSet& set );
+    static SfxTabPage* Create( Window* parent, const SfxItemSet* set );
 protected:
     virtual bool FillItemSet( SfxItemSet* set ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* set ) SAL_OVERRIDE;

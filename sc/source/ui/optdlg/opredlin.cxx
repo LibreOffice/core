@@ -41,7 +41,7 @@
 
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
-    : SfxTabPage(pParent,"OptChangesPage", "modules/scalc/ui/optchangespage.ui", rSet),
+    : SfxTabPage(pParent,"OptChangesPage", "modules/scalc/ui/optchangespage.ui", &rSet),
     aAuthorStr      (ScResId(SCSTR_AUTHOR))
 {
     get(m_pContentColorLB, "changes");
@@ -60,9 +60,9 @@ ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
 }
 
-SfxTabPage* ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet* rSet )
 {
-    return new ScRedlineOptionsTabPage( pParent, rSet );
+    return new ScRedlineOptionsTabPage( pParent, *rSet );
 }
 
 bool ScRedlineOptionsTabPage::FillItemSet( SfxItemSet* /* rSet */ )

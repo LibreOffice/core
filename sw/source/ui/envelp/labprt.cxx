@@ -31,7 +31,7 @@
 
 SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelOptionsPage",
-        "modules/swriter/ui/labeloptionspage.ui", rSet)
+        "modules/swriter/ui/labeloptionspage.ui", &rSet)
     , pPrinter(0)
 {
     get(m_pPageButton, "entirepage");
@@ -94,9 +94,9 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
     return 0;
 }
 
-SfxTabPage* SwLabPrtPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwLabPrtPage::Create(Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwLabPrtPage( pParent, rSet );
+    return new SwLabPrtPage( pParent, *rSet );
 }
 
 void SwLabPrtPage::ActivatePage( const SfxItemSet& rSet )

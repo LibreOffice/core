@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 
 SwFldPage::SwFldPage(Window *pParent, const OString& rID,
     const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
-    : SfxTabPage(pParent, rID, rUIXMLDescription, rAttrSet)
+    : SfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
     , m_pCurFld(0)
     , m_pWrtShell(0)
     , m_nTypeSel(LISTBOX_ENTRY_NOTFOUND)

@@ -37,7 +37,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDocument );
 
-    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
+    static SfxTabPage* Create( Window* pParent, const SfxItemSet* rInAttrs );
     virtual bool FillItemSet( SfxItemSet* rOutAttrs ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* rInAttrs ) SAL_OVERRIDE;
 

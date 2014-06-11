@@ -30,7 +30,7 @@
 class ScDocStatPage: public SfxTabPage
 {
 public:
-    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rSet );
+    static SfxTabPage* Create( Window* pParent, const SfxItemSet* rSet );
 
 private:
             ScDocStatPage( Window *pParent, const SfxItemSet& rSet );

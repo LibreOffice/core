@@ -29,7 +29,7 @@ using namespace com::sun::star::i18n;
 
 
 SvxJSearchOptionsPage::SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage( pParent, "OptJSearchPage", "cui/ui/optjsearchpage.ui", rSet )
+    SfxTabPage( pParent, "OptJSearchPage", "cui/ui/optjsearchpage.ui", &rSet )
 {
     get( m_pMatchCase, "matchcase");
     get( m_pMatchFullHalfWidth, "matchfullhalfwidth");
@@ -62,9 +62,9 @@ SvxJSearchOptionsPage::~SvxJSearchOptionsPage()
 }
 
 
-SfxTabPage*  SvxJSearchOptionsPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*  SvxJSearchOptionsPage::Create( Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxJSearchOptionsPage( pParent, rSet );
+    return new SvxJSearchOptionsPage( pParent, *rSet );
 }
 
 

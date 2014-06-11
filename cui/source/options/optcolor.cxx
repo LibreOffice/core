@@ -1030,7 +1030,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ControlFocusHdl, Control*, pCtrl)
 
 SvxColorOptionsTabPage::SvxColorOptionsTabPage(
     Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "OptAppearancePage", "cui/ui/optappearancepage.ui", rCoreSet)
+    : SfxTabPage(pParent, "OptAppearancePage", "cui/ui/optappearancepage.ui", &rCoreSet)
     , bFillItemSetCalled(false)
     , pColorConfig(0)
     , pExtColorConfig(0)
@@ -1074,9 +1074,9 @@ SvxColorOptionsTabPage::~SvxColorOptionsTabPage()
     delete pExtColorConfig;
 }
 
-SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new SvxColorOptionsTabPage( pParent, rAttrSet ) );
+    return ( new SvxColorOptionsTabPage( pParent, *rAttrSet ) );
 }
 
 bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet*  )

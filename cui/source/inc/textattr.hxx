@@ -77,7 +77,7 @@ public:
     SvxTextAttrPage( Window* pWindow, const SfxItemSet& rInAttrs );
     virtual ~SvxTextAttrPage();
 
-    static SfxTabPage*  Create( Window*, const SfxItemSet& );
+    static SfxTabPage*  Create( Window*, const SfxItemSet* );
     static  const sal_uInt16*     GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* ) SAL_OVERRIDE;

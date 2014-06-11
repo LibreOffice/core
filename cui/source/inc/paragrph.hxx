@@ -99,7 +99,7 @@ protected:
 public:
     DECL_LINK(ELRLoseFocusHdl, void *);
 
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
+    static SfxTabPage*      Create( Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -160,7 +160,7 @@ protected:
     virtual int             DeactivatePage( SfxItemSet* pSet = 0 ) SAL_OVERRIDE;
 
 public:
-    static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
+    static SfxTabPage*      Create( Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool            FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -192,7 +192,7 @@ public:
     virtual             ~SvxExtParagraphTabPage();
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rSet );
+                                const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -272,7 +272,7 @@ public:
 
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rSet );
+                                const SfxItemSet* rSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

@@ -128,7 +128,7 @@ SfxItemPresentation  SvxGridItem::GetPresentation
 // TabPage Screen Settings
 SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
-    SfxTabPage( pParent, "OptGridPage" , "svx/ui/optgridpage.ui", rCoreSet ),
+    SfxTabPage( pParent, "OptGridPage" , "svx/ui/optgridpage.ui", &rCoreSet ),
     bAttrModified( false )
 {
     get(pCbxUseGridsnap,"usegridsnap");

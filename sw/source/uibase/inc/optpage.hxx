@@ -72,7 +72,7 @@ public:
                         virtual ~SwContentOptPage();
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet);
+                                const SfxItemSet* rAttrSet);
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -120,7 +120,7 @@ class SwAddPrinterTabPage : public SfxTabPage
 public:
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet );
+                                const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -192,7 +192,7 @@ class SwStdFontTabPage : public SfxTabPage
 
 public:
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet );
+                                const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -234,7 +234,7 @@ class SwTableOptionsTabPage : public SfxTabPage
 public:
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet );
+                                const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -278,7 +278,7 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -358,7 +358,7 @@ class SwRedlineOptionsTabPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -375,7 +375,7 @@ public:
                                            const SfxItemSet& rSet );
 
     static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet& rAttrSet );
+                                const SfxItemSet* rAttrSet );
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -418,7 +418,7 @@ class SwCompareOptionsTabPage : public SfxTabPage
 
 public:
 
-    static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage* Create( Window* pParent, const SfxItemSet* rAttrSet );
 
     virtual bool FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
     virtual void Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;

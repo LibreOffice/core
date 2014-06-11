@@ -1142,7 +1142,7 @@ SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxIt
     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
     ::CreateTabPage ScTpPrintOptionsCreate =    pFact->GetTabPageCreatorFunc( RID_SCPAGE_PRINT );
     if ( ScTpPrintOptionsCreate )
-        return  (*ScTpPrintOptionsCreate)( pParent, rOptions);
+        return  (*ScTpPrintOptionsCreate)( pParent, &rOptions);
     return 0;
 }
 

@@ -37,7 +37,7 @@ class SfxViewFrame;
 class SfxTabPage;
 class SfxBindings;
 
-typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
+typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet *rAttrSet);
 typedef const sal_uInt16*     (*GetTabPageRanges)(); // provides international Which-value
 struct TabPageImpl;
 
@@ -242,7 +242,7 @@ private:
 
 protected:
     SfxTabPage( Window *pParent, const ResId &, const SfxItemSet &rAttrSet );
-    SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet);
+    SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet);
 
     sal_uInt16              GetSlot( sal_uInt16 nWhich ) const
                             { return pSet->GetPool()->GetSlotId( nWhich ); }

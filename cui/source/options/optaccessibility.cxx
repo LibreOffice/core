@@ -34,7 +34,7 @@ struct SvxAccessibilityOptionsTabPage_Impl
 SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage(Window* pParent,
     const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptAccessibilityPage",
-        "cui/ui/optaccessibilitypage.ui", rSet)
+        "cui/ui/optaccessibilitypage.ui", &rSet)
     , m_pImpl(new SvxAccessibilityOptionsTabPage_Impl)
 {
     get(m_pAccessibilityTool, "acctool");
@@ -61,9 +61,9 @@ SvxAccessibilityOptionsTabPage::~SvxAccessibilityOptionsTabPage()
     delete m_pImpl;
 }
 
-SfxTabPage* SvxAccessibilityOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxAccessibilityOptionsTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new SvxAccessibilityOptionsTabPage(pParent, rAttrSet);
+    return new SvxAccessibilityOptionsTabPage(pParent, *rAttrSet);
 }
 
 bool SvxAccessibilityOptionsTabPage::FillItemSet( SfxItemSet* )

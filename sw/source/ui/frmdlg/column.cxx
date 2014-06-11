@@ -161,7 +161,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh)
     assert(pColPgSet);
 
     // create TabPage
-    pTabPage = (SwColumnPage*) SwColumnPage::Create(get_content_area(), *pColPgSet);
+    pTabPage = (SwColumnPage*) SwColumnPage::Create(get_content_area(), pColPgSet);
     pTabPage->get<Window>("applytoft")->Show();
     pTabPage->get(m_pApplyToLB, "applytolb");
     m_pApplyToLB->Show();
@@ -394,7 +394,7 @@ void SwColumnPage::ResetColWidth()
 
 // Now as TabPage
 SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
-    : SfxTabPage(pParent, "ColumnPage", "modules/swriter/ui/columnpage.ui", rSet)
+    : SfxTabPage(pParent, "ColumnPage", "modules/swriter/ui/columnpage.ui", &rSet)
     , pColMgr(0)
     , nFirstVis(0)
     , nMinWidth(MINLAY)
@@ -622,9 +622,9 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
 }
 
 // create TabPage
-SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* SwColumnPage::Create(Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwColumnPage(pParent, rSet);
+    return new SwColumnPage(pParent, *rSet);
 }
 // stuff attributes into the Set when OK
 bool SwColumnPage::FillItemSet(SfxItemSet *rSet)

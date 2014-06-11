@@ -40,7 +40,7 @@ public:
     SdParagraphNumTabPage(Window* pParent, const SfxItemSet& rSet );
     virtual ~SdParagraphNumTabPage();
 
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rSet );
     static const sal_uInt16*  GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
@@ -59,7 +59,7 @@ SdParagraphNumTabPage::SdParagraphNumTabPage(Window* pParent, const SfxItemSet& 
                       : SfxTabPage(pParent,
                                    "DrawParaNumbering",
                                    "modules/sdraw/ui/paranumberingtab.ui",
-                                   rAttr),
+                                   &rAttr),
                         mbModified(false)
 {
     get(m_pNewStartCB,"checkbuttonCB_NEW_START");
@@ -74,9 +74,9 @@ SdParagraphNumTabPage::~SdParagraphNumTabPage()
 {
 }
 
-SfxTabPage* SdParagraphNumTabPage::Create(Window *pParent, const SfxItemSet & rAttrSet)
+SfxTabPage* SdParagraphNumTabPage::Create(Window *pParent, const SfxItemSet * rAttrSet)
 {
-    return new SdParagraphNumTabPage( pParent, rAttrSet );
+    return new SdParagraphNumTabPage( pParent, *rAttrSet );
 }
 
 const sal_uInt16* SdParagraphNumTabPage::GetRanges()

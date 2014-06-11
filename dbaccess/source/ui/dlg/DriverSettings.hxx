@@ -44,53 +44,53 @@ namespace dbaui
 
         /** Creates the detail page for Dbase
         */
-        static  SfxTabPage* CreateDbase2( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateDbase2( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ado
         */
-        static  SfxTabPage* CreateDbase( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateDbase( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ado
         */
-        static  SfxTabPage* CreateAdo( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateAdo( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for ODBC
         */
-        static  SfxTabPage* CreateODBC( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateODBC( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for user
         */
-        static  SfxTabPage* CreateUser( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateUser( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLODBC
         */
-        static  SfxTabPage* CreateMySQLODBC( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateMySQLODBC( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLJDBC
         */
-        static  SfxTabPage* CreateMySQLJDBC( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateMySQLJDBC( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for MySQLNATIVE
         */
-        static  SfxTabPage* CreateMySQLNATIVE( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateMySQLNATIVE( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for Oracle JDBC
         */
-        static SfxTabPage*  CreateOracleJDBC( Window* pParent, const SfxItemSet& _rAttrSet );
+        static SfxTabPage*  CreateOracleJDBC( Window* pParent, const SfxItemSet* _rAttrSet );
 
         /** Creates the detail page for LDAP
         */
-        static  SfxTabPage* CreateLDAP( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateLDAP( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /// Creates the detail page for Text
-        static  SfxTabPage* CreateText( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateText( Window* _pParent, const SfxItemSet* _rAttrSet );
 
 
         /// creates the GeneratedValues page
-        static  SfxTabPage* CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateGeneratedValuesPage( Window* _pParent, const SfxItemSet* _rAttrSet );
 
         /// creates the "Special Settings" page of the "Advanced Settings" dialog
-        static  SfxTabPage* CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet& _rAttrSet );
+        static  SfxTabPage* CreateSpecialSettingsPage( Window* _pParent, const SfxItemSet* _rAttrSet );
     };
 }
 

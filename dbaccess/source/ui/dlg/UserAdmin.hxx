@@ -65,7 +65,7 @@ protected:
 
     OUserAdmin( Window* pParent, const SfxItemSet& _rCoreAttrs);
 public:
-    static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
+    static  SfxTabPage* Create( Window* pParent, const SfxItemSet* _rAttrSet );
 
     virtual ~OUserAdmin();
     OUString GetUser();

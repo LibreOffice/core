@@ -107,7 +107,7 @@ IMPL_LINK_NOARG(SwFootNotePage, LineColorSelected_Impl)
 
 SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet)
     : SfxTabPage(pParent, "FootnoteAreaPage",
-        "modules/swriter/ui/footnoteareapage.ui", rSet)
+        "modules/swriter/ui/footnoteareapage.ui", &rSet)
     , lMaxHeight(0)
 {
     get(m_pMaxHeightPageBtn, "maxheightpage");
@@ -136,9 +136,9 @@ SwFootNotePage::~SwFootNotePage()
 {
 }
 
-SfxTabPage* SwFootNotePage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* SwFootNotePage::Create(Window *pParent, const SfxItemSet *rSet)
 {
-    return new SwFootNotePage(pParent, rSet);
+    return new SwFootNotePage(pParent, *rSet);
 }
 
 void SwFootNotePage::Reset(const SfxItemSet *rSet)

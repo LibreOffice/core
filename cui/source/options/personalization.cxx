@@ -86,7 +86,7 @@ IMPL_LINK( SelectPersonaDialog, VisitPersonas, PushButton*, /*pButton*/ )
 }
 
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
-    : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", rSet )
+    : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", &rSet )
 {
     // persona
     get( m_pNoPersona, "no_persona" );
@@ -103,9 +103,9 @@ SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
 {
 }
 
-SfxTabPage* SvxPersonalizationTabPage::Create( Window *pParent, const SfxItemSet &rSet )
+SfxTabPage* SvxPersonalizationTabPage::Create( Window *pParent, const SfxItemSet *rSet )
 {
-    return new SvxPersonalizationTabPage( pParent, rSet );
+    return new SvxPersonalizationTabPage( pParent, *rSet );
 }
 
 bool SvxPersonalizationTabPage::FillItemSet( SfxItemSet * )

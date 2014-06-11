@@ -165,16 +165,16 @@ const sal_uInt16* SvxPageDescPage::GetRanges()
 
 
 
-SfxTabPage* SvxPageDescPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SvxPageDescPage::Create( Window* pParent, const SfxItemSet* rSet )
 {
-    return new SvxPageDescPage( pParent, rSet );
+    return new SvxPageDescPage( pParent, *rSet );
 }
 
 
 
 SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
-    SfxTabPage( pParent, "PageFormatPage", "cui/ui/pageformatpage.ui", rAttr ),
+    SfxTabPage( pParent, "PageFormatPage", "cui/ui/pageformatpage.ui", &rAttr ),
 
     bLandscape          ( false ),
     eMode               ( SVX_PAGE_MODE_STANDARD ),

@@ -136,7 +136,7 @@ void _SfxMacroTabPage::EnableButtons()
 }
 
 _SfxMacroTabPage::_SfxMacroTabPage(Window* pParent, const SfxItemSet& rAttrSet)
-    : SfxTabPage(pParent, "EventAssignPage", "cui/ui/eventassignpage.ui", rAttrSet)
+    : SfxTabPage(pParent, "EventAssignPage", "cui/ui/eventassignpage.ui", &rAttrSet)
 {
     mpImpl = new _SfxMacroTabPage_Impl;
 }
@@ -462,9 +462,9 @@ namespace
     }
 }
 
-SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SfxMacroTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return CreateSfxMacroTabPage(pParent, rAttrSet);
+    return CreateSfxMacroTabPage(pParent, *rAttrSet);
 }
 
 SfxMacroAssignDlg::SfxMacroAssignDlg(Window* pParent,

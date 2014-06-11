@@ -41,7 +41,7 @@
 
 ScTpContentOptions::ScTpContentOptions( Window*         pParent,
                              const SfxItemSet&  rArgSet ) :
-    SfxTabPage(pParent, "TpViewPage", "modules/scalc/ui/tpviewpage.ui", rArgSet),
+    SfxTabPage(pParent, "TpViewPage", "modules/scalc/ui/tpviewpage.ui", &rArgSet),
     pLocalOptions(0)
 {
     get(pGridLB,"grid");
@@ -101,9 +101,9 @@ ScTpContentOptions::~ScTpContentOptions()
 }
 
 SfxTabPage* ScTpContentOptions::Create( Window*     pParent,
-                              const SfxItemSet&     rCoreSet )
+                              const SfxItemSet*     rCoreSet )
 {
-    return new ScTpContentOptions(pParent, rCoreSet);
+    return new ScTpContentOptions(pParent, *rCoreSet);
 }
 
 bool    ScTpContentOptions::FillItemSet( SfxItemSet* rCoreSet )
@@ -353,7 +353,7 @@ IMPL_LINK( ScTpContentOptions, GridHdl, ListBox*, pLb )
 ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
                                         const SfxItemSet&   rArgSet ) :
     SfxTabPage( pParent, "ScGeneralPage",
-                "modules/scalc/ui/scgeneralpage.ui", rArgSet),
+                "modules/scalc/ui/scgeneralpage.ui", &rArgSet),
     aUnitArr(               ScResId(SCSTR_UNIT           )),
     pDoc(NULL)
 {
@@ -413,9 +413,9 @@ ScTpLayoutOptions::~ScTpLayoutOptions()
 }
 
 SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
-                                    const SfxItemSet&   rCoreSet )
+                                    const SfxItemSet*   rCoreSet )
 {
-    ScTpLayoutOptions* pNew = new ScTpLayoutOptions(pParent, rCoreSet);
+    ScTpLayoutOptions* pNew = new ScTpLayoutOptions(pParent, *rCoreSet);
     ScDocShell* pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
 
     if(pDocSh!=NULL)

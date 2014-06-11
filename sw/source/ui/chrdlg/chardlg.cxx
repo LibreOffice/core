@@ -134,7 +134,7 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 }
 
 SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "CharURLPage", "modules/swriter/ui/charurlpage.ui", rCoreSet)
+    : SfxTabPage(pParent, "CharURLPage", "modules/swriter/ui/charurlpage.ui", &rCoreSet)
     , pINetItem(0)
     , bModified(false)
 
@@ -279,9 +279,9 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
 }
 
 SfxTabPage* SwCharURLPage::Create(  Window* pParent,
-                        const SfxItemSet& rAttrSet )
+                        const SfxItemSet* rAttrSet )
 {
-    return ( new SwCharURLPage( pParent, rAttrSet ) );
+    return ( new SwCharURLPage( pParent, *rAttrSet ) );
 }
 
 IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl)

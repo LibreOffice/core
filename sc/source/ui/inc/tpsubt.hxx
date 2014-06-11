@@ -83,7 +83,7 @@ public:
     virtual ~ScTpSubTotalGroup1();
 
     static  SfxTabPage* Create      ( Window*               pParent,
-                                      const SfxItemSet&     rArgSet );
+                                      const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
@@ -98,7 +98,7 @@ public:
     virtual ~ScTpSubTotalGroup2();
 
     static  SfxTabPage* Create      ( Window*               pParent,
-                                      const SfxItemSet&     rArgSet );
+                                      const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
@@ -113,7 +113,7 @@ public:
     virtual ~ScTpSubTotalGroup3();
 
     static  SfxTabPage* Create      ( Window*               pParent,
-                                      const SfxItemSet&     rArgSet );
+                                      const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 };
@@ -128,7 +128,7 @@ public:
     virtual ~ScTpSubTotalOptions();
 
     static SfxTabPage*  Create      ( Window*               pParent,
-                                      const SfxItemSet&     rArgSet );
+                                      const SfxItemSet*     rArgSet );
     virtual bool        FillItemSet ( SfxItemSet* rArgSet ) SAL_OVERRIDE;
     virtual void        Reset       ( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
 

@@ -733,24 +733,24 @@ ConvertToolbarEntry(
     return aPropSeq;
 }
 
-SfxTabPage *CreateSvxMenuConfigPage( Window *pParent, const SfxItemSet& rSet )
+SfxTabPage *CreateSvxMenuConfigPage( Window *pParent, const SfxItemSet* rSet )
 {
-    return new SvxMenuConfigPage( pParent, rSet );
+    return new SvxMenuConfigPage( pParent, *rSet );
 }
 
-SfxTabPage *CreateKeyboardConfigPage( Window *pParent, const SfxItemSet& rSet )
+SfxTabPage *CreateKeyboardConfigPage( Window *pParent, const SfxItemSet* rSet )
 {
-       return new SfxAcceleratorConfigPage( pParent, rSet );
+       return new SfxAcceleratorConfigPage( pParent, *rSet );
 }
 
-SfxTabPage *CreateSvxToolbarConfigPage( Window *pParent, const SfxItemSet& rSet )
+SfxTabPage *CreateSvxToolbarConfigPage( Window *pParent, const SfxItemSet* rSet )
 {
-    return new SvxToolbarConfigPage( pParent, rSet );
+    return new SvxToolbarConfigPage( pParent, *rSet );
 }
 
-SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
+SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet* rSet )
 {
-    return new SvxEventConfigPage( pParent, rSet, SvxEventConfigPage::EarlyInit() );
+    return new SvxEventConfigPage( pParent, *rSet, SvxEventConfigPage::EarlyInit() );
 }
 
 namespace {
@@ -1516,7 +1516,7 @@ void SvxMenuEntriesListBox::KeyInput( const KeyEvent& rKeyEvent )
  *
  *****************************************************************************/
 SvxConfigPage::SvxConfigPage(Window *pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "MenuAssignPage", "cui/ui/menuassignpage.ui", rSet)
+    : SfxTabPage(pParent, "MenuAssignPage", "cui/ui/menuassignpage.ui", &rSet)
     , bInitialised(false)
     , pCurrentSaveInData(0)
     , m_pContentsListBox(0)

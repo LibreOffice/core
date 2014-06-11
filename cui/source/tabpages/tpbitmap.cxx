@@ -290,9 +290,9 @@ void SvxBitmapTabPage::Reset( const SfxItemSet*  )
 
 
 SfxTabPage* SvxBitmapTabPage::Create( Window* pWindow,
-                const SfxItemSet& rSet )
+                const SfxItemSet* rSet )
 {
-    return new SvxBitmapTabPage( pWindow, rSet );
+    return new SvxBitmapTabPage( pWindow, *rSet );
 }
 
 

@@ -33,7 +33,7 @@ SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow, const SfxItemSet& rInA
     : SfxTabPage( pWindow
                  ,"tp_LegendPosition"
                  ,"modules/schart/ui/tp_LegendPosition.ui"
-                 , rInAttrs )
+                 , &rInAttrs )
     , m_aLegendPositionResources(*this)
 {
     get(m_pLbTextDirection,"LB_LEGEND_TEXTDIR");
@@ -41,9 +41,9 @@ SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow, const SfxItemSet& rInA
     m_pLbTextDirection->SetDropDownLineCount(3);
 }
 
-SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow, const SfxItemSet& rOutAttrs)
+SfxTabPage* SchLegendPosTabPage::Create(Window* pWindow, const SfxItemSet* rOutAttrs)
 {
-    return new SchLegendPosTabPage(pWindow, rOutAttrs);
+    return new SchLegendPosTabPage(pWindow, *rOutAttrs);
 }
 
 bool SchLegendPosTabPage::FillItemSet(SfxItemSet* rOutAttrs)

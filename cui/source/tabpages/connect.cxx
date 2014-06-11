@@ -82,7 +82,7 @@ SvxConnectionDialog::~SvxConnectionDialog()
 
 SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttrs )
     : SfxTabPage(pWindow ,"ConnectorTabPage" ,"cui/ui/connectortabpage.ui"
-        ,rInAttrs)
+        ,&rInAttrs)
     , rOutAttrs(rInAttrs)
     , aAttrSet(*rInAttrs.GetPool())
     , pView(NULL)
@@ -390,9 +390,9 @@ void SvxConnectionPage::Construct()
 \************************************************************************/
 
 SfxTabPage* SvxConnectionPage::Create( Window* pWindow,
-                const SfxItemSet& rAttrs )
+                const SfxItemSet* rAttrs )
 {
-    return( new SvxConnectionPage( pWindow, rAttrs ) );
+    return( new SvxConnectionPage( pWindow, *rAttrs ) );
 }
 
 const sal_uInt16* SvxConnectionPage::GetRanges()

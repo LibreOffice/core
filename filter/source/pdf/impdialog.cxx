@@ -511,7 +511,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
 
 ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "PdfGeneralPage","filter/ui/pdfgeneralpage.ui", rCoreSet)
+    : SfxTabPage(pParent, "PdfGeneralPage","filter/ui/pdfgeneralpage.ui", &rCoreSet)
     , mbTaggedPDFUserSelection(false)
     , mbExportFormFieldsUserSelection(false)
     , mbIsPresentation(false)
@@ -705,9 +705,9 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
 
 
 SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
-                                           const SfxItemSet& rAttrSet)
+                                           const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabGeneralPage( pParent, rAttrSet ) );
+    return ( new  ImpPDFTabGeneralPage( pParent, *rAttrSet ) );
 }
 
 
@@ -823,7 +823,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
 
 // the option features tab page
 ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage(Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "PdfViewPage","filter/ui/pdfviewpage.ui", rCoreSet)
+    : SfxTabPage(pParent, "PdfViewPage","filter/ui/pdfviewpage.ui", &rCoreSet)
     , mbUseCTLFont(false)
 {
     get(mpRbOpnPageOnly, "pageonly");
@@ -856,9 +856,9 @@ ImpPDFTabOpnFtrPage::~ImpPDFTabOpnFtrPage()
 
 
 SfxTabPage*  ImpPDFTabOpnFtrPage::Create( Window* pParent,
-                                          const SfxItemSet& rAttrSet)
+                                          const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabOpnFtrPage( pParent, rAttrSet ) );
+    return ( new  ImpPDFTabOpnFtrPage( pParent, *rAttrSet ) );
 }
 
 
@@ -986,7 +986,7 @@ IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
 
 ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
                                           const SfxItemSet& rCoreSet )
-    : SfxTabPage(pParent, "PdfUserInterfacePage","filter/ui/pdfuserinterfacepage.ui", rCoreSet)
+    : SfxTabPage(pParent, "PdfUserInterfacePage","filter/ui/pdfuserinterfacepage.ui", &rCoreSet)
     , mbIsPresentation(false)
 {
     get(m_pCbResWinInit,"resize");
@@ -1016,9 +1016,9 @@ IMPL_LINK( ImpPDFTabViewerPage, ToggleRbBookmarksHdl, void*, )
 }
 
 SfxTabPage*  ImpPDFTabViewerPage::Create( Window* pParent,
-                                          const SfxItemSet& rAttrSet)
+                                          const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabViewerPage( pParent, rAttrSet ) );
+    return ( new  ImpPDFTabViewerPage( pParent, *rAttrSet ) );
 }
 
 
@@ -1065,7 +1065,7 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
 
 // The Security preferences tab page
 ImpPDFTabSecurityPage::ImpPDFTabSecurityPage(Window* i_pParent, const SfxItemSet& i_rCoreSet)
-    : SfxTabPage(i_pParent, "PdfSecurityPage","filter/ui/pdfsecuritypage.ui", i_rCoreSet)
+    : SfxTabPage(i_pParent, "PdfSecurityPage","filter/ui/pdfsecuritypage.ui", &i_rCoreSet)
     , msUserPwdTitle( PDFFilterResId( STR_PDF_EXPORT_UDPWD ) )
     , mbHaveOwnerPassword( false )
     , mbHaveUserPassword( false )
@@ -1108,9 +1108,9 @@ ImpPDFTabSecurityPage::~ImpPDFTabSecurityPage()
 
 
 SfxTabPage*  ImpPDFTabSecurityPage::Create( Window* pParent,
-                                          const SfxItemSet& rAttrSet)
+                                          const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabSecurityPage( pParent, rAttrSet ) );
+    return ( new  ImpPDFTabSecurityPage( pParent, *rAttrSet ) );
 }
 
 
@@ -1308,7 +1308,7 @@ void    ImpPDFTabSecurityPage::ImplPDFASecurityControl( bool bEnableSecurity )
 
 ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
                                               const SfxItemSet& rCoreSet ) :
-    SfxTabPage( pParent, "PdfLinksPage","filter/ui/pdflinkspage.ui",rCoreSet ),
+    SfxTabPage( pParent, "PdfLinksPage","filter/ui/pdflinkspage.ui",&rCoreSet ),
 
     mbOpnLnksDefaultUserState( false ),
     mbOpnLnksLaunchUserState( false ),
@@ -1329,9 +1329,9 @@ ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
 
 
 SfxTabPage*  ImpPDFTabLinksPage::Create( Window* pParent,
-                                          const SfxItemSet& rAttrSet)
+                                          const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabLinksPage( pParent, rAttrSet ) );
+    return ( new  ImpPDFTabLinksPage( pParent, *rAttrSet ) );
 }
 
 
@@ -1528,7 +1528,7 @@ IMPL_LINK_NOARG(ImplErrorDialog, SelectHdl)
 // The digital signatures tab page
 
 ImpPDFTabSigningPage::ImpPDFTabSigningPage(Window* pParent, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pParent, "PdfSignPage","filter/ui/pdfsignpage.ui", rCoreSet)
+    : SfxTabPage(pParent, "PdfSignPage","filter/ui/pdfsignpage.ui", &rCoreSet)
     , maSignCertificate()
 {
     get(mpEdSignCert, "cert");
@@ -1586,9 +1586,9 @@ IMPL_LINK_NOARG( ImpPDFTabSigningPage, ClickmaPbSignCertClear )
 
 
 SfxTabPage*  ImpPDFTabSigningPage::Create( Window* pParent,
-                                          const SfxItemSet& rAttrSet)
+                                          const SfxItemSet* rAttrSet)
 {
-    return ( new  ImpPDFTabSigningPage( pParent, rAttrSet ) );
+    return ( new  ImpPDFTabSigningPage( pParent, *rAttrSet ) );
 }
 
 

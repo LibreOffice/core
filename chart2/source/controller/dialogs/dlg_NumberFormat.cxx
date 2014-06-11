@@ -38,7 +38,7 @@ NumberFormatDialog::NumberFormatDialog(Window* pParent, SfxItemSet& rSet)
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT );
     if ( fnCreatePage )
     {
-        SfxTabPage* pTabPage = (*fnCreatePage)( get_content_area(), rSet );
+        SfxTabPage* pTabPage = (*fnCreatePage)( get_content_area(), &rSet );
         pTabPage->PageCreated(rSet);
         SetTabPage(pTabPage);
     }

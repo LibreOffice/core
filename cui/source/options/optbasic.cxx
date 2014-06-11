@@ -26,7 +26,7 @@
 #include <cuires.hrc>
 
 SvxBasicIDEOptionsPage::SvxBasicIDEOptionsPage( Window* pParent, const SfxItemSet& rSet )
-: SfxTabPage(pParent, "OptBasicIDEPage", "cui/ui/optbasicidepage.ui", rSet)
+: SfxTabPage(pParent, "OptBasicIDEPage", "cui/ui/optbasicidepage.ui", &rSet)
 {
     SvtMiscOptions aMiscOpt;
     if( ! aMiscOpt.IsExperimentalMode() )
@@ -136,9 +136,9 @@ void SvxBasicIDEOptionsPage::Reset( const SfxItemSet* /*rSet*/ )
     pUseExtendedTypesChk->SaveValue();
 }
 
-SfxTabPage* SvxBasicIDEOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxBasicIDEOptionsPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new SvxBasicIDEOptionsPage( pParent, rAttrSet ) );
+    return ( new SvxBasicIDEOptionsPage( pParent, *rAttrSet ) );
 }
 
 void SvxBasicIDEOptionsPage::FillUserData()

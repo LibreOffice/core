@@ -29,7 +29,7 @@ SwAddrDlg::SwAddrDlg(Window* pParent, const SfxItemSet& rSet)
     ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( RID_SFXPAGE_GENERAL );
     if ( fnCreatePage )
     {
-        SfxTabPage* pPage2 = (*fnCreatePage)(get_content_area(), rSet);
+        SfxTabPage* pPage2 = (*fnCreatePage)(get_content_area(), &rSet);
         SetTabPage(pPage2);
     }
 }

@@ -288,7 +288,7 @@ void SwLabPreview::UpdateItem(const SwLabItem& rItem)
 
 SwLabFmtPage::SwLabFmtPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "LabelFormatPage",
-        "modules/swriter/ui/labelformatpage.ui", rSet)
+        "modules/swriter/ui/labelformatpage.ui", &rSet)
     , bModified(false)
     , aItem((const SwLabItem&) rSet.Get(FN_LABEL))
 {
@@ -464,9 +464,9 @@ void SwLabFmtPage::ChangeMinMax()
     m_pPHeightField->Reformat();
 }
 
-SfxTabPage* SwLabFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwLabFmtPage::Create(Window* pParent, const SfxItemSet* rSet)
 {
-    return new SwLabFmtPage(pParent, rSet);
+    return new SwLabFmtPage(pParent, *rSet);
 }
 
 void SwLabFmtPage::ActivatePage(const SfxItemSet& rSet)

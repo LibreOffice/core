@@ -37,7 +37,7 @@ static bool     bOutputForPrinter = true;
 #define DPI_COUNT (sizeof(aDPIArray)/sizeof(aDPIArray[0 ]))
 
 SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "OptPrintPage", "sfx/ui/optprintpage.ui", rSet)
+    : SfxTabPage(pParent, "OptPrintPage", "sfx/ui/optprintpage.ui", &rSet)
 {
     get(m_pPrinterOutputRB, "printer");
     get(m_pPrintFileOutputRB, "file");
@@ -89,9 +89,9 @@ SfxCommonPrintOptionsTabPage::~SfxCommonPrintOptionsTabPage()
 {
 }
 
-SfxTabPage* SfxCommonPrintOptionsTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SfxCommonPrintOptionsTabPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return( new SfxCommonPrintOptionsTabPage( pParent, rAttrSet ) );
+    return( new SfxCommonPrintOptionsTabPage( pParent, *rAttrSet ) );
 }
 
 Window* SfxCommonPrintOptionsTabPage::GetParentLabeledBy( const Window* pWindow ) const

@@ -112,7 +112,7 @@ int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 
 
 OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage(pParent, "OptMemoryPage", "cui/ui/optmemorypage.ui", rSet)
+    : SfxTabPage(pParent, "OptMemoryPage", "cui/ui/optmemorypage.ui", &rSet)
 {
     get(m_pUndoEdit, "undo");
     get(m_pNfGraphicCache, "graphiccache");
@@ -148,9 +148,9 @@ OfaMemoryOptionsPage::~OfaMemoryOptionsPage()
 
 
 
-SfxTabPage* OfaMemoryOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* OfaMemoryOptionsPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return new OfaMemoryOptionsPage( pParent, rAttrSet );
+    return new OfaMemoryOptionsPage( pParent, *rAttrSet );
 }
 
 

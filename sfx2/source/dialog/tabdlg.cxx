@@ -181,9 +181,9 @@ SfxTabPage::SfxTabPage( Window *pParent,
 }
 
 
-SfxTabPage::SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
+SfxTabPage::SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet)
     : TabPage(pParent, rID, rUIXMLDescription)
-    , pSet                ( &rAttrSet )
+    , pSet                ( rAttrSet )
     , bHasExchangeSupport ( false )
     , pImpl               ( new TabPageImpl )
 {
@@ -1195,10 +1195,10 @@ IMPL_LINK( SfxTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         }
 
         if ( pTmpSet && !pDataObject->bOnDemand )
-            pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, *pTmpSet );
+            pTabPage = (pDataObject->fnCreatePage)( pTabCtrl, pTmpSet );
         else
             pTabPage = (pDataObject->fnCreatePage)
-                            ( pTabCtrl, *CreateInputItemSet( nId ) );
+                            ( pTabCtrl, CreateInputItemSet( nId ) );
         DBG_ASSERT( NULL == pDataObject->pTabPage, "create TabPage more than once" );
         pDataObject->pTabPage = pTabPage;
 

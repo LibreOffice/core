@@ -207,17 +207,17 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
         {
             aText = ScGlobal::GetRscString( STR_PAGEHEADER );
             if ( bRightPage )
-                pDlg->SetTabPage( ScRightHeaderEditPage::Create( pDlg->get_content_area(), aDataSet ), NULL, nSettingsId );
+                pDlg->SetTabPage( ScRightHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ), NULL, nSettingsId );
             else
-                pDlg->SetTabPage( ScLeftHeaderEditPage::Create( pDlg->get_content_area(), aDataSet ), NULL, nSettingsId );
+                pDlg->SetTabPage( ScLeftHeaderEditPage::Create( pDlg->get_content_area(), &aDataSet ), NULL, nSettingsId );
         }
         else
         {
             aText = ScGlobal::GetRscString( STR_PAGEFOOTER );
             if ( bRightPage )
-                pDlg->SetTabPage( ScRightFooterEditPage::Create( pDlg->get_content_area(), aDataSet ), NULL, nSettingsId );
+                pDlg->SetTabPage( ScRightFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), NULL, nSettingsId );
             else
-                pDlg->SetTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), aDataSet ), NULL, nSettingsId );
+                pDlg->SetTabPage( ScLeftFooterEditPage::Create( pDlg->get_content_area(), &aDataSet ), NULL, nSettingsId );
         }
 
         SvxNumType eNumType = ((const SvxPageItem&)aDataSet.Get(ATTR_PAGE)).GetNumType();
@@ -246,9 +246,9 @@ ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
 {
-    return ( new ScHeaderPage( pParent, rCoreSet ) );
+    return ( new ScHeaderPage( pParent, *rCoreSet ) );
 }
 
 const sal_uInt16* ScHeaderPage::GetRanges()
@@ -265,9 +265,9 @@ ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
 {
 }
 
-SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet* rCoreSet )
 {
-    return ( new ScFooterPage( pParent, rCoreSet ) );
+    return ( new ScFooterPage( pParent, *rCoreSet ) );
 }
 
 const sal_uInt16* ScFooterPage::GetRanges()

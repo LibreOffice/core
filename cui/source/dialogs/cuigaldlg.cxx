@@ -610,7 +610,7 @@ void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 // - TPGalleryThemeGeneral -
 TPGalleryThemeGeneral::TPGalleryThemeGeneral(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "GalleryGeneralPage",
-        "cui/ui/gallerygeneralpage.ui", rSet)
+        "cui/ui/gallerygeneralpage.ui", &rSet)
     , pData(NULL)
 {
     get(m_pFiMSImage, "image");
@@ -687,14 +687,14 @@ bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet* /*rSet*/ )
 
 
 
-SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet* rSet )
 {
-    return new TPGalleryThemeGeneral( pParent, rSet );
+    return new TPGalleryThemeGeneral( pParent, *rSet );
 }
 
 // - TPGalleryThemeProperties -
 TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet )
-    : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", rSet)
+    : SfxTabPage(pWindow, "GalleryFilesPage", "cui/ui/galleryfilespage.ui", &rSet)
     , pData(NULL)
     , nCurFilterPos(0)
     , nFirstExtFilterPos(0)
@@ -771,9 +771,9 @@ TPGalleryThemeProperties::~TPGalleryThemeProperties()
 
 
 
-SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet* rSet )
 {
-    return new TPGalleryThemeProperties( pParent, rSet );
+    return new TPGalleryThemeProperties( pParent, *rSet );
 }
 
 

@@ -132,7 +132,7 @@ public:
 // class SvxJavaOptionsPage ----------------------------------------------
 
 SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", rSet)
+    : SfxTabPage(pParent, "OptAdvancedPage", "cui/ui/optadvancedpage.ui", &rSet)
     , m_pParamDlg(NULL)
     , m_pPathDlg(NULL)
 #if HAVE_FEATURE_JAVA
@@ -635,9 +635,9 @@ void SvxJavaOptionsPage::AddFolder( const OUString& _rFolder )
 
 
 
-SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* SvxJavaOptionsPage::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new SvxJavaOptionsPage( pParent, rAttrSet ) );
+    return ( new SvxJavaOptionsPage( pParent, *rAttrSet ) );
 }
 
 

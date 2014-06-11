@@ -33,7 +33,7 @@ class ScTpPrintOptions : public SfxTabPage
             virtual ~ScTpPrintOptions();
 
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rCoreSet );
     virtual bool        FillItemSet( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     using SfxTabPage::DeactivatePage;

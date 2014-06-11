@@ -327,7 +327,7 @@ SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItem
 #endif
     }
 
-    SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, rSet ) : NULL;
+    SfxTabPage* pRet = fnCreate ? (*fnCreate)( pParent, &rSet ) : NULL;
     return pRet;
 }
 

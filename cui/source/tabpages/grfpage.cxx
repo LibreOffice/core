@@ -49,7 +49,7 @@ static inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
  --------------------------------------------------------------------*/
 
 SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
-    : SfxTabPage(pParent, "CropPage", "cui/ui/croppage.ui", rSet)
+    : SfxTabPage(pParent, "CropPage", "cui/ui/croppage.ui", &rSet)
     , pLastCropField(0)
     , nOldWidth(0)
     , nOldHeight(0)
@@ -129,9 +129,9 @@ SvxGrfCropPage::~SvxGrfCropPage()
     aTimer.Stop();
 }
 
-SfxTabPage* SvxGrfCropPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* SvxGrfCropPage::Create(Window *pParent, const SfxItemSet *rSet)
 {
-    return new SvxGrfCropPage( pParent, rSet );
+    return new SvxGrfCropPage( pParent, *rSet );
 }
 
 void SvxGrfCropPage::Reset( const SfxItemSet *rSet )

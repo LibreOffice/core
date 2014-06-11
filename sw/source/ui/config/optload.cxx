@@ -65,7 +65,7 @@ using namespace ::com::sun::star;
 
 SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage",
-        "modules/swriter/ui/optgeneralpage.ui", rSet)
+        "modules/swriter/ui/optgeneralpage.ui", &rSet)
     , m_pWrtShell(NULL)
     , m_nLastTab(0)
     , m_nOldLinkMode(MANUAL)
@@ -127,9 +127,9 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
 }
 
 SfxTabPage* SwLoadOptPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet )
+                                const SfxItemSet* rAttrSet )
 {
-    return new SwLoadOptPage(pParent, rAttrSet );
+    return new SwLoadOptPage(pParent, *rAttrSet );
 }
 
 IMPL_LINK_NOARG(SwLoadOptPage, StandardizedPageCountCheckHdl)
@@ -356,7 +356,7 @@ SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet)
         "modules/swriter/ui/captiondialog.ui")
 {
     // create TabPage
-    SetTabPage(SwCaptionOptPage::Create(get_content_area(), rSet));
+    SetTabPage(SwCaptionOptPage::Create(get_content_area(), &rSet));
 }
 
 SwCaptionPreview::SwCaptionPreview( Window* pParent, WinBits nStyle )
@@ -411,7 +411,7 @@ void SwCaptionPreview::Paint( const Rectangle& rRect )
 }
 
 SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
-    : SfxTabPage(pParent, "OptCaptionPage", "modules/swriter/ui/optcaptionpage.ui", rSet)
+    : SfxTabPage(pParent, "OptCaptionPage", "modules/swriter/ui/optcaptionpage.ui", &rSet)
     , m_sSWTable(SW_RESSTR(STR_CAPTION_TABLE))
     , m_sSWFrame(SW_RESSTR(STR_CAPTION_FRAME))
     , m_sSWGraphic(SW_RESSTR(STR_CAPTION_GRAPHIC))
@@ -524,9 +524,9 @@ SwCaptionOptPage::~SwCaptionOptPage()
 }
 
 SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
-                                const SfxItemSet& rAttrSet )
+                                const SfxItemSet* rAttrSet )
 {
-    return new SwCaptionOptPage(pParent, rAttrSet );
+    return new SwCaptionOptPage(pParent, *rAttrSet );
 }
 
 bool SwCaptionOptPage::FillItemSet( SfxItemSet*  )

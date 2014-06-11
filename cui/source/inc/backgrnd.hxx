@@ -46,7 +46,7 @@ class SvxBackgroundTabPage : public SvxTabPage
 {
     using TabPage::DeactivatePage;
 public:
-    static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
+    static SfxTabPage*  Create( Window* pParent, const SfxItemSet* rAttrSet );
     static const sal_uInt16*      GetRanges();
 
     virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;

@@ -44,7 +44,7 @@ static const sal_uInt16 pProtectionRanges[] =
 
 ScTabPageProtection::ScTabPageProtection(Window* pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "CellProtectionPage",
-        "modules/scalc/ui/cellprotectionpage.ui", rCoreAttrs)
+        "modules/scalc/ui/cellprotectionpage.ui", &rCoreAttrs)
 {
     get(m_pBtnHideCell,"checkHideAll");
     get(m_pBtnProtect,"checkProtected");
@@ -68,9 +68,9 @@ const sal_uInt16* ScTabPageProtection::GetRanges()
     return pProtectionRanges;
 }
 
-SfxTabPage* ScTabPageProtection::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* ScTabPageProtection::Create( Window* pParent, const SfxItemSet* rAttrSet )
 {
-    return ( new ScTabPageProtection( pParent, rAttrSet ) );
+    return ( new ScTabPageProtection( pParent, *rAttrSet ) );
 }
 
 void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )

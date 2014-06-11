@@ -32,7 +32,7 @@ ErrorBarsTabPage::ErrorBarsTabPage( Window* pParent, const SfxItemSet& rInAttrs 
         SfxTabPage( pParent
         ,"tp_ErrorBars"
         ,"modules/schart/ui/tp_ErrorBars.ui"
-        , rInAttrs ),
+        , &rInAttrs ),
         m_aErrorBarResources(
             this,
             // the parent is the tab control, of which the parent is the dialog
@@ -42,9 +42,9 @@ ErrorBarsTabPage::ErrorBarsTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 }
 
 SfxTabPage* ErrorBarsTabPage::Create(
-    Window* pParent, const SfxItemSet& rOutAttrs )
+    Window* pParent, const SfxItemSet* rOutAttrs )
 {
-    return new ErrorBarsTabPage( pParent, rOutAttrs );
+    return new ErrorBarsTabPage( pParent, *rOutAttrs );
 }
 
 bool ErrorBarsTabPage::FillItemSet( SfxItemSet* rOutAttrs )

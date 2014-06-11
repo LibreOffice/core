@@ -455,7 +455,7 @@ const sal_uInt16* SvxBackgroundTabPage::GetRanges()
 
 
 SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
-                                          const SfxItemSet& rAttrSet )
+                                          const SfxItemSet* rAttrSet )
 
 /*  [Description]
 
@@ -463,7 +463,7 @@ SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
 */
 
 {
-    return ( new SvxBackgroundTabPage( pParent, rAttrSet ) );
+    return ( new SvxBackgroundTabPage( pParent, *rAttrSet ) );
 }
 
 

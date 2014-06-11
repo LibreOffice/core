@@ -29,7 +29,7 @@ class ScTablePage : public SfxTabPage
 {
 public:
     static  SfxTabPage* Create          ( Window*           pParent,
-                                          const SfxItemSet& rCoreSet );
+                                          const SfxItemSet* rCoreSet );
     static  const sal_uInt16* GetRanges       ();
     virtual bool        FillItemSet     ( SfxItemSet* rCoreSet ) SAL_OVERRIDE;
     virtual void        Reset           ( const SfxItemSet* rCoreSet ) SAL_OVERRIDE;
