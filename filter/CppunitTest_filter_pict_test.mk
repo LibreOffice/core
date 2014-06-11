@@ -18,13 +18,17 @@ $(eval $(call gb_CppunitTest_add_exception_objects,filter_pict_test, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,filter_pict_test, \
-    ipt \
+	basegfx \
 	sal \
 	test \
 	tl \
 	unotest \
 	vcl \
 	$(gb_UWINAPI) \
+))
+
+$(eval $(call gb_CppunitTest_use_library_objects,filter_pict_test, \
+    ipt \
 ))
 
 $(eval $(call gb_CppunitTest_use_api,filter_pict_test,\

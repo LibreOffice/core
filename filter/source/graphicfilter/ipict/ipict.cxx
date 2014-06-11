@@ -1913,6 +1913,16 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     if (pPict->GetError()) pPict->Seek(nOrigPos);
 }
 
+namespace pict {
+
+void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile)
+{
+    PictReader aPictReader;
+    aPictReader.ReadPict(rStreamPict, rGDIMetaFile);
+}
+
+}
+
 //================== GraphicImport - the exported function ================
 
 // this needs to be kept in sync with
@@ -1926,10 +1936,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL
 GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
 {
     GDIMetaFile aMTF;
-    PictReader  aPictReader;
     bool        bRet = false;
 
-    aPictReader.ReadPict( rIStm, aMTF );
+    pict::ReadPictFile( rIStm, aMTF );
 
     if ( !rIStm.GetError() )
     {
@@ -1938,16 +1947,6 @@ GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem* )
     }
 
     return bRet;
-}
-
-namespace pict {
-
-void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile)
-{
-    PictReader aPictReader;
-    aPictReader.ReadPict(rStreamPict, rGDIMetaFile);
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

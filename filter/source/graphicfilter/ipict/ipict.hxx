@@ -13,19 +13,13 @@
 #include <sal/config.h>
 #include <sal/types.h>
 
-#if defined PCT_DLLIMPLEMENTATION
-#define PCT_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
-#else
-#define PCT_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
-#endif
-
 class GDIMetaFile;
 class SvStream;
 
 namespace pict {
 
 /// Function to access PictReader::ReadPict for unit testing.
-PCT_DLLPUBLIC void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile);
+void ReadPictFile(SvStream &rStreamPict, GDIMetaFile& rGDIMetaFile);
 
 }
 
