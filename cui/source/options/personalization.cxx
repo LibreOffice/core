@@ -370,11 +370,13 @@ bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
     OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
     rtl::Bootstrap::expandMacros( gallery );
     gallery += "/user/gallery/personas/";
-    // gallery += aName + "/";
     osl::Directory::createPath( gallery );
 
     OUString aHeaderFile( INetURLObject( aHeaderURL ).getName() );
     OUString aFooterFile( INetURLObject( aFooterURL ).getName() );
+
+    aHeaderFile = aName + "/" + aHeaderFile;
+    aFooterFile = aName + "/" + aFooterFile;
 
     try {
         xFileAccess->copy( aHeaderURL, gallery + aHeaderFile );
