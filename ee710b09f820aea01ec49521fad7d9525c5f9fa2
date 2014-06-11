@@ -34,6 +34,24 @@
       "revId": "ee710b09f820aea01ec49521fad7d9525c5f9fa2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_20c5ca5a",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1552,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-11T08:44:04Z",
+      "side": 0,
+      "message": "The convention in writerfilter is that either content is appended at the end of the document (null cursor) or you have a cursor, and then you insert content at the cursor position. (Originally only append was implemented, then insert was also added for the RTF copy\u0026paste.)",
+      "parentUuid": "baa041b7_c07bbe7a",
+      "revId": "ee710b09f820aea01ec49521fad7d9525c5f9fa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
