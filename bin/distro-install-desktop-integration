@@ -113,6 +113,7 @@ sed -i \
     export ICON_SOURCE_DIR=$builddir/sysui/desktop/icons
     export PRODUCTVERSION=
     export KDEMAINDIR=$PREFIXDIR
+    export PREFIXDIR=${PREFIXDIR}
     export GNOMEDIR=$PREFIXDIR
     export GNOME_MIME_THEME=hicolor
     bash ./create_tree.sh
