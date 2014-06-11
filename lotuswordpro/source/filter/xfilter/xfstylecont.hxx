@@ -69,7 +69,7 @@ class IXFStyle;
  * @descr   container object for styles.
  *          All styles can be placed into an style container.
  */
-class XFStyleContainer : public IXFObject
+class XFStyleContainer
 {
 public:
     XFStyleContainer(){}
@@ -117,7 +117,7 @@ public:
     /**
      * @descr   Output all style.
      */
-    virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
+    virtual void    ToXml(IXFStream *pStrm);
 
     friend bool operator==(XFStyleContainer& b1, XFStyleContainer& b2);
     friend bool operator!=(XFStyleContainer& b1, XFStyleContainer& b2);

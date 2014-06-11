@@ -60,9 +60,7 @@
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFPROPERTY_HXX
 #define INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_IXFPROPERTY_HXX
 
-#include "ixfobject.hxx"
-
-class IXFProperty : public IXFObject
+class IXFProperty
 {
 public:
 

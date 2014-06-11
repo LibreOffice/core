@@ -65,7 +65,7 @@
  * @descr
  * Interface for all style object.
  */
-class IXFStyle : public IXFObject
+class IXFStyle
 {
 public:
     virtual ~IXFStyle(){}
@@ -104,6 +104,7 @@ public:
      */
     virtual bool    Equal(IXFStyle *pStyle) = 0;
 
+    virtual void ToXml(IXFStream * stream) = 0;
 };
 
 #endif

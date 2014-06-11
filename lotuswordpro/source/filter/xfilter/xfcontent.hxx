@@ -64,15 +64,16 @@
 
 #include <rtl/ustring.hxx>
 
-#include "ixfobject.hxx"
 #include "xfdefs.hxx"
+
+class IXFStream;
 
 /**
  * @descr
  * Base class for all content object.
  * There is only two properties:style name and content type in this class.
  */
-class XFContent : public IXFObject
+class XFContent
 {
 public:
     virtual ~XFContent() {}
@@ -91,6 +92,8 @@ public:
      * @short:  return the style name.
      */
     OUString   GetStyleName() {return m_strStyleName;}
+
+    virtual void ToXml(IXFStream * stream) = 0;
 
 protected:
     XFContent() {}
