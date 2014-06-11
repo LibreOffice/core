@@ -1271,29 +1271,6 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
     return eState;
 }
 
-
-
-void FilterCache::impl_resolveItem4TypeRegistration(      CacheItemList*   pList,
-                                                    const OUString& sItem,
-                                                    const OUString& sType)
-    throw(css::uno::Exception)
-{
-    CacheItem& rItem = (*pList)[sItem];
-    // In case it's a new created entry (automatically done by the boost::unordered_map index operator!)
-    // we must be sure, that this entry has its own name as property available.
-    // Its needed later at our container interface!
-    rItem[PROPNAME_NAME] <<= sItem;
-
-    OUStringList lTypeRegs(rItem[PROPNAME_TYPES]);
-    if (::std::find(lTypeRegs.begin(), lTypeRegs.end(), sType) == lTypeRegs.end())
-    {
-        lTypeRegs.push_back(sType);
-        rItem[PROPNAME_TYPES] <<= lTypeRegs.getAsConstList();
-    }
-}
-
-
-
 void FilterCache::impl_load(EFillState eRequiredState)
     throw(css::uno::Exception)
 {
