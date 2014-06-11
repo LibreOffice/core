@@ -46,7 +46,7 @@ int main (int argc, char **argv)
         return 1;
     }
 
-    Office *pOffice = lo_cpp_init( argv[1] );
+    Office *pOffice = lok_cpp_init( argv[1] );
     if( !pOffice )
     {
         fprintf( stderr, "Failed to initialize\n" );
