@@ -127,7 +127,7 @@ extern "C" void __cxa_throw(
     __attribute__((noreturn));
 }
 #endif
-}
+
 #endif
 
 namespace CPPU_CURRENT_NAMESPACE
