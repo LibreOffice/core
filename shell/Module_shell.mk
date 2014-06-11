@@ -14,7 +14,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Library_localebe \
 ))
 
-ifeq ($(OS),LINUX)
+ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD,$(OS)),)
 ifeq ($(ENABLE_GIO),TRUE)
 $(eval $(call gb_Module_add_targets,shell,\
 	Library_losessioninstall \
