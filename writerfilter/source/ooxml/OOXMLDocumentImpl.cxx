@@ -31,7 +31,6 @@
 #include "OOXMLBinaryObjectReference.hxx"
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLPropertySetImpl.hxx"
-#include "ooxmlLoggers.hxx"
 
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
@@ -47,10 +46,6 @@ using namespace ::com::sun::star;
 namespace writerfilter {
 namespace ooxml
 {
-
-#if OSL_DEBUG_LEVEL > 1
-TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
-#endif
 
 OOXMLDocumentImpl::OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream, const uno::Reference<task::XStatusIndicator>& xStatusIndicator)
     : mpStream(pStream)
@@ -284,12 +279,6 @@ writerfilter::Reference<Stream>::Pointer_t
 OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rType,
                                   const sal_Int32 nId)
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("getXNoteStream");
-    debug_logger->attribute("id", nId);
-    debug_logger->endElement();
-#endif
-
     OOXMLStream::Pointer_t pStream =
         (OOXMLDocumentFactory::createStream(mpStream, nType));
     // See above, no status indicator for the note stream, either.
@@ -445,10 +434,6 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
-#ifdef DEBUG_RESOLVE
-    debug_logger->startElement("OOXMLDocumentImpl.resolve");
-#endif
-
     uno::Reference< xml::sax::XFastParser > xParser
         (mpStream->getFastParser());
 
@@ -517,18 +502,11 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
             xParser->parseStream(aParserInput);
         }
         catch (...) {
-#ifdef DEBUG_ELEMENT
-            debug_logger->element("exception");
-#endif
         }
     }
 
     if (mxStatusIndicator.is())
         mxStatusIndicator->end();
-
-#ifdef DEBUG_RESOLVE
-    debug_logger->endElement();
-#endif
 }
 
 void OOXMLDocumentImpl::incrementProgress()

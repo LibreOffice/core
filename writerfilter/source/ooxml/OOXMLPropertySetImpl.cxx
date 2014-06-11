@@ -23,7 +23,6 @@
 #include <resourcemodel/QNameToString.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <ooxml/OOXMLFastTokens.hxx>
-#include "ooxmlLoggers.hxx"
 #include <ooxml/resourceids.hxx>
 
 namespace writerfilter {
@@ -401,28 +400,16 @@ OOXMLPropertySetImpl::~OOXMLPropertySetImpl()
 
 void OOXMLPropertySetImpl::resolve(Properties & rHandler)
 {
-    size_t nIt = 0;
-
     // The pProp->resolve(rHandler) call below can cause elements to
     // be appended to mProperties. I don't think it can cause elements
     // to be deleted. But let's check with < here just to be safe that
     // the indexing below works.
-    while (nIt < mProperties.size())
+    for (size_t nIt = 0; nIt < mProperties.size(); ++nIt)
     {
         OOXMLProperty::Pointer_t pProp = mProperties[nIt];
 
         if (pProp.get() != NULL)
             pProp->resolve(rHandler);
-#ifdef DEBUG_RESOLVE
-        else
-        {
-            debug_logger->startElement("error");
-            debug_logger->chars(std::string("zero-property"));
-            debug_logger->endElement();
-        }
-#endif
-
-        ++nIt;
     }
 }
 
@@ -455,11 +442,6 @@ string OOXMLPropertySetImpl::getType() const
 
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
-#ifdef DEBUG_PROPERTY_SET
-    debug_logger->startElement("propertyset.add");
-    debug_logger->chars(pProperty->toString());
-#endif
-
     if (pProperty.get() != NULL && pProperty->getId() != 0x0)
     {
         /*
@@ -477,14 +459,6 @@ void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
         else
             mProperties.push_back(pProperty);
     }
-#ifdef DEBUG_PROPERTY_SET
-    else
-    {
-        debug_logger->element("warning.property_not_added");
-    }
-
-    debug_logger->endElement("propertyset.add");
-#endif
 }
 
 void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)

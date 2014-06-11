@@ -19,7 +19,6 @@
 
 #include "OOXMLStreamImpl.hxx"
 #include "OOXMLFastTokenHandler.hxx"
-#include "ooxmlLoggers.hxx"
 #include <iostream>
 
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
@@ -77,9 +76,6 @@ OOXMLStreamImpl::OOXMLStreamImpl
 
 OOXMLStreamImpl::~OOXMLStreamImpl()
 {
-#ifdef DEBUG_STREAM
-    debug_logger->endElement("stream");
-#endif
 }
 
 const OUString & OOXMLStreamImpl::getTarget() const
@@ -364,10 +360,6 @@ void OOXMLStreamImpl::init()
 {
     bool bFound = lcl_getTarget(mxRelationshipAccess,
                                 mnStreamType, msId, msTarget);
-#ifdef DEBUG_STREAM
-    debug_logger->startElement("stream");
-    debug_logger->attribute("target", msTarget);
-#endif
 
     if (bFound)
     {

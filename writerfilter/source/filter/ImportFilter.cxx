@@ -81,11 +81,6 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
-        writerfilter::TagLogger::Pointer_t debugLogger
-        (writerfilter::TagLogger::getInstance("DEBUG"));
-        debugLogger->setFileName(sURLc);
-        debugLogger->startDocument();
-
         writerfilter::TagLogger::Pointer_t dmapperLogger
         (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
         dmapperLogger->setFileName(sURLc);
@@ -184,10 +179,9 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     }
 
     pStream.reset();
-#ifdef DEBUG_IMPORT
 
+#ifdef DEBUG_IMPORT
     dmapperLogger->endDocument();
-    debugLogger->endDocument();
 #endif
 
     return sal_True;

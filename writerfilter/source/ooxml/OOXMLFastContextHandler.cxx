@@ -38,7 +38,6 @@
 #include "OOXMLFastContextHandler.hxx"
 #include "OOXMLFactory.hxx"
 #include "Handler.hxx"
-#include "ooxmlLoggers.hxx"
 
 static const sal_Unicode uCR = 0xd;
 static const sal_Unicode uFtnEdnRef = 0x2;
@@ -219,17 +218,6 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.element");
-    string sToken = fastTokenToId(Element);
-    mpParserState->getXPathLogger().startElement(sToken);
-    debug_logger->attribute("token", sToken);
-    debug_logger->attribute("type", getType());
-    debug_logger->attribute("xpath", mpParserState->getXPathLogger().getXPath());
-    debug_logger->startElement("at-start");
-    dumpXml( debug_logger );
-    debug_logger->endElement();
-#endif
     if (oox::getNamespace(Element) == static_cast<sal_Int32>(NS_mce))
         m_bDiscardChildren = prepareMceContext(Element, Attribs);
 
@@ -241,29 +229,15 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
 }
 
 void SAL_CALL OOXMLFastContextHandler::startUnknownElement
-(const OUString & Namespace, const OUString & Name,
+(const OUString & /*Namespace*/, const OUString & /*Name*/,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.unknown-element");
-    debug_logger->attribute("namespace", Namespace);
-    debug_logger->attribute("name", Name);
-    mpParserState->getXPathLogger().startElement("unknown");
-#else
-    (void) Namespace;
-    (void) Name;
-#endif
 }
 
 void SAL_CALL OOXMLFastContextHandler::endFastElement(Token_t Element)
 throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    string sToken = fastTokenToId(Element);
-    (void) sToken;
-#endif
-
     if (Element == (NS_mce | OOXML_Choice) || Element == (NS_mce | OOXML_Fallback))
         m_bDiscardChildren = false;
     else if (Element == (NS_mce | OOXML_AlternateContent))
@@ -273,17 +247,8 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
         m_bDiscardChildren = aState.m_bDiscardChildren;
         m_bTookChoice = aState.m_bTookChoice;
     }
-
     else if (!m_bDiscardChildren)
         lcl_endFastElement(Element);
-
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("at-end");
-    dumpXml( debug_logger );
-    debug_logger->endElement();
-    debug_logger->endElement();
-    mpParserState->getXPathLogger().endElement();
-#endif
 }
 
 void OOXMLFastContextHandler::lcl_startFastElement
@@ -310,10 +275,6 @@ void SAL_CALL OOXMLFastContextHandler::endUnknownElement
 (const OUString & , const OUString & )
 throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-    mpParserState->getXPathLogger().endElement();
-#endif
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
@@ -322,22 +283,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.createFastChildContext");
-    debug_logger->attribute("token", fastTokenToId(Element));
-    debug_logger->attribute("type", getType());
-    debug_logger->attribute("discard-children", OUString::number(m_bDiscardChildren));
-#endif
-
     uno::Reference< xml::sax::XFastContextHandler > xResult;
     if ((Element & 0xffff0000) != NS_mce && !m_bDiscardChildren)
         xResult.set(lcl_createFastChildContext(Element, Attribs));
     else if ((Element & 0xffff0000) == NS_mce)
         xResult = this;
-
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-#endif
 
     return xResult;
 }
@@ -358,16 +308,6 @@ OOXMLFastContextHandler::createUnknownChildContext
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.createUnknownChildContext");
-    debug_logger->attribute("namespace", Namespace);
-    debug_logger->attribute("name", Name);
-    debug_logger->endElement();
-#else
-    (void) Namespace;
-    (void) Name;
-#endif
-
     return uno::Reference< xml::sax::XFastContextHandler >
         (new OOXMLFastContextHandler(*const_cast<const OOXMLFastContextHandler *>(this)));
 }
@@ -430,32 +370,10 @@ void OOXMLFastContextHandler::attributes
 
 void OOXMLFastContextHandler::startAction(Token_t Element)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.startAction");
-#endif
-    lcl_startAction(Element);
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-#endif
-}
-
-void OOXMLFastContextHandler::lcl_startAction(Token_t Element)
-{
     OOXMLFactory::getInstance()->startAction(this, Element);
 }
 
 void OOXMLFastContextHandler::endAction(Token_t Element)
-{
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.endAction");
-#endif
-    lcl_endAction(Element);
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-#endif
-}
-
-void OOXMLFastContextHandler::lcl_endAction(Token_t Element)
 {
     OOXMLFactory::getInstance()->endAction(this, Element);
 }
@@ -493,17 +411,6 @@ void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) cons
 
 void OOXMLFastContextHandler::setId(Id rId)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.setId");
-
-    static char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIuUINT32, rId);
-
-    debug_logger->attribute("id", std::string(sBuffer));
-    debug_logger->attribute("name", (*QNameToString::Instance())(rId));
-    debug_logger->endElement();
-#endif
-
     mId = rId;
 }
 
@@ -526,10 +433,6 @@ OOXMLParserState::Pointer_t OOXMLFastContextHandler::getParserState() const
 void OOXMLFastContextHandler::setToken(Token_t nToken)
 {
     mnToken = nToken;
-
-#ifdef DEBUG_CONTEXT_HANDLER
-    msTokenString = fastTokenToId(mnToken);
-#endif
 }
 
 Token_t OOXMLFastContextHandler::getToken() const
@@ -551,10 +454,6 @@ OOXMLPropertySet * OOXMLFastContextHandler::getPicturePropSet
 
 void OOXMLFastContextHandler::sendTableDepth() const
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.sendTableDepth");
-#endif
-
     if (mnTableDepth > 0)
     {
         OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
@@ -575,9 +474,6 @@ void OOXMLFastContextHandler::sendTableDepth() const
 
         mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
     }
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-#endif
 }
 
 void OOXMLFastContextHandler::setHandle()
@@ -588,10 +484,6 @@ void OOXMLFastContextHandler::setHandle()
 
 void OOXMLFastContextHandler::startCharacterGroup()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.startCharacterGroup");
-#endif
-
     if (isForwardEvents())
     {
         if (mpParserState->isInCharacterGroup())
@@ -611,10 +503,6 @@ void OOXMLFastContextHandler::startCharacterGroup()
 
 void OOXMLFastContextHandler::endCharacterGroup()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.endCharacterGroup");
-#endif
-
     if (isForwardEvents() && mpParserState->isInCharacterGroup())
     {
         mpStream->endCharacterGroup();
@@ -624,10 +512,6 @@ void OOXMLFastContextHandler::endCharacterGroup()
 
 void OOXMLFastContextHandler::startParagraphGroup()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.startParagraphGroup");
-#endif
-
     if (isForwardEvents())
     {
         if (mpParserState->isInParagraphGroup())
@@ -646,10 +530,6 @@ void OOXMLFastContextHandler::startParagraphGroup()
 
 void OOXMLFastContextHandler::endParagraphGroup()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.endParagraphGroup");
-#endif
-
     if (isForwardEvents())
     {
         if (mpParserState->isInCharacterGroup())
@@ -665,10 +545,6 @@ void OOXMLFastContextHandler::endParagraphGroup()
 
 void OOXMLFastContextHandler::startSdt()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.startSdt");
-#endif
-
     OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
     OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(1));
     OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
@@ -678,10 +554,6 @@ void OOXMLFastContextHandler::startSdt()
 
 void OOXMLFastContextHandler::endSdt()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.endSdt");
-#endif
-
     OOXMLPropertySet * pProps = new OOXMLPropertySetImpl();
     OOXMLValue::Pointer_t pVal(new OOXMLIntegerValue(1));
     OOXMLProperty::Pointer_t pProp(new OOXMLPropertyImpl(NS_ooxml::LN_CT_SdtBlock_sdtEndContent, pVal, OOXMLPropertyImpl::ATTRIBUTE));
@@ -691,10 +563,6 @@ void OOXMLFastContextHandler::endSdt()
 
 void OOXMLFastContextHandler::startSectionGroup()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.startSectionGroup");
-#endif
-
     if (isForwardEvents())
     {
         if (mpParserState->isInSectionGroup())
@@ -711,10 +579,6 @@ void OOXMLFastContextHandler::startSectionGroup()
 
 void OOXMLFastContextHandler::endSectionGroup()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.endSectionGroup");
-#endif
-
     if (isForwardEvents())
     {
         if (mpParserState->isInParagraphGroup())
@@ -751,9 +615,6 @@ OOXMLPropertySet::Pointer_t OOXMLFastContextHandler::getPropertySet() const
 
 void OOXMLFastContextHandler::startField()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.startField");
-#endif
     startCharacterGroup();
     if (isForwardEvents())
         mpStream->text(&cFieldStart, 1);
@@ -762,9 +623,6 @@ void OOXMLFastContextHandler::startField()
 
 void OOXMLFastContextHandler::fieldSeparator()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.fieldSeparator");
-#endif
     startCharacterGroup();
     if (isForwardEvents())
         mpStream->text(&cFieldSep, 1);
@@ -773,9 +631,6 @@ void OOXMLFastContextHandler::fieldSeparator()
 
 void OOXMLFastContextHandler::endField()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.endField");
-#endif
     startCharacterGroup();
     if (isForwardEvents())
         mpStream->text(&cFieldEnd, 1);
@@ -784,82 +639,54 @@ void OOXMLFastContextHandler::endField()
 
 void OOXMLFastContextHandler::ftnednref()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.ftnednref");
-#endif
     if (isForwardEvents())
         mpStream->utext((const sal_uInt8*)&uFtnEdnRef, 1);
 }
 
 void OOXMLFastContextHandler::ftnednsep()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.ftnednsep");
-#endif
     if (isForwardEvents())
         mpStream->utext((const sal_uInt8*)&uFtnEdnSep, 1);
 }
 
 void OOXMLFastContextHandler::ftnedncont()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.ftnedncont");
-#endif
     if (isForwardEvents())
         mpStream->text(&cFtnEdnCont, 1);
 }
 
 void OOXMLFastContextHandler::pgNum()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.pgNum");
-#endif
     if (isForwardEvents())
         mpStream->utext((const sal_uInt8*)&uPgNum, 1);
 }
 
 void OOXMLFastContextHandler::tab()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.tab");
-#endif
     if (isForwardEvents())
         mpStream->utext((const sal_uInt8*)&uTab, 1);
 }
 
 void OOXMLFastContextHandler::cr()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.cr");
-#endif
     if (isForwardEvents())
         mpStream->utext((const sal_uInt8*)&uCR, 1);
 }
 
 void OOXMLFastContextHandler::noBreakHyphen()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.noBreakHyphen");
-#endif
     if (isForwardEvents())
         mpStream->utext((const sal_uInt8*)&uNoBreakHyphen, 1);
 }
 
 void OOXMLFastContextHandler::softHyphen()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.softHyphen");
-#endif
     if (isForwardEvents())
         mpStream->utext((const sal_uInt8*)&uSoftHyphen, 1);
 }
 
 void OOXMLFastContextHandler::handleLastParagraphInSection()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.handleLastParagraphInSection");
-#endif
-
     if (mpParserState->isLastParagraphInSection())
     {
         mpParserState->setLastParagraphInSection(false);
@@ -869,9 +696,6 @@ void OOXMLFastContextHandler::handleLastParagraphInSection()
 
 void OOXMLFastContextHandler::endOfParagraph()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.endOfParagraph");
-#endif
     if (! mpParserState->isInCharacterGroup())
         startCharacterGroup();
     if (isForwardEvents())
@@ -882,9 +706,6 @@ void OOXMLFastContextHandler::endOfParagraph()
 
 void OOXMLFastContextHandler::startTxbxContent()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.startTxbxContent");
-#endif
 /*
     This usually means there are recursive <w:p> elements, and the ones
     inside and outside of w:txbxContent should not interfere (e.g.
@@ -899,20 +720,12 @@ void OOXMLFastContextHandler::startTxbxContent()
 
 void OOXMLFastContextHandler::endTxbxContent()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.endTxbxContent");
-#endif
     endParagraphGroup();
     mpParserState->endTxbxContent();
 }
 
 void OOXMLFastContextHandler::text(const OUString & sText)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.text");
-    debug_logger->chars(sText);
-    debug_logger->endElement();
-#endif
     if (isForwardEvents())
         mpStream->utext(reinterpret_cast < const sal_uInt8 * >
                         (sText.getStr()),
@@ -931,69 +744,35 @@ void OOXMLFastContextHandler::text(const OUString & sText)
 */
 void OOXMLFastContextHandler::positionOffset(const OUString & sText)
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("positionOffset");
-    debug_logger->chars(sText);
-    debug_logger->endElement();
-#endif
     if (isForwardEvents())
         ::writerfilter::dmapper::PositionHandler::setPositionOffset( sText, inPositionV );
 }
 
 void OOXMLFastContextHandler::alignH(const OUString & sText)
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("alignH");
-    debug_logger->chars(sText);
-    debug_logger->endElement();
-#endif
     if (isForwardEvents())
         ::writerfilter::dmapper::PositionHandler::setAlignH( sText );
 }
 
 void OOXMLFastContextHandler::alignV(const OUString & sText)
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("alignV");
-    debug_logger->chars(sText);
-    debug_logger->endElement();
-#endif
     if (isForwardEvents())
         ::writerfilter::dmapper::PositionHandler::setAlignV( sText );
 }
 
 void OOXMLFastContextHandler::positivePercentage(const OUString& rText)
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("positivePercentage");
-    debug_logger->chars(rText);
-    debug_logger->endElement();
-#endif
     if (isForwardEvents())
         mpStream->positivePercentage(rText);
 }
 
 void OOXMLFastContextHandler::propagateCharacterProperties()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.propagateCharacterProperties");
-    debug_logger->propertySet(getPropertySet(),
-            IdToString::Pointer_t(new OOXMLIdToString()));
-    debug_logger->endElement();
-#endif
-
     mpParserState->setCharacterProperties(getPropertySet());
 }
 
 void OOXMLFastContextHandler::propagateCharacterPropertiesAsSet(const Id & rId)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.propagateCharacterPropertiesAsSet");
-    debug_logger->propertySet(getPropertySet(),
-            IdToString::Pointer_t(new OOXMLIdToString()));
-    debug_logger->endElement();
-#endif
-
     OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
     OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySetImpl());
 
@@ -1011,91 +790,44 @@ bool OOXMLFastContextHandler::propagatesProperties() const
 
 void OOXMLFastContextHandler::propagateCellProperties()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.propagateCellProperties");
-#endif
-
     mpParserState->setCellProperties(getPropertySet());
 }
 
 void OOXMLFastContextHandler::propagateRowProperties()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.propagateRowProperties");
-#endif
-
     mpParserState->setRowProperties(getPropertySet());
 }
 
 void OOXMLFastContextHandler::propagateTableProperties()
 {
     OOXMLPropertySet::Pointer_t pProps = getPropertySet();
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.propagateTableProperties");
-    debug_logger->propertySet(getPropertySet(),
-            IdToString::Pointer_t(new OOXMLIdToString()));
-    debug_logger->endElement();
-#endif
 
     mpParserState->setTableProperties(pProps);
 }
 
 void OOXMLFastContextHandler::sendCellProperties()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.sendCellProperties");
-#endif
-
     mpParserState->resolveCellProperties(*mpStream);
-
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-#endif
 }
 
 void OOXMLFastContextHandler::sendRowProperties()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.sendRowProperties");
-#endif
-
     mpParserState->resolveRowProperties(*mpStream);
-
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-#endif
 }
 
 void OOXMLFastContextHandler::sendTableProperties()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.sendTableProperties");
-#endif
-
     mpParserState->resolveTableProperties(*mpStream);
-
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-#endif
 }
 
 void OOXMLFastContextHandler::clearTableProps()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.clearTableProps");
-#endif
-
     mpParserState->setTableProperties(OOXMLPropertySet::Pointer_t
                                      (new OOXMLPropertySetImpl()));
 }
 
 void OOXMLFastContextHandler::sendPropertiesWithId(const Id & rId)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.sendPropertiesWithId");
-    debug_logger->attribute("id", fastTokenToId(rId));
-#endif
-
     OOXMLValue::Pointer_t pValue(new OOXMLPropertySetValue(getPropertySet()));
     OOXMLPropertySet::Pointer_t pPropertySet(new OOXMLPropertySetImpl());
 
@@ -1104,20 +836,10 @@ void OOXMLFastContextHandler::sendPropertiesWithId(const Id & rId)
 
     pPropertySet->add(pProp);
     mpStream->props(pPropertySet);
-
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->propertySet(getPropertySet(),
-            IdToString::Pointer_t(new OOXMLIdToString()));
-    debug_logger->endElement();
-#endif
 }
 
 void OOXMLFastContextHandler::clearProps()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("contexthandler.clearProps");
-#endif
-
     setPropertySet(OOXMLPropertySet::Pointer_t(new OOXMLPropertySetImpl()));
 }
 
@@ -1149,17 +871,6 @@ OOXMLDocumentImpl* OOXMLFastContextHandler::getDocument()
 
 void OOXMLFastContextHandler::setForwardEvents(bool bForwardEvents)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.setForwardEvents");
-
-    if (bForwardEvents)
-        debug_logger->chars(std::string("true"));
-    else
-        debug_logger->chars(std::string("false"));
-
-    debug_logger->endElement();
-#endif
-
     mpParserState->setForwardEvents(bForwardEvents);
 }
 
@@ -1246,10 +957,6 @@ void OOXMLFastContextHandler::resolvePropertySetAttrs()
 
 void OOXMLFastContextHandler::sendPropertyToParent()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->element("sendPropertyToParent");
-#endif
-
     if (mpParent != NULL)
     {
         OOXMLPropertySet::Pointer_t pProps(mpParent->getPropertySet());
@@ -1266,9 +973,6 @@ void OOXMLFastContextHandler::sendPropertyToParent()
 
 void OOXMLFastContextHandler::sendPropertiesToParent()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.sendPropertiesToParent");
-#endif
     if (mpParent != NULL)
     {
         OOXMLPropertySet::Pointer_t pParentProps(mpParent->getPropertySet());
@@ -1291,9 +995,6 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
             }
         }
     }
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-#endif
 }
 
 uno::Reference< uno::XComponentContext >
@@ -1331,13 +1032,6 @@ void OOXMLFastContextHandlerStream::newProperty(const Id & rId,
 
 void OOXMLFastContextHandlerStream::sendProperty(Id nId)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.sendProperty");
-    debug_logger->attribute("id", (*QNameToString::Instance())(nId));
-    debug_logger->chars(xmlify(getPropertySetAttrs()->toString()));
-    debug_logger->endElement();
-#endif
-
     OOXMLPropertySetEntryToString aHandler(nId);
     getPropertySetAttrs()->resolve(aHandler);
     const OUString & sText = aHandler.getString();
@@ -1354,11 +1048,6 @@ OOXMLFastContextHandlerStream::getPropertySetAttrs() const
 
 void OOXMLFastContextHandlerStream::resolvePropertySetAttrs()
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-        debug_logger->startElement("contexthandler.resolvePropertySetAttrs");
-        debug_logger->chars(mpPropertySetAttrs->toString());
-        debug_logger->endElement();
-#endif
     mpStream->props(mpPropertySetAttrs);
 }
 
@@ -1502,40 +1191,24 @@ void OOXMLFastContextHandlerProperties::handleHdrFtr()
 
 void OOXMLFastContextHandlerProperties::handleComment()
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("handleComment");
-#endif
-
     OOXMLCommentHandler aCommentHandler(this);
     getPropertySet()->resolve(aCommentHandler);
 }
 
 void OOXMLFastContextHandlerProperties::handlePicture()
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("handlePicture");
-#endif
-
     OOXMLPictureHandler aPictureHandler(this);
     getPropertySet()->resolve(aPictureHandler);
 }
 
 void OOXMLFastContextHandlerProperties::handleBreak()
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("handleBreak");
-#endif
-
     OOXMLBreakHandler aBreakHandler(*mpStream);
     getPropertySet()->resolve(aBreakHandler);
 }
 
 void OOXMLFastContextHandlerProperties::handleOLE()
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("handleOLE");
-#endif
-
     OOXMLOLEHandler aOLEHandler(this);
     getPropertySet()->resolve(aOLEHandler);
 }
@@ -1549,12 +1222,6 @@ void OOXMLFastContextHandlerProperties::handleFontRel()
 void OOXMLFastContextHandlerProperties::setParent
 (OOXMLFastContextHandler * pParent)
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("setParent");
-    debug_logger->chars(std::string("OOXMLFastContextHandlerProperties"));
-    debug_logger->endElement();
-#endif
-
     OOXMLFastContextHandler::setParent(pParent);
 
     if (mpParent->getResource() == STREAM)
@@ -1600,12 +1267,6 @@ void OOXMLFastContextHandlerPropertyTable::lcl_endFastElement
 
     writerfilter::Reference<Table>::Pointer_t pTable(mTable.clone());
 
-#ifdef DEBUG_PROPERTIES
-    debug_logger->startElement("table");
-    debug_logger->attribute("id", (*QNameToString::Instance())(mId));
-    debug_logger->endElement();
-#endif
-
     mpStream->table(mId, pTable);
 
     endAction(Element);
@@ -1627,16 +1288,7 @@ OOXMLFastContextHandlerValue::~OOXMLFastContextHandlerValue()
 
 void OOXMLFastContextHandlerValue::setValue(OOXMLValue::Pointer_t pValue)
 {
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->startElement("contexthandler.setValue");
-    debug_logger->attribute("value", pValue->toString());
-#endif
-
     mpValue = pValue;
-
-#ifdef DEBUG_CONTEXT_HANDLER
-    debug_logger->endElement();
-#endif
 }
 
 OOXMLValue::Pointer_t OOXMLFastContextHandlerValue::getValue() const
@@ -1655,10 +1307,6 @@ throw (uno::RuntimeException, xml::sax::SAXException)
 
 void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("setDefaultBooleanValue");
-#endif
-
     if (mpValue.get() == NULL)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLBooleanValue(true));
@@ -1668,10 +1316,6 @@ void OOXMLFastContextHandlerValue::setDefaultBooleanValue()
 
 void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("setDefaultIntegerValue");
-#endif
-
     if (mpValue.get() == NULL)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(0));
@@ -1681,10 +1325,6 @@ void OOXMLFastContextHandlerValue::setDefaultIntegerValue()
 
 void OOXMLFastContextHandlerValue::setDefaultHexValue()
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("setDefaultHexValue");
-#endif
-
     if (mpValue.get() == NULL)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLHexValue(0));
@@ -1694,10 +1334,6 @@ void OOXMLFastContextHandlerValue::setDefaultHexValue()
 
 void OOXMLFastContextHandlerValue::setDefaultStringValue()
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->element("setDefaultStringValue");
-#endif
-
     if (mpValue.get() == NULL)
     {
         OOXMLValue::Pointer_t pValue(new OOXMLStringValue(OUString()));
@@ -1740,13 +1376,6 @@ void OOXMLFastContextHandlerTable::lcl_endFastElement
     writerfilter::Reference<Table>::Pointer_t pTable(mTable.clone());
     if (isForwardEvents() && mId != 0x0)
     {
-#ifdef DEBUG_PROPERTIES
-        debug_logger->startElement("table");
-        string str = (*QNameToString::Instance())(mId);
-        debug_logger->attribute("id", str);
-        debug_logger->endElement();
-#endif
-
         mpStream->table(mId, pTable);
     }
 }
@@ -1818,23 +1447,11 @@ void OOXMLFastContextHandlerXNote::lcl_endFastElement
 
 void OOXMLFastContextHandlerXNote::checkId(OOXMLValue::Pointer_t pValue)
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("checkId");
-    debug_logger->attribute("myId", sal_Int32(pValue->getInt()));
-    debug_logger->attribute("id", getXNoteId());
-    debug_logger->endElement();
-#endif
-
     mnMyXNoteId = sal_Int32(pValue->getInt());
 }
 
 void OOXMLFastContextHandlerXNote::checkType(OOXMLValue::Pointer_t pValue)
 {
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("checkType");
-    debug_logger->attribute("myType", sal_Int32(pValue->getInt()));
-    debug_logger->endElement();
-#endif
     mnMyXNoteType = pValue->getInt();
 }
 
@@ -1883,12 +1500,6 @@ void OOXMLFastContextHandlerTextTableCell::endCell()
             pProps->add(pProp);
         }
 
-#ifdef DEBUG_PROPERTIES
-        debug_logger->startElement("endcell");
-        debug_logger->propertySet(OOXMLPropertySet::Pointer_t(pProps->clone()),
-                IdToString::Pointer_t(new OOXMLIdToString()));
-        debug_logger->endElement();
-#endif
         mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
     }
 }
@@ -1940,13 +1551,6 @@ void OOXMLFastContextHandlerTextTableRow::endRow()
             pProps->add(pProp);
         }
 
-#ifdef DEBUG_PROPERTIES
-        debug_logger->startElement("endrow");
-        debug_logger->propertySet(OOXMLPropertySet::Pointer_t(pProps->clone()),
-                IdToString::Pointer_t(new OOXMLIdToString()));
-        debug_logger->endElement();
-#endif
-
         mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
     }
 
@@ -1996,12 +1600,6 @@ void OOXMLFastContextHandlerTextTableRow::handleGridBefore( OOXMLValue::Pointer_
                 pProps->add(pProp);
             }
 
-    #ifdef DEBUG_PROPERTIES
-            debug_logger->startElement("handlegridbefore");
-            debug_logger->propertySet(OOXMLPropertySet::Pointer_t(pProps->clone()),
-                    IdToString::Pointer_t(new OOXMLIdToString()));
-            debug_logger->endElement();
-    #endif
             mpStream->props(writerfilter::Reference<Properties>::Pointer_t(pProps));
 
             // fake <w:tcBorders> with no border
@@ -2116,11 +1714,6 @@ OOXMLFastContextHandlerShape::OOXMLFastContextHandlerShape
     mrShapeContext->setDrawPage(getDocument()->getDrawPage());
     mrShapeContext->setInputStream(getDocument()->getStorageStream());
 
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("setRelationFragmentPath");
-    debug_logger->attribute("path", mpParserState->getTarget());
-    debug_logger->endElement();
-#endif
     mrShapeContext->setRelationFragmentPath
         (mpParserState->getTarget());
 }
@@ -2405,22 +1998,6 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     uno::Reference< xml::sax::XFastContextHandler > xResult;
 
     Id nNameSpace = Element & 0xffff0000;
-
-#ifdef DEBUG_ELEMENT
-    debug_logger->startElement("Wrapper-createChildContext");
-    debug_logger->attribute("token", fastTokenToId(Element));
-
-    const set<Id>::const_iterator aEnd(mMyNamespaces.end());
-    for (set<Id>::const_iterator aIt(mMyNamespaces.begin());
-         aIt != aEnd; ++aIt)
-    {
-        debug_logger->startElement("namespace");
-        debug_logger->attribute("id", fastTokenToId(*aIt));
-        debug_logger->endElement();
-    }
-
-    debug_logger->endElement();
-#endif
 
     bool bInNamespaces = mMyNamespaces.find(nNameSpace) != mMyNamespaces.end();
     bool bInTokens = mMyTokens.find( Element ) != mMyTokens.end( );

@@ -125,14 +125,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
 
     if (pFactory.get() != NULL)
     {
-#ifdef DEBUG_FACTORY
-        debug_logger->startElement("factory.attributes");
-        debug_logger->attribute("define", pFactory->getDefineName(nDefine));
-        char sBuffer[256];
-        snprintf(sBuffer, sizeof(sBuffer), "%08" SAL_PRIxUINT32, nDefine);
-        debug_logger->attribute("define-num", sBuffer);
-#endif
-
         TokenToIdMapPointer pTokenToIdMap = pFactory->getTokenToIdMap(nDefine);
         AttributeToResourceMapPointer pMap = pFactory->getAttributeToResourceMap(nDefine);
 
@@ -142,22 +134,12 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
         for (aIt = pMap->begin(); aIt != aEndIt; ++aIt)
         {
             Id nId = (*pTokenToIdMap)[aIt->first];
-#ifdef DEBUG_FACTORY
-            debug_logger->startElement("factory.attribute");
-            debug_logger->attribute("name", fastTokenToId(aIt->first));
-            debug_logger->attribute("tokenid", (*QNameToString::Instance())(nId));
-            snprintf(sBuffer, sizeof(sBuffer), "%08" SAL_PRIxUINT32, nId);
-            debug_logger->attribute("tokenid-num", sBuffer);
-#endif
             if (Attribs->hasAttribute(aIt->first))
             {
                 switch (aIt->second.m_nResource)
                 {
                 case RT_Boolean:
                     {
-#ifdef DEBUG_FACTORY
-                        debug_logger->element("boolean");
-#endif
                         OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLBooleanValue>::newProperty(pHandler, nId, aValue);
 
@@ -167,9 +149,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     break;
                 case RT_String:
                     {
-#ifdef DEBUG_FACTORY
-                        debug_logger->element("string");
-#endif
                         OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLStringValue>::newProperty
                             (pHandler, nId, aValue);
@@ -180,9 +159,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     break;
                 case RT_Integer:
                     {
-#ifdef DEBUG_FACTORY
-                        debug_logger->element("integer");
-#endif
                         OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLIntegerValue>::newProperty
                             (pHandler, nId, aValue);
@@ -193,9 +169,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     break;
                 case RT_Hex:
                     {
-#ifdef DEBUG_FACTORY
-                        debug_logger->element("hex");
-#endif
                         OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLHexValue>::newProperty
                             (pHandler, nId, aValue);
@@ -206,9 +179,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     break;
                 case RT_UniversalMeasure:
                     {
-#ifdef DEBUG_FACTORY
-                        debug_logger->element("universalMeasure");
-#endif
                         OUString aValue(Attribs->getValue(aIt->first));
                         OOXMLFastHelper<OOXMLUniversalMeasureValue>::newProperty(pHandler, nId, aValue);
 
@@ -218,9 +188,6 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                     break;
                 case RT_List:
                     {
-#ifdef DEBUG_FACTORY
-                        debug_logger->startElement("list");
-#endif
                         ListValueMapPointer pListValueMap =
                             pFactory->getListValueMap(aIt->second.m_nRef);
 
@@ -229,37 +196,19 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                             OUString aValue(Attribs->getValue(aIt->first));
                             sal_uInt32 nValue = (*pListValueMap)[aValue];
 
-#ifdef DEBUG_FACTORY
-                            debug_logger->attribute("value", aValue);
-                            debug_logger->attribute("value-num", nValue);
-#endif
-
                             OOXMLFastHelper<OOXMLIntegerValue>::newProperty
                                 (pHandler, nId, nValue);
 
                             OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(nValue));
                             pFactory->attributeAction(pHandler, aIt->first, pValue);
                         }
-#ifdef DEBUG_FACTORY
-                        debug_logger->endElement();
-#endif
                     }
                     break;
                 default:
-#ifdef DEBUG_FACTORY
-                    debug_logger->element("unknown-attribute-type");
-#endif
                     break;
                 }
             }
-#ifdef DEBUG_FACTORY
-            debug_logger->endElement();
-#endif
         }
-
-#ifdef DEBUG_FACTORY
-        debug_logger->endElement();
-#endif
     }
 }
 
@@ -267,11 +216,6 @@ uno::Reference< xml::sax::XFastContextHandler>
 OOXMLFactory::createFastChildContext(OOXMLFastContextHandler * pHandler,
                                      Token_t Element)
 {
-#ifdef DEBUG_FACTORY
-    debug_logger->startElement("factory.createFastChildContext");
-    debug_logger->attribute("token", fastTokenToId(Element));
-#endif
-
     Id nDefine = pHandler->getDefine();
 
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
@@ -282,21 +226,12 @@ OOXMLFactory::createFastChildContext(OOXMLFastContextHandler * pHandler,
     if ((Element & 0xffff) < OOXML_FAST_TOKENS_END)
         ret = createFastChildContextFromFactory(pHandler, pFactory, Element);
 
-#ifdef DEBUG_FACTORY
-    debug_logger->endElement();
-#endif
-
     return ret;
 }
 
 void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,
                               const OUString & rString)
 {
-#ifdef DEBUG_FACTORY
-    debug_logger->startElement("factory.characters");
-    debug_logger->chars(rString);
-#endif
-
     Id nDefine = pHandler->getDefine();
     OOXMLFactory_ns::Pointer_t pFactory = getFactoryForNamespace(nDefine);
 
@@ -304,10 +239,6 @@ void OOXMLFactory::characters(OOXMLFastContextHandler * pHandler,
     {
         pFactory->charactersAction(pHandler, rString);
     }
-
-#ifdef DEBUG_FACTORY
-    debug_logger->endElement();
-#endif
 }
 
 void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nToken*/)
@@ -317,13 +248,7 @@ void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nTo
 
     if (pFactory.get() != NULL)
     {
-#ifdef DEBUG_ELEMENT
-        debug_logger->startElement("factory.startAction");
-#endif
         pFactory->startAction(pHandler);
-#ifdef DEBUG_ELEMENT
-        debug_logger->endElement();
-#endif
     }
 }
 
@@ -334,13 +259,7 @@ void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToke
 
     if (pFactory.get() != NULL)
     {
-#ifdef DEBUG_ELEMENT
-        debug_logger->startElement("factory.endAction");
-#endif
         pFactory->endAction(pHandler);
-#ifdef DEBUG_ELEMENT
-        debug_logger->endElement();
-#endif
     }
 }
 
