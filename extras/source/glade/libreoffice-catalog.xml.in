@@ -248,6 +248,10 @@
       </properties>
     </glade-widget-class>
 
+    <glade-widget-class title="Scan Preview" name="scnlo-ScanPreview"
+                        generic-name="Scan Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+
     <glade-widget-class title="Token Window" name="swuilo-SwTokenWindow"
                         generic-name="Token Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
