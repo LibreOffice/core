@@ -1692,6 +1692,17 @@ DECLARE_OOXMLIMPORT_TEST(testFdo69649, "fdo69649.docx")
     xTocString = xTocString.copy(256);
     CPPUNIT_ASSERT(xTocString.startsWithIgnoreAsciiCase( "Heading 15.1:\t15" ) );
 }
+
+DECLARE_OOXMLIMPORT_TEST(testFootnote, "footnote.docx")
+{
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFootnote(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    OUString aFootnote = xFootnote->getString();
+    // Ensure there are no additional newlines after "bar".
+    CPPUNIT_ASSERT(aFootnote.endsWith("bar"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
