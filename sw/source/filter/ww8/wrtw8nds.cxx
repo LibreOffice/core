@@ -2320,6 +2320,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             AttrOutput().RunText( aSavedSnippet, eChrSet );
             AttrOutput().EndRun();
         }
+        else if( bPostponeWritingText && FLY_NOT_PROCESSED == nStateOfFlyFrame )
+        {
+            //write the postponed text run
+            bPostponeWritingText = false ;
+            AttrOutput().RunText( aSavedSnippet, eChrSet );
+            AttrOutput().EndRun();
+        }
         else
             AttrOutput().EndRun();
 
