@@ -28,7 +28,12 @@
 #include <vector>
 
 #define NODE_NOTFOUND 0xFFFF
+#ifdef __FreeBSD__
+#include <sys/param.h>
+#define DINDEX_PAGE_SIZE PAGE_SIZE
+#else
 #define DINDEX_PAGE_SIZE 512
+#endif
 
 namespace connectivity
 {
