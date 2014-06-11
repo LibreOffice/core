@@ -78,7 +78,6 @@ public:
     void AddSfxItemPoolUser(SfxItemPoolUser& rNewUser);
     void RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser);
 
-#ifndef _SFXITEMS_HXX
 private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
     sal_uInt16                      GetSize_Impl() const;
@@ -90,7 +89,6 @@ public:
     // for default SfxItemSet::CTOR, set default WhichRanges
     void                            FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const;
     const sal_uInt16*               GetFrozenIdRanges() const;
-#endif
 
 protected:
     static inline void              SetRefCount( SfxPoolItem& rItem, sal_uLong n );
