@@ -442,7 +442,7 @@ XMLFile& XMLFile::operator=(const XMLFile& rObj)
     return *this;
 }
 
-void XMLFile::SearchL10NElements( XMLParentNode *pCur, int nPos )
+void XMLFile::SearchL10NElements( XMLChildNode *pCur, int nPos )
 {
     bool bInsert = true;
     if ( !pCur )
@@ -460,7 +460,7 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur, int nPos )
                     {
                         pElement = (*GetChildList())[ i ];
                         if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT )
-                            SearchL10NElements( (XMLParentNode*) pElement , i);
+                            SearchL10NElements( pElement , i);
                     }
                 }
             }
@@ -503,7 +503,7 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur, int nPos )
                 else if ( bInsert && pElement->GetChildList() )
                 {
                     for ( size_t k = 0; k < pElement->GetChildList()->size(); k++ )
-                        SearchL10NElements( (XMLParentNode*)(*pElement->GetChildList())[ k ], k);
+                        SearchL10NElements( (*pElement->GetChildList())[ k ], k);
                 }
             }
             break;
