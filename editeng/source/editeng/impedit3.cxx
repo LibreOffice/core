@@ -2933,6 +2933,13 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                     aTmpPos.X() += pLine->GetStartPosX();
                     aTmpPos.Y() += pLine->GetMaxAscent();
                     aStartPos.Y() += pLine->GetHeight();
+                    if (nLine == 0)
+                    {
+                        // First line needs to be visible, so add more space if text height is bigger.
+                        const sal_Int32 nDiff = pLine->GetTxtHeight() - pLine->GetHeight();
+                        aTmpPos.Y() += nDiff;
+                        aStartPos.Y() += nDiff;
+                    }
                     if (nLine != nLastLine)
                         aStartPos.Y() += nVertLineSpacing;
                 }
