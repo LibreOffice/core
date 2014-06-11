@@ -2210,6 +2210,16 @@ DECLARE_OOXMLIMPORT_TEST(testFdo78939, "fdo78939.docx")
     CPPUNIT_ASSERT_EQUAL(OUString(), getProperty<OUString>(getParagraph(1), "NumberingStyleName"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testFootnote, "footnote.docx")
+{
+    uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xFootnote(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    OUString aFootnote = xFootnote->getString();
+    // Ensure there are no additional newlines after "bar".
+    CPPUNIT_ASSERT(aFootnote.endsWith("bar"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
