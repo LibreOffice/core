@@ -725,9 +725,6 @@ void Chart2ExportTest::testScatterPlotLabels()
 
     OUString aLabelRole = xCT->getRoleOfSequenceForSeriesLabel();
 
-    fprintf(stdout, "Chart2ExportTest::testScatterPlotLabels:   label role = '%s\n",
-            rtl::OUStringToOString(aLabelRole, RTL_TEXTENCODING_UTF8).getStr());
-
     Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSCont.is());
     Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
