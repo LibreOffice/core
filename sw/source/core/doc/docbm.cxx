@@ -1181,8 +1181,6 @@ namespace
     //  2nd long contains the ContentPosition
 
     //  CntntType --
-    //          0x8000 = Bookmark Pos1
-    //          0x8001 = Bookmark Pos2
     //          0x2000 = Paragraph anchored frame
     //          0x2001 = frame anchored at character, which should be moved
     //          0x1000 = Redline Mark
@@ -1512,42 +1510,6 @@ void _SaveCntntIdx(SwDoc* pDoc,
 {
     // 1. Bookmarks
     _SwSaveTypeCountContent aSave;
-    aSave.SetTypeAndCount( 0x8000, 0 );
-
-    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-    const sal_Int32 nMarksCount = pMarkAccess->getAllMarksCount();
-    for ( ; aSave.GetCount() < nMarksCount; aSave.IncCount() )
-    {
-        bool bMarkPosEqual = false;
-        const ::sw::mark::IMark* pBkmk = (pMarkAccess->getAllMarksBegin() + aSave.GetCount())->get();
-        if(pBkmk->GetMarkPos().nNode.GetIndex() == nNode
-            && pBkmk->GetMarkPos().nContent.GetIndex() <= nCntnt)
-        {
-            if(pBkmk->GetMarkPos().nContent.GetIndex() < nCntnt)
-            {
-                aSave.SetContent(pBkmk->GetMarkPos().nContent.GetIndex());
-                aSave.Add(rSaveArr);
-            }
-            else // if a bookmark position is equal nCntnt, the other position
-                bMarkPosEqual = true; // has to decide if it is added to the array
-        }
-
-        if(pBkmk->IsExpanded()
-            && pBkmk->GetOtherMarkPos().nNode.GetIndex() == nNode
-            && pBkmk->GetOtherMarkPos().nContent.GetIndex() <= nCntnt)
-        {
-            if(bMarkPosEqual)
-            { // the other position is before, the (main) position is equal
-                aSave.SetContent(pBkmk->GetMarkPos().nContent.GetIndex());
-                aSave.Add(rSaveArr);
-            }
-            aSave.SetContent(pBkmk->GetOtherMarkPos().nContent.GetIndex());
-            aSave.IncType();
-            aSave.Add(rSaveArr);
-            aSave.DecType();
-        }
-    }
-
     // 2. Redlines
     aSave.SetTypeAndCount( 0x1000, 0 );
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
@@ -1726,7 +1688,6 @@ void _RestoreCntntIdx(SwDoc* pDoc,
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
-    IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     sal_uInt16 n = 0;
     while( n < rSaveArr.size() )
     {
@@ -1734,24 +1695,6 @@ void _RestoreCntntIdx(SwDoc* pDoc,
         SwPosition* pPos = 0;
         switch( aSave.GetType() )
         {
-            case 0x8000:
-            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get()))
-            {
-                SwPosition aNewPos(pMark->GetMarkPos());
-                aNewPos.nNode = *pCNd;
-                aNewPos.nContent.Assign(pCNd, aSave.GetContent() + nOffset);
-                pMark->SetMarkPos(aNewPos);
-            }
-            break;
-            case 0x8001:
-            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get()))
-            {
-                SwPosition aNewPos(pMark->GetOtherMarkPos());
-                aNewPos.nNode = *pCNd;
-                aNewPos.nContent.Assign(pCNd, aSave.GetContent() + nOffset);
-                pMark->SetOtherMarkPos(aNewPos);
-            }
-            break;
             case 0x1001:
                 pPos = (SwPosition*)rRedlTbl[ aSave.GetCount() ]->GetPoint();
                 break;
@@ -1888,7 +1831,6 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
     const SwDoc* pDoc = rNd.GetDoc();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     const SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
-    const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
 
     sal_uInt16 n = 0;
@@ -1902,30 +1844,6 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
             SwPosition* pPos = 0;
             switch( aSave.GetType() )
             {
-            case 0x8000:
-            {
-                MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get());
-                if (pMark)
-                {
-                    SwPosition aNewPos(pMark->GetMarkPos());
-                    aNewPos.nNode = rNd;
-                    aNewPos.nContent.Assign(pCNd, std::min(aSave.GetContent(), nLen));
-                    pMark->SetMarkPos(aNewPos);
-                }
-            }
-            break;
-            case 0x8001:
-            {
-                MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aSave.GetCount()].get());
-                if (pMark)
-                {
-                    SwPosition aNewPos(pMark->GetOtherMarkPos());
-                    aNewPos.nNode = rNd;
-                    aNewPos.nContent.Assign(pCNd, std::min(aSave.GetContent(), nLen));
-                    pMark->SetOtherMarkPos(aNewPos);
-                }
-            }
-            break;
             case 0x1001:
                 pPos = (SwPosition*)rRedlTbl[ aSave.GetCount() ]->GetPoint();
                 break;
