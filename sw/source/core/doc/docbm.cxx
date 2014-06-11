@@ -2077,7 +2077,7 @@ void CntntIdxStoreImpl::RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 n
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
     BOOST_FOREACH(const BkmkEntry& aEntry, m_aBkmkEntries)
     {
-        if( aEntry.m_nCntnt >= nCorrLen )
+        if( aEntry.m_nCntnt < nCorrLen )
         {
             if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nBkmkIdx].get()))
             {
