@@ -62,17 +62,6 @@ GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* 
     get(m_pOKButton, "ok");
     get(m_pResetTypeBox, "resetTypeCombobox");
     get(m_pResetButton, "resetButton");
-    sal_uInt16 nPos = m_pResetTypeBox->InsertEntry( "Linear ascending" );
-    m_pResetTypeBox->SetEntryData( nPos, (void *)LINEAR_ASCENDING );
-
-    nPos = m_pResetTypeBox->InsertEntry( "Linear descending" );
-    m_pResetTypeBox->SetEntryData( nPos, (void *)LINEAR_DESCENDING );
-
-    nPos = m_pResetTypeBox->InsertEntry( "Original values" );
-    m_pResetTypeBox->SetEntryData( nPos, (void *)RESET );
-
-    nPos = m_pResetTypeBox->InsertEntry( "Exponential increasing" );
-    m_pResetTypeBox->SetEntryData( nPos, (void *)EXPONENTIAL );
 
     m_pResetTypeBox->SelectEntryPos( 0 );
 
@@ -450,8 +439,6 @@ void GridWindow::MouseMove( const MouseEvent& rEvt )
     ModalDialog::MouseMove( rEvt );
 }
 
-
-
 void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
 {
     if( rEvt.GetButtons() == MOUSE_LEFT )
@@ -467,8 +454,6 @@ void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
 
     ModalDialog::MouseButtonUp( rEvt );
 }
-
-
 
 void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
 {
@@ -520,13 +505,11 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
     ModalDialog::MouseButtonDown( rEvt );
 }
 
-
-
 IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
 {
     if( pButton == m_pResetButton )
     {
-        int nType = (int)(sal_IntPtr)m_pResetTypeBox->GetEntryData( m_pResetTypeBox->GetSelectEntryPos() );
+        int nType = m_pResetTypeBox->GetSelectEntryPos();
         switch( nType )
         {
             case LINEAR_ASCENDING:
