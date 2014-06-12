@@ -67,6 +67,7 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 #include "swabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 SFX_IMPL_INTERFACE(SwMediaShell, SwBaseShell, SW_RES(STR_SHELLNAME_MEDIA))
 
@@ -118,7 +119,7 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
 
                     if( pItem )
                     {
-                        SdrMarkList* pMarkList = new SdrMarkList( pSdrView->GetMarkedObjectList() );
+                        boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( pSdrView->GetMarkedObjectList() ));
 
                         if( 1 == pMarkList->GetMarkCount() )
                         {
@@ -130,8 +131,6 @@ void SwMediaShell::ExecMedia(SfxRequest &rReq)
                                     static_cast< const ::avmedia::MediaItem& >( *pItem ) );
                             }
                         }
-
-                        delete pMarkList;
                     }
                 }
             }
@@ -163,7 +162,7 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
             if( pView )
             {
                 bool bDisable = true;
-                SdrMarkList* pMarkList = new SdrMarkList( pView->GetMarkedObjectList() );
+                boost::scoped_ptr<SdrMarkList> pMarkList(new SdrMarkList( pView->GetMarkedObjectList() ));
 
                 if( 1 == pMarkList->GetMarkCount() )
                 {
@@ -181,8 +180,6 @@ void SwMediaShell::GetMediaState(SfxItemSet &rSet)
 
                 if( bDisable )
                     rSet.DisableItem( SID_AVMEDIA_TOOLBOX );
-
-                delete pMarkList;
             }
         }
 

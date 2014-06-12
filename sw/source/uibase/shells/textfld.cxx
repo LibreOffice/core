@@ -69,6 +69,7 @@
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
 #include <switerator.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace nsSwDocInfoSubType;
 
@@ -123,11 +124,10 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         if(rLink.IsVisible())
                         {
                             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                            SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( pMDI, &rSh.GetLinkManager(), false, &rLink );
+                            boost::scoped_ptr<SfxAbstractLinksDialog> pDlg(pFact->CreateLinksDialog( pMDI, &rSh.GetLinkManager(), false, &rLink ));
                             if ( pDlg )
                             {
                                 pDlg->Execute();
-                                delete pDlg;
                             }
                         }
                         break;
@@ -137,10 +137,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                        SfxAbstractDialog* pDlg = pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG );
+                        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSwFldEditDlg( GetView(),RC_DLG_SWFLDEDITDLG ));
                         OSL_ENSURE(pDlg, "Dialogdiet fail!");
                         pDlg->Execute();
-                        delete pDlg;
                     }
                 }
             }
@@ -474,7 +473,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact2, "Dialogdiet fail!");
-                    AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel );
+                    boost::scoped_ptr<AbstractSvxPostItDialog> pDlg(pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel ));
                     OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     pDlg->HideAuthor();
 
@@ -502,7 +501,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         rSh.SetRedlineComment(sMsg);
                     }
 
-                    delete pDlg;
+                    pDlg.reset();
                     rSh.SetCareWin(NULL);
                     bNoInterrupt = false;
                     rSh.ClearMark();
@@ -536,7 +535,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "Dialogdiet fail!");
-                    AbstractJavaEditDialog* pDlg = pFact->CreateJavaEditDialog(pMDI, &rSh);
+                    boost::scoped_ptr<AbstractJavaEditDialog> pDlg(pFact->CreateJavaEditDialog(pMDI, &rSh));
                     OSL_ENSURE(pDlg, "Dialogdiet fail!");
                     if ( pDlg->Execute() )
                     {
@@ -549,8 +548,6 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         rReq.AppendItem( SfxStringItem( FN_PARAM_2, aType ) );
                         rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bIsUrl ) );
                     }
-
-                    delete pDlg;
                 }
 
                 if( bNew )
