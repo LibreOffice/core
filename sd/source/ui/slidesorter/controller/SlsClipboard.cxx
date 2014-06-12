@@ -467,7 +467,7 @@ void Clipboard::CreateSlideTransferable (
             SD_MOD()->pTransferClip = pTransferable;
 
         pDocument->CreatingDataObj (pTransferable);
-        pTransferable->SetWorkDocument( dynamic_cast<SdDrawDocument*>(pDocument->AllocModel()) );
+        pTransferable->SetWorkDocument(pDocument->AllocSdDrawDocument());
         pDocument->CreatingDataObj (NULL);
         TransferableObjectDescriptor aObjDesc;
         pTransferable->GetWorkDocument()->GetDocSh()
@@ -573,8 +573,7 @@ void Clipboard::CreateSlideTransferable (
             new TransferableData(
                 pSlideSorterViewShell,
                 aRepresentatives));
-        pTransferable->SetWorkDocument( dynamic_cast<SdDrawDocument*>(
-                pTreeListBoxTransferable->GetSourceDoc()->AllocModel()));
+        pTransferable->SetWorkDocument(pTreeListBoxTransferable->GetSourceDoc()->AllocSdDrawDocument());
         //        pTransferable->SetView(&mrSlideSorter.GetView());
 
         // Set page bookmark list.
