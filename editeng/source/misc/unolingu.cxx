@@ -45,6 +45,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/shl.hxx>
 #include <linguistic/misc.hxx>
 #include <editeng/eerdll.hxx>
@@ -490,6 +491,8 @@ public:
 
 void LinguMgrExitLstnr::AtExit()
 {
+    SolarMutexGuard g;
+
     // release references
     LinguMgr::xLngSvcMgr    = 0;
     LinguMgr::xSpell        = 0;
