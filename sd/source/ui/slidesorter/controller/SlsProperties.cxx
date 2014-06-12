@@ -137,10 +137,6 @@ void Properties::SetSuspendPreviewUpdatesDuringFullScreenPresentation (const boo
 
 
 
-Color Properties::GetBackgroundColor (void) const
-{
-    return maBackgroundColor;
-}
 
 
 
@@ -152,10 +148,6 @@ void Properties::SetBackgroundColor (const Color& rColor)
 
 
 
-Color Properties::GetTextColor (void) const
-{
-    return maTextColor;
-}
 
 
 
@@ -168,10 +160,6 @@ void Properties::SetTextColor (const Color& rColor)
 
 
 
-Color Properties::GetSelectionColor (void) const
-{
-    return maSelectionColor;
-}
 
 
 
@@ -184,10 +172,6 @@ void Properties::SetSelectionColor (const Color& rColor)
 
 
 
-Color Properties::GetHighlightColor (void) const
-{
-    return maHighlightColor;
-}
 
 
 

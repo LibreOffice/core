@@ -86,7 +86,7 @@ public:
                                   ExplicitValueProvider * pExplicitValueProvider = 0 );
 
     bool handleKeyEvent( const ::com::sun::star::awt::KeyEvent & rEvent );
-    ObjectHierarchy::tOID getCurrentSelection() const;
+    ObjectHierarchy::tOID getCurrentSelection() const { return m_aCurrentOID;}
 
 private:
     void setCurrentSelection( const ObjectHierarchy::tOID& rOID );

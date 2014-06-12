@@ -302,7 +302,7 @@ public:
     sc::FormulaResultValue GetResult();
     sal_uInt8       GetMatrixFlag() const { return cMatrixFlag;}
     ScTokenArray* GetCode() { return pCode;}
-    const ScTokenArray* GetCode() const;
+    const ScTokenArray* GetCode() const { return pCode;}
 
     void SetCode( ScTokenArray* pNew );
 
@@ -375,7 +375,7 @@ public:
      * Turn a non-grouped cell into the top of a grouped cell.
      */
     ScFormulaCellGroupRef CreateCellGroup( SCROW nLen, bool bInvariant );
-    ScFormulaCellGroupRef GetCellGroup() const;
+    ScFormulaCellGroupRef GetCellGroup() const { return mxGroup;}
     void SetCellGroup( const ScFormulaCellGroupRef &xRef );
 
     CompareState CompareByTokenArray( ScFormulaCell& rOther ) const;

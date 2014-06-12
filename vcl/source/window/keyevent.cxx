@@ -63,10 +63,4 @@ KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
     return aClone;
 }
 
-const Point&   HelpEvent::GetMousePosPixel() const
-{
-    //DBG_ASSERT( !mbKeyboardActivated, "Keyboard help has no mouse position !");
-    return maPos;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

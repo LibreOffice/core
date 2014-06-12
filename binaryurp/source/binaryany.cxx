@@ -63,10 +63,6 @@ BinaryAny & BinaryAny::operator =(BinaryAny const & other) throw () {
     return *this;
 }
 
-uno_Any * BinaryAny::get() throw () {
-    return &data_;
-}
-
 css::uno::TypeDescription BinaryAny::getType() const throw () {
     return css::uno::TypeDescription(data_.pType);
 }

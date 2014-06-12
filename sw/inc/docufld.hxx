@@ -474,12 +474,12 @@ public:
     /// Text
     virtual OUString   GetPar2() const SAL_OVERRIDE;
     virtual void            SetPar2(const OUString& rStr) SAL_OVERRIDE;
-    OUString                GetTxt() const { return sTxt; }
-    OUString                GetInitials() const;
+    const OUString&         GetTxt() const { return sTxt; }
+    const OUString&         GetInitials() const { return sInitials;}
     void                    SetName(const OUString& rStr);
-    OUString                GetName() const;
+    const OUString&         GetName() const { return sName;}
 
-    const OutlinerParaObject* GetTextObject() const;
+    const OutlinerParaObject* GetTextObject() const { return mpText;}
     void SetTextObject( OutlinerParaObject* pText );
 
     sal_Int32 GetNumberOfParagraphs() const;

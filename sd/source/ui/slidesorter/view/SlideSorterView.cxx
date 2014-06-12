@@ -986,10 +986,6 @@ bool SlideSorterView::SetState (
 
 
 
-::boost::shared_ptr<LayeredDevice> SlideSorterView::GetLayeredDevice (void) const
-{
-    return mpLayeredDevice;
-}
 
 
 

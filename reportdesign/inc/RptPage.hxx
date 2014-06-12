@@ -83,7 +83,7 @@ public:
     */
     void insertObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > getSection() const { return m_xSection;}
 };
 }
 #endif // INCLUDED_REPORTDESIGN_INC_RPTPAGE_HXX

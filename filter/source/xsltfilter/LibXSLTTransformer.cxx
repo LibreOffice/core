@@ -536,17 +536,7 @@ namespace XSLT
             }
     }
 
-    const OString
-    LibXSLTTransformer::getStyleSheetURL()
-    {
-        return m_styleSheetURL;
-    }
 
-    ::std::map<const char*, OString>
-    LibXSLTTransformer::getParameters()
-    {
-        return m_parameters;
-    }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
 

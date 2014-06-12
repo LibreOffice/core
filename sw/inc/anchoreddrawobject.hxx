@@ -141,7 +141,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         // accessors to the object area and its position
         virtual const SwRect GetObjRect() const SAL_OVERRIDE;
         // Return value can be NULL.
-        const Rectangle* GetLastObjRect() const;
+        const Rectangle* GetLastObjRect() const { return mpLastObjRect;}
 
         void SetLastObjRect( const Rectangle& _rNewObjRect );
 

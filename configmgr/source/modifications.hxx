@@ -46,7 +46,7 @@ public:
 
     void remove(Path const & path);
 
-    Node const & getRoot() const;
+    Node const & getRoot() const { return root_;}
 
 private:
     Node root_;

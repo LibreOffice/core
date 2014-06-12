@@ -396,9 +396,9 @@ public:
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
-    SC_DLLPUBLIC SheetCaches& GetSheetCaches();
-    NameCaches& GetNameCaches();
-    DBCaches& GetDBCaches();
+    SheetCaches& GetSheetCaches() { return maSheetCaches;}
+    NameCaches& GetNameCaches() { return maNameCaches;}
+    DBCaches& GetDBCaches() { return maDBCaches;}
 
     ScRangeList GetAllTableRanges( SCTAB nTab ) const;
     bool IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const;

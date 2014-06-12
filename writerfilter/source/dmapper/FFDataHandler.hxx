@@ -36,13 +36,13 @@ public:
     virtual ~FFDataHandler();
 
     // member: name
-    const OUString & getName() const;
+    const OUString & getName() const { return m_sName;}
 
     // member: helpText
-    const OUString & getHelpText() const;
+    const OUString & getHelpText() const { return m_sHelpText;}
 
     // member: statusText
-    const OUString & getStatusText() const;
+    const OUString & getStatusText() const { return m_sStatusText;}
 
     // member: checkboxHeight
     sal_uInt32 getCheckboxHeight() const { return m_nCheckboxHeight;}
@@ -54,13 +54,13 @@ public:
     bool getCheckboxChecked() const;
 
     // member: dropDownResult
-    const OUString & getDropDownResult() const;
+    const OUString & getDropDownResult() const { return m_sDropDownResult;}
 
     // member: dropDownEntries
-    const DropDownEntries_t & getDropDownEntries() const;
+    const DropDownEntries_t & getDropDownEntries() const { return m_DropDownEntries;}
 
     // member: textDefault
-    const OUString & getTextDefault() const;
+    const OUString & getTextDefault() const { return m_sTextDefault;}
 
     // sprm
     void resolveSprm(Sprm & r_sprm);

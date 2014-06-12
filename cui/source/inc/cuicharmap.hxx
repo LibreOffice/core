@@ -102,7 +102,7 @@ public:
 
     void            DisableFontSelection();
 
-    const Font&     GetCharFont() const;
+    const Font&     GetCharFont() const { return aFont;}
     void            SetCharFont( const Font& rFont );
 
     void            SetChar( sal_UCS4 );

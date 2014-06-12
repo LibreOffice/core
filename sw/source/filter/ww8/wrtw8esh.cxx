@@ -3113,10 +3113,6 @@ SwMSConvertControls::SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) : oox
 {
 }
 
-sal_uInt32 SwMSConvertControls::GenerateObjectID()
-{
-    return ++mnObjectId;
-}
 
 // in transitioning away old filter for ole/ocx controls, ReadOCXStream has been made pure virtual in
 // filter/source/msocximex.cxx, so.. we need an implementation here

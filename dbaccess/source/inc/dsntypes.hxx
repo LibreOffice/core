@@ -172,9 +172,9 @@ public:
             getDefaultDBSettings( const OUString& _sURL ) const;
 
     /// get access to the first element of the types collection
-    TypeIterator    begin() const;
+    inline TypeIterator    begin() const;
     /// get access to the (last + 1st) element of the types collection
-    TypeIterator    end() const;
+    inline TypeIterator    end() const;
 
     void fillPageIds(const OUString& _sURL,::std::vector<sal_Int16>& _rOutPathIds) const;
 
@@ -219,6 +219,10 @@ public:
 protected:
     TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos = 0);
 };
+
+
+inline ODsnTypeCollection::TypeIterator ODsnTypeCollection::begin() const { return ODsnTypeCollection::TypeIterator(this, 0);}
+inline ODsnTypeCollection::TypeIterator ODsnTypeCollection::end() const { return ODsnTypeCollection::TypeIterator(this, m_aDsnTypesDisplayNames.size());}
 
 }   // namespace dbaccess
 

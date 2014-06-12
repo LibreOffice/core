@@ -55,7 +55,7 @@ public:
     SdCustomShow( const SdCustomShow& rShow );
 
     /** Provides a direct access to the collection of the SdPage objects. */
-    PageVec& PagesVector();
+    PageVec& PagesVector() { return maPages;}
     /**
      * Replaces all occurrences of pOldPage with pNewPage.
      * If pNewPage is 0 then removes all occurrences of pOldPage.
@@ -65,7 +65,7 @@ public:
     void RemovePage( const SdPage* pPage );
 
     void   SetName(const OUString& rName);
-    OUString GetName() const;
+    const OUString& GetName() const { return aName;}
 
     SdDrawDocument* GetDoc() const { return pDoc; }
 

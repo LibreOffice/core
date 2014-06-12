@@ -802,25 +802,9 @@ ScDBCollection::ScDBCollection(ScDocument* pDocument) :
 ScDBCollection::ScDBCollection(const ScDBCollection& r) :
     pDoc(r.pDoc), nEntryIndex(r.nEntryIndex), maNamedDBs(r.maNamedDBs), maAnonDBs(r.maAnonDBs) {}
 
-ScDBCollection::NamedDBs& ScDBCollection::getNamedDBs()
-{
-    return maNamedDBs;
-}
 
-const ScDBCollection::NamedDBs& ScDBCollection::getNamedDBs() const
-{
-    return maNamedDBs;
-}
 
-ScDBCollection::AnonDBs& ScDBCollection::getAnonDBs()
-{
-    return maAnonDBs;
-}
 
-const ScDBCollection::AnonDBs& ScDBCollection::getAnonDBs() const
-{
-    return maAnonDBs;
-}
 
 const ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const
 {

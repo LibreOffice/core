@@ -116,7 +116,7 @@ namespace formula
 
         RefEdit*        GetCurrRefEdit();
 
-        const FormulaHelper& GetFormulaHelper() const;
+        const FormulaHelper& GetFormulaHelper() const { return m_aFormulaHelper;}
         uno::Reference< sheet::XFormulaOpCodeMapper > GetFormulaOpCodeMapper() const;
 
         DECL_LINK( ModifyHdl, ParaWin* );
@@ -1621,10 +1621,6 @@ void FormulaDlg_Impl::SetEdSelection()
     } // if( pEd )
 }
 
-const FormulaHelper& FormulaDlg_Impl::GetFormulaHelper()  const
-{
-    return m_aFormulaHelper;
-}
 
 FormulaModalDialog::FormulaModalDialog( Window* pParent
                                             , bool _bSupportFunctionResult

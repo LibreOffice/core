@@ -494,10 +494,6 @@ ScDPGroupTableData::~ScDPGroupTableData()
     delete[] pNumGroups;
 }
 
-boost::shared_ptr<ScDPTableData> ScDPGroupTableData::GetSourceTableData()
-{
-    return pSourceData;
-}
 
 void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
 {

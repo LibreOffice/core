@@ -44,19 +44,19 @@ namespace slideshow
 
                 @return hue, is in the range [0,360]
              */
-            double getHue() const;
+            double getHue() const {  return maHSLTriple.mnHue; }
 
             /** Saturation of the color.
 
                 @return saturation, is in the range [0,1]
              */
-            double getSaturation() const;
+            double getSaturation() const {  return maHSLTriple.mnSaturation; }
 
             /** Luminance of the color.
 
                 @return luminance, is in the range [0,1]
              */
-            double getLuminance() const;
+            double getLuminance() const {  return maHSLTriple.mnLuminance; }
 
             struct HSLTriple
             {

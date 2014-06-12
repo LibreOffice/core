@@ -49,7 +49,7 @@ namespace rptxml
         bool                    bConditionalFormatCreated : 1;
         bool                    bParentSet : 1;
 
-        ORptFilter& GetOwnImport() const;
+        ORptFilter& GetOwnImport() const { return m_rImport;}
 
         OControlStyleContext(const OControlStyleContext&);
         void operator =(const OControlStyleContext&);
@@ -106,7 +106,7 @@ namespace rptxml
         mutable ::com::sun::star::uno::Reference <
                         ::com::sun::star::container::XNameContainer > m_xTableStyles;
 
-        ORptFilter& GetOwnImport() const;
+        ORptFilter& GetOwnImport() const { return m_rImport;}
 
         OReportStylesContext(const OReportStylesContext&);
         void operator =(const OReportStylesContext&);

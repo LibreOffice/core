@@ -135,16 +135,6 @@ void SAL_CALL OConnectionPointContainerHelper::unadvise(    const   Type&       
     m_aMultiTypeContainer.removeInterface( aType, xListener );
 }
 
-//  public but impl method!
-//  Is necessary to get container member at OConnectionPoint-instance.
-
-OMultiTypeInterfaceContainerHelper& OConnectionPointContainerHelper::impl_getMultiTypeContainer()
-{
-    // Impl methods are not threadsafe!
-    // "Parent" function must do this.
-    return m_aMultiTypeContainer;
-}
-
 }   // namespace unocontrols
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

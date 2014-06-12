@@ -32,7 +32,7 @@ class StartListeningContext : boost::noncopyable
 public:
     StartListeningContext(ScDocument& rDoc);
     StartListeningContext(ScDocument& rDoc, const boost::shared_ptr<ColumnBlockPositionSet>& pSet);
-    ScDocument& getDoc();
+    ScDocument& getDoc() { return mrDoc;}
 
     ColumnBlockPosition* getBlockPosition(SCTAB nTab, SCCOL nCol);
 };
@@ -51,7 +51,7 @@ public:
 
     void setPositionDelta( const ScAddress& rDelta );
 
-    ScDocument& getDoc();
+    ScDocument& getDoc() { return mrDoc;}
     ScTokenArray* getOldCode() { return mpOldCode;}
     ScAddress getOldPosition( const ScAddress& rPos ) const;
 

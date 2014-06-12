@@ -1002,15 +1002,7 @@ EditLine::~EditLine()
 {
 }
 
-EditLine::CharPosArrayType& EditLine::GetCharPosArray()
-{
-    return aPositions;
-}
 
-const EditLine::CharPosArrayType& EditLine::GetCharPosArray() const
-{
-    return aPositions;
-}
 
 EditLine* EditLine::Clone() const
 {
@@ -1180,10 +1172,6 @@ EditPaM::EditPaM() : pNode(NULL), nIndex(0) {}
 EditPaM::EditPaM(const EditPaM& r) : pNode(r.pNode), nIndex(r.nIndex) {}
 EditPaM::EditPaM(ContentNode* p, sal_Int32 n) : pNode(p), nIndex(n) {}
 
-const ContentNode* EditPaM::GetNode() const
-{
-    return pNode;
-}
 
 
 void EditPaM::SetNode(ContentNode* p)
@@ -1657,10 +1645,6 @@ sal_Int32 ContentNode::Len() const
     return maString.getLength();
 }
 
-const OUString& ContentNode::GetString() const
-{
-    return maString;
-}
 
 void ContentNode::SetChar(sal_Int32 nPos, sal_Unicode c)
 {
@@ -2778,15 +2762,7 @@ bool CharAttribList::HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const
     return false;
 }
 
-CharAttribList::AttribsType& CharAttribList::GetAttribs()
-{
-    return aAttribs;
-}
 
-const CharAttribList::AttribsType& CharAttribList::GetAttribs() const
-{
-    return aAttribs;
-}
 
 namespace {
 

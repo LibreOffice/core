@@ -202,7 +202,7 @@ namespace rptui
         inline bool     empty() const { return m_aSections.empty(); }
         void            SetMode( DlgEdMode m_eMode );
         void            SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType = OUString());
-        OUString   GetInsertObjString() const;
+        OUString   GetInsertObjString() const { return m_sShapeType;}
         /** copies the current selection in this section
         */
         void Copy();

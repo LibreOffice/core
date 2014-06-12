@@ -52,7 +52,7 @@ public:
 
     virtual ::rtl::OString  prepareHelp() = 0;
 
-    const ::rtl::OString&   getProgramName() const;
+    const ::rtl::OString&   getProgramName() const { return m_program;}
     bool                isValid(const ::rtl::OString& option) const;
     const ::rtl::OString    getOption(const ::rtl::OString& option) const
         throw( IllegalArgument );

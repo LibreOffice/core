@@ -61,7 +61,7 @@ public:
     ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
     ~ScColorScaleEntry();
 
-    const Color& GetColor() const;
+    const Color& GetColor() const { return maColor;}
     void SetColor(const Color&);
     double GetValue() const;
     void SetValue(double nValue);

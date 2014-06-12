@@ -654,15 +654,7 @@ WW8FieldEntry &WW8FieldEntry::operator=(const WW8FieldEntry &rOther) throw()
     return *this;
 }
 
-OUString WW8FieldEntry::GetBookmarkName()
-{
-    return msBookmarkName;
-}
 
-OUString WW8FieldEntry::GetBookmarkCode()
-{
-    return msMarkCode;
-}
 
 void WW8FieldEntry::SetBookmarkName(const OUString& bookmarkName)
 {
@@ -679,10 +671,6 @@ void WW8FieldEntry::SetBookmarkCode(const OUString& bookmarkCode)
     msMarkCode = bookmarkCode;
 }
 
-::sw::mark::IFieldmark::parameter_map_t& WW8FieldEntry::getParameters()
-{
-    return maParams;
-}
 
 // Read_Field liest ein Feld ein oder, wenn es nicht gelesen werden kann,
 // wird 0 zurueckgegeben, so dass das Feld vom Aufrufer textuell gelesen wird.

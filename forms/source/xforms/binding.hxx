@@ -178,13 +178,13 @@ public:
     // property methods: get/set value
 
 
-    Model_t getModel() const;   /// get XForms model
+    Model_t getModel() const { return mxModel;}   /// get XForms model
     void _setModel( const Model_t& ); /// set XForms model (only called by Model)
 
 
     OUString getModelID() const;   /// get ID of XForms model
 
-    OUString getBindingID() const;         /// get ID for this binding
+    OUString getBindingID() const { return msBindingID;}         /// get ID for this binding
     void setBindingID( const OUString& );  /// set ID for this binding
 
     OUString getBindingExpression() const; /// get binding expression
@@ -207,7 +207,7 @@ public:
     OUString getCalculateExpression() const;        /// get calculate MIP
     void setCalculateExpression( const OUString& ); /// set calculate MIP
 
-    OUString getType() const;         /// get type name MIP (static)
+    OUString getType() const { return msTypeName;}         /// get type name MIP (static)
     void setType( const OUString& );  /// set type name MIP (static)
 
     // a binding expression can only be interpreted with respect to
@@ -215,7 +215,7 @@ public:
 
     // access to a binding's namespace
     // (set-method only changes local namespaces (but may add to model))
-    XNameContainer_t getBindingNamespaces() const;  /// set binding namespaces
+    XNameContainer_t getBindingNamespaces() const { return mxNamespaces; }
     void setBindingNamespaces( const XNameContainer_t& ); /// get binding nmsp.
 
     // access to the model's namespaces

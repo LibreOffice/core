@@ -4503,10 +4503,6 @@ const ScPatternAttr* ScDocument::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow
     return NULL;
 }
 
-const ScValidationDataList* ScDocument::GetValidationList() const
-{
-    return pValidationList;
-}
 
 
 void ScDocument::ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, const SfxPoolItem& rAttr )

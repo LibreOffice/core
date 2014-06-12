@@ -2640,15 +2640,7 @@ bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& r
     return aCol[nCol].GetDataEntries( nRow, rStrings, bLimit );
 }
 
-ScDocument& ScTable::GetDoc()
-{
-    return *pDocument;
-}
 
-const ScDocument& ScTable::GetDoc() const
-{
-    return *pDocument;
-}
 
 sal_uLong ScTable::GetCellCount() const
 {

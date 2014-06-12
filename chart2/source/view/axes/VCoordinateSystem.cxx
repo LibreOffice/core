@@ -147,10 +147,6 @@ void VCoordinateSystem::setTransformationSceneToScreen(
     }
 }
 
-drawing::HomogenMatrix VCoordinateSystem::getTransformationSceneToScreen()
-{
-    return m_aMatrixSceneToScreen;
-}
 
 //better performance for big data
 uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
@@ -205,10 +201,6 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
     return aResolution;
 }
 
-Reference< XCoordinateSystem > VCoordinateSystem::getModel() const
-{
-    return m_xCooSysModel;
-}
 
 Reference< XAxis > VCoordinateSystem::getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const
 {

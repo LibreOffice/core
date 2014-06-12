@@ -1542,15 +1542,7 @@ bool ObjectIdentifier::isAdditionalShape() const
     return m_xAdditionalShape.is();
 }
 
-OUString ObjectIdentifier::getObjectCID() const
-{
-    return m_aObjectCID;
-}
 
-Reference< drawing::XShape > ObjectIdentifier::getAdditionalShape() const
-{
-    return m_xAdditionalShape;
-}
 
 Any ObjectIdentifier::getAny() const
 {

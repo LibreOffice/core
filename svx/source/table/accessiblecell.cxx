@@ -581,10 +581,6 @@ sal_Int32 SAL_CALL AccessibleCell::getAccessibleIndexInParent (void) throw (Runt
     return mnIndexInParent;
 }
 
-sdr::table::CellRef AccessibleCell::getCellRef()
-{
-    return mxCell;
-}
 
 OUString AccessibleCell::getCellName( sal_Int32 nCol, sal_Int32 nRow )
 {

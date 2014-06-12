@@ -297,10 +297,6 @@ void RequestQueue::Clear (void)
 
 
 
-::osl::Mutex& RequestQueue::GetMutex (void)
-{
-    return maMutex;
-}
 
 
 } } } // end of namespace ::sd::slidesorter::cache

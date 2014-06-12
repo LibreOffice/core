@@ -55,7 +55,7 @@ namespace oglcanvas
         virtual ::com::sun::star::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-        const ::com::sun::star::geometry::Matrix2D& getFontMatrix() const;
+        const ::com::sun::star::geometry::Matrix2D& getFontMatrix() const { return maFontMatrix; }
 
     private:
         ::com::sun::star::rendering::FontRequest    maFontRequest;

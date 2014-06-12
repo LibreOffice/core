@@ -222,8 +222,8 @@ public:
     bool HasBoundingAttrib( sal_Int32 nBound ) const;
     bool HasAttrib( sal_Int32 nStartPos, sal_Int32 nEndPos ) const;
 
-    AttribsType& GetAttribs();
-    const AttribsType& GetAttribs() const;
+    AttribsType& GetAttribs() { return aAttribs;}
+    const AttribsType& GetAttribs() const { return aAttribs;}
 
     void Remove(const EditCharAttrib* p);
     void Remove(sal_Int32 nPos);
@@ -279,7 +279,7 @@ public:
     bool IsFeature( sal_Int32 nPos ) const;
 
     sal_Int32 Len() const;
-    const OUString& GetString() const;
+    const OUString& GetString() const { return maString;}
 
     void SetChar(sal_Int32 nPos, sal_Unicode c);
     void Insert(const OUString& rStr, sal_Int32 nPos);
@@ -305,7 +305,7 @@ public:
     EditPaM(const EditPaM& r);
     EditPaM(ContentNode* p, sal_Int32 n);
 
-    const ContentNode* GetNode() const;
+    const ContentNode* GetNode() const { return pNode;}
     ContentNode* GetNode() { return pNode;}
     void SetNode(ContentNode* p);
 
@@ -536,8 +536,8 @@ public:
 
     bool            IsEmpty() const                 { return (nEnd > nStart) ? sal_False : sal_True; }
 
-    CharPosArrayType& GetCharPosArray();
-    const CharPosArrayType& GetCharPosArray() const;
+    CharPosArrayType& GetCharPosArray() { return aPositions;}
+    const CharPosArrayType& GetCharPosArray() const { return aPositions;}
 
     EditLine*       Clone() const;
 

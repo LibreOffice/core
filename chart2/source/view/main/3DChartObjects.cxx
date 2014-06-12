@@ -111,10 +111,6 @@ void Text::render()
                                   mnUniqueId);
 }
 
-Size Text::getSize() const
-{
-    return maText.maSize;
-}
 
 void Text::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight)
 {

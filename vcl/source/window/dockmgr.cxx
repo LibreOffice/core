@@ -1391,10 +1391,6 @@ void    ImplDockingWindowWrapper::SetDragArea( const Rectangle& rRect )
     maDragArea = rRect;
 }
 
-Rectangle  ImplDockingWindowWrapper::GetDragArea() const
-{
-    return maDragArea;
-}
 
 void ImplDockingWindowWrapper::Lock()
 {

@@ -92,7 +92,7 @@ namespace cairocanvas
         void dumpScreenContent() const;
 
         OutputDevice* getOutputDevice() const { return mpRefDevice; }
-        ::cairo::SurfaceSharedPtr getSurface();
+        ::cairo::SurfaceSharedPtr getSurface() { return mpSurface; }
         ::cairo::SurfaceSharedPtr createSurface( const ::basegfx::B2ISize& rSize, ::cairo::Content aContent = CAIRO_CONTENT_COLOR_ALPHA );
         ::cairo::SurfaceSharedPtr createSurface( BitmapSystemData& rData, const Size& rSize );
 

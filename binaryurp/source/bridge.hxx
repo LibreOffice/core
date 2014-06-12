@@ -91,12 +91,12 @@ public:
     void terminate(bool final);
 
     com::sun::star::uno::Reference< com::sun::star::connection::XConnection >
-    getConnection() const;
+    getConnection() const { return connection_;}
 
     com::sun::star::uno::Reference< com::sun::star::bridge::XInstanceProvider >
-    getProvider() const;
+    getProvider() const { return provider_;}
 
-    com::sun::star::uno::Mapping & getCppToBinaryMapping();
+    com::sun::star::uno::Mapping & getCppToBinaryMapping() { return cppToBinaryMapping_;}
 
     BinaryAny mapCppToBinaryAny(com::sun::star::uno::Any const & cppAny);
 

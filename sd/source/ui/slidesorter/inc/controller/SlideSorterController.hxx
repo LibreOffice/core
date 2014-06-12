@@ -218,7 +218,7 @@ public:
 
     /** Return an Animator object.
     */
-    ::boost::shared_ptr<Animator> GetAnimator (void) const;
+    ::boost::shared_ptr<Animator> GetAnimator (void) const { return mpAnimator;}
 
     VisibleAreaManager& GetVisibleAreaManager (void) const;
 

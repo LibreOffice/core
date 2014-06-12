@@ -85,7 +85,7 @@ public:
     bool Import( sal_uInt8 nMode, ErrCode& rError );
     bool Export(bool bStylesOnly);
 
-    const sc::ImportPostProcessData& GetImportPostProcessData() const;
+    const sc::ImportPostProcessData& GetImportPostProcessData() const { return maPostProcessData;}
 };
 
 class ScXMLChartExportWrapper

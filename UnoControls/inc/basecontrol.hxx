@@ -515,17 +515,17 @@ protected:
     /**_______________________________________________________________________________________________________
     */
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > impl_getComponentContext();
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > impl_getComponentContext() { return m_xComponentContext;}
 
     /**_______________________________________________________________________________________________________
     */
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > impl_getPeerWindow();
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > impl_getPeerWindow() { return m_xPeerWindow;}
 
     /**_______________________________________________________________________________________________________
     */
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > impl_getGraphicsPeer();
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > impl_getGraphicsPeer() { return m_xGraphicsPeer;}
 
     /**_______________________________________________________________________________________________________
     */
@@ -559,7 +559,7 @@ protected:
     /**_______________________________________________________________________________________________________
     */
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > impl_getDelegator();
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > impl_getDelegator() { return m_xDelegator;}
 
 //  private methods
 

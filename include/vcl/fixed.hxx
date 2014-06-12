@@ -199,7 +199,7 @@ public:
     const Image&    GetImage() const { return maImage; }
 
     bool        SetModeImage( const Image& rImage );
-    const Image&    GetModeImage( ) const;
+    const Image&    GetModeImage( ) const { return maImage;}
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
 
     static Image loadThemeImage(const OString &rFileName);

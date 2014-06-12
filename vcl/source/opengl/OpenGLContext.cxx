@@ -580,10 +580,6 @@ void OpenGLContext::setWinSize(const Size& rSize)
     m_aGLWin.Height = rSize.Height();
 }
 
-GLWindow& OpenGLContext::getOpenGLWindow()
-{
-    return m_aGLWin;
-}
 
 void OpenGLContext::renderToFile()
 {

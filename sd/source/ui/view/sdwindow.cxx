@@ -185,10 +185,6 @@ void Window::SetMinZoom (long int nMin)
 
 
 
-long Window::GetMinZoom (void) const
-{
-    return mnMinZoom;
-}
 
 
 
@@ -201,10 +197,6 @@ void Window::SetMaxZoom (long int nMax)
 
 
 
-long Window::GetMaxZoom (void) const
-{
-    return mnMaxZoom;
-}
 
 
 
@@ -324,26 +316,14 @@ void Window::RequestHelp(const HelpEvent& rEvt)
 
 
 
-Point Window::GetWinViewPos (void) const
-{
-    return maWinPos;
-}
 
 
 
 
-Point Window::GetViewOrigin (void) const
-{
-    return maViewOrigin;
-}
 
 
 
 
-Size Window::GetViewSize (void) const
-{
-    return maViewSize;
-}
 
 
 

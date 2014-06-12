@@ -200,10 +200,6 @@ sal_uInt16 MSWordStyles::BuildGetSlot( const SwFmt& rFmt )
     return nRet;
 }
 
-sal_uInt16 MSWordStyles::BuildGetSlot(const SwNumRule&)
-{
-    return nUsedSlots++;
-}
 
 sal_uInt16 MSWordStyles::GetWWId( const SwFmt& rFmt ) const
 {

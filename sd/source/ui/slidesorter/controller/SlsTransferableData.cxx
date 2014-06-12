@@ -116,10 +116,6 @@ void TransferableData::Notify (SfxBroadcaster&, const SfxHint& rHint)
 
 
 
-const ::std::vector<TransferableData::Representative>& TransferableData::GetRepresentatives (void) const
-{
-    return maRepresentatives;
-}
 
 
 

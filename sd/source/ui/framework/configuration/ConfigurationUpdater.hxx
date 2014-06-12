@@ -72,7 +72,7 @@ public:
         css::drawing::framework::XConfiguration>& rxRequestedConfiguration);
 
     css::uno::Reference<
-        css::drawing::framework::XConfiguration> GetCurrentConfiguration (void) const;
+        css::drawing::framework::XConfiguration> GetCurrentConfiguration (void) const { return mxCurrentConfiguration;}
 
     friend class ConfigurationUpdaterLock;
     /** Return a lock of the called ConfigurationUpdater.  While the

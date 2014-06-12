@@ -109,10 +109,10 @@ public:
 
     sal_uInt16 getCurRegionId () const { return mnCurRegionId;}
 
-    const OUString& getCurRegionName () const;
+    const OUString& getCurRegionName () const { return maCurRegionName;}
 
     // Check if the root region is visible or not.
-    bool isNonRootRegionVisible () const;
+    bool isNonRootRegionVisible () const { return mnCurRegionId;}
 
     void setOpenRegionHdl(const Link &rLink);
 

@@ -144,13 +144,6 @@ void SAL_CALL OMRCListenerMultiplexerHelper::release() throw()
     OWeakObject::release();
 }
 
-//  operator
-
-OMRCListenerMultiplexerHelper::operator Reference< XInterface >() const
-{
-    return ((OWeakObject*)this);
-}
-
 //  container method
 
 void OMRCListenerMultiplexerHelper::setPeer( const Reference< XWindow >& xPeer )

@@ -66,7 +66,7 @@ public:
     void setParticle( const OUString& rCooSysParticle );
 
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix );
-    ::com::sun::star::drawing::HomogenMatrix getTransformationSceneToScreen();
+    ::com::sun::star::drawing::HomogenMatrix getTransformationSceneToScreen() { return m_aMatrixSceneToScreen;}
 
     //better performance for big data
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const ::com::sun::star::awt::Size& rPageSize
@@ -97,7 +97,7 @@ public:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XCoordinateSystem >
-        getModel() const;
+        getModel() const { return m_xCooSysModel;}
 
     virtual void createVAxisList(
             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xNumberFormatsSupplier

@@ -86,7 +86,7 @@ public:
                                     const uno::Reference< i18n::XBreakIterator >& _xBreakIter );
 
                                 /** Returns a size struct containing the width and height of the text in the current output device. */
-    const Size&                 GetTextSize() const;
+    const Size&                 GetTextSize() const { return maTextSize;}
 
                                 /** Draws the text in the current output device. */
     void                        DrawText( const Point& _rPos );
@@ -269,10 +269,6 @@ void SvtScriptedTextHelper_Impl::SetText( const OUString& _rText, const uno::Ref
     CalculateBreaks( _xBreakIter );
 }
 
-const Size& SvtScriptedTextHelper_Impl::GetTextSize() const
-{
-    return maTextSize;
-}
 
 void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
 {

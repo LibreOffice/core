@@ -132,25 +132,9 @@ uno::Sequence<OUString> SwDropDownField::GetItemSequence() const
     return aSeq;
 }
 
-OUString SwDropDownField::GetSelectedItem() const
-{
-    return aSelectedItem;
-}
 
-OUString SwDropDownField::GetName() const
-{
-    return aName;
-}
 
-OUString SwDropDownField::GetHelp() const
-{
-    return aHelp;
-}
 
-OUString SwDropDownField::GetToolTip() const
-{
-    return aToolTip;
-}
 
 bool SwDropDownField::SetSelectedItem(const OUString & rItem)
 {

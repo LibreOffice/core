@@ -66,10 +66,6 @@ Standard2007Engine::Standard2007Engine() :
 Standard2007Engine::~Standard2007Engine()
 {}
 
-StandardEncryptionInfo& Standard2007Engine::getInfo()
-{
-    return mInfo;
-}
 
 bool Standard2007Engine::generateVerifier()
 {

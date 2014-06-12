@@ -282,14 +282,6 @@ SvXMLImportContext *XMLTextListBlockContext::CreateChildContext(
     return pContext;
 }
 
-const OUString& XMLTextListBlockContext::GetListId() const
-{
-    return msListId;
-}
 
-const OUString& XMLTextListBlockContext::GetContinueListId() const
-{
-    return msContinueListId;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

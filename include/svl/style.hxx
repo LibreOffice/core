@@ -229,7 +229,7 @@ public:
 
     const OUString&             GetAppName() const { return aAppName;   }
 
-    SfxItemPool&                GetPool();
+    SfxItemPool&                GetPool() { return rPool;}
     const SfxItemPool&          GetPool() const { return rPool;}
 
     virtual SfxStyleSheetIteratorPtr CreateIterator(SfxStyleFamily, sal_uInt16 nMask);

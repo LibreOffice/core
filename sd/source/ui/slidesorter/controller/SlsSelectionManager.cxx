@@ -342,10 +342,6 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
 
 
 
-::boost::shared_ptr<SelectionObserver> SelectionManager::GetSelectionObserver (void) const
-{
-    return mpSelectionObserver;
-}
 
 } } } // end of namespace ::sd::slidesorter
 

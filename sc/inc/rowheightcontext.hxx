@@ -38,8 +38,8 @@ public:
 
     double getPPTX() const { return mfPPTX;}
     double getPPTY() const { return mfPPTY;}
-    const Fraction& getZoomX() const;
-    const Fraction& getZoomY() const;
+    const Fraction& getZoomX() const { return maZoomX;}
+    const Fraction& getZoomY() const { return maZoomY;}
 
     OutputDevice* getOutputDevice() { return mpOutDev;}
 

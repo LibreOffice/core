@@ -143,10 +143,10 @@ public :
     bool    GetIsReduceImageResolution() const { return mbReduceImageResolution;}
     void        SetIsReduceImageResolution( const bool bReduceImageResolution );
 
-    const com::sun::star::lang::Locale& GetDocumentLocale() const;
+    const com::sun::star::lang::Locale& GetDocumentLocale() const { return maDocLocale;}
     void        SetDocumentLocale( const com::sun::star::lang::Locale& rLoc );
 
-    std::vector< PDFExtOutDevBookmarkEntry >& GetBookmarks();
+    std::vector< PDFExtOutDevBookmarkEntry >& GetBookmarks() { return maBookmarks;}
 
     /** Start a new group of render output
 

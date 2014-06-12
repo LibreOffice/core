@@ -52,7 +52,7 @@ public: //methods
                         , const ::com::sun::star::awt::Size& rSize );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
-            getCoordinateRegion();
+            getCoordinateRegion() { return css::uno::Reference<css::drawing::XShapes>( m_xCoordinateRegionShape, css::uno::UNO_QUERY );}
 
     ::basegfx::B2IRectangle    getCurrentRectangle();
 

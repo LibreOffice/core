@@ -396,7 +396,7 @@ public:
     virtual bool isUsedByModel() const SAL_OVERRIDE;
 
     // data read/write
-    const SfxItemSet& GetItemSet() const;
+    const SfxItemSet& GetItemSet() const { return *mpProperties;}
     void PutItemSet(const SfxItemSet& rSet);
     void PutItem(const SfxPoolItem& rItem);
     void ClearItem(const sal_uInt16 nWhich = 0);

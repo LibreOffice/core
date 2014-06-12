@@ -48,7 +48,7 @@ public:
                         const OUString& rLName );
     virtual ~XFormsModelContext();
 
-    com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> getModel();
+    com::sun::star::uno::Reference<com::sun::star::xforms::XModel2> getModel() { return mxModel;}
 
 
     // implement SvXMLImportContext & TokenContext methods:

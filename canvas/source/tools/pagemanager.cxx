@@ -205,10 +205,6 @@ namespace canvas
     // PageManager::getRenderModule
 
 
-    canvas::IRenderModuleSharedPtr PageManager::getRenderModule() const
-    {
-        return mpRenderModule;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

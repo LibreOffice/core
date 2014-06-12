@@ -90,7 +90,7 @@ public:
     Standard2007Engine();
     virtual ~Standard2007Engine();
 
-    StandardEncryptionInfo& getInfo();
+    StandardEncryptionInfo& getInfo() { return mInfo;}
 
     virtual bool generateEncryptionKey(const OUString& rPassword) SAL_OVERRIDE;
 

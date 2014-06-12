@@ -90,8 +90,8 @@ public:
 
     virtual sal_uLong           Read( SvStream& rStrm, const OUString& rBaseURL  ) SAL_OVERRIDE = 0;
 
-    ScHTMLStyles&               GetStyles();
-    ScDocument&                 GetDoc();
+    ScHTMLStyles&               GetStyles() { return maStyles;}
+    ScDocument&                 GetDoc() { return *mpDoc;}
 
     /** Returns the "global table" which contains the entire HTML document. */
     virtual const ScHTMLTable*  GetGlobalTable() const = 0;

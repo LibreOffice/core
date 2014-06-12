@@ -92,7 +92,7 @@ public:
     explicit ScDBInternalRange(ScDocument* pDoc, const ScRange& rRange);
     virtual ~ScDBInternalRange();
 
-    const ScRange& getRange() const;
+    const ScRange& getRange() const { return maRange;}
 
     virtual SCCOL getColSize() const SAL_OVERRIDE;
     virtual SCROW getRowSize() const SAL_OVERRIDE;

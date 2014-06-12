@@ -15,7 +15,7 @@ class OpenGLWindowImpl
 {
 public:
     OpenGLWindowImpl(Window* pWindow);
-    OpenGLContext* getContext();
+    OpenGLContext* getContext() { return &maContext;}
 private:
     OpenGLContext maContext;
     boost::scoped_ptr<SystemChildWindow> mpChildWindow;
@@ -29,10 +29,6 @@ OpenGLWindowImpl::OpenGLWindowImpl(Window* pWindow):
     pWindow->SetMouseTransparent(false);
 }
 
-OpenGLContext* OpenGLWindowImpl::getContext()
-{
-    return &maContext;
-}
 
 OpenGLWindow::OpenGLWindow(Window* pParent):
     Window(pParent, 0),

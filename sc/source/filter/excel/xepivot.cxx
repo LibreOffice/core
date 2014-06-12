@@ -996,12 +996,6 @@ OUString XclExpPTField::GetFieldName() const
     return mpCacheField ? mpCacheField->GetFieldName() : OUString();
 }
 
-sal_uInt16 XclExpPTField::GetFieldIndex() const
-{
-    // field index always equal to cache index
-    return maFieldInfo.mnCacheIdx;
-}
-
 sal_uInt16 XclExpPTField::GetLastDataInfoIndex() const
 {
     OSL_ENSURE( !maDataInfoVec.empty(), "XclExpPTField::GetLastDataInfoIndex - no data info found" );

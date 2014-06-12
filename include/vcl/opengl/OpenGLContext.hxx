@@ -157,7 +157,7 @@ public:
 
     void setWinPosAndSize(const Point &rPos, const Size& rSize);
     void setWinSize(const Size& rSize);
-    GLWindow& getOpenGLWindow();
+    GLWindow& getOpenGLWindow() { return m_aGLWin;}
 
     void renderToFile();
 

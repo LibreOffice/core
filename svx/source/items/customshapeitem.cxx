@@ -286,10 +286,6 @@ bool SdrCustomShapeGeometryItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMe
     else
         return true;
 }
-const uno::Sequence< beans::PropertyValue >& SdrCustomShapeGeometryItem::GetGeometry() const
-{
-    return aPropSeq;
-}
 
 SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem()
 :   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, "" )

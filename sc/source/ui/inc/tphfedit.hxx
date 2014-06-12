@@ -124,7 +124,7 @@ public:
     void            SetPopupMenu(PopupMenu* pPopUp);
 
     sal_uInt16      GetSelected() const { return nSelected;}
-    OString         GetSelectedIdent() const;
+    OString         GetSelectedIdent() const { return aSelectedIdent;}
 
     void            SetMenuHdl( const Link& rLink ) { aMLink = rLink; }
     const Link&     GetMenuHdl() const { return aMLink; }

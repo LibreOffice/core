@@ -214,7 +214,7 @@ public:
     virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
     virtual SfxPoolItem* Clone(SfxItemPool* = 0) const SAL_OVERRIDE;
     void SetFrmFmt(SwFrmFmt * _pFrmFmt);
-    const SwFrmFmt* GetFrmFmt() const;
+    const SwFrmFmt* GetFrmFmt() const { return pFrmFmt;}
           SwFrmFmt* GetFrmFmt() { return pFrmFmt;}
 };
 

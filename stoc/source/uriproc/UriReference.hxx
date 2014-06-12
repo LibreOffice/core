@@ -42,7 +42,7 @@ public:
 
     bool isAbsolute() throw (css::uno::RuntimeException);
 
-    OUString getScheme() throw (css::uno::RuntimeException);
+    OUString getScheme() throw (css::uno::RuntimeException) { return m_scheme;}
 
     OUString getSchemeSpecificPart()
         throw (css::uno::RuntimeException);

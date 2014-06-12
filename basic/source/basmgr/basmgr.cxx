@@ -1590,10 +1590,6 @@ bool BasicManager::IsBasicModified() const
     return false;
 }
 
-std::vector<BasicError>& BasicManager::GetErrors()
-{
-    return aErrors;
-}
 
 bool BasicManager::GetGlobalUNOConstant( const sal_Char* _pAsciiName, uno::Any& aOut )
 {

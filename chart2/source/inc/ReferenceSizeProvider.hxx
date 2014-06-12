@@ -51,7 +51,7 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
-    ::com::sun::star::awt::Size getPageSize() const;
+    ::com::sun::star::awt::Size getPageSize() const { return m_aPageSize;}
 
     /** Retrieves the state auto-resize from all objects that support this
         feature.  If all objects return the same state, AUTO_RESIZE_YES or

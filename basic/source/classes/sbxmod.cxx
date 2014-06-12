@@ -731,10 +731,6 @@ SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
     return pRes;
 }
 
-const OUString& SbModule::GetSource32() const
-{
-    return aOUSource;
-}
 
 const OUString& SbModule::GetSource() const
 {
@@ -1800,10 +1796,6 @@ void SbModule::GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache)
     }
 }
 
-SbxArrayRef SbModule::GetMethods()
-{
-    return pMethods;
-}
 
 OUString SbModule::GetKeywordCase( const OUString& sKeyword ) const
 {

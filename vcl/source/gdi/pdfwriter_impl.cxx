@@ -6958,10 +6958,6 @@ bool PDFWriterImpl::emit()
     return true;
 }
 
-std::set< PDFWriter::ErrorCode > PDFWriterImpl::getErrors()
-{
-    return m_aErrors;
-}
 
 sal_Int32 PDFWriterImpl::getSystemFont( const Font& i_rFont )
 {

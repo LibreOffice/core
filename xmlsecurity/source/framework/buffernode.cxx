@@ -520,10 +520,6 @@ sal_Int32 BufferNode::indexOfChild(const BufferNode* pChild) const
     return nIndex;
 }
 
-const BufferNode* BufferNode::getParent() const
-{
-    return m_pParent;
-}
 
 void BufferNode::setParent(const BufferNode* pParent)
 {
@@ -736,10 +732,6 @@ const BufferNode* BufferNode::getNextNodeByTreeOrder() const
     return pNextSiblingParent;
 }
 
-cssu::Reference< cssxw::XXMLElementWrapper > BufferNode::getXMLElement() const
-{
-    return m_xXMLElement;
-}
 
 void BufferNode::setXMLElement( const cssu::Reference< cssxw::XXMLElementWrapper >& xXMLElement )
 {

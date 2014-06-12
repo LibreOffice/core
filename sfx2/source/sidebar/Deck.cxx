@@ -118,10 +118,6 @@ void Deck::Dispose (void)
 
 
 
-const ::rtl::OUString& Deck::GetId (void) const
-{
-    return msId;
-}
 
 
 
@@ -263,10 +259,6 @@ void Deck::SetPanels (const SharedPanelContainer& rPanels)
 
 
 
-const SharedPanelContainer& Deck::GetPanels (void) const
-{
-    return maPanels;
-}
 
 
 

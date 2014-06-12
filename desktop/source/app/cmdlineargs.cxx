@@ -634,10 +634,6 @@ void CommandLineArgs::InitParamValues()
 
 
 
-OUString CommandLineArgs::GetUnknown() const
-{
-    return m_unknown;
-}
 
 bool CommandLineArgs::HasModuleParam() const
 {
@@ -646,15 +642,7 @@ bool CommandLineArgs::HasModuleParam() const
 }
 
 
-std::vector< OUString > const & CommandLineArgs::GetAccept() const
-{
-    return m_accept;
-}
 
-std::vector< OUString > const & CommandLineArgs::GetUnaccept() const
-{
-    return m_unaccept;
-}
 
 std::vector< OUString > CommandLineArgs::GetOpenList() const
 {
@@ -691,30 +679,14 @@ std::vector< OUString > CommandLineArgs::GetPrintToList() const
     return translateExternalUris(m_printtolist);
 }
 
-OUString CommandLineArgs::GetPrinterName() const
-{
-    return m_printername;
-}
 
-OUString CommandLineArgs::GetLanguage() const
-{
-    return m_language;
-}
 
-std::vector< OUString > const & CommandLineArgs::GetInFilter() const
-{
-    return m_infilter;
-}
 
 std::vector< OUString > CommandLineArgs::GetConversionList() const
 {
     return translateExternalUris(m_conversionlist);
 }
 
-OUString CommandLineArgs::GetConversionParams() const
-{
-    return m_conversionparams;
-}
 OUString CommandLineArgs::GetConversionOut() const
 {
     return translateExternalUris(m_conversionout);
@@ -722,10 +694,6 @@ OUString CommandLineArgs::GetConversionOut() const
 
 
 
-OUString CommandLineArgs::GetPidfileName() const
-{
-    return m_pidfile;
-}
 
 } // namespace desktop
 

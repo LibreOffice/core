@@ -565,10 +565,6 @@ namespace accessibility
                           rForwarder.LogicToPixel( rRect.BottomRight(), rMapMode ) );
     }
 
-    const Point& AccessibleEditableTextPara::GetEEOffset() const
-    {
-        return maEEOffset;
-    }
 
     void AccessibleEditableTextPara::SetEEOffset( const Point& rOffset )
     {

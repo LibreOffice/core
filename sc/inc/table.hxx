@@ -223,8 +223,8 @@ public:
                          bool bColInfo = true, bool bRowInfo = true );
                 ~ScTable();
 
-    ScDocument& GetDoc();
-    const ScDocument& GetDoc() const;
+    ScDocument& GetDoc() { return *pDocument;}
+    const ScDocument& GetDoc() const { return *pDocument;}
     SCTAB GetTab() const { return nTab; }
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
@@ -271,21 +271,21 @@ public:
     void        GetScenarioComment( OUString& rComment) const  { rComment = aComment; }
     void        SetScenarioComment( const OUString& rComment ) { aComment = rComment; }
     const Color& GetScenarioColor() const                    { return aScenarioColor; }
-    void        SetScenarioColor(const Color& rNew)          { aScenarioColor = rNew; }
-    const Color& GetTabBgColor() const;
+    void         SetScenarioColor(const Color& rNew)         { aScenarioColor = rNew; }
+    const Color& GetTabBgColor() const                       { return aTabBgColor; }
     void         SetTabBgColor(const Color& rColor);
-    sal_uInt16      GetScenarioFlags() const                     { return nScenarioFlags; }
-    void        SetScenarioFlags(sal_uInt16 nNew)                { nScenarioFlags = nNew; }
+    sal_uInt16  GetScenarioFlags() const                     { return nScenarioFlags; }
+    void        SetScenarioFlags(sal_uInt16 nNew)            { nScenarioFlags = nNew; }
     void        SetActiveScenario(bool bSet)                 { bActiveScenario = bSet; }
     bool        IsActiveScenario() const                     { return bActiveScenario; }
 
-    sal_uInt8       GetLinkMode() const                         { return nLinkMode; }
-    bool        IsLinked() const                            { return nLinkMode != SC_LINK_NONE; }
-    const OUString& GetLinkDoc() const                        { return aLinkDoc; }
-    const OUString& GetLinkFlt() const                        { return aLinkFlt; }
-    const OUString& GetLinkOpt() const                        { return aLinkOpt; }
-    const OUString& GetLinkTab() const                        { return aLinkTab; }
-    sal_uLong       GetLinkRefreshDelay() const                 { return nLinkRefreshDelay; }
+    sal_uInt8   GetLinkMode() const                          { return nLinkMode; }
+    bool        IsLinked() const                             { return nLinkMode != SC_LINK_NONE; }
+    const OUString& GetLinkDoc() const                       { return aLinkDoc; }
+    const OUString& GetLinkFlt() const                       { return aLinkFlt; }
+    const OUString& GetLinkOpt() const                       { return aLinkOpt; }
+    const OUString& GetLinkTab() const                       { return aLinkTab; }
+    sal_uLong   GetLinkRefreshDelay() const                  { return nLinkRefreshDelay; }
 
     void        SetLink( sal_uInt8 nMode, const OUString& rDoc, const OUString& rFlt,
                         const OUString& rOpt, const OUString& rTab, sal_uLong nRefreshDelay );

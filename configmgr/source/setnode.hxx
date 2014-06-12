@@ -48,9 +48,9 @@ public:
 
     virtual int getMandatory() const SAL_OVERRIDE;
 
-    OUString const & getDefaultTemplateName() const;
+    OUString const & getDefaultTemplateName() const { return defaultTemplateName_;}
 
-    std::vector< OUString > & getAdditionalTemplateNames();
+    std::vector< OUString > & getAdditionalTemplateNames() { return additionalTemplateNames_;}
 
     bool isValidTemplate(OUString const & templateName) const;
 

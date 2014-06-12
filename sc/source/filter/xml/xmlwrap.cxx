@@ -986,10 +986,6 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
     return false;
 }
 
-const sc::ImportPostProcessData& ScXMLImportWrapper::GetImportPostProcessData() const
-{
-    return maPostProcessData;
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

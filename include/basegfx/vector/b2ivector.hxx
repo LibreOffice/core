@@ -121,7 +121,7 @@ namespace basegfx
             @return
             The Scalar value of the two involved 2D Vectors
         */
-        double scalar( const B2IVector& rVec ) const;
+        double scalar( const B2IVector& rVec ) const { return((mnX * rVec.mnX) + (mnY * rVec.mnY)); }
 
         /** Transform vector by given transformation matrix.
 

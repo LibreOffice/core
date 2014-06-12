@@ -1563,10 +1563,6 @@ bool ImpGraphic::ImplExportNative( SvStream& rOStm ) const
     return bResult;
 }
 
-const SvgDataPtr& ImpGraphic::getSvgData() const
-{
-    return maSvgData;
-}
 
 SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
 {

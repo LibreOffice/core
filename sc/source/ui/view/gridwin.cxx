@@ -4777,7 +4777,6 @@ void ScGridWindow::LoseFocus()
     Window::LoseFocus();
 }
 
-Point ScGridWindow::GetMousePosPixel() const  { return aCurMousePos; }
 
 bool ScGridWindow::HitRangeFinder( const Point& rMouse, RfCorner& rCorner,
                                 sal_uInt16* pIndex, SCsCOL* pAddX, SCsROW* pAddY)

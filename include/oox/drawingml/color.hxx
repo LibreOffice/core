@@ -97,7 +97,7 @@ public:
     /** Returns the scheme name from the a:schemeClr element for interoperability purposes */
     OUString            getSchemeName() const { return msSchemeName; }
     /** Returns the unaltered list of transformations for interoperability purposes */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getTransformations() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getTransformations() const { return maInteropTransformations;}
 
     /** Translates between color transformation tokens and their names */
     static OUString     getColorTransformationName( sal_Int32 nElement );

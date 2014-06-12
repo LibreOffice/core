@@ -274,8 +274,11 @@ public:
 
     /** Returns the name of this field. */
     OUString       GetFieldName() const;
-    /** Returns the pivot table field list index of this field. */
-    sal_uInt16          GetFieldIndex() const;
+    /** Returns the pivot table field list index of this field.
+      * The field index is always equal to cache index.
+      */
+    sal_uInt16          GetFieldIndex() const { return maFieldInfo.mnCacheIdx; }
+
 
     /** Returns the index of the last inserted data info struct. */
     sal_uInt16          GetLastDataInfoIndex() const;

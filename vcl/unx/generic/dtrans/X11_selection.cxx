@@ -3455,10 +3455,6 @@ void SelectionManager::dragDoDispatch()
  *  XDragSourceContext
  */
 
-sal_Int32 SelectionManager::getCurrentCursor()
-{
-    return m_aCurrentCursor;
-}
 
 void SelectionManager::setCursor( sal_Int32 cursor, XLIB_Window aDropWindow, XLIB_Time )
 {

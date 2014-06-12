@@ -556,11 +556,6 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
     return bChanged;
 }
 
-uno::Reference< beans::XPropertySet >
-    CharacterPropertyItemConverter::GetRefSizePropertySet() const
-{
-    return m_xRefSizePropSet;
-}
 
 } //  namespace wrapper
 } //  namespace chart

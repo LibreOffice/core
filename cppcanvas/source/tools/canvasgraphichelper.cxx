@@ -115,15 +115,7 @@ namespace cppcanvas
             return static_cast<CompositeOp>(maRenderState.CompositeOperation);
         }
 
-        CanvasSharedPtr CanvasGraphicHelper::getCanvas() const
-        {
-            return mpCanvas;
-        }
 
-        uno::Reference< rendering::XGraphicDevice > CanvasGraphicHelper::getGraphicDevice() const
-        {
-            return mxGraphicDevice;
-        }
 
     }
 }

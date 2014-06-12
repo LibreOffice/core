@@ -73,8 +73,8 @@ public:
                             ExplicitScaleData& rExplicitScale,
                             ExplicitIncrementData& rExplicitIncrement ) const;
 
-    ::com::sun::star::chart2::ScaleData getScale() const;
-    Date getNullDate() const;
+    ::com::sun::star::chart2::ScaleData getScale() const { return m_aSourceScale;}
+    Date getNullDate() const { return m_aNullDate;}
 
 private:
     /** Fills the passed scale data and increment data for category scaling. */

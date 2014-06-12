@@ -235,12 +235,6 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
     return bRet;
 }
 
-bool WW8GlossaryFib::IsGlossaryFib()
-{
-    // fGlsy will indicate whether this has AutoText or not
-    return fGlsy;
-}
-
 sal_uInt32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
                                              SvStream & /* rStrm */,
                                              const WW8Fib &rFib)

@@ -208,9 +208,6 @@ int XmlReader::getNamespaceId(Span const & prefix) const {
     return NAMESPACE_UNKNOWN;
 }
 
-OUString XmlReader::getUrl() const {
-    return fileUrl_;
-}
 
 void XmlReader::normalizeLineEnds(Span const & text) {
     char const * p = text.begin;

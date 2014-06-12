@@ -77,10 +77,6 @@ XFormsModelContext::~XFormsModelContext()
 }
 
 
-Reference<css::xforms::XModel2> XFormsModelContext::getModel()
-{
-    return mxModel;
-}
 
 
 void XFormsModelContext::HandleAttribute(

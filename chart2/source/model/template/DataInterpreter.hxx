@@ -38,7 +38,7 @@ public:
     virtual ~DataInterpreter();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        GetComponentContext() const;
+        GetComponentContext() const { return m_xContext;}
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()

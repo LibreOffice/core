@@ -42,10 +42,6 @@ namespace cppcanvas
             maTransformation = rViewTransform;
         }
 
-        ::basegfx::B2DHomMatrix ImplSpriteCanvas::TransformationArbiter::getTransformation() const
-        {
-            return maTransformation;
-        }
 
 
         ImplSpriteCanvas::ImplSpriteCanvas( const uno::Reference< rendering::XSpriteCanvas >& rCanvas ) :

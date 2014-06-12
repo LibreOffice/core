@@ -58,10 +58,6 @@ namespace pcr
 
 
 
-    Reference< XPropertyControlContext > SAL_CALL ControlHelper::getControlContext() throw (RuntimeException)
-    {
-        return m_xContext;
-    }
 
 
     void SAL_CALL ControlHelper::setControlContext( const Reference< XPropertyControlContext >& _controlcontext ) throw (RuntimeException)

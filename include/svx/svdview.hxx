@@ -247,7 +247,7 @@ public:
     // und mehr...
     OUString GetStatusText();
 
-    SvtAccessibilityOptions& getAccessibilityOptions();
+    SvtAccessibilityOptions& getAccessibilityOptions() { return maAccessibilityOptions;}
 
     virtual void onAccessibilityOptionsChanged();
 };

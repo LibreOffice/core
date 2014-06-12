@@ -149,7 +149,8 @@ public:
 
     ScDocument& getScDocument() { return *mpDoc; }
 
-    ScDocShell& getDocShell();
+    ScDocShell& getDocShell() { return *mpDocShell; }
+
     ScDocumentImport& getDocImport();
 
     /** Returns a reference to the source/target spreadsheet document model. */
@@ -329,11 +330,6 @@ WorkbookGlobals::~WorkbookGlobals()
 {
     finalize();
     mrExcelFilter.unregisterWorkbookGlobals();
-}
-
-ScDocShell& WorkbookGlobals::getDocShell()
-{
-    return *mpDocShell;
 }
 
 ScDocumentImport& WorkbookGlobals::getDocImport()

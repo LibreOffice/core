@@ -23,6 +23,7 @@
 #include "rangelst.hxx"
 #include "scdllapi.h"
 #include "viewopti.hxx"
+#include "docsh.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -232,8 +233,7 @@ public:
     ScDocFunc&      GetDocFunc() const;
     ScDBFunc*       GetView() const         { return pView; }
     ScTabViewShell* GetViewShell() const    { return pViewShell; }
-
-    SfxObjectShell* GetSfxDocShell() const;
+    SfxObjectShell* GetSfxDocShell() const  { return pDocShell; }
     SfxBindings&    GetBindings();          // from ViewShell's ViewFrame
     SfxDispatcher&  GetDispatcher();        // from ViewShell's ViewFrame
 

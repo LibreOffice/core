@@ -628,10 +628,6 @@ const basegfx::B3DHomMatrix& E3dObject::GetFullTransform() const
     return maFullTransform;
 }
 
-const basegfx::B3DHomMatrix& E3dObject::GetTransform() const
-{
-    return maTransformation;
-}
 
 void E3dObject::NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix)
 {

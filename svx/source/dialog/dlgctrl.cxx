@@ -641,10 +641,6 @@ void SvxRectCtl::Reset()
 
 // Returns the currently selected RECT_POINT
 
-RECT_POINT SvxRectCtl::GetActualRP() const
-{
-    return( eRP );
-}
 
 void SvxRectCtl::SetActualRP( RECT_POINT eNewRP )
 {

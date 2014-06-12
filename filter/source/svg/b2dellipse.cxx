@@ -32,15 +32,7 @@ namespace basegfx
         return !(*this == rEllipse);
     }
 
-    basegfx::B2DPoint B2DEllipse::getB2DEllipseCenter() const
-    {
-        return maCenter;
-    }
 
-    basegfx::B2DTuple B2DEllipse::getB2DEllipseRadius() const
-    {
-        return maRadius;
-    }
 } // end of namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

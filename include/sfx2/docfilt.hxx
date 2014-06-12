@@ -106,7 +106,7 @@ public:
     OUString GetSuffixes() const;
     OUString GetDefaultExtension() const;
     const OUString& GetServiceName() const { return aServiceName; }
-    const OUString& GetProviderName() const;
+    const OUString& GetProviderName() const { return maProvider;}
 
     static const SfxFilter* GetDefaultFilter( const OUString& rName );
     static const SfxFilter* GetFilterByName( const OUString& rName );

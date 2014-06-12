@@ -72,7 +72,7 @@ public:
     sal_uInt16                  GetRowPos(sal_uInt16 _nPos) const;
     sal_uInt16                  GetColumnPos(sal_uInt16 _nPos) const;
 
-    ScrollBar*                  getScrollBar();
+    ScrollBar*                  getScrollBar() { return &aVscrollSB;}
     void                        ReleaseAccessible();
     sal_Int32                   getMaxCharCount() const;
 

@@ -424,7 +424,7 @@ public:
     bool                        HasSelectedPage() const     { return bHasSelectedPage; }
     const ScDPItemData&         GetSelectedData();
 
-    const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
+    const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const { return aReferenceValue;}
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<

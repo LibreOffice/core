@@ -133,7 +133,7 @@ public:
         them from the returned list.  All entries that remain until the
         destructor is called will be destroyed.
     */
-    std::vector<TemplateDir*>& GetFolderList (void);
+    std::vector<TemplateDir*>& GetFolderList (void) { return maFolderList;}
 
     /** Implementation of the AsynchronousTask interface method.
     */
@@ -149,7 +149,7 @@ public:
             <NULL/> is returned either before the template scanning is
             started or after it has ended.
     */
-    const TemplateEntry* GetLastAddedEntry (void) const;
+    const TemplateEntry* GetLastAddedEntry (void) const { return mpLastAddedEntry;}
 
     /** Set whether to sort the template entries inside the regions.
     */

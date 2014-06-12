@@ -111,8 +111,8 @@ public:
         const Part ePart,
         const CoordinateSystem eCoordinateSystem);
 
-    Image GetTransitionEffectIcon (void) const;
-    Image GetCustomAnimationEffectIcon (void) const;
+    Image GetTransitionEffectIcon (void) const { return maTransitionEffectIcon;}
+    Image GetCustomAnimationEffectIcon (void) const { return maCustomAnimationEffectIcon;}
 
 private:
     SharedSdWindow mpWindow;

@@ -99,12 +99,12 @@ public:
     const ScNoteData& GetNoteData() const { return maNoteData;}
 
     /** Returns the creation date of this note. */
-    const OUString& GetDate() const;
+    const OUString& GetDate() const { return maNoteData.maDate;}
     /** Sets a new creation date for this note. */
     void SetDate( const OUString& rDate );
 
     /** Returns the author date of this note. */
-    const OUString& GetAuthor() const;
+    const OUString& GetAuthor() const { return maNoteData.maAuthor;}
     /** Sets a new author date for this note. */
     void SetAuthor( const OUString& rAuthor );
 
@@ -123,7 +123,7 @@ public:
 
     /** Returns an existing note caption object. returns null, if the note
         contains initial caption data needed to construct a caption object. */
-    SdrCaptionObj* GetCaption() const;
+    SdrCaptionObj* GetCaption() const { return maNoteData.mpCaption;}
     /** Returns the caption object of this note. Creates the caption object, if
         the note contains initial caption data instead of the caption. */
     SdrCaptionObj*      GetOrCreateCaption( const ScAddress& rPos ) const;
@@ -133,7 +133,7 @@ public:
     /** Shows or hides the note caption object. */
     void                ShowCaption( const ScAddress& rPos, bool bShow = true );
     /** Returns true, if the caption object is visible. */
-    bool IsCaptionShown() const;
+    bool IsCaptionShown() const { return maNoteData.mbShown;}
 
     /** Shows or hides the caption temporarily (does not change internal visibility state). */
     void                ShowCaptionTemp( const ScAddress& rPos, bool bShow = true );

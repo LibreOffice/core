@@ -39,7 +39,7 @@ public:
     /// To look up additional properties of a math symbol.
     static bool lookupMathKeyword(RTFMathSymbol& rSymbol);
 private:
-    SvStream& Strm();
+    SvStream& Strm() { return *m_pInStream;}
     int resolveKeyword();
     int dispatchKeyword(OString& rKeyword, bool bParam, int nParam);
 

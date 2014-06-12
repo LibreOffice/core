@@ -137,10 +137,6 @@ void CompileFormulaContext::setGrammar( formula::FormulaGrammar::Grammar eGram )
         updateTabNames();
 }
 
-const std::vector<OUString>& CompileFormulaContext::getTabNames() const
-{
-    return maTabNames;
-}
 
 
 }

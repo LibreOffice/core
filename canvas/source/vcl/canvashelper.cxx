@@ -900,13 +900,6 @@ namespace vclcanvas
                                true );
     }
 
-    uno::Reference< rendering::XGraphicDevice > CanvasHelper::getDevice()
-    {
-        // cast away const, need to change refcount (as this is
-        // ~invisible to client code, still logically const)
-        return uno::Reference< rendering::XGraphicDevice >(mpDevice);
-    }
-
     void CanvasHelper::copyRect( const rendering::XCanvas*                          ,
                                  const uno::Reference< rendering::XBitmapCanvas >&  ,
                                  const geometry::RealRectangle2D&                   ,

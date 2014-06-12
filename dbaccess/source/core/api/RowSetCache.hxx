@@ -157,7 +157,7 @@ namespace dbaccess
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);
 
     // ::com::sun::star::sdbc::XResultSetMetaDataSupplier
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > getMetaData(  );
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData > getMetaData(  ) { return m_xMetaData;}
 
     // ::com::sun::star::sdbcx::XRowLocate
         ::com::sun::star::uno::Any getBookmark(  );

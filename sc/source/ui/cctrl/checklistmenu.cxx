@@ -428,10 +428,6 @@ void ScMenuFloatingWindow::drawAllMenuItems()
     }
 }
 
-const Font& ScMenuFloatingWindow::getLabelFont() const
-{
-    return maLabelFont;
-}
 
 void ScMenuFloatingWindow::executeMenuItem(size_t nPos)
 {
@@ -656,10 +652,6 @@ void ScMenuFloatingWindow::setName(const OUString& rName)
     maName = rName;
 }
 
-const OUString& ScMenuFloatingWindow::getName() const
-{
-    return maName;
-}
 
 void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
 {

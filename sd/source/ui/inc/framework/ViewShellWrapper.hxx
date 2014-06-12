@@ -83,7 +83,7 @@ public:
         to obtain a pointer to the wrapped ViewShell object for a given
         XView object.
     */
-    ::boost::shared_ptr<ViewShell> GetViewShell (void);
+    ::boost::shared_ptr<ViewShell> GetViewShell (void) { return mpViewShell;}
 
     // XUnoTunnel
 

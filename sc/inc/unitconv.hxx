@@ -37,7 +37,7 @@ public:
     ~ScUnitConverterData();
 
     double GetValue() const { return mfValue;}
-    const OUString& GetIndexString() const;
+    const OUString& GetIndexString() const { return maIndexString;}
 
     static OUString BuildIndexString(
         const OUString& rFromUnit, const OUString& rToUnit );

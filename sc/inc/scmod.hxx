@@ -141,7 +141,7 @@ public:
     void                AnythingChanged();
 
     //  Drag & Drop:
-    const ScDragData&   GetDragData() const;
+    const ScDragData&   GetDragData() const { return *mpDragData;}
     void                SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
     void                ResetDragObject();
     void                SetDragLink(
@@ -150,7 +150,7 @@ public:
         ScDocument* pLocalDoc, const OUString& rTarget, const OUString& rText );
 
     //  clipboard:
-    const ScClipData&   GetClipData() const;
+    const ScClipData&   GetClipData() const { return *mpClipData;}
     void                SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj );
 
     ScDocument*         GetClipDoc();       // called from document - should be removed later

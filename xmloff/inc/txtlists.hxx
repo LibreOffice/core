@@ -67,8 +67,8 @@ class XMLTextListsHelper : private boost::noncopyable
                                         const OUString& sListId ) const;
         OUString GetContinueListIdOfProcessedList(
                                         const OUString& sListId ) const;
-        const OUString& GetLastProcessedListId() const;
-        const OUString& GetListStyleOfLastProcessedList() const;
+        const OUString& GetLastProcessedListId() const { return msLastProcessedListId;}
+        const OUString& GetListStyleOfLastProcessedList() const { return msListStyleOfLastProcessedList;}
 
         OUString GenerateNewListId() const;
 

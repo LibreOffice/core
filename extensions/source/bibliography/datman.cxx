@@ -928,10 +928,6 @@ Sequence< OUString > BibDataManager::getDataSources()
     return aTableNameSeq;
 }
 
-OUString BibDataManager::getActiveDataTable()
-{
-    return aActiveDataTable;
-}
 
 void BibDataManager::setFilter(const OUString& rQuery)
 {

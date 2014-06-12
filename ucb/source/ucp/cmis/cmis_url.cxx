@@ -39,25 +39,9 @@ namespace cmis
             m_sId = "root";
     }
 
-    OUString& URL::getObjectPath( )
-    {
-        return m_sPath;
-    }
 
-    OUString& URL::getObjectId( )
-    {
-        return m_sId;
-    }
 
-    OUString& URL::getBindingUrl( )
-    {
-        return m_sBindingUrl;
-    }
 
-    OUString& URL::getRepositoryId( )
-    {
-        return m_sRepositoryId;
-    }
 
     void URL::setObjectPath( const OUString& sPath )
     {

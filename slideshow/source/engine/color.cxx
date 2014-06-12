@@ -193,20 +193,8 @@ namespace slideshow
         {
         }
 
-        double HSLColor::getHue() const
-        {
-            return maHSLTriple.mnHue;
-        }
 
-        double HSLColor::getSaturation() const
-        {
-            return maHSLTriple.mnSaturation;
-        }
 
-        double HSLColor::getLuminance() const
-        {
-            return maHSLTriple.mnLuminance;
-        }
 
 
         bool operator==( const HSLColor& rLHS, const HSLColor& rRHS )
@@ -327,20 +315,8 @@ namespace slideshow
         {
         }
 
-        double RGBColor::getRed() const
-        {
-            return maRGBTriple.mnRed;
-        }
 
-        double RGBColor::getGreen() const
-        {
-            return maRGBTriple.mnGreen;
-        }
 
-        double RGBColor::getBlue() const
-        {
-            return maRGBTriple.mnBlue;
-        }
 
         ::cppcanvas::Color::IntSRGBA RGBColor::getIntegerColor() const
         {

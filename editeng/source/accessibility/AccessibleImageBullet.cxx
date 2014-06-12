@@ -561,11 +561,6 @@ namespace accessibility
                                           ( const_cast< AccessibleImageBullet* > (this) )  ) ); // disambiguate hierarchy
     }
 
-    const Point& AccessibleImageBullet::GetEEOffset() const
-    {
-
-        return maEEOffset;
-    }
 
 } // end of namespace accessibility
 

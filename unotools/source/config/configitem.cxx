@@ -1107,10 +1107,6 @@ void    ConfigItem::ClearModified()
 }
 
 
-bool ConfigItem::IsInValueChange() const
-{
-    return m_nInValueChange > 0;
-}
 
 Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
 {

@@ -128,10 +128,6 @@ Reference<XNode> PathExpression::getNode() const
     return xResult;
 }
 
-const PathExpression::NodeVector_t PathExpression::getNodeList() const
-{
-    return maNodes;
-}
 
 Reference<XNodeList> PathExpression::getXNodeList() const
 {

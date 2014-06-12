@@ -133,7 +133,7 @@ public:
     /**_______________________________________________________________________________________________________
     */
 
-    operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() const;
+    operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() const { return ((OWeakObject*)this);}
 
     /**_______________________________________________________________________________________________________
     */

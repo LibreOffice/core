@@ -148,10 +148,6 @@ namespace sdr
         }
 
         // method to get the primitiveAnimator
-        sdr::animation::primitiveAnimator& ObjectContact::getPrimitiveAnimator()
-        {
-            return maPrimitiveAnimator;
-        }
 
         // method to get the EventHandler. It will
         // return a existing one or create a new one using CreateEventHandler().

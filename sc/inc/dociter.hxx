@@ -215,13 +215,13 @@ public:
 
     const ScAddress& GetPos() const { return maCurPos; }
 
-    CellType getType() const;
+    CellType getType() const { return maCurCell.meType;}
     OUString getString();
-    const EditTextObject* getEditText() const;
-    ScFormulaCell* getFormulaCell();
-    const ScFormulaCell* getFormulaCell() const;
+    const EditTextObject* getEditText() const { return maCurCell.mpEditText;}
+    ScFormulaCell* getFormulaCell() { return maCurCell.mpFormula;}
+    const ScFormulaCell* getFormulaCell() const { return maCurCell.mpFormula;}
     ScCellValue getCellValue() const;
-    const ScRefCellValue& getRefCellValue() const;
+    const ScRefCellValue& getRefCellValue() const { return maCurCell;}
 
     bool hasString() const;
     bool hasEmptyData() const;
@@ -545,7 +545,7 @@ public:
     SCCOL                   GetEndCol() const       { return nFoundEndCol; }
     SCROW                   GetRow() const          { return nFoundRow; }
     const ScPatternAttr*    GetPattern() const      { return pFoundPattern; }
-    const ScRefCellValue&   GetCell() const;
+    const ScRefCellValue&   GetCell() const { return maFoundCell;}
 };
 
 class ScRowBreakIterator

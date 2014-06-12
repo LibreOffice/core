@@ -41,9 +41,6 @@ OUString LocalizedValueNode::getTemplateName() const {
     return OUString("*");
 }
 
-css::uno::Any LocalizedValueNode::getValue() const {
-    return value_;
-}
 
 void LocalizedValueNode::setValue(int layer, css::uno::Any const & value) {
     setLayer(layer);

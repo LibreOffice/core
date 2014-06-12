@@ -365,7 +365,7 @@ public:
     Color*&         GetTxtColor()           { return pTxtColor; }
     Color*&         GetFldColor()           { return pFldColor; }
 
-    const OUString& GetFieldValue() const;
+    const OUString& GetFieldValue() const { return aFieldValue;}
     void SetFieldValue(const OUString& rVal);
 
     void Reset();
