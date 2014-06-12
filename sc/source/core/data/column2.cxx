@@ -1699,7 +1699,7 @@ void ScColumn::CopyCellNotesToDocument(
     SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, bool bCloneCaption, SCROW nRowOffsetDest ) const
 {
     ScDrawLayer *pDrawLayer = rDestCol.GetDoc().GetDrawLayer();
-    bool bWasLocked;
+    bool bWasLocked = bool();
     if (pDrawLayer)
     {
         // Avoid O(n^2) by temporary locking SdrModel which disables broadcasting.
