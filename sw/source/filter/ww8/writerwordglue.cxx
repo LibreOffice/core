@@ -725,6 +725,13 @@ namespace sw
                 OUString const& rFontName, OUString const& rAltName,
                 rtl_TextEncoding eTextEncoding)
         {
+            static struct { rtl_TextEncoding enc; sal_uInt8 charset; }
+                const s_fallbacks [] = {
+                    { RTL_TEXTENCODING_MS_932, 0x80 }, // Shift-JIS
+                    { RTL_TEXTENCODING_MS_936, 0x86 }, // GB-2312
+                    { RTL_TEXTENCODING_MS_950, 0x88 }, // Big5
+                    { RTL_TEXTENCODING_MS_949, 0x81 }, // EUC-KR
+                };
             sal_uInt8 nRet =
                 rtl_getBestWindowsCharsetFromTextEncoding(eTextEncoding);
             switch (eTextEncoding)
@@ -734,13 +741,6 @@ namespace sw
                 case RTL_TEXTENCODING_UTF7:
                 case RTL_TEXTENCODING_UTF8:
                 case RTL_TEXTENCODING_JAVA_UTF8:
-                    static struct { rtl_TextEncoding enc; sal_uInt8 charset; }
-                        const s_fallbacks [] = {
-                            { RTL_TEXTENCODING_MS_932, 0x80 }, // Shift-JIS
-                            { RTL_TEXTENCODING_MS_936, 0x86 }, // GB-2312
-                            { RTL_TEXTENCODING_MS_950, 0x88 }, // Big5
-                            { RTL_TEXTENCODING_MS_949, 0x81 }, // EUC-KR
-                        };
                     for (size_t i = 0; i < SAL_N_ELEMENTS(s_fallbacks); ++i)
                     {
                         // fall back to a charset that can at least encode
