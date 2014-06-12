@@ -23,7 +23,8 @@ namespace writerfilter {
                 RTFSdrImport(RTFDocumentImpl& rImport, uno::Reference<lang::XComponent> const& xDstDoc);
                 virtual ~RTFSdrImport();
 
-                void resolve(RTFShape& rShape, bool bClose);
+    enum ShapeOrPict { SHAPE, PICT };
+    void resolve(RTFShape& rShape, bool bClose, ShapeOrPict shapeOrPict);
                 void close();
                 void append(OUString aKey, OUString aValue);
                 /// Append property on the current parent.
