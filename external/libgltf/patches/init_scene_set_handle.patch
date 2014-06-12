@@ -1,0 +1,86 @@
+diff -ur libgltf.org/src/LoadScene.cpp libgltf/src/LoadScene.cpp
+--- libgltf.org/src/LoadScene.cpp	2014-06-12 12:11:58.945707220 +0200
++++ libgltf/src/LoadScene.cpp	2014-06-12 12:13:14.129704086 +0200
+@@ -148,10 +148,14 @@
+     return true;
+ }
+ 
+-int Parser::parseScene(Scene* pscene)
++void Parser::setScene(Scene* pscene)
++{
++    pScene = pscene;
++}
++
++int Parser::parseScene()
+ {
+     int status;
+-    this->pScene = pscene;
+ 
+     {
+         TRACE_TIME ("parseScene->readBuffers", CPU);
+diff -ur libgltf.org/src/LoadScene.h libgltf/src/LoadScene.h
+--- libgltf.org/src/LoadScene.h	2014-06-12 12:11:58.945707220 +0200
++++ libgltf/src/LoadScene.h	2014-06-12 12:12:11.805706684 +0200
+@@ -27,7 +27,8 @@
+ public:
+     glTFHandle* getFileNameInJson(const std::string& jsonFile);
+     bool releaseFileName();
+-    int parseScene(Scene* pscene);
++    void setScene(Scene* pscene);
++    int parseScene();
+     bool parseJsonFile();
+     void setJsonInfo(const std::string& sbuffer);
+     void setJsonInfo(const std::string& direct, const std::string& fileName);
+@@ -81,4 +82,4 @@
+     bool is_json_in_buffer;
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff -ur libgltf.org/src/RenderScene.cpp libgltf/src/RenderScene.cpp
+--- libgltf.org/src/RenderScene.cpp	2014-06-12 12:11:58.949707220 +0200
++++ libgltf/src/RenderScene.cpp	2014-06-12 12:12:13.509706613 +0200
+@@ -561,7 +561,7 @@
+     {
+         return LIBGLTF_PARSE_JSON_ERROR;
+     }
+-    int iStatus = mLoadJson.parseScene(&scene);
++    int iStatus = mLoadJson.parseScene();
+     if (iStatus != LIBGLTF_SUCESS)
+     {
+         return iStatus;
+@@ -571,12 +571,11 @@
+ 
+ int RenderScene::loadScene(Scene& scene, glTFHandle* handle)
+ {
+-    scene.setGltfHandle(handle);
+     try
+     {
+         {
+             TRACE_TIME ("loadScene->parseScene", CPU);
+-            int iStatus = mLoadJson.parseScene(&scene);
++            int iStatus = mLoadJson.parseScene();
+             if (iStatus != LIBGLTF_SUCESS)
+             {
+                 return iStatus;
+@@ -612,7 +611,11 @@
+         }
+     }
+     string tmpFileName(jsonfile->filename);
+-    return mLoadJson.getFileNameInJson(tmpFileName);
++    glTFHandle* handle = mLoadJson.getFileNameInJson(tmpFileName);
++    pScene = new Scene();
++    pScene->setGltfHandle(handle);
++    mLoadJson.setScene(pScene);
++    return handle;
+ }
+ 
+ unsigned int RenderScene::bindAttribute(const Attribute* pAttr)
+@@ -1543,4 +1546,4 @@
+ int  RenderScene::isAnimPlay()
+ {
+     return this->mAnimationPlay ? 1 : 0;
+-}
+\ No newline at end of file
++}
