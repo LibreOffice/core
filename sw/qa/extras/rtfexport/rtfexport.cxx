@@ -306,6 +306,13 @@ DECLARE_RTFEXPORT_TEST(testMathRuns, "math-runs.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
 }
 
+DECLARE_RTFEXPORT_TEST(testFdo77979, "fdo77979.odt")
+{
+    // font name is encoded with \fcharset of font
+    CPPUNIT_ASSERT_EQUAL(OUString("微软雅黑", 12, RTL_TEXTENCODING_UTF8),
+            getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+}
+
 DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
 {
     /*
