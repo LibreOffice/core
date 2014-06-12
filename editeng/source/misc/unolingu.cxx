@@ -431,11 +431,7 @@ uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
     return xRes;
 }
 
-
-typedef cppu::WeakImplHelper1 < XEventListener > LinguMgrExitLstnrBaseClass;
-
-
-class LinguMgrExitLstnr : public LinguMgrExitLstnrBaseClass
+class LinguMgrExitLstnr : public cppu::WeakImplHelper1<XEventListener>
 {
     uno::Reference< XDesktop2 >        xDesktop;
 
