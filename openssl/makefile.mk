@@ -46,10 +46,10 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8v
+OPENSSL_NAME=openssl-0.9.8za
 
 TARFILE_NAME=$(OPENSSL_NAME)
-TARFILE_MD5=51a40a81b3b7abe8a5c33670bd3da0ce
+TARFILE_MD5=2f989915f8fea49aa1bc37aa58500cce
 PATCH_FILES=openssl-asm-fix.patch
 
 CONFIGURE_DIR=.
