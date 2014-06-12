@@ -106,10 +106,13 @@ namespace sdr { namespace contact {
     {
         // print or print preview requires special handling
         const OutputDevice* pDevice = _rObjectContact.TryToGetOutputDevice();
-        bool bPrintOrPreview = ( pDevice != NULL ) && ( pDevice->GetOutDevType() == OUTDEV_PRINTER );
+        ObjectContactOfPageView* const pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &_rObjectContact  );
 
-        ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &_rObjectContact  );
-        bPrintOrPreview |= ( pPageViewContact != NULL ) && pPageViewContact->GetPageWindow().GetPageView().GetView().IsPrintPreview();
+        const bool bPrintOrPreview = pPageViewContact
+            && ( ( ( pDevice != NULL ) && ( pDevice->GetOutDevType() == OUTDEV_PRINTER ) )
+                    || pPageViewContact->GetPageWindow().GetPageView().GetView().IsPrintPreview()
+               )
+            ;
 
         if ( bPrintOrPreview )
             return *new UnoControlPrintOrPreviewContact( *pPageViewContact, *this );
