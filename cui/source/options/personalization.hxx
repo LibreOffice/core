@@ -32,6 +32,7 @@ private:
     OUString m_aPersonaSettings;            ///< Header and footer images + color to be set in the settings.
 
 public:
+    ::rtl::Reference< SearchAndParseThread > m_rApplyThread;
     SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet );
     virtual ~SvxPersonalizationTabPage();
 
@@ -43,6 +44,8 @@ public:
     /// Reset to default settings ([Revert] button).
     virtual void Reset( const SfxItemSet *rSet ) SAL_OVERRIDE;
 
+    void setPersonaSettings( const OUString );
+
 private:
     /// Handle the Persona selection
     DECL_LINK( SelectPersona, PushButton* );
@@ -51,7 +54,7 @@ private:
     DECL_LINK( ForceSelect, RadioButton* );
 
     /// Download the bitmaps + color settings, and copy them to user's profile.
-    bool CopyPersonaToGallery( const OUString &rURL );
+    void CopyPersonaToGallery( const OUString &rURL );
 };
 
 /** Dialog that will allow the user to choose a Persona to use.
@@ -72,7 +75,7 @@ private:
 
 public:
     SelectPersonaDialog( Window *pParent );
-    ::rtl::Reference< SearchAndParseThread > m_aSearchThread;
+    ::rtl::Reference< SearchAndParseThread > m_rSearchThread;
 
     OUString GetSelectedPersona() const;
     void SetProgress( OUString& );
@@ -90,6 +93,7 @@ class SearchAndParseThread: public salhelper::Thread
 private:
 
     SelectPersonaDialog *m_pPersonaDialog;
+    SvxPersonalizationTabPage *m_pPersonalizationTabPage;
     OUString m_aURL;
 
     virtual ~SearchAndParseThread();
@@ -99,6 +103,8 @@ private:
 public:
 
     SearchAndParseThread( SelectPersonaDialog* pDialog,
+                          const OUString& rURL );
+    SearchAndParseThread( SvxPersonalizationTabPage *pTabPage,
                           const OUString& rURL );
 };
 
