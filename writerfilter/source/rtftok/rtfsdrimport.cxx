@@ -212,7 +212,8 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, OUStrin
     }
 }
 
-void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
+void RTFSdrImport::resolve(RTFShape& rShape, bool bClose,
+        ShapeOrPict const shapeOrPict)
 {
     int nType = -1;
     bool bPib = false;
@@ -243,7 +244,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose)
     bool bOpaque = true;
 
     // The spec doesn't state what is the default for shapeType, Word seems to implement it as a rectangle.
-    if (std::find_if(rShape.aProperties.begin(),
+    if (SHAPE == shapeOrPict &&
+        std::find_if(rShape.aProperties.begin(),
                 rShape.aProperties.end(),
                 boost::bind(&OUString::equals, boost::bind(&std::pair<OUString, OUString>::first, _1), OUString("shapeType")))
             == rShape.aProperties.end())
