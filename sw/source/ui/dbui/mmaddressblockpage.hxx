@@ -260,7 +260,6 @@ class SwAssignFieldsDialog : public SfxModalDialog
 
 
     OKButton                *m_pOK;
-    CancelButton            *m_pCancel;
 
     OUString                m_sNone;
     OUString                m_rPreviewString;
