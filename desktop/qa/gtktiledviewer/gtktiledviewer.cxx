@@ -11,14 +11,7 @@
 #include <string.h>
 
 #include <gdk/gdk.h>
-#include <gdk/gdkx.h>
 #include <gtk/gtk.h>
-
-#include <X11/extensions/Xrender.h>
-
-// Only for the SystemGraphicsData struct, and hopefully we can find some better
-// replacement for that at some point.
-#include <vcl/sysdata.hxx>
 
 #define LOK_USE_UNSTABLE_API
 #include <LibreOfficeKit/LibreOfficeKit.hxx>
