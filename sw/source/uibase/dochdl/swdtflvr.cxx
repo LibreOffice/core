@@ -416,7 +416,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor )
         // the fallback and just try to get a graphic
         const bool bPending(pWrtShell->BasicActionPend());
 
-        // SEL_GRF kommt vom ContentType der editsh
+        // SEL_GRF is from ContentType of editsh
         if(bPending || ((nsSelectionType::SEL_GRF | nsSelectionType::SEL_DRW_FORM) & nSelectionType))
         {
             pClpGraphic = new Graphic;

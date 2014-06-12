@@ -88,7 +88,7 @@ void        SetDfltMetric(FieldUnit eMetric, bool bWeb);
 SW_DLLPUBLIC bool HasCharUnit( bool bWeb );
 void SetApplyCharUnit(bool bApplyChar, bool bWeb);
 
-// ListBox mit allen Zeichenvorlagen fuellen - ausser Standard!
+// fill ListBox with all char style templates, except the standard ones
 SW_DLLPUBLIC void FillCharStyleListBox(ListBox& rToFill, SwDocShell* pDocSh, bool bSorted = false, bool bWithDefault = false);
 
 //inserts a string sorted into a ListBox,

@@ -1033,9 +1033,9 @@ SwView::~SwView()
     m_pPostItMgr = 0;
 
     m_bInDtor = true;
-    m_pEditWin->Hide(); // damit kein Paint Aerger machen kann!
-    // An der SwDocShell den Pointer auf die View ruecksetzen
+    m_pEditWin->Hide(); // prevent problems with painting
 
+    // Set pointer in SwDocShell to the view again
     SwDocShell* pDocSh = GetDocShell();
     if( pDocSh && pDocSh->GetView() == this )
         pDocSh->SetView( 0 );
