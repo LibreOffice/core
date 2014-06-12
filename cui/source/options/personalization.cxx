@@ -85,9 +85,9 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, /*pButton*/ )
     if( searchTerm.isEmpty( ) )
         return 0;
 
-    OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
-    m_aSearchThread = new SearchAndParseThread( this, rSearchURL );
-    m_aSearchThread->launch();
+    OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/1";
+    m_rSearchThread = new SearchAndParseThread( this, rSearchURL );
+    m_rSearchThread->launch();
     return 0;
 }
 
@@ -261,11 +261,9 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
         OUString aURL( aDialog.GetSelectedPersona() );
         if ( !aURL.isEmpty() )
         {
-            if ( CopyPersonaToGallery( aURL ) )
-                m_pOwnPersona->Check();
+            CopyPersonaToGallery( aURL );
             break;
         }
-        // else TODO msgbox that the URL did not match
     }
 
     return 0;
@@ -336,67 +334,32 @@ static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUSt
     return true;
 }
 
-bool SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
+void SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
 {
-    // init the input stream
-    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
-    if ( !xFileAccess.is() )
-        return false;
-
-    OUString aName, aHeaderURL, aFooterURL, aTextColor, aAccentColor;
-
-    // get the required fields from rURL
-    sal_Int32 nOldIndex = 0;
-    sal_Int32 nNewIndex = rURL.indexOf( ';', nOldIndex );
-    aName = rURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
-
-    nOldIndex = nNewIndex + 1;
-    nNewIndex = rURL.indexOf( ';', nOldIndex );
-    aHeaderURL = rURL.copy(nOldIndex , ( nNewIndex - nOldIndex ) );
-
-    nOldIndex = nNewIndex + 1;
-    nNewIndex = rURL.indexOf( ';', nOldIndex );
-    aFooterURL = rURL.copy( nOldIndex,  ( nNewIndex - nOldIndex ) );
-
-    nOldIndex = nNewIndex + 1;
-    nNewIndex = rURL.indexOf( ';', nOldIndex );
-    aTextColor = rURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
-
-    nOldIndex = nNewIndex + 1;
-    nNewIndex = rURL.getLength();
-    aAccentColor = rURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
-
-    // copy the images to the user's gallery
-    OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
-    rtl::Bootstrap::expandMacros( gallery );
-    gallery += "/user/gallery/personas/";
-    osl::Directory::createPath( gallery );
-
-    OUString aHeaderFile( INetURLObject( aHeaderURL ).getName() );
-    OUString aFooterFile( INetURLObject( aFooterURL ).getName() );
-
-    aHeaderFile = aName + "/" + aHeaderFile;
-    aFooterFile = aName + "/" + aFooterFile;
-
-    try {
-        xFileAccess->copy( aHeaderURL, gallery + aHeaderFile );
-        xFileAccess->copy( aFooterURL, gallery + aFooterFile );
-    }
-    catch ( const uno::Exception & )
-    {
-        return false;
-    }
-
-    m_aPersonaSettings = aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
-
-    return true;
+    m_rApplyThread = new SearchAndParseThread( this, rURL );
+    m_rApplyThread->launch();
 }
 
+void SvxPersonalizationTabPage::setPersonaSettings( const OUString aPersonaSettings )
+{
+    m_aPersonaSettings = aPersonaSettings;
+    m_pOwnPersona->Check();
+}
 
 SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,
                           const OUString& rURL ) :
             Thread( "cuiPersonasSearchThread" ),
             m_pPersonaDialog( pDialog ),
+            m_pPersonalizationTabPage( NULL ),
+            m_aURL( rURL )
+{
+}
+
+SearchAndParseThread::SearchAndParseThread( SvxPersonalizationTabPage* pDialog,
+                          const OUString& rURL ) :
+            Thread( "cuiPersonasSearchThread" ),
+            m_pPersonaDialog( NULL ),
+            m_pPersonalizationTabPage( pDialog ),
             m_aURL( rURL )
 {
 }
@@ -407,54 +370,113 @@ SearchAndParseThread::~SearchAndParseThread()
 
 void SearchAndParseThread::execute()
 {
-    OUString sProgress( "Searching.. Please Wait.." );
-    m_pPersonaDialog->SetProgress( sProgress );
-    Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
-    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
-    PersonasDocHandler* pHandler = new PersonasDocHandler();
-    Reference< xml::sax::XDocumentHandler > xDocHandler = pHandler;
-    uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
-    uno::Reference< io::XInputStream > xStream;
-    xParser->setDocumentHandler( xDocHandler );
-
-    // if ( !xFileAccess.is() )
-    //     return false;
-
-    try {
-        xStream = xFileAccess->openFileRead( m_aURL );
-    }
-    catch (...)
+    if(m_pPersonaDialog)
     {
-        // return false;
+        OUString sProgress( "Searching.. Please Wait.." );
+        m_pPersonaDialog->SetProgress( sProgress );
+        Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+        Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
+        PersonasDocHandler* pHandler = new PersonasDocHandler();
+        Reference< xml::sax::XDocumentHandler > xDocHandler = pHandler;
+        uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+        uno::Reference< io::XInputStream > xStream;
+        xParser->setDocumentHandler( xDocHandler );
+
+        if ( !xFileAccess.is() )
+            return;
+
+        try {
+            xStream = xFileAccess->openFileRead( m_aURL );
+        }
+        catch (...)
+        {
+        return;
+        }
+
+        xml::sax::InputSource aParserInput;
+        aParserInput.aInputStream = xStream;
+        xParser->parseStream( aParserInput );
+
+        std::vector<OUString> vLearnmoreURLs = pHandler->getLearnmoreURLs();
+        std::vector<OUString>::iterator it;
+        std::vector<Image> vResultList;
+        GraphicFilter aFilter;
+        Graphic aGraphic;
+
+        for( it = vLearnmoreURLs.begin(); it!=vLearnmoreURLs.end(); ++it )
+        {
+            OUString sHeaderFile, aPersonaSetting;
+            getPreviewFile( *it, &sHeaderFile, &aPersonaSetting );
+            INetURLObject aURLObj( sHeaderFile );
+            aFilter.ImportGraphic( aGraphic, aURLObj );
+            Bitmap aBmp = aGraphic.GetBitmap();
+            vResultList.push_back( Image( aBmp ) );
+            m_pPersonaDialog->AddPersonaSetting(aPersonaSetting);
+        }
+
+        // for VCL to be able to do visual changes in the thread
+        SolarMutexGuard aGuard;
+
+        m_pPersonaDialog->SetImages( vResultList );
+        sProgress = "";
+        m_pPersonaDialog->SetProgress( sProgress );
+        m_pPersonaDialog->setOptimalLayoutSize();
     }
-    xml::sax::InputSource aParserInput;
-    aParserInput.aInputStream = xStream;
-    xParser->parseStream( aParserInput );
 
-    std::vector<OUString> vLearnmoreURLs = pHandler->getLearnmoreURLs();
-    std::vector<OUString>::iterator it;
-    std::vector<Image> vResultList;
-    GraphicFilter aFilter;
-    Graphic aGraphic;
-
-    for( it = vLearnmoreURLs.begin(); it!=vLearnmoreURLs.end(); ++it )
+    else
     {
-        OUString sHeaderFile, aPersonaSetting;
-        getPreviewFile( *it, &sHeaderFile, &aPersonaSetting );
-        INetURLObject aURLObj( sHeaderFile );
-        aFilter.ImportGraphic( aGraphic, aURLObj );
-        Bitmap aBmp = aGraphic.GetBitmap();
-        vResultList.push_back( Image( aBmp ) );
-        m_pPersonaDialog->AddPersonaSetting(aPersonaSetting);
+        uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
+        if ( !xFileAccess.is() )
+            return;
+
+        OUString aName, aHeaderURL, aFooterURL, aTextColor, aAccentColor;
+        OUString m_aPersonaSettings;
+
+        // get the required fields from m_aURL
+        sal_Int32 nOldIndex = 0;
+        sal_Int32 nNewIndex = m_aURL.indexOf( ';', nOldIndex );
+        aName = m_aURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
+
+        nOldIndex = nNewIndex + 1;
+        nNewIndex = m_aURL.indexOf( ';', nOldIndex );
+        aHeaderURL = m_aURL.copy(nOldIndex , ( nNewIndex - nOldIndex ) );
+
+        nOldIndex = nNewIndex + 1;
+        nNewIndex = m_aURL.indexOf( ';', nOldIndex );
+        aFooterURL = m_aURL.copy( nOldIndex,  ( nNewIndex - nOldIndex ) );
+
+        nOldIndex = nNewIndex + 1;
+        nNewIndex = m_aURL.indexOf( ';', nOldIndex );
+        aTextColor = m_aURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
+
+        nOldIndex = nNewIndex + 1;
+        nNewIndex = m_aURL.getLength();
+        aAccentColor = m_aURL.copy( nOldIndex, ( nNewIndex - nOldIndex ) );
+
+        // copy the images to the user's gallery
+        OUString gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
+        rtl::Bootstrap::expandMacros( gallery );
+        gallery += "/user/gallery/personas/";
+        osl::Directory::createPath( gallery );
+
+        OUString aHeaderFile( INetURLObject( aHeaderURL ).getName() );
+        OUString aFooterFile( INetURLObject( aFooterURL ).getName() );
+
+        aHeaderFile = aName + "/" + aHeaderFile;
+        aFooterFile = aName + "/" + aFooterFile;
+
+        try {
+            xFileAccess->copy( aHeaderURL, gallery + aHeaderFile );
+            xFileAccess->copy( aFooterURL, gallery + aFooterFile );
+        }
+        catch ( const uno::Exception & )
+        {
+            return;
+        }
+
+        m_aPersonaSettings = aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
+        m_pPersonalizationTabPage->setPersonaSettings( m_aPersonaSettings );
     }
-
-    // for VCL to be able to do visual changes in the thread
-    SolarMutexGuard aGuard;
-
-    m_pPersonaDialog->SetImages( vResultList );
-    sProgress = "";
-    m_pPersonaDialog->SetProgress( sProgress );
-    m_pPersonaDialog->setOptimalLayoutSize();
 }
 
 void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pHeaderFile, OUString *pPersonaSetting )
@@ -515,4 +537,5 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pHead
     *pHeaderFile = gallery + aPreviewFile;
     *pPersonaSetting = aName + ";" + aHeaderURL + ";" + aFooterURL + ";" + aTextColor + ";" + aAccentColor;
 }
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
