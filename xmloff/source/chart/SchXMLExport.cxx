@@ -2549,14 +2549,6 @@ namespace
         //no doubles and no texts
         return false;
     }
-
-    bool isString(const OUString& rString)
-    {
-        if(rString.startsWith("\"") && rString.endsWith("\""))
-            return true;
-
-        return false;
-    }
 }
 
 void SchXMLExportHelper_Impl::exportSeries(
