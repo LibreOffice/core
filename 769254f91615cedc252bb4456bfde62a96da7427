@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_c03a9ee7",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_e016c2a6",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_a010baa9",
         "filename": "sc/source/core/data/dociter.cxx",
         "patchSetId": 5
@@ -30,6 +48,24 @@
       "writtenOn": "2014-06-11T13:40:47Z",
       "side": 1,
       "message": "ScFormulaCell::IsValueNoError() returns false also for string results (or any other than double, empty or hybrid cell). Use ScFormulaCell::GetErrCode() instead.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a03f9ad5",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "That\u0027s more than nit picking, this is bug fixing. Thank you for noticing!\nDone.",
+      "parentUuid": "baa041b7_a010baa9",
       "revId": "769254f91615cedc252bb4456bfde62a96da7427",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_8025b6c3",
+        "filename": "sc/source/core/data/dociter.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2209,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "ScHorizontal[Cell/Value]Iterator is not used in any subtotal/aggregate function. IMHO, therefore adding the new flags is useless.",
+      "parentUuid": "baa041b7_6023d206",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_0079a6fc",
         "filename": "sc/source/core/data/formulacell.cxx",
         "patchSetId": 5
@@ -64,6 +118,24 @@
       "writtenOn": "2014-06-11T13:40:47Z",
       "side": 1,
       "message": "We can simplify this a little and replace the entire block (including the mpCode-\u003eReset()) with\n\n mbSubTotal \u003d mpCode-\u003eHasOpCodeRPN( ocSubTotal ) || mpCode-\u003eHasOpCodeRPN( ocAggregate )",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6022b2bb",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Great, thank you :-)\nDone.",
+      "parentUuid": "baa041b7_0079a6fc",
       "revId": "769254f91615cedc252bb4456bfde62a96da7427",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_402faea1",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_e07da2e8",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_806db634",
         "filename": "sc/source/core/data/formulacell.cxx",
         "patchSetId": 5
@@ -98,6 +188,24 @@
       "writtenOn": "2014-06-11T13:40:47Z",
       "side": 1,
       "message": "ditto",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_202caaaa",
+        "filename": "sc/source/core/data/formulacell.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_806db634",
       "revId": "769254f91615cedc252bb4456bfde62a96da7427",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_00188683",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1010,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "We\u0027re in ScNPV(), which is not a subtotal or aggregate function and which is not called by any subtotal/aggregate function.\nI don\u0027t think we need the subtotal flags here.",
+      "parentUuid": "baa041b7_606ab21c",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_2074aafb",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 5
@@ -132,6 +258,24 @@
       "writtenOn": "2014-06-11T13:40:47Z",
       "side": 1,
       "message": "This extra condition is superfluous, the exact same condition was already checked above when we entered the containing if block.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_e01c8279",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_2074aafb",
       "revId": "769254f91615cedc252bb4456bfde62a96da7427",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_c0117e5f",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 515,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_00608634",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_e064824a",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 5
@@ -166,6 +328,24 @@
       "writtenOn": "2014-06-11T13:40:47Z",
       "side": 1,
       "message": "Same as above, condition was already checked in the containing if.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_a0167a53",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 571,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_e064824a",
       "revId": "769254f91615cedc252bb4456bfde62a96da7427",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_800c9643",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 587,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_c0597e90",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_a05e7a74",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 5
@@ -200,6 +398,24 @@
       "writtenOn": "2014-06-11T13:40:47Z",
       "side": 1,
       "message": "This condition misses the extra || (mnSubTotalFlags \u0026 SUBTOTAL_IGN_ERR_VAL) that is done in the other two cases above, but I think the intention was the same, and actually this condition is superfluous.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_60099231",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "I may not understand your comment as I think the code here is correct.\nIt is possible that ( nGlobalError \u0026\u0026 ( mnSubTotalFlags \u0026 SUBTOTAL_IGN_ERR_VAL ) ) is true for eFunc values other than ifCOUNT and ifCOUNT2. Only for these 2 break is relevant.",
+      "parentUuid": "baa041b7_a05e7a74",
       "revId": "769254f91615cedc252bb4456bfde62a96da7427",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_40068e21",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_80549654",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_60519262",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 5
@@ -234,6 +468,24 @@
       "writtenOn": "2014-06-11T13:40:47Z",
       "side": 1,
       "message": "For performance reasons, rather than checking the condition on every loop, I suggest to create extra loop blocks, with and without condition, for all these function blocks.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_03ff7002",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 672,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa041b7_60519262",
       "revId": "769254f91615cedc252bb4456bfde62a96da7427",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -257,6 +509,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_e3036c0c",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 711,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "ifCOUNT doesn\u0027t count error values as ifCOUNT2 does, nor does ifCOUNT propagate errors, so I think there is no need to change the loop.",
+      "parentUuid": "baa041b7_404e8ec2",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_204b8ab2",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 5
@@ -268,6 +538,24 @@
       "writtenOn": "2014-06-11T13:40:47Z",
       "side": 1,
       "message": "Ignoring an error here probably won\u0027t work. Getting an error during PopExternalDoubleRef() will leave us without a valid matrix.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_c308682b",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "Well, yes, I agree. That is why I haven\u0027t put the flags in IterateMatrix(). I think ignoring values will not work for matrices, i.e. matrices are not wanted a argument for subtotal/aggregate functions.\n\nHowever, I don\u0027t know how to handle matrices in subtotal/aggregate functions. Should I regard them as invalid arguments?",
+      "parentUuid": "baa041b7_204b8ab2",
       "revId": "769254f91615cedc252bb4456bfde62a96da7427",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -291,6 +579,24 @@
     },
     {
       "key": {
+        "uuid": "baa041b7_a30d6439",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 787,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "I see.\nIn that case I have 2 options:\n-subtotal/aggregate SUM function uses IterateParameters(). no optimisation, but uniform and central use of mnSubTotalFlags;\n-add mnSubTotalFlags to ScSum() and remove ifSUM from IterateParameters().\n\nI would prefer the first option, keeping ScSum() fully optimised and keeping the subtotal flags central.\nI wonder what your preference is, probably a third option ;-).",
+      "parentUuid": "baa041b7_a0d55aba",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_20e26aa0",
         "filename": "sc/source/core/tool/interpr6.cxx",
         "patchSetId": 5
@@ -302,6 +608,24 @@
       "writtenOn": "2014-06-11T13:40:47Z",
       "side": 1,
       "message": "Same here, please don\u0027t substitute the ColumnSpanSet optimized code.",
+      "revId": "769254f91615cedc252bb4456bfde62a96da7427",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_8313805c",
+        "filename": "sc/source/core/tool/interpr6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2014-06-12T07:45:05Z",
+      "side": 1,
+      "message": "See reply at ScSum().",
+      "parentUuid": "baa041b7_20e26aa0",
       "revId": "769254f91615cedc252bb4456bfde62a96da7427",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
