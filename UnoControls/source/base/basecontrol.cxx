@@ -716,27 +716,6 @@ const OUString BaseControl::impl_getStaticImplementationName()
 
 //  protected method
 
-const Reference< XComponentContext > BaseControl::impl_getComponentContext()
-{
-    return m_xComponentContext;
-}
-
-//  protected method
-
-const Reference< XWindow > BaseControl::impl_getPeerWindow()
-{
-    return m_xPeerWindow;
-}
-
-//  protected method
-
-const Reference< XGraphics > BaseControl::impl_getGraphicsPeer()
-{
-    return m_xGraphicsPeer;
-}
-
-//  protected method
-
 WindowDescriptor* BaseControl::impl_getWindowDescriptor( const Reference< XWindowPeer >& xParentPeer )
 {
     // - used from "createPeer()" to set the values of an ::com::sun::star::awt::WindowDescriptor !!!
@@ -776,10 +755,6 @@ void BaseControl::impl_recalcLayout( const WindowEvent& /*aEvent*/ )
 
 //  protected method
 
-Reference< XInterface > BaseControl::impl_getDelegator()
-{
-    return m_xDelegator;
-}
 
 //  private method
 

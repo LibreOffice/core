@@ -230,7 +230,7 @@ class SVX_DLLPUBLIC NBOTypeMgrBase
         // store the attributes passed from pSet
         void SetItems(const SfxItemSet* pArg) { pSet = pArg;StoreBulCharFmtName_impl();StoreMapUnit_impl();}
     protected:
-        OUString GetBulCharFmtName();
+        OUString GetBulCharFmtName() { return aNumCharFmtName;}
         SfxMapUnit GetMapUnit() { return eCoreUnit;}
     protected:
         bool    bIsLoading;

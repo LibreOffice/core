@@ -180,7 +180,7 @@ public:
 
     void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
     const unsigned char* GetTable( const char* pName, sal_uLong* pLength );
-    int                 GetEmUnits() const;
+    int                 GetEmUnits() const { return maFaceFT->units_per_EM;}
     const FT_Size_Metrics& GetMetricsFT() const { return maSizeFT->metrics; }
     const ImplFontCharMap* GetImplFontCharMap() const;
     bool                GetFontCapabilities(vcl::FontCapabilities &) const;

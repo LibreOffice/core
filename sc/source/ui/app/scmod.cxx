@@ -648,10 +648,6 @@ void ScModule::ResetDragObject()
     mpDragData->aJumpText = OUString();
 }
 
-const ScDragData& ScModule::GetDragData() const
-{
-    return *mpDragData;
-}
 
 void ScModule::SetDragObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
 {
@@ -679,10 +675,6 @@ void ScModule::SetDragJump(
     mpDragData->aJumpText = rText;
 }
 
-const ScClipData& ScModule::GetClipData() const
-{
-    return *mpClipData;
-}
 
 void ScModule::SetClipObject( ScTransferObj* pCellObj, ScDrawTransferObj* pDrawObj )
 {

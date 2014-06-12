@@ -65,7 +65,7 @@ namespace dbaui
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext);
         virtual ~OCollectionView();
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> getSelectedFolder() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> getSelectedFolder() const { return m_xContent;}
         OUString getName() const;
     };
 }   // namespace dbaui

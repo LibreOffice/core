@@ -73,7 +73,7 @@ public:
 
     /** Return the page that is represented by the descriptor as XDrawPage reference.
     */
-    css::uno::Reference<css::drawing::XDrawPage> GetXDrawPage (void) const;
+    css::uno::Reference<css::drawing::XDrawPage> GetXDrawPage (void) const { return mxPage;}
 
     /** Returns the index of the page as it is displayed in the view as page
         number.  The value may differ from the index returned by the
@@ -109,7 +109,7 @@ public:
     */
     void SetCoreSelection (void);
 
-    VisualState& GetVisualState (void);
+    VisualState& GetVisualState (void) { return maVisualState;}
 
     Rectangle GetBoundingBox (void) const;
     Point GetLocation (const bool bIgnoreLocation = false) const;

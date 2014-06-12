@@ -56,12 +56,12 @@ public:
     PanelTitleBar* GetTitleBar (void) const;
     bool IsTitleBarOptional (void) const { return mbIsTitleBarOptional;}
     void SetUIElement (const cssu::Reference<css::ui::XUIElement>& rxElement);
-    cssu::Reference<css::ui::XSidebarPanel> GetPanelComponent (void) const;
+    cssu::Reference<css::ui::XSidebarPanel> GetPanelComponent (void) const { return mxPanelComponent;}
     cssu::Reference<css::awt::XWindow> GetElementWindow (void);
     void SetExpanded (const bool bIsExpanded);
     bool IsExpanded (void) const { return mbIsExpanded;}
     bool HasIdPredicate (const ::rtl::OUString& rsId) const;
-    const ::rtl::OUString& GetId (void) const;
+    const ::rtl::OUString& GetId (void) const { return msPanelId;}
 
     virtual void Paint (const Rectangle& rUpdateArea) SAL_OVERRIDE;
     virtual void Resize (void) SAL_OVERRIDE;

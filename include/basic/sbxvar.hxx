@@ -137,7 +137,7 @@ public:
 
     virtual SbxClassType GetClass() const SAL_OVERRIDE;
     virtual SbxDataType GetType() const SAL_OVERRIDE;
-    SbxDataType GetFullType() const;
+    SbxDataType GetFullType() const { return aData.eType;}
     bool SetType( SbxDataType );
 
     virtual bool Get( SbxValues& ) const;

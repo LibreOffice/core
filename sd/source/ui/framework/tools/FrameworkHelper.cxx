@@ -903,10 +903,6 @@ Reference<XResourceId> FrameworkHelper::CreateResourceId (
 
 
 
-Reference<XConfigurationController> FrameworkHelper::GetConfigurationController (void) const
-{
-    return mxConfigurationController;
-}
 
 
 

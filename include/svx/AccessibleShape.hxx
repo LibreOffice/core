@@ -385,7 +385,7 @@ public:
     //===== Misc ========================================================
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-        GetXShape();
+        GetXShape() { return( mxShape );}
 
     /** set the index _nIndex at the accessible shape
         @param  _nIndex

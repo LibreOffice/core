@@ -51,7 +51,7 @@ public:
     BibToolBarListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     virtual ~BibToolBarListener();
 
-    OUString           GetCommand() const;
+    OUString           GetCommand() const { return aCommand;}
 
     // ::com::sun::star::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal

@@ -442,10 +442,6 @@ void AccessibleBase::KillAllChildren()
     m_bChildrenInitialized = false;
 }
 
-AccessibleElementInfo AccessibleBase::GetInfo() const
-{
-    return m_aAccInfo;
-}
 
 void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
 {
@@ -458,10 +454,6 @@ void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
                        true /* global notification */ );
 }
 
-AccessibleUniqueId AccessibleBase::GetId() const
-{
-    return m_aAccInfo.m_aOID;
-}
 
 // ________ (XComponent::dispose) ________
 void SAL_CALL AccessibleBase::disposing()

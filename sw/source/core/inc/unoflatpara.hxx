@@ -125,7 +125,7 @@ public:
     virtual void SAL_CALL changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getLanguagePortions() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    const SwTxtNode* getTxtNode() const;
+    const SwTxtNode* getTxtNode() const { return mpTxtNode;}
 
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

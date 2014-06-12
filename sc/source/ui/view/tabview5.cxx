@@ -430,11 +430,6 @@ void ScTabView::ViewOptionsHasChanged( bool bHScrollChanged, bool bGraphicsChang
 
 // Helper-Funktion gegen das Include des Drawing Layers
 
-SdrView* ScTabView::GetSdrView()
-{
-    return pDrawView;
-}
-
 void ScTabView::DrawMarkListHasChanged()
 {
     if ( pDrawView )

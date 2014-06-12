@@ -931,30 +931,14 @@ bool ScCellIterator::getCurrent()
     return false;
 }
 
-CellType ScCellIterator::getType() const
-{
-    return maCurCell.meType;
-}
 
 OUString ScCellIterator::getString()
 {
     return maCurCell.getString(mpDoc);
 }
 
-const EditTextObject* ScCellIterator::getEditText() const
-{
-    return maCurCell.mpEditText;
-}
 
-ScFormulaCell* ScCellIterator::getFormulaCell()
-{
-    return maCurCell.mpFormula;
-}
 
-const ScFormulaCell* ScCellIterator::getFormulaCell() const
-{
-    return maCurCell.mpFormula;
-}
 
 ScCellValue ScCellIterator::getCellValue() const
 {
@@ -982,10 +966,6 @@ ScCellValue ScCellIterator::getCellValue() const
     return aRet;
 }
 
-const ScRefCellValue& ScCellIterator::getRefCellValue() const
-{
-    return maCurCell;
-}
 
 bool ScCellIterator::hasString() const
 {
@@ -2501,10 +2481,6 @@ bool ScUsedAreaIterator::GetNext()
     return bFound;
 }
 
-const ScRefCellValue& ScUsedAreaIterator::GetCell() const
-{
-    return maFoundCell;
-}
 
 ScDocAttrIterator::ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol1, SCROW nRow1,

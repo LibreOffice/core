@@ -252,10 +252,6 @@ void ScSheetSourceDesc::SetRangeName(const OUString& rName)
     maRangeName = rName;
 }
 
-const OUString& ScSheetSourceDesc::GetRangeName() const
-{
-    return maRangeName;
-}
 
 bool ScSheetSourceDesc::HasRangeName() const
 {
@@ -267,10 +263,6 @@ void ScSheetSourceDesc::SetQueryParam(const ScQueryParam& rParam)
     maQueryParam = rParam;
 }
 
-const ScQueryParam& ScSheetSourceDesc::GetQueryParam() const
-{
-    return maQueryParam;
-}
 
 bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
 {

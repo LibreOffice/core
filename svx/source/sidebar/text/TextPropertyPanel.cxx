@@ -82,10 +82,6 @@ TextPropertyPanel* TextPropertyPanel::Create (
         rContext);
 }
 
-::sfx2::sidebar::ControllerItem& TextPropertyPanel::GetSpaceController()
-{
-    return maSpacingControl;
-}
 
 TextPropertyPanel::TextPropertyPanel ( Window* pParent, const cssu::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& /*rContext*/ )
     : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame),
@@ -298,10 +294,6 @@ void TextPropertyPanel::NotifyItemUpdate (
     }
 }
 
-Color& TextPropertyPanel::GetUnderlineColor()
-{
-    return meUnderlineColor;
-}
 
 } } // end of namespace svx::sidebar
 

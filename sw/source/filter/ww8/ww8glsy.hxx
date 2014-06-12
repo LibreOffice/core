@@ -37,7 +37,8 @@ public:
     WW8GlossaryFib( SvStream& rStrm, sal_uInt8 nWantedVersion ,
         SvStream& rTableStrm, const WW8Fib &rFib) : WW8Fib(rStrm,
         nWantedVersion,FindGlossaryFibOffset(rTableStrm,rStrm,rFib)) {}
-    bool IsGlossaryFib();
+    // fGlsy will indicate whether this has AutoText or not
+    bool IsGlossaryFib() { return fGlsy; }
 private:
     sal_uInt32 FindGlossaryFibOffset(SvStream &rTableStrm,SvStream &rStrm,
         const WW8Fib &rFib);

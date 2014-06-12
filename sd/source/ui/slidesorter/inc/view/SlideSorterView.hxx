@@ -215,7 +215,7 @@ public:
     void UpdateOrientation (void);
 
     ::boost::shared_ptr<PageObjectPainter> GetPageObjectPainter (void);
-    ::boost::shared_ptr<LayeredDevice> GetLayeredDevice (void) const;
+    ::boost::shared_ptr<LayeredDevice> GetLayeredDevice (void) const { return mpLayeredDevice;}
 
     class DrawLock
     {

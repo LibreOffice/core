@@ -73,7 +73,7 @@ public:
                         getXStorage() const;
 
     /** Returns the element name of this storage. */
-    const OUString& getName() const;
+    const OUString& getName() const { return maStorageName;}
 
     /** Returns the full path of this storage. */
     OUString     getPath() const;

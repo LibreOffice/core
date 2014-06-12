@@ -49,7 +49,7 @@ public:
         virtual void notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType) SAL_OVERRIDE;
         void addFileId(sal_uInt16 nFileId);
         void removeFileId(sal_uInt16 nFileId);
-        ::boost::unordered_set<sal_uInt16>& getAllFileIds();
+        ::boost::unordered_set<sal_uInt16>& getAllFileIds() { return maFileIds;}
 
     private:
         ExternalRefListener();
@@ -83,7 +83,7 @@ public:
     ScChartListener( const ScChartListener& );
     virtual ~ScChartListener();
 
-    const OUString& GetName() const;
+    const OUString& GetName() const { return maName;}
 
     void            SetUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
                             const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
@@ -167,9 +167,9 @@ public:
 
     void removeByName(const OUString& rName);
 
-    const ListenersType& getListeners() const;
-    ListenersType& getListeners();
-    StringSetType& getNonOleObjectNames();
+    const ListenersType& getListeners() const { return maListeners;}
+    ListenersType& getListeners() { return maListeners;}
+    StringSetType& getNonOleObjectNames() { return maNonOleObjectNames;}
 
     /**
      * Create a unique name that's not taken by any existing chart listener

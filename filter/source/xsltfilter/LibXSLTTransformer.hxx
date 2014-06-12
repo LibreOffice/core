@@ -139,10 +139,10 @@ namespace XSLT
         error(const OUString& msg);
 
         const OString SAL_CALL
-        getStyleSheetURL();
+        getStyleSheetURL() { return m_styleSheetURL; }
 
         ::std::map<const char*, OString> SAL_CALL
-        getParameters();
+        getParameters() { return m_parameters; }
 
         com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> SAL_CALL
         getComponentContext() {

@@ -49,10 +49,6 @@ VAxisBase::~VAxisBase()
 {
 }
 
-sal_Int32 VAxisBase::getDimensionCount()
-{
-    return m_nDimension;
-}
 
 void VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels )

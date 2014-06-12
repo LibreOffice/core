@@ -350,7 +350,7 @@ public:
     void SetDateType(condformat::ScCondFormatDateType eType);
     condformat::ScCondFormatDateType GetDateType() const { return meType;}
 
-    const OUString& GetStyleName() const;
+    const OUString& GetStyleName() const { return maStyleName;}
     void SetStyleName( const OUString& rStyleName );
 
     virtual condformat::ScFormatEntryType GetType() const SAL_OVERRIDE { return condformat::DATE; }

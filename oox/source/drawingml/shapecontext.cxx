@@ -58,10 +58,6 @@ ShapeContext::~ShapeContext()
         mpMasterShapePtr->addChild( mpShapePtr );
 }
 
-ShapePtr ShapeContext::getShape()
-{
-    return mpShapePtr;
-}
 
 ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {

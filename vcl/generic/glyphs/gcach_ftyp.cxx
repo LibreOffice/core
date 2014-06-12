@@ -634,10 +634,6 @@ ServerFont::~ServerFont()
     ReleaseFromGarbageCollect();
 }
 
-int ServerFont::GetEmUnits() const
-{
-    return maFaceFT->units_per_EM;
-}
 
 void ServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor ) const
 {

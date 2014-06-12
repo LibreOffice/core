@@ -181,28 +181,28 @@ public:
 
        @return the selected item
     */
-    OUString GetSelectedItem() const;
+    const OUString& GetSelectedItem() const { return aSelectedItem;}
 
     /**
        Returns the name of the field.
 
        @return the name of the field
     */
-    OUString GetName() const;
+    const OUString& GetName() const { return aName;}
 
     /**
        Returns the help text of the field.
 
        @return the help text of the field
     */
-    OUString GetHelp() const;
+    const OUString& GetHelp() const { return aHelp;}
 
     /**
        Returns the tool tip of the field.
 
        @return the tool tip of the field
      */
-    OUString GetToolTip() const;
+    const OUString& GetToolTip() const { return aToolTip;}
 
     /**
        Sets the selected item.

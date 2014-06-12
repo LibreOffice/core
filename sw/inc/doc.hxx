@@ -1865,7 +1865,7 @@ public:
 
     // access container for XForms model; will be NULL if !isXForms()
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer>
-        getXForms() const;
+        getXForms() const { return mxXForms;}
 
     com::sun::star::uno::Reference< com::sun::star::linguistic2::XProofreadingIterator > GetGCIterator() const;
 

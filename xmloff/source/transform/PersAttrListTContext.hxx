@@ -107,7 +107,8 @@ public:
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList >
-        GetAttrList() const;
+        GetAttrList() const { return m_xAttrList; }
+
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_PERSATTRLISTTCONTEXT_HXX

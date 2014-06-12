@@ -269,7 +269,7 @@ public:
     SC_DLLPUBLIC void SetGrandTotalName(const OUString& rName);
     SC_DLLPUBLIC const OUString* GetGrandTotalName() const;
 
-    SC_DLLPUBLIC const DimsType& GetDimensions() const;
+    const DimsType& GetDimensions() const { return aDimList;}
 
     /**
      * Get sort order map to sort row and column dimensions in order of

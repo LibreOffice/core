@@ -43,7 +43,7 @@ public:
     virtual ~SvColorDialog();
 
     void            SetColor( const Color& rColor );
-    const Color&    GetColor() const;
+    const Color&    GetColor() const { return maColor;}
 
     void            SetMode( sal_Int16 eMode );
 

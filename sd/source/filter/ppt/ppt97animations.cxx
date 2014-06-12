@@ -150,10 +150,6 @@ bool Ppt97Animation::HasAfterEffect_DimAfterEffect() const
     return m_aAtom.nAfterEffect == 3;
 }
 #endif
-sal_uInt32 Ppt97Animation::GetSoundRef() const
-{
-    return m_aAtom.nSoundRef;
-}
 void Ppt97Animation::SetSoundFileUrl( const OUString& rSoundFileUrl )
 {
     m_aSoundFileUrl = rSoundFileUrl;
@@ -191,10 +187,6 @@ bool Ppt97Animation::GetSpecialTextIterationDelay( double& rfTextIterationDelay 
     return bRet;
 }
 
-sal_Int32 Ppt97Animation::GetDimColor() const
-{
-    return static_cast<sal_Int32>(m_aAtom.nDimColor);
-}
 
 void Ppt97Animation::SetDimColor( sal_Int32 nDimColor )
 {

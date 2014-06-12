@@ -142,8 +142,8 @@ public:
     void                    ReleaseGraphicLink();
     bool IsLinkedGraphic() const;
 
-    const OUString& GetFileName() const;
-    const OUString& GetFilterName() const;
+    const OUString& GetFileName() const { return aFileName;}
+    const OUString& GetFilterName() const { return aFilterName;}
 
     void                    StartAnimation(OutputDevice* pOutDev, const Point& rPoint, const Size& rSize, long nExtraData=0L);
 

@@ -730,10 +730,6 @@ SvStream& XLineDashItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
     return rOut;
 }
 
-const XDash& XLineDashItem::GetDashValue() const
-{
-    return aDash;
-}
 
 SfxItemPresentation XLineDashItem::GetPresentation
 (
@@ -1334,10 +1330,6 @@ SvStream& XLineStartItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
     return rOut;
 }
 
-basegfx::B2DPolyPolygon XLineStartItem::GetLineStartValue() const
-{
-    return maPolyPolygon;
-}
 
 SfxItemPresentation XLineStartItem::GetPresentation
 (
@@ -1692,10 +1684,6 @@ SvStream& XLineEndItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
     return rOut;
 }
 
-basegfx::B2DPolyPolygon XLineEndItem::GetLineEndValue() const
-{
-    return maPolyPolygon;
-}
 
 /** this function searches in both the models pool and the styles pool for XLineStartItem
     and XLineEndItem with the same value or name and returns an item with the value of
@@ -3119,10 +3107,6 @@ SvStream& XFillHatchItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
     return rOut;
 }
 
-const XHatch& XFillHatchItem::GetHatchValue() const // GetValue -> GetHatchValue
-{
-    return aHatch;
-}
 
 SfxItemPresentation XFillHatchItem::GetPresentation
 (

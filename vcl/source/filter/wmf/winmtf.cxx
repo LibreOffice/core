@@ -596,10 +596,6 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
         delete pGDIObj;
 }
 
-const Font& WinMtfOutput::GetFont() const
-{
-    return maFont;
-}
 
 void WinMtfOutput::SetTextLayoutMode( const sal_uInt32 nTextLayoutMode )
 {

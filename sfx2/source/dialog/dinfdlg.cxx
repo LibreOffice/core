@@ -479,10 +479,6 @@ void SfxDocumentInfoItem::AddCustomProperty( const OUString& sName, const Any& r
     m_aCustomProperties.push_back( pProp );
 }
 
-uno::Sequence< document::CmisProperty > SfxDocumentInfoItem::GetCmisProperties() const
-{
-    return m_aCmisProperties;
-}
 
 void SfxDocumentInfoItem::SetCmisProperties( const Sequence< document::CmisProperty >& cmisProps)
 {

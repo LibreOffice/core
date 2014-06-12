@@ -1068,10 +1068,6 @@ bool FixedImage::SetModeImage( const Image& rImage )
     return true;
 }
 
-const Image& FixedImage::GetModeImage( ) const
-{
-    return maImage;
-}
 
 Image FixedImage::loadThemeImage(const OString &rFileName)
 {

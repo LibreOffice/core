@@ -139,14 +139,14 @@ class SvtSecurityOptions_Impl : public ConfigItem
 
         bool                IsReadOnly      ( SvtSecurityOptions::EOption eOption                   ) const;
 
-        Sequence< OUString >    GetSecureURLs   (                                                       ) const;
+        Sequence< OUString >    GetSecureURLs   (                                                       ) const { return m_seqSecureURLs;}
         void                    SetSecureURLs   (   const   Sequence< OUString >&   seqURLList          );
         inline sal_Int32        GetMacroSecurityLevel   (                                               ) const;
         void                    SetMacroSecurityLevel   ( sal_Int32 _nLevel                             );
 
         inline bool         IsMacroDisabled         (                                               ) const;
 
-        Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const;
+        Sequence< SvtSecurityOptions::Certificate > GetTrustedAuthors       (                                                                                       ) const { return m_seqTrustedAuthors;}
         void                                        SetTrustedAuthors       ( const Sequence< SvtSecurityOptions::Certificate >& rAuthors                           );
 
         bool                IsOptionSet     ( SvtSecurityOptions::EOption eOption                   ) const;
@@ -828,10 +828,6 @@ bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) 
     return bReadonly;
 }
 
-Sequence< OUString > SvtSecurityOptions_Impl::GetSecureURLs() const
-{
-    return m_seqSecureURLs;
-}
 
 void SvtSecurityOptions_Impl::SetSecureURLs( const Sequence< OUString >& seqURLList )
 {
@@ -868,10 +864,6 @@ void SvtSecurityOptions_Impl::SetMacroSecurityLevel( sal_Int32 _nLevel )
     }
 }
 
-Sequence< SvtSecurityOptions::Certificate > SvtSecurityOptions_Impl::GetTrustedAuthors() const
-{
-    return m_seqTrustedAuthors;
-}
 
 void SvtSecurityOptions_Impl::SetTrustedAuthors( const Sequence< SvtSecurityOptions::Certificate >& rAuthors )
 {

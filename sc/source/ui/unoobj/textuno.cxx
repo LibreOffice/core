@@ -253,10 +253,6 @@ void ScHeaderFooterTextData::UpdateData(EditEngine& rEditEngine)
     bDataValid = false;
 }
 
-const EditTextObject* ScHeaderFooterTextData::GetTextObject() const
-{
-    return mpTextObj;
-}
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj(
     ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :

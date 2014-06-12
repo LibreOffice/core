@@ -71,9 +71,6 @@ bool UriReference::isAbsolute() throw (css::uno::RuntimeException) {
     return !m_scheme.isEmpty();
 }
 
-OUString UriReference::getScheme() throw (css::uno::RuntimeException) {
-    return m_scheme;
-}
 
 OUString UriReference::getSchemeSpecificPart()
     throw (css::uno::RuntimeException)

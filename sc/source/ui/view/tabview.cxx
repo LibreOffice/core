@@ -866,11 +866,6 @@ ScGridWindow* ScTabView::GetActiveWin()
     return pGridWin[ePos];
 }
 
-Window* ScTabView::GetWindowByPos( ScSplitPos ePos )
-{
-    return pGridWin[ePos];
-}
-
 void ScTabView::SetActivePointer( const Pointer& rPointer )
 {
     for (sal_uInt16 i=0; i<4; i++)

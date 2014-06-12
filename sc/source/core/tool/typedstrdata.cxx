@@ -105,10 +105,6 @@ bool ScTypedStrData::IsStrData() const
 }
 
 
-const OUString& ScTypedStrData::GetString() const
-{
-    return maStrValue;
-}
 
 
 FindTypedStrData::FindTypedStrData(const ScTypedStrData& rVal, bool bCaseSens) :

@@ -1037,10 +1037,6 @@ void SlideSorterController::SetDocumentSlides (const Reference<container::XIndex
 
 
 
-::boost::shared_ptr<Animator> SlideSorterController::GetAnimator (void) const
-{
-    return mpAnimator;
-}
 
 
 

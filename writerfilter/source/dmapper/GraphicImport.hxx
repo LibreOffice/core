@@ -92,7 +92,7 @@ public:
     virtual void data(const sal_uInt8* buffer, size_t len, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
     css::uno::Reference<css::text::XTextContent> GetGraphicObject();
-    css::uno::Reference<css::drawing::XShape> GetXShapeObject();
+    css::uno::Reference<css::drawing::XShape> GetXShapeObject() { return m_xShape;}
     bool IsGraphic() const;
 
  private:

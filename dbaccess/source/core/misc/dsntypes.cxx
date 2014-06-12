@@ -317,15 +317,7 @@ OUString ODsnTypeCollection::getEmbeddedDatabase() const
     return sEmbeddedDatabaseURL;
 }
 
-ODsnTypeCollection::TypeIterator ODsnTypeCollection::begin() const
-{
-    return TypeIterator(this, 0);
-}
 
-ODsnTypeCollection::TypeIterator ODsnTypeCollection::end() const
-{
-    return TypeIterator(this, m_aDsnTypesDisplayNames.size());
-}
 
 DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
 {

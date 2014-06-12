@@ -353,10 +353,6 @@ SystemWindow* SfxFrame::GetTopWindow_Impl() const
         return NULL;
 }
 
-Window& SfxFrame::GetWindow() const
-{
-    return *pWindow;
-}
 
 bool SfxFrame::Close()
 {

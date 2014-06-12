@@ -436,13 +436,13 @@ namespace rptui
 
         /** returns the number formatter
         */
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getReportNumberFormatter() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    getReportNumberFormatter() const { return m_xFormatter;}
 
         /** return the SdrModel of the real model
         *
         * \return
         */
-        ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
+        ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const { return m_aReportModel;}
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
         inline sal_Int16   getZoomValue() const     { return m_nZoomValue; }

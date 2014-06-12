@@ -418,10 +418,6 @@ OString Options::prepareVersion()
     return version;
 }
 
-const OString& Options::getProgramName() const
-{
-    return m_program;
-}
 
 bool Options::isValid(const OString& option)
 {

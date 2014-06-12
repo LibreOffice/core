@@ -95,10 +95,6 @@ void ScChartListener::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
     maFileIds.erase(nFileId);
 }
 
-boost::unordered_set<sal_uInt16>& ScChartListener::ExternalRefListener::getAllFileIds()
-{
-    return maFileIds;
-}
 
 ScChartListener::ScChartListener( const OUString& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
@@ -176,10 +172,6 @@ ScChartListener::~ScChartListener()
     }
 }
 
-const OUString& ScChartListener::GetName() const
-{
-    return maName;
-}
 
 void ScChartListener::SetUno(
         const uno::Reference< chart::XChartDataChangeEventListener >& rListener,
@@ -477,20 +469,8 @@ bool ScChartListenerCollection::hasListeners() const
     return !maListeners.empty();
 }
 
-const ScChartListenerCollection::ListenersType& ScChartListenerCollection::getListeners() const
-{
-    return maListeners;
-}
 
-ScChartListenerCollection::ListenersType& ScChartListenerCollection::getListeners()
-{
-    return maListeners;
-}
 
-ScChartListenerCollection::StringSetType& ScChartListenerCollection::getNonOleObjectNames()
-{
-    return maNonOleObjectNames;
-}
 
 OUString ScChartListenerCollection::getUniqueName(const OUString& rPrefix) const
 {

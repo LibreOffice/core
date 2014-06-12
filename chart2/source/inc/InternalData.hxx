@@ -72,9 +72,9 @@ public:
     typedef ::std::vector< ::std::vector< ::com::sun::star::uno::Any > > tVecVecAny; //inner index is hierarchical level
 
     void setComplexRowLabels( const tVecVecAny& rNewRowLabels );
-    tVecVecAny getComplexRowLabels() const;
+    tVecVecAny getComplexRowLabels() const { return m_aRowLabels;}
     void setComplexColumnLabels( const tVecVecAny& rNewColumnLabels );
-    tVecVecAny getComplexColumnLabels() const;
+    tVecVecAny getComplexColumnLabels() const { return m_aColumnLabels;}
 
 #if OSL_DEBUG_LEVEL > 1
     void traceData() const;

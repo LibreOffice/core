@@ -77,10 +77,6 @@ uno::Reference< drawing::XShape > Selection::getSelectedAdditionalShape()
     return m_aSelectedOID.getAdditionalShape();
 }
 
-ObjectIdentifier Selection::getSelectedOID() const
-{
-    return m_aSelectedOID;
-}
 
 bool Selection::setSelection( const OUString& rCID )
 {

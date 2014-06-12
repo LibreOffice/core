@@ -92,11 +92,6 @@ CustomToolBarImportHelper::getCfgManager()
     return m_xCfgSupp->getUIConfigurationManager();
 }
 
-uno::Reference< ui::XUIConfigurationManager >
-CustomToolBarImportHelper::getAppCfgManager()
-{
-    return m_xAppCfgMgr;
-}
 
 uno::Any
 CustomToolBarImportHelper::createCommandFromMacro( const OUString& sCmd )
@@ -718,13 +713,6 @@ TBCBitMap::TBCBitMap() : cbDIB( 0 )
 
 TBCBitMap::~TBCBitMap()
 {
-}
-
-// #FIXME Const-ness
-Bitmap&
-TBCBitMap::getBitMap()
-{
-    return mBitMap;
 }
 
 bool TBCBitMap::Read( SvStream& rS)

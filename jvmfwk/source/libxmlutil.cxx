@@ -135,10 +135,6 @@ CXmlCharPtr::operator OUString()
     return ret;
 }
 
-CXmlCharPtr::operator OString()
-{
-    return OString((sal_Char*) _object);
-}
 
 
 

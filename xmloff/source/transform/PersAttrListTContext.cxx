@@ -177,9 +177,4 @@ void XMLPersAttrListTContext::ExportContent()
     // nothing to export
 }
 
-Reference< XAttributeList > XMLPersAttrListTContext::GetAttrList() const
-{
-    return m_xAttrList;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -424,10 +424,6 @@ void SlideSorterModel::SynchronizeModelSelection (void)
 
 
 
-::osl::Mutex& SlideSorterModel::GetMutex (void)
-{
-    return maMutex;
-}
 
 
 

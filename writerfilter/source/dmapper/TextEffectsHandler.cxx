@@ -494,10 +494,6 @@ TextEffectsHandler::~TextEffectsHandler()
 {
 }
 
-boost::optional<PropertyIds> TextEffectsHandler::getGrabBagPropertyId()
-{
-    return maPropertyId;
-}
 
 void TextEffectsHandler::lcl_attribute(Id aName, Value& aValue)
 {

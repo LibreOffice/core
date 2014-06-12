@@ -397,7 +397,7 @@ public:
     virtual void render() SAL_OVERRIDE;
 
     void clear();
-    TextCache& getTextCache();
+    TextCache& getTextCache() { return maTextCache;}
 
 private:
 

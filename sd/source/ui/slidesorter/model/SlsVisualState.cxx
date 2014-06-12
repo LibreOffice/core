@@ -64,10 +64,6 @@ void VisualState::UpdateVisualState (const PageDescriptor& rDescriptor)
         SetVisualState(VS_None);
 }
 
-Point VisualState::GetLocationOffset (void) const
-{
-    return maLocationOffset;
-}
 
 
 bool VisualState::SetLocationOffset (const Point& rOffset)

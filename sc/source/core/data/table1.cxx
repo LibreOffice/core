@@ -394,10 +394,6 @@ void ScTable::SetLoadingRTL( bool bSet )
     bLoadingRTL = bSet;
 }
 
-const Color& ScTable::GetTabBgColor() const
-{
-    return aTabBgColor;
-}
 
 void ScTable::SetTabBgColor(const Color& rColor)
 {

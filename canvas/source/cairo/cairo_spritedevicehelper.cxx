@@ -140,11 +140,6 @@ namespace cairocanvas
         setSize( ::basegfx::B2ISize(rBounds.Width, rBounds.Height) );
     }
 
-    SurfaceSharedPtr SpriteDeviceHelper::getBufferSurface()
-    {
-        return mpBufferSurface;
-    }
-
     SurfaceSharedPtr SpriteDeviceHelper::getWindowSurface()
     {
         return DeviceHelper::getSurface();

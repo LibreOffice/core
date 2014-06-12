@@ -52,7 +52,7 @@ public:
 
     bool    Write( SvStream& rOStm );
 
-    std::vector< vcl::PNGWriter::ChunkData >&   GetChunks();
+    std::vector< vcl::PNGWriter::ChunkData >&   GetChunks() { return maChunkSeq;}
 
 private:
 
@@ -269,10 +269,6 @@ bool PNGWriterImpl::Write( SvStream& rOStm )
     return mbStatus;
 }
 
-std::vector< vcl::PNGWriter::ChunkData >& PNGWriterImpl::GetChunks()
-{
-    return maChunkSeq;
-}
 
 bool PNGWriterImpl::ImplWriteHeader()
 {

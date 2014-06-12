@@ -79,10 +79,6 @@ ScQueryEntry& ScQueryEntry::operator=( const ScQueryEntry& r )
     return *this;
 }
 
-ScQueryEntry::QueryItemsType& ScQueryEntry::GetQueryItems()
-{
-    return maQueryItems;
-}
 
 
 void ScQueryEntry::SetQueryByEmpty()

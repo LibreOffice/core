@@ -40,10 +40,6 @@ SfxGrabBagItem::~SfxGrabBagItem()
 {
 }
 
-const std::map<OUString, uno::Any>& SfxGrabBagItem::GetGrabBag() const
-{
-    return m_aMap;
-}
 
 bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
 {

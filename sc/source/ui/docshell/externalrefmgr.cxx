@@ -1103,10 +1103,6 @@ void ScExternalRefCache::addCacheDocToReferenced( sal_uInt16 nFileId )
     }
 }
 
-bool ScExternalRefCache::areAllCacheTablesReferenced() const
-{
-    return maReferenced.mbAllReferenced;
-}
 
 void ScExternalRefCache::getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSpanSet& rSet ) const
 {

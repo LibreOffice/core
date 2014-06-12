@@ -74,7 +74,7 @@ public:
     void SetHyperlinkFlag(bool bFlag){m_bIsHyperlink = bFlag;}
     bool GetHyperlinkFlag(){return m_bIsHyperlink;}
     void SetHyperlink(const OUString& hyperlink);
-    OUString GetHyperlink();
+    const OUString& GetHyperlink() { return m_Hyperlink;}
 private:
     OUString m_Hyperlink;
     bool m_bIsHyperlink;

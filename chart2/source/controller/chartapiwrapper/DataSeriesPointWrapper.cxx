@@ -543,10 +543,6 @@ bool DataSeriesPointWrapper::isSupportingAreaProperties()
     return ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );
 }
 
-bool DataSeriesPointWrapper::isLinesForbidden()
-{
-    return !m_bLinesAllowed;
-}
 
 Reference< chart2::XDataSeries > DataSeriesPointWrapper::getDataSeries()
 {

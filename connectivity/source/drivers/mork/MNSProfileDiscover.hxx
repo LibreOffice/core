@@ -47,7 +47,7 @@ namespace connectivity
                             );
             MozillaProductType getProductType() { return product;}
             OUString getProfileName(){ return profileName;}
-            OUString getProfilePath() ;
+            OUString getProfilePath()  {  return profilePath; }
         protected:
             MozillaProductType product;
             OUString profileName;

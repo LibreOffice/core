@@ -595,7 +595,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
         getNumberFormatsSupplier();
 
-    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > getChartView();
+    com::sun::star::uno::Reference< com::sun::star::uno::XInterface > getChartView() { return xChartView;}
 
     bool isTimeBased() const { return mbTimeBased;}
     void setTimeBased(bool bTimeBased);

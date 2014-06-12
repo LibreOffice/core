@@ -865,10 +865,6 @@ const OUString* ScDPSaveData::GetGrandTotalName() const
     return mpGrandTotalName.get();
 }
 
-const ScDPSaveData::DimsType& ScDPSaveData::GetDimensions() const
-{
-    return aDimList;
-}
 
 namespace {
 

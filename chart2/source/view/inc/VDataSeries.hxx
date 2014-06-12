@@ -67,7 +67,7 @@ public:
     ~VDataSeries();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >
-        getModel() const;
+        getModel() const { return m_xDataSeries;}
 
     void setCategoryXAxis();
     void setXValues( const ::com::sun::star::uno::Reference<
@@ -116,7 +116,7 @@ public:
                         getPropertiesOfPoint( sal_Int32 index ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
-                        getPropertiesOfSeries() const;
+                        getPropertiesOfSeries() const { return css::uno::Reference<css::beans::XPropertySet>(m_xDataSeries, css::uno::UNO_QUERY );}
 
     ::com::sun::star::chart2::Symbol*
                         getSymbolProperties( sal_Int32 index ) const;
@@ -155,12 +155,12 @@ public:
     //this is here for deep stacking:
     double m_fLogicZPos;//from 0 to series count -1
 
-    OUString       getCID() const;
-    OUString       getSeriesParticle() const;
-    OUString       getPointCID_Stub() const;
+    OUString       getCID() const { return m_aCID;}
+    OUString       getSeriesParticle() const { return m_aSeriesParticle;}
+    OUString       getPointCID_Stub() const { return m_aPointCID_Stub;}
     OUString       getErrorBarsCID( bool bYError ) const;
     OUString       getLabelsCID() const;
-    OUString       getLabelCID_Stub() const;
+    OUString       getLabelCID_Stub() const { return m_aLabelCID_Stub;}
     OUString       getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const;
 
     ::com::sun::star::chart2::DataPointLabel*

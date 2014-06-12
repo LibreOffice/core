@@ -110,10 +110,6 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
 ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
 {
 }
-OUString ObjectPropertiesDialogParameter::getLocalizedName() const
-{
-    return m_aLocalizedName;
-}
 
 void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel >& xChartModel )
 {
@@ -309,14 +305,6 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
     }
 }
 
-const uno::Sequence< OUString >& ObjectPropertiesDialogParameter::GetCategories() const
-{
-    return m_aCategories;
-}
-uno::Reference< chart2::XChartDocument > ObjectPropertiesDialogParameter::getDocument() const
-{
-    return m_xChartDocument;
-}
 
 const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
 

@@ -42,10 +42,6 @@ ScUnitConverterData::ScUnitConverterData( const ScUnitConverterData& r ) :
 ScUnitConverterData::~ScUnitConverterData() {}
 
 
-const OUString& ScUnitConverterData::GetIndexString() const
-{
-    return maIndexString;
-}
 
 OUString ScUnitConverterData::BuildIndexString(
     const OUString& rFromUnit, const OUString& rToUnit )

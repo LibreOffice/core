@@ -96,8 +96,8 @@ public: //public methods
     bool HasEffect() const;
     bool HasParagraphEffect() const;
     bool HasSoundEffect() const;
-    sal_Int32 GetDimColor() const;
-    sal_uInt32 GetSoundRef() const;
+    sal_Int32 GetDimColor() const { return static_cast<sal_Int32>(m_aAtom.nDimColor);}
+    sal_uInt32 GetSoundRef() const { return m_aAtom.nSoundRef;}
     /// @return true if the shape should be animated in addition to the text
     bool HasAnimateAssociatedShape() const;
 

@@ -1053,10 +1053,6 @@ void SidebarController::UpdateDeckOpenState (void)
 
 
 
-FocusManager& SidebarController::GetFocusManager (void)
-{
-    return maFocusManager;
-}
 
 
 
@@ -1240,10 +1236,6 @@ void SidebarController::ShowPanel (const Panel& rPanel)
 
 
 
-Context SidebarController::GetCurrentContext (void) const
-{
-    return maCurrentContext;
-}
 
 
 } } // end of namespace sfx2::sidebar

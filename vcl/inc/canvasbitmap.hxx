@@ -112,7 +112,7 @@ namespace unotools
         explicit VclCanvasBitmap( const BitmapEx& rBitmap );
 
         /// Retrieve contained bitmap. Call me with locked Solar mutex!
-        BitmapEx getBitmapEx() const;
+        BitmapEx getBitmapEx() const { return m_aBmpEx;}
    };
 }
 }

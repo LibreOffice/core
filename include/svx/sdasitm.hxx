@@ -92,7 +92,7 @@ private:
             virtual bool                QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const SAL_OVERRIDE;
             virtual bool                PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) SAL_OVERRIDE;
 
-            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const;
+            const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const { return aPropSeq;}
 
             com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName );
             com::sun::star::uno::Any* GetPropertyValueByName( const OUString& rPropName, const OUString& rPropName2 );

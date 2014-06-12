@@ -150,10 +150,6 @@ void ContentInfo::NormalizeString( svl::SharedStringPool& rPool )
     maText = rPool.intern(OUString(maText.getData()));
 }
 
-const svl::SharedString& ContentInfo::GetSharedString() const
-{
-    return maText;
-}
 
 OUString ContentInfo::GetText() const
 {
@@ -676,15 +672,7 @@ void EditTextObjectImpl::DestroyAttrib( XEditAttribute* pAttr )
     delete pAttr;
 }
 
-EditTextObjectImpl::ContentInfosType& EditTextObjectImpl::GetContents()
-{
-    return aContents;
-}
 
-const EditTextObjectImpl::ContentInfosType& EditTextObjectImpl::GetContents() const
-{
-    return aContents;
-}
 
 ContentInfo* EditTextObjectImpl::CreateAndInsertContent()
 {
@@ -1056,10 +1044,6 @@ void EditTextObjectImpl::ChangeStyleSheetName( SfxStyleFamily eFamily,
     ImpChangeStyleSheets( rOldName, eFamily, rNewName, eFamily );
 }
 
-editeng::FieldUpdater EditTextObjectImpl::GetFieldUpdater()
-{
-    return editeng::FieldUpdater(*mpFront);
-}
 
 namespace {
 

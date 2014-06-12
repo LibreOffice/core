@@ -1035,15 +1035,7 @@ void ChartDocumentWrapper::setBaseDiagram( const OUString& rBaseDiagram )
         this->setDiagram( xDiagram );
 }
 
-OUString ChartDocumentWrapper::getBaseDiagram() const
-{
-    return m_aBaseDiagram;
-}
 
-Reference< util::XRefreshable > ChartDocumentWrapper::getAddIn() const
-{
-    return m_xAddIn;
-}
 
 void ChartDocumentWrapper::setAddIn( const Reference< util::XRefreshable >& xAddIn )
 {

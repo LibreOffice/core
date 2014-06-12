@@ -214,11 +214,11 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to member <mpDrawObj>
         void SetDrawObj( SdrObject& _rDrawObj );
-        const SdrObject* GetDrawObj() const;
+        const SdrObject* GetDrawObj() const { return mpDrawObj;}
         SdrObject* DrawObj() { return mpDrawObj;}
 
         // accessors to member <mpAnchorFrm>
-        const SwFrm* GetAnchorFrm() const;
+        const SwFrm* GetAnchorFrm() const { return mpAnchorFrm;}
         SwFrm* AnchorFrm() { return mpAnchorFrm;}
         void ChgAnchorFrm( SwFrm* _pNewAnchorFrm );
         /** determine anchor frame containing the anchor position
@@ -233,7 +233,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         SwFrm* GetAnchorFrmContainingAnchPos();
 
         SwPageFrm* GetPageFrm() { return mpPageFrm;}
-        const SwPageFrm* GetPageFrm() const;
+        const SwPageFrm* GetPageFrm() const { return mpPageFrm;}
         void SetPageFrm( SwPageFrm* _pNewPageFrm );
 
         /** method to determine the page frame, on which the 'anchor' of
@@ -291,7 +291,7 @@ class SW_DLLPUBLIC SwAnchoredObject
         void CheckCharRectAndTopOfLine( const bool _bCheckForParaPorInf = true );
 
         // accessors to member <maLastCharRect>
-        const SwRect& GetLastCharRect() const;
+        const SwRect& GetLastCharRect() const { return maLastCharRect;}
         SwTwips GetRelCharX( const SwFrm* pFrm ) const;
         SwTwips GetRelCharY( const SwFrm* pFrm ) const;
         void AddLastCharY( long nDiff );
@@ -353,7 +353,7 @@ class SW_DLLPUBLIC SwAnchoredObject
 
         // accessors to the current relative position (relative to anchor
         // position of anchor frame)
-        const Point GetCurrRelPos() const;
+        const Point GetCurrRelPos() const { return maRelPos;}
         void SetCurrRelPos( Point _aRelPos );
 
         // accessors to the format

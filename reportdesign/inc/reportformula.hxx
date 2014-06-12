@@ -68,7 +68,7 @@ namespace rptui
 
         /// returns the complete formula represented by the object
         const OUString&
-                    getCompleteFormula() const;
+                    getCompleteFormula() const { return m_sCompleteFormula; }
 
         /** gets the <em>undecorated formula</em> content
 
@@ -78,7 +78,7 @@ namespace rptui
             If the formula denotes an expression, then the <em>undecorated content</em> is the expression
             itself.
         */
-        const OUString& getUndecoratedContent() const;
+        const OUString& getUndecoratedContent() const { return m_sUndecoratedContent; }
 
         /// convenience alias for <code>getUndecoratedContent</code>, which asserts (in a non-product build) when used on an expression
         inline OUString  getFieldName() const;

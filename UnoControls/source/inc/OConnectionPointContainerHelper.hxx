@@ -178,20 +178,12 @@ public:
         const   ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >&  xListener
     ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    /**_________________________________________________________________________________________________________
-        @short
-        @descr
+    //  public but impl method!
+    //  Is necessary to get container member at OConnectionPoint-instance.
+    // Impl methods are not threadsafe!
+    // "Parent" function must do this.
+    ::cppu::OMultiTypeInterfaceContainerHelper& impl_getMultiTypeContainer() { return m_aMultiTypeContainer; }
 
-        @seealso
-
-        @param
-
-        @return
-
-        @onerror
-    */
-
-    ::cppu::OMultiTypeInterfaceContainerHelper& impl_getMultiTypeContainer();
 
 //  private variables
 

@@ -20,25 +20,13 @@ RefMovedHint::RefMovedHint( const ScRange& rRange, const ScAddress& rMove ) :
 
 RefMovedHint::~RefMovedHint() {}
 
-const ScRange& RefMovedHint::getRange() const
-{
-    return maRange;
-}
 
-const ScAddress& RefMovedHint::getDelta() const
-{
-    return maMoveDelta;
-}
 
 RefColReorderHint::RefColReorderHint( const sc::ColReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 ) :
     RefHint(ColumnReordered), mrColMap(rColMap), mnTab(nTab), mnRow1(nRow1), mnRow2(nRow2) {}
 
 RefColReorderHint::~RefColReorderHint() {}
 
-const sc::ColReorderMapType& RefColReorderHint::getColMap() const
-{
-    return mrColMap;
-}
 
 
 

@@ -208,7 +208,7 @@ namespace cairocanvas
                                  const ::com::sun::star::rendering::ViewState&      viewState,
                                  const ::com::sun::star::rendering::RenderState&    renderState );
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice >
-            getDevice();
+            getDevice() { return css::uno::Reference< css::rendering::XGraphicDevice >(mpDevice); }
 
         // BitmapCanvasHelper functionality
         // ================================

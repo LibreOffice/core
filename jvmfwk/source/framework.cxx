@@ -1268,15 +1268,7 @@ CJavaInfo & CJavaInfo::operator = (const ::JavaInfo* info)
     return *this;
 }
 
-const ::JavaInfo* CJavaInfo::operator ->() const
-{
-    return pInfo;
-}
 
-CJavaInfo::operator JavaInfo const * () const
-{
-    return pInfo;
-}
 
 OUString CJavaInfo::getVendor() const
 {

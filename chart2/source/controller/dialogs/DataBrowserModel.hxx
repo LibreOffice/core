@@ -130,7 +130,7 @@ public:
 
     typedef ::std::vector< tDataHeader > tDataHeaderVector;
 
-    const tDataHeaderVector& getDataHeaders() const;
+    const tDataHeaderVector& getDataHeaders() const { return m_aHeaders;}
 
     tDataHeader getHeaderForSeries(
         const ::com::sun::star::uno::Reference<

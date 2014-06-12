@@ -203,10 +203,6 @@ int ImplFontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
     return nCount;
 }
 
-sal_UCS4 ImplFontCharMap::GetFirstChar() const
-{
-    return mpRangeCodes[0];
-}
 
 sal_UCS4 ImplFontCharMap::GetLastChar() const
 {

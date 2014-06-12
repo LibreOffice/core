@@ -64,7 +64,7 @@ public:
             returned.  This reference remains valid as long as the called
             ConfigurationClassifier object stays alive.
     */
-    const ResourceIdVector& GetC1minusC2 (void) const;
+    const ResourceIdVector& GetC1minusC2 (void) const { return maC1minusC2;}
 
     /** Return the resources that belong to the configuration given as
         rxConfiguration2 to the constructor but that do not belong to
@@ -74,7 +74,7 @@ public:
             returned.  This reference remains valid as long as the called
             ConfigurationClassifier object stays alive.
     */
-    const ResourceIdVector& GetC2minusC1 (void) const;
+    const ResourceIdVector& GetC2minusC1 (void) const { return maC2minusC1;}
 
     /** Return the resources that belong to both the configurations that
         where given to the constructor.
@@ -83,7 +83,7 @@ public:
             returned.  This reference remains valid as long as the called
             ConfigurationClassifier object stays alive.
     */
-    const ResourceIdVector& GetC1andC2 (void) const;
+    const ResourceIdVector& GetC1andC2 (void) const { return maC1andC2;}
 
     void TraceResourceIdVector (
         const sal_Char* pMessage,

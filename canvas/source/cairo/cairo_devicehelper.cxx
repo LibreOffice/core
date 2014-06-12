@@ -271,11 +271,6 @@ namespace cairocanvas
         }
     }
 
-    SurfaceSharedPtr DeviceHelper::getSurface()
-    {
-        return mpSurface;
-    }
-
     SurfaceSharedPtr DeviceHelper::createSurface( const ::basegfx::B2ISize& rSize, Content aContent )
     {
         if( mpSurface )

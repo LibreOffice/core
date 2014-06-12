@@ -163,9 +163,9 @@ class SVT_DLLPUBLIC ToolboxController :
         void unbindListener();
         bool isBound() const;
         // TODO remove
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const { return m_xUrlTransformer;}
         // TODO remove
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getParent() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getParent() const { return m_xParentWindow;}
 
         bool                                                                                m_bInitialized : 1,
                                                                                             m_bDisposed : 1;

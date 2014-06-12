@@ -57,7 +57,7 @@ public:
     AgileEngine();
     virtual ~AgileEngine();
 
-    AgileEncryptionInfo& getInfo();
+    AgileEncryptionInfo& getInfo() { return mInfo;}
 
     virtual bool writeEncryptionInfo(
                     const OUString& rPassword,

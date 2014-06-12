@@ -36,7 +36,7 @@ class DLLEXPORT HWPStyle
         HWPStyle( void );
         ~HWPStyle( void );
 
-        int Num( void ) const;
+        int Num( void ) const { return nstyles;}
         char *GetName( int n ) const;
         CharShape *GetCharShape( int n ) const;
         ParaShape *GetParaShape( int n ) const;

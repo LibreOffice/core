@@ -36,7 +36,7 @@ public:
     DECL_LINK( BtnAutomaticSelectHdl, void* );
     DECL_LINK( DeviceSelHdl, void* );
 
-    const ScCalcConfig& GetConfig() const;
+    const ScCalcConfig& GetConfig() const { return maConfig;}
 
 private:
     void FillOptionsList();

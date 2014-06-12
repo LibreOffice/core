@@ -54,7 +54,7 @@ public:
 
     void setMSOCommandMap( MSOCommandConvertor* pCnvtr ) { pMSOCmdConvertor.reset( pCnvtr ); }
     css::uno::Reference< css::ui::XUIConfigurationManager > getCfgManager();
-    css::uno::Reference< css::ui::XUIConfigurationManager > getAppCfgManager();
+    css::uno::Reference< css::ui::XUIConfigurationManager > getAppCfgManager() { return m_xAppCfgMgr;}
 
 
     css::uno::Any createCommandFromMacro( const OUString& sCmd );
@@ -166,7 +166,8 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     virtual void Print( FILE* ) SAL_OVERRIDE;
 #endif
-    Bitmap& getBitMap();
+   // #FIXME Const-ness
+    Bitmap& getBitMap() { return mBitMap;}
 };
 
 class MSFILTER_DLLPUBLIC TBCMenuSpecific : public TBBase

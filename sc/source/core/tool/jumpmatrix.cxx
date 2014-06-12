@@ -110,10 +110,6 @@ void ScJumpMatrix::SetJumpParameters(ScTokenVec* p)
     pParams = p;
 }
 
-const ScTokenVec* ScJumpMatrix::GetJumpParameters() const
-{
-    return pParams;
-}
 
 void ScJumpMatrix::GetPos(SCSIZE& rCol, SCSIZE& rRow) const
 {

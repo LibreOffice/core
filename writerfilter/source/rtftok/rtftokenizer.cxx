@@ -57,10 +57,6 @@ RTFTokenizer::~RTFTokenizer()
 {
 }
 
-SvStream& RTFTokenizer::Strm()
-{
-    return *m_pInStream;
-}
 
 int RTFTokenizer::resolveParse()
 {

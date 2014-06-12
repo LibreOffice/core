@@ -44,9 +44,9 @@ public:
         rtl::Reference< Bridge > const & bridge, OUString const & oid,
         com::sun::star::uno::TypeDescription const & type);
 
-    OUString getOid() const;
+    OUString getOid() const { return oid_;}
 
-    com::sun::star::uno::TypeDescription getType() const;
+    com::sun::star::uno::TypeDescription getType() const { return type_;}
 
     void do_acquire();
 

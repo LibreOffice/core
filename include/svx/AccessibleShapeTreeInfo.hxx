@@ -74,7 +74,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleComponent>
-        GetDocumentWindow (void) const;
+        GetDocumentWindow (void) const { return mxDocumentWindow;}
 
     /** Deprecated.   Use the correctly named SetModelBroadcaster method
         instead.
@@ -86,7 +86,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XEventBroadcaster>
-        GetControllerBroadcaster (void) const;
+        GetControllerBroadcaster (void) const { return mxModelBroadcaster;}
 
     /** Set a new broadcaster that sends events indicating shape changes.
         The broadcaster usually is or belongs to a document model.
@@ -104,7 +104,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XEventBroadcaster>
-        GetModelBroadcaster (void) const;
+        GetModelBroadcaster (void) const { return mxModelBroadcaster;}
 
     /** Set the view that will be used to construct SvxTextEditSources which
         in turn are used to create accessible edit engines.
@@ -135,7 +135,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XController>
-        GetController (void) const;
+        GetController (void) const { return mxController;}
 
     /** Set the window that is used to construct SvxTextEditSources which in
         turn is used to create accessible edit engines.

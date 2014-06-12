@@ -325,7 +325,7 @@ public:
 
     void            FakeButtonUp();
 
-    Point           GetMousePosPixel() const;
+    Point           GetMousePosPixel() const { return aCurMousePos; }
     void            UpdateStatusPosSize();
 
     void            ClickExtern();

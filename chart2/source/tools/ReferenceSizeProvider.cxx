@@ -48,10 +48,6 @@ ReferenceSizeProvider::ReferenceSizeProvider(
         m_bUseAutoScale( getAutoResizeState( xChartDoc ) == AUTO_RESIZE_YES )
 {}
 
-awt::Size ReferenceSizeProvider::getPageSize() const
-{
-    return m_aPageSize;
-}
 
 
 void ReferenceSizeProvider::impl_setValuesAtTitled(

@@ -52,8 +52,8 @@ public:
     static OUString SAL_CALL getImplementationName_Static();
     static com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static();
 
-    com::sun::star::uno::Reference< com::sun::star::xforms::XModel > getModel();
-    com::sun::star::uno::Reference< com::sun::star::xml::dom::XNode > getContextNode();
+    com::sun::star::uno::Reference< com::sun::star::xforms::XModel > getModel() { return m_aModel;}
+    com::sun::star::uno::Reference< com::sun::star::xml::dom::XNode > getContextNode() { return m_aContextNode;}
 
     virtual com::sun::star::xml::xpath::Libxml2ExtensionHandle SAL_CALL getLibxml2ExtensionHandle() throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL initialize(const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aSequence) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

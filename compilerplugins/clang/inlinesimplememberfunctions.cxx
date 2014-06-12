@@ -65,6 +65,12 @@ bool InlineSimpleMemberFunctions::VisitCXXMethodDecl(const CXXMethodDecl * funct
     if( functionDecl->isInlineSpecified()) {
         return true;
     }
+    if( functionDecl->getCanonicalDecl()->isInlineSpecified()) {
+        return true;
+    }
+    if( functionDecl->getNameAsString().find("Impl") != std::string::npos) {
+        return true;
+    }
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(
                               functionDecl->getCanonicalDecl()->getNameInfo().getLoc()))) {
@@ -146,69 +152,67 @@ bool InlineSimpleMemberFunctions::VisitCXXMethodDecl(const CXXMethodDecl * funct
         }
     }
 
-    /* look for a chain like:
+    /* look for a chains like:
        CompoundStmt
          ReturnStmt
-           ImplicitCastExpr
-             MemberExpr
-               CXXThisExpr
+           stuff
+             CXXThisExpr
     */
     childStmt = *(*compoundStmt->child_begin())->child_begin();
     while (1) {
-        if (! oneAndOnlyOne( childStmt->children() ))
+        if (dyn_cast<CallExpr>( childStmt ) != nullptr)
             return true;
+        if (dyn_cast<CXXNewExpr>( childStmt ) != nullptr)
+            return true;
+        if (dyn_cast<CXXConstructExpr>( childStmt ) != nullptr)
+            return true;
+        if (dyn_cast<ConditionalOperator>( childStmt ) != nullptr)
+            return true;
+        if (dyn_cast<BinaryOperator>( childStmt ) != nullptr)
+            return true;
+        // exclude methods that return fields on incomplete types .e.g the pImpl pattern
+        const MemberExpr* memberExpr = dyn_cast<MemberExpr>( childStmt );
+        if (memberExpr != nullptr && memberExpr->getMemberDecl()) {
+            const FieldDecl* fieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl());
+            if (fieldDecl != nullptr)
+            {
+                // yes, a little bit of a hack. However, it is quite hard to determine if the method
+                // in question is accessing a field via a pImpl pattern.
+                if (fieldDecl->getType()->isIncompleteType())
+                    return true;
+                if (fieldDecl->getNameAsString().find("Impl") != std::string::npos)
+                    return true;
+                if (fieldDecl->getNameAsString().find("pImp") != std::string::npos)
+                    return true;
+                // somewhere in VCL
+                if (fieldDecl->getNameAsString().find("mpGlobalSyncData") != std::string::npos)
+                    return true;
+                std::string s = fieldDecl->getType().getAsString();
+                if (s.find("Impl") != std::string::npos || s.find("pImp") != std::string::npos || s.find("Internal") != std::string::npos)
+                    return true;
+            }
+        }
         if (dyn_cast<CXXThisExpr>( childStmt ) != nullptr) {
-
-            compoundStmt->dump();
-                if (!rewrite(functionDecl))
-                {
-                    report(
-                        DiagnosticsEngine::Warning,
-                        "inlinesimpleaccessmethods",
-                        functionDecl->getSourceRange().getBegin())
-                      << functionDecl->getSourceRange();
-                    // display the location of the class member declaration
-                    report(
-                        DiagnosticsEngine::Note,
-                        "inlinesimpleaccessmethods",
-                        functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
-                      << functionDecl->getCanonicalDecl()->getSourceRange();
+            if (!rewrite(functionDecl))
+            {
+                report(
+                    DiagnosticsEngine::Warning,
+                    "inlinesimpleaccessmethods",
+                    functionDecl->getSourceRange().getBegin())
+                  << functionDecl->getSourceRange();
+                // display the location of the class member declaration so I don't have to search for it by hand
+                report(
+                    DiagnosticsEngine::Note,
+                    "inlinesimpleaccessmethods",
+                    functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
+                  << functionDecl->getCanonicalDecl()->getSourceRange();
                 }
              return true;
         }
+        if ( childStmt->children().empty() )
+            return true;
         childStmt = *childStmt->child_begin();
     }
-/*
-    if (dyn_cast<ImplicitCastExpr>( childStmt ) != nullptr
-        && oneAndOnlyOne( childStmt->children() ))
-    {
-        const Stmt* childStmt2 = *childStmt->child_begin();
-        if (dyn_cast<MemberExpr>( childStmt2 ) != nullptr
-            && oneAndOnlyOne(childStmt2->children()))
-        {
-            childStmt2 = *childStmt2->child_begin();
-            if (dyn_cast<CXXThisExpr>( childStmt2 ) != nullptr
-                && childStmt2->children().empty())
-            {
-                if (!rewrite(functionDecl))
-                {
-                    report(
-                        DiagnosticsEngine::Warning,
-                        "inlinesimpleaccessmethods",
-                        functionDecl->getSourceRange().getBegin())
-                      << functionDecl->getSourceRange();
-                    // display the location of the class member declaration
-                    report(
-                        DiagnosticsEngine::Note,
-                        "inlinesimpleaccessmethods",
-                        functionDecl->getCanonicalDecl()->getSourceRange().getBegin())
-                      << functionDecl->getCanonicalDecl()->getSourceRange();
-                }
-                return true;
-            }
-        }
-    }
-*/
     return true;
 }
 
@@ -287,7 +291,7 @@ bool InlineSimpleMemberFunctions::rewrite(const CXXMethodDecl * functionDecl) {
     s1 = ReplaceString(s1, "  ", " ");
     s1 = " " + s1;
 
-    // scan from the end of the functions body through the whitespace, so we can do a nice clean remove
+    // scan from the end of the function's body through the trailing whitespace, so we can do a nice clean remove
 // commented out because for some reason it will sometimes chomp an extra token
 //    SourceLocation endOfRemoveLoc = functionDecl->getBody()->getLocEnd();
 //    for (;;) {
@@ -314,7 +318,7 @@ bool InlineSimpleMemberFunctions::rewrite(const CXXMethodDecl * functionDecl) {
     return replaceText(canonicalDecl->getLocEnd().getLocWithOffset(p2 - p1 + 1), 1, s1);
 }
 
-loplugin::Plugin::Registration< InlineSimpleMemberFunctions > X("inlinesimplememberfunctions", true);
+loplugin::Plugin::Registration< InlineSimpleMemberFunctions > X("inlinesimplememberfunctions");
 
 }
 

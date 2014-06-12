@@ -58,25 +58,13 @@ bool ConfigurationClassifier::Partition (void)
 
 
 
-const ConfigurationClassifier::ResourceIdVector& ConfigurationClassifier::GetC1minusC2 (void) const
-{
-    return maC1minusC2;
-}
 
 
 
 
-const ConfigurationClassifier::ResourceIdVector& ConfigurationClassifier::GetC2minusC1 (void) const
-{
-    return maC2minusC1;
-}
 
 
 
-const ConfigurationClassifier::ResourceIdVector& ConfigurationClassifier::GetC1andC2 (void) const
-{
-    return maC1andC2;
-}
 
 
 void ConfigurationClassifier::PartitionResources (

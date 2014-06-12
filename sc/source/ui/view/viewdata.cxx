@@ -2071,11 +2071,6 @@ void ScViewData::SetScreen( const Rectangle& rVisArea )
         ( aScrSize.Height() * ScGlobal::nScreenPPTY / HMM_PER_TWIPS );
 }
 
-SfxObjectShell* ScViewData::GetSfxDocShell() const
-{
-    return pDocShell;
-}
-
 ScDocFunc& ScViewData::GetDocFunc() const
 {
     return pDocShell->GetDocFunc();

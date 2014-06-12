@@ -72,10 +72,6 @@ namespace oglcanvas
         return rendering::FontMetrics();
     }
 
-    const ::com::sun::star::geometry::Matrix2D& CanvasFont::getFontMatrix() const
-    {
-        return maFontMatrix;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

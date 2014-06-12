@@ -689,7 +689,7 @@ public:
     void                SelectObject( sal_Int32 nIndex );
     rtl_TextEncoding    GetCharSet(){ return maFont.GetCharSet(); };
     WinMtfFillStyle&    GetFillStyle () { return maFillStyle; }
-    const Font&         GetFont() const;
+    const Font&         GetFont() const { return maFont;}
     void                SetTextLayoutMode( const sal_uInt32 nLayoutMode );
 
     void                ClearPath(){ aPathObj.Init(); };

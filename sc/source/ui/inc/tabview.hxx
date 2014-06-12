@@ -26,6 +26,8 @@
 #include "hiranges.hxx"
 #include "viewutil.hxx"
 #include "select.hxx"
+#include "gridwin.hxx"
+#include "drawview.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -294,7 +296,8 @@ public:
     bool            SelMouseButtonDown( const MouseEvent& rMEvt );
 
     ScDrawView*     GetScDrawView()         { return pDrawView; }
-    SdrView*        GetSdrView();           // gegen CLOKs
+    // gegen CLOKs
+    SdrView*        GetSdrView()            { return pDrawView; }
 
     bool            IsMinimized() const     { return bMinimized; }
 
@@ -325,7 +328,7 @@ public:
     void            FakeButtonUp( ScSplitPos eWhich );
 
     ScGridWindow*   GetActiveWin();
-    Window*         GetWindowByPos( ScSplitPos ePos );
+    Window*         GetWindowByPos( ScSplitPos ePos ) { return pGridWin[ePos]; }
 
     ScSplitPos      FindWindow( Window* pWindow ) const;
 

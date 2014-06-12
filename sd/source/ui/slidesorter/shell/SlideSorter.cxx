@@ -252,27 +252,15 @@ SlideSorter::~SlideSorter (void)
 
 
 
-::boost::shared_ptr<ScrollBar> SlideSorter::GetVerticalScrollBar (void) const
-{
-    return mpVerticalScrollBar;
-}
 
 
 
 
 
-::boost::shared_ptr<ScrollBar> SlideSorter::GetHorizontalScrollBar (void) const
-{
-    return mpHorizontalScrollBar;
-}
 
 
 
 
-::boost::shared_ptr<ScrollBarBox> SlideSorter::GetScrollBarFiller (void) const
-{
-    return mpScrollBarBox;
-}
 
 
 
@@ -323,10 +311,6 @@ void SlideSorter::Paint (const Rectangle& rRepaintArea)
 
 
 
-::SharedSdWindow SlideSorter::GetContentWindow (void) const
-{
-    return mpContentWindow;
-}
 
 
 

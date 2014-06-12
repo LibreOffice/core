@@ -681,31 +681,10 @@ void NodeJava::addJRELocation(rtl_uString * sLocation)
         m_JRELocations->push_back(OUString(sLocation));
 }
 
-const boost::optional<sal_Bool> & NodeJava::getEnabled() const
-{
-    return m_enabled;
-}
 
-const boost::optional<std::vector<OUString> >&
-NodeJava::getJRELocations() const
-{
-    return m_JRELocations;
-}
 
-const boost::optional<OUString> & NodeJava::getUserClassPath() const
-{
-    return m_userClassPath;
-}
 
-const boost::optional<std::vector<OUString> > & NodeJava::getVmParameters() const
-{
-    return m_vmParameters;
-}
 
-const boost::optional<CNodeJavaInfo> & NodeJava::getJavaInfo() const
-{
-    return m_javaInfo;
-}
 
 jfw::FileStatus NodeJava::checkSettingsFileStatus(OUString const & sURL) const
 {
@@ -1097,10 +1076,6 @@ void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
         m_JRELocations = * share.getJRELocations();
 }
 
-const OUString&  MergedSettings::getUserClassPath() const
-{
-    return m_sClassPath;
-}
 
 ::std::vector< OString> MergedSettings::getVmParametersUtf8() const
 {
@@ -1113,10 +1088,6 @@ const OUString&  MergedSettings::getUserClassPath() const
     return ret;
 }
 
-const OString  & MergedSettings::getJavaInfoAttrVendorUpdate() const
-{
-    return m_javaInfo.sAttrVendorUpdate;
-}
 
 
 JavaInfo * MergedSettings::createJavaInfo() const
@@ -1171,10 +1142,6 @@ void MergedSettings::getJRELocations(
         rtl_uString_acquire(i->pData);
     }
     *size = m_JRELocations.size();
-}
-const std::vector<OUString> & MergedSettings::getJRELocations() const
-{
-    return m_JRELocations;
 }
 }
 

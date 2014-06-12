@@ -101,7 +101,7 @@ public:
     void GetJump( SCSIZE nCol, SCSIZE nRow, double& rBool, short& rStart, short& rNext, short& rStop ) const;
     void SetAllJumps( double fBool, short nStart, short nNext, short nStop = SHRT_MAX );
     void SetJumpParameters( ScTokenVec* p );
-    const ScTokenVec* GetJumpParameters() const;
+    const ScTokenVec* GetJumpParameters() const { return pParams;}
     bool HasResultMatrix() const;
     ScMatrix* GetResultMatrix();        ///< also applies pending buffered values
     void GetPos( SCSIZE& rCol, SCSIZE& rRow ) const;

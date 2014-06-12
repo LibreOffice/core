@@ -37,7 +37,7 @@ public:
     WrappedProperty( const OUString& rOuterName, const OUString& rInnerName );
     virtual ~WrappedProperty();
 
-    const OUString& getOuterName() const;
+    const OUString& getOuterName() const { return m_aOuterName;}
     virtual OUString getInnerName() const;
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const

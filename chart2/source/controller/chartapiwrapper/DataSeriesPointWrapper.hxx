@@ -71,7 +71,7 @@ public:
     virtual ~DataSeriesPointWrapper();
 
     bool isSupportingAreaProperties();
-    bool isLinesForbidden();
+    bool isLinesForbidden() { return !m_bLinesAllowed;}
 
     /// XServiceInfo declarations
     APPHELPER_XSERVICEINFO_DECL()

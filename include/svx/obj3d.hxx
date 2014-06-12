@@ -170,7 +170,7 @@ public:
     const basegfx::B3DHomMatrix& GetFullTransform() const;
 
     // get and (re)set transformation matrix
-    const basegfx::B3DHomMatrix& GetTransform() const;
+    const basegfx::B3DHomMatrix& GetTransform() const { return maTransformation;}
     virtual void NbcSetTransform(const basegfx::B3DHomMatrix& rMatrix);
     virtual void SetTransform(const basegfx::B3DHomMatrix& rMatrix);
 

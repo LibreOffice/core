@@ -347,7 +347,7 @@ public:
 
     /** Return a pointer to the tab control for pages.
     */
-    TabControl* GetPageTabControl (void);
+    TabControl* GetPageTabControl (void) { return &maTabControl;}
 
     /** Return a pointer to the tab control for layers.
     */

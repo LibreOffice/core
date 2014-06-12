@@ -315,7 +315,7 @@ namespace accessibility
         /// Do we have children? This is the case for image bullets
         bool HaveChildren();
 
-        const Point& GetEEOffset() const;
+        const Point& GetEEOffset() const { return maEEOffset; }
 
         // Get text from forwarder
         OUString GetTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex );

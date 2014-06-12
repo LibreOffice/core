@@ -859,10 +859,6 @@ void Font::finalizeImport()
     }
 }
 
-const FontDescriptor& Font::getFontDescriptor() const
-{
-    return maApiData.maDesc;
-}
 
 bool Font::needsRichTextFormat() const
 {

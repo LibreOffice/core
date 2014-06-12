@@ -750,15 +750,7 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
         pDocPool->Remove( *pNewPattern );       // free up resources
 }
 
-ScDocument& ScColumn::GetDoc()
-{
-    return *pDocument;
-}
 
-const ScDocument& ScColumn::GetDoc() const
-{
-    return *pDocument;
-}
 
 ScRefCellValue ScColumn::GetCellValue( SCROW nRow ) const
 {

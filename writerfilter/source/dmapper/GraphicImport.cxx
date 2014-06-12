@@ -880,9 +880,6 @@ uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
     return xResult;
 }
 
-uno::Reference<drawing::XShape> GraphicImport::GetXShapeObject(){
-    return m_xShape;
-}
 
 void GraphicImport::ProcessShapeOptions(Value& rValue)
 {

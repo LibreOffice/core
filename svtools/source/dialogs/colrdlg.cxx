@@ -56,10 +56,6 @@ void SvColorDialog::SetColor( const Color& rColor )
 
 
 
-const Color& SvColorDialog::GetColor() const
-{
-    return maColor;
-}
 
 
 

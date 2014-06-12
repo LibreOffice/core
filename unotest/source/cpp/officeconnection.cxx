@@ -139,10 +139,6 @@ void OfficeConnection::tearDown() {
     }
 }
 
-css::uno::Reference< css::uno::XComponentContext >
-OfficeConnection::getComponentContext() const {
-    return context_;
-}
 
 bool OfficeConnection::isStillAlive() const {
     if (process_ == 0) {

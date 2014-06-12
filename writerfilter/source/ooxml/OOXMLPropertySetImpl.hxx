@@ -282,7 +282,7 @@ public:
     virtual void sprm(Sprm & rSprm) SAL_OVERRIDE;
     virtual void attribute(Id nId, Value & rValue) SAL_OVERRIDE;
 
-    const OUString & getString() const;
+    const OUString & getString() const { return mStr;}
 };
 
 class OOXMLPropertySetEntryToInteger : public Properties

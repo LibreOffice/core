@@ -177,7 +177,7 @@ private:
     void Update();
     void ImpUpdateTransparencies();
 
-    Color GetLastColor (void) const;
+    const Color& GetLastColor (void) const { return maLastColor;}
     void SetColor (
         const OUString& rsColorName,
         const Color aColor);

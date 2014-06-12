@@ -763,10 +763,6 @@ SbxDataType SbxValue::GetType() const
     return SbxDataType( aData.eType & 0x0FFF );
 }
 
-SbxDataType SbxValue::GetFullType() const
-{
-    return aData.eType;
-}
 
 bool SbxValue::SetType( SbxDataType t )
 {

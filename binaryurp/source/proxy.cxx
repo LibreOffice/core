@@ -73,13 +73,7 @@ Proxy::Proxy(
     pDispatcher = &proxy_dispatchInterface;
 }
 
-OUString Proxy::getOid() const {
-    return oid_;
-}
 
-css::uno::TypeDescription Proxy::getType() const {
-    return type_;
-}
 
 void Proxy::do_acquire() {
     if (osl_atomic_increment(&references_) == 1) {

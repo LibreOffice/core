@@ -369,7 +369,7 @@ public:
     bool            IsRadioCheckEnabled() const { return mbRadioCheck; }
 
     bool            SetModeRadioImage( const Image& rImage );
-    const Image&    GetModeRadioImage( ) const;
+    const Image&    GetModeRadioImage( ) const { return maImage;}
 
     void            SetState( bool bCheck );
     void            Check( bool bCheck = true );

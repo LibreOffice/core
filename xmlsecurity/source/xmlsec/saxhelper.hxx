@@ -41,9 +41,9 @@ class SAXHelper
         SAXHelper( ) ;
         virtual ~SAXHelper() ;
 
-        xmlNodePtr getCurrentNode();
+        xmlNodePtr getCurrentNode() { return m_pParserCtxt->node;}
         void setCurrentNode(const xmlNodePtr pNode);
-        xmlDocPtr getDocument();
+        xmlDocPtr getDocument() { return m_pParserCtxt->myDoc;}
 
         void startDocument( void )
             throw( ::com::sun::star::xml::sax::SAXException , ::com::sun::star::uno::RuntimeException ) ;

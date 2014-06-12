@@ -83,15 +83,7 @@ void SAL_CALL CLibxml2XFormsExtension::initialize(const Sequence< Any >& aSequen
     }
 }
 
-Reference< XModel > CLibxml2XFormsExtension::getModel()
-{
-    return m_aModel;
-}
 
-Reference< XNode > CLibxml2XFormsExtension::getContextNode()
-{
-    return m_aContextNode;
-}
 
 extern "C" void SAL_CALL createRegistryInfo_CLibxml2XFormsExtension()
 {

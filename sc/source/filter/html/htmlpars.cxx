@@ -203,15 +203,7 @@ ScHTMLParser::~ScHTMLParser()
 {
 }
 
-ScHTMLStyles& ScHTMLParser::GetStyles()
-{
-    return maStyles;
-}
 
-ScDocument& ScHTMLParser::GetDoc()
-{
-    return *mpDoc;
-}
 
 ScHTMLLayoutParser::ScHTMLLayoutParser(
     EditEngine* pEditP, const OUString& rBaseURL, const Size& aPageSizeP,

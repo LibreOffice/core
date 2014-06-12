@@ -82,7 +82,7 @@ public:
     sal_Int32   GetSize() const  { return nSize;  }
     sal_Int32   GetPage() const  { return nPage;  }
     short   GetPageSize() const { return nPageSize; }
-    sal_Int32   GetPages() const;
+    sal_Int32   GetPages() const { return ( nSize + nPageSize - 1 ) / nPageSize;}
     short   GetOffset() const { return nOffset;}
     void    SetEntry( StgDirEntry& );
     virtual bool SetSize( sal_Int32 );

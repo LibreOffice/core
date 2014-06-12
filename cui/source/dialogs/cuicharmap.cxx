@@ -112,10 +112,6 @@ SvxCharacterMap::~SvxCharacterMap()
 
 
 
-const Font& SvxCharacterMap::GetCharFont() const
-{
-    return aFont;
-}
 
 
 

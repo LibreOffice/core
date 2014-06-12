@@ -108,20 +108,8 @@ Guess::~Guess()
 {
 }
 
-string Guess::GetLanguage()
-{
-    return language_str;
-}
 
-string Guess::GetCountry()
-{
-    return country_str;
-}
 
-string Guess::GetEncoding()
-{
-    return encoding_str;
-}
 
 bool Guess::operator==(string lang)
 {

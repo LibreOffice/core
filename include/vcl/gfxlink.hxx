@@ -153,13 +153,13 @@ public:
     void                SetData( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, bool bOwns );
     const sal_uInt8*            GetData() const;
 
-    const Size&         GetPrefSize() const;
+    const Size&         GetPrefSize() const { return mpImpData->maPrefSize;}
     void                SetPrefSize( const Size& rPrefSize );
-    bool                IsPrefSizeValid();
+    bool                IsPrefSizeValid() { return mpImpData->mbPrefSizeValid;}
 
-    const MapMode&      GetPrefMapMode() const;
+    const MapMode&      GetPrefMapMode() const { return mpImpData->maPrefMapMode;}
     void                SetPrefMapMode( const MapMode& rPrefMapMode );
-    bool                IsPrefMapModeValid();
+    bool                IsPrefMapModeValid() { return mpImpData->mbPrefMapModeValid;}
 
     bool                IsNative() const;
     bool                IsUser() const { return( GFX_LINK_TYPE_USER == meType ); }

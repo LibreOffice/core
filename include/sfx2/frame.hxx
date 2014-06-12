@@ -126,7 +126,7 @@ public:
     static SfxFrame*    Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nViewId, bool bHidden );
 
     SvCompatWeakHdl*    GetHdl();
-    Window&             GetWindow() const;
+    Window&             GetWindow() const { return *pWindow;}
     void                CancelTransfers( bool bCancelLoadEnv = true );
     bool                DoClose();
     sal_uInt16          GetChildFrameCount() const;

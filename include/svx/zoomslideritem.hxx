@@ -40,7 +40,7 @@ public:
     virtual ~SvxZoomSliderItem();
 
     void AddSnappingPoint( sal_Int32 nNew );
-    const com::sun::star::uno::Sequence < sal_Int32 >& GetSnappingPoints() const;
+    const com::sun::star::uno::Sequence < sal_Int32 >& GetSnappingPoints() const { return maValues;}
     sal_uInt16 GetMinZoom() const {return mnMinZoom;}
     sal_uInt16 GetMaxZoom() const {return mnMaxZoom;}
 

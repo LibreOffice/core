@@ -69,11 +69,11 @@ public:
     SdtHelper(DomainMapper_Impl& rDM_Impl);
     virtual ~SdtHelper();
 
-    std::vector<OUString>& getDropDownItems();
-    OUStringBuffer& getSdtTexts();
-    OUStringBuffer& getDate();
-    OUStringBuffer& getDateFormat();
-    OUStringBuffer& getLocale();
+    std::vector<OUString>& getDropDownItems() { return m_aDropDownItems;}
+    OUStringBuffer& getSdtTexts() { return m_aSdtTexts;}
+    OUStringBuffer& getDate() { return m_sDate;}
+    OUStringBuffer& getDateFormat() { return m_sDateFormat;}
+    OUStringBuffer& getLocale() { return m_sLocale;}
     /// If createControlShape() was ever called.
     bool hasElements() { return m_bHasElements;}
 

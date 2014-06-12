@@ -64,7 +64,7 @@ public:
     // - type (static; default: xsd:string)
     //        (currently default implemented as empty string)
     bool hasTypeName() const { return mbHasTypeName; }
-    OUString getTypeName() const;
+    OUString getTypeName() const { return msTypeName; }
     void setTypeName( const OUString& );
     void resetTypeName();
 
@@ -94,7 +94,7 @@ public:
 
     // explain _why_ a constraint failed
     void setConstraintExplanation( const OUString& );
-    OUString getConstraintExplanation() const;
+    OUString getConstraintExplanation() const { return msConstraintExplanation; }
 
     // - calculate (computed XPath; default: has none (false))
     //   (for calculate, we only store whether a calculate MIP is present;

@@ -64,7 +64,7 @@ public:
     /** @returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType  GetPageNumType() const SAL_OVERRIDE;
 
-    OXUndoEnvironment&  GetUndoEnv();
+    OXUndoEnvironment&  GetUndoEnv() { return *m_pUndoEnv;}
     void                SetModified(bool _bModified);
 
     inline dbaui::DBSubComponentController* getController() const { return m_pController; }

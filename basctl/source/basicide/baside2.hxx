@@ -525,7 +525,7 @@ public:
     void InsertEntry( const OUString& aStr );
     void ClearListBox();
     void SetTextSelection( const TextSelection& aSel );
-    const TextSelection& GetTextSelection() const;
+    const TextSelection& GetTextSelection() const { return aTextSelection;}
     void ResizeAndPositionListBox();
     void SelectFirstEntry(); //selects first entry in ListBox
     void ClearAndHide();

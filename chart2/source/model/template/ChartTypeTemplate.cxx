@@ -898,10 +898,6 @@ void ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem(
         comphelper::copyProperties( xSource, xDestination );
 }
 
-Reference< uno::XComponentContext > ChartTypeTemplate::GetComponentContext() const
-{
-    return m_xContext;
-}
 
 } //  namespace chart
 

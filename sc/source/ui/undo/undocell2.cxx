@@ -54,10 +54,6 @@ OUString UndoSetCells::GetComment() const
     return ScGlobal::GetRscString(STR_UNDO_ENTERDATA);
 }
 
-CellValues& UndoSetCells::GetOldValues()
-{
-    return maOldValues;
-}
 
 void UndoSetCells::SetNewValues( const std::vector<double>& rVals )
 {

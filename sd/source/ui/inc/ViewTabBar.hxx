@@ -70,7 +70,7 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-    ::boost::shared_ptr< ::TabControl> GetTabControl (void) const;
+    ::boost::shared_ptr< ::TabControl> GetTabControl (void) const { return mpTabControl;}
 
     bool ActivatePage (void);
 

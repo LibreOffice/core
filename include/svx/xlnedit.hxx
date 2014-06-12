@@ -54,7 +54,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    basegfx::B2DPolyPolygon GetLineEndValue() const;
+    basegfx::B2DPolyPolygon GetLineEndValue() const { return maPolyPolygon;}
     void SetLineEndValue(const basegfx::B2DPolyPolygon& rPolyPolygon) { maPolyPolygon = rPolyPolygon; Detach(); }
 
     XLineEndItem* checkForUniqueItem( SdrModel* pModel ) const;

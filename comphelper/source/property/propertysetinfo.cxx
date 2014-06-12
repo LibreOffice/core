@@ -40,7 +40,7 @@ public:
 
     Sequence< Property > getProperties() throw();
 
-    const PropertyMap* getPropertyMap() const throw();
+    const PropertyMap* getPropertyMap() const throw() { return &maPropertyMap;}
 
     Property getPropertyByName( const OUString& aName ) throw( UnknownPropertyException );
     bool hasPropertyByName( const OUString& aName ) throw();
@@ -121,10 +121,6 @@ Sequence< Property > PropertyMapImpl::getProperties() throw()
     return maProperties;
 }
 
-const PropertyMap* PropertyMapImpl::getPropertyMap() const throw()
-{
-    return &maPropertyMap;
-}
 
 Property PropertyMapImpl::getPropertyByName( const OUString& aName ) throw( UnknownPropertyException )
 {

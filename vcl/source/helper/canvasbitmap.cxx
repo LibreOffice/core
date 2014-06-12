@@ -1439,9 +1439,5 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertIntegerFromPARGB( c
     return aRes;
 }
 
-BitmapEx VclCanvasBitmap::getBitmapEx() const
-{
-    return m_aBmpEx;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

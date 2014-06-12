@@ -868,10 +868,6 @@ void SwFltAnchor::SetFrmFmt(SwFrmFmt * _pFrmFmt)
     pFrmFmt = _pFrmFmt;
 }
 
-const SwFrmFmt * SwFltAnchor::GetFrmFmt() const
-{
-    return pFrmFmt;
-}
 
 
 bool SwFltAnchor::operator==(const SfxPoolItem& rItem) const

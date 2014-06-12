@@ -635,7 +635,7 @@ public:
 
     void InvalidateSelection( const SwPageFrm* _pSelectedPageFrm );
 
-    const SwRect& GetVisArea() const;
+    const SwRect& GetVisArea() const { return maVisArea;}
 
     /** Adjust the MapMode so that the preview page appears at the
      * proper position. rPoint identifies the page for which the
@@ -723,10 +723,6 @@ struct ContainsPredicate
     }
 };
 
-const SwRect& SwAccPreviewData::GetVisArea() const
-{
-    return maVisArea;
-}
 
 void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
                                       const Point& rPoint ) const

@@ -65,7 +65,7 @@ namespace oglcanvas
                        const ::com::sun::star::rendering::ViewState&        destViewState,
                        const ::com::sun::star::rendering::RenderState&      destRenderState );
 
-        ::com::sun::star::geometry::IntegerSize2D getSize();
+        ::com::sun::star::geometry::IntegerSize2D getSize() { return maSize; }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > queryBitmapCanvas();
 

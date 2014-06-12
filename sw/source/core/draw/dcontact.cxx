@@ -2171,18 +2171,6 @@ SwDrawVirtObj* SwDrawVirtObj::Clone() const
     return pObj;
 }
 
-// connection to writer layout
-
-const SwAnchoredObject* SwDrawVirtObj::GetAnchoredObj() const
-{
-    return &maAnchoredDrawObj;
-}
-
-SwAnchoredObject* SwDrawVirtObj::AnchoredObj()
-{
-    return &maAnchoredDrawObj;
-}
-
 const SwFrm* SwDrawVirtObj::GetAnchorFrm() const
 {
     // #i26791# - use new member <maAnchoredDrawObj>

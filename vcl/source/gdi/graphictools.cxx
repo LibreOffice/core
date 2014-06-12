@@ -217,10 +217,6 @@ void SvtGraphicFill::getPath( PolyPolygon& rPath ) const
     rPath = maPath;
 }
 
-Color SvtGraphicFill::getFillColor() const
-{
-    return maFillColor;
-}
 
 
 

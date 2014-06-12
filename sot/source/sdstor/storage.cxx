@@ -614,10 +614,6 @@ const OUString & SotStorage::GetName() const
     return m_aName;
 }
 
-const OString& SotStorage::GetKey() const
-{
-    return m_aKey;
-}
 
 void SotStorage::ResetError()
 {

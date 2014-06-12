@@ -91,13 +91,11 @@ void MIP::setConstraint( bool b ) { mbHasConstraint = true; mbConstraint = b; ms
 void MIP::resetConstraint()       { mbHasConstraint = false; mbConstraint = true; msConstraintExplanation = OUString(); }
 
 void MIP::setConstraintExplanation( const OUString& s ) { msConstraintExplanation = s; }
-OUString MIP::getConstraintExplanation() const { return msConstraintExplanation; }
 
 
 void MIP::setHasCalculate( bool b ) { mbHasCalculate = b; }
 void MIP::resetCalculate()        { mbHasCalculate = false; }
 
-    OUString MIP::getTypeName() const      { return msTypeName; }
 void MIP::setTypeName( const OUString& s ) { msTypeName = s; mbHasTypeName = true; }
 void MIP::resetTypeName()         { msTypeName = OUString(); mbHasTypeName = false; }
 

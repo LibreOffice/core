@@ -1371,9 +1371,6 @@ css::uno::Any Access::queryInterface(css::uno::Type const & aType)
     return res;
 }
 
-Components & Access::getComponents() const {
-    return components_;
-}
 
 void Access::checkLocalizedPropertyAccess() {
     if (getNode()->kind() == Node::KIND_LOCALIZED_PROPERTY &&

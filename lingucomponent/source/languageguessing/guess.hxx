@@ -48,9 +48,9 @@ class Guess{
 
         ~Guess();
 
-        string GetLanguage();
-        string GetCountry();
-        string GetEncoding();
+        string GetLanguage() { return language_str;}
+        string GetCountry() { return country_str;}
+        string GetEncoding() { return encoding_str;}
 
         bool operator==(string lang);
 

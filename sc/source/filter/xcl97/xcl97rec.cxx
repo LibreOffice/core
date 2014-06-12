@@ -1086,10 +1086,6 @@ ExcBundlesheet8::ExcBundlesheet8( const OUString& rString ) :
 }
 
 
-XclExpString ExcBundlesheet8::GetName() const
-{
-    return XclExpString( sUnicodeName, EXC_STR_8BITLENGTH );
-}
 
 
 void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )

@@ -167,7 +167,7 @@ public:
                                     const com::sun::star::uno::Any& rValue );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >
-                        GetCmisProperties() const;
+                        GetCmisProperties() const { return m_aCmisProperties;}
 
     void        SetCmisProperties(const ::com::sun::star::uno::Sequence< ::com::sun::star::document::CmisProperty >& cmisProps );
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const SAL_OVERRIDE;

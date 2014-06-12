@@ -158,30 +158,10 @@ void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControl
     m_bHasElements = true;
 }
 
-std::vector<OUString>& SdtHelper::getDropDownItems()
-{
-    return m_aDropDownItems;
-}
 
-OUStringBuffer& SdtHelper::getSdtTexts()
-{
-    return m_aSdtTexts;
-}
 
-OUStringBuffer& SdtHelper::getDate()
-{
-    return m_sDate;
-}
 
-OUStringBuffer& SdtHelper::getDateFormat()
-{
-    return m_sDateFormat;
-}
 
-OUStringBuffer& SdtHelper::getLocale()
-{
-    return m_sLocale;
-}
 
 
 void SdtHelper::appendToInteropGrabBag(com::sun::star::beans::PropertyValue rValue)

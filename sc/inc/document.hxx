@@ -553,8 +553,8 @@ public:
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, OUString* pName=NULL ) const;
 
     bool HasPivotTable() const;
-    SC_DLLPUBLIC ScDPCollection*        GetDPCollection();
-    SC_DLLPUBLIC const ScDPCollection* GetDPCollection() const;
+    SC_DLLPUBLIC ScDPCollection*       GetDPCollection();
+    const ScDPCollection* GetDPCollection() const { return pDPCollection; }
     SC_DLLPUBLIC ScDPObject* GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
 
@@ -769,7 +769,7 @@ public:
     void            BeginUnoRefUndo();
     bool            HasUnoRefUndo() const       { return ( pUnoRefUndoList != NULL ); }
     ScUnoRefList*   EndUnoRefUndo();            // must be deleted by caller!
-    sal_Int64       GetNewUnoId();
+    sal_Int64       GetNewUnoId() { return ++nUnoObjectId; }
     void            AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges );
 
     bool IsChart( const SdrObject* pObject );
@@ -1034,7 +1034,7 @@ public:
     void             SetPreviewFont( SfxItemSet* pFontSet );
     SfxItemSet*      GetPreviewFont() { return pPreviewFont; }
     SfxItemSet*      GetPreviewFont( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    const ScMarkData GetPreviewSelection();
+    const ScMarkData& GetPreviewSelection() const { return maPreviewSelection; }
     void             SetPreviewSelection( ScMarkData& rSel );
     ScStyleSheet*    GetPreviewCellStyle() { return pPreviewCellStyle; }
     ScStyleSheet*    GetPreviewCellStyle( SCCOL nCol, SCROW nRow, SCTAB nTab );
@@ -1410,7 +1410,7 @@ public:
 
     SC_DLLPUBLIC ScConditionalFormatList* GetCondFormList( SCTAB nTab ) const;
 
-    const ScValidationDataList* GetValidationList() const;
+    const ScValidationDataList* GetValidationList() const { return pValidationList;}
     ScValidationDataList* GetValidationList() { return pValidationList;}
 
     SC_DLLPUBLIC void           ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab,
@@ -2092,7 +2092,7 @@ public:
 #endif
 
     void SetCalcConfig( const ScCalcConfig& rConfig );
-    const ScCalcConfig& GetCalcConfig() const;
+    const ScCalcConfig& GetCalcConfig() const { return maCalcConfig; }
 
 private:
 

@@ -268,10 +268,6 @@ void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
 
 
 
-OUString  SvBaseLink::GetLinkSourceName() const
-{
-    return aLinkName;
-}
 
 
 

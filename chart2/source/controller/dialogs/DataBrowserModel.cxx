@@ -764,10 +764,6 @@ sal_Int32 DataBrowserModel::getCategoryColumnCount()
     return nLastTextColumnIndex+1;
 }
 
-const DataBrowserModel::tDataHeaderVector& DataBrowserModel::getDataHeaders() const
-{
-    return m_aHeaders;
-}
 
 void DataBrowserModel::updateFromModel()
 {

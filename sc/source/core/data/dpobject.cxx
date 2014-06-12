@@ -3618,20 +3618,8 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
     return true;
 }
 
-ScDPCollection::SheetCaches& ScDPCollection::GetSheetCaches()
-{
-    return maSheetCaches;
-}
 
-ScDPCollection::NameCaches& ScDPCollection::GetNameCaches()
-{
-    return maNameCaches;
-}
 
-ScDPCollection::DBCaches& ScDPCollection::GetDBCaches()
-{
-    return maDBCaches;
-}
 
 ScRangeList ScDPCollection::GetAllTableRanges( SCTAB nTab ) const
 {

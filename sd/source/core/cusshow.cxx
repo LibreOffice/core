@@ -85,10 +85,6 @@ uno::Reference< uno::XInterface > SdCustomShow::getUnoCustomShow()
     return xShow;
 }
 
-SdCustomShow::PageVec& SdCustomShow::PagesVector()
-{
-    return maPages;
-}
 
 void SdCustomShow::ReplacePage( const SdPage* pOldPage, const SdPage* pNewPage )
 {
@@ -112,9 +108,5 @@ void   SdCustomShow::SetName(const OUString& rName)
     aName = rName;
 }
 
-OUString SdCustomShow::GetName() const
-{
-    return aName;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

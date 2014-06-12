@@ -239,10 +239,6 @@ void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
     maCalcConfig = rConfig;
 }
 
-const ScCalcConfig& ScDocument::GetCalcConfig() const
-{
-    return maCalcConfig;
-}
 
 void ScDocument::PreprocessRangeNameUpdate()
 {
