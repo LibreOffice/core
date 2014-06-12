@@ -3274,6 +3274,21 @@ DECLARE_OOXMLEXPORT_TEST(testContentTypeTIF, "fdo77476.docx")
     assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tif']", "PartName", "/word/media/image1.tif");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79591, "fdo79591.docx")
+{
+    /* Values set for docPr name and shape ID attributes
+     * in RT file were not valid as per UTF-8 encoding format
+     * and hence was showing RT document as corrupt with error
+     * message "invalid character"
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+      return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr", "name", "");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "ID", "");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
 {
     uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
