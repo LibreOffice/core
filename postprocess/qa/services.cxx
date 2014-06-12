@@ -16,6 +16,7 @@
 #include <com/sun/star/reflection/XServiceConstructorDescription.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <test/bootstrapfixture.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace css::container;
 using namespace css::reflection;
@@ -87,6 +88,7 @@ void ServicesTest::test()
                 }
             }
     }
+    SolarMutexReleaser rel;
     for (std::vector< css::uno::Reference<css::lang::XComponent> >::iterator i(
              comps.begin());
          i != comps.end(); ++i)
