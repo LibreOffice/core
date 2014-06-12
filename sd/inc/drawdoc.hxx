@@ -212,9 +212,12 @@ public:
                         SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
                         virtual ~SdDrawDocument();
 
-    virtual SdrModel*   AllocModel() const SAL_OVERRIDE;
-    virtual SdrPage*    AllocPage(bool bMasterPage) SAL_OVERRIDE;
+    SdDrawDocument*     AllocSdDrawDocument() const;
+    virtual SdrModel*   AllocModel() const SAL_OVERRIDE; //forwards to AllocSdDrawDocument
+
     SdPage*             AllocSdPage(bool bMasterPage);
+    virtual SdrPage*    AllocPage(bool bMasterPage) SAL_OVERRIDE; //forwards to AllocSdPage
+
     virtual bool        IsReadOnly() const SAL_OVERRIDE;
     virtual void        SetChanged(bool bFlag = true) SAL_OVERRIDE;
 

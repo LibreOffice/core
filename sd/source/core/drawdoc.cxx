@@ -434,10 +434,15 @@ SdDrawDocument::~SdDrawDocument()
     mpCharClass = NULL;
 }
 
+SdrModel* SdDrawDocument::AllocModel() const
+{
+    return AllocSdDrawDocument();
+}
+
 // This method creates a new document (SdDrawDocument) and returns a pointer to
 // said document. The drawing engine uses this method to put the document (or
 // parts of it) into the clipboard/DragServer.
-SdrModel* SdDrawDocument::AllocModel() const
+SdDrawDocument* SdDrawDocument::AllocSdDrawDocument() const
 {
     SdDrawDocument* pNewModel = NULL;
 
