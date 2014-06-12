@@ -100,9 +100,10 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
     CFDictionarySetValue( mpStyleDict, kCTFontAttributeName, pNewCTFont );
     CFRelease( pNewCTFont);
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     // allow delayed setting the font color, i.e. after the text layout
     CFDictionarySetValue( mpStyleDict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue );
-
+#endif
 
 #if 0 // LastResort is implicit in CoreText's font cascading
     const void* aGFBDescriptors[] = { CTFontDescriptorCreateWithNameAndSize( CFSTR("LastResort"), 0) }; // TODO: use the full GFB list
