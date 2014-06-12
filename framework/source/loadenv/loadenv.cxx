@@ -132,7 +132,6 @@ LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xCont
     , m_bCloseFrameOnError(false)
     , m_bReactivateControllerOnError(false)
     , m_bLoaded( false )
-    , m_pQuietInteraction( 0 )
 {
 }
 
@@ -297,7 +296,7 @@ void LoadEnv::initializeLoading(const OUString&                                 
 
 void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
                                     utl::MediaDescriptor& io_lMediaDescriptor, const bool i_bUIMode,
-                                    QuietInteraction** o_ppQuietInteraction )
+                                    rtl::Reference<QuietInteraction>* o_ppQuietInteraction )
 {
     css::uno::Reference< css::task::XInteractionHandler > xInteractionHandler;
     sal_Int16                                             nMacroMode;
@@ -319,12 +318,11 @@ void LoadEnv::initializeUIDefaults( const css::uno::Reference< css::uno::XCompon
     {
         nMacroMode  = css::document::MacroExecMode::NEVER_EXECUTE;
         nUpdateMode = css::document::UpdateDocMode::NO_UPDATE;
-        QuietInteraction* pQuietInteraction = new QuietInteraction();
-        xInteractionHandler = css::uno::Reference< css::task::XInteractionHandler >(static_cast< css::task::XInteractionHandler* >(pQuietInteraction), css::uno::UNO_QUERY);
+        rtl::Reference<QuietInteraction> pQuietInteraction = new QuietInteraction();
+        xInteractionHandler = pQuietInteraction.get();
         if ( o_ppQuietInteraction != NULL )
         {
             *o_ppQuietInteraction = pQuietInteraction;
-            (*o_ppQuietInteraction)->acquire();
         }
     }
 
@@ -1618,11 +1616,10 @@ void LoadEnv::impl_reactForLoadingState()
 
     css::uno::Any aRequest;
     bool bThrow = false;
-    if ( !m_bLoaded && m_pQuietInteraction && m_pQuietInteraction->wasUsed() )
+    if ( !m_bLoaded && m_pQuietInteraction.is() && m_pQuietInteraction->wasUsed() )
     {
         aRequest = m_pQuietInteraction->getRequest();
-        m_pQuietInteraction->release();
-        m_pQuietInteraction = 0;
+        m_pQuietInteraction.clear();
         bThrow = true;
     }
 
