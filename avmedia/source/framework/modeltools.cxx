@@ -41,6 +41,84 @@ using namespace boost::property_tree;
 
 namespace avmedia {
 
+#ifdef ENABLE_COLLADA2GLTF
+bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
+{
+    o_rOutput = OUString();
+    const bool bIsDAE = rSourceURL.endsWithIgnoreAsciiCase(".dae");
+    const bool bIsKMZ = rSourceURL.endsWithIgnoreAsciiCase(".kmz");
+    if( !bIsDAE && !bIsKMZ )
+    {
+        SAL_WARN("avmedia.opengl", "KmzDae2Gltf converter got a file with wrong extension\n" << rSourceURL);
+        return false;
+    }
+
+    // Create a temporary folder for conversion
+    OUString sOutput;
+    ::utl::LocalFileHelper::ConvertPhysicalNameToURL(::utl::TempFile::CreateTempName(), sOutput);
+    // remove .tmp extension
+    sOutput = sOutput.copy(0, sOutput.getLength()-4);
+
+    std::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
+    asset->setBundleOutputPath(OUStringToOString( sOutput, RTL_TEXTENCODING_UTF8 ).getStr());
+
+    // If *.dae file is not in the local file system, then copy it to a temp folder for the conversion
+    // KMZ covnerter need a temp folder in all case, because it creates temp files next to the source file
+    OUString sInput = rSourceURL;
+    const INetURLObject aSourceURLObj(rSourceURL);
+    if( bIsKMZ || aSourceURLObj.GetProtocol() != INET_PROT_FILE )
+    {
+        try
+        {
+            ::ucbhelper::Content aSourceContent(rSourceURL,
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
+
+            const OUString sTarget = sOutput + "/" + GetFilename(rSourceURL);
+            ::ucbhelper::Content aTempContent(sTarget,
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext());
+
+            aTempContent.writeStream(aSourceContent.openStream(), true);
+            sInput = sTarget;
+        }
+        catch (const uno::Exception&)
+        {
+            SAL_WARN("avmedia.opengl", "Exception while trying to copy source file to the temp folder for conversion:\n" << sInput);
+            return false;
+        }
+    }
+
+    asset->setInputFilePath(OUStringToOString( sInput, RTL_TEXTENCODING_UTF8 ).getStr());
+
+    if (bIsKMZ)
+    {
+        // KMZ converter needs a system path
+        const std::string sSourcePath =
+            OUStringToOString( INetURLObject(sInput).getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
+        const std::string strDaeFilePath = GLTF::Kmz2Collada()(sSourcePath);
+        if (strDaeFilePath == "")
+        {
+            SAL_WARN("avmedia.opengl", "Kmz2Collada converter return with an empty URL\n" << rSourceURL);
+            return false;
+        }
+
+        // DAE converter needs URL
+        OUString sDaeFilePath;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(
+            OStringToOUString(OString(strDaeFilePath.c_str()), RTL_TEXTENCODING_UTF8 ), sDaeFilePath);
+        asset->setInputFilePath(OUStringToOString( sDaeFilePath, RTL_TEXTENCODING_UTF8 ).getStr());
+    }
+
+    GLTF::COLLADA2GLTFWriter writer(asset);
+    writer.write();
+    // Path to the .json file created by COLLADA2GLTFWriter
+    o_rOutput = sOutput + "/" + GetFilename(sOutput) + ".json";
+
+    return true;
+}
+#endif
+
 static void lcl_EmbedExternals(const OUString& rSourceURL, uno::Reference<embed::XStorage> xSubStorage, ::ucbhelper::Content& rContent)
 {
     // Create a temp file with which json parser can work.
@@ -148,66 +226,8 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
 {
     OUString sSource = rSourceURL;
 #ifdef ENABLE_COLLADA2GLTF
-    const bool bIsDAE = rSourceURL.endsWithIgnoreAsciiCase(".dae");
-    const bool bIsKMZ = rSourceURL.endsWithIgnoreAsciiCase(".kmz");
-    if (bIsDAE || bIsKMZ)
-    {
-        std::shared_ptr <GLTF::GLTFAsset> asset(new GLTF::GLTFAsset());
-
-        OUString sOutput;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(::utl::TempFile::CreateTempName(), sOutput);
-        // remove .tmp extension
-        sOutput = sOutput.copy(0, sOutput.getLength()-4);
-        asset->setBundleOutputPath(OUStringToOString( sOutput, RTL_TEXTENCODING_UTF8 ).getStr());
-
-        const INetURLObject aSourceURLObj(sSource);
-        // If *.dae or *.kmz file is not in the local file system, then copy them to a temp folder for the conversion
-        if(aSourceURLObj.GetProtocol() != INET_PROT_FILE )
-        {
-            try
-            {
-               ::ucbhelper::Content aSourceContent(sSource,
-                    uno::Reference<ucb::XCommandEnvironment>(),
-                    comphelper::getProcessComponentContext());
-
-                const OUString sTarget = sOutput + GetFilename(sSource);
-                ::ucbhelper::Content aTempContent(sTarget,
-                    uno::Reference<ucb::XCommandEnvironment>(),
-                    comphelper::getProcessComponentContext());
-
-                aTempContent.writeStream(aSourceContent.openStream(), true);
-                sSource = sTarget;
-            }
-            catch (const uno::Exception&)
-            {
-                SAL_WARN("avmedia.opengl", "Exception while trying to copy source file to the temp folder for conversion:\n" << sSource);
-                return false;
-            }
-        }
-
-        asset->setInputFilePath(OUStringToOString( sSource, RTL_TEXTENCODING_UTF8 ).getStr());
-
-        if (bIsKMZ)
-        {
-            // KMZ converter needs a system path
-            const std::string sSourcePath =
-                OUStringToOString( aSourceURLObj.getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
-            const std::string strDaeFilePath = GLTF::Kmz2Collada()(sSourcePath);
-            if (strDaeFilePath == "")
-                return false;
-
-            // DAE converter needs URL
-            OUString sDaeFilePath;
-            ::utl::LocalFileHelper::ConvertPhysicalNameToURL(
-                OStringToOUString(OString(strDaeFilePath.c_str()), RTL_TEXTENCODING_UTF8 ), sDaeFilePath);
-            asset->setInputFilePath(OUStringToOString( sDaeFilePath, RTL_TEXTENCODING_UTF8 ).getStr());
-        }
-
-        GLTF::COLLADA2GLTFWriter writer(asset);
-        writer.write();
-        // Path to the .json file created by COLLADA2GLTFWriter
-        sSource = sOutput + "/" + GetFilename(sOutput) + ".json";
-    }
+    if( !rSourceURL.endsWithIgnoreAsciiCase(".json") )
+        KmzDae2Gltf(rSourceURL, sSource);
 #endif
 
     try
