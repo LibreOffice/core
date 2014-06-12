@@ -1,0 +1,120 @@
+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <sal/types.h>
+
+#define LOK_USE_UNSTABLE_API
+#include <LibreOfficeKit/LibreOfficeKit.h>
+
+#include <LibreOfficeKit/LibreOfficeKitGtk.h>
+
+static void lok_docview_class_init( LOKDocViewClass* pClass );
+static void lok_docview_init( LOKDocView* pDocView );
+
+SAL_DLLPUBLIC_EXPORT guint lok_docview_get_type()
+{
+    static guint lok_docview_type = 0;
+
+    if (!lok_docview_type)
+    {
+        GtkTypeInfo lok_docview_info =
+        {
+            "LokDocView",
+            sizeof( LOKDocView ),
+            sizeof( LOKDocViewClass ),
+            (GtkClassInitFunc) lok_docview_class_init,
+            (GtkObjectInitFunc) lok_docview_init,
+            NULL,
+            NULL,
+            (GtkClassInitFunc) NULL
+        };
+
+        lok_docview_type = gtk_type_unique( gtk_scrolled_window_get_type(), &lok_docview_info );
+    }
+    return lok_docview_type;
+}
+
+static void lok_docview_class_init( LOKDocViewClass* pClass )
+{
+    pClass->lok_docview = NULL;
+}
+
+static void lok_docview_init( LOKDocView* pDocView )
+{
+    pDocView->pEventBox = gtk_event_box_new();
+    gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
+                                           pDocView->pEventBox );
+
+    pDocView->pCanvas = gtk_image_new();
+    gtk_container_add( GTK_CONTAINER( pDocView->pEventBox ), pDocView->pCanvas );
+
+    gtk_widget_show( pDocView->pCanvas );
+    gtk_widget_show( pDocView->pEventBox );
+
+    pDocView->pPixBuf = 0;
+
+    // TODO: figure out a clever view of getting paths set up.
+    pDocView->pOffice = 0;
+    pDocView->pDocument = 0;
+}
+
+SAL_DLLPUBLIC_EXPORT GtkWidget* lok_docview_new( LibreOfficeKit* pOffice )
+{
+    LOKDocView* pDocView = gtk_type_new( lok_docview_get_type() );
+    pDocView->pOffice = pOffice;
+    return GTK_WIDGET( pDocView );
+}
+
+SAL_DLLPUBLIC_EXPORT gboolean lok_docview_open_document( LOKDocView* pDocView, char* pPath )
+{
+    if ( pDocView->pDocument )
+    {
+        pDocView->pDocument->pClass->destroy( pDocView->pDocument );
+        pDocView->pDocument = 0;
+    }
+
+    pDocView->pDocument = pDocView->pOffice->pClass->documentLoad( pDocView->pOffice,
+                                                           pPath );
+    if ( pDocView->pPixBuf )
+    {
+        g_object_unref( G_OBJECT( pDocView->pPixBuf ) );
+    }
+
+    long nWidth, nHeight;
+    pDocView->pDocument->pClass->getDocumentSize( pDocView->pDocument, &nWidth, &nHeight );
+
+    // Draw the whole document at once (for now)
+    int nRenderWidth = nWidth / 10;
+    int nRenderHeight = nHeight / 10;
+
+    pDocView->pPixBuf = gdk_pixbuf_new( GDK_COLORSPACE_RGB,
+                                        TRUE, 8,
+                                        nRenderWidth, nRenderHeight);
+
+
+    // TODO: move the rendering into it's own function etc.
+    unsigned char* pBuffer = gdk_pixbuf_get_pixels( pDocView->pPixBuf );
+    int nRowStride;
+    pDocView->pDocument->pClass->paintTile( pDocView->pDocument,
+                                            pBuffer,
+                                            nRenderWidth, nRenderHeight,
+                                            &nRowStride,
+                                            0, 0, // origin
+                                            nWidth, nHeight );
+    // TODO: double check that the rowstride really matches what we expected,
+    // although presumably we'd already be crashing by now if things were
+    // wrong.
+    (void) nRowStride;
+
+    gtk_image_set_from_pixbuf( GTK_IMAGE( pDocView->pCanvas ), pDocView->pPixBuf );
+
+    return FALSE;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
