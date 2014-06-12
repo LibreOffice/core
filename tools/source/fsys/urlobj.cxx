@@ -501,7 +501,7 @@ static sal_uInt32 const aMustEncodeMap[128]
 /* 8 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
 /* 9 */ PA+PB+PC+PD+PE+PF+PG+PH+PI+PJ+PK+PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX+PY+PZ+P1+P2,
 /* : */    PB+PC            +PH+PI+PJ   +PL+PM+PN+PO+PP+PQ+PR+PS+PT+PU+PV+PW+PX   +PZ+P1+P2,
-/* ; */       PC+PD            +PI+PJ+PK+PL+PM   +PO+PP+PQ+PR   +PT+PU   +PW      +PZ+P1+P2,
+/* ; */       PC+PD            +PI+PJ+PK+PL+PM   +PO+PP+PQ+PR+PS+PT+PU   +PW      +PZ+P1+P2,
 /* < */       PC                                 +PO+PP            +PU+PV      +PY,
 /* = */ PA+PB+PC+PD+PE      +PH+PI+PJ+PK+PL+PM+PN         +PR+PS+PT+PU+PV+PW      +PZ+P1+P2,
 /* > */       PC                                 +PO+PP            +PU+PV      +PY,

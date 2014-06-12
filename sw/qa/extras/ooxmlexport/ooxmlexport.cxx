@@ -3626,6 +3626,13 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79817,"fdo79817.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:dataBinding", "xpath","/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79880,"fdo79880.docx")
+{
+    xmlDocPtr pXmlDocRels = parseExport("word/_rels/document.xml.rels");
+    if(!pXmlDocRels)
+        return;
+    assertXPath(pXmlDocRels,"/rels:Relationships/rels:Relationship[2]","Target","file:///c;/users/dan");
+}
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
