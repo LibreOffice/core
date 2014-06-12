@@ -27,6 +27,9 @@
 #ifdef MACOSX
 #include "osx/salinst.h"
 #include "osx/saldata.hxx"
+#ifndef kCTForegroundColorFromContextAttributeName
+extern const CFStringRef kCTForegroundColorFromContextAttributeName;
+#endif
 #endif
 #include "quartz/salgdi.h"
 #include "quartz/utils.h"
@@ -102,7 +105,6 @@ CoreTextStyle::CoreTextStyle( const FontSelectPattern& rFSD )
 
     // allow delayed setting the font color, i.e. after the text layout
     CFDictionarySetValue( mpStyleDict, kCTForegroundColorFromContextAttributeName, kCFBooleanTrue );
-
 
 #if 0 // LastResort is implicit in CoreText's font cascading
     const void* aGFBDescriptors[] = { CTFontDescriptorCreateWithNameAndSize( CFSTR("LastResort"), 0) }; // TODO: use the full GFB list
