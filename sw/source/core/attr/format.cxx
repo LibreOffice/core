@@ -471,14 +471,16 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, sal_Bool bSrchInParent, con
             static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
             aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bSrchInParent);
-            *ppItem = &aSvxBrushItem;
+            if( ppItem )
+                *ppItem = &aSvxBrushItem;
 
             return SFX_ITEM_SET;
         }
 
         // if not, reset pointer and return SFX_ITEM_DEFAULT to signal that
         // the item is not set
-        *ppItem = 0;
+        if( ppItem )
+            *ppItem = NULL;
 
         return SFX_ITEM_DEFAULT;
     }
