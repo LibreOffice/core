@@ -138,17 +138,6 @@ public:
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 };
 
-
-namespace {
-
-ResId SaneResId( sal_uInt32 nID )
-{
-    static ResMgr* pResMgr = ResMgr::CreateResMgr( "scn" );
-    return ResId( nID, *pResMgr );
-}
-
-}
-
 GridWindow::GridWindow(Window* pParent)
     : Window(pParent, 0)
     , m_aGridArea(50, 15, 100, 100)

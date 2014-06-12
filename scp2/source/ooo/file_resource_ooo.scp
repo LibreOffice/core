@@ -59,12 +59,6 @@ STD_RES_FILE( gid_File_Res_Pcr, pcr)
 
 STD_RES_FILE( gid_File_Res_Pdffilter, pdffilter)
 
-#ifdef UNX
-
-STD_RES_FILE( gid_File_Res_San, scn )
-
-#endif
-
 STD_RES_FILE( gid_File_Res_Sd, sd )
 
 STD_RES_FILE( gid_File_Res_Sfx, sfx )
