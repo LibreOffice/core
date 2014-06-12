@@ -2016,7 +2016,12 @@ void RtfAttributeOutput::CharFont( const SvxFontItem& rFont)
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_LOCH);
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_F);
     m_aStylesEnd.append((sal_Int32)m_rExport.maFontHelper.GetId(rFont));
-    m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(rtl_getBestWindowsCharsetFromTextEncoding(rFont.GetCharSet()));
+    // FIXME: this may be a tad expensive... but the charset needs to be
+    // consistent with what wwFont::WriteRtf() does
+    FontMapExport aTmp(rFont.GetFamilyName());
+    m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(
+            sw::ms::rtl_TextEncodingToWinCharsetRTF(
+                aTmp.msPrimary, aTmp.msSecondary, rFont.GetCharSet()));
 }
 
 void RtfAttributeOutput::CharFontSize( const SvxFontHeightItem& rFontSize)
@@ -3274,7 +3279,10 @@ void RtfAttributeOutput::StartFont( const OUString& rFamilyName ) const
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    m_rExport.Strm() << OUStringToOString( rFamilyName, m_rExport.eCurrentEncoding ).getStr();
+    // write the font name hex-encoded, but without Unicode - Word at least
+    // cannot read *both* Unicode and fallback as written by OutString
+    m_rExport.Strm() <<
+        msfilter::rtfutil::OutString(rFamilyName, m_rExport.eCurrentEncoding, false).getStr();
 }
 
 /// End the font.
@@ -3283,6 +3291,7 @@ void RtfAttributeOutput::EndFont() const
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     m_rExport.Strm() << ";}";
+    m_rExport.eCurrentEncoding = m_rExport.eDefaultEncoding;
 }
 
 /// Alternate name for the font.
@@ -3291,7 +3300,11 @@ void RtfAttributeOutput::FontAlternateName( const OUString& rName ) const
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
     m_rExport.Strm() << '{' << OOO_STRING_SVTOOLS_RTF_IGNORE << OOO_STRING_SVTOOLS_RTF_FALT << ' ';
-    m_rExport.Strm() << OUStringToOString( rName, m_rExport.eCurrentEncoding ).getStr() << '}';
+    // write the font name hex-encoded, but without Unicode - Word at least
+    // cannot read *both* Unicode and fallback as written by OutString
+    m_rExport.Strm() <<
+        msfilter::rtfutil::OutString(rName, m_rExport.eCurrentEncoding, false).getStr()
+        << '}';
 }
 
 /// Font charset.
@@ -3302,6 +3315,7 @@ void RtfAttributeOutput::FontCharset( sal_uInt8 nCharSet ) const
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_FCHARSET;
     m_rExport.OutULong( nCharSet );
     m_rExport.Strm() << ' ';
+    m_rExport.eCurrentEncoding =rtl_getTextEncodingFromWindowsCharset(nCharSet);
 }
 
 /// Font family.
