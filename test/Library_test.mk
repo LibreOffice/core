@@ -35,13 +35,6 @@ $(eval $(call gb_Library_use_libraries,test,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(GUIBASE),unx)
-$(call gb_Library_get_target,test) : \
-    $(call gb_Library_get_target,desktop_detector) \
-    $(call gb_Library_get_target,vclplug_svp) \
-
-endif
-
 $(eval $(call gb_Library_add_exception_objects,test,\
     test/source/bootstrapfixture \
     test/source/diff/diff \
