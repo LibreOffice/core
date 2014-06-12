@@ -32,7 +32,7 @@
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/URL.hpp>
-
+#include <rtl/ref.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -192,7 +192,7 @@ private:
      */
     ActionLockGuard m_aTargetLock;
 
-    QuietInteraction*   m_pQuietInteraction;
+    rtl::Reference<QuietInteraction> m_pQuietInteraction;
 
 public:
 
@@ -367,7 +367,7 @@ public:
                 const css::uno::Reference< css::uno::XComponentContext >& i_rxContext,
                 utl::MediaDescriptor& io_lMediaDescriptor,
                 const bool _bUIMode,
-                QuietInteraction** o_ppQuiteInteraction
+                rtl::Reference<QuietInteraction>* o_ppQuiteInteraction
             );
 
     /** TODO document me ... */
