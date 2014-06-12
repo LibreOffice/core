@@ -155,7 +155,7 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
     LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
         mxComponent( xComponent )
     {
-        nSize = sizeof(LibreOfficeKit);
+        nSize = sizeof(LibreOfficeKitDocument);
 
         destroy = doc_destroy;
         saveAs = doc_saveAs;
@@ -185,7 +185,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
 
     LibLibreOffice_Impl()
     {
-        nSize = sizeof(LibreOfficeKitDocument);
+        nSize = sizeof(LibreOfficeKit);
 
         destroy = lo_destroy;
         initialize = lo_initialize;
