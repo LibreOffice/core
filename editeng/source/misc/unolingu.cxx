@@ -432,26 +432,25 @@ uno::Reference< linguistic2::XPossibleHyphens > SAL_CALL
 }
 
 
-typedef cppu::WeakImplHelper1 < XEventListener > LinguMgrAppExitLstnrBaseClass;
+typedef cppu::WeakImplHelper1 < XEventListener > LinguMgrExitLstnrBaseClass;
 
 
-class LinguMgrAppExitLstnr : public LinguMgrAppExitLstnrBaseClass
+class LinguMgrExitLstnr : public LinguMgrExitLstnrBaseClass
 {
     uno::Reference< XDesktop2 >        xDesktop;
 
+    void AtExit();
+
 public:
-    LinguMgrAppExitLstnr();
-    virtual ~LinguMgrAppExitLstnr();
-
-    virtual void    AtExit() = 0;
-
+    LinguMgrExitLstnr();
+    virtual ~LinguMgrExitLstnr();
 
     // lang::XEventListener
     virtual void    SAL_CALL disposing(const EventObject& rSource)
             throw( RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
-LinguMgrAppExitLstnr::LinguMgrAppExitLstnr()
+LinguMgrExitLstnr::LinguMgrExitLstnr()
 {
     // add object to frame::Desktop EventListeners in order to properly call
     // the AtExit function at appliction exit.
@@ -461,7 +460,7 @@ LinguMgrAppExitLstnr::LinguMgrAppExitLstnr()
     xDesktop->addEventListener( this );
 }
 
-LinguMgrAppExitLstnr::~LinguMgrAppExitLstnr()
+LinguMgrExitLstnr::~LinguMgrExitLstnr()
 {
     if (xDesktop.is())
     {
@@ -471,7 +470,7 @@ LinguMgrAppExitLstnr::~LinguMgrAppExitLstnr()
     OSL_ENSURE(!xDesktop.is(), "reference to desktop should be realeased");
 }
 
-void LinguMgrAppExitLstnr::disposing(const EventObject& rSource)
+void LinguMgrExitLstnr::disposing(const EventObject& rSource)
         throw( RuntimeException, std::exception )
 {
     if (xDesktop.is()  &&  rSource.Source == xDesktop)
@@ -482,12 +481,6 @@ void LinguMgrAppExitLstnr::disposing(const EventObject& rSource)
         AtExit();
     }
 }
-
-class LinguMgrExitLstnr : public LinguMgrAppExitLstnr
-{
-public:
-    virtual void    AtExit() SAL_OVERRIDE;
-};
 
 void LinguMgrExitLstnr::AtExit()
 {
