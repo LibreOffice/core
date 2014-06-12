@@ -57,12 +57,15 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
     if( nDefaultListBehavior != word::WdDefaultListBehavior::wdWord8ListBehavior )
         throw uno::RuntimeException();
 
-    SwVbaListTemplate* pListTemplate = dynamic_cast< SwVbaListTemplate* >( ListTemplate.get() );
-
     uno::Reference< container::XEnumerationAccess > xEnumAccess( mxTextRange, uno::UNO_QUERY_THROW );
     uno::Reference< container::XEnumeration > xEnum = xEnumAccess->createEnumeration();
+    if (!xEnum->hasMoreElements())
+        return;
+
+    SwVbaListTemplate& rListTemplate = dynamic_cast<SwVbaListTemplate&>(*ListTemplate.get());
+
     bool isFirstElement = true;
-    while( xEnum->hasMoreElements() )
+    do
     {
         uno::Reference< beans::XPropertySet > xProps( xEnum->nextElement(), uno::UNO_QUERY_THROW );
         if( isFirstElement )
@@ -80,8 +83,9 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
         {
             xProps->setPropertyValue("ParaIsNumberingRestart", uno::makeAny( sal_False ) );
         }
-        pListTemplate->applyListTemplate( xProps );
+        rListTemplate.applyListTemplate( xProps );
     }
+    while( xEnum->hasMoreElements() );
 }
 
 void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  ) throw (css::uno::RuntimeException, std::exception)
