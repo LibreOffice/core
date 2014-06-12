@@ -29,7 +29,7 @@ ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	$(foreach file,$(officecfg_XCSFILES),\
 		&& echo "#include <officecfg/$(file).hxx>" >> $@)
 else
-	mv $(call var2file,$(shell mkdir -p $(dir $@) && truncate -s 0 $@.tmp && echo $@.tmp),100,$(foreach file,$(officecfg_XCSFILES),$(call officecfg_geninclude,$(file)))) $@
+	mv $(call var2file,$(shell mkdir -p $(dir $@) && cat /dev/null >$@.tmp && echo $@.tmp),100,$(foreach file,$(officecfg_XCSFILES),$(call officecfg_geninclude,$(file)))) $@
 endif
 
 # pass the stem as space separated path elements and get a set of --stringparam ns<level> <element> in return
