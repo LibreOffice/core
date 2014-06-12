@@ -35,7 +35,7 @@ OGLPlayer::~OGLPlayer()
     osl::MutexGuard aGuard(m_aMutex);
     if( m_pHandle )
     {
-        for (size_t i = 0; i < m_pHandle->size; ++i)
+        for (size_t i = 0; i < m_pHandle->size && m_pHandle->files[i].buffer; ++i)
         {
             if (m_pHandle->files[i].type != GLTF_JSON)
             {
