@@ -845,7 +845,6 @@ SwAssignFieldsControl::SwAssignFieldsControl(Window* pParent, WinBits nBits) :
     m_nYOffset(0),
     m_nFirstYPos(0)
 {
-    SetHelpId(HID_MM_ASSIGN_FIELDS);
     long nHBHeight = m_aHeaderHB.CalcWindowSizePixel().Height();
     Size aOutputSize(GetOutputSize());
     m_aVScroll.Show();
@@ -886,24 +885,6 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
     Link aMatchHdl = LINK(this, SwAssignFieldsControl, MatchHdl_Impl);
     Link aFocusHdl = LINK(this, SwAssignFieldsControl, GotFocusHdl_Impl);
 
-    static const char* aHIDs[] =
-    {
-         HID_MM_HEADER_0,
-         HID_MM_HEADER_1,
-         HID_MM_HEADER_2,
-         HID_MM_HEADER_3,
-         HID_MM_HEADER_4,
-         HID_MM_HEADER_5,
-         HID_MM_HEADER_6,
-         HID_MM_HEADER_7,
-         HID_MM_HEADER_8,
-         HID_MM_HEADER_9,
-         HID_MM_HEADER_10,
-         HID_MM_HEADER_11,
-         HID_MM_HEADER_12,
-         HID_MM_HEADER_13
-    };
-
     //fill the controls
     long nControlWidth = aOutputSize.Width() / 3;
     long nControlHeight = -1;
@@ -915,7 +896,6 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
         ListBox* pNewLB = new ListBox(&m_aWindow, WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
         pNewText->set_mnemonic_widget(pNewLB);
         pNewLB->InsertEntry(SW_RESSTR(SW_STR_NONE));
-        pNewLB->SetHelpId( aHIDs[i] );
         pNewLB->SelectEntryPos(0);
         pNewLB->SetDropDownLineCount(5);
 
