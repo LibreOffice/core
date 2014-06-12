@@ -724,7 +724,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
 
     sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
-    pDocPrAttrList->add(XML_name, OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8));
+    pDocPrAttrList->add(XML_name, OUStringToOString(pSdrObject->GetName(), RTL_TEXTENCODING_UTF8).getStr());
     if (!pSdrObject->GetTitle().isEmpty())
         pDocPrAttrList->add(XML_title, OUStringToOString(pSdrObject->GetTitle(), RTL_TEXTENCODING_UTF8));
     if (!pSdrObject->GetDescription().isEmpty())
