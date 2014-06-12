@@ -98,8 +98,6 @@ class GridWindow : public Window
     double findMaxX();
     double findMaxY();
 
-    void updateRectSize();
-
     void drawGrid();
     void drawOriginal();
     void drawNew();
@@ -123,14 +121,7 @@ public:
     virtual ~GridWindow();
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
-    double getMinX() { return m_fMinX; }
-    double getMinY() { return m_fMinY; }
-    double getMaxX() { return m_fMaxX; }
-    double getMaxY() { return m_fMaxY; }
 
-    int countValues() { return m_nValues; }
-    double* getXValues() { return m_pXValues; }
-    double* getOrigYValues() { return m_pOrigYValues; }
     double* getNewYValues() { return m_pNewYValues; }
 
     void ChangeMode(int nType);
