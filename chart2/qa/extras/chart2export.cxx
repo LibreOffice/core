@@ -739,13 +739,11 @@ void Chart2ExportTest::testScatterPlotLabels()
     xCT = getChartTypeFromDoc(xChartDoc, 0, 0);
     CPPUNIT_ASSERT(xCT.is());
 
-#if 0
     aLabels = getDataSeriesLabelsFromChartType(xCT);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLabels.size());
     CPPUNIT_ASSERT_EQUAL(OUString("a"), aLabels[0][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("b"), aLabels[1][0].get<OUString>());
     CPPUNIT_ASSERT_EQUAL(OUString("c"), aLabels[2][0].get<OUString>());
-#endif
 }
 
 void Chart2ExportTest::testErrorBarDataRangeODS()
