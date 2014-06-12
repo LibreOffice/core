@@ -119,7 +119,7 @@ class GridWindow : public Window
     void drawLine( double x1, double y1, double x2, double y2 );
 public:
     GridWindow(Window* pParent);
-    void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues);
+    void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap);
     virtual ~GridWindow();
 
     void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
@@ -159,13 +159,13 @@ GridWindow::GridWindow(Window* pParent)
     , m_bCutValues(false)
     , m_aHandles()
     , m_nDragIndex(0xffffffff)
-    , m_aMarkerBitmap( FixedImage::loadThemeImage("extensions/source/scanner/handle.png").GetBitmapEx() )
 {
     SetMapMode(MapMode(MAP_PIXEL));
 }
 
-void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCutValues)
+void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCutValues, const BitmapEx &rMarkerBitmap)
 {
+    m_aMarkerBitmap = rMarkerBitmap;
     m_pXValues = pXValues;
     m_pOrigYValues = pYValues;
     m_nValues = nValues;
@@ -214,7 +214,7 @@ GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, Window* 
     get(m_pResetTypeBox, "resetTypeCombobox");
     get(m_pResetButton, "resetButton");
     get(m_pGridWindow, "gridwindow");
-    m_pGridWindow->Init(pXValues, pYValues, nValues, bCutValues);
+    m_pGridWindow->Init(pXValues, pYValues, nValues, bCutValues, get<FixedImage>("handle")->GetImage().GetBitmapEx());
 
     m_pResetTypeBox->SelectEntryPos( 0 );
 
