@@ -400,6 +400,15 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( const sal_Int32 nMasterPlace
     return aShapePtr;
 }
 
+namespace
+{
+    bool ShapeLocationIsMaster(oox::drawingml::Shape *pInShape)
+    {
+        PPTShape* pShape = dynamic_cast<PPTShape*>(pInShape);
+        return pShape && pShape->getShapeLocation() == Master;
+    }
+}
+
 oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
 {
     oox::drawingml::ShapePtr aShapePtr;
@@ -408,8 +417,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx,
     while( aRevIter != rShapes.rend() )
     {
         if ( (*aRevIter)->getSubTypeIndex().has() && (*aRevIter)->getSubTypeIndex().get() == nIdx &&
-             ( !bMasterOnly ||
-               ( dynamic_cast< PPTShape* >( (*aRevIter).get() ) && dynamic_cast< PPTShape* >( (*aRevIter).get() )->getShapeLocation() == Master ) ) )
+             ( !bMasterOnly || ShapeLocationIsMaster((*aRevIter).get()) ) )
         {
             aShapePtr = *aRevIter;
             break;
