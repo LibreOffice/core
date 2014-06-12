@@ -133,7 +133,7 @@ struct LibLODocument_Impl : public _LibreOfficeDocument
     LibLODocument_Impl( const uno::Reference < css::lang::XComponent > &xComponent )
             : mxComponent( xComponent )
     {
-        nSize = sizeof( LibreOffice );
+        nSize = sizeof( LibreOfficeDocument );
 
         destroy = doc_destroy;
         saveAs = doc_saveAs;
@@ -159,7 +159,7 @@ struct LibLibreOffice_Impl : public _LibreOffice
 
     LibLibreOffice_Impl()
     {
-        nSize = sizeof( LibreOfficeDocument );
+        nSize = sizeof( LibreOffice );
 
         destroy = lo_destroy;
         initialize = lo_initialize;
