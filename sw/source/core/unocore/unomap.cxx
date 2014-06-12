@@ -639,6 +639,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     COMMON_TEXT_CONTENT_PROPERTIES
                     { OUString(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     cppu::UnoType<OUString>::get(),         PropertyAttribute::MAYBEVOID,     0},
                     { OUString(UNO_NAME_CHAR_STYLE_NAMES), FN_UNO_CHARFMT_SEQUENCE,  cppu::UnoType< cppu::UnoSequenceType<OUString> >::get(),     PropertyAttribute::MAYBEVOID,     0},
+                    { OUString(UNO_NAME_PARA_HAS_BOOKMARKS), FN_UNO_PARA_HAS_BOOKMARK,  cppu::UnoType<bool>::get(),     PropertyAttribute::MAYBEVOID,     0},
                     { OUString(), 0, css::uno::Type(), 0, 0 }
                 };
                 aMapEntriesArr[nPropertyId] = aParagraphMap_Impl;

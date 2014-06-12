@@ -352,7 +352,14 @@ void DomainMapper_Impl::RemoveLastParagraph( )
         {
             uno::Reference<container::XEnumeration> xEnumeration = xEnumerationAccess->createEnumeration();
             uno::Reference<lang::XComponent> xParagraph(xEnumeration->nextElement(), uno::UNO_QUERY);
-            xParagraph->dispose();
+            uno::Reference<beans::XPropertySet> xParagraphProperties(xParagraph, uno::UNO_QUERY);
+            if (xParagraphProperties.is())
+            {
+                bool bParaHasBookmarks;
+                xParagraphProperties->getPropertyValue(OUString("ParaHasBookmarks")) >>= bParaHasBookmarks;
+                if (!bParaHasBookmarks)
+                    xParagraph->dispose();
+            }
         }
         else if (xCursor.is())
         {

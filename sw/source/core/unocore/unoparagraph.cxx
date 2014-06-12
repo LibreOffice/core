@@ -38,6 +38,8 @@
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 
+#include <IDocumentSettingAccess.hxx>
+#include <IMark.hxx>
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>
 #include <com/sun/star/beans/GetPropertyTolerantResult.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
@@ -156,11 +158,38 @@ public:
             const uno::Sequence< OUString >& rPropertyNames,
             bool bDirectValuesOnly)
         throw (uno::RuntimeException);
+
+    // check for bookmarks in the paragraph
+    bool hasBookmarks();
 protected:
     // SwClient
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) SAL_OVERRIDE;
 
 };
+
+
+bool SwXParagraph::Impl::hasBookmarks()
+{
+    bool bHasBookmarks = false;
+
+    SwTxtNode *const pTxtNode( GetTxtNode() );
+    if (pTxtNode)
+    {
+        sal_uLong nNd = pTxtNode->GetIndex( );
+        IDocumentMarkAccess* const pMarkAccess = pTxtNode->GetDoc()->getIDocumentMarkAccess();
+        const sal_Int32 nMarks = pMarkAccess->getCommonMarksCount();
+        for ( sal_Int32 i = 0; i < nMarks; i++ )
+        {
+            sw::mark::IMark* pMark = ( pMarkAccess->getCommonMarksBegin() + i )->get();
+            if ( pMark->GetMarkStart().nNode == nNd ||   pMark->GetMarkEnd().nNode == nNd )
+            {
+                bHasBookmarks = true;
+                break;
+            }
+        }
+    }
+    return bHasBookmarks;
+}
 
 void SwXParagraph::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 {
@@ -448,7 +477,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 "Unknown property: " + pPropertyNames[nProp],
                 static_cast< cppu::OWeakObject * >(&m_rThis));
         }
-        if (! ::sw::GetDefaultTextContentValue(
+        if (FN_UNO_PARA_HAS_BOOKMARK == pEntry->nWID)
+        {
+            pValues[nProp] = uno::makeAny(hasBookmarks());
+        }
+        else if (! ::sw::GetDefaultTextContentValue(
                 pValues[nProp], pPropertyNames[nProp], pEntry->nWID))
         {
             beans::PropertyState eTemp;
