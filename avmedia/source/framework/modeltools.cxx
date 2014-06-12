@@ -15,12 +15,14 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <osl/file.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -30,7 +32,6 @@
 #ifdef ENABLE_COLLADA2GLTF
 #include <COLLADA2GLTFWriter.h>
 #include <GLTFAsset.h>
-#include <KMZ2Collada.h>
 #endif
 
 #include <string>
@@ -42,6 +43,29 @@ using namespace boost::property_tree;
 namespace avmedia {
 
 #ifdef ENABLE_COLLADA2GLTF
+
+static void lcl_UnzipKmz(const OUString& rSourceURL, const OUString& rOutputFolderURL, OUString& o_rDaeFileURL)
+{
+    o_rDaeFileURL = OUString();
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess =
+        packages::zip::ZipFileAccess::createWithURL(comphelper::getProcessComponentContext(), rSourceURL);
+    uno::Sequence< OUString > aNames = xNameAccess->getElementNames();
+    for( sal_Int32 i = 0; i < aNames.getLength(); ++i )
+    {
+        const OUString sCopy = rOutputFolderURL + "/" + aNames[i];
+        if( aNames[i].endsWithIgnoreAsciiCase(".dae") )
+            o_rDaeFileURL = sCopy;
+
+        uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(aNames[i]), uno::UNO_QUERY);
+
+        ::ucbhelper::Content aCopyContent(sCopy,
+            uno::Reference<ucb::XCommandEnvironment>(),
+            comphelper::getProcessComponentContext());
+
+        aCopyContent.writeStream(xInputStream, true);
+    }
+}
+
 bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
 {
     o_rOutput = OUString();
@@ -66,7 +90,7 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
     // KMZ covnerter need a temp folder in all case, because it creates temp files next to the source file
     OUString sInput = rSourceURL;
     const INetURLObject aSourceURLObj(rSourceURL);
-    if( bIsKMZ || aSourceURLObj.GetProtocol() != INET_PROT_FILE )
+    if( aSourceURLObj.GetProtocol() != INET_PROT_FILE )
     {
         try
         {
@@ -93,20 +117,14 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
 
     if (bIsKMZ)
     {
-        // KMZ converter needs a system path
-        const std::string sSourcePath =
-            OUStringToOString( INetURLObject(sInput).getFSysPath(INetURLObject::FSYS_DETECT), RTL_TEXTENCODING_UTF8 ).getStr();
-        const std::string strDaeFilePath = GLTF::Kmz2Collada()(sSourcePath);
-        if (strDaeFilePath == "")
+        OUString sDaeFilePath;
+        lcl_UnzipKmz(sInput, sOutput, sDaeFilePath);
+        if ( sDaeFilePath.isEmpty() )
         {
-            SAL_WARN("avmedia.opengl", "Kmz2Collada converter return with an empty URL\n" << rSourceURL);
+            SAL_WARN("avmedia.opengl", "Cannot find dae file in kmz:\n" << rSourceURL);
             return false;
         }
 
-        // DAE converter needs URL
-        OUString sDaeFilePath;
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL(
-            OStringToOUString(OString(strDaeFilePath.c_str()), RTL_TEXTENCODING_UTF8 ), sDaeFilePath);
         asset->setInputFilePath(OUStringToOString( sDaeFilePath, RTL_TEXTENCODING_UTF8 ).getStr());
     }
 
@@ -114,7 +132,6 @@ bool KmzDae2Gltf(const OUString& rSourceURL, OUString& o_rOutput)
     writer.write();
     // Path to the .json file created by COLLADA2GLTFWriter
     o_rOutput = sOutput + "/" + GetFilename(sOutput) + ".json";
-
     return true;
 }
 #endif
