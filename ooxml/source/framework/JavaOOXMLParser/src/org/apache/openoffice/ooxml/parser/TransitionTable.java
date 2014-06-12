@@ -30,21 +30,20 @@ public class TransitionTable
     public TransitionTable (final Vector<String[]> aData)
     {
         maTransitions = new HashMap<>();
-        int nTransitionCount = 0;
 
         for (final String[] aLine : aData)
         {
             // Create new transition.
             final int nStartStateId = Integer.parseInt(aLine[1]);
             final int nEndStateId = Integer.parseInt(aLine[2]);
-            final int nElementId = Integer.parseInt(aLine[3]);
-            final int nElementStateId = Integer.parseInt(aLine[4]);
+            final int nElementPrefixId = Integer.parseInt(aLine[3]);
+            final int nElementLocalId = Integer.parseInt(aLine[4]);
+            final int nElementStateId = Integer.parseInt(aLine[5]);
             final Transition aTransition = new Transition(
                 nStartStateId,
                 nEndStateId,
-                nElementId,
+                (nElementPrefixId<<16) | nElementLocalId,
                 nElementStateId);
-            ++nTransitionCount;
 
             Map<Integer,Transition> aPerElementTransitions = maTransitions.get(aTransition.GetStartStateId());
             if (aPerElementTransitions == null)
@@ -54,7 +53,6 @@ public class TransitionTable
             }
             aPerElementTransitions.put(aTransition.GetElementId(), aTransition);
         }
-        Log.Std.printf("read %d transitions\n",  nTransitionCount);
     }
 
 
@@ -62,13 +60,22 @@ public class TransitionTable
 
     public Transition GetTransition (
         final int nStateId,
-        final int nElementId)
+        final int nPrefixId,
+        final int nLocalId)
     {
         Map<Integer,Transition> aPerElementTransitions = maTransitions.get(nStateId);
         if (aPerElementTransitions == null)
             return null;
         else
-            return aPerElementTransitions.get(nElementId);
+            return aPerElementTransitions.get((nPrefixId<<16) | nLocalId);
+    }
+
+
+
+
+    public int GetTransitionCount ()
+    {
+        return maTransitions.size();
     }
 
 

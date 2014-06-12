@@ -42,24 +42,14 @@ public class NameMap
                 maIdToNameMap.setSize(nId+1);
             maIdToNameMap.set(nId, aLine[2]);
         }
-
-        if (Log.Dbg != null)
-            Log.Dbg.printf("initialized name map with %d definitions\n", maNameToIdMap.size());
     }
 
 
 
 
     public int GetIdForName (
-        final String sPrefix,
-        final String sElementName)
+        final String sName)
     {
-        final String sName;
-        if (sPrefix == null)
-            sName = sElementName;
-        else
-            sName = sPrefix+"_"+sElementName;
-
         if ( ! maNameToIdMap.containsKey(sName))
             throw new RuntimeException("token '"+sName+"' is not known");
 
@@ -75,6 +65,14 @@ public class NameMap
             return "<none>";
         else
             return maIdToNameMap.get(nId);
+    }
+
+
+
+
+    public int GetNameCount ()
+    {
+        return maIdToNameMap.size();
     }
 
 

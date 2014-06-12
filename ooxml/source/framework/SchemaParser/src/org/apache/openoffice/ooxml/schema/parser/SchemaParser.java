@@ -113,7 +113,7 @@ public class SchemaParser
                 case XMLStreamReader.START_ELEMENT:
                     if (maReader.getLocalName().equals("schema"))
                     {
-                        ProcessNamespaceDefinitions();
+                        ProcessSchemaTag();
                         ParseSchema();
 
                         maLastLocation = maReader.getLocation();
@@ -168,8 +168,18 @@ public class SchemaParser
 
     /** Process the namespace definitions in the outer 'schema' element.
      */
-    private void ProcessNamespaceDefinitions ()
+    private void ProcessSchemaTag ()
     {
+        GetOptionalAttributeValue("id", null);
+        meAttributeFormDefault = FormDefault.valueOf(
+            GetOptionalAttributeValue("attributeFormDefault", "unqualified"));
+        meElementFormDefault = FormDefault.valueOf(
+            GetOptionalAttributeValue("elementFormDefault", "unqualified"));
+        GetOptionalAttributeValue("blockDefault", null);//=(#all|list of (extension|restriction|substitution))
+        GetOptionalAttributeValue("finalDefault", null);//=(#all|list of (extension|restriction|list|union))
+        msTargetNamespace = GetOptionalAttributeValue("targetNamespace", null);
+        GetOptionalAttributeValue("version", null);
+
         for (int nIndex=0; nIndex<maReader.getNamespaceCount(); ++nIndex)
         {
             final String sPrefix = maReader.getNamespacePrefix(nIndex);
@@ -177,7 +187,7 @@ public class SchemaParser
             maLocalNamespaceMap.put(sPrefix, sURI);
             maSchemaBase.Namespaces.ProvideNamespace(sURI, sPrefix);
         }
-        msTargetNamespace = GetAttributeValue("targetNamespace");
+
         maLocalNamespaceMap.put(null, msTargetNamespace);
         maSchemaBase.Namespaces.ProvideNamespace(msTargetNamespace, null);
     }
@@ -482,6 +492,7 @@ public class SchemaParser
                 GetOptionalAttributeValue("use", "optional"),
                 GetOptionalAttributeValue("default", null),
                 GetOptionalAttributeValue("fixed", null),
+                meAttributeFormDefault,
                 GetLocation());
             ExpectEndElement("attribute reference");
         }
@@ -502,6 +513,7 @@ public class SchemaParser
             GetOptionalAttributeValue("use", "optional"),
             GetOptionalAttributeValue("default", null),
             GetOptionalAttributeValue("fixed", null),
+            meAttributeFormDefault,
             GetLocation());
         ExpectEndElement("attribute");
 
@@ -1193,4 +1205,6 @@ public class SchemaParser
     private final Vector<File> maImportedSchemas;
     /// Some values for tracking the number of read bytes and lines.
     private javax.xml.stream.Location maLastLocation;
+    private FormDefault meAttributeFormDefault;
+    private FormDefault meElementFormDefault;
 }

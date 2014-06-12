@@ -72,18 +72,6 @@ public class FiniteAutomatonContainer
 
 
 
-    public Iterable<Transition> GetTransitions ()
-    {
-        final Vector<Transition> aTransitions = new Vector<>();
-        for (final FiniteAutomaton aAutomaton : maComplexTypeNameToAutomatonMap.values())
-            for (final Transition aTransition : aAutomaton.GetTransitions())
-                aTransitions.add(aTransition);
-        return aTransitions;
-    }
-
-
-
-
     public int GetTransitionCount ()
     {
         int nTransitionCount = 0;
@@ -135,6 +123,7 @@ public class FiniteAutomatonContainer
                 HopcroftMinimizer.MinimizeDFA(
                     aNewStateContainer,
                     aEntry.getValue().GetStateContext(),
+                    aEntry.getValue().GetAttributes(),
                     aLog));
         }
         return aDFAs;

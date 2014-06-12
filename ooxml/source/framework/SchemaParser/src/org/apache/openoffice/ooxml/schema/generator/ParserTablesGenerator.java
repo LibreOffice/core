@@ -25,16 +25,22 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.openoffice.ooxml.schema.automaton.FiniteAutomaton;
 import org.apache.openoffice.ooxml.schema.automaton.FiniteAutomatonContainer;
 import org.apache.openoffice.ooxml.schema.automaton.SkipData;
 import org.apache.openoffice.ooxml.schema.automaton.State;
 import org.apache.openoffice.ooxml.schema.automaton.Transition;
+import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
+import org.apache.openoffice.ooxml.schema.model.attribute.AttributeBase.Use;
 import org.apache.openoffice.ooxml.schema.model.schema.NamespaceMap;
+import org.apache.openoffice.ooxml.schema.parser.FormDefault;
 
 public class ParserTablesGenerator
 {
@@ -44,7 +50,8 @@ public class ParserTablesGenerator
     {
         maAutomatons = aAutomatons;
         maNamespaces = aNamespaces;
-        maElementNameToIdMap = new TreeMap<>();
+        maNameToIdMap = new TreeMap<>();
+        maPrefixToIdMap = new HashMap<>();
         maStateNameToIdMap = new TreeMap<>();
     }
 
@@ -56,12 +63,15 @@ public class ParserTablesGenerator
     {
         final long nStartTime = System.currentTimeMillis();
 
+        SetupNameList();
         AssignNameIds();
 
         try
         {
             final PrintStream aOut = new PrintStream(new FileOutputStream(aParseTableFile));
+
             WriteNamespaceList(aOut);
+            WriteNameList(aOut);
             WriteGlobalStartEndStates(aOut);
             WriteNameList(aOut);
             WriteAutomatonList(aOut);
@@ -81,27 +91,57 @@ public class ParserTablesGenerator
 
 
 
+    private void SetupNameList ()
+    {
+        final Set<String> aNames = new TreeSet<>();
+
+        // Add the element names.
+        for (final FiniteAutomaton aAutomaton : maAutomatons.GetAutomatons())
+            for (final Transition aTransition : aAutomaton.GetTransitions())
+            {
+                if (aTransition.GetElementName() == null)
+                    throw new RuntimeException();
+                aNames.add(aTransition.GetElementName().GetLocalPart());
+            }
+
+        // Add the attribute names.
+        for (final FiniteAutomaton aAutomaton : maAutomatons.GetAutomatons())
+            for (final Attribute aAttribute : aAutomaton.GetAttributes())
+                aNames.add(aAttribute.GetName().GetLocalPart());
+
+        // Create unique ids for the names.
+        int nIndex = 1;
+        maNameToIdMap.clear();
+        for (final String sName : aNames)
+            maNameToIdMap.put(sName, nIndex++);
+
+        // Create unique ids for namespace prefixes.
+        nIndex = 1;
+        maPrefixToIdMap.clear();
+        for (final Entry<String, String> aEntry : maNamespaces)
+        {
+            maPrefixToIdMap.put(aEntry.getValue(), nIndex++);
+        }
+    }
+
+
+
+
     /** During the largest part of the parsing process, states and elements are
      *  identified not via their name but via a unique id.
      *  That allows a fast lookup.
      */
     private void AssignNameIds ()
     {
-        maElementNameToIdMap.clear();
         maStateNameToIdMap.clear();
         int nIndex = 0;
 
+        // Process state names.
+        final Set<State> aSortedStates = new TreeSet<>();
         for (final State aState : maAutomatons.GetStates())
+            aSortedStates.add(aState);
+        for (final State aState : aSortedStates)
             maStateNameToIdMap.put(aState.GetFullname(), nIndex++);
-        for (final Transition aTransition : maAutomatons.GetTransitions())
-        {
-            if (aTransition.GetElementName() == null)
-                continue;
-            // Element names are not necessarily unique.
-            final String sElementName = aTransition.GetElementName().GetStateName();
-            if ( ! maElementNameToIdMap.containsKey(sElementName))
-                maElementNameToIdMap.put(sElementName, nIndex++);
-        }
     }
 
 
@@ -112,8 +152,9 @@ public class ParserTablesGenerator
         aOut.printf("# namespaces\n");
         for (final Entry<String, String> aEntry : maNamespaces)
         {
-            aOut.printf("namespace %-8s %s\n",
+            aOut.printf("namespace %-8s %2d %s\n",
                 aEntry.getValue(),
+                maPrefixToIdMap.get(aEntry.getValue()),
                 aEntry.getKey());
         }
     }
@@ -141,14 +182,15 @@ public class ParserTablesGenerator
 
     private void WriteNameList (final PrintStream aOut)
     {
-        aOut.printf("\n# %d element names\n", maElementNameToIdMap.size());
-        for (final Entry<String, Integer> aEntry : maElementNameToIdMap.entrySet())
+        aOut.printf("\n# %d names\n", maNameToIdMap.size());
+        for (final Entry<String, Integer> aEntry : maNameToIdMap.entrySet())
         {
-            aOut.printf("element-name %4d %s\n",
+            aOut.printf("name %4d %s\n",
                 aEntry.getValue(),
                 aEntry.getKey());
         }
-        aOut.printf("\n# %d state names\n", maStateNameToIdMap.size());
+
+        aOut.printf("\n# %s states\n",  maStateNameToIdMap.size());
         for (final Entry<String, Integer> aEntry : maStateNameToIdMap.entrySet())
         {
             aOut.printf("state-name %4d %s\n",
@@ -165,23 +207,37 @@ public class ParserTablesGenerator
         for (final FiniteAutomaton aAutomaton : maAutomatons.GetAutomatons())
         {
             aOut.printf("# %s\n", aAutomaton.GetTypeName());
+
+            final State aStartState = aAutomaton.GetStartState();
+            final int nStartStateId = maStateNameToIdMap.get(aStartState.GetFullname());
+
             // Write start state.
             aOut.printf("start-state %d %s\n",
-                maStateNameToIdMap.get(aAutomaton.GetStartState().GetFullname()),
-                aAutomaton.GetStartState().GetFullname());
+                nStartStateId,
+                aStartState);
+
             // Write accepting states.
             for (final State aState : aAutomaton.GetAcceptingStates())
+            {
                 aOut.printf("accepting-state %d %s\n",
                     maStateNameToIdMap.get(aState.GetFullname()),
                     aState.GetFullname());
+            }
+
+            WriteAttributes(
+                aOut,
+                aStartState,
+                aAutomaton.GetAttributes());
+
             // Write transitions.
             for (final Transition aTransition : aAutomaton.GetTransitions())
             {
                 final Integer nId = maStateNameToIdMap.get(aTransition.GetElementTypeName());
-                aOut.printf("transition %4d %4d %4d %4d  %s %s \"%s\" %s\n",
+                aOut.printf("transition %4d %4d %2d %4d %4d  %s %s \"%s\" %s\n",
                     maStateNameToIdMap.get(aTransition.GetStartState().GetFullname()),
                     maStateNameToIdMap.get(aTransition.GetEndState().GetFullname()),
-                    maElementNameToIdMap.get(aTransition.GetElementName().GetStateName()),
+                    maPrefixToIdMap.get(aTransition.GetElementName().GetNamespacePrefix()),
+                    maNameToIdMap.get(aTransition.GetElementName().GetLocalPart()),
                     nId!=null ? nId : -1,
                     aTransition.GetStartState().GetFullname(),
                     aTransition.GetEndState().GetFullname(),
@@ -202,8 +258,34 @@ public class ParserTablesGenerator
 
 
 
+    private void WriteAttributes (
+        final PrintStream aOut,
+        final State aState,
+        final Iterable<Attribute> aAttributes)
+    {
+        // Write attributes.
+        for (final Attribute aAttribute : aAttributes)
+        {
+            aOut.printf("attribute %4d %2d %c %4d %4d %s %s  %s %s %s\n",
+                maStateNameToIdMap.get(aState.GetFullname()),
+                maPrefixToIdMap.get(aAttribute.GetName().GetNamespacePrefix()),
+                aAttribute.GetFormDefault()==FormDefault.qualified ? 'q' : 'u',
+                maNameToIdMap.get(aAttribute.GetName().GetLocalPart()),
+                maStateNameToIdMap.get(aAttribute.GetTypeName().GetStateName()),
+                aAttribute.GetUse()==Use.Optional ? 'o' : 'u',
+                aAttribute.GetDefault()==null ? "null" : '"'+aAttribute.GetDefault()+'"',
+                aState.GetFullname(),
+                aAttribute.GetName().GetStateName(),
+                aAttribute.GetTypeName().GetStateName());
+        }
+    }
+
+
+
+
     private final FiniteAutomatonContainer maAutomatons;
     private final NamespaceMap maNamespaces;
-    private final Map<String,Integer> maElementNameToIdMap;
+    private final Map<String,Integer> maNameToIdMap;
+    private final Map<String,Integer> maPrefixToIdMap;
     private final Map<String,Integer> maStateNameToIdMap;
 }

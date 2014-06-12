@@ -27,31 +27,65 @@ import java.util.Vector;
 
 public class NamespaceMap
 {
+    class NamespaceDescriptor
+    {
+        NamespaceDescriptor (final String sPrefix, final int nId)
+        {
+            Prefix = sPrefix;
+            Id = nId;
+        }
+        public final String Prefix;
+        public final int Id;
+    }
     NamespaceMap (final Vector<String[]> aData)
     {
-        maUriToPrefixMap = new HashMap<>();
+        maUriToDescriptorMap = new HashMap<>();
+        maIdToDescriptorMap = new HashMap<>();
 
         for (final String[] aLine : aData)
         {
-            maUriToPrefixMap.put(aLine[2], aLine[1]);
+            final int nId = Integer.parseInt(aLine[2]);
+            final NamespaceDescriptor aDescriptor = new NamespaceDescriptor(aLine[1], nId);
+            maUriToDescriptorMap.put(
+                aLine[3],
+                aDescriptor);
+            maIdToDescriptorMap.put(
+                nId,
+                aDescriptor);
         }
-
-        if (Log.Dbg != null)
-            Log.Dbg.printf("initialized namespace map with %d definitions\n", maUriToPrefixMap.size());
     }
 
 
 
 
-    public String GetPrefixForURI (final String sURI)
+    public NamespaceDescriptor GetDescriptorForURI (final String sURI)
     {
-        if ( ! maUriToPrefixMap.containsKey(sURI))
+        if (sURI == null)
+            throw new RuntimeException("namespace is null");
+        if ( ! maUriToDescriptorMap.containsKey(sURI))
             throw new RuntimeException("namespace '"+sURI+"' is not known");
-        return maUriToPrefixMap.get(sURI);
+        return maUriToDescriptorMap.get(sURI);
     }
 
 
 
 
-    private final Map<String,String> maUriToPrefixMap;
+    public NamespaceDescriptor GetDescriptorForId (final int nId)
+    {
+        return maIdToDescriptorMap.get(nId);
+    }
+
+
+
+
+    public int GetNamespaceCount ()
+    {
+        return maUriToDescriptorMap.size();
+    }
+
+
+
+
+    private final Map<String,NamespaceDescriptor> maUriToDescriptorMap;
+    private final Map<Integer,NamespaceDescriptor> maIdToDescriptorMap;
 }

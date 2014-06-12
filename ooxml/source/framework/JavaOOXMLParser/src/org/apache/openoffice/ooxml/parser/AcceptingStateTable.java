@@ -23,7 +23,6 @@ public class AcceptingStateTable
 
             maAcceptingStates.add(nStateId);
         }
-        Log.Std.printf("read %d accepting states\n",  maAcceptingStates.size());
     }
 
 
@@ -32,6 +31,14 @@ public class AcceptingStateTable
     public boolean Contains (final int nStateId)
     {
         return maAcceptingStates.contains(nStateId);
+    }
+
+
+
+
+    public int GetAcceptingStateCount ()
+    {
+        return maAcceptingStates.size();
     }
 
 

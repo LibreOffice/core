@@ -24,7 +24,6 @@ public class SkipStateTable
 
             maSkipStates.add(nStateId);
         }
-        Log.Std.printf("read %d skip states\n",  maSkipStates.size());
     }
 
 
@@ -33,6 +32,14 @@ public class SkipStateTable
     public boolean Contains (final int nStateId)
     {
         return maSkipStates.contains(nStateId);
+    }
+
+
+
+
+    public int GetSkipStateCount ()
+    {
+        return maSkipStates.size();
     }
 
 

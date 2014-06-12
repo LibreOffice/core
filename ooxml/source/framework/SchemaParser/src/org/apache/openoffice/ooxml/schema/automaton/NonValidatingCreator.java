@@ -22,9 +22,6 @@
 package org.apache.openoffice.ooxml.schema.automaton;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.iterator.DereferencingNodeIterator;
@@ -42,24 +39,13 @@ import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
  *  Input files but are not validated to conform to the schemas.
  */
 public class NonValidatingCreator
+    extends CreatorBase
 {
     public NonValidatingCreator (
         final SchemaBase aSchemaBase,
         final File aLogFile)
     {
-        maSchemaBase = aSchemaBase;
-        maStateContainer = new StateContainer();
-
-        PrintStream aLog = null;
-        try
-        {
-            aLog = new PrintStream(new FileOutputStream(aLogFile));
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        maLog = aLog;
+        super(aSchemaBase, aLogFile);
     }
 
 
@@ -89,23 +75,40 @@ public class NonValidatingCreator
     private FiniteAutomaton CreateForTopLevelElements (
         final Iterable<Schema> aTopLevelSchemas)
     {
+        AddComment("top level elements");
+        StartBlock();
         final String sTypeName = "<top-level>";
         final StateContext aStateContext = new StateContext(
             maStateContainer,
             sTypeName);
+        final State aStartState = aStateContext.GetStartState();
         final State aEndState = aStateContext.CreateEndState();
 
         // top level elements
         for (final Schema aSchema : aTopLevelSchemas)
+        {
+            AddComment("schema %s", aSchema.GetShortName());
+            StartBlock();
             for (final Element aElement : aSchema.TopLevelElements.GetSorted())
+            {
+                AddComment("Element: on '%s' go from %s to %s via %s",
+                    aElement.GetElementName().GetDisplayName(),
+                    aStartState.GetFullname(),
+                    aEndState.GetFullname(),
+                    aElement.GetTypeName().GetStateName());
+
                 aStateContext.GetStartState().AddTransition(
                     new Transition(
-                        aStateContext.GetStartState(),
+                        aStartState,
                         aEndState,
                         aElement.GetElementName(),
                         aElement.GetTypeName().GetStateName()));
+            }
+            EndBlock();
+        }
+        EndBlock();
 
-        return new FiniteAutomaton(aStateContext);
+        return new FiniteAutomaton(aStateContext, null);
     }
 
 
@@ -113,12 +116,24 @@ public class NonValidatingCreator
 
     private FiniteAutomaton CreateForComplexType (final ComplexType aComplexType)
     {
+        maLog.printf("\n");
+        AddComment ("Complex Type %s defined in %s.",
+            aComplexType.GetName().GetDisplayName(),
+            aComplexType.GetLocation());
+        StartBlock();
+
         final StateContext aStateContext = new StateContext(
             maStateContainer,
             aComplexType.GetName().GetStateName());
 
         for (final Element aElement : CollectElements(aComplexType))
         {
+            AddComment("Element: on '%s' go from %s to %s via %s",
+                aElement.GetElementName().GetDisplayName(),
+                aStateContext.GetStartState().GetFullname(),
+                aStateContext.GetStartState().GetFullname(),
+                aElement.GetTypeName().GetStateName());
+
             aStateContext.GetStartState().AddTransition(
                 new Transition(
                     aStateContext.GetStartState(),
@@ -129,15 +144,23 @@ public class NonValidatingCreator
 
         for (final Any aAny : CollectAnys(aComplexType))
         {
-            aStateContext.GetStartState().AddSkipData(
+            AddSkipTransition(
+                aStateContext.GetStartState(),
                 new SkipData(
                     aAny.GetProcessContentsFlag(),
                     aAny.GetNamespaces()));
         }
 
+        // Collect all attributes.
+        maAttributes = new Vector<>();
+        for (final INode aNode : new DereferencingNodeIterator(aComplexType, maSchemaBase, true))
+            ProcessAttributes(aNode);
+
         aStateContext.GetStartState().SetIsAccepting();
 
-        return new FiniteAutomaton(aStateContext);
+        EndBlock();
+
+        return new FiniteAutomaton(aStateContext, maAttributes);
     }
 
 
@@ -170,11 +193,4 @@ public class NonValidatingCreator
         }
         return aAnys;
     }
-
-
-
-
-    private final SchemaBase maSchemaBase;
-    private final StateContainer maStateContainer;
-    private final PrintStream maLog;
 }

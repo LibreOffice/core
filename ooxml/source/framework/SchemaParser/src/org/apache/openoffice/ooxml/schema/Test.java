@@ -53,6 +53,7 @@ public class Test
         HopcroftMinimizer.MinimizeDFA (
             new StateContainer(),
             aStates,
+            null,
             System.out);
     }
 }

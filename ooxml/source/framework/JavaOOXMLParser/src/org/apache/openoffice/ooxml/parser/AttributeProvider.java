@@ -22,12 +22,13 @@
 package org.apache.openoffice.ooxml.parser;
 
 import java.util.Iterator;
-import java.util.Map.Entry;
 
 import javax.xml.stream.XMLStreamReader;
 
+/** Give access to the attributes that are read from an OOXML stream.
+ */
 public class AttributeProvider
-    implements Iterable<Entry<String,String>>
+    implements Iterable<String[]>
 {
     public AttributeProvider(XMLStreamReader aReader)
     {
@@ -52,9 +53,9 @@ public class AttributeProvider
 
 
     @Override
-    public Iterator<Entry<String,String>> iterator ()
+    public Iterator<String[]> iterator ()
     {
-        return new Iterator<Entry<String,String>> ()
+        return new Iterator<String[]> ()
         {
             int nIndex = 0;
             final int nCount = maReader.getAttributeCount();
@@ -64,30 +65,16 @@ public class AttributeProvider
                 return nIndex < nCount;
             }
 
-            @Override public Entry<String, String> next()
+            @Override public String[] next()
             {
-                final Entry<String,String> aEntry = new Entry<String,String>()
-                {
-                    final String msKey = maReader.getAttributeLocalName(nIndex);
-                    final String msValue = maReader.getAttributeValue(nIndex);
-
-                    @Override public String getKey()
+                final String[] aResult = new String[]
                     {
-                        return msKey;
-                    }
-
-                    @Override public String getValue()
-                    {
-                        return msValue;
-                    }
-
-                    @Override public String setValue (final String sValue)
-                    {
-                        return null;
-                    }
-                };
+                        maReader.getAttributeNamespace(nIndex),
+                        maReader.getAttributeLocalName(nIndex),
+                        maReader.getAttributeValue(nIndex)
+                    };
                 ++nIndex;
-                return aEntry;
+                return aResult;
             }
 
             @Override public void remove()
@@ -96,6 +83,17 @@ public class AttributeProvider
 
         };
     }
+
+
+
+
+    public Integer GetAttributeCount ()
+    {
+        return maReader.getAttributeCount();
+    }
+
+
+
 
     private final XMLStreamReader maReader;
 }

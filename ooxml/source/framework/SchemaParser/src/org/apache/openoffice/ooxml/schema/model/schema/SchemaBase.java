@@ -70,6 +70,10 @@ public class SchemaBase
             return SimpleTypes.Get(sTypeName);
         else if (Groups.Contains(sTypeName))
             return Groups.Get(sTypeName);
+        else if (Attributes.Contains(sTypeName))
+            return Attributes.Get(sTypeName);
+        else if (AttributeGroups.Contains(sTypeName))
+            return AttributeGroups.Get(sTypeName);
         else
             return null;
     }

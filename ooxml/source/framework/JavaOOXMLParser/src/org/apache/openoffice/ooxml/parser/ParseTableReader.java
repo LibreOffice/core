@@ -30,6 +30,11 @@ public class ParseTableReader
                     break;
                 if (sLine.startsWith("#"))
                     continue;
+
+                // Splitting just at whitespace may be too simple to keep quoted text
+                // (used e.g. for attribute default values) in one peace when
+                // it contains whitespace.  Should this case occur than this
+                // implementation has to be improved.
                 final String aParts[] = sLine.split("\\s+");
 
                 GetSection(aParts[0]).add(aParts);

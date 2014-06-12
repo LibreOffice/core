@@ -28,6 +28,7 @@ import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
+import org.apache.openoffice.ooxml.schema.parser.FormDefault;
 
 public class AttributeReference
     extends AttributeBase
@@ -38,9 +39,10 @@ public class AttributeReference
         final String sUse,
         final String sDefault,
         final String sFixed,
+        final FormDefault eFormDefault,
         final Location aLocation)
     {
-        super(aReferencedName, sUse, sDefault, sFixed, aLocation);
+        super(aReferencedName, sUse, sDefault, sFixed, eFormDefault, aLocation);
 
         maReferencedName = aReferencedName;
     }
@@ -52,11 +54,13 @@ public class AttributeReference
     {
         final Attribute aAttribute = aSchemaBase.Attributes.Get(maReferencedName);
         if (aAttribute == null)
+        {
             throw new RuntimeException(
                 String.format(
                     "can not find attribute %s, referenced at %s",
                     maReferencedName.GetDisplayName(),
                     GetLocation()));
+        }
         return aAttribute;
     }
 
@@ -93,6 +97,15 @@ public class AttributeReference
     public void AcceptVisitor(INodeVisitor aVisitor)
     {
         aVisitor.Visit(this);
+    }
+
+
+
+
+    @Override
+    public String toString ()
+    {
+        return "attribute reference to "+maReferencedName;
     }
 
 

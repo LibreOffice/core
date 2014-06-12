@@ -49,6 +49,7 @@ public class XmlNamespace
                 "optional",
                 null,
                 null,
+                FormDefault.unqualified,
                 null));
 
         final SimpleType aType = new SimpleType(null, aStSpaceSimpleTypeName, null);

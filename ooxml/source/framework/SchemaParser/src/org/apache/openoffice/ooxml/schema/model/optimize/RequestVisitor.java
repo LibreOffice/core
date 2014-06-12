@@ -21,18 +21,17 @@
 
 package org.apache.openoffice.ooxml.schema.model.optimize;
 
+import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
+import org.apache.openoffice.ooxml.schema.model.attribute.AttributeGroupReference;
+import org.apache.openoffice.ooxml.schema.model.attribute.AttributeReference;
 import org.apache.openoffice.ooxml.schema.model.base.INode;
 import org.apache.openoffice.ooxml.schema.model.base.NodeVisitorAdapter;
-import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
-import org.apache.openoffice.ooxml.schema.model.complex.ComplexType;
 import org.apache.openoffice.ooxml.schema.model.complex.Element;
-import org.apache.openoffice.ooxml.schema.model.complex.ElementReference;
 import org.apache.openoffice.ooxml.schema.model.complex.Extension;
 import org.apache.openoffice.ooxml.schema.model.complex.GroupReference;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.model.simple.List;
 import org.apache.openoffice.ooxml.schema.model.simple.SimpleTypeReference;
-import org.apache.openoffice.ooxml.schema.model.simple.Union;
 
 /** A visitor that is called for all nodes of a complex or simple type to mark
  *  the referenced types as being used.
@@ -49,44 +48,44 @@ public class RequestVisitor
     }
 
 
-    @Override public void Visit (final ComplexType aComplexType)
+    @Override public void Visit (final Attribute aAttribute)
     {
-        for (final INode aAttribute : aComplexType.GetAttributes())
-            maSchemaOptimizer.RequestType(aAttribute);
+        maSchemaOptimizer.RequestType(aAttribute.GetTypeName());
+    }
+
+    @Override public void Visit (final AttributeReference aAttributeReference)
+    {
+        maSchemaOptimizer.RequestType(aAttributeReference.GetReferencedName());
+    }
+
+    @Override public void Visit (final AttributeGroupReference aAttributeGroupReference)
+    {
+        maSchemaOptimizer.RequestType(aAttributeGroupReference.GetReferencedName());
     }
 
     @Override public void Visit (final Element aElement)
     {
-        final QualifiedName aName = aElement.GetTypeName();
-        if (aName == null)
-            throw new RuntimeException(
-                String.format("element '%s' has no type, defined at %s",
-                aElement.toString(),
-                aElement.GetLocation()));
-        maSchemaOptimizer.RequestType(aName);
+        maSchemaOptimizer.RequestType(aElement.GetTypeName());
     }
-    @Override public void Visit (final ElementReference aElementReference)
-    {
-        Visit(aElementReference.GetReferencedElement(maSourceSchemaBase));
-    }
+
     @Override public void Visit (final Extension aExtension)
     {
         maSchemaOptimizer.RequestType(aExtension.GetBaseTypeName());
     }
+
     @Override public void Visit (final GroupReference aReference)
     {
         maSchemaOptimizer.RequestType(aReference.GetReferencedGroup(maSourceSchemaBase));
     }
+
     @Override public void Visit (final List aList)
     {
         maSchemaOptimizer.RequestType(aList.GetItemType());
     }
+
     @Override public void Visit (final SimpleTypeReference aReference)
     {
         maSchemaOptimizer.RequestType(aReference.GetReferencedSimpleType(maSourceSchemaBase));
-    }
-    @Override public void Visit (final Union aUnion)
-    {
     }
 
     @Override public void Default (final INode aNode)
@@ -95,17 +94,21 @@ public class RequestVisitor
         {
             case All:
             case Any:
+            case AttributeGroup:
             case BuiltIn:
             case Choice:
             case ComplexContent:
             case ComplexType:
+            case ElementReference:
             case Group:
             case List:
             case OccurrenceIndicator:
             case Sequence:
             case SimpleContent:
             case SimpleType:
+            case Union:
                 break;
+
             default:
                 throw new RuntimeException(
                     String.format("don't know how to request %s which was defined at %s",

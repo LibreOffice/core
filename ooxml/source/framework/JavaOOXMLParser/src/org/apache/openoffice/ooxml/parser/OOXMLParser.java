@@ -48,8 +48,20 @@ public class OOXMLParser
      */
     public static void main (final String ... aArgumentList)
     {
-        if (aArgumentList.length != 3)
-            throw new RuntimeException("usage: OOXMLParser <parser-tables-path> <XML-input-file> <log-file>");
+        if (aArgumentList.length<2 ||aArgumentList.length>3)
+            throw new RuntimeException("usage: OOXMLParser <parser-tables-path> <XML-input-file> <log-file>?");
+
+        if (aArgumentList.length == 3)
+        {
+            final File aLogFile = new File(aArgumentList[2]);
+            Log.Dbg = new Log(aLogFile);
+            System.out.printf("writing log data to %s\n", aLogFile.toString());
+        }
+        else
+        {
+            Log.Dbg = null;
+            System.out.printf("writing no log data\n");
+        }
 
         long nStartTime = System.currentTimeMillis();
         final StateMachine aMachine = new StateMachine(new File(aArgumentList[0]));
@@ -63,7 +75,7 @@ public class OOXMLParser
             if (aReader != null)
             {
                 nStartTime = System.currentTimeMillis();
-                final int  nElementCount = Parse(aReader, aMachine, new File(aArgumentList[2]));
+                final int  nElementCount = Parse(aReader, aMachine);
                 nEndTime = System.currentTimeMillis();
                 System.out.printf("parsed %d elements in %fs\n",
                     nElementCount,
@@ -75,6 +87,8 @@ public class OOXMLParser
             aException.printStackTrace();
         }
     }
+
+
 
 
     private static InputStream GetInputStream (final String sInputName)
@@ -146,11 +160,8 @@ public class OOXMLParser
 
     private static int Parse (
         final XMLStreamReader aReader,
-        final StateMachine aMachine,
-        final File aLogFile)
+        final StateMachine aMachine)
     {
-        Log.Dbg = new Log(aLogFile);
-
         int nElementCount = 0;
         try
         {
@@ -164,7 +175,8 @@ public class OOXMLParser
                         ++nElementCount;
                         if (aMachine.IsInSkipState())
                         {
-                            Log.Dbg.printf("is skip state -> starting to skip\n");
+                            if (Log.Dbg != null)
+                                Log.Dbg.printf("is skip state -> starting to skip\n");
                             nElementCount += Skip(aReader);
                         }
                         else if ( ! aMachine.ProcessStartElement(
@@ -173,7 +185,8 @@ public class OOXMLParser
                             aReader.getLocation(),
                             aAttributeProvider))
                         {
-                            Log.Dbg.printf("starting to skip to recover from error\n");
+                            if (Log.Dbg != null)
+                                Log.Dbg.printf("starting to skip to recover from error\n");
                             nElementCount += Skip(aReader);
                         }
                         break;
@@ -187,7 +200,8 @@ public class OOXMLParser
 
                     case XMLStreamReader.CHARACTERS:
                         final String sText = aReader.getText();
-                        Log.Dbg.printf("text [%s]\n", sText.replace("\n", "\\n"));
+                        if (Log.Dbg != null)
+                            Log.Dbg.printf("text [%s]\n", sText.replace("\n", "\\n"));
                         aMachine.ProcessCharacters(sText);
                         break;
 
@@ -215,11 +229,14 @@ public class OOXMLParser
 
     private static int Skip (final XMLStreamReader aReader)
     {
-        Log.Dbg.printf("starting to skip on %s at L%dC%d\n",
-            aReader.getLocalName(),
-            aReader.getLocation().getLineNumber(),
-            aReader.getLocation().getColumnNumber());
-        Log.Dbg.IncreaseIndentation();
+        if (Log.Dbg != null)
+        {
+            Log.Dbg.printf("starting to skip on %s at L%dC%d\n",
+                aReader.getLocalName(),
+                aReader.getLocation().getLineNumber(),
+                aReader.getLocation().getColumnNumber());
+            Log.Dbg.IncreaseIndentation();
+        }
 
         // We are called when processing a start element.  This means that we are
         // already at relative depth 1.
@@ -235,16 +252,21 @@ public class OOXMLParser
                     case XMLStreamReader.START_ELEMENT:
                         ++nRelativeDepth;
                         ++nElementCount;
-                        Log.Dbg.printf("skipping start element %s\n", aReader.getLocalName());
-                        Log.Dbg.IncreaseIndentation();
+                        if (Log.Dbg != null)
+                        {
+                            Log.Dbg.printf("skipping start element %s\n", aReader.getLocalName());
+                            Log.Dbg.IncreaseIndentation();
+                        }
                         break;
 
                     case XMLStreamReader.END_ELEMENT:
                         --nRelativeDepth;
-                        Log.Dbg.DecreaseIndentation();
+                        if (Log.Dbg != null)
+                            Log.Dbg.DecreaseIndentation();
                         if (nRelativeDepth <= 0)
                         {
-                            Log.Dbg.printf("leaving skip mode on %s\n", aReader.getLocalName());
+                            if (Log.Dbg != null)
+                                Log.Dbg.printf("leaving skip mode on %s\n", aReader.getLocalName());
                             return nElementCount;
                         }
                         break;
@@ -257,7 +279,9 @@ public class OOXMLParser
                         break;
 
                     default:
-                        Log.Dbg.printf("%s\n",  nCode);
+                        if (Log.Dbg != null)
+                            Log.Dbg.printf("%s\n",  nCode);
+                        break;
                 }
             }
         }
@@ -270,8 +294,10 @@ public class OOXMLParser
 
 
 
+
     private static void SkipText (final String sText)
     {
-        Log.Dbg.printf("skipping text [%s]\n", sText.replace("\n", "\\n"));
+        if (Log.Dbg != null)
+            Log.Dbg.printf("skipping text [%s]\n", sText.replace("\n", "\\n"));
     }
 }

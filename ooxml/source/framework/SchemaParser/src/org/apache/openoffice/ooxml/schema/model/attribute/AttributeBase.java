@@ -24,6 +24,7 @@ package org.apache.openoffice.ooxml.schema.model.attribute;
 import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
+import org.apache.openoffice.ooxml.schema.parser.FormDefault;
 
 /** Base class for both Attribute and AttributeReference classes.
  */
@@ -43,6 +44,7 @@ public abstract class AttributeBase
         final String sUse,
         final String sDefault,
         final String sFixed,
+        final FormDefault eFormDefault,
         final Location aLocation)
     {
         super(null, aName, aLocation);
@@ -60,6 +62,31 @@ public abstract class AttributeBase
         }
         msDefault = sDefault;
         msFixed = sFixed;
+        meFormDefault = eFormDefault;
+    }
+
+
+
+
+    public FormDefault GetFormDefault()
+    {
+        return meFormDefault;
+    }
+
+
+
+
+    public Use GetUse ()
+    {
+        return meUse;
+    }
+
+
+
+
+    public String GetDefault()
+    {
+        return msDefault;
     }
 
 
@@ -86,4 +113,5 @@ public abstract class AttributeBase
     private final Use meUse;
     private final String msDefault;
     private final String msFixed;
+    private final FormDefault meFormDefault;
 }

@@ -37,10 +37,10 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.openoffice.ooxml.schema.automaton.FiniteAutomatonContainer;
 import org.apache.openoffice.ooxml.schema.automaton.NonValidatingCreator;
-import org.apache.openoffice.ooxml.schema.automaton.FiniteAutomaton;
 import org.apache.openoffice.ooxml.schema.automaton.ValidatingCreator;
 import org.apache.openoffice.ooxml.schema.generator.LogGenerator;
 import org.apache.openoffice.ooxml.schema.generator.ParserTablesGenerator;
+import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
 import org.apache.openoffice.ooxml.schema.model.schema.Schema;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.parser.SchemaParser;

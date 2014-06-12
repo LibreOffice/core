@@ -23,6 +23,7 @@ package org.apache.openoffice.ooxml.schema.automaton;
 
 import java.util.Vector;
 
+import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 
 
@@ -37,9 +38,13 @@ import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 public class FiniteAutomaton
 {
     FiniteAutomaton (
-        final StateContext aContext)
+        final StateContext aContext,
+        final Vector<Attribute> aAttributes)
     {
         maStateContext = aContext;
+        maAttributes = aAttributes!=null
+            ? aAttributes
+            : new Vector<Attribute>();
     }
 
 
@@ -92,6 +97,7 @@ public class FiniteAutomaton
         return DFACreator.CreateDFAforNFA(
             aDFAContainer,
             maStateContext,
+            maAttributes,
             aTypeName);
     }
 
@@ -137,5 +143,14 @@ public class FiniteAutomaton
 
 
 
+    public Vector<Attribute> GetAttributes ()
+    {
+        return maAttributes;
+    }
+
+
+
+
     private final StateContext maStateContext;
+    private final Vector<Attribute> maAttributes;
 }

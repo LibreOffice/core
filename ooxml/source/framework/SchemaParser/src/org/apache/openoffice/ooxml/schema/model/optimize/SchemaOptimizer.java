@@ -5,7 +5,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 
-import org.apache.openoffice.ooxml.schema.iterator.NodeIterator;
+import org.apache.openoffice.ooxml.schema.iterator.AttributeNodeIterator;
+import org.apache.openoffice.ooxml.schema.iterator.DereferencingNodeIterator;
 import org.apache.openoffice.ooxml.schema.model.base.INode;
 import org.apache.openoffice.ooxml.schema.model.base.INodeVisitor;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
@@ -14,6 +15,11 @@ import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 import org.apache.openoffice.ooxml.schema.model.complex.Element;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
+/** Optimize the given schema base by creating a new one and adding only those
+ *  complex types, simple types, groups, attributes and attribute groups, that
+ *  are really used, i.e. used by one of the top level elements or by a type or
+ *  group that is in use.
+ */
 public class SchemaOptimizer
 {
     public SchemaOptimizer (
@@ -23,15 +29,6 @@ public class SchemaOptimizer
         maOptimizedSchemaBase = new SchemaBase();
         maTodoList = new LinkedList<>();
         maProcessedTypes = new HashSet<>();
-
-        maRequestVisitor = new RequestVisitor(maOriginalSchemaBase, this);
-
-        // Copy over the top-level elements.  They are the seeds in the use chain of types.
-        for (final Element aElement : aOriginalSchemaBase.TopLevelElements.GetUnsorted())
-        {
-            maOptimizedSchemaBase.TopLevelElements.Add(aElement);
-            RequestType(aElement.GetTypeName());
-        }
     }
 
 
@@ -39,8 +36,49 @@ public class SchemaOptimizer
 
     public SchemaBase Run ()
     {
+        // Seed the work list with the top-level elements.
+        for (final Element aElement : maOriginalSchemaBase.TopLevelElements.GetUnsorted())
+        {
+            maOptimizedSchemaBase.TopLevelElements.Add(aElement);
+            RequestType(aElement.GetTypeName());
+        }
 
-        ProcessTodoList();
+        final INodeVisitor aCopyVisitor = new CopyVisitor(
+            maOriginalSchemaBase,
+            maOptimizedSchemaBase);
+        final INodeVisitor aRequestVisitor = new RequestVisitor(
+            maOriginalSchemaBase,
+            this);
+
+        while ( ! maTodoList.isEmpty())
+        {
+            final INode aNode = maTodoList.poll();
+
+            // Iterate over all child nodes and attributes.
+            for (final INode aChild : new DereferencingNodeIterator(aNode, maOriginalSchemaBase, true))
+            {
+                aChild.AcceptVisitor(aCopyVisitor);
+                aChild.AcceptVisitor(aRequestVisitor);
+                for (final INode aAttribute : aChild.GetAttributes())
+                    aAttribute.AcceptVisitor(aCopyVisitor);
+                for (final INode aAttribute : new AttributeNodeIterator(aChild, maOriginalSchemaBase))
+                    aAttribute.AcceptVisitor(aRequestVisitor);
+            }
+
+            // Request used namespaces.
+            final QualifiedName aName = aNode.GetName();
+            if (aName != null)
+                maOptimizedSchemaBase.Namespaces.ProvideNamespace(aName.GetNamespaceURI(), aName.GetNamespacePrefix());
+        }
+
+        /*
+        System.out.printf("%d original attributes\n", maOriginalSchemaBase.Attributes.GetCount());
+        for (final Attribute aAttribute : maOriginalSchemaBase.Attributes.GetUnsorted())
+            System.out.printf("%s\n",  aAttribute);
+        System.out.printf("%d optimized attributes\n", maOptimizedSchemaBase.Attributes.GetCount());
+        for (final Attribute aAttribute : maOptimizedSchemaBase.Attributes.GetUnsorted())
+            System.out.printf("%s\n",  aAttribute);
+            */
 
         return maOptimizedSchemaBase;
     }
@@ -74,47 +112,8 @@ public class SchemaOptimizer
 
 
 
-    /** Process each entry in the todo list until it is empty.
-     *  Each type in it is used and inserted into the optimized schema.
-     */
-    private void ProcessTodoList ()
-    {
-        final INodeVisitor aVisitor = new ProcessTypeVisitor(
-            maOriginalSchemaBase,
-            maOptimizedSchemaBase,
-            this);
-        while ( ! maTodoList.isEmpty())
-        {
-            final INode aNode = maTodoList.poll();
-            aNode.AcceptVisitor(aVisitor);
-
-            // Request used namespaces.
-            final QualifiedName aName = aNode.GetName();
-            if (aName != null)
-                maOptimizedSchemaBase.Namespaces.ProvideNamespace(aName.GetNamespaceURI(), aName.GetNamespacePrefix());
-        }
-    }
-
-
-
-
-    /** Iterate over all nodes in the given type definition.
-     *  References to types are inserted into the todo list.
-     */
-    void RequestReferencedTypes (final Node aRoot)
-    {
-        for (final INode aNode : new NodeIterator(aRoot))
-        {
-            aNode.AcceptVisitor(maRequestVisitor);
-        }
-    }
-
-
-
-
     private final SchemaBase maOriginalSchemaBase;
     private final SchemaBase maOptimizedSchemaBase;
     private final Queue<INode> maTodoList;
     private final Set<INode> maProcessedTypes;
-    private final RequestVisitor maRequestVisitor;
 }

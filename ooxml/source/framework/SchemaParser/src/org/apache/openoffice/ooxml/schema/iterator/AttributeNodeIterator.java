@@ -24,8 +24,7 @@ package org.apache.openoffice.ooxml.schema.iterator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
 import org.apache.openoffice.ooxml.schema.model.attribute.AttributeGroup;
@@ -36,26 +35,27 @@ import org.apache.openoffice.ooxml.schema.model.base.INodeVisitor;
 import org.apache.openoffice.ooxml.schema.model.base.NodeVisitorAdapter;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 
-/** Iterate over all attributes of a given node.
- *  References to attributes and attribute groups and their references are resolved.
- *
- *  If you want to iterate over all attributes in a node tree then add an outer NodeIterator.
+/** This iterator is very similar to the AttributeIterator but it
+ *  a) returns the attributes as INode objects and
+ *  b) includes referencing nodes and group nodes in the iteration and
+ *  c) if there are multiple references to the same attribute then each
+ *     of them is visited.
  */
-public class AttributeIterator
-    implements Iterable<Attribute>
+public class AttributeNodeIterator
+    implements Iterable<INode>
 {
-    public AttributeIterator (
+    public AttributeNodeIterator (
         final INode aNode,
         final SchemaBase aSchemaBase)
     {
-        maAttributes = new TreeSet<Attribute>();
+        maAttributes = new Vector<INode>();
         CollectAttributes(aNode, aSchemaBase);
     }
 
 
 
 
-    public Iterator<Attribute> iterator ()
+    public Iterator<INode> iterator ()
     {
         return maAttributes.iterator();
     }
@@ -78,15 +78,18 @@ public class AttributeIterator
             }
             @Override public void Visit (final AttributeReference aAttributeReference)
             {
+                maAttributes.add(aAttributeReference);
                 aTodo.add(aAttributeReference.GetReferencedAttribute(aSchemaBase));
             }
             @Override public void Visit (final AttributeGroup aAttributeGroup)
             {
+                maAttributes.add(aAttributeGroup);
                 for (final INode aGroupAttribute : aAttributeGroup.GetAttributes())
                     aTodo.add(aGroupAttribute);
             }
             @Override public void Visit (final AttributeGroupReference aAttributeGroupReference)
             {
+                maAttributes.add(aAttributeGroupReference);
                 aTodo.add(aAttributeGroupReference.GetReferencedAttributeGroup(aSchemaBase));
             }
             @Override public void Default (final INode aNode)
@@ -105,5 +108,5 @@ public class AttributeIterator
 
 
 
-    private final Set<Attribute> maAttributes;
+    private final Vector<INode> maAttributes;
 }

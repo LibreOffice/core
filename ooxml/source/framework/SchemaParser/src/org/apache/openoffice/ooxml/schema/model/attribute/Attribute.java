@@ -25,6 +25,7 @@ import org.apache.openoffice.ooxml.schema.model.base.INodeVisitor;
 import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
+import org.apache.openoffice.ooxml.schema.parser.FormDefault;
 
 /* Representation of a single attribute.
  */
@@ -37,9 +38,10 @@ public class Attribute
         final String sUse,
         final String sDefault,
         final String sFixed,
+        final FormDefault eFormDefault,
         final Location aLocation)
     {
-        super(aName, sUse, sDefault, sFixed, aLocation);
+        super(aName, sUse, sDefault, sFixed, eFormDefault, aLocation);
         maTypeName = aTypeName;
     }
 
@@ -86,8 +88,4 @@ public class Attribute
 
 
     private final QualifiedName maTypeName;
-
-
-
-
 }
