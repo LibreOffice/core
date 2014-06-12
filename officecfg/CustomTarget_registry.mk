@@ -13,14 +13,24 @@ $(call gb_CustomTarget_get_target,officecfg/registry) : \
 	$(foreach i,officecfg_qa_allheaders $(officecfg_XCSFILES),\
 		$(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/$(i).hxx)
 
+# via define so it can end with a newline
+define officecfg_geninclude
+#include <officecfg/$(1).hxx>
+
+endef
+
 # auto generated header file for unit test qa/cppheader.cxx
 $(call gb_CustomTarget_get_workdir,officecfg/registry)/officecfg/officecfg_qa_allheaders.hxx: \
 		$(SRCDIR)/officecfg/files.mk
 	$(call gb_Output_announce,officecfg_qa_allheaders.hxx,$(true),CAT,1)
+ifeq ($(HAVE_GNUMAKE_FILE_FUNC),)
 	mkdir -p $(dir $@) && \
 	rm -f $@ \
 	$(foreach file,$(officecfg_XCSFILES),\
 		&& echo "#include <officecfg/$(file).hxx>" >> $@)
+else
+	mv $(call var2file,$(shell mkdir -p $(dir $@) && truncate -s 0 $@.tmp && echo $@.tmp),100,$(foreach file,$(officecfg_XCSFILES),$(call officecfg_geninclude,$(file)))) $@
+endif
 
 # pass the stem as space separated path elements and get a set of --stringparam ns<level> <element> in return
 officecfg_xsltparams=$(if $(filter-out $(lastword $1),$1),$(call officecfg_xsltparams,$(filter-out $(lastword $1),$1))) --stringparam ns$(words $1) $(lastword $1)
