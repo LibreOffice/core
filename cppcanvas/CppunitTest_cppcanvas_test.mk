@@ -15,8 +15,6 @@ $(eval $(call gb_CppunitTest_add_exception_objects,cppcanvas_test, \
     cppcanvas/qa/unit/test \
 ))
 
-$(eval $(call gb_CppunitTest_unset_headless,cppcanvas_test))
-
 $(eval $(call gb_CppunitTest_use_external,cppcanvas_test,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_test, \
