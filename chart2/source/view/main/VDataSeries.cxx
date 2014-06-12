@@ -312,10 +312,6 @@ void VDataSeries::doSortByXValues()
     }
 }
 
-uno::Reference< XDataSeries > VDataSeries::getModel() const
-{
-    return m_xDataSeries;
-}
 
 void VDataSeries::releaseShapes()
 {
@@ -370,18 +366,6 @@ void VDataSeries::setParticle( const OUString& rSeriesParticle )
     m_aLabelCID_Stub = ObjectIdentifier::createClassifiedIdentifierWithParent(
                         OBJECTTYPE_DATA_LABEL, OUString(), getLabelsCID() );
 }
-OUString VDataSeries::getSeriesParticle() const
-{
-    return m_aSeriesParticle;
-}
-OUString VDataSeries::getCID() const
-{
-    return m_aCID;
-}
-OUString VDataSeries::getPointCID_Stub() const
-{
-    return m_aPointCID_Stub;
-}
 OUString VDataSeries::getErrorBarsCID(bool bYError) const
 {
     OUString aChildParticle( ObjectIdentifier::getStringForType(
@@ -398,10 +382,6 @@ OUString VDataSeries::getLabelsCID() const
 
     return ObjectIdentifier::createClassifiedIdentifierForParticles(
             m_aSeriesParticle, aChildParticle );
-}
-OUString VDataSeries::getLabelCID_Stub() const
-{
-    return m_aLabelCID_Stub;
 }
 OUString VDataSeries::getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const
 {
@@ -910,10 +890,6 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfPoint( sal_Int
     return this->getPropertiesOfSeries();
 }
 
-uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfSeries() const
-{
-    return  uno::Reference<beans::XPropertySet>(m_xDataSeries, uno::UNO_QUERY );
-}
 
 DataPointLabel* getDataPointLabelFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
 {

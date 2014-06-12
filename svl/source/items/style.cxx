@@ -836,10 +836,6 @@ void SfxStyleSheetBase::Store( SvStream& )
 {
 }
 
-SfxItemPool& SfxStyleSheetBasePool::GetPool()
-{
-    return rPool;
-}
 
 
 

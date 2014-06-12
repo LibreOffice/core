@@ -577,10 +577,6 @@ SvxCellHorJustify           OFieldDescription::GetHorJustify()          const
         return m_eHorJustify;
 }
 
-TOTypeInfoSP                OFieldDescription::getTypeInfo()            const
-{
-    return m_pType;
-}
 
 TOTypeInfoSP                OFieldDescription::getSpecialTypeInfo() const
 {

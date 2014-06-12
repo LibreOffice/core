@@ -351,10 +351,6 @@ void OViewsWindow::SetInsertObj( sal_uInt16 eObj,const OUString& _sShapeType )
     m_sShapeType = _sShapeType;
 }
 
-OUString OViewsWindow::GetInsertObjString() const
-{
-    return m_sShapeType;
-}
 
 
 void OViewsWindow::SetMode( DlgEdMode eNewMode )

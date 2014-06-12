@@ -216,15 +216,7 @@ OUString XMLTextListsHelper::GetContinueListIdOfProcessedList(
     return OUString();
 }
 
-const OUString& XMLTextListsHelper::GetLastProcessedListId() const
-{
-    return msLastProcessedListId;
-}
 
-const OUString& XMLTextListsHelper::GetListStyleOfLastProcessedList() const
-{
-    return msListStyleOfLastProcessedList;
-}
 
 OUString XMLTextListsHelper::GenerateNewListId() const
 {

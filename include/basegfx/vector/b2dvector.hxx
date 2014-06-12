@@ -141,7 +141,7 @@ namespace basegfx
             @return
             The Scalar value of the two involved 2D Vectors
         */
-        double scalar( const B2DVector& rVec ) const;
+        double scalar( const B2DVector& rVec ) const { return((mfX * rVec.mfX) + (mfY * rVec.mfY)); }
 
         /** Calculate the length of the cross product with another 2D Vector
 
@@ -158,7 +158,7 @@ namespace basegfx
             @return
             The length of the cross product of the two involved 2D Vectors
         */
-        double cross( const B2DVector& rVec ) const;
+        double cross( const B2DVector& rVec ) const { return(mfX * rVec.getY() - mfY * rVec.getX()); }
 
         /** Calculate the Angle with another 2D Vector
 

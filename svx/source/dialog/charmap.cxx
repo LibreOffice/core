@@ -732,10 +732,6 @@ void SvxShowCharSet::ReleaseAccessible()
 }
 
 
-ScrollBar* SvxShowCharSet::getScrollBar()
-{
-    return &aVscrollSB;
-}
 
 sal_Int32 SvxShowCharSet::getMaxCharCount() const
 {

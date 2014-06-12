@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <rtl/ustring.hxx>
 #include <sot/storage.hxx>
 #include <tools/link.hxx>
@@ -623,7 +624,7 @@ public:
     void setLock( bool bLock );
 
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
-    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;
+    rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const { return mpForbiddenCharactersTable;}
 
     void SetCharCompressType( sal_uInt16 nType );
     sal_uInt16 GetCharCompressType() const { return mnCharCompressType; }

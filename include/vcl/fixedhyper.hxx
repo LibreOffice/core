@@ -116,7 +116,7 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
             @return
                 m_sURL
         */
-        OUString    GetURL() const;
+        const OUString&    GetURL() const { return m_sURL;}
 
         /** sets new text and recalculates the text length. */
         virtual void SetText(const OUString& rNewDescription) SAL_OVERRIDE;

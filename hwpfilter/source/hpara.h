@@ -130,7 +130,7 @@ class DLLEXPORT HWPPara
 /**
  * Returns the style of paragraph.
  */
-        ParaShape *GetParaShape(void);
+        ParaShape *GetParaShape(void) { return &pshape;}
 
 /**
  * Returns previous paragraph.

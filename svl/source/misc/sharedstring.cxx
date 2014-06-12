@@ -95,37 +95,13 @@ bool SharedString::operator!= ( const SharedString& r ) const
     return !operator== (r);
 }
 
-OUString SharedString::getString() const
-{
-    return mpData ? OUString(mpData) : OUString();
-}
 
 
-const rtl_uString* SharedString::getData() const
-{
-    return mpData;
-}
 
 
-const rtl_uString* SharedString::getDataIgnoreCase() const
-{
-    return mpDataIgnoreCase;
-}
 
-bool SharedString::isValid() const
-{
-    return mpData != NULL;
-}
 
-bool SharedString::isEmpty() const
-{
-    return mpData == NULL || mpData->length == 0;
-}
 
-sal_Int32 SharedString::getLength() const
-{
-    return mpData ? mpData->length : 0;
-}
 
 }
 

@@ -135,7 +135,7 @@ public:
     sal_uInt16                  GetPart() const         { return nPart; }
     ScHeaderFooterContentObj& GetContentObj() const { return rContentObj; }
 
-    const EditTextObject* GetTextObject() const;
+    const EditTextObject* GetTextObject() const { return mpTextObj;}
 };
 
 /**

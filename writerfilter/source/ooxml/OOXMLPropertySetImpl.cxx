@@ -789,10 +789,6 @@ void OOXMLPropertySetEntryToString::attribute(Id nId, Value & rValue)
         mStr = rValue.getString();
 }
 
-const OUString & OOXMLPropertySetEntryToString::getString() const
-{
-    return mStr;
-}
 
 OOXMLPropertySetEntryToInteger::OOXMLPropertySetEntryToInteger(Id nId)
 : mnId(nId), mnValue(0)

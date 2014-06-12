@@ -30,10 +30,6 @@ namespace basegfx
         return *this;
     }
 
-    double B2IVector::scalar( const B2IVector& rVec ) const
-    {
-        return((mnX * rVec.mnX) + (mnY * rVec.mnY));
-    }
 
     B2IVector& B2IVector::operator*=( const B2DHomMatrix& rMat )
     {

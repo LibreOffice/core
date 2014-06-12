@@ -86,11 +86,5 @@ VbaPalette::VbaPalette()
     mxPalette = new DefaultPalette();
 }
 
-uno::Reference< container::XIndexAccess >
-VbaPalette::getPalette() const
-{
-
-    return mxPalette;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

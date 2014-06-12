@@ -1173,10 +1173,6 @@ void Shape::setTextBody(const TextBodyPtr & pTextBody)
 }
 
 
-TextBodyPtr Shape::getTextBody()
-{
-    return mpTextBody;
-}
 
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {

@@ -66,7 +66,8 @@ protected:
     bool _checkExpression( const sal_Char* pExpression ) const;
 
     /// allow manipulation of the expression before it is evaluated
-    const OUString _getExpressionForEvaluation() const;
+    // the default implementation is to do nothing...
+    const OUString _getExpressionForEvaluation() const { return msExpression; }
 
     /// obtain a (suitable) XPathAPI implementation
     com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathAPI> _getXPathAPI(const xforms::EvaluationContext& aContext);
@@ -82,7 +83,7 @@ public:
 
 
     /// get the expression string
-    OUString getExpression() const;
+    OUString getExpression() const { return msExpression;}
 
     /// set a new expression string
     void setExpression( const OUString& rExpression );
@@ -117,7 +118,7 @@ public:
     // get the result of this expression as string/bool/...
     // (Results will be based on the last call of evaluate(..). The caller
     // must call evaluate to ensure current results.)
-    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> getXPath() const;
+    com::sun::star::uno::Reference<com::sun::star::xml::xpath::XXPathObject> getXPath() const { return mxResult;}
     bool getBool( bool bDefault = false ) const;
     OUString getString( const OUString& rDefault = OUString() ) const;
 

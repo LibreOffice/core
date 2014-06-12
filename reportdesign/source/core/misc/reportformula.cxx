@@ -140,11 +140,6 @@ namespace rptui
         return aFieldContent.makeStringAndClear();
     }
 
-    const OUString& ReportFormula::getUndecoratedContent() const
-    {
-        return m_sUndecoratedContent;
-    }
-    const OUString&  ReportFormula::getCompleteFormula() const { return m_sCompleteFormula; }
     bool                    ReportFormula::isValid() const { return getType() != Invalid; }
     ReportFormula& ReportFormula::operator=(class ReportFormula const & _rHd)
     {

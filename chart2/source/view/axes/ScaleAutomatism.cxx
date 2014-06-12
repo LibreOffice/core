@@ -228,15 +228,7 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
     }
 }
 
-ScaleData ScaleAutomatism::getScale() const
-{
-    return m_aSourceScale;
-}
 
-Date ScaleAutomatism::getNullDate() const
-{
-    return m_aNullDate;
-}
 
 void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
         ExplicitScaleData& rExplicitScale,

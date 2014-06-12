@@ -745,10 +745,6 @@ void ObjectKeyNavigation::setCurrentSelection( const ObjectHierarchy::tOID& rOID
     m_aCurrentOID = rOID;
 }
 
-ObjectHierarchy::tOID ObjectKeyNavigation::getCurrentSelection() const
-{
-    return m_aCurrentOID;
-}
 
 bool ObjectKeyNavigation::first()
 {

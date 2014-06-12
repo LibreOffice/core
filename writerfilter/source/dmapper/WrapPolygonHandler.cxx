@@ -200,10 +200,6 @@ void WrapPolygonHandler::lcl_sprm(Sprm & _sprm)
     }
 }
 
-WrapPolygon::Pointer_t WrapPolygonHandler::getPolygon()
-{
-    return mpPolygon;
-}
 
 }}
 

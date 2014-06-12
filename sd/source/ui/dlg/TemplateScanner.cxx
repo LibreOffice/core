@@ -428,10 +428,6 @@ void TemplateScanner::Scan (void)
 
 
 
-std::vector<TemplateDir*>& TemplateScanner::GetFolderList (void)
-{
-    return maFolderList;
-}
 
 
 
@@ -503,10 +499,6 @@ bool TemplateScanner::HasNextStep (void)
 
 
 
-const TemplateEntry* TemplateScanner::GetLastAddedEntry (void) const
-{
-    return mpLastAddedEntry;
-}
 
 }
 

@@ -181,10 +181,6 @@ bool ImplOPropertySet::SetStyle( const Reference< style::XStyle > & xStyle )
     return true;
 }
 
-Reference< style::XStyle > ImplOPropertySet::GetStyle() const
-{
-    return m_xStyle;
-}
 
 void ImplOPropertySet::cloneInterfaceProperties()
 {

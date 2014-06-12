@@ -1094,9 +1094,5 @@ const SwFrm& SwToCntntAnchoredObjectPosition::_GetHoriVirtualAnchor(
     return *pHoriVirtAnchFrm;
 }
 
-const SwLayoutFrm& SwToCntntAnchoredObjectPosition::GetVertPosOrientFrm() const
-{
-    return *mpVertPosOrientFrm;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

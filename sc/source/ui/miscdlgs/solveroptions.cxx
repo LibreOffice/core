@@ -162,11 +162,6 @@ ScSolverOptionsDialog::~ScSolverOptionsDialog()
     delete mpCheckButtonData;
 }
 
-const OUString& ScSolverOptionsDialog::GetEngine() const
-{
-    return maEngine;    // already updated in selection handler
-}
-
 const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties()
 {
     // update maProperties from list box content

@@ -1287,10 +1287,6 @@ void SVTXFormattedField::SetValue(const ::com::sun::star::uno::Any& rValue)
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  SVTXFormattedField::getFormatsSupplier(void) const
-{
-    return ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > ((::com::sun::star::util::XNumberFormatsSupplier*)m_pCurrentSupplier);
-}
 
 
 void SVTXFormattedField::setFormatsSupplier(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > & xSupplier)

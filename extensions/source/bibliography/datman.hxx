@@ -148,7 +148,7 @@ public:
         OUString                    getActiveDataSource() {return aDataSourceURL;}
         void                        setActiveDataSource(const OUString& rURL);
 
-        OUString                    getActiveDataTable();
+        OUString                    getActiveDataTable() { return aActiveDataTable;}
         void                        setActiveDataTable(const OUString& rTable);
 
         void                        setFilter(const OUString& rQuery);

@@ -139,7 +139,7 @@ namespace sdr
             virtual bool AreGluePointsVisible() const;
 
             // method to get the primitiveAnimator
-            sdr::animation::primitiveAnimator& getPrimitiveAnimator();
+            sdr::animation::primitiveAnimator& getPrimitiveAnimator() {  return maPrimitiveAnimator; }
 
             // method to get the EventHandler. It will
             // return a existing one or create a new one using CreateEventHandler().

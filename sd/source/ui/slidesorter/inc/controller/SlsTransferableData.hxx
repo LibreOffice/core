@@ -71,7 +71,7 @@ public:
 
     virtual void DragFinished (sal_Int8 nDropAction);
 
-    const ::std::vector<Representative>& GetRepresentatives (void) const;
+    const ::std::vector<Representative>& GetRepresentatives (void) const { return maRepresentatives;}
 
     /** Return the view shell for which the transferable was created.
     */

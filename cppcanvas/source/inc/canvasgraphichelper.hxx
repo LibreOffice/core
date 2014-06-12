@@ -58,8 +58,8 @@ namespace cppcanvas
         protected:
             // for our clients
             // ===============
-            CanvasSharedPtr                                                                 getCanvas() const;
-            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > getGraphicDevice() const;
+            CanvasSharedPtr                                                                 getCanvas() const {  return mpCanvas; }
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > getGraphicDevice() const {  return mxGraphicDevice; }
             const ::com::sun::star::rendering::RenderState&                                 getRenderState() const;
 
         private:

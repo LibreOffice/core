@@ -58,10 +58,6 @@ UnoVirtualMachine::UnoVirtualMachine(
     }
 }
 
-rtl::Reference< jvmaccess::VirtualMachine >
-UnoVirtualMachine::getVirtualMachine() const {
-    return m_virtualMachine;
-}
 
 
 UnoVirtualMachine::~UnoVirtualMachine() {

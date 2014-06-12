@@ -290,10 +290,6 @@ void PropertyMap::InsertProps(const PropertyMapPtr pMap)
     }
 }
 
-const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
-{
-    return m_xFootnote;
-}
 
 
 void PropertyMap::insertTableProperties( const PropertyMap* )

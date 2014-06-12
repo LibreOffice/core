@@ -70,10 +70,6 @@ SwXFlatParagraph::~SwXFlatParagraph()
 {
 }
 
-const SwTxtNode* SwXFlatParagraph::getTxtNode() const
-{
-    return mpTxtNode;
-}
 
 // XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL

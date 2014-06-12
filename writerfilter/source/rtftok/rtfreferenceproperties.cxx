@@ -46,15 +46,7 @@ std::string RTFReferenceProperties::getType() const
     return "RTFReferenceProperties";
 }
 
-RTFSprms& RTFReferenceProperties::getAttributes()
-{
-    return m_aAttributes;
-}
 
-RTFSprms& RTFReferenceProperties::getSprms()
-{
-    return m_aSprms;
-}
 
 } // namespace rtftok
 } // namespace writerfilter

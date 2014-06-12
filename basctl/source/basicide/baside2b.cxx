@@ -2819,10 +2819,6 @@ void CodeCompleteWindow::SetTextSelection( const TextSelection& aSel )
     aTextSelection = aSel;
 }
 
-const TextSelection& CodeCompleteWindow::GetTextSelection() const
-{
-    return aTextSelection;
-}
 
 void CodeCompleteWindow::ResizeAndPositionListBox()
 {

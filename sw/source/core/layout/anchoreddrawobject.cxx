@@ -717,12 +717,6 @@ void SwAnchoredDrawObject::AdjustPositioningAttr( const SwFrm* _pNewAnchorFrm,
     GetFrmFmt().SetFmtAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
 }
 
-// --> #i34748# - change return type
-const Rectangle* SwAnchoredDrawObject::GetLastObjRect() const
-{
-    return mpLastObjRect;
-}
-
 // --> #i34748# - change return type.
 // If member <mpLastObjRect> is NULL, create one.
 void SwAnchoredDrawObject::SetLastObjRect( const Rectangle& _rNewLastRect )

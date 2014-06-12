@@ -351,10 +351,6 @@ void ScExtIButton::SetPopupMenu(PopupMenu* pPopUp)
 }
 
 
-OString ScExtIButton::GetSelectedIdent() const
-{
-    return aSelectedIdent;
-}
 
 void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
 {

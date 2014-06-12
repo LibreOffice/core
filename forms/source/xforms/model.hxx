@@ -144,15 +144,15 @@ public:
 
 
     // get/set that part of the schema, that we can't interpret as data types
-    XDocument_t getForeignSchema() const;
+    XDocument_t getForeignSchema() const { return mxForeignSchema;}
     void setForeignSchema( const XDocument_t& );
 
     // get/set the xforms:model/@schema attribute
-    OUString getSchemaRef() const;
+    OUString getSchemaRef() const { return msSchemaRef;}
     void setSchemaRef( const OUString& );
 
     // get/set namespaces for entire model
-    XNameContainer_t getNamespaces() const;
+    XNameContainer_t getNamespaces() const { return mxNamespaces;}
     void setNamespaces( const XNameContainer_t& );
 
     // get/set the ExternalData property

@@ -279,10 +279,6 @@ int PageSelector::GetPageCount (void) const
 
 
 
-SharedPageDescriptor PageSelector::GetSelectionAnchor (void) const
-{
-    return mpSelectionAnchor;
-}
 
 
 

@@ -66,10 +66,6 @@ ChartType::~ChartType()
     m_aDataSeries.clear();
 }
 
-Reference< uno::XComponentContext > ChartType::GetComponentContext() const
-{
-    return m_xContext;
-}
 
 // ____ XChartType ____
 Reference< chart2::XCoordinateSystem > SAL_CALL

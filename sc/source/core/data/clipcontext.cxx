@@ -82,10 +82,6 @@ void CopyFromClipContext::setDeleteFlag( sal_uInt16 nFlag )
 }
 
 
-ScCellValue& CopyFromClipContext::getSingleCell()
-{
-    return maSingleCell;
-}
 
 void CopyFromClipContext::setCondFormatList( ScConditionalFormatList* pCondFormatList )
 {

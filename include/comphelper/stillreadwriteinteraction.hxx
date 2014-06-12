@@ -43,7 +43,7 @@ public:
 
     void resetInterceptions();
     void resetErrorStates();
-    bool wasWriteError();
+    bool wasWriteError() { return (m_bUsed && m_bHandledByMySelf);}
 
 private:
     virtual ucbhelper::InterceptedInteraction::EInterceptionState intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest&                         aRequest,

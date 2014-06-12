@@ -424,10 +424,6 @@ void OOXMLFastContextHandler::setDefine(Id nDefine)
 }
 
 
-OOXMLParserState::Pointer_t OOXMLFastContextHandler::getParserState() const
-{
-    return mpParserState;
-}
 
 void OOXMLFastContextHandler::setToken(Token_t nToken)
 {
@@ -996,11 +992,6 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
     }
 }
 
-uno::Reference< uno::XComponentContext >
-OOXMLFastContextHandler::getComponentContext()
-{
-    return m_xContext;
-}
 
 /*
   class OOXMLFastContextHandlerStream
@@ -1039,11 +1030,6 @@ void OOXMLFastContextHandlerStream::sendProperty(Id nId)
                     sText.getLength());
 }
 
-OOXMLPropertySet::Pointer_t
-OOXMLFastContextHandlerStream::getPropertySetAttrs() const
-{
-    return mpPropertySetAttrs;
-}
 
 void OOXMLFastContextHandlerStream::resolvePropertySetAttrs()
 {

@@ -63,10 +63,6 @@ void StillReadWriteInteraction::resetErrorStates()
     m_bHandledByInternalHandler = false;
 }
 
-bool StillReadWriteInteraction::wasWriteError()
-{
-    return (m_bUsed && m_bHandledByMySelf);
-}
 
 ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction::intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest&                         aRequest,
                                                                   const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)

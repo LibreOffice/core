@@ -405,7 +405,7 @@ public:
     bool IsHlplVisible() const { return bHlplVisible; }             // Hilfslinien der Seiten malen oder nicht
     bool IsHlplFront() const { return bHlplFront  ; }               // Hilfslinie ueber die Objekte druebermalen oder dahinter
     bool IsGlueVisible() const { return bGlueVisible; }             // Konnektoren der objekte sichtbar oder nicht
-    Color GetGridColor() const;
+    Color GetGridColor() const { return maGridColor;}
     void SetPageVisible(bool bOn = true) { bPageVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { bPageBorderVisible=bOn; InvalidateAllWin(); }
     void SetBordVisible(bool bOn = true) { bBordVisible=bOn; InvalidateAllWin(); }
@@ -532,7 +532,7 @@ public:
     bool IsPrintPreview() const { return bPrintPreview; }
     void SetPrintPreview(bool bOn = true) { bPrintPreview=bOn; }
 
-    const svtools::ColorConfig& getColorConfig() const;
+    const svtools::ColorConfig& getColorConfig() const { return maColorConfig;}
 
     virtual void onChangeColorConfig();
 

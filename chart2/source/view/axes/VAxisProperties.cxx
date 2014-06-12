@@ -87,13 +87,6 @@ double lcl_getTickOffset(sal_Int32 nLength,sal_Int32 nTickmarkStyle)
     return fPercent*nLength;
 }
 
-VLineProperties AxisProperties::makeLinePropertiesForDepth( sal_Int32 /* nDepth */ ) const
-{
-    //@todo get this from somewhere; maybe for each subincrement
-    //so far the model does not offer different settings for each tick depth
-    return m_aLineProperties;
-}
-
 TickmarkProperties AxisProperties::makeTickmarkProperties(
                         sal_Int32 nDepth ) const
 {

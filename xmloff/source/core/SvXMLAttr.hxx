@@ -28,8 +28,8 @@ public:
     bool operator== (const SvXMLAttr &rCmp) const;
 
     sal_uInt16       getPrefixPos() const { return aPrefixPos;}
-    const OUString& getLName() const;
-    const OUString& getValue() const;
+    const OUString& getLName() const { return aLName;}
+    const OUString& getValue() const { return aValue;}
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_CORE_SVXMLATTR_HXX

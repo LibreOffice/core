@@ -1458,10 +1458,6 @@ uno::Reference<util::XCloneable> SAL_CALL ScDPDimension::createClone() throw(uno
     return CreateCloneObject();
 }
 
-const sheet::DataPilotFieldReference& ScDPDimension::GetReferenceValue() const
-{
-    return aReferenceValue;
-}
 
 const ScDPItemData& ScDPDimension::GetSelectedData()
 {

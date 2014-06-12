@@ -112,7 +112,7 @@ public:
     virtual         ~UnoTreeListItem();
     void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* ) SAL_OVERRIDE;
     void            SetImage( const Image& rImage );
-    OUString        GetGraphicURL() const;
+    OUString        GetGraphicURL() const { return maGraphicURL;}
     void            SetGraphicURL( const OUString& rGraphicURL );
     virtual void Paint(
         const Point& rPos, SvTreeListBox& rOutDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry) SAL_OVERRIDE;
@@ -1643,10 +1643,6 @@ void UnoTreeListItem::SetImage( const Image& rImage )
 
 
 
-OUString UnoTreeListItem::GetGraphicURL() const
-{
-    return maGraphicURL;
-}
 
 
 

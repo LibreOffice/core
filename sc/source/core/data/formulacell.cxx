@@ -3390,10 +3390,6 @@ void ScFormulaCell::SetChanged(bool b)
 
 
 
-const ScTokenArray* ScFormulaCell::GetCode() const
-{
-    return pCode;
-}
 
 void ScFormulaCell::SetCode( ScTokenArray* pNew )
 {
@@ -3516,10 +3512,6 @@ ScFormulaCellGroupRef ScFormulaCell::CreateCellGroup( SCROW nLen, bool bInvarian
     return mxGroup;
 }
 
-ScFormulaCellGroupRef ScFormulaCell::GetCellGroup() const
-{
-    return mxGroup;
-}
 
 void ScFormulaCell::SetCellGroup( const ScFormulaCellGroupRef &xRef )
 {

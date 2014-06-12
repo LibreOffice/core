@@ -1430,10 +1430,6 @@ void SdrView::ConfigurationChanged( ::utl::ConfigurationBroadcaster*p, sal_uInt3
      SdrCreateView::ConfigurationChanged(p, nHint);
 }
 
-SvtAccessibilityOptions& SdrView::getAccessibilityOptions()
-{
-    return maAccessibilityOptions;
-}
 
 /** method is called whenever the global SvtAccessibilityOptions is changed */
 void SdrView::onAccessibilityOptionsChanged()

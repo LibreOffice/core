@@ -318,10 +318,6 @@ SvStream& RTFDocumentImpl::Strm()
     return *m_pInStream;
 }
 
-Stream& RTFDocumentImpl::Mapper()
-{
-    return *m_pMapperStream;
-}
 
 void RTFDocumentImpl::setSuperstream(RTFDocumentImpl* pSuperstream)
 {
@@ -5666,10 +5662,6 @@ int RTFDocumentImpl::popState()
     return "RTFDocumentImpl";
 }
 
-uno::Reference<lang::XMultiServiceFactory> RTFDocumentImpl::getModelFactory()
-{
-    return m_xModelFactory;
-}
 
 bool RTFDocumentImpl::isInBackground()
 {

@@ -38,7 +38,7 @@ public:
 
     virtual OUString getTemplateName() const SAL_OVERRIDE;
 
-    com::sun::star::uno::Any getValue() const;
+    com::sun::star::uno::Any getValue() const { return value_;}
 
     void setValue(int layer, com::sun::star::uno::Any const & value);
 

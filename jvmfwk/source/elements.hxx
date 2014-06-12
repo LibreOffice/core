@@ -229,22 +229,22 @@ public:
 
     /** returns the value of the element /java/enabled
      */
-    const boost::optional<sal_Bool> & getEnabled() const;
+    const boost::optional<sal_Bool> & getEnabled() const { return m_enabled;}
     /** returns the value of the element /java/userClassPath.
      */
-    const boost::optional< OUString> & getUserClassPath() const;
+    const boost::optional< OUString> & getUserClassPath() const { return m_userClassPath;}
 
     /** returns the value of the element /java/javaInfo.
      */
-    const boost::optional<CNodeJavaInfo> & getJavaInfo() const;
+    const boost::optional<CNodeJavaInfo> & getJavaInfo() const { return m_javaInfo;}
 
     /** returns the parameters from the element /java/vmParameters/param.
      */
-    const boost::optional< ::std::vector< OUString> > & getVmParameters() const;
+    const boost::optional< ::std::vector< OUString> > & getVmParameters() const { return m_vmParameters;}
 
     /** returns the parameters from the element /java/jreLocations/location.
      */
-    const boost::optional< ::std::vector< OUString> > & getJRELocations() const;
+    const boost::optional< ::std::vector< OUString> > & getJRELocations() const { return m_JRELocations;}
 };
 
 /** merges the settings for shared, user and installation during construction.
@@ -293,7 +293,7 @@ public:
      */
     bool getEnabled() const { return m_bEnabled;}
 
-    const OUString & getUserClassPath() const;
+    const OUString & getUserClassPath() const { return m_sClassPath;}
 
     ::std::vector< OString> getVmParametersUtf8() const;
     /** returns a JavaInfo structure representing the node
@@ -305,7 +305,7 @@ public:
 
     /** returns the value of the attribute /java/javaInfo[@vendorUpdate].
      */
-    OString const & getJavaInfoAttrVendorUpdate() const;
+    OString const & getJavaInfoAttrVendorUpdate() const { return m_javaInfo.sAttrVendorUpdate;}
 
 #ifdef WNT
     /** returns the javaInfo@autoSelect attribute.
@@ -326,7 +326,7 @@ public:
      */
     void getJRELocations(rtl_uString *** parLocations, sal_Int32 * size) const;
 
-    const ::std::vector< OUString> & getJRELocations() const;
+    const ::std::vector< OUString> & getJRELocations() const { return m_JRELocations;}
 };
 
 

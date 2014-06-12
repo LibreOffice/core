@@ -577,7 +577,7 @@ public:
     void    SetImages( long nMaxHeight = 0, bool bForce = false );
 
     void    calcMinSize();
-    Size    getMinSize();
+    const Size& getMinSize() { return maMinSize;}
 
     Image   maImage;
 };
@@ -631,10 +631,6 @@ void DecoToolBox::calcMinSize()
     maMinSize = aTbx.CalcWindowSizePixel();
 }
 
-Size DecoToolBox::getMinSize()
-{
-    return maMinSize;
-}
 
 void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 {

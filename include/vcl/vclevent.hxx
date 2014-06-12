@@ -249,7 +249,7 @@ class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
 public:
     VclAccessibleEvent( sal_uLong n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
     virtual ~VclAccessibleEvent();
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const { return mxAccessible;}
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;

@@ -54,11 +54,11 @@ public:
 
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
 
-    ::sfx2::sidebar::ControllerItem& GetSpaceController();
+    ::sfx2::sidebar::ControllerItem& GetSpaceController() { return maSpacingControl;}
     long GetSelFontSize();
     void EndSpacingPopupMode (void);
     void EndUnderlinePopupMode (void);
-    Color& GetUnderlineColor();
+    Color& GetUnderlineColor() { return meUnderlineColor;}
 
 
     virtual void HandleContextChange (

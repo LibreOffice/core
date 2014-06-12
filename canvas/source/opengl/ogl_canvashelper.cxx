@@ -890,10 +890,6 @@ namespace oglcanvas
         return drawBitmap(pCanvas, xBitmap, viewState, renderState);
     }
 
-    uno::Reference< rendering::XGraphicDevice > CanvasHelper::getDevice()
-    {
-        return uno::Reference< rendering::XGraphicDevice >(mpDevice);
-    }
 
     void CanvasHelper::setupGraphicsState( Action&                       o_action,
                                            const rendering::ViewState&   viewState,

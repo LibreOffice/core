@@ -706,10 +706,6 @@ bool SchXMLPositonAttributesHelper::isAutomatic() const
 {
     return m_bAutoSize || m_bAutoPosition;
 }
-awt::Rectangle SchXMLPositonAttributesHelper::getRectangle() const
-{
-    return awt::Rectangle( m_aPosition.X, m_aPosition.Y, m_aSize.Width, m_aSize.Height );
-}
 
 bool SchXMLPositonAttributesHelper::readPositioningAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue )
 {

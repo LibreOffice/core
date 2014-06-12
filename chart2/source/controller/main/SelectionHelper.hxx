@@ -39,7 +39,7 @@ public: //methods
     OUString getSelectedCID();
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape > getSelectedAdditionalShape();
-    ObjectIdentifier getSelectedOID() const;
+    ObjectIdentifier getSelectedOID() const { return m_aSelectedOID;}
 
     bool isResizeableObjectSelected();
     bool isRotateableObjectSelected( const ::com::sun::star::uno::Reference<

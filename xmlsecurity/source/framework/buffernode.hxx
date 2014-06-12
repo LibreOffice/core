@@ -102,14 +102,14 @@ public:
     void addChild(const BufferNode* pChild);
     void removeChild(const BufferNode* pChild);
     sal_Int32 indexOfChild(const BufferNode* pChild) const;
-    const BufferNode* getParent() const;
+    const BufferNode* getParent() const { return m_pParent;}
     void setParent(const BufferNode* pParent);
     const BufferNode* getNextSibling() const;
     const BufferNode* isAncestor(const BufferNode* pDescendant) const;
     bool isPrevious(const BufferNode* pFollowing) const;
     const BufferNode* getNextNodeByTreeOrder() const;
     com::sun::star::uno::Reference<
-        com::sun::star::xml::wrapper::XXMLElementWrapper > getXMLElement() const;
+        com::sun::star::xml::wrapper::XXMLElementWrapper > getXMLElement() const { return m_xXMLElement;}
     void setXMLElement(const com::sun::star::uno::Reference<
         com::sun::star::xml::wrapper::XXMLElementWrapper >& xXMLElement);
     void notifyBranch();

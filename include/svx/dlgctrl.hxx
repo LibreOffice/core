@@ -114,7 +114,7 @@ public:
     virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
     void                Reset();
-    RECT_POINT          GetActualRP() const;
+    RECT_POINT          GetActualRP() const { return eRP;}
     void                SetActualRP( RECT_POINT eNewRP );
 
     void                SetState( CTL_STATE nState );

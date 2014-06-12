@@ -198,10 +198,6 @@ CharShape *HWPPara::GetCharShape(int pos)
 }
 
 
-ParaShape *HWPPara::GetParaShape(void)
-{
-    return &pshape;
-}
 
 
 HBox *HWPPara::readHBox(HWPFile & hwpf)

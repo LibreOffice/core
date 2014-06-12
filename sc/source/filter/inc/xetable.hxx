@@ -941,7 +941,7 @@ public:
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
     virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
-    XclExpDimensions*   GetDimensions();
+    XclExpDimensions*   GetDimensions() { return &maDimensions;}
 
 private:
     /** Returns access to the specified ROW record. Inserts preceding missing ROW records.

@@ -517,10 +517,6 @@ PDFExtOutDevData::~PDFExtOutDevData()
     delete mpGlobalSyncData;
 }
 
-const com::sun::star::lang::Locale& PDFExtOutDevData::GetDocumentLocale() const
-{
-    return maDocLocale;
-}
 void PDFExtOutDevData::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
 {
     maDocLocale = rLoc;
@@ -568,10 +564,6 @@ void PDFExtOutDevData::SetIsExportBookmarks( const bool bExportBookmarks )
 void PDFExtOutDevData::SetIsExportHiddenSlides( const bool bExportHiddenSlides )
 {
     mbExportHiddenSlides = bExportHiddenSlides;
-}
-std::vector< PDFExtOutDevBookmarkEntry >& PDFExtOutDevData::GetBookmarks()
-{
-    return maBookmarks;
 }
 void PDFExtOutDevData::SetIsExportNamedDestinations( const bool bExportNDests )
 {

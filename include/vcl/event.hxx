@@ -250,7 +250,7 @@ class VCL_DLLPUBLIC HelpEvent
 {
 private:
     Point           maPos;
-    sal_uInt16          mnMode;
+    sal_uInt16      mnMode;
     bool            mbKeyboardActivated;
 
 public:
@@ -258,8 +258,8 @@ public:
     explicit        HelpEvent( sal_uInt16 nHelpMode );
     explicit        HelpEvent( const Point& rMousePos, sal_uInt16 nHelpMode );
 
-    const Point&    GetMousePosPixel() const;
-    sal_uInt16          GetMode() const { return mnMode; }
+    const Point&    GetMousePosPixel() const { return maPos; }
+    sal_uInt16      GetMode() const { return mnMode; }
     bool            KeyboardActivated() const { return mbKeyboardActivated; }
     void            SetKeyboardActivated( bool bKeyboard ) { mbKeyboardActivated = bKeyboard; }
 };

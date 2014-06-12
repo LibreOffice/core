@@ -86,11 +86,6 @@ void AccessibleShapeTreeInfo::SetDocumentWindow (
 
 
 
-uno::Reference<XAccessibleComponent>
-    AccessibleShapeTreeInfo::GetDocumentWindow (void) const
-{
-    return mxDocumentWindow;
-}
 
 
 
@@ -104,11 +99,6 @@ void AccessibleShapeTreeInfo::SetControllerBroadcaster (
 
 
 
-uno::Reference<document::XEventBroadcaster>
-    AccessibleShapeTreeInfo::GetControllerBroadcaster (void) const
-{
-    return mxModelBroadcaster;
-}
 
 
 
@@ -122,11 +112,6 @@ void AccessibleShapeTreeInfo::SetModelBroadcaster (
 
 
 
-Reference<document::XEventBroadcaster>
-        AccessibleShapeTreeInfo::GetModelBroadcaster (void) const
-{
-    return mxModelBroadcaster;
-}
 
 
 
@@ -152,11 +137,6 @@ void AccessibleShapeTreeInfo::SetController (
 
 
 
-Reference<frame::XController>
-    AccessibleShapeTreeInfo::GetController (void) const
-{
-    return mxController;
-}
 
 
 

@@ -154,7 +154,7 @@ public:
                           com::sun::star::chart::XChartDocument > rChartDoc,
                       bool bIncludeTable );
 
-    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const;
+    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const { return mxPropertySetMapper;}
 
     void SetChartRangeAddress( const OUString& rAddress )
         { msChartAddress = rAddress; }
@@ -1010,10 +1010,6 @@ const OUString& SchXMLExportHelper::getChartCLSID()
     return m_pImpl->msCLSID;
 }
 
-UniReference< XMLPropertySetMapper > SchXMLExportHelper_Impl::GetPropertySetMapper() const
-{
-    return mxPropertySetMapper;
-}
 
 void SchXMLExportHelper_Impl::exportAutoStyles()
 {

@@ -330,7 +330,7 @@ public:
 
     OString getDescriptor() const;
 
-    OString getSignature() const;
+    OString getSignature() const { return m_needsSignature ? m_signatureStart + m_signatureEnd : OString();}
 
 private:
     rtl::Reference< TypeManager > m_manager;
@@ -387,9 +387,6 @@ OString MethodDescriptor::getDescriptor() const {
     return buf.makeStringAndClear();
 }
 
-OString MethodDescriptor::getSignature() const {
-    return m_needsSignature ?  m_signatureStart + m_signatureEnd : OString();
-}
 
 class TypeInfo {
 public:

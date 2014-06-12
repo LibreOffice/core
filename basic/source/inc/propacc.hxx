@@ -104,7 +104,7 @@ public:
     PropertySetInfoImpl( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& rProps );
 
     // XPropertySetInfo
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void) throw ();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(void) throw () { return _aProps;}
     ::com::sun::star::beans::Property SAL_CALL getPropertyByName(const OUString& Name)
         throw( ::com::sun::star::uno::RuntimeException );
     bool SAL_CALL hasPropertyByName(const OUString& Name)

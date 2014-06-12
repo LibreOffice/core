@@ -1250,10 +1250,6 @@ void SdrPaintView::VisAreaChanged(const SdrPageWindow& /*rWindow*/)
     Broadcast(SvxViewHint(SvxViewHint::SVX_HINT_VIEWCHANGED));
 }
 
-const svtools::ColorConfig& SdrPaintView::getColorConfig() const
-{
-    return maColorConfig;
-}
 
 void SdrPaintView::onChangeColorConfig()
 {
@@ -1265,10 +1261,6 @@ void SdrPaintView::SetGridColor( Color aColor )
     maGridColor = aColor;
 }
 
-Color SdrPaintView::GetGridColor() const
-{
-    return maGridColor;
-}
 
 // Set background color for svx at SdrPageViews
 void SdrPaintView::SetApplicationBackgroundColor(Color aBackgroundColor)

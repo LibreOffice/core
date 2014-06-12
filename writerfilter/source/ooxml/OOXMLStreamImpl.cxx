@@ -393,12 +393,6 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getDocumentStream()
     return xResult;
 }
 
-// Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
-uno::Reference<io::XStream> OOXMLStreamImpl::accessDocumentStream()
-{
-    return mxDocumentStream;
-}
-
 uno::Reference<io::XInputStream> OOXMLStreamImpl::getStorageStream()
 {
     return mxStorageStream;

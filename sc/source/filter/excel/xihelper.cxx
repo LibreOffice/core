@@ -811,10 +811,6 @@ XclImpCachedValue::~XclImpCachedValue()
 {
 }
 
-const OUString& XclImpCachedValue::GetString() const
-{
-    return maStr;
-}
 
 sal_uInt16 XclImpCachedValue::GetScError() const
 {

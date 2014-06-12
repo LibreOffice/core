@@ -430,15 +430,7 @@ namespace canvas
         }
     }
 
-    ::basegfx::B2DPoint CanvasCustomSpriteHelper::getPosPixel() const
-    {
-        return maPosition;
-    }
 
-    ::basegfx::B2DVector CanvasCustomSpriteHelper::getSizePixel() const
-    {
-        return maSize;
-    }
 
     ::basegfx::B2DRange CanvasCustomSpriteHelper::getUpdateArea( const ::basegfx::B2DRange& rBounds ) const
     {

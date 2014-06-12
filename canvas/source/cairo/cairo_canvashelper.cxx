@@ -1527,10 +1527,6 @@ namespace cairocanvas
         return rv;
     }
 
-    uno::Reference< rendering::XGraphicDevice > CanvasHelper::getDevice()
-    {
-        return uno::Reference< rendering::XGraphicDevice >(mpDevice);
-    }
 
     void CanvasHelper::copyRect( const rendering::XCanvas*                          ,
                                  const uno::Reference< rendering::XBitmapCanvas >&  /*sourceCanvas*/,

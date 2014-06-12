@@ -84,10 +84,6 @@ void SvxRadioButtonListBox::HandleEntryChecked( SvTreeListEntry* _pEntry )
         SetCheckButtonState( _pEntry, SV_BUTTON_CHECKED );
 }
 
-const Point& SvxRadioButtonListBox::GetCurMousePoint() const
-{
-    return m_aCurMousePoint;
-}
 
 long SvxRadioButtonListBox::GetControlColumnWidth() const
 {

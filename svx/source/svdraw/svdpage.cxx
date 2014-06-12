@@ -1197,10 +1197,6 @@ bool SdrPageProperties::isUsedByModel() const
     return mpSdrPage->IsInserted();
 }
 
-const SfxItemSet& SdrPageProperties::GetItemSet() const
-{
-    return *mpProperties;
-}
 
 void SdrPageProperties::PutItemSet(const SfxItemSet& rSet)
 {

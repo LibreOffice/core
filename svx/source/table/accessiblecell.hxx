@@ -72,7 +72,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL getAccessibleStateSet(void) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(void) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getAccessibleName (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    sdr::table::CellRef getCellRef();
+    sdr::table::CellRef getCellRef() { return mxCell;}
     void UpdateChildren();
     OUString getCellName( sal_Int32 nCol, sal_Int32 nRow );
 

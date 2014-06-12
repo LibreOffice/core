@@ -112,16 +112,8 @@ void SwAnchoredObject::SetDrawObj( SdrObject& _rDrawObj )
     mpDrawObj = &_rDrawObj;
 }
 
-const SdrObject* SwAnchoredObject::GetDrawObj() const
-{
-    return mpDrawObj;
-}
 
 
-const SwFrm* SwAnchoredObject::GetAnchorFrm() const
-{
-    return mpAnchorFrm;
-}
 
 
 void SwAnchoredObject::ChgAnchorFrm( SwFrm* _pNewAnchorFrm )
@@ -154,10 +146,6 @@ SwFrm* SwAnchoredObject::GetAnchorFrmContainingAnchPos()
 }
 
 
-const SwPageFrm* SwAnchoredObject::GetPageFrm() const
-{
-    return mpPageFrm;
-}
 
 void SwAnchoredObject::SetPageFrm( SwPageFrm* _pNewPageFrm )
 {
@@ -177,10 +165,6 @@ void SwAnchoredObject::SetPageFrm( SwPageFrm* _pNewPageFrm )
     }
 }
 
-const SwRect& SwAnchoredObject::GetLastCharRect() const
-{
-    return maLastCharRect;
-}
 
 SwTwips SwAnchoredObject::GetRelCharX( const SwFrm* pFrm ) const
 {
@@ -365,10 +349,6 @@ void SwAnchoredObject::ClearCharRectAndTopOfLine()
     mnLastTopOfLine = 0;
 }
 
-const Point SwAnchoredObject::GetCurrRelPos() const
-{
-    return maRelPos;
-}
 void SwAnchoredObject::SetCurrRelPos( Point _aRelPos )
 {
     maRelPos = _aRelPos;

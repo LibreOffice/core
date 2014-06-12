@@ -65,7 +65,7 @@ public:
 
     bool hasPosSize() const;
     bool isAutomatic() const;
-    ::com::sun::star::awt::Rectangle getRectangle() const;
+    ::com::sun::star::awt::Rectangle getRectangle() const { return css::awt::Rectangle( m_aPosition.X, m_aPosition.Y, m_aSize.Width, m_aSize.Height );}
 
 private:
     bool hasSize() const;

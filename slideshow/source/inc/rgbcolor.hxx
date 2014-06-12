@@ -43,15 +43,15 @@ namespace slideshow
 
             /** Get the RGB red value.
              */
-            double getRed() const;
+            double getRed() const {  return maRGBTriple.mnRed; }
 
             /** Get the RGB green value.
              */
-            double getGreen() const;
+            double getGreen() const {  return maRGBTriple.mnGreen; }
 
             /** Get the RGB blue value.
              */
-            double getBlue() const;
+            double getBlue() const {  return maRGBTriple.mnBlue; }
 
             /** Create an integer sRGBA color.
              */

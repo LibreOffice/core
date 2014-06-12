@@ -324,10 +324,6 @@ ScDPCollection* ScDocument::GetDPCollection()
     return pDPCollection;
 }
 
-const ScDPCollection* ScDocument::GetDPCollection() const
-{
-    return pDPCollection;
-}
 
 ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
@@ -964,10 +960,6 @@ void ScDocument::AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges )
         pUnoRefUndoList->Add( nId, rOldRanges );
 }
 
-sal_Int64 ScDocument::GetNewUnoId()
-{
-    return ++nUnoObjectId;
-}
 
 void ScDocument::UpdateReference(
     sc::RefUpdateContext& rCxt, ScDocument* pUndoDoc, bool bIncludeDraw, bool bUpdateNoteCaptionPos )

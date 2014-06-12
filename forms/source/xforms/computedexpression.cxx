@@ -70,10 +70,6 @@ ComputedExpression::~ComputedExpression()
 }
 
 
-OUString ComputedExpression::getExpression() const
-{
-    return msExpression;
-}
 
 void ComputedExpression::setExpression( const OUString& rExpression )
 {
@@ -112,12 +108,6 @@ bool ComputedExpression::isSimpleExpression() const
     return mbIsEmpty || mbIsSimple;
 }
 
-
-const OUString ComputedExpression::_getExpressionForEvaluation() const
-{
-    // the default implementation is to do nothing...
-    return msExpression;
-}
 
 bool ComputedExpression::_evaluate(
     const xforms::EvaluationContext& rContext,
@@ -162,10 +152,6 @@ void ComputedExpression::clear()
     mxResult.clear();
 }
 
-Reference<XXPathObject> ComputedExpression::getXPath() const
-{
-    return mxResult;
-}
 
 OUString ComputedExpression::getString( const OUString& rDefault ) const
 {

@@ -306,7 +306,7 @@ public:
     void LockUpdate (void);
     void UnlockUpdate (void);
 
-    ToolBarRules& GetToolBarRules (void);
+    ToolBarRules& GetToolBarRules (void) { return maToolBarRules;}
 
 private:
     const static OUString msToolBarResourcePrefix;
@@ -968,10 +968,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 
 
-ToolBarRules& ToolBarManager::Implementation::GetToolBarRules (void)
-{
-    return maToolBarRules;
-}
 
 
 

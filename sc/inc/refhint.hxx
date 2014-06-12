@@ -47,12 +47,12 @@ public:
     /**
      * Get the source range from which the references have moved.
      */
-    const ScRange& getRange() const;
+    const ScRange& getRange() const { return maRange;}
 
     /**
      * Get the movement vector.
      */
-    const ScAddress& getDelta() const;
+    const ScAddress& getDelta() const { return maMoveDelta;}
 };
 
 class RefColReorderHint : public RefHint
@@ -66,7 +66,7 @@ public:
     RefColReorderHint( const sc::ColReorderMapType& rColMap, SCTAB nTab, SCROW nRow1, SCROW nRow2 );
     virtual ~RefColReorderHint();
 
-    const sc::ColReorderMapType& getColMap() const;
+    const sc::ColReorderMapType& getColMap() const { return mrColMap;}
 
     SCTAB getTab() const { return mnTab;}
     SCROW getStartRow() const { return mnRow1;}

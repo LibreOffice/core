@@ -24,15 +24,7 @@ RowHeightContext::~RowHeightContext() {}
 
 
 
-const Fraction& RowHeightContext::getZoomX() const
-{
-    return maZoomX;
-}
 
-const Fraction& RowHeightContext::getZoomY() const
-{
-    return maZoomY;
-}
 
 
 void RowHeightContext::setExtraHeight( sal_uInt16 nH )

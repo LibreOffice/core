@@ -165,7 +165,7 @@ public:
     /** Return the mutex so that the caller can lock it and then safely
         access the model.
     */
-    ::osl::Mutex& GetMutex (void);
+    ::osl::Mutex& GetMutex (void) { return maMutex;}
 
     /** Set the XIndexAccess from which the called SlideSorterModel takes
         its pages.

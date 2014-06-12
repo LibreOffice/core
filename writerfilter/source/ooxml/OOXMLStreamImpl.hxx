@@ -84,7 +84,8 @@ public:
     getFastTokenHandler(css::uno::Reference<css::uno::XComponentContext> rContext) SAL_OVERRIDE;
 
     void setInputStream(css::uno::Reference<css::io::XInputStream> rxInputStream);
-    css::uno::Reference<css::io::XStream> accessDocumentStream();
+    // Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
+    css::uno::Reference<css::io::XStream> accessDocumentStream() { return mxDocumentStream;}
 };
 }}
 #endif // INCLUDED_WRITERFILTER_SOURCE_OOXML_OOXMLSTREAMIMPL_HXX

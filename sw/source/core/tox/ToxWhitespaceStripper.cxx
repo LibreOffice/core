@@ -53,10 +53,5 @@ ToxWhitespaceStripper::GetPositionInStrippedString(sal_Int32 pos) const
     return mNewPositions.at(upos);
 }
 
-OUString
-ToxWhitespaceStripper::GetStrippedString() const
-{
-    return mStripped;
-}
 
 }

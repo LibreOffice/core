@@ -66,7 +66,7 @@ public:
 
     int getNamespaceId(Span const & prefix) const;
 
-    OUString getUrl() const;
+    const OUString& getUrl() const { return fileUrl_;}
 
 private:
     typedef std::vector< Span > NamespaceIris;

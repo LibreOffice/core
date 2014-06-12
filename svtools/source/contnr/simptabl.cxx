@@ -368,10 +368,6 @@ void SvSimpleTable::HBarEndDrag()
     Update();
 }
 
-CommandEvent SvSimpleTable::GetCommandEvent() const
-{
-    return aCEvt;
-}
 
 void SvSimpleTable::Command( const CommandEvent& rCEvt )
 {

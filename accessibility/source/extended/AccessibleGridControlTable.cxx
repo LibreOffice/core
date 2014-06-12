@@ -389,15 +389,7 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
     return Reference< XAccessibleTable >( xRet, uno::UNO_QUERY );
 }
 
-std::vector< AccessibleGridControlTableCell* >& AccessibleGridControlTable::getCellVector()
-{
-    return m_pCellVector;
-}
 
-std::vector< Reference< XAccessible > >& AccessibleGridControlTable::getAccessibleCellVector()
-{
-    return m_pAccessCellVector;
-}
 
 
 } // namespace accessibility

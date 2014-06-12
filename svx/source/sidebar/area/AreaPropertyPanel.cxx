@@ -1321,10 +1321,6 @@ IMPL_LINK(AreaPropertyPanel, ModifyTransparentHdl_Impl, void*, EMPTYARG)
 }
 
 
-Color AreaPropertyPanel::GetLastColor (void) const
-{
-    return maLastColor;
-}
 
 
 

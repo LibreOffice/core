@@ -196,7 +196,7 @@ public:
 
     inline Reference<XReportDefinition> getReportDefinition() const { return m_xReportDefinition; }
 
-    UniReference < XMLPropertySetMapper > GetCellStylePropertyMapper() const;
+    UniReference < XMLPropertySetMapper > GetCellStylePropertyMapper() const { return m_xCellStylesPropertySetMapper;}
 };
 
 /** Exports only settings

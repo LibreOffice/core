@@ -649,15 +649,7 @@ bool SdrGrafObj::IsLinkedGraphic() const
     return !aFileName.isEmpty();
 }
 
-const OUString& SdrGrafObj::GetFileName() const
-{
-    return aFileName;
-}
 
-const OUString& SdrGrafObj::GetFilterName() const
-{
-    return aFilterName;
-}
 
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {

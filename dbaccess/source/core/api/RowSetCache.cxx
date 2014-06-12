@@ -470,10 +470,6 @@ void ORowSetCache::setFetchSize(sal_Int32 _nSize)
 }
 
 // XResultSetMetaDataSupplier
-Reference< XResultSetMetaData > ORowSetCache::getMetaData(  )
-{
-    return m_xMetaData;
-}
 
 static Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
 {

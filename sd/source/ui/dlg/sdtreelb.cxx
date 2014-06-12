@@ -153,10 +153,6 @@ void SdPageObjsTLB::SdPageObjsTransferable::DragFinished( sal_Int8 nDropAction )
 
 
 
-::sd::DrawDocShell& SdPageObjsTLB::SdPageObjsTransferable::GetDocShell() const
-{
-    return mrDocShell;
-}
 
 
 

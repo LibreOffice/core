@@ -150,10 +150,6 @@ void OControlStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
 }
 
-ORptFilter& OControlStyleContext::GetOwnImport() const
-{
-    return m_rImport;
-}
 
 
 OReportStylesContext::OReportStylesContext( ORptFilter& rImport,
@@ -422,10 +418,6 @@ sal_Int32 OReportStylesContext::GetIndex(const sal_Int16 nContextID)
     return -1;
 }
 
-ORptFilter& OReportStylesContext::GetOwnImport() const
-{
-    return m_rImport;
-}
 
 sal_uInt16 OReportStylesContext::GetFamily( const OUString& rFamily ) const
 {

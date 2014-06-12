@@ -2364,10 +2364,6 @@ void SvXMLExport::DisposingModel()
     mxEventListener.clear();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SvXMLExport::getComponentContext()
-{
-    return m_xContext;
-}
 
 ::comphelper::UnoInterfaceToUniqueIdentifierMapper& SvXMLExport::getInterfaceToIdentifierMapper()
 {

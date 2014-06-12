@@ -73,15 +73,7 @@ namespace basegfx
         return hypot( mfX, mfY );
     }
 
-    double B2DVector::scalar( const B2DVector& rVec ) const
-    {
-        return((mfX * rVec.mfX) + (mfY * rVec.mfY));
-    }
 
-    double B2DVector::cross( const B2DVector& rVec ) const
-    {
-        return(mfX * rVec.getY() - mfY * rVec.getX());
-    }
 
     double B2DVector::angle( const B2DVector& rVec ) const
     {

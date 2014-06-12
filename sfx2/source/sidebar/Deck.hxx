@@ -51,11 +51,11 @@ public:
 
     void Dispose (void);
 
-    const ::rtl::OUString& GetId (void) const;
+    const ::rtl::OUString& GetId (void) const { return msId;}
     DeckTitleBar* GetTitleBar (void) const;
     Rectangle GetContentArea (void) const;
     void SetPanels (const SharedPanelContainer& rPanels);
-    const SharedPanelContainer& GetPanels (void) const;
+    const SharedPanelContainer& GetPanels (void) const { return maPanels;}
     void RequestLayout (void);
     ::Window* GetPanelParentWindow (void);
 

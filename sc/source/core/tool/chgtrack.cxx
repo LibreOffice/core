@@ -553,20 +553,12 @@ OUString ScChangeAction::GetRefString(
     return aBuf.makeStringAndClear();
 }
 
-const OUString& ScChangeAction::GetUser() const
-{
-    return aUser;
-}
 
 void ScChangeAction::SetUser( const OUString& r )
 {
     aUser = r;
 }
 
-const OUString& ScChangeAction::GetComment() const
-{
-    return aComment;
-}
 
 void ScChangeAction::SetComment( const OUString& rStr )
 {
@@ -1451,15 +1443,7 @@ void ScChangeActionContent::GetNewString( OUString& rStr, const ScDocument* pDoc
     GetValueString(rStr, maNewValue, maNewCell, pDoc);
 }
 
-const ScCellValue& ScChangeActionContent::GetOldCell() const
-{
-    return maOldCell;
-}
 
-const ScCellValue& ScChangeActionContent::GetNewCell() const
-{
-    return maNewCell;
-}
 
 void ScChangeActionContent::GetDescription(
     OUString& rStr, ScDocument* pDoc, bool bSplitRange, bool bWarning ) const
@@ -2217,10 +2201,6 @@ void ScChangeTrack::Clear()
     Init();
 }
 
-const std::set<OUString>& ScChangeTrack::GetUserCollection() const
-{
-    return maUserCollection;
-}
 
 void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
@@ -2258,10 +2238,6 @@ void ScChangeTrack::SetUser( const OUString& rUser )
     maUserCollection.insert(maUser);
 }
 
-const OUString& ScChangeTrack::GetUser() const
-{
-    return maUser;
-}
 
 void ScChangeTrack::StartBlockModify( ScChangeTrackMsgType eMsgType,
         sal_uLong nStartAction )

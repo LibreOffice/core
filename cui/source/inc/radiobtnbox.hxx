@@ -43,7 +43,7 @@ public:
 
     void                HandleEntryChecked( SvTreeListEntry* _pEntry );
 
-    const Point&        GetCurMousePoint() const;
+    const Point&        GetCurMousePoint() const { return m_aCurMousePoint;}
 
     long                GetControlColumnWidth() const;
 };

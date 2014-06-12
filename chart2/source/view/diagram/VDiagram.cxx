@@ -675,10 +675,6 @@ void VDiagram::createShapes_3d()
     adjustPosAndSize_3d( m_aAvailablePosIncludingAxes, m_aAvailableSizeIncludingAxes );
 }
 
-uno::Reference< drawing::XShapes > VDiagram::getCoordinateRegion()
-{
-    return uno::Reference<drawing::XShapes>( m_xCoordinateRegionShape, uno::UNO_QUERY );
-}
 
 ::basegfx::B2IRectangle VDiagram::getCurrentRectangle()
 {

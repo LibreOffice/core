@@ -62,7 +62,7 @@ public:
     WrapPolygonHandler();
     virtual ~WrapPolygonHandler();
 
-    WrapPolygon::Pointer_t getPolygon();
+    WrapPolygon::Pointer_t getPolygon() { return mpPolygon;}
 
 private:
     WrapPolygon::Pointer_t mpPolygon;

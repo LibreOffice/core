@@ -455,7 +455,8 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
 
     OUString GetSelDescr() const;
 
-    SwNavigationMgr& GetNavigationMgr();
+    SwNavigationMgr& GetNavigationMgr() { return aNavigationMgr; }
+
     void addCurrentPosition();
     bool GotoFly( const OUString& rName, FlyCntType eType = FLYCNTTYPE_ALL,
          bool bSelFrame = true );

@@ -55,7 +55,7 @@ public:
     virtual void SAL_CALL           disposing( const ::com::sun::star::lang::EventObject& Source ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     void                    Release();
-    const ::com::sun::star::frame::FeatureStateEvent& GetStatus() const;
+    const ::com::sun::star::frame::FeatureStateEvent& GetStatus() const { return aStatus;}
     void                    Dispatch( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& aProps, bool bForceSynchron = false );
 };
 

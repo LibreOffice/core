@@ -136,7 +136,7 @@ public:
     */
     void RequestOpenDeck (void);
 
-    FocusManager& GetFocusManager (void);
+    FocusManager& GetFocusManager (void) { return maFocusManager;}
 
 private:
     typedef ::std::map<
@@ -246,7 +246,7 @@ private:
     */
     void ShowPanel (const Panel& rPanel);
 
-    Context GetCurrentContext (void) const;
+    Context GetCurrentContext (void) const { return maCurrentContext;}
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 };

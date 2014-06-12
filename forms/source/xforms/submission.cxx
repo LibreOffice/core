@@ -105,30 +105,18 @@ Submission::~Submission() throw()
 {
 }
 
-Reference<XModel> Submission::getModel() const
-{
-    return mxModel;
-}
 
 void Submission::setModel( const Reference<XModel>& xModel )
 {
     mxModel = xModel;
 }
 
-OUString Submission::getID() const
-{
-    return msID;
-}
 
 void Submission::setID( const OUString& sID )
 {
     msID = sID;
 }
 
-OUString Submission::getBind() const
-{
-    return msBind;
-}
 
 void Submission::setBind( const OUString& sBind )
 {
@@ -145,30 +133,18 @@ void Submission::setRef( const OUString& sRef )
     maRef.setExpression( sRef );
 }
 
-OUString Submission::getAction() const
-{
-    return msAction;
-}
 
 void Submission::setAction( const OUString& sAction )
 {
     msAction = sAction;
 }
 
-OUString Submission::getMethod() const
-{
-    return msMethod;
-}
 
 void Submission::setMethod( const OUString& sMethod )
 {
     msMethod = sMethod;
 }
 
-OUString Submission::getVersion() const
-{
-    return msVersion;
-}
 
 void Submission::setVersion( const OUString& sVersion )
 {
@@ -181,20 +157,12 @@ void Submission::setIndent( bool bIndent )
     mbIndent = bIndent;
 }
 
-OUString Submission::getMediaType() const
-{
-    return msMediaType;
-}
 
 void Submission::setMediaType( const OUString& sMediaType )
 {
     msMediaType = sMediaType;
 }
 
-OUString Submission::getEncoding() const
-{
-    return msEncoding;
-}
 
 void Submission::setEncoding( const OUString& sEncoding )
 {
@@ -213,40 +181,24 @@ void Submission::setStandalone( bool bStandalone )
     mbStandalone = bStandalone;
 }
 
-OUString Submission::getCDataSectionElement() const
-{
-    return msCDataSectionElement;
-}
 
 void Submission::setCDataSectionElement( const OUString& sCDataSectionElement )
 {
     msCDataSectionElement = sCDataSectionElement;
 }
 
-OUString Submission::getReplace() const
-{
-    return msReplace;
-}
 
 void Submission::setReplace( const OUString& sReplace )
 {
     msReplace = sReplace;
 }
 
-OUString Submission::getSeparator() const
-{
-    return msSeparator;
-}
 
 void Submission::setSeparator( const OUString& sSeparator )
 {
     msSeparator = sSeparator;
 }
 
-Sequence< OUString > Submission::getIncludeNamespacePrefixes() const
-{
-    return msIncludeNamespacePrefixes;
-}
 
 void Submission::setIncludeNamespacePrefixes( const Sequence< OUString >& rIncludeNamespacePrefixes )
 {

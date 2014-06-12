@@ -340,10 +340,6 @@ void Color::clearTransformations()
     clearTransparence();
 }
 
-::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > Color::getTransformations() const
-{
-    return maInteropTransformations;
-}
 
 OUString Color::getColorTransformationName( sal_Int32 nElement )
 {

@@ -459,7 +459,7 @@ namespace x11 {
         void dropComplete( bool success, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
 
         // for XDragSourceContext
-        sal_Int32 getCurrentCursor();
+        sal_Int32 getCurrentCursor() { return m_aCurrentCursor;}
         void setCursor( sal_Int32 cursor, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
         void setImage( sal_Int32 image, XLIB_Window aDropXLIB_Window, XLIB_Time aXLIB_Timestamp );
         void transferablesFlavorsChanged();

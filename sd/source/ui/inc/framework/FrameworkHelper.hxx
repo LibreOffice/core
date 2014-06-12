@@ -302,7 +302,7 @@ public:
                     cssdf::XResourceId>& rxAnchor);
 
     cssu::Reference<cssdf::XConfigurationController>
-        GetConfigurationController (void) const;
+        GetConfigurationController (void) const { return mxConfigurationController;}
 
 
 private:

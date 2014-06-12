@@ -24,6 +24,7 @@
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
+#include <basic/sbx.hxx>
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <deque>
@@ -102,7 +103,7 @@ public:
     virtual SbxVariable* Find( const OUString&, SbxClassType ) SAL_OVERRIDE;
 
     virtual const OUString& GetSource() const;
-    const OUString&  GetSource32() const;
+    const OUString&  GetSource32() const { return aOUSource;}
     const OUString&  GetComment() const { return aComment; }
     virtual void     SetSource( const OUString& r );
     void             SetSource32( const OUString& r );
@@ -135,7 +136,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
     void GetCodeCompleteDataFromParse(CodeCompleteDataCache& aCache);
-    SbxArrayRef GetMethods();
+    SbxArrayRef GetMethods() { return pMethods;}
     OUString GetKeywordCase( const OUString& sKeyword ) const;
 };
 

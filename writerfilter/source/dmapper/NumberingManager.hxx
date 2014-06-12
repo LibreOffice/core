@@ -120,7 +120,7 @@ public:
     void SetId(sal_Int32 nId);
     sal_Int32 GetId() { return m_nId;}
     void SetShape(com::sun::star::uno::Reference<com::sun::star::drawing::XShape> xShape);
-    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> GetShape();
+    com::sun::star::uno::Reference<com::sun::star::drawing::XShape> GetShape() { return m_xShape;}
 private:
     sal_Int32 m_nId;
     com::sun::star::uno::Reference<com::sun::star::drawing::XShape> m_xShape;

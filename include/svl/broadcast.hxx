@@ -56,7 +56,7 @@ public:
 
     void                    Broadcast( const SfxHint &rHint );
 
-    ListenersType& GetAllListeners();
+    ListenersType& GetAllListeners() { return maListeners;}
 
     bool HasListeners() const;
 

@@ -385,7 +385,7 @@ public:
     virtual bool CanRepeat( SfxRepeatTarget& ) const SAL_OVERRIDE;
     virtual OUString GetComment() const SAL_OVERRIDE;
 
-    CellValues& GetOldValues();
+    CellValues& GetOldValues() { return maOldValues;}
     void SetNewValues( const std::vector<double>& rVals );
 };
 

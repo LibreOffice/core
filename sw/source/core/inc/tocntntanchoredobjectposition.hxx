@@ -80,7 +80,7 @@ namespace objectpositioning
 
             /** frame, at which the vertical position is oriented at
             */
-            const SwLayoutFrm& GetVertPosOrientFrm() const;
+            const SwLayoutFrm& GetVertPosOrientFrm() const { return *mpVertPosOrientFrm;}
     };
 } // namespace objectpositioning
 

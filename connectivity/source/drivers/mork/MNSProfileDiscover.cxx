@@ -35,10 +35,6 @@ namespace connectivity
             profileName = aProfileName;
             profilePath = aProfilePath;
         }
-        OUString ProfileStruct::getProfilePath()
-        {
-            return profilePath;
-        }
 
         ProfileAccess::~ProfileAccess()
         {

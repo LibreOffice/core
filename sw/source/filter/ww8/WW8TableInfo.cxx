@@ -346,10 +346,6 @@ RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow()
 
 
 
-const SwRect & WW8TableNodeInfoInner::getRect() const
-{
-    return maRect;
-}
 
 #ifdef DBG_UTIL
 ::std::string WW8TableNodeInfoInner::toString() const
@@ -546,10 +542,6 @@ sal_uInt32 WW8TableNodeInfo::getRow() const
     return getInnerForDepth(mnDepth)->getRow();
 }
 
-const ww8::WW8TableNodeInfo::Inners_t & WW8TableNodeInfo::getInners() const
-{
-    return mInners;
-}
 
 const WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getFirstInner() const
 {
@@ -1454,20 +1446,8 @@ void WW8TableCellGridRow::setRowSpans(RowSpansPtr pRowSpans)
     m_pRowSpans = pRowSpans;
 }
 
-TableBoxVectorPtr WW8TableCellGridRow::getTableBoxVector() const
-{
-    return m_pTableBoxVector;
-}
 
-WidthsPtr WW8TableCellGridRow::getWidths() const
-{
-    return m_pWidths;
-}
 
-RowSpansPtr WW8TableCellGridRow::getRowSpans() const
-{
-    return m_pRowSpans;
-}
 
 CellInfo::CellInfo(const SwRect & aRect, WW8TableNodeInfo * pNodeInfo)
 : m_aRect(aRect), m_pNodeInfo(pNodeInfo), m_nFmtFrmWidth(0)

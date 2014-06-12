@@ -427,10 +427,6 @@ void NumPicBullet::SetShape(uno::Reference<drawing::XShape> xShape)
 }
 
 
-uno::Reference<drawing::XShape> NumPicBullet::GetShape()
-{
-    return m_xShape;
-}
 
 //--------------------------------------- AbstractListDef implementation
 

@@ -57,10 +57,6 @@ DataInterpreter::DataInterpreter(
 DataInterpreter::~DataInterpreter()
 {}
 
-Reference< uno::XComponentContext > DataInterpreter::GetComponentContext() const
-{
-    return m_xContext;
-}
 
 // ____ XDataInterpreter ____
 InterpretedData SAL_CALL DataInterpreter::interpretDataSource(

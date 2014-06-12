@@ -75,7 +75,7 @@ public:
             ::sd::DrawDocShell& rDocShell,
             NavigatorDragType eDragType,
             const ::com::sun::star::uno::Any& rTreeListBoxData );
-        ::sd::DrawDocShell&     GetDocShell() const;
+        ::sd::DrawDocShell&     GetDocShell() const { return mrDocShell;}
         NavigatorDragType   GetDragType() const { return meDragType;}
 
         static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();

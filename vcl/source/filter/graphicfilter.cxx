@@ -2159,10 +2159,6 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
 #endif
 }
 
-const FilterErrorEx& GraphicFilter::GetLastError() const
-{
-    return *pErrorEx;
-}
 
 void GraphicFilter::ResetLastError()
 {

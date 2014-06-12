@@ -61,7 +61,7 @@ public:
     formula::FormulaGrammar::Grammar getGrammar() const { return meGram;}
     void setGrammar( formula::FormulaGrammar::Grammar eGram );
 
-    const std::vector<OUString>& getTabNames() const;
+    const std::vector<OUString>& getTabNames() const { return maTabNames;}
 
     ScDocument* getDoc() { return mpDoc;}
 };

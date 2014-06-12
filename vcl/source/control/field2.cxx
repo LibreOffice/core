@@ -2482,10 +2482,6 @@ void TimeFormatter::SetTimeFormat( TimeFormatter::TimeFormat eNewFormat )
     mnTimeFormat = sal::static_int_cast<sal_uInt16>(eNewFormat);
 }
 
-TimeFormatter::TimeFormat TimeFormatter::GetTimeFormat() const
-{
-    return (TimeFormat)mnTimeFormat;
-}
 
 void TimeFormatter::SetFormat( TimeFieldFormat eNewFormat )
 {

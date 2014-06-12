@@ -220,11 +220,11 @@ public:
     ScDBCollection(ScDocument* pDocument);
     ScDBCollection(const ScDBCollection& r);
 
-    NamedDBs& getNamedDBs();
-    const NamedDBs& getNamedDBs() const;
+    NamedDBs& getNamedDBs() { return maNamedDBs;}
+    const NamedDBs& getNamedDBs() const { return maNamedDBs;}
 
-    AnonDBs& getAnonDBs();
-    const AnonDBs& getAnonDBs() const;
+    AnonDBs& getAnonDBs() { return maAnonDBs;}
+    const AnonDBs& getAnonDBs() const { return maAnonDBs;}
 
     const ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly) const;
     ScDBData* GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bStartOnly);

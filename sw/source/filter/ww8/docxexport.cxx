@@ -1259,16 +1259,6 @@ void DocxExport::WriteEmbeddings()
     }
 }
 
-VMLExport& DocxExport::VMLExporter()
-{
-    return *m_pVMLExport;
-}
-
-DocxSdrExport& DocxExport::SdrExporter()
-{
-    return *m_pSdrExport;
-}
-
 bool DocxExport::isMirroredMargin()
 {
     bool bMirroredMargins = false;

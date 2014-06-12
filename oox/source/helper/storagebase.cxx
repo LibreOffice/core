@@ -108,10 +108,6 @@ Reference< XStorage > StorageBase::getXStorage() const
     return implGetXStorage();
 }
 
-const OUString& StorageBase::getName() const
-{
-    return maStorageName;
-}
 
 OUString StorageBase::getPath() const
 {

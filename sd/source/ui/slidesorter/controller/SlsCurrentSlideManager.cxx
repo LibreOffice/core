@@ -263,10 +263,6 @@ void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescript
 
 
 
-SharedPageDescriptor CurrentSlideManager::GetCurrentSlide (void)
-{
-    return mpCurrentSlide;
-}
 
 
 

@@ -146,7 +146,7 @@ public:
 
     virtual bool        Validate();
 
-    const OString&      GetKey() const;
+    const OString&      GetKey() const { return m_aKey;}
 
     void                SetVersion( long nVers )
                         {

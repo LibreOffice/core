@@ -70,7 +70,7 @@ public:
     ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue);
     ~ScDPItemData();
 
-    Type GetType() const;
+    Type GetType() const { return static_cast<Type>(meType); }
     void SetEmpty();
     void SetString(const OUString& rS);
     void SetString(const OUString* pS);

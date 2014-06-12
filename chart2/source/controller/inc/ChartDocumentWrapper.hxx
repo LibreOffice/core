@@ -69,13 +69,13 @@ public:
     APPHELPER_SERVICE_FACTORY_HELPER(ChartDocumentWrapper)
 
     void setAddIn( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable >& xAddIn );
-    ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable > getAddIn() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshable > getAddIn() const { return m_xAddIn;}
 
     void setUpdateAddIn( bool bUpdateAddIn );
     bool getUpdateAddIn() const { return m_bUpdateAddIn;}
 
     void setBaseDiagram( const OUString& rBaseDiagram );
-    OUString getBaseDiagram() const;
+    OUString getBaseDiagram() const { return m_aBaseDiagram;}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > getAdditionalShapes() const;
 

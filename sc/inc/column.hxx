@@ -166,8 +166,8 @@ public:
 
     void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc);
 
-    ScDocument& GetDoc();
-    const ScDocument& GetDoc() const;
+    ScDocument& GetDoc() { return *pDocument;}
+    const ScDocument& GetDoc() const { return *pDocument;}
     SCTAB GetTab() const { return nTab; }
     SCCOL GetCol() const { return nCol; }
     sc::CellStoreType& GetCellStore() { return maCells; }

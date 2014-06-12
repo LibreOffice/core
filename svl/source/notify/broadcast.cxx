@@ -138,10 +138,6 @@ void SvtBroadcaster::Broadcast( const SfxHint &rHint )
 
 void SvtBroadcaster::ListenersGone() {}
 
-SvtBroadcaster::ListenersType& SvtBroadcaster::GetAllListeners()
-{
-    return maListeners;
-}
 
 bool SvtBroadcaster::HasListeners() const
 {

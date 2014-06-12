@@ -496,10 +496,6 @@ void InternalData::setComplexRowLabels( const vector< vector< uno::Any > >& rNew
         enlargeData( 0, nNewRowCount );
 }
 
-vector< vector< uno::Any > > InternalData::getComplexRowLabels() const
-{
-    return m_aRowLabels;
-}
 
 void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& rNewColumnLabels )
 {
@@ -511,10 +507,6 @@ void InternalData::setComplexColumnLabels( const vector< vector< uno::Any > >& r
         enlargeData( nNewColumnCount, 0 );
 }
 
-vector< vector< uno::Any > > InternalData::getComplexColumnLabels() const
-{
-    return m_aColumnLabels;
-}
 
 #if OSL_DEBUG_LEVEL > 1
 void InternalData::traceData() const

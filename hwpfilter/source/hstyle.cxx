@@ -53,10 +53,6 @@ HWPStyle::~HWPStyle(void)
 }
 
 
-int HWPStyle::Num(void) const
-{
-    return nstyles;
-}
 
 
 char *HWPStyle::GetName(int n) const

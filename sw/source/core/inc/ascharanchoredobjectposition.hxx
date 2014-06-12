@@ -128,13 +128,13 @@ namespace objectpositioning
         virtual void CalcPosition() SAL_OVERRIDE;
 
         // calculated anchored position for object position type AS_CHAR
-        Point GetAnchorPos() const;
+        const Point& GetAnchorPos() const { return maAnchorPos;}
 
         // calculated relative position to base line for object position type AS_CHAR
         SwTwips GetRelPosY() const { return mnRelPos;}
 
         // determined object rectangle including spacing for object position type AS_CHAR
-        SwRect GetObjBoundRectInclSpacing() const;
+        const SwRect& GetObjBoundRectInclSpacing() const { return maObjBoundRect;}
 
         // determined line alignment relative to line height
         sal_uInt8 GetLineAlignment() const { return mnLineAlignment;}

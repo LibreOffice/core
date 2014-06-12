@@ -302,7 +302,7 @@ public:
     /** Returns the type of the cached value (EXC_CACHEDVAL_*). */
     inline sal_uInt8    GetType() const     { return mnType; }
     /** Returns the cached string value, if this value is a string, else an empty string. */
-    const OUString& GetString() const;
+    const OUString& GetString() const { return maStr;}
     /** Returns the cached number, if this value has number type, else 0.0. */
     inline double       GetValue() const    { return mfValue; }
     /** Returns the cached Boolean value, if this value has Boolean type, else false. */

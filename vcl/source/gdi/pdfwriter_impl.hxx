@@ -1086,7 +1086,7 @@ public:
     /* document structure */
     sal_Int32 newPage( sal_Int32 nPageWidth , sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation );
     bool emit();
-    std::set< PDFWriter::ErrorCode > getErrors();
+    const std::set< PDFWriter::ErrorCode > & getErrors() const { return m_aErrors;}
     void insertError( PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
     void playMetafile( const GDIMetaFile&, vcl::PDFExtOutDevData*, const vcl::PDFWriter::PlayMetafileContext&, VirtualDevice* pDummyDev = NULL );
 

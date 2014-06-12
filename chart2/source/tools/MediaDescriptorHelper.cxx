@@ -196,11 +196,6 @@ void MediaDescriptorHelper::impl_init()
     ISSET_Stream = false;
 }
 
-    uno::Sequence< beans::PropertyValue > MediaDescriptorHelper
-::getReducedForModel()
-{
-    return m_aModelProperties;
-}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -204,10 +204,6 @@ sal_Int32 PropertySetInfoImpl::GetIndex_Impl( const OUString &rPropName ) const
     return pP ? sal::static_int_cast<sal_Int32>( pP - _aProps.getConstArray() ) : -1;
 }
 
-Sequence< Property > PropertySetInfoImpl::getProperties(void) throw()
-{
-    return _aProps;
-}
 
 Property PropertySetInfoImpl::getPropertyByName(const OUString& Name) throw( RuntimeException )
 {

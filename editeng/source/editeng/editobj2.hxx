@@ -21,6 +21,7 @@
 #define INCLUDED_EDITENG_SOURCE_EDITENG_EDITOBJ2_HXX
 
 #include <editeng/editobj.hxx>
+#include <editeng/fieldupdater.hxx>
 #include <editdoc.hxx>
 
 #include <unotools/fontcvt.hxx>
@@ -144,7 +145,7 @@ public:
                         ~ContentInfo();
 
     void NormalizeString( svl::SharedStringPool& rPool );
-    const svl::SharedString& GetSharedString() const;
+    const svl::SharedString& GetSharedString() const { return maText;}
     OUString GetText() const;
     void SetText( const OUString& rStr );
 
@@ -221,8 +222,8 @@ public:
     XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd );
     void                    DestroyAttrib( XEditAttribute* pAttr );
 
-    ContentInfosType&       GetContents();
-    const ContentInfosType& GetContents() const;
+    ContentInfosType&       GetContents() { return aContents;}
+    const ContentInfosType& GetContents() const { return aContents;}
     SfxItemPool*            GetPool() const         { return pPool; }
     XParaPortionList*       GetPortionInfo() const  { return pPortionInfo; }
     void                    SetPortionInfo( XParaPortionList* pP )
@@ -255,7 +256,7 @@ public:
         const OUString& rOldName, SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily);
     void ChangeStyleSheetName(SfxStyleFamily eFamily, const OUString& rOldName, const OUString& rNewName);
 
-    editeng::FieldUpdater GetFieldUpdater();
+    editeng::FieldUpdater GetFieldUpdater() { return editeng::FieldUpdater(*mpFront);}
 
     bool HasMetric() const { return nMetric != 0xFFFF; }
     sal_uInt16                  GetMetric() const           { return nMetric; }

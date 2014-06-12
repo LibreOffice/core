@@ -260,8 +260,8 @@ class SwDrawVirtObj : public SdrVirtObj
         SwDrawVirtObj& operator= (const SwDrawVirtObj& rObj);
 
         /// connection to writer layout
-        const SwAnchoredObject* GetAnchoredObj() const;
-        SwAnchoredObject* AnchoredObj();
+        const SwAnchoredObject* GetAnchoredObj() const { return &maAnchoredDrawObj;}
+        SwAnchoredObject* AnchoredObj() { return &maAnchoredDrawObj;}
         const SwFrm* GetAnchorFrm() const;
         SwFrm* AnchorFrm();
         void RemoveFromWriterLayout();

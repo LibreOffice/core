@@ -678,10 +678,6 @@ bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
         && m_aName == rBkmk.GetName();
 }
 
-const OUString& SwHistoryBookmark::GetName() const
-{
-    return m_aName;
-}
 
 SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
                         sal_uLong nNodePos, const std::set<sal_uInt16> &rSetArr )

@@ -68,7 +68,7 @@ public:
     size_t getSelectedMenuItem() const { return mnSelectedMenu;}
 
     void setName(const OUString& rName);
-    const OUString& getName() const;
+    const OUString& getName() const { return maName;}
 
     void executeMenuItem(size_t nPos);
     void getMenuItemPosSize(size_t nPos, Point& rPos, Size& rSize) const;
@@ -81,7 +81,7 @@ protected:
     void drawMenuItem(size_t nPos);
     void drawSeparator(size_t nPos);
     void drawAllMenuItems();
-    const Font& getLabelFont() const;
+    const Font& getLabelFont() const { return maLabelFont;}
 
     void queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow* pMenu);
     void queueCloseSubMenu();

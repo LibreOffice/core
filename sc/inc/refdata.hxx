@@ -57,7 +57,7 @@ public:
     void InitAddress( SCCOL nCol, SCROW nRow, SCTAB nTab );
     /// InitAddressRel: InitFlags and set address, everything relative to rPos
     void InitAddressRel( const ScAddress& rAdr, const ScAddress& rPos );
-    sal_uInt8 FlagValue() const;
+    sal_uInt8 FlagValue() const { return mnFlagValue;}
 
     void SetColRel( bool bVal ) { Flags.bColRel = bVal; }
     bool IsColRel() const { return Flags.bColRel; }
@@ -77,11 +77,11 @@ public:
     void IncTab( SCTAB nInc );
 
     void SetColDeleted( bool bVal );
-    bool IsColDeleted() const;
+    bool IsColDeleted() const { return Flags.bColDeleted;}
     void SetRowDeleted( bool bVal );
-    bool IsRowDeleted() const;
+    bool IsRowDeleted() const { return Flags.bRowDeleted;}
     void SetTabDeleted( bool bVal );
-    bool IsTabDeleted() const;
+    bool IsTabDeleted() const { return Flags.bTabDeleted;}
     bool IsDeleted() const;
 
     void SetFlag3D( bool bVal ) { Flags.bFlag3D = bVal; }

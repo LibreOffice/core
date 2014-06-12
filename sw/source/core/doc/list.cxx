@@ -35,9 +35,9 @@ class SwListImpl
                     const SwNodes& rNodes );
         ~SwListImpl();
 
-        const OUString GetListId() const;
+        const OUString GetListId() const { return msListId;}
 
-        const OUString GetDefaultListStyleName() const;
+        const OUString GetDefaultListStyleName() const { return msDefaultListStyleName;}
 
         void InsertListItem( SwNodeNum& rNodeNum,
                              const int nLevel );
@@ -110,15 +110,7 @@ SwListImpl::~SwListImpl()
     }
 }
 
-const OUString SwListImpl::GetListId() const
-{
-    return msListId;
-}
 
-const OUString SwListImpl::GetDefaultListStyleName() const
-{
-    return msDefaultListStyleName;
-}
 
 void SwListImpl::InsertListItem( SwNodeNum& rNodeNum,
                                  const int nLevel )

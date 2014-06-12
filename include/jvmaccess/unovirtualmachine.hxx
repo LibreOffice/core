@@ -74,7 +74,7 @@ public:
         @return
         The Java virtual machine wrapper.  Will never be null.
      */
-    rtl::Reference< jvmaccess::VirtualMachine > getVirtualMachine() const;
+    rtl::Reference< jvmaccess::VirtualMachine > getVirtualMachine() const { return m_virtualMachine;}
 
     /** Get the UNO class loader.
 

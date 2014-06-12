@@ -96,7 +96,7 @@ public:
     void setDeleteFlag( sal_uInt16 nFlag );
     sal_uInt16 getDeleteFlag() const { return mnDeleteFlag;}
 
-    ScCellValue& getSingleCell();
+    ScCellValue& getSingleCell() { return maSingleCell;}
 
     void setCondFormatList( ScConditionalFormatList* pCondFormatList );
     ScConditionalFormatList* getCondFormatList() { return mpCondFormatList;}

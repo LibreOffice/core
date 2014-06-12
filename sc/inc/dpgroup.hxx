@@ -143,7 +143,7 @@ public:
                 ScDPGroupTableData( const ::boost::shared_ptr<ScDPTableData>& pSource, ScDocument* pDocument );
     virtual     ~ScDPGroupTableData();
 
-    boost::shared_ptr<ScDPTableData> GetSourceTableData();
+    boost::shared_ptr<ScDPTableData> GetSourceTableData() { return pSourceData;}
 
     void        AddGroupDimension( const ScDPGroupDimension& rGroup );
     void        SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup );

@@ -163,10 +163,6 @@ void NBOTypeMgrBase::StoreBulCharFmtName_impl() {
             }
         }
 }
-OUString NBOTypeMgrBase::GetBulCharFmtName()
-{
-    return aNumCharFmtName;
-}
 void NBOTypeMgrBase::ImplLoad(const OUString& filename)
 {
     bIsLoading = true;

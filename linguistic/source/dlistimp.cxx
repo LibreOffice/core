@@ -95,7 +95,7 @@ public:
                 bool bReceiveVerbose );
     bool    RemoveDicListEvtListener(
                 const uno::Reference< XDictionaryListEventListener >& rxListener );
-    sal_Int16   BeginCollectEvents();
+    sal_Int16   BeginCollectEvents() { return ++nNumCollectEvtListeners;}
     sal_Int16   EndCollectEvents();
     sal_Int16   FlushEvents();
     void    ClearEvents()   { nCondensedEvt = 0; }
@@ -227,10 +227,6 @@ bool DicEvtListenerHelper::RemoveDicListEvtListener(
 }
 
 
-sal_Int16 DicEvtListenerHelper::BeginCollectEvents()
-{
-    return ++nNumCollectEvtListeners;
-}
 
 
 sal_Int16 DicEvtListenerHelper::EndCollectEvents()
