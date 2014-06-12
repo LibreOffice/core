@@ -560,13 +560,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
-            SwTableRep* pTblRep = ::lcl_TableParamToItemSet( aCoreSet, rSh );
-            SfxAbstractTabDialog * pDlg = NULL;
+            boost::scoped_ptr<SwTableRep> pTblRep(::lcl_TableParamToItemSet( aCoreSet, rSh ));
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg = pFact->CreateSwTableTabDlg(GetView().GetWindow(), GetPool(), &aCoreSet, &rSh);
+                pDlg.reset(pFact->CreateSwTableTabDlg(GetView().GetWindow(), GetPool(), &aCoreSet, &rSh));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if (pItem)
@@ -593,8 +593,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 ItemSetToTableParam( *pOutSet, rSh );
             }
 
-            delete pDlg;
-            delete pTblRep;
+            pDlg.reset();
+            pTblRep.reset();
             rBindings.Update(SID_RULER_BORDERS);
             rBindings.Update(SID_ATTR_TABSTOP);
             rBindings.Update(SID_RULER_BORDERS_VERTICAL);
@@ -646,9 +646,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(),aCoreSet,
+                boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( GetView().GetWindow(),aCoreSet,
                     pView->GetViewFrame()->GetFrame().GetFrameInterface(),
-                    RC_DLG_SWNUMFMTDLG );
+                    RC_DLG_SWNUMFMTDLG ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if (RET_OK == pDlg->Execute())
@@ -677,7 +677,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
                     }
                 }
-                delete pDlg;
             }
         }
         break;
@@ -794,10 +793,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(&GetView().GetViewFrame()->GetWindow(), &rSh);
+            boost::scoped_ptr<AbstractSwAutoFormatDlg> pDlg(pFact->CreateSwAutoFormatDlg(&GetView().GetViewFrame()->GetWindow(), &rSh));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
         }
         break;
         case FN_TABLE_SET_ROW_HEIGHT:
@@ -805,10 +803,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_ROW_HEIGHT );
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_ROW_HEIGHT ));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
         }
         break;
         case FN_NUMBER_BULLETS:
@@ -918,7 +915,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 if( pFact )
                 {
                     const long nMaxVert = rSh.GetAnyCurRect( RECT_FRM ).Width() / MINLAY;
-                    SvxAbstractSplittTableDialog* pDlg = pFact->CreateSvxSplittTableDialog( GetView().GetWindow(), rSh.IsTableVertical(), nMaxVert, 99 );
+                    boost::scoped_ptr<SvxAbstractSplittTableDialog> pDlg(pFact->CreateSvxSplittTableDialog( GetView().GetWindow(), rSh.IsTableVertical(), nMaxVert, 99 ));
                     if( pDlg && (pDlg->Execute() == RET_OK) )
                     {
                         nCount = pDlg->GetCount();
@@ -928,7 +925,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bHorizontal ) );
                         rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bProportional ) );
                     }
-                    delete pDlg;
                 }
             }
 
@@ -963,11 +959,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSplitTableDialog* pDlg = pFact->CreateSplitTblDialog( GetView().GetWindow(), rSh );
+                boost::scoped_ptr<AbstractSplitTableDialog> pDlg(pFact->CreateSplitTblDialog( GetView().GetWindow(), rSh ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 pDlg->Execute();
                 rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, pDlg->GetSplitMode() ) );
-                delete pDlg;
                 bCallDone = true;
             }
         }
@@ -982,11 +977,10 @@ void SwTableShell::Execute(SfxRequest &rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-                VclAbstractDialog* pDlg = pFact->CreateTblMergeDialog(GetView().GetWindow(), bPrev);
+                boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateTblMergeDialog(GetView().GetWindow(), bPrev));
                 OSL_ENSURE(pDlg, "dialogdiet pDlg fail!");
                 if( RET_OK != pDlg->Execute())
                     bPrev = bNext = false;
-                delete pDlg;
             }
 
             if( bPrev || bNext )

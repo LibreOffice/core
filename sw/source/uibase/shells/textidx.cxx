@@ -39,6 +39,7 @@
 #include "swabstdlg.hxx"
 #include <index.hrc>
 #include <globals.hrc>
+#include <boost/scoped_ptr.hpp>
 
 void SwTextShell::ExecIdx(SfxRequest &rReq)
 {
@@ -57,10 +58,9 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( pMDI, GetShell(), DLG_EDIT_AUTHMARK);
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( pMDI, GetShell(), DLG_EDIT_AUTHMARK));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
         }
         break;
         case FN_INSERT_AUTH_ENTRY_DLG:
@@ -93,10 +93,9 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             {
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                VclAbstractDialog* pDlg = pFact->CreateIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark());
+                boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateIndexMarkModalDlg(pMDI, GetShell(), aMgr.GetCurTOXMark()));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 pDlg->Execute();
-                delete pDlg;
             }
             break;
         }
@@ -140,12 +139,11 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             }
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog(
+            boost::scoped_ptr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         pMDI, aSet, rSh, (SwTOXBase* )pCurTOX,
-                                                        USHRT_MAX, bGlobal);
+                                                        USHRT_MAX, bGlobal));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
         }
         break;
         case FN_REMOVE_CUR_TOX:

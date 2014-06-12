@@ -113,6 +113,7 @@ using namespace ::com::sun::star;
 #include <table.hrc>
 #include <frmui.hrc>
 #include <unomid.h>
+#include <boost/scoped_ptr.hpp>
 
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell, SW_RES(STR_SHELLNAME_TEXT))
 
@@ -607,10 +608,10 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog("FrameDialog",
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateFrmTabDialog("FrameDialog",
                                                     GetView().GetViewFrame(),
                                                     &GetView().GetViewFrame()->GetWindow(),
-                                                    aSet, true);
+                                                    aSet, true));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())
             {
@@ -653,8 +654,6 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 rShell.EndAllAction();
                 rShell.UnlockPaint();
             }
-
-            DELETEZ(pDlg);
         }
         break;
     }
@@ -662,10 +661,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
-        VclAbstractDialog* pColDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN);
+        boost::scoped_ptr<VclAbstractDialog> pColDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_COLUMN));
         OSL_ENSURE(pColDlg, "Dialogdiet fail!");
         pColDlg->Execute();
-        delete pColDlg;
     }
     break;
 
@@ -1021,8 +1019,8 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aFont.GetFamilyName() ) );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aAllSet,
-            GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
+        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( GetView().GetWindow(), aAllSet,
+            GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP ));
         if( RET_OK == pDlg->Execute() )
         {
             SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pCItem, SfxStringItem, SID_CHARMAP, false );
@@ -1042,8 +1040,6 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
                 SW_MOD()->ApplyUsrPref(aOpt, &GetView());
             }
         }
-
-        delete pDlg;
     }
 
     if( !aChars.isEmpty() )
