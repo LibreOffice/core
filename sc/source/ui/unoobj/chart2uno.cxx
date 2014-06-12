@@ -3530,9 +3530,21 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rProper
         BuildDataCache();
         aRet <<= m_aHiddenValues;
     }
-    else if (rPropertyName == "TimeBased")
+    else if (rPropertyName == SC_UNONAME_TIME_BASED)
     {
         aRet <<= mbTimeBased;
+    }
+    else if (rPropertyName == SC_UNONAME_HAS_STRING_LABEL)
+    {
+        // Read-only property.  It returns whether or not the label value is a
+        // direct user input, rather than an indirect reference.
+        bool bHasStringLabel = false;
+        if (m_pTokens->size() == 1)
+        {
+            const ScToken& rToken = *(*m_pTokens)[0];
+            bHasStringLabel = rToken.GetType() == formula::svString;
+        }
+        aRet <<= bHasStringLabel;
     }
     else
         throw beans::UnknownPropertyException();
