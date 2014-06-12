@@ -421,19 +421,25 @@ namespace basctl
         return bResult;
     }
 
-
     BasicManager* ScriptDocument::Impl::getBasicManager() const
     {
-        OSL_ENSURE( isValid(), "ScriptDocument::Impl::getBasicManager: invalid state!" );
-        if ( !isValid() )
-            return NULL;
+        try
+        {
+            OSL_ENSURE( isValid(), "ScriptDocument::Impl::getBasicManager: invalid state!" );
+            if ( !isValid() )
+                return NULL;
 
-        if ( isApplication() )
-            return SFX_APP()->GetBasicManager();
+            if ( isApplication() )
+                return SFX_APP()->GetBasicManager();
 
-        return ::basic::BasicManagerRepository::getDocumentBasicManager( m_xDocument );
+            return ::basic::BasicManagerRepository::getDocumentBasicManager( m_xDocument );
+        }
+        catch (const css::ucb::ContentCreationException& e)
+        {
+            SAL_WARN( "basctl.basicide", "ScriptDocument::getBasicManager: Caught exception: " << e.Message );
+        }
+        return NULL;
     }
-
 
     Reference< XModel > ScriptDocument::Impl::getDocument() const
     {
