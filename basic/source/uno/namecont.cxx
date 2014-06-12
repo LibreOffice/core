@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/errinf.hxx>
@@ -414,20 +415,27 @@ void SfxLibraryContainer::leaveMethod()
     maMutex.release();
 }
 
-BasicManager* SfxLibraryContainer::getBasicManager( void )
+BasicManager* SfxLibraryContainer::getBasicManager()
 {
-    if ( mpBasMgr )
+    try
     {
-        return mpBasMgr;
+        if ( mpBasMgr )
+        {
+            return mpBasMgr;
+        }
+        Reference< XModel > xDocument( mxOwnerDocument.get(), UNO_QUERY );
+        SAL_WARN_IF(
+            !xDocument.is(), "basic",
+            ("SfxLibraryContainer::getBasicManager: cannot obtain a BasicManager"
+             " without document!"));
+        if ( xDocument.is() )
+        {
+            mpBasMgr = BasicManagerRepository::getDocumentBasicManager( xDocument );
+        }
     }
-    Reference< XModel > xDocument( mxOwnerDocument.get(), UNO_QUERY );
-    SAL_WARN_IF(
-        !xDocument.is(), "basic",
-        ("SfxLibraryContainer::getBasicManager: cannot obtain a BasicManager"
-         " without document!"));
-    if ( xDocument.is() )
+    catch (const css::ucb::ContentCreationException& e)
     {
-        mpBasMgr = BasicManagerRepository::getDocumentBasicManager( xDocument );
+        SAL_WARN( "basic", "SfxLibraryContainer::getBasicManager : Caught exception: " << e.Message );
     }
     return mpBasMgr;
 }
