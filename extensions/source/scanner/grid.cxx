@@ -29,6 +29,116 @@
 #include <algorithm>
 #include <boost/scoped_array.hpp>
 
+class GridWindow : public Window
+{
+    // helper class for handles
+    struct impHandle
+    {
+        Point           maPos;
+        sal_uInt16      mnOffX;
+        sal_uInt16      mnOffY;
+
+        impHandle(const Point& rPos, sal_uInt16 nX, sal_uInt16 nY)
+        :   maPos(rPos), mnOffX(nX), mnOffY(nY)
+        {
+        }
+
+        bool operator<(const impHandle& rComp) const
+        {
+            return (maPos.X() < rComp.maPos.X());
+        }
+
+        void draw(Window& rWin, const BitmapEx& rBitmapEx)
+        {
+            const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
+            rWin.DrawBitmapEx(maPos - aOffset, rBitmapEx);
+        }
+
+        bool isHit(Window& rWin, const Point& rPos)
+        {
+            const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
+            const Rectangle aTarget(maPos - aOffset, maPos + aOffset);
+            return aTarget.IsInside(rPos);
+        }
+    };
+
+    Rectangle       m_aGridArea;
+
+    double          m_fMinX;
+    double          m_fMinY;
+    double          m_fMaxX;
+    double          m_fMaxY;
+
+    double          m_fChunkX;
+    double          m_fMinChunkX;
+    double          m_fChunkY;
+    double          m_fMinChunkY;
+
+    double*         m_pXValues;
+    double*         m_pOrigYValues;
+    int             m_nValues;
+    double*         m_pNewYValues;
+
+    sal_uInt16      m_BmOffX;
+    sal_uInt16      m_BmOffY;
+
+    bool            m_bCutValues;
+
+    // stuff for handles
+    std::vector< impHandle >    m_aHandles;
+    sal_uInt32                  m_nDragIndex;
+
+    BitmapEx        m_aMarkerBitmap;
+
+    Point transform( double x, double y );
+    void transform( const Point& rOriginal, double& x, double& y );
+
+    double findMinX();
+    double findMinY();
+    double findMaxX();
+    double findMaxY();
+
+    void updateRectSize();
+
+    void drawGrid();
+    void drawOriginal();
+    void drawNew();
+    void drawHandles();
+
+    void computeExtremes();
+    void computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut );
+    void computeNew();
+    double interpolate( double x, double* pNodeX, double* pNodeY, int nNodes );
+
+    virtual void MouseMove( const MouseEvent& ) SAL_OVERRIDE;
+    virtual void MouseButtonDown( const MouseEvent& ) SAL_OVERRIDE;
+    virtual void MouseButtonUp( const MouseEvent& ) SAL_OVERRIDE;
+    void onResize();
+    virtual void Resize() SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
+    void drawLine( double x1, double y1, double x2, double y2 );
+public:
+    GridWindow(Window* pParent);
+    void Init(double* pXValues, double* pYValues, int nValues, bool bCutValues);
+    virtual ~GridWindow();
+
+    void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
+    double getMinX() { return m_fMinX; }
+    double getMinY() { return m_fMinY; }
+    double getMaxX() { return m_fMaxX; }
+    double getMaxY() { return m_fMaxY; }
+
+    int countValues() { return m_nValues; }
+    double* getXValues() { return m_pXValues; }
+    double* getOrigYValues() { return m_pOrigYValues; }
+    double* getNewYValues() { return m_pNewYValues; }
+
+    void ChangeMode(int nType);
+
+    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+};
+
+
 namespace {
 
 ResId SaneResId( sal_uInt32 nID )
@@ -39,41 +149,32 @@ ResId SaneResId( sal_uInt32 nID )
 
 }
 
-/***********************************************************************
- *
- *  GridWindow
- *
- ***********************************************************************/
-
-
-
-GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* pParent, bool bCutValues )
-:   ModalDialog( pParent, "GridDialog", "modules/scanner/ui/griddialog.ui" ),
-    m_aGridArea( 50, 15, 100, 100 ),
-    m_pXValues( pXValues ),
-    m_pOrigYValues( pYValues ),
-    m_nValues( nValues ),
-    m_pNewYValues( NULL ),
-    m_bCutValues( bCutValues ),
-    m_aHandles(),
-    m_nDragIndex( 0xffffffff ),
-    m_aMarkerBitmap( FixedImage::loadThemeImage("extensions/source/scanner/handle.png").GetBitmapEx() )
+GridWindow::GridWindow(Window* pParent)
+    : Window(pParent, 0)
+    , m_aGridArea(50, 15, 100, 100)
+    , m_pXValues(NULL)
+    , m_pOrigYValues(NULL)
+    , m_nValues(0)
+    , m_pNewYValues(NULL)
+    , m_bCutValues(false)
+    , m_aHandles()
+    , m_nDragIndex(0xffffffff)
+    , m_aMarkerBitmap( FixedImage::loadThemeImage("extensions/source/scanner/handle.png").GetBitmapEx() )
 {
-    get(m_pOKButton, "ok");
-    get(m_pResetTypeBox, "resetTypeCombobox");
-    get(m_pResetButton, "resetButton");
+    SetMapMode(MapMode(MAP_PIXEL));
+}
 
-    m_pResetTypeBox->SelectEntryPos( 0 );
+void GridWindow::Init(double* pXValues, double* pYValues, int nValues, bool bCutValues)
+{
+    m_pXValues = pXValues;
+    m_pOrigYValues = pYValues;
+    m_nValues = nValues;
+    m_bCutValues = bCutValues;
 
-    m_pResetButton->SetClickHdl( LINK( this, GridWindow, ClickButtonHdl ) );
+    SetSizePixel(GetOptimalSize());
+    onResize();
 
-    SetMapMode( MapMode( MAP_PIXEL ) );
-    Size aSize = GetOutputSizePixel();
-    Size aBtnSize = m_pOKButton->GetOutputSizePixel();
-    m_aGridArea.setWidth( aSize.Width() - aBtnSize.Width() - 80 );
-    m_aGridArea.setHeight( aSize.Height() - 40 );
-
-    if( m_pOrigYValues && m_nValues )
+    if (m_pOrigYValues && m_nValues)
     {
         m_pNewYValues = new double[ m_nValues ];
         memcpy( m_pNewYValues, m_pOrigYValues, sizeof( double ) * m_nValues );
@@ -87,6 +188,37 @@ GridWindow::GridWindow(double* pXValues, double* pYValues, int nValues, Window* 
     m_BmOffY = sal_uInt16(m_aMarkerBitmap.GetSizePixel().Height() >> 1);
     m_aHandles.push_back(impHandle(transform(findMinX(), findMinY()), m_BmOffX, m_BmOffY));
     m_aHandles.push_back(impHandle(transform(findMaxX(), findMaxY()), m_BmOffX, m_BmOffY));
+}
+
+void GridWindow::Resize()
+{
+    onResize();
+}
+
+void GridWindow::onResize()
+{
+    Size aSize = GetSizePixel();
+    m_aGridArea.setWidth( aSize.Width() - 80 );
+    m_aGridArea.setHeight( aSize.Height() - 40 );
+}
+
+Size GridWindow::GetOptimalSize() const
+{
+    return LogicToPixel(Size(240, 200), MAP_APPFONT);
+}
+
+GridDialog::GridDialog(double* pXValues, double* pYValues, int nValues, Window* pParent, bool bCutValues )
+    : ModalDialog(pParent, "GridDialog", "modules/scanner/ui/griddialog.ui")
+{
+    get(m_pOKButton, "ok");
+    get(m_pResetTypeBox, "resetTypeCombobox");
+    get(m_pResetButton, "resetButton");
+    get(m_pGridWindow, "gridwindow");
+    m_pGridWindow->Init(pXValues, pYValues, nValues, bCutValues);
+
+    m_pResetTypeBox->SelectEntryPos( 0 );
+
+    m_pResetButton->SetClickHdl( LINK( this, GridDialog, ClickButtonHdl ) );
 }
 
 GridWindow::~GridWindow()
@@ -104,8 +236,6 @@ double GridWindow::findMinX()
             fMin = m_pXValues[ i ];
     return fMin;
 }
-
-
 
 double GridWindow::findMinY()
 {
@@ -183,22 +313,16 @@ Point GridWindow::transform( double x, double y )
     return aRet;
 }
 
-
-
 void GridWindow::transform( const Point& rOriginal, double& x, double& y )
 {
     x = ( rOriginal.X() - m_aGridArea.Left() ) * (m_fMaxX - m_fMinX) / (double)m_aGridArea.GetWidth() + m_fMinX;
     y = ( m_aGridArea.Bottom() - rOriginal.Y() ) * (m_fMaxY - m_fMinY) / (double)m_aGridArea.GetHeight() + m_fMinY;
 }
 
-
-
 void GridWindow::drawLine( double x1, double y1, double x2, double y2 )
 {
     DrawLine( transform( x1, y1 ), transform( x2, y2 ) );
 }
-
-
 
 void GridWindow::computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut )
 {
@@ -298,9 +422,12 @@ double GridWindow::interpolate(
     return ret;
 }
 
+void GridDialog::setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY)
+{
+    m_pGridWindow->setBoundings(fMinX, fMinY, fMaxX, fMaxY);
+}
 
-
-void GridWindow::setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY )
+void GridWindow::setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY)
 {
     m_fMinX = fMinX;
     m_fMinY = fMinY;
@@ -310,8 +437,6 @@ void GridWindow::setBoundings( double fMinX, double fMinY, double fMaxX, double 
     computeChunk( m_fMinX, m_fMaxX, m_fChunkX, m_fMinChunkX );
     computeChunk( m_fMinY, m_fMaxY, m_fChunkY, m_fMinChunkY );
 }
-
-
 
 void GridWindow::drawGrid()
 {
@@ -351,8 +476,6 @@ void GridWindow::drawGrid()
     drawLine( m_fMaxX, m_fMinY, m_fMaxX, m_fMaxY );
 }
 
-
-
 void GridWindow::drawOriginal()
 {
     if( m_nValues && m_pXValues && m_pOrigYValues )
@@ -365,8 +488,6 @@ void GridWindow::drawOriginal()
         }
     }
 }
-
-
 
 void GridWindow::drawNew()
 {
@@ -383,8 +504,6 @@ void GridWindow::drawNew()
     }
 }
 
-
-
 void GridWindow::drawHandles()
 {
     for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
@@ -393,18 +512,14 @@ void GridWindow::drawHandles()
     }
 }
 
-
-
 void GridWindow::Paint( const Rectangle& rRect )
 {
-    ModalDialog::Paint( rRect );
+    Window::Paint(rRect);
     drawGrid();
     drawOriginal();
     drawNew();
     drawHandles();
 }
-
-
 
 void GridWindow::MouseMove( const MouseEvent& rEvt )
 {
@@ -436,7 +551,7 @@ void GridWindow::MouseMove( const MouseEvent& rEvt )
         }
     }
 
-    ModalDialog::MouseMove( rEvt );
+    Window::MouseMove( rEvt );
 }
 
 void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
@@ -452,7 +567,7 @@ void GridWindow::MouseButtonUp( const MouseEvent& rEvt )
         }
     }
 
-    ModalDialog::MouseButtonUp( rEvt );
+    Window::MouseButtonUp( rEvt );
 }
 
 void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
@@ -502,81 +617,95 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
         Paint( m_aGridArea );
     }
 
-    ModalDialog::MouseButtonDown( rEvt );
+    Window::MouseButtonDown( rEvt );
 }
 
-IMPL_LINK( GridWindow, ClickButtonHdl, Button*, pButton )
+void GridWindow::ChangeMode(int nType)
 {
-    if( pButton == m_pResetButton )
+    switch( nType )
+    {
+        case LINEAR_ASCENDING:
+        {
+            for( int i = 0; i < m_nValues; i++ )
+            {
+                m_pNewYValues[ i ] = m_fMinY + (m_fMaxY-m_fMinY)/(m_fMaxX-m_fMinX)*(m_pXValues[i]-m_fMinX);
+            }
+        }
+        break;
+        case LINEAR_DESCENDING:
+        {
+            for( int i = 0; i < m_nValues; i++ )
+            {
+                m_pNewYValues[ i ] = m_fMaxY - (m_fMaxY-m_fMinY)/(m_fMaxX-m_fMinX)*(m_pXValues[i]-m_fMinX);
+            }
+        }
+        break;
+        case RESET:
+        {
+            if( m_pOrigYValues && m_pNewYValues && m_nValues )
+                memcpy( m_pNewYValues, m_pOrigYValues, m_nValues*sizeof(double) );
+        }
+        break;
+        case EXPONENTIAL:
+        {
+            for( int i = 0; i < m_nValues; i++ )
+            {
+                m_pNewYValues[ i ] = m_fMinY + (m_fMaxY-m_fMinY)*(std::exp((m_pXValues[i]-m_fMinX)/(m_fMaxX-m_fMinX))-1.0)/(M_E-1.0);
+            }
+        }
+        break;
+
+        default:
+            break;
+    }
+
+    if (m_pNewYValues)
+    {
+        for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
+        {
+            // find nearest xvalue
+            double x, y;
+            transform( m_aHandles[i].maPos, x, y );
+            int nIndex = 0;
+            double delta = std::fabs( x-m_pXValues[0] );
+            for( int n = 1; n < m_nValues; n++ )
+            {
+                if( delta > std::fabs( x - m_pXValues[ n ] ) )
+                {
+                    delta = std::fabs( x - m_pXValues[ n ] );
+                    nIndex = n;
+                }
+            }
+            if( 0 == i )
+                m_aHandles[i].maPos = transform( m_fMinX, m_pNewYValues[ nIndex ] );
+            else if( m_aHandles.size() - 1L == i )
+                m_aHandles[i].maPos = transform( m_fMaxX, m_pNewYValues[ nIndex ] );
+            else
+                m_aHandles[i].maPos = transform( m_pXValues[ nIndex ], m_pNewYValues[ nIndex ] );
+        }
+    }
+
+    Invalidate();
+}
+
+IMPL_LINK( GridDialog, ClickButtonHdl, Button*, pButton )
+{
+    if (pButton == m_pResetButton)
     {
         int nType = m_pResetTypeBox->GetSelectEntryPos();
-        switch( nType )
-        {
-            case LINEAR_ASCENDING:
-            {
-                for( int i = 0; i < m_nValues; i++ )
-                {
-                    m_pNewYValues[ i ] = m_fMinY + (m_fMaxY-m_fMinY)/(m_fMaxX-m_fMinX)*(m_pXValues[i]-m_fMinX);
-                }
-            }
-            break;
-            case LINEAR_DESCENDING:
-            {
-                for( int i = 0; i < m_nValues; i++ )
-                {
-                    m_pNewYValues[ i ] = m_fMaxY - (m_fMaxY-m_fMinY)/(m_fMaxX-m_fMinX)*(m_pXValues[i]-m_fMinX);
-                }
-            }
-            break;
-            case RESET:
-            {
-                if( m_pOrigYValues && m_pNewYValues && m_nValues )
-                    memcpy( m_pNewYValues, m_pOrigYValues, m_nValues*sizeof(double) );
-            }
-            break;
-            case EXPONENTIAL:
-            {
-                for( int i = 0; i < m_nValues; i++ )
-                {
-                    m_pNewYValues[ i ] = m_fMinY + (m_fMaxY-m_fMinY)*(std::exp((m_pXValues[i]-m_fMinX)/(m_fMaxX-m_fMinX))-1.0)/(M_E-1.0);
-                }
-            }
-            break;
-
-            default:
-                break;
-        }
-
-        if (m_pNewYValues)
-        {
-            for(sal_uInt32 i(0L); i < m_aHandles.size(); i++)
-            {
-                // find nearest xvalue
-                double x, y;
-                transform( m_aHandles[i].maPos, x, y );
-                int nIndex = 0;
-                double delta = std::fabs( x-m_pXValues[0] );
-                for( int n = 1; n < m_nValues; n++ )
-                {
-                    if( delta > std::fabs( x - m_pXValues[ n ] ) )
-                    {
-                        delta = std::fabs( x - m_pXValues[ n ] );
-                        nIndex = n;
-                    }
-                }
-                if( 0 == i )
-                    m_aHandles[i].maPos = transform( m_fMinX, m_pNewYValues[ nIndex ] );
-                else if( m_aHandles.size() - 1L == i )
-                    m_aHandles[i].maPos = transform( m_fMaxX, m_pNewYValues[ nIndex ] );
-                else
-                    m_aHandles[i].maPos = transform( m_pXValues[ nIndex ], m_pNewYValues[ nIndex ] );
-            }
-        }
-
-        Invalidate( m_aGridArea );
-        Paint(Rectangle());
+        m_pGridWindow->ChangeMode(nType);
     }
     return 0;
+}
+
+double* GridDialog::getNewYValues()
+{
+    return m_pGridWindow->getNewYValues();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeGridWindow(Window *pParent, VclBuilder::stringmap &)
+{
+    return new GridWindow(pParent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
