@@ -1184,8 +1184,6 @@ namespace
     //  CntntType --
     //          0x2000 = Paragraph anchored frame
     //          0x2001 = frame anchored at character, which should be moved
-    //          0x1000 = Redline Mark
-    //          0x1001 = Redline Point
     //          0x0800 = Crsr from the CrsrShell Mark
     //          0x0801 = Crsr from the CrsrShell Point
     //          0x0400 = UnoCrsr Mark
@@ -1511,34 +1509,6 @@ void _SaveCntntIdx(SwDoc* pDoc,
 {
     // 1. Bookmarks
     _SwSaveTypeCountContent aSave;
-    // 2. Redlines
-    aSave.SetTypeAndCount( 0x1000, 0 );
-    const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
-    for( ; aSave.GetCount() < rRedlTbl.size(); aSave.IncCount() )
-    {
-        const SwRangeRedline* pRdl = rRedlTbl[ aSave.GetCount() ];
-        int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
-        int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
-                                          nPointPos;
-        // #i59534: We have to store the positions inside the same node before the insert position
-        // and the one at the insert position if the corresponding Point/Mark position is before
-        // the insert position.
-        if( nPointPos == BEFORE_SAME_NODE ||
-            ( nPointPos == SAME_POSITION && nMarkPos < SAME_POSITION ) )
-        {
-            aSave.SetContent( pRdl->GetPoint()->nContent.GetIndex() );
-            aSave.IncType();
-            aSave.Add( rSaveArr );
-            aSave.DecType();
-        }
-        if( pRdl->HasMark() && ( nMarkPos == BEFORE_SAME_NODE ||
-            ( nMarkPos == SAME_POSITION && nPointPos < SAME_POSITION ) ) )
-        {
-            aSave.SetContent( pRdl->GetMark()->nContent.GetIndex() );
-            aSave.Add( rSaveArr );
-        }
-    }
-
     // 4. Paragraph anchored objects
     {
         SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
@@ -1687,7 +1657,6 @@ void _RestoreCntntIdx(SwDoc* pDoc,
     bool bAuto)
 {
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
-    const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     sal_uInt16 n = 0;
     while( n < rSaveArr.size() )
@@ -1696,12 +1665,6 @@ void _RestoreCntntIdx(SwDoc* pDoc,
         SwPosition* pPos = 0;
         switch( aSave.GetType() )
         {
-            case 0x1001:
-                pPos = (SwPosition*)rRedlTbl[ aSave.GetCount() ]->GetPoint();
-                break;
-            case 0x1000:
-                pPos = (SwPosition*)rRedlTbl[ aSave.GetCount() ]->GetMark();
-                break;
             case 0x2000:
                 {
                     SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
@@ -1845,12 +1808,6 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
             SwPosition* pPos = 0;
             switch( aSave.GetType() )
             {
-            case 0x1001:
-                pPos = (SwPosition*)rRedlTbl[ aSave.GetCount() ]->GetPoint();
-                break;
-            case 0x1000:
-                pPos = (SwPosition*)rRedlTbl[ aSave.GetCount() ]->GetMark();
-                break;
             case 0x2000:
             case 0x2001:
                 {
