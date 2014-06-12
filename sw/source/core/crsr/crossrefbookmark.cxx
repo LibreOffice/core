@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstdlib>
+
 #include <IDocumentMarkAccess.hxx>
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
@@ -59,7 +63,7 @@ namespace sw { namespace mark
         OSL_PRECOND(false,
             "<sw::mark::CrossRefBookmark::GetOtherMarkPos(..)>"
             " - this should never be called!");
-        abort();
+        for (;;) { std::abort(); } // avoid "must return a value" warnings
     }
 
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
