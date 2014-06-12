@@ -1054,8 +1054,8 @@ DECLARE_RTFIMPORT_TEST(testFdo61909, "fdo61909.rtf")
     uno::Reference<text::XTextRange> xTextRange = getRun(getParagraph(1), 1);
     // Was the Writer default font.
     CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xTextRange, "CharFontName"));
-    // Was 0x008000.
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<sal_uInt32>(xTextRange, "CharBackColor"));
+    // It is white (0xFFFFFF) in document
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0xFFFFFF), getProperty<sal_uInt32>(xTextRange, "CharBackColor"));
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo62288, "fdo62288.rtf")
