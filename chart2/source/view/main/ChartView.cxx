@@ -167,17 +167,19 @@ public:
     virtual void contextDestroyed() SAL_OVERRIDE;
 private:
     ChartView* mpView;
+    bool mbContextDestroyed;
 };
 
 GL2DRenderer::GL2DRenderer(ChartView* pView):
-    mpView(pView)
+    mpView(pView),
+    mbContextDestroyed(false)
 {
 }
 
 GL2DRenderer::~GL2DRenderer()
 {
     OpenGLWindow* pWindow = mpView->mrChartModel.getOpenGLWindow();
-    if(pWindow)
+    if(!mbContextDestroyed &&pWindow)
         pWindow->setRenderer(NULL);
 }
 
@@ -200,6 +202,7 @@ void GL2DRenderer::scroll(long )
 
 void GL2DRenderer::contextDestroyed()
 {
+    mbContextDestroyed = true;
 }
 
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
