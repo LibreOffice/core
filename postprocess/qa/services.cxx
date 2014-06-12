@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <vector>
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -36,6 +37,25 @@ public:
 
 void ServicesTest::test()
 {
+    std::vector<OUString> blacklist;
+#if defined WNT
+    // On Windows, blacklist the com.sun.star.report.ReportDefinition service,
+    // as its reportdesign::OReportDefinition implementation (in
+    // reportdesign/source/core/api/ReportDefinition.cxx) spawns a thread that
+    // forever blocks in SendMessageW when no VCL event loop is running
+    // (reportdesign::<anon>::FactoryLoader::execute ->
+    // framework::Desktop::findFrame -> framework::TaskCreator::createTask ->
+    // <anon>::TaskCreatorService::createInstanceWithArguments ->
+    // <anon>::TaskCreatorService::impls_createContainerWindow ->
+    // <anon>::VCLXToolkit::createWindow ->
+    // <anon>::VCLXToolkit::ImplCreateWindow ->
+    // <anon>::VCLXToolkit::ImplCreateWindow -> WorkWindow::WorkWindow ->
+    // WorkWindow::ImplInit -> ImplBorderWindow::ImplBorderWindow ->
+    // ImplBorderWindow::ImplInit -> Window::ImplInit ->
+    // WinSalInstance::CreateFrame -> ImplSendMessage -> SendMessageW):
+    blacklist.push_back("com.sun.star.report.ReportDefinition");
+#endif
+
     Reference< XHierarchicalNameAccess > xTypeManager(
             m_xContext->getValueByName(
                 "/singletons/com.sun.star.reflection.theTypeDescriptionManager"),
@@ -44,6 +64,11 @@ void ServicesTest::test()
     std::vector< css::uno::Reference<css::lang::XComponent> > comps;
     for (sal_Int32 i = 0; i < s.getLength(); i++)
     {
+        if (std::find(blacklist.begin(), blacklist.end(), s[i])
+            != blacklist.end())
+        {
+            continue;
+        }
         if (!xTypeManager->hasByHierarchicalName(s[i]))
         {
             SAL_WARN(
