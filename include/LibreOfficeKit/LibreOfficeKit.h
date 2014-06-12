@@ -18,6 +18,13 @@ extern "C"
 typedef struct _LibreOfficeKit LibreOfficeKit;
 typedef struct _LibreOfficeKitDocument LibreOfficeKitDocument;
 
+// Do we have an extended member in this struct ?
+#define LIBREOFFICEKIT_HAS_MEMBER(strct,member,nSize) \
+    ((((int)((unsigned char *)&((strct *) 0)->member) +  \
+      (int)sizeof ((strct *) 0)->member)) <= (nSize))
+
+#define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKit,member,(pKit)->nSize)
+
 struct _LibreOfficeKit
 {
   int  nSize;
@@ -27,6 +34,8 @@ struct _LibreOfficeKit
   LibreOfficeKitDocument* (*documentLoad)  (LibreOfficeKit *pThis, const char *pURL);
   char*                   (*getError)      (LibreOfficeKit *pThis);
 };
+
+#define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocument,member,(pDoc)->nSize)
 
 struct _LibreOfficeKitDocument
 {

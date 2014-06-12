@@ -45,11 +45,12 @@ public:
     inline bool saveAsWithOptions(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
     {
         // available since LibreOffice 4.3
-        if (!mpDoc->saveAsWithOptions)
+        if (!LIBREOFFICEKIT_DOCUMENT_HAS(mpDoc, saveAsWithOptions))
             return false;
 
         return mpDoc->saveAsWithOptions(mpDoc, pUrl, pFormat, pFilterOptions);
     }
+    inline LibreOfficeKitDocument *get() { return mpDoc; }
 };
 
 class Office
