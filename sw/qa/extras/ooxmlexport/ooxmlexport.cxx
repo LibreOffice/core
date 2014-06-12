@@ -2373,15 +2373,33 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73550, "fdo73550.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testPageRelSize, "pagerelsize.docx")
 {
-    // First textframe: width is relative from page, but not height.
-    uno::Reference<drawing::XShape> xTextFrame = getTextFrameByName("Frame1");
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    if (xIndexAccess->getCount())
+    {
+        // TODO TextBox: remove this when TextBox is enabled by default
+        // First textframe: width is relative from page, but not height.
+        uno::Reference<drawing::XShape> xTextFrame = getTextFrameByName("Frame1");
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
 
-    // Second textframe: height is relative from page, but not height.
-    xTextFrame = getTextFrameByName("Text Box 2");
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
-    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
+        // Second textframe: height is relative from page, but not height.
+        xTextFrame = getTextFrameByName("Text Box 2");
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
+    }
+    else
+    {
+        // First shape: width is relative from page, but not height.
+        uno::Reference<drawing::XShape> xShape = getShape(1);
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "RelativeWidthRelation"));
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xShape, "RelativeHeightRelation"));
+
+        // Second shape: height is relative from page, but not height.
+        xShape = getShape(2);
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "RelativeHeightRelation"));
+        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xShape, "RelativeWidthRelation"));
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRelSizeRound, "rel-size-round.docx")
