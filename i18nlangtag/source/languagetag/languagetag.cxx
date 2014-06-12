@@ -2720,6 +2720,20 @@ bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicali
                 const lt_string_t* pPrivate = lt_tag_get_privateuse( aVar.mpLangtag);
                 if (pPrivate && lt_string_length( pPrivate) > 0)
                     bValid = false;
+                else
+                {
+                    const lt_lang_t* pLangT = lt_tag_get_language( aVar.mpLangtag);
+                    if (pLangT)
+                    {
+                        const char* pLang = lt_lang_get_tag( pLangT);
+                        if (pLang && strcmp( pLang, I18NLANGTAG_QLT) == 0)
+                        {
+                            // Disallow 'qlt' privateuse code to prevent
+                            // confusion with our internal usage.
+                            bValid = false;
+                        }
+                    }
+                }
             }
             if (o_pCanonicalized)
                 *o_pCanonicalized = OUString::createFromAscii( pTag);
