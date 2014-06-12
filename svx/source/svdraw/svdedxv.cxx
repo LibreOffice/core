@@ -1275,13 +1275,19 @@ bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
         bool bPostIt=bSelMode;
         if (!bPostIt) {
             Point aPt(rMEvt.GetPosPixel());
-            if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
-            else if (pTextEditWin!=NULL) aPt=pTextEditWin->PixelToLogic(aPt);
+            if (pWin)
+                aPt=pWin->PixelToLogic(aPt);
+            else if (pTextEditWin)
+                aPt=pTextEditWin->PixelToLogic(aPt);
             bPostIt=IsTextEditHit(aPt,nHitTolLog);
         }
         if (bPostIt) {
             Point aPixPos(rMEvt.GetPosPixel());
-            Rectangle aR(pWin->LogicToPixel(pTextEditOutlinerView->GetOutputArea()));
+            Rectangle aR(pTextEditOutlinerView->GetOutputArea());
+            if (pWin)
+                aR = pWin->LogicToPixel(aR);
+            else if (pTextEditWin)
+                aR = pTextEditWin->LogicToPixel(aR);
             if (aPixPos.X()<aR.Left  ()) aPixPos.X()=aR.Left  ();
             if (aPixPos.X()>aR.Right ()) aPixPos.X()=aR.Right ();
             if (aPixPos.Y()<aR.Top   ()) aPixPos.Y()=aR.Top   ();
