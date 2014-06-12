@@ -1793,7 +1793,6 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
     sal_Int32 nChkLen)
 {
     const SwDoc* pDoc = rNd.GetDoc();
-    const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     const SwFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
 
@@ -2058,7 +2057,7 @@ void CntntIdxStoreImpl::RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 n
 void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
 {
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
-    for( long int nIdx = 0 ; nIdx < rRedlTbl.size(); ++nIdx )
+    for( long int nIdx = 0 ; static_cast<unsigned long int>(nIdx) < rRedlTbl.size(); ++nIdx )
     {
         const SwRangeRedline* pRdl = rRedlTbl[ nIdx ];
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
