@@ -20,14 +20,14 @@ typedef struct _LibreOfficeKitDocument LibreOfficeKitDocument;
 
 // Do we have an extended member in this struct ?
 #define LIBREOFFICEKIT_HAS_MEMBER(strct,member,nSize) \
-    ((((int)((unsigned char *)&((strct *) 0)->member) +  \
-      (int)sizeof ((strct *) 0)->member)) <= (nSize))
+    ((((size_t)((unsigned char *)&((strct *) 0)->member) +  \
+      sizeof ((strct *) 0)->member)) <= (nSize))
 
 #define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKit,member,(pKit)->nSize)
 
 struct _LibreOfficeKit
 {
-  int  nSize;
+  size_t  nSize;
 
   void                    (*destroy)       (LibreOfficeKit *pThis);
   int                     (*initialize)    (LibreOfficeKit *pThis, const char *pInstallPath);
@@ -39,7 +39,7 @@ struct _LibreOfficeKit
 
 struct _LibreOfficeKitDocument
 {
-  int  nSize;
+  size_t  nSize;
 
   void (*destroy)   (LibreOfficeKitDocument* pThis);
   int (*saveAs)     (LibreOfficeKitDocument* pThis,
