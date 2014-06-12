@@ -147,20 +147,24 @@ cpyBootstrapSocketPath(sal_Char *name, size_t len)
 
     if (rtl_bootstrap_get(pName, &pValue, NULL))
     {
-        rtl_String *pStrValue = 0;
         if (pValue && pValue->length > 0)
         {
+            rtl_String *pStrValue = 0;
+
             rtl_uString2String(&pStrValue, pValue->buffer,
                                pValue->length, RTL_TEXTENCODING_UTF8,
                                OUSTRING_TO_OSTRING_CVTFLAGS);
-            if (pStrValue && pStrValue->length > 0)
+            if (pStrValue)
             {
-                size_t nCopy = (len-1 < (size_t)pStrValue->length) ? len-1 : (size_t)pStrValue->length;
-                strncpy (name, pStrValue->buffer, nCopy);
-                name[nCopy] = '\0';
-                bRet = (size_t)pStrValue->length < len;
+                if (pStrValue->length > 0)
+                {
+                    size_t nCopy = (len-1 < (size_t)pStrValue->length) ? len-1 : (size_t)pStrValue->length;
+                    strncpy (name, pStrValue->buffer, nCopy);
+                    name[nCopy] = '\0';
+                    bRet = (size_t)pStrValue->length < len;
+                }
+                rtl_string_release(pStrValue);
             }
-            rtl_string_release(pStrValue);
         }
         rtl_uString_release(pName);
     }
