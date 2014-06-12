@@ -918,77 +918,78 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 
         case sw::Frame::eOle:
         {
-#ifdef OLE_PREVIEW_AS_EMF
             const SwNode *pNode = rItem.maFly.GetContent();
             const SwOLENode *pNd = pNode ? pNode->GetOLENode() : 0;
             OSL_ENSURE(pNd, "Impossible");
-            if (!rWrt.bWrtWW8)
+            if (pNd)
             {
-                SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
-                OSL_ENSURE( pOleNd, " Wer hat den OleNode versteckt ?" );
-                SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
-                uno::Reference < embed::XEmbeddedObject > rObj(  rSObj.GetOleRef() );
-
-                comphelper::EmbeddedObjectContainer aCnt( pOleNd->GetDoc()->GetDocStorage() );
-
-                SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( rObj ) );
-                OSL_ENSURE( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
-                if ( pGraphicStream && !pGraphicStream->GetError() )
+#ifdef OLE_PREVIEW_AS_EMF
+                if (!rWrt.bWrtWW8)
                 {
-                    Graphic aGr;
-                    GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-                    if( rGF.ImportGraphic( aGr, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                    SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
+                    SwOLEObj& rSObj = pOleNd->GetOLEObj();
+                    uno::Reference < embed::XEmbeddedObject > rObj(  rSObj.GetOleRef() );
+
+                    comphelper::EmbeddedObjectContainer aCnt( pOleNd->GetDoc()->GetDocStorage() );
+
+                    SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( rObj ) );
+                    OSL_ENSURE( pGraphicStream && !pGraphicStream->GetError(), "No graphic stream available!" );
+                    if ( pGraphicStream && !pGraphicStream->GetError() )
                     {
-                        //TODO/LATER: do we really want to use GDIMetafile?!
-                        GDIMetaFile aMtf;
-                        aMtf = aGr.GetGDIMetaFile();
-                        aMtf.WindStart();
-                        aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
-                            Size(2880, 2880));
-                        WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
-                            pNd->GetpSwAttrSet());
-                        WriteWindowMetafileBits(rStrm, aMtf);
+                        Graphic aGr;
+                        GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
+                        if( rGF.ImportGraphic( aGr, OUString(), *pGraphicStream, GRFILTER_FORMAT_DONTKNOW ) == GRFILTER_OK )
+                        {
+                            //TODO/LATER: do we really want to use GDIMetafile?!
+                            GDIMetaFile aMtf;
+                            aMtf = aGr.GetGDIMetaFile();
+                            aMtf.WindStart();
+                            aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
+                                Size(2880, 2880));
+                            WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
+                                pNd->GetpSwAttrSet());
+                            WriteWindowMetafileBits(rStrm, aMtf);
+                        }
                     }
+                    else
+                        delete pGraphicStream;
                 }
                 else
-                    delete pGraphicStream;
-            }
-            else
-            {
-                //Convert this ole2 preview in ww8+ to an EMF for better unicode
-                //support (note that at this moment this breaks StarSymbol
-                //using graphics because I need to embed starsymbol in exported
-                //documents.
-                WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
-                    pNd->GetpSwAttrSet());
-                SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
-                aInlineEscher.WriteOLEFlyFrame(rFly.GetFrmFmt(), 0x401);
-                aInlineEscher.WritePictures();
-            }
+                {
+                    //Convert this ole2 preview in ww8+ to an EMF for better unicode
+                    //support (note that at this moment this breaks StarSymbol
+                    //using graphics because I need to embed starsymbol in exported
+                    //documents.
+                    WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
+                        pNd->GetpSwAttrSet());
+                    SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+                    aInlineEscher.WriteOLEFlyFrame(rFly.GetFrmFmt(), 0x401);
+                    aInlineEscher.WritePictures();
+                }
 #else
-            // cast away const
-            SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
-            OSL_ENSURE( pOleNd, " Wer hat den OleNode versteckt ?" );
-            SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
+                // cast away const
+                SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
+                SwOLEObj& rSObj= pOleNd->GetOLEObj();
 
-            // TODO/LATER: do we need to load object?
-            Graphic* pGr = SdrOle2Obj::GetGraphicFromObject( pOleNd->GetDoc()->GetDocStorage(), rObj );
+                // TODO/LATER: do we need to load object?
+                Graphic* pGr = SdrOle2Obj::GetGraphicFromObject( pOleNd->GetDoc()->GetDocStorage(), rObj );
 
-            //TODO/LATER: do we really want to use GDIMetafile?!
-            GDIMetaFile aMtf;
-            if ( pGr )
-                aMtf = pGr->GetGDIMetaFile();
+                //TODO/LATER: do we really want to use GDIMetafile?!
+                GDIMetaFile aMtf;
+                if ( pGr )
+                    aMtf = pGr->GetGDIMetaFile();
 
-            Size aS(aMtf.GetPrefSize());
-            aMtf.WindStart();
-            aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
-                Size(2880, 2880));
+                Size aS(aMtf.GetPrefSize());
+                aMtf.WindStart();
+                aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
+                    Size(2880, 2880));
 
-            WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
-                pNd->GetpSwAttrSet());
-            WriteWindowMetafileBits(rStrm, aMtf);
-            delete pGr;
+                WritePICFHeader(rStrm, rFly, 8, nWidth, nHeight,
+                    pNd->GetpSwAttrSet());
+                WriteWindowMetafileBits(rStrm, aMtf);
+                delete pGr;
 #endif
+            }
         }
         break;
         case sw::Frame::eDrawing:
