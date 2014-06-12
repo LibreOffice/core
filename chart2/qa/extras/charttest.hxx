@@ -301,7 +301,6 @@ std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Re
     Reference<chart2::XDataSeriesContainer> xDSCont(xCT, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDSCont.is());
     Sequence<uno::Reference<chart2::XDataSeries> > aDataSeriesSeq = xDSCont->getDataSeries();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aDataSeriesSeq.getLength());
 
     std::vector<uno::Sequence<uno::Any> > aRet;
     for (sal_Int32 i = 0; i < aDataSeriesSeq.getLength(); ++i)
