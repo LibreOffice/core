@@ -64,7 +64,6 @@ writerfilter_GEN_ooxml_Factory_cxx=$(writerfilter_WORK)/OOXMLFactory_generated.c
 writerfilter_GEN_ooxml_Factory_hxx=$(writerfilter_WORK)/OOXMLFactory_generated.hxx
 writerfilter_GEN_ooxml_FastTokens_hxx=$(writerfilter_WORK)/ooxml/OOXMLFastTokens.hxx
 writerfilter_GEN_ooxml_GperfFastToken_hxx=$(writerfilter_WORK)/gperffasttoken.hxx
-writerfilter_GEN_ooxml_Model_analyzed=$(writerfilter_WORK)/ooxml/model_analyzed.xml
 writerfilter_GEN_ooxml_Model_processed=$(writerfilter_WORK)/model_preprocessed.xml
 writerfilter_GEN_ooxml_NamespaceIds_hxx=$(writerfilter_WORK)/ooxml/OOXMLnamespaceids.hxx
 writerfilter_GEN_ooxml_Namespacesmap_xsl=$(writerfilter_WORK)/namespacesmap.xsl
@@ -73,7 +72,6 @@ writerfilter_GEN_ooxml_QNameToStr_cxx=$(writerfilter_WORK)/ooxml/qnametostr.cxx
 writerfilter_GEN_ooxml_ResourceIds_hxx=$(writerfilter_WORK)/ooxml/resourceids.hxx
 writerfilter_GEN_ooxml_Token_xml=$(writerfilter_WORK)/token.xml
 writerfilter_SRC_model_NamespacePreprocess=$(writerfilter_SRC)/resourcemodel/namespace_preprocess.pl
-writerfilter_SRC_ooxml_Analyze_model_xsl=$(writerfilter_SRC)/ooxml/analyzemodel.xsl
 writerfilter_SRC_ooxml_FactoryTools_xsl=$(writerfilter_SRC)/ooxml/factorytools.xsl
 writerfilter_SRC_ooxml_FactoryValues_xsl=$(writerfilter_SRC)/ooxml/factory_values.xsl
 writerfilter_SRC_ooxml_FastTokens_py=$(writerfilter_SRC)/ooxml/fasttokens.py
@@ -104,10 +102,6 @@ $(writerfilter_GEN_ooxml_GperfFastToken_hxx) : $(writerfilter_SRC_ooxml_GperfFas
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,GPF,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_GperfFastTokenHandler_py) $(writerfilter_GEN_ooxml_Token_xml)) \
 	| tr -d '\r' | $(GPERF) -c -E -G -I  -LC++ -S1 -t  > $@
-
-$(writerfilter_GEN_ooxml_Model_analyzed) : $(writerfilter_SRC_ooxml_Analyze_model_xsl) $(writerfilter_SRC_ooxml_Model) | $(writerfilter_WORK)/ooxml/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $^) > $@
 
 $(writerfilter_GEN_ooxml_Model_processed) : $(writerfilter_GEN_ooxml_Namespacesmap_xsl) $(writerfilter_GEN_ooxml_Preprocess_xsl) $(writerfilter_SRC_ooxml_Model)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
