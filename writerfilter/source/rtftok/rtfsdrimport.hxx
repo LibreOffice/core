@@ -25,7 +25,8 @@ public:
     RTFSdrImport(RTFDocumentImpl& rImport, css::uno::Reference<css::lang::XComponent> const& xDstDoc);
     virtual ~RTFSdrImport();
 
-    void resolve(RTFShape& rShape, bool bClose);
+    enum ShapeOrPict { SHAPE, PICT };
+    void resolve(RTFShape& rShape, bool bClose, ShapeOrPict shapeOrPict);
     void close();
     void append(const OUString& aKey, const OUString& aValue);
     /// Append property on the current parent.
