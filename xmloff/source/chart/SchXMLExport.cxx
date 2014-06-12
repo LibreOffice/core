@@ -2588,7 +2588,6 @@ void SchXMLExportHelper_Impl::exportSeries(
 
     OUString aFirstXDomainRange;
     OUString aFirstYDomainRange;
-    bool modifyLabelRange = false;
 
     std::vector< XMLPropertyState > aPropertyStates;
 
@@ -2734,17 +2733,36 @@ void SchXMLExportHelper_Impl::exportSeries(
                                     // #i75297# allow empty series, export empty range to have all ranges on import
                                     mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_VALUES_CELL_RANGE_ADDRESS, OUString());
 
-                                if( xLabelSeq.is()) {
+                                if (xLabelSeq.is())
+                                {
+                                    // Check if the label is direct string value rather than a reference.
+                                    bool bHasString = false;
+                                    uno::Reference<beans::XPropertySet> xLSProp(xLabelSeq, uno::UNO_QUERY);
+                                    if (xLSProp.is())
+                                    {
+                                        try
+                                        {
+                                            xLSProp->getPropertyValue("HasStringLabel") >>= bHasString;
+                                        }
+                                        catch (const beans::UnknownPropertyException&) {}
+                                    }
+
                                     OUString aRange = xLabelSeq->getSourceRangeRepresentation();
-                                    if ( nSeriesIdx == 0 && aRange.equalsAscii("label 1"))
-                                        modifyLabelRange = true;
-                                    if (modifyLabelRange)
-                                        aRange = "label " + OUString::number(aRange.copy( OUString("label").getLength()).toInt32() - 1);
-                                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS,
-                                                           lcl_ConvertRange(
-                                                               aRange,
-                                                               xNewDoc ));
+
+                                    if (bHasString)
+                                    {
+                                        mrExport.AddAttribute(
+                                            XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS, aRange);
+                                    }
+                                    else
+                                    {
+                                        mrExport.AddAttribute(
+                                            XML_NAMESPACE_CHART, XML_LABEL_CELL_ADDRESS,
+                                                lcl_ConvertRange(
+                                                    xLabelSeq->getSourceRangeRepresentation(), xNewDoc));
+                                    }
                                 }
+
                                 if( xLabelSeq.is() || xValuesSeq.is() )
                                     aSeriesLabelValuesPair = tLabelValuesDataPair( xLabelSeq, xValuesSeq );
 
