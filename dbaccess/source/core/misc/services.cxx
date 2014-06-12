@@ -75,12 +75,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL dba_component_getFactory(
 {
     createRegistryInfo_DBA();
 
-    Reference< XInterface > xRet;
-    if (pServiceManager && pImplementationName)
-    {
-        xRet = ::dba::DbaModule::getInstance().getComponentFactory(
-            OUString::createFromAscii( pImplementationName ) );
-    }
+    Reference<XInterface> xRet(::dba::DbaModule::getInstance().getComponentFactory(
+        OUString::createFromAscii(pImplementationName)));
 
     if (xRet.is())
         xRet->acquire();
