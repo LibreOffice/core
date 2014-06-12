@@ -984,10 +984,6 @@ int RTFDocumentImpl::resolveChars(char ch)
 
         if (RTL_TEXTENCODING_MS_932 == m_aStates.top().nCurrentEncoding)
         {
-            // fdo#79384: Word will reject Shift-JIS following \loch
-            // but apparently OOo could read and (worse) write such documents
-            SAL_INFO_IF(m_aStates.top().eRunType != RTFParserState::DBCH,
-                "writerfilter.rtf", "invalid Shift-JIS without DBCH");
             unsigned char uch = ch;
             if ((uch >= 0x80 && uch <= 0x9F) || uch >= 0xE0)
             {
@@ -995,6 +991,9 @@ int RTFDocumentImpl::resolveChars(char ch)
                 Strm().ReadChar(ch);
                 if (m_aStates.top().nCharsToSkip == 0)
                 {
+                    // fdo#79384: Word will reject Shift-JIS following \loch
+                    // but apparently OOo could read and (worse) write such documents
+                    SAL_INFO_IF(m_aStates.top().eRunType != RTFParserState::DBCH, "writerfilter.rtf", "invalid Shift-JIS without DBCH");
                     assert(bUnicodeChecked);
                     aBuf.append(ch);
                 }
@@ -3557,6 +3556,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             return 0;
 
         m_nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(aRTFEncodings[i].codepage);
+        m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
     }
     break;
     case RTF_ANSICPG:
@@ -3567,6 +3567,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     break;
     case RTF_CPG:
         m_nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
+        m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
         break;
     case RTF_CF:
     {
