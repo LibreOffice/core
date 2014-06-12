@@ -19,7 +19,6 @@ $(eval $(call gb_Module_add_targets,extensions,\
 
 $(eval $(call gb_Module_add_l10n_targets,extensions,\
 	AllLangResTarget_abp \
-	AllLangResTarget_scn \
 	AllLangResTarget_upd \
 	UIConfig_sabpilot \
 	UIConfig_scanner \
