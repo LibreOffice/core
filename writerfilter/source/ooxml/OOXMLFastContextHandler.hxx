@@ -176,7 +176,7 @@ public:
     void setDefine(Id nDefine);
     Id getDefine() const { return mnDefine;}
 
-    OOXMLParserState::Pointer_t getParserState() const;
+    OOXMLParserState::Pointer_t getParserState() const { return mpParserState;}
 
     void sendTableDepth() const;
     void setHandle();
@@ -276,7 +276,7 @@ protected:
     (const OUString & rId);
     virtual void resolvePropertySetAttrs();
 
-    uno::Reference< uno::XComponentContext > getComponentContext();
+    uno::Reference< uno::XComponentContext > getComponentContext() { return m_xContext;}
 
     sal_uInt32 mnInstanceNumber;
 
@@ -304,7 +304,7 @@ public:
 
     virtual ResourceEnum_t getResource() const SAL_OVERRIDE { return STREAM; }
 
-    OOXMLPropertySet::Pointer_t getPropertySetAttrs() const;
+    OOXMLPropertySet::Pointer_t getPropertySetAttrs() const { return mpPropertySetAttrs;}
 
     virtual void newProperty(const Id & rId, OOXMLValue::Pointer_t pVal) SAL_OVERRIDE;
     virtual void sendProperty(Id nId);

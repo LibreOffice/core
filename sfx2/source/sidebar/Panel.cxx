@@ -160,10 +160,6 @@ bool Panel::HasIdPredicate (const ::rtl::OUString& rsId) const
 
 
 
-const ::rtl::OUString& Panel::GetId (void) const
-{
-    return msPanelId;
-}
 
 
 
@@ -212,10 +208,6 @@ void Panel::DataChanged (const DataChangedEvent& rEvent)
     SetBackground(Theme::GetPaint(Theme::Paint_PanelBackground).GetWallpaper());
 }
 
-Reference<ui::XSidebarPanel> Panel::GetPanelComponent (void) const
-{
-    return mxPanelComponent;
-}
 
 Reference<awt::XWindow> Panel::GetElementWindow (void)
 {

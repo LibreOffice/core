@@ -250,9 +250,5 @@ void SvxZoomSliderItem::AddSnappingPoint( sal_Int32 nNew )
     pValues[ nValues ] = nNew;
 }
 
-const com::sun::star::uno::Sequence < sal_Int32 >& SvxZoomSliderItem::GetSnappingPoints() const
-{
-    return maValues;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

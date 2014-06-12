@@ -311,7 +311,7 @@ public:
 
     void            Abort() { bAbort = true; }
 
-    const FilterErrorEx&    GetLastError() const;
+    const FilterErrorEx&    GetLastError() const { return *pErrorEx;}
     void                    ResetLastError();
 
     const Link      GetFilterCallback() const;

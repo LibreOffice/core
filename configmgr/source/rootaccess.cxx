@@ -106,9 +106,6 @@ OUString RootAccess::getAbsolutePathRepresentation() {
     return pathRepresentation_;
 }
 
-OUString RootAccess::getLocale() const {
-    return locale_;
-}
 
 
 void RootAccess::setAlive(bool b) {

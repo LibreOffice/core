@@ -199,10 +199,6 @@ SAXHelper::~SAXHelper() {
 //  xmlCleanupParser() ;
 }
 
-xmlNodePtr SAXHelper::getCurrentNode()
-{
-    return m_pParserCtxt->node;
-}
 
 void SAXHelper::setCurrentNode(const xmlNodePtr pNode)
 {
@@ -217,10 +213,6 @@ void SAXHelper::setCurrentNode(const xmlNodePtr pNode)
             = pNode;
 }
 
-xmlDocPtr SAXHelper::getDocument()
-{
-    return m_pParserCtxt->myDoc;
-}
 
 /**
  * XDocumentHandler -- start an xml document

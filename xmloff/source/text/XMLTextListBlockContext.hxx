@@ -78,8 +78,8 @@ public:
         ::com::sun::star::container::XIndexReplace >& GetNumRules() const
         { return mxNumRules; }
 
-    const OUString& GetListId() const;
-    const OUString& GetContinueListId() const;
+    const OUString& GetListId() const { return msListId;}
+    const OUString& GetContinueListId() const { return msContinueListId;}
 };
 
 

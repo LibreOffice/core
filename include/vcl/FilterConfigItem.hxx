@@ -76,7 +76,7 @@ public :
     void        WriteBool( const OUString& rKey, bool bValue );
     void        WriteInt32( const OUString& rKey, sal_Int32 nValue );
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetFilterData() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetFilterData() const { return aFilterData;}
 
     // GetStatusIndicator is returning the "StatusIndicator" property of the FilterData sequence
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator() const;

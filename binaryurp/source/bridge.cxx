@@ -105,7 +105,7 @@ public:
 
     ~AttachThread();
 
-    rtl::ByteSequence getTid() throw ();
+    rtl::ByteSequence getTid() throw () { return tid_;}
 
 private:
     uno_ThreadPool threadPool_;
@@ -124,9 +124,6 @@ AttachThread::~AttachThread() {
     uno_releaseIdFromCurrentThread();
 }
 
-rtl::ByteSequence AttachThread::getTid() throw () {
-    return tid_;
-}
 
 class PopOutgoingRequest: private boost::noncopyable {
 public:
@@ -347,21 +344,8 @@ void Bridge::terminate(bool final) {
     terminated_.set();
 }
 
-css::uno::Reference< css::connection::XConnection > Bridge::getConnection()
-    const
-{
-    return connection_;
-}
 
-css::uno::Reference< css::bridge::XInstanceProvider > Bridge::getProvider()
-    const
-{
-    return provider_;
-}
 
-css::uno::Mapping & Bridge::getCppToBinaryMapping() {
-    return cppToBinaryMapping_;
-}
 
 BinaryAny Bridge::mapCppToBinaryAny(css::uno::Any const & cppAny) {
     css::uno::Any in(cppAny);

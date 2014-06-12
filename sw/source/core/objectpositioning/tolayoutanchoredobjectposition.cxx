@@ -226,10 +226,4 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
     maRelPos = aRelPos;
 }
 
-/** calculated relative position for object position */
-Point SwToLayoutAnchoredObjectPosition::GetRelPos() const
-{
-    return maRelPos;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

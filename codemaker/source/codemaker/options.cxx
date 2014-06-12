@@ -31,10 +31,6 @@ Options::~Options()
 
 }
 
-const OString& Options::getProgramName() const
-{
-    return m_program;
-}
 
 bool Options::isValid(const OString& option) const
 {

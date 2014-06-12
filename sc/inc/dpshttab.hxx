@@ -62,10 +62,10 @@ public:
      */
     SC_DLLPUBLIC const ScRange& GetSourceRange() const;
     SC_DLLPUBLIC void SetRangeName(const OUString& rName);
-    SC_DLLPUBLIC const OUString& GetRangeName() const;
+    const OUString& GetRangeName() const { return maRangeName;}
     bool HasRangeName() const;
     void SetQueryParam(const ScQueryParam& rParam);
-    const ScQueryParam& GetQueryParam() const;
+    const ScQueryParam& GetQueryParam() const { return maQueryParam;}
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
     SC_DLLPUBLIC const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData) const;

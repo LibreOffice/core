@@ -136,7 +136,7 @@ public:
 
     void addRange( SvxUnoTextRangeBase* pNewRange );
     void removeRange( SvxUnoTextRangeBase* pOldRange );
-    const SvxUnoTextRangeBaseList& getRanges() const;
+    const SvxUnoTextRangeBaseList& getRanges() const { return maTextRanges;}
 
     void                    lock();
     void                    unlock();
@@ -264,10 +264,6 @@ void SvxTextEditSourceImpl::removeRange( SvxUnoTextRangeBase* pOldRange )
 
 
 
-const SvxUnoTextRangeBaseList& SvxTextEditSourceImpl::getRanges() const
-{
-    return maTextRanges;
-}
 
 
 

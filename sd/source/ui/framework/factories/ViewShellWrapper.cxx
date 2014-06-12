@@ -113,10 +113,6 @@ uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) th
 
 
 
-::boost::shared_ptr<ViewShell> ViewShellWrapper::GetViewShell (void)
-{
-    return mpViewShell;
-}
 
 
 

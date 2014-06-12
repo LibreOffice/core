@@ -62,7 +62,7 @@ protected:
         throw( ::com::sun::star::uno::Exception ) SAL_OVERRIDE;
 
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >  GetRefSizePropertySet() const;
+        ::com::sun::star::beans::XPropertySet >  GetRefSizePropertySet() const { return m_xRefSizePropSet;}
 
 private:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH

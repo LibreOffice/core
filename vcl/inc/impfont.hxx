@@ -174,7 +174,7 @@ public:
     int                 CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const;
     int                 GetCharCount() const { return mnCharCount;}
 
-    sal_uInt32          GetFirstChar() const;
+    sal_uInt32          GetFirstChar() const { return mpRangeCodes[0];}
     sal_uInt32          GetLastChar() const;
 
     sal_uInt32          GetNextChar( sal_uInt32 ) const;

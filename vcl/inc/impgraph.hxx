@@ -159,7 +159,7 @@ private:
     friend SvStream&    ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic );
 
     // SvgData support
-    const SvgDataPtr& getSvgData() const;
+    const SvgDataPtr& getSvgData() const { return maSvgData;}
 };
 
 #endif // INCLUDED_VCL_INC_IMPGRAPH_HXX

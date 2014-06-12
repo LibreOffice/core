@@ -246,7 +246,7 @@ protected:
                 ::com::sun::star::chart2::XCoordinateSystem > > & rCoordSys );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        GetComponentContext() const;
+        GetComponentContext() const { return m_xContext;}
 
     static void copyPropertiesFromOldToNewCoordianteSystem(
                     const ::com::sun::star::uno::Sequence<

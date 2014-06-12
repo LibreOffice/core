@@ -1380,10 +1380,6 @@ OUString ORptExport::implConvertNumber(sal_Int32 _nValue)
     return aBuffer.makeStringAndClear();
 }
 
-UniReference < XMLPropertySetMapper > ORptExport::GetCellStylePropertyMapper() const
-{
-    return m_xCellStylesPropertySetMapper;
-}
 
 SvXMLAutoStylePoolP* ORptExport::CreateAutoStylePool()
 {

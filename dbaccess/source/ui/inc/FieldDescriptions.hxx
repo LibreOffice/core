@@ -102,7 +102,7 @@ namespace dbaui
         sal_Int32                   GetIsNullable()         const;
         sal_Int32                   GetFormatKey()          const;
         SvxCellHorJustify           GetHorJustify()         const;
-        TOTypeInfoSP                getTypeInfo()           const;
+        TOTypeInfoSP                getTypeInfo()           const { return m_pType;}
         TOTypeInfoSP                getSpecialTypeInfo()    const;
         bool                    IsAutoIncrement()       const;
         bool                    IsPrimaryKey()          const { return m_bIsPrimaryKey;}

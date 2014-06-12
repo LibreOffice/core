@@ -1202,12 +1202,6 @@ bool SwGrfNode::IsSelected() const
     return bRet;
 }
 
-// #i73788#
-boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > SwGrfNode::GetThreadConsumer()
-{
-    return mpThreadConsumer;
-}
-
 void SwGrfNode::TriggerAsyncRetrieveInputStream()
 {
     if ( !IsLinkedFile() )

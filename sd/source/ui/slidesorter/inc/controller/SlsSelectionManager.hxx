@@ -103,7 +103,7 @@ public:
     */
     void SetInsertionPosition (const sal_Int32 nInsertionPosition);
 
-    ::boost::shared_ptr<SelectionObserver> GetSelectionObserver (void) const;
+    ::boost::shared_ptr<SelectionObserver> GetSelectionObserver (void) const { return mpSelectionObserver;}
 
 private:
     SlideSorter& mrSlideSorter;

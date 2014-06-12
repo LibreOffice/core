@@ -107,10 +107,6 @@ OUString SfxFilter::GetDefaultExtension() const
     return comphelper::string::getToken(GetWildcard().getGlob(), 0, ';');
 }
 
-const OUString& SfxFilter::GetProviderName() const
-{
-    return maProvider;
-}
 
 void SfxFilter::SetURLPattern( const OUString& rStr )
 {

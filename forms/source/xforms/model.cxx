@@ -176,30 +176,18 @@ Model::IntSequence_t Model::getUnoTunnelID()
     return aImplementationId.getImplementationId();
 }
 
-Model::XDocument_t Model::getForeignSchema() const
-{
-    return mxForeignSchema;
-}
 
 void Model::setForeignSchema( const XDocument_t& rDocument )
 {
     mxForeignSchema = rDocument;
 }
 
-OUString Model::getSchemaRef() const
-{
-    return msSchemaRef;
-}
 
 void Model::setSchemaRef( const OUString& rSchemaRef )
 {
     msSchemaRef = rSchemaRef;
 }
 
-Model::XNameContainer_t Model::getNamespaces() const
-{
-    return mxNamespaces;
-}
 
 void Model::setNamespaces( const XNameContainer_t& rNamespaces )
 {

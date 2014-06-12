@@ -42,20 +42,8 @@ FFDataHandler::~FFDataHandler()
 {
 }
 
-const OUString & FFDataHandler::getName() const
-{
-    return m_sName;
-}
 
-const OUString & FFDataHandler::getHelpText() const
-{
-    return m_sHelpText;
-}
 
-const OUString & FFDataHandler::getStatusText() const
-{
-    return m_sStatusText;
-}
 
 
 
@@ -69,20 +57,8 @@ bool FFDataHandler::getCheckboxChecked() const
         return false;
 }
 
-const OUString & FFDataHandler::getDropDownResult() const
-{
-    return m_sDropDownResult;
-}
 
-const FFDataHandler::DropDownEntries_t & FFDataHandler::getDropDownEntries() const
-{
-    return m_DropDownEntries;
-}
 
-const OUString & FFDataHandler::getTextDefault() const
-{
-    return m_sTextDefault;
-}
 
 void FFDataHandler::lcl_sprm(Sprm & r_Sprm)
 {

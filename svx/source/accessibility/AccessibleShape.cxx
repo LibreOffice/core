@@ -1306,10 +1306,6 @@ OUString
 
 
 
-uno::Reference< drawing::XShape > AccessibleShape::GetXShape()
-{
-    return( mxShape );
-}
 
 
 

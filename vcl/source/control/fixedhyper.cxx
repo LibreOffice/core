@@ -131,10 +131,6 @@ void FixedHyperlink::SetURL( const OUString& rNewURL )
     SetQuickHelpText( m_sURL );
 }
 
-OUString FixedHyperlink::GetURL() const
-{
-    return m_sURL;
-}
 
 void FixedHyperlink::SetText(const OUString& rNewDescription)
 {

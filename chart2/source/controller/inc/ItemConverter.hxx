@@ -164,13 +164,13 @@ protected:
         throw( ::com::sun::star::uno::Exception );
 
     /// Returns the pool
-    SfxItemPool & GetItemPool() const;
+    SfxItemPool & GetItemPool() const { return m_rItemPool;}
 
     /** Returns the XPropertySet that was given in the CTOR and is used to apply
         items in ApplyItemSet().
      */
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet >  GetPropertySet() const;
+        ::com::sun::star::beans::XPropertySet >  GetPropertySet() const { return m_xPropertySet;}
 
     // ____ ::utl::OEventListenerAdapter ____
     virtual void _disposing( const ::com::sun::star::lang::EventObject& rSource ) SAL_OVERRIDE;

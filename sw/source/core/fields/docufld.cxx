@@ -1727,25 +1727,13 @@ OUString SwPostItField::GetPar2() const
     return sTxt;
 }
 
-OUString SwPostItField::GetInitials() const
-{
-    return sInitials;
-}
 
 void SwPostItField::SetName(const OUString& rName)
 {
     sName = rName;
 }
 
-OUString SwPostItField::GetName() const
-{
-    return sName;
-}
 
-const OutlinerParaObject* SwPostItField::GetTextObject() const
-{
-    return mpText;
-}
 
 void SwPostItField::SetTextObject( OutlinerParaObject* pText )
 {

@@ -112,7 +112,7 @@ public:
     void setOption(SCSIZE nOptId, bool bEnabled);
 
     void setEnhancedProtection( const ::std::vector< ScEnhancedProtection > & rProt );
-    const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const;
+    const ::std::vector< ScEnhancedProtection > & getEnhancedProtection() const { return maEnhancedProtection;}
     bool updateReference( UpdateRefMode, ScDocument*, const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     bool isBlockEditable( const ScRange& rRange ) const;
     bool isSelectionEditable( const ScRangeList& rRangeList ) const;
@@ -351,10 +351,6 @@ void ScTableProtectionImpl::setEnhancedProtection( const ::std::vector< ScEnhanc
     maEnhancedProtection = rProt;
 }
 
-const ::std::vector< ScEnhancedProtection > & ScTableProtectionImpl::getEnhancedProtection() const
-{
-    return maEnhancedProtection;
-}
 
 bool ScTableProtectionImpl::updateReference( UpdateRefMode eMode, ScDocument* pDoc,
         const ScRange& rWhere, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )

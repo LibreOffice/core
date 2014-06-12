@@ -141,10 +141,6 @@ Binding::~Binding() throw()
 }
 
 
-Binding::Model_t Binding::getModel() const
-{
-    return mxModel;
-}
 
 void Binding::_setModel( const Model_t& xModel )
 {
@@ -337,10 +333,6 @@ Binding* SAL_CALL Binding::getBinding( const Reference<XPropertySet>& xPropertyS
 
 
 
-OUString Binding::getBindingID() const
-{
-    return msBindingID;
-}
 
 void Binding::setBindingID( const OUString& sBindingID )
 {
@@ -419,21 +411,11 @@ void Binding::setCalculateExpression( const OUString& sCalculate )
     bindingModified();
 }
 
-OUString Binding::getType() const
-{
-    return msTypeName;
-}
 
 void Binding::setType( const OUString& sTypeName )
 {
     msTypeName = sTypeName;
     bindingModified();
-}
-
-Binding::XNameContainer_t Binding::getBindingNamespaces() const
-{
-    //    return _getNamespaces();
-    return mxNamespaces;
 }
 
 void Binding::setBindingNamespaces( const XNameContainer_t& rNamespaces )

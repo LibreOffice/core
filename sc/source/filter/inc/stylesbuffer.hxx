@@ -252,7 +252,7 @@ public:
     void                finalizeImport();
 
     /** Returns an API font descriptor with own font information. */
-    const ::com::sun::star::awt::FontDescriptor& getFontDescriptor() const;
+    const ::com::sun::star::awt::FontDescriptor& getFontDescriptor() const { return maApiData.maDesc;}
     /** Returns true, if the font requires rich text formatting in Calc.
         @descr  Example: Font escapement is a cell attribute in Excel, but Calc
         needs an rich text cell for this attribute. */

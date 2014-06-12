@@ -161,10 +161,6 @@ void BindDispatch_Impl::Release()
     release();
 }
 
-const ::com::sun::star::frame::FeatureStateEvent& BindDispatch_Impl::GetStatus() const
-{
-    return aStatus;
-}
 
 void BindDispatch_Impl::Dispatch( const uno::Sequence < beans::PropertyValue >& aProps, bool bForceSynchron )
 {

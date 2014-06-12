@@ -97,8 +97,8 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     void                    SetOptions( SvxChartOptions* pOpts ) const;
 
-    const SvxChartColorTable & GetColorList() const ;
-    SvxChartColorTable &       GetColorList();
+    const SvxChartColorTable & GetColorList() const  { return m_aColorTable;}
+    SvxChartColorTable &       GetColorList() { return m_aColorTable;}
     void                    ReplaceColorByIndex( size_t _nIndex, const XColorEntry & _rEntry );
 
 private:

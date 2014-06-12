@@ -89,10 +89,6 @@ void OReportModel::SetChanged( bool bChanged )
 
 
 
-OXUndoEnvironment&  OReportModel::GetUndoEnv()
-{
-    return *m_pUndoEnv;
-}
 
 void OReportModel::SetModified(bool _bModified)
 {

@@ -102,37 +102,37 @@ public:
 
     /// get XForms model
     com::sun::star::uno::Reference<com::sun::star::xforms::XModel>
-        getModel() const;
+        getModel() const { return mxModel;}
 
     /// set XForms model
     void setModel(
         const com::sun::star::uno::Reference<com::sun::star::xforms::XModel>& );
 
-    OUString getID() const;         /// get ID for this submission
+    OUString getID() const { return msID;}         /// get ID for this submission
     void setID( const OUString& );  /// set ID for this submission
 
-    OUString getBind() const;
+    OUString getBind() const { return msBind;}
     void setBind( const OUString& );
 
     OUString getRef() const;
     void setRef( const OUString& );
 
-    OUString getAction() const;
+    OUString getAction() const { return msAction;}
     void setAction( const OUString& );
 
-    OUString getMethod() const;
+    OUString getMethod() const { return msMethod;}
     void setMethod( const OUString& );
 
-    OUString getVersion() const;
+    OUString getVersion() const { return msVersion;}
     void setVersion( const OUString& );
 
     bool getIndent() const { return mbIndent;}
     void setIndent( bool );
 
-    OUString getMediaType() const;
+    OUString getMediaType() const { return msMediaType;}
     void setMediaType( const OUString& );
 
-    OUString getEncoding() const;
+    OUString getEncoding() const { return msEncoding;}
     void setEncoding( const OUString& );
 
     bool getOmitXmlDeclaration() const { return mbOmitXmlDeclaration;}
@@ -141,16 +141,16 @@ public:
     bool getStandalone() const { return mbStandalone;}
     void setStandalone( bool );
 
-    OUString getCDataSectionElement() const;
+    OUString getCDataSectionElement() const { return msCDataSectionElement;}
     void setCDataSectionElement( const OUString& );
 
-    OUString getReplace() const;
+    OUString getReplace() const { return msReplace;}
     void setReplace( const OUString& );
 
-    OUString getSeparator() const;
+    OUString getSeparator() const { return msSeparator;}
     void setSeparator( const OUString& );
 
-    com::sun::star::uno::Sequence< OUString > getIncludeNamespacePrefixes() const;
+    com::sun::star::uno::Sequence< OUString > getIncludeNamespacePrefixes() const { return msIncludeNamespacePrefixes;}
     void setIncludeNamespacePrefixes( const com::sun::star::uno::Sequence< OUString >& );
 
 

@@ -1191,10 +1191,6 @@ void DummyChart::clear()
     maShapes.clear();
 }
 
-TextCache& DummyChart::getTextCache()
-{
-    return maTextCache;
-}
 
 }
 

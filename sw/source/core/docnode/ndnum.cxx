@@ -90,9 +90,5 @@ void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
         UpdateOutlineNode( *(*pOutlineNds)[ nPos ]);
 }
 
-const SwOutlineNodes & SwNodes::GetOutLineNds() const
-{
-    return *pOutlineNds;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

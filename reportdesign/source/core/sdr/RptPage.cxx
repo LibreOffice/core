@@ -132,10 +132,6 @@ void OReportPage::insertObject(const uno::Reference< report::XReportComponent >&
         pObject->StartListening();
 }
 
-uno::Reference< report::XSection > OReportPage::getSection() const
-{
-    return m_xSection;
-}
 
 uno::Reference< uno::XInterface > OReportPage::createUnoPage()
 {

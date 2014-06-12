@@ -1392,10 +1392,6 @@ void ScDocument::SetPreviewFont( SfxItemSet* pFont )
     pPreviewFont = pFont;
 }
 
-const ScMarkData ScDocument::GetPreviewSelection()
-{
-    return maPreviewSelection;
-}
 
 void  ScDocument::SetPreviewSelection( ScMarkData& rSel )
 {

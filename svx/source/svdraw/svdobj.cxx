@@ -2680,10 +2680,6 @@ void SdrObject::SetMarkProtect(bool bProt)
 
 
 
-bool SdrObject::IsPrintable() const
-{
-    return !bNoPrint;
-}
 
 
 void SdrObject::SetEmptyPresObj(bool bEpt)
@@ -3231,10 +3227,6 @@ bool SdrObject::HasLineStyle() const
 // usually this data makes no sence after the import is finished, since the object
 // might be resized
 
-Rectangle SdrObject::GetBLIPSizeRectangle() const
-{
-    return maBLIPSizeRectangle;
-}
 
 void SdrObject::SetBLIPSizeRectangle( const Rectangle& aRect )
 {

@@ -73,9 +73,6 @@ void Modifications::remove(Path const & path) {
     }
 }
 
-Modifications::Node const & Modifications::getRoot() const {
-    return root_;
-}
 
 }
 

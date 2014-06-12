@@ -160,7 +160,7 @@ public:
     void AddRange(ScMyRowFormatRange& rFormatRange);
     bool GetNext(ScMyRowFormatRange& rFormatRange);
     sal_Int32 GetMaxRows() const;
-    sal_Int32 GetSize() const;
+    sal_Int32 GetSize() const { return nSize;}
     void Sort();
 };
 

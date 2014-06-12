@@ -94,7 +94,7 @@ public:
     Text(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId);
     virtual void render() SAL_OVERRIDE;
 
-    Size getSize() const;
+    Size getSize() const { return maText.maSize;}
 
     void setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, const glm::vec3& rBottomRight);
 

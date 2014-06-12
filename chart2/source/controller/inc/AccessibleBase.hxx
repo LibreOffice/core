@@ -217,9 +217,9 @@ protected:
     virtual sal_Int32 ImplGetAccessibleChildCount() const
         throw (::com::sun::star::uno::RuntimeException);
 
-    AccessibleElementInfo GetInfo() const;
+    AccessibleElementInfo GetInfo() const { return m_aAccInfo;}
     void SetInfo( const AccessibleElementInfo & rNewInfo );
-    AccessibleUniqueId GetId() const;
+    AccessibleUniqueId GetId() const { return m_aAccInfo.m_aOID;}
 
     // ________ XComponent ________
     virtual void SAL_CALL dispose()throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE

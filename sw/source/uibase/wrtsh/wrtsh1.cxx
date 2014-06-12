@@ -1475,10 +1475,6 @@ SwFrmFmt *SwWrtShell::GetTblStyle(const OUString &rFmtName)
     return 0;
 }
 
-SwNavigationMgr& SwWrtShell::GetNavigationMgr() {
-    return aNavigationMgr;
-}
-
 void SwWrtShell::addCurrentPosition() {
     SwPaM* pPaM = GetCrsr();
     aNavigationMgr.addEntry(*pPaM->GetPoint());

@@ -537,12 +537,12 @@ class WW8FieldEntry
         SwNodeIndex GetPtNode() { return maStartPos.GetPtNode(); };
         sal_Int32 GetPtCntnt() { return maStartPos.GetPtCntnt(); };
 
-        OUString GetBookmarkName();
-        OUString GetBookmarkCode();
+        OUString GetBookmarkName() { return msBookmarkName;}
+        OUString GetBookmarkCode() { return msMarkCode;}
         void SetBookmarkName(const OUString& bookmarkName);
         void SetBookmarkType(const OUString& bookmarkType);
         void SetBookmarkCode(const OUString& bookmarkCode);
-        ::sw::mark::IFieldmark::parameter_map_t& getParameters();
+        ::sw::mark::IFieldmark::parameter_map_t& getParameters() { return maParams;}
 };
 
 //    Mini-Merker fuer einige Flags
@@ -712,7 +712,7 @@ public:
         com::sun::star::drawing::XShape > *pShapeRef=0,
         bool bFloatingCtrl=false );
 private:
-    sal_uInt32 GenerateObjectID();
+    sal_uInt32 GenerateObjectID() { return ++mnObjectId; }
     SwPaM *pPaM;
     sal_uInt32 mnObjectId;
 };

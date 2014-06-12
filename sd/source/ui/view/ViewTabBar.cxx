@@ -184,10 +184,6 @@ void ViewTabBar::disposing (void)
 
 
 
-::boost::shared_ptr< ::TabControl> ViewTabBar::GetTabControl (void) const
-{
-    return mpTabControl;
-}
 
 
 

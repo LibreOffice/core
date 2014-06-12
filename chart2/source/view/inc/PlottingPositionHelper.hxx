@@ -50,7 +50,7 @@ public:
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix);
 
     virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
-    const ::std::vector< ExplicitScaleData >& getScales() const;
+    const ::std::vector< ExplicitScaleData >& getScales() const { return m_aScales;}
 
     //better performance for big data
     inline void   setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
@@ -155,7 +155,7 @@ public:
     virtual void setTransformationSceneToScreen( const ::com::sun::star::drawing::HomogenMatrix& rMatrix) SAL_OVERRIDE;
     virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) SAL_OVERRIDE;
 
-    ::basegfx::B3DHomMatrix getUnitCartesianToScene() const;
+    ::basegfx::B3DHomMatrix getUnitCartesianToScene() const { return m_aUnitCartesianToScene;}
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >
                   getTransformationScaledLogicToScene() const SAL_OVERRIDE;

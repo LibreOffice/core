@@ -67,7 +67,7 @@ public:
 
     bool SetStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle > & xStyle );
     ::com::sun::star::uno::Reference< ::com::sun::star::style::XStyle >
-        GetStyle() const;
+        GetStyle() const { return m_xStyle;}
 
     typedef
         ::std::map< sal_Int32, ::com::sun::star::uno::Any >

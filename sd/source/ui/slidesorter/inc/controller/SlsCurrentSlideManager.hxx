@@ -77,7 +77,7 @@ public:
     /** Return the page descriptor for the current slide.  Note, that when
         there is no current slide then the returned pointer is empty.
     */
-    model::SharedPageDescriptor GetCurrentSlide (void);
+    model::SharedPageDescriptor GetCurrentSlide (void) { return mpCurrentSlide;}
 
     /** Release all references to model data.
     */

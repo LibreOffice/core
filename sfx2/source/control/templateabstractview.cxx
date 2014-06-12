@@ -208,15 +208,7 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
 }
 
 
-const OUString &TemplateAbstractView::getCurRegionName() const
-{
-    return maCurRegionName;
-}
 
-bool TemplateAbstractView::isNonRootRegionVisible () const
-{
-    return mnCurRegionId;
-}
 
 void TemplateAbstractView::setOpenRegionHdl(const Link &rLink)
 {

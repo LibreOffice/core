@@ -116,7 +116,7 @@ public:
 
     bool        supportsService( const OUString& _sServiceName ) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> getReportComponent() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> getReportComponent() const { return m_xReportComponent;}
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
     inline void setOldParent(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) { m_xSection = _xSection; }
     inline ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> getOldParent() const { return m_xSection;}

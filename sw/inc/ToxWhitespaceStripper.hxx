@@ -39,7 +39,7 @@ public:
     GetPositionInStrippedString(sal_Int32 pos) const;
 
     OUString
-    GetStrippedString() const;
+    GetStrippedString() const { return mStripped;}
 
 private:
     OUString mStripped;

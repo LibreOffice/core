@@ -70,7 +70,7 @@ public:
 
     // get the result of this expression as node/node list/...
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> getNode() const;
-    const NodeVector_t getNodeList() const;
+    const NodeVector_t getNodeList() const { return maNodes;}
     com::sun::star::uno::Reference<com::sun::star::xml::dom::XNodeList> getXNodeList() const;
 
 };

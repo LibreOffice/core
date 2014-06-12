@@ -280,10 +280,6 @@ bool ScColorScaleEntry::NeedsRepaint() const
     return false;
 }
 
-const Color& ScColorScaleEntry::GetColor() const
-{
-    return maColor;
-}
 
 void ScColorScaleEntry::SetColor(const Color& rColor)
 {

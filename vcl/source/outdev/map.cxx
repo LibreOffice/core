@@ -2061,10 +2061,6 @@ void OutputDevice::SetPixelOffset( const Size& rOffset )
         mpAlphaVDev->SetPixelOffset( rOffset );
 }
 
-Size OutputDevice::GetPixelOffset() const
-{
-    return Size(mnOutOffOrigX, mnOutOffOrigY);
-}
 
 long Window::ImplLogicUnitToPixelX( long nX, MapUnit eUnit )
 {

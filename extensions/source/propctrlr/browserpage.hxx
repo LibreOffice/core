@@ -47,8 +47,8 @@ namespace pcr
         sal_Int32 getMinimumWidth();
         sal_Int32 getMinimumHeight();
 
-              OBrowserListBox& getListBox();
-        const OBrowserListBox& getListBox() const;
+              OBrowserListBox& getListBox() { return m_aListBox; }
+        const OBrowserListBox& getListBox() const { return m_aListBox; }
     };
 
 

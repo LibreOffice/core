@@ -66,15 +66,7 @@ XFFontDecl::XFFontDecl(const OUString& name, const OUString& family, bool fixed)
     m_bPitchFixed = fixed;
 }
 
-OUString   XFFontDecl::GetFontName()
-{
-    return m_strFontName;
-}
 
-OUString   XFFontDecl::GetFontFamily()
-{
-    return m_strFontFamily;
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -159,9 +159,5 @@ OUString PlaceWareTempFile::createTempFileURL()
     return aTempFileURL;
 }
 
-OUString PlaceWareTempFile::getFileURL()
-{
-    return maURL;
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

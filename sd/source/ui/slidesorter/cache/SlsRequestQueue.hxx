@@ -98,7 +98,7 @@ public:
 
     /** Return the mutex that guards the access to the priority queue.
     */
-    ::osl::Mutex& GetMutex (void);
+    ::osl::Mutex& GetMutex (void) { return maMutex;}
 
     /** Ensure we don't hand out a page deleted before anyone got a
         chance to process it

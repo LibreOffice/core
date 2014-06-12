@@ -138,10 +138,6 @@ void ConfigurationUpdater::RequestUpdate (
 
 
 
-Reference<XConfiguration> ConfigurationUpdater::GetCurrentConfiguration (void) const
-{
-    return mxCurrentConfiguration;
-}
 
 
 

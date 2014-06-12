@@ -248,7 +248,7 @@ public:
     void CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, OutputDevice *pOutDev );
     void DeletePostItData();
 
-    SfxObjectShellLock const& GetTempDocShell() const;
+    SfxObjectShellLock const& GetTempDocShell() const { return m_xTempDocShell;}
     void SetTempDocShell(SfxObjectShellLock const&);
 
     bool IsViewOptionAdjust() const  { return m_pViewOptionAdjust != 0; }

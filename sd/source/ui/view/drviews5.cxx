@@ -632,10 +632,6 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
 
 
 
-TabControl* DrawViewShell::GetPageTabControl (void)
-{
-    return &maTabControl;
-}
 
 
 

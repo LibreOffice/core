@@ -313,15 +313,7 @@ void SvxChartColorTableItem::SetOptions( SvxChartOptions* pOpts ) const
 }
 
 
-SvxChartColorTable & SvxChartColorTableItem::GetColorList()
-{
-    return m_aColorTable;
-}
 
-const SvxChartColorTable & SvxChartColorTableItem::GetColorList() const
-{
-    return m_aColorTable;
-}
 
 void SvxChartColorTableItem::ReplaceColorByIndex( size_t _nIndex, const XColorEntry & _rEntry )
 {

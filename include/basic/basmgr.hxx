@@ -188,7 +188,7 @@ public:
     // Modify-Flag will be reset only during save.
     bool            IsBasicModified() const;
 
-    std::vector<BasicError>& GetErrors();
+    std::vector<BasicError>& GetErrors() { return aErrors;}
 
     /** sets a global constant in the basic library, referring to some UNO object, to a new value.
 

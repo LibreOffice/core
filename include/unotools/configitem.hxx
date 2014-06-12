@@ -169,7 +169,7 @@ namespace utl
             /** writes the changed values into the sub tree. Always called in the Dtor of the derived class.  */
             virtual void            Commit()=0;
 
-            bool IsInValueChange() const;
+            bool IsInValueChange() const { return m_nInValueChange > 0;}
 
             sal_Int16               GetMode() const { return m_nMode;}
     };

@@ -104,10 +104,6 @@ void PlottingPositionHelper::setScales( const std::vector< ExplicitScaleData >& 
     m_bSwapXAndY = bSwapXAndYAxis;
     m_xTransformationLogicToScene = NULL;
 }
-const std::vector< ExplicitScaleData >& PlottingPositionHelper::getScales() const
-{
-    return m_aScales;
-}
 
 uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScaledLogicToScene() const
 {
@@ -423,10 +419,6 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
     return aRet;
 }
 
-::basegfx::B3DHomMatrix PolarPlottingPositionHelper::getUnitCartesianToScene() const
-{
-    return m_aUnitCartesianToScene;
-}
 
 uno::Reference< XTransformation > PolarPlottingPositionHelper::getTransformationScaledLogicToScene() const
 {

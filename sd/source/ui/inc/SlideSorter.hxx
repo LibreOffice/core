@@ -124,21 +124,21 @@ public:
 
     /** Return the control of the vertical scroll bar.
     */
-    ::boost::shared_ptr<ScrollBar> GetVerticalScrollBar (void) const;
+    ::boost::shared_ptr<ScrollBar> GetVerticalScrollBar (void) const { return mpVerticalScrollBar;}
 
     /** Return the control of the horizontal scroll bar.
     */
-    ::boost::shared_ptr<ScrollBar> GetHorizontalScrollBar (void) const;
+    ::boost::shared_ptr<ScrollBar> GetHorizontalScrollBar (void) const { return mpHorizontalScrollBar;}
 
     /** Return the scroll bar filler that paints the little square that is
         enclosed by the two scroll bars.
     */
-    ::boost::shared_ptr<ScrollBarBox> GetScrollBarFiller (void) const;
+    ::boost::shared_ptr<ScrollBarBox> GetScrollBarFiller (void) const { return mpScrollBarBox;}
 
     /** Return the content window.  This is a sibling and is geometrically
         enclosed by the scroll bars.
     */
-    SharedSdWindow GetContentWindow (void) const;
+    SharedSdWindow GetContentWindow (void) const { return mpContentWindow;}
 
     model::SlideSorterModel& GetModel (void) const;
 

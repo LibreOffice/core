@@ -539,7 +539,7 @@ public:
 
     ::comphelper::UnoInterfaceToUniqueIdentifierMapper& getInterfaceToIdentifierMapper();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getComponentContext();
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > getComponentContext() { return m_xContext;}
 
     // Shapes in Writer cannot be named via context menu (#i51726#)
     SvtModuleOptions::EFactory GetModelType() const

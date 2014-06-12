@@ -64,20 +64,12 @@ void ItemConverter::resetPropertySet(
     }
 }
 
-SfxItemPool & ItemConverter::GetItemPool() const
-{
-    return m_rItemPool;
-}
 
 SfxItemSet ItemConverter::CreateEmptyItemSet() const
 {
     return SfxItemSet( GetItemPool(), GetWhichPairs() );
 }
 
-uno::Reference< beans::XPropertySet > ItemConverter::GetPropertySet() const
-{
-    return m_xPropertySet;
-}
 
 void ItemConverter::_disposing( const lang::EventObject& rSource )
 {

@@ -136,7 +136,7 @@ public:
     SdrPreRenderDevice* GetPreRenderDevice() const { return mpPreRenderDevice; }
 
     // RedrawRegion
-    const Region& GetRedrawRegion() const;
+    const Region& GetRedrawRegion() const { return maRedrawRegion;}
     void SetRedrawRegion(const Region& rNew);
 
     // #i72889# read/write access to TempoparyTarget

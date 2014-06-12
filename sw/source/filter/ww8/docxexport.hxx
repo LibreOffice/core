@@ -268,10 +268,10 @@ public:
     virtual ~DocxExport();
 
     /// Reference to the VMLExport instance for the main document.
-    oox::vml::VMLExport& VMLExporter();
+    oox::vml::VMLExport& VMLExporter() { return *m_pVMLExport; }
 
     /// Reference to the DocxSdrExport instance for the main document.
-    DocxSdrExport& SdrExporter();
+    DocxSdrExport& SdrExporter() { return *m_pSdrExport; }
 
     /// Set the document default tab stop.
     void setDefaultTabStop( int stop ) { m_aSettings.defaultTabStop = stop; }

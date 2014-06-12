@@ -152,11 +152,6 @@ ScDPItemData::~ScDPItemData()
     DisposeString();
 }
 
-ScDPItemData::Type ScDPItemData::GetType() const
-{
-    return static_cast<Type>(meType);
-}
-
 void ScDPItemData::SetEmpty()
 {
     DisposeString();

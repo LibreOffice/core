@@ -39,7 +39,7 @@ public:
                     ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
     virtual ~VAxisBase();
 
-    sal_Int32 getDimensionCount();
+    sal_Int32 getDimensionCount() { return m_nDimension;}
 
     virtual void createMaximumLabels()=0;
     virtual void createLabels()=0;

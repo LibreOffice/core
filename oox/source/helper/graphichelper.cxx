@@ -160,10 +160,6 @@ sal_Int32 GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
 
 // Device info and device dependent unit conversion ---------------------------
 
-const awt::DeviceInfo& GraphicHelper::getDeviceInfo() const
-{
-    return maDeviceInfo;
-}
 
 sal_Int32 GraphicHelper::convertScreenPixelXToHmm( double fPixelX ) const
 {

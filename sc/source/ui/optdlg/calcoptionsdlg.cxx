@@ -188,10 +188,6 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
 
 ScCalcOptionsDialog::~ScCalcOptionsDialog() {}
 
-const ScCalcConfig& ScCalcOptionsDialog::GetConfig() const
-{
-    return maConfig;
-}
 
 SvTreeListEntry *ScCalcOptionsDialog::createBoolItem(const OUString &rCaption, bool bValue) const
 {

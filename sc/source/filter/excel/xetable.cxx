@@ -2205,10 +2205,6 @@ void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_sheetData );
 }
 
-XclExpDimensions* XclExpRowBuffer::GetDimensions()
-{
-    return &maDimensions;
-}
 
 XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty )
 {

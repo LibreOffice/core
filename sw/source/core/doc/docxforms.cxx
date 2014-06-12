@@ -44,10 +44,6 @@ using frame::XModule;
 using xforms::XFormsUIHelper1;
 using com::sun::star::container::XIndexAccess;
 
-Reference<XNameContainer> SwDoc::getXForms() const
-{
-    return mxXForms;
-}
 
 bool SwDoc::isXForms() const
 {

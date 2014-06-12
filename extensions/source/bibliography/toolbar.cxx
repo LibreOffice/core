@@ -74,10 +74,6 @@ void BibToolBarListener::statusChanged(const ::com::sun::star::frame::FeatureSta
     }
 };
 
-OUString   BibToolBarListener::GetCommand() const
-{
-    return aCommand;
-}
 
 BibTBListBoxListener::BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId):
     BibToolBarListener(pTB,aStr,nId)

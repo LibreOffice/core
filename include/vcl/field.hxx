@@ -442,7 +442,7 @@ public:
     const Time&             GetMax() const { return maMax; }
 
     void                    SetTimeFormat( TimeFormat eNewFormat );
-    TimeFormat              GetTimeFormat() const;
+    TimeFormat              GetTimeFormat() const { return (TimeFormat)mnTimeFormat;}
 
     void                    SetFormat( TimeFieldFormat eNewFormat );
     TimeFieldFormat         GetFormat() const { return meFormat; }

@@ -30,10 +30,6 @@ WpgContext::~WpgContext()
 {
 }
 
-oox::drawingml::ShapePtr WpgContext::getShape()
-{
-    return mpShape;
-}
 
 oox::core::ContextHandlerRef WpgContext::onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& /*rAttribs*/)
 {

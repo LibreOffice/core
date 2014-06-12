@@ -1876,10 +1876,6 @@ void SdrModel::SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTabl
     ImpSetOutlinerDefaults( pHitTestOutliner );
 }
 
-rtl::Reference<SvxForbiddenCharactersTable> SdrModel::GetForbiddenCharsTable() const
-{
-    return mpForbiddenCharactersTable;
-}
 
 void SdrModel::SetCharCompressType( sal_uInt16 nType )
 {

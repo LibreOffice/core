@@ -35,7 +35,7 @@ public:
 
     void            init( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
     ObjectType      getObjectType() const { return m_eObjectType;}
-    OUString   getLocalizedName() const;
+    OUString   getLocalizedName() const { return m_aLocalizedName;}
 
     bool HasGeometryProperties() const { return m_bHasGeometryProperties;}
     bool HasStatisticProperties() const { return m_bHasStatisticProperties;}
@@ -53,10 +53,10 @@ public:
     bool IsSupportingAxisPositioning() const { return m_bSupportingAxisPositioning;}
     bool ShowAxisOrigin() const { return m_bShowAxisOrigin;}
     bool IsCrossingAxisIsCategoryAxis() const { return m_bIsCrossingAxisIsCategoryAxis;}
-    const ::com::sun::star::uno::Sequence< OUString >& GetCategories() const;
+    const ::com::sun::star::uno::Sequence< OUString >& GetCategories() const { return m_aCategories;}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
-        getDocument() const;
+        getDocument() const { return m_xChartDocument;}
 
     bool IsComplexCategoriesAxis() const { return m_bComplexCategoriesAxis;}
 

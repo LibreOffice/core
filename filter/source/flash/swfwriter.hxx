@@ -332,7 +332,7 @@ private:
 
     void startTag( sal_uInt8 nTagId );
     void endTag();
-    sal_uInt16 createID();
+    sal_uInt16 createID() { return mnNextId++; }
 
     void Impl_writeBmp( sal_uInt16 nBitmapId, sal_uInt32 width, sal_uInt32 height, sal_uInt8 *pCompressed, sal_uInt32 compressed_size );
     void Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const Rectangle& rClipRect, bool bMap );

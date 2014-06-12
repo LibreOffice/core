@@ -77,12 +77,12 @@ public:
     /**
      * @descr   Get font name.
      */
-    OUString   GetFontName();
+    OUString   GetFontName() { return m_strFontName;}
 
     /**
      * @descr   Get font family.
      */
-    OUString   GetFontFamily();
+    OUString   GetFontFamily() { return m_strFontFamily;}
 
     bool        GetFontPitchFixed() { return m_bPitchFixed;}
 

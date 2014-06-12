@@ -188,9 +188,9 @@ public:
         throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
     /**@return m_pCellVector*/
-    std::vector< AccessibleGridControlTableCell* >& getCellVector();
+    std::vector< AccessibleGridControlTableCell* >& getCellVector() { return m_pCellVector;}
     /**@return m_xAccessCellVector*/
-    std::vector< com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible > >& getAccessibleCellVector();
+    std::vector< com::sun::star::uno::Reference< com::sun::star::accessibility::XAccessible > >& getAccessibleCellVector() { return m_pAccessCellVector;}
 
 protected:
     // internal virtual methods -----------------------------------------------

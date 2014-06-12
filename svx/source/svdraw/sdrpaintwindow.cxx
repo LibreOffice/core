@@ -369,10 +369,6 @@ void SdrPaintWindow::DrawOverlay(const Region& rRegion)
     }
 }
 
-const Region& SdrPaintWindow::GetRedrawRegion() const
-{
-    return maRedrawRegion;
-}
 
 void SdrPaintWindow::SetRedrawRegion(const Region& rNew)
 {

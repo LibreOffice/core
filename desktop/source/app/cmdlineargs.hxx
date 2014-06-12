@@ -86,12 +86,12 @@ class CommandLineArgs: private boost::noncopyable
         bool                HasModuleParam() const;
         bool                WantsToLoadDocument() const { return m_bDocumentArgs;}
 
-        OUString            GetUnknown() const;
+        OUString            GetUnknown() const { return m_unknown;}
 
         // Access to string parameters
         bool                    HasSplashPipe() const { return m_splashpipe;}
-        std::vector< OUString > const & GetAccept() const;
-        std::vector< OUString > const & GetUnaccept() const;
+        std::vector< OUString > const & GetAccept() const { return m_accept;}
+        std::vector< OUString > const & GetUnaccept() const { return m_unaccept;}
         std::vector< OUString > GetOpenList() const;
         std::vector< OUString > GetViewList() const;
         std::vector< OUString > GetStartList() const;
@@ -99,13 +99,13 @@ class CommandLineArgs: private boost::noncopyable
         std::vector< OUString > GetForceNewList() const;
         std::vector< OUString > GetPrintList() const;
         std::vector< OUString > GetPrintToList() const;
-        OUString       GetPrinterName() const;
-        OUString       GetLanguage() const;
-        std::vector< OUString > const & GetInFilter() const;
+        OUString       GetPrinterName() const { return m_printername;}
+        OUString       GetLanguage() const { return m_language;}
+        std::vector< OUString > const & GetInFilter() const { return m_infilter;}
         std::vector< OUString > GetConversionList() const;
-        OUString       GetConversionParams() const;
+        OUString       GetConversionParams() const { return m_conversionparams;}
         OUString       GetConversionOut() const;
-        OUString       GetPidfileName() const;
+        OUString       GetPidfileName() const { return m_pidfile;}
 
         // Special analyzed states (does not match directly to a command line parameter!)
         bool IsEmpty() const { return m_bEmpty;}

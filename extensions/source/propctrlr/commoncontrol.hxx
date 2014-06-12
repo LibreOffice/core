@@ -132,7 +132,7 @@ namespace pcr
     public:
         // XPropertyControl
         ::sal_Int16 SAL_CALL getControlType() throw (::com::sun::star::uno::RuntimeException) { return m_nControlType; }
-        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (::com::sun::star::uno::RuntimeException) { return m_xContext; }
         void SAL_CALL setControlContext( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >& _controlcontext ) throw (::com::sun::star::uno::RuntimeException);
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getControlWindow() throw (::com::sun::star::uno::RuntimeException);
         bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException) { return m_bModified; }

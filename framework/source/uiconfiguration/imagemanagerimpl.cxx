@@ -274,15 +274,7 @@ ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
     return m_pImageList[nImageType];
 }
 
-std::vector< OUString >& CmdImageList::impl_getImageNameVector()
-{
-    return m_aImageNameVector;
-}
 
-std::vector< OUString >& CmdImageList::impl_getImageCommandNameVector()
-{
-    return m_aImageCommandNameVector;
-}
 
 Image CmdImageList::getImageFromCommandURL( sal_Int16 nImageType, const OUString& rCommandURL )
 {

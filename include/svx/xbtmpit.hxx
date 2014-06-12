@@ -63,7 +63,7 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    const GraphicObject& GetGraphicObject() const;
+    const GraphicObject& GetGraphicObject() const { return maGraphicObject;}
     void SetGraphicObject(const GraphicObject& rGraphicObject);
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );

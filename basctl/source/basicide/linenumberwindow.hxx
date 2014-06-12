@@ -36,7 +36,7 @@ public:
     void DoScroll( long nHorzScroll, long nVertScroll );
 
     bool SyncYOffset();
-    long& GetCurYOffset();
+    long& GetCurYOffset() { return m_nCurYOffset;}
 
     int GetWidth() { return m_nWidth;}
 };

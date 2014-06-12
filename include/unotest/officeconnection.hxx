@@ -46,7 +46,7 @@ public:
     void tearDown();
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-    getComponentContext() const;
+    getComponentContext() const { return context_;}
 
     // Must not be called before setUp or after tearDown:
     bool isStillAlive() const;

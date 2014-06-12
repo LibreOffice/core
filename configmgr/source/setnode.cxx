@@ -80,13 +80,7 @@ int SetNode::getMandatory() const {
     return mandatory_;
 }
 
-OUString const & SetNode::getDefaultTemplateName() const {
-    return defaultTemplateName_;
-}
 
-std::vector< OUString > & SetNode::getAdditionalTemplateNames() {
-    return additionalTemplateNames_;
-}
 
 bool SetNode::isValidTemplate(OUString const & templateName) const {
     return Data::equalTemplateNames(templateName, defaultTemplateName_) ||

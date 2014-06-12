@@ -145,10 +145,6 @@ const sal_uInt8* GfxLink::GetData() const
     return( mpBuf ? mpBuf->mpBuffer : NULL );
 }
 
-const Size& GfxLink::GetPrefSize() const
-{
-    return mpImpData->maPrefSize;
-}
 
 void GfxLink::SetPrefSize( const Size& rPrefSize )
 {
@@ -156,15 +152,7 @@ void GfxLink::SetPrefSize( const Size& rPrefSize )
     mpImpData->mbPrefSizeValid = true;
 }
 
-bool GfxLink::IsPrefSizeValid()
-{
-    return mpImpData->mbPrefSizeValid;
-}
 
-const MapMode& GfxLink::GetPrefMapMode() const
-{
-    return mpImpData->maPrefMapMode;
-}
 
 void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
 {
@@ -172,10 +160,6 @@ void GfxLink::SetPrefMapMode( const MapMode& rPrefMapMode )
     mpImpData->mbPrefMapModeValid = true;
 }
 
-bool GfxLink::IsPrefMapModeValid()
-{
-    return mpImpData->mbPrefMapModeValid;
-}
 
 bool GfxLink::LoadNative( Graphic& rGraphic )
 {

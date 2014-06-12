@@ -163,7 +163,7 @@ public:
     virtual void SwitchView();
 
     SC_DLLPUBLIC void SetSelectedTabs(const ScMarkData& rMark);
-    SC_DLLPUBLIC const ScMarkData::MarkedTabsType& GetSelectedTabs() const;
+    const ScMarkData::MarkedTabsType& GetSelectedTabs() const { return maSelectedTabs; }
 };
 
 #endif

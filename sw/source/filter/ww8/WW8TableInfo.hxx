@@ -96,7 +96,7 @@ public:
     bool isVertMerge() const;
     const SwTableBox * getTableBox() const { return mpTableBox;}
     const SwTable * getTable() const { return mpTable;}
-    const SwRect & getRect() const;
+    const SwRect & getRect() const { return maRect;}
 
     const SwNode * getNode() const;
 
@@ -205,7 +205,7 @@ public:
     const SwNode * getNextNode() const { return mpNextNode;}
     const SwRect & getRect() const;
 
-    const Inners_t & getInners() const;
+    const Inners_t & getInners() const { return mInners;}
     const WW8TableNodeInfoInner::Pointer_t getFirstInner() const;
     const WW8TableNodeInfoInner::Pointer_t getInnerForDepth(sal_uInt32 nDepth) const;
 
@@ -251,9 +251,9 @@ public:
     void setWidths(WidthsPtr pGridCols);
     void setRowSpans(RowSpansPtr pRowSpans);
 
-    TableBoxVectorPtr getTableBoxVector() const;
-    WidthsPtr getWidths() const;
-    RowSpansPtr getRowSpans() const;
+    TableBoxVectorPtr getTableBoxVector() const { return m_pTableBoxVector;}
+    WidthsPtr getWidths() const { return m_pWidths;}
+    RowSpansPtr getRowSpans() const { return m_pRowSpans;}
 };
 
 class WW8TableCellGrid

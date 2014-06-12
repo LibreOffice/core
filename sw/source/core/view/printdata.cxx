@@ -71,10 +71,6 @@ void SwRenderData::DeletePostItData()
     }
 }
 
-SfxObjectShellLock const& SwRenderData::GetTempDocShell() const
-{
-    return m_xTempDocShell;
-}
 
 void SwRenderData::SetTempDocShell(SfxObjectShellLock const& xShell)
 {

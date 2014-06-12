@@ -45,7 +45,7 @@ namespace objectpositioning
 
             /** calculated relative position for object
             */
-            Point GetRelPos() const;
+            const Point& GetRelPos() const { return maRelPos;}
     };
 } // namespace objectpositioning
 

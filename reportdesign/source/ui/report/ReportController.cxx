@@ -3036,10 +3036,6 @@ void OReportController::insertGraphic()
     }
 }
 
-::boost::shared_ptr<rptui::OReportModel> OReportController::getSdrModel() const
-{
-    return m_aReportModel;
-}
 
 sal_Bool SAL_CALL OReportController::select( const Any& aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
 {
@@ -3980,10 +3976,6 @@ void OReportController::createDefaultControl(const uno::Sequence< beans::Propert
     }
 }
 
-uno::Reference< util::XNumberFormatter > OReportController::getReportNumberFormatter() const
-{
-    return m_xFormatter;
-}
 
 void OReportController::checkChartEnabled()
 {

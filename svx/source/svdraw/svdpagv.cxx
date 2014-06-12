@@ -951,10 +951,6 @@ void SdrPageView::SetApplicationBackgroundColor(Color aBackgroundColor)
     maBackgroundColor = aBackgroundColor;
 }
 
-Color SdrPageView::GetApplicationBackgroundColor() const
-{
-    return maBackgroundColor;
-}
 
 // Set document color for svx at SdrPageViews
 void SdrPageView::SetApplicationDocumentColor(Color aDocumentColor)
@@ -962,10 +958,6 @@ void SdrPageView::SetApplicationDocumentColor(Color aDocumentColor)
     maDocumentColor = aDocumentColor;
 }
 
-Color SdrPageView::GetApplicationDocumentColor() const
-{
-    return maDocumentColor;
-}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

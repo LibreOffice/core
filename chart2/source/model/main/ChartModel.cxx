@@ -1408,10 +1408,6 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
     mbTimeBased = true;
 }
 
-uno::Reference< uno::XInterface > ChartModel::getChartView()
-{
-    return xChartView;
-}
 
 void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     throw (uno::RuntimeException, std::exception)

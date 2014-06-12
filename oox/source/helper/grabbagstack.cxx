@@ -25,10 +25,6 @@ GrabBagStack::GrabBagStack(const OUString& aName)
 GrabBagStack::~GrabBagStack()
 {}
 
-OUString GrabBagStack::getCurrentName()
-{
-    return mCurrentElement.maName;
-}
 
 bool GrabBagStack::isStackEmpty()
 {

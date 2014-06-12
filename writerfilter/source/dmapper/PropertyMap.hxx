@@ -119,7 +119,7 @@ public:
     void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true, GrabBagType rGrabBagType = NO_GRAB_BAG );
     void Insert( PropertyIds eId, const PropValue& rValue, bool bOverwrite = true );
     void InsertProps(const boost::shared_ptr<PropertyMap> pMap);
-    const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const;
+    const ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote>&  GetFootnote() const { return m_xFootnote;}
     void SetFootnote( ::com::sun::star::uno::Reference< ::com::sun::star::text::XFootnote> xF ) { m_xFootnote = xF; }
 
     sal_Unicode GetFootnoteSymbol() const { return m_cFootnoteSymbol;}

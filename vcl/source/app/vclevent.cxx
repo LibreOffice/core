@@ -40,10 +40,6 @@ VclAccessibleEvent::~VclAccessibleEvent()
 {
 }
 
-Reference<XAccessible> VclAccessibleEvent::GetAccessible() const
-{
-    return mxAccessible;
-}
 
 void VclEventListeners::Call( VclSimpleEvent* pEvent ) const
 {

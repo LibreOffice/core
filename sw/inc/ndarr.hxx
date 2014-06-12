@@ -243,7 +243,7 @@ public:
                             SwAttrSet* pAutoAttr ); ///< in ndole.cxx
 
     /// Array of all OutlineNodes.
-    const SwOutlineNodes& GetOutLineNds() const;
+    const SwOutlineNodes& GetOutLineNds() const { return *pOutlineNds;}
 
     /// Update all Nodes - Rule/Format-Change.
     void UpdateOutlineNode(SwNode & rNd);

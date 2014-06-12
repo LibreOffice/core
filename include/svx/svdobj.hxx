@@ -900,7 +900,7 @@ public:
     void SetResizeProtect(bool bProt);
     bool IsResizeProtect() const { return bSizProt;}
     void SetPrintable(bool bPrn);
-    bool IsPrintable() const;
+    bool IsPrintable() const { return !bNoPrint;}
     void SetVisible(bool bVisible);
     bool IsVisible() const { return mbVisible;}
     void SetEmptyPresObj(bool bEpt);
@@ -984,7 +984,7 @@ public:
     // the following methods are used to control it;
     // usually this data makes no sense after the import is finished, since the object
     // might be resized
-    Rectangle GetBLIPSizeRectangle() const;
+    Rectangle GetBLIPSizeRectangle() const { return maBLIPSizeRectangle;}
     void SetBLIPSizeRectangle( const Rectangle& aRect );
 
     /// @see mbDoNotInsertIntoPageAutomatically

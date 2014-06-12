@@ -674,15 +674,7 @@ void ToolboxController::updateStatus( const OUString& aCommandURL )
     }
 }
 
-Reference< XURLTransformer > ToolboxController::getURLTransformer() const
-{
-    return m_xUrlTransformer;
-}
 
-Reference< ::com::sun::star::awt::XWindow > ToolboxController::getParent() const
-{
-    return m_xParentWindow;
-}
 
 void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequence< PropertyValue >& rArgs, const OUString &sTarget )
 {

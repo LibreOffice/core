@@ -63,7 +63,7 @@ protected:
     explicit ChartType( const ChartType & rOther );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-        GetComponentContext() const;
+        GetComponentContext() const { return m_xContext;}
 
     // ____ XChartType ____
     // still abstract ! implement !

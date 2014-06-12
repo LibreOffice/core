@@ -288,13 +288,6 @@ void Writer::endTag()
 
 
 
-sal_uInt16 Writer::createID()
-{
-    return mnNextId++;
-}
-
-
-
 void Writer::showFrame()
 {
     startTag( TAG_SHOWFRAME );

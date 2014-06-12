@@ -41,10 +41,6 @@ AgileEngine::AgileEngine() :
 AgileEngine::~AgileEngine()
 {}
 
-AgileEncryptionInfo& AgileEngine::getInfo()
-{
-    return mInfo;
-}
 
 Crypto::CryptoType AgileEngine::cryptoType(const AgileEncryptionInfo& rInfo)
 {

@@ -597,7 +597,7 @@ public:
         }
     }
 
-    sal_uInt32 parseIndex();
+    sal_uInt32 parseIndex() { return ((m_numOfEntries ? sizeof(sal_uInt16) : 0) + (m_numOfEntries * m_FIELD_ENTRY_SIZE));}
 
     const sal_Char* getFieldName(sal_uInt16 index);
     const sal_Char* getFieldType(sal_uInt16 index);
@@ -608,10 +608,6 @@ public:
     const sal_Char* getFieldFileName(sal_uInt16 index);
 };
 
-sal_uInt32 FieldList::parseIndex()
-{
-    return ((m_numOfEntries ? sizeof(sal_uInt16) : 0) + (m_numOfEntries * m_FIELD_ENTRY_SIZE));
-}
 
 const sal_Char* FieldList::getFieldName(sal_uInt16 index)
 {
@@ -766,7 +762,7 @@ public:
         }
     }
 
-    sal_uInt32 parseIndex();
+    sal_uInt32 parseIndex() { return ((m_numOfEntries ? sizeof(sal_uInt16) : 0) + (m_numOfEntries * m_REFERENCE_ENTRY_SIZE));}
 
     const sal_Char* getReferenceName(sal_uInt16 index);
     RTReferenceType getReferenceType(sal_uInt16 index);
@@ -774,10 +770,6 @@ public:
     RTFieldAccess   getReferenceAccess(sal_uInt16 index);
 };
 
-sal_uInt32 ReferenceList::parseIndex()
-{
-    return ((m_numOfEntries ? sizeof(sal_uInt16) : 0) + (m_numOfEntries * m_REFERENCE_ENTRY_SIZE));
-}
 
 const sal_Char* ReferenceList::getReferenceName(sal_uInt16 index)
 {

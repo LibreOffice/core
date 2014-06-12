@@ -276,15 +276,7 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
 
 
 
-Image PageObjectLayouter::GetTransitionEffectIcon (void) const
-{
-    return maTransitionEffectIcon;
-}
 
-Image PageObjectLayouter::GetCustomAnimationEffectIcon (void) const
-{
-    return maCustomAnimationEffectIcon;
-}
 
 
 } } } // end of namespace ::sd::slidesorter::view

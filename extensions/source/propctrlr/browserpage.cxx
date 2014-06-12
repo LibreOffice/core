@@ -57,16 +57,8 @@ namespace pcr
     }
 
 
-    OBrowserListBox& OBrowserPage::getListBox()
-    {
-        return m_aListBox;
-    }
 
 
-    const OBrowserListBox& OBrowserPage::getListBox() const
-    {
-        return m_aListBox;
-    }
 
 
     void OBrowserPage::StateChanged(StateChangedType nType)

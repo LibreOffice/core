@@ -102,10 +102,6 @@ OCollectionView::~OCollectionView( )
 {
 }
 
-Reference< XContent> OCollectionView::getSelectedFolder() const
-{
-    return m_xContent;
-}
 
 IMPL_LINK_NOARG(OCollectionView, Save_Click)
 {

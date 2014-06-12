@@ -339,10 +339,6 @@ uno::Reference< report::XSection> OObjectBase::getSection() const
     return xSection;
 }
 
-uno::Reference< report::XReportComponent> OObjectBase::getReportComponent() const
-{
-    return m_xReportComponent;
-}
 
 uno::Reference< beans::XPropertySet> OObjectBase::getAwtComponent()
 {

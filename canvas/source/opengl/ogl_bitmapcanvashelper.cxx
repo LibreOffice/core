@@ -46,10 +46,6 @@ namespace oglcanvas
         // TODO(F2): copyRect NYI
     }
 
-    geometry::IntegerSize2D BitmapCanvasHelper::getSize()
-    {
-        return maSize;
-    }
 
     uno::Reference< rendering::XBitmap > BitmapCanvasHelper::getScaledBitmap( const geometry::RealSize2D& /*newSize*/,
                                                                               bool                    /*beFast*/ )

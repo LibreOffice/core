@@ -255,7 +255,7 @@ class SwHistoryBookmark : public SwHistoryHint
         virtual void SetInDoc(SwDoc * pDoc, bool) SAL_OVERRIDE;
 
         bool IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
-        const OUString& GetName() const;
+        const OUString& GetName() const { return m_aName;}
 
     private:
         const OUString m_aName;

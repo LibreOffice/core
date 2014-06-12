@@ -377,7 +377,7 @@ public:
     virtual bool operator==(const SfxPoolItem& rCmp ) const SAL_OVERRIDE;
     virtual ScCondFormatItem*  Clone( SfxItemPool* = 0 ) const SAL_OVERRIDE;
 
-    const std::vector<sal_uInt32>& GetCondFormatData() const;
+    const std::vector<sal_uInt32>& GetCondFormatData() const { return maIndex;}
     void AddCondFormatData( sal_uInt32 nIndex );
     void SetCondFormatData( const std::vector<sal_uInt32>& aIndex );
     void RemoveCondFormatData( sal_uInt32 nIndex );

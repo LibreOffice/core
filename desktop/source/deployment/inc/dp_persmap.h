@@ -49,7 +49,7 @@ public:
 
     bool has( OString const & key ) const;
     bool get( OString * value, OString const & key ) const;
-    t_string2string_map getEntries() const;
+    const t_string2string_map& getEntries() const { return m_entries; }
     void put( OString const & key, OString const & value );
     bool erase( OString const & key, bool flush_immediately = true );
 

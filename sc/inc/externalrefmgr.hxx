@@ -274,7 +274,7 @@ public:
      */
     bool setCacheTableReferenced( sal_uInt16 nFileId, const OUString& rTabName, size_t nSheets, bool bPermanent );
     void setAllCacheTableReferencedStati( bool bReferenced );
-    bool areAllCacheTablesReferenced() const;
+    bool areAllCacheTablesReferenced() const { return maReferenced.mbAllReferenced;}
 
     /**
      * Collect all cached non-empty cell positions, inferred directly from the

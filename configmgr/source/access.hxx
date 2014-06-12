@@ -448,7 +448,7 @@ protected:
         com::sun::star::uno::Type const & aType)
         throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    Components & getComponents() const;
+    Components & getComponents() const { return components_;}
 
     void checkLocalizedPropertyAccess();
 

@@ -410,10 +410,6 @@ bool ScDPFilteredCache::isRowQualified(sal_Int32 nRow, const vector<Criterion>& 
     return true;
 }
 
-const ScDPCache* ScDPFilteredCache::getCache() const
-{
-    return &mrCache;
-}
 
 #if DEBUG_PIVOT_TABLE
 using std::cout;

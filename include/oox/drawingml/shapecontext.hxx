@@ -37,7 +37,7 @@ public:
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
-    ShapePtr getShape();
+    ShapePtr getShape() { return mpShapePtr;}
 
 protected:
 

@@ -393,20 +393,4 @@ SwTwips SwAsCharAnchoredObjectPosition::_GetRelPosToBase(
     return nRelPosToBase;
 }
 
-/** calculated anchored position for object position */
-Point SwAsCharAnchoredObjectPosition::GetAnchorPos() const
-{
-    return maAnchorPos;
-}
-
-/** calculated relative position to base line for object position */
-
-/** determined object rectangle including spacing for object */
-SwRect SwAsCharAnchoredObjectPosition::GetObjBoundRectInclSpacing() const
-{
-    return maObjBoundRect;
-}
-
-/** determined line alignment */
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

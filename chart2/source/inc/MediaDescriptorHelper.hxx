@@ -52,7 +52,7 @@ public:
                             ::com::sun::star::beans::PropertyValue > & rMediaDescriptor );
 
     ::com::sun::star::uno::Sequence<
-                ::com::sun::star::beans::PropertyValue > getReducedForModel();
+                ::com::sun::star::beans::PropertyValue > getReducedForModel() { return m_aModelProperties;}
 
 public:
     //all properties given in the constructor are stored in the following three sequences

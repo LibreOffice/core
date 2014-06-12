@@ -2634,10 +2634,6 @@ bool RadioButton::SetModeRadioImage( const Image& rImage )
     return true;
 }
 
-const Image& RadioButton::GetModeRadioImage( ) const
-{
-    return maImage;
-}
 
 void RadioButton::SetState( bool bCheck )
 {

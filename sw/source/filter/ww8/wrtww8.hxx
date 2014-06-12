@@ -1578,7 +1578,7 @@ class MSWordStyles
 
     /// Get slot number during building the style table.
     sal_uInt16 BuildGetSlot( const SwFmt& rFmt );
-    sal_uInt16 BuildGetSlot( const SwNumRule& rNumRule );
+    sal_uInt16 BuildGetSlot( const SwNumRule& /*rNumRule*/ ) { return nUsedSlots++;}
 
     /// Return information about one style.
     void GetStyleData( SwFmt* pFmt, bool& bFmtColl, sal_uInt16& nBase, sal_uInt16& nNext );

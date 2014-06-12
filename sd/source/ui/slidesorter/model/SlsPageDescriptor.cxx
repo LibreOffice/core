@@ -77,10 +77,6 @@ PageDescriptor::~PageDescriptor (void)
 
 
 
-Reference<drawing::XDrawPage> PageDescriptor::GetXDrawPage (void) const
-{
-    return mxPage;
-}
 
 
 
@@ -227,10 +223,6 @@ bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
 
 
 
-VisualState& PageDescriptor::GetVisualState (void)
-{
-    return maVisualState;
-}
 
 
 

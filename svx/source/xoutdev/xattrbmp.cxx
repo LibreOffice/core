@@ -370,10 +370,6 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) cons
     return rOut;
 }
 
-const GraphicObject& XFillBitmapItem::GetGraphicObject() const
-{
-    return maGraphicObject;
-}
 
 void XFillBitmapItem::SetGraphicObject(const GraphicObject& rGraphicObject)
 {

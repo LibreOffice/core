@@ -51,7 +51,7 @@ public:
     /** Reads a cached value and stores it with its cell address. */
     explicit            XclImpCrn( XclImpStream& rStrm, const XclAddress& rXclPos );
 
-    const XclAddress&   GetAddress() const;
+    const XclAddress&   GetAddress() const { return maXclPos;}
 
 private:
     XclAddress          maXclPos;       /// Excel position of the cached cell.
@@ -544,10 +544,6 @@ XclImpCrn::XclImpCrn( XclImpStream& rStrm, const XclAddress& rXclPos ) :
 {
 }
 
-const XclAddress& XclImpCrn::GetAddress() const
-{
-    return maXclPos;
-}
 
 // Sheet in an external document ==============================================
 

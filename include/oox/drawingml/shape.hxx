@@ -139,7 +139,7 @@ public:
     void                            setTableType();
 
     void                setTextBody(const TextBodyPtr & pTextBody);
-    TextBodyPtr         getTextBody();
+    TextBodyPtr         getTextBody() { return mpTextBody;}
     void                setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle );
     TextListStylePtr    getMasterTextListStyle() const { return mpMasterTextListStyle; }
 

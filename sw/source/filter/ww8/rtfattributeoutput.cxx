@@ -438,11 +438,6 @@ OStringBuffer& RtfAttributeOutput::RunText()
     return m_aRunText.getLastBuffer();
 }
 
-OStringBuffer& RtfAttributeOutput::Styles()
-{
-    return m_aStyles;
-}
-
 void RtfAttributeOutput::RawText(const OUString& rText, bool /*bForceUnicode*/, rtl_TextEncoding eCharSet)
 {
     m_aRunText->append(msfilter::rtfutil::OutString(rText, eCharSet));

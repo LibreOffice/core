@@ -404,8 +404,8 @@ public:
     void                SetDateTimeUTC( const DateTime& rDT )
                             { aDateTime = rDT; }
 
-    SC_DLLPUBLIC const OUString& GetUser() const;
-    const OUString& GetComment() const;
+    const OUString& GetUser() const { return aUser;}
+    const OUString& GetComment() const { return aComment;}
 
     // set user comment
     void SetComment( const OUString& rStr );
@@ -799,8 +799,8 @@ public:
 
     void GetOldString( OUString& rStr, const ScDocument* pDoc ) const;
     void GetNewString( OUString& rStr, const ScDocument* pDoc ) const;
-    SC_DLLPUBLIC const ScCellValue& GetOldCell() const;
-    SC_DLLPUBLIC const ScCellValue& GetNewCell() const;
+    const ScCellValue& GetOldCell() const { return maOldCell;}
+    const ScCellValue& GetNewCell() const { return maNewCell;}
     virtual void GetDescription(
         OUString& rStr, ScDocument* pDoc, bool bSplitRange = false, bool bWarning = true ) const SAL_OVERRIDE;
 
@@ -1076,8 +1076,8 @@ public:
     bool IsInDeleteUndo() const { return bInDeleteUndo; }
     bool IsInPasteCut() const { return bInPasteCut; }
     SC_DLLPUBLIC void SetUser( const OUString& rUser );
-    SC_DLLPUBLIC const OUString& GetUser() const;
-    SC_DLLPUBLIC const std::set<OUString>& GetUserCollection() const;
+    const OUString& GetUser() const { return maUser;}
+    const std::set<OUString>& GetUserCollection() const { return maUserCollection;}
     ScDocument*         GetDocument() const { return pDoc; }
                         // for import filter
     const DateTime&     GetFixDateTime() const { return aFixDateTime; }

@@ -57,7 +57,7 @@ public:
     virtual bool            HasMetrics() const SAL_OVERRIDE;
     virtual bool            ScaleMetrics(long nMul, long nDiv) SAL_OVERRIDE;
 
-    const XDash&            GetDashValue() const;
+    const XDash&            GetDashValue() const { return aDash;}
     void                    SetDashValue(const XDash& rNew)   { aDash = rNew; Detach(); } // SetValue -> SetDashValue
 
     static bool CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 );

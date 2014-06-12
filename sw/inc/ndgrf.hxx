@@ -201,7 +201,7 @@ public:
     /// Returns the with our graphic attributes filled Graphic-Attr-Structure.
     GraphicAttr& GetGraphicAttr( GraphicAttr&, const SwFrm* pFrm ) const;
 
-    boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer();
+    boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > GetThreadConsumer() { return mpThreadConsumer;}
     bool IsLinkedInputStreamReady() const { return mbLinkedInputStreamReady;}
     void TriggerAsyncRetrieveInputStream();
     void ApplyInputStream(

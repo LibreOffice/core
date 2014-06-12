@@ -183,8 +183,8 @@ public:
 
     bool        IsOverlayBuffer() const { return m_bOverlayBuffer;}
     bool        IsPaintBuffer() const { return m_bPaintBuffer;}
-    Color       GetStripeColorA() const;
-    Color       GetStripeColorB() const;
+    Color       GetStripeColorA() const { return m_bStripeColorA;}
+    Color       GetStripeColorB() const { return m_bStripeColorB;}
     sal_uInt16  GetStripeLength() const { return m_nStripeLength;}
 
     // #i73602#
@@ -701,18 +701,10 @@ void SvtOptionsDrawinglayer_Impl::Notify( const com::sun::star::uno::Sequence<OU
 
 //  public method
 
-Color SvtOptionsDrawinglayer_Impl::GetStripeColorA() const
-{
-    return m_bStripeColorA;
-}
 
 
 //  public method
 
-Color SvtOptionsDrawinglayer_Impl::GetStripeColorB() const
-{
-    return m_bStripeColorB;
-}
 
 
 //  public method

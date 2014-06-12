@@ -1130,10 +1130,6 @@ ScCondFormatItem* ScCondFormatItem::Clone(SfxItemPool*) const
     return new ScCondFormatItem(maIndex);
 }
 
-const std::vector<sal_uInt32>& ScCondFormatItem::GetCondFormatData() const
-{
-    return maIndex;
-}
 
 void ScCondFormatItem::AddCondFormatData( sal_uInt32 nIndex )
 {

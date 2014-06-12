@@ -316,12 +316,6 @@ bool PersistentMap::erase( OString const & key, bool flush_immediately )
     return true;
 }
 
-t_string2string_map PersistentMap::getEntries() const
-{
-    // TODO: return by const reference instead?
-    return m_entries;
-}
-
 #ifndef DISABLE_BDB2PMAP
 bool PersistentMap::importFromBDB()
 {

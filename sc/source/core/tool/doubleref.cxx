@@ -276,10 +276,6 @@ ScDBInternalRange::~ScDBInternalRange()
 {
 }
 
-const ScRange& ScDBInternalRange::getRange() const
-{
-    return maRange;
-}
 
 SCCOL ScDBInternalRange::getColSize() const
 {

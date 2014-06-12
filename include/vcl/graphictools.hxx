@@ -300,7 +300,7 @@ public:
     /// Query path to fill
     void            getPath             ( PolyPolygon& ) const;
     /// Get color used for solid fills
-    Color           getFillColor        () const;
+    const Color&    getFillColor        () const { return maFillColor;}
     /** Get stroke transparency
 
         @return the transparency, ranging from 0.0 (opaque) to 1.0 (fully translucent)

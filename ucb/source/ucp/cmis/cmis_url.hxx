@@ -30,10 +30,10 @@ namespace cmis
         public:
             URL( OUString const & urlStr );
 
-            OUString& getObjectPath( );
-            OUString& getObjectId( );
-            OUString& getBindingUrl( );
-            OUString& getRepositoryId( );
+            OUString& getObjectPath( ) { return m_sPath; }
+            OUString& getObjectId( ) { return m_sId; }
+            OUString& getBindingUrl( ) { return m_sBindingUrl; }
+            OUString& getRepositoryId( ) { return m_sRepositoryId; }
             OUString& getUsername( ) { return m_sUser; }
             OUString& getPassword( ) { return m_sPass; }
             void setObjectPath( const OUString& sPath );

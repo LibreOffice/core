@@ -102,15 +102,15 @@ public:
     */
     void CalcMinZoom (void);
     void SetMinZoom (long int nMin);
-    long GetMinZoom (void) const;
+    long GetMinZoom (void) const { return mnMinZoom;}
     void SetMaxZoom (long int nMax);
-    long GetMaxZoom (void) const;
+    long GetMaxZoom (void) const { return mnMaxZoom;}
 
     long GetZoom (void) const;
 
-    Point GetWinViewPos (void) const;
-    Point GetViewOrigin (void) const;
-    Size GetViewSize (void) const;
+    Point GetWinViewPos (void) const { return maWinPos;}
+    Point GetViewOrigin (void) const { return maViewOrigin;}
+    Size GetViewSize (void) const { return maViewSize;}
     void SetWinViewPos(const Point& rPnt);
     void SetViewOrigin(const Point& rPnt);
     void SetViewSize(const Size& rSize);

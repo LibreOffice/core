@@ -364,10 +364,6 @@ void EditCharAttribField::SetFont( SvxFont& rFont, OutputDevice* )
         rFont.SetColor( *pTxtColor );
 }
 
-const OUString& EditCharAttribField::GetFieldValue() const
-{
-    return aFieldValue;
-}
 
 void EditCharAttribField::SetFieldValue(const OUString& rVal)
 {

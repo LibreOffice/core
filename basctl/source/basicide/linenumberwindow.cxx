@@ -99,10 +99,6 @@ void LineNumberWindow::DoScroll(long nHorzScroll, long nVertScroll)
     Window::Scroll(nHorzScroll, nVertScroll);
 }
 
-long& LineNumberWindow::GetCurYOffset()
-{
-    return m_nCurYOffset;
-}
 
 bool LineNumberWindow::SyncYOffset()
 {

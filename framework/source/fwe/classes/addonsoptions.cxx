@@ -245,15 +245,15 @@ class AddonsOptions_Impl : public ConfigItem
 
         bool                                            HasAddonsMenu        () const;
         sal_Int32                                       GetAddonsToolBarCount() const;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu        () const;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu        () const { return m_aCachedMenuProperties;}
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart () const { return m_aCachedMenuBarPartProperties;}
         const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart ( sal_uInt32 nIndex ) const;
         const OUString                           GetAddonsToolbarResourceName( sal_uInt32 nIndex ) const;
-        const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsHelpMenu    () const { return m_aCachedHelpMenuProperties;}
         Image                                           GetImageFromURL( const OUString& aURL, bool bBig, bool bNoScale );
-        const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const;
+        const MergeMenuInstructionContainer&            GetMergeMenuInstructions() const { return m_aCachedMergeMenuInsContainer;}
         bool                                            GetMergeToolbarInstructions( const OUString& rToolbarName, MergeToolbarInstructionContainer& rToolbarInstructions ) const;
-        const MergeStatusbarInstructionContainer&       GetMergeStatusbarInstructions() const;
+        const MergeStatusbarInstructionContainer&       GetMergeStatusbarInstructions() const { return m_aCachedStatusbarMergingInstructions;}
         void                                            ReadConfigurationData();
 
 
@@ -496,20 +496,6 @@ sal_Int32 AddonsOptions_Impl::GetAddonsToolBarCount() const
 
 //  public method
 
-const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenu() const
-{
-    return m_aCachedMenuProperties;
-}
-
-//  public method
-
-const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenuBarPart() const
-{
-    return m_aCachedMenuBarPartProperties;
-}
-
-//  public method
-
 const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBarPart( sal_uInt32 nIndex ) const
 {
     if ( /*nIndex >= 0 &&*/ nIndex < m_aCachedToolBarPartProperties.size() )
@@ -530,20 +516,6 @@ const OUString AddonsOptions_Impl::GetAddonsToolbarResourceName( sal_uInt32 nInd
 
 //  public method
 
-const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsHelpMenu  () const
-{
-    return m_aCachedHelpMenuProperties;
-}
-
-//  public method
-
-const MergeMenuInstructionContainer& AddonsOptions_Impl::GetMergeMenuInstructions() const
-{
-    return m_aCachedMergeMenuInsContainer;
-}
-
-//  public method
-
 bool AddonsOptions_Impl::GetMergeToolbarInstructions(
     const OUString& rToolbarName,
     MergeToolbarInstructionContainer& rToolbarInstructions ) const
@@ -558,10 +530,6 @@ bool AddonsOptions_Impl::GetMergeToolbarInstructions(
         return false;
 }
 
-const MergeStatusbarInstructionContainer& AddonsOptions_Impl::GetMergeStatusbarInstructions() const
-{
-    return m_aCachedStatusbarMergingInstructions;
-}
 
 //  public method
 
