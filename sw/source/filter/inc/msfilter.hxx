@@ -59,8 +59,7 @@ namespace sw
     {
         /** MSOffice appears to set the charset of unicode fonts to MS 932
 
-            Arial Unicode MS for example is a unicode font, but word sets
-            exported uses of it to the MS 932 charset
+            But we do "default", whatever that means.
 
             @param eTextEncoding
                 the OOo encoding to convert from
@@ -72,6 +71,15 @@ namespace sw
                 <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         sal_uInt8 rtl_TextEncodingToWinCharset(rtl_TextEncoding eTextEncoding);
+
+        /** MSOffice appears to set the charset of unicode fonts to MS 932
+
+            Arial Unicode MS for example is a unicode font, but word sets
+            exported uses of it to the MS 932 charset
+
+        */
+        sal_uInt8 rtl_TextEncodingToWinCharsetRTF(OUString const& rFontName,
+                OUString const& rAltName, rtl_TextEncoding eTextEncoding);
 
         /** Import a MSWord XE field. Suitable for .doc and .rtf
 

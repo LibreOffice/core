@@ -2073,7 +2073,12 @@ void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_LOCH);
     m_aStylesEnd.append(OOO_STRING_SVTOOLS_RTF_F);
     m_aStylesEnd.append((sal_Int32)m_rExport.maFontHelper.GetId(rFont));
-    m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(rtl_getBestWindowsCharsetFromTextEncoding(rFont.GetCharSet()));
+    // FIXME: this may be a tad expensive... but the charset needs to be
+    // consistent with what wwFont::WriteRtf() does
+    FontMapExport aTmp(rFont.GetFamilyName());
+    m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(
+            sw::ms::rtl_TextEncodingToWinCharsetRTF(
+                aTmp.msPrimary, aTmp.msSecondary, rFont.GetCharSet()));
     if (m_rExport.eCurrentEncoding == RTL_TEXTENCODING_DONTKNOW)
         m_rExport.eCurrentEncoding = m_rExport.eDefaultEncoding;
 }
@@ -3270,20 +3275,27 @@ MSWordExportBase& RtfAttributeOutput::GetExport()
 /// Start the font.
 void RtfAttributeOutput::StartFont(const OUString& rFamilyName) const
 {
-    m_rExport.Strm().WriteCharPtr(OUStringToOString(rFamilyName, m_rExport.eCurrentEncoding).getStr());
+    // write the font name hex-encoded, but without Unicode - Word at least
+    // cannot read *both* Unicode and fallback as written by OutString
+    m_rExport.Strm().WriteCharPtr(
+        msfilter::rtfutil::OutString(rFamilyName, m_rExport.eCurrentEncoding, false).getStr());
 }
 
 /// End the font.
 void RtfAttributeOutput::EndFont() const
 {
     m_rExport.Strm().WriteCharPtr(";}");
+    m_rExport.eCurrentEncoding = m_rExport.eDefaultEncoding;
 }
 
 /// Alternate name for the font.
 void RtfAttributeOutput::FontAlternateName(const OUString& rName) const
 {
     m_rExport.Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FALT).WriteChar(' ');
-    m_rExport.Strm().WriteCharPtr(OUStringToOString(rName, m_rExport.eCurrentEncoding).getStr()).WriteChar('}');
+    // write the font name hex-encoded, but without Unicode - Word at least
+    // cannot read *both* Unicode and fallback as written by OutString
+    m_rExport.Strm().WriteCharPtr(
+        msfilter::rtfutil::OutString(rName, m_rExport.eCurrentEncoding, false).getStr()).WriteChar('}');
 }
 
 /// Font charset.
@@ -3292,6 +3304,7 @@ void RtfAttributeOutput::FontCharset(sal_uInt8 nCharSet) const
     m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FCHARSET);
     m_rExport.OutULong(nCharSet);
     m_rExport.Strm().WriteChar(' ');
+    m_rExport.eCurrentEncoding =rtl_getTextEncodingFromWindowsCharset(nCharSet);
 }
 
 /// Font family.

@@ -712,6 +712,55 @@ namespace sw
             return nRet;
         }
 
+        static bool
+        CanEncode(OUString const& rString, rtl_TextEncoding const eEncoding)
+        {
+            rtl::OString tmp;
+            return rString.convertToString(&tmp, eEncoding,
+                    RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+                    RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR);
+        }
+
+        sal_uInt8 rtl_TextEncodingToWinCharsetRTF(
+                OUString const& rFontName, OUString const& rAltName,
+                rtl_TextEncoding eTextEncoding)
+        {
+            sal_uInt8 nRet =
+                rtl_getBestWindowsCharsetFromTextEncoding(eTextEncoding);
+            switch (eTextEncoding)
+            {
+                case RTL_TEXTENCODING_DONTKNOW:
+                case RTL_TEXTENCODING_UCS2:
+                case RTL_TEXTENCODING_UTF7:
+                case RTL_TEXTENCODING_UTF8:
+                case RTL_TEXTENCODING_JAVA_UTF8:
+                    static struct { rtl_TextEncoding enc; sal_uInt8 charset; }
+                        const s_fallbacks [] = {
+                            { RTL_TEXTENCODING_MS_932, 0x80 }, // Shift-JIS
+                            { RTL_TEXTENCODING_MS_936, 0x86 }, // GB-2312
+                            { RTL_TEXTENCODING_MS_950, 0x88 }, // Big5
+                            { RTL_TEXTENCODING_MS_949, 0x81 }, // EUC-KR
+                        };
+                    for (size_t i = 0; i < SAL_N_ELEMENTS(s_fallbacks); ++i)
+                    {
+                        // fall back to a charset that can at least encode
+                        // the font's name
+                        if (CanEncode(rFontName, s_fallbacks[i].enc)
+                            && CanEncode(rAltName, s_fallbacks[i].enc))
+                        {
+                            return s_fallbacks[i].charset;
+                        }
+                    }
+                    SAL_INFO("sw.rtf", "no fallback charset found for font: "
+                            << rFontName << " " << rAltName);
+                    nRet = 0x01; // all hope lost: "default", whatever that is
+                    break;
+                default:
+                    break;
+            }
+            return nRet;
+        }
+
         long DateTime2DTTM( const DateTime& rDT )
         {
         /*
