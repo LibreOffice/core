@@ -906,17 +906,25 @@ void SwAssignFieldsControl::Init(SwMailMergeConfigItem& rConfigItem)
 
     //fill the controls
     long nControlWidth = aOutputSize.Width() / 3;
-    long nControlHeight = 24;
+    long nControlHeight = -1;
     for(sal_uInt32 i = 0; i < rHeaders.Count(); ++i)
     {
         const OUString rHeader = rHeaders.GetString( i );
         FixedText* pNewText = new FixedText(&m_aWindow, WB_VCENTER);
         pNewText->SetText("<" + rHeader + ">");
         ListBox* pNewLB = new ListBox(&m_aWindow, WB_DROPDOWN | WB_VCENTER | WB_TABSTOP);
+        pNewText->set_mnemonic_widget(pNewLB);
         pNewLB->InsertEntry(SW_RESSTR(SW_STR_NONE));
         pNewLB->SetHelpId( aHIDs[i] );
         pNewLB->SelectEntryPos(0);
         pNewLB->SetDropDownLineCount(5);
+
+        if (nControlHeight == -1) //first time
+        {
+            nControlHeight = std::max(pNewLB->get_preferred_size().Height(),
+                                      pNewText->get_preferred_size().Height());
+        }
+
         for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
             pNewLB->InsertEntry(pFields[nField]);
         FixedText* pNewPreview = new FixedText(&m_aWindow, WB_VCENTER);
@@ -997,7 +1005,6 @@ void SwAssignFieldsControl::Resize()
 
     Size aOutputSize = GetOutputSize();
     long nHBHeight = m_aHeaderHB.CalcWindowSizePixel().Height();
-    long nControlHeight = 24;
 
     m_aWindow.SetSizePixel(Size(aOutputSize.Width() - m_aVScroll.GetSizePixel().Width(), aOutputSize.Height() - nHBHeight));
 
@@ -1010,9 +1017,15 @@ void SwAssignFieldsControl::Resize()
 
     sal_Int32 nColWidth = aOutputSize.Width() / 3;
     m_aHeaderHB.SetSizePixel(Size(aOutputSize.Width(), nHBHeight));
-    m_aHeaderHB.SetItemSize( 1, nColWidth);
-    m_aHeaderHB.SetItemSize( 2, nColWidth);
-    m_aHeaderHB.SetItemSize( 3, nColWidth);
+    m_aHeaderHB.SetItemSize(1, nColWidth);
+    m_aHeaderHB.SetItemSize(2, nColWidth);
+    m_aHeaderHB.SetItemSize(3, nColWidth);
+
+    if (m_aFieldNames.empty() || m_aMatches.empty())
+        return;
+
+    long nControlHeight = std::max(m_aFieldNames[0]->get_preferred_size().Height(),
+                                   m_aMatches[0]->get_preferred_size().Height());
 
     ::std::vector<FixedText*>::iterator aFIIter;
     for(aFIIter = m_aFieldNames.begin(); aFIIter != m_aFieldNames.end(); ++aFIIter)
