@@ -559,7 +559,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
                         x[ i ] = (double)i;
                     mrSane.GetOptionValue( mnCurrentOption, y.get() );
 
-                    GridWindow aGrid( x.get(), y.get(), nElements, this );
+                    GridDialog aGrid( x.get(), y.get(), nElements, this );
                     aGrid.SetText( mrSane.GetOptionName( mnCurrentOption ) );
                     aGrid.setBoundings( 0, mfMin, nElements, mfMax );
                     if( aGrid.Execute() && aGrid.getNewYValues() )

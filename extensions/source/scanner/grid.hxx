@@ -25,125 +25,33 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 
-class GridWindow : public ModalDialog
+class GridWindow;
+
+enum resetType
 {
-    // helper class for handles
-    struct impHandle
-    {
-        Point           maPos;
-        sal_uInt16      mnOffX;
-        sal_uInt16      mnOffY;
+    LINEAR_ASCENDING = 0,
+    LINEAR_DESCENDING = 1,
+    RESET = 2,
+    EXPONENTIAL = 3
+};
 
-        impHandle(const Point& rPos, sal_uInt16 nX, sal_uInt16 nY)
-        :   maPos(rPos), mnOffX(nX), mnOffY(nY)
-        {
-        }
-
-        bool operator<(const impHandle& rComp) const
-        {
-            return (maPos.X() < rComp.maPos.X());
-        }
-
-        void draw(Window& rWin, const BitmapEx& rBitmapEx)
-        {
-            const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
-            rWin.DrawBitmapEx(maPos - aOffset, rBitmapEx);
-        }
-
-        bool isHit(Window& rWin, const Point& rPos)
-        {
-            const Point aOffset(rWin.PixelToLogic(Point(mnOffX, mnOffY)));
-            const Rectangle aTarget(maPos - aOffset, maPos + aOffset);
-            return aTarget.IsInside(rPos);
-        }
-    };
-
-    enum resetType
-    {
-        LINEAR_ASCENDING = 0,
-        LINEAR_DESCENDING = 1,
-        RESET = 2,
-        EXPONENTIAL = 3
-    };
-
-    Rectangle       m_aGridArea;
-
-    double          m_fMinX;
-    double          m_fMinY;
-    double          m_fMaxX;
-    double          m_fMaxY;
-
-    double          m_fChunkX;
-    double          m_fMinChunkX;
-    double          m_fChunkY;
-    double          m_fMinChunkY;
-
-    double*         m_pXValues;
-    double*         m_pOrigYValues;
-    int             m_nValues;
-    double*         m_pNewYValues;
-
-    sal_uInt16      m_BmOffX;
-    sal_uInt16      m_BmOffY;
-
-    bool            m_bCutValues;
-
-    // stuff for handles
-    std::vector< impHandle >    m_aHandles;
-    sal_uInt32                  m_nDragIndex;
-
-    BitmapEx        m_aMarkerBitmap;
-
+class GridDialog : public ModalDialog
+{
     OKButton*       m_pOKButton;
 
     ListBox*        m_pResetTypeBox;
     PushButton*     m_pResetButton;
 
-
-    Point transform( double x, double y );
-    void transform( const Point& rOriginal, double& x, double& y );
-
-    double findMinX();
-    double findMinY();
-    double findMaxX();
-    double findMaxY();
-
-    void updateRectSize();
-
-    void drawGrid();
-    void drawOriginal();
-    void drawNew();
-    void drawHandles();
-
-    void computeExtremes();
-    void computeChunk( double fMin, double fMax, double& fChunkOut, double& fMinChunkOut );
-    void computeNew();
-    double interpolate( double x, double* pNodeX, double* pNodeY, int nNodes );
+    GridWindow*     m_pGridWindow;
 
     DECL_LINK( ClickButtonHdl, Button* );
 
-    virtual void MouseMove( const MouseEvent& ) SAL_OVERRIDE;
-    virtual void MouseButtonDown( const MouseEvent& ) SAL_OVERRIDE;
-    virtual void MouseButtonUp( const MouseEvent& ) SAL_OVERRIDE;
 public:
-    GridWindow( double* pXValues, double* pYValues, int nValues,
-                Window* pParent, bool bCutValues = true );
-    virtual ~GridWindow();
+    GridDialog(double* pXValues, double* pYValues, int nValues,
+                Window* pParent, bool bCutValues = true);
 
-    void setBoundings( double fMinX, double fMinY, double fMaxX, double fMaxY );
-    double getMinX() { return m_fMinX; }
-    double getMinY() { return m_fMinY; }
-    double getMaxX() { return m_fMaxX; }
-    double getMaxY() { return m_fMaxY; }
-
-    int countValues() { return m_nValues; }
-    double* getXValues() { return m_pXValues; }
-    double* getOrigYValues() { return m_pOrigYValues; }
-    double* getNewYValues() { return m_pNewYValues; }
-
-    void drawLine( double x1, double y1, double x2, double y2 );
-
-    virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    void setBoundings(double fMinX, double fMinY, double fMaxX, double fMaxY);
+    double* getNewYValues();
 };
 
 #endif // INCLUDED_EXTENSIONS_SOURCE_SCANNER_GRID_HXX
