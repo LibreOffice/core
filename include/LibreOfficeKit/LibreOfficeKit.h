@@ -10,6 +10,8 @@
 #ifndef INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_H
 #define INCLUDED_DESKTOP_INC_LIBREOFFICEKIT_H
 
+#include <stddef.h>
+
 #ifdef __cplusplus
 extern "C"
 {
