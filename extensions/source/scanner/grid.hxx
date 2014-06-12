@@ -60,10 +60,10 @@ class GridWindow : public ModalDialog
 
     enum resetType
     {
-        LINEAR_ASCENDING = 10,
-        LINEAR_DESCENDING,
-        RESET,
-        EXPONENTIAL
+        LINEAR_ASCENDING = 0,
+        LINEAR_DESCENDING = 1,
+        RESET = 2,
+        EXPONENTIAL = 3
     };
 
     Rectangle       m_aGridArea;
