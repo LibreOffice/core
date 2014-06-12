@@ -89,10 +89,12 @@ public class AttributeManager
     /** For the state with id nStateId, match the attributes from the document
      *  with the attribute specifications of that state.
      */
-    public void ParseAttributes (
+    public AttributeValues ParseAttributes (
         final int nStateId,
         final AttributeProvider aDocumentAttributes)
     {
+        final AttributeValues aValues = new AttributeValues();
+
         final Map<Integer,AttributeDescriptor> aAttributesPerState = maStateIdToAttributesMap.get(nStateId);
         if (aAttributesPerState == null)
         {
@@ -120,6 +122,8 @@ public class AttributeManager
                     aEntry[2],
                     aAttributesPerState);
                 aUsedAttributes.add(aAttributeDescriptor);
+                aValues.AddAttribute(aAttributeDescriptor, aEntry[2]);
+
                 if (Log.Dbg != null)
                 {
                     if (aAttributeDescriptor == null)
@@ -147,6 +151,8 @@ public class AttributeManager
                 }
             }
         }
+
+        return aValues;
     }
 
 

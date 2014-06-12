@@ -24,12 +24,13 @@ package org.apache.openoffice.ooxml.parser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.Location;
 
 /** This OOXML parser is based on the output of the schema parser.
  *  It exists to debug the schema parser and as illustration and preparation of
@@ -39,6 +40,10 @@ import javax.xml.stream.XMLStreamReader;
  */
 public class OOXMLParser
 {
+    class ActionContext
+    {
+        public Map<String,Integer> TypeCounts = new TreeMap<>();
+    }
     /** The parser is called with two arguments:
      *  - A path to where the parser tables with the states and transitions can
      *    be found.
@@ -63,29 +68,111 @@ public class OOXMLParser
             System.out.printf("writing no log data\n");
         }
 
+        new OOXMLParser(aArgumentList[0], aArgumentList[1]);
+    }
+
+
+
+    private OOXMLParser (
+        final String sParseTableFilename,
+        final String sInputFilename)
+    {
         long nStartTime = System.currentTimeMillis();
-        final StateMachine aMachine = new StateMachine(new File(aArgumentList[0]));
-        final InputStream aIn = GetInputStream(aArgumentList[1]);
-        final XMLStreamReader aReader = GetStreamReader(aIn, aArgumentList[1]);
+        final StateMachine aMachine = new StateMachine(new File(sParseTableFilename));
+        final InputStream aIn = GetInputStream(sInputFilename);
         long nEndTime = System.currentTimeMillis();
+
+        final ActionContext aActionContext = new ActionContext();
+        AddSomeActions(aMachine.GetActionManager(), aActionContext);
+
         System.out.printf("initialzed parser in %fs\n", (nEndTime-nStartTime)/1000.0);
 
         try
         {
-            if (aReader != null)
+            nStartTime = System.currentTimeMillis();
+            final Parser aParser = new Parser(aMachine, aIn);
+            aParser.Parse();
+            final int  nElementCount = aParser.GetElementCount();
+            nEndTime = System.currentTimeMillis();
+            System.out.printf("parsed %d elements in %fs\n",
+                nElementCount,
+                (nEndTime-nStartTime)/1000.0);
+
+            System.out.printf("%d different elements found:\n", aActionContext.TypeCounts.size());
+            for (final Entry<String, Integer> aEntry : aActionContext.TypeCounts.entrySet())
             {
-                nStartTime = System.currentTimeMillis();
-                final int  nElementCount = Parse(aReader, aMachine);
-                nEndTime = System.currentTimeMillis();
-                System.out.printf("parsed %d elements in %fs\n",
-                    nElementCount,
-                    (nEndTime-nStartTime)/1000.0);
+                System.out.printf("%-32s : %6d\n", aEntry.getKey(), aEntry.getValue());
             }
         }
         catch (final Exception aException)
         {
             aException.printStackTrace();
         }
+    }
+
+
+
+
+    private static void AddSomeActions (
+        final ActionManager aActionManager,
+        final ActionContext aActionContext)
+    {
+        aActionManager.AddElementStartAction(
+            "*",
+            new IAction()
+            {
+                @Override public void Run(
+                    final ActionTrigger eTrigger,
+                    final ElementContext aContext,
+                    final String sText,
+                    final Location aLocation)
+                {
+                    Integer nValue = aActionContext.TypeCounts.get(aContext.GetTypeName());
+                    if (nValue == null)
+                        nValue = 1;
+                    else
+                        ++nValue;
+                    aActionContext.TypeCounts.put(aContext.GetTypeName(), nValue);
+                }
+            }
+        );
+        aActionManager.AddElementStartAction(
+            ".*CT_Shd",
+            new IAction()
+            {
+                @Override public void Run(
+                    final ActionTrigger eTrigger,
+                    final ElementContext aContext,
+                    final String sText,
+                    final Location aLocation)
+                {
+                    System.out.printf("processing %s of element %s at position %d\n",
+                        eTrigger,
+                        aContext.GetElementName(),
+                        aLocation.getCharacterOffset());
+
+                    if (aContext.GetAttributes().GetAttributeCount() == 0)
+                        System.out.printf("    no attributes\n");
+                    else
+                        for (final Entry<String,Object> aAttribute : aContext.GetAttributes().GetAttributes())
+                            System.out.printf("    %s -> %s\n", aAttribute.getKey(), aAttribute.getValue());
+                }
+            }
+        );
+        aActionManager.AddTextAction(
+            ".*CT_Text",
+            new IAction()
+            {
+                @Override public void Run(
+                    final ActionTrigger eTrigger,
+                    final ElementContext aContext,
+                    final String sText,
+                    final Location aLocation)
+                {
+                    System.out.printf("%s text \"%s\"\n", aContext.GetTypeName(), sText.replace("\n", "\\n"));
+                }
+            }
+        );
     }
 
 
@@ -125,179 +212,5 @@ public class OOXMLParser
             return null;
         }
         return aIn;
-    }
-
-
-
-
-    private static XMLStreamReader GetStreamReader (
-        final InputStream aIn,
-        final String sDescription)
-    {
-        if (aIn == null)
-            return null;
-
-        try
-        {
-            final XMLInputFactory aFactory = (XMLInputFactory)XMLInputFactory.newInstance();
-            aFactory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
-            aFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
-            aFactory.setProperty(XMLInputFactory.IS_COALESCING, false);
-
-            return (XMLStreamReader)aFactory.createXMLStreamReader(
-                sDescription,
-                aIn);
-        }
-        catch (final Exception aException)
-        {
-            aException.printStackTrace();
-            return null;
-        }
-    }
-
-
-
-
-    private static int Parse (
-        final XMLStreamReader aReader,
-        final StateMachine aMachine)
-    {
-        int nElementCount = 0;
-        try
-        {
-            final AttributeProvider aAttributeProvider = new AttributeProvider(aReader);
-            while (aReader.hasNext())
-            {
-                final int nCode = aReader.next();
-                switch(nCode)
-                {
-                    case XMLStreamReader.START_ELEMENT:
-                        ++nElementCount;
-                        if (aMachine.IsInSkipState())
-                        {
-                            if (Log.Dbg != null)
-                                Log.Dbg.printf("is skip state -> starting to skip\n");
-                            nElementCount += Skip(aReader);
-                        }
-                        else if ( ! aMachine.ProcessStartElement(
-                            aReader.getNamespaceURI(),
-                            aReader.getLocalName(),
-                            aReader.getLocation(),
-                            aAttributeProvider))
-                        {
-                            if (Log.Dbg != null)
-                                Log.Dbg.printf("starting to skip to recover from error\n");
-                            nElementCount += Skip(aReader);
-                        }
-                        break;
-
-                    case XMLStreamReader.END_ELEMENT:
-                        aMachine.ProcessEndElement(
-                            aReader.getNamespaceURI(),
-                            aReader.getLocalName(),
-                            aReader.getLocation());
-                        break;
-
-                    case XMLStreamReader.CHARACTERS:
-                        final String sText = aReader.getText();
-                        if (Log.Dbg != null)
-                            Log.Dbg.printf("text [%s]\n", sText.replace("\n", "\\n"));
-                        aMachine.ProcessCharacters(sText);
-                        break;
-
-                    case XMLStreamReader.END_DOCUMENT:
-                        Log.Std.printf("--- end of document ---\n");
-                        break;
-
-                    default:
-                        Log.Err.printf("can't handle XML event of type %d\n", nCode);
-                }
-            }
-
-            aReader.close();
-        }
-        catch (final XMLStreamException aException)
-        {
-            aException.printStackTrace();
-        }
-
-        return nElementCount;
-    }
-
-
-
-
-    private static int Skip (final XMLStreamReader aReader)
-    {
-        if (Log.Dbg != null)
-        {
-            Log.Dbg.printf("starting to skip on %s at L%dC%d\n",
-                aReader.getLocalName(),
-                aReader.getLocation().getLineNumber(),
-                aReader.getLocation().getColumnNumber());
-            Log.Dbg.IncreaseIndentation();
-        }
-
-        // We are called when processing a start element.  This means that we are
-        // already at relative depth 1.
-        int nRelativeDepth = 1;
-        int nElementCount = 0;
-        try
-        {
-            while (aReader.hasNext())
-            {
-                final int nCode = aReader.next();
-                switch (nCode)
-                {
-                    case XMLStreamReader.START_ELEMENT:
-                        ++nRelativeDepth;
-                        ++nElementCount;
-                        if (Log.Dbg != null)
-                        {
-                            Log.Dbg.printf("skipping start element %s\n", aReader.getLocalName());
-                            Log.Dbg.IncreaseIndentation();
-                        }
-                        break;
-
-                    case XMLStreamReader.END_ELEMENT:
-                        --nRelativeDepth;
-                        if (Log.Dbg != null)
-                            Log.Dbg.DecreaseIndentation();
-                        if (nRelativeDepth <= 0)
-                        {
-                            if (Log.Dbg != null)
-                                Log.Dbg.printf("leaving skip mode on %s\n", aReader.getLocalName());
-                            return nElementCount;
-                        }
-                        break;
-
-                    case XMLStreamReader.END_DOCUMENT:
-                        throw new RuntimeException("saw end of document while skipping elements\n");
-
-                    case XMLStreamReader.CHARACTERS:
-                        SkipText(aReader.getText());
-                        break;
-
-                    default:
-                        if (Log.Dbg != null)
-                            Log.Dbg.printf("%s\n",  nCode);
-                        break;
-                }
-            }
-        }
-        catch (final XMLStreamException aException)
-        {
-            aException.printStackTrace();
-        }
-        return nElementCount;
-    }
-
-
-
-
-    private static void SkipText (final String sText)
-    {
-        if (Log.Dbg != null)
-            Log.Dbg.printf("skipping text [%s]\n", sText.replace("\n", "\\n"));
     }
 }

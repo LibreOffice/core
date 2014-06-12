@@ -23,6 +23,7 @@ package org.apache.openoffice.ooxml.parser;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Vector;
 
 public class NameMap
@@ -73,6 +74,22 @@ public class NameMap
     public int GetNameCount ()
     {
         return maIdToNameMap.size();
+    }
+
+
+
+
+    /** Return the ids of all states whose names match the given pattern.
+     */
+    public Vector<Integer> GetMatchingStateIds (final String sPattern)
+    {
+        final Vector<Integer> aStateIds = new Vector<>();
+        for (final Entry<String,Integer> aEntry : maNameToIdMap.entrySet())
+        {
+            if (aEntry.getKey().matches(sPattern))
+                aStateIds.add(aEntry.getValue());
+        }
+        return aStateIds;
     }
 
 
