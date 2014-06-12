@@ -205,6 +205,16 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
                                 bRet = sal_False;
                     }
                     break;
+                case SID_ATTR_ODFENCRYPTION:
+                    {
+                        bRet = sal_True;
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_USESHA1INODF12) &&
+                            !aSaveOptions.IsReadOnly(SvtSaveOptions::E_USEBLOWFISHINODF12))
+                            if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_ODFENCRYPTION ),
+                                                        !(aSaveOptions.IsUseSHA1InODF12() && aSaveOptions.IsUseBlowfishInODF12()))))
+                                bRet = sal_False;
+                    }
+                    break;
                 case SID_ATTR_PRETTYPRINTING:
                     {
                         bRet = sal_True;
@@ -561,6 +571,16 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetBackup( ( (const SfxBoolItem*)pItem )->GetValue() );
+    }
+
+    // ODF Encryption
+    if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_ODFENCRYPTION ), sal_True, &pItem ) )
+    {
+        DBG_ASSERT( pItem->ISA( SfxBoolItem ), "BoolItem expected" );
+        sal_Bool bItemValue =  static_cast< const SfxBoolItem*>(pItem)->GetValue();
+
+        aSaveOptions.SetUseSHA1InODF12( !bItemValue );
+        aSaveOptions.SetUseBlowfishInODF12( !bItemValue );
     }
 
     // PrettyPrinting

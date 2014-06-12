@@ -178,6 +178,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     aDefaultFormatFL    ( this, CUI_RES( FL_FILTER ) ),
     aODFVersionFT       ( this, CUI_RES( FT_ODF_VERSION ) ),
     aODFVersionLB       ( this, CUI_RES( LB_ODF_VERSION ) ),
+    aODFEncryptionCB    ( this, CUI_RES( BTN_ODFENCRYPTION ) ),
     aSizeOptimizationCB ( this, CUI_RES( BTN_NOPRETTYPRINTING ) ),
     aWarnAlienFormatCB  ( this, CUI_RES( BTN_WARNALIENFORMAT ) ),
     aDocTypeFT          ( this, CUI_RES( FT_APP ) ),
@@ -381,6 +382,12 @@ sal_Bool SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
     {
         rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_BACKUP ),
                                aBackupCB.IsChecked() ) );
+        bModified |= sal_True;
+    }
+
+    if ( aODFEncryptionCB.IsChecked() != aODFEncryptionCB.GetSavedValue() )
+    {
+        rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_ODFENCRYPTION ), aODFEncryptionCB.IsChecked() ) );
         bModified |= sal_True;
     }
 
@@ -596,6 +603,9 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aWarnAlienFormatCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT));
 //    aAutoSaveCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVE));
 
+    // ODF encryption
+    aODFEncryptionCB.Check( !aSaveOpt.IsUseSHA1InODF12());
+
     // the pretty printing
     aSizeOptimizationCB.Check( !aSaveOpt.IsPrettyPrinting());
 //    aSizeOptimizationCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING ));
@@ -620,6 +630,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aDocInfoCB.SaveValue();
     aBackupCB.SaveValue();
     aWarnAlienFormatCB.SaveValue();
+    aODFEncryptionCB.SaveValue();
     aSizeOptimizationCB.SaveValue();
     aAutoSaveCB.SaveValue();
     aAutoSaveEdit.SaveValue();
