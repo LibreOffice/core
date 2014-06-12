@@ -141,7 +141,6 @@ uno::Reference< uno::XInterface > OModuleRegistration::getComponentFactory(
             xReturn = FactoryInstantiationFunction( _rxServiceManager, *pImplName, ComponentInstantiationFunction, *pServices, NULL);
             if (xReturn.is())
             {
-                xReturn->acquire();
                 return xReturn.get();
             }
         }
