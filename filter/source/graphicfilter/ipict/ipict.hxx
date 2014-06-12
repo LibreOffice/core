@@ -11,7 +11,6 @@
 #define INCLUDED_FILTER_SOURCE_GRAPHICFILTER_IPICT_HXX
 
 #include <sal/config.h>
-#include <sal/types.h>
 
 class GDIMetaFile;
 class SvStream;
