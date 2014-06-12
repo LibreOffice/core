@@ -147,9 +147,32 @@ $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,unoexcepti
 
 endef
 
-define gb_CppunitTest_use_vcl
+# $(2) == $(true) if headless:
+define gb_CppunitTest__use_vcl
 $(call gb_CppunitTest_get_target,$(1)) : VCL := $(true)
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,vclbootstrapprotector)
+ifeq ($(GUIBASE),unx)
+$(call gb_CppunitTest_get_target,$(1)) : $(call gb_Library_get_target,desktop_detector)
+$(call gb_CppunitTest_get_target,$(1)) : $(if $(filter $(2),$(true)), \
+    $(call gb_Library_get_target,vclplug_svp), \
+    $(call gb_Library_get_target,vclplug_gen) \
+        $(if $(ENABLE_GTK),$(call gb_Library_get_target,vclplug_gtk)) \
+        $(if $(ENABLE_GTK3),$(call gb_Library_get_target,vclplug_gtk3)) \
+        $(if $(ENABLE_KDE),$(call gb_Library_get_target,vclplug_kde)) \
+        $(if $(ENABLE_KDE4),$(call gb_Library_get_target,vclplug_kde4)) \
+        $(if $(ENABLE_TDE),$(call gb_Library_get_target,vclplug_tde)))
+endif
+
+endef
+
+define gb_CppunitTest_use_vcl
+$(call gb_CppunitTest__use_vcl,$(1),$(true))
+
+endef
+
+define gb_CppunitTest_use_vcl_non_headless
+$(call gb_CppunitTest_get_target,$(1)) : HEADLESS :=
+$(call gb_CppunitTest__use_vcl,$(1),$(false))
 
 endef
 
@@ -222,11 +245,6 @@ endef
 define gb_CppunitTest_use_configuration
 $(call gb_CppunitTest_get_target,$(1)) : $(call gb_Package_get_target,postprocess_registry)
 $(call gb_CppunitTest__use_configuration,$(1),xcsxcu,$(INSTROOT)/$(LIBO_SHARE_FOLDER)/registry)
-
-endef
-
-define gb_CppunitTest_unset_headless
-$(call gb_CppunitTest_get_target,$(1)) : HEADLESS=
 
 endef
 

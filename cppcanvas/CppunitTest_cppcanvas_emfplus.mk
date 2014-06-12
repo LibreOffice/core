@@ -26,8 +26,6 @@ $(eval $(call gb_CppunitTest_use_libraries,cppcanvas_emfplus, \
 	vcl \
 ))
 
-$(eval $(call gb_CppunitTest_unset_headless,cppcanvas_emfplus))
-
 $(eval $(call gb_CppunitTest_use_external,cppcanvas_emfplus,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_api,cppcanvas_emfplus,\
@@ -36,7 +34,7 @@ $(eval $(call gb_CppunitTest_use_api,cppcanvas_emfplus,\
 ))
 
 $(eval $(call gb_CppunitTest_use_ure,cppcanvas_emfplus))
-$(eval $(call gb_CppunitTest_use_vcl,cppcanvas_emfplus))
+$(eval $(call gb_CppunitTest_use_vcl_non_headless,cppcanvas_emfplus))
 
 $(eval $(call gb_CppunitTest_use_components,cppcanvas_emfplus,\
 	canvas/source/cairo/cairocanvas \

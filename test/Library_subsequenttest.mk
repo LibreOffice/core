@@ -29,13 +29,6 @@ $(eval $(call gb_Library_use_libraries,subsequenttest,\
 	$(gb_UWINAPI) \
 ))
 
-ifeq ($(GUIBASE),unx)
-$(call gb_Library_get_target,subsequenttest) : \
-    $(call gb_Library_get_target,desktop_detector) \
-    $(call gb_Library_get_target,vclplug_svp) \
-
-endif
-
 $(eval $(call gb_Library_use_externals,subsequenttest,\
 	boost_headers \
 	cppunit \
