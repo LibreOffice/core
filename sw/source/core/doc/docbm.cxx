@@ -1971,38 +1971,43 @@ void _RestoreCntntIdx(std::vector<sal_uLong> &rSaveArr,
 
 namespace
 {
-    struct BkmkEntry
+    struct MarkEntry
     {
-        long int m_nBkmkIdx;
+        long int m_nIdx;
         bool m_bOther;
         sal_Int32 m_nCntnt;
     };
     struct CntntIdxStoreImpl : sw::mark::CntntIdxStore
     {
         std::vector<sal_uLong> m_aSaveArr;
-        std::vector<BkmkEntry> m_aBkmkEntries;
+        std::vector<MarkEntry> m_aBkmkEntries;
+        std::vector<MarkEntry> m_aRedlineEntries;
         virtual void Clear() SAL_OVERRIDE
         {
             m_aBkmkEntries.clear();
+            m_aRedlineEntries.clear();
             m_aSaveArr.clear();
         }
         virtual bool Empty() SAL_OVERRIDE
         {
-            return m_aBkmkEntries.empty() && m_aSaveArr.empty();
+            return m_aBkmkEntries.empty() && m_aRedlineEntries.empty() && m_aSaveArr.empty();
         }
         virtual void Save(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt, sal_uInt8 nSaveFly=0) SAL_OVERRIDE
         {
             SaveBkmks(pDoc, nNode, nCntnt);
+            SaveRedlines(pDoc, nNode, nCntnt);
             return _SaveCntntIdx(pDoc, nNode, nCntnt, m_aSaveArr, nSaveFly);
         }
         virtual void Restore(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset=0, bool bAuto = false) SAL_OVERRIDE
         {
             RestoreBkmks(pDoc, nNode, nOffset);
+            RestoreRedlines(pDoc, nNode, nOffset);
             return _RestoreCntntIdx(pDoc, m_aSaveArr, nNode, nOffset, bAuto);
         }
         virtual void Restore(SwNode& rNd, sal_Int32 nLen, sal_Int32 nCorrLen) SAL_OVERRIDE
         {
             RestoreBkmksLen(rNd, nLen, nCorrLen);
+            RestoreRedlinesLen(rNd, nLen, nCorrLen);
             return _RestoreCntntIdx(m_aSaveArr, rNd, nLen, nCorrLen);
         }
         virtual ~CntntIdxStoreImpl(){};
@@ -2010,6 +2015,9 @@ namespace
             inline void SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
             inline void RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
             inline void RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen);
+            inline void SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt);
+            inline void RestoreRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset);
+            inline void RestoreRedlinesLen(SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen);
             inline const SwPosition& GetRightMarkPos(::sw::mark::IMark* pMark, bool bOther)
                 { return bOther ? pMark->GetOtherMarkPos() : pMark->GetMarkPos(); };
             inline void SetRightMarkPos(MarkBase* pMark, bool bOther, const SwPosition* const pPos)
@@ -2033,7 +2041,7 @@ void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt
         {
             if(pBkmk->GetMarkPos().nContent.GetIndex() < nCntnt)
             {
-                const BkmkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
+                const MarkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
                 m_aBkmkEntries.push_back(aEntry);
             }
             else // if a bookmark position is equal nCntnt, the other position
@@ -2045,10 +2053,10 @@ void CntntIdxStoreImpl::SaveBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt
         {
             if(bMarkPosEqual)
             { // the other position is before, the (main) position is equal
-                const BkmkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
+                const MarkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), false, pBkmk->GetMarkPos().nContent.GetIndex() };
                 m_aBkmkEntries.push_back(aEntry);
             }
-            const BkmkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), true, pBkmk->GetOtherMarkPos().nContent.GetIndex() };
+            const MarkEntry aEntry = { ppBkmk - pMarkAccess->getAllMarksBegin(), true, pBkmk->GetOtherMarkPos().nContent.GetIndex() };
             m_aBkmkEntries.push_back(aEntry);
         }
     }
@@ -2058,9 +2066,9 @@ void CntntIdxStoreImpl::RestoreBkmks(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOf
 {
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
-    BOOST_FOREACH(const BkmkEntry& aEntry, m_aBkmkEntries)
+    BOOST_FOREACH(const MarkEntry& aEntry, m_aBkmkEntries)
     {
-        if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nBkmkIdx].get()))
+        if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nIdx].get()))
         {
             SwPosition aNewPos(GetRightMarkPos(pMark, aEntry.m_bOther));
             aNewPos.nNode = *pCNd;
@@ -2075,17 +2083,78 @@ void CntntIdxStoreImpl::RestoreBkmksLen(SwNode& rNd, sal_uLong nLen, sal_Int32 n
     const SwDoc* pDoc = rNd.GetDoc();
     IDocumentMarkAccess* const pMarkAccess = const_cast<IDocumentMarkAccess*>(pDoc->getIDocumentMarkAccess());
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
-    BOOST_FOREACH(const BkmkEntry& aEntry, m_aBkmkEntries)
+    BOOST_FOREACH(const MarkEntry& aEntry, m_aBkmkEntries)
     {
         if( aEntry.m_nCntnt < nCorrLen )
         {
-            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nBkmkIdx].get()))
+            if (MarkBase* pMark = dynamic_cast<MarkBase*>(pMarkAccess->getAllMarksBegin()[aEntry.m_nIdx].get()))
             {
                 SwPosition aNewPos(GetRightMarkPos(pMark, aEntry.m_bOther));
                 aNewPos.nNode = *pCNd;
                 aNewPos.nContent.Assign(pCNd, ::std::min(aEntry.m_nCntnt, static_cast<sal_Int32>(nLen)));
                 SetRightMarkPos(pMark, aEntry.m_bOther, &aNewPos);
             }
+        }
+    }
+}
+
+void CntntIdxStoreImpl::SaveRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nCntnt)
+{
+    const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
+    for( long int nIdx = 0 ; nIdx < rRedlTbl.size(); ++nIdx )
+    {
+        const SwRangeRedline* pRdl = rRedlTbl[ nIdx ];
+        int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
+        int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
+                                          nPointPos;
+        // #i59534: We have to store the positions inside the same node before the insert position
+        // and the one at the insert position if the corresponding Point/Mark position is before
+        // the insert position.
+        if( nPointPos == BEFORE_SAME_NODE ||
+            ( nPointPos == SAME_POSITION && nMarkPos < SAME_POSITION ) )
+        {
+            const MarkEntry aEntry = { nIdx, false, pRdl->GetPoint()->nContent.GetIndex() };
+            m_aRedlineEntries.push_back(aEntry);
+        }
+        if( pRdl->HasMark() && ( nMarkPos == BEFORE_SAME_NODE ||
+            ( nMarkPos == SAME_POSITION && nPointPos < SAME_POSITION ) ) )
+        {
+            const MarkEntry aEntry = { nIdx, true, pRdl->GetMark()->nContent.GetIndex() };
+            m_aRedlineEntries.push_back(aEntry);
+        }
+    }
+}
+
+void CntntIdxStoreImpl::RestoreRedlines(SwDoc* pDoc, sal_uLong nNode, sal_Int32 nOffset)
+{
+    SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
+    const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
+    SwPosition* pPos = NULL;
+    BOOST_FOREACH(const MarkEntry& aEntry, m_aRedlineEntries)
+    {
+        pPos = (SwPosition*)( aEntry.m_bOther
+            ? rRedlTbl[ aEntry.m_nIdx ]->GetMark()
+            : rRedlTbl[ aEntry.m_nIdx ]->GetPoint());
+        pPos->nNode = *pCNd;
+        pPos->nContent.Assign( pCNd, aEntry.m_nCntnt + nOffset );
+    }
+}
+
+void CntntIdxStoreImpl::RestoreRedlinesLen (SwNode& rNd, sal_uLong nLen, sal_Int32 nCorrLen)
+{
+    const SwDoc* pDoc = rNd.GetDoc();
+    SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
+    const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
+    SwPosition* pPos = NULL;
+    BOOST_FOREACH(const MarkEntry& aEntry, m_aRedlineEntries)
+    {
+        if( aEntry.m_nCntnt < nCorrLen )
+        {
+            pPos = (SwPosition*)( aEntry.m_bOther
+                ? rRedlTbl[ aEntry.m_nIdx ]->GetMark()
+                : rRedlTbl[ aEntry.m_nIdx ]->GetPoint());
+            pPos->nNode = *pCNd;
+            pPos->nContent.Assign( pCNd, std::min( aEntry.m_nCntnt, static_cast<sal_Int32>(nLen) ) );
         }
     }
 }
