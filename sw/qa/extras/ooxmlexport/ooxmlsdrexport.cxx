@@ -1811,6 +1811,21 @@ DECLARE_OOXMLEXPORT_TEST(testTextboxRoundedCorners, "textbox-rounded-corners.doc
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xCell->getString());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79591, "fdo79591.docx")
+{
+    /* Values set for docPr name and shape ID attributes
+     * in RT file were not valid as per UTF-8 encoding format
+     * and hence was showing RT document as corrupt with error
+     * message "invalid character"
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+      return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/wp:docPr", "name", "");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/mc:AlternateContent/mc:Fallback/w:pict/v:shape", "ID", "");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
