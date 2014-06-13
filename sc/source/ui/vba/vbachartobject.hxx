@@ -54,7 +54,7 @@ public:
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setName( const OUString& sName ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException, std::exception ) SAL_OVERRIDE;
+    virtual void SAL_CALL Delete() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void Activate() throw ( css::script::BasicErrorException );
     // XHelperInterface
     virtual OUString getServiceImplName() SAL_OVERRIDE;

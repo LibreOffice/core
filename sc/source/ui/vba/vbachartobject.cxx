@@ -91,7 +91,9 @@ ScVbaChartObject::getName() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaChartObject::Delete() throw ( css::script::BasicErrorException, std::exception )
+ScVbaChartObject::Delete()
+    throw (css::script::BasicErrorException,
+           css::uno::RuntimeException, std::exception)
 {
     // parent of this object is sheet
     uno::Reference< excel::XWorksheet > xParent( getParent(), uno::UNO_QUERY_THROW );
