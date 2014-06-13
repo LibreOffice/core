@@ -631,7 +631,7 @@ Model::XSubmission_t Model::getSubmission( const OUString& sId )
     DBG_INVARIANT();
     XSubmission_t xSubmission;
     if ( mpSubmissions->hasItem( sId ) )
-        xSubmission = xSubmission.query( mpSubmissions->getItem( sId ) );
+        xSubmission.set(mpSubmissions->getItem( sId ), css::uno::UNO_QUERY);
     return xSubmission;
 }
 

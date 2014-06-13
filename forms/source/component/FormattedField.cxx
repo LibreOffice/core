@@ -517,8 +517,8 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
     Reference<XForm>  xNextParentForm(xParent, UNO_QUERY);
     while (!xNextParentForm.is() && xParent.is())
     {
-        xParent         = xParent.query( xParent->getParent() );
-        xNextParentForm = xNextParentForm.query( xParent );
+        xParent.set(xParent->getParent(), css::uno::UNO_QUERY);
+        xNextParentForm.set(xParent, css::uno::UNO_QUERY);
     }
     if (!xNextParentForm.is())
     {

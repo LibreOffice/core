@@ -586,7 +586,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
                 {
                     SAL_WARN("forms.misc", "OInterfaceContainerHelper::read: reading succeeded, but not inserting!" );
                     // create a placeholder
-                    xElement = xElement.query( lcl_createPlaceHolder( m_xContext ) );
+                    xElement.set(lcl_createPlaceHolder( m_xContext ), css::uno::UNO_QUERY);
                     if ( !xElement.is() )
                         // couldn't handle it
                         throw;

@@ -42,7 +42,7 @@ namespace frm
 
         if ( query_aggregation( _pOriginal->m_xAggregate, xAggregateCloneable ) )
         {
-            xAggregateClone = xAggregateClone.query( xAggregateCloneable->createClone() );
+            xAggregateClone.set(xAggregateCloneable->createClone(), css::uno::UNO_QUERY);
             DBG_ASSERT( xAggregateClone.is(), "OCloneableAggregation::createAggregateClone: invalid clone returned by the aggregate!" );
         }
         else {

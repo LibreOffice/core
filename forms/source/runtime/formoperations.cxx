@@ -949,7 +949,7 @@ namespace frm
                 // both the control and its model can be committable, so try both
                 Reference< XBoundComponent > xBound( xCurrentControl, UNO_QUERY );
                 if ( !xBound.is() )
-                    xBound = xBound.query( xCurrentControl->getModel() );
+                    xBound.set(xCurrentControl->getModel(), css::uno::UNO_QUERY);
                 // and now really commit
                 if ( xBound.is() )
                     bSuccess = xBound->commit();
@@ -1136,7 +1136,7 @@ namespace frm
     void FormOperations::impl_initFromController_throw()
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_initFromController_throw: invalid controller!" );
-        m_xCursor = m_xCursor.query( m_xController->getModel() );
+        m_xCursor.set(m_xController->getModel(), css::uno::UNO_QUERY);
         if ( !m_xCursor.is() )
             throw IllegalArgumentException( OUString(), *this, 0 );
 
@@ -1151,9 +1151,9 @@ namespace frm
     void FormOperations::impl_initFromForm_throw()
     {
         OSL_PRECOND( m_xCursor.is(), "FormOperations::impl_initFromForm_throw: invalid form!" );
-        m_xCursorProperties = m_xCursorProperties.query ( m_xCursor );
-        m_xUpdateCursor     = m_xUpdateCursor.query     ( m_xCursor );
-        m_xLoadableForm     = m_xLoadableForm.query     ( m_xCursor );
+        m_xCursorProperties.set(m_xCursor, css::uno::UNO_QUERY);
+        m_xUpdateCursor.set(m_xCursor, css::uno::UNO_QUERY);
+        m_xLoadableForm.set(m_xCursor, css::uno::UNO_QUERY);
 
         if ( !m_xCursor.is() || !m_xCursorProperties.is() || !m_xLoadableForm.is() )
             throw IllegalArgumentException( OUString(), *this, 0 );
@@ -1178,7 +1178,7 @@ namespace frm
 
     void FormOperations::createWithForm( const Reference< XForm >& _rxForm )
     {
-        m_xCursor = m_xCursor.query( _rxForm );
+        m_xCursor.set(_rxForm, css::uno::UNO_QUERY);
         if ( !m_xCursor.is() )
             throw IllegalArgumentException( OUString(), *this, 0 );
 
