@@ -1545,12 +1545,16 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, bool bNext ) const
     if ( rPoint.Y() < pCnt->Frm().Top() && !lcl_IsInRepeatedHeadline( pCnt ) )
         return pCnt->UnionFrm().Pos();
 
-    while ( pCnt )
+    Point aRet(0, 0);
+    do
     {
         //Does the point lie in the current CntntFrm?
         SwRect aCntFrm( pCnt->UnionFrm() );
         if ( aCntFrm.IsInside( rPoint ) && !lcl_IsInRepeatedHeadline( pCnt ))
-            return rPoint;
+        {
+            aRet = rPoint;
+            break;
+        }
 
         //Is the current one the last CntntFrm?
         //If the next CntntFrm lies behind the point, then the current on is the
@@ -1561,7 +1565,10 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, bool bNext ) const
 
         //Does the point lie behind the last CntntFrm?
         if ( !pNxt )
-            return Point( aCntFrm.Right(), aCntFrm.Bottom() );
+        {
+            aRet = Point( aCntFrm.Right(), aCntFrm.Bottom() );
+            break;
+        }
 
         //If the next CntntFrm lies behind the point then it is the one we
         //searched.
@@ -1571,13 +1578,16 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, bool bNext ) const
             !lcl_IsInRepeatedHeadline( pCnt, &pTFrm ) &&
             ( !pTFrm || pNxt->Frm().Left() > rPoint.X() ))
         {
-            if( bNext )
-                return pNxt->Frm().Pos();
-            return Point( aCntFrm.Right(), aCntFrm.Bottom() );
+            if (bNext)
+                aRet = pNxt->Frm().Pos();
+            else
+                aRet = Point( aCntFrm.Right(), aCntFrm.Bottom() );
+            break;
         }
         pCnt = pNxt;
     }
-    return Point( 0, 0 );
+    while (pCnt);
+    return aRet;
 }
 
 /** Returns the absolute document position of the desired page.
