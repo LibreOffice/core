@@ -232,7 +232,7 @@ namespace svt
                 // _and_ add as event listener to the parent - in case the parent is destroyed
                 // before we are disposed, our disposal would access dead VCL windows then ....
                 m_xDialogParent = VCLUnoHelper::GetInterface( m_pDlg->GetParent() );
-                xWindowComp = xWindowComp.query( m_xDialogParent );
+                xWindowComp.set(m_xDialogParent, css::uno::UNO_QUERY);
                 OSL_ENSURE( xWindowComp.is() || !m_pDlg->GetParent(), "OCommonPicker::createFileDialog: invalid window component (the parent this time)!" );
                 if ( xWindowComp.is() )
                 {
