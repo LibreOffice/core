@@ -239,6 +239,8 @@ public:
 
     using SotObject::GetInterface;
 
+    static OUString CreateShellID( const SfxObjectShell* pShell );
+
     // Document-Shell Iterator
     static SfxObjectShell*      GetFirst( const TypeId* pType = 0,
                                           sal_Bool bOnlyVisible = sal_True );

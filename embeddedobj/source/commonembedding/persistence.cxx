@@ -723,12 +723,33 @@ void OCommonEmbeddedObject::SwitchDocToStorage_Impl( const uno::Reference< docum
         m_xRecoveryStorage.clear();
 }
 
-//------------------------------------------------------
-void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed::XStorage >& xStorage,
-                                                    sal_Int32 nStorageFormat,
-                                                    const OUString& aBaseURL,
-                                                    const OUString& aHierarchName,
-                                                    sal_Bool bAttachToTheStorage )
+namespace {
+
+OUString getStringPropertyValue( const uno::Sequence<beans::PropertyValue>& rProps, const OUString& rName )
+{
+    OUString aStr;
+
+    for (sal_Int32 i = 0; i < rProps.getLength(); ++i)
+    {
+        if (rProps[i].Name == rName)
+        {
+            rProps[i].Value >>= aStr;
+            break;
+        }
+    }
+
+    return aStr;
+}
+
+}
+
+void OCommonEmbeddedObject::StoreDocToStorage_Impl(
+    const uno::Reference<embed::XStorage>& xStorage,
+    const uno::Sequence<beans::PropertyValue>& rMediaArgs,
+    const uno::Sequence<beans::PropertyValue>& rObjArgs,
+    sal_Int32 nStorageFormat,
+    const OUString& aHierarchName,
+    bool bAttachToTheStorage )
 {
     SAL_WARN_IF( !xStorage.is(), "embeddedobj.common", "No storage is provided for storing!" );
 
@@ -742,6 +763,8 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
             xDoc = uno::Reference< document::XStorageBasedDocument >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
     }
 
+    OUString aBaseURL = GetBaseURLFrom_Impl(rMediaArgs, rObjArgs);
+
     if ( xDoc.is() )
     {
         OUString aFilterName = GetFilterName( nStorageFormat );
@@ -750,13 +773,17 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl( const uno::Reference< embed:
         if ( aFilterName.isEmpty() )
             throw io::IOException(); // TODO:
 
-        uno::Sequence< beans::PropertyValue > aArgs( 3 );
+        uno::Sequence<beans::PropertyValue> aArgs(5);
         aArgs[0].Name = "FilterName";
         aArgs[0].Value <<= aFilterName;
-        aArgs[2].Name = "DocumentBaseURL";
-        aArgs[2].Value <<= aBaseURL;
         aArgs[1].Name = "HierarchicalDocumentName";
         aArgs[1].Value <<= aHierarchName;
+        aArgs[2].Name = "DocumentBaseURL";
+        aArgs[2].Value <<= aBaseURL;
+        aArgs[3].Name = "SourceShellID";
+        aArgs[3].Value <<= getStringPropertyValue(rObjArgs, "SourceShellID");
+        aArgs[4].Name = "DestinationShellID";
+        aArgs[4].Value <<= getStringPropertyValue(rObjArgs, "DestinationShellID");
 
         xDoc->storeToStorage( xStorage, aArgs );
         if ( bAttachToTheStorage )
@@ -1241,7 +1268,8 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
 
         aGuard.clear();
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
-        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName, sal_False );
+        StoreDocToStorage_Impl(
+            xSubStorage, lArguments, lObjArgs, nTargetStorageFormat, sEntName, false );
         aGuard.reset();
 
         if ( bSwitchBackToLoaded )
@@ -1380,7 +1408,8 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     {
         aGuard.clear();
         // TODO/LATER: support hierarchical name for embedded objects in embedded objects
-        StoreDocToStorage_Impl( xSubStorage, nTargetStorageFormat, GetBaseURLFrom_Impl( lArguments, lObjArgs ), sEntName, sal_False );
+        StoreDocToStorage_Impl(
+            xSubStorage, lArguments, lObjArgs, nTargetStorageFormat, sEntName, false );
         aGuard.reset();
 
         if ( bSwitchBackToLoaded )
@@ -1609,7 +1638,8 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
         }
 
         aGuard.clear();
-        StoreDocToStorage_Impl( m_xObjectStorage, nStorageFormat, GetBaseURL_Impl(), m_aEntryName, sal_True );
+        uno::Sequence<beans::PropertyValue> aEmpty;
+        StoreDocToStorage_Impl( m_xObjectStorage, aEmpty, aEmpty, nStorageFormat, m_aEntryName, true );
         aGuard.reset();
     }
 

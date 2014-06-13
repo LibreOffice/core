@@ -36,7 +36,7 @@ public:
     void                SetLinkURL( const OUString& rURL, const OUString& rText );
 
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
     virtual void        ObjectReleased();
     virtual void        DragFinished( sal_Int8 nDropAction );
 };

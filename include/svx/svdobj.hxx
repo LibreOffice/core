@@ -599,9 +599,10 @@ public:
       Note that this function uses operator= internally.
     */
     virtual SdrObject* Clone() const;
-    /**
-      Implemented mainly for the purposes of Clone().
-    */
+
+    virtual SdrObject* CloneWithShellIDs( const OUString& rSrcShellID, const OUString& rDestShellID ) const;
+
+    // implemented mainly for the purposes of Clone()
     SdrObject& operator=(const SdrObject& rObj);
 
     // TakeObjName...() ist fuer die Anzeige in der UI, z.B. "3 Rahmen selektiert".

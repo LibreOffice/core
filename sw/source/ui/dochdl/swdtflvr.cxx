@@ -392,7 +392,7 @@ namespace
     }
 }
 
-sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
+sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
 
@@ -488,7 +488,7 @@ sal_Bool SwTransferable::GetData( const DataFlavor& rFlavor )
         if( xObj.is() )
         {
             TransferableDataHelper aD( new SvEmbedTransferHelper( xObj, pOLEGraph, nAspect ) );
-            uno::Any aAny( aD.GetAny( rFlavor ));
+            uno::Any aAny = aD.GetAny(rFlavor, rDestDoc);
             if( aAny.hasValue() )
                 bOK = SetAny( aAny, rFlavor );
         }
@@ -1713,7 +1713,13 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     else
         nId = 0;
 
-    if( nId && rData.GetInputStream( nId, xStrm ) && xStrm.is() )
+    if (nId)
+    {
+        SwDocShell* pDocSh = rSh.GetDoc()->GetDocShell();
+        xStrm = rData.GetInputStream(nId, SfxObjectShell::CreateShellID(pDocSh));
+    }
+
+    if (xStrm.is())
     {
         // if there is an embedded object, first try if it's a writer object
         // this will be inserted into the document by using a Reader
@@ -1780,8 +1786,9 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
             if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) && rData.GetTransferableObjectDescriptor( nFmt, aObjDesc ) )
              {
-                if ( !rData.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStrm ) )
-                    rData.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStrm );
+                xStrm = rData.GetInputStream(SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, OUString());
+                if (!xStrm.is())
+                    xStrm = rData.GetInputStream(SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, OUString());
 
                 if ( !xStrm.is() )
                 {

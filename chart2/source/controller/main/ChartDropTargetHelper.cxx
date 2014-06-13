@@ -103,8 +103,8 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
         TransferableDataHelper aDataHelper( rEvt.maDropEvent.Transferable );
         if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_LINK ))
         {
-            Sequence< sal_Int8 > aBytes;
-            if( aDataHelper.GetSequence( SOT_FORMATSTR_ID_LINK, aBytes ))
+            Sequence<sal_Int8> aBytes = aDataHelper.GetSequence(SOT_FORMATSTR_ID_LINK, OUString());
+            if (aBytes.getLength())
             {
                 ::std::vector< OUString > aStrings( lcl_getStringsFromByteSequence( aBytes ));
                 if( aStrings.size() >= 3 && aStrings[0] == "soffice" )

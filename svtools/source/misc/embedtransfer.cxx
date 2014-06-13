@@ -65,7 +65,10 @@ SvEmbedTransferHelper::~SvEmbedTransferHelper()
     }
 }
 
-// -----------------------------------------------------------------------------
+void SvEmbedTransferHelper::SetParentShellID( const OUString& rShellID )
+{
+    maParentShellID = rShellID;
+}
 
 void SvEmbedTransferHelper::AddSupportedFormats()
 {
@@ -76,7 +79,8 @@ void SvEmbedTransferHelper::AddSupportedFormats()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool SvEmbedTransferHelper::GetData(
+    const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     sal_Bool bRet = sal_False;
 
@@ -109,7 +113,12 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                             SvStream* pStream = NULL;
                             sal_Bool bDeleteStream = sal_False;
                             uno::Sequence < beans::PropertyValue > aEmpty;
-                            xPers->storeToEntry( xStg, aName, aEmpty, aEmpty );
+                            uno::Sequence<beans::PropertyValue> aObjArgs(2);
+                            aObjArgs[0].Name = "SourceShellID";
+                            aObjArgs[0].Value <<= maParentShellID;
+                            aObjArgs[1].Name = "DestinationShellID";
+                            aObjArgs[1].Value <<= rDestDoc;
+                            xPers->storeToEntry(xStg, aName, aEmpty, aObjArgs);
                             if ( xStg->isStreamElement( aName ) )
                             {
                                 uno::Reference < io::XStream > xStm = xStg->cloneStreamElement( aName );

@@ -49,14 +49,12 @@ public:
     friend class WrappedLinkNumberFormatProperty;
 private:
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
-    mutable ::com::sun::star::uno::Any m_aOuterValue;
-    WrappedLinkNumberFormatProperty* m_pWrappedLinkNumberFormatProperty;
 };
 
-class WrappedLinkNumberFormatProperty : public WrappedProperty
+class WrappedLinkNumberFormatProperty : public WrappedDirectStateProperty
 {
 public:
-    WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty );
+    WrappedLinkNumberFormatProperty( const boost::shared_ptr<Chart2ModelContact>& pChart2ModelContact );
     virtual ~WrappedLinkNumberFormatProperty();
 
     virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
@@ -68,9 +66,8 @@ public:
     virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    friend class WrappedNumberFormatProperty;
 private:
-    WrappedNumberFormatProperty* m_pWrappedNumberFormatProperty;
+    boost::shared_ptr<Chart2ModelContact> m_pChart2ModelContact;
 };
 
 } //namespace wrapper

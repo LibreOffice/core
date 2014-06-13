@@ -62,7 +62,7 @@ void TabControl::TabControlTransferable::AddSupportedFormats()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TabControl::TabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& )
+sal_Bool TabControl::TabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor&, const OUString& /*rDestDoc*/ )
 {
     return sal_False;
 }

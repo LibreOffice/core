@@ -45,6 +45,7 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -338,6 +339,12 @@ TransferableHelper::~TransferableHelper()
 
 Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
+    return getTransferData2(rFlavor, OUString());
+}
+
+Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, const OUString& rDestDoc )
+    throw (UnsupportedFlavorException, IOException, RuntimeException)
+{
     if( !maAny.hasValue() || !mpFormats->size() || ( maLastFormat != rFlavor.MimeType ) )
     {
         const SolarMutexGuard aGuard;
@@ -358,21 +365,21 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
             if( SotExchange::GetFormatDataFlavor( FORMAT_STRING, aSubstFlavor ) &&
                 TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) )
             {
-                GetData( aSubstFlavor );
+                GetData(aSubstFlavor, rDestDoc);
                 bDone = maAny.hasValue();
             }
             else if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_BMP, aSubstFlavor )
                 && TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor )
                 && SotExchange::GetFormatDataFlavor(FORMAT_BITMAP, aSubstFlavor))
             {
-                GetData( aSubstFlavor );
-                bDone = sal_True;
+                GetData(aSubstFlavor, rDestDoc);
+                bDone = true;
             }
             else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EMF, aSubstFlavor ) &&
                      TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
                      SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
             {
-                GetData( aSubstFlavor );
+                GetData(aSubstFlavor, rDestDoc);
 
                 if( maAny.hasValue() )
                 {
@@ -402,7 +409,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
                      TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
                      SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
             {
-                GetData( aSubstFlavor );
+                GetData(aSubstFlavor, rDestDoc);
 
                 if( maAny.hasValue() )
                 {
@@ -435,7 +442,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
 
             // if any is not yet filled, use standard format
             if( !maAny.hasValue() )
-                GetData( rFlavor );
+                GetData(rFlavor, rDestDoc);
 
 #ifdef DEBUG
             if( maAny.hasValue() && ::com::sun::star::uno::TypeClass_STRING != maAny.getValueType().getTypeClass() )
@@ -1573,13 +1580,13 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
 
 // -----------------------------------------------------------------------------
 
-Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
+Any TransferableDataHelper::GetAny( SotFormatStringId nFormat, const OUString& rDestDoc ) const
 {
     Any aReturn;
 
     DataFlavor aFlavor;
     if ( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) )
-        aReturn = GetAny( aFlavor );
+        aReturn = GetAny(aFlavor, rDestDoc);
 
     return aReturn;
 }
@@ -1587,7 +1594,7 @@ Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
 
 // -----------------------------------------------------------------------------
 
-Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
+Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& rDestDoc ) const
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
     Any aRet;
@@ -1598,13 +1605,20 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
         {
             const SotFormatStringId         nRequestFormat = SotExchange::GetFormat( rFlavor );
 
+            Reference<css::datatransfer::XTransferable2> xTransfer2(mxTransfer, UNO_QUERY);
+
             if( nRequestFormat )
             {
                 // try to get alien format first
                 for (DataFlavorExVector::const_iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
                 {
                     if( ( nRequestFormat == (*aIter).mnSotId ) && !rFlavor.MimeType.equalsIgnoreAsciiCase( (*aIter).MimeType ) )
-                        aRet = mxTransfer->getTransferData( *aIter );
+                    {
+                        if (xTransfer2.is())
+                            aRet = xTransfer2->getTransferData2(*aIter, rDestDoc);
+                        else
+                            aRet = mxTransfer->getTransferData(*aIter);
+                    }
 
                     if( aRet.hasValue() )
                         break;
@@ -1612,7 +1626,12 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
             }
 
             if( !aRet.hasValue() )
-                aRet = mxTransfer->getTransferData( rFlavor );
+            {
+                if (xTransfer2.is())
+                    aRet = xTransfer2->getTransferData2(rFlavor, rDestDoc);
+                else
+                    aRet = mxTransfer->getTransferData(rFlavor);
+            }
         }
     }
     catch( const ::com::sun::star::uno::Exception& )
@@ -1634,8 +1653,8 @@ sal_Bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString&
 
 sal_Bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rStr )
 {
-    Any         aAny( GetAny( rFlavor ) );
-    sal_Bool    bRet = sal_False;
+    Any aAny = GetAny(rFlavor, OUString());
+    bool        bRet = false;
 
     if( aAny.hasValue() )
     {
@@ -2003,9 +2022,9 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
         case( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ):
         {
-            Sequence< sal_Int8 > aSeq;
+            Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
-            if( GetSequence( rFlavor, aSeq ) && ( 2048 == aSeq.getLength() ) )
+            if (2048 == aSeq.getLength())
             {
                 const sal_Char* p1 = reinterpret_cast< const sal_Char* >( aSeq.getConstArray() );
                 const sal_Char* p2 =  reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ) + 1024;
@@ -2019,9 +2038,9 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 #ifdef WNT
         case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
         {
-            Sequence< sal_Int8 > aSeq;
+            Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
-            if( GetSequence( rFlavor, aSeq ) && aSeq.getLength() )
+            if (aSeq.getLength())
             {
                 FILEGROUPDESCRIPTOR* pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getConstArray();
 
@@ -2041,14 +2060,14 @@ sal_Bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatr
 
                             aSeq.realloc( 0 );
                             delete pStream;
+                            pStream = NULL;
 
-                            if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFileContentFlavor ) &&
-                                GetSequence( aFileContentFlavor, aSeq ) && aSeq.getLength() )
+                            if (SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_FILECONTENT, aFileContentFlavor))
                             {
-                                pStream = new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_STD_READ );
+                                aSeq = GetSequence(aFileContentFlavor, OUString());
+                                if (aSeq.getLength())
+                                    pStream = new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_STD_READ );
                             }
-                            else
-                                pStream = NULL;
                         }
 
                         if( pStream )
@@ -2153,69 +2172,69 @@ sal_Bool TransferableDataHelper::GetFileList(
 
 // -----------------------------------------------------------------------------
 
-sal_Bool TransferableDataHelper::GetSequence( SotFormatStringId nFormat, Sequence< sal_Int8 >& rSeq )
+
+Sequence<sal_Int8> TransferableDataHelper::GetSequence( SotFormatStringId nFormat, const OUString& rDestDoc )
 {
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSequence( aFlavor, rSeq ) );
+    if (!SotExchange::GetFormatDataFlavor(nFormat, aFlavor))
+        return Sequence<sal_Int8>();
+
+    return GetSequence(aFlavor, rDestDoc);
 }
 
-// -----------------------------------------------------------------------------
-
-sal_Bool TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, Sequence< sal_Int8 >& rSeq )
+Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
 #ifdef DEBUG
     fprintf( stderr, "TransferableDataHelper requests sequence of data\n" );
 #endif
 
-    const Any aAny( GetAny( rFlavor ) );
-    return( aAny.hasValue() && ( aAny >>= rSeq ) );
+    const Any aAny = GetAny(rFlavor, rDestDoc);
+    Sequence<sal_Int8> aSeq;
+    if (aAny.hasValue())
+        aAny >>= aSeq;
+
+    return aSeq;
 }
 
-// -----------------------------------------------------------------------------
-
-sal_Bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rxStream )
+bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rxStream )
 {
     DataFlavor aFlavor;
     return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSotStorageStream( aFlavor, rxStream ) );
 }
 
-// -----------------------------------------------------------------------------
-
-sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, SotStorageStreamRef& rxStream )
+bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, SotStorageStreamRef& rxStream )
 {
-    Sequence< sal_Int8 >    aSeq;
-    sal_Bool                bRet = GetSequence( rFlavor, aSeq );
+    Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
-    if( bRet )
+    if (aSeq.getLength())
     {
         rxStream = new SotStorageStream( "" );
         rxStream->Write( aSeq.getConstArray(), aSeq.getLength() );
         rxStream->Seek( 0 );
     }
 
-    return bRet;
+    return aSeq.getLength();
 }
 
-sal_Bool TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, Reference < XInputStream >& rxStream )
+Reference<XInputStream> TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, const OUString& rDestDoc )
 {
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetInputStream( aFlavor, rxStream ) );
+    if (!SotExchange::GetFormatDataFlavor(nFormat, aFlavor))
+        return Reference<XInputStream>();
+
+    return GetInputStream(aFlavor, rDestDoc);
 }
 
-// -----------------------------------------------------------------------------
-
-sal_Bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Reference < XInputStream >& rxStream )
+Reference<XInputStream> TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
-    Sequence< sal_Int8 >    aSeq;
-    sal_Bool                bRet = GetSequence( rFlavor, aSeq );
+    Sequence<sal_Int8> aSeq = GetSequence(rFlavor, rDestDoc);
 
-    if( bRet )
-          rxStream = new ::comphelper::SequenceInputStream( aSeq );
+    if (!aSeq.getLength())
+        return Reference<XInputStream>();
 
-    return bRet;
+    Reference<XInputStream> xStream(new comphelper::SequenceInputStream(aSeq));
+    return xStream;
 }
-
-// -----------------------------------------------------------------------------
 
 void TransferableDataHelper::Rebind( const Reference< XTransferable >& _rxNewContent )
 {
