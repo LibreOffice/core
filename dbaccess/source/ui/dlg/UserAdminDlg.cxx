@@ -153,7 +153,7 @@ namespace dbaui
     }
     OUString OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
     {
-        return m_pImpl->getDatasourceType(_rSet);
+        return dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(_rSet);
     }
     void OUserAdminDlg::clearPassword()
     {

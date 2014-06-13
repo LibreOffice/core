@@ -80,7 +80,7 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     m_pOutSet = new SfxItemSet( *_pItems->GetPool(), _pItems->GetRanges() );
 
     m_pImpl->translateProperties(xDatasource, *m_pOutSet);
-    m_eType = m_pImpl->getDatasourceType(*m_pOutSet);
+    m_eType = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*m_pOutSet);
 
     SetPageSizePixel(LogicToPixel(::Size(PAGE_X, PAGE_Y), MAP_APPFONT));
     ShowButtonFixedLine(true);
@@ -221,7 +221,7 @@ Reference< XDriver > ODbTypeWizDialog::getDriver()
 
 OUString ODbTypeWizDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
-    return m_pImpl->getDatasourceType(_rSet);
+    return dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(_rSet);
 }
 
 void ODbTypeWizDialog::clearPassword()

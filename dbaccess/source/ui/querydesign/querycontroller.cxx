@@ -1493,7 +1493,7 @@ bool OQueryController::doSaveAsDoc(bool _bSaveAs)
             {
                 Reference< XSingleServiceFactory > xSingleFac( xElements, UNO_QUERY );
                 if ( xSingleFac.is() )
-                    xQuery = xQuery.query( xSingleFac->createInstance() );
+                    xQuery.set(xSingleFac->createInstance(), css::uno::UNO_QUERY);
             }
         }
         else

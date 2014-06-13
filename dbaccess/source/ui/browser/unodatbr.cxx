@@ -600,7 +600,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::star
         Reference< XChild > xGridAsChild(xGrid, UNO_QUERY);
         Reference< XLoadable > xFormAsLoadable;
         if (xGridAsChild.is())
-            xFormAsLoadable = xFormAsLoadable.query(xGridAsChild->getParent());
+            xFormAsLoadable.set(xGridAsChild->getParent(), css::uno::UNO_QUERY);
         if (xFormAsLoadable.is() && xFormAsLoadable->isLoaded())
         {
             // set the formats from the table
@@ -1530,7 +1530,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
                 Reference< XUIElement > xUI(
                     xLayouter->getElement( OUString( "private:resource/toolbar/toolbar" ) ),
                     UNO_SET_THROW );
-                m_xMainToolbar = m_xMainToolbar.query( xUI->getRealInterface() );
+                m_xMainToolbar.set(xUI->getRealInterface(), css::uno::UNO_QUERY);
                 OSL_ENSURE( m_xMainToolbar.is(), "SbaTableQueryBrowser::attachFrame: where's my toolbox?" );
             }
         }
@@ -2648,7 +2648,7 @@ bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
                     Reference<XInterface> xObject;
                     if(xNameAccess->getByName(sSimpleName) >>= xObject) // remember the table or query object
                     {
-                        pData->xObjectProperties = pData->xObjectProperties.query( xObject );
+                        pData->xObjectProperties.set(xObject, css::uno::UNO_QUERY);
                         // if the query contains a parameterized statement and preview is enabled we won't get any data.
                         if ( nCommandType == CommandType::QUERY && xObject.is() )
                         {
@@ -3200,7 +3200,7 @@ void SbaTableQueryBrowser::impl_initialize()
                 Reference< XChild > xChild( xConnection, UNO_QUERY );
                 Reference< XPropertySet > xDataSourceProperties;
                 if ( xChild.is() )
-                    xDataSourceProperties = xDataSourceProperties.query( xChild->getParent() );
+                    xDataSourceProperties.set(xChild->getParent(), css::uno::UNO_QUERY);
                 if ( xDataSourceProperties.is() )
                 {
                     try

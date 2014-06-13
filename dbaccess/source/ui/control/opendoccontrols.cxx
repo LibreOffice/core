@@ -131,7 +131,7 @@ namespace dbaui
                     Reference< XUIConfigurationManager > xManager( xSupplier->getUIConfigurationManager( _rModuleName ) );
                     Reference< XImageManager > xImageManager;
                     if ( xManager.is() )
-                        xImageManager = xImageManager.query( xManager->getImageManager() );
+                        xImageManager.set(xManager->getImageManager(), css::uno::UNO_QUERY);
                     if ( !xImageManager.is() )
                         break;
 
@@ -203,8 +203,8 @@ namespace dbaui
 
         Sequence< Sequence< PropertyValue> > aHistory = SvtHistoryOptions().GetList( ePICKLIST );
         Reference< XNameAccess > xFilterFactory;
-        xFilterFactory = xFilterFactory.query( ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString( "com.sun.star.document.FilterFactory" ) ) );
+        xFilterFactory.set(::comphelper::getProcessServiceFactory()->createInstance(
+            OUString( "com.sun.star.document.FilterFactory" ) ), css::uno::UNO_QUERY);
 
         sal_uInt32 nCount = aHistory.getLength();
         for ( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )

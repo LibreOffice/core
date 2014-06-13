@@ -626,7 +626,7 @@ namespace
         Reference< XDataSource > xDataSource;
         Reference< XChild > xAsChild( _rxConnection, UNO_QUERY );
         if ( xAsChild.is() )
-            xDataSource = xDataSource.query( xAsChild->getParent() );
+            xDataSource.set(xAsChild->getParent(), css::uno::UNO_QUERY);
 
         if ( xDataSource.is() )
             return lcl_getInteractionHandler_throw( xDataSource, _rFallback );

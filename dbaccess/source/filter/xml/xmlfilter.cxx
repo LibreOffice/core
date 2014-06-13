@@ -155,7 +155,7 @@ namespace dbaxml
                             ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
                             SvtModuleOptions aModuleOptions;
                             uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
-                                aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),
+                                aModuleOptions.GetFactoryEmptyDocumentURL( SvtModuleOptions::ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),
                                 OUString(), // empty frame name
                                 0,
                                 aArgs

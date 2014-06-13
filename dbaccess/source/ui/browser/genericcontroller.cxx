@@ -1137,7 +1137,7 @@ namespace
 
                 Reference< XFrame > xParentFrame;
                 if ( _rxFrame.is() )
-                    xParentFrame = xParentFrame.query( _rxFrame->getCreator() );
+                    xParentFrame.set(_rxFrame->getCreator(), css::uno::UNO_QUERY);
                 // did we find a parent frame? Which is no top-level frame?
                 if ( xParentFrame.is() && !_rxFrame->isTop() )
                     // TODO: to prevent framework assertions, re-insert this "isTop" once 98303 is fixed
