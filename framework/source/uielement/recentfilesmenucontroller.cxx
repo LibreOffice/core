@@ -206,7 +206,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 else
                 {
                     // In all other URLs show the protocol name before the file name
-                    aMenuTitle   = aURL.GetSchemeName(aURL.GetProtocol()) + ": " + aURL.getName();
+                    aMenuTitle   = INetURLObject::GetSchemeName(aURL.GetProtocol()) + ": " + aURL.getName();
                 }
 
                 aMenuShortCut.append( aMenuTitle );
