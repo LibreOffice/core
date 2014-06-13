@@ -2563,6 +2563,11 @@ void Test::testFuncSUMPRODUCT()
     m_pDoc->SetValue(ScAddress(1,2,0),  5.0); // B3
     CPPUNIT_ASSERT_EQUAL(-3.0, m_pDoc->GetValue(aPos));
 
+    // Force an error in C2 and test ForcedArray matrix error propagation.
+    m_pDoc->SetString( 2, 1, 0, "=1/0");
+    sal_uInt16 nError = m_pDoc->GetErrCode(aPos);
+    CPPUNIT_ASSERT_MESSAGE("Formula result should be a propagated error", nError);
+
     m_pDoc->DeleteTab(0);
 }
 
