@@ -225,7 +225,7 @@ void SchXMLAxisContext::CreateGrid( const OUString& sAutoStyleName, bool bIsMajo
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    m_rImportHelper.GetChartFamilyID(), sAutoStyleName );
+                    SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
 
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                     (( XMLPropStyleContext* )pStyle )->FillPropertySet( xGridProp );
@@ -270,7 +270,6 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
 {
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    SchXMLImport& rImport = ( SchXMLImport& )GetImport();
     const SvXMLTokenMap& rAttrTokenMap = theAxisAttributeTokenMap::get();
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
@@ -285,7 +284,7 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
             case XML_TOK_AXIS_DIMENSION:
                 {
                     sal_uInt16 nEnumVal;
-                    if( rImport.GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLAxisDimensionMap ))
+                    if( SvXMLUnitConverter::convertEnum( nEnumVal, aValue, aXMLAxisDimensionMap ))
                         m_aCurrentAxis.eDimension = ( SchXMLAxisDimension )nEnumVal;
                 }
                 break;
@@ -295,7 +294,7 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
             case XML_TOK_AXIS_TYPE:
             case XML_TOK_AXIS_TYPE_EXT:
                 sal_uInt16 nEnumVal;
-                if( rImport.GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLAxisTypeMap ))
+                if( SvXMLUnitConverter::convertEnum( nEnumVal, aValue, aXMLAxisTypeMap ))
                 {
                     m_nAxisType = nEnumVal;
                     m_bAxisTypeImported = true;
@@ -472,7 +471,7 @@ void SchXMLAxisContext::CreateAxis()
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    m_rImportHelper.GetChartFamilyID(), m_aAutoStyleName );
+                    SchXMLImportHelper::GetChartFamilyID(), m_aAutoStyleName );
 
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                 {

@@ -106,7 +106,7 @@ void XMLNotesTransformerContext::StartElement(
             case XML_ATACTION_DECODE_STYLE_NAME_REF:
                 {
                     OUString aAttrValue( rAttrValue );
-                    if( GetTransformer().DecodeStyleName(aAttrValue) )
+                    if( XMLTransformerBase::DecodeStyleName(aAttrValue) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
                 break;

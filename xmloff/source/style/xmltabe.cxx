@@ -57,7 +57,7 @@ void SvxXMLTabStopExport::exportTabStop( const ::com::sun::star::style::TabStop*
     // type attribute
     if( style::TabAlign_LEFT != pTabStop->Alignment )
     {
-        rUnitConv.convertEnum( sBuffer, pTabStop->Alignment,
+        SvXMLUnitConverter::convertEnum( sBuffer, pTabStop->Alignment,
                                    pXML_tabstop_style );
         rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_TYPE,
                                sBuffer.makeStringAndClear() );

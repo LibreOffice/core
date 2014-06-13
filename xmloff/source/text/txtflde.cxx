@@ -446,7 +446,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
     {
         // map name to prelim. ID
         sal_uInt16 nTmp;
-        bool bRet = GetExport().GetMM100UnitConverter().convertEnum(
+        bool bRet = SvXMLUnitConverter::convertEnum(
             nTmp, sFieldName, aFieldServiceNameMapping);
 
         // check return

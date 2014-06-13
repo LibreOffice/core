@@ -345,14 +345,14 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     // prepare access to master pages
     uno::Reference < drawing::XMasterPagesSupplier > xMasterPagesSupplier(GetModel(), uno::UNO_QUERY);
     if(xMasterPagesSupplier.is())
-        mxDocMasterPages = mxDocMasterPages.query( xMasterPagesSupplier->getMasterPages() );
+        mxDocMasterPages.set(xMasterPagesSupplier->getMasterPages(), css::uno::UNO_QUERY);
 
     // prepare access to draw pages
     uno::Reference <drawing::XDrawPagesSupplier> xDrawPagesSupplier(GetModel(), uno::UNO_QUERY);
     if(!xDrawPagesSupplier.is())
         throw lang::IllegalArgumentException();
 
-    mxDocDrawPages = mxDocDrawPages.query( xDrawPagesSupplier->getDrawPages() );
+    mxDocDrawPages.set(xDrawPagesSupplier->getDrawPages(), css::uno::UNO_QUERY);
     if(!mxDocDrawPages.is())
         throw lang::IllegalArgumentException();
 

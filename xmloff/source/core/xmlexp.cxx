@@ -602,7 +602,7 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
 
     if(!mxNumberFormatsSupplier.is() )
     {
-        mxNumberFormatsSupplier = mxNumberFormatsSupplier.query( mxModel );
+        mxNumberFormatsSupplier.set(mxModel, css::uno::UNO_QUERY);
         if(mxNumberFormatsSupplier.is() && mxHandler.is())
             mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
     }

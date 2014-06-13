@@ -384,7 +384,7 @@ void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPa
     m_xCurrentPageFormsSupp.clear();
 
     OSL_ENSURE(_rxDrawPage.is(), "OFormLayerXMLImport_Impl::startPage: NULL page!");
-    m_xCurrentPageFormsSupp = m_xCurrentPageFormsSupp.query( _rxDrawPage );
+    m_xCurrentPageFormsSupp.set(_rxDrawPage, css::uno::UNO_QUERY);
     OSL_ENSURE( m_xCurrentPageFormsSupp.is(), "OFormLayerXMLImport_Impl::startPage: invalid draw page (no XFormsSupplier)!" );
     if ( !m_xCurrentPageFormsSupp.is() )
         return;
@@ -444,7 +444,7 @@ void OFormLayerXMLImport_Impl::endPage()
     // now that we have all children of the forms collection, attach the events
     Reference< XIndexAccess > xIndexContainer;
     if ( m_xCurrentPageFormsSupp.is() && m_xCurrentPageFormsSupp->hasForms() )
-        xIndexContainer = xIndexContainer.query( m_xCurrentPageFormsSupp->getForms() );
+        xIndexContainer.set(m_xCurrentPageFormsSupp->getForms(), css::uno::UNO_QUERY);
     if ( xIndexContainer.is() )
         ODefaultEventAttacherManager::setEvents( xIndexContainer );
 

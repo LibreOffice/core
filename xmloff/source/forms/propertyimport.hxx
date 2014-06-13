@@ -43,7 +43,6 @@ namespace xmloff
     {
     public:
         static ::com::sun::star::uno::Any convertString(
-            SvXMLImport& _rImporter,
             const ::com::sun::star::uno::Type& _rExpectedType,
             const OUString& _rReadCharacters,
             const SvXMLEnumMapEntry* _pEnumMap = NULL,

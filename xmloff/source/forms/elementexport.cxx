@@ -1791,7 +1791,7 @@ namespace xmloff
                     sal_Int16 nLinkageType = aHelper.isCellIntegerBinding( xBinding ) ? 1 : 0;
 
                     OUStringBuffer sBuffer;
-                    m_rContext.getGlobalContext().GetMM100UnitConverter().convertEnum(
+                    SvXMLUnitConverter::convertEnum(
                         sBuffer,
                         (sal_uInt16)nLinkageType,
                         OEnumMapper::getEnumMap( OEnumMapper::epListLinkageType )
@@ -1835,7 +1835,7 @@ namespace xmloff
             Reference< XListEntrySink > xSink( m_xProps, UNO_QUERY );
             Reference< XListEntrySource > xSource;
             if ( xSink.is() )
-                xSource = xSource.query( xSink->getListEntrySource() );
+                xSource.set(xSink->getListEntrySource(), css::uno::UNO_QUERY);
             OSL_ENSURE( xSource.is(), "OControlExport::exportCellListSourceRange: list source or sink!" );
             if ( xSource.is() )
             {

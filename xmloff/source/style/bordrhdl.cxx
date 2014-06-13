@@ -192,13 +192,13 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
     while( aTokens.getNextToken( aToken ) && !aToken.isEmpty() )
     {
         if( !bHasWidth &&
-            rUnitConverter.convertEnum( nNamedWidth, aToken,
+            SvXMLUnitConverter::convertEnum( nNamedWidth, aToken,
                                         pXML_NamedBorderWidths ) )
         {
             bHasWidth = true;
         }
         else if( !bHasStyle &&
-                 rUnitConverter.convertEnum( nStyle, aToken,
+                 SvXMLUnitConverter::convertEnum( nStyle, aToken,
                                               pXML_BorderStyles ) )
         {
             bHasStyle = true;

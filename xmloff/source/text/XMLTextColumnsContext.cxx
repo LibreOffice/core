@@ -242,8 +242,7 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
         case XML_TOK_COLUMN_SEP_ALIGN:
             {
                 sal_uInt16 nAlign;
-                if( GetImport().GetMM100UnitConverter().
-                                        convertEnum( nAlign, rValue,
+                if( SvXMLUnitConverter::convertEnum( nAlign, rValue,
                                                        pXML_Sep_Align_Enum ) )
                     eVertAlign = (VerticalAlignment)nAlign;
             }
@@ -251,8 +250,7 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
         case XML_TOK_COLUMN_SEP_STYLE:
             {
                 sal_uInt16 nStyleVal;
-                if( GetImport().GetMM100UnitConverter().
-                                        convertEnum( nStyleVal, rValue,
+                if( SvXMLUnitConverter::convertEnum( nStyleVal, rValue,
                                                        pXML_Sep_Style_Enum ) )
                     nStyle = (sal_Int8)nStyleVal;
             }

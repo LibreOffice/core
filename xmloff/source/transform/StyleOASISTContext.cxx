@@ -207,7 +207,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_DECODE_STYLE_NAME_REF:
                     {
                         OUString aAttrValue( rAttrValue );
-                        GetTransformer().DecodeStyleName(aAttrValue);
+                        XMLTransformerBase::DecodeStyleName(aAttrValue);
                         pAttrList->AddAttribute( rAttrName, aAttrValue );
                     }
                     break;
@@ -219,14 +219,14 @@ void XMLPropertiesTContext_Impl::StartElement(
                                 ::xmloff::token::GetXMLToken(
                                 (*aIter).second.GetQNameTokenFromParam1()) ) );
                         OUString aAttrValue( rAttrValue );
-                        GetTransformer().DecodeStyleName(aAttrValue);
+                        XMLTransformerBase::DecodeStyleName(aAttrValue);
                         pAttrList->AddAttribute( aNewAttrQName, aAttrValue );
                     }
                     break;
                 case XML_ATACTION_NEG_PERCENT:
                     {
                         OUString aAttrValue( rAttrValue );
-                        GetTransformer().NegPercent(aAttrValue);
+                        XMLTransformerBase::NegPercent(aAttrValue);
                         pAttrList->AddAttribute( rAttrName, aAttrValue );
                     }
                     break;
@@ -238,7 +238,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                                 ::xmloff::token::GetXMLToken(
                                 (*aIter).second.GetQNameTokenFromParam1()) ) );
                         OUString aAttrValue( rAttrValue );
-                        GetTransformer().NegPercent(aAttrValue);
+                        XMLTransformerBase::NegPercent(aAttrValue);
                         pAttrList->AddAttribute( aNewAttrQName, aAttrValue );
                     }
                     break;
@@ -400,13 +400,13 @@ void XMLPropertiesTContext_Impl::StartElement(
                 // #i25616#
                 case XML_OPTACTION_OPACITY:
                     aOpacityValueRemember = rAttrValue;
-                    GetTransformer().NegPercent(aOpacityValueRemember);
+                    XMLTransformerBase::NegPercent(aOpacityValueRemember);
                     break;
 
                 // #i25616#
                 case XML_OPTACTION_IMAGE_OPACITY:
                     aImageOpacityValueRemember = rAttrValue;
-                    GetTransformer().NegPercent(aImageOpacityValueRemember);
+                    XMLTransformerBase::NegPercent(aImageOpacityValueRemember);
                     break;
 
                 case XML_OPTACTION_KEEP_TOGETHER:
@@ -867,7 +867,7 @@ void XMLStyleOASISTContext::StartElement(
             case XML_ATACTION_DECODE_STYLE_NAME_REF:
                 {
                     OUString aAttrValue( rAttrValue );
-                    if( GetTransformer().DecodeStyleName(aAttrValue) )
+                    if( XMLTransformerBase::DecodeStyleName(aAttrValue) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
                 break;
@@ -882,7 +882,7 @@ void XMLStyleOASISTContext::StartElement(
             case XML_ATACTION_NEG_PERCENT:
                 {
                     OUString aAttrValue( rAttrValue );
-                    if( GetTransformer().NegPercent(aAttrValue) )
+                    if( XMLTransformerBase::NegPercent(aAttrValue) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
                 break;

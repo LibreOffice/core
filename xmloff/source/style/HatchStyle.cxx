@@ -122,7 +122,7 @@ bool XMLHatchStyleImport::importXML(
             case XML_TOK_HATCH_STYLE:
                 {
                     sal_uInt16 eValue;
-                    bHasStyle = rUnitConverter.convertEnum( eValue, rStrValue, pXML_HatchStyle_Enum );
+                    bHasStyle = SvXMLUnitConverter::convertEnum( eValue, rStrValue, pXML_HatchStyle_Enum );
                     if( bHasStyle )
                         aHatch.Style = (drawing::HatchStyle) eValue;
                 }
@@ -194,7 +194,7 @@ bool XMLHatchStyleExport::exportXML(
                 rExport.GetMM100UnitConverter();
 
             // Style
-            if( !rUnitConverter.convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
+            if( !SvXMLUnitConverter::convertEnum( aOut, aHatch.Style, pXML_HatchStyle_Enum ) )
             {
                 bRet = false;
             }

@@ -83,7 +83,7 @@ namespace
     }
 }
 
-Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun::star::uno::Type& _rExpectedType,
+Any PropertyConversion::convertString( const ::com::sun::star::uno::Type& _rExpectedType,
     const OUString& _rReadCharacters, const SvXMLEnumMapEntry* _pEnumMap, const bool _bInvertBoolean )
 {
     Any aReturn;
@@ -131,7 +131,7 @@ Any PropertyConversion::convertString( SvXMLImport& _rImporter, const ::com::sun
         #if OSL_DEBUG_LEVEL > 0
             bool bSuccess =
         #endif
-            _rImporter.GetMM100UnitConverter().convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
+            SvXMLUnitConverter::convertEnum(nEnumValue, _rReadCharacters, _pEnumMap);
             OSL_ENSURE(bSuccess, "PropertyConversion::convertString: could not convert to an enum value!");
             if (bEnumAsInt)
                 if (TypeClass_SHORT == _rExpectedType.getTypeClass())
@@ -336,7 +336,7 @@ bool OPropertyImport::handleAttribute(sal_uInt16 /*_nNamespaceKey*/, const OUStr
         aNewValue.Name = pProperty->sPropertyName;
 
         // convert the value string into the target type
-        aNewValue.Value = PropertyConversion::convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap, pProperty->bInverseSemantics);
+        aNewValue.Value = PropertyConversion::convertString(pProperty->aPropertyType, _rValue, pProperty->pEnumMap, pProperty->bInverseSemantics);
         implPushBackPropertyValue( aNewValue );
         return true;
     }
@@ -463,7 +463,7 @@ void OSinglePropertyContext::StartElement(const Reference< XAttributeList >& _rx
     else
     {
         aPropValue.Value =
-            PropertyConversion::convertString(GetImport(), aPropType,
+            PropertyConversion::convertString(aPropType,
                                            sValue);
     }
 
@@ -527,7 +527,7 @@ void OListPropertyContext::EndElement()
             ++values, ++pListElement
         )
     {
-        *pListElement = PropertyConversion::convertString( GetImport(), aType, *values );
+        *pListElement = PropertyConversion::convertString( aType, *values );
     }
 
     PropertyValue aSequenceValue;

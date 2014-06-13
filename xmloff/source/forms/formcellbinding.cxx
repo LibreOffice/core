@@ -103,7 +103,7 @@ FormCellBindingHelper::FormCellBindingHelper( const Reference< XPropertySet >& _
     OSL_ENSURE( m_xControlModel.is(), "FormCellBindingHelper::FormCellBindingHelper: invalid control model!" );
 
     if ( !m_xDocument.is() )
-        m_xDocument = m_xDocument.query( getDocument( m_xControlModel ) );
+        m_xDocument.set(getDocument( m_xControlModel ), css::uno::UNO_QUERY);
     OSL_ENSURE( m_xDocument.is(), "FormCellBindingHelper::FormCellBindingHelper: Did not find the spreadsheet document!" );
 }
 
@@ -152,11 +152,11 @@ Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAdd
     if ( _rAddress.isEmpty() || !convertStringAddress( _rAddress, aAddress ) )
         return xBinding;
 
-    xBinding = xBinding.query( createDocumentDependentInstance(
+    xBinding.set(createDocumentDependentInstance(
         _bUseIntegerBinding ? OUString(SERVICE_LISTINDEXCELLBINDING) : OUString(SERVICE_CELLVALUEBINDING),
         PROPERTY_BOUND_CELL,
         makeAny( aAddress )
-    ) );
+    ), css::uno::UNO_QUERY);
 
     return xBinding;
 }
@@ -170,11 +170,11 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
         return xSource;
 
     // create a range object for this address
-    xSource = xSource.query( createDocumentDependentInstance(
+    xSource.set(createDocumentDependentInstance(
         SERVICE_CELLRANGELISTSOURCE,
         PROPERTY_LIST_CELL_RANGE,
         makeAny( aRangeAddress )
-    ) );
+    ), css::uno::UNO_QUERY);
 
     return xSource;
 }
