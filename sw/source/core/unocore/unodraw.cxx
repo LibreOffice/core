@@ -1542,8 +1542,14 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                 }
                 else if (pEntry->nWID == RES_CHAIN)
                 {
-                    if (pEntry->nMemberId == MID_CHAIN_NAME)
+                    switch (pEntry->nMemberId)
+                    {
+                    case MID_CHAIN_PREVNAME:
+                    case MID_CHAIN_NEXTNAME:
+                    case MID_CHAIN_NAME:
                         SwTextBoxHelper::getProperty(pFmt, pEntry->nWID, pEntry->nMemberId, aRet);
+                    break;
+                    }
                 }
                 // #i28749#
                 else if ( FN_SHAPE_TRANSFORMATION_IN_HORI_L2R == pEntry->nWID )
