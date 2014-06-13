@@ -432,18 +432,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	writerfilter \
 ))
 
-$(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-	adabas \
-	adabasui \
-	agg \
-	communi \
-	ooxml \
-	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc) \
-	filtertracer \
-	simplecm \
-	sts \
-))
-
 ifneq (,$(filter ANDROID IOS,$(OS)))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
