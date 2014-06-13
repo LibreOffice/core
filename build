@@ -29,6 +29,7 @@ devinst=""
 enable_kde="kde4"
 disable_kde="kde"
 clean=0
+MAKE='make'
 
 while getopts bcdklw opt
   do case "$opt" in
@@ -38,7 +39,8 @@ while getopts bcdklw opt
   k) enable_kde="kde"
      disable_kde="kde4";;
   l) clean=1;;
-  w) windows=1;;
+  w) windows=1
+     MAKE='/opt/lo/bin/make';;
   [?]) error "$USAGE";;
   esac
 done
@@ -188,7 +190,7 @@ do_configure()
 
 
 do_build() {
-	make $devinst || error "make fehlgeschlagen."
+	"$MAKE" $devinst || error "$MAKE fehlgeschlagen."
 }
 
 echo "Startzeit: $(date)" | tee build.log
@@ -204,7 +206,7 @@ fi
 
 if [ "_$clean" = "_1" ]; then
   echo Cleaning...
-  make clean 2>&1 | tee -a build.log
+  "$MAKE" clean 2>&1 | tee -a build.log
   ret=${PIPESTATUS[0]}
   if [ $ret -ne 0 ]; then
     exit $ret
