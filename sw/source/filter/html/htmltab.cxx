@@ -3221,7 +3221,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
     if( bHasNumFmt )
     {
         LanguageType eLang;
-        nValue = rParser.GetTableDataOptionsValNum(
+        nValue = SfxHTMLParser::GetTableDataOptionsValNum(
                             nNumFmt, eLang, aValue, aNumFmt,
                             *rParser.pDoc->GetNumberFormatter() );
     }

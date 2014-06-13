@@ -1135,7 +1135,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             SwDocShell* pDocShell = rReader.mpDocShell;
             if(pDocShell)
             {
-                rReader.ReadEmbeddedData( aMemStream, pDocShell, hlStr);
+                SwWW8ImplReader::ReadEmbeddedData( aMemStream, pDocShell, hlStr);
             }
         }
 
@@ -1990,8 +1990,8 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     */
     if (!rTypo.reserved2)
     {
-        i18n::ForbiddenCharacters aForbidden(rTypo.GetJapanNotBeginLevel1(),
-            rTypo.GetJapanNotEndLevel1());
+        i18n::ForbiddenCharacters aForbidden(WW8DopTypography::GetJapanNotBeginLevel1(),
+            WW8DopTypography::GetJapanNotEndLevel1());
         rDoc.getIDocumentSettingAccess().setForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
     }
 

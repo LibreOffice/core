@@ -94,8 +94,8 @@ void SwFldDBPage::Reset(const SfxItemSet*)
 
         for(sal_uInt16 i = rRg.nStart; i < rRg.nEnd; ++i)
         {
-            const sal_uInt16 nTypeId = GetFldMgr().GetTypeId(i);
-            const sal_Int32 nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(i));
+            const sal_uInt16 nTypeId = SwFldMgr::GetTypeId(i);
+            const sal_Int32 nPos = m_pTypeLB->InsertEntry(SwFldMgr::GetTypeStr(i));
             m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
@@ -103,7 +103,7 @@ void SwFldDBPage::Reset(const SfxItemSet*)
     {
         const sal_uInt16 nTypeId = GetCurField()->GetTypeId();
         const sal_Int32 nPos = m_pTypeLB->InsertEntry(
-            GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
+            SwFldMgr::GetTypeStr(SwFldMgr::GetPos(nTypeId)));
         m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
     }
 

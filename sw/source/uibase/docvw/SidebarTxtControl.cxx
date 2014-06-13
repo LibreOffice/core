@@ -222,7 +222,7 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
             bool bIsProtected = mrSidebarWin.IsProtected();
             if ( !bIsProtected ||
                  ( bIsProtected &&
-                   !mrSidebarWin.GetOutlinerView()->GetOutliner()->GetEditEngine().DoesKeyChangeText(rKeyEvt)) )
+                   !EditEngine::DoesKeyChangeText(rKeyEvt)) )
             {
                 bDone = GetTextView() && GetTextView()->PostKeyEvent( rKeyEvt );
             }
@@ -347,7 +347,7 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
         }
         else
         {
-            boost::scoped_ptr<SfxPopupMenuManager> pMgr(mrDocView.GetViewFrame()->GetDispatcher()->Popup(0, this,&rCEvt.GetMousePosPixel()));
+            boost::scoped_ptr<SfxPopupMenuManager> pMgr(SfxDispatcher::Popup(0, this,&rCEvt.GetMousePosPixel()));
             ((PopupMenu*)pMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTxtControl, Select) );
 
             {

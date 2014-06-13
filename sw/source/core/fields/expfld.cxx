@@ -718,7 +718,7 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
         const OUString rTmp2 = rNew.sDlgEntry;
         sal_Int32 nFndPos2 = 0;
         const OUString sNum2( rTmp2.getToken( 0, ' ', nFndPos2 ));
-        bool bIsNum2IsNumeric = rCC.isAsciiNumeric( sNum2 );
+        bool bIsNum2IsNumeric = CharClass::isAsciiNumeric( sNum2 );
         sal_Int32 nNum2 = bIsNum2IsNumeric ? sNum2.toInt32() : 0;
 
         nO--;

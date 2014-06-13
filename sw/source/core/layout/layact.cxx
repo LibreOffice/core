@@ -2029,7 +2029,7 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
             break;
         case AUTOCOMPLETE_WORDS :
             if( !pViewOptions->IsAutoCompleteWords() ||
-                 pDoc->GetAutoCompleteWords().IsLockWordLstLocked())
+                 SwDoc::GetAutoCompleteWords().IsLockWordLstLocked())
                 return false;
             break;
         case WORD_COUNT :

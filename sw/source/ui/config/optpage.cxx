@@ -838,15 +838,15 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         nLabelHeight =    pFontConfig->GetFontHeight( FONT_CAPTION , nFontGroup, eLanguage );
         nIndexHeight =    pFontConfig->GetFontHeight( FONT_INDEX   , nFontGroup, eLanguage );
         if( nStandardHeight <= 0)
-            nStandardHeight = pFontConfig->GetDefaultHeightFor( FONT_STANDARD + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nStandardHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_STANDARD + nFontGroup * FONT_PER_GROUP, eLanguage);
         if( nTitleHeight <= 0)
-            nTitleHeight = pFontConfig->GetDefaultHeightFor( FONT_OUTLINE + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nTitleHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_OUTLINE + nFontGroup * FONT_PER_GROUP, eLanguage);
         if( nListHeight <= 0)
-            nListHeight = pFontConfig->GetDefaultHeightFor( FONT_LIST + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nListHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_LIST + nFontGroup * FONT_PER_GROUP, eLanguage);
         if( nLabelHeight <= 0)
-            nLabelHeight = pFontConfig->GetDefaultHeightFor( FONT_CAPTION + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nLabelHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_CAPTION + nFontGroup * FONT_PER_GROUP, eLanguage);
         if( nIndexHeight <= 0)
-            nIndexHeight = pFontConfig->GetDefaultHeightFor( FONT_INDEX + nFontGroup * FONT_PER_GROUP, eLanguage);
+            nIndexHeight = SwStdFontConfig::GetDefaultHeightFor( FONT_INDEX + nFontGroup * FONT_PER_GROUP, eLanguage);
 
        pDocOnlyCB->Enable(false);
     }

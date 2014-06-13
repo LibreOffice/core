@@ -168,7 +168,7 @@ void SwDocShell::ToggleBrowserMode(bool bSet, SwView* _pView )
                 pTmpFrm = SfxViewFrame::GetFirst(this, false);
             }
             else
-                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, false);
+                pTmpFrm = SfxViewFrame::GetNext(*pTmpFrm, this, false);
         }
         const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
         pTempView->GetWrtShell().CheckBrowseView( true );
@@ -417,7 +417,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     if( bFound && !bOnly )
                         break;
-                    pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this);
+                    pTmpFrm = SfxViewFrame::GetNext(*pTmpFrm, this);
                 }
 
                 if( pArgs && SFX_ITEM_SET ==

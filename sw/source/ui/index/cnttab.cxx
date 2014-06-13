@@ -491,7 +491,7 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
 
                 if(!pExampleFrame->IsServiceAvailable())
                 {
-                    pExampleFrame->CreateErrorMessage(0);
+                    SwOneExampleFrame::CreateErrorMessage(0);
                 }
             }
             m_pShowExampleCB->Show(pExampleFrame && pExampleFrame->IsServiceAvailable());

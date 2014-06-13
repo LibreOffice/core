@@ -419,7 +419,7 @@ void SwSidebarWin::InitControls()
     sal_uLong nCntrl = mpOutliner->GetControlWord();
     // TODO: crash when AUTOCOMPLETE enabled
     nCntrl |= EE_CNTRL_MARKFIELDS | EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_URLSFXEXECUTE; // | EE_CNTRL_AUTOCOMPLETE;
-    if (pVOpt->IsFieldShadings())
+    if (SwViewOption::IsFieldShadings())
         nCntrl |= EE_CNTRL_MARKFIELDS;
     else
         nCntrl &= ~EE_CNTRL_MARKFIELDS;
@@ -430,9 +430,9 @@ void SwSidebarWin::InitControls()
     mpOutliner->SetControlWord(nCntrl);
 
     sal_uInt16 aIndex = SW_MOD()->InsertRedlineAuthor(GetAuthor());
-    SetColor( mrMgr.GetColorDark(aIndex),
-              mrMgr.GetColorLight(aIndex),
-              mrMgr.GetColorAnchor(aIndex));
+    SetColor( SwPostItMgr::GetColorDark(aIndex),
+              SwPostItMgr::GetColorLight(aIndex),
+              SwPostItMgr::GetColorAnchor(aIndex));
 
     CheckMetaText();
 

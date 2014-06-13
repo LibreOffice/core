@@ -107,8 +107,8 @@ void SwFldVarPage::Reset(const SfxItemSet* )
 
         for (short i = rRg.nStart; i < rRg.nEnd; ++i)
         {
-            nTypeId = GetFldMgr().GetTypeId(i);
-            nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(i));
+            nTypeId = SwFldMgr::GetTypeId(i);
+            nPos = m_pTypeLB->InsertEntry(SwFldMgr::GetTypeStr(i));
             m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
@@ -118,7 +118,7 @@ void SwFldVarPage::Reset(const SfxItemSet* )
         nTypeId = pCurField->GetTypeId();
         if (nTypeId == TYP_SETINPFLD)
             nTypeId = TYP_INPUTFLD;
-        nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
+        nPos = m_pTypeLB->InsertEntry(SwFldMgr::GetTypeStr(SwFldMgr::GetPos(nTypeId)));
         m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         m_pNumFormatLB->SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
         SwWrtShell *pSh = GetWrtShell();

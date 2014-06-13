@@ -1174,7 +1174,7 @@ OUString SwNavigationPI::CreateDropFileName( TransferableDataHelper& rData )
 
 sal_Int8 SwNavigationPI::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
-    return ( !aContentTree.IsInDrag() &&
+    return ( !SwContentTree::IsInDrag() &&
         ( aContentTree.IsDropFormatSupported( FORMAT_FILE ) ||
           aContentTree.IsDropFormatSupported( FORMAT_STRING ) ||
           aContentTree.IsDropFormatSupported( SOT_FORMATSTR_ID_SOLK ) ||
@@ -1192,7 +1192,7 @@ sal_Int8 SwNavigationPI::ExecuteDrop( const ExecuteDropEvent& rEvt )
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     sal_Int8 nRet = DND_ACTION_NONE;
     OUString sFileName;
-    if( !aContentTree.IsInDrag() &&
+    if( !SwContentTree::IsInDrag() &&
         !(sFileName = SwNavigationPI::CreateDropFileName( aData )).isEmpty() )
     {
         INetURLObject aTemp( sFileName );

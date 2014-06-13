@@ -416,7 +416,7 @@ void SwExtend::ActualizeFont( SwFont &rFnt, sal_uInt16 nAttr )
 
     if ( nAttr & EXTTEXTINPUT_ATTR_HIGHLIGHT )
     {
-        const StyleSettings& rStyleSettings = GetpApp()->GetSettings().GetStyleSettings();
+        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         rFnt.SetColor( rStyleSettings.GetHighlightTextColor() );
         rFnt.SetBackColor( new Color( rStyleSettings.GetHighlightColor() ) );
     }

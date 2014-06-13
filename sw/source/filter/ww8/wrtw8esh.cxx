@@ -3035,7 +3035,7 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, sal_uInt32 nShapeId )
         // SdrExchangeView aExchange(pModel, pDevice);
         SdrView aExchange(pModel, pDevice);
 
-        Graphic aGraphic(aExchange.GetObjGraphic(pModel, pSdrObj));
+        Graphic aGraphic(SdrExchangeView::GetObjGraphic(pModel, pSdrObj));
 
         EscherPropertyContainer aPropOpt;
         WriteOLEPicture(aPropOpt, 0xa00 | SHAPEFLAG_OLESHAPE, aGraphic,

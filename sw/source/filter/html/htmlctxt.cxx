@@ -461,7 +461,7 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
 {
     bool bRet = false;
     if( rClass.equalsIgnoreAsciiCase( "sd-abs-pos" ) &&
-        pCSS1Parser->MayBePositioned( rPropInfo ) )
+        SwCSS1Parser::MayBePositioned( rPropInfo ) )
     {
         // Container-Klasse
         SfxItemSet *pFrmItemSet = pContext->GetFrmItemSet( pDoc );

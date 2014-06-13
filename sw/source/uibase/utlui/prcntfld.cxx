@@ -76,7 +76,7 @@ void PercentField::ShowPercent(bool bPercent)
         m_pField->SetUnit(FUNIT_CUSTOM);
         m_pField->SetDecimalDigits( 0 );
 
-        nAktWidth = m_pField->ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+        nAktWidth = MetricField::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
         // round to 0.5 percent
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
 
@@ -86,7 +86,7 @@ void PercentField::ShowPercent(bool bPercent)
         m_pField->SetBaseValue(0);
         if (nOldValue != nLastValue)
         {
-            nAktWidth = m_pField->ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+            nAktWidth = MetricField::ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
             nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
             m_pField->SetValue(nPercent);
             nLastPercent = nPercent;
@@ -129,12 +129,12 @@ void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
         sal_Int64 nPercent, nAktWidth;
         if(eInUnit == FUNIT_TWIP)
         {
-            nAktWidth = m_pField->ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
+            nAktWidth = MetricField::ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
         }
         else
         {
             sal_Int64 nValue = Convert(nNewValue, eInUnit, eOldUnit);
-            nAktWidth = m_pField->ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+            nAktWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
         }
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
         m_pField->SetValue(nPercent);
@@ -144,7 +144,7 @@ void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 void PercentField::SetBaseValue(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
     if (m_pField->GetUnit() == FUNIT_CUSTOM)
-        nOldBaseValue = m_pField->ConvertValue(nNewValue, 0, nOldDigits, eInUnit, eOldUnit);
+        nOldBaseValue = MetricField::ConvertValue(nNewValue, 0, nOldDigits, eInUnit, eOldUnit);
     else
         m_pField->SetBaseValue(nNewValue, eInUnit);
 }
@@ -219,12 +219,12 @@ void PercentField::SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit)
         sal_Int64 nPercent, nAktWidth;
         if (eInUnit == FUNIT_TWIP)
         {
-            nAktWidth = m_pField->ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
+            nAktWidth = MetricField::ConvertValue(nNewValue, 0, nOldDigits, FUNIT_TWIP, FUNIT_TWIP);
         }
         else
         {
             sal_Int64 nValue = Convert(nNewValue, eInUnit, eOldUnit);
-            nAktWidth = m_pField->ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
+            nAktWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
         }
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
         m_pField->SetUserValue(nPercent,FUNIT_NONE);
@@ -264,7 +264,7 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
         if (eOutUnit == FUNIT_TWIP) // Only convert if necessary
             return NormalizePercent(nTwipValue);
         else
-            return m_pField->ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
+            return MetricField::ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
     }
 
     if (eOutUnit == FUNIT_CUSTOM)
@@ -276,12 +276,12 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
         if (eInUnit == FUNIT_TWIP)  // Only convert if necessary
             nAktWidth = nValue;
         else
-            nAktWidth = m_pField->ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
+            nAktWidth = MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
         // Round to 0.5 percent
         return ((nAktWidth * 1000) / nRefValue + 5) / 10;
     }
 
-    return m_pField->ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
+    return MetricField::ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

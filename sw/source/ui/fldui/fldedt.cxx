@@ -68,7 +68,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw)
     if(!pCurFld)
         return;
 
-    pSh->SetCareWin(this);
+    SwViewShell::SetCareWin(this);
 
     if ( pSh->CrsrInsideInputFld() )
     {
@@ -195,7 +195,7 @@ SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 
 SwFldEditDlg::~SwFldEditDlg()
 {
-    pSh->SetCareWin(NULL);
+    SwViewShell::SetCareWin(NULL);
     pSh->EnterStdMode();
 }
 

@@ -593,7 +593,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
 
             sal_uInt16 eEnum;
 
-            if( !rUnitConverter.convertEnum( eEnum, rValue, psXML_BreakType ) )
+            if( !SvXMLUnitConverter::convertEnum( eEnum, rValue, psXML_BreakType ) )
                 return false;
 
             if( eEnum == 0 )
@@ -681,7 +681,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 {
                     SvxGraphicPosition eGraphicPos = pBrush->GetGraphicPos();
                     sal_uInt16 nPos = GPOS_NONE;
-                    if( rUnitConverter.convertEnum( nPos, rValue,
+                    if( SvXMLUnitConverter::convertEnum( nPos, rValue,
                                                     psXML_BrushRepeat ) )
                     {
                         if( GPOS_MM != nPos || GPOS_NONE == eGraphicPos ||
@@ -740,7 +740,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                             else
                                 ePos = GPOS_MM;
                         }
-                        else if( rUnitConverter.convertEnum( nTmp, aToken,
+                        else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
                                                          psXML_BrushHoriPos ) )
                         {
                             if( bVert )
@@ -752,7 +752,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                                 bOk = false;
                             bHori = true;
                         }
-                        else if( rUnitConverter.convertEnum( nTmp, aToken,
+                        else if( SvXMLUnitConverter::convertEnum( nTmp, aToken,
                                                          psXML_BrushVertPos ) )
                         {
                             if( bHori )
@@ -827,7 +827,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             OSL_ENSURE( pHoriOrient != NULL, "Wrong Which-ID" );
 
             sal_uInt16 nValue;
-            bOk = rUnitConverter.convertEnum( nValue, rValue,
+            bOk = SvXMLUnitConverter::convertEnum( nValue, rValue,
                                               aXMLTableAlignMap );
             if( bOk )
                 pHoriOrient->SetHoriOrient( nValue );
@@ -840,7 +840,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
             OSL_ENSURE( pVertOrient != NULL, "Wrong Which-ID" );
 
             sal_uInt16 nValue;
-            bOk = rUnitConverter.convertEnum( nValue, rValue,
+            bOk = SvXMLUnitConverter::convertEnum( nValue, rValue,
                                               aXMLTableVAlignMap );
             if( bOk )
                 pVertOrient->SetVertOrient( nValue );

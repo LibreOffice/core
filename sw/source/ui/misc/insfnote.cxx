@@ -191,7 +191,7 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, bool bEd
     m_pPrevBT->SetClickHdl(LINK(this, SwInsFootNoteDlg, NextPrevHdl));
     m_pNextBT->SetClickHdl(LINK(this, SwInsFootNoteDlg, NextPrevHdl));
 
-    rSh.SetCareWin(this);
+    SwViewShell::SetCareWin(this);
 
     if (bEdit)
     {
@@ -204,7 +204,7 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, bool bEd
 
 SwInsFootNoteDlg::~SwInsFootNoteDlg()
 {
-    rSh.SetCareWin(0);
+    SwViewShell::SetCareWin(0);
 
     if (bEdit)
         rSh.ResetSelect(0, false);

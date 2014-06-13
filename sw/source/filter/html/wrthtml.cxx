@@ -1343,7 +1343,7 @@ HTMLSaveData::HTMLSaveData(SwHTMLWriter& rWriter, sal_uLong nStt,
 {
     bOldWriteAll = rWrt.bWriteAll;
 
-    rWrt.pCurPam = rWrt.NewSwPaM( *rWrt.pDoc, nStt, nEnd );
+    rWrt.pCurPam = Writer::NewSwPaM( *rWrt.pDoc, nStt, nEnd );
 
     // Tabelle in Sonderbereichen erkennen
     if( nStt != rWrt.pCurPam->GetMark()->nNode.GetIndex() )

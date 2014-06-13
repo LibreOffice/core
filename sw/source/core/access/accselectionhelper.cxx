@@ -248,7 +248,7 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
                 {
                     const SwAccessibleChild& rChild = *aIter;
                     if( rChild.GetDrawObject() && !rChild.GetSwFrm() &&
-                        rContext.GetParent(rChild, rContext.IsInPagePreview())
+                        SwAccessibleFrame::GetParent(rChild, rContext.IsInPagePreview())
                            == rContext.GetFrm() &&
                         pFEShell->IsObjSelected( *rChild.GetDrawObject() ) )
                     {
@@ -301,7 +301,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     {
         if( 0 == nSelectedChildIndex )
         {
-            if(rContext.GetParent( SwAccessibleChild(pFlyFrm), rContext.IsInPagePreview()) == rContext.GetFrm() )
+            if(SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrm), rContext.IsInPagePreview()) == rContext.GetFrm() )
             {
                 aChild = pFlyFrm;
             }
@@ -313,7 +313,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
                     const SwFmtAnchor& pAnchor = pFrmFmt->GetAnchor();
                     if( pAnchor.GetAnchorId() == FLY_AS_CHAR )
                     {
-                        const SwFrm  *pParaFrm =  rContext.GetParent( SwAccessibleChild(pFlyFrm), rContext.IsInPagePreview() );
+                        const SwFrm  *pParaFrm =  SwAccessibleFrame::GetParent( SwAccessibleChild(pFlyFrm), rContext.IsInPagePreview() );
                         aChild  = pParaFrm;
                     }
                 }
@@ -335,7 +335,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
         {
             const SwAccessibleChild& rChild = *aIter;
             if( rChild.GetDrawObject() && !rChild.GetSwFrm() &&
-                rContext.GetParent(rChild, rContext.IsInPagePreview()) ==
+                SwAccessibleFrame::GetParent(rChild, rContext.IsInPagePreview()) ==
                     rContext.GetFrm() &&
                 pFEShell->IsObjSelected( *rChild.GetDrawObject() ) )
             {

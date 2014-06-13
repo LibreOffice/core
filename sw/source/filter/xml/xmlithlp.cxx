@@ -107,13 +107,13 @@ bool sw_frmitems_parseXMLBorder( const OUString& rValue,
     while( aTokens.getNextToken( aToken ) && !aToken.isEmpty() )
     {
         if( !rHasWidth &&
-            rUnitConverter.convertEnum( rNamedWidth, aToken,
+            SvXMLUnitConverter::convertEnum( rNamedWidth, aToken,
                                         psXML_NamedBorderWidths ) )
         {
             rHasWidth = true;
         }
         else if( !rHasStyle &&
-                 rUnitConverter.convertEnum( rStyle, aToken,
+                 SvXMLUnitConverter::convertEnum( rStyle, aToken,
                                              psXML_BorderStyles ) )
         {
             rHasStyle = true;

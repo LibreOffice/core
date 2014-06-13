@@ -381,7 +381,7 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                 pOut = pSh->GetWin();
 
                             if( !pOut )
-                                pOut = GetpApp()->GetDefaultDevice();
+                                pOut = Application::GetDefaultDevice();
 
                             MapMode aOldMap( pOut->GetMapMode() );
                             pOut->SetMapMode( MapMode( MAP_TWIP ) );

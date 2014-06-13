@@ -460,8 +460,8 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                 //    -> Ftn wandert in den PrevFollow
                 // beide muessen auf einer Seite/in einer Spalte stehen.
 
-                SwFtnFrm *pFtnFrm = bEndn ? pEndBoss->FindFtn( pSource, pFtn ) :
-                                            pFtnBoss->FindFtn( pSource, pFtn );
+                SwFtnFrm *pFtnFrm = bEndn ? SwFtnBossFrm::FindFtn( pSource, pFtn ) :
+                                            SwFtnBossFrm::FindFtn( pSource, pFtn );
 
                 if( pFtnFrm )
                 {
@@ -481,7 +481,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                         while( pDest->GetFollow() && ((SwTxtFrm*)pDest->
                                GetFollow())->GetOfst() <= nIdx )
                             pDest = pDest->GetFollow();
-                        OSL_ENSURE( !pDest->FindFtnBossFrm( !bEndn )->FindFtn(
+                        OSL_ENSURE( !SwFtnBossFrm::FindFtn(
                             pDest,pFtn),"SwTxtFrm::RemoveFtn: footnote exists");
 
                         //Nicht ummelden sondern immer Moven.
@@ -507,7 +507,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                         }
                         ((SwTxtFrm*)pDest)->SetFtn( true );
 
-                        OSL_ENSURE( pDest->FindFtnBossFrm( !bEndn )->FindFtn( pDest,
+                        OSL_ENSURE( SwFtnBossFrm::FindFtn( pDest,
                            pFtn),"SwTxtFrm::RemoveFtn: footnote ChgRef failed");
                     }
                     else
@@ -521,8 +521,8 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                             else
                                 pFtnBoss->RemoveFtn( this, pFtn );
                             bRemove = bRemove || !bEndDoc;
-                            OSL_ENSURE( bEndn ? !pEndBoss->FindFtn( this, pFtn ) :
-                                    !pFtnBoss->FindFtn( this, pFtn ),
+                            OSL_ENSURE( bEndn ? !SwFtnBossFrm::FindFtn( this, pFtn ) :
+                                    !SwFtnBossFrm::FindFtn( this, pFtn ),
                             "SwTxtFrm::RemoveFtn: can't get off that footnote" );
                         }
                     }
@@ -607,7 +607,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     {
         if( pSect && pSrcFrm )
         {
-            SwFtnFrm *pFtnFrm = pBoss->FindFtn( pSrcFrm, pFtn );
+            SwFtnFrm *pFtnFrm = SwFtnBossFrm::FindFtn( pSrcFrm, pFtn );
             if( pFtnFrm && pFtnFrm->IsInSct() )
             {
                 pBoss->RemoveFtn( pSrcFrm, pFtn );
@@ -617,7 +617,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     }
     else if( bEnd && pSect )
     {
-        SwFtnFrm *pFtnFrm = pSrcFrm ? pBoss->FindFtn( pSrcFrm, pFtn ) : NULL;
+        SwFtnFrm *pFtnFrm = pSrcFrm ? SwFtnBossFrm::FindFtn( pSrcFrm, pFtn ) : NULL;
         if( pFtnFrm && !pFtnFrm->GetUpper() )
             pFtnFrm = NULL;
         SwDoc *pDoc = GetNode()->GetDoc();
@@ -663,7 +663,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         pBoss->AppendFtn( this, pFtn );
     else
     {
-        SwFtnFrm *pFtnFrm = pBoss->FindFtn( pSrcFrm, pFtn );
+        SwFtnFrm *pFtnFrm = SwFtnBossFrm::FindFtn( pSrcFrm, pFtn );
         SwFtnBossFrm *pFtnBoss = pFtnFrm->FindFtnBossFrm();
 
         bool bBrutal = false;
@@ -826,7 +826,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     SwFtnBossFrm *pBoss = pFrm->FindFtnBossFrm( !rFtn.IsEndNote() );
     SwFtnFrm *pFtnFrm = NULL;
     if( pScrFrm )
-        pFtnFrm = pBoss->FindFtn( pScrFrm, pFtn );
+        pFtnFrm = SwFtnBossFrm::FindFtn( pScrFrm, pFtn );
 
     // Wir erkundigen uns, ob durch unser Append irgendeine
     // Fussnote noch auf der Seite/Spalte steht. Wenn nicht verschwindet

@@ -213,7 +213,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             pFontItem.reset();
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( FONT_STANDARD, i, eLanguage );
             if(nFontHeight <= 0)
-                nFontHeight = pStdFont->GetDefaultHeightFor( nFontId, eLanguage );
+                nFontHeight = SwStdFontConfig::GetDefaultHeightFor( nFontId, eLanguage );
             pDoc->SetDefault(SvxFontHeightItem( nFontHeight, 100, aFontHeightWhich[i] ));
             if( !bHTMLTemplSet )
             {
@@ -275,7 +275,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             }
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( static_cast< sal_Int8 >(aFontIdPoolId[nIdx]), 0, eLanguage );
             if(nFontHeight <= 0)
-                nFontHeight = pStdFont->GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
+                nFontHeight = SwStdFontConfig::GetDefaultHeightFor( aFontIdPoolId[nIdx], eLanguage );
             if(!pColl)
                 pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
             SvxFontHeightItem aFontHeight( (const SvxFontHeightItem&)pColl->GetFmtAttr( nFontHeightWhich, true ));

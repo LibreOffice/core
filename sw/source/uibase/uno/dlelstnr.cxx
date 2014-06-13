@@ -114,7 +114,7 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
     }
     if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
     {
-        SwView *pSwView = SW_MOD()->GetFirstView();
+        SwView *pSwView = SwModule::GetFirstView();
 
         //!! since this function may be called within the ctor of
         //!! SwView (during formatting) where the WrtShell is not yet
@@ -123,7 +123,7 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
         while (pSwView && pSwView->GetWrtShellPtr())
         {
             pSwView->GetWrtShell().ChgHyphenation();
-            pSwView = SW_MOD()->GetNextView( pSwView );
+            pSwView = SwModule::GetNextView( pSwView );
         }
     }
 }
