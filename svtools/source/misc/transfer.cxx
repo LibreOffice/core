@@ -45,6 +45,7 @@
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -299,8 +300,14 @@ TransferableHelper::~TransferableHelper()
 }
 
 
+Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor )
+    throw (UnsupportedFlavorException, IOException, RuntimeException, std::exception)
+{
+    return getTransferData2(rFlavor, OUString());
+}
 
-Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) throw( UnsupportedFlavorException, IOException, RuntimeException, std::exception )
+Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
+    throw (UnsupportedFlavorException, IOException, RuntimeException, std::exception)
 {
     if( !maAny.hasValue() || !mpFormats->size() || ( maLastFormat != rFlavor.MimeType ) )
     {
@@ -1551,7 +1558,7 @@ Any TransferableDataHelper::GetAny( SotFormatStringId nFormat, const OUString& r
 
 
 
-Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& /*rDestDoc*/ ) const
+Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& rDestDoc ) const
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
     Any aRet;
@@ -1562,13 +1569,20 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& /
         {
             const SotFormatStringId         nRequestFormat = SotExchange::GetFormat( rFlavor );
 
+            Reference<css::datatransfer::XTransferable2> xTransfer2(mxTransfer, UNO_QUERY);
+
             if( nRequestFormat )
             {
                 // try to get alien format first
                 for (DataFlavorExVector::const_iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() ); aIter != aEnd ; ++aIter)
                 {
                     if( ( nRequestFormat == (*aIter).mnSotId ) && !rFlavor.MimeType.equalsIgnoreAsciiCase( (*aIter).MimeType ) )
-                        aRet = mxTransfer->getTransferData( *aIter );
+                    {
+                        if (xTransfer2.is())
+                            aRet = xTransfer2->getTransferData2(*aIter, rDestDoc);
+                        else
+                            aRet = mxTransfer->getTransferData(*aIter);
+                    }
 
                     if( aRet.hasValue() )
                         break;
@@ -1576,7 +1590,12 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& /
             }
 
             if( !aRet.hasValue() )
-                aRet = mxTransfer->getTransferData( rFlavor );
+            {
+                if (xTransfer2.is())
+                    aRet = xTransfer2->getTransferData2(rFlavor, rDestDoc);
+                else
+                    aRet = mxTransfer->getTransferData(rFlavor);
+            }
         }
     }
     catch( const ::com::sun::star::uno::Exception& )

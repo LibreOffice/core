@@ -29,7 +29,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
@@ -126,7 +126,7 @@ struct ExecuteDropEvent
         mbDefault( false ) {}
 };
 
-class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< ::com::sun::star::datatransfer::XTransferable,
+class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< ::com::sun::star::datatransfer::XTransferable2,
                                                            ::com::sun::star::datatransfer::clipboard::XClipboardOwner,
                                                            ::com::sun::star::datatransfer::dnd::XDragSourceListener,
                                                            ::com::sun::star::lang::XUnoTunnel >
@@ -176,6 +176,11 @@ private:
     virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // Transferable2
+    virtual css::uno::Any SAL_CALL getTransferData2(
+        const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
+            throw (css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
