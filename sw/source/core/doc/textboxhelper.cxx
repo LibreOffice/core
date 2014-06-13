@@ -63,6 +63,9 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
 
         xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
 
+        uno::Reference<container::XNamed> xNamed(xTextFrame, uno::UNO_QUERY);
+        xNamed->setName(pShape->GetDoc()->GetUniqueFrameName());
+
         // Link its text range to the original shape.
         uno::Reference<text::XTextRange> xTextBox(xTextFrame, uno::UNO_QUERY_THROW);
         SwUnoInternalPaM aInternalPaM(*pShape->GetDoc());
@@ -270,6 +273,22 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, const OUString& rPropertyNa
             Rectangle aRectangle(pObject->GetSnapRect());
             syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Left()))));
             syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION, uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
+        }
+    }
+}
+
+void SwTextBoxHelper::getProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberId, css::uno::Any& rValue)
+{
+    if (!pShape)
+        return;
+
+    nMemberId &= ~CONVERT_TWIPS;
+
+    if (SwFrmFmt* pFmt = findTextBox(pShape))
+    {
+        if (nWID == RES_CHAIN && nMemberId == MID_CHAIN_NAME)
+        {
+            rValue = uno::makeAny(pFmt->GetName());
         }
     }
 }

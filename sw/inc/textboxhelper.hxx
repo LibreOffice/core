@@ -54,6 +54,8 @@ public:
     static void syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, const css::uno::Any& rValue);
     /// Does the same, but works on properties which lack an sw-specific WID / MemberID.
     static void syncProperty(SwFrmFmt* pShape, const OUString& rPropertyName, const css::uno::Any& rValue);
+    /// Get a property of the underlying TextFrame.
+    static void getProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, css::uno::Any& rValue);
 
     /// If we have an associated TextFrame, then return that.
     static SwFrmFmt* findTextBox(SwFrmFmt* pShape);
