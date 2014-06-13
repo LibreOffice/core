@@ -3052,6 +3052,13 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         {
             setPropertyValue(UNO_NAME_DESCRIPTION, *pDescription);
         }
+
+        // For grabbag
+        const uno::Any* pFrameIntropgrabbagItem;
+        if( pProps->GetProperty(RES_FRMATR_GRABBAG, 0, pFrameIntropgrabbagItem) )
+        {
+            setPropertyValue(UNO_NAME_FRAME_INTEROP_GRAB_BAG, *pFrameIntropgrabbagItem);
+        }
     }
     else
         throw lang::IllegalArgumentException();
