@@ -226,7 +226,10 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose,
     uno::Reference<drawing::XShape> xShape;
     uno::Reference<beans::XPropertySet> xPropertySet;
     // Create this early, as custom shapes may have properties before the type arrives.
-    createShape("com.sun.star.drawing.CustomShape", xShape, xPropertySet);
+    if (PICT == shapeOrPict)
+        createShape("com.sun.star.drawing.GraphicObjectShape", xShape, xPropertySet);
+    else
+        createShape("com.sun.star.drawing.CustomShape", xShape, xPropertySet);
     uno::Any aAny;
     beans::PropertyValue aPropertyValue;
     awt::Rectangle aViewBox;

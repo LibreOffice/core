@@ -43,6 +43,8 @@ public:
     void pushParent(css::uno::Reference<css::drawing::XShapes> xParent);
     /// Pop the current group shape from the parent stack.
     void popParent();
+    css::uno::Reference<css::drawing::XShape> const& getCurrentShape()
+        { return m_xShape; }
 private:
     void createShape(const OUString& aService, css::uno::Reference<css::drawing::XShape>& xShape, css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
     void applyProperty(css::uno::Reference<css::drawing::XShape> xShape, const OUString& aKey, const OUString& aValue);
