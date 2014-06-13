@@ -1049,12 +1049,14 @@ SwTxtAttr* MakeTxtAttr(
         break;
 
     case RES_TXTATR_FIELD:
-        pNew = new SwTxtFld( static_cast<SwFmtFld &>(rNew), nStt );
+        pNew =
+            new SwTxtFld( static_cast<SwFmtFld &>(rNew), nStt, rDoc.IsClipBoard() );
         break;
 
     case RES_TXTATR_ANNOTATION:
         {
-            pNew = new SwTxtAnnotationFld( static_cast<SwFmtFld &>(rNew), nStt );
+            pNew =
+                new SwTxtAnnotationFld( static_cast<SwFmtFld &>(rNew), nStt, rDoc.IsClipBoard() );
             if ( bIsCopy == COPY )
             {
                 // On copy of the annotation field do not keep the annotated text range by removing
@@ -1067,7 +1069,8 @@ SwTxtAttr* MakeTxtAttr(
         break;
 
     case RES_TXTATR_INPUTFIELD:
-        pNew = new SwTxtInputFld( static_cast<SwFmtFld &>(rNew), nStt, nEnd );
+        pNew =
+            new SwTxtInputFld( static_cast<SwFmtFld &>(rNew), nStt, nEnd, rDoc.IsClipBoard() );
         break;
 
     case RES_TXTATR_FLYCNT:

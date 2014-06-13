@@ -218,71 +218,76 @@ void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
 
 void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    if( !mpTxtFld )
+    if ( mpTxtFld == NULL )
         return;
 
-    // don't do anything, especially not expand!
-    if( pNew && pNew->Which() == RES_OBJECTDYING )
-        return;
-
-    SwTxtNode* pTxtNd = (SwTxtNode*)&mpTxtFld->GetTxtNode();
-    ASSERT( pTxtNd, "wo ist denn mein Node?" );
-    if( pNew )
+    if( pNew != NULL
+        && pNew->Which() == RES_OBJECTDYING )
     {
-        switch( pNew->Which() )
+        // don't do anything, especially not expand!
+        return;
+    }
+
+    SwTxtNode* pTxtNd = (SwTxtNode*) &mpTxtFld->GetTxtNode();
+    ASSERT( pTxtNd, "wo ist denn mein Node?" );
+    if ( pNew )
+    {
+        switch (pNew->Which())
         {
         case RES_TXTATR_FLDCHG:
-                // "Farbe hat sich geaendert !"
-                // this, this fuer "nur Painten"
-                pTxtNd->ModifyNotification( this, this );
-                return;
+            // "Farbe hat sich geaendert !"
+            // this, this fuer "nur Painten"
+            pTxtNd->ModifyNotification( this, this );
+            return;
+
         case RES_REFMARKFLD_UPDATE:
-                // GetReferenz-Felder aktualisieren
-                if( RES_GETREFFLD == GetField()->GetTyp()->Which() )
-                {
-                    // --> OD 2007-09-06 #i81002#
-//                    ((SwGetRefField*)GetFld())->UpdateField();
-                    dynamic_cast<SwGetRefField*>(GetField())->UpdateField( mpTxtFld );
-                    // <--
-                }
-                break;
+            // GetReferenz-Felder aktualisieren
+            if ( RES_GETREFFLD == GetField()->GetTyp()->Which() )
+            {
+                dynamic_cast<SwGetRefField*>(GetField())->UpdateField( mpTxtFld );
+            }
+            break;
+
         case RES_DOCPOS_UPDATE:
-                // Je nach DocPos aktualisieren (SwTxtFrm::Modify())
-                pTxtNd->ModifyNotification( pNew, this );
-                return;
+            // Je nach DocPos aktualisieren (SwTxtFrm::Modify())
+            pTxtNd->ModifyNotification( pNew, this );
+            return;
 
         case RES_ATTRSET_CHG:
-        case RES_FMT_CHG:
-                pTxtNd->ModifyNotification( pOld, pNew );
-                return;
-        default:
-                break;
+            case RES_FMT_CHG:
+            pTxtNd->ModifyNotification( pOld, pNew );
+            return;
+
+            default:
+            break;
         }
     }
 
     switch (GetField()->GetTyp()->Which())
     {
-        case RES_HIDDENPARAFLD:
-            if( !pOld || RES_HIDDENPARA_PRINT != pOld->Which() )
-                break;
-        case RES_DBSETNUMBERFLD:
-        case RES_DBNUMSETFLD:
-        case RES_DBNEXTSETFLD:
-        case RES_DBNAMEFLD:
-            pTxtNd->ModifyNotification( 0, pNew);
-            return;
+    case RES_HIDDENPARAFLD:
+        if ( !pOld || RES_HIDDENPARA_PRINT != pOld->Which() )
+            break;
+    case RES_DBSETNUMBERFLD:
+    case RES_DBNUMSETFLD:
+    case RES_DBNEXTSETFLD:
+    case RES_DBNAMEFLD:
+        pTxtNd->ModifyNotification( 0, pNew );
+        return;
     }
 
-    if( RES_USERFLD == GetField()->GetTyp()->Which() )
+    if ( RES_USERFLD == GetField()->GetTyp()->Which() )
     {
-        SwUserFieldType* pType = (SwUserFieldType*)GetField()->GetTyp();
-        if(!pType->IsValid())
+        SwUserFieldType* pType = (SwUserFieldType*) GetField()->GetTyp();
+        if ( !pType->IsValid() )
         {
             SwCalc aCalc( *pTxtNd->GetDoc() );
             pType->GetValue( aCalc );
         }
     }
-    mpTxtFld->ExpandTxtFld();
+
+    const bool bForceNotify = (pOld == NULL) && (pNew == NULL);
+    mpTxtFld->ExpandTxtFld( bForceNotify );
 }
 
 sal_Bool SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
@@ -316,9 +321,10 @@ sal_Bool SwFmtFld::IsProtect() const
 
 SwTxtFld::SwTxtFld(
     SwFmtFld & rAttr,
-    xub_StrLen const nStartPos )
+    xub_StrLen const nStartPos,
+    const bool bIsClipboardDoc )
     : SwTxtAttr( rAttr, nStartPos )
-    , m_aExpand( rAttr.GetField()->ExpandField(true) )
+    , m_aExpand( rAttr.GetField()->ExpandField( bIsClipboardDoc ) )
     , m_pTxtNode( NULL )
 {
     rAttr.SetTxtFld( *this );
@@ -341,14 +347,15 @@ bool SwTxtFld::IsFldInDoc() const
            && GetpTxtNode()->GetNodes().IsDocNodes();
 }
 
-void SwTxtFld::ExpandTxtFld() const
+void SwTxtFld::ExpandTxtFld( const bool bForceNotify ) const
 {
     ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFmtFld().GetField();
     const XubString aNewExpand( pFld->ExpandField(m_pTxtNode->GetDoc()->IsClipBoard()) );
 
-    if( aNewExpand == m_aExpand )
+    if ( !bForceNotify &&
+         aNewExpand == m_aExpand )
     {
         // Bei Seitennummernfeldern
         const sal_uInt16 nWhich = pFld->GetTyp()->Which();
@@ -453,9 +460,10 @@ void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
 SwTxtInputFld::SwTxtInputFld(
     SwFmtFld & rAttr,
     xub_StrLen const nStart,
-    xub_StrLen const nEnd )
+    xub_StrLen const nEnd,
+    const bool bIsClipboardDoc )
 
-    : SwTxtFld( rAttr, nStart )
+    : SwTxtFld( rAttr, nStart, bIsClipboardDoc )
     , m_nEnd( nEnd )
     , m_bLockNotifyContentChange( false )
 {
@@ -556,8 +564,9 @@ void SwTxtInputFld::UpdateTextNodeContent( const String& rNewContent )
 // text annotation field
 SwTxtAnnotationFld::SwTxtAnnotationFld(
     SwFmtFld & rAttr,
-    xub_StrLen const nStart )
-    : SwTxtFld( rAttr, nStart )
+    xub_StrLen const nStart,
+    const bool bIsClipboardDoc )
+    : SwTxtFld( rAttr, nStart, bIsClipboardDoc )
 {
 }
 

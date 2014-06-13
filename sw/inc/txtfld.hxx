@@ -39,18 +39,14 @@ class SwTxtFld : public SwTxtAttr
 public:
     SwTxtFld(
         SwFmtFld & rAttr,
-        xub_StrLen const nStart );
+        xub_StrLen const nStart,
+        const bool bIsClipboardDoc );
 
     virtual ~SwTxtFld();
 
     void CopyTxtFld( SwTxtFld *pDest ) const;
 
-    void ExpandTxtFld() const;
-    inline void ExpandAlways()
-    {
-        m_aExpand += ' '; // changing current value to assure that <ExpandTxtFld()> changes the value.
-        ExpandTxtFld();
-    }
+    void ExpandTxtFld( const bool bForceNotify = false ) const;
 
     // get and set TxtNode pointer
     inline SwTxtNode* GetpTxtNode() const
@@ -80,7 +76,8 @@ public:
     SwTxtInputFld(
         SwFmtFld & rAttr,
         xub_StrLen const nStart,
-        xub_StrLen const nEnd );
+        xub_StrLen const nEnd,
+        const bool bIsClipboardDoc );
 
     virtual ~SwTxtInputFld();
 
