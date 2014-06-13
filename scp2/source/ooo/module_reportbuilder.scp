@@ -20,9 +20,6 @@ Module gid_Module_Reportbuilder
     Default = YES; 
     Dirs = (gid_Dir_Share_Reportbuilder);
     Files = (auto_reportbuilder_ALL,
-        gid_File_Lib_Rpt,
-        gid_File_Lib_Rptui,
-        gid_File_Lib_Rptxml,
         gid_File_Xcd_Reportbuilder,
         gid_Filelist_ReportbuilderTemplates);
 End
