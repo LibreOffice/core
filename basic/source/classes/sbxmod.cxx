@@ -1209,7 +1209,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             {
                 // Compare here with 1 instead of 0, because before nCallLvl--
                 while( GetSbData()->pInst->nCallLvl != 1 )
-                    GetpApp()->Yield();
+                    Application::Yield();
             }
 
             nRes = sal_True;

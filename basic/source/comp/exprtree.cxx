@@ -215,7 +215,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         return new SbiExprNode( pParser, aSym );
     }
     // no keywords allowed from here on!
-    if( pParser->IsKwd( eTok ) )
+    if( SbiTokenizer::IsKwd( eTok ) )
     {
         if( pParser->IsCompatible() && eTok == INPUT )
         {
@@ -406,7 +406,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
 {
     pParser->Next();
     SbiToken eTok = pParser->Next();
-    if( eTok != SYMBOL && !pParser->IsKwd( eTok ) && !pParser->IsExtra( eTok ) )
+    if( eTok != SYMBOL && !SbiTokenizer::IsKwd( eTok ) && !SbiTokenizer::IsExtra( eTok ) )
     {
         // #66745 Some operators can also be allowed
         // as identifiers, important for StarOne
@@ -573,7 +573,7 @@ SbiExprNode* SbiExpression::Operand( bool bUsedForTypeOf )
         break;
     default:
         // keywords here are OK at the moment!
-        if( pParser->IsKwd( eTok ) )
+        if( SbiTokenizer::IsKwd( eTok ) )
         {
             pRes = Term();
         }
@@ -1018,7 +1018,7 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
     }
 
 
-    if( ( bBracket && eTok == RPAREN ) || pParser->IsEoln( eTok ) )
+    if( ( bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
     {
         if( eTok == RPAREN )
         {
@@ -1120,7 +1120,7 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
         eTok = pParser->Peek();
         if( eTok != COMMA )
         {
-            if( ( bBracket && eTok == RPAREN ) || pParser->IsEoln( eTok ) )
+            if( ( bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
             {
                 break;
             }
@@ -1131,7 +1131,7 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
         {
             pParser->Next();
             eTok = pParser->Peek();
-            if( ( bBracket && eTok == RPAREN ) || pParser->IsEoln( eTok ) )
+            if( ( bBracket && eTok == RPAREN ) || SbiTokenizer::IsEoln( eTok ) )
             {
                 break;
             }

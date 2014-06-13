@@ -367,7 +367,7 @@ SbiDllMgr* SbiInstance::GetDllMgr()
 // #39629 create NumberFormatter with the help of a static method now
 SvNumberFormatter* SbiInstance::GetNumberFormatter()
 {
-    LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
+    LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
     SvtSysLocale aSysLocale;
     DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
     if( pNumberFormatter )
@@ -401,7 +401,7 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     }
     else
     {
-        eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
+        eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
     }
     DateFormat eDate;
     if( peFormatterDateFormat )
@@ -524,14 +524,14 @@ void SbiInstance::Abort()
 {
     StarBASIC* pErrBasic = GetCurrentBasic( pBasic );
     pErrBasic->RTError( nErr, aErrorMsg, pRun->nLine, pRun->nCol1, pRun->nCol2 );
-    pBasic->Stop();
+    StarBASIC::Stop();
 }
 
 // can be unequal to pRTBasic
 StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic )
 {
     StarBASIC* pCurBasic = pRTBasic;
-    SbModule* pActiveModule = pRTBasic->GetActiveModule();
+    SbModule* pActiveModule = StarBASIC::GetActiveModule();
     if( pActiveModule )
     {
         SbxObject* pParent = pActiveModule->GetParent();
@@ -1669,16 +1669,16 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
     if (  aAny.getValueType().getTypeClass() == TypeClass_STRUCT )
     {
         refVar->SetType( SbxOBJECT );
-        SbxError eOldErr = refVar->GetError();
+        SbxError eOldErr = SbxBase::GetError();
         // There are some circumstances when calling GetObject
         // will trigger an error, we need to squash those here.
         // Alternatively it is possible that the same scenario
         // could overwrite and existing error. Lets prevent that
         SbxObjectRef xVarObj = (SbxObject*)refVar->GetObject();
         if ( eOldErr != SbxERR_OK )
-            refVar->SetError( eOldErr );
+            SbxBase::SetError( eOldErr );
         else
-            refVar->ResetError();
+            SbxBase::ResetError();
 
         SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,(SbxObject*)xVarObj);
 

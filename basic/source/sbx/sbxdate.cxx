@@ -98,7 +98,7 @@ double ImpGetDate( const SbxValues* p )
         }
         else
         {
-            LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
+            LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
 
             boost::scoped_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
 
@@ -267,7 +267,7 @@ start:
             }
             Color* pColor;
 
-            LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
+            LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
             boost::scoped_ptr<SvNumberFormatter> pFormatter(new SvNumberFormatter( comphelper::getProcessComponentContext(), eLangType ));
 
             sal_uInt32 nIndex;
