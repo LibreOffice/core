@@ -43,6 +43,12 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
 
     get( m_pProgressLabel, "progress_label" );
 
+    get( m_pOkButton, "ok" );
+    m_pOkButton->SetClickHdl( LINK( this, SelectPersonaDialog, ActionOK ) );
+
+    get( m_pCancelButton, "cancel" );
+    m_pCancelButton->SetClickHdl( LINK( this, SelectPersonaDialog, ActionCancel ) );
+
     get(m_vResultList[0], "result1");
     m_vResultList[0]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 
@@ -88,6 +94,30 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, /*pButton*/ )
     OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/1";
     m_rSearchThread = new SearchAndParseThread( this, rSearchURL );
     m_rSearchThread->launch();
+    return 0;
+}
+
+IMPL_LINK( SelectPersonaDialog, ActionOK, PushButton*, /* pButton */ )
+{
+    OUString aSelectedPersona = GetSelectedPersona();
+
+    if( !aSelectedPersona.isEmpty() )
+    {
+        m_rSearchThread = new SearchAndParseThread( this, aSelectedPersona );
+        m_rSearchThread->launch();
+    }
+
+    else
+        EndDialog( RET_OK );
+    return 0;
+}
+
+IMPL_LINK( SelectPersonaDialog, ActionCancel, PushButton*, /* pButton */ )
+{
+    if( m_rSearchThread.is() )
+        m_rSearchThread->terminate();
+
+    EndDialog( RET_CANCEL );
     return 0;
 }
 
@@ -148,6 +178,16 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, PushButton*, pButton )
     }
 
     return 0;
+}
+
+void SelectPersonaDialog::SetAppliedPersonaSetting( OUString& rPersonaSetting )
+{
+    m_aAppliedPersona = rPersonaSetting;
+}
+
+OUString SelectPersonaDialog::GetAppliedPersonaSetting() const
+{
+    return m_aAppliedPersona;
 }
 
 void SelectPersonaDialog::SetProgress( OUString& rProgress )
@@ -269,10 +309,10 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 
     while ( aDialog.Execute() == RET_OK )
     {
-        OUString aURL( aDialog.GetSelectedPersona() );
-        if ( !aURL.isEmpty() )
+        OUString aPersonaSetting( aDialog.GetAppliedPersonaSetting() );
+        if ( !aPersonaSetting.isEmpty() )
         {
-            CopyPersonaToGallery( aURL );
+            m_aPersonaSettings = aPersonaSetting;
             break;
         }
     }
@@ -345,12 +385,6 @@ static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUSt
     return true;
 }
 
-void SvxPersonalizationTabPage::CopyPersonaToGallery( const OUString &rURL )
-{
-    m_rApplyThread = new SearchAndParseThread( this, rURL );
-    m_rApplyThread->launch();
-}
-
 void SvxPersonalizationTabPage::setPersonaSettings( const OUString aPersonaSettings )
 {
     m_aPersonaSettings = aPersonaSettings;
@@ -361,16 +395,6 @@ SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,
                           const OUString& rURL ) :
             Thread( "cuiPersonasSearchThread" ),
             m_pPersonaDialog( pDialog ),
-            m_pPersonalizationTabPage( NULL ),
-            m_aURL( rURL )
-{
-}
-
-SearchAndParseThread::SearchAndParseThread( SvxPersonalizationTabPage* pDialog,
-                          const OUString& rURL ) :
-            Thread( "cuiPersonasSearchThread" ),
-            m_pPersonaDialog( NULL ),
-            m_pPersonalizationTabPage( pDialog ),
             m_aURL( rURL )
 {
 }
@@ -381,7 +405,7 @@ SearchAndParseThread::~SearchAndParseThread()
 
 void SearchAndParseThread::execute()
 {
-    if(m_pPersonaDialog)
+    if( m_aURL.startsWith( "https://" ) )
     {
         m_pPersonaDialog->ClearSearchResults();
         OUString sProgress( "Searching.. Please Wait.." );
@@ -437,12 +461,15 @@ void SearchAndParseThread::execute()
 
     else
     {
+        OUString sProgress( "Applying persona.." );
+        m_pPersonaDialog->SetProgress( sProgress );
+
         uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
         if ( !xFileAccess.is() )
             return;
 
         OUString aName, aHeaderURL, aFooterURL, aTextColor, aAccentColor;
-        OUString m_aPersonaSettings;
+        OUString aPersonaSetting;
 
         // get the required fields from m_aURL
         sal_Int32 nOldIndex = 0;
@@ -486,8 +513,11 @@ void SearchAndParseThread::execute()
             return;
         }
 
-        m_aPersonaSettings = aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
-        m_pPersonalizationTabPage->setPersonaSettings( m_aPersonaSettings );
+        SolarMutexGuard aGuard;
+
+        aPersonaSetting = aHeaderFile + ";" + aFooterFile + ";" + aTextColor + ";" + aAccentColor;
+        m_pPersonaDialog->SetAppliedPersonaSetting( aPersonaSetting );
+        m_pPersonaDialog->EndDialog( RET_OK );
     }
 }
 

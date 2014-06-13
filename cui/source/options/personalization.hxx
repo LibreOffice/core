@@ -52,9 +52,6 @@ private:
 
     /// When 'own' is chosen, but the Persona is not chosen yet.
     DECL_LINK( ForceSelect, RadioButton* );
-
-    /// Download the bitmaps + color settings, and copy them to user's profile.
-    void CopyPersonaToGallery( const OUString &rURL );
 };
 
 /** Dialog that will allow the user to choose a Persona to use.
@@ -69,9 +66,12 @@ private:
     PushButton *m_pSearchButton;            ///< The search button
     FixedText *m_pProgressLabel;            ///< The label for showing progress of search
     PushButton *m_vResultList[9];           ///< List of buttons to show search results
+    PushButton *m_pOkButton;                ///< The OK button
+    PushButton *m_pCancelButton;            ///< The Cancel button
 
     std::vector<OUString> m_vPersonaSettings;
     OUString m_aSelectedPersona;
+    OUString m_aAppliedPersona;
 
 public:
     SelectPersonaDialog( Window *pParent );
@@ -82,11 +82,15 @@ public:
     void SetImages( std::vector<Image>&);
     void AddPersonaSetting( OUString& );
     void ClearSearchResults();
+    void SetAppliedPersonaSetting( OUString& );
+    OUString GetAppliedPersonaSetting() const;
 
 private:
     /// Handle the Search button
     DECL_LINK( SearchPersonas, PushButton* );
     DECL_LINK( SelectPersona, PushButton* );
+    DECL_LINK( ActionOK, PushButton* );
+    DECL_LINK( ActionCancel, PushButton* );
 };
 
 class SearchAndParseThread: public salhelper::Thread
@@ -94,7 +98,6 @@ class SearchAndParseThread: public salhelper::Thread
 private:
 
     SelectPersonaDialog *m_pPersonaDialog;
-    SvxPersonalizationTabPage *m_pPersonalizationTabPage;
     OUString m_aURL;
 
     virtual ~SearchAndParseThread();
@@ -104,8 +107,6 @@ private:
 public:
 
     SearchAndParseThread( SelectPersonaDialog* pDialog,
-                          const OUString& rURL );
-    SearchAndParseThread( SvxPersonalizationTabPage *pTabPage,
                           const OUString& rURL );
 };
 
