@@ -66,7 +66,7 @@ namespace comphelper
         {
             Reference< XComponent > xContextComponent;
             if ( _rMapEntry.second.is() )
-                xContextComponent = xContextComponent.query( _rMapEntry.second->getAccessibleContext() );
+                xContextComponent.set(_rMapEntry.second->getAccessibleContext(), css::uno::UNO_QUERY);
             if ( xContextComponent.is() )
                 xContextComponent->dispose();
         }
