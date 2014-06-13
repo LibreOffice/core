@@ -46,7 +46,7 @@ interface XRange
     [attribute] long End;
     [attribute, readonly] XListFormat ListFormat;
 
-    void InsertBreak( [in] any Type );
+    void InsertBreak( [in] any Type ) raises (com::sun::star::script::BasicErrorException);
     void Select();
     void InsertParagraph();
     void InsertParagraphBefore();

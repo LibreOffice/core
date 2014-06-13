@@ -168,7 +168,8 @@ SwVbaRange::setText( const OUString& rText ) throw ( uno::RuntimeException, std:
 }
 
 // FIXME: test is not pass
-void SAL_CALL SwVbaRange::InsertBreak( const uno::Any& _breakType ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaRange::InsertBreak(const uno::Any& _breakType)
+    throw (css::script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     // default type is wdPageBreak;
     sal_Int32 nBreakType = word::WdBreakType::wdPageBreak;
