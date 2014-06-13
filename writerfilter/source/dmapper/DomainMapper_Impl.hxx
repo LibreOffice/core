@@ -570,6 +570,8 @@ public:
     void PopPageHeaderFooter();
     bool IsInHeaderFooter() const { return m_bInHeaderFooterImport; }
 
+    bool IsHeaderFooterDiscarded() const {return m_bDiscardHeaderFooter; }
+
     void PushFootOrEndnote( bool bIsFootnote );
     void PopFootOrEndnote();
     bool IsInFootOrEndnote() const { return m_bInFootOrEndnote; }

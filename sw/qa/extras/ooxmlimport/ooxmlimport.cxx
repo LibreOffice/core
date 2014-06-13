@@ -739,24 +739,9 @@ DECLARE_OOXMLIMPORT_TEST(testN779627, "n779627.docx")
     aValue >>= nLeftMargin;
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Left margin shouldn't take tableCellMar into account in nested tables",
             sal_Int32(0), nLeftMargin);
-
-    /*
-     * Another problem tested with this document is that the roundrect is
-     * centered vertically and horizontally.
-     */
-    uno::Reference<beans::XPropertySet> xShapeProperties( getShape(1), uno::UNO_QUERY );
-    uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(xShapeProperties, uno::UNO_QUERY);
-    // If this goes wrong, probably the index of the shape is changed and the test should be adjusted.
-    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.RectangleShape"), xShapeDescriptor->getShapeType());
-    sal_Int16 nValue;
-    xShapeProperties->getPropertyValue("HoriOrient") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally", text::HoriOrientation::CENTER, nValue);
-    xShapeProperties->getPropertyValue("HoriOrientRelation") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered horizontally relatively to page", text::RelOrientation::PAGE_FRAME, nValue);
-    xShapeProperties->getPropertyValue("VertOrient") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered vertically", text::VertOrientation::CENTER, nValue);
-    xShapeProperties->getPropertyValue("VertOrientRelation") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Not centered vertically relatively to page", text::RelOrientation::PAGE_FRAME, nValue);
+    //This check was one of the rare condition where there is just one shape.
+    // After my change this shape is being ignored as we should discard shape reading from header / footer
+    // which are being ignored.
 }
 
 DECLARE_OOXMLIMPORT_TEST(testFdo74357, "fdo74357.docx")

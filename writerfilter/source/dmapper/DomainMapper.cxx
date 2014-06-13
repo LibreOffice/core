@@ -2577,6 +2577,10 @@ void DomainMapper::markLastParagraphInSection( )
 
 void DomainMapper::lcl_startShape( uno::Reference< drawing::XShape > xShape )
 {
+    // if the header / footer has been set to be discarded then we should also not read
+    // the shapes inside it.
+    if (m_pImpl->IsHeaderFooterDiscarded())
+        return;
     if (m_pImpl->GetTopContext())
     {
         // If there is a deferred page break, handle it now, so that the
@@ -2603,6 +2607,10 @@ void DomainMapper::lcl_startShape( uno::Reference< drawing::XShape > xShape )
 
 void DomainMapper::lcl_endShape( )
 {
+    // if the header / footer has been set to be discarded then we should also not read
+    // the shapes inside it.
+    if (m_pImpl->IsHeaderFooterDiscarded())
+        return;
     if (m_pImpl->GetTopContext())
     {
         // End the current table, if there are any. Otherwise the unavoidable
