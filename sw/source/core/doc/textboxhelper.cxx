@@ -10,6 +10,7 @@
 #include <textboxhelper.hxx>
 #include <frmfmt.hxx>
 #include <fmtcntnt.hxx>
+#include <fmtanchr.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
@@ -19,6 +20,7 @@
 #include <unotextbodyhf.hxx>
 #include <unotextrange.hxx>
 #include <unomid.h>
+#include <cmdid.h>
 #include <unoprnms.hxx>
 #include <dflyobj.hxx>
 #include <mvsave.hxx>
@@ -334,6 +336,19 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
                     return;
                 }
                 break;
+            }
+            break;
+        case FN_TEXT_RANGE:
+            {
+                uno::Reference<text::XTextRange> xRange;
+                rValue >>= xRange;
+                SwUnoInternalPaM aInternalPaM(*pFmt->GetDoc());
+                if (sw::XTextRangeToSwPaM(aInternalPaM, xRange))
+                {
+                    SwFmtAnchor aAnchor(pFmt->GetAnchor());
+                    aAnchor.SetAnchor(aInternalPaM.Start());
+                    pFmt->SetFmtAttr(aAnchor);
+                }
             }
             break;
         }
