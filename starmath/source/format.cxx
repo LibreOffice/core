@@ -87,7 +87,7 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
                 SAL_WARN("starmath", "unknown script-type");
         }
 
-        return Application::GetDefaultDevice()->GetDefaultFont(
+        return OutputDevice::GetDefaultFont(
                         pTable[ nIdent ], nLang,
                         DEFAULTFONT_FLAGS_ONLYONE ).GetName();
     }

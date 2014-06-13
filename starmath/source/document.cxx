@@ -335,7 +335,7 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
             const FontDta &rFntDta = aTable[i];
             LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
                     rFntDta.nFallbackLang : rFntDta.nLang;
-            Font aFont = Application::GetDefaultDevice()->GetDefaultFont(
+            Font aFont = OutputDevice::GetDefaultFont(
                         rFntDta.nFontType, nLang, DEFAULTFONT_FLAGS_ONLYONE );
             rEditEngineItemPool.SetPoolDefaultItem(
                     SvxFontItem( aFont.GetFamily(), aFont.GetName(),
