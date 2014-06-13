@@ -33,10 +33,11 @@ typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
 #ifdef LOK_USE_UNSTABLE_API
 typedef enum
 {
-  WRITER,
-  SPREADSHEET,
-  PRESENTATION,
-  OTHER
+  LOK_DOCTYPE_TEXT,
+  LOK_DOCTYPE_SPREADSHEET,
+  LOK_DOCTYPE_PRESENTATION,
+  LOK_DOCTYPE_DRAWING,
+  LOK_DOCTYPE_OTHER
 }
 LibreOfficeKitDocumentType;
 #endif // LOK_USE_UNSTABLE_API
