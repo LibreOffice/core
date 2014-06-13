@@ -1347,7 +1347,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
         if( pT )
         {
             rOutStm.WriteCharPtr( pT->GetName().getString().getStr() );
-            if( !rBase.FindType( pT, rBase.aUsedTypes ) )
+            if( !SvIdlDataBase::FindType( pT, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.push_back( pT );
         }
         else
@@ -1356,7 +1356,7 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
     else
     {
         SvMetaType *pT = rBase.FindType( "SfxBoolItem" );
-        if ( pT && !rBase.FindType( pT, rBase.aUsedTypes ) )
+        if ( pT && !SvIdlDataBase::FindType( pT, rBase.aUsedTypes ) )
             rBase.aUsedTypes.push_back( pT );
     }
 
@@ -1435,7 +1435,7 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
         else
             pType = GetType();
 
-        if( !rBase.FindType( pType, rBase.aUsedTypes ) )
+        if( !SvIdlDataBase::FindType( pType, rBase.aUsedTypes ) )
             rBase.aUsedTypes.push_back( pType );
 
         const SvMetaAttributeMemberList & rList =
@@ -1452,7 +1452,7 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
                .WriteCharPtr("\"").WriteCharPtr(pPar->GetName().getString().getStr()).WriteCharPtr("\", ")
                 // slot id
                .WriteCharPtr(pPar->GetSlotId().getString().getStr()).WriteCharPtr(" },") << endl;
-            if( !rBase.FindType( pPType, rBase.aUsedTypes ) )
+            if( !SvIdlDataBase::FindType( pPType, rBase.aUsedTypes ) )
                 rBase.aUsedTypes.push_back( pPType );
         }
         return (sal_uInt16)rList.size();

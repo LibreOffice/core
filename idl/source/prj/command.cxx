@@ -139,7 +139,7 @@ bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
         SvFileStream aStm( aFileName, STREAM_STD_READ | STREAM_NOCREATE );
         if( aStm.GetError() == SVSTREAM_OK )
         {
-            if( pDataBase->IsBinaryFormat( aStm ) )
+            if( SvIdlDataBase::IsBinaryFormat( aStm ) )
             {
                 pDataBase->Load( aStm );
                 if( aStm.GetError() != SVSTREAM_OK )
