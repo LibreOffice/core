@@ -3624,6 +3624,23 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_rStyle, RTFValue::Pointer_t(new RTFValue(aName)));
         }
         break;
+    case RTF_DS:
+        if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
+        {
+            m_nCurrentStyleIndex = nParam;
+            RTFValue::Pointer_t pValue(new RTFValue(-42)); // TODO no value in enum StyleType?
+            m_aStates.top().aTableAttributes.set(
+                    NS_ooxml::LN_CT_Style_type, pValue); // section style
+        }
+        break;
+    case RTF_TS:
+        if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
+        {
+            m_nCurrentStyleIndex = nParam;
+            RTFValue::Pointer_t pValue(new RTFValue(-43)); // FIXME the correct value would be 3 but maybe table styles mess things up in dmapper, be cautious and disable them for now
+            m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // table style
+        }
+        break;
     case RTF_DEFF:
         m_nDefaultFontIndex = nParam;
         break;
@@ -4666,6 +4683,13 @@ int RTFDocumentImpl::pushState()
         break;
     case DESTINATION_STYLESHEET:
         m_aStates.top().nDestinationState = DESTINATION_STYLEENTRY;
+        {
+            // the *default* is \s0 i.e. paragraph style default
+            // this will be overwritten by \sN \csN \dsN \tsN
+            m_nCurrentStyleIndex = 0;
+            RTFValue::Pointer_t pValue(new RTFValue(1));
+            m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue);
+        }
         break;
     case DESTINATION_FIELDRESULT:
     case DESTINATION_SHAPETEXT:

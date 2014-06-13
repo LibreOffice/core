@@ -1138,6 +1138,17 @@ DECLARE_RTFIMPORT_TEST(testFdo62044, "fdo62044.rtf")
     CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(xPropertySet, "CharHeight")); // Was 18, i.e. reset back to original value.
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo70578, "fdo70578.rtf")
+{
+    // Style without explicit \s0 was not imported as the default style
+    uno::Reference<beans::XPropertySet> xPropertySet(
+        getStyles("ParagraphStyles")->getByName("Subtitle"), uno::UNO_QUERY);
+    uno::Reference<style::XStyle> xStyle(xPropertySet, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Standard"), xStyle->getParentStyle());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, "ParaBottomMargin"));
+}
+
 DECLARE_RTFIMPORT_TEST(testPoshPosv, "posh-posv.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, getProperty<sal_Int16>(getShape(1), "HoriOrient"));
