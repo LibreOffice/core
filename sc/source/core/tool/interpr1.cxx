@@ -5615,7 +5615,7 @@ double ScInterpreter::IterateParametersIfs( ScIterFuncIfs eFunc )
                         continue;
 
                     fVal = *itMain;
-                    if (rtl::math::isNan(fVal))
+                    if (GetDoubleErrorValue(fVal) == errElementNaN)
                         continue;
 
                     ++fCount;
