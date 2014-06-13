@@ -1244,7 +1244,7 @@ int SwPagePreview::_CreateScrollbar( bool bHori )
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &pHScrollbar : &pVScrollbar;
 
-    OSL_ENSURE( !*ppScrollbar, "check beforehand!" );
+    assert(!*ppScrollbar); //check beforehand!
 
     *ppScrollbar = new SwScrollbar( pMDI, bHori );
 

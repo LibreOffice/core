@@ -290,7 +290,7 @@ int SwView::_CreateScrollbar( bool bHori )
     Window *pMDI = &GetViewFrame()->GetWindow();
     SwScrollbar** ppScrollbar = bHori ? &m_pHScrollbar : &m_pVScrollbar;
 
-    OSL_ENSURE( !*ppScrollbar, "check beforehand!" );
+    assert(!*ppScrollbar); //check beforehand!
 
     *ppScrollbar = new SwScrollbar( pMDI, bHori );
     UpdateScrollbars();
@@ -305,9 +305,7 @@ int SwView::_CreateScrollbar( bool bHori )
     if(GetWindow())
         InvalidateBorder();
 
-    // The scrollbar has to be tested again, as in InvalidateBorder possibly
-    // the scrollbar has been deleted.
-    if ( !m_bShowAtResize && (*ppScrollbar))
+    if (!m_bShowAtResize)
         (*ppScrollbar)->ExtendedShow();
 
     return 1;
