@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cassert>
-
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <i18nlangtag/mslangid.hxx>
@@ -243,7 +241,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     aBulletItem.SetStart(1);
     aBulletItem.SetScale(45);           // In percent
 
-    Font aBulletFont( pSSPool->GetBulletFont() );
+    Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
 
     aBulletFont.SetSize(Size(0,635));   // sj: (i33745) changed default from 24 to 18 pt
 
@@ -1209,8 +1207,7 @@ void SdDrawDocument::SetTextDefaults() const
 {
     // BulletItem and BulletFont for Titel and Outline
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
-    assert(mxStyleSheetPool.is());
-    Font aBulletFont( static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->GetBulletFont() );
+    Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
     aBulletFont.SetSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
     aBulletItem.SetStyle(BS_BULLET);
