@@ -1119,7 +1119,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
 
                                 if ( !bHandleSysLocked )
                                 {
-                                    uno::Sequence< OUString > aOwnData = aLockFile.GenerateOwnEntry();
+                                    uno::Sequence< OUString > aOwnData = svt::LockFileCommon::GenerateOwnEntry();
                                     bOwnLock = ( aData.getLength() > LOCKFILE_USERURL_ID
                                               && aOwnData.getLength() > LOCKFILE_USERURL_ID
                                               && aOwnData[LOCKFILE_SYSUSERNAME_ID].equals( aData[LOCKFILE_SYSUSERNAME_ID] ) );

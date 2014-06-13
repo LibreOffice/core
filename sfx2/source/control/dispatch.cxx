@@ -973,7 +973,7 @@ void MappedPut_Impl( SfxAllItemSet &rSet, const SfxPoolItem &rItem )
     // Put with mapped Which-Id if possible
     const SfxItemPool *pPool = rSet.GetPool();
     sal_uInt16 nWhich = rItem.Which();
-    if ( pPool->IsSlot(nWhich) )
+    if ( SfxItemPool::IsSlot(nWhich) )
         nWhich = pPool->GetWhich(nWhich);
     rSet.Put( rItem, nWhich );
 }

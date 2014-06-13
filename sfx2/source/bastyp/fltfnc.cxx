@@ -203,9 +203,9 @@ const SfxFilter* SfxFilterContainer::GetDefaultFilter_Impl( const OUString& rNam
     // Try to find out the type of factory.
     // Interpret given name as Service- and ShortName!
     SvtModuleOptions aOpt;
-    SvtModuleOptions::EFactory eFactory = aOpt.ClassifyFactoryByServiceName(rName);
+    SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByServiceName(rName);
     if (eFactory == SvtModuleOptions::E_UNKNOWN_FACTORY)
-        eFactory = aOpt.ClassifyFactoryByShortName(rName);
+        eFactory = SvtModuleOptions::ClassifyFactoryByShortName(rName);
 
     // could not classify factory by its service nor by its short name.
     // Must be an unknown factory! => return NULL

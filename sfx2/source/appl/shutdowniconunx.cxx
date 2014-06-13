@@ -394,7 +394,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 
     // disable shutdown
     pShutdownIcon->SetVeto( true );
-    pShutdownIcon->addTerminateListener();
+    ShutdownIcon::addTerminateListener();
 
 #ifdef ENABLE_GIO
     GFile* pFile = NULL;
