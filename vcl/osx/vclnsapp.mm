@@ -79,7 +79,7 @@
 {
     NSEventType eType = [pEvent type];
     if( eType == NSApplicationDefined )
-        GetSalData()->mpFirstInstance->handleAppDefinedEvent( pEvent );
+        AquaSalInstance::handleAppDefinedEvent( pEvent );
     else if( eType == NSKeyDown && ([pEvent modifierFlags] & NSCommandKeyMask) != 0 )
     {
         NSWindow* pKeyWin = [NSApp keyWindow];

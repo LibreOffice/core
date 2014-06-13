@@ -365,7 +365,7 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     // do the same strange semantics as vcl popup windows to arrive at a frame geometry
     // in mirrored UI case; best done by actually executing the same code
     sal_uInt16 nArrangeIndex;
-    pWin->SetPosPixel( pWin->ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex ) );
+    pWin->SetPosPixel( FloatingWindow::ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex ) );
     displayPopupFrame.origin.x = pWin->ImplGetFrame()->maGeometry.nX - pParentAquaSalFrame->maGeometry.nX + offset;
     displayPopupFrame.origin.y = pWin->ImplGetFrame()->maGeometry.nY - pParentAquaSalFrame->maGeometry.nY + offset;
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
