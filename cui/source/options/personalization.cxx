@@ -179,6 +179,12 @@ void SelectPersonaDialog::AddPersonaSetting( OUString& rPersonaSetting )
     m_vPersonaSettings.push_back( rPersonaSetting );
 }
 
+void SelectPersonaDialog::ClearSearchResults()
+{
+    m_vPersonaSettings.clear();
+    m_aSelectedPersona = "";
+}
+
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage( pParent, "PersonalizationTabPage", "cui/ui/personalization_tab.ui", &rSet )
 {
@@ -377,6 +383,7 @@ void SearchAndParseThread::execute()
 {
     if(m_pPersonaDialog)
     {
+        m_pPersonaDialog->ClearSearchResults();
         OUString sProgress( "Searching.. Please Wait.." );
         m_pPersonaDialog->SetProgress( sProgress );
         Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );

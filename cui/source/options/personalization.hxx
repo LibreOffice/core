@@ -81,6 +81,7 @@ public:
     void SetProgress( OUString& );
     void SetImages( std::vector<Image>&);
     void AddPersonaSetting( OUString& );
+    void ClearSearchResults();
 
 private:
     /// Handle the Search button
