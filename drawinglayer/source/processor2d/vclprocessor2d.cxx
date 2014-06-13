@@ -190,9 +190,13 @@ namespace drawinglayer
                         // set FillColor Attribute
                         // FIXME(matteocam)
                         // XXX: is "Color" the right type
-                        const Color aFillColor(pTCPP->getFillColor() );
-                        if( aFillColor != COL_TRANSPARENT )
+
+                        //const Color aFillColor(pTCPP->getFontFillColor() );
+                        //if( aFillColor != COL_TRANSPARENT )
+                        // set fill Color if underlined
+                        if ( eFontUnderline != UNDERLINE_NONE )
                         {
+                            aFillColor = RGB_COLORDATA(0x66, 0x66, 0xff)
                             aFont.SetFillColor(aFillColor);
                             aFont.SetTransparent(false);
                         }
