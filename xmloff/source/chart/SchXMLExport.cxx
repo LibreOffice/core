@@ -154,7 +154,7 @@ public:
                           com::sun::star::chart::XChartDocument > rChartDoc,
                       bool bIncludeTable );
 
-    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const { return mxPropertySetMapper;}
+    UniReference<XMLPropertySetMapper> GetPropertySetMapper() const;
 
     void SetChartRangeAddress( const OUString& rAddress )
         { msChartAddress = rAddress; }
@@ -268,6 +268,9 @@ public:
     ::com::sun::star::uno::Sequence< sal_Int32 > maSequenceMapping;
 
     OUString msCLSID;
+
+    OUString maSrcShellID;
+    OUString maDestShellID;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxAdditionalShapes;
 
@@ -1010,6 +1013,20 @@ const OUString& SchXMLExportHelper::getChartCLSID()
     return m_pImpl->msCLSID;
 }
 
+void SchXMLExportHelper::SetSourceShellID( const OUString& rShellID )
+{
+    m_pImpl->maSrcShellID = rShellID;
+}
+
+void SchXMLExportHelper::SetDestinationShellID( const OUString& rShellID )
+{
+    m_pImpl->maDestShellID = rShellID;
+}
+
+UniReference< XMLPropertySetMapper > SchXMLExportHelper_Impl::GetPropertySetMapper() const
+{
+    return mxPropertySetMapper;
+}
 
 void SchXMLExportHelper_Impl::exportAutoStyles()
 {
@@ -2262,6 +2279,32 @@ bool lcl_exportAxisType( const Reference< chart2::XAxis > xChart2Axis, SvXMLExpo
     return bExportDateScale;
 }
 
+void disableLinkedNumberFormat(
+    std::vector<XMLPropertyState>& rPropStates, const UniReference<XMLPropertySetMapper>& rMapper )
+{
+    for (size_t i = 0; i < rPropStates.size(); ++i)
+    {
+        XMLPropertyState& rState = rPropStates[i];
+        if (rState.mnIndex < 0 || rMapper->GetEntryCount() <= rState.mnIndex)
+            continue;
+
+        OUString aXMLName = rMapper->GetEntryXMLName(rState.mnIndex);
+
+        if (aXMLName != "link-data-style-to-source")
+            continue;
+
+        // Entry found.  Set the value to false and bail out.
+        rState.maValue <<= false;
+        return;
+    }
+
+    // Entry not found.  Insert a new entry for this.
+    sal_Int32 nIndex = rMapper->GetEntryIndex(XML_NAMESPACE_CHART, "link-data-style-to-source", 0);
+    XMLPropertyState aState(nIndex);
+    aState.maValue <<= false;
+    rPropStates.push_back(aState);
+}
+
 }
 
 void SchXMLExportHelper_Impl::exportAxis(
@@ -2282,6 +2325,14 @@ void SchXMLExportHelper_Impl::exportAxis(
     {
         lcl_exportNumberFormat( sNumFormat, xAxisProps, mrExport );
         aPropertyStates = mxExpPropMapper->Filter( xAxisProps );
+
+        if (!maSrcShellID.isEmpty() && !maDestShellID.isEmpty() && maSrcShellID != maDestShellID)
+        {
+            // Disable link to source number format property when pasting to
+            // a different doc shell.  These shell ID's should be both empty
+            // during real ODF export.
+            disableLinkedNumberFormat(aPropertyStates, mxExpPropMapper->getPropertySetMapper());
+        }
     }
 
     bool bExportDateScale = false;
@@ -3558,6 +3609,9 @@ SchXMLExport::~SchXMLExport()
 
 sal_uInt32 SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
+    maExportHelper.SetSourceShellID(GetSourceShellID());
+    maExportHelper.SetDestinationShellID(GetDestinationShellID());
+
     Reference< chart2::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
     maExportHelper.m_pImpl->InitRangeSegmentationProperties( xChartDoc );
     return SvXMLExport::exportDoc( eClass );

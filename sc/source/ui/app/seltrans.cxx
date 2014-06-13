@@ -389,7 +389,8 @@ ScDrawTransferObj* ScSelectionTransferObj::GetDrawData()
     return pDrawData;
 }
 
-bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool ScSelectionTransferObj::GetData(
+    const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     bool bOK = false;
 
@@ -416,7 +417,7 @@ bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::Data
     if ( xSource.is() )
     {
         TransferableDataHelper aHelper( xSource );
-        uno::Any aAny = aHelper.GetAny( rFlavor );
+        uno::Any aAny = aHelper.GetAny(rFlavor, rDestDoc);
         bOK = SetAny( aAny, rFlavor );
     }
 

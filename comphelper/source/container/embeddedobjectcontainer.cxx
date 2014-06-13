@@ -487,7 +487,9 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
     }
 }
 
-bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName, bool bCopy )
+bool EmbeddedObjectContainer::StoreEmbeddedObject(
+    const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName, bool bCopy,
+    const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     uno::Reference < embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
     if ( rName.isEmpty() )
@@ -506,7 +508,14 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < embed:
         {
             uno::Sequence < beans::PropertyValue > aSeq;
             if ( bCopy )
-                xPersist->storeToEntry( pImpl->mxStorage, rName, aSeq, aSeq );
+            {
+                uno::Sequence<beans::PropertyValue> aObjArgs(2);
+                aObjArgs[0].Name = "SourceShellID";
+                aObjArgs[0].Value <<= rSrcShellID;
+                aObjArgs[1].Name = "DestinationShellID";
+                aObjArgs[1].Value <<= rDestShellID;
+                xPersist->storeToEntry(pImpl->mxStorage, rName, aSeq, aObjArgs);
+            }
             else
             {
                 //TODO/LATER: possible optimization, don't store immediately
@@ -529,7 +538,7 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < embed:
 bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
 {
     // store it into the container storage
-    if ( StoreEmbeddedObject( xObj, rName, false ) )
+    if (StoreEmbeddedObject(xObj, rName, false, OUString(), OUString()))
     {
         // remember object
         AddEmbeddedObject( xObj, rName );
@@ -683,7 +692,9 @@ bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectContainer
     return bResult;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmbeddedObject(
+    EmbeddedObjectContainer& rSrc, const uno::Reference <embed::XEmbeddedObject>& xObj, OUString& rName,
+    const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     uno::Reference< embed::XEmbeddedObject > xResult;
 
@@ -703,7 +714,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
         rName = CreateUniqueObjectName();
 
     // objects without persistence are not really stored by the method
-    if ( xObj.is() && StoreEmbeddedObject( xObj, rName, true ) )
+    if (xObj.is() && StoreEmbeddedObject(xObj, rName, true, rSrcShellID, rDestShellID))
     {
         xResult = Get_Impl( rName, xObj);
         if ( !xResult.is() )

@@ -4433,7 +4433,8 @@ sal_Int8 ScGridWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
         bPasteIsMove = bIsMove;
 
-        pViewData->GetView()->PasteDraw( aLogicPos, rData.pDrawTransfer->GetModel() );
+        pViewData->GetView()->PasteDraw(
+            aLogicPos, rData.pDrawTransfer->GetModel(), false, "A", "B");
 
         if (bPasteIsMove)
             rData.pDrawTransfer->SetDragWasInternal();
@@ -4536,8 +4537,9 @@ void ScGridWindow::PasteSelection( const Point& rPosPixel )
 
                 //  bSameDocClipboard argument for PasteDraw is needed
                 //  because only DragData is checked directly inside PasteDraw
-                pViewData->GetView()->PasteDraw( aLogicPos, pDrawTransfer->GetModel(), false,
-                            pDrawTransfer->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID() );
+                pViewData->GetView()->PasteDraw(
+                    aLogicPos, pDrawTransfer->GetModel(), false,
+                    pDrawTransfer->GetShellID(), SfxObjectShell::CreateShellID(pViewData->GetDocShell()));
             }
         }
     }

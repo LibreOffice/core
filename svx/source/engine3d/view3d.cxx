@@ -441,7 +441,9 @@ SdrModel* E3dView::GetMarkedObjModel() const
 // When pasting objects have to integrated if a scene is inserted, but
 // not the scene itself
 
-bool E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
+bool E3dView::Paste(
+    const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+    const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     bool bRetval = false;
 
@@ -486,7 +488,7 @@ bool E3dView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, s
     else
     {
         // call parent
-        bRetval = SdrView::Paste(rMod, rPos, pLst, nOptions);
+        bRetval = SdrView::Paste(rMod, rPos, pLst, nOptions, rSrcShellID, rDestShellID);
     }
 
     return bRetval;

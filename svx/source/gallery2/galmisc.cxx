@@ -507,7 +507,7 @@ void GalleryTransferable::AddSupportedFormats()
     }
 }
 
-bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
+bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
     bool        bRet = false;

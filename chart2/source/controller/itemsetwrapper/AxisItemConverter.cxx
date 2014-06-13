@@ -423,8 +423,9 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SID_ATTR_NUMBERFORMAT_SOURCE:
         {
-            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue());
-            rOutItemSet.Put( SfxBoolItem( nWhichId, ! bNumberFormatIsSet ));
+            bool bLinkToSource = true;
+            GetPropertySet()->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource;
+            rOutItemSet.Put(SfxBoolItem(nWhichId, bLinkToSource));
         }
         break;
 
@@ -930,6 +931,8 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             bool bUseSourceFormat =
                 (static_cast< const SfxBoolItem & >(
                     rItemSet.Get( nWhichId )).GetValue() );
+            GetPropertySet()->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::makeAny(bUseSourceFormat));
+
             bool bNumberFormatIsSet = GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue();
 
             bChangedOtherwise = (bUseSourceFormat == bNumberFormatIsSet);

@@ -72,7 +72,7 @@ public:
     virtual ~ScTransferObj();
 
     virtual void        AddSupportedFormats() SAL_OVERRIDE;
-    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
     virtual bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
     virtual void        ObjectReleased() SAL_OVERRIDE;

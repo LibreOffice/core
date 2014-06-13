@@ -53,7 +53,8 @@ void ScLinkTransferObj::AddSupportedFormats()
     }
 }
 
-bool ScLinkTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool ScLinkTransferObj::GetData(
+    const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     bool bOK = false;
     if ( !aLinkURL.isEmpty() )

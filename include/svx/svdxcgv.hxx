@@ -103,7 +103,10 @@ public:
     // View angezeigt wird.
     // Gueltige Werte fuer nOptions sind SDRINSERT_DONTMARK und
     // SDRINSERT_ADDMARK (siehe svdedtv.hxx).
-    virtual bool    Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
+    virtual bool Paste(
+        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+        const OUString& rSrcShellID, const OUString& rDestShellID );
+
     bool            Paste(const OUString& rStr, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
     bool            Paste(SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 

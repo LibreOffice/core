@@ -90,7 +90,7 @@ namespace svx
     }
 
 
-    bool OComponentTransferable::GetData( const DataFlavor& _rFlavor )
+    bool OComponentTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
         if ( nFormatId == getDescriptorFormatId(true) || nFormatId == getDescriptorFormatId(false) )
@@ -131,7 +131,7 @@ namespace svx
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(bForm), aFlavor);
             OSL_ENSURE(bSuccess, "OComponentTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
-            Any aDescriptor = _rData.GetAny(aFlavor);
+            Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
