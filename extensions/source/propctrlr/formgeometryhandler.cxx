@@ -330,7 +330,7 @@ namespace pcr
     Any SAL_CALL FormGeometryHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         ENSURE_OR_THROW2( m_xAssociatedShape.is(), "internal error: properties, but no shape!", *this );
         ENSURE_OR_THROW2( m_xShapeProperties.is(), "internal error: no shape properties!", *this );
@@ -379,7 +379,7 @@ namespace pcr
     void SAL_CALL FormGeometryHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         ENSURE_OR_THROW2( m_xAssociatedShape.is(), "internal error: properties, but no shape!", *this );
         ENSURE_OR_THROW2( m_xShapeProperties.is(), "internal error: properties, but no shape!", *this );
@@ -447,7 +447,7 @@ namespace pcr
         throw (UnknownPropertyException, NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         LineDescriptor aLineDesc( PropertyHandler::describePropertyLine( _rPropertyName, _rxControlFactory ) );
         try

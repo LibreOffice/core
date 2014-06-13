@@ -144,7 +144,14 @@ namespace pcr
             @throw com::sun::star::beans::UnknownPropertyException
                 if the property name is not known to our ->m_pInfoService
         */
-        PropertyId impl_getPropertyId_throw( const OUString& _rPropertyName ) const;
+        PropertyId impl_getPropertyId_throwUnknownProperty( const OUString& _rPropertyName ) const;
+
+        /** retrieves the property id for a given property name
+            @throw com::sun::star::uno::RuntimeException
+                if the property name is not known to our ->m_pInfoService
+        */
+        PropertyId impl_getPropertyId_throwRuntime( const OUString& _rPropertyName ) const;
+
 
         /** retrieves the property id for a given property name
             @returns -1
