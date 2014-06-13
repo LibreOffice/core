@@ -472,7 +472,7 @@ void EditorWindow::Command( const CommandEvent& rCEvt )
             SfxDispatcher* pDispatcher = GetDispatcher();
             if ( pDispatcher )
             {
-                pDispatcher->ExecutePopup();
+                SfxDispatcher::ExecutePopup();
             }
             if( pCodeCompleteWnd->IsVisible() ) // hide the code complete window
                 pCodeCompleteWnd->ClearAndHide();
