@@ -80,7 +80,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
 
     utl::MediaDescriptor aMediaDescriptor(rMediaDescriptor);
     {
-        utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_MODEL()));
+        utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_MODEL()));
         if( aIt != aMediaDescriptor.end())
         {
             xModel.set( (*aIt).second.get< uno::Reference< frame::XModel > >());
@@ -136,7 +136,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
     if(!bHaveLoadedModel)
         try
         {
-            utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( aMediaDescriptor.PROP_URL()));
+            utl::MediaDescriptor::const_iterator aIt( aMediaDescriptor.find( utl::MediaDescriptor::PROP_URL()));
             if( aIt != aMediaDescriptor.end())
             {
                 OUString aURL( (*aIt).second.get< OUString >());

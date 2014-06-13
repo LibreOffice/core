@@ -205,7 +205,7 @@ void VPolarAngleAxis::createShapes()
     uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
             m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
     //because of this name this line will be used for marking the axis
-    m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
+    ::chart::AbstractShapeFactory::setShapeName( xShape, "MarkHandles" );
 
     //create labels
     createLabels();
