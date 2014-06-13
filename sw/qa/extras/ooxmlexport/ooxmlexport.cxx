@@ -3648,6 +3648,48 @@ DECLARE_OOXMLEXPORT_TEST(testFDO78590, "FDO78590.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "h", "1669" );
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo79968_sldx, "fdo79968.docx")
+{
+    // This UT for DOCX embedded with powerpoint slide
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.presentationml.slide']",
+                "PartName",
+                "/word/embeddings/oleObject1.sldx");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsb, "fdo79969_xlsb.docx")
+{
+    // This UT for DOCX embedded with binary excel work sheet.
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-excel.sheet.binary.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.xlsb");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
+{
+    // This UT for DOCX embedded with excel work sheet.
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-excel.sheet.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.xlsm");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
