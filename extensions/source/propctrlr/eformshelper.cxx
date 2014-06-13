@@ -76,9 +76,9 @@ namespace pcr
         ,m_aPropertyListeners( _rMutex )
     {
         OSL_ENSURE( _rxControlModel.is(), "EFormsHelper::EFormsHelper: invalid control model!" );
-        m_xBindableControl = m_xBindableControl.query( _rxControlModel );
+        m_xBindableControl.set(_rxControlModel, css::uno::UNO_QUERY);
 
-        m_xDocument = m_xDocument.query( _rxContextDocument );
+        m_xDocument.set(_rxContextDocument, css::uno::UNO_QUERY);
         OSL_ENSURE( m_xDocument.is(), "EFormsHelper::EFormsHelper: invalid document!" );
 
     }
@@ -216,7 +216,7 @@ namespace pcr
     {
         Reference< XPropertySet > xBindingProps;
         if ( m_xBindableControl.is() )
-            xBindingProps = xBindingProps.query( m_xBindableControl->getValueBinding() );
+            xBindingProps.set(m_xBindableControl->getValueBinding(), css::uno::UNO_QUERY);
         if ( !xBindingProps.is() )
             return;
 
@@ -411,7 +411,7 @@ namespace pcr
         try
         {
             if ( m_xBindableControl.is() )
-                xBinding = xBinding.query( m_xBindableControl->getValueBinding() );
+                xBinding.set(m_xBindableControl->getValueBinding(), css::uno::UNO_QUERY);
         }
         catch( const Exception& )
         {
@@ -673,7 +673,7 @@ namespace pcr
 
                 Reference< XIndexAccess > xElements;
                 if ( xModel.is() )
-                    xElements = xElements.query( ( _eType == Submission ) ? xModel->getSubmissions() : xModel->getBindings() );
+                    xElements.set(( _eType == Submission ) ? xModel->getSubmissions() : xModel->getBindings(), css::uno::UNO_QUERY);
                 if ( !xElements.is() )
                     break;
 

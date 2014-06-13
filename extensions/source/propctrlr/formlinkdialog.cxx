@@ -520,9 +520,9 @@ namespace pcr
                         continue;
 
                     xKeyColumns.clear();
-                    xKeyColSupp = xKeyColSupp.query( xKey );
+                    xKeyColSupp.set(xKey, css::uno::UNO_QUERY);
                     if ( xKeyColSupp.is() )
-                        xKeyColumns = xKeyColumns.query( xKeyColSupp->getColumns() );
+                        xKeyColumns.set(xKeyColSupp->getColumns(), css::uno::UNO_QUERY);
                     OSL_ENSURE( xKeyColumns.is(), "FormLinkDialog::getExistingRelation: could not obtain the columns for the key!" );
 
                     if ( !xKeyColumns.is() )

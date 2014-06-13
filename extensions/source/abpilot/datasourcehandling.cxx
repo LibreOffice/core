@@ -372,7 +372,7 @@ namespace abp
             Reference< XDocumentDataSource > xDocAccess( m_pImpl->xDataSource, UNO_QUERY );
             Reference< XStorable > xStorable;
             if ( xDocAccess.is() )
-                xStorable = xStorable.query( xDocAccess->getDatabaseDocument() );
+                xStorable.set(xDocAccess->getDatabaseDocument(), css::uno::UNO_QUERY);
             OSL_ENSURE( xStorable.is(),"DataSource is no XStorable!" );
             if ( xStorable.is() )
                 xStorable->storeAsURL(m_pImpl->sName,Sequence<PropertyValue>());

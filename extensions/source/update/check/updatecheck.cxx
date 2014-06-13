@@ -425,7 +425,7 @@ UpdateCheckThread::runCheck( bool & rbExtensionsChecked )
     if( checkForUpdates(aInfo, m_xContext, aController->getInteractionHandler(), createProvider()) )
     {
         aController->setUpdateInfo(aInfo);
-        eUIState = aController->getUIState(aInfo);
+        eUIState = UpdateCheck::getUIState(aInfo);
         ret = true;
     }
     else

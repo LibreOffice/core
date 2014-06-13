@@ -84,7 +84,7 @@ namespace pcr
     {
         OSL_ENSURE( m_xControlModel.is(), "CellBindingHelper::CellBindingHelper: invalid control model!" );
 
-        m_xDocument = m_xDocument.query( _rxContextDocument );
+        m_xDocument.set(_rxContextDocument, css::uno::UNO_QUERY);
         OSL_ENSURE( m_xDocument.is(), "CellBindingHelper::CellBindingHelper: This is no spreadsheet document!" );
 
         OSL_ENSURE( isSpreadsheetDocumentWhichSupplies( SERVICE_ADDRESS_CONVERSION ),
@@ -109,14 +109,14 @@ namespace pcr
             // the object belongs to. This is the first object up the hierarchy which is
             // *no* XForm (and, well, no XGridColumnFactory)
             Reference< XChild > xCheck( m_xControlModel, UNO_QUERY );
-            Reference< XForm > xParentAsForm; if ( xCheck.is() ) xParentAsForm = xParentAsForm.query( xCheck->getParent() );
-            Reference< XGridColumnFactory > xParentAsGrid; if ( xCheck.is() ) xParentAsGrid = xParentAsGrid.query( xCheck->getParent() );
+            Reference< XForm > xParentAsForm; if ( xCheck.is() ) xParentAsForm.set(xCheck->getParent(), css::uno::UNO_QUERY);
+            Reference< XGridColumnFactory > xParentAsGrid; if ( xCheck.is() ) xParentAsGrid.set(xCheck->getParent(), css::uno::UNO_QUERY);
 
             while ( ( xParentAsForm.is() || xParentAsGrid.is() ) && xCheck.is() )
             {
-                xCheck = xCheck.query( xCheck->getParent() );
-                xParentAsForm = xParentAsForm.query( xCheck.is() ? xCheck->getParent() : (Reference< XInterface >) Reference< XForm >() );
-                xParentAsGrid = xParentAsGrid.query( xCheck.is() ? xCheck->getParent() : (Reference< XInterface >) Reference< XGridColumnFactory >() );
+                xCheck.set(xCheck->getParent(), css::uno::UNO_QUERY);
+                xParentAsForm.set(xCheck.is() ? xCheck->getParent() : (Reference< XInterface >) Reference< XForm >(), css::uno::UNO_QUERY);
+                xParentAsGrid.set(xCheck.is() ? xCheck->getParent() : (Reference< XInterface >) Reference< XGridColumnFactory >(), css::uno::UNO_QUERY);
             }
             Reference< XInterface > xFormsCollection( xCheck.is() ? xCheck->getParent() : Reference< XInterface >() );
 
@@ -247,11 +247,11 @@ namespace pcr
             return xSource;
 
         // create a range object for this address
-        xSource = xSource.query( createDocumentDependentInstance(
+        xSource.set(createDocumentDependentInstance(
             SERVICE_SHEET_CELLRANGE_LISTSOURCE,
             PROPERTY_LIST_CELL_RANGE,
             makeAny( aRangeAddress )
-        ) );
+        ), css::uno::UNO_QUERY);
 
         return xSource;
     }

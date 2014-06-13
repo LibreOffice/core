@@ -345,7 +345,7 @@ namespace pcr
         m_xComponent = Reference< XPropertySet >( xIntrospectionAccess->queryAdapter( cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
         // now that we survived so far, remember m_xComponentIntrospectionAccess
         m_xComponentIntrospectionAccess = xIntrospectionAccess;
-        m_xPropertyState = m_xPropertyState.query( m_xComponent );
+        m_xPropertyState.set(m_xComponent, css::uno::UNO_QUERY);
 
         m_bPropertyMapInitialized = false;
         m_aProperties.clear();
