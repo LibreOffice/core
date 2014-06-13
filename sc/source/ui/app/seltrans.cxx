@@ -416,7 +416,7 @@ bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::Data
     if ( xSource.is() )
     {
         TransferableDataHelper aHelper( xSource );
-        uno::Any aAny = aHelper.GetAny( rFlavor );
+        uno::Any aAny = aHelper.GetAny(rFlavor, OUString());
         bOK = SetAny( aAny, rFlavor );
     }
 

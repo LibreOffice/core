@@ -396,7 +396,7 @@ bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavo
                 pModel->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
             }
 
-            bOK = SetAny( aOleData.GetAny( rFlavor ), rFlavor );
+            bOK = SetAny( aOleData.GetAny(rFlavor, OUString()), rFlavor );
 
             if( pModel )
                 pModel->SetSwapGraphicsMode( nOldSwapMode );

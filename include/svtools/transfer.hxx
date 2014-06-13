@@ -311,8 +311,8 @@ public:
 
 public:
 
-    ::com::sun::star::uno::Any  GetAny( SotFormatStringId nFormat ) const;
-    ::com::sun::star::uno::Any  GetAny( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) const;
+    css::uno::Any GetAny( SotFormatStringId nFormat, const OUString& rDestDoc ) const;
+    css::uno::Any GetAny( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
     bool                        GetString( SotFormatStringId nFormat, OUString& rStr );
     bool                        GetString( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, OUString& rStr );
@@ -349,14 +349,14 @@ public:
     bool                        GetFileList( SotFormatStringId nFormat, FileList& rFileList );
     bool                        GetFileList( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, FileList& rFileList );
 
-    bool                        GetSequence( SotFormatStringId nFormat, ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
-    bool                        GetSequence( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
+    css::uno::Sequence<sal_Int8> GetSequence( SotFormatStringId nFormat, const OUString& rDestDoc );
+    css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
     bool                        GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rStreamRef );
     bool                        GetSotStorageStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, SotStorageStreamRef& rStreamRef );
 
-    bool                        GetInputStream( SotFormatStringId nFormat, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
-    bool                        GetInputStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
+    css::uno::Reference<css::io::XInputStream> GetInputStream( SotFormatStringId nFormat, const OUString& rDestDoc );
+    css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
     bool                        GetInterface( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
 

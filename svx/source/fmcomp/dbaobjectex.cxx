@@ -131,7 +131,7 @@ namespace svx
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(bForm), aFlavor);
             OSL_ENSURE(bSuccess, "OComponentTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
-            Any aDescriptor = _rData.GetAny(aFlavor);
+            Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;

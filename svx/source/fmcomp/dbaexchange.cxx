@@ -276,7 +276,7 @@ namespace svx
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
-            Any aDescriptor = _rData.GetAny(aFlavor);
+            Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
@@ -524,7 +524,7 @@ namespace svx
             SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
-            Any aDescriptor = _rData.GetAny(aFlavor);
+            Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
@@ -682,7 +682,7 @@ namespace svx
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
-            _rData.GetAny(aFlavor) >>= aList;
+            _rData.GetAny(aFlavor, OUString()) >>= aList;
         } // if (_rData.HasFormat(getDescriptorFormatId()))
         return aList;
     }

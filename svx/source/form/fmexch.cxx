@@ -139,7 +139,7 @@ namespace svxform
         if ( OControlExchange::hasControlPathFormat( aExchangedData.GetDataFlavorExVector() ) )
         {   // paths to the controls, relative to a root
             Sequence< Any > aControlPathData;
-            if ( aExchangedData.GetAny( OControlExchange::getControlPathFormatId() ) >>= aControlPathData )
+            if ( aExchangedData.GetAny(OControlExchange::getControlPathFormatId(), OUString()) >>= aControlPathData )
             {
                 DBG_ASSERT( aControlPathData.getLength() >= 2, "OControlTransferData::OControlTransferData: invalid data for the control path format!" );
                 if ( aControlPathData.getLength() >= 2 )
@@ -155,7 +155,7 @@ namespace svxform
         }
         if ( OControlExchange::hasHiddenControlModelsFormat( aExchangedData.GetDataFlavorExVector() ) )
         {   // sequence of models of hidden controls
-            aExchangedData.GetAny( OControlExchange::getHiddenControlModelsFormatId() ) >>= m_aHiddenControlModels;
+            aExchangedData.GetAny(OControlExchange::getHiddenControlModelsFormatId(), OUString()) >>= m_aHiddenControlModels;
         }
 
         updateFormats( );

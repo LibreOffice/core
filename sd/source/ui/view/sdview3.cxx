@@ -845,9 +845,14 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         uno::Reference < io::XInputStream > xStm;
         TransferableObjectDescriptor    aObjDesc;
 
-        if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-            ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) ||
-              aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ, xStm ) ) )
+        if (aDataHelper.GetTransferableObjectDescriptor(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc))
+        {
+            xStm = aDataHelper.GetInputStream(nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE, OUString());
+            if (!xStm.is())
+                xStm = aDataHelper.GetInputStream(SOT_FORMATSTR_ID_EMBEDDED_OBJ, OUString());
+        }
+
+        if (xStm.is())
         {
             if( mrDoc.GetDocSh() && ( mrDoc.GetDocSh()->GetClassName() == aObjDesc.maClassName ) )
             {
@@ -1030,8 +1035,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 uno::Reference < embed::XEmbeddedObject > xObj;
                 OUString aName;
 
-                if ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ||
-                    aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) )
+                xStm = aDataHelper.GetInputStream(nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, OUString());
+                if (!xStm.is())
+                    xStm = aDataHelper.GetInputStream(SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, OUString());
+
+                if (xStm.is())
                 {
                     xObj = mpDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
                 }

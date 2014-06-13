@@ -76,7 +76,7 @@ OReportExchange::TSectionElements OReportExchange::extractCopies(const Transfera
         SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
         OSL_ENSURE(bSuccess, "OReportExchange::extractCopies: invalid data format (no flavor)!");
 
-        uno::Any aDescriptor = _rData.GetAny(aFlavor);
+        uno::Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
         TSectionElements aCopies;
 #if OSL_DEBUG_LEVEL > 0

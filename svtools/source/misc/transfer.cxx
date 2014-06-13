@@ -1537,13 +1537,13 @@ Reference< XTransferable > TransferableDataHelper::GetXTransferable() const
 
 
 
-Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
+Any TransferableDataHelper::GetAny( SotFormatStringId nFormat, const OUString& rDestDoc ) const
 {
     Any aReturn;
 
     DataFlavor aFlavor;
     if ( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) )
-        aReturn = GetAny( aFlavor );
+        aReturn = GetAny(aFlavor, rDestDoc);
 
     return aReturn;
 }
@@ -1551,7 +1551,7 @@ Any TransferableDataHelper::GetAny( SotFormatStringId nFormat ) const
 
 
 
-Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
+Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& /*rDestDoc*/ ) const
 {
     ::osl::MutexGuard aGuard( mpImpl->maMutex );
     Any aRet;
@@ -1598,7 +1598,7 @@ bool TransferableDataHelper::GetString( SotFormatStringId nFormat, OUString& rSt
 
 bool TransferableDataHelper::GetString( const DataFlavor& rFlavor, OUString& rStr )
 {
-    Any         aAny( GetAny( rFlavor ) );
+    Any aAny = GetAny(rFlavor, OUString());
     bool        bRet = false;
 
     if( aAny.hasValue() )
@@ -1969,9 +1969,9 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
 
         case( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ):
         {
-            Sequence< sal_Int8 > aSeq;
+            Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
-            if( GetSequence( rFlavor, aSeq ) && ( 2048 == aSeq.getLength() ) )
+            if (2048 == aSeq.getLength())
             {
                 const sal_Char* p1 = reinterpret_cast< const sal_Char* >( aSeq.getConstArray() );
                 const sal_Char* p2 =  reinterpret_cast< const sal_Char* >( aSeq.getConstArray() ) + 1024;
@@ -1985,9 +1985,9 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
 #ifdef WNT
         case SOT_FORMATSTR_ID_FILEGRPDESCRIPTOR:
         {
-            Sequence< sal_Int8 > aSeq;
+            Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
-            if( GetSequence( rFlavor, aSeq ) && aSeq.getLength() )
+            if (aSeq.getLength())
             {
                 FILEGROUPDESCRIPTOR* pFDesc = (FILEGROUPDESCRIPTOR*) aSeq.getConstArray();
 
@@ -2007,14 +2007,14 @@ bool TransferableDataHelper::GetINetBookmark( const ::com::sun::star::datatransf
 
                             aSeq.realloc( 0 );
                             delete pStream;
+                            pStream = NULL;
 
-                            if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_FILECONTENT, aFileContentFlavor ) &&
-                                GetSequence( aFileContentFlavor, aSeq ) && aSeq.getLength() )
+                            if (SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_FILECONTENT, aFileContentFlavor))
                             {
-                                pStream = new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_STD_READ );
+                                aSeq = GetSequence(aFileContentFlavor, OUString());
+                                if (aSeq.getLength())
+                                    pStream = new SvMemoryStream( (sal_Char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_STD_READ );
                             }
-                            else
-                                pStream = NULL;
                         }
 
                         if( pStream )
@@ -2119,22 +2119,27 @@ bool TransferableDataHelper::GetFileList(
 
 
 
-bool TransferableDataHelper::GetSequence( SotFormatStringId nFormat, Sequence< sal_Int8 >& rSeq )
+Sequence<sal_Int8> TransferableDataHelper::GetSequence( SotFormatStringId nFormat, const OUString& rDestDoc )
 {
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetSequence( aFlavor, rSeq ) );
+    if (!SotExchange::GetFormatDataFlavor(nFormat, aFlavor))
+        return Sequence<sal_Int8>();
+
+    return GetSequence(aFlavor, rDestDoc);
 }
 
-
-
-bool TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, Sequence< sal_Int8 >& rSeq )
+Sequence<sal_Int8> TransferableDataHelper::GetSequence( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
 #ifdef DEBUG
     fprintf( stderr, "TransferableDataHelper requests sequence of data\n" );
 #endif
 
-    const Any aAny( GetAny( rFlavor ) );
-    return( aAny.hasValue() && ( aAny >>= rSeq ) );
+    const Any aAny = GetAny(rFlavor, rDestDoc);
+    Sequence<sal_Int8> aSeq;
+    if (aAny.hasValue())
+        aAny >>= aSeq;
+
+    return aSeq;
 }
 
 
@@ -2149,39 +2154,37 @@ bool TransferableDataHelper::GetSotStorageStream( SotFormatStringId nFormat, Sot
 
 bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor, SotStorageStreamRef& rxStream )
 {
-    Sequence< sal_Int8 >    aSeq;
-    bool                    bRet = GetSequence( rFlavor, aSeq );
+    Sequence<sal_Int8> aSeq = GetSequence(rFlavor, OUString());
 
-    if( bRet )
+    if (aSeq.getLength())
     {
         rxStream = new SotStorageStream( "" );
         rxStream->Write( aSeq.getConstArray(), aSeq.getLength() );
         rxStream->Seek( 0 );
     }
 
-    return bRet;
+    return aSeq.getLength();
 }
 
-bool TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, Reference < XInputStream >& rxStream )
+Reference<XInputStream> TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, const OUString& rDestDoc )
 {
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetInputStream( aFlavor, rxStream ) );
+    if (!SotExchange::GetFormatDataFlavor(nFormat, aFlavor))
+        return Reference<XInputStream>();
+
+    return GetInputStream(aFlavor, rDestDoc);
 }
 
-
-
-bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Reference < XInputStream >& rxStream )
+Reference<XInputStream> TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
-    Sequence< sal_Int8 >    aSeq;
-    bool                    bRet = GetSequence( rFlavor, aSeq );
+    Sequence<sal_Int8> aSeq = GetSequence(rFlavor, rDestDoc);
 
-    if( bRet )
-          rxStream = new ::comphelper::SequenceInputStream( aSeq );
+    if (!aSeq.getLength())
+        return Reference<XInputStream>();
 
-    return bRet;
+    Reference<XInputStream> xStream(new comphelper::SequenceInputStream(aSeq));
+    return xStream;
 }
-
-
 
 void TransferableDataHelper::Rebind( const Reference< XTransferable >& _rxNewContent )
 {

@@ -492,7 +492,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor )
         if( xObj.is() )
         {
             TransferableDataHelper aD( new SvEmbedTransferHelper( xObj, pOLEGraph, nAspect ) );
-            uno::Any aAny( aD.GetAny( rFlavor ));
+            uno::Any aAny = aD.GetAny(rFlavor, OUString());
             if( aAny.hasValue() )
                 bOK = SetAny( aAny, rFlavor );
         }
@@ -1716,7 +1716,10 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     else
         nId = 0;
 
-    if( nId && rData.GetInputStream( nId, xStrm ) && xStrm.is() )
+    if (nId)
+        xStrm = rData.GetInputStream(nId, OUString());
+
+    if (xStrm.is())
     {
         // if there is an embedded object, first try if it's a writer object
         // this will be inserted into the document by using a Reader
@@ -1783,8 +1786,9 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         {
             if( rData.HasFormat( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE ) && rData.GetTransferableObjectDescriptor( nFmt, aObjDesc ) )
              {
-                if ( !rData.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStrm ) )
-                    rData.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStrm );
+                xStrm = rData.GetInputStream(SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, OUString());
+                if (!xStrm.is())
+                    xStrm = rData.GetInputStream(SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, OUString());
 
                 if ( !xStrm.is() )
                 {

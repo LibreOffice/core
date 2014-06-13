@@ -117,8 +117,10 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         uno::Reference < io::XInputStream > xStm;
         TransferableObjectDescriptor   aObjDesc;
 
-        if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-            aDataHelper.GetInputStream( nFormatId, xStm ) )
+        if (aDataHelper.GetTransferableObjectDescriptor(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc))
+            xStm = aDataHelper.GetInputStream(nFormatId, OUString());
+
+        if (xStm.is())
         {
             if ( aObjDesc.maClassName == SvGlobalName( SO3_SC_CLASSID_60 ) )
             {
@@ -209,9 +211,11 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             {
                 OUString aName;
                 uno::Reference < embed::XEmbeddedObject > xObj;
+                xStm = aDataHelper.GetInputStream(SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, OUString());
+                if (!xStm.is())
+                    aDataHelper.GetInputStream(SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, OUString());
 
-                if ( aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm )
-                  || aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) )
+                if (xStm.is())
                 {
                     xObj = GetViewData()->GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
                 }
@@ -528,8 +532,8 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
     {
         //  do excel import into a clipboard document
         //TODO/MBA: testing
-        uno::Reference < io::XInputStream > xStm;
-        if( aDataHelper.GetInputStream( nFormatId, xStm ) )
+        uno::Reference <io::XInputStream> xStm = aDataHelper.GetInputStream(nFormatId, OUString());
+        if (xStm.is())
         {
             ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
             SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
@@ -629,8 +633,8 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
     //  get link data from transferable before string data,
     //  so the source knows it will be used for a link
 
-    uno::Sequence<sal_Int8> aSequence;
-    if ( !aDataHelper.GetSequence( SOT_FORMATSTR_ID_LINK, aSequence ) )
+    uno::Sequence<sal_Int8> aSequence = aDataHelper.GetSequence(SOT_FORMATSTR_ID_LINK, OUString());
+    if (!aSequence.getLength())
     {
         OSL_FAIL("DDE Data not found.");
         return false;
