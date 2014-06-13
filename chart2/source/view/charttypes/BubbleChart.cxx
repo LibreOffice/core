@@ -335,7 +335,7 @@ void BubbleChart::createShapes()
                                             pSeries->getValueByProperty(nIndex, "LineColor"))));
                         }
 
-                        m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
+                        ::chart::AbstractShapeFactory::setShapeName( xShape, "MarkHandles" );
 
                         //create data point label
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )

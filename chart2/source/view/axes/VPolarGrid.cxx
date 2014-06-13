@@ -215,7 +215,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
         Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                 xTarget, aAllPoints, &rLinePropertiesList[nDepth] );
         //because of this name this line will be used for marking
-        m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
+        ::chart::AbstractShapeFactory::setShapeName( xShape, "MarkHandles" );
     }
 }
 

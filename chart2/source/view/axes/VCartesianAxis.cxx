@@ -1647,7 +1647,7 @@ void VCartesianAxis::createShapes()
                     m_xGroupShape_Shapes, aPoints
                     , &m_aAxisProperties.m_aLineProperties );
             //because of this name this line will be used for marking the axis
-            m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
+            ::chart::AbstractShapeFactory::setShapeName( xShape, "MarkHandles" );
         }
         //create an additional line at NULL
         if( !AxisHelper::isAxisPositioningEnabled() )

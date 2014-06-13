@@ -466,7 +466,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
         //because of this name this line will be used for marking
-        m_pShapeFactory->setShapeName(xShape, "MarkHandles");
+        ::chart::AbstractShapeFactory::setShapeName(xShape, "MarkHandles");
     }
     return true;
 }
@@ -542,7 +542,7 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
     //because of this name this line will be used for marking
-    m_pShapeFactory->setShapeName(xShape, "MarkHandles");
+    ::chart::AbstractShapeFactory::setShapeName(xShape, "MarkHandles");
     return true;
 }
 

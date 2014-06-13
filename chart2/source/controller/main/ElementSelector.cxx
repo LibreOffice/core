@@ -113,7 +113,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
         ExplicitValueProvider* pExplicitValueProvider = 0; //ExplicitValueProvider::getExplicitValueProvider(xChartView); this creates all visible data points, that's too much
         ObjectHierarchy aHierarchy( xChartDoc, pExplicitValueProvider, true /*bFlattenDiagram*/, true /*bOrderingForElementSelector*/ );
-        lcl_addObjectsToList( aHierarchy, aHierarchy.getRootNodeOID(), m_aEntries, 0, xChartDoc );
+        lcl_addObjectsToList( aHierarchy, ::chart::ObjectHierarchy::getRootNodeOID(), m_aEntries, 0, xChartDoc );
 
         std::vector< ListBoxEntryData >::iterator aIt( m_aEntries.begin() );
         if( bAddSelectionToList )
