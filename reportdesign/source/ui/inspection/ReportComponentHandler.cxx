@@ -173,7 +173,7 @@ void SAL_CALL ReportComponentHandler::removePropertyChangeListener(const uno::Re
 uno::Sequence< beans::Property > SAL_CALL ReportComponentHandler::getSupportedProperties() throw (uno::RuntimeException, std::exception)
 {
     ::std::vector< beans::Property > aNewProps;
-    m_pInfoService->getExcludeProperties( aNewProps, m_xFormComponentHandler );
+    rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
 
     return aNewProps.empty() ? uno::Sequence< beans::Property > () : uno::Sequence< beans::Property > (&(*aNewProps.begin()),aNewProps.size());
 }
