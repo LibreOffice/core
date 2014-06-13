@@ -129,18 +129,19 @@ void SAL_CALL PropertySetHelper::removeVetoableChangeListener( const OUString&, 
 }
 
 // XMultiPropertySet
-void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rValues )
+    throw (PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
-    const sal_Int32 nCount = aPropertyNames.getLength();
+    const sal_Int32 nCount = rPropertyNames.getLength();
 
-    if( nCount != aValues.getLength() )
+    if( nCount != rValues.getLength() )
         throw IllegalArgumentException();
 
     if( nCount )
     {
         boost::scoped_array<PropertyMapEntry const *> pEntries(new PropertyMapEntry const *[nCount+1]);
         pEntries[nCount] = NULL;
-        const OUString* pNames = aPropertyNames.getConstArray();
+        const OUString* pNames = rPropertyNames.getConstArray();
 
         bool bUnknown = false;
         sal_Int32 n;
@@ -151,10 +152,10 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
         }
 
         if( !bUnknown )
-            _setPropertyValues( (const PropertyMapEntry**)pEntries.get(), aValues.getConstArray() );
+            _setPropertyValues( (const PropertyMapEntry**)pEntries.get(), rValues.getConstArray() );
 
         if( bUnknown )
-            throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );
+            throw RuntimeException( *pNames, static_cast< XPropertySet* >( this ) );
     }
 }
 
