@@ -204,7 +204,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     if( pStylesCtxt )
     {
         const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-            mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+            SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
 
         if( pStyle && pStyle->ISA( XMLPropStyleContext ))
             (( XMLPropStyleContext* )pStyle )->FillPropertySet( xLegendProps );

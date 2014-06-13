@@ -1213,7 +1213,7 @@ void XMLTableTransformerContext_Impl::StartElement(
             {
                 const OUString& rValue = xAttrList->getValueByIndex( i );
                 OUString aAttrValue( rValue );
-                if( GetTransformer().DecodeStyleName(aAttrValue) )
+                if( XMLTransformerBase::DecodeStyleName(aAttrValue) )
                 {
                     if ( !pMutableAttrList )
                     {

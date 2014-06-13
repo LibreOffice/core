@@ -181,7 +181,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+                    SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
 
                 XMLPropStyleContext* pPropStyleContext =
                     const_cast< XMLPropStyleContext* >( dynamic_cast< const XMLPropStyleContext* >( pStyle ));

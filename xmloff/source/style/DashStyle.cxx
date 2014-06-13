@@ -129,7 +129,7 @@ void XMLDashStyleImport::importXML(
         case XML_TOK_DASH_STYLE:
             {
                 sal_uInt16 eValue;
-                if( rUnitConverter.convertEnum( eValue, rStrValue, pXML_DashStyle_Enum ) )
+                if( SvXMLUnitConverter::convertEnum( eValue, rStrValue, pXML_DashStyle_Enum ) )
                 {
                     aLineDash.Style = (drawing::DashStyle) eValue;
                 }
@@ -245,7 +245,7 @@ bool XMLDashStyleExport::exportXML(
                                       rStrName );
 
             // Style
-            rUnitConverter.convertEnum( aOut, aLineDash.Style, pXML_DashStyle_Enum );
+            SvXMLUnitConverter::convertEnum( aOut, aLineDash.Style, pXML_DashStyle_Enum );
             aStrValue = aOut.makeStringAndClear();
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 

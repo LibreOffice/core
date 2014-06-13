@@ -136,7 +136,7 @@ XMLPersTextContentRNGTransformTContext::~XMLPersTextContentRNGTransformTContext(
 void XMLPersTextContentRNGTransformTContext::Characters( const OUString& rChars )
 {
     OUString aConvChars( rChars );
-    GetTransformer().ConvertRNGDateTimeToISO( aConvChars );
+    XMLTransformerBase::ConvertRNGDateTimeToISO( aConvChars );
     XMLPersTextContentTContext::Characters( aConvChars );
 }
 

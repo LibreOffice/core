@@ -476,14 +476,14 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         case XML_ATACTION_NEG_PERCENT:
             {
                 OUString aAttrValue( sAttrValue );
-                GetTransformer().NegPercent(aAttrValue);
+                XMLTransformerBase::NegPercent(aAttrValue);
                 pContext->AddAttribute( sAttrName, aAttrValue );
             }
             break;
         case XML_ATACTION_RENAME_NEG_PERCENT:
             {
                 OUString aAttrValue( sAttrValue );
-                GetTransformer().NegPercent(aAttrValue);
+                XMLTransformerBase::NegPercent(aAttrValue);
                 pContext->AddAttribute( aAction.GetQNamePrefixFromParam1(),
                                         aAction.GetQNameTokenFromParam1(),
                                         aAttrValue );
@@ -836,7 +836,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         case XML_PTACTION_TRANSPARENCY :
             {
                 OUString aAttrValue( sAttrValue );
-                GetTransformer().NegPercent(aAttrValue);
+                XMLTransformerBase::NegPercent(aAttrValue);
                 pContext->AddAttribute( XML_NAMESPACE_DRAW,
                                         XML_OPACITY,
                                         aAttrValue );
@@ -1256,7 +1256,7 @@ void XMLStyleOOoTContext::StartElement(
             case XML_ATACTION_NEG_PERCENT:
                 {
                     OUString aAttrValue( sAttrValue );
-                    if( GetTransformer().NegPercent(aAttrValue) )
+                    if( XMLTransformerBase::NegPercent(aAttrValue) )
                         pMutableAttrList->SetValueByIndex( i, aAttrValue );
                 }
                 break;

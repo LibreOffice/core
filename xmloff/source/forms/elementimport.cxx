@@ -949,7 +949,7 @@ namespace xmloff
                 _rPropValue.Value <<= sValue;
         }
         else
-            _rPropValue.Value = PropertyConversion::convertString(GetImport(), aProp.Type, sValue);
+            _rPropValue.Value = PropertyConversion::convertString(aProp.Type, sValue);
     }
 
     void OControlImport::EndElement()
@@ -1125,7 +1125,7 @@ namespace xmloff
         if ( _rLocalName == GetXMLToken( XML_IMAGE_POSITION ) )
         {
             OSL_VERIFY( PropertyConversion::convertString(
-                m_rContext.getGlobalContext(), ::getCppuType( &m_nImagePosition ),
+                ::getCppuType( &m_nImagePosition ),
                 _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImagePosition )
             ) >>= m_nImagePosition );
             m_bHaveImagePosition = true;
@@ -1135,7 +1135,7 @@ namespace xmloff
         if ( _rLocalName == GetXMLToken( XML_IMAGE_ALIGN ) )
         {
             OSL_VERIFY( PropertyConversion::convertString(
-                m_rContext.getGlobalContext(), ::getCppuType( &m_nImageAlign ),
+                ::getCppuType( &m_nImageAlign ),
                 _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImageAlign )
             ) >>= m_nImageAlign );
             return true;
@@ -1243,7 +1243,7 @@ namespace xmloff
             OSL_ENSURE(pProperty, "ORadioImport::handleAttribute: invalid property map!");
             if (pProperty)
             {
-                const Any aBooleanValue( PropertyConversion::convertString(m_rContext.getGlobalContext(), pProperty->aPropertyType, _rValue, pProperty->pEnumMap) );
+                const Any aBooleanValue( PropertyConversion::convertString(pProperty->aPropertyType, _rValue, pProperty->pEnumMap) );
 
                 // create and store a new PropertyValue
                 PropertyValue aNewValue;
@@ -1673,7 +1673,6 @@ namespace xmloff
         {
             sal_Int16 nLinkageType = 0;
             PropertyConversion::convertString(
-                m_rContext.getGlobalContext(),
                 ::cppu::UnoType<sal_Int16>::get(),
                 _rValue,
                 OEnumMapper::getEnumMap( OEnumMapper::epListLinkageType )

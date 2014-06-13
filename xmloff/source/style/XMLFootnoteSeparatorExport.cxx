@@ -143,7 +143,7 @@ void XMLFootnoteSeparatorExport::exportXML(
         { XML_DASH,     3 },
         { XML_TOKEN_INVALID, 0 }
     };
-    if (rExport.GetMM100UnitConverter().convertEnum(
+    if (SvXMLUnitConverter::convertEnum(
             sBuf, nLineStyle, aXML_LineStyle_Enum ) )
     {
         rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_LINE_STYLE,
@@ -159,7 +159,7 @@ void XMLFootnoteSeparatorExport::exportXML(
         { XML_TOKEN_INVALID, 0 }
     };
 
-    if (rExport.GetMM100UnitConverter().convertEnum(
+    if (SvXMLUnitConverter::convertEnum(
         sBuf, eLineAdjust, aXML_HorizontalAdjust_Enum))
     {
         rExport.AddAttribute(XML_NAMESPACE_STYLE, XML_ADJUSTMENT,

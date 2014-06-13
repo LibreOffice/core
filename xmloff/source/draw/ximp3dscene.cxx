@@ -64,7 +64,7 @@ SdXML3DLightContext::SdXML3DLightContext(
             }
             case XML_TOK_3DLIGHT_DIRECTION:
             {
-                GetImport().GetMM100UnitConverter().convertB3DVector(maDirection, sValue);
+                SvXMLUnitConverter::convertB3DVector(maDirection, sValue);
                 break;
             }
             case XML_TOK_3DLIGHT_ENABLED:
@@ -255,7 +255,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         else if( IsXMLToken( rLocalName, XML_VRP ) )
         {
             ::basegfx::B3DVector aNewVec;
-            mrImport.GetMM100UnitConverter().convertB3DVector(aNewVec, rValue);
+            SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
 
             if(aNewVec != maVRP)
             {
@@ -267,7 +267,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         else if( IsXMLToken( rLocalName, XML_VPN ) )
         {
             ::basegfx::B3DVector aNewVec;
-            mrImport.GetMM100UnitConverter().convertB3DVector(aNewVec, rValue);
+            SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
 
             if(aNewVec != maVPN)
             {
@@ -279,7 +279,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
         else if( IsXMLToken( rLocalName, XML_VUP ) )
         {
             ::basegfx::B3DVector aNewVec;
-            mrImport.GetMM100UnitConverter().convertB3DVector(aNewVec, rValue);
+            SvXMLUnitConverter::convertB3DVector(aNewVec, rValue);
 
             if(aNewVec != maVUP)
             {

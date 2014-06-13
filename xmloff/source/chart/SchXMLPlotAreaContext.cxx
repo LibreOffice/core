@@ -323,7 +323,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
+                    SchXMLImportHelper::GetChartFamilyID(), msAutoStyleName );
 
                 XMLPropStyleContext* pPropStyleContext =
                     const_cast< XMLPropStyleContext * >(
@@ -843,7 +843,7 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
                 if( pStylesCtxt )
                 {
                     const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                        mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+                        SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
 
                     if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                         (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
@@ -913,7 +913,7 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 if( pStylesCtxt )
                 {
                     const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                        mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+                        SchXMLImportHelper::GetChartFamilyID(), sAutoStyleName );
 
                     if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                         (( XMLPropStyleContext* )pStyle )->FillPropertySet( xProp );
@@ -1015,7 +1015,7 @@ void SetErrorBarStyleProperties( const OUString& rStyleName, uno::Reference< bea
                                         SchXMLImportHelper& rImportHelper )
 {
     const SvXMLStylesContext* pStylesCtxt = rImportHelper.GetAutoStylesContext();
-    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(rImportHelper.GetChartFamilyID(),
+    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(),
             rStyleName);
 
     XMLPropStyleContext &rSeriesStyleContext =
@@ -1028,7 +1028,7 @@ void SetErrorBarPropertiesFromStyleName( const OUString& aStyleName, uno::Refere
                                             SchXMLImportHelper& rImportHelper, OUString& aPosRange, OUString& aNegRange)
 {
     const SvXMLStylesContext* pStylesCtxt = rImportHelper.GetAutoStylesContext();
-    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(rImportHelper.GetChartFamilyID(),
+    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(SchXMLImportHelper::GetChartFamilyID(),
             aStyleName);
 
     XMLPropStyleContext * pSeriesStyleContext =

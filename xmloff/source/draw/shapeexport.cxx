@@ -3426,7 +3426,7 @@ void XMLShapeExport::ImpExport3DShape(
                 // write minEdge
                 if(aPos3D != ::basegfx::B3DVector(-2500.0, -2500.0, -2500.0)) // write only when not default
                 {
-                    mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aPos3D);
+                    SvXMLUnitConverter::convertB3DVector(sStringBuffer, aPos3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MIN_EDGE, aStr);
                 }
@@ -3434,7 +3434,7 @@ void XMLShapeExport::ImpExport3DShape(
                 // write maxEdge
                 if(aDir3D != ::basegfx::B3DVector(2500.0, 2500.0, 2500.0)) // write only when not default
                 {
-                    mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aDir3D);
+                    SvXMLUnitConverter::convertB3DVector(sStringBuffer, aDir3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MAX_EDGE, aStr);
                 }
@@ -3463,7 +3463,7 @@ void XMLShapeExport::ImpExport3DShape(
                 // write Center
                 if(aPos3D != ::basegfx::B3DVector(0.0, 0.0, 0.0)) // write only when not default
                 {
-                    mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aPos3D);
+                    SvXMLUnitConverter::convertB3DVector(sStringBuffer, aPos3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_CENTER, aStr);
                 }
@@ -3471,7 +3471,7 @@ void XMLShapeExport::ImpExport3DShape(
                 // write Size
                 if(aDir3D != ::basegfx::B3DVector(5000.0, 5000.0, 5000.0)) // write only when not default
                 {
-                    mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aDir3D);
+                    SvXMLUnitConverter::convertB3DVector(sStringBuffer, aDir3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SIZE, aStr);
                 }
@@ -3567,7 +3567,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     ::basegfx::B3DVector aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
     if(aVRP != ::basegfx::B3DVector(0.0, 0.0, 1.0)) // write only when not default
     {
-        mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aVRP);
+        SvXMLUnitConverter::convertB3DVector(sStringBuffer, aVRP);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VRP, aStr);
     }
@@ -3575,7 +3575,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     ::basegfx::B3DVector aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
     if(aVPN != ::basegfx::B3DVector(0.0, 0.0, 1.0)) // write only when not default
     {
-        mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aVPN);
+        SvXMLUnitConverter::convertB3DVector(sStringBuffer, aVPN);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VPN, aStr);
     }
@@ -3583,7 +3583,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     ::basegfx::B3DVector aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
     if(aVUP != ::basegfx::B3DVector(0.0, 1.0, 0.0)) // write only when not default
     {
-        mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aVUP);
+        SvXMLUnitConverter::convertB3DVector(sStringBuffer, aVUP);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VUP, aStr);
     }
@@ -3696,7 +3696,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         aPropName += aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= xLightDir;
         aLightDirection = ::basegfx::B3DVector(xLightDir.DirectionX, xLightDir.DirectionY, xLightDir.DirectionZ);
-        mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aLightDirection);
+        SvXMLUnitConverter::convertB3DVector(sStringBuffer, aLightDirection);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIRECTION, aStr);
 
@@ -4336,7 +4336,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         {
                                             ::basegfx::B3DVector aVec3D( aExtrusionFirstLightDirection.DirectionX, aExtrusionFirstLightDirection.DirectionY,
                                                 aExtrusionFirstLightDirection.DirectionZ );
-                                            rUnitConverter.convertB3DVector( aStrBuffer, aVec3D );
+                                            SvXMLUnitConverter::convertB3DVector( aStrBuffer, aVec3D );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_FIRST_LIGHT_DIRECTION, aStr );
                                         }
@@ -4349,7 +4349,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         {
                                             ::basegfx::B3DVector aVec3D( aExtrusionSecondLightDirection.DirectionX, aExtrusionSecondLightDirection.DirectionY,
                                                 aExtrusionSecondLightDirection.DirectionZ );
-                                            rUnitConverter.convertB3DVector( aStrBuffer, aVec3D );
+                                            SvXMLUnitConverter::convertB3DVector( aStrBuffer, aVec3D );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_SECOND_LIGHT_DIRECTION, aStr );
                                         }
@@ -4405,7 +4405,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         {
                                             ::basegfx::B3DVector aVec3D( aExtrusionRotationCenter.DirectionX, aExtrusionRotationCenter.DirectionY,
                                                 aExtrusionRotationCenter.DirectionZ );
-                                            rUnitConverter.convertB3DVector( aStrBuffer, aVec3D );
+                                            SvXMLUnitConverter::convertB3DVector( aStrBuffer, aVec3D );
                                             aStr = aStrBuffer.makeStringAndClear();
                                             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_EXTRUSION_ROTATION_CENTER, aStr );
                                         }

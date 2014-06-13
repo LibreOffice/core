@@ -371,7 +371,7 @@ namespace xmloff
 
                 // let the formatter of the export context build a string
                 OUStringBuffer sBuffer;
-                m_rContext.getGlobalContext().GetMM100UnitConverter().convertEnum(sBuffer, (sal_uInt16)nCurrentValue, _pValueMap);
+                SvXMLUnitConverter::convertEnum(sBuffer, (sal_uInt16)nCurrentValue, _pValueMap);
 
                 AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
             }

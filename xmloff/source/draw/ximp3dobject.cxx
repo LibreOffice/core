@@ -133,7 +133,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
             case XML_TOK_3DCUBEOBJ_MINEDGE:
             {
                 ::basegfx::B3DVector aNewVec;
-                GetImport().GetMM100UnitConverter().convertB3DVector(aNewVec, sValue);
+                SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maMinEdge)
                 {
@@ -145,7 +145,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
             case XML_TOK_3DCUBEOBJ_MAXEDGE:
             {
                 ::basegfx::B3DVector aNewVec;
-                GetImport().GetMM100UnitConverter().convertB3DVector(aNewVec, sValue);
+                SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maMaxEdge)
                 {
@@ -235,7 +235,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
             case XML_TOK_3DSPHEREOBJ_CENTER:
             {
                 ::basegfx::B3DVector aNewVec;
-                GetImport().GetMM100UnitConverter().convertB3DVector(aNewVec, sValue);
+                SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maCenter)
                 {
@@ -247,7 +247,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
             case XML_TOK_3DSPHEREOBJ_SIZE:
             {
                 ::basegfx::B3DVector aNewVec;
-                GetImport().GetMM100UnitConverter().convertB3DVector(aNewVec, sValue);
+                SvXMLUnitConverter::convertB3DVector(aNewVec, sValue);
 
                 if(aNewVec != maSize)
                 {

@@ -485,7 +485,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     Reference < drawing::XMasterPagesSupplier > xMasterPagesSupplier(GetModel(), UNO_QUERY);
     if(xMasterPagesSupplier.is())
     {
-        mxDocMasterPages = mxDocMasterPages.query( xMasterPagesSupplier->getMasterPages() );
+        mxDocMasterPages.set(xMasterPagesSupplier->getMasterPages(), css::uno::UNO_QUERY);
         if(mxDocMasterPages.is())
         {
             mnDocMasterPageCount = mxDocMasterPages->getCount();
@@ -497,7 +497,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const Reference< lang::XComponent 
     Reference <XDrawPagesSupplier> xDrawPagesSupplier(GetModel(), UNO_QUERY);
     if(xDrawPagesSupplier.is())
     {
-        mxDocDrawPages = mxDocDrawPages.query( xDrawPagesSupplier->getDrawPages() );
+        mxDocDrawPages.set(xDrawPagesSupplier->getDrawPages(), css::uno::UNO_QUERY);
         if(mxDocDrawPages.is())
         {
             mnDocDrawPageCount = mxDocDrawPages->getCount();

@@ -397,7 +397,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             mrGlobalChartTypeUsedBySeries = (maSeriesChartTypeName.equals( maGlobalChartTypeName ));
         sal_Int32 nCoordinateSystemIndex = 0;//so far we can only import one coordinate system
         m_xSeries.set(
-            mrImportHelper.GetNewDataSeries( mxNewDoc, nCoordinateSystemIndex, maSeriesChartTypeName, ! mrGlobalChartTypeUsedBySeries ));
+            SchXMLImportHelper::GetNewDataSeries( mxNewDoc, nCoordinateSystemIndex, maSeriesChartTypeName, ! mrGlobalChartTypeUsedBySeries ));
         Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( SchXMLTools::GetNewLabeledDataSequence(), uno::UNO_QUERY_THROW );
 
         if( bIsCandleStick )
@@ -477,7 +477,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
             if( pStylesCtxt )
             {
                 const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
-                    mrImportHelper.GetChartFamilyID(), msAutoStyleName );
+                    SchXMLImportHelper::GetChartFamilyID(), msAutoStyleName );
 
                 const XMLPropStyleContext* pPropStyleContext = dynamic_cast< const XMLPropStyleContext * >( pStyle );
 
@@ -808,7 +808,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
                     {
                         rCurrStyleName = iStyle->msStyleName;
                         rpStyle = pStylesCtxt->FindStyleChildContext(
-                            rImportHelper.GetChartFamilyID(), rCurrStyleName );
+                            SchXMLImportHelper::GetChartFamilyID(), rCurrStyleName );
                     }
 
                     //set style to series
@@ -1057,7 +1057,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                     {
                         rCurrStyleName = iStyle->msSeriesStyleNameForDonuts;
                         rpStyle = pStylesCtxt->FindStyleChildContext(
-                            rImportHelper.GetChartFamilyID(), rCurrStyleName );
+                            SchXMLImportHelper::GetChartFamilyID(), rCurrStyleName );
                     }
 
                     // note: SvXMLStyleContext::FillPropertySet is not const
@@ -1082,7 +1082,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 {
                     rCurrStyleName = iStyle->msStyleName;
                     rpStyle = pStylesCtxt->FindStyleChildContext(
-                        rImportHelper.GetChartFamilyID(), rCurrStyleName );
+                        SchXMLImportHelper::GetChartFamilyID(), rCurrStyleName );
                 }
 
                 // note: SvXMLStyleContext::FillPropertySet is not const

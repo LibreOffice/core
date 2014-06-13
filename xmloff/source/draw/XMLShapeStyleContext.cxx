@@ -175,7 +175,7 @@ void XMLShapeStyleContext::FillPropertySet( const Reference< beans::XPropertySet
             DBG_ASSERT( pListStyle, "list-style not found for shape style" );
             if( pListStyle )
             {
-                uno::Reference< container::XIndexReplace > xNumRule( pListStyle->CreateNumRule( GetImport().GetModel() ) );
+                uno::Reference< container::XIndexReplace > xNumRule( SvxXMLListStyleContext::CreateNumRule( GetImport().GetModel() ) );
                 pListStyle->FillUnoNumRule(xNumRule, NULL /* const SvI18NMap * ??? */ );
                 property->maValue <<= xNumRule;
             }
