@@ -1256,12 +1256,12 @@ public:
                 ss << ", ";
             vSubArguments[i]->GenSlidingWindowDecl(ss);
         }
-        ss << ") {\n\t";
-        ss << "double tmp = " << GetBottom() <<";\n\t";
-        ss << "int gid0 = get_global_id(0);\n\t";
+        ss << ") {\n";
+        ss << "double tmp = " << GetBottom() <<";\n";
+        ss << "int gid0 = get_global_id(0);\n";
         if (isAverage())
-            ss << "int nCount = 0;\n\t";
-        ss << "double tmpBottom;\n\t";
+            ss << "int nCount = 0;\n";
+        ss << "double tmpBottom;\n";
         unsigned i = vSubArguments.size();
         while (i--)
         {
@@ -1292,60 +1292,52 @@ public:
 
                 if (pCur->GetType() == formula::svSingleVectorRef)
                 {
-#ifdef  ISNAN
                     const formula::SingleVectorRefToken* pSVR =
                         static_cast< const formula::SingleVectorRefToken* >(pCur);
-                    ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n\t\t";
-#else
-#endif
+                    ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
                 }
                 else if (pCur->GetType() == formula::svDouble)
                 {
-#ifdef  ISNAN
-                    ss << "{\n\t\t";
-#endif
-                }
-                else
-                {
+                    ss << "{\n";
                 }
             }
-#ifdef  ISNAN
             if(ocPush==vSubArguments[i]->GetFormulaToken()->GetOpCode())
             {
-                ss << "tmpBottom = " << GetBottom() << ";\n\t\t";
+                ss << "tmpBottom = " << GetBottom() << ";\n";
                 ss << "if (isNan(";
                 ss << vSubArguments[i]->GenSlidingWindowDeclRef();
-                ss << "))\n\t\t\t";
-                ss << "tmp = ";
-                ss << Gen2("tmpBottom", "tmp") << ";\n\t\t";
-                ss << "else{\n\t\t\t";
-                ss << "tmp = ";
+                ss << "))\n";
+                if (  ZeroReturnZero() )
+                    ss << "    return 0;\n";
+                else
+                {
+                    ss << "    tmp = ";
+                    ss << Gen2("tmpBottom", "tmp") << ";\n";
+                }
+                ss << "else{\n";
+                ss << "        tmp = ";
                 ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
-                ss << ";\n\t\t\t";
-                ss << "}\n\t";
-                ss << "}\n\t";
+                ss << ";\n";
+                ss << "    }\n";
+                ss << "}\n";
+                if ( vSubArguments[i]->GetFormulaToken()->GetType() ==
+                formula::svSingleVectorRef&& ZeroReturnZero() )
+                {
+                    ss << "else{\n";
+                    ss << "        return 0;\n";
+                    ss << "    }\n";
+                }
             }
             else
             {
                 ss << "tmp = ";
                 ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
-                ss << ";\n\t";
+                ss << ";\n";
             }
-#else
-            ss << "tmp = ";
-            // Generate the operation in binary form
-            ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
-            ss << ";\n\t";
-#endif
         }
         ss << "return tmp";
-#ifdef  ISNAN
         if (isAverage())
             ss << "*pow((double)nCount,-1.0)";
-#else
-        if (isAverage())
-            ss << "/(double)"<<nItems;
-#endif
         ss << ";\n}";
     }
     virtual bool isAverage() const { return false; }
@@ -1535,6 +1527,11 @@ public:
                                     static_cast< const formula::SingleVectorRefToken*>
                                     (vSubArguments[i]->GetFormulaToken());
                                 temp3<<pSVR->GetArrayLength();
+                                temp3 << ")||isNan("<<vSubArguments[i]
+                                ->GenSlidingWindowDeclRef();
+                            temp3 << ")?0:";
+                            temp3 << vSubArguments[i]->GenSlidingWindowDeclRef();
+                            temp3  << ")";
                             }
                             else if(vSubArguments[i]->GetFormulaToken()->GetType() ==
                                     formula::svDoubleVectorRef){
@@ -1542,12 +1539,13 @@ public:
                                     static_cast< const formula::DoubleVectorRefToken*>
                                     (vSubArguments[i]->GetFormulaToken());
                                 temp3<<pSVR->GetArrayLength();
-                            }
-                            temp3 << ")||isNan("<<vSubArguments[i]
+                              temp3 << ")||isNan("<<vSubArguments[i]
                                 ->GenSlidingWindowDeclRef(true);
                             temp3 << ")?0:";
                             temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
                             temp3  << ")";
+                            }
+
                         }
                         else
                             temp3 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
@@ -1604,6 +1602,11 @@ public:
                                 static_cast< const formula::SingleVectorRefToken*>
                                 (vSubArguments[i]->GetFormulaToken());
                             temp4<<pSVR->GetArrayLength();
+                            temp4 << ")||isNan("<<vSubArguments[i]
+                                ->GenSlidingWindowDeclRef();
+                            temp4 << ")?0:";
+                            temp4 << vSubArguments[i]->GenSlidingWindowDeclRef();
+                            temp4  << ")";
                         }
                         else if(vSubArguments[i]->GetFormulaToken()->GetType() ==
                                 formula::svDoubleVectorRef)
@@ -1612,12 +1615,13 @@ public:
                                 static_cast< const formula::DoubleVectorRefToken*>
                                 (vSubArguments[i]->GetFormulaToken());
                             temp4<<pSVR->GetArrayLength();
+                            temp4 << ")||isNan("<<vSubArguments[i]
+                                ->GenSlidingWindowDeclRef(true);
+                            temp4 << ")?0:";
+                            temp4 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+                            temp4  << ")";
                         }
-                        temp4 << ")||isNan("<<vSubArguments[i]
-                            ->GenSlidingWindowDeclRef(true);
-                        temp4 << ")?0:";
-                        temp4 << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-                        temp4  << ")";
+
                     }
                     else
                     {
@@ -1752,6 +1756,7 @@ public:
         return lhs + "*" + rhs;
     }
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "fmul"; }
+    virtual bool ZeroReturnZero() {return true;};
 };
 
 /// Technically not a reduction, but fits the framework.
@@ -2020,9 +2025,20 @@ public:
             ss << ")";
         } else {
             if (mvSubArguments.size() != 2)
-                throw Unhandled();
-            ss << "(" << mpCodeGen->Gen2(mvSubArguments[0]->GenSlidingWindowDeclRef(true),
-                         mvSubArguments[1]->GenSlidingWindowDeclRef(true)) << ")";
+                    throw Unhandled();
+            bool bArgument1_NeedNested =
+                        (mvSubArguments[0]->GetFormulaToken()->GetType()
+                                == formula::svSingleVectorRef)? false:true;
+            bool bArgument2_NeedNested =
+                        (mvSubArguments[1]->GetFormulaToken()->GetType()
+                                == formula::svSingleVectorRef) ? false:true;
+            ss << "(";
+            ss << mpCodeGen->
+                      Gen2(mvSubArguments[0]
+                             ->GenSlidingWindowDeclRef(bArgument1_NeedNested),
+                           mvSubArguments[1]
+                             ->GenSlidingWindowDeclRef(bArgument2_NeedNested));
+             ss << ")";
         }
         return ss.str();
     }
