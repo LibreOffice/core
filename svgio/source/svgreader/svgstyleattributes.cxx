@@ -510,7 +510,7 @@ namespace svgio
                             else
                             {
                                 // choose default mapping
-                                aMapPrimitivesToUnitRange = rRatio.createLinearMapping(aUnitRange, *pViewBox);
+                                aMapPrimitivesToUnitRange = SvgAspectRatio::createLinearMapping(aUnitRange, *pViewBox);
                             }
                         }
                         else
@@ -800,7 +800,7 @@ namespace svgio
                             else
                             {
                                 // choose default mapping
-                                rMarkerTransform = rRatio.createLinearMapping(aTargetRange, aPrimitiveRange);
+                                rMarkerTransform = SvgAspectRatio::createLinearMapping(aTargetRange, aPrimitiveRange);
                             }
                         }
 
