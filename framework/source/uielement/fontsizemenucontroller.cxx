@@ -175,7 +175,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 
         if ( !aFontSizeNames.IsEmpty() )
         {
-            if ( pAry == pFontList->GetStdSizeAry() )
+            if ( pAry == FontList::GetStdSizeAry() )
             {
                 // for scalable fonts all font size names
                 sal_uLong nCount = aFontSizeNames.Count();
