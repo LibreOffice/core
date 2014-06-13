@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
                 ::exit(99);
         }
         // This call improves performance by approx 5x
-        cin.sync_with_stdio(false);
+        std::ios_base::sync_with_stdio(false);
 
         const char * outputFile(argv[2]);
         char inputBuffer[MAXLINE];

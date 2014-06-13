@@ -122,7 +122,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     {
         HelpParser aParser( aArgs.m_sInputFile );
         hasNoError =
-            aParser.CreatePO(
+            HelpParser::CreatePO(
                 aArgs.m_sOutputFile, aArgs.m_sInputFile,
                 new XMLFile( OString('0') ), "help" );
     }
