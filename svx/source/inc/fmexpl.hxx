@@ -260,7 +260,7 @@ public:
     void SetForm( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm )
     {
         m_xForm = xForm;
-        m_xContainer = m_xContainer.query( m_xForm );
+        m_xContainer.set(m_xForm, css::uno::UNO_QUERY);
         newObject( m_xForm );
     }
 

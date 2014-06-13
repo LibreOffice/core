@@ -926,7 +926,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             {
                 FormControlFactory factory;
 
-                OUString sLabel = factory.getDefaultUniqueName_ByComponentType(
+                OUString sLabel = FormControlFactory::getDefaultUniqueName_ByComponentType(
                     Reference< XNameAccess >( xCols, UNO_QUERY_THROW ), xNewCol );
                 xNewCol->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel ) );
                 xNewCol->setPropertyValue( FM_PROP_NAME, makeAny( sLabel ) );

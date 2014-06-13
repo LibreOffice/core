@@ -517,7 +517,7 @@ namespace svxform
                         }
                         break;
                         default:
-                            if (pFormShell->GetImpl()->isControlConversionSlot(nSlotId))
+                            if (FmXFormShell::isControlConversionSlot(nSlotId))
                             {
                                 FmControlData* pCurrent = (FmControlData*)(*m_arrCurrentSelection.begin())->GetUserData();
                                 if ( pFormShell->GetImpl()->executeControlConversionSlot( pCurrent->GetFormComponent(), nSlotId ) )

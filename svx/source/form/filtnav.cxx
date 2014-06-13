@@ -1365,7 +1365,7 @@ sal_Int8 FmFilterNavigator::AcceptDrop( const AcceptDropEvent& rEvt )
     if (!m_aControlExchange.isDragSource())
         return DND_ACTION_NONE;
 
-    if (!m_aControlExchange->hasFormat(GetDataFlavorExVector()))
+    if (!OFilterItemExchange::hasFormat(GetDataFlavorExVector()))
         return DND_ACTION_NONE;
 
     // do we conain the formitem?

@@ -1042,7 +1042,7 @@ FmUndoContainerAction::FmUndoContainerAction(FmFormModel& _rMod,
     if ( xCont.is() && xElem.is() )
     {
         // normalize
-        m_xElement = m_xElement.query( xElem );
+        m_xElement.set(xElem, css::uno::UNO_QUERY);
         if ( m_eAction == Removed )
         {
             if (m_nIndex >= 0)
@@ -1235,7 +1235,7 @@ void FmUndoModelReplaceAction::Undo()
         Reference< XChild > xCurrentAsChild( xCurrentModel, UNO_QUERY );
         Reference< XNameContainer > xCurrentsParent;
         if ( xCurrentAsChild.is() )
-            xCurrentsParent = xCurrentsParent.query( xCurrentAsChild->getParent() );
+            xCurrentsParent.set(xCurrentAsChild->getParent(), css::uno::UNO_QUERY);
         DBG_ASSERT( xCurrentsParent.is(), "FmUndoModelReplaceAction::Undo: invalid current model!" );
 
         if ( xCurrentsParent.is() )

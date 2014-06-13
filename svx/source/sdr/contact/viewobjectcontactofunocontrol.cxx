@@ -1082,7 +1082,7 @@ namespace sdr { namespace contact {
 
         m_pOutputDeviceForWindow = &_rDevice;
         m_aControl = aControl;
-        m_xContainer = m_xContainer.query( _rPageView.getControlContainer( _rDevice ) );
+        m_xContainer.set(_rPageView.getControlContainer( _rDevice ), css::uno::UNO_QUERY);
         DBG_ASSERT( (   m_xContainer.is()                                           // either have a XControlContainer
                     ||  (   ( !_rPageView.getControlContainer( _rDevice ).is() )    // or don't have any container,
                         &&  ( dynamic_cast< const Window* >( &_rDevice ) == NULL )  // which is allowed for non-Window instances only

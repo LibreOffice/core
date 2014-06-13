@@ -80,7 +80,7 @@ namespace drawinglayer
                     }
                     else
                     {
-                        aPrefSize = Application::GetDefaultDevice()->LogicToLogic(aPrefSize, aGraphic.GetPrefMapMode(), MAP_100TH_MM);
+                        aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aGraphic.GetPrefMapMode(), MAP_100TH_MM);
                     }
 
                     const double fOffsetX((aScale.getX() - aPrefSize.getWidth()) / 2.0);

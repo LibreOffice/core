@@ -471,7 +471,7 @@ namespace svx
             {
                 Reference< XPropertySet > xModelProps;
                 if ( _rxControl.is() )
-                    xModelProps = xModelProps.query( _rxControl->getModel() );
+                    xModelProps.set(_rxControl->getModel(), css::uno::UNO_QUERY);
                 Reference< XPropertySetInfo > xModelPropInfo;
                 if ( xModelProps.is() )
                     xModelPropInfo = xModelProps->getPropertySetInfo();
@@ -1224,7 +1224,7 @@ namespace svx
 
         // remember this control
         m_xActiveControl = _rxControl;
-        m_xActiveTextComponent = m_xActiveTextComponent.query( _rxControl );
+        m_xActiveTextComponent.set(_rxControl, css::uno::UNO_QUERY);
         m_bActiveControlIsReadOnly = lcl_determineReadOnly( m_xActiveControl );
         m_bActiveControlIsRichText = lcl_isRichText( m_xActiveControl );
 

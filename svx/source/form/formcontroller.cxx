@@ -3586,7 +3586,7 @@ bool FormController::checkFormComponentValidity( OUString& /* [out] */ _rFirstIn
                 continue;
 
             _rFirstInvalidityExplanation = xValidator->explainInvalid( xValidatable->getCurrentValue() );
-            _rxFirstInvalidModel = _rxFirstInvalidModel.query( xValidatable );
+            _rxFirstInvalidModel.set(xValidatable, css::uno::UNO_QUERY);
             return false;
         }
     }

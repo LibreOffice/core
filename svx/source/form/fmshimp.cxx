@@ -2028,8 +2028,8 @@ bool FmXFormShell::setCurrentSelection( const InterfaceBag& _rSelection )
     // TODO: this should happen elsewhere, but not here - shouldn't it?
     if ( !m_aCurrentSelection.empty() )
     {
-        Reference< XChild > xCur; if ( m_aCurrentSelection.size() == 1 ) xCur = xCur.query( *m_aCurrentSelection.begin() );
-        Reference< XChild > xNew; if ( _rSelection.size() == 1 ) xNew = xNew.query( *_rSelection.begin() );
+        Reference< XChild > xCur; if ( m_aCurrentSelection.size() == 1 ) xCur.set(*m_aCurrentSelection.begin(), css::uno::UNO_QUERY);
+        Reference< XChild > xNew; if ( _rSelection.size() == 1 ) xNew.set(*_rSelection.begin(), css::uno::UNO_QUERY);
 
         // is there nothing to be selected, or the parents differ, and the parent of the current object
         // is a selection supplier, then deselect
@@ -2600,7 +2600,7 @@ void FmXFormShell::UpdateForms( bool _bInvalidate )
     if ( pPage )
     {
         if ( m_pShell->m_bDesignMode )
-            xForms = xForms.query( pPage->GetForms( false ) );
+            xForms.set(pPage->GetForms( false ), css::uno::UNO_QUERY);
     }
 
     if ( m_xForms != xForms )
@@ -3887,7 +3887,7 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
 
         // load all forms
         Reference< XIndexAccess >  xForms;
-        xForms = xForms.query( _pPage->GetForms( false ) );
+        xForms.set(_pPage->GetForms( false ), css::uno::UNO_QUERY);
 
         if ( xForms.is() )
         {

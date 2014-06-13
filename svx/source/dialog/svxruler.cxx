@@ -594,7 +594,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
             else if (nIndex == INDENT_RIGHT_MARGIN)
                 nIndentValue = mpParaItem->GetRight();
 
-            double fValue = pEditWin->LogicToLogic(Size(nIndentValue, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
+            double fValue = OutputDevice::LogicToLogic(Size(nIndentValue, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
             fValue = rtl::math::round(fValue / aUnitData.nTickUnit, aNoDecimalPlaces);
 
             SetQuickHelpText(OUString::number(fValue) + " " + sUnit);
@@ -610,9 +610,9 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
             if (aSelection.nAryPos + 1 >= aColumnItem.Count())
                 break;
 
-            double fStart = pEditWin->LogicToLogic(Size(aColumnItem[aSelection.nAryPos].nEnd,       0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
+            double fStart = OutputDevice::LogicToLogic(Size(aColumnItem[aSelection.nAryPos].nEnd,       0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
             fStart = rtl::math::round(fStart / aUnitData.nTickUnit, aNoDecimalPlaces);
-            double fEnd   = pEditWin->LogicToLogic(Size(aColumnItem[aSelection.nAryPos + 1].nStart, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
+            double fEnd   = OutputDevice::LogicToLogic(Size(aColumnItem[aSelection.nAryPos + 1].nStart, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
             fEnd = rtl::math::round(fEnd / aUnitData.nTickUnit, aNoDecimalPlaces);
 
             SetQuickHelpText(
@@ -630,7 +630,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
             else
                 break;
 
-            double fValue = pEditWin->LogicToLogic(Size(nLeft, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
+            double fValue = OutputDevice::LogicToLogic(Size(nLeft, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
             fValue = rtl::math::round(fValue / aUnitData.nTickUnit, aNoDecimalPlaces);
             SetQuickHelpText(OUString::number(fValue) + " " + sUnit);
 
@@ -646,7 +646,7 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
             else
                 break;
 
-            double fValue = pEditWin->LogicToLogic(Size(nRight, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
+            double fValue = OutputDevice::LogicToLogic(Size(nRight, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
             fValue = rtl::math::round(fValue / aUnitData.nTickUnit, aNoDecimalPlaces);
             SetQuickHelpText(OUString::number(fValue) + " " + sUnit);
 
@@ -2083,9 +2083,9 @@ long SvxRuler::RoundToCurrentMapMode(long lValue) const
     RulerUnitData aUnitData = GetCurrentRulerUnit();
     double aRoundingFactor = aUnitData.nTickUnit / aUnitData.nTick1;
 
-    long lNewValue = pEditWin->LogicToLogic(Size(lValue, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
+    long lNewValue = OutputDevice::LogicToLogic(Size(lValue, 0), pEditWin->GetMapMode(), GetCurrentMapMode()).Width();
     lNewValue = (rtl::math::round(lNewValue / (double) aUnitData.nTickUnit * aRoundingFactor) / aRoundingFactor) * aUnitData.nTickUnit;
-    return pEditWin->LogicToLogic(Size(lNewValue, 0), GetCurrentMapMode(), pEditWin->GetMapMode()).Width();
+    return OutputDevice::LogicToLogic(Size(lNewValue, 0), GetCurrentMapMode(), pEditWin->GetMapMode()).Width();
 }
 
 void SvxRuler::ApplyIndents()

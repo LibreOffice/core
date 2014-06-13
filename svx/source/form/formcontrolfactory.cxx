@@ -203,12 +203,12 @@ namespace svxform
                 Reference< XChild > xChild( _rxControlModel, UNO_QUERY );
                 Reference< XPropertySet > xForm;
                 if ( xChild.is() )
-                    xForm = xForm.query( xChild->getParent() );
+                    xForm.set(xChild->getParent(), css::uno::UNO_QUERY);
 
                 if ( Reference< XGridColumnFactory >( xForm, UNO_QUERY ).is() )
                 {   // hmm. the model is a grid column, in real
-                    xChild = xChild.query( xForm );
-                    xForm = xForm.query( xChild->getParent() );
+                    xChild.set(xForm, css::uno::UNO_QUERY);
+                    xForm.set(xChild->getParent(), css::uno::UNO_QUERY);
                 }
 
                 OSL_ENSURE( xForm.is(), "lcl_getDataSourceIndirectProperties: could not determine the form!" );
@@ -219,7 +219,7 @@ namespace svxform
 
                 Reference< XPropertySet > xDsProperties;
                 if ( !sDataSourceName.isEmpty() )
-                    xDsProperties = xDsProperties.query( OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext ) );
+                    xDsProperties.set(OStaticDataAccessTools().getDataSource( sDataSourceName, _rContext ), css::uno::UNO_QUERY);
                 if ( xDsProperties.is() )
                     xDsProperties->getPropertyValue("Info") >>= aInfo;
             }

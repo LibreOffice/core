@@ -1137,7 +1137,7 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
                     if( aSet.GetItemState( pMap->nWID ) != SFX_ITEM_SET )
                     {
                         // Default aus ItemPool holen
-                        if(GetModel()->GetItemPool().IsWhich(pMap->nWID))
+                        if(SfxItemPool::IsWhich(pMap->nWID))
                             aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                     }
 
@@ -1226,7 +1226,7 @@ Any SAL_CALL Cell::getPropertyValue( const OUString& PropertyName ) throw(Unknow
                 if(!aSet.Count())
                 {
                     // Default aus ItemPool holen
-                    if(GetModel()->GetItemPool().IsWhich(pMap->nWID))
+                    if(SfxItemPool::IsWhich(pMap->nWID))
                         aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                 }
 
@@ -1559,7 +1559,7 @@ Any SAL_CALL Cell::getPropertyDefault( const OUString& aPropertyName ) throw(Unk
 
         default:
         {
-            if(  GetModel()->GetItemPool().IsWhich(pMap->nWID) )
+            if( SfxItemPool::IsWhich(pMap->nWID) )
             {
                 SfxItemSet aSet( GetModel()->GetItemPool(), pMap->nWID, pMap->nWID);
                 aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));

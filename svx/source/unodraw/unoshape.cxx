@@ -638,7 +638,7 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
                         }
                         else
                         {
-                            if(rSet.GetPool()->IsWhich(pEntry->nWID))
+                            if(SfxItemPool::IsWhich(pEntry->nWID))
                                 rSet.Put(rSet.GetPool()->GetDefaultItem(pEntry->nWID));
                             // setzen
                             SvxItemPropertySet_setPropertyValue(rPropSet, pEntry, *pUsrAny, rSet);
@@ -1715,7 +1715,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 if( pSet->GetItemState( pMap->nWID ) != SFX_ITEM_SET )
                 {
                     // Default aus ItemPool holen
-                    if(mpModel->GetItemPool().IsWhich(pMap->nWID))
+                    if(SfxItemPool::IsWhich(pMap->nWID))
                         pSet->Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
                 }
 
@@ -1811,7 +1811,7 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             if(!aSet.Count())
             {
                 // Default aus ItemPool holen
-                if(mpModel->GetItemPool().IsWhich(pMap->nWID))
+                if(SfxItemPool::IsWhich(pMap->nWID))
                     aSet.Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
             }
 
@@ -3096,7 +3096,7 @@ uno::Any SAL_CALL SvxShape::_getPropertyDefault( const OUString& aPropertyName )
     }
 
     // Default aus ItemPool holen
-    if(!mpModel->GetItemPool().IsWhich(pMap->nWID))
+    if(!SfxItemPool::IsWhich(pMap->nWID))
         throw beans::UnknownPropertyException();
 
     SfxItemSet aSet( mpModel->GetItemPool(),    pMap->nWID, pMap->nWID);

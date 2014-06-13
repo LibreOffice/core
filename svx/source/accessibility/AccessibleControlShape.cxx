@@ -156,7 +156,7 @@ namespace {
         DBG_ASSERT( _pView, "lcl_getControlContainer: invalid view!" );
         if ( _pView  && _pView->GetSdrPageView())
         {
-            xReturn = xReturn.query( _pView->GetSdrPageView()->GetControlContainer( *_pWin ) );
+            xReturn.set(_pView->GetSdrPageView()->GetControlContainer( *_pWin ), css::uno::UNO_QUERY);
         }
         return xReturn;
     }
@@ -706,7 +706,7 @@ bool AccessibleControlShape::ensureControlModelAccess()
     {
         Reference< XControlShape > xShape( mxShape, UNO_QUERY );
         if ( xShape.is() )
-            m_xControlModel = m_xControlModel.query( xShape->getControl() );
+            m_xControlModel.set(xShape->getControl(), css::uno::UNO_QUERY);
 
         if ( m_xControlModel.is() )
             m_xModelPropsMeta = m_xControlModel->getPropertySetInfo();

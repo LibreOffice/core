@@ -587,7 +587,7 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
                     Reference< XDataSource > xFormDS(xConnAsChild->getParent(), UNO_QUERY);
                     if (xFormDS.is())
                     {
-                        xDSProps = xDSProps.query(xFormDS);
+                        xDSProps.set(xFormDS, css::uno::UNO_QUERY);
                         if (xDSProps.is())
                             xDSProps->getPropertyValue(FM_PROP_NAME) >>= sFormDataSourceName;
                     }

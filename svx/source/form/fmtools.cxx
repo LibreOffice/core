@@ -131,7 +131,7 @@ void displayException(const Any& _rExcept, Window* _pParent)
     try
     {
         // the parent window
-        Window* pParentWindow = _pParent ? _pParent : GetpApp()->GetDefDialogParent();
+        Window* pParentWindow = _pParent ? _pParent : Application::GetDefDialogParent();
         Reference< XWindow > xParentWindow = VCLUnoHelper::GetInterface(pParentWindow);
 
         Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create(::comphelper::getProcessComponentContext(), "", xParentWindow, _rExcept);
@@ -253,9 +253,9 @@ void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResu
     else
         m_xMoveOperations   = _rxCursor;
 
-    m_xBookmarkOperations   = m_xBookmarkOperations.query( m_xMoveOperations );
-    m_xColumnsSupplier      = m_xColumnsSupplier.query( m_xMoveOperations );
-    m_xPropertyAccess       = m_xPropertyAccess.query( m_xMoveOperations );
+    m_xBookmarkOperations.set(m_xMoveOperations, css::uno::UNO_QUERY);
+    m_xColumnsSupplier.set(m_xMoveOperations, css::uno::UNO_QUERY);
+    m_xPropertyAccess.set(m_xMoveOperations, css::uno::UNO_QUERY);
 
     if ( !m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is() || !m_xPropertyAccess.is() )
     {   // all or nothing !!
