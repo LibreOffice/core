@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include "vcl/salnativewidgets.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/svapp.hxx"
@@ -36,6 +38,8 @@
 #define NSAppKitVersionNumber10_7 1138
 #endif
 
+#if !HAVE_FEATURE_MACOSX_SANDBOX
+
 extern "C"
 {
     typedef CFTypeRef CUIRendererRef;
@@ -45,6 +49,8 @@ extern "C"
 @interface NSWindow(CoreUIRendererPrivate)
 + (CUIRendererRef)coreUIRenderer;
 @end
+
+#endif
 
 class AquaBlinker : public Timer
 {
@@ -535,6 +541,13 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_TOOLBAR:
         {
+#if HAVE_FEATURE_MACOSX_SANDBOX
+            HIThemeMenuItemDrawInfo aMenuItemDrawInfo;
+            aMenuItemDrawInfo.version = 0;
+            aMenuItemDrawInfo.state = kThemeMenuActive;
+            aMenuItemDrawInfo.itemType = kThemeMenuItemHierBackground;
+            HIThemeDrawMenuItem(&rc,&rc,&aMenuItemDrawInfo,mrContext,kHIThemeOrientationNormal,NULL);
+#else
             if (rControlRegion.Top() == 0 && nPart == PART_DRAW_BACKGROUND_HORZ)
             {
                 BOOL isMain = [mpFrame->getNSWindow() isMainWindow];
@@ -559,6 +572,7 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
                 aMenuItemDrawInfo.itemType = kThemeMenuItemHierBackground;
                 HIThemeDrawMenuItem(&rc, &rc, &aMenuItemDrawInfo, mrContext, kHIThemeOrientationNormal, NULL);
             }
+#endif
             bOK = true;
         }
         break;
