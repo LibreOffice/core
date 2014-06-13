@@ -245,7 +245,7 @@ void KDEXLib::setupEventLoop()
         old_gpoll = g_main_context_get_poll_func( NULL );
         g_main_context_set_poll_func( NULL, gpoll_wrapper );
         if( m_allowKdeDialogs )
-            m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
+            QApplication::clipboard()->setProperty( "useEventLoopWhenWaiting", true );
         return;
     }
 #endif

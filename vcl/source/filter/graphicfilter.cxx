@@ -844,7 +844,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
         if ( aPrefMapMode == MAP_PIXEL )
             aOriginalSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
         else
-            aOriginalSize = Application::GetDefaultDevice()->LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
+            aOriginalSize = OutputDevice::LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
         if ( !nLogicalWidth )
             nLogicalWidth = aOriginalSize.Width();
         if ( !nLogicalHeight )

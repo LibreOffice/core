@@ -55,7 +55,7 @@ void VCLKDEApplication::preDialogSetup()
     // (see the KDE VCL plug), then this won't happen.
     // We cannot simply release SolarMutex here, because the event loop started
     // by the file dialog would also call back to LO code.
-    assert( qApp->clipboard()->property( "useEventLoopWhenWaiting" ).toBool() == true );
+    assert( QApplication::clipboard()->property( "useEventLoopWhenWaiting" ).toBool() == true );
 }
 
 // various hacks to be performed after a Qt dialog has been closed

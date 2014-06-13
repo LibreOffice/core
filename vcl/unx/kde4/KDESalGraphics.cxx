@@ -146,7 +146,7 @@ namespace
         option->rect = !rect.isNull() ? rect : image->rect();
 
         QPainter painter(image);
-        kapp->style()->drawControl(element, option, &painter);
+        QApplication::style()->drawControl(element, option, &painter);
     }
 
     void draw( QStyle::PrimitiveElement element, QStyleOption* option, QImage* image, QStyle::State state, QRect rect = QRect())
@@ -155,7 +155,7 @@ namespace
         option->rect = !rect.isNull() ? rect : image->rect();
 
         QPainter painter(image);
-        kapp->style()->drawPrimitive(element, option, &painter);
+        QApplication::style()->drawPrimitive(element, option, &painter);
     }
 
     void draw( QStyle::ComplexControl element, QStyleOptionComplex* option, QImage* image, QStyle::State state )
@@ -164,7 +164,7 @@ namespace
         option->rect = image->rect();
 
         QPainter painter(image);
-        kapp->style()->drawComplexControl(element, option, &painter);
+        QApplication::style()->drawComplexControl(element, option, &painter);
     }
 
     void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State state)
@@ -279,7 +279,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         {
             QStyleOptionMenuItem option;
             if ( ( nControlState & CTRL_STATE_ROLLOVER )
-                && kapp->style()->styleHint( QStyle::SH_MenuBar_MouseTracking ) )
+                && QApplication::style()->styleHint( QStyle::SH_MenuBar_MouseTracking ) )
                 option.state |= QStyle::State_Selected;
 
             if ( nControlState & CTRL_STATE_SELECTED ) // Passing State_Sunken is currently not documented.
@@ -325,13 +325,13 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             // with at least Plastique style, so clip only to the separator itself
             // (QSize( 2, 2 ) is hardcoded in Qt)
             option.rect = m_image->rect();
-            QSize size = kapp->style()->sizeFromContents( QStyle::CT_MenuItem, &option, QSize( 2, 2 ));
+            QSize size = QApplication::style()->sizeFromContents( QStyle::CT_MenuItem, &option, QSize( 2, 2 ));
             QRect rect = m_image->rect();
             QPoint center = rect.center();
             rect.setHeight( size.height());
             rect.moveCenter( center );
             // don't paint over popup frame border (like the hack above, but here it can be simpler)
-            int fw = kapp->style()->pixelMetric( QStyle::PM_MenuPanelWidth );
+            int fw = QApplication::style()->pixelMetric( QStyle::PM_MenuPanelWidth );
             clipRegion = new QRegion( rect.translated( widgetRect.topLeft()).adjusted( fw, 0, -fw, 0 ));
             draw( QStyle::CE_MenuItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value), rect );
@@ -394,7 +394,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_THUMB_VERT) )
     {   // reduce paint area only to the handle area
-        const int width = kapp->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
+        const int width = QApplication::style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
         QRect rect( 0, 0, width, widgetRect.height());
         clipRegion = new QRegion( widgetRect.x(), widgetRect.y(), width, widgetRect.height());
 
@@ -677,7 +677,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
 
                 if ( controlState & CTRL_STATE_DEFAULT )
                 {
-                    int size = kapp->style()->pixelMetric(
+                    int size = QApplication::style()->pixelMetric(
                         QStyle::PM_ButtonDefaultIndicator, &styleOption );
 
                     boundingRect.adjust( -size, -size, size, size );
@@ -688,12 +688,12 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             break;
         case CTRL_EDITBOX:
         {
-            int nFontHeight    = kapp->fontMetrics().height();
-            //int nFrameSize     = kapp->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-            int nLayoutTop     = kapp->style()->pixelMetric(QStyle::PM_LayoutTopMargin);
-            int nLayoutBottom  = kapp->style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
-            int nLayoutLeft    = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
-            int nLayoutRight   = kapp->style()->pixelMetric(QStyle::PM_LayoutRightMargin);
+            int nFontHeight    = QApplication::fontMetrics().height();
+            //int nFrameSize     = QApplication::style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+            int nLayoutTop     = QApplication::style()->pixelMetric(QStyle::PM_LayoutTopMargin);
+            int nLayoutBottom  = QApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
+            int nLayoutLeft    = QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+            int nLayoutRight   = QApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin);
 
             int nMinHeight = (nFontHeight + nLayoutTop + nLayoutBottom);
             if( boundingRect.height() < nMinHeight )
@@ -712,15 +712,15 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             {
                 styleOption.state = vclStateValue2StateFlag(controlState, val);
 
-                contentRect.setWidth(kapp->style()->pixelMetric(
+                contentRect.setWidth(QApplication::style()->pixelMetric(
                     QStyle::PM_IndicatorWidth, &styleOption));
-                contentRect.setHeight(kapp->style()->pixelMetric(
+                contentRect.setHeight(QApplication::style()->pixelMetric(
                     QStyle::PM_IndicatorHeight, &styleOption));
 
                 contentRect.adjust(0, 0,
-                    2 * kapp->style()->pixelMetric(
+                    2 * QApplication::style()->pixelMetric(
                         QStyle::PM_FocusFrameHMargin, &styleOption),
-                    2 * kapp->style()->pixelMetric(
+                    2 * QApplication::style()->pixelMetric(
                         QStyle::PM_FocusFrameVMargin, &styleOption)
                     );
 
@@ -742,13 +742,13 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             {
                 case PART_ENTIRE_CONTROL:
                 {
-                    int size = kapp->style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth) - 2;
+                    int size = QApplication::style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth) - 2;
 
                     // find out the minimum size that should be used
                     // assume contents is a text ling
-                    int nHeight = kapp->fontMetrics().height();
+                    int nHeight = QApplication::fontMetrics().height();
                     QSize aContentSize( contentRect.width(), nHeight );
-                    QSize aMinSize = kapp->style()->
+                    QSize aMinSize = QApplication::style()->
                         sizeFromContents( QStyle::CT_ComboBox, &cbo, aContentSize );
                     if( aMinSize.height() > contentRect.height() )
                         contentRect.adjust( 0, 0, 0, aMinSize.height() - contentRect.height() );
@@ -762,7 +762,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     break;
                 }
                 case PART_BUTTON_DOWN:
-                    contentRect = kapp->style()->subControlRect(
+                    contentRect = QApplication::style()->subControlRect(
                         QStyle::CC_ComboBox, &cbo, QStyle::SC_ComboBoxArrow );
 
                     contentRect.translate( boundingRect.left(), boundingRect.top() );
@@ -770,7 +770,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     retVal = true;
                     break;
                 case PART_SUB_EDIT:
-                    contentRect = kapp->style()->subControlRect(
+                    contentRect = QApplication::style()->subControlRect(
                         QStyle::CC_ComboBox, &cbo, QStyle::SC_ComboBoxEditField );
 
                     contentRect.translate( boundingRect.left(), boundingRect.top() );
@@ -793,7 +793,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             switch ( part )
             {
                 case PART_BUTTON_UP:
-                    contentRect = kapp->style()->subControlRect(
+                    contentRect = QApplication::style()->subControlRect(
                         QStyle::CC_SpinBox, &sbo, QStyle::SC_SpinBoxUp );
                     contentRect.translate( boundingRect.left(), boundingRect.top() );
                     retVal = true;
@@ -801,7 +801,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     break;
 
                 case PART_BUTTON_DOWN:
-                    contentRect = kapp->style()->subControlRect(
+                    contentRect = QApplication::style()->subControlRect(
                         QStyle::CC_SpinBox, &sbo, QStyle::SC_SpinBoxDown );
                     retVal = true;
                     contentRect.translate( boundingRect.left(), boundingRect.top() );
@@ -809,7 +809,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     break;
 
                 case PART_SUB_EDIT:
-                    contentRect = kapp->style()->subControlRect(
+                    contentRect = QApplication::style()->subControlRect(
                         QStyle::CC_SpinBox, &sbo, QStyle::SC_SpinBoxEditField );
                     retVal = true;
                     contentRect.translate( boundingRect.left(), boundingRect.top() );
@@ -824,13 +824,13 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
             int h, w;
             switch ( part ) {
             case PART_MENU_ITEM_CHECK_MARK:
-                h = kapp->style()->pixelMetric(QStyle::PM_IndicatorHeight);
-                w = kapp->style()->pixelMetric(QStyle::PM_IndicatorWidth);
+                h = QApplication::style()->pixelMetric(QStyle::PM_IndicatorHeight);
+                w = QApplication::style()->pixelMetric(QStyle::PM_IndicatorWidth);
                 retVal = true;
                 break;
             case PART_MENU_ITEM_RADIO_MARK:
-                h = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
-                w = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
+                h = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
+                w = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
                 retVal = true;
                 break;
             }
@@ -859,14 +859,14 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         }
         case CTRL_RADIOBUTTON:
         {
-            const int h = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
-            const int w = kapp->style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
+            const int h = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorHeight);
+            const int w = QApplication::style()->pixelMetric(QStyle::PM_ExclusiveIndicatorWidth);
 
             contentRect = QRect(boundingRect.left(), boundingRect.top(), w, h);
             contentRect.adjust(0, 0,
-                2 * kapp->style()->pixelMetric(
+                2 * QApplication::style()->pixelMetric(
                     QStyle::PM_FocusFrameHMargin, &styleOption),
-                2 * kapp->style()->pixelMetric(
+                2 * QApplication::style()->pixelMetric(
                     QStyle::PM_FocusFrameVMargin, &styleOption)
                 );
             boundingRect = contentRect;
@@ -876,7 +876,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         }
         case CTRL_SLIDER:
         {
-            const int w = kapp->style()->pixelMetric(QStyle::PM_SliderLength);
+            const int w = QApplication::style()->pixelMetric(QStyle::PM_SliderLength);
             if( part == PART_THUMB_HORZ )
             {
                 contentRect = QRect(boundingRect.left(), boundingRect.top(), w, boundingRect.height());
@@ -916,7 +916,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 QRect rect = contentRect;
                 rect.moveTo( 0, 0 );
                 option.rect = rect;
-                rect = kapp->style()->subControlRect( QStyle::CC_ScrollBar, &option,
+                rect = QApplication::style()->subControlRect( QStyle::CC_ScrollBar, &option,
                     QStyle::SC_ScrollBarGroove );
                 rect.translate( contentRect.topLeft()); // reverse the workaround above
                 contentRect = boundingRect = rect;
@@ -980,7 +980,7 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
         options.minimum = 0;
         options.sliderPosition = options.sliderValue = 4;
         options.pageStep = 2;
-        QStyle::SubControl control = kapp->style()->hitTestComplexControl( QStyle::CC_ScrollBar, &options, pos );
+        QStyle::SubControl control = QApplication::style()->hitTestComplexControl( QStyle::CC_ScrollBar, &options, pos );
         if( nPart == PART_BUTTON_UP || nPart == PART_BUTTON_LEFT )
             rIsInside = ( control == QStyle::SC_ScrollBarSubLine );
         else // DOWN, RIGHT

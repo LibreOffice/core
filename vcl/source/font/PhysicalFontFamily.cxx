@@ -217,7 +217,7 @@ void PhysicalFontFamily::InitMatchData( const utl::FontSubstConfiguration& rFont
     OUString aShortName;
     OUString aMatchFamilyName(maMatchFamilyName);
     // get font attributes from the decorated font name
-    rFontSubst.getMapName( rSearchName, aShortName, aMatchFamilyName,
+    utl::FontSubstConfiguration::getMapName( rSearchName, aShortName, aMatchFamilyName,
                             meMatchWeight, meMatchWidth, mnMatchType );
     maMatchFamilyName = aMatchFamilyName;
     const utl::FontNameAttr* pFontAttr = rFontSubst.getSubstInfo( rSearchName );

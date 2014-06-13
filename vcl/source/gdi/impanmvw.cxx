@@ -42,7 +42,7 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         mbHMirr         ( maSz.Width() < 0L ),
         mbVMirr         ( maSz.Height() < 0L )
 {
-    mpParent->ImplIncAnimCount();
+    Animation::ImplIncAnimCount();
 
     // Mirrored horizontally?
     if( mbHMirr )
@@ -97,7 +97,7 @@ ImplAnimView::~ImplAnimView()
     delete mpBackground;
     delete mpRestore;
 
-    mpParent->ImplDecAnimCount();
+    Animation::ImplDecAnimCount();
 }
 
 bool ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const

@@ -64,7 +64,7 @@ Image::Image( const ResId& rResId ) :
         if( nObjMask & RSC_IMAGE_IMAGEBITMAP )
         {
             aBmpEx = BitmapEx( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
-            pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+            pResMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
         }
 
         if( nObjMask & RSC_IMAGE_MASKBITMAP )
@@ -75,7 +75,7 @@ Image::Image( const ResId& rResId ) :
                 aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskBitmap );
             }
 
-            pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+            pResMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
         }
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
@@ -86,7 +86,7 @@ Image::Image( const ResId& rResId ) :
                 aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );
             }
 
-            pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+            pResMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
         }
         if( ! aBmpEx.IsEmpty() )
             ImplInit( aBmpEx );
@@ -306,7 +306,7 @@ ImageList::ImageList( const ResId& rResId ) :
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
             spMaskColor.reset( new Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) ) );
 
-        pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+        pResMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
 
         if( nObjMask & RSC_IMAGELIST_IDLIST )
         {

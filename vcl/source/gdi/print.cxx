@@ -1799,7 +1799,7 @@ void Printer::updatePrinters()
             {
                 DataChangedEvent aDCEvt( DATACHANGED_PRINTER );
                 pApp->DataChanged( aDCEvt );
-                pApp->NotifyAllWindows( aDCEvt );
+                Application::NotifyAllWindows( aDCEvt );
             }
         }
         else

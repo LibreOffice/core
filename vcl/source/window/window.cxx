@@ -271,7 +271,7 @@ Window::~Window()
                 aTempStr.append(aErrorStr.toString());
                 OSL_FAIL(aTempStr.getStr());
                 // abort in debug builds, must be fixed!
-                GetpApp()->Abort(OStringToOUString(
+                Application::Abort(OStringToOUString(
                                      aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
             }
         }
@@ -294,7 +294,7 @@ Window::~Window()
             aTempStr.append(") with live SystemWindows destroyed: ");
             aTempStr.append(aErrorStr.toString());
             OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstChild )
@@ -309,7 +309,7 @@ Window::~Window()
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
 
         if ( mpWindowImpl->mpFirstOverlap )
@@ -324,7 +324,7 @@ Window::~Window()
                 pTempWin = pTempWin->mpWindowImpl->mpNext;
             }
             OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
 
         Window* pMyParent = this;
@@ -342,7 +342,7 @@ Window::~Window()
             aTempStr.append(OUStringToOString(GetText(), RTL_TEXTENCODING_UTF8));
             aTempStr.append(") still in TaskPanelList!");
             OSL_FAIL( aTempStr.getStr() );
-            GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
+            Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8));   // abort in debug builds, this must be fixed!
         }
     }
 #endif
@@ -411,7 +411,7 @@ Window::~Window()
             RTL_TEXTENCODING_UTF8)).
                 append(") with focussed child window destroyed ! THIS WILL LEAD TO CRASHES AND MUST BE FIXED !");
         OSL_FAIL( aTempStr.getStr() );
-        GetpApp()->Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ));   // abort in debug build version, this must be fixed!
+        Application::Abort(OStringToOUString(aTempStr.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ));   // abort in debug build version, this must be fixed!
 #endif
     }
 

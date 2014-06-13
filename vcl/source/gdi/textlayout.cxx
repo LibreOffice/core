@@ -143,7 +143,7 @@ namespace vcl
 
         // now that the Zoom is part of the map mode, reset the target device's font to the "unzoomed" version
         Font aDrawFont( m_aUnzoomedPointFont );
-        aDrawFont.SetSize( m_rTargetDevice.LogicToLogic( aDrawFont.GetSize(), MAP_POINT, eTargetMapUnit ) );
+        aDrawFont.SetSize( OutputDevice::LogicToLogic( aDrawFont.GetSize(), MAP_POINT, eTargetMapUnit ) );
         _rTargetDevice.SetFont( aDrawFont );
 
         // transfer font to the reference device

@@ -496,10 +496,10 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     pDummyVDev->Push();
 
                     MapMode aMapMode( aSubstitute.GetPrefMapMode() );
-                    Size aOutSize( pDummyVDev->LogicToLogic( pA->GetSize(), pDummyVDev->GetMapMode(), aMapMode ) );
+                    Size aOutSize( OutputDevice::LogicToLogic( pA->GetSize(), pDummyVDev->GetMapMode(), aMapMode ) );
                     aMapMode.SetScaleX( Fraction( aOutSize.Width(), aSubstitute.GetPrefSize().Width() ) );
                     aMapMode.SetScaleY( Fraction( aOutSize.Height(), aSubstitute.GetPrefSize().Height() ) );
-                    aMapMode.SetOrigin( pDummyVDev->LogicToLogic( pA->GetPoint(), pDummyVDev->GetMapMode(), aMapMode ) );
+                    aMapMode.SetOrigin( OutputDevice::LogicToLogic( pA->GetPoint(), pDummyVDev->GetMapMode(), aMapMode ) );
 
                     m_rOuterFace.SetMapMode( aMapMode );
                     pDummyVDev->SetMapMode( aMapMode );

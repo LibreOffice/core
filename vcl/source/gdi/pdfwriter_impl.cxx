@@ -7715,7 +7715,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         aLine.setLength( 0 );
         aLine.append( "q\n" );
 
-        nEmphMark = m_pReferenceDevice->ImplGetEmphasisMarkStyle( m_aCurrentPDFState.m_aFont );
+        nEmphMark = OutputDevice::ImplGetEmphasisMarkStyle( m_aCurrentPDFState.m_aFont );
         if ( nEmphMark & EMPHASISMARK_POS_BELOW )
             nEmphHeight = m_pReferenceDevice->mnEmphasisDescent;
         else
@@ -7902,7 +7902,7 @@ void PDFWriterImpl::drawText( const Rectangle& rRect, const OUString& rOrigStr, 
 
     OUString aStr = rOrigStr;
     if ( nStyle & TEXT_DRAW_MNEMONIC )
-        aStr = m_pReferenceDevice->GetNonMnemonicString( aStr, nMnemonicPos );
+        aStr = OutputDevice::GetNonMnemonicString( aStr, nMnemonicPos );
 
     // multiline text
     if ( nStyle & TEXT_DRAW_MULTILINE )

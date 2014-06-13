@@ -79,7 +79,7 @@ bool SalKDEDisplay::checkDirectInputEvent( XEvent* ev )
     if( ev->xany.type == XLIB_KeyPress || ev->xany.type == KeyRelease
         || ( ev->xany.type == ClientMessage && ev->xclient.message_type == xim_protocol ))
     {
-        if( qApp->activeWindow() == NULL )
+        if( QApplication::activeWindow() == NULL )
         {
             Dispatch(ev);
             return true;
