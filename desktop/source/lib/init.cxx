@@ -42,16 +42,10 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/ITiledRenderable.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <osl/module.hxx>
-
-// Dirty hack -- we go directly into sw -- ideally we need some sort of
-// layer to get the writer shell for tiled rendering
-#include <doc.hxx>
-#include <docsh.hxx>
-#include <unotxdoc.hxx>
-#include <viewsh.hxx>
 
 #include <salinst.hxx>
 
@@ -445,38 +439,32 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
+    ::vcl::ITiledRenderable* pDoc = dynamic_cast< ::vcl::ITiledRenderable* >( pDocument->mxComponent.get() );
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return;
+    }
 
     Application::AcquireSolarMutex(1);
-    switch (doc_getDocumentType(pThis))
     {
-    case LOK_DOCTYPE_TEXT:
-        {
-            SwXTextDocument* pTxtDoc = dynamic_cast< SwXTextDocument* >( pDocument->mxComponent.get() );
-            SwDocShell* pDocShell = pTxtDoc->GetDocShell();
-            SwDoc* pDoc = pDocShell->GetDoc();
-            SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
+        ImplSVData* pSVData = ImplGetSVData();
+        SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
+        pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
 
-            ImplSVData* pSVData = ImplGetSVData();
-            SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
-            pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
+        VirtualDevice aDevice(0, (sal_uInt16)32);
+        boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
+        aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
+                    Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
+                    aBuffer, true );
 
-            VirtualDevice aDevice(0, (sal_uInt16)32);
-            boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
-            aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
-                        Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                        aBuffer, true );
+        pDoc->paintTile(aDevice, nCanvasWidth, nCanvasHeight,
+                        nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-            pViewShell->PaintTile(aDevice, nCanvasWidth, nCanvasHeight,
-                                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+        SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(aDevice.getSalVirtualDevice());
+        basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
 
-            SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(aDevice.getSalVirtualDevice());
-            basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
-
-            *pRowStride = pBmpDev->getScanlineStride();
-        }
-        break;
-    default:
-        break;
+        *pRowStride = pBmpDev->getScanlineStride();
     }
     Application::ReleaseSolarMutex();
 }
@@ -487,20 +475,16 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    if (doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT)
+    ::vcl::ITiledRenderable* pDoc = dynamic_cast< ::vcl::ITiledRenderable* >( pDocument->mxComponent.get() );
+    if (pDoc)
     {
-        SwXTextDocument* pTxtDoc = dynamic_cast< SwXTextDocument* >( pDocument->mxComponent.get() );
-        SwDocShell* pDocShell = pTxtDoc->GetDocShell();
-        SwDoc* pDoc = pDocShell->GetDoc();
-        SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
-        Size aDocumentSize = pViewShell->GetDocSize();
+        Size aDocumentSize = pDoc->getDocumentSize();
         *pWidth = aDocumentSize.Width();
         *pHeight = aDocumentSize.Height();
     }
     else
     {
-        pWidth = 0;
-        pHeight = 0;
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
     }
 }
 
