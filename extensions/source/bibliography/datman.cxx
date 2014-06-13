@@ -66,7 +66,6 @@
 #include "bibconfig.hxx"
 #include "bibbeam.hxx"
 #include "bib.hrc"
-#include "datman.hrc"
 #include "bibliography.hrc"
 #include <connectivity/dbtools.hxx>
 
@@ -194,72 +193,38 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
 class MappingDialog_Impl : public ModalDialog
 {
     BibDataManager* pDatMan;
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
-    FixedLine       aMapGB;
-    FixedText       aIdentifierFT;
-    ListBox         aIdentifierLB;
-    FixedText       aAuthorityTypeFT;
-    ListBox         aAuthorityTypeLB;
-    FixedText       aAuthorFT;
-    ListBox         aAuthorLB;
-    FixedText       aTitleFT;
-    ListBox         aTitleLB;
-    FixedText       aMonthFT;
-    ListBox         aMonthLB;
-    FixedText       aYearFT;
-    ListBox         aYearLB;
-    FixedText       aISBNFT;
-    ListBox         aISBNLB;
-    FixedText       aBooktitleFT;
-    ListBox         aBooktitleLB;
-    FixedText       aChapterFT;
-    ListBox         aChapterLB;
-    FixedText       aEditionFT;
-    ListBox         aEditionLB;
-    FixedText       aEditorFT;
-    ListBox         aEditorLB;
-    FixedText       aHowpublishedFT;
-    ListBox         aHowpublishedLB;
-    FixedText       aInstitutionFT;
-    ListBox         aInstitutionLB;
-    FixedText       aJournalFT;
-    ListBox         aJournalLB;
-    FixedText       aNoteFT;
-    ListBox         aNoteLB;
-    FixedText       aAnnoteFT;
-    ListBox         aAnnoteLB;
-    FixedText       aNumberFT;
-    ListBox         aNumberLB;
-    FixedText       aOrganizationsFT;
-    ListBox         aOrganizationsLB;
-    FixedText       aPagesFT;
-    ListBox         aPagesLB;
-    FixedText       aPublisherFT;
-    ListBox         aPublisherLB;
-    FixedText       aAddressFT;
-    ListBox         aAddressLB;
-    FixedText       aSchoolFT;
-    ListBox         aSchoolLB;
-    FixedText       aSeriesFT;
-    ListBox         aSeriesLB;
-    FixedText       aReportTypeFT;
-    ListBox         aReportTypeLB;
-    FixedText       aVolumeFT;
-    ListBox         aVolumeLB;
-    FixedText       aURLFT;
-    ListBox         aURLLB;
-    FixedText       aCustom1FT;
-    ListBox         aCustom1LB;
-    FixedText       aCustom2FT;
-    ListBox         aCustom2LB;
-    FixedText       aCustom3FT;
-    ListBox         aCustom3LB;
-    FixedText       aCustom4FT;
-    ListBox         aCustom4LB;
-    FixedText       aCustom5FT;
-    ListBox         aCustom5LB;
+    OKButton*       pOKBT;
+    ListBox*        pIdentifierLB;
+    ListBox*        pAuthorityTypeLB;
+    ListBox*        pAuthorLB;
+    ListBox*        pTitleLB;
+    ListBox*        pMonthLB;
+    ListBox*        pYearLB;
+    ListBox*        pISBNLB;
+    ListBox*        pBooktitleLB;
+    ListBox*        pChapterLB;
+    ListBox*        pEditionLB;
+    ListBox*        pEditorLB;
+    ListBox*        pHowpublishedLB;
+    ListBox*        pInstitutionLB;
+    ListBox*        pJournalLB;
+    ListBox*        pNoteLB;
+    ListBox*        pAnnoteLB;
+    ListBox*        pNumberLB;
+    ListBox*        pOrganizationsLB;
+    ListBox*        pPagesLB;
+    ListBox*        pPublisherLB;
+    ListBox*        pAddressLB;
+    ListBox*        pSchoolLB;
+    ListBox*        pSeriesLB;
+    ListBox*        pReportTypeLB;
+    ListBox*        pVolumeLB;
+    ListBox*        pURLLB;
+    ListBox*        pCustom1LB;
+    ListBox*        pCustom2LB;
+    ListBox*        pCustom3LB;
+    ListBox*        pCustom4LB;
+    ListBox*        pCustom5LB;
     ListBox*        aListBoxes[COLUMN_COUNT];
     OUString        sNone;
 
@@ -290,149 +255,80 @@ static sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
 }
 
 MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
-    ModalDialog(pParent, BibResId(RID_DLG_MAPPING) ),
+    ModalDialog(pParent, "MappingDialog", "modules/sbibliography/ui/mappingdialog.ui" ),
     pDatMan(pMan),
-    aOKBT(this,                 BibResId( BT_OK         )),
-    aCancelBT(this,             BibResId( BT_CANCEL     )),
-    aHelpBT(this,               BibResId( BT_HELP           )),
-
-    aMapGB(this,                BibResId( GB_MAPPING        )),
-
-    aIdentifierFT(this,         BibResId( FT_IDENTIFIER )),
-    aIdentifierLB(this,         BibResId( LB_IDENTIFIER )),
-    aAuthorityTypeFT(this,      BibResId( FT_AUTHORITYTYPE )),
-    aAuthorityTypeLB(this,      BibResId( LB_AUTHORITYTYPE )),
-    aAuthorFT(this,             BibResId( FT_AUTHOR     )),
-    aAuthorLB(this,             BibResId( LB_AUTHOR     )),
-    aTitleFT(this,              BibResId( FT_TITLE      )),
-    aTitleLB(this,              BibResId( LB_TITLE      )),
-    aMonthFT(this,              BibResId( FT_MONTH      )),
-    aMonthLB(this,              BibResId( LB_MONTH      )),
-    aYearFT(this,               BibResId( FT_YEAR           )),
-    aYearLB(this,               BibResId( LB_YEAR           )),
-    aISBNFT(this,               BibResId( FT_ISBN           )),
-    aISBNLB(this,               BibResId( LB_ISBN           )),
-    aBooktitleFT(this,          BibResId( FT_BOOKTITLE  )),
-    aBooktitleLB(this,          BibResId( LB_BOOKTITLE  )),
-    aChapterFT(this,            BibResId( FT_CHAPTER        )),
-    aChapterLB(this,            BibResId( LB_CHAPTER        )),
-    aEditionFT(this,            BibResId( FT_EDITION        )),
-    aEditionLB(this,            BibResId( LB_EDITION        )),
-    aEditorFT(this,             BibResId( FT_EDITOR     )),
-    aEditorLB(this,             BibResId( LB_EDITOR     )),
-    aHowpublishedFT(this,       BibResId( FT_HOWPUBLISHED   )),
-    aHowpublishedLB(this,       BibResId( LB_HOWPUBLISHED   )),
-    aInstitutionFT(this,        BibResId( FT_INSTITUTION    )),
-    aInstitutionLB(this,        BibResId( LB_INSTITUTION    )),
-    aJournalFT(this,            BibResId( FT_JOURNAL        )),
-    aJournalLB(this,            BibResId( LB_JOURNAL        )),
-    aNoteFT(this,               BibResId( FT_NOTE           )),
-    aNoteLB(this,               BibResId( LB_NOTE           )),
-    aAnnoteFT(this,             BibResId( FT_ANNOTE     )),
-    aAnnoteLB(this,             BibResId( LB_ANNOTE     )),
-    aNumberFT(this,             BibResId( FT_NUMBER     )),
-    aNumberLB(this,             BibResId( LB_NUMBER     )),
-    aOrganizationsFT(this,      BibResId( FT_ORGANIZATIONS )),
-    aOrganizationsLB(this,      BibResId( LB_ORGANIZATIONS )),
-    aPagesFT(this,              BibResId( FT_PAGES      )),
-    aPagesLB(this,              BibResId( LB_PAGES      )),
-    aPublisherFT(this,          BibResId( FT_PUBLISHER  )),
-    aPublisherLB(this,          BibResId( LB_PUBLISHER  )),
-    aAddressFT(this,            BibResId( FT_ADDRESS        )),
-    aAddressLB(this,            BibResId( LB_ADDRESS        )),
-    aSchoolFT(this,             BibResId( FT_SCHOOL     )),
-    aSchoolLB(this,             BibResId( LB_SCHOOL     )),
-    aSeriesFT(this,             BibResId( FT_SERIES     )),
-    aSeriesLB(this,             BibResId( LB_SERIES     )),
-    aReportTypeFT(this,         BibResId( FT_REPORTTYPE )),
-    aReportTypeLB(this,         BibResId( LB_REPORTTYPE )),
-    aVolumeFT(this,             BibResId( FT_VOLUME     )),
-    aVolumeLB(this,             BibResId( LB_VOLUME     )),
-    aURLFT(this,                BibResId( FT_URL            )),
-    aURLLB(this,                BibResId( LB_URL            )),
-    aCustom1FT(this,            BibResId( FT_CUSTOM1        )),
-    aCustom1LB(this,            BibResId( LB_CUSTOM1        )),
-    aCustom2FT(this,            BibResId( FT_CUSTOM2        )),
-    aCustom2LB(this,            BibResId( LB_CUSTOM2        )),
-    aCustom3FT(this,            BibResId( FT_CUSTOM3        )),
-    aCustom3LB(this,            BibResId( LB_CUSTOM3        )),
-    aCustom4FT(this,            BibResId( FT_CUSTOM4        )),
-    aCustom4LB(this,            BibResId( LB_CUSTOM4        )),
-    aCustom5FT(this,            BibResId( FT_CUSTOM5        )),
-    aCustom5LB(this,            BibResId( LB_CUSTOM5        )),
-    sNone(BIB_RESSTR(ST_NONE)),
+    sNone("<none>"),
     bModified(false)
 {
-    FreeResource();
+    get(pOKBT, "ok");
+    get(pIdentifierLB, "identifierCombobox");
+    get(pAuthorityTypeLB, "authorityTypeCombobox");
+    get(pAuthorLB, "authorCombobox");
+    get(pTitleLB, "titleCombobox");
+    get(pMonthLB, "monthCombobox");
+    get(pYearLB, "yearCombobox");
+    get(pISBNLB, "ISBNCombobox");
+    get(pBooktitleLB, "bookTitleCombobox");
+    get(pChapterLB, "chapterCombobox");
+    get(pEditionLB, "editionCombobox");
+    get(pEditorLB, "editorCombobox");
+    get(pHowpublishedLB, "howPublishedCombobox");
+    get(pInstitutionLB, "institutionCombobox");
+    get(pJournalLB, "journalCombobox");
+    get(pNoteLB, "noteCombobox");
+    get(pAnnoteLB, "annoteCombobox");
+    get(pNumberLB, "numberCombobox");
+    get(pOrganizationsLB, "organizationCombobox");
+    get(pPagesLB, "pagesCombobox");
+    get(pPublisherLB, "publisherCombobox");
+    get(pAddressLB, "addressCombobox");
+    get(pSchoolLB, "schoolCombobox");
+    get(pSeriesLB, "seriesCombobox");
+    get(pReportTypeLB, "reportTypeCombobox");
+    get(pVolumeLB, "volumeCombobox");
+    get(pURLLB, "URLCombobox");
+    get(pCustom1LB, "custom1Combobox");
+    get(pCustom2LB, "custom2Combobox");
+    get(pCustom3LB, "custom3Combobox");
+    get(pCustom4LB, "custom4Combobox");
+    get(pCustom5LB, "custom5Combobox");
 
-    aIdentifierFT.SetText(BIB_RESSTR(ST_IDENTIFIER));
-    aAuthorityTypeFT.SetText(BIB_RESSTR(ST_AUTHTYPE));
-    aAuthorFT.SetText(BIB_RESSTR(ST_AUTHOR));
-    aTitleFT.SetText(BIB_RESSTR(ST_TITLE));
-    aMonthFT.SetText(BIB_RESSTR(ST_MONTH));
-    aYearFT.SetText(BIB_RESSTR(ST_YEAR));
-    aISBNFT.SetText(BIB_RESSTR(ST_ISBN));
-    aBooktitleFT.SetText(BIB_RESSTR(ST_BOOKTITLE));
-    aChapterFT.SetText(BIB_RESSTR(ST_CHAPTER));
-    aEditionFT.SetText(BIB_RESSTR(ST_EDITION));
-    aEditorFT.SetText(BIB_RESSTR(ST_EDITOR));
-    aHowpublishedFT.SetText(BIB_RESSTR(ST_HOWPUBLISHED));
-    aInstitutionFT.SetText(BIB_RESSTR(ST_INSTITUTION));
-    aJournalFT.SetText(BIB_RESSTR(ST_JOURNAL));
-    aNoteFT.SetText(BIB_RESSTR(ST_NOTE));
-    aAnnoteFT.SetText(BIB_RESSTR(ST_ANNOTE));
-    aNumberFT.SetText(BIB_RESSTR(ST_NUMBER));
-    aOrganizationsFT.SetText(BIB_RESSTR(ST_ORGANIZATION));
-    aPagesFT.SetText(BIB_RESSTR(ST_PAGE));
-    aPublisherFT.SetText(BIB_RESSTR(ST_PUBLISHER));
-    aAddressFT.SetText(BIB_RESSTR(ST_ADDRESS));
-    aSchoolFT.SetText(BIB_RESSTR(ST_SCHOOL));
-    aSeriesFT.SetText(BIB_RESSTR(ST_SERIES));
-    aReportTypeFT.SetText(BIB_RESSTR(ST_REPORT));
-    aVolumeFT.SetText(BIB_RESSTR(ST_VOLUME));
-    aURLFT.SetText(BIB_RESSTR(ST_URL));
-    aCustom1FT.SetText(BIB_RESSTR(ST_CUSTOM1));
-    aCustom2FT.SetText(BIB_RESSTR(ST_CUSTOM2));
-    aCustom3FT.SetText(BIB_RESSTR(ST_CUSTOM3));
-    aCustom4FT.SetText(BIB_RESSTR(ST_CUSTOM4));
-    aCustom5FT.SetText(BIB_RESSTR(ST_CUSTOM5));
-
-    aOKBT.SetClickHdl(LINK(this, MappingDialog_Impl, OkHdl));
+    pOKBT->SetClickHdl(LINK(this, MappingDialog_Impl, OkHdl));
     OUString sTitle = GetText();
     sTitle = sTitle.replaceFirst("%1", pDatMan->getActiveDataTable());
     SetText(sTitle);
 
-    aListBoxes[0] = &aIdentifierLB;
-    aListBoxes[1] = &aAuthorityTypeLB;
-    aListBoxes[2] = &aAuthorLB;
-    aListBoxes[3] = &aTitleLB;
-    aListBoxes[4] = &aYearLB;
-    aListBoxes[5] = &aISBNLB;
-    aListBoxes[6] = &aBooktitleLB;
-    aListBoxes[7] = &aChapterLB;
-    aListBoxes[8] = &aEditionLB;
-    aListBoxes[9] = &aEditorLB;
-    aListBoxes[10] = &aHowpublishedLB;
-    aListBoxes[11] = &aInstitutionLB;
-    aListBoxes[12] = &aJournalLB;
-    aListBoxes[13] = &aMonthLB;
-    aListBoxes[14] = &aNoteLB;
-    aListBoxes[15] = &aAnnoteLB;
-    aListBoxes[16] = &aNumberLB;
-    aListBoxes[17] = &aOrganizationsLB;
-    aListBoxes[18] = &aPagesLB;
-    aListBoxes[19] = &aPublisherLB;
-    aListBoxes[20] = &aAddressLB;
-    aListBoxes[21] = &aSchoolLB;
-    aListBoxes[22] = &aSeriesLB;
-    aListBoxes[23] = &aReportTypeLB;
-    aListBoxes[24] = &aVolumeLB;
-    aListBoxes[25] = &aURLLB;
-    aListBoxes[26] = &aCustom1LB;
-    aListBoxes[27] = &aCustom2LB;
-    aListBoxes[28] = &aCustom3LB;
-    aListBoxes[29] = &aCustom4LB;
-    aListBoxes[30] = &aCustom5LB;
+    aListBoxes[0] = pIdentifierLB;
+    aListBoxes[1] = pAuthorityTypeLB;
+    aListBoxes[2] = pAuthorLB;
+    aListBoxes[3] = pTitleLB;
+    aListBoxes[4] = pYearLB;
+    aListBoxes[5] = pISBNLB;
+    aListBoxes[6] = pBooktitleLB;
+    aListBoxes[7] = pChapterLB;
+    aListBoxes[8] = pEditionLB;
+    aListBoxes[9] = pEditorLB;
+    aListBoxes[10] = pHowpublishedLB;
+    aListBoxes[11] = pInstitutionLB;
+    aListBoxes[12] = pJournalLB;
+    aListBoxes[13] = pMonthLB;
+    aListBoxes[14] = pNoteLB;
+    aListBoxes[15] = pAnnoteLB;
+    aListBoxes[16] = pNumberLB;
+    aListBoxes[17] = pOrganizationsLB;
+    aListBoxes[18] = pPagesLB;
+    aListBoxes[19] = pPublisherLB;
+    aListBoxes[20] = pAddressLB;
+    aListBoxes[21] = pSchoolLB;
+    aListBoxes[22] = pSeriesLB;
+    aListBoxes[23] = pReportTypeLB;
+    aListBoxes[24] = pVolumeLB;
+    aListBoxes[25] = pURLLB;
+    aListBoxes[26] = pCustom1LB;
+    aListBoxes[27] = pCustom2LB;
+    aListBoxes[28] = pCustom3LB;
+    aListBoxes[29] = pCustom4LB;
+    aListBoxes[30] = pCustom5LB;
 
     aListBoxes[0]->InsertEntry(sNone);
     Reference< XNameAccess >  xFields = getColumns( pDatMan->getForm() );
