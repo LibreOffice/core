@@ -149,6 +149,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
         //for further processing.
         mpShape->getCustomShapeProperties()->setShapeTypeOverride(true);
         mpShape->setServiceName("com.sun.star.text.TextFrame");
+        mpShape->setTextBox(true);
         OptValue<OUString> id  = rAttribs.getString(XML_id);
         OptValue<OUString> seq = rAttribs.getString(XML_seq);
         if (id.has() && seq.has())

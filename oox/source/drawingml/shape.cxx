@@ -820,6 +820,22 @@ Reference< XShape > Shape::createAndInsert(
                 //aShapeProps.setProperty(PROP_TextBox, uno::makeAny(true));
             }
 
+            if (aServiceName != "com.sun.star.text.TextFrame" && isLinkedTxbx())
+            {
+                uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
+                uno::Sequence<beans::PropertyValue> aGrabBag;
+                propertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
+                sal_Int32 length = aGrabBag.getLength();
+                aGrabBag.realloc( length + 3 );
+                aGrabBag[length].Name = "TxbxHasLink";
+                aGrabBag[length].Value = uno::makeAny(this->isLinkedTxbx());
+                aGrabBag[length + 1 ].Name = "Txbx-Id";
+                aGrabBag[length + 1 ].Value = uno::makeAny(this->getLinkedTxbxAttributes().id);
+                aGrabBag[length + 2 ].Name = "Txbx-Seq";
+                aGrabBag[length + 2 ].Value = uno::makeAny(this->getLinkedTxbxAttributes().seq);
+                propertySet->setPropertyValue("InteropGrabBag",uno::makeAny(aGrabBag));
+            }
+
             PropertySet( xSet ).setProperties( aShapeProps );
             if (mbLockedCanvas)
             {

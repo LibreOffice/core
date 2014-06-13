@@ -1881,6 +1881,14 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         xShapePropertySet->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ), uno::makeAny( false ) );
                         checkZOredrStatus = true;
                     }
+                    else if ( aGrabBag[i].Name == "TxbxHasLink" )
+                    {
+                        //Chaining of textboxes will happen in ~DomainMapper_Impl
+                        //i.e when all the textboxes are read and all its attributes
+                        //have been set ( basically the Name/LinkedDisplayName )
+                        //which is set in Graphic Import.
+                        m_vTextFramesForChaining.push_back(xShape);
+                    }
                 }
             }
             if (!m_bInHeaderFooterImport && !checkZOredrStatus)
@@ -2324,8 +2332,17 @@ void DomainMapper_Impl::ChainTextFrames()
             uno::Reference<text::XTextContent>  xTextContent1(*outer_itr, uno::UNO_QUERY_THROW);
             uno::Reference<beans::XPropertySet> xPropertySet1(xTextContent1, uno::UNO_QUERY);
             uno::Sequence<beans::PropertyValue> aGrabBag1;
-            xPropertySet1->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag1;
-            xPropertySet1->getPropertyValue("LinkDisplayName") >>= sName1;
+            uno::Reference<lang::XServiceInfo> xServiceInfo1(xPropertySet1, uno::UNO_QUERY);
+            if (xServiceInfo1->supportsService("com.sun.star.text.TextFrame"))
+            {
+                xPropertySet1->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag1;
+                xPropertySet1->getPropertyValue("LinkDisplayName") >>= sName1;
+            }
+            else
+            {
+                xPropertySet1->getPropertyValue("InteropGrabBag") >>= aGrabBag1;
+                xPropertySet1->getPropertyValue("ChainName") >>= sName1;
+            }
 
             lcl_getGrabBagValue( aGrabBag1, "Txbx-Id")  >>= nTxbxId1;
             lcl_getGrabBagValue( aGrabBag1, "Txbx-Seq") >>= nTxbxSeq1;
@@ -2337,8 +2354,17 @@ void DomainMapper_Impl::ChainTextFrames()
                 uno::Reference<text::XTextContent>  xTextContent2(*inner_itr, uno::UNO_QUERY_THROW);
                 uno::Reference<beans::XPropertySet> xPropertySet2(xTextContent2, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag2;
-                xPropertySet2->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag2;
-                xPropertySet2->getPropertyValue("LinkDisplayName") >>= sName2;
+                uno::Reference<lang::XServiceInfo> xServiceInfo2(xPropertySet1, uno::UNO_QUERY);
+                if (xServiceInfo2->supportsService("com.sun.star.text.TextFrame"))
+                {
+                    xPropertySet2->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag2;
+                    xPropertySet2->getPropertyValue("LinkDisplayName") >>= sName2;
+                }
+                else
+                {
+                    xPropertySet2->getPropertyValue("InteropGrabBag") >>= aGrabBag2;
+                    xPropertySet2->getPropertyValue("ChainName") >>= sName2;
+                }
 
                 lcl_getGrabBagValue( aGrabBag2, "Txbx-Id")  >>= nTxbxId2;
                 lcl_getGrabBagValue( aGrabBag2, "Txbx-Seq") >>= nTxbxSeq2;
