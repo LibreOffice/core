@@ -2283,7 +2283,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
                 sal_uInt32 nMirrorFlags;
                 OUString sCustomShapeType;
-                MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( mXShape, nMirrorFlags, sCustomShapeType );
+                MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( mXShape, nMirrorFlags, sCustomShapeType );
                 if ( sCustomShapeType == "col-502ad400" || sCustomShapeType == "col-60da8460" )
                 {   // sj: creating metafile for customshapes that can't be saved to ms format properly
                     ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );

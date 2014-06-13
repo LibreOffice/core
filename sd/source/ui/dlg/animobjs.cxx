@@ -1047,7 +1047,7 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
         if ( aGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
             aTmpSizeLog = pDefDev->PixelToLogic( aGraphic.GetPrefSize(), aMap100 );
         else
-            aTmpSizeLog = pDefDev->LogicToLogic( aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), aMap100 );
+            aTmpSizeLog = OutputDevice::LogicToLogic( aGraphic.GetPrefSize(), aGraphic.GetPrefMapMode(), aMap100 );
 
         aMaxSizeLog.Width() = std::max( aMaxSizeLog.Width(), aTmpSizeLog.Width() );
         aMaxSizeLog.Height() = std::max( aMaxSizeLog.Height(), aTmpSizeLog.Height() );

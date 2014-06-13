@@ -329,12 +329,12 @@ bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     /* Maybe a QueryBox is opened ("update links?"), therefore the dialog
        becomes the current DefModalDialogParent */
-    ::Window* pDefParent = GetpApp()->GetDefDialogParent();
-    GetpApp()->SetDefDialogParent(pDlg->GetWindow());
+    ::Window* pDefParent = Application::GetDefDialogParent();
+    Application::SetDefDialogParent(pDlg->GetWindow());
 
     sal_uInt16 nRet = pDlg->Execute();
 
-    GetpApp()->SetDefDialogParent(pDefParent);
+    Application::SetDefDialogParent(pDefParent);
 
     mpDocSh->SetWaitCursor( true );
 

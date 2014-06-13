@@ -371,7 +371,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
             const FontDta &rFntDta = aTable[i];
             LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
                 rFntDta.nFallbackLang : rFntDta.nLang;
-            Font aFont = Application::GetDefaultDevice()->GetDefaultFont(
+            Font aFont = OutputDevice::GetDefaultFont(
                 rFntDta.nFontType, nLang, DEFAULTFONT_FLAGS_ONLYONE);
             mpEditEngineItemPool->SetPoolDefaultItem(
                 SvxFontItem(

@@ -252,7 +252,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(aBulletItem);
 
     // New BulletItem
-    pSSPool->PutNumBulletItem( pSheet, aBulletFont );
+    SdStyleSheetPool::PutNumBulletItem( pSheet, aBulletFont );
 
     SfxItemSet* pISet = NULL;
 

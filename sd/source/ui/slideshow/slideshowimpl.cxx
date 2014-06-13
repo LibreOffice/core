@@ -1119,7 +1119,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
     try
     {
         mxShow = Reference< XSlideShow >( createSlideShow(), UNO_QUERY_THROW );
-        mxView = mxView.createFromQuery( new SlideShowView(
+        mxView = comphelper::ImplementationReference<sd::SlideShowView, css::presentation::XSlideShowView>::createFromQuery( new SlideShowView(
                                              *mpShowWindow,
                                              mpDoc,
                                              meAnimationMode,

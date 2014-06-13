@@ -101,7 +101,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
         }
         else
         {
-            OUString aShortName( aDesc.GetImportFormatShortName( aDesc.GetFileFormat() ) );
+            OUString aShortName( GraphicDescriptor::GetImportFormatShortName( aDesc.GetFileFormat() ) );
             GraphicFilter &rGrfFilter = GraphicFilter::GetGraphicFilter();
             const OUString aName( rGrfFilter.GetImportFormatTypeName( rGrfFilter.GetImportFormatNumberForShortName( aShortName ) ) );
 

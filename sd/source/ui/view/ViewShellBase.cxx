@@ -326,9 +326,9 @@ void ViewShellBase::LateInit (const OUString& rsDefaultView)
 
             // Create the resource ids for the center pane and view.
             const Reference<drawing::framework::XResourceId> xCenterPaneId (
-                pHelper->CreateResourceId(FrameworkHelper::msCenterPaneURL));
+                FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL));
             const Reference<drawing::framework::XResourceId> xCenterViewId (
-                pHelper->CreateResourceId(sView, xCenterPaneId));
+                FrameworkHelper::CreateResourceId(sView, xCenterPaneId));
 
             // Request center pane and view.
             xConfigurationController->requestResourceActivation(xCenterPaneId, ResourceActivationMode_ADD);
@@ -1192,7 +1192,7 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
                 pFrameView->GetPageKindOnLoad());
             ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(mrBase));
             pHelper->RequestView(
-                pHelper->GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
+                FrameworkHelper::GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
                 FrameworkHelper::msCenterPaneURL);
             pHelper->RunOnConfigurationEvent("ConfigurationUpdateEnd", CurrentPageSetter(mrBase));
         }

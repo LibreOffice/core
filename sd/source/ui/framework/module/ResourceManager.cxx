@@ -61,7 +61,7 @@ ResourceManager::ResourceManager (
       mxConfigurationController(),
       mpActiveMainViewContainer(new MainViewContainer()),
       mxResourceId(rxResourceId),
-      mxMainViewAnchorId(FrameworkHelper::Instance(rxController)->CreateResourceId(
+      mxMainViewAnchorId(FrameworkHelper::CreateResourceId(
           FrameworkHelper::msCenterPaneURL)),
       msCurrentMainViewURL()
 {

@@ -519,9 +519,9 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
             ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*mpBase));
 
             // The slide sorter and the task panel are cacheable and relocatable.
-            maCacheableResources.push_back(pHelper->CreateResourceId(
+            maCacheableResources.push_back(FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftDrawPaneURL));
-            maCacheableResources.push_back(pHelper->CreateResourceId(
+            maCacheableResources.push_back(FrameworkHelper::CreateResourceId(
                 FrameworkHelper::msSlideSorterURL, FrameworkHelper::msLeftImpressPaneURL));
         }
 
