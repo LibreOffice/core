@@ -824,7 +824,7 @@ namespace drawinglayer
 
                             {
                                 const MapMode aMapMode100thmm(MAP_100TH_MM);
-                                const Size aBitmapSize(Application::GetDefaultDevice()->LogicToLogic(
+                                const Size aBitmapSize(OutputDevice::LogicToLogic(
                                     rGraphicPrimitive.getGraphicObject().GetPrefSize(),
                                     rGraphicPrimitive.getGraphicObject().GetPrefMapMode(), aMapMode100thmm));
                                 const double fDivX(aBitmapSize.Width() - rAttr.GetLeftCrop() - rAttr.GetRightCrop());
@@ -914,7 +914,7 @@ namespace drawinglayer
                                 pPDFControl->Location = aRectLogic;
 
                                 Size aFontSize(pPDFControl->TextFont.GetSize());
-                                aFontSize = mpOutputDevice->LogicToLogic(aFontSize, MapMode(MAP_POINT), mpOutputDevice->GetMapMode());
+                                aFontSize = OutputDevice::LogicToLogic(aFontSize, MapMode(MAP_POINT), mpOutputDevice->GetMapMode());
                                 pPDFControl->TextFont.SetSize(aFontSize);
 
                                 mpPDFExtOutDevData->BeginStructureElement(vcl::PDFWriter::Form);

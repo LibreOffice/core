@@ -2739,7 +2739,7 @@ namespace
                         aFontSize = Size(0, 16);
 
                         // convert to target MapUnit if not pixels
-                        aFontSize = Application::GetDefaultDevice()->LogicToLogic(
+                        aFontSize = OutputDevice::LogicToLogic(
                             aFontSize, MAP_PIXEL, rPropertyHolders.Current().getMapUnit());
 
                         aCorrectedFont.SetSize(aFontSize);
