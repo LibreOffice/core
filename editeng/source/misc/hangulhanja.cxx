@@ -650,7 +650,7 @@ namespace editeng
                 // something went wrong, has already been asserted
                 return;
 
-            if (m_pAntiImpl->IsUseSavedConversionDirectionState())
+            if (HangulHanjaConversion::IsUseSavedConversionDirectionState())
             {
                 m_ePrimaryConversionDirection = m_pAntiImpl->m_ePrimaryConversionDirectionSave;
                 m_bTryBothDirections = m_pAntiImpl->m_bTryBothDirectionsSave;
@@ -670,7 +670,7 @@ namespace editeng
         {
             //always open dialog if at least having a hangul or hanja text portion
             createDialog();
-            if(m_pAntiImpl->IsUseSavedConversionDirectionState())
+            if(HangulHanjaConversion::IsUseSavedConversionDirectionState())
                 ContinueConversion( false );
             else
                 implUpdateData();
@@ -743,10 +743,10 @@ namespace editeng
         {
             // check if language needs to be changed
             if ( m_pAntiImpl->GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL &&
-                !m_pAntiImpl->IsTraditional( m_nCurrentPortionLang ))
+                !HangulHanjaConversion::IsTraditional( m_nCurrentPortionLang ))
                 nNewUnitLang = LANGUAGE_CHINESE_TRADITIONAL;
             else if ( m_pAntiImpl->GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED &&
-                     !m_pAntiImpl->IsSimplified( m_nCurrentPortionLang ))
+                     !HangulHanjaConversion::IsSimplified( m_nCurrentPortionLang ))
                 nNewUnitLang = LANGUAGE_CHINESE_SIMPLIFIED;
             if (nNewUnitLang != LANGUAGE_NONE)
                 pNewUnitLang = &nNewUnitLang;

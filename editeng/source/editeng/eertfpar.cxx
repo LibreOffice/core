@@ -313,7 +313,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             {
                 sal_uInt32 nHeight  = ((SvxFontHeightItem*)pItem)->GetHeight();
                 long nNewHeight;
-                nNewHeight = mpEditEngine->GetRefDevice()->LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
+                nNewHeight = OutputDevice::LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
 
                 SvxFontHeightItem aFntHeightItem( nNewHeight, ((SvxFontHeightItem*)pItem)->GetProp(), aFntHeightIems[i] );
                 rSet.GetAttrSet().Put( aFntHeightItem );
