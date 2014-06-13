@@ -4330,8 +4330,14 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
     if(m_postponedDMLDrawing == NULL)
         return;
 
-    for( std::list< PostponedDrawing >::iterator it = m_postponedDMLDrawing->begin();
-         it != m_postponedDMLDrawing->end();
+    // Clear the list early, this method may be called recursively.
+    std::list<PostponedDrawing>* postponedDMLDrawing = m_postponedDMLDrawing;
+    m_postponedDMLDrawing = NULL;
+    std::list<PostponedOLE>* postponedOLE = m_postponedOLE;
+    m_postponedOLE = 0;
+
+    for( std::list< PostponedDrawing >::iterator it = postponedDMLDrawing->begin();
+         it != postponedDMLDrawing->end();
          ++it )
     {
         // Avoid w:drawing within another w:drawing.
@@ -4340,8 +4346,9 @@ void DocxAttributeOutput::WritePostponedDMLDrawing()
         else
             m_rExport.SdrExporter().writeDMLAndVMLDrawing(it->object, *(it->frame), *(it->point), m_anchorId++);
     }
-    delete m_postponedDMLDrawing;
-    m_postponedDMLDrawing = NULL;
+
+    delete postponedDMLDrawing;
+    m_postponedOLE = postponedOLE;
 }
 
 void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Point& rNdTopLeft )
