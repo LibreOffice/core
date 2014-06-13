@@ -39,12 +39,7 @@ public:
 
     void CopyTxtFld( SwTxtFld *pDest ) const;
 
-    void ExpandTxtFld() const;
-    void ExpandAlways()
-    {
-        m_aExpand += " "; // changing current value to assure that <ExpandTxtFld()> changes the value.
-        ExpandTxtFld();
-    }
+    void ExpandTxtFld( const bool bForceNotify = false ) const;
 
     // get and set TxtNode pointer
     SwTxtNode* GetpTxtNode() const

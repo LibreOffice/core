@@ -1975,7 +1975,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
         }
 
         if (bExpand)
-            pTxtFld->ExpandAlways();
+            pTxtFld->ExpandTxtFld( true );
     }
     SetModified();
 #endif
