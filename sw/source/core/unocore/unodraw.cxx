@@ -1201,6 +1201,11 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         SwTextBoxHelper::destroy(pFmt);
 
                 }
+                else if (pEntry->nWID == RES_CHAIN)
+                {
+                    if (pEntry->nMemberId == MID_CHAIN_NEXTNAME || pEntry->nMemberId == MID_CHAIN_PREVNAME)
+                        SwTextBoxHelper::syncProperty(pFmt, pEntry->nWID, pEntry->nMemberId, aValue);
+                }
                 // #i28749#
                 else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
                 {
