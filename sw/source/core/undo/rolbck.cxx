@@ -976,10 +976,10 @@ SwHistory::SwHistory( sal_uInt16 nInitSz )
 
 SwHistory::~SwHistory()
 {
+    Delete( 0 );
     std::vector<SwHistoryHint*>::const_iterator it;
     for(it = m_SwpHstry.begin(); it != m_SwpHstry.end(); ++it)
         delete *it;
-    Delete( 0 );
 }
 
 void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
