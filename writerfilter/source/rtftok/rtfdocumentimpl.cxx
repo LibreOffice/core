@@ -771,16 +771,29 @@ int RTFDocumentImpl::resolvePict(bool bInline)
 
     // Wrap it in an XShape.
     uno::Reference<drawing::XShape> xShape;
-    if (m_xModelFactory.is())
-        xShape.set(m_xModelFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPageSupplier> xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
-    if (xDrawSupplier.is())
+    xShape = m_pSdrImport->getCurrentShape();//Mapper().PopPendingShape();
+    if (xShape.is())
     {
-        uno::Reference< drawing::XShapes > xShapes(xDrawSupplier->getDrawPage(), uno::UNO_QUERY);
-        if (xShapes.is())
-            xShapes->add(xShape);
+        uno::Reference<lang::XServiceInfo> xSI(xShape, uno::UNO_QUERY_THROW);
+        assert(xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"));
     }
+    else
+    {
+        if (m_xModelFactory.is())
+            xShape.set(m_xModelFactory->createInstance(
+                "com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPageSupplier> const xDrawSupplier(
+                m_xDstDoc, uno::UNO_QUERY);
+        if (xDrawSupplier.is())
+        {
+            uno::Reference<drawing::XShapes> xShapes(
+                    xDrawSupplier->getDrawPage(), uno::UNO_QUERY);
+            if (xShapes.is())
+                xShapes->add(xShape);
+        }
+    }
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
 
     // check if the picture is in an OLE object and if the \objdata element is used
     // (see RTF_OBJECT in RTFDocumentImpl::dispatchDestination)
