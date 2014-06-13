@@ -982,7 +982,7 @@ SfxItemPresentation SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
     SdrFormatter aFmt((MapUnit)eCoreMetric,(MapUnit)ePresMetric);
     aFmt.TakeStr(nValue,rText);
     OUString aStr;
-    aFmt.TakeUnitStr((MapUnit)ePresMetric,aStr);
+    SdrFormatter::TakeUnitStr((MapUnit)ePresMetric,aStr);
     rText += " " + aStr;
     if (ePres==SFX_ITEM_PRESENTATION_COMPLETE) {
         OUString aStr2;
@@ -1374,7 +1374,7 @@ SfxItemPresentation SdrTextAniAmountItem::GetPresentation(
         OUString aStr;
 
         aFmt.TakeStr(nValue, rText);
-        aFmt.TakeUnitStr((MapUnit)ePresMetric, aStr);
+        SdrFormatter::TakeUnitStr((MapUnit)ePresMetric, aStr);
         rText += aStr;
     }
 

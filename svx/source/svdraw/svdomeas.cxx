@@ -176,7 +176,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
                         eMeasureUnit = eModUIUnit;
 
                     if(bShowUnit)
-                        pModel->TakeUnitStr(eMeasureUnit, aStr);
+                        SdrModel::TakeUnitStr(eMeasureUnit, aStr);
                 }
             }
 

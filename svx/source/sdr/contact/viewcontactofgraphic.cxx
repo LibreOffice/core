@@ -112,7 +112,7 @@ namespace sdr
             }
             else
             {
-                aPrefSize = Application::GetDefaultDevice()->LogicToLogic(aPrefSize, GetGrafObject().GetGrafPrefMapMode(), MAP_100TH_MM);
+                aPrefSize = OutputDevice::LogicToLogic(aPrefSize, GetGrafObject().GetGrafPrefMapMode(), MAP_100TH_MM);
             }
 
             // decompose object matrix to get single values
@@ -204,7 +204,7 @@ namespace sdr
                 }
                 else
                 {
-                    aPrefSize = Application::GetDefaultDevice()->LogicToLogic(aPrefSize, aDraftBitmap.GetPrefMapMode(), MAP_100TH_MM);
+                    aPrefSize = OutputDevice::LogicToLogic(aPrefSize, aDraftBitmap.GetPrefMapMode(), MAP_100TH_MM);
                 }
 
                 const double fBitmapScaling(2.0);

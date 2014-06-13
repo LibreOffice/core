@@ -1828,7 +1828,7 @@ void FmXGridPeer::elementReplaced(const ContainerEvent& evt) throw( RuntimeExcep
     Reference< XColumnsSupplier > xSuppColumns;
     CursorWrapper* pGridDataSource = pGrid->getDataSource();
     if ( pGridDataSource )
-        xSuppColumns = xSuppColumns.query( (Reference< XInterface >)( *pGridDataSource ) );
+        xSuppColumns.set((Reference< XInterface >)( *pGridDataSource ), css::uno::UNO_QUERY);
     Reference< XNameAccess > xColumnsByName;
     if ( xSuppColumns.is() )
         xColumnsByName = xSuppColumns->getColumns();
@@ -2147,7 +2147,7 @@ void FmXGridPeer::dispose() throw( RuntimeException, std::exception )
         xInterceptor->setSlaveDispatchProvider( NULL );
 
         // start over with the next chain element
-        xInterceptor = xInterceptor.query( xSlave );
+        xInterceptor.set(xSlave, css::uno::UNO_QUERY);
     }
 
     DisConnectFromDispatcher();

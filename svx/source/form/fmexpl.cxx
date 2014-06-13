@@ -235,8 +235,8 @@ void FmEntryData::newObject( const ::com::sun::star::uno::Reference< ::com::sun:
 {
     // do not just copy, normalize it
     m_xNormalizedIFace = Reference< XInterface >( _rxIFace, UNO_QUERY );
-    m_xProperties = m_xProperties.query( m_xNormalizedIFace );
-    m_xChild = m_xChild.query( m_xNormalizedIFace );
+    m_xProperties.set(m_xNormalizedIFace, css::uno::UNO_QUERY);
+    m_xChild.set(m_xNormalizedIFace, css::uno::UNO_QUERY);
 }
 
 
