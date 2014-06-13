@@ -269,7 +269,9 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             pType->GetValue( aCalc );
         }
     }
-    mpTxtFld->ExpandTxtFld();
+
+    const bool bForceNotify = (pOld == NULL) && (pNew == NULL);
+    mpTxtFld->ExpandTxtFld( bForceNotify );
 }
 
 bool SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
@@ -326,14 +328,15 @@ bool SwTxtFld::IsFldInDoc() const
            && GetpTxtNode()->GetNodes().IsDocNodes();
 }
 
-void SwTxtFld::ExpandTxtFld() const
+void SwTxtFld::ExpandTxtFld(const bool bForceNotify) const
 {
     OSL_ENSURE( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFmtFld().GetField();
     const OUString aNewExpand( pFld->ExpandField(m_pTxtNode->GetDoc()->IsClipBoard()) );
 
-    if( aNewExpand == m_aExpand )
+    if (!bForceNotify &&
+        aNewExpand == m_aExpand)
     {
         // Bei Seitennummernfeldern
         const sal_uInt16 nWhich = pFld->GetTyp()->Which();
