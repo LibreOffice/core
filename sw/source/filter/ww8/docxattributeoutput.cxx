@@ -305,6 +305,96 @@ static void lcl_deleteAndResetTheLists( ::sax_fastparser::FastAttributeList* &pS
     }
 }
 
+void DocxAttributeOutput::PopulateFrameProperties(const SwFrmFmt* pFrmFmt, const Size& rSize)
+{
+
+    sax_fastparser::FastAttributeList* attrList = m_pSerializer->createAttrList();
+
+    awt::Point aPos(pFrmFmt->GetHoriOrient().GetPos(), pFrmFmt->GetVertOrient().GetPos());
+
+    attrList->add( FSNS( XML_w, XML_w), OString::number(rSize.Width()));
+    attrList->add( FSNS( XML_w, XML_h), OString::number(rSize.Height()));
+
+    attrList->add( FSNS( XML_w, XML_x), OString::number(aPos.X));
+    attrList->add( FSNS( XML_w, XML_y), OString::number(aPos.Y));
+
+    const char* relativeFromH;
+    const char* relativeFromV;
+    switch (pFrmFmt->GetVertOrient().GetRelationOrient())
+    {
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            relativeFromV = "margin";
+            break;
+        case text::RelOrientation::PAGE_FRAME:
+            relativeFromV = "page";
+            break;
+        case text::RelOrientation::FRAME:
+            relativeFromV = "paragraph";
+            break;
+        case text::RelOrientation::TEXT_LINE:
+        default:
+            relativeFromV = "line";
+            break;
+    }
+
+    switch (pFrmFmt->GetHoriOrient().GetRelationOrient())
+    {
+        case text::RelOrientation::PAGE_PRINT_AREA:
+            relativeFromH = "margin";
+            break;
+        case text::RelOrientation::PAGE_FRAME:
+            relativeFromH = "page";
+            break;
+        case text::RelOrientation::CHAR:
+            relativeFromH = "character";
+            break;
+        case text::RelOrientation::PAGE_RIGHT:
+            relativeFromH = "page";
+            break;
+        case text::RelOrientation::FRAME:
+        default:
+            relativeFromH = "column";
+            break;
+    }
+    attrList->add( FSNS( XML_w, XML_vAnchor), relativeFromV);
+    attrList->add( FSNS( XML_w, XML_hAnchor), relativeFromH);
+    attrList->add( FSNS( XML_w, XML_wrap), "notBeside");
+    attrList->add( FSNS( XML_w, XML_hRule), "exact");
+
+    sax_fastparser::XFastAttributeListRef xAttrList(attrList);
+    m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
+}
+
+bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrmFmt& rFrmFmt)
+{
+    uno::Reference< drawing::XShape > xShape;
+    const SdrObject* pSdrObj = rFrmFmt.FindRealSdrObject();
+    if (pSdrObj)
+        xShape = uno::Reference< drawing::XShape >(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySet > xPropertySet(xShape, uno::UNO_QUERY);
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+    if (xPropertySet.is())
+        xPropSetInfo = xPropertySet->getPropertySetInfo();
+    uno::Any aFrameProperties ;
+    bool bFrameProperties = 0;
+    if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= propList;
+        for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+        {
+            OUString propName = propList[nProp].Name;
+            if (propName == "ParaFrameProperties")
+            {
+                aFrameProperties = propList[nProp].Value ;
+                break;
+            }
+        }
+    }
+    aFrameProperties >>= bFrameProperties;
+    return bFrameProperties;
+}
+
 void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
     // write the paragraph properties + the run, already in the correct order
@@ -323,59 +413,71 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             sw::Frame aFrame = m_aFramesOfParagraph[nIndex];
             m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
 
-            m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
-            m_pSerializer->startElementNS(XML_mc, XML_Choice,
-                    XML_Requires, "wps",
-                    FSEND);
-            /**
-               This is to avoid AltenateContent within another AlternateContent.
-               So when Choice is Open, only write the DML Drawing instead of both DML
-               and VML Drawing in another AlternateContent.
-            **/
-            SetAlternateContentChoiceOpen( true );
-            /** FDO#71834 :
-               We should probably be renaming the function
-               switchHeaderFooter to something like SaveRetrieveTableReference.
-               Save the table reference attributes before calling WriteDMLTextFrame,
-               otherwise the StartParagraph function will use the previous existing
-               table reference attributes since the variable is being shared.
-            */
-            switchHeaderFooter(true,1);
-            /** Save the table info's before writing the shape
-                as there might be a new table that might get
-                spawned from within the VML & DML block and alter
-                the contents.
-            */
-            ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
-            //Reset the table infos after saving.
-            m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+            const SwFrmFmt& rFrmFmt = aFrame.GetFrmFmt();
+
+            if (!TextBoxIsFramePr(rFrmFmt) || m_bWritingHeaderFooter)
+            {
+                m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
+                m_pSerializer->startElementNS(XML_mc, XML_Choice,
+                        XML_Requires, "wps",
+                        FSEND);
+                /**
+                    This is to avoid AltenateContent within another AlternateContent.
+                       So when Choice is Open, only write the DML Drawing instead of both DML
+                       and VML Drawing in another AlternateContent.
+                 **/
+                SetAlternateContentChoiceOpen( true );
+                /** FDO#71834 :
+                       We should probably be renaming the function
+                       switchHeaderFooter to something like SaveRetrieveTableReference.
+                       Save the table reference attributes before calling WriteDMLTextFrame,
+                       otherwise the StartParagraph function will use the previous existing
+                       table reference attributes since the variable is being shared.
+                */
+                switchHeaderFooter(true,1);
+                /** Save the table info's before writing the shape
+                        as there might be a new table that might get
+                        spawned from within the VML & DML block and alter
+                        the contents.
+                */
+                ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
+                //Reset the table infos after saving.
+                m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
 
             m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++);
             m_pSerializer->endElementNS(XML_mc, XML_Choice);
             SetAlternateContentChoiceOpen( false );
 
-            // Reset table infos, otherwise the depth of the cells will be incorrect,
-            // in case the text frame had table(s) and we try to export the
-            // same table second time.
-            m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
-            //reset the tableReference.
-            switchHeaderFooter(false,0);
+                // Reset table infos, otherwise the depth of the cells will be incorrect,
+                // in case the text frame had table(s) and we try to export the
+                // same table second time.
+                m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+                //reset the tableReference.
+                switchHeaderFooter(false,0);
 
-            m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
-            m_rExport.SdrExporter().writeVMLTextFrame(&aFrame);
-            /* FDO#71834 :Restore the data here after having written the Shape
-               for further processing.
-            */
-            switchHeaderFooter(false,-1);
-            m_rExport.mpTableInfo = pOldTableInfo;
+                m_pSerializer->startElementNS(XML_mc, XML_Fallback, FSEND);
+                m_rExport.SdrExporter().writeVMLTextFrame(&aFrame);
+                /* FDO#71834 :Restore the data here after having written the Shape
+                   for further processing.
+                */
+                switchHeaderFooter(false,-1);
+                m_rExport.mpTableInfo = pOldTableInfo;
 
-            m_pSerializer->endElementNS(XML_mc, XML_Fallback);
-            m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
-
+                m_pSerializer->endElementNS(XML_mc, XML_Fallback);
+                m_pSerializer->endElementNS(XML_mc, XML_AlternateContent);
+            }
+            else
+            {
+                ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_rExport.mpTableInfo;
+                //Reset the table infos after saving.
+                m_rExport.mpTableInfo = ww8::WW8TableInfo::Pointer_t(new ww8::WW8TableInfo());
+                m_rExport.SdrExporter().writeOnlyTextOfFrame(&aFrame);
+                m_rExport.mpTableInfo = pOldTableInfo;
+            }
             m_pSerializer->endElementNS( XML_w, XML_r );
             m_bParagraphFrameOpen = false;
         }
-        if (m_postponedCustomShape)
+        if (!m_postponedCustomShape->empty())
         {
             m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
             WritePostponedCustomShape();
@@ -716,6 +818,20 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
         m_pSerializer->endElementNS( XML_w, XML_rPr );
     }
 
+    if (!m_bWritingHeaderFooter)
+    {
+        //Check whether we have Frame for paragraph
+        for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
+        {
+            sw::Frame aFrame = m_aFramesOfParagraph[nIndex];
+            const SwFrmFmt& rFrmFmt = aFrame.GetFrmFmt();
+            if (TextBoxIsFramePr(rFrmFmt))
+            {
+                const Size aSize = aFrame.GetSize();
+                PopulateFrameProperties(&rFrmFmt, aSize);
+            }
+        }
+    }
     m_pSerializer->endElementNS( XML_w, XML_pPr );
 
     if ( m_nColBreakStatus == COLBRK_WRITE )

@@ -1197,6 +1197,26 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
     }
 }
 
+void DocxSdrExport::writeOnlyTextOfFrame(sw::Frame* pParentFrame)
+{
+    const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
+    const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
+    sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
+
+    sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
+    sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
+
+    //Save data here and restore when out of scope
+    ExportDataSaveRestore aDataGuard(m_pImpl->m_rExport, nStt, nEnd, pParentFrame);
+
+    m_pImpl->m_pBodyPrAttrList = pFS->createAttrList();
+    m_pImpl->m_bFrameBtLr = checkFrameBtlr(m_pImpl->m_rExport.pDoc->GetNodes()[nStt], 0);
+    m_pImpl->m_bFlyFrameGraphic = true;
+    m_pImpl->m_rExport.WriteText();
+    m_pImpl->m_bFlyFrameGraphic = false;
+    m_pImpl->m_bFrameBtLr = false;
+}
+
 void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly)
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;

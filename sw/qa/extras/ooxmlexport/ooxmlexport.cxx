@@ -3635,6 +3635,19 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79817,"fdo79817.docx")
     assertXPath ( pXmlDoc, "/w:document/w:body/w:p[3]/w:sdt/w:sdtPr/w:dataBinding", "xpath","/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
 }
 
+
+DECLARE_OOXMLEXPORT_TEST(testFDO78590, "FDO78590.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+        return;
+
+    // This is to ensure that the fld starts and ends inside a hyperlink...
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "w", "9851" );
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:framePr", "h", "1669" );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
