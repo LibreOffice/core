@@ -44,7 +44,7 @@ class AnyCompare : public ::cppu::WeakImplHelper1< XAnyCompare >
     Reference< XCollator > m_rCollator;
 
 public:
-    AnyCompare( Reference< XComponentContext > xContext, const Locale& rLocale ) throw()
+    AnyCompare( Reference< XComponentContext > xContext, const Locale& rLocale )
     {
         m_rCollator = Collator::create( xContext );
         m_rCollator->loadDefaultCollator( rLocale,
