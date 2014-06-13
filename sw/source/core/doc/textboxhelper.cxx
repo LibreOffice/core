@@ -21,6 +21,7 @@
 #include <unomid.h>
 #include <unoprnms.hxx>
 #include <dflyobj.hxx>
+#include <mvsave.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <svx/svdoashp.hxx>
@@ -368,6 +369,48 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             uno::Reference<beans::XPropertySet> xPropertySet(static_cast<cppu::OWeakObject*>(SwXFrames::GetObject(*pFmt, FLYCNTTYPE_FRM)), uno::UNO_QUERY);
             xPropertySet->setPropertyValue(aPropertyName, aValue);
         }
+    }
+}
+
+void SwTextBoxHelper::saveLinks(const SwFrmFmts& rFormats, std::map<const SwFrmFmt*, const SwFrmFmt*>& rLinks)
+{
+    for (size_t i = 0; i < rFormats.size(); ++i)
+    {
+        SwFrmFmt* pFmt = rFormats[i];
+        if (pFmt->Which() != RES_DRAWFRMFMT)
+            continue;
+        if (SwFrmFmt* pTextBox = findTextBox(pFmt))
+            rLinks[pFmt] = pTextBox;
+    }
+}
+
+void SwTextBoxHelper::resetLink(SwFrmFmt* pShape, std::map<const SwFrmFmt*, SwFmtCntnt>& rMap)
+{
+    if (pShape->Which() == RES_DRAWFRMFMT)
+    {
+        if (pShape->GetCntnt().GetCntntIdx())
+            rMap.insert(std::make_pair(pShape, pShape->GetCntnt()));
+        pShape->ResetFmtAttr(RES_CNTNT);
+    }
+}
+
+void SwTextBoxHelper::restoreLinks(std::set<_ZSortFly>& rOld, std::vector<SwFrmFmt*>& rNew, SavedLink& rSavedLinks, SavedContent& rOldContent)
+{
+    size_t i = 0;
+    for (std::set<_ZSortFly>::iterator aSetIt = rOld.begin(); aSetIt != rOld.end(); ++aSetIt, ++i)
+    {
+        SavedLink::iterator aTextBoxIt = rSavedLinks.find(aSetIt->GetFmt());
+        if (aTextBoxIt != rSavedLinks.end())
+        {
+            size_t j = 0;
+            for (std::set<_ZSortFly>::iterator aSetJt = rOld.begin(); aSetJt != rOld.end(); ++aSetJt, ++j)
+            {
+                if (aSetJt->GetFmt() == aTextBoxIt->second)
+                    rNew[i]->SetFmtAttr(rNew[j]->GetCntnt());
+            }
+        }
+        if (rOldContent.find(aSetIt->GetFmt()) != rOldContent.end())
+            const_cast<SwFrmFmt*>(aSetIt->GetFmt())->SetFmtAttr(rOldContent[aSetIt->GetFmt()]);
     }
 }
 

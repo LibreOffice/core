@@ -11,6 +11,9 @@
 #define INCLUDED_SW_INC_TEXTBOXHELPER_HXX
 
 #include <list>
+#include <map>
+#include <set>
+#include <vector>
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -21,8 +24,11 @@
 
 class SdrPage;
 class SwFrmFmt;
+class SwFrmFmts;
+class SwFmtCntnt;
 class SwDoc;
 class Rectangle;
+class _ZSortFly;
 
 /**
  * A TextBox is a TextFrame, that is tied to a drawinglayer shape.
@@ -33,6 +39,10 @@ class Rectangle;
 class SW_DLLPUBLIC SwTextBoxHelper
 {
 public:
+    /// Maps a draw format to a fly format.
+    typedef std::map<const SwFrmFmt*, const SwFrmFmt*> SavedLink;
+    /// Maps a draw format to content.
+    typedef std::map<const SwFrmFmt*, SwFmtCntnt> SavedContent;
     /// Create a TextBox for a shape.
     static void create(SwFrmFmt* pShape);
     /// Destroy a TextBox for a shape.
@@ -57,6 +67,13 @@ public:
     static sal_Int32 getCount(SdrPage* pPage, std::list<SwFrmFmt*>& rTextBoxes);
     /// Get a shape by index, excluding TextBoxes.
     static css::uno::Any getByIndex(SdrPage* pPage, sal_Int32 nIndex, std::list<SwFrmFmt*>& rTextBoxes) throw(css::lang::IndexOutOfBoundsException);
+
+    /// Saves the current shape -> textbox links in a map, so they can be restored later.
+    static void saveLinks(const SwFrmFmts& rFormats, std::map<const SwFrmFmt*, const SwFrmFmt*>& rLinks);
+    /// Reset the shape -> textbox link on the shape, and save it to the map, so it can be restored later.
+    static void resetLink(SwFrmFmt* pShape, std::map<const SwFrmFmt*, SwFmtCntnt>& rOldContent);
+    /// Undo the effect of saveLinks() + individual resetLink() calls.
+    static void restoreLinks(std::set<_ZSortFly>& rOld, std::vector<SwFrmFmt*>& rNew, SavedLink& rSavedLinks, SavedContent& rResetContent);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

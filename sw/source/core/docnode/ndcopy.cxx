@@ -1415,17 +1415,9 @@ void SwDoc::CopyFlyInFlyImpl(
     ::std::set< _ZSortFly > aSet;
     sal_uInt16 nArrLen = GetSpzFrmFmts()->size();
 
-    // Old textbox -> old shape map.
-    std::map<const SwFrmFmt*, const SwFrmFmt*> aOldTextBoxes;
-
-    for (size_t i = 0; i < GetSpzFrmFmts()->size(); ++i)
-    {
-        SwFrmFmt* pFmt = (*GetSpzFrmFmts())[i];
-        if (pFmt->Which() != RES_DRAWFRMFMT)
-            continue;
-        if (SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(pFmt))
-            aOldTextBoxes[pTextBox] = pFmt;
-    }
+    SwTextBoxHelper::SavedLink aOldTextBoxes;
+    SwTextBoxHelper::saveLinks(*GetSpzFrmFmts(), aOldTextBoxes);
+    SwTextBoxHelper::SavedContent aOldContent;
 
     for ( sal_uInt16 n = 0; n < nArrLen; ++n )
     {
@@ -1491,8 +1483,7 @@ void SwDoc::CopyFlyInFlyImpl(
             {
                 // Make sure draw formats don't refer to content, so that such
                 // content can be removed without problems.
-                if (pFmt->Which() == RES_DRAWFRMFMT)
-                    pFmt->ResetFmtAttr(RES_CNTNT);
+                SwTextBoxHelper::resetLink(pFmt, aOldContent);
                 aSet.insert( _ZSortFly( pFmt, pAnchor, nArrLen + aSet.size() ));
             }
         }
@@ -1649,16 +1640,7 @@ void SwDoc::CopyFlyInFlyImpl(
         // Re-create content property of draw formats, knowing how old shapes
         // were paired with old fly formats (aOldTextBoxes) and that aSet is
         // parallel with aVecSwFrmFmt.
-        size_t i = 0;
-        for (std::set<_ZSortFly>::iterator aSetIt = aSet.begin(); aSetIt != aSet.end(); ++aSetIt, ++i)
-        {
-            std::map<const SwFrmFmt*, const SwFrmFmt*>::iterator aDrawIt = aOldTextBoxes.find(aSetIt->GetFmt());
-            if (aDrawIt != aOldTextBoxes.end())
-            {
-                size_t nDrawIndex = std::distance(aOldTextBoxes.begin(), aDrawIt);
-                aVecSwFrmFmt[nDrawIndex]->SetFmtAttr(aVecSwFrmFmt[i]->GetCntnt());
-            }
-        }
+        SwTextBoxHelper::restoreLinks(aSet, aVecSwFrmFmt, aOldTextBoxes, aOldContent);
     }
 }
 
