@@ -1131,6 +1131,17 @@ DECLARE_OOXMLIMPORT_TEST(testToolsLineNumbering, "tools-line-numbering.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nValue);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testfdo78904, "fdo78904.docx")
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    if (xIndexAccess->getCount())
+    {
+        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(0)), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+    }
+}
+
 DECLARE_OOXMLIMPORT_TEST(testFdo60922, "fdo60922.docx")
 {
     // This was 0, not 100, due to wrong import of w:position w:val="0"
