@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -1206,6 +1209,7 @@ void SdDrawDocument::SetTextDefaults() const
 {
     // BulletItem and BulletFont for Titel and Outline
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
+    assert(mxStyleSheetPool.is());
     Font aBulletFont( static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->GetBulletFont() );
     aBulletFont.SetSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
