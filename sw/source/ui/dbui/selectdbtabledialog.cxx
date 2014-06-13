@@ -30,7 +30,6 @@
 
 #include <unomid.h>
 
-#include <selectdbtabledialog.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
 #include <boost/scoped_ptr.hpp>
@@ -45,54 +44,51 @@ using namespace ::com::sun::star::beans;
 
 SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
         const uno::Reference< sdbc::XConnection>& rConnection) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTDBTABLEDDIALOG)),
-    m_aSelectFI( this, SW_RES(       FI_SELECT     )),
-    m_aTableHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    m_aTableLB( this, SW_RES(        LB_TABLE      )),
-    m_aPreviewPB( this, SW_RES(      PB_PREVIEW    )),
-    m_aSeparatorFL(this, SW_RES(    FL_SEPARATOR      )),
-    m_aOK( this, SW_RES(             PB_OK         )),
-    m_aCancel( this, SW_RES(         PB_CANCEL     )),
-    m_aHelp( this, SW_RES(           PB_HELP       )),
+    SfxModalDialog(pParent, "SelectTableDialog", "modules/swriter/ui/selecttabledialog.ui"),
     m_sName( SW_RES( ST_NAME )),
     m_sType( SW_RES( ST_TYPE )),
     m_sTable( SW_RES( ST_TABLE )),
     m_sQuery( SW_RES( ST_QUERY )),
     m_xConnection(rConnection)
 {
-    FreeResource();
+    get(m_pPreviewPB, "preview");
+    get(m_pContainer, "table");
+    m_pTableHB = new HeaderBar(m_pContainer, WB_BUTTONSTYLE | WB_BOTTOMBORDER);
+    m_pTableHB->set_height_request(40);
+    m_pTableLB = new SvTabListBox(m_pContainer, WB_BORDER);
 
-    Size aLBSize(m_aTableLB.GetSizePixel());
-    m_aTableHB.SetSizePixel(aLBSize);
-    Size aHeadSize(m_aTableHB.CalcWindowSizePixel());
+    Size aLBSize(Size(400, 100));
+    m_pContainer->SetSizePixel(aLBSize);
+    Size aHeadSize(m_pTableHB->CalcWindowSizePixel());
     aHeadSize.Width() = aLBSize.Width();
-    m_aTableHB.SetSizePixel(aHeadSize);
-    Point aLBPos(m_aTableLB.GetPosPixel());
-    m_aTableHB.SetPosPixel(aLBPos);
+    m_pTableHB->SetSizePixel(aHeadSize);
+    Point aLBPos(0, 0);
+    m_pTableHB->SetPosPixel(aLBPos);
     aLBPos.Y() += aHeadSize.Height();
     aLBSize.Height() -= aHeadSize.Height();
-    m_aTableLB.SetPosSizePixel(aLBPos, aLBSize);
+    m_pTableLB->SetPosSizePixel(aLBPos, aLBSize);
 
-    Size aSz(m_aTableHB.GetOutputSizePixel());
-    m_aTableHB.InsertItem( 1, m_sName,
+    Size aSz(m_pTableHB->GetOutputSizePixel());
+    m_pTableHB->InsertItem( 1, m_sName,
                             aSz.Width()/2,
                             HIB_LEFT | HIB_VCENTER /*| HIB_CLICKABLE | HIB_UPARROW */);
-    m_aTableHB.InsertItem( 2, m_sType,
+    m_pTableHB->InsertItem( 2, m_sType,
                             aSz.Width()/2,
                             HIB_LEFT | HIB_VCENTER /*| HIB_CLICKABLE | HIB_UPARROW */);
-    m_aTableHB.SetHelpId(HID_MM_ADDRESSLIST_HB );
-    m_aTableHB.Show();
+    m_pTableHB->SetHelpId(HID_MM_ADDRESSLIST_HB );
+    m_pTableHB->Show();
+    m_pTableLB->Show();
 
     static long nTabs[] = {3, 0, aSz.Width()/2, aSz.Width() };
-    m_aTableLB.SetTabs(&nTabs[0], MAP_PIXEL);
-    m_aTableLB.SetHelpId(HID_MM_SELECTDBTABLEDDIALOG_LISTBOX);
-    m_aTableLB.SetStyle( m_aTableLB.GetStyle() | WB_CLIPCHILDREN );
-    m_aTableLB.SetSpaceBetweenEntries(3);
-    m_aTableLB.SetSelectionMode( SINGLE_SELECTION );
-    m_aTableLB.SetDragDropMode( 0 );
-    m_aTableLB.EnableAsyncDrag(false);
+    m_pTableLB->SetTabs(&nTabs[0], MAP_PIXEL);
+    m_pTableLB->SetHelpId(HID_MM_SELECTDBTABLEDDIALOG_LISTBOX);
+    m_pTableLB->SetStyle( m_pTableLB->GetStyle() | WB_CLIPCHILDREN );
+    m_pTableLB->SetSpaceBetweenEntries(3);
+    m_pTableLB->SetSelectionMode( SINGLE_SELECTION );
+    m_pTableLB->SetDragDropMode( 0 );
+    m_pTableLB->EnableAsyncDrag(false);
 
-    m_aPreviewPB.SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
+    m_pPreviewPB->SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
 
     Reference<XTablesSupplier> xTSupplier(m_xConnection, UNO_QUERY);
     if(xTSupplier.is())
@@ -105,7 +101,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
             OUString sEntry = pTbls[i];
             sEntry += "\t";
             sEntry += m_sTable;
-            SvTreeListEntry* pEntry = m_aTableLB.InsertEntry(sEntry);
+            SvTreeListEntry* pEntry = m_pTableLB->InsertEntry(sEntry);
             pEntry->SetUserData((void*)0);
         }
     }
@@ -120,7 +116,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
             OUString sEntry = pQueries[i];
             sEntry += "\t";
             sEntry += m_sQuery;
-            SvTreeListEntry* pEntry = m_aTableLB.InsertEntry(sEntry);
+            SvTreeListEntry* pEntry = m_pTableLB->InsertEntry(sEntry);
             pEntry->SetUserData((void*)1);
         }
     }
@@ -128,14 +124,16 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
 
 SwSelectDBTableDialog::~SwSelectDBTableDialog()
 {
+    delete m_pTableHB;
+    delete m_pTableLB;
 }
 
 IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
 {
-    SvTreeListEntry* pEntry = m_aTableLB.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTableLB->FirstSelected();
     if(pEntry)
     {
-        OUString sTableOrQuery = m_aTableLB.GetEntryText(pEntry, 0);
+        OUString sTableOrQuery = m_pTableLB->GetEntryText(pEntry, 0);
         sal_Int32 nCommandType = 0 == pEntry->GetUserData() ? 0 : 1;
 
         OUString sDataSourceName;
@@ -169,23 +167,23 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
 
 OUString    SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
 {
-    SvTreeListEntry* pEntry = m_aTableLB.FirstSelected();
+    SvTreeListEntry* pEntry = m_pTableLB->FirstSelected();
     bIsTable = pEntry->GetUserData() ? false : true;
-    return m_aTableLB.GetEntryText(pEntry, 0);
+    return m_pTableLB->GetEntryText(pEntry, 0);
 }
 
 void   SwSelectDBTableDialog::SetSelectedTable(const OUString& rTable, bool bIsTable)
 {
-    SvTreeListEntry*    pEntry = m_aTableLB.First();
+    SvTreeListEntry*    pEntry = m_pTableLB->First();
     while(pEntry)
     {
-        if((m_aTableLB.GetEntryText(pEntry, 0) == rTable) &&
+        if((m_pTableLB->GetEntryText(pEntry, 0) == rTable) &&
                  ((pEntry->GetUserData() == 0 ) == bIsTable))
         {
-            m_aTableLB.Select(pEntry);
+            m_pTableLB->Select(pEntry);
             break;
         }
-        pEntry = m_aTableLB.Next( pEntry );
+        pEntry = m_pTableLB->Next( pEntry );
     }
 }
 
