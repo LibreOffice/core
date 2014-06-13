@@ -148,7 +148,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
             sal_Int32 nChildCount = xParentContext->getAccessibleChildCount();
             for( sal_Int32 nChild = 0; nChild < nChildCount; ++nChild )
             {
-                xChild = xChild.query( xParentContext->getAccessibleChild( nChild ) );
+                xChild.set(xParentContext->getAccessibleChild( nChild ), css::uno::UNO_QUERY);
 
                 if ( xMeMyselfAndI.get() == xChild.get() )
                 {
