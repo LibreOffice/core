@@ -560,7 +560,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
 
         case SID_BASICBREAK :
-            BASIC_DLL()->BasicBreak();
+            BasicDLL::BasicBreak();
             break;
 #endif
 

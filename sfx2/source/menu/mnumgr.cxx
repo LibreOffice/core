@@ -150,9 +150,9 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         // get synonym list for sub menu
         std::vector< OUString > aSynonyms;
         SfxThesSubMenuHelper aHelper;
-        OUString aText( aHelper.GetText( aThesLookUpStr, nDelimPos ) );
+        OUString aText( SfxThesSubMenuHelper::GetText( aThesLookUpStr, nDelimPos ) );
         lang::Locale aLocale;
-        aHelper.GetLocale( aLocale, aThesLookUpStr, nDelimPos );
+        SfxThesSubMenuHelper::GetLocale( aLocale, aThesLookUpStr, nDelimPos );
         const bool bHasMoreSynonyms = aHelper.GetMeanings( aSynonyms, aText, aLocale, 7 /*max number of synonyms to retrieve*/ );
         (void) bHasMoreSynonyms;
 

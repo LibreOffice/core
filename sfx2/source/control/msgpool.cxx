@@ -173,7 +173,7 @@ OUString SfxSlotPool::SeekGroup( sal_uInt16 nNo )
 
         SfxResId aResId( (*_pGroups)[_nCurGroup] );
         aResId.SetRT(RSC_STRING);
-        if ( !aResId.GetResMgr()->IsAvailable(aResId) )
+        if ( !SfxResId::GetResMgr()->IsAvailable(aResId) )
         {
             OSL_FAIL( "GroupId-Name not defined in SFX!" );
             return OUString();

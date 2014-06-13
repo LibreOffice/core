@@ -912,7 +912,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mnPostUserEventId = 0;
 
     // create the picker component
-    mxFileDlg = mxFileDlg.query( xFactory->createInstance( aService ) );
+    mxFileDlg.set(xFactory->createInstance( aService ), css::uno::UNO_QUERY);
     mbSystemPicker = lcl_isSystemFilePicker( mxFileDlg );
 
     uno::Reference< XFilePickerNotifier > xNotifier( mxFileDlg, UNO_QUERY );
