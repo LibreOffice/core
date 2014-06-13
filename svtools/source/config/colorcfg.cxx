@@ -368,7 +368,7 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
     Application* pApp = GetpApp();
     if( pApp )
     {
-        AllSettings aSettings = pApp->GetSettings();
+        AllSettings aSettings = Application::GetSettings();
         StyleSettings aStyleSettings( aSettings.GetStyleSettings() );
 
         ColorConfigValue aRet = GetColorConfigValue(svtools::FONTCOLOR);
@@ -382,7 +382,7 @@ void ColorConfig_Impl::ImplUpdateApplicationSettings()
             aStyleSettings.SetFontColor( aFontColor );
 
             aSettings.SetStyleSettings( aStyleSettings );
-            pApp->SetSettings( aSettings );
+            Application::SetSettings( aSettings );
         }
     }
 }

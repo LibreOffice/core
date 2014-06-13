@@ -54,14 +54,14 @@ SfxItemDesruptor_Impl::SfxItemDesruptor_Impl( SfxPoolItem *pItemToDesrupt ):
 void SfxItemDesruptor_Impl::LaunchDeleteOnIdle()
 {
     // process in Idle
-    GetpApp()->InsertIdleHdl( aLink, 1 );
+    Application::InsertIdleHdl( aLink, 1 );
 }
 
 SfxItemDesruptor_Impl::~SfxItemDesruptor_Impl()
 {
 
     // remove from Idle-Handler
-    GetpApp()->RemoveIdleHdl( aLink );
+    Application::RemoveIdleHdl( aLink );
 
     // reset RefCount (was set to SFX_ITEMS_SPECIAL before!)
     pItem->SetRefCount( 0 );

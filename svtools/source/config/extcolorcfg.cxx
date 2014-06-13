@@ -530,7 +530,7 @@ void ExtendedColorConfig_Impl::UnlockBroadcast()
         m_bBroadcastWhenUnlocked = ExtendedColorConfig::m_pImpl != NULL;
         if ( m_bBroadcastWhenUnlocked )
         {
-            if ( ExtendedColorConfig::m_pImpl->IsEnableBroadcast() )
+            if ( ExtendedColorConfig_Impl::IsEnableBroadcast() )
             {
                 m_bBroadcastWhenUnlocked = false;
                 ExtendedColorConfig::m_pImpl->Broadcast(SfxSimpleHint(SFX_HINT_COLORS_CHANGED));
@@ -621,12 +621,12 @@ EditableExtendedColorConfig::EditableExtendedColorConfig() :
     m_pImpl(new ExtendedColorConfig_Impl),
     m_bModified(false)
 {
-    m_pImpl->LockBroadcast();
+    ExtendedColorConfig_Impl::LockBroadcast();
 }
 
 EditableExtendedColorConfig::~EditableExtendedColorConfig()
 {
-    m_pImpl->UnlockBroadcast();
+    ExtendedColorConfig_Impl::UnlockBroadcast();
     if(m_bModified)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
@@ -688,12 +688,12 @@ void EditableExtendedColorConfig::Commit()
 
 void EditableExtendedColorConfig::DisableBroadcast()
 {
-    m_pImpl->DisableBroadcast();
+    ExtendedColorConfig_Impl::DisableBroadcast();
 }
 
 void EditableExtendedColorConfig::EnableBroadcast()
 {
-    m_pImpl->EnableBroadcast();
+    ExtendedColorConfig_Impl::EnableBroadcast();
 }
 
 sal_Int32 EditableExtendedColorConfig::GetComponentCount() const

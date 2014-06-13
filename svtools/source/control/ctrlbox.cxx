@@ -1659,12 +1659,12 @@ void FontSizeBox::Fill( const vcl::FontInfo* pInfo, const FontList* pList )
     }
     else
     {
-        pAry = pList->GetStdSizeAry();
+        pAry = FontList::GetStdSizeAry();
     }
 
     // first insert font size names (for simplified/traditional chinese)
     FontSizeNames aFontSizeNames( GetSettings().GetUILanguageTag().getLanguageType() );
-    if ( pAry == pList->GetStdSizeAry() )
+    if ( pAry == FontList::GetStdSizeAry() )
     {
         // for standard sizes we don't need to bother
         if ( bStdSize && GetEntryCount() && aFontSizeNames.IsEmpty() )
@@ -1682,7 +1682,7 @@ void FontSizeBox::Fill( const vcl::FontInfo* pInfo, const FontList* pList )
 
     if ( !aFontSizeNames.IsEmpty() )
     {
-        if ( pAry == pList->GetStdSizeAry() )
+        if ( pAry == FontList::GetStdSizeAry() )
         {
             // for scalable fonts all font size names
             sal_uLong nCount = aFontSizeNames.Count();

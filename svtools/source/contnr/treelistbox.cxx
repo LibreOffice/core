@@ -152,8 +152,8 @@ SvInplaceEdit2::SvInplaceEdit2
 
     aAccReturn.SetActivateHdl( LINK( this, SvInplaceEdit2, ReturnHdl_Impl) );
     aAccEscape.SetActivateHdl( LINK( this, SvInplaceEdit2, EscapeHdl_Impl) );
-    GetpApp()->InsertAccel( &aAccReturn );
-    GetpApp()->InsertAccel( &aAccEscape );
+    Application::InsertAccel( &aAccReturn );
+    Application::InsertAccel( &aAccEscape );
 
     pEdit->Show();
     pEdit->GrabFocus();
@@ -163,8 +163,8 @@ SvInplaceEdit2::~SvInplaceEdit2()
 {
     if( !bAlreadyInCallBack )
     {
-        GetpApp()->RemoveAccel( &aAccReturn );
-        GetpApp()->RemoveAccel( &aAccEscape );
+        Application::RemoveAccel( &aAccReturn );
+        Application::RemoveAccel( &aAccEscape );
     }
     delete pEdit;
 }
@@ -252,8 +252,8 @@ void SvInplaceEdit2::CallCallBackHdl_Impl()
     if ( !bAlreadyInCallBack )
     {
         bAlreadyInCallBack = true;
-        GetpApp()->RemoveAccel( &aAccReturn );
-        GetpApp()->RemoveAccel( &aAccEscape );
+        Application::RemoveAccel( &aAccReturn );
+        Application::RemoveAccel( &aAccEscape );
         pEdit->Hide();
         aCallBackHdl.Call( this );
     }

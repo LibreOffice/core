@@ -3311,8 +3311,8 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
 
     aAccReturn.SetActivateHdl( LINK( this, IcnViewEdit_Impl, ReturnHdl_Impl) );
     aAccEscape.SetActivateHdl( LINK( this, IcnViewEdit_Impl, EscapeHdl_Impl) );
-    GetpApp()->InsertAccel( &aAccReturn);//, ACCEL_ALWAYS );
-    GetpApp()->InsertAccel( &aAccEscape);//, ACCEL_ALWAYS );
+    Application::InsertAccel( &aAccReturn);//, ACCEL_ALWAYS );
+    Application::InsertAccel( &aAccEscape);//, ACCEL_ALWAYS );
     Show();
     GrabFocus();
 }
@@ -3321,8 +3321,8 @@ IcnViewEdit_Impl::~IcnViewEdit_Impl()
 {
     if( !bAlreadyInCallback )
     {
-        GetpApp()->RemoveAccel( &aAccReturn );
-        GetpApp()->RemoveAccel( &aAccEscape );
+        Application::RemoveAccel( &aAccReturn );
+        Application::RemoveAccel( &aAccEscape );
     }
 }
 
@@ -3332,8 +3332,8 @@ void IcnViewEdit_Impl::CallCallBackHdl_Impl()
     if ( !bAlreadyInCallback )
     {
         bAlreadyInCallback = true;
-        GetpApp()->RemoveAccel( &aAccReturn );
-        GetpApp()->RemoveAccel( &aAccEscape );
+        Application::RemoveAccel( &aAccReturn );
+        Application::RemoveAccel( &aAccEscape );
         Hide();
         aCallBackHdl.Call( this );
     }

@@ -638,7 +638,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     {
         VirtualDevice aDummyVDev;
         GDIMetaFile aMtf( rGraphic.GetGDIMetaFile() );
-        Size aMtfSize( aDummyVDev.LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_100TH_MM ) );
+        Size aMtfSize( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_100TH_MM ) );
         if ( aMtfSize.Width() && aMtfSize.Height() )
         {
             MapMode aNewMapMode( MAP_100TH_MM );

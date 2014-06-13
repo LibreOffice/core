@@ -75,9 +75,9 @@ namespace svt
         :m_xInput( _rxInput )
         ,m_xOutput( _rxOutput )
     {
-        m_xSeekable = m_xSeekable.query( m_xInput );
+        m_xSeekable.set(m_xInput, css::uno::UNO_QUERY);
         if ( !m_xSeekable.is() )
-            m_xSeekable = m_xSeekable.query( m_xOutput );
+            m_xSeekable.set(m_xOutput, css::uno::UNO_QUERY);
         OSL_ENSURE( m_xSeekable.is(), "StreamSupplier::StreamSupplier: at least one of both must be seekable!" );
     }
 

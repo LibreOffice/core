@@ -161,7 +161,7 @@ void FontSizeMenu::Fill( const vcl::FontInfo& rInfo, const FontList* pList )
     mpHeightAry = new long[nSizeCount+aFontSizeNames.Count()];
     if ( !aFontSizeNames.IsEmpty() )
     {
-        if ( pAry == pList->GetStdSizeAry() )
+        if ( pAry == FontList::GetStdSizeAry() )
         {
             // for scalable fonts all font size names
             sal_uLong nCount = aFontSizeNames.Count();

@@ -161,7 +161,7 @@ void SvtTabAppearanceCfg::SetMiddleMouseButton ( sal_uInt16 nSet )
 
 void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 {
-    AllSettings   hAppSettings = pApp->GetSettings();
+    AllSettings   hAppSettings = Application::GetSettings();
     StyleSettings hAppStyle    = hAppSettings.GetStyleSettings();
 
     // Look & Feel
@@ -218,10 +218,10 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     hAppSettings.SetMouseSettings( hMouseSettings );
 
     hAppSettings.SetStyleSettings( hAppStyle );
-    pApp->MergeSystemSettings    ( hAppSettings );      // Allow system-settings to apply
+    Application::MergeSystemSettings    ( hAppSettings );      // Allow system-settings to apply
     pApp->OverrideSystemSettings ( hAppSettings );
 
-    pApp->SetSettings ( hAppSettings );
+    Application::SetSettings ( hAppSettings );
 }
 
 
