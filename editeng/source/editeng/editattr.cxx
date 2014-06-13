@@ -246,6 +246,8 @@ EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
 
 void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
+#define BREAK_BKG_COLOR_SET_FONT 0
+    assert(BREAK_BKG_COLOR_SET_FONT); // XXX: checking if this is being called // FIXME(matteocam)
     Color aColor = ((const SvxBackgroundColorItem*)GetItem())->GetValue();
     rFont.SetFillColor( aColor); // XXX: Is it SetFillColor we want?
 
