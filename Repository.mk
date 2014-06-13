@@ -414,6 +414,12 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	) \
 ))
 
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,reportbuilder, \
+	rpt \
+	rptui \
+	rptxml \
+))
+
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,writer, \
 	hwp \
 	$(if $(ENABLE_LWP),lwpft) \
@@ -434,9 +440,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	ooxml \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc) \
 	filtertracer \
-	rpt \
-	rptui \
-	rptxml \
 	simplecm \
 	sts \
 ))
