@@ -1183,7 +1183,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
                         rContext->Insert(eBorderDistId, uno::makeAny( pBorderHandler->getLineDistance()), true);
                     if (nSprmId == NS_ooxml::LN_CT_PBdr_right && pBorderHandler->getShadow())
                     {
-                        table::ShadowFormat aFormat = rContext->getShadowFromBorder(pBorderHandler->getBorderLine());
+                        table::ShadowFormat aFormat = writerfilter::dmapper::PropertyMap::getShadowFromBorder(pBorderHandler->getBorderLine());
                         rContext->Insert(PROP_PARA_SHADOW_FORMAT, uno::makeAny(aFormat));
                     }
                 }
@@ -1730,7 +1730,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
 
                 if( pBorderHandler->getShadow() )
                 {
-                    table::ShadowFormat aFormat = rContext->getShadowFromBorder(pBorderHandler->getBorderLine());
+                    table::ShadowFormat aFormat = writerfilter::dmapper::PropertyMap::getShadowFromBorder(pBorderHandler->getBorderLine());
                     rContext->Insert(PROP_CHAR_SHADOW_FORMAT, uno::makeAny(aFormat));
                 }
             }
