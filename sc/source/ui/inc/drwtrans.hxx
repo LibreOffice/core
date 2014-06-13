@@ -67,6 +67,8 @@ private:
     void                InitDocShell();
     SdrOle2Obj* GetSingleObject();
 
+    void CreateOLEData();
+
 public:
             ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
                                 const TransferableObjectDescriptor& rDesc );

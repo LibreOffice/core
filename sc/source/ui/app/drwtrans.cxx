@@ -335,12 +335,8 @@ void ScDrawTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMAT_GDIMETAFILE );
 
-        if ( !aOleData.GetTransferable().is() )
-        {
-            SdrOle2Obj* pObj = GetSingleObject();
-            if ( pObj && pObj->GetObjRef().is() )
-                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect() ) ) ;
-        }
+        CreateOLEData();
+
         if ( aOleData.GetTransferable().is() )
         {
             //  get format list from object snapshot
@@ -379,12 +375,7 @@ bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, c
 
     if ( bOleObj && nFormat != SOT_FORMAT_GDIMETAFILE )
     {
-        if ( !aOleData.GetTransferable().is() )
-        {
-            SdrOle2Obj* pObj = GetSingleObject();
-            if ( pObj && pObj->GetObjRef().is() )
-                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect() ) ) ;
-        }
+        CreateOLEData();
 
         if( aOleData.GetTransferable().is() && aOleData.HasFormat( rFlavor ) )
         {
@@ -713,6 +704,22 @@ SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
     }
 
     return NULL;
+}
+
+void ScDrawTransferObj::CreateOLEData()
+{
+    if (aOleData.GetTransferable().is())
+        // Already created.
+        return;
+
+    SdrOle2Obj* pObj = GetSingleObject();
+    if (!pObj || !pObj->GetObjRef().is())
+        // No OLE object present.
+        return;
+
+    aOleData = TransferableDataHelper(
+        new SvEmbedTransferHelper(
+            pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect()));
 }
 
 
