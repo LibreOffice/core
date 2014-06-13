@@ -11,7 +11,7 @@ $(eval $(call gb_Module_Module,libreofficekit))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_targets,libreofficekit,\
-    Library_libreofficekit \
+    StaticLibrary_libreofficekit \
 ))
 endif
 

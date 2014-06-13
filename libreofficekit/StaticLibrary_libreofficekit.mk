@@ -9,21 +9,6 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,libreofficekit))
 
-$(eval $(call gb_StaticLibrary_set_include,libreofficekit,\
-    $$(INCLUDE) \
-))
-
-$(eval $(call gb_StaticLibrary_add_libs,libreofficekit,\
-    $(if $(filter $(OS),LINUX), \
-        -ldl \
-        -lpthread \
-    ) \
-))
-
-$(eval $(call gb_StaticLibrary_use_libraries,libreofficekit,\
-    $(gb_UWINAPI) \
-))
-
 $(eval $(call gb_StaticLibrary_add_cobjects,libreofficekit,\
     libreofficekit/source/shim \
 ))
