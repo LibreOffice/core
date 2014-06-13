@@ -11,6 +11,7 @@
 #include <frmfmt.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
+#include <fmtcnct.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
@@ -286,9 +287,21 @@ void SwTextBoxHelper::getProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 n
 
     if (SwFrmFmt* pFmt = findTextBox(pShape))
     {
-        if (nWID == RES_CHAIN && nMemberId == MID_CHAIN_NAME)
+        if (nWID == RES_CHAIN)
         {
-            rValue = uno::makeAny(pFmt->GetName());
+            switch (nMemberId)
+            {
+            case MID_CHAIN_PREVNAME:
+            case MID_CHAIN_NEXTNAME:
+            {
+                const SwFmtChain& rChain = pFmt->GetChain();
+                rChain.QueryValue(rValue, nMemberId);
+            }
+            break;
+            case MID_CHAIN_NAME:
+                rValue = uno::makeAny(pFmt->GetName());
+                break;
+            }
         }
     }
 }
