@@ -1072,7 +1072,7 @@ OUString LwpDrawTextBox::RegisterStyle()
         strlen((char*)m_aTextRec.tmpTextFaceName), aEncoding);
     pFont->SetFontName(aFontName);
 
-    this->SetFontStyle(pFont, &m_aTextRec);
+    SetFontStyle(pFont, &m_aTextRec);
 
     pStyle->SetFont(pFont);
 

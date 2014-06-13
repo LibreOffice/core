@@ -143,7 +143,7 @@ void LwpSilverBullet::RegisterStyle()
                         aFmt.SetPrefix(aPrefix + aParaNumbering.pPrefix->GetText());
                     }
 
-                    aFmt.SetFormat(this->GetNumCharByStyleID(pParaNumber));
+                    aFmt.SetFormat(GetNumCharByStyleID(pParaNumber));
 
                     if (aParaNumbering.pSuffix)
                     {
@@ -171,7 +171,7 @@ void LwpSilverBullet::RegisterStyle()
                         aSuffix = aParaNumbering.pSuffix->GetText();
                     }
 
-                    pListStyle->SetListBullet(nPos, this->GetNumCharByStyleID(pParaNumber).toChar(),
+                    pListStyle->SetListBullet(nPos, GetNumCharByStyleID(pParaNumber).toChar(),
                         "Times New Roman", aPrefix, aSuffix);
                 }
 
