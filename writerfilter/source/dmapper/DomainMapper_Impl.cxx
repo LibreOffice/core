@@ -42,6 +42,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -807,6 +808,8 @@ void lcl_AddRangeAndStyle(
 
 //define some default frame width - 0cm ATM: this allow the frame to be wrapped around the text
 #define DEFAULT_FRAME_MIN_WIDTH 0
+#define DEFAULT_FRAME_MIN_HEIGHT 0
+#define DEFAULT_VALUE 0
 
 void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
 {
@@ -860,7 +863,7 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                 pFrameProperties[1].Value <<=
                     rAppendContext.pLastParagraphProperties->Geth() > 0 ?
                         rAppendContext.pLastParagraphProperties->Geth() :
-                        pStyleProperties->Geth();
+                        pStyleProperties->Geth() > 0 ? pStyleProperties->Geth() : DEFAULT_FRAME_MIN_HEIGHT;
 
                 pFrameProperties[2].Value <<= sal_Int16(
                     rAppendContext.pLastParagraphProperties->GethRule() >= 0 ?
@@ -875,13 +878,17 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                         pStyleProperties->GetxAlign() >= 0 ? pStyleProperties->GetxAlign() : text::HoriOrientation::NONE );
                 pFrameProperties[4].Value <<= nHoriOrient;
 
+                //set a non negative default value
                 pFrameProperties[5].Value <<=
                     rAppendContext.pLastParagraphProperties->IsxValid() ?
-                        rAppendContext.pLastParagraphProperties->Getx() : pStyleProperties->Getx();
+                        rAppendContext.pLastParagraphProperties->Getx() :
+                        pStyleProperties->IsxValid() ? pStyleProperties->Getx() : DEFAULT_VALUE;
+
+                //Default the anchor in case FramePr_hAnchor is missing ECMA 17.3.1.11
                 pFrameProperties[6].Value <<= sal_Int16(
                     rAppendContext.pLastParagraphProperties->GethAnchor() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GethAnchor() :
-                    pStyleProperties->GethAnchor() );
+                    pStyleProperties->GethAnchor() >=0 ? pStyleProperties->GethAnchor() : text::RelOrientation::FRAME );
 
                 sal_Int16 nVertOrient = sal_Int16(
                     rAppendContext.pLastParagraphProperties->GetyAlign() >= 0 ?
@@ -889,18 +896,22 @@ void DomainMapper_Impl::CheckUnregisteredFrameConversion( )
                         pStyleProperties->GetyAlign() >= 0 ? pStyleProperties->GetyAlign() : text::VertOrientation::NONE );
                 pFrameProperties[7].Value <<= nVertOrient;
 
+                //set a non negative default value
                 pFrameProperties[8].Value <<=
                     rAppendContext.pLastParagraphProperties->IsyValid() ?
-                        rAppendContext.pLastParagraphProperties->Gety() : pStyleProperties->Gety();
+                        rAppendContext.pLastParagraphProperties->Gety() :
+                        pStyleProperties->IsyValid() ? pStyleProperties->Gety() : DEFAULT_VALUE;
+
+                //Default the anchor in case FramePr_vAnchor is missing ECMA 17.3.1.11
                 pFrameProperties[9].Value <<= sal_Int16(
                     rAppendContext.pLastParagraphProperties->GetvAnchor() >= 0 ?
                         rAppendContext.pLastParagraphProperties->GetvAnchor() :
-                        pStyleProperties->GetvAnchor() );
+                        pStyleProperties->GetvAnchor() >= 0 ? pStyleProperties->GetvAnchor() : text::RelOrientation::FRAME );
 
                 pFrameProperties[10].Value <<= text::WrapTextMode(
                     rAppendContext.pLastParagraphProperties->GetWrap() >= 0 ?
                     rAppendContext.pLastParagraphProperties->GetWrap() :
-                    pStyleProperties->GetWrap());
+                    pStyleProperties->GetWrap() >= 0 ? pStyleProperties->GetWrap() : text::WrapTextMode_NONE );
 
                 /** FDO#73546 : distL & distR should be unsigned intgers <Ecma 20.4.3.6>
                     Swapped the array elements 11,12 & 13,14 since 11 & 12 are
