@@ -187,6 +187,16 @@ namespace drawinglayer
                         if( eFontStrikeout != STRIKEOUT_NONE )
                             aFont.SetStrikeout( eFontStrikeout );
 
+                        // set FillColor Attribute
+                        // FIXME(matteocam)
+                        // XXX: is "Color" the right type
+                        const Color aFillColor(pTCPP->getFillColor() );
+                        if( aFillColor != COL_TRANSPARENT )
+                        {
+                            aFont.SetFillColor(aFillColor);
+                            aFont.SetTransparent(false);
+                        }
+
                         // set EmphasisMark attribute
                         FontEmphasisMark eFontEmphasisMark = EMPHASISMARK_NONE;
                         switch( pTCPP->getTextEmphasisMark() )
