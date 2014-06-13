@@ -145,7 +145,10 @@ public:
     virtual OUString TakeObjNameSingul() const SAL_OVERRIDE;
     virtual OUString TakeObjNamePlural() const SAL_OVERRIDE;
 
-    SdrOle2Obj* Clone() const SAL_OVERRIDE;
+    virtual SdrOle2Obj* Clone() const SAL_OVERRIDE;
+    virtual SdrOle2Obj* CloneWithShellIDs( const OUString& rSrcShellID, const OUString& rDestShellID ) const SAL_OVERRIDE;
+
+    SdrOle2Obj& assignFrom( const SdrOle2Obj& rObj, const OUString& rSrcShellID, const OUString& rDestShellID );
     SdrOle2Obj& operator=(const SdrOle2Obj& rObj);
 
     virtual void NbcMove(const Size& rSize) SAL_OVERRIDE;

@@ -603,7 +603,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     SdDrawDocument* pSourceDoc = (SdDrawDocument*) pSourceView->GetModel();
                     pSourceDoc->CreatingDataObj( pOwnData );
                     SdDrawDocument* pModel = (SdDrawDocument*) pSourceView->GetMarkedObjModel();
-                    bReturn = Paste( *pModel, maDropPos, pPage, nPasteOptions );
+                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
 
                     if( !pPage )
                         pPage = (SdPage*) GetSdrPageView()->GetPage();
@@ -644,7 +644,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     pWorkModel->DeletePage( (sal_uInt16) i );
             }
 
-            bReturn = Paste( *pWorkModel, maDropPos, pPage, nPasteOptions );
+            bReturn = Paste(*pWorkModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
 
             if( !pPage )
                 pPage = (SdPage*) GetSdrPageView()->GetPage();
@@ -803,7 +803,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                         maDropPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
                     }
 
-                    bReturn = Paste( *pModel, maDropPos, pPage, nPasteOptions );
+                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
                 }
 
                 xShell->DoClose();
@@ -844,9 +844,15 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
         uno::Reference < io::XInputStream > xStm;
         TransferableObjectDescriptor    aObjDesc;
 
-        if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-            ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE, xStm ) ||
-              aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ, xStm ) ) )
+        if (aDataHelper.GetTransferableObjectDescriptor(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc))
+        {
+            OUString aDocShellID = SfxObjectShell::CreateShellID(mrDoc.GetDocSh());
+            xStm = aDataHelper.GetInputStream(nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE, aDocShellID);
+            if (!xStm.is())
+                xStm = aDataHelper.GetInputStream(SOT_FORMATSTR_ID_EMBEDDED_OBJ, aDocShellID);
+        }
+
+        if (xStm.is())
         {
             if( mrDoc.GetDocSh() && ( mrDoc.GetDocSh()->GetClassName() == aObjDesc.maClassName ) )
             {
@@ -880,7 +886,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             pModel->DeletePage( (sal_uInt16) i );
                     }
 
-                    bReturn = Paste( *pModel, maDropPos, pPage, nPasteOptions );
+                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
 
                     if( !pPage )
                         pPage = (SdPage*) GetSdrPageView()->GetPage();
@@ -1029,8 +1035,11 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                 uno::Reference < embed::XEmbeddedObject > xObj;
                 OUString aName;
 
-                if ( aDataHelper.GetInputStream( nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, xStm ) ||
-                    aDataHelper.GetInputStream( SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, xStm ) )
+                xStm = aDataHelper.GetInputStream(nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE_OLE, OUString());
+                if (!xStm.is())
+                    xStm = aDataHelper.GetInputStream(SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE, OUString());
+
+                if (xStm.is())
                 {
                     xObj = mpDocSh->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
                 }
@@ -1504,7 +1513,7 @@ bool View::PasteRTFTable( SotStorageStreamRef xStm, SdrPage* pPage, sal_uLong nP
     pModel->setUnoModel( Reference< XInterface >::query( xComponent ) );
 
     CreateTableFromRTF( *xStm, pModel );
-    bool bRet = Paste( *pModel, maDropPos, pPage, nPasteOptions );
+    bool bRet = Paste(*pModel, maDropPos, pPage, nPasteOptions, OUString(), OUString());
 
     xComponent->dispose();
     xComponent.clear();

@@ -293,7 +293,7 @@ bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, O
 
         uno::Any aAny;
         if( rData.HasFormat( aFlavor ) &&
-            ( aAny = rData.GetAny( aFlavor ) ).hasValue() )
+            ( aAny = rData.GetAny(aFlavor, OUString()) ).hasValue() )
         {
             uno::Sequence< sal_Int8 > anySequence;
             aAny >>= anySequence;

@@ -1048,7 +1048,8 @@ void ScColumn::CopyToClip(
     rColumn.CellStorageModified();
 }
 
-void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol)
+void ScColumn::CopyStaticToDocument(
+    SCROW nRow1, SCROW nRow2, const SvNumberFormatterMergeMap& rMap, ScColumn& rDestCol )
 {
     if (nRow1 > nRow2)
         return;
@@ -1155,6 +1156,17 @@ void ScColumn::CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol
 
         if (bLastBlock)
             break;
+    }
+
+    // Dont' forget to copy the number formats over.  Charts may reference them.
+    for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+    {
+        sal_uInt32 nNumFmt = GetNumberFormat(nRow);
+        SvNumberFormatterMergeMap::const_iterator itNum = rMap.find(nNumFmt);
+        if (itNum != rMap.end())
+            nNumFmt = itNum->second;
+
+        rDestCol.SetNumberFormat(nRow, nNumFmt);
     }
 
     rDestCol.CellStorageModified();

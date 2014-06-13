@@ -580,6 +580,9 @@ public:
     // it should be sufficient to do "virtual Foo* Clone() const { return CloneHelper< Foo >(); }".
     // Note that this function uses operator= internally.
     virtual SdrObject* Clone() const;
+
+    virtual SdrObject* CloneWithShellIDs( const OUString& rSrcShellID, const OUString& rDestShellID ) const;
+
     // implemented mainly for the purposes of Clone()
     SdrObject& operator=(const SdrObject& rObj);
 

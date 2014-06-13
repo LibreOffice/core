@@ -145,7 +145,16 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     Reference< chart2::XChartDocument > xChartDoc( xNumberFormatsSupplier, uno::UNO_QUERY );
 
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
-    if( xProp.is() && !( xProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey ) )
+    if (!xProp.is())
+        return 0;
+
+    bool bLinkToSource = true;
+    xProp->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource;
+    xProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey;
+
+    sal_Int32 nOldNumberFormat = nNumberFormatKey;
+
+    if (bLinkToSource)
     {
         bool bFormatSet = false;
         //check whether we have a percent scale -> use percent format
@@ -318,7 +327,11 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 }
             }
         }
+
+        if (nOldNumberFormat != nNumberFormatKey)
+            xProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::makeAny(nNumberFormatKey));
     }
+
     return nNumberFormatKey;
 }
 

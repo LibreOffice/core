@@ -1570,8 +1570,10 @@ void SmViewShell::Execute(SfxRequest& rReq)
             if( aData.GetTransferable().is() &&
                 ( aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
                   (aData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
-                   aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBED_SOURCE ))) &&
-                aData.GetInputStream( nId, xStrm ) && xStrm.is() )
+                   aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBED_SOURCE ))))
+                xStrm = aData.GetInputStream(nId, OUString());
+
+            if (xStrm.is())
             {
                 try
                 {

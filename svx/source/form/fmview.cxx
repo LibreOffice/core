@@ -379,13 +379,6 @@ SdrModel* FmFormView::GetMarkedObjModel() const
     return E3dView::GetMarkedObjModel();
 }
 
-
-bool FmFormView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions)
-{
-    return E3dView::Paste(rMod, rPos, pLst, nOptions);
-}
-
-
 void FmFormView::ActivateControls(SdrPageView* pPageView)
 {
     if (!pPageView)
