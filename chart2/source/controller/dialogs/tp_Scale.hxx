@@ -65,13 +65,12 @@ private:
     ListBox*             m_pLB_TimeResolution;
     CheckBox*            m_pCbx_AutoTimeResolution;
 
-    VclBox*              m_pBxMain;
+    FixedText*           m_pTxtMain;
     FormattedField*      m_pFmtFldStepMain;
     MetricField*         m_pMt_MainDateStep;
     ListBox*             m_pLB_MainTimeUnit;
     CheckBox*            m_pCbxAutoStepMain;
 
-    VclBox*              m_pBxMinor;
     FixedText*           m_pTxtHelpCount;
     FixedText*           m_pTxtHelp;
     MetricField*         m_pMtStepHelp;
