@@ -43,7 +43,7 @@ $(eval $(call gb_Executable_add_libs,gtktiledviewer,\
 endif
 
 $(eval $(call gb_Executable_add_exception_objects,gtktiledviewer,\
-    desktop/qa/gtktiledviewer/gtktiledviewer \
+    libreofficekit/qa/gtktiledviewer/gtktiledviewer \
 ))
 
 # vim: set noet sw=4 ts=4:
