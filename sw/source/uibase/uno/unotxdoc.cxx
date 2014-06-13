@@ -3119,6 +3119,24 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
     return uno::Reference< util::XCloneable >( xNewModel, UNO_QUERY );
 }
 
+void SwXTextDocument::paintTile( VirtualDevice &rDevice,
+                                 int nOutputWidth, int nOutputHeight,
+                                 int nTilePosX, int nTilePosY,
+                                 long nTileWidth, long nTileHeight )
+{
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
+    pViewShell->PaintTile(rDevice, nOutputWidth, nOutputHeight,
+                          nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+}
+
+Size SwXTextDocument::getDocumentSize()
+{
+    SwDoc* pDoc = pDocShell->GetDoc();
+    SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
+    return pViewShell->GetDocSize();
+}
+
 void * SAL_CALL SwXTextDocument::operator new( size_t t) throw()
 {
     return SwXTextDocumentBaseClass::operator new(t);
