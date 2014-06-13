@@ -862,6 +862,15 @@ void ExtensionBox_Impl::Resize()
     RecalcAll();
 }
 
+Size ExtensionBox_Impl::GetOptimalSize() const
+{
+    return LogicToPixel(Size(250, 150), MAP_APPFONT);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeExtensionBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ExtensionBox_Impl(pParent);
+}
 
 long ExtensionBox_Impl::PointToPos( const Point& rPos )
 {

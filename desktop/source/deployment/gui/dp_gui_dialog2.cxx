@@ -81,9 +81,6 @@ using namespace ::com::sun::star::system;
 namespace dp_gui {
 
 #define TOP_OFFSET           5
-#define LINE_SIZE            4
-#define PROGRESS_WIDTH      60
-#define PROGRESS_HEIGHT     14
 
 #define USER_PACKAGE_MANAGER    "user"
 #define SHARED_PACKAGE_MANAGER  "shared"
@@ -146,8 +143,6 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
-
     virtual void    RecalcAll() SAL_OVERRIDE;
     virtual void    selectEntry( const long nPos ) SAL_OVERRIDE;
 
@@ -163,12 +158,6 @@ ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl(Window* pParent)
     , m_pParent(NULL)
 {
 }
-
-Size ExtBoxWithBtns_Impl::GetOptimalSize() const
-{
-    return LogicToPixel(Size(250, 150), MAP_APPFONT);
-}
-
 
 void ExtBoxWithBtns_Impl::InitFromDialog(ExtMgrDialog *pParentDialog)
 {
@@ -691,9 +680,7 @@ void DialogHelper::PostUserEvent( const Link& rLink, void* pCaller )
     m_nEventID = Application::PostUserEvent( rLink, pCaller );
 }
 
-
 //                             ExtMgrDialog
-
 ExtMgrDialog::ExtMgrDialog(Window *pParent, TheExtensionManager *pManager)
     : ModelessDialog(pParent, "ExtensionManagerDialog", "desktop/ui/extensionmanager.ui")
     , DialogHelper(pManager->getContext(), (Dialog*) this)
@@ -1186,91 +1173,54 @@ bool ExtMgrDialog::Close()
     return bRet;
 }
 
-
-//                             UpdateRequiredDialog
-
-UpdateRequiredDialog::UpdateRequiredDialog( Window *pParent, TheExtensionManager *pManager ) :
-    ModalDialog( pParent,   getResId( RID_DLG_UPDATE_REQUIRED ) ),
-    DialogHelper( pManager->getContext(), (Dialog*) this ),
-    m_aUpdateNeeded( this,  getResId( RID_EM_FT_MSG ) ),
-    m_aUpdateBtn( this,     getResId( RID_EM_BTN_CHECK_UPDATES ) ),
-    m_aCloseBtn( this,      getResId( RID_EM_BTN_CLOSE ) ),
-    m_aHelpBtn( this,       getResId( RID_EM_BTN_HELP ) ),
-    m_aCancelBtn( this,     getResId( RID_EM_BTN_CANCEL ) ),
-    m_aDivider( this ),
-    m_aProgressText( this,  getResId( RID_EM_FT_PROGRESS ) ),
-    m_aProgressBar( this,   WB_BORDER + WB_3DLOOK ),
-    m_sAddPackages(         getResourceString( RID_STR_ADD_PACKAGES ) ),
-    m_sCloseText(           getResourceString( RID_STR_CLOSE_BTN ) ),
-    m_bHasProgress(         false ),
-    m_bProgressChanged(     false ),
-    m_bStartProgress(       false ),
-    m_bStopProgress(        false ),
-    m_bUpdateWarning(       false ),
-    m_bDisableWarning(      false ),
-    m_bHasLockedEntries(    false ),
-    m_nProgress(            0 ),
-    m_pManager( pManager )
+//UpdateRequiredDialog
+UpdateRequiredDialog::UpdateRequiredDialog(Window *pParent, TheExtensionManager *pManager)
+    : ModalDialog(pParent, "UpdateRequiredDialog", "desktop/ui/updaterequireddialog.ui")
+    , DialogHelper(pManager->getContext(), (Dialog*) this)
+    , m_sAddPackages(getResourceString(RID_STR_ADD_PACKAGES))
+    , m_sCloseText(getResourceString(RID_STR_CLOSE_BTN))
+    , m_bHasProgress(false)
+    , m_bProgressChanged(false)
+    , m_bStartProgress(false)
+    , m_bStopProgress(false)
+    , m_bUpdateWarning(false)
+    , m_bDisableWarning(false)
+    , m_bHasLockedEntries(false)
+    , m_nProgress(0)
+    , m_pManager(pManager)
 {
-    // free local resources (RID < 256):
-    FreeResource();
+    get(m_pExtensionBox, "extensions");
+    m_pExtensionBox->setExtensionManager(pManager);
+    get(m_pUpdateNeeded, "updatelabel");
+    get(m_pUpdateBtn, "check");
+    get(m_pCloseBtn, "disable");
+    get(m_pCancelBtn, "cancel");
+    get(m_pProgressText, "progresslabel");
+    get(m_pProgressBar, "progress");
 
-    m_pExtensionBox = new ExtensionBox_Impl( this, pManager );
     m_pExtensionBox->SetHyperlinkHdl( LINK( this, UpdateRequiredDialog, HandleHyperlink ) );
 
-    m_aUpdateBtn.SetClickHdl( LINK( this, UpdateRequiredDialog, HandleUpdateBtn ) );
-    m_aCloseBtn.SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCloseBtn ) );
-    m_aCancelBtn.SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCancelBtn ) );
+    m_pUpdateBtn->SetClickHdl( LINK( this, UpdateRequiredDialog, HandleUpdateBtn ) );
+    m_pCloseBtn->SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCloseBtn ) );
+    m_pCancelBtn->SetClickHdl( LINK( this, UpdateRequiredDialog, HandleCancelBtn ) );
 
-    OUString aText = m_aUpdateNeeded.GetText();
+    OUString aText = m_pUpdateNeeded->GetText();
     aText = aText.replaceAll(
         "%PRODUCTNAME", utl::ConfigManager::getProductName());
-    m_aUpdateNeeded.SetText(aText);
+    m_pUpdateNeeded->SetText(aText);
 
-    // resize update button
-    Size aBtnSize = m_aUpdateBtn.GetSizePixel();
-    OUString sTitle = m_aUpdateBtn.GetText();
-    long nWidth = m_aUpdateBtn.GetCtrlTextWidth( sTitle );
-    nWidth += 2 * m_aUpdateBtn.GetTextHeight();
-    if ( nWidth > aBtnSize.Width() )
-        m_aUpdateBtn.SetSizePixel( Size( nWidth, aBtnSize.Height() ) );
-
-    // resize update button
-    aBtnSize = m_aCloseBtn.GetSizePixel();
-    sTitle = m_aCloseBtn.GetText();
-    nWidth = m_aCloseBtn.GetCtrlTextWidth( sTitle );
-    nWidth += 2 * m_aCloseBtn.GetTextHeight();
-    if ( nWidth > aBtnSize.Width() )
-        m_aCloseBtn.SetSizePixel( Size( nWidth, aBtnSize.Height() ) );
-
-    // minimum size:
-    SetMinOutputSizePixel(
-        Size( // width:
-              (5 * m_aHelpBtn.GetSizePixel().Width()) +
-              (5 * RSC_SP_DLG_INNERBORDER_LEFT ),
-              // height:
-              (1 * m_aHelpBtn.GetSizePixel().Height()) +
-              (1 * m_aUpdateNeeded.GetSizePixel().Height()) +
-              (1 * m_pExtensionBox->GetMinOutputSizePixel().Height()) +
-              (3 * RSC_SP_DLG_INNERBORDER_LEFT) ) );
-
-    m_aDivider.Show();
-    m_aProgressBar.Hide();
-    m_aUpdateBtn.Enable( false );
-    m_aCloseBtn.GrabFocus();
+    m_pProgressBar->Hide();
+    m_pUpdateBtn->Enable( false );
+    m_pCloseBtn->GrabFocus();
 
     m_aTimeoutTimer.SetTimeout( 50 ); // mSec
     m_aTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 
-
 UpdateRequiredDialog::~UpdateRequiredDialog()
 {
     m_aTimeoutTimer.Stop();
-
-    delete m_pExtensionBox;
 }
-
 
 long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::XPackage > &xPackage,
                                              bool bLicenseMissing )
@@ -1280,7 +1230,7 @@ long UpdateRequiredDialog::addPackageToList( const uno::Reference< deployment::X
     {
         m_bHasLockedEntries |= m_pManager->isReadOnly( xPackage );
         const SolarMutexGuard aGuard;
-        m_aUpdateBtn.Enable( true );
+        m_pUpdateBtn->Enable( true );
         return m_pExtensionBox->addEntry( xPackage );
     }
     return 0;
@@ -1300,8 +1250,8 @@ void UpdateRequiredDialog::checkEntries()
 
     if ( ! hasActiveEntries() )
     {
-        m_aCloseBtn.SetText( m_sCloseText );
-        m_aCloseBtn.GrabFocus();
+        m_pCloseBtn->SetText( m_sCloseText );
+        m_pCloseBtn->GrabFocus();
     }
 }
 
@@ -1342,8 +1292,8 @@ IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface )
 
     if ( m_bStopProgress )
     {
-        if ( m_aProgressBar.IsVisible() )
-            m_aProgressBar.SetValue( 100 );
+        if ( m_pProgressBar->IsVisible() )
+            m_pProgressBar->SetValue( 100 );
         m_xAbortChannel.clear();
         OSL_TRACE( " startProgress handler: stop" );
     }
@@ -1352,8 +1302,8 @@ IMPL_LINK( UpdateRequiredDialog, startProgress, void*, _bLockInterface )
         OSL_TRACE( " startProgress handler: start" );
     }
 
-    m_aCancelBtn.Enable( bLockInterface );
-    m_aUpdateBtn.Enable( false );
+    m_pCancelBtn->Enable( bLockInterface );
+    m_pUpdateBtn->Enable( false );
     clearEventID();
 
     return 0;
@@ -1415,8 +1365,8 @@ void UpdateRequiredDialog::updatePackageInfo( const uno::Reference< deployment::
 
     if ( ! hasActiveEntries() )
     {
-        m_aCloseBtn.SetText( m_sCloseText );
-        m_aCloseBtn.GrabFocus();
+        m_pCloseBtn->SetText( m_sCloseText );
+        m_pCloseBtn->GrabFocus();
     }
 }
 
@@ -1474,106 +1424,36 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl)
     {
         m_bHasProgress = false;
         m_bStopProgress = false;
-        m_aProgressText.Hide();
-        m_aProgressBar.Hide();
-        m_aCancelBtn.Hide();
+        m_pProgressText->Hide();
+        m_pProgressBar->Hide();
+        m_pCancelBtn->Hide();
     }
     else
     {
         if ( m_bProgressChanged )
         {
             m_bProgressChanged = false;
-            m_aProgressText.SetText( m_sProgressText );
+            m_pProgressText->SetText( m_sProgressText );
         }
 
         if ( m_bStartProgress )
         {
             m_bStartProgress = false;
             m_bHasProgress = true;
-            m_aProgressBar.Show();
-            m_aProgressText.Show();
-            m_aCancelBtn.Enable();
-            m_aCancelBtn.Show();
+            m_pProgressBar->Show();
+            m_pProgressText->Show();
+            m_pCancelBtn->Enable();
+            m_pCancelBtn->Show();
         }
 
-        if ( m_aProgressBar.IsVisible() )
-            m_aProgressBar.SetValue( (sal_uInt16) m_nProgress );
+        if ( m_pProgressBar->IsVisible() )
+            m_pProgressBar->SetValue( (sal_uInt16) m_nProgress );
 
         m_aTimeoutTimer.Start();
     }
 
     return 1;
 }
-
-
-// VCL::Window / Dialog
-void UpdateRequiredDialog::Resize()
-{
-    Size aTotalSize( GetOutputSizePixel() );
-    Size aBtnSize( m_aHelpBtn.GetSizePixel() );
-
-    Point aPos( RSC_SP_DLG_INNERBORDER_LEFT,
-                aTotalSize.Height() - RSC_SP_DLG_INNERBORDER_BOTTOM - aBtnSize.Height() );
-
-    m_aHelpBtn.SetPosPixel( aPos );
-
-    aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - m_aCloseBtn.GetSizePixel().Width();
-    m_aCloseBtn.SetPosPixel( aPos );
-
-    aPos.X() -= ( RSC_SP_CTRL_X + m_aUpdateBtn.GetSizePixel().Width() );
-    m_aUpdateBtn.SetPosPixel( aPos );
-
-    Size aDivSize( aTotalSize.Width(), LINE_SIZE );
-    aPos = Point( 0, aPos.Y() - LINE_SIZE - RSC_SP_DLG_INNERBORDER_BOTTOM );
-    m_aDivider.SetPosSizePixel( aPos, aDivSize );
-
-    // Calc fixed text size
-    aPos = Point( RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP );
-    Size aFTSize = m_aUpdateNeeded.CalcMinimumSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - RSC_SP_DLG_INNERBORDER_LEFT );
-    m_aUpdateNeeded.SetPosSizePixel( aPos, aFTSize );
-
-    // Calc list box size
-    Size aSize( aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_LEFT - RSC_SP_DLG_INNERBORDER_RIGHT,
-                aTotalSize.Height() - 2*aBtnSize.Height() - LINE_SIZE -
-                2*RSC_SP_DLG_INNERBORDER_TOP - 3*RSC_SP_DLG_INNERBORDER_BOTTOM - aFTSize.Height() );
-    aPos.Y() += aFTSize.Height()+RSC_SP_DLG_INNERBORDER_TOP;
-
-    m_pExtensionBox->SetPosSizePixel( aPos, aSize );
-
-    aPos.X() = aTotalSize.Width() - RSC_SP_DLG_INNERBORDER_RIGHT - aBtnSize.Width();
-    aPos.Y() += aSize.Height()+RSC_SP_DLG_INNERBORDER_TOP;
-    m_aCancelBtn.SetPosPixel( aPos );
-
-    // Calc progress height
-    aFTSize = m_aProgressText.GetSizePixel();
-    long nProgressHeight = aFTSize.Height();
-
-    if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
-    {
-        ImplControlValue aValue;
-        Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
-        Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                                 CTRL_STATE_ENABLED, aValue, OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) )
-        {
-            nProgressHeight = aNativeControlRegion.GetHeight();
-        }
-    }
-
-    if ( nProgressHeight < PROGRESS_HEIGHT )
-        nProgressHeight = PROGRESS_HEIGHT;
-
-    aPos.X() -= ( RSC_SP_CTRL_GROUP_Y + PROGRESS_WIDTH );
-    m_aProgressBar.SetPosSizePixel( Point( aPos.X(), aPos.Y() + ((aBtnSize.Height()-nProgressHeight)/2) ),
-                                    Size( PROGRESS_WIDTH, nProgressHeight ) );
-
-    aFTSize.Width() = aPos.X() - 2*RSC_SP_DLG_INNERBORDER_LEFT;
-    aPos.X() = RSC_SP_DLG_INNERBORDER_LEFT;
-    aPos.Y() += ( aBtnSize.Height() - aFTSize.Height() - 1 ) / 2;
-    m_aProgressText.SetPosSizePixel( aPos, aFTSize );
-}
-
 
 // VCL::Dialog
 short UpdateRequiredDialog::Execute()
@@ -1588,16 +1468,15 @@ short UpdateRequiredDialog::Execute()
     if ( m_bHasLockedEntries )
     {
         // Set other text, disable update btn, remove not shared entries from list;
-        m_aUpdateNeeded.SetText( DialogHelper::getResourceString( RID_STR_NO_ADMIN_PRIVILEGE ) );
-        m_aCloseBtn.SetText( DialogHelper::getResourceString( RID_STR_EXIT_BTN ) );
-        m_aUpdateBtn.Enable( false );
+        m_pUpdateNeeded->SetText( DialogHelper::getResourceString( RID_STR_NO_ADMIN_PRIVILEGE ) );
+        m_pCloseBtn->SetText( DialogHelper::getResourceString( RID_STR_EXIT_BTN ) );
+        m_pUpdateBtn->Enable( false );
         m_pExtensionBox->RemoveUnlocked();
         Resize();
     }
 
     return Dialog::Execute();
 }
-
 
 // VCL::Dialog
 bool UpdateRequiredDialog::Close()
@@ -1696,7 +1575,7 @@ void UpdateRequiredDialog::disableAllEntries()
     setBusy( false );
 
     if ( ! hasActiveEntries() )
-        m_aCloseBtn.SetText( m_sCloseText );
+        m_pCloseBtn->SetText( m_sCloseText );
 }
 
 
