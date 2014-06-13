@@ -892,7 +892,7 @@ void PaneStyleContainer::ProcessPaneStyle(
     }
 
     Reference<container::XHierarchicalNameAccess> xFontNode (rValues[2], UNO_QUERY);
-    pStyle->mpFont = rReadContext.ReadFont(
+    pStyle->mpFont = ReadContext::ReadFont(
         xFontNode, "", PresenterTheme::SharedFontDescriptor());
 
     Reference<container::XNameAccess> xInnerBorderSizeNode (rValues[3], UNO_QUERY);
@@ -1023,7 +1023,7 @@ void ViewStyleContainer::ProcessViewStyle(
     Reference<container::XHierarchicalNameAccess> xFontNode (
         PresenterConfigurationAccess::GetProperty(rxProperties, "Font"), UNO_QUERY);
     PresenterTheme::SharedFontDescriptor pFont (
-        rReadContext.ReadFont(xFontNode, sPathToFont, PresenterTheme::SharedFontDescriptor()));
+        ReadContext::ReadFont(xFontNode, sPathToFont, PresenterTheme::SharedFontDescriptor()));
     if (pFont.get() != NULL)
         pStyle->mpFont = pFont;
 
