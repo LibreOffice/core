@@ -34,13 +34,6 @@ int main( int argc, char* argv[] )
     }
 
     LibreOfficeKit* pOffice = lok_init( argv[1] );
-    if( !pOffice )
-    {
-        fprintf( stderr, "Failed to initialize\n" );
-        return -1;
-    }
-
-    ::lok::Document* pDocument = pOffice->documentLoad( argv[2] );
 
     gtk_init( &argc, &argv );
 

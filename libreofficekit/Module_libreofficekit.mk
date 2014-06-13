@@ -10,10 +10,18 @@
 $(eval $(call gb_Module_Module,libreofficekit))
 
 ifeq ($(OS),LINUX)
+
 $(eval $(call gb_Module_add_targets,libreofficekit,\
     StaticLibrary_libreofficekit \
     Library_libreofficekitgtk \
 ))
-endif
+
+ifneq ($(ENABLE_GTK),)
+$(eval $(call gb_Module_add_targets,libreofficekit,\
+    Executable_gtktiledviewer \
+))
+endif # ($(ENABLE_GTK),)
+
+endif # ($(OS),LINUX)
 
 # vim: set ts=4 sw=4 et:
