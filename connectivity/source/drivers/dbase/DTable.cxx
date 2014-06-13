@@ -1071,11 +1071,11 @@ bool ODbaseTable::CreateImpl()
     {
         OUString aExt = aURL.getExtension();
         aURL.setExtension("dbt");                      // extension for memo file
-        Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
 
         bool bMemoAlreadyExists = false;
         try
         {
+            Content aMemo1Content(aURL.GetMainURL(INetURLObject::NO_DECODE),Reference<XCommandEnvironment>(), comphelper::getProcessComponentContext());
             bMemoAlreadyExists = aMemo1Content.isDocument();
         }
         catch(const Exception&) // an exception is thrown when no file exists
