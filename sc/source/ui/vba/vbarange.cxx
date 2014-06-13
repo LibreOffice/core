@@ -4703,7 +4703,7 @@ ScVbaRange::Insert( const uno::Any& Shift, const uno::Any& /*CopyOrigin*/ ) thro
 }
 
 void SAL_CALL
-ScVbaRange::Autofit() throw (uno::RuntimeException, std::exception)
+ScVbaRange::Autofit() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = m_Areas->getCount();
     if ( nLen > 1 )

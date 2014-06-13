@@ -129,7 +129,7 @@ interface XRange
     any BorderAround( [in] any LineStyle, [in] any Weight, [in] any ColorIndex, [in] any Color );
         void AutoFilter([in ] any Field, [in] any Criteria1, [in] any Operator, [in] any Criteria2, [in] any VisibleDropDown);
         void Insert([in] any Shift, [in] any CopyOrigin);
-        void Autofit();
+    void Autofit() raises(com::sun::star::script::BasicErrorException);
     void PrintOut([in] any From, [in] any To, [in] any Copies, [in] any Preview, [in] any ActivePrinter, [in] any PrintToFile, [in] any Collate, [in] any PrToFileName);
     void AutoFill( [in] XRange Destination, [in] any Type );
     boolean GoalSeek( [in] any Goal, [in] XRange ChangingCell );
