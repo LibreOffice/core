@@ -113,32 +113,33 @@ void SAL_CALL ChainablePropertySet::removeVetoableChangeListener( const OUString
 }
 
 // XMultiPropertySet
-void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
-    throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rValues)
+    throw (PropertyVetoException, IllegalArgumentException,
+           WrappedTargetException, RuntimeException, std::exception)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
-    const sal_Int32 nCount = aPropertyNames.getLength();
+    const sal_Int32 nCount = rPropertyNames.getLength();
 
-    if( nCount != aValues.getLength() )
+    if( nCount != rValues.getLength() )
         throw IllegalArgumentException();
 
     if( nCount )
     {
         _preSetValues();
 
-        const Any * pAny = aValues.getConstArray();
-        const OUString * pString = aPropertyNames.getConstArray();
+        const Any * pAny = rValues.getConstArray();
+        const OUString * pString = rPropertyNames.getConstArray();
         PropertyInfoHash::const_iterator aEnd = mpInfo->maMap.end(), aIter;
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
         {
             aIter = mpInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
-                throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
+                throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
             _setSingleValue ( *((*aIter).second), *pAny );
         }
@@ -147,15 +148,15 @@ void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< OUString 
     }
 }
 
-Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames )
-    throw(RuntimeException, std::exception)
+Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues(const Sequence< OUString >& rPropertyNames)
+    throw (RuntimeException, std::exception)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
-    const sal_Int32 nCount = aPropertyNames.getLength();
+    const sal_Int32 nCount = rPropertyNames.getLength();
 
     Sequence < Any > aValues ( nCount );
 
@@ -164,14 +165,14 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
         _preGetValues();
 
         Any * pAny = aValues.getArray();
-        const OUString * pString = aPropertyNames.getConstArray();
+        const OUString * pString = rPropertyNames.getConstArray();
         PropertyInfoHash::const_iterator aEnd = mpInfo->maMap.end(), aIter;
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
         {
             aIter = mpInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
-                throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
+                throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
             _getSingleValue ( *((*aIter).second), *pAny );
         }
