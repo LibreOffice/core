@@ -196,7 +196,7 @@ namespace drawinglayer
                         // set fill Color if underlined
                         if ( eFontUnderline != UNDERLINE_NONE )
                         {
-                            aFillColor = RGB_COLORDATA(0x66, 0x66, 0xff)
+                            Color aFillColor = RGB_COLORDATA(0x66, 0x66, 0xff);
                             aFont.SetFillColor(aFillColor);
                             aFont.SetTransparent(false);
                         }
