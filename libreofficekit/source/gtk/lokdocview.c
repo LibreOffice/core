@@ -47,6 +47,12 @@ static void lok_docview_class_init( LOKDocViewClass* pClass )
 
 static void lok_docview_init( LOKDocView* pDocView )
 {
+    // Gtk ScrolledWindow is apparently not fully initialised yet, we specifically
+    // have to set the [hv]adjustment to prevent GTK assertions from firing, see
+    // https://bugzilla.gnome.org/show_bug.cgi?id=438114 for more info.
+    gtk_scrolled_window_set_hadjustment( GTK_SCROLLED_WINDOW( pDocView ), NULL );
+    gtk_scrolled_window_set_vadjustment( GTK_SCROLLED_WINDOW( pDocView ), NULL );
+
     pDocView->pEventBox = gtk_event_box_new();
     gtk_scrolled_window_add_with_viewport( GTK_SCROLLED_WINDOW(pDocView),
                                            pDocView->pEventBox );
