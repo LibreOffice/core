@@ -167,7 +167,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                         if( ( aDesc.Detect() &&
                               ::std::find( rFormats.begin(),
                                            rFormats.end(),
-                                           aDesc.GetImportFormatShortName(
+                                           GraphicDescriptor::GetImportFormatShortName(
                                                aDesc.GetFileFormat() ).toAsciiLowerCase() )
                               != rFormats.end() ) ||
                             ::std::find( rFormats.begin(),

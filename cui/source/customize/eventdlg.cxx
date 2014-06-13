@@ -144,7 +144,7 @@ void SvxEventConfigPage::ImplInitDocument()
         if ( xSupplier.is() )
         {
             m_xDocumentEvents = xSupplier->getEvents();
-            m_xDocumentModifiable = m_xDocumentModifiable.query( xModel );
+            m_xDocumentModifiable.set(xModel, css::uno::UNO_QUERY);
 
             OUString aTitle = ::comphelper::DocumentInfo::getDocumentTitle( xModel );
             sal_uInt16 nPos = m_pSaveInListBox->InsertEntry( aTitle );
