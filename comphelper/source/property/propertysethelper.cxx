@@ -158,16 +158,17 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
     }
 }
 
-Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< OUString >& aPropertyNames ) throw(RuntimeException, std::exception)
+Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OUString >& rPropertyNames)
+    throw (RuntimeException, std::exception)
 {
-    const sal_Int32 nCount = aPropertyNames.getLength();
+    const sal_Int32 nCount = rPropertyNames.getLength();
 
     Sequence< Any > aValues;
     if( nCount )
     {
         boost::scoped_array<PropertyMapEntry const *> pEntries(new PropertyMapEntry const *[nCount+1]);
         pEntries[nCount] = NULL;
-        const OUString* pNames = aPropertyNames.getConstArray();
+        const OUString* pNames = rPropertyNames.getConstArray();
 
         bool bUnknown = false;
         sal_Int32 n;
@@ -184,7 +185,7 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues( const Sequence< O
         }
 
         if( bUnknown )
-            throw UnknownPropertyException( *pNames, static_cast< XPropertySet* >( this ) );
+            throw RuntimeException( *pNames, static_cast< XPropertySet* >( this ) );
     }
 
     return aValues;
