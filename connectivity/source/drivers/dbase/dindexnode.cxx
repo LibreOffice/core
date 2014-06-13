@@ -743,7 +743,7 @@ int ONDXKey::Compare(const ONDXKey& rKey) const
 
     if (getValue().isNull())
     {
-        if (rKey.getValue().isNull() || (rKey.IsText(getDBType()) && rKey.getValue().getString().isEmpty()))
+        if (rKey.getValue().isNull() || (IsText(getDBType()) && rKey.getValue().getString().isEmpty()))
             nRes = 0;
         else
             nRes = -1;

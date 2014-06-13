@@ -1524,7 +1524,7 @@ bool OSQLParser::extractDate(OSQLParseNode* pLiteral,double& _rfValue)
     Reference< XNumberFormatsSupplier > xFormatSup = m_xFormatter->getNumberFormatsSupplier();
     Reference< XNumberFormatTypes > xFormatTypes;
     if ( xFormatSup.is() )
-        xFormatTypes = xFormatTypes.query( xFormatSup->getNumberFormats() );
+        xFormatTypes.set(xFormatSup->getNumberFormats(), css::uno::UNO_QUERY);
 
     // if there is no format key, yet, make sure we have a feasible one for our locale
     try

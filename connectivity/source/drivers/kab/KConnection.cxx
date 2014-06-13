@@ -67,7 +67,7 @@ void KabConnection::construct(const OUString&, const Sequence< PropertyValue >&)
 
     // create a KDE address book object
     m_pAddressBook = KABC::StdAddressBook::self();
-    m_pAddressBook->setAutomaticSave(false);
+    KABC::StdAddressBook::setAutomaticSave(false);
 // perharps we should analyze the URL to know whether the addressbook is local, over LDAP, etc...
 // perharps we should get some user and password information from "info" properties
 
@@ -280,7 +280,7 @@ void KabConnection::disposing()
 
     if (m_pAddressBook != NULL)
     {
-        m_pAddressBook->close();
+        KABC::StdAddressBook::close();
         m_pAddressBook = NULL;
     }
 
