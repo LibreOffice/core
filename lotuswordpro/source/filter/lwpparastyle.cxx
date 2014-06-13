@@ -358,7 +358,7 @@ void LwpParaStyle::ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverrid
         {
             if (pBorderStuff->HasSide(pType[nC]))
             {
-                this->ApplySubBorder(pBorderStuff, pType[nC], pXFBorders);
+                ApplySubBorder(pBorderStuff, pType[nC], pXFBorders);
 
                 //get border spacing to text content
                 if (pMargins)
