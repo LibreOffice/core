@@ -1661,13 +1661,25 @@ namespace {
 class SumValues : std::unary_function<double, void>
 {
     double mfSum;
+    bool   mbError;
 public:
-    SumValues() : mfSum(0.0) {}
+    SumValues() : mfSum(0.0), mbError(false) {}
 
     void operator() (double f)
     {
-        if (!rtl::math::isNan(f))
+        if (mbError)
+            return;
+
+        sal_uInt16 nErr = GetDoubleErrorValue(f);
+        if (!nErr)
             mfSum += f;
+        else if (nErr != errElementNaN)
+        {
+            // Propagate the first error encountered, ignore "this is not a
+            // number" elements.
+            mfSum = f;
+            mbError = true;
+        }
     }
 
     double getValue() const { return mfSum; }

@@ -1511,7 +1511,7 @@ public:
     ToDoubleArray( size_t nSize, bool bEmptyAsZero ) :
         maArray(nSize, 0.0), miPos(maArray.begin()), mbEmptyAsZero(bEmptyAsZero)
     {
-        rtl::math::setNan(&mfNaN);
+        mfNaN = CreateDoubleError( errElementNaN);
     }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
@@ -1582,7 +1582,7 @@ class MergeDoubleArrayFunc : std::unary_function<MatrixImplType::element_block_t
 public:
     MergeDoubleArrayFunc(std::vector<double>& rArray) : mrArray(rArray), miPos(mrArray.begin())
     {
-        rtl::math::setNan(&mfNaN);
+        mfNaN = CreateDoubleError( errElementNaN);
     }
 
     void operator() (const MatrixImplType::element_block_node_type& node)
@@ -1598,7 +1598,7 @@ public:
                 numeric_element_block::const_iterator itEnd = numeric_element_block::end(*node.data);
                 for (; it != itEnd; ++it, ++miPos)
                 {
-                    if (rtl::math::isNan(*miPos))
+                    if (GetDoubleErrorValue(*miPos) == errElementNaN)
                         continue;
 
                     *miPos = op(*miPos, *it);
@@ -1611,7 +1611,7 @@ public:
                 boolean_element_block::const_iterator itEnd = boolean_element_block::end(*node.data);
                 for (; it != itEnd; ++it, ++miPos)
                 {
-                    if (rtl::math::isNan(*miPos))
+                    if (GetDoubleErrorValue(*miPos) == errElementNaN)
                         continue;
 
                     *miPos = op(*miPos, *it ? 1.0 : 0.0);
@@ -1629,7 +1629,7 @@ public:
                 // Empty element is equivalent of having a numeric value of 0.0.
                 for (size_t i = 0; i < node.size; ++i, ++miPos)
                 {
-                    if (rtl::math::isNan(*miPos))
+                    if (GetDoubleErrorValue(*miPos) == errElementNaN)
                         continue;
 
                     *miPos = op(*miPos, 0.0);
