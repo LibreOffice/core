@@ -529,7 +529,7 @@ void OutlinerView::Indent( short nDiff )
                         pPrev = pOwner->pParaList->GetParent( pPrev );
 
                     pOwner->Expand( pPrev );
-                    pOwner->InvalidateBullet( pPrev, pOwner->pParaList->GetAbsPos( pPrev ) );
+                    pOwner->InvalidateBullet(pOwner->pParaList->GetAbsPos(pPrev));
                 }
             }
 

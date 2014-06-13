@@ -795,7 +795,6 @@ void Outliner::SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet )
 
 bool Outliner::Expand( Paragraph* pPara )
 {
-
     if ( pParaList->HasHiddenChildren( pPara ) )
     {
         OLUndoExpand* pUndo = 0;
@@ -811,7 +810,7 @@ bool Outliner::Expand( Paragraph* pPara )
         bIsExpanding = true;
         pParaList->Expand( pPara );
         ExpandHdl();
-        InvalidateBullet( pPara, pParaList->GetAbsPos(pPara) );
+        InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
         {
             InsertUndo( pUndo );
@@ -821,7 +820,6 @@ bool Outliner::Expand( Paragraph* pPara )
     }
     return false;
 }
-
 
 bool Outliner::Collapse( Paragraph* pPara )
 {
@@ -844,7 +842,7 @@ bool Outliner::Collapse( Paragraph* pPara )
         bIsExpanding = false;
         pParaList->Collapse( pPara );
         ExpandHdl();
-        InvalidateBullet( pPara, pParaList->GetAbsPos(pPara) );
+        InvalidateBullet(pParaList->GetAbsPos(pPara));
         if( bUndo )
         {
             InsertUndo( pUndo );
@@ -1105,9 +1103,8 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
     }
 }
 
-void Outliner::InvalidateBullet( Paragraph* /*pPara*/, sal_Int32 nPara )
+void Outliner::InvalidateBullet(sal_Int32 nPara)
 {
-
     long nLineHeight = (long)pEditEngine->GetLineHeight(nPara );
     for ( size_t i = 0, n = aViewList.size(); i < n; ++i )
     {
