@@ -482,7 +482,7 @@ namespace pcr
         ,m_eValueUnit( FUNIT_NONE )
         ,m_nFieldToUNOValueFactor( 1 )
     {
-        getTypedControlWindow()->SetDefaultUnit( FUNIT_NONE );
+        MetricField::SetDefaultUnit( FUNIT_NONE );
 
         getTypedControlWindow()->EnableEmptyFieldValue( true );
         getTypedControlWindow()->SetStrictFormat( true );

@@ -254,7 +254,7 @@ namespace pcr
             );
 
             // remember this newly loaded component - we need to care for it e.g. when we're suspended
-            m_xDesigner = m_xDesigner.query( xQueryDesign );
+            m_xDesigner.set(xQueryDesign, css::uno::UNO_QUERY);
             OSL_ENSURE( m_xDesigner.is() || !xQueryDesign.is(), "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: the component is expected to be a controller!" );
             if ( m_xDesigner.is() )
             {

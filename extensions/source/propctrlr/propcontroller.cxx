@@ -1454,9 +1454,9 @@ namespace pcr
             if ( _rFactoryDescriptor >>= sServiceName )
                 xHandler.set( _rContext->getServiceManager()->createInstanceWithContext( sServiceName, _rContext ), UNO_QUERY );
             else if ( _rFactoryDescriptor >>= xServiceFac )
-                xHandler = xHandler.query( xServiceFac->createInstance() );
+                xHandler.set(xServiceFac->createInstance(), css::uno::UNO_QUERY);
             else if ( _rFactoryDescriptor >>= xComponentFac )
-                xHandler = xHandler.query( xComponentFac->createInstanceWithContext( _rContext ) );
+                xHandler.set(xComponentFac->createInstanceWithContext( _rContext ), css::uno::UNO_QUERY);
             OSL_ENSURE(xHandler.is(),"lcl_createHandler: Can not create handler");
             return xHandler;
         }

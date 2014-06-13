@@ -249,7 +249,7 @@ namespace pcr
                 OUString sOldDataTypeName;
                 OSL_VERIFY( xBinding->getPropertyValue( PROPERTY_XSD_DATA_TYPE ) >>= sOldDataTypeName );
                 Reference< XPropertySet > xOldType;
-                try { xOldType = xOldType.query( getDataType( sOldDataTypeName ) ); } catch( const Exception& ) { }
+                try { xOldType.set(getDataType( sOldDataTypeName ), css::uno::UNO_QUERY); } catch( const Exception& ) { }
 
                 // set the new data type name
                 xBinding->setPropertyValue( PROPERTY_XSD_DATA_TYPE, makeAny( _rName ) );
@@ -347,7 +347,7 @@ namespace pcr
                 Reference< XNumberFormatTypes > xFormatTypes;
                 OSL_VERIFY( m_xControlModel->getPropertyValue( PROPERTY_FORMATSSUPPLIER ) >>= xSupplier );
                 if ( xSupplier.is() )
-                    xFormatTypes = xFormatTypes.query( xSupplier->getNumberFormats() );
+                    xFormatTypes.set(xSupplier->getNumberFormats(), css::uno::UNO_QUERY);
                 OSL_ENSURE( xFormatTypes.is(), "XSDValidationHelper::findDefaultFormatForIntrospectee: no number formats for the introspectee!" );
                 if ( !xFormatTypes.is() )
                     return;
