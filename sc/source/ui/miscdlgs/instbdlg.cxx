@@ -288,7 +288,7 @@ void ScInsertTableDlg::DoEnable_Impl()
 
 IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl)
 {
-    if(nTableCount > 1 || rDoc.ValidTabName(m_pEdName->GetText()))
+    if(nTableCount > 1 || ScDocument::ValidTabName(m_pEdName->GetText()))
     {
         EndDialog(RET_OK);
     }

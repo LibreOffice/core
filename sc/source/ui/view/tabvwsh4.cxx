@@ -1237,7 +1237,7 @@ void ScTabViewShell::StartSimpleRefDialog(
                            LINK( this, ScTabViewShell, SimpleRefChange ) );
         pWnd->SetRefString( rInitVal );
         pWnd->SetFlags( bCloseOnButtonUp, bSingleCell, bMultiSelection );
-        pWnd->SetAutoReOpen( false );
+        ScSimpleRefDlgWrapper::SetAutoReOpen( false );
         Window* pWin = pWnd->GetWindow();
         pWin->SetText( rTitle );
         pWnd->StartRefInput();

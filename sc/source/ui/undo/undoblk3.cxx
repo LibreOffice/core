@@ -677,7 +677,7 @@ void ScUndoMerge::DoChange( bool bUndo ) const
     ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    ScRange aCurRange = maOption.getSingleRange(pDocShell->GetCurTab());
+    ScRange aCurRange = maOption.getSingleRange(ScDocShell::GetCurTab());
     ScUndoUtil::MarkSimpleBlock(pDocShell, aCurRange);
 
     for (set<SCTAB>::const_iterator itr = maOption.maTabs.begin(), itrEnd = maOption.maTabs.end();

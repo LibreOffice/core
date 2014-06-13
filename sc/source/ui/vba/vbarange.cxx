@@ -1206,7 +1206,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
             ScDocument* pDoc = pDocSh->GetDocument();
             if ( pDoc )
             {
-                SCTAB nCurTab = pDocSh->GetCurTab();
+                SCTAB nCurTab = ScDocShell::GetCurTab();
                 ScRangeName* pRangeName = pDoc->GetRangeName(nCurTab);
                 if (pRangeName)
                 {
@@ -4285,7 +4285,7 @@ static void lcl_SelectAll( ScDocShell* pDocShell, ScQueryParam& aParam )
 {
     if ( pDocShell )
     {
-        ScViewData* pViewData = pDocShell->GetViewData();
+        ScViewData* pViewData = ScDocShell::GetViewData();
         if ( pViewData )
         {
             OSL_TRACE("Pushing out SelectAll query");

@@ -196,7 +196,7 @@ namespace calc
         OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );
         Reference< XTextRange > xCellText;
         if ( m_xRange.is() )
-            xCellText.set(xCellText.query( m_xRange->getCellByPosition( _nRangeRelativeColumn, _nRangeRelativeRow ) ));
+            xCellText.set(m_xRange->getCellByPosition( _nRangeRelativeColumn, _nRangeRelativeRow ), css::uno::UNO_QUERY);
 
         OUString sText;
         if ( xCellText.is() )

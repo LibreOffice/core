@@ -1750,7 +1750,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 if( !bCommonTerms )
                                     nOptions |= i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                                Font aTargetFont = GetViewData()->GetActiveWin()->GetDefaultFont(
+                                Font aTargetFont = OutputDevice::GetDefaultFont(
                                                     DEFAULTFONT_CJK_SPREADSHEET,
                                                     eTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
                                 ScConversionParam aConvParam( SC_CONVERSION_CHINESE_TRANSL,

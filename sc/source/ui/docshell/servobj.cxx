@@ -79,7 +79,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
     {
         //  parse ref
         ScDocument* pDoc = pDocSh->GetDocument();
-        SCTAB nTab = pDocSh->GetCurTab();
+        SCTAB nTab = ScDocShell::GetCurTab();
         aRange.aStart.SetTab( nTab );
 
         // For DDE link, we always must parse references using OOO A1 convention.

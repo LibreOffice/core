@@ -109,7 +109,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     if ( pInputHdl )
         pInputHdl->NotifyChange( NULL );
 
-    m_aHelper.enableInput( false );
+    ScFormulaReferenceHelper::enableInput( false );
     m_aHelper.EnableSpreadsheets();
     m_aHelper.Init();
     m_aHelper.SetDispatcherLock( true );

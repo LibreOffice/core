@@ -3360,7 +3360,7 @@ void ScInterpreter::ScMacro()
         }
 
         SbxDataType eResType = refRes->GetType();
-        if( pVar->GetError() )
+        if( SbxBase::GetError() )
         {
             SetError( errNoValue);
         }

@@ -166,21 +166,21 @@ void ScNoteMarker::InvalidateWin()
 {
     if (bVisible)
     {
-        pWindow->Invalidate( pWindow->LogicToLogic(aRect, aMapMode, pWindow->GetMapMode()) );
+        pWindow->Invalidate( OutputDevice::LogicToLogic(aRect, aMapMode, pWindow->GetMapMode()) );
 
         if ( pRightWin || pBottomWin )
         {
             Size aWinSize = pWindow->PixelToLogic( pWindow->GetOutputSizePixel(), aMapMode );
             if ( pRightWin )
-                pRightWin->Invalidate( pRightWin->LogicToLogic(aRect,
+                pRightWin->Invalidate( OutputDevice::LogicToLogic(aRect,
                                         lcl_MoveMapMode( aMapMode, Size( aWinSize.Width(), 0 ) ),
                                         pRightWin->GetMapMode()) );
             if ( pBottomWin )
-                pBottomWin->Invalidate( pBottomWin->LogicToLogic(aRect,
+                pBottomWin->Invalidate( OutputDevice::LogicToLogic(aRect,
                                         lcl_MoveMapMode( aMapMode, Size( 0, aWinSize.Height() ) ),
                                         pBottomWin->GetMapMode()) );
             if ( pDiagWin )
-                pDiagWin->Invalidate( pDiagWin->LogicToLogic(aRect,
+                pDiagWin->Invalidate( OutputDevice::LogicToLogic(aRect,
                                         lcl_MoveMapMode( aMapMode, aWinSize ),
                                         pDiagWin->GetMapMode()) );
         }

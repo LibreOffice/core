@@ -47,7 +47,7 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
         maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
     }
 
-    ScViewData* pViewData = pShell->GetViewData();
+    ScViewData* pViewData = ScDocShell::GetViewData();
     ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
     SvSimpleTableContainer *pContainer = get<SvSimpleTableContainer>("ctrl");
     Size aControlSize(210, 0);

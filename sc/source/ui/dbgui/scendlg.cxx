@@ -152,7 +152,7 @@ IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 
     m_pEdName->SetText( aName );
 
-    if ( !pDoc->ValidTabName( aName ) )
+    if ( !ScDocument::ValidTabName( aName ) )
     {
         InfoBox( this, ScGlobal::GetRscString( STR_INVALIDTABNAME ) ).Execute();
         m_pEdName->GrabFocus();
