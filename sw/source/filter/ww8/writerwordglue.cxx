@@ -725,38 +725,31 @@ namespace sw
                 OUString const& rFontName, OUString const& rAltName,
                 rtl_TextEncoding eTextEncoding)
         {
-            static struct { rtl_TextEncoding enc; sal_uInt8 charset; }
+            sal_uInt8 nRet =
+                rtl_getBestWindowsCharsetFromTextEncoding(eTextEncoding);
+            rtl_TextEncoding enc2 = rtl_getTextEncodingFromWindowsCharset(nRet);
+            if (!(CanEncode(rFontName, enc2) && CanEncode(rAltName, enc2)))
+            {
+                static struct { rtl_TextEncoding enc; sal_uInt8 charset; }
                 const s_fallbacks [] = {
                     { RTL_TEXTENCODING_MS_932, 0x80 }, // Shift-JIS
                     { RTL_TEXTENCODING_MS_936, 0x86 }, // GB-2312
                     { RTL_TEXTENCODING_MS_950, 0x88 }, // Big5
                     { RTL_TEXTENCODING_MS_949, 0x81 }, // EUC-KR
                 };
-            sal_uInt8 nRet =
-                rtl_getBestWindowsCharsetFromTextEncoding(eTextEncoding);
-            switch (eTextEncoding)
-            {
-                case RTL_TEXTENCODING_DONTKNOW:
-                case RTL_TEXTENCODING_UCS2:
-                case RTL_TEXTENCODING_UTF7:
-                case RTL_TEXTENCODING_UTF8:
-                case RTL_TEXTENCODING_JAVA_UTF8:
-                    for (size_t i = 0; i < SAL_N_ELEMENTS(s_fallbacks); ++i)
+                for (size_t i = 0; i < SAL_N_ELEMENTS(s_fallbacks); ++i)
+                {
+                    // fall back to a charset that can at least encode the
+                    // font's name
+                    if (CanEncode(rFontName, s_fallbacks[i].enc)
+                        && CanEncode(rAltName, s_fallbacks[i].enc))
                     {
-                        // fall back to a charset that can at least encode
-                        // the font's name
-                        if (CanEncode(rFontName, s_fallbacks[i].enc)
-                            && CanEncode(rAltName, s_fallbacks[i].enc))
-                        {
-                            return s_fallbacks[i].charset;
-                        }
+                        return s_fallbacks[i].charset;
                     }
-                    SAL_INFO("sw.rtf", "no fallback charset found for font: "
-                            << rFontName << " " << rAltName);
-                    nRet = 0x01; // all hope lost: "default", whatever that is
-                    break;
-                default:
-                    break;
+                }
+                SAL_INFO("sw.rtf", "no fallback charset found for font: "
+                         << rFontName << " " << rAltName);
+                nRet = 0x01; // all hope lost: "default", whatever that is
             }
             return nRet;
         }
