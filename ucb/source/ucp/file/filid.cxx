@@ -35,13 +35,13 @@ FileContentIdentifier::FileContentIdentifier(
     {
         m_pMyShell->getUrlFromUnq( aUnqPath,m_aContentId );
         m_aNormalizedId = aUnqPath;
-        m_pMyShell->getScheme( m_aProviderScheme );
+        shell::getScheme( m_aProviderScheme );
     }
     else
     {
         m_pMyShell->getUnqFromUrl( aUnqPath,m_aNormalizedId );
         m_aContentId = aUnqPath;
-        m_pMyShell->getScheme( m_aProviderScheme );
+        shell::getScheme( m_aProviderScheme );
     }
 }
 
