@@ -22,7 +22,6 @@ $(eval $(call gb_SrsTarget_set_include,bib/res,\
 
 $(eval $(call gb_SrsTarget_add_files,bib/res,\
 	extensions/source/bibliography/bib.src \
-	extensions/source/bibliography/datman.src \
 	extensions/source/bibliography/sections.src \
 	extensions/source/bibliography/toolbar.src \
 ))
