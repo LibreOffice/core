@@ -833,7 +833,7 @@ void AssignmentPersistentData::Commit()
             }
             else
             {
-                xDS = xDS.query( m_pImpl->m_xTransientDataSource );
+                xDS.set(m_pImpl->m_xTransientDataSource, css::uno::UNO_QUERY);
             }
 
             // build the connection

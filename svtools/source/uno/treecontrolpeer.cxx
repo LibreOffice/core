@@ -1448,13 +1448,11 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
 {
     if( !mxGraphicProvider.is() )
     {
-        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        Reference< XInterface > x( graphic::GraphicProvider::create(xContext) );
-        mxGraphicProvider.query( x );
-        mxGraphicProvider = Reference< XGraphicProvider >( x, UNO_QUERY );
+        mxGraphicProvider = graphic::GraphicProvider::create(
+            comphelper::getProcessComponentContext());
     }
 
-    if( mxGraphicProvider.is() ) try
+    try
     {
         ::com::sun::star::beans::PropertyValues aProps( 1 );
         aProps[0].Name = "URL";

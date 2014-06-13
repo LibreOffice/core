@@ -1281,7 +1281,7 @@ basegfx::B2DVector GraphicObject::calculateCropScaling(
     }
     else
     {
-        aBitmapSize = Application::GetDefaultDevice()->LogicToLogic(aBitmapSize, GetPrefMapMode(), aMapMode100thmm);
+        aBitmapSize = OutputDevice::LogicToLogic(aBitmapSize, GetPrefMapMode(), aMapMode100thmm);
     }
 
     const double fDivX(aBitmapSize.Width() - fLeftCrop - fRightCrop);
