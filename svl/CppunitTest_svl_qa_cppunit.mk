@@ -25,6 +25,9 @@ $(eval $(call gb_CppunitTest_use_api,svl_qa_cppunit, \
 
 $(eval $(call gb_CppunitTest_use_externals,svl_qa_cppunit, \
 	boost_headers \
+	icui18n \
+	icuuc \
+	icu_headers \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_qa_cppunit, \

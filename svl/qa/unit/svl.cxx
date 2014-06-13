@@ -37,6 +37,7 @@
 #include <unotools/syslocale.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <unicode/calendar.h>
 
 using namespace ::com::sun::star;
 using namespace svl;
@@ -55,6 +56,7 @@ public:
     void testSharedString();
     void testSharedStringPool();
     void testSharedStringPoolPurge();
+    void testFdo44286();
     void testFdo60915();
     void testI116701();
 
@@ -63,6 +65,7 @@ public:
     CPPUNIT_TEST(testSharedString);
     CPPUNIT_TEST(testSharedStringPool);
     CPPUNIT_TEST(testSharedStringPoolPurge);
+    CPPUNIT_TEST(testFdo44286);
     CPPUNIT_TEST(testFdo60915);
     CPPUNIT_TEST(testI116701);
     CPPUNIT_TEST_SUITE_END();
@@ -74,6 +77,7 @@ private:
                             double fPreviewNumber,
                             LanguageType eLang,
                             OUString& sExpected);
+    boost::scoped_ptr<icu::TimeZone> m_pDefaultTimeZone;
 };
 
 Test::Test()
@@ -87,6 +91,7 @@ Test::Test()
     //getProcessServiceFactory.  In general those should be removed in favour
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(xSM);
+    m_pDefaultTimeZone.reset(icu::TimeZone::createDefault());
 }
 
 void Test::setUp()
@@ -95,6 +100,7 @@ void Test::setUp()
 
 void Test::tearDown()
 {
+    icu::TimeZone::setDefault(*m_pDefaultTimeZone);
 }
 
 Test::~Test()
@@ -395,6 +401,32 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
     if (!aFormatter.GetPreviewString(sCode, fPreviewNumber, sStr, ppColor, eLang))
         CPPUNIT_FAIL("GetPreviewString() failed");
     CPPUNIT_ASSERT_EQUAL(sExpected, sStr);
+}
+
+void Test::testFdo44286()
+{
+    LanguageType eLang = LANGUAGE_SYSTEM;
+    OUString sCode = "YYYY-MM-DD", sExpected;
+    double fPreviewNumber;
+    SvNumberFormatter aFormatter(m_xContext, eLang);
+    {
+        icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone("America/Sao_Paulo"));
+        sExpected = "1902-04-22";
+        fPreviewNumber = 843;
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    }
+    {
+        icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone("Europe/Berlin"));
+        sExpected = "1790-07-27";
+        fPreviewNumber = -39967;
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    }
+    {
+        icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone("US/Mountain"));
+        sExpected = "1790-07-26";
+        fPreviewNumber = -39968;
+        checkPreviewString(aFormatter, sCode, fPreviewNumber, eLang, sExpected);
+    }
 }
 
 void Test::testFdo60915()
