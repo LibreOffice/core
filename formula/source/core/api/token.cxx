@@ -287,11 +287,16 @@ bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 {
     return FormulaByteToken::operator==( r ) && pOrigToken == r.GetFAPOrigToken();
 }
+
+
 short* FormulaJumpToken::GetJump() const                     { return pJump; }
+bool FormulaJumpToken::HasForceArray() const                 { return bHasForceArray; }
+void FormulaJumpToken::SetForceArray( bool b )               { bHasForceArray = b; }
 bool FormulaJumpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pJump[0] == r.GetJump()[0] &&
-        memcmp( pJump+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0;
+        memcmp( pJump+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0 &&
+        bHasForceArray == r.HasForceArray();
 }
 FormulaJumpToken::~FormulaJumpToken()
 {

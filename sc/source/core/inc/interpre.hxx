@@ -888,7 +888,7 @@ public:
 
 inline void ScInterpreter::MatrixDoubleRefToMatrix()
 {
-    if ( bMatrixFormula && GetStackType() == formula::svDoubleRef )
+    if ( (bMatrixFormula || pCur->HasForceArray()) && GetStackType() == formula::svDoubleRef )
     {
         GetTokenMatrixMap();    // make sure it exists, create if not.
         PopDoubleRefPushMatrix();

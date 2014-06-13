@@ -352,15 +352,18 @@ class FORMULA_DLLPUBLIC FormulaJumpToken : public FormulaToken
 {
 private:
             short*              pJump;
+            bool                bHasForceArray;
 public:
                                 FormulaJumpToken( OpCode e, short* p ) :
-                                    FormulaToken( formula::svJump , e)
+                                    FormulaToken( formula::svJump , e),
+                                    bHasForceArray( false)
                                 {
                                     pJump = new short[ p[0] + 1 ];
                                     memcpy( pJump, p, (p[0] + 1) * sizeof(short) );
                                 }
                                 FormulaJumpToken( const FormulaJumpToken& r ) :
-                                    FormulaToken( r )
+                                    FormulaToken( r ),
+                                    bHasForceArray( r.bHasForceArray)
                                 {
                                     pJump = new short[ r.pJump[0] + 1 ];
                                     memcpy( pJump, r.pJump, (r.pJump[0] + 1) * sizeof(short) );
@@ -369,6 +372,8 @@ public:
     virtual short*              GetJump() const SAL_OVERRIDE;
     virtual bool                operator==( const formula::FormulaToken& rToken ) const SAL_OVERRIDE;
     virtual FormulaToken*       Clone() const SAL_OVERRIDE { return new FormulaJumpToken(*this); }
+    virtual bool                HasForceArray() const SAL_OVERRIDE;
+    virtual void                SetForceArray( bool b ) SAL_OVERRIDE;
 };
 
 
