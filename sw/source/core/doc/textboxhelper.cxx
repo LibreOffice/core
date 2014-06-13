@@ -351,6 +351,17 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
                 }
             }
             break;
+        case RES_CHAIN:
+            switch (nMemberId)
+            {
+            case MID_CHAIN_PREVNAME:
+                aPropertyName = UNO_NAME_CHAIN_PREV_NAME;
+                break;
+            case MID_CHAIN_NEXTNAME:
+                aPropertyName = UNO_NAME_CHAIN_NEXT_NAME;
+                break;
+            }
+            break;
         }
 
         if (!aPropertyName.isEmpty())
