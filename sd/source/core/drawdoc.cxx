@@ -204,10 +204,11 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     pItemPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
     pItemPool->FreezeIdRanges();
-    SetTextDefaults();
 
     // DrawingEngine has to know where it is...
     FmFormModel::SetStyleSheetPool( new SdStyleSheetPool( GetPool(), this ) );
+
+    SetTextDefaults(); // requires the StyleSheetPool set above
 
     // Set StyleSheetPool for DrawOutliner, so text objects can be read correctly.
     // The link to the StyleRequest handler of the document is set later, in
