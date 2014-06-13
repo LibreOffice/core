@@ -1344,7 +1344,8 @@ bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, bool bAddRect )
                     if(aSpaceToPrevPage.Height() > 0 && aSpaceToPrevPage.Width() > 0)
                         pImp->GetShell()->AddPaintRect( aSpaceToPrevPage );
 
-                    pSh->GetOut()->DrawRect( aSpaceToPrevPage.SVRect() );
+                    if (pSh)
+                        pSh->GetOut()->DrawRect( aSpaceToPrevPage.SVRect() );
 
                     // left
                     aSpaceToPrevPage = aPageRect;
