@@ -1601,7 +1601,7 @@ int Desktop::Main()
     SvtFontSubstConfig().Apply();
 
     SvtTabAppearanceCfg aAppearanceCfg;
-    aAppearanceCfg.SetInitialized();
+    SvtTabAppearanceCfg::SetInitialized();
     aAppearanceCfg.SetApplicationDefaults( this );
     SvtAccessibilityOptions aOptions;
     aOptions.SetVCLSettings();
