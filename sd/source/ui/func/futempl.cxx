@@ -429,27 +429,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 }
                             }
 
-                            OUString sStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " ");
-
                             pStyleSheet->GetItemSet().Put(aTempSet);
-                            SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
-                            pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-
-                            if( (ePO >= PO_OUTLINE_1) && (ePO <= PO_OUTLINE_8) )
-                            {
-                                for( sal_uInt16 n = (sal_uInt16)(ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
-                                {
-                                    OUString aName( sStyleName + OUString::number(n) );
-
-                                    SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SD_STYLE_FAMILY_PSEUDO);
-
-                                    if(pSheet)
-                                    {
-                                        SdStyleSheet* pRealStyleSheet = ((SdStyleSheet*)pSheet)->GetRealStyleSheet();
-                                        pRealStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-                                    }
-                                }
-                            }
+                            SdStyleSheet::BroadcastSdStyleSheetChange(pStyleSheet, ePO, pSSPool);
                         }
 
                         SfxItemSet& rAttr = pStyleSheet->GetItemSet();

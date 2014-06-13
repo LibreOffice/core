@@ -57,10 +57,14 @@
 #include <editeng/cmapitem.hxx>
 
 #include "app.hrc"
-
+#include "glob.hrc"
+#include "sdresid.hxx"
+#include "prlayout.hxx"
 #include "ViewShell.hxx"
 #include "drawview.hxx"
 #include "drawdoc.hxx"
+#include "stlpool.hxx"
+#include "stlsheet.hxx"
 #include "OutlineView.hxx"
 #include "Window.hxx"
 #include "futempl.hxx"
@@ -316,10 +320,74 @@ void TextObjectBar::Execute( SfxRequest &rReq )
         break;
 
         case FN_NUM_BULLET_ON:
-            if( pOLV )
-                pOLV->ToggleBullets();
-            break;
+        {
+            if (pOLV)
+            {
+                bool bMasterPage = false;
+                SdrPageView* pPageView = mpView->GetSdrPageView();
+                if (pPageView)
+                {
+                    SdPage* pPage = (SdPage*)pPageView->GetPage();
+                    bMasterPage = pPage && (pPage->GetPageKind() == PK_STANDARD) && pPage->IsMasterPage();
+                }
 
+                if (!bMasterPage)
+                    pOLV->ToggleBullets();
+                else
+                {
+                    //Resolves: fdo#78151 in master pages if we toggle bullets on
+                    //and off then just disable/enable the bulleting, but do not
+                    //change the *level* of the paragraph, because the paragraph is
+                    //effectively a preview of the equivalent style level, and
+                    //changing the level disconnects it from the style
+
+                    ::Outliner* pOL = pOLV->GetOutliner();
+                    if (pOL)
+                    {
+                        const SvxNumBulletItem *pItem = NULL;
+                        SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
+                        OUString sStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " 1");
+                        SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find(sStyleName, SD_STYLE_FAMILY_PSEUDO);
+                        if( pFirstStyleSheet )
+                            pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, (const SfxPoolItem**)&pItem);
+
+                        if (pItem )
+                        {
+                            SvxNumRule aNewRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
+                            ESelection aSel = pOLV->GetSelection();
+                            aSel.Adjust();
+                            sal_Int32 nStartPara = aSel.nStartPara;
+                            sal_Int32 nEndPara = aSel.nEndPara;
+                            for (sal_Int32 nPara = nStartPara; nPara <= nEndPara; ++nPara)
+                            {
+                                sal_uInt16 nLevel = pOL->GetDepth(nPara);
+                                SvxNumberFormat aFmt(aNewRule.GetLevel(nLevel));
+
+                                if (aFmt.GetNumberingType() == SVX_NUM_NUMBER_NONE)
+                                {
+                                    aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+                                    SdStyleSheetPool::setDefaultOutlineNumberFormatBulletAndIndent(nLevel, aFmt);
+                                }
+                                else
+                                {
+                                    aFmt.SetNumberingType(SVX_NUM_NUMBER_NONE);
+                                    aFmt.SetLSpace(0);
+                                    aFmt.SetAbsLSpace(0);
+                                    aFmt.SetFirstLineOffset(0);
+                                }
+
+                                aNewRule.SetLevel(nLevel, aFmt);
+                            }
+
+                            pFirstStyleSheet->GetItemSet().Put(SvxNumBulletItem(aNewRule, EE_PARA_NUMBULLET));
+
+                            SdStyleSheet::BroadcastSdStyleSheetChange(pFirstStyleSheet, PO_OUTLINE_1, pSSPool);
+                        }
+                    }
+                }
+            }
+            break;
+        }
         case SID_GROW_FONT_SIZE:
         case SID_SHRINK_FONT_SIZE:
         {

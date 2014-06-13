@@ -1052,9 +1052,49 @@ void SdStyleSheetPool::UpdateStdNames()
     }
 }
 
+void SdStyleSheetPool::setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i, SvxNumberFormat &rNumberFormat)
+{
+    rNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
+    rNumberFormat.SetBulletRelSize(45);
+    const short nLSpace = (i + 1) * 1200;
+    rNumberFormat.SetLSpace(nLSpace);
+    rNumberFormat.SetAbsLSpace(nLSpace);
+    short nFirstLineOffset = -600;
+
+    switch(i)
+    {
+        case 0:
+        {
+            nFirstLineOffset = -900;
+        }
+        break;
+
+        case 1:
+        {
+            rNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
+            rNumberFormat.SetBulletRelSize(75);
+            nFirstLineOffset = -900;
+        }
+        break;
+
+        case 2:
+        {
+            nFirstLineOffset = -800;
+        }
+        break;
+
+        case 3:
+        {
+            rNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
+            rNumberFormat.SetBulletRelSize(75);
+        }
+        break;
+    }
+
+    rNumberFormat.SetFirstLineOffset(nFirstLineOffset);
+}
+
 // Set new SvxNumBulletItem for the respective style sheet
-
-
 void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                                          Font& rBulletFont )
 {
@@ -1134,12 +1174,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                                  SVX_MAX_NUM, false );
             for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
             {
-                aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
-                aNumberFormat.SetBulletRelSize(45);
-                const short nLSpace = (i + 1) * 1200;
-                aNumberFormat.SetLSpace(nLSpace);
-                aNumberFormat.SetAbsLSpace(nLSpace);
-                short nFirstLineOffset = -600;
+                setDefaultOutlineNumberFormatBulletAndIndent(i, aNumberFormat);
 
                 sal_uLong nFontSize = 20;
                 switch(i)
@@ -1147,36 +1182,28 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                     case 0:
                     {
                         nFontSize = 32;
-                        nFirstLineOffset = -900;
                     }
                     break;
 
                     case 1:
                     {
-                        aNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
-                        aNumberFormat.SetBulletRelSize(75);
                         nFontSize = 32;
-                        nFirstLineOffset = -900;
                     }
                     break;
 
                     case 2:
                     {
                         nFontSize = 28;
-                        nFirstLineOffset = -800;
                     }
                     break;
 
                     case 3:
                     {
-                        aNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
-                        aNumberFormat.SetBulletRelSize(75);
                         nFontSize = 24;
                     }
                     break;
                 }
 
-                aNumberFormat.SetFirstLineOffset(nFirstLineOffset);
                 nFontSize = (sal_uInt16)((nFontSize * 2540L) / 72);  // Pt --> 1/100 mm
                 rBulletFont.SetSize(Size(0,846));       // 24 pt
                 aNumberFormat.SetBulletFont(&rBulletFont);
