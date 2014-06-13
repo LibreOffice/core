@@ -84,13 +84,12 @@ ScaleTabPage::ScaleTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     get(m_pLB_TimeResolution, "LB_TIME_RESOLUTION");
     get(m_pCbx_AutoTimeResolution, "CBX_AUTO_TIME_RESOLUTION");
 
-    get(m_pBxMain, "boxMAIN");
+    get(m_pTxtMain, "TXT_STEP_MAIN");
     get(m_pFmtFldStepMain, "EDT_STEP_MAIN");
     get(m_pMt_MainDateStep, "MT_MAIN_DATE_STEP");
     get(m_pLB_MainTimeUnit, "LB_MAIN_TIME_UNIT");
     get(m_pCbxAutoStepMain, "CBX_AUTO_STEP_MAIN");
 
-    get(m_pBxMinor, "boxMINOR");
     get(m_pMtStepHelp, "MT_STEPHELP");
     get(m_pLB_HelpTimeUnit, "LB_HELP_TIME_UNIT");
     get(m_pCbxAutoStepHelp, "CBX_AUTO_STEP_HELP");
@@ -147,13 +146,16 @@ void ScaleTabPage::EnableControls()
     m_pCbxLogarithm->Show( bValueAxis && !bDateAxis );
 
     m_pBxMinMax->Show(bValueAxis);
-    m_pBxMain->Show( bValueAxis );
-    m_pBxMinor->Show( bValueAxis );
-    m_pBxOrigin->Show( m_bShowAxisOrigin && bValueAxis );
+
+    m_pTxtMain->Show( bValueAxis );
+    m_pCbxAutoStepMain->Show( bValueAxis );
 
     m_pTxtHelpCount->Show( bValueAxis && !bDateAxis );
     m_pTxtHelp->Show( bDateAxis );
+    m_pMtStepHelp->Show( bValueAxis );
+    m_pCbxAutoStepHelp->Show( bValueAxis );
 
+    m_pBxOrigin->Show( m_bShowAxisOrigin && bValueAxis );
     m_pBxResolution->Show( bDateAxis );
 
     bool bWasDateAxis = m_pMt_MainDateStep->IsVisible();
@@ -165,6 +167,7 @@ void ScaleTabPage::EnableControls()
         else
             m_pMt_MainDateStep->SetValue( static_cast<sal_Int32>(m_pFmtFldStepMain->GetValue()) );
     }
+
     m_pFmtFldStepMain->Show( bValueAxis && !bDateAxis );
     m_pMt_MainDateStep->Show( bDateAxis );
 
@@ -603,8 +606,15 @@ void ScaleTabPage::HideAllControls()
     m_pBxType->Hide();
     m_pCbxLogarithm->Hide();
     m_pBxMinMax->Hide();
-    m_pBxMain->Hide();
-    m_pBxMinor->Hide();
+    m_pTxtMain->Hide();
+    m_pFmtFldStepMain->Hide();
+    m_pMt_MainDateStep->Hide();
+    m_pLB_MainTimeUnit->Hide();
+    m_pCbxAutoStepMain->Hide();
+    m_pTxtHelpCount->Hide();
+    m_pTxtHelp->Hide();
+    m_pMtStepHelp->Hide();
+    m_pCbxAutoStepHelp->Hide();
     m_pBxOrigin->Hide();
     m_pBxResolution->Hide();
 }
