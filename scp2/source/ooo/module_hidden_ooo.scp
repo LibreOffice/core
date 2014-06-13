@@ -129,7 +129,6 @@ Module gid_Module_Root_Files_4
 	auto_ooobinarytable_ALL,
 	gid_File_Lib_Bib,
 	gid_File_Lib_J,
-	gid_File_Lib_BaseBmp,
 	gid_File_Lib_Zip);
 End
 

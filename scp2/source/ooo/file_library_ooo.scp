@@ -92,35 +92,6 @@ End
 
 #endif
 
-#ifdef MACOSX
-
-#ifndef ENABLE_MACOSX_SANDBOX
-File gid_File_Lib_avmediaQuickTime
-	PACKED_LIB_FILE_BODY;
-	Name = LIBNAME(avmediaQuickTime);
-End
-#endif
-
-#if MAXOSX_SDK_VERSION >= 1070
-File gid_File_Lib_avmediaMacAVF
-	PACKED_LIB_FILE_BODY;
-	Name = LIBNAME(avmediaMacAVF);
-End
-#endif
-
-#endif
-
-#if defined(MACOSX)
-File gid_File_Lib_Basebmp
-    Name = LIBNAME(basebmp);
-    PACKED_LIB_FILE_BODY;
-End
-#endif
-
-#if defined UNX && ! defined MACOSX
-STD_LIB_FILE( gid_File_Lib_BaseBmp, basebmp )
-#endif
-
 #if !defined(ANDROID) && !defined(IOS) //FIXME: get nss&xmlsec building
 //we need the nss libs for libxmlsec (or if the internal mozilla is enabled)
 

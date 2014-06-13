@@ -226,8 +226,15 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	acc \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
+	$(if $(filter MACOSX,$(OS)),\
+		$(if $(filter-out 1060,$(MACOSX_SDK_VERSION)),avmediaMacAVF) \
+		$(if $(ENABLE_MACOSX_SANDBOX),,avmediaQuickTime) \
+	) \
 	$(if $(DISABLE_SCRIPTING),,basctl) \
 	$(if $(DISABLE_SCRIPTING),,basprov) \
+	$(if $(filter $(OS),ANDROID),, \
+		basebmp \
+	) \
 	basegfx \
 	bib \
 	$(if $(ENABLE_CAIRO_CANVAS),cairocanvas) \
@@ -423,14 +430,9 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	adabas \
 	adabasui \
 	agg \
-	$(if $(filter $(OS),ANDROID),, \
-		basebmp \
-	) \
 	communi \
 	ooxml \
 	$(call gb_Helper_optional,DBCONNECTIVITY,sdbc) \
-	avmediaMacAVF \
-	avmediaQuickTime \
 	filtertracer \
 	rpt \
 	rptui \
