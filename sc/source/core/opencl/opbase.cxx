@@ -130,7 +130,6 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
     SubArguments &vSubArguments,  int argumentNum)
 {
     int i = argumentNum;
-#ifdef ISNAN
      if(vSubArguments[i]->GetFormulaToken()->GetType() ==
      formula::svSingleVectorRef)
      {
@@ -139,6 +138,17 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
          ss<< "    if(singleIndex>=";
          ss<< pTmpDVR1->GetArrayLength();
          ss<<" ||";
+         ss<< "isNan(";
+         ss<< vSubArguments[i]->GenSlidingWindowDeclRef(true);
+         ss<<"))\n";
+         ss<< "        tmp";
+         ss<< i;
+         ss <<"=0;\n    else \n";
+         ss <<"        tmp";
+         ss <<i;
+         ss << "=";
+         ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
+         ss<<";\n";
      }
      if(vSubArguments[i]->GetFormulaToken()->GetType() ==
      formula::svDoubleVectorRef)
@@ -148,24 +158,36 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream & ss,
          ss<< "    if(doubleIndex>=";
          ss<< pTmpDVR2->GetArrayLength();
          ss<<" ||";
+         ss<< "isNan(";
+         ss<< vSubArguments[i]->GenSlidingWindowDeclRef(false);
+         ss<<"))\n";
+         ss<< "        tmp";
+         ss<< i;
+         ss <<"=0;\n    else \n";
+         ss <<"        tmp";
+         ss <<i;
+         ss << "=";
+         ss << vSubArguments[i]->GenSlidingWindowDeclRef(false);
+         ss<<";\n";
      }
      if(vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble ||
      vSubArguments[i]->GetFormulaToken()->GetOpCode() != ocPush)
      {
          ss<< "    if(";
+         ss<< "isNan(";
+         ss<< vSubArguments[i]->GenSlidingWindowDeclRef();
+         ss<<"))\n";
+         ss<< "        tmp";
+         ss<< i;
+         ss <<"=0;\n    else \n";
+         ss <<"        tmp";
+         ss <<i;
+         ss << "=";
+         ss << vSubArguments[i]->GenSlidingWindowDeclRef();
+         ss<<";\n";
+
      }
-    ss<< "isNan(";
-    ss<< vSubArguments[i]->GenSlidingWindowDeclRef(true);
-    ss<<"))\n";
-    ss<< "        tmp";
-    ss<< i;
-    ss <<"=0;\n    else \n";
-#endif
-    ss <<"        tmp";
-    ss <<i;
-    ss << "=";
-    ss << vSubArguments[i]->GenSlidingWindowDeclRef(true);
-    ss<<";\n";
+
 }
 
 void CheckVariables::CheckSubArgumentIsNan2( std::stringstream & ss,

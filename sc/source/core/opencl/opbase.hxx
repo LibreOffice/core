@@ -211,7 +211,7 @@ public:
     virtual void GenSlidingWindowDecl(std::stringstream &ss) const SAL_OVERRIDE;
 
     /// When referenced in a sliding window function
-    virtual std::string GenSlidingWindowDeclRef(bool=true) const SAL_OVERRIDE;
+    virtual std::string GenSlidingWindowDeclRef(bool=false) const SAL_OVERRIDE;
 
     /// Create buffer and pass the buffer to a given kernel
     virtual size_t Marshal(cl_kernel, int, int, cl_program) SAL_OVERRIDE;
@@ -250,6 +250,9 @@ public:
         std::set<std::string>& ) {}
     virtual bool takeString() const = 0;
     virtual bool takeNumeric() const = 0;
+    //Continue process 'Zero' or Not(like OpMul, not continue process when meet
+    // 'Zero'
+    virtual bool ZeroReturnZero() {return false;}
     virtual ~OpBase() {}
 };
 

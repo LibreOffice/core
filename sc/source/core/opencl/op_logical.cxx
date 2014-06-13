@@ -319,7 +319,6 @@ void OpIf::GenSlidingWindowFunction(std::stringstream &ss,
 {
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
-    if(vSubArguments.size()!=3) throw  Unhandled("unknown operand for ocPush");
     for (unsigned i = 0; i < vSubArguments.size(); i++)
     {
         if (i)
@@ -332,22 +331,49 @@ void OpIf::GenSlidingWindowFunction(std::stringstream &ss,
     FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
     if(tmpCur0->GetType() == formula::svDoubleVectorRef)
     {
-            throw UnhandledToken(tmpCur0, "unknown operand for ocPush");
+        throw UnhandledToken(tmpCur0, "unknown operand for ocPush");
     }
     else
     {
-        ss << "    if(isNan(";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << ")||  ";
-        ss << vSubArguments[0]->GenSlidingWindowDeclRef();
-        ss << " == 0)\n";
-        ss << "         return ";
-        ss << vSubArguments[2]->GenSlidingWindowDeclRef();
-        ss << ";\n";
-        ss << "     else";
-        ss <<"          return ";
-        ss << vSubArguments[1]->GenSlidingWindowDeclRef();
-        ss <<";\n";
+        if(vSubArguments.size()==3)
+        {
+            ss << "    if(isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ")||  ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << " == 0)\n";
+            ss << "         return ";
+            ss << vSubArguments[2]->GenSlidingWindowDeclRef();
+            ss << ";\n";
+            ss << "     else";
+            ss <<"          return ";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+        }
+        if(vSubArguments.size()==2)
+        {
+            ss << "    if(isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ")||  ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << " == 0)\n";
+            ss << "         return 0;\n";
+            ss << "     else";
+            ss <<"          return ";
+            ss << vSubArguments[1]->GenSlidingWindowDeclRef();
+            ss <<";\n";
+        }
+        if(vSubArguments.size()==1)
+        {
+            ss << "    if(isNan(";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << ")||  ";
+            ss << vSubArguments[0]->GenSlidingWindowDeclRef();
+            ss << " == 0)\n";
+            ss << "         return 0;\n";
+            ss << "     else";
+            ss <<"          return 1;\n";
+        }
     }
     ss << "}\n";
 }
