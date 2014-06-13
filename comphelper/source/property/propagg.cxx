@@ -565,10 +565,10 @@ void OPropertySetAggregationHelper::setAggregation(const  ::com::sun::star::uno:
         m_bListening = false;
     }
 
-    m_xAggregateState       =  m_xAggregateState.query( _rxDelegate );
-    m_xAggregateSet         =  m_xAggregateSet.query( _rxDelegate );
-    m_xAggregateMultiSet    =  m_xAggregateMultiSet.query( _rxDelegate );
-    m_xAggregateFastSet     =  m_xAggregateFastSet.query( _rxDelegate );
+    m_xAggregateState.set(_rxDelegate, css::uno::UNO_QUERY);
+    m_xAggregateSet.set(_rxDelegate, css::uno::UNO_QUERY);
+    m_xAggregateMultiSet.set(_rxDelegate, css::uno::UNO_QUERY);
+    m_xAggregateFastSet.set(_rxDelegate, css::uno::UNO_QUERY);
 
     // must support XPropertySet and XMultiPropertySet
     if ( m_xAggregateSet.is() && !m_xAggregateMultiSet.is() )
