@@ -307,31 +307,23 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
     try
     {
-        uno::Reference<frame::XModel> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
-        uno::Sequence<beans::PropertyValue> aSequence = xDocument->getArgs();
-
-        MediaDescriptor aMediaDescriptor(aSequence);
-        OUString sPropertyName = MediaDescriptor::PROP_DOCUMENTSERVICE();
-        OUString aDocumentService = aMediaDescriptor.getUnpackedValueOrDefault(sPropertyName, OUString());
-
-        if (aDocumentService.isEmpty())
-        {
-            gImpl->maLastExceptionMsg = "unknown document type";
-            return false;
-        }
-
         const ExtensionMap* pMap;
-        if (aDocumentService == "com.sun.star.sheet.SpreadsheetDocument")
-            pMap = (const ExtensionMap*) aCalcExtensionMap;
-        else if (aDocumentService == "com.sun.star.presentation.PresentationDocument")
-            pMap = (const ExtensionMap*) aImpressExtensionMap;
-        else if (aDocumentService == "com.sun.star.drawing.DrawingDocument")
-            pMap = (const ExtensionMap*) aDrawExtensionMap;
-        else if (aDocumentService == "com.sun.star.text.TextDocument")
-            pMap = (const ExtensionMap*) aWriterExtensionMap;
-        else
+
+        switch (doc_getDocumentType(pThis))
         {
-            gImpl->maLastExceptionMsg = "unknown document mapping";
+        case LOK_DOCTYPE_SPREADSHEET:
+            pMap = (const ExtensionMap*) aCalcExtensionMap;
+            break;
+        case LOK_DOCTYPE_PRESENTATION:
+            pMap = (const ExtensionMap*) aImpressExtensionMap;
+            break;
+        case LOK_DOCTYPE_DRAWING:
+            pMap = (const ExtensionMap*) aDrawExtensionMap;
+            break;
+        case LOK_DOCTYPE_TEXT:
+            pMap = (const ExtensionMap*) aWriterExtensionMap;
+            break;
+        case LOK_DOCTYPE_OTHER:
             return false;
         }
 
@@ -386,8 +378,49 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
 static LibreOfficeKitDocumentType doc_getDocumentType (LibreOfficeKitDocument* pThis)
 {
-    (void) pThis;
-    return WRITER;
+    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
+
+    try
+    {
+        uno::Reference<frame::XModel> xDocument(pDocument->mxComponent, uno::UNO_QUERY_THROW);
+        uno::Sequence<beans::PropertyValue> aSequence = xDocument->getArgs();
+
+        MediaDescriptor aMediaDescriptor(aSequence);
+        OUString sPropertyName = MediaDescriptor::PROP_DOCUMENTSERVICE();
+        OUString aDocumentService = aMediaDescriptor.getUnpackedValueOrDefault(sPropertyName, OUString());
+
+        if (aDocumentService.isEmpty())
+        {
+            gImpl->maLastExceptionMsg = "unknown document type";
+            return LOK_DOCTYPE_OTHER;
+        }
+
+        if (aDocumentService == "com.sun.star.sheet.SpreadsheetDocument")
+        {
+            return LOK_DOCTYPE_SPREADSHEET;
+        }
+        else if (aDocumentService == "com.sun.star.presentation.PresentationDocument")
+        {
+            return LOK_DOCTYPE_PRESENTATION;
+        }
+        else if (aDocumentService == "com.sun.star.drawing.DrawingDocument")
+        {
+            return LOK_DOCTYPE_DRAWING;
+        }
+        else if (aDocumentService == "com.sun.star.text.TextDocument")
+        {
+            return LOK_DOCTYPE_TEXT;
+        }
+        else
+        {
+            gImpl->maLastExceptionMsg = "unknown document mapping";
+        }
+    }
+    catch (const uno::Exception& exception)
+    {
+        gImpl->maLastExceptionMsg = "exception: " + exception.Message;
+    }
+    return LOK_DOCTYPE_OTHER;
 }
 
 static int doc_getNumberOfParts (LibreOfficeKitDocument* pThis)
@@ -412,30 +445,38 @@ void doc_paintTile (LibreOfficeKitDocument* pThis,
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
+
     Application::AcquireSolarMutex(1);
+    switch (doc_getDocumentType(pThis))
     {
-        SwXTextDocument* pTxtDoc = dynamic_cast< SwXTextDocument* >( pDocument->mxComponent.get() );
-        SwDocShell* pDocShell = pTxtDoc->GetDocShell();
-        SwDoc* pDoc = pDocShell->GetDoc();
-        SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
+    case LOK_DOCTYPE_TEXT:
+        {
+            SwXTextDocument* pTxtDoc = dynamic_cast< SwXTextDocument* >( pDocument->mxComponent.get() );
+            SwDocShell* pDocShell = pTxtDoc->GetDocShell();
+            SwDoc* pDoc = pDocShell->GetDoc();
+            SwViewShell* pViewShell = pDoc->GetCurrentViewShell();
 
-        ImplSVData* pSVData = ImplGetSVData();
-        SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
-        pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
+            ImplSVData* pSVData = ImplGetSVData();
+            SvpSalInstance* pSalInstance = static_cast< SvpSalInstance* >(pSVData->mpDefInst);
+            pSalInstance->setBitCountFormatMapping( 32, ::basebmp::FORMAT_THIRTYTWO_BIT_TC_MASK_RGBA );
 
-        VirtualDevice aDevice(0, (sal_uInt16)32);
-        boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
-        aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
-                    Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
-                    aBuffer, true );
+            VirtualDevice aDevice(0, (sal_uInt16)32);
+            boost::shared_array< sal_uInt8 > aBuffer( pBuffer, NoDelete< sal_uInt8 >() );
+            aDevice.SetOutputSizePixelScaleOffsetAndBuffer(
+                        Size(nCanvasWidth, nCanvasHeight), Fraction(1.0), Point(),
+                        aBuffer, true );
 
-        pViewShell->PaintTile(aDevice, nCanvasWidth, nCanvasHeight,
-                                nTilePosX, nTilePosY, nTileWidth, nTileHeight);
+            pViewShell->PaintTile(aDevice, nCanvasWidth, nCanvasHeight,
+                                    nTilePosX, nTilePosY, nTileWidth, nTileHeight);
 
-        SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(aDevice.getSalVirtualDevice());
-        basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
+            SvpSalVirtualDevice* pSalDev = static_cast< SvpSalVirtualDevice* >(aDevice.getSalVirtualDevice());
+            basebmp::BitmapDeviceSharedPtr pBmpDev = pSalDev->getBitmapDevice();
 
-        *pRowStride = pBmpDev->getScanlineStride();
+            *pRowStride = pBmpDev->getScanlineStride();
+        }
+        break;
+    default:
+        break;
     }
     Application::ReleaseSolarMutex();
 }
@@ -446,7 +487,7 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
-    if (true) // TODO: test that we have a writer document here (vs calc/impress/etc.)
+    if (doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT)
     {
         SwXTextDocument* pTxtDoc = dynamic_cast< SwXTextDocument* >( pDocument->mxComponent.get() );
         SwDocShell* pDocShell = pTxtDoc->GetDocShell();
@@ -455,6 +496,11 @@ static void doc_getDocumentSize(LibreOfficeKitDocument* pThis,
         Size aDocumentSize = pViewShell->GetDocSize();
         *pWidth = aDocumentSize.Width();
         *pHeight = aDocumentSize.Height();
+    }
+    else
+    {
+        pWidth = 0;
+        pHeight = 0;
     }
 }
 
