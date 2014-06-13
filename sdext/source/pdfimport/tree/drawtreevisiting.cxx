@@ -657,7 +657,7 @@ void DrawXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::co
             ++ next_page_element;
        }
         Element* pCurEle = *page_element;
-        pCurEle->setParent( page_element, pCurPara );
+        Element::setParent( page_element, pCurPara );
         OSL_ENSURE( !pText || pCurEle == pText || pCurEle == pLink, "paragraph child list in disorder" );
         if( pText || pDraw )
             pCurPara->updateGeometryWith( pCurEle );

@@ -682,7 +682,7 @@ void PresenterScreen::ProcessLayout (
 
         // Read the parent layout first, if one is referenced.
         OUString sParentLayout;
-        rConfiguration.GetConfigurationNode(
+        PresenterConfigurationAccess::GetConfigurationNode(
             xLayoutNode,
             OUString("ParentLayout")) >>= sParentLayout;
         if (!sParentLayout.isEmpty())
@@ -694,7 +694,7 @@ void PresenterScreen::ProcessLayout (
 
         // Process the actual layout list.
         Reference<container::XNameAccess> xList (
-            rConfiguration.GetConfigurationNode(
+            PresenterConfigurationAccess::GetConfigurationNode(
                 xLayoutNode,
                 OUString("Layout")),
             UNO_QUERY_THROW);
