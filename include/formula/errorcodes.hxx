@@ -74,6 +74,10 @@ const sal_uInt16 errNotNumericString     = 534;
 // ScInterpreter internal:  jump matrix already has a result at this position,
 // do not overwrite in case of empty code path.
 const sal_uInt16 errJumpMatHasResult     = 535;
+// ScInterpreter internal:  (matrix) element is not a numeric value, i.e.
+// string or empty, to be distinguished from the general errNoValue NAN and not
+// to be used as result.
+const sal_uInt16 errElementNaN           = 536;
 
 // Interpreter: NA() not available condition, not a real error
 const sal_uInt16 NOTAVAILABLE            = 0x7fff;
