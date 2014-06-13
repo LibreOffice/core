@@ -293,7 +293,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    m_xTableUIProvider = m_xTableUIProvider.query( m_xMasterConnection );
+    m_xTableUIProvider.set(m_xMasterConnection, css::uno::UNO_QUERY);
 
     try
     {

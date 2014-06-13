@@ -105,7 +105,7 @@ namespace dbaui
             {   // perhaps the composer can supply us with columns? This is necessary for cases
                 // where the dialog is invoked for a rowset which is not yet loaded
                 // #i22878#
-                xSuppColumns = xSuppColumns.query( m_xComposer );
+                xSuppColumns.set(m_xComposer, css::uno::UNO_QUERY);
                 if ( xSuppColumns.is() )
                     xColumns = xSuppColumns->getColumns();
             }

@@ -65,9 +65,9 @@ OResultSet::OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star:
     try
     {
         m_aStatement = _xStatement;
-        m_xDelegatorResultSetUpdate = m_xDelegatorResultSetUpdate.query( m_xDelegatorResultSet );
-        m_xDelegatorRow = m_xDelegatorRow.query( m_xDelegatorResultSet );
-        m_xDelegatorRowUpdate = m_xDelegatorRowUpdate.query( m_xDelegatorResultSet );
+        m_xDelegatorResultSetUpdate.set(m_xDelegatorResultSet, css::uno::UNO_QUERY);
+        m_xDelegatorRow.set(m_xDelegatorResultSet, css::uno::UNO_QUERY);
+        m_xDelegatorRowUpdate.set(m_xDelegatorResultSet, css::uno::UNO_QUERY);
 
         Reference< XPropertySet > xSet(m_xDelegatorResultSet, UNO_QUERY);
         xSet->getPropertyValue(PROPERTY_RESULTSETTYPE) >>= m_nResultSetType;

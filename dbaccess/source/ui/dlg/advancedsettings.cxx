@@ -383,7 +383,7 @@ namespace dbaui
         delete pExampleSet;
         pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-        const OUString eType = m_pImpl->getDatasourceType(*_pItems);
+        const OUString eType = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*_pItems);
 
         DataSourceMetaData aMeta( eType );
         const FeatureSet& rFeatures( aMeta.getFeatureSet() );
@@ -470,7 +470,7 @@ namespace dbaui
 
     OUString AdvancedSettingsDialog::getDatasourceType(const SfxItemSet& _rSet) const
     {
-        return m_pImpl->getDatasourceType(_rSet);
+        return dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(_rSet);
     }
 
     void AdvancedSettingsDialog::clearPassword()

@@ -371,7 +371,7 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
     {
         ::comphelper::MimeConfigurationHelper aConfigHelper( _rContext );
         sResult = aConfigHelper.GetDocServiceNameFromMediaType( _rMediaType );
-        _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aConfigHelper.GetExplicitlyRegisteredObjClassID( _rMediaType ));
+        _rClassId = comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(aConfigHelper.GetExplicitlyRegisteredObjClassID( _rMediaType ));
         if ( !_rClassId.getLength() && !sResult.isEmpty() )
         {
             Reference< XNameAccess > xObjConfig = aConfigHelper.GetObjConfiguration();
@@ -387,7 +387,7 @@ OUString ODocumentDefinition::GetDocumentServiceFromMediaType( const OUString& _
                          && ( xObjectProps->getByName("ObjectDocumentServiceName") >>= aEntryDocName )
                          && aEntryDocName.equals( sResult ) )
                     {
-                        _rClassId = aConfigHelper.GetSequenceClassIDRepresentation(aClassIDs[nInd]);
+                        _rClassId = comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(aClassIDs[nInd]);
                         break;
                     }
                 }

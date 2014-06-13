@@ -532,7 +532,7 @@ Reference< XPropertySet > SAL_CALL ODBTableDecorator::createDataDescriptor(  ) t
     OSL_ENSURE( xFactory.is(), "ODBTableDecorator::createDataDescriptor: invalid table!" );
     Reference< XColumnsSupplier > xColsSupp;
     if ( xFactory.is() )
-        xColsSupp = xColsSupp.query( xFactory->createDataDescriptor() );
+        xColsSupp.set(xFactory->createDataDescriptor(), css::uno::UNO_QUERY);
 
     return new ODBTableDecorator(
         m_xConnection,

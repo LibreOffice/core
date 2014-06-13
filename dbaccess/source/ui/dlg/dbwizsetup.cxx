@@ -443,7 +443,7 @@ Reference< XDriver > ODbTypeWizDialogSetup::getDriver()
 
 OUString ODbTypeWizDialogSetup::getDatasourceType(const SfxItemSet& _rSet) const
 {
-    OUString sRet = m_pImpl->getDatasourceType(_rSet);
+    OUString sRet = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(_rSet);
     if (m_pMySQLIntroPage != NULL && m_pMySQLIntroPage->IsVisible() )
     {
         switch( m_pMySQLIntroPage->getMySQLMode() )
@@ -623,7 +623,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPageWizard*, /*
 
 void ODbTypeWizDialogSetup::enterState(WizardState _nState)
 {
-    m_sURL = m_pImpl->getDatasourceType(*m_pOutSet);
+    m_sURL = dbaui::ODbDataSourceAdministrationHelper::getDatasourceType(*m_pOutSet);
     RoadmapWizard::enterState(_nState);
     switch(_nState)
     {

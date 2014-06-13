@@ -676,7 +676,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
                 xDriver,
                 m_pImpl->m_sConnectURL,
                 m_pImpl->m_xSettings->getPropertyValues(),
-                m_pImpl->getDefaultDataSourceSettings()
+                dbaccess::ODatabaseModelImpl::getDefaultDataSourceSettings()
             );
 
             if ( m_pImpl->isEmbeddedDatabase() )

@@ -2149,7 +2149,7 @@ namespace
 
                 if ( SQL_ISRULE(pColumnRef,derived_column) )
                 {
-                    OUString aColumnAlias(rController.getParseIterator().getColumnAlias(pColumnRef)); // might be empty
+                    OUString aColumnAlias(connectivity::OSQLParseTreeIterator::getColumnAlias(pColumnRef)); // might be empty
                     pColumnRef = pColumnRef->getChild(0);
                     OTableFieldDescRef aInfo = new OTableFieldDesc();
 
