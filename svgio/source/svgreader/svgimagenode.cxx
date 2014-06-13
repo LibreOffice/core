@@ -327,7 +327,7 @@ namespace svgio
                             else
                             {
                                 // choose default mapping
-                                const basegfx::B2DHomMatrix aEmbeddingTransform(rRatio.createLinearMapping(aTarget, aViewBox));
+                                const basegfx::B2DHomMatrix aEmbeddingTransform(SvgAspectRatio::createLinearMapping(aTarget, aViewBox));
 
                                 if(!aEmbeddingTransform.isIdentity())
                                 {
