@@ -469,7 +469,9 @@ namespace slideshow
                                                                   rRangePix.getMinY(),
                                                                     rRangePix.getMaxX() - rRangePix.getMinX(),
                                                                     rRangePix.getMaxY() - rRangePix.getMinY() );
-#if HAVE_FEATURE_GLTF
+#if !HAVE_FEATURE_GLTF
+                            (void)rMimeType;
+#else
                             if( avmedia::IsModel(rMimeType) )
                             {
                                 mpEventHandlerParent.reset(new Window(pWindow, WB_NOBORDER|WB_NODIALOGCONTROL));
