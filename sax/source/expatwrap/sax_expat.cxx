@@ -108,10 +108,10 @@ OUString XmlChar2OUString( const XML_Char *p )
             pThis->call;\
         }\
         catch( const SAXParseException &e ) {\
-            pThis->callErrorHandler( pThis ,  e );\
+            callErrorHandler( pThis ,  e );\
          }\
         catch( const SAXException &e ) {\
-            pThis->callErrorHandler( pThis , SAXParseException(\
+            callErrorHandler( pThis , SAXParseException(\
                                             e.Message, \
                                             e.Context, \
                                             e.WrappedException,\
