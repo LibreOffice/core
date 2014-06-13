@@ -2404,6 +2404,9 @@ if test -z "$enable_avmedia"; then
     if test $_os != iOS -a $_os != Android; then
         enable_avmedia=yes
     fi
+    if test "$_os" = "Darwin" -a $MAC_OS_X_VERSION_MAX_ALLOWED -lt 1070; then
+        enable_avmedia=no
+    fi
 fi
 
 if test "$enable_avmedia" = yes; then
