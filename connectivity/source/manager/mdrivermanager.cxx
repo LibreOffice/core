@@ -123,8 +123,8 @@ Any SAL_CALL ODriverEnumeration::nextElement(  ) throw(NoSuchElementException, W
                 // we did not load this driver, yet
                 if ( _rDescriptor.xComponentFactory.is() )
                     // we have a factory for it
-                    const_cast< DriverAccess& >( _rDescriptor ).xDriver = _rDescriptor.xDriver.query(
-                        _rDescriptor.xComponentFactory->createInstanceWithContext( mxContext ) );
+                    const_cast< DriverAccess& >( _rDescriptor ).xDriver.set(
+                        _rDescriptor.xComponentFactory->createInstanceWithContext( mxContext ), css::uno::UNO_QUERY);
             return _rDescriptor;
         }
 
@@ -289,7 +289,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                 bool bValidDescriptor = false;
 
                 // can it tell us something about the implementation name?
-                xSI = xSI.query( xFactory );
+                xSI.set(xFactory, css::uno::UNO_QUERY);
                 if ( xSI.is() )
                 {   // yes -> no need to load the driver immediately (load it later when needed)
                     aDriverDescriptor.sImplementationName = xSI->getImplementationName();
@@ -311,7 +311,7 @@ void OSDBCDriverManager::bootstrapDrivers()
                     {
                         aDriverDescriptor.xDriver = xDriver;
                         // and obtain it's implementation name
-                        xSI = xSI.query( xDriver );
+                        xSI.set(xDriver, css::uno::UNO_QUERY);
                         OSL_ENSURE( xSI.is(), "OSDBCDriverManager::bootstrapDrivers: a driver without service info?" );
                         if ( xSI.is() )
                         {

@@ -786,7 +786,7 @@ namespace dbtools
 
         Reference< XColumnsSupplier > xColumnSupp;
         if ( _bFromComposer )
-            xColumnSupp = xColumnSupp.query( m_xComposer );
+            xColumnSupp.set(m_xComposer, css::uno::UNO_QUERY);
         else
             xColumnSupp.set( m_xComponent.get(),UNO_QUERY);
         if ( xColumnSupp.is() )
@@ -820,10 +820,10 @@ namespace dbtools
                     getCurrentSettingsComposer( xParent, m_xContext ),
                     SharedQueryComposer::TakeOwnership
                 );
-                xParentColSupp = xParentColSupp.query( m_xParentComposer );
+                xParentColSupp.set(m_xParentComposer, css::uno::UNO_QUERY);
             }
             else
-                xParentColSupp = xParentColSupp.query( xParent );
+                xParentColSupp.set(xParent, css::uno::UNO_QUERY);
 
             // get the columns of the parent
             if ( xParentColSupp.is() )

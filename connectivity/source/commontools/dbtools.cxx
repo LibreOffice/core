@@ -670,7 +670,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
                     // now execute
                     Reference< XPreparedStatement > xStatement = _rxConnection->prepareStatement( sStatementToExecute );
                     // transfer ownership of this temporary object to the caller
-                    _rxKeepFieldsAlive = _rxKeepFieldsAlive.query( xStatement );
+                    _rxKeepFieldsAlive.set(xStatement, css::uno::UNO_QUERY);
 
                     // set the "MaxRows" to 0. This is just in case our attempt to append a 0=1 filter
                     // failed - in this case, the MaxRows restriction should at least ensure that there
@@ -691,7 +691,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
                         // full blown result set
                     }
 
-                    xSupplyColumns = xSupplyColumns.query( xStatement->executeQuery() );
+                    xSupplyColumns.set(xStatement->executeQuery(), css::uno::UNO_QUERY);
                     // this should have given us a result set which does not contain any data, but
                     // the structural information we need
 

@@ -288,7 +288,7 @@ java_sql_Connection::~java_sql_Connection()
                 t.pEnv->DeleteGlobalRef( m_Driver_theClass );
             m_Driver_theClass = NULL;
         }
-        t.releaseRef();
+        SDBThreadAttach::releaseRef();
     }
 }
 
@@ -779,7 +779,7 @@ bool java_sql_Connection::construct(const OUString& url,
             throwGenericSQLException(STR_NO_JAVA,*this);
     }
     SDBThreadAttach t;
-    t.addRef();      // will be released in dtor
+    SDBThreadAttach::addRef();      // will be released in dtor
     if ( !t.pEnv )
         throwGenericSQLException(STR_NO_JAVA,*this);
 
