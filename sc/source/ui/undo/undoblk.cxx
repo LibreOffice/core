@@ -2174,7 +2174,7 @@ bool ScUndoRemoveMerge::CanRepeat(SfxRepeatTarget& rTarget) const
 
 void ScUndoRemoveMerge::SetCurTab()
 {
-    SCTAB nCurTab = pDocShell->GetCurTab();
+    SCTAB nCurTab = ScDocShell::GetCurTab();
     aBlockRange.aStart.SetTab(nCurTab);
     aBlockRange.aEnd.SetTab(nCurTab);
 }

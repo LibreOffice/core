@@ -3909,7 +3909,7 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
                 if (aNullDate.Day != 30 || aNullDate.Month != 12 || aNullDate.Year != 1899)
                 {
                     OUStringBuffer sDate;
-                    GetMM100UnitConverter().convertDateTime(sDate, 0.0, aNullDate);
+                    SvXMLUnitConverter::convertDateTime(sDate, 0.0, aNullDate);
                     AddAttribute(XML_NAMESPACE_TABLE, XML_DATE_VALUE, sDate.makeStringAndClear());
                     SvXMLElementExport aElemNullDate(*this, XML_NAMESPACE_TABLE, XML_NULL_DATE, true, true);
                 }

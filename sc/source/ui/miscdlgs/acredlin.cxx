@@ -878,7 +878,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
         pViewFrm->ShowChildWindow(nAcceptId,false);
         pWnd->SetCloseHdl(LINK( this, ScAcceptChgDlg,RefInfoHandle));
         pWnd->SetRefString(pTPFilter->GetRange());
-        pWnd->SetAutoReOpen(false);
+        ScSimpleRefDlgWrapper::SetAutoReOpen(false);
         Window* pWin=pWnd->GetWindow();
         pWin->SetPosSizePixel(GetPosPixel(),GetSizePixel());
         Hide();

@@ -1377,7 +1377,7 @@ void ScMultiTextWnd::InitEditEngine()
 
     {
         SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
-        pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
+        EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
         lcl_ExtendEditFontAttribs( *pSet );
         // turn off script spacing to match DrawText output
         pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
@@ -1754,7 +1754,7 @@ void ScTextWnd::StartEditEngine()
 
         {
             SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
-            pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
+            EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
             lcl_ExtendEditFontAttribs( *pSet );
             // turn off script spacing to match DrawText output
             pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
@@ -1996,7 +1996,7 @@ void ScTextWnd::MakeDialogEditView()
     pEditEngine->SetPaperSize( Size( bIsRTL ? USHRT_MAX : THESIZE, 300 ) );
 
     SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
-    pEditEngine->SetFontInfoInItemSet( *pSet, aTextFont );
+    EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
     lcl_ExtendEditFontAttribs( *pSet );
     if ( bIsRTL )
         lcl_ModifyRTLDefaults( *pSet );

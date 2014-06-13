@@ -561,7 +561,7 @@ namespace calc
             // first the sheets collection
             Reference< XIndexAccess > xSheets;
             if ( m_xDocument.is() )
-                xSheets.set(xSheets.query( m_xDocument->getSheets( ) ));
+                xSheets.set(m_xDocument->getSheets( ), css::uno::UNO_QUERY);
             OSL_ENSURE( xSheets.is(), "OCellValueBinding::initialize: could not retrieve the sheets!" );
 
             if ( xSheets.is() )
@@ -588,7 +588,7 @@ namespace calc
             throw Exception();
             // TODO error message
 
-        m_xCellText.set(m_xCellText.query( m_xCell ));
+        m_xCellText.set(m_xCell, css::uno::UNO_QUERY);
 
         Reference<XModifyBroadcaster> xBroadcaster( m_xCell, UNO_QUERY );
         if ( xBroadcaster.is() )

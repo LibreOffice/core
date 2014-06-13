@@ -85,7 +85,7 @@ void ScMacrosTest::testMSP()
     ScDocShell* xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
     CPPUNIT_ASSERT(xDocSh != NULL);
 
-    pFoundShell->CallXScript(
+    SfxObjectShell::CallXScript(
         xComponent,
         "vnd.sun.Star.script:Standard.Module1.TestMSP?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
@@ -118,7 +118,7 @@ void ScMacrosTest::testStarBasic()
     ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    pFoundShell->CallXScript(
+    SfxObjectShell::CallXScript(
         xComponent,
         "vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
@@ -261,7 +261,7 @@ void ScMacrosTest::testVba()
         CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
         std::cout << "about to invoke vba test in " << OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ).getStr() << std::endl;
 
-        pFoundShell->CallXScript(
+        SfxObjectShell::CallXScript(
             xComponent, testInfo[i].sMacroUrl, aParams, aRet, aOutParamIndex,
             aOutParam);
         OUString aStringRes;

@@ -451,7 +451,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                         //  first test, if the prefix is recognised as valid,
                         //  else avoid only doubles
-                        bool bPrefix = pDoc->ValidTabName( aBaseName );
+                        bool bPrefix = ScDocument::ValidTabName( aBaseName );
                         OSL_ENSURE(bPrefix, "ungueltiger Tabellenname");
 
                         while ( pDoc->IsScenario(nTab+i) )

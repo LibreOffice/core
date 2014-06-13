@@ -821,7 +821,7 @@ bool ScRefHandler::EnterRefMode()
     if ( pInputHdl )
         pInputHdl->NotifyChange( NULL );
 
-    m_aHelper.enableInput( false );
+    ScFormulaReferenceHelper::enableInput( false );
 
     m_aHelper.EnableSpreadsheets();
 
@@ -963,14 +963,14 @@ void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool 
     {
         if(m_rWindow.IsVisible())
         {
-            m_aHelper.enableInput( false );
+            ScFormulaReferenceHelper::enableInput( false );
             m_aHelper.EnableSpreadsheets();
             m_aHelper.SetDispatcherLock( true );
             aTimer.Start();
         }
         else
         {
-            m_aHelper.enableInput( true );
+            ScFormulaReferenceHelper::enableInput( true );
             m_aHelper.SetDispatcherLock( false );           /*//! here and in DoClose ?*/
         }
     }
