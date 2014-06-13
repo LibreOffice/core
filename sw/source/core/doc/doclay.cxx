@@ -216,7 +216,10 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         SetAttr( aChain, *rChain.GetNext() );
     }
 
-    const SwNodeIndex* pCntIdx = pFmt->GetCntnt().GetCntntIdx();
+    const SwNodeIndex* pCntIdx = 0;
+    // The draw format doesn't own its content, it just has a pointer to it.
+    if (pFmt->Which() != RES_DRAWFRMFMT)
+        pCntIdx = pFmt->GetCntnt().GetCntntIdx();
     if (pCntIdx && !GetIDocumentUndoRedo().DoesUndo())
     {
         // Disconnect if it's an OLE object
@@ -257,7 +260,9 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         if ( nWh == RES_FLYFRMFMT )
         {
             // determine frame formats of at-frame anchored objects
-            const SwNodeIndex* pCntntIdx = pFmt->GetCntnt().GetCntntIdx();
+            const SwNodeIndex* pCntntIdx = 0;
+            if (pFmt->Which() != RES_DRAWFRMFMT)
+                pFmt->GetCntnt().GetCntntIdx();
             if ( pCntntIdx )
             {
                 const SwFrmFmts* pTbl = pFmt->GetDoc()->GetSpzFrmFmts();
