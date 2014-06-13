@@ -4212,6 +4212,18 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
         sFileExtension = "xlsx";
     }
+    else if(sProgID.startsWith("Excel.SheetBinaryMacroEnabled.12") )
+    {
+        sMediaType = "application/vnd.ms-excel.sheet.binary.macroEnabled.12";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        sFileExtension = "xlsb";
+    }
+    else if( sProgID.startsWith("Excel.SheetMacroEnabled.12") )
+    {
+        sMediaType = "application/vnd.ms-excel.sheet.macroEnabled.12";
+        sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+        sFileExtension = "xlsm";
+    }
     else if( sProgID.startsWith("Excel.Sheet") )
     {
         sMediaType = "application/vnd.ms-excel";
@@ -4229,6 +4241,12 @@ void DocxAttributeOutput::WriteOLE( SwOLENode& rNode, const Size& rSize, const S
         sMediaType = "application/vnd.ms-powerpoint";
         sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
         sFileExtension = "ppt";
+    }
+    else if (sProgID.startsWith("PowerPoint.Slide.12"))
+    {
+        sMediaType = "application/vnd.openxmlformats-officedocument.presentationml.slide";
+       sRelationType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/package";
+       sFileExtension = "sldx";
     }
     else
     {
