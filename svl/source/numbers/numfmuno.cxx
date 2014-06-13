@@ -795,7 +795,7 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const OUString& aProperty
             OUString aSymbol, aExt;
             bool bBank = false;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
-            const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,
+            const NfCurrencyEntry* pCurr = SvNumberFormatter::GetCurrencyEntry( bBank,
                 aSymbol, aExt, pFormat->GetLanguage() );
             if ( pCurr )
                 aRet <<= OUString( pCurr->GetBankSymbol() );
@@ -858,7 +858,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         OUString aAbb;
         bool bBank = false;
         pFormat->GetNewCurrencySymbol( aSymbol, aExt );
-        const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,
+        const NfCurrencyEntry* pCurr = SvNumberFormatter::GetCurrencyEntry( bBank,
             aSymbol, aExt, pFormat->GetLanguage() );
         if ( pCurr )
             aAbb = pCurr->GetBankSymbol();
