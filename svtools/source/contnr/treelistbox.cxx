@@ -1243,9 +1243,8 @@ sal_Int8 SvTreeListBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvTreeListBox
     TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
     if( aData.HasFormat( SOT_FORMATSTR_ID_TREELISTBOX ))
     {
-        ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
-        if( aData.GetSequence( SOT_FORMATSTR_ID_TREELISTBOX, aSeq ) &&
-            sizeof(SvLBoxDDInfo) == aSeq.getLength() )
+        css::uno::Sequence<sal_Int8> aSeq = aData.GetSequence(SOT_FORMATSTR_ID_TREELISTBOX, OUString());
+        if (sizeof(SvLBoxDDInfo) == aSeq.getLength())
         {
             memcpy( &aDDInfo, aSeq.getConstArray(), sizeof(SvLBoxDDInfo) );
             nRet = rEvt.mnAction;

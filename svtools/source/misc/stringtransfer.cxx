@@ -44,7 +44,7 @@ namespace svt
     }
 
 
-    bool OStringTransferable::GetData( const DataFlavor& _rFlavor )
+    bool OStringTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
         sal_uInt32 nFormat = SotExchange::GetFormat( _rFlavor );
         if (SOT_FORMAT_STRING == nFormat)

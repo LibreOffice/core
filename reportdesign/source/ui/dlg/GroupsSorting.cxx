@@ -272,7 +272,7 @@ sal_Int8 OFieldExpressionControl::ExecuteDrop( const BrowserExecuteDropEvent& rE
         SetNoSelection();
 
         TransferableDataHelper aDropped( rEvt.maDropEvent.Transferable );
-        uno::Any aDrop = aDropped.GetAny(OGroupExchange::getReportGroupId());
+        uno::Any aDrop = aDropped.GetAny(OGroupExchange::getReportGroupId(), OUString());
         uno::Sequence< uno::Any > aGroups;
         aDrop >>= aGroups;
         if ( aGroups.getLength() )
@@ -865,7 +865,7 @@ void OFieldExpressionControl::InsertRows( long nRow )
         SotExchange::GetFormatDataFlavor(OGroupExchange::getReportGroupId(), aFlavor);
         uno::Sequence< uno::Any > aGroups;
 
-        if( (aTransferData.GetAny(aFlavor) >>= aGroups) && aGroups.getLength() )
+        if ((aTransferData.GetAny(aFlavor, OUString()) >>= aGroups) && aGroups.getLength())
         {
             m_bIgnoreEvent = false;
             {

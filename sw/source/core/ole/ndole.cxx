@@ -438,7 +438,9 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     pPersistShell->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
         pSrc->GetEmbeddedObjectContainer(),
         pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( aOLEObj.aName ),
-        aNewName );
+        aNewName,
+        OUString(),
+        OUString());
 
     SwOLENode* pOLENd = pDoc->GetNodes().MakeOLENode( rIdx, aNewName, GetAspect(),
                                     (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl(),

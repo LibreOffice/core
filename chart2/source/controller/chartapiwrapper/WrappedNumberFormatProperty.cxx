@@ -33,18 +33,11 @@ namespace wrapper
 WrappedNumberFormatProperty::WrappedNumberFormatProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : WrappedDirectStateProperty( CHART_UNONAME_NUMFMT, CHART_UNONAME_NUMFMT )
         , m_spChart2ModelContact(spChart2ModelContact)
-        , m_pWrappedLinkNumberFormatProperty(NULL)
 {
-    m_aOuterValue = getPropertyDefault( 0 );
 }
 
 WrappedNumberFormatProperty::~WrappedNumberFormatProperty()
 {
-    if( m_pWrappedLinkNumberFormatProperty )
-    {
-        if( m_pWrappedLinkNumberFormatProperty->m_pWrappedNumberFormatProperty == this )
-            m_pWrappedLinkNumberFormatProperty->m_pWrappedNumberFormatProperty = 0;
-    }
 }
 
 void WrappedNumberFormatProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -54,19 +47,8 @@ void WrappedNumberFormatProperty::setPropertyValue( const Any& rOuterValue, cons
     if( ! (rOuterValue >>= nFormat) )
         throw lang::IllegalArgumentException( "Property 'NumberFormat' requires value of type sal_Int32", 0, 0 );
 
-    m_aOuterValue = rOuterValue;
     if(xInnerPropertySet.is())
-    {
-        bool bUseSourceFormat = !xInnerPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue();
-        if( bUseSourceFormat )
-        {
-            uno::Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
-            if( xChartDoc.is() && xChartDoc->hasInternalDataProvider() )
-                bUseSourceFormat = false;
-        }
-        if( !bUseSourceFormat )
-            xInnerPropertySet->setPropertyValue( m_aInnerName, this->convertOuterToInnerValue( rOuterValue ) );
-    }
+        xInnerPropertySet->setPropertyValue(getInnerName(), this->convertOuterToInnerValue(rOuterValue));
 }
 
 Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -77,7 +59,7 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
         OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return Any();
     }
-    Any aRet( xInnerPropertySet->getPropertyValue( m_aInnerName ));
+    Any aRet( xInnerPropertySet->getPropertyValue(getInnerName()));
     if( !aRet.hasValue() )
     {
         sal_Int32 nKey = 0;
@@ -100,23 +82,14 @@ Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPr
     return uno::makeAny( sal_Int32( 0 ) );
 }
 
-WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty ) :
-    WrappedProperty( CHART_UNONAME_LINK_TO_SRC_NUMFMT, OUString() ),
-    m_pWrappedNumberFormatProperty( pWrappedNumberFormatProperty )
+WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( const boost::shared_ptr<Chart2ModelContact>& pChart2ModelContact ) :
+    WrappedDirectStateProperty(CHART_UNONAME_LINK_TO_SRC_NUMFMT, CHART_UNONAME_LINK_TO_SRC_NUMFMT),
+    m_pChart2ModelContact(pChart2ModelContact)
 {
-    if( m_pWrappedNumberFormatProperty )
-    {
-        m_pWrappedNumberFormatProperty->m_pWrappedLinkNumberFormatProperty = this;
-    }
 }
 
 WrappedLinkNumberFormatProperty::~WrappedLinkNumberFormatProperty()
 {
-    if( m_pWrappedNumberFormatProperty )
-    {
-        if( m_pWrappedNumberFormatProperty->m_pWrappedLinkNumberFormatProperty == this )
-            m_pWrappedNumberFormatProperty->m_pWrappedLinkNumberFormatProperty = 0;
-    }
 }
 
 void WrappedLinkNumberFormatProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -128,31 +101,7 @@ void WrappedLinkNumberFormatProperty::setPropertyValue( const Any& rOuterValue, 
         return;
     }
 
-    bool bLinkFormat = false;
-    if( rOuterValue >>= bLinkFormat )
-    {
-        Any aValue;
-        if( bLinkFormat )
-        {
-            if( m_pWrappedNumberFormatProperty )
-            {
-                uno::Reference< chart2::XChartDocument > xChartDoc( m_pWrappedNumberFormatProperty->m_spChart2ModelContact->getChart2Document() );
-                if( xChartDoc.is() && xChartDoc->hasInternalDataProvider() )
-                    return;
-            }
-        }
-        else
-        {
-            if( m_pWrappedNumberFormatProperty )
-            {
-                aValue = m_pWrappedNumberFormatProperty->getPropertyValue( xInnerPropertySet );
-            }
-            else
-                aValue <<= sal_Int32( 0 );
-        }
-
-        xInnerPropertySet->setPropertyValue(CHART_UNONAME_NUMFMT, aValue);
-    }
+    xInnerPropertySet->setPropertyValue(getInnerName(), rOuterValue);
 }
 
 Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
@@ -163,8 +112,8 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
         OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return getPropertyDefault(0);
     }
-    bool bLink = ! xInnerPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue();
-    return uno::makeAny( bLink );
+
+    return xInnerPropertySet->getPropertyValue(getInnerName());
 }
 
 Any WrappedLinkNumberFormatProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const

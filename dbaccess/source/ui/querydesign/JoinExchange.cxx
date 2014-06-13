@@ -113,7 +113,7 @@ namespace dbaui
             AddFormat( SOT_FORMATSTR_ID_SBA_TABID );
     }
 
-    bool OJoinExchObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+    bool OJoinExchObj::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
     {
         sal_uInt32 nFormat = SotExchange::GetFormat(rFlavor);
         if ( SOT_FORMATSTR_ID_SBA_JOIN == nFormat )

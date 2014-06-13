@@ -67,7 +67,8 @@ enum
     PROP_AXIS_CROSSOVER_POSITION,
     PROP_AXIS_CROSSOVER_VALUE,
     PROP_AXIS_DISPLAY_LABELS,
-    PROP_AXIS_NUMBER_FORMAT,
+    PROP_AXIS_NUMBERFORMAT,
+    PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
     PROP_AXIS_LABEL_POSITION,
     PROP_AXIS_TEXT_ROTATION,
     PROP_AXIS_TEXT_BREAK,
@@ -115,10 +116,17 @@ void lcl_AddPropertiesToVector(
 
     rOutProperties.push_back(
         Property( CHART_UNONAME_NUMFMT,
-                  PROP_AXIS_NUMBER_FORMAT,
+                  PROP_AXIS_NUMBERFORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
+                  PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "LabelPosition",
@@ -220,6 +228,7 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_SHOW, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_CROSSOVER_POSITION, ::com::sun::star::chart::ChartAxisPosition_ZERO );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_DISPLAY_LABELS, true );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE, true );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_LABEL_POSITION, ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
         ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_AXIS_TEXT_ROTATION, 0.0 );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_AXIS_TEXT_BREAK, false );

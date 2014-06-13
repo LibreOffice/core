@@ -115,7 +115,7 @@ namespace svxform
     }
 
 
-    bool OLocalExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& /*_rFlavor*/ )
+    bool OLocalExchange::GetData( const css::datatransfer::DataFlavor& /*_rFlavor*/, const OUString& /*rDestDoc*/ )
     {
         return false;   // do not have any formats by default
     }
@@ -139,7 +139,7 @@ namespace svxform
         if ( OControlExchange::hasControlPathFormat( aExchangedData.GetDataFlavorExVector() ) )
         {   // paths to the controls, relative to a root
             Sequence< Any > aControlPathData;
-            if ( aExchangedData.GetAny( OControlExchange::getControlPathFormatId() ) >>= aControlPathData )
+            if ( aExchangedData.GetAny(OControlExchange::getControlPathFormatId(), OUString()) >>= aControlPathData )
             {
                 DBG_ASSERT( aControlPathData.getLength() >= 2, "OControlTransferData::OControlTransferData: invalid data for the control path format!" );
                 if ( aControlPathData.getLength() >= 2 )
@@ -155,7 +155,7 @@ namespace svxform
         }
         if ( OControlExchange::hasHiddenControlModelsFormat( aExchangedData.GetDataFlavorExVector() ) )
         {   // sequence of models of hidden controls
-            aExchangedData.GetAny( OControlExchange::getHiddenControlModelsFormatId() ) >>= m_aHiddenControlModels;
+            aExchangedData.GetAny(OControlExchange::getHiddenControlModelsFormatId(), OUString()) >>= m_aHiddenControlModels;
         }
 
         updateFormats( );
@@ -290,7 +290,7 @@ namespace svxform
     }
 
 
-    bool OControlExchange::GetData( const DataFlavor& _rFlavor )
+    bool OControlExchange::GetData( const DataFlavor& _rFlavor, const OUString& rDestDoc )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
 
@@ -310,7 +310,7 @@ namespace svxform
             SetAny( makeAny( m_aHiddenControlModels ), _rFlavor );
         }
         else
-            return OLocalExchange::GetData( _rFlavor );
+            return OLocalExchange::GetData(_rFlavor, rDestDoc);
 
         return true;
     }

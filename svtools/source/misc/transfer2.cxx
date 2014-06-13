@@ -415,8 +415,8 @@ void TransferDataContainer::AddSupportedFormats()
 
 
 
-bool TransferDataContainer::GetData( const
-            ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool TransferDataContainer::GetData(
+    const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
                                     aEnd( pImpl->aFmtList.end() );

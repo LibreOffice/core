@@ -1095,7 +1095,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
             pBMView->GetDoc().SetAllocDocSh(true);
 
         SdDrawDocument* pTmpDoc = (SdDrawDocument*) pBMView->GetMarkedObjModel();
-        bOK = pView->Paste(*pTmpDoc, aObjPos, pPage);
+        bOK = pView->Paste(*pTmpDoc, aObjPos, pPage, 0, OUString(), OUString());
 
         if (bOLEObjFound)
             pBMView->GetDoc().SetAllocDocSh(false);
