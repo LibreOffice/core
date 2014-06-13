@@ -44,14 +44,14 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
 
-SvxUnoDrawPool::SvxUnoDrawPool( SdrModel* pModel, sal_Int32 nServiceId ) throw()
+SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel, sal_Int32 nServiceId)
 : PropertySetHelper( SvxPropertySetInfoPool::getOrCreate( nServiceId ) ), mpModel( pModel )
 {
     init();
 }
 
 /* deprecated */
-SvxUnoDrawPool::SvxUnoDrawPool( SdrModel* pModel ) throw()
+SvxUnoDrawPool::SvxUnoDrawPool(SdrModel* pModel)
 : PropertySetHelper( SvxPropertySetInfoPool::getOrCreate( SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS ) ), mpModel( pModel )
 {
     init();

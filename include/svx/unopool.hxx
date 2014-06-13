@@ -40,10 +40,10 @@ class SVX_DLLPUBLIC SvxUnoDrawPool :    public ::cppu::OWeakAggObject,
                         public comphelper::PropertySetHelper
 {
 public:
-    SvxUnoDrawPool( SdrModel* pModel, sal_Int32 nServiceId ) throw();
+    SvxUnoDrawPool(SdrModel* pModel, sal_Int32 nServiceId);
 
     /** deprecated */
-    SvxUnoDrawPool( SdrModel* pModel ) throw();
+    SvxUnoDrawPool(SdrModel* pModel);
     virtual ~SvxUnoDrawPool() throw();
 
     /** This returns the item pool from the given model, or the default pool if there is no model and bReadOnly is true.
