@@ -664,7 +664,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             return;
         }
 
-        LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
+        LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
         SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), eLangType );
 
         sal_uInt32 nIndex = 0;
@@ -789,7 +789,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         {
             SbxAppData& rAppData = GetSbxData_Impl();
 
-            LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
+            LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
             if( rAppData.pBasicFormater )
             {
                 if( rAppData.eBasicFormaterLangType != eLangType )

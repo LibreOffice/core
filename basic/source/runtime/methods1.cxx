@@ -2539,7 +2539,7 @@ RTLFUNC(FormatDateTime)
                 SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
             }
 
-            LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
+            LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
             sal_uIntPtr nIndex = pFormatter->GetFormatIndex( NF_DATE_SYSTEM_LONG, eLangType );
             Color* pCol;
             pFormatter->GetOutputString( dDate, nIndex, aRetStr, &pCol );

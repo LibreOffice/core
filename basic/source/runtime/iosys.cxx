@@ -997,7 +997,7 @@ void SbiIoSystem::WriteCon(const OUString& rText)
         }
         {
             SolarMutexGuard aSolarGuard;
-            if( !MessBox( GetpApp()->GetDefDialogParent(),
+            if( !MessBox( Application::GetDefDialogParent(),
                         WinBits( WB_OK_CANCEL | WB_DEF_OK ),
                         OUString(), s ).Execute() )
             {

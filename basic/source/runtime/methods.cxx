@@ -235,8 +235,8 @@ RTLFUNC(Error)
         }
         else
         {
-            pBasic->MakeErrorText( nErr, aErrorMsg );
-            tmpErrMsg = pBasic->GetErrorText();
+            StarBASIC::MakeErrorText( nErr, aErrorMsg );
+            tmpErrMsg = StarBASIC::GetErrorText();
         }
         // If this rtlfunc 'Error'  passed a errcode the same as the active Err Objects's
         // current err then  return the description for the error message if it is set
@@ -1665,7 +1665,7 @@ RTLFUNC(StrComp)
                     i18n::TransliterationModules_IGNORE_WIDTH );
         }
 
-        LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
+        LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
         pTransliterationWrapper->loadModuleIfNeeded( eLangType );
         nRetValue = pTransliterationWrapper->compareString( rStr1, rStr2 );
     }
@@ -2145,7 +2145,7 @@ RTLFUNC(DateValue)
         // by using SbiInstance::GetNumberFormatter.
         // It seems that both locale number formatter and English number formatter
         // are supported in Visual Basic.
-        LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
+        LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
         if( !bSuccess && ( eLangType != LANGUAGE_ENGLISH_US ) )
         {
             // Create a new SvNumberFormatter by using LANGUAGE_ENGLISH to get the date value;
@@ -4597,7 +4597,7 @@ RTLFUNC(MsgBox)
     }
     else
     {
-        aTitle = GetpApp()->GetAppName();
+        aTitle = Application::GetAppName();
     }
 
     nType &= (16+32+64);
@@ -4605,7 +4605,7 @@ RTLFUNC(MsgBox)
 
     SolarMutexGuard aSolarGuard;
 
-    Window* pParent = GetpApp()->GetDefDialogParent();
+    Window* pParent = Application::GetDefDialogParent();
     switch( nType )
     {
     case 16:
