@@ -411,7 +411,7 @@ bool ModulWindow::BasicStepOut()
 
 void ModulWindow::BasicStop()
 {
-    GetBasic()->Stop();
+    StarBASIC::Stop();
     aStatus.bIsRunning = false;
 }
 
@@ -635,9 +635,9 @@ bool ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     // ReturnWert: BOOL
     //  FALSE:  cancel
     //  TRUE:   go on....
-    sal_uInt16 nErrorLine = pBasic->GetLine() - 1;
-    sal_uInt16 nErrCol1 = pBasic->GetCol1();
-    sal_uInt16 nErrCol2 = pBasic->GetCol2();
+    sal_uInt16 nErrorLine = StarBASIC::GetLine() - 1;
+    sal_uInt16 nErrCol1 = StarBASIC::GetCol1();
+    sal_uInt16 nErrCol2 = StarBASIC::GetCol2();
     if ( nErrCol2 != 0xFFFF )
         nErrCol2++;
 
@@ -670,7 +670,7 @@ long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     (void)pBasic;
 
     // Return value: sal_uInt16 => see SB-Debug-Flags
-    sal_uInt16 nErrorLine = pBasic->GetLine();
+    sal_uInt16 nErrorLine = StarBASIC::GetLine();
 
 
     BreakPoint* pBrk = GetBreakPoints().FindBreakPoint( nErrorLine );
