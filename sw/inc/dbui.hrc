@@ -25,7 +25,6 @@
 // Dialoge --------------------------------------------------------------------
 
 #define DLG_MAILMERGEWIZARD         (RC_DBUI_BEGIN + 3)
-#define DLG_MM_SELECTDBTABLEDDIALOG (RC_DBUI_BEGIN + 12)
 #define DLG_MM_DBTABLEPREVIEWDIALOG (RC_DBUI_BEGIN + 13)
 
 #define DLG_MM_MAILBODY               (RC_DBUI_BEGIN + 24)
@@ -65,6 +64,10 @@
 #define ST_NOSUBJECT            (RC_DBUI_BEGIN + 31)
 #define ST_CONFIGUREMAIL        (RC_DBUI_BEGIN + 32)
 #define ST_FILTERNAME           (RC_DBUI_BEGIN + 33)
+#define ST_TYPE                 (RC_DBUI_BEGIN + 34)
+#define ST_NAME                 (RC_DBUI_BEGIN + 35)
+#define ST_TABLE                (RC_DBUI_BEGIN + 36)
+#define ST_QUERY                (RC_DBUI_BEGIN + 37)
 
 // Elements -----------------------------------------------------------------
 #define MM_PART_TITLE                   0

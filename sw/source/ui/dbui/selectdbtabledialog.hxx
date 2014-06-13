@@ -23,6 +23,7 @@
 
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 namespace com{namespace sun{namespace star{
@@ -33,16 +34,10 @@ namespace com{namespace sun{namespace star{
 
 class SwSelectDBTableDialog : public SfxModalDialog
 {
-    FixedText       m_aSelectFI;
-    HeaderBar       m_aTableHB;
-    SvTabListBox    m_aTableLB;
-    PushButton      m_aPreviewPB;
-
-    FixedLine       m_aSeparatorFL;
-
-    OKButton        m_aOK;
-    CancelButton    m_aCancel;
-    HelpButton      m_aHelp;
+    HeaderBar       *m_pTableHB;
+    SvTabListBox    *m_pTableLB;
+    PushButton      *m_pPreviewPB;
+    Window          *m_pContainer;
 
     OUString        m_sName;
     OUString        m_sType;
@@ -61,6 +56,7 @@ public:
 
     OUString    GetSelectedTable(bool& bIsTable);
     void        SetSelectedTable(const OUString& rTable, bool bIsTable);
+    virtual void Resize();
 };
 #endif
 
