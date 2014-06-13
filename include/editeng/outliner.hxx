@@ -650,8 +650,8 @@ protected:
 
     virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
 
-    void        InvalidateBullet( Paragraph* pPara, sal_Int32 nPara );
-    void        PaintBullet( sal_Int32 nPara, const Point& rStartPos,
+    void            InvalidateBullet(sal_Int32 nPara);
+    void            PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                     const Point& rOrigin, short nOrientation,
                     OutputDevice* pOutDev );
 
