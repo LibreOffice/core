@@ -42,6 +42,7 @@ class SdStyleSheet;
 class SdDrawDocument;
 class SdPage;
 class SfxStyleSheetBase;
+class SvxNumberFormat;
 
 typedef std::map< const SdPage*, SdStyleFamilyRef > SdStyleFamilyMap;
 
@@ -92,6 +93,7 @@ public:
 
     static  SdStyleSheetVector CreateChildList( SdStyleSheet* pSheet );
 
+    static void setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i, SvxNumberFormat &rNumberFormat);
 
 public:
     void throwIfDisposed() throw(::com::sun::star::uno::RuntimeException);

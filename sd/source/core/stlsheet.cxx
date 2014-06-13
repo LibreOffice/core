@@ -1352,12 +1352,38 @@ Any SAL_CALL SdStyleSheet::getPropertyDefault( const OUString& aPropertyName ) t
     return aRet;
 }
 
-
-
 /** this is used because our property map is not sorted yet */
 const SfxItemPropertySimpleEntry* SdStyleSheet::getPropertyMapEntry( const OUString& rPropertyName ) const throw (css::uno::RuntimeException)
 {
     return GetStylePropertySet().getPropertyMapEntry(rPropertyName);
+}
+
+//Broadcast that a SdStyleSheet has changed, taking into account outline sublevels
+//which need to be explicitly broadcast as changing if their parent style was
+//the one that changed
+void SdStyleSheet::BroadcastSdStyleSheetChange(SfxStyleSheetBase* pStyleSheet,
+    PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool)
+{
+    SdStyleSheet* pRealSheet =((SdStyleSheet*)pStyleSheet)->GetRealStyleSheet();
+    pRealSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+
+    if( (ePO >= PO_OUTLINE_1) && (ePO <= PO_OUTLINE_8) )
+    {
+        OUString sStyleName(SD_RESSTR(STR_PSEUDOSHEET_OUTLINE) + " ");
+
+        for( sal_uInt16 n = (sal_uInt16)(ePO - PO_OUTLINE_1 + 2); n < 10; n++ )
+        {
+            OUString aName( sStyleName + OUString::number(n) );
+
+            SfxStyleSheetBase* pSheet = pSSPool->Find( aName, SD_STYLE_FAMILY_PSEUDO);
+
+            if(pSheet)
+            {
+                SdStyleSheet* pRealStyleSheet = ((SdStyleSheet*)pSheet)->GetRealStyleSheet();
+                pRealStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
+            }
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
