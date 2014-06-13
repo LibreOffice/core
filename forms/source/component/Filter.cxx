@@ -880,7 +880,7 @@ namespace frm
         Reference< XChild > xModel( xControlModel, UNO_QUERY );
         Reference< XRowSet > xForm;
         if ( xModel.is() )
-            xForm = xForm.query( xModel->getParent() );
+            xForm.set(xModel->getParent(), css::uno::UNO_QUERY);
         m_xConnection = ::dbtools::getConnection( xForm );
         OSL_ENSURE( m_xConnection.is(), "OFilterControl::initialize: unable to determine the form's connection!" );
 #endif

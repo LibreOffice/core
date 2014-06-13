@@ -215,7 +215,7 @@ namespace frm
                 return;
 
             // which button type?
-            xSet = xSet.query( xComp );
+            xSet.set(xComp, css::uno::UNO_QUERY);
             if ( !xSet.is() )
                 return;
             xSet->getPropertyValue(PROPERTY_BUTTONTYPE) >>= eButtonType;
@@ -407,7 +407,7 @@ namespace frm
                 Reference< XChild > xChild( getModel(), UNO_QUERY );
                 Reference< XSubmit > xParentSubmission;
                 if ( xChild.is() )
-                    xParentSubmission = xParentSubmission.query( xChild->getParent() );
+                    xParentSubmission.set(xChild->getParent(), css::uno::UNO_QUERY);
                 if ( xParentSubmission.is() )
                     xParentSubmission->submit( this, _rEvent );
             }

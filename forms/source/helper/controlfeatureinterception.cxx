@@ -122,7 +122,7 @@ namespace frm
             xInterceptor->setSlaveDispatchProvider( NULL );
 
             // start over with the next chain element
-            xInterceptor = xInterceptor.query( xSlave );
+            xInterceptor.set(xSlave, css::uno::UNO_QUERY);
         }
     }
 

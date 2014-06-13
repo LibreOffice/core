@@ -145,7 +145,7 @@ void OGridControlModel::cloneColumns( const OGridControlModel* _pOriginalContain
         for ( OInterfaceArray::const_iterator pColumn = pColumnStart; pColumn != pColumnEnd; ++pColumn )
         {
             // ask the col for a factory for the clone
-            xColCloneable = xColCloneable.query( *pColumn );
+            xColCloneable.set(*pColumn, css::uno::UNO_QUERY);
             DBG_ASSERT( xColCloneable.is(), "OGridControlModel::cloneColumns: column is not cloneable!" );
             if ( xColCloneable.is() )
             {

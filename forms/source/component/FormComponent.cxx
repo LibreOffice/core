@@ -123,8 +123,8 @@ OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUSt
     // das Aggregat selbst den Refcount erhoeht
     increment( m_refCount );
     {
-        m_xAggregate = m_xAggregate.query( _rxContext->getServiceManager()->createInstanceWithContext(_rAggregateService, _rxContext) );
-        m_xControl = m_xControl.query( m_xAggregate );
+        m_xAggregate.set(_rxContext->getServiceManager()->createInstanceWithContext(_rAggregateService, _rxContext), css::uno::UNO_QUERY);
+        m_xControl.set(m_xAggregate, css::uno::UNO_QUERY);
     }
     decrement( m_refCount );
 
@@ -632,7 +632,7 @@ void SAL_CALL OControlModel::setParent(const Reference< XInterface >& _rxParent)
         xComp->removeEventListener(static_cast<XPropertiesChangeListener*>(this));
 
     m_xParent = _rxParent;
-    xComp = xComp.query( m_xParent );
+    xComp.set(m_xParent, css::uno::UNO_QUERY);
 
     if ( xComp.is() )
         xComp->addEventListener(static_cast<XPropertiesChangeListener*>(this));
@@ -1562,7 +1562,7 @@ void OBoundControlModel::readCommonProperties(const Reference<stario::XObjectInp
     nUsedFlag = _rxInStream->readLong();
     if (nUsedFlag)
         xPersist = _rxInStream->readObject();
-    m_xLabelControl = m_xLabelControl.query( xPersist );
+    m_xLabelControl.set(xPersist, css::uno::UNO_QUERY);
     Reference< XComponent > xComp( m_xLabelControl, UNO_QUERY );
     if (xComp.is())
         xComp->addEventListener(static_cast<com::sun::star::lang::XEventListener*>(static_cast<XPropertyChangeListener*>(this)));

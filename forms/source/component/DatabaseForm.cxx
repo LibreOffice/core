@@ -2496,7 +2496,7 @@ void SAL_CALL ODatabaseForm::setGroup( const Sequence<Reference<XControlModel> >
 
     for( sal_Int32 i=0; i<_rGroup.getLength(); ++i, ++pControls )
     {
-        xSet = xSet.query( *pControls );
+        xSet.set(*pControls, css::uno::UNO_QUERY);
         if ( !xSet.is() )
         {
             // can't throw an exception other than a RuntimeException (which would not be appropriate),
