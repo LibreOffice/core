@@ -67,6 +67,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
+#include <vcl/ITiledRenderable.hxx>
 
 #include <unobaseclass.hxx>
 #include <viewopt.hxx>
@@ -161,7 +162,8 @@ SwXTextDocumentBaseClass;
 
 class SW_DLLPUBLIC SwXTextDocument : public SwXTextDocumentBaseClass,
     public SvxFmMSFactory,
-    public SfxBaseModel
+    public SfxBaseModel,
+    public ::vcl::ITiledRenderable
 {
 private:
     class Impl;
@@ -427,6 +429,16 @@ public:
 
     // ::com::sun::star::util::XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+    // ITiledRenderable
+    virtual void paintTile( VirtualDevice &rDevice,
+                            int nOutputWidth,
+                            int nOutputHeight,
+                            int nTilePosX,
+                            int nTilePosY,
+                            long nTileWidth,
+                            long nTileHeight ) SAL_OVERRIDE;
+    virtual Size getDocumentSize() SAL_OVERRIDE;
 
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
