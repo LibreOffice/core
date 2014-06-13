@@ -76,7 +76,7 @@ void SvEmbedTransferHelper::AddSupportedFormats()
 
 
 
-bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     bool bRet = false;
 

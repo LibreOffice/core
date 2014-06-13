@@ -115,7 +115,7 @@ namespace svxform
     }
 
 
-    bool OLocalExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& /*_rFlavor*/ )
+    bool OLocalExchange::GetData( const css::datatransfer::DataFlavor& /*_rFlavor*/, const OUString& /*rDestDoc*/ )
     {
         return false;   // do not have any formats by default
     }
@@ -290,7 +290,7 @@ namespace svxform
     }
 
 
-    bool OControlExchange::GetData( const DataFlavor& _rFlavor )
+    bool OControlExchange::GetData( const DataFlavor& _rFlavor, const OUString& rDestDoc )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
 
@@ -310,7 +310,7 @@ namespace svxform
             SetAny( makeAny( m_aHiddenControlModels ), _rFlavor );
         }
         else
-            return OLocalExchange::GetData( _rFlavor );
+            return OLocalExchange::GetData(_rFlavor, rDestDoc);
 
         return true;
     }

@@ -372,7 +372,7 @@ void ScDrawTransferObj::AddSupportedFormats()
 //      AddFormat( SOT_FORMATSTR_ID_SVIM );
 }
 
-bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool ScDrawTransferObj::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     bool bOK = false;
     sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
@@ -396,7 +396,7 @@ bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavo
                 pModel->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
             }
 
-            bOK = SetAny( aOleData.GetAny(rFlavor, OUString()), rFlavor );
+            bOK = SetAny( aOleData.GetAny(rFlavor, rDestDoc), rFlavor );
 
             if( pModel )
                 pModel->SetSwapGraphicsMode( nOldSwapMode );

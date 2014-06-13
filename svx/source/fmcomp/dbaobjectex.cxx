@@ -90,7 +90,7 @@ namespace svx
     }
 
 
-    bool OComponentTransferable::GetData( const DataFlavor& _rFlavor )
+    bool OComponentTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
         if ( nFormatId == getDescriptorFormatId(true) || nFormatId == getDescriptorFormatId(false) )

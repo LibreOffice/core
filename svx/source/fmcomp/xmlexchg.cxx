@@ -43,7 +43,7 @@ namespace svx
         AddFormat( SOT_FORMATSTR_ID_XFORMS );
     }
 
-    bool OXFormsTransferable::GetData( const DataFlavor& _rFlavor )
+    bool OXFormsTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat( _rFlavor );
         if ( SOT_FORMATSTR_ID_XFORMS == nFormatId )

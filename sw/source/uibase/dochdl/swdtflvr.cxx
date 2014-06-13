@@ -396,7 +396,7 @@ namespace
     }
 }
 
-bool SwTransferable::GetData( const DataFlavor& rFlavor )
+bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
 
@@ -492,7 +492,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor )
         if( xObj.is() )
         {
             TransferableDataHelper aD( new SvEmbedTransferHelper( xObj, pOLEGraph, nAspect ) );
-            uno::Any aAny = aD.GetAny(rFlavor, OUString());
+            uno::Any aAny = aD.GetAny(rFlavor, rDestDoc);
             if( aAny.hasValue() )
                 bOK = SetAny( aAny, rFlavor );
         }

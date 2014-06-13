@@ -240,7 +240,7 @@ protected:
 protected:
 
     virtual void        AddSupportedFormats() = 0;
-    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) = 0;
+    virtual bool        GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) = 0;
     virtual bool        WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
@@ -497,7 +497,7 @@ class SVT_DLLPUBLIC TransferDataContainer : public TransferableHelper
 protected:
 
     virtual void        AddSupportedFormats() SAL_OVERRIDE;
-    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) SAL_OVERRIDE;
+    virtual bool        GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
     virtual void        DragFinished( sal_Int8 nDropAction ) SAL_OVERRIDE;
 
 public:

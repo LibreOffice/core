@@ -306,7 +306,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor )
     return getTransferData2(rFlavor, OUString());
 }
 
-Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
+Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, const OUString& rDestDoc )
     throw (UnsupportedFlavorException, IOException, RuntimeException, std::exception)
 {
     if( !maAny.hasValue() || !mpFormats->size() || ( maLastFormat != rFlavor.MimeType ) )
@@ -329,21 +329,21 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
             if( SotExchange::GetFormatDataFlavor( FORMAT_STRING, aSubstFlavor ) &&
                 TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) )
             {
-                GetData( aSubstFlavor );
+                GetData(aSubstFlavor, rDestDoc);
                 bDone = maAny.hasValue();
             }
             else if(SotExchange::GetFormatDataFlavor(SOT_FORMATSTR_ID_BMP, aSubstFlavor )
                 && TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor )
                 && SotExchange::GetFormatDataFlavor(FORMAT_BITMAP, aSubstFlavor))
             {
-                GetData( aSubstFlavor );
+                GetData(aSubstFlavor, rDestDoc);
                 bDone = true;
             }
             else if( SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_EMF, aSubstFlavor ) &&
                      TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
                      SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
             {
-                GetData( aSubstFlavor );
+                GetData(aSubstFlavor, rDestDoc);
 
                 if( maAny.hasValue() )
                 {
@@ -373,7 +373,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
                      TransferableDataHelper::IsEqual( aSubstFlavor, rFlavor ) &&
                      SotExchange::GetFormatDataFlavor( FORMAT_GDIMETAFILE, aSubstFlavor ) )
             {
-                GetData( aSubstFlavor );
+                GetData(aSubstFlavor, rDestDoc);
 
                 if( maAny.hasValue() )
                 {
@@ -406,7 +406,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
 
             // if any is not yet filled, use standard format
             if( !maAny.hasValue() )
-                GetData( rFlavor );
+                GetData(rFlavor, rDestDoc);
 
 #ifdef DEBUG
             if( maAny.hasValue() && ::com::sun::star::uno::TypeClass_STRING != maAny.getValueType().getTypeClass() )
