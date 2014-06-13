@@ -498,7 +498,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
         {
             uno::Reference< text::XTextContent >  xParagraph( xParaEnum->nextElement(), uno::UNO_QUERY );
             if( xParagraph.is() )
-                xEnumAccess.query( xParagraph );
+                xEnumAccess.set(xParagraph, css::uno::UNO_QUERY);
             else
                 xEnumAccess.clear();
 

@@ -597,7 +597,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
                     // with node
                     xE2->nextElement() >>= xEA2;
                     if( xEA2.is() )
-                        xE2.query( xEA2->createEnumeration() );
+                        xE2.set(xEA2->createEnumeration(), css::uno::UNO_QUERY);
                     else
                         xE2.clear();
 
@@ -2831,7 +2831,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
                 {
                     if ( ( nRecLen & 1 ) && ( nRecLen > 1 ) )
                     {
-                        OUString aOUString = mpPPTImport->MSDFFReadZString( mrStCtrl, nRecLen - 1, true );
+                        OUString aOUString = SvxMSDffManager::MSDFFReadZString( mrStCtrl, nRecLen - 1, true );
                         rAny <<= aOUString;
 
                         bOk = true;

@@ -105,7 +105,7 @@ IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation)
                 ::boost::shared_ptr<FrameworkHelper> pHelper(
                     FrameworkHelper::Instance(*mpViewShellBase));
                 if (pHelper->GetConfigurationController()->getResource(
-                    pHelper->CreateResourceId(FrameworkHelper::msFullScreenPaneURL)).is())
+                    FrameworkHelper::CreateResourceId(FrameworkHelper::msFullScreenPaneURL)).is())
                 {
                     ::sd::framework::ConfigurationController::Lock aLock (
                         pHelper->GetConfigurationController());

@@ -246,7 +246,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
                     if( !bCommonTerms )
                         nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                    Font aTargetFont = mpWindow->GetDefaultFont(
+                    Font aTargetFont = OutputDevice::GetDefaultFont(
                                         DEFAULTFONT_CJK_PRESENTATION,
                                         nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
