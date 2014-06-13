@@ -39,6 +39,7 @@
 #include "calcmacros.hxx"
 #include <tools/fract.hxx>
 #include <tools/gen.hxx>
+#include <svl/zforlist.hxx>
 
 #include <memory>
 #include <map>

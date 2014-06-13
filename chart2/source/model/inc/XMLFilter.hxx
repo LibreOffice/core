@@ -152,6 +152,9 @@ private:
         ::com::sun::star::lang::XComponent >       m_xTargetDoc;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::lang::XComponent >       m_xSourceDoc;
+
+    css::uno::Sequence<css::beans::PropertyValue> m_aMediaDescriptor;
+
     OUString                                m_sDocumentHandler; // when set it will be set as doc handler
 
     volatile bool                                  m_bCancelOperation;

@@ -449,8 +449,11 @@ void ScViewFunc::PasteDraw()
                                      pViewData->GetActivePart() ) );
     ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
     if (pDrawClip)
-        PasteDraw( aPos, pDrawClip->GetModel(), false,
-            pDrawClip->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID() );
+    {
+        OUString aSrcShellID = pDrawClip->GetShellID();
+        OUString aDestShellID = SfxObjectShell::CreateShellID(pViewData->GetDocShell());
+        PasteDraw(aPos, pDrawClip->GetModel(), false, aSrcShellID, aDestShellID);
+    }
 }
 
 void ScViewFunc::PasteFromSystem()
@@ -586,7 +589,9 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
         SCROW nPosY = pViewData->GetCurY();
         Window* pWin = GetActiveWin();
         Point aPos = pWin->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY, pViewData->GetActivePart() ) );
-        PasteDraw( aPos, pDrawClip->GetModel(), false, pDrawClip->GetSourceDocID() == pViewData->GetDocument()->GetDocumentID() );
+        PasteDraw(
+            aPos, pDrawClip->GetModel(), false,
+            pDrawClip->GetShellID(), SfxObjectShell::CreateShellID(pViewData->GetDocShell()));
     }
     else
     {

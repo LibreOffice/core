@@ -63,9 +63,12 @@ private:
 
     ScRangeListVector               m_aProtectedChartRangesVector;
 
+    OUString maShellID;
 
     void                InitDocShell();
     SdrOle2Obj* GetSingleObject();
+
+    void CreateOLEData();
 
 public:
             ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
@@ -73,7 +76,7 @@ public:
     virtual ~ScDrawTransferObj();
 
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
     virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        ObjectReleased();
@@ -86,6 +89,8 @@ public:
     void                SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
     void                SetDragSourceFlags( sal_uInt16 nFlags );
     void                SetDragWasInternal();
+
+    OUString GetShellID() const;
 
     SdrView*            GetDragSourceView()             { return pDragSourceView; }
     sal_uInt16              GetDragSourceFlags() const      { return nDragSourceFlags; }

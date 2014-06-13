@@ -548,6 +548,7 @@ sal_Int32 XMLFilter::impl_Export(
     const Reference< lang::XComponent > & xDocumentComp,
     const Sequence< beans::PropertyValue > & rMediaDescriptor )
 {
+    m_aMediaDescriptor = rMediaDescriptor;
     //save
 
     sal_Int32 nWarning = 0;
@@ -751,9 +752,7 @@ sal_Int32 XMLFilter::impl_ExportStream(
         if ( !xFilter.is() )
             return ERRCODE_SFX_GENERAL;
 
-        uno::Sequence < beans::PropertyValue > aMediaDesc(0);
-        //@todo? filter properties? ... url? ...
-        xFilter->filter( aMediaDesc );
+        xFilter->filter(m_aMediaDescriptor);
     }
     catch (const uno::Exception& rEx)
     {

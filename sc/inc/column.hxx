@@ -27,6 +27,7 @@
 #include "types.hxx"
 #include "mtvelements.hxx"
 #include "formula/types.hxx"
+#include <svl/zforlist.hxx>
 
 #include <set>
 #include <vector>
@@ -226,7 +227,10 @@ public:
         SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag, bool bBroadcast = true );
     void CopyToClip(
         sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const;
-    void CopyStaticToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol);
+
+    void CopyStaticToDocument(
+        SCROW nRow1, SCROW nRow2, const SvNumberFormatterMergeMap& rMap, ScColumn& rDestCol );
+
     void CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDestCol );
     bool InitBlockPosition( sc::ColumnBlockPosition& rBlockPos );
     bool InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const;

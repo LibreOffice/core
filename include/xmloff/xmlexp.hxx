@@ -212,6 +212,9 @@ protected:
 
     void SetExtended( sal_Bool bSet=sal_True ) { mbExtended = bSet; }
 
+    OUString GetSourceShellID() const;
+    OUString GetDestinationShellID() const;
+
     // save linked sections? (may be false in global documents)
     sal_Bool mbSaveLinkedSections;
 

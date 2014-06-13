@@ -2147,8 +2147,12 @@ void ScDocument::CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, 
     if (!pSrcTab || !pDestTab)
         return;
 
+    pDestDoc->GetFormatTable()->MergeFormatter(*GetFormatTable());
+    SvNumberFormatterMergeMap aMap = pDestDoc->GetFormatTable()->ConvertMergeTableToMap();
+
     pSrcTab->CopyStaticToDocument(
-        rSrcRange.aStart.Col(), rSrcRange.aStart.Row(), rSrcRange.aEnd.Col(), rSrcRange.aEnd.Row(), pDestTab);
+        rSrcRange.aStart.Col(), rSrcRange.aStart.Row(), rSrcRange.aEnd.Col(), rSrcRange.aEnd.Row(),
+        aMap, pDestTab);
 }
 
 void ScDocument::CopyCellToDocument( const ScAddress& rSrcPos, const ScAddress& rDestPos, ScDocument& rDestDoc )

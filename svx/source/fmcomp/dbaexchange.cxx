@@ -223,8 +223,7 @@ namespace svx
             AddFormat(getDescriptorFormatId());
     }
 
-    //--------------------------------------------------------------------
-    sal_Bool OColumnTransferable::GetData( const DataFlavor& _rFlavor )
+    sal_Bool OColumnTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
         switch (nFormatId)
@@ -276,7 +275,7 @@ namespace svx
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
-            Any aDescriptor = _rData.GetAny(aFlavor);
+            Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
@@ -468,8 +467,7 @@ namespace svx
             AddFormat(SOT_FORMATSTR_ID_SBA_DATAEXCHANGE);
     }
 
-    // -----------------------------------------------------------------------------
-    sal_Bool ODataAccessObjectTransferable::GetData( const DataFlavor& rFlavor )
+    sal_Bool ODataAccessObjectTransferable::GetData( const DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
     {
         sal_uIntPtr nFormat = SotExchange::GetFormat(rFlavor);
         switch (nFormat)
@@ -524,7 +522,7 @@ namespace svx
             SotExchange::GetFormatDataFlavor(nKnownFormatId, aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
-            Any aDescriptor = _rData.GetAny(aFlavor);
+            Any aDescriptor = _rData.GetAny(aFlavor, OUString());
 
             // extract the property value sequence
             Sequence< PropertyValue > aDescriptorProps;
@@ -643,8 +641,8 @@ namespace svx
     {
         AddFormat(getDescriptorFormatId());
     }
-    //--------------------------------------------------------------------
-    sal_Bool OMultiColumnTransferable::GetData( const DataFlavor& _rFlavor )
+
+    sal_Bool OMultiColumnTransferable::GetData( const DataFlavor& _rFlavor, const OUString& /*rDestDoc*/ )
     {
         const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
         if (nFormatId == getDescriptorFormatId())
@@ -682,7 +680,7 @@ namespace svx
             SotExchange::GetFormatDataFlavor(getDescriptorFormatId(), aFlavor);
             OSL_ENSURE(bSuccess, "OColumnTransferable::extractColumnDescriptor: invalid data format (no flavor)!");
 
-            _rData.GetAny(aFlavor) >>= aList;
+            _rData.GetAny(aFlavor, OUString()) >>= aList;
         } // if (_rData.HasFormat(getDescriptorFormatId()))
         return aList;
     }

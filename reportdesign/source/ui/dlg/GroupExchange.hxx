@@ -37,7 +37,7 @@ namespace rptui
         static sal_uInt32   getReportGroupId();
     protected:
         virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
         virtual void        ObjectReleased();
     };
 }

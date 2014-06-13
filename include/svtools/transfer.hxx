@@ -28,7 +28,7 @@
 #include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/datatransfer/XTransferable.hpp>
+#include <com/sun/star/datatransfer/XTransferable2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardOwner.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragGestureRecognizer.hpp>
@@ -127,7 +127,7 @@ struct ExecuteDropEvent
         mbDefault( sal_False ) {}
 };
 
-class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< ::com::sun::star::datatransfer::XTransferable,
+class SVT_DLLPUBLIC TransferableHelper : public ::cppu::WeakImplHelper4< ::com::sun::star::datatransfer::XTransferable2,
                                                            ::com::sun::star::datatransfer::clipboard::XClipboardOwner,
                                                            ::com::sun::star::datatransfer::dnd::XDragSourceListener,
                                                            ::com::sun::star::lang::XUnoTunnel >
@@ -177,6 +177,11 @@ private:
     virtual ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) throw(::com::sun::star::uno::RuntimeException);
+
+    // Transferable2
+    virtual css::uno::Any SAL_CALL getTransferData2(
+        const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
+            throw (css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException);
 
     // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -236,7 +241,7 @@ protected:
 protected:
 
     virtual void        AddSupportedFormats() = 0;
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) = 0;
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) = 0;
     virtual sal_Bool    WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId, const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
     virtual void        DragFinished( sal_Int8 nDropAction );
     virtual void        ObjectReleased();
@@ -312,8 +317,8 @@ public:
 
 public:
 
-    ::com::sun::star::uno::Any  GetAny( SotFormatStringId nFormat ) const;
-    ::com::sun::star::uno::Any  GetAny( const ::com::sun::star::datatransfer::DataFlavor& rFlavor ) const;
+    css::uno::Any GetAny( SotFormatStringId nFormat, const OUString& rDestDoc ) const;
+    css::uno::Any GetAny( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) const;
 
     sal_Bool                    GetString( SotFormatStringId nFormat, OUString& rStr );
     sal_Bool                    GetString( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, OUString& rStr );
@@ -342,16 +347,16 @@ public:
     sal_Bool                    GetFileList( SotFormatStringId nFormat, FileList& rFileList );
     sal_Bool                    GetFileList( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, FileList& rFileList );
 
-    sal_Bool                    GetSequence( SotFormatStringId nFormat, ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
-    sal_Bool                    GetSequence( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Sequence< sal_Int8 >& rSeq );
+    css::uno::Sequence<sal_Int8> GetSequence( SotFormatStringId nFormat, const OUString& rDestDoc );
+    css::uno::Sequence<sal_Int8> GetSequence( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
-    sal_Bool                    GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rStreamRef );
-    sal_Bool                    GetSotStorageStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, SotStorageStreamRef& rStreamRef );
+    bool                        GetSotStorageStream( SotFormatStringId nFormat, SotStorageStreamRef& rStreamRef );
+    bool                        GetSotStorageStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, SotStorageStreamRef& rStreamRef );
 
-    sal_Bool                    GetInputStream( SotFormatStringId nFormat, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
-    sal_Bool                    GetInputStream( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& xStream );
+    css::uno::Reference<css::io::XInputStream> GetInputStream( SotFormatStringId nFormat, const OUString& rDestDoc );
+    css::uno::Reference<css::io::XInputStream> GetInputStream( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
 
-    sal_Bool                    GetInterface( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
+    bool                        GetInterface( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rIf );
 
 public:
 
@@ -485,7 +490,7 @@ class SVT_DLLPUBLIC TransferDataContainer : public TransferableHelper
 protected:
 
     virtual void        AddSupportedFormats();
-    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc );
     virtual void        DragFinished( sal_Int8 nDropAction );
 
 public:

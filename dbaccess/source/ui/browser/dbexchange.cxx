@@ -159,7 +159,7 @@ namespace dbaui
         ODataAccessObjectTransferable::AddSupportedFormats();
     }
 
-    sal_Bool ODataClipboard::GetData( const DataFlavor& rFlavor )
+    sal_Bool ODataClipboard::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
     {
         const sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
         switch (nFormat)
@@ -175,7 +175,7 @@ namespace dbaui
                 return m_pHtml.is() && SetObject( m_pHtml.get(), SOT_FORMATSTR_ID_HTML, rFlavor );
         }
 
-        return ODataAccessObjectTransferable::GetData( rFlavor );
+        return ODataAccessObjectTransferable::GetData(rFlavor, rDestDoc);
     }
 
     void ODataClipboard::ObjectReleased()

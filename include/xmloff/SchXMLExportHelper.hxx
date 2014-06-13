@@ -52,6 +52,9 @@ public:
     /// returns the string corresponding to the current FileFormat CLSID for Chart
     const OUString& getChartCLSID();
 
+    void SetSourceShellID( const OUString& rShellID );
+    void SetDestinationShellID( const OUString& rShellID );
+
 private:
     SchXMLExportHelper(); // not defined
     SchXMLExportHelper(SchXMLExportHelper &); // not defined

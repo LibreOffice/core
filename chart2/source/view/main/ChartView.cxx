@@ -1787,8 +1787,16 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
     if( !xSeriesOrPointProp.is() )
         return nFormat;
 
-    OUString aPropName( "NumberFormat" );
-    if( !(xSeriesOrPointProp->getPropertyValue(aPropName) >>= nFormat) )
+    bool bLinkToSource = true;
+    try
+    {
+        xSeriesOrPointProp->getPropertyValue("LinkNumberFormatToSource") >>= bLinkToSource;
+    }
+    catch ( const beans::UnknownPropertyException& ) {}
+
+    xSeriesOrPointProp->getPropertyValue("NumberFormat") >>= nFormat;
+    sal_Int32 nOldFormat = nFormat;
+    if (bLinkToSource)
     {
         uno::Reference< chart2::XChartType > xChartType( DataSeriesHelper::getChartTypeOfSeries( xSeries, xDiagram ) );
 
@@ -1796,7 +1804,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
         if( ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( xChartType ) )
         {
             uno::Reference< beans::XPropertySet > xAttachedAxisProps( DiagramHelper::getAttachedAxis( xSeries, xDiagram ), uno::UNO_QUERY );
-            if( xAttachedAxisProps.is() && ( xAttachedAxisProps->getPropertyValue( aPropName ) >>= nFormat ) )
+            if( xAttachedAxisProps.is() && ( xAttachedAxisProps->getPropertyValue("NumberFormat") >>= nFormat ) )
                 bFormatFound = true;
         }
         if( !bFormatFound )
@@ -1813,7 +1821,11 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
                     nFormat = xValues->getNumberFormatKeyByIndex( nPointIndex );
             }
         }
+
+        if (nFormat >= 0 && nOldFormat != nFormat)
+            xSeriesOrPointProp->setPropertyValue("NumberFormat", uno::makeAny(nFormat));
     }
+
     if(nFormat<0)
         nFormat=0;
     return nFormat;

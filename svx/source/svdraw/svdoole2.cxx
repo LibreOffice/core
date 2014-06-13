@@ -1633,7 +1633,20 @@ SdrOle2Obj* SdrOle2Obj::Clone() const
     return CloneHelper< SdrOle2Obj >();
 }
 
-SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
+SdrOle2Obj* SdrOle2Obj::CloneWithShellIDs( const OUString& rSrcShellID, const OUString& rDestShellID ) const
+{
+    SdrOle2Obj* pObj =
+        dynamic_cast<SdrOle2Obj*>(
+            SdrObjFactory::MakeNewObject(GetObjInventor(), GetObjIdentifier(), NULL));
+
+    if (pObj)
+        pObj->assignFrom(*this, rSrcShellID, rDestShellID);
+
+    return pObj;
+}
+
+SdrOle2Obj& SdrOle2Obj::assignFrom(
+    const SdrOle2Obj& rObj, const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     //TODO/LATER: who takes over control of my old object?!
     if( &rObj != this )
@@ -1680,7 +1693,8 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
                 if ( xObj.is() )
                 {
                     OUString aTmp;
-                    xObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject( rContainer, xObj, aTmp ), rOle2Obj.GetAspect() );
+                    xObjRef.Assign( pDestPers->getEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
+                        rContainer, xObj, aTmp, rSrcShellID, rDestShellID), rOle2Obj.GetAspect());
                     m_bTypeAsked = false;
                     mpImpl->aPersistName = aTmp;
                     CheckFileLink_Impl();
@@ -1693,7 +1707,10 @@ SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
     return *this;
 }
 
-// -----------------------------------------------------------------------------
+SdrOle2Obj& SdrOle2Obj::operator=(const SdrOle2Obj& rObj)
+{
+    return assignFrom(rObj, OUString(), OUString());
+}
 
 void SdrOle2Obj::ImpSetVisAreaSize()
 {

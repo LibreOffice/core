@@ -52,7 +52,7 @@ namespace dbaui
         if ( !m_vTableRow.empty() )
             AddFormat(SOT_FORMATSTR_ID_SBA_TABED);
     }
-    sal_Bool OTableRowExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+    sal_Bool OTableRowExchange::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
     {
         sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
         if(nFormat == SOT_FORMATSTR_ID_SBA_TABED)

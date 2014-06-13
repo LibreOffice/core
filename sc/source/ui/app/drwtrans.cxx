@@ -95,7 +95,8 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     pDragSourceView( NULL ),
     nDragSourceFlags( 0 ),
     bDragWasInternal( false ),
-    nSourceDocID( 0 )
+    nSourceDocID( 0 ),
+    maShellID(SfxObjectShell::CreateShellID(pContainerShell))
 {
     //
     //  check what kind of objects are contained
@@ -339,12 +340,8 @@ void ScDrawTransferObj::AddSupportedFormats()
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
         AddFormat( SOT_FORMAT_GDIMETAFILE );
 
-        if ( !aOleData.GetTransferable().is() )
-        {
-            SdrOle2Obj* pObj = GetSingleObject();
-            if ( pObj && pObj->GetObjRef().is() )
-                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect() ) ) ;
-        }
+        CreateOLEData();
+
         if ( aOleData.GetTransferable().is() )
         {
             //  get format list from object snapshot
@@ -376,19 +373,15 @@ void ScDrawTransferObj::AddSupportedFormats()
 //      AddFormat( SOT_FORMATSTR_ID_SVIM );
 }
 
-sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool ScDrawTransferObj::GetData(
+    const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     sal_Bool bOK = false;
     sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
 
     if ( bOleObj && nFormat != SOT_FORMAT_GDIMETAFILE )
     {
-        if ( !aOleData.GetTransferable().is() )
-        {
-            SdrOle2Obj* pObj = GetSingleObject();
-            if ( pObj && pObj->GetObjRef().is() )
-                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect() ) ) ;
-        }
+        CreateOLEData();
 
         if( aOleData.GetTransferable().is() && aOleData.HasFormat( rFlavor ) )
         {
@@ -400,7 +393,7 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
                 pModel->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
             }
 
-            bOK = SetAny( aOleData.GetAny( rFlavor ), rFlavor );
+            bOK = SetAny( aOleData.GetAny(rFlavor, rDestDoc), rFlavor );
 
             if( pModel )
                 pModel->SetSwapGraphicsMode( nOldSwapMode );
@@ -701,6 +694,11 @@ void ScDrawTransferObj::SetDragWasInternal()
     bDragWasInternal = sal_True;
 }
 
+OUString ScDrawTransferObj::GetShellID() const
+{
+    return maShellID;
+}
+
 SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
 {
     //  if single OLE object was copied, get its object
@@ -719,7 +717,26 @@ SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
     return NULL;
 }
 
-//
+void ScDrawTransferObj::CreateOLEData()
+{
+    if (aOleData.GetTransferable().is())
+        // Already created.
+        return;
+
+    SdrOle2Obj* pObj = GetSingleObject();
+    if (!pObj || !pObj->GetObjRef().is())
+        // No OLE object present.
+        return;
+
+    SvEmbedTransferHelper* pEmbedTransfer =
+        new SvEmbedTransferHelper(
+            pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect());
+
+    pEmbedTransfer->SetParentShellID(maShellID);
+
+    aOleData = TransferableDataHelper(pEmbedTransfer);
+}
+
 //  initialize aDocShellRef with a live document from the ClipDoc
 //
 
@@ -740,7 +757,10 @@ void ScDrawTransferObj::InitDocShell()
         // SdrExchangeView aDestView( pDestModel );
         SdrView aDestView( pDestModel );
         aDestView.ShowSdrPage(aDestView.GetModel()->GetPage(0));
-        aDestView.Paste( *pModel, Point( aSrcSize.Width()/2, aSrcSize.Height()/2 ) );
+        aDestView.Paste(
+            *pModel,
+            Point(aSrcSize.Width()/2, aSrcSize.Height()/2),
+            NULL, 0, OUString(), OUString());
 
         // put objects to right layer (see ScViewFunc::PasteDataFormat for SOT_FORMATSTR_ID_DRAWING)
 

@@ -554,7 +554,8 @@ void ScTable::CopyToClip(
     }
 }
 
-void ScTable::CopyStaticToDocument(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab)
+void ScTable::CopyStaticToDocument(
+    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, const SvNumberFormatterMergeMap& rMap, ScTable* pDestTab )
 {
     if (nCol1 > nCol2)
         return;
@@ -563,7 +564,7 @@ void ScTable::CopyStaticToDocument(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
     {
         ScColumn& rSrcCol = aCol[i];
         ScColumn& rDestCol = pDestTab->aCol[i];
-        rSrcCol.CopyStaticToDocument(nRow1, nRow2, rDestCol);
+        rSrcCol.CopyStaticToDocument(nRow1, nRow2, rMap, rDestCol);
     }
 }
 

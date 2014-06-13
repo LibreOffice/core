@@ -58,7 +58,9 @@ class COMPHELPER_DLLPUBLIC EmbeddedObjectContainer
 
 public:
     // add an embedded object to the container storage
-    sal_Bool            StoreEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, OUString&, sal_Bool );
+    bool StoreEmbeddedObject(
+        const css::uno::Reference<css::embed::XEmbeddedObject>& xObj, OUString& rName, bool bCopy,
+        const OUString& rSrcShellID, const OUString& rDestShellID );
 
     // add an embedded object that has been imported from the container storage - should only be called by filters!
     void                AddEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, const OUString& );
@@ -119,7 +121,9 @@ public:
                         InsertEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >&, OUString& );
 
     // copy an embedded object into the storage, open the new copy and return it
-    ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject > CopyAndGetEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj, /* TODO const OUString& aOrigName,*/ OUString& rName );
+    css::uno::Reference <css::embed::XEmbeddedObject> CopyAndGetEmbeddedObject(
+        EmbeddedObjectContainer& rSrc, const css::uno::Reference <css::embed::XEmbeddedObject>& xObj, OUString& rName,
+        const OUString& rSrcShellID, const OUString& rDestShellID );
 
     // move an embedded object from one container to another one
     sal_Bool MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, OUString& );

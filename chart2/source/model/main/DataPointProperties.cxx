@@ -281,7 +281,14 @@ void DataPointProperties::AddPropertiesToVector(
                   PROP_DATAPOINT_NUMBER_FORMAT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID ));
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( "LinkNumberFormatToSource",
+                  PROP_DATAPOINT_LINK_NUMBERFORMAT_TO_SOURCE,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     //additional 'PercentageNumberFormat'
     rOutProperties.push_back(
@@ -409,6 +416,8 @@ void DataPointProperties::AddDefaultsToMap(
     PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_PERCENT_DIAGONAL, 0 );
 
     PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_DATAPOINT_TEXT_ROTATION, 0.0 );
+
+    PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LINK_NUMBERFORMAT_TO_SOURCE, true);
 }
 
 } //  namespace chart

@@ -698,9 +698,8 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
         WrappedStatisticProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
         aWrappedProperties.push_back( new WrappedAttachedAxisProperty( m_spChart2ModelContact ) );
 
-        WrappedNumberFormatProperty* pWrappedNumberFormatProperty = new WrappedNumberFormatProperty( m_spChart2ModelContact );
-        aWrappedProperties.push_back( pWrappedNumberFormatProperty );
-        aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty(pWrappedNumberFormatProperty) );
+        aWrappedProperties.push_back( new WrappedNumberFormatProperty(m_spChart2ModelContact) );
+        aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty(m_spChart2ModelContact) );
     }
 
     WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );

@@ -493,7 +493,9 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
     }
 }
 
-sal_Bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName, sal_Bool bCopy )
+bool EmbeddedObjectContainer::StoreEmbeddedObject(
+    const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName, bool bCopy,
+    const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::StoreEmbeddedObject" );
 
@@ -514,7 +516,14 @@ sal_Bool EmbeddedObjectContainer::StoreEmbeddedObject( const uno::Reference < em
         {
             uno::Sequence < beans::PropertyValue > aSeq;
             if ( bCopy )
-                xPersist->storeToEntry( pImpl->mxStorage, rName, aSeq, aSeq );
+            {
+                uno::Sequence<beans::PropertyValue> aObjArgs(2);
+                aObjArgs[0].Name = "SourceShellID";
+                aObjArgs[0].Value <<= rSrcShellID;
+                aObjArgs[1].Name = "DestinationShellID";
+                aObjArgs[1].Value <<= rDestShellID;
+                xPersist->storeToEntry(pImpl->mxStorage, rName, aSeq, aObjArgs);
+            }
             else
             {
                 //TODO/LATER: possible optimisation, don't store immediately
@@ -538,7 +547,7 @@ sal_Bool EmbeddedObjectContainer::InsertEmbeddedObject( const uno::Reference < e
 {
     SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::InsertEmbeddedObject( Object )" );
     // store it into the container storage
-    if ( StoreEmbeddedObject( xObj, rName, sal_False ) )
+    if (StoreEmbeddedObject(xObj, rName, false, OUString(), OUString()))
     {
         // remember object
         AddEmbeddedObject( xObj, rName );
@@ -700,7 +709,9 @@ sal_Bool EmbeddedObjectContainer::TryToCopyGraphReplacement( EmbeddedObjectConta
     return bResult;
 }
 
-uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmbeddedObject( EmbeddedObjectContainer& rSrc, const uno::Reference < embed::XEmbeddedObject >& xObj, OUString& rName )
+uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmbeddedObject(
+    EmbeddedObjectContainer& rSrc, const uno::Reference <embed::XEmbeddedObject>& xObj, OUString& rName,
+    const OUString& rSrcShellID, const OUString& rDestShellID )
 {
     SAL_INFO( "comphelper.container", "comphelper (mv76033) comphelper::EmbeddedObjectContainer::CopyAndGetEmbeddedObject" );
 
@@ -721,8 +732,8 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::CopyAndGetEmb
     if ( rName.isEmpty() )
         rName = CreateUniqueObjectName();
 
-    // objects without persistance are not really stored by the method
-    if ( xObj.is() && StoreEmbeddedObject( xObj, rName, sal_True ) )
+    // objects without persistence are not really stored by the method
+    if (xObj.is() && StoreEmbeddedObject(xObj, rName, true, rSrcShellID, rDestShellID))
     {
         xResult = Get_Impl( rName, xObj);
         if ( !xResult.is() )

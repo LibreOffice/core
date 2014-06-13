@@ -125,7 +125,8 @@ void SdPageObjsTLB::SdPageObjsTransferable::AddSupportedFormats()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+sal_Bool SdPageObjsTLB::SdPageObjsTransferable::GetData(
+    const ::com::sun::star::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     sal_uLong nFormatId = SotExchange::GetFormat( rFlavor );
     switch (nFormatId)
