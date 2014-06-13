@@ -201,13 +201,13 @@ uno::Any SvxUnoFontDescriptor::getPropertyDefault( SfxItemPool* pPool )
 
     uno::Any aAny;
 
-    if(!pPool->IsWhich(EE_CHAR_FONTINFO)||
-        !pPool->IsWhich(EE_CHAR_FONTHEIGHT)||
-        !pPool->IsWhich(EE_CHAR_ITALIC)||
-        !pPool->IsWhich(EE_CHAR_UNDERLINE)||
-        !pPool->IsWhich(EE_CHAR_WEIGHT)||
-        !pPool->IsWhich(EE_CHAR_STRIKEOUT)||
-        !pPool->IsWhich(EE_CHAR_WLM))
+    if(!SfxItemPool::IsWhich(EE_CHAR_FONTINFO)||
+        !SfxItemPool::IsWhich(EE_CHAR_FONTHEIGHT)||
+        !SfxItemPool::IsWhich(EE_CHAR_ITALIC)||
+        !SfxItemPool::IsWhich(EE_CHAR_UNDERLINE)||
+        !SfxItemPool::IsWhich(EE_CHAR_WEIGHT)||
+        !SfxItemPool::IsWhich(EE_CHAR_STRIKEOUT)||
+        !SfxItemPool::IsWhich(EE_CHAR_WLM))
         return aAny;
 
     aSet.Put(pPool->GetDefaultItem(EE_CHAR_FONTINFO));

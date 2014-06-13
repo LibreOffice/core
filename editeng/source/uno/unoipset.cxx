@@ -212,7 +212,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     if( (pMap->nWID < OWN_ATTR_VALUE_START) && (pMap->nWID > OWN_ATTR_VALUE_END ) )
     {
         // Get Default from ItemPool
-        if(mrItemPool.IsWhich(pMap->nWID))
+        if(SfxItemPool::IsWhich(pMap->nWID))
             aSet.Put(mrItemPool.GetDefaultItem(pMap->nWID));
     }
 
