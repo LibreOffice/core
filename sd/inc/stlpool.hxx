@@ -87,7 +87,7 @@ public:
     void                CreatePseudosIfNecessary();
     void                UpdateStdNames();
     static void         PutNumBulletItem( SfxStyleSheetBase* pSheet, Font& rBulletFont );
-    Font                GetBulletFont() const;
+    static Font         GetBulletFont();
 
     SdDrawDocument*     GetDoc() const { return mpDoc; }
 
