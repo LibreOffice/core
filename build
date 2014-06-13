@@ -213,7 +213,6 @@ fi
 
 if [ "_$build" = "_1" ]; then
   echo Building...
-  ./download 2>&1 | tee -a build.log
   do_build 2>&1 | tee -a build.log
   ret=${PIPESTATUS[0]}
   if [ $ret -ne 0 ]; then
