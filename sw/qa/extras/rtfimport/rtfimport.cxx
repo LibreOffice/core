@@ -578,14 +578,11 @@ DECLARE_RTFIMPORT_TEST(testFdo76633, "fdo76633.rtf")
     // check that there is only a graphic object, not an additional rectangle
     uno::Reference<lang::XServiceInfo> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
-#if 0
-    // disabled - fails currently
     CPPUNIT_ASSERT(xShape->supportsService("com.sun.star.text.TextGraphicObject"));
     try {
         uno::Reference<drawing::XShape> xShape2(getShape(2), uno::UNO_QUERY);
         CPPUNIT_FAIL("exception expected");
     } catch (lang::IndexOutOfBoundsException const&) { /* expected */ }
-#endif
 }
 
 DECLARE_RTFIMPORT_TEST(testFdo48033, "fdo48033.rtf")
