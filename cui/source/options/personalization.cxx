@@ -155,7 +155,12 @@ void SelectPersonaDialog::SetProgress( OUString& rProgress )
     if(rProgress.isEmpty())
         m_pProgressLabel->Hide();
     else
+    {
+        SolarMutexGuard aGuard;
+        m_pProgressLabel->Show();
         m_pProgressLabel->SetText( rProgress );
+        setOptimalLayoutSize();
+    }
 }
 
 void SelectPersonaDialog::SetImages( std::vector<Image> &rImageList )
@@ -390,7 +395,7 @@ void SearchAndParseThread::execute()
         }
         catch (...)
         {
-        return;
+            return;
         }
 
         xml::sax::InputSource aParserInput;
