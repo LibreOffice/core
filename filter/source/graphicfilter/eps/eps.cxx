@@ -505,7 +505,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     mpPS->WriteCharPtr( "%%BoundingBox: " );                         // BoundingBox
     ImplWriteLong( 0 );
     ImplWriteLong( 0 );
-    Size aSizePoint = Application::GetDefaultDevice()->LogicToLogic( pMTF->GetPrefSize(),
+    Size aSizePoint = OutputDevice::LogicToLogic( pMTF->GetPrefSize(),
                         pMTF->GetPrefMapMode(), MAP_POINT );
     ImplWriteLong( aSizePoint.Width() );
     ImplWriteLong( aSizePoint.Height() ,PS_RET );
@@ -1202,8 +1202,8 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                         Size    aSize = ( (const MetaEPSAction*) pMA )->GetSize();
 
                         MapMode aMapMode( aSubstitute.GetPrefMapMode() );
-                        Size aOutSize( rVDev.LogicToLogic( aSize, rVDev.GetMapMode(), aMapMode ) );
-                        Point aOrigin( rVDev.LogicToLogic( aPoint, rVDev.GetMapMode(), aMapMode ) );
+                        Size aOutSize( OutputDevice::LogicToLogic( aSize, rVDev.GetMapMode(), aMapMode ) );
+                        Point aOrigin( OutputDevice::LogicToLogic( aPoint, rVDev.GetMapMode(), aMapMode ) );
                         aOrigin.Y() += aOutSize.Height();
                         aMapMode.SetOrigin( aOrigin );
                         aMapMode.SetScaleX( aOutSize.Width() / ( nBoundingBox[ 2 ] - nBoundingBox[ 0 ] ) );

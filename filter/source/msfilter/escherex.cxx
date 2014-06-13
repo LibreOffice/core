@@ -1139,7 +1139,7 @@ static Size lcl_SizeToEmu(Size aPrefSize, MapMode aPrefMapMode)
     if (aPrefMapMode == MAP_PIXEL)
         aRetSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
     else
-        aRetSize = Application::GetDefaultDevice()->LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
+        aRetSize = OutputDevice::LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
     return aRetSize;
 }
 

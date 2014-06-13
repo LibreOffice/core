@@ -356,7 +356,7 @@ void METWriter::WriteBigEndianLong(sal_uInt32 nLong)
 
 void METWriter::WritePoint(Point aPt)
 {
-    Point aNewPt = pCompDev->LogicToLogic( aPt, aPictureMapMode, aTargetMapMode );
+    Point aNewPt = OutputDevice::LogicToLogic( aPt, aPictureMapMode, aTargetMapMode );
 
     pMET->WriteInt32( (sal_Int32) ( aNewPt.X() - aPictureRect.Left() ) )
          .WriteInt32( (sal_Int32) ( aPictureRect.Bottom() - aNewPt.Y() ) );
@@ -1164,7 +1164,7 @@ void METWriter::METBitBlt(Point aPt, Size aSize, const Size& rBmpSizePixel)
 
 void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
 {
-    sal_Int32 nWidth = pCompDev->LogicToLogic( Size( rLineInfo.GetWidth(),0 ), aPictureMapMode, aTargetMapMode ).Width();
+    sal_Int32 nWidth = OutputDevice::LogicToLogic( Size( rLineInfo.GetWidth(),0 ), aPictureMapMode, aTargetMapMode ).Width();
 
     WillWriteOrder( 8 );            // set stroke linewidth
     pMET  ->WriteUChar( (sal_uInt8)0x15 )

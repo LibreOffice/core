@@ -3635,7 +3635,7 @@ static Size lcl_GetPrefSize(const Graphic& rGraf, MapMode aWanted)
     }
     else
     {
-        aRetSize = Application::GetDefaultDevice()->LogicToLogic(
+        aRetSize = OutputDevice::LogicToLogic(
             rGraf.GetPrefSize(), rGraf.GetPrefMapMode(), aWanted);
     }
     return aRetSize;
@@ -5733,7 +5733,7 @@ void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
     sal_uInt16 nInst;
     sal_uInt16 nFbt;
     sal_uInt32  nLength;
-    if( !this->ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) ) return;
+    if( !ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) ) return;
 
     bool bOk;
     sal_uLong nPos = nOffsDggL + DFF_COMMON_RECORD_HEADER_SIZE;
@@ -5790,7 +5790,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
     // search for a  BStore Container
     do
     {
-        if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
+        if(!ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
         nRead += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
         if( DFF_msofbtBstoreContainer == nFbt )
         {
@@ -5814,7 +5814,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uLong nLe
     nRead = 0;
     do
     {
-        if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
+        if(!ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
         nRead += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
         if( DFF_msofbtBSE == nFbt )
         {
@@ -5874,7 +5874,7 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uLong nLenDg,
     // we now have to iterate through all contained shape group containers
     do
     {
-        if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
+        if(!ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return;
         nReadDg += DFF_COMMON_RECORD_HEADER_SIZE;
         // Patriarch found (the upmost shape group container) ?
         if( DFF_msofbtSpgrContainer == nFbt )
@@ -5906,7 +5906,7 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
     sal_uLong nReadSpGrCont = 0;
     do
     {
-        if( !this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength ) )
+        if( !ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength ) )
             return false;
         nReadSpGrCont += DFF_COMMON_RECORD_HEADER_SIZE;
         // Shape Container?
@@ -5963,7 +5963,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 
     do
     {
-        if(!this->ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return false;
+        if(!ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength)) return false;
         nReadSpCont += DFF_COMMON_RECORD_HEADER_SIZE;
         // FSP ?
         if( ( DFF_msofbtSp == nFbt ) && ( 4 <= nLength ) )
