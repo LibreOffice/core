@@ -2276,7 +2276,7 @@ namespace osl_File
 
              ::osl::FileBase::RC nError5 = testFile.close();
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError5 );
-            ::osl::FileBase::RC nError6 = testFile.remove( aCanURL1 );
+            ::osl::FileBase::RC nError6 = osl::File::remove( aCanURL1 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError6 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for open function: test for osl_File_OpenFlag_Read, osl_File_OpenFlag_Write and osl_File_OpenFlag_Create",
