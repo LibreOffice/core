@@ -365,7 +365,7 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
     ::std::vector< beans::Property > aNewProps;
     if( m_xChartModel.is() )
     {
-        m_pInfoService->getExcludeProperties( aNewProps, m_xFormComponentHandler );
+        rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
         beans::Property aValue;
         static const OUString s_pProperties[] =
         {

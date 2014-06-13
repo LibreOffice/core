@@ -1268,7 +1268,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
 {
     ::std::vector< beans::Property > aNewProps;
     aNewProps.reserve(20); // only a guess
-    m_pInfoService->getExcludeProperties( aNewProps, m_xFormComponentHandler );
+    rptui::OPropertyInfoService::getExcludeProperties( aNewProps, m_xFormComponentHandler );
 
     const OUString pIncludeProperties[] =
     {

@@ -218,7 +218,7 @@ void lcl_extractAndStartStatusIndicator( const utl::MediaDescriptor& _rDescripto
 {
     try
     {
-        _rxStatusIndicator = _rDescriptor.getUnpackedValueOrDefault( _rDescriptor.PROP_STATUSINDICATOR(), _rxStatusIndicator );
+        _rxStatusIndicator = _rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_STATUSINDICATOR(), _rxStatusIndicator );
         if ( _rxStatusIndicator.is() )
         {
             _rxStatusIndicator->start( OUString(), (sal_Int32)1000000 );
@@ -519,7 +519,7 @@ namespace
                 ::comphelper::MimeConfigurationHelper aHelper(m_xContext);
                 SvtModuleOptions aModuleOptions;
                 uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
-                    aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(m_sMimeType) )),
+                    aModuleOptions.GetFactoryEmptyDocumentURL( SvtModuleOptions::ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(m_sMimeType) )),
                     OUString(), // empty frame name
                     0,
                     aArgs
@@ -1477,7 +1477,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(aSaveOpt.IsPrettyPrinting()));
     if ( aSaveOpt.IsSaveRelFSys() )
     {
-        const OUString sVal( aDescriptor.getUnpackedValueOrDefault(aDescriptor.PROP_DOCUMENTBASEURL(),OUString()) );
+        const OUString sVal( aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTBASEURL(),OUString()) );
         xInfoSet->setPropertyValue("BaseURI", uno::makeAny(sVal));
     }
     const OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",OUString()) );
