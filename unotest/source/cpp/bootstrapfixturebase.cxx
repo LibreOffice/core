@@ -95,9 +95,8 @@ OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
 void test::BootstrapFixtureBase::setUp()
 {
     // set UserInstallation to user profile dir in test/user-template
-    rtl::Bootstrap aDefaultVars;
     OUString sUserInstallURL = m_aWorkdirRootURL + "/unittest";
-    aDefaultVars.set(OUString("UserInstallation"), sUserInstallURL);
+    rtl::Bootstrap::set(OUString("UserInstallation"), sUserInstallURL);
 
     m_xContext = comphelper::getProcessComponentContext();
     m_xFactory = m_xContext->getServiceManager();
