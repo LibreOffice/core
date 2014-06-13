@@ -195,7 +195,10 @@ public:
     virtual void onAccessibilityOptionsChanged() SAL_OVERRIDE;
 
     virtual SdrModel*   GetMarkedObjModel() const SAL_OVERRIDE;
-    virtual bool        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0) SAL_OVERRIDE;
+    virtual bool Paste(
+        const SdrModel& rMod, const Point& rPos, SdrObjList* pLst, sal_uInt32 nOptions,
+        const OUString& rSrcShellID, const OUString& rDestShellID ) SAL_OVERRIDE;
+
     using SdrExchangeView::Paste;
 
     /** returns true if we have an undo manager and there is an open list undo action */

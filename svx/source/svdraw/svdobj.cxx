@@ -1041,6 +1041,11 @@ SdrObject* SdrObject::Clone() const
     return CloneHelper< SdrObject >();
 }
 
+SdrObject* SdrObject::CloneWithShellIDs( const OUString& /*rSrcShellID*/, const OUString& /*rDestShellID*/ ) const
+{
+    return Clone();
+}
+
 SdrObject& SdrObject::operator=(const SdrObject& rObj)
 {
     if( this == &rObj )

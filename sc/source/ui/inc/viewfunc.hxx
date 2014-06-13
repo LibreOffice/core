@@ -119,8 +119,8 @@ public:
                                                        ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
 
     void            PasteDraw();
-    void            PasteDraw( const Point& rLogicPos, SdrModel* pModel,
-                                bool bGroup = false, bool bSameDocClipboard = false );
+    void PasteDraw( const Point& rLogicPos, SdrModel* pModel, bool bGroup,
+                    const OUString& rSrcShellID, const OUString& rDestShellID );
 
     bool            PasteOnDrawObjectLinked(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable,

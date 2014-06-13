@@ -448,7 +448,7 @@ void SdTransferable::AddSupportedFormats()
     }
 }
 
-bool SdTransferable::GetData( const DataFlavor& rFlavor )
+bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     if (SD_MOD()==NULL)
         return false;
@@ -476,7 +476,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor )
         if( nFormat == FORMAT_GDIMETAFILE && mpGraphic )
             bOK = SetGDIMetaFile( mpGraphic->GetGDIMetaFile(), rFlavor );
         else
-            bOK = SetAny( mpOLEDataHelper->GetAny( rFlavor ), rFlavor );
+            bOK = SetAny( mpOLEDataHelper->GetAny(rFlavor, rDestDoc), rFlavor );
 
         if( mpSdDrawDocumentIntern )
             mpSdDrawDocumentIntern->SetSwapGraphicsMode( nOldSwapMode );

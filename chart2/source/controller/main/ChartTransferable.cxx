@@ -73,7 +73,7 @@ void ChartTransferable::AddSupportedFormats()
     AddFormat( SOT_FORMAT_BITMAP );
 }
 
-bool ChartTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+bool ChartTransferable::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
     bool        bResult = false;
