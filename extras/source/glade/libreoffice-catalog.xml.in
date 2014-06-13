@@ -406,8 +406,11 @@
     <glade-widget-class title="Drop Caps Preview" name="swuilo-SwDropCapsPict"
                         generic-name="Drop Caps Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="Extension List" name="deploymentgui-ExtBoxWithBtns"
+    <glade-widget-class title="Extension List" name="deploymentgui-ExtensionBox"
                         generic-name="Extensions List" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Extension List With Buttons" name="deploymentgui-ExtBoxWithBtns"
+                        generic-name="Extensions List With Buttons" parent="deploymentgui-ExtensionBox"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Path List" name="xsltdlglo-SvxPathControl"
                         generic-name="Path List" parent="GtkDrawingArea"

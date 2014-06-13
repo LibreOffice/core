@@ -190,6 +190,7 @@ public:
     virtual void    Paint( const Rectangle &rPaintRect ) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
     const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }

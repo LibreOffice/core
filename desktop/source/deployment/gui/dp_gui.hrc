@@ -23,16 +23,6 @@
 #include "deployment.hrc"
 #include "helpid.hrc"
 
-// Package Manager Dialog:
-#define RID_DLG_UPDATE_REQUIRED               (RID_DEPLOYMENT_GUI_START + 11)
-
-#define RID_EM_BTN_CLOSE                       10
-#define RID_EM_BTN_HELP                        11
-#define RID_EM_BTN_CHECK_UPDATES               12
-#define RID_EM_BTN_CANCEL                      13
-#define RID_EM_FT_PROGRESS                     14
-#define RID_EM_FT_MSG                          15
-
 #define RID_DLG_DEPENDENCIES (RID_DEPLOYMENT_GUI_START + 1)
 #define RID_DLG_DEPENDENCIES_TEXT 1
 #define RID_DLG_DEPENDENCIES_LIST 2

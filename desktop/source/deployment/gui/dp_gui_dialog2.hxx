@@ -172,15 +172,13 @@ public:
 class UpdateRequiredDialog : public ModalDialog,
                              public DialogHelper
 {
-    ExtensionBox_Impl   *m_pExtensionBox;
-    FixedText            m_aUpdateNeeded;
-    PushButton           m_aUpdateBtn;
-    PushButton           m_aCloseBtn;
-    HelpButton           m_aHelpBtn;
-    CancelButton         m_aCancelBtn;
-    FixedLine            m_aDivider;
-    FixedText            m_aProgressText;
-    ProgressBar          m_aProgressBar;
+    ExtensionBox_Impl*   m_pExtensionBox;
+    FixedText*           m_pUpdateNeeded;
+    PushButton*          m_pUpdateBtn;
+    PushButton*          m_pCloseBtn;
+    CancelButton*        m_pCancelBtn;
+    FixedText*           m_pProgressText;
+    ProgressBar*         m_pProgressBar;
     const OUString       m_sAddPackages;
     const OUString       m_sCloseText;
     OUString             m_sProgressText;
@@ -215,7 +213,6 @@ public:
     virtual        ~UpdateRequiredDialog();
 
     virtual short   Execute() SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
     virtual bool    Close() SAL_OVERRIDE;
 
     virtual void    showProgress( bool bStart ) SAL_OVERRIDE;
