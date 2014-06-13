@@ -66,7 +66,10 @@ public:
     virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Reference< ooo::vba::word::XListFormat > SAL_CALL getListFormat() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     // Methods
-    virtual void SAL_CALL InsertBreak( const css::uno::Any& _breakType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL InsertBreak(const css::uno::Any& _breakType)
+        throw (css::script::BasicErrorException,
+               css::uno::RuntimeException,
+               std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL Select() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL InsertParagraph() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL InsertParagraphBefore() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
