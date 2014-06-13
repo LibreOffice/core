@@ -85,7 +85,7 @@ namespace pcr
     PropertyState  SAL_CALL ButtonNavigationHandler::getPropertyState( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         PropertyState eState = PropertyState_DIRECT_VALUE;
         switch ( nPropId )
         {
@@ -114,7 +114,7 @@ namespace pcr
     Any SAL_CALL ButtonNavigationHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         Any aReturn;
         switch ( nPropId )
@@ -145,7 +145,7 @@ namespace pcr
     void SAL_CALL ButtonNavigationHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         switch ( nPropId )
         {
         case PROPERTY_ID_BUTTONTYPE:
@@ -208,7 +208,7 @@ namespace pcr
     InteractiveSelectionResult SAL_CALL ButtonNavigationHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, Any& _rData, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         InteractiveSelectionResult eReturn( InteractiveSelectionResult_Cancelled );
 
@@ -229,7 +229,7 @@ namespace pcr
     void SAL_CALL ButtonNavigationHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
         switch ( nPropId )
         {
         case PROPERTY_ID_BUTTONTYPE:
@@ -255,7 +255,7 @@ namespace pcr
     LineDescriptor SAL_CALL ButtonNavigationHandler::describePropertyLine( const OUString& _rPropertyName, const Reference< XPropertyControlFactory >& _rxControlFactory ) throw (UnknownPropertyException, NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         LineDescriptor aReturn;
 

@@ -244,7 +244,7 @@ namespace pcr
 
     Any FormComponentPropertyHandler::impl_getPropertyValue_throw( const OUString& _rPropertyName ) const
     {
-        const PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        const PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         Any aPropertyValue( m_xComponent->getPropertyValue( _rPropertyName ) );
 
@@ -322,7 +322,7 @@ namespace pcr
         }
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) ); // check if property is known by the handler
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) ); // check if property is known by the handler
 
         Reference< graphic::XGraphicObject > xGrfObj;
         if ( PROPERTY_ID_IMAGE_URL == nPropId && ( _rValue >>= xGrfObj ) )
@@ -492,7 +492,7 @@ namespace pcr
     Any SAL_CALL FormComponentPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         Property aProperty( impl_getPropertyFromId_throw( nPropId ) );
 
         Any aPropertyValue( _rControlValue );
@@ -968,7 +968,7 @@ namespace pcr
             throw NullPointerException();
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         Property aProperty( impl_getPropertyFromId_throw( nPropId ) );
 
 
@@ -1418,7 +1418,7 @@ namespace pcr
             throw NullPointerException();
 
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         InteractiveSelectionResult eResult = InteractiveSelectionResult_Cancelled;
         switch ( nPropId )

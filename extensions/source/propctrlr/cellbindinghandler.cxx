@@ -103,9 +103,9 @@ namespace pcr
     void SAL_CALL CellBindingPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
+        PropertyId nActuatingPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
         OSL_PRECOND( m_pHelper.get(), "CellBindingPropertyHandler::actuatingPropertyChanged: inconsistentcy!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwRuntime, we should have a helper, since no helper implies no properties
 
         OSL_PRECOND( _rxInspectorUI.is(), "FormComponentPropertyHandler::actuatingPropertyChanged: no access to the UI!" );
         if ( !_rxInspectorUI.is() )
@@ -231,10 +231,10 @@ namespace pcr
     Any SAL_CALL CellBindingPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "CellBindingPropertyHandler::getPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         Any aReturn;
         switch ( nPropId )
@@ -277,10 +277,10 @@ namespace pcr
     void SAL_CALL CellBindingPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "CellBindingPropertyHandler::setPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         try
         {

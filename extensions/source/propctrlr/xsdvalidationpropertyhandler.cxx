@@ -102,10 +102,10 @@ namespace pcr
     Any SAL_CALL XSDValidationPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "XSDValidationPropertyHandler::getPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         Any aReturn;
         ::rtl::Reference< XSDDataType > pType = m_pHelper->getValidatingDataType();
@@ -132,10 +132,10 @@ namespace pcr
     void SAL_CALL XSDValidationPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "XSDValidationPropertyHandler::getPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         if ( PROPERTY_ID_XSD_DATA_TYPE == nPropId )
         {
@@ -300,7 +300,7 @@ namespace pcr
         if ( !m_pHelper.get() )
             throw RuntimeException();
 
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         LineDescriptor aDescriptor;
         if ( nPropId != PROPERTY_ID_XSD_DATA_TYPE )
@@ -436,7 +436,7 @@ namespace pcr
         if ( !m_pHelper.get() )
             return InteractiveSelectionResult_Cancelled;
 
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         switch ( nPropId )
         {
@@ -569,10 +569,10 @@ namespace pcr
             throw NullPointerException();
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
+        PropertyId nActuatingPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
         if ( !m_pHelper.get() )
             throw RuntimeException();
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwRuntime, we should have a helper, since no helper implies no properties
 
         switch ( nActuatingPropId )
         {

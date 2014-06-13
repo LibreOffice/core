@@ -121,10 +121,10 @@ namespace pcr
     Any SAL_CALL SubmissionPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::getPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         Any aReturn;
         try
@@ -170,10 +170,10 @@ namespace pcr
     void SAL_CALL SubmissionPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "SubmissionPropertyHandler::setPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         try
         {
@@ -288,7 +288,7 @@ namespace pcr
             RuntimeException();
 
         ::std::vector< OUString > aListEntries;
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         switch ( nPropId )
         {
         case PROPERTY_ID_SUBMISSION_ID:
@@ -324,9 +324,9 @@ namespace pcr
             throw NullPointerException();
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
+        PropertyId nActuatingPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
         OSL_PRECOND( m_pHelper.get(), "SubmissionPropertyHandler::actuatingPropertyChanged: inconsistentcy!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwRuntime, we should have a helper, since no helper implies no properties
 
         switch ( nActuatingPropId )
         {

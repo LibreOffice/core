@@ -96,10 +96,10 @@ namespace pcr
     Any SAL_CALL EFormsPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "EFormsPropertyHandler::getPropertyValue: we don't have any SupportedProperties!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         Any aReturn;
         try
@@ -159,10 +159,10 @@ namespace pcr
     void SAL_CALL EFormsPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "EFormsPropertyHandler::setPropertyValue: we don't have any SupportedProperties!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwUnknownProperty, we should have a helper, since no helper implies no properties
 
         try
         {
@@ -418,7 +418,7 @@ namespace pcr
         LineDescriptor aDescriptor;
         sal_Int16 nControlType = PropertyControlType::TextField;
         ::std::vector< OUString > aListEntries;
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         switch ( nPropId )
         {
         case PROPERTY_ID_LIST_BINDING:
@@ -482,7 +482,7 @@ namespace pcr
         if ( !m_pHelper.get() )
             return InteractiveSelectionResult_Cancelled;
 
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         (void)nPropId;
         OSL_ENSURE( ( PROPERTY_ID_BINDING_NAME == nPropId )
                  || ( PROPERTY_ID_BIND_EXPRESSION == nPropId )
@@ -555,9 +555,9 @@ namespace pcr
             throw NullPointerException();
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
+        PropertyId nActuatingPropId( impl_getPropertyId_throwRuntime( _rActuatingPropertyName ) );
         OSL_PRECOND( m_pHelper.get(), "EFormsPropertyHandler::actuatingPropertyChanged: inconsistentcy!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            // if we survived impl_getPropertyId_throwRuntime, we should have a helper, since no helper implies no properties
 
         DBG_ASSERT( _rxInspectorUI.is(), "EFormsPropertyHandler::actuatingPropertyChanged: invalid callback!" );
         if ( !_rxInspectorUI.is() )

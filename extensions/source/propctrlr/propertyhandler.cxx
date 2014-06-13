@@ -185,7 +185,7 @@ namespace pcr
             throw NullPointerException();
 
         ::osl::MutexGuard aGuard( m_aMutex );
-        PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
+        PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         const Property& rProperty( impl_getPropertyFromId_throw( nPropId ) );
 
         LineDescriptor aDescriptor;
@@ -312,11 +312,19 @@ namespace pcr
         return PropertyHandlerHelper::getDialogParentWindow( m_xContext );
     }
 
-    PropertyId PropertyHandler::impl_getPropertyId_throw( const OUString& _rPropertyName ) const
+    PropertyId PropertyHandler::impl_getPropertyId_throwUnknownProperty( const OUString& _rPropertyName ) const
     {
         PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
         if ( nPropId == -1 )
             throw UnknownPropertyException();
+        return nPropId;
+    }
+
+    PropertyId PropertyHandler::impl_getPropertyId_throwRuntime( const OUString& _rPropertyName ) const
+    {
+        PropertyId nPropId = m_pInfoService->getPropertyId( _rPropertyName );
+        if ( nPropId == -1 )
+            throw RuntimeException();
         return nPropId;
     }
 
