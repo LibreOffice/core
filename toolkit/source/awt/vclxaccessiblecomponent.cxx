@@ -733,7 +733,7 @@ awt::Rectangle VCLXAccessibleComponent::implGetBounds() throw (uno::RuntimeExcep
         // the screen location of the VCL parent
         xParent = getVclParent();
         if ( xParent.is() )
-            xParentComponent = xParentComponent.query( xParent->getAccessibleContext() );
+            xParentComponent.set(xParent->getAccessibleContext(), css::uno::UNO_QUERY);
 
         awt::Point aScreenLocVCL( 0, 0 );
         if ( xParentComponent.is() )

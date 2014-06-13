@@ -968,7 +968,7 @@ void ControlModelContainerBase::implUpdateGroupStructure()
     for ( ; pControlModels != pControlModelsEnd; ++pControlModels )
     {
         // we'll need this in every state
-        xModelSI = xModelSI.query( *pControlModels );
+        xModelSI.set(*pControlModels, css::uno::UNO_QUERY);
         bIsRadioButton = xModelSI.is() && xModelSI->supportsService( OUString::createFromAscii( szServiceName2_UnoControlRadioButtonModel ) );
 
         switch ( eState )
