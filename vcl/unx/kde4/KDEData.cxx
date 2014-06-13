@@ -50,7 +50,7 @@ void KDEData::initNWF()
     pSVData->maNWFData.mbFlatMenu = true;
 
     // Styled menus need additional space
-    QStyle *style = kapp->style();
+    QStyle *style = QApplication::style();
     pSVData->maNWFData.mnMenuFormatBorderX =
        style->pixelMetric( QStyle::PM_MenuPanelWidth ) +
        style->pixelMetric( QStyle::PM_MenuHMargin );

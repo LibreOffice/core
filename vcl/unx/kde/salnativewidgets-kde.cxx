@@ -505,7 +505,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             pPushButton->setEnabled( nStyle & QStyle::Style_Enabled );
         }
 
-        kapp->style().drawControl( QStyle::CE_PushButton,
+        QApplication::style().drawControl( QStyle::CE_PushButton,
             &qPainter, pWidget, qRect,
             pWidget->colorGroup(), nStyle );
     }
@@ -523,19 +523,19 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             0, 0 );
         XFreeGC( dpy, aTmpGC );
 
-        kapp->style().drawControl( QStyle::CE_RadioButton,
+        QApplication::style().drawControl( QStyle::CE_RadioButton,
             &qPainter, pWidget, qRect,
             pWidget->colorGroup(), nStyle );
     }
     else if ( strcmp( QCheckBox_String, pClassName ) == 0 )
     {
-        kapp->style().drawControl( QStyle::CE_CheckBox,
+        QApplication::style().drawControl( QStyle::CE_CheckBox,
             &qPainter, pWidget, qRect,
             pWidget->colorGroup(), nStyle );
     }
     else if ( strcmp( QComboBox_String, pClassName ) == 0 )
     {
-        kapp->style().drawComplexControl( QStyle::CC_ComboBox,
+        QApplication::style().drawComplexControl( QStyle::CC_ComboBox,
             &qPainter, pWidget, qRect,
             pWidget->colorGroup(), nStyle );
 
@@ -546,14 +546,14 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             QColorGroup::ColorRole eColorRole = ( pComboBox->isEnabled() )?
             QColorGroup::Base: QColorGroup::Background;
             qPainter.fillRect(
-                kapp->style().querySubControlMetrics( QStyle::CC_ComboBox,
+                QApplication::style().querySubControlMetrics( QStyle::CC_ComboBox,
                 pComboBox, QStyle::SC_ComboBoxEditField ),
                 pComboBox->lineEdit()->colorGroup().brush( eColorRole ) );
         }
     }
     else if ( strcmp( QLineEdit_String, pClassName ) == 0 )
     {
-        kapp->style().drawPrimitive( QStyle::PE_PanelLineEdit,
+        QApplication::style().drawPrimitive( QStyle::PE_PanelLineEdit,
             &qPainter, qRect,
             pWidget->colorGroup(), nStyle | QStyle::Style_Sunken );
     }
@@ -594,16 +594,16 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             QColorGroup::ColorRole eColorRole = ( pSpinWidget->isEnabled() )?
             QColorGroup::Base: QColorGroup::Background;
             qPainter.fillRect(
-                kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
+                QApplication::style().querySubControlMetrics( QStyle::CC_SpinWidget,
                 pSpinWidget, QStyle::SC_SpinWidgetEditField ),
                 pSpinWidget->editWidget()->colorGroup().brush( eColorRole ) );
         }
 
         // Adjust the frame (needed for Motif Plus style)
-        QRect qFrameRect = kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
+        QRect qFrameRect = QApplication::style().querySubControlMetrics( QStyle::CC_SpinWidget,
             pWidget, QStyle::SC_SpinWidgetFrame );
 
-        kapp->style().drawComplexControl( QStyle::CC_SpinWidget,
+        QApplication::style().drawComplexControl( QStyle::CC_SpinWidget,
             &qPainter, pWidget, qFrameRect,
             pWidget->colorGroup(), nStyle,
             QStyle::SC_All, eActive );
@@ -629,20 +629,20 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
 
         pTab->setRect( qRect );
 
-        kapp->style().drawControl( QStyle::CE_TabBarTab,
+        QApplication::style().drawControl( QStyle::CE_TabBarTab,
             &qPainter, pWidget, qRect,
             pWidget->colorGroup(), nStyle,
             QStyleOption( pTab ) );
     }
     else if ( strcmp( QTabWidget_String, pClassName ) == 0 )
     {
-        kapp->style().drawPrimitive( QStyle::PE_PanelTabWidget,
+        QApplication::style().drawPrimitive( QStyle::PE_PanelTabWidget,
             &qPainter, qRect,
             pWidget->colorGroup(), nStyle );
     }
     else if ( strcmp( QListView_String, pClassName ) == 0 )
     {
-        kapp->style().drawPrimitive( QStyle::PE_Panel,
+        QApplication::style().drawPrimitive( QStyle::PE_Panel,
             &qPainter, qRect,
             pWidget->colorGroup(), nStyle | QStyle::Style_Sunken );
     }
@@ -655,7 +655,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     {
         // Workaround for Style_MouseOver-aware themes.
         // Quite ugly, but I do not know about a better solution.
-        const char *pStyleName = kapp->style().className();
+        const char *pStyleName = QApplication::style().className();
         if ( strcmp( QMotifPlusStyle_String, pStyleName ) == 0 )
         {
             nStyle |= QStyle::Style_MouseOver;
@@ -705,7 +705,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     if ( pScrollBar && pScrollBar->orientation() == Qt::Horizontal )
         eHoriz = QStyle::Style_Horizontal;
 
-    kapp->style().drawComplexControl( QStyle::CC_ScrollBar,
+    QApplication::style().drawComplexControl( QStyle::CC_ScrollBar,
         &qPainter, pWidget, qRect,
         pWidget->colorGroup(), nStyle | eHoriz,
         QStyle::SC_All, eActive );
@@ -720,11 +720,11 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             bIsHorizontal = true;
         }
 
-        kapp->style().drawControl( QStyle::CE_DockWindowEmptyArea,
+        QApplication::style().drawControl( QStyle::CE_DockWindowEmptyArea,
                 &qPainter, pWidget, qRect,
                 pWidget->colorGroup(), nStyle );
 
-        kapp->style().drawPrimitive( QStyle::PE_PanelDockWindow,
+        QApplication::style().drawPrimitive( QStyle::PE_PanelDockWindow,
                 &qPainter, qRect, pWidget->colorGroup(), nStyle );
 
         if ( nPart == PART_THUMB_HORZ || nPart == PART_THUMB_VERT )
@@ -738,20 +738,20 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             else
                 qThumbRect.addCoords( 2, 0, -3, 0 );    // make the thumb a bit nicer
 
-            if ( kapp->style().inherits( "HighColorStyle" ) ||
-                 kapp->style().inherits( "HighContrastStyle" ) ||
-                 kapp->style().inherits( "KeramikStyle" ) ||
-                 kapp->style().inherits( "KThemeStyle" ) ||
-                 kapp->style().inherits( "ThinKeramikStyle" ) )
+            if ( QApplication::style().inherits( "HighColorStyle" ) ||
+                 QApplication::style().inherits( "HighContrastStyle" ) ||
+                 QApplication::style().inherits( "KeramikStyle" ) ||
+                 QApplication::style().inherits( "KThemeStyle" ) ||
+                 QApplication::style().inherits( "ThinKeramikStyle" ) )
             {
                 // Workaround for the workaround in KStyle::drawPrimitive()
-                KStyle *pStyle = static_cast< KStyle * >( &kapp->style() );
+                KStyle *pStyle = static_cast< KStyle * >( &QApplication::style() );
                 pStyle->drawKStylePrimitive( KStyle::KPE_ToolBarHandle,
                         &qPainter, pToolBar, qThumbRect,
                         pWidget->colorGroup(), nStyle );
             }
             else
-                kapp->style().drawPrimitive( QStyle::PE_DockWindowHandle,
+                QApplication::style().drawPrimitive( QStyle::PE_DockWindowHandle,
                         &qPainter, qThumbRect, pWidget->colorGroup(), nStyle );
         }
     }
@@ -759,7 +759,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     {
         if( (nStyle & QStyle::Style_MouseOver) )
             nStyle &= ~QStyle::Style_Off;
-        kapp->style().drawComplexControl( QStyle::CC_ToolButton,
+        QApplication::style().drawComplexControl( QStyle::CC_ToolButton,
                 &qPainter, pWidget, qRect,
                 pWidget->colorGroup(), nStyle,
                 QStyle::SC_ToolButton );
@@ -768,7 +768,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     {
         if ( nPart == PART_ENTIRE_CONTROL )
         {
-            kapp->style().drawControl( QStyle::CE_MenuBarEmptyArea,
+            QApplication::style().drawControl( QStyle::CE_MenuBarEmptyArea,
                     &qPainter, pWidget, qRect,
                     pWidget->colorGroup(), nStyle );
         }
@@ -778,13 +778,13 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             QMenuItem *pMenuItem = static_cast<QMenuBar*>( pWidget )->findItem( nMenuItem );
 
             if ( ( nStyle & QStyle::Style_MouseOver )
-                && kapp->style().styleHint( QStyle::SH_MenuBar_MouseTracking ) )
+                && QApplication::style().styleHint( QStyle::SH_MenuBar_MouseTracking ) )
                 nStyle |= QStyle::Style_Active;
 
             if ( nStyle & QStyle::Style_Selected )
                 nStyle |= QStyle::Style_Active | QStyle::Style_Down | QStyle::Style_HasFocus;
 
-            kapp->style().drawControl( QStyle::CE_MenuBarItem,
+            QApplication::style().drawControl( QStyle::CE_MenuBarItem,
                     &qPainter, pWidget, qRect,
                     pWidget->colorGroup(), nStyle,
                     QStyleOption( pMenuItem ) );
@@ -798,7 +798,7 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         if ( nStyle & QStyle::Style_Selected )
             nStyle |= QStyle::Style_Active;
 
-        kapp->style().drawControl( QStyle::CE_PopupMenuItem,
+        QApplication::style().drawControl( QStyle::CE_PopupMenuItem,
                 &qPainter, pWidget, qRect,
                 pWidget->colorGroup(), nStyle,
                 QStyleOption( pMenuItem, 0, 0 ) );
@@ -809,10 +809,10 @@ bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         QProgressBar* pProgress = static_cast<QProgressBar*>(pWidget);
         pProgress->setProgress( nProgressWidth, qRect.width() );
 
-        kapp->style().drawControl( QStyle::CE_ProgressBarGroove,
+        QApplication::style().drawControl( QStyle::CE_ProgressBarGroove,
             &qPainter, pWidget, qRect,
             pWidget->colorGroup(), nStyle );
-        kapp->style().drawControl( QStyle::CE_ProgressBarContents,
+        QApplication::style().drawControl( QStyle::CE_ProgressBarContents,
             &qPainter, pWidget, qRect,
             pWidget->colorGroup(), nStyle );
     }
@@ -849,13 +849,13 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
     {
         QSize qContentsSize( 50, 50 );
         m_pPushButton->setDefault( false );
-        QSize qNormalSize = kapp->style().sizeFromContents( QStyle::CT_PushButton,
+        QSize qNormalSize = QApplication::style().sizeFromContents( QStyle::CT_PushButton,
             m_pPushButton, qContentsSize );
         m_pPushButton->setDefault( true );
-        QSize qDefSize = kapp->style().sizeFromContents( QStyle::CT_PushButton,
+        QSize qDefSize = QApplication::style().sizeFromContents( QStyle::CT_PushButton,
             m_pPushButton, qContentsSize );
 
-        int nIndicatorSize = kapp->style().pixelMetric(
+        int nIndicatorSize = QApplication::style().pixelMetric(
             QStyle::PM_ButtonDefaultIndicator, m_pPushButton );
         if ( qNormalSize.width() == qDefSize.width() )
             qRect.addCoords( nIndicatorSize, 0, -nIndicatorSize, 0 );
@@ -879,14 +879,14 @@ QRadioButton *WidgetPainter::radioButton( const Rectangle& rControlRegion )
 
     // Workaround for broken themes which do not honor the given size.
     // Quite ugly, but I do not know about a better solution.
-    const char *pStyleName = kapp->style().className();
+    const char *pStyleName = QApplication::style().className();
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
         QRect qOldRect( qRect );
 
-        qRect.setWidth( kapp->style().pixelMetric(
+        qRect.setWidth( QApplication::style().pixelMetric(
             QStyle::PM_ExclusiveIndicatorWidth, m_pRadioButton ) );
-        qRect.setHeight( kapp->style().pixelMetric(
+        qRect.setHeight( QApplication::style().pixelMetric(
             QStyle::PM_ExclusiveIndicatorHeight, m_pRadioButton ) );
 
         qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
@@ -908,14 +908,14 @@ QCheckBox *WidgetPainter::checkBox( const Rectangle& rControlRegion )
 
     // Workaround for broken themes which do not honor the given size.
     // Quite ugly, but I do not know about a better solution.
-    const char *pStyleName = kapp->style().className();
+    const char *pStyleName = QApplication::style().className();
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
         QRect qOldRect( qRect );
 
-        qRect.setWidth( kapp->style().pixelMetric(
+        qRect.setWidth( QApplication::style().pixelMetric(
             QStyle::PM_IndicatorWidth, m_pCheckBox ) );
-        qRect.setHeight( kapp->style().pixelMetric(
+        qRect.setHeight( QApplication::style().pixelMetric(
             QStyle::PM_IndicatorHeight, m_pCheckBox ) );
 
         qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
@@ -1283,9 +1283,9 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
 
     QScrollBar *pScrollBar = pWidgetPainter->scrollBar( rControlRegion,
         bHorizontal, ImplControlValue() );
-    QRect qRectSubLine = kapp->style().querySubControlMetrics(
+    QRect qRectSubLine = QApplication::style().querySubControlMetrics(
         QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarSubLine );
-    QRect qRectAddLine = kapp->style().querySubControlMetrics(
+    QRect qRectAddLine = QApplication::style().querySubControlMetrics(
         QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarAddLine );
 
     // There are 2 buttons on the right/bottom side of the scrollbar
@@ -1298,22 +1298,22 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
     // It makes the right/down button bigger.
     if ( bHorizontal )
     {
-        qRectAddLine.setLeft( kapp->style().querySubControlMetrics(
+        qRectAddLine.setLeft( QApplication::style().querySubControlMetrics(
             QStyle::CC_ScrollBar, pScrollBar,
             QStyle::SC_ScrollBarAddPage ).right() + 1 );
         if ( qRectAddLine.width() > qRectSubLine.width() )
             bTwoSubButtons = true;
-        if ( qRectSubLine.left() > kapp->style().querySubControlMetrics( QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarSubPage ).left() )
+        if ( qRectSubLine.left() > QApplication::style().querySubControlMetrics( QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarSubPage ).left() )
             bPlatinumStyle = true;
     }
     else
     {
-        qRectAddLine.setTop( kapp->style().querySubControlMetrics(
+        qRectAddLine.setTop( QApplication::style().querySubControlMetrics(
             QStyle::CC_ScrollBar, pScrollBar,
             QStyle::SC_ScrollBarAddPage ).bottom() + 1 );
         if ( qRectAddLine.height() > qRectSubLine.height() )
             bTwoSubButtons = true;
-        if ( qRectSubLine.top() > kapp->style().querySubControlMetrics( QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarSubPage ).top() )
+        if ( qRectSubLine.top() > QApplication::style().querySubControlMetrics( QStyle::CC_ScrollBar, pScrollBar, QStyle::SC_ScrollBarSubPage ).top() )
             bPlatinumStyle = true;
     }
 
@@ -1543,7 +1543,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
             if ( nState & CTRL_STATE_DEFAULT )
             {
-            int nIndicatorSize = kapp->style().pixelMetric(
+            int nIndicatorSize = QApplication::style().pixelMetric(
                 QStyle::PM_ButtonDefaultIndicator, pWidget );
             qBoundingRect.addCoords( -nIndicatorSize, -nIndicatorSize,
                 nIndicatorSize, nIndicatorSize );
@@ -1559,8 +1559,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
             if ( nPart == PART_ENTIRE_CONTROL )
             {
-                qRect.setWidth( kapp->style().pixelMetric( QStyle::PM_ExclusiveIndicatorWidth, pWidget ) );
-                qRect.setHeight( kapp->style().pixelMetric( QStyle::PM_ExclusiveIndicatorHeight, pWidget ) );
+                qRect.setWidth( QApplication::style().pixelMetric( QStyle::PM_ExclusiveIndicatorWidth, pWidget ) );
+                qRect.setHeight( QApplication::style().pixelMetric( QStyle::PM_ExclusiveIndicatorHeight, pWidget ) );
 
                 bReturn = true;
             }
@@ -1572,8 +1572,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
             if ( nPart == PART_ENTIRE_CONTROL )
             {
-                qRect.setWidth( kapp->style().pixelMetric( QStyle::PM_IndicatorWidth, pWidget ) );
-                qRect.setHeight( kapp->style().pixelMetric( QStyle::PM_IndicatorHeight, pWidget ) );
+                qRect.setWidth( QApplication::style().pixelMetric( QStyle::PM_IndicatorWidth, pWidget ) );
+                qRect.setHeight( QApplication::style().pixelMetric( QStyle::PM_IndicatorHeight, pWidget ) );
 
                 bReturn = true;
             }
@@ -1586,9 +1586,9 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         switch ( nPart )
         {
         case PART_BUTTON_DOWN:
-            qRect = kapp->style().querySubControlMetrics(
+            qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_ComboBox, pWidget, QStyle::SC_ComboBoxArrow );
-            qRect.setLeft( kapp->style().querySubControlMetrics(
+            qRect.setLeft( QApplication::style().querySubControlMetrics(
                 QStyle::CC_ComboBox, pWidget,
                 QStyle::SC_ComboBoxEditField ).right() + 1 );
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
@@ -1596,7 +1596,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             break;
 
         case PART_SUB_EDIT:
-            qRect = kapp->style().querySubControlMetrics(
+            qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_ComboBox, pWidget, QStyle::SC_ComboBoxEditField );
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             bReturn = true;
@@ -1610,21 +1610,21 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         switch ( nPart )
         {
         case PART_BUTTON_UP:
-            qRect = kapp->style().querySubControlMetrics(
+            qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetUp );
             bReturn = true;
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             break;
 
         case PART_BUTTON_DOWN:
-            qRect = kapp->style().querySubControlMetrics(
+            qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetDown );
             bReturn = true;
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             break;
 
         case PART_SUB_EDIT:
-            qRect = kapp->style().querySubControlMetrics(
+            qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_SpinWidget, pWidget, QStyle::SC_SpinWidgetEditField );
             qRect.moveBy( qBoundingRect.left(), qBoundingRect.top() );
             bReturn = true;
@@ -1641,14 +1641,14 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         {
         case PART_BUTTON_LEFT:
         case PART_BUTTON_UP:
-            qRect = kapp->style().querySubControlMetrics(
+            qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_ScrollBar, pWidget, QStyle::SC_ScrollBarSubLine );
 
             // Workaround for Platinum style scroll bars. It makes the
             // left/up button invisible.
             if ( nPart == PART_BUTTON_LEFT )
             {
-            if ( qRect.left() > kapp->style().querySubControlMetrics(
+            if ( qRect.left() > QApplication::style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
                     QStyle::SC_ScrollBarSubPage ).left() )
             {
@@ -1658,7 +1658,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             }
             else
             {
-            if ( qRect.top() > kapp->style().querySubControlMetrics(
+            if ( qRect.top() > QApplication::style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
                     QStyle::SC_ScrollBarSubPage ).top() )
             {
@@ -1674,17 +1674,17 @@ bool KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
 
         case PART_BUTTON_RIGHT:
         case PART_BUTTON_DOWN:
-            qRect = kapp->style().querySubControlMetrics(
+            qRect = QApplication::style().querySubControlMetrics(
                 QStyle::CC_ScrollBar, pWidget, QStyle::SC_ScrollBarAddLine );
 
             // Workaround for Platinum and 3 button style scroll bars.
             // It makes the right/down button bigger.
             if ( nPart == PART_BUTTON_RIGHT )
-                qRect.setLeft( kapp->style().querySubControlMetrics(
+                qRect.setLeft( QApplication::style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
                     QStyle::SC_ScrollBarAddPage ).right() + 1 );
             else
-                qRect.setTop( kapp->style().querySubControlMetrics(
+                qRect.setTop( QApplication::style().querySubControlMetrics(
                     QStyle::CC_ScrollBar, pWidget,
                     QStyle::SC_ScrollBarAddPage ).bottom() + 1 );
 
@@ -1884,7 +1884,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     }
 
     // General settings
-    QColorGroup qColorGroup = kapp->palette().active();
+    QColorGroup qColorGroup = QApplication::palette().active();
 
     Color aFore = toColor( qColorGroup.foreground() );
     Color aBack = toColor( qColorGroup.background() );
@@ -1932,7 +1932,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHighlightTextColor( toColor( qColorGroup.highlightedText() ) );
 
     // Font
-    Font aFont = toFont( kapp->font(), rSettings.GetUILanguageTag().getLocale() );
+    Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
 
     aStyleSettings.SetAppFont( aFont );
     aStyleSettings.SetHelpFont( aFont );
@@ -1968,10 +1968,10 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         // Menu text and background color, theme specific
         Color aMenuFore = toColor( qMenuCG.foreground() );
         Color aMenuBack = toColor( qMenuCG.background() );
-        if ( kapp->style().inherits( "LightStyleV2" ) ||
-             kapp->style().inherits( "LightStyleV3" ) ||
-             ( kapp->style().inherits( QMotifStyle_String ) && !kapp->style().inherits( QSGIStyle_String ) ) ||
-             kapp->style().inherits( QWindowsStyle_String ) )
+        if ( QApplication::style().inherits( "LightStyleV2" ) ||
+             QApplication::style().inherits( "LightStyleV3" ) ||
+             ( QApplication::style().inherits( QMotifStyle_String ) && !QApplication::style().inherits( QSGIStyle_String ) ) ||
+             QApplication::style().inherits( QWindowsStyle_String ) )
         {
             aMenuFore = toColor( qMenuCG.buttonText() );
             aMenuBack = toColor( qMenuCG.button() );
@@ -1984,11 +1984,11 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuHighlightColor( toColor ( qMenuCG.highlight() ) );
 
         // Menu items higlight text color, theme specific
-        if ( kapp->style().inherits( "HighContrastStyle" ) ||
-             kapp->style().inherits( "KeramikStyle" ) ||
-             kapp->style().inherits( QWindowsStyle_String ) ||
-             kapp->style().inherits( "ThinKeramikStyle" ) ||
-             kapp->style().inherits( "PlastikStyle" ) )
+        if ( QApplication::style().inherits( "HighContrastStyle" ) ||
+             QApplication::style().inherits( "KeramikStyle" ) ||
+             QApplication::style().inherits( QWindowsStyle_String ) ||
+             QApplication::style().inherits( "ThinKeramikStyle" ) ||
+             QApplication::style().inherits( "PlastikStyle" ) )
         {
             aStyleSettings.SetMenuHighlightTextColor( toColor ( qMenuCG.highlightedText() ) );
         }
@@ -1996,13 +1996,13 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
             aStyleSettings.SetMenuHighlightTextColor( aMenuFore );
 
         // set special menubar higlight text color
-        if ( kapp->style().inherits( "HighContrastStyle" ) )
+        if ( QApplication::style().inherits( "HighContrastStyle" ) )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.highlightedText() );
         else
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
 
         // set menubar rollover color
-        if ( kapp->style().styleHint( QStyle::SH_MenuBar_MouseTracking ) )
+        if ( QApplication::style().styleHint( QStyle::SH_MenuBar_MouseTracking ) )
         {
             aStyleSettings.SetMenuBarRolloverColor( toColor ( qMenuCG.highlight() ) );
             aStyleSettings.SetMenuBarRolloverTextColor( ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor );
@@ -2027,7 +2027,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     }
 
     // Scroll bar size
-    aStyleSettings.SetScrollBarSize( kapp->style().pixelMetric( QStyle::PM_ScrollBarExtent ) );
+    aStyleSettings.SetScrollBarSize( QApplication::style().pixelMetric( QStyle::PM_ScrollBarExtent ) );
 
     rSettings.SetStyleSettings( aStyleSettings );
 }
@@ -2120,7 +2120,7 @@ void KDEData::deInitNWF()
     pWidgetPainter = NULL;
 
     // We have to destroy the style early
-    kapp->setStyle( NULL );
+    QApplication::setStyle( NULL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

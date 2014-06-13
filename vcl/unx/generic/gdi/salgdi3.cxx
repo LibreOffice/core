@@ -342,7 +342,7 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
         size_t nLen = std::distance(aI, aNext);
 
         aId.mbVerticalMetrics = nGlyphRotation != 0.0;
-        cairo_font_face_t* font_face = (cairo_font_face_t*)m_aCairoFontsCache.FindCachedFont(aId);
+        cairo_font_face_t* font_face = (cairo_font_face_t*)CairoFontsCache::FindCachedFont(aId);
         if (!font_face)
         {
             const ImplFontOptions *pOptions = rFont.GetFontOptions().get();
@@ -351,7 +351,7 @@ void X11SalGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
                 font_face = cairo_ft_font_face_create_for_pattern(reinterpret_cast<FcPattern*>(pPattern));
             if (!font_face)
                 font_face = cairo_ft_font_face_create_for_ft_face(reinterpret_cast<FT_Face>(aFace), rFont.GetLoadFlags());
-            m_aCairoFontsCache.CacheFont(font_face, aId);
+            CairoFontsCache::CacheFont(font_face, aId);
         }
         cairo_set_font_face(cr, font_face);
 

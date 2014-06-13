@@ -36,14 +36,14 @@ EventPoster::~EventPoster()
 {
     DBG_TESTSOLARMUTEX();
     if ( m_nId )
-        GetpApp()->RemoveUserEvent( m_nId );
+        Application::RemoveUserEvent( m_nId );
 }
 
 void EventPoster::Post( UserEvent* pEvent )
 
 {
     DBG_TESTSOLARMUTEX();
-    m_nId = GetpApp()->PostUserEvent( ( LINK( this, EventPoster, DoEvent_Impl ) ), pEvent );
+    m_nId = Application::PostUserEvent( ( LINK( this, EventPoster, DoEvent_Impl ) ), pEvent );
 }
 
 IMPL_LINK( EventPoster, DoEvent_Impl, UserEvent*, pEvent )

@@ -904,7 +904,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                 nVCLEvent = 0;
                 break;
         }
-        if( nVCLEvent && pSVData->mpApp->HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
+        if( nVCLEvent && Application::HandleKey( nVCLEvent, pWindow, &aKeyEvent ) )
             return true;
     }
 
@@ -2060,10 +2060,10 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
 
     if ( nEvent == SALEVENT_SETTINGSCHANGED )
     {
-        AllSettings aSettings = pApp->GetSettings();
-        pApp->MergeSystemSettings( aSettings );
+        AllSettings aSettings = Application::GetSettings();
+        Application::MergeSystemSettings( aSettings );
         pApp->OverrideSystemSettings( aSettings );
-        pApp->SetSettings( aSettings );
+        Application::SetSettings( aSettings );
     }
     else
     {
@@ -2099,7 +2099,7 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
         {
             DataChangedEvent aDCEvt( nType );
             pApp->DataChanged( aDCEvt );
-            pApp->NotifyAllWindows( aDCEvt );
+            Application::NotifyAllWindows( aDCEvt );
         }
     }
 }

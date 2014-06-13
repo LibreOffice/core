@@ -301,7 +301,7 @@ bool EMFWriter::WriteEMF(const GDIMetaFile& rMtf)
     mnHorTextAlign = 0;
 
     const Size aMtfSizePix( maVDev.LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
-    const Size aMtfSizeLog( maVDev.LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
+    const Size aMtfSizeLog( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
 
     // seek over header
     // use [MS-EMF 2.2.11] HeaderExtension2 Object, otherwise resulting EMF cannot be converted with GetWinMetaFileBits()
@@ -637,25 +637,25 @@ void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
 
 void EMFWriter::ImplWriteExtent( long nExtent )
 {
-    nExtent = maVDev.LogicToLogic( Size( nExtent, 0 ), maVDev.GetMapMode(), maDestMapMode ).Width();
+    nExtent = OutputDevice::LogicToLogic( Size( nExtent, 0 ), maVDev.GetMapMode(), maDestMapMode ).Width();
     m_rStm.WriteInt32( (sal_Int32) nExtent );
 }
 
 void EMFWriter::ImplWritePoint( const Point& rPoint )
 {
-    const Point aPoint( maVDev.LogicToLogic( rPoint, maVDev.GetMapMode(), maDestMapMode ));
+    const Point aPoint( OutputDevice::LogicToLogic( rPoint, maVDev.GetMapMode(), maDestMapMode ));
      m_rStm.WriteInt32( (sal_Int32) aPoint.X() ).WriteInt32( (sal_Int32) aPoint.Y() );
 }
 
 void EMFWriter::ImplWriteSize( const Size& rSize)
 {
-    const Size aSize( maVDev.LogicToLogic( rSize, maVDev.GetMapMode(), maDestMapMode ));
+    const Size aSize( OutputDevice::LogicToLogic( rSize, maVDev.GetMapMode(), maDestMapMode ));
      m_rStm.WriteInt32( (sal_Int32) aSize.Width() ).WriteInt32( (sal_Int32) aSize.Height() );
 }
 
 void EMFWriter::ImplWriteRect( const Rectangle& rRect )
 {
-    const Rectangle aRect( maVDev.LogicToLogic ( rRect, maVDev.GetMapMode(), maDestMapMode ));
+    const Rectangle aRect( OutputDevice::LogicToLogic ( rRect, maVDev.GetMapMode(), maDestMapMode ));
     m_rStm
        .WriteInt32( static_cast<sal_Int32>(aRect.Left()) )
        .WriteInt32( static_cast<sal_Int32>(aRect.Top()) )
@@ -1251,10 +1251,10 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                         ImplEndRecord();
 
                         MapMode aMapMode( aSubstitute.GetPrefMapMode() );
-                        Size aOutSize( maVDev.LogicToLogic( pA->GetSize(), maVDev.GetMapMode(), aMapMode ) );
+                        Size aOutSize( OutputDevice::LogicToLogic( pA->GetSize(), maVDev.GetMapMode(), aMapMode ) );
                         aMapMode.SetScaleX( Fraction( aOutSize.Width(), aSubstitute.GetPrefSize().Width() ) );
                         aMapMode.SetScaleY( Fraction( aOutSize.Height(), aSubstitute.GetPrefSize().Height() ) );
-                        aMapMode.SetOrigin( maVDev.LogicToLogic( pA->GetPoint(), maVDev.GetMapMode(), aMapMode ) );
+                        aMapMode.SetOrigin( OutputDevice::LogicToLogic( pA->GetPoint(), maVDev.GetMapMode(), aMapMode ) );
                         maVDev.SetMapMode( aMapMode );
                         ImplWrite( aSubstitute );
 

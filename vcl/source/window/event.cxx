@@ -213,7 +213,7 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
 
-    ImplGetSVData()->mpApp->ImplCallEventListeners( &aEvent );
+    Application::ImplCallEventListeners( &aEvent );
 
     if ( aDelData.IsDead() )
         return;
@@ -243,7 +243,7 @@ void Window::CallEventListeners( sal_uLong nEvent, void* pData )
 
 void Window::FireVclEvent( VclSimpleEvent* pEvent )
 {
-    ImplGetSVData()->mpApp->ImplCallEventListeners(pEvent);
+    Application::ImplCallEventListeners(pEvent);
 }
 
 void Window::AddEventListener( const Link& rEventListener )

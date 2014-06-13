@@ -166,7 +166,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     bool bSetTitleFont = false;
 
     // General settings
-    QPalette pal = kapp->palette();
+    QPalette pal = QApplication::palette();
 
     style.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
 
@@ -260,7 +260,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetHelpTextColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipText )));
 
     // Font
-    Font aFont = toFont( kapp->font(), rSettings.GetUILanguageTag().getLocale() );
+    Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
 
     style.SetAppFont( aFont );
 
@@ -306,7 +306,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         style.SetMenuHighlightTextColor( aMenuFore );
 
         // set special menubar higlight text color
-        if ( kapp->style()->inherits( "HighContrastStyle" ) )
+        if ( QApplication::style()->inherits( "HighContrastStyle" ) )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.color( QPalette::HighlightedText ) );
         else
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = aMenuFore;
@@ -331,8 +331,8 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     delete pMenuBar;
 
     // Scroll bar size
-    style.SetScrollBarSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
-    style.SetMinThumbSize( kapp->style()->pixelMetric( QStyle::PM_ScrollBarSliderMin ));
+    style.SetScrollBarSize( QApplication::style()->pixelMetric( QStyle::PM_ScrollBarExtent ) );
+    style.SetMinThumbSize( QApplication::style()->pixelMetric( QStyle::PM_ScrollBarSliderMin ));
 
     rSettings.SetStyleSettings( style );
 }

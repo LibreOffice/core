@@ -1441,12 +1441,12 @@ void DateFormatter::ImplLoadRes( const ResId& rResId )
         if ( DATEFORMATTER_MIN & nMask )
         {
             maMin = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
-            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
+            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
         }
         if ( DATEFORMATTER_MAX & nMask )
         {
             maMax = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
-            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
+            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
         }
         if ( DATEFORMATTER_LONGFORMAT & nMask )
             mbLongFormat = pMgr->ReadShort() != 0;
@@ -1457,7 +1457,7 @@ void DateFormatter::ImplLoadRes( const ResId& rResId )
         if ( DATEFORMATTER_VALUE & nMask )
         {
             maFieldDate = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
-            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
+            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
             if ( maFieldDate > maMax )
                 maFieldDate = maMax;
             if ( maFieldDate < maMin )
@@ -2422,13 +2422,13 @@ void TimeFormatter::ImplLoadRes( const ResId& rResId )
         if ( TIMEFORMATTER_MIN & nMask )
         {
             SetMin( Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
-            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
+            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
         }
 
         if ( TIMEFORMATTER_MAX & nMask )
         {
             SetMax( Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
-            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
+            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
         }
 
         if ( TIMEFORMATTER_TIMEFIELDFORMAT & nMask )
@@ -2449,7 +2449,7 @@ void TimeFormatter::ImplLoadRes( const ResId& rResId )
                 maFieldTime = GetMin();
             maLastTime = maFieldTime;
 
-            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
+            pMgr->Increment( ResMgr::GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
         }
     }
 }

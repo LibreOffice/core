@@ -107,7 +107,7 @@ PrinterJob::CreateSpoolFile (const OUString& rName, const OUString& rExtension)
         return NULL;
     }
 
-    pFile->setAttributes (aFileURL,
+    osl::File::setAttributes (aFileURL,
                           osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnRead);
     return pFile;
 }

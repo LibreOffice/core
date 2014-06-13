@@ -124,14 +124,14 @@ void KDECommandThread::handleCommand( const QString &rString, bool &bQuit )
     if ( qCommand == "exit" )
     {
         bQuit = true;
-        kapp->exit();
+        QApplication::exit();
         kapp->wakeUpGuiThread();
 #if OSL_DEBUG_LEVEL > 1
         ::std::cerr << "kdefilepicker: exiting" << ::std::endl;
 #endif
     }
     else
-        kapp->postEvent( m_pObject, new KDECommandEvent( qCommand, pTokens ) );
+        QApplication::postEvent( m_pObject, new KDECommandEvent( qCommand, pTokens ) );
 }
 
 QStringList* KDECommandThread::tokenize( const QString &rString )

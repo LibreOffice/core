@@ -182,7 +182,7 @@ void EmbeddedFontsHelper::activateFont( const OUString& fontName, const OUString
 {
     OutputDevice *pDevice = Application::GetDefaultDevice();
     pDevice->AddTempDevFont( fileUrl, fontName );
-    pDevice->ImplUpdateAllFontData( true );
+    OutputDevice::ImplUpdateAllFontData( true );
 }
 
 // Check if it's (legally) allowed to embed the font file into a document
