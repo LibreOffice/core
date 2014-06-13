@@ -287,7 +287,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             sal_uInt32 nMirrorFlags;
 
             OUString sCustomShapeType;
-            MSO_SPT eShapeType = aPropOpt.GetCustomShapeType( rObj.GetShapeRef(), nMirrorFlags, sCustomShapeType, rObj.GetOOXML() );
+            MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType( rObj.GetShapeRef(), nMirrorFlags, sCustomShapeType, rObj.GetOOXML() );
             if ( sCustomShapeType == "col-502ad400" || sCustomShapeType == "col-60da8460" )
             {
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );

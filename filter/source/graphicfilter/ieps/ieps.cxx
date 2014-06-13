@@ -133,7 +133,7 @@ static void MakeAsMeta(Graphic &rGraphic)
         aSize = Application::GetDefaultDevice()->PixelToLogic(
             aBmp.GetSizePixel(), MAP_100TH_MM );
     else
-        aSize = Application::GetDefaultDevice()->LogicToLogic( aSize,
+        aSize = OutputDevice::LogicToLogic( aSize,
             aBmp.GetPrefMapMode(), MAP_100TH_MM );
 
     aVDev.EnableOutput( false );
@@ -657,7 +657,7 @@ GraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                                     if( !aSize.Width() || !aSize.Height() )
                                         aSize = Application::GetDefaultDevice()->PixelToLogic( aBitmap.GetSizePixel(), MAP_100TH_MM );
                                     else
-                                        aSize = Application::GetDefaultDevice()->LogicToLogic( aSize, aBitmap.GetPrefMapMode(), MAP_100TH_MM );
+                                        aSize = OutputDevice::LogicToLogic( aSize, aBitmap.GetPrefMapMode(), MAP_100TH_MM );
                                     aVDev.DrawBitmap( Point(), aSize, aBitmap );
                                     aMtf.Stop();
                                     aMtf.WindStart();

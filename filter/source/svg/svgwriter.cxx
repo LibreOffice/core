@@ -460,7 +460,7 @@ const OUString & SVGTextWriter::implGetValidIDFromInterface( const Reference< XI
 void SVGTextWriter::implMap( const Size& rSz, Size& rDstSz ) const
 {
     if( mpVDev && mpTargetMapMode )
-        rDstSz = mpVDev->LogicToLogic( rSz, mpVDev->GetMapMode(), *mpTargetMapMode );
+        rDstSz = OutputDevice::LogicToLogic( rSz, mpVDev->GetMapMode(), *mpTargetMapMode );
     else
         OSL_FAIL( "SVGTextWriter::implMap: invalid virtual device or map mode." );
 }
@@ -468,7 +468,7 @@ void SVGTextWriter::implMap( const Size& rSz, Size& rDstSz ) const
 void SVGTextWriter::implMap( const Point& rPt, Point& rDstPt ) const
 {
     if( mpVDev && mpTargetMapMode )
-        rDstPt = mpVDev->LogicToLogic( rPt, mpVDev->GetMapMode(), *mpTargetMapMode );
+        rDstPt = OutputDevice::LogicToLogic( rPt, mpVDev->GetMapMode(), *mpTargetMapMode );
     else
         OSL_FAIL( "SVGTextWriter::implMap: invalid virtual device or map mode." );
 }
@@ -1666,12 +1666,12 @@ long SVGActionWriter::ImplMap( sal_Int32 nVal ) const
 
 Point& SVGActionWriter::ImplMap( const Point& rPt, Point& rDstPt ) const
 {
-    return( rDstPt = mpVDev->LogicToLogic( rPt, mpVDev->GetMapMode(), maTargetMapMode ) );
+    return( rDstPt = OutputDevice::LogicToLogic( rPt, mpVDev->GetMapMode(), maTargetMapMode ) );
 }
 
 Size& SVGActionWriter::ImplMap( const Size& rSz, Size& rDstSz ) const
 {
-    return( rDstSz = mpVDev->LogicToLogic( rSz, mpVDev->GetMapMode(), maTargetMapMode ) );
+    return( rDstSz = OutputDevice::LogicToLogic( rSz, mpVDev->GetMapMode(), maTargetMapMode ) );
 }
 
 Rectangle& SVGActionWriter::ImplMap( const Rectangle& rRect, Rectangle& rDstRect ) const
