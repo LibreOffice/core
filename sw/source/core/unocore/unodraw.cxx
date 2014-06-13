@@ -1540,6 +1540,11 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     bool bValue = SwTextBoxHelper::findTextBox(pFmt);
                     aRet <<= bValue;
                 }
+                else if (pEntry->nWID == RES_CHAIN)
+                {
+                    if (pEntry->nMemberId == MID_CHAIN_NAME)
+                        SwTextBoxHelper::getProperty(pFmt, pEntry->nWID, pEntry->nMemberId, aRet);
+                }
                 // #i28749#
                 else if ( FN_SHAPE_TRANSFORMATION_IN_HORI_L2R == pEntry->nWID )
                 {

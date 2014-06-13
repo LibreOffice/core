@@ -266,6 +266,7 @@
 #define UNO_NAME_BREAK_TYPE "BreakType"
 #define UNO_NAME_CHAIN_NEXT_NAME "ChainNextName"
 #define UNO_NAME_CHAIN_PREV_NAME "ChainPrevName"
+#define UNO_NAME_CHAIN_NAME "ChainName"
 #define UNO_NAME_CHAPTER_FORMAT "ChapterFormat"
 #define UNO_NAME_CLIENT_MAP "ClientMap"
 #define UNO_NAME_CONDITION "Condition"
