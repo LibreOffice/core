@@ -721,7 +721,7 @@ throw (css::uno::RuntimeException, std::exception)
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     if ( mpMenu && IsPopupMenu() )
-        return ( (PopupMenu*) mpMenu )->IsInExecute();
+        return PopupMenu::IsInExecute();
     else
         return sal_False;
 }

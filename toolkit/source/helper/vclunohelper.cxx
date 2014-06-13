@@ -148,7 +148,7 @@ Region VCLUnoHelper::GetRegion( const ::com::sun::star::uno::Reference< ::com::s
     if ( pWindow )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetComponentInterface();
-        xWin = xWin.query( xPeer );
+        xWin.set(xPeer, css::uno::UNO_QUERY);
     }
     return xWin;
 }

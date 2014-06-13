@@ -377,7 +377,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
 
         bool bReturn = UnoControlBase::setModel( _rModel );
 
-        xC = xC.query( getModel());
+        xC.set(getModel(), css::uno::UNO_QUERY);
         if ( xC.is() )
             xC->addContainerListener( this );
 

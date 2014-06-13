@@ -142,7 +142,7 @@ namespace toolkitform
             while ( xParentForm.is() )
             {
                 xChild = xParentForm.get();
-                xParentForm = xParentForm.query( xChild->getParent() );
+                xParentForm.set(xChild->getParent(), css::uno::UNO_QUERY);
             }
             Reference< XIndexAccess > xRoot( xChild->getParent(), UNO_QUERY );
             OSL_ENSURE( xRoot.is(), "determineRadioGroupId: unable to determine the root of the form component hierarchy!" );
@@ -466,7 +466,7 @@ namespace toolkitform
                     Reference< XChild > xChild( xModelProps, UNO_QUERY );
                     Reference < XPropertySet > xParentProps;
                     if ( xChild.is() )
-                        xParentProps = xParentProps.query( xChild->getParent() );
+                        xParentProps.set(xChild->getParent(), css::uno::UNO_QUERY);
                     if ( xParentProps.is() )
                     {
                         Reference< XServiceInfo > xParentSI( xParentProps, UNO_QUERY );

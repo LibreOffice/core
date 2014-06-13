@@ -301,7 +301,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException, std::excepti
     Reference< XControl >  xC( mxControlContainer, UNO_QUERY );
     Reference< XVclContainerPeer >  xVclContainerPeer;
     if ( xC.is() )
-        xVclContainerPeer = xVclContainerPeer.query( xC->getPeer() );
+        xVclContainerPeer.set(xC->getPeer(), css::uno::UNO_QUERY);
      if ( !xC.is() || !xVclContainerPeer.is() )
         return;
 

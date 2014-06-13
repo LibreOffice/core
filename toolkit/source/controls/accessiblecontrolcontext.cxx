@@ -71,7 +71,7 @@ namespace toolkit
 
         Reference< awt::XControl > xControl( _rxCreator, UNO_QUERY );
         if ( xControl.is() )
-            m_xControlModel = m_xControlModel.query( xControl->getModel() );
+            m_xControlModel.set(xControl->getModel(), css::uno::UNO_QUERY);
         OSL_ENSURE( m_xControlModel.is(), "OAccessibleControlContext::Init: invalid creator (no control, or control without model!" );
         if ( !m_xControlModel.is() )
             throw DisposedException();  // caught by the caller (the create method)
@@ -230,7 +230,7 @@ namespace toolkit
         Reference< awt::XControl > xControl( getAccessibleCreator(), UNO_QUERY );
         Reference< awt::XWindow > xWindow;
         if ( xControl.is() )
-            xWindow = xWindow.query( xControl->getPeer() );
+            xWindow.set(xControl->getPeer(), css::uno::UNO_QUERY);
 
         Window* pWindow = xWindow.is() ? VCLUnoHelper::GetWindow( xWindow ) : NULL;
 
@@ -283,7 +283,7 @@ namespace toolkit
             Reference< XAccessible > xParentAcc( implGetForeignControlledParent() );
             Reference< XAccessibleComponent > xParentAccComponent;
             if ( xParentAcc.is() )
-                xParentAccComponent = xParentAccComponent.query( xParentAcc->getAccessibleContext() );
+                xParentAccComponent.set(xParentAcc->getAccessibleContext(), css::uno::UNO_QUERY);
             awt::Point aAccParentScreenPos( 0, 0 );
             if ( xParentAccComponent.is() )
                 aAccParentScreenPos = xParentAccComponent->getLocationOnScreen();
