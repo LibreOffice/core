@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_032c1049",
+        "filename": "vcl/quartz/ctfonts.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-06-13T07:28:42Z",
+      "side": 1,
+      "message": "would be nice to have a comment here as to why this is necessary so that we can remove it later when it becomes unnecessary",
+      "revId": "04fbddb38c9a27b4776a34bb2a9c75677d9731af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
