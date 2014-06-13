@@ -412,8 +412,7 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
     switch(rCEvt.GetCommand())
     {
         case COMMAND_CONTEXTMENU:
-            ((SwSrcEditWindow*)GetParent())->GetSrcView()->GetViewFrame()->
-                GetDispatcher()->ExecutePopup();
+            SfxDispatcher::ExecutePopup();
         break;
         case COMMAND_WHEEL:
         case COMMAND_STARTAUTOSCROLL:

@@ -452,7 +452,7 @@ void SwPagePreviewWin::Command( const CommandEvent& rCEvt )
     switch( rCEvt.GetCommand() )
     {
         case COMMAND_CONTEXTMENU:
-            mrView.GetViewFrame()->GetDispatcher()->ExecutePopup();
+            SfxDispatcher::ExecutePopup();
             bCallBase = false;
         break;
 

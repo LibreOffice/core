@@ -101,7 +101,7 @@ void SwFldDokPage::Reset(const SfxItemSet* )
         // fill Type-Listbox
         for(sal_uInt16 i = rRg.nStart; i < rRg.nEnd; ++i)
         {
-            const sal_uInt16 nTypeId = GetFldMgr().GetTypeId(i);
+            const sal_uInt16 nTypeId = SwFldMgr::GetTypeId(i);
 
             switch (nTypeId)
             {
@@ -117,7 +117,7 @@ void SwFldDokPage::Reset(const SfxItemSet* )
                     break;
 
                 default:
-                    nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(i));
+                    nPos = m_pTypeLB->InsertEntry(SwFldMgr::GetTypeStr(i));
                     m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
                     break;
             }
@@ -131,7 +131,7 @@ void SwFldDokPage::Reset(const SfxItemSet* )
             nTypeId = TYP_DATEFLD;
         if (nTypeId == TYP_FIXTIMEFLD)
             nTypeId = TYP_TIMEFLD;
-        nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
+        nPos = m_pTypeLB->InsertEntry(SwFldMgr::GetTypeStr(SwFldMgr::GetPos(nTypeId)));
         m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         m_pNumFormatLB->SetAutomaticLanguage(pCurField->IsAutomaticLanguage());
         SwWrtShell *pSh = GetWrtShell();

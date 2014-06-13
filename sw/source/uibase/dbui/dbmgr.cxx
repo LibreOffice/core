@@ -1377,7 +1377,7 @@ sal_uLong SwDBManager::GetColumnFmt( const OUString& rDBName,
             xConnection = pImpl->pMergeData->xConnection;
             xSource = SwDBManager::getDataSourceAsParent(xConnection,rDBName);
             bUseMergeData = true;
-            xColsSupp = xColsSupp.query( pImpl->pMergeData->xResultSet );
+            xColsSupp.set(pImpl->pMergeData->xResultSet, css::uno::UNO_QUERY);
         }
         if(!xConnection.is())
         {
@@ -1389,7 +1389,7 @@ sal_uLong SwDBManager::GetColumnFmt( const OUString& rDBName,
             if(pParam && pParam->xConnection.is())
             {
                 xConnection = pParam->xConnection;
-                xColsSupp = xColsSupp.query( pParam->xResultSet );
+                xColsSupp.set(pParam->xResultSet, css::uno::UNO_QUERY);
             }
             else
             {

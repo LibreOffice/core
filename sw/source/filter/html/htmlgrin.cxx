@@ -170,7 +170,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         // des Containers uebernommen.
         rFrmItemSet.Put( *pCntnrItemSet );
     }
-    else if( pCSS1Parser->MayBePositioned( rCSS1PropInfo, true ) )
+    else if( SwCSS1Parser::MayBePositioned( rCSS1PropInfo, true ) )
     {
         // Wenn die Ausrichtung anhand der CSS1-Optionen gesetzt werden kann
         // werden die benutzt.

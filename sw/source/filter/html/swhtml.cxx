@@ -2474,7 +2474,7 @@ void SwHTMLParser::Show()
     OSL_ENSURE( SVPAR_WORKING==eState, "Show nicht im Working-State - Das kann ins Auge gehen" );
     SwViewShell *pOldVSh = CallEndAction();
 
-    GetpApp()->Reschedule();
+    Application::Reschedule();
 
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
         || 1 == pDoc->getReferenceCount() )
@@ -2513,7 +2513,7 @@ void SwHTMLParser::ShowStatline()
     }
     else
     {
-        GetpApp()->Reschedule();
+        Application::Reschedule();
 
         if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
             || 1 == pDoc->getReferenceCount() )

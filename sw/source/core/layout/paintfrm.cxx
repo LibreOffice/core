@@ -3552,7 +3552,7 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if ( rRect.IsOver( aPaintRect ) )
         {
             if ( bCnt && pFrm->IsCompletePaint() &&
-                 !rRect.IsInside( aPaintRect ) && GetpApp()->AnyInput( VCL_INPUT_KEYBOARD ) )
+                 !rRect.IsInside( aPaintRect ) && Application::AnyInput( VCL_INPUT_KEYBOARD ) )
             {
                 //fix(8104): It may happen, that the processing wasn't complete
                 //but some parts of the paragraph were still repainted.

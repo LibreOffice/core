@@ -82,7 +82,7 @@ void SwRetrievedInputStreamDataManager::PushData(
 
             tDataKey* pDataKey = new tDataKey;
             *pDataKey = nDataKey;
-            GetpApp()->PostUserEvent( LINK( this, SwRetrievedInputStreamDataManager, LinkedInputStreamReady ), pDataKey );
+            Application::PostUserEvent( LINK( this, SwRetrievedInputStreamDataManager, LinkedInputStreamReady ), pDataKey );
         }
         else
         {

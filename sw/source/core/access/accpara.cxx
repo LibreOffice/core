@@ -1475,7 +1475,7 @@ OUString SwAccessibleParagraph::GetFieldTypeNameAtIndex(sal_Int32 nIndex)
         const SwField* pField = (pTxtFld->GetFmtFld()).GetField();
         if (pField)
         {
-            strTypeName = pField->GetTyp()->GetTypeStr(pField->GetTypeId());
+            strTypeName = SwFieldType::GetTypeStr(pField->GetTypeId());
             sal_uInt16 nWhich = pField->GetTyp()->Which();
             rtl::OUString sEntry;
             sal_Int32 subType = 0;

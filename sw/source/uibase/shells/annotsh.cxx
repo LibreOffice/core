@@ -1274,7 +1274,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                                 if( !bCommonTerms )
                                     nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                                Font aTargetFont = pOLV->GetWindow()->GetDefaultFont( DEFAULTFONT_CJK_TEXT,
+                                Font aTargetFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT,
                                             nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
                                 pOLV->StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false );

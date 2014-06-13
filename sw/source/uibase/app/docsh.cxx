@@ -952,7 +952,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
                         bDisable = true;
                         break;
                     }
-                    pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this);
+                    pTmpFrm = SfxViewFrame::GetNext(*pTmpFrm, this);
                 }
             }
             // End of disabled "multiple layout"

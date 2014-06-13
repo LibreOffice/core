@@ -248,7 +248,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         if ( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
         {
             // We can only pick the AppWin here? (there's nothing better to pick?)
-            m_pOut = GetpApp()->GetDefaultDevice();
+            m_pOut = Application::GetDefaultDevice();
         }
         else
             m_pOut = pNd->getIDocumentDeviceAccess()->getPrinter( false );

@@ -67,7 +67,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
         Reference< XModule > xModule;
         SwDocShell* pShell( GetDocShell() );
         if ( pShell )
-            xModule = xModule.query( pShell->GetModel() );
+            xModule.set(pShell->GetModel(), css::uno::UNO_QUERY);
         OSL_ENSURE( xModule.is(), "SwDoc::initXForms: no XModule at the document!" );
         if ( xModule.is() )
             xModule->setIdentifier( OUString( "com.sun.star.xforms.XMLFormDocument" ) );

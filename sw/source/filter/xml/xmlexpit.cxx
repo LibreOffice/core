@@ -134,7 +134,7 @@ void SvXMLExportItemMapper::exportXML( const SvXMLExport& rExport,
                 const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
                 assert(pSplit); //Wrong Which-ID
                 const unsigned int eEnum = (pSplit && pSplit->GetValue()) ? 1 : 0;
-                rUnitConverter.convertEnum( aOut, eEnum, aXML_KeepTogetherType );
+                SvXMLUnitConverter::convertEnum( aOut, eEnum, aXML_KeepTogetherType );
                 aValue = aOut.makeStringAndClear();
             }
             if( bAddAttribute )
@@ -865,7 +865,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 break;
             }
 
-            bOk = rUnitConverter.convertEnum( aOut, eEnum, psXML_BreakType );
+            bOk = SvXMLUnitConverter::convertEnum( aOut, eEnum, psXML_BreakType );
         }
         break;
 
@@ -1039,7 +1039,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             assert(pHoriOrient); //Wrong Which-ID
             if (pHoriOrient)
             {
-                rUnitConverter.convertEnum( aOut, pHoriOrient->GetHoriOrient(),
+                SvXMLUnitConverter::convertEnum( aOut, pHoriOrient->GetHoriOrient(),
                                             aXMLTableAlignMap );
                 bOk = true;
             }
@@ -1051,7 +1051,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
             SwFmtVertOrient* pVertOrient = PTR_CAST(SwFmtVertOrient, &rItem);
             OSL_ENSURE( pVertOrient != NULL, "Wrong Which-ID" );
 
-            rUnitConverter.convertEnum( aOut, pVertOrient->GetVertOrient(),
+            SvXMLUnitConverter::convertEnum( aOut, pVertOrient->GetVertOrient(),
                                         aXMLTableVAlignMap );
             bOk = true;
         }

@@ -116,7 +116,7 @@ SwHHCWrapper::~SwHHCWrapper()
 {
     delete m_pConvArgs;
 
-    m_rWrtShell.SetCareWin( NULL );
+    SwViewShell::SetCareWin( NULL );
 
     // check for existence of a draw view which means that there are
     // (or previously were) draw objects present in the document.

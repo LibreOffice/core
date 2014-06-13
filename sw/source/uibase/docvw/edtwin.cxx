@@ -5122,7 +5122,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         }
                     }
                     else if ( !m_rView.ExecSpellPopup( aDocPos ) )
-                        GetView().GetViewFrame()->GetDispatcher()->ExecutePopup( 0, this, &aPixPos);
+                        SfxDispatcher::ExecutePopup( 0, this, &aPixPos);
                 }
                 else if (m_pApplyTempl->bUndo)
                     rSh.Do(SwWrtShell::UNDO);
@@ -5882,7 +5882,7 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const OUString& rWord )
     }
 
     // Add matching words from AutoCompleteWord list
-    const SwAutoCompleteWord& rACList = rSh.GetAutoCompleteWords();
+    const SwAutoCompleteWord& rACList = SwEditShell::GetAutoCompleteWords();
     std::vector<OUString> strings;
 
     if ( rACList.GetWordsMatching( rWord, strings ) )

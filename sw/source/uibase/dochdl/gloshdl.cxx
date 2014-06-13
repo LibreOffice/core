@@ -628,7 +628,7 @@ void SwGlossaryHdl::GetMacros( const OUString &rShortName,
 // ctor, dtor
 SwGlossaryHdl::SwGlossaryHdl(SfxViewFrame* pVwFrm, SwWrtShell *pSh)
     : rStatGlossaries( *::GetGlossaries() ),
-    aCurGrp( rStatGlossaries.GetDefName() ),
+    aCurGrp( SwGlossaries::GetDefName() ),
     pViewFrame( pVwFrm ),
     pWrtShell( pSh ),
     pCurGrp( 0 )

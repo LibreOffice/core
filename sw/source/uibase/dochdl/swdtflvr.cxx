@@ -3659,7 +3659,7 @@ bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 
     rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
     const OString aAppNm(OUStringToOString(
-        GetpApp()->GetAppName(), eEncoding));
+        Application::GetAppName(), eEncoding));
     const OString aTopic(OUStringToOString(
         pDocShell->GetTitle(SFX_TITLE_FULLNAME), eEncoding));
     const OString aName(OUStringToOString(sName, eEncoding));

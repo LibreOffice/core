@@ -2113,7 +2113,7 @@ void SwFtnBossFrm::MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
         if( pDestBoss )     // robust
         {
             SwFtnFrms aFtnArr;
-            pDestBoss->_CollectFtns( pDest, pFtn, aFtnArr );
+            SwFtnBossFrm::_CollectFtns( pDest, pFtn, aFtnArr );
             if ( !aFtnArr.empty() )
             {
                 pDestBoss->_MoveFtns( aFtnArr, true );

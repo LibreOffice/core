@@ -937,7 +937,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
         SvTreeListEntry* pActEntry = pSelEntry;
         pSh->StartAction();
         pSh->EnterStdMode();
-        pSh->SetCareWin(pParentDlg);
+        SwViewShell::SetCareWin(pParentDlg);
 
         while (pSelEntry)
         {
@@ -974,7 +974,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
 
         pSh->LeaveAddMode();
         pSh->EndAction();
-        pSh->SetCareWin(NULL);
+        SwViewShell::SetCareWin(NULL);
     }
     bool bEnable = !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
     pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
@@ -1101,7 +1101,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                             sTitle += SW_RESSTR( nResId );
                         pDlg->SetText(sTitle);
 
-                        pSh->SetCareWin(pDlg->GetWindow());
+                        SwViewShell::SetCareWin(pDlg->GetWindow());
 
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -1114,7 +1114,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                         }
 
                         pDlg.reset();
-                        pSh->SetCareWin(NULL);
+                        SwViewShell::SetCareWin(NULL);
                     }
 
                 }

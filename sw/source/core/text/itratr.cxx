@@ -552,7 +552,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
         if( pSh )
             pOut = pSh->GetWin();
         if( !pOut )
-            pOut = GetpApp()->GetDefaultDevice();
+            pOut = Application::GetDefaultDevice();
     }
 
     MapMode aOldMap( pOut->GetMapMode() );
@@ -786,7 +786,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     {
         // Access via StarONE, there's no need for an existing or active shell
         if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
-            pOut = GetpApp()->GetDefaultDevice();
+            pOut = Application::GetDefaultDevice();
         else
             pOut = getIDocumentDeviceAccess()->getReferenceDevice( true );
     }

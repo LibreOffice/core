@@ -582,14 +582,14 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
                           !lcl_CmpBeginEndChars
                             (
                                 pForbidden->endLine,
-                                rTypo.GetJapanNotEndLevel1(),
+                                WW8DopTypography::GetJapanNotEndLevel1(),
                                 rTypo.nMaxLeading * sizeof(sal_Unicode)
                             )
                         &&
                           !lcl_CmpBeginEndChars
                             (
                                 pForbidden->beginLine,
-                                rTypo.GetJapanNotBeginLevel1(),
+                                WW8DopTypography::GetJapanNotBeginLevel1(),
                                 rTypo.nMaxFollowing * sizeof(sal_Unicode)
                             )
                         )

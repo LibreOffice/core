@@ -489,7 +489,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         pDlg->SetNextHdl(LINK(this, SwTextShell, RedlineNextHdl));
                     }
 
-                    rSh.SetCareWin(pDlg->GetWindow());
+                    SwViewShell::SetCareWin(pDlg->GetWindow());
                     bNoInterrupt = true;
 
                     if ( pDlg->Execute() == RET_OK )
@@ -502,7 +502,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     }
 
                     pDlg.reset();
-                    rSh.SetCareWin(NULL);
+                    SwViewShell::SetCareWin(NULL);
                     bNoInterrupt = false;
                     rSh.ClearMark();
                     GetView().AttrChangedNotify(GetShellPtr());

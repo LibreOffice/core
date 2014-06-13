@@ -615,7 +615,7 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
 
     // Do positioning.
     bool bPositioned = false;
-    if( bInCntnr || pCSS1Parser->MayBePositioned( aPropInfo, true ) )
+    if( bInCntnr || SwCSS1Parser::MayBePositioned( aPropInfo, true ) )
     {
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );

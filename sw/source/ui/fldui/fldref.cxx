@@ -165,11 +165,11 @@ void SwFldRefPage::Reset(const SfxItemSet* )
 
     for (short i = rRg.nStart; i < rRg.nEnd; ++i)
     {
-        const sal_uInt16 nTypeId = GetFldMgr().GetTypeId(i);
+        const sal_uInt16 nTypeId = SwFldMgr::GetTypeId(i);
 
         if (!IsFldEdit() || nTypeId != TYP_SETREFFLD)
         {
-            nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(i), i - rRg.nStart);
+            nPos = m_pTypeLB->InsertEntry(SwFldMgr::GetTypeStr(i), i - rRg.nStart);
             m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }

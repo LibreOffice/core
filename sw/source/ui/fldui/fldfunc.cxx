@@ -111,15 +111,15 @@ void SwFldFuncPage::Reset(const SfxItemSet* )
         // fill Typ-Listbox
         for(sal_uInt16 i = rRg.nStart; i < rRg.nEnd; ++i)
         {
-            const sal_uInt16 nTypeId = GetFldMgr().GetTypeId(i);
-            nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(i));
+            const sal_uInt16 nTypeId = SwFldMgr::GetTypeId(i);
+            nPos = m_pTypeLB->InsertEntry(SwFldMgr::GetTypeStr(i));
             m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
         }
     }
     else
     {
         const sal_uInt16 nTypeId = GetCurField()->GetTypeId();
-        nPos = m_pTypeLB->InsertEntry(GetFldMgr().GetTypeStr(GetFldMgr().GetPos(nTypeId)));
+        nPos = m_pTypeLB->InsertEntry(SwFldMgr::GetTypeStr(SwFldMgr::GetPos(nTypeId)));
         m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
 
         if (nTypeId == TYP_MACROFLD)

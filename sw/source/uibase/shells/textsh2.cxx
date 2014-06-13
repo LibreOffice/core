@@ -128,7 +128,7 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
     if ( !xConnection.is() )
     {
         Reference<XDataSource> xSource;
-        xConnection = pDBManager->GetConnection(sSourceArg, xSource);
+        xConnection = SwDBManager::GetConnection(sSourceArg, xSource);
     }
     if(!xConnection.is())
         return ;
