@@ -61,7 +61,6 @@
 #define HID_BIB_CONTROL_PARENT                          "EXTENSIONS_HID_BIB_CONTROL_PARENT"
 #define UID_BIB_FRAME_WINDOW                            "EXTENSIONS_UID_BIB_FRAME_WINDOW"
 #define HID_BIB_DB_GRIDCTRL                             "EXTENSIONS_HID_BIB_DB_GRIDCTRL"
-#define HID_DLG_MAPPING                                 "EXTENSIONS_HID_DLG_MAPPING"
 
 #endif // EXTENSIONS_BIBLIOGRAPHY_HRC
 

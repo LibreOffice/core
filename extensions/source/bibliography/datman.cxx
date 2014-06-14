@@ -254,11 +254,11 @@ static sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
     return USHRT_MAX;
 }
 
-MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan) :
-    ModalDialog(pParent, "MappingDialog", "modules/sbibliography/ui/mappingdialog.ui" ),
-    pDatMan(pMan),
-    sNone("<none>"),
-    bModified(false)
+MappingDialog_Impl::MappingDialog_Impl(Window* pParent, BibDataManager* pMan)
+    : ModalDialog(pParent, "MappingDialog", "modules/sbibliography/ui/mappingdialog.ui")
+    , pDatMan(pMan)
+    , sNone(BIB_RESSTR(RID_BIB_STR_NONE))
+    , bModified(false)
 {
     get(pOKBT, "ok");
     get(pIdentifierLB, "identifierCombobox");
