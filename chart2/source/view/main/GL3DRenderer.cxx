@@ -134,7 +134,8 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
 }
 
 OpenGL3DRenderer::ShaderResources::ShaderResources()
-    : m_3DProID(0)
+    : m_b330Support(false)
+    , m_3DProID(0)
     , m_3DProjectionID(0)
     , m_3DViewID(0)
     , m_3DModelID(0)
@@ -174,16 +175,82 @@ OpenGL3DRenderer::ShaderResources::~ShaderResources()
     glDeleteProgram(m_3DBatchProID);
 }
 
+void OpenGL3DRenderer::CheckGLSLVersion()
+{
+    char version[256] = {0};
+    strcpy(version, (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
+    char *p = version;
+    int iVersion = 0;
+    //get the first point
+    while ((*p != '\0') && (*p != '.'))
+    {
+        iVersion = iVersion * 10 + ((*p) - 0x30);
+        p++;
+    }
+    if (iVersion < 3)
+    {
+        maResources.m_b330Support = false;
+        return;
+    }
+    if (iVersion > 3)
+    {
+        maResources.m_b330Support = true;
+        return;
+    }
+    p++;
+    iVersion = *p - 0x30;
+    if (iVersion >= 3)
+    {
+        maResources.m_b330Support = true;
+        return;
+    }
+    maResources.m_b330Support = false;
+}
+
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
 {
-    m_3DProID = OpenGLHelper::LoadShaders("shape3DVertexShader", "shape3DFragmentShader");
-    m_3DProjectionID = glGetUniformLocation(m_3DProID, "P");
-    m_3DViewID = glGetUniformLocation(m_3DProID, "V");
-    m_3DModelID = glGetUniformLocation(m_3DProID, "M");
-    m_3DNormalMatrixID = glGetUniformLocation(m_3DProID, "normalMatrix");
-    m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
-    m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
 
+    if (m_b330Support)
+    {
+        m_3DProID = OpenGLHelper::LoadShaders("shape3DVertexShader", "shape3DFragmentShader");
+        m_3DProjectionID = glGetUniformLocation(m_3DProID, "P");
+        m_3DViewID = glGetUniformLocation(m_3DProID, "V");
+        m_3DModelID = glGetUniformLocation(m_3DProID, "M");
+        m_3DNormalMatrixID = glGetUniformLocation(m_3DProID, "normalMatrix");
+        m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
+        m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
+
+        m_3DBatchProID = OpenGLHelper::LoadShaders("shape3DVertexShaderBatch", "shape3DFragmentShaderBatch");
+        m_3DBatchProjectionID = glGetUniformLocation(m_3DBatchProID, "P");
+        m_3DBatchViewID = glGetUniformLocation(m_3DBatchProID, "V");
+        m_3DBatchModelID = glGetAttribLocation(m_3DBatchProID, "M");
+        m_3DBatchNormalMatrixID = glGetAttribLocation(m_3DBatchProID, "normalMatrix");
+        m_3DBatchVertexID = glGetAttribLocation(m_3DBatchProID, "vertexPositionModelspace");
+        m_3DBatchNormalID = glGetAttribLocation(m_3DBatchProID, "vertexNormalModelspace");
+        m_3DBatchColorID = glGetAttribLocation(m_3DBatchProID, "barColor");
+    }
+    else
+    {
+        //use 300
+        m_3DProID = OpenGLHelper::LoadShaders("shape3DVertexShaderV300", "shape3DFragmentShaderV300");
+        m_3DProjectionID = glGetUniformLocation(m_3DProID, "P");
+        m_3DViewID = glGetUniformLocation(m_3DProID, "V");
+        m_3DModelID = glGetUniformLocation(m_3DProID, "M");
+        m_3DNormalMatrixID = glGetUniformLocation(m_3DProID, "normalMatrix");
+        m_3DMaterialAmbientID = glGetUniformLocation(m_3DProID, "materialAmbient");
+        m_3DMaterialDiffuseID = glGetUniformLocation(m_3DProID, "materialDiffuse");
+        m_3DMaterialSpecularID = glGetUniformLocation(m_3DProID, "materialSpecular");
+        m_3DMaterialColorID = glGetUniformLocation(m_3DProID, "materialColor");
+        m_3DMaterialTwoSidesID = glGetUniformLocation(m_3DProID, "twoSidesLighting");
+        m_3DMaterialShininessID = glGetUniformLocation(m_3DProID, "materialShininess");
+        m_3DLightColorID = glGetUniformLocation(m_3DProID, "lightColor");
+        m_3DLightPosID = glGetUniformLocation(m_3DProID, "lightPosWorldspace");
+        m_3DLightPowerID = glGetUniformLocation(m_3DProID, "lightPower");
+        m_3DLightNumID = glGetUniformLocation(m_3DProID, "lightNum");
+        m_3DLightAmbientID = glGetUniformLocation(m_3DProID, "lightAmbient");
+        m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
+        m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
+    }
     m_TextProID = OpenGLHelper::LoadShaders("textVertexShader", "textFragmentShader");
     m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
     m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
@@ -200,14 +267,6 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
 
-    m_3DBatchProID = OpenGLHelper::LoadShaders("shape3DVertexShaderBatch", "shape3DFragmentShaderBatch");
-    m_3DBatchProjectionID = glGetUniformLocation(m_3DBatchProID, "P");
-    m_3DBatchViewID = glGetUniformLocation(m_3DBatchProID, "V");
-    m_3DBatchModelID = glGetAttribLocation(m_3DBatchProID, "M");
-    m_3DBatchNormalMatrixID = glGetAttribLocation(m_3DBatchProID, "normalMatrix");
-    m_3DBatchVertexID = glGetAttribLocation(m_3DBatchProID, "vertexPositionModelspace");
-    m_3DBatchNormalID = glGetAttribLocation(m_3DBatchProID, "vertexNormalModelspace");
-    m_3DBatchColorID = glGetAttribLocation(m_3DBatchProID, "barColor");
     CHECK_GL_ERROR();
 }
 
@@ -281,6 +340,7 @@ void OpenGL3DRenderer::init()
     m_fViewAngle = 30.0f;
     m_3DProjection = glm::perspective(m_fViewAngle, (float)m_iWidth / (float)m_iHeight, 0.01f, 6000.0f);
 
+    CheckGLSLVersion();
     maResources.LoadShaders();
     maPickingResources.LoadShaders();
 
@@ -303,9 +363,12 @@ void OpenGL3DRenderer::init()
 
     m_Extrude3DInfo.rounded = false;
     CHECK_GL_ERROR();
-    Init3DUniformBlock();
-    InitBatch3DUniformBlock();
-
+    if (maResources.m_b330Support)
+    {
+        Init3DUniformBlock();
+        InitBatch3DUniformBlock();
+    }
+    CHECK_GL_ERROR();
     glViewport(0, 0, m_iWidth, m_iHeight);
     Set3DSenceInfo(0xFFFFFF, true);
     m_GlobalScaleMatrix = glm::scale(0.01f, 0.01f, 0.01f);
