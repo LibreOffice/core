@@ -12,7 +12,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,librevenge,librevenge))
 $(eval $(call gb_ExternalPackage_use_external_project,librevenge,librevenge))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/librevenge-0.0.0.dylib,src/lib/.libs/librevenge-0.0.dylib))
+$(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/librevenge-0.0.0.dylib,src/lib/.libs/librevenge-0.0.0.dylib))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,librevenge,$(LIBO_LIB_FOLDER)/librevenge-0.0.dll,src/lib/.libs/librevenge-0.0.dll))
 else ifeq ($(filter IOS ANDROID,$(OS)),)
