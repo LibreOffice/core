@@ -55,6 +55,19 @@ published interface XCalendar3 : com::sun::star::i18n::XExtendedCalendar
      */
     sequence< CalendarItem2 >    getPartitiveMonths2();
 
+    /** sets the date/time as an offset to the start of the calendar at
+        1-Jan-1970 00:00 of local time zone. The integer part represents
+        the number of days passed since start date. The fractional part
+        represents fractions of a day, thus 0.5 means 12 hours.
+     */
+    void    setLocalDateTime( [in] double nTimeInDays );
+
+    /** gets the date/time as an offset to the start of the calendar at
+        1-Jan-1970 00:00 of local time zone. The integer part represents
+        the number of days passed since start date. The fractional part
+        represents fractions of a day, thus 0.5 means 12 hours.
+     */
+    double  getLocalDateTime();
 };
 
 }; }; }; };

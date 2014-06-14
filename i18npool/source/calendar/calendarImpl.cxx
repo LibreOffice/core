@@ -155,6 +155,24 @@ CalendarImpl::getDateTime() throw(RuntimeException, std::exception)
         throw ERROR ;
 }
 
+void SAL_CALL
+CalendarImpl::setLocalDateTime( double fTimeInDays ) throw(RuntimeException, std::exception)
+{
+    if (xCalendar.is())
+        xCalendar->setLocalDateTime( fTimeInDays );
+    else
+        throw ERROR ;
+}
+
+double SAL_CALL
+CalendarImpl::getLocalDateTime() throw(RuntimeException, std::exception)
+{
+    if (xCalendar.is())
+        return xCalendar->getLocalDateTime();
+    else
+        throw ERROR ;
+}
+
 OUString SAL_CALL
 CalendarImpl::getUniqueID() throw(RuntimeException, std::exception)
 {

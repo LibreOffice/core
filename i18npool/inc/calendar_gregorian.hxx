@@ -84,6 +84,8 @@ public:
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getGenitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual com::sun::star::uno::Sequence < CalendarItem2 > SAL_CALL getPartitiveMonths2() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setLocalDateTime(double fTimeInDays) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual double SAL_CALL getLocalDateTime() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -111,9 +113,6 @@ private:
 
     /** Submit fieldSetValue array according to fieldSet. */
     void submitFields() throw(com::sun::star::uno::RuntimeException);
-    /** Submit fieldSetValue array according to fieldSet, plus YMDhms if >=0,
-        plus zone and DST if != 0 */
-    void submitValues( sal_Int32 nYear, sal_Int32 nMonth, sal_Int32 nDay, sal_Int32 nHour, sal_Int32 nMinute, sal_Int32 nSecond, sal_Int32 nMilliSecond, sal_Int32 nZone, sal_Int32 nDST) throw(com::sun::star::uno::RuntimeException);
     /** Set fields internally. */
     void setValue() throw(com::sun::star::uno::RuntimeException);
     /** Obtain combined field values for timezone offset (minutes+secondmillis)

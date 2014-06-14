@@ -54,16 +54,16 @@ published interface XCalendar : com::sun::star::uno::XInterface
 
     /**
         Set the date/time as an offset to the start of the calendar at
-        1-Jan-1970 00:00. The integer part represents the number of days
-        passed since start date. The fractional part represents
+        1-Jan-1970 00:00 UTC. The integer part represents the number of
+        days passed since start date. The fractional part represents
         fractions of a day, thus 0.5 means 12 hours.
      */
     void    setDateTime( [in] double nTimeInDays );
 
     /**
         Get the date/time as an offset to the start of the calendar at
-        1-Jan-1970 00:00. The integer part represents the number of days
-        passed since start date. The fractional part represents
+        1-Jan-1970 00:00 UTC. The integer part represents the number of
+        days passed since start date. The fractional part represents
         fractions of a day, thus 0.5 means 12 hours.
      */
     double  getDateTime();
