@@ -71,6 +71,16 @@ const char TEMPLATE_URL[] =       "slot:5500";
 const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
+const char TEMPLATEBAR_SAVE[] = "template_save";
+const char TEMPLATEBAR_OPEN[] = "open";
+const char TEMPLATEBAR_EDIT[] = "edit";
+const char TEMPLATEBAR_PROPERTIES[] = "properties";
+const char TEMPLATEBAR_DEFAULT[] = "default";
+const char TEMPLATEBAR_MOVE[] = "move";
+const char TEMPLATEBAR_EXPORT[] = "export";
+const char TEMPLATEBAR_DELETE[] = "template_delete";
+
+const int nButtonsFontSize = 15;
 float fMultiplier = 1.2f;
 const Color aButtonsBackground(114, 168, 84); // TDF green
 const Color aButtonsText(COL_WHITE);
@@ -116,6 +126,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpExtensionsButton, "extensions");
 
     get(mpViewBar, "action_view");
+    get(mpTemplateBar, "action_templates");
 
     //Containers are invisible to cursor traversal
     //So on pressing "right" when in Help the
@@ -275,6 +286,11 @@ void BackingWindow::initControls()
     mpViewBar->SetClickHdl(LINK(this,BackingWindow,TBXViewHdl));
     //mpViewBar->SetDropdownClickHdl(LINK(this,BackingWindow,TBXDropdownHdl));
     mpViewBar->Hide();
+
+    mpTemplateBar->SetButtonType(BUTTON_SYMBOLTEXT);
+    mpTemplateBar->SetItemBits(mpTemplateBar->GetItemId(TEMPLATEBAR_MOVE), TIB_DROPDOWNONLY);
+    mpTemplateBar->SetClickHdl( LINK( this, BackingWindow,TBXTemplateHdl ) );
+    //mpTemplateBar->SetDropdownClickHdl(LINK(this, BackingWindow,TBXDropdownHdl));
 
     //set handlers
     mpLocalView->setItemStateHdl(LINK(this, BackingWindow, TVItemStateHdl));
@@ -796,6 +812,28 @@ IMPL_LINK_NOARG(BackingWindow,TBXViewHdl)
 
     return 0;
 }
+
+//FIXME: Implement OnSomething() methods
+IMPL_LINK_NOARG(BackingWindow,TBXTemplateHdl)
+{
+    //const size_t nCurItemId = mpTemplateBar->GetCurItemId();
+
+    //if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_OPEN))
+        //OnTemplateOpen();
+    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_EDIT))
+        //OnTemplateEdit();
+    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_PROPERTIES))
+        //OnTemplateProperties();
+    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_DELETE))
+        //OnTemplateDelete();
+    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_DEFAULT))
+        //OnTemplateAsDefault();
+    //else if (nCurItemId == mpTemplateBar->GetItemId(TEMPLATEBAR_EXPORT))
+        //OnTemplateExport();
+
+    return 0;
+}
+
 
 IMPL_LINK(BackingWindow, TVItemStateHdl, const ThumbnailViewItem*, pItem)
 {
