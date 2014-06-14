@@ -195,6 +195,7 @@ void OpenGL3DRenderer::CheckGLSLVersion()
     if (iVersion > 3)
     {
         maResources.m_b330Support = true;
+        maResources.m_b330Support = false;
         return;
     }
     p++;
@@ -834,11 +835,6 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
     {
         return ;
     }
-    //update ubo
-    Update3DUniformBlock();
-    glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
-    glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &polygon.material);
-    CHECK_GL_ERROR();
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
     if(mbPickingMode)
     {
@@ -849,6 +845,31 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
         glUseProgram(maResources.m_3DProID);
         glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
         glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+        if (maResources.m_b330Support)
+        {
+            //update ubo
+            Update3DUniformBlock();
+            glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
+            glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &polygon.material);
+            CHECK_GL_ERROR();
+        }
+        else
+        {
+            //update light information
+            glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, (GLfloat*)m_LightColor);
+            glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, (GLfloat*)m_PositionWorldspace);
+            glUniform1fv(maResources.m_3DLightPowerID, m_iLightNum, m_fLightPower);
+            glUniform1i(maResources.m_3DLightNumID, m_iLightNum);
+            glUniform4fv(maResources.m_3DLightAmbientID, 1, &m_Ambient[0]);
+            //update meterial information
+            glUniform4fv(maResources.m_3DMaterialAmbientID, 1, &polygon.material.ambient[0]);
+            glUniform4fv(maResources.m_3DMaterialDiffuseID, 1, &polygon.material.diffuse[0]);
+            glUniform4fv(maResources.m_3DMaterialSpecularID, 1, &polygon.material.specular[0]);
+            glUniform4fv(maResources.m_3DMaterialColorID, 1, &polygon.material.materialColor[0]);
+            glUniform1i(maResources.m_3DMaterialTwoSidesID, polygon.material.twoSidesLighting);
+            glUniform1f(maResources.m_3DMaterialShininessID, polygon.material.shininess);
+            CHECK_GL_ERROR();
+        }
     }
     for (size_t i = 0; i < verticesNum; i++)
     {
@@ -968,26 +989,45 @@ void OpenGL3DRenderer::RenderPolygon3DObject()
 void OpenGL3DRenderer::Set3DSenceInfo(sal_uInt32 nColor, bool twoSidesLighting)
 {
     m_Polygon3DInfo.material.twoSidesLighting = twoSidesLighting;
-
-    m_LightsInfo.ambient = getColorAsVector(nColor);
-
-    m_LightsInfo.lightNum = 0;
+    if (maResources.m_b330Support)
+    {
+        m_LightsInfo.ambient = getColorAsVector(nColor);
+        m_LightsInfo.lightNum = 0;
+    }
+    else
+    {
+        m_iLightNum = 0;
+        m_Ambient = getColorAsVector(nColor);;
+    }
     SetLightInfo(true, 0xFFFFFF, glm::vec4(1.0, 1.0, 1.0, 0.0));
 }
 
 void OpenGL3DRenderer::SetLightInfo(bool lightOn, sal_uInt32 nColor, const glm::vec4& direction)
 {
-    if (m_LightsInfo.lightNum >= MAX_LIGHT_NUM)
-    {
-        return;
-    }
-
     if (lightOn)
     {
-        m_LightsInfo.light[m_LightsInfo.lightNum].lightColor = getColorAsVector(nColor);
-        m_LightsInfo.light[m_LightsInfo.lightNum].positionWorldspace = direction;
-        m_LightsInfo.light[m_LightsInfo.lightNum].lightPower = 1.0;
-        m_LightsInfo.lightNum++;
+        if (maResources.m_b330Support)
+        {
+            if (m_LightsInfo.lightNum >= MAX_LIGHT_NUM)
+            {
+                return;
+            }
+            m_LightsInfo.light[m_LightsInfo.lightNum].lightColor = getColorAsVector(nColor);
+            m_LightsInfo.light[m_LightsInfo.lightNum].positionWorldspace = direction;
+            m_LightsInfo.light[m_LightsInfo.lightNum].lightPower = 1.0;
+            m_LightsInfo.lightNum++;
+        }
+        else
+        {
+            if (m_iLightNum >= MAX_LIGHT_NUM)
+            {
+                return;
+            }
+            m_LightColor[m_iLightNum] = getColorAsVector(nColor);
+            m_PositionWorldspace[m_iLightNum] = direction;
+            m_fLightPower[m_iLightNum] = 1.0;
+            m_iLightNum++;
+        }
     }
 }
 
@@ -1389,7 +1429,6 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
         glUniform4fv(maResources.m_2DColorID, 1, &extrude3D.id[0]);
     }
     glDrawElements(GL_TRIANGLES, extrude3D.size[TOP_SURFACE], GL_UNSIGNED_SHORT, reinterpret_cast<GLvoid*>(extrude3D.startIndex[TOP_SURFACE]));
-    RenderExtrudeFlatSurface(extrude3D, FLAT_BOTTOM_SURFACE);
 }
 
 void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
@@ -1453,12 +1492,26 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
     }
     else
     {
-        Update3DUniformBlock();
         glUseProgram(maResources.m_3DProID);
         glUniformMatrix4fv(maResources.m_3DViewID, 1, GL_FALSE, &m_3DView[0][0]);
         glUniformMatrix4fv(maResources.m_3DProjectionID, 1, GL_FALSE, &m_3DProjection[0][0]);
+        if (maResources.m_b330Support)
+        {
+            //update ubo
+            Update3DUniformBlock();
+            CHECK_GL_ERROR();
+        }
+        else
+        {
+            //update light information
+            glUniform4fv(maResources.m_3DLightColorID, m_iLightNum, (GLfloat*)m_LightColor);
+            glUniform4fv(maResources.m_3DLightPosID, m_iLightNum, (GLfloat*)m_PositionWorldspace);
+            glUniform1fv(maResources.m_3DLightPowerID, m_iLightNum, m_fLightPower);
+            glUniform1i(maResources.m_3DLightNumID, m_iLightNum);
+            glUniform4fv(maResources.m_3DLightAmbientID, 1, &m_Ambient[0]);
+            CHECK_GL_ERROR();
+        }
     }
-    CHECK_GL_ERROR();
     size_t extrude3DNum = m_Extrude3DList.size();
     for (size_t i = 0; i < extrude3DNum; i++)
     {
@@ -1498,10 +1551,23 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
         extrude3DInfo.zScale *= m_fHeightWeight;
         if(!mbPickingMode)
         {
-            glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
-            glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &extrude3DInfo.material);
-            CHECK_GL_ERROR();
-            glBindBuffer(GL_UNIFORM_BUFFER, 0);
+            if (maResources.m_b330Support)
+            {
+                glBindBuffer(GL_UNIFORM_BUFFER, m_3DUBOBuffer);
+                glBufferSubData(GL_UNIFORM_BUFFER, m_3DActualSizeLight, sizeof(MaterialParameters), &extrude3DInfo.material);
+                CHECK_GL_ERROR();
+                glBindBuffer(GL_UNIFORM_BUFFER, 0);
+            }
+            else
+            {
+                //update meterial information
+                glUniform4fv(maResources.m_3DMaterialAmbientID, 1, &extrude3DInfo.material.ambient[0]);
+                glUniform4fv(maResources.m_3DMaterialDiffuseID, 1, &extrude3DInfo.material.diffuse[0]);
+                glUniform4fv(maResources.m_3DMaterialSpecularID, 1, &extrude3DInfo.material.specular[0]);
+                glUniform4fv(maResources.m_3DMaterialColorID, 1, &extrude3DInfo.material.materialColor[0]);
+                glUniform1i(maResources.m_3DMaterialTwoSidesID, extrude3DInfo.material.twoSidesLighting);
+                glUniform1f(maResources.m_3DMaterialShininessID, extrude3DInfo.material.shininess);
+            }
         }
         extrude3DInfo.reverse = 0;
         if (extrude3DInfo.rounded)
@@ -1796,7 +1862,16 @@ void OpenGL3DRenderer::ProcessUnrenderedShape(bool bNewScene)
     if(mbPickingMode)
         RenderExtrude3DObject();
     else
-        RenderBatchBars(bNewScene);
+    {
+        if (maResources.m_b330Support)
+        {
+            RenderBatchBars(bNewScene);
+        }
+        else
+        {
+            RenderExtrude3DObject();
+        }
+    }
     //render text
     RenderTextShape();
     // render screen text
