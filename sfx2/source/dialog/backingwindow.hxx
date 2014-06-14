@@ -86,6 +86,7 @@ class BackingWindow
     TemplateAbstractView*           mpCurrentView;
 
     ToolBox*                        mpViewBar;
+    ToolBox*                        mpTemplateBar;
 
     std::vector<Window*>            maDndWindows;
 
@@ -97,11 +98,10 @@ class BackingWindow
     svt::AcceleratorExecute*        mpAccExec;
 
     void setupButton( PushButton* pButton );
+    //Template Manager
     void OnTemplateImport ();
-
     void OnFolderNew ();
     void OnFolderDelete ();
-
     void OnRegionState (const ThumbnailViewItem *pItem);
 
     void dispatchURL( const OUString& i_rURL,
@@ -117,6 +117,7 @@ class BackingWindow
     DECL_LINK(ExtLinkClickHdl, Button*);
     DECL_LINK(OpenRegionHdl, void*);
     DECL_LINK(TBXViewHdl, void*);
+    DECL_LINK(TBXTemplateHdl, void*);
     DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*);
 
     void initControls();
