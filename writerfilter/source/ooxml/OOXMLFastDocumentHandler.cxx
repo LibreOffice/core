@@ -19,9 +19,6 @@
 
 #include <iostream>
 #include <boost/shared_ptr.hpp>
-#ifdef DEBUG_ELEMENT
-#include "ooxmlLoggers.hxx"
-#endif
 #include "OOXMLFastDocumentHandler.hxx"
 #include "OOXMLFastContextHandler.hxx"
 #include "ooxml/OOXMLFastTokens.hxx"
