@@ -102,7 +102,7 @@ public:
     {
         if (nRow >= m_nRows || nCol >= m_nCols)
             return;
-        m_WordProCellsMap[nRow * m_nCols + nCol] = pCell;
+        m_WordProCellsMap[static_cast<size_t>(nRow) * m_nCols + nCol] = pCell;
     };
 protected:
     void Read() SAL_OVERRIDE;
