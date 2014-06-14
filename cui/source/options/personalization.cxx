@@ -426,6 +426,8 @@ void SearchAndParseThread::execute()
         }
         catch (...)
         {
+            sProgress = "Something went wrong. Please try again.";
+            m_pPersonaDialog->SetProgress( sProgress );
             return;
         }
 
@@ -510,6 +512,8 @@ void SearchAndParseThread::execute()
         }
         catch ( const uno::Exception & )
         {
+            sProgress = "Something went wrong. Please try again.";
+            m_pPersonaDialog->SetProgress( sProgress );
             return;
         }
 
@@ -533,6 +537,8 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pHead
     }
     catch (...)
     {
+        sProgress = "Something went wrong. Please try again.";
+        m_pPersonaDialog->SetProgress( sProgress );
         return;
     }
     if ( !xStream.is() )
