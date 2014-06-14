@@ -12188,7 +12188,7 @@
             <value>true</value>
             <!-- Logical False -->
             <value>false</value>
-            <!-- Blank – Logical False -->
+            <!-- Blank - Logical False -->
             <value/>
           </choice>
         </list>
@@ -14061,7 +14061,7 @@
         <list>
           <xs:documentation>Boolean Value with Blank [False] State</xs:documentation>
           <choice>
-            <!-- Blank – Logical False -->
+            <!-- Blank - Logical False -->
             <value/>
             <!-- Logical True -->
             <value>t</value>
@@ -14861,7 +14861,7 @@
       </define>
       <define name="ST_HexColorAuto">
         <list>
-          <xs:documentation>‘Automatic’ Color Value</xs:documentation>
+          <xs:documentation>'Automatic' Color Value</xs:documentation>
           <!-- Automatically Determined Color -->
           <value>auto</value>
         </list>
@@ -23988,7 +23988,7 @@
       <value name="exact" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_exact">exact</value>
       <value name="atLeast" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_atLeast">atLeast</value>
     </resource>
-    <resource name="CT_Spacing" resource="Properties" tag="paragraüh">
+    <resource name="CT_Spacing" resource="Properties" tag="paragraph">
       <attribute name="before" tokenid="ooxml:CT_Spacing_before"/>
       <attribute name="beforeLines" tokenid="ooxml:CT_Spacing_beforeLines"/>
       <attribute name="beforeAutospacing" tokenid="ooxml:CT_Spacing_beforeAutospacing"/>
