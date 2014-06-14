@@ -18,6 +18,7 @@
  */
 
 #include "backingwindow.hxx"
+#include "inputdlg.hxx"
 
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -51,7 +52,7 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
-//well find a better way for it.
+//FIXME:well find a better way for it.
 #include "../doc/doc.hrc"
 
 using namespace ::com::sun::star;
@@ -595,6 +596,56 @@ void BackingWindow::OnTemplateImport ()
     }
 }
 
+void BackingWindow::OnFolderDelete()
+{
+    QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_FOLDER_DELETE).toString());
+
+    if ( aQueryDlg.Execute() == RET_NO )
+        return;
+
+    OUString aFolderList;
+
+    std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator pIter;
+    std::set<const ThumbnailViewItem*,selection_cmp_fn> aSelFolders = maSelFolders; //Copy to avoid invalidating      an iterator
+
+    for (pIter = aSelFolders.begin(); pIter != aSelFolders.end(); ++pIter)
+    {
+        if (!mpLocalView->removeRegion((*pIter)->mnId))
+        {
+            if (aFolderList.isEmpty())
+                aFolderList = (*pIter)->maTitle;
+            else
+                aFolderList = aFolderList + "\n" + (*pIter)->maTitle;
+
+            ++pIter;
+            if (pIter == aSelFolders.end())
+                break;
+        }
+    }
+
+    if (!aFolderList.isEmpty())
+    {
+        OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
+        ErrorBox(this, WB_OK,aMsg.replaceFirst("$1",aFolderList)).Execute();
+    }
+}
+
+
+void BackingWindow::OnFolderNew()
+{
+    InputDialog dlg(SfxResId(STR_INPUT_NEW).toString(),this);
+
+    int ret = dlg.Execute();
+
+    if (ret)
+    {
+        OUString aName = dlg.getEntryText();
+
+        mpCurrentView->createRegion(aName);
+    }
+}
+
+
 void BackingWindow::OnRegionState (const ThumbnailViewItem *pItem)
 {
     if (pItem->isSelected())
@@ -731,15 +782,15 @@ IMPL_LINK_NOARG(BackingWindow,TBXViewHdl)
 
     if (nCurItemId == mpViewBar->GetItemId("import"))
         OnTemplateImport();
-    //else if (nCurItemId == mpViewBar->GetItemId("delete"))
-    //{
-        //if (mpCurView == mpLocalView)
-            ////OnFolderDelete();
+    else if (nCurItemId == mpViewBar->GetItemId("delete"))
+    {
+        if (mpCurrentView == mpLocalView)
+            OnFolderDelete();
         //else
             ////OnRepositoryDelete();
-    //}
-    //else if (nCurItemId == mpViewBar->GetItemId("new_folder"))
-        ////OnFolderNew();
+    }
+    else if (nCurItemId == mpViewBar->GetItemId("new_folder"))
+        OnFolderNew();
     //else if (nCurItemId == mpViewBar->GetItemId("save"))
         ////OnTemplateSaveAs();
 
