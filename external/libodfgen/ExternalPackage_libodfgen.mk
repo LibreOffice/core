@@ -12,7 +12,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,libodfgen,libodfgen))
 $(eval $(call gb_ExternalPackage_use_external_project,libodfgen,libodfgen))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen-0.1.1.dylib,src/.libs/libodfgen-0.1.dylib))
+$(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen-0.1.1.dylib,src/.libs/libodfgen-0.1.1.dylib))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libodfgen,$(LIBO_LIB_FOLDER)/libodfgen-0.1.dll,src/.libs/libodfgen-0.1.dll))
 else ifeq ($(filter IOS ANDROID,$(OS)),)
