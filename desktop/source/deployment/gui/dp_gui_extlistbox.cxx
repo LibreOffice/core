@@ -175,29 +175,6 @@ ExtensionRemovedListener::~ExtensionRemovedListener()
 
 
 // ExtensionBox_Impl
-
-ExtensionBox_Impl::ExtensionBox_Impl( Window* pParent, TheExtensionManager *pManager ) :
-    IExtensionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_CHILDDLGCTRL ),
-    m_bHasScrollBar( false ),
-    m_bHasActive( false ),
-    m_bNeedsRecalc( true ),
-    m_bInCheckMode( false ),
-    m_bAdjustActive( false ),
-    m_bInDelete( false ),
-    m_nActive( 0 ),
-    m_nTopIndex( 0 ),
-    m_nActiveHeight( 0 ),
-    m_nExtraHeight( 2 ),
-    m_aSharedImage( DialogHelper::getResId( RID_IMG_SHARED ) ),
-    m_aLockedImage( DialogHelper::getResId( RID_IMG_LOCKED ) ),
-    m_aWarningImage( DialogHelper::getResId( RID_IMG_WARNING ) ),
-    m_aDefaultImage( DialogHelper::getResId( RID_IMG_EXTENSION ) ),
-    m_pScrollBar( NULL ),
-    m_pManager( pManager )
-{
-    Init();
-}
-
 ExtensionBox_Impl::ExtensionBox_Impl(Window* pParent) :
     IExtensionListBox( pParent, WB_BORDER | WB_TABSTOP | WB_CHILDDLGCTRL ),
     m_bHasScrollBar( false ),
@@ -421,13 +398,6 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     else
         m_nActiveHeight = aTextHeight + 2;
 }
-
-
-const Size ExtensionBox_Impl::GetMinOutputSizePixel() const
-{
-    return Size( 200, 80 );
-}
-
 
 Rectangle ExtensionBox_Impl::GetEntryRect( const long nPos ) const
 {

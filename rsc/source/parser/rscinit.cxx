@@ -116,7 +116,6 @@ void RscTypCont::Init()
     RscTop   *  pClassMetricField;
     RscTop   *  pClassDateField;
     RscTop   *  pClassTimeField;
-    RscTop   *  pClassNumericBox;
     RscTop   *  pClassDockingWindow;
     RscTop   *  pClassToolBoxItem;
     RscTop   *  pClassToolBox;
@@ -610,13 +609,6 @@ void RscTypCont::Init()
 
     pClassTimeField = InitClassTimeField( pClassTmp, pClassTime );
     pRoot->Insert( pClassTimeField );
-    }
-    { // Mehrfachvererbung von Hand
-    RscTop * pClassTmp = InitClassNumericFormatter( pClassComboBox );
-    aBaseLst.push_back( pClassTmp );
-
-    pClassNumericBox = InitClassNumericBox( pClassTmp );
-    pRoot->Insert( pClassNumericBox );
     }
 }
 {

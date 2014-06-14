@@ -718,7 +718,6 @@ class VCL_DLLPUBLIC NumericBox : public ComboBox, public NumericFormatter
 {
 public:
     explicit                NumericBox( Window* pParent, WinBits nWinStyle );
-    explicit                NumericBox( Window* pParent, const ResId& );
     virtual                 ~NumericBox();
 
     virtual Size            CalcMinimumSize() const SAL_OVERRIDE;
