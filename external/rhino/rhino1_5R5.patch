@@ -108,7 +108,7 @@
  }
 --- misc/rhino1_5R5/toolsrc/build.xml	2004-03-25 21:54:34.000000000 +0100
 +++ misc/build/rhino1_5R5/toolsrc/build.xml	2009-01-17 20:46:44.000000000 +0100
-@@ -6,6 +6,24 @@
+@@ -6,6 +6,25 @@ Requires Ant version 1.2
  -->
  <project name="toolsrc" default="compile" basedir=".">
  
@@ -116,6 +116,7 @@
 +    <and>
 +      <os family="mac"/>
 +      <os family="unix"/>
++      <equals arg1="${ant.java.version}" arg2="1.6" />
 +    </and>
 +  </condition>
 +  <path id="macPath" location="${java.home}/../Classes/classes.jar"/>
@@ -133,7 +134,7 @@
    <target name="properties">
      <property name="nest" value=".."/>
      <property name="build.dir" value="./build"/>
-@@ -20,46 +38,10 @@
+@@ -20,46 +39,10 @@ Requires Ant version 1.2
      <!-- Download source from Sun's site, unzip it, remove
           the files we don't need, and change the package
      -->
@@ -181,7 +182,7 @@
    </target>
  
    <target name="compile" depends="properties,get-swing-ex">
-@@ -68,6 +50,7 @@
+@@ -68,6 +51,7 @@ Requires Ant version 1.2
             includes="org/**/*.java"
             deprecation="on"
             debug="${debug}">
