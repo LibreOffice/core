@@ -44,6 +44,7 @@
 #include "docsh.hxx"
 #include "unotbl.hxx"
 #include "unochart.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -54,10 +55,9 @@ void SwTableFUNC::ColWidthDlg( Window *pParent )
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-    VclAbstractDialog* pDlg = pFact->CreateSwTableWidthDlg(pParent, *this);
+    boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwTableWidthDlg(pParent, *this));
     OSL_ENSURE(pDlg, "Dialogdiet fail!");
     pDlg->Execute();
-    delete pDlg;
 }
 
 // Determine the width

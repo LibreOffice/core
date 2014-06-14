@@ -118,6 +118,7 @@
 #include <svx/nbdtmgfact.hxx>
 #include <svx/nbdtmg.hxx>
 #include <numrule.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace svx::sidebar;
@@ -166,13 +167,13 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     ::PrepareBoxInfo( aCoreSet, rWrtSh );
 
     aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(rWrtSh.GetView().GetDocShell())));
-    SfxAbstractTabDialog* pDlg = NULL;
+    boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
     if ( bUseDialog && GetActiveView() )
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        pDlg = pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, DLG_CHAR_STD);
+        pDlg.reset(pFact->CreateSwCharDlg(rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, DLG_CHAR_STD));
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if( FN_INSERT_HYPERLINK == nSlot )
             pDlg->SetCurPageId("hyperlink");
@@ -189,7 +190,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     const SfxItemSet* pSet = NULL;
     if ( !bUseDialog )
         pSet = pArgs;
-    else if ( NULL != pDlg && pDlg->Execute() == RET_OK ) /* #110771# pDlg can be NULL */
+    else if ( pDlg && pDlg->Execute() == RET_OK ) /* #110771# pDlg can be NULL */
     {
         pSet = pDlg->GetOutputItemSet();
     }
@@ -247,8 +248,6 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
             rWrtSh.EndAction();
         }
     }
-
-    delete pDlg;
 }
 
 static short lcl_AskRedlineMode(Window *pWin)
@@ -303,9 +302,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                 if (pFact)
                 {
-                    VclAbstractDialog* pDlg = pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS );
+                    boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS ));
                     pDlg->Execute();
-                    delete pDlg;
                 }
             }
             else
@@ -450,8 +448,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg(
-                GetView().GetWindow(), rWrtSh, false);
+            boost::scoped_ptr<AbstractInsFootNoteDlg> pDlg(pFact->CreateInsFootNoteDlg(
+                GetView().GetWindow(), rWrtSh, false));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
@@ -466,7 +464,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
 
             rReq.Ignore();
-            delete pDlg;
         }
         break;
         case FN_FORMAT_FOOTNOTE_DLG:
@@ -474,10 +471,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), rWrtSh);
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwFootNoteOptionDlg(GetView().GetWindow(), rWrtSh));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
             break;
         }
         case SID_INSERTDOC:
@@ -539,7 +535,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSwBreakDlg* pDlg = pFact->CreateSwBreakDlg(GetView().GetWindow(), rWrtSh);
+                boost::scoped_ptr<AbstractSwBreakDlg> pDlg(pFact->CreateSwBreakDlg(GetView().GetWindow(), rWrtSh));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -564,7 +560,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
                 else
                     rReq.Ignore();
-                delete pDlg;
             }
 
             switch ( nKind )
@@ -598,10 +593,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                VclAbstractDialog* pDlg = pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq, DLG_INSERT_BOOKMARK );
+                boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSwInsertBookmarkDlg( GetView().GetWindow(), rWrtSh, rReq, DLG_INSERT_BOOKMARK ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 pDlg->Execute();
-                delete pDlg;
             }
 
             break;
@@ -631,7 +625,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            AbstractSwModalRedlineAcceptDlg* pDlg = pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin());
+            boost::scoped_ptr<AbstractSwModalRedlineAcceptDlg> pDlg(pFact->CreateSwModalRedlineAcceptDlg(&GetView().GetEditWin()));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
             switch (lcl_AskRedlineMode(&GetView().GetEditWin()))
@@ -655,7 +649,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rReq.Done();
                     break;
             }
-            delete pDlg;
         }
         break;
 
@@ -696,10 +689,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING );
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclAbstractDialog( GetView().GetWindow(), rWrtSh, DLG_SORTING ));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
+            pDlg.reset();
             rReq.Done();
         }
         break;
@@ -708,11 +701,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SfxItemSet aTmp(GetPool(), FN_PARAM_1, FN_PARAM_1);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
-                                                        GetView().GetWindow(), &aTmp, rWrtSh);
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_TAB_OUTLINE,
+                                                        GetView().GetWindow(), &aTmp, rWrtSh));
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             pDlg->Execute();
-            delete pDlg;
+            pDlg.reset();
             rReq.Done();
         }
             break;
@@ -952,7 +945,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                                         rWrtSh.GetNodeNumStart( pPaM ) );
                 aCoreSet.Put(aStartAt);
             }
-            SfxAbstractTabDialog* pDlg = NULL;
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg;
 
             if ( bUseDialog && GetActiveView() )
             {
@@ -963,7 +956,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                pDlg = pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, NULL, false, sDefPage );
+                pDlg.reset(pFact->CreateSwParaDlg( GetView().GetWindow(),GetView(), aCoreSet, DLG_STD, NULL, false, sDefPage ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
             }
             SfxItemSet* pSet = NULL;
@@ -980,7 +973,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     pSet = (SfxItemSet*) pArgs;
 
             }
-            else if ( NULL != pDlg && pDlg->Execute() == RET_OK )
+            else if ( pDlg && pDlg->Execute() == RET_OK )
             {
                 // Apply defaults if nessecary.
                 pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
@@ -1072,8 +1065,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.EndUndo( UNDO_INSATTR );
                 }
             }
-
-            delete pDlg;
         }
         break;
         case FN_NUM_CONTINUE:
