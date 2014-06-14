@@ -12,7 +12,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,libmwaw,libmwaw))
 $(eval $(call gb_ExternalPackage_use_external_project,libmwaw,libmwaw))
 
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3.3.dylib,src/lib/.libs/libmwaw-0.3.dylib))
+$(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3.3.dylib,src/lib/.libs/libmwaw-0.3.3.dylib))
 else ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libmwaw,$(LIBO_LIB_FOLDER)/libmwaw-0.3.dll,src/lib/.libs/libmwaw-0.3.dll))
 else ifeq ($(filter IOS ANDROID,$(OS)),)
