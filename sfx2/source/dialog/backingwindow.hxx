@@ -98,6 +98,10 @@ class BackingWindow
 
     void setupButton( PushButton* pButton );
     void OnTemplateImport ();
+
+    void OnFolderNew ();
+    void OnFolderDelete ();
+
     void OnRegionState (const ThumbnailViewItem *pItem);
 
     void dispatchURL( const OUString& i_rURL,
