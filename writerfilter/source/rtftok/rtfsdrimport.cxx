@@ -215,8 +215,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> xShape, const O
     }
 }
 
-void RTFSdrImport::resolve(RTFShape& rShape, bool bClose,
-        ShapeOrPict const shapeOrPict)
+void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shapeOrPict)
 {
     int nType = -1;
     bool bPib = false;
@@ -253,13 +252,15 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose,
     sal_Int16 nRelativeWidthRelation = text::RelOrientation::PAGE_FRAME;
     sal_Int16 nRelativeHeightRelation = text::RelOrientation::PAGE_FRAME;
 
-    // The spec doesn't state what is the default for shapeType, Word seems to implement it as a rectangle.
-    if (SHAPE == shapeOrPict &&
-        std::find_if(rShape.aProperties.begin(),
-                     rShape.aProperties.end(),
-                     boost::bind(&OUString::equals, boost::bind(&std::pair<OUString, OUString>::first, _1), OUString("shapeType")))
-            == rShape.aProperties.end())
-        rShape.aProperties.insert(rShape.aProperties.begin(), std::pair<OUString, OUString>("shapeType", OUString::number(ESCHER_ShpInst_Rectangle)));
+    if (SHAPE == shapeOrPict)
+    {
+        // The spec doesn't state what is the default for shapeType, Word seems to implement it as a rectangle.
+        if (std::find_if(rShape.aProperties.begin(),
+                         rShape.aProperties.end(),
+                         boost::bind(&OUString::equals, boost::bind(&std::pair<OUString, OUString>::first, _1), OUString("shapeType")))
+                == rShape.aProperties.end())
+            rShape.aProperties.insert(rShape.aProperties.begin(), std::pair<OUString, OUString>("shapeType", OUString::number(ESCHER_ShpInst_Rectangle)));
+    }
 
     for (std::vector< std::pair<OUString, OUString> >::iterator i = rShape.aProperties.begin();
             i != rShape.aProperties.end(); ++i)

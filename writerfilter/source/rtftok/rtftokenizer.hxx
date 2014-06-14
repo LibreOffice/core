@@ -29,13 +29,19 @@ public:
     int resolveParse();
     int asHex(char ch);
     /// Number of states on the stack.
-    int getGroup() const { return m_nGroup;}
+    int getGroup() const
+    {
+        return m_nGroup;
+    }
     /// To be invoked by the pushState() callback to signal when the importer enters a group.
     void pushGroup();
     /// To be invoked by the popState() callback to single when the importer leaves a group.
     void popGroup();
     OUString getPosition();
-    sal_Size getGroupStart() { return m_nGroupStart;}
+    sal_Size getGroupStart()
+    {
+        return m_nGroupStart;
+    }
     /// To look up additional properties of a math symbol.
     static bool lookupMathKeyword(RTFMathSymbol& rSymbol);
 private:
