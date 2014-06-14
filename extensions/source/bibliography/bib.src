@@ -36,4 +36,9 @@ String RID_MAP_QUESTION
     Text [ en-US ] = "Do you want to edit the column arrangement?";
 };
 
+String RID_BIB_STR_NONE
+{
+    Text [ en-US ] = "<none>";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
