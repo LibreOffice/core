@@ -320,8 +320,8 @@ DECLARE_RTFEXPORT_TEST(testMathRuns, "math-runs.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo77979, "fdo77979.odt")
 {
     // font name is encoded with \fcharset of font
-    CPPUNIT_ASSERT_EQUAL(OUString("\xE5\xBE\xAE\xE8\xBD\xAF\xE9\x9B\x85\xE9\xBB\x91", 12, RTL_TEXTENCODING_UTF8),
-            getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+    OUString aExpected("\xE5\xBE\xAE\xE8\xBD\xAF\xE9\x9B\x85\xE9\xBB\x91", 12, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")

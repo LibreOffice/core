@@ -44,7 +44,10 @@ public:
     virtual void setSkipUnknown(bool bSkipUnknown) SAL_OVERRIDE;
     virtual void finishSubstream() SAL_OVERRIDE;
     virtual bool isSubstream() const SAL_OVERRIDE;
-    bool hasTable() { return m_bHasTable;}
+    bool hasTable()
+    {
+        return m_bHasTable;
+    }
 private:
     boost::shared_ptr<RTFTokenizer> m_pTokenizer;
     SvStream& m_rStream;

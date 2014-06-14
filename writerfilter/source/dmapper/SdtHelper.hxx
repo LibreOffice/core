@@ -75,7 +75,10 @@ public:
     OUStringBuffer& getDateFormat();
     OUStringBuffer& getLocale();
     /// If createControlShape() was ever called.
-    bool hasElements() { return m_bHasElements;}
+    bool hasElements()
+    {
+        return m_bHasElements;
+    }
 
     /// Create drop-down control from w:sdt's w:dropDownList.
     void createDropDownControl();

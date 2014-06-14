@@ -371,18 +371,18 @@ void SwTextBoxHelper::syncProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 
             }
             break;
         case FN_TEXT_RANGE:
+        {
+            uno::Reference<text::XTextRange> xRange;
+            rValue >>= xRange;
+            SwUnoInternalPaM aInternalPaM(*pFmt->GetDoc());
+            if (sw::XTextRangeToSwPaM(aInternalPaM, xRange))
             {
-                uno::Reference<text::XTextRange> xRange;
-                rValue >>= xRange;
-                SwUnoInternalPaM aInternalPaM(*pFmt->GetDoc());
-                if (sw::XTextRangeToSwPaM(aInternalPaM, xRange))
-                {
-                    SwFmtAnchor aAnchor(pFmt->GetAnchor());
-                    aAnchor.SetAnchor(aInternalPaM.Start());
-                    pFmt->SetFmtAttr(aAnchor);
-                }
+                SwFmtAnchor aAnchor(pFmt->GetAnchor());
+                aAnchor.SetAnchor(aInternalPaM.Start());
+                pFmt->SetFmtAttr(aAnchor);
             }
-            break;
+        }
+        break;
         case RES_CHAIN:
             switch (nMemberId)
             {

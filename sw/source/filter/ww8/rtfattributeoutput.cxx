@@ -2076,9 +2076,8 @@ void RtfAttributeOutput::CharFont(const SvxFontItem& rFont)
     // FIXME: this may be a tad expensive... but the charset needs to be
     // consistent with what wwFont::WriteRtf() does
     FontMapExport aTmp(rFont.GetFamilyName());
-    m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(
-            sw::ms::rtl_TextEncodingToWinCharsetRTF(
-                aTmp.msPrimary, aTmp.msSecondary, rFont.GetCharSet()));
+    sal_uInt8 nWindowsCharset = sw::ms::rtl_TextEncodingToWinCharsetRTF(aTmp.msPrimary, aTmp.msSecondary, rFont.GetCharSet());
+    m_rExport.eCurrentEncoding = rtl_getTextEncodingFromWindowsCharset(nWindowsCharset);
     if (m_rExport.eCurrentEncoding == RTL_TEXTENCODING_DONTKNOW)
         m_rExport.eCurrentEncoding = m_rExport.eDefaultEncoding;
 }

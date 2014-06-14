@@ -780,14 +780,11 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     else
     {
         if (m_xModelFactory.is())
-            xShape.set(m_xModelFactory->createInstance(
-                "com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
-        uno::Reference<drawing::XDrawPageSupplier> const xDrawSupplier(
-                m_xDstDoc, uno::UNO_QUERY);
+            xShape.set(m_xModelFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPageSupplier> const xDrawSupplier(m_xDstDoc, uno::UNO_QUERY);
         if (xDrawSupplier.is())
         {
-            uno::Reference<drawing::XShapes> xShapes(
-                    xDrawSupplier->getDrawPage(), uno::UNO_QUERY);
+            uno::Reference<drawing::XShapes> xShapes(xDrawSupplier->getDrawPage(), uno::UNO_QUERY);
             if (xShapes.is())
                 xShapes->add(xShape);
         }
@@ -1427,8 +1424,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer,
         else if (boost::get<0>(aTuple) == BUFFER_PAR)
             parBreak();
         else if (boost::get<0>(aTuple) == BUFFER_STARTSHAPE)
-            m_pSdrImport->resolve(boost::get<1>(aTuple)->getShape(), false,
-                    RTFSdrImport::SHAPE);
+            m_pSdrImport->resolve(boost::get<1>(aTuple)->getShape(), false, RTFSdrImport::SHAPE);
         else if (boost::get<0>(aTuple) == BUFFER_ENDSHAPE)
             m_pSdrImport->close();
         else
@@ -1714,8 +1710,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             if (nKeyword == RTF_SHPTXT)
             {
                 if (!m_aStates.top().pCurrentBuffer)
-                    m_pSdrImport->resolve(m_aStates.top().aShape, false,
-                            RTFSdrImport::SHAPE);
+                    m_pSdrImport->resolve(m_aStates.top().aShape, false, RTFSdrImport::SHAPE);
                 else
                 {
                     RTFValue::Pointer_t pValue(new RTFValue(m_aStates.top().aShape));
@@ -4853,9 +4848,8 @@ int RTFDocumentImpl::popState()
         // Don't trigger a shape import in case we're only leaving the \shpinst of the groupshape itself.
         if (!m_bObject && !aState.bInListpicture && !aState.bHadShapeText && !(aState.bInShapeGroup && !aState.bInShape))
         {
-            m_pSdrImport->resolve(m_aStates.top().aShape, true,
-                    (aState.nDestinationState == DESTINATION_SHAPEINSTRUCTION)
-                        ? RTFSdrImport::SHAPE : RTFSdrImport::PICT);
+            RTFSdrImport::ShapeOrPict eType = (aState.nDestinationState == DESTINATION_SHAPEINSTRUCTION) ? RTFSdrImport::SHAPE : RTFSdrImport::PICT;
+            m_pSdrImport->resolve(m_aStates.top().aShape, true, eType);
         }
         else if (aState.bInShapeGroup && !aState.bInShape)
         {
