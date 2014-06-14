@@ -40,6 +40,7 @@
 #include <svx/nbdtmgfact.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <boost/scoped_ptr.hpp>
 
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {
@@ -183,8 +184,8 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
-        SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
-                                                        GetView().GetWindow(), &aSet, GetShell());
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
+                                                        GetView().GetWindow(), &aSet, GetShell()));
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         sal_uInt16 nRet = pDlg->Execute();
         const SfxPoolItem* pItem;
@@ -226,8 +227,6 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         }
         else if ( RET_USER == nRet )
             GetShell().DelNumRules();
-
-        delete pDlg;
     }
         break;
 

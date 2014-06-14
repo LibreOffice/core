@@ -55,6 +55,8 @@
 #include <SwStyleNameMapper.hxx>
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
+#include <boost/scoped_ptr.hpp>
+
 const sal_uInt32 nFontInc = 40;      // 2pt
 const sal_uInt32 nFontMaxSz = 19998; // 999.9pt
 
@@ -438,8 +440,8 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
-                    rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS );
+                boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( GetView().GetWindow(), aSet,
+                    rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), DLG_SWDROPCAPS ));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if (pDlg->Execute() == RET_OK)
                 {
@@ -455,7 +457,6 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                     rSh.EndAction();
                     rReq.Done(*pDlg->GetOutputItemSet());
                 }
-                delete pDlg;
             }
         }
          break;
