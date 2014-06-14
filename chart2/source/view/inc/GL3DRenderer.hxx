@@ -230,10 +230,12 @@ private:
     void InitBatch3DUniformBlock();
     void UpdateBatch3DUniformBlock();
     void RenderBatchBars(bool bNewScene);
+    void CheckGLSLVersion();
 private:
 
     struct ShaderResources
     {
+        bool m_b330Support;
         // 3DProID
         GLint m_3DProID;
         GLint m_3DProjectionID;
@@ -242,6 +244,18 @@ private:
         GLint m_3DNormalMatrixID;
         GLint m_3DVertexID;
         GLint m_3DNormalID;
+        //300 verson;
+        GLint m_3DMaterialAmbientID;
+        GLint m_3DMaterialDiffuseID;
+        GLint m_3DMaterialSpecularID;
+        GLint m_3DMaterialColorID;
+        GLint m_3DMaterialTwoSidesID;
+        GLint m_3DMaterialShininessID;
+        GLint m_3DLightColorID;
+        GLint m_3DLightPosID;
+        GLint m_3DLightPowerID;
+        GLint m_3DLightNumID;
+        GLint m_3DLightAmbientID;
 
         // TextProID
         GLint m_TextProID;
@@ -376,6 +390,12 @@ private:
     GLint m_Batch3DActualSizeLight;
 
     glm::mat4 m_GlobalScaleMatrix;
+    //for 3.0 version
+    int m_iLightNum;
+    glm::vec4 m_Ambient;
+    glm::vec4 m_LightColor[MAX_LIGHT_NUM];
+    glm::vec4 m_PositionWorldspace[MAX_LIGHT_NUM];
+    float m_fLightPower[MAX_LIGHT_NUM];
 };
 
 }
