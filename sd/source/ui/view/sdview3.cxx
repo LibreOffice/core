@@ -847,9 +847,10 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if (aDataHelper.GetTransferableObjectDescriptor(SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc))
         {
-            xStm = aDataHelper.GetInputStream(nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE, OUString());
+            OUString aDocShellID = SfxObjectShell::CreateShellID(mrDoc.GetDocSh());
+            xStm = aDataHelper.GetInputStream(nFormat ? nFormat : SOT_FORMATSTR_ID_EMBED_SOURCE, aDocShellID);
             if (!xStm.is())
-                xStm = aDataHelper.GetInputStream(SOT_FORMATSTR_ID_EMBEDDED_OBJ, OUString());
+                xStm = aDataHelper.GetInputStream(SOT_FORMATSTR_ID_EMBEDDED_OBJ, aDocShellID);
         }
 
         if (xStm.is())

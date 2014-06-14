@@ -65,6 +65,10 @@ SvEmbedTransferHelper::~SvEmbedTransferHelper()
     }
 }
 
+void SvEmbedTransferHelper::SetParentShellID( const OUString& rShellID )
+{
+    maParentShellID = rShellID;
+}
 
 
 void SvEmbedTransferHelper::AddSupportedFormats()
@@ -76,7 +80,7 @@ void SvEmbedTransferHelper::AddSupportedFormats()
 
 
 
-bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& /*rDestDoc*/ )
+bool SvEmbedTransferHelper::GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc )
 {
     bool bRet = false;
 

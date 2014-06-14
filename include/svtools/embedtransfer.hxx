@@ -33,6 +33,8 @@ private:
     Graphic* m_pGraphic;
     sal_Int64 m_nAspect;
 
+    OUString maParentShellID;
+
 protected:
 
     virtual void        AddSupportedFormats() SAL_OVERRIDE;
@@ -45,6 +47,8 @@ public:
                            const Graphic* pGraphic,
                             sal_Int64 nAspect );
     virtual ~SvEmbedTransferHelper();
+
+    void SetParentShellID( const OUString& rShellID );
 
     static void         FillTransferableObjectDescriptor( TransferableObjectDescriptor& rDesc,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,

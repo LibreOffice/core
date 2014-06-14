@@ -91,7 +91,8 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     pDragSourceView( NULL ),
     nDragSourceFlags( 0 ),
     bDragWasInternal( false ),
-    nSourceDocID( 0 )
+    nSourceDocID( 0 ),
+    maShellID(SfxObjectShell::CreateShellID(pContainerShell))
 {
 
     //  check what kind of objects are contained
@@ -717,9 +718,13 @@ void ScDrawTransferObj::CreateOLEData()
         // No OLE object present.
         return;
 
-    aOleData = TransferableDataHelper(
+    SvEmbedTransferHelper* pEmbedTransfer =
         new SvEmbedTransferHelper(
-            pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect()));
+            pObj->GetObjRef(), pObj->GetGraphic(), pObj->GetAspect());
+
+    pEmbedTransfer->SetParentShellID(maShellID);
+
+    aOleData = TransferableDataHelper(pEmbedTransfer);
 }
 
 
