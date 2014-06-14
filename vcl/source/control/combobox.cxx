@@ -44,13 +44,6 @@ static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, const
     }
 }
 
-ComboBox::ComboBox( WindowType nType ) :
-    Edit( nType )
-{
-    ImplInitComboBoxData();
-    SetWidthInChars(-1);
-}
-
 ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
     Edit( WINDOW_COMBOBOX )
 {

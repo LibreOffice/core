@@ -76,8 +76,6 @@ class SW_DLLPUBLIC SwAddressPreview : public Window
     DECL_LINK(ScrollHdl, void*);
 
 public:
-    SwAddressPreview(Window* pParent, const ResId& rResId);
-
     SwAddressPreview(Window* pParent, WinBits nStyle=WB_BORDER);
 
     void positionScrollBar();

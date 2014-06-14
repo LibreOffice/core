@@ -185,16 +185,6 @@ struct  SwAddressPreview_Impl
     }
 };
 
-SwAddressPreview::SwAddressPreview(Window* pParent, const ResId& rResId)
-    : Window( pParent, rResId )
-    , aVScrollBar(this, WB_VSCROLL)
-    , pImpl(new SwAddressPreview_Impl())
-{
-    aVScrollBar.SetScrollHdl(LINK(this, SwAddressPreview, ScrollHdl));
-    positionScrollBar();
-    Show();
-}
-
 SwAddressPreview::SwAddressPreview(Window* pParent, WinBits nStyle)
     : Window( pParent, nStyle )
     , aVScrollBar(this, WB_VSCROLL)

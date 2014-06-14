@@ -182,9 +182,8 @@ class ExtensionBox_Impl : public ::svt::IExtensionListBox
 
     void Init();
 public:
-                    ExtensionBox_Impl(Window* pParent);
-                    ExtensionBox_Impl(Window* pParent, TheExtensionManager *pManager);
-                   virtual ~ExtensionBox_Impl();
+    ExtensionBox_Impl(Window* pParent);
+    virtual ~ExtensionBox_Impl();
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Paint( const Rectangle &rPaintRect ) SAL_OVERRIDE;
@@ -192,7 +191,6 @@ public:
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
-    const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
     TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long            GetEntryCount() { return (long) m_vEntries.size(); }

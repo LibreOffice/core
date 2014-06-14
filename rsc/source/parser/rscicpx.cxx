@@ -1213,30 +1213,6 @@ RscTop * RscTypCont::InitClassDate( RscTop * pSuper )
     return pClassDate;
 }
 
-RscTop * RscTypCont::InitClassPatternFormatter( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassPattern;
-
-    // Klasse anlegen
-    nId = pHS->getID( "PatternFormatter" );
-    pClassPattern = new RscClass( nId, RSC_NOTYPE, pSuper );
-    pClassPattern->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "StrictFormat", VARNAME );
-    pClassPattern->SetVariable( nId, &aBool, NULL,
-                                0, PATTERNFORMATTER_STRICTFORMAT );
-    nId = aNmTb.Put( "EditMask", VARNAME );
-    pClassPattern->SetVariable( nId, &aLangString, NULL,
-                                0, PATTERNFORMATTER_EDITMASK );
-    nId = aNmTb.Put( "LiteralMask", VARNAME );
-    pClassPattern->SetVariable( nId, &aLangString, NULL,
-                                0, PATTERNFORMATTER_LITTERALMASK );
-
-        return pClassPattern;
-}
-
 RscTop * RscTypCont::InitClassNumericFormatter( RscTop * pSuper )
 {
     Atom        nId;
@@ -1467,23 +1443,6 @@ RscTop * RscTypCont::InitClassTimeField( RscTop * pSuper, RscTop * pClassTime )
     pClassTimeField->SetVariable( nId, pClassTime, NULL, 0, TIMEFIELD_LAST );
 
     return pClassTimeField;
-}
-
-RscTop * RscTypCont::InitClassNumericBox( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassNumericBox;
-
-    // Klasse anlegen
-    nId = pHS->getID( "NumericBox" );
-    pClassNumericBox = new RscClass( nId, RSC_NUMERICBOX, pSuper );
-    pClassNumericBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-
-    aNmTb.Put( nId, CLASSNAME, pClassNumericBox );
-
-    // Variablen anlegen
-
-    return pClassNumericBox;
 }
 
 RscTop * RscTypCont::InitClassDockingWindow( RscTop * pSuper,

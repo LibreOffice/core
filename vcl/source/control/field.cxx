@@ -892,21 +892,6 @@ NumericBox::NumericBox( Window* pParent, WinBits nWinStyle ) :
         Show();
 }
 
-NumericBox::NumericBox( Window* pParent, const ResId& rResId ) :
-    ComboBox( WINDOW_NUMERICBOX )
-{
-    rResId.SetRT( RSC_NUMERICBOX );
-    WinBits nStyle = ImplInitRes( rResId );
-    ComboBox::ImplInit( pParent, nStyle );
-    SetField( this );
-    ComboBox::ImplLoadRes( rResId );
-    NumericFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
-    Reformat();
-
-    if ( !(nStyle & WB_HIDE ) )
-        Show();
-}
-
 Size NumericBox::CalcMinimumSize() const
 {
     Size aRet(calcMinimumSize(*this, *this));

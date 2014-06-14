@@ -85,7 +85,6 @@ protected:
     SAL_DLLPRIVATE long     getMaxWidthScrollBarAndDownButton() const;
 
 protected:
-    explicit            ComboBox( WindowType nType );
     bool            IsDropDownBox() const { return mpFloatWin ? true : false; }
 
     virtual void  FillLayoutData() const SAL_OVERRIDE;

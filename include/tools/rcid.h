@@ -95,11 +95,6 @@
 
 #define RSC_DATEFIELD           (RSC_NOTYPE + 0x66)
 #define RSC_TIMEFIELD           (RSC_NOTYPE + 0x67)
-#define RSC_NUMERICBOX          (RSC_NOTYPE + 0x69)
-
-
-
-
 
 
 #define RSC_TOOLBOXITEM         (RSC_NOTYPE + 0x70)

@@ -205,7 +205,6 @@ class RscTypCont
     RscTop *    InitClassTime( RscTop * pSuper );
     RscTop *    InitClassDate( RscTop * pSuper );
 
-    RscTop *    InitClassPatternFormatter( RscTop * pSuper );
     RscTop *    InitClassNumericFormatter( RscTop * pSuper );
     RscTop *    InitClassMetricFormatter( RscTop * pSuper,
                                           RscEnum * pFieldUnits );
@@ -218,7 +217,6 @@ class RscTypCont
     RscTop *    InitClassMetricField( RscTop * pSuper );
     RscTop *    InitClassDateField( RscTop * pSuper, RscTop * pClassDate );
     RscTop *    InitClassTimeField( RscTop * pSuper, RscTop * pClassTime );
-    RscTop *    InitClassNumericBox( RscTop * pSuper );
 
     RscTop *    InitClassDockingWindow( RscTop * pSuper,
                                         RscEnum * pMapUnit );
