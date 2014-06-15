@@ -397,7 +397,7 @@ void ToolbarMenu_Impl::notifyHighlightedEntry()
                 if( pValueSet )
                     nChildIndex = static_cast< sal_Int32 >( pValueSet->GetItemPos( pValueSet->GetSelectItemId() ) );
 
-                if( nChildIndex >= pEntry->getAccessibleChildCount() )
+                if( (nChildIndex >= pEntry->getAccessibleChildCount()) || (nChildIndex < 0) )
                     return;
 
                 aNew <<= getAccessibleChild( pEntry->mpControl, nChildIndex );
