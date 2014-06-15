@@ -29,7 +29,7 @@ void SAL_CALL
 PersonasDocHandler::characters( const OUString & aChars)
     throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
-    if( m_bLearnmoreTag )
+    if( m_isLearnmoreTag )
         m_vLearnmoreURLs.push_back( aChars );
 }
 
@@ -55,14 +55,21 @@ PersonasDocHandler::setDocumentLocator(
 
 void SAL_CALL
 PersonasDocHandler::startElement( const OUString& aName,
-    const Reference< xml::sax::XAttributeList > & )
+    const Reference< xml::sax::XAttributeList > &xAttribs )
         throw ( xml::sax::SAXException,
             RuntimeException, std::exception )
 {
+    if( aName == "searchresults" )
+    {
+        OUString aTotalResults = xAttribs->getValueByName( "total_results" );
+        if( !aTotalResults.equals( "0" ) )
+            m_hasResults = true;
+    }
+
     if ( aName == "learnmore" )
-        m_bLearnmoreTag = true;
+        m_isLearnmoreTag = true;
     else
-        m_bLearnmoreTag = false;
+        m_isLearnmoreTag = false;
 }
 
 void SAL_CALL PersonasDocHandler::endElement( const OUString & )

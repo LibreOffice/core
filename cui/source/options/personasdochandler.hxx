@@ -19,10 +19,12 @@ class PersonasDocHandler : public ::cppu::WeakImplHelper1< css::xml::sax::XDocum
 {
 private:
     std::vector<OUString> m_vLearnmoreURLs;
-    bool m_bLearnmoreTag;
+    bool m_isLearnmoreTag, m_hasResults;
 public:
-    PersonasDocHandler(){ m_bLearnmoreTag = false; }
+    PersonasDocHandler(){ m_isLearnmoreTag = false; m_hasResults = false; }
     std::vector<OUString> getLearnmoreURLs() { return m_vLearnmoreURLs; }
+    bool hasResults() { return m_hasResults; }
+
     // XDocumentHandler
     virtual void SAL_CALL startDocument()
         throw ( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
