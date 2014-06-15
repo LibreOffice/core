@@ -321,7 +321,7 @@ void ScDrawView::RecalcScale()
     if (nEndCol<20)
         nEndCol = 20;
     if (nEndRow<20)
-        nEndRow = 1000;
+        nEndRow = 20;
 
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev,aZoomX,aZoomY,nPPTX,nPPTY,
                             aScaleX,aScaleY );
