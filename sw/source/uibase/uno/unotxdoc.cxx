@@ -98,6 +98,7 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentChartDataProviderAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
@@ -2238,7 +2239,7 @@ void SwXTextDocument::updateLinks(  ) throw(RuntimeException, std::exception)
     if(!IsValid())
         throw RuntimeException();
     SwDoc* pDoc = pDocShell->GetDoc();
-      sfx2::LinkManager& rLnkMan = pDoc->GetLinkManager();
+      sfx2::LinkManager& rLnkMan = pDoc->getIDocumentLinksAdministration().GetLinkManager();
     if( !rLnkMan.GetLinks().empty() )
     {
         UnoActionContext aAction(pDoc);

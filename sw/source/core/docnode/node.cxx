@@ -61,6 +61,7 @@
 #include <istyleaccess.hxx>
 #include <IDocumentListItems.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <switerator.hxx>
 #include "ndole.hxx"
 
@@ -1927,8 +1928,8 @@ const IDocumentLineNumberAccess* SwNode::getIDocumentLineNumberAccess() const { 
 const IDocumentDrawModelAccess* SwNode::getIDocumentDrawModelAccess() const { return & GetDoc()->getIDocumentDrawModelAccess(); }
 const IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() const { return GetDoc(); }
 IDocumentLayoutAccess* SwNode::getIDocumentLayoutAccess() { return GetDoc(); }
-const IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() const { return GetDoc(); }
-IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return GetDoc(); }
+const IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() const { return &GetDoc()->getIDocumentLinksAdministration(); }
+IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return &GetDoc()->getIDocumentLinksAdministration(); }
 const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return GetDoc(); }
 IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }

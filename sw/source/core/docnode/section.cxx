@@ -33,6 +33,7 @@
 #include <fmtpdsc.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <DocumentLinksAdministrationManager.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmtool.hxx>
@@ -239,12 +240,12 @@ SwSection::~SwSection()
 
         if (CONTENT_SECTION != m_Data.GetType())
         {
-            pDoc->GetLinkManager().Remove( m_RefLink );
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink );
         }
 
         if (m_RefObj.Is())
         {
-            pDoc->GetLinkManager().RemoveServer( &m_RefObj );
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( &m_RefObj );
         }
 
         // If the Section is the last Client in the Format we can delete it
@@ -593,7 +594,7 @@ void SwSection::SetLinkFileName(const OUString& rNew, OUString const*const pPass
 void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 {
     const SwNode* pNd;
-    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
+    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
     for( sal_uInt16 n = rLnks.size(); n; )
     {
         ::sfx2::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
@@ -1094,7 +1095,7 @@ static void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
         return;
     }
     const ::sfx2::SvBaseLink* pOwnLink( &(rSectNd.GetSection().GetBaseLink() ) );
-    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
+    const ::sfx2::SvBaseLinks& rLnks = rSectNd.GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
     for ( sal_uInt16 n = rLnks.size(); n > 0; )
     {
         SwIntrnlSectRefLink* pSectLnk = dynamic_cast<SwIntrnlSectRefLink*>(&(*rLnks[ --n ]));
@@ -1127,7 +1128,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     uno::Any aValue;
     aValue <<= sName; // Arbitrary name
 
-    const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
+    const ::sfx2::SvBaseLinks& rLnks = pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
     for( sal_uInt16 n = rLnks.size(); n; )
     {
         ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
@@ -1139,7 +1140,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         {
             // It's in the Section, so update. But only if it's not in the same File!
             OUString sFName;
-            pDoc->GetLinkManager().GetDisplayNames( pBLink, 0, &sFName, 0, 0 );
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().GetDisplayNames( pBLink, 0, &sFName, 0, 0 );
             if( sFName != sName )
             {
                 pBLink->DataChanged( sMimeType, aValue );
@@ -1180,13 +1181,13 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     pDoc->SetModified();
     // set additional flag that links have been updated, in order to check this
     // during load.
-    pDoc->SetLinksUpdated( true );
+    pDoc->getIDocumentLinksAdministration().SetLinksUpdated( true );
 
     // Always switch off Undo
     bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     pDoc->GetIDocumentUndoRedo().DoUndo(false);
-    bool bWasVisibleLinks = pDoc->IsVisibleLinks();
-    pDoc->SetVisibleLinks( false );
+    bool bWasVisibleLinks = pDoc->getIDocumentLinksAdministration().IsVisibleLinks();
+    pDoc->getIDocumentLinksAdministration().SetVisibleLinks( false );
 
     SwPaM* pPam;
     SwViewShell* pVSh = 0;
@@ -1241,7 +1242,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 break;
             OUString sFilter;
             OUString sRange;
-            pDoc->GetLinkManager().GetDisplayNames( this, 0, &sFileName,
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().GetDisplayNames( this, 0, &sFileName,
                                                     &sRange, &sFilter );
 
             RedlineMode_t eOldRedlineMode = nsRedlineMode_t::REDLINE_NONE;
@@ -1292,7 +1293,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                     if( pSrcDoc == pDoc )
                     {
                         tools::SvRef<SwServerObject> refObj( (SwServerObject*)
-                                        pDoc->CreateLinkSource( sRange ));
+                                        pDoc->getIDocumentLinksAdministration().CreateLinkSource( sRange ));
                         if( refObj.Is() )
                         {
                             bRecursion = refObj->IsLinkInServer( this ) ||
@@ -1304,7 +1305,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
                     SwPaM* pCpyPam = 0;
                     if( !bRecursion &&
-                        pSrcDoc->SelectServerObj( sRange, pCpyPam, pCpyRg )
+                        pSrcDoc->GetDocumentLinksAdministrationManager().SelectServerObj( sRange, pCpyPam, pCpyRg )
                         && pCpyPam )
                     {
                         if( pSrcDoc != pDoc ||
@@ -1330,7 +1331,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 if ( pSrcDoc != pDoc &&
                      rSection.IsProtectFlag() )
                 {
-                    pSrcDoc->GetLinkManager().UpdateAllLinks( false, true, false, 0 );
+                    pSrcDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( false, true, false, 0 );
                 }
 
                 if( pCpyRg )
@@ -1414,7 +1415,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     // remove all undo actions and turn undo on again
     pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
     pDoc->GetIDocumentUndoRedo().DoUndo(bWasUndo);
-    pDoc->SetVisibleLinks( bWasVisibleLinks );
+    pDoc->getIDocumentLinksAdministration().SetVisibleLinks( bWasVisibleLinks );
 
     pDoc->UnlockExpFlds();
     if( !pDoc->IsExpFldsLocked() )
@@ -1491,7 +1492,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     }
     else
     {
-        pFmt->GetDoc()->GetLinkManager().Remove( m_RefLink );
+        pFmt->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink );
     }
 
     SwIntrnlSectRefLink *const pLnk =
@@ -1499,13 +1500,13 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
 
     const OUString sCmd(SwSectionData::CollapseWhiteSpaces(m_Data.GetLinkFileName()));
     pLnk->SetUpdateMode( nUpdateType );
-    pLnk->SetVisible( pFmt->GetDoc()->IsVisibleLinks() );
+    pLnk->SetVisible( pFmt->GetDoc()->getIDocumentLinksAdministration().IsVisibleLinks() );
 
     switch (m_Data.GetType())
     {
     case DDE_LINK_SECTION:
         pLnk->SetLinkSourceName( sCmd );
-        pFmt->GetDoc()->GetLinkManager().InsertDDELink( pLnk );
+        pFmt->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( pLnk );
         break;
     case FILE_LINK_SECTION:
         {
@@ -1514,7 +1515,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
             const OUString sFile(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
             const OUString sFltr(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
             const OUString sRange(sCmd.getToken( 0, sfx2::cTokenSeparator, nIndex ));
-            pFmt->GetDoc()->GetLinkManager().InsertFileLink( *pLnk,
+            pFmt->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *pLnk,
                                 static_cast<sal_uInt16>(m_Data.GetType()),
                                 sFile,
                                 ( !sFltr.isEmpty() ? &sFltr : 0 ),
@@ -1556,7 +1557,7 @@ void SwSection::BreakLink()
         OSL_ENSURE(pFormat, "SwSection::BreakLink: no format?");
         if (pFormat)
         {
-            pFormat->GetDoc()->GetLinkManager().Remove( m_RefLink );
+            pFormat->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink );
         }
         m_RefLink.Clear();
     }

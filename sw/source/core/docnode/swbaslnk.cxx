@@ -35,6 +35,7 @@
 #include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
 #include <swtable.hxx>
@@ -228,7 +229,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             // Notify all who are listening at the same link
             bInNotifyLinks = true;
 
-            const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
+            const ::sfx2::SvBaseLinks& rLnks = pDoc->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
             for( sal_uInt16 n = rLnks.size(); n; )
             {
                 ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);

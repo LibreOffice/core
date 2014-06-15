@@ -79,6 +79,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
@@ -426,7 +427,7 @@ SwHTMLParser::~SwHTMLParser()
         sal_uInt16 nLinkMode = pDoc->getIDocumentSettingAccess().getLinkUpdateMode( true );
         if( nLinkMode != NEVER && bAsync &&
             SFX_CREATE_MODE_INTERNAL!=pDoc->GetDocShell()->GetCreateMode() )
-            pDoc->GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL,
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL,
                                                    true, false );
 
         if ( pDoc->GetDocShell()->IsLoading() )

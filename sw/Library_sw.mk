@@ -166,7 +166,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/docchart \
     sw/source/core/doc/doccomp \
     sw/source/core/doc/doccorr \
-    sw/source/core/doc/docdde \
     sw/source/core/doc/docdesc \
     sw/source/core/doc/docdraw \
     sw/source/core/doc/docedt \
@@ -190,6 +189,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/doc/DocumentDrawModelManager \
     sw/source/core/doc/DocumentChartDataProviderManager \
     sw/source/core/doc/DocumentTimerManager \
+    sw/source/core/doc/DocumentLinksAdministrationManager \
     sw/source/core/doc/extinput \
     sw/source/core/doc/fmtcol \
     sw/source/core/doc/ftnidx \

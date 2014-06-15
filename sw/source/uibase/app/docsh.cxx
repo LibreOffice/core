@@ -70,6 +70,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <docstat.hxx>
@@ -1038,7 +1039,7 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         {
             //check if linked content or possibly hidden content is available
             //mpDoc->UpdateFlds( NULL, false );
-            sfx2::LinkManager& rLnkMgr = mpDoc->GetLinkManager();
+            sfx2::LinkManager& rLnkMgr = mpDoc->getIDocumentLinksAdministration().GetLinkManager();
             const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
             bool bRet = false;
             if( !rLnks.empty() )
@@ -1103,7 +1104,11 @@ void SwDocShell::LoadingFinished()
     // enables the document modification again.
     // Thus, manuell modify the document, if its modified and its links are updated
     // before <FinishedLoading(..)> is called.
+<<<<<<< HEAD
     const bool bHasDocToStayModified( mpDoc->IsModified() && mpDoc->LinksUpdated() );
+=======
+    const bool bHasDocToStayModified( pDoc->IsModified() && pDoc->getIDocumentLinksAdministration().LinksUpdated() );
+>>>>>>> Refactored IDocumentLinksAdministration out of SwDoc.
 
     FinishedLoading( SFX_LOADED_ALL );
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
@@ -1126,7 +1131,11 @@ void SwDocShell::CancelTransfers()
 {
     // Cancel all links from LinkManager
     aFinishedTimer.Stop();
+<<<<<<< HEAD
     mpDoc->GetLinkManager().CancelTransfers();
+=======
+    pDoc->getIDocumentLinksAdministration().GetLinkManager().CancelTransfers();
+>>>>>>> Refactored IDocumentLinksAdministration out of SwDoc.
     SfxObjectShell::CancelTransfers();
 }
 
@@ -1182,7 +1191,7 @@ void SwDocShell::CalcLayoutForOLEObjects()
 // read by the binary filter:
 void SwDocShell::UpdateLinks()
 {
-    GetDoc()->UpdateLinks(true);
+    GetDoc()->getIDocumentLinksAdministration().UpdateLinks(true);
     // #i50703# Update footnote numbers
     SwTxtFtn::SetUniqueSeqRefNo( *GetDoc() );
     SwNodeIndex aTmp( GetDoc()->GetNodes() );

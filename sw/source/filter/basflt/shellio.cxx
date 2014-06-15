@@ -39,6 +39,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
 #include <undobj.hxx>
@@ -357,7 +358,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         // #i42634# Moved common code of SwReader::Read() and
         // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     // ATM still with Update
-        pDoc->UpdateLinks( true );
+        pDoc->getIDocumentLinksAdministration().UpdateLinks( true );
 
         // not insert: set the redline mode read from settings.xml
         eOld = static_cast<RedlineMode_t>(
@@ -375,7 +376,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     // have to be modified. During update of links the OLE link at the document
     // isn't set. Thus, the document's modified state has to be set again after
     // the OLE link is restored - see above <pDoc->SetOle2Link( aOLELink )>.
-    if ( pDoc->LinksUpdated() )
+    if ( pDoc->getIDocumentLinksAdministration().LinksUpdated() )
     {
         pDoc->SetModified();
     }
@@ -888,7 +889,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         {
             rDoc.ResetModified();
             // #i38810# - reset also flag, that indicates updated links
-            rDoc.SetLinksUpdated( false );
+            rDoc.getIDocumentLinksAdministration().SetLinksUpdated( false );
         }
     }
 

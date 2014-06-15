@@ -20,6 +20,7 @@
 #include <osl/thread.h>
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <editsh.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
@@ -240,7 +241,7 @@ SwDDEFieldType::SwDDEFieldType(const OUString& rName,
 SwDDEFieldType::~SwDDEFieldType()
 {
     if( pDoc && !pDoc->IsInDtor() )
-        pDoc->GetLinkManager().Remove( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
     refLink->Disconnect();
 }
 
@@ -283,14 +284,14 @@ void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
     if( pDoc && refLink.Is() )
     {
         OSL_ENSURE( !nRefCnt, "How do we get the references?" );
-        pDoc->GetLinkManager().Remove( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
     }
 
     pDoc = pNewDoc;
     if( pDoc && nRefCnt )
     {
-        refLink->SetVisible( pDoc->IsVisibleLinks() );
-        pDoc->GetLinkManager().InsertDDELink( refLink );
+        refLink->SetVisible( pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink );
     }
 }
 
@@ -298,15 +299,15 @@ void SwDDEFieldType::_RefCntChgd()
 {
     if( nRefCnt )
     {
-        refLink->SetVisible( pDoc->IsVisibleLinks() );
-        pDoc->GetLinkManager().InsertDDELink( refLink );
+        refLink->SetVisible( pDoc->getIDocumentLinksAdministration().IsVisibleLinks() );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertDDELink( refLink );
         if( pDoc->GetCurrentViewShell() )
             UpdateNow();
     }
     else
     {
         Disconnect();
-        pDoc->GetLinkManager().Remove( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
     }
 }
 

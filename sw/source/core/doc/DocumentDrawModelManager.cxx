@@ -23,6 +23,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <docsh.hxx>
 #include <swtypes.hxx>
 #include <swhints.hxx>
@@ -140,7 +141,7 @@ void DocumentDrawModelManager::InitDrawModel()
 
     // Set the LinkManager in the model so that linked graphics can be inserted.
     // The WinWord import needs it too.
-    mpDrawModel->SetLinkManager( & m_rSwdoc.GetLinkManager() );
+    mpDrawModel->SetLinkManager( & m_rSwdoc.getIDocumentLinksAdministration().GetLinkManager() );
     mpDrawModel->SetAddExtLeading( m_rSwdoc.getIDocumentSettingAccess().get(IDocumentSettingAccess::ADD_EXT_LEADING) );
 
     OutputDevice* pRefDev = m_rSwdoc.getIDocumentDeviceAccess().getReferenceDevice( false );

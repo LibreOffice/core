@@ -76,6 +76,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDeviceAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
 #include <pview.hxx>
@@ -826,7 +827,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             if(mpWrtShell)
                 mpWrtShell->StartAllAction();
             mpDoc->UpdateFlds( NULL, false );
-            mpDoc->EmbedAllLinks();
+            mpDoc->getIDocumentLinksAdministration().EmbedAllLinks();
             mpDoc->RemoveInvisibleContent();
             if(mpWrtShell)
                 mpWrtShell->EndAllAction();
@@ -1164,24 +1165,24 @@ void lcl_processCompatibleSfxHint( const uno::Reference< document::XVbaEventsHel
 bool SwDocShell::DdeGetData( const OUString& rItem, const OUString& rMimeType,
                              uno::Any & rValue )
 {
-    return mpDoc->GetData( rItem, rMimeType, rValue );
+    return mpDoc->getIDocumentLinksAdministration().GetData( rItem, rMimeType, rValue );
 }
 
 bool SwDocShell::DdeSetData( const OUString& rItem, const OUString& rMimeType,
                              const uno::Any & rValue )
 {
-    return mpDoc->SetData( rItem, rMimeType, rValue );
+    return mpDoc->getIDocumentLinksAdministration().SetData( rItem, rMimeType, rValue );
 }
 
 ::sfx2::SvLinkSource* SwDocShell::DdeCreateLinkSource( const OUString& rItem )
 {
-    return mpDoc->CreateLinkSource( rItem );
+    return mpDoc->getIDocumentLinksAdministration().CreateLinkSource( rItem );
 }
 
 void SwDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 {
     if ( mpDoc ) {
-        ::sfx2::LinkManager& rLinkManager = mpDoc->GetLinkManager();
+        ::sfx2::LinkManager& rLinkManager = mpDoc->getIDocumentLinksAdministration().GetLinkManager();
         rLinkManager.ReconnectDdeLink(rServer);
     }
 }

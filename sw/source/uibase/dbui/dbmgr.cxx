@@ -78,6 +78,7 @@
 #include <dbmgr.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <swwait.hxx>
 #include <swunohelper.hxx>
 #include <dbui.hrc>
@@ -2825,7 +2826,7 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 SwDoc* pWorkDoc = rWorkShell.GetDoc();
                 SwDBManager* pWorkDBManager = pWorkDoc->GetDBManager();
                 pWorkDoc->SetDBManager( this );
-                pWorkDoc->EmbedAllLinks();
+                pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
                 SwUndoId nLastUndoId(UNDO_EMPTY);
                 if (rWorkShell.GetLastUndoInfo(0, & nLastUndoId))
                 {

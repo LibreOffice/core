@@ -22,6 +22,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <pam.hxx>
@@ -476,7 +477,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
         else if( CONTENT_SECTION == rNdSect.GetType() && rNdSect.IsConnected() )
         {
             rNdSect.Disconnect();
-            rDoc.GetLinkManager().Remove( &rNdSect.GetBaseLink() );
+            rDoc.getIDocumentLinksAdministration().GetLinkManager().Remove( &rNdSect.GetBaseLink() );
         }
     }
 }

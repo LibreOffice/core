@@ -48,6 +48,7 @@
 #include <frmatr.hxx>
 #include <ndole.hxx>
 #include <DocumentSettingManager.hxx>
+#include <IDocumentLinksAdministration.hxx>
 
 #include <comphelper/classids.hxx>
 #include <vcl/graph.hxx>
@@ -516,7 +517,7 @@ bool SwOLENode::UpdateLinkURL_Impl()
     if ( mpObjectLink )
     {
         OUString aNewLinkURL;
-        GetDoc()->GetLinkManager().GetDisplayNames( mpObjectLink, 0, &aNewLinkURL, 0, 0 );
+        GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetDisplayNames( mpObjectLink, 0, &aNewLinkURL, 0, 0 );
         if ( !aNewLinkURL.equalsIgnoreAsciiCase( maLinkURL ) )
         {
             if ( !aOLEObj.xOLERef.is() )
@@ -586,7 +587,7 @@ void SwOLENode::DisconnectFileLink_Impl()
 {
     if ( mpObjectLink )
     {
-        GetDoc()->GetLinkManager().Remove( mpObjectLink );
+        GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( mpObjectLink );
         mpObjectLink = NULL;
     }
 }
@@ -606,7 +607,7 @@ void SwOLENode::CheckFileLink_Impl()
                     // this is a file link so the model link manager should handle it
                     mpObjectLink = new SwEmbedObjectLink( this );
                     maLinkURL = aLinkURL;
-                    GetDoc()->GetLinkManager().InsertFileLink( *mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL, NULL, NULL );
+                    GetDoc()->getIDocumentLinksAdministration().GetLinkManager().InsertFileLink( *mpObjectLink, OBJECT_CLIENT_OLE, aLinkURL, NULL, NULL );
                     mpObjectLink->Connect();
                 }
             }

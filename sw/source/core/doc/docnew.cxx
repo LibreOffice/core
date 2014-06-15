@@ -92,6 +92,7 @@
 #include <DocumentDrawModelManager.hxx>
 #include <DocumentChartDataProviderManager.hxx>
 #include <DocumentTimerManager.hxx>
+#include <DocumentLinksAdministrationManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -200,6 +201,7 @@ SwDoc::SwDoc()
     m_pDocumentChartDataProviderManager( new sw::DocumentChartDataProviderManager( *this ) ),
     m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
     m_pDocumentTimerManager( new ::sw::DocumentTimerManager( *this ) ),
+    m_pDocumentLinksAdministrationManager( new ::sw::DocumentLinksAdministrationManager( *this ) ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -226,7 +228,6 @@ SwDoc::SwDoc()
     mpFtnIdxs( new SwFtnIdxs ),
     mpDocStat( new SwDocStat ),
     mpDocShell( 0 ),
-    mpLinkMgr( new sfx2::LinkManager( 0 ) ),
     mpACEWord( 0 ),
     mpURLStateChgd( 0 ),
     mpNumberFormatter( 0 ),
@@ -259,7 +260,6 @@ SwDoc::SwDoc()
     mbNewDoc(false),
     mbNewFldLst(true),
     mbCopyIsMove(false),
-    mbVisibleLinks(true),
     mbInReading(false),
     mbInXMLImport(false),
     mbUpdateTOX(false),
@@ -272,7 +272,6 @@ SwDoc::SwDoc()
     mbInsOnlyTxtGlssry(false),
     mbContains_MSVBasic(false),
     mbReadlineChecked(false),
-    mbLinksUpdated( false ), //#i38810#
     mbClipBoard( false ),
     mbColumnSelection( false ),
     mbIsPrepareSelAll(false),
@@ -483,13 +482,13 @@ SwDoc::~SwDoc()
 
     // Release the BaseLinks
     {
-       ::sfx2::SvLinkSources aTemp(mpLinkMgr->GetServers());
+       ::sfx2::SvLinkSources aTemp(getIDocumentLinksAdministration().GetLinkManager().GetServers());
        for( ::sfx2::SvLinkSources::const_iterator it = aTemp.begin();
             it != aTemp.end(); ++it )
             (*it)->Closed();
 
-        if( !mpLinkMgr->GetLinks().empty() )
-            mpLinkMgr->Remove( 0, mpLinkMgr->GetLinks().size() );
+        if( !getIDocumentLinksAdministration().GetLinkManager().GetLinks().empty() )
+            getIDocumentLinksAdministration().GetLinkManager().Remove( 0, getIDocumentLinksAdministration().GetLinkManager().GetLinks().size() );
     }
 
     // The ChapterNumbers/Numbers need to be deleted before the styles
@@ -604,7 +603,7 @@ SwDoc::~SwDoc()
     GetDocumentDrawModelManager().ReleaseDrawModel();
     // Destroy DrawModel before the LinkManager, because it's always set
     // in the DrawModel.
-    DELETEZ( mpLinkMgr );
+    //The LinkManager gets destroyed automatically with m_pLinksAdministrationManager
 
     // Clear the Tables before deleting the defaults, or we crash due to
     // dependencies on defaults.
@@ -665,7 +664,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
             mpDocShell->SetUndoManager(& GetUndoManager());
         }
 
-        mpLinkMgr->SetPersist( mpDocShell );
+        getIDocumentLinksAdministration().GetLinkManager().SetPersist( mpDocShell );
 
         // set DocShell pointer also on DrawModel
         InitDrawModelAndDocShell(mpDocShell, GetDocumentDrawModelManager().GetDrawModel());
@@ -680,14 +679,14 @@ uno::Reference < embed::XStorage > SwDoc::GetDocStorage()
 {
     if( mpDocShell )
         return mpDocShell->GetStorage();
-    if( mpLinkMgr->GetPersist() )
-        return mpLinkMgr->GetPersist()->GetStorage();
+    if( getIDocumentLinksAdministration().GetLinkManager().GetPersist() )
+        return getIDocumentLinksAdministration().GetLinkManager().GetPersist()->GetStorage();
     return NULL;
 }
 
 SfxObjectShell* SwDoc::GetPersist() const
 {
-    return mpDocShell ? mpDocShell : mpLinkMgr->GetPersist();
+    return mpDocShell ? mpDocShell : getIDocumentLinksAdministration().GetLinkManager().GetPersist();
 }
 
 void SwDoc::ClearDoc()
@@ -858,50 +857,6 @@ IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
     if( !pDoc || pDoc->IsInDtor() )
         return 0;
     return pDoc->getGrammarContact();
-}
-
-// #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
-// to new SwDoc::UpdateLinks():
-void SwDoc::UpdateLinks( bool bUI )
-{
-    SfxObjectCreateMode eMode;
-    sal_uInt16 nLinkMode = GetDocumentSettingManager().getLinkUpdateMode( true );
-    if ( GetDocShell()) {
-        sal_uInt16 nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
-        if( (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
-            !GetLinkManager().GetLinks().empty() &&
-            SFX_CREATE_MODE_INTERNAL !=
-                        ( eMode = GetDocShell()->GetCreateMode()) &&
-            SFX_CREATE_MODE_ORGANIZER != eMode &&
-            SFX_CREATE_MODE_PREVIEW != eMode &&
-            !GetDocShell()->IsPreview() )
-        {
-            SwViewShell* pVSh = 0;
-            bool bAskUpdate = nLinkMode == MANUAL;
-            bool bUpdate = true;
-            switch(nUpdateDocMode)
-            {
-                case document::UpdateDocMode::NO_UPDATE:   bUpdate = false;break;
-                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
-                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
-            }
-            if( bUpdate && (bUI || !bAskUpdate) )
-            {
-                SfxMedium* pMedium = GetDocShell()->GetMedium();
-                SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
-                Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
-                if( GetCurrentViewShell() && !GetEditShell( &pVSh ) && !pVSh )
-                {
-                    SwViewShell aVSh( *this, 0, 0 );
-
-                    SET_CURR_SHELL( &aVSh );
-                    GetLinkManager().UpdateAllLinks( bAskUpdate , true, false, pDlgParent );
-                }
-                else
-                    GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
-            }
-        }
-    }
 }
 
 ::sfx2::IXmlIdRegistry&

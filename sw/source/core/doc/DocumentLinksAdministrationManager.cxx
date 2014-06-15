@@ -17,36 +17,77 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdlib.h>
+#include <DocumentLinksAdministrationManager.hxx>
 
-#include <vcl/svapp.hxx>
-#include <tools/urlobj.hxx>
-
-#include <sfx2/linkmgr.hxx>
-#include <unotools/charclass.hxx>
-#include <fmtcntnt.hxx>
 #include <doc.hxx>
-#include <swserv.hxx>
-#include <IMark.hxx>
+#include <DocumentSettingManager.hxx>
+#include <IDocumentUndoRedo.hxx>
+#include <sfx2/objsh.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/frame.hxx>
+#include <linkenum.hxx>
+#include <com/sun/star/document/UpdateDocMode.hpp>
+#include <swtypes.hxx>
+#include <viewsh.hxx>
+#include <docsh.hxx>
 #include <bookmrk.hxx>
+#include <swserv.hxx>
+#include <swbaslnk.hxx>
 #include <section.hxx>
-#include <swtable.hxx>
-#include <node.hxx>
-#include <ndtxt.hxx>
-#include <pam.hxx>
 #include <docary.hxx>
-#include <MarkManager.hxx>
+#include <frmfmt.hxx>
+#include <fmtcntnt.hxx>
+#include <swtable.hxx>
+#include <ndtxt.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/charclass.hxx>
+//#include <rtl/string.h>
 #include <boost/foreach.hpp>
+
 
 using namespace ::com::sun::star;
 
+//Helper functions for this file
 namespace
 {
+    struct _FindItem
+    {
+        const OUString m_Item;
+        SwTableNode* pTblNd;
+        SwSectionNode* pSectNd;
 
-    static ::sw::mark::DdeBookmark* lcl_FindDdeBookmark(
-        const IDocumentMarkAccess& rMarkAccess,
-        const OUString& rName,
-        const bool bCaseSensitive )
+        _FindItem(const OUString& rS)
+            : m_Item(rS), pTblNd(0), pSectNd(0)
+        {}
+     };
+
+    ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
+    {
+        for( sal_uInt16 n = 0; n < rLinks.size(); ++n )
+        {
+            ::sfx2::SvBaseLink* pLnk = &(*rLinks[ n ]);
+            if( pLnk &&
+                ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
+                  OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
+                pLnk->ISA( SwBaseLink ) )
+            {
+                    ::sfx2::SvBaseLinkRef xLink = pLnk;
+
+                    OUString sFName;
+                    rLnkMgr.GetDisplayNames( xLink, 0, &sFName, 0, 0 );
+
+                    INetURLObject aURL( sFName );
+                    if( INET_PROT_FILE == aURL.GetProtocol() ||
+                        INET_PROT_CID == aURL.GetProtocol() )
+                        return pLnk;
+            }
+        }
+        return 0;
+    }
+
+
+    ::sw::mark::DdeBookmark* lcl_FindDdeBookmark( const IDocumentMarkAccess& rMarkAccess, const OUString& rName, const bool bCaseSensitive )
     {
         //Iterating over all bookmarks, checking DdeBookmarks
         const OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lowercase(rName);
@@ -70,86 +111,152 @@ namespace
         }
         return NULL;
     }
-}
 
-struct _FindItem
-{
-    const OUString m_Item;
-    SwTableNode* pTblNd;
-    SwSectionNode* pSectNd;
 
-    _FindItem(const OUString& rS)
-        : m_Item(rS), pTblNd(0), pSectNd(0)
-    {}
-};
-
-static bool lcl_FindSection( const SwSectionFmt* pSectFmt, _FindItem * const pItem, bool bCaseSensitive )
-{
-    SwSection* pSect = pSectFmt->GetSection();
-    if( pSect )
+    bool lcl_FindSection( const SwSectionFmt* pSectFmt, _FindItem * const pItem, bool bCaseSensitive )
     {
-        OUString sNm( (bCaseSensitive)
-                ? pSect->GetSectionName()
-                : GetAppCharClass().lowercase( pSect->GetSectionName() ));
-        OUString sCompare( (bCaseSensitive)
-                ? pItem->m_Item
-                : GetAppCharClass().lowercase( pItem->m_Item ) );
-        if( sNm == sCompare )
+        SwSection* pSect = pSectFmt->GetSection();
+        if( pSect )
         {
-            // found, so get the data
-            const SwNodeIndex* pIdx;
-            if( 0 != (pIdx = pSectFmt->GetCntnt().GetCntntIdx() ) &&
-                &pSectFmt->GetDoc()->GetNodes() == &pIdx->GetNodes() )
+            OUString sNm( (bCaseSensitive)
+                    ? pSect->GetSectionName()
+                    : GetAppCharClass().lowercase( pSect->GetSectionName() ));
+            OUString sCompare( (bCaseSensitive)
+                    ? pItem->m_Item
+                    : GetAppCharClass().lowercase( pItem->m_Item ) );
+            if( sNm == sCompare )
+            {
+                // found, so get the data
+                const SwNodeIndex* pIdx;
+                if( 0 != (pIdx = pSectFmt->GetCntnt().GetCntntIdx() ) &&
+                    &pSectFmt->GetDoc()->GetNodes() == &pIdx->GetNodes() )
+                {
+                    // a table in the normal NodesArr
+                    pItem->pSectNd = pIdx->GetNode().GetSectionNode();
+                    return false;
+                }
+                // If the name is already correct, but not the rest then we don't have them.
+                // The names are always unique.
+            }
+        }
+        return true;
+    }
+
+    bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
+    {
+        OUString sNm( GetAppCharClass().lowercase( pTableFmt->GetName() ));
+        if ( sNm == pItem->m_Item )
+        {
+            SwTable* pTmpTbl;
+            SwTableBox* pFBox;
+            if( 0 != ( pTmpTbl = SwTable::FindTable( pTableFmt ) ) &&
+                0 != ( pFBox = pTmpTbl->GetTabSortBoxes()[0] ) &&
+                pFBox->GetSttNd() &&
+                &pTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
             {
                 // a table in the normal NodesArr
-                pItem->pSectNd = pIdx->GetNode().GetSectionNode();
+                pItem->pTblNd = (SwTableNode*)
+                                            pFBox->GetSttNd()->FindTableNode();
                 return false;
             }
             // If the name is already correct, but not the rest then we don't have them.
             // The names are always unique.
         }
+        return true;
     }
-    return true;
+
 }
 
-static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
+
+namespace sw
 {
-    OUString sNm( GetAppCharClass().lowercase( pTableFmt->GetName() ));
-    if ( sNm == pItem->m_Item )
-    {
-        SwTable* pTmpTbl;
-        SwTableBox* pFBox;
-        if( 0 != ( pTmpTbl = SwTable::FindTable( pTableFmt ) ) &&
-            0 != ( pFBox = pTmpTbl->GetTabSortBoxes()[0] ) &&
-            pFBox->GetSttNd() &&
-            &pTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
-        {
-            // a table in the normal NodesArr
-            pItem->pTblNd = (SwTableNode*)
-                                        pFBox->GetSttNd()->FindTableNode();
-            return false;
-        }
-        // If the name is already correct, but not the rest then we don't have them.
-        // The names are always unique.
-    }
-    return true;
+
+DocumentLinksAdministrationManager::DocumentLinksAdministrationManager( SwDoc& i_rSwdoc ) : mbVisibleLinks(true),
+                                                                                            mbLinksUpdated( false ), //#i38810#
+                                                                                            mpLinkMgr( new sfx2::LinkManager( 0 ) ),
+                                                                                            m_rSwdoc( i_rSwdoc )
+{
 }
 
-bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
+bool DocumentLinksAdministrationManager::IsVisibleLinks() const
+{
+    return mbVisibleLinks;
+}
+
+void DocumentLinksAdministrationManager::SetVisibleLinks(bool bFlag)
+{
+    mbVisibleLinks = bFlag;
+}
+
+sfx2::LinkManager& DocumentLinksAdministrationManager::GetLinkManager()
+{
+    return *mpLinkMgr;
+}
+
+const sfx2::LinkManager& DocumentLinksAdministrationManager::GetLinkManager() const
+{
+    return *mpLinkMgr;
+}
+
+// #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
+// to new SwDoc::UpdateLinks():
+void DocumentLinksAdministrationManager::UpdateLinks( bool bUI )
+{
+    SfxObjectCreateMode eMode;
+    sal_uInt16 nLinkMode = m_rSwdoc.GetDocumentSettingManager().getLinkUpdateMode( true );
+    if ( m_rSwdoc.GetDocShell()) {
+        sal_uInt16 nUpdateDocMode = m_rSwdoc.GetDocShell()->GetUpdateDocMode();
+        if( (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
+            !GetLinkManager().GetLinks().empty() &&
+            SFX_CREATE_MODE_INTERNAL !=
+                        ( eMode = m_rSwdoc.GetDocShell()->GetCreateMode()) &&
+            SFX_CREATE_MODE_ORGANIZER != eMode &&
+            SFX_CREATE_MODE_PREVIEW != eMode &&
+            !m_rSwdoc.GetDocShell()->IsPreview() )
+        {
+            SwViewShell* pVSh = 0;
+            bool bAskUpdate = nLinkMode == MANUAL;
+            bool bUpdate = true;
+            switch(nUpdateDocMode)
+            {
+                case document::UpdateDocMode::NO_UPDATE:   bUpdate = false;break;
+                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
+                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
+            }
+            if( bUpdate && (bUI || !bAskUpdate) )
+            {
+                SfxMedium* pMedium = m_rSwdoc.GetDocShell()->GetMedium();
+                SfxFrame* pFrm = pMedium ? pMedium->GetLoadTargetFrame() : 0;
+                Window* pDlgParent = pFrm ? &pFrm->GetWindow() : 0;
+                if( m_rSwdoc.GetCurrentViewShell() && !m_rSwdoc.GetEditShell( &pVSh ) && !pVSh )
+                {
+                    SwViewShell aVSh( m_rSwdoc, 0, 0 );
+
+                    SET_CURR_SHELL( &aVSh );
+                    GetLinkManager().UpdateAllLinks( bAskUpdate , true, false, pDlgParent );
+                }
+                else
+                    GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
+            }
+        }
+    }
+}
+
+bool DocumentLinksAdministrationManager::GetData( const OUString& rItem, const OUString& rMimeType,
                      uno::Any & rValue ) const
 {
     // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
-        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*mpMarkManager, rItem, bCaseSensitive);
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*m_rSwdoc.getIDocumentMarkAccess(), rItem, bCaseSensitive);
         if(pBkmk)
             return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
 
         // Do we already have the Item?
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
+        BOOST_FOREACH( const SwSectionFmt* pFmt, m_rSwdoc.GetSections() )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                 break;
@@ -165,7 +272,7 @@ bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
     }
 
     _FindItem aPara( GetAppCharClass().lowercase( rItem ));
-    BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
+    BOOST_FOREACH( const SwFrmFmt* pFmt, *m_rSwdoc.GetTblFrmFmts() )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
@@ -178,21 +285,21 @@ bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
     return false;
 }
 
-bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
+bool DocumentLinksAdministrationManager::SetData( const OUString& rItem, const OUString& rMimeType,
                      const uno::Any & rValue )
 {
     // search for bookmarks and sections case sensitive at first. If nothing is found then try again case insensitive
     bool bCaseSensitive = true;
     while( true )
     {
-        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*mpMarkManager, rItem, bCaseSensitive);
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*m_rSwdoc.getIDocumentMarkAccess(), rItem, bCaseSensitive);
         if(pBkmk)
             return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
 
         // Do we already have the Item?
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
-        BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
+        BOOST_FOREACH( const SwSectionFmt* pFmt, m_rSwdoc.GetSections() )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                 break;
@@ -209,7 +316,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
 
     OUString sItem(GetAppCharClass().lowercase(rItem));
     _FindItem aPara( sItem );
-    BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
+    BOOST_FOREACH( const SwFrmFmt* pFmt, *m_rSwdoc.GetTblFrmFmts() )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
@@ -222,7 +329,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
     return false;
 }
 
-::sfx2::SvLinkSource* SwDoc::CreateLinkSource(const OUString& rItem)
+::sfx2::SvLinkSource* DocumentLinksAdministrationManager::CreateLinkSource(const OUString& rItem)
 {
     SwServerObject* pObj = NULL;
 
@@ -231,7 +338,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
     while( true )
     {
         // bookmarks
-        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*mpMarkManager, rItem, bCaseSensitive);
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*m_rSwdoc.getIDocumentMarkAccess(), rItem, bCaseSensitive);
         if(pBkmk && pBkmk->IsExpanded()
             && (0 == (pObj = pBkmk->GetRefObject())))
         {
@@ -245,7 +352,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
 
         _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         // sections
-        BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
+        BOOST_FOREACH( const SwSectionFmt* pFmt, m_rSwdoc.GetSections() )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                 break;
@@ -268,7 +375,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
 
     _FindItem aPara( GetAppCharClass().lowercase(rItem) );
     // tables
-    BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
+    BOOST_FOREACH( const SwFrmFmt* pFmt, *m_rSwdoc.GetTblFrmFmts() )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
             break;
@@ -284,8 +391,52 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
     return pObj;
 }
 
-bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
-                            SwNodeRange*& rpRange ) const
+/// embedded all local links (Areas/Graphics)
+bool DocumentLinksAdministrationManager::EmbedAllLinks()
+{
+    bool bRet = false;
+    sfx2::LinkManager& rLnkMgr = GetLinkManager();
+    const ::sfx2::SvBaseLinks& rLinks = rLnkMgr.GetLinks();
+    if( !rLinks.empty() )
+    {
+        ::sw::UndoGuard const undoGuard(m_rSwdoc.GetIDocumentUndoRedo());
+
+        ::sfx2::SvBaseLink* pLnk = 0;
+        while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks, rLnkMgr ) ) )
+        {
+            ::sfx2::SvBaseLinkRef xLink = pLnk;
+            // Tell the link that it's being destroyed!
+            xLink->Closed();
+
+            // if one forgot to remove itself
+            if( xLink.Is() )
+                rLnkMgr.Remove( xLink );
+
+            bRet = true;
+        }
+
+        m_rSwdoc.GetIDocumentUndoRedo().DelAllUndoObj();
+        m_rSwdoc.SetModified();
+    }
+    return bRet;
+}
+
+void DocumentLinksAdministrationManager::SetLinksUpdated(const bool bNewLinksUpdated)
+{
+    mbLinksUpdated = bNewLinksUpdated;
+}
+
+bool DocumentLinksAdministrationManager::LinksUpdated() const
+{
+    return mbLinksUpdated;
+}
+
+DocumentLinksAdministrationManager::~DocumentLinksAdministrationManager()
+{
+    DELETEZ( mpLinkMgr );
+}
+
+bool DocumentLinksAdministrationManager::SelectServerObj( const OUString& rStr, SwPaM*& rpPam, SwNodeRange*& rpRange ) const
 {
     // Do we actually have the Item?
     rpPam = 0;
@@ -313,7 +464,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
         if( sCmp == "table" )
         {
             sName = rCC.lowercase( sName );
-            BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
+            BOOST_FOREACH( const SwFrmFmt* pFmt, *m_rSwdoc.GetTblFrmFmts() )
             {
                 if (!(lcl_FindTable(pFmt, &aPara)))
                     break;
@@ -329,7 +480,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
         {
             SwNodeIndex* pIdx;
             SwNode* pNd;
-            const SwFlyFrmFmt* pFlyFmt = FindFlyByName( sName );
+            const SwFlyFrmFmt* pFlyFmt = m_rSwdoc.FindFlyByName( sName );
             if( pFlyFmt &&
                 0 != ( pIdx = (SwNodeIndex*)pFlyFmt->GetCntnt().GetCntntIdx() ) &&
                 !( pNd = &pIdx->GetNode())->IsNoTxtNode() )
@@ -345,13 +496,13 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
         }
         else if( sCmp == "outline" )
         {
-            SwPosition aPos( SwNodeIndex( (SwNodes&)GetNodes() ));
-            if( GotoOutline( aPos, sName ))
+            SwPosition aPos( SwNodeIndex( (SwNodes&)m_rSwdoc.GetNodes() ));
+            if( m_rSwdoc.GotoOutline( aPos, sName ))
             {
                 SwNode* pNd = &aPos.nNode.GetNode();
                 const int nLvl = pNd->GetTxtNode()->GetAttrOutlineLevel()-1;
 
-                const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
+                const SwOutlineNodes& rOutlNds = m_rSwdoc.GetNodes().GetOutLineNds();
                 sal_uInt16 nTmpPos;
                 rOutlNds.Seek_Entry( pNd, &nTmpPos );
                 rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
@@ -367,7 +518,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
                 if( nTmpPos < rOutlNds.size() )
                     rpRange->aEnd = *rOutlNds[ nTmpPos ];
                 else
-                    rpRange->aEnd = GetNodes().GetEndOfContent();
+                    rpRange->aEnd = m_rSwdoc.GetNodes().GetEndOfContent();
                 return true;
             }
         }
@@ -380,7 +531,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
     bool bCaseSensitive = true;
     while( true )
     {
-        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*mpMarkManager, sItem, bCaseSensitive);
+        ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*m_rSwdoc.getIDocumentMarkAccess(), sItem, bCaseSensitive);
         if(pBkmk)
         {
             if(pBkmk->IsExpanded())
@@ -392,9 +543,9 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
 
         _FindItem aPara( bCaseSensitive ? sItem : rCC.lowercase( sItem ) );
 
-        if( !mpSectionFmtTbl->empty() )
+        if( !m_rSwdoc.GetSections().empty() )
         {
-            BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
+            BOOST_FOREACH( const SwSectionFmt* pFmt, m_rSwdoc.GetSections() )
             {
                 if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
                     break;
@@ -413,5 +564,10 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
     }
     return false;
 }
+
+
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

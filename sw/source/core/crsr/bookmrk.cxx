@@ -20,6 +20,7 @@
 #include <bookmrk.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
@@ -229,7 +230,7 @@ namespace sw { namespace mark
     void DdeBookmark::DeregisterFromDoc(SwDoc* const pDoc)
     {
         if(m_aRefObj.Is())
-            pDoc->GetLinkManager().RemoveServer(m_aRefObj);
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer(m_aRefObj);
     }
 
     DdeBookmark::~DdeBookmark()

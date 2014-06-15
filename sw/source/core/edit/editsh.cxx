@@ -32,6 +32,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>
@@ -585,7 +586,7 @@ OUString SwEditShell::Calculate()
 
 sfx2::LinkManager& SwEditShell::GetLinkManager()
 {
-    return mpDoc->GetLinkManager();
+    return mpDoc->getIDocumentLinksAdministration().GetLinkManager();
 }
 
 void *SwEditShell::GetIMapInventor() const

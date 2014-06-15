@@ -28,6 +28,7 @@
 #include <fmtclds.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <rootfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -738,7 +739,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     else if( !pSection->IsLinkType() && pSection->IsConnected() )
     {
         pSection->Disconnect();
-        GetLinkManager().Remove( &pSection->GetBaseLink() );
+        getIDocumentLinksAdministration().GetLinkManager().Remove( &pSection->GetBaseLink() );
     }
 
     SetModified();
@@ -1283,7 +1284,7 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         && pDoc->GetIDocumentUndoRedo().IsUndoNodes(rNds))
     {
         pNewSect->SetRefObject( m_pSection->GetObject() );
-        pDoc->GetLinkManager().InsertServer( pNewSect->GetObject() );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertServer( pNewSect->GetObject() );
     }
 
     // METADATA: copy xml:id; must be done after insertion of node
@@ -1360,18 +1361,17 @@ void SwSectionNode::NodesArrChgd()
                 m_pSection->CreateLink( pDoc->GetCurrentViewShell() ? CREATE_CONNECT : CREATE_NONE );
 
             if (m_pSection->IsServer())
-                pDoc->GetLinkManager().InsertServer( m_pSection->GetObject() );
+                pDoc->getIDocumentLinksAdministration().GetLinkManager().InsertServer( m_pSection->GetObject() );
         }
         else
         {
             if (CONTENT_SECTION != m_pSection->GetType()
                 && m_pSection->IsConnected())
             {
-                pDoc->GetLinkManager().Remove( &m_pSection->GetBaseLink() );
+                pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( &m_pSection->GetBaseLink() );
             }
-
             if (m_pSection->IsServer())
-                pDoc->GetLinkManager().RemoveServer( m_pSection->GetObject() );
+                pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_pSection->GetObject() );
         }
     }
 }

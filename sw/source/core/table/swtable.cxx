@@ -34,6 +34,7 @@
 #include <fmtfld.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <docary.hxx>
 #include <frame.hxx>
 #include <swtable.hxx>
@@ -279,7 +280,7 @@ SwTable::~SwTable()
     {
         SwDoc* pDoc = GetFrmFmt()->GetDoc();
         if( !pDoc->IsInDtor() )         // then remove from the list
-            pDoc->GetLinkManager().RemoveServer( &refObj );
+            pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( &refObj );
 
         refObj->Closed();
     }

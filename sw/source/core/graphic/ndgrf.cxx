@@ -34,6 +34,7 @@
 #include <fmturl.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <frmatr.hxx>
 #include <grfatr.hxx>
 #include <swtypes.hxx>
@@ -186,7 +187,7 @@ bool SwGrfNode::ReRead(
         }
         else // no name anymore, so remove link
         {
-            GetDoc()->GetLinkManager().Remove( refLink );
+            GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
             refLink.Clear();
         }
 
@@ -322,7 +323,7 @@ SwGrfNode::~SwGrfNode()
     if( refLink.Is() )
     {
         OSL_ENSURE( !bInSwapIn, "DTOR: I am still in SwapIn" );
-        pDoc->GetLinkManager().Remove( refLink );
+        pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
         refLink->Disconnect();
     }
     else
@@ -668,7 +669,7 @@ bool SwGrfNode::SavePersistentData()
     if( refLink.Is() )
     {
         OSL_ENSURE( !bInSwapIn, "SavePersistentData: I am still in SwapIn" );
-        GetDoc()->GetLinkManager().Remove( refLink );
+        GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink );
         return true;
     }
 
@@ -1089,7 +1090,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
     if( pDoc )
     {
         // delete all Graphic-Links with this name from cache
-        const sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
+        const sfx2::LinkManager& rLnkMgr = pDoc->getIDocumentLinksAdministration().GetLinkManager();
         const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         SwGrfNode* pGrfNd;
         OUString sFileNm;

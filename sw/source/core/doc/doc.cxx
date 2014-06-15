@@ -23,6 +23,7 @@
 #include <DocumentTimerManager.hxx>
 #include <DocumentDeviceManager.hxx>
 #include <DocumentChartDataProviderManager.hxx>
+#include <DocumentLinksAdministrationManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
 #include <tools/shl.hxx>
@@ -279,6 +280,27 @@ IDocumentTimerAccess const & SwDoc::getIDocumentTimerAccess() const
 IDocumentTimerAccess & SwDoc::getIDocumentTimerAccess()
 {
     return *m_pDocumentTimerManager;
+}
+
+// IDocumentLinksAdministration
+IDocumentLinksAdministration const & SwDoc::getIDocumentLinksAdministration() const
+{
+    return *m_pDocumentLinksAdministrationManager;
+}
+
+IDocumentLinksAdministration & SwDoc::getIDocumentLinksAdministration()
+{
+    return *m_pDocumentLinksAdministrationManager;
+}
+
+::sw::DocumentLinksAdministrationManager const & SwDoc::GetDocumentLinksAdministrationManager() const
+{
+    return *m_pDocumentLinksAdministrationManager;
+}
+
+::sw::DocumentLinksAdministrationManager & SwDoc::GetDocumentLinksAdministrationManager()
+{
+    return *m_pDocumentLinksAdministrationManager;
 }
 
 
@@ -2029,90 +2051,6 @@ bool SwDoc::ConvertFieldsToText()
     UnlockExpFlds();
     return bRet;
 
-}
-
-bool SwDoc::IsVisibleLinks() const
-{
-    return mbVisibleLinks;
-}
-
-void SwDoc::SetVisibleLinks(bool bFlag)
-{
-    mbVisibleLinks = bFlag;
-}
-
-sfx2::LinkManager& SwDoc::GetLinkManager()
-{
-    return *mpLinkMgr;
-}
-
-const sfx2::LinkManager& SwDoc::GetLinkManager() const
-{
-    return *mpLinkMgr;
-}
-
-void SwDoc::SetLinksUpdated(const bool bNewLinksUpdated)
-{
-    mbLinksUpdated = bNewLinksUpdated;
-}
-
-bool SwDoc::LinksUpdated() const
-{
-    return mbLinksUpdated;
-}
-
-static ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
-{
-    for( sal_uInt16 n = 0; n < rLinks.size(); ++n )
-    {
-        ::sfx2::SvBaseLink* pLnk = &(*rLinks[ n ]);
-        if( pLnk &&
-            ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
-              OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
-            pLnk->ISA( SwBaseLink ) )
-        {
-                ::sfx2::SvBaseLinkRef xLink = pLnk;
-
-                OUString sFName;
-                rLnkMgr.GetDisplayNames( xLink, 0, &sFName, 0, 0 );
-
-                INetURLObject aURL( sFName );
-                if( INET_PROT_FILE == aURL.GetProtocol() ||
-                    INET_PROT_CID == aURL.GetProtocol() )
-                    return pLnk;
-        }
-    }
-    return 0;
-}
-
-/// embedded all local links (Areas/Graphics)
-bool SwDoc::EmbedAllLinks()
-{
-    bool bRet = false;
-    sfx2::LinkManager& rLnkMgr = GetLinkManager();
-    const ::sfx2::SvBaseLinks& rLinks = rLnkMgr.GetLinks();
-    if( !rLinks.empty() )
-    {
-        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-
-        ::sfx2::SvBaseLink* pLnk = 0;
-        while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks, rLnkMgr ) ) )
-        {
-            ::sfx2::SvBaseLinkRef xLink = pLnk;
-            // Tell the link that it's being destroyed!
-            xLink->Closed();
-
-            // if one forgot to remove itself
-            if( xLink.Is() )
-                rLnkMgr.Remove( xLink );
-
-            bRet = true;
-        }
-
-        GetIDocumentUndoRedo().DelAllUndoObj();
-        SetModified();
-    }
-    return bRet;
 }
 
 bool SwDoc::IsInsTblFormatNum() const

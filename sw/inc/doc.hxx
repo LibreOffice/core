@@ -23,7 +23,6 @@
 #include <IInterface.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentStylePoolAccess.hxx>
@@ -190,6 +189,12 @@ class SwRenderData;
 class SwPageFrm;
 class SwViewOption;
 class IDocumentUndoRedo;
+class IDocumentSettingAccess;
+class IDocumentDeviceAccess;
+class IDocumentDrawModelAccess;
+class IDocumentChartDataProviderAccess;
+class IDocumentTimerAccess;
+class IDocumentLinksAdministration;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -204,6 +209,7 @@ namespace sw {
     class DocumentDrawModelManager;
     class DocumentChartDataProviderManager;
     class DocumentTimerManager;
+    class DocumentLinksAdministrationManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -242,7 +248,6 @@ void StartGrammarChecking( SwDoc &rDoc );
 class SW_DLLPUBLIC SwDoc :
     public IInterface,
     public IDocumentRedlineAccess,
-    public IDocumentLinksAdministration,
     public IDocumentFieldsAccess,
     public IDocumentContentOperations,
     public IDocumentStylePoolAccess,
@@ -285,6 +290,7 @@ class SW_DLLPUBLIC SwDoc :
     const ::boost::scoped_ptr< ::sw::DocumentChartDataProviderManager > m_pDocumentChartDataProviderManager;
     ::boost::scoped_ptr< ::sw::DocumentDeviceManager > m_pDeviceAccess;
     const ::boost::scoped_ptr< ::sw::DocumentTimerManager > m_pDocumentTimerManager;
+    const ::boost::scoped_ptr< ::sw::DocumentLinksAdministrationManager > m_pDocumentLinksAdministrationManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -323,8 +329,6 @@ class SW_DLLPUBLIC SwDoc :
 
     SwDocShell      *mpDocShell;         //< Ptr to SfxDocShell of Doc.
     SfxObjectShellLock mxTmpDocShell;    //< A temporary shell that is used to copy OLE-Nodes
-
-    sfx2::LinkManager   *mpLinkMgr;      //< List of linked stuff (graphics/DDE/OLE).
 
     SwAutoCorrExceptWord *mpACEWord;     /**< For the automated takeover of
                                          auto-corrected words that are "re-corrected". */
@@ -405,7 +409,6 @@ private:
     bool mbNewDoc                : 1;    //< TRUE: new Doc.
     bool mbNewFldLst             : 1;    //< TRUE: Rebuild field-list.
     bool mbCopyIsMove            : 1;    //< TRUE: Copy is a hidden Move.
-    bool mbVisibleLinks          : 1;    //< TRUE: Links are inserted visibly.
     bool mbInReading             : 1;    //< TRUE: Document is in the process of being read.
     bool mbInXMLImport           : 1;    //< TRUE: During xml import, attribute portion building is not necessary.
     bool mbUpdateTOX             : 1;    //< TRUE: After loading document, update TOX.
@@ -420,8 +423,6 @@ private:
     bool mbInsOnlyTxtGlssry      : 1;    //< True: insert 'only text' glossary into doc
     bool mbContains_MSVBasic     : 1;    //< True: MS-VBasic exist is in our storage
     bool mbReadlineChecked       : 1;    //< sal_True: if the query was already shown
-    bool mbLinksUpdated          : 1;    /**< #i38810#
-                                          flag indicating, that the links have been updated. */
     bool mbClipBoard             : 1;    //< TRUE: this document represents the clipboard
     bool mbColumnSelection       : 1;    /**< TRUE: this content has bee created by a column selection
                                                 (clipboard docs only) */
@@ -610,17 +611,11 @@ public:
     IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
 
     // IDocumentLinksAdministration
-    virtual bool IsVisibleLinks() const SAL_OVERRIDE;
-    virtual void SetVisibleLinks(bool bFlag) SAL_OVERRIDE;
-    virtual sfx2::LinkManager& GetLinkManager() SAL_OVERRIDE;
-    virtual const sfx2::LinkManager& GetLinkManager() const SAL_OVERRIDE;
-    virtual void UpdateLinks(bool bUI) SAL_OVERRIDE;
-    virtual bool GetData(const OUString& rItem, const OUString& rMimeType, ::com::sun::star::uno::Any& rValue) const SAL_OVERRIDE;
-    virtual bool SetData(const OUString& rItem, const OUString& rMimeType, const ::com::sun::star::uno::Any& rValue) SAL_OVERRIDE;
-    virtual ::sfx2::SvLinkSource* CreateLinkSource(const OUString& rItem) SAL_OVERRIDE;
-    virtual bool EmbedAllLinks() SAL_OVERRIDE;
-    virtual void SetLinksUpdated(const bool bNewLinksUpdated) SAL_OVERRIDE;
-    virtual bool LinksUpdated() const SAL_OVERRIDE;
+    IDocumentLinksAdministration const & getIDocumentLinksAdministration() const;
+    IDocumentLinksAdministration & getIDocumentLinksAdministration();
+
+    ::sw::DocumentLinksAdministrationManager const & GetDocumentLinksAdministrationManager() const;
+    ::sw::DocumentLinksAdministrationManager & GetDocumentLinksAdministrationManager();
 
     // IDocumentFieldsAccess
     virtual const SwFldTypes *GetFldTypes() const SAL_OVERRIDE;

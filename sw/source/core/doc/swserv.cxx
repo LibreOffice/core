@@ -21,6 +21,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <com/sun/star/uno/Sequence.h>
 #include <doc.hxx>
+#include <IDocumentLinksAdministration.hxx>
 #include <swtypes.hxx>
 #include <swserv.hxx>
 #include <swbaslnk.hxx>
@@ -226,7 +227,7 @@ bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     if( nSttNd && nEndNd )
     {
         // Get LinkManager
-        const ::sfx2::SvBaseLinks& rLnks = pNds->GetDoc()->GetLinkManager().GetLinks();
+        const ::sfx2::SvBaseLinks& rLnks = pNds->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().GetLinks();
 
         // To avoid recursions: convert ServerType!
         SwServerObject::ServerModes eSave = eType;
@@ -303,7 +304,7 @@ SwDataChanged::~SwDataChanged()
     // JP 09.04.96: Only if the Layout is available (thus during input)
     if( pDoc->GetCurrentViewShell() )
     {
-        const ::sfx2::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
+        const ::sfx2::SvLinkSources& rServers = pDoc->getIDocumentLinksAdministration().GetLinkManager().GetServers();
 
         ::sfx2::SvLinkSources aTemp(rServers);
         for( ::sfx2::SvLinkSources::const_iterator it = aTemp.begin(); it != aTemp.end(); ++it )
@@ -323,7 +324,7 @@ SwDataChanged::~SwDataChanged()
             if( !refObj->HasDataLinks() )
             {
                 // Then remove from the list
-                pDoc->GetLinkManager().RemoveServer( *it );
+                pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( *it );
             }
         }
     }
