@@ -1,0 +1,11 @@
+--- libffi/include/ffi.h.in.orig	2014-06-15 18:34:58.144906593 +0200
++++ libffi/include/ffi.h.in	2014-06-15 18:35:11.287848950 +0200
+@@ -221,7 +221,7 @@ typedef struct {
+ #endif
+ } ffi_cif;
+ 
+-#if HAVE_LONG_DOUBLE_VARIANT
++#ifdef HAVE_LONG_DOUBLE_VARIANT
+ /* Used to adjust size/alignment of ffi types.  */
+ void ffi_prep_types (ffi_abi abi);
+ # endif
