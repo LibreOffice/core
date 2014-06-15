@@ -128,7 +128,6 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
 #include <rtl/strbuf.hxx>
-#include <svdoopengl.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3405,7 +3404,6 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
 #endif
             case sal_uInt16(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
-            case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
         }
     }
 

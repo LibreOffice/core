@@ -16,7 +16,6 @@
 
 SdrOpenGLObj::SdrOpenGLObj()
   : SdrObject(),
-    IOpenGLInfoProvider(),
     mpContext(NULL)
 {
 #if HAVE_FEATURE_DESKTOP
@@ -31,7 +30,7 @@ SdrOpenGLObj::~SdrOpenGLObj()
 
 sdr::contact::ViewContact* SdrOpenGLObj::CreateObjectSpecificViewContact()
 {
-    return new sdr::contact::ViewContactOfOpenGLObj(*this);
+    return NULL;
 }
 
 OpenGLContext* SdrOpenGLObj::getOpenGLContext()
@@ -53,17 +52,11 @@ void SdrOpenGLObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fra
 void SdrOpenGLObj::setRenderer(IOpenGLRenderer* pRenderer)
 {
     mpRenderer.reset(pRenderer);
-    mpRenderer->setInfoProvider(this);
 }
 
 IOpenGLRenderer* SdrOpenGLObj::getRenderer()
 {
     return mpRenderer.get();
-}
-
-bool SdrOpenGLObj::isOpenGLInitialized()
-{
-    return mpContext && mpContext->isInitialized();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
