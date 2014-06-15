@@ -98,6 +98,7 @@ void XmlTestTools::assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, 
 
 void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
 {
+#if LIBXML_VERSION >= 20703 /* xmlChildElementCount is only available in libxml2 >= 2.7.3 */
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of nodes is incorrect").getStr(),
@@ -106,6 +107,11 @@ void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath,
     CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("XPath '" + rXPath + "' number of child-nodes is incorrect").getStr(),
                                  nNumberOfChildNodes, (int)xmlChildElementCount(pXmlNode));
     xmlXPathFreeObject(pXmlObj);
+#else
+    (void)pXmlDoc;
+    (void)rXPath;
+    (void)nNumberOfChildNodes;
+#endif
 }
 
 int XmlTestTools::getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName)
