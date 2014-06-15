@@ -315,8 +315,9 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
         if ( !aPersonaSetting.isEmpty() )
         {
             m_aPersonaSettings = aPersonaSetting;
-            break;
         }
+
+        break;
     }
 
     return 0;
