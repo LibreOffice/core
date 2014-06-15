@@ -713,7 +713,10 @@ void SdFiltersTest::testMediaEmbedding()
 {
     SvtMiscOptions().SetExperimentalMode(true);
     ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/media_embedding.odp"));
+
+#if HAVE_FEATURE_GLTF
     xDocShRef = saveAndReload( xDocShRef, ODP );
+#endif
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
