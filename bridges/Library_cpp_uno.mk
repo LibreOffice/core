@@ -166,6 +166,8 @@ $(eval $(call gb_Library_use_internal_comprehensive_api,$(gb_CPPU_ENV)_uno,\
 
 $(eval $(call gb_Library_set_include,$(gb_CPPU_ENV)_uno,\
 	-I$(SRCDIR)/bridges/inc \
+	-I$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM) \
+	-I$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/include \
 	$$(INCLUDE) \
 ))
 
@@ -197,6 +199,10 @@ $(eval $(call gb_Library_add_cxxflags,gcc3_uno,\
 	-fno-strict-aliasing \
 	$(if $(filter TRUE,$(ENABLE_LTO)),-fno-lto) \
 	$(if $(filter TRUE,$(HAVE_GCC_AVX)),-mno-avx) \
+))
+
+$(eval $(call gb_Library_add_libs,gcc3_uno,\
+	-L$(call gb_UnpackedTarball_get_dir,libffi)/$(HOST_PLATFORM)/.libs -lffi \
 ))
 
 ifeq ($(filter ANDROID WNT DRAGONFLY FREEBSD NETBSD OPENBSD MACOSX,$(OS)),)

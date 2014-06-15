@@ -25,74 +25,44 @@
 #include <exception>
 #include <typeinfo>
 
-#include "rtl/alloc.h"
-#include "rtl/ustrbuf.hxx"
+#include <fficonfig.h>
+#include <ffi.h>
+
+#include <rtl/alloc.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
-#include "com/sun/star/uno/RuntimeException.hpp"
+#include <com/sun/star/uno/RuntimeException.hpp>
 #include <uno/data.h>
 
 #include <bridges/cpp_uno/shared/bridge.hxx>
 #include <bridges/cpp_uno/shared/types.hxx>
-#include "bridges/cpp_uno/shared/unointerfaceproxy.hxx"
-#include "bridges/cpp_uno/shared/vtables.hxx"
+#include <bridges/cpp_uno/shared/unointerfaceproxy.hxx>
+#include <bridges/cpp_uno/shared/vtables.hxx>
 
-#include "abi.hxx"
-#include "callvirtualmethod.hxx"
 #include "share.hxx"
 
-using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-// Macros for easier insertion of values to registers or stack
-// pSV - pointer to the source
-// nr - order of the value [will be increased if stored to register]
-// pFPR, pGPR - pointer to the registers
-// pDS - pointer to the stack [will be increased if stored here]
-
-// The value in %xmm register is already prepared to be retrieved as a float,
-// thus we treat float and double the same
-#define INSERT_FLOAT_DOUBLE( pSV, nr, pFPR, pDS ) \
-    if ( nr < x86_64::MAX_SSE_REGS ) \
-        pFPR[nr++] = *reinterpret_cast<double *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV ); // verbatim!
-
-#define INSERT_INT64( pSV, nr, pGPR, pDS ) \
-    if ( nr < x86_64::MAX_GPR_REGS ) \
-        pGPR[nr++] = *reinterpret_cast<sal_uInt64 *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV );
-
-#define INSERT_INT32( pSV, nr, pGPR, pDS ) \
-    if ( nr < x86_64::MAX_GPR_REGS ) \
-        pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
-
-#define INSERT_INT16( pSV, nr, pGPR, pDS ) \
-    if ( nr < x86_64::MAX_GPR_REGS ) \
-        pGPR[nr++] = *reinterpret_cast<sal_uInt16 *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV );
-
-#define INSERT_INT8( pSV, nr, pGPR, pDS ) \
-    if ( nr < x86_64::MAX_GPR_REGS ) \
-        pGPR[nr++] = *reinterpret_cast<sal_uInt8 *>( pSV ); \
-    else \
-        *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
-
-
-namespace {
-
-void appendCString(OUStringBuffer & buffer, char const * text) {
-    if (text != 0) {
-        buffer.append(
-            OStringToOUString(OString(text), RTL_TEXTENCODING_ISO_8859_1));
-            // use 8859-1 to avoid conversion failure
+static ffi_type* unoTypeToFFI(_typelib_TypeClass eTypeClass)
+{
+    switch (eTypeClass)
+    {
+    case typelib_TypeClass_VOID:           return &ffi_type_void;
+    case typelib_TypeClass_CHAR:           return &ffi_type_sint16;
+    case typelib_TypeClass_BOOLEAN:        return &ffi_type_uint8;
+    case typelib_TypeClass_BYTE:           return &ffi_type_sint8;
+    case typelib_TypeClass_SHORT:          return &ffi_type_sint16;
+    case typelib_TypeClass_UNSIGNED_SHORT: return &ffi_type_uint16;
+    case typelib_TypeClass_LONG:           return &ffi_type_sint32;
+    case typelib_TypeClass_UNSIGNED_LONG:  return &ffi_type_uint32;
+    case typelib_TypeClass_HYPER:          return &ffi_type_sint64;
+    case typelib_TypeClass_UNSIGNED_HYPER: return &ffi_type_uint64;
+    case typelib_TypeClass_FLOAT:          return &ffi_type_float;
+    case typelib_TypeClass_DOUBLE:         return &ffi_type_double;
+    case typelib_TypeClass_ENUM:           return &ffi_type_uint32;
+    default:                               return &ffi_type_pointer;
     }
-}
-
 }
 
 static void cpp_call(
@@ -102,92 +72,37 @@ static void cpp_call(
     sal_Int32 nParams, typelib_MethodParameter * pParams,
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
 {
-    // Maxium space for [complex ret ptr], values | ptr ...
-    // (but will be used less - some of the values will be in pGPR and pFPR)
-      sal_uInt64 *pStack = (sal_uInt64 *)__builtin_alloca( (nParams + 3) * sizeof(sal_uInt64) );
-      sal_uInt64 *pStackStart = pStack;
-
-    sal_uInt64 pGPR[x86_64::MAX_GPR_REGS];
-    sal_uInt32 nGPR = 0;
-
-    double pFPR[x86_64::MAX_SSE_REGS];
-    sal_uInt32 nFPR = 0;
-
-    // Return
-    typelib_TypeDescription * pReturnTypeDescr = 0;
-    TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
-    OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
-
-    void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion (see below)
-
-    bool bSimpleReturn = true;
-    if ( pReturnTypeDescr )
-    {
-        if ( x86_64::return_in_hidden_param( pReturnTypeRef ) )
-            bSimpleReturn = false;
-
-        if ( bSimpleReturn )
-            pCppReturn = pUnoReturn; // direct way for simple types
-        else
-        {
-            // complex return via ptr
-            pCppReturn = bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )?
-                         __builtin_alloca( pReturnTypeDescr->nSize ) : pUnoReturn;
-            INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack );
-        }
-    }
+    // Argument types & values
+    // Has to be larger, to fit the "this" pointer as the 1st param
+    ffi_type* pTypes[nParams + 1];
+    void ** pValues = (void **)alloca(3 * sizeof(void *) * (nParams + 1));
 
     // Push "this" pointer
     void * pAdjustedThisPtr = reinterpret_cast< void ** >( pThis->getCppI() ) + aVtableSlot.offset;
-    INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack );
+    pValues[0] = pAdjustedThisPtr;
+    pTypes[0] = &ffi_type_pointer;
 
-    // Args
-    void ** pCppArgs = (void **)alloca( 3 * sizeof(void *) * nParams );
     // Indices of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndices = (sal_Int32 *)(pCppArgs + nParams);
+    sal_Int32 * pTempIndices = (sal_Int32 *)(pValues + nParams + 1);
+
     // Type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
+    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pValues + (2 * nParams));
 
     sal_Int32 nTempIndices = 0;
 
-    for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
+    for (sal_Int32 in = 0, out = 1; in < nParams; ++in, ++out)
     {
-        const typelib_MethodParameter & rParam = pParams[nPos];
+        const typelib_MethodParameter & rParam = pParams[in];
         typelib_TypeDescription * pParamTypeDescr = 0;
         TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
-            uno_copyAndConvertData( pCppArgs[nPos] = alloca( 8 ), pUnoArgs[nPos], pParamTypeDescr,
-                                    pThis->getBridge()->getUno2Cpp() );
+            pValues[out] = alloca(8);
+            uno_copyAndConvertData(pValues[out], pUnoArgs[in], pParamTypeDescr,
+                                   pThis->getBridge()->getUno2Cpp());
 
-            switch (pParamTypeDescr->eTypeClass)
-            {
-            case typelib_TypeClass_HYPER:
-            case typelib_TypeClass_UNSIGNED_HYPER:
-                INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack );
-                break;
-            case typelib_TypeClass_LONG:
-            case typelib_TypeClass_UNSIGNED_LONG:
-            case typelib_TypeClass_ENUM:
-                INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack );
-                break;
-            case typelib_TypeClass_SHORT:
-            case typelib_TypeClass_CHAR:
-            case typelib_TypeClass_UNSIGNED_SHORT:
-                INSERT_INT16( pCppArgs[nPos], nGPR, pGPR, pStack );
-                break;
-            case typelib_TypeClass_BOOLEAN:
-            case typelib_TypeClass_BYTE:
-                INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack );
-                break;
-            case typelib_TypeClass_FLOAT:
-            case typelib_TypeClass_DOUBLE:
-                INSERT_FLOAT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack );
-                break;
-            default:
-                break;
-            }
+            pTypes[out] = unoTypeToFFI(pParamTypeDescr->eTypeClass);
 
             // no longer needed
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
@@ -197,51 +112,75 @@ static void cpp_call(
             if (! rParam.bIn) // is pure out
             {
                 // cpp out is constructed mem, uno out is not!
-                uno_constructData(
-                    pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                    pParamTypeDescr );
-                pTempIndices[nTempIndices] = nPos; // default constructed for cpp call
+                pValues[out] = alloca(pParamTypeDescr->nSize);
+                uno_constructData(pValues[out], pParamTypeDescr);
+
+                // default constructed for cpp call
+                pTempIndices[nTempIndices] = in;
+
                 // will be released at reconversion
                 ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
             }
-            // is in/inout
-            else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
+            else if (bridges::cpp_uno::shared::relatesToInterfaceType(pParamTypeDescr)) // is in/inout
             {
-                uno_copyAndConvertData(
-                    pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                    pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
+                pValues[out] = alloca(pParamTypeDescr->nSize);
+                uno_copyAndConvertData(pValues[out], pUnoArgs[in], pParamTypeDescr, pThis->getBridge()->getUno2Cpp());
 
-                pTempIndices[nTempIndices] = nPos; // has to be reconverted
+                // has to be reconverted
+                pTempIndices[nTempIndices] = in;
+
                 // will be released at reconversion
                 ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
             }
             else // direct way
             {
-                pCppArgs[nPos] = pUnoArgs[nPos];
+                pValues[out] = pUnoArgs[in];
                 // no longer needed
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
-            INSERT_INT64( &(pCppArgs[nPos]), nGPR, pGPR, pStack );
+
+            // TODO FIXME this is wrong, we need the complete FFI type info
+            // here
+            pTypes[out] = &ffi_type_pointer;
         }
+    }
+
+    // Return type / value
+    typelib_TypeDescription *pReturnTypeDescr = NULL;
+    TYPELIB_DANGER_GET(&pReturnTypeDescr, pReturnTypeRef);
+    OSL_ENSURE(pReturnTypeDescr, "### expected return type description!");
+
+    void * pCppReturn = NULL;
+    if (pReturnTypeDescr)
+    {
+        pCppReturn = bridges::cpp_uno::shared::relatesToInterfaceType(pReturnTypeDescr)?
+            __builtin_alloca(pReturnTypeDescr->nSize) : pUnoReturn;
     }
 
     try
     {
         try {
-            CPPU_CURRENT_NAMESPACE::callVirtualMethod(
-                pAdjustedThisPtr, aVtableSlot.index,
-                pCppReturn, pReturnTypeRef, bSimpleReturn,
-                pStackStart, ( pStack - pStackStart ),
-                pGPR, nGPR,
-                pFPR, nFPR );
+            ffi_cif cif;
+            if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, nParams + 1, unoTypeToFFI(pReturnTypeDescr->eTypeClass), pTypes) == FFI_OK)
+            {
+                // pAdjustedThisPtr is the pointer to start of vtable:
+                // dereference it + find the method in the vtable (on the
+                // aVtableSlot.index position), and dereference again
+                sal_IntPtr pMethod =
+                    *reinterpret_cast<sal_IntPtr*>(
+                            *reinterpret_cast<sal_IntPtr*>(pAdjustedThisPtr) + sizeof(void*) * aVtableSlot.index);
+
+                // perform the call
+                ffi_call(&cif, reinterpret_cast<void (*)()>(pMethod), pCppReturn, pValues);
+            }
         } catch (const Exception &) {
             throw;
         } catch (const std::exception & e) {
             OUStringBuffer buf;
             buf.append("C++ code threw ");
-            appendCString(buf, typeid(e).name());
+            buf.appendAscii(typeid(e).name());
             buf.append(": ");
-            appendCString(buf, e.what());
+            buf.appendAscii(e.what());
             throw RuntimeException(buf.makeStringAndClear());
         } catch (...) {
             throw RuntimeException("C++ code threw unknown exception");
@@ -260,17 +199,18 @@ static void cpp_call(
                 if (pParams[nIndex].bOut) // inout
                 {
                     uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
-                    uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
-                                            pThis->getBridge()->getCpp2Uno() );
+                    uno_copyAndConvertData(pUnoArgs[nIndex], pValues[nIndex], pParamTypeDescr,
+                                           pThis->getBridge()->getCpp2Uno());
                 }
             }
             else // pure out
             {
-                uno_copyAndConvertData( pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
-                                        pThis->getBridge()->getCpp2Uno() );
+                uno_copyAndConvertData(pUnoArgs[nIndex], pValues[nIndex], pParamTypeDescr,
+                                       pThis->getBridge()->getCpp2Uno());
             }
+
             // destroy temp cpp param => cpp: every param was constructed
-            uno_destructData( pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+            uno_destructData(pValues[nIndex], pParamTypeDescr, cpp_release);
 
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
@@ -282,19 +222,19 @@ static void cpp_call(
             uno_destructData( pCppReturn, pReturnTypeDescr, cpp_release );
         }
     }
-     catch (...)
-     {
-         // fill uno exception
+    catch (...)
+    {
+        // fill uno exception
 #ifdef _LIBCPP_VERSION
-         CPPU_CURRENT_NAMESPACE::fillUnoException(
-             reinterpret_cast< __cxxabiv1::__cxa_eh_globals * >(
-                 __cxxabiv1::__cxa_get_globals())->caughtExceptions,
-             *ppUnoExc, pThis->getBridge()->getCpp2Uno());
+        CPPU_CURRENT_NAMESPACE::fillUnoException(
+            reinterpret_cast< __cxxabiv1::__cxa_eh_globals * >(
+                __cxxabiv1::__cxa_get_globals())->caughtExceptions,
+            *ppUnoExc, pThis->getBridge()->getCpp2Uno());
 #else
-         fillUnoException(
-             reinterpret_cast< CPPU_CURRENT_NAMESPACE::__cxa_eh_globals * >(
-                 __cxxabiv1::__cxa_get_globals())->caughtExceptions,
-             *ppUnoExc, pThis->getBridge()->getCpp2Uno());
+        fillUnoException(
+            reinterpret_cast< CPPU_CURRENT_NAMESPACE::__cxa_eh_globals * >(
+                __cxxabiv1::__cxa_get_globals())->caughtExceptions,
+            *ppUnoExc, pThis->getBridge()->getCpp2Uno());
 #endif
 
         // temporary params
@@ -302,7 +242,7 @@ static void cpp_call(
         {
             sal_Int32 nIndex = pTempIndices[nTempIndices];
             // destroy temp cpp param => cpp: every param was constructed
-            uno_destructData( pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndices], cpp_release );
+            uno_destructData(pValues[nIndex], ppTempParamTypeDescr[nTempIndices], cpp_release);
             TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndices] );
         }
         // return type
