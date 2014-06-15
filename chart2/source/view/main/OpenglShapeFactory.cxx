@@ -47,7 +47,6 @@
 #include <rtl/math.hxx>
 #include <svx/svdocirc.hxx>
 #include <svx/svdopath.hxx>
-#include <vcl/opengl/IOpenGLRenderer.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
@@ -64,24 +63,6 @@ extern "C" {
                               {    return new opengl::OpenglShapeFactory();}
     }
 
-class OpenGLChartAdapter : public IOpenGLRenderer
-{
-public:
-    OpenGLChartAdapter(uno::Reference<drawing::XShapes> xShapes):
-        mxShapes(xShapes) {}
-
-    virtual ~OpenGLChartAdapter() {}
-
-    uno::Reference<drawing::XShapes> getShapes()
-    {
-        return mxShapes;
-    }
-
-private:
-    uno::Reference<drawing::XShapes> mxShapes; // here to fix lifetime
-};
-
-
 using dummy::DummyXShape;
 using dummy::DummyXShapes;
 using dummy::DummyCylinder;
@@ -93,8 +74,10 @@ namespace opengl {
 
 namespace {
 
-IOpenGLRenderer* getRenderer(const uno::Reference< drawing::XDrawPage>& xDrawPage )
+uno::Reference< drawing::XShapes > getChartShape(
+    const uno::Reference< drawing::XDrawPage>& xDrawPage )
 {
+    uno::Reference< drawing::XShapes > xRet;
     uno::Reference< drawing::XShapes > xShapes( xDrawPage, uno::UNO_QUERY );
     if( xShapes.is() )
     {
@@ -104,33 +87,20 @@ IOpenGLRenderer* getRenderer(const uno::Reference< drawing::XDrawPage>& xDrawPag
         {
             if( xShapes->getByIndex( nN ) >>= xShape )
             {
+
                 OUString aRet;
 
                 uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
                 xProp->getPropertyValue( UNO_NAME_MISC_OBJ_NAME ) >>= aRet;
                 if( aRet.equals("com.sun.star.chart2.shapes") )
                 {
-                    SvxOpenGLObject* pGLObj = dynamic_cast<SvxOpenGLObject*>(xShape.get());
-                    IOpenGLRenderer* pRenderer = pGLObj ? pGLObj->getRenderer() : NULL;
-                    if (pRenderer)
-                        return pRenderer;
+                    xRet = dynamic_cast<SvxDummyShapeContainer*>(xShape.get())->getWrappedShape();
+                    break;
                 }
             }
         }
     }
-
-    return NULL;
-}
-
-uno::Reference< drawing::XShapes > getChartShape(
-    const uno::Reference< drawing::XDrawPage>& xDrawPage )
-{
-    IOpenGLRenderer* pRenderer = getRenderer(xDrawPage);
-    OpenGLChartAdapter* pAdapter = dynamic_cast<OpenGLChartAdapter*>(pRenderer);
-    if(pAdapter)
-        return pAdapter->getShapes();
-
-    return uno::Reference< drawing::XShapes> ();
+    return xRet;
 }
 
 }
@@ -145,19 +115,13 @@ uno::Reference< drawing::XShapes > OpenglShapeFactory::getOrCreateChartRootShape
         SAL_WARN("chart2.opengl", "getOrCreateChartRootShape");
 
         uno::Reference< drawing::XShape > xTarget (m_xShapeFactory->createInstance(
-                "com.sun.star.drawing.OpenGLObject" ), uno::UNO_QUERY );
-        uno::Reference<drawing::XShapes> xChart(new dummy::DummyChart(xTarget));
+                "com.sun.star.drawing.GraphicObjectShape" ), uno::UNO_QUERY );
+        dummy::DummyChart *pChart = new dummy::DummyChart(xTarget);
+        SvxDummyShapeContainer* pContainer = new SvxDummyShapeContainer(pChart);
+        pContainer->setSize(awt::Size(0,0));
+        xRet = pChart;
         xDrawPage->add(xTarget);
-        uno::Any aName;
-        aName <<= OUString("com.sun.star.chart2.shapes");
-        uno::Reference<beans::XPropertySet> xPropSet( xTarget, uno::UNO_QUERY_THROW );
-        xPropSet->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, aName );
-
-        SvxOpenGLObject* pObj = dynamic_cast<SvxOpenGLObject*>(xTarget.get());
-        if (pObj)
-            pObj->setRenderer(new OpenGLChartAdapter(xChart));
-
-        xRet = getChartShape( xDrawPage );
+        xDrawPage->add(pContainer);
     }
     return xRet;
 }
@@ -484,34 +448,15 @@ uno::Reference< drawing::XShape >
     return pText;
 }
 
-void OpenglShapeFactory::render(uno::Reference< drawing::XDrawPage > xDrawPage)
+void OpenglShapeFactory::render(uno::Reference< drawing::XShapes > xRootShape)
 {
-    IOpenGLRenderer* pRenderer = getRenderer(xDrawPage);
-    if(!pRenderer)
-        return;
-
-    if(!pRenderer->isOpenGLInitialized())
-        return;
-
-    OpenGLChartAdapter* pAdapter = dynamic_cast<OpenGLChartAdapter*>(pRenderer);
-    if(!pAdapter)
-        return;
-
-    uno::Reference< drawing::XShapes > xRootShape = pAdapter->getShapes();
     dummy::DummyChart* pChart = dynamic_cast<dummy::DummyChart*>(xRootShape.get());
     assert(pChart);
     pChart->render();
 }
 
-void OpenglShapeFactory::clearPage(uno::Reference< drawing::XDrawPage > xDrawPage)
+void OpenglShapeFactory::clearPage(uno::Reference< drawing::XShapes > xRootShape)
 {
-    IOpenGLRenderer* pRenderer = getRenderer(xDrawPage);
-
-    OpenGLChartAdapter* pAdapter = dynamic_cast<OpenGLChartAdapter*>(pRenderer);
-    if(!pAdapter)
-        return;
-
-    uno::Reference< drawing::XShapes > xRootShape = pAdapter->getShapes();
     dummy::DummyChart* pChart = dynamic_cast<dummy::DummyChart*>(xRootShape.get());
     assert(pChart);
     pChart->clear();

@@ -23,7 +23,7 @@ namespace sdr { namespace contact {
 
 class IOpenGLRenderer;
 
-class SVX_DLLPUBLIC SdrOpenGLObj : public SdrObject, public IOpenGLInfoProvider
+class SVX_DLLPUBLIC SdrOpenGLObj : public SdrObject
 {
 public:
     SdrOpenGLObj();
@@ -36,8 +36,6 @@ public:
 
     void setRenderer(IOpenGLRenderer* pRenderer);
     IOpenGLRenderer* getRenderer();
-
-    virtual bool isOpenGLInitialized() SAL_OVERRIDE;
 
 private:
 
