@@ -71,12 +71,14 @@ protected:
      * Assert that rXPath exists, and its content equals rContent.
      */
     void          assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rContent);
+
+#if LIBXML_VERSION >= 20703
     /**
      * Assert that rXPath exists, and has exactly nNumberOfChildNodes child nodes.
      * Useful for checking that we do have a no child nodes to a specific node (nNumberOfChildNodes == 0).
      */
     void          assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes);
-
+#endif
 };
 
 #endif
