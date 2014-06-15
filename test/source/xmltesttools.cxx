@@ -96,6 +96,7 @@ void XmlTestTools::assertXPathContent(xmlDocPtr pXmlDoc, const OString& rXPath, 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("XPath contents of child does not match", rContent, getXPathContent(pXmlDoc, rXPath));
 }
 
+#if LIBXML_VERSION >= 20730 /* xmlChildElementCount is only avail in libxml2 >= 2.7.3 */
 void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath, int nNumberOfChildNodes)
 {
     xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, rXPath);
@@ -107,6 +108,7 @@ void XmlTestTools::assertXPathChildren(xmlDocPtr pXmlDoc, const OString& rXPath,
                                  nNumberOfChildNodes, (int)xmlChildElementCount(pXmlNode));
     xmlXPathFreeObject(pXmlObj);
 }
+#endif
 
 int XmlTestTools::getXPathPosition(xmlDocPtr pXmlDoc, const OString& rXPath, const OUString& rChildName)
 {

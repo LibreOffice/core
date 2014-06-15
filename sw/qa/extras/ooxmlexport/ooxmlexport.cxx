@@ -2344,7 +2344,9 @@ DECLARE_OOXMLEXPORT_TEST(testTrackChangesParagraphProperties, "testTrackChangesP
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
+#if LIBXML_VERSION >= 20730 // xmlChildElementCount is available only in libxml2 2.7.3 and above
     assertXPathChildren(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pPrChange", 0);
+#endif
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMsoSpt180, "mso-spt180.docx")
