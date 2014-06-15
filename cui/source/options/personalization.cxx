@@ -223,6 +223,8 @@ void SelectPersonaDialog::ClearSearchResults()
 {
     m_vPersonaSettings.clear();
     m_aSelectedPersona = "";
+    for( sal_Int32 nIndex = 0; nIndex < 9; nIndex++ )
+        m_vResultList[nIndex]->Hide();
 }
 
 SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const SfxItemSet &rSet )
@@ -435,6 +437,13 @@ void SearchAndParseThread::execute()
         aParserInput.aInputStream = xStream;
         xParser->parseStream( aParserInput );
 
+        if( !pHandler->hasResults() )
+        {
+            sProgress = "No results found.";
+            m_pPersonaDialog->SetProgress( sProgress );
+            return;
+        }
+
         std::vector<OUString> vLearnmoreURLs = pHandler->getLearnmoreURLs();
         std::vector<OUString>::iterator it;
         std::vector<Image> vResultList;
@@ -537,7 +546,7 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pHead
     }
     catch (...)
     {
-        sProgress = "Something went wrong. Please try again.";
+        OUString sProgress = "Something went wrong. Please try again.";
         m_pPersonaDialog->SetProgress( sProgress );
         return;
     }
