@@ -55,6 +55,7 @@ mkdir -p $RPM_BUILD_ROOT
 # set parameters for the create_tree script
 export DESTDIR=$RPM_BUILD_ROOT
 export KDEMAINDIR=/usr
+export PREFIXDIR=/usr
 export GNOMEDIR=%{gnome_dir}
 
 ./create_tree.sh
