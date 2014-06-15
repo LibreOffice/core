@@ -402,8 +402,6 @@ void SAL_CALL OCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeExc
         PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
         PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_USEBOOKMARKS),
-        PROPERTY_ID_USEBOOKMARKS, ::getBooleanCppuType(), 0);
 
     return new ::cppu::OPropertyArrayHelper(aProps);
 }
