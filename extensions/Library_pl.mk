@@ -15,7 +15,6 @@ $(eval $(call gb_Library_set_componentfile,pl,extensions/source/plugin/pl))
 
 $(eval $(call gb_Library_use_externals,pl,\
 	boost_headers \
-	npapi_headers \
 ))
 
 $(eval $(call gb_Library_set_include,pl,\
@@ -31,12 +30,6 @@ $(eval $(call gb_Library_add_defs,pl,\
 ))
 
 endif # ENABLE_JAVA=YES
-
-ifeq ($(SYSTEM_MOZILLA),YES)
-$(eval $(call gb_Library_add_defs,pl,\
-	-DSYSTEM_MOZILLA \
-))
-endif # SYSTEM_MOZILLA=YES
 
 ifeq ($(OS),SOLARIS)
 $(eval $(call gb_Library_add_libs,pl,\

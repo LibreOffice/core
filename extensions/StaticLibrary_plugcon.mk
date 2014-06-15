@@ -16,7 +16,6 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,plugcon))
 
 $(eval $(call gb_StaticLibrary_use_externals,plugcon,\
     boost_headers \
-    npapi_headers \
 ))
 
 $(eval $(call gb_StaticLibrary_set_include,plugcon,\
@@ -35,12 +34,6 @@ $(eval $(call gb_StaticLibrary_add_defs,plugcon,\
 ))
 
 endif # ENABLE_JAVA=YES
-
-ifeq ($(SYSTEM_MOZILLA),YES)
-$(eval $(call gb_StaticLibrary_add_defs,plugcon,\
-	-DSYSTEM_MOZILLA \
-))
-endif # SYSTEM_MOZILLA=YES
 
 ifeq ($(ENABLE_GTK),TRUE)
 $(eval $(call gb_StaticLibrary_add_defs,plugcon,\
