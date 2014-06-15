@@ -10,36 +10,12 @@
 #ifndef INCLUDED_VCL_OPENGL_IOPENGLRENDERER_HXX
 #define INCLUDED_VCL_OPENGL_IOPENGLRENDERER_HXX
 
-class IOpenGLInfoProvider
-{
-public:
-    virtual ~IOpenGLInfoProvider() {}
-
-    virtual bool isOpenGLInitialized() = 0;
-};
-
 class IOpenGLRenderer
 {
 public:
-    IOpenGLRenderer():
-        mpInfoProvider(NULL) {}
-    virtual ~IOpenGLRenderer() {}
+    virtual ~IOpenGLRenderer() {};
+    virtual void operator()() = 0;
 
-    bool isOpenGLInitialized()
-    {
-        if(mpInfoProvider)
-            return mpInfoProvider->isOpenGLInitialized();
-
-        return false;
-    }
-
-    void setInfoProvider(IOpenGLInfoProvider* pInfo)
-    {
-        mpInfoProvider = pInfo;
-    }
-
-private:
-    IOpenGLInfoProvider* mpInfoProvider;
 };
 
 #endif
