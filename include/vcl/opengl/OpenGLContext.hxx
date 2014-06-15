@@ -167,7 +167,6 @@ public:
     }
 
     static SystemWindowData generateWinData(Window* pParent);
-
 private:
     SAL_DLLPRIVATE bool initWindow();
     SAL_DLLPRIVATE bool ImplInit();
