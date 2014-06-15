@@ -36,36 +36,6 @@ namespace writerfilter
 using namespace com::sun::star;
 using namespace std;
 
-string xmlify(const string & str)
-{
-    string result = "";
-    char sBuffer[16];
-
-    for (string::const_iterator aIt = str.begin(); aIt != str.end(); ++aIt)
-    {
-        char c = *aIt;
-
-        if (isprint(c) && c != '\"')
-        {
-            if (c == '<')
-                result += "&lt;";
-            else if (c == '>')
-                result += "&gt;";
-            else if (c == '&')
-                result += "&amp;";
-            else
-                result += c;
-        }
-        else
-        {
-            snprintf(sBuffer, sizeof(sBuffer), "\\%03d", c);
-            result += sBuffer;
-        }
-    }
-
-    return result;
-}
-
 #if OSL_DEBUG_LEVEL > 1
 
 string toString(uno::Reference< text::XTextRange > textRange)
