@@ -215,4 +215,3 @@ writerfilter::XPathLogger::endElement()
 writerfilter::XPathLogger::getXPath() const
 writerfilter::XPathLogger::startElement(std::basic_string<char, std::char_traits<char>, std::allocator<char> >)
 writerfilter::ooxml::OOXMLParserState::getXPathLogger()
-writerfilter::xmlify(std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
