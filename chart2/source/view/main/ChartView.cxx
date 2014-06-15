@@ -2463,7 +2463,7 @@ void ChartView::createShapes()
         OSL_FAIL("could not set page size correctly");
     }
     pShapeFactory->setPageSize(mxRootShape, aPageSize);
-    pShapeFactory->clearPage(m_xDrawPage);
+    pShapeFactory->clearPage(mxRootShape);
 
 #if HAVE_FEATURE_DESKTOP
     if(isReal3DChart())
@@ -2627,7 +2627,7 @@ void ChartView::createShapes()
         //cleanup: remove all empty group shapes to avoid grey border lines:
         lcl_removeEmptyGroupShapes( mxRootShape );
 
-        pShapeFactory->render( m_xDrawPage );
+        pShapeFactory->render( mxRootShape );
 
         if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
         {
