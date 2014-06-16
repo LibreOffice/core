@@ -82,6 +82,15 @@ public:
 
 OUString SwCaptionDialog::our_aSepTextSave(": "); // Caption separator text
 
+//Resolves: fdo#47427 disallow typing *or* pasting content into the category box
+OUString TextFilterAutoConvert::filter(const OUString &rText)
+{
+    if (!SwCalc::IsValidVarName(rText))
+        return m_sLastGoodText;
+    m_sLastGoodText = rText;
+    return rText;
+}
+
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),
     m_sNone( SW_RESSTR(SW_STR_NONE) ),
@@ -92,6 +101,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
 {
     get(m_pTextEdit, "caption_edit");
     get(m_pCategoryBox, "category");
+    m_pCategoryBox->SetTextFilter(&m_aTextFilter);
     get(m_pFormatText, "numbering_label");
     get(m_pFormatBox, "numbering");
     get(m_pNumberingSeparatorFT, "num_separator");
@@ -487,43 +497,6 @@ void    SwSequenceOptionDialog::SetCharacterStyle(const OUString& rStyle)
 {
     m_pLbCharStyle->SelectEntryPos(0);
     m_pLbCharStyle->SelectEntry(rStyle);
-}
-
-bool CategoryBox::PreNotify( NotifyEvent& rNEvt )
-{
-    bool nHandled = false;
-    if( rNEvt.GetType() == EVENT_KEYINPUT &&
-        rNEvt.GetKeyEvent()->GetCharCode() )
-    {
-        const KeyEvent* pEvent = rNEvt.GetKeyEvent();
-        const KeyCode&  rKeyCode = pEvent->GetKeyCode();
-        const sal_uInt16 nTmpCode = rKeyCode.GetFullCode() & ~KEY_ALLMODTYPE;
-
-        if(nTmpCode != KEY_BACKSPACE && nTmpCode != KEY_RETURN
-                && nTmpCode != KEY_TAB && nTmpCode != KEY_ESCAPE)
-        {
-            const OUString sText( GetText() );
-            Selection aSel( GetSelection() );
-            aSel.Justify();
-
-            const OUString sName = sText.copy(0, aSel.Min())
-                + OUString( pEvent->GetCharCode() )
-                + sText.copy(aSel.Max());
-
-            if( !SwCalc::IsValidVarName( sName ))
-                nHandled = true;
-        }
-    }
-    if(!nHandled)
-        nHandled = ComboBox::PreNotify( rNEvt );
-    return nHandled;
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCategoryBox(Window* pParent, VclBuilder::stringmap &)
-{
-    CategoryBox* pCategoryBox = new CategoryBox(pParent, WB_LEFT | WB_DROPDOWN | WB_VCENTER | WB_3DLOOK | WB_SORT);
-    pCategoryBox->EnableAutoSize(true);
-    return pCategoryBox;
 }
 
 // #i61007# order of captions
