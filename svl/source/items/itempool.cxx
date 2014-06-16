@@ -698,7 +698,8 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
         return *pPoolItem;
     }
 
-    SFX_ASSERT( rItem.IsA(GetDefaultItem(nWhich).Type()), nWhich,
+    SFX_ASSERT( !pImp->ppStaticDefaults ||
+                rItem.IsA(GetDefaultItem(nWhich).Type()), nWhich,
                 "SFxItemPool: wrong item type in Put" );
 
     SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];
@@ -712,20 +713,21 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     bool ppFreeIsSet = false;
     if ( IsItemFlag_Impl( nIndex, SFX_ITEM_POOLABLE ) )
     {
-        // wenn es ueberhaupt gepoolt ist, koennte es schon drin sein
+        // if is already in a pool, then it is worth checking if it is in this one.
         if ( IsPooledItem(&rItem) )
         {
-            // 1. Schleife: teste ob der Pointer vorhanden ist.
-            SfxPoolItemArrayBase_Impl::iterator itr =
-                std::find(pItemArr->begin(), pItemArr->end(), &rItem);
-            if (itr != pItemArr->end())
+            SfxPoolItemArray_Impl::Hash::const_iterator it;
+            it = pItemArr->maHash.find(const_cast<SfxPoolItem *>(&rItem));
+
+            // 1. search for an identical pointer in the pool
+            if (it != pItemArr->maHash.end())
             {
-                AddRef(**itr);
-                return **itr;
+                AddRef(rItem);
+                return rItem;
             }
         }
 
-        // 2. Schleife: dann muessen eben die Attribute verglichen werden
+        // 2. search for an item with matching attributes.
         SfxPoolItemArrayBase_Impl::iterator itr = pItemArr->begin();
         for (; itr != pItemArr->end(); ++itr)
         {
@@ -749,20 +751,18 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
     }
     else
     {
-        // freien Platz suchen
-        SfxPoolItemArrayBase_Impl::iterator itr = pItemArr->begin();
-        std::advance(itr, pItemArr->nFirstFree);
-        for (; itr != pItemArr->end(); ++itr)
+        // look for a freed place
+        if (pItemArr->maFree.size() > 0)
         {
-            if (!*itr)
-            {
-                ppFree = itr;
-                ppFreeIsSet = true;
-                break;
-            }
+            SfxPoolItemArrayBase_Impl::iterator itr = pItemArr->begin();
+            sal_uInt32 nIdx = pItemArr->maFree.back();
+            pItemArr->maFree.pop_back();
+
+            assert(nIdx < pItemArr->size());
+            std::advance(itr, nIdx);
+            ppFreeIsSet = true;
+            ppFree = itr;
         }
-        // naechstmoeglichen freien Platz merken
-        pItemArr->nFirstFree = std::distance(pItemArr->begin(), itr);
     }
 
     // nicht vorhanden, also im PtrArray eintragen
@@ -782,17 +782,41 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich
 #endif
     AddRef( *pNewItem, pImp->nInitRefCount );
 
-    if ( ppFreeIsSet == false )
+    assert( pItemArr->maHash.find(pNewItem) == pItemArr->maHash.end() );
+    if ( !ppFreeIsSet )
+    {
+        sal_uInt32 nOffset = pItemArr->size();
+        pItemArr->maHash.insert(std::make_pair(pNewItem, nOffset));
         pItemArr->push_back( pNewItem );
+    }
     else
     {
-        DBG_ASSERT( *ppFree == 0, "using surrogate in use" );
+        sal_uInt32 nOffset = std::distance(pItemArr->begin(), ppFree);
+        pItemArr->maHash.insert(std::make_pair(pNewItem, nOffset));
+        assert(*ppFree == NULL);
         *ppFree = pNewItem;
     }
     return *pNewItem;
 }
 
+/// Re-build our free list and pointer hash.
+void SfxPoolItemArray_Impl::ReHash()
+{
+    maFree.clear();
+    maHash.clear();
 
+    for (sal_uInt32 nIdx = 0; nIdx < size(); ++nIdx)
+    {
+        SfxPoolItem *pItem = (*this)[nIdx];
+        if (!pItem)
+            maFree.push_back(nIdx);
+        else
+        {
+            maHash.insert(std::make_pair(pItem,nIdx));
+            assert(maHash.find(pItem) != maHash.end());
+        }
+    }
+}
 
 void SfxItemPool::Remove( const SfxPoolItem& rItem )
 {
@@ -841,33 +865,40 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     // Item im eigenen Pool suchen
     SfxPoolItemArray_Impl* pItemArr = pImp->maPoolItems[nIndex];
     SFX_ASSERT( pItemArr, rItem.Which(), "removing Item not in Pool" );
-    SfxPoolItemArrayBase_Impl::iterator ppHtArrBeg = pItemArr->begin(), ppHtArrEnd = pItemArr->end();
-    for (SfxPoolItemArrayBase_Impl::iterator ppHtArr = ppHtArrBeg; ppHtArr != ppHtArrEnd; ++ppHtArr)
+
+    SfxPoolItemArray_Impl::Hash::iterator it;
+    it = pItemArr->maHash.find(const_cast<SfxPoolItem *>(&rItem));
+    if (it != pItemArr->maHash.end())
     {
-        SfxPoolItem*& p = *ppHtArr;
-        if (p == &rItem)
+        sal_uInt32 nIdx = it->second;
+        assert(nIdx < pItemArr->size());
+        SfxPoolItem*& p = (*pItemArr)[nIdx];
+        assert(p == &rItem);
+
+        if ( p->GetRefCount() ) //!
+            ReleaseRef( *p );
+        else
         {
-            if ( p->GetRefCount() ) //!
-                ReleaseRef( *p );
-            else
-            {
-                SFX_ASSERT( false, rItem.Which(), "removing Item without ref" );
-            }
-
-            // ggf. kleinstmoegliche freie Position merken
-            size_t nPos = std::distance(ppHtArrBeg, ppHtArr);
-            if ( pItemArr->nFirstFree > nPos )
-                pItemArr->nFirstFree = nPos;
-
-            //! MI: Hack, solange wir das Problem mit dem Outliner haben
-            //! siehe anderes MI-REF
-            if ( 0 == p->GetRefCount() && nWhich < 4000 )
-                DELETEZ(p);
-            return;
+            SFX_ASSERT( false, rItem.Which(), "removing Item without ref" );
         }
+
+        //! MI: Hack, solange wir das Problem mit dem Outliner haben
+        //! siehe anderes MI-REF
+        if ( 0 == p->GetRefCount() && nWhich < 4000 )
+        {
+            DELETEZ(p);
+
+            // remove ourselves from the hash
+            pItemArr->maHash.erase(it);
+
+            // record that this slot is free
+            pItemArr->maFree.push_back( nIdx );
+        }
+
+        return;
     }
 
-    // nicht vorhanden
+    // not found
     SFX_ASSERT( false, rItem.Which(), "removing Item not in Pool" );
 }
 
@@ -965,8 +996,6 @@ const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) co
 
     return 0;
 }
-
-
 
 sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
 {
