@@ -24,9 +24,11 @@
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#include <com/sun/star/sdbc/XPreparedBatchExecution.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+
+// TODO: implement ::com::sun::star::sdbc::XPreparedBatchExecution
+//       (empty implementations removed on 2014-06-16)
 
 namespace connectivity
 {
@@ -37,7 +39,6 @@ namespace connectivity
         class OPreparedStatement :  public  OStatement_Base,
                                     public  ::com::sun::star::sdbc::XPreparedStatement,
                                     public  ::com::sun::star::sdbc::XParameters,
-                                    public  ::com::sun::star::sdbc::XPreparedBatchExecution,
                                     public  ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
                                     public  ::com::sun::star::lang::XServiceInfo
 
@@ -97,10 +98,6 @@ namespace connectivity
             virtual void SAL_CALL setClob( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL setArray( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL clearParameters(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            // XPreparedBatchExecution
-            virtual void SAL_CALL addBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL clearBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XCloseable
             virtual void SAL_CALL close(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             // XResultSetMetaDataSupplier

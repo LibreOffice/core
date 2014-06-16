@@ -98,7 +98,6 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
     return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
                                         static_cast< XPreparedStatement*>(this),
                                         static_cast< XParameters*>(this),
-                                        static_cast< XPreparedBatchExecution*>(this),
                                         static_cast< XResultSetMetaDataSupplier*>(this));
 }
 
@@ -106,8 +105,7 @@ Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(Runt
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<XPreparedStatement>::get(),
                                     cppu::UnoType<XParameters>::get(),
-                                    cppu::UnoType<XResultSetMetaDataSupplier>::get(),
-                                    cppu::UnoType<XPreparedBatchExecution>::get());
+                                    cppu::UnoType<XResultSetMetaDataSupplier>::get());
 
     return ::comphelper::concatSequences(aTypes.getTypes(),OStatement_Base::getTypes());
 }
@@ -444,19 +442,6 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
             }
         }
     }
-}
-
-void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException)
-{
-}
-
-void SAL_CALL OPreparedStatement::addBatch( ) throw(SQLException, RuntimeException)
-{
-}
-
-Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLException, RuntimeException)
-{
-    return Sequence< sal_Int32 > ();
 }
 
 void SAL_CALL OPreparedStatement::acquire() throw()
