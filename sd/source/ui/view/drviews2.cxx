@@ -79,8 +79,6 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 
-#include <svtools/miscopt.hxx>
-
 #include <tools/diagnose_ex.h>
 
 #include <unotools/useroptions.hxx>
@@ -1173,9 +1171,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 #if HAVE_FEATURE_GLTF
         case SID_INSERT_3DMODEL:
         {
-            if( !SvtMiscOptions().IsExperimentalMode() )
-                break;
-
             SetCurrentFunction( FuInsert3DModel::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
 
             Cancel();
