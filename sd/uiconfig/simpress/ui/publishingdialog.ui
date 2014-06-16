@@ -1680,7 +1680,7 @@
             </child>
             <child>
               <object class="GtkButton" id="finishButton">
-                <property name="label">_Create</property>
+                <property name="label" translatable="yes">_Create</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
