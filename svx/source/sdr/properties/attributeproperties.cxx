@@ -268,7 +268,7 @@ namespace sdr
                     }
 
                     mpItemSet = mpItemSet->Clone(false, pDestPool);
-                    GetSdrObject().GetModel()->MigrateItemSet(pOldSet, mpItemSet, pNewModel);
+                    SdrModel::MigrateItemSet(pOldSet, mpItemSet, pNewModel);
 
                     // set stylesheet (if used)
                     if(pStySheet)

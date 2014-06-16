@@ -46,10 +46,10 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     // Create ItemSets; Attention, it is possible that the new one is from a,
     // different pool. Therefore we clone it with its items.
     pNewSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(), pTheNewItemSet->GetRanges());
-    pTheDoc->MigrateItemSet( pTheNewItemSet, pNewSet, pTheDoc );
+    SdrModel::MigrateItemSet( pTheNewItemSet, pNewSet, pTheDoc );
 
     pOldSet = new SfxItemSet((SfxItemPool&)SdrObject::GetGlobalDrawObjectItemPool(),pStyleSheet->GetItemSet().GetRanges());
-    pTheDoc->MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet, pTheDoc );
+    SdrModel::MigrateItemSet( &pStyleSheet->GetItemSet(), pOldSet, pTheDoc );
 
     aComment = SD_RESSTR(STR_UNDO_CHANGE_PRES_OBJECT);
     OUString aName(pStyleSheet->GetName());
@@ -98,7 +98,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 void StyleSheetUndoAction::Undo()
 {
     SfxItemSet aNewSet( mpDoc->GetItemPool(), pOldSet->GetRanges() );
-    mpDoc->MigrateItemSet( pOldSet, &aNewSet, mpDoc );
+    SdrModel::MigrateItemSet( pOldSet, &aNewSet, mpDoc );
 
     pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )
@@ -111,7 +111,7 @@ void StyleSheetUndoAction::Undo()
 void StyleSheetUndoAction::Redo()
 {
     SfxItemSet aNewSet( mpDoc->GetItemPool(), pOldSet->GetRanges() );
-    mpDoc->MigrateItemSet( pNewSet, &aNewSet, mpDoc );
+    SdrModel::MigrateItemSet( pNewSet, &aNewSet, mpDoc );
 
     pStyleSheet->GetItemSet().Set(aNewSet);
     if( pStyleSheet->GetFamily() == SD_STYLE_FAMILY_PSEUDO )

@@ -645,10 +645,8 @@ public:
     virtual SvxNumType GetPageNumType() const;
 
     /** copies the items from the source set to the destination set. Both sets must have
-        same ranges but can have different pools. If pNewModel is optional. If it is null,
-        this model is used. */
-
-    void MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel );
+        same ranges but can have different pools. */
+    static void MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel );
 
     bool IsInDestruction() const { return mbInDestruction;}
 
