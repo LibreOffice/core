@@ -486,6 +486,25 @@ protected:
         return xShape;
     }
 
+    /// Get shape by name
+    uno::Reference<drawing::XShape> getShapeByName(const OUString& aName)
+    {
+        uno::Reference<drawing::XShape> xRet;
+
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        for (sal_Int32 i = 0; i < xDrawPage->getCount(); ++i)
+        {
+            uno::Reference<container::XNamed> xShape(xDrawPage->getByIndex(i), uno::UNO_QUERY);
+            if (xShape->getName() == aName)
+            {
+                xRet.set(xShape, uno::UNO_QUERY);
+                break;
+            }
+        }
+
+        return xRet;
+    }
     /// Get TextFrame by name
     uno::Reference<drawing::XShape> getTextFrameByName(const OUString& aName)
     {
