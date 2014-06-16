@@ -1016,7 +1016,7 @@ void ODatabaseDocument::impl_throwIOExceptionCausedBySave_throw( const Any& i_rE
 }
 
 void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comphelper::NamedValueCollection& _rArguments,
-    const StoreType _eType, DocumentGuard& _rGuard ) throw ( IOException, RuntimeException )
+    const StoreType _eType, DocumentGuard& _rGuard ) throw (IOException, RuntimeException, std::exception)
 {
     OSL_PRECOND( ( _eType == SAVE ) || ( _eType == SAVE_AS ),
         "ODatabaseDocument::impl_storeAs_throw: you introduced a new type which cannot be handled here!" );
