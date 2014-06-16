@@ -50,7 +50,6 @@
 #include <vector>
 #include <set>
 #include <memory>
-#include <algorithm>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
