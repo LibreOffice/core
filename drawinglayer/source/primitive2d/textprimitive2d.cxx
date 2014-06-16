@@ -228,7 +228,8 @@ namespace drawinglayer
             const ::com::sun::star::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,
             bool bFilled,
-            long nWidthToFill)
+            long nWidthToFill,
+            const basegfx::BColor& rFillColor)
         :   BufferedDecompositionPrimitive2D(),
             maTextTransform(rNewTransform),
             maText(rText),
@@ -240,7 +241,8 @@ namespace drawinglayer
             maFontColor(rFontColor),
             maB2DRange(),
             mbFilled(bFilled),
-            mnWidthToFill(nWidthToFill)
+            mnWidthToFill(nWidthToFill),
+            maTextFillColor(rFillColor)
         {
 #if OSL_DEBUG_LEVEL > 0
             const sal_Int32 aStringLength(getText().getLength());

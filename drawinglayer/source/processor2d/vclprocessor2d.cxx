@@ -189,17 +189,15 @@ namespace drawinglayer
 
                         // set FillColor Attribute
                         // FIXME(matteocam)
-                        // XXX: is "Color" the right type
 
-                        //const Color aFillColor(pTCPP->getFontFillColor() );
-                        //if( aFillColor != COL_TRANSPARENT )
-                        // set fill Color if underlined
-                        if ( eFontUnderline != UNDERLINE_NONE )
+                        // XXX: is "Color" the right type? i.e. can we use class Color in TextSimplePortionPrimitive2D
+                        const Color aFillColor(pTCPP->getTextFillColor() );
+                        if( aFillColor != COL_TRANSPARENT )
                         {
-                            Color aFillColor = RGB_COLORDATA(0x66, 0x66, 0xff);
                             aFont.SetFillColor(aFillColor);
                             aFont.SetTransparent(false);
                         }
+
 
                         // set EmphasisMark attribute
                         FontEmphasisMark eFontEmphasisMark = EMPHASISMARK_NONE;
