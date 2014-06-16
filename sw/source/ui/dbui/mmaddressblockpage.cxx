@@ -447,53 +447,6 @@ IMPL_LINK(SwSelectAddressBlockDialog, IncludeHdl_Impl, RadioButton*, pButton)
     return 0;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwRestrictedComboBox(Window *pParent, VclBuilder::stringmap &rMap)
-{
-    WinBits nBits = WB_LEFT|WB_VCENTER|WB_3DLOOK;
-
-    bool bDropdown = VclBuilder::extractDropdown(rMap);
-
-    if (bDropdown)
-        nBits |= WB_DROPDOWN;
-
-    SwRestrictedComboBox* pComboBox = new SwRestrictedComboBox(pParent, nBits);
-    pComboBox->EnableAutoSize(true);
-    return pComboBox;
-}
-
-void SwRestrictedComboBox::KeyInput(const KeyEvent& rEvt)
-{
-    bool bCallParent = true;
-    if(rEvt.GetCharCode())
-    {
-        OUString sKey(rEvt.GetCharCode());
-        if( -1 != sForbiddenChars.indexOf(sKey))
-            bCallParent = false;
-    }
-    if(bCallParent)
-        ComboBox::KeyInput(rEvt);
-}
-
-void SwRestrictedComboBox::Modify()
-{
-    Selection aSel = GetSelection();
-    OUString sTemp = GetText();
-    for(sal_Int32 i = 0; i < sForbiddenChars.getLength(); ++i)
-    {
-        sTemp = comphelper::string::remove(sTemp, sForbiddenChars[i]);
-    }
-    const sal_Int32 nDiff = GetText().getLength() - sTemp.getLength();
-    if(nDiff)
-    {
-        aSel.setMin(aSel.getMin() - nDiff);
-        aSel.setMax(aSel.getMin());
-        SetText(sTemp);
-        SetSelection(aSel);
-    }
-    if(GetModifyHdl().IsSet())
-        GetModifyHdl().Call(this);
-}
-
 #define USER_DATA_SALUTATION        -1
 #define USER_DATA_PUNCTUATION       -2
 #define USER_DATA_TEXT              -3
@@ -503,13 +456,14 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         Window* pParent, SwMailMergeConfigItem& rConfig, DialogType eType)
     : SfxModalDialog(pParent, "AddressBlockDialog",
         "modules/swriter/ui/addressblockdialog.ui")
+    , m_aTextFilter("<>")
     , m_rConfigItem(rConfig)
     , m_eType(eType)
 {
     get(m_pOK, "ok");
     get(m_pPreviewWIN, "addrpreview");
     get(m_pFieldCB, "custom");
-    m_pFieldCB->SetForbiddenChars("<>");
+    m_pFieldCB->SetTextFilter(&m_aTextFilter);
     get(m_pFieldFT, "customft");
     get(m_pDownIB, "down");
     get(m_pRightIB, "right");

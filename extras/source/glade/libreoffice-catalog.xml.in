@@ -463,9 +463,6 @@
     <glade-widget-class title="Bookmark Combo" name="swuilo-BookmarkCombo"
                         generic-name="BookmarkComboBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
-    <glade-widget-class title="Restricted ComboBox" name="swuilo-SwRestrictedComboBox"
-                        generic-name="Restricted ComboBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Category Edit" name="swuilo-FEdit"
                         generic-name="CategoryEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
