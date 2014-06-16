@@ -608,6 +608,15 @@
     <glade-widget-class title="Reference Edit" name="foruilo-RefEdit"
                         generic-name="Reference Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="Edit" name="foruilo-ArgEdit"
+                        generic-name="Edit" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="Value entry" name="foruilo-ValWnd"
+                        generic-name="Value entry" parent="GtkEntry"
+                        icon-name="widget-gtk-textentry"/>
+    <glade-widget-class title="Edit Box" name="foruilo-EditBox"
+                        generic-name="Edit Box" parent="GtkTextView"
+                        icon-name="widget-gtk-textview"/>
 
     <glade-widget-class title="Another NoSpace Edit" name="cuilo-SvxNoSpaceEdit"
                         generic-name="Another NoSpace Edit" parent="GtkEntry"
@@ -711,6 +720,13 @@
     <glade-widget-class title="Driver List Control" name="cuilo-DriverListControl"
                         generic-name="DriverListControl" parent="GtkEntry"
                         icon-name="widget-gtk-combobox"/>
+
+    <glade-widget-class title="Formula ListBox" name="foruilo-FormulaListBox"
+                        generic-name="Formula ListBox" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Formula ListBox" name="foruilo-StructListBox"
+                        generic-name="Formula ListBox" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
 
   </glade-widget-classes>
 </glade-catalog>

@@ -48,7 +48,7 @@ protected:
 
 public:
 
-                    StructListBox(Window* pParent, const ResId& rResId );
+                    StructListBox(Window* pParent, WinBits nBits );
 
     /** Inserts an entry with static image (no difference between collapsed/expanded). */
     SvTreeListEntry*    InsertStaticEntry(
@@ -73,8 +73,7 @@ private:
     OModuleClient   m_aModuleClient;
     Link            aSelLink;
 
-    FixedText       aFtStruct;
-    StructListBox   aTlbStruct;
+    StructListBox   *m_pTlbStruct;
     Image           maImgEnd;
     Image           maImgError;
 
