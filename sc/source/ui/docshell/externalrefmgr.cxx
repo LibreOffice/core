@@ -1122,15 +1122,18 @@ void ScExternalRefCache::getAllCachedDataSpans( sal_uInt16 nFileId, sc::ColumnSp
     const std::vector<TableTypeRef>& rTables = pDocItem->maTables;
     for (size_t nTab = 0, nTabCount = rTables.size(); nTab < nTabCount; ++nTab)
     {
-        const Table& rTable = *rTables[nTab];
+        TableTypeRef pTab = rTables[nTab];
+        if (!pTab)
+            continue;
+
         std::vector<SCROW> aRows;
-        rTable.getAllRows(aRows);
+        pTab->getAllRows(aRows);
         std::vector<SCROW>::const_iterator itRow = aRows.begin(), itRowEnd = aRows.end();
         for (; itRow != itRowEnd; ++itRow)
         {
             SCROW nRow = *itRow;
             std::vector<SCCOL> aCols;
-            rTable.getAllCols(nRow, aCols);
+            pTab->getAllCols(nRow, aCols);
             std::vector<SCCOL>::const_iterator itCol = aCols.begin(), itColEnd = aCols.end();
             for (; itCol != itColEnd; ++itCol)
             {
@@ -1246,8 +1249,11 @@ void ScExternalRefCache::clearCacheTables(sal_uInt16 nFileId)
     std::vector<TableTypeRef>& rTabs = pDocItem->maTables;
     for (size_t i = 0, n = rTabs.size(); i < n; ++i)
     {
-        Table& rTab = *rTabs[i];
-        rTab.clear();
+        TableTypeRef pTab = rTabs[i];
+        if (!pTab)
+            continue;
+
+        pTab->clear();
     }
 
     // Clear the external range name caches.
