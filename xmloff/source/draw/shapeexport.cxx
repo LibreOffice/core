@@ -3206,7 +3206,7 @@ static void lcl_StoreJsonExternalsAndFallback(
             {
                 // Fallback storage
                 const uno::Reference<embed::XStorage> xFallbackTarget(
-                    xModelsTarget->openStorageElement(OUString("Fallback"), embed::ElementModes::WRITE));
+                    xModelsTarget->openStorageElement(OUString("Fallbacks"), embed::ElementModes::WRITE));
 
                 uno::Reference< io::XStream > xPictureStream(
                     xFallbackTarget->openStreamElement( sModelName + ".png", embed::ElementModes::WRITE ), uno::UNO_QUERY_THROW );
@@ -3225,7 +3225,7 @@ static void lcl_StoreJsonExternalsAndFallback(
                     xFallbackTransaction->commit();
                 }
 
-                const OUString sFallbackURL( sUrlPath.copy(0,sUrlPath.lastIndexOf("/")) + "/Fallback/" + sModelName + ".png");
+                const OUString sFallbackURL( sUrlPath.copy(0,sUrlPath.lastIndexOf("/")) + "/Fallbacks/" + sModelName + ".png");
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sFallbackURL );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );

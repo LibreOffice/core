@@ -260,7 +260,7 @@ bool Embed3DModel( const uno::Reference<frame::XModel>& xModel,
                 xSBD->getDocumentStorage(), uno::UNO_QUERY_THROW);
 
         // Model storage
-        const OUString sModel("Model");
+        const OUString sModel("Models");
         uno::Reference<embed::XStorage> const xModelStorage(
             xStorage->openStorageElement(sModel, embed::ElementModes::WRITE));
 
