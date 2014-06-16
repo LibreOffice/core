@@ -509,6 +509,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     get(m_pOK, "ok");
     get(m_pPreviewWIN, "addrpreview");
     get(m_pFieldCB, "custom");
+    m_pFieldCB->SetForbiddenChars("<>");
     get(m_pFieldFT, "customft");
     get(m_pDownIB, "down");
     get(m_pRightIB, "right");
