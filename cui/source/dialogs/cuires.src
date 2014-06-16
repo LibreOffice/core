@@ -107,4 +107,14 @@ String RID_SVXSTR_FILTERNAME_CFG
     Text [ en-US ] = "Configuration (*.cfg)" ;
 };
 
+String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
+{
+    Text [ en-US ] = "Targets do not exist in the document." ;
+};
+
+String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
+{
+    Text [ en-US ] = "Couldn't open the document." ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
