@@ -321,6 +321,11 @@ public:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
 
+    void            PaintTile( VirtualDevice& rDevice,
+                               int nOutputWidth, int nOutputHeight,
+                               int nTilePosX, int nTilePosY,
+                               long nTileWidth, long nTileHeight );
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
     void            FakeButtonUp();
