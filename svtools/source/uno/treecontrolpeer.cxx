@@ -1450,7 +1450,6 @@ bool TreeControlPeer::loadImage( const OUString& rURL, Image& rImage )
     {
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         Reference< XInterface > x( graphic::GraphicProvider::create(xContext) );
-        mxGraphicProvider.query( x );
         mxGraphicProvider = Reference< XGraphicProvider >( x, UNO_QUERY );
     }
 
