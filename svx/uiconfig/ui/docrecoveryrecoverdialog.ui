@@ -19,7 +19,7 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="next">
-                <property name="label">_Start Recovery &gt;</property>
+                <property name="label" translatable="yes">_Start Recovery &gt;</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
