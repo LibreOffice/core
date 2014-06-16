@@ -1,0 +1,525 @@
+/* -*- Mode: Java; c-basic-offset: 4; tab-width: 20; indent-tabs-mode: nil; -*-
+ * ***** BEGIN LICENSE BLOCK *****
+ * Version: MPL 1.1/GPL 2.0/LGPL 2.1
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Original Code is Mozilla Android code.
+ *
+ * The Initial Developer of the Original Code is Mozilla Foundation.
+ * Portions created by the Initial Developer are Copyright (C) 2009-2010
+ * the Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):
+ *   Patrick Walton <pcwalton@mozilla.com>
+ *   Chris Lord <chrislord.net@gmail.com>
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 2 or later (the "GPL"), or
+ * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+ * in which case the provisions of the GPL or the LGPL are applicable instead
+ * of those above. If you wish to allow use of your version of this file only
+ * under the terms of either the GPL or the LGPL, and not to allow others to
+ * use your version of this file under the terms of the MPL, indicate your
+ * decision by deleting the provisions above and replace them with the notice
+ * and other provisions required by the GPL or the LGPL. If you do not delete
+ * the provisions above, a recipient may use your version of this file under
+ * the terms of any one of the MPL, the GPL or the LGPL.
+ *
+ * ***** END LICENSE BLOCK ***** */
+
+package org.mozilla.gecko.gfx;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Point;
+import android.graphics.PointF;
+import android.graphics.RectF;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View.OnTouchListener;
+import android.view.ViewConfiguration;
+
+import org.mozilla.gecko.ui.PanZoomController;
+import org.mozilla.gecko.ui.SimpleScaleGestureDetector;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+//import org.mozilla.gecko.GeckoApp;
+//import org.mozilla.gecko.GeckoEvent;
+//import org.mozilla.gecko.Tabs;
+//import org.mozilla.gecko.Tab;
+
+/**
+ * The layer controller manages a tile that represents the visible page. It does panning and
+ * zooming natively by delegating to a panning/zooming controller. Touch events can be dispatched
+ * to a higher-level view.
+ * <p/>
+ * Many methods require that the monitor be held, with a synchronized (controller) { ... } block.
+ */
+public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
+    /* The extra area on the sides of the page that we want to buffer to help with
+     * smooth, asynchronous scrolling. Depending on a device's support for NPOT
+     * textures, this may be rounded up to the nearest power of two.
+     */
+    public static final IntSize MIN_BUFFER = new IntSize(512, 1024);
+    private static final String LOGTAG = "GeckoLayerController";
+    /* If the visible rect is within the danger zone (measured in pixels from each edge of a tile),
+     * we start aggressively redrawing to minimize checkerboarding. */
+    private static final int DANGER_ZONE_X = 75;
+    private static final int DANGER_ZONE_Y = 150;
+    private Layer mRootLayer;                   /* The root layer. */
+    private LayerView mView;                    /* The main rendering view. */
+    private Context mContext;                   /* The current context. */
+    /*
+     * The panning and zooming controller, which interprets pan and zoom gestures for us and
+     * updates our visible rect appropriately.
+     */
+    private ViewportMetrics mViewportMetrics;   /* The current viewport metrics. */
+    private boolean mWaitForTouchListeners;
+    private PanZoomController mPanZoomController;
+    private OnTouchListener mOnTouchListener;       /* The touch listener. */
+    private LayerClient mLayerClient;               /* The layer client. */
+    /* The new color for the checkerboard. */
+    private int mCheckerboardColor;
+    private boolean mCheckerboardShouldShowChecks;
+    private boolean mForceRedraw;
+    /* The time limit for pages to respond with preventDefault on touchevents
+     * before we begin panning the page */
+    private int mTimeout = 200;
+
+    private boolean allowDefaultActions = true;
+    private Timer allowDefaultTimer = null;
+    private PointF initialTouchLocation = null;
+
+    public LayerController(Context context) {
+        mContext = context;
+
+        mForceRedraw = true;
+        mViewportMetrics = new ViewportMetrics();
+        mPanZoomController = new PanZoomController(this);
+        mView = new LayerView(context, this);
+
+        //Tabs.getInstance().registerOnTabsChangedListener(this);
+
+        ViewConfiguration vc = ViewConfiguration.get(mContext);
+        mTimeout = vc.getLongPressTimeout();
+    }
+
+    public void onDestroy() {
+        //Tabs.getInstance().unregisterOnTabsChangedListener(this);
+    }
+
+    public void setForceRedraw() {
+        mForceRedraw = true;
+    }
+
+    public LayerClient getLayerClient() {
+        return mLayerClient;
+    }
+
+    public void setLayerClient(LayerClient layerClient) {
+        mLayerClient = layerClient;
+        layerClient.setLayerController(this);
+    }
+
+    public Layer getRoot() {
+        return mRootLayer;
+    }
+
+    public void setRoot(Layer layer) {
+        mRootLayer = layer;
+    }
+
+    public LayerView getView() {
+        return mView;
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
+
+    public ViewportMetrics getViewportMetrics() {
+        return mViewportMetrics;
+    }
+
+    /**
+     * Sets the entire viewport metrics at once. This function does not notify the layer client or
+     * the pan/zoom controller, so you will need to call notifyLayerClientOfGeometryChange() or
+     * notifyPanZoomControllerOfGeometryChange() after calling this. You must hold the monitor
+     * while calling this.
+     */
+    public void setViewportMetrics(ViewportMetrics viewport) {
+        mViewportMetrics = new ViewportMetrics(viewport);
+        Log.d(LOGTAG, "setViewportMetrics: " + mViewportMetrics);
+        // this function may or may not be called on the UI thread,
+        // but repositionPluginViews must only be called on the UI thread.
+        //GeckoApp.mAppContext.runOnUiThread(new Runnable() {
+        //    public void run() {
+        //        GeckoApp.mAppContext.repositionPluginViews(false);
+        //    }
+        //});
+        mView.requestRender();
+    }
+
+    public RectF getViewport() {
+        return mViewportMetrics.getViewport();
+    }
+
+    public FloatSize getViewportSize() {
+        return mViewportMetrics.getSize();
+    }
+
+    /**
+     * The view calls this function to indicate that the viewport changed size. It must hold the
+     * monitor while calling it.
+     * <p/>
+     * TODO: Refactor this to use an interface. Expose that interface only to the view and not
+     * to the layer client. That way, the layer client won't be tempted to call this, which might
+     * result in an infinite loop.
+     */
+    public void setViewportSize(FloatSize size) {
+        // Resize the viewport, and modify its zoom factor so that the page retains proportionally
+        // zoomed relative to the screen.
+        float oldHeight = mViewportMetrics.getSize().height;
+        float oldWidth = mViewportMetrics.getSize().width;
+        float oldZoomFactor = mViewportMetrics.getZoomFactor();
+        mViewportMetrics.setSize(size);
+
+        // if the viewport got larger (presumably because the vkb went away), and the page
+        // is smaller than the new viewport size, increase the page size so that the panzoomcontroller
+        // doesn't zoom in to make it fit (bug 718270). this page size change is in anticipation of
+        // gecko increasing the page size to match the new viewport size, which will happen the next
+        // time we get a draw update.
+        if (size.width >= oldWidth && size.height >= oldHeight) {
+            FloatSize pageSize = mViewportMetrics.getPageSize();
+            if (pageSize.width < size.width || pageSize.height < size.height) {
+                mViewportMetrics.setPageSize(new FloatSize(Math.max(pageSize.width, size.width),
+                        Math.max(pageSize.height, size.height)));
+            }
+        }
+
+        PointF newFocus = new PointF(size.width / 2.0f, size.height / 2.0f);
+        float newZoomFactor = size.width * oldZoomFactor / oldWidth;
+        mViewportMetrics.scaleTo(newZoomFactor, newFocus);
+
+        Log.d(LOGTAG, "setViewportSize: " + mViewportMetrics);
+        setForceRedraw();
+
+        if (mLayerClient != null)
+            mLayerClient.viewportSizeChanged();
+
+        notifyLayerClientOfGeometryChange();
+        mPanZoomController.abortAnimation();
+        mView.requestRender();
+    }
+
+    public FloatSize getPageSize() {
+        return mViewportMetrics.getPageSize();
+    }
+
+    /**
+     * Sets the current page size. You must hold the monitor while calling this.
+     */
+    public void setPageSize(FloatSize size) {
+        if (mViewportMetrics.getPageSize().fuzzyEquals(size))
+            return;
+
+        mViewportMetrics.setPageSize(size);
+        Log.d(LOGTAG, "setPageSize: " + mViewportMetrics);
+
+        // Page size is owned by the LayerClient, so no need to notify it of
+        // this change.
+
+        mView.post(new Runnable() {
+            public void run() {
+                mPanZoomController.pageSizeUpdated();
+                mView.requestRender();
+            }
+        });
+    }
+
+    public PointF getOrigin() {
+        return mViewportMetrics.getOrigin();
+    }
+
+    public float getZoomFactor() {
+        return mViewportMetrics.getZoomFactor();
+    }
+
+    public Bitmap getBackgroundPattern() {
+        return getDrawable("background");
+    }
+
+    public Bitmap getShadowPattern() {
+        return getDrawable("shadow");
+    }
+
+    public PanZoomController getPanZoomController() {
+        return mPanZoomController;
+    }
+
+    public GestureDetector.OnGestureListener getGestureListener() {
+        return mPanZoomController;
+    }
+
+    public SimpleScaleGestureDetector.SimpleScaleGestureListener getScaleGestureListener() {
+        return mPanZoomController;
+    }
+
+    public GestureDetector.OnDoubleTapListener getDoubleTapListener() {
+        return mPanZoomController;
+    }
+
+    public Bitmap getDrawable(String name) {
+        Resources resources = mContext.getResources();
+        int resourceID = resources.getIdentifier(name, "drawable", mContext.getPackageName());
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        return BitmapFactory.decodeResource(mContext.getResources(), resourceID, options);
+    }
+
+    public Bitmap getDrawable16(String name) {
+        Resources resources = mContext.getResources();
+        int resourceID = resources.getIdentifier(name, "drawable", mContext.getPackageName());
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        return BitmapFactory.decodeResource(mContext.getResources(), resourceID, options);
+    }
+
+    /**
+     * Scrolls the viewport by the given offset. You must hold the monitor while calling this.
+     */
+    public void scrollBy(PointF point) {
+        PointF origin = mViewportMetrics.getOrigin();
+        origin.offset(point.x, point.y);
+        mViewportMetrics.setOrigin(origin);
+        Log.d(LOGTAG, "scrollBy: " + mViewportMetrics);
+
+        notifyLayerClientOfGeometryChange();
+        //GeckoApp.mAppContext.repositionPluginViews(false);
+        mView.requestRender();
+    }
+
+    /**
+     * Scales the viewport, keeping the given focus point in the same place before and after the
+     * scale operation. You must hold the monitor while calling this.
+     */
+    public void scaleWithFocus(float zoomFactor, PointF focus) {
+        mViewportMetrics.scaleTo(zoomFactor, focus);
+        Log.d(LOGTAG, "scaleWithFocus: " + mViewportMetrics + "; zf=" + zoomFactor);
+
+        // We assume the zoom level will only be modified by the
+        // PanZoomController, so no need to notify it of this change.
+        notifyLayerClientOfGeometryChange();
+        //GeckoApp.mAppContext.repositionPluginViews(false);
+        mView.requestRender();
+    }
+
+    public boolean post(Runnable action) {
+        return mView.post(action);
+    }
+
+    public void setOnTouchListener(OnTouchListener onTouchListener) {
+        mOnTouchListener = onTouchListener;
+    }
+
+    /**
+     * The view as well as the controller itself use this method to notify the layer client that
+     * the geometry changed.
+     */
+    public void notifyLayerClientOfGeometryChange() {
+        if (mLayerClient != null)
+            mLayerClient.geometryChanged();
+    }
+
+    /**
+     * Aborts any pan/zoom animation that is currently in progress.
+     */
+    public void abortPanZoomAnimation() {
+        if (mPanZoomController != null) {
+            mView.post(new Runnable() {
+                public void run() {
+                    mPanZoomController.abortAnimation();
+                }
+            });
+        }
+    }
+
+    /**
+     * Returns true if this controller is fine with performing a redraw operation or false if it
+     * would prefer that the action didn't take place.
+     */
+    public boolean getRedrawHint() {
+        if (mForceRedraw) {
+            mForceRedraw = false;
+            return true;
+        }
+
+        return aboutToCheckerboard() && mPanZoomController.getRedrawHint();
+    }
+
+    private RectF getTileRect() {
+        if (mRootLayer == null)
+            return new RectF();
+
+        float x = mRootLayer.getOrigin().x, y = mRootLayer.getOrigin().y;
+        IntSize layerSize = mRootLayer.getSize();
+        return new RectF(x, y, x + layerSize.width, y + layerSize.height);
+    }
+
+    // Returns true if a checkerboard is about to be visible.
+    private boolean aboutToCheckerboard() {
+        // Increase the size of the viewport (and clamp to page boundaries), and
+        // intersect it with the tile's displayport to determine whether we're
+        // close to checkerboarding.
+        FloatSize pageSize = getPageSize();
+        RectF adjustedViewport = RectUtils.expand(getViewport(), DANGER_ZONE_X, DANGER_ZONE_Y);
+        if (adjustedViewport.top < 0) adjustedViewport.top = 0;
+        if (adjustedViewport.left < 0) adjustedViewport.left = 0;
+        if (adjustedViewport.right > pageSize.width) adjustedViewport.right = pageSize.width;
+        if (adjustedViewport.bottom > pageSize.height) adjustedViewport.bottom = pageSize.height;
+
+        return !getTileRect().contains(adjustedViewport);
+    }
+
+    /**
+     * Converts a point from layer view coordinates to layer coordinates. In other words, given a
+     * point measured in pixels from the top left corner of the layer view, returns the point in
+     * pixels measured from the top left corner of the root layer, in the coordinate system of the
+     * layer itself. This method is used by the viewport controller as part of the process of
+     * translating touch events to Gecko's coordinate system.
+     */
+    public PointF convertViewPointToLayerPoint(PointF viewPoint) {
+        if (mRootLayer == null)
+            return null;
+
+        // Undo the transforms.
+        PointF origin = mViewportMetrics.getOrigin();
+        PointF newPoint = new PointF(origin.x, origin.y);
+        newPoint.offset(viewPoint.x, viewPoint.y);
+
+        Point rootOrigin = mRootLayer.getOrigin();
+        newPoint.offset(-rootOrigin.x, -rootOrigin.y);
+
+        return newPoint;
+    }
+
+    /*
+     * Gesture detection. This is handled only at a high level in this class; we dispatch to the
+     * pan/zoom controller to do the dirty work.
+     */
+    public boolean onTouchEvent(MotionEvent event) {
+        int action = event.getAction();
+        PointF point = new PointF(event.getX(), event.getY());
+
+        // this will only match the first touchstart in a series
+        if ((action & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
+            initialTouchLocation = point;
+            allowDefaultActions = !mWaitForTouchListeners;
+
+            // if we have a timer, this may be a double tap,
+            // cancel the current timer but don't clear the event queue
+            if (allowDefaultTimer != null) {
+                allowDefaultTimer.cancel();
+            } else {
+                // if we don't have a timer, make sure we remove any old events
+                mView.clearEventQueue();
+            }
+            allowDefaultTimer = new Timer();
+            allowDefaultTimer.schedule(new TimerTask() {
+                public void run() {
+                    post(new Runnable() {
+                        public void run() {
+                            preventPanning(false);
+                        }
+                    });
+                }
+            }, mTimeout);
+        }
+
+        // After the initial touch, ignore touch moves until they exceed a minimum distance.
+        if (initialTouchLocation != null && (action & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_MOVE) {
+            if (PointUtils.subtract(point, initialTouchLocation).length() > PanZoomController.PAN_THRESHOLD) {
+                initialTouchLocation = null;
+            } else {
+                return !allowDefaultActions;
+            }
+        }
+
+        // send the event to content
+        if (mOnTouchListener != null)
+            mOnTouchListener.onTouch(mView, event);
+
+        return !allowDefaultActions;
+    }
+
+    public void preventPanning(boolean aValue) {
+        if (allowDefaultTimer != null) {
+            allowDefaultTimer.cancel();
+            allowDefaultTimer = null;
+        }
+        if (aValue == allowDefaultActions) {
+            allowDefaultActions = !aValue;
+
+            if (aValue) {
+                mView.clearEventQueue();
+                mPanZoomController.cancelTouch();
+            } else {
+                mView.processEventQueue();
+            }
+        }
+    }
+
+    /*public void onTabChanged(Tab tab, Tabs.TabEvents msg) {
+        if ((Tabs.getInstance().isSelectedTab(tab) && msg == Tabs.TabEvents.STOP) || msg == Tabs.TabEvents.SELECTED) {
+            mWaitForTouchListeners = tab.getHasTouchListeners();
+        }
+    }*/
+    public void setWaitForTouchListeners(boolean aValue) {
+        mWaitForTouchListeners = aValue;
+    }
+
+    /**
+     * Retrieves whether we should show checkerboard checks or not.
+     */
+    public boolean checkerboardShouldShowChecks() {
+        return mCheckerboardShouldShowChecks;
+    }
+
+    /**
+     * Retrieves the color that the checkerboard should be.
+     */
+    public int getCheckerboardColor() {
+        return mCheckerboardColor;
+    }
+
+    /**
+     * Sets a new color for the checkerboard.
+     */
+    public void setCheckerboardColor(int newColor) {
+        mCheckerboardColor = newColor;
+        mView.requestRender();
+    }
+
+    /**
+     * Sets whether or not the checkerboard should show checkmarks.
+     */
+    public void setCheckerboardShowChecks(boolean showChecks) {
+        mCheckerboardShouldShowChecks = showChecks;
+        mView.requestRender();
+    }
+}
