@@ -22,36 +22,6 @@
 
 #include "docrecovery.hrc"
 
-ModalDialog RID_SVX_MDLG_DOCRECOVERY_PROGR
-{
-    Size = MAP_APPFONT( SAVEPROGR_WIDTH, SAVEPROGR_HEIGHT );
-    HelpId = HID_SVX_MDLG_DOCRECOVERY_PROGR;
-    OutputSize = TRUE;
-    SVLook = TRUE;
-    Moveable = TRUE;
-    Closeable = FALSE;
-    Text = "%PRODUCTNAME %PRODUCTVERSION";
-
-    FixedText FT_SAVEPROGR_HINT
-    {
-        Pos = MAP_APPFONT( SAVEPROGR_COL0, SAVEPROGR_ROW0 );
-        Size = MAP_APPFONT( SAVEPROGR_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text[ en-US ] = "Documents are being saved.";
-    };
-    FixedText FT_SAVEPROGR_PROGR
-    {
-        Pos = MAP_APPFONT( SAVEPROGR_COL0, SAVEPROGR_ROW1 );
-        Size = MAP_APPFONT( SAVEPROGR_CONTROLWIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text[ en-US ] = "Progress of saving: ";
-    };
-    Window WIN_SAVEPROGR_PROGR
-    {
-        Pos = MAP_APPFONT( SAVEPROGR_COL0, SAVEPROGR_ROW2 );
-        Size = MAP_APPFONT( SAVEPROGR_CONTROLWIDTH, PROGR_HEIGHT );
-        Border = TRUE;
-    };
-};
-
 QueryBox RID_SVXQB_EXIT_RECOVERY
 {
     BUTTONS = WB_YES_NO ;

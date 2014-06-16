@@ -26,35 +26,14 @@
 
 #define PROGR_HEIGHT                (RSC_CD_PUSHBUTTON_HEIGHT)
 
-// TabDialog
-#define TABDLG_WIDTH                290
-#define TABDLG_HEIGHT               238
-
 #define SAVE_WIDTH                  290
 #define SAVE_HEIGHT                 238
 #define SAVE_TITLEWINHEIGHT         36
 #define SAVE_COL0                   (RSC_SP_DLG_INNERBORDER_LEFT)
 #define SAVE_COL2                   (SAVE_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
-#define SAVE_COL1                   (SAVE_COL2-RSC_CD_PUSHBUTTON_WIDTH)
-#define SAVE_ROW0                   ((SAVE_TITLEWINHEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)
-#define SAVE_ROW1                   (SAVE_TITLEWINHEIGHT)
-#define SAVE_ROW2                   (SAVE_ROW1+RSC_SP_CTRL_Y)
-#define SAVE_ROW3                   (SAVE_ROW2+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define SAVE_ROW4                   (SAVE_ROW3+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
-#define SAVE_ROW9                   (SAVE_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
-#define SAVE_ROW8                   (SAVE_ROW9-RSC_CD_PUSHBUTTON_HEIGHT)
-#define SAVE_ROW7                   (SAVE_ROW8-RSC_SP_CTRL_GROUP_Y-RSC_CD_FIXEDLINE_HEIGHT)
-#define SAVE_ROW6                   (SAVE_ROW7-RSC_SP_CTRL_GROUP_Y-RSC_CD_CHECKBOX_HEIGHT)
-#define SAVE_ROW5                   (SAVE_ROW6-RSC_SP_CTRL_Y)
-#define SAVE_FILELISTHEIGHT         (SAVE_ROW5-SAVE_ROW4)
 #define SAVE_CONTROLWIDTH           (SAVE_COL2-SAVE_COL0)
 
 // Save Progress Dialog
-
-#define FT_SAVEPROGR_HINT           1
-#define FT_SAVEPROGR_PROGR          2
-#define WIN_SAVEPROGR_PROGR         3
-
 #define SAVEPROGR_WIDTH             240
 #define SAVEPROGR_COL0              (RSC_SP_DLG_INNERBORDER_LEFT)
 #define SAVEPROGR_COL1              (SAVEPROGR_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
