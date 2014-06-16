@@ -870,6 +870,20 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     rDoc.ClearFormulaContext();
 }
 
+void ScGridWindow::PaintTile( VirtualDevice& rDevice,
+                              int nOutputWidth, int nOutputHeight,
+                              int nTilePosX, int nTilePosY,
+                              long nTileWidth, long nTileHeight )
+{
+    (void) rDevice;
+    (void) nOutputWidth;
+    (void) nOutputHeight;
+    (void) nTilePosX;
+    (void) nTilePosY;
+    (void) nTileWidth;
+    (void) nTileHeight;
+}
+
 void ScGridWindow::CheckNeedsRepaint()
 {
     //  called at the end of painting, and from timer after background text width calculation

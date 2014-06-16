@@ -54,6 +54,7 @@
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/interfacecontainer.h>
 #include <svl/itemprop.hxx>
+#include <vcl/ITiledRenderable.hxx>
 #include "drwlayer.hxx"
 
 class ScDocShell;
@@ -69,6 +70,7 @@ class ScPrintUIOptions;
 class ScSheetSaveData;
 
 class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
+                    public ::vcl::ITiledRenderable,
                     public com::sun::star::sheet::XSpreadsheetDocument,
                     public com::sun::star::document::XActionLockable,
                     public com::sun::star::sheet::XCalculatable,
@@ -350,6 +352,17 @@ public:
     virtual com::sun::star::uno::Sequence< com::sun::star::sheet::opencl::OpenCLPlatform >
         SAL_CALL getOpenCLPlatforms()
                                 throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
+
+    // ITiledRenderable
+    virtual void paintTile( VirtualDevice& rDevice,
+                            int nOutputWidth,
+                            int nOutputHeight,
+                            int nTilePosX,
+                            int nTilePosY,
+                            long nTileWidth,
+                            long nTileHeight ) SAL_OVERRIDE;
+    virtual Size getDocumentSize() SAL_OVERRIDE;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper2<

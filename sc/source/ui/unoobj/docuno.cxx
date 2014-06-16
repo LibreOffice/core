@@ -96,6 +96,7 @@
 #include "platforminfo.hxx"
 #include "interpre.hxx"
 #include "formulagroup.hxx"
+#include "gridwin.hxx"
 #include <columnspanset.hxx>
 
 using namespace com::sun::star;
@@ -444,6 +445,28 @@ void ScModelObj::RepaintRange( const ScRangeList& rRange )
 {
     if (pDocShell)
         pDocShell->PostPaint( rRange, PAINT_GRID );
+}
+
+void ScModelObj::paintTile( VirtualDevice& rDevice,
+                            int nOutputWidth, int nOutputHeight,
+                            int nTilePosX, int nTilePosY,
+                            long nTileWidth, long nTileHeight )
+{
+    // There seems to be no clear way of getting the grid window for this
+    // particular document, hence we need to hope we get the right window.
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+
+    pGridWindow->PaintTile( rDevice, nOutputWidth, nOutputHeight,
+                            nTilePosX, nTilePosY, nTileWidth, nTileHeight );
+}
+
+Size ScModelObj::getDocumentSize()
+{
+    // TODO: not sure what we want to do here, maybe just return the size for a certain
+    // default minimum number of cells, e.g. 100x100 and more if more cells have
+    // content?
+    return Size();
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
