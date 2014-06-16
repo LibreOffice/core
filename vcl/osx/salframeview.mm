@@ -1026,9 +1026,15 @@ private:
     }
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+-(void)insertText:(id)aString
+#else
 -(void)insertText:(id)aString replacementRange:(NSRange)replacementRange
+#endif
 {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     (void) replacementRange; // FIXME: surely it must be used
+#endif
 
     YIELD_GUARD;
 
@@ -1547,7 +1553,7 @@ private:
 }
 
 
-// NSTextInputClient protocol
+// NSTextInput/NSTextInputClient protocol
 - (NSArray *)validAttributesForMarkedText
 {
     return [NSArray arrayWithObjects:NSUnderlineStyleAttributeName, nil];
@@ -1598,9 +1604,15 @@ private:
     return mSelectedRange;
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+- (void)setMarkedText:(id)aString selectedRange:(NSRange)selRange
+#else
 - (void)setMarkedText:(id)aString selectedRange:(NSRange)selRange replacementRange:(NSRange)replacementRange
+#endif
 {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     (void) replacementRange; // FIXME - use it!
+#endif
 
     if( ![aString isKindOfClass:[NSAttributedString class]] )
         aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
@@ -1668,10 +1680,16 @@ private:
     mSelectedRange = mMarkedRange = NSMakeRange(NSNotFound, 0);
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+- (NSAttributedString *)attributedSubstringFromRange:(NSRange)aRange
+#else
 - (NSAttributedString *)attributedSubstringForProposedRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+#endif
 {
     (void) aRange;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     (void) actualRange;
+#endif
 
     // FIXME - Implement
     return nil;
@@ -1715,11 +1733,17 @@ private:
     mpLastEvent = nil;
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+- (NSRect)firstRectForCharacterRange:(NSRange)aRange
+#else
 - (NSRect)firstRectForCharacterRange:(NSRange)aRange actualRange:(NSRangePointer)actualRange
+#endif
 {
      // FIXME - These should probably be used?
     (void) aRange;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
     (void) actualRange;
+#endif
 
     SalExtTextInputPosEvent aPosEvent;
     mpFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void *)&aPosEvent );
