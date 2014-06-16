@@ -54,23 +54,6 @@ NoSpaceEdit::NoSpaceEdit(Window* pParent)
 {
 }
 
-NoSpaceEdit::~NoSpaceEdit()
-{
-}
-
-void NoSpaceEdit::KeyInput(const KeyEvent& rEvt)
-{
-    bool bCallParent = true;
-    if(rEvt.GetCharCode())
-    {
-        OUString sKey(rEvt.GetCharCode());
-        if( -1 != sForbiddenChars.indexOf(sKey))
-            bCallParent = false;
-    }
-    if(bCallParent)
-        Edit::KeyInput(rEvt);
-}
-
 void NoSpaceEdit::Modify()
 {
     Selection aSel = GetSelection();
