@@ -94,7 +94,7 @@ public:
     /// Writes text frame in DML format.
     void writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly = false);
     /// Writes text frame in VML format.
-    void writeVMLTextFrame(sw::Frame* pParentFrame);
+    void writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly = false);
     /// Undo the text direction mangling done by the frame btLr handler in writerfilter::dmapper::DomainMapper::lcl_startCharacterGroup()
     bool checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList = 0);
     /// Is this a standalone TextFrame, or used as a TextBox of a shape?

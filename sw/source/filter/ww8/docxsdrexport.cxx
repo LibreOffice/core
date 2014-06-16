@@ -1405,7 +1405,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
     }
 }
 
-void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
+void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly)
 {
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
@@ -1446,38 +1446,44 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
     m_pImpl->m_pFlyFrameSize = 0;
     m_pImpl->m_rExport.mpParentFrame = NULL;
 
-    pFS->startElementNS(XML_w, XML_pict, FSEND);
-    pFS->startElementNS(XML_v, XML_rect, xFlyAttrList);
-    m_pImpl->textFrameShadow(rFrmFmt);
-    if (m_pImpl->m_pFlyFillAttrList)
+    if (!bTextBoxOnly)
     {
-        sax_fastparser::XFastAttributeListRef xFlyFillAttrList(m_pImpl->m_pFlyFillAttrList);
-        m_pImpl->m_pFlyFillAttrList = NULL;
-        pFS->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
+        pFS->startElementNS(XML_w, XML_pict, FSEND);
+        pFS->startElementNS(XML_v, XML_rect, xFlyAttrList);
+        m_pImpl->textFrameShadow(rFrmFmt);
+        if (m_pImpl->m_pFlyFillAttrList)
+        {
+            sax_fastparser::XFastAttributeListRef xFlyFillAttrList(m_pImpl->m_pFlyFillAttrList);
+            m_pImpl->m_pFlyFillAttrList = NULL;
+            pFS->singleElementNS(XML_v, XML_fill, xFlyFillAttrList);
+        }
+        if (m_pImpl->m_pDashLineStyleAttr)
+        {
+            sax_fastparser::XFastAttributeListRef xDashLineStyleAttr(m_pImpl->m_pDashLineStyleAttr);
+            m_pImpl->m_pDashLineStyleAttr = NULL;
+            pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
+        }
+        pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
+        pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
     }
-    if (m_pImpl->m_pDashLineStyleAttr)
-    {
-        sax_fastparser::XFastAttributeListRef xDashLineStyleAttr(m_pImpl->m_pDashLineStyleAttr);
-        m_pImpl->m_pDashLineStyleAttr = NULL;
-        pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
-    }
-    pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
-    pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
     m_pImpl->m_bFlyFrameGraphic = true;
     m_pImpl->m_rExport.WriteText();
     m_pImpl->m_bFlyFrameGraphic = false;
-    pFS->endElementNS(XML_w, XML_txbxContent);
-    pFS->endElementNS(XML_v, XML_textbox);
-
-    if (m_pImpl->m_pFlyWrapAttrList)
+    if (!bTextBoxOnly)
     {
-        sax_fastparser::XFastAttributeListRef xFlyWrapAttrList(m_pImpl->m_pFlyWrapAttrList);
-        m_pImpl->m_pFlyWrapAttrList = NULL;
-        pFS->singleElementNS(XML_w10, XML_wrap, xFlyWrapAttrList);
-    }
+        pFS->endElementNS(XML_w, XML_txbxContent);
+        pFS->endElementNS(XML_v, XML_textbox);
 
-    pFS->endElementNS(XML_v, XML_rect);
-    pFS->endElementNS(XML_w, XML_pict);
+        if (m_pImpl->m_pFlyWrapAttrList)
+        {
+            sax_fastparser::XFastAttributeListRef xFlyWrapAttrList(m_pImpl->m_pFlyWrapAttrList);
+            m_pImpl->m_pFlyWrapAttrList = NULL;
+            pFS->singleElementNS(XML_w10, XML_wrap, xFlyWrapAttrList);
+        }
+
+        pFS->endElementNS(XML_v, XML_rect);
+        pFS->endElementNS(XML_w, XML_pict);
+    }
     m_pImpl->m_bFrameBtLr = false;
 }
 

@@ -4582,6 +4582,14 @@ void DocxAttributeOutput::WriteTextBox(uno::Reference<drawing::XShape> xShape)
     m_rExport.SdrExporter().writeDMLTextFrame(&aFrame, m_anchorId++, /*bTextBoxOnly=*/true);
 }
 
+void DocxAttributeOutput::WriteVMLTextBox(uno::Reference<drawing::XShape> xShape)
+{
+    SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(xShape);
+    const SwPosition* pAnchor = pTextBox->GetAnchor().GetCntntAnchor();
+    sw::Frame aFrame(*pTextBox, *pAnchor);
+    m_rExport.SdrExporter().writeVMLTextFrame(&aFrame, /*bTextBoxOnly=*/true);
+}
+
 oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
 {
     return m_rDrawingML;
