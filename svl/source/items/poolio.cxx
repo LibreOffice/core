@@ -303,7 +303,6 @@ void SfxItemPool::LoadCompleted()
     // wurden keine Ref-Counts mitgeladen?
     if ( pImp->nInitRefCount > 1 )
     {
-
         // "uber alle Which-Werte iterieren
         std::vector<SfxPoolItemArray_Impl*>::iterator itrItemArr = pImp->maPoolItems.begin();
         for( sal_uInt16 nArrCnt = GetSize_Impl(); nArrCnt; --nArrCnt, ++itrItemArr )
@@ -314,6 +313,7 @@ void SfxItemPool::LoadCompleted()
                 // "uber alle Items mit dieser Which-Id iterieren
                 SfxPoolItemArrayBase_Impl::iterator ppHtArr = (*itrItemArr)->begin();
                 for( size_t n = (*itrItemArr)->size(); n; --n, ++ppHtArr )
+                {
                     if (*ppHtArr)
                     {
                         #ifdef DBG_UTIL
@@ -326,6 +326,8 @@ void SfxItemPool::LoadCompleted()
                         if ( !ReleaseRef( **ppHtArr, 1 ) )
                             DELETEZ( *ppHtArr );
                     }
+                }
+                (*itrItemArr)->ReHash();
             }
         }
 
@@ -453,9 +455,9 @@ void SfxItemPool_Impl::readTheItems (
         }
     }
     delete pOldArr;
+
+    (*ppArr)->ReHash(); // paranoid
 }
-
-
 
 SvStream &SfxItemPool::Load(SvStream &rStream)
 {
@@ -981,7 +983,6 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
 }
 
 
-
 const SfxPoolItem* SfxItemPool::LoadSurrogate
 (
     SvStream&           rStream,    // vor einem Surrogat positionierter Stream
@@ -1178,7 +1179,6 @@ sal_uInt32 SfxItemPool::GetSurrogate(const SfxPoolItem *pItem) const
     SFX_ASSERT( false, pItem->Which(), "Item not in the pool");
     return SFX_ITEMS_NULL;
 }
-
 
 
 bool SfxItemPool::IsInStoringRange( sal_uInt16 nWhich ) const
