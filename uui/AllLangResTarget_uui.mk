@@ -31,7 +31,6 @@ $(eval $(call gb_SrsTarget_add_files,uui/res,\
 	uui/source/openlocked.src \
 	uui/source/passworddlg.src \
 	uui/source/passworderrs.src \
-	uui/source/secmacrowarnings.src \
 	uui/source/trylater.src \
 ))
 
