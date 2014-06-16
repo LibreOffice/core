@@ -25,6 +25,7 @@
 #include <svl/lstner.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include "svx/svxdllapi.h"
+#include <svx/xenum.hxx>
 
 class XFillStyleItem;
 class XFillColorItem;
