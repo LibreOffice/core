@@ -42,9 +42,6 @@
     <glade-widget-class title="Thesaurus Edit" name="cuilo-ReplaceEdit"
                         generic-name="ReplaceEdit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
-    <glade-widget-class title="TableName Edit" name="swlo-TableNameEdit"
-                        generic-name="TableNameEdit" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="Thesaurus Lookup" name="cuilo-LookUpComboBox"
                         generic-name="LookUpComboBox" parent="GtkEntry"
                         icon-name="widget-gtk-comboboxtext"/>
@@ -616,10 +613,6 @@
 
     <glade-widget-class title="Reference Edit" name="foruilo-RefEdit"
                         generic-name="Reference Edit" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
-
-    <glade-widget-class title="NoSpace Edit" name="swlo-NoSpaceEdit"
-                        generic-name="NoSpace Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
 
     <glade-widget-class title="Another NoSpace Edit" name="cuilo-SvxNoSpaceEdit"

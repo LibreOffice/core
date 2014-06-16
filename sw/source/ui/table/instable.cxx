@@ -71,11 +71,13 @@ void SwInsTableDlg::GetValues( OUString& rName, sal_uInt16& rRow, sal_uInt16& rC
 
 SwInsTableDlg::SwInsTableDlg( SwView& rView )
     : SfxModalDialog(rView.GetWindow(), "InsertTableDialog", "modules/swriter/ui/inserttable.ui")
+    , m_aTextFilter(" .<>")
     , pShell(&rView.GetWrtShell())
     , pTAutoFmt(0)
     , nEnteredValRepeatHeaderNF(-1)
 {
     get(m_pNameEdit, "nameedit");
+    m_pNameEdit->SetTextFilter(&m_aTextFilter);
     get(m_pColNF, "colspin");
     get(m_pRowNF, "rowspin");
     get(m_pHeaderCB, "headercb");

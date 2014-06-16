@@ -63,6 +63,7 @@ using namespace ::com::sun::star;
 
 SwFormatTablePage::SwFormatTablePage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "FormatTablePage", "modules/swriter/ui/formattablepage.ui", &rSet)
+    , m_aTextFilter(" .<>")
     , pTblData(0)
     , nSaveWidth(0)
     , nMinTableWidth(MINLAY)

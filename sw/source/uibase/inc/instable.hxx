@@ -34,7 +34,8 @@ struct SwInsertTableOptions;
 
 class SwInsTableDlg : public SfxModalDialog
 {
-    TableNameEdit*  m_pNameEdit;
+    Edit*           m_pNameEdit;
+    TextFilter      m_aTextFilter;
 
     NumericField*   m_pColNF;
     NumericField*   m_pRowNF;

@@ -32,10 +32,9 @@
 
 class SwRenameXNamedDlg : public ModalDialog
 {
-    NoSpaceEdit*    m_pNewNameED;
-    OKButton*       m_pOk;
-
-    OUString        m_sRemoveWarning;
+    Edit*     m_pNewNameED;
+    TextFilter m_aTextFilter;
+    OKButton* m_pOk;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > &   xNamed;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & xNameAccess;
@@ -43,7 +42,7 @@ class SwRenameXNamedDlg : public ModalDialog
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >   xThirdAccess;
 
     DECL_LINK(OkHdl, void *);
-    DECL_LINK(ModifyHdl, NoSpaceEdit*);
+    DECL_LINK(ModifyHdl, Edit*);
 
 public:
     SwRenameXNamedDlg( Window* pParent,
@@ -52,7 +51,7 @@ public:
 
     void SetForbiddenChars(const OUString& rSet)
     {
-        m_pNewNameED->SetForbiddenChars(rSet);
+        m_aTextFilter.SetForbiddenChars(rSet);
     }
 
     void SetAlternativeAccess(

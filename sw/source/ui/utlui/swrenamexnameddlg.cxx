@@ -56,11 +56,11 @@ SwRenameXNamedDlg::SwRenameXNamedDlg( Window* pWin,
             uno::Reference< container::XNameAccess > & xNA )
     : ModalDialog(pWin, "RenameObjectDialog",
         "modules/swriter/ui/renameobjectdialog.ui")
-    , m_sRemoveWarning(SW_RESSTR(STR_REMOVE_WARNING))
     , xNamed(xN)
     , xNameAccess(xNA)
 {
     get(m_pNewNameED, "entry");
+    m_pNewNameED->SetTextFilter(&m_aTextFilter);
     get(m_pOk, "ok");
 
     OUString sTmp(GetText());
@@ -88,25 +88,9 @@ IMPL_LINK_NOARG(SwRenameXNamedDlg, OkHdl)
     return 0;
 }
 
-IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, NoSpaceEdit*, pEdit)
+IMPL_LINK(SwRenameXNamedDlg, ModifyHdl, Edit*, pEdit)
 {
     OUString sTmp(pEdit->GetText());
-
-    // prevent from pasting illegal characters
-    const sal_Int32 nLen = sTmp.getLength();
-    OUString sMsg;
-    for(sal_Int32 i = 0; i < pEdit->GetForbiddenChars().getLength(); ++i)
-    {
-        const sal_Int32 nTmpLen = sTmp.getLength();
-        sTmp = comphelper::string::remove(sTmp, pEdit->GetForbiddenChars()[i]);
-        if(sTmp.getLength() != nTmpLen)
-            sMsg += OUString(pEdit->GetForbiddenChars()[i]);
-    }
-    if(sTmp.getLength() != nLen)
-    {
-        pEdit->SetText(sTmp);
-        InfoBox(this, m_sRemoveWarning + sMsg).Execute();
-    }
 
     m_pOk->Enable(!sTmp.isEmpty()
                   && !xNameAccess->hasByName(sTmp)

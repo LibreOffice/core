@@ -48,31 +48,6 @@ bool NumEditAction::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-NoSpaceEdit::NoSpaceEdit(Window* pParent)
-    : Edit(pParent, WB_BORDER|WB_TABSTOP)
-    , sForbiddenChars(OUString(" "))
-{
-}
-
-void NoSpaceEdit::Modify()
-{
-    Selection aSel = GetSelection();
-    OUString sTemp = GetText();
-    for(sal_uInt16 i = 0; i < sForbiddenChars.getLength(); i++)
-    {
-        sTemp = comphelper::string::remove(sTemp, sForbiddenChars[i]);
-    }
-    sal_Int32 nDiff = GetText().getLength() - sTemp.getLength();
-    if(nDiff)
-    {
-        aSel.setMin(aSel.getMin() - nDiff);
-        aSel.setMax(aSel.getMin());
-        SetText(sTemp);
-        SetSelection(aSel);
-    }
-    Edit::Modify();
-}
-
 void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
 {
     const KeyCode aKeyCode = rEvt.GetKeyCode();
@@ -85,18 +60,6 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
     }
     else
         Edit::KeyInput(rEvt);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTableNameEdit(Window *pParent, VclBuilder::stringmap &rMap)
-{
-    VclBuilder::ensureDefaultWidthChars(rMap);
-    return new TableNameEdit(pParent);
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeNoSpaceEdit(Window *pParent, VclBuilder::stringmap &rMap)
-{
-    VclBuilder::ensureDefaultWidthChars(rMap);
-    return new NoSpaceEdit(pParent);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeReturnActionEdit(Window *pParent, VclBuilder::stringmap &rMap)

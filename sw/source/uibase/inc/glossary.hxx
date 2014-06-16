@@ -91,7 +91,8 @@ class SwGlossaryDlg : public SvxStandardDialog
     CheckBox*       m_pInsertTipCB;
     Edit*           m_pNameED;
     FixedText*      m_pShortNameLbl;
-    NoSpaceEdit*    m_pShortNameEdit;
+    TextFilter      m_aNoSpaceFilter;
+    Edit*           m_pShortNameEdit;
     SwGlTreeListBox* m_pCategoryBox;
     CheckBox*       m_pFileRelCB;
     CheckBox*       m_pNetRelCB;
