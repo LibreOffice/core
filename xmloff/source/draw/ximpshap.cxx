@@ -81,7 +81,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/vector/b2dvector.hxx>
-#include <svtools/miscopt.hxx>
 
 #include <config_features.h>
 
@@ -3082,7 +3081,7 @@ void SdXMLPluginShapeContext::StartElement( const ::com::sun::star::uno::Referen
             if( xAttrList->getValueByIndex( n ).equalsAscii( "application/vnd.sun.star.media" ) )
                 mbMedia = true;
 #if HAVE_FEATURE_GLTF
-            if( xAttrList->getValueByIndex( n ).equalsAscii( "model/vnd.gltf+json" ) && SvtMiscOptions().IsExperimentalMode() )
+            if( xAttrList->getValueByIndex( n ).equalsAscii( "model/vnd.gltf+json" ) )
                 mbMedia = true;
 #endif
             // leave this loop
@@ -3535,14 +3534,9 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
         if ( !msHyperlink.isEmpty() )
             pShapeContext->setHyperlink( msHyperlink );
 
-        // Ignore gltf model if necessary and so the fallback image will be imported
-        bool bIngoreGltf;
 #if !HAVE_FEATURE_GLTF
-        bIngoreGltf = true;
-#else
-        bIngoreGltf = !SvtMiscOptions().IsExperimentalMode();
-#endif
-        if( bIngoreGltf && IsXMLToken(rLocalName, XML_PLUGIN ) )
+        // Ignore gltf model if necessary and so the fallback image will be imported
+        if( IsXMLToken(rLocalName, XML_PLUGIN ) )
         {
             SdXMLPluginShapeContext* pPluginContext = dynamic_cast<SdXMLPluginShapeContext*>(pShapeContext);
             if( pPluginContext && pPluginContext->getMimeType() == "model/vnd.gltf+json" )
@@ -3551,6 +3545,7 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
                  return this;
             }
         }
+#endif
 
         mxImplContext = pContext;
         mbSupportsReplacement = IsXMLToken(rLocalName, XML_OBJECT ) || IsXMLToken(rLocalName, XML_OBJECT_OLE);
