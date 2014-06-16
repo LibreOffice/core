@@ -117,10 +117,14 @@ namespace drawinglayer
             /// font color
             basegfx::BColor                         maFontColor;
 
+
             /// #i96669# internal: add simple range buffering for this primitive
             basegfx::B2DRange                       maB2DRange;
             bool                                    mbFilled;           // Whether to fill a given width with the text
             long                                    mnWidthToFill;      // the width to fill
+
+            /// The fill color of the text
+            basegfx::BColor                         maTextFillColor;
 
         protected:
             /// local decomposition.
@@ -138,7 +142,8 @@ namespace drawinglayer
                 const ::com::sun::star::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor,
                 bool bFilled = false,
-                long nWidthToFill = 0);
+                long nWidthToFill = 0,
+                const basegfx::BColor& rFillColor = Color(COL_TRANSPARENT).getBColor());
 
             /// helpers
             /** get text outlines as polygons and their according ObjectTransformation. Handles all
@@ -155,6 +160,7 @@ namespace drawinglayer
             const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
+            const basegfx::BColor& getTextFillColor() const { return maTextFillColor; }
             bool isFilled() const { return mbFilled; }
             long getWidthToFill() const { return mnWidthToFill; }
 
