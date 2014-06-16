@@ -170,23 +170,6 @@ public:
     void            SelectCurrentItem();
 };
 
-// Dialog is used to create custom address blocks as well as custom greeting lines
-class SwRestrictedComboBox : public ComboBox
-{
-    OUString sForbiddenChars;
-
-protected:
-    virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
-    virtual void        Modify() SAL_OVERRIDE;
-public:
-    SwRestrictedComboBox(Window* pParent, WinBits nStyle = 0)
-        : ComboBox( pParent, nStyle )
-    {
-    }
-
-    void SetForbiddenChars(const OUString& rSet){sForbiddenChars = rSet;}
-
-};
 class SwCustomizeAddressBlockDialog : public SfxModalDialog
 {
     friend class DDListBox;
@@ -214,7 +197,8 @@ private:
     PushButton*             m_pDownIB;
 
     FixedText*              m_pFieldFT;
-    SwRestrictedComboBox*   m_pFieldCB;
+    ComboBox*               m_pFieldCB;
+    TextFilter              m_aTextFilter;
 
     SwAddressPreview*       m_pPreviewWIN;
 
