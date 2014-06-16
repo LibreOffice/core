@@ -1717,6 +1717,11 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
                         sWritingMode = "vert";
                         bVertical = true;
                     }
+                    else if ( nTextRotateAngle == -270 )
+                    {
+                        sWritingMode = "vert270";
+                        bVertical = true;
+                    }
                     break;
                 }
             }
