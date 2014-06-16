@@ -32,7 +32,8 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
-#include <hash_map>#include <sys/param.h>
+#include <hash_map>
+#include <sys/param.h>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
