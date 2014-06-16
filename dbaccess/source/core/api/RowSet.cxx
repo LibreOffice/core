@@ -1700,7 +1700,7 @@ Reference< XResultSet > ORowSet::impl_prepareAndExecute_throw()
     if ( !m_aUpdateTableName.isEmpty() )
         aComposedUpdateTableName = composeTableName( m_xActiveConnection->getMetaData(), m_aUpdateCatalogName, m_aUpdateSchemaName, m_aUpdateTableName, false, ::dbtools::eInDataManipulation );
 
-    SAL_INFO("dbaccess", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
+    SAL_INFO("dbaccess", "ORowSet::impl_prepareAndExecute_throw: creating cache" );
     m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew,m_aParameterValueForCache,m_aFilter,m_nMaxRows );
     if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
     {
