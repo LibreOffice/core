@@ -1229,6 +1229,11 @@ sal_uInt16 SwDocShell::MakeByExample( const OUString &rName, sal_uInt16 nFamily,
     return nFamily;
 }
 
+std::vector<Color> SwDocShell::GetDocColors()
+{
+    return pDoc->GetDocColors();
+}
+
 void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
 {
     _LoadStyles(rSource, false);

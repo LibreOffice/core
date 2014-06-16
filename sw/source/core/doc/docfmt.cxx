@@ -26,6 +26,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <editeng/rsiditem.hxx>
+#include <editeng/colritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
@@ -1883,6 +1884,43 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const OUString & sNewName,
 
     if (bBroadcast)
         BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);
+}
+
+
+std::vector<Color> SwDoc::GetDocColors()
+{
+    std::vector<Color> docColors;
+
+    for(unsigned int i = 0; i < m_pNodes->Count(); ++i)
+    {
+        const SwNode* pNode = (*m_pNodes)[i];
+        if( ! pNode->IsTxtNode() )
+            continue;
+
+        const SfxItemSet* pItemSet = pNode->GetTxtNode()->GetpSwAttrSet();
+        if( pItemSet == 0 )
+            continue;
+
+        SfxWhichIter aIter( *pItemSet );
+        sal_uInt16 nWhich = aIter.FirstWhich();
+        while( nWhich )
+        {
+            const SfxPoolItem *pItem;
+            if( SFX_ITEM_SET == pItemSet->GetItemState( nWhich, false, &pItem ) &&
+                RES_CHRATR_COLOR == pItem->Which() )
+            {
+                Color aColor( ((SvxColorItem*)pItem)->GetValue() );
+                if( COL_AUTO != aColor.GetColor() &&
+                    std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
+                {
+                    docColors.push_back( aColor );
+                }
+            }
+
+            nWhich = aIter.NextWhich();
+        }
+    }
+    return docColors;
 }
 
 // #i69627#

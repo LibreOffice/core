@@ -298,6 +298,13 @@ SfxDocumentInfoDialog* SfxObjectShell::CreateDocumentInfoDialog
 
 
 
+
+std::vector<Color> SfxObjectShell::GetDocColors()
+{
+    std::vector<Color> empty;
+    return empty;
+}
+
 SfxStyleSheetBasePool* SfxObjectShell::GetStyleSheetPool()
 {
     return 0;

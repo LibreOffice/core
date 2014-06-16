@@ -244,6 +244,8 @@ public:
                                    sal_Int32 nFileFormat,
                                    bool bTemplate = false ) const SAL_OVERRIDE;
 
+    virtual std::vector<Color> GetDocColors();
+
     virtual void LoadStyles( SfxObjectShell& rSource ) SAL_OVERRIDE;
 
     void _LoadStyles( SfxObjectShell& rSource, bool bPreserveCurrentDocument );

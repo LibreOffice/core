@@ -57,6 +57,7 @@
 #include <vector>
 #include <set>
 #include <memory>
+#include <algorithm>
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -1776,6 +1777,8 @@ public:
      * @since 3.5
      */
     void dumpAsXml( xmlTextWriterPtr writer = NULL );
+
+    std::vector<Color> GetDocColors();
 
 private:
     // Copies master header to left / first one, if necessary - used by ChgPageDesc().

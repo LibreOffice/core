@@ -1025,7 +1025,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                           Window*                    pParentWindow ):
     SfxPopupWindow( nSlotId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
     theSlotId( nSlotId ),
-    aColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
+    aColorSet   ( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
+    aDocColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
     maCommand( rCommand )
 
 {
@@ -1034,8 +1035,20 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     XColorListRef pColorList;
 
     if ( pDocSh )
+    {
         if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
             pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
+//-------- Add doc colors to palette
+        XColorEntry* pEntry;
+        std::vector<Color> aColors = pDocSh->GetDocColors();
+        for( unsigned int i = 0; i < aColors.size(); ++i )
+        {
+            pEntry = new XColorEntry( aColors[i],
+                "Document Color " + OUString::number(i) );
+            pColorList->Insert( pEntry, pColorList->Count() );
+        }
+//---------
+    }
 
     if ( !pColorList.is() )
         pColorList = XColorList::CreateStdColorList();

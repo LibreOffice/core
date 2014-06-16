@@ -41,6 +41,7 @@ class SvxColorWindow_Impl : public SfxPopupWindow
 private:
     const sal_uInt16 theSlotId;
     SvxColorValueSet aColorSet;
+    SvxColorValueSet aDocColorSet;
     OUString  maCommand;
     Link maSelectedLink;
 
