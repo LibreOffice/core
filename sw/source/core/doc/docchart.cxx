@@ -204,10 +204,9 @@ SwChartDataProvider * SwDoc::GetChartDataProvider( bool bCreate ) const
     // we need a mutex here
     SolarMutexGuard aGuard;
 
-    if (bCreate && !maChartDataProviderImplRef.get())
+    if (bCreate && !maChartDataProviderImplRef.is())
     {
-        maChartDataProviderImplRef = comphelper::ImplementationReference< SwChartDataProvider
-            , chart2::data::XDataProvider >( new SwChartDataProvider( this ) );
+        maChartDataProviderImplRef = new SwChartDataProvider( this );
     }
     return maChartDataProviderImplRef.get();
 }
