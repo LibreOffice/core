@@ -2007,6 +2007,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
     else // !m_bCommandFacetsDirty
     {
         impl_rebuild_throw(_rClearForNotification);
+        beforeFirst();
     }
     checkCache();
     // notify the rowset listeners
@@ -2740,7 +2741,6 @@ void ORowSet::impl_rebuild_throw(::osl::ResettableMutexGuard& _rGuard)
     {
         xResultSet = m_xStatement->executeQuery();
         m_pCache->reset(xResultSet);
-        beforeFirst();
     }
     m_aWarnings.setExternalWarnings( Reference< XWarningsSupplier >( xResultSet, UNO_QUERY ) );
     notifyAllListeners(_rGuard);
