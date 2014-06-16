@@ -19,12 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-
-// include ---------------------------------------------------------------
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <sfx2/app.hxx>
@@ -32,10 +28,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
 #include <rtl/ustring.hxx>
-
 #include <svx/dialogs.hrc>
-
-#define DELAY_TIMEOUT           300
 
 #define TMP_STR_BEGIN   '['
 #define TMP_STR_END     ']'
@@ -62,19 +55,21 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxFillToolBoxControl, XFillStyleItem );
 |*
 \************************************************************************/
 
-SvxFillToolBoxControl::SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
-    SfxToolBoxControl( nSlotId, nId, rTbx ),
-
-    pStyleItem      ( NULL ),
-    pColorItem      ( NULL ),
-    pGradientItem   ( NULL ),
-    pHatchItem      ( NULL ),
-    pBitmapItem     ( NULL ),
-    pFillControl    ( NULL ),
-    pFillTypeLB     ( NULL ),
-    pFillAttrLB     ( NULL ),
-    bUpdate         ( sal_False ),
-    eLastXFS        ( XFILL_NONE )
+SvxFillToolBoxControl::SvxFillToolBoxControl(
+    sal_uInt16 nSlotId,
+    sal_uInt16 nId,
+    ToolBox& rTbx )
+:   SfxToolBoxControl( nSlotId, nId, rTbx ),
+    mpStyleItem(0),
+    mpColorItem(0),
+    mpGradientItem(0),
+    mpHatchItem(0),
+    mpBitmapItem(0),
+    mpFillControl(0),
+    mpFillTypeLB(0),
+    mpFillAttrLB(0),
+    meLastXFS(XFILL_NONE),
+    mbUpdate(false)
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillColor" )));
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillGradient" )));
@@ -90,134 +85,146 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId
 
 SvxFillToolBoxControl::~SvxFillToolBoxControl()
 {
-    delete pStyleItem;
-    delete pColorItem;
-    delete pGradientItem;
-    delete pHatchItem;
-    delete pBitmapItem;
+    delete mpStyleItem;
+    delete mpColorItem;
+    delete mpGradientItem;
+    delete mpHatchItem;
+    delete mpBitmapItem;
 }
 
 //========================================================================
 
 void SvxFillToolBoxControl::StateChanged(
-
-    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
-
+    sal_uInt16 nSID,
+    SfxItemState eState,
+    const SfxPoolItem* pState)
 {
-    bool bEnableControls = sal_False;
+    bool bEnableControls(false);
 
-    if( eState == SFX_ITEM_DISABLED )
+    if(eState == SFX_ITEM_DISABLED)
     {
-        if( nSID == SID_ATTR_FILL_STYLE )
+        // slot disable state
+        if(nSID == SID_ATTR_FILL_STYLE)
         {
-            pFillTypeLB->Disable();
-            pFillTypeLB->SetNoSelection();
+            mpFillTypeLB->Disable();
+            mpFillTypeLB->SetNoSelection();
         }
-        pFillAttrLB->Disable();
-        pFillAttrLB->SetNoSelection();
+
+        mpFillAttrLB->Disable();
+        mpFillAttrLB->SetNoSelection();
+    }
+    else if(SFX_ITEM_AVAILABLE == eState)
+    {
+        // slot available state
+        if(nSID == SID_ATTR_FILL_STYLE)
+        {
+            delete mpStyleItem;
+            mpStyleItem = static_cast< XFillStyleItem* >(pState->Clone());
+            mpFillTypeLB->Enable();
+        }
+        else if(mpStyleItem)
+        {
+            const XFillStyle eXFS(static_cast< XFillStyle >(mpStyleItem->GetValue()));
+
+            if(nSID == SID_ATTR_FILL_COLOR)
+            {
+                delete mpColorItem;
+                mpColorItem = static_cast< XFillColorItem* >(pState->Clone());
+
+                if(eXFS == XFILL_SOLID)
+                {
+                    bEnableControls = true;
+                }
+            }
+            else if(nSID == SID_ATTR_FILL_GRADIENT)
+            {
+                delete mpGradientItem;
+                mpGradientItem = static_cast< XFillGradientItem* >(pState->Clone());
+
+                if(eXFS == XFILL_GRADIENT)
+                {
+                    bEnableControls = true;
+                }
+            }
+            else if(nSID == SID_ATTR_FILL_HATCH)
+            {
+                delete mpHatchItem;
+                mpHatchItem = static_cast< XFillHatchItem* >(pState->Clone());
+
+                if(eXFS == XFILL_HATCH)
+                {
+                    bEnableControls = true;
+                }
+            }
+            else if(nSID == SID_ATTR_FILL_BITMAP)
+            {
+                delete mpBitmapItem;
+                mpBitmapItem = static_cast< XFillBitmapItem* >(pState->Clone());
+
+                if(eXFS == XFILL_BITMAP)
+                {
+                    bEnableControls = true;
+                }
+            }
+        }
+
+        if(mpStyleItem)
+        {
+            // ensure that the correct entry is selected in mpFillTypeLB
+            XFillStyle eXFS(static_cast< XFillStyle >(mpStyleItem->GetValue()));
+            const bool bFillTypeChangedByUser(mpFillControl->mbFillTypeChanged);
+
+            if(bFillTypeChangedByUser)
+            {
+                meLastXFS = static_cast< XFillStyle >(mpFillControl->mnLastFillTypeControlSelectEntryPos);
+                mpFillControl->mbFillTypeChanged = false;
+            }
+
+            if(meLastXFS != eXFS)
+            {
+                mbUpdate = true;
+                mpFillTypeLB->SelectEntryPos(sal::static_int_cast<sal_uInt16>(eXFS));
+            }
+
+            mpFillAttrLB->Enable();
+        }
+
+        if(bEnableControls)
+        {
+            mpFillAttrLB->Enable();
+            mbUpdate = true;
+        }
+
+        Update(pState);
     }
     else
     {
-        if ( SFX_ITEM_AVAILABLE == eState )
+        // slot empty or ambigous
+        if(nSID == SID_ATTR_FILL_STYLE)
         {
-            if( nSID == SID_ATTR_FILL_STYLE )
-            {
-                delete pStyleItem;
-                pStyleItem = (XFillStyleItem*) pState->Clone();
-                pFillTypeLB->Enable();
-            }
-            else if( pStyleItem )
-            {
-                XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
-
-                if( nSID == SID_ATTR_FILL_COLOR )
-                {
-                    delete pColorItem;
-                    pColorItem = (XFillColorItem*) pState->Clone();
-
-                    if( eXFS == XFILL_SOLID )
-                        bEnableControls = sal_True;
-                }
-                else if( nSID == SID_ATTR_FILL_GRADIENT )
-                {
-                    delete pGradientItem;
-                    pGradientItem = (XFillGradientItem*) pState->Clone();
-
-                    if( eXFS == XFILL_GRADIENT )
-                        bEnableControls = sal_True;
-                }
-                else if( nSID == SID_ATTR_FILL_HATCH )
-                {
-                    delete pHatchItem;
-                    pHatchItem = (XFillHatchItem*) pState->Clone();
-
-                    if( eXFS == XFILL_HATCH )
-                        bEnableControls = sal_True;
-                }
-                else if( nSID == SID_ATTR_FILL_BITMAP )
-                {
-                    delete pBitmapItem;
-                    pBitmapItem = (XFillBitmapItem*) pState->Clone();
-
-                    if( eXFS == XFILL_BITMAP )
-                        bEnableControls = sal_True;
-                }
-            }
-
-            if( pStyleItem )
-            {
-                // ensure that the correct entry is selected in pFillTypeLB. It
-                // might have been changed by nSID == SID_ATTR_FILL_STYLE, but
-                // it might also be in an in-between state when user had started to
-                // change fillstyle, but not yet changed fillvalue for new style
-                // and when nSID == SID_ATTR_FILL_COLOR/SID_ATTR_FILL_GRADIENT/
-                // SID_ATTR_FILL_HATCH/SID_ATTR_FILL_BITMAP value change is triggered
-                eLastXFS = pFillTypeLB->GetSelectEntryPos();
-                XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
-
-                if(eLastXFS != eXFS)
-                {
-                    bUpdate = sal_True;
-                    pFillTypeLB->SelectEntryPos( sal::static_int_cast< sal_uInt16 >( eXFS ) );
-                }
-
-                pFillAttrLB->Enable();
-            }
-
-            if( bEnableControls )
-            {
-                //pFillTypeLB->Enable();
-                pFillAttrLB->Enable();
-
-                bUpdate = sal_True;
-            }
-
-            Update( pState );
+            mpFillTypeLB->SetNoSelection();
+            mpFillAttrLB->Disable();
+            mpFillAttrLB->SetNoSelection();
+            delete mpStyleItem;
+            mpStyleItem = 0;
+            mbUpdate = false;
         }
         else
         {
-            // leerer oder uneindeutiger Status
-            if( nSID == SID_ATTR_FILL_STYLE )
+            XFillStyle eXFS(XFILL_NONE);
+
+            if(mpStyleItem)
             {
-                pFillTypeLB->SetNoSelection();
-                pFillAttrLB->Disable();
-                pFillAttrLB->SetNoSelection();
-                bUpdate = sal_False;
+                eXFS = static_cast< XFillStyle >(mpStyleItem->GetValue());
             }
-            else
+
+            if(!mpStyleItem ||
+                (nSID == SID_ATTR_FILL_COLOR && eXFS == XFILL_SOLID) ||
+                (nSID == SID_ATTR_FILL_GRADIENT && eXFS == XFILL_GRADIENT) ||
+                (nSID == SID_ATTR_FILL_HATCH && eXFS == XFILL_HATCH) ||
+                (nSID == SID_ATTR_FILL_BITMAP && eXFS == XFILL_BITMAP))
             {
-                XFillStyle eXFS = XFILL_NONE;
-                if( pStyleItem )
-                    eXFS = (XFillStyle)pStyleItem->GetValue();
-                if( !pStyleItem ||
-                    ( nSID == SID_ATTR_FILL_COLOR    && eXFS == XFILL_SOLID ) ||
-                    ( nSID == SID_ATTR_FILL_GRADIENT && eXFS == XFILL_GRADIENT ) ||
-                    ( nSID == SID_ATTR_FILL_HATCH    && eXFS == XFILL_HATCH ) ||
-                    ( nSID == SID_ATTR_FILL_BITMAP   && eXFS == XFILL_BITMAP ) )
-                {
-                    pFillAttrLB->SetNoSelection();
-                    //bUpdate = sal_False;
-                }
+                mpFillAttrLB->SetNoSelection();
             }
         }
     }
@@ -225,275 +232,321 @@ void SvxFillToolBoxControl::StateChanged(
 
 //========================================================================
 
-void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
+void SvxFillToolBoxControl::Update(const SfxPoolItem* pState)
 {
-    if ( pStyleItem && pState && bUpdate )
+    if(mpStyleItem && pState && mbUpdate)
     {
-        bUpdate = sal_False;
-
-        XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
+        mbUpdate = false;
+        const XFillStyle eXFS(static_cast< XFillStyle >(mpStyleItem->GetValue()));
 
         // Pruefen, ob Fuellstil schon vorher aktiv war
-        //if( eTmpXFS != eXFS )
-        if( (XFillStyle) eLastXFS != eXFS )
-            pFillControl->SelectFillTypeHdl( NULL );
-            //eLastXFS = eXFS;
+        if(meLastXFS != eXFS)
+        {
+            // update mnLastFillTypeControlSelectEntryPos and fill style list
+            mpFillControl->updateLastFillTypeControlSelectEntryPos();
+            mpFillControl->InitializeFillStyleAccordingToGivenFillType(eXFS);
+            meLastXFS = eXFS;
+        }
 
-        switch( eXFS )
+        switch(eXFS)
         {
             case XFILL_NONE:
-            break;
+            {
+                break;
+            }
 
             case XFILL_SOLID:
             {
-                if ( pColorItem )
+                if(mpColorItem)
                 {
-                    String aString( pColorItem->GetName() );
-                    ::Color aColor = pColorItem->GetColorValue();
+                    String aString(mpColorItem->GetName());
+                    ::Color aColor = mpColorItem->GetColorValue();
 
-                    pFillAttrLB->SelectEntry( aString );
+                    mpFillAttrLB->SelectEntry(aString);
 
-                    if ( pFillAttrLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND ||
-                         pFillAttrLB->GetSelectEntryColor() != aColor )
-                        pFillAttrLB->SelectEntry( aColor );
-
-                    // NEU
-                    // Pruefen, ob Eintrag nicht in der Liste ist
-                    if( pFillAttrLB->GetSelectEntryPos() ==
-                        LISTBOX_ENTRY_NOTFOUND ||
-                        pFillAttrLB->GetSelectEntryColor() != aColor )
+                    if(mpFillAttrLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND || mpFillAttrLB->GetSelectEntryColor() != aColor)
                     {
-                        sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
+                        mpFillAttrLB->SelectEntry(aColor);
+                    }
+
+                    // Pruefen, ob Eintrag nicht in der Liste ist
+                    if(mpFillAttrLB->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND || mpFillAttrLB->GetSelectEntryColor() != aColor)
+                    {
+                        sal_uInt16 nCount = mpFillAttrLB->GetEntryCount();
                         String aTmpStr;
-                        if( nCount > 0 )
+                        if(nCount > 0)
                         {
                             //Letzter Eintrag wird auf temporaere Farbe geprueft
-                            aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
-                                 aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                            aTmpStr = mpFillAttrLB->GetEntry(nCount - 1);
+
+                            if(aTmpStr.GetChar(0) == TMP_STR_BEGIN && aTmpStr.GetChar(aTmpStr.Len() - 1) == TMP_STR_END)
                             {
-                                pFillAttrLB->RemoveEntry( nCount - 1 );
+                                mpFillAttrLB->RemoveEntry(nCount - 1);
                             }
                         }
+
                         aTmpStr = TMP_STR_BEGIN;
                         aTmpStr += aString;
                         aTmpStr += TMP_STR_END;
 
-                        //pFillAttrLB->SetUpdateMode( sal_False );
-                        sal_uInt16 nPos = pFillAttrLB->InsertEntry( aColor, aTmpStr );
-                        //pFillAttrLB->SetUpdateMode( sal_True );
-                        pFillAttrLB->SelectEntryPos( nPos );
+                        sal_uInt16 nPos = mpFillAttrLB->InsertEntry(aColor,aTmpStr);
+                        mpFillAttrLB->SelectEntryPos(nPos);
                     }
-                    // NEU
                 }
                 else
-                    pFillAttrLB->SetNoSelection();
+                {
+                    mpFillAttrLB->SetNoSelection();
+                }
+                break;
             }
-            break;
 
             case XFILL_GRADIENT:
             {
-                if ( pGradientItem )
+                if(mpGradientItem)
                 {
-                    String aString( pGradientItem->GetName() );
-                    pFillAttrLB->SelectEntry( aString );
-                    // NEU
+                    String aString(mpGradientItem->GetName());
+                    mpFillAttrLB->SelectEntry(aString);
+
                     // Pruefen, ob Eintrag nicht in der Liste ist
-                    if( pFillAttrLB->GetSelectEntry() != aString )
+                    if(mpFillAttrLB->GetSelectEntry() != aString)
                     {
-                        sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
+                        sal_uInt16 nCount = mpFillAttrLB->GetEntryCount();
                         String aTmpStr;
-                        if( nCount > 0 )
+
+                        if(nCount > 0)
                         {
                             //Letzter Eintrag wird auf temporaeren Eintrag geprueft
-                            aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
-                                 aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                            aTmpStr = mpFillAttrLB->GetEntry(nCount - 1);
+
+                            if(aTmpStr.GetChar(0) == TMP_STR_BEGIN && aTmpStr.GetChar(aTmpStr.Len() - 1) == TMP_STR_END)
                             {
-                                pFillAttrLB->RemoveEntry( nCount - 1 );
+                                mpFillAttrLB->RemoveEntry(nCount - 1);
                             }
                         }
+
                         aTmpStr = TMP_STR_BEGIN;
                         aTmpStr += aString;
                         aTmpStr += TMP_STR_END;
 
-                        XGradientEntry* pEntry = new XGradientEntry( pGradientItem->GetGradientValue(), aTmpStr );
+                        XGradientEntry* pEntry = new XGradientEntry(mpGradientItem->GetGradientValue(),aTmpStr);
                         XGradientListSharedPtr aGradientList(XPropertyListFactory::CreateSharedXGradientList(String::CreateFromAscii("TmpList")));
 
                         aGradientList->Insert(pEntry);
                         aGradientList->SetDirty(false);
-                        const Bitmap aBmp = aGradientList->GetUiBitmap( 0 );
+                        const Bitmap aBmp = aGradientList->GetUiBitmap(0);
 
-                        if( !aBmp.IsEmpty() )
+                        if(!aBmp.IsEmpty())
                         {
-                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), aBmp );
-                            pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
+                            ((ListBox*)mpFillAttrLB)->InsertEntry(pEntry->GetName(),aBmp);
+                            mpFillAttrLB->SelectEntryPos(mpFillAttrLB->GetEntryCount() - 1);
                         }
                     }
-                    // NEU
                 }
                 else
-                    pFillAttrLB->SetNoSelection();
+                {
+                    mpFillAttrLB->SetNoSelection();
+                }
+                break;
             }
-            break;
 
             case XFILL_HATCH:
             {
-                if ( pHatchItem )
+                if(mpHatchItem)
                 {
-                    String aString( pHatchItem->GetName() );
-                    pFillAttrLB->SelectEntry( aString );
-                    // NEU
+                    String aString(mpHatchItem->GetName());
+                    mpFillAttrLB->SelectEntry(aString);
+
                     // Pruefen, ob Eintrag nicht in der Liste ist
-                    if( pFillAttrLB->GetSelectEntry() != aString )
+                    if(mpFillAttrLB->GetSelectEntry() != aString)
                     {
-                        sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
+                        sal_uInt16 nCount = mpFillAttrLB->GetEntryCount();
                         String aTmpStr;
-                        if( nCount > 0 )
+                        if(nCount > 0)
                         {
                             //Letzter Eintrag wird auf temporaeren Eintrag geprueft
-                            aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
-                                 aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                            aTmpStr = mpFillAttrLB->GetEntry(nCount - 1);
+                            if(aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
+                                aTmpStr.GetChar(aTmpStr.Len() - 1) == TMP_STR_END)
                             {
-                                pFillAttrLB->RemoveEntry( nCount - 1 );
+                                mpFillAttrLB->RemoveEntry(nCount - 1);
                             }
                         }
+
                         aTmpStr = TMP_STR_BEGIN;
                         aTmpStr += aString;
                         aTmpStr += TMP_STR_END;
 
-                        XHatchEntry* pEntry = new XHatchEntry( pHatchItem->GetHatchValue(), aTmpStr );
+                        XHatchEntry* pEntry = new XHatchEntry(mpHatchItem->GetHatchValue(),aTmpStr);
                         XHatchListSharedPtr aHatchList(XPropertyListFactory::CreateSharedXHatchList(String::CreateFromAscii("TmpList")));
 
-                        aHatchList->Insert( pEntry );
-                        aHatchList->SetDirty( sal_False );
-                        const Bitmap aBmp = aHatchList->GetUiBitmap( 0 );
+                        aHatchList->Insert(pEntry);
+                        aHatchList->SetDirty(sal_False);
+                        const Bitmap aBmp = aHatchList->GetUiBitmap(0);
 
-                        if( !aBmp.IsEmpty() )
+                        if(!aBmp.IsEmpty())
                         {
-                            ( (ListBox*)pFillAttrLB )->InsertEntry( pEntry->GetName(), aBmp );
-                            pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
+                            ((ListBox*)mpFillAttrLB)->InsertEntry(pEntry->GetName(),aBmp);
+                            mpFillAttrLB->SelectEntryPos(mpFillAttrLB->GetEntryCount() - 1);
                         }
                     }
-                    // NEU
                 }
                 else
-                    pFillAttrLB->SetNoSelection();
+                {
+                    mpFillAttrLB->SetNoSelection();
+                }
+                break;
             }
-            break;
 
             case XFILL_BITMAP:
             {
-                if ( pBitmapItem )
-                    // &&
-                    // SfxObjectShell::Current()    &&
-                    // SfxObjectShell::Current()->GetItem( SID_BITMAP_LIST ) )
+                if(mpBitmapItem)
                 {
-                    String aString( pBitmapItem->GetName() );
-                    // Bitmap aBitmap( pBitmapItem->GetValue() );
+                    String aString(mpBitmapItem->GetName());
+                    mpFillAttrLB->SelectEntry(aString);
 
-                    // SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(
-                    //  SfxObjectShell::Current()->GetItem( SID_BITMAP_LIST ) ) );
-                    pFillAttrLB->SelectEntry( aString );
-                    // NEU
                     // Pruefen, ob Eintrag nicht in der Liste ist
-                    if( pFillAttrLB->GetSelectEntry() != aString )
+                    if(mpFillAttrLB->GetSelectEntry() != aString)
                     {
-                        sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
+                        sal_uInt16 nCount = mpFillAttrLB->GetEntryCount();
                         String aTmpStr;
-                        if( nCount > 0 )
+
+                        if(nCount > 0)
                         {
                             //Letzter Eintrag wird auf temporaeren Eintrag geprueft
-                            aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
-                            if(  aTmpStr.GetChar(0) == TMP_STR_BEGIN &&
-                                 aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                            aTmpStr = mpFillAttrLB->GetEntry(nCount - 1);
+
+                            if(aTmpStr.GetChar(0) == TMP_STR_BEGIN && aTmpStr.GetChar(aTmpStr.Len() - 1) == TMP_STR_END)
                             {
-                                pFillAttrLB->RemoveEntry( nCount - 1 );
+                                mpFillAttrLB->RemoveEntry(nCount - 1);
                             }
                         }
+
                         aTmpStr = TMP_STR_BEGIN;
                         aTmpStr += aString;
                         aTmpStr += TMP_STR_END;
 
                         XBitmapListSharedPtr aNew(XPropertyListFactory::CreateSharedXBitmapList(String::CreateFromAscii("TmpList")));
-                        aNew->Insert(new XBitmapEntry(pBitmapItem->GetGraphicObject(), aTmpStr));
+                        aNew->Insert(new XBitmapEntry(mpBitmapItem->GetGraphicObject(),aTmpStr));
                         aNew->SetDirty(false);
 
-                        pFillAttrLB->Fill( aNew );
-                        pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
+                        mpFillAttrLB->Fill(aNew);
+                        mpFillAttrLB->SelectEntryPos(mpFillAttrLB->GetEntryCount() - 1);
                     }
-                    // NEU
                 }
                 else
-                    pFillAttrLB->SetNoSelection();
+                {
+                    mpFillAttrLB->SetNoSelection();
+                }
+                break;
             }
-            break;
 
             default:
-                DBG_ERROR( "Nicht unterstuetzter Flaechentyp" );
-            break;
+            {
+                DBG_ERROR("Nicht unterstuetzter Flaechentyp");
+                break;
+            }
         }
+
+        // update mnLastFillAttrControlSelectEntryPos
+        mpFillControl->updateLastFillAttrControlSelectEntryPos();
     }
 
-    if( pState && pStyleItem )
+    if(pState && mpStyleItem)
     {
-        XFillStyle eXFS = (XFillStyle) pStyleItem->GetValue();
+        XFillStyle eXFS = static_cast< XFillStyle >(mpStyleItem->GetValue());
 
         // Die Listen haben sich geaendert ?
-        if( pState->ISA( SvxColorTableItem ) &&
-            eXFS == XFILL_SOLID )
+        switch(eXFS)
         {
-            ::Color aTmpColor( pFillAttrLB->GetSelectEntryColor() );
-            pFillAttrLB->Clear();
-            pFillAttrLB->Fill( ( (SvxColorTableItem*)pState )->GetColorTable() );
-            pFillAttrLB->SelectEntry( aTmpColor );
-        }
-        if( pState->ISA( SvxGradientListItem ) &&
-            eXFS == XFILL_GRADIENT )
-        {
-            String aString( pFillAttrLB->GetSelectEntry() );
-            pFillAttrLB->Clear();
-            pFillAttrLB->Fill( ( (SvxGradientListItem*)pState )->GetGradientList() );
-            pFillAttrLB->SelectEntry( aString );
-        }
-        if( pState->ISA( SvxHatchListItem ) &&
-            eXFS == XFILL_HATCH )
-        {
-            String aString( pFillAttrLB->GetSelectEntry() );
-            pFillAttrLB->Clear();
-            pFillAttrLB->Fill( ( (SvxHatchListItem*)pState )->GetHatchList() );
-            pFillAttrLB->SelectEntry( aString );
-        }
-        if( pState->ISA( SvxBitmapListItem ) &&
-            eXFS == XFILL_BITMAP )
-        {
-            String aString( pFillAttrLB->GetSelectEntry() );
-            pFillAttrLB->Clear();
-            pFillAttrLB->Fill( ( (SvxBitmapListItem*)pState )->GetBitmapList() );
-            pFillAttrLB->SelectEntry( aString );
+            case XFILL_SOLID:
+            {
+                const SvxColorTableItem* pItem = dynamic_cast< const SvxColorTableItem* >(pState);
+
+                if(pItem)
+                {
+                    ::Color aTmpColor(mpFillAttrLB->GetSelectEntryColor());
+                    mpFillAttrLB->Clear();
+                    mpFillAttrLB->Fill(pItem->GetColorTable());
+                    mpFillAttrLB->SelectEntry(aTmpColor);
+                }
+                break;
+            }
+            case XFILL_GRADIENT:
+            {
+                const SvxGradientListItem* pItem = dynamic_cast< const SvxGradientListItem* >(pState);
+
+                if(pItem)
+                {
+                    String aString(mpFillAttrLB->GetSelectEntry());
+                    mpFillAttrLB->Clear();
+                    mpFillAttrLB->Fill(pItem->GetGradientList());
+                    mpFillAttrLB->SelectEntry(aString);
+                }
+                break;
+            }
+            case XFILL_HATCH:
+            {
+                const SvxHatchListItem* pItem = dynamic_cast< const SvxHatchListItem* >(pState);
+
+                if(pItem)
+                {
+                    String aString(mpFillAttrLB->GetSelectEntry());
+                    mpFillAttrLB->Clear();
+                    mpFillAttrLB->Fill(pItem->GetHatchList());
+                    mpFillAttrLB->SelectEntry(aString);
+                }
+                break;
+            }
+            case XFILL_BITMAP:
+            {
+                const SvxBitmapListItem* pItem = dynamic_cast< const SvxBitmapListItem* >(pState);
+
+                if(pItem)
+                {
+                    String aString(mpFillAttrLB->GetSelectEntry());
+                    mpFillAttrLB->Clear();
+                    mpFillAttrLB->Fill(pItem->GetBitmapList());
+                    mpFillAttrLB->SelectEntry(aString);
+                }
+                break;
+            }
+            default: // XFILL_NONE
+            {
+                break;
+            }
         }
     }
 }
 
 //========================================================================
 
-Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
+Window* SvxFillToolBoxControl::CreateItemWindow(Window *pParent)
 {
-    if ( GetSlotId() == SID_ATTR_FILL_STYLE )
+    if(GetSlotId() == SID_ATTR_FILL_STYLE)
     {
-        pFillControl = new FillControl( pParent );
+        mpFillControl = new FillControl(pParent);
         // Damit dem FillControl das SvxFillToolBoxControl bekannt ist
         // (und um kompatibel zu bleiben)
-        pFillControl->SetData( this );
+        mpFillControl->SetData(this);
 
-        pFillAttrLB = (SvxFillAttrBox*)pFillControl->pLbFillAttr;
-        pFillTypeLB = (SvxFillTypeBox*)pFillControl->pLbFillType;
+        mpFillAttrLB = (SvxFillAttrBox*)mpFillControl->mpLbFillAttr;
+        mpFillTypeLB = (SvxFillTypeBox*)mpFillControl->mpLbFillType;
 
-        pFillAttrLB->SetUniqueId( HID_FILL_ATTR_LISTBOX );
-        pFillTypeLB->SetUniqueId( HID_FILL_TYPE_LISTBOX );
+        mpFillAttrLB->SetUniqueId(HID_FILL_ATTR_LISTBOX);
+        mpFillTypeLB->SetUniqueId(HID_FILL_TYPE_LISTBOX);
 
-        return pFillControl;
+        if(!mpStyleItem)
+        {
+            // for Writer and Calc it's not the same instance of
+            // SvxFillToolBoxControl which gets used after deselecting
+            // and selecting a DrawObject, thhus a useful initialization is
+            // needed to get the FillType and the FillStyle List inited
+            // correctly. This in combination with meLastXFS inited to
+            // XFILL_NONE do the trick
+            mpStyleItem = new XFillStyleItem(XFILL_SOLID);
+        }
+
+        return mpFillControl;
     }
     return NULL;
 }
@@ -504,283 +557,337 @@ Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
 |*
 \************************************************************************/
 
-FillControl::FillControl( Window* pParent, WinBits nStyle ) :
-    Window( pParent, nStyle | WB_DIALOGCONTROL ),
-    pLbFillType(new SvxFillTypeBox( this )),
-    aLogicalFillSize(40,80),
-    aLogicalAttrSize(50,80)
+FillControl::FillControl(Window* pParent,WinBits nStyle)
+:   Window(pParent,nStyle | WB_DIALOGCONTROL),
+    mpLbFillType(new SvxFillTypeBox(this)),
+    mpLbFillAttr(new SvxFillAttrBox(this)),
+    maLogicalFillSize(40,80),
+    maLogicalAttrSize(50,80),
+    mnLastFillTypeControlSelectEntryPos(mpLbFillType->GetSelectEntryPos()),
+    mnLastFillAttrControlSelectEntryPos(mpLbFillAttr->GetSelectEntryPos()),
+    mbFillTypeChanged(false)
 {
-    pLbFillAttr = new SvxFillAttrBox( this );
-    Size aTypeSize(LogicToPixel(aLogicalFillSize, MAP_APPFONT));
-    Size aAttrSize(LogicToPixel(aLogicalAttrSize, MAP_APPFONT));
-    pLbFillType->SetSizePixel(aTypeSize);
-    pLbFillAttr->SetSizePixel(aAttrSize);
+    Size aTypeSize(LogicToPixel(maLogicalFillSize,MAP_APPFONT));
+    Size aAttrSize(LogicToPixel(maLogicalAttrSize,MAP_APPFONT));
+    mpLbFillType->SetSizePixel(aTypeSize);
+    mpLbFillAttr->SetSizePixel(aAttrSize);
+
     //to get the base height
-    aTypeSize = pLbFillType->GetSizePixel();
-    aAttrSize = pLbFillAttr->GetSizePixel();
-    Point aAttrPnt = pLbFillAttr->GetPosPixel();
+    aTypeSize = mpLbFillType->GetSizePixel();
+    aAttrSize = mpLbFillAttr->GetSizePixel();
+    Point aAttrPnt = mpLbFillAttr->GetPosPixel();
     SetSizePixel(
-        Size( aAttrPnt.X() + aAttrSize.Width(),
-              Max( aAttrSize.Height(), aTypeSize.Height() ) ) );
+        Size(aAttrPnt.X() + aAttrSize.Width(),
+        Max(aAttrSize.Height(),aTypeSize.Height())));
 
-    pLbFillType->SetSelectHdl( LINK( this, FillControl, SelectFillTypeHdl ) );
-    pLbFillAttr->SetSelectHdl( LINK( this, FillControl, SelectFillAttrHdl ) );
-
-    aDelayTimer.SetTimeout( DELAY_TIMEOUT );
-    aDelayTimer.SetTimeoutHdl( LINK( this, FillControl, DelayHdl ) );
-    aDelayTimer.Start();
+    mpLbFillType->SetSelectHdl(LINK(this,FillControl,SelectFillTypeHdl));
+    mpLbFillAttr->SetSelectHdl(LINK(this,FillControl,SelectFillAttrHdl));
 }
 
 //------------------------------------------------------------------------
 
 FillControl::~FillControl()
 {
-    delete pLbFillType;
-    delete pLbFillAttr;
+    delete mpLbFillType;
+    delete mpLbFillAttr;
 }
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( FillControl, DelayHdl, Timer *, EMPTYARG )
+void FillControl::InitializeFillStyleAccordingToGivenFillType(XFillStyle aFillStyle)
 {
-    SelectFillTypeHdl( NULL );
-    ( (SvxFillToolBoxControl*)GetData() )->updateStatus( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )));
-//  ( (SvxFillToolBoxControl*)GetData() )->GetBindings().Invalidate( SID_ATTR_FILL_STYLE );
-    return 0;
-}
-IMPL_LINK_INLINE_END( FillControl, DelayHdl, Timer *, pTimer )
+    SfxObjectShell* pSh = SfxObjectShell::Current();
+    bool bDone(false);
 
-//------------------------------------------------------------------------
-
-IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
-{
-    XFillStyle  eXFS = (XFillStyle)pLbFillType->GetSelectEntryPos();
-
-    // Spaeter sollte eine Optimierung derart erfolgen, dass die
-    // Listen, bzw. Tables nur dann geloescht und wieder aufgebaut
-    // werden, wenn sich die Listen, bzw. Tables tatsaechlich geaendert
-    // haben (in den LBs natuerlich).
-
-    if ( ( pBox && !pBox->IsTravelSelect() ) || !pBox )
+    if(pSh)
     {
-        // Damit wir in folgendem Fall einen Status anzeigen koennen:
-        // Ein Typ wurde ausgewaehlt aber kein Attribut.
-        // Die Selektion hat genau die gleichen Attribute wie die vorherige.
-//      SvxFillToolBoxControl* pControlerItem = (SvxFillToolBoxControl*)GetData();
-//      if( pControlerItem )
-//          pControlerItem->ClearCache();
+        // clear in all cases, else we would risk a mix of FillStyles in the Style list
+        mpLbFillAttr->Clear();
 
-        pLbFillAttr->Clear();
-        SfxObjectShell* pSh = SfxObjectShell::Current();
-
-        switch( eXFS )
+        switch(aFillStyle)
         {
-            case XFILL_NONE:
-            {
-                pLbFillType->Selected();
-                SelectFillAttrHdl( pBox );
-                pLbFillAttr->Disable();
-            }
-            break;
-
             case XFILL_SOLID:
             {
-                if ( pSh && pSh->GetItem( SID_COLOR_TABLE ) )
+                if(pSh->GetItem(SID_COLOR_TABLE))
                 {
-                    SvxColorTableItem aItem( *(const SvxColorTableItem*)(
-                        pSh->GetItem( SID_COLOR_TABLE ) ) );
-                    pLbFillAttr->Enable();
-                    pLbFillAttr->Fill( aItem.GetColorTable() );
+                    const SvxColorTableItem* pItem = static_cast< const SvxColorTableItem* >(pSh->GetItem(SID_COLOR_TABLE));
+                    mpLbFillAttr->Enable();
+                    mpLbFillAttr->Fill(pItem->GetColorTable());
+                    bDone = true;
                 }
-                else
-                    pLbFillAttr->Disable();
+                break;
             }
-            break;
 
             case XFILL_GRADIENT:
             {
-                if ( pSh && pSh->GetItem( SID_GRADIENT_LIST ) )
+                if(pSh->GetItem(SID_GRADIENT_LIST))
                 {
-                    SvxGradientListItem aItem( *(const SvxGradientListItem*)(
-                        pSh->GetItem( SID_GRADIENT_LIST ) ) );
-                    pLbFillAttr->Enable();
-                    pLbFillAttr->Fill( aItem.GetGradientList() );
+                    const SvxGradientListItem* pItem = static_cast< const SvxGradientListItem* >(pSh->GetItem(SID_GRADIENT_LIST));
+                    mpLbFillAttr->Enable();
+                    mpLbFillAttr->Fill(pItem->GetGradientList());
+                    bDone = true;
                 }
-                else
-                    pLbFillAttr->Disable();
+                break;
             }
-            break;
 
             case XFILL_HATCH:
             {
-                if ( pSh && pSh->GetItem( SID_HATCH_LIST ) )
+                if(pSh->GetItem(SID_HATCH_LIST))
                 {
-                    SvxHatchListItem aItem( *(const SvxHatchListItem*)(
-                        pSh->GetItem( SID_HATCH_LIST ) ) );
-                    pLbFillAttr->Enable();
-                    pLbFillAttr->Fill( aItem.GetHatchList() );
+                    const SvxHatchListItem* pItem = static_cast< const SvxHatchListItem* >(pSh->GetItem(SID_HATCH_LIST));
+                    mpLbFillAttr->Enable();
+                    mpLbFillAttr->Fill(pItem->GetHatchList());
+                    bDone = true;
                 }
-                else
-                    pLbFillAttr->Disable();
+                break;
             }
-            break;
 
             case XFILL_BITMAP:
             {
-                if ( pSh && pSh->GetItem( SID_BITMAP_LIST ) )
+                if(pSh->GetItem(SID_BITMAP_LIST))
                 {
-                    SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(
-                        pSh->GetItem( SID_BITMAP_LIST ) ) );
-                    pLbFillAttr->Enable();
-                    pLbFillAttr->Fill( aItem.GetBitmapList() );
+                    const SvxBitmapListItem* pItem = static_cast< const SvxBitmapListItem* >(pSh->GetItem(SID_BITMAP_LIST));
+                    mpLbFillAttr->Enable();
+                    mpLbFillAttr->Fill(pItem->GetBitmapList());
+                    bDone = true;
                 }
-                else
-                    pLbFillAttr->Disable();
+                break;
             }
-            break;
-        }
-
-        if( eXFS != XFILL_NONE ) // Wurde schon erledigt
-        {
-            if ( pBox )
-                pLbFillType->Selected();
-
-            // release focus
-            if ( pBox && pLbFillType->IsRelease() )
+            default: // XFILL_NONE
             {
-                SfxViewShell* pViewShell = SfxViewShell::Current();
-                if( pViewShell && pViewShell->GetWindow() )
-                    pViewShell->GetWindow()->GrabFocus();
+                // accept disable (no styles for XFILL_NONE)
+                break;
             }
         }
     }
+
+    if(!bDone)
+    {
+        mpLbFillAttr->Disable();
+    }
+}
+
+void FillControl::updateLastFillTypeControlSelectEntryPos()
+{
+    mnLastFillTypeControlSelectEntryPos = mpLbFillType->GetSelectEntryPos();
+}
+
+IMPL_LINK(FillControl,SelectFillTypeHdl,ListBox *,pBox)
+{
+    if(!pBox) // only work with real calls from ListBox, do not accept direct calls with zeros here
+    {
+        return 0;
+    }
+
+    const bool bAction(
+           !mpLbFillType->IsTravelSelect() // keep TravelSelect, this means keyboard up/down in the list
+        && mpLbFillType->GetSelectEntryCount()
+        && mpLbFillType->GetSelectEntryPos() != mnLastFillTypeControlSelectEntryPos);
+
+    updateLastFillTypeControlSelectEntryPos();
+    XFillStyle eXFS = static_cast< XFillStyle >(mpLbFillType->GetSelectEntryPos());
+
+    if(bAction && XFILL_NONE != eXFS)
+    {
+        mbFillTypeChanged = true;
+    }
+
+    // update list of FillStyles in any case
+    InitializeFillStyleAccordingToGivenFillType(eXFS);
+
+    // for XFILL_NONE do no longer call SelectFillAttrHdl (as done before),
+    // trigger needed actions directly. This is the only action this handler
+    // can trigger directly as the user action is finished in this case
+    if(XFILL_NONE == eXFS && bAction)
+    {
+        // for XFILL_NONE do no longer call SelectFillAttrHdl,
+        // trigger needed actions directly
+        Any a;
+        Sequence< PropertyValue > aArgsFillStyle(1);
+        XFillStyleItem aXFillStyleItem(eXFS);
+
+        aArgsFillStyle[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
+        aXFillStyleItem.QueryValue(a);
+        aArgsFillStyle[0].Value = a;
+        ((SvxFillToolBoxControl*)GetData())->Dispatch(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillStyle")), aArgsFillStyle);
+    }
+
+    mpLbFillType->Selected();
+
+    // release focus. Needed to get focus automatically back to EditView
+    if(mpLbFillType->IsRelease())
+    {
+        SfxViewShell* pViewShell = SfxViewShell::Current();
+
+        if(pViewShell && pViewShell->GetWindow())
+        {
+            pViewShell->GetWindow()->GrabFocus();
+        }
+    }
+
     return 0;
 }
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
+void FillControl::updateLastFillAttrControlSelectEntryPos()
 {
-    XFillStyle eXFS = (XFillStyle)pLbFillType->GetSelectEntryPos();
-    XFillStyleItem aXFillStyleItem( eXFS );
-    sal_Bool bAction = pBox && !pLbFillAttr->IsTravelSelect();
+    mnLastFillAttrControlSelectEntryPos = mpLbFillAttr->GetSelectEntryPos();
+}
 
-    SfxObjectShell* pSh = SfxObjectShell::Current();
-    if ( bAction )
+IMPL_LINK(FillControl, SelectFillAttrHdl, ListBox *, pBox)
+{
+    if(!pBox) // only work with real calls from ListBox, do not accept direct calls with zeros here
     {
+        return 0;
+    }
+
+    const bool bAction(
+           !mpLbFillAttr->IsTravelSelect() // keep TravelSelect, this means keyboard up/down in the list
+        && mpLbFillAttr->GetSelectEntryCount()
+        && mpLbFillAttr->GetSelectEntryPos() != mnLastFillAttrControlSelectEntryPos);
+
+    updateLastFillAttrControlSelectEntryPos();
+
+    if(bAction)
+    {
+        SfxObjectShell* pSh = SfxObjectShell::Current();
+
+        // Need to prepare the PropertyValue for the FillStyle dispatch action early,
+        // else the call for FillType to Dispatch(".uno:FillStyle") will already destroy the current state
+        // of selection in mpLbFillAttr again by calls to StateChanged which *will* set to no
+        // selection again (e.g. when two objects, same fill style, but different fill attributes)
         Any a;
-        Sequence< PropertyValue > aArgs( 1 );
+        Sequence< PropertyValue > aArgsFillAttr(1);
+        ::rtl::OUString aFillAttrCommand;
+        XFillStyle eXFS(static_cast< XFillStyle >(mpLbFillType->GetSelectEntryPos()));
 
-        // First set the style
-        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ));
-        aXFillStyleItem.QueryValue(  a );
-        aArgs[0].Value = a;
-        ((SvxFillToolBoxControl*)GetData())->Dispatch(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillStyle" )), aArgs );
-
-        switch( eXFS )
+        switch(eXFS)
         {
             case XFILL_NONE:
             {
+                // handled in SelectFillTypeHdl, nothing to do here
+                break;
             }
-            break;
 
             case XFILL_SOLID:
             {
-                // NEU
                 //Eintrag wird auf temporaere Farbe geprueft
-                String aTmpStr = pLbFillAttr->GetSelectEntry();
-                if( aTmpStr.GetChar(0) == TMP_STR_BEGIN && aTmpStr.GetChar(aTmpStr.Len()-1) == TMP_STR_END )
+                String aTmpStr = mpLbFillAttr->GetSelectEntry();
+
+                if(aTmpStr.GetChar(0) == TMP_STR_BEGIN && aTmpStr.GetChar(aTmpStr.Len() - 1) == TMP_STR_END)
                 {
-                    aTmpStr.Erase( aTmpStr.Len()-1, 1 );
-                    aTmpStr.Erase( 0, 1 );
+                    aTmpStr.Erase(aTmpStr.Len() - 1,1);
+                    aTmpStr.Erase(0,1);
                 }
 
-                XFillColorItem aXFillColorItem( aTmpStr, pLbFillAttr->GetSelectEntryColor() );
-
-                aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ));
-                aXFillColorItem.QueryValue( a );
-                aArgs[0].Value = a;
-                ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillColor" )),
-                                                               aArgs );
+                XFillColorItem aXFillColorItem(aTmpStr,mpLbFillAttr->GetSelectEntryColor());
+                aArgsFillAttr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor"));
+                aXFillColorItem.QueryValue(a);
+                aArgsFillAttr[0].Value = a;
+                aFillAttrCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillColor"));
+                break;
             }
-            break;
             case XFILL_GRADIENT:
             {
-                sal_uInt16 nPos = pLbFillAttr->GetSelectEntryPos();
+                sal_uInt16 nPos = mpLbFillAttr->GetSelectEntryPos();
 
-                if ( nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem( SID_GRADIENT_LIST ) )
+                if(nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem(SID_GRADIENT_LIST))
                 {
-                    SvxGradientListItem aItem(
-                        *(const SvxGradientListItem*)( pSh->GetItem( SID_GRADIENT_LIST ) ) );
+                    const SvxGradientListItem* pItem = static_cast< const SvxGradientListItem* >(pSh->GetItem(SID_GRADIENT_LIST));
 
-                    if ( nPos < aItem.GetGradientList()->Count() )  // kein temp. Eintrag ?
+                    if(nPos < pItem->GetGradientList()->Count())  // kein temp. Eintrag ?
                     {
-                        XGradient aGradient = aItem.GetGradientList()->GetGradient( nPos )->GetGradient();
-                        XFillGradientItem aXFillGradientItem( pLbFillAttr->GetSelectEntry(), aGradient );
-
-                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ));
-                        aXFillGradientItem.QueryValue( a );
-                        aArgs[0].Value = a;
-                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillGradient" )),
-                                                                       aArgs );
+                        XGradient aGradient = pItem->GetGradientList()->GetGradient(nPos)->GetGradient();
+                        XFillGradientItem aXFillGradientItem(mpLbFillAttr->GetSelectEntry(),aGradient);
+                        aArgsFillAttr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillGradient"));
+                        aXFillGradientItem.QueryValue(a);
+                        aArgsFillAttr[0].Value = a;
+                        aFillAttrCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillGradient"));
                     }
                 }
+                break;
             }
-            break;
 
             case XFILL_HATCH:
             {
-                sal_uInt16 nPos = pLbFillAttr->GetSelectEntryPos();
+                sal_uInt16 nPos = mpLbFillAttr->GetSelectEntryPos();
 
-                if ( nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem( SID_HATCH_LIST ) )
+                if(nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem(SID_HATCH_LIST))
                 {
-                    SvxHatchListItem aItem( *(const SvxHatchListItem*)( pSh->GetItem( SID_HATCH_LIST ) ) );
+                    const SvxHatchListItem* pItem = static_cast< const SvxHatchListItem* >(pSh->GetItem(SID_HATCH_LIST));
 
-                    if ( nPos < aItem.GetHatchList()->Count() )  // kein temp. Eintrag ?
+                    if(nPos < pItem->GetHatchList()->Count())  // kein temp. Eintrag ?
                     {
-                        XHatch aHatch = aItem.GetHatchList()->GetHatch( nPos )->GetHatch();
-                        XFillHatchItem aXFillHatchItem( pLbFillAttr->GetSelectEntry(), aHatch );
+                        XHatch aHatch = pItem->GetHatchList()->GetHatch(nPos)->GetHatch();
+                        XFillHatchItem aXFillHatchItem(mpLbFillAttr->GetSelectEntry(),aHatch);
 
-                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillHatch" ));
-                        aXFillHatchItem.QueryValue( a );
-                        aArgs[0].Value = a;
-                        ((SvxFillToolBoxControl*)GetData())->Dispatch( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FillHatch" )),
-                                                                       aArgs );
+                        aArgsFillAttr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillHatch"));
+                        aXFillHatchItem.QueryValue(a);
+                        aArgsFillAttr[0].Value = a;
+                        aFillAttrCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillHatch"));
                     }
                 }
+                break;
             }
-            break;
 
             case XFILL_BITMAP:
             {
-                sal_uInt16 nPos = pLbFillAttr->GetSelectEntryPos();
+                sal_uInt16 nPos = mpLbFillAttr->GetSelectEntryPos();
 
-                if ( nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem( SID_BITMAP_LIST ) )
+                if(nPos != LISTBOX_ENTRY_NOTFOUND && pSh && pSh->GetItem(SID_BITMAP_LIST))
                 {
-                    SvxBitmapListItem aItem(
-                        *(const SvxBitmapListItem*)( pSh->GetItem( SID_BITMAP_LIST ) ) );
+                    const SvxBitmapListItem* pItem = static_cast< const SvxBitmapListItem* >(pSh->GetItem(SID_BITMAP_LIST));
 
-                    if ( nPos < aItem.GetBitmapList()->Count() )  // kein temp. Eintrag ?
+                    if(nPos < pItem->GetBitmapList()->Count())  // kein temp. Eintrag ?
                     {
-                        const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
-                        const XFillBitmapItem aXFillBitmapItem(pLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
+                        const XBitmapEntry* pXBitmapEntry = pItem->GetBitmapList()->GetBitmap(nPos);
+                        const XFillBitmapItem aXFillBitmapItem(mpLbFillAttr->GetSelectEntry(),pXBitmapEntry->GetGraphicObject());
 
-                        aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillBitmap" ));
-                        aXFillBitmapItem.QueryValue( a );
-                        aArgs[0].Value = a;
-                        ((SvxFillToolBoxControl*)GetData())->Dispatch(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillBitmap")), aArgs);
+                        aArgsFillAttr[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillBitmap"));
+                        aXFillBitmapItem.QueryValue(a);
+                        aArgsFillAttr[0].Value = a;
+                        aFillAttrCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillBitmap"));
                     }
                 }
+                break;
             }
-            break;
         }
 
-        // release focus
-        if ( pLbFillAttr->IsRelease()  && pBox )
+        // this is the place where evtl. a new slot action may be introduced to avoid the
+        // two undo entries. Reason for this is that indeed two actions are executed, the fill style
+        // and the fill attribute change. The sidebar already handles both separately, so
+        // changing the fill style already changes the object and adds a default fill attribute for
+        // the newly choosen fill style.
+        // This control uses the older user's two-step action to select a fill style and a fill attribute. In
+        // this case a lot of things may go wrong (e.g. the user stops that action and does something
+        // different), thus the solution of the sidebar should be preferred from my POV in the future
+
+        // first set the fill style if changed
+        if(mbFillTypeChanged)
+        {
+            Sequence< PropertyValue > aArgsFillStyle(1);
+            XFillStyleItem aXFillStyleItem(eXFS);
+
+            aArgsFillStyle[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle"));
+            aXFillStyleItem.QueryValue(a);
+            aArgsFillStyle[0].Value = a;
+            ((SvxFillToolBoxControl*)GetData())->Dispatch(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillStyle")), aArgsFillStyle);
+            mbFillTypeChanged = false;
+        }
+
+        // second set fill attribute when a change was detected and prepared
+        if(aFillAttrCommand.getLength())
+        {
+            ((SvxFillToolBoxControl*)GetData())->Dispatch(aFillAttrCommand, aArgsFillAttr);
+        }
+
+        // release focus. Needed to get focus automatically back to EditView
+        if(mpLbFillAttr->IsRelease() && pBox)
         {
             SfxViewShell* pViewShell = SfxViewShell::Current();
-            if( pViewShell && pViewShell->GetWindow() )
+
+            if(pViewShell && pViewShell->GetWindow())
             {
                 pViewShell->GetWindow()->GrabFocus();
             }
@@ -799,31 +906,33 @@ void FillControl::Resize()
     long nH = 180;
     long nSep = 0; // war vorher 4
 
-    pLbFillType->SetSizePixel( Size( nW * 2 - nSep, nH ) );
-    pLbFillAttr->SetPosSizePixel( Point( nW * 2 + nSep, 0 ), Size( nW * 3 - nSep, nH ) );
+    mpLbFillType->SetSizePixel(Size(nW * 2 - nSep,nH));
+    mpLbFillAttr->SetPosSizePixel(Point(nW * 2 + nSep,0),Size(nW * 3 - nSep,nH));
 }
-/* -----------------------------08.03.2002 15:04------------------------------
 
- ---------------------------------------------------------------------------*/
+//------------------------------------------------------------------------
 
-void FillControl::DataChanged( const DataChangedEvent& rDCEvt )
+void FillControl::DataChanged(const DataChangedEvent& rDCEvt)
 {
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
-         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    if((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+        (rDCEvt.GetFlags() & SETTINGS_STYLE))
     {
-        Size aTypeSize(LogicToPixel(aLogicalFillSize, MAP_APPFONT));
-        Size aAttrSize(LogicToPixel(aLogicalAttrSize, MAP_APPFONT));
-        pLbFillType->SetSizePixel(aTypeSize);
-        pLbFillAttr->SetSizePixel(aAttrSize);
+        Size aTypeSize(LogicToPixel(maLogicalFillSize,MAP_APPFONT));
+        Size aAttrSize(LogicToPixel(maLogicalAttrSize,MAP_APPFONT));
+        mpLbFillType->SetSizePixel(aTypeSize);
+        mpLbFillAttr->SetSizePixel(aAttrSize);
+
         //to get the base height
-        aTypeSize = pLbFillType->GetSizePixel();
-        aAttrSize = pLbFillAttr->GetSizePixel();
-        Point aAttrPnt = pLbFillAttr->GetPosPixel();
+        aTypeSize = mpLbFillType->GetSizePixel();
+        aAttrSize = mpLbFillAttr->GetSizePixel();
+        Point aAttrPnt = mpLbFillAttr->GetPosPixel();
 
         SetSizePixel(
-            Size( aAttrPnt.X() + aAttrSize.Width(),
-                Max( aAttrSize.Height(), aTypeSize.Height() ) ) );
+            Size(aAttrPnt.X() + aAttrSize.Width(),
+            Max(aAttrSize.Height(),aTypeSize.Height())));
     }
-    Window::DataChanged( rDCEvt );
+    Window::DataChanged(rDCEvt);
 }
 
+//------------------------------------------------------------------------
+//eof
