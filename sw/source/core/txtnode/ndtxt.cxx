@@ -1055,6 +1055,8 @@ void SwTxtNode::Update(
         // Bookmarks must never grow to either side, when editing (directly) to the left or right (#i29942#)!
         // And a bookmark with same start and end must remain to the left of the inserted text (used in XML import).
         {
+            bool bAtLeastOneBookmarkMoved = false;
+            bool bAtLeastOneExpandedBookmarkAtInsertionPosition = false;
             const IDocumentMarkAccess* const pMarkAccess = getIDocumentMarkAccess();
             for ( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
@@ -1062,14 +1064,28 @@ void SwTxtNode::Update(
             {
                 const ::sw::mark::IMark* const pMark = ppMark->get();
                 const SwPosition* pEnd = &pMark->GetMarkEnd();
-                SwIndex & rIdx = const_cast<SwIndex&>(pEnd->nContent);
+                SwIndex & rEndIdx = const_cast<SwIndex&>(pEnd->nContent);
                 if( this == &pEnd->nNode.GetNode() &&
-                    rPos.GetIndex() == rIdx.GetIndex() )
+                    rPos.GetIndex() == rEndIdx.GetIndex() )
                 {
-                    rIdx.Assign( &aTmpIdxReg, rIdx.GetIndex() );
-                    bSortMarks = true;
+                    rEndIdx.Assign( &aTmpIdxReg, rEndIdx.GetIndex() );
+                    bAtLeastOneBookmarkMoved = true;
+                }
+                else if ( !bAtLeastOneExpandedBookmarkAtInsertionPosition )
+                {
+                    if ( pMark->IsExpanded() )
+                    {
+                        const SwPosition* pStart = &pMark->GetMarkStart();
+                        if ( this == &pStart->nNode.GetNode()
+                             && rPos.GetIndex() == pStart->nContent.GetIndex() )
+                        {
+                            bAtLeastOneExpandedBookmarkAtInsertionPosition = true;
+                        }
+                    }
                 }
             }
+
+            bSortMarks = bAtLeastOneBookmarkMoved && bAtLeastOneExpandedBookmarkAtInsertionPosition;
         }
     }
 
