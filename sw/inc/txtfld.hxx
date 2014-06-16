@@ -27,6 +27,8 @@
 #include <tools/string.hxx>
 #include <pam.hxx>
 
+#include <boost/shared_ptr.hpp>
+
 class SwTxtNode;
 
 // ATT_FLD ***********************************
@@ -67,6 +69,13 @@ public:
 
     // enable notification that field content has changed and needs reformatting
     virtual void NotifyContentChange( SwFmtFld& rFmtFld );
+
+    // deletes the given field via removing the corresponding text selection from the document's content
+    static void DeleteTxtFld( const SwTxtFld& rTxtFld );
+
+    // return text selection for the given field
+    static void GetPamForTxtFld( const SwTxtFld& rTxtFld,
+                                 boost::shared_ptr< SwPaM >& rPamForTxtFld );
 
 };
 
