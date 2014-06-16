@@ -46,18 +46,15 @@ private:
     OUString                                 maODFVersion;
     const cssu::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
 
-    FixedImage          maSymbolImg;
-    FixedInfo           maDocNameFI;
-    FixedInfo           maDescr1aFI;
-    FixedInfo           maDescr1bFI;
-    FixedInfo           maSignsFI;
-    PushButton          maViewSignsBtn;
-    FixedInfo           maDescr2FI;
-    CheckBox            maAlwaysTrustCB;
-    FixedLine           maBottomSepFL;
-    OKButton            maEnableBtn;
-    CancelButton        maDisableBtn;
-    HelpButton          maHelpBtn;
+    FixedImage*         mpSymbolImg;
+    FixedText*          mpDocNameFI;
+    FixedText*          mpDescr1FI;
+    FixedText*          mpSignsFI;
+    PushButton*         mpViewSignsBtn;
+    FixedText*          mpDescr2FI;
+    CheckBox*           mpAlwaysTrustCB;
+    PushButton*         mpEnableBtn;
+    PushButton*         mpDisableBtn;
 
     const bool          mbSignedMode;           // modus of dialog (signed / unsigned macros)
     const bool          mbShowSignatures;
@@ -69,13 +66,10 @@ private:
     DECL_LINK(          AlwaysTrustCheckHdl, void* );
 
     void                InitControls();
-    void                FitControls();
 
 public:
     MacroWarning( Window* pParent, bool _bShowSignatures, ResMgr& rResMgr );
     virtual ~MacroWarning();
-
-    virtual short   Execute() SAL_OVERRIDE;
 
     void    SetDocumentURL( const OUString& rDocURL );
 

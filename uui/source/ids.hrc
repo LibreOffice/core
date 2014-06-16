@@ -37,7 +37,6 @@
 #define STR_ERROR_SIMPLE_PASSWORD_WRONG                 (RID_UUI_START + 23)
 #define STR_ERROR_PASSWORD_TO_OPEN_WRONG                (RID_UUI_START + 24)
 #define STR_ERROR_PASSWORD_TO_MODIFY_WRONG              (RID_UUI_START + 25)
-#define RID_XMLSECDLG_MACROWARN                         (RID_UUI_START + 30)
 #define STR_UNKNOWNUSER                                 (RID_UUI_START + 31)
 #define STR_OPENLOCKED_TITLE                            (RID_UUI_START + 32)
 #define STR_OPENLOCKED_MSG                              (RID_UUI_START + 33)
