@@ -48,20 +48,19 @@ class SwView;
 #include "optload.hxx"
 #include "swlbox.hxx"
 
-class CategoryBox : public ComboBox
+class TextFilterAutoConvert : public TextFilter
 {
+private:
+    OUString m_sLastGoodText;
 public:
-    CategoryBox( Window* pParent, WinBits nStyle = 0 )
-        : ComboBox( pParent, nStyle )
-    {}
-
-    virtual bool PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
+    virtual OUString filter(const OUString &rText) SAL_OVERRIDE;
 };
 
 class SwCaptionDialog : public SvxStandardDialog
 {
     Edit*        m_pTextEdit;
-    CategoryBox* m_pCategoryBox;
+    ComboBox*    m_pCategoryBox;
+    TextFilterAutoConvert m_aTextFilter;
     FixedText*   m_pFormatText;
     ListBox*     m_pFormatBox;
     //#i61007# order of captions

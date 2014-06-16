@@ -460,9 +460,6 @@
     <glade-widget-class title="Numbering Type ListBox" name="swlo-SwNumberingTypeListBox"
                         generic-name="NumberingTypeListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
-    <glade-widget-class title="Category ComboBox" name="swuilo-CategoryBox"
-                        generic-name="CategoryComboBox" parent="GtkComboBox"
-                        icon-name="widget-gtk-combobox"/>
     <glade-widget-class title="Bookmark Combo" name="swuilo-BookmarkCombo"
                         generic-name="BookmarkComboBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
