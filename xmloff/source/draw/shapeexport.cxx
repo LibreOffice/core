@@ -3332,7 +3332,7 @@ void XMLShapeExport::ImpExportMediaShape(
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, sMimeType );
 
         // write plugin
-        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & SEF_EXPORT_NO_WS ), true);
+        SvXMLElementExport* pPluginOBJ =  new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & SEF_EXPORT_NO_WS ), true);
 
         // export parameters
         const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );
@@ -3384,6 +3384,7 @@ void XMLShapeExport::ImpExportMediaShape(
             delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
         }
 
+        delete pPluginOBJ;
 #if HAVE_FEATURE_GLTF
         if( sMimeType == "model/vnd.gltf+json" )
             lcl_StoreGltfFallback(GetExport(), xPropSet, aMediaURL);
