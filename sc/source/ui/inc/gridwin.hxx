@@ -358,7 +358,8 @@ public:
 
     using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                          ScUpdateMode eMode = SC_UPDATE_ALL );
+                          ScUpdateMode eMode = SC_UPDATE_ALL,
+                          OutputDevice* pOutDev = 0 );
 
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
 

@@ -376,9 +376,14 @@ void ScGridWindow::Paint( const Rectangle& rRect )
 }
 
 //  Draw  ----------------------------------------------------------------
-
-void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMode eMode )
+void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMode eMode,
+                         OutputDevice* pOutDev )
 {
+    if ( !pOutDev )
+    {
+        pOutDev = this;
+    }
+
     ScModule* pScMod = SC_MOD();
     bool bTextWysiwyg = pScMod->GetInputOptions().GetTextWysiwyg();
 
@@ -472,7 +477,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
-    ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
+    ScOutputData aOutputData( pOutDev, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
 
@@ -587,7 +592,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         aDrawingRectLogic = PixelToLogic(aDrawingRectPixel, aDrawMode);
     }
 
-    OutputDevice* pContentDev = this;       // device for document content, used by overlay manager
+    // device for document content, used by overlay manager
+    // We usually paint to ourselves, but allow other devices for tiled rendering.
+    OutputDevice* pContentDev = pOutDev;
     SdrPaintWindow* pTargetPaintWindow = 0; // #i74769# work with SdrPaintWindow directly
 
     {
@@ -604,7 +611,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             {
                 // #i74769# Use new BeginDrawLayers() interface
                 vcl::Region aDrawingRegion(aDrawingRectLogic);
-                pTargetPaintWindow = pDrawView->BeginDrawLayers(this, aDrawingRegion);
+                pTargetPaintWindow = pDrawView->BeginDrawLayers(pOutDev, aDrawingRegion);
+
                 OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
 
                 // #i74769# get target device from SdrPaintWindow, this may be the prerender
@@ -877,13 +885,23 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nTilePosX, int nTilePosY,
                               long nTileWidth, long nTileHeight )
 {
-    (void) rDevice;
-    (void) nOutputWidth;
-    (void) nOutputHeight;
-    (void) nTilePosX;
-    (void) nTilePosY;
-    (void) nTileWidth;
-    (void) nTileHeight;
+    rDevice.SetOutputSizePixel( Size( nOutputWidth, nOutputHeight ) );
+    // setup the output device to draw the tile
+    MapMode aMapMode( rDevice.GetMapMode() );
+    aMapMode.SetMapUnit( MAP_TWIP );
+    aMapMode.SetOrigin( Point( -nTilePosX, -nTilePosY ) );
+
+    // Scaling. Must convert from pixels to twips. We know
+    // that VirtualDevises use a DPI of 96.
+    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
+                                Fraction( nTileWidth);
+    Fraction scaleY = Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
+                                Fraction( nTileHeight);
+    aMapMode.SetScaleX( scaleX );
+    aMapMode.SetScaleY( scaleY );
+    rDevice.SetMapMode( aMapMode );
+
+    Draw( 0, 0, 3, 3, SC_UPDATE_ALL, &rDevice );
 }
 
 void ScGridWindow::CheckNeedsRepaint()

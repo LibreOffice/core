@@ -491,7 +491,7 @@ Size ScModelObj::getDocumentSize()
     // TODO: not sure what we want to do here, maybe just return the size for a certain
     // default minimum number of cells, e.g. 100x100 and more if more cells have
     // content?
-    return Size();
+    return Size( 3200, 3200 );
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
