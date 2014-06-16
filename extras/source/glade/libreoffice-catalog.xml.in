@@ -504,6 +504,9 @@
     <glade-widget-class title="Chart Series ListBox" name="chartcontrollerlo-SeriesListBox"
                         generic-name="Chart Series ListBox" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Hyperlink Tree Box" name="cuilo-SvxHlmarkTreeLBox"
+                        generic-name="Hyperlink Tree Box" parent="svtlo-SvTreeListBox"
+                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Content List Box" name="sfxlo-ContentListBox"
                         generic-name="Content List Box" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>

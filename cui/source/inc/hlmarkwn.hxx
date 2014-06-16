@@ -42,25 +42,29 @@ private:
     SvxHlinkDlgMarkWnd* mpParentWnd;
 
 public:
-    SvxHlmarkTreeLBox( Window* pParent, const ResId& rResId );
+    SvxHlmarkTreeLBox(Window* pParent, WinBits nStyle);
+
+    void SetParentWnd(SvxHlinkDlgMarkWnd* pParent)
+    {
+        mpParentWnd = pParent;
+    }
 
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 };
 
 
 //#                                                                      #
 //# Window-Class                                                         #
 //#                                                                      #
-
-
 class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 {
 private:
     friend class SvxHlmarkTreeLBox;
 
-    PushButton      maBtApply;
-    PushButton      maBtClose;
-    SvxHlmarkTreeLBox maLbTree;
+    PushButton*       mpBtApply;
+    PushButton*       mpBtClose;
+    SvxHlmarkTreeLBox*  mpLbTree;
 
     bool            mbUserMoved;
 
