@@ -434,6 +434,40 @@ void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
     }
 }
 
+/*static*/
+void SwTxtFld::GetPamForTxtFld(
+    const SwTxtFld& rTxtFld,
+    boost::shared_ptr< SwPaM >& rPamForTxtFld )
+{
+    if (rTxtFld.GetpTxtNode() == NULL)
+    {
+        SAL_WARN("sw.core", "<SwTxtFld::GetPamForField> - missing <SwTxtNode>");
+        return;
+    }
+
+    const SwTxtNode& rTxtNode = rTxtFld.GetTxtNode();
+
+    rPamForTxtFld.reset( new SwPaM( rTxtNode,
+                                    ( (rTxtFld.End() != NULL) ? *(rTxtFld.End()) : ( *(rTxtFld.GetStart()) + 1 ) ),
+                                    rTxtNode,
+                                    *(rTxtFld.GetStart()) ) );
+
+}
+
+/*static*/
+void SwTxtFld::DeleteTxtFld( const SwTxtFld& rTxtFld )
+{
+    if (rTxtFld.GetpTxtNode() != NULL)
+    {
+        boost::shared_ptr< SwPaM > pPamForTxtFld;
+        GetPamForTxtFld(rTxtFld, pPamForTxtFld);
+        if (pPamForTxtFld.get() != NULL)
+        {
+            rTxtFld.GetTxtNode().GetDoc()->DeleteAndJoin(*pPamForTxtFld);
+        }
+    }
+}
+
 // input field in-place editing
 SwTxtInputFld::SwTxtInputFld(
     SwFmtFld & rAttr,
