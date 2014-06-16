@@ -1203,8 +1203,11 @@ void ScExternalRefCache::clearCacheTables(sal_uInt16 nFileId)
     std::vector<TableTypeRef>& rTabs = pDocItem->maTables;
     for (size_t i = 0, n = rTabs.size(); i < n; ++i)
     {
-        Table& rTab = *rTabs[i];
-        rTab.clear();
+        TableTypeRef pTab = rTabs[i];
+        if (!pTab)
+            continue;
+
+        pTab->clear();
     }
 
     // Clear the external range name caches.
