@@ -269,6 +269,9 @@ public:
 
     OUString msCLSID;
 
+    OUString maSrcShellID;
+    OUString maDestShellID;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > mxAdditionalShapes;
 
     tDataSequenceCont m_aDataSequencesToExport;
@@ -1010,6 +1013,20 @@ const OUString& SchXMLExportHelper::getChartCLSID()
     return m_pImpl->msCLSID;
 }
 
+void SchXMLExportHelper::SetSourceShellID( const OUString& rShellID )
+{
+    m_pImpl->maSrcShellID = rShellID;
+}
+
+void SchXMLExportHelper::SetDestinationShellID( const OUString& rShellID )
+{
+    m_pImpl->maDestShellID = rShellID;
+}
+
+UniReference< XMLPropertySetMapper > SchXMLExportHelper_Impl::GetPropertySetMapper() const
+{
+    return mxPropertySetMapper;
+}
 
 void SchXMLExportHelper_Impl::exportAutoStyles()
 {
@@ -2280,8 +2297,42 @@ void SchXMLExportHelper_Impl::exportAxis(
     // get property states for autostyles
     if( xAxisProps.is() && mxExpPropMapper.is() )
     {
+        bool bIgnoreLinkedNumFmt = maSrcShellID != maDestShellID;
         lcl_exportNumberFormat( sNumFormat, xAxisProps, mrExport );
         aPropertyStates = mxExpPropMapper->Filter( xAxisProps );
+
+        fprintf(stdout, "SchXMLExportHelper_Impl::exportAxis:   src shell = '%s'  dest shell = '%s'\n",
+                rtl::OUStringToOString(maSrcShellID, RTL_TEXTENCODING_UTF8).getStr(),
+                rtl::OUStringToOString(maDestShellID, RTL_TEXTENCODING_UTF8).getStr());
+
+        if (bIgnoreLinkedNumFmt && false)
+        {
+            bool bFound = false;
+            const UniReference<XMLPropertySetMapper>& rMapper = mxExpPropMapper->getPropertySetMapper();
+            for (size_t i = 0; i < aPropertyStates.size(); ++i)
+            {
+                XMLPropertyState& rState = aPropertyStates[i];
+                if (rState.mnIndex < 0 || rMapper->GetEntryCount() <= rState.mnIndex)
+                    continue;
+
+                OUString aAPIName = rMapper->GetEntryAPIName(rState.mnIndex);
+                OUString aXMLName = rMapper->GetEntryXMLName(rState.mnIndex);
+
+                if (aAPIName != "LinkNumberFormatToSource")
+                    continue;
+
+                rState.maValue <<= false;
+                bFound = true;
+            }
+
+            if (!bFound)
+            {
+                sal_Int32 nIndex = rMapper->GetEntryIndex(XML_NAMESPACE_CHART, "link-data-style-to-source", 0);
+                XMLPropertyState aState(nIndex);
+                aState.maValue <<= false;
+                aPropertyStates.push_back(aState);
+            }
+        }
     }
 
     bool bExportDateScale = false;
@@ -3558,6 +3609,9 @@ SchXMLExport::~SchXMLExport()
 
 sal_uInt32 SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
+    maExportHelper.SetSourceShellID(GetSourceShellID());
+    maExportHelper.SetDestinationShellID(GetDestinationShellID());
+
     Reference< chart2::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
     maExportHelper.m_pImpl->InitRangeSegmentationProperties( xChartDoc );
     return SvXMLExport::exportDoc( eClass );
