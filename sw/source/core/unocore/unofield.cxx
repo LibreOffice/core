@@ -976,15 +976,10 @@ throw (uno::RuntimeException, std::exception)
     SwFmtFld* pFld = aIter.First();
     while(pFld)
     {
-        // Feld im Undo?
         SwTxtFld *pTxtFld = pFld->GetTxtFld();
         if(pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
         {
-            SwTxtNode& rTxtNode = (SwTxtNode&)*pTxtFld->GetpTxtNode();
-            SwPaM aPam(rTxtNode, *pTxtFld->GetStart());
-            aPam.SetMark();
-            aPam.Move();
-            m_pImpl->m_pDoc->DeleteAndJoin(aPam);
+            SwTxtFld::DeleteTxtFld(*pTxtFld);
         }
         pFld = aIter.Next();
     }
@@ -2035,12 +2030,14 @@ SwXTextField::getAnchor() throw (uno::RuntimeException, std::exception)
     const SwTxtFld* pTxtFld = m_pImpl->m_pFmtFld->GetTxtFld();
     if (!pTxtFld)
         throw uno::RuntimeException();
-    const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
 
-    SwPaM aPam(rTxtNode, *pTxtFld->GetStart() + 1, rTxtNode, *pTxtFld->GetStart());
+    boost::shared_ptr< SwPaM > pPamForTxtFld;
+    SwTxtFld::GetPamForTxtFld(*pTxtFld, pPamForTxtFld);
+    if (pPamForTxtFld.get() == NULL)
+        return 0;
 
     uno::Reference<text::XTextRange> xRange = SwXTextRange::CreateXTextRange(
-            *m_pImpl->m_pDoc, *aPam.GetPoint(), aPam.GetMark());
+            *m_pImpl->m_pDoc, *(pPamForTxtFld->GetPoint()), pPamForTxtFld->GetMark());
     return xRange;
 }
 
@@ -2051,12 +2048,9 @@ void SAL_CALL SwXTextField::dispose() throw (uno::RuntimeException, std::excepti
     if(pField)
     {
         UnoActionContext aContext(m_pImpl->m_pDoc);
-        const SwTxtFld* pTxtFld = m_pImpl->m_pFmtFld->GetTxtFld();
-        SwTxtNode& rTxtNode = (SwTxtNode&)*pTxtFld->GetpTxtNode();
-        SwPaM aPam(rTxtNode, *pTxtFld->GetStart());
-        aPam.SetMark();
-        aPam.Move();
-        m_pImpl->m_pDoc->DeleteAndJoin(aPam);
+
+        assert(m_pImpl->m_pFmtFld->GetTxtFld() && "<SwXTextField::dispose()> - missing <SwTxtFld> --> crash");
+        SwTxtFld::DeleteTxtFld(*(m_pImpl->m_pFmtFld->GetTxtFld()));
     }
 
     if (m_pImpl->m_pTextObject)
