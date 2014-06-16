@@ -44,7 +44,7 @@ public:
 
     void SetWidthSelect( long lValue, bool bValuable, SfxMapUnit eMapUnit);
     bool IsCloseByEdit() { return mbCloseByEdit;}
-    long GetTmpCustomWidth() { return mnTmpCusomWidth;}
+    long GetTmpCustomWidth() { return mnTmpCustomWidth;}
 
 private:
     LinePropertyPanel& mrLinePropertyPanel;
@@ -59,7 +59,7 @@ private:
     long                                mnCustomWidth;
     bool                                mbCustom;
     bool                                mbCloseByEdit;
-    long                                mnTmpCusomWidth;
+    long                                mnTmpCustomWidth;
     bool                                mbVSFocus;
 
     Image                               maIMGCus;

@@ -51,7 +51,7 @@ LineWidthControl::LineWidthControl (
       mnCustomWidth(0),
       mbCustom(false),
       mbCloseByEdit(false),
-      mnTmpCusomWidth(0),
+      mnTmpCustomWidth(0),
       mbVSFocus(true),
       maIMGCus(SVX_RES(IMG_WIDTH_CUSTOM)),
       maIMGCusGray(SVX_RES(IMG_WIDTH_CUSTOM_GRAY))
@@ -278,7 +278,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
             mrLinePropertyPanel.SetWidthIcon(iPos);
             mrLinePropertyPanel.SetWidth(nVal);
             mbCloseByEdit = false;
-            mnTmpCusomWidth = 0;
+            mnTmpCustomWidth = 0;
         }
         else if(iPos == 9)
         {//last custom
@@ -291,7 +291,7 @@ IMPL_LINK(LineWidthControl, VSSelectHdl, void *, pControl)
                 mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
                 mrLinePropertyPanel.SetWidth(nVal);
                 mbCloseByEdit = false;
-                mnTmpCusomWidth = 0;
+                mnTmpCustomWidth = 0;
             }
             else
             {
@@ -329,29 +329,10 @@ IMPL_LINK(LineWidthControl, MFModifyHdl, void *, pControl)
         mpBindings->GetDispatcher()->Execute(SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aWidthItem, 0L);
 
         mbCloseByEdit = true;
-        mnTmpCusomWidth = nTmp;
-        /*for(sal_uInt16 i = 0; i < 8; i++)
-        {
-            if(nTmp == (sal_Int32)maVSWidth.GetItemData(i))
-            {
-                mbCloseByEdit = false;
-                break;
-            }
-        }*/
-
+        mnTmpCustomWidth = nTmp;
     }
     return( 0L );
 }
-
-
-
-
-
-
-
-
-
-
 
 } } // end of namespace svx::sidebar
 
