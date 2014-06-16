@@ -489,6 +489,8 @@ public:
 #define DEF_CONTENT_COUNT 1
 
 
+    virtual std::vector<Color> GetDocColors();
+
     virtual void                LoadStyles( SfxObjectShell &rSource );
     void                        ReadNote( INote * );
     void                        UpdateNote( INote * );
