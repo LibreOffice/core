@@ -8,7 +8,7 @@ To call a wizard remotely you need to:
       
 -> For testing on installed LibreOffice:
     export URE_BOOTSTRAP="file:///usr/lib/libreoffice/program/fundamentalrc"
-    export PYTHONPATH=/usr/lib/libreoffice/basis-link/program
+    export PYTHONPATH=/usr/lib/libreoffice/program
     #and run LibreOffice in listening mode:
     soffice --"accept=socket,host=localhost,port=2002;urp;"
       
