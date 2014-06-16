@@ -683,7 +683,7 @@ namespace frm
                 }
 
                 if ( aDispatcherPos != m_aDispatchers.end() )
-                    xReturn = aDispatcherPos->second.getRef();
+                    xReturn = aDispatcherPos->second.get();
             }
         }
 

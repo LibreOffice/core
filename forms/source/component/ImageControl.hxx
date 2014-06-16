@@ -27,7 +27,6 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <comphelper/propmultiplex.hxx>
-#include <comphelper/implementationreference.hxx>
 #include <cppuhelper/implbase2.hxx>
 
 using namespace comphelper;

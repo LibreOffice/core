@@ -25,8 +25,8 @@
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <comphelper/uno3.hxx>
-#include <comphelper/implementationreference.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
 #include <tools/wintypes.hxx>
 #include "rtattributes.hxx"
 #include "attributedispatcher.hxx"
@@ -86,7 +86,7 @@ namespace frm
                         ,public ITextSelectionListener
     {
     private:
-        typedef ::comphelper::ImplementationReference< ORichTextFeatureDispatcher, ::com::sun::star::frame::XDispatch > SingleAttributeDispatcher;
+        typedef rtl::Reference<ORichTextFeatureDispatcher> SingleAttributeDispatcher;
         typedef ::std::map< SfxSlotId, SingleAttributeDispatcher >                                                      AttributeDispatchers;
         AttributeDispatchers                                                                                            m_aDispatchers;
 
