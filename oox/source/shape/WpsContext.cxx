@@ -56,25 +56,34 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
     case XML_bodyPr:
         if (mxShape.is())
         {
+            uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
             OptValue<OUString> oVert = rAttribs.getString(XML_vert);
             if (oVert.has() && oVert.get() == "vert270")
             {
-                // No support for this in core, work around by char rotation, as we do so for table cells already.
-                uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
-                uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
-                xTextCursor->gotoStart(false);
-                xTextCursor->gotoEnd(true);
-                uno::Reference<beans::XPropertyState> xPropertyState(xTextCursor, uno::UNO_QUERY);
-                beans::PropertyState aState = xPropertyState->getPropertyState("CharRotation");
-                if (aState == beans::PropertyState_DEFAULT_VALUE)
+                if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
                 {
-                    uno::Reference<beans::XPropertySet> xPropertySet(xTextCursor, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("CharRotation", uno::makeAny(sal_Int16(900)));
+                    // No support for this in core, work around by char rotation, as we do so for table cells already.
+                    uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
+                    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+                    xTextCursor->gotoStart(false);
+                    xTextCursor->gotoEnd(true);
+                    uno::Reference<beans::XPropertyState> xPropertyState(xTextCursor, uno::UNO_QUERY);
+                    beans::PropertyState aState = xPropertyState->getPropertyState("CharRotation");
+                    if (aState == beans::PropertyState_DEFAULT_VALUE)
+                    {
+                        uno::Reference<beans::XPropertySet> xTextCursorPropertySet(xTextCursor, uno::UNO_QUERY);
+                        xTextCursorPropertySet->setPropertyValue("CharRotation", uno::makeAny(sal_Int16(900)));
+                    }
+                }
+                else
+                {
+                    comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+                    aCustomShapeGeometry["TextPreRotateAngle"] = uno::makeAny(sal_Int32(-270));
+                    xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
                 }
             }
 
-            uno::Reference<lang::XServiceInfo> xServiceInfo(mxShape, uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
             if (xServiceInfo.is())
             {
                 bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
