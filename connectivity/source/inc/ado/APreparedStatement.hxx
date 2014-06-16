@@ -63,8 +63,6 @@ namespace connectivity
             // a Constructor, that is needed for when Returning the Object is needed:
             OPreparedStatement( OConnection* _pConnection,const OTypeInfoMap& _TypeInfo,const OUString& sql);
 
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
