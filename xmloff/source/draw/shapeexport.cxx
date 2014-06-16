@@ -3160,9 +3160,8 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
 }
 
 #if HAVE_FEATURE_GLTF
-static void lcl_StoreJsonExternalsAndFallback(
+static void lcl_StoreGltfExternals(
     SvXMLExport& rExport,
-    const uno::Reference<beans::XPropertySet> xPropSet,
     const OUString& rURL )
 {
     OUString sUrlPath;
@@ -3198,16 +3197,60 @@ static void lcl_StoreJsonExternalsAndFallback(
 
             xModelStorage->copyToStorage(xModelTarget);
 
-            /* Save the fallback image under the 'Model/Fallback/' folder
-               Place fallback image before the plugin tag otherwise older LO versions will parse an empty
-               plugin shape instead of the image. In current version this image will be ingored during import.*/
+            const uno::Reference<embed::XTransactedObject> xModelsTransaction(xModelsTarget, uno::UNO_QUERY);
+            if (xModelsTransaction.is())
+            {
+                xModelsTransaction->commit();
+            }
+        }
+        catch (uno::Exception const& e)
+        {
+            SAL_INFO("xmloff", "exception while saving embedded model: '" << e.Message << "'");
+        }
+    }
+}
+
+static void lcl_StoreGltfFallback(
+    SvXMLExport& rExport,
+    const uno::Reference<beans::XPropertySet> xPropSet,
+    const OUString& rURL )
+{
+    OUString sUrlPath;
+    if (rURL.startsWithIgnoreAsciiCase("vnd.sun.star.Package:", &sUrlPath))
+    {
+        sUrlPath = sUrlPath.copy(0,sUrlPath.lastIndexOf("/"));
+        try
+        {
+            // Base storage
+            uno::Reference<document::XStorageBasedDocument> const xSBD(
+                rExport.GetModel(), uno::UNO_QUERY_THROW);
+            const uno::Reference<embed::XStorage> xStorage(
+                xSBD->getDocumentStorage(), uno::UNO_QUERY_THROW);
+
+            // Model source
+            ::comphelper::LifecycleProxy proxy;
+            const uno::Reference<embed::XStorage> xModelStorage(
+                ::comphelper::OStorageHelper::GetStorageAtPath(xStorage, sUrlPath,
+                    embed::ElementModes::READ, proxy));
+
+            // Target storage
+            uno::Reference<embed::XStorage> const xTarget(
+                    rExport.GetTargetStorage(), uno::UNO_QUERY_THROW);
+
+            // Target of all models
+            const uno::Reference<embed::XStorage> xModelsTarget(
+                xTarget->openStorageElement(sUrlPath.copy(0,sUrlPath.lastIndexOf("/")), embed::ElementModes::WRITE));
+
+            /// Save the fallback image under the 'Models/Fallbacks/' folder
             uno::Reference< graphic::XGraphic > xGraphic( xPropSet->getPropertyValue("FallbackGraphic"), uno::UNO_QUERY );
             if( xGraphic.is() )
             {
                 // Fallback storage
+                const OUString sFallbackFolder("Fallbacks");
                 const uno::Reference<embed::XStorage> xFallbackTarget(
-                    xModelsTarget->openStorageElement(OUString("Fallbacks"), embed::ElementModes::WRITE));
+                    xModelsTarget->openStorageElement(sFallbackFolder, embed::ElementModes::WRITE));
 
+                const OUString sModelName = sUrlPath.copy(sUrlPath.lastIndexOf("/")+1);
                 uno::Reference< io::XStream > xPictureStream(
                     xFallbackTarget->openStreamElement( sModelName + ".png", embed::ElementModes::WRITE ), uno::UNO_QUERY_THROW );
 
@@ -3225,7 +3268,7 @@ static void lcl_StoreJsonExternalsAndFallback(
                     xFallbackTransaction->commit();
                 }
 
-                const OUString sFallbackURL( sUrlPath.copy(0,sUrlPath.lastIndexOf("/")) + "/Fallbacks/" + sModelName + ".png");
+                const OUString sFallbackURL( sUrlPath.copy(0,sUrlPath.lastIndexOf("/")) + "/" + sFallbackFolder + "/" + sModelName + ".png");
                 rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sFallbackURL );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
@@ -3242,10 +3285,11 @@ static void lcl_StoreJsonExternalsAndFallback(
         }
         catch (uno::Exception const& e)
         {
-            SAL_INFO("xmloff", "exception while saving embedded model: '" << e.Message << "'");
+            SAL_INFO("xmloff", "exception while saving fallback image of glTF model: '" << e.Message << "'");
         }
     }
 }
+
 #endif
 
 void XMLShapeExport::ImpExportMediaShape(
@@ -3276,7 +3320,7 @@ void XMLShapeExport::ImpExportMediaShape(
             lcl_StoreMediaAndGetURL(GetExport(), xPropSet, aMediaURL, sMimeType);
 #if HAVE_FEATURE_GLTF
         if( sMimeType == "model/vnd.gltf+json" )
-            lcl_StoreJsonExternalsAndFallback(GetExport(), xPropSet, aMediaURL);
+            lcl_StoreGltfExternals(GetExport(), aMediaURL);
 #endif
 
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, persistentURL );
@@ -3288,7 +3332,7 @@ void XMLShapeExport::ImpExportMediaShape(
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, sMimeType );
 
         // write plugin
-        SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & SEF_EXPORT_NO_WS ), true);
+        SvXMLElementExport* pPluginOBJ =  new SvXMLElementExport(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & SEF_EXPORT_NO_WS ), true);
 
         // export parameters
         const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );
@@ -3339,6 +3383,12 @@ void XMLShapeExport::ImpExportMediaShape(
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, aZoomValue );
             delete( new SvXMLElementExport( mrExport, XML_NAMESPACE_DRAW, XML_PARAM, false, true ) );
         }
+
+        delete pPluginOBJ;
+#if HAVE_FEATURE_GLTF
+        if( sMimeType == "model/vnd.gltf+json" )
+            lcl_StoreGltfFallback(GetExport(), xPropSet, aMediaURL);
+#endif
     }
 }
 
