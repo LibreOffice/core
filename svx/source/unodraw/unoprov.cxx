@@ -589,6 +589,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
         { OUString(UNO_NAME_EDIT_CHAR_STRIKEOUT),       0,  cppu::UnoType<sal_Int16>::get(),        0, 0},
         { OUString(UNO_NAME_EDIT_CHAR_CASEMAP),         0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
         { OUString(UNO_NAME_EDIT_CHAR_COLOR),           0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
+        { OUString("CharBackColor"),                    0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
         { OUString("CharRelief"),                       0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
         { OUString("CharUnderlineColor"),               0,  cppu::UnoType<sal_Int32>::get(),        0, 0 },
         { OUString("CharKerning"),                      0,  cppu::UnoType<sal_Int16>::get(),        0, 0 },
