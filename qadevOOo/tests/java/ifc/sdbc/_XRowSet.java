@@ -157,15 +157,24 @@ public class _XRowSet extends MultiMethodTest {
         oObj.removeRowSetListener(listener) ;
 
         checker.moveCursor() ;
-        result &= !listener.cursorMoved ;
+        if (listener.cursorMoved) {
+            log.println("cursorMoved is erroneously set");
+            result = false;
+        }
         listener.reset() ;
 
         checker.changeRow() ;
-        result &= !listener.rowChanged ;
+        if (listener.rowChanged) {
+            log.println("rowChanged is erroneously set");
+            result = false;
+        }
         listener.reset() ;
 
         checker.changeRowSet() ;
-        result &= !listener.rowSetChanged ;
+        if (listener.rowSetChanged) {
+            log.println("rowSetChanged is erroneously set");
+            result = false;
+        }
 
         tRes.tested("removeRowSetListener()", result) ;
     }
