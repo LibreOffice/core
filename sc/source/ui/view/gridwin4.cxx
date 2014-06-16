@@ -34,6 +34,7 @@
 
 #include "gridwin.hxx"
 #include "viewdata.hxx"
+#include "drawview.hxx"
 #include "output.hxx"
 #include "document.hxx"
 #include "attrib.hxx"
@@ -901,7 +902,19 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     aMapMode.SetScaleY( scaleY );
     rDevice.SetMapMode( aMapMode );
 
+    ScTabViewShell* pTabViewSh = pViewData->GetViewShell();
+    SdrView* pDrawView = pTabViewSh->GetScDrawView();
+    if ( pDrawView )
+    {
+        pDrawView->AddWindowToPaintView( &rDevice );
+    }
+
     Draw( 0, 0, 3, 3, SC_UPDATE_ALL, &rDevice );
+
+    if ( pDrawView )
+    {
+        pDrawView->DeleteWindowFromPaintView( &rDevice );
+    }
 }
 
 void ScGridWindow::CheckNeedsRepaint()
