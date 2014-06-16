@@ -3526,7 +3526,6 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
 
     if( !mxImplContext.Is() )
     {
-
         SvXMLShapeContext* pShapeContext= GetImport().GetShapeImport()->CreateFrameChildContext(
                         GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList );
 
@@ -3535,6 +3534,23 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
         // propagate the hyperlink to child context
         if ( !msHyperlink.isEmpty() )
             pShapeContext->setHyperlink( msHyperlink );
+
+        // Ignore gltf model if necessary and so the fallback image will be imported
+        bool bIngoreGltf;
+#if !HAVE_FEATURE_GLTF
+        bIngoreGltf = true;
+#else
+        bIngoreGltf = !SvtMiscOptions().IsExperimentalMode();
+#endif
+        if( bIngoreGltf && IsXMLToken(rLocalName, XML_PLUGIN ) )
+        {
+            SdXMLPluginShapeContext* pPluginContext = dynamic_cast<SdXMLPluginShapeContext*>(pShapeContext);
+            if( pPluginContext && pPluginContext->getMimeType() == "model/vnd.gltf+json" )
+            {
+                 mxImplContext = 0;
+                 return this;
+            }
+        }
 
         mxImplContext = pContext;
         mbSupportsReplacement = IsXMLToken(rLocalName, XML_OBJECT ) || IsXMLToken(rLocalName, XML_OBJECT_OLE);
@@ -3600,20 +3616,6 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
             }
         }
     }
-#if HAVE_FEATURE_GLTF
-    // For glTF models the fallback image is placed before the real shape.
-    // So we need to remove the fallback image after real shape is detected.
-    else if ( mxImplContext.Is() && IsXMLToken(mxImplContext->GetLocalName(), XML_IMAGE) &&
-              IsXMLToken( rLocalName, XML_PLUGIN ) && SvtMiscOptions().IsExperimentalMode() )
-    {
-        SvXMLShapeContext* pShapeContext= GetImport().GetShapeImport()->CreateFrameChildContext(
-                        GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList );
-
-        pContext = pShapeContext;
-        if( pContext )
-            removeGraphicFromImportContext(*mxImplContext);
-    }
-#endif
     // call parent for content
     if(!pContext)
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
