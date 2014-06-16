@@ -11,6 +11,7 @@ $(eval $(call gb_UIConfig_UIConfig,uui))
 
 $(eval $(call gb_UIConfig_add_uifiles,uui,\
 	uui/uiconfig/ui/logindialog \
+	uui/uiconfig/ui/macrowarnmedium \
 	uui/uiconfig/ui/masterpassworddlg \
 	uui/uiconfig/ui/password \
 	uui/uiconfig/ui/setmasterpassworddlg \
