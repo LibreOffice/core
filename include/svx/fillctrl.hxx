@@ -40,32 +40,33 @@ class ListBox;
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC SvxFillToolBoxControl: public SfxToolBoxControl
+class SVX_DLLPUBLIC SvxFillToolBoxControl : public SfxToolBoxControl
 {
 private:
-    XFillStyleItem*     pStyleItem;
-    XFillColorItem*     pColorItem;
-    XFillGradientItem*  pGradientItem;
-    XFillHatchItem*     pHatchItem;
-    XFillBitmapItem*    pBitmapItem;
+    XFillStyleItem*     mpStyleItem;
+    XFillColorItem*     mpColorItem;
+    XFillGradientItem*  mpGradientItem;
+    XFillHatchItem*     mpHatchItem;
+    XFillBitmapItem*    mpBitmapItem;
 
-    FillControl*        pFillControl;
-    SvxFillTypeBox*     pFillTypeLB;
-    SvxFillAttrBox*     pFillAttrLB;
+    FillControl*        mpFillControl;
+    SvxFillTypeBox*     mpFillTypeLB;
+    SvxFillAttrBox*     mpFillAttrLB;
 
-    bool                bUpdate;
-    sal_uInt16          eLastXFS;
+    XFillStyle          meLastXFS;
+
+    /// bitfield
+    bool                mbUpdate:1;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
+    SvxFillToolBoxControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~SvxFillToolBoxControl();
 
-    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
-                                      const SfxPoolItem* pState ) SAL_OVERRIDE;
-    void                Update( const SfxPoolItem* pState );
-    virtual Window*     CreateItemWindow( Window *pParent ) SAL_OVERRIDE;
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) SAL_OVERRIDE;
+    void Update(const SfxPoolItem* pState);
+    virtual Window* CreateItemWindow(Window* pParent) SAL_OVERRIDE;
 };
 
 
@@ -75,18 +76,29 @@ class FillControl : public Window
 private:
     friend class SvxFillToolBoxControl;
 
-    SvxFillTypeBox* pLbFillType;
-    SvxFillAttrBox* pLbFillAttr;
-    Size            aLogicalFillSize;
-    Size            aLogicalAttrSize;
-    Timer           aDelayTimer;
+    SvxFillTypeBox*     mpLbFillType;
+    SvxFillAttrBox*     mpLbFillAttr;
+    Size                maLogicalFillSize;
+    Size                maLogicalAttrSize;
 
-    DECL_LINK( DelayHdl, void * );
-    DECL_LINK( SelectFillTypeHdl, ListBox * );
-    DECL_LINK( SelectFillAttrHdl, ListBox * );
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
+    //
+    sal_uInt16          mnLastFillTypeControlSelectEntryPos;
+    sal_uInt16          mnLastFillAttrControlSelectEntryPos;
+
+    /// bitfield
+    bool                mbFillTypeChanged : 1;
+
+    DECL_LINK(SelectFillTypeHdl,ListBox *);
+    DECL_LINK(SelectFillAttrHdl,ListBox *);
+
+    virtual void DataChanged(const DataChangedEvent& rDCEvt) SAL_OVERRIDE;
+
+    void InitializeFillStyleAccordingToGivenFillType(XFillStyle eFillStyle);
+    void updateLastFillTypeControlSelectEntryPos();
+    void updateLastFillAttrControlSelectEntryPos();
+
 public:
-    FillControl( Window* pParent, WinBits nStyle = 0 );
+    FillControl(Window* pParent, WinBits nStyle = 0);
     virtual ~FillControl();
 
     virtual void Resize() SAL_OVERRIDE;
