@@ -560,6 +560,15 @@ void ORowSet::freeResources( bool _bComplete )
     }
     m_aClones.clear();
 
+    m_aBookmark     = Any();
+    m_bBeforeFirst  = true;
+    m_bAfterLast    = false;
+    m_bNew          = false;
+    m_bModified     = false;
+    m_bIsInsertRow  = false;
+    m_bLastKnownRowCountFinal = false;
+    m_nLastKnownRowCount      = 0;
+
     if ( _bComplete )
     {
         // the columns must be disposed before the querycomposer is disposed because
@@ -588,14 +597,6 @@ void ORowSet::freeResources( bool _bComplete )
         m_xStatement    = NULL;
         m_xTypeMap      = NULL;
 
-        m_aBookmark     = Any();
-        m_bBeforeFirst  = true;
-        m_bAfterLast    = false;
-        m_bNew          = false;
-        m_bModified     = false;
-        m_bIsInsertRow  = false;
-        m_bLastKnownRowCountFinal = false;
-        m_nLastKnownRowCount      = 0;
         if ( m_aOldRow.is() )
             m_aOldRow->clearRow();
 
@@ -2006,8 +2007,22 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
     }
     else // !m_bCommandFacetsDirty
     {
-        impl_rebuild_throw(_rClearForNotification);
-        beforeFirst();
+        Reference< XResultSet > xResultSet;
+        if(m_bParametersDirty)
+        {
+            xResultSet = impl_prepareAndExecute_throw();
+        }
+        else
+        {
+            xResultSet = m_xStatement->executeQuery();
+            m_pCache->reset(xResultSet);
+        }
+        // let our warnings container forget the reference to the (possibly disposed) old result set
+        m_aWarnings.setExternalWarnings( NULL );
+        // clear all current warnings
+        m_aWarnings.clearWarnings();
+        // let the warnings container know about the new "external warnings"
+        m_aWarnings.setExternalWarnings( Reference< XWarningsSupplier >( xResultSet, UNO_QUERY ) );
     }
     checkCache();
     // notify the rowset listeners
@@ -2732,16 +2747,8 @@ void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException, std:
 
 void ORowSet::impl_rebuild_throw(::osl::ResettableMutexGuard& _rGuard)
 {
-    Reference< XResultSet > xResultSet;
-    if(m_bParametersDirty)
-    {
-        xResultSet = impl_prepareAndExecute_throw();
-    }
-    else
-    {
-        xResultSet = m_xStatement->executeQuery();
-        m_pCache->reset(xResultSet);
-    }
+    Reference< XResultSet > xResultSet(m_xStatement->executeQuery());
+    m_pCache->reset(xResultSet);
     m_aWarnings.setExternalWarnings( Reference< XWarningsSupplier >( xResultSet, UNO_QUERY ) );
     notifyAllListeners(_rGuard);
 }
