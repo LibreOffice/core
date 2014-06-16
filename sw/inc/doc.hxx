@@ -60,7 +60,6 @@ class SwList;
 #include <sfx2/objsh.hxx>
 #include <svl/style.hxx>
 #include <editeng/numitem.hxx>
-#include <comphelper/implementationreference.hxx>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
@@ -365,9 +364,7 @@ class SW_DLLPUBLIC SwDoc :
     SwModify *mpUnoCallBack;
     IGrammarContact *mpGrammarContact;   //< for grammar checking in paragraphs during editing
 
-    mutable  comphelper::ImplementationReference< SwChartDataProvider
-        , ::com::sun::star::chart2::data::XDataProvider >
-                                maChartDataProviderImplRef;
+    mutable rtl::Reference<SwChartDataProvider> maChartDataProviderImplRef;
     SwChartLockController_Helper  *mpChartControllerHelper;
 
     // table of forbidden characters of this document

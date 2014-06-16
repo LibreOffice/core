@@ -431,7 +431,7 @@ SwDoc::~SwDoc()
     // Note: the chart data provider gets already disposed in ~SwDocShell
     // since all UNO API related functionality requires an existing SwDocShell
     // this assures that dipose gets called if there is need for it.
-    maChartDataProviderImplRef.reset();
+    maChartDataProviderImplRef.clear();
     delete mpChartControllerHelper;
 
     delete mpGrammarContact;
