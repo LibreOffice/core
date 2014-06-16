@@ -38,7 +38,6 @@
 #include "svtools/treelistentry.hxx"
 
 #include <cuires.hrc>
-#include "hlmarkwn.hrc"
 #include "hlmarkwn.hxx"
 #include "hltpbase.hxx"
 
@@ -95,10 +94,10 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
         switch( mpParentWnd->mnError )
         {
         case LERR_NOENTRIES :
-            aStrMessage = CUI_RESSTR( RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES );
+            aStrMessage = "Targets do not exist in the document.";
             break;
         case LERR_DOCNOTOPEN :
-            aStrMessage = CUI_RESSTR( RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN );
+            aStrMessage = "Couldn't open the document.";
             break;
         }
 
@@ -120,26 +119,25 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 |************************************************************************/
 
 SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
-:   ModalDialog( (Window*)pParent, CUI_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
-    maBtApply( this, CUI_RES (BT_APPLY) ),
-    maBtClose( this, CUI_RES (BT_CLOSE) ),
-    maLbTree ( this, CUI_RES (TLB_MARK) ),
+:   ModalDialog( (Window*)pParent, "HyperlinkMark", "cui/ui/hyperlinkmarkdialog.ui" ),
     mbUserMoved ( false ),
     mpParent    ( pParent ),
     mnError     ( LERR_NOERROR )
 {
-    FreeResource();
+    get(mpBtApply, "applyButton");
+    get(mpBtClose, "closeButton");
+    get(mpLbTree, "TreeListBox");
 
-    maBtApply.SetClickHdl          ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
-    maBtClose.SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
-    maLbTree.SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
+    mpBtApply->SetClickHdl          ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
+    mpBtClose->SetClickHdl       ( LINK ( this, SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl ) );
+    mpLbTree->SetDoubleClickHdl  ( LINK ( this, SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl ) );
 
     // add lines to the Tree-ListBox
-    maLbTree.SetStyle( maLbTree.GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
+    mpLbTree->SetStyle( mpLbTree->GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  //WB_HASLINESATROOT |
                             WB_HSCROLL | WB_HASBUTTONSATROOT );
 
-    maLbTree.SetAccessibleName(CUI_RES(STR_MARK_TREE));
+    mpLbTree->SetAccessibleName( "Mark Tree" );
 }
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()
@@ -161,7 +159,7 @@ sal_uInt16 SvxHlinkDlgMarkWnd::SetError( sal_uInt16 nError)
     if( mnError != LERR_NOERROR )
         ClearTree();
 
-    maLbTree.Invalidate();
+    mpLbTree->Invalidate();
 
     return nOldError;
 }
@@ -259,7 +257,7 @@ void SvxHlinkDlgMarkWnd::RestoreLastSelection()
     if (!bSelectedEntry && !aLastSelectedPath.empty())
     {
         std::deque<OUString> aTmpSelectedPath(aLastSelectedPath);
-        SelectPath(maLbTree.First(), maLbTree, aTmpSelectedPath);
+        SelectPath(mpLbTree->First(), *mpLbTree, aTmpSelectedPath);
     }
 }
 
@@ -283,7 +281,7 @@ void SvxHlinkDlgMarkWnd::RefreshTree (const OUString& aStrURL)
         aUStrURL = aStrURL;
 
     if (!RefreshFromDoc(aUStrURL))
-        maLbTree.Invalidate();
+        mpLbTree->Invalidate();
 
     bool bSelectedEntry = false;
 
@@ -430,7 +428,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                     {
                         Image aBmp( VCLUnoHelper::GetBitmap( aXBitmap ).GetBitmap(), aMaskColor );
                         // insert Displayname into treelist with bitmaps
-                        pEntry = maLbTree.InsertEntry ( aStrDisplayname,
+                        pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
                                                         aBmp, aBmp,
                                                         pParentEntry,
                                                         false, TREELIST_APPEND,
@@ -440,7 +438,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                     else
                     {
                         // insert Displayname into treelist without bitmaps
-                        pEntry = maLbTree.InsertEntry ( aStrDisplayname,
+                        pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
                                                         pParentEntry,
                                                         false, TREELIST_APPEND,
                                                         (void*)pData );
@@ -450,7 +448,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                 catch(const com::sun::star::uno::Exception&)
                 {
                     // insert Displayname into treelist without bitmaps
-                    pEntry = maLbTree.InsertEntry ( aStrDisplayname,
+                    pEntry = mpLbTree->InsertEntry ( aStrDisplayname,
                                                     pParentEntry,
                                                     false, TREELIST_APPEND,
                                                     (void*)pData );
@@ -478,17 +476,17 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
 
 void SvxHlinkDlgMarkWnd::ClearTree()
 {
-    SvTreeListEntry* pEntry = maLbTree.First();
+    SvTreeListEntry* pEntry = mpLbTree->First();
 
     while ( pEntry )
     {
         TargetData* pUserData = ( TargetData * ) pEntry->GetUserData();
         delete pUserData;
 
-        pEntry = maLbTree.Next( pEntry );
+        pEntry = mpLbTree->Next( pEntry );
     }
 
-    maLbTree.Clear();
+    mpLbTree->Clear();
 }
 
 /*************************************************************************
@@ -500,7 +498,7 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry (const OUString& aStrName)
 {
     bool bFound=false;
-    SvTreeListEntry* pEntry = maLbTree.First();
+    SvTreeListEntry* pEntry = mpLbTree->First();
 
     while ( pEntry && !bFound )
     {
@@ -508,7 +506,7 @@ SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry (const OUString& aStrName)
         if (aStrName == pUserData->aUStrLinkname)
             bFound = true;
         else
-            pEntry = maLbTree.Next( pEntry );
+            pEntry = mpLbTree->Next( pEntry );
     }
 
     return pEntry;
@@ -525,8 +523,8 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
     SvTreeListEntry* pEntry = FindEntry(aStrMark);
     if (!pEntry)
         return false;
-    maLbTree.Select(pEntry);
-    maLbTree.MakeVisible (pEntry);
+    mpLbTree->Select(pEntry);
+    mpLbTree->MakeVisible (pEntry);
     return true;
 }
 
@@ -538,7 +536,7 @@ bool SvxHlinkDlgMarkWnd::SelectEntry(const OUString& aStrMark)
 
 IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
 {
-    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
+    SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
 
     if ( pEntry )
     {
@@ -561,7 +559,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
 {
-    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
+    SvTreeListEntry* pEntry = mpLbTree->GetCurEntry();
     if ( pEntry )
     {
         TargetData* pUserData = (TargetData *) pEntry->GetUserData();
@@ -572,12 +570,12 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
         {
             //If the bottommost entry is expanded but nothing
             //underneath it is selected leave a dummy entry
-            if (maLbTree.IsExpanded(pEntry))
+            if (mpLbTree->IsExpanded(pEntry))
                 aLastSelectedPath.push_front(OUString());
             while (pEntry)
             {
-                aLastSelectedPath.push_front(maLbTree.GetEntryText(pEntry));
-                pEntry = maLbTree.GetParent(pEntry);
+                aLastSelectedPath.push_front(mpLbTree->GetEntryText(pEntry));
+                pEntry = mpLbTree->GetParent(pEntry);
             }
         }
 

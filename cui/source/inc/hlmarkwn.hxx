@@ -58,9 +58,9 @@ class SvxHlinkDlgMarkWnd : public ModalDialog //FloatingWindow
 private:
     friend class SvxHlmarkTreeLBox;
 
-    PushButton      maBtApply;
-    PushButton      maBtClose;
-    SvxHlmarkTreeLBox maLbTree;
+    PushButton*       mpBtApply;
+    PushButton*       mpBtClose;
+    SvxHlmarkTreeLBox*  mpLbTree;
 
     bool            mbUserMoved;
 
