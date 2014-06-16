@@ -20,6 +20,7 @@
 
 #include <svx/svdmodel.hxx>
 
+#include <cassert>
 #include <math.h>
 
 #include <osl/endian.h>
@@ -1805,11 +1806,9 @@ void SdrModel::setLock( bool bLock )
 
 void SdrModel::MigrateItemSet( const SfxItemSet* pSourceSet, SfxItemSet* pDestSet, SdrModel* pNewModel )
 {
+    assert(pNewModel != 0);
     if( pSourceSet && pDestSet && (pSourceSet != pDestSet ) )
     {
-        if( pNewModel == NULL )
-            pNewModel = this;
-
         SfxWhichIter aWhichIter(*pSourceSet);
         sal_uInt16 nWhich(aWhichIter.FirstWhich());
         const SfxPoolItem *pPoolItem;
