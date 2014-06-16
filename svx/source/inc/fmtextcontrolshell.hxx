@@ -27,7 +27,7 @@
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <comphelper/implementationreference.hxx>
+#include <rtl/ref.hxx>
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
 #include "fmslotinvalidator.hxx"
@@ -99,18 +99,15 @@ namespace svx
         bool                                                                        m_bActiveControlIsRichText;
 
         // listening at all controls of the active controller for focus changes
-        typedef ::comphelper::ImplementationReference< FmFocusListenerAdapter, ::com::sun::star::awt::XFocusListener >
-                                                                                    FocusListenerAdapter;
+        typedef rtl::Reference<FmFocusListenerAdapter> FocusListenerAdapter;
         typedef ::std::vector< FocusListenerAdapter >                               FocusListenerAdapters;
         FocusListenerAdapters                                                       m_aControlObservers;
 
-        typedef ::comphelper::ImplementationReference< FmMouseListenerAdapter, ::com::sun::star::awt::XMouseListener >
-                                                                                    MouseListenerAdapter;
+        typedef rtl::Reference<FmMouseListenerAdapter> MouseListenerAdapter;
         MouseListenerAdapter                                                        m_aContextMenuObserver;
 
         // translating between "slots" of the framework and "features" of the active control
-        typedef ::comphelper::ImplementationReference< FmTextControlFeature, ::com::sun::star::frame::XStatusListener >
-                                                                                    ControlFeature;
+        typedef rtl::Reference<FmTextControlFeature> ControlFeature;
         typedef ::std::map< SfxSlotId, ControlFeature, ::std::less< SfxSlotId > >   ControlFeatures;
         ControlFeatures                                                             m_aControlFeatures;
 
