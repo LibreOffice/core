@@ -431,10 +431,9 @@ DECLARE_OOXMLEXPORT_TEST(testDMLGroupShapeParaSpacing, "dml-groupshape-paraspaci
 DECLARE_OOXMLEXPORT_TEST(testTableFloatingMargins, "table-floating-margins.docx")
 {
     // In case the table had custom left cell margin, the horizontal position was still incorrect (too small, -199).
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-499), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    sal_Int32 nHoriOrientPosition = getProperty<sal_Int32>(xFrame, "HoriOrientPosition");
+    CPPUNIT_ASSERT(nHoriOrientPosition < sal_Int32(-495));
     // These were 0 as well, due to lack of import.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xFrame, "TopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(xFrame, "BottomMargin"));
