@@ -727,7 +727,7 @@ void SdFiltersTest::testMediaEmbedding()
     // First object is a glTF model
     SdrMediaObj *pModelObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 2 ));
     CPPUNIT_ASSERT_MESSAGE( "missing model", pModelObj != NULL);
-    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Models/jeep/jeep.json" ), pModelObj->getMediaProperties().getURL());
+    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Models/duck/duck.json" ), pModelObj->getMediaProperties().getURL());
     CPPUNIT_ASSERT_EQUAL( OUString( "model/vnd.gltf+json" ), pModelObj->getMediaProperties().getMimeType());
 
     // Check the case when experimental mode is disabled
@@ -743,7 +743,7 @@ void SdFiltersTest::testMediaEmbedding()
     // If glTF is not supported, then the fallback image is imported
     SdrGrafObj *pGrafic = dynamic_cast<SdrGrafObj*>( pPage->GetObj( 2 ));
     CPPUNIT_ASSERT_MESSAGE( "Could not load glTF fallback image", pGrafic != NULL);
-    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Models/Fallbacks/jeep.png" ), pGrafic->GetGrafStreamURL());
+    CPPUNIT_ASSERT_EQUAL( OUString( "vnd.sun.star.Package:Models/Fallbacks/duck.png" ), pGrafic->GetGrafStreamURL());
 
     // Second object is a sound
     SdrMediaObj *pMediaObj = dynamic_cast<SdrMediaObj*>( pPage->GetObj( 3 ));
