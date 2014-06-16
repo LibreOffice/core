@@ -45,9 +45,9 @@ $(eval $(call gb_Library_set_include,vcl,\
 
 $(eval $(call gb_Library_add_defs,vcl,\
     -DVCL_DLLIMPLEMENTATION \
-	-DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,cui)\" \
-	-DDESKTOP_DETECTOR_DLL_NAME=\"$(call gb_Library_get_runtime_filename,desktop_detector)\" \
-	-DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,tk)\" \
+	-DCUI_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,cui))\" \
+	-DDESKTOP_DETECTOR_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,desktop_detector))\" \
+	-DTK_DLL_NAME=\"$(call gb_Library_get_runtime_filename,$(call gb_Library__get_name,tk))\" \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,vcl))
