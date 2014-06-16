@@ -144,6 +144,7 @@ namespace drawinglayer
                                 mrSource.getFontAttribute(),
                                 mrSource.getLocale(),
                                 mrSource.getFontColor(),
+                                mrSource.getTextFillColor(),
 
                                 pTextDecoratedPortionPrimitive2D->getOverlineColor(),
                                 pTextDecoratedPortionPrimitive2D->getTextlineColor(),
