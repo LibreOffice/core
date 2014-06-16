@@ -540,13 +540,13 @@ public:
         @param rRef interface reference
         @return interface reference of demanded type (may be null)
     */
-    inline static Reference< interface_type > SAL_CALL query( const BaseReference & rRef );
+    inline static SAL_WARN_UNUSED_RESULT Reference< interface_type > SAL_CALL query( const BaseReference & rRef );
     /** Queries given interface for type interface_type.
 
         @param pInterface interface pointer
         @return interface reference of demanded type (may be null)
     */
-    inline static Reference< interface_type > SAL_CALL query( XInterface * pInterface );
+    inline static SAL_WARN_UNUSED_RESULT Reference< interface_type > SAL_CALL query( XInterface * pInterface );
 };
 
 /// @cond INTERNAL
