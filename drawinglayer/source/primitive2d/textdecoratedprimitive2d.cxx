@@ -317,6 +317,7 @@ namespace drawinglayer
             const attribute::FontAttribute& rFontAttribute,
             const ::com::sun::star::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,
+            const basegfx::BColor& rFillColor,
 
             // local parameters
             const basegfx::BColor& rOverlineColor,
@@ -331,7 +332,7 @@ namespace drawinglayer
             bool bEmphasisMarkBelow,
             TextRelief eTextRelief,
             bool bShadow)
-        :   TextSimplePortionPrimitive2D(rNewTransform, rText, nTextPosition, nTextLength, rDXArray, rFontAttribute, rLocale, rFontColor),
+        :   TextSimplePortionPrimitive2D(rNewTransform, rText, nTextPosition, nTextLength, rDXArray, rFontAttribute, rLocale, rFontColor, false, 0, rFillColor),
             maOverlineColor(rOverlineColor),
             maTextlineColor(rTextlineColor),
             meFontOverline(eFontOverline),

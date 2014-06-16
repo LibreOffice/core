@@ -260,7 +260,7 @@ namespace
             const basegfx::BColor aBFontColor(aFontColor.getBColor());
 
             const Color aTextFillColor(rInfo.mrFont.GetFillColor());
-            const basegfx::BColor aBTextFill(aTextFillColor.getBColor());
+            const basegfx::BColor aBTextFillColor(aTextFillColor.getBColor());
 
             // prepare wordLineMode (for underline and strikeout)
             // NOT for bullet texts. It is set (this may be an error by itself), but needs to be suppressed to hinder e.g. '1)'
@@ -340,6 +340,7 @@ namespace
                     aFontAttribute,
                     rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
                     aBFontColor,
+                    aBTextFillColor,
 
                     // attributes for TextDecoratedPortionPrimitive2D
                     aBOverlineColor,
@@ -368,7 +369,8 @@ namespace
                     rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale(),
                     aBFontColor,
                     rInfo.mbFilled,
-                    rInfo.mnWidthToFill);
+                    rInfo.mnWidthToFill,
+                    aBTextFillColor);
             }
 
             if(rInfo.mbEndOfBullet)
