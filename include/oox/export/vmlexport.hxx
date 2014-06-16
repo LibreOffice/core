@@ -37,6 +37,8 @@ class OOX_DLLPUBLIC VMLTextExport
 public:
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) = 0;
     virtual oox::drawingml::DrawingML& GetDrawingML() = 0;
+    /// Write the contents of the textbox that is associated to this shape in VML format.
+    virtual void WriteVMLTextBox(css::uno::Reference<css::drawing::XShape> xShape) = 0;
 protected:
     VMLTextExport() {}
     virtual ~VMLTextExport() {}
