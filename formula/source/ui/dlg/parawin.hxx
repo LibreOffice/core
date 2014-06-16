@@ -56,31 +56,31 @@ private:
         Font            aFntBold;
         Font            aFntLight;
 
-        FixedInfo       aFtEditDesc;
-        FixedText       aFtArgName;
-        FixedInfo       aFtArgDesc;
+        FixedText       *m_pFtEditDesc;
+        FixedText       *m_pFtArgName;
+        FixedText       *m_pFtArgDesc;
 
-        ImageButton     aBtnFx1;
-        FixedText       aFtArg1;
-        ArgEdit         aEdArg1;
-        RefButton       aRefBtn1;
+        PushButton      *m_pBtnFx1;
+        FixedText       *m_pFtArg1;
+        ArgEdit         *m_pEdArg1;
+        RefButton       *m_pRefBtn1;
 
-        ImageButton     aBtnFx2;
-        FixedText       aFtArg2;
-        ArgEdit         aEdArg2;
-        RefButton       aRefBtn2;
+        PushButton      *m_pBtnFx2;
+        FixedText       *m_pFtArg2;
+        ArgEdit         *m_pEdArg2;
+        RefButton       *m_pRefBtn2;
 
-        ImageButton     aBtnFx3;
-        FixedText       aFtArg3;
-        ArgEdit         aEdArg3;
-        RefButton       aRefBtn3;
+        PushButton      *m_pBtnFx3;
+        FixedText       *m_pFtArg3;
+        ArgEdit         *m_pEdArg3;
+        RefButton       *m_pRefBtn3;
 
-        ImageButton     aBtnFx4;
-        FixedText       aFtArg4;
-        ArgEdit         aEdArg4;
-        RefButton       aRefBtn4;
+        PushButton      *m_pBtnFx4;
+        FixedText       *m_pFtArg4;
+        ArgEdit         *m_pEdArg4;
+        RefButton       *m_pRefBtn4;
 
-        ScrollBar       aSlider;
+        ScrollBar       *m_pSlider;
         OUString        m_sOptional;
         OUString        m_sRequired;
         bool        bRefMode;
@@ -105,7 +105,7 @@ protected:
         virtual void    ArgumentModified();
         virtual void    FxClick();
 
-        void            InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, ImageButton& rBtnFx,
+        void            InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, PushButton& rBtnFx,
                                         ArgEdit& rEdArg, RefButton& rRefBtn);
 
         void            DelParaArray();
@@ -123,7 +123,7 @@ protected:
         void            UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 i );
 
 public:
-                        ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos);
+                        ParaWin(Window* pParent,IControlReferenceHandler* _pDlg);
                         virtual ~ParaWin();
 
         void            SetFunctionDesc(const IFunctionDescription* pFDesc);

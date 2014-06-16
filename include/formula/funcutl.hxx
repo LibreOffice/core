@@ -44,7 +44,6 @@ protected:
     virtual void LoseFocus() SAL_OVERRIDE;
 
 public:
-    RefEdit( Window* _pParent,IControlReferenceHandler* pParent, Window* pShrinkModeLabel, const ResId& rResId );
     RefEdit( Window* _pParent, Window* pShrinkModeLabel, WinBits nStyle = WB_BORDER );
 
     virtual ~RefEdit();
@@ -95,10 +94,7 @@ protected:
     virtual void LoseFocus() SAL_OVERRIDE;
 
 public:
-    RefButton(Window* _pParent, const ResId& rResId);
     RefButton(Window* _pParent, WinBits nStyle = 0);
-    RefButton(Window* _pParent, const ResId& rResId,
-              RefEdit* pEdit,   IControlReferenceHandler* pDlg);
 
     void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
 

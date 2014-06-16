@@ -50,7 +50,7 @@ protected:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
 
 public:
-                    FormulaListBox( Window* pParent, const ResId& rResId );
+                    FormulaListBox( Window* pParent, WinBits nBits );
 
 };
 
@@ -64,10 +64,8 @@ private:
     OModuleClient   m_aModuleClient;
     Link            aDoubleClickLink;
     Link            aSelectionLink;
-    FixedText       aFtCategory;
-    ListBox         aLbCategory;
-    FixedText       aFtFunction;
-    FormulaListBox  aLbFunction;
+    ListBox         *m_pLbCategory;
+    FormulaListBox  *m_pLbFunction;
     const IFunctionManager*
                     m_pFunctionManager;
 

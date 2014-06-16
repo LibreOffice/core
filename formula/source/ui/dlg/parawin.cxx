@@ -23,7 +23,6 @@
 #include <vcl/settings.hxx>
 
 #include "parawin.hxx"
-#include "parawin.hrc"
 #include "helpids.hrc"
 #include "formula/formdata.hxx"
 #include "formula/IFunctionDescription.hxx"
@@ -36,55 +35,59 @@ namespace formula
 {
 
 
-ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
-    TabPage         (pParent,ModuleRes(RID_FORMULATAB_PARAMETER)),
+ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg):
+    TabPage         (pParent, "ParameterPage", "formula/ui/parameter.ui"),
     pFuncDesc       ( NULL ),
     pMyParent       (_pDlg),
-    aFtEditDesc     ( this, ModuleRes( FT_EDITDESC ) ),
-    aFtArgName      ( this, ModuleRes( FT_PARNAME ) ),
-    aFtArgDesc      ( this, ModuleRes( FT_PARDESC ) ),
-
-    aBtnFx1         ( this, ModuleRes( BTN_FX1 ) ),
-    aFtArg1         ( this, ModuleRes( FT_ARG1 ) ),
-    aEdArg1         ( this, ModuleRes( ED_ARG1 ) ),
-    aRefBtn1        ( this, ModuleRes( RB_ARG1 ) ),
-
-    aBtnFx2         ( this, ModuleRes( BTN_FX2 ) ),
-    aFtArg2         ( this, ModuleRes( FT_ARG2 ) ),
-    aEdArg2         ( this, ModuleRes( ED_ARG2 ) ),
-    aRefBtn2        ( this, ModuleRes( RB_ARG2 ) ),
-
-    aBtnFx3         ( this, ModuleRes( BTN_FX3 ) ),
-    aFtArg3         ( this, ModuleRes( FT_ARG3 ) ),
-    aEdArg3         ( this, ModuleRes( ED_ARG3 ) ),
-    aRefBtn3        ( this, ModuleRes( RB_ARG3 ) ),
-
-    aBtnFx4         ( this, ModuleRes( BTN_FX4 ) ),
-    aFtArg4         ( this, ModuleRes( FT_ARG4 ) ),
-    aEdArg4         ( this, ModuleRes( ED_ARG4 ) ),
-    aRefBtn4        ( this, ModuleRes( RB_ARG4 ) ),
-
-    aSlider         ( this, ModuleRes( WND_SLIDER ) ),
     m_sOptional     ( ModuleRes( STR_OPTIONAL ) ),
     m_sRequired     ( ModuleRes( STR_REQUIRED ) ),
     bRefMode        (false)
 {
-    FreeResource();
-    aDefaultString=aFtEditDesc.GetText();
+    get(m_pFtEditDesc, "editdesc");
+    get(m_pFtArgName, "parname");
+    get(m_pFtArgDesc, "pardesc");
 
-    SetPosPixel(aPos);
+    get(m_pBtnFx1, "FX1");
+    m_pBtnFx1->SetModeImage(Image(ModuleRes( BMP_FX )));
+    get(m_pBtnFx2, "FX2");
+    m_pBtnFx2->SetModeImage(Image(ModuleRes( BMP_FX )));
+    get(m_pBtnFx3, "FX3");
+    m_pBtnFx3->SetModeImage(Image(ModuleRes( BMP_FX )));
+    get(m_pBtnFx4, "FX4");
+    m_pBtnFx4->SetModeImage(Image(ModuleRes( BMP_FX )));
+
+    get(m_pFtArg1, "FT_ARG1");
+    get(m_pFtArg2, "FT_ARG2");
+    get(m_pFtArg3, "FT_ARG3");
+    get(m_pFtArg4, "FT_ARG4");
+
+    get(m_pEdArg1, "ED_ARG1");
+    get(m_pEdArg2, "ED_ARG2");
+    get(m_pEdArg3, "ED_ARG3");
+    get(m_pEdArg4, "ED_ARG4");
+
+    get(m_pRefBtn1, "RB_ARG1");
+    get(m_pRefBtn2, "RB_ARG2");
+    get(m_pRefBtn3, "RB_ARG3");
+    get(m_pRefBtn4, "RB_ARG4");
+
+    get(m_pSlider, "scrollbar");
+
+    aDefaultString=m_pFtEditDesc->GetText();
+    SetOutputSizePixel(LogicToPixel(Size(203, 128), MAP_APPFONT));
     nEdFocus=NOT_FOUND;
     nActiveLine=0;
-    Size aSize = aSlider.GetSizePixel();
-    aSize.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
-    aSlider.SetSizePixel( aSize );
-    aSlider.SetEndScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
-    aSlider.SetScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
+    Size aSize = m_pSlider->GetSizePixel();
 
-    InitArgInput( 0, aFtArg1, aBtnFx1, aEdArg1, aRefBtn1);
-    InitArgInput( 1, aFtArg2, aBtnFx2, aEdArg2, aRefBtn2);
-    InitArgInput( 2, aFtArg3, aBtnFx3, aEdArg3, aRefBtn3);
-    InitArgInput( 3, aFtArg4, aBtnFx4, aEdArg4, aRefBtn4);
+    aSize.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
+    m_pSlider->SetSizePixel( aSize );
+    m_pSlider->SetEndScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
+    m_pSlider->SetScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
+
+    InitArgInput( 0, *m_pFtArg1, *m_pBtnFx1, *m_pEdArg1, *m_pRefBtn1);
+    InitArgInput( 1, *m_pFtArg2, *m_pBtnFx2, *m_pEdArg2, *m_pRefBtn2);
+    InitArgInput( 2, *m_pFtArg3, *m_pBtnFx3, *m_pEdArg3, *m_pRefBtn3);
+    InitArgInput( 3, *m_pFtArg4, *m_pBtnFx4, *m_pEdArg4, *m_pRefBtn4);
     ClearAll();
 }
 
@@ -211,10 +214,10 @@ ParaWin::~ParaWin()
     // #i66422# if the focus changes during destruction of the controls,
     // don't call the focus handlers
     Link aEmptyLink;
-    aBtnFx1.SetGetFocusHdl( aEmptyLink );
-    aBtnFx2.SetGetFocusHdl( aEmptyLink );
-    aBtnFx3.SetGetFocusHdl( aEmptyLink );
-    aBtnFx4.SetGetFocusHdl( aEmptyLink );
+    m_pBtnFx1->SetGetFocusHdl( aEmptyLink );
+    m_pBtnFx2->SetGetFocusHdl( aEmptyLink );
+    m_pBtnFx3->SetGetFocusHdl( aEmptyLink );
+    m_pBtnFx4->SetGetFocusHdl( aEmptyLink );
 }
 
 
@@ -309,20 +312,20 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         }
         nArgs = pFuncDesc->getSuppressedArgumentCount();
         pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
-        aSlider.Hide();
+        m_pSlider->Hide();
         OString sHelpId = pFuncDesc->getHelpId();
         SetHelpId( sHelpId );
-        aEdArg1.SetHelpId( sHelpId );
-        aEdArg2.SetHelpId( sHelpId );
-        aEdArg3.SetHelpId( sHelpId );
-        aEdArg4.SetHelpId( sHelpId );
+        m_pEdArg1->SetHelpId( sHelpId );
+        m_pEdArg2->SetHelpId( sHelpId );
+        m_pEdArg3->SetHelpId( sHelpId );
+        m_pEdArg4->SetHelpId( sHelpId );
 
         //  Unique-IDs muessen gleich bleiben fuer Automatisierung
         SetUniqueId( HID_FORMULA_FAP_PAGE );
-        aEdArg1.SetUniqueId( HID_FORMULA_FAP_EDIT1 );
-        aEdArg2.SetUniqueId( HID_FORMULA_FAP_EDIT2 );
-        aEdArg3.SetUniqueId( HID_FORMULA_FAP_EDIT3 );
-        aEdArg4.SetUniqueId( HID_FORMULA_FAP_EDIT4 );
+        m_pEdArg1->SetUniqueId( HID_FORMULA_FAP_EDIT1 );
+        m_pEdArg2->SetUniqueId( HID_FORMULA_FAP_EDIT2 );
+        m_pEdArg3->SetUniqueId( HID_FORMULA_FAP_EDIT3 );
+        m_pEdArg4->SetUniqueId( HID_FORMULA_FAP_EDIT4 );
         SetActiveLine(0);
     }
     else
@@ -334,17 +337,17 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
 
 void ParaWin::SetArgumentText(const OUString& aText)
 {
-    aFtArgName.SetText(aText);
+    m_pFtArgName->SetText(aText);
 }
 
 void ParaWin::SetArgumentDesc(const OUString& aText)
 {
-    aFtArgDesc.SetText(aText);
+    m_pFtArgDesc->SetText(aText);
 }
 
 void ParaWin::SetEditDesc(const OUString& aText)
 {
-    aFtEditDesc.SetText(aText);
+    m_pFtEditDesc->SetText(aText);
 }
 
 void ParaWin::SetArgName(sal_uInt16 no,const OUString& aText)
@@ -381,7 +384,7 @@ void ParaWin::SetEdFocus(sal_uInt16 no)
 }
 
 
-void ParaWin::InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, ImageButton& rBtnFx,
+void ParaWin::InitArgInput( sal_uInt16 nPos, FixedText& rFtArg, PushButton& rBtnFx,
                         ArgEdit& rEdArg, RefButton& rRefBtn)
 {
 
@@ -408,7 +411,7 @@ void ParaWin::ClearAll()
 void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
 {
     DelParaArray();
-    aSlider.SetThumbPos(0);
+    m_pSlider->SetThumbPos(0);
 
     aParaArray.resize(nArgs);
 
@@ -421,22 +424,22 @@ void ParaWin::SetArgumentOffset(sal_uInt16 nOffset)
             aArgInput[i].GetArgEdPtr()->Init(
                 (i==0)               ? (ArgEdit *)NULL : aArgInput[i-1].GetArgEdPtr(),
                 (i==3 || i==nArgs-1) ? (ArgEdit *)NULL : aArgInput[i+1].GetArgEdPtr(),
-                                       aSlider, nArgs );
+                                       *m_pSlider, nArgs );
         }
     }
 
     if ( nArgs < 5 )
     {
-        aSlider.Hide();
+        m_pSlider->Hide();
     }
     else
     {
-        aSlider.SetPageSize( 4 );
-        aSlider.SetVisibleSize( 4 );
-        aSlider.SetLineSize( 1 );
-        aSlider.SetRange( Range( 0, nArgs ) );
-        aSlider.SetThumbPos( nOffset );
-        aSlider.Show();
+        m_pSlider->SetPageSize( 4 );
+        m_pSlider->SetVisibleSize( 4 );
+        m_pSlider->SetLineSize( 1 );
+        m_pSlider->SetRange( Range( 0, nArgs ) );
+        m_pSlider->SetThumbPos( nOffset );
+        m_pSlider->Show();
     }
 
     UpdateParas();
@@ -462,16 +465,16 @@ void ParaWin::UpdateParas()
 
 sal_uInt16 ParaWin::GetSliderPos()
 {
-    return (sal_uInt16) aSlider.GetThumbPos();
+    return (sal_uInt16) m_pSlider->GetThumbPos();
 }
 
 void ParaWin::SetSliderPos(sal_uInt16 nSliderPos)
 {
     sal_uInt16 nOffset = GetSliderPos();
 
-    if(aSlider.IsVisible() && nOffset!=nSliderPos)
+    if(m_pSlider->IsVisible() && nOffset!=nSliderPos)
     {
-        aSlider.SetThumbPos(nSliderPos);
+        m_pSlider->SetThumbPos(nSliderPos);
         for ( sal_uInt16 i=0; i<4; i++ )
         {
             UpdateArgInput( nSliderPos, i );

@@ -20,8 +20,6 @@
 #define FT_RESULT           1
 #define WND_RESULT          2
 #define FT_EDITNAME         3
-#define STR_TITLE1          4
-#define STR_TITLE2          5
 #define BTN_HELP            6
 #define BTN_CANCEL          7
 #define BTN_BACKWARD        8
@@ -39,29 +37,9 @@
 #define RB_REF              20
 #define FT_FORMULA_RESULT   21
 #define WND_FORMULA_RESULT  22
-#define STR_END             23
+
 // Fuer Tabpage
 #define TP_FUNCTION         1
 #define TP_STRUCT           2
-
-// Funktions-Tabpage
-#define FT_FUNCTION         1
-#define FT_CATEGORY         2
-#define LB_CATEGORY         3
-#define LB_FUNCTION         4
-
-// Struktur-Tabpage
-#define FT_STRUCT           1
-#define TLB_STRUCT          2
-
-// Bitmaps
-#define BMP_STR_CLOSE       1
-#define BMP_STR_OPEN        2
-#define BMP_STR_END         3
-#define BMP_STR_ERROR       4
-
-// Texte
-#define STR_STRUCT_ERR1     1
-#define STR_STRUCT_ERR2     2
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

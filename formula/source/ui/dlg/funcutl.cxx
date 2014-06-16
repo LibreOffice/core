@@ -33,8 +33,9 @@ namespace formula
 {
 
 // class ValWnd
-ValWnd::ValWnd( Window* pParent, const ResId& rId ) : Window( pParent, rId )
+ValWnd::ValWnd( Window* pParent, WinBits nBits ) : Window( pParent, nBits )
 {
+    SetSizePixel(Size(100, 25));
     Font aFnt( GetFont() );
     aFnt.SetTransparent( true );
     aFnt.SetWeight( WEIGHT_LIGHT );
@@ -63,6 +64,11 @@ ValWnd::ValWnd( Window* pParent, const ResId& rId ) : Window( pParent, rId )
     SetAccessibleRole( ::com::sun::star::accessibility::AccessibleRole::LABEL );
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeValWnd(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ValWnd(pParent, WB_BORDER);
+}
+
 void ValWnd::Paint( const Rectangle& )
 {
     DrawText( aRectOut.TopLeft(), aStrValue );
@@ -80,13 +86,18 @@ void ValWnd::SetValue( const OUString& rStrVal )
 
 // class ArgEdit
 
-ArgEdit::ArgEdit( Window* pParent, const ResId& rResId )
-    :   RefEdit( pParent, NULL, NULL, rResId ),
+ArgEdit::ArgEdit( Window* pParent, WinBits nBits )
+    :   RefEdit( pParent, NULL, nBits ),
         pEdPrev ( NULL ),
         pEdNext ( NULL ),
         pSlider ( NULL ),
         nArgs   ( 0 )
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeArgEdit(Window *pParent, VclBuilder::stringmap &)
+{
+    return new ArgEdit(pParent, WB_BORDER);
 }
 
 void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
@@ -183,7 +194,7 @@ ArgInput::ArgInput()
     pRefBtn=NULL;
 }
 
-void ArgInput::InitArgInput( FixedText* pftArg, ImageButton* pbtnFx,
+void ArgInput::InitArgInput( FixedText* pftArg, PushButton* pbtnFx,
                              ArgEdit* pedArg, RefButton* prefBtn)
 {
     pFtArg =pftArg;
@@ -374,8 +385,9 @@ IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
 }
 
 // class EditBox
-EditBox::EditBox( Window* pParent, const ResId& rResId )
-        :Control(pParent,rResId),
+
+EditBox::EditBox( Window* pParent, WinBits nBits )
+        :Control(pParent,nBits),
         bMouseFlag(false)
 {
     WinBits nStyle=GetStyle();
@@ -393,6 +405,11 @@ EditBox::EditBox( Window* pParent, const ResId& rResId )
     //  not for the control that contains it.
     pMEdit->SetHelpId( GetHelpId() );
     SetHelpId( "" );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeEditBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new EditBox(pParent, WB_BORDER);
 }
 
 EditBox::~EditBox()
@@ -492,16 +509,6 @@ void EditBox::UpdateOldSel()
 // class RefEdit
 
 #define SC_ENABLE_TIME 100
-
-RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent,
-    Window* pShrinkModeLabel, const ResId& rResId )
-    : Edit( _pParent, rResId )
-    , pAnyRefDlg( pParent )
-    , pLabelWidget(pShrinkModeLabel)
-{
-    aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
-    aTimer.SetTimeout( SC_ENABLE_TIME );
-}
 
 RefEdit::RefEdit( Window* _pParent, Window* pShrinkModeLabel, WinBits nStyle )
     : Edit( _pParent, nStyle )
@@ -608,18 +615,6 @@ IMPL_LINK_NOARG(RefEdit, UpdateHdl)
 
 //class RefButton
 
-RefButton::RefButton( Window* _pParent, const ResId& rResId) :
-    ImageButton( _pParent, rResId ),
-    aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
-    aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
-    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
-    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
-    pAnyRefDlg( NULL ),
-    pRefEdit( NULL )
-{
-    SetStartImage();
-}
-
 RefButton::RefButton( Window* _pParent, WinBits nStyle ) :
     ImageButton( _pParent, nStyle ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
@@ -635,18 +630,6 @@ RefButton::RefButton( Window* _pParent, WinBits nStyle ) :
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRefButton(Window *pParent, VclBuilder::stringmap &)
 {
     return new RefButton(pParent, 0);
-}
-
-RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, IControlReferenceHandler* _pDlg ) :
-    ImageButton( _pParent, rResId ),
-    aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
-    aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
-    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
-    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
-    pAnyRefDlg( _pDlg ),
-    pRefEdit( pEdit )
-{
-    SetStartImage();
 }
 
 void RefButton::SetStartImage()
