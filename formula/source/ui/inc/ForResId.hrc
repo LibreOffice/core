@@ -42,16 +42,24 @@
 // strings
 #define RID_STR_SHRINK                  (RID_STRING_START + 0)
 #define RID_STR_EXPAND                  (RID_STRING_START + 1)
+#define STR_STRUCT_ERR1                 (RID_STRING_START + 2)
+#define STR_STRUCT_ERR2                 (RID_STRING_START + 3)
+#define STR_OPTIONAL                    (RID_STRING_START + 4)
+#define STR_REQUIRED                    (RID_STRING_START + 5)
+#define STR_END                         (RID_STRING_START + 6)
+#define STR_TITLE1                      (RID_STRING_START + 7)
+#define STR_TITLE2                      (RID_STRING_START + 8)
 
 // bitmap
 #define RID_BMP_REFBTN1                             (RID_BITMAP_START + 0)
 #define RID_BMP_REFBTN2                             (RID_BITMAP_START + 2)
+#define BMP_STR_CLOSE                               (RID_BITMAP_START + 3)
+#define BMP_STR_OPEN                                (RID_BITMAP_START + 4)
+#define BMP_STR_END                                 (RID_BITMAP_START + 5)
+#define BMP_STR_ERROR                               (RID_BITMAP_START + 6)
+#define BMP_FX                                      (RID_BITMAP_START + 7)
 
 // pages
-#define RID_FORMULATAB_STRUCT                       (RID_PAGE_START + 0)
-#define RID_FORMULATAB_FUNCTION                     (RID_PAGE_START + 1)
-#define RID_FORMULADLG_FORMULA                      (RID_PAGE_START + 2)
-#define RID_FORMULATAB_PARAMETER                    (RID_PAGE_START + 3)
 #define RID_FORMULADLG_FORMULA_MODAL                (RID_PAGE_START + 4)
 
 #endif          // FORMULA_FORRESID_HRC

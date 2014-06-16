@@ -29,12 +29,14 @@ namespace formula
 class ValWnd : public Window
 {
 public:
-            ValWnd( Window* pParent, const ResId& rId );
+            ValWnd( Window* pParent, WinBits nBits );
 
     void    SetValue( const OUString& rStrVal );
 
 protected:
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
 
 private:
     OUString    aStrValue;
@@ -62,7 +64,7 @@ protected:
 
 
 public:
-                    EditBox( Window* pParent, const ResId& rResId );
+                    EditBox( Window* pParent, WinBits nBits );
 
                     virtual ~EditBox();
 
@@ -80,7 +82,7 @@ public:
 class ArgEdit : public RefEdit
 {
 public:
-            ArgEdit( Window* pParent, const ResId& rResId );
+            ArgEdit( Window* pParent, WinBits nBits );
 
     void    Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
                   ScrollBar& rArgSlider, sal_uInt16 nArgCount );
@@ -111,7 +113,7 @@ private:
     Link            aEdModifyLink;
 
     FixedText*      pFtArg;
-    ImageButton*    pBtnFx;
+    PushButton*    pBtnFx;
     ArgEdit*        pEdArg;
     RefButton*  pRefBtn;
 
@@ -138,7 +140,7 @@ public:
     virtual ~ArgInput() {}
 
     void        InitArgInput (  FixedText*      pftArg,
-                                ImageButton*    pbtnFx,
+                                PushButton*    pbtnFx,
                                 ArgEdit*        pedArg,
                                 RefButton*  prefBtn);
 

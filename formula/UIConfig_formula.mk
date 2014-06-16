@@ -7,17 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,formula))
+$(eval $(call gb_UIConfig_UIConfig,formula))
 
-$(eval $(call gb_Module_add_targets,formula,\
-    Library_for \
-    Library_forui \
-))
-
-$(eval $(call gb_Module_add_l10n_targets,formula,\
-    AllLangResTarget_for \
-    AllLangResTarget_forui \
-    UIConfig_formula \
+$(eval $(call gb_UIConfig_add_uifiles,formula,\
+	formula/uiconfig/ui/formuladialog \
+	formula/uiconfig/ui/functionpage \
+	formula/uiconfig/ui/structpage \
+	formula/uiconfig/ui/parameter \
 ))
 
 # vim: set noet sw=4 ts=4:
