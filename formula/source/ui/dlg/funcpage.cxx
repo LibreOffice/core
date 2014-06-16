@@ -31,8 +31,8 @@
 namespace formula
 {
 
-FormulaListBox::FormulaListBox( Window* pParent, const ResId& rResId ):
-    ListBox(pParent,rResId)
+FormulaListBox::FormulaListBox( Window* pParent, WinBits nBits ):
+    ListBox(pParent, nBits)
 {}
 
 void FormulaListBox::KeyInput( const KeyEvent& rKEvt )
@@ -57,6 +57,11 @@ bool FormulaListBox::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFormulaListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new FormulaListBox(pParent, WB_BORDER | WB_SORT);
+}
+
 inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 {
     // Category 0 == LRU, otherwise Categories == LbPos-1
@@ -67,16 +72,17 @@ inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 }
 
 FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
-    TabPage(pParent,ModuleRes(RID_FORMULATAB_FUNCTION)),
-    aFtCategory     ( this, ModuleRes( FT_CATEGORY ) ),
-    aLbCategory     ( this, ModuleRes( LB_CATEGORY ) ),
-    aFtFunction     ( this, ModuleRes( FT_FUNCTION ) ),
-    aLbFunction     ( this, ModuleRes( LB_FUNCTION ) ),
+    TabPage(pParent, "FunctionPage", "formula/ui/functionpage.ui"),
     m_pFunctionManager(_pFunctionManager)
 {
-    FreeResource();
-    m_aHelpId = aLbFunction.GetHelpId();
-    aLbFunction.SetUniqueId(m_aHelpId);
+    get(m_pLbCategory, "category");
+    get(m_pLbFunction, "function");
+    m_pLbFunction->SetStyle(m_pLbFunction->GetStyle() | WB_SORT);
+    Size aSize(LogicToPixel(Size(86 , 133), MAP_APPFONT));
+    m_pLbFunction->set_height_request(aSize.Height());
+    m_pLbFunction->set_width_request(aSize.Width());
+    m_aHelpId = m_pLbFunction->GetHelpId();
+    m_pLbFunction->SetUniqueId(m_aHelpId);
 
     InitLRUList();
 
@@ -84,14 +90,14 @@ FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     for(sal_uInt32 j= 0; j < nCategoryCount; ++j)
     {
         const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(j);
-        aLbCategory.SetEntryData(aLbCategory.InsertEntry(pCategory->getName()),(void*)pCategory);
+        m_pLbCategory->SetEntryData(m_pLbCategory->InsertEntry(pCategory->getName()),(void*)pCategory);
     }
 
-    aLbCategory.SelectEntryPos(1);
+    m_pLbCategory->SelectEntryPos(1);
     UpdateFunctionList();
-    aLbCategory.SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
-    aLbFunction.SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
-    aLbFunction.SetDoubleClickHdl( LINK( this, FuncPage, DblClkHdl ) );
+    m_pLbCategory->SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
+    m_pLbFunction->SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
+    m_pLbFunction->SetDoubleClickHdl( LINK( this, FuncPage, DblClkHdl ) );
 }
 
 void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
@@ -100,22 +106,22 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
     for(sal_uInt32 i = 0 ; i < nCount; ++i)
     {
         TFunctionDesc pDesc(_pCategory->getFunction(i));
-        aLbFunction.SetEntryData(
-            aLbFunction.InsertEntry(pDesc->getFunctionName() ),(void*)pDesc );
+        m_pLbFunction->SetEntryData(
+            m_pLbFunction->InsertEntry(pDesc->getFunctionName() ),(void*)pDesc );
     }
 }
 
 void FuncPage::UpdateFunctionList()
 {
-    sal_Int32  nSelPos   = aLbCategory.GetSelectEntryPos();
-    const IFunctionCategory* pCategory = static_cast<const IFunctionCategory*>(aLbCategory.GetEntryData(nSelPos));
+    sal_Int32  nSelPos   = m_pLbCategory->GetSelectEntryPos();
+    const IFunctionCategory* pCategory = static_cast<const IFunctionCategory*>(m_pLbCategory->GetEntryData(nSelPos));
     sal_Int32  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? Lb2Cat( nSelPos ) : 0;
 
     (void)nCategory;
 
-    aLbFunction.Clear();
-    aLbFunction.SetUpdateMode( false );
+    m_pLbFunction->Clear();
+    m_pLbFunction->SetUpdateMode( false );
 
 
     if ( nSelPos > 0 )
@@ -143,35 +149,35 @@ void FuncPage::UpdateFunctionList()
             const IFunctionDescription* pDesc = *aIter;
             if (pDesc)  // may be null if a function is no longer available
             {
-                aLbFunction.SetEntryData(
-                    aLbFunction.InsertEntry( pDesc->getFunctionName() ), (void*)pDesc );
+                m_pLbFunction->SetEntryData(
+                    m_pLbFunction->InsertEntry( pDesc->getFunctionName() ), (void*)pDesc );
             }
         }
     }
 
 
-    aLbFunction.SetUpdateMode( true );
-    aLbFunction.SelectEntryPos(0);
+    m_pLbFunction->SetUpdateMode( true );
+    m_pLbFunction->SelectEntryPos(0);
 
-    if(IsVisible()) SelHdl(&aLbFunction);
+    if(IsVisible()) SelHdl(m_pLbFunction);
 }
 
 IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
 {
-    if(pLb==&aLbFunction)
+    if(pLb==m_pLbFunction)
     {
         const IFunctionDescription* pDesc = GetFuncDesc( GetFunction() );
         if ( pDesc )
         {
             const OString sHelpId = pDesc->getHelpId();
             if ( !sHelpId.isEmpty() )
-                aLbFunction.SetHelpId(sHelpId);
+                m_pLbFunction->SetHelpId(sHelpId);
         }
         aSelectionLink.Call(this);
     }
     else
     {
-        aLbFunction.SetHelpId(m_aHelpId);
+        m_pLbFunction->SetHelpId(m_aHelpId);
         UpdateFunctionList();
     }
     return 0;
@@ -185,49 +191,49 @@ IMPL_LINK_NOARG(FuncPage, DblClkHdl)
 
 void FuncPage::SetCategory(sal_Int32 nCat)
 {
-    aLbCategory.SelectEntryPos(nCat);
+    m_pLbCategory->SelectEntryPos(nCat);
     UpdateFunctionList();
 }
 
 sal_Int32 FuncPage::GetFuncPos(const IFunctionDescription* _pDesc)
 {
-    return aLbFunction.GetEntryPos(_pDesc);
+    return m_pLbFunction->GetEntryPos(_pDesc);
 }
 
 void FuncPage::SetFunction(sal_Int32 nFunc)
 {
-    aLbFunction.SelectEntryPos(nFunc);
+    m_pLbFunction->SelectEntryPos(nFunc);
 }
 
 void FuncPage::SetFocus()
 {
-    aLbFunction.GrabFocus();
+    m_pLbFunction->GrabFocus();
 }
 
 sal_Int32 FuncPage::GetCategory()
 {
-    return aLbCategory.GetSelectEntryPos();
+    return m_pLbCategory->GetSelectEntryPos();
 }
 
 sal_Int32 FuncPage::GetFunction()
 {
-    return aLbFunction.GetSelectEntryPos();
+    return m_pLbFunction->GetSelectEntryPos();
 }
 
 sal_Int32 FuncPage::GetFunctionEntryCount()
 {
-    return aLbFunction.GetSelectEntryCount();
+    return m_pLbFunction->GetSelectEntryCount();
 }
 
 OUString FuncPage::GetSelFunctionName() const
 {
-    return aLbFunction.GetSelectEntry();
+    return m_pLbFunction->GetSelectEntry();
 }
 
 const IFunctionDescription* FuncPage::GetFuncDesc( sal_Int32 nPos ) const
 {
     // not pretty, but hopefully rare
-    return (const IFunctionDescription*) aLbFunction.GetEntryData(nPos);
+    return (const IFunctionDescription*) m_pLbFunction->GetEntryData(nPos);
 }
 
 void FuncPage::InitLRUList()
