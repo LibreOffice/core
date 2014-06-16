@@ -38,30 +38,6 @@ public:
     const Link& GetActionHdl() const                { return aActionLink; }
 };
 
-// Edit that doesn't accept spaces
-class SW_DLLPUBLIC NoSpaceEdit : public Edit
-{
-    OUString sForbiddenChars;
-protected:
-    virtual void  Modify() SAL_OVERRIDE;
-
-public:
-    NoSpaceEdit( Window* pParent );
-    void            SetForbiddenChars(const OUString& rSet){sForbiddenChars = rSet;}
-    const OUString& GetForbiddenChars(){return sForbiddenChars;}
-};
-
-// No space and no full stop
-class TableNameEdit : public NoSpaceEdit
-{
-public:
-    TableNameEdit(Window* pWin)
-        : NoSpaceEdit(pWin)
-    {
-        SetForbiddenChars(OUString(" .<>"));
-    }
-};
-
 // call a link when KEY_RETURN is pressed
 class SW_DLLPUBLIC ReturnActionEdit : public Edit
 {

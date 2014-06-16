@@ -116,7 +116,8 @@ struct GroupUserData
 class SwNewGlosNameDlg : public ModalDialog
 {
     Edit*        m_pNewName;
-    NoSpaceEdit* m_pNewShort;
+    TextFilter   m_aNoSpaceFilter;
+    Edit*        m_pNewShort;
     OKButton*    m_pOk;
     Edit*        m_pOldName;
     Edit*        m_pOldShort;
@@ -142,6 +143,7 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
 {
     get(m_pNewName, "newname");
     get(m_pNewShort, "newsc");
+    m_pNewShort->SetTextFilter(&m_aNoSpaceFilter);
     get(m_pOk, "ok");
     get(m_pOldName, "oldname");
     get(m_pOldShort, "oldsc");
@@ -185,6 +187,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     get(m_pNameED, "name");
     get(m_pShortNameLbl, "shortnameft");
     get(m_pShortNameEdit, "shortname");
+    m_pShortNameEdit->SetTextFilter(&m_aNoSpaceFilter);
     get(m_pCategoryBox, "category");
     get(m_pFileRelCB, "relfile");
     get(m_pNetRelCB, "relnet");

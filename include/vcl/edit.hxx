@@ -41,24 +41,34 @@ struct Impl_IMEInfos;
 
 
 // - Edit-Types -
-
-
 #define EDIT_NOLIMIT                SAL_MAX_INT32
 #define EDIT_UPDATEDATA_TIMEOUT     350
 
 typedef OUString (*FncGetSpecialChars)( Window* pWin, const Font& rFont );
 
+class VCL_DLLPUBLIC TextFilter
+{
+private:
+    OUString sForbiddenChars;
+public:
+    void SetForbiddenChars(const OUString& rSet) { sForbiddenChars = rSet; }
+    const OUString& GetForbiddenChars() { return sForbiddenChars; }
 
-// - Edit -
+    virtual OUString filter(const OUString &rText);
 
+    TextFilter(const OUString &rForbiddenChars = OUString(" "));
+    virtual ~TextFilter();
+};
 
 enum AutocompleteAction{ AUTOCOMPLETE_KEYINPUT, AUTOCOMPLETE_TABFORWARD, AUTOCOMPLETE_TABBACKWARD };
 
+// - Edit -
 class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
 {
 private:
     Edit*               mpSubEdit;
     Timer*              mpUpdateDataTimer;
+    TextFilter*         mpFilterText;
     DDInfo*             mpDDInfo;
     Impl_IMEInfos*      mpIMEInfos;
     OUStringBuffer      maText;
@@ -116,6 +126,7 @@ private:
     SAL_DLLPRIVATE long        ImplGetTextYPosition() const;
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker();
     SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
+    SAL_DLLPRIVATE void        filterText();
 
 protected:
     using Control::ImplInitSettings;
@@ -251,6 +262,8 @@ public:
     virtual OUString GetSurroundingText() const SAL_OVERRIDE;
     virtual Selection GetSurroundingTextSelection() const SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
+
+    void SetTextFilter(TextFilter* pFilter) { mpFilterText = pFilter; }
 
     // returns the minimum size a bordered Edit should have given the current
     // global style settings (needed by sc's inputwin.cxx)

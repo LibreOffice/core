@@ -276,6 +276,7 @@ void Edit::ImplInitEditData()
 {
     mpSubEdit               = NULL;
     mpUpdateDataTimer       = NULL;
+    mpFilterText            = NULL;
     mnXOffset               = 0;
     mnAlign                 = EDIT_ALIGN_LEFT;
     mnMaxTextLen            = EDIT_NOLIMIT;
@@ -2334,8 +2335,48 @@ void Edit::ImplHideDDCursor()
     }
 }
 
+TextFilter::TextFilter(const OUString &rForbiddenChars)
+    : sForbiddenChars(rForbiddenChars)
+{
+}
+
+TextFilter::~TextFilter()
+{
+}
+
+OUString TextFilter::filter(const OUString &rText)
+{
+    OUString sTemp(rText);
+    for (sal_uInt16 i = 0; i < sForbiddenChars.getLength(); ++i)
+    {
+        sTemp = comphelper::string::remove(sTemp, sForbiddenChars[i]);
+    }
+    return sTemp;
+}
+
+void Edit::filterText()
+{
+    Selection aSel = GetSelection();
+    OUString sOrig = GetText();
+    OUString sNew = mpFilterText->filter(GetText());
+    if (sOrig != sNew)
+    {
+        sal_Int32 nDiff = sOrig.getLength() - sNew.getLength();
+        if (nDiff)
+        {
+            aSel.setMin(aSel.getMin() - nDiff);
+            aSel.setMax(aSel.getMin());
+        }
+        SetText(sNew);
+        SetSelection(aSel);
+    }
+}
+
 void Edit::Modify()
 {
+    if (mpFilterText)
+        filterText();
+
     if ( mbIsSubEdit )
     {
         ((Edit*)GetParent())->Modify();

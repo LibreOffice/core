@@ -201,10 +201,9 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="swlo-NoSpaceEdit" id="newsc">
+                  <object class="GtkEntry" id="newsc">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">●</property>
                     <property name="width_chars">6</property>
                     <property name="invisible_char_set">True</property>
                   </object>
