@@ -2,6 +2,7 @@
 <!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="SelectTableDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -88,7 +89,7 @@
                 <property name="label" translatable="yes">The file you have selected contains more than one table. Please select the table containing the address list you want to use.</property>
                 <property name="use_underline">True</property>
                 <property name="wrap">True</property>
-                <property name="max_width_chars">70</property>
+                <property name="max_width_chars">90</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -97,17 +98,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="table">
+              <object class="svtlo-SvSimpleTableContainer" id="table">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="Simple Table Container-selection1"/>
                 </child>
               </object>
               <packing>
