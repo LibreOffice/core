@@ -30,7 +30,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/implementationreference.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -145,7 +144,7 @@ namespace svxform
         public IFormScriptingEnvironment, private boost::noncopyable
     {
     private:
-        typedef ::comphelper::ImplementationReference< FormScriptListener, XScriptListener >    ListenerImplementation;
+        typedef rtl::Reference<FormScriptListener> ListenerImplementation;
 
     private:
         ::osl::Mutex            m_aMutex;
@@ -833,9 +832,9 @@ namespace svxform
         try
         {
             if ( _bRegister )
-                _rxManager->addScriptListener( m_pScriptListener.getRef() );
+                _rxManager->addScriptListener( m_pScriptListener.get() );
             else
-                _rxManager->removeScriptListener( m_pScriptListener.getRef() );
+                _rxManager->removeScriptListener( m_pScriptListener.get() );
         }
         catch( const RuntimeException& ) { throw; }
         catch( const Exception& )
