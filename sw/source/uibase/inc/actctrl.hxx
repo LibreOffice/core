@@ -43,12 +43,10 @@ class SW_DLLPUBLIC NoSpaceEdit : public Edit
 {
     OUString sForbiddenChars;
 protected:
-    virtual void KeyInput( const KeyEvent& ) SAL_OVERRIDE;
-    virtual void        Modify() SAL_OVERRIDE;
+    virtual void  Modify() SAL_OVERRIDE;
 
 public:
     NoSpaceEdit( Window* pParent );
-    virtual ~NoSpaceEdit();
     void            SetForbiddenChars(const OUString& rSet){sForbiddenChars = rSet;}
     const OUString& GetForbiddenChars(){return sForbiddenChars;}
 };
