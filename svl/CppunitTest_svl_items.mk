@@ -16,11 +16,6 @@ $(eval $(call gb_CppunitTest_use_api,svl_items, \
     udkapi \
 ))
 
-
-#$(eval $(call gb_CppunitTest_use_components,svl_items, \
-#    ucb/source/core/ucb1 \
-#))
-
 $(eval $(call gb_CppunitTest_add_exception_objects,svl_items, \
 	svl/qa/unit/items/test_IndexedStyleSheets \
 ))
@@ -32,11 +27,5 @@ $(eval $(call gb_CppunitTest_use_libraries,svl_items, \
 	cppu \
 	cppuhelper \
 ))
-
-#$(eval $(call gb_CppunitTest_use_ure,svl_items))
-
-#$(eval $(call gb_CppunitTest_use_components,svl_urihelper,\
-#    i18npool/util/i18npool \
-#))
 
 # vim: set noet sw=4 ts=4:

@@ -22,13 +22,16 @@
 
 #include <svl/brdcst.hxx>
 #include <boost/shared_ptr.hpp>
+#include <boost/unordered_map.hpp>
 #include <deque>
 #include <vector>
+
+class SfxPoolItem;
+class SfxItemPoolUser;
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
 #endif
-
 
 struct SfxPoolVersion_Impl
 {
@@ -56,13 +59,27 @@ typedef std::vector<SfxPoolItem*> SfxPoolItemArrayBase_Impl;
 typedef boost::shared_ptr< SfxPoolVersion_Impl > SfxPoolVersion_ImplPtr;
 typedef std::deque< SfxPoolVersion_ImplPtr > SfxPoolVersionArr_Impl;
 
+/**
+ * This array contains a set of SfxPoolItems, if those items are
+ * poolable then each item has a unique set of properties, and we
+ * often search linearly to ensure uniqueness. If they are
+ * non-poolable we maintain an (often large) list of pointers.
+ */
 struct SfxPoolItemArray_Impl: public SfxPoolItemArrayBase_Impl
 {
-    size_t  nFirstFree;
+    typedef std::vector<sal_uInt32> FreeList;
+    typedef boost::unordered_map<SfxPoolItem*,sal_uInt32> Hash;
 
-    SfxPoolItemArray_Impl ()
-        : nFirstFree( 0 )
-    {}
+public:
+    /// Track list of indicees into our array that contain an empty slot
+    FreeList maFree;
+    /// Hash of SfxPoolItem pointer to index into our array that contains that slot
+    Hash     maHash;
+
+    SfxPoolItemArray_Impl () {}
+
+    /// re-build the list of free slots and hash from clean
+    void SVL_DLLPUBLIC ReHash();
 };
 
 struct SfxItemPool_Impl
@@ -140,6 +157,10 @@ struct SfxItemPool_Impl
 
     void readTheItems(SvStream & rStream, sal_uInt32 nCount, sal_uInt16 nVersion,
                       SfxPoolItem * pDefItem, SfxPoolItemArray_Impl ** pArr);
+
+    // unit testing
+    friend class PoolItemTest;
+    static SfxItemPool_Impl *GetImpl(SfxItemPool *pPool) { return pPool->pImp; }
 };
 
 
