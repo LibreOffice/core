@@ -668,22 +668,18 @@ IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
     return 0;
 }
 
-SaveProgressDialog::SaveProgressDialog(Window*       pParent,
-                                       RecoveryCore* pCore  )
-    : ModalDialog   ( pParent        , SVX_RES( RID_SVX_MDLG_DOCRECOVERY_PROGR ) )
-    , m_aHintFT     ( this           , SVX_RES  ( FT_SAVEPROGR_HINT              ) )
-    , m_aProgrFT    ( this           , SVX_RES  ( FT_SAVEPROGR_PROGR             ) )
-    , m_aProgrParent( this           , SVX_RES  ( WIN_SAVEPROGR_PROGR            ) )
-    , m_pCore       ( pCore                                                      )
+SaveProgressDialog::SaveProgressDialog(Window* pParent, RecoveryCore* pCore)
+    : ModalDialog(pParent, "DocRecoveryProgressDialog",
+        "svx/ui/docrecoveryprogressdialog.ui")
+    , m_pCore(pCore)
 {
-    FreeResource();
-    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getComponentContext() );
+    get(m_pProgrParent, "progress");
+    Size aSize(LogicToPixel(Size(SAVEPROGR_CONTROLWIDTH, PROGR_HEIGHT)));
+    m_pProgrParent->set_width_request(aSize.Width());
+    m_pProgrParent->set_height_request(aSize.Height());
+
+    PluginProgress* pProgress   = new PluginProgress(m_pProgrParent, pCore->getComponentContext());
     m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
-}
-
-
-SaveProgressDialog::~SaveProgressDialog()
-{
 }
 
 short SaveProgressDialog::Execute()

@@ -400,26 +400,18 @@ class SaveDialog : public Dialog
 class SaveProgressDialog : public ModalDialog
                          , public IRecoveryUpdateListener
 {
-
     // member
     private:
-
-        FixedText       m_aHintFT;
-        FixedText       m_aProgrFT;
-        OUString        m_aProgrBaseTxt;
-        Window          m_aProgrParent;
+        OUString      m_aProgrBaseTxt;
+        Window*       m_pProgrParent;
 
         // @short   TODO
         RecoveryCore* m_pCore;
 
         // @short   TODO
         css::uno::Reference< css::task::XStatusIndicator > m_xProgress;
-
-
     // interface
     public:
-
-
         /** @short  create all child controls of this dialog.
 
             @descr  The dialog isn't shown nor it starts any
@@ -435,11 +427,6 @@ class SaveProgressDialog : public ModalDialog
          */
         SaveProgressDialog(Window*       pParent,
                            RecoveryCore* pCore  );
-
-
-        /** @short  free all controls and used memory. */
-        virtual ~SaveProgressDialog();
-
 
         /** @short  start the emergency save operation. */
         virtual short Execute() SAL_OVERRIDE;
