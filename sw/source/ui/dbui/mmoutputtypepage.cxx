@@ -291,7 +291,6 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_aStatusHB.InsertItem( ITEMID_STATUS, sStatus,
                             nPos2,
                             HIB_LEFT | HIB_VCENTER );
-    m_aStatusHB.SetHelpId(HID_MM_ADDRESSLIST_HB );
     m_aStatusHB.Show();
 
     m_aStatusLB.SetHelpId(HID_MM_MAILSTATUS_TLB);

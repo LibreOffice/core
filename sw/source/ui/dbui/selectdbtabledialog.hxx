@@ -24,34 +24,31 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
-#include <svtools/svtabbx.hxx>
-#include <svtools/headbar.hxx>
+
 namespace com{namespace sun{namespace star{
     namespace sdbc{
         class XConnection;
     }
 }}}
 
+class SwAddressTable;
+
 class SwSelectDBTableDialog : public SfxModalDialog
 {
-    HeaderBar       *m_pTableHB;
-    SvTabListBox    *m_pTableLB;
-    PushButton      *m_pPreviewPB;
-    Window          *m_pContainer;
+    SwAddressTable* m_pTable;
+    PushButton*     m_pPreviewPB;
 
     OUString        m_sName;
     OUString        m_sType;
     OUString        m_sTable;
     OUString        m_sQuery;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> m_xConnection;
+    css::uno::Reference<css::sdbc::XConnection> m_xConnection;
 
     DECL_LINK(PreviewHdl, PushButton*);
 public:
-
     SwSelectDBTableDialog(Window* pParent,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection
-            );
+        const css::uno::Reference<css::sdbc::XConnection>& xConnection);
     virtual ~SwSelectDBTableDialog();
 
     OUString    GetSelectedTable(bool& bIsTable);
