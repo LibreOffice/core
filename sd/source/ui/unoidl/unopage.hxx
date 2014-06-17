@@ -108,8 +108,8 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // SvxFmDrawPage
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  _CreateShape( SdrObject *pObj ) const
-        throw (std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::drawing::XShape>  _CreateShape(SdrObject *pObj) const
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
