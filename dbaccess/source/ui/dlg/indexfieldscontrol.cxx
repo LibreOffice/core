@@ -91,10 +91,12 @@ namespace dbaui
 
     // IndexFieldsControl
     IndexFieldsControl::IndexFieldsControl( Window* _pParent, WinBits nWinStyle)
-        :EditBrowseBox(_pParent, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, nWinStyle, BROWSER_STANDARD_FLAGS)
-        ,m_aSeekRow(m_aFields.end())
-        ,m_pSortingCell(NULL)
-        ,m_pFieldNameCell(NULL)
+        : EditBrowseBox(_pParent, EBBF_SMART_TAB_TRAVEL | EBBF_ACTIVATE_ON_BUTTONDOWN, nWinStyle, BROWSER_STANDARD_FLAGS)
+        , m_aSeekRow(m_aFields.end())
+        , m_pSortingCell(NULL)
+        , m_pFieldNameCell(NULL)
+        , m_nMaxColumnsInIndex(0)
+        , m_bAddIndexAppendix(false)
     {
 
         SetUniqueId( UID_DLGINDEX_INDEXDETAILS_BACK );
