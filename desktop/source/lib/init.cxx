@@ -46,6 +46,8 @@ struct LibLODocument_Impl;
 struct LibLibreOffice_Impl;
 
 static LibLibreOffice_Impl *gImpl = NULL;
+static LibreOfficeKitClass *gOfficeClass = NULL;
+static LibreOfficeKitDocumentClass *gDocumentClass = NULL;
 
 typedef struct
 {
@@ -155,11 +157,16 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
     LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
         mxComponent( xComponent )
     {
-        nSize = sizeof(LibreOfficeKitDocument);
+        if (!gDocumentClass)
+        {
+            gDocumentClass = new LibreOfficeKitDocumentClass;
 
-        destroy = doc_destroy;
-        saveAs = doc_saveAs;
-        saveAsWithOptions = doc_saveAsWithOptions;
+            gDocumentClass->nSize = sizeof(LibreOfficeKitDocument);
+
+            gDocumentClass->destroy = doc_destroy;
+            gDocumentClass->saveAs = doc_saveAs;
+            gDocumentClass->saveAsWithOptions = doc_saveAsWithOptions;
+        }
     }
 
     ~LibLODocument_Impl()
@@ -185,12 +192,17 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
 
     LibLibreOffice_Impl()
     {
-        nSize = sizeof(LibreOfficeKit);
+        if (!gOfficeClass)
+        {
+            gOfficeClass = new LibreOfficeKitClass;
+            gOfficeClass->nSize = sizeof(LibreOfficeKitClass);
 
-        destroy = lo_destroy;
-        initialize = lo_initialize;
-        documentLoad = lo_documentLoad;
-        getError = lo_getError;
+            gOfficeClass->destroy = lo_destroy;
+            gOfficeClass->initialize = lo_initialize;
+            gOfficeClass->documentLoad = lo_documentLoad;
+            gOfficeClass->getError = lo_getError;
+        }
+        pClass = gOfficeClass;
     }
 };
 

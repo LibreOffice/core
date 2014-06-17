@@ -33,13 +33,13 @@ public:
 
     inline ~Document()
     {
-        mpDoc->destroy(mpDoc);
+        mpDoc->pClass->destroy(mpDoc);
     }
 
     // Save as the given format, if format is NULL sniff from ext'n
     inline bool saveAs(const char* pUrl, const char* pFormat = NULL)
     {
-        return mpDoc->saveAs(mpDoc, pUrl, pFormat);
+        return mpDoc->pClass->saveAs(mpDoc, pUrl, pFormat);
     }
 
     inline bool saveAsWithOptions(const char* pUrl, const char* pFormat = NULL, const char* pFilterOptions = NULL)
@@ -48,7 +48,7 @@ public:
         if (!LIBREOFFICEKIT_DOCUMENT_HAS(mpDoc, saveAsWithOptions))
             return false;
 
-        return mpDoc->saveAsWithOptions(mpDoc, pUrl, pFormat, pFilterOptions);
+        return mpDoc->pClass->saveAsWithOptions(mpDoc, pUrl, pFormat, pFilterOptions);
     }
     inline LibreOfficeKitDocument *get() { return mpDoc; }
 };
@@ -65,17 +65,17 @@ public:
 
     inline ~Office()
     {
-        mpThis->destroy(mpThis);
+        mpThis->pClass->destroy(mpThis);
     }
 
     inline bool initialize(const char* pInstallPath)
     {
-        return mpThis->initialize(mpThis, pInstallPath);
+        return mpThis->pClass->initialize(mpThis, pInstallPath);
     }
 
     inline Document* documentLoad(const char* pUrl)
     {
-        LibreOfficeKitDocument* pDoc = mpThis->documentLoad(mpThis, pUrl);
+        LibreOfficeKitDocument* pDoc = mpThis->pClass->documentLoad(mpThis, pUrl);
         if (pDoc == NULL)
             return NULL;
         return new Document(pDoc);
@@ -84,14 +84,14 @@ public:
     // return the last error as a string, free me.
     inline char* getError()
     {
-        return mpThis->getError(mpThis);
+        return mpThis->pClass->getError(mpThis);
     }
 };
 
 inline Office* lok_cpp_init(const char* pInstallPath)
 {
     LibreOfficeKit* pThis = lok_init(pInstallPath);
-    if (pThis == NULL || pThis->nSize == 0)
+    if (pThis == NULL || pThis->pClass->nSize == 0)
         return NULL;
     return new ::lok::Office(pThis);
 }
