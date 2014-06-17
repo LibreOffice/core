@@ -400,14 +400,15 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     render();
 
     glm::vec3 maTargetPosition = rBarInfo.maPos;
-    maTargetPosition.z += 45;
-    maStep = (maTargetPosition - maCameraPosition)/100.0f;
+    maTargetPosition.z += 240;
+    maTargetPosition.y += BAR_SIZE_Y / 2.0f;
+    maStep = (maTargetPosition - maCameraPosition)/((float)mnStepsTotal);
 
     glm::vec3 maTargetDirection = rBarInfo.maPos;
     maTargetDirection.x += BAR_SIZE_X / 2.0f;
     maTargetDirection.y += BAR_SIZE_Y / 2.0f;
 
-    maStepDirection = (maTargetDirection - maCameraDirection)/100.f;
+    maStepDirection = (maTargetDirection - maCameraDirection)/((float)mnStepsTotal);
 
     maTimer.SetTimeout(TIMEOUT);
     maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, MoveToBar));
