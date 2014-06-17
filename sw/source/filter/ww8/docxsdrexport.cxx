@@ -75,8 +75,13 @@ OUString lclGetAnchorIdFromGrabBag(const SdrObject* pObj)
 {
     OUString aResult;
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pObj)->getUnoShape(), uno::UNO_QUERY);
-    uno::Sequence< beans::PropertyValue > propList =
-        lclGetProperty(xShape, "FrameInteropGrabBag");
+    OUString aGrabBagName;
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
+    if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+        aGrabBagName = "FrameInteropGrabBag";
+    else
+        aGrabBagName = "InteropGrabBag";
+    uno::Sequence< beans::PropertyValue > propList = lclGetProperty(xShape, aGrabBagName);
     for (sal_Int32 nProp = 0; nProp < propList.getLength(); ++nProp)
     {
         OUString aPropName = propList[nProp].Name;

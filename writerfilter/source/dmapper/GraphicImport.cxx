@@ -468,7 +468,12 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
     if (!xSetInfo.is())
         return;
 
-    const OUString aGrabBagPropName("FrameInteropGrabBag");
+    OUString aGrabBagPropName;
+    uno::Reference<lang::XServiceInfo> xServiceInfo(m_xShape, uno::UNO_QUERY_THROW);
+    if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+        aGrabBagPropName = "FrameInteropGrabBag";
+    else
+        aGrabBagPropName = "InteropGrabBag";
 
     if (xSetInfo->hasPropertyByName(aGrabBagPropName))
     {
