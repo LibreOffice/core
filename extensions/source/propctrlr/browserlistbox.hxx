@@ -105,7 +105,7 @@ namespace pcr
         ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >
                                     m_xActiveControl;
         sal_uInt16                  m_nTheNameSize;
-        sal_uInt16                  m_nRowHeight;
+        long                        m_nRowHeight;
         ::std::set< sal_uInt16 >    m_aOutOfDateLines;
         bool                    m_bIsActive : 1;
         bool                    m_bUpdate : 1;
