@@ -233,7 +233,7 @@ sal_uInt16 XclExpString::GetHeaderSize() const
 
 sal_Size XclExpString::GetBufferSize() const
 {
-    return mnLen * (mbIsUnicode ? 2 : 1);
+    return static_cast<sal_Size>(mnLen) * (mbIsUnicode ? 2 : 1);
 }
 
 sal_Size XclExpString::GetSize() const
