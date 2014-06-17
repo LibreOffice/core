@@ -963,9 +963,9 @@ bool SVGFilter::implGenerateMetaData()
                     sNumberingType = "roman-lower";
                     break;
                 // arabic numbering type is the default, so we do not append any attribute for it
-                case SVX_ARABIC: ;
+                case SVX_ARABIC:
                 // in case the numbering type is not handled we fall back on arabic numbering
-                default: ;
+                default:
                     break;
             }
             if( !sNumberingType.isEmpty() )
@@ -2231,8 +2231,8 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                             sDate += SvxDateField::GetFormatted( aDate, SVXDATEFORMAT_B, *pNumberFormatter, eLang );
                             switch( eDateFormat )
                             {
-                                case SVXDATEFORMAT_E: ;     // Tue, 13.February 1996
-                                case SVXDATEFORMAT_STDBIG: ;
+                                case SVXDATEFORMAT_E:       // Tue, 13.February 1996
+                                case SVXDATEFORMAT_STDBIG:
                                 case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
                                     for( sal_uInt16 i = 1; i <= 7; ++i )  // we get all days in a week
                                     {
@@ -2240,7 +2240,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                                         sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
                                     }
                                     // No break here! We need months too!
-                                case SVXDATEFORMAT_C: ;     // 13.Feb 1996
+                                case SVXDATEFORMAT_C:       // 13.Feb 1996
                                 case SVXDATEFORMAT_D:       // 13.February 1996
                                     for( sal_uInt16 i = 1; i <= 12; ++i ) // we get all months in a year
                                     {
@@ -2248,9 +2248,9 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                                         sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
                                     }
                                     break;
-                                case SVXDATEFORMAT_STDSMALL: ;
-                                case SVXDATEFORMAT_A: ;     // 13.02.96
-                                case SVXDATEFORMAT_B: ;     // 13.02.1996
+                                case SVXDATEFORMAT_STDSMALL:
+                                case SVXDATEFORMAT_A:       // 13.02.96
+                                case SVXDATEFORMAT_B:       // 13.02.1996
                                 default:
                                     // nothing to do here, we always collect the characters needed for these cases.
                                     break;
@@ -2276,7 +2276,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                             aRepresentation += "ivxlcdm";
                             break;
                         // arabic numbering type is the default
-                        case SVX_ARABIC: ;
+                        case SVX_ARABIC:
                         // in case the numbering type is not handled we fall back on arabic numbering
                         default:
                             aRepresentation += "0123456789";
@@ -2341,7 +2341,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                             aRepresentation += SvxNumberFormat::CreateRomanString( nPageNumber, false /* lower */ );
                             break;
                         // arabic numbering type is the default
-                        case SVX_ARABIC: ;
+                        case SVX_ARABIC:
                         // in case the numbering type is not handled we fall back on arabic numbering
                         default:
                             aRepresentation += OUString::number( nPageNumber );
