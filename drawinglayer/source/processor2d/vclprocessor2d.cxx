@@ -146,6 +146,14 @@ namespace drawinglayer
                         fRotate,
                         rTextCandidate.getLocale()));
 
+                    // set FillColor Attribute
+                    const Color aFillColor( rTextCandidate.getTextFillColor() );
+                    if( aFillColor != COL_TRANSPARENT )
+                    {
+                        aFont.SetFillColor(aFillColor);
+                        aFont.SetTransparent(false);
+                    }
+
                     // Don't draw fonts without height
                     if( aFont.GetHeight() <= 0 )
                         return;
@@ -186,17 +194,6 @@ namespace drawinglayer
 
                         if( eFontStrikeout != STRIKEOUT_NONE )
                             aFont.SetStrikeout( eFontStrikeout );
-
-                        // set FillColor Attribute
-                        // FIXME(matteocam)
-
-                        // XXX: is "Color" the right type? i.e. can we use class Color in TextSimplePortionPrimitive2D
-                        const Color aFillColor(pTCPP->getTextFillColor() );
-                        if( aFillColor != COL_TRANSPARENT )
-                        {
-                            aFont.SetFillColor(aFillColor);
-                            aFont.SetTransparent(false);
-                        }
 
 
                         // set EmphasisMark attribute
