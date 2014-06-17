@@ -1877,7 +1877,9 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
     }
     catch ( const beans::UnknownPropertyException& ) {}
 
-    if (bLinkToSource || !(xSeriesOrPointProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat))
+    xSeriesOrPointProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat;
+    sal_Int32 nOldFormat = nFormat;
+    if (bLinkToSource)
     {
         uno::Reference< chart2::XChartType > xChartType( DataSeriesHelper::getChartTypeOfSeries( xSeries, xDiagram ) );
 
@@ -1903,7 +1905,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
             }
         }
 
-        if (nFormat >= 0)
+        if (nFormat >= 0 && nOldFormat != nFormat)
             xSeriesOrPointProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::makeAny(nFormat));
     }
 

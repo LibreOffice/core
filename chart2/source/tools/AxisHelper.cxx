@@ -148,8 +148,11 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
 
     bool bLinkToSource = true;
     xProp->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkToSource;
+    xProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey;
 
-    if (bLinkToSource || !(xProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey))
+    sal_Int32 nOldNumberFormat = nNumberFormatKey;
+
+    if (bLinkToSource)
     {
         bool bFormatSet = false;
         //check whether we have a percent scale -> use percent format
@@ -323,7 +326,8 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
             }
         }
 
-        xProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::makeAny(nNumberFormatKey));
+        if (nOldNumberFormat != nNumberFormatKey)
+            xProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::makeAny(nNumberFormatKey));
     }
 
     return nNumberFormatKey;
