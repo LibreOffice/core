@@ -58,11 +58,6 @@ public:
         mpThis->pClass->destroy(mpThis);
     }
 
-    inline bool initialize(const char* pInstallPath)
-    {
-        return mpThis->pClass->initialize(mpThis, pInstallPath);
-    }
-
     inline Document* documentLoad(const char* pUrl)
     {
         LibreOfficeKitDocument* pDoc = mpThis->pClass->documentLoad(mpThis, pUrl);
