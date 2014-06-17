@@ -690,6 +690,27 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFr
         const_cast< SdrObject* >(sdrObj)->SetPage(0);
 }
 
+bool lcl_isLockedCanvas(uno::Reference<drawing::XShape> xShape)
+{
+    bool bRet = false;
+    uno::Sequence< beans::PropertyValue > propList =
+        lclGetProperty(xShape, "InteropGrabBag");
+    for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
+    {
+        OUString propName = propList[nProp].Name;
+        if (propName == "LockedCanvas")
+        {
+            /*
+             * Export as Locked Canvas only if the property
+             * is in the PropertySet
+             */
+            bRet = true;
+            break;
+        }
+    }
+    return bRet;
+}
+
 void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt* pFrmFmt, int nAnchorId)
 {
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
@@ -723,22 +744,7 @@ void DocxSdrExport::writeDMLDrawing(const SdrObject* pSdrObject, const SwFrmFmt*
                         XML_uri, pNamespace,
                         FSEND);
 
-    bool bLockedCanvas = false;
-    uno::Sequence< beans::PropertyValue > propList =
-        lclGetProperty(xShape, "InteropGrabBag");
-    for (sal_Int32 nProp=0; nProp < propList.getLength(); ++nProp)
-    {
-        OUString propName = propList[nProp].Name;
-        if (propName == "LockedCanvas")
-        {
-            /*
-             * Export as Locked Canvas only if the property
-             * is in the PropertySet
-             */
-            bLockedCanvas = true;
-            break;
-        }
-    }
+    bool bLockedCanvas = lcl_isLockedCanvas(xShape);
     if (bLockedCanvas)
         pFS->startElementNS(XML_lc, XML_lockedCanvas,
                             FSNS(XML_xmlns, XML_lc), "http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas",
@@ -827,15 +833,22 @@ bool DocxSdrExport::Impl::isSupportedDMLShape(uno::Reference<drawing::XShape> xS
 
 void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId)
 {
+    bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
     m_pImpl->m_bDMLAndVMLDrawingOpen = true;
 
     // Depending on the shape type, we actually don't write the shape as DML.
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
+
+    // Locked canvas is OK inside DML.
+    if (lcl_isLockedCanvas(xShape))
+        bDMLAndVMLDrawingOpen = false;
+
     MSO_SPT eShapeType = EscherPropertyContainer::GetCustomShapeType(xShape, nMirrorFlags, sShapeType);
 
-    if (eShapeType != ESCHER_ShpInst_TextPlainText && m_pImpl->isSupportedDMLShape(xShape))
+    // In case we are already inside a DML block, then write the shape only as VML, turn out that's allowed to do.
+    if (eShapeType != ESCHER_ShpInst_TextPlainText && m_pImpl->isSupportedDMLShape(xShape) && !bDMLAndVMLDrawingOpen)
     {
         m_pImpl->m_pSerializer->startElementNS(XML_mc, XML_AlternateContent, FSEND);
 

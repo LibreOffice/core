@@ -971,6 +971,18 @@ bool lcl_isTextBox(const SdrObject* pSdrObject)
     return false;
 }
 
+bool lcl_hasTextBoxContent(sal_uInt32 nShapeType)
+{
+    switch (nShapeType)
+    {
+    case ESCHER_ShpInst_TextPlainText:
+    case ESCHER_ShpInst_TextSlantUp:
+        return false;
+    default:
+        return true;
+    }
+}
+
 OUString lcl_getAnchorIdFromGrabBag(const SdrObject* pSdrObject)
 {
     OUString aResult;
@@ -1126,7 +1138,7 @@ sal_Int32 VMLExport::StartShape()
 
     // now check if we have some editeng text (not associated textbox) and we have a text exporter registered
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
-    if (pTxtObj && m_pTextExport && m_nShapeType != ESCHER_ShpInst_TextPlainText && !IsWaterMarkShape(m_pSdrObject->GetName()) && !lcl_isTextBox(m_pSdrObject))
+    if (pTxtObj && m_pTextExport && lcl_hasTextBoxContent(m_nShapeType) && !IsWaterMarkShape(m_pSdrObject->GetName()) && !lcl_isTextBox(m_pSdrObject))
     {
         const OutlinerParaObject* pParaObj = 0;
         bool bOwnParaObj = false;
