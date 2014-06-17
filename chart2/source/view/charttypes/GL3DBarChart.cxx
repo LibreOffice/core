@@ -38,7 +38,8 @@ GL3DBarChart::GL3DBarChart(
     mnMaxY(0),
     mnCornerId(0),
     mbBlockUserInput(false),
-    mbNeedsNewRender(true)
+    mbNeedsNewRender(true),
+    mbCameraInit(false)
 {
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
@@ -63,9 +64,9 @@ GL3DBarChart::~GL3DBarChart()
 
 namespace {
 
-const float TEXT_HEIGHT = 15.0f;
-const float DEFAULT_CAMERA_HEIGHT = 500.0f;
-const size_t STEPS = 100;
+const float TEXT_HEIGHT = 10.0f;
+float DEFAULT_CAMERA_HEIGHT = 500.0f;
+const size_t STEPS = 200;
 const sal_uLong TIMEOUT = 5;
 const sal_uInt32 ID_STEP = 10;
 
@@ -268,12 +269,28 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
     mnMaxX = nMaxPointCount * (BAR_SIZE_X + BAR_DISTANCE_X) + 40;
     mnMaxY = nSeriesIndex * (BAR_SIZE_Y + BAR_DISTANCE_Y) + 40;
-
-    maCameraPosition = glm::vec3(-30, -30, DEFAULT_CAMERA_HEIGHT);
-    mpCamera->setPosition(maCameraPosition);
-    maCameraDirection = glm::vec3(mnMaxX/2, mnMaxY/2, 0);
-    mpCamera->setDirection(maCameraDirection);
-
+    if (!mbCameraInit)
+    {
+        mnDistance = sqrt(mnMaxX * mnMaxX + mnMaxY * mnMaxY + DEFAULT_CAMERA_HEIGHT * DEFAULT_CAMERA_HEIGHT);
+        maDefaultCameraDirection = glm::vec3(mnMaxX * 0.4, mnMaxY * 0.35, 0);
+        maDefaultCameraPosition = glm::vec3(maDefaultCameraDirection.x, maDefaultCameraDirection.y - mnDistance, DEFAULT_CAMERA_HEIGHT * 2);
+        mnCornerId = 0;
+        mbCameraInit = true;
+        float pi = 3.1415926f;
+        float angleX = -pi / 6.5f;
+        float angleZ = -pi / 8.0f;
+        glm::mat4 maDefaultRotateMatrix = glm::eulerAngleYXZ(0.0f, angleX, angleZ);
+        maDefaultCameraPosition = glm::vec3(maDefaultRotateMatrix * glm::vec4(maDefaultCameraPosition, 1.0f));
+        maCameraPosition = maDefaultCameraPosition;
+        maCameraDirection = maDefaultCameraDirection;
+        mpCamera->setPosition(maCameraPosition);
+        mpCamera->setDirection(maCameraDirection);
+    }
+    else
+    {
+        mpCamera->setPosition(maCameraPosition);
+        mpCamera->setDirection(maCameraDirection);
+    }
     mbNeedsNewRender = true;
 }
 
@@ -328,6 +345,30 @@ public:
     }
 };
 
+}
+
+void GL3DBarChart::moveToDefault()
+{
+    mnStepsTotal = STEPS;
+    mnStep = 0;
+    mbBlockUserInput = true;
+    glm::vec3 maTargetPosition = maDefaultCameraPosition;
+    maStep = (maTargetPosition - maCameraPosition)/((float)mnStepsTotal);
+
+    glm::vec3 maTargetDirection = maDefaultCameraDirection;
+    maStepDirection = (maTargetDirection - maCameraDirection)/((float)mnStepsTotal);
+    while((mnStep < mnStepsTotal) && mbBlockUserInput)
+    {
+        ++mnStep;
+        maCameraPosition += maStep;
+        mpCamera->setPosition(maCameraPosition);
+        maCameraDirection += maStepDirection;
+        mpCamera->setDirection(maCameraDirection);
+        render();
+    }
+    maShapes.pop_back();
+    mbBlockUserInput = false;
+    mnStep = 0;
 }
 
 void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)

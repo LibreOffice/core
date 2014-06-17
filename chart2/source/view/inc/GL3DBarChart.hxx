@@ -58,6 +58,7 @@ public:
 private:
 
     void moveToCorner();
+    void moveToDefault();
     glm::vec3 getCornerPosition(sal_Int8 nCornerId);
 
     DECL_LINK(MoveCamera, void*);
@@ -77,6 +78,9 @@ private:
     glm::vec3 maCameraPosition;
     glm::vec3 maCameraDirection;
 
+    glm::vec3 maDefaultCameraPosition;
+    glm::vec3 maDefaultCameraDirection;
+
     Timer maTimer;
     glm::vec3 maStep;
     glm::vec3 maStepDirection;
@@ -84,6 +88,7 @@ private:
     size_t mnStepsTotal;
     float mnMaxX;
     float mnMaxY;
+    float mnDistance;
     /**
      * 0 = corner at (0,0,0);
      * numbering counter clockwise
@@ -107,6 +112,7 @@ private:
     std::map<sal_uInt32, const BarInformation> maBarMap;
     bool mbBlockUserInput;
     bool mbNeedsNewRender;
+    bool mbCameraInit;
 };
 
 }
