@@ -32,73 +32,7 @@
 namespace formula
 {
 
-// class ValWnd
-ValWnd::ValWnd(Window* pParent, WinBits nBits)
-    : Window(pParent, nBits)
-{
-    Font aFnt( GetFont() );
-    aFnt.SetTransparent( true );
-    aFnt.SetWeight( WEIGHT_LIGHT );
-    if ( pParent->IsBackground() )
-    {
-        fprintf(stderr, "one\n");
-        Wallpaper aBack = pParent->GetBackground();
-        SetFillColor( aBack.GetColor() );
-        SetBackground( aBack );
-        aFnt.SetFillColor( aBack.GetColor() );
-    }
-    else
-    {
-        fprintf(stderr, "two\n");
-        SetFillColor();
-        SetBackground();
-    }
-    SetFont( aFnt );
-    SetLineColor();
-
-    SetAccessibleRole( ::com::sun::star::accessibility::AccessibleRole::LABEL );
-}
-
-Size ValWnd::GetOptimalSize() const
-{
-    return LogicToPixel(Size(60, 12), MAP_APPFONT);
-}
-
-void ValWnd::Resize()
-{
-    Window::Resize();
-
-    Size aSzWnd  = GetOutputSizePixel();
-    long nHeight = GetTextHeight();
-    long nDiff   = aSzWnd.Height()-nHeight;
-
-    aRectOut = Rectangle( Point( 1, ( nDiff<2 ) ? 1 : nDiff/2),
-                          Size ( aSzWnd.Width()-2, nHeight ) );
-    SetClipRegion( Region( aRectOut ) );
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeValWnd(Window *pParent, VclBuilder::stringmap &)
-{
-    return new ValWnd(pParent, WB_BORDER);
-}
-
-void ValWnd::Paint( const Rectangle& )
-{
-    DrawText( aRectOut.TopLeft(), aStrValue );
-}
-
-void ValWnd::SetValue( const OUString& rStrVal )
-{
-    if ( aStrValue != rStrVal )
-    {
-        aStrValue = rStrVal;
-        DrawRect( aRectOut );   // delete old text
-        Paint( aRectOut );      // repaint
-    }
-}
-
 // class ArgEdit
-
 ArgEdit::ArgEdit( Window* pParent, WinBits nBits )
     :   RefEdit( pParent, NULL, nBits ),
         pEdPrev ( NULL ),

@@ -24,26 +24,6 @@
 namespace formula
 {
 
-
-// class ValWnd
-class ValWnd : public Window
-{
-public:
-            ValWnd( Window* pParent, WinBits nBits );
-
-    void    SetValue( const OUString& rStrVal );
-
-protected:
-    virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
-
-private:
-    OUString    aStrValue;
-    Rectangle   aRectOut;
-};
-
-
 // class EditBox
 class EditBox : public Control
 {

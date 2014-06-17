@@ -611,9 +611,6 @@
     <glade-widget-class title="Edit" name="foruilo-ArgEdit"
                         generic-name="Edit" parent="GtkEntry"
                         icon-name="widget-gtk-textentry"/>
-    <glade-widget-class title="Value entry" name="foruilo-ValWnd"
-                        generic-name="Value entry" parent="GtkEntry"
-                        icon-name="widget-gtk-textentry"/>
     <glade-widget-class title="Edit Box" name="foruilo-EditBox"
                         generic-name="Edit Box" parent="GtkTextView"
                         icon-name="widget-gtk-textview"/>
