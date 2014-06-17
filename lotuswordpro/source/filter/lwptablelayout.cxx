@@ -449,7 +449,7 @@ LwpCellLayout * LwpTableLayout::GetCellByRowCol(sal_uInt16 nRow, sal_uInt16 nCol
     if (nRow >= m_nRows || nCol >= m_nCols)
         return NULL;
 
-    return m_WordProCellsMap[nRow*m_nCols + nCol];
+    return m_WordProCellsMap[static_cast<size_t>(nRow)*m_nCols + nCol];
 }
 /**
  * @short   traverse all table cells
