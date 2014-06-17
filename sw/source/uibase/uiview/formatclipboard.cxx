@@ -35,6 +35,7 @@
 #include <editeng/frmdiritem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace
 {
@@ -509,8 +510,8 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
         if ( m_pItemSet_ParAttr && m_pItemSet_ParAttr->Count() != 0 && !bNoParagraphFormats )
         {
             // temporary SfxItemSet
-            SfxItemSet* pTemplateItemSet = lcl_CreateEmptyItemSet(
-                    nSelectionType, *m_pItemSet_ParAttr->GetPool(), false);
+            boost::scoped_ptr<SfxItemSet> pTemplateItemSet(lcl_CreateEmptyItemSet(
+                    nSelectionType, *m_pItemSet_ParAttr->GetPool(), false));
             // no need to verify the existence of pTemplateItemSet as we
             // know that here the selection type is SEL_TXT
 
@@ -525,8 +526,6 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             // store the attributes in aItemVector in order not to apply them as
             // text automatic formatting attributes later in the code
             lcl_AppendSetItems( aItemVector, *pTemplateItemSet);
-
-            delete pTemplateItemSet;
         }
     }
 
@@ -544,8 +543,8 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
         else
         {
             // temporary SfxItemSet
-            SfxItemSet* pTemplateItemSet = lcl_CreateEmptyItemSet(
-                    nSelectionType, *m_pItemSet_TxtAttr->GetPool(), true );
+            boost::scoped_ptr<SfxItemSet> pTemplateItemSet(lcl_CreateEmptyItemSet(
+                    nSelectionType, *m_pItemSet_TxtAttr->GetPool(), true ));
 
             if(pTemplateItemSet)
             {
@@ -561,8 +560,6 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                     rWrtShell.SetFlyFrmAttr(*pTemplateItemSet);
                 else if ( !bNoCharacterFormats )
                     rWrtShell.SetAttrSet(*pTemplateItemSet);
-
-                delete pTemplateItemSet;
             }
         }
     }

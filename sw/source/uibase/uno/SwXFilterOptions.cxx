@@ -32,6 +32,7 @@
 
 #include "swabstdlg.hxx"
 #include "dialog.hrc"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -101,9 +102,9 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException, std::excepti
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
-    SvStream* pInStream = NULL;
+    boost::scoped_ptr<SvStream> pInStream;
     if ( xInputStream.is() )
-        pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
+        pInStream.reset(utl::UcbStreamHelper::CreateStream( xInputStream ));
 
     uno::Reference< XUnoTunnel > xTunnel(xModel, uno::UNO_QUERY);
     SwDocShell* pDocShell = 0;
@@ -119,8 +120,8 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException, std::excepti
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg(NULL, *pDocShell,
-            pInStream);
+        boost::scoped_ptr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(NULL, *pDocShell,
+            pInStream.get()));
         OSL_ENSURE(pAsciiDlg, "Dialogdiet fail!");
         if(RET_OK == pAsciiDlg->Execute())
         {
@@ -129,10 +130,7 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException, std::excepti
             aOptions.WriteUserData(sFilterOptions);
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
-        delete pAsciiDlg;
     }
-
-    delete pInStream;
 
     return nRet;
 }
