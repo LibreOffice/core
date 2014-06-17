@@ -37,7 +37,6 @@ namespace connectivity
         typedef ::cppu::ImplHelper5<    ::com::sun::star::sdbc::XPreparedStatement,
                                         ::com::sun::star::sdbc::XParameters,
                                         ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                        ::com::sun::star::sdbc::XMultipleResults,
                                         ::com::sun::star::lang::XServiceInfo> OPreparedStatement_BASE;
 
         class OPreparedStatement :  public  OCommonStatement,
