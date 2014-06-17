@@ -89,6 +89,14 @@ namespace drawinglayer
 
             @param rFontColor
             The font color to use
+
+            @param bFilled
+
+            @param nWidthToFill
+
+            @param rFillColor
+            Text background color (has nothing to do with bFilled and nWidthToFill)
+
          */
         class DRAWINGLAYER_DLLPUBLIC TextSimplePortionPrimitive2D : public BufferedDecompositionPrimitive2D
         {
@@ -124,7 +132,7 @@ namespace drawinglayer
             long                                    mnWidthToFill;      // the width to fill
 
             /// The fill color of the text
-            basegfx::BColor                         maTextFillColor;
+            Color                         maTextFillColor;
 
         protected:
             /// local decomposition.
@@ -143,7 +151,7 @@ namespace drawinglayer
                 const basegfx::BColor& rFontColor,
                 bool bFilled = false,
                 long nWidthToFill = 0,
-                const basegfx::BColor& rFillColor = Color(COL_TRANSPARENT).getBColor());
+                const Color& rFillColor = COL_TRANSPARENT );
 
             /// helpers
             /** get text outlines as polygons and their according ObjectTransformation. Handles all
@@ -160,7 +168,7 @@ namespace drawinglayer
             const attribute::FontAttribute& getFontAttribute() const { return maFontAttribute; }
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
-            const basegfx::BColor& getTextFillColor() const { return maTextFillColor; }
+            const Color& getTextFillColor() const { return maTextFillColor; }
             bool isFilled() const { return mbFilled; }
             long getWidthToFill() const { return mnWidthToFill; }
 
