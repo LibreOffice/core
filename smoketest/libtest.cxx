@@ -54,13 +54,6 @@ int main (int argc, char **argv)
         return -1;
     }
 
-    // This separate init is lame I think.
-    if( !pOffice->initialize( argv[1] ) )
-    {
-        fprintf( stderr, "failed to initialize\n" );
-        return -1;
-    }
-
     end = getTimeMS();
     fprintf( stderr, "init time: %ld ms\n", (end-start) );
     start = end;

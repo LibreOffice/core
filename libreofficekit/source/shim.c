@@ -23,7 +23,7 @@
 
 #define TARGET_LIB SAL_MODULENAME( "sofficeapp" )
 
-typedef LibreOfficeKit *(HookFunction)(void);
+typedef LibreOfficeKit *(HookFunction)( const char *install_path);
 
 SAL_DLLPUBLIC_EXPORT LibreOfficeKit *lok_init( const char *install_path )
 {
@@ -59,7 +59,7 @@ SAL_DLLPUBLIC_EXPORT LibreOfficeKit *lok_init( const char *install_path )
     }
 
     free( imp_lib );
-    return pSym();
+    return pSym( install_path );
 }
 
 #endif // not LINUX => port me !
