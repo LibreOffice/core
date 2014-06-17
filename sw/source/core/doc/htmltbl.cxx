@@ -176,7 +176,7 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pSwTbl,
                                       sal_uInt16 nInhLeftBWidth,
                                       sal_uInt16 nInhRightBWidth )
     : aColumns( new SwHTMLTableLayoutColumnPtr[nCls] )
-    , aCells( new SwHTMLTableLayoutCellPtr[nRws*nCls] )
+    , aCells( new SwHTMLTableLayoutCellPtr[static_cast<size_t>(nRws)*nCls] )
     , pSwTable( pSwTbl )
     , pLeftFillerBox( 0 )
     , pRightFillerBox( 0 )
