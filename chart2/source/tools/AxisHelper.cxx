@@ -29,6 +29,7 @@
 #include "Scaling.hxx"
 #include "ChartModelHelper.hxx"
 #include "DataSourceHelper.hxx"
+#include <unonames.hxx>
 
 #include <unotools/saveopt.hxx>
 
@@ -142,7 +143,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
     Reference< chart2::XChartDocument > xChartDoc( xNumberFormatsSupplier, uno::UNO_QUERY );
 
     Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
-    if( xProp.is() && !( xProp->getPropertyValue( "NumberFormat" ) >>= nNumberFormatKey ) )
+    if( xProp.is() && !( xProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey ) )
     {
         bool bFormatSet = false;
         //check whether we have a percent scale -> use percent format

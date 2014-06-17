@@ -28,6 +28,8 @@
 #include "CloneHelper.hxx"
 #include "AxisHelper.hxx"
 #include "EventListenerHelper.hxx"
+#include <unonames.hxx>
+
 #include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
@@ -112,7 +114,7 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( "NumberFormat",
+        Property( CHART_UNONAME_NUMFMT,
                   PROP_AXIS_NUMBER_FORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND

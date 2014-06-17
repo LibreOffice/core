@@ -30,6 +30,8 @@
 #include "DiagramHelper.hxx"
 #include "ChartModelHelper.hxx"
 #include "ChartTypeHelper.hxx"
+#include <unonames.hxx>
+
 #include <svx/chrtitem.hxx>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -96,7 +98,7 @@ bool lcl_NumberFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxItemSe
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
-    OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? OUString( "NumberFormat" ) : OUString( "PercentageNumberFormat" );
+    OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? OUString(CHART_UNONAME_NUMFMT) : OUString( "PercentageNumberFormat" );
     sal_uInt16 nSourceWhich = (SID_ATTR_NUMBERFORMAT_VALUE==nWhichId) ? SID_ATTR_NUMBERFORMAT_SOURCE : SCHATTR_PERCENT_NUMBERFORMAT_SOURCE;
 
     if( SFX_ITEM_SET != rItemSet.GetItemState( nSourceWhich ) )
@@ -143,7 +145,7 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
     bool bChanged = false;
     if( !xPropertySet.is() )
         return bChanged;
-    OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? OUString( "NumberFormat" ) : OUString( "PercentageNumberFormat" );
+    OUString aPropertyName = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? OUString(CHART_UNONAME_NUMFMT) : OUString( "PercentageNumberFormat" );
     sal_uInt16 nFormatWhich = (SID_ATTR_NUMBERFORMAT_SOURCE==nWhichId) ? SID_ATTR_NUMBERFORMAT_VALUE : SCHATTR_PERCENT_NUMBERFORMAT_VALUE;
 
     if( SFX_ITEM_SET != rItemSet.GetItemState( nWhichId ) )
@@ -558,7 +560,7 @@ void DataPointItemConverter::FillSpecialItem(
         case SID_ATTR_NUMBERFORMAT_VALUE:
         {
             sal_Int32 nKey = 0;
-            if( !(GetPropertySet()->getPropertyValue( "NumberFormat" ) >>= nKey) )
+            if (!(GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nKey))
                 nKey = m_nNumberFormat;
             rOutItemSet.Put( SfxUInt32Item( nWhichId, nKey ));
         }
@@ -575,7 +577,7 @@ void DataPointItemConverter::FillSpecialItem(
 
         case SID_ATTR_NUMBERFORMAT_SOURCE:
         {
-            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( "NumberFormat" ).hasValue());
+            bool bNumberFormatIsSet = GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue();
             rOutItemSet.Put( SfxBoolItem( nWhichId, ! bNumberFormatIsSet ));
         }
         break;

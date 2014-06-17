@@ -31,6 +31,8 @@
 #include "LegendHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "AxisIndexDefines.hxx"
+#include <unonames.hxx>
+
 #include <cppuhelper/component_context.hxx>
 #include <com/sun/star/chart/ChartSolidType.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -456,9 +458,9 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
                 if( xAxisProp.is())
                 {
                     // set number format to source format
-                    uno::Any aValue( xAxisProp->getPropertyValue("NumberFormat"));
+                    uno::Any aValue = xAxisProp->getPropertyValue(CHART_UNONAME_NUMFMT);
                     if( aValue.hasValue())
-                        xAxisProp->setPropertyValue("NumberFormat", uno::Any());
+                        xAxisProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
                 }
             }
         }
@@ -756,9 +758,9 @@ void ChartTypeTemplate::adaptAxes(
                             if( xAxisProp.is())
                             {
                                 // set number format to source format
-                                uno::Any aValue( xAxisProp->getPropertyValue("NumberFormat"));
+                                uno::Any aValue = xAxisProp->getPropertyValue(CHART_UNONAME_NUMFMT);
                                 if( aValue.hasValue())
-                                    xAxisProp->setPropertyValue("NumberFormat", uno::Any());
+                                    xAxisProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
                             }
                         }
                     }
