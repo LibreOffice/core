@@ -48,6 +48,7 @@ public:
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
     virtual std::string toString() const SAL_OVERRIDE;
     virtual RTFValue* Clone();
+    virtual RTFValue* CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms);
     RTFSprms& getAttributes();
     RTFSprms& getSprms();
     RTFShape& getShape() const;

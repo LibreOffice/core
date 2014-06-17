@@ -67,8 +67,10 @@ public:
     /// Does the same as ->push_back(), except that it can overwrite or ignore existing entries.
     void set(Id nKeyword, RTFValue::Pointer_t pValue, RTFOverwrite eOverwrite = OVERWRITE_YES);
     bool erase(Id nKeyword);
-    /// Removes elements, which are already in the reference set.
-    void deduplicate(RTFSprms& rReference);
+    /// Removes elements which are already in the reference set.
+    /// Also insert default values to override attributes of style
+    /// (yes, really; that's what Word does).
+    RTFSprms cloneAndDeduplicate(RTFSprms& rReference) const;
     size_t size() const
     {
         return m_pSprms->size();
