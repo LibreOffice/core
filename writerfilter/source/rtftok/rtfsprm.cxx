@@ -8,8 +8,10 @@
  */
 
 #include <rtfsprm.hxx>
+
 #include <rtl/strbuf.hxx>
 
+#include <ooxml/resourceids.hxx>
 #include <resourcemodel/QNameToString.hxx>
 
 
@@ -138,22 +140,68 @@ bool RTFSprms::erase(Id nKeyword)
     return false;
 }
 
-void RTFSprms::deduplicate(RTFSprms& rReference)
+static RTFValue::Pointer_t getDefaultSPRM(Id const id)
 {
-    ensureCopyBeforeWrite();
-
-    RTFSprms::Iterator_t i = m_pSprms->begin();
-    while (i != m_pSprms->end())
+    switch (id)
     {
-        bool bIgnore = false;
-        RTFValue::Pointer_t pValue(rReference.find(i->first));
-        if (pValue.get() && i->second->equals(*pValue))
-            bIgnore = true;
-        if (bIgnore)
-            i = m_pSprms->erase(i);
-        else
-            ++i;
+        case NS_ooxml::LN_CT_Spacing_before:
+        case NS_ooxml::LN_CT_Spacing_after:
+            return RTFValue::Pointer_t(new RTFValue(0));
+
+        default:
+            return 0;
     }
+}
+
+RTFSprms RTFSprms::cloneAndDeduplicate(RTFSprms& rReference) const
+{
+    RTFSprms ret(*this);
+    ret.ensureCopyBeforeWrite();
+
+    // Note: apparently some attributes are set with OVERWRITE_NO_APPEND;
+    // it is probably a bad idea to mess with those in any way here?
+    for (RTFSprms::Iterator_t i = rReference.begin(); i != rReference.end(); ++i)
+    {
+        RTFValue::Pointer_t const pValue(ret.find(i->first));
+        if (pValue)
+        {
+            if (i->second->equals(*pValue))
+            {
+                ret.erase(i->first); // duplicate to style
+            }
+            else if (!i->second->getSprms().empty() || !i->second->getAttributes().empty())
+            {
+                RTFSprms const sprms(
+                    pValue->getSprms().cloneAndDeduplicate(i->second->getSprms()));
+                RTFSprms const attributes(
+                    pValue->getAttributes().cloneAndDeduplicate(i->second->getAttributes()));
+                ret.set(i->first, RTFValue::Pointer_t(
+                            pValue->CloneWithSprms(attributes, sprms)));
+            }
+        }
+        else
+        {
+            // not found - try to override style with default
+            RTFValue::Pointer_t const pDefault(getDefaultSPRM(i->first));
+            if (pDefault)
+            {
+                ret.set(i->first, pDefault);
+            }
+            else if (!i->second->getSprms().empty() || !i->second->getAttributes().empty())
+            {
+                RTFSprms const sprms(
+                    RTFSprms().cloneAndDeduplicate(i->second->getSprms()));
+                RTFSprms const attributes(
+                    RTFSprms().cloneAndDeduplicate(i->second->getAttributes()));
+                if (!sprms.empty() || !attributes.empty())
+                {
+                    ret.set(i->first,
+                        RTFValue::Pointer_t(new RTFValue(attributes, sprms)));
+                }
+            }
+        }
+    }
+    return ret;
 }
 
 bool RTFSprms::equals(RTFValue& rOther)

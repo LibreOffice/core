@@ -443,8 +443,12 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
     {
         RTFReferenceProperties& rProps = *(RTFReferenceProperties*)it->second.get();
         // Get rid of direct formatting what is already in the style.
-        rSprms.deduplicate(rProps.getSprms());
-        rAttributes.deduplicate(rProps.getAttributes());
+        RTFSprms const sprms(
+                rSprms.cloneAndDeduplicate(rProps.getSprms()));
+        RTFSprms const attributes(
+                rAttributes.cloneAndDeduplicate(rProps.getAttributes()));
+        return writerfilter::Reference<Properties>::Pointer_t(
+                new RTFReferenceProperties(attributes, sprms));
     }
     writerfilter::Reference<Properties>::Pointer_t pRet(new RTFReferenceProperties(rAttributes, rSprms));
     return pRet;
@@ -2759,6 +2763,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         // \pard is allowed between \cell and \row, but in that case it should not reset the fact that we're inside a table.
         m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
         m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
+
         if (m_nTopLevelCells == 0 && m_nNestedCells == 0)
         {
             // Reset that we're in a table.
@@ -2772,7 +2777,20 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         m_aStates.top().resetFrame();
 
         // Reset currently selected paragraph style as well.
-        m_aStates.top().nCurrentStyleIndex = -1;
+        // By default the style with index 0 is applied.
+        {
+            OUString const aName = getStyleName(0);
+            if (!aName.isEmpty())
+            {
+                m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle,
+                    RTFValue::Pointer_t(new RTFValue(aName)));
+                m_aStates.top().nCurrentStyleIndex = 0;
+            }
+            else
+            {
+                m_aStates.top().nCurrentStyleIndex = -1;
+            }
+        }
         break;
     case RTF_SECTD:
     {
