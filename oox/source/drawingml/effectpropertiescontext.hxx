@@ -11,16 +11,13 @@
 #define INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIESCONTEXT_HXX
 
 #include <oox/core/contexthandler2.hxx>
-#include <oox/dllapi.h>
-#include <oox/drawingml/effectproperties.hxx>
 
 namespace oox { namespace drawingml {
 
-
-
 struct EffectProperties;
+struct Effect;
 
-class OOX_DLLPUBLIC EffectPropertiesContext : public ::oox::core::ContextHandler2
+class EffectPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
     EffectPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,

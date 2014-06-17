@@ -10,7 +10,9 @@
 #ifndef INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIES_HXX
 #define INCLUDED_OOX_DRAWINGML_EFFECTPROPERTIES_HXX
 
-#include <oox/drawingml/fillproperties.hxx>
+#include <map>
+#include <oox/drawingml/color.hxx>
+#include <oox/helper/propertymap.hxx>
 
 namespace oox {
 namespace drawingml {
@@ -41,7 +43,7 @@ struct Effect
 
 
 
-struct OOX_DLLPUBLIC EffectProperties
+struct EffectProperties
 {
     EffectShadowProperties maShadow;
 

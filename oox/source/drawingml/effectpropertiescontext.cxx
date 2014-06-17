@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "oox/drawingml/effectpropertiescontext.hxx"
+#include "effectpropertiescontext.hxx"
+#include "effectproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/effectproperties.hxx"
 #include "oox/helper/attributelist.hxx"
 
 using namespace ::oox::core;

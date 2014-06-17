@@ -30,7 +30,7 @@
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/transform2dcontext.hxx"
 #include "oox/drawingml/customshapegeometry.hxx"
-#include "oox/drawingml/effectpropertiescontext.hxx"
+#include "effectpropertiescontext.hxx"
 
 using namespace oox::core;
 using namespace ::com::sun::star;

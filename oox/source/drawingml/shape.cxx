@@ -22,7 +22,7 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/effectproperties.hxx"
+#include "effectproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/table/tableproperties.hxx"
