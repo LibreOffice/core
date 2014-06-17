@@ -466,6 +466,16 @@ RefEdit::RefEdit( Window* _pParent, Window* pShrinkModeLabel, WinBits nStyle )
     aTimer.SetTimeout( SC_ENABLE_TIME );
 }
 
+RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent,
+    Window* pShrinkModeLabel, const ResId& rResId )
+    : Edit( _pParent, rResId )
+    , pAnyRefDlg( pParent )
+    , pLabelWidget(pShrinkModeLabel)
+{
+    aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
+    aTimer.SetTimeout( SC_ENABLE_TIME );
+}
+
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeRefEdit(Window *pParent, VclBuilder::stringmap &)
 {
     return new RefEdit(pParent, NULL, WB_BORDER);
@@ -561,7 +571,6 @@ IMPL_LINK_NOARG(RefEdit, UpdateHdl)
 }
 
 //class RefButton
-
 RefButton::RefButton( Window* _pParent, WinBits nStyle ) :
     ImageButton( _pParent, nStyle ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
@@ -570,6 +579,30 @@ RefButton::RefButton( Window* _pParent, WinBits nStyle ) :
     aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( NULL ),
     pRefEdit( NULL )
+{
+    SetStartImage();
+}
+
+RefButton::RefButton( Window* _pParent, const ResId& rResId) :
+    ImageButton( _pParent, rResId ),
+    aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
+    aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
+    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
+    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
+    pAnyRefDlg( NULL ),
+    pRefEdit( NULL )
+{
+    SetStartImage();
+}
+
+RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, IControlReferenceHandler* _pDlg ) :
+    ImageButton( _pParent, rResId ),
+    aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
+    aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
+    aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
+    aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
+    pAnyRefDlg( _pDlg ),
+    pRefEdit( pEdit )
 {
     SetStartImage();
 }
