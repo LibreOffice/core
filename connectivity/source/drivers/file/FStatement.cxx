@@ -95,9 +95,22 @@ OStatement_Base::~OStatement_Base()
     delete m_pSQLAnalyzer;
 }
 
+void OStatement_Base::disposeResultSet()
+{
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::disposeResultSet" );
+    // free the cursor if alive
+    Reference< XComponent > xComp(m_xResultSet.get(), UNO_QUERY);
+    assert(xComp.is() || !m_xResultSet.get().is());
+    if (xComp.is())
+        xComp->dispose();
+    m_xResultSet.clear();
+}
+
 void OStatement_BASE2::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
+
+    disposeResultSet();
 
     if(m_pSQLAnalyzer)
         m_pSQLAnalyzer->dispose();
@@ -173,16 +186,25 @@ void SAL_CALL OStatement_Base::close(  ) throw(SQLException, RuntimeException, s
     dispose();
 }
 
-
-void OStatement_Base::reset() throw (SQLException)
+void OStatement_Base::closeResultSet () throw (SQLException)
 {
+    SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::clearMyResultSet " );
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    clearWarnings ();
+    Reference< XCloseable > xCloseable(m_xResultSet.get(), UNO_QUERY);
+    assert(xCloseable.is() || !m_xResultSet.get().is());
+    if (xCloseable.is())
+    {
+        try
+        {
+            xCloseable->close();
+        }
+        catch( const DisposedException& ) { }
+    }
 
+    m_xResultSet.clear();
 }
-
 
 Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
 {
@@ -252,6 +274,7 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
     OResultSet* pResult = createResultSet();
     xRS = pResult;
     initializeResultSet(pResult);
+    m_xResultSet = xRS;
 
     pResult->OpenImpl();
 
