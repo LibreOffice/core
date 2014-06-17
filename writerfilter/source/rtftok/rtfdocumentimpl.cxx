@@ -3368,10 +3368,11 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     switch (nKeyword)
     {
     case RTF_FS:
-        nSprm = NS_ooxml::LN_EG_RPrBase_sz;
-        break;
     case RTF_AFS:
-        nSprm = NS_ooxml::LN_EG_RPrBase_szCs;
+        nSprm = (m_aStates.top().isRightToLeft
+                        || m_aStates.top().eRunType == RTFParserState::HICH)
+                ? NS_ooxml::LN_EG_RPrBase_szCs
+                : NS_ooxml::LN_EG_RPrBase_sz;
         break;
     case RTF_ANIMTEXT:
         nSprm = NS_ooxml::LN_EG_RPrBase_effect;
@@ -3397,13 +3398,23 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     switch (nKeyword)
     {
     case RTF_LANG:
-        nSprm = NS_ooxml::LN_CT_Language_val;
-        break;
-    case RTF_LANGFE:
-        nSprm = NS_ooxml::LN_CT_Language_eastAsia;
-        break;
     case RTF_ALANG:
-        nSprm = NS_ooxml::LN_CT_Language_bidi;
+        if (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::HICH)
+        {
+            nSprm = NS_ooxml::LN_CT_Language_bidi;
+        }
+        else if (m_aStates.top().eRunType == RTFParserState::DBCH)
+        {
+            nSprm = NS_ooxml::LN_CT_Language_eastAsia;
+        }
+        else
+        {
+            assert(m_aStates.top().eRunType == RTFParserState::LOCH);
+            nSprm = NS_ooxml::LN_CT_Language_val;
+        }
+        break;
+    case RTF_LANGFE: // this one is always CJK apparently
+        nSprm = NS_ooxml::LN_CT_Language_eastAsia;
         break;
     default:
         break;
@@ -4608,16 +4619,18 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     switch (nKeyword)
     {
     case RTF_B:
-        nSprm = NS_ooxml::LN_EG_RPrBase_b;
-        break;
     case RTF_AB:
-        nSprm = NS_ooxml::LN_EG_RPrBase_bCs;
+        nSprm = (m_aStates.top().isRightToLeft
+                        || m_aStates.top().eRunType == RTFParserState::HICH)
+                ? NS_ooxml::LN_EG_RPrBase_bCs
+                : NS_ooxml::LN_EG_RPrBase_b;
         break;
     case RTF_I:
-        nSprm = NS_ooxml::LN_EG_RPrBase_i;
-        break;
     case RTF_AI:
-        nSprm = NS_ooxml::LN_EG_RPrBase_iCs;
+        nSprm = (m_aStates.top().isRightToLeft
+                        || m_aStates.top().eRunType == RTFParserState::HICH)
+                ? NS_ooxml::LN_EG_RPrBase_iCs
+                : NS_ooxml::LN_EG_RPrBase_i;
         break;
     case RTF_OUTL:
         nSprm = NS_ooxml::LN_EG_RPrBase_outline;
