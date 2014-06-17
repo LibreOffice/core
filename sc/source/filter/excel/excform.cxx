@@ -1874,10 +1874,10 @@ void ExcelToSc::ReadExtensionNlr( XclImpStream& aIn )
 
 void ExcelToSc::ReadExtensionMemArea( XclImpStream& aIn )
 {
-    sal_uInt16 nCount;
+    sal_uInt16 nCount(0);
     aIn >> nCount;
 
-    aIn.Ignore( nCount * ((GetBiff() == EXC_BIFF8) ? 8 : 6) ); // drop the ranges
+    aIn.Ignore( static_cast<sal_Size>(nCount) * ((GetBiff() == EXC_BIFF8) ? 8 : 6) ); // drop the ranges
 }
 
 void ExcelToSc::ReadExtensions( const ExtensionTypeVec& rExtensions,
