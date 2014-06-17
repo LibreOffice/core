@@ -29,6 +29,7 @@
 #include "AxisHelper.hxx"
 #include "CommonConverters.hxx"
 #include "ChartTypeHelper.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
@@ -422,7 +423,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SID_ATTR_NUMBERFORMAT_SOURCE:
         {
-            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( "NumberFormat" ).hasValue());
+            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue());
             rOutItemSet.Put( SfxBoolItem( nWhichId, ! bNumberFormatIsSet ));
         }
         break;
@@ -914,9 +915,9 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                             rItemSet.Get( nWhichId )).GetValue());
 
                     aValue = uno::makeAny(nFmt);
-                    if( GetPropertySet()->getPropertyValue( "NumberFormat" ) != aValue )
+                    if (GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT) != aValue)
                     {
-                        GetPropertySet()->setPropertyValue( "NumberFormat" , aValue );
+                        GetPropertySet()->setPropertyValue(CHART_UNONAME_NUMFMT , aValue);
                         bChangedOtherwise = true;
                     }
                 }
@@ -929,7 +930,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             bool bUseSourceFormat =
                 (static_cast< const SfxBoolItem & >(
                     rItemSet.Get( nWhichId )).GetValue() );
-            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( "NumberFormat").hasValue());
+            bool bNumberFormatIsSet = GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue();
 
             bChangedOtherwise = (bUseSourceFormat == bNumberFormatIsSet);
             if( bChangedOtherwise )
@@ -957,7 +958,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     }
                 }
                 // else set a void Any
-                GetPropertySet()->setPropertyValue( "NumberFormat" , aValue );
+                GetPropertySet()->setPropertyValue(CHART_UNONAME_NUMFMT , aValue);
             }
         }
         break;
