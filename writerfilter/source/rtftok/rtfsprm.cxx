@@ -149,7 +149,7 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id)
             return RTFValue::Pointer_t(new RTFValue(0));
 
         default:
-            return 0;
+            return RTFValue::Pointer_t();
     }
 }
 
