@@ -383,8 +383,8 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 break;
             case 0x19: // Special Attribute                     [327 279]
             {
-                sal_uInt16  nData, nFakt;
-                sal_uInt8   nOpt;
+                sal_uInt16  nData(0), nFakt(0);
+                sal_uInt8   nOpt(0);
 
                 aIn >> nOpt;
 
@@ -400,9 +400,10 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 }
 
                 if( nOpt & 0x04 )
-                {// nFakt -> skip bytes or words    AttrChoose
-                    nData++;
-                    aIn.Ignore( nData * nFakt );
+                {
+                    // nFakt -> skip bytes or words    AttrChoose
+                    ++nData;
+                    aIn.Ignore(static_cast<sal_Size>(nData) * nFakt);
                 }
                 else if( nOpt & 0x10 )                      // AttrSum
                     DoMulArgs( ocSum, 1 );
