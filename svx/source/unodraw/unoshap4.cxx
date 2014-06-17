@@ -766,7 +766,12 @@ bool SvxFrameShape::setPropertyValueImpl( const OUString& rName, const SfxItemPr
     }
 }
 
-bool SvxFrameShape::getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPropertySimpleEntry* pProperty,
+    css::uno::Any& rValue)
+        throw (css::beans::UnknownPropertyException,
+               css::lang::WrappedTargetException,
+               css::uno::RuntimeException,
+               std::exception)
 {
     if( (pProperty->nWID >= OWN_ATTR_FRAME_URL) && (pProperty->nWID <= OWN_ATTR_FRAME_MARGIN_HEIGHT) )
     {
