@@ -1324,7 +1324,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
         }
         catch (const css::ucb::ContentCreationException& e)
         {
-            SAL_WARN( "basic", "BasicManager::RemoveLib: Caught exception: " << e.Message );
+            SAL_WARN("basic", "BasicManager::RemoveLib: Caught exception: " << e.Message);
         }
 
         if (xStorage.Is() && xStorage->IsStorage(OUString(szBasicStorage)))
@@ -1527,12 +1527,18 @@ StarBASIC* BasicManager::CreateLib( const OUString& rLibName, const OUString& Pa
     {
         if( !LinkTargetURL.isEmpty())
         {
-            SotStorageRef xStorage = new SotStorage( false, LinkTargetURL, STREAM_READ | STREAM_SHARE_DENYWRITE );
-            if( !xStorage->GetError() )
+            try
             {
-                pLib = AddLib( *xStorage, rLibName, true );
+                SotStorageRef xStorage = new SotStorage(false, LinkTargetURL, STREAM_READ | STREAM_SHARE_DENYWRITE);
+                if (!xStorage->GetError())
+                {
+                    pLib = AddLib(*xStorage, rLibName, true);
+                }
             }
-
+            catch (const css::ucb::ContentCreationException& e)
+            {
+                SAL_WARN("basic", "BasicManager::RemoveLib: Caught exception: " << e.Message);
+            }
             DBG_ASSERT( pLib, "XML Import: Linked basic library could not be loaded");
         }
         else
