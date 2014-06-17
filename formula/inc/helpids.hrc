@@ -19,26 +19,11 @@
 #ifndef FORMULA_HELPID_HRC
 #define FORMULA_HELPID_HRC
 
-#define HID_FORMULADLG_FORMULA                             "FORMULA_HID_FORMULADLG_FORMULA"
-#define HID_FORMULA_FAP_FORMULA                            "FORMULA_HID_FORMULA_FAP_FORMULA"
-#define HID_FORMULA_FAP_STRUCT                             "FORMULA_HID_FORMULA_FAP_STRUCT"
 #define HID_FORMULA_FAP_PAGE                               "FORMULA_HID_FORMULA_FAP_PAGE"
 #define HID_FORMULA_FAP_EDIT1                              "FORMULA_HID_FORMULA_FAP_EDIT1"
 #define HID_FORMULA_FAP_EDIT2                              "FORMULA_HID_FORMULA_FAP_EDIT2"
 #define HID_FORMULA_FAP_EDIT3                              "FORMULA_HID_FORMULA_FAP_EDIT3"
 #define HID_FORMULA_FAP_EDIT4                              "FORMULA_HID_FORMULA_FAP_EDIT4"
-#define HID_FORMULA_FAP_BTN_FX1                            "FORMULA_HID_FORMULA_FAP_BTN_FX1"
-#define HID_FORMULA_FAP_BTN_FX2                            "FORMULA_HID_FORMULA_FAP_BTN_FX2"
-#define HID_FORMULA_FAP_BTN_FX3                            "FORMULA_HID_FORMULA_FAP_BTN_FX3"
-#define HID_FORMULA_FAP_BTN_FX4                            "FORMULA_HID_FORMULA_FAP_BTN_FX4"
-#define HID_FORMULA_FAP_BTN_REF1                           "FORMULA_HID_FORMULA_FAP_BTN_REF1"
-#define HID_FORMULA_FAP_BTN_REF2                           "FORMULA_HID_FORMULA_FAP_BTN_REF2"
-#define HID_FORMULA_FAP_BTN_REF3                           "FORMULA_HID_FORMULA_FAP_BTN_REF3"
-#define HID_FORMULA_FAP_BTN_REF4                           "FORMULA_HID_FORMULA_FAP_BTN_REF4"
-#define HID_FORMULA_LB_CATEGORY                            "FORMULA_HID_FORMULA_LB_CATEGORY"
-#define HID_FORMULA_LB_FUNCTION                            "FORMULA_HID_FORMULA_LB_FUNCTION"
-#define HID_FORMULATAB_FUNCTION                            "FORMULA_HID_FORMULATAB_FUNCTION"
-#define HID_FORMULATAB_STRUCT                              "FORMULA_HID_FORMULATAB_STRUCT"
 
 #endif //FORMULA_HELPID_HRC
 
