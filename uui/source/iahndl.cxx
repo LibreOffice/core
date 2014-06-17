@@ -168,15 +168,13 @@ bool
 UUIInteractionHelper::handleRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    Application* pApp = 0;
     if(
         // be aware,it is the same type
         static_cast< oslThreadIdentifier >(
             Application::GetMainThreadIdentifier())
         != osl::Thread::getCurrentIdentifier()
         &&
-        (pApp = GetpApp())
-        != 0
+        GetpApp()
     ) {
         // we are not in the main thread, let it handle that stuff
         HandleData aHD(rRequest);
@@ -227,15 +225,13 @@ beans::Optional< OUString >
 UUIInteractionHelper::getStringFromRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
-    Application* pApp = 0;
     if(
         // be aware,it is the same type
         static_cast< oslThreadIdentifier >(
             Application::GetMainThreadIdentifier())
         != osl::Thread::getCurrentIdentifier()
         &&
-        (pApp = GetpApp())
-        != 0
+        GetpApp()
     ) {
         // we are not in the main thread, let it handle that stuff
         HandleData aHD(rRequest);
