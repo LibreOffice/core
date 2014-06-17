@@ -101,14 +101,15 @@ void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, Run
 
 Reference<XResultSet> OPreparedStatement::makeResultSet()
 {
+    closeResultSet();
+
     OResultSet *pResultSet = createResultSet();
     Reference<XResultSet> xRS(pResultSet);
     initializeResultSet(pResultSet);
     initResultSet(pResultSet);
+    m_xResultSet = xRS;
     return xRS;
 }
-
-
 
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
 {
@@ -145,6 +146,8 @@ void SAL_CALL OPreparedStatement::close(  ) throw(SQLException, RuntimeException
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+
+    closeResultSet();
 }
 
 
@@ -157,6 +160,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
 
     // since we don't support the XMultipleResults interface, nobody will ever get that ResultSet...
     Reference< XComponent > xComp(xRS, UNO_QUERY);
+    assert(xComp.is() || !xRS.is());
     if (xComp.is())
         xComp->dispose();
 
@@ -512,7 +516,6 @@ void OPreparedStatement::describeParameter()
         }
     }
 }
-
 void OPreparedStatement::initializeResultSet(OResultSet* pRS)
 {
     OStatement_Base::initializeResultSet(pRS);
