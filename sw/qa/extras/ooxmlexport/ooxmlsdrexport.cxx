@@ -919,7 +919,16 @@ DECLARE_OOXMLEXPORT_TEST(testLineStyle_DashType_VML, "LineStyle_DashType_VML.doc
     xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:stroke", "dashstyle", "dash");
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    if (xIndexAccess->getCount())
+    {
+        // TODO TextBox: remove this when TextBox is enabled by default
+        // This second run is a bug, should be the first ideally
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:stroke", "dashstyle", "dash");
+    }
+    else
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r[1]/mc:AlternateContent/mc:Fallback/w:pict/v:rect/v:stroke", "dashstyle", "dash");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo74110,"fdo74110.docx")
