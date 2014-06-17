@@ -81,19 +81,19 @@ public class SimpleScaleGestureDetector {
 
     /** Forward touch events to this function. */
     public void onTouchEvent(MotionEvent event) {
-        switch (event.getAction() & event.ACTION_MASK) {
-        case MotionEvent.ACTION_DOWN:
-        case MotionEvent.ACTION_POINTER_DOWN:
-            onTouchStart(event);
-            break;
-        case MotionEvent.ACTION_MOVE:
-            onTouchMove(event);
-            break;
-        case MotionEvent.ACTION_POINTER_UP:
-        case MotionEvent.ACTION_UP:
-        case MotionEvent.ACTION_CANCEL:
-            onTouchEnd(event);
-            break;
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                onTouchStart(event);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                onTouchMove(event);
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                onTouchEnd(event);
+                break;
         }
     }
 
@@ -103,7 +103,7 @@ public class SimpleScaleGestureDetector {
 
     private int getActionIndex(MotionEvent event) {
         return (event.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK)
-            >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+                >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
     }
 
     private void onTouchStart(MotionEvent event) {
@@ -156,11 +156,11 @@ public class SimpleScaleGestureDetector {
      */
     public float getFocusX() {
         switch (getPointersDown()) {
-        case 1:
-            return mPointerInfo.getFirst().getCurrent().x;
-        case 2:
-            PointerInfo pointerA = mPointerInfo.getFirst(), pointerB = mPointerInfo.getLast();
-            return (pointerA.getCurrent().x + pointerB.getCurrent().x) / 2.0f;
+            case 1:
+                return mPointerInfo.getFirst().getCurrent().x;
+            case 2:
+                PointerInfo pointerA = mPointerInfo.getFirst(), pointerB = mPointerInfo.getLast();
+                return (pointerA.getCurrent().x + pointerB.getCurrent().x) / 2.0f;
         }
 
         Log.e(LOGTAG, "No gesture taking place in getFocusX()!");
@@ -173,11 +173,11 @@ public class SimpleScaleGestureDetector {
      */
     public float getFocusY() {
         switch (getPointersDown()) {
-        case 1:
-            return mPointerInfo.getFirst().getCurrent().y;
-        case 2:
-            PointerInfo pointerA = mPointerInfo.getFirst(), pointerB = mPointerInfo.getLast();
-            return (pointerA.getCurrent().y + pointerB.getCurrent().y) / 2.0f;
+            case 1:
+                return mPointerInfo.getFirst().getCurrent().y;
+            case 2:
+                PointerInfo pointerA = mPointerInfo.getFirst(), pointerB = mPointerInfo.getLast();
+                return (pointerA.getCurrent().y + pointerB.getCurrent().y) / 2.0f;
         }
 
         Log.e(LOGTAG, "No gesture taking place in getFocusY()!");
@@ -225,9 +225,9 @@ public class SimpleScaleGestureDetector {
     /* Sends the requested scale gesture notification to the listener. */
     private void sendScaleGesture(EventType eventType) {
         switch (eventType) {
-        case BEGIN:     mListener.onScaleBegin(this);   break;
-        case CONTINUE:  mListener.onScale(this);        break;
-        case END:       mListener.onScaleEnd(this);     break;
+            case BEGIN:     mListener.onScaleBegin(this);   break;
+            case CONTINUE:  mListener.onScale(this);        break;
+            case END:       mListener.onScaleEnd(this);     break;
         }
     }
 

@@ -23,7 +23,7 @@ public class LibreOfficeMainActivity extends Activity {
     private LinearLayout mMainLayout;
     private RelativeLayout mGeckoLayout;
     private static LayerController mLayerController;
-    private static GeckoSoftwareLayerClient mSoftwareLayerClient;
+    private static GeckoSoftwareLayerClient mLayerClient;
     private static LOKitThread sLOKitThread;
 
     public static LibreOfficeMainActivity mAppContext;
@@ -74,8 +74,12 @@ public class LibreOfficeMainActivity extends Activity {
 
         if (mLayerController == null) {
             mLayerController = new LayerController(this);
-            mSoftwareLayerClient = new GeckoSoftwareLayerClient(this);
-            mLayerController.setLayerClient(mSoftwareLayerClient);
+
+            Log.e(LOGTAG, "### Creating GeckoSoftwareLayerClient");
+            mLayerClient = new GeckoSoftwareLayerClient(this);
+            Log.e(LOGTAG, "### Done creating GeckoSoftwareLayerClient");
+
+            mLayerController.setLayerClient(mLayerClient);
             mGeckoLayout.addView(mLayerController.getView(), 0);
         }
 
@@ -88,7 +92,11 @@ public class LibreOfficeMainActivity extends Activity {
         Log.w(LOGTAG, "zerdatime " + SystemClock.uptimeMillis() + " - UI almost up");
     }
 
-    public static GeckoSoftwareLayerClient getSoftwareLayerClient() {
-        return mSoftwareLayerClient;
+    public static GeckoSoftwareLayerClient getLayerClient() {
+        return mLayerClient;
+    }
+
+    public static LayerController getLayerController() {
+        return mLayerController;
     }
 }

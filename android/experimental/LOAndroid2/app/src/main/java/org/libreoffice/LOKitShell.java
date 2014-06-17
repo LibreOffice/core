@@ -115,4 +115,17 @@ public class LOKitShell {
 
         layerController.notifyLayerClientOfGeometryChange();*/
     }
+
+    public static void viewSizeChanged() {
+    }
+
+    public static void scheduleComposite() {
+    }
+
+    public static void schedulePauseComposition() {
+    }
+
+    public static void scheduleResumeComposition() {
+
+    }
 }

@@ -38,6 +38,8 @@
 package org.mozilla.gecko.gfx;
 
 import org.mozilla.gecko.util.FloatUtils;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import org.json.JSONException;
@@ -60,27 +62,27 @@ public final class RectUtils {
         float halfLessWidth = lessWidth / 2.0f;
         float halfLessHeight = lessHeight / 2.0f;
         return new Rect(Math.round(rect.left + halfLessWidth),
-                        Math.round(rect.top + halfLessHeight),
-                        Math.round(rect.right - halfLessWidth),
-                        Math.round(rect.bottom - halfLessHeight));
+                Math.round(rect.top + halfLessHeight),
+                Math.round(rect.right - halfLessWidth),
+                Math.round(rect.bottom - halfLessHeight));
     }
 
     public static RectF contract(RectF rect, float lessWidth, float lessHeight) {
         float halfLessWidth = lessWidth / 2;
         float halfLessHeight = lessHeight / 2;
         return new RectF(rect.left + halfLessWidth,
-                         rect.top + halfLessHeight,
-                         rect.right - halfLessWidth,
-                         rect.bottom - halfLessHeight);
+                rect.top + halfLessHeight,
+                rect.right - halfLessWidth,
+                rect.bottom - halfLessHeight);
     }
 
     public static RectF expand(RectF rect, float moreWidth, float moreHeight) {
         float halfMoreWidth = moreWidth / 2;
         float halfMoreHeight = moreHeight / 2;
         return new RectF(rect.left - halfMoreWidth,
-                         rect.top - halfMoreHeight,
-                         rect.right + halfMoreWidth,
-                         rect.bottom + halfMoreHeight);
+                rect.top - halfMoreHeight,
+                rect.right + halfMoreWidth,
+                rect.bottom + halfMoreHeight);
     }
 
     public static RectF intersect(RectF one, RectF two) {
@@ -95,17 +97,26 @@ public final class RectUtils {
         float x = rect.left * scale;
         float y = rect.top * scale;
         return new RectF(x, y,
-                         x + (rect.width() * scale),
-                         y + (rect.height() * scale));
+                x + (rect.width() * scale),
+                y + (rect.height() * scale));
     }
 
+    /** Returns the nearest integer rect of the given rect. */
     public static Rect round(RectF rect) {
         return new Rect(Math.round(rect.left), Math.round(rect.top),
-                        Math.round(rect.right), Math.round(rect.bottom));
+                Math.round(rect.right), Math.round(rect.bottom));
     }
 
     public static IntSize getSize(Rect rect) {
         return new IntSize(rect.width(), rect.height());
+    }
+
+    public static Point getOrigin(Rect rect) {
+        return new Point(rect.left, rect.top);
+    }
+
+    public static PointF getOrigin(RectF rect) {
+        return new PointF(rect.left, rect.top);
     }
 
     /*
@@ -114,15 +125,15 @@ public final class RectUtils {
      */
     public static RectF interpolate(RectF from, RectF to, float t) {
         return new RectF(FloatUtils.interpolate(from.left, to.left, t),
-                         FloatUtils.interpolate(from.top, to.top, t),
-                         FloatUtils.interpolate(from.right, to.right, t),
-                         FloatUtils.interpolate(from.bottom, to.bottom, t));
+                FloatUtils.interpolate(from.top, to.top, t),
+                FloatUtils.interpolate(from.right, to.right, t),
+                FloatUtils.interpolate(from.bottom, to.bottom, t));
     }
 
     public static boolean fuzzyEquals(RectF a, RectF b) {
         return FloatUtils.fuzzyEquals(a.top, b.top)
-            && FloatUtils.fuzzyEquals(a.left, b.left)
-            && FloatUtils.fuzzyEquals(a.right, b.right)
-            && FloatUtils.fuzzyEquals(a.bottom, b.bottom);
+                && FloatUtils.fuzzyEquals(a.left, b.left)
+                && FloatUtils.fuzzyEquals(a.right, b.right)
+                && FloatUtils.fuzzyEquals(a.bottom, b.bottom);
     }
 }

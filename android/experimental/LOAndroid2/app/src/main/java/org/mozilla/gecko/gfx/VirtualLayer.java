@@ -38,62 +38,43 @@
 
 package org.mozilla.gecko.gfx;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.mozilla.gecko.util.FloatUtils;
+import android.graphics.Point;
 
-public class FloatSize {
-    public final float width, height;
+public class VirtualLayer extends Layer {
+    private Listener mListener;
+    private IntSize mSize;
 
-    public FloatSize(FloatSize size) {
-        width = size.width;
-        height = size.height;
-    }
-
-    public FloatSize(IntSize size) {
-        width = size.width;
-        height = size.height;
-    }
-
-    public FloatSize(float aWidth, float aHeight) {
-        width = aWidth;
-        height = aHeight;
-    }
-
-    public FloatSize(JSONObject json) {
-        try {
-            width = (float) json.getDouble("width");
-            height = (float) json.getDouble("height");
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+    public void setListener(Listener listener) {
+        mListener = listener;
     }
 
     @Override
-    public String toString() {
-        return "(" + width + "," + height + ")";
+    public void draw(RenderContext context) {
+        // No-op.
     }
 
-    public boolean isPositive() {
-        return (width > 0 && height > 0);
+    @Override
+    public IntSize getSize() {
+        return mSize;
     }
 
-    public boolean fuzzyEquals(FloatSize size) {
-        return (FloatUtils.fuzzyEquals(size.width, width) &&
-                FloatUtils.fuzzyEquals(size.height, height));
+    public void setSize(IntSize size) {
+        mSize = size;
     }
 
-    public FloatSize scale(float factor) {
-        return new FloatSize(width * factor, height * factor);
+    @Override
+    protected boolean performUpdates(RenderContext context) {
+        boolean dimensionsChanged = dimensionChangesPending();
+        boolean result = super.performUpdates(context);
+        if (dimensionsChanged && mListener != null) {
+            mListener.dimensionsChanged(getOrigin(), getResolution());
+        }
+
+        return result;
     }
 
-    /*
-     * Returns the size that represents a linear transition between this size and `to` at time `t`,
-     * which is on the scale [0, 1).
-     */
-    public FloatSize interpolate(FloatSize to, float t) {
-        return new FloatSize(FloatUtils.interpolate(width, to.width, t),
-                FloatUtils.interpolate(height, to.height, t));
+    public interface Listener {
+        void dimensionsChanged(Point newOrigin, float newResolution);
     }
 }
 

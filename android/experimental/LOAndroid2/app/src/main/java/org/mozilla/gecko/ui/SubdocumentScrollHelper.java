@@ -37,14 +37,14 @@
 
 package org.mozilla.gecko.ui;
 
-//import org.mozilla.gecko.GeckoAppShell;
-//import org.mozilla.gecko.GeckoEvent;
-import org.mozilla.gecko.GeckoEventListener;
-import org.json.JSONObject;
-import org.json.JSONException;
+
 import android.graphics.PointF;
 import android.os.Handler;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.mozilla.gecko.GeckoEventListener;
 
 class SubdocumentScrollHelper implements GeckoEventListener {
     private static final String LOGTAG = "GeckoSubdocumentScrollHelper";
@@ -73,11 +73,11 @@ class SubdocumentScrollHelper implements GeckoEventListener {
     }
 
     boolean scrollBy(PointF displacement) {
-        if (! mOverridePanning) {
+        if (!mOverridePanning) {
             return false;
         }
 
-        if (! mOverrideScrollAck) {
+        if (!mOverrideScrollAck) {
             mOverrideScrollPending = true;
             return true;
         }
@@ -92,7 +92,7 @@ class SubdocumentScrollHelper implements GeckoEventListener {
         } catch (JSONException e) {
             Log.e(LOGTAG, "Error forming subwindow scroll message: ", e);
         }
-        //GeckoAppShell.sendEventToGecko(new GeckoEvent(MESSAGE_SCROLL, json.toString()));
+        //GeckoAppShell.sendEventToGecko(GeckoEvent.createBroadcastEvent(MESSAGE_SCROLL, json.toString()));
 
         return true;
     }
