@@ -1617,7 +1617,16 @@ DECLARE_OOXMLEXPORT_TEST(fdo78474, "fdo78474.docx")
     xmlDocPtr pXmlDoc1 = parseExport("word/document.xml");
     if (!pXmlDoc1) return;
     //docx file after RT is getting corrupted.
-    assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "rId2");
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    if (xIndexAccess->getCount())
+    {
+        // TODO TextBox: remove this when TextBox is enabled by default
+        // This second run is a bug, should be the first ideally
+        assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "rId2");
+    }
+    else
+        assertXPath(pXmlDoc1, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/pic:pic[1]/pic:blipFill[1]/a:blip[1]", "embed", "rId2");
 
     xmlDocPtr pXmlDoc2 = parseExport("word/_rels/document.xml.rels");
     if (!pXmlDoc2) return;
