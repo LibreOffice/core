@@ -1338,8 +1338,8 @@ void SAL_CALL SdGenericDrawPage::firePropertiesChangeEvent( const Sequence< OUSt
 {
 }
 
-Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj ) const
-    throw (std::exception)
+Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape(SdrObject *pObj) const
+    throw (RuntimeException, std::exception)
 {
     DBG_ASSERT( GetPage(), "SdGenericDrawPage::_CreateShape(), can't create shape for disposed page!" );
     DBG_ASSERT( pObj, "SdGenericDrawPage::_CreateShape(), invalid call with pObj == 0!" );
