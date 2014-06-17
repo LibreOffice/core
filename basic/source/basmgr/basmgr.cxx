@@ -1311,16 +1311,23 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
             ( !pLibInfo->IsExtern() || SotStorage::IsStorageFile( pLibInfo->GetStorageName() ) ) )
     {
         SotStorageRef xStorage;
-        if ( !pLibInfo->IsExtern() )
+        try
         {
-            xStorage = new SotStorage( false, GetStorageName() );
+            if (!pLibInfo->IsExtern())
+            {
+                xStorage = new SotStorage(false, GetStorageName());
+            }
+            else
+            {
+                xStorage = new SotStorage(false, pLibInfo->GetStorageName());
+            }
         }
-        else
+        catch (const css::ucb::ContentCreationException& e)
         {
-            xStorage = new SotStorage( false, pLibInfo->GetStorageName() );
+            SAL_WARN( "basic", "BasicManager::RemoveLib: Caught exception: " << e.Message );
         }
 
-        if ( xStorage->IsStorage( OUString(szBasicStorage) ) )
+        if (xStorage.Is() && xStorage->IsStorage(OUString(szBasicStorage)))
         {
             SotStorageRef xBasicStorage = xStorage->OpenSotStorage
                             ( OUString(szBasicStorage), STREAM_STD_READWRITE, sal_False );
