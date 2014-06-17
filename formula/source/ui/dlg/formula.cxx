@@ -1402,8 +1402,13 @@ void FormulaDlg_Impl::UpdateSelection()
     pMEdit->SetSelection(aSel);
     m_pMEFormula->UpdateOldSel();
 }
+
 ::std::pair<RefButton*,RefEdit*> FormulaDlg_Impl::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
 {
+    //because its initially hidden, give it its optimal
+    //size so clicking the refbutton has an initial
+    //size to work work when retro-fitting this to .ui
+    m_pEdRef->SetSizePixel(m_pEdRef->GetOptimalSize());
     m_pEdRef->Show();
     pTheRefEdit = pEdit;
     pTheRefButton = pButton;
