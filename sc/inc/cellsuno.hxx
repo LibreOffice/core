@@ -679,7 +679,8 @@ public:
     virtual void            SetArrayFormulaWithGrammar( const OUString& rFormula,
                                     const OUString& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw (css::uno::RuntimeException,
+                                       std::exception);
 
                             // XCellRangeAddressable
     virtual ::com::sun::star::table::CellRangeAddress SAL_CALL getRangeAddress()
