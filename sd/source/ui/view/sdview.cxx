@@ -678,7 +678,7 @@ bool View::SdrBeginTextEdit(
     SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
     bool bDontDeleteOutliner, bool bOnlyOneView, bool bGrabFocus )
 {
-    SdrPage* pPage = pObj->GetPage();
+    SdrPage* pPage = pObj ? pObj->GetPage() : NULL;
     bool bMasterPage = pPage && pPage->IsMasterPage();
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
