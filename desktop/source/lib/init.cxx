@@ -205,7 +205,6 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->nSize = sizeof(LibreOfficeKitClass);
 
             m_pOfficeClass->destroy = lo_destroy;
-            m_pOfficeClass->initialize = lo_initialize;
             m_pOfficeClass->documentLoad = lo_documentLoad;
             m_pOfficeClass->getError = lo_getError;
 
@@ -433,12 +432,16 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
     return bInitialized;
 }
 
-SAL_DLLPUBLIC_EXPORT LibreOfficeKit *libreofficekit_hook(void)
+SAL_DLLPUBLIC_EXPORT LibreOfficeKit *libreofficekit_hook(const char* install_path)
 {
     if (!gImpl)
     {
         fprintf(stderr, "create libreoffice object\n");
         gImpl = new LibLibreOffice_Impl();
+        if (!lo_initialize(gImpl, install_path))
+        {
+            lo_destroy(gImpl);
+        }
     }
     return static_cast<LibreOfficeKit*>(gImpl);
 }
