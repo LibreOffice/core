@@ -21,6 +21,7 @@
 #include "macros.hxx"
 #include "LinePropertiesHelper.hxx"
 #include "FillProperties.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -277,7 +278,7 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( "NumberFormat",
+        Property( CHART_UNONAME_NUMFMT,
                   PROP_DATAPOINT_NUMBER_FORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND

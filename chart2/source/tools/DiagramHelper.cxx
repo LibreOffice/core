@@ -32,6 +32,7 @@
 #include "RelativePositionHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "NumberFormatterWrapper.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -1052,7 +1053,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
         if( xAxisProps.is() && xNumberFormatsSupplier.is() )
         {
             sal_Int32 nNumberFormat = -1;
-            xAxisProps->getPropertyValue( "NumberFormat" ) >>= nNumberFormat;
+            xAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
 
             Reference< util::XNumberFormats > xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
             if( xNumberFormats.is() )
@@ -1077,7 +1078,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                     Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );
                     if( aKeySeq.getLength() )
                     {
-                        xAxisProps->setPropertyValue( "NumberFormat", uno::makeAny(aKeySeq[0]) );
+                        xAxisProps->setPropertyValue(CHART_UNONAME_NUMFMT, uno::makeAny(aKeySeq[0]));
                     }
                 }
             }

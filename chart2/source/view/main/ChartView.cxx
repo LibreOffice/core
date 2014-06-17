@@ -907,7 +907,7 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
                         if( xAxisProp.is())
                         {
                             sal_Int32 nNumberFormatKey(0);
-                            if( xAxisProp->getPropertyValue( "NumberFormat" ) >>= nNumberFormatKey )
+                            if( xAxisProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey )
                             {
                                 aAxesNumberFormats.setFormat( nNumberFormatKey, nDimensionIndex, nAxisIndex );
                             }
@@ -1818,8 +1818,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
     if( !xSeriesOrPointProp.is() )
         return nFormat;
 
-    OUString aPropName( "NumberFormat" );
-    if( !(xSeriesOrPointProp->getPropertyValue(aPropName) >>= nFormat) )
+    if (!(xSeriesOrPointProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat))
     {
         uno::Reference< chart2::XChartType > xChartType( DataSeriesHelper::getChartTypeOfSeries( xSeries, xDiagram ) );
 
@@ -1827,7 +1826,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
         if( ChartTypeHelper::shouldLabelNumberFormatKeyBeDetectedFromYAxis( xChartType ) )
         {
             uno::Reference< beans::XPropertySet > xAttachedAxisProps( DiagramHelper::getAttachedAxis( xSeries, xDiagram ), uno::UNO_QUERY );
-            if( xAttachedAxisProps.is() && ( xAttachedAxisProps->getPropertyValue( aPropName ) >>= nFormat ) )
+            if (xAttachedAxisProps.is() && (xAttachedAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormat))
                 bFormatFound = true;
         }
         if( !bFormatFound )
