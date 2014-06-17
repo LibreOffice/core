@@ -50,7 +50,7 @@ SAL_DLLPUBLIC_EXPORT LibreOfficeKit *lok_init( const char *install_path )
         return NULL;
     }
 
-    pSym = (HookFunction *) dlsym( dlhandle, "liblibreoffice_hook" );
+    pSym = (HookFunction *) dlsym( dlhandle, "libreofficekit_hook" );
     if( !pSym ) {
         fprintf( stderr, "failed to find hook in library '%s'\n", imp_lib );
         dlclose( dlhandle );
