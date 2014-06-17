@@ -170,17 +170,22 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
         FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
         if (fd != nullptr && fd->isExternC()) {
             ext = true;
-            PointerType const * pt = dyn_cast<PointerType>(fd->getType());
-            t = (pt == nullptr ? fd->getType() : pt->getPointeeType())
-                ->getAs<FunctionProtoType>();
+            PointerType const * pt = fd->getType()->getAs<PointerType>();
+            QualType t2(pt == nullptr ? fd->getType() : pt->getPointeeType());
+            t = t2->getAs<FunctionProtoType>();
+            assert(
+                t != nullptr || !compiler.getLangOpts().CPlusPlus
+                || (fd->getBuiltinID() != Builtin::NotBuiltin
+                    && isa<FunctionNoProtoType>(t2)));
+                // __builtin_*s have no proto type?
         } else {
             VarDecl const * vd = dyn_cast<VarDecl>(d);
             if (vd != nullptr && vd->isExternC())
             {
                 ext = true;
-                PointerType const * pt = dyn_cast<PointerType>(vd->getType());
+                PointerType const * pt = vd->getType()->getAs<PointerType>();
                 t = (pt == nullptr ? vd->getType() : pt->getPointeeType())
-                    ->getAs<FunctionProtoType>();
+                    ->castAs<FunctionProtoType>();
             }
         }
     }
@@ -192,7 +197,7 @@ bool ImplicitBoolConversion::TraverseCallExpr(CallExpr * expr) {
                 [&i](Expr * e) { return i == e->IgnoreParens(); });
             if (j == expr->arg_end()) {
                 reportWarning(i);
-            } else {
+            } else if (t != nullptr) {
                 std::ptrdiff_t n = j - expr->arg_begin();
                 assert(n >= 0);
                 assert(
