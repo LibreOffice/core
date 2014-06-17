@@ -252,9 +252,8 @@ bool    SwGlossaries::RenameGroupDoc(
         m_GlosArr.push_back(rNewGroup);
     }
 
-    SwTextBlocks* pNewBlock = new SwTextBlocks( sNewFileURL );
+    boost::scoped_ptr<SwTextBlocks> pNewBlock(new SwTextBlocks( sNewFileURL ));
     pNewBlock->SetName(rNewTitle);
-    delete pNewBlock;
 
     return true;
 }

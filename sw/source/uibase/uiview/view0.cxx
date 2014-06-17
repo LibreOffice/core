@@ -78,6 +78,7 @@ using namespace ::com::sun::star;
 #include <IDocumentSettingAccess.hxx>
 
 #include <unomid.h>
+#include <boost/scoped_ptr.hpp>
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {
@@ -351,7 +352,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
 
 void SwView::ExecViewOptions(SfxRequest &rReq)
 {
-    SwViewOption* pOpt = new SwViewOption( *GetWrtShell().GetViewOptions() );
+    boost::scoped_ptr<SwViewOption> pOpt(new SwViewOption( *GetWrtShell().GetViewOptions() ));
     bool bModified = GetWrtShell().IsModified();
 
     int eState = STATE_TOGGLE;
@@ -550,7 +551,6 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         break;
 
     default:
-        delete pOpt;
         OSL_FAIL("wrong request method");
         return;
     }
@@ -591,7 +591,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         CalcVisArea( GetEditWin().GetOutputSizePixel() );
     rSh.LockView( bLockedView );
 
-    delete pOpt;
+    pOpt.reset();
     Invalidate(rReq.GetSlot());
     if(!pArgs)
         rReq.AppendItem(SfxBoolItem(nSlot, bFlag));

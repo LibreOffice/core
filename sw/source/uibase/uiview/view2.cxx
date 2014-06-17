@@ -2420,7 +2420,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         // call documents and template dialog
         SfxApplication* pSfxApp = SFX_APP();
         Window* pTopWin = pSfxApp->GetTopWindow();
-        SvtDocumentTemplateDialog* pDocTemplDlg = new SvtDocumentTemplateDialog( pTopWin );
+        boost::scoped_ptr<SvtDocumentTemplateDialog> pDocTemplDlg(new SvtDocumentTemplateDialog( pTopWin ));
         pDocTemplDlg->SelectTemplateFolder();
 
         int nRet = pDocTemplDlg->Execute();
@@ -2435,7 +2435,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             }
         }
 
-        delete pDocTemplDlg;
+        pDocTemplDlg.reset();
         if ( bNewWin )
             // after the destruction of the dialogue its parent comes to top,
             // but we want that the new document is on top
