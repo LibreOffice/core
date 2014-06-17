@@ -21,12 +21,12 @@
 #include "oox/drawingml/clrschemecontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
-#include "oox/drawingml/effectproperties.hxx"
-#include "oox/drawingml/effectpropertiescontext.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "effectproperties.hxx"
+#include "effectpropertiescontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
