@@ -357,24 +357,19 @@ void GL3DBarChart::moveToDefault()
 
     glm::vec3 maTargetDirection = maDefaultCameraDirection;
     maStepDirection = (maTargetDirection - maCameraDirection)/((float)mnStepsTotal);
-    while((mnStep < mnStepsTotal) && mbBlockUserInput)
-    {
-        ++mnStep;
-        maCameraPosition += maStep;
-        mpCamera->setPosition(maCameraPosition);
-        maCameraDirection += maStepDirection;
-        mpCamera->setDirection(maCameraDirection);
-        render();
-    }
-    maShapes.pop_back();
-    mbBlockUserInput = false;
-    mnStep = 0;
+    maTimer.SetTimeout(TIMEOUT);
+    maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, MoveToBar));
+    maTimer.Start();
 }
 
 void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
 {
     if(mbBlockUserInput)
         return;
+    if (nButtons == MOUSE_RIGHT)
+    {
+        moveToDefault();
+    }
 
     if(nButtons != MOUSE_LEFT)
         return;
