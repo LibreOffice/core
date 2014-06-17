@@ -157,7 +157,7 @@ namespace formula
         FixedText       *m_pFtEditName;
 
         FixedText       *m_pFtResult;
-        ValWnd          *m_pWndResult;
+        Edit            *m_pWndResult;
 
         FixedText       *m_pFtFormula;
         EditBox         *m_pMEFormula;
@@ -173,7 +173,7 @@ namespace formula
         RefButton       *m_pRefBtn;
 
         FixedText       *m_pFtFormResult;
-        ValWnd          *m_pWndFormResult;
+        Edit            *m_pWndFormResult;
 
         RefEdit*        pTheRefEdit;
         RefButton*      pTheRefButton;
@@ -597,15 +597,15 @@ void FormulaDlg_Impl::UpdateValues()
     OUString aStrResult;
 
     if ( CalcValue( pFuncDesc->getFormula( m_aArguments ), aStrResult ) )
-        m_pWndResult->SetValue( aStrResult );
+        m_pWndResult->SetText( aStrResult );
 
     aStrResult = "";
     if ( CalcValue(m_pHelper->getCurrentFormula(), aStrResult ) )
-        m_pWndFormResult->SetValue( aStrResult );
+        m_pWndFormResult->SetText( aStrResult );
     else
     {
         aStrResult = "";
-        m_pWndFormResult->SetValue( aStrResult );
+        m_pWndFormResult->SetText( aStrResult );
     }
     CalcStruct(pMEdit->GetText());
 }
@@ -633,7 +633,7 @@ bool FormulaDlg_Impl::CalcStruct( const OUString& rStrExp)
             OUString aStrResult;
 
             if ( CalcValue(aString, aStrResult ) )
-                m_pWndFormResult->SetValue( aStrResult );
+                m_pWndFormResult->SetText( aStrResult );
 
             UpdateTokenArray(aString);
             fillTree(pStructPage);
@@ -776,11 +776,11 @@ void FormulaDlg_Impl::FillDialog(bool nFlag)
     OUString aStrResult;
 
     if ( CalcValue(m_pHelper->getCurrentFormula(), aStrResult ) )
-        m_pWndFormResult->SetValue( aStrResult );
+        m_pWndFormResult->SetText( aStrResult );
     else
     {
         aStrResult = "";
-        m_pWndFormResult->SetValue( aStrResult );
+        m_pWndFormResult->SetText( aStrResult );
     }
 }
 
@@ -922,7 +922,7 @@ void FormulaDlg_Impl::ClearAllParas()
     DeleteArgs();
     pFuncDesc = NULL;
     pParaWin->ClearAll();
-    m_pWndResult->SetValue(OUString());
+    m_pWndResult->SetText(OUString());
     m_pFtFuncName->SetText(OUString());
     FuncSelHdl(NULL);
 
@@ -1281,11 +1281,11 @@ IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl)
     OUString aStrResult;
 
     if ( CalcValue(m_pHelper->getCurrentFormula(), aStrResult ) )
-        m_pWndFormResult->SetValue( aStrResult );
+        m_pWndFormResult->SetText( aStrResult );
     else
     {
         aStrResult = "";
-        m_pWndFormResult->SetValue( aStrResult );
+        m_pWndFormResult->SetText( aStrResult );
     }
     CalcStruct(aString);
 
