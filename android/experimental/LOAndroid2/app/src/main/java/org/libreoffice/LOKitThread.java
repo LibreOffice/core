@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.JsonWriter;
 
 import org.mozilla.gecko.gfx.ViewportMetrics;
@@ -11,8 +12,6 @@ import org.mozilla.gecko.gfx.ViewportMetrics;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.ByteBuffer;
-import java.nio.ShortBuffer;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -26,28 +25,11 @@ public class LOKitThread extends Thread {
     LOKitThread() {
     }
 
-    private void draw() throws InterruptedException {
+    private boolean draw() throws InterruptedException {
         final LibreOfficeMainActivity application = LibreOfficeMainActivity.mAppContext;
 
-        Bitmap bitmap = application.getSoftwareLayerClient().getLayerController().getDrawable16("dummy_page");
-        bitmap  = convert(bitmap, Bitmap.Config.RGB_565);
-
-        application.getSoftwareLayerClient().beginDrawing(bitmap.getWidth(), bitmap.getHeight());
-        //application.getSoftwareLayerClient().beginDrawing(500,500);
-
-        ByteBuffer buffer = application.getSoftwareLayerClient().getBuffer();
-        bitmap.copyPixelsToBuffer(buffer.asIntBuffer());
-
-        /*short mainColor16 = convertTo16Bit(rand.nextInt());
-
-        short[] mainPattern = new short[500];
-        Arrays.fill(mainPattern, mainColor16);
-
-        buffer.rewind();
-        ShortBuffer shortBuffer = buffer.asShortBuffer();
-        for (int i = 0; i < 500; i++) {
-            shortBuffer.put(mainPattern);
-        }*/
+        Bitmap bitmap = application.getLayerClient().getLayerController().getDrawable16("dummy_page");
+        bitmap = convert(bitmap, Bitmap.Config.RGB_565);
 
         StringWriter stringWriter = new StringWriter();
 
@@ -64,7 +46,6 @@ public class LOKitThread extends Thread {
                 writer.name("offsetX").value(0);
                 writer.name("offsetY").value(0);
                 writer.name("zoom").value(1.0);
-                writer.name("allowZoom").value(true);
             } else {
                 writer.name("x").value(mViewportMetrics.getOrigin().x);
                 writer.name("y").value(mViewportMetrics.getOrigin().y);
@@ -75,7 +56,6 @@ public class LOKitThread extends Thread {
                 writer.name("offsetX").value(mViewportMetrics.getViewportOffset().x);
                 writer.name("offsetY").value(mViewportMetrics.getViewportOffset().y);
                 writer.name("zoom").value(mViewportMetrics.getZoomFactor());
-                writer.name("allowZoom").value(mViewportMetrics.getAllowZoom());
             }
             writer.name("backgroundColor").value("rgb(255,255,255)");
             writer.endObject();
@@ -83,15 +63,24 @@ public class LOKitThread extends Thread {
         } catch (IOException ex) {
         }
 
-        application.getSoftwareLayerClient().endDrawing(0, 0, bitmap.getWidth(), bitmap.getHeight(), stringWriter.toString(), false);
-        //application.getSoftwareLayerClient().endDrawing(0, 0, 500, 500, stringWriter.toString(), false);
-        application.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                application.getSoftwareLayerClient().handleMessage("Viewport:UpdateLater", null);
-            }
-        });
+        Rect bufferRect = application.getLayerClient().beginDrawing(bitmap.getWidth(), bitmap.getHeight(), 256, 256, stringWriter.toString(), false);
 
+        if (bufferRect == null) {
+            return false;
+        }
+            ByteBuffer buffer = application.getLayerClient().lockBuffer();
+            bitmap.copyPixelsToBuffer(buffer.asIntBuffer());
+            application.getLayerClient().unlockBuffer();
+
+            application.getLayerClient().endDrawing(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+            application.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    application.getLayerClient().handleMessage("Viewport:UpdateLater", null);
+                }
+            });
+        return true;
     }
 
     private short convertTo16Bit(int color) {
@@ -119,9 +108,8 @@ public class LOKitThread extends Thread {
                 if (!gEvents.isEmpty()) {
                     processEvent(gEvents.poll());
                 } else {
-                    if(!drawn) {
-                        draw();
-                        drawn = true;
+                    if (!drawn) {
+                        drawn = draw();
                     }
                     Thread.sleep(100L);
                 }

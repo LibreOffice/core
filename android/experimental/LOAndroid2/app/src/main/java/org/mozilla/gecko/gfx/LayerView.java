@@ -20,6 +20,7 @@
  *
  * Contributor(s):
  *   Patrick Walton <pcwalton@mozilla.com>
+ *   Arkady Blyakher <rkadyb@mit.edu>
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -37,18 +38,23 @@
 
 package org.mozilla.gecko.gfx;
 
+//import org.mozilla.gecko.GeckoInputConnection;
 import org.mozilla.gecko.gfx.FloatSize;
 import org.mozilla.gecko.gfx.InputConnectionHandler;
 import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.ui.SimpleScaleGestureDetector;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.view.View;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.ScaleGestureDetector;
+import android.widget.RelativeLayout;
 import android.util.Log;
+import java.nio.IntBuffer;
 import java.util.LinkedList;
 
 /**
@@ -57,7 +63,7 @@ import java.util.LinkedList;
  * This view delegates to LayerRenderer to actually do the drawing. Its role is largely that of a
  * mediator between the LayerRenderer and the LayerController.
  */
-public class LayerView extends GLSurfaceView {
+public class LayerView extends FlexibleGLSurfaceView {
     private Context mContext;
     private LayerController mController;
     private InputConnectionHandler mInputConnectionHandler;
@@ -70,6 +76,7 @@ public class LayerView extends GLSurfaceView {
     /* List of events to be processed if the page does not prevent them. Should only be touched on the main thread */
     private LinkedList<MotionEvent> mEventQueue = new LinkedList<MotionEvent>();
 
+
     public LayerView(Context context, LayerController controller) {
         super(context);
 
@@ -77,15 +84,16 @@ public class LayerView extends GLSurfaceView {
         mController = controller;
         mRenderer = new LayerRenderer(this);
         setRenderer(mRenderer);
-        setRenderMode(RENDERMODE_WHEN_DIRTY);
         mGestureDetector = new GestureDetector(context, controller.getGestureListener());
         mScaleGestureDetector =
-            new SimpleScaleGestureDetector(controller.getScaleGestureListener());
+                new SimpleScaleGestureDetector(controller.getScaleGestureListener());
         mGestureDetector.setOnDoubleTapListener(controller.getDoubleTapListener());
         mInputConnectionHandler = null;
 
         setFocusable(true);
         setFocusableInTouchMode(true);
+
+        createGLThread();
     }
 
     private void addToEventQueue(MotionEvent event) {
@@ -131,9 +139,11 @@ public class LayerView extends GLSurfaceView {
         mController.setViewportSize(new FloatSize(size));
     }
 
-    public void setInputConnectionHandler(InputConnectionHandler handler) {
-        mInputConnectionHandler = handler;
-    }
+    //public GeckoInputConnection setInputConnectionHandler() {
+    //    GeckoInputConnection geckoInputConnection = GeckoInputConnection.create(this);
+    //    mInputConnectionHandler = geckoInputConnection;
+    //    return geckoInputConnection;
+    //}
 
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
@@ -210,6 +220,11 @@ public class LayerView extends GLSurfaceView {
 
     public int getMaxTextureSize() {
         return mRenderer.getMaxTextureSize();
+    }
+
+    /** Used by robocop for testing purposes. Not for production use! This is called via reflection by robocop. */
+    public IntBuffer getPixels() {
+        return mRenderer.getPixels();
     }
 }
 

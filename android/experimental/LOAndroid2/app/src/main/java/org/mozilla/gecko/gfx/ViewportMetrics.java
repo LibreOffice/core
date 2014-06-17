@@ -38,22 +38,14 @@
 
 package org.mozilla.gecko.gfx;
 
-import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.DisplayMetrics;
 
-import org.libreoffice.LibreOfficeMainActivity;
-import org.mozilla.gecko.util.FloatUtils;
-//import org.mozilla.gecko.GeckoApp;
-import org.mozilla.gecko.gfx.FloatSize;
-import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.gfx.RectUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import android.util.Log;
+import org.libreoffice.LibreOfficeMainActivity;
+import org.mozilla.gecko.util.FloatUtils;
 
 /**
  * ViewportMetrics manages state and contains some utility functions related to
@@ -61,28 +53,24 @@ import android.util.Log;
  */
 public class ViewportMetrics {
     private static final String LOGTAG = "GeckoViewportMetrics";
-
+    private static final float MAX_BIAS = 0.8f;
     private FloatSize mPageSize;
     private RectF mViewportRect;
     private PointF mViewportOffset;
     private float mZoomFactor;
-    private boolean mAllowZoom;
-
     // A scale from -1,-1 to 1,1 that represents what edge of the displayport
     // we want the viewport to be biased towards.
     private PointF mViewportBias;
-    private static final float MAX_BIAS = 0.8f;
 
     public ViewportMetrics() {
         DisplayMetrics metrics = new DisplayMetrics();
-        /*GeckoApp*/LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        LibreOfficeMainActivity.mAppContext.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         mPageSize = new FloatSize(metrics.widthPixels, metrics.heightPixels);
         mViewportRect = new RectF(0, 0, metrics.widthPixels, metrics.heightPixels);
         mViewportOffset = new PointF(0, 0);
         mZoomFactor = 1.0f;
         mViewportBias = new PointF(0.0f, 0.0f);
-        mAllowZoom = true;
     }
 
     public ViewportMetrics(ViewportMetrics viewport) {
@@ -92,21 +80,18 @@ public class ViewportMetrics {
         mViewportOffset = new PointF(offset.x, offset.y);
         mZoomFactor = viewport.getZoomFactor();
         mViewportBias = viewport.mViewportBias;
-        mAllowZoom = viewport.mAllowZoom;
     }
 
     public ViewportMetrics(JSONObject json) throws JSONException {
-        float x = (float)json.getDouble("x");
-        float y = (float)json.getDouble("y");
-        float width = (float)json.getDouble("width");
-        float height = (float)json.getDouble("height");
-        float pageWidth = (float)json.getDouble("pageWidth");
-        float pageHeight = (float)json.getDouble("pageHeight");
-        float offsetX = (float)json.getDouble("offsetX");
-        float offsetY = (float)json.getDouble("offsetY");
-        float zoom = (float)json.getDouble("zoom");
-
-        mAllowZoom = json.getBoolean("allowZoom");
+        float x = (float) json.getDouble("x");
+        float y = (float) json.getDouble("y");
+        float width = (float) json.getDouble("width");
+        float height = (float) json.getDouble("height");
+        float pageWidth = (float) json.getDouble("pageWidth");
+        float pageHeight = (float) json.getDouble("pageHeight");
+        float offsetX = (float) json.getDouble("offsetX");
+        float offsetY = (float) json.getDouble("offsetY");
+        float zoom = (float) json.getDouble("zoom");
 
         mPageSize = new FloatSize(pageWidth, pageHeight);
         mViewportRect = new RectF(x, y, x + width, y + height);
@@ -148,63 +133,6 @@ public class ViewportMetrics {
         return new PointF(mViewportRect.left, mViewportRect.top);
     }
 
-    public PointF getDisplayportOrigin() {
-        return new PointF(mViewportRect.left - mViewportOffset.x,
-                mViewportRect.top - mViewportOffset.y);
-    }
-
-    public FloatSize getSize() {
-        return new FloatSize(mViewportRect.width(), mViewportRect.height());
-    }
-
-    public RectF getViewport() {
-        return mViewportRect;
-    }
-
-    /** Returns the viewport rectangle, clamped within the page-size. */
-    public RectF getClampedViewport() {
-        RectF clampedViewport = new RectF(mViewportRect);
-
-        // While the viewport size ought to never exceed the page size, we
-        // do the clamping in this order to make sure that the origin is
-        // never negative.
-        if (clampedViewport.right > mPageSize.width)
-            clampedViewport.offset(mPageSize.width - clampedViewport.right, 0);
-        if (clampedViewport.left < 0)
-            clampedViewport.offset(-clampedViewport.left, 0);
-
-        if (clampedViewport.bottom > mPageSize.height)
-            clampedViewport.offset(0, mPageSize.height - clampedViewport.bottom);
-        if (clampedViewport.top < 0)
-            clampedViewport.offset(0, -clampedViewport.top);
-
-        return clampedViewport;
-    }
-
-    public PointF getViewportOffset() {
-        return mViewportOffset;
-    }
-
-    public FloatSize getPageSize() {
-        return mPageSize;
-    }
-
-    public float getZoomFactor() {
-        return mZoomFactor;
-    }
-
-    public boolean getAllowZoom() {
-        return mAllowZoom;
-    }
-
-    public void setPageSize(FloatSize pageSize) {
-        mPageSize = pageSize;
-    }
-
-    public void setViewport(RectF viewport) {
-        mViewportRect = viewport;
-    }
-
     public void setOrigin(PointF origin) {
         // When the origin is set, we compare it with the last value set and
         // change the viewport bias accordingly, so that any viewport based
@@ -228,13 +156,68 @@ public class ViewportMetrics {
                 origin.y + mViewportRect.height());
     }
 
+    public PointF getDisplayportOrigin() {
+        return new PointF(mViewportRect.left - mViewportOffset.x,
+                mViewportRect.top - mViewportOffset.y);
+    }
+
+    public FloatSize getSize() {
+        return new FloatSize(mViewportRect.width(), mViewportRect.height());
+    }
+
     public void setSize(FloatSize size) {
         mViewportRect.right = mViewportRect.left + size.width;
         mViewportRect.bottom = mViewportRect.top + size.height;
     }
 
+    public RectF getViewport() {
+        return mViewportRect;
+    }
+
+    public void setViewport(RectF viewport) {
+        mViewportRect = viewport;
+    }
+
+    /**
+     * Returns the viewport rectangle, clamped within the page-size.
+     */
+    public RectF getClampedViewport() {
+        RectF clampedViewport = new RectF(mViewportRect);
+
+        // While the viewport size ought to never exceed the page size, we
+        // do the clamping in this order to make sure that the origin is
+        // never negative.
+        if (clampedViewport.right > mPageSize.width)
+            clampedViewport.offset(mPageSize.width - clampedViewport.right, 0);
+        if (clampedViewport.left < 0)
+            clampedViewport.offset(-clampedViewport.left, 0);
+
+        if (clampedViewport.bottom > mPageSize.height)
+            clampedViewport.offset(0, mPageSize.height - clampedViewport.bottom);
+        if (clampedViewport.top < 0)
+            clampedViewport.offset(0, -clampedViewport.top);
+
+        return clampedViewport;
+    }
+
+    public PointF getViewportOffset() {
+        return mViewportOffset;
+    }
+
     public void setViewportOffset(PointF offset) {
         mViewportOffset = offset;
+    }
+
+    public FloatSize getPageSize() {
+        return mPageSize;
+    }
+
+    public void setPageSize(FloatSize pageSize) {
+        mPageSize = pageSize;
+    }
+
+    public float getZoomFactor() {
+        return mZoomFactor;
     }
 
     public void setZoomFactor(float zoomFactor) {
@@ -320,3 +303,4 @@ public class ViewportMetrics {
         return buff.toString();
     }
 }
+

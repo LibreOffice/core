@@ -47,9 +47,6 @@ import org.mozilla.gecko.gfx.LayerController;
 import org.mozilla.gecko.gfx.PointUtils;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 import org.mozilla.gecko.util.FloatUtils;
-//import org.mozilla.gecko.GeckoApp;
-//import org.mozilla.gecko.GeckoAppShell;
-//import org.mozilla.gecko.GeckoEvent;
 import org.mozilla.gecko.GeckoEventListener;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -89,7 +86,7 @@ public class PanZoomController
     private static final double AXIS_LOCK_ANGLE = Math.PI / 6.0; // 30 degrees
 
     // The maximum amount we allow you to zoom into a page
-    private static final float MAX_ZOOM = 12.0f;
+    private static final float MAX_ZOOM = 4.0f;
 
     /* 16 precomputed frames of the _ease-out_ animation from the CSS Transitions specification. */
     private static final float[] EASE_OUT_ANIMATION_FRAMES = {
@@ -148,7 +145,7 @@ public class PanZoomController
         mX = new AxisX(mSubscroller);
         mY = new AxisY(mSubscroller);
 
-        mMainThread = /*GeckoApp*/LibreOfficeMainActivity.mAppContext.getMainLooper().getThread();
+        mMainThread = LibreOfficeMainActivity.mAppContext.getMainLooper().getThread();
         checkMainThread();
 
         mState = PanZoomState.NOTHING;
@@ -254,6 +251,7 @@ public class PanZoomController
     /*
      * Panning/scrolling
      */
+
     private boolean onTouchStart(MotionEvent event) {
         Log.d(LOGTAG, "onTouchStart in state " + mState);
         // user is taking control of movement, so stop
@@ -298,12 +296,12 @@ public class PanZoomController
                 cancelTouch();
                 startPanning(event.getX(0), event.getY(0), event.getEventTime());
                 //GeckoApp.mAppContext.hidePlugins(false /* don't hide layers */);
-                //GeckoApp.mFormAssistPopup.hide();
+                //GeckoApp.mAutoCompletePopup.hide();
                 track(event);
                 return true;
 
             case PANNING_HOLD_LOCKED:
-                //GeckoApp.mFormAssistPopup.hide();
+                //GeckoApp.mAutoCompletePopup.hide();
                 mState = PanZoomState.PANNING_LOCKED;
                 // fall through
             case PANNING_LOCKED:
@@ -311,7 +309,7 @@ public class PanZoomController
                 return true;
 
             case PANNING_HOLD:
-                //GeckoApp.mFormAssistPopup.hide();
+                //GeckoApp.mAutoCompletePopup.hide();
                 mState = PanZoomState.PANNING;
                 // fall through
             case PANNING:
@@ -761,7 +759,7 @@ public class PanZoomController
         mState = PanZoomState.PINCHING;
         mLastZoomFocus = new PointF(detector.getFocusX(), detector.getFocusY());
         //GeckoApp.mAppContext.hidePlugins(false /* don't hide layers, only views */);
-        //GeckoApp.mFormAssistPopup.hide();
+        //GeckoApp.mAutoCompletePopup.hide();
         cancelTouch();
 
         return true;
@@ -770,12 +768,6 @@ public class PanZoomController
     @Override
     public boolean onScale(SimpleScaleGestureDetector detector) {
         Log.d(LOGTAG, "onScale in state " + mState);
-
-        //if (GeckoApp.mDOMFullScreen)
-        //    return false;
-
-        if (!mController.getViewportMetrics().getAllowZoom())
-            return false;
 
         if (mState == PanZoomState.ANIMATED_ZOOM)
             return false;
@@ -837,7 +829,7 @@ public class PanZoomController
     }
 
     public boolean getRedrawHint() {
-        return (mState == PanZoomState.NOTHING || mState == PanZoomState.FLING);
+        return (mState != PanZoomState.PINCHING && mState != PanZoomState.ANIMATED_ZOOM);
     }
 
     private void sendPointToGecko(String event, MotionEvent motionEvent) {
@@ -870,7 +862,7 @@ public class PanZoomController
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        //GeckoApp.mFormAssistPopup.hide();
+        //GeckoApp.mAutoCompletePopup.hide();
         sendPointToGecko("Gesture:SingleTap", motionEvent);
         return true;
     }
@@ -887,7 +879,7 @@ public class PanZoomController
     }
 
     private boolean animatedZoomTo(RectF zoomToRect) {
-        //GeckoApp.mFormAssistPopup.hide();
+        //GeckoApp.mAutoCompletePopup.hide();
 
         mState = PanZoomState.ANIMATED_ZOOM;
         final float startZoom = mController.getZoomFactor();

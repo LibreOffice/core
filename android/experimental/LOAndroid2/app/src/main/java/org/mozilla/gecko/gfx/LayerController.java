@@ -49,18 +49,12 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View.OnTouchListener;
-import android.view.ViewConfiguration;
 
 import org.mozilla.gecko.ui.PanZoomController;
 import org.mozilla.gecko.ui.SimpleScaleGestureDetector;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-//import org.mozilla.gecko.GeckoApp;
-//import org.mozilla.gecko.GeckoEvent;
-//import org.mozilla.gecko.Tabs;
-//import org.mozilla.gecko.Tab;
 
 /**
  * The layer controller manages a tile that represents the visible page. It does panning and
@@ -69,7 +63,7 @@ import java.util.TimerTask;
  * <p/>
  * Many methods require that the monitor be held, with a synchronized (controller) { ... } block.
  */
-public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
+public class LayerController {
     /* The extra area on the sides of the page that we want to buffer to help with
      * smooth, asynchronous scrolling. Depending on a device's support for NPOT
      * textures, this may be rounded up to the nearest power of two.
@@ -80,13 +74,16 @@ public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
      * we start aggressively redrawing to minimize checkerboarding. */
     private static final int DANGER_ZONE_X = 75;
     private static final int DANGER_ZONE_Y = 150;
+    /* The time limit for pages to respond with preventDefault on touchevents
+     * before we begin panning the page */
+    private static final int PREVENT_DEFAULT_TIMEOUT = 200;
     private Layer mRootLayer;                   /* The root layer. */
     private LayerView mView;                    /* The main rendering view. */
-    private Context mContext;                   /* The current context. */
     /*
      * The panning and zooming controller, which interprets pan and zoom gestures for us and
      * updates our visible rect appropriately.
      */
+    private Context mContext;                   /* The current context. */
     private ViewportMetrics mViewportMetrics;   /* The current viewport metrics. */
     private boolean mWaitForTouchListeners;
     private PanZoomController mPanZoomController;
@@ -96,12 +93,9 @@ public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
     private int mCheckerboardColor;
     private boolean mCheckerboardShouldShowChecks;
     private boolean mForceRedraw;
-    /* The time limit for pages to respond with preventDefault on touchevents
-     * before we begin panning the page */
-    private int mTimeout = 200;
-
     private boolean allowDefaultActions = true;
     private Timer allowDefaultTimer = null;
+    private boolean inTouchSession = false;
     private PointF initialTouchLocation = null;
 
     public LayerController(Context context) {
@@ -111,15 +105,6 @@ public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
         mViewportMetrics = new ViewportMetrics();
         mPanZoomController = new PanZoomController(this);
         mView = new LayerView(context, this);
-
-        //Tabs.getInstance().registerOnTabsChangedListener(this);
-
-        ViewConfiguration vc = ViewConfiguration.get(mContext);
-        mTimeout = vc.getLongPressTimeout();
-    }
-
-    public void onDestroy() {
-        //Tabs.getInstance().unregisterOnTabsChangedListener(this);
     }
 
     public void setForceRedraw() {
@@ -364,12 +349,15 @@ public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
      * would prefer that the action didn't take place.
      */
     public boolean getRedrawHint() {
+        // FIXME: Allow redraw while a finger is down, but only if we're about to checkerboard.
+        // This requires fixing aboutToCheckerboard() to know about the new buffer size.
+
         if (mForceRedraw) {
             mForceRedraw = false;
             return true;
         }
 
-        return aboutToCheckerboard() && mPanZoomController.getRedrawHint();
+        return mPanZoomController.getRedrawHint();
     }
 
     private RectF getTileRect() {
@@ -426,29 +414,15 @@ public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
         int action = event.getAction();
         PointF point = new PointF(event.getX(), event.getY());
 
-        // this will only match the first touchstart in a series
         if ((action & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
+            mView.clearEventQueue();
             initialTouchLocation = point;
             allowDefaultActions = !mWaitForTouchListeners;
-
-            // if we have a timer, this may be a double tap,
-            // cancel the current timer but don't clear the event queue
-            if (allowDefaultTimer != null) {
-                allowDefaultTimer.cancel();
-            } else {
-                // if we don't have a timer, make sure we remove any old events
-                mView.clearEventQueue();
-            }
-            allowDefaultTimer = new Timer();
-            allowDefaultTimer.schedule(new TimerTask() {
+            post(new Runnable() {
                 public void run() {
-                    post(new Runnable() {
-                        public void run() {
-                            preventPanning(false);
-                        }
-                    });
+                    preventPanning(mWaitForTouchListeners);
                 }
-            }, mTimeout);
+            });
         }
 
         // After the initial touch, ignore touch moves until they exceed a minimum distance.
@@ -460,9 +434,47 @@ public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
             }
         }
 
-        // send the event to content
         if (mOnTouchListener != null)
             mOnTouchListener.onTouch(mView, event);
+
+        if (!mWaitForTouchListeners)
+            return !allowDefaultActions;
+
+        boolean createTimer = false;
+        switch (action & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_MOVE: {
+                if (!inTouchSession && allowDefaultTimer == null) {
+                    inTouchSession = true;
+                    createTimer = true;
+                }
+                break;
+            }
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP: {
+                // if we still have initialTouchLocation, we haven't fired any
+                // touchmove events. We should start the timer to wait for preventDefault
+                // from touchstart. If we don't hear from it we fire mouse events
+                if (initialTouchLocation != null)
+                    createTimer = true;
+                inTouchSession = false;
+            }
+        }
+
+        if (createTimer) {
+            if (allowDefaultTimer != null) {
+                allowDefaultTimer.cancel();
+            }
+            allowDefaultTimer = new Timer();
+            allowDefaultTimer.schedule(new TimerTask() {
+                public void run() {
+                    post(new Runnable() {
+                        public void run() {
+                            preventPanning(false);
+                        }
+                    });
+                }
+            }, PREVENT_DEFAULT_TIMEOUT);
+        }
 
         return !allowDefaultActions;
     }
@@ -470,6 +482,7 @@ public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
     public void preventPanning(boolean aValue) {
         if (allowDefaultTimer != null) {
             allowDefaultTimer.cancel();
+            allowDefaultTimer.purge();
             allowDefaultTimer = null;
         }
         if (aValue == allowDefaultActions) {
@@ -484,11 +497,6 @@ public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
         }
     }
 
-    /*public void onTabChanged(Tab tab, Tabs.TabEvents msg) {
-        if ((Tabs.getInstance().isSelectedTab(tab) && msg == Tabs.TabEvents.STOP) || msg == Tabs.TabEvents.SELECTED) {
-            mWaitForTouchListeners = tab.getHasTouchListeners();
-        }
-    }*/
     public void setWaitForTouchListeners(boolean aValue) {
         mWaitForTouchListeners = aValue;
     }
@@ -523,3 +531,4 @@ public class LayerController /*implements Tabs.OnTabsChangedListener*/ {
         mView.requestRender();
     }
 }
+

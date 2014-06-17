@@ -20,7 +20,7 @@ public class LOEvent {
 
     ViewportMetrics viewportMetrics;
 
-    public LOEvent(int type, int width, int height, int widthPixels, int heightPixels) {
+    public LOEvent(int type, int width, int height, int widthPixels, int heightPixels, int tileWidth, int tileHeight) {
         mType = type;
         mTypeString = "Size Changed";
     }
@@ -45,8 +45,8 @@ public class LOEvent {
         return new LOEvent(DRAW, rect);
     }
 
-    public static LOEvent sizeChanged(int width, int height, int widthPixels, int heightPixels) {
-        return new LOEvent(SIZE_CHANGED, width, height, widthPixels, heightPixels);
+    public static LOEvent sizeChanged(int width, int height, int widthPixels, int heightPixels, int tileWidth, int tileHeight) {
+        return new LOEvent(SIZE_CHANGED, width, height, widthPixels, heightPixels, tileWidth, tileHeight);
     }
 
     public static LOEvent tileSize(IntSize tileSize) {
