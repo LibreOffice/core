@@ -1663,7 +1663,7 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     pNewLine->m_aTypeBox.SetAccessibleName(m_aTypeBox.GetAccessibleName());
     pNewLine->m_aValueEdit.SetAccessibleName(m_aValueEdit.GetAccessibleName());
 
-    long nPos = GetVisibleLineCount() * GetLineHeight();
+    sal_Int32 nPos = GetVisibleLineCount() * GetLineHeight();
     m_aCustomPropertiesLines.push_back( pNewLine );
     Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
                             &m_aDateField, &m_aTimeField,
