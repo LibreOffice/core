@@ -740,29 +740,10 @@ void OutputDevice::DrawGradient( const PolyPolygon& rPolyPoly,
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_BEGIN" ) );
             mpMetaFile->AddAction( new MetaGradientExAction( rPolyPoly, rGradient ) );
 
-            if( OUTDEV_PRINTER == meOutDevType )
-            {
-                Push( PUSH_CLIPREGION );
-                IntersectClipRegion(Region(rPolyPoly));
-                DrawGradient( aRect, rGradient );
-                Pop();
-            }
-            else
-            {
-                const sal_Bool  bOldOutput = IsOutputEnabled();
-
-                EnableOutput( sal_False );
-                Push( PUSH_RASTEROP );
-                SetRasterOp( ROP_XOR );
-                DrawGradient( aRect, rGradient );
-                SetFillColor( COL_BLACK );
-                SetRasterOp( ROP_0 );
-                DrawPolyPolygon( rPolyPoly );
-                SetRasterOp( ROP_XOR );
-                DrawGradient( aRect, rGradient );
-                Pop();
-                EnableOutput( bOldOutput );
-            }
+            Push( PUSH_CLIPREGION );
+            IntersectClipRegion(Region(rPolyPoly));
+            DrawGradient( aRect, rGradient );
+            Pop();
 
             mpMetaFile->AddAction( new MetaCommentAction( "XGRAD_SEQ_END" ) );
         }
