@@ -133,8 +133,8 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
     rFont.SetUnderline( (FontUnderline)((const SvxUnderlineItem*)GetItem())->GetValue() );
 
     /* FIXME(matteocam) */
-    rFont.SetFillColor(aColor); // XXX: alone it works but it set it white (vcl causing troubes?)
-    rFont.SetTransparent(false); // XXX: will this be enough?
+    rFont.SetFillColor(aColor);
+    rFont.SetTransparent(false);
     //if (pOutDev)
     //    pOutDev->SetTextFillColor(aColor); // this doesn't work either
     // end FIXME
@@ -241,15 +241,14 @@ EditCharAttribBackgroundColor::EditCharAttribBackgroundColor(
                                   sal_uInt16 _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_BKGCOLOR, "Not a BackgroundColor attribute!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_BKGCOLOR, "Not a BackColor attribute!" );
 }
 
 void EditCharAttribBackgroundColor::SetFont( SvxFont& rFont, OutputDevice* )
 {
-#define BREAK_BKG_COLOR_SET_FONT 0
-    assert(BREAK_BKG_COLOR_SET_FONT); // XXX: checking if this is being called // FIXME(matteocam)
     Color aColor = ((const SvxBackgroundColorItem*)GetItem())->GetValue();
-    rFont.SetFillColor( aColor); // XXX: Is it SetFillColor we want?
+    rFont.SetFillColor( aColor);
+    rFont.SetTransparent(false);
 
 }
 
