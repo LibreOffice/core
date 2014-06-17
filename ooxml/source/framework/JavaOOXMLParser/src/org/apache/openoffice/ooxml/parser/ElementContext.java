@@ -1,5 +1,7 @@
 package org.apache.openoffice.ooxml.parser;
 
+import org.apache.openoffice.ooxml.parser.attribute.AttributeValues;
+
 /** Context that has the same life time (by default) as the element it represents.
  *  Gives access to the attribute values and the parent context.
  */

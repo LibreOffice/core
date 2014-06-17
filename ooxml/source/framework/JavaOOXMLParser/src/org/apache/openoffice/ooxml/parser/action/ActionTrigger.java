@@ -1,4 +1,4 @@
-package org.apache.openoffice.ooxml.parser;
+package org.apache.openoffice.ooxml.parser.action;
 
 /** An enumeration of all supported action triggers.
  */

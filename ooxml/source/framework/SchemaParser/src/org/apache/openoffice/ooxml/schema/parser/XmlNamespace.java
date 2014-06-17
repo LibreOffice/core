@@ -22,6 +22,7 @@
 package org.apache.openoffice.ooxml.schema.parser;
 
 import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
+import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.model.simple.Restriction;
@@ -34,17 +35,17 @@ import org.apache.openoffice.ooxml.schema.model.simple.SimpleType;
  */
 public class XmlNamespace
 {
-    public static final String NamespaceURI = "http://www.w3.org/XML/1998/namespace";
-    public static final String NamespacePrefix = "xml";
+    public static final String URI = "http://www.w3.org/XML/1998/namespace";
+    public static final String Prefix = "xml";
 
     public static void Apply (final SchemaBase aSchemaBase)
     {
-        aSchemaBase.Namespaces.ProvideNamespace(NamespaceURI, NamespacePrefix);
+        aSchemaBase.Namespaces.ProvideNamespace(URI, Prefix);
 
-        final QualifiedName aStSpaceSimpleTypeName = new QualifiedName(NamespaceURI, NamespacePrefix, "ST__space");
+        final QualifiedName aStSpaceSimpleTypeName = new QualifiedName(URI, Prefix, "ST__space");
         aSchemaBase.Attributes.Add(
             new Attribute(
-                new QualifiedName(NamespaceURI, NamespacePrefix, "space"),
+                new QualifiedName(URI, Prefix, "space"),
                 aStSpaceSimpleTypeName,
                 "optional",
                 null,
@@ -52,10 +53,17 @@ public class XmlNamespace
                 FormDefault.unqualified,
                 null));
 
-        final SimpleType aType = new SimpleType(null, aStSpaceSimpleTypeName, null);
-        final Restriction aRestriction = new Restriction(aType, "xsd:token", null);
+        final SimpleType aType = new SimpleType(
+            null,
+            aStSpaceSimpleTypeName,
+            new Location());
+        final Restriction aRestriction = new Restriction(
+            aType,
+            new QualifiedName(XsdNamespace.URI, XsdNamespace.Prefix, "token"),
+            null);
         aRestriction.AddEnumeration("default");
         aRestriction.AddEnumeration("preserve");
+        aType.AddChild(aRestriction);
         aSchemaBase.SimpleTypes.Add(aType);
     }
 }

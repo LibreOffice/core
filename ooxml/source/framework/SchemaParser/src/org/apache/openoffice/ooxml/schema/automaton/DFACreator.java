@@ -13,6 +13,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
+import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 
 /** Convert an NFA into a DFA via the powerset construction (also called subset
@@ -27,13 +28,15 @@ public class DFACreator
         final StateContainer aDFAStateContainer,
         final StateContext aNFAStateContext,
         final Vector<Attribute> aAttributes,
-        final QualifiedName aTypeName)
+        final QualifiedName aTypeName,
+        final Location aLocation)
     {
         final DFACreator aCreator = new DFACreator(aDFAStateContainer, aNFAStateContext, aTypeName);
         aCreator.CreateDFAforNFA();
         return new FiniteAutomaton(
             aCreator.maDFAStateContext,
-            aAttributes);
+            aAttributes,
+            aLocation);
     }
 
 
@@ -241,13 +244,7 @@ public class DFACreator
         final State aDFAState)
     {
         for (final State aNFAState : aNFAStateSet.GetStates())
-        {
-            if (aNFAState.IsAccepting())
-                aDFAState.SetIsAccepting();
-
-            for (final SkipData aSkipData : aNFAState.GetSkipData())
-                aDFAState.AddSkipData(aSkipData.Clone(aDFAState));
-        }
+            aDFAState.CopyFrom(aNFAState);
     }
 
 

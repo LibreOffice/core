@@ -216,12 +216,6 @@ public class LogGenerator
                         WriteAttribute(sIndentation+"    ", aAttribute);
                     break;
 
-                case SimpleType:
-                    final Restriction aRestriction = ((SimpleType)aType).GetRestriction();
-                    if (aRestriction != null)
-                        WriteRestriction(sIndentation+"    ", aRestriction);
-                    break;
-
                 case SimpleTypeReference:
                     WriteType(
                             sIndentation+"    ",
@@ -303,25 +297,12 @@ public class LogGenerator
             case ComplexType:
                 return ((ComplexType)aType).GetAttributes().iterator().hasNext();
 
-            case SimpleType:
-                return ((SimpleType)aType).GetRestriction() != null;
-
             case SimpleTypeReference:
                 return true;
 
             default:
                 return false;
         }
-    }
-
-
-
-
-    private void WriteRestriction (
-        final String sIndentation,
-        final Restriction aRestriction)
-    {
-        maOut.printf("%s%s\n", sIndentation, aRestriction.toString());
     }
 
 

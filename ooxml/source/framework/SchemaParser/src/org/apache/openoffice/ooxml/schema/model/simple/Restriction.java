@@ -23,12 +23,12 @@ package org.apache.openoffice.ooxml.schema.model.simple;
 
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
 
 import org.apache.openoffice.ooxml.schema.model.base.INodeVisitor;
 import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
+import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 
 /** Representation of the 'restriction' XML schema element.
  *  It defines constraints on a another simple type.
@@ -39,15 +39,27 @@ import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 public class Restriction
     extends Node
 {
+    public final static int MinInclusiveBit = 0x0001;
+    public final static int MinExclusiveBit = 0x0002;
+    public final static int MaxInclusiveBit = 0x0004;
+    public final static int MaxExclusiveBit = 0x0008;
+    public final static int LengthBit = 0x0010;
+    public final static int MinLengthBit = 0x0020;
+    public final static int MaxLengthBit = 0x0040;
+    public final static int PatternBit = 0x0080;
+    public final static int EnumerationBit = 0x0100;
+
     public Restriction (
         final Node aParent,
-        final String sBaseType,
+        final QualifiedName aBaseType,
         final Location aLocation)
     {
         super(aParent, null, aLocation);
-        msBaseType = sBaseType;
+        maBaseType = aBaseType;
         maEnumerations = new TreeSet<>();
+        mnFeatures = 0;
     }
+
 
 
 
@@ -56,6 +68,7 @@ public class Restriction
     {
         aVisitor.Visit(this);
     }
+
 
 
 
@@ -68,51 +81,59 @@ public class Restriction
 
 
 
+    public QualifiedName GetBaseType ()
+    {
+        return maBaseType;
+    }
+
+
+
+
     @Override
     public String toString ()
     {
         final StringBuffer aBuffer = new StringBuffer("restriction based on ");
-        aBuffer.append(msBaseType);
+        aBuffer.append(maBaseType.GetDisplayName());
 
-        if (mnMinInclusive != null)
+        if (msMinInclusive != null)
         {
             aBuffer.append(",minInclusive=");
-            aBuffer.append(mnMinInclusive);
+            aBuffer.append(msMinInclusive);
         }
-        if (mnMinExclusive != null)
+        if (msMinExclusive != null)
         {
             aBuffer.append(",minExclusive=");
-            aBuffer.append(mnMinExclusive);
+            aBuffer.append(msMinExclusive);
         }
-        if (mnMaxInclusive != null)
+        if (msMaxInclusive != null)
         {
             aBuffer.append(",maxInclusive=");
-            aBuffer.append(mnMaxInclusive);
+            aBuffer.append(msMaxInclusive);
         }
-        if (mnMaxExclusive != null)
+        if (msMaxExclusive != null)
         {
             aBuffer.append(",maxExclusive=");
-            aBuffer.append(mnMaxExclusive);
+            aBuffer.append(msMaxExclusive);
         }
-        if (mnLength != null)
+        if (HasFeature(LengthBit))
         {
             aBuffer.append(",length=");
             aBuffer.append(mnLength);
         }
-        if (mnMinLength != null)
+        if (HasFeature(MinLengthBit))
         {
             aBuffer.append(",minLength=");
             aBuffer.append(mnMinLength);
         }
-        if (mnMaxLength != null)
+        if (HasFeature(MaxLengthBit))
         {
             aBuffer.append(",maxLength=");
             aBuffer.append(mnMaxLength);
         }
-        if (maPattern != null)
+        if (msPattern != null)
         {
             aBuffer.append(",pattern=\"");
-            aBuffer.append(maPattern);
+            aBuffer.append(msPattern);
             aBuffer.append('"');
         }
         if ( ! maEnumerations.isEmpty())
@@ -128,6 +149,7 @@ public class Restriction
     public void AddEnumeration (final String sValue)
     {
         maEnumerations.add(sValue);
+        mnFeatures |= EnumerationBit;
     }
 
 
@@ -135,7 +157,9 @@ public class Restriction
 
     public void SetMinInclusive (final String sValue)
     {
-        mnMinInclusive = Double.parseDouble(sValue);
+        msMinInclusive = sValue;
+        assert( ! HasFeature(MinExclusiveBit));
+        mnFeatures |= MinInclusiveBit;
     }
 
 
@@ -143,7 +167,9 @@ public class Restriction
 
     public void SetMinExclusive (final String sValue)
     {
-        mnMinExclusive = Double.parseDouble(sValue);
+        msMinExclusive = sValue;
+        assert( ! HasFeature(MinInclusiveBit));
+        mnFeatures |= MinExclusiveBit;
     }
 
 
@@ -151,7 +177,9 @@ public class Restriction
 
     public void SetMaxInclusive (final String sValue)
     {
-        mnMaxInclusive = Double.parseDouble(sValue);
+        msMaxInclusive = sValue;
+        assert( ! HasFeature(MaxExclusiveBit));
+        mnFeatures |= MaxInclusiveBit;
     }
 
 
@@ -159,7 +187,9 @@ public class Restriction
 
     public void SetMaxExclusive (final String sValue)
     {
-        mnMaxExclusive = Double.parseDouble(sValue);
+        msMaxExclusive = sValue;
+        assert( ! HasFeature(MaxInclusiveBit));
+        mnFeatures |= MaxExclusiveBit;
     }
 
 
@@ -168,6 +198,8 @@ public class Restriction
     public void SetLength (final String sValue)
     {
         mnLength = Integer.parseInt(sValue);
+        assert( ! HasFeature(MinLengthBit|MaxLengthBit));
+        mnFeatures |= LengthBit;
     }
 
 
@@ -176,6 +208,8 @@ public class Restriction
     public void SetMinLength (final String sValue)
     {
         mnMinLength = Integer.parseInt(sValue);
+        assert( ! HasFeature(LengthBit));
+        mnFeatures |= MinLengthBit;
     }
 
 
@@ -184,6 +218,8 @@ public class Restriction
     public void SetMaxLength (final String sValue)
     {
         mnMaxLength = Integer.parseInt(sValue);
+        assert( ! HasFeature(LengthBit));
+        mnFeatures |= MaxLengthBit;
     }
 
 
@@ -191,20 +227,111 @@ public class Restriction
 
     public void SetPattern (final String sValue)
     {
-        maPattern = Pattern.compile(sValue);
+        msPattern = sValue;
+        mnFeatures |= PatternBit;
     }
 
 
 
 
-    private final String msBaseType;
+    public String GetMinInclusive ()
+    {
+        return msMinInclusive;
+    }
+
+
+
+
+    public String GetMinExclusive ()
+    {
+        return msMinExclusive;
+    }
+
+
+
+
+    public String GetMaxInclusive ()
+    {
+        return msMaxInclusive;
+    }
+
+
+
+
+    public String GetMaxExclusive ()
+    {
+        return msMaxExclusive;
+    }
+
+
+
+
+    public Set<String> GetEnumeration()
+    {
+        return maEnumerations;
+    }
+
+
+
+
+    public int GetLength()
+    {
+        return mnLength;
+    }
+
+
+
+
+    public int GetMinimumLength()
+    {
+        return mnMinLength;
+    }
+
+
+
+
+    public int GetMaximumLength()
+    {
+        return mnMaxLength;
+    }
+
+
+
+
+
+    public String GetPattern()
+    {
+        return msPattern;
+    }
+
+
+
+
+    public int GetFeatureBits ()
+    {
+        return mnFeatures;
+    }
+
+
+
+
+    public boolean HasFeature (final int nBitMask)
+    {
+        return (mnFeatures & nBitMask) != 0;
+    }
+
+
+
+
+    private final QualifiedName maBaseType;
     private final Set<String> maEnumerations;
-    private Double mnMinInclusive;
-    private Double mnMinExclusive;
-    private Double mnMaxInclusive;
-    private Double mnMaxExclusive;
-    private Integer mnLength;
-    private Integer mnMinLength;
-    private Integer mnMaxLength;
-    private Pattern maPattern;
+    private String msMinInclusive;
+    private String msMinExclusive;
+    private String msMaxInclusive;
+    private String msMaxExclusive;
+    private int mnLength;
+    private int mnMinLength;
+    private int mnMaxLength;
+    private String msPattern;
+    private int mnFeatures;
 }

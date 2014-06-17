@@ -19,7 +19,7 @@
 *
 *************************************************************/
 
-package org.apache.openoffice.ooxml.parser;
+package org.apache.openoffice.ooxml.parser.attribute;
 
 import java.util.Iterator;
 

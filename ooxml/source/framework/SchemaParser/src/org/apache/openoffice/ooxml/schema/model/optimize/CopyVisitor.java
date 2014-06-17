@@ -92,6 +92,7 @@ public class CopyVisitor
             case Group:
             case List:
             case OccurrenceIndicator:
+            case Restriction:
             case Sequence:
             case SimpleContent:
             case SimpleTypeReference:

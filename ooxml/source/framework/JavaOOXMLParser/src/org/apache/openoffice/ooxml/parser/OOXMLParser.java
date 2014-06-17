@@ -32,6 +32,10 @@ import java.util.zip.ZipFile;
 
 import javax.xml.stream.Location;
 
+import org.apache.openoffice.ooxml.parser.action.ActionManager;
+import org.apache.openoffice.ooxml.parser.action.ActionTrigger;
+import org.apache.openoffice.ooxml.parser.action.IAction;
+
 /** This OOXML parser is based on the output of the schema parser.
  *  It exists to debug the schema parser and as illustration and preparation of
  *  the C++ parse (yet to come.)
@@ -154,7 +158,7 @@ public class OOXMLParser
                     if (aContext.GetAttributes().GetAttributeCount() == 0)
                         System.out.printf("    no attributes\n");
                     else
-                        for (final Entry<String,Object> aAttribute : aContext.GetAttributes().GetAttributes())
+                        for (final Entry<String,String> aAttribute : aContext.GetAttributes().GetAttributes())
                             System.out.printf("    %s -> %s\n", aAttribute.getKey(), aAttribute.getValue());
                 }
             }
@@ -169,7 +173,7 @@ public class OOXMLParser
                     final String sText,
                     final Location aLocation)
                 {
-                    System.out.printf("%s text \"%s\"\n", aContext.GetTypeName(), sText.replace("\n", "\\n"));
+//                    System.out.printf("%s text \"%s\"\n", aContext.GetTypeName(), sText.replace("\n", "\\n"));
                 }
             }
         );

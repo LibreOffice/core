@@ -27,7 +27,7 @@ import java.util.Vector;
 
 public class NamespaceMap
 {
-    class NamespaceDescriptor
+    public class NamespaceDescriptor
     {
         NamespaceDescriptor (final String sPrefix, final int nId)
         {

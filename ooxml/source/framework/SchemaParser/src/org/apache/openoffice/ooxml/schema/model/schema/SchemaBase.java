@@ -21,6 +21,9 @@
 
 package org.apache.openoffice.ooxml.schema.model.schema;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
 import org.apache.openoffice.ooxml.schema.model.attribute.AttributeGroup;
 import org.apache.openoffice.ooxml.schema.model.base.Node;
@@ -50,6 +53,7 @@ public class SchemaBase
         Groups = new TypeContainer<>();
         AttributeGroups = new TypeContainer<>();
         Attributes = new TypeContainer<>();
+        AttributeValueToIdMap = new HashMap<>();
 
         // Initialize the list of simple types with all known built ins (
         // these are implicitly defined).
@@ -81,6 +85,19 @@ public class SchemaBase
 
 
 
+    public Node GetSimpleTypeForName (final QualifiedName aName)
+    {
+        final String sTypeName = aName.GetDisplayName();
+
+        if (SimpleTypes.Contains(sTypeName))
+            return SimpleTypes.Get(aName.GetDisplayName());
+        else
+            return null;
+    }
+
+
+
+
     /** Create a new schema object that contains only the used types, i.e.
      *  types that are reachable via element transitions, starting with the
      *  top level elements.
@@ -100,4 +117,5 @@ public class SchemaBase
     public final TypeContainer<Group> Groups;
     public final TypeContainer<AttributeGroup> AttributeGroups;
     public final TypeContainer<Attribute> Attributes;
+    public final Map<String,Integer> AttributeValueToIdMap;
 }

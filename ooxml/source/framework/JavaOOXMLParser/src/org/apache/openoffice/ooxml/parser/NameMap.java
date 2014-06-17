@@ -60,6 +60,19 @@ public class NameMap
 
 
 
+    public int GetIdForOptionalName (
+        final String sName)
+    {
+        final Integer aId = maNameToIdMap.get(sName);
+        if (aId == null)
+            return -1;
+        else
+            return aId;
+    }
+
+
+
+
     public String GetNameForId (final int nId)
     {
         if (nId == -1)

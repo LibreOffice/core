@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
+import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 
 /** Minimize an DFA with respect to its number of states.
@@ -27,6 +28,7 @@ public class HopcroftMinimizer
         final StateContainer aNewStateContainer,
         final StateContext aOriginalStates,
         final Vector<Attribute> aAttributes,
+        final Location aLocation,
         final PrintStream aLog)
     {
         if (aLog != null)
@@ -99,7 +101,8 @@ public class HopcroftMinimizer
         // Create and return the new minimized automaton.
         return new FiniteAutomaton(
             aMinimizedStates,
-            aAttributes);
+            aAttributes,
+            aLocation);
     }
 
 
@@ -318,10 +321,7 @@ public class HopcroftMinimizer
         for (final State aOldState : aOriginalStates.GetStates())
         {
             final State aNewState = aOldStateToNewStateMap.get(aOldState);
-            if (aOldState.IsAccepting())
-                aNewState.SetIsAccepting();
-            for (final SkipData aSkipData : aOldState.GetSkipData())
-                aNewState.AddSkipData(aSkipData.Clone(aNewState));
+            aNewState.CopyFrom(aOldState);
         }
         return aMinimizedStates;
     }

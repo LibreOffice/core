@@ -24,6 +24,7 @@ package org.apache.openoffice.ooxml.schema.automaton;
 import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
+import org.apache.openoffice.ooxml.schema.model.base.Location;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 
 
@@ -39,12 +40,14 @@ public class FiniteAutomaton
 {
     FiniteAutomaton (
         final StateContext aContext,
-        final Vector<Attribute> aAttributes)
+        final Vector<Attribute> aAttributes,
+        final Location aLocation)
     {
         maStateContext = aContext;
         maAttributes = aAttributes!=null
             ? aAttributes
             : new Vector<Attribute>();
+        maLocation = aLocation;
     }
 
 
@@ -98,7 +101,8 @@ public class FiniteAutomaton
             aDFAContainer,
             maStateContext,
             maAttributes,
-            aTypeName);
+            aTypeName,
+            maLocation);
     }
 
 
@@ -143,6 +147,14 @@ public class FiniteAutomaton
 
 
 
+    public Location GetLocation ()
+    {
+        return maLocation;
+    }
+
+
+
+
     public Vector<Attribute> GetAttributes ()
     {
         return maAttributes;
@@ -153,4 +165,5 @@ public class FiniteAutomaton
 
     private final StateContext maStateContext;
     private final Vector<Attribute> maAttributes;
+    private final Location maLocation;
 }

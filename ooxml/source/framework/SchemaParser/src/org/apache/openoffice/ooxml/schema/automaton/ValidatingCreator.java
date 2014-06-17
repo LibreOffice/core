@@ -85,16 +85,24 @@ public class ValidatingCreator
     {
         final FiniteAutomatonContainer aAutomatons = new FiniteAutomatonContainer(maStateContainer);
 
+        // Create the automaton for the top-level elements.
         aAutomatons.AddAutomaton(
             null,
             CreateForTopLevelElements());
 
+        // Create one automation for each complex type.
         for (final ComplexType aComplexType : maSchemaBase.ComplexTypes.GetSorted())
             aAutomatons.AddAutomaton(
                 aComplexType.GetName(),
                 CreateForComplexType(aComplexType));
 
-        maLog.close();
+        // Create one automaton for each simple type that is referenced by an element.
+        for (final INode aSimpleType : maElementSimpleTypes)
+            aAutomatons.AddAutomaton(
+                aSimpleType.GetName(),
+                CreateForSimpleType(aSimpleType));
+
+        maLog.Close();
 
         return aAutomatons;
     }
@@ -120,7 +128,7 @@ public class ValidatingCreator
                 maStateContext.GetStartState(),
                 aEndState);
 
-        return new FiniteAutomaton(maStateContext, null);
+        return new FiniteAutomaton(maStateContext, null, null);
     }
 
 
@@ -140,7 +148,8 @@ public class ValidatingCreator
             aEndState);
         return new FiniteAutomaton(
             maStateContext,
-            maAttributes);
+            maAttributes,
+            aComplexType.GetLocation());
     }
 
 
@@ -149,7 +158,7 @@ public class ValidatingCreator
     @Override
     public void Visit (final All aAll)
     {
-        AddComment("All");
+        maLog.AddComment("All");
         ProcessAttributes(aAll);
 
         // Make a transformation of the children into a choice of sequences that
@@ -164,15 +173,18 @@ public class ValidatingCreator
             maCurrentContext.BaseState,
             "Ae");
 
-        StartBlock();
+        maLog.StartBlock();
         AddEpsilonTransition(maCurrentContext.StartState, aLocalStartState);
+        final long nStartTime = System.currentTimeMillis();
         ProcessType(
             aReplacement,
             maStateContext.CreateState(maCurrentContext.BaseState, "A"),
             aLocalStartState,
             aLocalEndState);
+        final long nEndTime = System.currentTimeMillis();
+        System.out.printf("processed 'all' children in %fs\n", (nEndTime-nStartTime)/1000.0);
         AddEpsilonTransition(aLocalEndState, maCurrentContext.EndState);
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -183,7 +195,7 @@ public class ValidatingCreator
     {
         assert(aAny.GetChildCount() == 0);
 
-        AddComment("Any");
+        maLog.AddComment("Any");
         ProcessAttributes(aAny);
 
         AddSkipTransition(
@@ -202,16 +214,16 @@ public class ValidatingCreator
     {
         assert(aComplexContent.GetChildCount() == 1);
 
-        AddComment ("Complex Content.");
+        maLog.AddComment ("Complex Content.");
         ProcessAttributes(aComplexContent);
 
-        StartBlock();
+        maLog.StartBlock();
         ProcessType(
             aComplexContent.GetChildren().iterator().next(),
             maCurrentContext.BaseState,
             maCurrentContext.StartState,
             maCurrentContext.EndState);
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -222,14 +234,14 @@ public class ValidatingCreator
     {
         if (maLog != null)
         {
-            maLog.print("\n");
-            AddComment ("Complex Type %s defined in %s.",
+            maLog.printf("\n");
+            maLog.AddComment ("Complex Type %s defined in %s.",
                 aComplexType.GetName().GetDisplayName(),
                 aComplexType.GetLocation());
         }
         ProcessAttributes(aComplexType);
 
-        StartBlock();
+        maLog.StartBlock();
         maLog.printf("%sstarting at state %s\n", msLogIndentation, maCurrentContext.StartState.GetFullname());
 
         if (GetElementCount(aComplexType) == 0)
@@ -243,7 +255,7 @@ public class ValidatingCreator
         for (final INode aChild : aComplexType.GetChildren())
             ProcessType(aChild, maCurrentContext.BaseState, maCurrentContext.StartState, maCurrentContext.EndState);
 
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -261,12 +273,12 @@ public class ValidatingCreator
     @Override
     public void Visit (final Choice aChoice)
     {
-        AddComment("Choice");
+        maLog.AddComment("Choice");
         ProcessAttributes(aChoice);
 
         final State aLocalStartState = maStateContext.CreateState(maCurrentContext.BaseState, "Cs");
         final State aLocalEndState = maStateContext.CreateState(maCurrentContext.BaseState, "Ce");
-        StartBlock();
+        maLog.StartBlock();
         AddEpsilonTransition(maCurrentContext.StartState, aLocalStartState);
 
         int nStateIndex = 0;
@@ -279,7 +291,7 @@ public class ValidatingCreator
                 aLocalEndState);
         }
         AddEpsilonTransition(aLocalEndState, maCurrentContext.EndState);
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -290,7 +302,7 @@ public class ValidatingCreator
     {
         assert(aElement.GetChildCount()==0);
 
-        AddComment("Element: on '%s' go from %s to %s via %s",
+        maLog.AddComment("Element: on '%s' go from %s to %s via %s",
             aElement.GetElementName().GetDisplayName(),
             maCurrentContext.StartState.GetFullname(),
             maCurrentContext.EndState.GetFullname(),
@@ -303,6 +315,13 @@ public class ValidatingCreator
             aElement.GetElementName(),
             aElement.GetTypeName().GetStateName());
         maCurrentContext.StartState.AddTransition(aTransition);
+
+        // For elements whose type is a simple type we have to remember that
+        // simple type for later (and then create an NFA for it.)
+        final INode aSimpleType = maSchemaBase.GetSimpleTypeForName(
+            aElement.GetTypeName());
+        if (aSimpleType != null)
+            maElementSimpleTypes.add(aSimpleType);
     }
 
 
@@ -313,15 +332,15 @@ public class ValidatingCreator
     {
         assert(aReference.GetChildCount() == 0);
 
-        AddComment("Element reference to %s", aReference.GetReferencedElementName());
+        maLog.AddComment("Element reference to %s", aReference.GetReferencedElementName());
         ProcessAttributes(aReference);
 
         final Element aElement = aReference.GetReferencedElement(maSchemaBase);
         if (aElement == null)
             throw new RuntimeException("can't find referenced element "+aReference.GetReferencedElementName());
-        StartBlock();
+        maLog.StartBlock();
         ProcessType(aElement, maCurrentContext.BaseState, maCurrentContext.StartState, maCurrentContext.EndState);
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -334,12 +353,12 @@ public class ValidatingCreator
     {
         assert(aExtension.GetChildCount() <= 1);
 
-        AddComment("Extension of base type %s", aExtension.GetBaseTypeName());
+        maLog.AddComment("Extension of base type %s", aExtension.GetBaseTypeName());
         ProcessAttributes(aExtension);
 
         final Vector<INode> aNodes = aExtension.GetTypeNodes(maSchemaBase);
 
-        StartBlock();
+        maLog.StartBlock();
         int nStateIndex = 0;
         State aCurrentState = maStateContext.CreateState(maCurrentContext.BaseState, "E"+nStateIndex++);
         AddEpsilonTransition(maCurrentContext.StartState, aCurrentState);
@@ -355,7 +374,7 @@ public class ValidatingCreator
             aCurrentState = aNextState;
         }
         AddEpsilonTransition(aCurrentState, maCurrentContext.EndState);
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -366,17 +385,17 @@ public class ValidatingCreator
     {
         assert(aGroup.GetChildCount() == 1);
 
-        AddComment("Group %s", aGroup.GetName());
+        maLog.AddComment("Group %s", aGroup.GetName());
         ProcessAttributes(aGroup);
 
-        StartBlock();
+        maLog.StartBlock();
         final State aGroupBaseState = maStateContext.CreateState(maCurrentContext.BaseState, "G");
         ProcessType(
             aGroup.GetOnlyChild(),
             aGroupBaseState,
             maCurrentContext.StartState,
             maCurrentContext.EndState);
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -385,16 +404,16 @@ public class ValidatingCreator
     @Override
     public void Visit (final GroupReference aReference)
     {
-        AddComment("Group reference to %s", aReference.GetReferencedGroupName());
+        maLog.AddComment("Group reference to %s", aReference.GetReferencedGroupName());
         ProcessAttributes(aReference);
 
         final Group aGroup = aReference.GetReferencedGroup(maSchemaBase);
         if (aGroup == null)
             throw new RuntimeException("can't find referenced group "+aReference.GetReferencedGroupName());
 
-        StartBlock();
+        maLog.StartBlock();
         ProcessType(aGroup, maCurrentContext.BaseState, maCurrentContext.StartState, maCurrentContext.EndState);
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -409,12 +428,12 @@ public class ValidatingCreator
     {
         assert(aOccurrence.GetChildCount() == 1);
 
-        AddComment("OccurrenceIndicator %s->%s",
+        maLog.AddComment("OccurrenceIndicator %s->%s",
             aOccurrence.GetDisplayMinimum(),
             aOccurrence.GetDisplayMaximum());
         ProcessAttributes(aOccurrence);
 
-        StartBlock();
+        maLog.StartBlock();
 
         final INode aChild = aOccurrence.GetChildren().iterator().next();
 
@@ -426,7 +445,7 @@ public class ValidatingCreator
         {
             // A zero minimum means that all occurrences are optional.
             // Add a short circuit from start to end.
-            AddComment("Occurrence: make whole element optional (min==0)");
+            maLog.AddComment("Occurrence: make whole element optional (min==0)");
             AddEpsilonTransition(maCurrentContext.StartState, maCurrentContext.EndState);
         }
         else
@@ -436,14 +455,14 @@ public class ValidatingCreator
             {
                 // Add transition i-1 -> i (i == nIndex).
                 final State aNextState = maStateContext.CreateState(maCurrentContext.BaseState, "O"+nIndex);
-                AddComment("Occurrence: move from %d -> %d (%s -> %s) (minimum)",
+                maLog.AddComment("Occurrence: move from %d -> %d (%s -> %s) (minimum)",
                     nIndex-1,
                     nIndex,
                     aCurrentState,
                     aNextState);
-                StartBlock();
+                maLog.StartBlock();
                 ProcessType(aChild, aCurrentState, aCurrentState, aNextState);
-                EndBlock();
+                maLog.EndBlock();
                 aCurrentState = aNextState;
             }
         }
@@ -454,17 +473,17 @@ public class ValidatingCreator
 
             // last -> loop
             final State aLoopState = maStateContext.CreateState(maCurrentContext.BaseState, "OL");
-            AddComment("Occurrence: forward to loop (maximum)");
+            maLog.AddComment("Occurrence: forward to loop (maximum)");
             AddEpsilonTransition(aCurrentState, aLoopState);
 
             // loop -> loop
-            AddComment("Occurrence: loop");
-            StartBlock();
+            maLog.AddComment("Occurrence: loop");
+            maLog.StartBlock();
             ProcessType(aChild, aLoopState, aLoopState, aLoopState);
-            EndBlock();
+            maLog.EndBlock();
 
             // -> end
-            AddComment("Occurrence: forward to local end");
+            maLog.AddComment("Occurrence: forward to local end");
             AddEpsilonTransition(aLoopState, maCurrentContext.EndState);
         }
         else
@@ -475,29 +494,29 @@ public class ValidatingCreator
                 if (nIndex > 0)
                 {
                     // i-1 -> end
-                    AddComment("Occurrence: make %d optional (maximum)", nIndex-1);
+                    maLog.AddComment("Occurrence: make %d optional (maximum)", nIndex-1);
                     AddEpsilonTransition(aCurrentState, maCurrentContext.EndState);
                 }
 
                 // i-1 -> i
                 final State aNextState = maStateContext.CreateState(maCurrentContext.BaseState, "O"+nIndex);
-                AddComment("Occurrence: %d -> %d (%s -> %s) (maximum)",
+                maLog.AddComment("Occurrence: %d -> %d (%s -> %s) (maximum)",
                     nIndex-1,
                     nIndex,
                     aCurrentState,
                     aNextState);
-                StartBlock();
+                maLog.StartBlock();
                 ProcessType(aChild, aCurrentState, aCurrentState, aNextState);
-                EndBlock();
+                maLog.EndBlock();
 
                 aCurrentState = aNextState;
             }
 
             // max -> end
-            AddComment("Occurrence: forward to local end");
+            maLog.AddComment("Occurrence: forward to local end");
             AddEpsilonTransition(aCurrentState, maCurrentContext.EndState);
         }
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -510,10 +529,10 @@ public class ValidatingCreator
     @Override
     public void Visit (final Sequence aSequence)
     {
-        AddComment("Sequence.");
+        maLog.AddComment("Sequence.");
         ProcessAttributes(aSequence);
 
-        StartBlock();
+        maLog.StartBlock();
         int nStateIndex = 0;
         State aCurrentState = maStateContext.CreateState(maCurrentContext.BaseState, "S"+nStateIndex++);
         AddEpsilonTransition(maCurrentContext.StartState, aCurrentState);
@@ -524,7 +543,7 @@ public class ValidatingCreator
             aCurrentState = aNextState;
         }
         AddEpsilonTransition(aCurrentState, maCurrentContext.EndState);
-        EndBlock();
+        maLog.EndBlock();
     }
 
 
@@ -533,7 +552,8 @@ public class ValidatingCreator
     @Override
     public void Visit (final BuiltIn aNode)
     {
-        throw new RuntimeException("can not handle "+aNode.toString());
+        // Ignored.
+        //throw new RuntimeException("can not handle "+aNode.toString());
     }
 
 
@@ -559,7 +579,7 @@ public class ValidatingCreator
     @Override
     public void Visit (final SimpleContent aNode)
     {
-        AddComment("SimpleContent.");
+        maLog.AddComment("SimpleContent.");
         ProcessAttributes(aNode);
 
         for (final INode aChild : aNode.GetChildren())
@@ -572,9 +592,9 @@ public class ValidatingCreator
     @Override
     public void Visit (final SimpleType aNode)
     {
-        AddComment("SimpleContent.");
-        for (final INode aChild : aNode.GetChildren())
-            ProcessType(aChild, maCurrentContext.BaseState, maCurrentContext.StartState, maCurrentContext.EndState);
+        maLog.AddComment("SimpleType.");
+        //for (final INode aChild : aNode.GetChildren())
+            //ProcessType(aChild, maCurrentContext.BaseState, maCurrentContext.StartState, maCurrentContext.EndState);
     }
 
 
@@ -706,6 +726,8 @@ public class ValidatingCreator
 
     private INode GetAllReplacement (final All aAll)
     {
+        final long nStartTime = System.currentTimeMillis();
+
         // By default each child of this node can appear exactly once, however
         // the order is undefined.  This corresponds to an enumeration of all
         // permutations of the children.
@@ -735,7 +757,10 @@ public class ValidatingCreator
 
             ++nCount;
         }
-        System.out.printf("there are %d permutations\n", nCount);
+        final long nEndTime = System.currentTimeMillis();
+        System.out.printf("created %d permutations in %fs\n",
+            nCount,
+            (nEndTime-nStartTime)/1000.0);
 
         return aChoice;
     }

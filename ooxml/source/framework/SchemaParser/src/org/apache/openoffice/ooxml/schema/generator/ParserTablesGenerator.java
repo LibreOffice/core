@@ -39,20 +39,35 @@ import org.apache.openoffice.ooxml.schema.automaton.State;
 import org.apache.openoffice.ooxml.schema.automaton.Transition;
 import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
 import org.apache.openoffice.ooxml.schema.model.attribute.AttributeBase.Use;
+import org.apache.openoffice.ooxml.schema.model.base.INode;
+import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 import org.apache.openoffice.ooxml.schema.model.schema.NamespaceMap;
 import org.apache.openoffice.ooxml.schema.parser.FormDefault;
+import org.apache.openoffice.ooxml.schema.simple.BlobNode;
+import org.apache.openoffice.ooxml.schema.simple.DateTimeNode;
+import org.apache.openoffice.ooxml.schema.simple.ISimpleTypeNode;
+import org.apache.openoffice.ooxml.schema.simple.ISimpleTypeNodeVisitor;
+import org.apache.openoffice.ooxml.schema.simple.NumberNode;
+import org.apache.openoffice.ooxml.schema.simple.SimpleTypeContainer;
+import org.apache.openoffice.ooxml.schema.simple.SimpleTypeDescriptor;
+import org.apache.openoffice.ooxml.schema.simple.StringNode;
+import org.apache.openoffice.ooxml.schema.simple.UnionNode;
 
 public class ParserTablesGenerator
 {
     public ParserTablesGenerator (
         final FiniteAutomatonContainer aAutomatons,
-        final NamespaceMap aNamespaces)
+        final NamespaceMap aNamespaces,
+        final SimpleTypeContainer aSimpleTypes,
+        final Map<String,Integer> aAttributeValueToIdMap)
     {
         maAutomatons = aAutomatons;
+        maSimpleTypes = aSimpleTypes;
         maNamespaces = aNamespaces;
         maNameToIdMap = new TreeMap<>();
         maPrefixToIdMap = new HashMap<>();
-        maStateNameToIdMap = new TreeMap<>();
+        maTypeNameToIdMap = new TreeMap<>();
+        maAttributeValueToIdMap = aAttributeValueToIdMap;
     }
 
 
@@ -73,8 +88,9 @@ public class ParserTablesGenerator
             WriteNamespaceList(aOut);
             WriteNameList(aOut);
             WriteGlobalStartEndStates(aOut);
-            WriteNameList(aOut);
             WriteAutomatonList(aOut);
+            WriteSimpleTypes(aOut);
+            WriteAttributeValues(aOut);
             aOut.close();
         }
         catch (final FileNotFoundException aException)
@@ -133,15 +149,18 @@ public class ParserTablesGenerator
      */
     private void AssignNameIds ()
     {
-        maStateNameToIdMap.clear();
+        maTypeNameToIdMap.clear();
         int nIndex = 0;
 
         // Process state names.
-        final Set<State> aSortedStates = new TreeSet<>();
+        final Set<QualifiedName> aSortedTypeNames = new TreeSet<>();
         for (final State aState : maAutomatons.GetStates())
-            aSortedStates.add(aState);
-        for (final State aState : aSortedStates)
-            maStateNameToIdMap.put(aState.GetFullname(), nIndex++);
+            aSortedTypeNames.add(aState.GetQualifiedName());
+        for (final Entry<String, SimpleTypeDescriptor> aSimpleType : maSimpleTypes.GetSimpleTypes())
+            aSortedTypeNames.add(aSimpleType.getValue().GetName());
+
+        for (final QualifiedName aName : aSortedTypeNames)
+            maTypeNameToIdMap.put(aName.GetStateName(), nIndex++);
     }
 
 
@@ -169,11 +188,11 @@ public class ParserTablesGenerator
         final FiniteAutomaton aAutomaton = maAutomatons.GetTopLevelAutomaton();
         final State aStartState = aAutomaton.GetStartState();
         aOut.printf("start-state %4d %s\n",
-            maStateNameToIdMap.get(aStartState.GetFullname()),
+            maTypeNameToIdMap.get(aStartState.GetFullname()),
             aStartState.GetFullname());
         for (final State aAcceptingState : aAutomaton.GetAcceptingStates())
             aOut.printf("end-state %4d %s\n",
-                maStateNameToIdMap.get(aAcceptingState.GetFullname()),
+                maTypeNameToIdMap.get(aAcceptingState.GetFullname()),
                 aAcceptingState.GetFullname());
     }
 
@@ -190,8 +209,8 @@ public class ParserTablesGenerator
                 aEntry.getKey());
         }
 
-        aOut.printf("\n# %s states\n",  maStateNameToIdMap.size());
-        for (final Entry<String, Integer> aEntry : maStateNameToIdMap.entrySet())
+        aOut.printf("\n# %s states\n",  maTypeNameToIdMap.size());
+        for (final Entry<String, Integer> aEntry : maTypeNameToIdMap.entrySet())
         {
             aOut.printf("state-name %4d %s\n",
                 aEntry.getValue(),
@@ -206,10 +225,10 @@ public class ParserTablesGenerator
     {
         for (final FiniteAutomaton aAutomaton : maAutomatons.GetAutomatons())
         {
-            aOut.printf("# %s\n", aAutomaton.GetTypeName());
+            aOut.printf("# %s at %s\n", aAutomaton.GetTypeName(), aAutomaton.GetLocation());
 
             final State aStartState = aAutomaton.GetStartState();
-            final int nStartStateId = maStateNameToIdMap.get(aStartState.GetFullname());
+            final int nStartStateId = maTypeNameToIdMap.get(aStartState.GetFullname());
 
             // Write start state.
             aOut.printf("start-state %d %s\n",
@@ -220,8 +239,31 @@ public class ParserTablesGenerator
             for (final State aState : aAutomaton.GetAcceptingStates())
             {
                 aOut.printf("accepting-state %d %s\n",
-                    maStateNameToIdMap.get(aState.GetFullname()),
+                    maTypeNameToIdMap.get(aState.GetFullname()),
                     aState.GetFullname());
+            }
+
+            // Write text type.
+            final INode aTextType = aStartState.GetTextType();
+            if (aTextType != null)
+            {
+                switch(aTextType.GetNodeType())
+                {
+                    case BuiltIn:
+                        aOut.printf("text-type %d %d   %s\n",
+                            nStartStateId,
+                            maTypeNameToIdMap.get(aTextType.GetName().GetStateName()),
+                            aTextType.GetName().GetStateName());
+                        break;
+                    case SimpleType:
+                        aOut.printf("text-type %d %d   %s\n",
+                            nStartStateId,
+                            maTypeNameToIdMap.get(aTextType.GetName().GetStateName()),
+                            aTextType.GetName().GetStateName());
+                        break;
+                    default:
+                        throw new RuntimeException();
+                }
             }
 
             WriteAttributes(
@@ -232,10 +274,10 @@ public class ParserTablesGenerator
             // Write transitions.
             for (final Transition aTransition : aAutomaton.GetTransitions())
             {
-                final Integer nId = maStateNameToIdMap.get(aTransition.GetElementTypeName());
-                aOut.printf("transition %4d %4d %2d %4d %4d  %s %s \"%s\" %s\n",
-                    maStateNameToIdMap.get(aTransition.GetStartState().GetFullname()),
-                    maStateNameToIdMap.get(aTransition.GetEndState().GetFullname()),
+                final Integer nId = maTypeNameToIdMap.get(aTransition.GetElementTypeName());
+                aOut.printf("transition %4d %4d %2d %4d %4d  %s %s %s %s\n",
+                    maTypeNameToIdMap.get(aTransition.GetStartState().GetFullname()),
+                    maTypeNameToIdMap.get(aTransition.GetEndState().GetFullname()),
                     maPrefixToIdMap.get(aTransition.GetElementName().GetNamespacePrefix()),
                     maNameToIdMap.get(aTransition.GetElementName().GetLocalPart()),
                     nId!=null ? nId : -1,
@@ -249,7 +291,7 @@ public class ParserTablesGenerator
             {
                 for (@SuppressWarnings("unused") final SkipData aSkipData : aState.GetSkipData())
                     aOut.printf("skip %4d   %s\n",
-                        maStateNameToIdMap.get(aState.GetFullname()),
+                        maTypeNameToIdMap.get(aState.GetFullname()),
                         aState.GetFullname());
             }
         }
@@ -267,11 +309,11 @@ public class ParserTablesGenerator
         for (final Attribute aAttribute : aAttributes)
         {
             aOut.printf("attribute %4d %2d %c %4d %4d %s %s  %s %s %s\n",
-                maStateNameToIdMap.get(aState.GetFullname()),
+                maTypeNameToIdMap.get(aState.GetFullname()),
                 maPrefixToIdMap.get(aAttribute.GetName().GetNamespacePrefix()),
                 aAttribute.GetFormDefault()==FormDefault.qualified ? 'q' : 'u',
                 maNameToIdMap.get(aAttribute.GetName().GetLocalPart()),
-                maStateNameToIdMap.get(aAttribute.GetTypeName().GetStateName()),
+                maTypeNameToIdMap.get(aAttribute.GetTypeName().GetStateName()),
                 aAttribute.GetUse()==Use.Optional ? 'o' : 'u',
                 aAttribute.GetDefault()==null ? "null" : '"'+aAttribute.GetDefault()+'"',
                 aState.GetFullname(),
@@ -283,9 +325,231 @@ public class ParserTablesGenerator
 
 
 
+    private void WriteSimpleTypes (
+        final PrintStream aOut)
+    {
+        if (maSimpleTypes == null)
+        {
+            aOut.printf("\n// There is no simple type information.\n");
+        }
+        else
+        {
+            aOut.printf("\n// %d simple types.\n", maSimpleTypes.GetSimpleTypeCount());
+            for (final Entry<String,SimpleTypeDescriptor> aEntry : maSimpleTypes.GetSimpleTypesSorted())
+            {
+                int nIndex = 0;
+                for (final ISimpleTypeNode aSubType : aEntry.getValue().GetSubType())
+                {
+                    final int nCurrentIndex = nIndex++;
+
+                    final StringBuffer aLine = new StringBuffer();
+                    aLine.append(String.format(
+                        "simple-type %5d %1d %c ",
+                        maTypeNameToIdMap.get(aEntry.getKey()),
+                        nCurrentIndex,
+                        aSubType.IsList() ? 'L' : 'T'));
+
+                    aSubType.AcceptVisitor(new ISimpleTypeNodeVisitor()
+                    {
+                        @Override public void Visit(UnionNode aType)
+                        {
+                            throw new RuntimeException("unexpected");
+                        }
+                        @Override public void Visit(StringNode aType)
+                        {
+                            AppendStringDescription(aLine, aType);
+                        }
+                        @Override public void Visit(NumberNode<?> aType)
+                        {
+                            AppendNumberDescription(aLine, aType);
+                        }
+                        @Override public void Visit(DateTimeNode aType)
+                        {
+                            AppendDateTimeDescription(aLine, aType);
+                        }
+                        @Override public void Visit(BlobNode aType)
+                        {
+                            AppendBlobDescription(aLine, aType);
+                        }
+                    });
+                    aOut.printf("%s\n", aLine.toString());
+                }
+            }
+        }
+    }
+
+
+
+
+    private void WriteAttributeValues (
+        final PrintStream aOut)
+    {
+        final Map<String,Integer> aSortedMap = new TreeMap<>();
+        aSortedMap.putAll(maAttributeValueToIdMap);
+        aOut.printf("//  %d attribute values from enumerations.\n", maAttributeValueToIdMap.size());
+        for (final Entry<String,Integer> aEntry : aSortedMap.entrySet())
+            aOut.printf("attribute-value %5d %s\n", aEntry.getValue(), QuoteString(aEntry.getKey()));
+    }
+
+
+
+
+    private static void AppendStringDescription (
+        final StringBuffer aLine,
+        final StringNode aType)
+    {
+        aLine.append("S ");
+        switch(aType.GetRestrictionType())
+        {
+            case Enumeration:
+                aLine.append('E');
+                for (final int nValueId : aType.GetEnumerationRestriction())
+                {
+                    aLine.append(' ');
+                    aLine.append(nValueId);
+                }
+                break;
+            case Pattern:
+                aLine.append("P ");
+                aLine.append(QuoteString(aType.GetPatternRestriction()));
+                break;
+            case Length:
+                aLine.append("L ");
+                final int[] aLengthRestriction = aType.GetLengthRestriction();
+                aLine.append(aLengthRestriction[0]);
+                aLine.append(' ');
+                aLine.append(aLengthRestriction[1]);
+                break;
+            case None:
+                aLine.append('N');
+                break;
+            default:
+                throw new RuntimeException();
+        }
+    }
+
+
+
+
+    private static void AppendNumberDescription (
+        final StringBuffer aLine,
+        final NumberNode<?> aType)
+    {
+        aLine.append("N ");
+        switch(aType.GetNumberType())
+        {
+            case Boolean: aLine.append("u1"); break;
+            case Byte: aLine.append("s8"); break;
+            case UnsignedByte: aLine.append("u8"); break;
+            case Short: aLine.append("s16"); break;
+            case UnsignedShort: aLine.append("u16"); break;
+            case Int: aLine.append("s32"); break;
+            case UnsignedInt: aLine.append("u32"); break;
+            case Long: aLine.append("s64"); break;
+            case UnsignedLong: aLine.append("u64"); break;
+            case Integer: aLine.append("s*"); break;
+            case Float: aLine.append("f"); break;
+            case Double: aLine.append("d"); break;
+            default:
+                throw new RuntimeException("unsupported numerical type "+aType.GetNumberType());
+        }
+        aLine.append(' ');
+        switch(aType.GetRestrictionType())
+        {
+            case Enumeration:
+                aLine.append("E ");
+                for (final Object nValue : aType.GetEnumerationRestriction())
+                {
+                    aLine.append(" ");
+                    aLine.append(nValue);
+                }
+                break;
+            case Size:
+                aLine.append("S");
+                if (aType.GetMinimum() != null)
+                {
+                    if (aType.IsMinimumInclusive())
+                        aLine.append(" >= ");
+                    else
+                        aLine.append(" > ");
+                    aLine.append(aType.GetMinimum());
+                }
+                if (aType.GetMaximum() != null)
+                {
+                    if (aType.IsMaximumInclusive())
+                        aLine.append(" <= ");
+                    else
+                        aLine.append(" < ");
+                    aLine.append(aType.GetMaximum());
+                }
+                break;
+            case None:
+                aLine.append("N");
+                break;
+            default:
+                throw new RuntimeException("unsupported numerical restriction "+aType.GetRestrictionType());
+        }
+    }
+
+
+
+
+    private static void AppendDateTimeDescription (
+        final StringBuffer aLine,
+        final DateTimeNode aType)
+    {
+        aLine.append("D");
+    }
+
+
+
+
+    private static void AppendBlobDescription (
+        final StringBuffer aLine,
+        final BlobNode aType)
+    {
+        aLine.append("B ");
+        switch(aType.GetBlobType())
+        {
+            case Base64Binary:
+                aLine.append("B ");
+                break;
+            case HexBinary:
+                aLine.append ("H ");
+                break;
+            default:
+                throw new RuntimeException("unsupported blob type");
+        }
+        switch(aType.GetRestrictionType())
+        {
+            case Length:
+                aLine.append("L ");
+                aLine.append(aType.GetLengthRestriction());
+                break;
+            case None:
+                aLine.append("N");
+                break;
+            default:
+                throw new RuntimeException();
+        }
+    }
+
+
+
+
+    private static String QuoteString(final String sText)
+    {
+        return "\"" + sText.replace("\"", "&quot;").replace(" ", "%20") + "\"";
+    }
+
+
+
+
     private final FiniteAutomatonContainer maAutomatons;
+    private final SimpleTypeContainer maSimpleTypes;
     private final NamespaceMap maNamespaces;
     private final Map<String,Integer> maNameToIdMap;
     private final Map<String,Integer> maPrefixToIdMap;
-    private final Map<String,Integer> maStateNameToIdMap;
+    private final Map<String,Integer> maTypeNameToIdMap;
+    private final Map<String,Integer> maAttributeValueToIdMap;
 }

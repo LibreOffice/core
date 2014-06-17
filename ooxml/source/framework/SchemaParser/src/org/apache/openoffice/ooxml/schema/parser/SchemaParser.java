@@ -688,9 +688,10 @@ public class SchemaParser
     {
         assert(HasOnlyAttributes("base", "value"));
 
+        final String sBaseType = GetAttributeValue("base");
         final Restriction aRestriction = new Restriction(
             aParent,
-            GetAttributeValue("base"),
+            CreateQualifiedName(sBaseType),
             GetLocation());
 
         while (true)
@@ -827,7 +828,7 @@ public class SchemaParser
                             break;
 
                         case "restriction":
-                            aType.SetRestriction(ParseRestriction(aType));
+                            aType.AddChild(ParseRestriction(aType));
                             break;
 
                         case "union":
@@ -908,10 +909,10 @@ public class SchemaParser
         if (sFilename == null)
         {
             final String sNamespaceName = GetAttributeValue("namespace");
-            if (sNamespaceName.equals(XmlNamespace.NamespaceURI))
+            if (sNamespaceName.equals(XmlNamespace.URI))
             {
                 XmlNamespace.Apply(maSchemaBase);
-                maLocalNamespaceMap.put(XmlNamespace.NamespacePrefix, XmlNamespace.NamespaceURI);
+                maLocalNamespaceMap.put(XmlNamespace.Prefix, XmlNamespace.URI);
             }
             else
                 throw CreateErrorException("invalid import");

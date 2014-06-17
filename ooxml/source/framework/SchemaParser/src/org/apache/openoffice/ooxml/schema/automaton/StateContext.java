@@ -21,7 +21,9 @@
 
 package org.apache.openoffice.ooxml.schema.automaton;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -44,6 +46,7 @@ public class StateContext
         maStateContainer = aStateContainer;
         maStates = new HashSet<>();
         maStartState = GetOrCreateState(new QualifiedName(null, null, sBaseStateName), null);
+        maDisambiguateCounters = new HashMap<>();
     }
 
 
@@ -129,6 +132,31 @@ public class StateContext
             "end");
         aEndState.SetIsAccepting();
         return aEndState;
+    }
+
+
+
+    /** Some algorithms can not easily produce unique suffixes.
+     *  Append an integer to the given suffix so that it becomes unique.
+     */
+    public String GetUnambiguousSuffix (final QualifiedName aBasename, final String sSuffix)
+    {
+        String sStateName = State.GetStateName(aBasename, sSuffix);
+        if ( ! HasState(sStateName))
+        {
+            // The given suffix can be used without modification.
+            return sSuffix;
+        }
+        else
+        {
+            int nIndex = 2;
+            final Integer nDisambiguateCounter = maDisambiguateCounters.get(sStateName);
+            if (nDisambiguateCounter != null)
+                nIndex = nDisambiguateCounter+1;
+            maDisambiguateCounters.put(sStateName, nIndex);
+
+            return sSuffix + "_" + nIndex;
+        }
     }
 
 
@@ -237,4 +265,5 @@ public class StateContext
     private final StateContainer maStateContainer;
     private final Set<State> maStates;
     private final State maStartState;
+    private final Map<String,Integer> maDisambiguateCounters;
 }

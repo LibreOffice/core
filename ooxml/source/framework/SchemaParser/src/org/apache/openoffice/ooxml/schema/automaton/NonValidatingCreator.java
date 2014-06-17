@@ -56,27 +56,36 @@ public class NonValidatingCreator
     {
         final FiniteAutomatonContainer aAutomatons = new FiniteAutomatonContainer(maStateContainer);
 
+        // Create a single automaton for all top level elements.
         aAutomatons.AddAutomaton(
             null,
             CreateForTopLevelElements(aTopLevelSchemas));
 
+        // Create one automaton for each complex type.
         for (final ComplexType aComplexType : maSchemaBase.ComplexTypes.GetSorted())
             aAutomatons.AddAutomaton(
                 aComplexType.GetName(),
                 CreateForComplexType(aComplexType));
 
-        maLog.close();
+        // Create one automaton for each simple type that is referenced by an element.
+        for (final INode aSimpleType : maElementSimpleTypes)
+            aAutomatons.AddAutomaton(
+                aSimpleType.GetName(),
+                CreateForSimpleType(aSimpleType));
+
+        maLog.Close();
 
         return aAutomatons;
     }
 
 
 
+
     private FiniteAutomaton CreateForTopLevelElements (
         final Iterable<Schema> aTopLevelSchemas)
     {
-        AddComment("top level elements");
-        StartBlock();
+        maLog.AddComment("top level elements");
+        maLog.StartBlock();
         final String sTypeName = "<top-level>";
         final StateContext aStateContext = new StateContext(
             maStateContainer,
@@ -87,11 +96,11 @@ public class NonValidatingCreator
         // top level elements
         for (final Schema aSchema : aTopLevelSchemas)
         {
-            AddComment("schema %s", aSchema.GetShortName());
-            StartBlock();
+            maLog.AddComment("schema %s", aSchema.GetShortName());
+            maLog.StartBlock();
             for (final Element aElement : aSchema.TopLevelElements.GetSorted())
             {
-                AddComment("Element: on '%s' go from %s to %s via %s",
+                maLog.AddComment("Element: on '%s' go from %s to %s via %s",
                     aElement.GetElementName().GetDisplayName(),
                     aStartState.GetFullname(),
                     aEndState.GetFullname(),
@@ -104,11 +113,11 @@ public class NonValidatingCreator
                         aElement.GetElementName(),
                         aElement.GetTypeName().GetStateName()));
             }
-            EndBlock();
+            maLog.EndBlock();
         }
-        EndBlock();
+        maLog.EndBlock();
 
-        return new FiniteAutomaton(aStateContext, null);
+        return new FiniteAutomaton(aStateContext, null, null);
     }
 
 
@@ -117,10 +126,10 @@ public class NonValidatingCreator
     private FiniteAutomaton CreateForComplexType (final ComplexType aComplexType)
     {
         maLog.printf("\n");
-        AddComment ("Complex Type %s defined in %s.",
+        maLog.AddComment ("Complex Type %s defined in %s.",
             aComplexType.GetName().GetDisplayName(),
             aComplexType.GetLocation());
-        StartBlock();
+        maLog.StartBlock();
 
         final StateContext aStateContext = new StateContext(
             maStateContainer,
@@ -128,7 +137,7 @@ public class NonValidatingCreator
 
         for (final Element aElement : CollectElements(aComplexType))
         {
-            AddComment("Element: on '%s' go from %s to %s via %s",
+            maLog.AddComment("Element: on '%s' go from %s to %s via %s",
                 aElement.GetElementName().GetDisplayName(),
                 aStateContext.GetStartState().GetFullname(),
                 aStateContext.GetStartState().GetFullname(),
@@ -140,6 +149,13 @@ public class NonValidatingCreator
                     aStateContext.GetStartState(),
                     aElement.GetElementName(),
                     aElement.GetTypeName().GetStateName()));
+
+            // For elements whose type is a simple type we have to remember that
+            // simple type for later (and then create an NFA for it.)
+            final INode aSimpleType = maSchemaBase.GetSimpleTypeForName(
+                aElement.GetTypeName());
+            if (aSimpleType != null)
+                maElementSimpleTypes.add(aSimpleType);
         }
 
         for (final Any aAny : CollectAnys(aComplexType))
@@ -158,9 +174,9 @@ public class NonValidatingCreator
 
         aStateContext.GetStartState().SetIsAccepting();
 
-        EndBlock();
+        maLog.EndBlock();
 
-        return new FiniteAutomaton(aStateContext, maAttributes);
+        return new FiniteAutomaton(aStateContext, maAttributes, aComplexType.GetLocation());
     }
 
 

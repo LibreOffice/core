@@ -1,6 +1,8 @@
-package org.apache.openoffice.ooxml.parser;
+package org.apache.openoffice.ooxml.parser.action;
 
 import javax.xml.stream.Location;
+
+import org.apache.openoffice.ooxml.parser.ElementContext;
 
 /** Interface for actions that are bound to states and triggered by XML events.
  */

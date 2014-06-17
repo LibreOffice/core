@@ -39,7 +39,6 @@ public class SimpleType
         final Location aLocation)
     {
         super(aParent, aName, aLocation);
-        maRestriction = null;
         maFinalValues = null;
     }
 
@@ -50,23 +49,6 @@ public class SimpleType
     public NodeType GetNodeType ()
     {
         return NodeType.SimpleType;
-    }
-
-
-
-
-    public void SetRestriction (final Restriction aRestriction)
-    {
-        assert(maRestriction==null);
-        maRestriction = aRestriction;
-    }
-
-
-
-
-    public Restriction GetRestriction ()
-    {
-        return maRestriction;
     }
 
 
@@ -116,6 +98,5 @@ public class SimpleType
 
 
 
-    private Restriction maRestriction;
     private String[] maFinalValues;
 }

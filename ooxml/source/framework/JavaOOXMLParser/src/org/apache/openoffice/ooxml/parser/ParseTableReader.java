@@ -28,16 +28,26 @@ public class ParseTableReader
                 final String sLine = aReader.readLine();
                 if (sLine == null)
                     break;
-                if (sLine.startsWith("#"))
+                else if (sLine.startsWith("#"))
+                    continue;
+                else if (sLine.isEmpty())
                     continue;
 
-                // Splitting just at whitespace may be too simple to keep quoted text
-                // (used e.g. for attribute default values) in one peace when
-                // it contains whitespace.  Should this case occur than this
-                // implementation has to be improved.
-                final String aParts[] = sLine.split("\\s+");
-
-                GetSection(aParts[0]).add(aParts);
+                final String[] aLineParts = sLine.split("\\s+");
+                for (int nIndex=0; nIndex<aLineParts.length; ++nIndex)
+                {
+                    final String sPart = aLineParts[nIndex];
+                    if (sPart.isEmpty())
+                    {
+                        throw new RuntimeException();
+                    }
+                    else if (sPart.charAt(0) == '"')
+                    {
+                        // Remove leading and trailing quotes, unquote spaces.
+                        aLineParts[nIndex] = sPart.substring(1, sPart.length()-1).replace("%20", " ").replace("&quot;", "\"");
+                    }
+                }
+                GetSection(aLineParts[0]).add(aLineParts);
             }
 
             aReader.close();

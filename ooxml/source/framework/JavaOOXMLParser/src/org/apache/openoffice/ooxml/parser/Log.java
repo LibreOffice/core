@@ -22,6 +22,7 @@
 package org.apache.openoffice.ooxml.parser;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,6 +38,14 @@ public class Log
     {
         maOut = aOut;
         msIndentation = "";
+    }
+
+
+
+
+    public Log (final String sFilename)
+    {
+        this(CreateFileOutputStream(sFilename));
     }
 
 
@@ -93,6 +102,24 @@ public class Log
     public void DecreaseIndentation ()
     {
         msIndentation = msIndentation.substring(4);
+    }
+
+
+
+
+    private static OutputStream CreateFileOutputStream (final String sFilename)
+    {
+        OutputStream aOut;
+        try
+        {
+            aOut = new FileOutputStream(sFilename);
+            return aOut;
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 

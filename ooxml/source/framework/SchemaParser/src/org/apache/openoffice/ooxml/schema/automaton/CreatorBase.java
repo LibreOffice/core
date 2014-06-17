@@ -1,13 +1,13 @@
 package org.apache.openoffice.ooxml.schema.automaton;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.iterator.AttributeIterator;
 import org.apache.openoffice.ooxml.schema.iterator.DereferencingNodeIterator;
+import org.apache.openoffice.ooxml.schema.misc.Log;
 import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
 import org.apache.openoffice.ooxml.schema.model.base.INode;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
@@ -22,18 +22,30 @@ public class CreatorBase
     {
         maSchemaBase = aSchemaBase;
         maStateContainer = new StateContainer();
-
-        PrintStream aLog = null;
-        try
-        {
-            aLog = new PrintStream(new FileOutputStream(aLogFile));
-        }
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-        maLog = aLog;
+        maLog = new Log(aLogFile);
         msLogIndentation = "";
+        maElementSimpleTypes = new HashSet<>();
+    }
+
+
+
+
+    /** Create a very simple automaton:
+     *  a) Its start state is also the accepting state.
+     *  b) It does not allow any transitions.
+     *  c) Its text items have the given simple type.
+     */
+    protected FiniteAutomaton CreateForSimpleType (final INode aSimpleType)
+    {
+        final StateContext aStateContext = new StateContext(
+            maStateContainer,
+            aSimpleType.GetName().GetStateName());
+        aStateContext.GetStartState().SetIsAccepting();
+        aStateContext.GetStartState().SetTextType(aSimpleType);
+        return new FiniteAutomaton(
+            aStateContext,
+            new Vector<Attribute>(),
+            aSimpleType.GetLocation());
     }
 
 
@@ -82,43 +94,10 @@ public class CreatorBase
 
 
 
-    protected void AddComment (
-        final String sFormat,
-        final Object ... aArgumentList)
-    {
-        if (maLog != null)
-        {
-            maLog.print(msLogIndentation);
-            maLog.print("// ");
-            maLog.printf(sFormat, aArgumentList);
-            maLog.print("\n");
-        }
-    }
-
-
-
-
-    protected void StartBlock ()
-    {
-        if (maLog != null)
-            msLogIndentation += "    ";
-    }
-
-
-
-
-    protected void EndBlock ()
-    {
-        if (maLog != null)
-            msLogIndentation = msLogIndentation.substring(4);
-    }
-
-
-
-
     protected final SchemaBase maSchemaBase;
     protected final StateContainer maStateContainer;
-    protected final PrintStream maLog;
+    protected final Log maLog;
     protected String msLogIndentation;
     protected Vector<Attribute> maAttributes;
+    protected final Set<INode> maElementSimpleTypes;
 }

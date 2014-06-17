@@ -24,6 +24,8 @@ package org.apache.openoffice.ooxml.schema.model.simple;
 import java.util.Vector;
 
 import org.apache.openoffice.ooxml.schema.model.base.INodeVisitor;
+import org.apache.openoffice.ooxml.schema.model.base.Location;
+import org.apache.openoffice.ooxml.schema.model.base.Node;
 import org.apache.openoffice.ooxml.schema.model.base.NodeType;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 
@@ -32,34 +34,10 @@ import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 public class BuiltIn
     extends SimpleType
 {
-    public enum Type
-    {
-        String,
-        Token,
-        Byte,
-        UnsignedByte,
-        Short,
-        UnsignedShort,
-        Int,
-        UnsignedInt,
-        Integer,
-        Long,
-        Float,
-        Double,
-        Boolean,
-        Base64Binary,
-        DateTime,
-        AnyURI
-    }
-    public static final String XsdNamespace = "http://www.w3.org/2001/XMLSchema";
-
-
-
-
     public static Vector<BuiltIn> GetTypes ()
     {
         final Vector<BuiltIn> aTypes = new Vector<>();
-        for (final Type eType : Type.values())
+        for (final BuiltInType eType : BuiltInType.values())
             aTypes.add(new BuiltIn(eType));
         return aTypes;
     }
@@ -68,9 +46,9 @@ public class BuiltIn
 
 
     protected BuiltIn (
-        final Type eType)
+        final BuiltInType eType)
     {
-        super(null, GetNameForType(eType), null);
+        super(null, eType.GetQualifiedName(), new Location());
         meType = eType;
     }
 
@@ -86,7 +64,7 @@ public class BuiltIn
 
 
 
-    public Type GetBuiltInType ()
+    public BuiltInType GetBuiltInType ()
     {
         return meType;
     }
@@ -103,36 +81,6 @@ public class BuiltIn
 
 
 
-    private static QualifiedName GetNameForType (final Type eType)
-    {
-        final String sTypeName;
-        switch (eType)
-        {
-            case String: sTypeName = "string"; break;
-            case Token: sTypeName = "token"; break;
-            case Byte: sTypeName = "byte"; break;
-            case UnsignedByte: sTypeName = "unsignedByte"; break;
-            case Short: sTypeName = "short"; break;
-            case UnsignedShort: sTypeName = "unsignedShort"; break;
-            case Int: sTypeName = "int"; break;
-            case UnsignedInt: sTypeName = "unsignedInt"; break;
-            case Integer: sTypeName = "integer"; break;
-            case Long: sTypeName = "long"; break;
-            case Float: sTypeName = "float"; break;
-            case Double: sTypeName = "double"; break;
-            case Boolean: sTypeName = "boolean"; break;
-            case Base64Binary: sTypeName = "base64Binary"; break;
-            case DateTime: sTypeName = "dateTime"; break;
-            case AnyURI: sTypeName = "anyURI"; break;
-            default:
-                throw new RuntimeException();
-        }
-        return new QualifiedName(XsdNamespace, "xsd", sTypeName);
-    }
-
-
-
-
     @Override
     public String toString ()
     {
@@ -142,5 +90,14 @@ public class BuiltIn
 
 
 
-    private final Type meType;
+    private final BuiltInType meType;
+
+
+
+
+    public static Node GetForName(QualifiedName aName)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

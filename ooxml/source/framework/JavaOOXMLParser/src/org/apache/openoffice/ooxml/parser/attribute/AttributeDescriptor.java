@@ -1,4 +1,4 @@
-package org.apache.openoffice.ooxml.parser;
+package org.apache.openoffice.ooxml.parser.attribute;
 
 /** Store information about a single attribute (per state) that was read
  *  from the parse table.
@@ -16,7 +16,7 @@ public class AttributeDescriptor
         final boolean bIsOptional,
         final String sDefaultValue,
         final String sAttributeName,
-        final String sAttributeType)
+        final int nAttributeTypeId)
     {
         mnNamespaceId = nPrefixId;
         mnAttributeId = nAttributeId;
@@ -24,18 +24,15 @@ public class AttributeDescriptor
         mbIsOptional = bIsOptional;
         msDefaultValue = sDefaultValue;
         msAttributeName = sAttributeName;
-        msAttributeType = sAttributeType;
+        mnAttributeTypeId = nAttributeTypeId;
     }
 
 
 
 
-    public String GetType()
+    public int GetTypeId()
     {
-        if (msAttributeType != null)
-            return msAttributeType;
-        else
-            return "<undefined>";
+        return mnAttributeTypeId;
     }
 
 
@@ -93,10 +90,10 @@ public class AttributeDescriptor
     public String toString ()
     {
         return String.format(
-            "attribute %s(%d) of type %s",
+            "attribute %s(%d) of type %d",
             msAttributeName,
             mnAttributeId,
-            msAttributeType);
+            mnAttributeTypeId);
     }
 
 
@@ -108,5 +105,5 @@ public class AttributeDescriptor
     private final boolean mbIsOptional;
     private final String msDefaultValue;
     private final String msAttributeName;
-    private final String msAttributeType;
+    private final int mnAttributeTypeId;
 }

@@ -1,4 +1,4 @@
-package org.apache.openoffice.ooxml.parser;
+package org.apache.openoffice.ooxml.parser.action;
 
 import java.util.Iterator;
 

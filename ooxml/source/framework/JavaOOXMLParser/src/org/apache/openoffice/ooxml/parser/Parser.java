@@ -6,6 +6,9 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.openoffice.ooxml.parser.action.ActionManager;
+import org.apache.openoffice.ooxml.parser.attribute.AttributeProvider;
+
 /** This is the actual parser (where OOXMLParser is the front end that handles
  *  parameters given to the main method).
  */
@@ -23,7 +26,7 @@ public class Parser
 
 
 
-    void Parse ()
+    public void Parse ()
     {
         try
         {
@@ -67,7 +70,6 @@ public class Parser
                         break;
 
                     case XMLStreamReader.END_DOCUMENT:
-                        Log.Std.printf("--- end of document ---\n");
                         break;
 
                     default:
@@ -192,6 +194,14 @@ public class Parser
             aException.printStackTrace();
             return null;
         }
+    }
+
+
+
+
+    public ActionManager GetActionManager()
+    {
+        return maMachine.GetActionManager();
     }
 
 

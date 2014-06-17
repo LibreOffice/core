@@ -23,6 +23,7 @@ package org.apache.openoffice.ooxml.schema.automaton;
 
 import java.util.Vector;
 
+import org.apache.openoffice.ooxml.schema.model.base.INode;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 
 /** Each complex type is represented by a State object (primary state).
@@ -49,6 +50,7 @@ public class State
         maEpsilonTransitions = new Vector<>();
         maSkipData = new Vector<>();
         mbIsAccepting = false;
+        maTextType = null;
     }
 
 
@@ -82,9 +84,26 @@ public class State
 
 
 
+
     public QualifiedName GetBasename ()
     {
         return maBasename;
+    }
+
+
+
+
+    /** Return a qualified name that contains the suffix.
+     *  This is typically only used for sorting type names.
+     */
+    public QualifiedName GetQualifiedName ()
+    {
+        return new QualifiedName(
+            maBasename.GetNamespacePrefix(),
+            maBasename.GetNamespaceURI(),
+            msSuffix != null
+                ? maBasename.GetLocalPart() + "_" + msSuffix
+                : maBasename.GetLocalPart());
     }
 
 
@@ -195,6 +214,35 @@ public class State
 
 
 
+    public void SetTextType (final INode aTextType)
+    {
+        assert(maTextType==null);
+        maTextType = aTextType;
+    }
+
+
+
+
+    public INode GetTextType ()
+    {
+        return maTextType;
+    }
+
+
+
+
+    public void CopyFrom (final State aOther)
+    {
+        if (aOther.IsAccepting())
+            SetIsAccepting();
+        for (final SkipData aSkipData : aOther.GetSkipData())
+            AddSkipData(aSkipData.Clone(this));
+        SetTextType(aOther.GetTextType());
+    }
+
+
+
+
     @Override
     public String toString ()
     {
@@ -211,4 +259,5 @@ public class State
     private final Vector<EpsilonTransition> maEpsilonTransitions;
     private final Vector<SkipData> maSkipData;
     private boolean mbIsAccepting;
+    private INode maTextType;
 }

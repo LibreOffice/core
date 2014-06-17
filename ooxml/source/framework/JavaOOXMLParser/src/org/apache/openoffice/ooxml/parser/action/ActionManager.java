@@ -1,13 +1,15 @@
-package org.apache.openoffice.ooxml.parser;
+package org.apache.openoffice.ooxml.parser.action;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.openoffice.ooxml.parser.NameMap;
 
 /** Manage actions that are bound to states and XML events.
  */
 public class ActionManager
 {
-    ActionManager (
+    public ActionManager (
         final NameMap aStateNameToIdMap)
     {
         maStateNameToIdMap = aStateNameToIdMap;

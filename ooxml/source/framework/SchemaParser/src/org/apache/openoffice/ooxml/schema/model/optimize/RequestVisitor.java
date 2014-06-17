@@ -31,6 +31,7 @@ import org.apache.openoffice.ooxml.schema.model.complex.Extension;
 import org.apache.openoffice.ooxml.schema.model.complex.GroupReference;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.model.simple.List;
+import org.apache.openoffice.ooxml.schema.model.simple.Restriction;
 import org.apache.openoffice.ooxml.schema.model.simple.SimpleTypeReference;
 
 /** A visitor that is called for all nodes of a complex or simple type to mark
@@ -81,6 +82,11 @@ public class RequestVisitor
     @Override public void Visit (final List aList)
     {
         maSchemaOptimizer.RequestType(aList.GetItemType());
+    }
+
+    @Override public void Visit (final Restriction aRestriction)
+    {
+        maSchemaOptimizer.RequestType(aRestriction.GetBaseType());
     }
 
     @Override public void Visit (final SimpleTypeReference aReference)

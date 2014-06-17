@@ -40,10 +40,10 @@ import org.apache.openoffice.ooxml.schema.automaton.NonValidatingCreator;
 import org.apache.openoffice.ooxml.schema.automaton.ValidatingCreator;
 import org.apache.openoffice.ooxml.schema.generator.LogGenerator;
 import org.apache.openoffice.ooxml.schema.generator.ParserTablesGenerator;
-import org.apache.openoffice.ooxml.schema.model.attribute.Attribute;
 import org.apache.openoffice.ooxml.schema.model.schema.Schema;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.parser.SchemaParser;
+import org.apache.openoffice.ooxml.schema.simple.SimpleTypeContainer;
 
 public class SchemaReader
 {
@@ -151,10 +151,15 @@ public class SchemaReader
                         maOutputOperations.add(new Runnable()
                         {
                             final File maAutomatonLogFile = CreateCheckedOutputFile(aParts.get(1));
-                            final File maParseTableFile = CreateCheckedOutputFile(aParts.get(2));
-                            @Override public void run() {WriteNonValidatingParseTables(
-                                maAutomatonLogFile,
-                                maParseTableFile);}
+                            final File maSimpleTypeLogFile = CreateCheckedOutputFile(aParts.get(2));
+                            final File maParseTableFile = CreateCheckedOutputFile(aParts.get(3));
+                            @Override public void run()
+                            {
+                                WriteNonValidatingParseTables(
+                                    maAutomatonLogFile,
+                                    maSimpleTypeLogFile,
+                                    maParseTableFile);
+                            }
                         });
                         break;
 
@@ -162,10 +167,15 @@ public class SchemaReader
                         maOutputOperations.add(new Runnable()
                         {
                             final File maAutomatonLogFile = CreateCheckedOutputFile(aParts.get(1));
-                            final File maParseTableFile = CreateCheckedOutputFile(aParts.get(2));
-                            @Override public void run() {WriteValidatingParseTables(
-                                maAutomatonLogFile,
-                                maParseTableFile);}
+                            final File maSimpleTypeLogFile = CreateCheckedOutputFile(aParts.get(2));
+                            final File maParseTableFile = CreateCheckedOutputFile(aParts.get(3));
+                            @Override public void run()
+                            {
+                                WriteValidatingParseTables(
+                                    maAutomatonLogFile,
+                                    maSimpleTypeLogFile,
+                                    maParseTableFile);
+                            }
                         });
                         break;
 
@@ -368,6 +378,7 @@ public class SchemaReader
 
     private void WriteNonValidatingParseTables (
         final File aAutomatonLogFile,
+        final File aSimpleTypeLogFile,
         final File aParseTableFile)
     {
         long nStartTime = System.currentTimeMillis();
@@ -381,7 +392,21 @@ public class SchemaReader
             aAutomatons.GetTransitionCount(),
             (nEndTime-nStartTime)/1000.0);
 
-        new ParserTablesGenerator(aAutomatons, maOptimizedSchemaBase.Namespaces)
+        nStartTime = System.currentTimeMillis();
+        final SimpleTypeContainer aSimpleTypes = SimpleTypeContainer.Create(
+            maOptimizedSchemaBase,
+            aSimpleTypeLogFile);
+        nEndTime = System.currentTimeMillis();
+        System.out.printf(
+            "created %d simple type descriptions in %fs\n",
+            aSimpleTypes.GetSimpleTypeCount(),
+            (nEndTime-nStartTime)/1000.0);
+
+        new ParserTablesGenerator(
+            aAutomatons,
+            maOptimizedSchemaBase.Namespaces,
+            aSimpleTypes,
+            maOptimizedSchemaBase.AttributeValueToIdMap)
             .Generate(aParseTableFile);
     }
 
@@ -390,6 +415,7 @@ public class SchemaReader
 
     private void WriteValidatingParseTables (
         final File aAutomatonLogFile,
+        final File aSimpleTypeLogFile,
         final File aParseTableFile)
     {
         long nStartTime = System.currentTimeMillis();
@@ -423,7 +449,21 @@ public class SchemaReader
             aAutomatons.GetStateCount(),
             aAutomatons.GetTransitionCount());
 
-        new ParserTablesGenerator(aAutomatons, maOptimizedSchemaBase.Namespaces)
+        nStartTime = System.currentTimeMillis();
+        final SimpleTypeContainer aSimpleTypes = SimpleTypeContainer.Create(
+            maOptimizedSchemaBase,
+            aSimpleTypeLogFile);
+        nEndTime = System.currentTimeMillis();
+        System.out.printf(
+            "created %d simple type descriptions in %fs\n",
+            aSimpleTypes.GetSimpleTypeCount(),
+            (nEndTime-nStartTime)/1000.0);
+
+        new ParserTablesGenerator(
+            aAutomatons,
+            maOptimizedSchemaBase.Namespaces,
+            aSimpleTypes,
+            maOptimizedSchemaBase.AttributeValueToIdMap)
             .Generate(aParseTableFile);
     }
 

@@ -26,6 +26,14 @@ import java.util.Stack;
 
 import javax.xml.stream.Location;
 
+import org.apache.openoffice.ooxml.parser.action.ActionManager;
+import org.apache.openoffice.ooxml.parser.action.ActionTrigger;
+import org.apache.openoffice.ooxml.parser.action.IAction;
+import org.apache.openoffice.ooxml.parser.attribute.AttributeManager;
+import org.apache.openoffice.ooxml.parser.attribute.AttributeProvider;
+import org.apache.openoffice.ooxml.parser.attribute.AttributeValues;
+import org.apache.openoffice.ooxml.parser.type.SimpleTypeManager;
+
 /** The state machine is initialized at creation from the data tables
  *  created previously by a stack automaton.
  */
@@ -42,29 +50,37 @@ public class StateMachine
         maStateNameMap = new NameMap(aReader.GetSection("state-name"));
         maTransitions = new TransitionTable(aReader.GetSection("transition"));
         maSkipStates = new SkipStateTable(aReader.GetSection("skip"));
+        maAttributeValueMap = new NameMap(aReader.GetSection("attribute-value"));
         maAcceptingStates = new AcceptingStateTable(aReader.GetSection("accepting-state"));
+        maSimpleTypeManager = new SimpleTypeManager(
+            aReader.GetSection("simple-type"),
+            maAttributeValueMap);
         maAttributeManager = new AttributeManager(
             aReader.GetSection("attribute"),
             maNamespaceMap,
-            maNameMap);
+            maNameMap,
+            maStateNameMap,
+            maSimpleTypeManager);
         mnStartStateId = Integer.parseInt(aReader.GetSection("start-state").firstElement()[1]);
         mnEndStateId = Integer.parseInt(aReader.GetSection("end-state").firstElement()[1]);
+
         mnCurrentStateId = mnStartStateId;
         maStateStack = new Stack<>();
         maElementContextStack = new Stack<>();
         maActionManager = new ActionManager(maStateNameMap);
 
-        System.out.printf("read %d namespace, %d names, %d states (%d skip, %d accept), %d transitions and %d attributes\n",
-            maNamespaceMap.GetNamespaceCount(),
-            maNameMap.GetNameCount(),
-            maStateNameMap.GetNameCount(),
-            maSkipStates.GetSkipStateCount(),
-            maAcceptingStates.GetAcceptingStateCount(),
-            maTransitions.GetTransitionCount(),
-            maAttributeManager.GetAttributeCount());
-
         if (Log.Dbg != null)
+        {
+            Log.Dbg.printf("read %d namespace, %d names, %d states (%d skip, %d accept), %d transitions and %d attributes\n",
+                maNamespaceMap.GetNamespaceCount(),
+                maNameMap.GetNameCount(),
+                maStateNameMap.GetNameCount(),
+                maSkipStates.GetSkipStateCount(),
+                maAcceptingStates.GetAcceptingStateCount(),
+                maTransitions.GetTransitionCount(),
+                maAttributeManager.GetAttributeCount());
             Log.Dbg.printf("starting in state _start_ (%d)\n", mnCurrentStateId);
+        }
     }
 
 
@@ -98,11 +114,12 @@ public class StateMachine
             if (aTransition == null)
             {
                 final String sText = String.format(
-                    "can not find transition for state %s(%d) and element %s(%d:%d) at L%dC%d\n",
+                    "can not find transition for state %s(%d) and element %s:%s(%d:%d) at L%dC%d\n",
                     maStateNameMap.GetNameForId(mnCurrentStateId),
                     mnCurrentStateId,
-                    aNamespaceDescriptor.Id,
+                    aNamespaceDescriptor.Prefix,
                     maNameMap.GetNameForId(nElementNameId),
+                    aNamespaceDescriptor.Id,
                     nElementNameId,
                     aLocation.getLineNumber(),
                     aLocation.getColumnNumber());
@@ -285,7 +302,9 @@ public class StateMachine
     private final NameMap maNameMap;
     private final NameMap maStateNameMap;
     private final TransitionTable maTransitions;
+    private final SimpleTypeManager maSimpleTypeManager;
     private final AttributeManager maAttributeManager;
+    private final NameMap maAttributeValueMap;
     private int mnCurrentStateId;
     private Stack<Integer> maStateStack;
     private ElementContext maCurrentElementContext;

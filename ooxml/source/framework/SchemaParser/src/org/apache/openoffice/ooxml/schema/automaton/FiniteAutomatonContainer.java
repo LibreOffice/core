@@ -124,6 +124,7 @@ public class FiniteAutomatonContainer
                     aNewStateContainer,
                     aEntry.getValue().GetStateContext(),
                     aEntry.getValue().GetAttributes(),
+                    aEntry.getValue().GetLocation(),
                     aLog));
         }
         return aDFAs;

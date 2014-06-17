@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.openoffice.ooxml.schema.model.base.INode;
 import org.apache.openoffice.ooxml.schema.model.base.QualifiedName;
 
 /** Used in the transformation of NFA to DFA and in the minimization of DFAs.
@@ -149,26 +150,26 @@ public class StateSet
             throw new RuntimeException("can not create state for "+toString());
 
         // Disambiguate new state name.
-        State aNewState = null;
-        for (int nIndex=1; true; ++nIndex)
-        {
-            final String sSuffix = nIndex==1 ? sShortestSuffix : sShortestSuffix+"_"+nIndex;
-            if ( ! aContext.HasState(aBaseName, sSuffix))
-            {
-                aNewState = aContext.CreateState(aBaseName, sSuffix);
-                break;
-            }
-        }
+        State aNewState = aContext.CreateState(
+            aBaseName,
+            aContext.GetUnambiguousSuffix(aBaseName, sShortestSuffix));
         assert(aNewState!=null);
 
         // Mark the new state as accepting if at least one of its original states
         // is accepting.
         for (final State aState : maStates)
+        {
             if (aState.IsAccepting())
             {
                 aNewState.SetIsAccepting();
                 break;
             }
+            for (final SkipData aData : aState.GetSkipData())
+                aNewState.AddSkipData(aData.Clone(aNewState));
+            final INode aTextType = aState.GetTextType();
+            if (aTextType != null)
+                aNewState.SetTextType(aTextType);
+        }
 
         return aNewState;
     }

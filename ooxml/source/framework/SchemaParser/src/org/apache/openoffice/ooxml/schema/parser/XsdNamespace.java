@@ -19,51 +19,11 @@
 *
 *************************************************************/
 
-package org.apache.openoffice.ooxml.schema.model.base;
+package org.apache.openoffice.ooxml.schema.parser;
 
-/** The location in a file consisting of file name, line number, column number
- *  and byte index in the file.
- */
-public class Location
+
+public class XsdNamespace
 {
-    public Location (
-        final String sFilename,
-        final int nLineNumber,
-        final int nColumnNumber,
-        final int nOffset)
-    {
-        msFilename = sFilename;
-        mnLineNumber = nLineNumber;
-        mnColumnNumber = nColumnNumber;
-        mnOffset = nOffset;
-    }
-
-
-
-
-    public Location ()
-    {
-        this("<predefined>", 0,0,0);
-    }
-
-
-
-
-    @Override
-    public String toString ()
-    {
-        return String.format("%s:%d,%d/%d",
-            msFilename,
-            mnLineNumber,
-            mnColumnNumber,
-            mnOffset);
-    }
-
-
-
-
-    private final String msFilename;
-    private final int mnLineNumber;
-    private final int mnColumnNumber;
-    private final int mnOffset;
+    public static final String URI = "http://www.w3.org/2001/XMLSchema";
+    public static final String Prefix = "xsd";
 }
