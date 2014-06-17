@@ -25,7 +25,6 @@
 
 #if OSL_DEBUG_LEVEL > 1
 #include <resourcemodel/TagLogger.hxx>
-#include <resourcemodel/XPathLogger.hxx>
 #endif
 
 namespace writerfilter {
@@ -52,9 +51,6 @@ class OOXMLParserState
     bool savedInParagraphGroup;
     bool savedInCharacterGroup;
     bool savedLastParagraphInSection;
-#if OSL_DEBUG_LEVEL > 1
-    XPathLogger m_xPathLogger;
-#endif
 
 public:
     typedef boost::shared_ptr<OOXMLParserState> Pointer_t;
@@ -108,7 +104,6 @@ public:
 #if OSL_DEBUG_LEVEL > 1
 public:
     void dumpXml( const TagLogger::Pointer_t& pLogger );
-    XPathLogger & getXPathLogger();
 #endif
 
 };
