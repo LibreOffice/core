@@ -41,11 +41,18 @@ class SvxColorWindow_Impl : public SfxPopupWindow
 private:
     const sal_uInt16 theSlotId;
     SvxColorValueSet aColorSet;
-    SvxColorValueSet aDocColorSet;
+    PushButton aButtonLeft;
+    PushButton aButtonRight;
     OUString  maCommand;
     Link maSelectedLink;
 
+    const sal_uInt16 nNavButtonWidth;
+    const sal_uInt16 nNavButtonHeight;
+    sal_uInt16& rnCurrentPalette;
+
     DECL_LINK( SelectHdl, void * );
+    DECL_LINK( StepLeftClickHdl, void * );
+    DECL_LINK( StepRightClickHdl, void * );
 
 protected:
     virtual void    Resize() SAL_OVERRIDE;
@@ -53,6 +60,7 @@ protected:
 
 public:
     SvxColorWindow_Impl( const OUString& rCommand,
+                         sal_uInt16& rnCurrentPalette_,
                          sal_uInt16 nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const OUString& rWndTitle,
