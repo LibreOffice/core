@@ -91,7 +91,7 @@ IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, /*pButton*/ )
     if( searchTerm.isEmpty( ) )
         return 0;
 
-    OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/1";
+    OUString rSearchURL = "https://addons.allizom.org/en-US/firefox/api/1.5/search/" + searchTerm + "/9/9";
     m_rSearchThread = new SearchAndParseThread( this, rSearchURL );
     m_rSearchThread->launch();
     return 0;
@@ -314,7 +314,7 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
         OUString aPersonaSetting( aDialog.GetAppliedPersonaSetting() );
         if ( !aPersonaSetting.isEmpty() )
         {
-            m_aPersonaSettings = aPersonaSetting;
+            setPersonaSettings( aPersonaSetting );
         }
 
         break;
