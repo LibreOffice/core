@@ -685,8 +685,18 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70942, "fdo70942.docx")
      xmlDocPtr pXmlDoc = parseExport("word/document.xml");
     if (!pXmlDoc)
         return;
-    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
-                "prst", "ellipse");
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    if (xIndexAccess->getCount())
+    {
+        // TODO TextBox: remove this when TextBox is enabled by default
+        // This second run is a bug, should be the first ideally
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                    "prst", "ellipse");
+    }
+    else
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:prstGeom",
+                    "prst", "ellipse");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testDrawinglayerPicPos, "drawinglayer-pic-pos.docx")
