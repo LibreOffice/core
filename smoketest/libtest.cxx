@@ -76,16 +76,6 @@ int main (int argc, char **argv)
         return -1;
     }
 
-    if (!LIBREOFFICEKIT_DOCUMENT_HAS(pDocument->get(), saveAsWithOptions))
-    {
-        fprintf( stderr, "using obsolete LibreOffice %" SAL_PRI_SIZET "d + %" SAL_PRI_SIZET "d vs. %" SAL_PRI_SIZET "d\n",
-                 (size_t)((unsigned char *)&((LibreOfficeKitDocumentClass *) 0)->saveAsWithOptions),
-                 sizeof ((LibreOfficeKitDocumentClass *) 0)->saveAsWithOptions,
-                 pDocument->get()->pClass->nSize );
-        return -1;
-    }
-
-
     end = getTimeMS();
     fprintf( stderr, "load time: %ld ms\n", (end-start) );
     start = end;

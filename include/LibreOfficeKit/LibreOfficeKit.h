@@ -59,11 +59,8 @@ struct _LibreOfficeKitDocumentClass
   void (*destroy)   (LibreOfficeKitDocument* pThis);
   int (*saveAs)     (LibreOfficeKitDocument* pThis,
                      const char *pUrl,
-                     const char *pFormat);
-  int (*saveAsWithOptions) (LibreOfficeKitDocument* pThis,
-                            const char *pUrl,
-                            const char *pFormat,
-                            const char *pFilterOptions);
+                     const char *pFormat,
+                     const char *pFilterOptions);
 };
 
 LibreOfficeKit* lok_init (const char* pInstallPath);
