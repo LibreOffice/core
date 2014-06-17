@@ -153,8 +153,7 @@ extern "C"
 {
 
 static void doc_destroy(LibreOfficeKitDocument* pThis);
-static int  doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat);
-static int  doc_saveAsWithOptions(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
+static int  doc_saveAs(LibreOfficeKitDocument* pThis, const char* pUrl, const char* pFormat, const char* pFilterOptions);
 
 struct LibLODocument_Impl : public _LibreOfficeKitDocument
 {
@@ -172,7 +171,6 @@ struct LibLODocument_Impl : public _LibreOfficeKitDocument
 
             m_pDocumentClass->destroy = doc_destroy;
             m_pDocumentClass->saveAs = doc_saveAs;
-            m_pDocumentClass->saveAsWithOptions = doc_saveAsWithOptions;
 
             gDocumentClass = m_pDocumentClass;
         }
@@ -254,12 +252,7 @@ static LibreOfficeKitDocument* lo_documentLoad(LibreOfficeKit* pThis, const char
     return NULL;
 }
 
-static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat)
-{
-    return doc_saveAsWithOptions(pThis, sUrl, pFormat, NULL);
-}
-
-static int doc_saveAsWithOptions(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
+static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const char* pFormat, const char* pFilterOptions)
 {
     LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
 
