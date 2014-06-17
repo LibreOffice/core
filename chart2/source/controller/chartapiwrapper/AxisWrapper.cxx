@@ -27,6 +27,7 @@
 #include "GridWrapper.hxx"
 #include "TitleWrapper.hxx"
 #include "DisposeHelper.hxx"
+#include <unonames.hxx>
 
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -270,14 +271,14 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( "NumberFormat",
+        Property( CHART_UNONAME_NUMFMT,
                   PROP_AXIS_NUMBERFORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( "LinkNumberFormatToSource",
+        Property( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
                   PROP_AXIS_LINK_NUMBERFORMAT_TO_SOURCE,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND

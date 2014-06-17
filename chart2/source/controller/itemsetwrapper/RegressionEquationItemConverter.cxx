@@ -24,6 +24,7 @@
 #include "GraphicPropertyItemConverter.hxx"
 #include "CharacterPropertyItemConverter.hxx"
 #include "MultipleItemConverter.hxx"
+#include <unonames.hxx>
 
 #include <svl/intitem.hxx>
 #include <rtl/math.hxx>
@@ -125,9 +126,9 @@ bool RegressionEquationItemConverter::ApplySpecialItem(
             uno::Any aValue( static_cast< sal_Int32 >(
                 static_cast< const SfxUInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue()));
-            if( GetPropertySet()->getPropertyValue( "NumberFormat" ) != aValue )
+            if (GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT) != aValue)
             {
-                GetPropertySet()->setPropertyValue( "NumberFormat", aValue );
+                GetPropertySet()->setPropertyValue(CHART_UNONAME_NUMFMT, aValue);
                 bChanged = true;
             }
         }
@@ -146,7 +147,7 @@ void RegressionEquationItemConverter::FillSpecialItem(
         case SID_ATTR_NUMBERFORMAT_VALUE:
         {
             sal_Int32 nFormatKey = 0;
-            if( GetPropertySet()->getPropertyValue( "NumberFormat" ) >>= nFormatKey )
+            if (GetPropertySet()->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nFormatKey)
             {
                 rOutItemSet.Put( SfxUInt32Item( nWhichId, nFormatKey ));
             }

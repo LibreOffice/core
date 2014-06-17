@@ -22,6 +22,8 @@
 #include "DataSource.hxx"
 #include "macros.hxx"
 #include "ContainerHelper.hxx"
+#include <unonames.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
@@ -478,7 +480,7 @@ sal_Int32 getNumberFormatKeyFromAxis(
         Reference< beans::XPropertySet > xAxisProp(
             xCorrespondingCoordinateSystem->getAxisByDimension( nDimensionIndex, nAxisIndex ), uno::UNO_QUERY );
         if( xAxisProp.is())
-            xAxisProp->getPropertyValue( "NumberFormat") >>= nResult;
+            xAxisProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nResult;
     }
     catch( const uno::Exception & ex )
     {

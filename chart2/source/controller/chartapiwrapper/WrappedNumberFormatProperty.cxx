@@ -19,6 +19,7 @@
 
 #include "WrappedNumberFormatProperty.hxx"
 #include "macros.hxx"
+#include <unonames.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -30,7 +31,7 @@ namespace wrapper
 {
 
 WrappedNumberFormatProperty::WrappedNumberFormatProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
-        : WrappedDirectStateProperty( "NumberFormat", "NumberFormat" )
+        : WrappedDirectStateProperty( CHART_UNONAME_NUMFMT, CHART_UNONAME_NUMFMT )
         , m_spChart2ModelContact(spChart2ModelContact)
         , m_pWrappedLinkNumberFormatProperty(NULL)
 {
@@ -56,7 +57,7 @@ void WrappedNumberFormatProperty::setPropertyValue( const Any& rOuterValue, cons
     m_aOuterValue = rOuterValue;
     if(xInnerPropertySet.is())
     {
-        bool bUseSourceFormat = !xInnerPropertySet->getPropertyValue( "NumberFormat" ).hasValue();
+        bool bUseSourceFormat = !xInnerPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue();
         if( bUseSourceFormat )
         {
             uno::Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
@@ -99,9 +100,9 @@ Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPr
     return uno::makeAny( sal_Int32( 0 ) );
 }
 
-WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty )
-    : WrappedProperty( "LinkNumberFormatToSource", OUString() )
-        , m_pWrappedNumberFormatProperty( pWrappedNumberFormatProperty )
+WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty( WrappedNumberFormatProperty* pWrappedNumberFormatProperty ) :
+    WrappedProperty( CHART_UNONAME_LINK_TO_SRC_NUMFMT, OUString() ),
+    m_pWrappedNumberFormatProperty( pWrappedNumberFormatProperty )
 {
     if( m_pWrappedNumberFormatProperty )
     {
@@ -150,7 +151,7 @@ void WrappedLinkNumberFormatProperty::setPropertyValue( const Any& rOuterValue, 
                 aValue <<= sal_Int32( 0 );
         }
 
-        xInnerPropertySet->setPropertyValue( "NumberFormat", aValue );
+        xInnerPropertySet->setPropertyValue(CHART_UNONAME_NUMFMT, aValue);
     }
 }
 
@@ -162,7 +163,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
         OSL_FAIL("missing xInnerPropertySet in WrappedNumberFormatProperty::getPropertyValue");
         return getPropertyDefault(0);
     }
-    bool bLink = ! xInnerPropertySet->getPropertyValue( "NumberFormat" ).hasValue();
+    bool bLink = ! xInnerPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT).hasValue();
     return uno::makeAny( bLink );
 }
 

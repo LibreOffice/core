@@ -27,6 +27,7 @@
 #include "ContainerHelper.hxx"
 #include "macros.hxx"
 #include "NumberFormatterWrapper.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
@@ -435,7 +436,7 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
                 bOwnData = true;
                 Reference< beans::XPropertySet > xAxisProps( xCooSysModel->getAxisByDimension(0,0), uno::UNO_QUERY );
                 sal_Int32 nAxisNumberFormat = 0;
-                if( xAxisProps.is() && (xAxisProps->getPropertyValue( "NumberFormat" ) >>= nAxisNumberFormat) )
+                if (xAxisProps.is() && (xAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nAxisNumberFormat))
                 {
                     bOwnDataAnddAxisHasAnyFormat = true;
                     bOwnDataAnddAxisHasDateFormat = DiagramHelper::isDateNumberFormat( nAxisNumberFormat, xNumberFormats );

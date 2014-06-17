@@ -51,6 +51,7 @@
 #include "CandleStickChart.hxx"
 #include "BubbleChart.hxx"
 #include "NetChart.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
@@ -1131,7 +1132,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
         OUStringBuffer aFormula;
         sal_Int32 nNumberFormatKey = 0;
-        xEquationProperties->getPropertyValue( "NumberFormat") >>= nNumberFormatKey;
+        xEquationProperties->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormatKey;
 
         if( bShowEquation )
         {

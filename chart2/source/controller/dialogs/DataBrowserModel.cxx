@@ -32,6 +32,7 @@
 #include "ExplicitCategoriesProvider.hxx"
 
 #include "ChartModel.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -334,7 +335,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
 
             Reference< beans::XPropertySet > xSeriesProps( xSeries, uno::UNO_QUERY );
             if( xSeriesProps.is() )
-                xSeriesProps->getPropertyValue( "NumberFormat" ) >>= nSeriesNumberFormat;
+                xSeriesProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nSeriesNumberFormat;
         }
         else
         {
@@ -407,7 +408,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                     //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immediately
                     Reference< beans::XPropertySet > xNewSeriesProps( xNewSeries, uno::UNO_QUERY );
                     if( xNewSeriesProps.is() )
-                        xNewSeriesProps->setPropertyValue( "NumberFormat" , uno::makeAny( nSeriesNumberFormat ) );
+                        xNewSeriesProps->setPropertyValue(CHART_UNONAME_NUMFMT , uno::makeAny(nSeriesNumberFormat));
                 }
 
                 updateFromModel();
