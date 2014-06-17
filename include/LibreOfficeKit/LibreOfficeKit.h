@@ -40,7 +40,6 @@ struct _LibreOfficeKitClass
   size_t  nSize;
 
   void                    (*destroy)       (LibreOfficeKit *pThis);
-  int                     (*initialize)    (LibreOfficeKit *pThis, const char *pInstallPath);
   LibreOfficeKitDocument* (*documentLoad)  (LibreOfficeKit *pThis, const char *pURL);
   char*                   (*getError)      (LibreOfficeKit *pThis);
 };
