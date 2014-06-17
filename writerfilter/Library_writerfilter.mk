@@ -144,7 +144,6 @@ $(eval $(call gb_Library_add_exception_objects,writerfilter,\
     writerfilter/source/resourcemodel/LoggedResources \
     writerfilter/source/resourcemodel/ResourceModelHelper \
     writerfilter/source/resourcemodel/TagLogger \
-    writerfilter/source/resourcemodel/XPathLogger \
     writerfilter/source/resourcemodel/qnametostrcore \
     writerfilter/source/resourcemodel/util \
 ))

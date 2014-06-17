@@ -24,7 +24,6 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/xml/sax/FastShapeContextHandler.hpp>
 #include <resourcemodel/QNameToString.hxx>
-#include <resourcemodel/XPathLogger.hxx>
 #include <resourcemodel/util.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>
