@@ -376,20 +376,27 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, bool bDetectFol
         aExt = rObject.getExtension();
         if ( aExt == "vor" )
         {
-            SotStorageRef aStorage = new SotStorage( sURL, STREAM_STD_READ );
             sal_uInt16 nId = IMG_WRITERTEMPLATE;
-            if ( !aStorage->GetError() )
+            try
             {
-                SvGlobalName aGlobalName = aStorage->GetClassName();
-                if ( aGlobalName == SvGlobalName(SO3_SC_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_30) )
-                    nId = IMG_CALCTEMPLATE;
-                else if ( aGlobalName == SvGlobalName(SO3_SDRAW_CLASSID_50) )
-                    nId = IMG_DRAWTEMPLATE;
-                else if ( aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_50) ||
-                        aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_30) )
-                    nId = IMG_IMPRESSTEMPLATE;
-                else if ( aGlobalName == SvGlobalName(SO3_SM_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_30) )
-                    nId = IMG_MATHTEMPLATE;
+                SotStorageRef aStorage = new SotStorage( sURL, STREAM_STD_READ );
+                if ( !aStorage->GetError() )
+                {
+                    SvGlobalName aGlobalName = aStorage->GetClassName();
+                    if ( aGlobalName == SvGlobalName(SO3_SC_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_30) )
+                        nId = IMG_CALCTEMPLATE;
+                    else if ( aGlobalName == SvGlobalName(SO3_SDRAW_CLASSID_50) )
+                        nId = IMG_DRAWTEMPLATE;
+                    else if ( aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_50) ||
+                            aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_30) )
+                        nId = IMG_IMPRESSTEMPLATE;
+                    else if ( aGlobalName == SvGlobalName(SO3_SM_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_30) )
+                        nId = IMG_MATHTEMPLATE;
+                }
+            }
+            catch (const css::ucb::ContentCreationException& e)
+            {
+                SAL_WARN("svtools.misc", "GetImageId_Impl: Caught exception: " << e.Message);
             }
 
             return nId;
