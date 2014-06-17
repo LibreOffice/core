@@ -397,7 +397,7 @@ void expand(DEFBUF* tokenp)
 {
         register int            c;
         register FILEINFO       *file;
-    extern FILEINFO     *getfile();
+    extern FILEINFO     *getfile(int, char *);
 
 #if OSL_DEBUG_LEVEL > 1
         if (debug)
@@ -553,7 +553,7 @@ void expstuff(DEFBUF* tokenp)
         char            *defend;                /* -> output buff end   */
         int             string_magic;           /* String formal hack   */
         FILEINFO        *file;                  /* Funny #include       */
-    extern FILEINFO *getfile();
+    extern FILEINFO *getfile(int, char *);
 
         file = getfile(NBUFF, tokenp->name);
         inp = tokenp->repl;                     /* -> macro replacement */

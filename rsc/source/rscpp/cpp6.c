@@ -1021,7 +1021,7 @@ void ungetstring(char* text)
  */
 {
         register FILEINFO       *file;
-        extern FILEINFO         *getfile();
+        extern FILEINFO         *getfile(int, char *);
         file = getfile(strlen(text) + 1, "");
         strcpy(file->buffer, text);
 }

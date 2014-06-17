@@ -68,7 +68,7 @@ SAL_DLLPUBLIC oslProcessError SAL_CALL rtl_getAppCommandArg(sal_uInt32 nArg, rtl
     @see osl_getCommandArgCount()
     @see rtl_getCommandArg()
 */
-SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_getAppCommandArgCount();
+SAL_DLLPUBLIC sal_uInt32 SAL_CALL rtl_getAppCommandArgCount(void);
 
 #ifdef __cplusplus
 }

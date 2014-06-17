@@ -260,7 +260,7 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( const TimeValue* pLocalTimeVal
     return sal_False;
 }
 
-void sal_initGlobalTimer()
+void sal_initGlobalTimer(void)
 {
 #ifdef __MACH__
   clock_serv_t cclock;

@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-void sal_initGlobalTimer();
+void sal_initGlobalTimer(void);
 
 #if defined __cplusplus
 }

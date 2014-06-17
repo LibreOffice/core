@@ -34,7 +34,7 @@ extern "C" {
 #endif
 
 SAL_DLLPUBLIC void SAL_CALL sal_detail_initialize(int argc, char ** argv);
-SAL_DLLPUBLIC void SAL_CALL sal_detail_deinitialize();
+SAL_DLLPUBLIC void SAL_CALL sal_detail_deinitialize(void);
 
 #if defined IOS || defined ANDROID
 

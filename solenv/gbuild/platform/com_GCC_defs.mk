@@ -53,6 +53,7 @@ gb_CFLAGS_COMMON := \
 	-Wall \
 	-Wendif-labels \
 	-Wextra \
+	-Wstrict-prototypes \
 	-Wundef \
 	-Wunused-macros \
 	-fmessage-length=0 \

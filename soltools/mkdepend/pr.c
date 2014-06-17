@@ -79,8 +79,7 @@ void add_include(struct filepointer *filep, struct inclist *file, struct inclist
     }
 }
 
-void pr_dummy(ip)
-    register struct inclist  *ip;
+void pr_dummy(register struct inclist  *ip)
 {
     fwrite(ip->i_file, strlen(ip->i_file), 1, stdout);
     fwrite(" :\n\n", 4, 1, stdout);

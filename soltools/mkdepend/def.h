@@ -184,7 +184,7 @@ int match(register char *str, register char **list);
 void recursive_pr_include(register struct inclist *head, register char *file,
     register char *base);
 void recursive_pr_dummy(register struct inclist *head, register char *file);
-void inc_clean();
+void inc_clean(void);
 
 void fatalerr(char *, ...);
 void warning(char *, ...);

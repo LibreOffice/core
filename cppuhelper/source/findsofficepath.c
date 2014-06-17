@@ -113,7 +113,7 @@ static char* platformSpecific()
  * @return the installation path or NULL, if no installation was found or
  *         if an error occurred
  */
-static char* platformSpecific()
+static char* platformSpecific(void)
 {
     const int SEPARATOR = '/';
     const char* PATHSEPARATOR = ":";

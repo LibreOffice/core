@@ -163,9 +163,7 @@ struct sigaction sig_act;
 
 boolean native_win_slashes = FALSE;
 
-int main(argc, argv)
-    int argc;
-    char    **argv;
+int main(int argc, char    **argv)
 {
     register char   **fp = filelist;
     register char   **incp = includedirs;

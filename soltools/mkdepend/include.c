@@ -317,7 +317,7 @@ void included_by(ip, newfile)
     ip->i_list[ ip->i_listlen-1 ] = newfile;
 }
 
-void inc_clean ()
+void inc_clean (void)
 {
     register struct inclist *ip;
 
