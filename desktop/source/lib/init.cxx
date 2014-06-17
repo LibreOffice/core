@@ -13,6 +13,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
 #include <LibreOfficeKit/LibreOfficeKit.h>
 
 #include <tools/errinf.hxx>
@@ -42,10 +45,14 @@
 using namespace css;
 using namespace utl;
 
+using namespace boost;
+
 struct LibLODocument_Impl;
 struct LibLibreOffice_Impl;
 
 static LibLibreOffice_Impl *gImpl = NULL;
+static weak_ptr< LibreOfficeKitClass > gOfficeClass;
+static weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
 typedef struct
 {
@@ -151,15 +158,24 @@ static int  doc_saveAsWithOptions(LibreOfficeKitDocument* pThis, const char* pUr
 struct LibLODocument_Impl : public _LibreOfficeKitDocument
 {
     uno::Reference<css::lang::XComponent> mxComponent;
+    shared_ptr< LibreOfficeKitDocumentClass > m_pDocumentClass;
 
     LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent) :
         mxComponent( xComponent )
     {
-        nSize = sizeof(LibreOfficeKitDocument);
+        if (!(m_pDocumentClass = gDocumentClass.lock()))
+        {
+            m_pDocumentClass.reset(new LibreOfficeKitDocumentClass);
 
-        destroy = doc_destroy;
-        saveAs = doc_saveAs;
-        saveAsWithOptions = doc_saveAsWithOptions;
+            m_pDocumentClass->nSize = sizeof(LibreOfficeKitDocument);
+
+            m_pDocumentClass->destroy = doc_destroy;
+            m_pDocumentClass->saveAs = doc_saveAs;
+            m_pDocumentClass->saveAsWithOptions = doc_saveAsWithOptions;
+
+            gDocumentClass = m_pDocumentClass;
+        }
+        pClass = m_pDocumentClass.get();
     }
 
     ~LibLODocument_Impl()
@@ -182,15 +198,23 @@ static char *                  lo_getError      (LibreOfficeKit* pThis);
 struct LibLibreOffice_Impl : public _LibreOfficeKit
 {
     OUString maLastExceptionMsg;
+    shared_ptr< LibreOfficeKitClass > m_pOfficeClass;
 
     LibLibreOffice_Impl()
     {
-        nSize = sizeof(LibreOfficeKit);
+        if(!(m_pOfficeClass = gOfficeClass.lock())) {
+            m_pOfficeClass.reset(new LibreOfficeKitClass);
+            m_pOfficeClass->nSize = sizeof(LibreOfficeKitClass);
 
-        destroy = lo_destroy;
-        initialize = lo_initialize;
-        documentLoad = lo_documentLoad;
-        getError = lo_getError;
+            m_pOfficeClass->destroy = lo_destroy;
+            m_pOfficeClass->initialize = lo_initialize;
+            m_pOfficeClass->documentLoad = lo_documentLoad;
+            m_pOfficeClass->getError = lo_getError;
+
+            gOfficeClass = m_pOfficeClass;
+        }
+
+        pClass = m_pOfficeClass.get();
     }
 };
 
@@ -416,7 +440,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath)
     return bInitialized;
 }
 
-SAL_DLLPUBLIC_EXPORT LibreOfficeKit *liblibreoffice_hook(void)
+SAL_DLLPUBLIC_EXPORT LibreOfficeKit *libreofficekit_hook(void)
 {
     if (!gImpl)
     {
