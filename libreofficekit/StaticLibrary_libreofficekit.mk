@@ -10,6 +10,7 @@
 $(eval $(call gb_StaticLibrary_StaticLibrary,libreofficekit))
 
 $(eval $(call gb_StaticLibrary_add_cobjects,libreofficekit,\
+    libreofficekit/source/libreofficekit \
     libreofficekit/source/shim \
 ))
 

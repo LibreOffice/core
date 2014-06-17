@@ -18,16 +18,36 @@ extern "C"
 #endif
 
 typedef struct _LibreOfficeKit LibreOfficeKit;
+typedef struct _LibreOfficeKitClass LibreOfficeKitClass;
+
 typedef struct _LibreOfficeKitDocument LibreOfficeKitDocument;
+typedef struct _LibreOfficeKitDocumentClass LibreOfficeKitDocumentClass;
 
 // Do we have an extended member in this struct ?
 #define LIBREOFFICEKIT_HAS_MEMBER(strct,member,nSize) \
     ((((size_t)((unsigned char *)&((strct *) 0)->member) +  \
       sizeof ((strct *) 0)->member)) <= (nSize))
 
-#define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKit,member,(pKit)->nSize)
+#define LIBREOFFICEKIT_HAS(pKit,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitClass,member,(pKit)->pClass->nSize)
 
 struct _LibreOfficeKit
+{
+    LibreOfficeKitClass* pClass;
+};
+
+void
+lok_office_destroy              (LibreOfficeKit *pOffice);
+
+int
+lok_office_initialize           (LibreOfficeKit *pOffice,
+                                 const char *pInstallPath);
+LibreOfficeKitDocument*
+lok_office_document_load        (LibreOfficeKit *pOffice,
+                                 const char *pURL);
+char*
+lok_office_get_error            (LibreOfficeKit *pOffice);
+
+struct _LibreOfficeKitClass
 {
   size_t  nSize;
 
@@ -37,9 +57,14 @@ struct _LibreOfficeKit
   char*                   (*getError)      (LibreOfficeKit *pThis);
 };
 
-#define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocument,member,(pDoc)->nSize)
+#define LIBREOFFICEKIT_DOCUMENT_HAS(pDoc,member) LIBREOFFICEKIT_HAS_MEMBER(LibreOfficeKitDocumentClass,member,(pDoc)->pClass->nSize)
 
 struct _LibreOfficeKitDocument
+{
+    LibreOfficeKitDocumentClass* pClass;
+};
+
+struct _LibreOfficeKitDocumentClass
 {
   size_t  nSize;
 
@@ -52,6 +77,20 @@ struct _LibreOfficeKitDocument
                             const char *pFormat,
                             const char *pFilterOptions);
 };
+
+void
+lok_document_destroy                (LibreOfficeKitDocument* pDocument);
+
+int
+lok_document_save_as                (LibreOfficeKitDocument* pDocument,
+                                     const char *pUrl,
+                                     const char *pFormat);
+
+int
+lok_document_save_as_with_options   (LibreOfficeKitDocument* pDocument,
+                                     const char *pUrl,
+                                     const char *pFormat,
+                                     const char *pFilterOptions);
 
 LibreOfficeKit* lok_init (const char* pInstallPath);
 
