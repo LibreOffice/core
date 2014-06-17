@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main() {
+int main(void) {
     for (;;) {
         int c;
         errno = 0;

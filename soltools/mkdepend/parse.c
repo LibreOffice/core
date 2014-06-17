@@ -410,8 +410,7 @@ void define( def, symbols )
     hash_define( def, val, symbols );
 }
 
-static int hash( str )
-    register char *str;
+static int hash( register char *str )
 {
     /* Hash (Kernighan and Ritchie) */
     register unsigned int hashval = 0;

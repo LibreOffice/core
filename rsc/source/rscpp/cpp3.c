@@ -441,7 +441,7 @@ void initdefines()
         time_t                  tvec;
 
 #if !defined( WNT ) && !defined(G3)
-        extern char             *ctime();
+        extern char             *ctime(time_t const *);
 #endif
 
         /*

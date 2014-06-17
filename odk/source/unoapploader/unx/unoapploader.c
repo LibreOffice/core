@@ -32,7 +32,7 @@
 #include "rtl/string.h"
 #include "sal/types.h"
 
-char const* getPath();
+char const* getPath(void);
 char* createCommandName( char* argv0 );
 
 const int SEPARATOR = '/';
@@ -234,7 +234,7 @@ int main( int argc, char *argv[] )
  * @return the installation path or NULL, if no installation was specified or
  *         found, or if an error occurred
  */
-char const* getPath()
+char const* getPath(void)
 {
     char const* path = cppuhelper_detail_findSofficePath();
 

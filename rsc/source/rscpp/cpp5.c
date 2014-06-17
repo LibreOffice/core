@@ -139,7 +139,7 @@ register int    op;
 #define S_PDOUBLE   (sizeof (double *))
 #endif
 #ifndef S_PFPTR
-#define S_PFPTR     (sizeof (int (*)()))
+#define S_PFPTR     (sizeof (int (*)(void)))
 #endif
 
 typedef struct types {
@@ -218,7 +218,7 @@ eval()
     int     skip;       /* For short-circuit testing    */
     int     value[NEXP];    /* Value stack          */
     OPTAB       opstack[NEXP];  /* Operand stack        */
-    extern int  *evaleval();    /* Does actual evaluation   */
+    extern int  *evaleval(int *, int, int);    /* Does actual evaluation   */
     valp = value;
     opp = opstack;
     opp->op = OP_END;       /* Mark bottom of stack     */

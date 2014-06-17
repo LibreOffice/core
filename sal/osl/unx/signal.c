@@ -199,7 +199,7 @@ static sal_Bool is_soffice_Impl (void)
     return (idx != -1);
 }
 
-static sal_Bool InitSignal()
+static sal_Bool InitSignal(void)
 {
     int i;
     struct sigaction act;
@@ -288,7 +288,7 @@ static sal_Bool InitSignal()
     return sal_True;
 }
 
-static sal_Bool DeInitSignal()
+static sal_Bool DeInitSignal(void)
 {
     int i;
     struct sigaction act;
@@ -889,7 +889,7 @@ void CallSystemHandler(int Signal)
 }
 
 #if defined HAVE_VALGRIND_HEADERS
-static void DUMPCURRENTALLOCS()
+static void DUMPCURRENTALLOCS(void)
 {
     VALGRIND_PRINTF( "=== start memcheck dump of active allocations ===\n" );
 

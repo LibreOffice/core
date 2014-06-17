@@ -89,7 +89,7 @@ static oslPipeError osl_PipeErrorFromNative(int nativeType)
 /* macros */
 #define ERROR_FROM_NATIVE(y)    osl_PipeErrorFromNative(y)
 
-oslPipe __osl_createPipeImpl()
+oslPipe __osl_createPipeImpl(void)
 {
     oslPipe pPipeImpl;
 

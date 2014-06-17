@@ -83,7 +83,7 @@ SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_register(
     for different fields, e.g. in a spreadsheet.
     <BR>Note that the initial setting will match the host system.
  */
-SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_getDefault();
+SAL_DLLPUBLIC rtl_Locale * SAL_CALL rtl_locale_getDefault(void);
 
 /**
     Sets the default.

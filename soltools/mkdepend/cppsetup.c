@@ -119,10 +119,7 @@ struct _parse_data {
 };
 
 static const char *
-_my_if_errors (ip, cp, expecting)
-    IfParser *ip;
-    const char *cp;
-    const char *expecting;
+_my_if_errors (IfParser *ip, const char *cp, const char *expecting)
 {
 #ifdef DEBUG_MKDEPEND
     struct _parse_data *pd = (struct _parse_data *) ip->data;
@@ -154,9 +151,7 @@ _my_if_errors (ip, cp, expecting)
 #define MAXNAMELEN 256
 
 char *
-_lookup_variable (var, len)
-    const char *var;
-    int len;
+_lookup_variable (const char *var, int len)
 {
     char tmpbuf[MAXNAMELEN + 1];
 
@@ -170,10 +165,7 @@ _lookup_variable (var, len)
 
 
 static int
-_my_eval_defined (ip, var, len)
-    IfParser *ip;
-    const char *var;
-    int len;
+_my_eval_defined (IfParser *ip, const char *var, int len)
 {
     (void)ip;
     if (_lookup_variable (var, len))
@@ -185,10 +177,7 @@ _my_eval_defined (ip, var, len)
 #define isvarfirstletter(ccc) (isalpha(ccc) || (ccc) == '_')
 
 static int
-_my_eval_variable (ip, var, len)
-    IfParser *ip;
-    const char *var;
-    int len;
+_my_eval_variable (IfParser *ip, const char *var, int len)
 {
     char *s;
 

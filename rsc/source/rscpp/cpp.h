@@ -295,12 +295,12 @@ int rscpp_main( int argc, char **argv );
 #endif
 
 
-void InitCpp1();
-void InitCpp2();
-void InitCpp3();
-void InitCpp4();
-void InitCpp5();
-void InitCpp6();
+void InitCpp1(void);
+void InitCpp2(void);
+void InitCpp3(void);
+void InitCpp4(void);
+void InitCpp5(void);
+void InitCpp6(void);
 
 #define HELLO()   fprintf( stderr, "[Hello at %s, %d] ", __FILE__, __LINE__ )
 
@@ -310,8 +310,8 @@ void InitCpp6();
 
 /* cpp1.c */
 void output( int c );
-void sharp();
-void cppmain();
+void sharp(void);
+void cppmain(void);
 #if OSL_DEBUG_LEVEL > 1
 #ifdef EVALDEFS
 int outputEval( int c );
@@ -321,8 +321,8 @@ int outputEval( int c );
 
 /* cpp2.c */
 int control( int counter );
-void doinclude();
-void dodefine();
+void doinclude(void);
+void dodefine(void);
 void doif( int hash );
 int openinclude( char *, int );
 int hasdirectory(char *, char * );
@@ -331,19 +331,19 @@ int openfile( char * );
 /* cpp3.c */
 int openfiles( char *filename );
 void addfile( FILE *fp, char *filename );
-void setincdirs();
+void setincdirs(void);
 int AddInclude( char *pIncStr );
 int getredirection( int argc, char **argv );
 void zap_uc( char *ap );
 
-void initdefines();
+void initdefines(void);
 int dooptions( int argc, char *argv[] );
 int readoptions(char* filename, char*** pfargv);
 
 /* cpp4.c */
-void dodefines();
+void dodefines(void);
 void checkparm( int c, DEFBUF *dp );
-int expcollect();
+int expcollect(void);
 void expstuff( DEFBUF *dp );
 
 #if STRING_FORMAL
@@ -355,27 +355,27 @@ void stparmscan( int delim);
 void dumpparm( char *why );
 #endif
 
-void doundef();
+void doundef(void);
 void textput( char *text );
 void charput( int c );
 void expand( DEFBUF *tokenp );
 
 /* cpp5.c */
-int eval();
+int eval(void);
 int evallex(int);
 int *evaleval(int *, int, int );
 int evalchar(int);
-int dosizeof();
+int dosizeof(void);
 int evalnum( int c );
 int bittest( int );
 
 /* cpp6.c */
 
-void skipnl();
-int skipws();
+void skipnl(void);
+int skipws(void);
 void scanid( int c );
 int macroid( int c );
-int catenate();
+int catenate(void);
 int scanstring( int c, void (*outfun)( int c ) );
 void scannumber( int c, void (*outfun)( int c ) );
 void save( int c );
@@ -386,9 +386,9 @@ DEFBUF *lookid( int c );
 DEFBUF *defendel( char *name, int delete );
 void dunpdef( char *why );
 void dumpadef( char *why, DEFBUF *dp);
-int get();
-int cget();
-void unget();
+int get(void);
+int cget(void);
+void unget(void);
 void ungetstring( char *text );
 void cerror( char *format, char *sarg);
 void cwarn( char *format, char *sarg);
