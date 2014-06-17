@@ -1469,14 +1469,14 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
             pFS->singleElementNS(XML_v, XML_stroke, xDashLineStyleAttr);
         }
         pFS->startElementNS(XML_v, XML_textbox, xTextboxAttrList);
-        pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
     }
+    pFS->startElementNS(XML_w, XML_txbxContent, FSEND);
     m_pImpl->m_bFlyFrameGraphic = true;
     m_pImpl->m_rExport.WriteText();
     m_pImpl->m_bFlyFrameGraphic = false;
+    pFS->endElementNS(XML_w, XML_txbxContent);
     if (!bTextBoxOnly)
     {
-        pFS->endElementNS(XML_w, XML_txbxContent);
         pFS->endElementNS(XML_v, XML_textbox);
 
         if (m_pImpl->m_pFlyWrapAttrList)
