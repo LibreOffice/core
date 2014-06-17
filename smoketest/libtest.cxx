@@ -79,9 +79,9 @@ int main (int argc, char **argv)
     if (!LIBREOFFICEKIT_DOCUMENT_HAS(pDocument->get(), saveAsWithOptions))
     {
         fprintf( stderr, "using obsolete LibreOffice %" SAL_PRI_SIZET "d + %" SAL_PRI_SIZET "d vs. %" SAL_PRI_SIZET "d\n",
-                 (size_t)((unsigned char *)&((LibreOfficeKitDocument *) 0)->saveAsWithOptions),
-                 sizeof ((LibreOfficeKitDocument *) 0)->saveAsWithOptions,
-                 pDocument->get()->nSize );
+                 (size_t)((unsigned char *)&((LibreOfficeKitDocumentClass *) 0)->saveAsWithOptions),
+                 sizeof ((LibreOfficeKitDocumentClass *) 0)->saveAsWithOptions,
+                 pDocument->get()->pClass->nSize );
         return -1;
     }
 
