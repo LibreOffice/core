@@ -98,7 +98,7 @@
 // don't make more than 15 entries visible at once
 #define MAX_STYLES_ENTRIES          static_cast< sal_uInt16 >( 15 )
 
-static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet );
+static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet, sal_uInt16 nVertPadding );
 static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
 
 // namespaces
@@ -1003,6 +1003,7 @@ void SvxFontNameBox_Impl::Select()
 #endif
 
 SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
+                                          sal_uInt16&                rnCurrentPalette_,
                                           sal_uInt16                 nSlotId,
                                           const Reference< XFrame >& rFrame,
                                           const OUString&            rWndTitle,
@@ -1010,8 +1011,12 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SfxPopupWindow( nSlotId, rFrame, pParentWindow, WinBits( WB_STDPOPUP | WB_OWNERDRAWDECORATION ) ),
     theSlotId( nSlotId ),
     aColorSet   ( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
-    aDocColorSet( this, WinBits( WB_ITEMBORDER | WB_NAMEFIELD | WB_3DLOOK | WB_NO_DIRECTSELECT) ),
-    maCommand( rCommand )
+    aButtonLeft ( this ),
+    aButtonRight( this ),
+    maCommand( rCommand ),
+    nNavButtonWidth ( 20 ),
+    nNavButtonHeight( 20 ),
+    rnCurrentPalette( rnCurrentPalette_ )
 
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
@@ -1075,9 +1080,21 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         aColorSet.SetOutputSizePixel(aNewSize);
         static sal_Int32 nAdd = 4;
 
-        SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd));
+        SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd + nNavButtonHeight));
         aColorSet.Clear();
         aColorSet.addEntriesForXColorList(*pColorList);
+
+        aButtonLeft.SetText("<");
+        aButtonLeft.SetClickHdl( LINK( this, SvxColorWindow_Impl, StepLeftClickHdl ) );
+        aButtonLeft.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
+        aButtonLeft.SetPosPixel(Point(0, aNewSize.Height() + nAdd + 1));
+        aButtonLeft.Show();
+
+        aButtonRight.SetText(">");
+        aButtonRight.SetClickHdl( LINK( this, SvxColorWindow_Impl, StepRightClickHdl ) );
+        aButtonRight.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
+        aButtonRight.SetPosPixel(Point(aNewSize.Width() + nAdd - nNavButtonWidth, aNewSize.Height() + nAdd + 1));
+        aButtonRight.Show();
     }
 
     aColorSet.SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
@@ -1101,7 +1118,7 @@ void SvxColorWindow_Impl::KeyInput( const KeyEvent& rKEvt )
 
 SfxPopupWindow* SvxColorWindow_Impl::Clone() const
 {
-    return new SvxColorWindow_Impl( maCommand, theSlotId, GetFrame(), GetText(), GetParent() );
+    return new SvxColorWindow_Impl( maCommand, rnCurrentPalette, theSlotId, GetFrame(), GetText(), GetParent() );
 }
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
@@ -1141,9 +1158,21 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
     return 0;
 }
 
+IMPL_LINK_NOARG(SvxColorWindow_Impl, StepLeftClickHdl)
+{
+    rnCurrentPalette--;
+    return 0;
+}
+
+IMPL_LINK_NOARG(SvxColorWindow_Impl, StepRightClickHdl)
+{
+    rnCurrentPalette++;
+    return 0;
+}
+
 void SvxColorWindow_Impl::Resize()
 {
-    lcl_ResizeValueSet( *this, aColorSet);
+    lcl_ResizeValueSet( *this, aColorSet, nNavButtonHeight + 2);
 }
 
 void SvxColorWindow_Impl::StartSelection()
@@ -1408,7 +1437,7 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
 
 void SvxFrameWindow_Impl::Resize()
 {
-    lcl_ResizeValueSet( *this, aFrameSet);
+    lcl_ResizeValueSet( *this, aFrameSet, 0 );
 }
 
 void SvxFrameWindow_Impl::StateChanged(
@@ -2174,7 +2203,8 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nId,
     ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    mLastColor( COL_AUTO )
+    mLastColor( COL_AUTO ),
+    nCurrentPalette( 0 )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 
@@ -2228,6 +2258,7 @@ SfxPopupWindow* SvxColorToolBoxControl::CreatePopupWindow()
     SvxColorWindow_Impl* pColorWin =
         new SvxColorWindow_Impl(
                             m_aCommandURL,
+                            nCurrentPalette,
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXITEMS_EXTRAS_CHARCOLOR ),
@@ -2335,7 +2366,8 @@ SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
     ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
-    mLastColor( COL_BLACK )
+    mLastColor( COL_BLACK ),
+    nCurrentPalette( 0 )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
     addStatusListener( OUString( ".uno:XLineColor" ) );
@@ -2356,6 +2388,7 @@ SfxPopupWindow* SvxLineColorToolBoxControl::CreatePopupWindow()
     SvxColorWindow_Impl* pColorWin =
         new SvxColorWindow_Impl(
                             m_aCommandURL,
+                            nCurrentPalette,
                             GetSlotId(),
                             m_xFrame,
                             SVX_RESSTR( RID_SVXSTR_LINECOLOR ),
@@ -2497,11 +2530,13 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
     rBox.EnableItem( GetId(), eState != SfxItemState::DISABLED );
 }
 
-static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet )
+
+
+static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet, sal_uInt16 nVertPadding)
 {
     Size aSize = rWin.GetOutputSizePixel();
     aSize.Width()  -= 4;
-    aSize.Height() -= 4;
+    aSize.Height() -= 4 + nVertPadding;
     rValueSet.SetPosSizePixel( Point(2,2), aSize );
 }
 
