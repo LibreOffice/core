@@ -416,19 +416,19 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     pScreenText->render();
 }
 
-void GL3DBarChart::mouseDragMove(const Point& , const Point& , sal_uInt16 nButtons)
+void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 )
 {
     if(mbBlockUserInput)
         return;
 
     mbBlockUserInput = true;
-
-    if(nButtons == MOUSE_RIGHT)
+    long direction = rEndPos.X() - rStartPos.X();
+    if(direction < 0)
     {
         mnCornerId = (mnCornerId + 1) % 4;
         moveToCorner();
     }
-    else if(nButtons == MOUSE_LEFT)
+    else if(direction > 0)
     {
         mnCornerId = mnCornerId - 1;
         if(mnCornerId < 0)
@@ -439,33 +439,33 @@ void GL3DBarChart::mouseDragMove(const Point& , const Point& , sal_uInt16 nButto
 
 glm::vec3 GL3DBarChart::getCornerPosition(sal_Int8 nId)
 {
+    float pi = 3.1415926;
     switch(nId)
     {
         case 0:
         {
-            return glm::vec3(-30, -30, DEFAULT_CAMERA_HEIGHT);
+            return glm::vec3(mnMaxX / 2 - mnDistance * sin(pi / 4), mnMaxY / 2 - mnDistance * cos(pi / 4), DEFAULT_CAMERA_HEIGHT * 2);
         }
         break;
         case 1:
         {
-            return glm::vec3(mnMaxX, -30, DEFAULT_CAMERA_HEIGHT);
+            return glm::vec3(mnMaxX / 2 + mnDistance * sin(pi / 4), mnMaxY / 2 - mnDistance * cos(pi / 4), DEFAULT_CAMERA_HEIGHT * 2);
         }
         break;
         case 2:
         {
-            return glm::vec3(mnMaxX, mnMaxY, DEFAULT_CAMERA_HEIGHT);
+            return glm::vec3(mnMaxX / 2 + mnDistance * sin(pi / 4), mnMaxY / 2 + mnDistance * cos(pi / 4), DEFAULT_CAMERA_HEIGHT * 2);
         }
         break;
         case 3:
         {
-            return glm::vec3(-30, mnMaxY, DEFAULT_CAMERA_HEIGHT);
+            return glm::vec3(mnMaxX / 2 - mnDistance * sin(pi / 4), mnMaxY / 2 + mnDistance * cos(pi / 4), DEFAULT_CAMERA_HEIGHT * 2);
         }
         break;
         default:
             assert(false);
     }
-
-    return glm::vec3(-30, -30, DEFAULT_CAMERA_HEIGHT);
+    return maDefaultCameraPosition;
 }
 
 void GL3DBarChart::moveToCorner()
