@@ -43,7 +43,6 @@ using ::com::sun::star::presentation::XSlideShow;
 using ::com::sun::star::presentation::XSlideShowView;
 using ::com::sun::star::presentation::XShapeEventListener;
 using ::com::sun::star::presentation::XSlideShowListener;
-using ::comphelper::ImplementationReference;
 
 using namespace ::com::sun::star;
 

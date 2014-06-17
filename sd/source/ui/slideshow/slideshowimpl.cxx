@@ -80,7 +80,6 @@
 #include <boost/bind.hpp>
 
 using ::cppu::OInterfaceContainerHelper;
-using ::comphelper::ImplementationReference;
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationListener;
 using ::com::sun::star::awt::XWindow;
@@ -630,7 +629,7 @@ void SAL_CALL SlideshowImpl::disposing()
     try
     {
         if( mxView.is() )
-            mxShow->removeView( mxView.getRef() );
+            mxShow->removeView( mxView.get() );
 
         Reference< XComponent > xComponent( mxShow, UNO_QUERY );
         if( xComponent.is() )
@@ -651,7 +650,7 @@ void SAL_CALL SlideshowImpl::disposing()
     }
 
     mxShow.clear();
-    mxView.reset();
+    mxView.clear();
     mxListenerProxy.clear();
     mpSlideController.reset();
 
@@ -1119,12 +1118,12 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
     try
     {
         mxShow = Reference< XSlideShow >( createSlideShow(), UNO_QUERY_THROW );
-        mxView = comphelper::ImplementationReference<sd::SlideShowView, css::presentation::XSlideShowView>::createFromQuery( new SlideShowView(
+        mxView = new SlideShowView(
                                              *mpShowWindow,
                                              mpDoc,
                                              meAnimationMode,
                                              this,
-                                             maPresSettings.mbFullScreen) );
+                                             maPresSettings.mbFullScreen);
 
         // try add wait symbol to properties:
         const Reference<rendering::XSpriteCanvas> xSpriteCanvas(
@@ -1163,7 +1162,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
         for( nIndex = 0; nIndex < nCount; nIndex++ )
             mxShow->setProperty( aProperties[nIndex] );
 
-        mxShow->addView( mxView.getRef() );
+        mxShow->addView( mxView.get() );
 
         mxListenerProxy.set( new SlideShowListenerProxy( this, mxShow ) );
         mxListenerProxy->addAsSlideShowListener();
