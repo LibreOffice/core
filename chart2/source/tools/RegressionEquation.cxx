@@ -25,6 +25,7 @@
 #include "PropertyHelper.hxx"
 #include "macros.hxx"
 #include "ContainerHelper.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -88,7 +89,7 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
-        Property( "NumberFormat",
+        Property( CHART_UNONAME_NUMFMT,
                   PROP_EQUATION_NUMBER_FORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND

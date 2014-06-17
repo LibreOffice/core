@@ -39,6 +39,8 @@
 #include "WrappedScaleTextProperties.hxx"
 #include "WrappedNumberFormatProperty.hxx"
 #include "WrappedTextRotationProperty.hxx"
+#include <unonames.hxx>
+
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 
@@ -114,7 +116,7 @@ void lcl_AddPropertiesToVector_PointProperties(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( "NumberFormat",
+        Property( CHART_UNONAME_NUMFMT,
                   PROP_SERIES_NUMBERFORMAT,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
@@ -153,7 +155,7 @@ void lcl_AddPropertiesToVector_SeriesOnly(
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
-        Property( "LinkNumberFormatToSource",
+        Property( CHART_UNONAME_LINK_TO_SRC_NUMFMT,
                   PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND

@@ -26,6 +26,7 @@
 #include "ContainerHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "RegressionCurveHelper.hxx"
+#include <unonames.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -582,7 +583,7 @@ double VDataSeries::getBubble_Size( sal_Int32 index ) const
 
 bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString("NumberFormat");
+    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString(CHART_UNONAME_NUMFMT);
     bool bHasNumberFormat = false;
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
     sal_Int32 nNumberFormat = -1;
@@ -592,7 +593,7 @@ bool VDataSeries::hasExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPerce
 }
 sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const
 {
-    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString("NumberFormat");
+    OUString aPropName = bForPercentage ? OUString("PercentageNumberFormat") : OUString(CHART_UNONAME_NUMFMT);
     sal_Int32 nNumberFormat = -1;
     uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( nPointIndex ));
     if( xPointProp.is() )
