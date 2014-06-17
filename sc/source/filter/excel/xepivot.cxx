@@ -1677,7 +1677,7 @@ void XclExpPivotTable::WriteSxli( XclExpStream& rStrm, sal_uInt16 nLineCount, sa
 {
     if( nLineCount > 0 )
     {
-        sal_uInt16 nLineSize = 8 + 2 * nIndexCount;
+        sal_Size nLineSize = 8 + 2 * nIndexCount;
         rStrm.StartRecord( EXC_ID_SXLI, nLineSize * nLineCount );
 
         /*  Excel expects the records to be filled completely, do not
