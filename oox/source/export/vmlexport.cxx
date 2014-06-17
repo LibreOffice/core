@@ -971,6 +971,21 @@ bool lcl_isTextBox(const SdrObject* pSdrObject)
     return false;
 }
 
+OUString lcl_getAnchorIdFromGrabBag(const SdrObject* pSdrObject)
+{
+    OUString aResult;
+
+    uno::Reference<beans::XPropertySet> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY);
+    if (xShape->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+    {
+        comphelper::SequenceAsHashMap aInteropGrabBag(xShape->getPropertyValue("InteropGrabBag"));
+        if (aInteropGrabBag.find("AnchorId") != aInteropGrabBag.end())
+            aInteropGrabBag["AnchorId"] >>= aResult;
+    }
+
+    return aResult;
+}
+
 sal_Int32 VMLExport::StartShape()
 {
     if ( m_nShapeType == ESCHER_ShpInst_Nil )
@@ -1086,6 +1101,10 @@ sal_Int32 VMLExport::StartShape()
 
     // add style
     m_pShapeAttrList->add( XML_style, m_pShapeStyle->makeStringAndClear() );
+
+    OUString sAnchorId = lcl_getAnchorIdFromGrabBag(m_pSdrObject);
+    if (!sAnchorId.isEmpty())
+        m_pShapeAttrList->addNS(XML_wp14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
 
     if ( nShapeElement >= 0 && !m_pShapeAttrList->hasAttribute( XML_type ) )
     {
