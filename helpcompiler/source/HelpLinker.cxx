@@ -281,7 +281,7 @@ void HelpLinker::initIndexerPreProcessor()
 /**
 *
 */
-void HelpLinker::link() throw( HelpProcessingException )
+void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerException)
 {
     bool bIndexForExtension = true;
 
