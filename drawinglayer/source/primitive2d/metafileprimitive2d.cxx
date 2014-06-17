@@ -1293,7 +1293,7 @@ namespace
 
             // prepare FontColor and Locale
             const basegfx::BColor aFontColor(rProperty.getTextColor());
-            const basegfx::BColor aBFillColor(rFont.GetFillColor().getBColor());
+            const Color aFillColor(rFont.GetFillColor());
             const com::sun::star::lang::Locale aLocale(LanguageTag(rProperty.getLanguageType()).getLocale());
             const bool bWordLineMode(rFont.IsWordLineMode());
 
@@ -1355,7 +1355,7 @@ namespace
                     aFontAttribute,
                     aLocale,
                     aFontColor,
-                    aBFillColor,
+                    aFillColor,
 
                     // attributes for TextDecoratedPortionPrimitive2D
                     rProperty.getOverlineColorActive() ? rProperty.getOverlineColor() : aFontColor,

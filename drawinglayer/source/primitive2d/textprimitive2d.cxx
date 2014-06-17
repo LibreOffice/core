@@ -229,7 +229,7 @@ namespace drawinglayer
             const basegfx::BColor& rFontColor,
             bool bFilled,
             long nWidthToFill,
-            const basegfx::BColor& rFillColor)
+            const Color& rFillColor)
         :   BufferedDecompositionPrimitive2D(),
             maTextTransform(rNewTransform),
             maText(rText),

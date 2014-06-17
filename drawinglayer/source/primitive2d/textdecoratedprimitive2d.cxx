@@ -317,7 +317,7 @@ namespace drawinglayer
             const attribute::FontAttribute& rFontAttribute,
             const ::com::sun::star::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,
-            const basegfx::BColor& rFillColor,
+            const Color& rFillColor,
 
             // local parameters
             const basegfx::BColor& rOverlineColor,
