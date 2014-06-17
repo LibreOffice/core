@@ -39,7 +39,6 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <comphelper/implementationreference.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <cppcanvas/spritecanvas.hxx>

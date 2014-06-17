@@ -26,7 +26,6 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/prntypes.hxx>
 #include <svtools/transfer.hxx>
-#include <comphelper/implementationreference.hxx>
 #include "glob.hxx"
 #include "pres.hxx"
 #include "cfgids.hxx"

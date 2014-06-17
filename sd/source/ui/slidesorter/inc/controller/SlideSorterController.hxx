@@ -29,7 +29,6 @@
 #include <sfx2/viewfac.hxx>
 #include <tools/link.hxx>
 #include <tools/gen.hxx>
-#include <comphelper/implementationreference.hxx>
 
 namespace sd { namespace slidesorter {
 class SlideSorter;
@@ -241,8 +240,6 @@ private:
     ::boost::scoped_ptr<VisibleAreaManager> mpVisibleAreaManager;
 
     // The listener listens to UNO events and thus is a UNO object.
-    // For proper life time management and at the same time free access to
-    // the implementation object we use the ImplementationReference class.
     ::rtl::Reference<controller::Listener> mpListener;
 
     int mnModelChangeLockCount;

@@ -332,7 +332,7 @@ private:
     sal_Int32 updateSlideShow (void);
 
     css::uno::Reference< css::presentation::XSlideShow > mxShow;
-    comphelper::ImplementationReference< ::sd::SlideShowView, css::presentation::XSlideShowView > mxView;
+    rtl::Reference<sd::SlideShowView> mxView;
     css::uno::Reference< css::frame::XModel > mxModel;
 
     Timer maUpdateTimer;
