@@ -2279,6 +2279,32 @@ bool lcl_exportAxisType( const Reference< chart2::XAxis > xChart2Axis, SvXMLExpo
     return bExportDateScale;
 }
 
+void disableLinkedNumberFormat(
+    std::vector<XMLPropertyState>& rPropStates, const UniReference<XMLPropertySetMapper>& rMapper )
+{
+    for (size_t i = 0; i < rPropStates.size(); ++i)
+    {
+        XMLPropertyState& rState = rPropStates[i];
+        if (rState.mnIndex < 0 || rMapper->GetEntryCount() <= rState.mnIndex)
+            continue;
+
+        OUString aXMLName = rMapper->GetEntryXMLName(rState.mnIndex);
+
+        if (aXMLName != "link-data-style-to-source")
+            continue;
+
+        // Entry found.  Set the value to false and bail out.
+        rState.maValue <<= false;
+        return;
+    }
+
+    // Entry not found.  Insert a new entry for this.
+    sal_Int32 nIndex = rMapper->GetEntryIndex(XML_NAMESPACE_CHART, "link-data-style-to-source", 0);
+    XMLPropertyState aState(nIndex);
+    aState.maValue <<= false;
+    rPropStates.push_back(aState);
+}
+
 }
 
 void SchXMLExportHelper_Impl::exportAxis(
@@ -2297,7 +2323,6 @@ void SchXMLExportHelper_Impl::exportAxis(
     // get property states for autostyles
     if( xAxisProps.is() && mxExpPropMapper.is() )
     {
-        bool bIgnoreLinkedNumFmt = maSrcShellID != maDestShellID;
         lcl_exportNumberFormat( sNumFormat, xAxisProps, mrExport );
         aPropertyStates = mxExpPropMapper->Filter( xAxisProps );
 
@@ -2305,33 +2330,12 @@ void SchXMLExportHelper_Impl::exportAxis(
                 rtl::OUStringToOString(maSrcShellID, RTL_TEXTENCODING_UTF8).getStr(),
                 rtl::OUStringToOString(maDestShellID, RTL_TEXTENCODING_UTF8).getStr());
 
-        if (bIgnoreLinkedNumFmt && false)
+        if (!maSrcShellID.isEmpty() && !maDestShellID.isEmpty() && maSrcShellID != maDestShellID)
         {
-            bool bFound = false;
-            const UniReference<XMLPropertySetMapper>& rMapper = mxExpPropMapper->getPropertySetMapper();
-            for (size_t i = 0; i < aPropertyStates.size(); ++i)
-            {
-                XMLPropertyState& rState = aPropertyStates[i];
-                if (rState.mnIndex < 0 || rMapper->GetEntryCount() <= rState.mnIndex)
-                    continue;
-
-                OUString aAPIName = rMapper->GetEntryAPIName(rState.mnIndex);
-                OUString aXMLName = rMapper->GetEntryXMLName(rState.mnIndex);
-
-                if (aAPIName != "LinkNumberFormatToSource")
-                    continue;
-
-                rState.maValue <<= false;
-                bFound = true;
-            }
-
-            if (!bFound)
-            {
-                sal_Int32 nIndex = rMapper->GetEntryIndex(XML_NAMESPACE_CHART, "link-data-style-to-source", 0);
-                XMLPropertyState aState(nIndex);
-                aState.maValue <<= false;
-                aPropertyStates.push_back(aState);
-            }
+            // Disable link to source number format property when pasting to
+            // a different doc shell.  These shell ID's should be both empty
+            // during real ODF export.
+            disableLinkedNumberFormat(aPropertyStates, mxExpPropMapper->getPropertySetMapper());
         }
     }
 
