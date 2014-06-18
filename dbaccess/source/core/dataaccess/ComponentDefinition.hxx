@@ -33,7 +33,6 @@
 #include "ContentHelper.hxx"
 #include "apitools.hxx"
 #include <column.hxx>
-#include <comphelper/implementationreference.hxx>
 
 #include <memory>
 namespace dbaccess
@@ -90,8 +89,7 @@ class OComponentDefinition  :public OContentHelper
 
 protected:
     ::std::auto_ptr< OColumns >     m_pColumns;
-    ::comphelper::ImplementationReference< OColumnPropertyListener,::com::sun::star::beans::XPropertyChangeListener>
-                                    m_xColumnPropertyListener;
+    rtl::Reference<OColumnPropertyListener> m_xColumnPropertyListener;
     bool                        m_bTable;
 
     virtual ~OComponentDefinition();

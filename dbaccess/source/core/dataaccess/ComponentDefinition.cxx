@@ -103,7 +103,7 @@ void OComponentDefinition::initialize( const Sequence< Any >& aArguments ) throw
 
 void OComponentDefinition::registerProperties()
 {
-    m_xColumnPropertyListener = ::comphelper::ImplementationReference<OColumnPropertyListener,XPropertyChangeListener>(new OColumnPropertyListener(this));
+    m_xColumnPropertyListener = new OColumnPropertyListener(this);
     OComponentDefinition_Impl& rDefinition( getDefinition() );
     ODataSettings::registerPropertiesFor( &rDefinition );
 
@@ -194,7 +194,7 @@ void SAL_CALL OComponentDefinition::disposing()
     if ( m_pColumns.get() )
         m_pColumns->disposing();
     m_xColumnPropertyListener->clear();
-    m_xColumnPropertyListener.dispose();
+    m_xColumnPropertyListener.clear();
 }
 
 IPropertyArrayHelper& OComponentDefinition::getInfoHelper()
@@ -251,7 +251,7 @@ OColumn* OComponentDefinition::createColumn(const OUString& _rName) const
     OComponentDefinition_Impl::const_iterator aFind = rDefinition.find( _rName );
     if ( aFind != rDefinition.end() )
     {
-        aFind->second->addPropertyChangeListener(OUString(),m_xColumnPropertyListener.getRef());
+        aFind->second->addPropertyChangeListener(OUString(),m_xColumnPropertyListener.get());
         return new OTableColumnWrapper( aFind->second, aFind->second, true );
     }
     OSL_FAIL( "OComponentDefinition::createColumn: is this a valid case?" );
