@@ -3012,7 +3012,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
                 break;
         }
 
-        rAreas.resize( nColCnt * nRowCnt );
+        rAreas.resize(static_cast<size_t>(nColCnt) * nRowCnt);
 
         Size aPartArea, aSize;
         aPartArea.Width()  = ((aArea.Width()  - ((nColCnt-1) * nGapW) ) / nColCnt);
