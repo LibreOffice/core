@@ -143,48 +143,48 @@ void SAL_CALL OToolboxController::initialize( const Sequence< Any >& _rArguments
         if ( m_aCommandURL == ".uno:BasicShapes" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:BasicShapes"),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_BASIC,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_BASIC,m_nToolBoxId,*pToolBox);
         }
         else if ( m_aCommandURL == ".uno:SymbolShapes" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:SymbolShapes"),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_SYMBOL,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_SYMBOL,m_nToolBoxId,*pToolBox);
         }
         else if ( m_aCommandURL == ".uno:ArrowShapes" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:ArrowShapes"),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_ARROW,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_ARROW,m_nToolBoxId,*pToolBox);
         }
         else if ( m_aCommandURL == ".uno:FlowChartShapes" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:FlowChartShapes"),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_FLOWCHART,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_FLOWCHART,m_nToolBoxId,*pToolBox);
         }
         else if ( m_aCommandURL == ".uno:CalloutShapes" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:CalloutShapes"),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_CALLOUT,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_CALLOUT,m_nToolBoxId,*pToolBox);
         }
         else if ( m_aCommandURL == ".uno:StarShapes" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:StarShapes"),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_STAR,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = new SvxTbxCtlCustomShapes(m_nSlotId = SID_DRAWTBX_CS_STAR,m_nToolBoxId,*pToolBox);
         }
         else if ( m_aCommandURL == ".uno:CharFontName" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:CharFontName"),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxFontNameToolBoxControl/*SvxStyleToolBoxControl*/(m_nSlotId = SID_ATTR_CHAR_FONT,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = new SvxFontNameToolBoxControl/*SvxStyleToolBoxControl*/(m_nSlotId = SID_ATTR_CHAR_FONT,m_nToolBoxId,*pToolBox);
         }
         else if ( m_aCommandURL == ".uno:FontColor" || m_aCommandURL == ".uno:Color" )
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:FontColor"),sal_True));
             m_aStates.insert(TCommandState::value_type(OUString(".uno:Color"),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxColorToolBoxControl(m_nSlotId = SID_ATTR_CHAR_COLOR2,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = new SvxColorToolBoxControl(m_nSlotId = SID_ATTR_CHAR_COLOR2,m_nToolBoxId,*pToolBox);
         }
         else
         {
             m_aStates.insert(TCommandState::value_type(OUString(".uno:BackgroundColor"),sal_True));
-            m_pToolbarController = TToolbarHelper::createFromQuery(new SvxColorToolBoxControl(m_nSlotId = SID_BACKGROUND_COLOR,m_nToolBoxId,*pToolBox));
+            m_pToolbarController = new SvxColorToolBoxControl(m_nSlotId = SID_BACKGROUND_COLOR,m_nToolBoxId,*pToolBox);
         }
 
         TCommandState::iterator aIter = m_aStates.begin();
@@ -271,7 +271,7 @@ Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw
 
     Reference< awt::XWindow > xRet;
     if ( m_pToolbarController.is() )
-        xRet = m_pToolbarController.getRef()->createPopupWindow();
+        xRet = m_pToolbarController->createPopupWindow();
 
     return xRet;
 }
@@ -279,7 +279,7 @@ Reference< awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw
 void SAL_CALL OToolboxController::execute( sal_Int16 KeyModifier ) throw (uno::RuntimeException, std::exception)
 {
     if ( m_pToolbarController.is() )
-        m_pToolbarController.getRef()->execute( KeyModifier );
+        m_pToolbarController->execute( KeyModifier );
 }
 
 sal_Bool SAL_CALL OToolboxController::opensSubToolbar() throw (uno::RuntimeException, std::exception)
@@ -296,9 +296,8 @@ OUString SAL_CALL OToolboxController::getSubToolbarName() throw (uno::RuntimeExc
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
-    uno::Reference< frame::XSubToolbarController> xSub(m_pToolbarController.getRef(),uno::UNO_QUERY);
-    if ( xSub.is() )
-        return xSub->getSubToolbarName();
+    if ( m_pToolbarController.is() )
+        return m_pToolbarController->getSubToolbarName();
     return OUString();
 }
 
@@ -306,11 +305,9 @@ void SAL_CALL OToolboxController::functionSelected( const OUString& rCommand ) t
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
-
-    uno::Reference< frame::XSubToolbarController> xSub(m_pToolbarController.getRef(),uno::UNO_QUERY);
-    if ( xSub.is() )
+    if ( m_pToolbarController.is() )
     {
-        xSub->functionSelected(m_aCommandURL = rCommand);
+        m_pToolbarController->functionSelected(m_aCommandURL = rCommand);
     }
 }
 
@@ -318,10 +315,8 @@ void SAL_CALL OToolboxController::updateImage(  ) throw (uno::RuntimeException, 
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
-
-    uno::Reference< frame::XSubToolbarController> xSub(m_pToolbarController.getRef(),uno::UNO_QUERY);
-    if ( xSub.is() )
-        xSub->updateImage();
+    if ( m_pToolbarController.is() )
+        m_pToolbarController->updateImage();
 }
 
 uno::Reference< awt::XWindow > SAL_CALL OToolboxController::createItemWindow( const uno::Reference< awt::XWindow >& _xParent)

@@ -32,8 +32,6 @@
 #include <svx/svdocirc.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoashp.hxx>
-#include <comphelper/implementationreference.hxx>
-
 
 namespace rptui
 {
@@ -72,7 +70,7 @@ class OPropertyMediator;
 class REPORTDESIGN_DLLPUBLIC OObjectBase
 {
 public:
-    typedef ::comphelper::ImplementationReference<OPropertyMediator,::com::sun::star::beans::XPropertyChangeListener> TMediator;
+    typedef rtl::Reference<OPropertyMediator> TMediator;
 
 protected:
     mutable TMediator                                                                           m_xMediator;

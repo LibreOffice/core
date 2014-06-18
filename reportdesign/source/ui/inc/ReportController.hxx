@@ -44,7 +44,6 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
-#include <comphelper/implementationreference.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertystatecontainer.hxx>
 #include <comphelper/uno3.hxx>
