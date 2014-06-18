@@ -758,9 +758,10 @@ FlatFndBox::FlatFndBox(SwDoc* pDocPtr, const _FndBox& rBox) :
         nRows = GetRowCount(rBoxRef);
 
         // Create linear array
-        pArr = new const _FndBox*[ nRows * nCols ];
+        size_t nCount = static_cast<size_t>(nRows) * nCols;
+        pArr = new const _FndBox*[nCount];
         _FndBox** ppTmp = (_FndBox**)pArr;
-        memset( ppTmp, 0, sizeof(const _FndBox*) * nRows * nCols );
+        memset(ppTmp, 0, sizeof(const _FndBox*) * nCount);
 
         FillFlat( rBoxRef );
     }
