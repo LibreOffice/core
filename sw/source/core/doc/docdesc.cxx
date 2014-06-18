@@ -638,7 +638,7 @@ SwPageDesc* SwDoc::FindPageDescByName( const OUString& rName, sal_uInt16* pPos )
     if( pPos ) *pPos = USHRT_MAX;
 
     for( sal_uInt16 n = 0, nEnd = maPageDescs.size(); n < nEnd; ++n )
-        if( maPageDescs[ n ]->GetName() == rName )
+        if( maPageDescs[ n ]->HasName( rName ) )
         {
             pRet = maPageDescs[ n ];
             if( pPos )
