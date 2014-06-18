@@ -107,7 +107,7 @@ protected:
     LwpNotifyListPersistent m_ExtraList;
     LwpNotifyListPersistent m_PersistentList;
 public:
-    LwpNotifyListPersistent* GetExtraList(){return &m_ExtraList;}
+    LwpNotifyListPersistent& GetExtraList() { return m_ExtraList; }
     void Read(LwpObjectStream* pObjStrm);
 };
 
@@ -156,7 +156,7 @@ public:
     void Release();
 
     LwpPara* GetParent();
-    LwpObjectID* GetStoryID();
+    LwpObjectID& GetStoryID();
     LwpStory* GetStory();
     LwpBreaksOverride* GetBreaks();
 
@@ -174,7 +174,7 @@ public:
     bool GetBulletFlag() const;
 
     void GetParaNumber(sal_uInt16 nPosition, ParaNumbering* pParaNumbering);
-    LwpFribPtr* GetFribs();
+    LwpFribPtr& GetFribs();
     double GetBelowSpacing();
     LwpParaProperty* GetProperty(sal_uInt32 nPropType);
     void GatherDropcapInfo();
@@ -328,9 +328,9 @@ inline bool LwpPara::GetBulletFlag() const
 {
     return m_bHasBullet;
 }
-inline LwpFribPtr* LwpPara::GetFribs()
+inline LwpFribPtr& LwpPara::GetFribs()
 {
-    return &m_Fribs;
+    return m_Fribs;
 }
 inline LwpBreaksOverride* LwpPara::GetBreaks()
 {
@@ -362,9 +362,9 @@ inline void LwpPara::SetIndent(LwpIndentOverride* pIndentOverride)
         delete m_pIndentOverride;
     m_pIndentOverride = pIndentOverride;
 }
-inline LwpObjectID* LwpPara::GetStoryID()
+inline LwpObjectID& LwpPara::GetStoryID()
 {
-    return &m_Story;
+    return m_Story;
 }
 inline LwpStory* LwpPara::GetStory()
 {

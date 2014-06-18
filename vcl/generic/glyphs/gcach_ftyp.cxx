@@ -615,7 +615,7 @@ boost::shared_ptr<ImplFontOptions> ServerFont::GetFontOptions() const
     return mpFontOptions;
 }
 
-const OString* ServerFont::GetFontFileName() const
+const OString& ServerFont::GetFontFileName() const
 {
     return mpFontInfo->GetFontFileName();
 }

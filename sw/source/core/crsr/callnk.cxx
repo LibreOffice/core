@@ -167,7 +167,7 @@ SwCallLink::~SwCallLink()
                 {
                     const SwTxtAttr* pHt = rHts[ n ];
                     const sal_Int32 *pEnd = pHt->End();
-                    const sal_Int32 nStart = *pHt->GetStart();
+                    const sal_Int32 nStart = pHt->GetStart();
 
                     // If "only start" or "start and end equal" then call on
                     // every overflow of start.

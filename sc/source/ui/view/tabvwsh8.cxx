@@ -43,7 +43,7 @@ void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine 
 bool ScTabViewShell::HasSelection( bool bText ) const
 {
     bool bHas = false;
-    ScViewData* pData = (ScViewData*)GetViewData();     // const weggecasted
+    ScViewData* pData = (ScViewData*)&GetViewData();     // const weggecasted
     if ( bText )
     {
         //  Text enthalten: Anzahl2 >= 1

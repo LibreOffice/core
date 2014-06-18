@@ -101,7 +101,7 @@ bool SwFrmSidebarWinContainer::insert( const SwFrm& rFrm,
     FrmKey aFrmKey( &rFrm );
     SidebarWinContainer& rSidebarWinContainer = (*mpFrmSidebarWinContainer)[ aFrmKey ];
 
-    SidebarWinKey aSidebarWinKey( *(rFmtFld.GetTxtFld()->GetStart()) );
+    SidebarWinKey aSidebarWinKey( rFmtFld.GetTxtFld()->GetStart() );
     if ( rSidebarWinContainer.empty() ||
          rSidebarWinContainer.find( aSidebarWinKey) == rSidebarWinContainer.end() )
     {

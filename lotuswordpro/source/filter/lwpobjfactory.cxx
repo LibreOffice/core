@@ -674,7 +674,7 @@ rtl::Reference<LwpObject> LwpObjectFactory::CreateObject(sal_uInt32 type, LwpObj
     if(newObj.is())
     {
         newObj->QuickRead();
-        m_IdToObjList.insert(LwpIdToObjMap::value_type(*objHdr.GetID(), newObj));
+        m_IdToObjList.insert(LwpIdToObjMap::value_type(objHdr.GetID(), newObj));
     }
 
     return(newObj);
@@ -700,8 +700,8 @@ rtl::Reference<LwpObject> LwpObjectFactory::QueryObject(const LwpObjectID &objID
         if (!objHdr.Read(*m_pSvStream))
             return NULL;
 
-        LwpObjectID* pId = objHdr.GetID();
-        if (pId && (*pId != objID))
+        LwpObjectID& rId = objHdr.GetID();
+        if (rId != objID)
         {
             OSL_FAIL("apparently incorrect objid, invalidating");
             return NULL;

@@ -277,7 +277,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
 void ScCellShell::GetCellState( SfxItemSet& rSet )
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
-    ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
+    ScDocument& rDoc = GetViewData()->GetDocShell()->GetDocument();
     ScAddress aCursor( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
                         GetViewData()->GetTabNo() );
 
@@ -291,25 +291,25 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
         {
             case SID_THESAURUS:
                 {
-                    CellType eType = pDoc->GetCellType( aCursor );
+                    CellType eType = rDoc.GetCellType( aCursor );
                     bDisable = ( eType != CELLTYPE_STRING && eType != CELLTYPE_EDIT);
                     if (!bDisable)
                     {
                         //  test for available languages
-                        sal_uInt16 nLang = ScViewUtil::GetEffLanguage( pDoc, aCursor );
+                        sal_uInt16 nLang = ScViewUtil::GetEffLanguage( &rDoc, aCursor );
                         bDisable = !ScModule::HasThesaurusLanguage( nLang );
                     }
                 }
                 break;
             case SID_OPENDLG_FUNCTION:
                 {
-                    ScMarkData aMarkData=GetViewData()->GetMarkData();
+                    ScMarkData aMarkData = GetViewData()->GetMarkData();
                     aMarkData.MarkToSimple();
                     ScRange aRange;
                     aMarkData.GetMarkArea(aRange);
                     if(aMarkData.IsMarked())
                     {
-                        if (!pDoc->IsBlockEditable( aCursor.Tab(), aRange.aStart.Col(),aRange.aStart.Row(),
+                        if (!rDoc.IsBlockEditable( aCursor.Tab(), aRange.aStart.Col(),aRange.aStart.Row(),
                                             aRange.aEnd.Col(),aRange.aEnd.Row() ))
                         {
                             bDisable = true;
@@ -329,7 +329,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 break;
         }
         if (!bDisable && bNeedEdit)
-            if (!pDoc->IsBlockEditable( aCursor.Tab(), aCursor.Col(),aCursor.Row(),
+            if (!rDoc.IsBlockEditable( aCursor.Tab(), aCursor.Col(),aCursor.Row(),
                                         aCursor.Col(),aCursor.Row() ))
                 bDisable = true;
         if (bDisable)
@@ -523,8 +523,8 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         SCCOL nCol = GetViewData()->GetCurX();
         SCROW nRow = GetViewData()->GetCurY();
         SCTAB nTab = GetViewData()->GetTabNo();
-        ScDocument* pDoc = GetViewData()->GetDocShell()->GetDocument();
-        if (!pDoc->IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
+        ScDocument& rDoc = GetViewData()->GetDocShell()->GetDocument();
+        if (!rDoc.IsBlockEditable( nTab, nCol,nRow, nCol,nRow ))
             bDisable = true;
 
         if (!checkDestRanges(*GetViewData()))

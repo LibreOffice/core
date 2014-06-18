@@ -195,7 +195,7 @@ void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
         SwDoc* pDoc = pPaM->GetDoc();
         const SwTxtNode& rTxtNode = mpTxtFld->GetTxtNode();
         pPaM->GetPoint()->nNode = rTxtNode;
-        pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode, *mpTxtFld->GetStart() );
+        pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode, mpTxtFld->GetStart() );
 
         OUString const aEntry( GetField()->ExpandField( pDoc->IsClipBoard() ) );
         pPaM->SetMark();
@@ -448,9 +448,9 @@ void SwTxtFld::GetPamForTxtFld(
     const SwTxtNode& rTxtNode = rTxtFld.GetTxtNode();
 
     rPamForTxtFld.reset( new SwPaM( rTxtNode,
-                                    ( (rTxtFld.End() != NULL) ? *(rTxtFld.End()) : ( *(rTxtFld.GetStart()) + 1 ) ),
+                                    (rTxtFld.End() != NULL) ? *(rTxtFld.End()) : ( rTxtFld.GetStart() + 1 ),
                                     rTxtNode,
-                                    *(rTxtFld.GetStart()) ) );
+                                    rTxtFld.GetStart() ) );
 
 }
 
@@ -529,12 +529,12 @@ const OUString SwTxtInputFld::GetFieldContent() const
 void SwTxtInputFld::UpdateFieldContent()
 {
     if ( IsFldInDoc()
-         && (*GetStart()) != (*End()) )
+         && GetStart() != (*End()) )
     {
-        OSL_ENSURE( (*End()) - (*GetStart()) >= 2,
+        OSL_ENSURE( (*End()) - GetStart() >= 2,
                 "<SwTxtInputFld::UpdateFieldContent()> - Are CH_TXT_ATR_INPUTFIELDSTART and/or CH_TXT_ATR_INPUTFIELDEND missing?" );
         // skip CH_TXT_ATR_INPUTFIELDSTART character
-        const sal_Int32 nIdx = (*GetStart()) + 1;
+        const sal_Int32 nIdx = GetStart() + 1;
         // skip CH_TXT_ATR_INPUTFIELDEND character
         const sal_Int32 nLen = static_cast<sal_Int32>(std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) ));
         const OUString aNewFieldContent = GetTxtNode().GetExpandTxt( nIdx, nLen );
@@ -557,10 +557,10 @@ void SwTxtInputFld::UpdateTextNodeContent( const OUString& rNewContent )
         return;
     }
 
-    OSL_ENSURE( (*End()) - (*GetStart()) >= 2,
+    OSL_ENSURE( (*End()) - GetStart() >= 2,
             "<SwTxtInputFld::UpdateTextNodeContent(..)> - Are CH_TXT_ATR_INPUTFIELDSTART and/or CH_TXT_ATR_INPUTFIELDEND missing?" );
     // skip CH_TXT_ATR_INPUTFIELDSTART character
-    const sal_Int32 nIdx = (*GetStart()) + 1;
+    const sal_Int32 nIdx = GetStart() + 1;
     // skip CH_TXT_ATR_INPUTFIELDEND character
     const sal_Int32 nDelLen = std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) );
     SwIndex aIdx( &GetTxtNode(), nIdx );

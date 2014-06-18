@@ -43,9 +43,9 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
 {
     //  Tabelle geschuetzt ?
 
-    ScViewData* pViewData = GetViewData();
-    ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
+    ScViewData& rViewData = GetViewData();
+    ScDocument* pDoc = rViewData.GetDocument();
+    SCTAB nTab = rViewData.GetTabNo();
     if ( pDoc->IsTabProtected(nTab) )
     {
         ErrorMessage(STR_PROTECTIONERR);
@@ -54,7 +54,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
 
     MakeDrawLayer();
 
-    ScTabView*  pView   = pViewData->GetView();
+    ScTabView*  pView   = rViewData.GetView();
     ScDrawView* pDrView = pView->GetScDrawView();
     SdrModel*   pModel  = pDrView->GetModel();
 

@@ -1387,10 +1387,10 @@ XclImpOutlineDataBuffer::~XclImpOutlineDataBuffer()
 
 void XclImpOutlineDataBuffer::Convert()
 {
-    mxColOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, true )->GetColArray() );
+    mxColOutlineBuff->SetOutlineArray( &GetDoc().GetOutlineTable( mnScTab, true )->GetColArray() );
     mxColOutlineBuff->MakeScOutline();
 
-    mxRowOutlineBuff->SetOutlineArray( GetDoc().GetOutlineTable( mnScTab, true )->GetRowArray() );
+    mxRowOutlineBuff->SetOutlineArray( &GetDoc().GetOutlineTable( mnScTab, true )->GetRowArray() );
     mxRowOutlineBuff->MakeScOutline();
 
     mxColRowBuff->ConvertHiddenFlags( mnScTab );

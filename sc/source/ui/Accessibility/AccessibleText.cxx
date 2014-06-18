@@ -94,9 +94,9 @@ Rectangle ScViewForwarder::GetVisArea() const
             ScVSplitPos eWhichV = ((meSplitPos == SC_SPLIT_TOPLEFT) || (meSplitPos == SC_SPLIT_TOPRIGHT)) ?
                                     SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
 
-            Point aBaseCellPos(mpViewShell->GetViewData()->GetScrPos(mpViewShell->GetViewData()->GetPosX(eWhichH),
-                mpViewShell->GetViewData()->GetPosY(eWhichV), meSplitPos, true));
-            Point aCellPos(mpViewShell->GetViewData()->GetScrPos(maCellPos.Col(), maCellPos.Row(), meSplitPos, true));
+            Point aBaseCellPos(mpViewShell->GetViewData().GetScrPos(mpViewShell->GetViewData().GetPosX(eWhichH),
+                mpViewShell->GetViewData().GetPosY(eWhichV), meSplitPos, true));
+            Point aCellPos(mpViewShell->GetViewData().GetScrPos(maCellPos.Col(), maCellPos.Row(), meSplitPos, true));
             aVisArea.SetPos(aCellPos - aBaseCellPos);
         }
     }
@@ -755,25 +755,22 @@ void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, OUString& 
 {
 //  #104893#; don't use the input string
 //    ScCellTextData::GetCellText(rCellPos, rText);
-    ScDocument* pDoc = pDocShell->GetDocument();
-    if (pDoc)
+    ScDocument& rDoc = pDocShell->GetDocument();
+    //  #104893#; use the displayed string
+    rText = rDoc.GetString(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab());
+    if (mpViewShell)
     {
-        //  #104893#; use the displayed string
-        rText = pDoc->GetString(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab());
-        if (mpViewShell)
+        const ScViewOptions& aOptions = mpViewShell->GetViewData().GetOptions();
+        CellType aCellType;
+        rDoc.GetCellType(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), aCellType);
+        if (aCellType == CELLTYPE_FORMULA && aOptions.GetOption( VOPT_FORMULAS ))
         {
-            const ScViewOptions& aOptions = mpViewShell->GetViewData()->GetOptions();
-            CellType aCellType;
-            pDoc->GetCellType(rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), aCellType);
-            if (aCellType == CELLTYPE_FORMULA && aOptions.GetOption( VOPT_FORMULAS ))
-            {
-                pDoc->GetFormula( rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText);
-            }
-            else if (!aOptions.GetOption( VOPT_NULLVALS ))
-            {
-                if ((aCellType == CELLTYPE_VALUE || aCellType == CELLTYPE_FORMULA) && pDoc->GetValue(rCellPos) == 0.0)
-                    rText = "";
-            }
+            rDoc.GetFormula( rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText);
+        }
+        else if (!aOptions.GetOption( VOPT_NULLVALS ))
+        {
+            if ((aCellType == CELLTYPE_VALUE || aCellType == CELLTYPE_FORMULA) && rDoc.GetValue(rCellPos) == 0.0)
+                rText = "";
         }
     }
 }
@@ -782,11 +779,11 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 {
     ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine
 
-    ScDocument* pDoc = ( pDocShell ? pDocShell->GetDocument() : NULL );
-    if ( pDoc && pEditEngine && mpViewShell )
+    if ( pDocShell && pEditEngine && mpViewShell )
     {
+        ScDocument& rDoc = pDocShell->GetDocument();
         long nSizeX, nSizeY;
-        mpViewShell->GetViewData()->GetMergeSizePixel(
+        mpViewShell->GetViewData().GetMergeSizePixel(
             aCellPos.Col(), aCellPos.Row(), nSizeX, nSizeY);
 
         Size aSize(nSizeX, nSizeY);
@@ -794,12 +791,12 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
         long nIndent = 0;
         const SvxHorJustifyItem* pHorJustifyItem = static_cast< const SvxHorJustifyItem* >(
-            pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY ) );
+            rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_HOR_JUSTIFY ) );
         SvxCellHorJustify eHorJust = ( pHorJustifyItem ? static_cast< SvxCellHorJustify >( pHorJustifyItem->GetValue() ) : SVX_HOR_JUSTIFY_STANDARD );
         if ( eHorJust == SVX_HOR_JUSTIFY_LEFT )
         {
             const SfxUInt16Item* pIndentItem = static_cast< const SfxUInt16Item* >(
-                pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_INDENT ) );
+                rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_INDENT ) );
             if ( pIndentItem )
             {
                 nIndent = static_cast< long >( pIndentItem->GetValue() );
@@ -807,10 +804,10 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         }
 
         const SvxMarginItem* pMarginItem = static_cast< const SvxMarginItem* >(
-            pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_MARGIN ) );
-        ScViewData* pViewData = mpViewShell->GetViewData();
-        double nPPTX = ( pViewData ? pViewData->GetPPTX() : 0 );
-        double nPPTY = ( pViewData ? pViewData->GetPPTY() : 0 );
+            rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_MARGIN ) );
+        ScViewData& rViewData = mpViewShell->GetViewData();
+        double nPPTX = rViewData.GetPPTX();
+        double nPPTY = rViewData.GetPPTY();
         long nLeftM = ( pMarginItem ? static_cast< long >( ( pMarginItem->GetLeftMargin() + nIndent ) * nPPTX ) : 0 );
         long nTopM = ( pMarginItem ? static_cast< long >( pMarginItem->GetTopMargin() * nPPTY ) : 0 );
         long nRightM = ( pMarginItem ? static_cast< long >( pMarginItem->GetRightMargin() * nPPTX ) : 0 );
@@ -836,7 +833,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             the cell bounding box in ScAccessibleCell::GetBoundingBox()
             (see sc/source/ui/Accessibility/AccessibleCell.cxx). */
         const SfxInt32Item* pItem = static_cast< const SfxInt32Item* >(
-            pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_ROTATE_VALUE ) );
+            rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_ROTATE_VALUE ) );
         if( pItem && (pItem->GetValue() != 0) )
         {
             pEditEngine->SetPaperSize( Size( LONG_MAX, aSize.getHeight() ) );
@@ -847,7 +844,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         {
             // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
             const SfxBoolItem* pLineBreakItem = static_cast< const SfxBoolItem* >(
-                pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_LINEBREAK ) );
+                rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_LINEBREAK ) );
             bool bLineBreak = ( pLineBreakItem && pLineBreakItem->GetValue() );
             if ( !bLineBreak )
             {
@@ -859,7 +856,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
         pEditEngine->SetPaperSize( aSize );
 
         // #i92143# text getRangeExtents reports incorrect 'x' values for spreadsheet cells
-        if ( eHorJust == SVX_HOR_JUSTIFY_STANDARD && pDoc->HasValueData( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
+        if ( eHorJust == SVX_HOR_JUSTIFY_STANDARD && rDoc.HasValueData( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
         {
             pEditEngine->SetDefaultItem( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
         }
@@ -897,7 +894,7 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 
         long nOffsetY = 0;
         const SvxVerJustifyItem* pVerJustifyItem = static_cast< const SvxVerJustifyItem* >(
-            pDoc->GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_VER_JUSTIFY ) );
+            rDoc.GetAttr( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab(), ATTR_VER_JUSTIFY ) );
         SvxCellVerJustify eVerJust = ( pVerJustifyItem ? static_cast< SvxCellVerJustify >( pVerJustifyItem->GetValue() ) : SVX_VER_JUSTIFY_STANDARD );
         switch ( eVerJust )
         {
@@ -962,7 +959,7 @@ ScDocShell* ScAccessibleCellTextData::GetDocShell(ScTabViewShell* pViewShell)
 {
     ScDocShell* pDocSh = NULL;
     if (pViewShell)
-        pDocSh = pViewShell->GetViewData()->GetDocShell();
+        pDocSh = pViewShell->GetViewData().GetDocShell();
     return pDocSh;
 }
 
@@ -1310,8 +1307,8 @@ SvxViewForwarder* ScAccessiblePreviewCellTextData::GetViewForwarder()
 ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewShell)
 {
     ScDocShell* pDocSh = NULL;
-    if (pViewShell && pViewShell->GetDocument())
-        pDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
+    if (pViewShell)
+        pDocSh = (ScDocShell*) pViewShell->GetDocument().GetDocumentShell();
     return pDocSh;
 }
 
@@ -1363,8 +1360,8 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
     {
         if ( pDocShell )
         {
-            ScDocument* pDoc = pDocShell->GetDocument();
-            pEditEngine = pDoc->CreateFieldEditEngine();
+            ScDocument& rDoc = pDocShell->GetDocument();
+            pEditEngine = rDoc.CreateFieldEditEngine();
         }
         else
         {
@@ -1418,8 +1415,8 @@ SvxViewForwarder* ScAccessiblePreviewHeaderCellTextData::GetViewForwarder()
 ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* pViewShell)
 {
     ScDocShell* pDocSh = NULL;
-    if (pViewShell && pViewShell->GetDocument())
-        pDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
+    if (pViewShell)
+        pDocSh = (ScDocShell*) pViewShell->GetDocument().GetDocumentShell();
     return pDocSh;
 }
 
@@ -1436,10 +1433,10 @@ ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShel
     mbDataValid(false),
     meAdjust(eAdjust)
 {
-    if (pViewShell && pViewShell->GetDocument())
-        mpDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
+    if (pViewShell)
+        mpDocSh = (ScDocShell*) pViewShell->GetDocument().GetDocumentShell();
     if (mpDocSh)
-        mpDocSh->GetDocument()->AddUnoObject(*this);
+        mpDocSh->GetDocument().AddUnoObject(*this);
 }
 
 ScAccessibleHeaderTextData::~ScAccessibleHeaderTextData()
@@ -1447,7 +1444,7 @@ ScAccessibleHeaderTextData::~ScAccessibleHeaderTextData()
     SolarMutexGuard aGuard;     //  needed for EditEngine dtor
 
     if (mpDocSh)
-        mpDocSh->GetDocument()->RemoveUnoObject(*this);
+        mpDocSh->GetDocument().RemoveUnoObject(*this);
     if (mpEditEngine)
         mpEditEngine->SetNotifyHdl(Link());
     delete mpEditEngine;
@@ -1550,10 +1547,10 @@ ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
     mbMarkNote(bMarkNote),
     mbDataValid(false)
 {
-    if (pViewShell && pViewShell->GetDocument())
-        mpDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
+    if (pViewShell)
+        mpDocSh = (ScDocShell*) pViewShell->GetDocument().GetDocumentShell();
     if (mpDocSh)
-        mpDocSh->GetDocument()->AddUnoObject(*this);
+        mpDocSh->GetDocument().AddUnoObject(*this);
 }
 
 ScAccessibleNoteTextData::~ScAccessibleNoteTextData()
@@ -1561,7 +1558,7 @@ ScAccessibleNoteTextData::~ScAccessibleNoteTextData()
     SolarMutexGuard aGuard;     //  needed for EditEngine dtor
 
     if (mpDocSh)
-        mpDocSh->GetDocument()->RemoveUnoObject(*this);
+        mpDocSh->GetDocument().RemoveUnoObject(*this);
     if (mpEditEngine)
         mpEditEngine->SetNotifyHdl(Link());
     delete mpEditEngine;
@@ -1594,8 +1591,8 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
     {
         if ( mpDocSh )
         {
-            ScDocument* pDoc = mpDocSh->GetDocument();
-            mpEditEngine = pDoc->CreateFieldEditEngine();
+            ScDocument& rDoc = mpDocSh->GetDocument();
+            mpEditEngine = rDoc.CreateFieldEditEngine();
         }
         else
         {

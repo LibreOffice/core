@@ -105,7 +105,6 @@ private:
 
 private:
     ScDocShell* mpDocShell;
-    ScDocument* mpDoc;
     DocumentStreamAccess maDocAccess;
     OUString msURL;
     sal_Int32 mnLimit;

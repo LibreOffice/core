@@ -58,9 +58,9 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
 
     ScDocShellModificator aModificator( rDocShell );
 
-    ScDocument* pDoc = rDocShell.GetDocument();
-    ScDBCollection* pDocColl = pDoc->GetDBCollection();
-    bool bUndo (pDoc->IsUndoEnabled());
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pDocColl = rDoc.GetDBCollection();
+    bool bUndo (rDoc.IsUndoEnabled());
 
     ScDBCollection* pUndoColl = NULL;
     if (bUndo)
@@ -73,13 +73,13 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
     // #i55926# While loading XML, formula cells only have a single string token,
     // so CompileDBFormula would never find any name (index) tokens, and would
     // unnecessarily loop through all cells.
-    bool bCompile = !pDoc->IsImportingXML();
+    bool bCompile = !rDoc.IsImportingXML();
     bool bOk;
     if ( bCompile )
-        pDoc->CompileDBFormula( true );     // CreateFormulaString
+        rDoc.CompileDBFormula( true );     // CreateFormulaString
     if ( rName == STR_DB_LOCAL_NONAME )
     {
-        pDoc->SetAnonymousDBData(rRange.aStart.Tab() , pNew);
+        rDoc.SetAnonymousDBData(rRange.aStart.Tab() , pNew);
         bOk = true;
     }
     else
@@ -87,7 +87,7 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
         bOk = pDocColl->getNamedDBs().insert(pNew);
     }
     if ( bCompile )
-        pDoc->CompileDBFormula( false );    // CompileFormulaString
+        rDoc.CompileDBFormula( false );    // CompileFormulaString
 
     if (!bOk)
     {
@@ -111,9 +111,9 @@ bool ScDBDocFunc::AddDBRange( const OUString& rName, const ScRange& rRange, bool
 bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
 {
     bool bDone = false;
-    ScDocument* pDoc = rDocShell.GetDocument();
-    ScDBCollection* pDocColl = pDoc->GetDBCollection();
-    bool bUndo = pDoc->IsUndoEnabled();
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pDocColl = rDoc.GetDBCollection();
+    bool bUndo = rDoc.IsUndoEnabled();
 
     ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
     const ScDBData* p = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rName));
@@ -125,9 +125,9 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
         if (bUndo)
             pUndoColl = new ScDBCollection( *pDocColl );
 
-        pDoc->CompileDBFormula( true );     // CreateFormulaString
+        rDoc.CompileDBFormula( true );     // CreateFormulaString
         rDBs.erase(*p);
-        pDoc->CompileDBFormula( false );    // CompileFormulaString
+        rDoc.CompileDBFormula( false );    // CompileFormulaString
 
         if (bUndo)
         {
@@ -147,9 +147,9 @@ bool ScDBDocFunc::DeleteDBRange(const OUString& rName)
 bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
 {
     bool bDone = false;
-    ScDocument* pDoc = rDocShell.GetDocument();
-    ScDBCollection* pDocColl = pDoc->GetDBCollection();
-    bool bUndo = pDoc->IsUndoEnabled();
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pDocColl = rDoc.GetDBCollection();
+    bool bUndo = rDoc.IsUndoEnabled();
     ScDBCollection::NamedDBs& rDBs = pDocColl->getNamedDBs();
     const ScDBData* pOld = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rOld));
     const ScDBData* pNew = rDBs.findByUpperName(ScGlobal::pCharClass->uppercase(rNew));
@@ -161,16 +161,16 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
 
         ScDBCollection* pUndoColl = new ScDBCollection( *pDocColl );
 
-        pDoc->CompileDBFormula(true);               // CreateFormulaString
+        rDoc.CompileDBFormula(true);               // CreateFormulaString
         rDBs.erase(*pOld);
         bool bInserted = rDBs.insert(pNewData);
         if (!bInserted)                             // Fehler -> alten Zustand wiederherstellen
         {
             delete pNewData;
-            pDoc->SetDBCollection(pUndoColl);       // gehoert dann dem Dokument
+            rDoc.SetDBCollection(pUndoColl);       // gehoert dann dem Dokument
         }
 
-        pDoc->CompileDBFormula( false );            // CompileFormulaString
+        rDoc.CompileDBFormula( false );            // CompileFormulaString
 
         if (bInserted)                              // Einfuegen hat geklappt
         {
@@ -195,9 +195,9 @@ bool ScDBDocFunc::RenameDBRange( const OUString& rOld, const OUString& rNew )
 bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
 {
     bool bDone = false;
-    ScDocument* pDoc = rDocShell.GetDocument();
-    ScDBCollection* pDocColl = pDoc->GetDBCollection();
-    bool bUndo = pDoc->IsUndoEnabled();
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection* pDocColl = rDoc.GetDBCollection();
+    bool bUndo = rDoc.IsUndoEnabled();
 
     ScDBData* pData = NULL;
     if (rNewData.GetName() == STR_DB_LOCAL_NONAME)
@@ -205,7 +205,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
         ScRange aRange;
         rNewData.GetArea(aRange);
         SCTAB nTab = aRange.aStart.Tab();
-        pData = pDoc->GetAnonymousDBData(nTab);
+        pData = rDoc.GetAnonymousDBData(nTab);
     }
     else
         pData = pDocColl->getNamedDBs().findByUpperName(rNewData.GetUpperName());
@@ -224,7 +224,7 @@ bool ScDBDocFunc::ModifyDBData( const ScDBData& rNewData )
 
         *pData = rNewData;
         if (bAreaChanged)
-            pDoc->CompileDBFormula();
+            rDoc.CompileDBFormula();
 
         if (bUndo)
         {
@@ -245,17 +245,17 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
     //! auch fuer ScDBFunc::RepeatDB benutzen!
 
     bool bDone = false;
-    ScDocument* pDoc = rDocShell.GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
     ScDBData* pDBData = NULL;
     if (bIsUnnamed)
     {
-        pDBData = pDoc->GetAnonymousDBData( aTab );
+        pDBData = rDoc.GetAnonymousDBData( aTab );
     }
     else
     {
-        ScDBCollection* pColl = pDoc->GetDBCollection();
+        ScDBCollection* pColl = rDoc.GetDBCollection();
         if (pColl)
             pDBData = pColl->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rDBName));
     }
@@ -281,7 +281,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
             ScRange aNewQuery;
             if (bQuery && !aQueryParam.bInplace)
             {
-                ScDBData* pDest = pDoc->GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
+                ScDBData* pDest = rDoc.GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
                                                         aQueryParam.nDestTab, true );
                 if (pDest && pDest->IsDoSize())
                 {
@@ -306,9 +306,9 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
 
             if (bRecord)
             {
-                SCTAB nTabCount = pDoc->GetTableCount();
+                SCTAB nTabCount = rDoc.GetTableCount();
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-                ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
+                ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
                 if (pTable)
                 {
                     pUndoTab = new ScOutlineTable( *pTable );
@@ -316,31 +316,31 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
                     // column/row state
                     SCCOLROW nOutStartCol, nOutEndCol;
                     SCCOLROW nOutStartRow, nOutEndRow;
-                    pTable->GetColArray()->GetRange( nOutStartCol, nOutEndCol );
-                    pTable->GetRowArray()->GetRange( nOutStartRow, nOutEndRow );
+                    pTable->GetColArray().GetRange( nOutStartCol, nOutEndCol );
+                    pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
-                    pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
-                    pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0,
+                    pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+                    rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0,
                             nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab,
                             IDF_NONE, false, pUndoDoc );
-                    pDoc->CopyToDocument( 0, static_cast<SCROW>(nOutStartRow),
+                    rDoc.CopyToDocument( 0, static_cast<SCROW>(nOutStartRow),
                             nTab, MAXCOL, static_cast<SCROW>(nOutEndRow), nTab,
                             IDF_NONE, false, pUndoDoc );
                 }
                 else
-                    pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
+                    pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
 
                 //  Datenbereich sichern - incl. Filter-Ergebnis
-                pDoc->CopyToDocument( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab, IDF_ALL, false, pUndoDoc );
+                rDoc.CopyToDocument( 0,nStartRow,nTab, MAXCOL,nEndRow,nTab, IDF_ALL, false, pUndoDoc );
 
                 //  alle Formeln wegen Referenzen
-                pDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1, IDF_FORMULA, false, pUndoDoc );
+                rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1, IDF_FORMULA, false, pUndoDoc );
 
                 //  DB- und andere Bereiche
-                ScRangeName* pDocRange = pDoc->GetRangeName();
+                ScRangeName* pDocRange = rDoc.GetRangeName();
                 if (!pDocRange->empty())
                     pUndoRange = new ScRangeName( *pDocRange );
-                ScDBCollection* pDocDB = pDoc->GetDBCollection();
+                ScDBCollection* pDocDB = rDoc.GetDBCollection();
                 if (!pDocDB->empty())
                     pUndoDB = new ScDBCollection( *pDocDB );
             }
@@ -390,7 +390,7 @@ bool ScDBDocFunc::RepeatDB( const OUString& rDBName, bool bRecord, bool bApi, bo
                 const ScRange* pNew = NULL;
                 if (bQuerySize)
                 {
-                    ScDBData* pDest = pDoc->GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
+                    ScDBData* pDest = rDoc.GetDBAtCursor( aQueryParam.nDestCol, aQueryParam.nDestRow,
                                                             aQueryParam.nDestTab, true );
                     if (pDest)
                     {
@@ -427,13 +427,13 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 {
     ScDocShellModificator aModificator( rDocShell );
 
-    ScDocument* pDoc = rDocShell.GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
     SCTAB nSrcTab = nTab;
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
 
-    ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rSortParam.nCol1, rSortParam.nRow1,
+    ScDBData* pDBData = rDoc.GetDBAtArea( nTab, rSortParam.nCol1, rSortParam.nRow1,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
     if (!pDBData)
     {
@@ -459,13 +459,13 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         }
 
         nTab = rSortParam.nDestTab;
-        pDestData = pDoc->GetDBAtCursor( rSortParam.nDestCol, rSortParam.nDestRow,
+        pDestData = rDoc.GetDBAtCursor( rSortParam.nDestCol, rSortParam.nDestRow,
                                             rSortParam.nDestTab, true );
         if (pDestData)
             pDestData->GetArea(aOldDest);
     }
 
-    ScEditableTester aTester( pDoc, nTab, aLocalParam.nCol1,aLocalParam.nRow1,
+    ScEditableTester aTester( &rDoc, nTab, aLocalParam.nCol1,aLocalParam.nRow1,
                                         aLocalParam.nCol2,aLocalParam.nRow2 );
     if (!aTester.IsEditable())
     {
@@ -474,7 +474,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         return false;
     }
 
-    if ( aLocalParam.bIncludePattern && pDoc->HasAttrib(
+    if ( aLocalParam.bIncludePattern && rDoc.HasAttrib(
                                         aLocalParam.nCol1, aLocalParam.nRow1, nTab,
                                         aLocalParam.nCol2, aLocalParam.nRow2, nTab,
                                         HASATTR_MERGED | HASATTR_OVERLAPPED ) )
@@ -495,14 +495,14 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     // Calculate the script types for all cells in the sort range beforehand.
     // This will speed up the row height adjustment that takes place after the
     // sort.
-    pDoc->UpdateScriptTypes(
+    rDoc.UpdateScriptTypes(
         ScAddress(aLocalParam.nCol1,nStartRow,nTab),
         aLocalParam.nCol2-aLocalParam.nCol1+1,
         aLocalParam.nRow2-nStartRow+1);
 
     // No point adjusting row heights after the sort when all rows have the same height.
     bool bUniformRowHeight =
-        pDoc->HasUniformRowHeight(nTab, nStartRow, aLocalParam.nRow2);
+        rDoc.HasUniformRowHeight(nTab, nStartRow, aLocalParam.nRow2);
 
     bool bRepeatQuery = false;                          // bestehenden Filter wiederholen?
     ScQueryParam aQueryParam;
@@ -527,14 +527,14 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         //  Zeilenhoehen immer (wegen automatischer Anpassung)
         //! auf ScBlockUndo umstellen
-        pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
+        pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
 
         /*  #i59745# Do not copy note captions to undo document. All existing
             caption objects will be repositioned while sorting which is tracked
             in drawing undo. When undo is executed, the old positions will be
             restored, and the cells with the old notes (which still refer to the
             existing captions) will be copied back into the source document. */
-        pDoc->CopyToDocument( aLocalParam.nCol1, aLocalParam.nRow1, nTab,
+        rDoc.CopyToDocument( aLocalParam.nCol1, aLocalParam.nRow1, nTab,
                                 aLocalParam.nCol2, aLocalParam.nRow2, nTab,
                                 IDF_ALL|IDF_NOCAPTIONS, false, pUndoDoc );
 
@@ -547,18 +547,18 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
                 caption objects are reinserted with drawing undo, and the cells
                 with the old notes (which still refer to the existing captions)
                 will be copied back into the source document. */
-            pDoc->CopyToDocument( aOldDest, IDF_ALL|IDF_NOCAPTIONS, false, pUndoDoc );
+            rDoc.CopyToDocument( aOldDest, IDF_ALL|IDF_NOCAPTIONS, false, pUndoDoc );
             pR = &aOldDest;
         }
 
         //  Zeilenhoehen immer (wegen automatischer Anpassung)
         //! auf ScBlockUndo umstellen
 //        if (bRepeatQuery)
-            pDoc->CopyToDocument( 0, aLocalParam.nRow1, nTab, MAXCOL, aLocalParam.nRow2, nTab,
+            rDoc.CopyToDocument( 0, aLocalParam.nRow1, nTab, MAXCOL, aLocalParam.nRow2, nTab,
                                     IDF_NONE, false, pUndoDoc );
 
         ScDBCollection* pUndoDB = NULL;
-        ScDBCollection* pDocDB = pDoc->GetDBCollection();
+        ScDBCollection* pDocDB = rDoc.GetDBCollection();
         if (!pDocDB->empty())
             pUndoDB = new ScDBCollection( *pDocDB );
 
@@ -573,7 +573,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     if ( bCopy )
     {
         if (pDestData)
-            pDoc->DeleteAreaTab(aOldDest, IDF_CONTENTS);            // Zielbereich vorher loeschen
+            rDoc.DeleteAreaTab(aOldDest, IDF_CONTENTS);            // Zielbereich vorher loeschen
 
         ScRange aSource( rSortParam.nCol1,rSortParam.nRow1,nSrcTab,
                             rSortParam.nCol2,rSortParam.nRow2,nSrcTab );
@@ -586,7 +586,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     if (aLocalParam.GetSortKeyCount() && aLocalParam.maKeyState[0].bDoSort)
     {
         ScProgress aProgress(&rDocShell, ScGlobal::GetRscString(STR_PROGRESS_SORTING), 0);
-        pDoc->Sort( nTab, aLocalParam, bRepeatQuery, &aProgress );
+        rDoc.Sort( nTab, aLocalParam, bRepeatQuery, &aProgress );
     }
 
     bool bSave = true;
@@ -641,7 +641,7 @@ bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
     ScRange aDirtyRange(
         aLocalParam.nCol1, nStartRow, nTab,
         aLocalParam.nCol2, aLocalParam.nRow2, nTab);
-    pDoc->SetDirty( aDirtyRange );
+    rDoc.SetDirty( aDirtyRange );
 
     if (bPaint)
     {
@@ -683,10 +683,10 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 {
     ScDocShellModificator aModificator( rDocShell );
 
-    ScDocument* pDoc = rDocShell.GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
-    ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rQueryParam.nCol1, rQueryParam.nRow1,
+    ScDBData* pDBData = rDoc.GetDBAtArea( nTab, rQueryParam.nCol1, rQueryParam.nRow1,
                                                     rQueryParam.nCol2, rQueryParam.nRow2 );
     if (!pDBData)
     {
@@ -736,7 +736,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             return false;
         }
 
-        ScEditableTester aTester( pDoc, nDestTab, aLocalParam.nCol1,aLocalParam.nRow1,
+        ScEditableTester aTester( &rDoc, nDestTab, aLocalParam.nCol1,aLocalParam.nRow1,
                                                 aLocalParam.nCol2,aLocalParam.nRow2);
         if (!aTester.IsEditable())
         {
@@ -745,7 +745,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             return false;
         }
 
-        pDestData = pDoc->GetDBAtCursor( rQueryParam.nDestCol, rQueryParam.nDestRow,
+        pDestData = rDoc.GetDBAtCursor( rQueryParam.nDestCol, rQueryParam.nDestRow,
                                             rQueryParam.nDestTab, true );
         if (pDestData)
         {
@@ -765,12 +765,12 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                 SCROW nTestRow = rQueryParam.nDestRow +
                                     ( aLocalParam.bHasHeader ? 1 : 0 );
                 while ( nTestCol <= MAXCOL &&
-                        pDoc->GetCellType(ScAddress( nTestCol, nTestRow, nTab )) == CELLTYPE_FORMULA )
+                        rDoc.GetCellType(ScAddress( nTestCol, nTestRow, nTab )) == CELLTYPE_FORMULA )
                     ++nTestCol, ++nFormulaCols;
             }
 
             bKeepFmt = pDestData->IsKeepFmt();
-            if ( bDoSize && !pDoc->CanFitBlock( aOldDest, aDestTotal ) )
+            if ( bDoSize && !rDoc.CanFitBlock( aOldDest, aDestTotal ) )
             {
                 if (!bApi)
                     rDocShell.ErrorMessage(STR_MSSG_DOSUBTOTALS_2);     // kann keine Zeilen einfuegen
@@ -802,30 +802,30 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bCopy)
         {
-            pUndoDoc->InitUndo( pDoc, nDestTab, nDestTab, false, true );
-            pDoc->CopyToDocument( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
+            pUndoDoc->InitUndo( &rDoc, nDestTab, nDestTab, false, true );
+            rDoc.CopyToDocument( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
                                     aLocalParam.nCol2, aLocalParam.nRow2, nDestTab,
                                     IDF_ALL, false, pUndoDoc );
             //  Attribute sichern, falls beim Filtern mitkopiert
 
             if (pDestData)
             {
-                pDoc->CopyToDocument( aOldDest, IDF_ALL, false, pUndoDoc );
+                rDoc.CopyToDocument( aOldDest, IDF_ALL, false, pUndoDoc );
                 pOld = &aOldDest;
             }
         }
         else
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, false, true );
-            pDoc->CopyToDocument( 0, rQueryParam.nRow1, nTab, MAXCOL, rQueryParam.nRow2, nTab,
+            pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, true );
+            rDoc.CopyToDocument( 0, rQueryParam.nRow1, nTab, MAXCOL, rQueryParam.nRow2, nTab,
                                         IDF_NONE, false, pUndoDoc );
         }
 
-        ScDBCollection* pDocDB = pDoc->GetDBCollection();
+        ScDBCollection* pDocDB = rDoc.GetDBCollection();
         if (!pDocDB->empty())
             pUndoDB = new ScDBCollection( *pDocDB );
 
-        pDoc->BeginDrawUndo();
+        rDoc.BeginDrawUndo();
     }
 
     ScDocument* pAttribDoc = NULL;
@@ -845,18 +845,18 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             aAttribRange.aEnd.SetCol( aAttribRange.aEnd.Col() + nFormulaCols );
 
             pAttribDoc = new ScDocument( SCDOCMODE_UNDO );
-            pAttribDoc->InitUndo( pDoc, nDestTab, nDestTab, false, true );
-            pDoc->CopyToDocument( aAttribRange, IDF_ATTRIB, false, pAttribDoc );
+            pAttribDoc->InitUndo( &rDoc, nDestTab, nDestTab, false, true );
+            rDoc.CopyToDocument( aAttribRange, IDF_ATTRIB, false, pAttribDoc );
         }
 
         if ( bDoSize )
-            pDoc->FitBlock( aOldDest, aDestTotal );
+            rDoc.FitBlock( aOldDest, aDestTotal );
         else
-            pDoc->DeleteAreaTab(aOldDest, IDF_ALL);         // einfach loeschen
+            rDoc.DeleteAreaTab(aOldDest, IDF_ALL);         // einfach loeschen
     }
 
     //  Filtern am Dokument ausfuehren
-    SCSIZE nCount = pDoc->Query( nTab, rQueryParam, bKeepSub );
+    SCSIZE nCount = rDoc.Query( nTab, rQueryParam, bKeepSub );
     if (bCopy)
     {
         aLocalParam.nRow2 = aLocalParam.nRow1 + nCount;
@@ -870,7 +870,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
             ScRange aNewDest( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
                                 aLocalParam.nCol2, aLocalParam.nRow2, nDestTab );
-            pDoc->FitBlock( aDestTotal, aNewDest, false );      // sal_False - nicht loeschen
+            rDoc.FitBlock( aDestTotal, aNewDest, false );      // sal_False - nicht loeschen
 
             if ( nFormulaCols > 0 )
             {
@@ -881,7 +881,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                   aLocalParam.nCol2+nFormulaCols, aLocalParam.nRow2, nDestTab );
                 ScRange aOldForm = aNewForm;
                 aOldForm.aEnd.SetRow( aOldDest.aEnd.Row() );
-                pDoc->FitBlock( aOldForm, aNewForm, false );
+                rDoc.FitBlock( aOldForm, aNewForm, false );
 
                 ScMarkData aMark;
                 aMark.SelectOneTable(nDestTab);
@@ -889,10 +889,10 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
                 sal_uLong nProgCount = nFormulaCols;
                 nProgCount *= aLocalParam.nRow2 - nFStartY;
-                ScProgress aProgress( pDoc->GetDocumentShell(),
+                ScProgress aProgress( rDoc.GetDocumentShell(),
                         ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
 
-                pDoc->Fill( aLocalParam.nCol2+1, nFStartY,
+                rDoc.Fill( aLocalParam.nCol2+1, nFStartY,
                             aLocalParam.nCol2+nFormulaCols, nFStartY, &aProgress, aMark,
                             aLocalParam.nRow2 - nFStartY,
                             FILL_TO_BOTTOM, FILL_SIMPLE );
@@ -906,7 +906,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             {
                 ScRange aHdrRange = aAttribRange;
                 aHdrRange.aEnd.SetRow( aHdrRange.aStart.Row() );
-                pAttribDoc->CopyToDocument( aHdrRange, IDF_ATTRIB, false, pDoc );
+                pAttribDoc->CopyToDocument( aHdrRange, IDF_ATTRIB, false, &rDoc );
             }
 
             //  Daten
@@ -919,11 +919,11 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                 OSL_ENSURE(pSrcPattern,"Pattern ist 0");
                 if (pSrcPattern)
                 {
-                    pDoc->ApplyPatternAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
+                    rDoc.ApplyPatternAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
                                                     nDestTab, *pSrcPattern );
                     const ScStyleSheet* pStyle = pSrcPattern->GetStyleSheet();
                     if (pStyle)
-                        pDoc->ApplyStyleAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
+                        rDoc.ApplyStyleAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
                                                     nDestTab, *pStyle );
                 }
             }
@@ -974,13 +974,13 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
     if (!bCopy)
     {
-        pDoc->InvalidatePageBreaks(nTab);
-        pDoc->UpdatePageBreaks( nTab );
+        rDoc.InvalidatePageBreaks(nTab);
+        rDoc.UpdatePageBreaks( nTab );
     }
 
     // #i23299# Subtotal functions depend on cell's filtered states.
     ScRange aDirtyRange(0 , aLocalParam.nRow1, nDestTab, MAXCOL, aLocalParam.nRow2, nDestTab);
-    pDoc->SetSubTotalCellsDirty(aDirtyRange);
+    rDoc.SetSubTotalCellsDirty(aDirtyRange);
 
     if ( bRecord )
     {
@@ -1028,10 +1028,10 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
     bool bDo = !rParam.bRemoveOnly;                         // sal_False = nur loeschen
     bool bRet = false;
 
-    ScDocument* pDoc = rDocShell.GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
-    ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rParam.nCol1, rParam.nRow1,
+    ScDBData* pDBData = rDoc.GetDBAtArea( nTab, rParam.nCol1, rParam.nRow1,
                                                 rParam.nCol2, rParam.nRow2 );
     if (!pDBData)
     {
@@ -1039,7 +1039,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         return false;
     }
 
-    ScEditableTester aTester( pDoc, nTab, 0,rParam.nRow1+1, MAXCOL,MAXROW );
+    ScEditableTester aTester( &rDoc, nTab, 0,rParam.nRow1+1, MAXCOL,MAXROW );
     if (!aTester.IsEditable())
     {
         if (!bApi)
@@ -1047,7 +1047,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         return false;
     }
 
-    if (pDoc->HasAttrib( rParam.nCol1, rParam.nRow1+1, nTab,
+    if (rDoc.HasAttrib( rParam.nCol1, rParam.nRow1+1, nTab,
                          rParam.nCol2, rParam.nRow2, nTab, HASATTR_MERGED | HASATTR_OVERLAPPED ))
     {
         if (!bApi)
@@ -1057,7 +1057,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
     bool bOk = true;
     if (rParam.bReplace)
-        if (pDoc->TestRemoveSubTotals( nTab, rParam ))
+        if (rDoc.TestRemoveSubTotals( nTab, rParam ))
         {
             bOk = ( MessBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 // "StarCalc" "Daten loeschen?"
@@ -1081,9 +1081,9 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         {
             bool bOldFilter = bDo && rParam.bDoSort;
 
-            SCTAB nTabCount = pDoc->GetTableCount();
+            SCTAB nTabCount = rDoc.GetTableCount();
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
+            ScOutlineTable* pTable = rDoc.GetOutlineTable( nTab );
             if (pTable)
             {
                 pUndoTab = new ScOutlineTable( *pTable );
@@ -1091,40 +1091,40 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                 // column/row state
                 SCCOLROW nOutStartCol, nOutEndCol;
                 SCCOLROW nOutStartRow, nOutEndRow;
-                pTable->GetColArray()->GetRange( nOutStartCol, nOutEndCol );
-                pTable->GetRowArray()->GetRange( nOutStartRow, nOutEndRow );
+                pTable->GetColArray().GetRange( nOutStartCol, nOutEndCol );
+                pTable->GetRowArray().GetRange( nOutStartRow, nOutEndRow );
 
-                pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
-                pDoc->CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, IDF_NONE, false, pUndoDoc );
-                pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, false, pUndoDoc );
+                pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
+                rDoc.CopyToDocument( static_cast<SCCOL>(nOutStartCol), 0, nTab, static_cast<SCCOL>(nOutEndCol), MAXROW, nTab, IDF_NONE, false, pUndoDoc );
+                rDoc.CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, false, pUndoDoc );
             }
             else
-                pUndoDoc->InitUndo( pDoc, nTab, nTab, false, bOldFilter );
+                pUndoDoc->InitUndo( &rDoc, nTab, nTab, false, bOldFilter );
 
             //  Datenbereich sichern - incl. Filter-Ergebnis
-            pDoc->CopyToDocument( 0,rParam.nRow1+1,nTab, MAXCOL,rParam.nRow2,nTab,
+            rDoc.CopyToDocument( 0,rParam.nRow1+1,nTab, MAXCOL,rParam.nRow2,nTab,
                                     IDF_ALL, false, pUndoDoc );
 
             //  alle Formeln wegen Referenzen
-            pDoc->CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
+            rDoc.CopyToDocument( 0,0,0, MAXCOL,MAXROW,nTabCount-1,
                                         IDF_FORMULA, false, pUndoDoc );
 
             //  DB- und andere Bereiche
-            ScRangeName* pDocRange = pDoc->GetRangeName();
+            ScRangeName* pDocRange = rDoc.GetRangeName();
             if (!pDocRange->empty())
                 pUndoRange = new ScRangeName( *pDocRange );
-            ScDBCollection* pDocDB = pDoc->GetDBCollection();
+            ScDBCollection* pDocDB = rDoc.GetDBCollection();
             if (!pDocDB->empty())
                 pUndoDB = new ScDBCollection( *pDocDB );
         }
 
-//      pDoc->SetOutlineTable( nTab, NULL );
-        ScOutlineTable* pOut = pDoc->GetOutlineTable( nTab );
+//      rDoc.SetOutlineTable( nTab, NULL );
+        ScOutlineTable* pOut = rDoc.GetOutlineTable( nTab );
         if (pOut)
-            pOut->GetRowArray()->RemoveAll();       // nur Zeilen-Outlines loeschen
+            pOut->GetRowArray().RemoveAll();       // nur Zeilen-Outlines loeschen
 
         if (rParam.bReplace)
-            pDoc->RemoveSubTotals( nTab, aNewParam );
+            rDoc.RemoveSubTotals( nTab, aNewParam );
         bool bSuccess = true;
         if (bDo)
         {
@@ -1142,12 +1142,12 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                 Sort( nTab, aSortParam, false, false, bApi );
             }
 
-            bSuccess = pDoc->DoSubTotals( nTab, aNewParam );
-            pDoc->SetDrawPageSize(nTab);
+            bSuccess = rDoc.DoSubTotals( nTab, aNewParam );
+            rDoc.SetDrawPageSize(nTab);
         }
         ScRange aDirtyRange( aNewParam.nCol1, aNewParam.nRow1, nTab,
             aNewParam.nCol2, aNewParam.nRow2, nTab );
-        pDoc->SetDirty( aDirtyRange );
+        rDoc.SetDirty( aDirtyRange );
 
         if (bRecord)
         {
@@ -1169,7 +1169,7 @@ bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                                                     // merken
         pDBData->SetSubTotalParam( aNewParam );
         pDBData->SetArea( nTab, aNewParam.nCol1,aNewParam.nRow1, aNewParam.nCol2,aNewParam.nRow2 );
-        pDoc->CompileDBFormula();
+        rDoc.CompileDBFormula();
 
         rDocShell.PostPaint(ScRange(0, 0, nTab, MAXCOL,MAXROW,nTab),
                             PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE);
@@ -1199,8 +1199,8 @@ bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rE
 
 bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
 {
-    ScDocument* pDoc = rDocShell.GetDocument();
-    if (!rDocShell.IsEditable() || pDoc->GetChangeTrack())
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (!rDocShell.IsEditable() || rDoc.GetChangeTrack())
     {
         //  not recorded -> disallow
         if (!bApi)
@@ -1212,7 +1212,7 @@ bool isEditable(ScDocShell& rDocShell, const ScRangeList& rRanges, bool bApi)
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
         const ScRange* p = rRanges[i];
-        ScEditableTester aTester(pDoc, *p);
+        ScEditableTester aTester(&rDoc, *p);
         if (!aTester.IsEditable())
         {
             if (!bApi)
@@ -1237,7 +1237,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 
 bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut, bool bApi)
 {
-    ScDocument* pDoc = rDocShell.GetDocument();
+    ScDocument& rDoc = rDocShell.GetDocument();
 
     bool bOverflow = false;
     rNewOut = rDPObj.GetNewOutputRange(bOverflow);
@@ -1265,7 +1265,7 @@ bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNe
         return false;
     }
 
-    ScEditableTester aTester(pDoc, rNewOut);
+    ScEditableTester aTester(&rDoc, rNewOut);
     if (!aTester.IsEditable())
     {
         //  destination area isn't editable
@@ -1318,12 +1318,12 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
     ScDPObject aUndoDPObj(*pOldObj); // for undo or revert on failure
 
-    ScDocument* pDoc = rDocShell.GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
     if (bRecord)
-        createUndoDoc(pOldUndoDoc, pDoc, pOldObj->GetOutRange());
+        createUndoDoc(pOldUndoDoc, &rDoc, pOldObj->GetOutRange());
 
     pNewObj->WriteSourceDataTo(*pOldObj);     // copy source data
 
@@ -1339,7 +1339,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
     //  make sure the table has a name (not set by dialog)
     if (pOldObj->GetName().isEmpty())
-        pOldObj->SetName( pDoc->GetDPCollection()->CreateNewName() );
+        pOldObj->SetName( rDoc.GetDPCollection()->CreateNewName() );
 
     ScRange aNewOut;
     if (!checkNewOutputRange(*pOldObj, rDocShell, aNewOut, bApi))
@@ -1352,7 +1352,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     if (!bApi)
     {
         // OutRange of pOldObj (pDestObj) is still old area
-        if (!lcl_EmptyExcept(pDoc, aNewOut, pOldObj->GetOutRange()))
+        if (!lcl_EmptyExcept(&rDoc, aNewOut, pOldObj->GetOutRange()))
         {
             QueryBox aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                              ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
@@ -1366,7 +1366,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     }
 
     if (bRecord)
-        createUndoDoc(pNewUndoDoc, pDoc, aNewOut);
+        createUndoDoc(pNewUndoDoc, &rDoc, aNewOut);
 
     pOldObj->Output(aNewOut.aStart);
     rDocShell.PostPaintGridAll();           //! only necessary parts
@@ -1379,7 +1379,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     }
 
     // notify API objects
-    pDoc->BroadcastUno( ScDataPilotModifiedHint(pOldObj->GetName()) );
+    rDoc.BroadcastUno( ScDataPilotModifiedHint(pOldObj->GetName()) );
     aModificator.SetDocumentModified();
 
     return true;
@@ -1401,8 +1401,8 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     if (bRecord)
         pUndoDPObj.reset(new ScDPObject(rDPObj));    // copy old settings for undo
 
-    ScDocument* pDoc = rDocShell.GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
     //  delete table
@@ -1411,16 +1411,16 @@ bool ScDBDocFunc::RemovePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     SCTAB nTab = aRange.aStart.Tab();
 
     if (bRecord)
-        createUndoDoc(pOldUndoDoc, pDoc, aRange);
+        createUndoDoc(pOldUndoDoc, &rDoc, aRange);
 
-    pDoc->DeleteAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
+    rDoc.DeleteAreaTab( aRange.aStart.Col(), aRange.aStart.Row(),
                          aRange.aEnd.Col(),   aRange.aEnd.Row(),
                          nTab, IDF_ALL );
-    pDoc->RemoveFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+    rDoc.RemoveFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
                           aRange.aEnd.Col(),   aRange.aEnd.Row(),
                           nTab, SC_MF_AUTO );
 
-    pDoc->GetDPCollection()->FreeTable(&rDPObj);  // object is deleted here
+    rDoc.GetDPCollection()->FreeTable(&rDPObj);  // object is deleted here
 
     rDocShell.PostPaintGridAll();   //! only necessary parts
     rDocShell.PostPaint(aRange, PAINT_GRID);
@@ -1451,8 +1451,8 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     std::auto_ptr<ScDocument> pNewUndoDoc;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    ScDocument* pDoc = rDocShell.GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
     //  output range must be set at pNewObj
@@ -1465,10 +1465,10 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     // #i94570# When changing the output position in the dialog, a new table is created
     // with the settings from the old table, including the name.
     // So we have to check for duplicate names here (before inserting).
-    if (pDoc->GetDPCollection()->GetByName(rDestObj.GetName()))
+    if (rDoc.GetDPCollection()->GetByName(rDestObj.GetName()))
         rDestObj.SetName(OUString());      // ignore the invalid name, create a new name below
 
-    if (!pDoc->GetDPCollection()->InsertNewTable(pDestObj.release()))
+    if (!rDoc.GetDPCollection()->InsertNewTable(pDestObj.release()))
         // Insertion into collection failed.
         return false;
 
@@ -1478,7 +1478,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
 
     //  make sure the table has a name (not set by dialog)
     if (rDestObj.GetName().isEmpty())
-        rDestObj.SetName(pDoc->GetDPCollection()->CreateNewName());
+        rDestObj.SetName(rDoc.GetDPCollection()->CreateNewName());
 
     bool bOverflow = false;
     ScRange aNewOut = rDestObj.GetNewOutputRange(bOverflow);
@@ -1492,7 +1492,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     }
 
     {
-        ScEditableTester aTester(pDoc, aNewOut);
+        ScEditableTester aTester(&rDoc, aNewOut);
         if (!aTester.IsEditable())
         {
             //  destination area isn't editable
@@ -1506,7 +1506,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     //  test if new output area is empty except for old area
     if (!bApi)
     {
-        bool bEmpty = pDoc->IsBlockEmpty(
+        bool bEmpty = rDoc.IsBlockEmpty(
             aNewOut.aStart.Tab(), aNewOut.aStart.Col(), aNewOut.aStart.Row(),
             aNewOut.aEnd.Col(), aNewOut.aEnd.Row());
 
@@ -1525,7 +1525,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     }
 
     if (bRecord)
-        createUndoDoc(pNewUndoDoc, pDoc, aNewOut);
+        createUndoDoc(pNewUndoDoc, &rDoc, aNewOut);
 
     rDestObj.Output(aNewOut.aStart);
     rDocShell.PostPaintGridAll();           //! only necessary parts
@@ -1537,7 +1537,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     }
 
     // notify API objects
-    pDoc->BroadcastUno(ScDataPilotModifiedHint(rDestObj.GetName()));
+    rDoc.BroadcastUno(ScDataPilotModifiedHint(rDestObj.GetName()));
     aModificator.SetDocumentModified();
 
     return true;
@@ -1558,12 +1558,12 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
 
     ScDPObject aUndoDPObj(rDPObj); // For undo or revert on failure.
 
-    ScDocument* pDoc = rDocShell.GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (bRecord && !rDoc.IsUndoEnabled())
         bRecord = false;
 
     if (bRecord)
-        createUndoDoc(pOldUndoDoc, pDoc, rDPObj.GetOutRange());
+        createUndoDoc(pOldUndoDoc, &rDoc, rDPObj.GetOutRange());
 
     rDPObj.SetAllowMove(false);
     rDPObj.ReloadGroupTableData();
@@ -1574,7 +1574,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
 
     //  make sure the table has a name (not set by dialog)
     if (rDPObj.GetName().isEmpty())
-        rDPObj.SetName( pDoc->GetDPCollection()->CreateNewName() );
+        rDPObj.SetName( rDoc.GetDPCollection()->CreateNewName() );
 
     ScRange aNewOut;
     if (!checkNewOutputRange(rDPObj, rDocShell, aNewOut, bApi))
@@ -1586,7 +1586,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     //  test if new output area is empty except for old area
     if (!bApi)
     {
-        if (!lcl_EmptyExcept(pDoc, aNewOut, rDPObj.GetOutRange()))
+        if (!lcl_EmptyExcept(&rDoc, aNewOut, rDPObj.GetOutRange()))
         {
             QueryBox aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                              ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
@@ -1599,7 +1599,7 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     }
 
     if (bRecord)
-        createUndoDoc(pNewUndoDoc, pDoc, aNewOut);
+        createUndoDoc(pNewUndoDoc, &rDoc, aNewOut);
 
     rDPObj.Output(aNewOut.aStart);
     rDocShell.PostPaintGridAll();           //! only necessary parts
@@ -1612,14 +1612,14 @@ bool ScDBDocFunc::UpdatePivotTable(ScDPObject& rDPObj, bool bRecord, bool bApi)
     }
 
     // notify API objects
-    pDoc->BroadcastUno( ScDataPilotModifiedHint(rDPObj.GetName()) );
+    rDoc.BroadcastUno( ScDataPilotModifiedHint(rDPObj.GetName()) );
     aModificator.SetDocumentModified();
     return true;
 }
 
 sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
 {
-    ScDPCollection* pDPs = rDocShell.GetDocument()->GetDPCollection();
+    ScDPCollection* pDPs = rDocShell.GetDocument().GetDPCollection();
     if (!pDPs)
         return 0;
 
@@ -1645,7 +1645,7 @@ void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
     if (!pDPObj)
         return;
 
-    ScDPCollection* pDPs = rDocShell.GetDocument()->GetDPCollection();
+    ScDPCollection* pDPs = rDocShell.GetDocument().GetDPCollection();
     if (!pDPs)
         return;
 
@@ -1681,8 +1681,8 @@ void ScDBDocFunc::UpdateImport( const OUString& rTarget, const svx::ODataAccessD
 {
     // rTarget is the name of a database range
 
-    ScDocument* pDoc = rDocShell.GetDocument();
-    ScDBCollection& rDBColl = *pDoc->GetDBCollection();
+    ScDocument& rDoc = rDocShell.GetDocument();
+    ScDBCollection& rDBColl = *rDoc.GetDBCollection();
     const ScDBData* pData = rDBColl.getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(rTarget));
     if (!pData)
     {

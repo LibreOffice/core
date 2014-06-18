@@ -223,8 +223,8 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_SELECTALL:
         {
-            ::Outliner* pOutl = pOlView->GetOutliner();
-            sal_Int32 nParaCount = pOutl->GetParagraphCount();
+            ::Outliner& rOutl = pOlView->GetOutliner();
+            sal_Int32 nParaCount = rOutl.GetParagraphCount();
             if (nParaCount > 0)
             {
                 pOutlinerView->SelectRange( 0, nParaCount );
@@ -445,7 +445,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         {
             pOlView->SetSelectedPages();
             SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            pOlView->GetOutliner()->Clear();
+            pOlView->GetOutliner().Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();
             Cancel();
@@ -456,7 +456,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         {
             pOlView->SetSelectedPages();
             SetCurrentFunction( FuExpandPage::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            pOlView->GetOutliner()->Clear();
+            pOlView->GetOutliner().Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();
             Cancel();

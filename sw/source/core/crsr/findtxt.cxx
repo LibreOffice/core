@@ -66,7 +66,7 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
     {
         if ( bNewHint )
             nHintStart = pHts && n < pHts->Count() ?
-                         *(*pHts)[n]->GetStart() :
+                         (*pHts)[n]->GetStart() :
                          -1;
 
         if ( bNewSoftHyphen )
@@ -269,7 +269,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                     const SwTxtAttr* pTxtAttr = (*pHts)[i];
                     if ( pTxtAttr->Which()==RES_TXTATR_ANNOTATION )
                     {
-                        const sal_Int32 aPos = *pTxtAttr->GetStart();
+                        const sal_Int32 aPos = pTxtAttr->GetStart();
                         if ( (aPos >= nStart) && (aPos <= nEnd) )
                             aNumberPostits++;
                         else
@@ -328,14 +328,14 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                 {
                     if (bSrchForward)
                     {
-                        nStartInside = aLoop==0 ? nStart : *(*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
-                        nEndInside = aLoop==aNumberPostits ? nEnd : *(*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
+                        nStartInside = aLoop==0 ? nStart : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
+                        nEndInside = aLoop==aNumberPostits ? nEnd : (*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
                         nTxtLen = nEndInside - nStartInside;
                     }
                     else
                     {
-                        nStartInside =  aLoop==aNumberPostits ? nStart : *(*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
-                        nEndInside = aLoop==0 ? nEnd : *(*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
+                        nStartInside =  aLoop==aNumberPostits ? nStart : (*pHts)[GetPostIt(aLoop+aIgnore,pHts)]->GetStart();
+                        nEndInside = aLoop==0 ? nEnd : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
                         nTxtLen = nStartInside - nEndInside;
                     }
                     // search inside the text between a note

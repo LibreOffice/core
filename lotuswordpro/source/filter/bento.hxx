@@ -225,8 +225,8 @@ public: // Internal methods
 
     BenObjectID GetNextAvailObjectID() { return cNextAvailObjectID; }
     void SetNextAvailObjectID(BenObjectID ID) { cNextAvailObjectID = ID; }
-    pCUtList GetObjects() { return &cObjects; }
-    pCUtList GetNamedObjects() { return &cNamedObjects; }
+    CUtList& GetObjects() { return cObjects; }
+    CUtList& GetNamedObjects() { return cNamedObjects; }
 
     LtcUtBenValueStream * FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream);
     LtcUtBenValueStream * FindValueStreamWithPropertyName(const char * sPropertyName);
@@ -257,7 +257,7 @@ public: // Internal methods
     CBenObject(pLtcBenContainer pContainer, BenObjectID ObjectID,
       pCBenIDListElmt pPrev) : CBenIDListElmt(ObjectID, pPrev)
       { cpContainer = pContainer; }
-    pCUtList GetProperties() { return &cProperties; }
+    CUtList& GetProperties() { return cProperties; }
 
 private: // Data
     pLtcBenContainer cpContainer;
@@ -296,7 +296,7 @@ public: // Internal methods
     inline pCBenValueSegment GetNextValueSegment(pCBenValueSegment
       pCurrValueSegment);
     inline pLtcBenContainer GetContainer();
-    pCUtList GetValueSegments() { return &cValueSegments; }
+    CUtList& GetValueSegments() { return cValueSegments; }
     // Currently, no generation support
     BenGeneration GetGeneration() { return 1; }
 
@@ -313,7 +313,7 @@ public:
     // different type.  But we never use it that way, so in this code a
     // property has exactly one value
 
-    pCBenValue UseValue() { return &cValue; }
+    CBenValue& UseValue() { return cValue; }
     pCBenObject GetBenObject() { return cpObject; }
     pLtcBenContainer GetContainer() { return GetBenObject()->GetContainer(); }
 
@@ -351,11 +351,11 @@ class CBenValueSegment : public CUtListElmt
 {
 public: // Internal methods
     CBenValueSegment(pCBenValue pValue, BenContainerPos Pos,
-      unsigned long Size) : CUtListElmt(pValue->GetValueSegments())
+      unsigned long Size) : CUtListElmt(&pValue->GetValueSegments())
       { cpValue = pValue; cImmediate = false; cPos = Pos;
       cSize = Size; }
     CBenValueSegment(pCBenValue pValue, BenConstDataPtr pImmData,
-      unsigned short Size) : CUtListElmt(pValue->GetValueSegments())
+      unsigned short Size) : CUtListElmt(&pValue->GetValueSegments())
       { cpValue = pValue; cImmediate = true;
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
     CBenValueSegment(BenContainerPos Pos, unsigned long Size)
@@ -366,7 +366,7 @@ public: // Internal methods
       UtHugeMemcpy(cImmData, pImmData, Size); cSize = Size; }
     bool IsLast()
     {
-        return cpValue == NULL || cpValue->GetValueSegments()->GetLast() ==
+        return cpValue == NULL || cpValue->GetValueSegments().GetLast() ==
           this;
     }
     bool IsImmediate() { return cImmediate; }
@@ -411,7 +411,7 @@ public: // Internal methods
     void SetPosition(BenContainerPos Pos) { cPos = Pos; }
     BenContainerPos GetPosition(void) { return cPos; }
     size_t GetLength(void) { return csName.length()+ 1; }
-    pCBenNamedObjectListElmt GetNameListElmt() { return &cNameListElmt; }
+    CBenNamedObjectListElmt& GetNameListElmt() { return cNameListElmt; }
 
 private: // Data
     std::string csName;

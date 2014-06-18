@@ -173,10 +173,10 @@ Rectangle ScAccessibleCell::GetBoundingBox() const
     if (mpViewShell)
     {
         long nSizeX, nSizeY;
-        mpViewShell->GetViewData()->GetMergeSizePixel(
+        mpViewShell->GetViewData().GetMergeSizePixel(
             maCellAddress.Col(), maCellAddress.Row(), nSizeX, nSizeY);
         aCellRect.SetSize(Size(nSizeX, nSizeY));
-        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, true));
+        aCellRect.SetPos(mpViewShell->GetViewData().GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, true));
 
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)
@@ -373,9 +373,9 @@ bool ScAccessibleCell::IsSelected()
     }
 
     bool bResult(false);
-    if (mpViewShell && mpViewShell->GetViewData())
+    if (mpViewShell)
     {
-        const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
+        const ScMarkData& rMarkdata = mpViewShell->GetViewData().GetMarkData();
         bResult = rMarkdata.IsCellMarked(maCellAddress.Col(), maCellAddress.Row());
     }
     return bResult;
@@ -384,8 +384,8 @@ bool ScAccessibleCell::IsSelected()
 ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
 {
     ScDocument* pDoc = NULL;
-    if (pViewShell && pViewShell->GetViewData())
-        pDoc = pViewShell->GetViewData()->GetDocument();
+    if (pViewShell)
+        pDoc = pViewShell->GetViewData().GetDocument();
     return pDoc;
 }
 

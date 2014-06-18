@@ -61,8 +61,8 @@ pCBenNamedObject
 FindNamedObject(pCUtList pList, const char * sName,
   pCBenNamedObjectListElmt * ppPrev)
 {
-    pCUtListElmt pTerminating = pList->GetTerminating();
-    for (pCUtListElmt pCurr = pList->GetLast(); pCurr != pTerminating;
+    CUtListElmt& rTerminating = pList->GetTerminating();
+    for (pCUtListElmt pCurr = pList->GetLast(); pCurr != &rTerminating;
       pCurr = pCurr->GetPrev())
     {
         pCBenNamedObjectListElmt pCurrNamedObjectListElmt =
@@ -84,7 +84,7 @@ FindNamedObject(pCUtList pList, const char * sName,
     }
 
     if (ppPrev != NULL)
-        *ppPrev = (pCBenNamedObjectListElmt) pTerminating;
+        *ppPrev = (pCBenNamedObjectListElmt) &rTerminating;
     return NULL;
 }
 
@@ -92,8 +92,8 @@ FindNamedObject(pCUtList pList, const char * sName,
 pCBenIDListElmt
 FindID(pCUtList pList, BenObjectID ObjectID, pCBenIDListElmt * ppPrev)
 {
-    pCUtListElmt pTerminating = pList->GetTerminating();
-    for (pCUtListElmt pCurr = pList->GetLast(); pCurr != pTerminating;
+    CUtListElmt& rTerminating = pList->GetTerminating();
+    for (pCUtListElmt pCurr = pList->GetLast(); pCurr != &rTerminating;
       pCurr = pCurr->GetPrev())
     {
         pCBenIDListElmt pCurrIDListElmt = (pCBenIDListElmt) pCurr;
@@ -111,7 +111,7 @@ FindID(pCUtList pList, BenObjectID ObjectID, pCBenIDListElmt * ppPrev)
     }
 
     if (ppPrev != NULL)
-        *ppPrev = (pCBenIDListElmt) pTerminating;
+        *ppPrev = (pCBenIDListElmt) &rTerminating;
     return NULL;
 }
 } //end namespace OpenStormBento

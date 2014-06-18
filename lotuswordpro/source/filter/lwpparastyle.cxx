@@ -589,7 +589,7 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
     {
         if (below_val != -1)
             pPara->SetBelowSpacing(below_val);
-        LwpPara* pPrePara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj().get());
+        LwpPara* pPrePara = dynamic_cast<LwpPara*>(pPara->GetPrevious().obj().get());
         if (pPrePara && above_val != -1)
         {
             above_val += pPrePara->GetBelowSpacing();
@@ -608,14 +608,14 @@ void LwpParaStyle::ApplySpacing(LwpPara* pPara, XFParaStyle* pParaStyle, LwpSpac
 **************************************************************************/
 void LwpParaStyle::ApplyTab(XFParaStyle *pParaStyle, LwpTabOverride *pTabOverRide)
 {
-    LwpObjectID* pTabRackID = pTabOverRide->GetTabRackID();
-    if(pTabRackID->IsNull())
+    LwpObjectID& rTabRackID = pTabOverRide->GetTabRackID();
+    if(rTabRackID.IsNull())
     {
         //assert(false);
         return;
     }
 
-    LwpTabRack* pTabRack = dynamic_cast<LwpTabRack*>(pTabRackID->obj().get());
+    LwpTabRack* pTabRack = dynamic_cast<LwpTabRack*>(rTabRackID.obj().get());
     if(!pTabRack)
     {
         //assert(false);
@@ -688,12 +688,12 @@ void LwpParaStyle::RegisterStyle()
     XFParaStyle* pStyle = new XFParaStyle();
 
     //Set name
-    OUString styleName = GetName()->str();
+    OUString styleName = GetName().str();
     pStyle->SetStyleName(styleName);
 
     //Create font
-    LwpFontManager* pFontMgr = m_pFoundry->GetFontManger();
-    rtl::Reference<XFFont> pFont = pFontMgr->CreateFont(m_nFinalFontID);
+    LwpFontManager& rFontMgr = m_pFoundry->GetFontManger();
+    rtl::Reference<XFFont> pFont = rFontMgr.CreateFont(m_nFinalFontID);
     pStyle->SetFont(pFont);
 
     //Set other paragraph properties...
@@ -701,7 +701,7 @@ void LwpParaStyle::RegisterStyle()
     Apply(pStyle);
     //Add style
     LwpStyleManager* pStyleMgr = m_pFoundry->GetStyleManager();
-    pStyleMgr->AddStyle(*GetObjectID(), pStyle);
+    pStyleMgr->AddStyle(GetObjectID(), pStyle);
 }
 
 LwpAlignmentOverride* LwpParaStyle::GetAlignment()

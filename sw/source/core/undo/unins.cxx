@@ -680,7 +680,7 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
 
         pDoc->DeleteAndJoin( rPam );
         rPam.DeleteMark();
-        pNd = rPam.GetNode()->GetTxtNode();
+        pNd = rPam.GetNode().GetTxtNode();
         OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
         aIdx.Assign( pNd, m_nSttCnt );
     }

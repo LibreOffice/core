@@ -2715,7 +2715,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPMember )
 const ScDPCache* ScDPSource::GetCache()
 {
     OSL_ENSURE( GetData() , "empty ScDPTableData pointer");
-    return ( GetData()!=NULL) ? GetData()->GetCacheTable().getCache() : NULL ;
+    return ( GetData()!=NULL ) ? &GetData()->GetCacheTable().getCache() : NULL ;
 }
 
 const ScDPItemData* ScDPMember::GetItemData() const

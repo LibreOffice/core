@@ -177,7 +177,7 @@ void ScTabViewShell::GetObjectState( SfxItemSet& rSet )
                     uno::Reference < embed::XEmbeddedObject > xOLE = lcl_GetSelectedObj( GetSdrView() );
                     if (xOLE.is())
                     {
-                        aName = GetViewData()->GetSfxDocShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xOLE );
+                        aName = GetViewData().GetSfxDocShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xOLE );
                     }
                     rSet.Put( SfxStringItem( nWhich, aName ) );
                 }
@@ -224,7 +224,7 @@ void ScTabViewShell::AddAccessibilityObject( SfxListener& rObject )
         pAccessibilityBroadcaster = new SfxBroadcaster;
 
     rObject.StartListening( *pAccessibilityBroadcaster );
-    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocument* pDoc = GetViewData().GetDocument();
     if (pDoc)
         pDoc->AddUnoObject(rObject);
 }
@@ -234,7 +234,7 @@ void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
     if (pAccessibilityBroadcaster)
     {
         rObject.EndListening( *pAccessibilityBroadcaster );
-        ScDocument* pDoc = GetViewData()->GetDocument();
+        ScDocument* pDoc = GetViewData().GetDocument();
         if (pDoc)
             pDoc->RemoveUnoObject(rObject);
     }
@@ -257,7 +257,7 @@ bool ScTabViewShell::HasAccessibilityObjects()
 
 bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
 {
-    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocument* pDoc = GetViewData().GetDocument();
 
     boost::scoped_ptr<ScRetypePassDlg> pDlg(new ScRetypePassDlg(GetDialogParent()));
     pDlg->SetDataFromDocument(*pDoc);

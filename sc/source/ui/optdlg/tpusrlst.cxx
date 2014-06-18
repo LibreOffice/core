@@ -112,7 +112,7 @@ void ScTpUserLists::Init()
         SCCOL   nEndCol     = 0;
         SCROW   nEndRow     = 0;
 
-        pViewData = pViewSh->GetViewData();
+        pViewData = &pViewSh->GetViewData();
         pDoc = pViewData->GetDocument();
 
         pViewData->GetSimpleArea( nStartCol, nStartRow, nStartTab,

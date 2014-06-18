@@ -284,7 +284,7 @@ ScCellFieldsObj::ScCellFieldsObj(
     aCellPos( rPos ),
     mpRefreshListeners( NULL )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 
     mpEditSource = new ScCellEditSource( pDocShell, aCellPos );
 }
@@ -292,7 +292,7 @@ ScCellFieldsObj::ScCellFieldsObj(
 ScCellFieldsObj::~ScCellFieldsObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 
     delete mpEditSource;
 

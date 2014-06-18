@@ -290,7 +290,7 @@ bool SwEditShell::GetGrfSize(Size& rSz) const
     SwPaM* pCurrentCrsr = GetCrsr();
     if( ( !pCurrentCrsr->HasMark()
          || pCurrentCrsr->GetPoint()->nNode == pCurrentCrsr->GetMark()->nNode )
-         && 0 != ( pNoTxtNd = pCurrentCrsr->GetNode()->GetNoTxtNode() ) )
+         && 0 != ( pNoTxtNd = pCurrentCrsr->GetNode().GetNoTxtNode() ) )
     {
         rSz = pNoTxtNd->GetTwipSize();
         return true;
@@ -326,13 +326,13 @@ void SwEditShell::GetGrfNms( OUString* pGrfName, OUString* pFltName,
 
 const PolyPolygon *SwEditShell::GetGraphicPolygon() const
 {
-    SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();
+    SwNoTxtNode *pNd = GetCrsr()->GetNode().GetNoTxtNode();
     return pNd->HasContour();
 }
 
 void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
 {
-    SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();
+    SwNoTxtNode *pNd = GetCrsr()->GetNode().GetNoTxtNode();
     StartAllAction();
     pNd->SetContour( pPoly );
     SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
@@ -344,7 +344,7 @@ void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
 
 void SwEditShell::ClearAutomaticContour()
 {
-    SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();
+    SwNoTxtNode *pNd = GetCrsr()->GetNode().GetNoTxtNode();
     OSL_ENSURE( pNd, "is no NoTxtNode!" );
     if( pNd->HasAutomaticContour() )
     {
@@ -372,7 +372,7 @@ svt::EmbeddedObjectRef& SwEditShell::GetOLEObject() const
                 GetCrsr()->GetPoint()->nNode == GetCrsr()->GetMark()->nNode),
             "GetOLEObj: no OLENode." );
 
-    SwOLENode *pOLENode = GetCrsr()->GetNode()->GetOLENode();
+    SwOLENode *pOLENode = GetCrsr()->GetNode().GetOLENode();
     OSL_ENSURE( pOLENode, "GetOLEObj: no OLENode." );
     SwOLEObj& rOObj = pOLENode->GetOLEObj();
     return rOObj.GetObject();
@@ -398,7 +398,7 @@ bool SwEditShell::HasOLEObj( const OUString &rName ) const
 
 void SwEditShell::SetChartName( const OUString &rName )
 {
-    SwOLENode *pONd = GetCrsr()->GetNode()->GetOLENode();
+    SwOLENode *pONd = GetCrsr()->GetNode().GetOLENode();
     OSL_ENSURE( pONd, "ChartNode not found" );
     pONd->SetChartTblName( rName );
 }
@@ -418,7 +418,7 @@ void SwEditShell::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
 OUString SwEditShell::GetCurWord()
 {
     const SwPaM& rPaM = *GetCrsr();
-    const SwTxtNode* pNd = rPaM.GetNode()->GetTxtNode();
+    const SwTxtNode* pNd = rPaM.GetNode().GetTxtNode();
     OUString aString = pNd ?
                      pNd->GetCurWord(rPaM.GetPoint()->nContent.GetIndex()) :
                      OUString();
@@ -489,7 +489,7 @@ OUString SwEditShell::GetDropTxt( const sal_uInt16 nChars ) const
         }
     }
 
-    SwTxtNode* pTxtNd = pCrsr->GetNode( !pCrsr->HasMark() )->GetTxtNode();
+    SwTxtNode* pTxtNd = pCrsr->GetNode( !pCrsr->HasMark() ).GetTxtNode();
     if( pTxtNd )
     {
         sal_Int32 nDropLen = pTxtNd->GetDropLen( nChars );
@@ -504,7 +504,7 @@ void SwEditShell::ReplaceDropTxt( const OUString &rStr, SwPaM* pPaM )
 {
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
     if( pCrsr->GetPoint()->nNode == pCrsr->GetMark()->nNode &&
-        pCrsr->GetNode()->GetTxtNode()->IsTxtNode() )
+        pCrsr->GetNode().GetTxtNode()->IsTxtNode() )
     {
         StartAllAction();
 
@@ -528,7 +528,7 @@ OUString SwEditShell::Calculate()
     const CharClass& rCC = GetAppCharClass();
 
     do {
-        SwTxtNode* pTxtNd = pPaM->GetNode()->GetTxtNode();
+        SwTxtNode* pTxtNd = pPaM->GetNode().GetTxtNode();
         if(pTxtNd)
         {
             const SwPosition *pStart = pPaM->Start(), *pEnd = pPaM->End();
@@ -591,7 +591,7 @@ sfx2::LinkManager& SwEditShell::GetLinkManager()
 void *SwEditShell::GetIMapInventor() const
 {
     // The node on which the cursor points should be sufficient as a unique identifier
-    return (void*)GetCrsr()->GetNode();
+    return (void*)&(GetCrsr()->GetNode());
 }
 
 // #i73788#
@@ -603,10 +603,10 @@ Graphic SwEditShell::GetIMapGraphic() const
     SwPaM* pCrsr = GetCrsr();
     if ( !pCrsr->HasMark() )
     {
-        SwNode *pNd =pCrsr->GetNode();
-        if( pNd->IsGrfNode() )
+        SwNode& rNd =pCrsr->GetNode();
+        if( rNd.IsGrfNode() )
         {
-            SwGrfNode & rGrfNode(*static_cast<SwGrfNode*>(pNd));
+            SwGrfNode & rGrfNode(static_cast<SwGrfNode&>(rNd));
             const Graphic& rGrf = rGrfNode.GetGrf();
             if( rGrf.IsSwapOut() || ( rGrfNode.IsLinkedFile() &&
                                     GRAPHIC_DEFAULT == rGrf.GetType() ) )
@@ -617,13 +617,13 @@ Graphic SwEditShell::GetIMapGraphic() const
             }
             aRet = rGrf;
         }
-        else if ( pNd->IsOLENode() )
+        else if ( rNd.IsOLENode() )
         {
-            aRet = *((SwOLENode*)pNd)->GetGraphic();
+            aRet = *((SwOLENode&)rNd).GetGraphic();
         }
         else
         {
-            SwFlyFrm* pFlyFrm = pNd->GetCntntNode()->getLayoutFrm( GetLayout() )->FindFlyFrm();
+            SwFlyFrm* pFlyFrm = rNd.GetCntntNode()->getLayoutFrm( GetLayout() )->FindFlyFrm();
             if(pFlyFrm)
                 aRet = pFlyFrm->GetFmt()->MakeGraphic();
         }
@@ -700,8 +700,8 @@ sal_uInt16 SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                 pTxtNd->GetNodes().IsDocNodes() )
             {
                 SwTxtINetFmt& rAttr = *pFnd;
-                OUString sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
-                                    *rAttr.GetEnd() - *rAttr.GetStart() ) );
+                OUString sTxt( pTxtNd->GetExpandTxt( rAttr.GetStart(),
+                                    *rAttr.GetEnd() - rAttr.GetStart() ) );
 
                 sTxt = comphelper::string::remove(sTxt, 0x0a);
                 sTxt = comphelper::string::strip(sTxt, ' ');

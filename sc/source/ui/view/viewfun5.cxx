@@ -75,7 +75,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                     const uno::Reference<datatransfer::XTransferable>& rxTransferable,
                     SCCOL nPosX, SCROW nPosY, Point* pLogicPos, bool bLink, bool bAllowDialogs )
 {
-    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocument* pDoc = GetViewData().GetDocument();
     pDoc->SetPastingDrawFromOtherDoc( true );
 
     Point aPos;                     //  inserting position (1/100 mm)
@@ -90,7 +90,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         {
             //  Window MapMode isn't drawing MapMode if DrawingLayer hasn't been created yet
 
-            SCTAB nTab = GetViewData()->GetTabNo();
+            SCTAB nTab = GetViewData().GetTabNo();
             long nXT = 0;
             for (SCCOL i=0; i<nPosX; i++)
                 nXT += pDoc->GetColWidth(i,nTab);
@@ -135,9 +135,9 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 ScDocShellRef xDocShRef = new ScDocShell(SFX_CREATE_MODE_EMBEDDED);
                 if (xDocShRef->DoLoad(pMedium))
                 {
-                    ScDocument* pSrcDoc = xDocShRef->GetDocument();
-                    SCTAB nSrcTab = pSrcDoc->GetVisibleTab();
-                    if (!pSrcDoc->HasTable(nSrcTab))
+                    ScDocument& rSrcDoc = xDocShRef->GetDocument();
+                    SCTAB nSrcTab = rSrcDoc.GetVisibleTab();
+                    if (!rSrcDoc.HasTable(nSrcTab))
                         nSrcTab = 0;
 
                     ScMarkData aSrcMark;
@@ -146,15 +146,15 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
                     SCCOL nFirstCol, nLastCol;
                     SCROW nFirstRow, nLastRow;
-                    if ( pSrcDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
-                        pSrcDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
+                    if ( rSrcDoc.GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
+                        rSrcDoc.GetCellArea( nSrcTab, nLastCol, nLastRow );
                     else
                     {
                         nFirstCol = nLastCol = 0;
                         nFirstRow = nLastRow = 0;
                     }
                     ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, nSrcTab, nLastCol, nLastRow, nSrcTab), false);
-                    pSrcDoc->CopyToClip(aClipParam, pClipDoc.get(), &aSrcMark);
+                    rSrcDoc.CopyToClip(aClipParam, pClipDoc.get(), &aSrcMark);
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
 
                     SetCursor( nPosX, nPosY );
@@ -171,7 +171,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             else
             {
                 OUString aName;
-                uno::Reference < embed::XEmbeddedObject > xObj = GetViewData()->GetViewShell()->GetObjectShell()->
+                uno::Reference < embed::XEmbeddedObject > xObj = GetViewData().GetViewShell()->GetObjectShell()->
                         GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
                 if ( xObj.is() )
                 {
@@ -217,7 +217,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
                 if (xStm.is())
                 {
-                    xObj = GetViewData()->GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
+                    xObj = GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xStm, aName );
                 }
                 else
                 {
@@ -236,7 +236,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                         // for example whether the object should be an iconified one
                         xObj = aInfo.Object;
                         if ( xObj.is() )
-                            GetViewData()->GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
+                            GetViewData().GetDocShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
                     }
                     catch( uno::Exception& )
                     {}
@@ -294,8 +294,8 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
         }
         else
         {
-            ScAddress aCellPos( nPosX, nPosY, GetViewData()->GetTabNo() );
-            ScImportExport aObj( GetViewData()->GetDocument(), aCellPos );
+            ScAddress aCellPos( nPosX, nPosY, GetViewData().GetTabNo() );
+            ScImportExport aObj( GetViewData().GetDocument(), aCellPos );
             aObj.SetImportBroadcast(true);
 
             OUString aStr;
@@ -368,7 +368,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                 bRet = aObj.ImportString( aStr, nFormatId );
 
             InvalidateAttribs();
-            GetViewData()->UpdateInputHandler();
+            GetViewData().UpdateInputHandler();
         }
     }
     else if (nFormatId == SOT_FORMATSTR_ID_SBA_DATAEXCHANGE)
@@ -385,8 +385,8 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             aDescAny <<= aProperties;
             SfxUsrAnyItem aDataDesc(SID_SBA_IMPORT, aDescAny);
 
-            ScDocShell* pDocSh = GetViewData()->GetDocShell();
-            SCTAB nTab = GetViewData()->GetTabNo();
+            ScDocShell* pDocSh = GetViewData().GetDocShell();
+            SCTAB nTab = GetViewData().GetTabNo();
 
             ClickCursor(nPosX, nPosY, false);               // set cursor position
 
@@ -408,7 +408,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
             SfxBoolItem aAreaNew(FN_PARAM_2, bAreaIsNew);
 
             //  asynchronous, to avoid doing the whole import in drop handler
-            SfxDispatcher& rDisp = GetViewData()->GetDispatcher();
+            SfxDispatcher& rDisp = GetViewData().GetDispatcher();
             rDisp.Execute(SID_SBA_IMPORT, SFX_CALLMODE_ASYNCHRON,
                                         &aDataDesc, &aTarget, &aAreaNew, (void*)0 );
 
@@ -455,7 +455,7 @@ bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
 
                 pScDrawView->InsertObjectSafe(pObj, *pScDrawView->GetSdrPageView());
 
-                GetViewData()->GetViewShell()->SetDrawShell( true );
+                GetViewData().GetViewShell()->SetDrawShell( true );
                 bRet = true;
             }
         }
@@ -705,7 +705,7 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
         // uses Calc A1 syntax even when another formula syntax is specified
         // in the UI.
         EnterMatrix("='"
-            + OUString(ScGlobal::GetAbsDocName(*pTopic, GetViewData()->GetDocument()->GetDocumentShell()))
+            + OUString(ScGlobal::GetAbsDocName(*pTopic, GetViewData().GetDocument()->GetDocumentShell()))
             + "'#" + *pItem
                 , ::formula::FormulaGrammar::GRAM_NATIVE);
         return true;
@@ -728,9 +728,9 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
 
     //  mark range
 
-    SCTAB nTab = GetViewData()->GetTabNo();
-    SCCOL nCurX = GetViewData()->GetCurX();
-    SCROW nCurY = GetViewData()->GetCurY();
+    SCTAB nTab = GetViewData().GetTabNo();
+    SCCOL nCurX = GetViewData().GetCurX();
+    SCROW nCurY = GetViewData().GetCurY();
     HideAllCursors();
     DoneBlockMode();
     InitBlockMode( nCurX, nCurY, nTab );

@@ -76,8 +76,8 @@ public:
     static void Destroy( SwTxtAttr * pToDestroy, SfxItemPool& rPool );
 
     /// start position
-                  sal_Int32* GetStart()        { return & m_nStart; }
-            const sal_Int32* GetStart() const  { return & m_nStart; }
+                  sal_Int32& GetStart()        { return m_nStart; }
+            const sal_Int32& GetStart() const  { return m_nStart; }
 
     /// end position
     virtual      sal_Int32* GetEnd(); // also used to change the end position
@@ -140,7 +140,7 @@ inline const sal_Int32* SwTxtAttr::End() const
 inline const sal_Int32* SwTxtAttr::GetAnyEnd() const
 {
     const sal_Int32* pEnd = End();
-    return pEnd ? pEnd : GetStart();
+    return pEnd ? pEnd : &GetStart();
 }
 
 inline const SfxPoolItem& SwTxtAttr::GetAttr() const

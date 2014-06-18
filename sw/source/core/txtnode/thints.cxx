@@ -113,7 +113,7 @@ struct TxtAttrContains
     TxtAttrContains( const sal_Int32 nPos ) : m_nPos( nPos ) { }
     bool operator() (SwTxtAttrEnd * const pAttr)
     {
-        return (*pAttr->GetStart() < m_nPos) && (m_nPos < *pAttr->End());
+        return (pAttr->GetStart() < m_nPos) && (m_nPos < *pAttr->End());
     }
 };
 
@@ -354,7 +354,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
 {
 //    INVARIANT:  the nestable hints in the array are properly nested
     const sal_uInt16 nNewWhich( rNewHint.Which() );
-    const sal_Int32 nNewStart( *rNewHint.GetStart() );
+    const sal_Int32 nNewStart( rNewHint.GetStart() );
     const sal_Int32 nNewEnd  ( *rNewHint.GetEnd()   );
     const bool bNewSelfNestable( isSelfNestable(nNewWhich) );
 
@@ -379,7 +379,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
         if (pOther->IsNesting())
         {
             const sal_uInt16 nOtherWhich( pOther->Which() );
-            const sal_Int32 nOtherStart( *(pOther)->GetStart() );
+            const sal_Int32 nOtherStart( pOther->GetStart() );
             const sal_Int32 nOtherEnd  ( *(pOther)->GetEnd()   );
             if (isOverlap(nNewStart, nNewEnd, nOtherStart, nOtherEnd ))
             {
@@ -423,9 +423,9 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                         // should be corrected because it may lead to problems
                         // in SwXMeta::createEnumeration
                         // SplitNew is sorted, so this is the first split
-                        sal_Int32 *const pStart(SplitNew.front()->GetStart());
-                        OSL_ENSURE(*pStart == nNewStart, "how did that happen?");
-                        *pStart = nNewStart + 1;
+                        sal_Int32& rStart(SplitNew.front()->GetStart());
+                        OSL_ENSURE(rStart == nNewStart, "how did that happen?");
+                        rStart = nNewStart + 1;
                     }
                 }
             }
@@ -446,13 +446,13 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
     for (NestList_t::iterator itOther = OverlappingExisting.begin();
             itOther != OverlappingExisting.end(); ++itOther)
     {
-        const sal_Int32 nOtherStart( *(*itOther)->GetStart() );
+        const sal_Int32 nOtherStart( (*itOther)->GetStart() );
         const sal_Int32 nOtherEnd  ( *(*itOther)->GetEnd()   );
 
         for (NestList_t::iterator itNew = SplitNew.begin();
                 itNew != SplitNew.end(); ++itNew)
         {
-            const sal_Int32 nSplitNewStart( *(*itNew)->GetStart() );
+            const sal_Int32 nSplitNewStart( (*itNew)->GetStart() );
             const sal_Int32 nSplitNewEnd  ( *(*itNew)->GetEnd()   );
             // 4 cases: within, around, overlap l, overlap r, (OTHER: no action)
             const bool bRemoveOverlap(
@@ -476,7 +476,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                 case POS_OVERLAP_BEFORE:
                     {
                         Delete( *itOther ); // this also does NoteInHistory!
-                        *(*itOther)->GetStart() = nSplitNewEnd;
+                        (*itOther)->GetStart() = nSplitNewEnd;
                         InsertNesting( **itOther );
                         if (!bRemoveOverlap)
                         {
@@ -536,7 +536,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
     for (NestList_t::iterator itOther = OverwrittenExisting.begin();
             itOther != OverwrittenExisting.end(); ++itOther)
     {
-        const sal_Int32 nOtherStart( *(*itOther)->GetStart() );
+        const sal_Int32 nOtherStart( (*itOther)->GetStart() );
         const sal_Int32 nOtherEnd  ( *(*itOther)->GetEnd()   );
 
         // overwritten portion is given by start/end of inserted hint
@@ -582,7 +582,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
 {
     const sal_uInt16 nWhich = rNewHint.Which();
 
-    const sal_Int32 nThisStart = *rNewHint.GetStart();
+    const sal_Int32 nThisStart = rNewHint.GetStart();
     const sal_Int32 nThisEnd =   *rNewHint.GetEnd();
     const bool bNoLengthAttribute = nThisStart == nThisEnd;
 
@@ -606,7 +606,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                  RES_TXTATR_AUTOFMT != pOther->Which() )
                 continue;
 
-            sal_Int32 nOtherStart = *pOther->GetStart();
+            sal_Int32 nOtherStart = pOther->GetStart();
             const sal_Int32 nOtherEnd = *pOther->GetEnd();
 
             // Check if start of new attribute overlaps with pOther:
@@ -620,7 +620,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                 aInsDelHints.push_back( pNewAttr );
 
                 NoteInHistory( pOther );
-                *pOther->GetStart() = nThisStart;
+                pOther->GetStart() = nThisStart;
                 NoteInHistory( pOther, true );
 
                 nOtherStart = nThisStart;
@@ -637,7 +637,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                 aInsDelHints.push_back( pNewAttr );
 
                 NoteInHistory( pOther );
-                *pOther->GetStart() = nThisEnd;
+                pOther->GetStart() = nThisEnd;
                 NoteInHistory( pOther, true );
             }
         }
@@ -671,7 +671,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                  RES_TXTATR_AUTOFMT != pOther->Which() )
                 continue;
 
-            const sal_Int32 nOtherStart = *pOther->GetStart();
+            const sal_Int32 nOtherStart = pOther->GetStart();
             const sal_Int32 nOtherEnd = *pOther->End();
 
             aBounds.insert( nOtherStart );
@@ -703,7 +703,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                  RES_TXTATR_AUTOFMT != pOther->Which() )
                 continue;
 
-            const sal_Int32 nOtherStart = *pOther->GetStart();
+            const sal_Int32 nOtherStart = pOther->GetStart();
 
             if ( nOtherStart > nPorStart )
                 break;
@@ -1243,7 +1243,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
 {
     bool bHiddenPara = false;
 
-    OSL_ENSURE( pAttr && *pAttr->GetStart() <= Len(), "StartIdx out of bounds!" );
+    OSL_ENSURE( pAttr && pAttr->GetStart() <= Len(), "StartIdx out of bounds!" );
     OSL_ENSURE( !pAttr->GetEnd() || (*pAttr->GetEnd() <= Len()),
             "EndIdx out of bounds!" );
 
@@ -1256,7 +1256,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
         : IDocumentContentOperations::INS_EMPTYEXPAND;
 
     // need this after TryInsertHint, when pAttr may be deleted
-    const sal_Int32 nStart( *pAttr->GetStart() );
+    const sal_Int32 nStart( pAttr->GetStart() );
     const bool bDummyChar( pAttr->HasDummyChar() );
     if (bDummyChar)
     {
@@ -1279,7 +1279,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     pFmt->GetItemState( RES_ANCHOR, false,
                         (const SfxPoolItem**)&pAnchor );
 
-                    SwIndex aIdx( this, *pAttr->GetStart() );
+                    SwIndex aIdx( this, pAttr->GetStart() );
                     const OUString c(GetCharOfTxtAttr(*pAttr));
                     OUString const ins( InsertText(c, aIdx, nInsertFlags) );
                     if (ins.isEmpty())
@@ -1328,13 +1328,13 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                         {
                             // loesche das Zeichen aus dem String !
                             OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
-                                        m_Text[*pAttr->GetStart()] ||
+                                        m_Text[pAttr->GetStart()] ||
                                       CH_TXTATR_INWORD ==
-                                        m_Text[*pAttr->GetStart()]),
+                                        m_Text[pAttr->GetStart()]),
                                     "where is my attribute character?" );
-                            m_Text = m_Text.replaceAt(*pAttr->GetStart(), 1, "");
+                            m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, "");
                             // Indizies Updaten
-                            SwIndex aTmpIdx( this, *pAttr->GetStart() );
+                            SwIndex aTmpIdx( this, pAttr->GetStart() );
                             Update( aTmpIdx, 1, true );
                         }
                         // do not record deletion of Format!
@@ -1364,13 +1364,13 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     {
                         // loesche das Zeichen aus dem String !
                         OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
-                                      m_Text[*pAttr->GetStart()] ||
+                                      m_Text[pAttr->GetStart()] ||
                                   CH_TXTATR_INWORD ==
-                                      m_Text[*pAttr->GetStart()]),
+                                      m_Text[pAttr->GetStart()]),
                                 "where is my attribute character?" );
-                        m_Text = m_Text.replaceAt(*pAttr->GetStart(), 1, "");
+                        m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, "");
                         // Indizies Updaten
-                        SwIndex aTmpIdx( this, *pAttr->GetStart() );
+                        SwIndex aTmpIdx( this, pAttr->GetStart() );
                         Update( aTmpIdx, 1, true );
                     }
                     DestroyAttr( pAttr );
@@ -1404,7 +1404,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     // Wir muessen zuerst einfuegen, da sonst gleiche Indizes
                     // entstehen koennen und das Attribut im _SortArr_ am
                     // Dokument nicht eingetrage wird.
-                    SwIndex aNdIdx( this, *pAttr->GetStart() );
+                    SwIndex aNdIdx( this, pAttr->GetStart() );
                     const OUString c(GetCharOfTxtAttr(*pAttr));
                     OUString const ins( InsertText(c, aNdIdx, nInsertFlags) );
                     if (ins.isEmpty())
@@ -1470,7 +1470,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
         // mitkopiert. In solchem Fall ist SETATTR_NOTXTATRCHR angegeben worden.
         if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nInsMode) )
         {
-            SwIndex aIdx( this, *pAttr->GetStart() );
+            SwIndex aIdx( this, pAttr->GetStart() );
             OUString const ins( InsertText(OUString(GetCharOfTxtAttr(*pAttr)),
                         aIdx, nInsertFlags) );
             if (ins.isEmpty())
@@ -1504,7 +1504,7 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                 {
                     if( !(nsSetAttrMode::SETATTR_NOTXTATRCHR & nMode) )
                     {
-                        SwIndex aIdx( this, *pAttr->GetStart() );
+                        SwIndex aIdx( this, pAttr->GetStart() );
                         InsertText( OUString(CH_TXT_ATR_INPUTFIELDSTART), aIdx, nInsertFlags );
                         const OUString aContent = pTxtInputFld->GetFieldContent();
                         InsertText( aContent, aIdx, nInsertFlags );
@@ -1521,9 +1521,9 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                     else
                     {
                         // assure that CH_TXT_ATR_INPUTFIELDSTART and CH_TXT_ATR_INPUTFIELDEND are inserted.
-                        if ( m_Text[ *(pAttr->GetStart()) ] != CH_TXT_ATR_INPUTFIELDSTART )
+                        if ( m_Text[ pAttr->GetStart() ] != CH_TXT_ATR_INPUTFIELDSTART )
                         {
-                            SwIndex aIdx( this, *pAttr->GetStart() );
+                            SwIndex aIdx( this, pAttr->GetStart() );
                             InsertText( OUString(CH_TXT_ATR_INPUTFIELDSTART), aIdx, nInsertFlags );
                             bInputFieldStartCharInserted = true;
                             sal_Int32* const pEnd(pAttr->GetEnd());
@@ -1569,9 +1569,9 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
             }
             else
             {
-                if ( *(pAttr->GetStart()) > *(pTxtInputFld->GetStart()) )
+                if ( pAttr->GetStart() > pTxtInputFld->GetStart() )
                 {
-                    *(pAttr->GetStart()) = *(pTxtInputFld->GetStart());
+                    pAttr->GetStart() = pTxtInputFld->GetStart();
                 }
                 if ( *(pAttr->End()) < *(pTxtInputFld->End()) )
                 {
@@ -1647,21 +1647,21 @@ void SwTxtNode::DeleteAttribute( SwTxtAttr * const pAttr )
     if ( pAttr->HasDummyChar() )
     {
         // Unbedingt Copy-konstruieren!
-        const SwIndex aIdx( this, *pAttr->GetStart() );
+        const SwIndex aIdx( this, pAttr->GetStart() );
         // erase the CH_TXTATR, which will also delete pAttr
         EraseText( aIdx, 1 );
     }
     else if ( pAttr->HasContent() )
     {
-        const SwIndex aIdx( this, *pAttr->GetStart() );
+        const SwIndex aIdx( this, pAttr->GetStart() );
         OSL_ENSURE( pAttr->End() != NULL, "<SwTxtNode::DeleteAttribute(..)> - missing End() at <SwTxtAttr> instance which has content" );
-        EraseText( aIdx, *pAttr->End() - *pAttr->GetStart() );
+        EraseText( aIdx, *pAttr->End() - pAttr->GetStart() );
     }
     else
     {
         // create MsgHint before start/end become invalid
         SwUpdateAttr aHint(
-                *pAttr->GetStart(), *pAttr->GetEnd(), pAttr->Which() );
+                pAttr->GetStart(), *pAttr->GetEnd(), pAttr->Which() );
         m_pSwpHints->Delete( pAttr );
         SwTxtAttr::Destroy( pAttr, GetDoc()->GetAttrPool() );
         NotifyClients( 0, &aHint );
@@ -1682,7 +1682,7 @@ void SwTxtNode::DeleteAttributes(
     for ( sal_uInt16 nPos = 0; m_pSwpHints && nPos < m_pSwpHints->Count(); nPos++ )
     {
         SwTxtAttr * const pTxtHt = m_pSwpHints->GetTextHint( nPos );
-        const sal_Int32 nHintStart = *(pTxtHt->GetStart());
+        const sal_Int32 nHintStart = pTxtHt->GetStart();
         if (nStart < nHintStart)
         {
             break; // sorted by start
@@ -2092,7 +2092,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
             for (sal_uInt16 n = 0; n < nSize; ++n)
             {
                 const SwTxtAttr* pHt = (*m_pSwpHints)[n];
-                const sal_Int32 nAttrStart = *pHt->GetStart();
+                const sal_Int32 nAttrStart = pHt->GetStart();
                 if( nAttrStart > nEnd )         // ueber den Bereich hinaus
                     break;
 
@@ -2119,7 +2119,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
             for (sal_uInt16 n = 0; n < nSize; ++n)
             {
                 const SwTxtAttr* pHt = (*m_pSwpHints)[n];
-                const sal_Int32 nAttrStart = *pHt->GetStart();
+                const sal_Int32 nAttrStart = pHt->GetStart();
                 if( nAttrStart > nEnd )         // ueber den Bereich hinaus
                     break;
 
@@ -2346,7 +2346,7 @@ lcl_CollectHintSpans(const SwpHints& i_rHints, const sal_uInt16 nLength,
         const sal_uInt16 nWhich(pHint->Which());
         if (nWhich == RES_TXTATR_CHARFMT || nWhich == RES_TXTATR_AUTOFMT)
         {
-            const AttrSpan_t aSpan(*pHint->GetStart(), *pHint->End());
+            const AttrSpan_t aSpan(pHint->GetStart(), *pHint->End());
             o_rSpanMap.insert(AttrSpanMap_t::value_type(aSpan, pHint));
 
             // < not != because there may be multiple CHARFMT at same range
@@ -2661,7 +2661,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
             {
                 // fdo#70201: eliminate no-extent RSID-only AUTOFMT
                 // could be produced by ReplaceText or (maybe?) RstAttr
-                if (*pHt->GetStart() == *pHt->GetEnd())
+                if (pHt->GetStart() == *pHt->GetEnd())
                 {
                     SwpHintsArray::DeleteAtPos(i); // kill it without History!
                     SwTxtAttr::Destroy(pHt, rNode.GetDoc()->GetAttrPool());
@@ -2680,14 +2680,14 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
             }
         }
 
-        if (*pHt->GetStart() == *pHt->GetEnd())
+        if (pHt->GetStart() == *pHt->GetEnd())
         {
             // no-length hints are a disease. ignore them here.
             // the SwAttrIter::SeekFwd will not call Rst/Chg for them.
             continue;
         }
 
-        const sal_Int32 nPorStart = *pHt->GetStart();
+        const sal_Int32 nPorStart = pHt->GetStart();
         if (nPorStart != nLastPorStart)
             ++nKey;
         nLastPorStart = nPorStart;
@@ -2731,7 +2731,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
             {
                 // first of all test if there's no gap (before skipping stuff!)
                 if (aIter1 != aRange1.second && aIter2 != aRange2.second &&
-                    *aIter1->second.first->End() < *aIter2->second.first->GetStart())
+                    *aIter1->second.first->End() < aIter2->second.first->GetStart())
                 {
                     eMerge = DIFFER;
                     break;
@@ -2900,7 +2900,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
 // check if there is already a character format and adjust the sort numbers
 static void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharFmt )
 {
-    const sal_Int32 nHtStart = *rNewCharFmt.GetStart();
+    const sal_Int32 nHtStart = rNewCharFmt.GetStart();
     const sal_Int32 nHtEnd   = *rNewCharFmt.GetEnd();
     sal_uInt16 nSortNumber = 0;
 
@@ -2908,7 +2908,7 @@ static void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharF
     {
         const SwTxtAttr* pOtherHt = rHints[i];
 
-        const sal_Int32 nOtherStart = *pOtherHt->GetStart();
+        const sal_Int32 nOtherStart = pOtherHt->GetStart();
 
         if ( nOtherStart > nHtStart )
             break;
@@ -2974,7 +2974,7 @@ bool SwpHints::TryInsertHint(
     case RES_TXTATR_AUTOFMT:
     {
         boost::shared_ptr<SfxItemSet> const pSet( pHint->GetAutoFmt().GetStyleHandle() );
-        if (*pHint->GetStart() == *pHint->GetEnd())
+        if (pHint->GetStart() == *pHint->GetEnd())
         {
             if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))
             {   // empty range RSID-only hints could cause trouble, there's no
@@ -3102,8 +3102,8 @@ bool SwpHints::TryInsertHint(
                     0 != ( pTmpHintEnd = pHint->GetEnd() ) )
                 {
                     SwComparePosition eCmp = ::ComparePosition(
-                            *pTmpHt->GetStart(), *pTmpHtEnd,
-                            *pHint->GetStart(), *pTmpHintEnd );
+                            pTmpHt->GetStart(), *pTmpHtEnd,
+                            pHint->GetStart(), *pTmpHintEnd );
                     bool bDelOld = true, bChgStart = false, bChgEnd = false;
                     switch( eCmp )
                     {
@@ -3120,7 +3120,7 @@ bool SwpHints::TryInsertHint(
                     }
 
                     if( bChgStart )
-                        *pHint->GetStart() = *pTmpHt->GetStart();
+                        pHint->GetStart() = pTmpHt->GetStart();
                     if( bChgEnd )
                         *pTmpHintEnd = *pTmpHtEnd;
 
@@ -3159,7 +3159,7 @@ bool SwpHints::TryInsertHint(
     // Sie werden natuerlich in das Array insertet, aber sie werden nicht
     // in die pPrev/Next/On/Off-Verkettung aufgenommen.
     // Der Formatierer erkennt diese TxtHints an dem CH_TXTATR_.. im Text !
-    sal_Int32 nHtStart = *pHint->GetStart();
+    sal_Int32 nHtStart = pHint->GetStart();
     if( !pHtEnd )
     {
         SwpHintsArray::Insert( pHint );
@@ -3185,9 +3185,9 @@ bool SwpHints::TryInsertHint(
                     "+SwpHints::Insert: invalid hint, end < start" );
 
         // Wir drehen den Quatsch einfach um:
-        *pHint->GetStart() = *pHtEnd;
+        pHint->GetStart() = *pHtEnd;
         *pHtEnd = nHtStart;
-        nHtStart = *pHint->GetStart();
+        nHtStart = pHint->GetStart();
     }
 
     // I need this value later on for notification but the pointer may become invalid
@@ -3364,7 +3364,7 @@ sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
         {
             // ist der Attribut-Anfang schon groesser als der Idx ?
             const SwTxtAttr *pHt = m_pSwpHints->operator[](i);
-            const sal_Int32 nAttrStart = *pHt->GetStart();
+            const sal_Int32 nAttrStart = pHt->GetStart();
             if( nEnd < nAttrStart )
                 break;
 

@@ -78,7 +78,7 @@ using namespace com::sun::star;
 
 ScXMLImportWrapper::ScXMLImportWrapper( ScDocShell& rDocSh, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
     mrDocShell(rDocSh),
-    rDoc(*rDocSh.GetDocument()),
+    rDoc(rDocSh.GetDocument()),
     pMedium(pM),
     xStorage(xStor)
 {

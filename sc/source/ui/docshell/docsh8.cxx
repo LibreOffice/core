@@ -486,8 +486,8 @@ void lcl_GetColumnTypes(
     OUString* pColNames, sal_Int32* pColTypes, sal_Int32* pColLengths,
     sal_Int32* pColScales, bool& bHasMemo, rtl_TextEncoding eCharSet )
 {
-    ScDocument* pDoc = rDocShell.GetDocument();
-    SvNumberFormatter* pNumFmt = pDoc->GetFormatTable();
+    ScDocument& rDoc = rDocShell.GetDocument();
+    SvNumberFormatter* pNumFmt = rDoc.GetFormatTable();
 
     SCTAB nTab = rDataRange.aStart.Tab();
     SCCOL nFirstCol = rDataRange.aStart.Col();
@@ -514,7 +514,7 @@ void lcl_GetColumnTypes(
         // Type etc.: L; D; C[,W]; N[,W[,P]]
         if ( bHasFieldNames )
         {
-            aString = pDoc->GetString(nCol, nFirstRow, nTab);
+            aString = rDoc.GetString(nCol, nFirstRow, nTab);
             aString = aString.toAsciiUpperCase();
             sal_Int32 nToken = comphelper::string::getTokenCount(aString, ',');
             if ( nToken > 1 )
@@ -615,13 +615,13 @@ void lcl_GetColumnTypes(
         if ( !bTypeDefined )
         {   // Field type.
             ScRefCellValue aCell;
-            aCell.assign(*pDoc, ScAddress(nCol, nFirstDataRow, nTab));
+            aCell.assign(rDoc, ScAddress(nCol, nFirstDataRow, nTab));
             if (aCell.isEmpty() || aCell.hasString())
                 nDbType = sdbc::DataType::VARCHAR;
             else
             {
                 sal_uInt32 nFormat;
-                pDoc->GetNumberFormat( nCol, nFirstDataRow, nTab, nFormat );
+                rDoc.GetNumberFormat( nCol, nFirstDataRow, nTab, nFormat );
                 switch ( pNumFmt->GetType( nFormat ) )
                 {
                     case NUMBERFORMAT_LOGICAL :
@@ -646,7 +646,7 @@ void lcl_GetColumnTypes(
         // Field length.
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
         {   // Determine maximum field width.
-            nFieldLen = pDoc->GetMaxStringLen( nTab, nCol, nFirstDataRow,
+            nFieldLen = rDoc.GetMaxStringLen( nTab, nCol, nFirstDataRow,
                 nLastRow, eCharSet );
             if ( nFieldLen == 0 )
                 nFieldLen = 1;
@@ -655,7 +655,7 @@ void lcl_GetColumnTypes(
         {   // Determine maximum field width and precision.
             sal_Int32 nLen;
             sal_uInt16 nPrec;
-            nLen = pDoc->GetMaxNumberStringLen( nPrec, nTab, nCol,
+            nLen = rDoc.GetMaxNumberStringLen( nPrec, nTab, nCol,
                 nFirstDataRow, nLastRow );
             // dBaseIII precision limit: 15
             if ( nPrecision > 15 )

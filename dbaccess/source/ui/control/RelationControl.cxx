@@ -184,7 +184,7 @@ namespace dbaui
             // not the first call
             RowRemoved(0, GetRowCount());
 
-        RowInserted(0, m_pConnData->GetConnLineDataList()->size() + 1, true); // add one extra row
+        RowInserted(0, m_pConnData->GetConnLineDataList().size() + 1, true); // add one extra row
     }
 
     void ORelationControl::Resize()
@@ -234,16 +234,16 @@ namespace dbaui
         if ( nRow != BROWSER_ENDOFSELECTION )
         {
             OUString sFieldName(m_pListCell->GetSelectEntry());
-            OConnectionLineDataVec* pLines = m_pConnData->GetConnLineDataList();
-            if ( pLines->size() <= static_cast<OConnectionLineDataVec::size_type>(nRow) )
+            OConnectionLineDataVec& rLines = m_pConnData->GetConnLineDataList();
+            if ( rLines.size() <= static_cast<OConnectionLineDataVec::size_type>(nRow) )
             {
-                pLines->push_back(new OConnectionLineData());
-                nRow = pLines->size() - 1;
-                // add new past-pLines row
+                rLines.push_back(new OConnectionLineData());
+                nRow = rLines.size() - 1;
+                // add new past-rLines row
                 m_ops.push_back(make_pair(INSERT, make_pair(nRow+1, nRow+2)));
             }
 
-            OConnectionLineDataRef pConnLineData = (*pLines)[nRow];
+            OConnectionLineDataRef pConnLineData = rLines[nRow];
 
             switch( getColumnIdent( GetCurColumnId() ) )
             {
@@ -259,9 +259,9 @@ namespace dbaui
             //m_ops.push_back(make_pair(MODIFY, make_pair(nRow, nRow+1)));
         }
 
-        const OConnectionLineDataVec::size_type oldSize = m_pConnData->GetConnLineDataList()->size();
+        const OConnectionLineDataVec::size_type oldSize = m_pConnData->GetConnLineDataList().size();
         OConnectionLineDataVec::size_type line = m_pConnData->normalizeLines();
-        const OConnectionLineDataVec::size_type newSize = m_pConnData->GetConnLineDataList()->size();
+        const OConnectionLineDataVec::size_type newSize = m_pConnData->GetConnLineDataList().size();
         assert(newSize <= oldSize);
         m_ops.push_back(make_pair(MODIFY, make_pair(line, newSize)));
         m_ops.push_back(make_pair(DELETE, make_pair(newSize, oldSize)));
@@ -280,9 +280,9 @@ namespace dbaui
     OUString ORelationControl::GetCellText( long nRow, sal_uInt16 nColId ) const
     {
         OUString sText;
-        if ( m_pConnData->GetConnLineDataList()->size() > static_cast<size_t>(nRow) )
+        if ( m_pConnData->GetConnLineDataList().size() > static_cast<size_t>(nRow) )
         {
-            OConnectionLineDataRef pConnLineData = (*m_pConnData->GetConnLineDataList())[nRow];
+            OConnectionLineDataRef pConnLineData = m_pConnData->GetConnLineDataList()[nRow];
             switch( getColumnIdent( nColId ) )
             {
             case SOURCE_COLUMN:
@@ -403,7 +403,7 @@ namespace dbaui
 
             const OJoinTableView* pView = _pSource->getTableView();
             OTableConnection* pConn = pView->GetTabConn(_pSource,_pDest);
-            if ( pConn && !m_pConnData->GetConnLineDataList()->empty() )
+            if ( pConn && !m_pConnData->GetConnLineDataList().empty() )
             {
                 m_pConnData->CopyFrom(*pConn->GetData());
                 m_pBoxControl->getContainer()->notifyConnectionChange();
@@ -411,9 +411,9 @@ namespace dbaui
             else
             {
                 // no connection found so we clear our data
-                OConnectionLineDataVec* pLines = m_pConnData->GetConnLineDataList();
-                ::std::for_each(pLines->begin(),
-                                pLines->end(),
+                OConnectionLineDataVec& rLines = m_pConnData->GetConnLineDataList();
+                ::std::for_each(rLines.begin(),
+                                rLines.end(),
                                 OUnaryRefFunctor<OConnectionLineData>( ::std::mem_fun(&OConnectionLineData::Reset))
                                 );
 
@@ -608,12 +608,12 @@ namespace dbaui
     {
         // Enable/disable the OK button, depending on having a valid situation
         TTableConnectionData::value_type pConnData = m_pRC_Tables->getData();
-        const OConnectionLineDataVec* pLines = pConnData->GetConnLineDataList();
-        bool bValid = !pLines->empty();
+        const OConnectionLineDataVec& rLines = pConnData->GetConnLineDataList();
+        bool bValid = !rLines.empty();
         if (bValid)
         {
-            OConnectionLineDataVec::const_iterator l(pLines->begin());
-            const OConnectionLineDataVec::const_iterator le(pLines->end());
+            OConnectionLineDataVec::const_iterator l(rLines.begin());
+            const OConnectionLineDataVec::const_iterator le(rLines.end());
             for (; bValid && l!=le; ++l)
             {
                 bValid = ! ((*l)->GetSourceFieldName().isEmpty() || (*l)->GetDestFieldName().isEmpty());

@@ -554,7 +554,7 @@ void XPlugin_Impl::loadPlugin()
     getPluginComm()->
         NPP_New( (char*)OUStringToOString( m_aDescription.Mimetype,
                                                   m_aEncoding).getStr(),
-                 getNPPInstance(),
+                 &getNPPInstance(),
                  m_aPluginMode == PluginMode::FULL ? NP_FULL : NP_EMBED,
                  ::sal::static_int_cast< int16_t, int >( m_nArgs ),
                  (char**)(m_nArgs ? m_pArgn : NULL),
@@ -629,12 +629,12 @@ PluginStream* XPlugin_Impl::getStreamFromNPStream( NPStream* stream )
 
     std::list<PluginInputStream*>::iterator iter;
     for( iter = m_aInputStreams.begin(); iter != m_aInputStreams.end(); ++iter )
-        if( (*iter)->getStream() == stream )
+        if( &(*iter)->getStream() == stream )
             return *iter;
 
     std::list<PluginOutputStream*>::iterator iter2;
     for( iter2 = m_aOutputStreams.begin(); iter2 != m_aOutputStreams.end(); ++iter2 )
-        if( (*iter2)->getStream() == stream )
+        if( &(*iter2)->getStream() == stream )
             return *iter2;
 
     return NULL;
@@ -741,7 +741,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
      uno::Reference< com::sun::star::io::XOutputStream > xNewStream( pStream );
 
      if( iter != m_aPEventListeners.end() )
-         pStream->getStream()->notifyData = (*iter)->getNotifyData();
+         pStream->getStream().notifyData = (*iter)->getNotifyData();
 
     uint16_t stype = 0;
 
@@ -761,7 +761,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 #endif
     if( ! m_pPluginComm->NPP_NewStream( &m_aInstance,
                                         (char*)aMIME.getStr(),
-                                        pStream->getStream(), isfile,
+                                        &pStream->getStream(), isfile,
                                         &stype ) )
     {
 #if OSL_DEBUG_LEVEL > 1
@@ -789,7 +789,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
                 aFileName = OUStringToOString( url, m_aEncoding );
             m_pPluginComm->
                 NPP_StreamAsFile( &m_aInstance,
-                                  pStream->getStream(),
+                                  &pStream->getStream(),
                                   aFileName.getStr() );
         }
         else
@@ -937,7 +937,7 @@ PluginStream::~PluginStream()
 
     if( m_pPlugin && m_pPlugin->getPluginComm() )
     {
-        m_pPlugin->getPluginComm()->NPP_DestroyStream( m_pPlugin->getNPPInstance(),
+        m_pPlugin->getPluginComm()->NPP_DestroyStream( &m_pPlugin->getNPPInstance(),
                                                        &m_aNPStream, NPRES_DONE );
         m_pPlugin->checkListeners( m_aNPStream.url );
         m_pPlugin->getPluginComm()->NPP_SetWindow( m_pPlugin );
@@ -1001,7 +1001,7 @@ PluginInputStream::~PluginInputStream()
             if( m_nMode == NP_ASFILE )
             {
                 m_pPlugin->getPluginComm()->
-                    NPP_StreamAsFile( m_pPlugin->getNPPInstance(),
+                    NPP_StreamAsFile( &m_pPlugin->getNPPInstance(),
                                       &m_aNPStream,
                                       aFileName.getStr() );
             }
@@ -1029,8 +1029,8 @@ void PluginInputStream::load()
     INetURLObject aUrl;
     aUrl.SetSmartProtocol( INET_PROT_FILE );
     aUrl.SetSmartURL(
-        OUString( getStream()->url,
-                  strlen( getStream()->url ),
+        OUString( getStream().url,
+                  strlen( getStream().url ),
                 RTL_TEXTENCODING_MS_1252
             ) );
     try
@@ -1081,7 +1081,7 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw(std
     while( m_nMode != NP_ASFILEONLY &&
            m_nWritePos < nPos &&
            (nBytes = m_pPlugin->getPluginComm()-> NPP_WriteReady(
-               m_pPlugin->getNPPInstance(), &m_aNPStream )) > 0 )
+               &m_pPlugin->getNPPInstance(), &m_aNPStream )) > 0 )
     {
         nBytes = (nBytes > nPos - m_nWritePos) ? nPos - m_nWritePos : nBytes;
 
@@ -1093,7 +1093,7 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw(std
         try
         {
             nBytesRead = m_pPlugin->getPluginComm()->NPP_Write(
-                m_pPlugin->getNPPInstance(), &m_aNPStream, m_nWritePos, nBytes, pBuffer.get() );
+                &m_pPlugin->getNPPInstance(), &m_aNPStream, m_nWritePos, nBytes, pBuffer.get() );
         }
         catch( ... )
         {

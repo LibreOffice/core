@@ -31,8 +31,8 @@ SvParser* OWizHTMLExtend::createReader(sal_Int32 _nRows)
                             m_pParent->GetColumnPositions(),
                             m_pParent->GetFormatter(),
                             m_pParent->GetComponentContext(),
-                            m_pParent->getDestVector(),
-                            m_pParent->getTypeInfo(),
+                            &m_pParent->getDestVector(),
+                            &m_pParent->getTypeInfo(),
                             m_pParent->shouldCreatePrimaryKey());
 }
 
@@ -43,8 +43,8 @@ SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
                             m_pParent->GetColumnPositions(),
                             m_pParent->GetFormatter(),
                             m_pParent->GetComponentContext(),
-                            m_pParent->getDestVector(),
-                            m_pParent->getTypeInfo(),
+                            &m_pParent->getDestVector(),
+                            &m_pParent->getTypeInfo(),
                             m_pParent->shouldCreatePrimaryKey());
 }
 

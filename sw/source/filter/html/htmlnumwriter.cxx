@@ -243,10 +243,10 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
             {
                 // #i51089 - TUNING#
-                if ( rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum() )
+                if ( rWrt.pCurPam->GetNode().GetTxtNode()->GetNum() )
                 {
                     nStartVal = static_cast< sal_uInt16 >( rWrt.pCurPam->GetNode()
-                                ->GetTxtNode()->GetNumberVector()[i] );
+                                .GetTxtNode()->GetNumberVector()[i] );
                 }
                 else
                 {

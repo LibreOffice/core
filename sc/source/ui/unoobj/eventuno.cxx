@@ -33,13 +33,13 @@ ScSheetEventsObj::ScSheetEventsObj(ScDocShell* pDocSh, SCTAB nT) :
     mpDocShell( pDocSh ),
     mnTab( nT )
 {
-    mpDocShell->GetDocument()->AddUnoObject(*this);
+    mpDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScSheetEventsObj::~ScSheetEventsObj()
 {
     if (mpDocShell)
-        mpDocShell->GetDocument()->RemoveUnoObject(*this);
+        mpDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScSheetEventsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -76,7 +76,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
         throw container::NoSuchElementException();
 
     ScSheetEvents aNewEvents;
-    const ScSheetEvents* pOldEvents = mpDocShell->GetDocument()->GetSheetEvents(mnTab);
+    const ScSheetEvents* pOldEvents = mpDocShell->GetDocument().GetSheetEvents(mnTab);
     if (pOldEvents)
         aNewEvents = *pOldEvents;
 
@@ -110,7 +110,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
     else
         aNewEvents.SetScript( nEvent, NULL );       // reset
 
-    mpDocShell->GetDocument()->SetSheetEvents( mnTab, &aNewEvents );
+    mpDocShell->GetDocument().SetSheetEvents( mnTab, &aNewEvents );
     mpDocShell->SetDocumentModified();
 }
 
@@ -127,7 +127,7 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     const OUString* pScript = NULL;
     if (mpDocShell)
     {
-        const ScSheetEvents* pEvents = mpDocShell->GetDocument()->GetSheetEvents(mnTab);
+        const ScSheetEvents* pEvents = mpDocShell->GetDocument().GetSheetEvents(mnTab);
         if (pEvents)
             pScript = pEvents->GetScript(nEvent);
     }

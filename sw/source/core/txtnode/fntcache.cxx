@@ -1635,7 +1635,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         sal_uInt16 nDir = bBidiPor ?
                                         1800 :
                                         UnMapDirection(
-                                            GetFont()->GetOrientation(),
+                                            GetFont().GetOrientation(),
                                             bSwitchH2V );
 
                         switch ( nDir )
@@ -1686,7 +1686,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // anything to do?
                 if (rInf.GetWrong() || rInf.GetGrammarCheck() || rInf.GetSmartTags())
                 {
-                    CalcLinePosData aCalcLinePosData(rInf, *GetFont(),
+                    CalcLinePosData aCalcLinePosData(rInf, GetFont(),
                             nCnt, bSwitchH2V, bSwitchL2R,
                             nHalfSpace, pKernArray, bBidiPor);
 

@@ -1072,9 +1072,9 @@ OUString SwPaM::GetTxt() const
 
 void SwPaM::InvalidatePaM()
 {
-    const SwNode *_pNd=this->GetNode();
-    const SwTxtNode *_pTxtNd=(_pNd!=NULL?_pNd->GetTxtNode():NULL);
-    if (_pTxtNd!=NULL)
+    const SwNode &_pNd = this->GetNode();
+    const SwTxtNode *_pTxtNd = _pNd.GetTxtNode();
+    if (_pTxtNd != NULL)
     {
         // pretend that the PaM marks inserted text to recalc the portion...
         SwInsTxt aHint( Start()->nContent.GetIndex(),

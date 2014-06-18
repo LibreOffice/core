@@ -3884,7 +3884,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
     // for list levels of mode LABEL_ALIGNMENT.(see ww8par3.cxx
     // W8ImplReader::RegisterNumFmtOnTxtNode).
     // Need to apply the list format to the paragraph here.
-    SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNode = pPaM->GetNode().GetTxtNode();
     if( pTxtNode && pTxtNode->AreListLevelIndentsApplicable() )
     {
         SwNumRule * pNumRule = pTxtNode->GetNumRule();
@@ -3975,7 +3975,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
 
             if (!pAktColl)
             {
-                if (const SwTxtNode* pNode = pPaM->GetNode()->GetTxtNode())
+                if (const SwTxtNode* pNode = pPaM->GetNode().GetTxtNode())
                 {
                     if ( const SwNumFmt *pNumFmt = GetNumFmtFromTxtNode(*pNode) )
                     {

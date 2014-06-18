@@ -204,7 +204,7 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
         XFParagraph* pXFPara = new XFParagraph();
         pXFPara->SetStyleName(m_StyleName);
         m_pPara->AddXFContent(pXFPara);
-        m_pPara->GetFribs()->SetXFPara(pXFPara);
+        m_pPara->GetFribs().SetXFPara(pXFPara);
     }
 
 }

@@ -288,7 +288,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
 
     //Get the footnote character and remove it from the txtnode. We'll
     //replace it with the footnote
-    SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
+    SwTxtNode* pTxt = pPaM->GetNode().GetTxtNode();
     sal_Int32 nPos = pPaM->GetPoint()->nContent.GetIndex();
 
     OUString sChar;
@@ -996,7 +996,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
     else
         nSwNumLevel = 0xff;                 // no number
 
-    SwTxtNode* pNd = pPaM->GetNode()->GetTxtNode();
+    SwTxtNode* pNd = pPaM->GetNode().GetTxtNode();
     if (nSwNumLevel < MAXLEVEL)
         pNd->SetAttrListLevel( nSwNumLevel );
     else
@@ -2848,7 +2848,7 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
         }
 
         // Better to turn Snap to Grid off for all paragraphs in tables
-        if(SwTxtNode *pNd = pIo->pPaM->GetNode()->GetTxtNode())
+        if(SwTxtNode *pNd = pIo->pPaM->GetNode().GetTxtNode())
         {
             const SfxPoolItem &rItm = pNd->SwCntntNode::GetAttr(RES_PARATR_SNAPTOGRID);
             SvxParaGridItem &rSnapToGrid = (SvxParaGridItem&)(rItm);

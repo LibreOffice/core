@@ -130,12 +130,12 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
     if ( pNamedRange && pNamedRange->pDocShell )
     {
 
-        ScDocument* pDoc = pNamedRange->pDocShell->GetDocument();
+        ScDocument& rDoc = pNamedRange->pDocShell->GetDocument();
         ScRangeData* pOldData = pNamedRange->GetRangeData_Impl();
         if (pOldData)
         {
             // Shorter way of doing this ?
-            ScCompiler aComp( pDoc, pOldData->GetPos() );
+            ScCompiler aComp( &rDoc, pOldData->GetPos() );
             aComp.SetGrammar( eGrammar );
             boost::scoped_ptr<ScTokenArray> pArray(aComp.CompileString(sContent));
             pOldData->SetCode(*pArray);

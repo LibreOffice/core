@@ -57,10 +57,10 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     pViewShell( pViewSh )
 {
     SetPool( &pViewSh->GetPool() );
-    ScViewData* pViewData = pViewSh->GetViewData();
-    ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    ScViewData& rViewData = pViewSh->GetViewData();
+    ::svl::IUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    if ( !rViewData.GetDocument()->IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }
@@ -100,10 +100,10 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                     nSrcTab = pDesc->GetSourceRange().aStart.Tab();
                 }
 
-                ScViewData* pViewData = pViewShell->GetViewData();
+                ScViewData& rViewData = pViewShell->GetViewData();
                 SfxItemSet aArgSet( pViewShell->GetPool(),
                     SCITEM_QUERYDATA, SCITEM_QUERYDATA );
-                aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
+                aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, &rViewData, &aQueryParam ) );
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -114,7 +114,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 
                 if( pDlg->Execute() == RET_OK )
                 {
-                    ScSheetSourceDesc aNewDesc(pViewData->GetDocument());
+                    ScSheetSourceDesc aNewDesc(rViewData.GetDocument());
                     if( pDesc )
                         aNewDesc = *pDesc;
 
@@ -123,9 +123,9 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 
                     ScDPObject aNewObj( *pDPObj );
                     aNewObj.SetSheetDesc( aNewDesc );
-                    ScDBDocFunc aFunc( *pViewData->GetDocShell() );
+                    ScDBDocFunc aFunc( *rViewData.GetDocShell() );
                     aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
-                    pViewData->GetView()->CursorPosChanged();       // shells may be switched
+                    rViewData.GetView()->CursorPosChanged();       // shells may be switched
                 }
             }
         }
@@ -135,9 +135,9 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 
 void ScPivotShell::GetState( SfxItemSet& rSet )
 {
-    ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
-    bool bDisable = pDocSh->IsReadOnly() || pDoc->GetChangeTrack();
+    ScDocShell* pDocSh = pViewShell->GetViewData().GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    bool bDisable = pDocSh->IsReadOnly() || rDoc.GetChangeTrack();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -169,7 +169,7 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
 
 ScDPObject* ScPivotShell::GetCurrDPObject()
 {
-    const ScViewData& rViewData = *pViewShell->GetViewData();
+    const ScViewData& rViewData = pViewShell->GetViewData();
     return rViewData.GetDocument()->GetDPAtCursor(
         rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
 }

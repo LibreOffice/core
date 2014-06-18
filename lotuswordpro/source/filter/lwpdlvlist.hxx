@@ -83,8 +83,8 @@ protected:
 protected:
     void Read() SAL_OVERRIDE;
 public:
-    LwpObjectID* GetNext() { return &m_ListNext; }
-    LwpObjectID* GetPrevious() { return &m_ListPrevious; }
+    LwpObjectID& GetNext() { return m_ListNext; }
+    LwpObjectID& GetPrevious() { return m_ListPrevious; }
 };
 
 /**
@@ -106,11 +106,11 @@ protected:
     void ReadName(LwpObjectStream* pObjStrm);
 public:
     // 01/17/2005
-    LwpAtomHolder* GetName() { return &m_Name; }
+    LwpAtomHolder& GetName() { return m_Name; }
     //end
-    LwpObjectID* GetChildHead() { return &m_ChildHead; }
-    LwpObjectID* GetChildTail() { return &m_ChildTail; }
-    LwpObjectID* GetParent() { return &m_Parent; }
+    LwpObjectID& GetChildHead() { return m_ChildHead; }
+    LwpObjectID& GetChildTail() { return m_ChildTail; }
+    LwpObjectID& GetParent() { return m_Parent; }
 };
 
 
@@ -145,8 +145,8 @@ private:
     LwpObjectID m_ListHead;
     LwpObjectID m_ListTail;
 public:
-    LwpObjectID* GetHead() { return &m_ListHead; }
-    LwpObjectID* GetTail() { return &m_ListTail; }
+    LwpObjectID& GetHead() { return m_ListHead; }
+    LwpObjectID& GetTail() { return m_ListTail; }
 };
 
 /**
@@ -158,7 +158,7 @@ public:
     LwpDLVListHead(){}
     ~LwpDLVListHead(){}
     void Read(LwpObjectStream* pObjStrm);
-    LwpObjectID* GetFirst() { return &m_objHead; }
+    LwpObjectID& GetFirst() { return m_objHead; }
 protected:
     LwpObjectID m_objHead;//LwpDLVList
 };

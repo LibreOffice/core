@@ -65,7 +65,7 @@ public:
     /** returns a stl map with all PropertyMapEntry pointer.<p>
         The key is the property name.
     */
-    const PropertyMap* getPropertyMap() const throw();
+    const PropertyMap& getPropertyMap() const throw();
 
     /** adds an array of PropertyMapEntry to this instance.<p>
         The end is marked with a PropertyMapEntry where mpName equals NULL</p>

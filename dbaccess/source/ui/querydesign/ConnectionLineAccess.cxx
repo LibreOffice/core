@@ -81,10 +81,10 @@ namespace dbaui
         if( m_pLine )
         {
             // search the position of our table window in the table window map
-            nIndex = m_pLine->GetParent()->GetTabWinMap()->size();
-            const ::std::vector<OTableConnection*>* pVec = m_pLine->GetParent()->getTableConnections();
-            ::std::vector<OTableConnection*>::const_iterator aIter = pVec->begin();
-            ::std::vector<OTableConnection*>::const_iterator aEnd = pVec->end();
+            nIndex = m_pLine->GetParent()->GetTabWinMap().size();
+            const ::std::vector<OTableConnection*>& rVec = m_pLine->GetParent()->getTableConnections();
+            ::std::vector<OTableConnection*>::const_iterator aIter = rVec.begin();
+            ::std::vector<OTableConnection*>::const_iterator aEnd = rVec.end();
             for (; aIter != aEnd && (*aIter) != m_pLine; ++nIndex,++aIter)
                 ;
             nIndex = ( aIter != aEnd ) ? nIndex : -1;

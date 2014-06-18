@@ -306,7 +306,7 @@ DataStream* DataStream::Set(
     sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings)
 {
     DataStream* pLink = new DataStream(pShell, rURL, rRange, nLimit, eMove, nSettings);
-    sc::DocumentLinkManager& rMgr = pShell->GetDocument()->GetDocLinkManager();
+    sc::DocumentLinkManager& rMgr = pShell->GetDocument().GetDocLinkManager();
     rMgr.setDataStream(pLink);
     return pLink;
 }
@@ -314,8 +314,7 @@ DataStream* DataStream::Set(
 DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
         sal_Int32 nLimit, MoveType eMove, sal_uInt32 nSettings) :
     mpDocShell(pShell),
-    mpDoc(mpDocShell->GetDocument()),
-    maDocAccess(*mpDoc),
+    maDocAccess(mpDocShell->GetDocument()),
     meOrigMove(NO_MOVE),
     meMove(NO_MOVE),
     mbRunning(false),
@@ -546,7 +545,7 @@ void DataStream::Text2Doc()
     if (meMove == RANGE_DOWN)
     {
         ++mnCurRow;
-//      mpDocShell->GetViewData()->GetView()->AlignToCursor(
+//      mpDocShell->GetViewData().GetView()->AlignToCursor(
 //              maStartRange.aStart.Col(), mnCurRow, SC_FOLLOW_JUMP);
     }
 

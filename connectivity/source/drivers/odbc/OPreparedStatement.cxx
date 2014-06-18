@@ -373,8 +373,8 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
     SQLSMALLINT fCType, fSqlType;
     OTools::getBindTypes(useWChar, m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
 
-    SQLLEN *pDataLen=boundParams[parameterIndex-1].getBindLengthBuffer();
-    *pDataLen=_nDataLen;
+    SQLLEN& rDataLen = boundParams[parameterIndex-1].getBindLengthBuffer();
+    rDataLen = _nDataLen;
 
     SQLRETURN nRetcode;
     nRetcode = (*(T3SQLBindParameter)m_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(
@@ -389,7 +389,7 @@ void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_
                   // we trust the ODBC driver not to touch it because SQL_PARAM_INPUT
                   const_cast<void*>(_pData),
                   _nDataAllocLen,
-                  pDataLen);
+                  &rDataLen);
 
     OTools::ThrowException(m_pConnection, nRetcode, m_aStatementHandle, SQL_HANDLE_STMT, *this);
 }
@@ -742,7 +742,7 @@ SQLLEN* OPreparedStatement::getLengthBuf (sal_Int32 index)
     if ((index >= 1) &&
         (index <= numParams))
     {
-        b = boundParams[index - 1].getBindLengthBuffer ();
+        b = &boundParams[index - 1].getBindLengthBuffer ();
     }
 
     return b;

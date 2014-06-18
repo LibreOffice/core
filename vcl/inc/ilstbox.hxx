@@ -414,7 +414,7 @@ public:
                     virtual ~ImplListBox();
 
     const ImplEntryList*    GetEntryList() const            { return maLBWindow.GetEntryList(); }
-    ImplListBoxWindow*      GetMainWindow()                 { return &maLBWindow; }
+    ImplListBoxWindow&      GetMainWindow()                 { return maLBWindow; }
 
     virtual void    Resize() SAL_OVERRIDE;
     virtual const Wallpaper& GetDisplayBackground() const SAL_OVERRIDE;

@@ -926,9 +926,9 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
     {
         ScViewFunc* pViewFunc = pViewData->GetView();
         ScDocShell* pDocSh = pViewData->GetDocShell();
-        ScDocument* pDoc = pDocSh->GetDocument();
+        ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = pViewData->GetTabNo();
-        bool bUndo (pDoc->IsUndoEnabled());
+        bool bUndo (rDoc.IsUndoEnabled());
 
         if ( bBreak )
         {
@@ -945,7 +945,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                 bool bGrow = !bHide && nNew > nPagebreakBreak;
                 if ( bColumn )
                 {
-                    if (pDoc->HasColBreak(static_cast<SCCOL>(nPagebreakBreak), nTab) & BREAK_MANUAL)
+                    if (rDoc.HasColBreak(static_cast<SCCOL>(nPagebreakBreak), nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( static_cast<SCCOL>(nPagebreakBreak), nPosY, nTab );
                         pViewFunc->DeletePageBreak( true, true, &aOldAddr, false );
@@ -958,7 +958,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                     if ( bGrow )
                     {
                         //  vorigen Break auf hart, und Skalierung aendern
-                        bool bManualBreak = (pDoc->HasColBreak(static_cast<SCCOL>(nPagebreakPrev), nTab) & BREAK_MANUAL);
+                        bool bManualBreak = (rDoc.HasColBreak(static_cast<SCCOL>(nPagebreakPrev), nTab) & BREAK_MANUAL);
                         if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() && !bManualBreak )
                         {
                             ScAddress aPrev( static_cast<SCCOL>(nPagebreakPrev), nPosY, nTab );
@@ -972,7 +972,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                 }
                 else
                 {
-                    if (pDoc->HasRowBreak(nPagebreakBreak, nTab) & BREAK_MANUAL)
+                    if (rDoc.HasRowBreak(nPagebreakBreak, nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( nPosX, nPagebreakBreak, nTab );
                         pViewFunc->DeletePageBreak( false, true, &aOldAddr, false );
@@ -985,7 +985,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
                     if ( bGrow )
                     {
                         //  vorigen Break auf hart, und Skalierung aendern
-                        bool bManualBreak = (pDoc->HasRowBreak(nPagebreakPrev, nTab) & BREAK_MANUAL);
+                        bool bManualBreak = (rDoc.HasRowBreak(nPagebreakPrev, nTab) & BREAK_MANUAL);
                         if ( nPagebreakPrev > aPagebreakSource.aStart.Row() && !bManualBreak )
                         {
                             ScAddress aPrev( nPosX, nPagebreakPrev, nTab );
@@ -1015,12 +1015,12 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
             //  Druckbereich setzen
 
             OUString aNewRanges;
-            sal_uInt16 nOldCount = pDoc->GetPrintRangeCount( nTab );
+            sal_uInt16 nOldCount = rDoc.GetPrintRangeCount( nTab );
             if ( nOldCount )
             {
                 for (sal_uInt16 nPos=0; nPos<nOldCount; nPos++)
                 {
-                    const ScRange* pOld = pDoc->GetPrintRange( nTab, nPos );
+                    const ScRange* pOld = rDoc.GetPrintRange( nTab, nPos );
                     if ( pOld )
                     {
                         OUString aTemp;
@@ -1040,7 +1040,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, bool bUp )
             else if (!bHide)
                 aNewRanges = aPagebreakDrag.Format(SCA_VALID);
 
-            pViewFunc->SetPrintRanges( pDoc->IsPrintEntireSheet( nTab ), &aNewRanges, NULL, NULL, false );
+            pViewFunc->SetPrintRanges( rDoc.IsPrintEntireSheet( nTab ), &aNewRanges, NULL, NULL, false );
         }
     }
 

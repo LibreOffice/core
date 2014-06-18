@@ -167,11 +167,11 @@ public:
                         SortedResultSet( css::uno::Reference< css::sdbc::XResultSet > aResult );
                         virtual ~SortedResultSet();
 
-    const SortedEntryList*      GetS2OList() const { return &maS2O; }
-    const SimpleList*           GetO2SList() const { return &maO2S; }
+    const SortedEntryList&      GetS2OList() const { return maS2O; }
+    const SimpleList&           GetO2SList() const { return maO2S; }
     css::uno::Reference < css::sdbc::XResultSet >    GetResultSet() const { return mxOriginal; }
     SortInfo*                   GetSortInfo() const { return mpSortInfo; }
-    sal_IntPtr                        GetCount() const { return mnCount; }
+    sal_IntPtr                  GetCount() const { return mnCount; }
 
     void                CopyData( SortedResultSet* pSource );
     void                Initialize( const css::uno::Sequence < css::ucb::NumberedSortingInfo > &xSortInfo,

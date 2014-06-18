@@ -107,8 +107,8 @@ void FuDraw::ResetModifiers()
     if (!pView)
         return;
 
-    ScViewData* pViewData = pViewShell->GetViewData();
-    const ScViewOptions& rOpt = pViewData->GetOptions();
+    ScViewData& rViewData = pViewShell->GetViewData();
+    const ScViewOptions& rOpt = rViewData.GetOptions();
     const ScGridOptions& rGrid = rOpt.GetGridOptions();
     bool bGridOpt = rGrid.GetUseGridSnap();
 
@@ -196,15 +196,15 @@ static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const 
         sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
         // don't switch shells if text shell is already active
-        FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+        FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
         if ( !pPoor || pPoor->GetSlotID() != nTextSlotId )
         {
-            pViewShell->GetViewData()->GetDispatcher().
+            pViewShell->GetViewData().GetDispatcher().
                 Execute(nTextSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
         }
 
         // get the resulting FuText and set in edit mode
-        pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+        pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
         if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // no RTTI
         {
             FuText* pText = (FuText*)pPoor;
@@ -219,7 +219,7 @@ static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const 
 bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 {
     bool bReturn = false;
-    ScViewData& rViewData = *pViewShell->GetViewData();
+    ScViewData& rViewData = pViewShell->GetViewData();
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {

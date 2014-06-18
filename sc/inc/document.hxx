@@ -2024,8 +2024,8 @@ public:
 
     ScRefreshTimerControl*  GetRefreshTimerControl() const
         { return pRefreshTimerControl; }
-    ScRefreshTimerControl * const * GetRefreshTimerControlAddress() const
-        { return &pRefreshTimerControl; }
+    ScRefreshTimerControl * const & GetRefreshTimerControlAddress() const
+        { return pRefreshTimerControl; }
 
     void            SetPastingDrawFromOtherDoc( bool bVal )
                         { bPastingDrawFromOtherDoc = bVal; }

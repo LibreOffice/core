@@ -77,10 +77,10 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     ResetConnLines();
 
     // and copy
-    OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
+    const OConnectionLineDataVec& rLineData = rConnData.GetConnLineDataList();
 
-    OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
-    OConnectionLineDataVec::const_iterator aEnd = pLineData->end();
+    OConnectionLineDataVec::const_iterator aIter = rLineData.begin();
+    OConnectionLineDataVec::const_iterator aEnd = rLineData.end();
     for(;aIter != aEnd;++aIter)
         m_vConnLineData.push_back(new OConnectionLineData(**aIter));
 

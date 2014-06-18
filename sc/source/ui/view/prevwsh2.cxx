@@ -43,7 +43,7 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
             case SC_HINT_DRWLAYER_NEW:
                 {
-                    SfxBroadcaster* pDrawBC = pDocShell->GetDocument()->GetDrawBroadcaster();
+                    SfxBroadcaster* pDrawBC = pDocShell->GetDocument().GetDrawBroadcaster();
                     if (pDrawBC)
                         StartListening(*pDrawBC);
                 }

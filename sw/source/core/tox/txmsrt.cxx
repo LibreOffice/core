@@ -142,7 +142,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
     {
         sal_Int32 n = 0;
         if( pTxtMark )
-            n = *pTxtMark->GetStart();
+            n = pTxtMark->GetStart();
         SwTOXSource aTmp( pNd, n, pTxtMark && pTxtMark->GetTOXMark().IsMainEntry() );
         aTOXSources.push_back(aTmp);
 
@@ -199,7 +199,7 @@ bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
     if( TOX_SORT_CONTENT == nType )
     {
         bRet = bRet && pTxtMark && rCmp.pTxtMark &&
-                *pTxtMark->GetStart() == *rCmp.pTxtMark->GetStart();
+                pTxtMark->GetStart() == rCmp.pTxtMark->GetStart();
 
         if( bRet )
         {
@@ -235,10 +235,10 @@ bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
             {
                 if( TOX_SORT_CONTENT == nType && pTxtMark && rCmp.pTxtMark )
                 {
-                    if( *pTxtMark->GetStart() < *rCmp.pTxtMark->GetStart() )
+                    if( pTxtMark->GetStart() < rCmp.pTxtMark->GetStart() )
                         return true;
 
-                    if( *pTxtMark->GetStart() == *rCmp.pTxtMark->GetStart() )
+                    if( pTxtMark->GetStart() == rCmp.pTxtMark->GetStart() )
                     {
                         const sal_Int32 *pEnd = pTxtMark->End();
                         const sal_Int32 *pEndCmp = rCmp.pTxtMark->End();
@@ -371,8 +371,8 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 ) 
             0 == (GetOptions() & nsSwTOIOptions::TOI_KEY_AS_ENTRY))
     {
         aRet.sText = ((SwTxtNode*)aTOXSources[0].pNd)->GetExpandTxt(
-                            *pTxtMark->GetStart(),
-                            *pEnd - *pTxtMark->GetStart());
+                            pTxtMark->GetStart(),
+                            *pEnd - pTxtMark->GetStart());
         if(nsSwTOIOptions::TOI_INITIAL_CAPS & nOpt && pTOXIntl && !aRet.sText.isEmpty())
         {
             aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.copy(1);
@@ -450,8 +450,8 @@ TextAndReading SwTOXContent::GetText_Impl() const
     {
         return TextAndReading(
             ((SwTxtNode*)aTOXSources[0].pNd)->GetExpandTxt(
-                                     *pTxtMark->GetStart(),
-                                     *pEnd - *pTxtMark->GetStart() ),
+                                     pTxtMark->GetStart(),
+                                     *pEnd - pTxtMark->GetStart() ),
             pTxtMark->GetTOXMark().GetTextReading());
     }
 
@@ -463,8 +463,8 @@ void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 
     const sal_Int32* pEnd = pTxtMark->End();
     if( pEnd && !pTxtMark->GetTOXMark().IsAlternativeText() )
         ((SwTxtNode*)aTOXSources[0].pNd)->GetExpandTxt( rNd, &rInsPos,
-                                    *pTxtMark->GetStart(),
-                                    *pEnd - *pTxtMark->GetStart() );
+                                    pTxtMark->GetStart(),
+                                    *pEnd - pTxtMark->GetStart() );
     else
     {
         rNd.InsertText( GetTxt().sText, rInsPos );
@@ -663,7 +663,7 @@ SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
     m_rField(rField)
 {
     if(rField.GetTxtFld())
-        nCntPos = *rField.GetTxtFld()->GetStart();
+        nCntPos = rField.GetTxtFld()->GetStart();
 }
 
 sal_uInt16 SwTOXAuthority::GetLevel() const

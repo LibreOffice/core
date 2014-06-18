@@ -217,7 +217,7 @@ SwFrm* SwNode2LayImpl::NextFrm()
             {
                 while( pFlow->HasFollow() )
                     pFlow = pFlow->GetFollow();
-                pRet = pFlow->GetFrm();
+                pRet = &(pFlow->GetFrm());
             }
             if( pRet->IsInSct() )
             {

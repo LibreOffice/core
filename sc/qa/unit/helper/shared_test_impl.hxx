@@ -48,9 +48,9 @@ DataBarData aData[] = {
     { ScRange(1,9,0,1,12,0), COLORSCALE_AUTO, COLORSCALE_AUTO, databar::MIDDLE }
 };
 
-void testDataBar_Impl(ScDocument* pDoc)
+void testDataBar_Impl(ScDocument& rDoc)
 {
-    ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
+    ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(aData); ++i)
@@ -85,9 +85,9 @@ ColorScale2EntryData aData2Entry[] = {
     { ScRange(5,2,0,5,5,0), COLORSCALE_VALUE, COLORSCALE_FORMULA }
 };
 
-void testColorScale2Entry_Impl(ScDocument* pDoc)
+void testColorScale2Entry_Impl(ScDocument& rDoc)
 {
-    const ScConditionalFormatList* pList = pDoc->GetCondFormList(0);
+    const ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(aData2Entry); ++i)
@@ -124,9 +124,9 @@ ColorScale3EntryData aData3Entry[] = {
     { ScRange(5,1,1,5,6,1), COLORSCALE_VALUE, COLORSCALE_VALUE, COLORSCALE_FORMULA }
 };
 
-void testColorScale3Entry_Impl(ScDocument* pDoc)
+void testColorScale3Entry_Impl(ScDocument& rDoc)
 {
-    ScConditionalFormatList* pList = pDoc->GetCondFormList(1);
+    ScConditionalFormatList* pList = rDoc.GetCondFormList(1);
     CPPUNIT_ASSERT(pList);
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(aData3Entry); ++i)
@@ -152,7 +152,7 @@ void testColorScale3Entry_Impl(ScDocument* pDoc)
     }
 }
 
-void testFunctionsExcel2010_Impl( ScDocument* pDoc )
+void testFunctionsExcel2010_Impl( ScDocument& rDoc )
 {
     // Original test case document is functions-excel-2010.xlsx
     // Which test rows to evaluate, 1-based as in UI to ease maintenance.
@@ -252,20 +252,20 @@ void testFunctionsExcel2010_Impl( ScDocument* pDoc )
 
             OString aStr = OString::number( aTests[i].nRow) +
                 ", function name=[ " +
-                OUStringToOString( pDoc->GetString( ScAddress( 0, nRow, 0)), RTL_TEXTENCODING_UTF8 ) +
+                OUStringToOString( rDoc.GetString( ScAddress( 0, nRow, 0)), RTL_TEXTENCODING_UTF8 ) +
                 " ], result=" +
-                OString::number( pDoc->GetValue( ScAddress( 1, nRow, 0)) ) +
+                OString::number( rDoc.GetValue( ScAddress( 1, nRow, 0)) ) +
                 ", expected=" +
-                OString::number( pDoc->GetValue( ScAddress( 2, nRow, 0)) );
+                OString::number( rDoc.GetValue( ScAddress( 2, nRow, 0)) );
 
-            ScFormulaCell* pFC = pDoc->GetFormulaCell( ScAddress( 1, nRow, 0) );
+            ScFormulaCell* pFC = rDoc.GetFormulaCell( ScAddress( 1, nRow, 0) );
             if ( pFC && pFC->GetErrCode() != 0 )
                 aStr += ", error code =" + OString::number( pFC->GetErrCode() );
 
             CPPUNIT_ASSERT_MESSAGE( OString( "Expected a formula cell without error at row " +
-                    aStr ).getStr(), isFormulaWithoutError( *pDoc, ScAddress( 1, nRow, 0)));
+                    aStr ).getStr(), isFormulaWithoutError( rDoc, ScAddress( 1, nRow, 0)));
             CPPUNIT_ASSERT_MESSAGE( OString( "Expected a TRUE value at row " +
-                    aStr ).getStr(), 0 != pDoc->GetValue( ScAddress( 3, nRow, 0)));
+                    aStr ).getStr(), 0 != rDoc.GetValue( ScAddress( 3, nRow, 0)));
 
         }
     }

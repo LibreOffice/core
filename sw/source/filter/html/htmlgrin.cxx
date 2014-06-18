@@ -439,7 +439,7 @@ IMAGE_SETEVENT:
         !aBulletGrfs[GetNumInfo().GetDepth()-1].isEmpty() &&
         aBulletGrfs[GetNumInfo().GetDepth()-1]==sGrfNm )
     {
-        SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
+        SwTxtNode* pTxtNode = pPam->GetNode().GetTxtNode();
 
         if( pTxtNode && ! pTxtNode->IsCountedInList())
         {

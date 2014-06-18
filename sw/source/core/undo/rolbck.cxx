@@ -194,7 +194,7 @@ void SwHistoryResetFmt::SetInDoc( SwDoc* pDoc, bool )
 SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTXTHNT )
     , m_nNodeIndex( nNodePos )
-    , m_nStart( *pTxtHt->GetStart() )
+    , m_nStart( pTxtHt->GetStart() )
     , m_nEnd( *pTxtHt->GetAnyEnd() )
     , m_bFormatIgnoreStart(pTxtHt->IsFormatIgnoreStart())
     , m_bFormatIgnoreEnd  (pTxtHt->IsFormatIgnoreEnd  ())
@@ -272,7 +272,7 @@ SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
         m_pFld->GetField()->ChgTyp( m_pFldType.get() ); // change field type
     }
     m_nNodeIndex = nNodePos;
-    m_nPos = *pTxtFld->GetStart();
+    m_nPos = pTxtFld->GetStart();
 }
 
 OUString SwHistorySetTxtFld::GetDescription() const
@@ -316,7 +316,7 @@ SwHistorySetRefMark::SwHistorySetRefMark( SwTxtRefMark* pTxtHt, sal_uLong nNodeP
     : SwHistoryHint( HSTRY_SETREFMARKHNT )
     , m_RefName( pTxtHt->GetRefMark().GetRefName() )
     , m_nNodeIndex( nNodePos )
-    , m_nStart( *pTxtHt->GetStart() )
+    , m_nStart( pTxtHt->GetStart() )
     , m_nEnd( *pTxtHt->GetAnyEnd() )
 {
 }
@@ -345,7 +345,7 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, sal_uLong nNodeP
     , m_TOXName( m_TOXMark.GetTOXType()->GetTypeName() )
     , m_eTOXTypes( m_TOXMark.GetTOXType()->GetType() )
     , m_nNodeIndex( nNodePos )
-    , m_nStart( *pTxtHt->GetStart() )
+    , m_nStart( pTxtHt->GetStart() )
     , m_nEnd( *pTxtHt->GetAnyEnd() )
 {
     m_TOXMark.DeRegister();
@@ -417,7 +417,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, sal_uLong nNodePo
     , m_pUndo( new SwUndoSaveSection )
     , m_FootnoteNumber( pTxtFtn->GetFtn().GetNumStr() )
     , m_nNodeIndex( nNodePos )
-    , m_nStart( *pTxtFtn->GetStart() )
+    , m_nStart( pTxtFtn->GetStart() )
     , m_bEndNote( pTxtFtn->GetFtn().IsEndNote() )
 {
     OSL_ENSURE( pTxtFtn->GetStartNode(),
@@ -442,7 +442,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( const SwTxtFtn &rTxtFtn )
     , m_pUndo( 0 )
     , m_FootnoteNumber( rTxtFtn.GetFtn().GetNumStr() )
     , m_nNodeIndex( _SwTxtFtn_GetIndex( (&rTxtFtn) ) )
-    , m_nStart( *rTxtFtn.GetStart() )
+    , m_nStart( rTxtFtn.GetStart() )
     , m_bEndNote( rTxtFtn.GetFtn().IsEndNote() )
 {
     OSL_ENSURE( rTxtFtn.GetStartNode(),
@@ -1042,7 +1042,7 @@ void SwHistory::Add( SwTxtAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
     }
     else
     {
-        pHt = new SwHistoryResetTxt( pHint->Which(), *pHint->GetStart(),
+        pHt = new SwHistoryResetTxt( pHint->Which(), pHint->GetStart(),
                                     *pHint->GetAnyEnd(), nNodeIdx );
     }
     m_SwpHstry.push_back( pHt );
@@ -1231,7 +1231,7 @@ void SwHistory::CopyAttr(
     {
         // nAttrStt must even be set when !pEndIdx
         pHt = pHts->GetTextHint(n);
-        const sal_Int32 nAttrStt = *pHt->GetStart();
+        const sal_Int32 nAttrStt = pHt->GetStart();
         if( 0 != ( pEndIdx = pHt->GetEnd() ) && nAttrStt > nEnd )
             break;
 

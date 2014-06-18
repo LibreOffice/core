@@ -336,7 +336,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
 
             if ( !pDocShTables->GetError() )                    // nur Errors
             {
-                FillTables_Impl( pDocShTables->GetDocument() );
+                FillTables_Impl( &pDocShTables->GetDocument() );
                 m_pFtPath->SetText( pDocShTables->GetTitle( SFX_TITLE_FULLNAME ) );
             }
             else

@@ -459,15 +459,15 @@ bool OpenglShapeFactory::preRender(OpenGLWindow* pWindow)
         return false;
 
     pWindow->Show();
-    pWindow->getContext()->makeCurrent();
+    pWindow->getContext().makeCurrent();
     Size aSize = pWindow->GetSizePixel();
-    pWindow->getContext()->setWinSize(aSize);
+    pWindow->getContext().setWinSize(aSize);
     return true;
 }
 
 void OpenglShapeFactory::postRender(OpenGLWindow* pWindow)
 {
-    pWindow->getContext()->swapBuffers();
+    pWindow->getContext().swapBuffers();
 }
 
 void OpenglShapeFactory::clearPage(uno::Reference< drawing::XShapes > xRootShape)

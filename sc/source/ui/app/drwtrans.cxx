@@ -225,14 +225,11 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
 
     if ( pContainerShell )
     {
-        ScDocument* pDoc = pContainerShell->GetDocument();
-        if ( pDoc )
+        ScDocument& rDoc = pContainerShell->GetDocument();
+        nSourceDocID = rDoc.GetDocumentID();
+        if ( pPage )
         {
-            nSourceDocID = pDoc->GetDocumentID();
-            if ( pPage )
-            {
-                ScChartHelper::FillProtectedChartRangesVector( m_aProtectedChartRangesVector, pDoc, pPage );
-            }
+            ScChartHelper::FillProtectedChartRangesVector( m_aProtectedChartRangesVector, &rDoc, pPage );
         }
     }
 }
@@ -745,10 +742,10 @@ void ScDrawTransferObj::InitDocShell()
 
         pDocSh->DoInitNew(NULL);
 
-        ScDocument* pDestDoc = pDocSh->GetDocument();
-        pDestDoc->InitDrawLayer( pDocSh );
+        ScDocument& rDestDoc = pDocSh->GetDocument();
+        rDestDoc.InitDrawLayer( pDocSh );
 
-        SdrModel* pDestModel = pDestDoc->GetDrawLayer();
+        SdrModel* pDestModel = rDestDoc.GetDrawLayer();
         // #i71538# use complete SdrViews
         // SdrExchangeView aDestView( pDestModel );
         SdrView aDestView( pDestModel );
@@ -779,9 +776,9 @@ void ScDrawTransferObj::InitDocShell()
         Rectangle aDestArea( aTmpPoint, aSrcSize );
         pDocSh->SetVisArea( aDestArea );
 
-        ScViewOptions aViewOpt( pDestDoc->GetViewOptions() );
+        ScViewOptions aViewOpt( rDestDoc.GetViewOptions() );
         aViewOpt.SetOption( VOPT_GRID, false );
-        pDestDoc->SetViewOptions( aViewOpt );
+        rDestDoc.SetViewOptions( aViewOpt );
 
         ScViewData aViewData( pDocSh, NULL );
         aViewData.SetTabNo( 0 );

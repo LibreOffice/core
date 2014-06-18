@@ -618,7 +618,7 @@ bool SwFlyFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
 /** Layout dependent cursor travelling */
 bool SwCntntFrm::LeftMargin(SwPaM *pPam) const
 {
-    if( pPam->GetNode() != (SwCntntNode*)GetNode() )
+    if( &pPam->GetNode() != (SwCntntNode*)GetNode() )
         return false;
     ((SwCntntNode*)GetNode())->
         MakeStartIndex((SwIndex *) &pPam->GetPoint()->nContent);
@@ -627,7 +627,7 @@ bool SwCntntFrm::LeftMargin(SwPaM *pPam) const
 
 bool SwCntntFrm::RightMargin(SwPaM *pPam, bool) const
 {
-    if( pPam->GetNode() != (SwCntntNode*)GetNode() )
+    if( &pPam->GetNode() != (SwCntntNode*)GetNode() )
         return false;
     ((SwCntntNode*)GetNode())->
         MakeEndIndex((SwIndex *) &pPam->GetPoint()->nContent);
@@ -693,7 +693,7 @@ static const SwCntntFrm * lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
 static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                     GetNxtPrvCnt fnNxtPrv, bool bInReadOnly )
 {
-    OSL_ENSURE( pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),
+    OSL_ENSURE( &pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),
             "lcl_UpDown doesn't work for others." );
 
     const SwCntntFrm *pCnt = 0;
@@ -703,8 +703,8 @@ static bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
     //going down.
     bool bTblSel = false;
     if ( pStart->IsInTab() &&
-        pPam->GetNode( true )->StartOfSectionNode() !=
-        pPam->GetNode( false )->StartOfSectionNode() )
+        pPam->GetNode( true ).StartOfSectionNode() !=
+        pPam->GetNode( false ).StartOfSectionNode() )
     {
         bTblSel = true;
         const SwLayoutFrm  *pCell = pStart->GetUpper();

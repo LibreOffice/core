@@ -212,7 +212,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             const SwTxtFtn* pFtn = ((SwFtnFrm*)pLayout)->GetAttr();
             pTxtNode = &pFtn->GetTxtNode();
             rPos.nNode = *pTxtNode;
-            rPos.nContent = *pFtn->GetStart();
+            rPos.nContent = pFtn->GetStart();
         }
         else if( pLayout->IsHeaderFrm() || pLayout->IsFooterFrm() )
         {
@@ -873,7 +873,7 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc,
     const SwTxtFld* pTxtFld = rFmt.GetTxtFld();
     const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
 
-    sal_Int32 nRet = nHint ? nHint : *pTxtFld->GetStart() + 1;
+    sal_Int32 nRet = nHint ? nHint : pTxtFld->GetStart() + 1;
     OUString sNodeText = rTxtNode.GetTxt();
 
     if(nRet<sNodeText.getLength())

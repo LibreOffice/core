@@ -199,7 +199,7 @@ void LwpPara::Read()
             if (Notify)
             {
                 LwpForked3NotifyList* pNotifyList = new LwpForked3NotifyList();
-                pNotifyList->GetExtraList()->Read(m_pObjStrm);
+                pNotifyList->GetExtraList().Read(m_pObjStrm);
                 pNotifyList->Read(m_pObjStrm);
                 delete pNotifyList;
             }
@@ -477,17 +477,17 @@ void LwpPara::RegisterStyle()
                 LwpBackgroundOverride* pBGOver = static_cast<LwpParaBackGroundProperty*>(pProps)->GetBackground();
                 if (pBGOver)
                 {
-                    LwpBackgroundStuff* pBGStuff = pBGOver->GetBGStuff();
-                    if (pBGStuff && !pBGStuff->IsTransparent() )
+                    LwpBackgroundStuff& rBGStuff = pBGOver->GetBGStuff();
+                    if (!rBGStuff.IsTransparent() )
                     {
-                        if (pBGStuff->IsPatternFill())
+                        if (rBGStuff.IsPatternFill())
                         {
-                            XFBGImage* pXFBGImage = pBGStuff->GetFillPattern();
+                            XFBGImage* pXFBGImage = rBGStuff.GetFillPattern();
                             pOverStyle->SetBackImage(pXFBGImage);
                         }
                         else
                         {
-                            LwpColor* pColor = pBGStuff->GetFillColor();
+                            LwpColor* pColor = rBGStuff.GetFillColor();
                             if (pColor && pColor->IsValidColor())
                             {
                                 XFColor aXFColor( pColor->To24Color());
@@ -605,7 +605,7 @@ void LwpPara::RegisterStyle()
                         pParaSilverBullet = pPara->GetSilverBullet();
                         pNumbering = pPara->GetParaNumbering();
 
-                        if (*(pPara->GetObjectID()) != *(this->GetObjectID()))
+                        if (pPara->GetObjectID() != this->GetObjectID())
                         {
                             if (!pParaSilverBullet)
                             {
@@ -625,7 +625,7 @@ void LwpPara::RegisterStyle()
                                         break;
                                     }
                                     if ((pNumbering->GetLevel() == nFoundLevel)
-                                        && (*(pParaSilverBullet->GetObjectID()) != *(m_pSilverBullet->GetObjectID())
+                                        && (pParaSilverBullet->GetObjectID() != m_pSilverBullet->GetObjectID()
                                             || pNumbering->GetPosition() != nPosition))
                                     {
                                         break;
@@ -634,7 +634,7 @@ void LwpPara::RegisterStyle()
                                 else
                                 {
                                     if (pNumbering && pNumbering->GetLevel() < nFoundBound && pParaSilverBullet
-                                        &&  (*(pParaSilverBullet->GetObjectID()) != *(m_pSilverBullet->GetObjectID())
+                                        &&  (pParaSilverBullet->GetObjectID() != m_pSilverBullet->GetObjectID()
                                             || pNumbering->GetPosition() != nPosition))
                                     {
                                         nFoundBound = pNumbering->GetLevel();
@@ -659,7 +659,7 @@ void LwpPara::RegisterStyle()
                         if (m_pBullOver->IsSkip())
                             ;
                         else if ( pParaSilverBullet
-                            && *(pParaSilverBullet->GetObjectID()) == *(m_pSilverBullet->GetObjectID())
+                            && pParaSilverBullet->GetObjectID() == m_pSilverBullet->GetObjectID()
                             && pNumbering && nPosition == pNumbering->GetPosition())
                         {
                             if (bLesser)
@@ -690,10 +690,7 @@ void LwpPara::RegisterStyle()
                             }
                         }
 
-                        if (pPara->GetPrevious())
-                            pPrePara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj(VO_PARA).get());
-                        else
-                            pPrePara=NULL;
+                        pPrePara = dynamic_cast<LwpPara*>(pPara->GetPrevious().obj(VO_PARA).get());
 
                         if (!pPrePara)
                         {
@@ -748,9 +745,9 @@ void LwpPara::RegisterStyle()
     }
     //end add
 
-    if (noSpacing && GetPrevious())
+    if (noSpacing)
     {
-        LwpPara* pPrePara = dynamic_cast<LwpPara*>(GetPrevious()->obj().get());
+        LwpPara* pPrePara = dynamic_cast<LwpPara*>(GetPrevious().obj().get());
         if (pPrePara && pPrePara->GetBelowSpacing()!=0)
         {
             pOverStyle = new XFParaStyle;

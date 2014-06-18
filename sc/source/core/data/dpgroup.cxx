@@ -394,7 +394,7 @@ const std::vector<SCROW>& ScDPGroupDimension::GetColumnEntries(
     if (!maMemberEntries.empty())
         return maMemberEntries;
 
-    rCacheTable.getCache()->GetGroupDimMemberIds(nGroupDim, maMemberEntries);
+    rCacheTable.getCache().GetGroupDimMemberIds(nGroupDim, maMemberEntries);
     return maMemberEntries;
 }
 
@@ -558,7 +558,7 @@ const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn 
     {
         // dimension number is unchanged for numerical groups
         return pNumGroups[nColumn].GetNumEntries(
-            static_cast<SCCOL>(nColumn), GetCacheTable().getCache());
+            static_cast<SCCOL>(nColumn), &GetCacheTable().getCache());
     }
 
     return pSourceData->GetColumnEntries( nColumn );
@@ -675,7 +675,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
 
     // Go through all the filtered field names and process them appropriately.
 
-    const ScDPCache* pCache = GetCacheTable().getCache();
+    const ScDPCache& rCache = GetCacheTable().getCache();
     vector<ScDPFilteredCache::Criterion>::const_iterator itrEnd = rCriteria.end();
     GroupFieldMapType::const_iterator itrGrpEnd = aGroupFieldIds.end();
     for (vector<ScDPFilteredCache::Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
@@ -688,7 +688,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
             if (IsNumGroupDimension(itr->mnFieldIndex))
             {
                 // internal number group field
-                const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(itr->mnFieldIndex);
+                const ScDPNumGroupInfo* pNumInfo = rCache.GetNumGroupInfo(itr->mnFieldIndex);
                 if (!pNumInfo)
                     // Number group dimension without num info?  Something is wrong...
                     continue;
@@ -726,7 +726,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterio
             const ScDPGroupDimension* pGrpDim = itrGrp->second;
             long nSrcDim = pGrpDim->GetSourceDim();
             long nGrpDim = pGrpDim->GetGroupDim();
-            const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(nGrpDim);
+            const ScDPNumGroupInfo* pNumInfo = rCache.GetNumGroupInfo(nGrpDim);
 
             if (pGrpDim->IsDateDimension() && pNumInfo)
             {
@@ -833,7 +833,7 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
 {
     long nGroupedColumns = aGroups.size();
 
-    const ScDPCache* pCache = GetCacheTable().getCache();
+    const ScDPCache& rCache = GetCacheTable().getCache();
     vector<long>::const_iterator it = rDims.begin(), itEnd = rDims.end();
     for (size_t i = 0; it != itEnd; ++it, ++i)
     {
@@ -853,10 +853,10 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
                 if (pGroupItem)
                 {
                     rItems[i] =
-                        pCache->GetIdByItemData(nColumn, pGroupItem->GetName());
+                        rCache.GetIdByItemData(nColumn, pGroupItem->GetName());
                 }
                 else
-                    rItems[i] = pCache->GetIdByItemData(nColumn, rItem);
+                    rItems[i] = rCache.GetIdByItemData(nColumn, rItem);
             }
         }
         else if ( IsNumGroupDimension( nColumn ) )
@@ -864,7 +864,7 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
             bDateDim = pNumGroups[nColumn].IsDateDimension();
             if (!bDateDim)                         // date is handled below
             {
-                const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, rItems[i]);
+                const ScDPItemData* pData = rCache.GetItemDataById(nSourceDim, rItems[i]);
                 if (pData->GetType() == ScDPItemData::Value)
                 {
                     ScDPNumGroupInfo aNumInfo;
@@ -872,19 +872,19 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
                     double fGroupValue = ScDPUtil::getNumGroupStartValue(pData->GetValue(), aNumInfo);
                     ScDPItemData aItemData;
                     aItemData.SetRangeStart(fGroupValue);
-                    rItems[i] = pCache->GetIdByItemData(nSourceDim, aItemData);
+                    rItems[i] = rCache.GetIdByItemData(nSourceDim, aItemData);
                 }
                 // else (textual) keep original value
             }
         }
 
-        const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(nColumn);
+        const ScDPNumGroupInfo* pNumInfo = rCache.GetNumGroupInfo(nColumn);
 
         if (bDateDim && pNumInfo)
         {
             // This is a date group dimension.
-            sal_Int32 nDatePart = pCache->GetGroupType(nColumn);
-            const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, rItems[i]);
+            sal_Int32 nDatePart = rCache.GetGroupType(nColumn);
+            const ScDPItemData* pData = rCache.GetItemDataById(nSourceDim, rItems[i]);
             if (pData->GetType() == ScDPItemData::Value)
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
@@ -892,7 +892,7 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
                     pData->GetValue(), pNumInfo, nDatePart, pFormatter);
 
                 ScDPItemData aItem(nDatePart, nPartValue);
-                rItems[i] = pCache->GetIdByItemData(nColumn, aItem);
+                rItems[i] = rCache.GetIdByItemData(nColumn, aItem);
             }
         }
     }

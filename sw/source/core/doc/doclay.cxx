@@ -908,7 +908,7 @@ SwDrawFrmFmt* SwDoc::InsertDrawObj(
         eAnchorId = aAnch.GetAnchorId();
         if ( eAnchorId == FLY_AT_FLY )
         {
-            SwPosition aPos( *rRg.GetNode()->FindFlyStartNode() );
+            SwPosition aPos( *rRg.GetNode().FindFlyStartNode() );
             aAnch.SetAnchor( &aPos );
         }
         else

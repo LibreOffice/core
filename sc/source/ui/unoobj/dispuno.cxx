@@ -227,10 +227,10 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
     bool bDone = false;
     if ( pViewShell && aURL.Complete.equalsAscii(cURLInsertColumns) )
     {
-        ScViewData* pViewData = pViewShell->GetViewData();
-        ScAddress aPos( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
+        ScViewData& rViewData = pViewShell->GetViewData();
+        ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
 
-        ScDBDocFunc aFunc( *pViewData->GetDocShell() );
+        ScDBDocFunc aFunc( *rViewData.GetDocShell() );
         bDone = aFunc.DoImportUno( aPos, aArgs );
     }
     // cURLDocDataSource is never dispatched

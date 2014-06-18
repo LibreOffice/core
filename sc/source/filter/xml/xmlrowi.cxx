@@ -332,9 +332,9 @@ void ScXMLTableRowsContext::EndElement()
             {
                 ScXMLImport::MutexGuard aGuard(GetScImport());
                 ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nSheet, true));
-                ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
+                ScOutlineArray& rRowArray(pOutlineTable->GetRowArray());
                 bool bResized;
-                pRowArray->Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, true);
+                rRowArray.Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, true);
             }
         }
     }

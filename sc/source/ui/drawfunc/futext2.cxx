@@ -26,10 +26,10 @@
 
 SdrOutliner* FuText::MakeOutliner()
 {
-    ScViewData* pViewData = pViewShell->GetViewData();
+    ScViewData& rViewData = pViewShell->GetViewData();
     SdrOutliner* pOutl = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, pDrDoc);
 
-    pViewData->UpdateOutlinerFlags(*pOutl);
+    rViewData.UpdateOutlinerFlags(*pOutl);
 
     //  Die EditEngine benutzt beim RTF Export (Clipboard / Drag&Drop)
     //  den MapMode des RefDevices, um die Fontgroesse zu setzen

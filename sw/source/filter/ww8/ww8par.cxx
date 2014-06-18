@@ -2468,7 +2468,7 @@ void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
 
 void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
 {
-    SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
+    SwTxtNode* pTxt = pPaM->GetNode().GetTxtNode();
 
     const SwNumRule* pRule = NULL;
 
@@ -3432,7 +3432,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
     if (!nInTable)
     {
         bool IsTemp=true;
-        SwTxtNode* pTemp = pPaM->GetNode()->GetTxtNode();
+        SwTxtNode* pTemp = pPaM->GetNode().GetTxtNode();
         if (pTemp && pTemp->GetTxt().isEmpty()
                 && (bFirstPara || bFirstParaOfPage))
         {
@@ -3453,7 +3453,7 @@ bool SwWW8ImplReader::HandlePageBreakChar()
             bParaEndAdded = true;
             if (0 >= pPaM->GetPoint()->nContent.GetIndex())
             {
-                if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
+                if (SwTxtNode* pTxtNode = pPaM->GetNode().GetTxtNode())
                 {
                     pTxtNode->SetAttr(
                         *GetDfltAttr(RES_PARATR_NUMRULE));
@@ -3716,20 +3716,20 @@ long SwWW8ImplReader::ReadTextAttr(WW8_CP& rTxtPos, bool& rbStartLine)
     long nSkipChars = 0;
     WW8PLCFManResult aRes;
 
-    OSL_ENSURE(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
+    OSL_ENSURE(pPaM->GetNode().GetTxtNode(), "Missing txtnode");
     bool bStartAttr = pPlcxMan->Get(&aRes); // Get Attribute position again
     aRes.nAktCp = rTxtPos;                  // Current Cp position
 
     bool bNewSection = (aRes.nFlags & MAN_MASK_NEW_SEP) && !bIgnoreText;
     if ( bNewSection ) // New Section
     {
-        OSL_ENSURE(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
+        OSL_ENSURE(pPaM->GetNode().GetTxtNode(), "Missing txtnode");
         // Create PageDesc and fill it
         maSectionManager.CreateSep(rTxtPos, bPgSecBreak);
         // -> 0xc was a Sectionbreak, but not a Pagebreak;
         // Create PageDesc and fill it
         bPgSecBreak = false;
-        OSL_ENSURE(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
+        OSL_ENSURE(pPaM->GetNode().GetTxtNode(), "Missing txtnode");
     }
 
     // New paragraph over Plcx.Fkp.papx
@@ -3930,7 +3930,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
     while ( l<nStartCp+nTextLen )
     {
         ReadAttrs( nNext, l, bStartLine );// Takes SectionBreaks into account, too
-        OSL_ENSURE(pPaM->GetNode()->GetTxtNode(), "Missing txtnode");
+        OSL_ENSURE(pPaM->GetNode().GetTxtNode(), "Missing txtnode");
 
         if (mpPostProcessAttrsInfo != NULL)
             PostProcessAttrs();
@@ -3968,7 +3968,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
 
         if (pPreviousNode && bStartLine)
         {
-            SwTxtNode* pEndNd = pPaM->GetNode()->GetTxtNode();
+            SwTxtNode* pEndNd = pPaM->GetNode().GetTxtNode();
             const sal_Int32 nDropCapLen = pPreviousNode->GetTxt().getLength();
 
             // Need to reset the font size and text position for the dropcap
@@ -4001,7 +4001,7 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, ManTypes nType)
         else if (bDropCap)
         {
             // If we have found a dropcap store the textnode
-            pPreviousNode = pPaM->GetNode()->GetTxtNode();
+            pPreviousNode = pPaM->GetNode().GetTxtNode();
 
             const sal_uInt8 *pDCS;
 
@@ -5244,7 +5244,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                     for( sal_uInt16 nHintPos = 0; pHints && nHintPos < pHints->Count(); ++nHintPos)
                     {
                         const SwTxtAttr *pHt = (*pHints)[nHintPos];
-                        const sal_Int32 st = *(pHt->GetStart());
+                        const sal_Int32 st = pHt->GetStart();
                         if( pHt
                             && pHt->Which() == RES_TXTATR_FLYCNT
                             && (st >= ppBkmk->get()->GetMarkStart().nContent.GetIndex()) )

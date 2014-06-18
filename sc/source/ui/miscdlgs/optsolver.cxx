@@ -155,7 +155,7 @@ ScOptSolverDlg::ScOptSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     , maConditionError(ScGlobal::GetRscString(STR_INVALIDCONDITION))
 
     , mpDocShell(pDocSh)
-    , mpDoc(pDocSh->GetDocument())
+    , mrDoc(pDocSh->GetDocument())
     , mnCurTab(aCursorPos.Tab())
     , mpEdActive(NULL)
     , mbDlgLostFocus(false)
@@ -366,8 +366,8 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     {
         m_pRbMax->Check();
         OUString aCursorStr;
-        if ( !mpDoc->GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
-            aCursorStr = rCursorPos.Format(SCA_ABS, NULL, mpDoc->GetAddressConvention());
+        if ( !mrDoc.GetRangeAtBlock( ScRange(rCursorPos), &aCursorStr ) )
+            aCursorStr = rCursorPos.Format(SCA_ABS, NULL, mrDoc.GetAddressConvention());
         m_pEdObjectiveCell->SetRefString( aCursorStr );
         if ( nImplCount > 0 )
             maEngine = maImplNames[0];  // use first implementation
@@ -735,8 +735,8 @@ void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 bool ScOptSolverDlg::ParseRef( ScRange& rRange, const OUString& rInput, bool bAllowRange )
 {
     ScRangeUtil aRangeUtil;
-    ScAddress::Details aDetails(mpDoc->GetAddressConvention(), 0, 0);
-    sal_uInt16 nFlags = rRange.ParseAny( rInput, mpDoc, aDetails );
+    ScAddress::Details aDetails(mrDoc.GetAddressConvention(), 0, 0);
+    sal_uInt16 nFlags = rRange.ParseAny( rInput, &mrDoc, aDetails );
     if ( nFlags & SCA_VALID )
     {
         if ( (nFlags & SCA_TAB_3D) == 0 )
@@ -745,7 +745,7 @@ bool ScOptSolverDlg::ParseRef( ScRange& rRange, const OUString& rInput, bool bAl
             rRange.aEnd.SetTab( rRange.aStart.Tab() );
         return ( bAllowRange || rRange.aStart == rRange.aEnd );
     }
-    else if ( aRangeUtil.MakeRangeFromName( rInput, mpDoc, mnCurTab, rRange, RUTL_NAMES, aDetails ) )
+    else if ( aRangeUtil.MakeRangeFromName( rInput, &mrDoc, mnCurTab, rRange, RUTL_NAMES, aDetails ) )
         return ( bAllowRange || rRange.aStart == rRange.aEnd );
 
     return false;   // not recognized
@@ -800,7 +800,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
 
     // "changing cells" can be several ranges
     ScRangeList aVarRanges;
-    if ( !ParseWithNames( aVarRanges, m_pEdVariableCells->GetText(), mpDoc ) )
+    if ( !ParseWithNames( aVarRanges, m_pEdVariableCells->GetText(), &mrDoc ) )
     {
         ShowError( false, m_pEdVariableCells );
         return false;
@@ -863,7 +863,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
             {
                 sal_uInt32 nFormat = 0;     //! explicit language?
                 double fValue = 0.0;
-                if ( mpDoc->GetFormatTable()->IsNumberFormat( aConstrIter->aRightStr, nFormat, fValue ) )
+                if ( mrDoc.GetFormatTable()->IsNumberFormat( aConstrIter->aRightStr, nFormat, fValue ) )
                     aConstraint.Right <<= fValue;
                 else if ( aConstraint.Operator != sheet::SolverConstraintOperator_INTEGER &&
                           aConstraint.Operator != sheet::SolverConstraintOperator_BINARY )
@@ -911,7 +911,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         {
             sal_uInt32 nFormat = 0;     //! explicit language?
             double fValue = 0.0;
-            if ( mpDoc->GetFormatTable()->IsNumberFormat( aValStr, nFormat, fValue ) )
+            if ( mrDoc.GetFormatTable()->IsNumberFormat( aValStr, nFormat, fValue ) )
                 aConstraint.Right <<= fValue;
             else
             {
@@ -933,7 +933,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     {
         ScAddress aCellPos;
         ScUnoConversion::FillScAddress( aCellPos, aVariables[nVarPos] );
-        aOldValues[nVarPos] = mpDoc->GetValue( aCellPos );
+        aOldValues[nVarPos] = mrDoc.GetValue( aCellPos );
     }
 
     // create and initialize solver
@@ -993,7 +993,7 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
         //! else error?
 
         // take formatted result from document (result value from component is ignored)
-        OUString aResultStr = mpDoc->GetString(
+        OUString aResultStr = mrDoc.GetString(
             static_cast<SCCOL>(aObjective.Column), static_cast<SCROW>(aObjective.Row),
             static_cast<SCTAB>(aObjective.Sheet));
 

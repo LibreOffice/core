@@ -163,7 +163,7 @@ inline OUString LwpSilverBullet::GetBulletStyleName() const
 
 inline OUString LwpSilverBullet::GetNumberingName()
 {
-    return GetName()->str();
+    return GetName().str();
 }
 inline LwpPara* LwpSilverBullet::GetNumberingPara()
 {

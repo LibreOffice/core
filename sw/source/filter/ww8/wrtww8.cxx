@@ -2546,38 +2546,38 @@ void MSWordExportBase::WriteText()
            ( pCurPam->GetPoint()->nNode == pCurPam->GetMark()->nNode &&
              pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex() ) )
     {
-        SwNode * pNd = pCurPam->GetNode();
+        SwNode& rNd = pCurPam->GetNode();
 
-        if ( pNd->IsTxtNode() )
-            SectionBreaksAndFrames( *pNd->GetTxtNode() );
+        if ( rNd.IsTxtNode() )
+            SectionBreaksAndFrames( *rNd.GetTxtNode() );
 
         // output the various types of nodes
-        if ( pNd->IsCntntNode() )
+        if ( rNd.IsCntntNode() )
         {
-            SwCntntNode* pCNd = (SwCntntNode*)pNd;
+            SwCntntNode* pCNd = (SwCntntNode*)&rNd;
 
-            const SwPageDesc* pTemp = pNd->FindPageDesc(false);
+            const SwPageDesc* pTemp = rNd.FindPageDesc(false);
             if ( pTemp )
                 pAktPageDesc = pTemp;
 
             pCurPam->GetPoint()->nContent.Assign( pCNd, 0 );
             OutputContentNode( *pCNd );
         }
-        else if ( pNd->IsTableNode() )
+        else if ( rNd.IsTableNode() )
         {
-            mpTableInfo->processSwTable( &pNd->GetTableNode()->GetTable() );
+            mpTableInfo->processSwTable( &rNd.GetTableNode()->GetTable() );
         }
-        else if ( pNd->IsSectionNode() && TXT_MAINTEXT == nTxtTyp )
-            OutputSectionNode( *pNd->GetSectionNode() );
-        else if ( TXT_MAINTEXT == nTxtTyp && pNd->IsEndNode() &&
-                  pNd->StartOfSectionNode()->IsSectionNode() )
+        else if ( rNd.IsSectionNode() && TXT_MAINTEXT == nTxtTyp )
+            OutputSectionNode( *rNd.GetSectionNode() );
+        else if ( TXT_MAINTEXT == nTxtTyp && rNd.IsEndNode() &&
+                  rNd.StartOfSectionNode()->IsSectionNode() )
         {
-            const SwSection& rSect = pNd->StartOfSectionNode()->GetSectionNode()
+            const SwSection& rSect = rNd.StartOfSectionNode()->GetSectionNode()
                                         ->GetSection();
             if ( bStartTOX && TOX_CONTENT_SECTION == rSect.GetType() )
                 bStartTOX = false;
 
-            SwNodeIndex aIdx( *pNd, 1 );
+            SwNodeIndex aIdx( rNd, 1 );
             if ( aIdx.GetNode().IsEndNode() && aIdx.GetNode().StartOfSectionNode()->IsSectionNode() )
                 ;
             else if ( aIdx.GetNode().IsSectionNode() )
@@ -2634,16 +2634,16 @@ void MSWordExportBase::WriteText()
                 }
             }
         }
-        else if ( pNd->IsStartNode() )
+        else if ( rNd.IsStartNode() )
         {
-            OutputStartNode( *pNd->GetStartNode() );
+            OutputStartNode( *rNd.GetStartNode() );
         }
-        else if ( pNd->IsEndNode() )
+        else if ( rNd.IsEndNode() )
         {
-            OutputEndNode( *pNd->GetEndNode() );
+            OutputEndNode( *rNd.GetEndNode() );
         }
 
-        if ( pNd == &pNd->GetNodes().GetEndOfContent() )
+        if ( &rNd == &rNd.GetNodes().GetEndOfContent() )
             break;
 
         SwNode * pCurrentNode = &pCurPam->GetPoint()->nNode.GetNode();
@@ -2695,11 +2695,11 @@ bool MSWordExportBase::IsInTable() const
 
     if (pCurPam != NULL)
     {
-        SwNode * pNode = pCurPam->GetNode();
+        SwNode& rNode = pCurPam->GetNode();
 
-        if (pNode != NULL && mpTableInfo.get() != NULL)
+        if (mpTableInfo.get() != NULL)
         {
-            ww8::WW8TableNodeInfo::Pointer_t pTableNodeInfo = mpTableInfo->getTableNodeInfo(pNode);
+            ww8::WW8TableNodeInfo::Pointer_t pTableNodeInfo = mpTableInfo->getTableNodeInfo(&rNode);
 
             if (pTableNodeInfo.get() != NULL && pTableNodeInfo->getDepth() > 0)
             {
@@ -3425,7 +3425,7 @@ sal_uLong SwWW8Writer::WriteStorage()
 
     // Respect table at the beginning of the document
     {
-        SwTableNode * pTNd = pCurPam->GetNode()->FindTableNode();
+        SwTableNode* pTNd = pCurPam->GetNode().FindTableNode();
         if( pTNd && bWriteAll )
             // start with the table node !!
             pCurPam->GetPoint()->nNode = *pTNd;

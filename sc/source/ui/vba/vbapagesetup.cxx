@@ -82,8 +82,8 @@ OUString SAL_CALL ScVbaPageSetup::getPrintArea() throw (css::uno::RuntimeExcepti
             ScUnoConversion::FillScRange( aRange, aSeq[i] );
             aRangeList.Append( aRange );
         }
-        ScDocument* pDoc = excel::getDocShell( mxModel )->GetDocument();
-        aRangeList.Format( aPrintArea, nFlags, pDoc, formula::FormulaGrammar::CONV_XL_A1, ','  );
+        ScDocument& rDoc = excel::getDocShell( mxModel )->GetDocument();
+        aRangeList.Format( aPrintArea, nFlags, &rDoc, formula::FormulaGrammar::CONV_XL_A1, ','  );
     }
 
     return aPrintArea;

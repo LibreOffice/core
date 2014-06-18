@@ -166,7 +166,7 @@ void ScSpellDialogChildWindow::Init()
     if( (mpViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() )) == 0 )
         return;
 
-    mpViewData = mpViewShell->GetViewData();
+    mpViewData = &mpViewShell->GetViewData();
 
     // exit edit mode - TODO support spelling in edit mode
     if( mpViewData->HasEditView( mpViewData->GetActivePart() ) )
@@ -175,7 +175,7 @@ void ScSpellDialogChildWindow::Init()
     mxOldSel.reset( new ScSelectionState( *mpViewData ) );
 
     mpDocShell = mpViewData->GetDocShell();
-    mpDoc = mpDocShell->GetDocument();
+    mpDoc = &mpDocShell->GetDocument();
 
     const ScAddress& rCursor = mxOldSel->GetCellCursor();
     SCCOL nCol = rCursor.Col();

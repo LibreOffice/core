@@ -559,28 +559,28 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     else if( aFilterName.indexOf( "HTML" ) != -1 )
         nFormat = EE_FORMAT_HTML;
 
-    ::Outliner*    pDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
+    ::Outliner&    rDocliner = static_cast<OutlineView*>(mpView)->GetOutliner();
 
     std::vector<Paragraph*> aSelList;
-    pDocliner->GetView(0)->CreateSelectionList(aSelList);
+    rDocliner.GetView(0)->CreateSelectionList(aSelList);
 
     Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
     // what should we insert?
-    while (pPara && !pDocliner->HasParaFlag(pPara, PARAFLAG_ISPAGE))
-        pPara = pDocliner->GetParent(pPara);
+    while (pPara && !rDocliner.HasParaFlag(pPara, PARAFLAG_ISPAGE))
+        pPara = rDocliner.GetParent(pPara);
 
-    sal_Int32 nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
+    sal_Int32 nTargetPos = rDocliner.GetAbsPos(pPara) + 1;
 
     // apply layout of predecessor page
     sal_uInt16 nPage = 0;
-    pPara = pDocliner->GetParagraph( pDocliner->GetAbsPos( pPara ) - 1 );
+    pPara = rDocliner.GetParagraph( rDocliner.GetAbsPos( pPara ) - 1 );
     while (pPara)
     {
-        sal_Int32 nPos = pDocliner->GetAbsPos( pPara );
-        if ( pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
+        sal_Int32 nPos = rDocliner.GetAbsPos( pPara );
+        if ( rDocliner.HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
             nPage++;
-        pPara = pDocliner->GetParagraph( nPos - 1 );
+        pPara = rDocliner.GetParagraph( nPos - 1 );
     }
     SdPage* pPage = mpDoc->GetSdPage(nPage, PK_STANDARD);
     aLayoutName = pPage->GetLayoutName();
@@ -636,7 +636,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
         nNewPages = 0;
 
-        pDocliner->GetUndoManager().EnterListAction(
+        rDocliner.GetUndoManager().EnterListAction(
                                     SD_RESSTR(STR_UNDO_INSERT_FILE), OUString() );
 
         sal_Int32 nSourcePos = 0;
@@ -651,16 +651,16 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
             if (nSourcePos < nParaCount - 1 ||
                 !pOutliner->GetText(pSourcePara).isEmpty())
             {
-                pDocliner->Insert( pOutliner->GetText(pSourcePara), nTargetPos, nDepth );
+                rDocliner.Insert( pOutliner->GetText(pSourcePara), nTargetPos, nDepth );
                 OUString aStyleSheetName( pStyleSheet->GetName() );
                 aStyleSheetName = aStyleSheetName.copy( 0, aStyleSheetName.getLength()-1 );
                 aStyleSheetName += OUString::number( nDepth <= 0 ? 1 : nDepth+1 );
                 SfxStyleSheetBasePool* pStylePool = mpDoc->GetStyleSheetPool();
                 SfxStyleSheet* pOutlStyle = (SfxStyleSheet*) pStylePool->Find( aStyleSheetName, pStyleSheet->GetFamily() );
-                pDocliner->SetStyleSheet( nTargetPos, pOutlStyle );
+                rDocliner.SetStyleSheet( nTargetPos, pOutlStyle );
             }
 
-            if( pDocliner->HasParaFlag( pSourcePara, PARAFLAG_ISPAGE ) )
+            if( rDocliner.HasParaFlag( pSourcePara, PARAFLAG_ISPAGE ) )
             {
                 nNewPages++;
                 if( pProgress )
@@ -672,7 +672,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
             nSourcePos++;
         }
 
-        pDocliner->GetUndoManager().LeaveListAction();
+        rDocliner.GetUndoManager().LeaveListAction();
 
         pProgress.reset();
 

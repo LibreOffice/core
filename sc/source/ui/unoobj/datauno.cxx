@@ -994,13 +994,13 @@ ScFilterDescriptorBase::ScFilterDescriptorBase(ScDocShell* pDocShell) :
     pDocSh(pDocShell)
 {
     if (pDocSh)
-        pDocSh->GetDocument()->AddUnoObject(*this);
+        pDocSh->GetDocument().AddUnoObject(*this);
 }
 
 ScFilterDescriptorBase::~ScFilterDescriptorBase()
 {
     if (pDocSh)
-        pDocSh->GetDocument()->RemoveUnoObject(*this);
+        pDocSh->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScFilterDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -1356,8 +1356,8 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
     SCSIZE nCount = static_cast<SCSIZE>(aFilterFields.getLength());
     aParam.Resize( nCount );
 
-    ScDocument* pDoc = pDocSh->GetDocument();
-    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    svl::SharedStringPool& rPool = rDoc.GetSharedStringPool();
     const sheet::TableFilterField* pAry = aFilterFields.getConstArray();
     SCSIZE i;
     for (i=0; i<nCount; i++)
@@ -1376,7 +1376,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields(
         if (rItem.meType != ScQueryEntry::ByString)
         {
             OUString aStr;
-            pDoc->GetFormatTable()->GetInputLineString(rItem.mfVal, 0, aStr);
+            rDoc.GetFormatTable()->GetInputLineString(rItem.mfVal, 0, aStr);
             rItem.maString = rPool.intern(aStr);
         }
 
@@ -1418,7 +1418,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields2(
     SolarMutexGuard aGuard;
     ScQueryParam aParam;
     GetData(aParam);
-    fillQueryParam(aParam, pDocSh->GetDocument(), aFilterFields);
+    fillQueryParam(aParam, &pDocSh->GetDocument(), aFilterFields);
     PutData(aParam);
 }
 
@@ -1429,7 +1429,7 @@ void SAL_CALL ScFilterDescriptorBase::setFilterFields3(
     SolarMutexGuard aGuard;
     ScQueryParam aParam;
     GetData(aParam);
-    fillQueryParam(aParam, pDocSh->GetDocument(), aFilterFields);
+    fillQueryParam(aParam, &pDocSh->GetDocument(), aFilterFields);
     PutData(aParam);
 }
 
@@ -1621,7 +1621,7 @@ void ScDataPilotFilterDescriptor::PutData( const ScQueryParam& rParam )
         ScDPObject* pDPObj = pParent->GetDPObject();
         if (pDPObj)
         {
-            ScSheetSourceDesc aSheetDesc(pParent->GetDocShell()->GetDocument());
+            ScSheetSourceDesc aSheetDesc(&pParent->GetDocShell()->GetDocument());
             if (pDPObj->IsSheetData())
                 aSheetDesc = *pDPObj->GetSheetDesc();
             aSheetDesc.SetQueryParam(rParam);
@@ -1638,7 +1638,7 @@ ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const OUString& rNm) 
     bIsUnnamed(false),
     aTab( 0 )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab) :
@@ -1648,13 +1648,13 @@ ScDatabaseRangeObj::ScDatabaseRangeObj(ScDocShell* pDocSh, const SCTAB nTab) :
     bIsUnnamed(true),
     aTab( nTab )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScDatabaseRangeObj::~ScDatabaseRangeObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -1682,11 +1682,11 @@ ScDBData* ScDatabaseRangeObj::GetDBData_Impl() const
     {
         if (bIsUnnamed)
         {
-            pRet = pDocShell->GetDocument()->GetAnonymousDBData(aTab);
+            pRet = pDocShell->GetDocument().GetAnonymousDBData(aTab);
         }
         else
         {
-            ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
+            ScDBCollection* pNames = pDocShell->GetDocument().GetDBCollection();
             if (pNames)
             {
                 ScDBData* p = pNames->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aName));
@@ -2037,13 +2037,13 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
             aNewData.SetAutoFilter(bAutoFilter);
             ScRange aRange;
             aNewData.GetArea(aRange);
-            ScDocument* pDoc = pDocShell->GetDocument();
-            if (bAutoFilter && pDoc)
-                pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+            ScDocument& rDoc = pDocShell->GetDocument();
+            if (bAutoFilter)
+                rDoc.ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
                                      aRange.aEnd.Col(), aRange.aStart.Row(),
                                      aRange.aStart.Tab(), SC_MF_AUTO );
-            else  if (!bAutoFilter && pDoc)
-                pDoc->RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
+            else if (!bAutoFilter)
+                rDoc.RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
                                      aRange.aEnd.Col(), aRange.aStart.Row(),
                                      aRange.aStart.Tab(), SC_MF_AUTO );
             ScRange aPaintRange(aRange.aStart, aRange.aEnd);
@@ -2081,12 +2081,12 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
             sal_Int32 nRefresh = 0;
             if (aValue >>= nRefresh)
             {
-                ScDocument* pDoc = pDocShell->GetDocument();
+                ScDocument& rDoc = pDocShell->GetDocument();
                 aNewData.SetRefreshDelay(nRefresh);
-                if (pDoc && pDoc->GetDBCollection())
+                if (rDoc.GetDBCollection())
                 {
-                    aNewData.SetRefreshHandler( pDoc->GetDBCollection()->GetRefreshHandler() );
-                    aNewData.SetRefreshControl( pDoc->GetRefreshTimerControlAddress() );
+                    aNewData.SetRefreshHandler( rDoc.GetDBCollection()->GetRefreshHandler() );
+                    aNewData.SetRefreshControl( &rDoc.GetRefreshTimerControlAddress() );
                 }
             }
         }
@@ -2203,13 +2203,13 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangeObj::getSupportedServiceNames()
 ScDatabaseRangesObj::ScDatabaseRangesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScDatabaseRangesObj::~ScDatabaseRangesObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -2230,7 +2230,7 @@ ScDatabaseRangeObj* ScDatabaseRangesObj::GetObjectByIndex_Impl(size_t nIndex)
     if (!pDocShell)
         return NULL;
 
-    ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
+    ScDBCollection* pNames = pDocShell->GetDocument().GetDBCollection();
     if (!pNames)
         return NULL;
 
@@ -2307,7 +2307,7 @@ sal_Int32 SAL_CALL ScDatabaseRangesObj::getCount() throw(uno::RuntimeException, 
 
     if (pDocShell)
     {
-        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
+        ScDBCollection* pNames = pDocShell->GetDocument().GetDBCollection();
         if (pNames)
             return static_cast<sal_Int32>(pNames->getNamedDBs().size());
     }
@@ -2365,7 +2365,7 @@ uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
 
     if (pDocShell)
     {
-        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
+        ScDBCollection* pNames = pDocShell->GetDocument().GetDBCollection();
         if (pNames)
         {
             const ScDBCollection::NamedDBs& rDBs = pNames->getNamedDBs();
@@ -2389,7 +2389,7 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const OUString& aName )
 
     if (pDocShell)
     {
-        ScDBCollection* pNames = pDocShell->GetDocument()->GetDBCollection();
+        ScDBCollection* pNames = pDocShell->GetDocument().GetDBCollection();
         if (pNames)
             return pNames->getNamedDBs().findByUpperName(ScGlobal::pCharClass->uppercase(aName)) != NULL;
     }
@@ -2399,13 +2399,13 @@ sal_Bool SAL_CALL ScDatabaseRangesObj::hasByName( const OUString& aName )
 ScUnnamedDatabaseRangesObj::ScUnnamedDatabaseRangesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScUnnamedDatabaseRangesObj::~ScUnnamedDatabaseRangesObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScUnnamedDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -2429,7 +2429,7 @@ void ScUnnamedDatabaseRangesObj::setByTable( const table::CellRangeAddress& aRan
     bool bDone = false;
     if (pDocShell)
     {
-        if ( pDocShell->GetDocument()->GetTableCount() <= aRange.Sheet )
+        if ( pDocShell->GetDocument().GetTableCount() <= aRange.Sheet )
             throw lang::IndexOutOfBoundsException();
 
         ScDBDocFunc aFunc(*pDocShell);
@@ -2450,7 +2450,7 @@ uno::Any ScUnnamedDatabaseRangesObj::getByTable( sal_Int32 nTab )
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        if ( pDocShell->GetDocument()->GetTableCount() <= nTab )
+        if ( pDocShell->GetDocument().GetTableCount() <= nTab )
             throw lang::IndexOutOfBoundsException();
         uno::Reference<sheet::XDatabaseRange> xRange(
             new ScDatabaseRangeObj(pDocShell, static_cast<SCTAB>(nTab)));
@@ -2470,9 +2470,9 @@ sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-         if (pDocShell->GetDocument()->GetTableCount() <= nTab)
+         if (pDocShell->GetDocument().GetTableCount() <= nTab)
             throw lang::IndexOutOfBoundsException();
-        if (pDocShell->GetDocument()->GetAnonymousDBData((SCTAB) nTab))
+        if (pDocShell->GetDocument().GetAnonymousDBData((SCTAB) nTab))
             return true;
         return false;
     }

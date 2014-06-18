@@ -59,8 +59,8 @@ public:
 
     virtual ~SwFontObj();
 
-    inline       SwFont *GetFont()      { return &aSwFont; }
-    inline const SwFont *GetFont() const  { return &aSwFont; }
+    inline       SwFont& GetFont()        { return aSwFont; }
+    inline const SwFont& GetFont() const  { return aSwFont; }
     inline const SfxPoolItem** GetDefault() { return pDefaultArray; }
 };
 

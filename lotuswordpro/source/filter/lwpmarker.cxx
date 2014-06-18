@@ -351,10 +351,7 @@ bool LwpBookMark::IsRightMarker(LwpObjectID objMarker)
 
 OUString LwpBookMark::GetName()
 {
-    if (LwpDLNFVList::GetName())
-        return LwpDLNFVList::GetName()->str();
-    else
-        return OUString("");
+    return LwpDLNFVList::GetName().str();
 }
 
 LwpFieldMark::LwpFieldMark(LwpObjectHeader &objHdr, LwpSvStream *pStrm)

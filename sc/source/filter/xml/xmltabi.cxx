@@ -373,28 +373,28 @@ void ScXMLTableContext::EndElement()
     ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(nCurTab, false));
     if (pOutlineTable)
     {
-        ScOutlineArray* pColArray(pOutlineTable->GetColArray());
-        size_t nDepth = pColArray->GetDepth();
+        ScOutlineArray& rColArray(pOutlineTable->GetColArray());
+        size_t nDepth = rColArray.GetDepth();
         for (size_t i = 0; i < nDepth; ++i)
         {
-            size_t nCount = pColArray->GetCount(i);
+            size_t nCount = rColArray.GetCount(i);
             for (size_t j = 0; j < nCount; ++j)
             {
-                const ScOutlineEntry* pEntry = pColArray->GetEntry(i, j);
+                const ScOutlineEntry* pEntry = rColArray.GetEntry(i, j);
                 if (pEntry->IsHidden())
-                    pColArray->SetVisibleBelow(i, j, false);
+                    rColArray.SetVisibleBelow(i, j, false);
             }
         }
-        ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
-        nDepth = pRowArray->GetDepth();
+        ScOutlineArray& rRowArray(pOutlineTable->GetRowArray());
+        nDepth = rRowArray.GetDepth();
         for (size_t i = 0; i < nDepth; ++i)
         {
-            size_t nCount = pRowArray->GetCount(i);
+            size_t nCount = rRowArray.GetCount(i);
             for (size_t j = 0; j < nCount; ++j)
             {
-                const ScOutlineEntry* pEntry = pRowArray->GetEntry(i, j);
+                const ScOutlineEntry* pEntry = rRowArray.GetEntry(i, j);
                 if (pEntry->IsHidden())
-                    pRowArray->SetVisibleBelow(i, j, false);
+                    rRowArray.SetVisibleBelow(i, j, false);
             }
         }
     }

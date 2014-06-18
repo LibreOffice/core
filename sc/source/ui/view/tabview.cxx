@@ -167,8 +167,8 @@ static bool lcl_HasColOutline( const ScViewData& rViewData )
     const ScOutlineTable* pTable = rViewData.GetDocument()->GetOutlineTable(rViewData.GetTabNo());
     if (pTable)
     {
-        const ScOutlineArray* pArray = pTable->GetColArray();
-        if ( pArray->GetDepth() > 0 )
+        const ScOutlineArray& rArray = pTable->GetColArray();
+        if ( rArray.GetDepth() > 0 )
             return true;
     }
     return false;
@@ -179,8 +179,8 @@ static bool lcl_HasRowOutline( const ScViewData& rViewData )
     const ScOutlineTable* pTable = rViewData.GetDocument()->GetOutlineTable(rViewData.GetTabNo());
     if (pTable)
     {
-        const ScOutlineArray* pArray = pTable->GetRowArray();
-        if ( pArray->GetDepth() > 0 )
+        const ScOutlineArray& rArray = pTable->GetRowArray();
+        if ( rArray.GetDepth() > 0 )
             return true;
     }
     return false;
@@ -706,8 +706,8 @@ void ScTabView::UpdateVarZoom()
     if ( eZoomType != SVX_ZOOM_PERCENT && !bInZoomUpdate )
     {
         bInZoomUpdate = true;
-        const Fraction& rOldX = GetViewData()->GetZoomX();
-        const Fraction& rOldY = GetViewData()->GetZoomY();
+        const Fraction& rOldX = GetViewData().GetZoomX();
+        const Fraction& rOldY = GetViewData().GetZoomY();
         long nOldPercent = ( rOldY.GetNumerator() * 100 ) / rOldY.GetDenominator();
         sal_uInt16 nNewZoom = CalcZoom( eZoomType, (sal_uInt16)nOldPercent );
         Fraction aNew( nNewZoom, 100 );

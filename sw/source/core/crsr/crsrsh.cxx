@@ -353,7 +353,7 @@ bool SwCrsrShell::LeftRight( bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
     // to the left will simply set the bInFrontOfLabel flag:
     else if ( bLeft && 0 == pShellCrsr->GetPoint()->nContent.GetIndex() &&
              !pShellCrsr->IsInFrontOfLabel() && !pShellCrsr->HasMark() &&
-             0 != ( pTxtNd = pShellCrsr->GetNode()->GetTxtNode() ) &&
+             0 != ( pTxtNd = pShellCrsr->GetNode().GetTxtNode() ) &&
              pTxtNd->HasVisibleNumberingOrBullet() )
     {
         SetInFrontOfLabel( true );
@@ -405,7 +405,7 @@ void SwCrsrShell::MarkListLevel( const OUString& sListId,
 
 void SwCrsrShell::UpdateMarkedListLevel()
 {
-    SwTxtNode * pTxtNd = _GetCrsr()->GetNode()->GetTxtNode();
+    SwTxtNode * pTxtNd = _GetCrsr()->GetNode().GetTxtNode();
 
     if ( pTxtNd )
     {
@@ -547,7 +547,7 @@ bool SwCrsrShell::LRMargin( bool bLeft, bool bAPI)
 
     if ( bLeft && !bTableMode && bRet && bWasAtLM && !_GetCrsr()->HasMark() )
     {
-        const SwTxtNode * pTxtNd = _GetCrsr()->GetNode()->GetTxtNode();
+        const SwTxtNode * pTxtNd = _GetCrsr()->GetNode().GetTxtNode();
         if ( pTxtNd && pTxtNd->HasVisibleNumberingOrBullet() )
             SetInFrontOfLabel( true );
     }
@@ -734,7 +734,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, bool bOnlyText, bool bBlock )
                                     bOnlyText ?  MV_SETONLYTEXT : MV_NONE );
     aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
 
-    SwTxtNode * pTxtNd = pCrsr->GetNode()->GetTxtNode();
+    SwTxtNode * pTxtNd = pCrsr->GetNode().GetTxtNode();
 
     if ( pTxtNd && !IsTableMode() &&
         // #i37515# No bInFrontOfLabel during selection
@@ -1405,8 +1405,8 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
     if( pTstCrsr->HasMark() && !m_pBlockCrsr &&
         mpDoc->IsIdxInTbl( pTstCrsr->GetPoint()->nNode ) &&
           ( m_pTblCrsr ||
-            pTstCrsr->GetNode( true )->StartOfSectionNode() !=
-            pTstCrsr->GetNode( false )->StartOfSectionNode() ) && !mbSelectAll)
+            pTstCrsr->GetNode( true ).StartOfSectionNode() !=
+            pTstCrsr->GetNode( false ).StartOfSectionNode() ) && !mbSelectAll)
     {
         SwShellCrsr* pITmpCrsr = getShellCrsr( true );
         Point aTmpPt( pITmpCrsr->GetPtPos() );
@@ -1572,7 +1572,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, bool bIdleEnd )
     {
         SwShellCrsr* pShellCrsr = getShellCrsr( true );
         bool bChgState = true;
-        const SwSectionNode* pSectNd = pShellCrsr->GetNode()->FindSectionNode();
+        const SwSectionNode* pSectNd = pShellCrsr->GetNode().FindSectionNode();
         if( pSectNd && ( pSectNd->GetSection().IsHiddenFlag() ||
             ( !IsReadOnlyAvailable() &&
               pSectNd->GetSection().IsProtectFlag() &&
@@ -2236,7 +2236,7 @@ OUString SwCrsrShell::GetSelTxt() const
     if( m_pCurCrsr->GetPoint()->nNode.GetIndex() ==
         m_pCurCrsr->GetMark()->nNode.GetIndex() )
     {
-        SwTxtNode* pTxtNd = m_pCurCrsr->GetNode()->GetTxtNode();
+        SwTxtNode* pTxtNd = m_pCurCrsr->GetNode().GetTxtNode();
         if( pTxtNd )
         {
             const sal_Int32 nStt = m_pCurCrsr->Start()->nContent.GetIndex();
@@ -2254,7 +2254,7 @@ OUString SwCrsrShell::GetText() const
     if( m_pCurCrsr->GetPoint()->nNode.GetIndex() ==
         m_pCurCrsr->GetMark()->nNode.GetIndex() )
     {
-        SwTxtNode* pTxtNd = m_pCurCrsr->GetNode()->GetTxtNode();
+        SwTxtNode* pTxtNd = m_pCurCrsr->GetNode().GetTxtNode();
         if( pTxtNd )
             aTxt = pTxtNd->GetTxt().copy(
                     m_pCurCrsr->GetPoint()->nContent.GetIndex() );
@@ -2843,22 +2843,22 @@ bool SwCrsrShell::FindValidCntntNode( bool bOnlyText )
 
         // move forward into non-protected area.
         SwPaM aPam( rNdIdx.GetNode(), 0 );
-        while( aPam.GetNode()->IsProtect() &&
+        while( aPam.GetNode().IsProtect() &&
                aPam.Move( fnMoveForward, fnGoCntnt ) )
             ; // nothing to do in the loop; the aPam.Move does the moving!
 
         // didn't work? then go backwards!
-        if( aPam.GetNode()->IsProtect() )
+        if( aPam.GetNode().IsProtect() )
         {
             SwPaM aTmpPaM( rNdIdx.GetNode(), 0 );
             aPam = aTmpPaM;
-            while( aPam.GetNode()->IsProtect() &&
+            while( aPam.GetNode().IsProtect() &&
                    aPam.Move( fnMoveBackward, fnGoCntnt ) )
                 ; // nothing to do in the loop; the aPam.Move does the moving!
         }
 
         // if we're successful, set the new position
-        if( ! aPam.GetNode()->IsProtect() )
+        if( ! aPam.GetNode().IsProtect() )
         {
             *m_pCurCrsr->GetPoint() = *aPam.GetPoint();
         }

@@ -213,7 +213,7 @@ void ScDocShell::DoEnterHandler()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if (pViewSh)
-        if (pViewSh->GetViewData()->GetDocShell() == this)
+        if (pViewSh->GetViewData().GetDocShell() == this)
             SC_MOD()->InputEnterHandler();
 }
 
@@ -223,7 +223,7 @@ SCTAB ScDocShell::GetSaveTab()
     ScTabViewShell* pSh = GetBestViewShell();
     if (pSh)
     {
-        const ScMarkData& rMark = pSh->GetViewData()->GetMarkData();
+        const ScMarkData& rMark = pSh->GetViewData().GetMarkData();
         nTab = rMark.GetFirstSelected();
     }
     return nTab;
@@ -423,7 +423,7 @@ void processDataStream( ScDocShell& rShell, const sc::ImportPostProcessData& rDa
 
     sc::DataStream* pStrm = new sc::DataStream(&rShell, r.maURL, aTopRange, nLimit, eMove, 0);
     pStrm->SetRefreshOnEmptyLine(r.mbRefreshOnEmpty);
-    sc::DocumentLinkManager& rMgr = rShell.GetDocument()->GetDocLinkManager();
+    sc::DocumentLinkManager& rMgr = rShell.GetDocument().GetDocLinkManager();
     rMgr.setDataStream(pStrm);
 }
 
@@ -933,7 +933,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
             case SFX_EVENT_SAVEASDOC:
                 {
-                    if ( GetDocument()->GetExternalRefManager()->containsUnsavedReferences() )
+                    if ( GetDocument().GetExternalRefManager()->containsUnsavedReferences() )
                     {
                         WarningBox aBox( GetActiveDialogParent(), WinBits( WB_YES_NO ),
                                 ScGlobal::GetRscString( STR_UNSAVED_EXT_REF ) );
@@ -2223,7 +2223,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             ScExtDocOptions* pExtDocOpt = aDocument.GetExtDocOptions();
             if( !pExtDocOpt )
                 aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
-            pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
+            pViewShell->GetViewData().WriteExtOptions( *pExtDocOpt );
 
             /*  #i104990# If the imported document contains a medium
                 password, determine if we can save it, otherwise ask the users
@@ -3068,43 +3068,43 @@ void ScDocShell::UseSheetSaveEntries()
 ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
         :
         rDocShell( rDS ),
-        mpProtector(new ScRefreshTimerProtector(rDS.GetDocument()->GetRefreshTimerControlAddress()))
+        mpProtector(new ScRefreshTimerProtector(rDS.GetDocument().GetRefreshTimerControlAddress()))
 {
-    ScDocument* pDoc = rDocShell.GetDocument();
-    bAutoCalcShellDisabled = pDoc->IsAutoCalcShellDisabled();
-    bIdleEnabled = pDoc->IsIdleEnabled();
-    pDoc->SetAutoCalcShellDisabled( true );
-    pDoc->EnableIdle(false);
+    ScDocument& rDoc = rDocShell.GetDocument();
+    bAutoCalcShellDisabled = rDoc.IsAutoCalcShellDisabled();
+    bIdleEnabled = rDoc.IsIdleEnabled();
+    rDoc.SetAutoCalcShellDisabled( true );
+    rDoc.EnableIdle(false);
 }
 
 
 ScDocShellModificator::~ScDocShellModificator()
 {
-    ScDocument* pDoc = rDocShell.GetDocument();
-    pDoc->SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
+    ScDocument& rDoc = rDocShell.GetDocument();
+    rDoc.SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
     if ( !bAutoCalcShellDisabled && rDocShell.IsDocumentModifiedPending() )
         rDocShell.SetDocumentModified();    // last one shuts off the lights
-    pDoc->EnableIdle(bIdleEnabled);
+    rDoc.EnableIdle(bIdleEnabled);
 }
 
 
 void ScDocShellModificator::SetDocumentModified()
 {
-    ScDocument* pDoc = rDocShell.GetDocument();
-    pDoc->ClearFormulaContext();
-    if ( !pDoc->IsImportingXML() )
+    ScDocument& rDoc = rDocShell.GetDocument();
+    rDoc.ClearFormulaContext();
+    if ( !rDoc.IsImportingXML() )
     {
         // AutoCalcShellDisabled temporaer restaurieren
-        bool bDisabled = pDoc->IsAutoCalcShellDisabled();
-        pDoc->SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
+        bool bDisabled = rDoc.IsAutoCalcShellDisabled();
+        rDoc.SetAutoCalcShellDisabled( bAutoCalcShellDisabled );
         rDocShell.SetDocumentModified();
-        pDoc->SetAutoCalcShellDisabled( bDisabled );
+        rDoc.SetAutoCalcShellDisabled( bDisabled );
     }
     else
     {
         // uno broadcast is necessary for api to work
         // -> must also be done during xml import
-        pDoc->BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+        rDoc.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
     }
 }
 

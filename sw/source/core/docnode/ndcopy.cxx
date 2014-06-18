@@ -754,7 +754,7 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
                 pDoc->GetNodes().GoPrevious( &aPam.GetMark()->nNode );
             pNode->MakeEndIndex( &aPam.GetMark()->nContent );
 
-            aPam.GetPoint()->nNode = *aPam.GetNode()->StartOfSectionNode();
+            aPam.GetPoint()->nNode = *aPam.GetNode().StartOfSectionNode();
             pNode = pDoc->GetNodes().GoNext( &aPam.GetPoint()->nNode );
             pNode->MakeStartIndex( &aPam.GetPoint()->nContent );
             // move to desired position

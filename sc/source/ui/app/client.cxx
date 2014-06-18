@@ -98,7 +98,7 @@ void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
             aLogicRect.SetPos( aOldRect.TopLeft() );
     }
 
-    sal_uInt16 nTab = pViewSh->GetViewData()->GetTabNo();
+    sal_uInt16 nTab = pViewSh->GetViewData().GetTabNo();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     if ( pPage && aLogicRect != aOldRect )
     {
@@ -176,7 +176,7 @@ void ScClient::ObjectAreaChanged()
 //        SfxViewShell* pSfxViewSh = GetViewShell();
 //        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
         if (pViewSh)
-            pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
+            pViewSh->GetViewData().GetDocShell()->SetDrawModified();
     }
 
     if (pDrawObj)
@@ -236,7 +236,7 @@ void ScClient::ViewChanged()
                 pDrawObj->SetLogicRect( aLogicRect );
 
                 // set document modified (SdrModel::SetChanged is not used)
-                pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
+                pViewSh->GetViewData().GetDocShell()->SetDrawModified();
             }
         }
     }

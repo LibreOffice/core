@@ -40,9 +40,9 @@ public:
 
 PropertyMapEntry const * PropertySetHelperImpl::find( const OUString& aName ) const throw()
 {
-    PropertyMap::const_iterator aIter = mpInfo->getPropertyMap()->find( aName );
+    PropertyMap::const_iterator aIter = mpInfo->getPropertyMap().find( aName );
 
-    if( mpInfo->getPropertyMap()->end() != aIter )
+    if( mpInfo->getPropertyMap().end() != aIter )
     {
         return (*aIter).second;
     }

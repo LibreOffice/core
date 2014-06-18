@@ -266,7 +266,7 @@ void SwDoDrawCapital::Do()
     }
 
     OSL_ENSURE( pUpperFnt, "No upper font, dying soon!");
-    rInf.Shift( pUpperFnt->GetFont()->GetOrientation() );
+    rInf.Shift( pUpperFnt->GetFont().GetOrientation() );
     rInf.SetWidth( nOrgWidth );
 }
 

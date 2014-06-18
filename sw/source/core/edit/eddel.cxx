@@ -45,9 +45,9 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
     // 1. Point and Mark are in one box, delete selection as usual
     // 2. Point and Mark are in different boxes, search all selected boxes and delete content
     // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
-    if( rPam.GetNode()->FindTableNode() &&
-        rPam.GetNode()->StartOfSectionNode() !=
-        rPam.GetNode(false)->StartOfSectionNode() && !bSelectAll )
+    if( rPam.GetNode().FindTableNode() &&
+        rPam.GetNode().StartOfSectionNode() !=
+        rPam.GetNode(false).StartOfSectionNode() && !bSelectAll )
     {
         // group the Undo in the table
         if( pUndo && !*pUndo )
@@ -59,8 +59,8 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
         const SwPosition* pEndSelPos = rPam.End();
         do {
             aDelPam.SetMark();
-            SwNode* pNd = aDelPam.GetNode();
-            const SwNode& rEndNd = *pNd->EndOfSectionNode();
+            SwNode& rNd = aDelPam.GetNode();
+            const SwNode& rEndNd = *rNd.EndOfSectionNode();
             if( pEndSelPos->nNode.GetIndex() <= rEndNd.GetIndex() )
             {
                 *aDelPam.GetPoint() = *pEndSelPos;
@@ -73,8 +73,8 @@ void SwEditShell::DeleteSel( SwPaM& rPam, bool* pUndo )
                 aDelPam.Move( fnMoveBackward, fnGoCntnt );
             }
             // skip protected boxes
-            if( !pNd->IsCntntNode() ||
-                !pNd->IsInProtectSect() )
+            if( !rNd.IsCntntNode() ||
+                !rNd.IsInProtectSect() )
             {
                 // delete everything
                 GetDoc()->DeleteAndJoin( aDelPam );

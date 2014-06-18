@@ -1351,7 +1351,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                         pCnt->GetNode()->GetTxtNode()->GetTxtAttrAt( pPos->nContent.GetIndex(), RES_TXTATR_INPUTFIELD, SwTxtNode::PARENT );
                     if ( pTxtInputFld != NULL )
                     {
-                        pPos->nContent = *(pTxtInputFld->GetStart());
+                        pPos->nContent = pTxtInputFld->GetStart();
                     }
                 }
                 ResetLastCharRectHeight();

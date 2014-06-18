@@ -194,7 +194,7 @@ bool SwFlowFrm::IsKeep( const SwAttrSet& rAttrs, bool bCheckIfLastRowShouldKeep 
         {
             SwFrm *pNxt;
             if( 0 != (pNxt = m_rThis.FindNextCnt()) &&
-                (!m_pFollow || pNxt != m_pFollow->GetFrm()))
+                (!m_pFollow || pNxt != &m_pFollow->GetFrm()))
             {
                 // #135914#
                 // The last row of a table only keeps with the next content
@@ -277,7 +277,7 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
         // do a test formatting, because paragraph bound objects wouldn't
         // be properly considered, and character bound objects shouldn't
         // be test formatted at all.
-        if( pTmp->GetFrm()->GetDrawObjs() )
+        if( pTmp->GetFrm().GetDrawObjs() )
             nRet = 1;
         pTmp = pTmp->GetFollow();
     } while ( !nRet && pTmp );
@@ -831,10 +831,10 @@ bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
     // Did we find ourselves?
     if( pNewFlow == pFlow )
         pNewFlow = NULL;
-    if ( pNewFlow && pNewFlow->GetFrm()->IsInTab() )
-        pNewFlow = pNewFlow->GetFrm()->FindTabFrm();
+    if ( pNewFlow && pNewFlow->GetFrm().IsInTab() )
+        pNewFlow = pNewFlow->GetFrm().FindTabFrm();
     const SwPageDesc *pNewDesc= ( pNewFlow && !pNewFlow->IsFollow() )
-            ? pNewFlow->GetFrm()->GetAttrSet()->GetPageDesc().GetPageDesc() : 0;
+            ? pNewFlow->GetFrm().GetAttrSet()->GetPageDesc().GetPageDesc() : 0;
 
     return (pNew->GetPageDesc() != pDesc)   //  own desc ?
         || (pNew->GetFmt() !=

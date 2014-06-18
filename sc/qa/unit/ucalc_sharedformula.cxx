@@ -465,13 +465,13 @@ void Test::testSharedFormulasRefUpdateExternal()
 
     SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
-    ScDocument* pExtDoc = xExtDocSh->GetDocument();
+    ScDocument& rExtDoc = xExtDocSh->GetDocument();
 
     // Populate A1:A3.
-    pExtDoc->InsertTab(0, "Data");
-    pExtDoc->SetString(ScAddress(0,0,0), "A");
-    pExtDoc->SetString(ScAddress(0,1,0), "B");
-    pExtDoc->SetString(ScAddress(0,2,0), "C");
+    rExtDoc.InsertTab(0, "Data");
+    rExtDoc.SetString(ScAddress(0,0,0), "A");
+    rExtDoc.SetString(ScAddress(0,1,0), "B");
+    rExtDoc.SetString(ScAddress(0,2,0), "C");
 
     // Insert formula cells in A7:A10 of the host document, referencing A1:A3
     // of the external document.

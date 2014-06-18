@@ -225,8 +225,8 @@ private:
     static void InitInterface_Impl();
 
 public:
-    inline Window*          GetFrameWindow() const { return &(GetViewFrame())->GetWindow(); }
-    inline SwViewShell*       GetViewShell() const { return pViewWin->GetViewShell(); }
+    inline Window&          GetFrameWindow() const { return GetViewFrame()->GetWindow(); }
+    inline SwViewShell*     GetViewShell() const { return pViewWin->GetViewShell(); }
     inline const Rectangle& GetVisArea() const { return aVisArea; }
     inline void             GrabFocusViewWin() { pViewWin->GrabFocus(); }
     inline void             RepaintCoreRect( const SwRect& rRect )
@@ -297,7 +297,7 @@ public:
 
 inline void SwPagePreview::AdjustEditWin()
 {
-    OuterResizePixel( Point(), GetFrameWindow()->GetOutputSizePixel() );
+    OuterResizePixel( Point(), GetFrameWindow().GetOutputSizePixel() );
 }
 
 #endif

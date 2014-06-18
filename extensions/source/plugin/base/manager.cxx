@@ -149,7 +149,7 @@ XPlugin_Impl* XPluginManager_Impl::getXPluginFromNPP( NPP instance )
     for( iter = PluginManager::get().getPlugins().begin();
          iter != PluginManager::get().getPlugins().end(); ++iter )
     {
-        if( (*iter)->getNPPInstance() == instance )
+        if( &(*iter)->getNPPInstance() == instance )
             return *iter;
     }
 

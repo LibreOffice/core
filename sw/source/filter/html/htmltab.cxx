@@ -5344,7 +5344,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                     SwStartNode *pTblStNd = pTCntxt->GetTableNode();
 
                     OSL_ENSURE( pTblStNd, "Wo ist der Tabellen-Node" );
-                    OSL_ENSURE( pTblStNd==pPam->GetNode()->FindTableNode(),
+                    OSL_ENSURE( pTblStNd==pPam->GetNode().FindTableNode(),
                             "Stehen wir in der falschen Tabelle?" );
 
                     SwNode* pNd;

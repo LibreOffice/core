@@ -2239,7 +2239,7 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
             if (pFileName->equalsIgnoreAsciiCase(pMedium->GetName()))
             {
                 // Found !
-                pSrcDoc = pShell->GetDocument();
+                pSrcDoc = &pShell->GetDocument();
                 break;
             }
         }
@@ -2254,7 +2254,7 @@ ScDocument* ScExternalRefManager::getInMemorySrcDocument(sal_uInt16 nFileId)
                 aSrcDoc.maShell = pShell;
                 maUnsavedDocShells.insert(DocShellMap::value_type(nFileId, aSrcDoc));
                 StartListening(*pShell);
-                pSrcDoc = pShell->GetDocument();
+                pSrcDoc = &pShell->GetDocument();
                 break;
             }
         }
@@ -2279,7 +2279,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
 
         SfxObjectShell* p = itr->second.maShell;
         itr->second.maLastAccess = Time( Time::SYSTEM );
-        return static_cast<ScDocShell*>(p)->GetDocument();
+        return &static_cast<ScDocShell*>(p)->GetDocument();
     }
 
     itrEnd = maUnsavedDocShells.end();
@@ -2290,7 +2290,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
 
         SfxObjectShell* p = itr->second.maShell;
         itr->second.maLastAccess = Time( Time::SYSTEM );
-        return static_cast<ScDocShell*>(p)->GetDocument();
+        return &static_cast<ScDocShell*>(p)->GetDocument();
     }
 
     const OUString* pFile = getExternalFileName(nFileId);
@@ -2313,7 +2313,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
         return NULL;
     }
 
-    return cacheNewDocShell(nFileId, aSrcDoc);
+    return &cacheNewDocShell(nFileId, aSrcDoc);
 }
 
 SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUString& rFilter)
@@ -2376,17 +2376,17 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     // increment the recursive link count of the source document.
     ScExtDocOptions* pExtOpt = mpDoc->GetExtDocOptions();
     sal_uInt32 nLinkCount = pExtOpt ? pExtOpt->GetDocSettings().mnLinkCnt : 0;
-    ScDocument* pSrcDoc = pNewShell->GetDocument();
-    pSrcDoc->EnableExecuteLink(false); // to prevent circular access of external references.
-    pSrcDoc->EnableUndo(false);
-    pSrcDoc->EnableAdjustHeight(false);
-    pSrcDoc->EnableUserInteraction(false);
+    ScDocument& rSrcDoc = pNewShell->GetDocument();
+    rSrcDoc.EnableExecuteLink(false); // to prevent circular access of external references.
+    rSrcDoc.EnableUndo(false);
+    rSrcDoc.EnableAdjustHeight(false);
+    rSrcDoc.EnableUserInteraction(false);
 
-    ScExtDocOptions* pExtOptNew = pSrcDoc->GetExtDocOptions();
+    ScExtDocOptions* pExtOptNew = rSrcDoc.GetExtDocOptions();
     if (!pExtOptNew)
     {
         pExtOptNew = new ScExtDocOptions;
-        pSrcDoc->SetExtDocOptions(pExtOptNew);
+        rSrcDoc.SetExtDocOptions(pExtOptNew);
     }
     pExtOptNew->GetDocSettings().mnLinkCnt = nLinkCount + 1;
 
@@ -2406,7 +2406,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     return aRef;
 }
 
-ScDocument* ScExternalRefManager::cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell )
+ScDocument& ScExternalRefManager::cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell )
 {
     if (mbDocTimerEnabled && maDocShells.empty())
         // If this is the first source document insertion, start up the timer.
@@ -2414,9 +2414,9 @@ ScDocument* ScExternalRefManager::cacheNewDocShell( sal_uInt16 nFileId, SrcShell
 
     maDocShells.insert(DocShellMap::value_type(nFileId, rSrcShell));
     SfxObjectShell& rShell = *rSrcShell.maShell;
-    ScDocument* pSrcDoc = static_cast<ScDocShell&>(rShell).GetDocument();
-    initDocInCache(maRefCache, pSrcDoc, nFileId);
-    return pSrcDoc;
+    ScDocument& rSrcDoc = static_cast<ScDocShell&>(rShell).GetDocument();
+    initDocInCache(maRefCache, &rSrcDoc, nFileId);
+    return rSrcDoc;
 }
 
 bool ScExternalRefManager::isFileLoadable(const OUString& rFile) const
@@ -2742,13 +2742,13 @@ bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
         return false;
 
     ScDocShell& rDocSh = static_cast<ScDocShell&>(*xDocShell);
-    ScDocument* pSrcDoc = rDocSh.GetDocument();
+    ScDocument& rSrcDoc = rDocSh.GetDocument();
 
     // Clear the existing cache, and refill it.  Make sure we keep the
     // existing cache table instances here.
     maRefCache.clearCacheTables(nFileId);
     RefCacheFiller aAction(mpDoc->GetSharedStringPool(), maRefCache, nFileId);
-    aCachedArea.executeColumnAction(*pSrcDoc, aAction);
+    aCachedArea.executeColumnAction(rSrcDoc, aAction);
 
     DocShellMap::iterator it = maDocShells.find(nFileId);
     if (it != maDocShells.end())

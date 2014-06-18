@@ -108,9 +108,9 @@ void OWizColumnSelect::Reset()
     m_pParent->m_mNameMapping.clear();
 
     // insert the source columns in the left listbox
-    const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
-    ODatabaseExport::TColumnVector::const_iterator aIter = pSrcColumns->begin();
-    ODatabaseExport::TColumnVector::const_iterator aEnd = pSrcColumns->end();
+    const ODatabaseExport::TColumnVector& rSrcColumns = m_pParent->getSrcVector();
+    ODatabaseExport::TColumnVector::const_iterator aIter = rSrcColumns.begin();
+    ODatabaseExport::TColumnVector::const_iterator aEnd = rSrcColumns.end();
 
     for(;aIter != aEnd;++aIter)
     {
@@ -127,15 +127,15 @@ void OWizColumnSelect::Reset()
 void OWizColumnSelect::ActivatePage( )
 {
     // if there are no dest columns reset the left side with the origibnal columns
-    if(m_pParent->getDestColumns()->empty())
+    if(m_pParent->getDestColumns().empty())
         Reset();
 
     clearListBox(*m_pNewColumnNames);
 
-    const ODatabaseExport::TColumnVector* pDestColumns = m_pParent->getDestVector();
+    const ODatabaseExport::TColumnVector& rDestColumns = m_pParent->getDestVector();
 
-    ODatabaseExport::TColumnVector::const_iterator aIter = pDestColumns->begin();
-    ODatabaseExport::TColumnVector::const_iterator aEnd = pDestColumns->end();
+    ODatabaseExport::TColumnVector::const_iterator aIter = rDestColumns.begin();
+    ODatabaseExport::TColumnVector::const_iterator aEnd = rDestColumns.end();
     for(;aIter != aEnd;++aIter)
     {
         sal_uInt16 nPos = m_pNewColumnNames->InsertEntry((*aIter)->first);
@@ -164,7 +164,7 @@ bool OWizColumnSelect::LeavePage()
     if  (   m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_NEXT
         ||  m_pParent->GetPressedButton() == OCopyTableWizard::WIZARD_FINISH
         )
-        return m_pParent->getDestColumns()->size() != 0;
+        return m_pParent->getDestColumns().size() != 0;
     else
         return true;
 }
@@ -331,15 +331,15 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
         OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
         if ( aIter == m_pParent->m_mNameMapping.end() )
             return; // do nothing
-        const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
-        ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
-        if ( aSrcIter != pSrcColumns->end() )
+        const ODatabaseExport::TColumns& rSrcColumns = m_pParent->getSourceColumns();
+        ODatabaseExport::TColumns::const_iterator aSrcIter = rSrcColumns.find((*aIter).first);
+        if ( aSrcIter != rSrcColumns.end() )
         {
             // we need also the old position of this column to insert it back on that position again
-            const ODatabaseExport::TColumnVector* pSrcVector = m_pParent->getSrcVector();
-            ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
-            OSL_ENSURE( aPos != pSrcVector->end(),"Invalid position for the iterator here!");
-            ODatabaseExport::TColumnVector::size_type nPos = (aPos - pSrcVector->begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - pSrcVector->begin()), _aCase);
+            const ODatabaseExport::TColumnVector& rSrcVector = m_pParent->getSrcVector();
+            ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(rSrcVector.begin(), rSrcVector.end(), aSrcIter);
+            OSL_ENSURE( aPos != rSrcVector.end(),"Invalid position for the iterator here!");
+            ODatabaseExport::TColumnVector::size_type nPos = (aPos - rSrcVector.begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - rSrcVector.begin()), _aCase);
 
             _pRight->SetEntryData( _pRight->InsertEntry( (*aIter).first, sal::static_int_cast< sal_uInt16 >(nPos)),aSrcIter->second );
             _rRightColumns.push_back((*aIter).first);
@@ -379,14 +379,14 @@ sal_uInt16 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
                                                                     );
 
             OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
-            const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
-            ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
-            if ( aSrcIter != pSrcColumns->end() )
+            const ODatabaseExport::TColumns& rSrcColumns = m_pParent->getSourceColumns();
+            ODatabaseExport::TColumns::const_iterator aSrcIter = rSrcColumns.find((*aIter).first);
+            if ( aSrcIter != rSrcColumns.end() )
             {
                 // we need also the old position of this column to insert it back on that position again
-                const ODatabaseExport::TColumnVector* pSrcVector = m_pParent->getSrcVector();
-                ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(pSrcVector->begin(),pSrcVector->end(),aSrcIter);
-                ODatabaseExport::TColumnVector::size_type nPos = aPos - pSrcVector->begin();
+                const ODatabaseExport::TColumnVector& rSrcVector = m_pParent->getSrcVector();
+                ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(rSrcVector.begin(), rSrcVector.end(), aSrcIter);
+                ODatabaseExport::TColumnVector::size_type nPos = aPos - rSrcVector.begin();
                 if( nPos < nCurrentPos)
                 {
                     nAdjustedPos++;

@@ -274,18 +274,16 @@ void ScVbaRange::fireChangeEvent()
 {
     if( ScVbaApplication::getDocumentEventsEnabled() )
     {
-        if( ScDocument* pDoc = getScDocument() )
+        ScDocument& rDoc = getScDocument();
+        uno::Reference< script::vba::XVBAEventProcessor > xVBAEvents = rDoc.GetVbaEventProcessor();
+        if( xVBAEvents.is() ) try
         {
-            uno::Reference< script::vba::XVBAEventProcessor > xVBAEvents = pDoc->GetVbaEventProcessor();
-            if( xVBAEvents.is() ) try
-            {
-                uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[ 0 ] <<= uno::Reference< excel::XRange >( this );
-                xVBAEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_CHANGE, aArgs );
-            }
-            catch( uno::Exception& )
-            {
-            }
+            uno::Sequence< uno::Any > aArgs( 1 );
+            aArgs[ 0 ] <<= uno::Reference< excel::XRange >( this );
+            xVBAEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_CHANGE, aArgs );
+        }
+        catch( uno::Exception& )
+        {
         }
     }
 }
@@ -426,17 +424,17 @@ uno::Reference< frame::XModel > getModelFromRange( const uno::Reference< table::
 	return getModelFromXIf( xIf );
 }
 
-ScDocument*
+ScDocument&
 getDocumentFromRange( const uno::Reference< table::XCellRange >& xRange )
 {
 	ScDocShell* pDocShell = getDocShellFromRange( xRange );
 	if ( !pDocShell )
             throw uno::RuntimeException("Failed to access underlying docshell from uno range object" );
-	ScDocument* pDoc = pDocShell->GetDocument();
-	return pDoc;
+    ScDocument& rDoc = pDocShell->GetDocument();
+    return rDoc;
 }
 
-ScDocument*
+ScDocument&
 ScVbaRange::getScDocument() throw (uno::RuntimeException)
 {
     if ( mxRanges.is() )
@@ -1157,12 +1155,11 @@ bool
 ScVbaRange::getCellRangesForAddress( sal_uInt16& rResFlags, const OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention& eConv, char cDelimiter )
 {
 
-    ScDocument* pDoc = NULL;
     if ( pDocSh )
     {
-        pDoc = pDocSh->GetDocument();
+        ScDocument& rDoc = pDocSh->GetDocument();
         sal_uInt16 nMask = SCA_VALID;
-        rResFlags = rCellRanges.Parse( sAddress, pDoc, nMask, eConv, 0, cDelimiter );
+        rResFlags = rCellRanges.Parse( sAddress, &rDoc, nMask, eConv, 0, cDelimiter );
         if ( rResFlags & SCA_VALID )
         {
             return true;
@@ -1203,17 +1200,14 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
         if ( !xNameAccess->hasByName( sAddress ) )
         {
             // try a local name
-            ScDocument* pDoc = pDocSh->GetDocument();
-            if ( pDoc )
+            ScDocument& rDoc = pDocSh->GetDocument();
+            SCTAB nCurTab = ScDocShell::GetCurTab();
+            ScRangeName* pRangeName = rDoc.GetRangeName(nCurTab);
+            if (pRangeName)
             {
-                SCTAB nCurTab = ScDocShell::GetCurTab();
-                ScRangeName* pRangeName = pDoc->GetRangeName(nCurTab);
-                if (pRangeName)
-                {
-                    bLocalName = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(sAddress)) != NULL;
-                    // TODO: Handle local names correctly.
-                    (void)bLocalName;
-                }
+                bLocalName = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(sAddress)) != NULL;
+                // TODO: Handle local names correctly.
+                (void)bLocalName;
             }
         }
         char aChar = 0;
@@ -1223,7 +1217,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
             sAddress = xNamed->getContent();
             // As the address comes from OOO, the addressing
             // style is may not be XL_A1
-            eConv = pDocSh->GetDocument()->GetAddressConvention();
+            eConv = pDocSh->GetDocument().GetAddressConvention();
             aChar = ';';
         }
 
@@ -1367,7 +1361,7 @@ util::TriState lclGetMergedState( const uno::Reference< table::XCellRange >& rxC
         of a merged range is part of this range are not covered. */
     ScRange aScRange;
     ScUnoConversion::FillScRange( aScRange, aRangeAddr );
-    bool bHasMerged = getDocumentFromRange( rxCellRange )->HasAttrib( aScRange, HASATTR_MERGED | HASATTR_OVERLAPPED );
+    bool bHasMerged = getDocumentFromRange( rxCellRange ).HasAttrib( aScRange, HASATTR_MERGED | HASATTR_OVERLAPPED );
     return bHasMerged ? util::TriState_INDETERMINATE : util::TriState_NO;
 }
 
@@ -1424,10 +1418,8 @@ static uno::Reference< XCollection >
 lcl_setupBorders( const uno::Reference< excel::XRange >& xParentRange, const uno::Reference<uno::XComponentContext>& xContext,  const uno::Reference< table::XCellRange >& xRange  ) throw( uno::RuntimeException )
 {
     uno::Reference< XHelperInterface > xParent( xParentRange, uno::UNO_QUERY_THROW );
-    ScDocument* pDoc = getDocumentFromRange(xRange);
-    if ( !pDoc )
-        throw uno::RuntimeException("Failed to access document from shell" );
-    ScVbaPalette aPalette( pDoc->GetDocumentShell() );
+    ScDocument& rDoc = getDocumentFromRange(xRange);
+    ScVbaPalette aPalette( rDoc.GetDocumentShell() );
      uno::Reference< XCollection > borders( new ScVbaBorders( xParent, xContext, xRange, aPalette ) );
     return borders;
 }
@@ -1667,7 +1659,7 @@ ScVbaRange::setFormulaValue( const uno::Any& rFormula, formula::FormulaGrammar::
         aVisitor.visit( valueProcessor );
         return;
     }
-    CellFormulaValueSetter formulaValueSetter( rFormula, getScDocument(), eGram );
+    CellFormulaValueSetter formulaValueSetter( rFormula, &getScDocument(), eGram );
     setValue( rFormula, formulaValueSetter, bFireEvent );
 }
 
@@ -1683,7 +1675,7 @@ ScVbaRange::getFormulaValue( formula::FormulaGrammar::Grammar eGram ) throw (uno
         uno::Reference< excel::XRange > xRange( getArea( 0 ), uno::UNO_QUERY_THROW );
         return xRange->getFormula();
     }
-    CellFormulaValueGetter valueGetter( getScDocument(), eGram );
+    CellFormulaValueGetter valueGetter( &getScDocument(), eGram );
     return getValue( valueGetter );
 
 }
@@ -2023,7 +2015,7 @@ ScVbaRange::setFormulaArray(const uno::Any& rFormula) throw (uno::RuntimeExcepti
     rFormula >>= sFormula;
     uno::Sequence<sheet::FormulaToken> aTokens = xParser->parseFormula( sFormula, aAddress );
     ScTokenArray aTokenArray;
-    (void)ScTokenConversion::ConvertToTokenArray( *getScDocument(), aTokenArray, aTokens );
+    (void)ScTokenConversion::ConvertToTokenArray( getScDocument(), aTokenArray, aTokens );
 
     getScDocShell()->GetDocFunc().EnterMatrix( *getScRangeList()[0], NULL, &aTokenArray, OUString(), true, true, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_PODF_A1 );
 }
@@ -2089,7 +2081,7 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
     }
     sal_uInt16 nFlags = SCA_VALID;
     ScDocShell* pDocShell =  getScDocShell();
-    ScDocument* pDoc =  pDocShell->GetDocument();
+    ScDocument& rDoc =  pDocShell->GetDocument();
 
     RangeHelper thisRange( mxRange );
     table::CellRangeAddress thisAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
@@ -2126,22 +2118,20 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
         table::CellRangeAddress refAddress = getCellRangeAddressForVBARange( RelativeTo, pDocShell );
         dDetails = ScAddress::Details( formula::FormulaGrammar::CONV_XL_R1C1, static_cast< SCROW >( refAddress.StartRow ), static_cast< SCCOL >( refAddress.StartColumn ) );
     }
-    return aRange.Format(nFlags, pDoc, dDetails);
+    return aRange.Format(nFlags, &rDoc, dDetails);
 }
 
 uno::Reference < excel::XFont >
 ScVbaRange::Font() throw ( script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps(mxRange, ::uno::UNO_QUERY );
-    ScDocument* pDoc = getScDocument();
+    ScDocument& rDoc = getScDocument();
     if ( mxRange.is() )
         xProps.set(mxRange, ::uno::UNO_QUERY );
     else if ( mxRanges.is() )
         xProps.set(mxRanges, ::uno::UNO_QUERY );
-    if ( !pDoc )
-        throw uno::RuntimeException("Failed to access document from shell" );
 
-    ScVbaPalette aPalette( pDoc->GetDocumentShell() );
+    ScVbaPalette aPalette( rDoc.GetDocumentShell() );
     ScCellRangeObj* pRangeObj = NULL;
     try
     {
@@ -2210,7 +2200,7 @@ ScVbaRange::CellsHelper( const uno::Reference< ov::XHelperInterface >& xParent,
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            sal_uInt16 flags = tmpRange.ParseCols( sCol, getDocumentFromRange( xRange ), dDetails );
+            sal_uInt16 flags = tmpRange.ParseCols( sCol, &getDocumentFromRange( xRange ), dDetails );
             if ( ( flags & 0x200 ) != 0x200 )
                throw uno::RuntimeException();
             nColumn = tmpRange.aStart.Col() + 1;
@@ -2387,7 +2377,7 @@ ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException, std::exc
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            tmpRange.ParseRows( sAddress, getDocumentFromRange( mxRange ), dDetails );
+            tmpRange.ParseRows( sAddress, &getDocumentFromRange( mxRange ), dDetails );
             SCROW nStartRow = tmpRange.aStart.Row();
             SCROW nEndRow = tmpRange.aEnd.Row();
 
@@ -2431,7 +2421,7 @@ ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException, std::
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
             ScRange tmpRange;
-            tmpRange.ParseCols( sAddress, getDocumentFromRange( mxRange ), dDetails );
+            tmpRange.ParseCols( sAddress, &getDocumentFromRange( mxRange ), dDetails );
             SCCOL nStartCol = tmpRange.aStart.Col();
             SCCOL nEndCol = tmpRange.aEnd.Col();
 
@@ -2691,7 +2681,7 @@ ScVbaRange::getWrapText() throw (script::BasicErrorException, uno::RuntimeExcept
 uno::Reference< excel::XInterior > ScVbaRange::Interior( ) throw ( script::BasicErrorException, uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( mxRange, uno::UNO_QUERY_THROW );
-        return new ScVbaInterior ( this, mxContext, xProps, getScDocument() );
+        return new ScVbaInterior ( this, mxContext, xProps, &getScDocument() );
 }
 uno::Reference< excel::XRange >
 ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2 ) throw (uno::RuntimeException, std::exception)
@@ -3400,15 +3390,13 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
     sal_Int16 nDataOption2 = excel::XlSortDataOption::xlSortNormal;
     sal_Int16 nDataOption3 = excel::XlSortDataOption::xlSortNormal;
 
-    ScDocument* pDoc = getScDocument();
-    if ( !pDoc )
-        throw uno::RuntimeException("Failed to access document from shell" );
+    ScDocument& rDoc = getScDocument();
 
     RangeHelper thisRange( mxRange );
     table::CellRangeAddress thisRangeAddress = thisRange.getCellRangeAddressable()->getRangeAddress();
     ScSortParam aSortParam;
     SCTAB nTab = thisRangeAddress.Sheet;
-    pDoc->GetSortParam( aSortParam, nTab );
+    rDoc.GetSortParam( aSortParam, nTab );
 
     if ( DataOption1.hasValue() )
         DataOption1 >>= nDataOption1;
@@ -3464,8 +3452,8 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 
     if ( nHeader == excel::XlYesNoGuess::xlGuess )
     {
-        bool bHasColHeader = pDoc->HasColHeader(  static_cast< SCCOL >( thisRangeAddress.StartColumn ), static_cast< SCROW >( thisRangeAddress.StartRow ), static_cast< SCCOL >( thisRangeAddress.EndColumn ), static_cast< SCROW >( thisRangeAddress.EndRow ), static_cast< SCTAB >( thisRangeAddress.Sheet ));
-        bool bHasRowHeader = pDoc->HasRowHeader(  static_cast< SCCOL >( thisRangeAddress.StartColumn ), static_cast< SCROW >( thisRangeAddress.StartRow ), static_cast< SCCOL >( thisRangeAddress.EndColumn ), static_cast< SCROW >( thisRangeAddress.EndRow ), static_cast< SCTAB >( thisRangeAddress.Sheet ) );
+        bool bHasColHeader = rDoc.HasColHeader(  static_cast< SCCOL >( thisRangeAddress.StartColumn ), static_cast< SCROW >( thisRangeAddress.StartRow ), static_cast< SCCOL >( thisRangeAddress.EndColumn ), static_cast< SCROW >( thisRangeAddress.EndRow ), static_cast< SCTAB >( thisRangeAddress.Sheet ));
+        bool bHasRowHeader = rDoc.HasRowHeader(  static_cast< SCCOL >( thisRangeAddress.StartColumn ), static_cast< SCROW >( thisRangeAddress.StartRow ), static_cast< SCCOL >( thisRangeAddress.EndColumn ), static_cast< SCROW >( thisRangeAddress.EndRow ), static_cast< SCTAB >( thisRangeAddress.Sheet ) );
         if ( bHasColHeader || bHasRowHeader )
             nHeader =  excel::XlYesNoGuess::xlYes;
         else
@@ -3559,7 +3547,7 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
     nIndex =    findSortPropertyIndex( sortDescriptor, CONTS_HEADER );
     sortDescriptor[ nIndex ].Value <<= bContainsHeader;
 
-    pDoc->SetSortParam( aSortParam, nTab );
+    rDoc.SetSortParam( aSortParam, nTab );
     xSort->sort( sortDescriptor );
 
     // #FIXME #TODO
@@ -3663,12 +3651,10 @@ ScVbaRange::characters( const uno::Any& Start, const uno::Any& Length ) throw (u
     if ( !isSingleCellRange() )
         throw uno::RuntimeException("Can't create Characters property for multicell range " );
     uno::Reference< text::XSimpleText > xSimple(mxRange->getCellByPosition(0,0) , uno::UNO_QUERY_THROW );
-    ScDocument* pDoc = getDocumentFromRange(mxRange);
-    if ( !pDoc )
-        throw uno::RuntimeException("Failed to access document from shell" );
+    ScDocument& rDoc = getDocumentFromRange(mxRange);
 
-    ScVbaPalette aPalette( pDoc->GetDocumentShell() );
-    return  new ScVbaCharacters( this, mxContext, aPalette, xSimple, Start, Length );
+    ScVbaPalette aPalette( rDoc.GetDocumentShell() );
+    return new ScVbaCharacters( this, mxContext, aPalette, xSimple, Start, Length );
 }
 
  void SAL_CALL
@@ -3761,8 +3747,8 @@ double
 ScVbaRange::getCalcColWidth(const table::CellRangeAddress& rAddress)
     throw (uno::RuntimeException, std::exception)
 {
-    ScDocument* pDoc = getScDocument();
-    sal_uInt16 nWidth = pDoc->GetOriginalWidth( static_cast< SCCOL >( rAddress.StartColumn ), static_cast< SCTAB >( rAddress.Sheet ) );
+    ScDocument& rDoc = getScDocument();
+    sal_uInt16 nWidth = rDoc.GetOriginalWidth( static_cast< SCCOL >( rAddress.StartColumn ), static_cast< SCTAB >( rAddress.Sheet ) );
     double nPoints = lcl_TwipsToPoints( nWidth );
     nPoints = lcl_Round2DecPlaces( nPoints );
     return nPoints;
@@ -3772,8 +3758,8 @@ double
 ScVbaRange::getCalcRowHeight(const table::CellRangeAddress& rAddress)
     throw (uno::RuntimeException, std::exception)
 {
-    ScDocument* pDoc = getDocumentFromRange( mxRange );
-    sal_uInt16 nWidth = pDoc->GetOriginalHeight( rAddress.StartRow, rAddress.Sheet );
+    ScDocument& rDoc = getDocumentFromRange( mxRange );
+    sal_uInt16 nWidth = rDoc.GetOriginalHeight( rAddress.StartRow, rAddress.Sheet );
     double nPoints = lcl_TwipsToPoints( nWidth );
     nPoints = lcl_Round2DecPlaces( nPoints );
     return nPoints;
@@ -3782,9 +3768,9 @@ ScVbaRange::getCalcRowHeight(const table::CellRangeAddress& rAddress)
 // return Char Width in points
 double getDefaultCharWidth( ScDocShell* pDocShell )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    OutputDevice* pRefDevice = pDoc->GetRefDevice();
-    ScPatternAttr* pAttr = pDoc->GetDefPattern();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    OutputDevice* pRefDevice = rDoc.GetRefDevice();
+    ScPatternAttr* pAttr = rDoc.GetDefPattern();
     ::Font aDefFont;
     pAttr->GetFont( aDefFont, SC_AUTOCOL_BLACK, pRefDevice );
     pRefDevice->SetFont( aDefFont );
@@ -3815,7 +3801,7 @@ ScVbaRange::getColumnWidth() throw (uno::RuntimeException, std::exception)
         for( sal_Int32 nCol = nStartCol ; nCol <= nEndCol; ++nCol )
         {
             thisAddress.StartColumn = nCol;
-            sal_uInt16 nCurTwips = pShell->GetDocument()->GetOriginalWidth( static_cast< SCCOL >( thisAddress.StartColumn ), static_cast< SCTAB >( thisAddress.Sheet ) );
+            sal_uInt16 nCurTwips = pShell->GetDocument().GetOriginalWidth( static_cast< SCCOL >( thisAddress.StartColumn ), static_cast< SCTAB >( thisAddress.Sheet ) );
             if ( nCol == nStartCol )
                 nColTwips =  nCurTwips;
             if ( nColTwips != nCurTwips )
@@ -3983,7 +3969,7 @@ ScVbaRange::getRowHeight()
         for ( sal_Int32 nRow = nStartRow ; nRow <= nEndRow; ++nRow )
         {
             thisAddress.StartRow = nRow;
-            sal_uInt16 nCurTwips = pShell->GetDocument()->GetOriginalHeight( thisAddress.StartRow, thisAddress.Sheet );
+            sal_uInt16 nCurTwips = pShell->GetDocument().GetOriginalHeight( thisAddress.StartRow, thisAddress.Sheet );
             if ( nRow == nStartRow )
                 nRowTwips = nCurTwips;
             if ( nRowTwips != nCurTwips )
@@ -4037,13 +4023,13 @@ ScVbaRange::getPageBreak() throw (uno::RuntimeException, std::exception)
         uno::Reference< frame::XModel > xModel = pShell->GetModel();
         if ( xModel.is() )
         {
-            ScDocument* pDoc = getDocumentFromRange( mxRange );
+            ScDocument& rDoc = getDocumentFromRange( mxRange );
 
             ScBreakType nBreak = BREAK_NONE;
             if ( !bColumn )
-                nBreak = pDoc->HasRowBreak(thisAddress.StartRow, thisAddress.Sheet);
+                nBreak = rDoc.HasRowBreak(thisAddress.StartRow, thisAddress.Sheet);
             else
-                nBreak = pDoc->HasColBreak(thisAddress.StartColumn, thisAddress.Sheet);
+                nBreak = rDoc.HasColBreak(thisAddress.StartColumn, thisAddress.Sheet);
 
             if (nBreak & BREAK_PAGE)
                 nPageBreak = excel::XlPageBreak::xlPageBreakAutomatic;
@@ -4276,7 +4262,7 @@ static ScDBData* lcl_GetDBData_Impl( ScDocShell* pDocShell, sal_Int16 nSheet )
     ScDBData* pRet = NULL;
     if (pDocShell)
     {
-        pRet = pDocShell->GetDocument()->GetAnonymousDBData(nSheet);
+        pRet = pDocShell->GetDocument().GetAnonymousDBData(nSheet);
     }
     return pRet;
 }
@@ -4441,7 +4427,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
             RangeHelper multiCellRange( mxRange );
             autoFiltAddress = multiCellRange.getCellRangeAddressable()->getRangeAddress();
             // #163530# Filter box shows only entry of first row
-            ScDocument* pDocument = ( pShell ? pShell->GetDocument() : NULL );
+            ScDocument* pDocument = ( pShell ? &pShell->GetDocument() : NULL );
             if ( pDocument )
             {
                 SCCOL nStartCol = autoFiltAddress.StartColumn;
@@ -4473,7 +4459,7 @@ ScVbaRange::AutoFilter( const uno::Any& aField, const uno::Any& Criteria1, const
 		// set header (autofilter always need column headers)
         uno::Reference< beans::XPropertySet > xFiltProps( xDataBaseRange->getFilterDescriptor(), uno::UNO_QUERY_THROW );
         bool bHasColHeader = false;
-        ScDocument* pDoc = pShell ? pShell->GetDocument() : NULL;
+        ScDocument* pDoc = pShell ? &pShell->GetDocument() : NULL;
         if (pDoc)
         {
             bHasColHeader = pDoc->HasColHeader(  static_cast< SCCOL >( autoFiltAddress.StartColumn ), static_cast< SCROW >( autoFiltAddress.StartRow ), static_cast< SCCOL >( autoFiltAddress.EndColumn ), static_cast< SCROW >( autoFiltAddress.EndRow ), static_cast< SCTAB >( autoFiltAddress.Sheet ) );
@@ -4881,18 +4867,15 @@ uno::Any ScVbaRange::getShowDetail() throw ( css::uno::RuntimeException, std::ex
         (thisAddress.StartColumn == thisAddress.EndColumn && thisAddress.EndColumn == aOutlineAddress.EndColumn ))
     {
         bool bColumn =thisAddress.StartRow == thisAddress.EndRow ? false:sal_True;
-        ScDocument* pDoc = getDocumentFromRange( mxRange );
-        ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(static_cast<SCTAB>(thisAddress.Sheet), true);
-        const ScOutlineArray* pOutlineArray =  bColumn ? pOutlineTable->GetColArray(): pOutlineTable->GetRowArray();
-        if( pOutlineArray )
+        ScDocument& rDoc = getDocumentFromRange( mxRange );
+        ScOutlineTable* pOutlineTable = rDoc.GetOutlineTable(static_cast<SCTAB>(thisAddress.Sheet), true);
+        const ScOutlineArray& rOutlineArray =  bColumn ? pOutlineTable->GetColArray(): pOutlineTable->GetRowArray();
+        SCCOLROW nPos = bColumn ? (SCCOLROW)(thisAddress.EndColumn-1):(SCCOLROW)(thisAddress.EndRow-1);
+        const ScOutlineEntry* pEntry = rOutlineArray.GetEntryByPos( 0, nPos );
+        if( pEntry )
         {
-            SCCOLROW nPos = bColumn ? (SCCOLROW)(thisAddress.EndColumn-1):(SCCOLROW)(thisAddress.EndRow-1);
-            const ScOutlineEntry* pEntry = pOutlineArray->GetEntryByPos( 0, nPos );
-            if( pEntry )
-            {
-                bShowDetail = !pEntry->IsHidden();
-                return uno::makeAny( bShowDetail );
-            }
+            bShowDetail = !pEntry->IsHidden();
+            return uno::makeAny( bShowDetail );
         }
     }
     else
@@ -5334,8 +5317,8 @@ ScVbaRange::PreviousNext( bool bIsPrevious )
     SCROW nNewY = refRange.aStart.Row();
     SCTAB nTab = refRange.aStart.Tab();
 
-    ScDocument* pDoc = getScDocument();
-    pDoc->GetNextPos( nNewX,nNewY, nTab, nMove,0, true,true, markedRange );
+    ScDocument& rDoc = getScDocument();
+    rDoc.GetNextPos( nNewX,nNewY, nTab, nMove,0, true,true, markedRange );
     refRange.aStart.SetCol( nNewX );
     refRange.aStart.SetRow( nNewY );
     refRange.aStart.SetTab( nTab );

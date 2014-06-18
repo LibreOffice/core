@@ -151,10 +151,10 @@ public:
                             ScOutlineTable();
                             ScOutlineTable( const ScOutlineTable& rOutline );
 
-    const ScOutlineArray*   GetColArray() const     { return &aColOutline; }
-    ScOutlineArray*         GetColArray()           { return &aColOutline; }
-    const ScOutlineArray*   GetRowArray() const     { return &aRowOutline; }
-    ScOutlineArray*         GetRowArray()           { return &aRowOutline; }
+    const ScOutlineArray&   GetColArray() const     { return aColOutline; }
+    ScOutlineArray&         GetColArray()           { return aColOutline; }
+    const ScOutlineArray&   GetRowArray() const     { return aRowOutline; }
+    ScOutlineArray&         GetRowArray()           { return aRowOutline; }
 
     bool                    TestInsertCol( SCSIZE nSize );
     void                    InsertCol( SCCOL nStartCol, SCSIZE nSize );

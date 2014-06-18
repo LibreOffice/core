@@ -622,7 +622,7 @@ bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com:
         {
             if( mpViewShell->ISA( OutlineViewShell ) )
                 static_cast<OutlineView*>(mpViewShell->GetView())
-                    ->GetOutliner()->ClearModifyFlag();
+                    ->GetOutliner().ClearModifyFlag();
 
             SdrOutliner* pOutl = mpViewShell->GetView()->GetTextEditOutliner();
             if( pOutl )

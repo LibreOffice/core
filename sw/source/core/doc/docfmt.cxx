@@ -331,7 +331,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
         if (pURLAttr && !pURLAttr->GetINetFmt().GetValue().isEmpty())
         {
-            nMkPos = *pURLAttr->GetStart();
+            nMkPos = pURLAttr->GetStart();
             nPtPos = *pURLAttr->End();
         }
         else
@@ -789,7 +789,7 @@ static bool lcl_InsAttr(
                 pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
             if (pURLAttr && !pURLAttr->GetINetFmt().GetValue().isEmpty())
             {
-                nMkPos = *pURLAttr->GetStart();
+                nMkPos = pURLAttr->GetStart();
                 nPtPos = *pURLAttr->End();
             }
             else

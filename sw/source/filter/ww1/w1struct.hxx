@@ -793,7 +793,7 @@ struct W1_PIC // PictureStructure
 //  sal_uInt16 dyaOriginGet() {
 //      return SVBT16ToShort(dyaOrigin); }
     sal_uInt8 rgb;// 0x3a   variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
-    sal_uInt8* rgbGet() { return &rgb; }
+    sal_uInt8& rgbGet() { return rgb; }
 };
 
 struct W1_TBD

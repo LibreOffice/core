@@ -110,7 +110,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
         if( mpPropSet->AreThereOwnUsrAnys() )
         {
             uno::Any* pAny;
-            PropertyEntryVector_t aProperties = mpPropSet->getPropertyMap()->getPropertyEntries();
+            PropertyEntryVector_t aProperties = mpPropSet->getPropertyMap().getPropertyEntries();
             PropertyEntryVector_t::const_iterator aIt = aProperties.begin();
 
             while( aIt != aProperties.end() )
@@ -445,7 +445,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyDefault( const OUString& aProp
 /** this is used because our property map is not sorted yet */
 const SfxItemPropertySimpleEntry* SdUnoPageBackground::getPropertyMapEntry( const OUString& rPropertyName ) const throw()
 {
-    return mpPropSet->getPropertyMap()->getByName(rPropertyName);
+    return mpPropSet->getPropertyMap().getByName(rPropertyName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

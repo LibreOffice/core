@@ -968,7 +968,7 @@ namespace pcr
 
     public:
                         OMultilineFloatingEdit(Window* _pParen);
-        MultiLineEdit*  getEdit() { return &m_aImplEdit; }
+        MultiLineEdit&  getEdit() { return m_aImplEdit; }
 
     protected:
         virtual bool    PreNotify(NotifyEvent& _rNEvt) SAL_OVERRIDE;
@@ -1047,14 +1047,14 @@ namespace pcr
         m_pFloatingEdit = new OMultilineFloatingEdit(this); //FloatingWindow
 
         m_pFloatingEdit->SetPopupModeEndHdl( LINK( this, DropDownEditControl, ReturnHdl ) );
-        m_pFloatingEdit->getEdit()->SetReadOnly( ( _nStyle & WB_READONLY ) != 0 );
+        m_pFloatingEdit->getEdit().SetReadOnly( ( _nStyle & WB_READONLY ) != 0 );
     }
 
 
     void DropDownEditControl::setControlHelper( ControlHelper& _rControlHelper )
     {
         DropDownEditControl_Base::setControlHelper( _rControlHelper );
-        m_pFloatingEdit->getEdit()->SetModifyHdl( LINK( &_rControlHelper, ControlHelper, ModifiedHdl ) );
+        m_pFloatingEdit->getEdit().SetModifyHdl( LINK( &_rControlHelper, ControlHelper, ModifiedHdl ) );
         m_pImplEdit->SetGetFocusHdl( LINK( &_rControlHelper, ControlHelper, GetFocusHdl ) );
         m_pImplEdit->SetModifyHdl( LINK( &_rControlHelper, ControlHelper, ModifiedHdl ) );
         m_pImplEdit->SetLoseFocusHdl( LINK( &_rControlHelper, ControlHelper, LoseFocusHdl ) );
@@ -1140,8 +1140,8 @@ namespace pcr
                 }
                 Invalidate();
                 ShowDropDown( true );
-                m_pFloatingEdit->getEdit()->GrabFocus();
-                m_pFloatingEdit->getEdit()->SetSelection( aSel );
+                m_pFloatingEdit->getEdit().GrabFocus();
+                m_pFloatingEdit->getEdit().SetSelection( aSel );
                 Window* pFocusWin = Application::GetFocusWindow();
                 pFocusWin->KeyInput( *rNEvt.GetKeyEvent() );
             }
@@ -1214,11 +1214,11 @@ namespace pcr
             m_pFloatingEdit->StartPopupMode( aRect, FLOATWIN_POPUPMODE_DOWN );
 
             m_pFloatingEdit->Show();
-            m_pFloatingEdit->getEdit()->GrabFocus();
-            m_pFloatingEdit->getEdit()->SetSelection(Selection(m_pFloatingEdit->getEdit()->GetText().getLength()));
+            m_pFloatingEdit->getEdit().GrabFocus();
+            m_pFloatingEdit->getEdit().SetSelection(Selection(m_pFloatingEdit->getEdit().GetText().getLength()));
             m_bDropdown = true;
             if ( m_nOperationMode == eMultiLineText )
-                m_pFloatingEdit->getEdit()->SetText( m_pImplEdit->GetText() );
+                m_pFloatingEdit->getEdit().SetText( m_pImplEdit->GetText() );
             m_pImplEdit->SetText("");
         }
         else
@@ -1228,7 +1228,7 @@ namespace pcr
             m_pFloatingEdit->Update();
 
             // transfer the text from the floating edit to our own edit
-            OUString sDisplayText( m_pFloatingEdit->getEdit()->GetText() );
+            OUString sDisplayText( m_pFloatingEdit->getEdit().GetText() );
             if ( m_nOperationMode == eStringList )
                 sDisplayText = lcl_convertListToDisplayText( lcl_convertMultiLineToList( sDisplayText ) );
 
@@ -1244,9 +1244,9 @@ namespace pcr
 
     long DropDownEditControl::FindPos(long nSinglePos)
     {
-        long nPos=0;
+        long nPos = 0;
         OUString aOutput;
-        OUString aStr=m_pFloatingEdit->getEdit()->GetText();
+        OUString aStr = m_pFloatingEdit->getEdit().GetText();
         OUString aStr1 = GetText();
 
         if ((nSinglePos == 0) || (nSinglePos == aStr1.getLength()))
@@ -1302,7 +1302,7 @@ namespace pcr
     IMPL_LINK( DropDownEditControl, ReturnHdl, OMultilineFloatingEdit*, /*pMEd*/)
     {
 
-        OUString aStr = m_pFloatingEdit->getEdit()->GetText();
+        OUString aStr = m_pFloatingEdit->getEdit().GetText();
         OUString aStr2 = GetText();
         ShowDropDown(false);
 
@@ -1326,13 +1326,13 @@ namespace pcr
     void DropDownEditControl::SetStringListValue( const StlSyntaxSequence< OUString >& _rStrings )
     {
         SetText( lcl_convertListToDisplayText( _rStrings ) );
-        m_pFloatingEdit->getEdit()->SetText( lcl_convertListToMultiLine( _rStrings ) );
+        m_pFloatingEdit->getEdit().SetText( lcl_convertListToMultiLine( _rStrings ) );
     }
 
 
     StlSyntaxSequence< OUString > DropDownEditControl::GetStringListValue() const
     {
-        return lcl_convertMultiLineToList( m_pFloatingEdit->getEdit()->GetText() );
+        return lcl_convertMultiLineToList( m_pFloatingEdit->getEdit().GetText() );
     }
 
 
@@ -1340,7 +1340,7 @@ namespace pcr
     {
         OSL_PRECOND( m_nOperationMode == eMultiLineText, "DropDownEditControl::SetTextValue: illegal call!" );
 
-        m_pFloatingEdit->getEdit()->SetText( _rText );
+        m_pFloatingEdit->getEdit().SetText( _rText );
         SetText( _rText );
     }
 

@@ -432,8 +432,8 @@ public:
     inline SwTwips Y() const { return aPos.Y(); }
     inline void Y( const SwTwips nNew ) { aPos.Y() = nNew; }
 
-    inline SwTxtFly *GetTxtFly() { return &aTxtFly; }
-    inline const SwTxtFly *GetTxtFly() const { return &aTxtFly; }
+    inline SwTxtFly& GetTxtFly() { return aTxtFly; }
+    inline const SwTxtFly& GetTxtFly() const { return aTxtFly; }
     inline void DrawText( const OUString &rText, const SwLinePortion &rPor,
                           const sal_Int32 nIdx = 0,
                           const sal_Int32 nLen = COMPLETE_STRING,
@@ -795,12 +795,12 @@ inline SwPosSize SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI,
 
 inline SwTwips SwTxtPaintInfo::GetPaintOfst() const
 {
-    return GetParaPortion()->GetRepaint()->GetOfst();
+    return GetParaPortion()->GetRepaint().GetOfst();
 }
 
 inline void SwTxtPaintInfo::SetPaintOfst( const SwTwips nNew )
 {
-    GetParaPortion()->GetRepaint()->SetOfst( nNew );
+    GetParaPortion()->GetRepaint().SetOfst( nNew );
 }
 
 inline void SwTxtPaintInfo::DrawText( const OUString &rText,
@@ -829,7 +829,7 @@ inline void SwTxtPaintInfo::DrawMarkedText( const SwLinePortion &rPor,
 
 inline sal_Int32 SwTxtFormatInfo::GetReformatStart() const
 {
-    return GetParaPortion()->GetReformat()->Start();
+    return GetParaPortion()->GetReformat().Start();
 }
 
 inline const SwAttrSet& SwTxtFormatInfo::GetCharAttr() const

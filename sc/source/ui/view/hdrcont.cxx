@@ -611,9 +611,9 @@ bool ScHeaderControl::IsSelectionAllowed(SCCOLROW nPos) const
     if (!pViewSh)
         return false;
 
-    ScViewData* pViewData = pViewSh->GetViewData();
-    sal_uInt16 nTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
+    ScViewData& rViewData = pViewSh->GetViewData();
+    sal_uInt16 nTab = rViewData.GetTabNo();
+    ScDocument* pDoc = rViewData.GetDocument();
     const ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
     bool bSelectAllowed = true;
     if ( pProtect && pProtect->isProtected() )
@@ -827,10 +827,10 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
             if ( rCEvt.IsMouseEvent() )
             {
                 // #i18735# select the column/row under the mouse pointer
-                ScViewData* pViewData = pViewSh->GetViewData();
+                ScViewData& rViewData = pViewSh->GetViewData();
 
                 SelectWindow();     // also deselects drawing objects, stops draw text edit
-                if ( pViewData->HasEditView( pViewData->GetActivePart() ) )
+                if ( rViewData.HasEditView( rViewData.GetActivePart() ) )
                     SC_MOD()->InputEnterHandler();  // always end edit mode
 
                 MouseEvent aMEvt( rCEvt.GetMousePosPixel() );
@@ -840,7 +840,7 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                     // Selecting this cell is not allowed, neither is context menu.
                     return;
 
-                SCTAB nTab = pViewData->GetTabNo();
+                SCTAB nTab = rViewData.GetTabNo();
                 ScRange aNewRange;
                 if ( bVertical )
                     aNewRange = ScRange( 0, sal::static_int_cast<SCROW>(nPos), nTab,
@@ -851,7 +851,7 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
 
                 // see if any part of the range is already selected
                 ScRangeList aRanges;
-                pViewData->GetMarkData().FillRangeListWithMarks( &aRanges, false );
+                rViewData.GetMarkData().FillRangeListWithMarks( &aRanges, false );
                 bool bSelected = aRanges.Intersects(aNewRange);
 
                 // select the range if no part of it was selected

@@ -2156,7 +2156,7 @@ void addConstructor(
         codemaker::convertString(returnType).replace('.', '/'));
     // stack: instance
     code->instrAreturn();
-    if (!tree.getRoot()->present) {
+    if (!tree.getRoot().present) {
         ClassFile::Code::Position pos1 = code->getPosition();
         // stack: e
         code->instrInvokevirtual(
@@ -2188,7 +2188,7 @@ void addConstructor(
         ClassFile::Code::Position pos2 = code->getPosition();
         code->instrAthrow();
         addExceptionHandlers(
-            tree.getRoot(), tryStart, tryEnd, pos2, code.get());
+            &tree.getRoot(), tryStart, tryEnd, pos2, code.get());
         code->addException(
             tryStart, tryEnd, pos1, "com/sun/star/uno/Exception");
         dependencies->insert("com.sun.star.uno.Exception");

@@ -80,8 +80,8 @@ public:
     virtual void AddWindowToPaintView(OutputDevice* pWin) SAL_OVERRIDE;
     virtual void DeleteWindowFromPaintView(OutputDevice* pWin) SAL_OVERRIDE;
 
-    OutlinerView*   GetViewByWindow (::Window* pWin) const;
-    SdrOutliner*    GetOutliner() { return(&mrOutliner) ; }
+    OutlinerView*   GetViewByWindow(::Window* pWin) const;
+    SdrOutliner&    GetOutliner() { return mrOutliner; }
 
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
     Paragraph*      GetNextTitle(const Paragraph* pPara);

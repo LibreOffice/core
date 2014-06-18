@@ -455,14 +455,14 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         // Switch the page and send events regarding
                         // deactivation the old page and activating the new
                         // one.
-                        TabControl* pPageTabControl =
+                        TabControl& rPageTabControl =
                             static_cast<DrawViewShell*>(mpViewShell)
                             ->GetPageTabControl();
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendDeactivatePageEvent ();
+                        if (rPageTabControl.IsReallyShown())
+                            rPageTabControl.SendDeactivatePageEvent ();
                         static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage - 1);
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendActivatePageEvent ();
+                        if (rPageTabControl.IsReallyShown())
+                            rPageTabControl.SendActivatePageEvent ();
                     }
                 }
                 else if (rKEvt.GetKeyCode().IsMod1())
@@ -501,13 +501,13 @@ bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         // Switch the page and send events regarding
                         // deactivation the old page and activating the new
                         // one.
-                        TabControl* pPageTabControl =
+                        TabControl& rPageTabControl =
                             static_cast<DrawViewShell*>(mpViewShell)->GetPageTabControl();
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendDeactivatePageEvent ();
+                        if (rPageTabControl.IsReallyShown())
+                            rPageTabControl.SendDeactivatePageEvent ();
                         static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(nSdPage + 1);
-                        if (pPageTabControl->IsReallyShown())
-                            pPageTabControl->SendActivatePageEvent ();
+                        if (rPageTabControl.IsReallyShown())
+                            rPageTabControl.SendActivatePageEvent ();
                     }
                 }
                 else if (rKEvt.GetKeyCode().IsMod1())

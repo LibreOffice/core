@@ -136,7 +136,7 @@ void ScPreviewShell::Construct( Window* pParent )
     SetWindow( pPreview );
     StartListening(*pDocShell,true);
     StartListening(*SFX_APP(),true);        // #i62045# #i62046# application is needed for Calc's own hints
-    SfxBroadcaster* pDrawBC = pDocShell->GetDocument()->GetDrawBroadcaster();
+    SfxBroadcaster* pDrawBC = pDocShell->GetDocument().GetDrawBroadcaster();
     if (pDrawBC)
         StartListening(*pDrawBC);
 
@@ -165,10 +165,10 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         //! or completely forget aSourceData on ScTablesHint?
 
         ScTabViewShell* pTabViewShell = ((ScTabViewShell*)pOldSh);
-        const ScViewData* pData = pTabViewShell->GetViewData();
-        pData->WriteUserDataSequence( aSourceData );
-        pPreview->SetSelectedTabs(pData->GetMarkData());
-        InitStartTable( pData->GetTabNo() );
+        const ScViewData& rData = pTabViewShell->GetViewData();
+        rData.WriteUserDataSequence( aSourceData );
+        pPreview->SetSelectedTabs(rData.GetMarkData());
+        InitStartTable( rData.GetTabNo() );
 
         //  also have to store the TabView's DesignMode state
         //  (only if draw view exists)
@@ -189,7 +189,7 @@ ScPreviewShell::~ScPreviewShell()
     BroadcastAccessibility( SfxSimpleHint( SFX_HINT_DYING ) );
     DELETEZ(pAccessibilityBroadcaster);
 
-    SfxBroadcaster* pDrawBC = pDocShell->GetDocument()->GetDrawBroadcaster();
+    SfxBroadcaster* pDrawBC = pDocShell->GetDocument().GetDrawBroadcaster();
     if (pDrawBC)
         EndListening(*pDrawBC);
     EndListening(*SFX_APP());
@@ -240,11 +240,11 @@ void ScPreviewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
 
 bool ScPreviewShell::GetPageSize( Size& aPageSize )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTab = pPreview->GetTab();
 
-    ScStyleSheetPool*   pStylePool  = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ),
+    ScStyleSheetPool*   pStylePool  = rDoc.GetStyleSheetPool();
+    SfxStyleSheetBase*  pStyleSheet = pStylePool->Find( rDoc.GetPageStyle( nTab ),
                                                         SFX_STYLE_FAMILY_PAGE );
     OSL_ENSURE(pStyleSheet,"No style sheet");
     if (!pStyleSheet) return false;
@@ -738,8 +738,8 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 SCTAB nTab                      = pPreview->GetTab();
-                OUString aOldName               = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
-                ScStyleSheetPool* pStylePool    = pDocShell->GetDocument()->GetStyleSheetPool();
+                OUString aOldName               = pDocShell->GetDocument().GetPageStyle( pPreview->GetTab() );
+                ScStyleSheetPool* pStylePool    = pDocShell->GetDocument().GetStyleSheetPool();
                 SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
                 OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
@@ -852,8 +852,8 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
                         rSet.DisableItem( nWhich );
                     else
                     {
-                        OUString aOldName               = pDocShell->GetDocument()->GetPageStyle( pPreview->GetTab() );
-                        ScStyleSheetPool* pStylePool    = pDocShell->GetDocument()->GetStyleSheetPool();
+                        OUString aOldName               = pDocShell->GetDocument().GetPageStyle( pPreview->GetTab() );
+                        ScStyleSheetPool* pStylePool    = pDocShell->GetDocument().GetStyleSheetPool();
                         SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
                         OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
@@ -894,10 +894,10 @@ void ScPreviewShell::GetState( SfxItemSet& rSet )
 
 void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTab = pPreview->GetTab();
     OUString aTmp;
-    pDoc->GetName(nTab, aTmp);
+    rDoc.GetName(nTab, aTmp);
     rData.aTabName = aTmp;
 
     if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
@@ -1200,7 +1200,7 @@ const ScPreviewLocationData& ScPreviewShell::GetLocationData()
     return pPreview->GetLocationData();
 }
 
-ScDocument* ScPreviewShell::GetDocument()
+ScDocument& ScPreviewShell::GetDocument()
 {
     return pDocShell->GetDocument();
 }

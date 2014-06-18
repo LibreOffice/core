@@ -138,15 +138,15 @@ public:
 
     inline bool IsChildDoc();
     inline bool HonorProtection();
-    inline LwpObjectID* GetContentList();
-    inline LwpObjectID* GetDocData();
-    inline LwpObjectID* GetSocket();
+    inline LwpObjectID& GetContentList();
+    inline LwpObjectID& GetDocData();
+    inline LwpObjectID& GetSocket();
 
     inline LwpFoundry* GetFoundry();
-    inline LwpObjectID* GetDivInfoID();
-    inline LwpObjectID* GetPageHintsID();
-    inline LwpObjectID* GetFootnoteOpts();
-    inline LwpObjectID* GetVerDoc();
+    inline LwpObjectID& GetDivInfoID();
+    inline LwpObjectID& GetPageHintsID();
+    inline LwpObjectID& GetFootnoteOpts();
+    inline LwpObjectID& GetVerDoc();
     LwpObjectID* GetValidFootnoteOpts();
 
     sal_uInt16 GetEndnoteType();
@@ -186,37 +186,37 @@ inline bool LwpDocument::HonorProtection()
 {
     return m_nPersistentFlags & DOC_PROTECTED;
 }
-inline LwpObjectID* LwpDocument::GetContentList()
+inline LwpObjectID& LwpDocument::GetContentList()
 {
-    return(m_pFoundry->GetContentManager()->GetContentList());
+    return m_pFoundry->GetContentManager().GetContentList();
 }
-inline LwpObjectID* LwpDocument::GetSocket()
+inline LwpObjectID& LwpDocument::GetSocket()
 {
-    return &m_DocSockID;
+    return m_DocSockID;
 }
 inline LwpFoundry* LwpDocument::GetFoundry()
 {
     return m_pFoundry;
 }
-inline LwpObjectID* LwpDocument::GetDivInfoID()
+inline LwpObjectID& LwpDocument::GetDivInfoID()
 {
-    return &m_DivInfo;
+    return m_DivInfo;
 }
-inline LwpObjectID* LwpDocument::GetPageHintsID()
+inline LwpObjectID& LwpDocument::GetPageHintsID()
 {
-    return &m_WYSIWYGPageHints;
+    return m_WYSIWYGPageHints;
 }
-inline LwpObjectID* LwpDocument::GetFootnoteOpts()
+inline LwpObjectID& LwpDocument::GetFootnoteOpts()
 {
-    return &m_FootnoteOpts;
+    return m_FootnoteOpts;
 }
-inline LwpObjectID* LwpDocument::GetDocData()
+inline LwpObjectID& LwpDocument::GetDocData()
 {
-    return &m_DocData;
+    return m_DocData;
 }
-inline LwpObjectID* LwpDocument::GetVerDoc()
+inline LwpObjectID& LwpDocument::GetVerDoc()
 {
-    return &m_VerDoc;
+    return m_VerDoc;
 }
 
 /**

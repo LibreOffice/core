@@ -270,7 +270,7 @@ SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int3
     else
     {
         const SwTxtAttr& rAttr = *rCreate.pAttr;
-        pBracket->nStart = *rAttr.GetStart();
+        pBracket->nStart = rAttr.GetStart();
 
         const SfxPoolItem * const pItem =
             CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
@@ -864,7 +864,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     for( i = 0; i < nCount; ++i )
     {
         const SwTxtAttr *pTmp = (*pHints)[i];
-        sal_Int32 nStart = *pTmp->GetStart();
+        sal_Int32 nStart = pTmp->GetStart();
         if( rPos < nStart )
             break;
         if( *pTmp->GetAnyEnd() > rPos )
@@ -958,18 +958,18 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
             const SwTxtAttr *pTmp = (*pHints)[i++];
             if( *pTmp->GetAnyEnd() <= rPos )
                 continue;
-            if( rPos < *pTmp->GetStart() )
+            if( rPos < pTmp->GetStart() )
             {
                 // If bOn is false and the next attribute starts later than rPos
                 // the winner attribute is interrupted at rPos.
                 // If the start of the next attribute is behind the end of
                 // the last attribute on the aEnd-stack, this is the endposition
                 // on the stack is the end of the 2-line portion.
-                if( !bOn || aEnd.back() < *pTmp->GetStart() )
+                if( !bOn || aEnd.back() < pTmp->GetStart() )
                     break;
                 // At this moment, bOn is true and the next attribute starts
                 // behind rPos, so we could move rPos to the next startpoint
-                rPos = *pTmp->GetStart();
+                rPos = pTmp->GetStart();
                 // We clean up the aEnd-stack, endpositions equal to rPos are
                 // superfluous.
                 while( !aEnd.empty() && aEnd.back() <= rPos )
@@ -1038,11 +1038,11 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
             const SwTxtAttr *pTmp = (*pHints)[i++];
             if( *pTmp->GetAnyEnd() <= n2Start )
                 continue;
-            if( n2Start < *pTmp->GetStart() )
+            if( n2Start < pTmp->GetStart() )
             {
-                if( bOn || aEnd.back() < *pTmp->GetStart() )
+                if( bOn || aEnd.back() < pTmp->GetStart() )
                     break;
-                n2Start = *pTmp->GetStart();
+                n2Start = pTmp->GetStart();
                 while( !aEnd.empty() && aEnd.back() <= n2Start )
                 {
                     bOn = !bOn;
@@ -1111,11 +1111,11 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
             const SwTxtAttr *pTmp = (*pHints)[i++];
             if( *pTmp->GetAnyEnd() <= rPos )
                 continue;
-            if( rPos < *pTmp->GetStart() )
+            if( rPos < pTmp->GetStart() )
             {
-                if( !bOn || aEnd.back() < *pTmp->GetStart() )
+                if( !bOn || aEnd.back() < pTmp->GetStart() )
                     break;
-                rPos = *pTmp->GetStart();
+                rPos = pTmp->GetStart();
                 while( !aEnd.empty() && aEnd.back() <= rPos )
                 {
                     bOn = !bOn;

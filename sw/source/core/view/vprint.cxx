@@ -353,7 +353,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     {
         SwShellTableCrsr* pShellTblCrsr = pFESh->GetTableCrsr();
 
-        const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode()->GetCntntNode();
+        const SwCntntNode* pCntntNode = pShellTblCrsr->GetNode().GetCntntNode();
         const SwCntntFrm *pCntntFrm = pCntntNode ? pCntntNode->getLayoutFrm( GetLayout(), 0, pShellTblCrsr->Start() ) : 0;
         if( pCntntFrm )
         {

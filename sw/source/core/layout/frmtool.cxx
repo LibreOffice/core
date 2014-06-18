@@ -1679,16 +1679,16 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 
                 if( pTmp )
                 {
-                    SwFrm* pOldUp = pTmp->GetFrm()->GetUpper();
+                    SwFrm* pOldUp = pTmp->GetFrm().GetUpper();
                     // MoveFwd==sal_True means that we are still on the same page.
                     // But since we want to move if possible!
                     bool bTmpOldLock = pTmp->IsJoinLocked();
                     pTmp->LockJoin();
                     while( pTmp->MoveFwd( true, false, true ) )
                     {
-                        if( pOldUp == pTmp->GetFrm()->GetUpper() )
+                        if( pOldUp == pTmp->GetFrm().GetUpper() )
                             break;
-                        pOldUp = pTmp->GetFrm()->GetUpper();
+                        pOldUp = pTmp->GetFrm().GetUpper();
                     }
                     if( !bTmpOldLock )
                         pTmp->UnlockJoin();

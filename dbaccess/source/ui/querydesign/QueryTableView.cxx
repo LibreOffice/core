@@ -118,7 +118,7 @@ namespace
     {
         OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pConnectionData.get());
 
-        DlgQryJoin aDlg(_pView,_pConnectionData,_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables);
+        DlgQryJoin aDlg(_pView,_pConnectionData,&_pView->GetTabWinMap(),_pView->getDesignView()->getController().getConnection(),_bSelectableTables);
         bool bOk = aDlg.Execute() == RET_OK;
         if( bOk )
         {
@@ -236,11 +236,11 @@ sal_Int32 OQueryTableView::CountTableAlias(const OUString& rName, sal_Int32& rMa
 {
     sal_Int32 nRet = 0;
 
-    OTableWindowMap::iterator aIter = GetTabWinMap()->find(rName);
-    while(aIter != GetTabWinMap()->end())
+    OTableWindowMap::iterator aIter = GetTabWinMap().find(rName);
+    while(aIter != GetTabWinMap().end())
     {
-        OUString aNewName = OUString(rName) + "_" + OUString::number(++nRet);
-        aIter = GetTabWinMap()->find(aNewName);
+        OUString aNewName = rName + "_" + OUString::number(++nRet);
+        aIter = GetTabWinMap().find(aNewName);
     }
 
     rMax = nRet;
@@ -250,17 +250,17 @@ sal_Int32 OQueryTableView::CountTableAlias(const OUString& rName, sal_Int32& rMa
 
 void OQueryTableView::ReSync()
 {
-    TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
-    OSL_ENSURE((getTableConnections()->size()==0) && (GetTabWinMap()->size()==0),
+    TTableWindowData& rTabWinDataList = m_pView->getController().getTableWindowData();
+    OSL_ENSURE((getTableConnections().size()==0) && (GetTabWinMap().size()==0),
         "before calling OQueryTableView::ReSync() please call ClearAll !");
 
     // I need a collection of all window names that cannot be created so that I do not initialize connections for them.
     ::std::vector<OUString> arrInvalidTables;
 
-    TTableWindowData::reverse_iterator aIter = pTabWinDataList->rbegin();
+    TTableWindowData::reverse_iterator aIter = rTabWinDataList.rbegin();
     // Create the window and add it
 
-    for(;aIter != pTabWinDataList->rend();++aIter)
+    for(;aIter != rTabWinDataList.rend();++aIter)
     {
         OQueryTableWindowData* pData = static_cast<OQueryTableWindowData*>(aIter->get());
         OTableWindow* pTabWin = createWindow(*aIter);
@@ -276,11 +276,11 @@ void OQueryTableView::ReSync()
             delete pTabWin;
             arrInvalidTables.push_back(pData->GetAliasName());
 
-            pTabWinDataList->erase( ::std::remove(pTabWinDataList->begin(),pTabWinDataList->end(),*aIter) ,pTabWinDataList->end());
+            rTabWinDataList.erase( ::std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
             continue;
         }
 
-        (*GetTabWinMap())[pData->GetAliasName()] = pTabWin; // add at the beginning as I am going backwards through the DataList
+        GetTabWinMap()[pData->GetAliasName()] = pTabWin; // add at the beginning as I am going backwards through the DataList
         // Use the default if there is no position or size
         if (!pData->HasPosition() && !pData->HasSize())
             SetDefaultTabWinPosSize(pTabWin);
@@ -289,10 +289,10 @@ void OQueryTableView::ReSync()
     }
 
     // Add the connections
-    TTableConnectionData* pTabConnDataList = m_pView->getController().getTableConnectionData();
-    TTableConnectionData::reverse_iterator aConIter = pTabConnDataList->rbegin();
+    TTableConnectionData& rTabConnDataList = m_pView->getController().getTableConnectionData();
+    TTableConnectionData::reverse_iterator aConIter = rTabConnDataList.rbegin();
 
-    for(;aConIter != pTabConnDataList->rend();++aConIter)
+    for(;aConIter != rTabConnDataList.rend();++aConIter)
     {
         OQueryTableConnectionData* pTabConnData =  static_cast<OQueryTableConnectionData*>(aConIter->get());
 
@@ -305,7 +305,7 @@ void OQueryTableView::ReSync()
         if (bInvalid)
         {
             // no -> bad luck, no connection
-            pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter) ,pTabConnDataList->end());
+            rTabConnDataList.erase( ::std::remove(rTabConnDataList.begin(), rTabConnDataList.end(), *aConIter), rTabConnDataList.end());
             continue;
         }
 
@@ -331,15 +331,15 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
 {
     // let's first check if I have the connection already
     OQueryTableConnection* pTabConn = NULL;
-    const ::std::vector<OTableConnection*>* pConnections = getTableConnections();
-    ::std::vector<OTableConnection*>::const_iterator aEnd = pConnections->end();
-    ::std::vector<OTableConnection*>::const_iterator aIter = ::std::find(   pConnections->begin(),
+    const ::std::vector<OTableConnection*>& rConnections = getTableConnections();
+    ::std::vector<OTableConnection*>::const_iterator aEnd = rConnections.end();
+    ::std::vector<OTableConnection*>::const_iterator aIter = ::std::find(   rConnections.begin(),
                                                     aEnd,
                                                     static_cast<const OTableConnection*>(&rNewConn)
                                                     );
     if(aIter == aEnd )
     {
-        aIter = pConnections->begin();
+        aIter = rConnections.begin();
         for(;aIter != aEnd;++aIter)
         {
             if(*static_cast<OQueryTableConnection*>(*aIter) == rNewConn)
@@ -445,9 +445,9 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     // first check if this already has its data
     bool bAppend = bNewTable;
     TTableWindowData::value_type pNewTabWinData;
-    TTableWindowData* pWindowData = getDesignView()->getController().getTableWindowData();
-    TTableWindowData::iterator aWinIter = pWindowData->begin();
-    TTableWindowData::iterator aWinEnd = pWindowData->end();
+    TTableWindowData& rWindowData = getDesignView()->getController().getTableWindowData();
+    TTableWindowData::iterator aWinIter = rWindowData.begin();
+    TTableWindowData::iterator aWinEnd = rWindowData.end();
     for(;aWinIter != aWinEnd;++aWinIter)
     {
         pNewTabWinData = *aWinIter;
@@ -479,8 +479,8 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
     }
 
     // Show the relations between the individual tables
-    OTableWindowMap* pTabWins = GetTabWinMap();
-    if(bNewTable && !pTabWins->empty() && !_rTableName.isEmpty())
+    OTableWindowMap& rTabWins = GetTabWinMap();
+    if(bNewTable && !rTabWins.empty() && !_rTableName.isEmpty())
     {
         modified();
         if ( m_pAccessible )
@@ -523,11 +523,11 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
                     xProp->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= aReferencedTable;
                     OSL_ENSURE(!aReferencedTable.isEmpty(),"Foreign key without referencedTableName");
 
-                    OTableWindowMap::const_iterator aIter = pTabWins->find(aReferencedTable);
-                    OTableWindowMap::const_iterator aEnd  = pTabWins->end();
+                    OTableWindowMap::const_iterator aIter = rTabWins.find(aReferencedTable);
+                    OTableWindowMap::const_iterator aEnd  = rTabWins.end();
                     if(aIter == aEnd)
                     {
-                        for(aIter = pTabWins->begin();aIter != aEnd;++aIter)
+                        for(aIter = rTabWins.begin();aIter != aEnd;++aIter)
                         {
                             OQueryTableWindow* pTabWinTmp = static_cast<OQueryTableWindow*>(aIter->second);
                             OSL_ENSURE( pTabWinTmp,"TableWindow is null!" );
@@ -543,8 +543,8 @@ void OQueryTableView::AddTabWin(const OUString& _rComposedName, const OUString& 
                 case KeyType::PRIMARY:
                 {
                     // we have a primary key so look in our list if there exists a key which this is referred to
-                    OTableWindowMap::const_iterator aIter = pTabWins->begin();
-                    OTableWindowMap::const_iterator aEnd  = pTabWins->end();
+                    OTableWindowMap::const_iterator aIter = rTabWins.begin();
+                    OTableWindowMap::const_iterator aEnd  = rTabWins.end();
                     for(;aIter != aEnd;++aIter)
                     {
                         OQueryTableWindow* pTabWinTmp = static_cast<OQueryTableWindow*>(aIter->second);
@@ -659,9 +659,9 @@ void OQueryTableView::createNewConnection()
     TTableConnectionData::value_type pData(new OQueryTableConnectionData());
     if( openJoinDialog(this,pData,true) )
     {
-        OTableWindowMap* pMap = GetTabWinMap();
-        OQueryTableWindow* pSourceWin   = static_cast< OQueryTableWindow*>((*pMap)[pData->getReferencingTable()->GetWinName()]);
-        OQueryTableWindow* pDestWin     = static_cast< OQueryTableWindow*>((*pMap)[pData->getReferencedTable()->GetWinName()]);
+        OTableWindowMap& rMap = GetTabWinMap();
+        OQueryTableWindow* pSourceWin   = static_cast< OQueryTableWindow*>(rMap[pData->getReferencingTable()->GetWinName()]);
+        OQueryTableWindow* pDestWin     = static_cast< OQueryTableWindow*>(rMap[pData->getReferencedTable()->GetWinName()]);
         // first we have to look if the this connection already exists
         OTableConnection* pConn = GetTabConn(pSourceWin,pDestWin,true);
         bool bNew = true;
@@ -706,8 +706,8 @@ OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
 {
     OSL_ENSURE(!rAliasName.isEmpty(), "OQueryTableView::FindTable : the  AliasName should not be empty !");
         // (it is harmless but does not make sense and indicates that there is probably an error in the caller)
-    OTableWindowMap::const_iterator aIter = GetTabWinMap()->find(rAliasName);
-    if(aIter != GetTabWinMap()->end())
+    OTableWindowMap::const_iterator aIter = GetTabWinMap().find(rAliasName);
+    if(aIter != GetTabWinMap().end())
         return static_cast<OQueryTableWindow*>(aIter->second);
     return NULL;
 }
@@ -715,8 +715,8 @@ OQueryTableWindow* OQueryTableView::FindTable(const OUString& rAliasName)
 bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableFieldDescRef& rInfo, sal_uInt16& rCnt)
 {
     rCnt = 0;
-    OTableWindowMap::const_iterator aIter = GetTabWinMap()->begin();
-    OTableWindowMap::const_iterator aEnd  = GetTabWinMap()->end();
+    OTableWindowMap::const_iterator aIter = GetTabWinMap().begin();
+    OTableWindowMap::const_iterator aEnd  = GetTabWinMap().end();
     for(;aIter != aEnd;++aIter)
     {
         if(static_cast<OQueryTableWindow*>(aIter->second)->ExistsField(rFieldName, rInfo))
@@ -728,11 +728,10 @@ bool OQueryTableView::FindTableFromField(const OUString& rFieldName, OTableField
 
 bool OQueryTableView::ContainsTabWin(const OTableWindow& rTabWin)
 {
-    OTableWindowMap* pTabWins = GetTabWinMap();
-    OSL_ENSURE(pTabWins != NULL, "OQueryTableView::RemoveTabWin : Window should not be NULL !");
+    OTableWindowMap& rTabWins = GetTabWinMap();
 
-    OTableWindowMap::iterator aIter = pTabWins->begin();
-    OTableWindowMap::iterator aEnd  = pTabWins->end();
+    OTableWindowMap::iterator aIter = rTabWins.begin();
+    OTableWindowMap::iterator aEnd  = rTabWins.end();
 
     for ( ;aIter != aEnd ; ++aIter )
     {
@@ -808,74 +807,70 @@ void OQueryTableView::DropConnection(OQueryTableConnection* pConn)
 
 void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction )
 {
-    OTableWindowMap* pTabWins = GetTabWinMap();
-    OSL_ENSURE(pTabWins != NULL, "OQueryTableView::HideTabWin : have no TabWins !");
+    OTableWindowMap& rTabWins = GetTabWinMap();
 
-    if (pTabWin)
-    {
-        // Window
-        // save the position in its data
-        getDesignView()->SaveTabWinUIConfig(pTabWin);
-        // (I need to go via the parent, as only the parent knows the position of the scrollbars)
-        // and then out of the TabWins list and hide
-        OTableWindowMap::iterator aIter = pTabWins->begin();
-        OTableWindowMap::iterator aEnd  = pTabWins->end();
-        for ( ;aIter != aEnd ; ++aIter )
-            if ( aIter->second == pTabWin )
-            {
-                pTabWins->erase( aIter );
-                break;
-            }
-
-        pTabWin->Hide();    // do not destroy it, as it is still in the undo list!!
-
-        // the TabWin data must also be passed out of my responsibility
-        TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
-        pTabWinDataList->erase( ::std::remove(pTabWinDataList->begin(),pTabWinDataList->end(),pTabWin->GetData()),pTabWinDataList->end());
-            // The data should not be destroyed as TabWin itself - which is still alive - needs them
-            // Either it goes back into my responsibility, (via ShowTabWin), then I add the data back,
-            // or the Undo-Action, which currently has full responsibility for the window
-            // and its data, gets destroyed and destroys both the window and its data
-
-        if (m_pLastFocusTabWin == pTabWin)
-            m_pLastFocusTabWin = NULL;
-
-        // collect connections belonging to the window and pass to UndoAction
-        sal_Int16 nCnt = 0;
-        const ::std::vector<OTableConnection*>* pTabConList = getTableConnections();
-        ::std::vector<OTableConnection*>::const_iterator aIter2 = pTabConList->begin();
-        for(;aIter2 != pTabConList->end();)// the end may change
+    // Window
+    // save the position in its data
+    getDesignView()->SaveTabWinUIConfig(pTabWin);
+    // (I need to go via the parent, as only the parent knows the position of the scrollbars)
+    // and then out of the TabWins list and hide
+    OTableWindowMap::iterator aIter = rTabWins.begin();
+    OTableWindowMap::iterator aEnd  = rTabWins.end();
+    for ( ;aIter != aEnd ; ++aIter )
+        if ( aIter->second == pTabWin )
         {
-            OQueryTableConnection* pTmpEntry = static_cast<OQueryTableConnection*>(*aIter2);
-            OSL_ENSURE(pTmpEntry,"OQueryTableConnection is null!");
-            if( pTmpEntry->GetAliasName(JTCS_FROM) == pTabWin->GetAliasName() ||
-                pTmpEntry->GetAliasName(JTCS_TO) == pTabWin->GetAliasName() )
-            {
-                // add to undo list
-                pUndoAction->InsertConnection(pTmpEntry);
-
-                // call base class because we append an undo action
-                // but this time we are in a undo action list
-                OJoinTableView::RemoveConnection(pTmpEntry,sal_False);
-                aIter2 = pTabConList->begin();
-                ++nCnt;
-            }
-            else
-                ++aIter2;
+            rTabWins.erase( aIter );
+            break;
         }
 
-        if (nCnt)
-            InvalidateConnections();
+    pTabWin->Hide();    // do not destroy it, as it is still in the undo list!!
 
-        m_pView->getController().InvalidateFeature(ID_BROWSER_ADDTABLE);
+    // the TabWin data must also be passed out of my responsibility
+    TTableWindowData& rTabWinDataList = m_pView->getController().getTableWindowData();
+    rTabWinDataList.erase( ::std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), pTabWin->GetData()), rTabWinDataList.end());
+        // The data should not be destroyed as TabWin itself - which is still alive - needs them
+        // Either it goes back into my responsibility, (via ShowTabWin), then I add the data back,
+        // or the Undo-Action, which currently has full responsibility for the window
+        // and its data, gets destroyed and destroys both the window and its data
 
-        // inform the UndoAction that the window and connections belong to it
-        pUndoAction->SetOwnership(true);
+    if (m_pLastFocusTabWin == pTabWin)
+        m_pLastFocusTabWin = NULL;
 
-        // by doing so, we have modified the document
-        m_pView->getController().setModified( sal_True );
-        m_pView->getController().InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
+    // collect connections belonging to the window and pass to UndoAction
+    sal_Int16 nCnt = 0;
+    const ::std::vector<OTableConnection*>& rTabConList = getTableConnections();
+    ::std::vector<OTableConnection*>::const_iterator aIter2 = rTabConList.begin();
+    for(;aIter2 != rTabConList.end();)// the end may change
+    {
+        OQueryTableConnection* pTmpEntry = static_cast<OQueryTableConnection*>(*aIter2);
+        OSL_ENSURE(pTmpEntry,"OQueryTableConnection is null!");
+        if( pTmpEntry->GetAliasName(JTCS_FROM) == pTabWin->GetAliasName() ||
+            pTmpEntry->GetAliasName(JTCS_TO) == pTabWin->GetAliasName() )
+        {
+            // add to undo list
+            pUndoAction->InsertConnection(pTmpEntry);
+
+            // call base class because we append an undo action
+            // but this time we are in a undo action list
+            OJoinTableView::RemoveConnection(pTmpEntry,sal_False);
+            aIter2 = rTabConList.begin();
+            ++nCnt;
+        }
+        else
+            ++aIter2;
     }
+
+    if (nCnt)
+        InvalidateConnections();
+
+    m_pView->getController().InvalidateFeature(ID_BROWSER_ADDTABLE);
+
+    // inform the UndoAction that the window and connections belong to it
+    pUndoAction->SetOwnership(true);
+
+    // by doing so, we have modified the document
+    m_pView->getController().setModified( sal_True );
+    m_pView->getController().InvalidateFeature(SID_BROWSER_CLEAR_QUERY);
 }
 
 bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction, bool _bAppend )
@@ -901,8 +896,8 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
             // Show the window and add to the list
             OUString sName = static_cast< OQueryTableWindowData*>(pData.get())->GetAliasName();
-            OSL_ENSURE(GetTabWinMap()->find(sName) == GetTabWinMap()->end(),"Alias name already in list!");
-            GetTabWinMap()->insert(OTableWindowMap::value_type(sName,pTabWin));
+            OSL_ENSURE(GetTabWinMap().find(sName) == GetTabWinMap().end(),"Alias name already in list!");
+            GetTabWinMap().insert(OTableWindowMap::value_type(sName,pTabWin));
 
             pTabWin->Show();
 
@@ -913,18 +908,18 @@ bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
             // GetEntryPos, and then in turn by the Connection, when its starting point to the window must be determined.
 
             // the Connections
-            ::std::vector<OTableConnection*>* pTableCon = pUndoAction->GetTabConnList();
-            ::std::vector<OTableConnection*>::iterator aIter = pTableCon->begin();
-            ::std::vector<OTableConnection*>::iterator aEnd = pTableCon->end();
+            ::std::vector<OTableConnection*>& rTableCon = pUndoAction->GetTabConnList();
+            ::std::vector<OTableConnection*>::iterator aIter = rTableCon.begin();
+            ::std::vector<OTableConnection*>::iterator aEnd = rTableCon.end();
 
             for(;aIter != aEnd;++aIter)
                 addConnection(*aIter); // add all connections from the undo action
 
-            pTableCon->clear();
+            rTableCon.clear();
 
             // and add the window's data to the list (of the document)
             if(_bAppend)
-                m_pView->getController().getTableWindowData()->push_back(pTabWin->GetData());
+                m_pView->getController().getTableWindowData().push_back(pTabWin->GetData());
 
             m_pView->getController().InvalidateFeature(ID_BROWSER_ADDTABLE);
 
@@ -959,18 +954,15 @@ void OQueryTableView::InsertField(const OTableFieldDescRef& rInfo)
 
 bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const
 {
-    const ::std::vector<OTableConnection*>* pList = getTableConnections();
-    if (pList)
+    const ::std::vector<OTableConnection*>& rList = getTableConnections();
+    ::std::vector<OTableConnection*>::const_iterator aIter = rList.begin();
+    ::std::vector<OTableConnection*>::const_iterator aEnd = rList.end();
+    for(;aIter != aEnd;++aIter)
     {
-        ::std::vector<OTableConnection*>::const_iterator aIter = pList->begin();
-        ::std::vector<OTableConnection*>::const_iterator aEnd = pList->end();
-        for(;aIter != aEnd;++aIter)
-        {
-            OQueryTableConnection* pTemp = static_cast<OQueryTableConnection*>(*aIter);
-            if (pTemp->IsVisited() &&
-                (pFrom == static_cast< OQueryTableWindow*>(pTemp->GetSourceWin()) || pFrom == static_cast< OQueryTableWindow*>(pTemp->GetDestWin())))
-                return true;
-        }
+        OQueryTableConnection* pTemp = static_cast<OQueryTableConnection*>(*aIter);
+        if (pTemp->IsVisited() &&
+            (pFrom == static_cast< OQueryTableWindow*>(pTemp->GetSourceWin()) || pFrom == static_cast< OQueryTableWindow*>(pTemp->GetDestWin())))
+            return true;
     }
 
     return false;

@@ -100,11 +100,11 @@ public:
     /**
        Gives access to the resultant exception hierarchy.
 
-       @return a non-null pointer to the root of the exception hierarchy, as
+       @return a reference to the root of the exception hierarchy, as
        formed by all previous calls to add; it is an error if any calls to add
        follow the first call to getRoot
      */
-    ExceptionTreeNode const * getRoot() const { return &m_root; }
+    ExceptionTreeNode const & getRoot() const { return m_root; }
 
 private:
     ExceptionTree(ExceptionTree &); // not implemented

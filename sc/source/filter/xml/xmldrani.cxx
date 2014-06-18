@@ -414,7 +414,7 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
     {
         pData->SetRefreshDelay(nRefresh);
         pData->SetRefreshHandler(pDoc->GetDBCollection()->GetRefreshHandler());
-        pData->SetRefreshControl(pDoc->GetRefreshTimerControlAddress());
+        pData->SetRefreshControl(&pDoc->GetRefreshTimerControlAddress());
     }
 
     return pData.release();

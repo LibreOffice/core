@@ -719,7 +719,7 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
     ScMyShapeList::const_iterator aShapeItr = aDummyInitList.end();
     if (pSharedData->GetShapesContainer())
     {
-        pShapeList = pSharedData->GetShapesContainer()->GetShapes();
+        pShapeList = &pSharedData->GetShapesContainer()->GetShapes();
         aShapeItr = pShapeList->begin();
     }
     if (pSharedData->HasDrawPage())
@@ -762,15 +762,12 @@ void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
                 }
                 if (pSharedData->GetNoteShapes())
                 {
-                    const ScMyNoteShapeList* pNoteShapes = pSharedData->GetNoteShapes()->GetNotes();
-                    if (pNoteShapes)
+                    const ScMyNoteShapeList& rNoteShapes = pSharedData->GetNoteShapes()->GetNotes();
+                    for (ScMyNoteShapeList::const_iterator aNoteShapeItr = rNoteShapes.begin(), aNoteShapeEndItr = rNoteShapes.end();
+                         aNoteShapeItr != aNoteShapeEndItr; ++aNoteShapeItr)
                     {
-                        for (ScMyNoteShapeList::const_iterator aNoteShapeItr = pNoteShapes->begin(), aNoteShapeEndItr = pNoteShapes->end();
-                             aNoteShapeItr != aNoteShapeEndItr; ++aNoteShapeItr)
-                        {
-                            if (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) == nTable)
-                                GetShapeExport()->collectShapeAutoStyles(aNoteShapeItr->xShape);
-                        }
+                        if (static_cast<sal_Int32>(aNoteShapeItr->aPos.Tab()) == nTable)
+                            GetShapeExport()->collectShapeAutoStyles(aNoteShapeItr->xShape);
                     }
                 }
             }
@@ -904,16 +901,16 @@ void ScXMLExport::WriteColumn(const sal_Int32 nColumn, const sal_Int32 nRepeatCo
     const sal_Int32 nStyleIndex, const bool bIsVisible)
 {
     sal_Int32 nRepeat(1);
-    sal_Int32 nPrevIndex((*pDefaults->GetColDefaults())[nColumn].nIndex);
-    bool bPrevAutoStyle((*pDefaults->GetColDefaults())[nColumn].bIsAutoStyle);
+    sal_Int32 nPrevIndex(pDefaults->GetColDefaults()[nColumn].nIndex);
+    bool bPrevAutoStyle(pDefaults->GetColDefaults()[nColumn].bIsAutoStyle);
     for (sal_Int32 i = nColumn + 1; i < nColumn + nRepeatColumns; ++i)
     {
-        if (((*pDefaults->GetColDefaults())[i].nIndex != nPrevIndex) ||
-            ((*pDefaults->GetColDefaults())[i].bIsAutoStyle != bPrevAutoStyle))
+        if ((pDefaults->GetColDefaults()[i].nIndex != nPrevIndex) ||
+            (pDefaults->GetColDefaults()[i].bIsAutoStyle != bPrevAutoStyle))
         {
             WriteSingleColumn(nRepeat, nStyleIndex, nPrevIndex, bPrevAutoStyle, bIsVisible);
-            nPrevIndex = (*pDefaults->GetColDefaults())[i].nIndex;
-            bPrevAutoStyle = (*pDefaults->GetColDefaults())[i].bIsAutoStyle;
+            nPrevIndex = pDefaults->GetColDefaults()[i].nIndex;
+            bPrevAutoStyle = pDefaults->GetColDefaults()[i].bIsAutoStyle;
             nRepeat = 1;
         }
         else
@@ -1756,12 +1753,10 @@ void ScXMLExport::FillColumnRowGroups()
         ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable( static_cast<SCTAB>(nCurrentTable), false );
         if(pOutlineTable)
         {
-            ScOutlineArray* pCols(pOutlineTable->GetColArray());
-            ScOutlineArray* pRows(pOutlineTable->GetRowArray());
-            if (pCols)
-                FillFieldGroup(pCols, pGroupColumns);
-            if (pRows)
-                FillFieldGroup(pRows, pGroupRows);
+            ScOutlineArray& rCols(pOutlineTable->GetColArray());
+            ScOutlineArray& rRows(pOutlineTable->GetRowArray());
+            FillFieldGroup(&rCols, pGroupColumns);
+            FillFieldGroup(&rRows, pGroupRows);
             pSharedData->SetLastColumn(nCurrentTable, pGroupColumns->GetLast());
             pSharedData->SetLastRow(nCurrentTable, pGroupRows->GetLast());
         }
@@ -2992,8 +2987,8 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
         pSharedData->SetLastRow(nTable, aRowHeaderRange.EndRow);
     pDefaults->FillDefaultStyles(nTable, pSharedData->GetLastRow(nTable),
         pSharedData->GetLastColumn(nTable), pCellStyles, pDoc);
-    pRowFormatRanges->SetColDefaults(pDefaults->GetColDefaults());
-    pCellStyles->SetColDefaults(pDefaults->GetColDefaults());
+    pRowFormatRanges->SetColDefaults(&pDefaults->GetColDefaults());
+    pCellStyles->SetColDefaults(&pDefaults->GetColDefaults());
     ExportColumns(nTable, aColumnHeaderRange, bHasColumnHeader);
     bool bIsFirst(true);
     sal_Int32 nEqualCells(0);

@@ -184,7 +184,7 @@ long SwWrtShell::DelLeft()
         // #i4032# Don't actually call a 'delete' if we
         // changed the table cell, compare DelRight().
         const SwStartNode * pSNdOld = pWasInTblNd ?
-                                      GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
+                                      GetSwCrsr()->GetNode().FindTableBoxStartNode() :
                                       0;
 
         // If the cursor is at the beginning of a paragraph, try to step
@@ -199,7 +199,7 @@ long SwWrtShell::DelLeft()
             return 0;
 
         const SwStartNode* pSNdNew = pIsInTblNd ?
-                                     GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
+                                     GetSwCrsr()->GetNode().FindTableBoxStartNode() :
                                      0;
 
         // #i4032# Don't actually call a 'delete' if we
@@ -300,8 +300,7 @@ long SwWrtShell::DelRight()
         {
             // #108049# Save the startnode of the current cell
             const SwStartNode * pSNdOld;
-            pSNdOld = GetSwCrsr()->GetNode()->
-                FindTableBoxStartNode();
+            pSNdOld = GetSwCrsr()->GetNode().FindTableBoxStartNode();
 
             if ( SwCrsrShell::IsEndPara() )
             {
@@ -320,7 +319,7 @@ long SwWrtShell::DelRight()
                             cell. May be different to pSNdOld as we have
                             moved. */
                         const SwStartNode * pSNdNew = GetSwCrsr()
-                            ->GetNode()->FindTableBoxStartNode();
+                            ->GetNode().FindTableBoxStartNode();
 
                         /** #108049# Only move instead of deleting if we
                             have moved to a different cell */

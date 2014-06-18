@@ -183,8 +183,8 @@ namespace
             };
             BoundFrames()
                 {};
-            const TextContentSet* GetPageBoundContents() const
-                { return &m_vPageBounds; };
+            const TextContentSet& GetPageBoundContents() const
+                { return m_vPageBounds; };
             const TextContentSet* GetFrameBoundContents(const Reference<XTextFrame>& rParentFrame) const
             {
                 framebound_map_t::const_iterator it = m_vFrameBoundsOf.find(rParentFrame);
@@ -1387,24 +1387,24 @@ SvXMLExportPropertyMapper *XMLTextParagraphExport::CreateParaDefaultExtPropMappe
 void XMLTextParagraphExport::exportPageFrames( bool bAutoStyles,
                                                bool bIsProgress )
 {
-    const TextContentSet* const pTexts = pBoundFrameSets->GetTexts()->GetPageBoundContents();
-    const TextContentSet* const pGraphics = pBoundFrameSets->GetGraphics()->GetPageBoundContents();
-    const TextContentSet* const pEmbeddeds = pBoundFrameSets->GetEmbeddeds()->GetPageBoundContents();
-    const TextContentSet* const pShapes = pBoundFrameSets->GetShapes()->GetPageBoundContents();
-    for(TextContentSet::const_iterator_t it = pTexts->getBegin();
-        it != pTexts->getEnd();
+    const TextContentSet& rTexts = pBoundFrameSets->GetTexts()->GetPageBoundContents();
+    const TextContentSet& rGraphics = pBoundFrameSets->GetGraphics()->GetPageBoundContents();
+    const TextContentSet& rEmbeddeds = pBoundFrameSets->GetEmbeddeds()->GetPageBoundContents();
+    const TextContentSet& rShapes = pBoundFrameSets->GetShapes()->GetPageBoundContents();
+    for(TextContentSet::const_iterator_t it = rTexts.getBegin();
+        it != rTexts.getEnd();
         ++it)
         exportTextFrame(*it, bAutoStyles, bIsProgress, true);
-    for(TextContentSet::const_iterator_t it = pGraphics->getBegin();
-        it != pGraphics->getEnd();
+    for(TextContentSet::const_iterator_t it = rGraphics.getBegin();
+        it != rGraphics.getEnd();
         ++it)
         exportTextGraphic(*it, bAutoStyles);
-    for(TextContentSet::const_iterator_t it = pEmbeddeds->getBegin();
-        it != pEmbeddeds->getEnd();
+    for(TextContentSet::const_iterator_t it = rEmbeddeds.getBegin();
+        it != rEmbeddeds.getEnd();
         ++it)
         exportTextEmbedded(*it, bAutoStyles);
-    for(TextContentSet::const_iterator_t it = pShapes->getBegin();
-        it != pShapes->getEnd();
+    for(TextContentSet::const_iterator_t it = rShapes.getBegin();
+        it != rShapes.getEnd();
         ++it)
         exportShape(*it, bAutoStyles);
 }

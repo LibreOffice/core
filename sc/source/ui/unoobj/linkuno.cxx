@@ -77,13 +77,13 @@ ScSheetLinkObj::ScSheetLinkObj(ScDocShell* pDocSh, const OUString& rName) :
     pDocShell( pDocSh ),
     aFileName( rName )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScSheetLinkObj::~ScSheetLinkObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -108,7 +108,7 @@ ScTableLink* ScSheetLinkObj::GetLink_Impl() const
 {
     if (pDocShell)
     {
-        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument().GetLinkManager();
         size_t nCount = pLinkManager->GetLinks().size();
         for (size_t i=0; i<nCount; i++)
         {
@@ -289,14 +289,14 @@ void ScSheetLinkObj::setFileName(const OUString& rNewName)
 
         //  zuerst Tabellen umsetzen
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = pDoc->GetTableCount();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if ( pDoc->IsLinked(nTab) && pDoc->GetLinkDoc(nTab) == aFileName )  // alte Datei
-                pDoc->SetLink( nTab, pDoc->GetLinkMode(nTab), aNewStr,
-                                pDoc->GetLinkFlt(nTab), pDoc->GetLinkOpt(nTab),
-                                pDoc->GetLinkTab(nTab),
-                                pDoc->GetLinkRefreshDelay(nTab) );  // nur Datei aendern
+            if ( rDoc.IsLinked(nTab) && rDoc.GetLinkDoc(nTab) == aFileName )  // alte Datei
+                rDoc.SetLink( nTab, rDoc.GetLinkMode(nTab), aNewStr,
+                                rDoc.GetLinkFlt(nTab), rDoc.GetLinkOpt(nTab),
+                                rDoc.GetLinkTab(nTab),
+                                rDoc.GetLinkRefreshDelay(nTab) );  // nur Datei aendern
 
         //  Links updaten
         //! Undo !!!
@@ -374,13 +374,13 @@ void ScSheetLinkObj::setRefreshDelay(sal_Int32 nRefreshDelay)
 ScSheetLinksObj::ScSheetLinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScSheetLinksObj::~ScSheetLinksObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -403,15 +403,15 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 
     typedef boost::unordered_set<OUString, OUStringHash> StrSetType;
     StrSetType aNames;
-    ScDocument* pDoc = pDocShell->GetDocument();
-    SCTAB nTabCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SCTAB nTabCount = rDoc.GetTableCount();
     sal_Int32 nCount = 0;
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
     {
-        if (!pDoc->IsLinked(nTab))
+        if (!rDoc.IsLinked(nTab))
             continue;
 
-        OUString aLinkDoc = pDoc->GetLinkDoc(nTab);
+        OUString aLinkDoc = rDoc.GetLinkDoc(nTab);
         if (aNames.insert(aLinkDoc).second)
         {
             // unique document name.
@@ -432,13 +432,13 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
     {
         OUString aNameStr(aName);
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = pDoc->GetTableCount();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if (pDoc->IsLinked(nTab))
+            if (rDoc.IsLinked(nTab))
             {
-                //! case-insensitiv ???
-                OUString aLinkDoc = pDoc->GetLinkDoc( nTab );
+                //! case-insensitive ???
+                OUString aLinkDoc = rDoc.GetLinkDoc( nTab );
                 if ( aLinkDoc == aNameStr )
                     return new ScSheetLinkObj( pDocShell, aNameStr );
             }
@@ -469,14 +469,14 @@ sal_Int32 SAL_CALL ScSheetLinksObj::getCount() throw(uno::RuntimeException, std:
     sal_Int32 nCount = 0;
 
     StrSetType aNames;
-    ScDocument* pDoc = pDocShell->GetDocument();
-    SCTAB nTabCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SCTAB nTabCount = rDoc.GetTableCount();
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
     {
-        if (!pDoc->IsLinked(nTab))
+        if (!rDoc.IsLinked(nTab))
             continue;
 
-        OUString aLinkDoc = pDoc->GetLinkDoc(nTab);
+        OUString aLinkDoc = rDoc.GetLinkDoc(nTab);
         if (aNames.insert(aLinkDoc).second)
             ++nCount;
     }
@@ -530,13 +530,13 @@ sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
     {
         OUString aNameStr(aName);
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = pDoc->GetTableCount();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            if (pDoc->IsLinked(nTab))
+            if (rDoc.IsLinked(nTab))
             {
                 //! case-insensitiv ???
-                OUString aLinkDoc(pDoc->GetLinkDoc( nTab ));
+                OUString aLinkDoc(rDoc.GetLinkDoc( nTab ));
                 if ( aLinkDoc == aNameStr )
                     return sal_True;
             }
@@ -555,8 +555,8 @@ uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(uno::R
         return uno::Sequence<OUString>();
 
     StrSetType aNames;
-    ScDocument* pDoc = pDocShell->GetDocument();
-    SCTAB nTabCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SCTAB nTabCount = rDoc.GetTableCount();
 
     sal_Int32 nLinkCount = getCount();
     uno::Sequence<OUString> aSeq(nLinkCount);
@@ -564,10 +564,10 @@ uno::Sequence<OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(uno::R
     size_t nPos = 0;
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
     {
-        if (!pDoc->IsLinked(nTab))
+        if (!rDoc.IsLinked(nTab))
             continue;
 
-        OUString aLinkDoc = pDoc->GetLinkDoc(nTab);
+        OUString aLinkDoc = rDoc.GetLinkDoc(nTab);
         if (aNames.insert(aLinkDoc).second)
             pAry[nPos++] = aLinkDoc;
     }
@@ -579,7 +579,7 @@ static ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, size_t nPos )
 {
     if (pDocShell)
     {
-        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument().GetLinkManager();
         size_t nTotalCount = pLinkManager->GetLinks().size();
         size_t nAreaCount = 0;
         for (size_t i=0; i<nTotalCount; i++)
@@ -601,13 +601,13 @@ ScAreaLinkObj::ScAreaLinkObj(ScDocShell* pDocSh, size_t nP) :
     pDocShell( pDocSh ),
     nPos( nP )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScAreaLinkObj::~ScAreaLinkObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -652,7 +652,7 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
         //! Undo fuer Loeschen
         //! Undo zusammenfassen
 
-        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument().GetLinkManager();
         pLinkManager->Remove( pLink );
         pLink = NULL;   // bei Remove geloescht
 
@@ -916,13 +916,13 @@ void SAL_CALL ScAreaLinkObj::setDestArea( const table::CellRangeAddress& aDestAr
 ScAreaLinksObj::ScAreaLinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScAreaLinksObj::~ScAreaLinksObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -977,7 +977,7 @@ void SAL_CALL ScAreaLinksObj::removeByIndex( sal_Int32 nIndex ) throw(uno::Runti
     {
         //! SetAddUndo oder so
 
-        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument().GetLinkManager();
         pLinkManager->Remove( pLink );
     }
 }
@@ -999,7 +999,7 @@ sal_Int32 SAL_CALL ScAreaLinksObj::getCount() throw(uno::RuntimeException, std::
     sal_Int32 nAreaCount = 0;
     if (pDocShell)
     {
-        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument()->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDocShell->GetDocument().GetLinkManager();
         size_t nTotalCount = pLinkManager->GetLinks().size();
         for (size_t i=0; i<nTotalCount; i++)
         {
@@ -1042,13 +1042,13 @@ ScDDELinkObj::ScDDELinkObj(ScDocShell* pDocSh, const OUString& rA,
     aTopic( rT ),
     aItem( rI )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScDDELinkObj::~ScDDELinkObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -1126,7 +1126,7 @@ void SAL_CALL ScDDELinkObj::refresh() throw(uno::RuntimeException, std::exceptio
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        sc::DocumentLinkManager& rMgr = pDocShell->GetDocument()->GetDocLinkManager();
+        sc::DocumentLinkManager& rMgr = pDocShell->GetDocument().GetDocLinkManager();
         rMgr.updateDdeLink(aAppl, aTopic, aItem);
     }
 }
@@ -1175,23 +1175,20 @@ uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
 
     if ( pDocShell )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        if ( pDoc )
+        ScDocument& rDoc = pDocShell->GetDocument();
+        size_t nPos = 0;
+        if ( rDoc.FindDdeLink( aAppl, aTopic, aItem, SC_DDE_IGNOREMODE, nPos ) )
         {
-            size_t nPos = 0;
-            if ( pDoc->FindDdeLink( aAppl, aTopic, aItem, SC_DDE_IGNOREMODE, nPos ) )
+            const ScMatrix* pMatrix = rDoc.GetDdeLinkResultMatrix( nPos );
+            if ( pMatrix )
             {
-                const ScMatrix* pMatrix = pDoc->GetDdeLinkResultMatrix( nPos );
-                if ( pMatrix )
+                uno::Any aAny;
+                if ( ScRangeToSequence::FillMixedArray( aAny, pMatrix, true ) )
                 {
-                    uno::Any aAny;
-                    if ( ScRangeToSequence::FillMixedArray( aAny, pMatrix, true ) )
-                    {
-                        aAny >>= aReturn;
-                    }
+                    aAny >>= aReturn;
                 }
-                bSuccess = true;
             }
+            bSuccess = true;
         }
     }
 
@@ -1212,17 +1209,14 @@ void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >&
 
     if ( pDocShell )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        if ( pDoc )
+        ScDocument& rDoc = pDocShell->GetDocument();
+        size_t nPos = 0;
+        if ( rDoc.FindDdeLink( aAppl, aTopic, aItem, SC_DDE_IGNOREMODE, nPos ) )
         {
-            size_t nPos = 0;
-            if ( pDoc->FindDdeLink( aAppl, aTopic, aItem, SC_DDE_IGNOREMODE, nPos ) )
-            {
-                uno::Any aAny;
-                aAny <<= aResults;
-                ScMatrixRef xMatrix = ScSequenceToMatrix::CreateMixedMatrix( aAny );
-                bSuccess = pDoc->SetDdeLinkResultMatrix( nPos, xMatrix );
-            }
+            uno::Any aAny;
+            aAny <<= aResults;
+            ScMatrixRef xMatrix = ScSequenceToMatrix::CreateMixedMatrix( aAny );
+            bSuccess = rDoc.SetDdeLinkResultMatrix( nPos, xMatrix );
         }
     }
 
@@ -1244,13 +1238,13 @@ void ScDDELinkObj::Refreshed_Impl()
 ScDDELinksObj::ScDDELinksObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScDDELinksObj::~ScDDELinksObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScDDELinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -1271,7 +1265,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     if (pDocShell)
     {
         OUString aAppl, aTopic, aItem;
-        if ( pDocShell->GetDocument()->GetDdeLinkData( (size_t)nIndex, aAppl, aTopic, aItem ) )
+        if ( pDocShell->GetDocument().GetDdeLinkData( (size_t)nIndex, aAppl, aTopic, aItem ) )
             return new ScDDELinkObj( pDocShell, aAppl, aTopic, aItem );
     }
     return NULL;
@@ -1284,11 +1278,11 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const OUString& aName)
         OUString aNamStr(aName);
         OUString aAppl, aTopic, aItem;
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        size_t nCount = pDoc->GetDocLinkManager().getDdeLinkCount();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        size_t nCount = rDoc.GetDocLinkManager().getDdeLinkCount();
         for (size_t i=0; i<nCount; i++)
         {
-            pDoc->GetDdeLinkData( i, aAppl, aTopic, aItem );
+            rDoc.GetDdeLinkData( i, aAppl, aTopic, aItem );
             if ( lcl_BuildDDEName(aAppl, aTopic, aItem) == aNamStr )
                 return new ScDDELinkObj( pDocShell, aAppl, aTopic, aItem );
         }
@@ -1312,7 +1306,7 @@ sal_Int32 SAL_CALL ScDDELinksObj::getCount() throw(uno::RuntimeException, std::e
     SolarMutexGuard aGuard;
     sal_Int32 nAreaCount = 0;
     if (pDocShell)
-        nAreaCount = pDocShell->GetDocument()->GetDocLinkManager().getDdeLinkCount();
+        nAreaCount = pDocShell->GetDocument().GetDocLinkManager().getDdeLinkCount();
     return nAreaCount;
 }
 
@@ -1359,14 +1353,14 @@ uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames() throw(uno::Run
     {
         OUString aAppl, aTopic, aItem;
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        size_t nCount = pDocShell->GetDocument()->GetDocLinkManager().getDdeLinkCount();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        size_t nCount = pDocShell->GetDocument().GetDocLinkManager().getDdeLinkCount();
         uno::Sequence<OUString> aSeq(nCount);
         OUString* pAry = aSeq.getArray();
 
         for (size_t i=0; i<nCount; i++)
         {
-            pDoc->GetDdeLinkData( i, aAppl, aTopic, aItem );
+            rDoc.GetDdeLinkData( i, aAppl, aTopic, aItem );
             pAry[i] = lcl_BuildDDEName(aAppl, aTopic, aItem);
         }
         return aSeq;
@@ -1383,11 +1377,11 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const OUString& aName )
         OUString aNamStr(aName);
         OUString aAppl, aTopic, aItem;
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        size_t nCount = pDocShell->GetDocument()->GetDocLinkManager().getDdeLinkCount();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        size_t nCount = pDocShell->GetDocument().GetDocLinkManager().getDdeLinkCount();
         for (size_t i=0; i<nCount; i++)
         {
-            pDoc->GetDdeLinkData( i, aAppl, aTopic, aItem );
+            rDoc.GetDdeLinkData( i, aAppl, aTopic, aItem );
             if ( lcl_BuildDDEName(aAppl, aTopic, aItem) == aNamStr )
                 return sal_True;
         }
@@ -1407,38 +1401,35 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
 
     if ( pDocShell )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        if ( pDoc )
+        ScDocument& rDoc = pDocShell->GetDocument();
+        sal_uInt8 nMod = SC_DDE_DEFAULT;
+        switch ( nMode )
         {
-            sal_uInt8 nMod = SC_DDE_DEFAULT;
-            switch ( nMode )
-            {
-                case sheet::DDELinkMode_DEFAULT:
-                    {
-                        nMod = SC_DDE_DEFAULT;
-                    }
-                    break;
-                case sheet::DDELinkMode_ENGLISH:
-                    {
-                        nMod = SC_DDE_ENGLISH;
-                    }
-                    break;
-                case sheet::DDELinkMode_TEXT:
-                    {
-                        nMod = SC_DDE_TEXT;
-                    }
-                    break;
-                default:
-                    {
-                    }
-                    break;
-            }
+            case sheet::DDELinkMode_DEFAULT:
+                {
+                    nMod = SC_DDE_DEFAULT;
+                }
+                break;
+            case sheet::DDELinkMode_ENGLISH:
+                {
+                    nMod = SC_DDE_ENGLISH;
+                }
+                break;
+            case sheet::DDELinkMode_TEXT:
+                {
+                    nMod = SC_DDE_TEXT;
+                }
+                break;
+            default:
+                {
+                }
+                break;
+        }
 
-            if ( pDoc->CreateDdeLink( aApplication, aTopic, aItem, nMod, ScMatrixRef() ) )
-            {
-                const OUString aName( lcl_BuildDDEName( aApplication, aTopic, aItem ) );
-                xLink.set( GetObjectByName_Impl( aName ) );
-            }
+        if ( rDoc.CreateDdeLink( aApplication, aTopic, aItem, nMod, ScMatrixRef() ) )
+        {
+            const OUString aName( lcl_BuildDDEName( aApplication, aTopic, aItem ) );
+            xLink.set( GetObjectByName_Impl( aName ) );
         }
     }
 
@@ -1476,7 +1467,7 @@ void SAL_CALL ScExternalSheetCacheObj::setCellValue(sal_Int32 nCol, sal_Int32 nR
         pToken.reset(new FormulaDoubleToken(fVal));
     else if (rValue >>= aVal)
     {
-        svl::SharedStringPool& rPool = mpDocShell->GetDocument()->GetSharedStringPool();
+        svl::SharedStringPool& rPool = mpDocShell->GetDocument().GetSharedStringPool();
         svl::SharedString aSS = rPool.intern(aVal);
         pToken.reset(new FormulaStringToken(aSS));
     }
@@ -1692,7 +1683,7 @@ sal_Int32 SAL_CALL ScExternalDocLinkObj::getTokenIndex()
 
 ScExternalDocLinksObj::ScExternalDocLinksObj(ScDocShell* pDocShell) :
     mpDocShell(pDocShell),
-    mpRefMgr(pDocShell->GetDocument()->GetExternalRefManager())
+    mpRefMgr(pDocShell->GetDocument().GetExternalRefManager())
 {
 }
 

@@ -77,7 +77,7 @@ public:
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) SAL_OVERRIDE;
     void RegisterBreakStyle(LwpPara* pPara);
     void ParseLayout();
-    LwpObjectID* GetLayout(){return &m_Layout;}
+    LwpObjectID& GetLayout() { return m_Layout;}
     bool IsLastFrib(){return m_bLastFrib;}
 
 private:

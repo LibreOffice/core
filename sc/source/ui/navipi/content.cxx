@@ -493,7 +493,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                         if (pScNavigatorDlg!=NULL)
                               pScTabViewShell=pScNavigatorDlg->GetTabViewShell();
                         if(pScTabViewShell !=NULL)
-                              pScDrawView =pScTabViewShell->GetViewData()->GetScDrawView();
+                              pScDrawView =pScTabViewShell->GetViewData().GetScDrawView();
                         if(pScDrawView!=NULL)
                          {
                             pScDrawView->SelectCurrentViewObject(aText );
@@ -717,7 +717,7 @@ ScDocument* ScContentTree::GetSourceDocument()
     {
         ScDocShell* pSh = GetManualOrCurrent();
         if (pSh)
-            return pSh->GetDocument();
+            return &pSh->GetDocument();
 
     }
     return NULL;
@@ -979,7 +979,7 @@ void ScContentTree::GetDrawNames( sal_uInt16 nType )
                                     if (pScNavigatorDlg!=NULL)
                                           pScTabViewShell=pScNavigatorDlg->GetTabViewShell();
                                     if(pScTabViewShell !=NULL)
-                                          pScDrawView =pScTabViewShell->GetViewData()->GetScDrawView();
+                                          pScDrawView =pScTabViewShell->GetViewData().GetScDrawView();
                                     if(pScDrawView!=NULL)
                                      {
                                          bool bMarked =pScDrawView->GetObjectIsMarked(pObject);
@@ -1224,8 +1224,8 @@ static bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const OUString& rN
 
 static void lcl_DoDragObject( ScDocShell* pSrcShell, const OUString& rName, sal_uInt16 nType, Window* pWin )
 {
-    ScDocument* pSrcDoc = pSrcShell->GetDocument();
-    ScDrawLayer* pModel = pSrcDoc->GetDrawLayer();
+    ScDocument& rSrcDoc = pSrcShell->GetDocument();
+    ScDrawLayer* pModel = rSrcDoc.GetDrawLayer();
     if (pModel)
     {
         bool bOle = ( nType == SC_CONTENT_OLEOBJECT );
@@ -1266,14 +1266,14 @@ static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, sal_u
     aMark.SelectTable( rRange.aStart.Tab(), true );
     aMark.SetMarkArea( rRange );
 
-    ScDocument* pSrcDoc = pSrcShell->GetDocument();
-    if ( !pSrcDoc->HasSelectedBlockMatrixFragment( rRange.aStart.Col(), rRange.aStart.Row(),
+    ScDocument& rSrcDoc = pSrcShell->GetDocument();
+    if ( !rSrcDoc.HasSelectedBlockMatrixFragment( rRange.aStart.Col(), rRange.aStart.Row(),
                                                    rRange.aEnd.Col(),   rRange.aEnd.Row(),
                                                    aMark ) )
     {
         ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
         ScClipParam aClipParam(rRange, false);
-        pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
+        rSrcDoc.CopyToClip(aClipParam, pClipDoc, &aMark);
         // pClipDoc->ExtendMerge( rRange, sal_True );
 
         TransferableObjectDescriptor aObjDesc;
@@ -1325,7 +1325,7 @@ void ScContentTree::DoDrag()
                 if (pDocSh->HasName())
                     aDocName = pDocSh->GetMedium()->GetName();
                 else
-                    pLocalDoc = pDocSh->GetDocument();      // Drop nur in dieses Dokument
+                    pLocalDoc = &pDocSh->GetDocument();      // Drop nur in dieses Dokument
             }
         }
 
@@ -1392,11 +1392,11 @@ void ScContentTree::DoDrag()
 
                     if ( pSrcShell )
                     {
-                        ScDocument* pSrcDoc = pSrcShell->GetDocument();
+                        ScDocument& rSrcDoc = pSrcShell->GetDocument();
                         if ( nType == SC_CONTENT_RANGENAME || nType == SC_CONTENT_DBAREA )
                         {
                             ScRange aRange;
-                            if ( lcl_GetRange( pSrcDoc, nType, aText, aRange ) )
+                            if ( lcl_GetRange( &rSrcDoc, nType, aText, aRange ) )
                             {
                                 lcl_DoDragCells( pSrcShell, aRange, SC_DROP_NAVIGATOR, this );
                             }
@@ -1404,7 +1404,7 @@ void ScContentTree::DoDrag()
                         else if ( nType == SC_CONTENT_TABLE )
                         {
                             SCTAB nTab;
-                            if ( pSrcDoc->GetTable( aText, nTab ) )
+                            if ( rSrcDoc.GetTable( aText, nTab ) )
                             {
                                 ScRange aRange( 0,0,nTab, MAXCOL,MAXROW,nTab );
                                 lcl_DoDragCells( pSrcShell, aRange, SC_DROP_NAVIGATOR | SC_DROP_TABLE, this );

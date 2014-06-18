@@ -87,7 +87,7 @@ bool ORelationDesignView::PreNotify( NotifyEvent& rNEvt )
 void ORelationDesignView::GetFocus()
 {
     OJoinDesignView::GetFocus();
-    if ( m_pTableView && m_pTableView->IsVisible() && !m_pTableView->GetTabWinMap()->empty() )
+    if ( m_pTableView && m_pTableView->IsVisible() && !m_pTableView->GetTabWinMap().empty() )
         m_pTableView->GrabTabWinFocus();
 }
 

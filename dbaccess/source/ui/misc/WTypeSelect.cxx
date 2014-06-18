@@ -186,7 +186,7 @@ TOTypeInfoSP    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
 
 const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 {
-    return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo();
+    return &static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
@@ -285,9 +285,9 @@ void OWizTypeSelect::Reset()
     sal_Int32 nBreakPos;
     m_pParent->CheckColumns(nBreakPos);
 
-    const ODatabaseExport::TColumnVector* pDestColumns = m_pParent->getDestVector();
-    ODatabaseExport::TColumnVector::const_iterator aIter = pDestColumns->begin();
-    ODatabaseExport::TColumnVector::const_iterator aEnd = pDestColumns->end();
+    const ODatabaseExport::TColumnVector& rDestColumns = m_pParent->getDestVector();
+    ODatabaseExport::TColumnVector::const_iterator aIter = rDestColumns.begin();
+    ODatabaseExport::TColumnVector::const_iterator aEnd = rDestColumns.end();
     for(;aIter != aEnd;++aIter)
     {
         sal_uInt16 nPos;

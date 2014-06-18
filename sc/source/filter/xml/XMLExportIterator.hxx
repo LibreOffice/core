@@ -85,7 +85,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     void                        AddNewShape(const ScMyShape& aShape);
     bool                        HasShapes() { return !aShapeList.empty(); }
-    const ScMyShapeList*        GetShapes() const { return &aShapeList; }
+    const ScMyShapeList&        GetShapes() const { return aShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
     virtual void                Sort() SAL_OVERRIDE;
     void                        SkipTable(SCTAB nSkip);
@@ -114,7 +114,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     void                        AddNewNote(const ScMyNoteShape& aNote);
     bool                        HasNotes() { return !aNoteShapeList.empty(); }
-    const ScMyNoteShapeList*    GetNotes() const { return &aNoteShapeList; }
+    const ScMyNoteShapeList&    GetNotes() const { return aNoteShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell ) SAL_OVERRIDE;
     virtual void                Sort() SAL_OVERRIDE;
     void                        SkipTable(SCTAB nSkip);

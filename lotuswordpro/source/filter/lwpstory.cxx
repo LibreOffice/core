@@ -105,7 +105,7 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     XFConvertFrameInFrame(pCont);
     //process para list
     XFContentContainer* pParaCont = pCont;
-    LwpPara* pPara = dynamic_cast<LwpPara*> ( GetFirstPara()->obj().get() );
+    LwpPara* pPara = dynamic_cast<LwpPara*> ( GetFirstPara().obj().get() );
     while(pPara)
     {
         pPara->SetFoundry(m_pFoundry);
@@ -113,7 +113,7 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
 
         //Get the xfcontainer for the next para
         pParaCont = pPara->GetXFContainer();
-        pPara = dynamic_cast<LwpPara*> ( pPara->GetNext()->obj().get() );
+        pPara = dynamic_cast<LwpPara*> ( pPara->GetNext().obj().get() );
     }
 
     //process frame which anchor is to cell after converter all the para
@@ -121,27 +121,27 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
     XFConvertFrameInHeaderFooter(pCont);
 
     //Release Lwp Objects
-    LwpPara* pCur = dynamic_cast<LwpPara*> (GetFirstPara()->obj().get());
+    LwpPara* pCur = dynamic_cast<LwpPara*> (GetFirstPara().obj().get());
     LwpPara* pNext;
     while(pCur)
     {
         pCur->Release();
-        pNext = dynamic_cast<LwpPara*> ( pCur->GetNext()->obj().get() );
+        pNext = dynamic_cast<LwpPara*> ( pCur->GetNext().obj().get() );
         LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
         LwpObjectFactory* pObjMgr = pGlobal->GetLwpObjFactory();
-        pObjMgr->ReleaseObject(*pCur->GetObjectID());
+        pObjMgr->ReleaseObject(pCur->GetObjectID());
         pCur = pNext;
     }
 }
 
 void LwpStory::RegisterStyle()
 {
-    LwpPara* pPara = dynamic_cast<LwpPara*>( GetFirstPara()->obj().get() );
+    LwpPara* pPara = dynamic_cast<LwpPara*>( GetFirstPara().obj().get() );
     while(pPara)
     {
         pPara->SetFoundry(m_pFoundry);
         pPara->RegisterStyle();
-        pPara = dynamic_cast<LwpPara*>(pPara->GetNext()->obj().get());
+        pPara = dynamic_cast<LwpPara*>(pPara->GetNext().obj().get());
     }
 }
 
@@ -340,7 +340,7 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
     LwpVirtualLayout* pLayout = GetLayout(NULL);
     while(pLayout)
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj().get());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
         while(pFrameLayout)
         {
 
@@ -354,7 +354,7 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
                 if(pXFFirtPara)
                     pFrameLayout->XFConvert(pXFFirtPara);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj().get());
+            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
         }
         pLayout = GetLayout(pLayout);
     }
@@ -371,7 +371,7 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
     LwpVirtualLayout* pLayout = GetLayout(NULL);
     while(pLayout)
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj().get());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
         while(pFrameLayout)
         {
             if((pFrameLayout->IsAnchorPage()
@@ -381,7 +381,7 @@ void LwpStory::XFConvertFrameInPage(XFContentContainer* pCont)
             {
                 pFrameLayout->XFConvert(pCont);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj().get());
+            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
         }
         pLayout = GetLayout(pLayout);
     }
@@ -397,14 +397,14 @@ void LwpStory::XFConvertFrameInFrame(XFContentContainer* pCont)
     LwpVirtualLayout* pLayout = GetLayout(NULL);
     while(pLayout)
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj().get());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
         while(pFrameLayout)
         {
             if(pFrameLayout->IsAnchorFrame())
             {
                 pFrameLayout->XFConvert(pCont);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj().get());
+            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
         }
         pLayout = GetLayout(pLayout);
     }
@@ -420,7 +420,7 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
     LwpVirtualLayout* pLayout = GetLayout(NULL);
     while(pLayout)
     {
-        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead()->obj().get());
+        LwpVirtualLayout* pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pLayout->GetChildHead().obj().get());
         while(pFrameLayout)
         {
             if(pFrameLayout->IsAnchorPage() && (pLayout->IsHeader() || pLayout->IsFooter()))
@@ -432,7 +432,7 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
                 if(pXFFirtPara)
                     pFrameLayout->XFConvert(pXFFirtPara);
             }
-            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext()->obj().get());
+            pFrameLayout = dynamic_cast<LwpVirtualLayout*>(pFrameLayout->GetNext().obj().get());
         }
         pLayout = GetLayout(pLayout);
     }
@@ -474,22 +474,22 @@ OUString LwpStory::GetContentText(bool bAllText)
     {
         OUString sText("");
         //process para list
-        LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara()->obj().get());
+        LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara().obj().get());
         while (pPara)
         {
             pPara->SetFoundry(m_pFoundry);
             sText += pPara->GetContentText(true);
-            pPara = dynamic_cast<LwpPara*>(pPara->GetNext()->obj().get());
+            pPara = dynamic_cast<LwpPara*>(pPara->GetNext().obj().get());
         }
         return sText;
     }
     else //only the first text frib
     {
-        rtl::Reference<LwpObject> pObj = GetFirstPara()->obj();
+        rtl::Reference<LwpObject> pObj = GetFirstPara().obj();
         if(pObj.is())
         {
             LwpPara* pPara = dynamic_cast<LwpPara*>(pObj.get());
-            if (!pPara || pPara->GetNext()->obj() != NULL)
+            if (!pPara || pPara->GetNext().obj() != NULL)
                 return OUString("");
             pPara->SetFoundry(m_pFoundry);
             return pPara->GetContentText();
@@ -500,27 +500,23 @@ OUString LwpStory::GetContentText(bool bAllText)
 }
 OUString LwpStory::RegisterFirstFribStyle()
 {
-    LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara()->obj().get());
+    LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara().obj().get());
     if (!pPara)
         return OUString("");
     pPara->SetFoundry(m_pFoundry);
-    LwpFribPtr* pFribs = pPara->GetFribs();
-    if (pFribs)
-    {
-        LwpFrib* pFirstFrib = pFribs->GetFribs();
-        pFirstFrib->RegisterStyle(m_pFoundry);
-        XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-        XFTextStyle* pBaseStyle = pXFStyleManager->FindTextStyle(pFirstFrib->GetStyleName());
-        if (pBaseStyle == NULL)
-            return OUString("");
-        XFTextStyle* pStyle = new XFTextStyle;
-        *pStyle = *pBaseStyle;
-        OUString sName = "Ruby" + pFirstFrib->GetStyleName();
-        pStyle->SetStyleName(sName);
-        pXFStyleManager->AddStyle(pStyle);
-        return sName;
-    }
-    return OUString("");
+    LwpFribPtr& rFribs = pPara->GetFribs();
+    LwpFrib* pFirstFrib = rFribs.GetFribs();
+    pFirstFrib->RegisterStyle(m_pFoundry);
+    XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
+    XFTextStyle* pBaseStyle = pXFStyleManager->FindTextStyle(pFirstFrib->GetStyleName());
+    if (pBaseStyle == NULL)
+        return OUString("");
+    XFTextStyle* pStyle = new XFTextStyle;
+    *pStyle = *pBaseStyle;
+    OUString sName = "Ruby" + pFirstFrib->GetStyleName();
+    pStyle->SetStyleName(sName);
+    pXFStyleManager->AddStyle(pStyle);
+    return sName;
 }
 
 bool LwpStory::IsBullStyleUsedBefore(const OUString& rStyleName, const sal_uInt8& nPos)

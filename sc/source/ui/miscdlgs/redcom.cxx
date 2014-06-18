@@ -58,8 +58,8 @@ ScChangeAction *ScRedComDialog::FindPrev(ScChangeAction *pAction)
 {
     if(pAction!=NULL && pDocShell !=NULL)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScChangeViewSettings* pSettings = pDoc->GetChangeViewSettings();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScChangeViewSettings* pSettings = rDoc.GetChangeViewSettings();
 
         pAction=pAction->GetPrev();
 
@@ -67,7 +67,7 @@ ScChangeAction *ScRedComDialog::FindPrev(ScChangeAction *pAction)
         {
             if( pAction->GetState()==SC_CAS_VIRGIN &&
                 pAction->IsDialogRoot() &&
-                ScViewUtil::IsActionShown(*pAction,*pSettings,*pDoc)) break;
+                ScViewUtil::IsActionShown(*pAction,*pSettings,rDoc)) break;
 
             pAction=pAction->GetPrev();
         }
@@ -79,8 +79,8 @@ ScChangeAction *ScRedComDialog::FindNext(ScChangeAction *pAction)
 {
     if(pAction!=NULL && pDocShell !=NULL)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScChangeViewSettings* pSettings = pDoc->GetChangeViewSettings();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScChangeViewSettings* pSettings = rDoc.GetChangeViewSettings();
 
         pAction=pAction->GetNext();
 
@@ -88,7 +88,7 @@ ScChangeAction *ScRedComDialog::FindNext(ScChangeAction *pAction)
         {
             if( pAction->GetState()==SC_CAS_VIRGIN &&
                 pAction->IsDialogRoot() &&
-                ScViewUtil::IsActionShown(*pAction,*pSettings,*pDoc)) break;
+                ScViewUtil::IsActionShown(*pAction,*pSettings,rDoc)) break;
 
             pAction=pAction->GetNext();
         }
@@ -102,7 +102,7 @@ void ScRedComDialog::ReInit(ScChangeAction *pAction)
     if(pChangeAction!=NULL && pDocShell !=NULL)
     {
         OUString aTitle;
-        pChangeAction->GetDescription( aTitle, pDocShell->GetDocument());
+        pChangeAction->GetDescription( aTitle, &pDocShell->GetDocument());
         pDlg->SetText(aTitle);
         aComment=pChangeAction->GetComment();
 
@@ -142,7 +142,7 @@ void ScRedComDialog::SelectCell()
         const ScChangeAction* pAction=pChangeAction;
         const ScBigRange& rRange = pAction->GetBigRange();
 
-        if(rRange.IsValid(pDocShell->GetDocument()))
+        if(rRange.IsValid(&pDocShell->GetDocument()))
         {
             ScViewData* pViewData=ScDocShell::GetViewData();
             ScRange aRef=rRange.MakeRange();

@@ -124,7 +124,7 @@ bool SwCrsrShell::GotoFtnTxt()
 bool SwCursor::GotoFtnAnchor()
 {
     // jump from footnote to anchor
-    const SwNode* pSttNd = GetNode()->FindFootnoteStartNode();
+    const SwNode* pSttNd = GetNode().FindFootnoteStartNode();
     if( pSttNd )
     {
         // search in all footnotes in document for this StartIndex
@@ -138,7 +138,7 @@ bool SwCursor::GotoFtnAnchor()
 
                 SwTxtNode& rTNd = (SwTxtNode&)pTxtFtn->GetTxtNode();
                 GetPoint()->nNode = rTNd;
-                GetPoint()->nContent.Assign( &rTNd, *pTxtFtn->GetStart() );
+                GetPoint()->nContent.Assign( &rTNd, pTxtFtn->GetStart() );
 
                 return !IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE );
@@ -165,13 +165,13 @@ bool SwCrsrShell::GotoFtnAnchor()
 inline bool CmpLE( const SwTxtFtn& rFtn, sal_uLong nNd, sal_Int32 nCnt )
 {
     const sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
-    return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() <= nCnt );
+    return nTNd < nNd || ( nTNd == nNd && rFtn.GetStart() <= nCnt );
 }
 
 inline bool CmpL( const SwTxtFtn& rFtn, sal_uLong nNd, sal_Int32 nCnt )
 {
     const sal_uLong nTNd = rFtn.GetTxtNode().GetIndex();
-    return nTNd < nNd || ( nTNd == nNd && *rFtn.GetStart() < nCnt );
+    return nTNd < nNd || ( nTNd == nNd && rFtn.GetStart() < nCnt );
 }
 
 bool SwCursor::GotoNextFtnAnchor()
@@ -227,7 +227,7 @@ bool SwCursor::GotoNextFtnAnchor()
 
         SwTxtNode& rTNd = (SwTxtNode&)pTxtFtn->GetTxtNode();
         GetPoint()->nNode = rTNd;
-        GetPoint()->nContent.Assign( &rTNd, *pTxtFtn->GetStart() );
+        GetPoint()->nContent.Assign( &rTNd, pTxtFtn->GetStart() );
         bRet = !IsSelOvr();
     }
     return bRet;
@@ -284,7 +284,7 @@ bool SwCursor::GotoPrevFtnAnchor()
 
         SwTxtNode& rTNd = (SwTxtNode&)pTxtFtn->GetTxtNode();
         GetPoint()->nNode = rTNd;
-        GetPoint()->nContent.Assign( &rTNd, *pTxtFtn->GetStart() );
+        GetPoint()->nContent.Assign( &rTNd, pTxtFtn->GetStart() );
         bRet = !IsSelOvr();
     }
     return bRet;
