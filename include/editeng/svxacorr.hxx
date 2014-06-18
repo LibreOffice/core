@@ -329,8 +329,9 @@ public:
     // Query/Set the name of the AutoCorrect file
     // the default is "autocorr.dat"
     OUString GetAutoCorrFileName( const LanguageTag& rLanguageTag /* = LANGUAGE_SYSTEM */ ,
-                                sal_Bool bNewFile = sal_False,
-                                sal_Bool bTstUserExist = sal_False ) const;
+                                bool bNewFile = false,
+                                bool bTstUserExist = false,
+                                bool bUnlocalized = false ) const;
 
     // Query/Set the current settings of AutoCorrect
     long GetFlags() const                       { return nFlags; }
