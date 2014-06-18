@@ -578,7 +578,7 @@ public:
 
     sal_uInt16      m_numOfEntries;
     sal_uInt16      m_numOfFieldEntries;
-    sal_uInt16      m_FIELD_ENTRY_SIZE;
+    size_t          m_FIELD_ENTRY_SIZE;
     ConstantPool*   m_pCP;
 
     FieldList(const sal_uInt8* buffer, sal_uInt16 numEntries, ConstantPool* pCP)
@@ -832,7 +832,7 @@ public:
     sal_uInt16      m_numOfEntries;
     sal_uInt16      m_numOfMethodEntries;
     sal_uInt16      m_numOfParamEntries;
-    sal_uInt16      m_PARAM_ENTRY_SIZE;
+    size_t          m_PARAM_ENTRY_SIZE;
     sal_uInt32*     m_pIndex;
     ConstantPool*   m_pCP;
 
