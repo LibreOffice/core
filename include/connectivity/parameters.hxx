@@ -35,7 +35,6 @@
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <connectivity/paramwrapper.hxx>
 #include <unotools/sharedunocomponent.hxx>
-#include <comphelper/implementationreference.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 

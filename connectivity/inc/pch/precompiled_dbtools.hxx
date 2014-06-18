@@ -123,7 +123,6 @@
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/evtlistenerhlp.hxx>
 #include <comphelper/extract.hxx>
-#include <comphelper/implementationreference.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/numbers.hxx>
