@@ -167,7 +167,9 @@ public:
     virtual void SAL_CALL setPropertyValue (
         const ::rtl::OUString& rsPropertyName,
         const cssu::Any& rValue)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::beans::UnknownPropertyException,
+               css::uno::RuntimeException,
+               std::exception) SAL_OVERRIDE;
     virtual cssu::Any SAL_CALL getPropertyValue (
         const ::rtl::OUString& rsPropertyName)
         throw(css::beans::UnknownPropertyException,

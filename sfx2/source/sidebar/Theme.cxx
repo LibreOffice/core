@@ -473,13 +473,12 @@ Reference<beans::XPropertySetInfo> SAL_CALL Theme::getPropertySetInfo (void)
     return Reference<beans::XPropertySetInfo>(this);
 }
 
-
-
-
 void SAL_CALL Theme::setPropertyValue (
     const ::rtl::OUString& rsPropertyName,
     const cssu::Any& rValue)
-    throw(cssu::RuntimeException, std::exception)
+    throw (css::beans::UnknownPropertyException,
+           css::uno::RuntimeException,
+           std::exception)
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
@@ -519,9 +518,6 @@ void SAL_CALL Theme::setPropertyValue (
     BroadcastPropertyChange(GetChangeListeners(__AnyItem, false), aEvent);
     BroadcastPropertyChange(GetChangeListeners(eItem, false), aEvent);
 }
-
-
-
 
 Any SAL_CALL Theme::getPropertyValue (
     const ::rtl::OUString& rsPropertyName)
