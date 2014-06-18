@@ -126,37 +126,37 @@ void ShapeToolbarController::initialize( const Sequence< uno::Any >& rArguments 
         {
             m_aStates.insert( TCommandState::value_type( ".uno:BasicShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_BASIC;
-            m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
+            m_pToolbarController = new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox );
         }
         else if ( m_aCommandURL == ".uno:SymbolShapes" )
         {
             m_aStates.insert( TCommandState::value_type( ".uno:SymbolShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_SYMBOL;
-            m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
+            m_pToolbarController = new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox );
         }
         else if ( m_aCommandURL == ".uno:ArrowShapes" )
         {
             m_aStates.insert( TCommandState::value_type( ".uno:ArrowShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_ARROW;
-            m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox) );
+            m_pToolbarController = new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox);
         }
         else if ( m_aCommandURL == ".uno:FlowChartShapes" )
         {
             m_aStates.insert( TCommandState::value_type( ".uno:FlowChartShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_FLOWCHART;
-            m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
+            m_pToolbarController = new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox );
         }
         else if ( m_aCommandURL == ".uno:CalloutShapes" )
         {
             m_aStates.insert( TCommandState::value_type( ".uno:CalloutShapes", sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_CALLOUT;
-            m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
+            m_pToolbarController = new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox );
         }
         else if ( m_aCommandURL == ".uno:StarShapes" )
         {
             m_aStates.insert( TCommandState::value_type( ".uno:StarShapes" , sal_True ) );
             m_nSlotId = SID_DRAWTBX_CS_STAR;
-            m_pToolbarController = TToolbarHelper::createFromQuery( new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox ) );
+            m_pToolbarController = new SvxTbxCtlCustomShapes( m_nSlotId, m_nToolBoxId, *pToolBox );
         }
 
         for ( TCommandState::iterator aIter( m_aStates.begin() ); aIter != m_aStates.end(); ++aIter )
@@ -225,7 +225,7 @@ Reference< awt::XWindow > ShapeToolbarController::createPopupWindow() throw (uno
     Reference< awt::XWindow > xRet;
     if ( m_pToolbarController.is() )
     {
-        xRet = m_pToolbarController.getRef()->createPopupWindow();
+        xRet = m_pToolbarController->createPopupWindow();
     }
 
     return xRet;
@@ -254,10 +254,9 @@ OUString ShapeToolbarController::getSubToolbarName() throw (uno::RuntimeExceptio
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard(m_aMutex);
-    uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
-    if ( xSub.is() )
+    if ( m_pToolbarController.is() )
     {
-        return xSub->getSubToolbarName();
+        return m_pToolbarController->getSubToolbarName();
     }
     return OUString();
 }
@@ -266,12 +265,10 @@ void ShapeToolbarController::functionSelected( const OUString& rCommand ) throw 
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
-    if ( xSub.is() )
+    if ( m_pToolbarController.is() )
     {
         m_aCommandURL = rCommand;
-        xSub->functionSelected( rCommand );
+        m_pToolbarController->functionSelected( rCommand );
     }
 }
 
@@ -279,11 +276,9 @@ void ShapeToolbarController::updateImage() throw (uno::RuntimeException, std::ex
 {
     SolarMutexGuard aSolarMutexGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
-
-    uno::Reference< frame::XSubToolbarController > xSub( m_pToolbarController.getRef(), uno::UNO_QUERY );
-    if ( xSub.is() )
+    if ( m_pToolbarController.is() )
     {
-        xSub->updateImage();
+        m_pToolbarController->updateImage();
     }
 }
 
