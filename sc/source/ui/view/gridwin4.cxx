@@ -380,6 +380,36 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
     bIsInPaint = false;
 }
 
+Size ScGridWindow::GetDataAreaSize()
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    SCCOL nStartCol = 0, nEndCol = MAXCOL;
+    SCROW nStartRow = 0, nEndRow = MAXROW;
+
+    SCTAB nTab = pViewData->GetTabNo();
+
+    pDoc->ShrinkToDataArea( nTab,
+                            nStartCol, nStartRow, nEndCol, nEndRow );
+
+    long nX = 0;
+    for ( SCCOL i = 0; i <= nEndCol; i++ )
+    {
+        nX += pDoc->GetColWidth( i, nTab );
+    }
+
+    long nY = 0;
+    for ( SCROW i = 0; i <= nEndRow; i++ )
+    {
+        nY += pDoc->GetRowHeight( i, nTab );
+    }
+
+    // TODO: this ignores any images / etc., which could be outside
+    // the data area.
+
+    // This doesn't include the final (bottom & right) borders...
+    return Size( nX, nY );
+}
+
 //  Draw  ----------------------------------------------------------------
 void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMode eMode,
                          OutputDevice* pOutDev )
@@ -482,6 +512,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
+
     ScOutputData aOutputData( pOutDev, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
