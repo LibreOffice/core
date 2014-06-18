@@ -53,7 +53,7 @@ namespace connectivity
 
             // factory method for resultset's
             virtual OResultSet* createResultSet() SAL_OVERRIDE;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > makeResultSet();
+            ::rtl::Reference< OResultSet > makeResultSet();
             void initResultSet(OResultSet*);
 
             void checkAndResizeParameters(sal_Int32 parameterIndex);
