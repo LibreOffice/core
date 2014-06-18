@@ -816,8 +816,7 @@ Reference< XShape > Shape::createAndInsert(
             }
             else if (mbTextBox)
             {
-                //No such property yet
-                //aShapeProps.setProperty(PROP_TextBox, uno::makeAny(true));
+                aShapeProps.setProperty(PROP_TextBox, uno::makeAny(true));
             }
 
             if (aServiceName != "com.sun.star.text.TextFrame" && isLinkedTxbx())

@@ -131,7 +131,6 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
     case XML_txbx:
     {
         mpShape->getCustomShapeProperties()->setShapeTypeOverride(true);
-        mpShape->setServiceName("com.sun.star.text.TextFrame");
         mpShape->setTextBox(true);
         //in case if the textbox is linked, save the attributes
         //for further processing.
@@ -153,7 +152,6 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
         //in case if the textbox is linked, save the attributes
         //for further processing.
         mpShape->getCustomShapeProperties()->setShapeTypeOverride(true);
-        mpShape->setServiceName("com.sun.star.text.TextFrame");
         mpShape->setTextBox(true);
         OptValue<OUString> id  = rAttribs.getString(XML_id);
         OptValue<OUString> seq = rAttribs.getString(XML_seq);
