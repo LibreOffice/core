@@ -141,6 +141,26 @@ struct TextInfo
     float vertex[12];
 };
 
+struct TextureArrayInfo
+{
+    size_t subTextureNum;
+    int textureArrayWidth;
+    int textureArrayHeight;
+    GLuint textureID;
+
+    TextureArrayInfo();
+};
+
+struct TextInfoBatch
+{
+    size_t batchNum;
+    std::vector<glm::vec4> idList;
+    std::vector<TextureArrayInfo> texture;
+    std::vector<glm::vec3> vertexList;
+    std::vector<glm::vec3> textureCoordList;
+};
+
+
 struct BatchBarInfo
 {
     std::vector <glm::mat4> modelMatrixList;
@@ -231,6 +251,18 @@ private:
     void UpdateBatch3DUniformBlock();
     void RenderBatchBars(bool bNewScene);
     void CheckGLSLVersion();
+    void RenderTextShapeBatch();
+    void ReleaseTextShapesBatch();
+    void CreateTextTextureSingle(const boost::shared_array<sal_uInt8> &bitmapBuf,
+                           ::Size maSizePixels,
+                           glm::vec3 vTopLeft,glm::vec3 vTopRight,
+                           glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                           sal_uInt32 nUniqueId);
+    void CreateTextTextureBatch(const boost::shared_array<sal_uInt8> &bitmapBuf,
+                       ::Size maSizePixels,
+                       glm::vec3 vTopLeft,glm::vec3 vTopRight,
+                       glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                       sal_uInt32 nUniqueId);
 private:
 
     struct ShaderResources
@@ -285,6 +317,14 @@ private:
         GLint m_3DBatchVertexID;
         GLint m_3DBatchNormalID;
         GLint m_3DBatchColorID;
+
+        //Batch render text
+        bool mbTexBatchSupport;
+        GLint m_BatchTextProID;
+        GLint m_BatchTextMatrixID;
+        GLint m_BatchTextVertexID;
+        GLint m_BatchTextTexCoordID;
+        GLint m_BatchTextTexID;
 
         ShaderResources();
         ~ShaderResources();
@@ -358,6 +398,7 @@ private:
     std::vector <TextInfo> m_TextInfoList;
     std::vector <TextInfo> m_ScreenTextInfoList;
     GLuint m_TextTexCoordBuf;
+    GLuint m_TextTexCoordBufBatch;
 
     std::vector<glm::vec3> m_Vertices;
 
@@ -388,6 +429,7 @@ private:
     GLint m_Batch3DActualSizeLight;
 
     glm::mat4 m_GlobalScaleMatrix;
+    TextInfoBatch m_TextInfoBatch;
     //for 3.0 version
     int m_iLightNum;
     glm::vec4 m_Ambient;
