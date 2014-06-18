@@ -340,7 +340,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         }
         else
         {
-            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( aLanguageTag, false, true ));
+            SwTextBlocks aTBlks( rACorrect.GetAutoCorrFileName( aLanguageTag, false, true, false ));
             sal_uInt16 nPos = aTBlks.GetIndex( pFnd->GetShort() );
             if( USHRT_MAX != nPos && aTBlks.BeginGetDoc( nPos ) )
             {
