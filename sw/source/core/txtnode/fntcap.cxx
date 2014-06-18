@@ -537,7 +537,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     // do not matter for Writer (and if they did it'd be pretty ugly to propagate
     // the option there).
     int smallCapsPercentage = smallCapsPercentage66 ? 66 : SMALL_CAPS_PERCENTAGE;
-    aFont.SetProportion( (aFont.GetPropr() * smallCapsPercentage ) / 100L );
+    aFont.SetProportion( (aFont.GetPropr() * smallCapsPercentage ) / 100 );
     pMagic2 = NULL;
     nIndex2 = 0;
     SwFntAccess *pSmallFontAccess = new SwFntAccess( pMagic2, nIndex2, &aFont,
