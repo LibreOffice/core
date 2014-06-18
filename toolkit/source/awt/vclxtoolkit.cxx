@@ -1466,6 +1466,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > SAL_CALL VCLXToolkit::getDragSource( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     Window * pWindow = VCLUnoHelper::GetWindow( window );
 
     if( pWindow )
@@ -1476,6 +1478,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget > SAL_CALL VCLXToolkit::getDropTarget( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& window ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
+    SolarMutexGuard g;
+
     Window * pWindow = VCLUnoHelper::GetWindow( window );
 
     if( pWindow )
