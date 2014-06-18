@@ -1756,7 +1756,7 @@ public:
         return lhs + "*" + rhs;
     }
     virtual std::string BinFuncName(void) const SAL_OVERRIDE { return "fmul"; }
-    virtual bool ZeroReturnZero() {return true;};
+    virtual bool ZeroReturnZero() SAL_OVERRIDE { return true; }
 };
 
 /// Technically not a reduction, but fits the framework.
