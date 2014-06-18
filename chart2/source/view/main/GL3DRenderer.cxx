@@ -71,6 +71,14 @@ glm::vec4 getColorAsVector(sal_uInt32 nColor)
 
 }
 
+TextureArrayInfo::TextureArrayInfo():
+    subTextureNum(0),
+    textureArrayWidth(0),
+    textureArrayHeight(0),
+    textureID(0)
+{
+}
+
 OpenGL3DRenderer::OpenGL3DRenderer():
       m_iWidth(0)
     , m_iHeight(0)
@@ -111,6 +119,7 @@ OpenGL3DRenderer::OpenGL3DRenderer():
 
 OpenGL3DRenderer::~OpenGL3DRenderer()
 {
+    ReleaseShapes();
     // delete buffers
     glDeleteBuffers(1, &m_CubeVertexBuf);
     glDeleteBuffers(1, &m_CubeNormalBuf);
@@ -126,10 +135,18 @@ OpenGL3DRenderer::~OpenGL3DRenderer()
     glDeleteBuffers(1, &m_Batch3DUBOBuffer);
     glDeleteBuffers(1, &m_3DUBOBuffer);
     glDeleteBuffers(1, &m_3DUBOBuffer);
+    glDeleteBuffers(1, &m_TextTexCoordBufBatch);
 
     glDeleteFramebuffers(1, &mnPickingFbo);
     glDeleteRenderbuffers(1, &mnPickingRboDepth);
     glDeleteRenderbuffers(1, &mnPickingRboColor);
+
+    for (size_t i = 0; i < m_TextInfoBatch.texture.size(); i++)
+    {
+        glDeleteTextures(1, &m_TextInfoBatch.texture[i].textureID);
+    }
+    m_TextInfoBatch.texture.clear();
+
 }
 
 OpenGL3DRenderer::ShaderResources::ShaderResources()
@@ -162,6 +179,12 @@ OpenGL3DRenderer::ShaderResources::ShaderResources()
     , m_3DBatchVertexID(0)
     , m_3DBatchNormalID(0)
     , m_3DBatchColorID(0)
+    , mbTexBatchSupport(false)
+    , m_BatchTextProID(0)
+    , m_BatchTextMatrixID(0)
+    , m_BatchTextVertexID(0)
+    , m_BatchTextTexCoordID(0)
+    , m_BatchTextTexID(0)
 {
 }
 
@@ -172,6 +195,7 @@ OpenGL3DRenderer::ShaderResources::~ShaderResources()
     glDeleteProgram(m_ScreenTextProID);
     glDeleteProgram(m_3DProID);
     glDeleteProgram(m_3DBatchProID);
+    glDeleteProgram(m_BatchTextProID);
 }
 
 void OpenGL3DRenderer::CheckGLSLVersion()
@@ -227,6 +251,27 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DBatchVertexID = glGetAttribLocation(m_3DBatchProID, "vertexPositionModelspace");
         m_3DBatchNormalID = glGetAttribLocation(m_3DBatchProID, "vertexNormalModelspace");
         m_3DBatchColorID = glGetAttribLocation(m_3DBatchProID, "barColor");
+        //check whether the texture array is support
+        GLint numExtensions = 0;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
+        for( GLint i = 0; i < numExtensions; ++i )
+        {
+            OUString currExt = ::rtl::OUString::createFromAscii((char*)glGetStringi(GL_EXTENSIONS, i));
+            if (currExt == "GL_EXT_texture_array")
+            {
+                mbTexBatchSupport = true;
+                break;
+            }
+        }
+        if (mbTexBatchSupport)
+        {
+            m_BatchTextProID = OpenGLHelper::LoadShaders("textVertexShaderBatch", "textFragmentShaderBatch");
+            m_BatchTextMatrixID = glGetUniformLocation(m_BatchTextProID, "MVP");
+            m_BatchTextTexID = glGetUniformLocation(m_BatchTextProID, "texArray");
+            m_BatchTextVertexID = glGetAttribLocation(m_BatchTextProID, "vPosition");
+            m_BatchTextTexCoordID = glGetAttribLocation(m_BatchTextProID, "texCoord");
+        }
+        mbTexBatchSupport = m_BatchTextProID ? true : false;
     }
     else
     {
@@ -250,11 +295,14 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
         m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
     }
-    m_TextProID = OpenGLHelper::LoadShaders("textVertexShader", "textFragmentShader");
-    m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
-    m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
-    m_TextTexCoordID = glGetAttribLocation(m_TextProID, "texCoord");
-    m_TextTexID = glGetUniformLocation(m_TextProID, "TextTex");
+    if (!mbTexBatchSupport)
+    {
+        m_TextProID = OpenGLHelper::LoadShaders("textVertexShader", "textFragmentShader");
+        m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
+        m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
+        m_TextTexCoordID = glGetAttribLocation(m_TextProID, "texCoord");
+        m_TextTexID = glGetUniformLocation(m_TextProID, "TextTex");
+    }
 
     m_ScreenTextProID = OpenGLHelper::LoadShaders("screenTextVertexShader", "screenTextFragmentShader");
     m_ScreenTextVertexID = glGetAttribLocation(m_ScreenTextProID, "vPosition");
@@ -326,6 +374,7 @@ void OpenGL3DRenderer::init()
     glGenBuffers(1, &m_BatchModelMatrixBuf);
     glGenBuffers(1, &m_BatchNormalMatrixBuf);
     glGenBuffers(1, &m_BatchColorBuf);
+    glGenBuffers(1, &m_TextTexCoordBufBatch);
     glGenBuffers(1, &m_BoundBox);
     glBindBuffer(GL_ARRAY_BUFFER, m_BoundBox);
     glBufferData(GL_ARRAY_BUFFER, sizeof(boundBox), boundBox, GL_STATIC_DRAW);
@@ -367,6 +416,7 @@ void OpenGL3DRenderer::init()
         Init3DUniformBlock();
         InitBatch3DUniformBlock();
     }
+    m_TextInfoBatch.batchNum = 512;
     CHECK_GL_ERROR();
     glViewport(0, 0, m_iWidth, m_iHeight);
     Set3DSenceInfo(0xFFFFFF, true);
@@ -1631,11 +1681,11 @@ void OpenGL3DRenderer::CreateScreenTextTexture(
     m_ScreenTextInfoList.push_back(aTextInfo);
 }
 
-void OpenGL3DRenderer::CreateTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
-                                         ::Size maSizePixels,
-                                         const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
-                                         const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
-                                         sal_uInt32 nUniqueId)
+void OpenGL3DRenderer::CreateTextTextureSingle(const boost::shared_array<sal_uInt8> &bitmapBuf,
+                           ::Size maSizePixels,
+                           glm::vec3 vTopLeft,glm::vec3 vTopRight,
+                           glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                           sal_uInt32 nUniqueId)
 {
     long bmpWidth = maSizePixels.Width();
     long bmpHeight = maSizePixels.Height();
@@ -1676,6 +1726,92 @@ void OpenGL3DRenderer::CreateTextTexture(const boost::shared_array<sal_uInt8> &b
     glBindTexture(GL_TEXTURE_2D, 0);
     CHECK_GL_ERROR();
     m_TextInfoList.push_back(aTextInfo);
+
+}
+
+
+void OpenGL3DRenderer::CreateTextTextureBatch(const boost::shared_array<sal_uInt8> &bitmapBuf,
+                   ::Size maSizePixels,
+                   glm::vec3 vTopLeft,glm::vec3 vTopRight,
+                   glm::vec3 vBottomRight, glm::vec3 vBottomLeft,
+                   sal_uInt32 nUniqueId)
+{
+    long bmpWidth = maSizePixels.Width();
+    long bmpHeight = maSizePixels.Height();
+    glm::vec4 id = getColorAsVector(nUniqueId);
+    m_TextInfoBatch.idList.push_back(id);
+    m_TextInfoBatch.vertexList.push_back(glm::vec3(vBottomRight.x, vBottomRight.y, vBottomRight.z));
+    m_TextInfoBatch.vertexList.push_back(glm::vec3(vTopRight.x, vTopRight.y, vTopRight.z));
+    m_TextInfoBatch.vertexList.push_back(glm::vec3(vTopLeft.x, vTopLeft.y, vTopLeft.z));
+    m_TextInfoBatch.vertexList.push_back(glm::vec3(vBottomLeft.x, vBottomLeft.y, vBottomLeft.z));
+    //find the last vector, which size is small than default batch number;
+    size_t index = 0;
+    while ((m_TextInfoBatch.texture.size() > 0) &&
+           (m_TextInfoBatch.texture[index].subTextureNum >= m_TextInfoBatch.batchNum) &&
+           (index < m_TextInfoBatch.texture.size() - 1))
+    {
+        index++;
+    }
+    //if the sub texture number of the last texture array reach the largest, create a new textur array
+    if ((m_TextInfoBatch.texture.size() == 0) ||
+        (m_TextInfoBatch.texture[index].subTextureNum >= m_TextInfoBatch.batchNum))
+    {
+        TextureArrayInfo textureArray;
+        glGenTextures(1, &textureArray.textureID);
+        CHECK_GL_ERROR();
+        glBindTexture(GL_TEXTURE_2D_ARRAY, textureArray.textureID);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        CHECK_GL_ERROR();
+        textureArray.textureArrayWidth = bmpHeight * 8;
+        textureArray.textureArrayHeight = bmpHeight;
+        glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGB, textureArray.textureArrayWidth, textureArray.textureArrayHeight,
+                     m_TextInfoBatch.batchNum, 0, GL_RGB,  GL_UNSIGNED_BYTE, NULL);
+        CHECK_GL_ERROR();
+        if (m_TextInfoBatch.texture.size() > 0)
+        {
+            index++;
+        }
+        m_TextInfoBatch.texture.push_back(textureArray);
+        glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+    }
+    glBindTexture(GL_TEXTURE_2D_ARRAY, m_TextInfoBatch.texture[index].textureID);
+    CHECK_GL_ERROR();
+    glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, m_TextInfoBatch.texture[index].subTextureNum, bmpWidth, bmpHeight, 1, GL_RGB, GL_UNSIGNED_BYTE, bitmapBuf.get());
+    CHECK_GL_ERROR();
+        //calc texture coordinate
+    m_TextInfoBatch.textureCoordList.push_back(glm::vec3((float)bmpWidth / (float)m_TextInfoBatch.texture[index].textureArrayWidth,
+                                                         0,
+                                                         m_TextInfoBatch.texture[index].subTextureNum));
+    m_TextInfoBatch.textureCoordList.push_back(glm::vec3((float)bmpWidth / (float)m_TextInfoBatch.texture[index].textureArrayWidth,
+                                                         (float)bmpHeight/ (float)m_TextInfoBatch.texture[index].textureArrayHeight,
+                                                         m_TextInfoBatch.texture[index].subTextureNum));
+    m_TextInfoBatch.textureCoordList.push_back(glm::vec3(0,
+                                                         (float)bmpHeight/ (float)m_TextInfoBatch.texture[index].textureArrayHeight,
+                                                         m_TextInfoBatch.texture[index].subTextureNum));
+    m_TextInfoBatch.textureCoordList.push_back(glm::vec3(0,
+                                                         0,
+                                                         m_TextInfoBatch.texture[index].subTextureNum));
+    m_TextInfoBatch.texture[index].subTextureNum++;
+    glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+}
+
+void OpenGL3DRenderer::CreateTextTexture(const boost::shared_array<sal_uInt8> &bitmapBuf,
+                                         ::Size maSizePixels,
+                                         const glm::vec3& vTopLeft, const glm::vec3& vTopRight,
+                                         const glm::vec3& vBottomRight, const glm::vec3& vBottomLeft,
+                                         sal_uInt32 nUniqueId)
+{
+    if (maResources.mbTexBatchSupport)
+    {
+        CreateTextTextureBatch(bitmapBuf, maSizePixels, vTopLeft, vTopRight, vBottomRight, vBottomLeft, nUniqueId);
+    }
+    else
+    {
+        CreateTextTextureSingle(bitmapBuf, maSizePixels, vTopLeft, vTopRight, vBottomRight, vBottomLeft, nUniqueId);
+    }
 }
 
 void OpenGL3DRenderer::ReleaseTextShapes()
@@ -1753,7 +1889,67 @@ void OpenGL3DRenderer::RenderScreenTextShape()
     }
     CHECK_GL_ERROR();
 }
+void OpenGL3DRenderer::ReleaseTextShapesBatch()
+{
+    for (size_t i = 0; i < m_TextInfoBatch.texture.size(); i++)
+    {
+        m_TextInfoBatch.texture[i].subTextureNum = 0;
+    }
+    m_TextInfoBatch.vertexList.clear();
+    m_TextInfoBatch.textureCoordList.clear();
+    m_TextInfoBatch.idList.clear();
+}
 
+void OpenGL3DRenderer::RenderTextShapeBatch()
+{
+    glm::mat4 aMVP = m_3DProjection * m_3DView * m_GlobalScaleMatrix;
+    glUseProgram(maResources.m_BatchTextProID);
+    CHECK_GL_ERROR();
+    glUniformMatrix4fv(maResources.m_BatchTextMatrixID, 1, GL_FALSE, &aMVP[0][0]);
+    glEnableVertexAttribArray(maResources.m_BatchTextVertexID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+    glVertexAttribPointer(
+        maResources.m_BatchTextVertexID,
+        3,                  // size
+        GL_FLOAT,           // type
+        GL_FALSE,           // normalized?
+        0,                  // stride
+        (void*)0            // array buffer offset
+        );
+    //tex coord
+    CHECK_GL_ERROR();
+    glEnableVertexAttribArray(maResources.m_BatchTextTexCoordID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBufBatch);
+    glVertexAttribPointer(
+        maResources.m_BatchTextTexCoordID,
+        3,                  // size
+        GL_FLOAT,           // type
+        GL_FALSE,           // normalized?
+        0,                  // stride
+        (void*)0            // array buffer offset
+        );
+    //use texture array to get the vertex
+    for (size_t i = 0; i < m_TextInfoBatch.texture.size(); i++)
+    {
+        int vertexNum = m_TextInfoBatch.texture[i].subTextureNum;
+        glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+        glBufferData(GL_ARRAY_BUFFER, 4 * vertexNum * sizeof(glm::vec3), &m_TextInfoBatch.vertexList[4 * i * m_TextInfoBatch.batchNum], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, m_TextTexCoordBufBatch);
+        glBufferData(GL_ARRAY_BUFFER, 4 * vertexNum * sizeof(glm::vec3), &m_TextInfoBatch.textureCoordList[4 * i * m_TextInfoBatch.batchNum], GL_STATIC_DRAW);
+        glBindTexture(GL_TEXTURE_2D_ARRAY, m_TextInfoBatch.texture[i].textureID);
+        CHECK_GL_ERROR();
+        glUniform1i(maResources.m_BatchTextTexID, 0);
+        CHECK_GL_ERROR();
+        //TODO: moggi: get rid fo GL_QUADS
+        glDrawArrays(GL_QUADS, 0, 4 * vertexNum);
+    }
+    glDisableVertexAttribArray(maResources.m_BatchTextVertexID);
+    CHECK_GL_ERROR();
+    glDisableVertexAttribArray(maResources.m_BatchTextTexCoordID);
+    CHECK_GL_ERROR();
+    glBindTexture(GL_TEXTURE_2D_ARRAY, 0);
+    glUseProgram(0);
+}
 void OpenGL3DRenderer::RenderTextShape()
 {
     CHECK_GL_ERROR();
@@ -1869,7 +2065,14 @@ void OpenGL3DRenderer::ProcessUnrenderedShape(bool bNewScene)
         }
     }
     //render text
-    RenderTextShape();
+    if (maResources.mbTexBatchSupport)
+    {
+        RenderTextShapeBatch();
+    }
+    else
+    {
+        RenderTextShape();
+    }
     // render screen text
     RenderScreenTextShape();
 #if DEBUG_FBO
@@ -1929,6 +2132,7 @@ void OpenGL3DRenderer::ReleaseShapes()
     ReleaseTextShapes();
     ReleaseScreenTextShapes();
     ReleaseBatchBarInfo();
+    ReleaseTextShapesBatch();
 }
 
 void OpenGL3DRenderer::GetBatchMiddleInfo(const Extrude3DInfo &extrude3D)
