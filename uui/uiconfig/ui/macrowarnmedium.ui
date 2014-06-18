@@ -5,7 +5,7 @@
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="MacroWarnMedium">
     <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="border_width">12</property>
     <property name="title" translatable="yes">%PRODUCTNAME - Security Warning</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -14,7 +14,7 @@
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
+        <property name="spacing">24</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
@@ -76,7 +76,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
-            <property name="spacing">6</property>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkImage" id="symbolImage">
                 <property name="visible">True</property>
