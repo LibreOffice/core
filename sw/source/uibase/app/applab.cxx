@@ -131,9 +131,9 @@ static const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rIte
 
     //anchor frame to page
     aSet.Put( SwFmtAnchor( FLY_AT_PAGE, nPhyPageNum ) );
-    aSet.Put( SwFmtHoriOrient( rItem.lLeft + nCol * rItem.lHDist,
+    aSet.Put( SwFmtHoriOrient( rItem.lLeft + static_cast<SwTwips>(nCol) * rItem.lHDist,
                                text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
-    aSet.Put( SwFmtVertOrient( rItem.lUpper + nRow * rItem.lVDist,
+    aSet.Put( SwFmtVertOrient( rItem.lUpper + static_cast<SwTwips>(nRow) * rItem.lVDist,
                                text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ) );
     const SwFrmFmt *pFmt = rSh.NewFlyFrm(aSet, true,  &rFmt );  // Insert Fly
     OSL_ENSURE( pFmt, "Fly not inserted" );
