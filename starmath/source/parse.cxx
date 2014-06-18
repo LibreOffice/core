@@ -2276,11 +2276,11 @@ void SmParser::Matrix()
             r++;
         }
 
-        long nRC = r * c;
+        size_t nRC = static_cast<size_t>(r) * c;
 
         ExpressionArray.resize(nRC);
 
-        for (sal_uInt16 i = 0; i < (nRC); i++)
+        for (size_t i = 0; i < (nRC); ++i)
         {
             ExpressionArray[(nRC) - (i + 1)] = lcl_popOrZero(m_aNodeStack);
         }
