@@ -20,6 +20,8 @@
 #define INCLUDED_REPORTDESIGN_INC_RPTOBJECT_HXX
 
 #include "dllapi.h"
+
+#include <boost/noncopyable.hpp>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
 
@@ -67,7 +69,7 @@ typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexTo
 class OReportPage;
 class OPropertyMediator;
 
-class REPORTDESIGN_DLLPUBLIC OObjectBase
+class REPORTDESIGN_DLLPUBLIC OObjectBase: private boost::noncopyable
 {
 public:
     typedef rtl::Reference<OPropertyMediator> TMediator;
