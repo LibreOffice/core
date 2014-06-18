@@ -290,6 +290,7 @@ protected:
     virtual void    Resize( const Size& rSize );
     virtual void    PrePaint() SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual void    Paint( const Rectangle& rRect, OutputDevice* pOutDev);
     virtual void    KeyInput(const KeyEvent& rKEvt) SAL_OVERRIDE;
     virtual void    GetFocus() SAL_OVERRIDE;
     virtual void    LoseFocus() SAL_OVERRIDE;
@@ -359,7 +360,7 @@ public:
     using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                           ScUpdateMode eMode = SC_UPDATE_ALL,
-                          OutputDevice* pOutDev = 0 );
+                          OutputDevice* pOutDev = 0);
 
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
 

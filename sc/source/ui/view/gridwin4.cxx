@@ -301,6 +301,11 @@ void ScGridWindow::PrePaint()
 
 void ScGridWindow::Paint( const Rectangle& rRect )
 {
+    Paint( rRect, this );
+}
+
+void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
+{
     ScDocument* pDoc = pViewData->GetDocument();
     if ( pDoc->IsInInterpreter() )
     {
@@ -330,7 +335,7 @@ void ScGridWindow::Paint( const Rectangle& rRect )
 
     bIsInPaint = true;
 
-    Rectangle aPixRect = LogicToPixel( rRect );
+    Rectangle aPixRect = pOutDev->LogicToPixel( rRect );
 
     SCCOL nX1 = pViewData->GetPosX(eHWhich);
     SCROW nY1 = pViewData->GetPosY(eVWhich);
@@ -371,8 +376,7 @@ void ScGridWindow::Paint( const Rectangle& rRect )
         ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
     }
 
-    Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS );           // nicht weiterzeichnen
-
+    Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS, pOutDev );           // nicht weiterzeichnen
     bIsInPaint = false;
 }
 
@@ -590,7 +594,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         }
 
         // get logic positions
-        aDrawingRectLogic = PixelToLogic(aDrawingRectPixel, aDrawMode);
+        aDrawingRectLogic = pOutDev->PixelToLogic(aDrawingRectPixel, aDrawMode);
     }
 
     // device for document content, used by overlay manager
@@ -849,7 +853,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         DrawRect( Rectangle( aStart,aEnd ) );
 
         SetMapMode(pViewData->GetLogicMode());
-        pEditView->Paint( PixelToLogic( Rectangle( Point( nScrX, nScrY ),
+        pEditView->Paint( pOutDev->PixelToLogic( Rectangle( Point( nScrX, nScrY ),
                             Size( aOutputData.GetScrW(), aOutputData.GetScrH() ) ) ) );
         SetMapMode(MAP_PIXEL);
     }
@@ -909,7 +913,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
         pDrawView->AddWindowToPaintView( &rDevice );
     }
 
-    Draw( 0, 0, 3, 3, SC_UPDATE_ALL, &rDevice );
+    Paint( Rectangle( Point(nTilePosX, nTilePosY),
+                      rDevice.PixelToLogic(Size(nOutputWidth, nOutputHeight))),
+           &rDevice );
 
     if ( pDrawView )
     {
