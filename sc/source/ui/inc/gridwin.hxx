@@ -326,6 +326,7 @@ public:
                                int nOutputWidth, int nOutputHeight,
                                int nTilePosX, int nTilePosY,
                                long nTileWidth, long nTileHeight );
+    Size            GetDataAreaSize();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
