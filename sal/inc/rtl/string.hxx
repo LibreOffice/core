@@ -945,10 +945,10 @@ struct OStringHash
 struct CStringEqual
 {
     bool operator()( const char* p1, const char* p2) const {
-        while( *p1)
+        while( *p1 != '\0')
             if( *(p1++) != *(p2++))
                 return false;
-        return true;
+        return (*p2 == '\0');
     }
 };
 
