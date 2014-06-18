@@ -1037,7 +1037,7 @@ size_t ValueSet::ImplGetItem( const Point& rPos, bool bMove ) const
         if (x < mnItemWidth && y < mnItemHeight)
         {
             // the point is inside item rect and not inside spacing
-            const size_t item = (mnFirstLine + row) * mnCols + col;
+            const size_t item = (mnFirstLine + row) * static_cast<size_t>(mnCols) + col;
             if (item < mItemList.size())
             {
                 return item;
