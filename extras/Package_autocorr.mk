@@ -23,7 +23,7 @@ $(eval $(call gb_Package_add_files,extras_autocorr,$(LIBO_SHARE_FOLDER)/autocorr
 	acor_es-ES.dat \
 	acor_fa-IR.dat \
 	acor_fi-FI.dat \
-	acor_fr-FR.dat \
+	acor_fr.dat \
 	acor_ga-IE.dat \
 	acor_hr-HR.dat \
 	acor_hu-HU.dat \

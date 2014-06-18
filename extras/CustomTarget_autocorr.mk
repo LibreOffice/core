@@ -23,7 +23,7 @@ extras_AUTOCORR_LANGS := \
 	es:es-ES \
 	fa:fa-IR \
 	fi:fi-FI \
-	fr:fr-FR \
+	fr:fr \
 	ga-IE:ga-IE \
 	hr:hr-HR \
 	hu:hu-HU \
