@@ -1717,7 +1717,10 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         nId = 0;
 
     if (nId)
-        xStrm = rData.GetInputStream(nId, OUString());
+    {
+        SwDocShell* pDocSh = rSh.GetDoc()->GetDocShell();
+        xStrm = rData.GetInputStream(nId, SfxObjectShell::CreateShellID(pDocSh));
+    }
 
     if (xStrm.is())
     {
