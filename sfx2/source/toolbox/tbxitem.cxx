@@ -224,7 +224,6 @@ SfxToolBoxControl::SfxToolBoxControl(
     sal_uInt16      nID,
     ToolBox&        rBox,
     bool            bShowStringItems     )
-:   svt::ToolboxController()
 {
     pImpl = new SfxToolBoxControl_Impl;
 
@@ -457,26 +456,6 @@ void SfxToolBoxControl::Dispatch( const OUString& aCommand, ::com::sun::star::un
         if ( xDispatch.is() )
             xDispatch->dispatch( aTargetURL, aArgs );
     }
-}
-
-// XInterface
-Any SAL_CALL SfxToolBoxControl::queryInterface( const Type & rType )
-throw(::com::sun::star::uno::RuntimeException, std::exception)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                           (static_cast< ::com::sun::star::awt::XDockableWindowListener* >(this)),
-                                        (static_cast< ::com::sun::star::frame::XSubToolbarController* >(this)));
-    return (aRet.hasValue() ? aRet : svt::ToolboxController::queryInterface( rType ));
-}
-
-void SAL_CALL SfxToolBoxControl::acquire() throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SfxToolBoxControl::release() throw()
-{
-    OWeakObject::release();
 }
 
 void SAL_CALL SfxToolBoxControl::disposing( const ::com::sun::star::lang::EventObject& aEvent )

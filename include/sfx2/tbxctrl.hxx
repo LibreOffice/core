@@ -178,10 +178,9 @@ public:
 
 struct SfxToolBoxControl_Impl;
 class SFX2_DLLPUBLIC SfxToolBoxControl:
-                         public ::com::sun::star::awt::XDockableWindowListener,
-                         public ::com::sun::star::frame::XSubToolbarController,
-                         public svt::ToolboxController
-
+    public cppu::ImplInheritanceHelper2<
+        svt::ToolboxController, css::awt::XDockableWindowListener,
+        css::frame::XSubToolbarController>
 {
 friend class SfxToolbox;
 friend class SfxPopupWindow;
@@ -207,11 +206,12 @@ protected:
     // Must be called by subclass to set a new popup window instance
     void                       SetPopupWindow( SfxPopupWindow* pWindow );
 
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void               SAL_CALL acquire() throw() SAL_OVERRIDE;
-    virtual void               SAL_CALL release() throw() SAL_OVERRIDE;
+    // helper methods
+    void    createAndPositionSubToolBar( const OUString& rSubToolBarResName );
+    ::Size  getPersistentFloatingSize( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const OUString& rSubToolBarResName );
+    bool    hasBigImages() const;
 
+public:
     // XEventListener
     using ::cppu::OPropertySetHelper::disposing;
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -250,11 +250,6 @@ protected:
     virtual void SAL_CALL toggleFloatingMode( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL closed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL endPopupMode( const ::com::sun::star::awt::EndPopupModeEvent& e ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // helper methods
-    void    createAndPositionSubToolBar( const OUString& rSubToolBarResName );
-    ::Size  getPersistentFloatingSize( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame, const OUString& rSubToolBarResName );
-    bool    hasBigImages() const;
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();
