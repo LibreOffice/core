@@ -502,7 +502,7 @@ void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     sal_uInt16  nItemId = rUDEvt.GetItemId();
     Point aBLPos = aRect.TopLeft();
 
-    int nRectHeight = aRect.GetHeight();
+    long nRectHeight = aRect.GetHeight();
     Size aSize(nRectHeight/8, nRectHeight/8);
 
     Graphic aGraphic;
