@@ -99,16 +99,15 @@ void OPreparedStatement::construct(const OUString& sql)  throw(SQLException, Run
     OResultSet::setBoundedColumns(m_aEvaluateRow,aTemp,m_xParamColumns,xNames,false,m_xDBMetaData,m_aColMapping);
 }
 
-Reference<XResultSet> OPreparedStatement::makeResultSet()
+rtl::Reference<OResultSet> OPreparedStatement::makeResultSet()
 {
     closeResultSet();
 
-    OResultSet *pResultSet = createResultSet();
-    Reference<XResultSet> xRS(pResultSet);
-    initializeResultSet(pResultSet);
-    initResultSet(pResultSet);
-    m_xResultSet = xRS;
-    return xRS;
+    rtl::Reference<OResultSet> xResultSet(createResultSet());
+    m_xResultSet = xResultSet.get();
+    initializeResultSet(xResultSet.get());
+    initResultSet(xResultSet.get());
+    return xResultSet;
 }
 
 Any SAL_CALL OPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
@@ -156,13 +155,10 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    Reference<XResultSet> xRS(makeResultSet());
-
+    rtl::Reference<OResultSet> xRS(makeResultSet());
     // since we don't support the XMultipleResults interface, nobody will ever get that ResultSet...
-    Reference< XComponent > xComp(xRS, UNO_QUERY);
-    assert(xComp.is() || !xRS.is());
-    if (xComp.is())
-        xComp->dispose();
+    if(xRS.is())
+        xRS->dispose();
 
     return m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT;
 }
@@ -173,16 +169,12 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    Reference<XResultSet> xRS(makeResultSet());
+    rtl::Reference<OResultSet> xRS(makeResultSet());
     if(xRS.is())
     {
-        assert(dynamic_cast<OResultSet*>(xRS.get()));
-        const sal_Int32 res(static_cast<OResultSet*>(xRS.get())->getRowCountResult());
+        const sal_Int32 res(xRS->getRowCountResult());
         // nobody will ever get that ResultSet...
-        Reference< XComponent > xComp(xRS, UNO_QUERY);
-        assert(xComp.is());
-        if (xComp.is())
-            xComp->dispose();
+        xRS->dispose();
         return res;
     }
     else
@@ -210,7 +202,7 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return makeResultSet();
+    return makeResultSet().get();
 }
 
 
