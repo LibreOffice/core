@@ -76,10 +76,10 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_URL(), OUString());
         std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
-        writerfilter::TagLogger::Pointer_t dmapperLogger
+        writerfilter::TagLogger::Pointer_t dmapper_logger
         (writerfilter::TagLogger::getInstance("DOMAINMAPPER"));
-        dmapperLogger->setFileName(sURLc);
-        dmapperLogger->startDocument();
+        dmapper_logger->setFileName(sURLc);
+        dmapper_logger->startDocument();
 #endif
         uno::Reference< io::XInputStream > xInputStream;
 
@@ -122,7 +122,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         pDocument->resolve(*pStream);
         bResult = true;
 #ifdef DEBUG_IMPORT
-        dmapperLogger->endDocument();
+        dmapper_logger->endDocument();
 #endif
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         SAL_INFO("writerfilter.profile", OSL_THIS_FUNC << " finished in " << nEndTime - nStartTime << " ms");
