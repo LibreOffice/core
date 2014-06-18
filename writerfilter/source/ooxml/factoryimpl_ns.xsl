@@ -680,7 +680,7 @@ CreateElementMapPointer </xsl:text>
 
 <xsl:template name="factorygetdefinename">
     <xsl:text>
-#ifdef DEBUG_FACTORY
+#ifdef DEBUG_DOMAINMAPPER
 string </xsl:text>
     <xsl:call-template name="factoryclassname"/>
     <xsl:text>::getDefineName(Id nId) const
@@ -888,7 +888,7 @@ void </xsl:text>
 <xsl:template name="factorygetname">
   <xsl:param name="ns"/>
   <xsl:text>
-#ifdef DEBUG_FACTORY
+#ifdef DEBUG_DOMAINMAPPER
 string </xsl:text>
 <xsl:call-template name="factoryclassname"/>
 <xsl:text>::getName() const

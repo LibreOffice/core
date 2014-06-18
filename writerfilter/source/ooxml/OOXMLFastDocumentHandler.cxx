@@ -38,7 +38,7 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
     sal_Int32 nXNoteId )
     : m_xContext(context)
     , mpStream( pStream )
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_DOMAINMAPPER
     , mpTmpStream()
 #endif
     , mpDocument( pDocument )
@@ -50,13 +50,13 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
 // ::com::sun::star::xml::sax::XFastContextHandler:
 void SAL_CALL OOXMLFastDocumentHandler::startFastElement
 (::sal_Int32
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
 Element
 #endif
 , const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
     clog << this << ":start element:"
          << fastTokenToId(Element)
          << endl;
@@ -65,18 +65,18 @@ Element
 
 void SAL_CALL OOXMLFastDocumentHandler::startUnknownElement
 (const OUString &
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
 Namespace
 #endif
 , const OUString &
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
 Name
 #endif
 ,
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
 throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
     clog << this << ":start unknown element:"
          << OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr()
          << ":"
@@ -86,13 +86,13 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 }
 
 void SAL_CALL OOXMLFastDocumentHandler::endFastElement(::sal_Int32
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
 Element
 #endif
 )
 throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
     clog << this << ":end element:"
          << fastTokenToId(Element)
          << endl;
@@ -101,17 +101,17 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 
 void SAL_CALL OOXMLFastDocumentHandler::endUnknownElement
 (const OUString &
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
 Namespace
 #endif
 , const OUString &
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
 Name
 #endif
 )
 throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
     clog << this << ":end unknown element:"
          << OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr()
          << ":"
@@ -142,7 +142,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
  const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
     clog << this << ":createFastChildContext:"
          << fastTokenToId(Element)
          << endl;
@@ -161,18 +161,18 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 OOXMLFastDocumentHandler::createUnknownChildContext
 (const OUString &
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
 Namespace
 #endif
 ,
  const OUString &
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
 Name
 #endif
 , const uno::Reference< xml::sax::XFastAttributeList > & /*Attribs*/)
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_DOMAINMAPPER
     clog << this << ":createUnknownChildContext:"
          << OUStringToOString(Namespace, RTL_TEXTENCODING_ASCII_US).getStr()
          << ":"

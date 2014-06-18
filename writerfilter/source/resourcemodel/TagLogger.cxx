@@ -39,7 +39,7 @@ namespace writerfilter
         pName = NULL;
     }
 
-#ifdef DEBUG_IMPORT
+#ifdef DEBUG_DOMAINMAPPER
     void TagLogger::setFileName( const std::string & filename )
     {
         if ( pWriter )
@@ -228,7 +228,7 @@ namespace writerfilter
     }
 #endif
 
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
     class PropertySetDumpHandler : public Properties
     {
         IdToString::Pointer_t mpIdToString;

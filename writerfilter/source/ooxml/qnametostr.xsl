@@ -60,7 +60,7 @@
     <xsl:text>
 void QNameToString::init_ooxml()
 {
-#ifdef DEBUG_LOGGING
+#ifdef DEBUG_DOMAINMAPPER
     /* ooxml */
     </xsl:text>
     <xsl:for-each select="//@tokenid">

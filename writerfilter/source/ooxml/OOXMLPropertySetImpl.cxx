@@ -108,7 +108,7 @@ string OOXMLPropertyImpl::getName() const
 {
     string sResult;
 
-#ifdef DEBUG_LOGGING
+#ifdef DEBUG_DOMAINMAPPER
     sResult = (*QNameToString::Instance())(mId);
 #endif
 
