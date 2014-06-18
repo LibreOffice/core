@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7aaa499b_be08d929",
+        "filename": "cui/source/dialogs/hlmarkwn.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2014-06-18T14:44:45Z",
+      "side": 1,
+      "message": "you shouldn\u0027t put raw english message into the .cxx files because they will not be translated then. Only strings in .src and .ui get translations.",
+      "revId": "a14717a0f2ef590a71a729683015fc2468aca02e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
