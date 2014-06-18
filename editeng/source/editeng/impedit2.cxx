@@ -2081,7 +2081,6 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, Edit
     }
 
     aEditDoc.RemoveChars( rPaM, nChars );
-    TextModified();
 }
 
 EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 nNewPos )
