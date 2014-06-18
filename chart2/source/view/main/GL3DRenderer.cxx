@@ -195,7 +195,6 @@ void OpenGL3DRenderer::CheckGLSLVersion()
     if (iVersion > 3)
     {
         maResources.m_b330Support = true;
-        maResources.m_b330Support = false;
         return;
     }
     p++;
