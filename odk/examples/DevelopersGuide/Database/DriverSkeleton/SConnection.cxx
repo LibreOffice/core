@@ -262,7 +262,7 @@ void SAL_CALL OConnection::setCatalog( const ::rtl::OUString& catalog ) throw(SQ
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // if your database doesn't work with catalogs you go to next method otherwise you kjnow what to do
+    // if your database doesn't work with catalogs you go to next method otherwise you know what to do
 }
 
 ::rtl::OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
