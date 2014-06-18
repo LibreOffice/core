@@ -159,7 +159,7 @@ private:
     OUString        maConditionError;
 
     ScDocShell*     mpDocShell;
-    ScDocument*     mpDoc;
+    ScDocument&     mrDoc;
     const SCTAB     mnCurTab;
     formula::RefEdit*      mpEdActive;
     bool            mbDlgLostFocus;

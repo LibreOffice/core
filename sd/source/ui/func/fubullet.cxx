@@ -112,7 +112,7 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     }
     else if (mpViewShell->ISA(OutlineViewShell))
     {
-        pOL = static_cast<OutlineView*>(mpView)->GetOutliner();
+        pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
         pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
             mpViewShell->GetActiveWindow());
     }
@@ -234,7 +234,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         }
         else if(mpViewShell && mpViewShell->ISA(OutlineViewShell))
         {
-            pOL = static_cast<OutlineView*>(mpView)->GetOutliner();
+            pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
             pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
                 mpViewShell->GetActiveWindow());
         }

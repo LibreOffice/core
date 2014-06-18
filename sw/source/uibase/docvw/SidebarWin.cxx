@@ -660,7 +660,7 @@ void SwSidebarWin::SetPosAndSize()
                     SwShellTableCrsr* pTableCrsr = new SwShellTableCrsr( DocView().GetWrtShell(), aStartPos );
                     pTableCrsr->SetMark();
                     pTableCrsr->GetMark()->nNode = *pTxtNode;
-                    pTableCrsr->GetMark()->nContent.Assign( pTxtNode, *(pTxtAnnotationFld->GetStart())+1 );
+                    pTableCrsr->GetMark()->nContent.Assign( pTxtNode, pTxtAnnotationFld->GetStart()+1 );
                     pTableCrsr->NewTableSelection();
                     pTmpCrsr = pTableCrsr;
                 }
@@ -669,7 +669,7 @@ void SwSidebarWin::SetPosAndSize()
                     SwShellCrsr* pCrsr = new SwShellCrsr( DocView().GetWrtShell(), aStartPos );
                     pCrsr->SetMark();
                     pCrsr->GetMark()->nNode = *pTxtNode;
-                    pCrsr->GetMark()->nContent.Assign( pTxtNode, *(pTxtAnnotationFld->GetStart())+1 );
+                    pCrsr->GetMark()->nContent.Assign( pTxtNode, pTxtAnnotationFld->GetStart()+1 );
                     pTmpCrsr = pCrsr;
                 }
                 ::boost::scoped_ptr<SwShellCrsr> pTmpCrsrForAnnotationTextRange( pTmpCrsr );

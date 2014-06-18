@@ -91,7 +91,7 @@ LwpCellLayout::~LwpCellLayout()
  */
 LwpTableLayout * LwpCellLayout::GetTableLayout()
 {
-    LwpRowLayout * pRow = dynamic_cast<LwpRowLayout *>(GetParent()->obj().get());
+    LwpRowLayout * pRow = dynamic_cast<LwpRowLayout *>(GetParent().obj().get());
     if(!pRow)
     {
         return NULL;
@@ -272,7 +272,7 @@ void LwpCellLayout::ApplyFmtStyle(XFCellStyle *pCellStyle)
         LwpCellLayout* pCellLayout = dynamic_cast<LwpCellLayout*>(m_BasedOnStyle.obj().get());
         if (pCellLayout)
         {
-            pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(pCellLayout->GetNumericsObject()->obj().get());
+            pLayoutNumerics = dynamic_cast<LwpLayoutNumerics*>(pCellLayout->GetNumericsObject().obj().get());
         }
     }
 
@@ -325,7 +325,7 @@ XFCell* LwpCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, sal_uI
 
     // if cell layout is aTableID's default cell layout
     // we should judt its style by current position
-    if (*pTable->GetDefaultCellStyle() == *GetObjectID())
+    if (pTable->GetDefaultCellStyle() == GetObjectID())
     {
         aStyleName = GetCellStyleName(nRow, nCol, pTable->GetTableLayout());
     }
@@ -348,7 +348,7 @@ LwpPara* LwpCellLayout::GetLastParaOfPreviousStory()
     if (pPreStoryID && !(pPreStoryID->IsNull()))
     {
         LwpStory* pPreStory = dynamic_cast<LwpStory*>(pPreStoryID->obj(VO_STORY).get());
-        return dynamic_cast<LwpPara*>(pPreStory->GetLastPara()->obj(VO_PARA).get());
+        return dynamic_cast<LwpPara*>(pPreStory->GetLastPara().obj(VO_PARA).get());
     }
     else
     {
@@ -433,8 +433,8 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
     {
         return enumWholeBorder;
     }
-    XFBorder *pLeftBorder = pBorders->GetLeft();
-    XFBorder *pBottomBorder = pBorders->GetBottom();
+    XFBorder& rLeftBorder = pBorders->GetLeft();
+    XFBorder& rBottomBorder = pBorders->GetBottom();
     bool bNoLeftBorder = false;
     bool bNoBottomBorder = false;
 
@@ -444,8 +444,8 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
         XFBorders * pNeighbourBorders = pLeftNeighbour->GetXFBorders();
         if (pNeighbourBorders)
         {
-            XFBorder * pRightBorder = pNeighbourBorders->GetRight();
-            if (*pLeftBorder == *pRightBorder)
+            XFBorder& rRightBorder = pNeighbourBorders->GetRight();
+            if (rLeftBorder == rRightBorder)
             {
                 // for these 2 types cell, left border should be ignored for sake of avoiding duplication border
                 // but if left border is different with right border of left cell
@@ -463,8 +463,8 @@ LwpCellBorderType LwpCellLayout::GetCellBorderType(sal_uInt16 nRow, sal_uInt16 n
         XFBorders * pBelowBorders = pBelowNeighbour->GetXFBorders();
         if (pBelowBorders)
         {
-            XFBorder * pTopBorder = pBelowBorders->GetTop();
-            if (*pTopBorder == *pBottomBorder)
+            XFBorder& rTopBorder = pBelowBorders->GetTop();
+            if (rTopBorder == rBottomBorder)
             {
                 // for these 2 types cell, bottom border should be ignored for sake of avoiding duplication border
                 // but if bottom border is different with right border of left cell
@@ -571,7 +571,7 @@ void LwpCellLayout::RegisterDefaultCell()
  */
 void LwpCellLayout::RegisterStyle()
 {
-    LwpVirtualLayout * pParent = dynamic_cast<LwpVirtualLayout *>(GetParent()->obj().get());
+    LwpVirtualLayout * pParent = dynamic_cast<LwpVirtualLayout *>(GetParent().obj().get());
     if (!pParent || pParent->GetLayoutType() != LWP_ROW_LAYOUT)
     {
         // default cell layout, we must register 4 styles for it
@@ -730,8 +730,8 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
     {
         return enumWholeBorder;
     }
-    XFBorder *pLeftBorder = pBorders->GetLeft();
-    XFBorder *pBottomBorder = pBorders->GetBottom();
+    XFBorder& rLeftBorder = pBorders->GetLeft();
+    XFBorder& rBottomBorder = pBorders->GetBottom();
     bool bNoLeftBorder = true;
     bool bNoBottomBorder = true;
 
@@ -749,8 +749,8 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
                 boost::scoped_ptr<XFBorders> pNeighbourBorders(pLeftNeighbour->GetXFBorders());
                 if (pNeighbourBorders)
                 {
-                    XFBorder * pRightBorder = pNeighbourBorders->GetRight();
-                    if (*pLeftBorder != *pRightBorder)
+                    XFBorder& rRightBorder = pNeighbourBorders->GetRight();
+                    if (rLeftBorder != rRightBorder)
                     {
                         // if left border is different with right border of left cell
                         // we should not ignored it
@@ -776,8 +776,8 @@ LwpCellBorderType LwpConnectedCellLayout::GetCellBorderType(sal_uInt16 nRow, sal
                 boost::scoped_ptr<XFBorders> pBelowBorders(pBelowNeighbour->GetXFBorders());
                 if (pBelowBorders)
                 {
-                    XFBorder * pTopBorder = pBelowBorders->GetTop();
-                    if (*pTopBorder != *pBottomBorder)
+                    XFBorder& rTopBorder = pBelowBorders->GetTop();
+                    if (rTopBorder != rBottomBorder)
                     {
                         // if bottom border is different with right border of left cell
                         // we should not ignored it
@@ -889,7 +889,7 @@ XFCell* LwpHiddenCellLayout::ConvertCell(LwpObjectID aTableID, sal_uInt16 nRow, 
     LwpTable *pTable = dynamic_cast<LwpTable *>(aTableID.obj().get());
     if (pTable)
     {
-        LwpCellLayout *pDefault = dynamic_cast<LwpCellLayout *>(pTable->GetDefaultCellStyle()->obj().get());
+        LwpCellLayout *pDefault = dynamic_cast<LwpCellLayout *>(pTable->GetDefaultCellStyle().obj().get());
         if (pDefault)
         {
             pXFCell = pDefault->ConvertCell(aTableID, nRow, nCol);

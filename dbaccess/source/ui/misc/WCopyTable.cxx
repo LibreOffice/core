@@ -1225,11 +1225,11 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 
         Reference< XColumnsSupplier > xSuppDestinationColumns( xTable, UNO_QUERY );
         // now append the columns
-        const ODatabaseExport::TColumnVector* pVec = getDestVector();
-        appendColumns( xSuppDestinationColumns, pVec );
+        const ODatabaseExport::TColumnVector& rVec = getDestVector();
+        appendColumns( xSuppDestinationColumns, &rVec );
         // now append the primary key
         Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
-        appendKey(xKeySup,pVec);
+        appendKey(xKeySup, &rVec);
 
         Reference<XAppend> xAppend(xTables,UNO_QUERY);
         if(xAppend.is())

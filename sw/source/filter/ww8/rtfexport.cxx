@@ -407,7 +407,7 @@ void RtfExport::WriteMainText()
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC << " start");
 
-    SwTableNode* pTableNode = pCurPam->GetNode()->FindTableNode();
+    SwTableNode* pTableNode = pCurPam->GetNode().FindTableNode();
     if (m_pWriter && m_pWriter->bWriteOnlyFirstTable
             && pTableNode != 0)
     {

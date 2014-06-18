@@ -464,13 +464,13 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             // first a "short" test - in case both are in the same node
             if( pFldTxtAttr->GetpTxtNode() == pTxtNd )
             {
-                sTxt = nNumStart < *pFldTxtAttr->GetStart()
+                sTxt = nNumStart < pFldTxtAttr->GetStart()
                             ? aLocaleData.getAboveWord()
                             : aLocaleData.getBelowWord();
                 break;
             }
 
-            sTxt = ::IsFrameBehind( *pFldTxtAttr->GetpTxtNode(), *pFldTxtAttr->GetStart(),
+            sTxt = ::IsFrameBehind( *pFldTxtAttr->GetpTxtNode(), pFldTxtAttr->GetStart(),
                                     *pTxtNd, nNumStart )
                         ? aLocaleData.getAboveWord()
                         : aLocaleData.getBelowWord();
@@ -800,7 +800,7 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
                 pTFld->GetpTxtNode() )
             {
                 pGRef->SetLanguage( pTFld->GetpTxtNode()->GetLang(
-                                                *pTFld->GetStart() ) );
+                                                pTFld->GetStart() ) );
             }
 
             // #i81002#
@@ -826,7 +826,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
             if( pRef && pRef->GetTxtRefMark() )
             {
                 pTxtNd = (SwTxtNode*)&pRef->GetTxtRefMark()->GetTxtNode();
-                *pStt = *pRef->GetTxtRefMark()->GetStart();
+                *pStt = pRef->GetTxtRefMark()->GetStart();
                 if( pEnd )
                     *pEnd = *pRef->GetTxtRefMark()->GetAnyEnd();
             }
@@ -847,7 +847,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                     {
                         SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
                         pTxtNd = (SwTxtNode*)pTxtFld->GetpTxtNode();
-                        *pStt = *pTxtFld->GetStart();
+                        *pStt = pTxtFld->GetStart();
                         if( pEnd )
                             *pEnd = (*pStt) + 1;
                         break;

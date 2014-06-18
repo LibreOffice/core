@@ -217,8 +217,8 @@ bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                 {
                     sal_uLong nNdPos = pNd->GetIndex();
                     if( nSttNd <= nNdPos && nNdPos <= nEndNd &&
-                        ( nNdPos != nSttNd || *pTFld->GetStart() >= nStt ) &&
-                        ( nNdPos != nEndNd || *pTFld->GetStart() < nEnd ))
+                        ( nNdPos != nSttNd || pTFld->GetStart() >= nStt ) &&
+                        ( nNdPos != nEndNd || pTFld->GetStart() < nEnd ))
                         return true;
                 }
             }

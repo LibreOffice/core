@@ -126,7 +126,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         //  the dialog has been opened in a different view
         //  -> lock the dispatcher for this view (modal mode)
 
-        GetViewData()->GetDispatcher().Lock( true );    // lock is reset when closing dialog
+        GetViewData().GetDispatcher().Lock( true );    // lock is reset when closing dialog
         return NULL;
     }
 
@@ -135,7 +135,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
     if(pCW)
         pCW->SetHideNotDelete(true);
 
-    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocument* pDoc = GetViewData().GetDocument();
 
     switch( nSlotId )
     {
@@ -143,17 +143,17 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             if (!mbInSwitch)
             {
-                pResult = new ScNameDlg( pB, pCW, pParent, GetViewData(),
-                                     ScAddress( GetViewData()->GetCurX(),
-                                                GetViewData()->GetCurY(),
-                                                GetViewData()->GetTabNo() ) );
+                pResult = new ScNameDlg( pB, pCW, pParent, &GetViewData(),
+                                     ScAddress( GetViewData().GetCurX(),
+                                                GetViewData().GetCurY(),
+                                                GetViewData().GetTabNo() ) );
             }
             else
             {
-                pResult = new ScNameDlg( pB, pCW, pParent, GetViewData(),
-                                     ScAddress( GetViewData()->GetCurX(),
-                                                GetViewData()->GetCurY(),
-                                                GetViewData()->GetTabNo() ), &maRangeMap);
+                pResult = new ScNameDlg( pB, pCW, pParent, &GetViewData(),
+                                     ScAddress( GetViewData().GetCurX(),
+                                                GetViewData().GetCurY(),
+                                                GetViewData().GetTabNo() ), &maRangeMap);
                 static_cast<ScNameDlg*>(pResult)->SetEntry( maName, maScope);
                 mbInSwitch = false;
             }
@@ -166,10 +166,10 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             {
                 std::map<OUString, ScRangeName*> aRangeMap;
                 pDoc->GetRangeNameMap(aRangeMap);
-                pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData(), aRangeMap,
-                                ScAddress( GetViewData()->GetCurX(),
-                                            GetViewData()->GetCurY(),
-                                            GetViewData()->GetTabNo() ), true );
+                pResult = new ScNameDefDlg( pB, pCW, pParent, &GetViewData(), aRangeMap,
+                                ScAddress( GetViewData().GetCurX(),
+                                            GetViewData().GetCurY(),
+                                            GetViewData().GetTabNo() ), true );
             }
             else
             {
@@ -179,17 +179,17 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                 {
                     aRangeMap.insert(std::pair<OUString, ScRangeName*>(itr->first, itr->second));
                 }
-                pResult = new ScNameDefDlg( pB, pCW, pParent, GetViewData(), aRangeMap,
-                                ScAddress( GetViewData()->GetCurX(),
-                                            GetViewData()->GetCurY(),
-                                            GetViewData()->GetTabNo() ), false );
+                pResult = new ScNameDefDlg( pB, pCW, pParent, &GetViewData(), aRangeMap,
+                                ScAddress( GetViewData().GetCurX(),
+                                            GetViewData().GetCurY(),
+                                            GetViewData().GetTabNo() ), false );
             }
         }
         break;
 
         case SID_DEFINE_COLROWNAMERANGES:
         {
-            pResult = new ScColRowNameRangesDlg( pB, pCW, pParent, GetViewData() );
+            pResult = new ScColRowNameRangesDlg( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
@@ -209,7 +209,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                 SCROW nStartRow, nEndRow;
                 SCTAB nStartTab, nEndTab;
 
-                GetViewData()->GetSimpleArea( nStartCol, nStartRow, nStartTab,
+                GetViewData().GetSimpleArea( nStartCol, nStartRow, nStartTab,
                                               nEndCol,   nEndRow,   nEndTab );
 
                 PutInOrder( nStartCol, nEndCol );
@@ -235,11 +235,11 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             //  wenn auf einem bestehenden Bereich aufgerufen, den markieren
             GetDBData( true, SC_DB_OLD );
-            const ScMarkData& rMark = GetViewData()->GetMarkData();
+            const ScMarkData& rMark = GetViewData().GetMarkData();
             if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                 MarkDataArea( false );
 
-            pResult = new ScDbNameDlg( pB, pCW, pParent, GetViewData() );
+            pResult = new ScDbNameDlg( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
@@ -258,7 +258,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             pDBData->GetArea(aArea);
             MarkRange(aArea, false);
 
-            ScQueryItem aItem( SCITEM_QUERYDATA, GetViewData(), &aQueryParam );
+            ScQueryItem aItem( SCITEM_QUERYDATA, &GetViewData(), &aQueryParam );
             ScRange aAdvSource;
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
                 aItem.SetAdvancedQuerySource( &aAdvSource );
@@ -266,7 +266,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             aArgSet.Put( aItem );
 
             // aktuelle Tabelle merken (wg. RefInput im Dialog)
-            GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
+            GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
             pResult = new ScSpecialFilterDlg( pB, pCW, pParent, aArgSet );
         }
@@ -289,11 +289,11 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             MarkRange(aArea, false);
 
             aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA,
-                                      GetViewData(),
+                                      &GetViewData(),
                                       &aQueryParam ) );
 
             // aktuelle Tabelle merken (wg. RefInput im Dialog)
-            GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
+            GetViewData().SetRefTabNo( GetViewData().GetTabNo() );
 
             pResult = new ScFilterDlg( pB, pCW, pParent, aArgSet );
         }
@@ -301,91 +301,91 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
 
         case SID_OPENDLG_TABOP:
         {
-            ScViewData*  pViewData  = GetViewData();
-            ScRefAddress  aCurPos   ( pViewData->GetCurX(),
-                                      pViewData->GetCurY(),
-                                      pViewData->GetTabNo(),
+            ScViewData&   rViewData  = GetViewData();
+            ScRefAddress  aCurPos   ( rViewData.GetCurX(),
+                                      rViewData.GetCurY(),
+                                      rViewData.GetTabNo(),
                                       false, false, false );
 
-            pResult = new ScTabOpDlg( pB, pCW, pParent, pViewData->GetDocument(), aCurPos );
+            pResult = new ScTabOpDlg( pB, pCW, pParent, rViewData.GetDocument(), aCurPos );
         }
         break;
 
         case SID_OPENDLG_SOLVE:
         {
-            ScViewData*  pViewData  = GetViewData();
-            ScAddress aCurPos(  pViewData->GetCurX(),
-                                pViewData->GetCurY(),
-                                pViewData->GetTabNo());
-            pResult = new ScSolverDlg( pB, pCW, pParent, pViewData->GetDocument(), aCurPos );
+            ScViewData& rViewData = GetViewData();
+            ScAddress   aCurPos( rViewData.GetCurX(),
+                                 rViewData.GetCurY(),
+                                 rViewData.GetTabNo());
+            pResult = new ScSolverDlg( pB, pCW, pParent, rViewData.GetDocument(), aCurPos );
         }
         break;
 
         case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
         {
-            pResult = new ScRandomNumberGeneratorDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScRandomNumberGeneratorDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_SAMPLING_DIALOG:
         {
-            pResult = new ScSamplingDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScSamplingDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_DESCRIPTIVE_STATISTICS_DIALOG:
         {
-            pResult = new ScDescriptiveStatisticsDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScDescriptiveStatisticsDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_ANALYSIS_OF_VARIANCE_DIALOG:
         {
-            pResult = new ScAnalysisOfVarianceDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScAnalysisOfVarianceDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_CORRELATION_DIALOG:
         {
-            pResult = new ScCorrelationDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScCorrelationDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_COVARIANCE_DIALOG:
         {
-            pResult = new ScCovarianceDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScCovarianceDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_EXPONENTIAL_SMOOTHING_DIALOG:
         {
-            pResult = new ScExponentialSmoothingDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScExponentialSmoothingDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_MOVING_AVERAGE_DIALOG:
         {
-            pResult = new ScMovingAverageDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScMovingAverageDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_TTEST_DIALOG:
         {
-            pResult = new ScTTestDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScTTestDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_FTEST_DIALOG:
         {
-            pResult = new ScFTestDialog( pB, pCW, pParent, GetViewData() );
+            pResult = new ScFTestDialog( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
         case SID_OPENDLG_OPTSOLVER:
         {
-            ScViewData* pViewData = GetViewData();
-            ScAddress aCurPos( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
-            pResult = new ScOptSolverDlg( pB, pCW, pParent, pViewData->GetDocShell(), aCurPos );
+            ScViewData& rViewData = GetViewData();
+            ScAddress aCurPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+            pResult = new ScOptSolverDlg( pB, pCW, pParent, rViewData.GetDocShell(), aCurPos );
         }
         break;
 
@@ -396,10 +396,10 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             if( pDialogDPObject )
             {
                 // Check for an existing datapilot output.
-                ScViewData* pViewData = GetViewData();
-                pViewData->SetRefTabNo( pViewData->GetTabNo() );
-                ScDPObject* pObj = pDoc->GetDPAtCursor(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
-                pResult = new ScPivotLayoutDialog(pB, pCW, pParent, pViewData, pDialogDPObject, pObj == NULL);
+                ScViewData& rViewData = GetViewData();
+                rViewData.SetRefTabNo( rViewData.GetTabNo() );
+                ScDPObject* pObj = pDoc->GetDPAtCursor(rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo());
+                pResult = new ScPivotLayoutDialog(pB, pCW, pParent, &rViewData, pDialogDPObject, pObj == NULL);
             }
         }
         break;
@@ -414,7 +414,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             //  Dialog schaut selber, was in der Zelle steht
 
-            pResult = new ScFormulaDlg( pB, pCW, pParent, GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
+            pResult = new ScFormulaDlg( pB, pCW, pParent, &GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
         }
         break;
 
@@ -430,7 +430,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             //  Dialog schaut selber, was in der Zelle steht
 
-            pResult = new ScHighlightChgDlg( pB, pCW, pParent, GetViewData() );
+            pResult = new ScHighlightChgDlg( pB, pCW, pParent, &GetViewData() );
         }
         break;
 
@@ -438,9 +438,9 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             //  Dialog schaut selber, was in der Zelle steht
 
-            ScViewData* pViewData = GetViewData();
-            pViewData->SetRefTabNo( pViewData->GetTabNo() );
-            pResult = new ScSimpleRefDlg( pB, pCW, pParent, pViewData );
+            ScViewData& rViewData = GetViewData();
+            rViewData.SetRefTabNo( rViewData.GetTabNo() );
+            pResult = new ScSimpleRefDlg( pB, pCW, pParent, &rViewData );
         }
         break;
 

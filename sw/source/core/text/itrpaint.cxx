@@ -503,7 +503,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
 
             if ( pItem )
             {
-                const sal_Int32 nSt = *pTxtAttr->GetStart();
+                const sal_Int32 nSt = pTxtAttr->GetStart();
                 const sal_Int32 nEnd = *pTxtAttr->GetEnd();
                 if( nEnd > nSt )
                 {

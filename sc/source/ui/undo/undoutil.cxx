@@ -38,14 +38,14 @@ void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        SCTAB nViewTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nViewTab = pViewShell->GetViewData().GetTabNo();
         if ( nViewTab < nStartZ || nViewTab > nEndZ )
             pViewShell->SetTabNo( nStartZ );
 
         pViewShell->DoneBlockMode();
         pViewShell->MoveCursorAbs( nStartX, nStartY, SC_FOLLOW_JUMP, false, false );
         pViewShell->InitOwnBlockMode();
-        pViewShell->GetViewData()->GetMarkData().
+        pViewShell->GetViewData().GetMarkData().
                 SetMarkArea( ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ) );
         pViewShell->MarkDataChanged();
     }

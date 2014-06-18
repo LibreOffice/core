@@ -47,8 +47,8 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
         pSelRange = &aRange;
     }
 
-    ScDocument* pDoc = pDocSh->GetDocument();
-    SCTAB nTabCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SCTAB nTabCount = rDoc.GetTableCount();
 
     // avoid repeated progress bars if row heights for all sheets are needed
     if ( nTabCount > 1 && rMark.GetSelectCount() == nTabCount )
@@ -94,8 +94,8 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
     long nRenderer = 0;     // 0-based physical page number across sheets
     long nTabStart = 0;
 
-    ScDocument* pDoc = pDocSh->GetDocument();
-    SCTAB nTabCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SCTAB nTabCount = rDoc.GetTableCount();
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
     for (; itr != itrEnd && (*itr) < nTabCount; ++itr)
     {
@@ -112,7 +112,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
             aPage.SetTotalRange( Range(0,RANGE_MAX) );
             aPage.Select( aPageRange );
 
-            ScPreviewLocationData aLocData( pDoc, pDev );
+            ScPreviewLocationData aLocData( &rDoc, pDev );
             aFunc.DoPrint( aPage, nTabStart, nDisplayStart, false, &aLocData );
 
             ScRange aCellRange;
@@ -150,8 +150,8 @@ bool ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) 
 
 SCTAB ScPrintFuncCache::GetTabForPage( long nPage ) const
 {
-    ScDocument* pDoc = pDocSh->GetDocument();
-    SCTAB nTabCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SCTAB nTabCount = rDoc.GetTableCount();
     SCTAB nTab = 0;
     while ( nTab < nTabCount && nPage >= nPages[nTab] )
         nPage -= nPages[nTab++];
@@ -173,10 +173,10 @@ long ScPrintFuncCache::GetDisplayStart( SCTAB nTab ) const
     //! merge with lcl_GetDisplayStart in preview?
 
     long nDisplayStart = 0;
-    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = pDocSh->GetDocument();
     for (SCTAB i=0; i<nTab; i++)
     {
-        if ( pDoc->NeedPageResetAfterTab(i) )
+        if ( rDoc.NeedPageResetAfterTab(i) )
             nDisplayStart = 0;
         else
         {

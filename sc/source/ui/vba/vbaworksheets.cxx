@@ -370,7 +370,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace ) throw (uno::RuntimeException,
     if ( !pViewShell )
         throw uno::RuntimeException("Cannot obtain view shell" );
 
-    ScMarkData& rMarkData = pViewShell->GetViewData()->GetMarkData();
+    ScMarkData& rMarkData = pViewShell->GetViewData().GetMarkData();
     bool bReplace = true;
     Replace >>= bReplace;
     // Replace is defaulted to True, meanining this current collection
@@ -549,7 +549,7 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ ) thr
                 WaitUntilPreviewIsClosed( pViewFrame );
                 // restore old tab selection
                 pViewShell = excel::getBestViewShell( mxModel );
-                pViewShell->GetViewData()->GetMarkData().SetSelectedTabs(aOldTabs);
+                pViewShell->GetViewData().GetMarkData().SetSelectedTabs(aOldTabs);
             }
         }
     }

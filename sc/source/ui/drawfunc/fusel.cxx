@@ -216,7 +216,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                                new uno::Sequence< uno::Any >(0);
                            pObjSh->CallXScript( pInfo->GetMacro(),
                                *pInArgs, aRet, aOutArgsIndex, aOutArgs, true, &aCaller );
-                           pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
+                           pViewShell->FakeButtonUp( pViewShell->GetViewData().GetActivePart() );
                            return true;        // kein CaptureMouse etc.
                        }
                    }
@@ -250,7 +250,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 if ( !sURL.isEmpty() )
                 {
                     ScGlobal::OpenURL( sURL, sTarget );
-                    pViewShell->FakeButtonUp( pViewShell->GetViewData()->GetActivePart() );
+                    pViewShell->FakeButtonUp( pViewShell->GetViewData().GetActivePart() );
                     return true;        // kein CaptureMouse etc.
                 }
 
@@ -388,7 +388,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
     bool bCopy = false;
-    ScViewData* pViewData = ( pViewShell ? pViewShell->GetViewData() : NULL );
+    ScViewData* pViewData = ( pViewShell ? &pViewShell->GetViewData() : NULL );
     ScDocument* pDocument = ( pViewData ? pViewData->GetDocument() : NULL );
     SdrPageView* pPageView = ( pView ? pView->GetSdrPageView() : NULL );
     SdrPage* pPage = ( pPageView ? pPageView->GetPage() : NULL );
@@ -448,7 +448,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             {
                   SdrMark* pMark = rMarkList.GetMark(0);
                   pObj = pMark->GetMarkedSdrObj();
-                  FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+                  FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
                   FuText* pText = static_cast<FuText*>(pPoor);
                 pText->StopDragMode(pObj );
             }
@@ -545,11 +545,11 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         bool bVertical = ( pOPO && pOPO->IsVertical() );
                         sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 
-                        pViewShell->GetViewData()->GetDispatcher().
+                        pViewShell->GetViewData().GetDispatcher().
                             Execute(nTextSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
 
                         // jetzt den erzeugten FuText holen und in den EditModus setzen
-                        FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+                        FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
                         if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
                         {
                             FuText* pText = (FuText*)pPoor;
@@ -581,7 +581,7 @@ bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     //  darum hier die harte IsLeft-Abfrage
     if ( !bReturn && rMEvt.IsLeft() )
         if (pViewShell->IsDrawSelMode())
-            pViewShell->GetViewData()->GetDispatcher().
+            pViewShell->GetViewData().GetDispatcher().
                 Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 
     if ( bCopy && pViewData && pDocument && pPage )

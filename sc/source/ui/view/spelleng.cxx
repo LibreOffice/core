@@ -51,7 +51,7 @@ ScConversionEngineBase::ScConversionEngineBase(
     ScEditEngineDefaulter( pEnginePoolP ),
     mrViewData( rViewData ),
     mrDocShell( *rViewData.GetDocShell() ),
-    mrDoc( *rViewData.GetDocShell()->GetDocument() ),
+    mrDoc( rViewData.GetDocShell()->GetDocument() ),
     maSelState( rViewData ),
     mpUndoDoc( pUndoDoc ),
     mpRedoDoc( pRedoDoc ),

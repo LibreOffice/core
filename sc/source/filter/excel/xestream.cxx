@@ -1050,8 +1050,8 @@ bool XclExpXmlStream::exportDocument()
     throw (css::uno::RuntimeException, std::exception)
 {
     ScDocShell* pShell = getDocShell();
-    ScDocument* pDoc = pShell->GetDocument();
-    ScRefreshTimerProtector aProt(pDoc->GetRefreshTimerControlAddress());
+    ScDocument& rDoc = pShell->GetDocument();
+    ScRefreshTimerProtector aProt(rDoc.GetRefreshTimerControlAddress());
 
     uno::Reference<task::XStatusIndicator> xStatusIndicator = getStatusIndicator();
 
@@ -1064,7 +1064,7 @@ bool XclExpXmlStream::exportDocument()
     SotStorageRef rStorage = static_cast<SotStorage*>(NULL);
     XclExpObjList::ResetCounters();
 
-    XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, *pDoc, RTL_TEXTENCODING_DONTKNOW );
+    XclExpRootData aData( EXC_BIFF8, *pShell->GetMedium (), rStorage, rDoc, RTL_TEXTENCODING_DONTKNOW );
     aData.meOutput = EXC_OUTPUT_XML_2007;
     aData.maXclMaxPos.Set( EXC_MAXCOL_XML_2007, EXC_MAXROW_XML_2007, EXC_MAXTAB_XML_2007 );
     aData.maMaxPos.SetCol( ::std::min( aData.maScMaxPos.Col(), aData.maXclMaxPos.Col() ) );

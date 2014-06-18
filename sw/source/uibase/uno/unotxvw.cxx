@@ -1105,20 +1105,20 @@ void SwXTextViewCursor::gotoRange(
         else if(nFrmType & FRMTYPE_FOOTNOTE)
             eSearchNodeType = SwFootnoteStartNode;
 
-        const SwStartNode* pOwnStartNode = aOwnPaM.GetNode()->
+        const SwStartNode* pOwnStartNode = aOwnPaM.GetNode().
                                                 FindSttNodeByType(eSearchNodeType);
 
         const SwNode* pSrcNode = 0;
         if(pCursor && pCursor->GetPaM())
         {
-            pSrcNode = pCursor->GetPaM()->GetNode();
+            pSrcNode = &pCursor->GetPaM()->GetNode();
         }
         else if (pRange)
         {
             SwPaM aPam(pRange->GetDoc()->GetNodes());
             if (pRange->GetPositions(aPam))
             {
-                pSrcNode = aPam.GetNode();
+                pSrcNode = &aPam.GetNode();
             }
         }
         else if (pPara && pPara->GetTxtNode())
@@ -1501,8 +1501,8 @@ void  SwXTextViewCursor::setPropertyValue( const OUString& rPropertyName, const 
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        SwNode *pNode = pShellCrsr->GetNode();
-        if (pNode && pNode->IsTxtNode())
+        SwNode& rNode = pShellCrsr->GetNode();
+        if (rNode.IsTxtNode())
         {
             SwUnoCursorHelper::SetPropertyValue(
                 *pShellCrsr, *m_pPropSet, rPropertyName, aValue );

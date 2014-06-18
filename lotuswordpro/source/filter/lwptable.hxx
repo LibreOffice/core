@@ -121,7 +121,7 @@ public:
     virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     double GetWidth() {return LwpTools::ConvertFromUnitsToMetric(m_nWidth);}
     double GetHeight() {return LwpTools::ConvertFromUnitsToMetric(m_nHeight);}
-    LwpObjectID * GetDefaultCellStyle() {return &m_DefaultCellStyle;}
+    LwpObjectID& GetDefaultCellStyle() {return m_DefaultCellStyle;}
     sal_uInt16 GetRow() {return m_nRow;}
     sal_uInt16 GetColumn() {return m_nColumn;}
     LwpTableLayout * GetTableLayout(){return static_cast<LwpTableLayout *>(GetLayout(NULL));}

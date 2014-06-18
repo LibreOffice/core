@@ -37,13 +37,13 @@ ScAddressConversionObj::ScAddressConversionObj(ScDocShell* pDocSh, bool _bIsRang
     nRefSheet( 0 ),
     bIsRange( _bIsRange )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScAddressConversionObj::~ScAddressConversionObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScAddressConversionObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -60,11 +60,11 @@ bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula
     if (!pDocShell)
         return false;
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     bool bSuccess = false;
     if ( bIsRange )
     {
-        sal_uInt16 nResult = aRange.ParseAny( rUIString, pDoc, eConv );
+        sal_uInt16 nResult = aRange.ParseAny( rUIString, &rDoc, eConv );
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
@@ -78,7 +78,7 @@ bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula
     }
     else
     {
-        sal_uInt16 nResult = aRange.aStart.Parse( rUIString, pDoc, eConv );
+        sal_uInt16 nResult = aRange.aStart.Parse( rUIString, &rDoc, eConv );
         if ( nResult & SCA_VALID )
         {
             if ( ( nResult & SCA_TAB_3D ) == 0 )
@@ -222,7 +222,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     uno::Any aRet;
 
     OUString aNameStr(aPropertyName);
@@ -253,9 +253,9 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
         if ( aRange.aStart.Tab() != nRefSheet )
             nFlags |= SCA_TAB_3D;
         if ( bIsRange )
-            aFormatStr = aRange.Format(nFlags, pDoc);
+            aFormatStr = aRange.Format(nFlags, &rDoc);
         else
-            aFormatStr = aRange.aStart.Format(nFlags, pDoc);
+            aFormatStr = aRange.aStart.Format(nFlags, &rDoc);
         aRet <<= aFormatStr;
     }
     else if ( aNameStr.equalsAscii( SC_UNONAME_PERSREPR ) || aNameStr.equalsAscii( SC_UNONAME_XLA1REPR ) )
@@ -264,7 +264,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
             ::formula::FormulaGrammar::CONV_XL_A1 : ::formula::FormulaGrammar::CONV_OOO;
 
         //  generate file format string - always include sheet
-        OUString aFormatStr(aRange.aStart.Format(SCA_VALID | SCA_TAB_3D, pDoc, eConv));
+        OUString aFormatStr(aRange.aStart.Format(SCA_VALID | SCA_TAB_3D, &rDoc, eConv));
         if ( bIsRange )
         {
             //  manually concatenate range so both parts always have the sheet name
@@ -272,7 +272,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPro
             sal_uInt16 nFlags = SCA_VALID;
             if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
                 nFlags |= SCA_TAB_3D;
-            OUString aSecond(aRange.aEnd.Format(nFlags, pDoc, eConv));
+            OUString aSecond(aRange.aEnd.Format(nFlags, &rDoc, eConv));
             aFormatStr += aSecond ;
         }
         aRet <<= OUString( aFormatStr );

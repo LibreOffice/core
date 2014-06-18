@@ -216,7 +216,7 @@ public:
         {
             /** clear the mark position; this helps if mark's SwIndex is
                registered at some node, and that node is then deleted */
-            *m_pMark = SwPosition( SwNodeIndex( GetNode()->GetNodes() ) );
+            *m_pMark = SwPosition( SwNodeIndex( GetNode().GetNodes() ) );
             m_pMark = m_pPoint;
         }
     }
@@ -256,15 +256,15 @@ public:
                 { return (*m_pPoint) >  (*m_pMark) ? m_pPoint : m_pMark; }
 
     /// @return current Node at Point/Mark
-    SwNode    * GetNode      ( bool bPoint = true ) const
+    SwNode    & GetNode      ( bool bPoint = true ) const
     {
-        return &( bPoint ? m_pPoint->nNode : m_pMark->nNode ).GetNode();
+        return ( bPoint ? m_pPoint->nNode : m_pMark->nNode ).GetNode();
     }
 
     /// @return current ContentNode at Point/Mark
     SwCntntNode* GetCntntNode( bool bPoint = true ) const
     {
-        return GetNode(bPoint)->GetCntntNode();
+        return GetNode(bPoint).GetCntntNode();
     }
 
     /**

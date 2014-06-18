@@ -485,7 +485,7 @@ inline ScDocument* ScNotesChildren::GetDocument() const
 {
     ScDocument* pDoc = NULL;
     if (mpViewShell)
-        pDoc = mpViewShell->GetDocument();
+        pDoc = &mpViewShell->GetDocument();
     return pDoc;
 }
 
@@ -723,7 +723,7 @@ ScShapeChildren::ScShapeChildren(ScPreviewShell* pViewShell, ScAccessibleDocumen
 {
     if (pViewShell)
     {
-        SfxBroadcaster* pDrawBC = pViewShell->GetDocument()->GetDrawBroadcaster();
+        SfxBroadcaster* pDrawBC = pViewShell->GetDocument().GetDrawBroadcaster();
         if (pDrawBC)
             StartListening(*pDrawBC);
     }
@@ -733,7 +733,7 @@ ScShapeChildren::~ScShapeChildren()
 {
     if (mpViewShell)
     {
-        SfxBroadcaster* pDrawBC = mpViewShell->GetDocument()->GetDrawBroadcaster();
+        SfxBroadcaster* pDrawBC = mpViewShell->GetDocument().GetDrawBroadcaster();
         if (pDrawBC)
             EndListening(*pDrawBC);
     }
@@ -743,7 +743,7 @@ void ScShapeChildren::SetDrawBroadcaster()
 {
     if (mpViewShell)
     {
-        SfxBroadcaster* pDrawBC = mpViewShell->GetDocument()->GetDrawBroadcaster();
+        SfxBroadcaster* pDrawBC = mpViewShell->GetDocument().GetDrawBroadcaster();
         if (pDrawBC)
             StartListening(*pDrawBC, true);
     }
@@ -1163,10 +1163,10 @@ SdrPage* ScShapeChildren::GetDrawPage() const
 {
     SCTAB nTab( mpViewShell->GetLocationData().GetPrintTab() );
     SdrPage* pDrawPage = NULL;
-    ScDocument* pDoc = mpViewShell->GetDocument();
-    if (pDoc && pDoc->GetDrawLayer())
+    ScDocument& rDoc = mpViewShell->GetDocument();
+    if (rDoc.GetDrawLayer())
     {
-        ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+        ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
         if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
             pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     }
@@ -1688,11 +1688,9 @@ throw (::com::sun::star::uno::RuntimeException, std::exception)
     SolarMutexGuard g;
 
     OUString aName = ScResId(STR_ACC_DOC_SPREADSHEET);
-    ScDocument* pScDoc = mpViewShell->GetDocument();
-    if (!pScDoc)
-        return aName;
+    ScDocument& rScDoc = mpViewShell->GetDocument();
 
-    SfxObjectShell* pObjSh = pScDoc->GetDocumentShell();
+    SfxObjectShell* pObjSh = rScDoc.GetDocumentShell();
     if (!pObjSh)
         return aName;
 

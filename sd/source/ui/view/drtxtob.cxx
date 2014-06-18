@@ -99,7 +99,7 @@ TextObjectBar::TextObjectBar (
         OutlineView* pOutlinerView = dynamic_cast< OutlineView* >( mpView );
         if( pOutlinerView )
         {
-            SetUndoManager(&pOutlinerView->GetOutliner()->GetUndoManager());
+            SetUndoManager(&pOutlinerView->GetOutliner().GetUndoManager());
         }
         else
         {

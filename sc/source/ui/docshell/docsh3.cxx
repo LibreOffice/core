@@ -72,7 +72,7 @@ void ScDocShell::PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddre
         //  Test: nur aktive ViewShell
 
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-    if (pViewSh && pViewSh->GetViewData()->GetDocShell() == this)
+    if (pViewSh && pViewSh->GetViewData().GetDocShell() == this)
     {
         ScEditViewHint aHint( pEditEngine, rCursorPos );
         pViewSh->Notify( *this, aHint );
@@ -554,7 +554,7 @@ sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlag
 
 ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
 {
-    ScChangeTrack* pTrack = GetDocument()->GetChangeTrack();
+    ScChangeTrack* pTrack = GetDocument().GetChangeTrack();
     if (!pTrack)
         return NULL;
 
@@ -612,7 +612,7 @@ void ScDocShell::SetChangeComment( ScChangeAction* pAction, const OUString& rCom
         SetDocumentModified();
 
         //  Dialog-Notify
-        ScChangeTrack* pTrack = GetDocument()->GetChangeTrack();
+        ScChangeTrack* pTrack = GetDocument().GetChangeTrack();
         if (pTrack)
         {
             sal_uLong nNumber = pAction->GetActionNumber();
@@ -879,7 +879,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     bool bHasRejected = false;
     OUString aOldUser = pThisTrack->GetUser();
     pThisTrack->SetUseFixDateTime( true );
-    ScMarkData& rMarkData = pViewSh->GetViewData()->GetMarkData();
+    ScMarkData& rMarkData = pViewSh->GetViewData().GetMarkData();
     ScMarkData aOldMarkData( rMarkData );
     pSourceAction = pFirstMergeAction;
     while ( pSourceAction && pSourceAction->GetActionNumber() <= nLastMergeAction )
@@ -1151,7 +1151,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         return false;
     }
 
-    ScDocument& rSharedDoc = *( pSharedDocShell->GetDocument() );
+    ScDocument& rSharedDoc = pSharedDocShell->GetDocument();
     ScChangeTrack* pSharedTrack = rSharedDoc.GetChangeTrack();
     if ( !pSharedTrack )
     {

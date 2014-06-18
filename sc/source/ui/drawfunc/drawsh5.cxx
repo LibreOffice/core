@@ -537,7 +537,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             }
 
                             // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                            pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( true );
+                            pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
                             pDocSh->SetDrawModified();
                         }
                     }
@@ -574,7 +574,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             pSelected->SetDescription(aDescription);
 
                             // ChartListenerCollectionNeedsUpdate is needed for Navigator update
-                            pDocSh->GetDocument()->SetChartListenerCollectionNeedsUpdate( true );
+                            pDocSh->GetDocument().SetChartListenerCollectionNeedsUpdate( true );
                             pDocSh->SetDrawModified();
                         }
                     }

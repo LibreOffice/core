@@ -82,8 +82,8 @@ namespace dbaui
         OJoinController(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rM);
 
         // attribute access
-        inline TTableWindowData*        getTableWindowData()     { return &m_vTableData; }
-        inline TTableConnectionData*    getTableConnectionData() { return &m_vTableConnectionData;}
+        inline TTableWindowData&        getTableWindowData()     { return m_vTableData; }
+        inline TTableConnectionData&    getTableConnectionData() { return m_vTableConnectionData;}
         inline OAddTableDlg*            getAddTableDialog()const { return m_pAddTableDialog; }
 
         // OSingleDocumentController overridables

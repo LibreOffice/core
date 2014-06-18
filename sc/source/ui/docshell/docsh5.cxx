@@ -822,40 +822,40 @@ sal_uLong ScDocShell::TransferTab( ScDocShell& rSrcDocShell, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
                                 bool bNotifyAndPaint )
 {
-    ScDocument* pSrcDoc = rSrcDocShell.GetDocument();
+    ScDocument& rSrcDoc = rSrcDocShell.GetDocument();
 
     // set the transferred area to the copyparam to make adjusting formulas possible
     ScClipParam aParam;
     ScRange aRange(0, 0, nSrcPos, MAXCOL, MAXROW, nSrcPos);
     aParam.maRanges.Append(aRange);
-    pSrcDoc->SetClipParam(aParam);
+    rSrcDoc.SetClipParam(aParam);
 
-    sal_uLong nErrVal =  aDocument.TransferTab( pSrcDoc, nSrcPos, nDestPos,
+    sal_uLong nErrVal =  aDocument.TransferTab( &rSrcDoc, nSrcPos, nDestPos,
                     bInsertNew );       // no insert
 
     // TransferTab doesn't copy drawing objects with bInsertNew=FALSE
     if ( nErrVal > 0 && !bInsertNew)
-        aDocument.TransferDrawPage( pSrcDoc, nSrcPos, nDestPos );
+        aDocument.TransferDrawPage( &rSrcDoc, nSrcPos, nDestPos );
 
-    if(nErrVal>0 && pSrcDoc->IsScenario( nSrcPos ))
+    if(nErrVal>0 && rSrcDoc.IsScenario( nSrcPos ))
     {
         OUString aComment;
         Color  aColor;
         sal_uInt16 nFlags;
 
-        pSrcDoc->GetScenarioData( nSrcPos, aComment,aColor, nFlags);
+        rSrcDoc.GetScenarioData( nSrcPos, aComment,aColor, nFlags);
         aDocument.SetScenario(nDestPos,true);
         aDocument.SetScenarioData(nDestPos,aComment,aColor,nFlags);
-        bool bActive = pSrcDoc->IsActiveScenario(nSrcPos);
+        bool bActive = rSrcDoc.IsActiveScenario(nSrcPos);
         aDocument.SetActiveScenario(nDestPos, bActive );
 
-        bool bVisible=pSrcDoc->IsVisible(nSrcPos);
+        bool bVisible = rSrcDoc.IsVisible(nSrcPos);
         aDocument.SetVisible(nDestPos,bVisible );
 
     }
 
-    if ( nErrVal > 0 && pSrcDoc->IsTabProtected( nSrcPos ) )
-        aDocument.SetTabProtection(nDestPos, pSrcDoc->GetTabProtection(nSrcPos));
+    if ( nErrVal > 0 && rSrcDoc.IsTabProtected( nSrcPos ) )
+        aDocument.SetTabProtection(nDestPos, rSrcDoc.GetTabProtection(nSrcPos));
     if ( bNotifyAndPaint )
     {
             Broadcast( ScTablesHint( SC_TAB_INSERTED, nDestPos ) );

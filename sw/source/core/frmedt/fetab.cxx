@@ -452,7 +452,7 @@ sal_uInt16 SwFEShell::MergeTab()
     if( IsTableMode() )
     {
         SwShellTableCrsr* pTableCrsr = GetTableCrsr();
-        const SwTableNode* pTblNd = pTableCrsr->GetNode()->FindTableNode();
+        const SwTableNode* pTblNd = pTableCrsr->GetNode().FindTableNode();
         if( pTblNd->GetTable().ISA( SwDDETable ))
         {
             ErrorHandler::HandleError( ERR_TBLDDECHG_ERROR,
@@ -884,7 +884,7 @@ bool SwFEShell::HasBoxSelection() const
     }
     SwNode* pNd;
     if( pPam->GetPoint()->nNode.GetIndex() -1 ==
-        ( pNd = pPam->GetNode())->StartOfSectionIndex() &&
+        ( pNd = &pPam->GetNode())->StartOfSectionIndex() &&
         !pPam->GetPoint()->nContent.GetIndex() &&
         pPam->GetMark()->nNode.GetIndex() + 1 ==
         pNd->EndOfSectionIndex())
@@ -2081,7 +2081,7 @@ static bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
     OSL_ENSURE( pShell != NULL, "need shell" );
 
     SwPaM* pPam = pShell->GetCrsr();
-    const SwStartNode* pTableBox = pPam->GetNode()->FindTableBoxStartNode();
+    const SwStartNode* pTableBox = pPam->GetNode().FindTableBoxStartNode();
     OSL_ENSURE( pTableBox != NULL, "I'm living in a box... NOT!" );
 
     // move cursor to start node of table box

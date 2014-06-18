@@ -228,8 +228,8 @@ public:
     LwpAssociatedLayouts(){}
 public:
     void Read(LwpObjectStream* pStrm);
-    LwpObjectID* GetOnlyLayout(){return &m_OnlyLayout;}
-    LwpDLVListHeadTail* GetLayouts(){return &m_Layouts;}
+    LwpObjectID& GetOnlyLayout() { return m_OnlyLayout;}
+    LwpDLVListHeadTail& GetLayouts() { return m_Layouts;}
     LwpVirtualLayout* GetLayout(LwpVirtualLayout* pStartLayout);
 protected:
     LwpObjectID m_OnlyLayout; //LwpVirtualLayout
@@ -348,7 +348,7 @@ protected:
     LwpObjectID     m_LayBackgroundStuff;
     LwpObjectID     m_LayExtBorderStuff;
 public:
-    LwpObjectID* GetContent(){return &m_Content;}
+    LwpObjectID& GetContent() { return m_Content; }
     LwpTabOverride* GetTabOverride();
 };
 
@@ -393,7 +393,7 @@ public:
     virtual bool IsUseOnAllEvenPages() SAL_OVERRIDE;
     virtual bool IsUseOnAllOddPages() SAL_OVERRIDE;
     virtual bool IsUseOnPage() SAL_OVERRIDE;
-    LwpObjectID* GetPosition(){ return &m_Positon;}
+    LwpObjectID& GetPosition(){ return m_Positon;}
     virtual LwpVirtualLayout* GetContainerLayout() SAL_OVERRIDE;
 };
 

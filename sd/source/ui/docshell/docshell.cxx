@@ -456,9 +456,7 @@ void DrawDocShell::ClearUndoBuffer()
                     sd::OutlineView* pOutlView = dynamic_cast< sd::OutlineView* >( pView );
                     if( pOutlView )
                     {
-                        SdrOutliner* pOutliner = pOutlView->GetOutliner();
-                        if( pOutliner )
-                            pOutliner->GetUndoManager().Clear();
+                        pOutlView->GetOutliner().GetUndoManager().Clear();
                     }
                 }
             }

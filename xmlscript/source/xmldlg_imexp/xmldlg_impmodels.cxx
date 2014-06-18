@@ -1184,12 +1184,12 @@ void TitledBoxElement::endElement()
         }
         xControlModel->setPropertyValue( "State", makeAny( nVal ) );
         ctx.importDataAwareProperty( "linked-cell" , xAttributes );
-        ::std::vector< Reference< xml::input::XElement > > * radioEvents =
+        ::std::vector< Reference< xml::input::XElement > > & radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
-        ctx.importEvents( *radioEvents );
+        ctx.importEvents( radioEvents );
         // avoid ring-reference:
         // vector< event elements > holding event elements holding this (via _pParent)
-        radioEvents->clear();
+        radioEvents.clear();
     }
     // avoid ring-reference:
     // vector< radio elements > holding radio elements holding this (via _pParent)
@@ -1280,12 +1280,12 @@ void RadioGroupElement::endElement()
 
         ctx.importDataAwareProperty( "linked-cell", xAttributes );
 
-        ::std::vector< Reference< xml::input::XElement > > * radioEvents =
+        ::std::vector< Reference< xml::input::XElement > > & radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
-        ctx.importEvents( *radioEvents );
+        ctx.importEvents( radioEvents );
         // avoid ring-reference:
         // vector< event elements > holding event elements holding this (via _pParent)
-        radioEvents->clear();
+        radioEvents.clear();
     }
     // avoid ring-reference:
     // vector< radio elements > holding radio elements holding this (via _pParent)

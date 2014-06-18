@@ -148,7 +148,7 @@ void ScNewScenarioDlg::SetScenarioData( const OUString& rName, const OUString& r
 IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 {
     OUString      aName = comphelper::string::strip(m_pEdName->GetText(), ' ');
-    ScDocument* pDoc    = ((ScTabViewShell*)SfxViewShell::Current())->GetViewData()->GetDocument();
+    ScDocument* pDoc    = ((ScTabViewShell*)SfxViewShell::Current())->GetViewData().GetDocument();
 
     m_pEdName->SetText( aName );
 

@@ -1436,10 +1436,10 @@ void ScTabView::UpdatePageBreakData( bool bForcePaint )
     if (aViewData.IsPagebreakMode())
     {
         ScDocShell* pDocSh = aViewData.GetDocShell();
-        ScDocument* pDoc = pDocSh->GetDocument();
+        ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = aViewData.GetTabNo();
 
-        sal_uInt16 nCount = pDoc->GetPrintRangeCount(nTab);
+        sal_uInt16 nCount = rDoc.GetPrintRangeCount(nTab);
         if (!nCount)
             nCount = 1;
         pNewData = new ScPageBreakData(nCount);

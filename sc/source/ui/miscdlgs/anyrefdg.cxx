@@ -290,8 +290,8 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::R
         pViewShell->ActiveGrabFocus();
         if( pRefEdit )
         {
-            const ScViewData* pViewData = pViewShell->GetViewData();
-            ScDocument* pDoc = pViewData->GetDocument();
+            const ScViewData& rViewData = pViewShell->GetViewData();
+            ScDocument* pDoc = rViewData.GetDocument();
             ScRangeList aRangeList;
             if( ParseWithNames( aRangeList, pRefEdit->GetText(), pDoc ) )
             {

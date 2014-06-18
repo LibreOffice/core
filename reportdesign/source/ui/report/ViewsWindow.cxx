@@ -1444,9 +1444,9 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
     {
         // scroll page
         OScrollWindowHelper* pScrollWindow = getView()->getScrollWindow();
-        ScrollBar* pScrollBar = ( nCode == KEY_LEFT || nCode == KEY_RIGHT ) ? pScrollWindow->GetHScroll() : pScrollWindow->GetVScroll();
-        if ( pScrollBar && pScrollBar->IsVisible() )
-            pScrollBar->DoScrollAction(( nCode == KEY_RIGHT || nCode == KEY_UP ) ? SCROLL_LINEUP : SCROLL_LINEDOWN );
+        ScrollBar& rScrollBar = ( nCode == KEY_LEFT || nCode == KEY_RIGHT ) ? pScrollWindow->GetHScroll() : pScrollWindow->GetVScroll();
+        if ( rScrollBar.IsVisible() )
+            rScrollBar.DoScrollAction(( nCode == KEY_RIGHT || nCode == KEY_UP ) ? SCROLL_LINEUP : SCROLL_LINEDOWN );
         return;
     }
     TSectionsMap::const_iterator aIter = m_aSections.begin();

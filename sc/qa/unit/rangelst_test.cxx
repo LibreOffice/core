@@ -94,7 +94,7 @@ void Test::setUp()
         SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
         SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
 
-    m_pDoc = m_xDocShRef->GetDocument();
+    m_pDoc = &m_xDocShRef->GetDocument();
 }
 
 void Test::tearDown()

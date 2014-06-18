@@ -91,17 +91,17 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
     if( pViewSh && pViewSh->ISA(sd::OutlineViewShell))
         pSdView = static_cast<sd::OutlineView*> (static_cast<sd::OutlineViewShell*>(pViewSh)->GetView());
 
-    if (pSdView != NULL && (pOutliner ==  pSdView->GetOutliner()))
+    if (pSdView != NULL && (pOutliner ==  &pSdView->GetOutliner()))
     {
         // outline mode
         int nPgNum = 0;
-        Outliner* pOutl = pSdView->GetOutliner();
+        Outliner& rOutl = pSdView->GetOutliner();
         long nPos = pInfo->GetPara();
         sal_Int32 nParaPos = 0;
 
-        for( Paragraph* pPara = pOutl->GetParagraph( 0 ); pPara && nPos >= 0; pPara = pOutl->GetParagraph( ++nParaPos ), nPos-- )
+        for( Paragraph* pPara = rOutl.GetParagraph( 0 ); pPara && nPos >= 0; pPara = rOutl.GetParagraph( ++nParaPos ), nPos-- )
         {
-            if( pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
+            if( rOutl.HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
                 nPgNum++;
         }
 

@@ -269,7 +269,7 @@ SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException, std:
         OSL_ENSURE(pTxtFtn, "kein TextNode?");
         SwTxtNode& rTxtNode = (SwTxtNode&)pTxtFtn->GetTxtNode();
 
-        SwPaM aPam(rTxtNode, *pTxtFtn->GetStart());
+        SwPaM aPam(rTxtNode, pTxtFtn->GetStart());
         GetDoc()->SetCurFtn(aPam, aLabel, pFmt->GetNumber(), pFmt->IsEndNote());
     }
     else if (m_pImpl->m_bIsDescriptor)
@@ -328,7 +328,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     pNewDoc->InsertPoolItem(aPam, aFootNote, nInsertFlags);
 
     SwTxtFtn *const pTxtAttr = static_cast<SwTxtFtn*>(
-        aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+        aPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
                 aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FTN ));
 
     if (pTxtAttr)
@@ -358,7 +358,7 @@ SwXFootnote::getAnchor() throw (uno::RuntimeException, std::exception)
     SwFmtFtn const& rFmt( m_pImpl->GetFootnoteFormatOrThrow() );
 
     SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
-    SwPaM aPam( pTxtFtn->GetTxtNode(), *pTxtFtn->GetStart() );
+    SwPaM aPam( pTxtFtn->GetTxtNode(), pTxtFtn->GetStart() );
     SwPosition aMark( *aPam.Start() );
     aPam.SetMark();
     aPam.GetMark()->nContent++;
@@ -376,7 +376,7 @@ void SAL_CALL SwXFootnote::dispose() throw (uno::RuntimeException, std::exceptio
     SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
     OSL_ENSURE(pTxtFtn, "no TextNode?");
     SwTxtNode& rTxtNode = const_cast<SwTxtNode&>(pTxtFtn->GetTxtNode());
-    const sal_Int32 nPos = *pTxtFtn->GetStart();
+    const sal_Int32 nPos = pTxtFtn->GetStart();
     SwPaM aPam(rTxtNode, nPos, rTxtNode, nPos+1);
     GetDoc()->DeleteAndJoin( aPam );
 }
@@ -455,7 +455,7 @@ throw (uno::RuntimeException, std::exception)
     SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
     SwNode const*const pFtnStartNode = &pTxtFtn->GetStartNode()->GetNode();
 
-    const SwNode* pStart = aPam.GetNode()->FindFootnoteStartNode();
+    const SwNode* pStart = aPam.GetNode().FindFootnoteStartNode();
     if (pStart != pFtnStartNode)
     {
         throw uno::RuntimeException();

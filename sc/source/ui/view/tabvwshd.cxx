@@ -55,7 +55,7 @@ Window* ScTabViewShell::GetDialogParent()
         }
     }
 
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
     if ( pDocSh->IsOle() )
     {
         // TODO/LATER: how to GetEditWindow in embedded document?!

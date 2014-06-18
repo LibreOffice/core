@@ -443,7 +443,7 @@ void SwTxtFrm::HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd )
             const SwTxtAttr *pHt = (*pHints)[i];
             if ( pHt->Which() == RES_TXTATR_FTN )
             {
-                const sal_Int32 nIdx = *pHt->GetStart();
+                const sal_Int32 nIdx = pHt->GetStart();
                 if ( nEnd < nIdx )
                     break;
                 if( nStart <= nIdx )
@@ -674,10 +674,10 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
         // linelengths are being added, that's why it's negative
         // if chars have been added and positive, if chars have
         // deleted
-        *(pPara->GetDelta()) += nD;
+        pPara->GetDelta() += nD;
         bInv = true;
     }
-    SwCharRange &rReformat = *(pPara->GetReformat());
+    SwCharRange &rReformat = pPara->GetReformat();
     if(aRange != rReformat) {
         if( COMPLETE_STRING == rReformat.Len() )
             rReformat = aRange;
@@ -725,14 +725,14 @@ void SwTxtFrm::CalcLineSpace()
 
     SwTwips nDelta = aNewSize.Height() - Prt().Height();
     // 4291: underflow with free-flying frames
-    if( aInf.GetTxtFly()->IsOn() )
+    if( aInf.GetTxtFly().IsOn() )
     {
         SwRect aTmpFrm( Frm() );
         if( nDelta < 0 )
             aTmpFrm.Height( Prt().Height() );
         else
             aTmpFrm.Height( aNewSize.Height() );
-        if( aInf.GetTxtFly()->Relax( aTmpFrm ) )
+        if( aInf.GetTxtFly().Relax( aTmpFrm ) )
         {
             Init();
             return;
@@ -1019,7 +1019,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         case RES_TXTATR_FIELD:
         case RES_TXTATR_ANNOTATION:
             {
-                nPos = *((SwFmtFld*)pNew)->GetTxtFld()->GetStart();
+                nPos = ((SwFmtFld*)pNew)->GetTxtFld()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
                 {
                     if( pNew == pOld )
@@ -1041,7 +1041,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
         case RES_TXTATR_FTN :
         {
-            nPos = *((SwFmtFtn*)pNew)->GetTxtFtn()->GetStart();
+            nPos = ((SwFmtFtn*)pNew)->GetTxtFtn()->GetStart();
             if( IsInFtn() || IsIdxInside( nPos, 1 ) )
                 Prepare( PREP_FTN, ((SwFmtFtn*)pNew)->GetTxtFtn() );
             break;
@@ -1058,7 +1058,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
             if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FTN, false, &pItem ))
             {
-                nPos = *((SwFmtFtn*)pItem)->GetTxtFtn()->GetStart();
+                nPos = ((SwFmtFtn*)pItem)->GetTxtFtn()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
                     Prepare( PREP_FTN, pNew );
                 nClear = 0x01;
@@ -1067,7 +1067,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
             if( SFX_ITEM_SET == rNewSet.GetItemState( RES_TXTATR_FIELD, false, &pItem ))
             {
-                nPos = *((SwFmtFld*)pItem)->GetTxtFld()->GetStart();
+                nPos = ((SwFmtFld*)pItem)->GetTxtFld()->GetStart();
                 if( IsIdxInside( nPos, 1 ) )
                 {
                     const SfxPoolItem& rOldItem =
@@ -1258,7 +1258,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 {
                     const SwFmtFld *pFld = (const SwFmtFld *)pNew;
                     InvalidateRange(
-                        SwCharRange( *pFld->GetTxtFld()->GetStart(), 1 ) );
+                        SwCharRange( pFld->GetTxtFld()->GetStart(), 1 ) );
                 }
             }
             break;
@@ -1527,7 +1527,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             else
             {
                 // we are the TxtFrm _with_ the footnote
-                const sal_Int32 nPos = *pFtn->GetStart();
+                const sal_Int32 nPos = pFtn->GetStart();
                 InvalidateRange( SwCharRange( nPos, 1 ), 1);
             }
             break;
@@ -1568,7 +1568,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 for ( sal_uInt16 i = 0; i < nSize; ++i )
                 {
                     const SwTxtAttr *pHt = (*pHints)[i];
-                    const sal_Int32 nStart = *pHt->GetStart();
+                    const sal_Int32 nStart = pHt->GetStart();
                     if( nStart >= GetOfst() )
                     {
                         if( nStart >= nEnd )
@@ -1652,7 +1652,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 if( !IsLocked() )
                 {
-                    if( pPara->GetRepaint()->HasArea() )
+                    if( pPara->GetRepaint().HasArea() )
                         SetCompletePaint();
                     Init();
                     pPara = 0;
@@ -1742,7 +1742,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             }
             else
             {
-                if( pPara->GetRepaint()->HasArea() )
+                if( pPara->GetRepaint().HasArea() )
                     SetCompletePaint();
                 Init();
                 pPara = 0;
@@ -2417,8 +2417,8 @@ void SwTxtFrm::ChgThisLines()
             // Extend repaint to the bottom.
             if ( HasPara() )
             {
-                SwRepaint *pRepaint = GetPara()->GetRepaint();
-                pRepaint->Bottom( std::max( pRepaint->Bottom(),
+                SwRepaint& rRepaint = GetPara()->GetRepaint();
+                rRepaint.Bottom( std::max( rRepaint.Bottom(),
                                        Frm().Top()+Prt().Bottom()));
             }
         }

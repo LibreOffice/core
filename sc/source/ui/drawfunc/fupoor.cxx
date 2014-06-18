@@ -97,18 +97,18 @@ void FuPoor::ForceScroll(const Point& aPixPos)
     if ( aPixPos.Y() <= 0              ) dy = -1;
     if ( aPixPos.Y() >= aSize.Height() ) dy =  1;
 
-    ScViewData* pViewData = pViewShell->GetViewData();
-    if ( pViewData->GetDocument()->IsNegativePage( pViewData->GetTabNo() ) )
+    ScViewData& rViewData = pViewShell->GetViewData();
+    if ( rViewData.GetDocument()->IsNegativePage( rViewData.GetTabNo() ) )
         dx = -dx;
 
-    ScSplitPos eWhich = pViewData->GetActivePart();
-    if ( dx > 0 && pViewData->GetHSplitMode() == SC_SPLIT_FIX && WhichH(eWhich) == SC_SPLIT_LEFT )
+    ScSplitPos eWhich = rViewData.GetActivePart();
+    if ( dx > 0 && rViewData.GetHSplitMode() == SC_SPLIT_FIX && WhichH(eWhich) == SC_SPLIT_LEFT )
     {
         pViewShell->ActivatePart( ( eWhich == SC_SPLIT_TOPLEFT ) ?
                         SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT );
         dx = 0;
     }
-    if ( dy > 0 && pViewData->GetVSplitMode() == SC_SPLIT_FIX && WhichV(eWhich) == SC_SPLIT_TOP )
+    if ( dy > 0 && rViewData.GetVSplitMode() == SC_SPLIT_FIX && WhichV(eWhich) == SC_SPLIT_TOP )
     {
         pViewShell->ActivatePart( ( eWhich == SC_SPLIT_TOPLEFT ) ?
                         SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT );

@@ -214,8 +214,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_FORMATPAGE:
         case SID_STATUS_PAGESTYLE:
         case SID_HFEDIT:
-            GetViewData()->GetDocShell()->
-                ExecutePageStyle( *this, rReq, GetViewData()->GetTabNo() );
+            GetViewData().GetDocShell()->
+                ExecutePageStyle( *this, rReq, GetViewData().GetTabNo() );
             break;
 
         case SID_JUMPTOMARK:
@@ -251,13 +251,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 }
 
                 bool bFound = false;
-                ScViewData* pViewData = GetViewData();
-                ScDocument* pDoc      = pViewData->GetDocument();
-                ScMarkData& rMark     = pViewData->GetMarkData();
+                ScViewData& rViewData = GetViewData();
+                ScDocument* pDoc      = rViewData.GetDocument();
+                ScMarkData& rMark     = rViewData.GetMarkData();
                 ScRange     aScRange;
                 ScAddress   aScAddress;
                 sal_uInt16      nResult = lcl_ParseRange(aScRange, aAddress, pDoc, nSlot);
-                SCTAB       nTab = pViewData->GetTabNo();
+                SCTAB       nTab = rViewData.GetTabNo();
                 bool        bMark = true;
 
                 // Is this a range ?
@@ -311,7 +311,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         //  1-basierte Zeilennummer
 
                         aScAddress.SetRow( (SCROW)(nNumeric - 1) );
-                        aScAddress.SetCol( pViewData->GetCurX() );
+                        aScAddress.SetCol( rViewData.GetCurX() );
                         aScAddress.SetTab( nTab );
                         aScRange = ScRange( aScAddress, aScAddress );
                         bMark    = false;
@@ -328,7 +328,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     bFound = true;
                     SCCOL nCol = aScRange.aStart.Col();
                     SCROW nRow = aScRange.aStart.Row();
-                    bool bNothing = ( pViewData->GetCurX()==nCol && pViewData->GetCurY()==nRow );
+                    bool bNothing = ( rViewData.GetCurX()==nCol && rViewData.GetCurY()==nRow );
 
                     // markieren
                     if( bMark )
@@ -374,7 +374,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     }
                     else
                     {
-                        pViewData->ResetOldCursor();
+                        rViewData.ResetOldCursor();
                         SetCursor( nCol, nRow );
                         rBindings.Invalidate( SID_CURRENTCELL );
                         rBindings.Update( nSlot );
@@ -431,7 +431,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 //  Tabelle fuer Basic ist 1-basiert
                 SCTAB nTab = ((const SfxUInt16Item&)pReqArgs->Get(nSlot)).GetValue() - 1;
-                ScDocument* pDoc = GetViewData()->GetDocument();
+                ScDocument* pDoc = GetViewData().GetDocument();
                 if ( nTab < pDoc->GetTableCount() )
                 {
                     SetTabNo( nTab );
@@ -527,7 +527,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     bWantPageBreak = (nSlot == FID_PAGEBREAKMODE) == bItemValue;
                 }
 
-                if( GetViewData()->IsPagebreakMode() != bWantPageBreak )
+                if( GetViewData().IsPagebreakMode() != bWantPageBreak )
                 {
                     SetPagebreakMode( bWantPageBreak );
                     UpdatePageBreakData();
@@ -561,11 +561,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_TOGGLESYNTAX:
             {
-                bool bSet = !GetViewData()->IsSyntaxMode();
+                bool bSet = !GetViewData().IsSyntaxMode();
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
-                GetViewData()->SetSyntaxMode( bSet );
+                GetViewData().SetSyntaxMode( bSet );
                 PaintGrid();
                 rBindings.Invalidate( FID_TOGGLESYNTAX );
                 rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
@@ -574,11 +574,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
         case FID_TOGGLEHEADERS:
             {
-                bool bSet = !GetViewData()->IsHeaderMode();
+                bool bSet = !GetViewData().IsHeaderMode();
                 const SfxPoolItem* pItem;
                 if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
-                GetViewData()->SetHeaderMode( bSet );
+                GetViewData().SetHeaderMode( bSet );
                 RepeatResize();
                 rBindings.Invalidate( FID_TOGGLEHEADERS );
                 rReq.AppendItem( SfxBoolItem( nSlot, bSet ) );
@@ -588,8 +588,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_TOGGLEFORMULA:
             {
-                ScViewData* pViewData = GetViewData();
-                const ScViewOptions& rOpts = pViewData->GetOptions();
+                ScViewData& rViewData = GetViewData();
+                const ScViewOptions& rOpts = rViewData.GetOptions();
                 bool bFormulaMode = !rOpts.GetOption( VOPT_FORMULAS );
                 const SfxPoolItem *pItem;
                 if( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
@@ -597,9 +597,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 ScViewOptions rSetOpts = ScViewOptions( rOpts );
                 rSetOpts.SetOption( VOPT_FORMULAS, bFormulaMode );
-                pViewData->SetOptions( rSetOpts );
+                rViewData.SetOptions( rSetOpts );
 
-                pViewData->GetDocShell()->PostPaintGridAll();
+                rViewData.GetDocShell()->PostPaintGridAll();
 
                 rBindings.Invalidate( FID_TOGGLEFORMULA );
                 rReq.AppendItem( SfxBoolItem( nSlot, bFormulaMode ) );
@@ -629,7 +629,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
                 SvxZoomType eOldZoomType = GetZoomType();
                 SvxZoomType eNewZoomType = eOldZoomType;
-                const Fraction& rOldY = GetViewData()->GetZoomY();  // Y wird angezeigt
+                const Fraction& rOldY = GetViewData().GetZoomY();  // Y wird angezeigt
                 sal_uInt16 nOldZoom = (sal_uInt16)(( rOldY.GetNumerator() * 100 )
                                             / rOldY.GetDenominator());
                 sal_uInt16 nZoom = nOldZoom;
@@ -648,7 +648,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     SfxItemSet      aSet     ( GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM );
                     SvxZoomItem     aZoomItem( eOldZoomType, nOldZoom, SID_ATTR_ZOOM );
                     boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
-                    ScMarkData&     rMark = GetViewData()->GetMarkData();
+                    ScMarkData&     rMark = GetViewData().GetMarkData();
                     sal_uInt16          nBtnFlags =   SVX_ZOOM_ENABLE_50
                                                 | SVX_ZOOM_ENABLE_75
                                                 | SVX_ZOOM_ENABLE_100
@@ -715,7 +715,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if ( nZoom != nOldZoom && !bCancel )
                 {
-                    if (!GetViewData()->IsPagebreakMode())
+                    if (!GetViewData().IsPagebreakMode())
                     {
                         ScAppOptions aNewOpt = pScMod->GetAppOptions();
                         aNewOpt.SetZoom( nZoom );
@@ -744,7 +744,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if( nCurrentZoom )
                     {
                         SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
-                        if (!GetViewData()->IsPagebreakMode())
+                        if (!GetViewData().IsPagebreakMode())
                         {
                             ScAppOptions aNewOpt = pScMod->GetAppOptions();
                             aNewOpt.SetZoom( nCurrentZoom );
@@ -775,7 +775,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_SELECT_TABLES:
         {
-            ScViewData& rViewData = *GetViewData();
+            ScViewData& rViewData = GetViewData();
             ScDocument& rDoc = *rViewData.GetDocument();
             ScMarkData& rMark = rViewData.GetMarkData();
             SCTAB nTabCount = rDoc.GetTableCount();
@@ -872,8 +872,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_WINDOW_SPLIT:
             {
-                ScSplitMode eHSplit = GetViewData()->GetHSplitMode();
-                ScSplitMode eVSplit = GetViewData()->GetVSplitMode();
+                ScSplitMode eHSplit = GetViewData().GetHSplitMode();
+                ScSplitMode eVSplit = GetViewData().GetVSplitMode();
                 if ( eHSplit == SC_SPLIT_NORMAL || eVSplit == SC_SPLIT_NORMAL )     // aufheben
                     RemoveSplit();
                 else if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )      // normal
@@ -888,8 +888,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case SID_WINDOW_FIX:
             {
-                ScSplitMode eHSplit = GetViewData()->GetHSplitMode();
-                ScSplitMode eVSplit = GetViewData()->GetVSplitMode();
+                ScSplitMode eHSplit = GetViewData().GetHSplitMode();
+                ScSplitMode eVSplit = GetViewData().GetVSplitMode();
                 if ( eHSplit == SC_SPLIT_FIX || eVSplit == SC_SPLIT_FIX )           // aufheben
                     RemoveSplit();
                 else
@@ -926,9 +926,9 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_CHG_COMMENT:
             {
-                ScViewData* pData = GetViewData();
-                ScAddress aCursorPos( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
-                ScDocShell* pDocSh = pData->GetDocShell();
+                ScViewData& rData = GetViewData();
+                ScAddress aCursorPos( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
+                ScDocShell* pDocSh = rData.GetDocShell();
 
                 ScChangeAction* pAction = pDocSh->GetChangeAction( aCursorPos );
                 if ( pAction )
@@ -956,14 +956,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             //  angelegt werden muss
             if (!GetScDrawView())
             {
-                GetViewData()->GetDocShell()->MakeDrawLayer();
+                GetViewData().GetDocShell()->MakeDrawLayer();
                 rBindings.InvalidateAll(false);
             }
             break;
 
         case FID_PROTECT_DOC:
             {
-                ScDocument*         pDoc = GetViewData()->GetDocument();
+                ScDocument*         pDoc = GetViewData().GetDocument();
 
                 if( pReqArgs )
                 {
@@ -1030,8 +1030,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
         case FID_PROTECT_TABLE:
         {
-            ScDocument* pDoc = GetViewData()->GetDocument();
-            SCTAB       nTab = GetViewData()->GetTabNo();
+            ScDocument* pDoc = GetViewData().GetDocument();
+            SCTAB       nTab = GetViewData().GetTabNo();
             bool        bOldProtection = pDoc->IsTabProtected(nTab);
 
             if( pReqArgs )

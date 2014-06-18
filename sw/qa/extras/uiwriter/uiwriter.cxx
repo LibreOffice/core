@@ -88,7 +88,7 @@ void SwUiWriterTest::testReplaceForward()
 
     pDoc->InsertString(aPaM, ORIGINAL_REPLACE_CONTENT);
 
-    SwTxtNode* pTxtNode = aPaM.GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
     lcl_selectCharacters(aPaM, 5, 9);
     pDoc->ReplaceRange(aPaM, OUString("toto"), false);
 
@@ -137,7 +137,7 @@ void SwUiWriterTest::testReplaceBackward()
     SwPaM aPaM(aIdx);
 
     pDoc->InsertString(aPaM, OUString("toto titi tutu"));
-    SwTxtNode* pTxtNode = aPaM.GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
     lcl_selectCharacters(aPaM, 9, 5);
 
     pDoc->ReplaceRange(aPaM, OUString("toto"), false);
@@ -207,7 +207,7 @@ void SwUiWriterTest::testImportRTF()
     CPPUNIT_ASSERT(pRTFReader != 0);
     CPPUNIT_ASSERT_EQUAL(sal_uLong(0), aReader.Read(*pRTFReader));
 
-    sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode()->GetIndex();
+    sal_uLong nIndex = pWrtShell->GetCrsr()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), static_cast<SwTxtNode*>(pDoc->GetNodes()[nIndex - 1])->GetTxt());
     CPPUNIT_ASSERT_EQUAL(OUString("bar"), static_cast<SwTxtNode*>(pDoc->GetNodes()[nIndex])->GetTxt());
 }

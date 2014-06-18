@@ -94,9 +94,9 @@ void ORelationTableView::ReSync()
     ::std::vector< OUString> arrInvalidTables;
 
     // create and insert windows
-    TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
-    TTableWindowData::reverse_iterator aIter = pTabWinDataList->rbegin();
-    for(;aIter != pTabWinDataList->rend();++aIter)
+    TTableWindowData& rTabWinDataList = m_pView->getController().getTableWindowData();
+    TTableWindowData::reverse_iterator aIter = rTabWinDataList.rbegin();
+    for(;aIter != rTabWinDataList.rend();++aIter)
     {
         TTableWindowData::value_type pData = *aIter;
         OTableWindow* pTabWin = createWindow(pData);
@@ -109,11 +109,11 @@ void ORelationTableView::ReSync()
             delete pTabWin;
             arrInvalidTables.push_back(pData->GetTableName());
 
-            pTabWinDataList->erase( ::std::remove(pTabWinDataList->begin(),pTabWinDataList->end(),*aIter) ,pTabWinDataList->end());
+            rTabWinDataList.erase( ::std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
             continue;
         }
 
-        (*GetTabWinMap())[pData->GetComposedName()] = pTabWin;  // insert at the beginning, as the Datalist is walked through backward
+        GetTabWinMap()[pData->GetComposedName()] = pTabWin;  // insert at the beginning, as the Datalist is walked through backward
         // if there's no position or size contained in the data -> Default
         if (!pData->HasPosition() && !pData->HasSize())
             SetDefaultTabWinPosSize(pTabWin);
@@ -122,10 +122,10 @@ void ORelationTableView::ReSync()
     }
 
     // insert connection
-    TTableConnectionData* pTabConnDataList = m_pView->getController().getTableConnectionData();
-    TTableConnectionData::reverse_iterator aConIter = pTabConnDataList->rbegin();
+    TTableConnectionData& rTabConnDataList = m_pView->getController().getTableConnectionData();
+    TTableConnectionData::reverse_iterator aConIter = rTabConnDataList.rbegin();
 
-    for(;aConIter != pTabConnDataList->rend();++aConIter)
+    for(;aConIter != rTabConnDataList.rend();++aConIter)
     {
         ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(aConIter->get());
         if ( !arrInvalidTables.empty() )
@@ -139,7 +139,7 @@ void ORelationTableView::ReSync()
             if (bInvalid)
             {
                 // no -> bad luck, the connection is gone
-                pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
+                rTabConnDataList.erase( ::std::remove(rTabConnDataList.begin(), rTabConnDataList.end(), *aConIter), rTabConnDataList.end() );
                 continue;
             }
         }
@@ -147,8 +147,8 @@ void ORelationTableView::ReSync()
         addConnection( new ORelationTableConnection(this, *aConIter), false ); // don't add the data again
     }
 
-    if ( !GetTabWinMap()->empty() )
-        GetTabWinMap()->begin()->second->GrabFocus();
+    if ( !GetTabWinMap().empty() )
+        GetTabWinMap().begin()->second->GrabFocus();
 }
 
 bool ORelationTableView::IsAddAllowed()
@@ -164,8 +164,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     OTableWindow* pSourceWin = jxdSource.pListBox->GetTabWin();
     OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
 
-    ::std::vector<OTableConnection*>::const_iterator aIter = getTableConnections()->begin();
-    ::std::vector<OTableConnection*>::const_iterator aEnd = getTableConnections()->end();
+    ::std::vector<OTableConnection*>::const_iterator aIter = getTableConnections().begin();
+    ::std::vector<OTableConnection*>::const_iterator aEnd = getTableConnections().end();
     for(;aIter != aEnd;++aIter)
     {
         OTableConnection* pFirst = *aIter;
@@ -277,9 +277,9 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
 void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUString& rWinName, bool /*bNewTable*/)
 {
     OSL_ENSURE(!_rComposedName.isEmpty(),"There must be a table name supplied!");
-    OJoinTableView::OTableWindowMap::iterator aIter = GetTabWinMap()->find(_rComposedName);
+    OJoinTableView::OTableWindowMap::iterator aIter = GetTabWinMap().find(_rComposedName);
 
-    if(aIter != GetTabWinMap()->end())
+    if(aIter != GetTabWinMap().end())
     {
         aIter->second->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
         aIter->second->GrabFocus();
@@ -296,9 +296,9 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
     if(pNewTabWin->Init())
     {
-        m_pView->getController().getTableWindowData()->push_back( pNewTabWinData);
+        m_pView->getController().getTableWindowData().push_back( pNewTabWinData);
         // when we already have a table with this name insert the full qualified one instead
-        (*GetTabWinMap())[_rComposedName] = pNewTabWin;
+        GetTabWinMap()[_rComposedName] = pNewTabWin;
 
         SetDefaultTabWinPosSize( pNewTabWin );
         pNewTabWin->Show();

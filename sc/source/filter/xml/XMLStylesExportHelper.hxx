@@ -124,7 +124,7 @@ public:
         const sal_Int32 nLastRow, const sal_Int32 nLastCol,
         const ScFormatRangeStyles* pCellStyles, ScDocument* pDoc);
 
-    const ScMyDefaultStyleList* GetColDefaults() const { return &maColDefaults; }
+    const ScMyDefaultStyleList& GetColDefaults() const { return maColDefaults; }
 };
 
 struct ScMyRowFormatRange

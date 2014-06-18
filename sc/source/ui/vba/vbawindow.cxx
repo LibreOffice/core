@@ -111,9 +111,9 @@ public:
         if ( !pViewShell )
             throw uno::RuntimeException("Cannot obtain view shell" );
 
-        SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
+        SCTAB nTabCount = pDocShell->GetDocument().GetTableCount();
         SCTAB nIndex = 0;
-        const ScMarkData& rMarkData = pViewShell->GetViewData()->GetMarkData();
+        const ScMarkData& rMarkData = pViewShell->GetViewData().GetMarkData();
         sheets.reserve( nTabCount );
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadSheet( m_xModel, uno::UNO_QUERY_THROW );
         uno::Reference <container::XIndexAccess> xIndex( xSpreadSheet->getSheets(), uno::UNO_QUERY_THROW );
@@ -355,8 +355,8 @@ ScVbaWindow::getScrollRow() throw (uno::RuntimeException, std::exception)
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell )
     {
-        ScSplitPos eWhich = pViewShell->GetViewData()->GetActivePart();
-        nValue = pViewShell->GetViewData()->GetPosY(WhichV(eWhich));
+        ScSplitPos eWhich = pViewShell->GetViewData().GetActivePart();
+        nValue = pViewShell->GetViewData().GetPosY(WhichV(eWhich));
     }
 
     return uno::makeAny( nValue + 1);
@@ -371,8 +371,8 @@ ScVbaWindow::setScrollRow( const uno::Any& _scrollrow ) throw (uno::RuntimeExcep
     {
         sal_Int32 scrollRow = 0;
         _scrollrow >>= scrollRow;
-        ScSplitPos eWhich = pViewShell->GetViewData()->GetActivePart();
-        sal_Int32 nOldValue = pViewShell->GetViewData()->GetPosY(WhichV(eWhich)) + 1;
+        ScSplitPos eWhich = pViewShell->GetViewData().GetActivePart();
+        sal_Int32 nOldValue = pViewShell->GetViewData().GetPosY(WhichV(eWhich)) + 1;
         pViewShell->ScrollLines(0, scrollRow - nOldValue);
     }
 }
@@ -385,8 +385,8 @@ ScVbaWindow::getScrollColumn() throw (uno::RuntimeException, std::exception)
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if ( pViewShell )
     {
-        ScSplitPos eWhich = pViewShell->GetViewData()->GetActivePart();
-        nValue = pViewShell->GetViewData()->GetPosX(WhichH(eWhich));
+        ScSplitPos eWhich = pViewShell->GetViewData().GetActivePart();
+        nValue = pViewShell->GetViewData().GetPosX(WhichH(eWhich));
     }
 
     return uno::makeAny( nValue + 1);
@@ -401,8 +401,8 @@ ScVbaWindow::setScrollColumn( const uno::Any& _scrollcolumn ) throw (uno::Runtim
     {
         sal_Int32 scrollColumn = 0;
         _scrollcolumn >>= scrollColumn;
-        ScSplitPos eWhich = pViewShell->GetViewData()->GetActivePart();
-        sal_Int32 nOldValue = pViewShell->GetViewData()->GetPosX(WhichH(eWhich)) + 1;
+        ScSplitPos eWhich = pViewShell->GetViewData().GetActivePart();
+        sal_Int32 nOldValue = pViewShell->GetViewData().GetPosX(WhichH(eWhich)) + 1;
         pViewShell->ScrollLines(scrollColumn - nOldValue, 0);
     }
 }
@@ -794,7 +794,7 @@ ScVbaWindow::getView() throw (uno::RuntimeException, std::exception)
 
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
     if (pViewShell)
-        bPageBreak = pViewShell->GetViewData()->IsPagebreakMode();
+        bPageBreak = pViewShell->GetViewData().IsPagebreakMode();
 
     if( bPageBreak )
         nWindowView = excel::XlWindowView::xlPageBreakPreview;
@@ -871,9 +871,9 @@ ScVbaWindow::PrintPreview( const css::uno::Any& EnableChanges ) throw (css::scri
 double SAL_CALL ScVbaWindow::getTabRatio() throw (css::uno::RuntimeException, std::exception)
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
-    if ( pViewShell && pViewShell->GetViewData() && pViewShell->GetViewData()->GetView() )
+    if ( pViewShell && pViewShell->GetViewData().GetView() )
     {
-        double fRatio = pViewShell->GetViewData()->GetView()->GetRelTabBarWidth();
+        double fRatio = pViewShell->GetViewData().GetView()->GetRelTabBarWidth();
         if ( fRatio >= 0.0 && fRatio <= 1.0 )
             return fRatio;
     }
@@ -883,10 +883,10 @@ double SAL_CALL ScVbaWindow::getTabRatio() throw (css::uno::RuntimeException, st
 void SAL_CALL ScVbaWindow::setTabRatio( double fRatio ) throw (css::uno::RuntimeException, std::exception)
 {
     ScTabViewShell* pViewShell = excel::getBestViewShell( m_xModel );
-    if ( pViewShell && pViewShell->GetViewData() && pViewShell->GetViewData()->GetView() )
+    if ( pViewShell && pViewShell->GetViewData().GetView() )
     {
         if ( fRatio >= 0.0 && fRatio <= 1.0 )
-            pViewShell->GetViewData()->GetView()->SetRelTabBarWidth( fRatio );
+            pViewShell->GetViewData().GetView()->SetRelTabBarWidth( fRatio );
     }
 }
 

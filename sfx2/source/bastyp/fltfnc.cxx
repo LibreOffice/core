@@ -125,9 +125,9 @@ namespace
                 delete pFilter;
             }
         }
-        SfxFilterList_Impl *getList()
+        SfxFilterList_Impl& getList()
         {
-            return &aList;
+            return aList;
         }
     };
     class theSfxFilterArray : public rtl::Static<SfxFilterArray, theSfxFilterArray > {};
@@ -138,7 +138,7 @@ static bool bFirstRead = true;
 
 static void CreateFilterArr()
 {
-    pFilterArr = theSfxFilterArray::get().getList();
+    pFilterArr = &theSfxFilterArray::get().getList();
     theSfxFilterListener::get();
 }
 

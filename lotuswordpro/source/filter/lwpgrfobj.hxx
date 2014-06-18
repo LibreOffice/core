@@ -124,7 +124,7 @@ public:
     // add by , 03/25/2005
     void CreateDrawObjects();
     void CreateGrafObject();
-    void GetBentoNamebyID(LwpObjectID* pMyID, std::string& rName);
+    void GetBentoNamebyID(LwpObjectID& rMyID, std::string& rName);
     sal_uInt32 GetRawGrafData(sal_uInt8*& pGrafData);
     sal_uInt32 GetGrafData(sal_uInt8*& pGrafData);
     void GetGrafOrgSize(long& rWidth, long& rHeight) { rWidth = m_Cache.Width; rHeight = m_Cache.Height; }

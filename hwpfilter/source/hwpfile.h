@@ -222,9 +222,9 @@ class DLLEXPORT HWPFile
           int GetPageMasterNum(int page);
 
           int getCurrentPage(){ return m_nCurrentPage;}
-        HWPInfo *GetHWPInfo(void) { return &_hwpInfo; }
-        HWPFont *GetHWPFont(void) { return &_hwpFont; }
-        HWPStyle *GetHWPStyle(void) { return &_hwpStyle; }
+        HWPInfo& GetHWPInfo(void) { return _hwpInfo; }
+        HWPFont& GetHWPFont(void) { return _hwpFont; }
+        HWPStyle& GetHWPStyle(void) { return _hwpStyle; }
         HWPPara *GetFirstPara(void) { return plist.front(); }
         HWPPara *GetLastPara(void) { return plist.back(); }
 

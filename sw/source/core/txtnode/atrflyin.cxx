@@ -45,7 +45,7 @@ bool SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return( pTxtAttr && ((SwFmtFlyCnt&)rAttr).pTxtAttr &&
-            *pTxtAttr->GetStart() == *((SwFmtFlyCnt&)rAttr).pTxtAttr->GetStart() &&
+            pTxtAttr->GetStart() == ((SwFmtFlyCnt&)rAttr).pTxtAttr->GetStart() &&
             pFmt == ((SwFmtFlyCnt&)rAttr).GetFrmFmt() );
 }
 
@@ -144,7 +144,7 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
 
     SwDoc* pDoc = (SwDoc*)pNode->GetDoc();
 
-    SwIndex aIdx( (SwTxtNode*)pNode, *GetStart() );
+    SwIndex aIdx( (SwTxtNode*)pNode, GetStart() );
     SwPosition aPos( *pNode->StartOfSectionNode(), aIdx );
     SwFrmFmt* pFmt = GetFlyCnt().GetFrmFmt();
     SwFmtAnchor aAnchor( pFmt->GetAnchor() );

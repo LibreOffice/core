@@ -138,10 +138,10 @@ void ScDPFilteredCache::fillTable(
     // Process the non-empty data rows.
     for (SCROW nRow = 0; nRow < nDataSize; ++nRow)
     {
-        if (!getCache()->ValidQuery(nRow, rQuery))
+        if (!getCache().ValidQuery(nRow, rQuery))
             continue;
 
-        if (bIgnoreEmptyRows && getCache()->IsRowEmpty(nRow))
+        if (bIgnoreEmptyRows && getCache().IsRowEmpty(nRow))
             continue;
 
         maShowByFilter.insert_back(nRow, nRow+1, true);
@@ -161,7 +161,7 @@ void ScDPFilteredCache::fillTable(
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
         maFieldEntries.push_back( vector<SCROW>() );
-        SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
+        SCROW nMemCount = getCache().GetDimMemberCount( nCol );
         if (!nMemCount)
             continue;
 
@@ -186,7 +186,7 @@ void ScDPFilteredCache::fillTable(
                 continue;
             }
 
-            SCROW nIndex = getCache()->GetItemDataId(nCol, nRow, bRepeatIfEmpty);
+            SCROW nIndex = getCache().GetItemDataId(nCol, nRow, bRepeatIfEmpty);
             SCROW nOrder = getOrder(nCol, nIndex);
             aAdded[nOrder] = nIndex;
         }
@@ -220,7 +220,7 @@ void ScDPFilteredCache::fillTable()
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
         maFieldEntries.push_back( vector<SCROW>() );
-        SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
+        SCROW nMemCount = getCache().GetDimMemberCount( nCol );
         if (!nMemCount)
             continue;
 
@@ -228,7 +228,7 @@ void ScDPFilteredCache::fillTable()
 
         for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
         {
-            SCROW nIndex = getCache()->GetItemDataId(nCol, nRow, false);
+            SCROW nIndex = getCache().GetItemDataId(nCol, nRow, false);
             SCROW nOrder = getOrder(nCol, nIndex);
             aAdded[nOrder] = nIndex;
         }

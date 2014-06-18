@@ -3083,8 +3083,7 @@ void AttributeOutputBase::TextField( const SwFmtFld& rField )
             const SwTxtNode *pTxtNd = GetExport().GetHdFtPageRoot();
             if (!pTxtNd)
             {
-                if (const SwNode *pNd = GetExport().pCurPam->GetNode())
-                    pTxtNd = pNd->GetTxtNode();
+                pTxtNd = GetExport().pCurPam->GetNode().GetTxtNode();
             }
 
             if (pTxtNd)
@@ -3318,8 +3317,8 @@ void WW8Export::WriteFtnBegin( const SwFmtFtn& rFtn, ww::bytes* pOutArr )
             pCFmt = pInfo->GetCharFmt( *pDoc );
             aSet.Set( pCFmt->GetAttrSet() );
 
-            pTxtFtn->GetTxtNode().GetAttr( aSet, *pTxtFtn->GetStart(),
-                                            (*pTxtFtn->GetStart()) + 1 );
+            pTxtFtn->GetTxtNode().GetAttr( aSet, pTxtFtn->GetStart(),
+                                            (pTxtFtn->GetStart()) + 1 );
             m_pAttrOutput->OutputItem( aSet.Get( RES_CHRATR_FONT ) );
             pO = pOld;
         }

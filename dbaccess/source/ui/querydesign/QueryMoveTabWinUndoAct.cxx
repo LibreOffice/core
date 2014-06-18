@@ -23,7 +23,7 @@
 using namespace dbaui;
 void OJoinMoveTabWinUndoAct::TogglePosition()
 {
-    Point ptFrameScrollPos(m_pOwner->GetHScrollBar()->GetThumbPos(), m_pOwner->GetVScrollBar()->GetThumbPos());
+    Point ptFrameScrollPos(m_pOwner->GetHScrollBar().GetThumbPos(), m_pOwner->GetVScrollBar().GetThumbPos());
     Point ptNext = m_pTabWin->GetPosPixel() + ptFrameScrollPos;
 
     m_pTabWin->SetPosPixel(m_ptNextPosition - ptFrameScrollPos);

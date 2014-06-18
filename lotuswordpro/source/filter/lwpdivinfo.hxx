@@ -78,8 +78,8 @@ class LwpDivInfo : public LwpObject
 {
 public:
     LwpDivInfo(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    LwpObjectID* GetInitialLayoutID(){ return &m_InitialLayoutID;}
-    LwpObjectID* GetFillerPageTextID(){ return &m_FillerPageTextID;}
+    LwpObjectID& GetInitialLayoutID() { return m_InitialLayoutID; }
+    LwpObjectID& GetFillerPageTextID() { return m_FillerPageTextID; }
     // add by  ,03/14/2004
     OUString GetDivName() { return m_Name.str(); }
     // end add
@@ -92,7 +92,7 @@ public:
     inline LwpDocument* GetDivision();
     void GetNumberOfPages(sal_uInt16& nPageno);
     sal_uInt16 GetMaxNumberOfPages();
-    LwpAtomHolder* GetExternalName(){return &m_ExternalName;}
+    LwpAtomHolder& GetExternalName() { return m_ExternalName; }
 protected:
     void Read() SAL_OVERRIDE;
 private:

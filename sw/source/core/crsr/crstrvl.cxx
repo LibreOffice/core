@@ -564,7 +564,7 @@ const SwTOXMark& SwCrsrShell::GotoTOXMark( const SwTOXMark& rStart,
     SwPosition& rPos = *GetCrsr()->GetPoint();
     rPos.nNode = rNewMark.GetTxtTOXMark()->GetTxtNode();
     rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(),
-                         *rNewMark.GetTxtTOXMark()->GetStart() );
+                         rNewMark.GetTxtTOXMark()->GetStart() );
 
     if( !m_pCurCrsr->IsSelOvr() )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
@@ -752,7 +752,7 @@ bool SwCrsrShell::GotoFld( const SwFmtFld& rFld )
 
         SwTxtNode* pTNd = (SwTxtNode*)rFld.GetTxtFld()->GetpTxtNode();
         pCrsr->GetPoint()->nNode = *pTNd;
-        pCrsr->GetPoint()->nContent.Assign( pTNd, *rFld.GetTxtFld()->GetStart() );
+        pCrsr->GetPoint()->nContent.Assign( pTNd, rFld.GetTxtFld()->GetStart() );
 
         bRet = !pCrsr->IsSelOvr();
         if( bRet )
@@ -788,7 +788,7 @@ SwField* SwCrsrShell::GetFieldAtCrsr(
     {
         const sal_Int32 nTxtFldLength =
             pTxtFld->End() != NULL
-            ? *(pTxtFld->End()) - *(pTxtFld->GetStart())
+            ? *(pTxtFld->End()) - pTxtFld->GetStart()
             : 1;
         if ( ( pCrsr->End()->nContent.GetIndex() - pCrsr->Start()->nContent.GetIndex() ) <= nTxtFldLength )
         {
@@ -861,7 +861,7 @@ sal_Int32 SwCrsrShell::StartOfInputFldAtPos( const SwPosition& rPos ) const
         OSL_ENSURE( false, "<SwEditShell::StartOfInputFldAtPos(..)> - no Input Field at given position" );
         return 0;
     }
-    return *(pTxtInputFld->GetStart());
+    return pTxtInputFld->GetStart();
 }
 
 sal_Int32 SwCrsrShell::EndOfInputFldAtPos( const SwPosition& rPos ) const
@@ -915,7 +915,7 @@ bool SwCrsrShell::GotoNextOutline()
     SwCursor* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = pCrsr->GetNode();
+    SwNode* pNd = &(pCrsr->GetNode());
     sal_uInt16 nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         ++nPos;
@@ -943,7 +943,7 @@ bool SwCrsrShell::GotoPrevOutline()
     SwCursor* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = pCrsr->GetNode();
+    SwNode* pNd = &(pCrsr->GetNode());
     sal_uInt16 nPos;
     rNds.GetOutLineNds().Seek_Entry( pNd, &nPos );
 
@@ -975,7 +975,7 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     SwPaM* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = pCrsr->GetNode();
+    SwNode* pNd = &(pCrsr->GetNode());
     sal_uInt16 nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         nPos++; // is at correct position; take next for while
@@ -1354,7 +1354,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                             const sal_Int32* pEnd = pTxtAttr->GetEnd();
                             if( pEnd )
                                 rCntntAtPos.sStr =
-                                    pTxtNd->GetExpandTxt( *pTxtAttr->GetStart(), *pEnd - *pTxtAttr->GetStart() );
+                                    pTxtNd->GetExpandTxt( pTxtAttr->GetStart(), *pEnd - pTxtAttr->GetStart() );
                             else if( RES_TXTATR_TOXMARK == pTxtAttr->Which())
                                 rCntntAtPos.sStr =
                                     pTxtAttr->GetTOXMark().GetAlternativeText();
@@ -1397,8 +1397,8 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                         if( bRet )
                         {
                             rCntntAtPos.sStr = pTxtNd->GetExpandTxt(
-                                *pTxtAttr->GetStart(),
-                                *pTxtAttr->GetEnd() - *pTxtAttr->GetStart() );
+                                pTxtAttr->GetStart(),
+                                *pTxtAttr->GetEnd() - pTxtAttr->GetStart() );
 
                             rCntntAtPos.aFnd.pAttr = &pTxtAttr->GetAttr();
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_INETATTR;
@@ -1518,7 +1518,7 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     for( sal_uInt16 i = 0; i < pTxtNd->GetSwpHints().Count(); ++i )
                     {
                         const SwTxtAttr* pHt = pTxtNd->GetSwpHints()[i];
-                        const sal_Int32 nAttrStart = *pHt->GetStart();
+                        const sal_Int32 nAttrStart = pHt->GetStart();
                         if( nAttrStart > n ) // over the section
                             break;
 
@@ -1737,7 +1737,7 @@ bool SwCrsrShell::SelectTxtAttr( sal_uInt16 nWhich,
         if( pTxtAttr )
         {
             const sal_Int32* pEnd = pTxtAttr->End();
-            bRet = SelectTxt( *pTxtAttr->GetStart(), ( pEnd ? *pEnd : *pTxtAttr->GetStart() + 1 ) );
+            bRet = SelectTxt( pTxtAttr->GetStart(), ( pEnd ? *pEnd : pTxtAttr->GetStart() + 1 ) );
         }
     }
     return bRet;
@@ -1756,7 +1756,7 @@ bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 
         pCrsr->GetPoint()->nNode = *rAttr.GetpTxtNode();
         pCrsr->GetPoint()->nContent.Assign( (SwTxtNode*)rAttr.GetpTxtNode(),
-                                            *rAttr.GetStart() );
+                                            rAttr.GetStart() );
         bRet = !pCrsr->IsSelOvr();
         if( bRet )
             UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
@@ -2188,8 +2188,8 @@ bool SwCrsrShell::SelectNxtPrvHyperlink( bool bNext )
                         ? ( aPos < aCmpPos && aCurPos < aPos )
                         : ( aCmpPos < aPos && aPos < aCurPos ))
                     {
-                        OUString sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
-                                        *rAttr.GetEnd() - *rAttr.GetStart() ) );
+                        OUString sTxt( pTxtNd->GetExpandTxt( rAttr.GetStart(),
+                                        *rAttr.GetEnd() - rAttr.GetStart() ) );
 
                         sTxt = comphelper::string::remove(sTxt, 0x0a);
                         sTxt = comphelper::string::strip(sTxt, ' ');

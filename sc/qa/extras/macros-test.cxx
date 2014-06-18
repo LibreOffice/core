@@ -116,14 +116,14 @@ void ScMacrosTest::testStarBasic()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
     ScDocShell* xDocSh = static_cast<ScDocShell*>(pFoundShell);
-    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
 
     SfxObjectShell::CallXScript(
         xComponent,
         "vnd.sun.Star.script:Standard.Module1.Macro1?language=Basic&location=document",
         aParams, aRet, aOutParamIndex, aOutParam);
     double aValue;
-    pDoc->GetValue(0,0,0,aValue);
+    rDoc.GetValue(0,0,0,aValue);
     std::cout << "returned value = " << aValue << std::endl;
     CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("script did not change the value of Sheet1.A1",2.0, aValue, 0.00001);
     xDocSh->DoClose();

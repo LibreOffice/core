@@ -743,11 +743,11 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                 //  Gliederung einfuegen
 
-                ScOutlineArray* pOutArr = pDestDoc->GetOutlineTable( nTab, true )->GetRowArray();
+                ScOutlineArray& rOutArr = pDestDoc->GetOutlineTable( nTab, true )->GetRowArray();
                 SCROW nOutStart = nRow+nArrY;
                 SCROW nOutEnd = nRow+nArrY+nNeeded-1;
                 bool bSize = false;
-                pOutArr->Insert( nOutStart, nOutEnd, bSize );
+                rOutArr.Insert( nOutStart, nOutEnd, bSize );
                 for (SCROW nOutRow=nOutStart; nOutRow<=nOutEnd; nOutRow++)
                     pDestDoc->ShowRow( nOutRow, nTab, false );
                 pDestDoc->SetDrawPageSize(nTab);

@@ -78,10 +78,8 @@ ScVbaNames::getScDocument()
     ScTabViewShell * pTabViewShell = excel::getBestViewShell( xModel );
     if ( !pTabViewShell )
         throw uno::RuntimeException( "No ViewShell available" );
-    ScViewData* pViewData = pTabViewShell->GetViewData();
-    if ( !pViewData )
-        throw uno::RuntimeException( "No ViewData available" );
-    return pViewData->GetDocument();
+    ScViewData& rViewData = pTabViewShell->GetViewData();
+    return rViewData.GetDocument();
 }
 
 

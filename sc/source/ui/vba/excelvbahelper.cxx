@@ -98,7 +98,7 @@ void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom
 {
     ScTabViewShell* pViewSh = excel::getBestViewShell( xModel );
     Fraction aFract( nZoom, 100 );
-    pViewSh->GetViewData()->SetZoom( aFract, aFract, nTabs );
+    pViewSh->GetViewData().SetZoom( aFract, aFract, nTabs );
     pViewSh->RefreshZoom();
 }
 
@@ -195,8 +195,8 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16
     ScTabViewShell* pTabViewShell = getBestViewShell( xModel );
     if ( pTabViewShell )
     {
-        ScViewData* pView = pTabViewShell->GetViewData();
-        Window* pWin = ( pView != NULL ) ? pView->GetActiveWin() : NULL;
+        ScViewData& rView = pTabViewShell->GetViewData();
+        Window* pWin = rView.GetActiveWin();
         if (pWin)
         {
             ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
@@ -319,21 +319,21 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                 uno::Reference< container::XNameAccess > xVBACodeNamedObjectAccess( xSF->createInstance("ooo.vba.VBAObjectModuleObjectProvider"), uno::UNO_QUERY_THROW );
                 // set up the module info for the workbook and sheets in the nealy created
                 // spreadsheet
-                ScDocument* pDoc = pShell->GetDocument();
-                OUString sCodeName = pDoc->GetCodeName();
+                ScDocument& rDoc = pShell->GetDocument();
+                OUString sCodeName = rDoc.GetCodeName();
                 if ( sCodeName.isEmpty() )
                 {
                     sCodeName = "ThisWorkbook";
-                    pDoc->SetCodeName( sCodeName );
+                    rDoc.SetCodeName( sCodeName );
                 }
 
                 std::vector< OUString > sDocModuleNames;
                 sDocModuleNames.push_back( sCodeName );
 
-                for ( SCTAB index = 0; index < pDoc->GetTableCount(); index++)
+                for ( SCTAB index = 0; index < rDoc.GetTableCount(); index++)
                 {
                     OUString aName;
-                    pDoc->GetCodeName( index, aName );
+                    rDoc.GetCodeName( index, aName );
                     sDocModuleNames.push_back( aName );
                 }
 
@@ -359,7 +359,7 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
             itself as listener for specific events. */
         try
         {
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument()->GetVbaEventProcessor(), uno::UNO_SET_THROW );
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pShell->GetDocument().GetVbaEventProcessor(), uno::UNO_SET_THROW );
             uno::Sequence< uno::Any > aArgs;
             xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_OPEN, aArgs );
         }

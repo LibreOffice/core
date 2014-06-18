@@ -90,7 +90,7 @@ public:
     LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
     virtual ~LwpTableLayout();
     virtual LWP_LAYOUT_TYPE GetLayoutType () SAL_OVERRIDE { return LWP_TABLE_LAYOUT;}
-    LwpObjectID * GetColumnLayoutHead(){return &m_ColumnLayout;}
+    LwpObjectID& GetColumnLayoutHead(){return m_ColumnLayout;}
     void RegisterStyle() SAL_OVERRIDE;
     LwpTable *  GetTable();
     LwpCellLayout * GetDefaultCellLayout(){return m_pDefaultCellLayout;}

@@ -20,8 +20,8 @@ UndoSetCells::~UndoSetCells() {}
 
 void UndoSetCells::DoChange( const CellValues& rValues )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->CopyCellValuesFrom(maTopPos, rValues);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    rDoc.CopyCellValuesFrom(maTopPos, rValues);
 
     ScRange aRange(maTopPos);
     aRange.aEnd.IncRow(rValues.size());

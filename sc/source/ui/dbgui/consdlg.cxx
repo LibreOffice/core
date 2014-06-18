@@ -69,10 +69,10 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
                            rArgSet.Get( rArgSet.GetPool()->
                                             GetWhich( SID_CONSOLIDATE ) )
                                       ).GetData() ),
-        pViewData       ( ((ScTabViewShell*)SfxViewShell::Current())->
+        rViewData       ( ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData() ),
         pDoc            ( ((ScTabViewShell*)SfxViewShell::Current())->
-                                GetViewData()->GetDocument() ),
+                                GetViewData().GetDocument() ),
         pRangeUtil      ( new ScRangeUtil ),
         pAreaData       ( NULL ),
         nAreaDataCount  ( 0 ),
@@ -113,7 +113,7 @@ ScConsolidateDlg::~ScConsolidateDlg()
 
 void ScConsolidateDlg::Init()
 {
-    OSL_ENSURE( pViewData && pDoc && pRangeUtil, "Error in Ctor" );
+    OSL_ENSURE( pDoc && pRangeUtil, "Error in Ctor" );
 
     OUString aStr;
     sal_uInt16 i=0;
@@ -299,11 +299,11 @@ void ScConsolidateDlg::Deactivate()
 
 bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 {
-    if ( !pRangeUtil || !pDoc || !pViewData ||
+    if ( !pRangeUtil || !pDoc ||
          ((pEd != pEdDataArea) && (pEd != pEdDestArea)) )
         return false;
 
-    SCTAB    nTab    = pViewData->GetTabNo();
+    SCTAB    nTab    = rViewData.GetTabNo();
     bool bEditOk = false;
     OUString theCompleteStr;
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
@@ -357,7 +357,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
     if ( nDataAreaCount > 0 )
     {
         ScRefAddress aDestAddress;
-        SCTAB       nTab = pViewData->GetTabNo();
+        SCTAB       nTab = rViewData.GetTabNo();
         OUString    aDestPosStr( pEdDestArea->GetText() );
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 

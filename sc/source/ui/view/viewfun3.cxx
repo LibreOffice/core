@@ -90,11 +90,11 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, bool bIncludeObjects )
     }
 
     ScRange aRange;                             // zu loeschender Bereich
-    if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+    if ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
     {
-        ScDocument* pDoc = GetViewData()->GetDocument();
-        ScDocShell* pDocSh = GetViewData()->GetDocShell();
-        ScMarkData& rMark = GetViewData()->GetMarkData();
+        ScDocument* pDoc = GetViewData().GetDocument();
+        ScDocShell* pDocSh = GetViewData().GetDocShell();
+        ScMarkData& rMark = GetViewData().GetMarkData();
         const bool bRecord(pDoc->IsUndoEnabled());                  // Undo/Redo
 
         ScDocShellModificator aModificator( *pDocSh );
@@ -142,7 +142,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, bool bIncludeObjects )
                 new ScUndoCut( pDocSh, aRange, aOldEnd, rMark, pUndoDoc ) );
 
         aModificator.SetDocumentModified();
-        pDocSh->UpdateOle(GetViewData());
+        pDocSh->UpdateOle(&GetViewData());
 
         CellContentChanged();
     }
@@ -155,8 +155,8 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, bool bIncludeObjects )
 bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, bool bCut, bool bApi, bool bIncludeObjects, bool bStopEdit )
 {
     ScRange aRange;
-    ScMarkType eMarkType = GetViewData()->GetSimpleArea( aRange );
-    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScMarkType eMarkType = GetViewData().GetSimpleArea( aRange );
+    ScMarkData& rMark = GetViewData().GetMarkData();
     bool bDone = false;
 
     if ( eMarkType == SC_MARK_SIMPLE || eMarkType == SC_MARK_SIMPLE_FILTERED )
@@ -194,8 +194,8 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
     ScClipParam aClipParam( aRange, bCut );
     aClipParam.maRanges = rRanges;
 
-    ScDocument* pDoc = GetViewData()->GetDocument();
-    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScDocument* pDoc = GetViewData().GetDocument();
+    ScMarkData& rMark = GetViewData().GetMarkData();
 
     if ( !aClipParam.isMultiRange() )
     {
@@ -257,7 +257,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
 
             if ( bSysClip )
             {
-                ScDocShell* pDocSh = GetViewData()->GetDocShell();
+                ScDocShell* pDocSh = GetViewData().GetDocShell();
                 TransferableObjectDescriptor aObjDesc;
                 pDocSh->FillTransferableObjectDescriptor( aObjDesc );
                 aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
@@ -367,7 +367,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 pChangeTrack->ResetLastCut();   // kein CutMode mehr
 
             {
-                ScDocShell* pDocSh = GetViewData()->GetDocShell();
+                ScDocShell* pDocSh = GetViewData().GetDocShell();
                 TransferableObjectDescriptor aObjDesc;
                 pDocSh->FillTransferableObjectDescriptor( aObjDesc );
                 aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
@@ -402,10 +402,10 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
 ScTransferObj* ScViewFunc::CopyToTransferable()
 {
     ScRange aRange;
-    if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+    if ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
     {
-        ScDocument* pDoc = GetViewData()->GetDocument();
-        ScMarkData& rMark = GetViewData()->GetMarkData();
+        ScDocument* pDoc = GetViewData().GetDocument();
+        ScMarkData& rMark = GetViewData().GetMarkData();
         if ( !pDoc->HasSelectedBlockMatrixFragment(
                         aRange.aStart.Col(), aRange.aStart.Row(),
                         aRange.aEnd.Col(),   aRange.aEnd.Row(),
@@ -422,7 +422,7 @@ ScTransferObj* ScViewFunc::CopyToTransferable()
             ScDrawLayer::SetGlobalDrawPersist(NULL);
             pClipDoc->ExtendMerge( aRange, true );
 
-            ScDocShell* pDocSh = GetViewData()->GetDocShell();
+            ScDocShell* pDocSh = GetViewData().GetDocShell();
             TransferableObjectDescriptor aObjDesc;
             pDocSh->FillTransferableObjectDescriptor( aObjDesc );
             aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
@@ -439,17 +439,17 @@ ScTransferObj* ScViewFunc::CopyToTransferable()
 
 void ScViewFunc::PasteDraw()
 {
-    ScViewData* pViewData = GetViewData();
-    SCCOL nPosX = pViewData->GetCurX();
-    SCROW nPosY = pViewData->GetCurY();
+    ScViewData& rViewData = GetViewData();
+    SCCOL nPosX = rViewData.GetCurX();
+    SCROW nPosY = rViewData.GetCurY();
     Window* pWin = GetActiveWin();
-    Point aPos = pWin->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY,
-                                     pViewData->GetActivePart() ) );
+    Point aPos = pWin->PixelToLogic( rViewData.GetScrPos( nPosX, nPosY,
+                                     rViewData.GetActivePart() ) );
     ScDrawTransferObj* pDrawClip = ScDrawTransferObj::GetOwnClipboard( pWin );
     if (pDrawClip)
     {
         OUString aSrcShellID = pDrawClip->GetShellID();
-        OUString aDestShellID = SfxObjectShell::CreateShellID(pViewData->GetDocShell());
+        OUString aDestShellID = SfxObjectShell::CreateShellID(rViewData.GetDocShell());
         PasteDraw(aPos, pDrawClip->GetModel(), false, aSrcShellID, aDestShellID);
     }
 }
@@ -582,14 +582,14 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
     }
     else if (pDrawClip)
     {
-        ScViewData* pViewData = GetViewData();
-        SCCOL nPosX = pViewData->GetCurX();
-        SCROW nPosY = pViewData->GetCurY();
+        ScViewData& rViewData = GetViewData();
+        SCCOL nPosX = rViewData.GetCurX();
+        SCROW nPosY = rViewData.GetCurY();
         Window* pWin = GetActiveWin();
-        Point aPos = pWin->PixelToLogic( pViewData->GetScrPos( nPosX, nPosY, pViewData->GetActivePart() ) );
+        Point aPos = pWin->PixelToLogic( rViewData.GetScrPos( nPosX, nPosY, rViewData.GetActivePart() ) );
         PasteDraw(
             aPos, pDrawClip->GetModel(), false,
-            pDrawClip->GetShellID(), SfxObjectShell::CreateShellID(pViewData->GetDocShell()));
+            pDrawClip->GetShellID(), SfxObjectShell::CreateShellID(rViewData.GetDocShell()));
     }
     else
     {
@@ -654,7 +654,7 @@ void ScViewFunc::PasteFromTransferable( const uno::Reference<datatransfer::XTran
                 return;
 
             PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
-                GetViewData()->GetCurX(), GetViewData()->GetCurY(),
+                GetViewData().GetCurX(), GetViewData().GetCurY(),
                 NULL, false, false );
         }
     }
@@ -682,7 +682,7 @@ bool ScViewFunc::PasteFromSystem( sal_uLong nFormatId, bool bApi )
             return false;
 
         bRet = PasteDataFormat( nFormatId, aDataHelper.GetTransferable(),
-                                GetViewData()->GetCurX(), GetViewData()->GetCurY(),
+                                GetViewData().GetCurX(), GetViewData().GetCurY(),
                                 NULL, false, !bApi );       // allow warning dialog
 
         if ( !bRet && !bApi )
@@ -837,7 +837,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
             eMoveMode, nUndoFlags);
     }
 
-    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScMarkData& rMark = GetViewData().GetMarkData();
     if (rMark.IsMultiMarked())
     {
         // Source data is single-range but destination is multi-range.
@@ -900,8 +900,8 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     SCROW nDestSizeY;
     pClipDoc->GetClipArea( nDestSizeX, nDestSizeY, bIncludeFiltered );
 
-    ScDocument* pDoc = GetViewData()->GetDocument();
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
     ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     const bool bRecord(pDoc->IsUndoEnabled());
 
@@ -909,7 +909,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 
     ScRange aMarkRange;
     ScMarkData aFilteredMark( rMark);   // local copy for all modifications
-    ScMarkType eMarkType = GetViewData()->GetSimpleArea( aMarkRange, aFilteredMark);
+    ScMarkType eMarkType = GetViewData().GetSimpleArea( aMarkRange, aFilteredMark);
     bool bMarkIsFiltered = (eMarkType == SC_MARK_SIMPLE_FILTERED);
     bool bNoPaste = ((eMarkType != SC_MARK_SIMPLE && !bMarkIsFiltered) ||
             (bMarkIsFiltered && (eMoveMode != INS_NONE || bAsLink)));
@@ -920,9 +920,9 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         {
             // Create a selection with clipboard row count and check that for
             // filtered.
-            nStartCol = GetViewData()->GetCurX();
-            nStartRow = GetViewData()->GetCurY();
-            nStartTab = GetViewData()->GetTabNo();
+            nStartCol = GetViewData().GetCurX();
+            nStartRow = GetViewData().GetCurY();
+            nStartTab = GetViewData().GetTabNo();
             nEndCol = nStartCol + nDestSizeX;
             nEndRow = nStartRow + nDestSizeY;
             nEndTab = nStartTab;
@@ -1002,7 +1002,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         {
             ScWaitCursorOff aWaitOff( GetFrameWin() );
             OUString aMessage = ScGlobal::GetRscString( STR_PASTE_BIGGER );
-            QueryBox aBox( GetViewData()->GetDialogParent(),
+            QueryBox aBox( GetViewData().GetDialogParent(),
                             WinBits(WB_YES_NO | WB_DEF_NO), aMessage );
             if ( aBox.Execute() != RET_YES )
             {
@@ -1045,9 +1045,9 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     }
     else
     {
-        nStartCol = GetViewData()->GetCurX();
-        nStartRow = GetViewData()->GetCurY();
-        nStartTab = GetViewData()->GetTabNo();
+        nStartCol = GetViewData().GetCurX();
+        nStartRow = GetViewData().GetCurY();
+        nStartTab = GetViewData().GetTabNo();
         nEndCol = nStartCol + nDestSizeX;
         nEndRow = nStartRow + nDestSizeY;
         nEndTab = nStartTab;
@@ -1089,7 +1089,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
         {
             ScRangeList aTestRanges;
             aTestRanges.Append(aUserRange);
-            if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aFilteredMark, GetViewData()->GetDialogParent()))
+            if (!checkDestRangeForOverwrite(aTestRanges, pDoc, aFilteredMark, GetViewData().GetDialogParent()))
                 return false;
         }
     }
@@ -1200,7 +1200,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab,
                                        nEndCol,   nEndRow,   nEndTab );     // content before the change
 
-    if (GetViewData()->IsActive())
+    if (GetViewData().IsActive())
     {
         DoneBlockMode();
         InitOwnBlockMode();
@@ -1402,7 +1402,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
     InsCellCmd eMoveMode, sal_uInt16 nUndoFlags)
 {
-    ScViewData& rViewData = *GetViewData();
+    ScViewData& rViewData = GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScMarkData aMark(rViewData.GetMarkData());
@@ -1580,7 +1580,7 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
         return false;
     }
 
-    ScViewData& rViewData = *GetViewData();
+    ScViewData& rViewData = GetViewData();
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
     if (rClipParam.mbCutMode)
     {
@@ -1722,9 +1722,9 @@ bool ScViewFunc::PasteFromClipToMultiRanges(
 
 void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMarkData& rMark)
 {
-    ScViewData* pViewData = GetViewData();
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    pDocSh->UpdateOle(pViewData);
+    ScViewData& rViewData = GetViewData();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
+    pDocSh->UpdateOle(&rViewData);
 
     SelectionChanged();
 
@@ -1755,12 +1755,12 @@ void ScViewFunc::PostPasteFromClip(const ScRangeList& rPasteRanges, const ScMark
 bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
                                 bool bCut, bool bRecord, bool bPaint, bool bApi )
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
     HideAllCursors();       // wegen zusammengefassten
 
     bool bSuccess = true;
     SCTAB nDestTab = rDestPos.Tab();
-    const ScMarkData& rMark = GetViewData()->GetMarkData();
+    const ScMarkData& rMark = GetViewData().GetMarkData();
     if ( rSource.aStart.Tab() == nDestTab && rSource.aEnd.Tab() == nDestTab && rMark.GetSelectCount() > 1 )
     {
         //  moving within one table and several tables selected -> apply to all selected tables
@@ -1775,7 +1775,7 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
 
         ScRange aLocalSource = rSource;
         ScAddress aLocalDest = rDestPos;
-        SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
+        SCTAB nTabCount = pDocSh->GetDocument().GetTableCount();
         SCTAB nStartTab = 0;
         while ( nStartTab < nTabCount && bSuccess )
         {
@@ -1821,7 +1821,7 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
         if ( !bIncludeFiltered )
         {
             // find number of non-filtered rows
-            SCROW nPastedCount = pDocSh->GetDocument()->CountNonFilteredRows(
+            SCROW nPastedCount = pDocSh->GetDocument().CountNonFilteredRows(
                 rSource.aStart.Row(), rSource.aEnd.Row(), rSource.aStart.Tab());
 
             if ( nPastedCount == 0 )
@@ -1831,7 +1831,7 @@ bool ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
 
         MarkRange( ScRange( rDestPos, aDestEnd ), false );          //! sal_False ???
 
-        pDocSh->UpdateOle(GetViewData());
+        pDocSh->UpdateOle(&GetViewData());
         SelectionChanged();
         ResetAutoSpell();
     }
@@ -1860,7 +1860,7 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, b
 
     //  Ausfuehren per Paste
 
-    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDocument* pDoc = GetViewData().GetDocument();
     boost::scoped_ptr<ScDocument> pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
     pDoc->CopyTabToClip( rSource.aStart.Col(), rSource.aStart.Row(),
                             rSource.aEnd.Col(), rSource.aEnd.Row(),
@@ -1868,7 +1868,7 @@ bool ScViewFunc::LinkBlock( const ScRange& rSource, const ScAddress& rDestPos, b
 
     //  Zielbereich markieren (Cursor setzen, keine Markierung)
 
-    if ( GetViewData()->GetTabNo() != rDestPos.Tab() )
+    if ( GetViewData().GetTabNo() != rDestPos.Tab() )
         SetTabNo( rDestPos.Tab() );
 
     MoveCursorAbs( rDestPos.Col(), rDestPos.Row(), SC_FOLLOW_NONE, false, false );
@@ -1886,9 +1886,9 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
                                   boost::ptr_vector<boost::nullable<Edit> >& aEdits,
                                   sal_uInt16 aColLength )
 {
-    ScDocument* pDoc = GetViewData()->GetDocument();
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    ScMarkData& rMark = GetViewData()->GetMarkData();
+    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScMarkData& rMark = GetViewData().GetMarkData();
     ScDocShellModificator aModificator( *pDocSh );
     ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     if ( pDoc )
@@ -1897,7 +1897,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         ScDocument* pUndoDoc = NULL;
         ScDocument* pRedoDoc = NULL;
         ScRefUndoData* pUndoData = NULL;
-        SCTAB nTab = GetViewData()->GetTabNo();
+        SCTAB nTab = GetViewData().GetTabNo();
         SCTAB nStartTab = nTab;
         SCTAB nEndTab = nTab;
 
@@ -1955,7 +1955,7 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         pDocSh->PostPaint(
             ScRange(nStartCol, nCurrentRow, nStartTab, nUndoEndCol, nUndoEndRow, nEndTab),
             nPaint, nExtFlags);
-        pDocSh->UpdateOle(GetViewData());
+        pDocSh->UpdateOle(&GetViewData());
     }
 }
 

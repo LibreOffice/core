@@ -54,9 +54,9 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
     {
         ScRange aRange;
 
-        if ( GetViewData()->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+        if ( GetViewData().GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
         {
-            ScDocument* pDoc = GetViewData()->GetDocument();
+            ScDocument* pDoc = GetViewData().GetDocument();
             if ( bInFormatDialog && aRange.aStart.Row() != aRange.aEnd.Row() )
             {
                 // Range auf eine Datenzeile begrenzen
@@ -95,7 +95,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
             }
 
             ScImportExport aObj( pDoc, aRange );
-            aObj.SetFormulas( GetViewData()->GetOptions().GetOption( VOPT_FORMULAS ) );
+            aObj.SetFormulas( GetViewData().GetOptions().GetOption( VOPT_FORMULAS ) );
             OUString aExportOUString;
             aObj.ExportString( aExportOUString );
             aStrSelection = convertLineEnd(aExportOUString, LINEEND_CR);
@@ -125,7 +125,7 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
 
     if ( bAsText )
     {
-        if ( GetViewData()->IsActive() )
+        if ( GetViewData().IsActive() )
         {
             //  if the view is active, always use InsertURLField, which starts EditMode
             //  and selects the URL, so it can be changed from the URL bar / dialog
@@ -138,8 +138,8 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
             //  -> use InsertBookmark to directly manipulate cell content
             //  bTryReplace=sal_True -> if cell contains only one URL, replace it
 
-            SCCOL nPosX = GetViewData()->GetCurX();
-            SCROW nPosY = GetViewData()->GetCurY();
+            SCCOL nPosX = GetViewData().GetCurX();
+            SCROW nPosY = GetViewData().GetCurY();
             InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, true );
         }
     }
@@ -168,9 +168,9 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     aURLField.SetTargetFrame( rTarget );
     SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
 
-    ScViewData*     pViewData   = GetViewData();
+    ScViewData&     rViewData   = GetViewData();
     ScModule*       pScMod      = SC_MOD();
-    ScInputHandler* pHdl        = pScMod->GetInputHdl( pViewData->GetViewShell() );
+    ScInputHandler* pHdl        = pScMod->GetInputHdl( rViewData.GetViewShell() );
 
     bool bSelectFirst = false;
     if ( !pScMod->IsEditMode() )
@@ -239,7 +239,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                         SvxSearchDialog* pSearchDlg = (SvxSearchDialog*)(pChildWindow->GetWindow());
                         if( pSearchDlg )
                         {
-                            ScTabView* pTabView = GetViewData()->GetView();
+                            ScTabView* pTabView = GetViewData().GetView();
                             if( pTabView )
                             {
                                 Window* pWin = pTabView->GetActiveWin();
@@ -298,7 +298,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     //  Request ausfuehren (dabei wird das SearchItem gespeichert)
 
                     aSearchItem.SetWhich(SID_SEARCH_ITEM);
-                    GetViewData()->GetDispatcher().Execute( FID_SEARCH_NOW,
+                    GetViewData().GetDispatcher().Execute( FID_SEARCH_NOW,
                             rReq.IsAPI() ? SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON :
                                             SFX_CALLMODE_STANDARD,
                             &aSearchItem, 0L );
@@ -309,7 +309,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                         SvxSearchDialog* pSearchDlg = (SvxSearchDialog*)(pChildWindow->GetWindow());
                         if( pSearchDlg )
                         {
-                            ScTabView* pTabView = GetViewData()->GetView();
+                            ScTabView* pTabView = GetViewData().GetView();
                             if( pTabView )
                             {
                                 Window* pWin = pTabView->GetActiveWin();
@@ -324,7 +324,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                 }
                 else
                 {
-                    GetViewData()->GetDispatcher().Execute(
+                    GetViewData().GetDispatcher().Execute(
                             SID_SEARCH_DLG, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD );
                 }
             }
@@ -335,7 +335,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 
                 SvxSearchItem aSearchItem = ScGlobal::GetSearchItem();
                 aSearchItem.SetWhich(SID_SEARCH_ITEM);
-                GetViewData()->GetDispatcher().Execute( FID_SEARCH_NOW,
+                GetViewData().GetDispatcher().Execute( FID_SEARCH_NOW,
                         rReq.IsAPI() ? SFX_CALLMODE_API|SFX_CALLMODE_SYNCHRON :
                                         SFX_CALLMODE_STANDARD,
                         &aSearchItem, 0L );

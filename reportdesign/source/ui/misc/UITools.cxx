@@ -266,8 +266,8 @@ namespace
     {
         uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
-        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
-        PropertyEntryVector_t aPropVector = pPropertyMap->getPropertyEntries();
+        const SfxItemPropertyMap& rPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
+        PropertyEntryVector_t aPropVector = rPropertyMap.getPropertyEntries();
         PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
         while( aIt != aPropVector.end() )
         {
@@ -291,8 +291,8 @@ namespace
     {
         const uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
-        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
-        PropertyEntryVector_t aPropVector = pPropertyMap->getPropertyEntries();
+        const SfxItemPropertyMap& rPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
+        PropertyEntryVector_t aPropVector = rPropertyMap.getPropertyEntries();
         PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
         while( aIt != aPropVector.end() )
         {

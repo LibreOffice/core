@@ -147,8 +147,8 @@ static void lcl_InsertGraphic( const Graphic& rGraphic,
     SdrPage* pPage = pPV->GetPage();
     Point aInsertPos = pViewSh->GetInsertPos();
 
-    ScViewData* pData = pViewSh->GetViewData();
-    if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
+    ScViewData& rData = pViewSh->GetViewData();
+    if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
         aInsertPos.X() -= aLogicSize.Width();       // move position to left edge
 
     ScLimitSizeOnDrawPage( aLogicSize, aInsertPos, pPage->GetSize() );
@@ -182,7 +182,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 {
     SdrPageView*    pPV  = pView->GetSdrPageView();
     SdrPage*        pPage = pPV->GetPage();
-    ScViewData*     pData = pViewSh->GetViewData();
+    ScViewData&     rData = pViewSh->GetViewData();
     Point           aInsertPos( pViewSh->GetInsertPos() );
     Size            aSize;
 
@@ -198,7 +198,7 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
 
     ScLimitSizeOnDrawPage( aSize, aInsertPos, pPage->GetSize() );
 
-    if( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
+    if( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
         aInsertPos.X() -= aSize.Width();
 
     OUString realURL;
@@ -209,14 +209,14 @@ static void lcl_InsertMedia( const OUString& rMediaURL, bool bApi,
     else
     {
         uno::Reference<frame::XModel> const xModel(
-                pData->GetDocument()->GetDocumentShell()->GetModel());
+                rData.GetDocument()->GetDocumentShell()->GetModel());
         bool const bRet = ::avmedia::EmbedMedia(xModel, rMediaURL, realURL);
         if (!bRet) { return; }
     }
 
     SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
 
-    pObj->SetModel(pData->GetDocument()->GetDrawLayer()); // set before setURL
+    pObj->SetModel(rData.GetDocument()->GetDrawLayer()); // set before setURL
     pObj->setURL( realURL, ""/*TODO?*/ );
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
 }

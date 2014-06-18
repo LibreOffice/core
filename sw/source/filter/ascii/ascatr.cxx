@@ -90,7 +90,7 @@ sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( pHt->HasDummyChar() )
             {
-                sal_Int32 nPos = *pHt->GetStart();
+                sal_Int32 nPos = pHt->GetStart();
 
                 if( nPos >= nStartPos && nPos <= nMinPos )
                     nMinPos = nPos;
@@ -100,7 +100,7 @@ sal_Int32 SwASC_AttrIter::SearchNext( sal_Int32 nStartPos )
             }
             else if ( pHt->HasContent() )
             {
-                const sal_Int32 nHintStart = *pHt->GetStart();
+                const sal_Int32 nHintStart = pHt->GetStart();
                 if ( nHintStart >= nStartPos && nHintStart <= nMinPos )
                 {
                     nMinPos = nHintStart;
@@ -129,7 +129,7 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( ( pHt->HasDummyChar()
                    || pHt->HasContent() )
-                 && nSwPos == *pHt->GetStart() )
+                 && nSwPos == pHt->GetStart() )
             {
                 bRet = true;
                 OUString sOut;
@@ -158,7 +158,7 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
                 if( !sOut.isEmpty() )
                     rWrt.Strm().WriteUnicodeOrByteText( sOut );
             }
-            else if( nSwPos < *pHt->GetStart() )
+            else if( nSwPos < pHt->GetStart() )
                 break;
         }
     }

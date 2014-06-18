@@ -53,7 +53,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     eMode( eNewMode ),
     pDrawUndo( NULL )
 {
-    pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
 
 ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
@@ -81,7 +81,7 @@ void ScUndoWidthOrHeight::Undo()
 {
     BeginUndo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     SCCOLROW nPaintStart = nStart > 0 ? nStart-1 : static_cast<SCCOLROW>(0);
 
@@ -93,9 +93,9 @@ void ScUndoWidthOrHeight::Undo()
 
     //! outlines from all tables?
     if (pUndoTab)                                           // Outlines are included when saving ?
-        pDoc->SetOutlineTable( nStartTab, pUndoTab );
+        rDoc.SetOutlineTable( nStartTab, pUndoTab );
 
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = rDoc.GetTableCount();
     ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
@@ -103,27 +103,27 @@ void ScUndoWidthOrHeight::Undo()
         {
             pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, *itr,
                     static_cast<SCCOL>(nEnd), MAXROW, *itr, IDF_NONE,
-                    false, pDoc );
-            pDoc->UpdatePageBreaks( *itr );
+                    false, &rDoc );
+            rDoc.UpdatePageBreaks( *itr );
             pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, *itr,
                     MAXCOL, MAXROW, *itr, PAINT_GRID | PAINT_TOP );
         }
         else        // Height
         {
-            pUndoDoc->CopyToDocument( 0, nStart, *itr, MAXCOL, nEnd, *itr, IDF_NONE, false, pDoc );
-            pDoc->UpdatePageBreaks( *itr );
+            pUndoDoc->CopyToDocument( 0, nStart, *itr, MAXCOL, nEnd, *itr, IDF_NONE, false, &rDoc );
+            rDoc.UpdatePageBreaks( *itr );
             pDocShell->PostPaint( 0, nPaintStart, *itr, MAXCOL, MAXROW, *itr, PAINT_GRID | PAINT_LEFT );
         }
     }
 
-    DoSdrUndoAction( pDrawUndo, pDoc );
+    DoSdrUndoAction( pDrawUndo, &rDoc );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
         pViewShell->UpdateScrollBars();
 
-        SCTAB nCurrentTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nCurrentTab = pViewShell->GetViewData().GetTabNo();
         if ( nCurrentTab < nStartTab || nCurrentTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
     }
@@ -145,7 +145,7 @@ void ScUndoWidthOrHeight::Redo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nTab = pViewShell->GetViewData().GetTabNo();
         if ( nTab < nStartTab || nTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
 

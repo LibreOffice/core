@@ -692,7 +692,7 @@ const SwAnchoredObject* SwDrawContact::GetAnchoredObj( const SdrObject* _pSdrObj
     {
         if ( _pSdrObj->ISA(SwDrawVirtObj) )
         {
-            pRetAnchoredObj = static_cast<const SwDrawVirtObj*>(_pSdrObj)->GetAnchoredObj();
+            pRetAnchoredObj = &(static_cast<const SwDrawVirtObj*>(_pSdrObj)->GetAnchoredObj());
         }
         else if ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) )
         {
@@ -725,7 +725,7 @@ SwAnchoredObject* SwDrawContact::GetAnchoredObj( SdrObject* _pSdrObj )
     {
         if ( _pSdrObj->ISA(SwDrawVirtObj) )
         {
-            pRetAnchoredObj = static_cast<SwDrawVirtObj*>(_pSdrObj)->AnchoredObj();
+            pRetAnchoredObj = &(static_cast<SwDrawVirtObj*>(_pSdrObj)->AnchoredObj());
         }
         else if ( !_pSdrObj->ISA(SdrVirtObj) && !_pSdrObj->ISA(SwDrawVirtObj) )
         {
@@ -976,7 +976,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
         if ( pDrawVirtObj->GetAnchorFrm() )
         {
             // #i34640# - determine correct page frame
-            SwPageFrm* pPage = pDrawVirtObj->AnchoredObj()->FindPageFrmOfAnchor();
+            SwPageFrm* pPage = pDrawVirtObj->AnchoredObj().FindPageFrmOfAnchor();
             if( pOldBoundRect && pPage )
             {
                 SwRect aOldRect( *pOldBoundRect );
@@ -986,7 +986,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
                                          aOldRect, PREP_FLY_LEAVE,true);
             }
             // #i34640# - include spacing for wrapping
-            SwRect aRect( pDrawVirtObj->GetAnchoredObj()->GetObjRectWithSpaces() );
+            SwRect aRect( pDrawVirtObj->GetAnchoredObj().GetObjRectWithSpaces() );
             if (aRect.HasArea() && pPage)
             {
                 SwPageFrm* pPg = (SwPageFrm*)::FindPage( aRect, pPage );
@@ -1568,11 +1568,11 @@ void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
         // 'virtual' drawing objects
         if ( pDrawVirtObj->IsConnected() )
         {
-            pDrawVirtObj->AnchoredObj()->InvalidateObjPos();
+            pDrawVirtObj->AnchoredObj().InvalidateObjPos();
             // #i28701#
             if ( _bUpdateSortedObjsList )
             {
-                pDrawVirtObj->AnchoredObj()->UpdateObjInSortedList();
+                pDrawVirtObj->AnchoredObj().UpdateObjInSortedList();
             }
         }
     }
@@ -1869,7 +1869,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                             {
                                 ClrContourCache( pDrawVirtObj );
                             }
-                            pFrm->AppendDrawObj( *(pDrawVirtObj->AnchoredObj()) );
+                            pFrm->AppendDrawObj( pDrawVirtObj->AnchoredObj() );
 
                             pDrawVirtObj->ActionChanged();
                         }
@@ -1976,7 +1976,7 @@ void SwDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredOb
           aDrawVirtObjsIter != maDrawVirtObjs.end();
           ++aDrawVirtObjsIter )
     {
-        _roAnchoredObjs.push_back( (*aDrawVirtObjsIter)->AnchoredObj() );
+        _roAnchoredObjs.push_back( &(*aDrawVirtObjsIter)->AnchoredObj() );
     }
 }
 

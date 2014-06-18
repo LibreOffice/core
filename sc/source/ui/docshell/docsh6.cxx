@@ -151,7 +151,7 @@ void ScDocShell::SetVisAreaOrSize( const Rectangle& rVisArea, bool bModifyStart 
         ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
         if (pViewSh)
         {
-            if (pViewSh->GetViewData()->GetDocShell() == this)
+            if (pViewSh->GetViewData().GetDocShell() == this)
                 pViewSh->UpdateOleZoom();
         }
     }
@@ -279,7 +279,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
     if ( !bCellStyles && !bPageStyles )     // nothing to do
         return;
 
-    ScStyleSheetPool* pSourcePool = rSource.GetDocument()->GetStyleSheetPool();
+    ScStyleSheetPool* pSourcePool = rSource.GetDocument().GetStyleSheetPool();
     ScStyleSheetPool* pDestPool = aDocument.GetStyleSheetPool();
 
     SfxStyleFamily eFamily = bCellStyles ?

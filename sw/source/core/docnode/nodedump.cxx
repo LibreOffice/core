@@ -710,7 +710,7 @@ void SwTxtNode::dumpAsXml( xmlTextWriterPtr w )
             SwTxtAttr* pHint = rHints.GetTextHint(i);
 
             if (pHint->GetStart())
-                writer.writeFormatAttribute("start", TMP_FORMAT, *pHint->GetStart());
+                writer.writeFormatAttribute("start", TMP_FORMAT, pHint->GetStart());
             if (pHint->GetEnd())
                 writer.writeFormatAttribute("end", TMP_FORMAT, *pHint->GetEnd());
             writer.writeFormatAttribute("whichId", TMP_FORMAT, pHint->Which());

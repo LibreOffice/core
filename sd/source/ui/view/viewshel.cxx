@@ -1067,9 +1067,8 @@ void ViewShell::UpdatePreview (SdPage*, bool )
             OutlineView* pOlView = dynamic_cast< OutlineView* >( pView );
             if( pOlView )
             {
-                ::Outliner* pOutl = pOlView->GetOutliner();
-                if( pOutl )
-                    return &pOutl->GetUndoManager();
+                ::Outliner& rOutl = pOlView->GetOutliner();
+                return &rOutl.GetUndoManager();
             }
         }
         else if( pView->IsTextEdit() )

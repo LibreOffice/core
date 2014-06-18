@@ -339,7 +339,7 @@ namespace
                 bBrace = true;
                 _rJoin = _rJoin.replaceAt(_rJoin.getLength()-1,1,OUString(' '));
             }
-            (_rJoin += C_AND) += BuildJoinCriteria(_xConnection,pData->GetConnLineDataList(),pData);
+            (_rJoin += C_AND) += BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);
             if(bBrace)
                 _rJoin += ")";
             _pEntryConn->SetVisited(true);
@@ -413,7 +413,7 @@ namespace
         if ( CROSS_JOIN != pData->GetJoinType() && !pData->isNatural() )
         {
             aErg += " ON ";
-            aErg += BuildJoinCriteria(_xConnection,pData->GetConnLineDataList(),pData);
+            aErg += BuildJoinCriteria(_xConnection,&pData->GetConnLineDataList(),pData);
         }
 
         return aErg;
@@ -508,9 +508,9 @@ namespace
         pEntryConn->SetVisited(true);
 
         // first search for the "to" window
-        const ::std::vector<OTableConnection*>* pConnections = pEntryConn->GetParent()->getTableConnections();
-        ::std::vector<OTableConnection*>::const_iterator aIter = pConnections->begin();
-        ::std::vector<OTableConnection*>::const_iterator aEnd = pConnections->end();
+        const ::std::vector<OTableConnection*>& rConnections = pEntryConn->GetParent()->getTableConnections();
+        ::std::vector<OTableConnection*>::const_iterator aIter = rConnections.begin();
+        ::std::vector<OTableConnection*>::const_iterator aEnd = rConnections.end();
         for(;aIter != aEnd;++aIter)
         {
             OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(*aIter);
@@ -528,7 +528,7 @@ namespace
         if(aIter == aEnd)
         {
             OQueryTableWindow* pEntryTabFrom = static_cast<OQueryTableWindow*>(pEntryConn->GetSourceWin());
-            aIter = pConnections->begin();
+            aIter = rConnections.begin();
             for(;aIter != aEnd;++aIter)
             {
                 OQueryTableConnection* pNext = static_cast<OQueryTableConnection*>(*aIter);
@@ -636,7 +636,7 @@ namespace
             const Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             const OUString aQuote = xMetaData->getIdentifierQuoteString();
 
-            OJoinTableView::OTableWindowMap* pTabList = _pView->getTableView()->GetTabWinMap();
+            OJoinTableView::OTableWindowMap& rTabList = _pView->getTableView()->GetTabWinMap();
 
             const static OUString sFieldSeparator(", ");
             const static OUString s_sAs(" AS ");
@@ -660,8 +660,8 @@ namespace
                     {
                         // we have to look if we have alias.* here but before we have to check if the column doesn't already exist
                         OTableFieldDescRef  aInfo = new OTableFieldDesc();
-                        OJoinTableView::OTableWindowMap::iterator tableIter = pTabList->begin();
-                        OJoinTableView::OTableWindowMap::iterator tableEnd = pTabList->end();
+                        OJoinTableView::OTableWindowMap::iterator tableIter = rTabList.begin();
+                        OJoinTableView::OTableWindowMap::iterator tableEnd = rTabList.end();
                         bool bFound = false;
                         for(;!bFound && tableIter != tableEnd ;++tableIter)
                         {
@@ -995,7 +995,7 @@ namespace
             {
                 if(!_rJoinCrit.isEmpty())
                     _rJoinCrit += C_AND;
-                _rJoinCrit += BuildJoinCriteria(_xConnection,pEntryConnData->GetConnLineDataList(),pEntryConnData);
+                _rJoinCrit += BuildJoinCriteria(_xConnection,&pEntryConnData->GetConnLineDataList(),pEntryConnData);
             }
         }
     }
@@ -1532,9 +1532,9 @@ namespace
                 OSQLParseNode* pParamNode = pFunction->getChild(pFunction->count()-2);
                 if ( pParamNode && pParamNode->getTokenValue().toChar() == '*' )
                 {
-                    OJoinTableView::OTableWindowMap* pTabList = _pView->getTableView()->GetTabWinMap();
-                    OJoinTableView::OTableWindowMap::iterator aIter = pTabList->begin();
-                    OJoinTableView::OTableWindowMap::iterator aTabEnd = pTabList->end();
+                    OJoinTableView::OTableWindowMap& rTabList = _pView->getTableView()->GetTabWinMap();
+                    OJoinTableView::OTableWindowMap::iterator aIter = rTabList.begin();
+                    OJoinTableView::OTableWindowMap::iterator aTabEnd = rTabList.end();
                     for(;aIter != aTabEnd;++aIter)
                     {
                         OQueryTableWindow* pTabWin = static_cast<OQueryTableWindow*>(aIter->second);
@@ -1606,9 +1606,9 @@ namespace
                                                                                        true));
                 if ( pConn )
                 {
-                    OConnectionLineDataVec* pLineDataList = pConn->GetData()->GetConnLineDataList();
-                    OConnectionLineDataVec::iterator aIter = pLineDataList->begin();
-                    OConnectionLineDataVec::iterator aEnd = pLineDataList->end();
+                    OConnectionLineDataVec& rLineDataList = pConn->GetData()->GetConnLineDataList();
+                    OConnectionLineDataVec::iterator aIter = rLineDataList.begin();
+                    OConnectionLineDataVec::iterator aEnd = rLineDataList.end();
                     for(;aIter != aEnd;++aIter)
                     {
                         if((*aIter)->GetSourceFieldName() == aDragLeft->GetField() ||
@@ -2022,7 +2022,7 @@ namespace
                 }
 
                 // now delete the data for which we haven't any tablewindow
-                OJoinTableView::OTableWindowMap aTableMap(*pTableView->GetTabWinMap());
+                OJoinTableView::OTableWindowMap aTableMap(pTableView->GetTabWinMap());
                 OJoinTableView::OTableWindowMap::iterator aIterTableMap = aTableMap.begin();
                 OJoinTableView::OTableWindowMap::iterator aIterTableEnd = aTableMap.end();
                 for(;aIterTableMap != aIterTableEnd;++aIterTableMap)
@@ -2056,7 +2056,7 @@ namespace
                         rController.setLimit(-1);
                     }
 
-                    if ( (eErrorCode = InstallFields(_pView,pParseTree, pTableView->GetTabWinMap())) == eOk )
+                    if ( (eErrorCode = InstallFields(_pView, pParseTree, &pTableView->GetTabWinMap())) == eOk )
                     {
                         // GetSelectionCriteria must be called before GetHavingCriteria
                         sal_uInt16 nLevel=0;
@@ -2735,11 +2735,11 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
 
     bool bAllTables = sAliasName.isEmpty();
 
-    OJoinTableView::OTableWindowMap* pTabWins = m_pTableView->GetTabWinMap();
+    OJoinTableView::OTableWindowMap& rTabWins = m_pTableView->GetTabWinMap();
     OUString strCurrentPrefix;
     ::std::vector< OUString> aFields;
-    OJoinTableView::OTableWindowMap::iterator aIter = pTabWins->begin();
-    OJoinTableView::OTableWindowMap::iterator aEnd  = pTabWins->end();
+    OJoinTableView::OTableWindowMap::iterator aIter = rTabWins.begin();
+    OJoinTableView::OTableWindowMap::iterator aEnd  = rTabWins.end();
     for(;aIter != aEnd;++aIter)
     {
         OQueryTableWindow* pCurrentWin = static_cast<OQueryTableWindow*>(aIter->second);
@@ -2831,8 +2831,8 @@ OUString OQueryDesignView::getStatement()
         return OUString();
     }
 
-    OQueryTableView::OTableWindowMap* pTabList   = m_pTableView->GetTabWinMap();
-    sal_uInt32 nTabcount        = pTabList->size();
+    OQueryTableView::OTableWindowMap& rTabList   = m_pTableView->GetTabWinMap();
+    sal_uInt32 nTabcount        = rTabList.size();
 
     OUString aFieldListStr(GenerateSelectList(this,rFieldList,nTabcount>1));
     if( aFieldListStr.isEmpty() )
@@ -2844,9 +2844,9 @@ OUString OQueryDesignView::getStatement()
     // and trigger a error message
     // ----------------- Build table list ----------------------
 
-    const ::std::vector<OTableConnection*>* pConnList = m_pTableView->getTableConnections();
+    const ::std::vector<OTableConnection*>& rConnList = m_pTableView->getTableConnections();
     Reference< XConnection> xConnection = rController.getConnection();
-    OUString aTableListStr(GenerateFromClause(xConnection,pTabList,pConnList));
+    OUString aTableListStr(GenerateFromClause(xConnection,&rTabList,&rConnList));
     OSL_ENSURE(!aTableListStr.isEmpty(), "OQueryDesignView::getStatement() : unexpected : have Fields, but no Tables !");
     // if fields exist now, these only can be created by inserting from an already existing table; if on the other hand
     // a table is deleted, also the belonging fields will be deleted -> therefore it CANNOT occur that fields
@@ -2858,7 +2858,7 @@ OUString OQueryDesignView::getStatement()
         return OUString();
 
     OUString aJoinCrit;
-    GenerateInnerJoinCriterias(xConnection,aJoinCrit,pConnList);
+    GenerateInnerJoinCriterias(xConnection,aJoinCrit,&rConnList);
     if(!aJoinCrit.isEmpty())
     {
         OUString aTmp = "( " + aJoinCrit + " )";
@@ -2990,7 +2990,7 @@ bool OQueryDesignView::isSlotEnabled(sal_Int32 _nSlotId)
 void OQueryDesignView::SaveUIConfig()
 {
     OQueryController& rCtrl = static_cast<OQueryController&>(getController());
-    rCtrl.SaveTabWinsPosSize( m_pTableView->GetTabWinMap(), m_pScrollWindow->GetHScrollBar()->GetThumbPos(), m_pScrollWindow->GetVScrollBar()->GetThumbPos() );
+    rCtrl.SaveTabWinsPosSize( &m_pTableView->GetTabWinMap(), m_pScrollWindow->GetHScrollBar().GetThumbPos(), m_pScrollWindow->GetVScrollBar().GetThumbPos() );
     rCtrl.setVisibleRows( m_pSelectionBox->GetNoneVisibleRows() );
     if ( m_aSplitter.GetSplitPosPixel() != 0 )
         rCtrl.setSplitPos( m_aSplitter.GetSplitPosPixel() );

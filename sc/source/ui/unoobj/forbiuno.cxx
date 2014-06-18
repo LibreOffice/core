@@ -29,15 +29,15 @@ static rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell*
     rtl::Reference<SvxForbiddenCharactersTable> xRet;
     if ( pDocSh )
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
-        xRet = pDoc->GetForbiddenCharacters();
+        ScDocument& rDoc = pDocSh->GetDocument();
+        xRet = rDoc.GetForbiddenCharacters();
         if ( !xRet.is() )
         {
             //  create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
             //  so changes can be stored.
 
             xRet = new SvxForbiddenCharactersTable( comphelper::getProcessComponentContext() );
-            pDoc->SetForbiddenCharacters( xRet );
+            rDoc.SetForbiddenCharacters( xRet );
         }
     }
     return xRet;
@@ -48,13 +48,13 @@ ScForbiddenCharsObj::ScForbiddenCharsObj( ScDocShell* pDocSh ) :
     pDocShell( pDocSh )
 {
     if (pDocShell)
-        pDocShell->GetDocument()->AddUnoObject(*this);
+        pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScForbiddenCharsObj::~ScForbiddenCharsObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScForbiddenCharsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -70,7 +70,7 @@ void ScForbiddenCharsObj::onChange()
 {
     if (pDocShell)
     {
-        pDocShell->GetDocument()->SetForbiddenCharacters( mxForbiddenChars );
+        pDocShell->GetDocument().SetForbiddenCharacters( mxForbiddenChars );
         pDocShell->PostPaintGridAll();
         pDocShell->SetDocumentModified();
     }

@@ -110,7 +110,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeExcep
         SCROW nEndRow = aOneRange.aEnd.Row();
         SCTAB nTab = aOneRange.aStart.Tab();
 
-        pDocSh->GetDocument()->GetDataArea(
+        pDocSh->GetDocument().GetDataArea(
                         nTab, nStartCol, nStartRow, nEndCol, nEndRow, true, false );
 
         ScRange aNew( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab );
@@ -132,11 +132,11 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
+        ScDocument& rDoc = pDocSh->GetDocument();
         ScRange aMatrix;
 
         // finding the matrix range is now in GetMatrixFormulaRange in the document
-        if ( pDoc->GetMatrixFormulaRange( aCursor, aMatrix ) )
+        if ( rDoc.GetMatrixFormulaRange( aCursor, aMatrix ) )
         {
             SetNewRange( aMatrix );
         }
@@ -161,9 +161,9 @@ void SAL_CALL ScCellCursorObj::collapseToMergedArea() throw(uno::RuntimeExceptio
         OSL_ENSURE( rRanges.size() == 1, "Range? Ranges?" );
         ScRange aNewRange( *rRanges[ 0 ] );
 
-        ScDocument* pDoc = pDocSh->GetDocument();
-        pDoc->ExtendOverlapped( aNewRange );
-        pDoc->ExtendMerge( aNewRange );                 // after ExtendOverlapped!
+        ScDocument& rDoc = pDocSh->GetDocument();
+        rDoc.ExtendOverlapped( aNewRange );
+        rDoc.ExtendMerge( aNewRange );                 // after ExtendOverlapped!
 
         SetNewRange( aNewRange );
     }
@@ -245,7 +245,7 @@ void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
 
         SCCOL nUsedX = 0;       // Anfang holen
         SCROW nUsedY = 0;
-        if (!pDocSh->GetDocument()->GetDataStart( nTab, nUsedX, nUsedY ))
+        if (!pDocSh->GetDocument().GetDataStart( nTab, nUsedX, nUsedY ))
         {
             nUsedX = 0;
             nUsedY = 0;
@@ -273,7 +273,7 @@ void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
 
         SCCOL nUsedX = 0;       // Ende holen
         SCROW nUsedY = 0;
-        if (!pDocSh->GetDocument()->GetTableArea( nTab, nUsedX, nUsedY ))
+        if (!pDocSh->GetDocument().GetTableArea( nTab, nUsedX, nUsedY ))
         {
             nUsedX = 0;
             nUsedY = 0;
@@ -309,7 +309,7 @@ void SAL_CALL ScCellCursorObj::gotoStart() throw(uno::RuntimeException, std::exc
         SCROW nEndRow = aOneRange.aEnd.Row();
         SCTAB nTab = aOneRange.aStart.Tab();
 
-        pDocSh->GetDocument()->GetDataArea(
+        pDocSh->GetDocument().GetDataArea(
                         nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
 
         ScRange aNew( nStartCol, nStartRow, nTab );
@@ -337,7 +337,7 @@ void SAL_CALL ScCellCursorObj::gotoEnd() throw(uno::RuntimeException, std::excep
         SCROW nEndRow = aOneRange.aEnd.Row();
         SCTAB nTab = aOneRange.aStart.Tab();
 
-        pDocSh->GetDocument()->GetDataArea(
+        pDocSh->GetDocument().GetDataArea(
                         nTab, nStartCol, nStartRow, nEndCol, nEndRow, false, false );
 
         ScRange aNew( nEndCol, nEndRow, nTab );
@@ -361,7 +361,7 @@ void SAL_CALL ScCellCursorObj::gotoNext() throw(uno::RuntimeException, std::exce
     SCTAB nTab  = aCursor.Tab();
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
-        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab,  1,0, false,true, aMark );
+        pDocSh->GetDocument().GetNextPos( nNewX,nNewY, nTab,  1,0, false,true, aMark );
     //! sonst Exception oder so
 
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );
@@ -383,7 +383,7 @@ void SAL_CALL ScCellCursorObj::gotoPrevious() throw(uno::RuntimeException, std::
     SCTAB nTab  = aCursor.Tab();
     ScDocShell* pDocSh = GetDocShell();
     if ( pDocSh )
-        pDocSh->GetDocument()->GetNextPos( nNewX,nNewY, nTab, -1,0, false,true, aMark );
+        pDocSh->GetDocument().GetNextPos( nNewX,nNewY, nTab, -1,0, false,true, aMark );
     //! sonst Exception oder so
 
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );

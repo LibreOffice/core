@@ -109,7 +109,7 @@ protected:
 protected:
     void Read() SAL_OVERRIDE;
 public:
-    inline LwpAssociatedLayouts* GetLayoutsWithMe();
+    inline LwpAssociatedLayouts& GetLayoutsWithMe();
     LwpVirtualLayout* GetLayout(LwpVirtualLayout* pStartLayout);
     inline bool IsActive();
     virtual bool IsTable();
@@ -119,9 +119,9 @@ public:
     bool IsStyleContent();
 };
 
-LwpAssociatedLayouts* LwpContent::GetLayoutsWithMe()
+LwpAssociatedLayouts& LwpContent::GetLayoutsWithMe()
 {
-    return &m_LayoutsWithMe;
+    return m_LayoutsWithMe;
 }
 
 inline bool LwpContent::IsActive()

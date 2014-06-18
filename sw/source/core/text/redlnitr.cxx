@@ -58,7 +58,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
     // Build a font matching the default paragraph style:
     SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
     delete pFnt;
-    pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
+    pFnt = new SwFont( aFontAccess.Get()->GetFont() );
 
     // set font to vertical if frame layout is vertical
     bool bVertLayout = false;

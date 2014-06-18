@@ -901,7 +901,7 @@ ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
     bDoUpdate( true )
 {
     if (pDocShell)
-        pDocShell->GetDocument()->AddUnoObject(*this);
+        pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScCellTextData::~ScCellTextData()
@@ -910,8 +910,8 @@ ScCellTextData::~ScCellTextData()
 
     if (pDocShell)
     {
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
-        pDocShell->GetDocument()->DisposeFieldEditEngine(pEditEngine);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
+        pDocShell->GetDocument().DisposeFieldEditEngine(pEditEngine);
     }
     else
         delete pEditEngine;
@@ -932,8 +932,8 @@ void ScCellTextData::GetCellText(const ScAddress& rCellPos, OUString& rText)
 {
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        pDoc->GetInputString( rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText );
+        ScDocument& rDoc = pDocShell->GetDocument();
+        rDoc.GetInputString( rCellPos.Col(), rCellPos.Row(), rCellPos.Tab(), rText );
     }
 }
 
@@ -943,8 +943,8 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
     {
         if ( pDocShell )
         {
-            ScDocument* pDoc = pDocShell->GetDocument();
-            pEditEngine = pDoc->CreateFieldEditEngine();
+            ScDocument& rDoc = pDocShell->GetDocument();
+            pEditEngine = rDoc.CreateFieldEditEngine();
         }
         else
         {
@@ -970,19 +970,19 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
 
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = pDocShell->GetDocument();
 
         SfxItemSet aDefaults( pEditEngine->GetEmptyItemSet() );
         if( const ScPatternAttr* pPattern =
-                pDoc->GetPattern( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
+                rDoc.GetPattern( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
         {
             pPattern->FillEditItemSet( &aDefaults );
             pPattern->FillEditParaItems( &aDefaults );  // including alignment etc. (for reading)
         }
 
-        if (pDoc->GetCellType(aCellPos) == CELLTYPE_EDIT)
+        if (rDoc.GetCellType(aCellPos) == CELLTYPE_EDIT)
         {
-            const EditTextObject* pObj = pDoc->GetEditText(aCellPos);
+            const EditTextObject* pObj = rDoc.GetEditText(aCellPos);
             if (pObj)
                 pEditEngine->SetTextNewDefaults(*pObj, aDefaults);
         }

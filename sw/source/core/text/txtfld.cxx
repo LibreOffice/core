@@ -418,8 +418,8 @@ static void checkApplyParagraphMarkFormatToNumbering( SwFont* pNumFnt, SwTxtForm
             SwTxtAttr* hint = hints->GetTextHint( i );
             // Formatting for the paragraph mark is set to apply only to the (non-existent) extra character
             // the at end of the txt node.
-            if( hint->Which() == RES_TXTATR_AUTOFMT && hint->GetStart() != NULL && hint->GetEnd() != NULL
-                && *hint->GetStart() == *hint->GetEnd() && *hint->GetStart() == node->Len())
+            if( hint->Which() == RES_TXTATR_AUTOFMT && hint->GetEnd() != NULL
+                && hint->GetStart() == *hint->GetEnd() && hint->GetStart() == node->Len())
             {
                 boost::shared_ptr<SfxItemSet> pSet(hint->GetAutoFmt().GetStyleHandle());
                 pNumFnt->SetDiffFnt( pSet.get(), pIDSA );

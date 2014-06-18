@@ -221,7 +221,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     ::std::vector<SwTxtAttr *> oldMarks;
     if (bMark)
     {
-        oldMarks = rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+        oldMarks = rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
             rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
     }
 
@@ -239,7 +239,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         // #i107672#
         // ensure that we do not retrieve a different mark at the same position
         ::std::vector<SwTxtAttr *> const newMarks(
-            rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+            rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
                 rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
         ::std::vector<SwTxtAttr *>::const_iterator const iter(
             ::std::find_if(newMarks.begin(), newMarks.end(),
@@ -252,9 +252,9 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     }
     else
     {
-        SwTxtNode *pTxtNd = rPam.GetNode()->GetTxtNode();
+        SwTxtNode *pTxtNd = rPam.GetNode().GetTxtNode();
         OSL_ASSERT(pTxtNd);
-        pTxtAttr = pTxtNd ? rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+        pTxtAttr = pTxtNd ? rPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
                 rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK) : NULL;
     }
 
@@ -324,8 +324,8 @@ SwXReferenceMark::getAnchor() throw (uno::RuntimeException, std::exception)
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 const ::std::auto_ptr<SwPaM> pPam( (pTxtMark->End())
                     ?   new SwPaM( rTxtNode, *pTxtMark->End(),
-                                   rTxtNode, *pTxtMark->GetStart())
-                    :   new SwPaM( rTxtNode, *pTxtMark->GetStart()) );
+                                   rTxtNode, pTxtMark->GetStart())
+                    :   new SwPaM( rTxtNode, pTxtMark->GetStart()) );
                 SAL_WNODEPRECATED_DECLARATIONS_POP
 
                 return SwXTextRange::CreateXTextRange(
@@ -352,7 +352,7 @@ void SAL_CALL SwXReferenceMark::dispose() throw (uno::RuntimeException, std::exc
                     &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                const sal_Int32 nStt = *pTxtMark->GetStart();
+                const sal_Int32 nStt = pTxtMark->GetStart();
                 const sal_Int32 nEnd = pTxtMark->End()
                                   ? *pTxtMark->End()
                                   : nStt + 1;
@@ -425,7 +425,7 @@ throw (uno::RuntimeException, std::exception)
                      &m_pImpl->m_pDoc->GetNodes()))
             {
                 SwTxtNode const& rTxtNode = pTxtMark->GetTxtNode();
-                const sal_Int32 nStt = *pTxtMark->GetStart();
+                const sal_Int32 nStt = pTxtMark->GetStart();
                 const sal_Int32 nEnd = pTxtMark->End()
                                         ? *pTxtMark->End()
                                         : nStt + 1;
@@ -766,7 +766,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
         SwTxtMeta * const pTxtAttr( rMeta.GetTxtAttr() );
         OSL_ENSURE(pTxtAttr, "CreateXMeta: no text attr?");
         if (!pTxtAttr) { return 0; }
-        const SwPosition aPos(*pTxtNode, *pTxtAttr->GetStart());
+        const SwPosition aPos(*pTxtNode, pTxtAttr->GetStart());
         xParentText.set( ::sw::CreateParentXText(*pTxtNode->GetDoc(), aPos) );
     }
     if (!xParentText.is()) { return 0; }
@@ -796,7 +796,7 @@ bool SwXMeta::SetContentRange(
             if (rpNode)
             {
                 // rStart points at the first position _within_ the meta!
-                rStart = *pTxtAttr->GetStart() + 1;
+                rStart = pTxtAttr->GetStart() + 1;
                 rEnd = *pTxtAttr->End();
                 return true;
             }

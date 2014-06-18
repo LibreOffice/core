@@ -62,10 +62,10 @@ ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
 
     if ( pViewSh )
     {
-        ScViewData* pViewData = pViewSh->GetViewData();
-        ScDocument* pDoc      = pViewData->GetDocument();
+        ScViewData& rViewData = pViewSh->GetViewData();
+        ScDocument* pDoc      = rViewData.GetDocument();
 
-        aStrPageStyle = pDoc->GetPageStyle( pViewData->GetTabNo() );
+        aStrPageStyle = pDoc->GetPageStyle( rViewData.GetTabNo() );
     }
 
     m_pBtnEdit->SetClickHdl    ( LINK( this, ScHFPage, BtnHdl ) );

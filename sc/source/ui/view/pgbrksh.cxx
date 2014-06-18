@@ -47,10 +47,10 @@ ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :
     SfxShell(pViewSh)
 {
     SetPool( &pViewSh->GetPool() );
-    ScViewData* pViewData = pViewSh->GetViewData();
-    ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    ScViewData& rViewData = pViewSh->GetViewData();
+    ::svl::IUndoManager* pMgr = rViewData.GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
-    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    if ( !rViewData.GetDocument()->IsUndoEnabled() )
     {
         pMgr->SetMaxUndoActionCount( 0 );
     }

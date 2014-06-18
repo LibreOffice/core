@@ -257,7 +257,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
             LwpCharacterStyle* pCharStyle = static_cast<LwpCharacterStyle*>(m_pModifiers->CharStyleID.obj().get());
 
             pStyle->SetStyleName("");
-            pFont = pFoundry->GetFontManger()->CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
+            pFont = pFoundry->GetFontManger().CreateOverrideFont(pCharStyle->GetFinalFontID(),m_pModifiers->FontID);
             pStyle->SetFont(pFont);
             IXFStyle *pNewStyle = pXFStyleManager->AddStyle(pStyle);
             m_StyleName = pNewStyle->GetStyleName();
@@ -272,7 +272,7 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
         if (m_pModifiers->FontID)
         {
             pStyle = new XFTextStyle();
-            pFont = pFoundry->GetFontManger()->CreateFont(m_pModifiers->FontID);
+            pFont = pFoundry->GetFontManger().CreateFont(m_pModifiers->FontID);
             pStyle->SetFont(pFont);
             IXFStyle *pNewStyle = pXFStyleManager->AddStyle(pStyle);
             m_StyleName = pNewStyle->GetStyleName();
@@ -418,7 +418,7 @@ rtl::Reference<XFFont> LwpFrib::GetFont()
     if(m_pModifiers&&m_pModifiers->FontID)
     {
         LwpFoundry* pFoundry = m_pPara->GetFoundry();
-        pFont = pFoundry->GetFontManger()->CreateFont(m_pModifiers->FontID);
+        pFont = pFoundry->GetFontManger().CreateFont(m_pModifiers->FontID);
     }
     else
     {

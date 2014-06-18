@@ -127,7 +127,7 @@ void SwAnnotationWin::UpdateData()
         {
             SwTxtFld *const pTxtFld = mpFmtFld->GetTxtFld();
             SwPosition aPosition( pTxtFld->GetTxtNode() );
-            aPosition.nContent = *pTxtFld->GetStart();
+            aPosition.nContent = pTxtFld->GetStart();
             rUndoRedo.AppendUndo(
                 new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
         }
@@ -169,7 +169,7 @@ bool SwAnnotationWin::CalcFollow()
 {
     SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
     SwPosition aPosition( pTxtFld->GetTxtNode() );
-    aPosition.nContent = *pTxtFld->GetStart();
+    aPosition.nContent = pTxtFld->GetStart();
     SwTxtAttr * const pTxtAttr =
         pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
             aPosition.nContent.GetIndex() - 1,
@@ -184,7 +184,7 @@ sal_uInt32 SwAnnotationWin::CountFollowing()
     sal_uInt32 aCount = 1;  // we start with 1, so we have to subtract one at the end again
     SwTxtFld* pTxtFld = mpFmtFld->GetTxtFld();
     SwPosition aPosition( pTxtFld->GetTxtNode() );
-    aPosition.nContent = *pTxtFld->GetStart();
+    aPosition.nContent = pTxtFld->GetStart();
 
     SwTxtAttr * pTxtAttr = pTxtFld->GetTxtNode().GetTxtAttrForCharAt(
                                         aPosition.nContent.GetIndex() + 1,
@@ -267,7 +267,7 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     {
         SwTxtFld *const pTxtFld = mpFmtFld->GetTxtFld();
         SwPosition aPosition( pTxtFld->GetTxtNode() );
-        aPosition.nContent = *pTxtFld->GetStart();
+        aPosition.nContent = pTxtFld->GetStart();
         rUndoRedo.AppendUndo(
             new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
     }

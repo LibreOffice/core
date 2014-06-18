@@ -114,7 +114,7 @@ bool ScSheetDPData::IsDateDimension(long nDim)
     }
     else
     {
-        return GetCacheTable().getCache()->IsDateDimension( nDim);
+        return GetCacheTable().getCache().IsDateDimension( nDim);
     }
 }
 
@@ -132,7 +132,7 @@ sal_uLong ScSheetDPData::GetNumberFormat(long nDim)
     }
     else
     {
-        return GetCacheTable().getCache()->GetNumberFormat( nDim );
+        return GetCacheTable().getCache().GetNumberFormat( nDim );
     }
 }
 sal_uInt32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )

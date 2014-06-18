@@ -77,7 +77,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                         }
                         const_cast<SwTxtINetFmt*>(pTxtAttr)->SetVisitedValid( false );
                         const SwTxtAttr* pAttr = pTxtAttr;
-                        SwUpdateAttr aUpdateAttr( *pAttr->GetStart(),
+                        SwUpdateAttr aUpdateAttr( pAttr->GetStart(),
                                                   *pAttr->End(),
                                                   RES_FMT_CHG );
                         ((SwTxtNode*)pTxtNd)->ModifyNotification( &aUpdateAttr, &aUpdateAttr );

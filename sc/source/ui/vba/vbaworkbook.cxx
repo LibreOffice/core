@@ -280,17 +280,17 @@ ScVbaWorkbook::getProtectStructure() throw (uno::RuntimeException, std::exceptio
 sal_Bool SAL_CALL ScVbaWorkbook::getPrecisionAsDisplayed() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
-    return pDoc->GetDocOptions().IsCalcAsShown();
+    ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
+    return rDoc.GetDocOptions().IsCalcAsShown();
 }
 
 void SAL_CALL ScVbaWorkbook::setPrecisionAsDisplayed( sal_Bool _precisionAsDisplayed ) throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
-    ScDocOptions aOpt = pDoc->GetDocOptions();
+    ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
+    ScDocOptions aOpt = rDoc.GetDocOptions();
     aOpt.SetCalcAsShown( _precisionAsDisplayed );
-    pDoc->SetDocOptions( aOpt );
+    rDoc.SetDocOptions( aOpt );
 }
 
 void

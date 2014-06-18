@@ -148,7 +148,7 @@ public:
     SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyle,
                 const SwTabFrm *pT , const sal_uInt8 nSCol );
 
-    const Color         *GetColor() const { return &aColor;}
+    const Color&         GetColor() const { return aColor;}
     SvxBorderStyle       GetStyle() const { return nStyle; }
     const SwTabFrm      *GetTab()   const { return pTab;  }
     void  SetPainted()                    { bPainted = true; }
@@ -661,8 +661,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
         if ( rLRect.GetTab() == pTab &&
              !rLRect.IsPainted() && rLRect.GetSubColor() == nSCol &&
              (rLRect.Height() > rLRect.Width()) == (rRect.Height() > rRect.Width()) &&
-             ((!rLRect.GetColor() && !pCol) ||
-              (rLRect.GetColor() && pCol && *rLRect.GetColor() == *pCol)) )
+             (pCol && rLRect.GetColor() == *pCol) )
         {
             if ( rLRect.MakeUnion( rRect ) )
                 return;
@@ -773,7 +772,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             aIns.Bottom( pLA->Bottom() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            aLineRects.push_back( SwLineRect( aIns, rL1.GetColor(),
+                            aLineRects.push_back( SwLineRect( aIns, &rL1.GetColor(),
                                         table::BorderLineStyle::SOLID,
                                         rL1.GetTab(), SUBCOL_TAB ) );
                             if ( isFull() )
@@ -814,7 +813,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             aIns.Right( pLA->Right() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            aLineRects.push_back( SwLineRect( aIns, rL1.GetColor(),
+                            aLineRects.push_back( SwLineRect( aIns, &rL1.GetColor(),
                                         table::BorderLineStyle::SOLID,
                                         rL1.GetTab(), SUBCOL_TAB ) );
                             if ( isFull() )
@@ -1043,9 +1042,9 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
             }
             if ( bPaint )
             {
-                if ( !pLast || *pLast != *rLRect.GetColor() )
+                if ( !pLast || *pLast != rLRect.GetColor() )
                 {
-                    pLast = rLRect.GetColor();
+                    pLast = &rLRect.GetColor();
 
                     sal_uLong nOldDrawMode = pOut->GetDrawMode();
                     if( pGlobalShell->GetWin() &&
@@ -1078,9 +1077,9 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                     continue;
                 }
 
-                if ( !pLast || *pLast != *rLRect.GetColor() )
+                if ( !pLast || *pLast != rLRect.GetColor() )
                 {
-                    pLast = rLRect.GetColor();
+                    pLast = &rLRect.GetColor();
 
                     sal_uLong nOldDrawMode = pOut->GetDrawMode();
                     if( pGlobalShell->GetWin() &&

@@ -148,7 +148,7 @@ namespace connectivity
             OUString regDir = getRegistryDir(product);
             OUString profilesIni = regDir + "profiles.ini";
             IniParser parser( profilesIni );
-            IniSectionMap &mAllSection = *(parser.getAllSection());
+            IniSectionMap &mAllSection = parser.getAllSection();
 
             IniSectionMap::iterator iBegin = mAllSection.begin();
             IniSectionMap::iterator iEnd = mAllSection.end();

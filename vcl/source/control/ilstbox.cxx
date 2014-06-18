@@ -2952,13 +2952,13 @@ void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, 
         // this the presence of the vertical Scrollbar has to be known.
         mpImplLB->SetSizePixel( GetOutputSizePixel() );
         ((Window*)mpImplLB)->Resize();
-        ((Window*)mpImplLB->GetMainWindow())->Resize();
+        ((Window&)mpImplLB->GetMainWindow()).Resize();
     }
 }
 
 void ImplListBoxFloatingWindow::Resize()
 {
-    mpImplLB->GetMainWindow()->ImplClearLayoutData();
+    mpImplLB->GetMainWindow().ImplClearLayoutData();
     FloatingWindow::Resize();
 }
 
@@ -3077,12 +3077,12 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
             mpImplLB->ShowProminentEntry( nPos );
 
         if( bStartTracking )
-            mpImplLB->GetMainWindow()->EnableMouseMoveSelect( true );
+            mpImplLB->GetMainWindow().EnableMouseMoveSelect( true );
 
-        if ( mpImplLB->GetMainWindow()->IsGrabFocusAllowed() )
-            mpImplLB->GetMainWindow()->GrabFocus();
+        if ( mpImplLB->GetMainWindow().IsGrabFocusAllowed() )
+            mpImplLB->GetMainWindow().GrabFocus();
 
-        mpImplLB->GetMainWindow()->ImplClearLayoutData();
+        mpImplLB->GetMainWindow().ImplClearLayoutData();
     }
 }
 

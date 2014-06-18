@@ -83,7 +83,7 @@ public:
     }
 
     LwpColor GetBackColor(){ return m_aStuff.m_aFillColor; }
-    LwpBackgroundStuff* GetBGStuff() { return &m_aStuff; }
+    LwpBackgroundStuff& GetBGStuff() { return m_aStuff; }
 
 protected:
     LwpBackgroundOverride(LwpBackgroundOverride const& rOther);

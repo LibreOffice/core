@@ -92,7 +92,7 @@ namespace dbaui
         Rectangle   GetBoundingRect() const;
 
         inline TTableConnectionData::value_type GetData() const { return m_pData; }
-        const ::std::vector<OConnectionLine*>*  GetConnLineList() const { return &m_vConnLine; }
+        const ::std::vector<OConnectionLine*>&  GetConnLineList() const { return m_vConnLine; }
         inline OJoinTableView*                  GetParent() const { return m_pParent; }
         virtual void                    Draw( const Rectangle& rRect );
         using Window::Draw;

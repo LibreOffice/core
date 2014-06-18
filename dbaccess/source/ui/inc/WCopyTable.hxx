@@ -369,19 +369,19 @@ namespace dbaui
         OUString getPrimaryKeyName() const { return m_aKeyName; }
 
         TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos)        const { return m_aTypeInfoIndex[_nPos]->second; }
-        const OTypeInfoMap* getTypeInfo()                       const { return &m_aTypeInfo; }
+        const OTypeInfoMap& getTypeInfo()                       const { return m_aTypeInfo; }
 
         TOTypeInfoSP        getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }
-        const OTypeInfoMap* getDestTypeInfo()                   const { return &m_aDestTypeInfo; }
+        const OTypeInfoMap& getDestTypeInfo()                   const { return m_aDestTypeInfo; }
 
         ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const { return m_xFormatter; }
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> GetComponentContext() const { return m_xContext; }
 
-        const ODatabaseExport::TColumns*        getSourceColumns() const{ return &m_vSourceColumns; }
-        const ODatabaseExport::TColumnVector*   getSrcVector() const    { return &m_vSourceVec; }
-        ODatabaseExport::TColumns*              getDestColumns()        { return &m_vDestColumns; }
-        const ODatabaseExport::TColumnVector*   getDestVector() const   { return &m_aDestVec; }
+        const ODatabaseExport::TColumns&        getSourceColumns() const{ return m_vSourceColumns; }
+        const ODatabaseExport::TColumnVector&   getSrcVector() const    { return m_vSourceVec; }
+        ODatabaseExport::TColumns&              getDestColumns()        { return m_vDestColumns; }
+        const ODatabaseExport::TColumnVector&   getDestVector() const   { return m_aDestVec; }
         OUString getName() const { return m_sName; }
 
         /** clears the dest vectors

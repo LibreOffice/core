@@ -45,7 +45,7 @@ ScAccessiblePreviewCell::ScAccessiblePreviewCell( const ::com::sun::star::uno::R
                                 ::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell, /* const */ ScAddress& rCellAddress,
                             sal_Int32 nIndex ) :
-    ScAccessibleCellBase( rxParent, ( pViewShell ? pViewShell->GetDocument() : NULL ), rCellAddress, nIndex ),
+    ScAccessibleCellBase( rxParent, ( pViewShell ? &pViewShell->GetDocument() : NULL ), rCellAddress, nIndex ),
     mpViewShell( pViewShell ),
     mpTextHelper(NULL)
 {

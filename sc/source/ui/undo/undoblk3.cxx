@@ -87,7 +87,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
         bMulti      ( bNewMulti )   // unnecessary
 {
     if (bObjects)
-        pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
+        pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 
     if ( !(aMarkData.IsMarked() || aMarkData.IsMultiMarked()) )     // if no cell is selected:
         aMarkData.SetMarkArea( aRange );                            // select cell under cursor
@@ -113,7 +113,7 @@ void ScUndoDeleteContents::SetDataSpans( const boost::shared_ptr<DataSpansType>&
 
 void ScUndoDeleteContents::SetChangeTrack()
 {
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
+    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack && (nFlags & IDF_CONTENTS) )
         pChangeTrack->AppendContentRange( aRange, pUndoDoc,
             nStartChangeAction, nEndChangeAction );
@@ -123,7 +123,7 @@ void ScUndoDeleteContents::SetChangeTrack()
 
 void ScUndoDeleteContents::DoChange( const bool bUndo )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     SetViewMarkData( aMarkData );
 
@@ -142,15 +142,15 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
         nUndoFlags |= IDF_NOCAPTIONS;
 
         ScRange aCopyRange = aRange;
-        SCTAB nTabCount = pDoc->GetTableCount();
+        SCTAB nTabCount = rDoc.GetTableCount();
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
 
-        pUndoDoc->CopyToDocument( aCopyRange, nUndoFlags, bMulti, pDoc, &aMarkData );
+        pUndoDoc->CopyToDocument( aCopyRange, nUndoFlags, bMulti, &rDoc, &aMarkData );
 
-        DoSdrUndoAction( pDrawUndo, pDoc );
+        DoSdrUndoAction( pDrawUndo, &rDoc );
 
-        ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+        ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
         if ( pChangeTrack )
             pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
@@ -164,7 +164,7 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
         RedoSdrUndoAction( pDrawUndo );
         // do not delete objects and note captions, they have been removed via drawing undo
         sal_uInt16 nRedoFlags = (nFlags & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
-        pDoc->DeleteSelection( nRedoFlags, aMarkData );
+        rDoc.DeleteSelection( nRedoFlags, aMarkData );
         aMarkData.MarkToSimple();
 
         SetChangeTrack();
@@ -256,10 +256,10 @@ OUString ScUndoFillTable::GetComment() const
 
 void ScUndoFillTable::SetChangeTrack()
 {
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
+    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
     {
-        SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
+        SCTAB nTabCount = pDocShell->GetDocument().GetTableCount();
         ScRange aWorkRange(aRange);
         nStartChangeAction = 0;
         sal_uLong nTmpAction;
@@ -283,13 +283,13 @@ void ScUndoFillTable::SetChangeTrack()
 
 void ScUndoFillTable::DoChange( const bool bUndo )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     SetViewMarkData( aMarkData );
 
     if (bUndo)  // only Undo
     {
-        SCTAB nTabCount = pDoc->GetTableCount();
+        SCTAB nTabCount = rDoc.GetTableCount();
         ScRange aWorkRange(aRange);
         ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
@@ -298,20 +298,20 @@ void ScUndoFillTable::DoChange( const bool bUndo )
                 aWorkRange.aStart.SetTab(*itr);
                 aWorkRange.aEnd.SetTab(*itr);
                 if (bMulti)
-                    pDoc->DeleteSelectionTab( *itr, IDF_ALL, aMarkData );
+                    rDoc.DeleteSelectionTab( *itr, IDF_ALL, aMarkData );
                 else
-                    pDoc->DeleteAreaTab( aWorkRange, IDF_ALL );
-                pUndoDoc->CopyToDocument( aWorkRange, IDF_ALL, bMulti, pDoc, &aMarkData );
+                    rDoc.DeleteAreaTab( aWorkRange, IDF_ALL );
+                pUndoDoc->CopyToDocument( aWorkRange, IDF_ALL, bMulti, &rDoc, &aMarkData );
             }
 
-        ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+        ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
         if ( pChangeTrack )
             pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
     }
     else        // only Redo
     {
         aMarkData.MarkToMulti();
-        pDoc->FillTabMarked( nSrcTab, aMarkData, nFlags, nFunction, bSkipEmpty, bAsLink );
+        rDoc.FillTabMarked( nSrcTab, aMarkData, nFlags, nFunction, bSkipEmpty, bAsLink );
         aMarkData.MarkToSimple();
         SetChangeTrack();
     }
@@ -324,7 +324,7 @@ void ScUndoFillTable::DoChange( const bool bUndo )
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nTab = pViewShell->GetViewData().GetTabNo();
         if ( !aMarkData.GetTableSelect(nTab) )
             pViewShell->SetTabNo( nSrcTab );
 
@@ -371,7 +371,7 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
         pUndoDoc    ( pNewUndoDoc ),
         bMulti      ( bNewMulti )
 {
-    ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+    ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
     pApplyPattern = (ScPatternAttr*) &pPool->Put( *pNewApply );
     pLineOuter = pNewOuter ? (SvxBoxItem*) &pPool->Put( *pNewOuter ) : NULL;
     pLineInner = pNewInner ? (SvxBoxInfoItem*) &pPool->Put( *pNewInner ) : NULL;
@@ -379,7 +379,7 @@ ScUndoSelectionAttr::ScUndoSelectionAttr( ScDocShell* pNewDocShell,
 
 ScUndoSelectionAttr::~ScUndoSelectionAttr()
 {
-    ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+    ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
     pPool->Remove(*pApplyPattern);
     if (pLineOuter)
         pPool->Remove(*pLineOuter);
@@ -402,13 +402,13 @@ ScEditDataArray* ScUndoSelectionAttr::GetDataArray()
 
 void ScUndoSelectionAttr::DoChange( const bool bUndo )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     SetViewMarkData( aMarkData );
 
     ScRange aEffRange( aRange );
-    if ( pDoc->HasAttrib( aEffRange, HASATTR_MERGED ) )         // merged cells?
-        pDoc->ExtendMerge( aEffRange );
+    if ( rDoc.HasAttrib( aEffRange, HASATTR_MERGED ) )         // merged cells?
+        rDoc.ExtendMerge( aEffRange );
 
     sal_uInt16 nExtFlags = 0;
     pDocShell->UpdatePaintExt( nExtFlags, aEffRange );
@@ -418,19 +418,19 @@ void ScUndoSelectionAttr::DoChange( const bool bUndo )
     if (bUndo)  // only for Undo
     {
         ScRange aCopyRange = aRange;
-        SCTAB nTabCount = pDoc->GetTableCount();
+        SCTAB nTabCount = rDoc.GetTableCount();
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        pUndoDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, pDoc, &aMarkData );
+        pUndoDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, bMulti, &rDoc, &aMarkData );
     }
     else        // only for Redo
     {
         aMarkData.MarkToMulti();
-        pDoc->ApplySelectionPattern( *pApplyPattern, aMarkData );
+        rDoc.ApplySelectionPattern( *pApplyPattern, aMarkData );
         aMarkData.MarkToSimple();
 
         if (pLineOuter)
-            pDoc->ApplySelectionFrame( aMarkData, pLineOuter, pLineInner );
+            rDoc.ApplySelectionFrame( aMarkData, pLineOuter, pLineInner );
     }
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -442,26 +442,26 @@ void ScUndoSelectionAttr::DoChange( const bool bUndo )
 
 void ScUndoSelectionAttr::ChangeEditData( const bool bUndo )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     for (const ScEditDataArray::Item* pItem = mpDataArray->First(); pItem; pItem = mpDataArray->Next())
     {
         ScAddress aPos(pItem->GetCol(), pItem->GetRow(), pItem->GetTab());
-        if (pDoc->GetCellType(aPos) != CELLTYPE_EDIT)
+        if (rDoc.GetCellType(aPos) != CELLTYPE_EDIT)
             continue;
 
         if (bUndo)
         {
             if (pItem->GetOldData())
-                pDoc->SetEditText(aPos, *pItem->GetOldData(), NULL);
+                rDoc.SetEditText(aPos, *pItem->GetOldData(), NULL);
             else
-                pDoc->SetEmptyCell(aPos);
+                rDoc.SetEmptyCell(aPos);
         }
         else
         {
             if (pItem->GetNewData())
-                pDoc->SetEditText(aPos, *pItem->GetNewData(), NULL);
+                rDoc.SetEditText(aPos, *pItem->GetNewData(), NULL);
             else
-                pDoc->SetEmptyCell(aPos);
+                rDoc.SetEmptyCell(aPos);
         }
     }
 }
@@ -528,7 +528,7 @@ OUString ScUndoAutoFill::GetComment() const
 
 void ScUndoAutoFill::SetChangeTrack()
 {
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
+    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc,
             nStartChangeAction, nEndChangeAction );
@@ -540,9 +540,9 @@ void ScUndoAutoFill::Undo()
 {
     BeginUndo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = rDoc.GetTableCount();
     ScMarkData::iterator itr = aMarkData.begin(), itrEnd = aMarkData.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
@@ -552,10 +552,10 @@ void ScUndoAutoFill::Undo()
 
         sal_uInt16 nExtFlags = 0;
         pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
-        pDoc->DeleteAreaTab( aWorkRange, IDF_AUTOFILL );
-        pUndoDoc->CopyToDocument( aWorkRange, IDF_AUTOFILL, false, pDoc );
+        rDoc.DeleteAreaTab( aWorkRange, IDF_AUTOFILL );
+        pUndoDoc->CopyToDocument( aWorkRange, IDF_AUTOFILL, false, &rDoc );
 
-        pDoc->ExtendMerge( aWorkRange, true );
+        rDoc.ExtendMerge( aWorkRange, true );
         pDocShell->PostPaint( aWorkRange, PAINT_GRID, nExtFlags );
     }
     pDocShell->PostDataChanged();
@@ -563,7 +563,7 @@ void ScUndoAutoFill::Undo()
     if (pViewShell)
         pViewShell->CellContentChanged();
 
-    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+    ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
@@ -593,13 +593,13 @@ void ScUndoAutoFill::Redo()
             break;
     }
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     if ( fStartValue != MAXDOUBLE )
     {
         SCCOL nValX = (eFillDir == FILL_TO_LEFT) ? aSource.aEnd.Col() : aSource.aStart.Col();
         SCROW nValY = (eFillDir == FILL_TO_TOP ) ? aSource.aEnd.Row() : aSource.aStart.Row();
         SCTAB nTab = aSource.aStart.Tab();
-        pDoc->SetValue( nValX, nValY, nTab, fStartValue );
+        rDoc.SetValue( nValX, nValY, nTab, fStartValue );
     }
     sal_uLong nProgCount;
     if (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_TOP)
@@ -607,10 +607,10 @@ void ScUndoAutoFill::Redo()
     else
         nProgCount = aSource.aEnd.Row() - aSource.aStart.Row() + 1;
     nProgCount *= nCount;
-    ScProgress aProgress( pDoc->GetDocumentShell(),
+    ScProgress aProgress( rDoc.GetDocumentShell(),
             ScGlobal::GetRscString(STR_FILL_SERIES_PROGRESS), nProgCount );
 
-    pDoc->Fill( aSource.aStart.Col(), aSource.aStart.Row(),
+    rDoc.Fill( aSource.aStart.Col(), aSource.aStart.Row(),
             aSource.aEnd.Col(), aSource.aEnd.Row(), &aProgress,
             aMarkData, nCount,
             eFillDir, eFillCmd, eFillDateCmd,
@@ -674,7 +674,7 @@ void ScUndoMerge::DoChange( bool bUndo ) const
         // Nothing to do.
         return;
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     ScRange aCurRange = maOption.getSingleRange(ScDocShell::GetCurTab());
@@ -688,20 +688,20 @@ void ScUndoMerge::DoChange( bool bUndo ) const
 
         if (bUndo)
             // remove merge (contents are copied back below from undo document)
-            pDoc->RemoveMerge( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
+            rDoc.RemoveMerge( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab() );
         else
         {
             // repeat merge, but do not remove note captions (will be done by drawing redo below)
-            pDoc->DoMerge( aRange.aStart.Tab(),
+            rDoc.DoMerge( aRange.aStart.Tab(),
                            aRange.aStart.Col(), aRange.aStart.Row(),
                            aRange.aEnd.Col(),   aRange.aEnd.Row(), false );
 
             if (maOption.mbCenter)
             {
-                pDoc->ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
+                rDoc.ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
                                  aRange.aStart.Tab(),
                                  SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY ) );
-                pDoc->ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
+                rDoc.ApplyAttr( aRange.aStart.Col(), aRange.aStart.Row(),
                                  aRange.aStart.Tab(),
                                  SvxVerJustifyItem( SVX_VER_JUSTIFY_CENTER, ATTR_VER_JUSTIFY ) );
             }
@@ -710,20 +710,20 @@ void ScUndoMerge::DoChange( bool bUndo ) const
         // undo -> copy back deleted contents
         if (bUndo && mpUndoDoc)
         {
-            pDoc->DeleteAreaTab( aRange, IDF_CONTENTS|IDF_NOCAPTIONS );
-            mpUndoDoc->CopyToDocument( aRange, IDF_ALL|IDF_NOCAPTIONS, false, pDoc );
+            rDoc.DeleteAreaTab( aRange, IDF_CONTENTS|IDF_NOCAPTIONS );
+            mpUndoDoc->CopyToDocument( aRange, IDF_ALL|IDF_NOCAPTIONS, false, &rDoc );
         }
 
         // redo -> merge contents again
         else if (!bUndo && mbMergeContents)
         {
-            pDoc->DoMergeContents( aRange.aStart.Tab(),
+            rDoc.DoMergeContents( aRange.aStart.Tab(),
                                    aRange.aStart.Col(), aRange.aStart.Row(),
                                    aRange.aEnd.Col(), aRange.aEnd.Row() );
         }
 
         if (bUndo)
-            DoSdrUndoAction( mpDrawUndo, pDoc );
+            DoSdrUndoAction( mpDrawUndo, &rDoc );
         else
             RedoSdrUndoAction( mpDrawUndo );
 
@@ -795,16 +795,16 @@ void ScUndoAutoFormat::Undo()
 {
     BeginUndo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
-    SCTAB nTabCount = pDoc->GetTableCount();
-    pDoc->DeleteArea( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
+    SCTAB nTabCount = rDoc.GetTableCount();
+    rDoc.DeleteArea( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                       aBlockRange.aEnd.Col(), aBlockRange.aEnd.Row(),
                       aMarkData, IDF_ATTRIB );
     ScRange aCopyRange = aBlockRange;
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
-    pUndoDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, false, pDoc, &aMarkData );
+    pUndoDoc->CopyToDocument( aCopyRange, IDF_ATTRIB, false, &rDoc, &aMarkData );
 
     // cell heights and widths (IDF_NONE)
     if (bSize)
@@ -817,9 +817,9 @@ void ScUndoAutoFormat::Undo()
         SCTAB nEndZ = aBlockRange.aEnd.Tab();
 
         pUndoDoc->CopyToDocument( nStartX, 0, 0, nEndX, MAXROW, nTabCount-1,
-                                    IDF_NONE, false, pDoc, &aMarkData );
+                                    IDF_NONE, false, &rDoc, &aMarkData );
         pUndoDoc->CopyToDocument( 0, nStartY, 0, MAXCOL, nEndY, nTabCount-1,
-                                    IDF_NONE, false, pDoc, &aMarkData );
+                                    IDF_NONE, false, &rDoc, &aMarkData );
         pDocShell->PostPaint( 0, 0, nStartZ, MAXCOL, MAXROW, nEndZ,
                               PAINT_GRID | PAINT_LEFT | PAINT_TOP, SC_PF_LINES );
     }
@@ -833,7 +833,7 @@ void ScUndoAutoFormat::Redo()
 {
     BeginRedo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     SCCOL nStartX = aBlockRange.aStart.Col();
     SCROW nStartY = aBlockRange.aStart.Row();
@@ -842,7 +842,7 @@ void ScUndoAutoFormat::Redo()
     SCROW nEndY = aBlockRange.aEnd.Row();
     SCTAB nEndZ = aBlockRange.aEnd.Tab();
 
-    pDoc->AutoFormat( nStartX, nStartY, nEndX, nEndY, nFormatNo, aMarkData );
+    rDoc.AutoFormat( nStartX, nStartY, nEndX, nEndY, nFormatNo, aMarkData );
 
     if (bSize)
     {
@@ -853,11 +853,11 @@ void ScUndoAutoFormat::Redo()
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)
         {
-            ScViewData* pData = pViewShell->GetViewData();
-            nPPTX = pData->GetPPTX();
-            nPPTY = pData->GetPPTY();
-            aZoomX = pData->GetZoomX();
-            aZoomY = pData->GetZoomY();
+            ScViewData& rData = pViewShell->GetViewData();
+            nPPTX = rData.GetPPTX();
+            nPPTY = rData.GetPPTY();
+            aZoomX = rData.GetZoomX();
+            aZoomY = rData.GetZoomY();
         }
         else
         {
@@ -879,22 +879,22 @@ void ScUndoAutoFormat::Redo()
             // as SC_SIZE_VISOPT
             for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
             {
-                sal_uInt8 nOld = pDoc->GetRowFlags(nRow,nTab);
-                bool bHidden = pDoc->RowHidden(nRow, nTab);
+                sal_uInt8 nOld = rDoc.GetRowFlags(nRow,nTab);
+                bool bHidden = rDoc.RowHidden(nRow, nTab);
                 if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
-                    pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
+                    rDoc.SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
             }
 
-            pDoc->SetOptimalHeight(aCxt, nStartY, nEndY, nTab);
+            rDoc.SetOptimalHeight(aCxt, nStartY, nEndY, nTab);
 
             for (SCCOL nCol=nStartX; nCol<=nEndX; nCol++)
-                if (!pDoc->ColHidden(nCol, nTab))
+                if (!rDoc.ColHidden(nCol, nTab))
                 {
-                    sal_uInt16 nThisSize = STD_EXTRA_WIDTH + pDoc->GetOptimalColWidth( nCol, nTab,
+                    sal_uInt16 nThisSize = STD_EXTRA_WIDTH + rDoc.GetOptimalColWidth( nCol, nTab,
                                                 &aVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, bFormula,
                                                 &aDestMark );
-                    pDoc->SetColWidth( nCol, nTab, nThisSize );
-                    pDoc->ShowCol( nCol, nTab, true );
+                    rDoc.SetColWidth( nCol, nTab, nThisSize );
+                    rDoc.ShowCol( nCol, nTab, true );
                 }
         }
 
@@ -941,8 +941,8 @@ ScUndoReplace::~ScUndoReplace()
 
 void ScUndoReplace::SetChangeTrack()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
     {
         if ( pUndoDoc )
@@ -957,9 +957,9 @@ void ScUndoReplace::SetChangeTrack()
             ScChangeActionContent* pContent = new ScChangeActionContent(
                 ScRange( aCursorPos) );
             ScCellValue aCell;
-            aCell.assign(*pDoc, aCursorPos);
-            pContent->SetOldValue( aUndoStr, pDoc );
-            pContent->SetNewValue(aCell, pDoc);
+            aCell.assign(rDoc, aCursorPos);
+            pContent->SetOldValue( aUndoStr, &rDoc );
+            pContent->SetNewValue(aCell, &rDoc);
             pChangeTrack->Append( pContent );
             nEndChangeAction = pChangeTrack->GetActionMax();
         }
@@ -977,7 +977,7 @@ void ScUndoReplace::Undo()
 {
     BeginUndo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     ShowTable( aCursorPos.Tab() );
@@ -998,7 +998,7 @@ void ScUndoReplace::Undo()
         sal_uInt16 nUndoFlags = (pSearchItem->GetPattern()) ? IDF_ATTRIB : IDF_CONTENTS;
         pUndoDoc->CopyToDocument( 0,      0,      0,
                                   MAXCOL, MAXROW, MAXTAB,
-                                  nUndoFlags, false, pDoc, NULL, false );   // without row flags
+                                  nUndoFlags, false, &rDoc, NULL, false );   // without row flags
         pDocShell->PostPaintGridAll();
     }
     else if (pSearchItem->GetPattern() &&
@@ -1007,7 +1007,7 @@ void ScUndoReplace::Undo()
         OUString aTempStr = pSearchItem->GetSearchString();       // toggle
         pSearchItem->SetSearchString(pSearchItem->GetReplaceString());
         pSearchItem->SetReplaceString(aTempStr);
-        pDoc->ReplaceStyle( *pSearchItem,
+        rDoc.ReplaceStyle( *pSearchItem,
                             aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),
                             aMarkData, true);
         pSearchItem->SetReplaceString(pSearchItem->GetSearchString());
@@ -1019,7 +1019,7 @@ void ScUndoReplace::Undo()
     }
     else if (pSearchItem->GetCellType() == SVX_SEARCHIN_NOTE)
     {
-        ScPostIt* pNote = pDoc->GetNote(aCursorPos);
+        ScPostIt* pNote = rDoc.GetNote(aCursorPos);
         OSL_ENSURE( pNote, "ScUndoReplace::Undo - cell does not contain a note" );
         if (pNote)
             pNote->SetText( aCursorPos, aUndoStr );
@@ -1032,19 +1032,19 @@ void ScUndoReplace::Undo()
         // aUndoStr may contain line breaks
         if ( aUndoStr.indexOf('\n') != -1 )
         {
-            ScFieldEditEngine& rEngine = pDoc->GetEditEngine();
+            ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
             rEngine.SetText(aUndoStr);
-            pDoc->SetEditText(aCursorPos, rEngine.CreateTextObject());
+            rDoc.SetEditText(aCursorPos, rEngine.CreateTextObject());
         }
         else
-            pDoc->SetString( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aUndoStr );
+            rDoc.SetString( aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(), aUndoStr );
         if (pViewShell)
             pViewShell->MoveCursorAbs( aCursorPos.Col(), aCursorPos.Row(),
                                        SC_FOLLOW_JUMP, false, false );
         pDocShell->PostPaintGridAll();
     }
 
-    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+    ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
@@ -1055,7 +1055,7 @@ void ScUndoReplace::Redo()
 {
     BeginRedo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     if (pViewShell)
@@ -1073,7 +1073,7 @@ void ScUndoReplace::Redo()
     else if (pSearchItem->GetPattern() &&
              pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE)
     {
-        pDoc->ReplaceStyle( *pSearchItem,
+        rDoc.ReplaceStyle( *pSearchItem,
                             aCursorPos.Col(), aCursorPos.Row(), aCursorPos.Tab(),
                             aMarkData, true);
         pDocShell->PostPaintGridAll();
@@ -1137,9 +1137,9 @@ void ScUndoTabOp::Undo()
     sal_uInt16 nExtFlags = 0;
     pDocShell->UpdatePaintExt( nExtFlags, aRange );
 
-    ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->DeleteAreaTab( aRange,IDF_ALL & ~IDF_NOTE );
-    pUndoDoc->CopyToDocument( aRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
+    ScDocument& rDoc = pDocShell->GetDocument();
+    rDoc.DeleteAreaTab( aRange,IDF_ALL & ~IDF_NOTE );
+    pUndoDoc->CopyToDocument( aRange, IDF_ALL & ~IDF_NOTE, false, &rDoc );
     pDocShell->PostPaint( aRange, PAINT_GRID, nExtFlags );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1197,8 +1197,8 @@ ScUndoConversion::~ScUndoConversion()
 
 void ScUndoConversion::SetChangeTrack()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
     {
         if ( pUndoDoc )
@@ -1231,18 +1231,18 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
 {
     if (pRefDoc)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = pDocShell->GetDocument();
         ShowTable( rCursorPos.Tab() );
 
         SetViewMarkData( aMarkData );
 
-        SCTAB nTabCount = pDoc->GetTableCount();
+        SCTAB nTabCount = rDoc.GetTableCount();
         //  Undo/Redo-doc has only selected tables
 
         bool bMulti = aMarkData.IsMultiMarked();
         pRefDoc->CopyToDocument( 0,      0,      0,
                                  MAXCOL, MAXROW, nTabCount-1,
-                                 IDF_CONTENTS, bMulti, pDoc, &aMarkData );
+                                 IDF_CONTENTS, bMulti, &rDoc, &aMarkData );
         pDocShell->PostPaintGridAll();
     }
     else
@@ -1255,7 +1255,7 @@ void ScUndoConversion::Undo()
 {
     BeginUndo();
     DoChange( pUndoDoc, aCursorPos );
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
+    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
     EndUndo();
@@ -1307,7 +1307,7 @@ OUString ScUndoRefConversion::GetComment() const
 
 void ScUndoRefConversion::SetChangeTrack()
 {
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
+    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack && (nFlags & IDF_FORMULA) )
         pChangeTrack->AppendContentsIfInRefDoc( pUndoDoc,
             nStartChangeAction, nEndChangeAction );
@@ -1317,17 +1317,17 @@ void ScUndoRefConversion::SetChangeTrack()
 
 void ScUndoRefConversion::DoChange( ScDocument* pRefDoc)
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     ShowTable(aRange);
 
     SetViewMarkData( aMarkData );
 
     ScRange aCopyRange = aRange;
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = rDoc.GetTableCount();
     aCopyRange.aStart.SetTab(0);
     aCopyRange.aEnd.SetTab(nTabCount-1);
-    pRefDoc->CopyToDocument( aCopyRange, nFlags, bMulti, pDoc, &aMarkData );
+    pRefDoc->CopyToDocument( aCopyRange, nFlags, bMulti, &rDoc, &aMarkData );
     pDocShell->PostPaint( aRange, PAINT_GRID);
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
@@ -1340,7 +1340,7 @@ void ScUndoRefConversion::Undo()
     BeginUndo();
     if (pUndoDoc)
         DoChange(pUndoDoc);
-    ScChangeTrack* pChangeTrack = pDocShell->GetDocument()->GetChangeTrack();
+    ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
     EndUndo();
@@ -1394,8 +1394,8 @@ void ScUndoRefreshLink::Undo()
         pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
 
     bool bFirst = true;
-    ScDocument* pDoc = pDocShell->GetDocument();
-    SCTAB nCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (pUndoDoc->HasTable(nTab))
         {
@@ -1403,28 +1403,28 @@ void ScUndoRefreshLink::Undo()
             if (bMakeRedo)
             {
                 if (bFirst)
-                    pRedoDoc->InitUndo( pDoc, nTab, nTab, true, true );
+                    pRedoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
                 else
                     pRedoDoc->AddUndoTab( nTab, nTab, true, true );
                 bFirst = false;
-                pDoc->CopyToDocument(aRange, IDF_ALL, false, pRedoDoc);
+                rDoc.CopyToDocument(aRange, IDF_ALL, false, pRedoDoc);
                 pRedoDoc->SetLink( nTab,
-                                   pDoc->GetLinkMode(nTab),
-                                   pDoc->GetLinkDoc(nTab),
-                                   pDoc->GetLinkFlt(nTab),
-                                   pDoc->GetLinkOpt(nTab),
-                                   pDoc->GetLinkTab(nTab),
-                                   pDoc->GetLinkRefreshDelay(nTab) );
-				pRedoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
+                                   rDoc.GetLinkMode(nTab),
+                                   rDoc.GetLinkDoc(nTab),
+                                   rDoc.GetLinkFlt(nTab),
+                                   rDoc.GetLinkOpt(nTab),
+                                   rDoc.GetLinkTab(nTab),
+                                   rDoc.GetLinkRefreshDelay(nTab) );
+                pRedoDoc->SetTabBgColor( nTab, rDoc.GetTabBgColor(nTab) );
             }
 
-            pDoc->DeleteAreaTab( aRange,IDF_ALL );
-            pUndoDoc->CopyToDocument( aRange, IDF_ALL, false, pDoc );
-            pDoc->SetLink( nTab, pUndoDoc->GetLinkMode(nTab), pUndoDoc->GetLinkDoc(nTab),
+            rDoc.DeleteAreaTab( aRange,IDF_ALL );
+            pUndoDoc->CopyToDocument( aRange, IDF_ALL, false, &rDoc );
+            rDoc.SetLink( nTab, pUndoDoc->GetLinkMode(nTab), pUndoDoc->GetLinkDoc(nTab),
                                  pUndoDoc->GetLinkFlt(nTab),  pUndoDoc->GetLinkOpt(nTab),
                                  pUndoDoc->GetLinkTab(nTab),
                                  pUndoDoc->GetLinkRefreshDelay(nTab) );
-			pDoc->SetTabBgColor( nTab, pUndoDoc->GetTabBgColor(nTab) );
+            rDoc.SetTabBgColor( nTab, pUndoDoc->GetTabBgColor(nTab) );
         }
 
     pDocShell->PostPaintGridAll();
@@ -1439,23 +1439,23 @@ void ScUndoRefreshLink::Redo()
 
     BeginUndo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();
-    SCTAB nCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
         if (pRedoDoc->HasTable(nTab))
         {
             ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
 
-            pDoc->DeleteAreaTab( aRange, IDF_ALL );
-            pRedoDoc->CopyToDocument( aRange, IDF_ALL, false, pDoc );
-            pDoc->SetLink( nTab,
+            rDoc.DeleteAreaTab( aRange, IDF_ALL );
+            pRedoDoc->CopyToDocument( aRange, IDF_ALL, false, &rDoc );
+            rDoc.SetLink( nTab,
                            pRedoDoc->GetLinkMode(nTab),
                            pRedoDoc->GetLinkDoc(nTab),
                            pRedoDoc->GetLinkFlt(nTab),
                            pRedoDoc->GetLinkOpt(nTab),
                            pRedoDoc->GetLinkTab(nTab),
                            pRedoDoc->GetLinkRefreshDelay(nTab) );
-            pDoc->SetTabBgColor( nTab, pRedoDoc->GetTabBgColor(nTab) );
+            rDoc.SetTabBgColor( nTab, pRedoDoc->GetTabBgColor(nTab) );
         }
 
     pDocShell->PostPaintGridAll();
@@ -1518,8 +1518,8 @@ OUString ScUndoInsertAreaLink::GetComment() const
 
 void ScUndoInsertAreaLink::Undo()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
 
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aDocName, aFltName, aOptions,
                                             aAreaName, aRange );
@@ -1531,8 +1531,8 @@ void ScUndoInsertAreaLink::Undo()
 
 void ScUndoInsertAreaLink::Redo()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
                                             aAreaName, aRange.aStart, nRefreshDelay );
@@ -1580,8 +1580,8 @@ OUString ScUndoRemoveAreaLink::GetComment() const
 
 void ScUndoRemoveAreaLink::Undo()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
 
     ScAreaLink* pLink = new ScAreaLink( pDocShell, aDocName, aFltName, aOptions,
                                         aAreaName, aRange.aStart, nRefreshDelay );
@@ -1596,8 +1596,8 @@ void ScUndoRemoveAreaLink::Undo()
 
 void ScUndoRemoveAreaLink::Redo()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
 
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aDocName, aFltName, aOptions,
                                             aAreaName, aRange );
@@ -1656,7 +1656,7 @@ OUString ScUndoUpdateAreaLink::GetComment() const
 
 void ScUndoUpdateAreaLink::DoChange( const bool bUndo ) const
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     SCCOL nEndX = std::max( aOldRange.aEnd.Col(), aNewRange.aEnd.Col() );
     SCROW nEndY = std::max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
@@ -1666,35 +1666,35 @@ void ScUndoUpdateAreaLink::DoChange( const bool bUndo ) const
     {
         if ( bWithInsert )
         {
-            pDoc->FitBlock( aNewRange, aOldRange );
-            pDoc->DeleteAreaTab( aOldRange, IDF_ALL & ~IDF_NOTE );
-            pUndoDoc->UndoToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
+            rDoc.FitBlock( aNewRange, aOldRange );
+            rDoc.DeleteAreaTab( aOldRange, IDF_ALL & ~IDF_NOTE );
+            pUndoDoc->UndoToDocument( aOldRange, IDF_ALL & ~IDF_NOTE, false, &rDoc );
         }
         else
         {
             ScRange aCopyRange( aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ) );
-            pDoc->DeleteAreaTab( aCopyRange, IDF_ALL & ~IDF_NOTE );
-            pUndoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
+            rDoc.DeleteAreaTab( aCopyRange, IDF_ALL & ~IDF_NOTE );
+            pUndoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, false, &rDoc );
         }
     }
     else
     {
         if ( bWithInsert )
         {
-            pDoc->FitBlock( aOldRange, aNewRange );
-            pDoc->DeleteAreaTab( aNewRange, IDF_ALL & ~IDF_NOTE );
-            pRedoDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
+            rDoc.FitBlock( aOldRange, aNewRange );
+            rDoc.DeleteAreaTab( aNewRange, IDF_ALL & ~IDF_NOTE );
+            pRedoDoc->CopyToDocument( aNewRange, IDF_ALL & ~IDF_NOTE, false, &rDoc );
         }
         else
         {
             ScRange aCopyRange( aOldRange.aStart, ScAddress(nEndX,nEndY,nEndZ) );
-            pDoc->DeleteAreaTab( aCopyRange, IDF_ALL & ~IDF_NOTE );
-            pRedoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, false, pDoc );
+            rDoc.DeleteAreaTab( aCopyRange, IDF_ALL & ~IDF_NOTE );
+            pRedoDoc->CopyToDocument( aCopyRange, IDF_ALL & ~IDF_NOTE, false, &rDoc );
         }
     }
 
     ScRange aWorkRange( aNewRange.aStart, ScAddress( nEndX, nEndY, nEndZ ) );
-    pDoc->ExtendMerge( aWorkRange, true );
+    rDoc.ExtendMerge( aWorkRange, true );
 
     //  Paint
 
@@ -1714,8 +1714,8 @@ void ScUndoUpdateAreaLink::DoChange( const bool bUndo ) const
 
 void ScUndoUpdateAreaLink::Undo()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aNewDoc, aNewFlt, aNewOpt,
                                             aNewArea, aNewRange );
     if (pLink)
@@ -1730,8 +1730,8 @@ void ScUndoUpdateAreaLink::Undo()
 
 void ScUndoUpdateAreaLink::Redo()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sfx2::LinkManager* pLinkManager = rDoc.GetLinkManager();
     ScAreaLink* pLink = lcl_FindAreaLink( pLinkManager, aOldDoc, aOldFlt, aOldOpt,
                                             aOldArea, aOldRange );
     if (pLink)

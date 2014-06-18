@@ -860,7 +860,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
         sValue += OUString::number((sal_Int16)((sal_uInt16)((pDrViewSh->getCurrentPage()->GetPageNum()-1)>>1) + 1)) ;
         sName = ";total-pages:";
         sValue += sName;
-        sValue += OUString::number(pDrViewSh->GetPageTabControl()->GetPageCount()) ;
+        sValue += OUString::number(pDrViewSh->GetPageTabControl().GetPageCount()) ;
         sValue += ";";
         if(pDrViewSh->IsLayerModeActive() && pDrViewSh->GetLayerTabControl()) // #i87182#
         {

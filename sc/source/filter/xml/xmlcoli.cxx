@@ -283,11 +283,11 @@ void ScXMLTableColsContext::EndElement()
             {
                 ScXMLImport::MutexGuard aGuard(GetScImport());
                 ScOutlineTable* pOutlineTable = pDoc->GetOutlineTable(nSheet, true);
-                ScOutlineArray* pColArray = pOutlineTable ? pOutlineTable->GetColArray() : NULL;
-                if (pColArray)
+                if (pOutlineTable)
                 {
+                    ScOutlineArray& rColArray = pOutlineTable->GetColArray();
                     bool bResized;
-                    pColArray->Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay, true);
+                    rColArray.Insert(static_cast<SCCOL>(nGroupStartCol), static_cast<SCCOL>(nGroupEndCol), bResized, !bGroupDisplay, true);
                 }
             }
         }

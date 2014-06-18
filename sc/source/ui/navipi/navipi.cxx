@@ -1021,7 +1021,7 @@ ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
 bool ScNavigatorDlg::GetViewData()
 {
     ScTabViewShell* pViewSh = GetTabViewShell();
-    pViewData = pViewSh ? pViewSh->GetViewData() : NULL;
+    pViewData = pViewSh ? &pViewSh->GetViewData() : NULL;
 
     return ( pViewData != NULL );
 }
@@ -1272,7 +1272,7 @@ void ScNavigatorDlg::MarkDataArea()
 
         pViewSh->MarkDataArea();
         ScRange aMarkRange;
-        pViewSh->GetViewData()->GetMarkData().GetMarkArea(aMarkRange);
+        pViewSh->GetViewData().GetMarkData().GetMarkArea(aMarkRange);
         pMarkArea->nColStart = aMarkRange.aStart.Col();
         pMarkArea->nRowStart = aMarkRange.aStart.Row();
         pMarkArea->nColEnd = aMarkRange.aEnd.Col();

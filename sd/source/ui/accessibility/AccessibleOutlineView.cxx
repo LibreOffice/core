@@ -79,14 +79,14 @@ AccessibleOutlineView::AccessibleOutlineView (
         {
             OutlinerView* pOutlineView = static_cast< ::sd::OutlineView*>(
                 pView)->GetViewByWindow( pSdWindow );
-            SdrOutliner* pOutliner =
+            SdrOutliner& rOutliner =
                 static_cast< ::sd::OutlineView*>(pView)->GetOutliner();
 
-            if( pOutlineView && pOutliner )
+            if( pOutlineView )
             {
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 maTextHelper.SetEditSource( ::std::auto_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
-                                                                                  *pOutliner, *pView, *pOutlineView, *pSdWindow ) ) );
+                                                                                  rOutliner, *pView, *pOutlineView, *pSdWindow ) ) );
                 SAL_WNODEPRECATED_DECLARATIONS_POP
             }
         }

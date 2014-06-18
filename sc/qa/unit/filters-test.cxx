@@ -132,27 +132,27 @@ void ScFiltersTest::testCVEs()
 
 namespace {
 
-void testRangeNameImpl(ScDocument* pDoc)
+void testRangeNameImpl(ScDocument& rDoc)
 {
     //check one range data per sheet and one global more detailed
     //add some more checks here
-    ScRangeData* pRangeData = pDoc->GetRangeName()->findByUpperName(OUString("GLOBAL1"));
+    ScRangeData* pRangeData = rDoc.GetRangeName()->findByUpperName(OUString("GLOBAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Global1 not found", pRangeData);
     double aValue;
-    pDoc->GetValue(1,0,0,aValue);
+    rDoc.GetValue(1,0,0,aValue);
     CPPUNIT_ASSERT_MESSAGE("range name Global1 should reference Sheet1.A1", aValue == 1);
-    pRangeData = pDoc->GetRangeName(0)->findByUpperName(OUString("LOCAL1"));
+    pRangeData = rDoc.GetRangeName(0)->findByUpperName(OUString("LOCAL1"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 not found", pRangeData);
-    pDoc->GetValue(1,2,0,aValue);
+    rDoc.GetValue(1,2,0,aValue);
     CPPUNIT_ASSERT_MESSAGE("range name Sheet1.Local1 should reference Sheet1.A3", aValue == 3);
-    pRangeData = pDoc->GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
+    pRangeData = rDoc.GetRangeName(1)->findByUpperName(OUString("LOCAL2"));
     CPPUNIT_ASSERT_MESSAGE("range name Sheet2.Local2 not found", pRangeData);
     //check for correct results for the remaining formulas
-    pDoc->GetValue(1,1,0, aValue);
+    rDoc.GetValue(1,1,0, aValue);
     CPPUNIT_ASSERT_MESSAGE("=global2 should be 2", aValue == 2);
-    pDoc->GetValue(1,3,0, aValue);
+    rDoc.GetValue(1,3,0, aValue);
     CPPUNIT_ASSERT_MESSAGE("=local2 should be 4", aValue == 4);
-    pDoc->GetValue(2,0,0, aValue);
+    rDoc.GetValue(2,0,0, aValue);
     CPPUNIT_ASSERT_MESSAGE("=SUM(global3) should be 10", aValue == 10);
 }
 
@@ -166,42 +166,42 @@ void ScFiltersTest::testRangeNameODS()
 
     xDocSh->DoHardRecalc(true);
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    testRangeNameImpl(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    testRangeNameImpl(rDoc);
 
     OUString aSheet2CSV("rangeExp_Sheet2.");
     OUString aCSVPath;
     createCSVPath( aSheet2CSV, aCSVPath );
-    testFile( aCSVPath, pDoc, 1);
+    testFile( aCSVPath, rDoc, 1);
     xDocSh->DoClose();
 }
 
 namespace {
 
-void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, xls, xlsx
+void testContentImpl(ScDocument& rDoc, sal_Int32 nFormat ) //same code for ods, xls, xlsx
 {
     double fValue;
     //check value import
-    pDoc->GetValue(0,0,0,fValue);
+    rDoc.GetValue(0,0,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("value not imported correctly", fValue == 1);
-    pDoc->GetValue(0,1,0,fValue);
+    rDoc.GetValue(0,1,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("value not imported correctly", fValue == 2);
-    OUString aString = pDoc->GetString(1, 0, 0);
+    OUString aString = rDoc.GetString(1, 0, 0);
 
     //check string import
     CPPUNIT_ASSERT_MESSAGE("string imported not correctly", aString == "String1");
-    aString = pDoc->GetString(1, 1, 0);
+    aString = rDoc.GetString(1, 1, 0);
     CPPUNIT_ASSERT_MESSAGE("string not imported correctly", aString == "String2");
 
     //check basic formula import
     // in case of DIF it just contains values
-    pDoc->GetValue(2,0,0,fValue);
+    rDoc.GetValue(2,0,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("=2*3", fValue == 6);
-    pDoc->GetValue(2,1,0,fValue);
+    rDoc.GetValue(2,1,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("=2+3", fValue == 5);
-    pDoc->GetValue(2,2,0,fValue);
+    rDoc.GetValue(2,2,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("=2-3", fValue == -1);
-    pDoc->GetValue(2,3,0,fValue);
+    rDoc.GetValue(2,3,0,fValue);
     CPPUNIT_ASSERT_MESSAGE("=C1+C2", fValue == 11);
 
     //check merged cells import
@@ -209,12 +209,12 @@ void testContentImpl(ScDocument* pDoc, sal_Int32 nFormat ) //same code for ods, 
     {
         SCCOL nCol = 4;
         SCROW nRow = 1;
-        pDoc->ExtendMerge(4, 1, nCol, nRow, 0, false);
+        rDoc.ExtendMerge(4, 1, nCol, nRow, 0, false);
         CPPUNIT_ASSERT_MESSAGE("merged cells are not imported", nCol == 5 && nRow == 2);
 
         //check notes import
         ScAddress aAddress(7, 2, 0);
-        ScPostIt* pNote = pDoc->GetNote(aAddress);
+        ScPostIt* pNote = rDoc.GetNote(aAddress);
         CPPUNIT_ASSERT_MESSAGE("note not imported", pNote);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("note text not imported correctly", pNote->GetText(), OUString("Test"));
     }
@@ -229,8 +229,8 @@ void ScFiltersTest::testContentODS()
     ScDocShellRef xDocSh = loadDoc("universal-content.", ODS);
     xDocSh->DoHardRecalc(true);
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc, ODS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    testContentImpl(rDoc, ODS);
     xDocSh->DoClose();
 }
 
@@ -239,8 +239,8 @@ void ScFiltersTest::testContentXLS()
     ScDocShellRef xDocSh = loadDoc("universal-content.", XLS);
     xDocSh->DoHardRecalc(true);
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc, XLS);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    testContentImpl(rDoc, XLS);
     xDocSh->DoClose();
 }
 
@@ -249,8 +249,8 @@ void ScFiltersTest::testContentXLSX()
     ScDocShellRef xDocSh = loadDoc("universal-content.", XLSX);
     xDocSh->DoHardRecalc(true);
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc, XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    testContentImpl(rDoc, XLSX);
     xDocSh->DoClose();
 }
 
@@ -259,8 +259,8 @@ void ScFiltersTest::testContentXLSXStrict()
     ScDocShellRef xDocSh = loadDoc("universal-content-strict.", XLSX);
     xDocSh->DoHardRecalc(true);
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    testContentImpl(pDoc, XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    testContentImpl(rDoc, XLSX);
     xDocSh->DoClose();
 }
 
@@ -269,9 +269,9 @@ void ScFiltersTest::testContentLotus123()
     ScDocShellRef xDocSh = loadDoc("universal-content.", LOTUS123);
     xDocSh->DoHardRecalc(true);
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-    testContentImpl(pDoc, LOTUS123);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(&rDoc);
+    testContentImpl(rDoc, LOTUS123);
     xDocSh->DoClose();
 }
 
@@ -279,8 +279,8 @@ void ScFiltersTest::testContentDIF()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", DIF);
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(&rDoc);
     xDocSh->DoClose();
 }
 
@@ -289,8 +289,8 @@ void ScFiltersTest::testContentDIF()
 //     ScDocShellRef xDocSh = loadDoc("universal-content.", XLS_XML);
 //     CPPUNIT_ASSERT(xDocSh);
 //
-//     ScDocument* pDoc = xDocSh->GetDocument();
-//     CPPUNIT_ASSERT(pDoc);
+//     ScDocument& rDoc = xDocSh->GetDocument();
+//     CPPUNIT_ASSERT(&rDoc);
 //     testContentImpl(pDoc, XLS_XML);
 //     xDocSh->DoClose();
 // }
@@ -299,17 +299,17 @@ void ScFiltersTest::testSharedFormulaXLS()
 {
     ScDocShellRef xDocSh = loadDoc("shared-formula/basic.", XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
     xDocSh->DoHardRecalc(true);
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 18; ++i)
     {
-        double fVal = pDoc->GetValue(ScAddress(1,i,0));
+        double fVal = rDoc.GetValue(ScAddress(1,i,0));
         double fCheck = i*10.0;
         CPPUNIT_ASSERT_EQUAL(fCheck, fVal);
     }
 
-    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1,18,0));
+    ScFormulaCell* pCell = rDoc.GetFormulaCell(ScAddress(1,18,0));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pCell);
     ScFormulaCellGroupRef xGroup = pCell->GetCellGroup();
     CPPUNIT_ASSERT_MESSAGE("This cell should be a part of a cell group.", xGroup);
@@ -323,40 +323,40 @@ void ScFiltersTest::testSharedFormulaXLS()
 
     xDocSh = loadDoc("shared-formula/gap.", XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
-    pDoc = xDocSh->GetDocument();
-    pDoc->CalcAll();
+    ScDocument& rDoc2 = xDocSh->GetDocument();
+    rDoc2.CalcAll();
 
-    if (!checkFormula(*pDoc, ScAddress(1,0,0), "A1*20"))
+    if (!checkFormula(rDoc2, ScAddress(1,0,0), "A1*20"))
         CPPUNIT_FAIL("Wrong formula.");
 
-    if (!checkFormula(*pDoc, ScAddress(1,1,0), "A2*20"))
+    if (!checkFormula(rDoc2, ScAddress(1,1,0), "A2*20"))
         CPPUNIT_FAIL("Wrong formula.");
 
-    if (!checkFormula(*pDoc, ScAddress(1,2,0), "A3*20"))
+    if (!checkFormula(rDoc2, ScAddress(1,2,0), "A3*20"))
         CPPUNIT_FAIL("Wrong formula.");
 
     // There is an intentional gap at row 4.
 
-    if (!checkFormula(*pDoc, ScAddress(1,4,0), "A5*20"))
+    if (!checkFormula(rDoc2, ScAddress(1,4,0), "A5*20"))
         CPPUNIT_FAIL("Wrong formula.");
 
-    if (!checkFormula(*pDoc, ScAddress(1,5,0), "A6*20"))
+    if (!checkFormula(rDoc2, ScAddress(1,5,0), "A6*20"))
         CPPUNIT_FAIL("Wrong formula.");
 
-    if (!checkFormula(*pDoc, ScAddress(1,6,0), "A7*20"))
+    if (!checkFormula(rDoc2, ScAddress(1,6,0), "A7*20"))
         CPPUNIT_FAIL("Wrong formula.");
 
-    if (!checkFormula(*pDoc, ScAddress(1,7,0), "A8*20"))
+    if (!checkFormula(rDoc2, ScAddress(1,7,0), "A8*20"))
         CPPUNIT_FAIL("Wrong formula.");
 
     // We re-group formula cells on load. Let's check that as well.
 
-    ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(1,0,0));
+    ScFormulaCell* pFC = rDoc2.GetFormulaCell(ScAddress(1,0,0));
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch formula cell.", pFC);
     CPPUNIT_ASSERT_MESSAGE("This should be the top cell in formula group.", pFC->IsSharedTop());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(3), pFC->GetSharedLength());
 
-    pFC = pDoc->GetFormulaCell(ScAddress(1,4,0));
+    pFC = rDoc2.GetFormulaCell(ScAddress(1,4,0));
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch formula cell.", pFC);
     CPPUNIT_ASSERT_MESSAGE("This should be the top cell in formula group.", pFC->IsSharedTop());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(4), pFC->GetSharedLength());
@@ -367,18 +367,18 @@ void ScFiltersTest::testSharedFormulaXLS()
 void ScFiltersTest::testSharedFormulaXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("shared-formula/basic.", XLSX);
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT(&rDoc);
     xDocSh->DoHardRecalc(true);
     // Check the results of formula cells in the shared formula range.
     for (SCROW i = 1; i <= 18; ++i)
     {
-        double fVal = pDoc->GetValue(ScAddress(1,i,0));
+        double fVal = rDoc.GetValue(ScAddress(1,i,0));
         double fCheck = i*10.0;
         CPPUNIT_ASSERT_EQUAL(fCheck, fVal);
     }
 
-    ScFormulaCell* pCell = pDoc->GetFormulaCell(ScAddress(1,18,0));
+    ScFormulaCell* pCell = rDoc.GetFormulaCell(ScAddress(1,18,0));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pCell);
     ScFormulaCellGroupRef xGroup = pCell->GetCellGroup();
     CPPUNIT_ASSERT_MESSAGE("This cell should be a part of a cell group.", xGroup);
@@ -387,9 +387,9 @@ void ScFiltersTest::testSharedFormulaXLSX()
     xDocSh->DoClose();
 }
 
-void impl_testLegacyCellAnchoredRotatedShape( ScDocument* pDoc, Rectangle& aRect, ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
+void impl_testLegacyCellAnchoredRotatedShape( ScDocument& rDoc, Rectangle& aRect, ScDrawObjData& aAnchor, long TOLERANCE = 30 /* 30 hmm */ )
 {
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("No drawing layer.", pDrawLayer);
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("No page instance for the 1st sheet.", pPage);
@@ -427,8 +427,8 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // is a good edge case test to see if we import it still correctly )
         ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedclippedshape.", ODS);
 
-        ScDocument* pDoc = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(pDoc);
+        ScDocument& rDoc = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(&rDoc);
         // ensure the imported legacy rotated shape is in the expected position
         Rectangle aRect( 6000, -2000, 8000, 4000 );
         // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
@@ -438,14 +438,14 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         aAnchor.maStart.SetCol( 5 );
         aAnchor.maEnd.SetRow( 3 );
         aAnchor.maEnd.SetCol( 7 );
-        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor );
         // test save and reload
         // for some reason having this test in subsequent_export-test.cxx causes
         // a core dump in editeng ( so moved to here )
         xDocSh = saveAndReload( &(*xDocSh), ODS);
-        pDoc = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(pDoc);
-        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+        ScDocument& rDoc2 = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(&rDoc2);
+        impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
 
         xDocSh->DoClose();
     }
@@ -455,8 +455,8 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // the shape is completely hidden because the rows the shape occupies
         // are hidden
         ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedhiddenshape.", ODS, true);
-        ScDocument* pDoc = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(pDoc);
+        ScDocument& rDoc = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(&rDoc);
         // ensure the imported legacy rotated shape is in the expected position
         // when a shape is fully hidden reloading seems to result is in some errors, usually
         // ( same but different error happens pre-patch ) - we should do better here, I regard it
@@ -470,12 +470,12 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         aAnchor.maStart.SetCol( 5 );
         aAnchor.maEnd.SetRow( 3 );
         aAnchor.maEnd.SetCol( 7 );
-        pDoc->ShowRows(0, 9, 0, true); // show relavent rows
-        pDoc->SetDrawPageSize(0); // trigger recalcpos
+        rDoc.ShowRows(0, 9, 0, true); // show relavent rows
+        rDoc.SetDrawPageSize(0); // trigger recalcpos
 
         // apply hefty ( 1 mm ) tolerence here, as some opensuse tinderbox
         // failing
-        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor, 100 );
+        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor, 100 );
 
         xDocSh->DoClose();
     }
@@ -483,8 +483,8 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // This example doc contains cell anchored shape that is rotated
         ScDocShellRef xDocSh = loadDoc("legacycellanchoredrotatedshape.", ODS);
 
-        ScDocument* pDoc = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(pDoc);
+        ScDocument& rDoc = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(&rDoc);
         // ensure the imported legacy rotated shape is in the expected position
         Rectangle aRect( 6000, 3000, 8000, 9000 );
         // ensure the imported ( and converted ) anchor ( note we internally now store the anchor in
@@ -496,20 +496,20 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         aAnchor.maEnd.SetRow( 9 );
         aAnchor.maEnd.SetCol( 7 );
         // test import
-        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+        impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor );
         // test save and reload
         xDocSh = saveAndReload( &(*xDocSh), ODS);
-        pDoc = xDocSh->GetDocument();
-        CPPUNIT_ASSERT(pDoc);
-        impl_testLegacyCellAnchoredRotatedShape( pDoc, aRect, aAnchor );
+        ScDocument& rDoc2 = xDocSh->GetDocument();
+        CPPUNIT_ASSERT(&rDoc2);
+        impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
 
         xDocSh->DoClose();
     }
 }
 
-void testEnhancedProtectionImpl( ScDocument* pDoc )
+void testEnhancedProtectionImpl( ScDocument& rDoc )
 {
-    const ScTableProtection* pProt = pDoc->GetTabProtection(0);
+    const ScTableProtection* pProt = rDoc.GetTabProtection(0);
 
     CPPUNIT_ASSERT( pProt);
 
@@ -528,9 +528,9 @@ void ScFiltersTest::testEnhancedProtectionXLS()
 {
     ScDocShellRef xDocSh = loadDoc("enhanced-protection.", XLS);
     CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
 
-    testEnhancedProtectionImpl( pDoc);
+    testEnhancedProtectionImpl( rDoc);
 
     xDocSh->DoClose();
 }
@@ -539,9 +539,9 @@ void ScFiltersTest::testEnhancedProtectionXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("enhanced-protection.", XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
 
-    testEnhancedProtectionImpl( pDoc);
+    testEnhancedProtectionImpl( rDoc);
 
     xDocSh->DoClose();
 }
@@ -550,16 +550,16 @@ void ScFiltersTest::testSortWithSharedFormulasODS()
 {
     ScDocShellRef xDocSh = loadDoc("shared-formula/sort-crash.", ODS, true);
     CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
 
     // E2:E10 should be shared.
-    const ScFormulaCell* pFC = pDoc->GetFormulaCell(ScAddress(4,1,0));
+    const ScFormulaCell* pFC = rDoc.GetFormulaCell(ScAddress(4,1,0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(9), pFC->GetSharedLength());
 
     // E12:E17 should be shared.
-    pFC = pDoc->GetFormulaCell(ScAddress(4,11,0));
+    pFC = rDoc.GetFormulaCell(ScAddress(4,11,0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(11), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(6), pFC->GetSharedLength());
@@ -567,7 +567,7 @@ void ScFiltersTest::testSortWithSharedFormulasODS()
     // Set A1:E17 as an anonymous database range to sheet, or else Calc would
     // refuse to sort the range.
     ScDBData* pDBData = new ScDBData(STR_DB_LOCAL_NONAME, 0, 0, 0, 4, 16, true, true);
-    pDoc->SetAnonymousDBData(0, pDBData);
+    rDoc.SetAnonymousDBData(0, pDBData);
 
     // Sort ascending by Column E.
 
@@ -587,7 +587,7 @@ void ScFiltersTest::testSortWithSharedFormulasODS()
     CPPUNIT_ASSERT(bSorted);
 
     // After the sort, E2:E16 should be shared.
-    pFC = pDoc->GetFormulaCell(ScAddress(4,1,0));
+    pFC = rDoc.GetFormulaCell(ScAddress(4,1,0));
     CPPUNIT_ASSERT(pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(15), pFC->GetSharedLength());

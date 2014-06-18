@@ -615,8 +615,8 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
 {
     if(rPropSet.AreThereOwnUsrAnys())
     {
-        const SfxItemPropertyMap* pSrc = rPropSet.getPropertyMap();
-        PropertyEntryVector_t aSrcPropVector = pSrc->getPropertyEntries();
+        const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
+        PropertyEntryVector_t aSrcPropVector = rSrc.getPropertyEntries();
         PropertyEntryVector_t::const_iterator aSrcIt = aSrcPropVector.begin();
         while(aSrcIt != aSrcPropVector.end())
         {
@@ -662,7 +662,7 @@ void SvxShape::ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet)
     {
         SfxItemSet aSet( mpModel->GetItemPool(), SDRATTR_START, SDRATTR_END);
         Reference< beans::XPropertySet > xShape( (OWeakObject*)this, UNO_QUERY );
-        SvxItemPropertySet_ObtainSettingsFromPropertySet(rPropSet, aSet, xShape, mpPropSet->getPropertyMap() );
+        SvxItemPropertySet_ObtainSettingsFromPropertySet(rPropSet, aSet, xShape, &mpPropSet->getPropertyMap() );
 
         mpObj->SetMergedItemSetAndBroadcast(aSet);
 

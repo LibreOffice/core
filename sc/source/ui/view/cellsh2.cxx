@@ -994,7 +994,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScViewData* pData       = GetViewData();
     ScDocShell* pDocSh      = pData->GetDocShell();
-    ScDocument* pDoc        = pDocSh->GetDocument();
+    ScDocument& rDoc        = pDocSh->GetDocument();
     SCCOL       nPosX       = pData->GetCurX();
     SCROW       nPosY       = pData->GetCurY();
     SCTAB       nTab        = pData->GetTabNo();
@@ -1014,7 +1014,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     //  or filter,sort,subtotal (also without import)
                     bool bOk = false;
                     ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
-                    if (pDBData && pDoc->GetChangeTrack() == NULL)
+                    if (pDBData && rDoc.GetChangeTrack() == NULL)
                     {
                         if ( pDBData->HasImportParam() )
                             bOk = !pDBData->HasImportSelection();
@@ -1052,7 +1052,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 {
                     //! move ReadOnly check to idl flags
 
-                    if ( pDocSh->IsReadOnly() || pDoc->GetChangeTrack()!=NULL ||
+                    if ( pDocSh->IsReadOnly() || rDoc.GetChangeTrack()!=NULL ||
                             GetViewData()->IsMultiMarked() )
                     {
                         rSet.DisableItem( nWhich );
@@ -1065,7 +1065,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     //  only imported data without selection
                     ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
                     if (!pDBData || !pDBData->HasImportParam() || pDBData->HasImportSelection() ||
-                        pDoc->GetChangeTrack()!=NULL)
+                        rDoc.GetChangeTrack()!=NULL)
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -1095,7 +1095,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 {
                     if (!bAutoFilterTested)
                     {
-                        bAutoFilter = pDoc->HasAutoFilter( nPosX, nPosY, nTab );
+                        bAutoFilter = rDoc.HasAutoFilter( nPosX, nPosY, nTab );
                         bAutoFilterTested = true;
                     }
                     if ( nWhich == SID_AUTO_FILTER )
@@ -1106,7 +1106,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                         {
                             rSet.DisableItem( nWhich );
                         }
-                        else if (pDoc->GetDPAtBlock(aDummy))
+                        else if (rDoc.GetDPAtBlock(aDummy))
                         {
                             rSet.DisableItem( nWhich );
                         }
@@ -1143,8 +1143,8 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     }
 
                     ScDBData* pDBData = bSelected
-                                ? pDoc->GetDBAtArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow )
-                                : pDoc->GetDBAtCursor( nStartCol, nStartRow, nStartTab );
+                                ? rDoc.GetDBAtArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow )
+                                : rDoc.GetDBAtCursor( nStartCol, nStartRow, nStartTab );
 
                     if ( pDBData )
                     {

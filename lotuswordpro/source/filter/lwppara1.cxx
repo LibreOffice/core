@@ -175,13 +175,13 @@ LwpPara* LwpPara::GetParent()
 
     if (level != 1)
     {
-        pPara = dynamic_cast<LwpPara*>(GetPrevious()->obj().get());
+        pPara = dynamic_cast<LwpPara*>(GetPrevious().obj().get());
         while (pPara)
         {
             otherlevel = pPara->GetLevel();
             if ((otherlevel < level) || (otherlevel && (level == 0)))
                 return pPara;
-            pPara = dynamic_cast<LwpPara*>(pPara->GetPrevious()->obj().get());
+            pPara = dynamic_cast<LwpPara*>(pPara->GetPrevious().obj().get());
         }
     }
     return NULL;
@@ -569,7 +569,7 @@ void LwpPara::FindLayouts()
 {
     m_Fribs.SetPara(this);
     m_Fribs.FindLayouts();
-    LwpPara* pNextPara = dynamic_cast<LwpPara*>(GetNext()->obj().get());
+    LwpPara* pNextPara = dynamic_cast<LwpPara*>(GetNext().obj().get());
     if(pNextPara)
     {
         pNextPara->FindLayouts();

@@ -287,10 +287,10 @@ public:
 
     void            DrawMarkRect( const Rectangle& rRect );
 
-    ScViewData*         GetViewData()       { return &aViewData; }
-    const ScViewData*   GetViewData() const { return &aViewData; }
+    ScViewData&         GetViewData()       { return aViewData; }
+    const ScViewData&   GetViewData() const { return aViewData; }
 
-    ScViewFunctionSet*      GetFunctionSet()    { return &aFunctionSet; }
+    ScViewFunctionSet&      GetFunctionSet()    { return aFunctionSet; }
     ScViewSelectionEngine*  GetSelEngine()      { return pSelEngine; }
 
     bool            SelMouseButtonDown( const MouseEvent& rMEvt );

@@ -1340,7 +1340,7 @@ XclExpOutlineBuffer::XclExpOutlineBuffer( const XclExpRoot& rRoot, bool bRows ) 
         mbCurrCollapse( false )
 {
     if( const ScOutlineTable* pOutlineTable = rRoot.GetDoc().GetOutlineTable( rRoot.GetCurrScTab() ) )
-        mpScOLArray = bRows ? pOutlineTable->GetRowArray() : pOutlineTable->GetColArray();
+        mpScOLArray = &(bRows ? pOutlineTable->GetRowArray() : pOutlineTable->GetColArray());
 
     if( mpScOLArray )
         for( size_t nLevel = 0; nLevel < SC_OL_MAXDEPTH; ++nLevel )
@@ -1402,8 +1402,8 @@ XclExpGuts::XclExpGuts( const XclExpRoot& rRoot ) :
     if( const ScOutlineTable* pOutlineTable = rRoot.GetDoc().GetOutlineTable( rRoot.GetCurrScTab() ) )
     {
         // column outline groups
-        if( const ScOutlineArray* pColArray = pOutlineTable->GetColArray() )
-            mnColLevels = ulimit_cast< sal_uInt16 >( pColArray->GetDepth(), EXC_OUTLINE_MAX );
+        const ScOutlineArray& rColArray = pOutlineTable->GetColArray();
+        mnColLevels = ulimit_cast< sal_uInt16 >( rColArray.GetDepth(), EXC_OUTLINE_MAX );
         if( mnColLevels )
         {
             ++mnColLevels;
@@ -1411,8 +1411,8 @@ XclExpGuts::XclExpGuts( const XclExpRoot& rRoot ) :
         }
 
         // row outline groups
-        if( const ScOutlineArray* pRowArray = pOutlineTable->GetRowArray() )
-            mnRowLevels = ulimit_cast< sal_uInt16 >( pRowArray->GetDepth(), EXC_OUTLINE_MAX );
+        const ScOutlineArray& rRowArray = pOutlineTable->GetRowArray();
+        mnRowLevels = ulimit_cast< sal_uInt16 >( rRowArray.GetDepth(), EXC_OUTLINE_MAX );
         if( mnRowLevels )
         {
             ++mnRowLevels;
@@ -2281,12 +2281,10 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
     if( const ScOutlineTable* pOutlineTable = rDoc.GetOutlineTable( nScTab ) )
     {
         SCCOLROW nScStartPos, nScEndPos;
-        if( const ScOutlineArray* pRowArray = pOutlineTable->GetRowArray() )
-        {
-            pRowArray->GetRange( nScStartPos, nScEndPos );
-            // +1 because open/close button is in next row in Excel, +1 for "end->first unused"
-            nFirstUngroupedScRow = static_cast< SCROW >( nScEndPos + 2 );
-        }
+        const ScOutlineArray& rRowArray = pOutlineTable->GetRowArray();
+        rRowArray.GetRange( nScStartPos, nScEndPos );
+        // +1 because open/close button is in next row in Excel, +1 for "end->first unused"
+        nFirstUngroupedScRow = static_cast< SCROW >( nScEndPos + 2 );
     }
 
     // column settings
@@ -2482,7 +2480,7 @@ XclExpRecordRef XclExpCellTable::CreateRecord( sal_uInt16 nRecId ) const
     XclExpRecordRef xRec;
     switch( nRecId )
     {
-        case EXC_ID3_DIMENSIONS:    xRec.reset( new XclExpDelegatingRecord( const_cast<XclExpRowBuffer*>(&maRowBfr)->GetDimensions() ) );   break;
+        case EXC_ID3_DIMENSIONS:    xRec.reset( new XclExpDelegatingRecord( &const_cast<XclExpRowBuffer*>(&maRowBfr)->GetDimensions() ) );   break;
         case EXC_ID2_DEFROWHEIGHT:  xRec = mxDefrowheight;  break;
         case EXC_ID_GUTS:           xRec = mxGuts;          break;
         case EXC_ID_NOTE:           xRec = mxNoteList;      break;

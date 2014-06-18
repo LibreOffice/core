@@ -133,7 +133,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTxtNode &rNode, sal_uInt16 eMode)
             const SwTxtAttr* pAttr = (*pSwpHints2)[i];
             if (pAttr->HasDummyChar())
             {
-                const sal_Int32 nDummyCharPos = *pAttr->GetStart();
+                const sal_Int32 nDummyCharPos = pAttr->GetStart();
                 if (aHiddenMulti.IsSelected(nDummyCharPos))
                     continue;
                 std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(),

@@ -83,10 +83,6 @@ class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container
 public:
     ScVbaObjectForCodeNameProvider( ScDocShell* pDocShell ) : mpDocShell( pDocShell )
     {
-        ScDocument* pDoc = mpDocShell->GetDocument();
-        if ( !pDoc )
-            throw uno::RuntimeException();
-
         uno::Sequence< uno::Any > aArgs(2);
         // access the application object ( parent for workbook )
         aArgs[0] = uno::Any( ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", uno::Sequence< uno::Any >() ) );
@@ -99,26 +95,24 @@ public:
         SolarMutexGuard aGuard;
         maCachedObject = uno::Any(); // clear cached object
 
-        ScDocument* pDoc = mpDocShell->GetDocument();
-        if ( !pDoc )
-            throw uno::RuntimeException();
+        ScDocument& rDoc = mpDocShell->GetDocument();
         // aName is generated from the stream name which can be different ( case-wise )
         // from the code name
-        if( aName.equalsIgnoreAsciiCase( pDoc->GetCodeName() ) )
+        if( aName.equalsIgnoreAsciiCase( rDoc.GetCodeName() ) )
             maCachedObject = maWorkbook;
         else
         {
             OUString sCodeName;
-            SCTAB nCount = pDoc->GetTableCount();
+            SCTAB nCount = rDoc.GetTableCount();
             for( SCTAB i = 0; i < nCount; i++ )
             {
-                pDoc->GetCodeName( i, sCodeName );
+                rDoc.GetCodeName( i, sCodeName );
                 // aName is generated from the stream name which can be different ( case-wise )
                 // from the code name
                 if( sCodeName.equalsIgnoreAsciiCase( aName ) )
                 {
                     OUString sSheetName;
-                    if( pDoc->GetName( i, sSheetName ) )
+                    if( rDoc.GetName( i, sSheetName ) )
                     {
                         uno::Reference< frame::XModel > xModel( mpDocShell->GetModel() );
                         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY_THROW );
@@ -151,19 +145,17 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         SolarMutexGuard aGuard;
-        ScDocument* pDoc = mpDocShell->GetDocument();
-        if ( !pDoc )
-            throw uno::RuntimeException();
-        SCTAB nCount = pDoc->GetTableCount();
+        ScDocument& rDoc = mpDocShell->GetDocument();
+        SCTAB nCount = rDoc.GetTableCount();
         uno::Sequence< OUString > aNames( nCount + 1 );
         SCTAB index = 0;
         OUString sCodeName;
         for( ; index < nCount; ++index )
         {
-            pDoc->GetCodeName( index, sCodeName );
+            rDoc.GetCodeName( index, sCodeName );
             aNames[ index ] = sCodeName;
         }
-        aNames[ index ] = pDoc->GetCodeName();
+        aNames[ index ] = rDoc.GetCodeName();
         return aNames;
     }
     // XElemenAccess
@@ -204,7 +196,7 @@ public:
                     if ( bMatched )
                     {
                         OUString sName;
-                        mrDocShell.GetDocument()->GetCodeName( static_cast<SCTAB>( index ), sName );
+                        mrDocShell.GetDocument().GetCodeName( static_cast<SCTAB>( index ), sName );
                         sCodeName = sName;
                     }
                 }
@@ -235,7 +227,7 @@ public:
                 if (xFormControls == xContainer)
                 {
                     OUString aName;
-                    if (mrDocShell.GetDocument()->GetCodeName(static_cast<SCTAB>(i), aName))
+                    if (mrDocShell.GetDocument().GetCodeName(static_cast<SCTAB>(i), aName))
                         return aName;
                 }
             }
@@ -583,8 +575,8 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
 
         case SC_SERVICE_CHDATAPROV:
-            if (pDocShell && pDocShell->GetDocument())
-                xRet = *new ScChart2DataProvider( pDocShell->GetDocument() );
+            if (pDocShell)
+                xRet = *new ScChart2DataProvider( &pDocShell->GetDocument() );
             break;
 
         case SC_SERVICE_FORMULAPARS:
@@ -595,10 +587,10 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_OPCODEMAPPER:
             if (pDocShell)
             {
-                ScDocument* pDoc = pDocShell->GetDocument();
+                ScDocument& rDoc = pDocShell->GetDocument();
                 ScAddress aAddress;
-                ScCompiler* pComp = new ScCompiler(pDoc,aAddress);
-                pComp->SetGrammar( pDoc->GetGrammar() );
+                ScCompiler* pComp = new ScCompiler(&rDoc,aAddress);
+                pComp->SetGrammar( rDoc.GetGrammar() );
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> (pComp))));
                 SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -606,7 +598,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             }
 #ifndef DISABLE_SCRIPTING
         case SC_SERVICE_VBAOBJECTPROVIDER:
-            if (pDocShell && pDocShell->GetDocument()->IsInVBAMode())
+            if (pDocShell && pDocShell->GetDocument().IsInVBAMode())
             {
                 OSL_TRACE("**** creating VBA Object mapper");
                 xRet.set(static_cast<container::XNameAccess*>(new ScVbaObjectForCodeNameProvider( pDocShell )));
@@ -636,7 +628,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                     // create the VBA document event processor
                     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents(
                         ::ooo::vba::createVBAUnoAPIServiceWithArgs( pDocShell, "com.sun.star.script.vba.VBASpreadsheetEventProcessor", aArgs ), uno::UNO_QUERY );
-                    pDocShell->GetDocument()->SetVbaEventProcessor( xVbaEvents );
+                    pDocShell->GetDocument().SetVbaEventProcessor( xVbaEvents );
                 }
             }
         break;

@@ -510,7 +510,7 @@ ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, co
     mbOpened( false )
 {
     mpDocShell = dynamic_cast< ScDocShell* >( mpShell ); // mpShell from base class
-    mpDoc = mpDocShell ? mpDocShell->GetDocument() : 0;
+    mpDoc = mpDocShell ? &mpDocShell->GetDocument() : 0;
 
     if( !mxModel.is() || !mpDocShell || !mpDoc )
         return;

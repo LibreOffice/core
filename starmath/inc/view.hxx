@@ -185,7 +185,7 @@ public:
 
     void AdjustPosition();
 
-    SmEditWindow *GetEditWindow() { return (&aEdit); }
+    SmEditWindow& GetEditWindow() { return aEdit; }
     SmViewShell  *GetView();
 };
 
@@ -207,7 +207,7 @@ protected:
 
 public:
 
-    SmEditWindow *GetEditWindow()
+    SmEditWindow& GetEditWindow()
     {
         return (((SmCmdBoxWindow *)pWindow)->GetEditWindow());
     }

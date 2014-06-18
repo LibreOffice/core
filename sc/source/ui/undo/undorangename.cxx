@@ -75,7 +75,7 @@ OUString ScUndoAllRangeNames::GetComment() const
 
 void ScUndoAllRangeNames::DoChange(const boost::ptr_map<OUString, ScRangeName>& rNames)
 {
-    ScDocument& rDoc = *pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     rDoc.PreprocessRangeNameUpdate();
     rDoc.SetAllRangeNames(rNames);
@@ -99,15 +99,15 @@ ScUndoAddRangeData::~ScUndoAddRangeData()
 
 void ScUndoAddRangeData::Undo()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     ScRangeName* pRangeName = NULL;
     if (mnTab == -1)
     {
-        pRangeName = pDoc->GetRangeName();
+        pRangeName = rDoc.GetRangeName();
     }
     else
     {
-        pRangeName = pDoc->GetRangeName( mnTab );
+        pRangeName = rDoc.GetRangeName( mnTab );
     }
     pRangeName->erase(*mpRangeData);
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
@@ -116,15 +116,15 @@ void ScUndoAddRangeData::Undo()
 
 void ScUndoAddRangeData::Redo()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     ScRangeName* pRangeName = NULL;
     if (mnTab == -1)
     {
-        pRangeName = pDoc->GetRangeName();
+        pRangeName = rDoc.GetRangeName();
     }
     else
     {
-        pRangeName = pDoc->GetRangeName( mnTab );
+        pRangeName = rDoc.GetRangeName( mnTab );
     }
     pRangeName->insert(new ScRangeData(*mpRangeData));
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );

@@ -155,9 +155,9 @@ void LwpSdwGroupLoaderV0102::BeginDrawObjects(std::vector< rtl::Reference<XFFram
             double fFrameHeight = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetHeight());
 
             // get frame offset
-            LwpPoint* pOffset = pMyScale->GetOffset();
-            double fOffsetX = LwpTools::ConvertFromUnitsToMetric(pOffset->GetX());
-            double fOffsetY = LwpTools::ConvertFromUnitsToMetric(pOffset->GetY());
+            LwpPoint& rOffset = pMyScale->GetOffset();
+            double fOffsetX = LwpTools::ConvertFromUnitsToMetric(rOffset.GetX());
+            double fOffsetY = LwpTools::ConvertFromUnitsToMetric(rOffset.GetY());
 
             // get scale mode
             sal_uInt16 nScalemode = pMyScale->GetScaleMode();

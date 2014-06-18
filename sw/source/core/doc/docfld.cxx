@@ -726,7 +726,7 @@ _SetGetExpFld::_SetGetExpFld(
     if( pIdx )
         nCntnt = pIdx->GetIndex();
     else if( pFld )
-        nCntnt = *pFld->GetStart();
+        nCntnt = pFld->GetStart();
     else
         nCntnt = 0;
 }
@@ -740,7 +740,7 @@ _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
     if( pIdx )
         nCntnt = pIdx->GetIndex();
     else
-        nCntnt = *rINet.GetStart();
+        nCntnt = rINet.GetStart();
 }
 
 // Extension for Sections:
@@ -798,7 +798,7 @@ _SetGetExpFld::_SetGetExpFld( const SwNodeIndex& rNdIdx,
     if( pIdx )
         nCntnt = pIdx->GetIndex();
     else
-        nCntnt = *rTOX.GetStart();
+        nCntnt = rTOX.GetStart();
 }
 
 _SetGetExpFld::_SetGetExpFld( const SwPosition& rPos )
@@ -972,7 +972,7 @@ sal_Int32 _SetGetExpFld::GetCntPosFromCntnt() const
         case TEXTFIELD:
         case TEXTINET:
         case TEXTTOXMARK:
-            nRet = *CNTNT.pTxtFld->GetStart();
+            nRet = CNTNT.pTxtFld->GetStart();
             break;
         case CRSRPOS:
             nRet =  CNTNT.pPos->nContent.GetIndex();
@@ -2646,7 +2646,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             SwPosition aPosition( pDstTxtFld->GetTxtNode() );
-            aPosition.nContent = *pDstTxtFld->GetStart();
+            aPosition.nContent = pDstTxtFld->GetStart();
 
             SwUndo *const pUndo( new SwUndoFieldFromDoc( aPosition, *pDstFld, rSrcFld, pMsgHnt, bUpdateFlds) );
             GetIDocumentUndoRedo().AppendUndo(pUndo);

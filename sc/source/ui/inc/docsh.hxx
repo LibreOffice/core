@@ -239,7 +239,7 @@ public:
 
     void    GetDocStat( ScDocStat& rDocStat );
 
-    ScDocument*     GetDocument()   { return &aDocument; }
+    ScDocument&     GetDocument()   { return aDocument; }
     ScDocFunc&      GetDocFunc()    { return *pDocFunc; }
     void            SetDocFunc( ScDocFunc *pDF ) { pDocFunc = pDF; }
 

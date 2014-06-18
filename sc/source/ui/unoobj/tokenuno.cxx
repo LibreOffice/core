@@ -68,13 +68,13 @@ ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
     mbIgnoreSpaces( true ),
     mbCompileFAP( false )
 {
-    mpDocShell->GetDocument()->AddUnoObject(*this);
+    mpDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScFormulaParserObj::~ScFormulaParserObj()
 {
     if (mpDocShell)
-        mpDocShell->GetDocument()->RemoveUnoObject(*this);
+        mpDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScFormulaParserObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -129,17 +129,17 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
 
     if (mpDocShell)
     {
-        ScDocument* pDoc = mpDocShell->GetDocument();
-        ScExternalRefManager::ApiGuard aExtRefGuard(pDoc);
+        ScDocument& rDoc = mpDocShell->GetDocument();
+        ScExternalRefManager::ApiGuard aExtRefGuard(&rDoc);
 
         ScAddress aRefPos( ScAddress::UNINITIALIZED );
         ScUnoConversion::FillScAddress( aRefPos, rReferencePos );
-        ScCompiler aCompiler( pDoc, aRefPos);
-        aCompiler.SetGrammar(pDoc->GetGrammar());
+        ScCompiler aCompiler( &rDoc, aRefPos);
+        aCompiler.SetGrammar(rDoc.GetGrammar());
         SetCompilerFlags( aCompiler );
 
         ScTokenArray* pCode = aCompiler.CompileString( aFormula );
-        (void)ScTokenConversion::ConvertToTokenSequence( *pDoc, aRet, *pCode );
+        (void)ScTokenConversion::ConvertToTokenSequence( rDoc, aRet, *pCode );
         delete pCode;
     }
 
@@ -155,13 +155,13 @@ OUString SAL_CALL ScFormulaParserObj::printFormula(
 
     if (mpDocShell)
     {
-        ScDocument* pDoc = mpDocShell->GetDocument();
+        ScDocument& rDoc = mpDocShell->GetDocument();
         ScTokenArray aCode;
-        (void)ScTokenConversion::ConvertToTokenArray( *pDoc, aCode, aTokens );
+        (void)ScTokenConversion::ConvertToTokenArray( rDoc, aCode, aTokens );
         ScAddress aRefPos( ScAddress::UNINITIALIZED );
         ScUnoConversion::FillScAddress( aRefPos, rReferencePos );
-        ScCompiler aCompiler( pDoc, aRefPos, aCode);
-        aCompiler.SetGrammar(pDoc->GetGrammar());
+        ScCompiler aCompiler( &rDoc, aRefPos, aCode);
+        aCompiler.SetGrammar(rDoc.GetGrammar());
         SetCompilerFlags( aCompiler );
 
         OUStringBuffer aBuffer;
@@ -204,9 +204,9 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
             // CompileEnglish _before_ OpCodeMap!
             if (mxOpCodeMap.get() && mbEnglish != bOldEnglish)
             {
-                ScDocument* pDoc = mpDocShell->GetDocument();
-                ScCompiler aCompiler( pDoc, ScAddress());
-                aCompiler.SetGrammar(pDoc->GetGrammar());
+                ScDocument& rDoc = mpDocShell->GetDocument();
+                ScCompiler aCompiler( &rDoc, ScAddress());
+                aCompiler.SetGrammar(rDoc.GetGrammar());
                 mxOpCodeMap = aCompiler.CreateOpCodeMap( maOpCodeMapping, mbEnglish);
             }
         }
@@ -225,9 +225,9 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
     {
         if (aValue >>= maOpCodeMapping)
         {
-            ScDocument* pDoc = mpDocShell->GetDocument();
-            ScCompiler aCompiler( pDoc, ScAddress());
-            aCompiler.SetGrammar(pDoc->GetGrammar());
+            ScDocument& rDoc = mpDocShell->GetDocument();
+            ScCompiler aCompiler( &rDoc, ScAddress());
+            aCompiler.SetGrammar(rDoc.GetGrammar());
             mxOpCodeMap = aCompiler.CreateOpCodeMap( maOpCodeMapping, mbEnglish);
         }
         else

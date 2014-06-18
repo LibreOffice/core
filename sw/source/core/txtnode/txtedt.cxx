@@ -392,9 +392,9 @@ void SwTxtNode::RstTxtAttr(
         }
         if ( pTxtInputFld != NULL )
         {
-            if ( nStt > *(pTxtInputFld->GetStart()) )
+            if ( nStt > pTxtInputFld->GetStart() )
             {
-                nStt = *(pTxtInputFld->GetStart());
+                nStt = pTxtInputFld->GetStart();
             }
             if ( nEnd < *(pTxtInputFld->End()) )
             {
@@ -420,7 +420,7 @@ void SwTxtNode::RstTxtAttr(
     sal_Int32 nAttrStart;
     SwTxtAttr *pHt = NULL;
     while ( (i < m_pSwpHints->Count())
-            && ( ( ( nAttrStart = *(*m_pSwpHints)[i]->GetStart()) < nEnd )
+            && ( ( ( nAttrStart = (*m_pSwpHints)[i]->GetStart()) < nEnd )
                  || nLen==0 ) )
     {
         pHt = m_pSwpHints->GetTextHint(i);
@@ -531,7 +531,7 @@ void SwTxtNode::RstTxtAttr(
                 {
                     m_pSwpHints->NoteInHistory( pHt );
                     // UGLY: this may temporarily destroy the sorting!
-                    *pHt->GetStart() = nEnd;
+                    pHt->GetStart() = nEnd;
                     m_pSwpHints->NoteInHistory( pHt, true );
 
                     if ( pStyleHandle.get() && nAttrStart < nEnd )

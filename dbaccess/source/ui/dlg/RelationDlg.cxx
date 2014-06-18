@@ -52,7 +52,7 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  bool bAllowTableSelect )
     : ModalDialog(pParent, "RelationDialog",
         "dbaccess/ui/relationdialog.ui")
-    , m_pTableMap(pParent->GetTabWinMap())
+    , m_pTableMap(&pParent->GetTabWinMap())
     , m_pOrigConnData(pConnectionData)
     , m_bTriedOneUpdate(false)
 {

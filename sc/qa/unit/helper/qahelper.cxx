@@ -109,9 +109,9 @@ void loadFile(const OUString& aFileName, std::string& aContent)
 
 #if ENABLE_ORCUS
 
-void testFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab, StringType aStringFormat)
+void testFile(OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat)
 {
-    csv_handler aHandler(pDoc, nTab, aStringFormat);
+    csv_handler aHandler(&rDoc, nTab, aStringFormat);
     orcus::csv::parser_config aConfig;
     aConfig.delimiters.push_back(',');
     aConfig.delimiters.push_back(';');
@@ -170,7 +170,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     //test Sheet1 with csv file
     OUString aCSVFileName;
     pTest->createCSVPath(OUString("numberFormat."), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 0, PureString);
+    testFile(aCSVFileName, *pDoc, 0, PureString);
     //need to test the color of B3
     //it's not a font color!
     //formatting for B5: # ??/100 gets lost during import
@@ -535,7 +535,7 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     pFilter->SetVersion(nFilterVersion);
 
     ScDocShellRef xDocShRef = new ScDocShell;
-    xDocShRef->GetDocument()->EnableUserInteraction(false);
+    xDocShRef->GetDocument().EnableUserInteraction(false);
     SfxMedium* pSrcMed = new SfxMedium(rURL, bReadWrite ? STREAM_STD_READWRITE : STREAM_STD_READ );
     pSrcMed->SetFilter(pFilter);
     pSrcMed->UseInteractionHandler(false);
@@ -663,7 +663,7 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned in
 
         CPPUNIT_ASSERT(xShell.Is());
 
-        ScDocument* pDoc = xShell->GetDocument();
+        ScDocument& rDoc = xShell->GetDocument();
 
         for (int i=0; i<aTestValues[ index ].nRowData; ++i)
         {
@@ -677,10 +677,10 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned in
             for ( ; nRow <= nEndRow; ++nRow )
             {
                 SAL_INFO( "sc.qa", " checking row " << nRow << " for height " << nExpectedHeight );
-                int nHeight = sc::TwipsToHMM( pDoc->GetRowHeight(nRow, nTab, false) );
+                int nHeight = sc::TwipsToHMM( rDoc.GetRowHeight(nRow, nTab, false) );
                 if ( bCheckOpt )
                 {
-                    bool bOpt = !(pDoc->GetRowFlags( nRow, nTab ) & CR_MANUALSIZE);
+                    bool bOpt = !(rDoc.GetRowFlags( nRow, nTab ) & CR_MANUALSIZE);
                     CPPUNIT_ASSERT_EQUAL(aTestValues[ index ].pData[ i ].bOptimal, bOpt);
                 }
                 CPPUNIT_ASSERT_EQUAL(nExpectedHeight, nHeight);

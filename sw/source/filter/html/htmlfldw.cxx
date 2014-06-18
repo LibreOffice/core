@@ -536,7 +536,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         OSL_ENSURE( pTxtFld, "Where is the txt fld?" );
         if( pTxtFld )
             OutHTML_SwField( rWrt, pFld, pTxtFld->GetTxtNode(),
-                             *pTxtFld->GetStart()  );
+                             pTxtFld->GetStart()  );
     }
     return rWrt;
 }

@@ -63,7 +63,7 @@ class IniParser
 {
     IniSectionMap mAllSection;
 public:
-    IniSectionMap * getAllSection(){return &mAllSection;};
+    IniSectionMap& getAllSection() { return mAllSection; }
     IniParser(OUString const & rIniName) throw(com::sun::star::io::IOException);
 };
 

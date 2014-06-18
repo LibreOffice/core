@@ -210,7 +210,7 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     }
     //! SetDocumentName sollte schon im Sfx passieren ???
     //TODO/LATER: how "SetDocumentName"?
-    //xIPObj->SetDocumentName( GetViewData()->GetDocShell()->GetTitle() );
+    //xIPObj->SetDocumentName( GetViewData().GetDocShell()->GetTitle() );
 
     return ( !(nErr & ERRCODE_ERROR_MASK) );
 }
@@ -273,16 +273,16 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
     //  Rahmen fuer Chart einfuegen wird abgebrochen:
     FuPoor* pPoor = GetDrawFuncPtr();
     if ( pPoor && pPoor->GetSlotID() == SID_DRAW_CHART )
-        GetViewData()->GetDispatcher().Execute(SID_DRAW_CHART, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+        GetViewData().GetDispatcher().Execute(SID_DRAW_CHART, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 
     MakeDrawLayer();
 
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
-    ScTabView*   pTabView  = GetViewData()->GetView();
+    ScTabView*   pTabView  = GetViewData().GetView();
     Window*      pWin      = pTabView->GetActiveWin();
     ScDrawView*  pView     = pTabView->GetScDrawView();
-    ScDocShell*  pDocSh    = GetViewData()->GetDocShell();
-    ScDocument*  pDoc      = pDocSh->GetDocument();
+    ScDocShell*  pDocSh    = GetViewData().GetDocShell();
+    ScDocument&  rDoc      = pDocSh->GetDocument();
     SdrModel*    pDrModel  = pView->GetModel();
 
     switch ( nSlot )
@@ -362,7 +362,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
         case SID_LINKS:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( pWin, pDoc->GetLinkManager() );
+                SfxAbstractLinksDialog* pDlg = pFact->CreateLinksDialog( pWin, rDoc.GetLinkManager() );
                 if ( pDlg )
                 {
                     pDlg->Execute();
@@ -438,8 +438,8 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
     bool bOle = GetViewFrame()->GetFrame().IsInPlace();
-    bool bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
-    ScDocShell* pDocShell = ( GetViewData() ? GetViewData()->GetDocShell() : NULL );
+    bool bTabProt = GetViewData().GetDocument()->IsTabProtected(GetViewData().GetTabNo());
+    ScDocShell* pDocShell = GetViewData().GetDocShell();
     bool bShared = pDocShell && pDocShell->IsDocShared();
 
     SfxWhichIter aIter(rSet);
@@ -483,7 +483,7 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 
             case SID_LINKS:
                 {
-                    if (GetViewData()->GetDocument()->GetLinkManager()->GetLinks().empty())
+                    if (GetViewData().GetDocument()->GetLinkManager()->GetLinks().empty())
                         rSet.DisableItem( SID_LINKS );
                 }
                 break;
@@ -495,11 +495,11 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 {
-    SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
+    SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);
     ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
 
     sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
@@ -549,7 +549,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 
 void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
 {
-    SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
+    SfxShell* pSh = GetViewData().GetDispatcher().GetShell(0);
     ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
 
     SfxWhichIter aIter(rSet);

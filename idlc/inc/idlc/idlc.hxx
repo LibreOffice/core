@@ -114,8 +114,8 @@ public:
 
     void addInclude(const OString& inc)
         { m_includes.insert(inc); }
-    StringSet* getIncludes()
-        { return &m_includes; }
+    StringSet& getIncludes()
+        { return m_includes; }
 
     void setPublished(bool published) { m_published = published; }
     bool isPublished() const { return m_published; }

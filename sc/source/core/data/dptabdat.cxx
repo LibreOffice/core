@@ -60,8 +60,8 @@ ScDPTableData::~ScDPTableData()
 
 OUString ScDPTableData::GetFormattedString(long nDim, const ScDPItemData& rItem) const
 {
-    const ScDPCache* pCache = GetCacheTable().getCache();
-    return pCache->GetFormattedString(nDim, rItem);
+    const ScDPCache& rCache = GetCacheTable().getCache();
+    return rCache.GetFormattedString(nDim, rItem);
 }
 
 long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
@@ -159,7 +159,7 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFiltered
     // page dimensions
     GetItemData(rCacheTable, nRow, rInfo.aPageDims, rData.aPageData);
 
-    long nCacheColumnCount = rCacheTable.getCache()->GetColumnCount();
+    long nCacheColumnCount = rCacheTable.getCache().GetColumnCount();
     sal_Int32 n = rInfo.aDataSrcCols.size();
     for (sal_Int32 i = 0; i < n; ++i)
     {
@@ -239,10 +239,10 @@ void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 
         }
 
         nDim = GetSourceDim( nDim );
-        if ( nDim >= rCacheTable.getCache()->GetColumnCount() )
+        if ( nDim >= rCacheTable.getCache().GetColumnCount() )
            continue;
 
-        SCROW nId= rCacheTable.getCache()->GetItemDataId( static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
+        SCROW nId= rCacheTable.getCache().GetItemDataId( static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
         rItemData.push_back( nId );
     }
 }
@@ -261,13 +261,12 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
 
     const ::std::vector<SCROW>& nMembers = GetCacheTable().getFieldEntries( nDim );
 
-    return GetCacheTable().getCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nMembers[nIndex] );
+    return GetCacheTable().getCache().GetItemDataById( (SCCOL) nDim, (SCROW)nMembers[nIndex] );
 }
 
 const ScDPItemData* ScDPTableData::GetMemberById( long nDim, long nId)
 {
-
-    return GetCacheTable().getCache()->GetItemDataById(nDim, static_cast<SCROW>(nId));
+    return GetCacheTable().getCache().GetItemDataById(nDim, static_cast<SCROW>(nId));
 }
 
 const std::vector< SCROW >& ScDPTableData::GetColumnEntries( long nColumn )

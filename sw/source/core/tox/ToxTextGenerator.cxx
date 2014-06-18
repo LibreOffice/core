@@ -311,7 +311,7 @@ ToxTextGenerator::HandleTextToken(const SwTOXSortTabBase& source, SwAttrPool& po
         clone->SetStyleHandle(attributesToClone);
 
         result.autoFormats.push_back(clone);
-        result.startPositions.push_back(stripper.GetPositionInStrippedString(*hint->GetStart()));
+        result.startPositions.push_back(stripper.GetPositionInStrippedString(hint->GetStart()));
         result.endPositions.push_back(stripper.GetPositionInStrippedString(*hint->GetAnyEnd()));
     }
     return result;

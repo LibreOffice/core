@@ -138,7 +138,7 @@ bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                         bool bInReadOnly )
 {
-    SwSectionNode* pNd = rCurCrsr.GetNode()->FindSectionNode();
+    SwSectionNode* pNd = rCurCrsr.GetNode().FindSectionNode();
     if( !pNd )
         return false;
 
@@ -168,8 +168,8 @@ bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                                 bool bInReadOnly )
 {
-    SwNode* pCurrNd = rCurCrsr.GetNode();
-    SwSectionNode* pNd = pCurrNd->FindSectionNode();
+    SwNode& rCurrNd = rCurCrsr.GetNode();
+    SwSectionNode* pNd = rCurrNd.FindSectionNode();
     if( !pNd )
         return false;
 
@@ -198,7 +198,7 @@ bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
         pPos->nContent.Assign( pCNd, bMoveBackward ? pCNd->Len() : 0 );
 
-        if( &pPos->nNode.GetNode() != pCurrNd ||
+        if( &pPos->nNode.GetNode() != &rCurrNd ||
             pPos->nContent.GetIndex() != nCurrCnt )
             // there was a change
             return true;

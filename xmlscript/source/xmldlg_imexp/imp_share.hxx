@@ -366,8 +366,8 @@ protected:
     css::uno::Reference< css::xml::input::XElement > getStyle(
         css::uno::Reference<css::xml::input::XAttributes> const & xAttributes );
 public:
-    ::std::vector<css::uno::Reference< css::xml::input::XElement> > *getEvents()
-         { return &_events; }
+    ::std::vector<css::uno::Reference< css::xml::input::XElement> >& getEvents()
+         { return _events; }
 
     ControlElement(
         OUString const & rLocalName,

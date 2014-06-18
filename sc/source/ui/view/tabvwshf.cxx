@@ -57,12 +57,12 @@ using namespace com::sun::star;
 
 void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 {
-    ScViewData* pViewData   = GetViewData();
-    ScDocument* pDoc        = pViewData->GetDocument();
+    ScViewData& rViewData   = GetViewData();
+    ScDocument* pDoc        = rViewData.GetDocument();
 
-    SCTAB       nCurrentTab = pViewData->GetTabNo();
+    SCTAB       nCurrentTab = rViewData.GetTabNo();
     SCTAB       nTabCount   = pDoc->GetTableCount();
-    sal_uInt16      nSlot       = rReq.GetSlot();
+    sal_uInt16  nSlot       = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
     HideListBox();                  // Autofilter-DropDown-Listbox
@@ -86,7 +86,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     if ( pDoc->IsDocEditable() )
                     {
-                        ScMarkData& rMark = pViewData->GetMarkData();
+                        ScMarkData& rMark = rViewData.GetMarkData();
                         HideTable( rMark );
                     }
                 }
@@ -103,7 +103,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 if ( pDoc->IsDocEditable() )
                 {
-                    ScMarkData& rMark = pViewData->GetMarkData();
+                    ScMarkData& rMark = rViewData.GetMarkData();
                     HideTable( rMark );
                 }
             }
@@ -165,7 +165,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         case FID_INS_TABLE:
         case FID_INS_TABLE_EXT:
             {
-                ScMarkData& rMark    = pViewData->GetMarkData();
+                ScMarkData& rMark    = rViewData.GetMarkData();
                 SCTAB   nTabSelCount = rMark.GetSelectCount();
                 SCTAB   nTabNr       = nCurrentTab;
 
@@ -199,7 +199,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
-                    boost::scoped_ptr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetDialogParent(), *pViewData,
+                    boost::scoped_ptr<AbstractScInsertTableDlg> pDlg(pFact->CreateScInsertTableDlg(GetDialogParent(), rViewData,
                         nTabSelCount, nSlot == FID_INS_TABLE_EXT));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     if ( RET_OK == pDlg->Execute() )
@@ -306,8 +306,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if ( nSlot == FID_TAB_MENU_RENAME )
                     nSlot = FID_TAB_RENAME;             // Execute ist gleich
 
-                SCTAB nTabNr = pViewData->GetTabNo();
-                ScMarkData& rMark = pViewData->GetMarkData();
+                SCTAB nTabNr = rViewData.GetTabNo();
+                ScMarkData& rMark = rViewData.GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
 
                 if ( !pDoc->IsDocEditable() )
@@ -363,7 +363,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                         case FID_TAB_RENAME:
                             aDlgTitle = OUString(ScResId(SCSTR_RENAMETAB));
-                            pDoc->GetName( pViewData->GetTabNo(), aName );
+                            pDoc->GetName( rViewData.GetTabNo(), aName );
                             pHelpId = HID_SC_RENAME_NAME;
                             break;
                     }
@@ -431,7 +431,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 bool   bDoIt = false;
                 sal_uInt16 nDoc = 0;
-                SCTAB nTab = pViewData->GetTabNo();
+                SCTAB nTab = rViewData.GetTabNo();
                 bool   bCpy = false;
                 OUString aDocName;
                 OUString aTabName;
@@ -470,9 +470,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 if (aDocName.equals(pScSh->GetTitle()))
                                 {
                                     nDoc = i;
-                                    ScDocument* pDestDoc = pScSh->GetDocument();
-                                    nTableCount = pDestDoc->GetTableCount();
-                                    bDoIt = pDestDoc->IsDocEditable();
+                                    ScDocument& rDestDoc = pScSh->GetDocument();
+                                    nTableCount = rDestDoc.GetTableCount();
+                                    bDoIt = rDestDoc.IsDocEditable();
                                     break;
                                 }
 
@@ -493,7 +493,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 else
                 {
                     OUString aDefaultName;
-                    pDoc->GetName( pViewData->GetTabNo(), aDefaultName );
+                    pDoc->GetName( rViewData.GetTabNo(), aDefaultName );
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -503,7 +503,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     OSL_ENSURE(pDlg, "Dialog create fail!");
 
                     SCTAB nTableCount = pDoc->GetTableCount();
-                    ScMarkData& rMark       = GetViewData()->GetMarkData();
+                    ScMarkData& rMark       = GetViewData().GetMarkData();
                     SCTAB       nTabSelCount = rMark.GetSelectCount();
 
 
@@ -536,7 +536,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             if (pSh)
                             {
                                 aFoundDocName = pSh->GetTitle();
-                                if ( !pSh->GetDocument()->IsDocEditable() )
+                                if ( !pSh->GetDocument().IsDocEditable() )
                                 {
                                     ErrorMessage(STR_READONLYERR);
                                     bDoIt = false;
@@ -580,7 +580,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     SCTAB nNewTab   = nCurrentTab;
                     SCTAB nFirstTab=0;
                     bool   bTabFlag=false;
-                    ScMarkData& rMark = pViewData->GetMarkData();
+                    ScMarkData& rMark = rViewData.GetMarkData();
                     std::vector<SCTAB> TheTabs;
                     for(SCTAB i=0;i<nTabCount;i++)
                     {
@@ -594,7 +594,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
                     if(nNewTab>=nTabCount) nNewTab=nFirstTab;
 
-                    pViewData->SetTabNo(nNewTab);
+                    rViewData.SetTabNo(nNewTab);
                     DeleteTables(TheTabs);
                     TheTabs.clear();
                     rReq.Done();
@@ -604,11 +604,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_TAB_RTL:
             {
-                ScDocShell* pDocSh = pViewData->GetDocShell();
+                ScDocShell* pDocSh = rViewData.GetDocShell();
                 ScDocFunc &rFunc = pDocSh->GetDocFunc();
                 bool bSet = !pDoc->IsLayoutRTL( nCurrentTab );
 
-                const ScMarkData& rMark = pViewData->GetMarkData();
+                const ScMarkData& rMark = rViewData.GetMarkData();
                 if ( rMark.GetSelectCount() != 0 )
                 {
                     //  handle several sheets
@@ -630,8 +630,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_TAB_TOGGLE_GRID:
             {
-                bool bShowGrid = pViewData->GetShowGrid();
-                pViewData->SetShowGrid(!bShowGrid);
+                bool bShowGrid = rViewData.GetShowGrid();
+                rViewData.SetShowGrid(!bShowGrid);
                 SfxBindings& rBindings = GetViewFrame()->GetBindings();
                 rBindings.Invalidate( FID_TAB_TOGGLE_GRID );
                 PaintGrid();
@@ -644,8 +644,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 if ( nSlot == FID_TAB_MENU_SET_TAB_BG_COLOR )
                     nSlot = FID_TAB_SET_TAB_BG_COLOR;
-                SCTAB nTabNr = pViewData->GetTabNo();
-                ScMarkData& rMark = pViewData->GetMarkData();
+                SCTAB nTabNr = rViewData.GetTabNo();
+                ScMarkData& rMark = rViewData.GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
                 if ( !pDoc->IsDocEditable() )
                     break;
@@ -751,9 +751,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 break;
 
-            case FID_TAB_EVENTS:
+        case FID_TAB_EVENTS:
                 {
-                    ScDocShell* pDocSh = pViewData->GetDocShell();
+                    ScDocShell* pDocSh = rViewData.GetDocShell();
                     uno::Reference<container::XNameReplace> xEvents( new ScSheetEventsObj( pDocSh, nCurrentTab ) );
                     uno::Reference<frame::XFrame> xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
                     SvxAbstractDialogFactory* pDlgFactory = SvxAbstractDialogFactory::Create();
@@ -769,19 +769,19 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 break;
 
-            default:
+        default:
                 OSL_FAIL("Unbekannte Message bei ViewShell");
                 break;
-        }
     }
+}
 
-    void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
-    {
-        ScViewData* pViewData   = GetViewData();
-    ScDocument* pDoc        = pViewData->GetDocument();
-    ScDocShell* pDocShell   = pViewData->GetDocShell();
-    ScMarkData& rMark       = GetViewData()->GetMarkData();
-    SCTAB       nTab        = pViewData->GetTabNo();
+void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
+{
+    ScViewData& rViewData   = GetViewData();
+    ScDocument* pDoc        = rViewData.GetDocument();
+    ScDocShell* pDocShell   = rViewData.GetDocShell();
+    ScMarkData& rMark       = GetViewData().GetMarkData();
+    SCTAB       nTab        = rViewData.GetTabNo();
 
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
@@ -904,7 +904,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 break;
 
             case FID_TAB_TOGGLE_GRID:
-                rSet.Put( SfxBoolItem(nWhich, pViewData->GetShowGrid()) );
+                rSet.Put( SfxBoolItem(nWhich, rViewData.GetShowGrid()) );
                 break;
         }
         nWhich = aIter.NextWhich();

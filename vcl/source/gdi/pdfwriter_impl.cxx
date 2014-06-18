@@ -2211,7 +2211,7 @@ private:
 public:
     enum {PDF_FONT_MAGIC = 0xBDFF0A1C };
                                         ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& );
-    const PDFWriterImpl::BuiltinFont*   GetBuiltinFont() const  { return &mrBuiltin; }
+    const PDFWriterImpl::BuiltinFont&   GetBuiltinFont() const  { return mrBuiltin; }
 
     virtual PhysicalFontFace*           Clone() const SAL_OVERRIDE { return new ImplPdfBuiltinFontData(*this); }
     virtual ImplFontEntry*              CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
@@ -2899,7 +2899,7 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const PhysicalFontFace* pFont, sal_Int
     const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pFont );
     if( !pFD )
         return 0;
-    const BuiltinFont* pBuiltinFont = pFD->GetBuiltinFont();
+    const BuiltinFont& rBuiltinFont = pFD->GetBuiltinFont();
 
     OStringBuffer aLine( 1024 );
 
@@ -2909,9 +2909,9 @@ sal_Int32 PDFWriterImpl::emitBuiltinFont( const PhysicalFontFace* pFont, sal_Int
     aLine.append( nFontObject );
     aLine.append( " 0 obj\n"
                   "<</Type/Font/Subtype/Type1/BaseFont/" );
-    appendName( pBuiltinFont->m_pPSName, aLine );
+    appendName( rBuiltinFont.m_pPSName, aLine );
     aLine.append( "\n" );
-    if( pBuiltinFont->m_eCharSet == RTL_TEXTENCODING_MS_1252 )
+    if( rBuiltinFont.m_eCharSet == RTL_TEXTENCODING_MS_1252 )
          aLine.append( "/Encoding/WinAnsiEncoding\n" );
     aLine.append( ">>\nendobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );

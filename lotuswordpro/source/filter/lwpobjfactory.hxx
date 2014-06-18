@@ -117,7 +117,7 @@ public:
     rtl::Reference<LwpObject> QueryObject(const LwpObjectID &objID);
     void ReleaseObject(const LwpObjectID &objID);
     void ReadIndex(LwpSvStream* pStrm);
-    LwpIndexManager* GetIndexManager(){return &m_IndexMgr;}
+    LwpIndexManager& GetIndexManager(){return m_IndexMgr;}
 
 };
 

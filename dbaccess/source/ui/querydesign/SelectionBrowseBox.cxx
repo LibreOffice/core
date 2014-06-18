@@ -488,21 +488,18 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, lon
             enableControl(pEntry,m_pTableCell);
             if ( !pEntry->isCondition() )
             {
-                OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                if (pTabWinList)
-                {
-                    OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->begin();
-                    OJoinTableView::OTableWindowMap::iterator aEnd = pTabWinList->end();
+                OJoinTableView::OTableWindowMap& rTabWinList = getDesignView()->getTableView()->GetTabWinMap();
+                OJoinTableView::OTableWindowMap::iterator aIter = rTabWinList.begin();
+                OJoinTableView::OTableWindowMap::iterator aEnd = rTabWinList.end();
 
-                    for(;aIter != aEnd;++aIter)
-                        m_pTableCell->InsertEntry(static_cast<OQueryTableWindow*>(aIter->second)->GetAliasName());
+                for(;aIter != aEnd;++aIter)
+                    m_pTableCell->InsertEntry(static_cast<OQueryTableWindow*>(aIter->second)->GetAliasName());
 
-                    m_pTableCell->InsertEntry(OUString(ModuleRes(STR_QUERY_NOTABLE)), 0);
-                    if (!pEntry->GetAlias().isEmpty())
-                        m_pTableCell->SelectEntry(pEntry->GetAlias());
-                    else
-                        m_pTableCell->SelectEntry(OUString(ModuleRes(STR_QUERY_NOTABLE)));
-                }
+                m_pTableCell->InsertEntry(OUString(ModuleRes(STR_QUERY_NOTABLE)), 0);
+                if (!pEntry->GetAlias().isEmpty())
+                    m_pTableCell->SelectEntry(pEntry->GetAlias());
+                else
+                    m_pTableCell->SelectEntry(OUString(ModuleRes(STR_QUERY_NOTABLE)));
             }
         }   break;
         case BROW_VIS_ROW:
@@ -607,22 +604,18 @@ bool OSelectionBrowseBox::fillColumnRef(const OUString& _sColumnName, const OUSt
     OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(_pEntry->GetTabWindow());
     if ( !pEntryTab ) // no table found with this name so we have to travel through all tables
     {
-        OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-        if ( pTabWinList )
+        sal_uInt16 nTabCount = 0;
+        if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occurred: column not in table window
         {
-            sal_uInt16 nTabCount = 0;
-            if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occurred: column not in table window
-            {
-                OUString sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
-                sErrorMsg = sErrorMsg.replaceFirst("$name$",_sColumnName);
-                OSQLErrorBox( this, sErrorMsg ).Execute();
-                bError = true;
-            }
-            else
-            {
-                pEntryTab = static_cast<OQueryTableWindow*>(_pEntry->GetTabWindow());
-                notifyTableFieldChanged(OUString(),_pEntry->GetAlias(),_bListAction,GetCurColumnId());
-            }
+            OUString sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
+            sErrorMsg = sErrorMsg.replaceFirst("$name$",_sColumnName);
+            OSQLErrorBox( this, sErrorMsg ).Execute();
+            bError = true;
+        }
+        else
+        {
+            pEntryTab = static_cast<OQueryTableWindow*>(_pEntry->GetTabWindow());
+            notifyTableFieldChanged(OUString(),_pEntry->GetAlias(),_bListAction,GetCurColumnId());
         }
     }
     if ( pEntryTab ) // here we got a valid table
@@ -991,18 +984,15 @@ bool OSelectionBrowseBox::SaveModified()
                 {
                     pEntry->SetAlias(aAliasName);
                     // we have to set the table name as well as the table window
-                    OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-                    if (pTabWinList)
+                    OJoinTableView::OTableWindowMap& rTabWinList = getDesignView()->getTableView()->GetTabWinMap();
+                    OJoinTableView::OTableWindowMap::iterator aIter = rTabWinList.find(aAliasName);
+                    if(aIter != rTabWinList.end())
                     {
-                        OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->find(aAliasName);
-                        if(aIter != pTabWinList->end())
+                        OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
+                        if (pEntryTab)
                         {
-                            OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
-                            if (pEntryTab)
-                            {
-                                pEntry->SetTable(pEntryTab->GetTableName());
-                                pEntry->SetTabWindow(pEntryTab);
-                            }
+                            pEntry->SetTable(pEntryTab->GetTableName());
+                            pEntry->SetTabWindow(pEntryTab);
                         }
                     }
                 }
@@ -2618,19 +2608,16 @@ OUString OSelectionBrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBo
 bool OSelectionBrowseBox::fillEntryTable(OTableFieldDescRef& _pEntry,const OUString& _sTableName)
 {
     bool bRet = false;
-    OJoinTableView::OTableWindowMap* pTabWinList = getDesignView()->getTableView()->GetTabWinMap();
-    if (pTabWinList)
+    OJoinTableView::OTableWindowMap& rTabWinList = getDesignView()->getTableView()->GetTabWinMap();
+    OJoinTableView::OTableWindowMap::iterator aIter = rTabWinList.find(_sTableName);
+    if(aIter != rTabWinList.end())
     {
-        OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->find(_sTableName);
-        if(aIter != pTabWinList->end())
+        OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
+        if (pEntryTab)
         {
-            OQueryTableWindow* pEntryTab = static_cast<OQueryTableWindow*>(aIter->second);
-            if (pEntryTab)
-            {
-                _pEntry->SetTable(pEntryTab->GetTableName());
-                _pEntry->SetTabWindow(pEntryTab);
-                bRet = true;
-            }
+            _pEntry->SetTable(pEntryTab->GetTableName());
+            _pEntry->SetTabWindow(pEntryTab);
+            bRet = true;
         }
     }
     return bRet;

@@ -54,7 +54,7 @@ namespace dbaui
         // access to the managed connections
         sal_uInt16  ConnCount() { return (sal_uInt16)m_vTableConnection.size(); }
 
-        ::std::vector<OTableConnection*>*       GetTabConnList() { return &m_vTableConnection; }
+        ::std::vector<OTableConnection*>&       GetTabConnList() { return m_vTableConnection; }
 
         void InsertConnection( OTableConnection* pConnection ) { m_vTableConnection.push_back(pConnection); }
         void RemoveConnection( OTableConnection* pConnection )

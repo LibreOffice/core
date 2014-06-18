@@ -67,8 +67,8 @@ namespace dbaui
         void resetRange(const Point& _aSize);
 
         // own methods
-        ScrollBar* GetHScrollBar() { return &m_aHScrollBar; }
-        ScrollBar* GetVScrollBar() { return &m_aVScrollBar; }
+        ScrollBar& GetHScrollBar() { return m_aHScrollBar; }
+        ScrollBar& GetVScrollBar() { return m_aVScrollBar; }
     };
 
 
@@ -121,8 +121,8 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
         // own methods
-        ScrollBar* GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }
-        ScrollBar* GetVScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetVScrollBar(); }
+        ScrollBar& GetHScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetHScrollBar(); }
+        ScrollBar& GetVScrollBar() { return static_cast<OScrollWindowHelper*>(GetParent())->GetVScrollBar(); }
         DECL_LINK( ScrollHdl, ScrollBar* );
 
         void DrawConnections( const Rectangle& rRect );
@@ -174,12 +174,12 @@ namespace dbaui
         void DeselectConn(OTableConnection* pConn);
         void SelectConn(OTableConnection* pConn);
 
-        OTableWindowMap* GetTabWinMap() { return &m_aTableMap; }
-        const OTableWindowMap* GetTabWinMap() const { return &m_aTableMap; }
+        OTableWindowMap& GetTabWinMap() { return m_aTableMap; }
+        const OTableWindowMap& GetTabWinMap() const { return m_aTableMap; }
 
         /** gives a read only access to the connection vector
         */
-        const ::std::vector<OTableConnection*>* getTableConnections() const { return &m_vTableConnection; }
+        const ::std::vector<OTableConnection*>& getTableConnections() const { return m_vTableConnection; }
 
         bool ExistsAConn(const OTableWindow* pFromWin) const;
 

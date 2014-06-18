@@ -686,11 +686,11 @@ SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
             if( pSect->GetType() == TOX_CONTENT_SECTION )
             {
                 SwTOXSortTabBase* pSortBase = 0;
-                size_t nSize = pTOXBaseSect->GetTOXSortTabBases()->size();
+                size_t nSize = pTOXBaseSect->GetTOXSortTabBases().size();
 
                 for(size_t nIndex = 0; nIndex<nSize; nIndex++ )
                 {
-                    pSortBase = (*(pTOXBaseSect->GetTOXSortTabBases()))[nIndex];
+                    pSortBase = pTOXBaseSect->GetTOXSortTabBases()[nIndex];
                     if( pSortBase->pTOXNd == pTxtNd )
                         break;
                 }
@@ -3134,7 +3134,7 @@ const SwTxtAttr *SwHyperlinkIter_Impl::next()
             const SwTxtAttr *pHt = (*pHints)[nPos];
             if( RES_TXTATR_INETFMT == pHt->Which() )
             {
-                const sal_Int32 nHtStt = *pHt->GetStart();
+                const sal_Int32 nHtStt = pHt->GetStart();
                 const sal_Int32 nHtEnd = *pHt->GetAnyEnd();
                 if( nHtEnd > nHtStt &&
                     ( (nHtStt >= nStt && nHtStt < nEnd) ||
@@ -3188,7 +3188,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
         bool bH = false;
 
         if( pHt )
-            nHStt = *pHt->GetStart();
+            nHStt = pHt->GetStart();
         bool bTOC = false;
         // Inside TOC & get the first link
         if( pTBase && nTIndex == -1 )
@@ -3221,7 +3221,7 @@ uno::Reference< XAccessibleHyperlink > SAL_CALL
                     {
                         {
                             const sal_Int32 nTmpHStt= GetPortionData().GetAccessiblePosition(
-                                max( aHIter.startIdx(), *pHt->GetStart() ) );
+                                max( aHIter.startIdx(), pHt->GetStart() ) );
                             const sal_Int32 nTmpHEnd= GetPortionData().GetAccessiblePosition(
                                 min( aHIter.endIdx(), *pHt->GetAnyEnd() ) );
                             xRet = new SwAccessibleHyperlink( aHIter.getCurrHintPos(),
@@ -3280,7 +3280,7 @@ sal_Int32 SAL_CALL SwAccessibleParagraph::getHyperLinkIndex( sal_Int32 nCharInde
         const sal_Int32 nIdx = GetPortionData().GetModelPosition( nCharIndex );
         sal_Int32 nPos = 0;
         const SwTxtAttr *pHt = aHIter.next();
-        while( pHt && !(nIdx >= *pHt->GetStart() && nIdx < *pHt->GetAnyEnd()) )
+        while( pHt && !(nIdx >= pHt->GetStart() && nIdx < *pHt->GetAnyEnd()) )
         {
             pHt = aHIter.next();
             nPos++;

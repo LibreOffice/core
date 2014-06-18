@@ -767,7 +767,7 @@ private:
     /**
      * Caller must ensure that the passed shell is not already stored.
      */
-    ScDocument* cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell );
+    ScDocument& cacheNewDocShell( sal_uInt16 nFileId, SrcShell& rSrcShell );
 
     void maybeLinkExternalFile(sal_uInt16 nFileId);
 

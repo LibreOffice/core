@@ -85,7 +85,7 @@ public:
     LwpCellList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
 
     virtual void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
-    LwpObjectID GetNextID(){return *GetNext();}
+    LwpObjectID GetNextID(){return GetNext();}
     sal_uInt8 GetColumnID(){return cColumn;}
     virtual bool IsFormula(){return false;}
     LwpObjectID GetValueID(){return cValue;}
@@ -110,8 +110,8 @@ public:
     LwpRowList(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
-    LwpObjectID GetChildHeadID(){return *cChild.GetHead();}
-    LwpObjectID GetNextID(){return *GetNext();}
+    LwpObjectID GetChildHeadID(){return cChild.GetHead();}
+    LwpObjectID GetNextID(){return GetNext();}
     sal_uInt16 GetRowID(){return cRowID;}
 protected:
     LwpDLVListHeadTail cChild;
@@ -152,7 +152,7 @@ public:
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
     LwpObjectID GetCellRangeID(){return cpCellRange;}
     LwpObjectID GetTableID(){ return cqTable;}
-    LwpTableRange* GetNext() { return (LwpTableRange*)(LwpDLVList::GetNext()->obj().get());}
+    LwpTableRange* GetNext() { return (LwpTableRange*)(LwpDLVList::GetNext().obj().get());}
 protected:
     LwpObjectID cqTable;
     LwpObjectID cpCellRange;
@@ -187,7 +187,7 @@ public:
     LwpFolder(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
 
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
-    LwpObjectID GetChildHeadID(){ return *cChild.GetHead();}
+    LwpObjectID GetChildHeadID(){ return cChild.GetHead();}
 protected:
     LwpDLVListHeadTail cChild;
     LwpObjectID cParent;

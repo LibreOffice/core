@@ -15,7 +15,7 @@ class OpenGLWindowImpl
 {
 public:
     OpenGLWindowImpl(Window* pWindow);
-    OpenGLContext* getContext() { return &maContext;}
+    OpenGLContext& getContext() { return maContext;}
 private:
     OpenGLContext maContext;
     boost::scoped_ptr<SystemChildWindow> mpChildWindow;
@@ -43,7 +43,7 @@ OpenGLWindow::~OpenGLWindow()
         mpRenderer->contextDestroyed();
 }
 
-OpenGLContext* OpenGLWindow::getContext()
+OpenGLContext& OpenGLWindow::getContext()
 {
     return mpImpl->getContext();
 }

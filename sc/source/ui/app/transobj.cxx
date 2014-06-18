@@ -555,7 +555,7 @@ ScDocument* ScTransferObj::GetSourceDocument()
 {
     ScDocShell* pSourceDocSh = GetSourceDocShell();
     if (pSourceDocSh)
-        return pSourceDocSh->GetDocument();
+        return &pSourceDocSh->GetDocument();
     return NULL;
 }
 
@@ -595,17 +595,17 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 
         pDocSh->DoInitNew(NULL);
 
-        ScDocument* pDestDoc = pDocSh->GetDocument();
+        ScDocument& rDestDoc = pDocSh->GetDocument();
         ScMarkData aDestMark;
         aDestMark.SelectTable( 0, true );
 
-        pDestDoc->SetDocOptions( pDoc->GetDocOptions() );   // #i42666#
+        rDestDoc.SetDocOptions( pDoc->GetDocOptions() );   // #i42666#
 
         OUString aTabName;
         pDoc->GetName( aBlock.aStart.Tab(), aTabName );
-        pDestDoc->RenameTab( 0, aTabName, false );          // no UpdateRef (empty)
+        rDestDoc.RenameTab( 0, aTabName, false );          // no UpdateRef (empty)
 
-        pDestDoc->CopyStdStylesFrom( pDoc );
+        rDestDoc.CopyStdStylesFrom( pDoc );
 
         SCCOL nStartX = aBlock.aStart.Col();
         SCROW nStartY = aBlock.aStart.Row();
@@ -617,24 +617,24 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 
         SCCOL nCol;
         SCTAB nSrcTab = aBlock.aStart.Tab();
-        pDestDoc->SetLayoutRTL(0, pDoc->IsLayoutRTL(nSrcTab));
+        rDestDoc.SetLayoutRTL(0, pDoc->IsLayoutRTL(nSrcTab));
         for (nCol=nStartX; nCol<=nEndX; nCol++)
             if ( pDoc->ColHidden(nCol, nSrcTab) )
-                pDestDoc->ShowCol( nCol, 0, false );
+                rDestDoc.ShowCol( nCol, 0, false );
             else
-                pDestDoc->SetColWidth( nCol, 0, pDoc->GetColWidth( nCol, nSrcTab ) );
+                rDestDoc.SetColWidth( nCol, 0, pDoc->GetColWidth( nCol, nSrcTab ) );
 
         for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
         {
             if ( pDoc->RowHidden(nRow, nSrcTab) )
-                pDestDoc->ShowRow( nRow, 0, false );
+                rDestDoc.ShowRow( nRow, 0, false );
             else
             {
-                pDestDoc->SetRowHeight( nRow, 0, pDoc->GetOriginalHeight( nRow, nSrcTab ) );
+                rDestDoc.SetRowHeight( nRow, 0, pDoc->GetOriginalHeight( nRow, nSrcTab ) );
 
                 //  if height was set manually, that flag has to be copied, too
                 bool bManual = pDoc->IsManualRowHeight(nRow, nSrcTab);
-                pDestDoc->SetManualHeight(nRow, nRow, 0, bManual);
+                rDestDoc.SetManualHeight(nRow, nRow, 0, bManual);
             }
         }
 
@@ -649,15 +649,15 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         bool bWasCut = pDoc->IsCutMode();
         if (!bWasCut)
             pDoc->SetClipArea( aDestRange, true );          // Cut
-        pDestDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, false );
+        rDestDoc.CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, false );
         pDoc->SetClipArea( aDestRange, bWasCut );
 
-        StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, pDestDoc, 0,0 );
+        StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, &rDestDoc, 0,0 );
 
         ScRange aMergeRange = aDestRange;
-        pDestDoc->ExtendMerge( aMergeRange, true );
+        rDestDoc.ExtendMerge( aMergeRange, true );
 
-        pDoc->CopyDdeLinks( pDestDoc );         // copy values of DDE Links
+        pDoc->CopyDdeLinks( &rDestDoc );         // copy values of DDE Links
 
         //  page format (grid etc) and page size (maximum size for ole object)
 
@@ -671,7 +671,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
             aPaperSize = ((const SvxSizeItem&) rSourceSet.Get(ATTR_PAGE_SIZE)).GetSize();
 
             //  CopyStyleFrom kopiert SetItems mit richtigem Pool
-            ScStyleSheetPool* pDestPool = pDestDoc->GetStyleSheetPool();
+            ScStyleSheetPool* pDestPool = rDestDoc.GetStyleSheetPool();
             pDestPool->CopyStyleFrom( pStylePool, aStyleName, SFX_STYLE_FAMILY_PAGE );
         }
 
@@ -680,7 +680,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         aViewData.SetCurX( nStartX );
         aViewData.SetCurY( nStartY );
 
-        pDestDoc->SetViewOptions( pDoc->GetViewOptions() );
+        rDestDoc.SetViewOptions( pDoc->GetViewOptions() );
 
         //      Size
         //! get while copying sizes
@@ -689,8 +689,8 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         long nPosY = 0;
 
         for (nCol=0; nCol<nStartX; nCol++)
-            nPosX += pDestDoc->GetColWidth( nCol, 0 );
-        nPosY += pDestDoc->GetRowHeight( 0, nStartY-1, 0 );
+            nPosX += rDestDoc.GetColWidth( nCol, 0 );
+        nPosY += rDestDoc.GetRowHeight( 0, nStartY-1, 0 );
         nPosX = (long) ( nPosX * HMM_PER_TWIPS );
         nPosY = (long) ( nPosY * HMM_PER_TWIPS );
 
@@ -702,14 +702,14 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         long nSizeY = 0;
         for (nCol=nStartX; nCol<=nEndX; nCol++)
         {
-            long nAdd = pDestDoc->GetColWidth( nCol, 0 );
+            long nAdd = rDestDoc.GetColWidth( nCol, 0 );
             if ( bLimitToPageSize && nSizeX+nAdd > aPaperSize.Width() && nSizeX )   // above limit?
                 break;
             nSizeX += nAdd;
         }
         for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
         {
-            long nAdd = pDestDoc->GetRowHeight( nRow, 0 );
+            long nAdd = rDestDoc.GetRowHeight( nRow, 0 );
             if ( bLimitToPageSize && nSizeY+nAdd > aPaperSize.Height() && nSizeY )  // above limit?
                 break;
             nSizeY += nAdd;
@@ -727,8 +727,8 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         pDocSh->UpdateOle(&aViewData, true);
 
         //! SetDocumentModified?
-        if ( pDestDoc->IsChartListenerCollectionNeedsUpdate() )
-            pDestDoc->UpdateChartListenerCollection();
+        if ( rDestDoc.IsChartListenerCollectionNeedsUpdate() )
+            rDestDoc.UpdateChartListenerCollection();
     }
 }
 

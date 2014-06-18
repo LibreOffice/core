@@ -146,8 +146,8 @@ void ScSimpleUndo::EndRedo()
 
 void ScSimpleUndo::BroadcastChanges( const ScRange& rRange )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->BroadcastCells(rRange, SC_HINT_DATACHANGED);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    rDoc.BroadcastCells(rRange, SC_HINT_DATACHANGED);
 }
 
 namespace {
@@ -181,14 +181,14 @@ public:
 
 void ScSimpleUndo::BroadcastChanges( const DataSpansType& rSpans )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    SpanBroadcaster aBroadcaster(*pDoc);
+    ScDocument& rDoc = pDocShell->GetDocument();
+    SpanBroadcaster aBroadcaster(rDoc);
 
     DataSpansType::const_iterator it = rSpans.begin(), itEnd = rSpans.end();
     for (; it != itEnd; ++it)
     {
         const sc::ColumnSpanSet& rSet = *it->second;
-        rSet.executeColumnAction(*pDoc, aBroadcaster);
+        rSet.executeColumnAction(rDoc, aBroadcaster);
     }
 }
 
@@ -206,7 +206,7 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )
     {
         SCTAB nStart = rRange.aStart.Tab();
         SCTAB nEnd   = rRange.aEnd.Tab();
-        SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nTab = pViewShell->GetViewData().GetTabNo();
         if ( nTab < nStart || nTab > nEnd )                     // if not in range:
             pViewShell->SetTabNo( nStart );                     // at beginning of the range
     }
@@ -218,7 +218,7 @@ ScBlockUndo::ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
     aBlockRange( rRange ),
     eMode( eBlockMode )
 {
-    pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
+    pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
 
 ScBlockUndo::~ScBlockUndo()
@@ -229,7 +229,7 @@ ScBlockUndo::~ScBlockUndo()
 void ScBlockUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
-    EnableDrawAdjust( pDocShell->GetDocument(), false );
+    EnableDrawAdjust( &pDocShell->GetDocument(), false );
 }
 
 void ScBlockUndo::EndUndo()
@@ -237,8 +237,8 @@ void ScBlockUndo::EndUndo()
     if (eMode == SC_UNDO_AUTOHEIGHT)
         AdjustHeight();
 
-    EnableDrawAdjust( pDocShell->GetDocument(), true );
-    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );
+    EnableDrawAdjust( &pDocShell->GetDocument(), true );
+    DoSdrUndoAction( pDrawUndo, &pDocShell->GetDocument() );
 
     ShowBlock();
     ScSimpleUndo::EndUndo();
@@ -255,7 +255,7 @@ void ScBlockUndo::EndRedo()
 
 bool ScBlockUndo::AdjustHeight()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     VirtualDevice aVirtDev;
     Fraction aZoomX( 1, 1 );
@@ -264,11 +264,11 @@ bool ScBlockUndo::AdjustHeight()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        ScViewData* pData = pViewShell->GetViewData();
-        nPPTX = pData->GetPPTX();
-        nPPTY = pData->GetPPTY();
-        aZoomX = pData->GetZoomX();
-        aZoomY = pData->GetZoomY();
+        ScViewData& rData = pViewShell->GetViewData();
+        nPPTX = rData.GetPPTX();
+        nPPTY = rData.GetPPTY();
+        aZoomX = rData.GetZoomX();
+        aZoomY = rData.GetZoomY();
     }
     else
     {
@@ -278,7 +278,7 @@ bool ScBlockUndo::AdjustHeight()
     }
 
     sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, &aVirtDev);
-    bool bRet = pDoc->SetOptimalHeight(
+    bool bRet = rDoc.SetOptimalHeight(
         aCxt, aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(), aBlockRange.aStart.Tab());
 
     if (bRet)
@@ -300,7 +300,7 @@ void ScBlockUndo::ShowBlock()
         ShowTable( aBlockRange );       // with multiple sheets in range each of them is good
         pViewShell->MoveCursorAbs( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                    SC_FOLLOW_JUMP, false, false );
-        SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
+        SCTAB nTab = pViewShell->GetViewData().GetTabNo();
         ScRange aRange = aBlockRange;
         aRange.aStart.SetTab( nTab );
         aRange.aEnd.SetTab( nTab );
@@ -316,7 +316,7 @@ ScMultiBlockUndo::ScMultiBlockUndo(
     maBlockRanges(rRanges),
     meMode(eBlockMode)
 {
-    mpDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
+    mpDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
 
 ScMultiBlockUndo::~ScMultiBlockUndo()
@@ -327,7 +327,7 @@ ScMultiBlockUndo::~ScMultiBlockUndo()
 void ScMultiBlockUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
-    EnableDrawAdjust(pDocShell->GetDocument(), false);
+    EnableDrawAdjust(&pDocShell->GetDocument(), false);
 }
 
 void ScMultiBlockUndo::EndUndo()
@@ -335,8 +335,8 @@ void ScMultiBlockUndo::EndUndo()
     if (meMode == SC_UNDO_AUTOHEIGHT)
         AdjustHeight();
 
-    EnableDrawAdjust(pDocShell->GetDocument(), true);
-    DoSdrUndoAction(mpDrawUndo, pDocShell->GetDocument());
+    EnableDrawAdjust(&pDocShell->GetDocument(), true);
+    DoSdrUndoAction(mpDrawUndo, &pDocShell->GetDocument());
 
     ShowBlock();
     ScSimpleUndo::EndUndo();
@@ -353,7 +353,7 @@ void ScMultiBlockUndo::EndRedo()
 
 void ScMultiBlockUndo::AdjustHeight()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
 
     VirtualDevice aVirtDev;
     Fraction aZoomX( 1, 1 );
@@ -362,11 +362,11 @@ void ScMultiBlockUndo::AdjustHeight()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        ScViewData* pData = pViewShell->GetViewData();
-        nPPTX = pData->GetPPTX();
-        nPPTY = pData->GetPPTY();
-        aZoomX = pData->GetZoomX();
-        aZoomY = pData->GetZoomY();
+        ScViewData& rData = pViewShell->GetViewData();
+        nPPTX = rData.GetPPTX();
+        nPPTY = rData.GetPPTY();
+        aZoomX = rData.GetZoomX();
+        aZoomY = rData.GetZoomY();
     }
     else
     {
@@ -379,7 +379,7 @@ void ScMultiBlockUndo::AdjustHeight()
     for (size_t i = 0, n = maBlockRanges.size(); i < n; ++i)
     {
         const ScRange& r = *maBlockRanges[i];
-        bool bRet = pDoc->SetOptimalHeight(aCxt, r.aStart.Row(), r.aEnd.Row(), r.aStart.Tab());
+        bool bRet = rDoc.SetOptimalHeight(aCxt, r.aStart.Row(), r.aEnd.Row(), r.aStart.Tab());
 
         if (bRet)
             pDocShell->PostPaint(
@@ -405,7 +405,7 @@ void ScMultiBlockUndo::ShowBlock()
     ShowTable(aRange);
     pViewShell->MoveCursorAbs(
         aRange.aStart.Col(), aRange.aStart.Row(), SC_FOLLOW_JUMP, false, false);
-    SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
+    SCTAB nTab = pViewShell->GetViewData().GetTabNo();
     aRange.aStart.SetTab(nTab);
     aRange.aEnd.SetTab(nTab);
     pViewShell->MarkRange(aRange, false, false);
@@ -426,10 +426,10 @@ ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocument* pRefDoc, ScRefUndoData* 
     pRefUndoData( pRefData ),
     eMode( eRefMode )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     if (pRefUndoData)
-        pRefUndoData->DeleteUnchanged(pDoc);
-    pDrawUndo = GetSdrUndoAction( pDoc );
+        pRefUndoData->DeleteUnchanged(&rDoc);
+    pDrawUndo = GetSdrUndoAction( &rDoc );
 }
 
 ScMoveUndo::~ScMoveUndo()
@@ -441,11 +441,11 @@ ScMoveUndo::~ScMoveUndo()
 
 void ScMoveUndo::UndoRef()
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     ScRange aRange(0,0,0, MAXCOL,MAXROW,pRefUndoDoc->GetTableCount()-1);
-    pRefUndoDoc->CopyToDocument( aRange, IDF_FORMULA, false, pDoc, NULL, false );
+    pRefUndoDoc->CopyToDocument( aRange, IDF_FORMULA, false, &rDoc, NULL, false );
     if (pRefUndoData)
-        pRefUndoData->DoUndo( pDoc, (eMode == SC_UNDO_REFFIRST) );
+        pRefUndoData->DoUndo( &rDoc, (eMode == SC_UNDO_REFFIRST) );
         // HACK: ScDragDropUndo is the only one with REFFIRST.
         // If not, results possibly in a too frequent adjustment
         // of ChartRefs. Not that pretty, but not too bad either..
@@ -455,7 +455,7 @@ void ScMoveUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
 
-    EnableDrawAdjust( pDocShell->GetDocument(), false );
+    EnableDrawAdjust( &pDocShell->GetDocument(), false );
 
     if (pRefUndoDoc && eMode == SC_UNDO_REFFIRST)
         UndoRef();
@@ -463,12 +463,12 @@ void ScMoveUndo::BeginUndo()
 
 void ScMoveUndo::EndUndo()
 {
-    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );     // must also be called when pointer is null
+    DoSdrUndoAction( pDrawUndo, &pDocShell->GetDocument() );     // must also be called when pointer is null
 
     if (pRefUndoDoc && eMode == SC_UNDO_REFLAST)
         UndoRef();
 
-    EnableDrawAdjust( pDocShell->GetDocument(), true );
+    EnableDrawAdjust( &pDocShell->GetDocument(), true );
 
     ScSimpleUndo::EndUndo();
 }
@@ -496,7 +496,7 @@ void ScDBFuncUndo::SetDrawUndoAction( SdrUndoAction* pDrawUndo )
 void ScDBFuncUndo::BeginUndo()
 {
     ScSimpleUndo::BeginUndo();
-    DoSdrUndoAction( mpDrawUndo, pDocShell->GetDocument() );
+    DoSdrUndoAction( mpDrawUndo, &pDocShell->GetDocument() );
 }
 
 void ScDBFuncUndo::EndUndo()
@@ -505,9 +505,9 @@ void ScDBFuncUndo::EndUndo()
 
     if ( pAutoDBRange )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SCTAB nTab = pDoc->GetVisibleTab();
-        ScDBData* pNoNameData = pDoc->GetAnonymousDBData(nTab);
+        ScDocument& rDoc = pDocShell->GetDocument();
+        SCTAB nTab = rDoc.GetVisibleTab();
+        ScDBData* pNoNameData = rDoc.GetAnonymousDBData(nTab);
         if (pNoNameData )
         {
             SCCOL nRangeX1;
@@ -524,7 +524,7 @@ void ScDBFuncUndo::EndUndo()
             {
                 // restore AutoFilter buttons
                 pAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
-                pDoc->ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, SC_MF_AUTO );
+                rDoc.ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, SC_MF_AUTO );
                 pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PAINT_GRID );
             }
         }
@@ -538,8 +538,8 @@ void ScDBFuncUndo::BeginRedo()
     {
         // move the database range to this function's position again (see ScDocShell::GetDBData)
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScDBData* pNoNameData = pDoc->GetAnonymousDBData(aOriginalRange.aStart.Tab());
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDBData* pNoNameData = rDoc.GetAnonymousDBData(aOriginalRange.aStart.Tab());
         if ( pNoNameData )
         {
 

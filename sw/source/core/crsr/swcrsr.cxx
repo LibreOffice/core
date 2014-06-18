@@ -447,14 +447,14 @@ bool SwCursor::IsSelOvr( int eFlags )
             if ( pInputFldTxtAttrAtPoint != NULL )
             {
                 const sal_Int32 nNewPointPos =
-                    bIsForwardSelection ? *(pInputFldTxtAttrAtPoint->End()) : *(pInputFldTxtAttrAtPoint->GetStart());
+                    bIsForwardSelection ? *(pInputFldTxtAttrAtPoint->End()) : pInputFldTxtAttrAtPoint->GetStart();
                 GetPoint()->nContent.Assign( pTxtNdAtPoint, nNewPointPos );
             }
 
             if ( pInputFldTxtAttrAtMark != NULL )
             {
                 const sal_Int32 nNewMarkPos =
-                    bIsForwardSelection ? *(pInputFldTxtAttrAtMark->GetStart()) : *(pInputFldTxtAttrAtMark->End());
+                    bIsForwardSelection ? pInputFldTxtAttrAtMark->GetStart() : *(pInputFldTxtAttrAtMark->End());
                 GetMark()->nContent.Assign( pTxtNdAtMark, nNewMarkPos );
             }
         }
@@ -492,7 +492,7 @@ bool SwCursor::IsSelOvr( int eFlags )
                     nSttEndTbl = rNds[ nSEIdx ]->StartOfSectionIndex() - 1;
 
                 GetPoint()->nNode = nSttEndTbl;
-                const SwNode* pMyNd = GetNode();
+                const SwNode* pMyNd = &(GetNode());
 
                 if( pMyNd->IsSectionNode() || ( pMyNd->IsEndNode() &&
                     pMyNd->StartOfSectionNode()->IsSectionNode() ) )
@@ -592,7 +592,7 @@ bool SwCursor::IsInProtectTable( bool bMove, bool bChgCrsr )
         // search next valid box
         // if there is another StartNode after the EndNode of a cell then
         // there is another cell
-        SwNodeIndex aCellStt( *GetNode()->FindTableBoxStartNode()->EndOfSectionNode(), 1 );
+        SwNodeIndex aCellStt( *GetNode().FindTableBoxStartNode()->EndOfSectionNode(), 1 );
         bool bProt = true;
 GoNextCell:
         do {
@@ -640,7 +640,7 @@ SetNextCrsr:
     {
         // if there is another EndNode in front of the StartNode than there
         // exists a previous cell
-        SwNodeIndex aCellStt( *GetNode()->FindTableBoxStartNode(), -1 );
+        SwNodeIndex aCellStt( *GetNode().FindTableBoxStartNode(), -1 );
         SwNode* pNd;
         bool bProt = true;
 GoPrevCell:
@@ -1163,7 +1163,7 @@ bool SwCursor::SelectWord( SwViewShell* pViewShell, const Point* pPt )
 bool SwCursor::IsStartWordWT( sal_Int16 nWordType ) const
 {
     bool bRet = false;
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = GetNode().GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
@@ -1178,7 +1178,7 @@ bool SwCursor::IsStartWordWT( sal_Int16 nWordType ) const
 bool SwCursor::IsEndWordWT( sal_Int16 nWordType ) const
 {
     bool bRet = false;
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = GetNode().GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
@@ -1194,7 +1194,7 @@ bool SwCursor::IsEndWordWT( sal_Int16 nWordType ) const
 bool SwCursor::IsInWordWT( sal_Int16 nWordType ) const
 {
     bool bRet = false;
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = GetNode().GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         const sal_Int32 nPtPos = GetPoint()->nContent.GetIndex();
@@ -1235,7 +1235,7 @@ bool SwCursor::IsStartEndSentence( bool bEnd ) const
 bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
 {
     bool bRet = false;
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = GetNode().GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
@@ -1259,7 +1259,7 @@ bool SwCursor::GoStartWordWT( sal_Int16 nWordType )
 bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
 {
     bool bRet = false;
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = GetNode().GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
@@ -1284,7 +1284,7 @@ bool SwCursor::GoEndWordWT( sal_Int16 nWordType )
 bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
 {
     bool bRet = false;
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = GetNode().GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
@@ -1308,7 +1308,7 @@ bool SwCursor::GoNextWordWT( sal_Int16 nWordType )
 bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
 {
     bool bRet = false;
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = GetNode().GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         SwCrsrSaveState aSave( *this );
@@ -1347,7 +1347,7 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
         pLayout->GetCrsrOfst( GetPoint(), aPt );
     }
 
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = GetNode().GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         // Should we select the whole fieldmark?
@@ -1438,7 +1438,7 @@ static OUString lcl_MaskDeletedRedlines( const SwTxtNode* pTxtNd )
 bool SwCursor::GoSentence( SentenceMoveType eMoveType )
 {
     bool bRet = false;
-    const SwTxtNode* pTxtNd = GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = GetNode().GetTxtNode();
     if( pTxtNd && g_pBreakIt->GetBreakIter().is() )
     {
         OUString sNodeText( lcl_MaskDeletedRedlines( pTxtNd ) );
@@ -1758,8 +1758,8 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
 
     // If the point/mark of the table cursor in the same box then set cursor to
     // beginning of the box
-    if( pTblCrsr && GetNode( true )->StartOfSectionNode() ==
-                    GetNode( false )->StartOfSectionNode() )
+    if( pTblCrsr && GetNode( true ).StartOfSectionNode() ==
+                    GetNode( false ).StartOfSectionNode() )
     {
         if ( End() != GetPoint() )
             Exchange();
@@ -1798,7 +1798,7 @@ bool SwCursor::UpDown( bool bUp, sal_uInt16 nCnt,
             // than one paragraph. If we want to go down, we have to set the
             // point to the last frame in the table box. This is only necessary
             // if we do not already have a table selection
-            const SwStartNode* pTblNd = GetNode( true )->FindTableBoxStartNode();
+            const SwStartNode* pTblNd = GetNode( true ).FindTableBoxStartNode();
             OSL_ENSURE( pTblNd, "pTblCrsr without SwTableNode?" );
 
             if ( pTblNd ) // safety first

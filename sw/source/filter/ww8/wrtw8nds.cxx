@@ -313,7 +313,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         for( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            sal_Int32 nPos = *pHt->GetStart();    // first Attr characters
+            sal_Int32 nPos = pHt->GetStart();    // first Attr characters
             if( nPos >= nStartPos && nPos <= nMinPos )
                 nMinPos = nPos;
 
@@ -326,7 +326,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
             if (pHt->HasDummyChar())
             {
                 // pos + 1 because of CH_TXTATR in Text
-                nPos = *pHt->GetStart() + 1;
+                nPos = pHt->GetStart() + 1;
                 if( nPos >= nStartPos && nPos <= nMinPos )
                     nMinPos = nPos;
             }
@@ -422,8 +422,8 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             const sal_Int32* pEnd = pHt->End();
 
-            if (pEnd ? ( nSwPos >= *pHt->GetStart() && nSwPos < *pEnd)
-                        : nSwPos == *pHt->GetStart() )
+            if (pEnd ? ( nSwPos >= pHt->GetStart() && nSwPos < *pEnd)
+                        : nSwPos == pHt->GetStart() )
             {
                 sal_uInt16 nWhich = pHt->GetAttr().Which();
                 if (nWhich == RES_TXTATR_AUTOFMT)
@@ -450,7 +450,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
                 else
                     aRangeItems[nWhich] = (&(pHt->GetAttr()));
             }
-            else if (nSwPos < *pHt->GetStart())
+            else if (nSwPos < pHt->GetStart())
                 break;
         }
     }
@@ -617,7 +617,7 @@ bool SwWW8AttrIter::IsTxtAttr( sal_Int32 nSwPos )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( ( pHt->HasDummyChar() || pHt->HasContent() )
-                 && (*pHt->GetStart() == nSwPos) )
+                 && (pHt->GetStart() == nSwPos) )
             {
                 return true;
             }
@@ -676,7 +676,7 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
             const SfxPoolItem* pItem = &pHt->GetAttr();
             const sal_Int32 * pAtrEnd = 0;
             if( 0 != ( pAtrEnd = pHt->End() ) &&        // only Attr with an end
-                nTmpSwPos >= *pHt->GetStart() && nTmpSwPos < *pAtrEnd )
+                nTmpSwPos >= pHt->GetStart() && nTmpSwPos < *pAtrEnd )
             {
                 if ( nWhich == pItem->Which() )
                 {
@@ -697,7 +697,7 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
                     }
                 }
             }
-            else if (nTmpSwPos < *pHt->GetStart())
+            else if (nTmpSwPos < pHt->GetStart())
                 break;              // nothing more to come
         }
     }
@@ -805,7 +805,7 @@ void WW8AttributeOutput::StartRuby( const SwTxtNode& rNode, sal_Int32 /*nPos*/, 
 
     if ( g_pBreakIt->GetBreakIter().is() )
         nRubyScript = g_pBreakIt->GetBreakIter()->getScriptType( rNode.GetTxt(),
-                *( pRubyTxt->GetStart() ) );
+                pRubyTxt->GetStart() );
     else
         nRubyScript = i18n::ScriptType::ASIAN;
 
@@ -1146,8 +1146,8 @@ void AttributeOutputBase::TOXMark( const SwTxtNode& rNode, const SwTOXMark& rAtt
     const sal_Int32* pTxtEnd = rTxtTOXMark.End();
     if ( pTxtEnd ) // has range?
     {
-        sTxt = rNode.GetExpandTxt( *rTxtTOXMark.GetStart(),
-                                   *pTxtEnd - *rTxtTOXMark.GetStart() );
+        sTxt = rNode.GetExpandTxt( rTxtTOXMark.GetStart(),
+                                   *pTxtEnd - rTxtTOXMark.GetStart() );
     }
     else
         sTxt = rAttr.GetAlternativeText();
@@ -1205,7 +1205,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
             switch ( pItem->Which() )
             {
                 case RES_TXTATR_INETFMT:
-                    if ( nPos == *pHt->GetStart() )
+                    if ( nPos == pHt->GetStart() )
                     {
                         const SwFmtINetFmt *rINet = static_cast< const SwFmtINetFmt* >( pItem );
                         if ( m_rExport.AttrOutput().StartURL( rINet->GetValue(), rINet->GetTargetFrame() ) )
@@ -1218,7 +1218,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                     }
                     break;
                 case RES_TXTATR_REFMARK:
-                    if ( nPos == *pHt->GetStart() )
+                    if ( nPos == pHt->GetStart() )
                     {
                         OutSwFmtRefMark( *static_cast< const SwFmtRefMark* >( pItem ), true );
                         ++nRet;
@@ -1230,11 +1230,11 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                     }
                     break;
                 case RES_TXTATR_TOXMARK:
-                    if ( nPos == *pHt->GetStart() )
+                    if ( nPos == pHt->GetStart() )
                         m_rExport.AttrOutput().TOXMark( rNd, *static_cast< const SwTOXMark* >( pItem ) );
                     break;
                 case RES_TXTATR_CJK_RUBY:
-                    if ( nPos == *pHt->GetStart() )
+                    if ( nPos == pHt->GetStart() )
                     {
                         m_rExport.AttrOutput().StartRuby( rNd, nPos, *static_cast< const SwFmtRuby* >( pItem ) );
                         ++nRet;
@@ -2659,14 +2659,14 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         for( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
-            const sal_Int32* startPos = pHt->GetStart();    // first Attr characters
+            const sal_Int32 startPos = pHt->GetStart();    // first Attr characters
             const sal_Int32* endPos = pHt->End();    // end Attr characters
             // Check if these attributes are for the last character in the paragraph
             // - which means the paragraph marker. If a paragraph has 7 characters,
             // then properties on character 8 are for the paragraph marker
-            if( (startPos && endPos) && (*startPos == *endPos ) && (*endPos == rNode.GetTxt().getLength()) )
+            if( (endPos) && (startPos == *endPos ) && (*endPos == rNode.GetTxt().getLength()) )
             {
-                SAL_INFO( "sw.ww8", *startPos << "startPos == endPos" << *endPos);
+                SAL_INFO( "sw.ww8", startPos << "startPos == endPos" << *endPos);
                 sal_uInt16 nWhich = pHt->GetAttr().Which();
                 SAL_INFO( "sw.ww8", "nWhich" << nWhich);
                 if (nWhich == RES_TXTATR_AUTOFMT)

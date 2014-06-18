@@ -134,7 +134,7 @@ SwPosition SwAnnotationItem::GetAnchorPosition() const
     SwTxtNode* pTxtNode = pTxtFld->GetpTxtNode();
 
     SwPosition aPos( *pTxtNode );
-    aPos.nContent.Assign( pTxtNode, *(pTxtFld->GetStart()) );
+    aPos.nContent.Assign( pTxtNode, pTxtFld->GetStart() );
     return aPos;
 }
 

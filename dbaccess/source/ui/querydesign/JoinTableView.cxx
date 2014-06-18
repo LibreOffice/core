@@ -73,14 +73,14 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 
     // ScrollBars
 
-    GetHScrollBar()->SetRange( Range(0, 1000) );
-    GetVScrollBar()->SetRange( Range(0, 1000) );
+    GetHScrollBar().SetRange( Range(0, 1000) );
+    GetVScrollBar().SetRange( Range(0, 1000) );
 
-    GetHScrollBar()->SetLineSize( LINE_SIZE );
-    GetVScrollBar()->SetLineSize( LINE_SIZE );
+    GetHScrollBar().SetLineSize( LINE_SIZE );
+    GetVScrollBar().SetLineSize( LINE_SIZE );
 
-    GetHScrollBar()->Show();
-    GetVScrollBar()->Show();
+    GetHScrollBar().Show();
+    GetVScrollBar().Show();
     m_pCornerWindow->Show();
 
     // normally we should be SCROLL_PANE
@@ -98,15 +98,15 @@ void OScrollWindowHelper::setTableView(OJoinTableView* _pTableView)
 {
     m_pTableView = _pTableView;
     // ScrollBars
-    GetHScrollBar()->SetScrollHdl( LINK(m_pTableView, OJoinTableView, ScrollHdl) );
-    GetVScrollBar()->SetScrollHdl( LINK(m_pTableView, OJoinTableView, ScrollHdl) );
+    GetHScrollBar().SetScrollHdl( LINK(m_pTableView, OJoinTableView, ScrollHdl) );
+    GetVScrollBar().SetScrollHdl( LINK(m_pTableView, OJoinTableView, ScrollHdl) );
 }
 
 void OScrollWindowHelper::resetRange(const Point& _aSize)
 {
     Point aPos = PixelToLogic(_aSize);
-    GetHScrollBar()->SetRange( Range(0, aPos.X() + TABWIN_SPACING_X) );
-    GetVScrollBar()->SetRange( Range(0, aPos.Y() + TABWIN_SPACING_Y) );
+    GetHScrollBar().SetRange( Range(0, aPos.X() + TABWIN_SPACING_X) );
+    GetVScrollBar().SetRange( Range(0, aPos.Y() + TABWIN_SPACING_Y) );
 }
 
 void OScrollWindowHelper::Resize()
@@ -114,15 +114,15 @@ void OScrollWindowHelper::Resize()
     Window::Resize();
 
     Size aTotalOutputSize = GetOutputSizePixel();
-    long nHScrollHeight = GetHScrollBar()->GetSizePixel().Height();
-    long nVScrollWidth = GetVScrollBar()->GetSizePixel().Width();
+    long nHScrollHeight = GetHScrollBar().GetSizePixel().Height();
+    long nVScrollWidth = GetVScrollBar().GetSizePixel().Width();
 
-    GetHScrollBar()->SetPosSizePixel(
+    GetHScrollBar().SetPosSizePixel(
         Point( 0, aTotalOutputSize.Height()-nHScrollHeight ),
         Size( aTotalOutputSize.Width()-nVScrollWidth, nHScrollHeight )
         );
 
-    GetVScrollBar()->SetPosSizePixel(
+    GetVScrollBar().SetPosSizePixel(
         Point( aTotalOutputSize.Width()-nVScrollWidth, 0 ),
         Size( nVScrollWidth, aTotalOutputSize.Height()-nHScrollHeight )
         );
@@ -132,20 +132,20 @@ void OScrollWindowHelper::Resize()
         Size( nVScrollWidth, nHScrollHeight )
         );
 
-    GetHScrollBar()->SetPageSize( aTotalOutputSize.Width() );
-    GetHScrollBar()->SetVisibleSize( aTotalOutputSize.Width() );
+    GetHScrollBar().SetPageSize( aTotalOutputSize.Width() );
+    GetHScrollBar().SetVisibleSize( aTotalOutputSize.Width() );
 
-    GetVScrollBar()->SetPageSize( aTotalOutputSize.Height() );
-    GetVScrollBar()->SetVisibleSize( aTotalOutputSize.Height() );
+    GetVScrollBar().SetPageSize( aTotalOutputSize.Height() );
+    GetVScrollBar().SetVisibleSize( aTotalOutputSize.Height() );
 
     // adjust the ranges of the scrollbars if necessary
-    long lRange = GetHScrollBar()->GetRange().Max() - GetHScrollBar()->GetRange().Min();
+    long lRange = GetHScrollBar().GetRange().Max() - GetHScrollBar().GetRange().Min();
     if (m_pTableView->GetScrollOffset().X() + aTotalOutputSize.Width() > lRange)
-        GetHScrollBar()->SetRangeMax(m_pTableView->GetScrollOffset().X() + aTotalOutputSize.Width() + GetHScrollBar()->GetRange().Min());
+        GetHScrollBar().SetRangeMax(m_pTableView->GetScrollOffset().X() + aTotalOutputSize.Width() + GetHScrollBar().GetRange().Min());
 
-    lRange = GetVScrollBar()->GetRange().Max() - GetVScrollBar()->GetRange().Min();
+    lRange = GetVScrollBar().GetRange().Max() - GetVScrollBar().GetRange().Min();
     if (m_pTableView->GetScrollOffset().Y() + aTotalOutputSize.Height() > lRange)
-        GetVScrollBar()->SetRangeMax(m_pTableView->GetScrollOffset().Y() + aTotalOutputSize.Height() + GetVScrollBar()->GetRange().Min());
+        GetVScrollBar().SetRangeMax(m_pTableView->GetScrollOffset().Y() + aTotalOutputSize.Height() + GetVScrollBar().GetRange().Min());
 
     m_pTableView->SetPosSizePixel(Point( 0, 0 ),Size( aTotalOutputSize.Width()-nVScrollWidth, aTotalOutputSize.Height()-nHScrollHeight ));
 }
@@ -186,7 +186,7 @@ OJoinTableView::~OJoinTableView()
 IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar )
 {
     // move all windows
-    ScrollPane( pScrollBar->GetDelta(), (pScrollBar == GetHScrollBar()), false );
+    ScrollPane( pScrollBar->GetDelta(), (pScrollBar == &GetHScrollBar()), false );
 
     return 0;
 }
@@ -202,8 +202,8 @@ void OJoinTableView::Resize()
         return;
 
     // we have at least one table so resize it
-    m_aScrollOffset.X() = GetHScrollBar()->GetThumbPos();
-    m_aScrollOffset.Y() = GetVScrollBar()->GetThumbPos();
+    m_aScrollOffset.X() = GetHScrollBar().GetThumbPos();
+    m_aScrollOffset.Y() = GetVScrollBar().GetThumbPos();
 
     OTableWindow* pCheck = m_aTableMap.begin()->second;
     Point aRealPos = pCheck->GetPosPixel();
@@ -311,7 +311,7 @@ void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& r
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
     if ( pNewTabWin->Init() )
     {
-        m_pView->getController().getTableWindowData()->push_back( pNewTabWinData);
+        m_pView->getController().getTableWindowData().push_back( pNewTabWinData);
         // when we already have a table with this name insert the full qualified one instead
         if(m_aTableMap.find(rWinName) != m_aTableMap.end())
             m_aTableMap[_rComposedName] = pNewTabWin;
@@ -366,10 +366,10 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
 
         pTabWin->Hide();
         OJoinController& rController = m_pView->getController();
-        TTableWindowData::iterator aFind = ::std::find(rController.getTableWindowData()->begin(),rController.getTableWindowData()->end(),pData);
-        if(aFind != rController.getTableWindowData()->end())
+        TTableWindowData::iterator aFind = ::std::find(rController.getTableWindowData().begin(), rController.getTableWindowData().end(), pData);
+        if(aFind != rController.getTableWindowData().end())
         {
-            rController.getTableWindowData()->erase(aFind);
+            rController.getTableWindowData().erase(aFind);
             rController.setModified(sal_True);
         }
 
@@ -395,16 +395,14 @@ namespace
     bool isScrollAllowed( OJoinTableView* _pView,long nDelta, bool bHoriz)
     {
         // adjust ScrollBar-Positions
-        ScrollBar* pBar = _pView->GetVScrollBar();
-        if( bHoriz )
-            pBar = _pView->GetHScrollBar();
+        ScrollBar& rBar = bHoriz ? _pView->GetHScrollBar() : _pView->GetVScrollBar() ;
 
-        long nOldThumbPos = pBar->GetThumbPos();
+        long nOldThumbPos = rBar.GetThumbPos();
         long nNewThumbPos = nOldThumbPos + nDelta;
         if( nNewThumbPos < 0 )
             nNewThumbPos = 0;
-        else if( nNewThumbPos > pBar->GetRangeMax() )
-            nNewThumbPos = pBar->GetRangeMax();
+        else if( nNewThumbPos > rBar.GetRangeMax() )
+            nNewThumbPos = rBar.GetRangeMax();
 
         if ( bHoriz )
         {
@@ -462,12 +460,12 @@ namespace
 
             if ( bVisbile )
             {
-                sal_Int32 nHRangeMax = _pView->GetHScrollBar()->GetRangeMax();
-                sal_Int32 nVRangeMax = _pView->GetVScrollBar()->GetRangeMax();
+                sal_Int32 nHRangeMax = _pView->GetHScrollBar().GetRangeMax();
+                sal_Int32 nVRangeMax = _pView->GetVScrollBar().GetRangeMax();
 
-                if ( aSize.Width() + _pView->GetHScrollBar()->GetThumbPos() + _nScrollX > nHRangeMax )
+                if ( aSize.Width() + _pView->GetHScrollBar().GetThumbPos() + _nScrollX > nHRangeMax )
                     bVisbile = false;
-                if ( bVisbile && aSize.Height() + _pView->GetVScrollBar()->GetThumbPos() + _nScrollY > nVRangeMax )
+                if ( bVisbile && aSize.Height() + _pView->GetVScrollBar().GetThumbPos() + _nScrollY > nVRangeMax )
                     bVisbile = false;
             }
         }
@@ -576,10 +574,10 @@ void OJoinTableView::SetDefaultTabWinPosSize( OTableWindow* pTabWin )
     aBottom.X() += aNewSize.Width();
     aBottom.Y() += aNewSize.Height();
 
-    if(!GetHScrollBar()->GetRange().IsInside(aBottom.X()))
-        GetHScrollBar()->SetRange( Range(0, aBottom.X()) );
-    if(!GetVScrollBar()->GetRange().IsInside(aBottom.Y()))
-        GetVScrollBar()->SetRange( Range(0, aBottom.Y()) );
+    if(!GetHScrollBar().GetRange().IsInside(aBottom.X()))
+        GetHScrollBar().SetRange( Range(0, aBottom.X()) );
+    if(!GetVScrollBar().GetRange().IsInside(aBottom.Y()))
+        GetVScrollBar().SetRange( Range(0, aBottom.Y()) );
 
     pTabWin->SetPosSizePixel( aNewPos, aNewSize );
 }
@@ -643,50 +641,50 @@ bool OJoinTableView::ScrollPane( long nDelta, bool bHoriz, bool bPaintScrollBars
     {
         if( bHoriz )
         {
-            long nOldThumbPos = GetHScrollBar()->GetThumbPos();
+            long nOldThumbPos = GetHScrollBar().GetThumbPos();
             long nNewThumbPos = nOldThumbPos + nDelta;
             if( nNewThumbPos < 0 )
             {
                 nNewThumbPos = 0;
                 bRet = false;
             }
-            if( nNewThumbPos > GetHScrollBar()->GetRange().Max() )
+            if( nNewThumbPos > GetHScrollBar().GetRange().Max() )
             {
-                nNewThumbPos = GetHScrollBar()->GetRange().Max();
+                nNewThumbPos = GetHScrollBar().GetRange().Max();
                 bRet = false;
             }
-            GetHScrollBar()->SetThumbPos( nNewThumbPos );
-            nDelta = GetHScrollBar()->GetThumbPos() - nOldThumbPos;
+            GetHScrollBar().SetThumbPos( nNewThumbPos );
+            nDelta = GetHScrollBar().GetThumbPos() - nOldThumbPos;
         }
         else
         {
-            long nOldThumbPos = GetVScrollBar()->GetThumbPos();
+            long nOldThumbPos = GetVScrollBar().GetThumbPos();
             long nNewThumbPos = nOldThumbPos+nDelta;
             if( nNewThumbPos < 0 )
             {
                 nNewThumbPos = 0;
                 bRet = false;
             }
-            if( nNewThumbPos > GetVScrollBar()->GetRange().Max() )
+            if( nNewThumbPos > GetVScrollBar().GetRange().Max() )
             {
-                nNewThumbPos = GetVScrollBar()->GetRange().Max();
+                nNewThumbPos = GetVScrollBar().GetRange().Max();
                 bRet = false;
             }
-            GetVScrollBar()->SetThumbPos( nNewThumbPos );
-            nDelta = GetVScrollBar()->GetThumbPos() - nOldThumbPos;
+            GetVScrollBar().SetThumbPos( nNewThumbPos );
+            nDelta = GetVScrollBar().GetThumbPos() - nOldThumbPos;
         }
     }
 
     // If ScrollOffset hitting borders, no redrawing.
-    if( (GetHScrollBar()->GetThumbPos()==m_aScrollOffset.X()) &&
-        (GetVScrollBar()->GetThumbPos()==m_aScrollOffset.Y()) )
+    if( (GetHScrollBar().GetThumbPos()==m_aScrollOffset.X()) &&
+        (GetVScrollBar().GetThumbPos()==m_aScrollOffset.Y()) )
         return false;
 
     // set ScrollOffset anew
     if (bHoriz)
-        m_aScrollOffset.X() = GetHScrollBar()->GetThumbPos();
+        m_aScrollOffset.X() = GetHScrollBar().GetThumbPos();
     else
-        m_aScrollOffset.Y() = GetVScrollBar()->GetThumbPos();
+        m_aScrollOffset.Y() = GetVScrollBar().GetThumbPos();
 
     // move all windows
     OTableWindow* pTabWin;
@@ -749,7 +747,7 @@ void OJoinTableView::Tracking( const TrackingEvent& rTEvt )
             if ( ! (pData && pData->HasPosition() && (pData->GetPosition() == aDragWinPos)))
             {
                 // old logic coordinates
-                Point ptOldPos = m_pDragWin->GetPosPixel() + Point(GetHScrollBar()->GetThumbPos(), GetVScrollBar()->GetThumbPos());
+                Point ptOldPos = m_pDragWin->GetPosPixel() + Point(GetHScrollBar().GetThumbPos(), GetVScrollBar().GetThumbPos());
                 // new positioning
                 m_pDragWin->SetPosPixel(aDragWinPos);
                 TabWinMoved(m_pDragWin, ptOldPos);
@@ -894,9 +892,9 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
             SvTreeListEntry* pFirstSourceVisible = pSourceBox->GetFirstEntryInView();
             SvTreeListEntry* pFirstDestVisible = pDestBox->GetFirstEntryInView();
 
-            const ::std::vector<OConnectionLine*>* pLines = pConn->GetConnLineList();
-            ::std::vector<OConnectionLine*>::const_reverse_iterator aIter = pLines->rbegin();
-            for(;aIter != pLines->rend();++aIter)
+            const ::std::vector<OConnectionLine*>& rLines = pConn->GetConnLineList();
+            ::std::vector<OConnectionLine*>::const_reverse_iterator aIter = rLines.rbegin();
+            for(;aIter != rLines.rend();++aIter)
             {
                 if ((*aIter)->IsValid())
                 {
@@ -1077,7 +1075,7 @@ void OJoinTableView::invalidateAndModify(SfxUndoAction *_pAction)
 
 void OJoinTableView::TabWinMoved(OTableWindow* ptWhich, const Point& ptOldPosition)
 {
-    Point ptThumbPos(GetHScrollBar()->GetThumbPos(), GetVScrollBar()->GetThumbPos());
+    Point ptThumbPos(GetHScrollBar().GetThumbPos(), GetVScrollBar().GetThumbPos());
     ptWhich->GetData()->SetPosition(ptWhich->GetPosPixel() + ptThumbPos);
 
     invalidateAndModify(new OJoinMoveTabWinUndoAct(this, ptOldPosition, ptWhich));
@@ -1150,9 +1148,9 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
             {
                 if( pSelConnection )
                 {
-                    const ::std::vector<OConnectionLine*>* pLines = pSelConnection->GetConnLineList();
-                    ::std::vector<OConnectionLine*>::const_iterator aIter = ::std::find_if(pLines->begin(),pLines->end(),::std::mem_fun(&OConnectionLine::IsValid));
-                    if( aIter != pLines->end() )
+                    const ::std::vector<OConnectionLine*>& rLines = pSelConnection->GetConnLineList();
+                    ::std::vector<OConnectionLine*>::const_iterator aIter = ::std::find_if(rLines.begin(), rLines.end(),::std::mem_fun(&OConnectionLine::IsValid));
+                    if( aIter != rLines.end() )
                         executePopup((*aIter)->getMidPoint(),pSelConnection);
                 }
             }
@@ -1475,16 +1473,14 @@ void OJoinTableView::HideTabWins()
 {
     SetUpdateMode(false);
 
-    OTableWindowMap* pTabWins = GetTabWinMap();
-    if ( pTabWins )
-    {
-        // working on a copy because the real list will be cleared in inner calls
-        OTableWindowMap aCopy(*pTabWins);
-        OTableWindowMap::iterator aIter = aCopy.begin();
-        OTableWindowMap::iterator aEnd = aCopy.end();
-        for(;aIter != aEnd;++aIter)
-            RemoveTabWin(aIter->second);
-    }
+    OTableWindowMap& rTabWins = GetTabWinMap();
+
+    // working on a copy because the real list will be cleared in inner calls
+    OTableWindowMap aCopy(rTabWins);
+    OTableWindowMap::iterator aIter = aCopy.begin();
+    OTableWindowMap::iterator aEnd = aCopy.end();
+    for(;aIter != aEnd;++aIter)
+        RemoveTabWin(aIter->second);
 
     m_pView->getController().setModified(sal_True);
 
@@ -1571,10 +1567,10 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,bool _bAddData
     if ( _bAddData )
     {
 #if OSL_DEBUG_LEVEL > 0
-        TTableConnectionData* pTabConnDataList = m_pView->getController().getTableConnectionData();
-        OSL_ENSURE( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),_pConnection->GetData()) == pTabConnDataList->end(),"Data already in vector!");
+        TTableConnectionData& rTabConnDataList = m_pView->getController().getTableConnectionData();
+        OSL_ENSURE( ::std::find(rTabConnDataList.begin(), rTabConnDataList.end(),_pConnection->GetData()) == rTabConnDataList.end(),"Data already in vector!");
 #endif
-        m_pView->getController().getTableConnectionData()->push_back(_pConnection->GetData());
+        m_pView->getController().getTableConnectionData().push_back(_pConnection->GetData());
     }
     m_vTableConnection.push_back(_pConnection);
     _pConnection->RecalcLines();

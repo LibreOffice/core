@@ -94,7 +94,7 @@ const SwTxtAttr* GetFrwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     {
         const SwTxtAttr *pTxtHt = rHtsArr.GetStart( rPos++ );
         // the start of an attribute has to be in the section
-        if( *pTxtHt->GetStart() >= nCntntPos )
+        if( pTxtHt->GetStart() >= nCntntPos )
             return pTxtHt; // valid text attribute
     }
     return 0; // invalid text attribute
@@ -107,7 +107,7 @@ const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     {
         const SwTxtAttr *pTxtHt = rHtsArr.GetStart( --rPos );
         // the start of an attribute has to be in the section
-        if( *pTxtHt->GetStart() < nCntntPos )
+        if( pTxtHt->GetStart() < nCntntPos )
             return pTxtHt; // valid text attribute
     }
     return 0; // invalid text attribute
@@ -167,7 +167,7 @@ static bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
         if( pTxtHt->Which() == rCmpItem.Which() &&
             ( !bValue || CmpAttr( pTxtHt->GetAttr(), rCmpItem )))
         {
-            lcl_SetAttrPam( rPam, *pTxtHt->GetStart(), pTxtHt->End(), bForward );
+            lcl_SetAttrPam( rPam, pTxtHt->GetStart(), pTxtHt->End(), bForward );
             return true;
         }
     return false;
@@ -332,7 +332,7 @@ lcl_IsAttributeIgnorable(sal_Int32 const nNdStart, sal_Int32 const nNdEnd,
 
 bool SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
 {
-    _SwSrchChrAttr aTmp( rAttr.GetAttr(), *rAttr.GetStart(), *rAttr.GetAnyEnd() );
+    _SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
 
     // ignore all attributes not in search range
     if (lcl_IsAttributeIgnorable(nNdStt, nNdEnd, aTmp))
@@ -485,7 +485,7 @@ bool SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
 
 bool SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
 {
-    _SwSrchChrAttr aTmp( rAttr.GetAttr(), *rAttr.GetStart(), *rAttr.GetAnyEnd() );
+    _SwSrchChrAttr aTmp( rAttr.GetAttr(), rAttr.GetStart(), *rAttr.GetAnyEnd() );
 
     // ignore all attributes not in search range
     if (lcl_IsAttributeIgnorable(nNdStt, nNdEnd, aTmp))
@@ -714,11 +714,11 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
         for( ; nPos < rHtArr.Count(); ++nPos )
             if( !rCmpArr.SetAttrFwd( *( pAttr = rHtArr.GetStart( nPos )) ) )
             {
-                if( rCmpArr.GetNdStt() < *pAttr->GetStart() )
+                if( rCmpArr.GetNdStt() < pAttr->GetStart() )
                 {
                     // found end
                     lcl_SetAttrPam( rPam, rCmpArr.GetNdStt(),
-                                pAttr->GetStart(), true );
+                                &pAttr->GetStart(), true );
                     return sal_True;
                 }
                 // continue search
@@ -739,9 +739,9 @@ static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
         if( rCmpArr.SetAttrFwd( *( pAttr = rHtArr.GetStart( nPos )) ) )
         {
             // Do multiple start at that position? Do also check those:
-            nSttPos = *pAttr->GetStart();
+            nSttPos = pAttr->GetStart();
             while( ++nPos < rHtArr.Count() && nSttPos ==
-                    *( pAttr = rHtArr.GetStart( nPos ))->GetStart() &&
+                    ( pAttr = rHtArr.GetStart( nPos ))->GetStart() &&
                     rCmpArr.SetAttrFwd( *pAttr ) )
                 ;
 

@@ -202,16 +202,15 @@ void ScExportTest::test()
         SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
     pShell->DoInitNew();
 
-    ScDocument* pDoc = pShell->GetDocument();
+    ScDocument& rDoc = pShell->GetDocument();
 
-    pDoc->SetValue(0,0,0, 1.0);
-    CPPUNIT_ASSERT(pDoc);
+    rDoc.SetValue(0,0,0, 1.0);
 
     ScDocShellRef xDocSh = saveAndReload( pShell, ODS );
 
     CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument* pLoadedDoc = xDocSh->GetDocument();
-    double aVal = pLoadedDoc->GetValue(0,0,0);
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
 }
 
@@ -224,10 +223,9 @@ void ScExportTest::testPasswordExport()
         SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
     pShell->DoInitNew();
 
-    ScDocument* pDoc = pShell->GetDocument();
+    ScDocument& rDoc = pShell->GetDocument();
 
-    pDoc->SetValue(0,0,0, 1.0);
-    CPPUNIT_ASSERT(pDoc);
+    rDoc.SetValue(0,0,0, 1.0);
 
     sal_Int32 nFormat = ODS;
     OUString aFilterName(getFileFormats()[nFormat].pFilterName, strlen(getFileFormats()[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
@@ -235,8 +233,8 @@ void ScExportTest::testPasswordExport()
     ScDocShellRef xDocSh = saveAndReloadPassword(pShell, aFilterName, OUString(), aFilterType, getFileFormats()[nFormat].nFormatType);
 
     CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument* pLoadedDoc = xDocSh->GetDocument();
-    double aVal = pLoadedDoc->GetValue(0,0,0);
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    double aVal = rLoadedDoc.GetValue(0,0,0);
     ASSERT_DOUBLES_EQUAL(aVal, 1.0);
 
     xDocSh->DoClose();
@@ -250,11 +248,11 @@ void ScExportTest::testConditionalFormatExportODS()
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
     OUString aCSVFile("new_cond_format_test.");
     OUString aCSVPath;
     createCSVPath( aCSVFile, aCSVPath );
-    testCondFile(aCSVPath, pDoc, 0);
+    testCondFile(aCSVPath, &rDoc, 0);
 
     xDocSh->DoClose();
 }
@@ -266,18 +264,18 @@ void ScExportTest::testConditionalFormatExportXLSX()
 
     ScDocShellRef xDocSh = saveAndReload(&(*xShell), XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
     {
         OUString aCSVFile("new_cond_format_test.");
         OUString aCSVPath;
         createCSVPath( aCSVFile, aCSVPath );
-        testCondFile(aCSVPath, pDoc, 0);
+        testCondFile(aCSVPath, &rDoc, 0);
     }
     {
         OUString aCSVFile("new_cond_format_test_sheet2.");
         OUString aCSVPath;
         createCSVPath( aCSVFile, aCSVPath );
-        testCondFile(aCSVPath, pDoc, 1);
+        testCondFile(aCSVPath, &rDoc, 1);
     }
 
 
@@ -292,11 +290,10 @@ void ScExportTest::testColorScaleExportODS()
     ScDocShellRef xDocSh = saveAndReload(xShell, ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
 
-    testColorScale2Entry_Impl(pDoc);
-    testColorScale3Entry_Impl(pDoc);
+    testColorScale2Entry_Impl(rDoc);
+    testColorScale3Entry_Impl(rDoc);
 
     xDocSh->DoClose();
 }
@@ -309,11 +306,10 @@ void ScExportTest::testColorScaleExportXLSX()
     ScDocShellRef xDocSh = saveAndReload(xShell, XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
 
-    testColorScale2Entry_Impl(pDoc);
-    testColorScale3Entry_Impl(pDoc);
+    testColorScale2Entry_Impl(rDoc);
+    testColorScale3Entry_Impl(rDoc);
 
     xDocSh->DoClose();
 }
@@ -326,10 +322,9 @@ void ScExportTest::testDataBarExportODS()
     ScDocShellRef xDocSh = saveAndReload(xShell, ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
 
-    testDataBar_Impl(pDoc);
+    testDataBar_Impl(rDoc);
 
     xDocSh->DoClose();
 }
@@ -342,9 +337,9 @@ void ScExportTest::testFormatExportODS()
     ScDocShellRef xDocSh = saveAndReload(xShell, ODS);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
 
-    testFormats(this, pDoc, ODS);
+    testFormats(this, &rDoc, ODS);
 
     xDocSh->DoClose();
 }
@@ -357,10 +352,9 @@ void ScExportTest::testDataBarExportXLSX()
     ScDocShellRef xDocSh = saveAndReload(xShell, XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
 
-    testDataBar_Impl(pDoc);
+    testDataBar_Impl(rDoc);
 
     xDocSh->DoClose();
 }
@@ -476,23 +470,21 @@ void ScExportTest::testNamedRangeBugfdo62729()
 {
     ScDocShellRef xShell = loadDoc("fdo62729.", ODS);
     CPPUNIT_ASSERT(xShell.Is());
-    ScDocument* pDoc = xShell->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xShell->GetDocument();
 
-    ScRangeName* pNames = pDoc->GetRangeName();
+    ScRangeName* pNames = rDoc.GetRangeName();
     //should be just a single named range
     CPPUNIT_ASSERT(pNames->size() == 1 );
-    pDoc->DeleteTab(0);
+    rDoc.DeleteTab(0);
     //should be still a single named range
     CPPUNIT_ASSERT(pNames->size() == 1 );
     ScDocShellRef xDocSh = saveAndReload(xShell, ODS);
     xShell->DoClose();
 
     CPPUNIT_ASSERT(xDocSh.Is());
-    pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc2 = xDocSh->GetDocument();
 
-    pNames = pDoc->GetRangeName();
+    pNames = rDoc2.GetRangeName();
     //after reload should still have a named range
     CPPUNIT_ASSERT(pNames->size() == 1 );
 
@@ -804,106 +796,111 @@ void ScExportTest::testRichTextExportODS()
     // Start with an empty document, put one edit text cell, and make sure it
     // survives the save and reload.
     ScDocShellRef xOrigDocSh = loadDoc("empty.", ODS, true);
-    ScDocument* pDoc = xOrigDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", pDoc->GetTableCount() > 0);
+    const EditTextObject* pEditText;
+    {
+        ScDocument& rDoc = xOrigDocSh->GetDocument();
+        CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", rDoc.GetTableCount() > 0);
 
-    // Insert an edit text cell.
-    ScFieldEditEngine* pEE = &pDoc->GetEditEngine();
-    pEE->SetText("Bold and Italic");
-    // Set the 'Bold' part bold.
-    setAttribute(*pEE, 0, 0, 4, EE_CHAR_WEIGHT);
-    // Set the 'Italic' part italic.
-    setAttribute(*pEE, 0, 9, 15, EE_CHAR_ITALIC);
-    ESelection aSel;
-    aSel.nStartPara = aSel.nEndPara = 0;
+        // Insert an edit text cell.
+        ScFieldEditEngine* pEE = &rDoc.GetEditEngine();
+        pEE->SetText("Bold and Italic");
+        // Set the 'Bold' part bold.
+        setAttribute(*pEE, 0, 0, 4, EE_CHAR_WEIGHT);
+        // Set the 'Italic' part italic.
+        setAttribute(*pEE, 0, 9, 15, EE_CHAR_ITALIC);
+        ESelection aSel;
+        aSel.nStartPara = aSel.nEndPara = 0;
 
-    // Set this edit text to cell B2.
-    pDoc->SetEditText(ScAddress(1,1,0), pEE->CreateTextObject());
-    const EditTextObject* pEditText = pDoc->GetEditText(ScAddress(1,1,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
+        // Set this edit text to cell B2.
+        rDoc.SetEditText(ScAddress(1,1,0), pEE->CreateTextObject());
+        pEditText = rDoc.GetEditText(ScAddress(1,1,0));
+        CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
+    }
 
     // Now, save and reload this document.
     ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, ODS);
-    xOrigDocSh->DoClose();
-    CPPUNIT_ASSERT(xNewDocSh.Is());
-    pDoc = xNewDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.", pDoc->GetTableCount() > 0);
-    pEE = &pDoc->GetEditEngine();
+    {
+        xOrigDocSh->DoClose();
+        CPPUNIT_ASSERT(xNewDocSh.Is());
+        ScDocument& rDoc2 = xNewDocSh->GetDocument();
+        CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.", rDoc2.GetTableCount() > 0);
+        ScFieldEditEngine* pEE = &rDoc2.GetEditEngine();
 
-    // Make sure the content of B2 is still intact.
-    CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
+        // Make sure the content of B2 is still intact.
+        CPPUNIT_ASSERT_MESSAGE("Incorret B2 value.", aCheckFunc.checkB2(pEditText));
 
-    // Insert a multi-line content to B4.
-    pEE->Clear();
-    pEE->SetText("One\nTwo\nThree");
-    pDoc->SetEditText(ScAddress(1,3,0), pEE->CreateTextObject());
-    pEditText = pDoc->GetEditText(ScAddress(1,3,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
+        // Insert a multi-line content to B4.
+        pEE->Clear();
+        pEE->SetText("One\nTwo\nThree");
+        rDoc2.SetEditText(ScAddress(1,3,0), pEE->CreateTextObject());
+        pEditText = rDoc2.GetEditText(ScAddress(1,3,0));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B4 value.", aCheckFunc.checkB4(pEditText));
+    }
 
     // Reload the doc again, and check the content of B2 and B4.
     ScDocShellRef xNewDocSh2 = saveAndReload(xNewDocSh, ODS);
-    pDoc = xNewDocSh2->GetDocument();
-    pEE = &pDoc->GetEditEngine();
-    xNewDocSh->DoClose();
+    {
+        ScDocument& rDoc3 = xNewDocSh2->GetDocument();
+        ScFieldEditEngine* pEE = &rDoc3.GetEditEngine();
+        xNewDocSh->DoClose();
 
-    pEditText = pDoc->GetEditText(ScAddress(1,1,0));
-    CPPUNIT_ASSERT_MESSAGE("B2 should be an edit text.", pEditText);
-    pEditText = pDoc->GetEditText(ScAddress(1,3,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B4 value.", aCheckFunc.checkB4(pEditText));
+        pEditText = rDoc3.GetEditText(ScAddress(1,1,0));
+        CPPUNIT_ASSERT_MESSAGE("B2 should be an edit text.", pEditText);
+        pEditText = rDoc3.GetEditText(ScAddress(1,3,0));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B4 value.", aCheckFunc.checkB4(pEditText));
 
-    // Insert a multi-line content to B5, but this time, set some empty paragraphs.
-    pEE->Clear();
-    pEE->SetText("\nTwo\nThree\n\nFive\n");
-    pDoc->SetEditText(ScAddress(1,4,0), pEE->CreateTextObject());
-    pEditText = pDoc->GetEditText(ScAddress(1,4,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B5 value.", aCheckFunc.checkB5(pEditText));
+        // Insert a multi-line content to B5, but this time, set some empty paragraphs.
+        pEE->Clear();
+        pEE->SetText("\nTwo\nThree\n\nFive\n");
+        rDoc3.SetEditText(ScAddress(1,4,0), pEE->CreateTextObject());
+        pEditText = rDoc3.GetEditText(ScAddress(1,4,0));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B5 value.", aCheckFunc.checkB5(pEditText));
 
-    // Insert a text with strikethrough in B6.
-    pEE->Clear();
-    pEE->SetText("Strike Me");
-    // Set the 'Strike' part strikethrough.
-    setAttribute(*pEE, 0, 0, 6, EE_CHAR_STRIKEOUT);
-    pDoc->SetEditText(ScAddress(1,5,0), pEE->CreateTextObject());
-    pEditText = pDoc->GetEditText(ScAddress(1,5,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B6 value.", aCheckFunc.checkB6(pEditText));
+        // Insert a text with strikethrough in B6.
+        pEE->Clear();
+        pEE->SetText("Strike Me");
+        // Set the 'Strike' part strikethrough.
+        setAttribute(*pEE, 0, 0, 6, EE_CHAR_STRIKEOUT);
+        rDoc3.SetEditText(ScAddress(1,5,0), pEE->CreateTextObject());
+        pEditText = rDoc3.GetEditText(ScAddress(1,5,0));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B6 value.", aCheckFunc.checkB6(pEditText));
 
-    // Insert a text with different font segments in B7.
-    pEE->Clear();
-    pEE->SetText("Font1 and Font2");
-    setFont(*pEE, 0, 0, 5, "Courier");
-    setFont(*pEE, 0, 10, 15, "Luxi Mono");
-    pDoc->SetEditText(ScAddress(1,6,0), pEE->CreateTextObject());
-    pEditText = pDoc->GetEditText(ScAddress(1,6,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B7 value.", aCheckFunc.checkB7(pEditText));
+        // Insert a text with different font segments in B7.
+        pEE->Clear();
+        pEE->SetText("Font1 and Font2");
+        setFont(*pEE, 0, 0, 5, "Courier");
+        setFont(*pEE, 0, 10, 15, "Luxi Mono");
+        rDoc3.SetEditText(ScAddress(1,6,0), pEE->CreateTextObject());
+        pEditText = rDoc3.GetEditText(ScAddress(1,6,0));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B7 value.", aCheckFunc.checkB7(pEditText));
 
-    // Insert a text with overline and underline in B8.
-    pEE->Clear();
-    pEE->SetText("Over and Under");
-    setAttribute(*pEE, 0, 0, 4, EE_CHAR_OVERLINE);
-    setAttribute(*pEE, 0, 9, 14, EE_CHAR_UNDERLINE);
-    pDoc->SetEditText(ScAddress(1,7,0), pEE->CreateTextObject());
-    pEditText = pDoc->GetEditText(ScAddress(1,7,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B8 value.", aCheckFunc.checkB8(pEditText));
+        // Insert a text with overline and underline in B8.
+        pEE->Clear();
+        pEE->SetText("Over and Under");
+        setAttribute(*pEE, 0, 0, 4, EE_CHAR_OVERLINE);
+        setAttribute(*pEE, 0, 9, 14, EE_CHAR_UNDERLINE);
+        rDoc3.SetEditText(ScAddress(1,7,0), pEE->CreateTextObject());
+        pEditText = rDoc3.GetEditText(ScAddress(1,7,0));
+        CPPUNIT_ASSERT_MESSAGE("Incorrect B8 value.", aCheckFunc.checkB8(pEditText));
+    }
 
     // Reload the doc again, and check the content of B2, B4, B6 and B7.
     ScDocShellRef xNewDocSh3 = saveAndReload(xNewDocSh2, ODS);
-    pDoc = xNewDocSh3->GetDocument();
+    ScDocument& rDoc4 = xNewDocSh3->GetDocument();
     xNewDocSh2->DoClose();
 
-    pEditText = pDoc->GetEditText(ScAddress(1,1,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B2 value after save and reload.", aCheckFunc.checkB2(pEditText));
-    pEditText = pDoc->GetEditText(ScAddress(1,3,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B4 value after save and reload.", aCheckFunc.checkB4(pEditText));
-    pEditText = pDoc->GetEditText(ScAddress(1,4,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B5 value after save and reload.", aCheckFunc.checkB5(pEditText));
-    pEditText = pDoc->GetEditText(ScAddress(1,5,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B6 value after save and reload.", aCheckFunc.checkB6(pEditText));
-    pEditText = pDoc->GetEditText(ScAddress(1,6,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B7 value after save and reload.", aCheckFunc.checkB7(pEditText));
-    pEditText = pDoc->GetEditText(ScAddress(1,7,0));
-    CPPUNIT_ASSERT_MESSAGE("Incorret B8 value after save and reload.", aCheckFunc.checkB8(pEditText));
+    pEditText = rDoc4.GetEditText(ScAddress(1,1,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorrect B2 value after save and reload.", aCheckFunc.checkB2(pEditText));
+    pEditText = rDoc4.GetEditText(ScAddress(1,3,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorrect B4 value after save and reload.", aCheckFunc.checkB4(pEditText));
+    pEditText = rDoc4.GetEditText(ScAddress(1,4,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorrect B5 value after save and reload.", aCheckFunc.checkB5(pEditText));
+    pEditText = rDoc4.GetEditText(ScAddress(1,5,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorrect B6 value after save and reload.", aCheckFunc.checkB6(pEditText));
+    pEditText = rDoc4.GetEditText(ScAddress(1,6,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorrect B7 value after save and reload.", aCheckFunc.checkB7(pEditText));
+    pEditText = rDoc4.GetEditText(ScAddress(1,7,0));
+    CPPUNIT_ASSERT_MESSAGE("Incorrect B8 value after save and reload.", aCheckFunc.checkB8(pEditText));
 
     xNewDocSh3->DoClose();
 }
@@ -911,22 +908,23 @@ void ScExportTest::testRichTextExportODS()
 void ScExportTest::testFormulaRefSheetNameODS()
 {
     ScDocShellRef xDocSh = loadDoc("formula-quote-in-sheet-name.", ODS, true);
-    ScDocument* pDoc = xDocSh->GetDocument();
+    {
+        ScDocument& rDoc = xDocSh->GetDocument();
 
-    sc::AutoCalcSwitch aACSwitch(*pDoc, true); // turn on auto calc.
-    pDoc->SetString(ScAddress(1,1,0), "='90''s Data'.B2");
-    CPPUNIT_ASSERT_EQUAL(1.1, pDoc->GetValue(ScAddress(1,1,0)));
-    if (!checkFormula(*pDoc, ScAddress(1,1,0), "'90''s Data'.B2"))
-        CPPUNIT_FAIL("Wrong formula");
-
+        sc::AutoCalcSwitch aACSwitch(rDoc, true); // turn on auto calc.
+        rDoc.SetString(ScAddress(1,1,0), "='90''s Data'.B2");
+        CPPUNIT_ASSERT_EQUAL(1.1, rDoc.GetValue(ScAddress(1,1,0)));
+        if (!checkFormula(rDoc, ScAddress(1,1,0), "'90''s Data'.B2"))
+            CPPUNIT_FAIL("Wrong formula");
+    }
     // Now, save and reload this document.
     ScDocShellRef xNewDocSh = saveAndReload(xDocSh, ODS);
     xDocSh->DoClose();
 
-    pDoc = xNewDocSh->GetDocument();
-    pDoc->CalcAll();
-    CPPUNIT_ASSERT_EQUAL(1.1, pDoc->GetValue(ScAddress(1,1,0)));
-    if (!checkFormula(*pDoc, ScAddress(1,1,0), "'90''s Data'.B2"))
+    ScDocument& rDoc = xNewDocSh->GetDocument();
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(1.1, rDoc.GetValue(ScAddress(1,1,0)));
+    if (!checkFormula(rDoc, ScAddress(1,1,0), "'90''s Data'.B2"))
         CPPUNIT_FAIL("Wrong formula");
 
     xNewDocSh->DoClose();
@@ -936,73 +934,72 @@ void ScExportTest::testCellValuesExportODS()
 {
     // Start with an empty document
     ScDocShellRef xOrigDocSh = loadDoc("empty.", ODS);
-    ScDocument* pDoc = xOrigDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", pDoc->GetTableCount() > 0);
+    {
+        ScDocument& rDoc = xOrigDocSh->GetDocument();
+        CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.", rDoc.GetTableCount() > 0);
 
-    // set a value double
-    pDoc->SetValue(ScAddress(0,0,0), 2.0); // A1
+        // set a value double
+        rDoc.SetValue(ScAddress(0,0,0), 2.0); // A1
 
-    // set a formula
-    pDoc->SetValue(ScAddress(2,0,0), 3.0); // C1
-    pDoc->SetValue(ScAddress(3,0,0), 3); // D1
-    pDoc->SetString(ScAddress(4,0,0), "=10*C1/4"); // E1
-    pDoc->SetValue(ScAddress(5,0,0), 3.0); // F1
-    pDoc->SetString(ScAddress(7,0,0), "=SUM(C1:F1)"); //H1
+        // set a formula
+        rDoc.SetValue(ScAddress(2,0,0), 3.0); // C1
+        rDoc.SetValue(ScAddress(3,0,0), 3); // D1
+        rDoc.SetString(ScAddress(4,0,0), "=10*C1/4"); // E1
+        rDoc.SetValue(ScAddress(5,0,0), 3.0); // F1
+        rDoc.SetString(ScAddress(7,0,0), "=SUM(C1:F1)"); //H1
 
-    // set a string
-    pDoc->SetString(ScAddress(0,2,0), "a simple line"); //A3
+        // set a string
+        rDoc.SetString(ScAddress(0,2,0), "a simple line"); //A3
 
-    // set a digit string
-    pDoc->SetString(ScAddress(0,4,0), "'12"); //A5
-    // set a contiguous value
-    pDoc->SetValue(ScAddress(0,5,0), 12.0); //A6
-    // set acontiguous string
-    pDoc->SetString(ScAddress(0,6,0), "a string"); //A7
-    // set a contiguous formula
-    pDoc->SetString(ScAddress(0,7,0), "=$A$6"); //A8
-
+        // set a digit string
+        rDoc.SetString(ScAddress(0,4,0), "'12"); //A5
+        // set a contiguous value
+        rDoc.SetValue(ScAddress(0,5,0), 12.0); //A6
+        // set acontiguous string
+        rDoc.SetString(ScAddress(0,6,0), "a string"); //A7
+        // set a contiguous formula
+        rDoc.SetString(ScAddress(0,7,0), "=$A$6"); //A8
+    }
     // save and reload
     ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, ODS);
     xOrigDocSh->DoClose();
     CPPUNIT_ASSERT(xNewDocSh.Is());
-    pDoc = xNewDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.", pDoc->GetTableCount() > 0);
+    ScDocument& rDoc = xNewDocSh->GetDocument();
+    CPPUNIT_ASSERT_MESSAGE("Reloaded document should at least have one sheet.", rDoc.GetTableCount() > 0);
 
     // check value
-    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(0,0,0));
-    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(2,0,0));
-    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(3,0,0));
-    CPPUNIT_ASSERT_EQUAL(7.5, pDoc->GetValue(4,0,0));
-    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(5,0,0));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(0,0,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(2,0,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(3,0,0));
+    CPPUNIT_ASSERT_EQUAL(7.5, rDoc.GetValue(4,0,0));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(5,0,0));
 
     // check formula
-    if (!checkFormula(*pDoc, ScAddress(4,0,0), "10*C1/4"))
+    if (!checkFormula(rDoc, ScAddress(4,0,0), "10*C1/4"))
         CPPUNIT_FAIL("Wrong formula =10*C1/4");
-    if (!checkFormula(*pDoc, ScAddress(7,0,0), "SUM(C1:F1)"))
+    if (!checkFormula(rDoc, ScAddress(7,0,0), "SUM(C1:F1)"))
         CPPUNIT_FAIL("Wrong formula =SUM(C1:F1)");
-    CPPUNIT_ASSERT_EQUAL(16.5, pDoc->GetValue(7,0,0));
+    CPPUNIT_ASSERT_EQUAL(16.5, rDoc.GetValue(7,0,0));
 
     // check string
     ScRefCellValue aCell;
-    aCell.assign(*pDoc, ScAddress(0,2,0));
+    aCell.assign(rDoc, ScAddress(0,2,0));
     CPPUNIT_ASSERT_EQUAL( CELLTYPE_STRING, aCell.meType );
 
     // check for an empty cell
-    aCell.assign(*pDoc, ScAddress(0,3,0));
+    aCell.assign(rDoc, ScAddress(0,3,0));
     CPPUNIT_ASSERT_EQUAL( CELLTYPE_NONE, aCell.meType);
 
     // check a digit string
-    aCell.assign(*pDoc, ScAddress(0,4,0));
+    aCell.assign(rDoc, ScAddress(0,4,0));
     CPPUNIT_ASSERT_EQUAL( CELLTYPE_STRING, aCell.meType);
 
     //check contiguous values
-    CPPUNIT_ASSERT_EQUAL( 12.0, pDoc->GetValue(0,5,0) );
-    CPPUNIT_ASSERT_EQUAL( OUString("a string"), pDoc->GetString(0,6,0) );
-    if (!checkFormula(*pDoc, ScAddress(0,7,0), "$A$6"))
+    CPPUNIT_ASSERT_EQUAL( 12.0, rDoc.GetValue(0,5,0) );
+    CPPUNIT_ASSERT_EQUAL( OUString("a string"), rDoc.GetString(0,6,0) );
+    if (!checkFormula(rDoc, ScAddress(0,7,0), "$A$6"))
         CPPUNIT_FAIL("Wrong formula =$A$6");
-    CPPUNIT_ASSERT_EQUAL( pDoc->GetValue(0,5,0), pDoc->GetValue(0,7,0) );
+    CPPUNIT_ASSERT_EQUAL( rDoc.GetValue(0,5,0), rDoc.GetValue(0,7,0) );
 
     xNewDocSh->DoClose();
 }
@@ -1010,27 +1007,28 @@ void ScExportTest::testCellValuesExportODS()
 void ScExportTest::testCellNoteExportODS()
 {
     ScDocShellRef xOrigDocSh = loadDoc("single-note.", ODS);
-    ScDocument* pDoc = xOrigDocSh->GetDocument();
-
     ScAddress aPos(0,0,0); // Start with A1.
-    CPPUNIT_ASSERT_MESSAGE("There should be a note at A1.", pDoc->HasNote(aPos));
+    {
+        ScDocument& rDoc = xOrigDocSh->GetDocument();
 
-    aPos.IncRow(); // Move to A2.
-    ScPostIt* pNote = pDoc->GetOrCreateNote(aPos);
-    pNote->SetText(aPos, "Note One");
-    pNote->SetAuthor("Author One");
-    CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", pDoc->HasNote(aPos));
+        CPPUNIT_ASSERT_MESSAGE("There should be a note at A1.", rDoc.HasNote(aPos));
 
+        aPos.IncRow(); // Move to A2.
+        ScPostIt* pNote = rDoc.GetOrCreateNote(aPos);
+        pNote->SetText(aPos, "Note One");
+        pNote->SetAuthor("Author One");
+        CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", rDoc.HasNote(aPos));
+    }
     // save and reload
     ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, ODS);
     xOrigDocSh->DoClose();
     CPPUNIT_ASSERT(xNewDocSh.Is());
-    pDoc = xNewDocSh->GetDocument();
+    ScDocument& rDoc = xNewDocSh->GetDocument();
 
     aPos.SetRow(0); // Move back to A1.
-    CPPUNIT_ASSERT_MESSAGE("There should be a note at A1.", pDoc->HasNote(aPos));
+    CPPUNIT_ASSERT_MESSAGE("There should be a note at A1.", rDoc.HasNote(aPos));
     aPos.IncRow(); // Move to A2.
-    CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", pDoc->HasNote(aPos));
+    CPPUNIT_ASSERT_MESSAGE("There should be a note at A2.", rDoc.HasNote(aPos));
 
     xNewDocSh->DoClose();
 }
@@ -1039,43 +1037,46 @@ void ScExportTest::testCellNoteExportXLS()
 {
     // Start with an empty document.s
     ScDocShellRef xOrigDocSh = loadDoc("notes-on-3-sheets.", ODS);
-    ScDocument* pDoc = xOrigDocSh->GetDocument();
-    CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", pDoc->GetTableCount() == 3);
+    {
+        ScDocument& rDoc = xOrigDocSh->GetDocument();
+        CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", rDoc.GetTableCount() == 3);
 
-    // Check note's presence.
-    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,0)));
+        // Check note's presence.
+        CPPUNIT_ASSERT( rDoc.HasNote(ScAddress(0,0,0)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,1,0)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,2,0)));
 
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,0,1)));
-    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,1,1)));
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,1)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,0,1)));
+        CPPUNIT_ASSERT( rDoc.HasNote(ScAddress(0,1,1)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,2,1)));
 
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,0,2)));
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,2)));
-    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,2,2)));
-
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,0,2)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,1,2)));
+        CPPUNIT_ASSERT( rDoc.HasNote(ScAddress(0,2,2)));
+    }
     // save and reload as XLS.
     ScDocShellRef xNewDocSh = saveAndReload(xOrigDocSh, XLS);
-    xOrigDocSh->DoClose();
-    CPPUNIT_ASSERT(xNewDocSh.Is());
-    pDoc = xNewDocSh->GetDocument();
-    CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", pDoc->GetTableCount() == 3);
+    {
+        xOrigDocSh->DoClose();
+        CPPUNIT_ASSERT(xNewDocSh.Is());
+        ScDocument& rDoc = xNewDocSh->GetDocument();
+        CPPUNIT_ASSERT_MESSAGE("This document should have 3 sheets.", rDoc.GetTableCount() == 3);
 
-    // Check note's presence again.
-    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,0)));
+        // Check note's presence again.
+        CPPUNIT_ASSERT( rDoc.HasNote(ScAddress(0,0,0)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,1,0)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,2,0)));
 
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,0,1)));
-    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,1,1)));
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,2,1)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,0,1)));
+        CPPUNIT_ASSERT( rDoc.HasNote(ScAddress(0,1,1)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,2,1)));
 
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,0,2)));
-    CPPUNIT_ASSERT(!pDoc->HasNote(ScAddress(0,1,2)));
-    CPPUNIT_ASSERT( pDoc->HasNote(ScAddress(0,2,2)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,0,2)));
+        CPPUNIT_ASSERT(!rDoc.HasNote(ScAddress(0,1,2)));
+        CPPUNIT_ASSERT( rDoc.HasNote(ScAddress(0,2,2)));
 
-    xNewDocSh->DoClose();
+        xNewDocSh->DoClose();
+    }
 }
 
 namespace {
@@ -1113,17 +1114,16 @@ void ScExportTest::testInlineArrayXLS()
     xShell->DoClose();
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
 
     // B2:C3 contains a matrix.
-    checkMatrixRange(*pDoc, ScRange(1,1,0,2,2,0));
+    checkMatrixRange(rDoc, ScRange(1,1,0,2,2,0));
 
     // B5:D6 contains a matrix.
-    checkMatrixRange(*pDoc, ScRange(1,4,0,3,5,0));
+    checkMatrixRange(rDoc, ScRange(1,4,0,3,5,0));
 
     // B8:C10 as well.
-    checkMatrixRange(*pDoc, ScRange(1,7,0,2,9,0));
+    checkMatrixRange(rDoc, ScRange(1,7,0,2,9,0));
 
     xDocSh->DoClose();
 }
@@ -1137,18 +1137,17 @@ void ScExportTest::testEmbeddedChartXLS()
     xShell->DoClose();
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
 
     // Make sure the 2nd sheet is named 'Chart1'.
     OUString aName;
-    pDoc->GetName(1, aName);
+    rDoc.GetName(1, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Chart1"), aName);
 
-    const SdrOle2Obj* pOleObj = getSingleChartObject(*pDoc, 1);
+    const SdrOle2Obj* pOleObj = getSingleChartObject(rDoc, 1);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve a chart object from the 2nd sheet.", pOleObj);
 
-    ScRangeList aRanges = getChartRanges(*pDoc, *pOleObj);
+    ScRangeList aRanges = getChartRanges(rDoc, *pOleObj);
     CPPUNIT_ASSERT_MESSAGE("Label range (B3:B5) not found.", aRanges.In(ScRange(1,2,1,1,4,1)));
     CPPUNIT_ASSERT_MESSAGE("Data label (C2) not found.", aRanges.In(ScAddress(2,1,1)));
     CPPUNIT_ASSERT_MESSAGE("Data range (C3:C5) not found.", aRanges.In(ScRange(2,2,1,2,4,1)));
@@ -1165,31 +1164,30 @@ void ScExportTest::testFormulaReferenceXLS()
     xShell->DoClose();
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
+    ScDocument& rDoc = xDocSh->GetDocument();
 
-    if (!checkFormula(*pDoc, ScAddress(3,1,0), "$A$2+$B$2+$C$2"))
+    if (!checkFormula(rDoc, ScAddress(3,1,0), "$A$2+$B$2+$C$2"))
         CPPUNIT_FAIL("Wrong formula in D2");
 
-    if (!checkFormula(*pDoc, ScAddress(3,2,0), "A3+B3+C3"))
+    if (!checkFormula(rDoc, ScAddress(3,2,0), "A3+B3+C3"))
         CPPUNIT_FAIL("Wrong formula in D3");
 
-    if (!checkFormula(*pDoc, ScAddress(3,5,0), "SUM($A$6:$C$6)"))
+    if (!checkFormula(rDoc, ScAddress(3,5,0), "SUM($A$6:$C$6)"))
         CPPUNIT_FAIL("Wrong formula in D6");
 
-    if (!checkFormula(*pDoc, ScAddress(3,6,0), "SUM(A7:C7)"))
+    if (!checkFormula(rDoc, ScAddress(3,6,0), "SUM(A7:C7)"))
         CPPUNIT_FAIL("Wrong formula in D7");
 
-    if (!checkFormula(*pDoc, ScAddress(3,9,0), "$Two.$A$2+$Two.$B$2+$Two.$C$2"))
+    if (!checkFormula(rDoc, ScAddress(3,9,0), "$Two.$A$2+$Two.$B$2+$Two.$C$2"))
         CPPUNIT_FAIL("Wrong formula in D10");
 
-    if (!checkFormula(*pDoc, ScAddress(3,10,0), "$Two.A3+$Two.B3+$Two.C3"))
+    if (!checkFormula(rDoc, ScAddress(3,10,0), "$Two.A3+$Two.B3+$Two.C3"))
         CPPUNIT_FAIL("Wrong formula in D11");
 
-    if (!checkFormula(*pDoc, ScAddress(3,13,0), "MIN($Two.$A$2:$C$2)"))
+    if (!checkFormula(rDoc, ScAddress(3,13,0), "MIN($Two.$A$2:$C$2)"))
         CPPUNIT_FAIL("Wrong formula in D14");
 
-    if (!checkFormula(*pDoc, ScAddress(3,14,0), "MAX($Two.A3:C3)"))
+    if (!checkFormula(rDoc, ScAddress(3,14,0), "MAX($Two.A3:C3)"))
         CPPUNIT_FAIL("Wrong formula in D15");
 
     xDocSh->DoClose();
@@ -1203,9 +1201,8 @@ void ScExportTest::testSheetProtectionXLSX()
     ScDocShellRef xDocSh = saveAndReload(xShell, XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
 
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-    const ScTableProtection* pTabProtect = pDoc->GetTabProtection(0);
+    ScDocument& rDoc = xDocSh->GetDocument();
+    const ScTableProtection* pTabProtect = rDoc.GetTabProtection(0);
     CPPUNIT_ASSERT(pTabProtect);
     if ( pTabProtect )
     {
@@ -1247,11 +1244,6 @@ const char* toBorderName( sal_Int16 eStyle )
 
 void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
 {
-    ScDocShellRef xDocSh = loadDoc("cell-borders.", nFormatType);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
-
     struct
     {
         SCROW mnRow;
@@ -1272,23 +1264,29 @@ void ScExportTest::testExcelCellBorders( sal_uLong nFormatType )
         { 25, table::BorderLineStyle::DOUBLE_THIN,  -1L }, // double (don't check width)
     };
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+    ScDocShellRef xDocSh = loadDoc("cell-borders.", nFormatType);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.Is());
     {
-        const editeng::SvxBorderLine* pLine = NULL;
-        pDoc->GetBorderLines(2, aChecks[i].mnRow, 0, NULL, &pLine, NULL, NULL);
-        CPPUNIT_ASSERT(pLine);
-        CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle), toBorderName(pLine->GetBorderLineStyle()));
-        if (aChecks[i].mnWidth >= 0)
-            CPPUNIT_ASSERT_EQUAL(aChecks[i].mnWidth, pLine->GetWidth());
+        ScDocument& rDoc = xDocSh->GetDocument();
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        {
+            const editeng::SvxBorderLine* pLine = NULL;
+            rDoc.GetBorderLines(2, aChecks[i].mnRow, 0, NULL, &pLine, NULL, NULL);
+            CPPUNIT_ASSERT(pLine);
+            CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle), toBorderName(pLine->GetBorderLineStyle()));
+            if (aChecks[i].mnWidth >= 0)
+                CPPUNIT_ASSERT_EQUAL(aChecks[i].mnWidth, pLine->GetWidth());
+        }
     }
 
     ScDocShellRef xNewDocSh = saveAndReload(xDocSh, nFormatType);
     xDocSh->DoClose();
-    pDoc = xNewDocSh->GetDocument();
+    ScDocument& rDoc = xNewDocSh->GetDocument();
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
         const editeng::SvxBorderLine* pLine = NULL;
-        pDoc->GetBorderLines(2, aChecks[i].mnRow, 0, NULL, &pLine, NULL, NULL);
+        rDoc.GetBorderLines(2, aChecks[i].mnRow, 0, NULL, &pLine, NULL, NULL);
         CPPUNIT_ASSERT(pLine);
         CPPUNIT_ASSERT_EQUAL(toBorderName(aChecks[i].mnStyle), toBorderName(pLine->GetBorderLineStyle()));
         if (aChecks[i].mnWidth >= 0)
@@ -1312,10 +1310,10 @@ void ScExportTest::testSheetTabColorsXLSX()
 {
     struct
     {
-        bool checkContent( ScDocument* pDoc )
+        bool checkContent( ScDocument& rDoc )
         {
 
-            std::vector<OUString> aTabNames = pDoc->GetAllTableNames();
+            std::vector<OUString> aTabNames = rDoc.GetAllTableNames();
 
             // green, red, blue, yellow (from left to right).
             if (aTabNames.size() != 4)
@@ -1345,7 +1343,7 @@ void ScExportTest::testSheetTabColorsXLSX()
 
             for (size_t i = 0, n = SAL_N_ELEMENTS(aXclColors); i < n; ++i)
             {
-                if (aXclColors[i] != pDoc->GetTabBgColor(i).GetColor())
+                if (aXclColors[i] != rDoc.GetTabBgColor(i).GetColor())
                 {
                     cerr << "wrong sheet color for sheet " << i << endl;
                     return false;
@@ -1358,16 +1356,18 @@ void ScExportTest::testSheetTabColorsXLSX()
     } aTest;
 
     ScDocShellRef xDocSh = loadDoc("sheet-tab-color.", XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
-    bool bRes = aTest.checkContent(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Failed on the initial content check.", bRes);
+    {
+        CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
+        ScDocument& rDoc = xDocSh->GetDocument();
+        bool bRes = aTest.checkContent(rDoc);
+        CPPUNIT_ASSERT_MESSAGE("Failed on the initial content check.", bRes);
+    }
 
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLSX);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload file.", xDocSh2.Is());
     xDocSh->DoClose();
-    pDoc = xDocSh2->GetDocument();
-    bRes = aTest.checkContent(pDoc);
+    ScDocument& rDoc = xDocSh2->GetDocument();
+    bool bRes = aTest.checkContent(rDoc);
     CPPUNIT_ASSERT_MESSAGE("Failed on the content check after reload.", bRes);
 
     xDocSh2->DoClose();
@@ -1377,15 +1377,15 @@ void ScExportTest::testSharedFormulaExportXLS()
 {
     struct
     {
-        bool checkContent( ScDocument* pDoc )
+        bool checkContent( ScDocument& rDoc )
         {
             formula::FormulaGrammar::Grammar eGram = formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1;
-            pDoc->SetGrammar(eGram);
-            sc::TokenStringContext aCxt(pDoc, eGram);
+            rDoc.SetGrammar(eGram);
+            sc::TokenStringContext aCxt(&rDoc, eGram);
 
             // Check the title row.
 
-            OUString aActual = pDoc->GetString(0,1,0);
+            OUString aActual = rDoc.GetString(0,1,0);
             OUString aExpected = "Response";
             if (aActual != aExpected)
             {
@@ -1393,7 +1393,7 @@ void ScExportTest::testSharedFormulaExportXLS()
                 return false;
             }
 
-            aActual = pDoc->GetString(1,1,0);
+            aActual = rDoc.GetString(1,1,0);
             aExpected = "Response";
             if (aActual != aExpected)
             {
@@ -1406,7 +1406,7 @@ void ScExportTest::testSharedFormulaExportXLS()
             {
                 double fExpected = i + 1.0;
                 ScAddress aPos(0,i+2,0);
-                double fActual = pDoc->GetValue(aPos);
+                double fActual = rDoc.GetValue(aPos);
                 if (fExpected != fActual)
                 {
                     cerr << "Wrong value in A" << (i+2) << ": expected=" << fExpected << ", actual=" << fActual << endl;
@@ -1414,7 +1414,7 @@ void ScExportTest::testSharedFormulaExportXLS()
                 }
 
                 aPos.IncCol();
-                ScFormulaCell* pFC = pDoc->GetFormulaCell(aPos);
+                ScFormulaCell* pFC = rDoc.GetFormulaCell(aPos);
                 if (!pFC)
                 {
                     cerr << "B" << (i+2) << " should be a formula cell." << endl;
@@ -1429,7 +1429,7 @@ void ScExportTest::testSharedFormulaExportXLS()
                     return false;
                 }
 
-                fActual = pDoc->GetValue(aPos);
+                fActual = rDoc.GetValue(aPos);
                 if (fExpected != fActual)
                 {
                     cerr << "Wrong value in B" << (i+2) << ": expected=" << fExpected << ", actual=" << fActual << endl;
@@ -1443,21 +1443,23 @@ void ScExportTest::testSharedFormulaExportXLS()
     } aTest;
 
     ScDocShellRef xDocSh = loadDoc("shared-formula/3d-reference.", ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+    {
+        CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
+        ScDocument& rDoc = xDocSh->GetDocument();
 
-    // Check the content of the original.
-    bool bRes = aTest.checkContent(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Content check on the original document failed.", bRes);
+        // Check the content of the original.
+        bool bRes = aTest.checkContent(rDoc);
+        CPPUNIT_ASSERT_MESSAGE("Content check on the original document failed.", bRes);
+    }
 
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLS);
     xDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("Failed to reload file.", xDocSh2.Is());
 
-    pDoc = xDocSh2->GetDocument();
+    ScDocument& rDoc = xDocSh2->GetDocument();
 
     // Check the content of the reloaded. This should be identical.
-    bRes = aTest.checkContent(pDoc);
+    bool bRes = aTest.checkContent(rDoc);
     CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
 
     xDocSh2->DoClose();
@@ -1467,14 +1469,14 @@ void ScExportTest::testSharedFormulaExportXLSX()
 {
     struct
     {
-        bool checkContent( ScDocument* pDoc )
+        bool checkContent( ScDocument& rDoc )
         {
             // B2:B7 should show 1,2,3,4,5,6.
             double fExpected = 1.0;
             for (SCROW i = 1; i <= 6; ++i, ++fExpected)
             {
                 ScAddress aPos(1,i,0);
-                double fVal = pDoc->GetValue(aPos);
+                double fVal = rDoc.GetValue(aPos);
                 if (fVal != fExpected)
                 {
                     cerr << "Wrong value in B" << (i+1) << ": expected=" << fExpected << ", actual=" << fVal << endl;
@@ -1487,7 +1489,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
             for (SCROW i = 1; i <= 6; ++i, fExpected+=10.0)
             {
                 ScAddress aPos(2,i,0);
-                double fVal = pDoc->GetValue(aPos);
+                double fVal = rDoc.GetValue(aPos);
                 if (fVal != fExpected)
                 {
                     cerr << "Wrong value in C" << (i+1) << ": expected=" << fExpected << ", actual=" << fVal << endl;
@@ -1500,7 +1502,7 @@ void ScExportTest::testSharedFormulaExportXLSX()
             for (SCROW i = 1; i <= 6; ++i, ++fExpected)
             {
                 ScAddress aPos(3,i,0);
-                double fVal = pDoc->GetValue(aPos);
+                double fVal = rDoc.GetValue(aPos);
                 if (fVal != fExpected)
                 {
                     cerr << "Wrong value in D" << (i+1) << ": expected=" << fExpected << ", actual=" << fVal << endl;
@@ -1514,25 +1516,27 @@ void ScExportTest::testSharedFormulaExportXLSX()
     } aTest;
 
     ScDocShellRef xDocSh = loadDoc("shared-formula/3d-reference.", XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+    {
+        CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
+        ScDocument& rDoc = xDocSh->GetDocument();
 
-    bool bRes = aTest.checkContent(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Content check on the initial document failed.", bRes);
+        bool bRes = aTest.checkContent(rDoc);
+        CPPUNIT_ASSERT_MESSAGE("Content check on the initial document failed.", bRes);
 
-    pDoc->CalcAll(); // Recalculate to flush all cached results.
-    bRes = aTest.checkContent(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Content check on the initial recalculated document failed.", bRes);
+        rDoc.CalcAll(); // Recalculate to flush all cached results.
+        bRes = aTest.checkContent(rDoc);
+        CPPUNIT_ASSERT_MESSAGE("Content check on the initial recalculated document failed.", bRes);
+    }
 
     // Save and reload, and check the content again.
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLSX);
     xDocSh->DoClose();
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh2.Is());
-    pDoc = xDocSh2->GetDocument();
-    pDoc->CalcAll(); // Recalculate to flush all cached results.
+    ScDocument& rDoc = xDocSh2->GetDocument();
+    rDoc.CalcAll(); // Recalculate to flush all cached results.
 
-    bRes = aTest.checkContent(pDoc);
+    bool bRes = aTest.checkContent(rDoc);
     CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
 
     xDocSh2->DoClose();
@@ -1542,7 +1546,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
 {
     struct
     {
-        bool checkContent( ScDocument* pDoc )
+        bool checkContent( ScDocument& rDoc )
         {
             {
                 // B2:B7 should show A,B,....,F.
@@ -1550,7 +1554,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
                 for (SCROW i = 0; i <= 5; ++i)
                 {
                     ScAddress aPos(1,i+1,0);
-                    OUString aStr = pDoc->GetString(aPos);
+                    OUString aStr = rDoc.GetString(aPos);
                     OUString aExpected = OUString::createFromAscii(expected[i]);
                     if (aStr != aExpected)
                     {
@@ -1566,7 +1570,7 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
                 for (SCROW i = 0; i <= 5; ++i)
                 {
                     ScAddress aPos(2,i+1,0);
-                    OUString aStr = pDoc->GetString(aPos);
+                    OUString aStr = rDoc.GetString(aPos);
                     OUString aExpected = OUString::createFromAscii(expected[i]);
                     if (aStr != aExpected)
                     {
@@ -1582,25 +1586,26 @@ void ScExportTest::testSharedFormulaStringResultExportXLSX()
     } aTest;
 
     ScDocShellRef xDocSh = loadDoc("shared-formula/text-results.", XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
-    ScDocument* pDoc = xDocSh->GetDocument();
+    {
+        CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
+        ScDocument& rDoc = xDocSh->GetDocument();
 
-    // Check content without re-calculation, to test cached formula results.
-    bool bRes = aTest.checkContent(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Content check on the initial document failed.", bRes);
+        // Check content without re-calculation, to test cached formula results.
+        bool bRes = aTest.checkContent(rDoc);
+        CPPUNIT_ASSERT_MESSAGE("Content check on the initial document failed.", bRes);
 
-    // Now, re-calculate and check the results.
-    pDoc->CalcAll();
-    bRes = aTest.checkContent(pDoc);
-    CPPUNIT_ASSERT_MESSAGE("Content check on the initial recalculated document failed.", bRes);
-
+        // Now, re-calculate and check the results.
+        rDoc.CalcAll();
+        bRes = aTest.checkContent(rDoc);
+        CPPUNIT_ASSERT_MESSAGE("Content check on the initial recalculated document failed.", bRes);
+    }
     // Reload and check again.
     ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLSX);
     xDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("Failed to re-load file.", xDocSh2.Is());
-    pDoc = xDocSh2->GetDocument();
+    ScDocument& rDoc = xDocSh2->GetDocument();
 
-    bRes = aTest.checkContent(pDoc);
+    bool bRes = aTest.checkContent(rDoc);
     CPPUNIT_ASSERT_MESSAGE("Content check on the reloaded document failed.", bRes);
 
     xDocSh2->DoClose();
@@ -1612,11 +1617,10 @@ void ScExportTest::testFunctionsExcel2010( sal_uLong nFormatType )
     CPPUNIT_ASSERT_MESSAGE("Failed to load the document.", xShell.Is());
 
     ScDocShellRef xDocSh = saveAndReload(xShell, nFormatType);
-    ScDocument* pDoc = xDocSh->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-    pDoc->CalcAll(); // perform hard re-calculation.
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
 
-    testFunctionsExcel2010_Impl(pDoc);
+    testFunctionsExcel2010_Impl(rDoc);
 
     xDocSh->DoClose();
 }

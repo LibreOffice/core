@@ -254,7 +254,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
         case SID_CHART_ADDSOURCE:
             if (pReqArgs)
             {
-                ScDocument* pDoc = GetDocument();
+                ScDocument& rDoc = GetDocument();
                 const   SfxPoolItem* pItem;
                 OUString  aChartName, aRangeName;
 
@@ -285,12 +285,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     bRowInit = true;
                 }
 
-                ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
-                bool bValid = ( aSingleRange.ParseAny( aRangeName, pDoc, aDetails ) & SCA_VALID ) != 0;
+                ScAddress::Details aDetails(rDoc.GetAddressConvention(), 0, 0);
+                bool bValid = ( aSingleRange.ParseAny( aRangeName, &rDoc, aDetails ) & SCA_VALID ) != 0;
                 if (!bValid)
                 {
                     aRangeListRef = new ScRangeList;
-                    aRangeListRef->Parse( aRangeName, pDoc );
+                    aRangeListRef->Parse( aRangeName, &rDoc );
                     if ( !aRangeListRef->empty() )
                     {
                         bMultiRange = true;
@@ -410,9 +410,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
             break;
         case SID_UPDATETABLINKS:
             {
-                ScDocument* pDoc = GetDocument();
+                ScDocument& rDoc = GetDocument();
 
-                ScLkUpdMode nSet=pDoc->GetLinkMode();
+                ScLkUpdMode nSet = rDoc.GetLinkMode();
 
                 sal_uInt16 nDlgRet=RET_NO;
                 if(nSet==LM_UNKNOWN)
@@ -557,70 +557,67 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
         case FID_CHG_RECORD:
             {
-                ScDocument* pDoc = GetDocument();
-                if(pDoc!=NULL)
+                ScDocument& rDoc = GetDocument();
+                // get argument (recorded macro)
+                SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FID_CHG_RECORD, false );
+                bool bDo = true;
+
+                // xmlsec05/06:
+                // getting real parent window when called from Security-Options TP
+                Window* pParent = NULL;
+                const SfxPoolItem* pParentItem;
+                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
+                    pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
+
+                // desired state
+                ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
+                bool bActivateTracking = (pChangeTrack == 0);   // toggle
+                if ( pItem )
+                    bActivateTracking = pItem->GetValue();      // from argument
+
+                if ( !bActivateTracking )
                 {
-                    // get argument (recorded macro)
-                    SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FID_CHG_RECORD, false );
-                    bool bDo = true;
-
-                    // xmlsec05/06:
-                    // getting real parent window when called from Security-Options TP
-                    Window* pParent = NULL;
-                    const SfxPoolItem* pParentItem;
-                    if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
-                        pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
-
-                    // desired state
-                    ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
-                    bool bActivateTracking = (pChangeTrack == 0);   // toggle
-                    if ( pItem )
-                        bActivateTracking = pItem->GetValue();      // from argument
-
-                    if ( !bActivateTracking )
+                    if ( !pItem )
                     {
-                        if ( !pItem )
-                        {
-                            // no dialog on playing the macro
-                            WarningBox aBox( pParent ? pParent : GetActiveDialogParent(),
-                                WinBits(WB_YES_NO | WB_DEF_NO),
-                                ScGlobal::GetRscString( STR_END_REDLINING ) );
-                            bDo = ( aBox.Execute() == RET_YES );
-                        }
-
-                        if ( bDo )
-                        {
-                            if ( pChangeTrack->IsProtected() )
-                                bDo = ExecuteChangeProtectionDialog( NULL );
-                            if ( bDo )
-                            {
-                                pDoc->EndChangeTracking();
-                                PostPaintGridAll();
-                            }
-                        }
-                    }
-                    else
-                    {
-                        pDoc->StartChangeTracking();
-                        ScChangeViewSettings aChangeViewSet;
-                        aChangeViewSet.SetShowChanges(true);
-                        pDoc->SetChangeViewSettings(aChangeViewSet);
+                        // no dialog on playing the macro
+                        WarningBox aBox( pParent ? pParent : GetActiveDialogParent(),
+                            WinBits(WB_YES_NO | WB_DEF_NO),
+                            ScGlobal::GetRscString( STR_END_REDLINING ) );
+                        bDo = ( aBox.Execute() == RET_YES );
                     }
 
                     if ( bDo )
                     {
-                        UpdateAcceptChangesDialog();
-
-                        // Slots invalidieren
-                        if (pBindings)
-                            pBindings->InvalidateAll(false);
-                        if ( !pItem )
-                            rReq.AppendItem( SfxBoolItem( FID_CHG_RECORD, bActivateTracking ) );
-                        rReq.Done();
+                        if ( pChangeTrack->IsProtected() )
+                            bDo = ExecuteChangeProtectionDialog( NULL );
+                        if ( bDo )
+                        {
+                            rDoc.EndChangeTracking();
+                            PostPaintGridAll();
+                        }
                     }
-                    else
-                        rReq.Ignore();
                 }
+                else
+                {
+                    rDoc.StartChangeTracking();
+                    ScChangeViewSettings aChangeViewSet;
+                    aChangeViewSet.SetShowChanges(true);
+                    rDoc.SetChangeViewSettings(aChangeViewSet);
+                }
+
+                if ( bDo )
+                {
+                    UpdateAcceptChangesDialog();
+
+                    // Slots invalidieren
+                    if (pBindings)
+                        pBindings->InvalidateAll(false);
+                    if ( !pItem )
+                        rReq.AppendItem( SfxBoolItem( FID_CHG_RECORD, bActivateTracking ) );
+                    rReq.Done();
+                }
+                else
+                    rReq.Ignore();
             }
             break;
 
@@ -746,9 +743,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         }
 #endif
                         if ( nSlot == SID_DOCUMENT_COMPARE )
-                            CompareDocument( *pOtherDocSh->GetDocument() );
+                            CompareDocument( pOtherDocSh->GetDocument() );
                         else
-                            MergeDocument( *pOtherDocSh->GetDocument() );
+                            MergeDocument( pOtherDocSh->GetDocument() );
 
                         //  show "accept changes" dialog
                         //! get view for this document!
@@ -822,7 +819,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                             if ( pSh )
                             {
                                 //! SetTabNo in DeleteTable weglassen?
-                                SCTAB nDispTab = pSh->GetViewData()->GetTabNo();
+                                SCTAB nDispTab = pSh->GetViewData().GetTabNo();
                                 pSh->DeleteTable( nTab );
                                 pSh->SetTabNo(nDispTab);
                                 rReq.Done();
@@ -2186,7 +2183,7 @@ ScViewData* ScDocShell::GetViewData()
 {
     SfxViewShell* pCur = SfxViewShell::Current();
     ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,pCur);
-    return pViewSh ? pViewSh->GetViewData() : NULL;
+    return pViewSh ? &pViewSh->GetViewData() : NULL;
 }
 
 SCTAB ScDocShell::GetCurTab()
@@ -2202,7 +2199,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell( bool bOnlyVisible )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     // falsches Doc?
-    if( pViewSh && pViewSh->GetViewData()->GetDocShell() != this )
+    if( pViewSh && pViewSh->GetViewData().GetDocShell() != this )
         pViewSh = NULL;
     if( !pViewSh )
     {
