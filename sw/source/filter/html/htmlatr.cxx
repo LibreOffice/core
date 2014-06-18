@@ -477,7 +477,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     sal_uInt8 nBulletGrfLvl = 255;      // Die auszugebende Bullet-Grafik
 
     // Sind wir in einer Aufzaehlungs- oder Numerierungliste?
-    const SwTxtNode* pTxtNd = rWrt.pCurPam->GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = rWrt.pCurPam->GetNode().GetTxtNode();
 
     SwHTMLNumRuleInfo aNumInfo;
     if( rHWrt.GetNextNumInfo() )
@@ -2339,7 +2339,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     sal_Int32 nStrPos = rHTMLWrt.pCurPam->GetPoint()->nContent.GetIndex();
     const SwTxtAttr * pHt = 0;
     sal_uInt16 nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
-    if( nCntAttr && nStrPos > *( pHt = pNd->GetSwpHints()[ 0 ] )->GetStart() )
+    if( nCntAttr && nStrPos > ( pHt = pNd->GetSwpHints()[ 0 ] )->GetStart() )
     {
         // Ok, es gibt vorher Attribute, die ausgegeben werden muessen
         do {
@@ -2353,7 +2353,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             if ( pHt->End() && !pHt->HasDummyChar() )
             {
                 const sal_Int32 nHtEnd = *pHt->End(),
-                       nHtStt = *pHt->GetStart();
+                       nHtStt = pHt->GetStart();
                 if( !rHTMLWrt.bWriteAll && nHtEnd <= nStrPos )
                     continue;
 
@@ -2379,7 +2379,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             }
 
         } while( nAttrPos < nCntAttr && nStrPos >
-            *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
+            ( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
 
         // dann gebe mal alle gesammelten Attribute von der String-Pos aus
         aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset );
@@ -2407,7 +2407,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
             bool bOutChar = true;
             const SwTxtAttr * pTxtHt = 0;
-            if( nAttrPos < nCntAttr && *pHt->GetStart() == nStrPos
+            if( nAttrPos < nCntAttr && pHt->GetStart() == nStrPos
                 && nStrPos != nEnd )
             {
                 do {
@@ -2445,7 +2445,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                         bOutChar = false;       // keine 255 ausgeben
                     }
                 } while( ++nAttrPos < nCntAttr && nStrPos ==
-                    *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
+                    ( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
             }
 
             // Manche Draw-Formate koennen auch noch Attribute mitbringen

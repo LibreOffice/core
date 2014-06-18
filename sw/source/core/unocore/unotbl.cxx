@@ -317,13 +317,13 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             for(size_t nRed = 0; nRed < rRedTbl.size(); ++nRed)
             {
                 const SwRangeRedline* pRedline = rRedTbl[nRed];
-                const SwNode* pRedPointNode = pRedline->GetNode(true);
-                const SwNode* pRedMarkNode = pRedline->GetNode(false);
-                if(pRedPointNode == pTblNode || pRedMarkNode == pTblNode)
+                const SwNode& rRedPointNode = pRedline->GetNode(true);
+                const SwNode& rRedMarkNode = pRedline->GetNode(false);
+                if(&rRedPointNode == pTblNode || &rRedMarkNode == pTblNode)
                 {
-                    const SwNode* pStartOfRedline = SwNodeIndex(*pRedPointNode) <= SwNodeIndex(*pRedMarkNode) ?
-                        pRedPointNode : pRedMarkNode;
-                    bool bIsStart = pStartOfRedline == pTblNode;
+                    const SwNode& rStartOfRedline = SwNodeIndex(rRedPointNode) <= SwNodeIndex(rRedMarkNode) ?
+                        rRedPointNode : rRedMarkNode;
+                    bool bIsStart = &rStartOfRedline == pTblNode;
                     aRet <<= SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart);
                     break;
                 }
@@ -1026,7 +1026,7 @@ uno::Reference< text::XTextCursor >  SwXCell::createTextCursorByRange(const uno:
     {
         const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
         // skip sections
-        SwStartNode* p1 = aPam.GetNode()->StartOfSectionNode();
+        SwStartNode* p1 = aPam.GetNode().StartOfSectionNode();
         while(p1->IsSectionNode())
             p1 = p1->StartOfSectionNode();
 
@@ -1810,7 +1810,7 @@ void SwXTextTableCursor::setPropertyValue(const OUString& rPropertyName, const u
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwStartNode* pSttNode = pUnoCrsr->GetNode()->StartOfSectionNode();
+        SwStartNode* pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);
@@ -1875,7 +1875,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        SwStartNode* pSttNode = pUnoCrsr->GetNode()->StartOfSectionNode();
+        SwStartNode* pSttNode = pUnoCrsr->GetNode().StartOfSectionNode();
         const SwTableNode* pTblNode = pSttNode->FindTableNode();
         lcl_FormatTable((SwFrmFmt*)pTblNode->GetTable().GetFrmFmt());
         SwUnoTableCrsr& rTblCrsr = dynamic_cast<SwUnoTableCrsr&>(*pUnoCrsr);

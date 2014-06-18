@@ -122,7 +122,7 @@ public:
     ScVbaRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, bool bIsRows = false, bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
     ScVbaRange( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
-    ScDocument* getScDocument() throw (css::uno::RuntimeException);
+    ScDocument& getScDocument() throw (css::uno::RuntimeException);
     ScDocShell* getScDocShell() throw (css::uno::RuntimeException);
 
     /** Returns the ScVbaRange implementation object for the passed VBA Range object. */

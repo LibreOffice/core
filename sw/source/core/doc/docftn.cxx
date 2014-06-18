@@ -412,9 +412,9 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
     while( nPos < rFtnArr.size() &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ nPos++ ] )))
                 < nEndNd || ( nIdx == nEndNd &&
-                nEndCnt >= *pTxtFtn->GetStart() )) )
+                nEndCnt >= pTxtFtn->GetStart() )) )
         if( nIdx > nSttNd || ( nIdx == nSttNd &&
-                nSttCnt <= *pTxtFtn->GetStart() ) )
+                nSttCnt <= pTxtFtn->GetStart() ) )
         {
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
             if( rFtn.GetNumStr() != rNumStr ||
@@ -443,9 +443,9 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
     while( nPos &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ --nPos ] )))
                 > nSttNd || ( nIdx == nSttNd &&
-                nSttCnt <= *pTxtFtn->GetStart() )) )
+                nSttCnt <= pTxtFtn->GetStart() )) )
         if( nIdx < nEndNd || ( nIdx == nEndNd &&
-            nEndCnt >= *pTxtFtn->GetStart() ) )
+            nEndCnt >= pTxtFtn->GetStart() ) )
         {
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
             if( rFtn.GetNumStr() != rNumStr ||

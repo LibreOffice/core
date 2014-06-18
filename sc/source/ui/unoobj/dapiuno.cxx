@@ -234,8 +234,8 @@ static ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUS
 {
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScDPCollection* pColl = pDoc->GetDPCollection();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDPCollection* pColl = rDoc.GetDPCollection();
         if ( pColl )
         {
             size_t nCount = pColl->GetCount();
@@ -255,8 +255,8 @@ static OUString lcl_CreatePivotName( ScDocShell* pDocShell )
 {
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScDPCollection* pColl = pDoc->GetDPCollection();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDPCollection* pColl = rDoc.GetDPCollection();
         if ( pColl )
             return pColl->CreateNewName();
     }
@@ -284,13 +284,13 @@ ScDataPilotTablesObj::ScDataPilotTablesObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
     nTab( nT )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScDataPilotTablesObj::~ScDataPilotTablesObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScDataPilotTablesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -310,8 +310,8 @@ ScDataPilotTableObj* ScDataPilotTablesObj::GetObjectByIndex_Impl( sal_Int32 nInd
 {
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScDPCollection* pColl = pDoc->GetDPCollection();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDPCollection* pColl = rDoc.GetDPCollection();
         if ( pColl )
         {
             //  count tables on this sheet
@@ -459,8 +459,8 @@ sal_Int32 SAL_CALL ScDataPilotTablesObj::getCount() throw(RuntimeException, std:
     SolarMutexGuard aGuard;
     if ( pDocShell )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScDPCollection* pColl = pDoc->GetDPCollection();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDPCollection* pColl = rDoc.GetDPCollection();
         if ( pColl )
         {
             //  count tables on this sheet
@@ -520,8 +520,8 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScDPCollection* pColl = pDoc->GetDPCollection();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDPCollection* pColl = rDoc.GetDPCollection();
         if ( pColl )
         {
             //  count tables on this sheet
@@ -558,8 +558,8 @@ sal_Bool SAL_CALL ScDataPilotTablesObj::hasByName( const OUString& aName )
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScDPCollection* pColl = pDoc->GetDPCollection();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScDPCollection* pColl = rDoc.GetDPCollection();
         if ( pColl )
         {
             size_t nCount = pColl->GetCount();
@@ -579,13 +579,13 @@ ScDataPilotDescriptorBase::ScDataPilotDescriptorBase(ScDocShell* pDocSh) :
     maPropSet( lcl_GetDataPilotDescriptorBaseMap() ),
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScDataPilotDescriptorBase::~ScDataPilotDescriptorBase()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 Any SAL_CALL ScDataPilotDescriptorBase::queryInterface( const uno::Type& rType )
@@ -672,7 +672,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress&
     if (!pDPObject)
         throw RuntimeException();
 
-    ScSheetSourceDesc aSheetDesc(pDocShell->GetDocument());
+    ScSheetSourceDesc aSheetDesc(&pDocShell->GetDocument());
     if (pDPObject->IsSheetData())
         aSheetDesc = *pDPObject->GetSheetDesc();
 
@@ -792,7 +792,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                 uno::Sequence<beans::PropertyValue> aArgSeq;
                 if ( aValue >>= aArgSeq )
                 {
-                    ScImportSourceDesc aImportDesc(pDocShell->GetDocument());
+                    ScImportSourceDesc aImportDesc(&pDocShell->GetDocument());
 
                     const ScImportSourceDesc* pOldDesc = pDPObject->GetImportSourceDesc();
                     if (pOldDesc)
@@ -1351,7 +1351,7 @@ void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         ScRangeList aRanges;
         aRanges.Append( aRange );
         const ScUpdateRefHint& rRef = static_cast< const ScUpdateRefHint& >( rHint );
-        if ( aRanges.UpdateReference( rRef.GetMode(), GetDocShell()->GetDocument(), rRef.GetRange(),
+        if ( aRanges.UpdateReference( rRef.GetMode(), &GetDocShell()->GetDocument(), rRef.GetRange(),
                  rRef.GetDx(), rRef.GetDy(), rRef.GetDz() ) &&
              aRanges.size() == 1 )
         {
@@ -1373,14 +1373,14 @@ void ScDataPilotTableObj::Refreshed_Impl()
 
     // the EventObject holds a Ref to this object until after the listener calls
 
-    ScDocument* pDoc = GetDocShell()->GetDocument();
+    ScDocument& rDoc = GetDocShell()->GetDocument();
     for ( sal_uInt16 n=0; n<aModifyListeners.size(); n++ )
-        pDoc->AddUnoListenerCall( aModifyListeners[n], aEvent );
+        rDoc.AddUnoListenerCall( aModifyListeners[n], aEvent );
 }
 
 ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     ScDataPilotDescriptorBase( pDocSh ),
-    mpDPObject(new ScDPObject(pDocSh ? pDocSh->GetDocument() : NULL) )
+    mpDPObject(new ScDPObject(pDocSh ? &pDocSh->GetDocument() : NULL) )
 {
     ScDPSaveData aSaveData;
     // set defaults like in ScPivotParam constructor
@@ -1389,7 +1389,7 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     aSaveData.SetIgnoreEmptyRows( false );
     aSaveData.SetRepeatIfEmpty( false );
     mpDPObject->SetSaveData(aSaveData);
-    ScSheetSourceDesc aSheetDesc(pDocSh ? pDocSh->GetDocument() : NULL);
+    ScSheetSourceDesc aSheetDesc(pDocSh ? &pDocSh->GetDocument() : NULL);
     mpDPObject->SetSheetDesc(aSheetDesc);
     mpDPObject->GetSource();
 }

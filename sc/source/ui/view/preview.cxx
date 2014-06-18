@@ -152,8 +152,8 @@ ScPreview::~ScPreview()
 
 void ScPreview::UpdateDrawView()        // nTab must be right
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
-    ScDrawLayer* pModel = pDoc->GetDrawLayer();     // is not 0
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDrawLayer* pModel = rDoc.GetDrawLayer();     // is not 0
 
     // #114135#
     if ( pModel )
@@ -201,8 +201,8 @@ void ScPreview::TestLastPage()
             for (sal_uInt16 i=0; i<nTab; i++)
                 nTabStart += nPages[i];
 
-            ScDocument* pDoc = pDocShell->GetDocument();
-            nDisplayStart = lcl_GetDisplayStart( nTab, pDoc, nPages );
+            ScDocument& rDoc = pDocShell->GetDocument();
+            nDisplayStart = lcl_GetDisplayStart( nTab, &rDoc, nPages );
         }
         else        // empty Document
         {
@@ -224,8 +224,8 @@ void ScPreview::CalcPages()
 {
     WaitObject aWait( this );
 
-    ScDocument* pDoc = pDocShell->GetDocument();
-    nTabCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    nTabCount = rDoc.GetTableCount();
 
     SCTAB nStart = nTabsTested;
     if (!bValid)
@@ -284,7 +284,7 @@ void ScPreview::CalcPages()
         }
     }
 
-    nDisplayStart = lcl_GetDisplayStart( nTab, pDoc, nPages );
+    nDisplayStart = lcl_GetDisplayStart( nTab, &rDoc, nPages );
 
     if (nTabCount > nTabsTested)
         nTabsTested = nTabCount;
@@ -329,8 +329,8 @@ void ScPreview::RecalcPages()                   // only nPageNo is changed
             }
         }
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        nDisplayStart = lcl_GetDisplayStart( nTab, pDoc, nPages );
+        ScDocument& rDoc = pDocShell->GetDocument();
+        nDisplayStart = lcl_GetDisplayStart( nTab, &rDoc, nPages );
     }
 
     TestLastPage();         // to test, if after last page
@@ -382,8 +382,8 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     bool   bHeaderOn = false;
     bool   bFooterOn = false;
 
-    ScDocument* pDoc = pDocShell->GetDocument();
-    bool   bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    ScDocument& rDoc = pDocShell->GetDocument();
+    bool   bLayoutRTL = rDoc.IsLayoutRTL( nTab );
 
     Size aLocalPageSize;
     if ( bValidPage )
@@ -506,7 +506,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
             const ScPatternAttr& rDefPattern =
                 static_cast<const ScPatternAttr&>(
-                    pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
+                    rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN));
 
             boost::scoped_ptr<ScEditEngineDefaulter> pEditEng(
                 new ScEditEngineDefaulter(EditEngine::CreatePool(), true));
@@ -687,7 +687,7 @@ const ScPreviewLocationData& ScPreview::GetLocationData()
 {
     if ( !pLocationData )
     {
-        pLocationData = new ScPreviewLocationData( pDocShell->GetDocument(), this );
+        pLocationData = new ScPreviewLocationData( &pDocShell->GetDocument(), this );
         bLocationValid = false;
     }
     if ( !bLocationValid )
@@ -773,7 +773,7 @@ void ScPreview::SetPageNo( long nPage )
 
 long ScPreview::GetFirstPage(SCTAB nTabP)
 {
-    SCTAB nDocTabCount = pDocShell->GetDocument()->GetTableCount();
+    SCTAB nDocTabCount = pDocShell->GetDocument().GetTableCount();
     if (nTabP >= nDocTabCount)
         nTabP = nDocTabCount-1;
 
@@ -829,7 +829,7 @@ sal_uInt16 ScPreview::GetOptimalZoom(bool bWidthOnly)
     aWinSize.Width()  -= 2 * aMarginSize.Width();
     aWinSize.Height() -= 2 * aMarginSize.Height();
 
-    Size aLocalPageSize = lcl_GetDocPageSize( pDocShell->GetDocument(), nTab );
+    Size aLocalPageSize = lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab );
     if ( aLocalPageSize.Width() && aLocalPageSize.Height() )
     {
         long nZoomX = (long) ( aWinSize.Width() * 100  / ( aLocalPageSize.Width() * nWinScaleX ));
@@ -1069,18 +1069,18 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
         aButtonUpPt = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
 
-        long  nWidth = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Width();
-        long  nHeight = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Height();
+        long  nWidth = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Width();
+        long  nHeight = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Height();
 
         if( rMEvt.IsLeft() && GetPointer() == POINTER_HSIZEBAR )
         {
             SetPointer( Pointer( POINTER_ARROW ) );
 
 
-            ScDocument * pDoc = pDocShell->GetDocument();
-            OUString aOldName = pDoc->GetPageStyle( nTab );
-            bool bUndo = pDoc->IsUndoEnabled();
-            ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+            ScDocument& rDoc = pDocShell->GetDocument();
+            OUString aOldName = rDoc.GetPageStyle( nTab );
+            bool bUndo = rDoc.IsUndoEnabled();
+            ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
             SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
 
             if ( pStyleSheet )
@@ -1173,10 +1173,10 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
             }
             if( bMoveRulerAction )
             {
-                ScDocument * pDoc = pDocShell->GetDocument();
-                bool bUndo = pDoc->IsUndoEnabled();
-                ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
-                SfxStyleSheetBase* pStyleSheet = pStylePool->Find( pDoc->GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
+                ScDocument& rDoc = pDocShell->GetDocument();
+                bool bUndo = rDoc.IsUndoEnabled();
+                ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+                SfxStyleSheetBase* pStyleSheet = pStylePool->Find( rDoc.GetPageStyle( nTab ), SFX_STYLE_FAMILY_PAGE );
                 OSL_ENSURE( pStyleSheet, "PageStyle not found" );
                 if ( pStyleSheet )
                 {
@@ -1264,8 +1264,8 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
         if( rMEvt.IsLeft() && GetPointer() == POINTER_HSPLIT )
         {
             SetPointer(POINTER_ARROW);
-            ScDocument* pDoc = pDocShell->GetDocument();
-            bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+            ScDocument& rDoc = pDocShell->GetDocument();
+            bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
             bool bMoveRulerAction = true;
             if( aButtonDownPt.X() == aButtonUpPt.X() )
             {
@@ -1284,13 +1284,13 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 if( !bLayoutRTL )
                 {
                     nNewColWidth = (long) ( PixelToLogic( Point( rMEvt.GetPosPixel().X() - nRight[ nColNumberButttonDown ], 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
-                    nNewColWidth += pDocShell->GetDocument()->GetColWidth( nColNumberButttonDown, nTab );
+                    nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButttonDown, nTab );
                 }
                 else
                 {
 
                     nNewColWidth = (long) ( PixelToLogic( Point( nRight[ nColNumberButttonDown ] - rMEvt.GetPosPixel().X(), 0), aMMMode ).X() / HMM_PER_TWIPS ) * 100 / mnScale;
-                    nNewColWidth += pDocShell->GetDocument()->GetColWidth( nColNumberButttonDown, nTab );
+                    nNewColWidth += pDocShell->GetDocument().GetColWidth( nColNumberButttonDown, nTab );
                 }
 
                 if( nNewColWidth >= 0 )
@@ -1324,8 +1324,8 @@ void ScPreview::MouseMove( const MouseEvent& rMEvt )
     long    nTopMargin = 0;
     long    nBottomMargin = 0;
 
-    long    nWidth = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Width();
-    long    nHeight = (long) lcl_GetDocPageSize(pDocShell->GetDocument(), nTab).Height();
+    long    nWidth = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Width();
+    long    nHeight = (long) lcl_GetDocPageSize(&pDocShell->GetDocument(), nTab).Height();
 
     if ( nPageNo < nTotalPages )
     {
@@ -1587,8 +1587,8 @@ void ScPreview::DragMove( long nDragMovePos, sal_uInt16 nFlags )
 
 void ScPreview::DrawInvert( long nDragPos, sal_uInt16 nFlags )
 {
-    long  nHeight = (long) lcl_GetDocPageSize( pDocShell->GetDocument(), nTab ).Height();
-    long  nWidth = (long) lcl_GetDocPageSize( pDocShell->GetDocument(), nTab ).Width();
+    long  nHeight = (long) lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Height();
+    long  nWidth = (long) lcl_GetDocPageSize( &pDocShell->GetDocument(), nTab ).Width();
     if( nFlags == POINTER_HSIZEBAR || nFlags == POINTER_HSPLIT )
     {
         Rectangle aRect( nDragPos, -aOffset.Y(), nDragPos + 1,(long)( ( nHeight * HMM_PER_TWIPS ) - aOffset.Y()));

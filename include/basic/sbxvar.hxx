@@ -144,7 +144,7 @@ public:
     const SbxValues& GetValues_Impl() const { return aData; }
     virtual bool Put( const SbxValues& );
 
-    inline SbxValues * data() { return &aData; }
+    inline SbxValues& data() { return aData; }
 
     sal_Unicode GetChar() const;
     sal_Int16   GetInteger() const;

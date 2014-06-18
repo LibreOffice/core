@@ -354,7 +354,7 @@ ScViewData::ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh ) :
 
     if (pDocShell)
     {
-        pDoc = pDocShell->GetDocument();
+        pDoc = &pDocShell->GetDocument();
         *pOptions = pDoc->GetViewOptions();
     }
 
@@ -445,7 +445,7 @@ ScDocument* ScViewData::GetDocument() const
     if (pDoc)
         return pDoc;
     else if (pDocShell)
-        return pDocShell->GetDocument();
+        return &pDocShell->GetDocument();
 
     OSL_FAIL("kein Document an ViewData");
     return NULL;

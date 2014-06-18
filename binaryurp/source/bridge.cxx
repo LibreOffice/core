@@ -352,7 +352,7 @@ BinaryAny Bridge::mapCppToBinaryAny(css::uno::Any const & cppAny) {
     BinaryAny out;
     out.~BinaryAny();
     uno_copyAndConvertData(
-        out.get(), &in,
+        &out.get(), &in,
         css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()).get(),
         cppToBinaryMapping_.get());
     return out;
@@ -992,7 +992,7 @@ css::uno::Any Bridge::mapBinaryToCppAny(BinaryAny const & binaryAny) {
     css::uno::Any out;
     out.~Any();
     uno_copyAndConvertData(
-        &out, in.get(),
+        &out, &in.get(),
         css::uno::TypeDescription(cppu::UnoType< css::uno::Any >::get()).get(),
         binaryToCppMapping_.get());
     return out;

@@ -123,7 +123,7 @@ sal_uInt16 SwDoc::GetCurTOXMark( const SwPosition& rPos,
     {
         if( RES_TXTATR_TOXMARK != (pHt = rHts[n])->Which() )
             continue;
-        if( ( nSttIdx = *pHt->GetStart() ) < nAktPos )
+        if( ( nSttIdx = pHt->GetStart() ) < nAktPos )
         {
             // also check the end
             if( 0 == ( pEndIdx = pHt->End() ) ||
@@ -154,7 +154,7 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
     {
         // save attributes for Undo
         SwUndoResetAttr* pUndo = new SwUndoResetAttr(
-            SwPosition( rTxtNd, SwIndex( &rTxtNd, *pTxtTOXMark->GetStart() ) ),
+            SwPosition( rTxtNd, SwIndex( &rTxtNd, pTxtTOXMark->GetStart() ) ),
             RES_TXTATR_TOXMARK );
         GetIDocumentUndoRedo().AppendUndo( pUndo );
 
@@ -207,7 +207,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 
     const SwTxtNode *pTOXSrc = pMark->GetpTxtNd();
 
-    CompareNodeCntnt aAbsIdx( pTOXSrc->GetIndex(), *pMark->GetStart() );
+    CompareNodeCntnt aAbsIdx( pTOXSrc->GetIndex(), pMark->GetStart() );
     CompareNodeCntnt aPrevPos( 0, 0 );
     CompareNodeCntnt aNextPos( ULONG_MAX, SAL_MAX_INT32 );
     CompareNodeCntnt aMax( 0, 0 );
@@ -242,7 +242,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
 
         if ( bInReadOnly || !pCFrm->IsProtected() )
         {
-            CompareNodeCntnt aAbsNew( pTOXSrc->GetIndex(), *pMark->GetStart() );
+            CompareNodeCntnt aAbsNew( pTOXSrc->GetIndex(), pMark->GetStart() );
             switch( eDir )
             {
             // The following (a bit more complicated) statements make it
@@ -1150,7 +1150,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 pTOXSrc->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
                (!IsFromChapter() || ::lcl_FindChapterNode( *pTOXSrc, 0 ) == pOwnChapterNode ) &&
                !pTOXSrc->HasHiddenParaField() &&
-               !SwScriptInfo::IsInHiddenRange( *pTOXSrc, *pTxtMark->GetStart() ) )
+               !SwScriptInfo::IsInHiddenRange( *pTOXSrc, pTxtMark->GetStart() ) )
             {
                 SwTOXSortTabBase* pBase = 0;
                 if(TOX_INDEX == eTOXTyp)
@@ -1160,7 +1160,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                     if ( g_pBreakIt->GetBreakIter().is() )
                     {
                         aLocale = g_pBreakIt->GetLocale(
-                                        pTOXSrc->GetLang( *pTxtMark->GetStart() ) );
+                                        pTOXSrc->GetLang( pTxtMark->GetStart() ) );
                     }
 
                     pBase = new SwTOXIndex( *pTOXSrc, pTxtMark,
@@ -1292,7 +1292,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
             }
             else if(GetCaptionDisplay() == CAPTION_NUMBER)
             {
-                pNew->SetEndIndex(*pTxtFld->GetStart() + 1);
+                pNew->SetEndIndex(pTxtFld->GetStart() + 1);
             }
             InsertSorted(pNew);
         }
@@ -1696,7 +1696,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
         {
             SwTxtAttr* pAttr = pHints->GetStart(nHintIdx);
             const sal_Int32 nTmpEnd = pAttr->End() ? *pAttr->End() : 0;
-            if( nStartPos >= *pAttr->GetStart() &&
+            if( nStartPos >= pAttr->GetStart() &&
                 (nStartPos + 2) <= nTmpEnd &&
                 pAttr->Which() == RES_TXTATR_CHARFMT)
             {

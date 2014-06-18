@@ -144,7 +144,7 @@ void  LwpTable::Parse(IXFStream* /*pOutputStream*/)
 {
     LwpTableLayout* pLayout = dynamic_cast<LwpTableLayout*>(m_Layout.obj().get());
     if(pLayout)
-        return dynamic_cast<LwpSuperTableLayout*>(pLayout->GetParent()->obj().get());
+        return dynamic_cast<LwpSuperTableLayout*>(pLayout->GetParent().obj().get());
 
     return NULL;
 }

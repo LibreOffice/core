@@ -41,7 +41,7 @@ public:
 
     const unsigned char*    GetBuffer() const { return mpFileMap; }
     int                     GetFileSize() const { return mnFileSize; }
-    const OString*   GetFileName() const { return &maNativeFileName; }
+    const OString&          GetFileName() const { return maNativeFileName; }
     int                     GetLangBoost() const { return mnLangBoost; }
 
 private:
@@ -71,7 +71,7 @@ public:
 #endif
     void                  ReleaseFaceFT();
 
-    const OString* GetFontFileName() const   { return mpFontFile->GetFileName(); }
+    const OString&        GetFontFileName() const   { return mpFontFile->GetFileName(); }
     int                   GetFaceNum() const        { return mnFaceNum; }
     int                   GetSynthetic() const      { return mnSynthetic; }
     sal_IntPtr            GetFontId() const         { return mnFontId; }

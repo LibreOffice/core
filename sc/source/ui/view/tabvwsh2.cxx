@@ -78,7 +78,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 
     MakeDrawLayer();
 
-    ScTabView* pTabView = GetViewData()->GetView();
+    ScTabView* pTabView = GetViewData().GetView();
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
 
     Window*     pWin    = pTabView->GetActiveWin();
@@ -181,7 +181,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         //  Execute fuer die Form-Shell, um im Controller zu deselektieren
         if ( nNewId == SID_FM_CREATE_CONTROL )
         {
-            GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
+            GetViewData().GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
             GetViewFrame()->GetBindings().InvalidateAll(false);
             //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
         }
@@ -195,7 +195,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( nDrawSfxId == SID_FM_CREATE_CONTROL && nNewId != nDrawSfxId )
     {
         //  Wechsel von Control- zu Zeichenfunktion -> im Control-Controller deselektieren
-        GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
+        GetViewData().GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
         GetViewFrame()->GetBindings().InvalidateAll(false);
         //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
     }
@@ -443,7 +443,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
 
 bool ScTabViewShell::SelectObject( const OUString& rName )
 {
-    ScDrawView* pView = GetViewData()->GetScDrawView();
+    ScDrawView* pView = GetViewData().GetScDrawView();
     if (!pView)
         return false;
 

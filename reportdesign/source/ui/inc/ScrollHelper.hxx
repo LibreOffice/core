@@ -81,10 +81,10 @@ namespace rptui
 
         inline Point            getThumbPos() const { return Point(m_aHScroll.GetThumbPos(),m_aVScroll.GetThumbPos())/*m_aScrollOffset*/; }
         inline const OReportWindow& getReportWindow() const { return m_aReportWindow; }
-        void                    setTotalSize(sal_Int32 _nWidth ,sal_Int32 _nHeight);
+        void                    setTotalSize(sal_Int32 _nWidth, sal_Int32 _nHeight);
         inline Size             getTotalSize() const { return m_aTotalPixelSize; }
-        inline ScrollBar*       GetHScroll() { return &m_aHScroll; }
-        inline ScrollBar*       GetVScroll() { return &m_aVScroll; }
+        inline ScrollBar&       GetHScroll() { return m_aHScroll; }
+        inline ScrollBar&       GetVScroll() { return m_aVScroll; }
 
         // forwards
         void                    SetMode( DlgEdMode _eMode );

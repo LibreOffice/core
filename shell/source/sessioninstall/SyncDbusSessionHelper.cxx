@@ -36,7 +36,7 @@ namespace
                 g_error_free(m_pError);
                 throw RuntimeException(sMsg);
             }
-            GError** getRef() { return &m_pError; }
+            GError*& getRef() { return m_pError; }
     };
     static inline GDBusProxy* lcl_GetPackageKitProxy(const OUString& sInterface)
     {
@@ -49,7 +49,7 @@ namespace
                                "/org/freedesktop/PackageKit",
                                reinterpret_cast<const gchar*>(sFullInterface.getStr()),
                                NULL,
-                               error.getRef());
+                               &error.getRef());
         if(!proxy)
             throw RuntimeException("couldnt get a proxy!");
         return proxy;
@@ -87,7 +87,7 @@ namespace shell { namespace sessioninstall
                          G_DBUS_CALL_FLAGS_NONE,
                          -1, /* timeout */
                          NULL, /* cancellable */
-                         error.getRef());
+                         &error.getRef());
     }
 
     void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, sal_Bool& o_isInstalled ) throw (RuntimeException, std::exception)
@@ -104,7 +104,7 @@ namespace shell { namespace sessioninstall
                          G_DBUS_CALL_FLAGS_NONE,
                          -1, /* timeout */
                          NULL, /* cancellable */
-                         error.getRef()),GVariantDeleter());
+                         &error.getRef()),GVariantDeleter());
         if(result.get())
             o_isInstalled = g_variant_get_boolean(g_variant_get_child_value(result.get(),0)) ? sal_True : sal_False;
     }

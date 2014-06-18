@@ -727,7 +727,7 @@ lcl_ExportHints(
                     break;
                     case RES_TXTATR_CJK_RUBY:
                        //#i91534# GetEnd() == 0 mixes the order of ruby start/end
-                        if( *pAttr->GetEnd() == *pAttr->GetStart())
+                        if( *pAttr->GetEnd() == pAttr->GetStart())
                         {
                             lcl_InsertRubyPortion( *rPortionStack.top().first,
                                     xParent, pUnoCrsr, *pAttr, false);
@@ -738,17 +738,17 @@ lcl_ExportHints(
                     case RES_TXTATR_META:
                     case RES_TXTATR_METAFIELD:
                     {
-                        OSL_ENSURE(*pAttr->GetStart() != *pAttr->GetEnd(),
+                        OSL_ENSURE(pAttr->GetStart() != *pAttr->GetEnd(),
                                 "empty meta?");
                         if ((i_nStartPos > 0) &&
-                            (*pAttr->GetStart() < i_nStartPos))
+                            (pAttr->GetStart() < i_nStartPos))
                         {
                             // force skip pAttr and rest of attribute ends
                             // at nCurrentIndex
                             // because they are not contained in the meta pAttr
                             // and the meta pAttr itself is outside selection!
                             // (necessary for SwXMeta::createEnumeration)
-                            if (*pAttr->GetStart() + 1 == i_nStartPos)
+                            if (pAttr->GetStart() + 1 == i_nStartPos)
                             {
                                 nEndIndex = pHints->GetEndCount() - 1;
                             }
@@ -783,7 +783,7 @@ lcl_ExportHints(
     sal_uInt16 nStartIndex = 0;
     sal_uInt16 nNextStart = 0;
     while(nStartIndex < pHints->GetStartCount() &&
-        nCurrentIndex >= (nNextStart = (*pHints->GetStart(nStartIndex)->GetStart())))
+        nCurrentIndex >= (nNextStart = pHints->GetStart(nStartIndex)->GetStart()))
     {
         SwTxtAttr * const pAttr = pHints->GetStart(nStartIndex);
         sal_uInt16 nAttrWhich = pAttr->Which();
@@ -917,7 +917,7 @@ lcl_ExportHints(
                 break;
                 case RES_TXTATR_CJK_RUBY:
                     //#i91534# GetEnd() == 0 mixes the order of ruby start/end
-                    if(pAttr->GetEnd() && (*pAttr->GetEnd() != *pAttr->GetStart()))
+                    if(pAttr->GetEnd() && (*pAttr->GetEnd() != pAttr->GetStart()))
                     {
                         lcl_InsertRubyPortion( *rPortionStack.top().first,
                             xParent, pUnoCrsr, *pAttr, false);
@@ -925,7 +925,7 @@ lcl_ExportHints(
                 break;
                 case RES_TXTATR_META:
                 case RES_TXTATR_METAFIELD:
-                    if (*pAttr->GetStart() != *pAttr->GetEnd())
+                    if (pAttr->GetStart() != *pAttr->GetEnd())
                     {
                         if (!bRightMoveForbidden)
                         {
@@ -965,7 +965,7 @@ lcl_ExportHints(
         nStartIndex = 0;
         nNextStart = 0;
         while(nStartIndex < pHints->GetStartCount() &&
-            nCurrentIndex >= (nNextStart = (*pHints->GetStart(nStartIndex)->GetStart())))
+            nCurrentIndex >= (nNextStart = pHints->GetStart(nStartIndex)->GetStart()))
             nStartIndex++;
 
         nEndIndex = 0;
@@ -1253,7 +1253,7 @@ static void lcl_CreatePortions(
             pUnoCrsr->DeleteMark();
         }
 
-        SwTxtNode * const pTxtNode = pUnoCrsr->GetNode()->GetTxtNode();
+        SwTxtNode * const pTxtNode = pUnoCrsr->GetNode().GetTxtNode();
         if (!pTxtNode)
         {
             OSL_FAIL("lcl_CreatePortions: no TextNode - what now ?");

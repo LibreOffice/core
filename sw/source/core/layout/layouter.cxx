@@ -446,7 +446,7 @@ bool SwLayouter::MoveBwdSuppressed( const SwDoc& p_rDoc,
 
     // create hash map key
     tMoveBwdLayoutInfoKey aMoveBwdLayoutInfo;
-    aMoveBwdLayoutInfo.mnFrmId = p_rFlowFrm.GetFrm()->GetFrmId();
+    aMoveBwdLayoutInfo.mnFrmId = p_rFlowFrm.GetFrm().GetFrmId();
     aMoveBwdLayoutInfo.mnNewUpperPosX = p_rNewUpperFrm.Frm().Pos().X();
     aMoveBwdLayoutInfo.mnNewUpperPosY = p_rNewUpperFrm.Frm().Pos().Y();
     aMoveBwdLayoutInfo.mnNewUpperWidth = p_rNewUpperFrm.Frm().Width();

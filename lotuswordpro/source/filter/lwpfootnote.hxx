@@ -231,7 +231,7 @@ public:
     sal_uInt32 GetIndent(){ return m_nIndent;}
     sal_uInt32 GetAbove(){ return m_nAbove;}
     sal_uInt32 GetBelow(){ return m_nBelow;}
-    LwpBorderStuff* GetBorderStuff(){ return &m_BorderStuff;}
+    LwpBorderStuff& GetBorderStuff(){ return m_BorderStuff;}
     bool HasCustomLength(){ return (m_nFlag & CUSTOM_LENGTH) != 0;}
     bool HasSeparator(){ return (m_nFlag & HAS_SEPARATOR) != 0;}
     float GetTopBorderWidth(){ return m_BorderStuff.GetSideWidth(LwpBorderStuff::TOP);}
@@ -277,12 +277,12 @@ private:
     };
 
 public:
-    LwpFootnoteNumberOptions* GetFootnoteNumbering(){ return &m_FootnoteNumbering;}
-    LwpFootnoteNumberOptions* GetEndnoteDivisionNumbering(){ return &m_EndnoteDivisionNumbering;}
-    LwpFootnoteNumberOptions* GetEndnoteDivisionGroupNumbering(){ return &m_EndnoteDivisionGroupNumbering;}
-    LwpFootnoteNumberOptions* GetEndnoteDocNumbering(){ return &m_EndnoteDocNumbering;}
-    LwpFootnoteSeparatorOptions* GetFootnoteSeparator(){ return &m_FootnoteSeparator;}
-    LwpFootnoteSeparatorOptions* GetFootnoteContinuedSeparator(){ return &m_FootnoteContinuedSeparator;}
+    LwpFootnoteNumberOptions& GetFootnoteNumbering(){ return m_FootnoteNumbering;}
+    LwpFootnoteNumberOptions& GetEndnoteDivisionNumbering(){ return m_EndnoteDivisionNumbering;}
+    LwpFootnoteNumberOptions& GetEndnoteDivisionGroupNumbering(){ return m_EndnoteDivisionGroupNumbering;}
+    LwpFootnoteNumberOptions& GetEndnoteDocNumbering(){ return m_EndnoteDocNumbering;}
+    LwpFootnoteSeparatorOptions& GetFootnoteSeparator(){ return m_FootnoteSeparator;}
+    LwpFootnoteSeparatorOptions& GetFootnoteContinuedSeparator(){ return m_FootnoteContinuedSeparator;}
     bool GetContinuedFrom(){ return ((m_nFlag & FO_CONTINUEFROM) != 0);}
     bool GetContinuedOn(){ return ((m_nFlag & FO_CONTINUEON) != 0);}
     OUString GetContinuedOnMessage();

@@ -66,7 +66,7 @@ void SwModalRedlineAcceptDlg::Activate()
 
 void SwModalRedlineAcceptDlg::AcceptAll( bool bAccept )
 {
-    SvxTPFilter* pFilterTP = pImplDlg->GetChgCtrl()->GetFilterPage();
+    SvxTPFilter* pFilterTP = pImplDlg->GetChgCtrl().GetFilterPage();
 
     if (pFilterTP->IsDate() || pFilterTP->IsAuthor() ||
         pFilterTP->IsRange() || pFilterTP->IsAction())

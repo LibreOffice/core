@@ -309,7 +309,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 //  Notizen editieren -> keine neuen Textobjekte erzeugen,
                 //  stattdessen Textmodus verlassen
 
-                pViewShell->GetViewData()->GetDispatcher().
+                pViewShell->GetViewData().GetDispatcher().
                     Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             }
             else
@@ -332,7 +332,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 else if (pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
                 {
                     pView->UnmarkAllObj();
-                    ScViewData& rViewData = *pViewShell->GetViewData();
+                    ScViewData& rViewData = pViewShell->GetViewData();
                     rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
                     pView->MarkObj(pObj,pPV,false,false);
 
@@ -357,7 +357,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     if (!bStraightEnter)
     {
             pView->UnmarkAll();
-            ScViewData& rViewData = *pViewShell->GetViewData();
+            ScViewData& rViewData = pViewShell->GetViewData();
             rViewData.GetDispatcher().Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
     }
 
@@ -442,7 +442,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         {
               SdrMark* pMark = rMarkList.GetMark(0);
               SdrObject* pObj = pMark->GetMarkedSdrObj();
-              FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
+              FuPoor* pPoor = pViewShell->GetViewData().GetView()->GetDrawFuncPtr();
               FuText* pText = static_cast<FuText*>(pPoor);
             pText->StopDragMode(pObj );
         }
@@ -512,7 +512,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             {
                 pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
-                SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
+                SfxDispatcher& rDisp = pViewShell->GetViewData().GetDispatcher();
                 if ( pView->AreObjectsMarked() )
                     rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
                 else
@@ -532,7 +532,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         {
             pView->MarkObj(aPnt, -2, false, rMEvt.IsMod1());
 
-            SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
+            SfxDispatcher& rDisp = pViewShell->GetViewData().GetDispatcher();
             if ( pView->AreObjectsMarked() )
                 rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             else

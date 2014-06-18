@@ -47,7 +47,7 @@ public:
 
     BinaryAny & operator =(BinaryAny const & other) throw ();
 
-    uno_Any * get() throw () { return &data_; }
+    uno_Any& get() throw () { return data_; }
 
     com::sun::star::uno::TypeDescription getType() const throw ();
 

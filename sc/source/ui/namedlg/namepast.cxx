@@ -37,9 +37,9 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
     get(m_pBtnPaste, "paste");
     get(m_pBtnClose, "close");
 
-    ScDocument* pDoc = pShell->GetDocument();
+    ScDocument& rDoc = pShell->GetDocument();
     std::map<OUString, ScRangeName*> aCopyMap;
-    pDoc->GetRangeNameMap(aCopyMap);
+    rDoc.GetRangeNameMap(aCopyMap);
     std::map<OUString, ScRangeName*>::iterator itr = aCopyMap.begin(), itrEnd = aCopyMap.end();
     for (; itr != itrEnd; ++itr)
     {

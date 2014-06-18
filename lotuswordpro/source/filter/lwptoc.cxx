@@ -384,8 +384,8 @@ sal_uInt16 LwpTocSuperLayout::GetSeparatorType(sal_uInt16 index)
  */
 LwpTocLevelData * LwpTocSuperLayout::GetSearchLevelPtr(sal_uInt16 index)
 {
-    LwpObjectID * pID = m_SearchItems.GetHead(); // not necessary to check pID NULL or not
-    LwpTocLevelData * pObj = dynamic_cast<LwpTocLevelData *>(pID->obj().get());
+    LwpObjectID& rID = m_SearchItems.GetHead();
+    LwpTocLevelData * pObj = dynamic_cast<LwpTocLevelData *>(rID.obj().get());
 
     while(pObj)
     {
@@ -394,8 +394,8 @@ LwpTocLevelData * LwpTocSuperLayout::GetSearchLevelPtr(sal_uInt16 index)
             return pObj;
         }
 
-        pID = pObj->GetNext(); // not necessary to check pID NULL or not
-        pObj = dynamic_cast<LwpTocLevelData *>(pID->obj().get());
+        rID = pObj->GetNext();
+        pObj = dynamic_cast<LwpTocLevelData *>(rID.obj().get());
     }
 
     return NULL;
@@ -408,8 +408,8 @@ LwpTocLevelData * LwpTocSuperLayout::GetSearchLevelPtr(sal_uInt16 index)
  */
 LwpTocLevelData * LwpTocSuperLayout::GetNextSearchLevelPtr(sal_uInt16 index, LwpTocLevelData * pCurData)
 {
-    LwpObjectID * pID = pCurData->GetNext();
-    LwpTocLevelData * pObj = dynamic_cast<LwpTocLevelData *>(pID->obj().get());
+    LwpObjectID& rID = pCurData->GetNext();
+    LwpTocLevelData * pObj = dynamic_cast<LwpTocLevelData *>(rID.obj().get());
 
     while(pObj)
     {
@@ -418,8 +418,8 @@ LwpTocLevelData * LwpTocSuperLayout::GetNextSearchLevelPtr(sal_uInt16 index, Lwp
             return pObj;
         }
 
-        pID = pObj->GetNext(); // not necessary to check pID NULL or not
-        pObj = dynamic_cast<LwpTocLevelData *>(pID->obj().get());
+        rID = pObj->GetNext();
+        pObj = dynamic_cast<LwpTocLevelData *>(rID.obj().get());
     }
 
     return NULL;

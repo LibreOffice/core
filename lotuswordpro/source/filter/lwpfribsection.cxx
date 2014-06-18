@@ -128,7 +128,7 @@ void LwpFribSection::SetSectionName()
     LwpSection* pSection = GetSection();
     if(pSection)
     {
-        LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj().get());
+        LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
         pStory->SetSectionName(pSection->GetSectionName());
     }
 }
@@ -166,7 +166,7 @@ void LwpFribSection::ParseSection()
     }
     else
     {
-        LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID()->obj().get() );
+        LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID().obj().get() );
         if (m_Section.obj()->GetTag() == VO_INDEXSECTION)
         {
             //create a new section and add it to container
@@ -259,7 +259,7 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     //if there is no other frib after current firb, register master page in starting para of next page
     if(IsNextPageType()&&(!pFrib->HasNextFrib()))
     {
-        LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj().get());
+        LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
         pStory->SetCurrentLayout(m_pLayout);
         RegisterFillerPageStyle();
         return false;
@@ -290,7 +290,7 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
         case LwpLayout::StartOnOddPage: //fall throught
         case LwpLayout::StartOnEvenPage:
         {
-            LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj().get());
+            LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
             pStory->SetCurrentLayout(m_pLayout);
             //get odd page layout when the current pagelayout is mirror
             m_pLayout = pStory->GetCurrentLayout();
@@ -305,7 +305,7 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     }
 
     //register tab style;
-    LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj().get());
+    LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
     pStory->SetTabLayout(m_pLayout);
     m_pPara->RegisterTabStyle(pOverStyle);
 
@@ -316,7 +316,7 @@ bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     {
         XFSectionStyle* pSectStyle= new XFSectionStyle();
         //set margin
-        pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj().get());
+        pStory = static_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
         if(pStory)
         {
             LwpPageLayout* pCurrentLayout = pStory->GetCurrentLayout();
@@ -348,7 +348,7 @@ bool LwpMasterPage::IsNeedSection()
 {
     bool bNewSection = false;
     //get story
-    LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj().get());
+    LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID().obj().get());
     //if pagelayout is modified, register the pagelayout
     if(pStory->IsPMModified())
     {
@@ -379,8 +379,8 @@ XFSection* LwpMasterPage::CreateXFSection()
  */
 void LwpMasterPage::ParseSection(LwpFrib* pFrib)
 {
-    LwpFribPtr* pFribPtr = m_pPara->GetFribs();
-    //XFParagraph * pXFPara = pFribPtr->GetXFPara();
+    LwpFribPtr& rFribPtr = m_pPara->GetFribs();
+    //XFParagraph * pXFPara = rFribPtr.GetXFPara();
 
     //parse fillerpage text
     if(m_pLayout->HasFillerPageText(m_pPara->GetFoundry()))
@@ -388,7 +388,7 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
         XFParagraph *pPara = new XFParagraph();
         pPara->SetStyleName(GetFillerPageStyleName());
         m_pPara->AddXFContent(pPara);
-        pFribPtr->SetXFPara(pPara);
+        rFribPtr.SetXFPara(pPara);
 
         m_pLayout->ConvertFillerPageText(m_pPara->GetXFContainer());
     }
@@ -396,9 +396,9 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
     XFContentContainer* pContent = CreateXFSection();
     if(pContent)
     {
-        LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID()->obj().get() );
+        LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID().obj().get() );
         //delete the additional blank para, 06/28/2005
-        XFParagraph* pCurrPara = pFribPtr->GetXFPara();
+        XFParagraph* pCurrPara = rFribPtr.GetXFPara();
         if(!pCurrPara->HasContents())
         {
             XFContentContainer* pCurrContainer = m_pPara->GetXFContainer();
@@ -412,7 +412,7 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
     }
     else
     {
-        LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID()->obj().get() );
+        LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID().obj().get() );
         pContent = pStory->GetXFContent();
     }
     if(pContent)
@@ -425,7 +425,7 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
         XFParagraph *pNextPara = new XFParagraph();
         pNextPara->SetStyleName(GetStyleName());
         m_pPara->AddXFContent(pNextPara);
-        pFribPtr->SetXFPara(pNextPara);
+        rFribPtr.SetXFPara(pNextPara);
     }
 
 }

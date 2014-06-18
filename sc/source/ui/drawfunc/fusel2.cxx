@@ -62,20 +62,20 @@ bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
             if (SdrObjectPrimitiveHit(*pObject, rPos, nHitLog, *pPV, 0, false))
             {
-                ScViewData* pViewData = pViewShell->GetViewData();
+                ScViewData& rViewData = pViewShell->GetViewData();
                 ScSplitPos ePos = pViewShell->FindWindow( pWindow );
                 Point aLineStart = pObject->GetPoint(0);
                 Point aLineEnd   = pObject->GetPoint(1);
                 Point aPixel = pWindow->LogicToPixel( aLineStart );
                 SCsCOL nStartCol;
                 SCsROW nStartRow;
-                pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nStartCol, nStartRow );
+                rViewData.GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nStartCol, nStartRow );
                 aPixel = pWindow->LogicToPixel( aLineEnd );
                 SCsCOL nEndCol;
                 SCsROW nEndRow;
-                pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nEndCol, nEndRow );
-                SCsCOL nCurX = (SCsCOL) pViewData->GetCurX();
-                SCsROW nCurY = (SCsROW) pViewData->GetCurY();
+                rViewData.GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nEndCol, nEndRow );
+                SCsCOL nCurX = (SCsCOL) rViewData.GetCurX();
+                SCsROW nCurY = (SCsROW) rViewData.GetCurY();
                 bool bStart = ( Diff( rPos,aLineStart ) > Diff( rPos,aLineEnd ) );
                 if ( nCurX == nStartCol && nCurY == nStartRow )
                     bStart = false;
@@ -124,7 +124,7 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : 0;
     if( pPageView )
     {
-        const ScViewData& rViewData = *pViewShell->GetViewData();
+        const ScViewData& rViewData = pViewShell->GetViewData();
         ScDocument& rDoc = *rViewData.GetDocument();
         SCTAB nTab = rViewData.GetTabNo();
         ScDocShell* pDocSh = rViewData.GetDocShell();

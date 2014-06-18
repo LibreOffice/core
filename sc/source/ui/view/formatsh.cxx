@@ -151,9 +151,9 @@ ScFormatShell::~ScFormatShell()
 
 void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 {
-    ScDocument*             pDoc        = GetViewData()->GetDocument();
-    ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
-    SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
+    ScDocument*             pDoc          = GetViewData()->GetDocument();
+    ScTabViewShell*         pTabViewShell = GetViewData()->GetViewShell();
+    SfxStyleSheetBasePool*  pStylePool    = pDoc->GetStyleSheetPool();
 
     bool bProtected = false;
     SCTAB nTabCount = pDoc->GetTableCount();
@@ -264,12 +264,12 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     const SCTAB         nCurTab     = GetViewData()->GetTabNo();
     ScDocShell*         pDocSh      = GetViewData()->GetDocShell();
     ScTabViewShell*     pTabViewShell= GetViewData()->GetViewShell();
-    ScDocument*         pDoc        = pDocSh->GetDocument();
+    ScDocument&         rDoc        = pDocSh->GetDocument();
     ScMarkData&         rMark       = GetViewData()->GetMarkData();
     ScModule*           pScMod      = SC_MOD();
     OUString            aRefName;
-    bool                bUndo       = pDoc->IsUndoEnabled();
-    SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
+    bool                bUndo       = rDoc.IsUndoEnabled();
+    SfxStyleSheetBasePool*  pStylePool  = rDoc.GetStyleSheetPool();
 
     if ( (nSlotId == SID_STYLE_PREVIEW)
         || (nSlotId ==  SID_STYLE_END_PREVIEW) )
@@ -287,7 +287,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             if ( eFamily == SFX_STYLE_FAMILY_PARA ) // CellStyles
             {
                 ScMarkData aFuncMark( pViewData->GetMarkData() );
-                ScViewUtil::UnmarkFiltered( aFuncMark, pDoc );
+                ScViewUtil::UnmarkFiltered( aFuncMark, &rDoc );
                 aFuncMark.MarkToMulti();
 
                 if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
@@ -298,10 +298,10 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     ScRange aRange( nCol, nRow, nTab );
                     aFuncMark.SetMarkArea( aRange );
                 }
-                pDoc->SetPreviewSelection( aFuncMark );
+                rDoc.SetPreviewSelection( aFuncMark );
                 ScStyleSheet* pPreviewStyle = static_cast<ScStyleSheet*>( pStylePool->Find( aStyleName, eFamily ) );
-                pDoc->SetPreviewCellStyle( pPreviewStyle  );
-                ScPatternAttr aAttr( *pDoc->GetSelectionPattern( aFuncMark ) );
+                rDoc.SetPreviewCellStyle( pPreviewStyle  );
+                ScPatternAttr aAttr( *rDoc.GetSelectionPattern( aFuncMark ) );
                 aAttr.SetStyleSheet( pPreviewStyle );
 
                 SfxItemSet aItemSet( GetPool() );
@@ -310,7 +310,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
                 rNewSet.Put( aItemSet, false );
 
-                pDoc->ApplySelectionPattern( aNewAttrs, pDoc->GetPreviewSelection() );
+                rDoc.ApplySelectionPattern( aNewAttrs, rDoc.GetPreviewSelection() );
                 pTabViewShell->UpdateSelectionArea( aFuncMark, &aAttr );
             }
         }
@@ -319,20 +319,20 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
             // No mark at all happens when creating a new document, in which
             // case the selection pattern obtained would be empty (created of
             // GetPool()) anyway and nothing needs to be applied.
-            ScMarkData aPreviewMark( pDoc->GetPreviewSelection());
+            ScMarkData aPreviewMark( rDoc.GetPreviewSelection());
             if (aPreviewMark.IsMarked() || aPreviewMark.IsMultiMarked())
             {
-                ScPatternAttr aAttr( *pDoc->GetSelectionPattern( aPreviewMark ) );
-                if ( ScStyleSheet* pPreviewStyle = pDoc->GetPreviewCellStyle() )
+                ScPatternAttr aAttr( *rDoc.GetSelectionPattern( aPreviewMark ) );
+                if ( ScStyleSheet* pPreviewStyle = rDoc.GetPreviewCellStyle() )
                     aAttr.SetStyleSheet( pPreviewStyle );
-                pDoc->SetPreviewCellStyle(NULL);
+                rDoc.SetPreviewCellStyle(NULL);
 
                 SfxItemSet aItemSet( GetPool() );
 
                 ScPatternAttr aNewAttrs( GetViewData()->GetDocument()->GetPool() );
                 SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
                 rNewSet.Put( aItemSet, false );
-                pDoc->ApplySelectionPattern( aNewAttrs, aPreviewMark );
+                rDoc.ApplySelectionPattern( aNewAttrs, aPreviewMark );
                 pTabViewShell->UpdateSelectionArea( aPreviewMark, &aAttr );
             }
         }
@@ -554,7 +554,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         // ScViewData* pViewData = GetViewData();
                         SCCOL       nCol = pViewData->GetCurX();
                         SCROW       nRow = pViewData->GetCurY();
-                        pAttrItem = pDoc->GetPattern( nCol, nRow, nCurTab );
+                        pAttrItem = rDoc.GetPattern( nCol, nRow, nCurTab );
 
                         SfxItemSet aAttrSet = pAttrItem->GetItemSet();
                         aAttrSet.ClearItem( ATTR_MERGE );
@@ -592,7 +592,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 // enthalten.
                                 //!!! bei Gelenheit mal eine Methode, die
                                 //    das fuer einen bestimmten Style macht
-                                pDoc->StylesToNames();
+                                rDoc.StylesToNames();
                                 bConvertBack = true;
                                 pStylePool->Remove(pStyleSheet);
                             }
@@ -608,9 +608,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             if ( bConvertBack )
                                 // Namen zu Style-Pointer
-                                pDoc->UpdStlShtPtrsFrmNms();
+                                rDoc.UpdStlShtPtrsFrmNms();
                             else
-                                pDoc->GetPool()->CellStyleCreated( aStyleName );
+                                rDoc.GetPool()->CellStyleCreated( aStyleName );
 
                             // Attribute uebernehmen und Style anwenden
                             pStyleSheet->GetItemSet().Put( aAttrSet );
@@ -665,7 +665,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         nRetMask = sal_uInt16( NULL != pStyleSheet );
                         if ( pStyleSheet )
                         {
-                            if ( pDoc->RemovePageStyleInUse( pStyleSheet->GetName() ) )
+                            if ( rDoc.RemovePageStyleInUse( pStyleSheet->GetName() ) )
                             {
                                 ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(true), nCurTab ).UpdatePages();
                                 rBindings.Invalidate( SID_STATUS_PAGESTYLE );
@@ -700,14 +700,14 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         if ( pStyleSheet && !pScMod->GetIsWaterCan() )
                         {
                             ScUndoApplyPageStyle* pUndoAction = 0;
-                            SCTAB nTabCount = pDoc->GetTableCount();
+                            SCTAB nTabCount = rDoc.GetTableCount();
                             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
                             for (; itr != itrEnd && *itr < nTabCount; ++itr)
                             {
-                                OUString aOldName = pDoc->GetPageStyle( *itr );
+                                OUString aOldName = rDoc.GetPageStyle( *itr );
                                 if ( aOldName != aStyleName )
                                 {
-                                    pDoc->SetPageStyle( *itr, aStyleName );
+                                    rDoc.SetPageStyle( *itr, aStyleName );
                                     ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(true), *itr ).UpdatePages();
                                     if( !pUndoAction )
                                         pUndoAction = new ScUndoApplyPageStyle( pDocSh, aStyleName );
@@ -729,14 +729,14 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                     case SID_STYLE_NEW_BY_EXAMPLE:
                     {
-                        const OUString& rStrCurStyle = pDoc->GetPageStyle( nCurTab );
+                        const OUString& rStrCurStyle = rDoc.GetPageStyle( nCurTab );
 
                         if ( rStrCurStyle != aStyleName )
                         {
                             SfxStyleSheetBase*  pCurStyle = pStylePool->Find( rStrCurStyle, eFamily );
                             SfxItemSet          aAttrSet  = pCurStyle->GetItemSet();
                             SCTAB               nInTab;
-                            bool                bUsed = pDoc->IsPageStyleInUse( aStyleName, &nInTab );
+                            bool                bUsed = rDoc.IsPageStyleInUse( aStyleName, &nInTab );
 
                             // wenn bereits vorhanden, erstmal entfernen...
                             if ( pStyleSheet )
@@ -807,7 +807,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 LanguageType eLang =
                                     ((SvxLanguageItem*)&rSet.Get(
                                     ATTR_LANGUAGE_FORMAT ))->GetLanguage();
-                                sal_uLong nLangFormat = pDoc->GetFormatTable()->
+                                sal_uLong nLangFormat = rDoc.GetFormatTable()->
                                     GetFormatForLanguageIfBuiltIn( nFormat, eLang );
                                 if ( nLangFormat != nFormat )
                                 {
@@ -820,7 +820,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             }
 
                             boost::scoped_ptr<SvxNumberInfoItem> pNumberInfoItem(
-                                pTabViewShell->MakeNumberInfoItem(pDoc, GetViewData()));
+                                pTabViewShell->MakeNumberInfoItem(&rDoc, GetViewData()));
 
                             pDocSh->PutItem( *pNumberInfoItem );
                             nRsc = RID_SCDLG_STYLES_PAR;
@@ -886,12 +886,12 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             bool bNumFormatChanged;
                             if ( ScGlobal::CheckWidthInvalidate(
                                                 bNumFormatChanged, aOldSet, rNewSet ) )
-                                pDoc->InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
+                                rDoc.InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
 
-                            SCTAB nTabCount = pDoc->GetTableCount();
+                            SCTAB nTabCount = rDoc.GetTableCount();
                             for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                                if (pDoc->IsStreamValid(nTab))
-                                    pDoc->SetStreamValid(nTab, false);
+                                if (rDoc.IsStreamValid(nTab))
+                                    rDoc.SetStreamValid(nTab, false);
 
                             sal_uLong nOldFormat = ((const SfxUInt32Item&)aOldSet.
                                                     Get( ATTR_VALUE_FORMAT )).GetValue();
@@ -899,7 +899,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                                     Get( ATTR_VALUE_FORMAT )).GetValue();
                             if ( nNewFormat != nOldFormat )
                             {
-                                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                                SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                                 const SvNumberformat* pOld = pFormatter->GetEntry( nOldFormat );
                                 const SvNumberformat* pNew = pFormatter->GetEntry( nNewFormat );
                                 if ( pOld && pNew && pOld->GetLanguage() != pNew->GetLanguage() )
@@ -907,7 +907,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                                     pNew->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
                             }
 
-                            pDoc->GetPool()->CellStyleCreated( pStyleSheet->GetName() );
+                            rDoc.GetPool()->CellStyleCreated( pStyleSheet->GetName() );
                         }
                         else
                         {
@@ -915,13 +915,13 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             OUString aNewName = pStyleSheet->GetName();
                             if ( aNewName != aOldName &&
-                                    pDoc->RenamePageStyleInUse( aOldName, aNewName ) )
+                                    rDoc.RenamePageStyleInUse( aOldName, aNewName ) )
                             {
                                 rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                                 rBindings.Invalidate( FID_RESET_PRINTZOOM );
                             }
 
-                            pDoc->ModifyStyleSheet( *pStyleSheet, *pOutSet );
+                            rDoc.ModifyStyleSheet( *pStyleSheet, *pOutSet );
                             rBindings.Invalidate( FID_RESET_PRINTZOOM );
                         }
 
@@ -1604,10 +1604,10 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
 void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
+    ScTabViewShell*     pTabViewShell = GetViewData()->GetViewShell();
     SfxBindings&        rBindings = pViewData->GetBindings();
     const SfxItemSet*   pNewAttrs = rReq.GetArgs();
-    sal_uInt16 nSlot = rReq.GetSlot();
+    sal_uInt16          nSlot = rReq.GetSlot();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
     ScDocument* pDoc = GetViewData()->GetDocument();
@@ -2414,7 +2414,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                 //      sal_uLong nNumberFormat = ((const SfxUInt32Item&)rAttrSet.Get(
                 //                                  ATTR_VALUE_FORMAT )).GetValue();
                 //
-                //      SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                //      SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
                 //      const SvNumberformat* pFormatEntry = pFormatter->GetEntry( nNumberFormat );
                 //      if ( pFormatEntry )
                 //          aFormatCode = pFormatEntry->GetFormatstring();

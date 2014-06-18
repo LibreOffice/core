@@ -53,7 +53,7 @@ bool SwCrsrShell::GoNextCell( bool bAppendLine )
 
         // Check if we have to move the cursor to a covered cell before
         // proceeding:
-        const SwNode* pTableBoxStartNode = pCrsr->GetNode()->FindTableBoxStartNode();
+        const SwNode* pTableBoxStartNode = pCrsr->GetNode().FindTableBoxStartNode();
         const SwTableBox* pTableBox = 0;
 
         if ( pCrsr->GetCrsrRowSpanOffset() )

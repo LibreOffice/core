@@ -3609,10 +3609,10 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         // half of the field was clicked on.
                         SwTxtAttr const*const pTxtFld(aFieldAtPos.pFndTxtAttr);
                         if (rSh.GetCurrentShellCursor().GetPoint()->nContent
-                                .GetIndex() != *pTxtFld->GetStart())
+                                .GetIndex() != pTxtFld->GetStart())
                         {
                             assert(rSh.GetCurrentShellCursor().GetPoint()->nContent
-                                    .GetIndex() == (*pTxtFld->GetStart() + 1));
+                                    .GetIndex() == (pTxtFld->GetStart() + 1));
                             rSh.Left( CRSR_SKIP_CHARS, false, 1, false );
                         }
                         // don't go into the !bOverSelect block below - it moves
@@ -4507,7 +4507,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
                                     // and CH_TXT_ATR_INPUTFIELDEND
                                     rSh.SttSelect();
-                                    rSh.SelectTxt( *(aCntntAtPos.pFndTxtAttr->GetStart()) + 1,
+                                    rSh.SelectTxt( aCntntAtPos.pFndTxtAttr->GetStart() + 1,
                                                    *(aCntntAtPos.pFndTxtAttr->End()) - 1 );
                                 }
                                 else

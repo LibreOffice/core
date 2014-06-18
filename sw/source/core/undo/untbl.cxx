@@ -500,7 +500,7 @@ void SwUndoTblToTxt::UndoImpl(::sw::UndoRedoContext & rContext)
     pPam->DeleteMark();
     pPam->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
     pPam->SetMark();
-    pPam->GetPoint()->nNode = *pPam->GetNode()->StartOfSectionNode();
+    pPam->GetPoint()->nNode = *pPam->GetNode().StartOfSectionNode();
     pPam->Move( fnMoveForward, fnGoCntnt );
     pPam->Exchange();
     pPam->Move( fnMoveBackward, fnGoCntnt );
@@ -629,7 +629,7 @@ void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
     pPam->SetMark();            // log off all indices
     pPam->DeleteMark();
 
-    SwTableNode* pTblNd = pPam->GetNode()->GetTableNode();
+    SwTableNode* pTblNd = pPam->GetNode().GetTableNode();
     OSL_ENSURE( pTblNd, "Could not find any TableNode" );
 
     if( pTblNd->GetTable().IsA( TYPE( SwDDETable )) )
@@ -656,7 +656,7 @@ void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoTblToTxt::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwPaM *const pPam = & rContext.GetRepeatPaM();
-    SwTableNode *const pTblNd = pPam->GetNode()->FindTableNode();
+    SwTableNode *const pTblNd = pPam->GetNode().FindTableNode();
     if( pTblNd )
     {
         // move cursor out of table
@@ -798,7 +798,7 @@ void SwUndoTxtToTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoTxtToTbl::RepeatImpl(::sw::RepeatContext & rContext)
 {
     // no Table In Table
-    if (!rContext.GetRepeatPaM().GetNode()->FindTableNode())
+    if (!rContext.GetRepeatPaM().GetNode().FindTableNode())
     {
         rContext.GetDoc().TextToTable( aInsTblOpts, rContext.GetRepeatPaM(),
                                         cTrenner, nAdjust,
@@ -855,7 +855,7 @@ void SwUndoTblHeadline::RedoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoTblHeadline::RepeatImpl(::sw::RepeatContext & rContext)
 {
     SwTableNode *const pTblNd =
-        rContext.GetRepeatPaM().GetNode()->FindTableNode();
+        rContext.GetRepeatPaM().GetNode().FindTableNode();
     if( pTblNd )
     {
         rContext.GetDoc().SetRowsToRepeat( pTblNd->GetTable(), nNewHeadline );
@@ -1924,7 +1924,7 @@ void SwUndoTblNdsChg::RedoImpl(::sw::UndoRedoContext & rContext)
 SwUndoTblMerge::SwUndoTblMerge( const SwPaM& rTblSel )
     : SwUndo( UNDO_TABLE_MERGE ), SwUndRng( rTblSel ), pHistory( 0 )
 {
-    const SwTableNode* pTblNd = rTblSel.GetNode()->FindTableNode();
+    const SwTableNode* pTblNd = rTblSel.GetNode().FindTableNode();
     OSL_ENSURE( pTblNd, "Where is the TableNode?" );
     pSaveTbl = new _SaveTable( pTblNd->GetTable() );
     pMoves = new SwUndoMoves;

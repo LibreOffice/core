@@ -234,9 +234,9 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
                     {
                         ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
                         if ( bArrows )
-                            ScDetectiveFunc( pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
+                            ScDetectiveFunc( &pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
                         if ( bComments )
-                            ScDetectiveFunc::UpdateAllComments( *pDocSh->GetDocument() );
+                            ScDetectiveFunc::UpdateAllComments( pDocSh->GetDocument() );
                     }
                     pObjSh = SfxObjectShell::GetNext( *pObjSh );
                 }
@@ -283,7 +283,7 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
 
                 pDocSh->CalcOutputFactor();
 
-                SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
+                SCTAB nTabCount = pDocSh->GetDocument().GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                     pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
             }
@@ -400,7 +400,7 @@ void ScModule::Execute( SfxRequest& rReq )
                 {   // Toggle
                     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
                     if ( pDocSh )
-                        bSet = !pDocSh->GetDocument()->GetDocOptions().IsAutoSpell();
+                        bSet = !pDocSh->GetDocument().GetDocOptions().IsAutoSpell();
                     else
                         bSet = !GetDocOptions().IsAutoSpell();
                 }
@@ -502,12 +502,12 @@ void ScModule::Execute( SfxRequest& rReq )
                 if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( GetPool().GetWhich(nSlot), true, &pItem ) )
                 {
                     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
-                    ScDocument* pDoc = pDocSh ? pDocSh->GetDocument() : NULL;
-                    if ( pDoc )
+                    if ( pDocSh )
                     {
+                        ScDocument& rDoc = pDocSh->GetDocument();
                         LanguageType eNewLang = ((SvxLanguageItem*)pItem)->GetLanguage();
                         LanguageType eLatin, eCjk, eCtl;
-                        pDoc->GetLanguage( eLatin, eCjk, eCtl );
+                        rDoc.GetLanguage( eLatin, eCjk, eCtl );
                         LanguageType eOld = ( nSlot == SID_ATTR_CHAR_CJK_LANGUAGE ) ? eCjk :
                                             ( ( nSlot == SID_ATTR_CHAR_CTL_LANGUAGE ) ? eCtl : eLatin );
                         if ( eNewLang != eOld )
@@ -519,7 +519,7 @@ void ScModule::Execute( SfxRequest& rReq )
                             else
                                 eLatin = eNewLang;
 
-                            pDoc->SetLanguage( eLatin, eCjk, eCtl );
+                            rDoc.SetLanguage( eLatin, eCjk, eCtl );
 
                             ScInputHandler* pInputHandler = GetInputHdl();
                             if ( pInputHandler )
@@ -598,21 +598,17 @@ void ScModule::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxUInt16Item( nWhich, sal::static_int_cast<sal_uInt16>(GetAppOptions().GetAppMetric()) ) );
                 break;
             case SID_AUTOSPELL_CHECK:
-                rSet.Put( SfxBoolItem( nWhich, pDocSh->GetDocument()->GetDocOptions().IsAutoSpell()) );
+                rSet.Put( SfxBoolItem( nWhich, pDocSh->GetDocument().GetDocOptions().IsAutoSpell()) );
                 break;
             case SID_ATTR_LANGUAGE:
             case ATTR_CJK_FONT_LANGUAGE:        // WID for SID_ATTR_CHAR_CJK_LANGUAGE
             case ATTR_CTL_FONT_LANGUAGE:        // WID for SID_ATTR_CHAR_CTL_LANGUAGE
                 {
-                    ScDocument* pDoc = pDocSh->GetDocument();
-                    if ( pDoc )
-                    {
-                        LanguageType eLatin, eCjk, eCtl;
-                        pDoc->GetLanguage( eLatin, eCjk, eCtl );
-                        LanguageType eLang = ( nWhich == ATTR_CJK_FONT_LANGUAGE ) ? eCjk :
-                                            ( ( nWhich == ATTR_CTL_FONT_LANGUAGE ) ? eCtl : eLatin );
-                        rSet.Put( SvxLanguageItem( eLang, nWhich ) );
-                    }
+                    LanguageType eLatin, eCjk, eCtl;
+                    pDocSh->GetDocument().GetLanguage( eLatin, eCjk, eCtl );
+                    LanguageType eLang = ( nWhich == ATTR_CJK_FONT_LANGUAGE ) ? eCjk :
+                                        ( ( nWhich == ATTR_CTL_FONT_LANGUAGE ) ? eCtl : eLatin );
+                    rSet.Put( SvxLanguageItem( eLang, nWhich ) );
                 }
                 break;
         }
@@ -971,7 +967,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     ScTabViewShell*         pViewSh = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
     ScDocShell*             pDocSh  = PTR_CAST(ScDocShell, SfxObjectShell::Current());
-    ScDocument*             pDoc    = pDocSh ? pDocSh->GetDocument() : NULL;
+    ScDocument*             pDoc    = pDocSh ? &pDocSh->GetDocument() : NULL;
     const SfxPoolItem*      pItem   = NULL;
     bool bRepaint = false;
     bool bUpdateMarks = false;
@@ -1062,16 +1058,16 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
         if ( pViewSh )
         {
-            ScViewData*             pViewData = pViewSh->GetViewData();
-            const ScViewOptions&    rOldOpt   = pViewData->GetOptions();
+            ScViewData&             rViewData = pViewSh->GetViewData();
+            const ScViewOptions&    rOldOpt   = rViewData.GetOptions();
 
             bool bAnchorList = ( rOldOpt.GetOption( VOPT_ANCHOR ) !=
                                  rNewOpt.GetOption( VOPT_ANCHOR ) );
 
             if ( rOldOpt != rNewOpt )
             {
-                pViewData->SetOptions( rNewOpt ); // Changes rOldOpt
-                pViewData->GetDocument()->SetViewOptions( rNewOpt );
+                rViewData.SetOptions( rNewOpt ); // Changes rOldOpt
+                rViewData.GetDocument()->SetViewOptions( rNewOpt );
                 if (pDocSh)
                     pDocSh->SetDocumentModified();
                 bRepaint = true;
@@ -1095,15 +1091,15 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
         if ( pViewSh )
         {
-            ScViewData*          pViewData = pViewSh->GetViewData();
-            ScViewOptions        aNewViewOpt( pViewData->GetOptions() );
+            ScViewData&          rViewData = pViewSh->GetViewData();
+            ScViewOptions        aNewViewOpt( rViewData.GetOptions() );
             const ScGridOptions& rOldGridOpt = aNewViewOpt.GetGridOptions();
 
             if ( rOldGridOpt != aNewGridOpt )
             {
                 aNewViewOpt.SetGridOptions( aNewGridOpt );
-                pViewData->SetOptions( aNewViewOpt );
-                pViewData->GetDocument()->SetViewOptions( aNewViewOpt );
+                rViewData.SetOptions( aNewViewOpt );
+                rViewData.GetDocument()->SetViewOptions( aNewViewOpt );
                 pDocSh->SetDocumentModified();
                 bRepaint = true;
             }
@@ -1329,7 +1325,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             {
                 ScDocShell* pOneDocSh = ((ScDocShell*)pObjSh);
                 pOneDocSh->CalcOutputFactor();
-                SCTAB nTabCount = pOneDocSh->GetDocument()->GetTableCount();
+                SCTAB nTabCount = pOneDocSh->GetDocument().GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                     pOneDocSh->AdjustRowHeight( 0, MAXROW, nTab );
             }
@@ -1349,8 +1345,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 pHdl->UpdateRefDevice();
 
             // update view scale
-            ScViewData* pViewData = pOneViewSh->GetViewData();
-            pOneViewSh->SetZoom( pViewData->GetZoomX(), pViewData->GetZoomY(), false );
+            ScViewData& rViewData = pOneViewSh->GetViewData();
+            pOneViewSh->SetZoom( rViewData.GetZoomX(), rViewData.GetZoomY(), false );
 
             // repaint
             pOneViewSh->PaintGrid();
@@ -1893,14 +1889,14 @@ IMPL_LINK_NOARG(ScModule, IdleHandler)
 
     if ( pDocSh )
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
-        bAutoSpell = pDoc->GetDocOptions().IsAutoSpell();
+        ScDocument& rDoc = pDocSh->GetDocument();
+        bAutoSpell = rDoc.GetDocOptions().IsAutoSpell();
         if (pDocSh->IsReadOnly())
             bAutoSpell = false;
 
-        sc::DocumentLinkManager& rLinkMgr = pDoc->GetDocLinkManager();
+        sc::DocumentLinkManager& rLinkMgr = rDoc.GetDocLinkManager();
         bool bLinks = rLinkMgr.idleCheckLinks();
-        bool bWidth = pDoc->IdleCalcTextWidth();
+        bool bWidth = rDoc.IdleCalcTextWidth();
 
         bMore = bLinks || bWidth; // Still something at all?
 
@@ -2008,13 +2004,13 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         ScDocShell*     pDocSh = PTR_CAST(ScDocShell,
                                             SfxObjectShell::Current());
         ScDocOptions    aCalcOpt = pDocSh
-                            ? pDocSh->GetDocument()->GetDocOptions()
+                            ? pDocSh->GetDocument().GetDocOptions()
                             : GetDocOptions();
 
         ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,
                                             SfxViewShell::Current());
         ScViewOptions   aViewOpt = pViewSh
-                            ? pViewSh->GetViewData()->GetOptions()
+                            ? pViewSh->GetViewData().GetOptions()
                             : GetViewOptions();
 
         ScUserListItem  aULItem( SCITEM_USERLIST );
@@ -2085,7 +2081,7 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
         if (pDocSh)
         {
             ScCalcConfig aConfig( aOptions.GetCalcConfig());
-            aConfig.MergeDocumentSpecific( pDocSh->GetDocument()->GetCalcConfig());
+            aConfig.MergeDocumentSpecific( pDocSh->GetDocument().GetCalcConfig());
             aOptions.SetCalcConfig( aConfig);
         }
         pRet->Put( ScTpFormulaItem( SID_SCFORMULAOPTIONS, aOptions ) );

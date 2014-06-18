@@ -77,13 +77,13 @@ ScDocDefaultsObj::ScDocDefaultsObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh ),
     aPropertyMap(lcl_GetDocDefaultsMap())
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScDocDefaultsObj::~ScDocDefaultsObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScDocDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -134,35 +134,25 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
     {
         if(aPropertyName.equalsAscii(SC_UNO_STANDARDDEC) )
         {
-            ScDocument* pDoc = pDocShell->GetDocument();
-            if (pDoc)
+            ScDocument& rDoc = pDocShell->GetDocument();
+            ScDocOptions aDocOpt(rDoc.GetDocOptions());
+            sal_Int16 nValue = 0;
+            if (aValue >>= nValue)
             {
-                ScDocOptions aDocOpt(pDoc->GetDocOptions());
-                sal_Int16 nValue = 0;
-                if (aValue >>= nValue)
-                {
-                    aDocOpt.SetStdPrecision(static_cast<sal_uInt16> (nValue));
-                    pDoc->SetDocOptions(aDocOpt);
-                }
+                aDocOpt.SetStdPrecision(static_cast<sal_uInt16> (nValue));
+                rDoc.SetDocOptions(aDocOpt);
             }
-            else
-                throw uno::RuntimeException();
         }
         else if (aPropertyName.equalsAscii(SC_UNO_TABSTOPDIS) )
         {
-            ScDocument* pDoc = pDocShell->GetDocument();
-            if (pDoc)
+            ScDocument& rDoc = pDocShell->GetDocument();
+            ScDocOptions aDocOpt(rDoc.GetDocOptions());
+            sal_Int32 nValue = 0;
+            if (aValue >>= nValue)
             {
-                ScDocOptions aDocOpt(pDoc->GetDocOptions());
-                sal_Int32 nValue = 0;
-                if (aValue >>= nValue)
-                {
-                    aDocOpt.SetTabDistance(static_cast<sal_uInt16>(HMMToTwips(nValue)));
-                    pDoc->SetDocOptions(aDocOpt);
-                }
+                aDocOpt.SetTabDistance(static_cast<sal_uInt16>(HMMToTwips(nValue)));
+                rDoc.SetDocOptions(aDocOpt);
             }
-            else
-                throw uno::RuntimeException();
         }
     }
     else if ( pEntry->nWID == ATTR_FONT_LANGUAGE ||
@@ -181,9 +171,9 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             else
                 eNew = LANGUAGE_NONE;
 
-            ScDocument* pDoc = pDocShell->GetDocument();
+            ScDocument& rDoc = pDocShell->GetDocument();
             LanguageType eLatin, eCjk, eCtl;
-            pDoc->GetLanguage( eLatin, eCjk, eCtl );
+            rDoc.GetLanguage( eLatin, eCjk, eCtl );
 
             if ( pEntry->nWID == ATTR_CJK_FONT_LANGUAGE )
                 eCjk = eNew;
@@ -192,12 +182,12 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             else
                 eLatin = eNew;
 
-            pDoc->SetLanguage( eLatin, eCjk, eCtl );
+            rDoc.SetLanguage( eLatin, eCjk, eCtl );
         }
     }
     else
     {
-        ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+        ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
         SfxPoolItem* pNewItem = pPool->GetDefaultItem(pEntry->nWID).Clone();
 
         if( !pNewItem->PutValue( aValue, pEntry->nMemberId ) )
@@ -230,36 +220,26 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
     {
         if(aPropertyName.equalsAscii(SC_UNO_STANDARDDEC) )
         {
-            ScDocument* pDoc = pDocShell->GetDocument();
-            if (pDoc)
-            {
-                const ScDocOptions& aDocOpt = pDoc->GetDocOptions();
-                sal_uInt16 nPrec = aDocOpt.GetStdPrecision();
-                // the max value of unsigned 16-bit integer is used as the flag
-                // value for unlimited precision, c.f.
-                // SvNumberFormatter::UNLIMITED_PRECISION.
-                if (nPrec <= ::std::numeric_limits<sal_Int16>::max())
-                    aRet <<= static_cast<sal_Int16> (nPrec);
-            }
-            else
-                throw uno::RuntimeException();
+            ScDocument& rDoc = pDocShell->GetDocument();
+            const ScDocOptions& aDocOpt = rDoc.GetDocOptions();
+            sal_uInt16 nPrec = aDocOpt.GetStdPrecision();
+            // the max value of unsigned 16-bit integer is used as the flag
+            // value for unlimited precision, c.f.
+            // SvNumberFormatter::UNLIMITED_PRECISION.
+            if (nPrec <= ::std::numeric_limits<sal_Int16>::max())
+                aRet <<= static_cast<sal_Int16> (nPrec);
         }
         else if (aPropertyName.equalsAscii(SC_UNO_TABSTOPDIS) )
         {
-            ScDocument* pDoc = pDocShell->GetDocument();
-            if (pDoc)
-            {
-                const ScDocOptions& aDocOpt = pDoc->GetDocOptions();
-                sal_Int32 nValue (TwipsToEvenHMM(aDocOpt.GetTabDistance()));
-                aRet <<= nValue;
-            }
-            else
-                throw uno::RuntimeException();
+            ScDocument& rDoc = pDocShell->GetDocument();
+            const ScDocOptions& aDocOpt = rDoc.GetDocOptions();
+            sal_Int32 nValue (TwipsToEvenHMM(aDocOpt.GetTabDistance()));
+            aRet <<= nValue;
         }
     }
     else
     {
-        ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+        ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
         const SfxPoolItem& rItem = pPool->GetDefaultItem( pEntry->nWID );
         rItem.QueryValue( aRet, pEntry->nMemberId );
     }
@@ -296,7 +276,7 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const OUString
     {
         //  check if pool default is set
 
-        ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+        ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
         if ( pPool->GetPoolDefaultItem( nWID ) != NULL )
             eRet = beans::PropertyState_DIRECT_VALUE;
     }
@@ -333,7 +313,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const OUString& aPropertyN
 
     if (pEntry->nWID)
     {
-        ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+        ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
         pPool->ResetPoolDefaultItem( pEntry->nWID );
 
         ItemsChanged();
@@ -358,7 +338,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropert
     uno::Any aRet;
     if (pEntry->nWID)
     {
-        ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
+        ScDocumentPool* pPool = pDocShell->GetDocument().GetPool();
         const SfxPoolItem* pItem = pPool->GetItem2( pEntry->nWID, SFX_ITEMS_DEFAULT );
         if (pItem)
             pItem->QueryValue( aRet, pEntry->nMemberId );

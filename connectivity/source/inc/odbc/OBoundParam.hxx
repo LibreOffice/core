@@ -73,9 +73,9 @@ namespace connectivity
             // getBindLengthBuffer
             // Returns the length buffer to be used when binding to a parameter
 
-            SQLLEN* getBindLengthBuffer ()
+            SQLLEN& getBindLengthBuffer ()
             {
-                return &paramLength;
+                return paramLength;
             }
 
 

@@ -1115,7 +1115,7 @@ bool SwAutoFormat::DeleteCurNxtPara( const OUString& rNxtPara )
     m_aDelPam.SetMark();
 
     m_aDelPam.GetPoint()->nNode++;
-    SwTxtNode* pTNd = m_aDelPam.GetNode()->GetTxtNode();
+    SwTxtNode* pTNd = m_aDelPam.GetNode().GetTxtNode();
     if( !pTNd )
     {
         // then delete only up to end of the paragraph
@@ -1148,7 +1148,7 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
     m_aDelPam.SetMark();
 
     m_aDelPam.GetMark()->nNode--;
-    SwTxtNode* pTNd = m_aDelPam.GetNode( false )->GetTxtNode();
+    SwTxtNode* pTNd = m_aDelPam.GetNode( false ).GetTxtNode();
     if( pTNd )
         // first use the previous text node
         m_aDelPam.GetMark()->nContent.Assign(pTNd, pTNd->GetTxt().getLength());
@@ -1156,7 +1156,7 @@ void SwAutoFormat::DelEmptyLine( bool bTstNextPara )
     {
         // then try the next (at the beginning of a Doc, table cells, borders, ...)
         m_aDelPam.GetMark()->nNode += 2;
-        pTNd = m_aDelPam.GetNode( false )->GetTxtNode();
+        pTNd = m_aDelPam.GetNode( false ).GetTxtNode();
         if( pTNd )
         {
             m_aDelPam.GetMark()->nContent.Assign( pTNd, 0 );
@@ -1221,7 +1221,7 @@ void SwAutoFormat::DelPrevPara()
     m_aDelPam.SetMark();
 
     m_aDelPam.GetPoint()->nNode--;
-    SwTxtNode* pTNd = m_aDelPam.GetNode()->GetTxtNode();
+    SwTxtNode* pTNd = m_aDelPam.GetNode().GetTxtNode();
     if( pTNd )
     {
         // use the previous text node first
@@ -1571,7 +1571,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
             {
                 m_aDelPam.SetMark();
                 m_aDelPam.GetMark()->nNode++;
-                m_aDelPam.GetNode(false)->GetTxtNode()->SetAttrListLevel( nLvl );
+                m_aDelPam.GetNode(false).GetTxtNode()->SetAttrListLevel( nLvl );
             }
 
             m_pCurTxtNd->SetAttrListLevel(nLvl);

@@ -306,7 +306,7 @@ extern "C" {
 
         PluginOutputStream* pStream = new PluginOutputStream( pImpl,
                                                               "", 0, 0 );
-        *stream = pStream->getStream();
+        *stream = &pStream->getStream();
 
         try
         {
@@ -443,10 +443,10 @@ extern "C" {
             do
             {
                 nNow = pPlugin->getPluginComm()->
-                    NPP_WriteReady( pPlugin->getNPPInstance(),
+                    NPP_WriteReady( &pPlugin->getNPPInstance(),
                                     stream );
                 nNow = pPlugin->getPluginComm()->
-                    NPP_Write( pPlugin->getNPPInstance(),
+                    NPP_Write( &pPlugin->getNPPInstance(),
                                stream,
                                rangeList->offset + nPos,
                                nNow,

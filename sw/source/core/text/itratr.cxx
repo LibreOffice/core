@@ -157,7 +157,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
         SwTxtAttr *pTxtAttr;
         // While we've not reached the end of the StartArray && the TextAttribute starts at position 0...
         while ( ( nStartIndex < pHints->GetStartCount() ) &&
-                !(*(pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()) )
+                !((pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()) )
         {
             // open the TextAttributes
             Chg( pTxtAttr );
@@ -199,7 +199,7 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
         {
             // schliesse die TextAttribute, deren StartPos vor
             // oder an der alten nPos lag, die z.Z. geoeffnet sind.
-            if (*pTxtAttr->GetStart() <= nPos)  Rst( pTxtAttr );
+            if (pTxtAttr->GetStart() <= nPos)  Rst( pTxtAttr );
             nEndIndex++;
         }
     }
@@ -214,7 +214,7 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
     // Solange wir noch nicht am Ende des StartArrays angekommen sind &&
     // das TextAttribut vor oder an der neuen Position beginnt ...
     while ( ( nStartIndex < pHints->GetStartCount() ) &&
-           (*(pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()<=nNewPos))
+            ((pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()<=nNewPos) )
     {
 
         // open the TextAttributes, whose ends lie behind the new position
@@ -280,7 +280,7 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
             SwTxtAttr *const pAttr(pHints->GetStart(i));
             if (!pAttr->IsFormatIgnoreStart())
             {
-                nNext = *pAttr->GetStart();
+                nNext = pAttr->GetStart();
                 break;
             }
         }

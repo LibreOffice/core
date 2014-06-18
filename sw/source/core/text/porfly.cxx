@@ -198,7 +198,7 @@ sal_Int32 SwTxtFrm::CalcFlyPos( SwFrmFmt* pSearch )
     OSL_ENSURE( pHints, "CalcFlyPos: Not Found!" );
     if( !pFound )
         return COMPLETE_STRING;
-    return *pFound->GetStart();
+    return pFound->GetStart();
 }
 
 void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const

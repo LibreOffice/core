@@ -118,7 +118,7 @@ sal_uInt16 SwEditShell::GetCntType() const
     if( IsTableMode() )
         nRet = CNT_TXT;
     else
-        switch( GetCrsr()->GetNode()->GetNodeType() )
+        switch( GetCrsr()->GetNode().GetNodeType() )
         {
         case ND_TEXTNODE:   nRet = CNT_TXT; break;
         case ND_GRFNODE:    nRet = CNT_GRF; break;
@@ -246,7 +246,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     StartAllAction();
 
     SwPaM* pCrsr = getShellCrsr( true );
-    SwTxtNode* pTNd = pCrsr->GetNode()->GetTxtNode();
+    SwTxtNode* pTNd = pCrsr->GetNode().GetTxtNode();
 
     SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, cChar );
     // FIXME: this _must_ be called with reference to the actual node text!
@@ -271,7 +271,7 @@ bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, OUString& rWord )
     bool bRet;
     SwPaM* pCrsr = getShellCrsr( true );
     const sal_Int32 nPos = pCrsr->GetPoint()->nContent.GetIndex();
-    SwTxtNode* pTNd = pCrsr->GetNode()->GetTxtNode();
+    SwTxtNode* pTNd = pCrsr->GetNode().GetTxtNode();
     if( pTNd && nPos )
     {
         SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, 0 );

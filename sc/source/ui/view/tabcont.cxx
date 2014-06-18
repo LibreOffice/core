@@ -467,7 +467,7 @@ void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 void ScTabControl::DoDrag( const Region& /* rRegion */ )
 {
     ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = pDocSh->GetDocument();
 
     SCTAB nTab = pViewData->GetTabNo();
     ScRange aTabRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
@@ -477,7 +477,7 @@ void ScTabControl::DoDrag( const Region& /* rRegion */ )
 
     ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
     ScClipParam aClipParam(aTabRange, false);
-    pDoc->CopyToClip(aClipParam, pClipDoc, &aTabMark, false);
+    rDoc.CopyToClip(aClipParam, pClipDoc, &aTabMark, false);
 
     TransferableObjectDescriptor aObjDesc;
     pDocSh->FillTransferableObjectDescriptor( aObjDesc );
@@ -504,7 +504,7 @@ static sal_uInt16 lcl_DocShellNr( ScDocument* pDoc )
     {
         if ( pShell->Type() == TYPE(ScDocShell) )
         {
-            if ( ((ScDocShell*)pShell)->GetDocument() == pDoc )
+            if ( &((ScDocShell*)pShell)->GetDocument() == pDoc )
                 return nShellCnt;
 
             ++nShellCnt;

@@ -1044,7 +1044,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
 
     sal_uLong nRstLnNum =  pSet ? ((SwFmtLineNumber&)pSet->Get( RES_LINENUMBER )).GetStartValue() : 0;
 
-    const SwTableNode* pTblNd = rExport.pCurPam->GetNode()->FindTableNode();
+    const SwTableNode* pTblNd = rExport.pCurPam->GetNode().FindTableNode();
     const SwSectionNode* pSectNd;
     if ( pTblNd )
     {

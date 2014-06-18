@@ -301,10 +301,10 @@ void GL3DBarChart::render()
     if(!mbValidContext)
         return;
 
-    mrWindow.getContext()->makeCurrent();
+    mrWindow.getContext().makeCurrent();
     Size aSize = mrWindow.GetSizePixel();
     mpRenderer->SetSize(aSize);
-    mrWindow.getContext()->setWinSize(aSize);
+    mrWindow.getContext().setWinSize(aSize);
     if(mbNeedsNewRender)
     {
         for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
@@ -319,7 +319,7 @@ void GL3DBarChart::render()
     }
     mpRenderer->ProcessUnrenderedShape(mbNeedsNewRender);
     mbNeedsNewRender = false;
-    mrWindow.getContext()->swapBuffers();
+    mrWindow.getContext().swapBuffers();
 }
 
 void GL3DBarChart::update()

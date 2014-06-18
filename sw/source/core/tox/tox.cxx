@@ -221,7 +221,7 @@ OUString SwTOXMark::GetText() const
         OSL_ENSURE( pEndIdx, "TOXMark without mark!");
         if( pEndIdx )
         {
-            const sal_Int32 nStt = *pTxtAttr->GetStart();
+            const sal_Int32 nStt = pTxtAttr->GetStart();
             return pTxtAttr->GetpTxtNd()->GetExpandTxt( nStt, *pEndIdx-nStt );
         }
     }

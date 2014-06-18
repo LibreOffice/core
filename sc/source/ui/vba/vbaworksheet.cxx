@@ -234,7 +234,7 @@ ScVbaWorksheet::createSheetCopyInNewDoc(const OUString& aCurrSheetName)
 
     ScDocShell* pShell = excel::getDocShell( xModel );
     OUString aCodeName;
-    pShell->GetDocument()->GetCodeName( 0, aCodeName );
+    pShell->GetDocument().GetCodeName( 0, aCodeName );
     return uno::Reference< excel::XWorksheet >( getUnoDocModule( aCodeName, pShell ), uno::UNO_QUERY_THROW );
 }
 
@@ -344,8 +344,8 @@ ScVbaWorksheet::getEnableSelection() throw (uno::RuntimeException, std::exceptio
     if ( ScVbaWorksheets::nameExists(xSpreadDoc, getName(), nTab) )
     {
         uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-        ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
-        ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
+        ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
         bool bLockedCells = false;
         bool bUnlockedCells = false;
         if( pProtect )
@@ -379,8 +379,8 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
     if ( ScVbaWorksheets::nameExists(xSpreadDoc, getName(), nTab) )
     {
         uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-        ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
-        ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
+        ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
         // default is xlNoSelection
         bool bLockedCells = false;
         bool bUnlockedCells = false;
@@ -407,8 +407,8 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
 sal_Bool SAL_CALL ScVbaWorksheet::getAutoFilterMode() throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
-    ScDBData* pDBData = pDoc->GetAnonymousDBData(getSheetID());
+    ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
+    ScDBData* pDBData = rDoc.GetAnonymousDBData(getSheetID());
     if (pDBData)
         return pDBData->HasAutoFilter();
     return false;
@@ -418,19 +418,19 @@ void SAL_CALL ScVbaWorksheet::setAutoFilterMode( sal_Bool bAutoFilterMode ) thro
 {
     uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
     ScDocShell* pDocShell = excel::getDocShell( xModel );
-    ScDocument* pDoc = pDocShell->GetDocument();
-    ScDBData* pDBData = pDoc->GetAnonymousDBData(getSheetID());
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScDBData* pDBData = rDoc.GetAnonymousDBData(getSheetID());
     if (pDBData)
     {
         pDBData->SetAutoFilter(bAutoFilterMode);
         ScRange aRange;
         pDBData->GetArea(aRange);
-        if (bAutoFilterMode && pDoc)
-            pDoc->ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
+        if (bAutoFilterMode)
+            rDoc.ApplyFlagsTab( aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(), aRange.aStart.Row(),
                                     aRange.aStart.Tab(), SC_MF_AUTO );
-        else  if (!bAutoFilterMode && pDoc)
-            pDoc->RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
+        else if (!bAutoFilterMode)
+            rDoc.RemoveFlagsTab(aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(), aRange.aStart.Row(),
                                     aRange.aStart.Tab(), SC_MF_AUTO );
         ScRange aPaintRange(aRange.aStart, aRange.aEnd);
@@ -519,8 +519,8 @@ ScVbaWorksheet::getProtectDrawingObjects() throw (uno::RuntimeException, std::ex
     if ( bSheetExists )
     {
         uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-        ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
-        ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
+        ScTableProtection* pProtect = rDoc.GetTabProtection(nTab);
         if ( pProtect )
             return pProtect->isOptionEnabled( ScTableProtection::OBJECTS );
     }

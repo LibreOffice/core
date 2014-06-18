@@ -669,7 +669,7 @@ bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
 
 bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
 {
-    if( ((const SwNode*)pPam->GetNode()) != GetNode() )
+    if( &pPam->GetNode() != GetNode() )
         pPam->GetPoint()->nNode = *((SwTxtFrm*)this)->GetTxtNode();
 
     SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *pPam->GetPoint(),
@@ -704,7 +704,7 @@ bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
 
 bool SwTxtFrm::RightMargin(SwPaM *pPam, bool bAPI) const
 {
-    if( ((const SwNode*)pPam->GetNode()) != GetNode() )
+    if( &pPam->GetNode() != GetNode() )
         pPam->GetPoint()->nNode = *((SwTxtFrm*)this)->GetTxtNode();
 
     SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *pPam->GetPoint(),
@@ -758,8 +758,8 @@ bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
     SwSetToRightMargin aSet;
 
     if( IsInTab() &&
-        pPam->GetNode( true )->StartOfSectionNode() !=
-        pPam->GetNode( false )->StartOfSectionNode() )
+        pPam->GetNode( true ).StartOfSectionNode() !=
+        pPam->GetNode( false ).StartOfSectionNode() )
     {
         // If the PaM is located within different boxes, we have a table selection,
         // which is handled by the base class.
@@ -1145,8 +1145,8 @@ bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
 {
 
     if ( IsInTab() &&
-        pPam->GetNode( true )->StartOfSectionNode() !=
-        pPam->GetNode( false )->StartOfSectionNode() )
+        pPam->GetNode( true ).StartOfSectionNode() !=
+        pPam->GetNode( false ).StartOfSectionNode() )
     {
         // If the PaM is located within different boxes, we have a table selection,
         // which is handled by the base class.
@@ -1375,7 +1375,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
     else
     {
         SwFontAccess aFontAccess( pColl, pSh );
-        pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
+        pFnt = new SwFont( aFontAccess.Get()->GetFont() );
         pFnt->ChkMagic( pSh, pFnt->GetActual() );
     }
     OutputDevice* pOut = pSh->GetOut();

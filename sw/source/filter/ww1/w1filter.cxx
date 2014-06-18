@@ -1745,7 +1745,7 @@ static sal_uLong GuessPicSize(W1_PIC* pPic)
 void Ww1Picture::WriteBmp(SvStream& rOut)
 {
     long nSize = pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb));
-    sal_uInt8* p = pPic->rgbGet();
+    sal_uInt8* p = &pPic->rgbGet();
     sal_uInt16 maxx = pPic->mfp.xExtGet();
     sal_uInt16 padx = ((maxx + 7) / 8) * 8;
     sal_uInt16 maxy = pPic->mfp.yExtGet();
@@ -1869,7 +1869,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
     case 8: // embedded metafile
     {
         SvMemoryStream aOut(8192, 8192);
-        aOut.Write(pPic->rgbGet(), pPic->lcbGet() -
+        aOut.Write(&pPic->rgbGet(), pPic->lcbGet() -
          (sizeof(*pPic)-sizeof(pPic->rgb)));
         aOut.Seek(0);
         GDIMetaFile aWMF;
@@ -1889,7 +1889,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
     case 94: // embedded name SH:??? Which one is it? Embedded or Name ?
     case 98: // TIFF name
     {
-        OUString aDir( (sal_Char*)pPic->rgbGet(),
+        OUString aDir( (sal_Char*)&pPic->rgbGet(),
                 (sal_uInt16)(pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb))),
                 RTL_TEXTENCODING_MS_1252 );
 

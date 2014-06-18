@@ -276,12 +276,12 @@ public:
     inline void ResetPreps();
 
     // Get/Set methods
-    inline SwRepaint *GetRepaint() { return &aRepaint; }
-    inline const SwRepaint *GetRepaint() const { return &aRepaint; }
-    inline SwCharRange *GetReformat() { return &aReformat; }
-    inline const SwCharRange *GetReformat() const { return &aReformat; }
-    inline long *GetDelta() { return &nDelta; }
-    inline const long *GetDelta() const { return &nDelta; }
+    inline SwRepaint& GetRepaint() { return aRepaint; }
+    inline const SwRepaint& GetRepaint() const { return aRepaint; }
+    inline SwCharRange& GetReformat() { return aReformat; }
+    inline const SwCharRange& GetReformat() const { return aReformat; }
+    inline long& GetDelta() { return nDelta; }
+    inline const long& GetDelta() const { return nDelta; }
     inline SwScriptInfo& GetScriptInfo() { return aScriptInfo; }
     inline const SwScriptInfo& GetScriptInfo() const { return aScriptInfo; }
 

@@ -47,14 +47,14 @@ using namespace ::com::sun::star;
 static bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
                              sal_uInt16 nWidth, sal_uInt16 nHeight )
 {
-    const SwTxtFly *pTxtFly = rInf.GetTxtFly();
-    if( pTxtFly && pTxtFly->IsOn() )
+    const SwTxtFly& rTxtFly = rInf.GetTxtFly();
+    if( rTxtFly.IsOn() )
     {
         SwRect aRect( rInf.GetTxtFrm()->Frm().Pos(), Size( nWidth, nHeight) );
         aRect.Pos() += rInf.GetTxtFrm()->Prt().Pos();
         aRect.Pos().X() += rInf.X();
         aRect.Pos().Y() = rInf.Y();
-        aRect = pTxtFly->GetFrm( aRect );
+        aRect = rTxtFly.GetFrm( aRect );
         return aRect.HasArea();
     }
 

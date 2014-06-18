@@ -87,7 +87,7 @@ public:
         pStrm->SkipExtra();
     }
 
-    inline LwpObjectID* GetTabRackID();
+    inline LwpObjectID& GetTabRackID();
     inline bool IsTabRackOverridden();
     inline void Override(LwpTabOverride* pOther);
     inline void OverrideTabRack(LwpObjectID* pTabRackID);
@@ -106,9 +106,9 @@ private:
     };
 };
 
-inline LwpObjectID* LwpTabOverride::GetTabRackID()
+inline LwpObjectID& LwpTabOverride::GetTabRackID()
 {
-    return &m_aTabRackID;
+    return m_aTabRackID;
 }
 
 inline void LwpTabOverride::Override(LwpTabOverride* pOther)
@@ -117,7 +117,7 @@ inline void LwpTabOverride::Override(LwpTabOverride* pOther)
     {
         if (IsTabRackOverridden())
             //m_aTabRackID = *(pOther->GetTabRackID());
-            pOther->OverrideTabRack(GetTabRackID());
+            pOther->OverrideTabRack(&GetTabRackID());
     }
 }
 

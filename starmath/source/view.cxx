@@ -1374,9 +1374,8 @@ SmEditWindow *SmViewShell::GetEditWindow()
 
     if (pWrapper != NULL)
     {
-        SmEditWindow *pEditWin  = pWrapper->GetEditWindow();
-        SAL_WARN_IF( !pEditWin, "starmath", "SmEditWindow missing" );
-        return pEditWin;
+        SmEditWindow& rEditWin = pWrapper->GetEditWindow();
+        return &rEditWin;
     }
 
     return NULL;

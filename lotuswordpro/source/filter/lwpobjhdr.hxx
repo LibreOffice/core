@@ -114,7 +114,7 @@ public:
     bool Read(LwpSvStream &pStrm);
     inline sal_uInt32 GetTag();
     inline sal_uInt32 GetSize();
-    inline LwpObjectID* GetID();
+    inline LwpObjectID& GetID();
     inline bool IsCompressed();
 };
 
@@ -126,9 +126,9 @@ inline sal_uInt32 LwpObjectHeader::GetSize()
 {
     return m_nSize;
 }
-inline LwpObjectID* LwpObjectHeader::GetID()
+inline LwpObjectID& LwpObjectHeader::GetID()
 {
-    return &m_ID;
+    return m_ID;
 }
 inline bool LwpObjectHeader::IsCompressed()
 {

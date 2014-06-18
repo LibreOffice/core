@@ -2474,7 +2474,7 @@ sal_uLong SwTableBox::IsValidNumTxtNd( bool bCheckAttr ) const
                         const SwTxtAttr* pAttr = (*pHts)[ n ];
                         if( RES_TXTATR_NOEND_BEGIN <= pAttr->Which() )
                         {
-                            if ( (*pAttr->GetStart() == nNextSetField)
+                            if ( (pAttr->GetStart() == nNextSetField)
                                  && (pAttr->Which() == RES_TXTATR_FIELD))
                             {
                                 // #i104949# hideous hack for report builder:
@@ -2488,7 +2488,7 @@ sal_uLong SwTableBox::IsValidNumTxtNd( bool bCheckAttr ) const
                                            (pField)->GetSubType() &
                                         nsSwExtendedSubType::SUB_INVISIBLE)))
                                 {
-                                    nNextSetField = *pAttr->GetStart() + 1;
+                                    nNextSetField = pAttr->GetStart() + 1;
                                     continue;
                                 }
                             }

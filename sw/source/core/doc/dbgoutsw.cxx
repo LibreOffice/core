@@ -301,7 +301,7 @@ static const OUString lcl_dbg_out(const SwTxtAttr & rAttr)
 {
     OUString aStr("[ ");
 
-    aStr += OUString::number(*rAttr.GetStart());
+    aStr += OUString::number(rAttr.GetStart());
     aStr += "->";
     aStr += OUString::number(*rAttr.End());
     aStr += " ";

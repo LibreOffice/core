@@ -922,7 +922,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 
         // skip fly frames from pages before the current page
         while( nFlyIdx < nFlyCount &&
-               pImpl->GetFlyCache(nFlyIdx)->nPageNum < nPgNum )
+               pImpl->GetFlyCache(nFlyIdx).nPageNum < nPgNum )
             ++nFlyIdx;
 
         // sort cached objects on this page by ordnum
@@ -931,7 +931,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 
         SwFlyCache* pFlyC;
         while( nIdx < nFlyCount &&
-               ( pFlyC = pImpl->GetFlyCache( nIdx ) )->nPageNum == nPgNum )
+               ( pFlyC = &pImpl->GetFlyCache( nIdx ) )->nPageNum == nPgNum )
         {
             aFlyCacheSet.insert( pFlyC );
             ++nIdx;
@@ -1016,11 +1016,11 @@ bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
 
         // skip fly frames from pages before the current page
         while( nIdx < nCnt &&
-               nPgNum > (pFlyC = pCache->GetFlyCache( nIdx ))->nPageNum )
+               nPgNum > (pFlyC = &pCache->GetFlyCache( nIdx ))->nPageNum )
             ++nIdx;
 
         while( nIdx < nCnt &&
-               nOrdNum != (pFlyC = pCache->GetFlyCache( nIdx ))->nOrdNum )
+               nOrdNum != (pFlyC = &pCache->GetFlyCache( nIdx ))->nOrdNum )
             ++nIdx;
         if( nIdx < nCnt )
         {

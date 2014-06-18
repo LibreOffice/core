@@ -204,8 +204,8 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleRowExtentAt( sal_Int32
         }
         else
         {
-            ScDocument* pDoc = mpViewShell->GetDocument();
-            const ScMergeAttr* pItem = (const ScMergeAttr*)pDoc->GetAttr(
+            ScDocument& rDoc = mpViewShell->GetDocument();
+            const ScMergeAttr* pItem = (const ScMergeAttr*)rDoc.GetAttr(
                 static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE );
             if ( pItem && pItem->GetRowMerge() > 0 )
                 nRows = pItem->GetRowMerge();
@@ -238,8 +238,8 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnExtentAt( sal_In
         }
         else
         {
-            ScDocument* pDoc = mpViewShell->GetDocument();
-            const ScMergeAttr* pItem = (const ScMergeAttr*)pDoc->GetAttr(
+            ScDocument& rDoc = mpViewShell->GetDocument();
+            const ScMergeAttr* pItem = (const ScMergeAttr*)rDoc.GetAttr(
                 static_cast<SCCOL>(rColInfo.nDocIndex), static_cast<SCROW>(rRowInfo.nDocIndex), mpTableInfo->GetTab(), ATTR_MERGE );
             if ( pItem && pItem->GetColMerge() > 0 )
                 nColumns = pItem->GetColMerge();
@@ -614,14 +614,14 @@ OUString SAL_CALL ScAccessiblePreviewTable::createAccessibleName()
 {
     OUString sName(SC_RESSTR(STR_ACC_TABLE_NAME));
 
-    if (mpViewShell && mpViewShell->GetDocument())
+    if (mpViewShell)
     {
         FillTableInfo();
 
         if ( mpTableInfo )
         {
             OUString sCoreName;
-            if (mpViewShell->GetDocument()->GetName( mpTableInfo->GetTab(), sCoreName ))
+            if (mpViewShell->GetDocument().GetName( mpTableInfo->GetTab(), sCoreName ))
                 sName = sName.replaceFirst("%1", sCoreName);
         }
     }

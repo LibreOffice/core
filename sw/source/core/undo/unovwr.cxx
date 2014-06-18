@@ -177,7 +177,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
-    SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNd = pAktPam->GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNd, "Overwrite not in a TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
     rIdx.Assign( pTxtNd, nSttCntnt );
@@ -259,7 +259,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
 
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
-    SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNd = pAktPam->GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNd, "Overwrite not in TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
 

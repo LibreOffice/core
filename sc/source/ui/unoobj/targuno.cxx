@@ -67,7 +67,7 @@ SC_SIMPLE_SERVICE_INFO( ScLinkTargetsObj,     "ScLinkTargetsObj",     "com.sun.s
 ScLinkTargetTypesObj::ScLinkTargetTypesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 
     for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
         aNames[i] = ScResId( nTypeResIds[i] );
@@ -76,7 +76,7 @@ ScLinkTargetTypesObj::ScLinkTargetTypesObj(ScDocShell* pDocSh) :
 ScLinkTargetTypesObj::~ScLinkTargetTypesObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -135,14 +135,14 @@ ScLinkTargetTypeObj::ScLinkTargetTypeObj(ScDocShell* pDocSh, sal_uInt16 nT) :
     pDocShell( pDocSh ),
     nType( nT )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
     aName = ScResId( nTypeResIds[nType] );    //! on demand?
 }
 
 ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScLinkTargetTypeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )

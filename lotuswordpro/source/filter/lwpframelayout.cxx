@@ -101,7 +101,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
     ApplyTextDir(pFrameStyle);
     ApplyPosType(pFrameStyle);
 
-    pFrameStyle->SetStyleName(m_pLayout->GetName()->str());
+    pFrameStyle->SetStyleName(m_pLayout->GetName().str());
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_StyleName = pXFStyleManager->AddStyle(pFrameStyle)->GetStyleName();
     m_pLayout->SetStyleName(m_StyleName);
@@ -125,7 +125,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
     }
 
     //Set frame Name
-    OUString aFrameName = m_pLayout->GetName()->str();
+    OUString aFrameName = m_pLayout->GetName().str();
     if(!aFrameName.isEmpty())
     {
         //cause the bug of SODC, the linkframe name can not be "Frame1", so I change the frame name
@@ -148,7 +148,7 @@ void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
         pXFFrame->SetHeight( fHeight );
 
         //Get content obj;
-        /*LwpObject* pObj =*/ m_pLayout->GetContent()->obj();
+        /*LwpObject* pObj =*/ m_pLayout->GetContent().obj();
         if(m_pLayout->IsGroupHead()&&(m_pLayout->IsMinimumHeight()))
         {
             //process grouplayout height. there is problems now
@@ -881,15 +881,14 @@ void  LwpFrameLayout::RegisterStyle()
 OUString LwpFrameLayout::GetNextLinkName()
 {
     OUString aName;
-    LwpObjectID* pObjectID = m_Link.GetNextLayout();
-    if(!pObjectID->IsNull())
+    LwpObjectID& rObjectID = m_Link.GetNextLayout();
+    if(!rObjectID.IsNull())
     {
-        LwpLayout* pLayout = dynamic_cast<LwpLayout*>(pObjectID->obj().get());
+        LwpLayout* pLayout = dynamic_cast<LwpLayout*>(rObjectID.obj().get());
         if (pLayout)
         {
-            LwpAtomHolder *pHolder = pLayout->GetName();
-            if (pHolder)
-                aName = pHolder->str();
+            LwpAtomHolder& rHolder = pLayout->GetName();
+            aName = rHolder.str();
             //for division name confict
             if(!pLayout->GetStyleName().isEmpty())
                 aName = pLayout->GetStyleName();
@@ -903,8 +902,8 @@ OUString LwpFrameLayout::GetNextLinkName()
  */
 bool LwpFrameLayout::HasPreviousLinkLayout()
 {
-    LwpObjectID* pObjectID = m_Link.GetPreviousLayout();
-    if(pObjectID->IsNull())
+    LwpObjectID& rObjectID = m_Link.GetPreviousLayout();
+    if(rObjectID.IsNull())
         return false;
     return true;
 }
@@ -1097,11 +1096,11 @@ void LwpGroupLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 nStart 
         m_pFrame->Parse(pXFFrame, nStart);
 
         //add child frame into group
-        LwpVirtualLayout* pLayout = static_cast<LwpVirtualLayout*>(GetChildHead()->obj().get());
+        LwpVirtualLayout* pLayout = static_cast<LwpVirtualLayout*>(GetChildHead().obj().get());
         while(pLayout)
         {
             pLayout->XFConvert(pXFFrame);
-            pLayout = static_cast<LwpVirtualLayout*>(pLayout->GetNext()->obj().get());
+            pLayout = static_cast<LwpVirtualLayout*>(pLayout->GetNext().obj().get());
         }
 
         pCont ->Add(pXFFrame);
@@ -1150,7 +1149,7 @@ void LwpDropcapLayout::Parse(IXFStream* pOutputStream)
     LwpStory* pStory = static_cast<LwpStory*>(m_Content.obj(VO_STORY).get());
     if (!pStory)
         return;
-    rtl::Reference<LwpObject> pPara = pStory->GetFirstPara()->obj(VO_PARA);
+    rtl::Reference<LwpObject> pPara = pStory->GetFirstPara().obj(VO_PARA);
     if(pPara.is())
     {
         pPara->SetFoundry(m_pFoundry);
@@ -1180,12 +1179,12 @@ void LwpDropcapLayout::RegisterStyle(LwpFoundry* pFoundry)
     {
         pStory->SetDropcapFlag(true);
         pStory->SetFoundry(pFoundry);
-        LwpPara* pPara = static_cast<LwpPara*>(pStory->GetFirstPara()->obj().get());
+        LwpPara* pPara = static_cast<LwpPara*>(pStory->GetFirstPara().obj().get());
         while(pPara)
         {
             pPara->SetFoundry(pFoundry);
             pPara->RegisterStyle();
-            pPara = static_cast<LwpPara*>(pPara->GetNext()->obj().get());
+            pPara = static_cast<LwpPara*>(pPara->GetNext().obj().get());
         }
     }
 }

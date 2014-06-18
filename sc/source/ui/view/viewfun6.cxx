@@ -51,56 +51,56 @@ using ::std::vector;
 
 void ScViewFunc::DetectiveAddPred()
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    pDocSh->GetDocFunc().DetectiveAddPred( GetViewData()->GetCurPos() );
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    pDocSh->GetDocFunc().DetectiveAddPred( GetViewData().GetCurPos() );
     RecalcPPT();    //! use broadcast in DocFunc instead?
 }
 
 void ScViewFunc::DetectiveDelPred()
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    pDocSh->GetDocFunc().DetectiveDelPred( GetViewData()->GetCurPos() );
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    pDocSh->GetDocFunc().DetectiveDelPred( GetViewData().GetCurPos() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveAddSucc()
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    pDocSh->GetDocFunc().DetectiveAddSucc( GetViewData()->GetCurPos() );
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    pDocSh->GetDocFunc().DetectiveAddSucc( GetViewData().GetCurPos() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveDelSucc()
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    pDocSh->GetDocFunc().DetectiveDelSucc( GetViewData()->GetCurPos() );
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    pDocSh->GetDocFunc().DetectiveDelSucc( GetViewData().GetCurPos() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveAddError()
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    pDocSh->GetDocFunc().DetectiveAddError( GetViewData()->GetCurPos() );
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    pDocSh->GetDocFunc().DetectiveAddError( GetViewData().GetCurPos() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveDelAll()
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    pDocSh->GetDocFunc().DetectiveDelAll( GetViewData()->GetTabNo() );
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    pDocSh->GetDocFunc().DetectiveDelAll( GetViewData().GetTabNo() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveMarkInvalid()
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    pDocSh->GetDocFunc().DetectiveMarkInvalid( GetViewData()->GetTabNo() );
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    pDocSh->GetDocFunc().DetectiveMarkInvalid( GetViewData().GetTabNo() );
     RecalcPPT();
 }
 
 void ScViewFunc::DetectiveRefresh()
 {
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
     pDocSh->GetDocFunc().DetectiveRefresh();
     RecalcPPT();
 }
@@ -117,12 +117,12 @@ static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument
 
 void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
 {
-    ScViewData* pView = GetViewData();
-    ScDocShell* pDocSh = pView->GetDocShell();
+    ScViewData& rView = GetViewData();
+    ScDocShell* pDocSh = rView.GetDocShell();
 
     ScRangeList aRanges(rRanges);
     ScRangeList aRangesToMark;
-    ScAddress aCurPos = pView->GetCurPos();
+    ScAddress aCurPos = rView.GetCurPos();
     size_t ListSize = aRanges.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
@@ -138,7 +138,7 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
 
     // Jump to the first range of all precedent ranges.
     const ScRange* p = aRangesToMark.front();
-    lcl_jumpToRange(*p, pView, pDocSh->GetDocument());
+    lcl_jumpToRange(*p, &rView, &pDocSh->GetDocument());
 
     ListSize = aRangesToMark.size();
     for ( size_t i = 0; i < ListSize; ++i )
@@ -150,11 +150,11 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
 
 void ScViewFunc::DetectiveMarkPred()
 {
-    ScViewData* pView = GetViewData();
-    ScDocShell* pDocSh = pView->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
-    ScMarkData& rMarkData = pView->GetMarkData();
-    ScAddress aCurPos = pView->GetCurPos();
+    ScViewData& rView = GetViewData();
+    ScDocShell* pDocSh = rView.GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScMarkData& rMarkData = rView.GetMarkData();
+    ScAddress aCurPos = rView.GetCurPos();
     ScRangeList aRanges;
     if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
         rMarkData.FillRangeListWithMarks(&aRanges, false);
@@ -175,7 +175,7 @@ void ScViewFunc::DetectiveMarkPred()
         // jump to the destination.
 
         sal_uInt16 nFileId = p->GetIndex();
-        ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
+        ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
         const OUString* pPath = pRefMgr->getExternalFileName(nFileId);
 
         ScRange aRange;
@@ -203,7 +203,7 @@ void ScViewFunc::DetectiveMarkPred()
         {
             // The first precedent range is on a different sheet.  Jump to it
             // immediately and forget the rest.
-            lcl_jumpToRange(aRange, pView, pDoc);
+            lcl_jumpToRange(aRange, &rView, &rDoc);
             return;
         }
     }
@@ -215,10 +215,10 @@ void ScViewFunc::DetectiveMarkPred()
 
 void ScViewFunc::DetectiveMarkSucc()
 {
-    ScViewData* pView = GetViewData();
-    ScDocShell* pDocSh = pView->GetDocShell();
-    ScMarkData& rMarkData = pView->GetMarkData();
-    ScAddress aCurPos = pView->GetCurPos();
+    ScViewData& rView = GetViewData();
+    ScDocShell* pDocSh = rView.GetDocShell();
+    ScMarkData& rMarkData = rView.GetMarkData();
+    ScAddress aCurPos = rView.GetCurPos();
     ScRangeList aRanges;
     if (rMarkData.IsMarked() || rMarkData.IsMultiMarked())
         rMarkData.FillRangeListWithMarks(&aRanges, false);
@@ -239,12 +239,12 @@ void ScViewFunc::DetectiveMarkSucc()
 
 void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
 {
-    ScViewData* pViewData = GetViewData();
-    ScAddress aCurPos = pViewData->GetCurPos();
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
+    ScViewData& rViewData = GetViewData();
+    ScAddress aCurPos = rViewData.GetCurPos();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
     ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     Date aActDate( Date::SYSTEM );
     double fDate = aActDate - *pFormatter->GetNullDate();
     Time aActTime( Time::SYSTEM );
@@ -257,7 +257,7 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
 
     // Set the new cell format only when it differs from the current cell
     // format type.
-    sal_uInt32 nCurNumFormat = pDoc->GetNumberFormat(aCurPos);
+    sal_uInt32 nCurNumFormat = rDoc.GetNumberFormat(aCurPos);
     const SvNumberformat* pEntry = pFormatter->GetEntry(nCurNumFormat);
     if (!pEntry || !(pEntry->GetType() & nCellFmt))
         SetNumberFormat(nCellFmt);
@@ -268,7 +268,7 @@ void ScViewFunc::ShowNote( bool bShow )
 {
     if( bShow )
         HideNoteMarker();
-    const ScViewData& rViewData = *GetViewData();
+    const ScViewData& rViewData = GetViewData();
     ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
     // show note moved to ScDocFunc, to be able to use it in notesuno.cxx
     rViewData.GetDocShell()->GetDocFunc().ShowNote( aPos, bShow );
@@ -278,21 +278,21 @@ void ScViewFunc::EditNote()
 {
     // for editing display and activate
 
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
-    SCCOL nCol = GetViewData()->GetCurX();
-    SCROW nRow = GetViewData()->GetCurY();
-    SCTAB nTab = GetViewData()->GetTabNo();
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    SCCOL nCol = GetViewData().GetCurX();
+    SCROW nRow = GetViewData().GetCurY();
+    SCTAB nTab = GetViewData().GetTabNo();
     ScAddress aPos( nCol, nRow, nTab );
 
     // start drawing undo to catch undo action for insertion of the caption object
     pDocSh->MakeDrawLayer();
-    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
     pDrawLayer->BeginCalcUndo(true);
     // generated undo action is processed in FuText::StopEditMode
 
     // get existing note or create a new note (including caption drawing object)
-    if( ScPostIt* pNote = pDoc->GetOrCreateNote( aPos ) )
+    if( ScPostIt* pNote = rDoc.GetOrCreateNote( aPos ) )
     {
         // hide temporary note caption
         HideNoteMarker();
@@ -311,7 +311,7 @@ void ScViewFunc::EditNote()
                 static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
 
             // activate object (as in FuSelection::TestComment)
-            GetViewData()->GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
+            GetViewData().GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
             // now get the created FuText and set into EditMode
             FuPoor* pPoor = GetDrawFuncPtr();
             if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    // has no RTTI

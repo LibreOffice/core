@@ -17,10 +17,10 @@ class ScRefreshTimerControl;
 
 class SC_DLLPUBLIC ScRefreshTimerProtector
 {
-    ScRefreshTimerControl * const * ppControl;
+    ScRefreshTimerControl * const & m_rpControl;
 
 public:
-    ScRefreshTimerProtector( ScRefreshTimerControl * const * pp );
+    ScRefreshTimerProtector( ScRefreshTimerControl * const & rp );
     ~ScRefreshTimerProtector();
 };
 

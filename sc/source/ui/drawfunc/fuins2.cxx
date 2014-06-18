@@ -87,7 +87,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
                     const OUString& rRangeParam )
 {
     ScDocShell* pDocShell = pViewData->GetDocShell();
-    ScDocument* pScDoc = pDocShell->GetDocument();
+    ScDocument& rScDoc = pDocShell->GetDocument();
 
     OUString aRangeString( rRangeParam );
     if ( aRangeString.isEmpty() )
@@ -113,7 +113,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
                 pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
 
                 ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-                aRangeString = aRange.Format(SCR_ABS_3D, pScDoc);
+                aRangeString = aRange.Format(SCR_ABS_3D, &rScDoc);
             }
         }
     }
@@ -129,7 +129,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
         OSL_ASSERT( xReceiver.is());
         if( xReceiver.is() )
         {
-            uno::Reference< chart2::data::XDataProvider > xDataProvider = new ScChart2DataProvider( pScDoc );
+            uno::Reference< chart2::data::XDataProvider > xDataProvider = new ScChart2DataProvider( &rScDoc );
             xReceiver->attachDataProvider( xDataProvider );
 
             uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
@@ -142,17 +142,17 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
             // use ScChartPositioner to auto-detect column/row headers (like ScChartArray in old version)
             ScRangeListRef aRangeListRef( new ScRangeList );
-            aRangeListRef->Parse( aRangeString, pScDoc, SCA_VALID, pScDoc->GetAddressConvention() );
+            aRangeListRef->Parse( aRangeString, &rScDoc, SCA_VALID, rScDoc.GetAddressConvention() );
             if ( !aRangeListRef->empty() )
             {
-                pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
+                rScDoc.LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
 
                 // update string from modified ranges.  The ranges must be in the current formula syntax.
                 OUString aTmpStr;
-                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc, pScDoc->GetAddressConvention() );
+                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, &rScDoc, rScDoc.GetAddressConvention() );
                 aRangeString = aTmpStr;
 
-                ScChartPositioner aChartPositioner( pScDoc, aRangeListRef );
+                ScChartPositioner aChartPositioner( &rScDoc, aRangeListRef );
                 const ScChartPositionMap* pPositionMap( aChartPositioner.GetPositionMap() );
                 if( pPositionMap )
                 {
@@ -356,12 +356,12 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             //  Chart initialisieren ?
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
-                lcl_ChartInit( xObj, pViewSh->GetViewData(), OUString() );
+                lcl_ChartInit( xObj, &pViewSh->GetViewData(), OUString() );
 
-            ScViewData* pData = pViewSh->GetViewData();
+            ScViewData& rData = pViewSh->GetViewData();
 
             Point aPnt = pViewSh->GetInsertPos();
-            if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
+            if ( rData.GetDocument()->IsNegativePage( rData.GetTabNo() ) )
                 aPnt.X() -= aSize.Width();      // move position to left edge
             Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
@@ -443,21 +443,21 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     // get range
     OUString aRangeString;
     ScRange aPositionRange;             // cell range for chart positioning
-    ScMarkData aMark = pViewSh->GetViewData()->GetMarkData();
+    ScMarkData aMark = pViewSh->GetViewData().GetMarkData();
     if( pReqArgs )
     {
         const SfxPoolItem* pItem;
         if( pReqArgs->HasItem( FN_PARAM_5, &pItem ) )
             aRangeString = OUString( ((const SfxStringItem*)pItem)->GetValue());
 
-        aPositionRange = pViewSh->GetViewData()->GetCurPos();
+        aPositionRange = pViewSh->GetViewData().GetCurPos();
     }
     else
     {
         bool bAutomaticMark = false;
         if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
         {
-            pViewSh->GetViewData()->GetView()->MarkDataArea( true );
+            pViewSh->GetViewData().GetView()->MarkDataArea( true );
             bAutomaticMark = true;
         }
 
@@ -467,7 +467,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         ScRangeList aRanges;
         aMultiMark.FillRangeListWithMarks( &aRanges, false );
         OUString aStr;
-        ScDocument* pDocument = pViewSh->GetViewData()->GetDocument();
+        ScDocument* pDocument = pViewSh->GetViewData().GetDocument();
         aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
         aRangeString = aStr;
 
@@ -482,7 +482,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         }
 
         if(bAutomaticMark)
-            pViewSh->GetViewData()->GetView()->Unmark();
+            pViewSh->GetViewData().GetView()->Unmark();
     }
 
 
@@ -540,12 +540,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         xObj->setVisualAreaSize( nAspect, aSz );
     }
 
-    ScViewData* pData = pViewSh->GetViewData();
-    ScDocShell* pScDocSh = pData->GetDocShell();
-    ScDocument* pScDoc   = pScDocSh->GetDocument();
-    bool bUndo (pScDoc->IsUndoEnabled());
+    ScViewData& rData = pViewSh->GetViewData();
+    ScDocShell* pScDocSh = rData.GetDocShell();
+    ScDocument& rScDoc   = pScDocSh->GetDocument();
+    bool bUndo (rScDoc.IsUndoEnabled());
 
-    Window* pParentWindow = pData->GetActiveWin();
+    Window* pParentWindow = rData.GetActiveWin();
     OpenGLWindow* pChildWindow = new OpenGLWindow(pParentWindow);
     Size aWindowSize = pChildWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
     pChildWindow->SetSizePixel(aWindowSize);
@@ -576,9 +576,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
 
                 if ( ((const SfxBoolItem*)pItem)->GetValue() )
-                    nToTable = static_cast<sal_uInt16>(pScDoc->GetTableCount());
+                    nToTable = static_cast<sal_uInt16>(rScDoc.GetTableCount());
                 else
-                    nToTable = static_cast<sal_uInt16>(pData->GetTabNo());
+                    nToTable = static_cast<sal_uInt16>(rData.GetTabNo());
             }
         }
         else
@@ -589,15 +589,15 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         }
 
         // auf neue Tabelle ausgeben?
-        if ( nToTable == pScDoc->GetTableCount() )
+        if ( nToTable == rScDoc.GetTableCount() )
         {
             // dann los...
             OUString      aTabName;
-            SCTAB       nNewTab = pScDoc->GetTableCount();
+            SCTAB       nNewTab = rScDoc.GetTableCount();
 
-            pScDoc->CreateValidTabName( aTabName );
+            rScDoc.CreateValidTabName( aTabName );
 
-            if ( pScDoc->InsertTab( nNewTab, aTabName ) )
+            if ( rScDoc.InsertTab( nNewTab, aTabName ) )
             {
                 bool bAppend = true;
 
@@ -617,13 +617,13 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 OSL_FAIL( "Could not create new table :-/" );
             }
         }
-        else if ( nToTable != pData->GetTabNo() )
+        else if ( nToTable != rData.GetTabNo() )
         {
             pViewSh->SetTabNo( nToTable, true );
         }
     }
 
-    lcl_ChartInit( xObj, pData, aRangeString );         // set source range, auto-detect column/row headers
+    lcl_ChartInit( xObj, &rData, aRangeString );         // set source range, auto-detect column/row headers
 
     //  Objekt-Position
 
@@ -760,7 +760,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
                         // reset marked cell area
 
-                        pViewSh->GetViewData()->GetViewShell()->SetMarkData(aMark);
+                        pViewSh->GetViewData().GetViewShell()->SetMarkData(aMark);
                     }
                     else
                     {
@@ -812,7 +812,7 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* p
     awt::Size aSz = xObj->getVisualAreaSize( nAspect );
     Size aSize( aSz.Width, aSz.Height );
 
-    ScRange aPositionRange = pViewSh->GetViewData()->GetCurPos();
+    ScRange aPositionRange = pViewSh->GetViewData().GetCurPos();
     Point aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
     Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);

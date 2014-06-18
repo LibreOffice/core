@@ -1629,7 +1629,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     if( rStyleInfo.pFmt && rStyleInfo.bColl )
     {
         bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt);
-        SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
+        SwTxtNode* pTxtNode = pPaM->GetNode().GetTxtNode();
         OSL_ENSURE( pTxtNode, "No Text-Node at PaM-Position" );
         // make code robust
         if ( !pTxtNode )
@@ -1792,7 +1792,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 
     if (pLstManager) // sind die Listendeklarationen gelesen?
     {
-        SwTxtNode* pTxtNd = pPaM->GetNode()->GetTxtNode();
+        SwTxtNode* pTxtNd = pPaM->GetNode().GetTxtNode();
         OSL_ENSURE(pTxtNd, "No Text-Node at PaM-Position");
         if (!pTxtNd)
             return;
@@ -2001,7 +2001,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 // reset/blank the indent
                 pAktColl->SetFmtAttr(SvxLRSpaceItem(RES_LR_SPACE));
             }
-            else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
+            else if (SwTxtNode* pTxtNode = pPaM->GetNode().GetTxtNode())
             {
                 // here a paragraph is being directly formated
 

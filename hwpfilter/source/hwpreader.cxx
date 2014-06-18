@@ -55,7 +55,7 @@
 // xmloff/xmlkyd.hxx
 #define sXML_CDATA ascii("CDATA")
 
-#define STARTP  padd( ascii("text:style-name"), ascii("CDATA"), ascii(getPStyleName(((ParaShape *)para->GetParaShape())->index,buf))); \
+#define STARTP  padd( ascii("text:style-name"), ascii("CDATA"), ascii(getPStyleName(((ParaShape &)para->GetParaShape()).index,buf))); \
     rstartEl( ascii("text:p"),rList ); \
     pList->clear(); \
     pstart = true
@@ -239,34 +239,34 @@ void HwpReader::makeTextDecls()
  */
 void HwpReader::makeMeta()
 {
-    HWPInfo *hwpinfo = hwpfile.GetHWPInfo();
+    HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
 
     rstartEl(ascii("office:meta"), rList);
 
-    if (hwpinfo->summary.title[0])
+    if (hwpinfo.summary.title[0])
     {
         rstartEl(ascii("dc:title"), rList);
-        rchars((hconv(hwpinfo->summary.title)));
+        rchars((hconv(hwpinfo.summary.title)));
         rendEl(ascii("dc:title"));
     }
 
-    if (hwpinfo->summary.subject[0])
+    if (hwpinfo.summary.subject[0])
     {
         rstartEl(ascii("dc:subject"), rList);
-        rchars((hconv(hwpinfo->summary.subject)));
+        rchars((hconv(hwpinfo.summary.subject)));
         rendEl(ascii("dc:subject"));
     }
 
-    if (hwpinfo->summary.author[0])
+    if (hwpinfo.summary.author[0])
     {
         rstartEl(ascii("meta:initial-creator"), rList);
-        rchars((hconv(hwpinfo->summary.author)));
+        rchars((hconv(hwpinfo.summary.author)));
         rendEl(ascii("meta:initial-creator"));
     }
 
-    if (hwpinfo->summary.date[0])
+    if (hwpinfo.summary.date[0])
     {
-        unsigned short *pDate = hwpinfo->summary.date;
+        unsigned short *pDate = hwpinfo.summary.date;
         int year,month,day,hour,minute;
         int gab = 0;
         if( ISNUMBER( pDate[0] ) && ISNUMBER( pDate[1] ) &&
@@ -328,37 +328,37 @@ void HwpReader::makeMeta()
         rendEl( ascii("meta:creation-date") );
     }
 
-    if (hwpinfo->summary.keyword[0][0] || hwpinfo->summary.etc[0][0])
+    if (hwpinfo.summary.keyword[0][0] || hwpinfo.summary.etc[0][0])
     {
         rstartEl(ascii("meta:keywords"), rList);
-        if (hwpinfo->summary.keyword[0][0])
+        if (hwpinfo.summary.keyword[0][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.keyword[0])));
+            rchars((hconv(hwpinfo.summary.keyword[0])));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.keyword[1][0])
+        if (hwpinfo.summary.keyword[1][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.keyword[1])));
+            rchars((hconv(hwpinfo.summary.keyword[1])));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[0][0])
+        if (hwpinfo.summary.etc[0][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.etc[0])));
+            rchars((hconv(hwpinfo.summary.etc[0])));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[1][0])
+        if (hwpinfo.summary.etc[1][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.etc[1])));
+            rchars((hconv(hwpinfo.summary.etc[1])));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[2][0])
+        if (hwpinfo.summary.etc[2][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
-            rchars((hconv(hwpinfo->summary.etc[2])));
+            rchars((hconv(hwpinfo.summary.etc[2])));
             rendEl(ascii("meta:keyword"));
         }
         rendEl(ascii("meta:keywords"));
@@ -579,14 +579,14 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 padd( ascii("draw:cx"), sXML_CDATA,ascii(Int2Str(prop->center_x, "%d%%", buf)));
                 padd( ascii("draw:cy"), sXML_CDATA,ascii(Int2Str(prop->center_y, "%d%%", buf)));
 
-                     HWPInfo *hwpinfo = hwpfile.GetHWPInfo();
+                     HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
                      int default_color = 0xffffff;
-                     if( hwpinfo->back_info.isset )
+                     if( hwpinfo.back_info.isset )
                      {
-                             if( hwpinfo->back_info.color[0] > 0 || hwpinfo->back_info.color[1] > 0
-                                     || hwpinfo->back_info.color[2] > 0 )
-                                 default_color = hwpinfo->back_info.color[0] << 16 |
-                                     hwpinfo->back_info.color[1] << 8 | hwpinfo->back_info.color[2];
+                             if( hwpinfo.back_info.color[0] > 0 || hwpinfo.back_info.color[1] > 0
+                                     || hwpinfo.back_info.color[2] > 0 )
+                                 default_color = hwpinfo.back_info.color[0] << 16 |
+                                     hwpinfo.back_info.color[1] << 8 | hwpinfo.back_info.color[2];
                      }
 
                      if( prop->fromcolor > 0xffffff )
@@ -681,7 +681,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 
 void HwpReader::makeStyles()
 {
-    HWPStyle *hwpstyle = hwpfile.GetHWPStyle();
+    HWPStyle& hwpstyle = hwpfile.GetHWPStyle();
 
     rstartEl(ascii("office:styles"), rList);
 
@@ -719,9 +719,9 @@ void HwpReader::makeStyles()
 
     rendEl(ascii("style:style"));
 
-    for (int ii = 0; ii < hwpstyle->Num(); ii++)
+    for (int ii = 0; ii < hwpstyle.Num(); ii++)
     {
-        unsigned char *stylename = (unsigned char *) hwpstyle->GetName(ii);
+        unsigned char *stylename = (unsigned char *) hwpstyle.GetName(ii);
         padd(ascii("style:name"), sXML_CDATA, (hconv(kstr2hstr(stylename).c_str())));
         padd(ascii("style:family"), sXML_CDATA, ascii("paragraph"));
         padd(ascii("style:parent-style-name"), sXML_CDATA, ascii("Standard"));
@@ -730,8 +730,8 @@ void HwpReader::makeStyles()
 
         pList->clear();
 
-        parseCharShape(hwpstyle->GetCharShape(ii));
-        parseParaShape(hwpstyle->GetParaShape(ii));
+        parseCharShape(hwpstyle.GetCharShape(ii));
+        parseParaShape(hwpstyle.GetParaShape(ii));
 
         rstartEl(ascii("style:properties"), rList);
         pList->clear();
@@ -784,12 +784,12 @@ void HwpReader::makeStyles()
         rendEl( ascii("style:style"));
     }
 
-    HWPInfo *hwpinfo = hwpfile.GetHWPInfo();
+    HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
 
     padd(ascii("text:num-suffix"), sXML_CDATA, ascii(")"));
     padd(ascii("text:num-format"), sXML_CDATA, ascii("1"));
-    if( hwpinfo->beginfnnum != 1)
-        padd(ascii("text:offset"), sXML_CDATA, ascii(Int2Str(hwpinfo->beginfnnum -1, "%d", buf)));
+    if( hwpinfo.beginfnnum != 1)
+        padd(ascii("text:offset"), sXML_CDATA, ascii(Int2Str(hwpinfo.beginfnnum -1, "%d", buf)));
     rstartEl(ascii("text:footnotes-configuration"), rList);
     pList->clear();
     rendEl(ascii("text:footnotes-configuration"));
@@ -1313,7 +1313,7 @@ void HwpReader::makeMasterStyles()
  */
 void HwpReader::parseCharShape(CharShape * cshape)
 {
-    HWPFont *hwpfont = hwpfile.GetHWPFont();
+    HWPFont& hwpfont = hwpfile.GetHWPFont();
 
     padd(ascii("fo:font-size"), sXML_CDATA,
         ascii(Int2Str(cshape->size / 25, "%dpt", buf)));
@@ -1321,7 +1321,7 @@ void HwpReader::parseCharShape(CharShape * cshape)
         ascii(Int2Str(cshape->size / 25, "%dpt", buf)));
 
     ::std::string const tmp = hstr2ksstr(kstr2hstr(
-        (unsigned char *) hwpfont->GetFontName(0, cshape->font[0])).c_str());
+        (unsigned char *) hwpfont.GetFontName(0, cshape->font[0])).c_str());
     double fRatio = 1.0;
     int size = getRepFamilyName(tmp.c_str(), buf, fRatio);
 
@@ -1526,7 +1526,7 @@ void HwpReader::makePStyle(ParaShape * pshape)
  */
 void HwpReader::makePageStyle()
 {
-    HWPInfo *hwpinfo = hwpfile.GetHWPInfo();
+     HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
      int pmCount = hwpfile.getColumnCount();
 
      for( int i = 0 ; i < pmCount ; i++ ){
@@ -1535,10 +1535,10 @@ void HwpReader::makePageStyle()
          pList->clear();
 
 
-         switch( hwpinfo->paper.paper_kind )
+         switch( hwpinfo.paper.paper_kind )
          {
               case 3:                                   // A4
-                    if( hwpinfo->paper.paper_direction )
+                    if( hwpinfo.paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("210mm"));
                          padd(ascii("fo:page-width"),sXML_CDATA, ascii("297mm"));
@@ -1550,7 +1550,7 @@ void HwpReader::makePageStyle()
                     }
                     break;
               case 4:                                   // 80 column
-                    if( hwpinfo->paper.paper_direction )
+                    if( hwpinfo.paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("8.5inch"));
                          padd(ascii("fo:page-width"),sXML_CDATA, ascii("11inch"));
@@ -1562,7 +1562,7 @@ void HwpReader::makePageStyle()
                     }
                     break;
               case 5:                                   // B5
-                    if( hwpinfo->paper.paper_direction )
+                    if( hwpinfo.paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("176mm"));
                          padd(ascii("fo:page-width"),sXML_CDATA, ascii("250mm"));
@@ -1574,7 +1574,7 @@ void HwpReader::makePageStyle()
                     }
                     break;
               case 6:                                   // B4
-                    if( hwpinfo->paper.paper_direction )
+                    if( hwpinfo.paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("250mm"));
                          padd(ascii("fo:page-width"),sXML_CDATA, ascii("353mm"));
@@ -1586,7 +1586,7 @@ void HwpReader::makePageStyle()
                     }
                     break;
               case 7:
-                    if( hwpinfo->paper.paper_direction )
+                    if( hwpinfo.paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("8.5inch"));
                          padd(ascii("fo:page-width"),sXML_CDATA, ascii("14inch"));
@@ -1598,7 +1598,7 @@ void HwpReader::makePageStyle()
                     }
                     break;
               case 8:
-                    if( hwpinfo->paper.paper_direction )
+                    if( hwpinfo.paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("297mm"));
                          padd(ascii("fo:page-width"),sXML_CDATA, ascii("420mm"));
@@ -1613,52 +1613,52 @@ void HwpReader::makePageStyle()
               case 1:
               case 2:
               default:
-                    if( hwpinfo->paper.paper_direction )
+                    if( hwpinfo.paper.paper_direction )
                     {
                          padd(ascii("fo:page-width"),sXML_CDATA,
-                              Double2Str(WTI(hwpinfo->paper.paper_height)) + ascii("inch"));
+                              Double2Str(WTI(hwpinfo.paper.paper_height)) + ascii("inch"));
                          padd(ascii("fo:page-height"),sXML_CDATA,
-                              Double2Str(WTI(hwpinfo->paper.paper_width)) + ascii("inch"));
+                              Double2Str(WTI(hwpinfo.paper.paper_width)) + ascii("inch"));
                     }
                     else
                     {
                          padd(ascii("fo:page-width"),sXML_CDATA,
-                              Double2Str(WTI(hwpinfo->paper.paper_width)) + ascii("inch"));
+                              Double2Str(WTI(hwpinfo.paper.paper_width)) + ascii("inch"));
                          padd(ascii("fo:page-height"),sXML_CDATA,
-                              Double2Str(WTI(hwpinfo->paper.paper_height)) + ascii("inch"));
+                              Double2Str(WTI(hwpinfo.paper.paper_height)) + ascii("inch"));
                     }
                     break;
 
          }
 
          padd(ascii("style:print-orientation"),sXML_CDATA,
-              ascii(hwpinfo->paper.paper_direction ? "landscape" : "portrait"));
-         if( hwpinfo->beginpagenum != 1)
+              ascii(hwpinfo.paper.paper_direction ? "landscape" : "portrait"));
+         if( hwpinfo.beginpagenum != 1)
               padd(ascii("style:first-page-number"),sXML_CDATA,
-                    ascii(Int2Str(hwpinfo->beginpagenum, "%d", buf)));
+                    ascii(Int2Str(hwpinfo.beginpagenum, "%d", buf)));
 
-         if( hwpinfo->borderline ){
+         if( hwpinfo.borderline ){
              padd(ascii("fo:margin-left"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo->paper.left_margin - hwpinfo->bordermargin[0] + hwpinfo->paper.gutter_length)) + ascii("inch"));
+                  Double2Str(WTI(hwpinfo.paper.left_margin - hwpinfo.bordermargin[0] + hwpinfo.paper.gutter_length)) + ascii("inch"));
              padd(ascii("fo:margin-right"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo->paper.right_margin - hwpinfo->bordermargin[1])) + ascii("inch"));
+                  Double2Str(WTI(hwpinfo.paper.right_margin - hwpinfo.bordermargin[1])) + ascii("inch"));
              padd(ascii("fo:margin-top"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo->paper.top_margin - hwpinfo->bordermargin[2])) + ascii("inch"));
+                  Double2Str(WTI(hwpinfo.paper.top_margin - hwpinfo.bordermargin[2])) + ascii("inch"));
              padd(ascii("fo:margin-bottom"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo->paper.bottom_margin - hwpinfo->bordermargin[3])) + ascii("inch"));
+                  Double2Str(WTI(hwpinfo.paper.bottom_margin - hwpinfo.bordermargin[3])) + ascii("inch"));
          }
          else{
              padd(ascii("fo:margin-left"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo->paper.left_margin + hwpinfo->paper.gutter_length)) + ascii("inch"));
+                  Double2Str(WTI(hwpinfo.paper.left_margin + hwpinfo.paper.gutter_length)) + ascii("inch"));
              padd(ascii("fo:margin-right"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo->paper.right_margin)) + ascii("inch"));
+                  Double2Str(WTI(hwpinfo.paper.right_margin)) + ascii("inch"));
              padd(ascii("fo:margin-top"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo->paper.top_margin)) + ascii("inch"));
+                  Double2Str(WTI(hwpinfo.paper.top_margin)) + ascii("inch"));
              padd(ascii("fo:margin-bottom"),sXML_CDATA,
-                  Double2Str(WTI(hwpinfo->paper.bottom_margin)) + ascii("inch"));
+                  Double2Str(WTI(hwpinfo.paper.bottom_margin)) + ascii("inch"));
          }
 
-         switch( hwpinfo->borderline )
+         switch( hwpinfo.borderline )
          {
               case 1:
                     padd(ascii("fo:border"), sXML_CDATA,ascii("0.002cm solid #000000"));
@@ -1676,21 +1676,21 @@ void HwpReader::makePageStyle()
          }
 
          padd(ascii("fo:padding-left"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo->bordermargin[0])) + ascii("inch"));
+              Double2Str(WTI(hwpinfo.bordermargin[0])) + ascii("inch"));
          padd(ascii("fo:padding-right"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo->bordermargin[1])) + ascii("inch"));
+              Double2Str(WTI(hwpinfo.bordermargin[1])) + ascii("inch"));
          padd(ascii("fo:padding-top"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo->bordermargin[2])) + ascii("inch"));
+              Double2Str(WTI(hwpinfo.bordermargin[2])) + ascii("inch"));
          padd(ascii("fo:padding-bottom"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo->bordermargin[3])) + ascii("inch"));
+              Double2Str(WTI(hwpinfo.bordermargin[3])) + ascii("inch"));
 
      /* background color */
-         if( hwpinfo->back_info.isset )
+         if( hwpinfo.back_info.isset )
          {
-             if( hwpinfo->back_info.color[0] > 0 || hwpinfo->back_info.color[1] > 0
-                     || hwpinfo->back_info.color[2] > 0 ){
-                 sprintf(buf,"#%02x%02x%02x",hwpinfo->back_info.color[0],
-                         hwpinfo->back_info.color[1],hwpinfo->back_info.color[2] );
+             if( hwpinfo.back_info.color[0] > 0 || hwpinfo.back_info.color[1] > 0
+                     || hwpinfo.back_info.color[2] > 0 ){
+                 sprintf(buf,"#%02x%02x%02x",hwpinfo.back_info.color[0],
+                         hwpinfo.back_info.color[1],hwpinfo.back_info.color[2] );
                  padd(ascii("fo:background-color"), sXML_CDATA, ascii(buf));
              }
          }
@@ -1699,31 +1699,31 @@ void HwpReader::makePageStyle()
          pList->clear();
 
      /* background image */
-         if( hwpinfo->back_info.isset && hwpinfo->back_info.type > 0 )
+         if( hwpinfo.back_info.isset && hwpinfo.back_info.type > 0 )
          {
-             if( hwpinfo->back_info.type == 1 ){
+             if( hwpinfo.back_info.type == 1 ){
 #ifdef _WIN32
                  padd(ascii("xlink:href"), sXML_CDATA,
-                      hconv(kstr2hstr((uchar*) urltowin(hwpinfo->back_info.filename).c_str()).c_str()));
+                      hconv(kstr2hstr((uchar*) urltowin(hwpinfo.back_info.filename).c_str()).c_str()));
 #else
                  padd(ascii("xlink:href"), sXML_CDATA,
-                    hconv(kstr2hstr( (uchar *)urltounix(hwpinfo->back_info.filename).c_str()).c_str()));
+                    hconv(kstr2hstr( (uchar *)urltounix(hwpinfo.back_info.filename).c_str()).c_str()));
 #endif
                  padd(ascii("xlink:type"), sXML_CDATA, ascii("simple"));
                  padd(ascii("xlink:actuate"), sXML_CDATA, ascii("onLoad"));
              }
-             if( hwpinfo->back_info.flag >= 2)
+             if( hwpinfo.back_info.flag >= 2)
                  padd(ascii("style:repeat"), sXML_CDATA, ascii("stretch"));
-             else if( hwpinfo->back_info.flag == 1 ){
+             else if( hwpinfo.back_info.flag == 1 ){
                  padd(ascii("style:repeat"), sXML_CDATA, ascii("no-repeat"));
                  padd(ascii("style:position"), sXML_CDATA, ascii("center"));
              }
              rstartEl(ascii("style:background-image"),rList);
 
-             if( hwpinfo->back_info.type == 2 ){
+             if( hwpinfo.back_info.type == 2 ){
                  rstartEl(ascii("office:binary-data"), rList);
                  pList->clear();
-                 boost::shared_ptr<char> pStr(base64_encode_string((unsigned char *) hwpinfo->back_info.data, hwpinfo->back_info.size ), Free<char>());
+                 boost::shared_ptr<char> pStr(base64_encode_string((unsigned char *) hwpinfo.back_info.data, hwpinfo.back_info.size ), Free<char>());
                  rchars(ascii(pStr.get()));
                  rendEl(ascii("office:binary-data"));
              }
@@ -1737,7 +1737,7 @@ void HwpReader::makePageStyle()
     /* header style */
          rstartEl(ascii("style:header-style"), rList);
          padd(ascii("svg:height"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo->paper.header_length)) + ascii("inch"));
+              Double2Str(WTI(hwpinfo.paper.header_length)) + ascii("inch"));
          padd(ascii("fo:margin-bottom"), sXML_CDATA, ascii("0mm"));
 
          rstartEl(ascii("style:properties"),rList);
@@ -1748,7 +1748,7 @@ void HwpReader::makePageStyle()
     /* footer style */
          rstartEl(ascii("style:footer-style"), rList);
          padd(ascii("svg:height"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo->paper.footer_length)) + ascii("inch"));
+              Double2Str(WTI(hwpinfo.paper.footer_length)) + ascii("inch"));
          padd(ascii("fo:margin-top"), sXML_CDATA, ascii("0mm"));
          rstartEl(ascii("style:properties"),rList);
          pList->clear();
@@ -1759,17 +1759,17 @@ void HwpReader::makePageStyle()
          rstartEl(ascii("style:footnote-layout"), rList);
 
          padd(ascii("style:distance-before-sep"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo->splinetext)) + ascii("inch"));
+              Double2Str(WTI(hwpinfo.splinetext)) + ascii("inch"));
          padd(ascii("style:distance-after-sep"), sXML_CDATA,
-              Double2Str(WTI(hwpinfo->splinefn)) + ascii("inch"));
+              Double2Str(WTI(hwpinfo.splinefn)) + ascii("inch"));
          rstartEl(ascii("style:properties"),rList);
          pList->clear();
          rendEl(ascii("style:properties"));
-         if ( hwpinfo->fnlinetype == 2 )
+         if ( hwpinfo.fnlinetype == 2 )
               padd(ascii("style:width"), sXML_CDATA, ascii("15cm"));
-         else if ( hwpinfo->fnlinetype == 1)
+         else if ( hwpinfo.fnlinetype == 1)
               padd(ascii("style:width"), sXML_CDATA, ascii("2cm"));
-         else if ( hwpinfo->fnlinetype == 3)
+         else if ( hwpinfo.fnlinetype == 3)
               padd(ascii("style:width"), sXML_CDATA, ascii("0cm"));
          else
               padd(ascii("style:width"), sXML_CDATA, ascii("5cm"));
@@ -2698,7 +2698,7 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
     if( !bParaStart)
     {
         padd(ascii("text:style-name"), sXML_CDATA,
-            ascii(getPStyleName(para->GetParaShape()->index, buf)));
+            ascii(getPStyleName(para->GetParaShape().index, buf)));
         rstartEl(ascii("text:p"), rList);
         pList->clear();
     }
@@ -2768,7 +2768,7 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
     if( !bParaStart )
     {
         padd(ascii("text:style-name"), sXML_CDATA,
-            ascii(getPStyleName(para->GetParaShape()->index, buf)));
+            ascii(getPStyleName(para->GetParaShape().index, buf)));
         rstartEl(ascii("text:p"), rList);
         pList->clear();
     }
@@ -3980,12 +3980,12 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
             case PAGE_ANCHOR:
             case PAPER_ANCHOR:
             {
-                HWPInfo *hwpinfo = hwpfile.GetHWPInfo();
+                HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
                 padd(ascii("text:anchor-type"), sXML_CDATA, ascii("page"));
                 padd(ascii("text:anchor-page-number"), sXML_CDATA,
                     ascii(Int2Str(hbox->pgno +1, "%d", buf)));
-                a = hwpinfo->paper.left_margin;
-                b = hwpinfo->paper.top_margin + hwpinfo->paper.header_length;
+                a = hwpinfo.paper.left_margin;
+                b = hwpinfo.paper.top_margin + hwpinfo.paper.header_length;
                 break;
             }
         }
@@ -4782,7 +4782,7 @@ void HwpReader::parsePara(HWPPara * para, bool bParaStart)
             if( !bParaStart )
             {
                 padd(ascii("text:style-name"), sXML_CDATA,
-                    ascii(getPStyleName(para->GetParaShape()->index, buf)));
+                    ascii(getPStyleName(para->GetParaShape().index, buf)));
                 rstartEl( ascii("text:p"),rList);
                 pList->clear();
             }

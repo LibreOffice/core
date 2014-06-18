@@ -60,7 +60,7 @@ ScAnnotationObj::ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos) :
     aCellPos( rPos ),
     pUnoText( NULL )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 
     //  pUnoText is allocated on demand (GetUnoText)
     //  can't be aggregated because getString/setString is handled here
@@ -69,7 +69,7 @@ ScAnnotationObj::ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos) :
 ScAnnotationObj::~ScAnnotationObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 
     if (pUnoText)
         pUnoText->release();
@@ -248,6 +248,6 @@ SvxUnoText& ScAnnotationObj::GetUnoText()
 
 const ScPostIt* ScAnnotationObj::ImplGetNote() const
 {
-    return pDocShell ? pDocShell->GetDocument()->GetNote(aCellPos) : 0;
+    return pDocShell ? pDocShell->GetDocument().GetNote(aCellPos) : 0;
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

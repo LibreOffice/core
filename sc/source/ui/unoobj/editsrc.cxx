@@ -112,7 +112,7 @@ ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddre
     bDataValid( false )
 {
     if (pDocShell)
-        pDocShell->GetDocument()->AddUnoObject(*this);
+        pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScAnnotationEditSource::~ScAnnotationEditSource()
@@ -120,7 +120,7 @@ ScAnnotationEditSource::~ScAnnotationEditSource()
     SolarMutexGuard aGuard;     //  needed for EditEngine dtor
 
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 
     delete pForwarder;
     delete pEditEngine;
@@ -133,7 +133,7 @@ SvxEditSource* ScAnnotationEditSource::Clone() const
 
 SdrObject* ScAnnotationEditSource::GetCaptionObj()
 {
-    ScPostIt* pNote = pDocShell->GetDocument()->GetNote(aCellPos);
+    ScPostIt* pNote = pDocShell->GetDocument().GetNote(aCellPos);
     return pNote ? pNote->GetOrCreateCaption( aCellPos ) : 0;
 }
 
@@ -144,7 +144,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
         // Notizen haben keine Felder
         if ( pDocShell )
         {
-            pEditEngine = new ScNoteEditEngine( pDocShell->GetDocument()->GetNoteEngine() );
+            pEditEngine = new ScNoteEditEngine( pDocShell->GetDocument().GetNoteEngine() );
         }
         else
         {
@@ -159,7 +159,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
         return pForwarder;
 
     if ( pDocShell )
-        if ( ScPostIt* pNote = pDocShell->GetDocument()->GetNote(aCellPos) )
+        if ( ScPostIt* pNote = pDocShell->GetDocument().GetNote(aCellPos) )
             if ( const EditTextObject* pEditObj = pNote->GetEditTextObject() )
                 pEditEngine->SetText( *pEditObj );      // incl. Umbrueche
 

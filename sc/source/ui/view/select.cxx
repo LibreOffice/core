@@ -734,7 +734,7 @@ void ScViewFunctionSet::DeselectAll()
 
 ScViewSelectionEngine::ScViewSelectionEngine( Window* pWindow, ScTabView* pView,
                                                 ScSplitPos eSplitPos ) :
-        SelectionEngine( pWindow, pView->GetFunctionSet() ),
+        SelectionEngine( pWindow, &pView->GetFunctionSet() ),
         eWhich( eSplitPos )
 {
     SetSelectionMode( MULTIPLE_SELECTION );

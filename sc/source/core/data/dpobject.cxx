@@ -816,7 +816,7 @@ void ScDPObject::ClearTableData()
     ClearSource();
 
     if (mpTableData)
-        mpTableData->GetCacheTable().getCache()->RemoveReference(this);
+        mpTableData->GetCacheTable().getCache().RemoveReference(this);
     mpTableData.reset();
 }
 

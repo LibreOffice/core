@@ -2364,7 +2364,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, OUString& rSt
 
     //we have inserted a section before this point, so adjust pos
     //for future page/section segment insertion
-    maSectionManager.PrependedInlineNode(aTmpPos, *pPaM->GetNode());
+    maSectionManager.PrependedInlineNode(aTmpPos, pPaM->GetNode());
 
     return FLD_TEXT;
 }
@@ -3325,7 +3325,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
 
         // inserting a toc inserts a section before this point, so adjust pos
         // for future page/section segment insertion
-        maSectionManager.PrependedInlineNode( *mpPosAfterTOC->GetPoint(), *aRegion.GetNode() );
+        maSectionManager.PrependedInlineNode( *mpPosAfterTOC->GetPoint(), aRegion.GetNode() );
     }
 
     // Setze Ende in Stack

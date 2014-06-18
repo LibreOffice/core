@@ -33,8 +33,8 @@ static bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const OU
 {
     if (pDocSh)
     {
-        ScDocument* pDoc = pDocSh->GetDocument();
-        ScRangeName* pNames = pDoc->GetRangeName();
+        ScDocument& rDoc = pDocSh->GetDocument();
+        ScRangeName* pNames = rDoc.GetRangeName();
         if (pNames)
         {
             const ScRangeData* pData = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(rName));
@@ -78,17 +78,17 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
     else
     {
         //  parse ref
-        ScDocument* pDoc = pDocSh->GetDocument();
+        ScDocument& rDoc = pDocSh->GetDocument();
         SCTAB nTab = ScDocShell::GetCurTab();
         aRange.aStart.SetTab( nTab );
 
         // For DDE link, we always must parse references using OOO A1 convention.
 
-        if ( aRange.Parse( rItem, pDoc, FormulaGrammar::CONV_OOO ) & SCA_VALID )
+        if ( aRange.Parse( rItem, &rDoc, FormulaGrammar::CONV_OOO ) & SCA_VALID )
         {
             // area reference
         }
-        else if ( aRange.aStart.Parse( rItem, pDoc, FormulaGrammar::CONV_OOO ) & SCA_VALID )
+        else if ( aRange.aStart.Parse( rItem, &rDoc, FormulaGrammar::CONV_OOO ) & SCA_VALID )
         {
             // cell reference
             aRange.aEnd = aRange.aStart;
@@ -99,8 +99,8 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const OUString& rItem ) :
         }
     }
 
-    pDocSh->GetDocument()->GetLinkManager()->InsertServer( this );
-    pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
+    pDocSh->GetDocument().GetLinkManager()->InsertServer( this );
+    pDocSh->GetDocument().StartListeningArea( aRange, &aForwarder );
 
     StartListening(*pDocSh);        // um mitzubekommen, wenn die DocShell geloescht wird
     StartListening(*SFX_APP());     // for SC_HINT_AREAS_CHANGED
@@ -118,8 +118,8 @@ void ScServerObject::Clear()
         ScDocShell* pTemp = pDocSh;
         pDocSh = NULL;
 
-        pTemp->GetDocument()->EndListeningArea( aRange, &aForwarder );
-        pTemp->GetDocument()->GetLinkManager()->RemoveServer( this );
+        pTemp->GetDocument().EndListeningArea( aRange, &aForwarder );
+        pTemp->GetDocument().GetLinkManager()->RemoveServer( this );
         EndListening(*pTemp);
         EndListening(*SFX_APP());
     }
@@ -154,18 +154,18 @@ bool ScServerObject::GetData(
         //  refresh the listeners now (this is called from a timer)
 
         EndListeningAll();
-        pDocSh->GetDocument()->StartListeningArea( aRange, &aForwarder );
+        pDocSh->GetDocument().StartListeningArea( aRange, &aForwarder );
         StartListening(*pDocSh);
         StartListening(*SFX_APP());
         bRefreshListener = false;
     }
 
     OUString aDdeTextFmt = pDocSh->GetDdeTextFmt();
-    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = pDocSh->GetDocument();
 
     if( FORMAT_STRING == SotExchange::GetFormatIdFromMimeType( rMimeType ))
     {
-        ScImportExport aObj( pDoc, aRange );
+        ScImportExport aObj( &rDoc, aRange );
         if( aDdeTextFmt[0] == 'F' )
             aObj.SetFormulas( true );
         if( aDdeTextFmt.equalsAscii( "SYLK" ) ||
@@ -188,7 +188,7 @@ bool ScServerObject::GetData(
         return aObj.ExportData( rMimeType, rData );
     }
 
-    ScImportExport aObj( pDoc, aRange );
+    ScImportExport aObj( &rDoc, aRange );
     aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
     if( aObj.IsRef() )
         return aObj.ExportData( rMimeType, rData );

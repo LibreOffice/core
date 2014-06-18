@@ -371,8 +371,8 @@ void ScDrawView::DoCopy()
         // Copy data referenced by the chart objects to the draw clip
         // document. We need to do this before GetMarkedObjModel() below.
         ScDocShellRef xDocSh = *ScGlobal::pDrawClipDocShellRef;
-        ScDocument* pClipDoc = xDocSh->GetDocument();
-        copyChartRefDataToClipDoc(pDoc, pClipDoc, aRanges);
+        ScDocument& rClipDoc = xDocSh->GetDocument();
+        copyChartRefDataToClipDoc(pDoc, &rClipDoc, aRanges);
     }
     SdrModel* pModel = GetMarkedObjModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);

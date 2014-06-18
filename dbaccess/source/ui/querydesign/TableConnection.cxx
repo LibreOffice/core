@@ -53,10 +53,10 @@ namespace dbaui
     void OTableConnection::Init()
     {
         // initialise linelist with defaults
-        OConnectionLineDataVec* pLineData = GetData()->GetConnLineDataList();
-        OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
-        OConnectionLineDataVec::const_iterator aEnd = pLineData->end();
-        m_vConnLine.reserve(pLineData->size());
+        OConnectionLineDataVec& rLineData = GetData()->GetConnLineDataList();
+        OConnectionLineDataVec::const_iterator aIter = rLineData.begin();
+        OConnectionLineDataVec::const_iterator aEnd = rLineData.end();
+        m_vConnLine.reserve(rLineData.size());
         for(;aIter != aEnd;++aIter)
             m_vConnLine.push_back( new OConnectionLine(this, *aIter) );
     }
@@ -89,12 +89,12 @@ namespace dbaui
         clearLineData();
 
         // copy linelist
-        if(! rConn.GetConnLineList()->empty() )
+        if(! rConn.GetConnLineList().empty() )
         {
-            const ::std::vector<OConnectionLine*>* pLine = rConn.GetConnLineList();
-            ::std::vector<OConnectionLine*>::const_iterator aIter = pLine->begin();
-            ::std::vector<OConnectionLine*>::const_iterator aEnd = pLine->end();
-            m_vConnLine.reserve(pLine->size());
+            const ::std::vector<OConnectionLine*>& rLine = rConn.GetConnLineList();
+            ::std::vector<OConnectionLine*>::const_iterator aIter = rLine.begin();
+            ::std::vector<OConnectionLine*>::const_iterator aEnd = rLine.end();
+            m_vConnLine.reserve(rLine.size());
             for(;aIter != aEnd;++aIter)
                 m_vConnLine.push_back( CreateConnLine( **aIter ));
         }

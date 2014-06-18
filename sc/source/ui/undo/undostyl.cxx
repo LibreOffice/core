@@ -122,8 +122,8 @@ static void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, bo
 void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
                                     SfxStyleFamily eStyleFamily, const ScStyleSaveData& rData )
 {
-    ScDocument* pDoc = pDocSh->GetDocument();
-    ScStyleSheetPool* pStlPool = pDoc->GetStyleSheetPool();
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScStyleSheetPool* pStlPool = rDoc.GetStyleSheetPool();
     OUString aNewName = rData.GetName();
     bool bDelete = aNewName.isEmpty();         // no new name -> delete style
     bool bNew = ( rName.isEmpty() && !bDelete );   // creating new style
@@ -147,7 +147,7 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
         pStyle = &pStlPool->Make( aNewName, eStyleFamily, SFXSTYLEBIT_USERDEF );
 
         if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
-            pDoc->GetPool()->CellStyleCreated( aNewName );
+            rDoc.GetPool()->CellStyleCreated( aNewName );
     }
 
     if ( pStyle )
@@ -155,9 +155,9 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
         if ( bDelete )
         {
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
-                lcl_DocStyleChanged( pDoc, pStyle, true );      // TRUE: remove usage of style
+                lcl_DocStyleChanged( &rDoc, pStyle, true );      // TRUE: remove usage of style
             else
-                pDoc->RemovePageStyleInUse( rName );
+                rDoc.RemovePageStyleInUse( rName );
 
             // delete style
             pStlPool->Remove( pStyle );
@@ -178,17 +178,17 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const OUString& rName,
 
             if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
             {
-                lcl_DocStyleChanged( pDoc, pStyle, false );     // cell styles: row heights
+                lcl_DocStyleChanged( &rDoc, pStyle, false );     // cell styles: row heights
             }
             else
             {
                 // page styles
 
                 if ( bNew && aNewName != rName )
-                    pDoc->RenamePageStyleInUse( rName, aNewName );
+                    rDoc.RenamePageStyleInUse( rName, aNewName );
 
                 if (pNewSet)
-                    pDoc->ModifyStyleSheet( *pStyle, *pNewSet );
+                    rDoc.ModifyStyleSheet( *pStyle, *pNewSet );
 
                 pDocSh->PageStyleModified( aNewName, true );
             }
@@ -257,7 +257,7 @@ void ScUndoApplyPageStyle::Undo()
     BeginUndo();
     for( ApplyStyleVec::const_iterator aIt = maEntries.begin(), aEnd = maEntries.end(); aIt != aEnd; ++aIt )
     {
-        pDocShell->GetDocument()->SetPageStyle( aIt->mnTab, aIt->maOldStyle );
+        pDocShell->GetDocument().SetPageStyle( aIt->mnTab, aIt->maOldStyle );
         ScPrintFunc( pDocShell, pDocShell->GetPrinter(), aIt->mnTab ).UpdatePages();
     }
     EndUndo();
@@ -268,7 +268,7 @@ void ScUndoApplyPageStyle::Redo()
     BeginRedo();
     for( ApplyStyleVec::const_iterator aIt = maEntries.begin(), aEnd = maEntries.end(); aIt != aEnd; ++aIt )
     {
-        pDocShell->GetDocument()->SetPageStyle( aIt->mnTab, maNewStyle );
+        pDocShell->GetDocument().SetPageStyle( aIt->mnTab, maNewStyle );
         ScPrintFunc( pDocShell, pDocShell->GetPrinter(), aIt->mnTab ).UpdatePages();
     }
     EndRedo();

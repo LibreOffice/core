@@ -94,8 +94,8 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
     {
-        ScrollBar* pHScroll = pScrollWindow->GetHScroll();
-        ScrollBar* pVScroll = pScrollWindow->GetVScroll();
+        ScrollBar& rHScroll = pScrollWindow->GetHScroll();
+        ScrollBar& rVScroll = pScrollWindow->GetVScroll();
         ScrollType eH = SCROLL_LINEDOWN,eV = SCROLL_LINEDOWN;
         if( rPos.X() < aOutRect.Left() )
             eH = SCROLL_LINEUP;
@@ -107,8 +107,8 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
         else if( rPos.Y() <= aOutRect.Bottom() )
             eV = SCROLL_DONTKNOW;
 
-        pHScroll->DoScrollAction(eH);
-        pVScroll->DoScrollAction(eV);
+        rHScroll.DoScrollAction(eH);
+        rVScroll.DoScrollAction(eV);
     }
 
     aScrollTimer.Start();

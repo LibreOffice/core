@@ -59,7 +59,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     else
                     {
                         GetSelEngine()->Reset();
-                        GetFunctionSet()->SetAnchorFlag(true);
+                        GetFunctionSet().SetAnchorFlag(true);
                         //  AnchorFlag, damit gleich mit Control angehaengt werden kann
                     }
                 }
@@ -73,8 +73,8 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             case SFX_HINT_DOCCHANGED:
                 {
-                    ScDocument* pDoc = GetViewData()->GetDocument();
-                    if (!pDoc->HasTable( GetViewData()->GetTabNo() ))
+                    ScDocument* pDoc = GetViewData().GetDocument();
+                    if (!pDoc->HasTable( GetViewData().GetTabNo() ))
                     {
                         SetTabNo(0);
                     }
@@ -107,12 +107,12 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 //  dieser Hint kommt, den Design-Modus immer dann umschalten, wenn der
                 //  ReadOnly-Status sich wirklich geaendert hat:
 
-                if ( GetViewData()->GetSfxDocShell()->IsReadOnly() != bReadOnly )
+                if ( GetViewData().GetSfxDocShell()->IsReadOnly() != bReadOnly )
                 {
-                    bReadOnly = GetViewData()->GetSfxDocShell()->IsReadOnly();
+                    bReadOnly = GetViewData().GetSfxDocShell()->IsReadOnly();
 
                     SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly);
-                    GetViewData()->GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_ASYNCHRON,
+                    GetViewData().GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_ASYNCHRON,
                                                 &aItem, 0L );
 
                     UpdateInputContext();
@@ -124,7 +124,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
 
             case SC_HINT_FORCESETTAB:
-                SetTabNo( GetViewData()->GetTabNo(), true );
+                SetTabNo( GetViewData().GetTabNo(), true );
                 break;
 
             default:
@@ -135,7 +135,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         ScPaintHint* pHint = (ScPaintHint*) &rHint;
         sal_uInt16 nParts = pHint->GetParts();
-        SCTAB nTab = GetViewData()->GetTabNo();
+        SCTAB nTab = GetViewData().GetTabNo();
         if (pHint->GetStartTab() <= nTab && pHint->GetEndTab() >= nTab)
         {
             if (nParts & PAINT_EXTRAS)          // zuerst, falls Tabelle weg ist !!!
@@ -144,7 +144,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             // if the current sheet has pending row height updates (sheet links refreshed),
             // execute them before invalidating the window
-            GetViewData()->GetDocShell()->UpdatePendingRowHeights( GetViewData()->GetTabNo() );
+            GetViewData().GetDocShell()->UpdatePendingRowHeights( GetViewData().GetTabNo() );
 
             if (nParts & PAINT_SIZE)
                 RepeatResize();                     //! InvalidateBorder ???
@@ -171,7 +171,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         //  ScEditViewHint kommt nur an aktiver View an
 
         ScEditViewHint* pHint = (ScEditViewHint*) &rHint;
-        SCTAB nTab = GetViewData()->GetTabNo();
+        SCTAB nTab = GetViewData().GetTabNo();
         if ( pHint->GetTab() == nTab )
         {
             SCCOL nCol = pHint->GetCol();
@@ -183,14 +183,14 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
                 StopEditShell();                    // sollte nicht gesetzt sein
 
-                ScSplitPos eActive = GetViewData()->GetActivePart();
-                if ( GetViewData()->HasEditView(eActive) )
+                ScSplitPos eActive = GetViewData().GetActivePart();
+                if ( GetViewData().HasEditView(eActive) )
                 {
                     //  MakeEditView geht schief, wenn der Cursor ausserhalb des
                     //  Bildschirms steht. GetEditView gibt dann eine nicht aktive
                     //  View zurueck, darum die Abfrage HasEditView.
 
-                    EditView* pView = GetViewData()->GetEditView(eActive);  // ist nicht 0
+                    EditView* pView = GetViewData().GetEditView(eActive);  // ist nicht 0
 
                     SetEditShell(pView, true);
                 }
@@ -200,7 +200,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     else if (rHint.ISA(ScTablesHint))               // Tabelle eingefuegt / geloescht
     {
             //  aktuelle Tabelle zuerst holen (kann bei DeleteTab an ViewData geaendert werden)
-        SCTAB nActiveTab = GetViewData()->GetTabNo();
+        SCTAB nActiveTab = GetViewData().GetTabNo();
 
         const ScTablesHint& rTabHint = (const ScTablesHint&)rHint;
         SCTAB nTab1 = rTabHint.GetTab1();
@@ -209,24 +209,24 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         switch (nId)
         {
             case SC_TAB_INSERTED:
-                GetViewData()->InsertTab( nTab1 );
+                GetViewData().InsertTab( nTab1 );
                 break;
             case SC_TAB_DELETED:
-                GetViewData()->DeleteTab( nTab1 );
+                GetViewData().DeleteTab( nTab1 );
                 break;
             case SC_TAB_MOVED:
-                GetViewData()->MoveTab( nTab1, nTab2 );
+                GetViewData().MoveTab( nTab1, nTab2 );
                 break;
             case SC_TAB_COPIED:
-                GetViewData()->CopyTab( nTab1, nTab2 );
+                GetViewData().CopyTab( nTab1, nTab2 );
                 break;
             case SC_TAB_HIDDEN:
                 break;
             case SC_TABS_INSERTED:
-                GetViewData()->InsertTabs( nTab1, nTab2 );
+                GetViewData().InsertTabs( nTab1, nTab2 );
                 break;
             case SC_TABS_DELETED:
-                GetViewData()->DeleteTabs( nTab1, nTab2 );
+                GetViewData().DeleteTabs( nTab1, nTab2 );
                 break;
             default:
                 OSL_FAIL("unbekannter ScTablesHint");
@@ -281,7 +281,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
         }
 
-        ScDocument* pDoc = GetViewData()->GetDocument();
+        ScDocument* pDoc = GetViewData().GetDocument();
         if ( nNewTab >= pDoc->GetTableCount() )
             nNewTab = pDoc->GetTableCount() - 1;
 

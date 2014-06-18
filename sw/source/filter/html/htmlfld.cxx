@@ -612,7 +612,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
     // werden soll, fuegen wir es vor dem Space ein. Dann gibt es
     // weniger Probleme beim Formatieren (bug #40483#)
     const sal_Int32 nPos = pPam->GetPoint()->nContent.GetIndex();
-    SwTxtNode *pTxtNd = pPam->GetNode()->GetTxtNode();
+    SwTxtNode *pTxtNd = pPam->GetNode().GetTxtNode();
     bool bMoveFwd = false;
     if (nPos>0 && pTxtNd && (' ' == pTxtNd->GetTxt()[nPos-1]))
     {

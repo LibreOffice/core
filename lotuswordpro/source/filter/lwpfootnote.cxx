@@ -212,7 +212,7 @@ LwpCellLayout* LwpFootnote::GetCellLayout()
             LwpRowLayout* pRowLayout = pTableLayout->GetRowLayout(m_nRow);
             if(pRowLayout)
             {
-                return dynamic_cast<LwpCellLayout*>(pRowLayout->GetChildHead()->obj().get());
+                return dynamic_cast<LwpCellLayout*>(pRowLayout->GetChildHead().obj().get());
             }
         }
     }
@@ -235,7 +235,7 @@ LwpDocument* LwpFootnote::GetFootnoteTableDivision()
     // The division might not have a DivisionInfo if it's being Destruct()ed
     pPrev = m_pFoundry->GetDocument();
     pFootnoteDivision = pPrev;
-    if (!pPrev || pPrev->GetDivInfoID()->IsNull())
+    if (!pPrev || pPrev->GetDivInfoID().IsNull())
         return NULL;
 
     switch (m_nType)
@@ -396,7 +396,7 @@ LwpContent* LwpFootnote::FindFootnoteContent()
     LwpCellLayout* pCellLayout = GetCellLayout();
     if(pCellLayout)
     {
-        pContent = dynamic_cast<LwpContent*>(pCellLayout->GetContent()->obj().get());
+        pContent = dynamic_cast<LwpContent*>(pCellLayout->GetContent().obj().get());
     }
 
     return pContent;

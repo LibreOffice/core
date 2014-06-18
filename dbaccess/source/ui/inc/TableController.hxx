@@ -101,12 +101,12 @@ namespace dbaui
 
         virtual void impl_onModifyChanged() SAL_OVERRIDE;
 
-        inline ::std::vector< ::boost::shared_ptr<OTableRow> >* getRows() { return &m_vRowList; }
+        inline ::std::vector< ::boost::shared_ptr<OTableRow> >& getRows() { return m_vRowList; }
 
         /// returns the position of the first empty row
         sal_Int32                           getFirstEmptyRowPosition();
 
-        inline const OTypeInfoMap*          getTypeInfo() const { return &m_aTypeInfo; }
+        inline const OTypeInfoMap&          getTypeInfo() const { return m_aTypeInfo; }
 
         inline TOTypeInfoSP                 getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
         TOTypeInfoSP                        getTypeInfoByType(sal_Int32 _nDataType) const;

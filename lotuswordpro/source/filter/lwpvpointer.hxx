@@ -75,7 +75,7 @@ public:
     void Read() SAL_OVERRIDE;
     void RegisterStyle() SAL_OVERRIDE;
     void Parse(IXFStream* pOutputStream) SAL_OVERRIDE;
-    LwpObjectID* GetPointer(){return &m_PointerID;}
+    LwpObjectID& GetPointer(){return m_PointerID;}
 protected:
     LwpObjectID m_PointerID;
 private:

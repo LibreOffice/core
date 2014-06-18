@@ -120,7 +120,7 @@ public:
     bool    HasAccessibilityObjects();
 
     const ScPreviewLocationData& GetLocationData();
-    ScDocument*     GetDocument();
+    ScDocument&     GetDocument();
     SC_DLLPUBLIC ScPreview*      GetPreview() { return pPreview; }
 };
 

@@ -118,7 +118,7 @@ public:
 
     DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
 
-    inline SvxAcceptChgCtr* GetChgCtrl()        { return &aTabPagesCTRL; }
+    inline SvxAcceptChgCtr& GetChgCtrl()        { return aTabPagesCTRL; }
     inline bool     HasRedlineAutoFmt() const   { return bRedlnAutoFmt; }
 
     void            Init(sal_uInt16 nStart = 0);

@@ -84,8 +84,8 @@ namespace dbaui
          */
         OConnectionLineDataVec::size_type normalizeLines();
 
-        const OConnectionLineDataVec* GetConnLineDataList() const { return &m_vConnLineData; }
-        OConnectionLineDataVec* GetConnLineDataList() { return &m_vConnLineData; }
+        const OConnectionLineDataVec& GetConnLineDataList() const { return m_vConnLineData; }
+        OConnectionLineDataVec& GetConnLineDataList() { return m_vConnLineData; }
 
         inline TTableWindowData::value_type getReferencingTable() const { return m_pReferencingTable; }
         inline TTableWindowData::value_type getReferencedTable()  const { return m_pReferencedTable;  }

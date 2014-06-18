@@ -111,14 +111,14 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
             if ( eMode == SC_SELTRANS_INVALID )             // no drawing object selected
             {
                 ScRange aRange;
-                ScViewData* pViewData = pView->GetViewData();
-                const ScMarkData& rMark = pViewData->GetMarkData();
+                ScViewData& rViewData = pView->GetViewData();
+                const ScMarkData& rMark = rViewData.GetMarkData();
                 //  allow MultiMarked because GetSimpleArea may be able to merge into a simple range
                 //  (GetSimpleArea modifies a local copy of MarkData)
                 // Also allow simple filtered area.
                 ScMarkType eMarkType;
                 if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) &&
-                        (((eMarkType = pViewData->GetSimpleArea( aRange )) == SC_MARK_SIMPLE) ||
+                        (((eMarkType = rViewData.GetSimpleArea( aRange )) == SC_MARK_SIMPLE) ||
                          (eMarkType == SC_MARK_SIMPLE_FILTERED)) )
                 {
                     //  only for "real" selection, cursor alone isn't used
@@ -269,19 +269,19 @@ void ScSelectionTransferObj::CreateCellData()
     OSL_ENSURE( !pCellData, "CreateCellData twice" );
     if ( pView )
     {
-        ScViewData* pViewData = pView->GetViewData();
-        ScMarkData aNewMark( pViewData->GetMarkData() );    // use local copy for MarkToSimple
+        ScViewData& rViewData = pView->GetViewData();
+        ScMarkData aNewMark( rViewData.GetMarkData() );    // use local copy for MarkToSimple
         aNewMark.MarkToSimple();
 
         //  similar to ScViewFunctionSet::BeginDrag
         if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
         {
-            ScDocShell* pDocSh = pViewData->GetDocShell();
+            ScDocShell* pDocSh = rViewData.GetDocShell();
 
             ScRange aSelRange;
             aNewMark.GetMarkArea( aSelRange );
             ScDocShellRef aDragShellRef;
-            if ( pDocSh->GetDocument()->HasOLEObjectsInArea( aSelRange, &aNewMark ) )
+            if ( pDocSh->GetDocument().HasOLEObjectsInArea( aSelRange, &aNewMark ) )
             {
                 aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
                 aDragShellRef->DoInitNew(NULL);
@@ -292,7 +292,7 @@ void ScSelectionTransferObj::CreateCellData()
             // bApi = sal_True -> no error messages
             // #i18364# bStopEdit = sal_False -> don't end edit mode
             // (this may be called from pasting into the edit line)
-            bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, false, true, true, false );
+            bool bCopied = rViewData.GetView()->CopyToClip( pClipDoc, false, true, true, false );
 
             ScDrawLayer::SetGlobalDrawPersist(NULL);
 
@@ -351,8 +351,8 @@ void ScSelectionTransferObj::CreateDrawData()
             SdrModel* pModel = pDrawView->GetMarkedObjModel();
             ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-            ScViewData* pViewData = pView->GetViewData();
-            ScDocShell* pDocSh = pViewData->GetDocShell();
+            ScViewData& rViewData = pView->GetViewData();
+            ScDocShell* pDocSh = rViewData.GetDocShell();
 
             TransferableObjectDescriptor aObjDesc;
             pDocSh->FillTransferableObjectDescriptor( aObjDesc );

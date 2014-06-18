@@ -280,8 +280,8 @@ GetNestedTextContent(SwTxtNode & rTextNode, sal_Int32 const nIndex,
     // which is innermost?
     SwTxtAttr *const pTxtAttr = (pMetaTxtAttr)
         ? ((pMetaFieldTxtAttr)
-            ? ((*pMetaFieldTxtAttr->GetStart() >
-                    *pMetaTxtAttr->GetStart())
+            ? ((pMetaFieldTxtAttr->GetStart() >
+                    pMetaTxtAttr->GetStart())
                 ? pMetaFieldTxtAttr : pMetaTxtAttr)
             : pMetaTxtAttr)
         : pMetaFieldTxtAttr;
@@ -315,7 +315,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 const SwTxtNode * pTmpNode = pNode;
 
                 if (!pTmpNode)
-                    pTmpNode = rPam.GetNode()->GetTxtNode();
+                    pTmpNode = rPam.GetNode().GetTxtNode();
 
                 bool bRet = false;
 
@@ -335,7 +335,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 const SwTxtNode * pTmpNode = pNode;
 
                 if (!pTmpNode)
-                    pTmpNode = rPam.GetNode()->GetTxtNode();
+                    pTmpNode = rPam.GetNode().GetTxtNode();
 
                 OUString sRet;
                 if ( pTmpNode && pTmpNode->GetNum() )
@@ -352,7 +352,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 const SwTxtNode * pTmpNode = pNode;
 
                 if (!pTmpNode)
-                    pTmpNode = rPam.GetNode()->GetTxtNode();
+                    pTmpNode = rPam.GetNode().GetTxtNode();
 
                 sal_Int16 nRet = -1;
                 if ( pTmpNode )
@@ -410,7 +410,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_NUMBER_NEWSTART:
         {
             // a multi selection is not considered
-            const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
+            const SwTxtNode* pTxtNd = rPam.GetNode().GetTxtNode();
             if ( pTxtNd && pTxtNd->IsInList() )
             {
                 if( pAny )
@@ -469,9 +469,9 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_DOCUMENT_INDEX_MARK:
         {
             ::std::vector<SwTxtAttr *> marks;
-            if (rPam.GetNode()->IsTxtNode())
+            if (rPam.GetNode().IsTxtNode())
             {
-                marks = rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                marks = rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
                     rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
             }
             if (marks.size())
@@ -535,7 +535,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_TEXT_TABLE:
         case FN_UNO_CELL:
         {
-            SwStartNode* pSttNode = rPam.GetNode()->StartOfSectionNode();
+            SwStartNode* pSttNode = rPam.GetNode().StartOfSectionNode();
             SwStartNodeType eType = pSttNode->GetStartNodeType();
             if(SwTableBoxStartNode == eType)
             {
@@ -563,7 +563,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_TEXT_FRAME:
         {
-            SwStartNode* pSttNode = rPam.GetNode()->StartOfSectionNode();
+            SwStartNode* pSttNode = rPam.GetNode().StartOfSectionNode();
             SwStartNodeType eType = pSttNode->GetStartNodeType();
 
             SwFrmFmt* pFmt;
@@ -597,8 +597,8 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_ENDNOTE:
         case FN_UNO_FOOTNOTE:
         {
-            SwTxtAttr *const pTxtAttr = rPam.GetNode()->IsTxtNode() ?
-                rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+            SwTxtAttr *const pTxtAttr = rPam.GetNode().IsTxtNode() ?
+                rPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
                     rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN) : 0;
             if(pTxtAttr)
             {
@@ -622,10 +622,10 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_REFERENCE_MARK:
         {
             ::std::vector<SwTxtAttr *> marks;
-            if (rPam.GetNode()->IsTxtNode())
+            if (rPam.GetNode().IsTxtNode())
             {
                 marks = (
-                rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+                rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
                     rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
             }
             if (marks.size())
@@ -643,8 +643,8 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_NESTED_TEXT_CONTENT:
         {
-            uno::Reference<XTextContent> const xRet(rPam.GetNode()->IsTxtNode()
-                ? GetNestedTextContent(*rPam.GetNode()->GetTxtNode(),
+            uno::Reference<XTextContent> const xRet(rPam.GetNode().IsTxtNode()
+                ? GetNestedTextContent(*rPam.GetNode().GetTxtNode(),
                     rPam.GetPoint()->nContent.GetIndex(), false)
                 : 0);
             if (xRet.is())
@@ -663,8 +663,8 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         case FN_UNO_CHARFMT_SEQUENCE:
         {
 
-            SwTxtNode *const pTxtNode = rPam.GetNode()->GetTxtNode();
-            if (rPam.GetNode(true) == rPam.GetNode(false)
+            SwTxtNode *const pTxtNode = rPam.GetNode().GetTxtNode();
+            if (&rPam.GetNode(true) == &rPam.GetNode(false)
                 && pTxtNode && pTxtNode->GetpSwpHints())
             {
                 sal_Int32 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
@@ -680,7 +680,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     SwTxtAttr* pAttr = pHints->GetStart( nAttr );
                     if(pAttr->Which() != RES_TXTATR_CHARFMT)
                         continue;
-                    const sal_Int32 nAttrStart = *pAttr->GetStart();
+                    const sal_Int32 nAttrStart = pAttr->GetStart();
                     const sal_Int32 nAttrEnd = *pAttr->GetEnd();
                     //check if the attribute touches the selection
                     if( ( nAttrEnd > nPaMStart && nAttrStart < nPaMEnd ) ||
@@ -731,7 +731,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
 
 sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
 {
-    const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = rPam.GetNode().GetTxtNode();
     // correction: check, if restart value is set at the text node and use
     // new method <SwTxtNode::GetAttrListRestartValue()> to retrieve the value
     if ( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsListRestart() &&

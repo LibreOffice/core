@@ -1138,16 +1138,16 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 for (size_t nRed = 0; nRed < rRedTbl.size(); ++nRed)
                 {
                     const SwRangeRedline* pRedline = rRedTbl[nRed];
-                    SwNode const*const pRedPointNode = pRedline->GetNode(true);
-                    SwNode const*const pRedMarkNode = pRedline->GetNode(false);
-                    if ((pRedPointNode == pSectNode) ||
-                        (pRedMarkNode == pSectNode))
+                    const SwNode& rRedPointNode = pRedline->GetNode(true);
+                    const SwNode& rRedMarkNode = pRedline->GetNode(false);
+                    if ((&rRedPointNode == pSectNode) ||
+                        (&rRedMarkNode == pSectNode))
                     {
-                        SwNode const*const pStartOfRedline =
-                            (SwNodeIndex(*pRedPointNode) <=
-                             SwNodeIndex(*pRedMarkNode))
-                                 ? pRedPointNode : pRedMarkNode;
-                        const bool bIsStart = (pStartOfRedline == pSectNode);
+                        const SwNode& rStartOfRedline =
+                            (SwNodeIndex(rRedPointNode) <=
+                             SwNodeIndex(rRedMarkNode))
+                                 ? rRedPointNode : rRedMarkNode;
+                        const bool bIsStart = (&rStartOfRedline == pSectNode);
                         pRet[nProperty] <<=
                             SwXRedlinePortion::CreateRedlineProperties(
                                     *pRedline, bIsStart);

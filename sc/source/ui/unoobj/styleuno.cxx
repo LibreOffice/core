@@ -399,13 +399,13 @@ static bool lcl_AnyTabProtected( ScDocument& rDoc )
 ScStyleFamiliesObj::ScStyleFamiliesObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScStyleFamiliesObj::~ScStyleFamiliesObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScStyleFamiliesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -588,13 +588,13 @@ ScStyleFamilyObj::ScStyleFamilyObj(ScDocShell* pDocSh, SfxStyleFamily eFam) :
     pDocShell( pDocSh ),
     eFamily( eFam )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScStyleFamilyObj::~ScStyleFamilyObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScStyleFamilyObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -614,8 +614,8 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_uInt32 nIndex)
 {
     if ( pDocShell )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
 
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         if ( nIndex < aIter.Count() )
@@ -636,8 +636,8 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByName_Impl(const OUString& aName)
     {
         OUString aString(aName);
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
         if ( pStylePool->Find( aString, eFamily ) )
             return new ScStyleObj( pDocShell, eFamily, aString );
     }
@@ -660,8 +660,8 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
         {
             OUString aNameStr(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
 
-            ScDocument* pDoc = pDocShell->GetDocument();
-            ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+            ScDocument& rDoc = pDocShell->GetDocument();
+            ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
 
             //! DocFunc-Funktion??
             //! Undo ?????????????
@@ -670,8 +670,8 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
             {
                 (void)pStylePool->Make( aNameStr, eFamily, SFXSTYLEBIT_USERDEF );
 
-                if ( eFamily == SFX_STYLE_FAMILY_PARA && !pDoc->IsImportingXML() )
-                    pDoc->GetPool()->CellStyleCreated( aNameStr );
+                if ( eFamily == SFX_STYLE_FAMILY_PARA && !rDoc.IsImportingXML() )
+                    rDoc.GetPool()->CellStyleCreated( aNameStr );
 
                 pStyleObj->InitDoc( pDocShell, aNameStr );  // Objekt kann benutzt werden
 
@@ -712,8 +712,8 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
     {
         OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
 
         //! DocFunc-Funktion??
         //! Undo ?????????????
@@ -730,7 +730,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
                 Fraction aZoom(1,1);
-                pDoc->StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+                rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
                 pDocShell->SetDocumentModified();
 
@@ -740,7 +740,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const OUString& aName )
             }
             else
             {
-                if ( pDoc->RemovePageStyleInUse( aString ) )
+                if ( rDoc.RemovePageStyleInUse( aString ) )
                     pDocShell->PageStyleModified( ScGlobal::GetRscString(STR_STYLENAME_STANDARD), true );
 
                 pStylePool->Remove( pStyle );
@@ -764,8 +764,8 @@ sal_Int32 SAL_CALL ScStyleFamilyObj::getCount() throw(uno::RuntimeException, std
     SolarMutexGuard aGuard;
     if ( pDocShell )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
 
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         return aIter.Count();
@@ -820,8 +820,8 @@ uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
     SolarMutexGuard aGuard;
     if ( pDocShell )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
 
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         sal_uInt16 nCount = aIter.Count();
@@ -851,8 +851,8 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const OUString& aName )
     {
         OUString aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
 
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
         if ( pStylePool->Find( aString, eFamily ) )
             return sal_True;
     }
@@ -934,7 +934,7 @@ ScStyleObj::ScStyleObj(ScDocShell* pDocSh, SfxStyleFamily eFam, const OUString& 
     //  pDocShell ist Null, wenn per ServiceProvider erzeugt
 
     if (pDocShell)
-        pDocShell->GetDocument()->AddUnoObject(*this);
+        pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 void ScStyleObj::InitDoc( ScDocShell* pNewDocSh, const OUString& rNewName )
@@ -943,14 +943,14 @@ void ScStyleObj::InitDoc( ScDocShell* pNewDocSh, const OUString& rNewName )
     {
         aStyleName = rNewName;
         pDocShell = pNewDocSh;
-        pDocShell->GetDocument()->AddUnoObject(*this);
+        pDocShell->GetDocument().AddUnoObject(*this);
     }
 }
 
 ScStyleObj::~ScStyleObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 // XUnoTunnel
@@ -1002,8 +1002,8 @@ SfxStyleSheetBase* ScStyleObj::GetStyle_Impl()
 {
     if ( pDocShell )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
         return pStylePool->Find( aStyleName, eFamily );
     }
     return NULL;
@@ -1048,7 +1048,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
     if (pStyle)
     {
         //  cell styles cannot be modified if any sheet is protected
-        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
+        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             return;         //! exception?
 
         //! DocFunc-Funktion??
@@ -1060,7 +1060,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
         {
             //  wie bei setPropertyValue
 
-            ScDocument* pDoc = pDocShell->GetDocument();
+            ScDocument& rDoc = pDocShell->GetDocument();
             if ( eFamily == SFX_STYLE_FAMILY_PARA )
             {
                 //  Zeilenhoehen anpassen...
@@ -1070,7 +1070,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const OUString& rParentStyle )
                 double nPPTX = aLogic.X() / 1000.0;
                 double nPPTY = aLogic.Y() / 1000.0;
                 Fraction aZoom(1,1);
-                pDoc->StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+                rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
                 pDocShell->SetDocumentModified();
@@ -1104,7 +1104,7 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
     if (pStyle)
     {
         //  cell styles cannot be renamed if any sheet is protected
-        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
+        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             return;         //! exception?
 
         //! DocFunc-Funktion??
@@ -1116,9 +1116,9 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
         {
             aStyleName = aString;       //! notify other objects for this style?
 
-            ScDocument* pDoc = pDocShell->GetDocument();
-            if ( eFamily == SFX_STYLE_FAMILY_PARA && !pDoc->IsImportingXML() )
-                pDoc->GetPool()->CellStyleCreated( aString );
+            ScDocument& rDoc = pDocShell->GetDocument();
+            if ( eFamily == SFX_STYLE_FAMILY_PARA && !rDoc.IsImportingXML() )
+                rDoc.GetPool()->CellStyleCreated( aString );
 
             //  Zellvorlagen = 2, Seitenvorlagen = 4
             sal_uInt16 nId = ( eFamily == SFX_STYLE_FAMILY_PARA ) ?
@@ -1416,7 +1416,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
     if ( pStyle )
     {
         //  cell styles cannot be modified if any sheet is protected
-        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
+        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             throw uno::RuntimeException();
 
         SfxItemSet& rSet = pStyle->GetItemSet();
@@ -1424,7 +1424,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
 
         //! merge with SetOneProperty
 
-        ScDocument* pDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = pDocShell->GetDocument();
         if ( eFamily == SFX_STYLE_FAMILY_PARA )
         {
             //  row heights
@@ -1434,7 +1434,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
             Fraction aZoom(1,1);
-            pDoc->StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+            rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
             pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
             pDocShell->SetDocumentModified();
@@ -1527,7 +1527,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
     if ( pStyle && pEntry )
     {
         //  cell styles cannot be modified if any sheet is protected
-        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( *pDocShell->GetDocument() ) )
+        if ( eFamily == SFX_STYLE_FAMILY_PARA && lcl_AnyTabProtected( pDocShell->GetDocument() ) )
             throw uno::RuntimeException();
 
         SfxItemSet& rSet = pStyle->GetItemSet();    // direkt im lebenden Style aendern...
@@ -1577,7 +1577,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                                 {
                                     // language for number formats
                                     SvNumberFormatter* pFormatter =
-                                            pDocShell->GetDocument()->GetFormatTable();
+                                            pDocShell->GetDocument().GetFormatTable();
                                     sal_uInt32 nOldFormat = ((const SfxUInt32Item&)
                                             rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
                                     LanguageType eOldLang = ((const SvxLanguageItem&)
@@ -1803,7 +1803,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
         //! DocFunc-Funktion??
         //! Undo ?????????????
 
-        ScDocument* pDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = pDocShell->GetDocument();
         if ( eFamily == SFX_STYLE_FAMILY_PARA )
         {
             //  Zeilenhoehen anpassen...
@@ -1813,7 +1813,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
             double nPPTX = aLogic.X() / 1000.0;
             double nPPTY = aLogic.Y() / 1000.0;
             Fraction aZoom(1,1);
-            pDoc->StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
+            rDoc.StyleSheetChanged( pStyle, false, &aVDev, nPPTX, nPPTY, aZoom, aZoom );
 
             pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID|PAINT_LEFT );
             pDocShell->SetDocumentModified();
@@ -1861,7 +1861,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
                                     pItemSet->Get( ATTR_VALUE_FORMAT )).GetValue();
                             LanguageType eOldLang = ((const SvxLanguageItem&)
                                     pItemSet->Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
-                            nOldFormat = pDocShell->GetDocument()->GetFormatTable()->
+                            nOldFormat = pDocShell->GetDocument().GetFormatTable()->
                                     GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
                             aAny <<= nOldFormat;
                         }

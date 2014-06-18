@@ -107,7 +107,7 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
     {
         pXFContentContainer = m_pPara->GetXFContainer();
         //delete the additional blank para, 06/28/2005
-        XFParagraph* pCurrPara = m_pPara->GetFribs()->GetXFPara();
+        XFParagraph* pCurrPara = m_pPara->GetFribs().GetXFPara();
         if(!pCurrPara->HasContents())
         {
             if(pXFContentContainer->GetLastContent() == pCurrPara)
@@ -165,7 +165,7 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
         XFParagraph* pXFPara = new XFParagraph();
         pXFPara->SetStyleName(m_StyleName);
         m_pPara->AddXFContent(pXFPara);
-        m_pPara->GetFribs()->SetXFPara(pXFPara);
+        m_pPara->GetFribs().SetXFPara(pXFPara);
     }
 
 }

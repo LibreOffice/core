@@ -106,7 +106,7 @@ public:
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
 
-    const ScDPCache* getCache() const { return &mrCache;}
+    const ScDPCache& getCache() const { return mrCache;}
 
     void fillTable(const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty);
 

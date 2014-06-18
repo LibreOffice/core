@@ -124,7 +124,7 @@ TOTypeInfoSP OTableFieldControl::getTypeInfo(sal_Int32 _nPos)
 
 const OTypeInfoMap* OTableFieldControl::getTypeInfo() const
 {
-    return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getTypeInfo();
+    return &const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getTypeInfo();
 }
 
 Locale OTableFieldControl::GetLocale() const

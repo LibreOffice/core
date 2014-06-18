@@ -92,16 +92,16 @@ bool ScTable::SetOutlineTable( const ScOutlineTable* pNewOutline )
 
     if (pOutlineTable)
     {
-        nOldSizeX = pOutlineTable->GetColArray()->GetDepth();
-        nOldSizeY = pOutlineTable->GetRowArray()->GetDepth();
+        nOldSizeX = pOutlineTable->GetColArray().GetDepth();
+        nOldSizeY = pOutlineTable->GetRowArray().GetDepth();
         delete pOutlineTable;
     }
 
     if (pNewOutline)
     {
         pOutlineTable = new ScOutlineTable( *pNewOutline );
-        nNewSizeX = pOutlineTable->GetColArray()->GetDepth();
-        nNewSizeY = pOutlineTable->GetRowArray()->GetDepth();
+        nNewSizeX = pOutlineTable->GetColArray().GetDepth();
+        nNewSizeY = pOutlineTable->GetRowArray().GetDepth();
     }
     else
         pOutlineTable = NULL;
@@ -3348,7 +3348,7 @@ bool ScTable::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, bool bShow )
     if (pOutlineTable && pColFlags)
     {
         ScBitMaskCompressedArray< SCCOLROW, sal_uInt8> aArray( MAXCOL, pColFlags, MAXCOLCOUNT);
-        return pOutlineTable->GetColArray()->ManualAction( nStartCol, nEndCol, bShow, *this, true );
+        return pOutlineTable->GetColArray().ManualAction( nStartCol, nEndCol, bShow, *this, true );
     }
     else
         return false;
@@ -3358,7 +3358,7 @@ bool ScTable::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, bool bShow )
 bool ScTable::UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, bool bShow )
 {
     if (pOutlineTable && pRowFlags)
-        return pOutlineTable->GetRowArray()->ManualAction( nStartRow, nEndRow, bShow, *this, false );
+        return pOutlineTable->GetRowArray().ManualAction( nStartRow, nEndRow, bShow, *this, false );
     else
         return false;
 }
@@ -3475,7 +3475,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
     SCCOL nCol;
     SCROW nRow;
     bool bFound;
-    ScOutlineArray* pArray;
     ScRange aRef;
 
     StartOutlineTable();
@@ -3487,7 +3486,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
         aCol[nCol].FindUsed(nStartRow, nEndRow, aUsed);
     aUsed.build_tree();
 
-    pArray = pOutlineTable->GetRowArray();
+    ScOutlineArray& rRowArray = pOutlineTable->GetRowArray();
     for (nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
         bool bUsed = false;
@@ -3515,7 +3514,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                  DiffSign( aRef.aStart.Row(), nRow ) ==
                     DiffSign( aRef.aEnd.Row(), nRow ) )
             {
-                if (pArray->Insert( aRef.aStart.Row(), aRef.aEnd.Row(), bSizeChanged ))
+                if (rRowArray.Insert( aRef.aStart.Row(), aRef.aEnd.Row(), bSizeChanged ))
                 {
                     bFound = true;
                 }
@@ -3524,13 +3523,13 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
     }
 
     // Column
-    pArray = pOutlineTable->GetColArray();
+    ScOutlineArray& rColArray = pOutlineTable->GetColArray();
     for (nCol=nStartCol; nCol<=nEndCol; nCol++)
     {
         if (aCol[nCol].IsEmptyData())
             continue;
 
-        OutlineArrayFinder aFunc(aRef, nCol, nTab, pArray, bSizeChanged);
+        OutlineArrayFinder aFunc(aRef, nCol, nTab, &rColArray, bSizeChanged);
         sc::FindFormula(aCol[nCol].maCells, nStartRow, nEndRow, aFunc);
     }
 }

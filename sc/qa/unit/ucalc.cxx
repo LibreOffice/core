@@ -162,7 +162,7 @@ void Test::setUp()
         SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
 
     m_pImpl->m_xDocShell->DoInitUnitTest();
-    m_pDoc = m_pImpl->m_xDocShell->GetDocument();
+    m_pDoc = &m_pImpl->m_xDocShell->GetDocument();
 }
 
 void Test::tearDown()
@@ -4579,7 +4579,7 @@ void Test::testCopyPasteFormulasExternalDoc()
     OUString aDocName("file:///source.fake");
     SfxMedium* pMedium = new SfxMedium(aDocName, STREAM_STD_READWRITE);
     getDocShell().DoInitNew(pMedium);
-    m_pDoc = getDocShell().GetDocument();
+    m_pDoc = &getDocShell().GetDocument();
 
     ScDocShellRef xExtDocSh = new ScDocShell;
     OUString aExtDocName("file:///extdata.fake");
@@ -4590,9 +4590,9 @@ void Test::testCopyPasteFormulasExternalDoc()
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != NULL);
 
-    ScDocument* pExtDoc = xExtDocSh->GetDocument();
-    pExtDoc->InsertTab(0, aExtSh1Name);
-    pExtDoc->InsertTab(1, aExtSh2Name);
+    ScDocument& rExtDoc = xExtDocSh->GetDocument();
+    rExtDoc.InsertTab(0, aExtSh1Name);
+    rExtDoc.InsertTab(1, aExtSh2Name);
 
     m_pDoc->InsertTab(0, "Sheet1");
     m_pDoc->InsertTab(1, "Sheet2");
@@ -4615,23 +4615,23 @@ void Test::testCopyPasteFormulasExternalDoc()
     aRange = ScRange(1,1,1,1,6,1);
     ScMarkData aMarkData2;
     aMarkData2.SetMarkArea(aRange);
-    pExtDoc->CopyFromClip(aRange, aMarkData2, nFlags, NULL, pClipDoc);
+    rExtDoc.CopyFromClip(aRange, aMarkData2, nFlags, NULL, pClipDoc);
 
     OUString aFormula;
-    pExtDoc->GetFormula(1,1,1, aFormula);
+    rExtDoc.GetFormula(1,1,1, aFormula);
     //adjust absolute refs pointing to the copy area
     CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=COLUMN($B$2)"));
-    pExtDoc->GetFormula(1,2,1, aFormula);
+    rExtDoc.GetFormula(1,2,1, aFormula);
     //adjust absolute refs and keep relative refs
     CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$B$2+C3"));
-    pExtDoc->GetFormula(1,3,1, aFormula);
+    rExtDoc.GetFormula(1,3,1, aFormula);
     // make absolute sheet refs external refs
     CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.B2"));
-    pExtDoc->GetFormula(1,4,1, aFormula);
+    rExtDoc.GetFormula(1,4,1, aFormula);
     CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.$A$1"));
-    pExtDoc->GetFormula(1,5,1, aFormula);
+    rExtDoc.GetFormula(1,5,1, aFormula);
     CPPUNIT_ASSERT_EQUAL(aFormula, OUString("='file:///source.fake'#$Sheet2.B$1"));
-    pExtDoc->GetFormula(1,6,1, aFormula);
+    rExtDoc.GetFormula(1,6,1, aFormula);
     CPPUNIT_ASSERT_EQUAL(aFormula, OUString("=$ExtSheet2.$B$2"));
 }
 
@@ -5466,21 +5466,21 @@ void Test::testNoteDeleteRow()
 
 void Test::testNoteDeleteCol()
 {
-    ScDocument* pDoc = getDocShell().GetDocument();
-    pDoc->InsertTab(0, "Sheet1");
+    ScDocument& rDoc = getDocShell().GetDocument();
+    rDoc.InsertTab(0, "Sheet1");
 
     ScAddress rAddr(1, 1, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(rAddr);
     pNote->SetText(rAddr, "Hello");
     pNote->SetAuthor("Jim Bob");
 
-    CPPUNIT_ASSERT_MESSAGE("there should be a note", pDoc->HasNote(1, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("there should be a note", rDoc.HasNote(1, 1, 0));
 
-    pDoc->DeleteCol(0, 0, MAXROW, 0, 1, 1);
+    rDoc.DeleteCol(0, 0, MAXROW, 0, 1, 1);
 
-    CPPUNIT_ASSERT_MESSAGE("there should be no more note", !pDoc->HasNote(1, 1, 0));
+    CPPUNIT_ASSERT_MESSAGE("there should be no more note", !rDoc.HasNote(1, 1, 0));
 
-    pDoc->DeleteTab(0);
+    rDoc.DeleteTab(0);
 }
 
 void Test::testNoteLifeCycle()
@@ -5583,8 +5583,8 @@ void Test::testNoteCopyPaste()
 
 void Test::testAreasWithNotes()
 {
-    ScDocument* pDoc = getDocShell().GetDocument();
-    pDoc->InsertTab(0, "Sheet1");
+    ScDocument& rDoc = getDocShell().GetDocument();
+    rDoc.InsertTab(0, "Sheet1");
 
     ScAddress rAddr(1, 5, 0);
     ScPostIt* pNote = m_pDoc->GetOrCreateNote(rAddr);
@@ -5600,40 +5600,40 @@ void Test::testAreasWithNotes()
 
     // only cell notes (empty content)
 
-    dataFound = pDoc->GetDataStart(0,col,row);
+    dataFound = rDoc.GetDataStart(0,col,row);
 
     CPPUNIT_ASSERT_MESSAGE("No DataStart found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("DataStart wrong col for notes", col == 1);
     CPPUNIT_ASSERT_MESSAGE("DataStart wrong row for notes", row == 2);
 
-    dataFound = pDoc->GetCellArea(0,col,row);
+    dataFound = rDoc.GetCellArea(0,col,row);
 
     CPPUNIT_ASSERT_MESSAGE("No CellArea found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("CellArea wrong col for notes", col == 2);
     CPPUNIT_ASSERT_MESSAGE("CellArea wrong row for notes", row == 5);
 
     bool bNotes = true;
-    dataFound = pDoc->GetPrintArea(0,col,row, bNotes);
+    dataFound = rDoc.GetPrintArea(0,col,row, bNotes);
 
     CPPUNIT_ASSERT_MESSAGE("No PrintArea found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("PrintArea wrong col for notes", col == 2);
     CPPUNIT_ASSERT_MESSAGE("PrintArea wrong row for notes", row == 5);
 
     bNotes = false;
-    dataFound = pDoc->GetPrintArea(0,col,row, bNotes);
+    dataFound = rDoc.GetPrintArea(0,col,row, bNotes);
     CPPUNIT_ASSERT_MESSAGE("No PrintArea should be found", !dataFound);
 
     bNotes = true;
-    dataFound = pDoc->GetPrintAreaVer(0,0,1,row, bNotes); // cols 0 & 1
+    dataFound = rDoc.GetPrintAreaVer(0,0,1,row, bNotes); // cols 0 & 1
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("PrintAreaVer wrong row for notes", row == 5);
 
-    dataFound = pDoc->GetPrintAreaVer(0,2,3,row, bNotes); // cols 2 & 3
+    dataFound = rDoc.GetPrintAreaVer(0,2,3,row, bNotes); // cols 2 & 3
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("PrintAreaVer wrong row for notes", row == 2);
 
     bNotes = false;
-    dataFound = pDoc->GetPrintAreaVer(0,0,1,row, bNotes); // col 0 & 1
+    dataFound = rDoc.GetPrintAreaVer(0,0,1,row, bNotes); // col 0 & 1
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer should be found", !dataFound);
 
     // now add cells with value, check that notes are taken into accompt in good cases
@@ -5641,46 +5641,46 @@ void Test::testAreasWithNotes()
     m_pDoc->SetString(0, 3, 0, "Some Text");
     m_pDoc->SetString(3, 3, 0, "Some Text");
 
-    dataFound = pDoc->GetDataStart(0,col,row);
+    dataFound = rDoc.GetDataStart(0,col,row);
 
     CPPUNIT_ASSERT_MESSAGE("No DataStart found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("DataStart wrong col", col == 0);
     CPPUNIT_ASSERT_MESSAGE("DataStart wrong row", row == 2);
 
-    dataFound = pDoc->GetCellArea(0,col,row);
+    dataFound = rDoc.GetCellArea(0,col,row);
 
     CPPUNIT_ASSERT_MESSAGE("No CellArea found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("CellArea wrong col", col == 3);
     CPPUNIT_ASSERT_MESSAGE("CellArea wrong row", row == 5);
 
     bNotes = true;
-    dataFound = pDoc->GetPrintArea(0,col,row, bNotes);
+    dataFound = rDoc.GetPrintArea(0,col,row, bNotes);
 
     CPPUNIT_ASSERT_MESSAGE("No PrintArea found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("PrintArea wrong col", col == 3);
     CPPUNIT_ASSERT_MESSAGE("PrintArea wrong row", row == 5);
 
     bNotes = false;
-    dataFound = pDoc->GetPrintArea(0,col,row, bNotes);
+    dataFound = rDoc.GetPrintArea(0,col,row, bNotes);
     CPPUNIT_ASSERT_MESSAGE("No PrintArea found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("PrintArea wrong col", col == 3);
     CPPUNIT_ASSERT_MESSAGE("PrintArea wrong row", row == 3);
 
     bNotes = true;
-    dataFound = pDoc->GetPrintAreaVer(0,0,1,row, bNotes); // cols 0 & 1
+    dataFound = rDoc.GetPrintAreaVer(0,0,1,row, bNotes); // cols 0 & 1
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("PrintAreaVer wrong row", row == 5);
 
-    dataFound = pDoc->GetPrintAreaVer(0,2,3,row, bNotes); // cols 2 & 3
+    dataFound = rDoc.GetPrintAreaVer(0,2,3,row, bNotes); // cols 2 & 3
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("PrintAreaVer wrong row", row == 3);
 
     bNotes = false;
-    dataFound = pDoc->GetPrintAreaVer(0,0,1,row, bNotes); // cols 0 & 1
+    dataFound = rDoc.GetPrintAreaVer(0,0,1,row, bNotes); // cols 0 & 1
     CPPUNIT_ASSERT_MESSAGE("No PrintAreaVer found", dataFound);
     CPPUNIT_ASSERT_MESSAGE("PrintAreaVer wrong row", row == 3);
 
-    pDoc->DeleteTab(0);
+    rDoc.DeleteTab(0);
 }
 
 void Test::testAnchoredRotatedShape()
@@ -6460,10 +6460,10 @@ void Test::pasteFromClip(ScDocument* pDestDoc, const ScRange& rDestRange, ScDocu
 
 ScUndoPaste* Test::createUndoPaste(ScDocShell& rDocSh, const ScRange& rRange, ScDocument* pUndoDoc)
 {
-    ScDocument* pDoc = rDocSh.GetDocument();
+    ScDocument& rDoc = rDocSh.GetDocument();
     ScMarkData aMarkData;
     aMarkData.SetMarkArea(rRange);
-    ScRefUndoData* pRefUndoData = new ScRefUndoData(pDoc);
+    ScRefUndoData* pRefUndoData = new ScRefUndoData(&rDoc);
 
     return new ScUndoPaste(
         &rDocSh, rRange, aMarkData, pUndoDoc, NULL, IDF_ALL, pRefUndoData, false);

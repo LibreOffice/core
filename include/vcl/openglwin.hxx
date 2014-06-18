@@ -37,7 +37,7 @@ class VCLOPENGL_DLLPUBLIC OpenGLWindow : public Window
 public:
     OpenGLWindow(Window* pParent);
     virtual ~OpenGLWindow();
-    OpenGLContext* getContext();
+    OpenGLContext& getContext();
 
     void setRenderer(IRenderer* pRenderer);
 

@@ -58,7 +58,7 @@ namespace dbaui
         ::osl::MutexGuard aGuard( m_aMutex  );
         sal_Int32 nChildCount = 0;
         if ( m_pTableView )
-            nChildCount = m_pTableView->GetTabWinCount() + m_pTableView->getTableConnections()->size();
+            nChildCount = m_pTableView->GetTabWinCount() + m_pTableView->getTableConnections().size();
         return nChildCount;
     }
     Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException, std::exception)
@@ -71,13 +71,13 @@ namespace dbaui
             sal_Int32 nTableWindowCount = m_pTableView->GetTabWinCount();
             if( i < nTableWindowCount )
             {
-                OJoinTableView::OTableWindowMap::iterator aIter = m_pTableView->GetTabWinMap()->begin();
+                OJoinTableView::OTableWindowMap::iterator aIter = m_pTableView->GetTabWinMap().begin();
                 for (sal_Int32 j=i; j; ++aIter,--j)
                     ;
                 aRet = aIter->second->GetAccessible();
             }
-            else if( size_t(i - nTableWindowCount) < m_pTableView->getTableConnections()->size() )
-                aRet = (*m_pTableView->getTableConnections())[i - nTableWindowCount]->GetAccessible();
+            else if( size_t(i - nTableWindowCount) < m_pTableView->getTableConnections().size() )
+                aRet = m_pTableView->getTableConnections()[i - nTableWindowCount]->GetAccessible();
         }
         else
             throw IndexOutOfBoundsException();

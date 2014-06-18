@@ -243,7 +243,7 @@ ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
             PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
         OSL_ENSURE( pViewShell, "missing view shell :-(" );
         pWindow = pViewShell ?
-            new ScAcceptChgDlg( pBindings, this, pParentP, pViewShell->GetViewData() ) :
+            new ScAcceptChgDlg( pBindings, this, pParentP, &pViewShell->GetViewData() ) :
             NULL;
         if(pWindow!=NULL)
         {
@@ -261,7 +261,7 @@ void ScAcceptChgDlgWrapper::ReInitDlg()
 
     if(pWindow!=NULL && pViewShell)
     {
-        ((ScAcceptChgDlg*)pWindow)->ReInit(pViewShell->GetViewData());
+        ((ScAcceptChgDlg*)pWindow)->ReInit(&pViewShell->GetViewData());
     }
 }
 

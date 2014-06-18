@@ -1915,7 +1915,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             SwTxtNode& rTNd = const_cast<SwTxtNode&>(pTxtFtn->GetTxtNode());
 
             mrSh._GetCrsr()->GetPoint()->nNode = rTNd;
-            mrSh._GetCrsr()->GetPoint()->nContent.Assign( &rTNd, *pTxtFtn->GetStart() );
+            mrSh._GetCrsr()->GetPoint()->nContent.Assign( &rTNd, pTxtFtn->GetStart() );
 
             // 1. Check if the whole paragraph is hidden
             // 2. Check for hidden text attribute

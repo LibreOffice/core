@@ -95,8 +95,7 @@ namespace dbaui
         sal_Int32 nCount = 0;
         if(m_pTable)
         {
-            if(m_pTable->GetTitleCtrl())
-                ++nCount;
+            ++nCount;
             if(m_pTable->GetListBox())
                 ++nCount;
         }
@@ -111,14 +110,10 @@ namespace dbaui
             switch(i)
             {
                 case 0:
-                    if(m_pTable->GetTitleCtrl())
-                    {
-                        aRet = m_pTable->GetTitleCtrl()->GetAccessible();
-                        break;
-                    } // fall through if title control does not exist
+                    aRet = m_pTable->GetTitleCtrl().GetAccessible();
+                    break;
                 case 1:
-                    if(m_pTable->GetListBox())
-                        aRet = m_pTable->GetListBox()->GetAccessible();
+                    aRet = m_pTable->GetListBox()->GetAccessible();
                     break;
                 default:
                     throw IndexOutOfBoundsException();
@@ -133,9 +128,9 @@ namespace dbaui
         if( m_pTable )
         {
             // search the position of our table window in the table window map
-            OJoinTableView::OTableWindowMap* pMap = m_pTable->getTableView()->GetTabWinMap();
-            OJoinTableView::OTableWindowMap::iterator aIter = pMap->begin();
-            OJoinTableView::OTableWindowMap::iterator aEnd = pMap->end();
+            OJoinTableView::OTableWindowMap& rMap = m_pTable->getTableView()->GetTabWinMap();
+            OJoinTableView::OTableWindowMap::iterator aIter = rMap.begin();
+            OJoinTableView::OTableWindowMap::iterator aEnd = rMap.end();
             for (nIndex = 0; aIter != aEnd && aIter->second != m_pTable; ++nIndex,++aIter)
                 ;
             nIndex = aIter != aEnd ? nIndex : -1;
@@ -199,7 +194,7 @@ namespace dbaui
             OJoinTableView* pView = m_pTable->getTableView();
             ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable) + nIndex;
             aRet.TargetSet.realloc(1);
-            aRet.TargetSet[0] = getParentChild(aIter - pView->getTableConnections()->begin());
+            aRet.TargetSet[0] = getParentChild(aIter - pView->getTableConnections().begin());
             aRet.RelationType = AccessibleRelationType::CONTROLLER_FOR;
         }
         return aRet;
@@ -216,16 +211,16 @@ namespace dbaui
         if( AccessibleRelationType::CONTROLLER_FOR == aRelationType && m_pTable)
         {
             OJoinTableView* pView = m_pTable->getTableView();
-            const ::std::vector<OTableConnection*>* pConnectionList = pView->getTableConnections();
+            const ::std::vector<OTableConnection*>& rConnectionList = pView->getTableConnections();
 
             ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable);
-            ::std::vector<OTableConnection*>::const_iterator aEnd = pConnectionList->end();
+            ::std::vector<OTableConnection*>::const_iterator aEnd = rConnectionList.end();
             ::std::vector< Reference<XInterface> > aRelations;
             aRelations.reserve(5); // just guessing
             for (; aIter != aEnd ; ++aIter )
             {
                 uno::Reference<uno::XInterface> xInterface(
-                    getParentChild(aIter - pConnectionList->begin()));
+                    getParentChild(aIter - rConnectionList.begin()));
                 aRelations.push_back(xInterface);
             }
 

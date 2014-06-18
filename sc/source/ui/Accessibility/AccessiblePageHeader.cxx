@@ -227,25 +227,22 @@ sal_Int32 SAL_CALL ScAccessiblePageHeader::getAccessibleChildCount() throw (uno:
     if((mnChildCount < 0) && mpViewShell)
     {
         mnChildCount = 0;
-        ScDocument* pDoc = mpViewShell->GetDocument();
-        if (pDoc)
+        ScDocument& rDoc = mpViewShell->GetDocument();
+        // find out how many regions (left,center, right) are with content
+
+        SfxStyleSheetBase* pStyle = rDoc.GetStyleSheetPool()->Find(rDoc.GetPageStyle(mpViewShell->GetLocationData().GetPrintTab()), SFX_STYLE_FAMILY_PAGE);
+        if (pStyle)
         {
-            // find out how many regions (left,center, right) are with content
+            sal_uInt16 nPageWhichId(0);
+            if (mbHeader)
+                nPageWhichId = mpViewShell->GetLocationData().IsHeaderLeft() ? ATTR_PAGE_HEADERLEFT : ATTR_PAGE_HEADERRIGHT;
+            else
+                nPageWhichId = mpViewShell->GetLocationData().IsFooterLeft() ? ATTR_PAGE_FOOTERLEFT : ATTR_PAGE_FOOTERRIGHT;
 
-            SfxStyleSheetBase* pStyle = pDoc->GetStyleSheetPool()->Find(pDoc->GetPageStyle(mpViewShell->GetLocationData().GetPrintTab()), SFX_STYLE_FAMILY_PAGE);
-            if (pStyle)
-            {
-                sal_uInt16 nPageWhichId(0);
-                if (mbHeader)
-                    nPageWhichId = mpViewShell->GetLocationData().IsHeaderLeft() ? ATTR_PAGE_HEADERLEFT : ATTR_PAGE_HEADERRIGHT;
-                else
-                    nPageWhichId = mpViewShell->GetLocationData().IsFooterLeft() ? ATTR_PAGE_FOOTERLEFT : ATTR_PAGE_FOOTERRIGHT;
-
-                const ScPageHFItem& rPageItem = static_cast<const ScPageHFItem&>(pStyle->GetItemSet().Get(nPageWhichId));
-                AddChild(rPageItem.GetLeftArea(), 0, SVX_ADJUST_LEFT);
-                AddChild(rPageItem.GetCenterArea(), 1, SVX_ADJUST_CENTER);
-                AddChild(rPageItem.GetRightArea(), 2, SVX_ADJUST_RIGHT);
-            }
+            const ScPageHFItem& rPageItem = static_cast<const ScPageHFItem&>(pStyle->GetItemSet().Get(nPageWhichId));
+            AddChild(rPageItem.GetLeftArea(), 0, SVX_ADJUST_LEFT);
+            AddChild(rPageItem.GetCenterArea(), 1, SVX_ADJUST_CENTER);
+            AddChild(rPageItem.GetRightArea(), 2, SVX_ADJUST_RIGHT);
         }
     }
 

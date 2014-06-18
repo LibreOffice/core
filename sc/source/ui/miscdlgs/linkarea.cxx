@@ -266,7 +266,7 @@ void ScLinkedAreaDlg::UpdateSourceRanges()
     m_pLbRanges->Clear();
     if ( pSourceShell )
     {
-        ScAreaNameIterator aIter( pSourceShell->GetDocument() );
+        ScAreaNameIterator aIter( &pSourceShell->GetDocument() );
         ScRange aDummy;
         OUString aName;
         while ( aIter.Next( aName, aDummy ) )

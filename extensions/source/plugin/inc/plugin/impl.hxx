@@ -196,8 +196,8 @@ public:
     Reference< com::sun::star::lang::XMultiServiceFactory > getServiceManager() { return m_xSMgr; }
     const com::sun::star::plugin::PluginDescription& getDescription() const { return m_aDescription; }
     rtl_TextEncoding getTextEncoding() { return m_aEncoding; }
-    NPP             getNPPInstance() { return &m_aInstance; }
-    NPWindow*       getNPWindow() { return &m_aNPWindow; }
+    NPP_t&          getNPPInstance() { return m_aInstance; }
+    NPWindow&       getNPWindow() { return m_aNPWindow; }
     SysPlugData&    getSysPlugData() { return *m_pSysPlugData; }
 
     void            enterPluginCallback() { m_nCalledFromPlugin++; }
@@ -336,7 +336,7 @@ public:
                    const char* url, sal_uInt32 len, sal_uInt32 lastmod );
     virtual ~PluginStream();
 
-    NPStream* getStream() { return &m_aNPStream; }
+    NPStream& getStream() { return m_aNPStream; }
     XPlugin_Impl* getPlugin() { return m_pPlugin; }
 
     virtual PluginStreamType getStreamType() = 0;

@@ -449,7 +449,7 @@ bool ScFormulaDlg::IsDocAllowed(SfxObjectShell* pDocSh) const
 {
     //  not allowed: different from this doc, and no name
     //  pDocSh is always a ScDocShell
-    if ( pDocSh && ((ScDocShell*)pDocSh)->GetDocument() != pDoc && !pDocSh->HasName() )
+    if ( pDocSh && &((ScDocShell*)pDocSh)->GetDocument() != pDoc && !pDocSh->HasName() )
         return false;
 
     return true;        // everything else is allowed
@@ -579,15 +579,15 @@ void ScFormulaDlg::switchBack()
     ScTabViewShell* pScViewShell = PTR_CAST(ScTabViewShell, SfxViewShell::Current());
     if ( pScViewShell )
     {
-        ScViewData* pVD=pScViewShell->GetViewData();
+        ScViewData& rVD=pScViewShell->GetViewData();
         SCTAB nExecTab = aCursorPos.Tab();
-        if ( nExecTab != pVD->GetTabNo() )
+        if ( nExecTab != rVD.GetTabNo() )
             pScViewShell->SetTabNo( nExecTab );
 
         SCROW nRow=aCursorPos.Row();
         SCCOL nCol=aCursorPos.Col();
 
-        if(pVD->GetCurX()!=nCol || pVD->GetCurY()!=nRow)
+        if(rVD.GetCurX()!=nCol || rVD.GetCurY()!=nRow)
             pScViewShell->SetCursor(nCol,nRow);
     }
 }

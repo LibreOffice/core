@@ -144,10 +144,10 @@ void  LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
     LwpDocument* pDoc = pFoundry->GetDocument();
     if (pDoc)
     {
-        LwpObjectID* pID = pDoc->GetDivInfoID();
-        if (!pID->IsNull())
+        LwpObjectID& rID = pDoc->GetDivInfoID();
+        if (!rID.IsNull())
         {
-            LwpDivInfo *pDivInvo = dynamic_cast<LwpDivInfo*>(pID->obj(VO_DIVISIONINFO).get());
+            LwpDivInfo *pDivInvo = dynamic_cast<LwpDivInfo*>(rID.obj(VO_DIVISIONINFO).get());
             if (pDivInvo)
                 sDivision = pDivInvo->GetDivName();
         }

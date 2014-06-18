@@ -364,7 +364,7 @@ void SwSelPaintRects::HighlightInputFld()
         {
             SwTxtNode* pTxtNode = pCurTxtInputFldAtCrsr->GetpTxtNode();
             ::boost::scoped_ptr<SwShellCrsr> pCrsrForInputTxtFld(
-                new SwShellCrsr( *GetShell(), SwPosition( *pTxtNode, *(pCurTxtInputFldAtCrsr->GetStart()) ) ) );
+                new SwShellCrsr( *GetShell(), SwPosition( *pTxtNode, pCurTxtInputFldAtCrsr->GetStart() ) ) );
             pCrsrForInputTxtFld->SetMark();
             pCrsrForInputTxtFld->GetMark()->nNode = *pTxtNode;
             pCrsrForInputTxtFld->GetMark()->nContent.Assign( pTxtNode, *(pCurTxtInputFldAtCrsr->End()) );

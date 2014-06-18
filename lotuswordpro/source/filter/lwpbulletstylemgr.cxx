@@ -155,8 +155,8 @@ OUString LwpBulletStyleMgr::RegisterBulletStyle(LwpPara* pPara, LwpBulletOverrid
     m_vIDsPairList.push_back(std::make_pair(pBulletOver, aIndentID));
     OUString aStyleName;
 
-    LwpFribPtr* pBulletParaFribs = pBulletPara->GetFribs();
-    bool bIsNumbering = (pBulletParaFribs->HasFrib(FRIB_TAG_PARANUMBER) != 0);
+    LwpFribPtr& rBulletParaFribs = pBulletPara->GetFribs();
+    bool bIsNumbering = (rBulletParaFribs.HasFrib(FRIB_TAG_PARANUMBER) != 0);
 
     enumXFAlignType eAlign = enumXFAlignStart;
     if (pBullOver->IsRightAligned())

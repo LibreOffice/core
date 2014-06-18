@@ -167,7 +167,7 @@ static long lcl_LineTotal(const ::editeng::SvxBorderLine* pLine)
 void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
 {
     pDocShell->UpdatePendingRowHeights( nPrintTab );
-    pDoc = pDocShell->GetDocument();
+    pDoc = &pDocShell->GetDocument();
 
     SfxPrinter* pDocPrinter = pDoc->GetPrinter();   // use the printer, even for preview
     if (pDocPrinter)

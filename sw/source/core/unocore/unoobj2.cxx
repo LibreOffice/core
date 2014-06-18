@@ -332,7 +332,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
 
     if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SFX_ITEM_AVAILABLE )
     {
-        SwTxtNode * pTmpNode = rPam.GetNode()->GetTxtNode();
+        SwTxtNode * pTmpNode = rPam.GetNode().GetTxtNode();
         if ( pTmpNode )
         {
             rPam.GetDoc()->GetNodes().UpdateOutlineNode( *pTmpNode );
@@ -605,7 +605,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
 
         // os 2005-01-14: This part is only necessary to detect movements out
         // of a selection; if there is no selection we don't have to care
-        SwTableNode *const pTblNode = aNewCrsr->GetNode()->FindTableNode();
+        SwTableNode *const pTblNode = aNewCrsr->GetNode().FindTableNode();
         if (((CURSOR_TBLTEXT != m_eCursorType) &&
             (CURSOR_SELECTION_IN_TABLE != m_eCursorType)) && pTblNode)
         {
@@ -627,7 +627,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
     {
         pUnoCrsr->SetRemainInSection( false );
         // what to do if already in a table?
-        SwTableNode * pTblNode = pUnoCrsr->GetNode()->FindTableNode();
+        SwTableNode * pTblNode = pUnoCrsr->GetNode().FindTableNode();
         pTblNode = lcl_FindTopLevelTable( pTblNode, m_pOwnTable );
         if (pTblNode && (&pTblNode->GetTable() != m_pOwnTable))
         {
@@ -656,7 +656,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
             (m_nEndIndex == pStart->nNode.GetIndex()) ? m_nLastParaEnd : -1;
 
         // position in a table, or in a simple paragraph?
-        SwTableNode * pTblNode = pUnoCrsr->GetNode()->FindTableNode();
+        SwTableNode * pTblNode = pUnoCrsr->GetNode().FindTableNode();
         pTblNode = lcl_FindTopLevelTable( pTblNode, m_pOwnTable );
         if (/*CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType && */
             pTblNode && (&pTblNode->GetTable() != m_pOwnTable))
@@ -1794,8 +1794,8 @@ lcl_FillFrame(SwClient & rEnum, SwUnoCrsr& rUnoCrsr,
         FrameDependList_t & rFrames)
 {
     // search for objects at the cursor - anchored at/as char
-    SwTxtAttr const*const pTxtAttr = (rUnoCrsr.GetNode()->IsTxtNode())
-        ? rUnoCrsr.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+    SwTxtAttr const*const pTxtAttr = (rUnoCrsr.GetNode().IsTxtNode())
+        ? rUnoCrsr.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
             rUnoCrsr.GetPoint()->nContent.GetIndex(), RES_TXTATR_FLYCNT)
         : 0;
     if (pTxtAttr)

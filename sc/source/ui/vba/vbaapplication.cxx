@@ -302,12 +302,10 @@ ScVbaApplication::getActiveCell() throw (uno::RuntimeException, std::exception )
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell(mxContext);
     if ( !pViewShell )
         throw uno::RuntimeException("No ViewShell available" );
-    ScViewData* pTabView = pViewShell->GetViewData();
-    if ( !pTabView )
-        throw uno::RuntimeException("No ViewData available" );
+    ScViewData& rTabView = pViewShell->GetViewData();
 
-    sal_Int32 nCursorX = pTabView->GetCurX();
-    sal_Int32 nCursorY = pTabView->GetCurY();
+    sal_Int32 nCursorX = rTabView.GetCurX();
+    sal_Int32 nCursorY = rTabView.GetCurY();
 
     // #i117392# excel::getUnoSheetModuleObj() may return null in documents without global VBA mode enabled
     return new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), mxContext, xRange->getCellRangeByPosition( nCursorX, nCursorY, nCursorX, nCursorY ) );
@@ -576,9 +574,9 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
             {
                 xVbaSheetRange->Select();
                 uno::Reference< excel::XWindow >  xWindow = getActiveWindow();
-                ScSplitPos eWhich = pShell->GetViewData()->GetActivePart();
-                sal_Int32 nValueX = pShell->GetViewData()->GetPosX(WhichH(eWhich));
-                sal_Int32 nValueY = pShell->GetViewData()->GetPosY(WhichV(eWhich));
+                ScSplitPos eWhich = pShell->GetViewData().GetActivePart();
+                sal_Int32 nValueX = pShell->GetViewData().GetPosX(WhichH(eWhich));
+                sal_Int32 nValueY = pShell->GetViewData().GetPosY(WhichV(eWhich));
                 xWindow->SmallScroll( uno::makeAny( (sal_Int16)(xVbaSheetRange->getRow() - 1) ),
                          uno::makeAny( (sal_Int16)nValueY ),
                          uno::makeAny( (sal_Int16)(xVbaSheetRange->getColumn() - 1)  ),
@@ -616,9 +614,9 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
             {
                 xVbaRange->Select();
                 uno::Reference< excel::XWindow >  xWindow = getActiveWindow();
-                ScSplitPos eWhich = pShell->GetViewData()->GetActivePart();
-                sal_Int32 nValueX = pShell->GetViewData()->GetPosX(WhichH(eWhich));
-                sal_Int32 nValueY = pShell->GetViewData()->GetPosY(WhichV(eWhich));
+                ScSplitPos eWhich = pShell->GetViewData().GetActivePart();
+                sal_Int32 nValueX = pShell->GetViewData().GetPosX(WhichH(eWhich));
+                sal_Int32 nValueY = pShell->GetViewData().GetPosY(WhichV(eWhich));
                 xWindow->SmallScroll( uno::makeAny( (sal_Int16)(xVbaRange->getRow() - 1) ),
                          uno::makeAny( (sal_Int16)nValueY ),
                          uno::makeAny( (sal_Int16)(xVbaRange->getColumn() - 1)  ),
@@ -772,7 +770,7 @@ ScVbaApplication::getDisplayScrollBars()  throw (uno::RuntimeException, std::exc
     ScTabViewShell* pShell  = excel::getCurrentBestViewShell( mxContext );
     if ( pShell )
     {
-        return ( pShell->GetViewData()->IsHScrollMode() && pShell->GetViewData()->IsVScrollMode() );
+        return ( pShell->GetViewData().IsHScrollMode() && pShell->GetViewData().IsVScrollMode() );
     }
     return true;
 }
@@ -1225,8 +1223,8 @@ ScVbaApplication::Volatile( const uno::Any& aVolatile )  throw ( uno::RuntimeExc
     {
         OSL_TRACE("ScVbaApplication::Volatile() In method ->%s<-", OUStringToOString( pMeth->GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
         uno::Reference< frame::XModel > xModel( getCurrentDocument() );
-        ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
-        pDoc->GetMacroManager()->SetUserFuncVolatile( pMeth->GetName(), bVolatile);
+        ScDocument& rDoc = excel::getDocShell( xModel )->GetDocument();
+        rDoc.GetMacroManager()->SetUserFuncVolatile( pMeth->GetName(), bVolatile);
     }
 
 // this is bound to break when loading the document

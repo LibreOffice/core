@@ -419,7 +419,7 @@ SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
     ScDocShell* pDocSh = PTR_CAST(ScDocShell,SfxObjectShell::Current());
 
     if(pDocSh!=NULL)
-        pNew->SetDocument(pDocSh->GetDocument());
+        pNew->SetDocument(&pDocSh->GetDocument());
     return pNew;
 }
 

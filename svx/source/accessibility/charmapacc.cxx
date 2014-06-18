@@ -78,7 +78,7 @@ sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChildCount(  ) throw (
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return ( mpParent->getScrollBar()->IsVisible() ) ? 2 : 1;
+    return ( mpParent->getScrollBar().IsVisible() ) ? 2 : 1;
 }
 
 uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleAtPoint( const awt::Point& aPoint )
@@ -96,14 +96,14 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtual
             m_pTable = new SvxShowCharSetAcc(this);
         xRet = m_pTable;
     }
-    else if ( mpParent->getScrollBar()->IsVisible() )
+    else if ( mpParent->getScrollBar().IsVisible() )
     {
-        const Point aOutPos( mpParent->getScrollBar()->GetPosPixel() );
-        const Size  aScrollBar = mpParent->getScrollBar()->GetOutputSizePixel();
+        const Point aOutPos( mpParent->getScrollBar().GetPosPixel() );
+        const Size  aScrollBar = mpParent->getScrollBar().GetOutputSizePixel();
         Rectangle aRect(aOutPos,aScrollBar);
 
         if ( aRect.IsInside(VCLPoint(aPoint)) )
-            xRet = mpParent->getScrollBar()->GetAccessible();
+            xRet = mpParent->getScrollBar().GetAccessible();
     }
     return xRet;
 }
@@ -128,8 +128,8 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChild( 
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    if ( mpParent->getScrollBar()->IsVisible() && i == 0 )
-        return mpParent->getScrollBar()->GetAccessible();
+    if ( mpParent->getScrollBar().IsVisible() && i == 0 )
+        return mpParent->getScrollBar().GetAccessible();
     else if ( i == 1 )
     {
         if ( !m_xAcc.is() )
@@ -340,9 +340,9 @@ void SvxShowCharSetAcc::implSelect(sal_Int32 nAccessibleChildIndex, sal_Bool bSe
 {
     const Point   aOutPos;//( m_pParent->getCharSetControl()->GetPosPixel() );
     Size          aOutSize( m_pParent->getCharSetControl()->GetOutputSizePixel());
-    if ( m_pParent->getCharSetControl()->getScrollBar()->IsVisible() )
+    if ( m_pParent->getCharSetControl()->getScrollBar().IsVisible() )
     {
-        const Size aScrollBar = m_pParent->getCharSetControl()->getScrollBar()->GetOutputSizePixel();
+        const Size aScrollBar = m_pParent->getCharSetControl()->getScrollBar().GetOutputSizePixel();
         aOutSize.Width() -= aScrollBar.Width();
     }
 

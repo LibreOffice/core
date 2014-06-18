@@ -66,7 +66,7 @@ bool SwTxtFrm::_IsFtnNumFrm() const
 SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
 {
     SwTxtFrm *pFrm = this;
-    const bool bFwd = *pFtn->GetStart() >= GetOfst();
+    const bool bFwd = pFtn->GetStart() >= GetOfst();
     while( pFrm )
     {
         if( SwFtnBossFrm::FindFtn( pFrm, pFtn ) )
@@ -103,7 +103,7 @@ void SwTxtFrm::CalcFtnFlag()
         const SwTxtAttr *pHt = (*pHints)[i];
         if ( pHt->Which() == RES_TXTATR_FTN )
         {
-            const sal_Int32 nIdx = *pHt->GetStart();
+            const sal_Int32 nIdx = pHt->GetStart();
             if ( nEnd < nIdx )
                 break;
             if( GetOfst() <= nIdx )
@@ -267,7 +267,7 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
 
     SwTxtInfo aInf( pThis );
     SwTxtIter aLine( pThis, &aInf );
-    const sal_Int32 nPos = *pFtn->GetStart();
+    const sal_Int32 nPos = pFtn->GetStart();
     aLine.CharToLine( nPos );
 
     SwTwips nRet = aLine.Y() + SwTwips(aLine.GetLineHeight());
@@ -421,7 +421,7 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
             if ( RES_TXTATR_FTN != pHt->Which() )
                 continue;
 
-            const sal_Int32 nIdx = *pHt->GetStart();
+            const sal_Int32 nIdx = pHt->GetStart();
             if( nStart > nIdx )
                 break;
 

@@ -89,7 +89,7 @@ ScTableLink::ScTableLink(SfxObjectShell* pShell, const OUString& rFile,
 {
     pImpl->m_pDocSh = static_cast< ScDocShell* >( pShell );
     SetRefreshHandler( LINK( this, ScTableLink, RefreshHdl ) );
-    SetRefreshControl( pImpl->m_pDocSh->GetDocument()->GetRefreshTimerControlAddress() );
+    SetRefreshControl( &pImpl->m_pDocSh->GetDocument().GetRefreshTimerControlAddress() );
 }
 
 ScTableLink::~ScTableLink()
@@ -98,11 +98,11 @@ ScTableLink::~ScTableLink()
 
     StopRefreshTimer();
     OUString aEmpty;
-    ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
-    SCTAB nCount = pDoc->GetTableCount();
+    ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
+    SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
-        if (pDoc->IsLinked(nTab) && aFileName.equals(pDoc->GetLinkDoc(nTab)))
-            pDoc->SetLink( nTab, SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty, 0 );
+        if (rDoc.IsLinked(nTab) && aFileName.equals(rDoc.GetLinkDoc(nTab)))
+            rDoc.SetLink( nTab, SC_LINK_NONE, aEmpty, aEmpty, aEmpty, aEmpty, 0 );
     delete pImpl;
 }
 
@@ -123,7 +123,7 @@ void ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
 ::sfx2::SvBaseLink::UpdateResult ScTableLink::DataChanged(
     const OUString&, const ::com::sun::star::uno::Any& )
 {
-    sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
+    sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument().GetLinkManager();
     if (pLinkManager!=NULL)
     {
         OUString aFile, aFilter;
@@ -142,8 +142,8 @@ void ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
 void ScTableLink::Closed()
 {
     // Verknuepfung loeschen: Undo
-    ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
-    bool bUndo (pDoc->IsUndoEnabled());
+    ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
+    bool bUndo (rDoc.IsUndoEnabled());
 
     if (bAddUndo && bUndo)
     {
@@ -160,7 +160,7 @@ void ScTableLink::Closed()
 
 bool ScTableLink::IsUsed() const
 {
-    return pImpl->m_pDocSh->GetDocument()->HasLink( aFileName, aFilterName, aOptions );
+    return pImpl->m_pDocSh->GetDocument().HasLink( aFileName, aFilterName, aOptions );
 }
 
 bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
@@ -178,10 +178,10 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     if (!pFilter)
         return false;
 
-    ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();
-    pDoc->SetInLinkUpdate( true );
+    ScDocument& rDoc = pImpl->m_pDocSh->GetDocument();
+    rDoc.SetInLinkUpdate( true );
 
-    bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo(rDoc.IsUndoEnabled());
 
     //  wenn neuer Filter ausgewaehlt wurde, Optionen vergessen
     if (!aFilterName.equals(rNewFilter))
@@ -221,36 +221,36 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     ScDocShellModificator aModificator( *pImpl->m_pDocSh );
 
     bool bNotFound = false;
-    ScDocument* pSrcDoc = pSrcShell->GetDocument();
+    ScDocument& rSrcDoc = pSrcShell->GetDocument();
 
     //  from text filters that don't set the table name,
     //  use the one table regardless of link table name
-    bool bAutoTab = (pSrcDoc->GetTableCount() == 1) &&
+    bool bAutoTab = (rSrcDoc.GetTableCount() == 1) &&
                     ScDocShell::HasAutomaticTableName( rNewFilter );
 
-    SCTAB nCount = pDoc->GetTableCount();
+    SCTAB nCount = rDoc.GetTableCount();
     for (SCTAB nTab=0; nTab<nCount; nTab++)
     {
-        sal_uInt8 nMode = pDoc->GetLinkMode(nTab);
-        if (nMode && aFileName.equals(pDoc->GetLinkDoc(nTab)))
+        sal_uInt8 nMode = rDoc.GetLinkMode(nTab);
+        if (nMode && aFileName.equals(rDoc.GetLinkDoc(nTab)))
         {
-            OUString aTabName = pDoc->GetLinkTab(nTab);
+            OUString aTabName = rDoc.GetLinkTab(nTab);
 
             //  Undo
 
             if (bAddUndo && bUndo)
             {
                 if (bFirst)
-                    pUndoDoc->InitUndo( pDoc, nTab, nTab, true, true );
+                    pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );
                 else
                     pUndoDoc->AddUndoTab( nTab, nTab, true, true );
                 bFirst = false;
                 ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
-                pDoc->CopyToDocument(aRange, IDF_ALL, false, pUndoDoc);
-                pUndoDoc->TransferDrawPage( pDoc, nTab, nTab );
+                rDoc.CopyToDocument(aRange, IDF_ALL, false, pUndoDoc);
+                pUndoDoc->TransferDrawPage( &rDoc, nTab, nTab );
                 pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName,
                                    aOptions, aTabName, GetRefreshDelay() );
-				pUndoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
+                pUndoDoc->SetTabBgColor( nTab, rDoc.GetTabBgColor(nTab) );
             }
 
             //  Tabellenname einer ExtDocRef anpassen
@@ -258,11 +258,11 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
             if ( bNewUrlName && nMode == SC_LINK_VALUE )
             {
                 OUString aName;
-                pDoc->GetName( nTab, aName );
+                rDoc.GetName( nTab, aName );
                 if ( ScGlobal::GetpTransliteration()->isEqual(
                         ScGlobal::GetDocTabName( aFileName, aTabName ), aName ) )
                 {
-                    pDoc->RenameTab( nTab,
+                    rDoc.RenameTab( nTab,
                         ScGlobal::GetDocTabName( aNewUrl, aTabName ),
                         false, true );  // kein RefUpdate, kein ValidTabName
                 }
@@ -274,22 +274,22 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
             bool bFound = false;
             /*  #i71497# check if external document is loaded successfully,
                 otherwise we may find the empty default sheet "Sheet1" in
-                pSrcDoc, even if the document does not exist. */
+                rSrcDoc, even if the document does not exist. */
             if( pMed->GetError() == 0 )
             {
                 // no sheet name -> use first sheet
                 if ( !aTabName.isEmpty() && !bAutoTab )
-                    bFound = pSrcDoc->GetTable( aTabName, nSrcTab );
+                    bFound = rSrcDoc.GetTable( aTabName, nSrcTab );
                 else
                     bFound = true;
             }
 
             if (bFound)
-                pDoc->TransferTab( pSrcDoc, nSrcTab, nTab, false,       // nicht neu einfuegen
+                rDoc.TransferTab( &rSrcDoc, nSrcTab, nTab, false,       // nicht neu einfuegen
                                         (nMode == SC_LINK_VALUE) );     // nur Werte?
             else
             {
-                pDoc->DeleteAreaTab( 0,0,MAXCOL,MAXROW, nTab, IDF_ALL );
+                rDoc.DeleteAreaTab( 0,0,MAXCOL,MAXROW, nTab, IDF_ALL );
 
                 bool bShowError = true;
                 if ( nMode == SC_LINK_VALUE )
@@ -299,7 +299,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
                     ScRangeList aErrorCells;        // cells on the linked sheets that need error values
 
-                    ScCellIterator aIter(pDoc, ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB));          // all sheets
+                    ScCellIterator aIter(&rDoc, ScRange(0,0,0,MAXCOL,MAXROW,MAXTAB));          // all sheets
                     for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
                     {
                         if (aIter.getType() != CELLTYPE_FORMULA)
@@ -339,7 +339,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                                 for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
                                 {
                                     ScAddress aDestPos( nCol, nRow, nTab );
-                                    pDoc->SetFormula(aDestPos, aTokenArr);
+                                    rDoc.SetFormula(aDestPos, aTokenArr);
                                 }
                         }
 
@@ -352,11 +352,11 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                 {
                     //  Normal link or no references: put error message on sheet.
 
-                    pDoc->SetString( 0,0,nTab, ScGlobal::GetRscString(STR_LINKERROR) );
-                    pDoc->SetString( 0,1,nTab, ScGlobal::GetRscString(STR_LINKERRORFILE) );
-                    pDoc->SetString( 1,1,nTab, aNewUrl );
-                    pDoc->SetString( 0,2,nTab, ScGlobal::GetRscString(STR_LINKERRORTAB) );
-                    pDoc->SetString( 1,2,nTab, aTabName );
+                    rDoc.SetString( 0,0,nTab, ScGlobal::GetRscString(STR_LINKERROR) );
+                    rDoc.SetString( 0,1,nTab, ScGlobal::GetRscString(STR_LINKERRORFILE) );
+                    rDoc.SetString( 1,1,nTab, aNewUrl );
+                    rDoc.SetString( 0,2,nTab, ScGlobal::GetRscString(STR_LINKERRORTAB) );
+                    rDoc.SetString( 1,2,nTab, aTabName );
                 }
 
                 bNotFound = true;
@@ -365,7 +365,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
             if ( bNewUrlName || !aFilterName.equals(rNewFilter) ||
                     !aOptions.equals(aNewOpt) || pNewOptions ||
                     nNewRefresh != GetRefreshDelay() )
-                pDoc->SetLink( nTab, nMode, aNewUrl, rNewFilter, aNewOpt,
+                rDoc.SetLink( nTab, nMode, aNewUrl, rNewFilter, aNewOpt,
                     aTabName, nNewRefresh );
         }
     }
@@ -403,13 +403,13 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
         //! Fehler ausgeben ?
     }
 
-    pDoc->SetInLinkUpdate( false );
+    rDoc.SetInLinkUpdate( false );
 
     //  notify Uno objects (for XRefreshListener)
     //! also notify Uno objects if file name was changed!
     ScLinkRefreshedHint aHint;
     aHint.SetSheetLink( aFileName );
-    pDoc->BroadcastUno( aHint );
+    rDoc.BroadcastUno( aHint );
 
     return true;
 }
@@ -535,17 +535,14 @@ ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
     pDocShell = new ScDocShell( SFX_CREATE_MODE_INTERNAL );
     aRef = pDocShell;
 
-    ScDocument* pDoc = pDocShell->GetDocument();
-    if( pDoc )
+    ScDocument& rDoc = pDocShell->GetDocument();
+    ScExtDocOptions*    pExtDocOpt = rDoc.GetExtDocOptions();
+    if( !pExtDocOpt )
     {
-        ScExtDocOptions*    pExtDocOpt = pDoc->GetExtDocOptions();
-        if( !pExtDocOpt )
-        {
-            pExtDocOpt = new ScExtDocOptions;
-            pDoc->SetExtDocOptions( pExtDocOpt );
-        }
-        pExtDocOpt->GetDocSettings().mnLinkCnt = nRekCnt;
+        pExtDocOpt = new ScExtDocOptions;
+        rDoc.SetExtDocOptions( pExtDocOpt );
     }
+    pExtDocOpt->GetDocSettings().mnLinkCnt = nRekCnt;
 
     pDocShell->DoLoad( pMedium );
 
@@ -577,7 +574,7 @@ void ScDocumentLoader::ReleaseDocRef()
 
 ScDocument* ScDocumentLoader::GetDocument()
 {
-    return pDocShell ? pDocShell->GetDocument() : 0;
+    return pDocShell ? &pDocShell->GetDocument() : 0;
 }
 
 bool ScDocumentLoader::IsError() const

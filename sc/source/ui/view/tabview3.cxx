@@ -1838,7 +1838,7 @@ void ScTabView::UpdateEditView()
             EditView* pEditView = aViewData.GetEditView( (ScSplitPos) i );
             aViewData.SetEditEngine( (ScSplitPos) i,
                 static_cast<ScEditEngineDefaulter*>(pEditView->GetEditEngine()),
-                pGridWin[i], GetViewData()->GetCurX(), GetViewData()->GetCurY() );
+                pGridWin[i], GetViewData().GetCurX(), GetViewData().GetCurY() );
             if ( (ScSplitPos)i == eActive )
                 pEditView->ShowCursor( false );
         }
@@ -2182,9 +2182,9 @@ void ScTabView::DoChartSelection(
     {
         Color aSelColor( rHilightRanges[i].PreferredColor );
         ScRangeList aRangeList;
-        ScDocument* pDoc = aViewData.GetDocShell()->GetDocument();
+        ScDocument& rDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(
-                aRangeList, rHilightRanges[i].RangeRepresentation, pDoc, pDoc->GetAddressConvention(), sep ))
+                aRangeList, rHilightRanges[i].RangeRepresentation, &rDoc, rDoc.GetAddressConvention(), sep ))
         {
             size_t nListSize = aRangeList.size();
             for ( size_t j = 0; j < nListSize; ++j )

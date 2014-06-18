@@ -160,7 +160,7 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
     SetHelpId(HID_TABDESIGN_BACKGROUND);
     GetDataWindow().SetHelpId(HID_CTL_TABLEEDIT);
 
-    m_pRowList = GetView()->getController().getRows();
+    m_pRowList = &GetView()->getController().getRows();
     m_nDataPos = 0;
 }
 
@@ -378,9 +378,9 @@ void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 
                 if( !pActFieldDescr )
                     break;
 
-                const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
-                OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
-                OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();
+                const OTypeInfoMap& rTypeInfo = GetView()->getController().getTypeInfo();
+                OTypeInfoMap::const_iterator aIter = rTypeInfo.begin();
+                OTypeInfoMap::const_iterator aEnd = rTypeInfo.end();
                 for(;aIter != aEnd;++aIter)
                     pTypeCell->InsertEntry( aIter->second->aUIName );
                 pTypeCell->SelectEntry( aInitString );
@@ -658,12 +658,12 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     GetUndoManager().EnterListAction( sActionDescription, OUString() );
     if (!pActFieldDescr)
     {
-        const OTypeInfoMap* pTypeInfoMap = GetView()->getController().getTypeInfo();
-        if ( !pTypeInfoMap->empty() )
+        const OTypeInfoMap& rTypeInfoMap = GetView()->getController().getTypeInfo();
+        if ( !rTypeInfoMap.empty() )
         {
-            OTypeInfoMap::const_iterator aTypeIter = pTypeInfoMap->find(DataType::VARCHAR);
-            if ( aTypeIter == pTypeInfoMap->end() )
-                aTypeIter = pTypeInfoMap->begin();
+            OTypeInfoMap::const_iterator aTypeIter = rTypeInfoMap.find(DataType::VARCHAR);
+            if ( aTypeIter == rTypeInfoMap.end() )
+                aTypeIter = rTypeInfoMap.begin();
             pActRow->SetFieldType( aTypeIter->second );
         }
         else
@@ -1640,9 +1640,9 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
             )
         {
             sal_Int32 nEntryPos = 0;
-            const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
-            OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
-            OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();
+            const OTypeInfoMap& rTypeInfo = GetView()->getController().getTypeInfo();
+            OTypeInfoMap::const_iterator aIter = rTypeInfo.begin();
+            OTypeInfoMap::const_iterator aEnd = rTypeInfo.end();
             for(;aIter != aEnd;++aIter,++nEntryPos)
             {
                 if(aIter->second == _pType)

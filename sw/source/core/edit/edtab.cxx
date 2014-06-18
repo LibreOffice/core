@@ -429,7 +429,7 @@ bool SwEditShell::SplitTable( sal_uInt16 eMode )
 {
     bool bRet = false;
     SwPaM *pCrsr = GetCrsr();
-    if( pCrsr->GetNode()->FindTableNode() )
+    if( pCrsr->GetNode().FindTableNode() )
     {
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
@@ -447,7 +447,7 @@ bool SwEditShell::MergeTable( bool bWithPrev, sal_uInt16 nMode )
 {
     bool bRet = false;
     SwPaM *pCrsr = GetCrsr();
-    if( pCrsr->GetNode()->FindTableNode() )
+    if( pCrsr->GetNode().FindTableNode() )
     {
         StartAllAction();
         GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
@@ -465,7 +465,7 @@ bool SwEditShell::CanMergeTable( bool bWithPrev, bool* pChkNxtPrv ) const
 {
     bool bRet = false;
     const SwPaM *pCrsr = GetCrsr();
-    const SwTableNode* pTblNd = pCrsr->GetNode()->FindTableNode();
+    const SwTableNode* pTblNd = pCrsr->GetNode().FindTableNode();
     if( pTblNd && !pTblNd->GetTable().ISA( SwDDETable ))
     {
         bool bNew = pTblNd->GetTable().IsNewModel();

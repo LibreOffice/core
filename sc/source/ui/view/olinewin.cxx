@@ -157,7 +157,7 @@ const ScOutlineArray* ScOutlineWindow::GetOutlineArray() const
 {
     const ScOutlineTable* pTable = GetDoc().GetOutlineTable( GetTab() );
     if ( !pTable ) return NULL;
-    return mbHoriz ? pTable->GetColArray() : pTable->GetRowArray();
+    return mbHoriz ? &pTable->GetColArray() : &pTable->GetRowArray();
 }
 
 const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( size_t nLevel, size_t nEntry ) const

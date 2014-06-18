@@ -214,12 +214,12 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
             if( RES_TXTATR_CJK_RUBY == ( pHt = (*pHts)[ nHtIdx ])->Which() &&
                 *pHt->GetAnyEnd() > nStart )
             {
-                if( *pHt->GetStart() < nEnd )
+                if( pHt->GetStart() < nEnd )
                 {
                     pAttr = pHt;
-                    if( !bHasMark && nStart > *pAttr->GetStart() )
+                    if( !bHasMark && nStart > pAttr->GetStart() )
                     {
-                        nStart = *pAttr->GetStart();
+                        nStart = pAttr->GetStart();
                         pPos->nContent = nStart;
                     }
                 }
@@ -227,7 +227,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
             }
     }
 
-    if( !bHasMark && nStart && ( !pAttr || nStart != *pAttr->GetStart()) )
+    if( !bHasMark && nStart && ( !pAttr || nStart != pAttr->GetStart()) )
     {
         // skip to the word begin!
         const sal_Int32 nWordStt = g_pBreakIt->GetBreakIter()->getWordBoundary(
@@ -247,7 +247,7 @@ bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt
     CharClass& rCC = GetAppCharClass();
     while(  nStart < nEnd )
     {
-        if( pAttr && nStart == *pAttr->GetStart() )
+        if( pAttr && nStart == pAttr->GetStart() )
         {
             pPos->nContent = nStart;
             if( !rPam.HasMark() )

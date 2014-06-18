@@ -145,8 +145,8 @@ public:
     SwFlowFrm( SwFrm &rFrm );
     virtual ~SwFlowFrm();
 
-    const SwFrm *GetFrm() const { return &m_rThis; }
-          SwFrm *GetFrm()       { return &m_rThis; }
+    const SwFrm& GetFrm() const { return m_rThis; }
+          SwFrm& GetFrm()       { return m_rThis; }
 
     static bool IsMoveBwdJump() { return m_bMoveBwdJump; }
     static void SetMoveBwdJump( bool bNew ){ m_bMoveBwdJump = bNew; }

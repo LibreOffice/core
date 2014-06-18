@@ -2129,7 +2129,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         ScViewFunc* pView = pViewData->GetView();
         pView->StopRefMode();
         pViewData->ResetFillMode();
-        pView->GetFunctionSet()->SetAnchorFlag( false );    // #i5819# don't use AutoFill anchor flag for selection
+        pView->GetFunctionSet().SetAnchorFlag( false );    // #i5819# don't use AutoFill anchor flag for selection
 
         if ( bIsDel )
         {
@@ -2165,7 +2165,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         ScTabView* pView = pViewData->GetView();
         pView->StopRefMode();
         pViewData->ResetFillMode();
-        pView->GetFunctionSet()->SetAnchorFlag( false );
+        pView->GetFunctionSet().SetAnchorFlag( false );
 
         if ( aEndPos != aBlockRange.aEnd )
         {
@@ -2179,7 +2179,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         ScTabView* pView = pViewData->GetView();
         pView->StopRefMode();
         pViewData->ResetFillMode();
-        pView->GetFunctionSet()->SetAnchorFlag( false );
+        pView->GetFunctionSet().SetAnchorFlag( false );
         pViewData->GetDocShell()->UpdateOle(pViewData);
     }
 
@@ -4653,14 +4653,14 @@ void ScGridWindow::UpdateFormulas()
     SCROW nPosY = nY1;
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = pDocSh->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
 
-    pDoc->ExtendHidden( nX1, nY1, nX2, nY2, nTab );
+    rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
 
     Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
     long nMirrorWidth = GetSizePixel().Width();
-    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     if ( bLayoutRTL )
     {
         long nEndPixel = pViewData->GetScrPos( nX2+1, nPosY, eWhich ).X();
@@ -4675,11 +4675,11 @@ void ScGridWindow::UpdateFormulas()
     double nPPTY = pViewData->GetPPTY();
 
     ScTableInfo aTabInfo;
-    pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab, nPPTX, nPPTY, false, false );
+    rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab, nPPTX, nPPTY, false, false );
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
-    ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
+    ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
     aOutputData.SetMirrorWidth( nMirrorWidth );
@@ -4897,18 +4897,18 @@ static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uI
     bool bHiddenEdge = false;
     SCROW nTmp;
 
-    ScDocument* pDoc = pDocSh->GetDocument();
-    while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab1) )
+    ScDocument& rDoc = pDocSh->GetDocument();
+    while ( nCol1 > 0 && rDoc.ColHidden(nCol1, nTab1) )
     {
         --nCol1;
         bHiddenEdge = true;
     }
-    while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab1) )
+    while ( nCol2 < MAXCOL && rDoc.ColHidden(nCol2, nTab1) )
     {
         ++nCol2;
         bHiddenEdge = true;
     }
-    nTmp = pDoc->FirstVisibleRow(0, nRow1, nTab1);
+    nTmp = rDoc.FirstVisibleRow(0, nRow1, nTab1);
     if (!ValidRow(nTmp))
         nTmp = 0;
     if (nTmp < nRow1)
@@ -4916,7 +4916,7 @@ static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uI
         nRow1 = nTmp;
         bHiddenEdge = true;
     }
-    nTmp = pDoc->FirstVisibleRow(nRow2, MAXROW, nTab1);
+    nTmp = rDoc.FirstVisibleRow(nRow2, MAXROW, nTab1);
     if (!ValidRow(nTmp))
         nTmp = MAXROW;
     if (nTmp > nRow2)
@@ -4953,9 +4953,9 @@ static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, cons
     aNew.Justify();
 
     if ( aOld.aStart == aOld.aEnd )                 //! Tab ignorieren?
-        pDocSh->GetDocument()->ExtendMerge(aOld);
+        pDocSh->GetDocument().ExtendMerge(aOld);
     if ( aNew.aStart == aNew.aEnd )                 //! Tab ignorieren?
-        pDocSh->GetDocument()->ExtendMerge(aNew);
+        pDocSh->GetDocument().ExtendMerge(aNew);
 
     SCCOL nOldCol1 = aOld.aStart.Col();
     SCROW nOldRow1 = aOld.aStart.Row();
@@ -5193,9 +5193,9 @@ SvxAdjust toSvxAdjust( const ScPatternAttr& rPat )
 
 boost::shared_ptr<ScFieldEditEngine> createEditEngine( ScDocShell* pDocSh, const ScPatternAttr& rPat )
 {
-    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = pDocSh->GetDocument();
 
-    boost::shared_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(pDoc, pDoc->GetEditPool()));
+    boost::shared_ptr<ScFieldEditEngine> pEngine(new ScFieldEditEngine(&rDoc, rDoc.GetEditPool()));
     ScSizeDeviceProvider aProv(pDocSh);
     pEngine->SetRefDevice(aProv.GetDevice());
     pEngine->SetRefMapMode(MAP_100TH_MM);
@@ -5251,14 +5251,14 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
 
     SCTAB nTab = pViewData->GetTabNo();
     ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = pDocSh->GetDocument();
     OUString sURL;
     ScRefCellValue aCell;
-    bool bFound = lcl_GetHyperlinkCell(pDoc, nPosX, nPosY, nTab, aCell, sURL);
+    bool bFound = lcl_GetHyperlinkCell(&rDoc, nPosX, nPosY, nTab, aCell, sURL);
     if( !bFound )
         return false;
 
-    const ScPatternAttr* pPattern = pDoc->GetPattern( nPosX, nPosY, nTab );
+    const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
     // bForceToTop = sal_False, use the cell's real position
     Rectangle aEditRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
     if (rPos.Y() < aEditRect.Top())
@@ -5309,7 +5309,7 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         if (sURL.isEmpty())
             pTextObj.reset(aCell.mpFormula->CreateURLObject());
         else
-            pTextObj.reset(ScEditUtil::CreateURLObjectFromURL(*pDoc, sURL, sURL));
+            pTextObj.reset(ScEditUtil::CreateURLObjectFromURL(rDoc, sURL, sURL));
 
         if (pTextObj.get())
             pEngine->SetText(*pTextObj);
@@ -5366,11 +5366,11 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCCOL nCol
 
     SCTAB nTab = pViewData->GetTabNo();
     ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = pDocSh->GetDocument();
 
     ScAddress aCellPos(nCol1, nRow, nTab);
     ScRefCellValue aCell;
-    aCell.assign(*pDoc, aCellPos);
+    aCell.assign(rDoc, aCellPos);
     if (aCell.meType != CELLTYPE_STRING && aCell.meType != CELLTYPE_EDIT)
         return false;
 
@@ -5378,7 +5378,7 @@ bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCCOL nCol
     if (!pRanges)
         return false;
 
-    const ScPatternAttr* pPattern = pDoc->GetPattern(nCol1, nRow, nTab);
+    const ScPatternAttr* pPattern = rDoc.GetPattern(nCol1, nRow, nTab);
 
     Rectangle aEditRect = pViewData->GetEditArea(eWhich, nCol1, nRow, this, pPattern, false);
     if (rPos.Y() < aEditRect.Top())

@@ -696,7 +696,7 @@ bool ScDBCollection::NamedDBs::insert(ScDBData* p)
     if (r.second && p->HasImportParam() && !p->HasImportSelection())
     {
         p->SetRefreshHandler(mrParent.GetRefreshHandler());
-        p->SetRefreshControl(mrDoc.GetRefreshTimerControlAddress());
+        p->SetRefreshControl(&mrDoc.GetRefreshTimerControlAddress());
     }
     return r.second;
 }

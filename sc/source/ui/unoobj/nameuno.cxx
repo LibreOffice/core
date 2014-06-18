@@ -88,13 +88,13 @@ ScNamedRangeObj::ScNamedRangeObj( rtl::Reference< ScNamedRangesObj > xParent, Sc
     aName( rNm ),
     mxSheet( xSheet )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScNamedRangeObj::~ScNamedRangeObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScNamedRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -115,9 +115,9 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
         ScRangeName* pNames;
         SCTAB nTab = GetTab_Impl();
         if (nTab >= 0)
-            pNames = pDocShell->GetDocument()->GetRangeName(nTab);
+            pNames = pDocShell->GetDocument().GetRangeName(nTab);
         else
-            pNames = pDocShell->GetDocument()->GetRangeName();
+            pNames = pDocShell->GetDocument().GetRangeName();
         if (pNames)
         {
             pRet = pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName));
@@ -134,10 +134,10 @@ SCTAB ScNamedRangeObj::GetTab_Impl()
     {
         if (!pDocShell)
             return -2;
-        ScDocument* pDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = pDocShell->GetDocument();
         SCTAB nTab;
         OUString sName = mxSheet->getName();
-        pDoc->GetTable(sName, nTab);
+        rDoc.GetTable(sName, nTab);
         return nTab;
     }
     else
@@ -153,13 +153,13 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
     if (!pDocShell)
         return;
 
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     ScRangeName* pNames;
     SCTAB nTab = GetTab_Impl();
     if (nTab >= 0)
-        pNames = pDoc->GetRangeName(nTab);
+        pNames = rDoc.GetRangeName(nTab);
     else
-        pNames = pDoc->GetRangeName();
+        pNames = rDoc.GetRangeName();
     if (!pNames)
         return;
 
@@ -188,9 +188,9 @@ void ScNamedRangeObj::Modify_Impl( const OUString* pNewName, const ScTokenArray*
 
     ScRangeData* pNew = NULL;
     if (pNewTokens)
-        pNew = new ScRangeData( pDoc, aInsName, *pNewTokens, aPos, nType );
+        pNew = new ScRangeData( &rDoc, aInsName, *pNewTokens, aPos, nType );
     else
-        pNew = new ScRangeData( pDoc, aInsName, aContent, aPos, nType, eGrammar );
+        pNew = new ScRangeData( &rDoc, aInsName, aContent, aPos, nType, eGrammar );
 
     pNew->SetIndex( pOld->GetIndex() );
 
@@ -263,7 +263,7 @@ table::CellAddress SAL_CALL ScNamedRangeObj::getReferencePosition()
     aAddress.Sheet  = aPos.Tab();
     if (pDocShell)
     {
-        SCTAB nDocTabs = pDocShell->GetDocument()->GetTableCount();
+        SCTAB nDocTabs = pDocShell->GetDocument().GetTableCount();
         if ( aAddress.Sheet >= nDocTabs && nDocTabs > 0 )
         {
             //  Even after ValidateTabRefs, the position can be invalid if
@@ -328,7 +328,7 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens()
     {
         ScTokenArray* pTokenArray = pData->GetCode();
         if ( pTokenArray )
-            (void)ScTokenConversion::ConvertToTokenSequence( *pDocShell->GetDocument(), aSequence, *pTokenArray );
+            (void)ScTokenConversion::ConvertToTokenSequence( pDocShell->GetDocument(), aSequence, *pTokenArray );
     }
     return aSequence;
 }
@@ -340,7 +340,7 @@ void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToke
     if( pDocShell )
     {
         ScTokenArray aTokenArray;
-        (void)ScTokenConversion::ConvertToTokenArray( *pDocShell->GetDocument(), aTokenArray, rTokens );
+        (void)ScTokenConversion::ConvertToTokenArray( pDocShell->GetDocument(), aTokenArray, rTokens );
         // GRAM_PODF_A1 for API compatibility.
         Modify_Impl( NULL, &aTokenArray, NULL, NULL, NULL, formula::FormulaGrammar::GRAM_PODF_A1 );
     }
@@ -471,13 +471,13 @@ ScNamedRangesObj::ScNamedRangesObj(ScDocShell* pDocSh) :
     mbModifyAndBroadcast(true),
     pDocShell( pDocSh )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScNamedRangesObj::~ScNamedRangesObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -511,13 +511,13 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const OUString& aName,
     bool bDone = false;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
+        ScDocument& rDoc = pDocShell->GetDocument();
         ScRangeName* pNames = GetRangeName_Impl();
         if (pNames && !pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aName)))
         {
             ScRangeName* pNewRanges = new ScRangeName( *pNames );
             // GRAM_PODF_A1 for API compatibility.
-            ScRangeData* pNew = new ScRangeData( pDoc, aName, aContent,
+            ScRangeData* pNew = new ScRangeData( &rDoc, aName, aContent,
                                                 aPos, nNewType,formula::FormulaGrammar::GRAM_PODF_A1 );
             if ( pNewRanges->insert(pNew) )
             {
@@ -739,13 +739,13 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const OUString& aName )
 /** called from the XActionLockable interface methods on initial locking */
 void ScNamedRangesObj::lock()
 {
-    pDocShell->GetDocument()->PreprocessRangeNameUpdate();
+    pDocShell->GetDocument().PreprocessRangeNameUpdate();
 }
 
 /** called from the XActionLockable interface methods on final unlock */
 void ScNamedRangesObj::unlock()
 {
-    pDocShell->GetDocument()->PostprocessRangeNameUpdate();
+    pDocShell->GetDocument().PostprocessRangeNameUpdate();
 }
 
 // document::XActionLockable
@@ -753,27 +753,27 @@ void ScNamedRangesObj::unlock()
 sal_Bool ScNamedRangesObj::isActionLocked() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    return pDocShell->GetDocument()->GetNamedRangesLockCount() != 0;
+    return pDocShell->GetDocument().GetNamedRangesLockCount() != 0;
 }
 
 void ScNamedRangesObj::addActionLock() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScDocument* pDoc = pDocShell->GetDocument();
-    sal_Int16 nLockCount = pDoc->GetNamedRangesLockCount();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sal_Int16 nLockCount = rDoc.GetNamedRangesLockCount();
     ++nLockCount;
     if ( nLockCount == 1 )
     {
         lock();
     }
-    pDoc->SetNamedRangesLockCount( nLockCount );
+    rDoc.SetNamedRangesLockCount( nLockCount );
 }
 
 void ScNamedRangesObj::removeActionLock() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScDocument* pDoc = pDocShell->GetDocument();
-    sal_Int16 nLockCount = pDoc->GetNamedRangesLockCount();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sal_Int16 nLockCount = rDoc.GetNamedRangesLockCount();
     if ( nLockCount > 0 )
     {
         --nLockCount;
@@ -781,7 +781,7 @@ void ScNamedRangesObj::removeActionLock() throw(uno::RuntimeException, std::exce
         {
             unlock();
         }
-        pDoc->SetNamedRangesLockCount( nLockCount );
+        rDoc.SetNamedRangesLockCount( nLockCount );
     }
 }
 
@@ -790,8 +790,8 @@ void ScNamedRangesObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeExcep
     SolarMutexGuard aGuard;
     if ( nLock >= 0 )
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        sal_Int16 nLockCount = pDoc->GetNamedRangesLockCount();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        sal_Int16 nLockCount = rDoc.GetNamedRangesLockCount();
         if ( nLock == 0 && nLockCount > 0 )
         {
             unlock();
@@ -800,20 +800,20 @@ void ScNamedRangesObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeExcep
         {
             lock();
         }
-        pDoc->SetNamedRangesLockCount( nLock );
+        rDoc.SetNamedRangesLockCount( nLock );
     }
 }
 
 sal_Int16 ScNamedRangesObj::resetActionLocks() throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
-    ScDocument* pDoc = pDocShell->GetDocument();
-    sal_Int16 nLockCount = pDoc->GetNamedRangesLockCount();
+    ScDocument& rDoc = pDocShell->GetDocument();
+    sal_Int16 nLockCount = rDoc.GetNamedRangesLockCount();
     if ( nLockCount > 0 )
     {
         unlock();
     }
-    pDoc->SetNamedRangesLockCount( 0 );
+    rDoc.SetNamedRangesLockCount( 0 );
     return nLockCount;
 }
 
@@ -833,7 +833,7 @@ ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex
     if (!pDocShell)
         return NULL;
 
-    ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
+    ScRangeName* pNames = pDocShell->GetDocument().GetRangeName();
     if (!pNames)
         return NULL;
 
@@ -860,7 +860,7 @@ ScNamedRangeObj* ScGlobalNamedRangesObj::GetObjectByName_Impl(const OUString& aN
 
 ScRangeName* ScGlobalNamedRangesObj::GetRangeName_Impl()
 {
-    return pDocShell->GetDocument()->GetRangeName();
+    return pDocShell->GetDocument().GetRangeName();
 }
 
 SCTAB ScGlobalNamedRangesObj::GetTab_Impl()
@@ -894,11 +894,11 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex
         return NULL;
 
     OUString aName = mxSheet->getName();
-    ScDocument* pDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     SCTAB nTab;
-    pDoc->GetTable( aName, nTab );
+    rDoc.GetTable( aName, nTab );
 
-    ScRangeName* pNames = pDoc->GetRangeName( nTab );
+    ScRangeName* pNames = rDoc.GetRangeName( nTab );
     if (!pNames)
         return NULL;
 
@@ -919,13 +919,13 @@ ScNamedRangeObj* ScLocalNamedRangesObj::GetObjectByIndex_Impl( sal_uInt16 nIndex
 ScRangeName* ScLocalNamedRangesObj::GetRangeName_Impl()
 {
     SCTAB nTab = GetTab_Impl();
-    return pDocShell->GetDocument()->GetRangeName( nTab );
+    return pDocShell->GetDocument().GetRangeName( nTab );
 }
 
 SCTAB ScLocalNamedRangesObj::GetTab_Impl()
 {
     SCTAB nTab;
-    pDocShell->GetDocument()->GetTable(mxSheet->getName(), nTab);
+    pDocShell->GetDocument().GetTable(mxSheet->getName(), nTab);
     return nTab;
 }
 
@@ -934,13 +934,13 @@ ScLabelRangeObj::ScLabelRangeObj(ScDocShell* pDocSh, bool bCol, const ScRange& r
     bColumn( bCol ),
     aRange( rR )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScLabelRangeObj::~ScLabelRangeObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScLabelRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -958,8 +958,8 @@ ScRangePair* ScLabelRangeObj::GetData_Impl()
     ScRangePair* pRet = NULL;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScRangePairList* pList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScRangePairList* pList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
         if (pList)
             pRet = pList->Find( aRange );
     }
@@ -970,8 +970,8 @@ void ScLabelRangeObj::Modify_Impl( const ScRange* pLabel, const ScRange* pData )
 {
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScRangePairList* pOldList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScRangePairList* pOldList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
         if (pOldList)
         {
             ScRangePairListRef xNewList(pOldList->Clone());
@@ -989,11 +989,11 @@ void ScLabelRangeObj::Modify_Impl( const ScRange* pLabel, const ScRange* pData )
                 delete pEntry;
 
                 if (bColumn)
-                    pDoc->GetColNameRangesRef() = xNewList;
+                    rDoc.GetColNameRangesRef() = xNewList;
                 else
-                    pDoc->GetRowNameRangesRef() = xNewList;
+                    rDoc.GetRowNameRangesRef() = xNewList;
 
-                pDoc->CompileColRowNameFormula();
+                rDoc.CompileColRowNameFormula();
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
                 pDocShell->SetDocumentModified();
 
@@ -1052,13 +1052,13 @@ ScLabelRangesObj::ScLabelRangesObj(ScDocShell* pDocSh, bool bCol) :
     pDocShell( pDocSh ),
     bColumn( bCol )
 {
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScLabelRangesObj::~ScLabelRangesObj()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScLabelRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -1078,8 +1078,8 @@ ScLabelRangeObj* ScLabelRangesObj::GetObjectByIndex_Impl(size_t nIndex)
 {
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScRangePairList* pList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScRangePairList* pList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
         if ( pList && nIndex < pList->size() )
         {
             ScRangePair* pData = (*pList)[nIndex];
@@ -1097,8 +1097,8 @@ void SAL_CALL ScLabelRangesObj::addNew( const table::CellRangeAddress& aLabelAre
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScRangePairList* pOldList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScRangePairList* pOldList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
         if (pOldList)
         {
             ScRangePairListRef xNewList(pOldList->Clone());
@@ -1110,11 +1110,11 @@ void SAL_CALL ScLabelRangesObj::addNew( const table::CellRangeAddress& aLabelAre
             xNewList->Join( ScRangePair( aLabelRange, aDataRange ) );
 
             if (bColumn)
-                pDoc->GetColNameRangesRef() = xNewList;
+                rDoc.GetColNameRangesRef() = xNewList;
             else
-                pDoc->GetRowNameRangesRef() = xNewList;
+                rDoc.GetRowNameRangesRef() = xNewList;
 
-            pDoc->CompileColRowNameFormula();
+            rDoc.CompileColRowNameFormula();
             pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
             pDocShell->SetDocumentModified();
 
@@ -1130,8 +1130,8 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
     bool bDone = false;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScRangePairList* pOldList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScRangePairList* pOldList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
 
         if ( pOldList && nIndex >= 0 && nIndex < (sal_Int32)pOldList->size() )
         {
@@ -1144,11 +1144,11 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
                 delete pEntry;
 
                 if (bColumn)
-                    pDoc->GetColNameRangesRef() = xNewList;
+                    rDoc.GetColNameRangesRef() = xNewList;
                 else
-                    pDoc->GetRowNameRangesRef() = xNewList;
+                    rDoc.GetRowNameRangesRef() = xNewList;
 
-                pDoc->CompileColRowNameFormula();
+                rDoc.CompileColRowNameFormula();
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
                 pDocShell->SetDocumentModified();
                 bDone = true;
@@ -1177,8 +1177,8 @@ sal_Int32 SAL_CALL ScLabelRangesObj::getCount() throw(uno::RuntimeException, std
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        ScDocument* pDoc = pDocShell->GetDocument();
-        ScRangePairList* pList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
+        ScDocument& rDoc = pDocShell->GetDocument();
+        ScRangePairList* pList = bColumn ? rDoc.GetColNameRanges() : rDoc.GetRowNameRanges();
         if (pList)
             return pList->size();
     }

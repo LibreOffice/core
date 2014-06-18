@@ -77,7 +77,7 @@ private:
     OUString         aStrUndefined;
 
     ScConsolidateParam  theConsData;
-    ScViewData*         pViewData;
+    ScViewData&         rViewData;
     ScDocument*         pDoc;
     ScRangeUtil*        pRangeUtil;
     ScAreaData*         pAreaData;

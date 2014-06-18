@@ -416,14 +416,14 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     ++nPaintCount;                  // merken, dass gemalt wird (wichtig beim Invertieren)
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
+    ScDocument& rDoc = pDocSh->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
 
-    pDoc->ExtendHidden( nX1, nY1, nX2, nY2, nTab );
+    rDoc.ExtendHidden( nX1, nY1, nX2, nY2, nTab );
 
     Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
     long nMirrorWidth = GetSizePixel().Width();
-    bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    bool bLayoutRTL = rDoc.IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
     if ( bLayoutRTL )
     {
@@ -439,7 +439,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     SCROW nCurY = pViewData->GetCurY();
     SCCOL nCurEndX = nCurX;
     SCROW nCurEndY = nCurY;
-    pDoc->ExtendMerge( nCurX, nCurY, nCurEndX, nCurEndY, nTab );
+    rDoc.ExtendMerge( nCurX, nCurY, nCurEndX, nCurEndY, nTab );
     bool bCurVis = nCursorHideCount==0 &&
                     ( nCurEndX+1 >= nX1 && nCurX <= nX2+1 && nCurEndY+1 >= nY1 && nCurY <= nY2+1 );
 
@@ -449,7 +449,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     {
         SCCOL nHdlX = aAutoMarkPos.Col();
         SCROW nHdlY = aAutoMarkPos.Row();
-        pDoc->ExtendMerge( nHdlX, nHdlY, nHdlX, nHdlY, nTab );
+        rDoc.ExtendMerge( nHdlX, nHdlY, nHdlX, nHdlY, nTab );
         bCurVis = ( nHdlX+1 >= nX1 && nHdlX <= nX2 && nHdlY+1 >= nY1 && nHdlY <= nY2 );
         //  links und oben ist nicht betroffen
 
@@ -466,13 +466,13 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         // Datenblock
 
     ScTableInfo aTabInfo;
-    pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
+    rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
                                         nPPTX, nPPTY, false, bFormulaMode,
                                         &pViewData->GetMarkData() );
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
-    ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
+    ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
 
@@ -486,7 +486,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     {
         //  use printer for text formatting
 
-        OutputDevice* pFmtDev = pDoc->GetPrinter();
+        OutputDevice* pFmtDev = rDoc.GetPrinter();
         pFmtDev->SetMapMode( pViewData->GetLogicMode(eWhich) );
         aOutputData.SetFmtDevice( pFmtDev );
     }
@@ -514,7 +514,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.SetGridColor        ( aGridColor );
     aOutputData.SetShowNullValues   ( rOpts.GetOption( VOPT_NULLVALS ) );
     aOutputData.SetShowFormulas     ( bFormulaMode );
-    aOutputData.SetShowSpellErrors  ( pDoc->GetDocOptions().IsAutoSpell() );
+    aOutputData.SetShowSpellErrors  ( rDoc.GetDocOptions().IsAutoSpell() );
     aOutputData.SetMarkClipped      ( bMarkClipped );
 
     aOutputData.SetUseStyleColor( true );       // always set in table view
@@ -657,7 +657,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         pContentDev->SetMapMode(aCurrentMapMode);
     }
 
-    if ( pDoc->HasBackgroundDraw( nTab, aDrawingRectLogic ) )
+    if ( rDoc.HasBackgroundDraw( nTab, aDrawingRectLogic ) )
     {
         pContentDev->SetMapMode(MAP_PIXEL);
         aOutputData.DrawClear();
@@ -721,10 +721,10 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     //! Test, ob ChangeTrack-Anzeige aktiv ist
     //! Szenario-Rahmen per View-Optionen abschaltbar?
 
-    SCTAB nTabCount = pDoc->GetTableCount();
+    SCTAB nTabCount = rDoc.GetTableCount();
     const std::vector<ScHighlightEntry> &rHigh = pViewData->GetView()->GetHighlightRanges();
-    bool bHasScenario = ( nTab+1<nTabCount && pDoc->IsScenario(nTab+1) && !pDoc->IsScenario(nTab) );
-    bool bHasChange = ( pDoc->GetChangeTrack() != NULL );
+    bool bHasScenario = ( nTab+1<nTabCount && rDoc.IsScenario(nTab+1) && !rDoc.IsScenario(nTab) );
+    bool bHasChange = ( rDoc.GetChangeTrack() != NULL );
 
     if ( bHasChange || bHasScenario || !rHigh.empty() )
     {
@@ -870,8 +870,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         CheckNeedsRepaint();
 
     // Flag drawn formula cells "unchanged".
-    pDoc->ResetChanged(ScRange(nX1,nY1,nTab,nX2,nY2,nTab));
-    pDoc->ClearFormulaContext();
+    rDoc.ResetChanged(ScRange(nX1,nY1,nTab,nX2,nY2,nTab));
+    rDoc.ClearFormulaContext();
 }
 
 void ScGridWindow::CheckNeedsRepaint()

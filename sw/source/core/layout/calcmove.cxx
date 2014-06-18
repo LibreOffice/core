@@ -1122,7 +1122,7 @@ void SwCntntFrm::MakeAll()
 
     if ( GetUpper()->IsSctFrm() &&
          HasFollow() &&
-         GetFollow()->GetFrm() == GetNext() )
+         &GetFollow()->GetFrm() == GetNext() )
     {
         dynamic_cast<SwTxtFrm&>(*this).JoinFrm();
     }

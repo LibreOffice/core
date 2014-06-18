@@ -34,7 +34,7 @@ inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
 
 static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
 {
-    if ( *rHt1.GetStart() == *rHt2.GetStart() )
+    if ( rHt1.GetStart() == rHt2.GetStart() )
     {
         const sal_Int32 nHt1 = *rHt1.GetAnyEnd();
         const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
@@ -59,7 +59,7 @@ static bool lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
         }
         return ( nHt1 > nHt2 );
     }
-    return ( *rHt1.GetStart() < *rHt2.GetStart() );
+    return ( rHt1.GetStart() < rHt2.GetStart() );
 }
 
 // Zuerst nach Ende danach nach Ptr
@@ -69,7 +69,7 @@ static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
     const sal_Int32 nHt2 = *rHt2.GetAnyEnd();
     if ( nHt1 == nHt2 )
     {
-        if ( *rHt1.GetStart() == *rHt2.GetStart() )
+        if ( rHt1.GetStart() == rHt2.GetStart() )
         {
             const sal_uInt16 nWhich1 = rHt1.Which();
             const sal_uInt16 nWhich2 = rHt2.Which();
@@ -89,7 +89,7 @@ static bool lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
             return ( nWhich1 < nWhich2 );
         }
         else
-            return ( *rHt1.GetStart() > *rHt2.GetStart() );
+            return ( rHt1.GetStart() > rHt2.GetStart() );
     }
     return ( nHt1 < nHt2 );
 }
@@ -191,7 +191,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
         CHECK_ERR( 0xFF != *(unsigned char*)pHt, "HintsCheck: start ptr was deleted" );
 
         // 3a) Stimmt die Start-Sortierung?
-        sal_Int32 nIdx = *pHt->GetStart();
+        sal_Int32 nIdx = pHt->GetStart();
         CHECK_ERR( nIdx >= nLastStart, "HintsCheck: starts are unsorted" );
 
         // 4a) IsLessStart-Konsistenz
@@ -251,8 +251,8 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                 &&  (RES_TXTATR_AUTOFMT != pHtLast->Which()))
             ||  (   (RES_TXTATR_CHARFMT != pHtThis->Which())
                 &&  (RES_TXTATR_AUTOFMT != pHtThis->Which()))
-            ||  (*pHtThis->GetStart() >= *pHtLast->End()) // no overlap
-            ||  (   (   (*pHtThis->GetStart() == *pHtLast->GetStart())
+            ||  (pHtThis->GetStart() >= *pHtLast->End()) // no overlap
+            ||  (   (   (pHtThis->GetStart() == pHtLast->GetStart())
                     &&  (*pHtThis->End()   == *pHtLast->End())
                     ) // same range
                 &&  (   (pHtThis->Which() != RES_TXTATR_AUTOFMT)
@@ -266,7 +266,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                                 ->GetSortNumber())
                     ) // multiple CHARFMT on same range need distinct sortnr
                 )
-            ||  (*pHtThis->GetStart() == *pHtThis->End()), // this empty
+            ||  (pHtThis->GetStart() == *pHtThis->End()), // this empty
                    "HintsCheck: Portion inconsistency. "
                    "This can be temporarily ok during undo operations" );
 
@@ -279,7 +279,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
             {
                 // mostly ignore the annoying no-length hints
                 // BuildPortions inserts these in the middle of an existing one
-                bool const bNoLength(*pHt->GetStart() == *pHt->End());
+                bool const bNoLength(pHt->GetStart() == *pHt->End());
                 bool bNeedContinuation(!bNoLength && pHt->IsFormatIgnoreEnd());
                 bool bForbidContinuation(!bNoLength && !bNeedContinuation);
                 if (RES_TXTATR_AUTOFMT == pHt->Which())
@@ -297,15 +297,15 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                     for (sal_uInt16 j = i + 1; j < Count(); ++j)
                     {
                         SwTxtAttr *const pOther(m_HintStarts[j]);
-                        if (*pOther->GetStart() > *pHt->End())
+                        if (pOther->GetStart() > *pHt->End())
                         {
                             break; // done
                         }
-                        else if (*pOther->GetStart() == *pOther->GetAnyEnd())
+                        else if (pOther->GetStart() == *pOther->GetAnyEnd())
                         {
                             continue; // empty hint: ignore
                         }
-                        else if (*pOther->GetStart() == *pHt->End())
+                        else if (pOther->GetStart() == *pHt->End())
                         {
                             if (RES_TXTATR_AUTOFMT == pOther->Which() ||
                                 RES_TXTATR_CHARFMT == pOther->Which())
@@ -346,8 +346,8 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                 if ( pOther->IsNesting() &&  (i != j) )
                 {
                     SwComparePosition cmp = ComparePosition(
-                        *pHtThis->GetStart(), *pHtThis->End(),
-                        *pOther->GetStart(), *pOther->End());
+                        pHtThis->GetStart(), *pHtThis->End(),
+                        pOther->GetStart(), *pOther->End());
                     CHECK_ERR( (POS_OVERLAP_BEFORE != cmp) &&
                                (POS_OVERLAP_BEHIND != cmp),
                         "HintsCheck: overlapping nesting hints!!!" );
@@ -363,7 +363,7 @@ bool SwpHintsArray::Check(bool bPortionsMerged) const
                 SwTxtAttr const * const pOther( m_HintStarts[j] );
                 if (pOther->HasDummyChar())
                 {
-                    CHECK_ERR( (*pOther->GetStart() != *pHtThis->GetStart()),
+                    CHECK_ERR( (pOther->GetStart() != pHtThis->GetStart()),
                         "HintsCheck: multiple hints claim same CH_TXTATR!");
                 }
             }

@@ -310,7 +310,7 @@ bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
     if ( pViewSh )
     {
-        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
         size_t nRangeCount (pRangeList->size());
         size_t nRangeIndex (0);
         while (!bSubTotal && nRangeIndex < nRangeCount)
@@ -402,12 +402,12 @@ void ScInputWindow::Select()
                 ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
                 if ( pViewSh )
                 {
-                    const ScMarkData& rMark = pViewSh->GetViewData()->GetMarkData();
+                    const ScMarkData& rMark = pViewSh->GetViewData().GetMarkData();
                     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
                     {
                         ScRangeList aMarkRangeList;
                         rMark.FillRangeListWithMarks( &aMarkRangeList, false );
-                        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+                        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
 
                         // check if one of the marked ranges is empty
                         bool bEmpty = false;
@@ -464,7 +464,7 @@ void ScInputWindow::Select()
                         ScRangeList aRangeList;
                         const bool bDataFound = pViewSh->GetAutoSumArea( aRangeList );
                         const bool bSubTotal( UseSubTotal( &aRangeList ) );
-                        ScAddress aAddr = pViewSh->GetViewData()->GetCurPos();
+                        ScAddress aAddr = pViewSh->GetViewData().GetCurPos();
                         const OUString aFormula = pViewSh->GetAutoSumFormula( aRangeList, bSubTotal, aAddr );
                         SetFuncString( aFormula );
 
@@ -515,8 +515,8 @@ void ScInputWindow::Select()
                     const OUString& rString = aTextWindow.GetTextString();
                     const sal_Int32 nLen = rString.getLength();
 
-                    ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
-                    CellType eCellType = pDoc->GetCellType( pViewSh->GetViewData()->GetCurPos() );
+                    ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
+                    CellType eCellType = pDoc->GetCellType( pViewSh->GetViewData().GetCurPos() );
                     switch ( eCellType )
                     {
                         case CELLTYPE_VALUE:
@@ -1357,8 +1357,8 @@ void ScMultiTextWnd::InitEditEngine()
     ScDocShell* pDocSh = NULL;
     if ( pViewSh )
     {
-        pDocSh = pViewSh->GetViewData()->GetDocShell();
-        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+        pDocSh = pViewSh->GetViewData().GetDocShell();
+        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
         pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
@@ -1424,8 +1424,8 @@ void ScMultiTextWnd::InitEditEngine()
     //	repaint now to have the EditEngine's version visible
     if (pDocSh)
     {
-        ScDocument* pDoc = pDocSh->GetDocument(); // any document
-        sal_uInt8 nScript = pDoc->GetStringScriptType( aString );
+        ScDocument& rDoc = pDocSh->GetDocument(); // any document
+        sal_uInt8 nScript = rDoc.GetStringScriptType( aString );
         if ( nScript & SCRIPTTYPE_COMPLEX )
             Invalidate();
     }
@@ -1609,12 +1609,12 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
             ScTabViewShell* pEndViewSh = ScTabViewShell::GetActiveViewShell();
             if ( pEndViewSh != pStartViewSh && pStartViewSh != NULL )
             {
-                ScViewData* pViewData = pStartViewSh->GetViewData();
+                ScViewData& rViewData = pStartViewSh->GetViewData();
                 ScInputHandler* pHdl = pScMod->GetInputHdl( pStartViewSh );
-                if ( pHdl && pViewData->HasEditView( pViewData->GetActivePart() ) )
+                if ( pHdl && rViewData.HasEditView( rViewData.GetActivePart() ) )
                 {
                     pHdl->CancelHandler();
-                    pViewData->GetView()->ShowCursor(); // Missing for KillEditView, due to being inactive
+                    rViewData.GetView()->ShowCursor(); // Missing for KillEditView, due to being inactive
                 }
             }
         }
@@ -1734,7 +1734,7 @@ void ScTextWnd::StartEditEngine()
         ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
         if ( pViewSh )
         {
-            ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+            ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
             pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
         }
         else
@@ -1800,8 +1800,8 @@ void ScTextWnd::StartEditEngine()
 //        SfxObjectShell* pObjSh = SfxObjectShell::Current();
         if ( pObjSh && pObjSh->ISA(ScDocShell) )
         {
-            ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();    // any document
-            sal_uInt8 nScript = pDoc->GetStringScriptType( aString );
+            ScDocument& rDoc = ((ScDocShell*)pObjSh)->GetDocument();    // any document
+            sal_uInt8 nScript = rDoc.GetStringScriptType( aString );
             if ( nScript & SCRIPTTYPE_COMPLEX )
                 Invalidate();
         }
@@ -1900,9 +1900,9 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
                 if ( pObjSh && pObjSh->ISA(ScDocShell) )
                 {
                     //  any document can be used (used only for its break iterator)
-                    ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();
-                    nOldScript = pDoc->GetStringScriptType( aString );
-                    nNewScript = pDoc->GetStringScriptType( rNewString );
+                    ScDocument& rDoc = ((ScDocShell*)pObjSh)->GetDocument();
+                    nOldScript = rDoc.GetStringScriptType( aString );
+                    nNewScript = rDoc.GetStringScriptType( rNewString );
                 }
                 bPaintAll = ( nOldScript & SCRIPTTYPE_COMPLEX ) || ( nNewScript & SCRIPTTYPE_COMPLEX );
             }
@@ -1978,7 +1978,7 @@ void ScTextWnd::MakeDialogEditView()
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
     {
-        ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
+        ScDocument* pDoc = pViewSh->GetViewData().GetDocument();
         pNew = new ScFieldEditEngine(pDoc, pDoc->GetEnginePool(), pDoc->GetEditPool());
     }
     else
@@ -2139,14 +2139,14 @@ void ScPosWnd::FillRangeNames()
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
     if ( pObjSh && pObjSh->ISA(ScDocShell) )
     {
-        ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();
+        ScDocument& rDoc = ((ScDocShell*)pObjSh)->GetDocument();
 
         InsertEntry(ScGlobal::GetRscString( STR_MANAGE_NAMES ));
         SetSeparatorPos(0);
 
         ScRange aDummy;
         std::set<OUString> aSet;
-        ScRangeName* pRangeNames = pDoc->GetRangeName();
+        ScRangeName* pRangeNames = rDoc.GetRangeName();
         if (!pRangeNames->empty())
         {
             ScRangeName::const_iterator itrBeg = pRangeNames->begin(), itrEnd = pRangeNames->end();
@@ -2156,13 +2156,13 @@ void ScPosWnd::FillRangeNames()
                     aSet.insert(itr->second->GetName());
             }
         }
-        for (SCTAB i = 0; i < pDoc->GetTableCount(); ++i)
+        for (SCTAB i = 0; i < rDoc.GetTableCount(); ++i)
         {
-            ScRangeName* pLocalRangeName = pDoc->GetRangeName(i);
+            ScRangeName* pLocalRangeName = rDoc.GetRangeName(i);
             if (pLocalRangeName && !pLocalRangeName->empty())
             {
                 OUString aTableName;
-                pDoc->GetName(i, aTableName);
+                rDoc.GetName(i, aTableName);
                 for (ScRangeName::const_iterator itr = pLocalRangeName->begin(); itr != pLocalRangeName->end(); ++itr)
                 {
                     if (itr->second->IsValidReference(aDummy))
@@ -2256,9 +2256,9 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
     {
-        ScViewData* pViewData = pViewSh->GetViewData();
-        ScDocument* pDoc = pViewData->GetDocument();
-        SCTAB nTab = pViewData->GetTabNo();
+        ScViewData& rViewData = pViewSh->GetViewData();
+        ScDocument* pDoc = rViewData.GetDocument();
+        SCTAB nTab = rViewData.GetTabNo();
         formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         // test in same order as in SID_CURRENTCELL execute
@@ -2286,7 +2286,7 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
             eRet = SC_NAME_INPUT_SHEET;
         else if ( ScRangeData::IsNameValid( rText, pDoc ) )     // nothing found, create new range?
         {
-            if ( pViewData->GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
+            if ( rViewData.GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
                 eRet = SC_NAME_INPUT_DEFINE;
             else
                 eRet = SC_NAME_INPUT_BAD_SELECTION;
@@ -2401,9 +2401,9 @@ void ScPosWnd::DoEnter()
             ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
             if ( pViewSh )
             {
-                ScViewData* pViewData = pViewSh->GetViewData();
-                ScDocShell* pDocShell = pViewData->GetDocShell();
-                ScDocument* pDoc = pDocShell->GetDocument();
+                ScViewData& rViewData = pViewSh->GetViewData();
+                ScDocShell* pDocShell = rViewData.GetDocShell();
+                ScDocument& rDoc = pDocShell->GetDocument();
 
                 ScNameInputType eType = lcl_GetInputType( aText );
                 if ( eType == SC_NAME_INPUT_BAD_NAME || eType == SC_NAME_INPUT_BAD_SELECTION )
@@ -2413,15 +2413,15 @@ void ScPosWnd::DoEnter()
                 }
                 else if ( eType == SC_NAME_INPUT_DEFINE )
                 {
-                    ScRangeName* pNames = pDoc->GetRangeName();
+                    ScRangeName* pNames = rDoc.GetRangeName();
                     ScRange aSelection;
                     if ( pNames && !pNames->findByUpperName(ScGlobal::pCharClass->uppercase(aText)) &&
-                            (pViewData->GetSimpleArea( aSelection ) == SC_MARK_SIMPLE) )
+                            (rViewData.GetSimpleArea( aSelection ) == SC_MARK_SIMPLE) )
                     {
                         ScRangeName aNewRanges( *pNames );
-                        ScAddress aCursor( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
-                        OUString aContent(aSelection.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
-                        ScRangeData* pNew = new ScRangeData( pDoc, aText, aContent, aCursor );
+                        ScAddress aCursor( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
+                        OUString aContent(aSelection.Format(SCR_ABS_3D, &rDoc, rDoc.GetAddressConvention()));
+                        ScRangeData* pNew = new ScRangeData( &rDoc, aText, aContent, aCursor );
                         if ( aNewRanges.insert(pNew) )
                         {
                             pDocShell->GetDocFunc().ModifyRangeNames( aNewRanges );
@@ -2444,15 +2444,15 @@ void ScPosWnd::DoEnter()
                     {
                         // Note that SID_CURRENTCELL always expects address to
                         // be in Calc A1 format.  Convert the text.
-                        ScRange aRange(0,0,pViewData->GetTabNo());
-                        aRange.ParseAny(aText, pDoc, pDoc->GetAddressConvention());
-                        aText = aRange.Format(SCR_ABS_3D, pDoc, ::formula::FormulaGrammar::CONV_OOO);
+                        ScRange aRange(0,0, rViewData.GetTabNo());
+                        aRange.ParseAny(aText, &rDoc, rDoc.GetAddressConvention());
+                        aText = aRange.Format(SCR_ABS_3D, &rDoc, ::formula::FormulaGrammar::CONV_OOO);
                     }
 
                     SfxStringItem aPosItem( SID_CURRENTCELL, aText );
                     SfxBoolItem aUnmarkItem( FN_PARAM_1, true );        // remove existing selection
 
-                    pViewSh->GetViewData()->GetDispatcher().Execute( SID_CURRENTCELL,
+                    pViewSh->GetViewData().GetDispatcher().Execute( SID_CURRENTCELL,
                                         SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
                                         &aPosItem, &aUnmarkItem, 0L );
                 }

@@ -358,14 +358,14 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
     }
     if (pViewShell)
     {
-        ScViewData *pViewData = pViewShell->GetViewData();
-        SfxBroadcaster* pDrawBC = pViewData ? pViewData->GetDocument()->GetDrawBroadcaster() : NULL;
+        ScViewData& rViewData = pViewShell->GetViewData();
+        SfxBroadcaster* pDrawBC = rViewData.GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
         {
             StartListening(*pDrawBC);
 
-            maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(pViewData->GetDocument()->GetDrawLayer()) );
-            maShapeTreeInfo.SetSdrView(pViewData->GetScDrawView());
+            maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(rViewData.GetDocument()->GetDrawLayer()) );
+            maShapeTreeInfo.SetSdrView(rViewData.GetScDrawView());
             maShapeTreeInfo.SetController(NULL);
             maShapeTreeInfo.SetWindow(pViewShell->GetWindowByPos(meSplitPos));
             maShapeTreeInfo.SetViewForwarder(mpAccessibleDocument);
@@ -378,8 +378,7 @@ ScChildrenShapes::~ScChildrenShapes()
     std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), Destroy());
     if (mpViewShell)
     {
-        ScViewData *pViewData = mpViewShell->GetViewData();
-        SfxBroadcaster* pDrawBC = pViewData ? pViewData->GetDocument()->GetDrawBroadcaster() : NULL;
+        SfxBroadcaster* pDrawBC = mpViewShell->GetViewData().GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
             EndListening(*pDrawBC);
     }
@@ -389,14 +388,14 @@ void ScChildrenShapes::SetDrawBroadcaster()
 {
     if (mpViewShell)
     {
-        ScViewData *pViewData = mpViewShell->GetViewData();
-        SfxBroadcaster* pDrawBC = pViewData ? pViewData->GetDocument()->GetDrawBroadcaster() : NULL;
+        ScViewData& rViewData = mpViewShell->GetViewData();
+        SfxBroadcaster* pDrawBC = rViewData.GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
         {
             StartListening(*pDrawBC, true);
 
-            maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(pViewData->GetDocument()->GetDrawLayer()) );
-            maShapeTreeInfo.SetSdrView(pViewData->GetScDrawView());
+            maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(rViewData.GetDocument()->GetDrawLayer()) );
+            maShapeTreeInfo.SetSdrView(rViewData.GetScDrawView());
             maShapeTreeInfo.SetController(NULL);
             maShapeTreeInfo.SetWindow(mpViewShell->GetWindowByPos(meSplitPos));
             maShapeTreeInfo.SetViewForwarder(mpAccessibleDocument);
@@ -892,8 +891,8 @@ SdrPage* ScChildrenShapes::GetDrawPage() const
     SdrPage* pDrawPage = NULL;
     if (mpViewShell)
     {
-        ScViewData *pViewData = mpViewShell->GetViewData();
-        ScDocument* pDoc = pViewData ? pViewData->GetDocument() : NULL;
+        ScViewData& rViewData = mpViewShell->GetViewData();
+        ScDocument* pDoc = rViewData.GetDocument();
         if (pDoc && pDoc->GetDrawLayer())
         {
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
@@ -1049,8 +1048,7 @@ bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     bool bIsFocuseMarked = true;
     if( mpViewShell && mnShapesSelected == 1 && bWinFocus)
     {
-        ScViewData *pViewData = mpViewShell->GetViewData();
-        ScDrawView* pScDrawView = pViewData ? pViewData->GetScDrawView() : NULL;
+        ScDrawView* pScDrawView = mpViewShell->GetViewData().GetScDrawView();
         if( pScDrawView )
         {
             if( pScDrawView->GetMarkedObjectList().GetMarkCount() == 1 )
@@ -1431,10 +1429,10 @@ ScAccessibleDocument::ScAccessibleDocument(
                     AddChild( pChildWin->GetAccessible(), false );
             }
         }
-        ScViewData *pViewData = pViewShell->GetViewData();
-        if (pViewData && pViewData->HasEditView(eSplitPos))
+        ScViewData& rViewData = pViewShell->GetViewData();
+        if (rViewData.HasEditView(eSplitPos))
         {
-            uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, pViewData->GetEditView(eSplitPos),
+            uno::Reference<XAccessible> xAcc = new ScAccessibleEditObject(this, rViewData.GetEditView(eSplitPos),
                 pViewShell->GetWindowByPos(eSplitPos), GetCurrentCellName(), GetCurrentCellDescription(),
                 ScAccessibleEditObject::CellInEditMode);
             AddChild(xAcc, false);
@@ -1599,13 +1597,13 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if ((rRef.GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
         {
-            ScViewData *pViewData = mpViewShell ? mpViewShell->GetViewData() : NULL;
-            if (pViewData && pViewData->HasEditView(meSplitPos))
+            if (mpViewShell->GetViewData().HasEditView(meSplitPos))
             {
-                const EditEngine* pEditEng = pViewData->GetEditView(meSplitPos)->GetEditEngine();
+                ScViewData& rViewData = mpViewShell->GetViewData();
+                const EditEngine* pEditEng = rViewData.GetEditView(meSplitPos)->GetEditEngine();
                 if (pEditEng && pEditEng->GetUpdateMode())
                 {
-                    mpTempAccEdit = new ScAccessibleEditObject(this, pViewData->GetEditView(meSplitPos),
+                    mpTempAccEdit = new ScAccessibleEditObject(this, rViewData.GetEditView(meSplitPos),
                         mpViewShell->GetWindowByPos(meSplitPos), GetCurrentCellName(),
                         OUString(ScResId(STR_ACC_EDITLINE_DESCR)), ScAccessibleEditObject::CellInEditMode);
                     uno::Reference<XAccessible> xAcc = mpTempAccEdit;
@@ -1774,8 +1772,8 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
         {
             xAccessibleComponent->grabFocus();
             // grab only focus if it does not have the focus and it is not hidden
-            if (mpViewShell && mpViewShell->GetViewData() &&
-                (mpViewShell->GetViewData()->GetActivePart() != meSplitPos) &&
+            if (mpViewShell &&
+                (mpViewShell->GetViewData().GetActivePart() != meSplitPos) &&
                 mpViewShell->GetWindowByPos(meSplitPos)->IsVisible())
             {
                 mpViewShell->ActivatePart(meSplitPos);
@@ -2127,14 +2125,10 @@ Rectangle ScAccessibleDocument::GetVisibleArea_Impl() const
 
     if (mpViewShell)
     {
-        ScViewData *pViewData = mpViewShell->GetViewData();
-        if (pViewData)
-        {
-            Point aPoint(pViewData->GetPixPos(meSplitPos)); // returns a negative Point
-            aPoint.setX(-aPoint.getX());
-            aPoint.setY(-aPoint.getY());
-            aVisRect.SetPos(aPoint);
-        }
+        Point aPoint(mpViewShell->GetViewData().GetPixPos(meSplitPos)); // returns a negative Point
+        aPoint.setX(-aPoint.getX());
+        aPoint.setY(-aPoint.getY());
+        aVisRect.SetPos(aPoint);
 
         ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
         if (pWin)
@@ -2260,9 +2254,8 @@ Rectangle ScAccessibleDocument::GetBoundingBox() const
 SCTAB ScAccessibleDocument::getVisibleTable() const
 {
     SCTAB nVisibleTable(0);
-    ScViewData *pViewData = mpViewShell ? mpViewShell->GetViewData() : NULL;
-    if (pViewData)
-        nVisibleTable = pViewData->GetTabNo();
+    if (mpViewShell)
+        nVisibleTable = mpViewShell->GetViewData().GetTabNo();
     return nVisibleTable;
 }
 
@@ -2292,12 +2285,11 @@ void ScAccessibleDocument::FreeAccessibleSpreadsheet()
 bool ScAccessibleDocument::IsTableSelected() const
 {
     bool bResult (false);
-    ScViewData *pViewData = mpViewShell ? mpViewShell->GetViewData() : NULL;
-    if(pViewData)
+    if(mpViewShell)
     {
         SCTAB nTab(getVisibleTable());
         //#103800#; use a copy of MarkData
-        ScMarkData aMarkData(pViewData->GetMarkData());
+        ScMarkData aMarkData(mpViewShell->GetViewData().GetMarkData());
         aMarkData.MarkToMulti();
         if (aMarkData.IsAllMarked(ScRange(ScAddress(0, 0, nTab),ScAddress(MAXCOL, MAXROW, nTab))))
             bResult = true;
@@ -2357,11 +2349,10 @@ void ScAccessibleDocument::RemoveChild(const uno::Reference<XAccessible>& xAcc, 
 OUString ScAccessibleDocument::GetCurrentCellName() const
 {
     OUString sName(SC_RESSTR(STR_ACC_CELL_NAME));
-    ScViewData *pViewData = mpViewShell ? mpViewShell->GetViewData() : NULL;
-    if (pViewData)
+    if (mpViewShell)
     {
         // Document not needed, because only the cell address, but not the tablename is needed
-        OUString sAddress(pViewData->GetCurPos().Format(SCA_VALID, NULL));
+        OUString sAddress(mpViewShell->GetViewData().GetCurPos().Format(SCA_VALID, NULL));
         sName = sName.replaceFirst("%1", sAddress);
     }
     return sName;
@@ -2374,14 +2365,12 @@ OUString ScAccessibleDocument::GetCurrentCellDescription() const
 
 ScDocument *ScAccessibleDocument::GetDocument() const
 {
-    ScViewData *pViewData = mpViewShell ? mpViewShell->GetViewData() : NULL;
-    return pViewData ? pViewData->GetDocument() : NULL;
+    return mpViewShell ? mpViewShell->GetViewData().GetDocument() : NULL;
 }
 
 ScAddress   ScAccessibleDocument::GetCurCellAddress() const
 {
-    ScViewData *pViewData = mpViewShell ? mpViewShell->GetViewData() : NULL;
-    return pViewData ? pViewData->GetCurPos() : ScAddress();
+    return mpViewShell ? mpViewShell->GetViewData().GetCurPos() : ScAddress();
 }
 
 uno::Any SAL_CALL ScAccessibleDocument::getExtendedAttributes()

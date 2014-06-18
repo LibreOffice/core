@@ -474,7 +474,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const OUString* pTxt
       pSmartTags( rInf.GetSmartTags() ),
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
-      aTxtFly( *rInf.GetTxtFly() ),
+      aTxtFly( rInf.GetTxtFly() ),
       aPos( rInf.GetPos() ),
       aPaintRect( rInf.GetPaintRect() ),
       nSpaceIdx( rInf.GetSpaceIdx() )
@@ -487,7 +487,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
       pSmartTags( rInf.GetSmartTags() ),
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
-      aTxtFly( *rInf.GetTxtFly() ),
+      aTxtFly( rInf.GetTxtFly() ),
       aPos( rInf.GetPos() ),
       aPaintRect( rInf.GetPaintRect() ),
       nSpaceIdx( rInf.GetSpaceIdx() )
@@ -659,7 +659,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
             aFontPos.X() = 0;
     }
 
-    if( GetTxtFly()->IsOn() )
+    if( GetTxtFly().IsOn() )
     {
         // aPos needs to be the TopLeft, because we cannot calculate the
         // ClipRects otherwise
@@ -672,7 +672,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
         aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
         aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : NULL );
         aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );
-        GetTxtFly()->DrawTextOpaque( aDrawInf );
+        GetTxtFly().DrawTextOpaque( aDrawInf );
     }
     else
     {
@@ -897,7 +897,7 @@ void SwTxtPaintInfo::DrawRect( const SwRect &rRect, bool bNoGraphic,
     if ( OnWin() || !bRetouche )
     {
         if( aTxtFly.IsOn() )
-            ((SwTxtPaintInfo*)this)->GetTxtFly()->
+            ((SwTxtPaintInfo*)this)->GetTxtFly().
                 DrawFlyRect( m_pOut, rRect, *this, bNoGraphic );
         else if ( bNoGraphic )
             m_pOut->DrawRect( rRect.SVRect() );

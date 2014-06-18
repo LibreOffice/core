@@ -123,11 +123,11 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
 
     OSL_ENSURE( pScDocSh, "Current DocumentShell not found :-(" );
 
-    pDoc = pScDocSh->GetDocument();
+    pDoc = &pScDocSh->GetDocument();
 
     if ( pScViewSh )
     {
-        pViewData = pScViewSh->GetViewData();
+        pViewData = &pScViewSh->GetViewData();
         nCurTab   = pViewData->GetTabNo();
     }
 

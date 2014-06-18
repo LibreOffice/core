@@ -306,9 +306,9 @@ void LwpGraphicObject::CreateDrawObjects()
     SvStream* pDrawObjStream = NULL;
 
     // get graphic object's bento objet name
-    LwpObjectID* pMyID = this->GetObjectID();
+    LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(pMyID,  aGrfObjName);
+    this->GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
     pBentoContainer->CreateGraphicStream(pDrawObjStream, aGrfObjName.c_str());
@@ -325,10 +325,10 @@ void LwpGraphicObject::CreateDrawObjects()
 /**
  * @descr   create drawing object.
  */
-void LwpGraphicObject::GetBentoNamebyID(LwpObjectID* pMyID, std::string& rName)
+void LwpGraphicObject::GetBentoNamebyID(LwpObjectID& rMyID, std::string& rName)
 {
-    sal_uInt16 nHigh = pMyID->GetHigh();
-    sal_uInt16 nLow = pMyID->GetLow();
+    sal_uInt16 nHigh = rMyID.GetHigh();
+    sal_uInt16 nLow = rMyID.GetLow();
     char pTempStr[32];
     rName = std::string("Gr");
     sprintf(pTempStr, "%X,%X", nHigh, nLow);
@@ -358,9 +358,9 @@ sal_uInt32 LwpGraphicObject::GetRawGrafData(sal_uInt8*& pGrafData)
     SvStream* pGrafStream = NULL;
 
     // get graphic object's bento objet name
-    LwpObjectID* pMyID = this->GetObjectID();
+    LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(pMyID,  aGrfObjName);
+    this->GetBentoNamebyID(rMyID,  aGrfObjName);
 
     // get bento stream by the name
     pBentoContainer->CreateGraphicStream(pGrafStream, aGrfObjName.c_str());
@@ -401,9 +401,9 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     SvStream* pGrafStream = NULL;
 
     // get graphic object's bento objet name
-    LwpObjectID* pMyID = this->GetObjectID();
+    LwpObjectID& rMyID = this->GetObjectID();
     std::string aGrfObjName;
-    this->GetBentoNamebyID(pMyID,  aGrfObjName);
+    this->GetBentoNamebyID(rMyID,  aGrfObjName);
 
     char sDName[64]="";
     sprintf(sDName, "%s-D", aGrfObjName.c_str());
@@ -457,9 +457,9 @@ void LwpGraphicObject::CreateGrafObject()
     }
 
     // set scale and crop styles
-    LwpAssociatedLayouts* pLayoutWithMe = GetLayoutsWithMe();
+    LwpAssociatedLayouts& rLayoutWithMe = GetLayoutsWithMe();
     LwpFrameLayout* pMyFrameLayout =
-        static_cast<LwpFrameLayout*>(pLayoutWithMe->GetOnlyLayout()->obj(VO_FRAMELAYOUT).get());
+        static_cast<LwpFrameLayout*>(rLayoutWithMe.GetOnlyLayout().obj(VO_FRAMELAYOUT).get());
     if (pMyFrameLayout)
     {
         LwpLayoutScale* pMyScale = pMyFrameLayout->GetLayoutScale();
@@ -576,9 +576,9 @@ void LwpGraphicObject::CreateGrafObject()
                 pImageStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
 
                 // get image position offset
-                LwpPoint* pOffset = pMyScale->GetOffset();
-                double fOffsetX = LwpTools::ConvertFromUnitsToMetric(pOffset->GetX());
-                double fOffsetY = LwpTools::ConvertFromUnitsToMetric(pOffset->GetY());
+                LwpPoint& rOffset = pMyScale->GetOffset();
+                double fOffsetX = LwpTools::ConvertFromUnitsToMetric(rOffset.GetX());
+                double fOffsetY = LwpTools::ConvertFromUnitsToMetric(rOffset.GetY());
 
                 struct LwpRect
                 {
@@ -653,10 +653,10 @@ void LwpGraphicObject::CreateGrafObject()
     pImage->SetAnchorType(enumXFAnchorFrame);
 
     // set object name
-    LwpAtomHolder* pHolder = this->GetName();
-    if ( pHolder && !pHolder->str().isEmpty() )
+    LwpAtomHolder& rHolder = this->GetName();
+    if ( !rHolder.str().isEmpty() )
     {
-        pImage->SetName(pHolder->str());
+        pImage->SetName(rHolder.str());
     }
 
     // insert image object into array

@@ -76,7 +76,7 @@ void SwTextBoxHelper::create(SwFrmFmt* pShape)
         if (sw::XTextRangeToSwPaM(aInternalPaM, xTextBox))
         {
             SwAttrSet aSet(pShape->GetAttrSet());
-            SwFmtCntnt aCntnt(aInternalPaM.GetNode()->StartOfSectionNode());
+            SwFmtCntnt aCntnt(aInternalPaM.GetNode().StartOfSectionNode());
             aSet.Put(aCntnt);
             pShape->SetFmtAttr(aSet);
         }

@@ -3421,10 +3421,10 @@ void ServiceType::dumpHxxFile(
                 {
                     tree.add(u2b(*j), m_typeMgr);
                 }
-                if (!tree.getRoot()->present) {
+                if (!tree.getRoot().present) {
                     includes.add("com.sun.star.uno.Exception");
                     includes.add("com.sun.star.uno.RuntimeException");
-                    includeExceptions(includes, tree.getRoot());
+                    includeExceptions(includes, &tree.getRoot());
                 }
             }
         }
@@ -3603,7 +3603,7 @@ void ServiceType::dumpHxxFile(
                 {
                     tree.add(u2b(*j), m_typeMgr);
                 }
-                if (!tree.getRoot()->present) {
+                if (!tree.getRoot().present) {
                     o << indent() << "try {\n";
                     inc();
                 }
@@ -3657,14 +3657,14 @@ void ServiceType::dumpHxxFile(
                     o << "the_arguments";
                 }
                 o << ", the_context), ::css::uno::UNO_QUERY);\n#endif\n";
-                if (!tree.getRoot()->present) {
+                if (!tree.getRoot().present) {
                     dec();
                     o << indent()
                       << ("} catch (const ::css::uno::RuntimeException &) {\n");
                     inc();
                     o << indent() << "throw;\n";
                     dec();
-                    dumpCatchClauses(o, tree.getRoot());
+                    dumpCatchClauses(o, &tree.getRoot());
                     o << indent()
                       << ("} catch (const ::css::uno::Exception &"
                           " the_exception) {\n");

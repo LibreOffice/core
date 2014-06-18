@@ -176,19 +176,19 @@ void LwpTextStyle::RegisterStyle()
     XFTextStyle* pStyle = new XFTextStyle();
 
     //Set name
-    OUString styleName = GetName()->str();
+    OUString styleName = GetName().str();
     pStyle->SetStyleName(styleName);
 
     //Create font
-    LwpFontManager* pFontMgr = m_pFoundry->GetFontManger();
-    rtl::Reference<XFFont> pFont = pFontMgr->CreateFont(m_nFinalFontID);
+    LwpFontManager& rFontMgr = m_pFoundry->GetFontManger();
+    rtl::Reference<XFFont> pFont = rFontMgr.CreateFont(m_nFinalFontID);
     pStyle->SetFont(pFont);
 
     //Set other properties if needed
 
     //Add style
     LwpStyleManager* pStyleMgr = m_pFoundry->GetStyleManager();
-    pStyleMgr->AddStyle(*GetObjectID(), pStyle);
+    pStyleMgr->AddStyle(GetObjectID(), pStyle);
 
 }
 

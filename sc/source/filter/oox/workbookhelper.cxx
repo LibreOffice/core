@@ -542,7 +542,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
         if (pModel)
             mpDocShell = static_cast<ScDocShell*>(pModel->GetEmbeddedObject());
         if (mpDocShell)
-            mpDoc = mpDocShell->GetDocument();
+            mpDoc = &mpDocShell->GetDocument();
     }
 
     if (!mpDoc)

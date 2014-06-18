@@ -689,7 +689,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         if (::sw::XTextRangeToSwPaM(*pInternalPam, xRg))
         {
             if(FLY_AT_FLY == aAnchor.GetAnchorId() &&
-                                !pInternalPam->GetNode()->FindFlyStartNode())
+                                !pInternalPam->GetNode().FindFlyStartNode())
             {
                         aAnchor.SetType(FLY_AS_CHAR);
             }
@@ -1172,7 +1172,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                                 //The connection is removed now the attribute can be deleted.
                                 pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx );
                                 //create a new one
-                                SwTxtNode *pNd = pInternalPam->GetNode()->GetTxtNode();
+                                SwTxtNode *pNd = pInternalPam->GetNode().GetTxtNode();
                                 SAL_WARN_IF( !pNd, "sw.uno", "Cursor not at TxtNode." );
                                 SwFmtFlyCnt aFmt( pFmt );
                                 pNd->InsertItem(aFmt, pInternalPam->GetPoint()
@@ -1341,7 +1341,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                                 aPam.Move( fnMoveBackward, fnGoDoc );
                             }
                             //the RES_TXTATR_FLYCNT needs to be added now
-                            SwTxtNode *pNd = aPam.GetNode()->GetTxtNode();
+                            SwTxtNode *pNd = aPam.GetNode().GetTxtNode();
                             SAL_WARN_IF( !pNd, "sw.uno", "Crsr is not in a TxtNode." );
                             SwFmtFlyCnt aFmt( pFlyFmt );
                             pNd->InsertItem(aFmt,

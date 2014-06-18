@@ -96,7 +96,7 @@ public:
     sal_uInt16 GetRowID(){return crowid;}
     sal_uInt8 GetColID(){return ccolid;}
     void RegisterStyle() SAL_OVERRIDE;
-    LwpObjectID * GetNumericsObject() {return &cLayNumerics;}
+    LwpObjectID& GetNumericsObject() {return cLayNumerics;}
     LwpObjectID * GetPreviousCellStory();
     virtual LwpPara* GetLastParaOfPreviousStory() SAL_OVERRIDE;
     LwpTableLayout * GetTableLayout();

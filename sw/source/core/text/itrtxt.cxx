@@ -351,7 +351,7 @@ void SwTxtIter::TruncLines( bool bNoteFollow )
                     if( RES_TXTATR_FLYCNT == pHt->Which() )
                     {
                         // check, if hint is in our range
-                        const sal_uInt16 nTmpPos = *pHt->GetStart();
+                        const sal_uInt16 nTmpPos = pHt->GetStart();
                         if ( nEnd <= nTmpPos && nTmpPos < nRangeEnd )
                             pFollow->_InvalidateRange(
                                 SwCharRange( nTmpPos, nTmpPos ), 0 );

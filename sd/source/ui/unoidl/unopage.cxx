@@ -2856,7 +2856,7 @@ void SdMasterPage::setBackground( const Any& rValue )
                 Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_QUERY_THROW );
                 Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY );
 
-                PropertyEntryVector_t aBackgroundProperties = ImplGetPageBackgroundPropertySet()->getPropertyMap()->getPropertyEntries();
+                PropertyEntryVector_t aBackgroundProperties = ImplGetPageBackgroundPropertySet()->getPropertyMap().getPropertyEntries();
                 PropertyEntryVector_t::const_iterator aIt = aBackgroundProperties.begin();
                 while( aIt != aBackgroundProperties.end() )
                 {

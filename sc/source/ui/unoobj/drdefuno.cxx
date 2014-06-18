@@ -30,13 +30,13 @@ ScDrawDefaultsObj::ScDrawDefaultsObj(ScDocShell* pDocSh) :
     //  SvxUnoDrawPool is initialized without model,
     //  draw layer is created on demand in getModelPool
 
-    pDocShell->GetDocument()->AddUnoObject(*this);
+    pDocShell->GetDocument().AddUnoObject(*this);
 }
 
 ScDrawDefaultsObj::~ScDrawDefaultsObj() throw ()
 {
     if (pDocShell)
-        pDocShell->GetDocument()->RemoveUnoObject(*this);
+        pDocShell->GetDocument().RemoveUnoObject(*this);
 }
 
 void ScDrawDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -57,7 +57,7 @@ SfxItemPool* ScDrawDefaultsObj::getModelPool( bool bReadOnly ) throw()
         if ( pDocShell )
         {
             ScDrawLayer* pModel = bReadOnly ?
-                            pDocShell->GetDocument()->GetDrawLayer() :
+                            pDocShell->GetDocument().GetDrawLayer() :
                             pDocShell->MakeDrawLayer();
             if ( pModel )
                 pRet = &pModel->GetItemPool();

@@ -39,13 +39,13 @@ ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
 
     //read header form current document, and add new controls
     OSL_ENSURE( pTabViewShell, "pTabViewShell is NULL! :-/" );
-    ScViewData* pViewData = pTabViewShell->GetViewData();
+    ScViewData& rViewData = pTabViewShell->GetViewData();
 
-    pDoc = pViewData->GetDocument();
+    pDoc = rViewData.GetDocument();
     if (pDoc)
     {
         ScRange aRange;
-        pViewData->GetSimpleArea( aRange );
+        rViewData.GetSimpleArea( aRange );
         ScAddress aStart = aRange.aStart;
         ScAddress aEnd = aRange.aEnd;
 
@@ -54,7 +54,7 @@ ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
         nStartRow   = aStart.Row();
         nEndRow = aEnd.Row();
 
-        nTab = pViewData->GetTabNo();
+        nTab = rViewData.GetTabNo();
         //if there is no selection
         if ((nStartCol == nEndCol) && (nStartRow == nEndRow))
             bNoSelection = true;
@@ -241,8 +241,8 @@ IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, Edit*, pEdit)
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl)
 {
-    ScViewData* pViewData = pTabViewShell->GetViewData();
-    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScViewData& rViewData = pTabViewShell->GetViewData();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
     if ( pDoc )
     {
         bool bHasData = false;
@@ -310,8 +310,8 @@ IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl)
 
 IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl)
 {
-    ScViewData* pViewData = pTabViewShell->GetViewData();
-    ScDocShell* pDocSh = pViewData->GetDocShell();
+    ScViewData& rViewData = pTabViewShell->GetViewData();
+    ScDocShell* pDocSh = rViewData.GetDocShell();
     if (pDoc)
     {
         ScRange aRange(nStartCol, nCurrentRow, nTab, nEndCol, nCurrentRow, nTab);

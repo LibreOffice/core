@@ -3656,10 +3656,10 @@ void Test::testExternalRef()
                            findLoadedDocShellByName(aExtDocName) != NULL);
 
     // Populate the external source document.
-    ScDocument* pExtDoc = xExtDocSh->GetDocument();
-    pExtDoc->InsertTab(0, aExtSh1Name);
-    pExtDoc->InsertTab(1, aExtSh2Name);
-    pExtDoc->InsertTab(2, aExtSh3Name);
+    ScDocument& rExtDoc = xExtDocSh->GetDocument();
+    rExtDoc.InsertTab(0, aExtSh1Name);
+    rExtDoc.InsertTab(1, aExtSh2Name);
+    rExtDoc.InsertTab(2, aExtSh3Name);
 
     OUString name("Name");
     OUString value("Value");
@@ -3673,38 +3673,38 @@ void Test::testExternalRef()
     OUString henry("Henry");
 
     // Sheet 1
-    pExtDoc->SetString(0, 0, 0, name);
-    pExtDoc->SetString(0, 1, 0, andy);
-    pExtDoc->SetString(0, 2, 0, bruce);
-    pExtDoc->SetString(0, 3, 0, charlie);
-    pExtDoc->SetString(0, 4, 0, david);
-    pExtDoc->SetString(1, 0, 0, value);
+    rExtDoc.SetString(0, 0, 0, name);
+    rExtDoc.SetString(0, 1, 0, andy);
+    rExtDoc.SetString(0, 2, 0, bruce);
+    rExtDoc.SetString(0, 3, 0, charlie);
+    rExtDoc.SetString(0, 4, 0, david);
+    rExtDoc.SetString(1, 0, 0, value);
     double val = 10;
-    pExtDoc->SetValue(1, 1, 0, val);
+    rExtDoc.SetValue(1, 1, 0, val);
     val = 11;
-    pExtDoc->SetValue(1, 2, 0, val);
+    rExtDoc.SetValue(1, 2, 0, val);
     val = 12;
-    pExtDoc->SetValue(1, 3, 0, val);
+    rExtDoc.SetValue(1, 3, 0, val);
     val = 13;
-    pExtDoc->SetValue(1, 4, 0, val);
+    rExtDoc.SetValue(1, 4, 0, val);
 
     // Sheet 2 remains empty.
 
     // Sheet 3
-    pExtDoc->SetString(0, 0, 2, name);
-    pExtDoc->SetString(0, 1, 2, edward);
-    pExtDoc->SetString(0, 2, 2, frank);
-    pExtDoc->SetString(0, 3, 2, george);
-    pExtDoc->SetString(0, 4, 2, henry);
-    pExtDoc->SetString(1, 0, 2, value);
+    rExtDoc.SetString(0, 0, 2, name);
+    rExtDoc.SetString(0, 1, 2, edward);
+    rExtDoc.SetString(0, 2, 2, frank);
+    rExtDoc.SetString(0, 3, 2, george);
+    rExtDoc.SetString(0, 4, 2, henry);
+    rExtDoc.SetString(1, 0, 2, value);
     val = 99;
-    pExtDoc->SetValue(1, 1, 2, val);
+    rExtDoc.SetValue(1, 1, 2, val);
     val = 98;
-    pExtDoc->SetValue(1, 2, 2, val);
+    rExtDoc.SetValue(1, 2, 2, val);
     val = 97;
-    pExtDoc->SetValue(1, 3, 2, val);
+    rExtDoc.SetValue(1, 3, 2, val);
     val = 96;
-    pExtDoc->SetValue(1, 4, 2, val);
+    rExtDoc.SetValue(1, 4, 2, val);
 
     // Test external refernces on the main document while the external
     // document is still in memory.
@@ -3815,14 +3815,14 @@ void Test::testExternalRef()
     m_pDoc->DeleteTab(0);
 }
 
-void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
+void testExtRefFuncT(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
-    Test::clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+    Test::clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
-    pExtDoc->SetString(0, 0, 0, OUString("'1.2"));
-    pExtDoc->SetString(0, 1, 0, OUString("Foo"));
-    pExtDoc->SetValue(0, 2, 0, 12.3);
+    rExtDoc.SetString(0, 0, 0, OUString("'1.2"));
+    rExtDoc.SetString(0, 1, 0, OUString("Foo"));
+    rExtDoc.SetValue(0, 2, 0, 12.3);
     pDoc->SetString(0, 0, 0, OUString("=T('file:///extdata.fake'#Data.A1)"));
     pDoc->SetString(0, 1, 0, OUString("=T('file:///extdata.fake'#Data.A2)"));
     pDoc->SetString(0, 2, 0, OUString("=T('file:///extdata.fake'#Data.A3)"));
@@ -3836,36 +3836,36 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
     CPPUNIT_ASSERT_MESSAGE("Unexpected result with T.", aRes.isEmpty());
 }
 
-void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument* pExtDoc)
+void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
-    Test::clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+    Test::clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
     sc::AutoCalcSwitch aACSwitch(*pDoc, true);
 
     // External document has sheet named 'Data', and the internal doc has sheet named 'Test'.
-    pExtDoc->SetValue(ScAddress(0,1,0), 1.2); // Set 1.2 to A2.
+    rExtDoc.SetValue(ScAddress(0,1,0), 1.2); // Set 1.2 to A2.
     pDoc->SetString(ScAddress(0,0,0), "=OFFSET('file:///extdata.fake'#Data.$A$1;1;0;1;1)");
     CPPUNIT_ASSERT_EQUAL(1.2, pDoc->GetValue(ScAddress(0,0,0)));
 }
 
-void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument* pExtDoc)
+void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument& rExtDoc)
 {
     Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
-    Test::clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
+    Test::clearRange(&rExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
     // Populate the external document.
-    pExtDoc->SetString(ScAddress(0,0,0), "A1");
-    pExtDoc->SetString(ScAddress(0,1,0), "A2");
-    pExtDoc->SetString(ScAddress(0,2,0), "A3");
-    pExtDoc->SetString(ScAddress(0,3,0), "A4");
-    pExtDoc->SetString(ScAddress(0,4,0), "A5");
+    rExtDoc.SetString(ScAddress(0,0,0), "A1");
+    rExtDoc.SetString(ScAddress(0,1,0), "A2");
+    rExtDoc.SetString(ScAddress(0,2,0), "A3");
+    rExtDoc.SetString(ScAddress(0,3,0), "A4");
+    rExtDoc.SetString(ScAddress(0,4,0), "A5");
 
-    pExtDoc->SetString(ScAddress(1,0,0), "B1");
-    pExtDoc->SetString(ScAddress(1,1,0), "B2");
-    pExtDoc->SetString(ScAddress(1,2,0), "B3");
-    pExtDoc->SetString(ScAddress(1,3,0), "B4");
-    pExtDoc->SetString(ScAddress(1,4,0), "B5");
+    rExtDoc.SetString(ScAddress(1,0,0), "B1");
+    rExtDoc.SetString(ScAddress(1,1,0), "B2");
+    rExtDoc.SetString(ScAddress(1,2,0), "B3");
+    rExtDoc.SetString(ScAddress(1,3,0), "B4");
+    rExtDoc.SetString(ScAddress(1,4,0), "B5");
 
     // Put formula in the source document.
 
@@ -3899,20 +3899,20 @@ void Test::testExternalRefFunctions()
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
 
     // Populate the external source document.
-    ScDocument* pExtDoc = xExtDocSh->GetDocument();
-    pExtDoc->InsertTab(0, OUString("Data"));
+    ScDocument& rExtDoc = xExtDocSh->GetDocument();
+    rExtDoc.InsertTab(0, OUString("Data"));
     double val = 1;
-    pExtDoc->SetValue(0, 0, 0, val);
+    rExtDoc.SetValue(0, 0, 0, val);
     // leave cell B1 empty.
     val = 2;
-    pExtDoc->SetValue(0, 1, 0, val);
-    pExtDoc->SetValue(1, 1, 0, val);
+    rExtDoc.SetValue(0, 1, 0, val);
+    rExtDoc.SetValue(1, 1, 0, val);
     val = 3;
-    pExtDoc->SetValue(0, 2, 0, val);
-    pExtDoc->SetValue(1, 2, 0, val);
+    rExtDoc.SetValue(0, 2, 0, val);
+    rExtDoc.SetValue(1, 2, 0, val);
     val = 4;
-    pExtDoc->SetValue(0, 3, 0, val);
-    pExtDoc->SetValue(1, 3, 0, val);
+    rExtDoc.SetValue(0, 3, 0, val);
+    rExtDoc.SetValue(1, 3, 0, val);
 
     m_pDoc->InsertTab(0, OUString("Test"));
 
@@ -3935,9 +3935,9 @@ void Test::testExternalRefFunctions()
     }
 
     pRefMgr->clearCache(nFileId);
-    testExtRefFuncT(m_pDoc, pExtDoc);
-    testExtRefFuncOFFSET(m_pDoc, pExtDoc);
-    testExtRefFuncVLOOKUP(m_pDoc, pExtDoc);
+    testExtRefFuncT(m_pDoc, rExtDoc);
+    testExtRefFuncOFFSET(m_pDoc, rExtDoc);
+    testExtRefFuncVLOOKUP(m_pDoc, rExtDoc);
 
     // Unload the external document shell.
     xExtDocSh->DoClose();
