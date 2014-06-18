@@ -757,8 +757,8 @@ void SvxRectCtl::SetCS(CTL_STYLE eNew)
 //Logic Pixel
 long SvxPixelCtl::PointToIndex(const Point &aPt) const
 {
-    sal_Int32 nX = aPt.X() * nLines / aRectSize.Width();
-    sal_Int32 nY = aPt.Y() * nLines / aRectSize.Height();
+    long nX = aPt.X() * nLines / aRectSize.Width();
+    long nY = aPt.Y() * nLines / aRectSize.Height();
 
     return nX + nY * nLines ;
 }
