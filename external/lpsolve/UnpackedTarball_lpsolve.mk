@@ -26,6 +26,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,lpsolve,\
 	external/lpsolve/lp_solve-aix.patch \
 	external/lpsolve/lp_solve-fixed-warn.patch \
 	external/lpsolve/lp_solve_5.5.patch \
+	external/lpsolve/lpsolve-ubsan.patch.0 \
 ))
 
 $(eval $(call gb_UnpackedTarball_add_file,lpsolve,lpsolve55/ccc.static,external/lpsolve/ccc.static))
