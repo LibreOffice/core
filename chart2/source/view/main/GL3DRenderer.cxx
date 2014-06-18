@@ -788,7 +788,7 @@ void OpenGL3DRenderer::RenderLine3D(const Polygon3DInfo& polygon)
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
     PosVecf3 scale = {1.0f, 1.0f, m_fHeightWeight};
     MoveModelf(trans, angle, scale);
-    m_Model =m_GlobalScaleMatrix * m_Model;
+    m_Model = m_GlobalScaleMatrix * m_Model;
     m_3DMVP = m_3DProjection * m_3DView * m_Model;
 
     for (size_t i = 0; i < polygon.verticesList.size(); i++)
@@ -879,7 +879,7 @@ void OpenGL3DRenderer::RenderPolygon3D(const Polygon3DInfo& polygon)
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
         PosVecf3 scale = {1.0f, 1.0f, m_fHeightWeight};
         MoveModelf(trans, angle, scale);
-        m_Model =m_GlobalScaleMatrix * m_Model;
+        m_Model = m_GlobalScaleMatrix * m_Model;
         glm::mat3 normalMatrix(m_Model);
         glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
 
@@ -1279,7 +1279,7 @@ void OpenGL3DRenderer::RenderExtrudeFlatSurface(const Extrude3DInfo& extrude3D, 
                       extrude3D.zTransform};
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 flatScale = glm::scale(glm::vec3(xyScale, xyScale, xyScale));
-    m_Model = aTranslationMatrix * extrude3D.rotation * flatScale;
+    m_Model = m_GlobalScaleMatrix * aTranslationMatrix * extrude3D.rotation * flatScale;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1323,7 +1323,7 @@ void OpenGL3DRenderer::RenderExtrudeBottomSurface(const Extrude3DInfo& extrude3D
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale;
     }
-    m_Model =m_GlobalScaleMatrix * m_Model;
+    m_Model = m_GlobalScaleMatrix * m_Model;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1368,7 +1368,7 @@ void OpenGL3DRenderer::RenderExtrudeMiddleSurface(const Extrude3DInfo& extrude3D
         glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, 0.0, -1.0));
         m_Model = m_Model * reverseMatrix;
     }
-    m_Model =m_GlobalScaleMatrix * m_Model;
+    m_Model = m_GlobalScaleMatrix * m_Model;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1413,7 +1413,7 @@ void OpenGL3DRenderer::RenderExtrudeTopSurface(const Extrude3DInfo& extrude3D)
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
     }
-    m_Model =m_GlobalScaleMatrix * m_Model;
+    m_Model = m_GlobalScaleMatrix * m_Model;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1443,7 +1443,7 @@ void OpenGL3DRenderer::RenderNonRoundedBar(const Extrude3DInfo& extrude3D)
         glm::mat4 reverseMatrix = glm::translate(glm::vec3(0.0, 0.0, -1.0));
         m_Model = m_Model * reverseMatrix;
     }
-    m_Model =m_GlobalScaleMatrix * m_Model;
+    m_Model = m_GlobalScaleMatrix * m_Model;
     if(!mbPickingMode)
     {
         glm::mat3 normalMatrix(m_Model);
@@ -1767,7 +1767,7 @@ void OpenGL3DRenderer::RenderTextShape()
         PosVecf3 angle = {0.0f, 0.0f, 0.0f};
         PosVecf3 scale = {1.0, 1.0, 1.0f};
         MoveModelf(trans, angle, scale);
-        m_Model =m_GlobalScaleMatrix * m_Model;
+        m_Model = m_GlobalScaleMatrix * m_Model;
         glm::mat4 aMVP = m_3DProjection * m_3DView * m_Model;
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
@@ -1952,7 +1952,8 @@ void OpenGL3DRenderer::GetBatchMiddleInfo(const Extrude3DInfo &extrude3D)
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * scale;
     }
-    m_Model =m_GlobalScaleMatrix * m_Model;
+
+    m_Model = m_GlobalScaleMatrix * m_Model;
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     m_BarSurface[MIDDLE_SURFACE].modelMatrixList.push_back(m_Model);
@@ -1987,7 +1988,8 @@ void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
     }
-    m_Model =m_GlobalScaleMatrix * m_Model;
+
+    m_Model = m_GlobalScaleMatrix * m_Model;
     glm::mat3 normalMatrix(m_Model);
     glm::mat3 normalInverseTranspos = glm::inverseTranspose(normalMatrix);
     m_BarSurface[TOP_SURFACE].modelMatrixList.push_back(m_Model);
@@ -1997,7 +1999,7 @@ void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
     glm::mat4 flatScale = glm::scale(glm::vec3(xyScale, xyScale, xyScale));
     m_Model = aTranslationMatrix * extrude3D.rotation * flatScale;
-    m_Model =m_GlobalScaleMatrix * m_Model;
+    m_Model = m_GlobalScaleMatrix * m_Model;
     normalMatrix = glm::mat3(m_Model);
     normalInverseTranspos = glm::inverseTranspose(normalMatrix);
 
