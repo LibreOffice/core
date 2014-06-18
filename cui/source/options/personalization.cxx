@@ -128,8 +128,15 @@ IMPL_LINK( SelectPersonaDialog, SelectPersona, PushButton*, pButton )
         if( pButton == m_vResultList[index] )
         {
             if( !m_vPersonaSettings[index].isEmpty() )
+            {
                 m_aSelectedPersona = m_vPersonaSettings[index];
-
+                // get the persona name from the setting variable to show in the progress.
+                sal_Int32 nNameIndex = m_aSelectedPersona.indexOf( ';' );
+                OUString aName = m_aSelectedPersona.copy( 0, nNameIndex );
+                OUString aProgress( "Selected Persona: " );
+                aProgress += aName;
+                SetProgress( aProgress );
+            }
             break;
         }
     }
