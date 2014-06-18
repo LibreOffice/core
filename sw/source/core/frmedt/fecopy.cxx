@@ -348,11 +348,11 @@ bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                 else
                 {
                     SwPaM *pCrsr = pDestShell->GetCrsr();
-                    if( pCrsr->GetNode()->IsNoTxtNode() )
+                    if( pCrsr->GetNode().IsNoTxtNode() )
                         bRet = false;
                     else
                         bRet = ::lcl_SetAnchor( *pCrsr->GetPoint(),
-                                                *pCrsr->GetNode(), 0, rInsPt,
+                                                pCrsr->GetNode(), 0, rInsPt,
                                                 *pDestShell, aAnchor,
                                                 aNewAnch, false );
                 }
@@ -506,10 +506,10 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             else
             {
                 const SwPaM *pCrsr = pDestShell->GetCrsr();
-                if( pCrsr->GetNode()->IsNoTxtNode() )
+                if( pCrsr->GetNode().IsNoTxtNode() )
                     bRet = false;
                 else
-                    bRet = ::lcl_SetAnchor( *pCrsr->GetPoint(), *pCrsr->GetNode(),
+                    bRet = ::lcl_SetAnchor( *pCrsr->GetPoint(), pCrsr->GetNode(),
                                             pFly, rInsPt, *pDestShell, aAnchor,
                                     aNewAnch, GetDoc() == pDestShell->GetDoc());
             }
@@ -587,7 +587,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
                 if( !pDstPos->nNode.GetNode().IsNoTxtNode() )
                     bRet = true;
             }
-            else if( !pDestShell->GetCrsr()->GetNode()->IsNoTxtNode() )
+            else if( !pDestShell->GetCrsr()->GetNode().IsNoTxtNode() )
             {
                 pDstPos = new SwPosition( *pDestShell->GetCrsr()->GetPoint() );
                 bRet = true;
@@ -631,7 +631,7 @@ bool SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
             GetLayout()->GetCrsrOfst( &aPos, aPt );
             bRet = !aPos.nNode.GetNode().IsNoTxtNode();
         }
-        else if( pDestShell->GetCrsr()->GetNode()->IsNoTxtNode() )
+        else if( pDestShell->GetCrsr()->GetNode().IsNoTxtNode() )
             bRet = false;
 
         if( bRet )
@@ -682,10 +682,10 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
     // (individual boxes in the area are retrieved via the layout)
      SwFieldType* pTblFldTyp = GetDoc()->GetSysFldType( RES_TABLEFLD );
 
-    SwTableNode *pDestNd, *pSrcNd = aCpyPam.GetNode()->GetTableNode();
+    SwTableNode *pDestNd, *pSrcNd = aCpyPam.GetNode().GetTableNode();
     if( !pSrcNd )                               // TabellenNode ?
     {                                           // nicht ueberspringen!!
-        SwCntntNode* pCNd = aCpyPam.GetNode()->GetCntntNode();
+        SwCntntNode* pCNd = aCpyPam.GetNode().GetCntntNode();
         if( pCNd )
             aCpyPam.GetPoint()->nContent.Assign( pCNd, 0 );
         else if( !aCpyPam.Move( fnMoveForward, fnGoNode ))
@@ -819,7 +819,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
             SwPosition aDestPos( *PCURCRSR->GetPoint() );
 
             bool bParkTblCrsr = false;
-            const SwStartNode* pSttNd =  PCURCRSR->GetNode()->FindTableBoxStartNode();
+            const SwStartNode* pSttNd =  PCURCRSR->GetNode().FindTableBoxStartNode();
 
             // TABLE IN TABLE: copy table in table
             // search boxes via the layout
@@ -959,7 +959,7 @@ bool SwFEShell::Paste( SwDoc* pClpDoc, bool bIncludingPageFrames )
                     else if( FLY_AT_FLY == aAnchor.GetAnchorId() )
                     {
                         Point aPt;
-                        lcl_SetAnchor( *PCURCRSR->GetPoint(), *PCURCRSR->GetNode(),
+                        lcl_SetAnchor( *PCURCRSR->GetPoint(), PCURCRSR->GetNode(),
                                         0, aPt, *this, aAnchor, aPt, false );
                     }
 
@@ -1133,7 +1133,7 @@ bool SwFEShell::PastePages( SwFEShell& rToFill, sal_uInt16 nStartPage, sal_uInt1
         return false;
     }
     //if the page starts with a table a paragraph has to be inserted before
-    SwNode* pTableNode = aCpyPam.GetNode()->FindTableNode();
+    SwNode* pTableNode = aCpyPam.GetNode().FindTableNode();
     if(pTableNode)
     {
         //insert a paragraph

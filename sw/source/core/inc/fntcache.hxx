@@ -93,8 +93,8 @@ public:
     virtual ~SwFntObj();
 
     inline       Font *GetScrFont()     { return pScrFont; }
-    inline       Font *GetFont()        { return &aFont; }
-    inline const Font *GetFont() const  { return &aFont; }
+    inline       Font& GetFont()        { return aFont; }
+    inline const Font& GetFont() const  { return aFont; }
 
     inline sal_uInt16 GetGuessedLeading() const  { return nGuessedLeading; }
     inline sal_uInt16 GetExtLeading() const  { return nExtLeading; }

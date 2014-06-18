@@ -224,7 +224,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
     else
     {
         SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pSh);
-        pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
+        pFnt = new SwFont( aFontAccess.Get()->GetFont() );
         pFnt->ChkMagic( pSh, pFnt->GetActual() );
     }
 
@@ -370,7 +370,7 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                         {
                             SwViewShell *pSh = getRootFrm()->GetCurrShell();
                             SwFontAccess aFontAccess( pFmt, pSh );
-                            SwFont aFnt( *aFontAccess.Get()->GetFont() );
+                            SwFont aFnt( aFontAccess.Get()->GetFont() );
 
                             OutputDevice *pOut = 0;
                             if( !pSh || !pSh->GetViewOptions()->getBrowseMode() ||

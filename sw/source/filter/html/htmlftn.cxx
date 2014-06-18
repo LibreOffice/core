@@ -206,7 +206,7 @@ void SwHTMLParser::FinishFootEndNote()
 
     pDoc->InsertPoolItem( *pPam, aFtn, 0 );
     SwTxtFtn * const pTxtFtn = static_cast<SwTxtFtn *>(
-        pPam->GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+        pPam->GetNode().GetTxtNode()->GetTxtAttrForCharAt(
             pPam->GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_FTN ) );
     // In Kopf- und Fusszeilen duerfen keine Fussnoten eingefuegt werden.
     if( pTxtFtn )

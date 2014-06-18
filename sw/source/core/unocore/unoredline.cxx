@@ -113,7 +113,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
     // Patterned after SwXTextFrame::createTextCursor(void).
 
     // skip all tables at the beginning
-    SwTableNode* pTableNode = pUnoCursor->GetNode()->FindTableNode();
+    SwTableNode* pTableNode = pUnoCursor->GetNode().FindTableNode();
     SwCntntNode* pContentNode = NULL;
     bool bTable = pTableNode != NULL;
     while( pTableNode != NULL )
@@ -124,7 +124,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor(void)
     }
     if( pContentNode != NULL )
         pUnoCursor->GetPoint()->nContent.Assign( pContentNode, 0 );
-    if( bTable && pUnoCursor->GetNode()->FindSttNodeByType( SwNormalStartNode )
+    if( bTable && pUnoCursor->GetNode().FindSttNodeByType( SwNormalStartNode )
                                                             != GetStartNode() )
     {
         // We have gone too far and have left our own redline. This means that
@@ -448,9 +448,9 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
         rPropertyName == UNO_NAME_REDLINE_END)
     {
         uno::Reference<XInterface> xRet;
-        SwNode* pNode = pRedline->GetNode();
+        SwNode* pNode = &pRedline->GetNode();
         if(!bStart && pRedline->HasMark())
-            pNode = pRedline->GetNode(false);
+            pNode = &pRedline->GetNode(false);
         switch(pNode->GetNodeType())
         {
             case ND_SECTIONNODE:
@@ -591,7 +591,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor(void) throw( u
         pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
         //steht hier eine Tabelle?
-        SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
+        SwTableNode* pTblNode = pUnoCrsr->GetNode().FindTableNode();
         SwCntntNode* pCont = 0;
         while( pTblNode )
         {

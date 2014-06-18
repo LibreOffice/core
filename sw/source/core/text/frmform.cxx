@@ -222,7 +222,7 @@ bool SwTxtFrm::CalcFollow( const sal_Int32 nTxtOfst )
             ValidateBodyFrm();
             if( pPara )
             {
-                *(pPara->GetReformat()) = SwCharRange();
+                pPara->GetReformat() = SwCharRange();
                 *(pPara->GetDelta()) = 0;
             }
         }
@@ -313,7 +313,7 @@ bool SwTxtFrm::CalcFollow( const sal_Int32 nTxtOfst )
             ValidateFrm();
             if( pPara )
             {
-                *(pPara->GetReformat()) = SwCharRange();
+                pPara->GetReformat() = SwCharRange();
                 *(pPara->GetDelta()) = 0;
             }
         }
@@ -755,7 +755,7 @@ void SwTxtFrm::_SetOfst( const sal_Int32 nNewOfst )
     SwParaPortion *pPara = GetPara();
     if( pPara )
     {
-        SwCharRange &rReformat = *(pPara->GetReformat());
+        SwCharRange &rReformat = pPara->GetReformat();
         rReformat.Start() = 0;
         rReformat.Len() = GetTxt().getLength();
         *(pPara->GetDelta()) = rReformat.Len();
@@ -778,7 +778,7 @@ bool SwTxtFrm::CalcPreps()
     ResetPreps();
 
     bool bRet = false;
-    if( bPrep && !pPara->GetReformat()->Len() )
+    if( bPrep && !pPara->GetReformat().Len() )
     {
         // PREP_WIDOWS means that the orphans rule got activated in the Follow.
         // In unfortunate cases we could also have a PrepAdjust!
@@ -830,7 +830,7 @@ bool SwTxtFrm::CalcPreps()
                 GetFollow()->SetJustWidow( true );
                 GetFollow()->Prepare( PREP_CLEAR );
                 Shrink( nChgHeight );
-                SwRect &rRepaint = *(pPara->GetRepaint());
+                SwRect &rRepaint = pPara->GetRepaint();
 
                 if ( bVert )
                 {
@@ -907,7 +907,7 @@ bool SwTxtFrm::CalcPreps()
                     // We delete a line before the Master, because the Follow
                     // could hand over a line
                     const SwCharRange aFollowRg( GetFollow()->GetOfst(), 1 );
-                    *(pPara->GetReformat()) += aFollowRg;
+                    pPara->GetReformat() += aFollowRg;
                     // We should continue!
                     bRet = false;
                 }
@@ -1000,7 +1000,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
     // If the current values have been calculated, show that they
     // are valid now
-    *(pPara->GetReformat()) = SwCharRange();
+    pPara->GetReformat() = SwCharRange();
     bool bDelta = *pPara->GetDelta() != 0;
     *(pPara->GetDelta()) = 0;
 
@@ -1090,7 +1090,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
 
     if ( IsVertical() && !IsVertLR() && nChg )
     {
-        SwRect &rRepaint = *(pPara->GetRepaint());
+        SwRect &rRepaint = pPara->GetRepaint();
         rRepaint.Left( rRepaint.Left() - nChg );
         rRepaint.Width( rRepaint.Width() - nChg );
     }
@@ -1151,9 +1151,9 @@ bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const bool bPrev )
 
     // Calculate rRepaint
     const SwTwips nBottom = rLine.Y() + rLine.GetLineHeight();
-    SwRepaint &rRepaint = *(pPara->GetRepaint());
+    SwRepaint &rRepaint = pPara->GetRepaint();
     if( bUnChg && rRepaint.Top() == rLine.Y()
-               && (bPrev || nNewStart <= pPara->GetReformat()->Start())
+               && (bPrev || nNewStart <= pPara->GetReformat().Start())
                && (nNewStart < GetTxtNode()->GetTxt().getLength()))
     {
         rRepaint.Top( nBottom );
@@ -1234,8 +1234,8 @@ bool SwTxtFrm::FormatLine( SwTxtFormatter &rLine, const bool bPrev )
         return true;
 
     // Reached the Reformat's end?
-    const sal_Int32 nEnd = pPara->GetReformat()->Start() +
-                        pPara->GetReformat()->Len();
+    const sal_Int32 nEnd = pPara->GetReformat().Start() +
+                        pPara->GetReformat().Len();
 
     if( nNewStart <= nEnd )
         return true;
@@ -1255,8 +1255,8 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
     const OUString &rString = GetTxtNode()->GetTxt();
     const sal_Int32 nStrLen = rString.getLength();
 
-    SwCharRange &rReformat = *(pPara->GetReformat());
-    SwRepaint   &rRepaint = *(pPara->GetRepaint());
+    SwCharRange &rReformat = pPara->GetReformat();
+    SwRepaint   &rRepaint = pPara->GetRepaint();
     SwRepaint *pFreeze = NULL;
 
     // Due to performance reasons we set rReformat to COMPLETE_STRING in Init()
@@ -1588,7 +1588,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         if( !rLine.GetDropFmt() )
             rLine.SetOnceMore( false );
         SwCharRange aRange( 0, rInf.GetTxt().getLength() );
-        *(pPara->GetReformat()) = aRange;
+        pPara->GetReformat() = aRange;
         _Format( rLine, rInf );
 
         bGoOn = rLine.IsOnceMore();
@@ -1618,7 +1618,7 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 rLine.SetDropLines( 1 );
                 rLine.CalcDropHeight( 1 );
                 SwCharRange aTmpRange( 0, rInf.GetTxt().getLength() );
-                *(pPara->GetReformat()) = aTmpRange;
+                pPara->GetReformat() = aTmpRange;
                 _Format( rLine, rInf, true );
                 // We paint everything ...
                 SetCompletePaint();
@@ -1768,7 +1768,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
             ; // nothing
         // We return if already formatted, but if the TxtFrm was just created
         // and does not have any format information
-        else if( !bNew && !aAccess.GetPara()->GetReformat()->Len() )
+        else if( !bNew && !aAccess.GetPara()->GetReformat().Len() )
         {
             if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue() )
             {
@@ -1934,11 +1934,11 @@ bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     // We made it!
 
     // Set repaint
-    pPara->GetRepaint()->Pos( aTopLeft );
-    pPara->GetRepaint()->SSize( Prt().SSize() );
+    pPara->GetRepaint().Pos( aTopLeft );
+    pPara->GetRepaint().SSize( Prt().SSize() );
 
     // Delete reformat
-    *(pPara->GetReformat()) = SwCharRange();
+    pPara->GetReformat() = SwCharRange();
     *(pPara->GetDelta()) = 0;
 
     return true;

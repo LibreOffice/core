@@ -449,7 +449,7 @@ static bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
 
 static void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
 {
-    SwDoc* pDoc = aPam.GetNode()->GetDoc();
+    SwDoc* pDoc = aPam.GetNode().GetDoc();
 
     const SwPosition* pStart = aPam.Start();
     const SwPosition* pEnd = aPam.End();
@@ -964,7 +964,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     *aSavePam.GetMark() = rPos;
 
     rPaM.SetMark();         // create a Sel. around the new range
-    pTNd = aSavePam.GetNode()->GetTxtNode();
+    pTNd = aSavePam.GetNode().GetTxtNode();
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         // correct the SavePam's Content first
@@ -983,7 +983,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         // If it's not possible to call Undo JoinNext here.
         bool bJoin = bSplit && pTNd;
         bCorrSavePam = bCorrSavePam &&
-                        0 != ( pPamTxtNd = rPaM.GetNode()->GetTxtNode() )
+                        0 != ( pPamTxtNd = rPaM.GetNode().GetTxtNode() )
                         && pPamTxtNd->CanJoinNext()
                         && (*rPaM.GetPoint() <= *aSavePam.GetPoint());
 

@@ -146,7 +146,7 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     const SwTxtNode* pTNd;
     if( UNDO_DELETE == mnUserId &&
         nSttNode == nEndNode && nSttCntnt + 1 == nEndCntnt &&
-        0 != (pTNd = rRange.GetNode()->GetTxtNode()) )
+        0 != (pTNd = rRange.GetNode().GetTxtNode()) )
     {
         sal_Unicode const cCh = pTNd->GetTxt()[nSttCntnt];
         if( CH_TXTATR_BREAKWORD != cCh && CH_TXTATR_INWORD != cCh )
@@ -428,19 +428,16 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pCSttNd && !pCEndNd)
         {
             // #112139# Do not step behind the end of content.
-            SwNode * pTmp = pPam->GetNode(true);
-            if (pTmp)
-            {
-                SwNode * pEnd = pDoc->GetNodes().DocumentSectionEndNode(pTmp);
+            SwNode & rTmp = pPam->GetNode(true);
+            SwNode * pEnd = pDoc->GetNodes().DocumentSectionEndNode(&rTmp);
 
-                if (pTmp != pEnd)
-                {
-                    pPam->SetMark();
-                    pPam->GetPoint()->nNode++;
-                    pPam->GetBound( true ).nContent.Assign( 0, 0 );
-                    pPam->GetBound( false ).nContent.Assign( 0, 0 );
-                    pUnDel2 = new SwUndoDelete( *pPam, true );
-                }
+            if (&rTmp != pEnd)
+            {
+                pPam->SetMark();
+                pPam->GetPoint()->nNode++;
+                pPam->GetBound( true ).nContent.Assign( 0, 0 );
+                pPam->GetBound( false ).nContent.Assign( 0, 0 );
+                pUnDel2 = new SwUndoDelete( *pPam, true );
             }
         }
         pPam->DeleteMark();

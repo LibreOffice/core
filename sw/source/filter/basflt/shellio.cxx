@@ -203,15 +203,15 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         {
             *pUndoPam->GetMark() = *pPam->GetPoint();
             pUndoPam->GetPoint()->nNode++;
-            SwNode* pNd = pUndoPam->GetNode();
-            if( pNd->IsCntntNode() )
+            SwNode& rNd = pUndoPam->GetNode();
+            if( rNd.IsCntntNode() )
                 pUndoPam->GetPoint()->nContent.Assign(
-                                    (SwCntntNode*)pNd, nSttCntnt );
+                                    (SwCntntNode*)&rNd, nSttCntnt );
             else
                 pUndoPam->GetPoint()->nContent.Assign( 0, 0 );
 
-            bool bChkHeaderFooter = pNd->FindHeaderStartNode() ||
-                                   pNd->FindFooterStartNode();
+            bool bChkHeaderFooter = rNd.FindHeaderStartNode() ||
+                                   rNd.FindFooterStartNode();
 
             // search all new Fly's, and store them as individual Undo Objects
             for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )

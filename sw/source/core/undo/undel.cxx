@@ -343,7 +343,7 @@ SwUndoDelete::SwUndoDelete(
         nNdDiff -= rPam.GetPoint()->nNode.GetIndex();
     }
 
-    if( !rPam.GetNode()->IsCntntNode() )
+    if( !rPam.GetNode().IsCntntNode() )
         rPam.GetPoint()->nContent.Assign( 0, 0 );
 
     // is a history necessary here at all?

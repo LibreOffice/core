@@ -328,7 +328,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     pNewDoc->InsertPoolItem(aPam, aFootNote, nInsertFlags);
 
     SwTxtFtn *const pTxtAttr = static_cast<SwTxtFtn*>(
-        aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+        aPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
                 aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FTN ));
 
     if (pTxtAttr)
@@ -455,7 +455,7 @@ throw (uno::RuntimeException, std::exception)
     SwTxtFtn const*const pTxtFtn = rFmt.GetTxtFtn();
     SwNode const*const pFtnStartNode = &pTxtFtn->GetStartNode()->GetNode();
 
-    const SwNode* pStart = aPam.GetNode()->FindFootnoteStartNode();
+    const SwNode* pStart = aPam.GetNode().FindFootnoteStartNode();
     if (pStart != pFtnStartNode)
     {
         throw uno::RuntimeException();

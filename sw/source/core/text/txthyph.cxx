@@ -125,7 +125,7 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     // In der letzten Zeile gibt es nie etwas zu trennen.
     // Es sei denn, es befindet sich eine FlyPortion darin,
     // oder es ist die letzte Zeile des Masters
-    if( !GetNext() && !rInf.GetTxtFly()->IsOn() && !pFrm->GetFollow() )
+    if( !GetNext() && !rInf.GetTxtFly().IsOn() && !pFrm->GetFollow() )
         return false;
 
     sal_Int32 nWrdStart = nStart;

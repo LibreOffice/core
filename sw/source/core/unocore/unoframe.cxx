@@ -2764,7 +2764,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         {
             eAnchorId = ((const SwFmtAnchor*)pItem)->GetAnchorId();
             if( FLY_AT_FLY == eAnchorId &&
-                !aPam.GetNode()->FindFlyStartNode())
+                !aPam.GetNode().FindFlyStartNode())
             {
                 //rahmengebunden geht nur dort, wo ein Rahmen ist!
                 SwFmtAnchor aAnchor(FLY_AT_PARA);
@@ -3226,7 +3226,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
 
         SwPaM aPam(rNode);
         aPam.Move(fnMoveForward, fnGoNode);
-        SwTableNode* pTblNode = aPam.GetNode()->FindTableNode();
+        SwTableNode* pTblNode = aPam.GetNode().FindTableNode();
         SwCntntNode* pCont = 0;
         while( pTblNode )
         {
@@ -3238,7 +3238,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
             aPam.GetPoint()->nContent.Assign(pCont, 0);
 
         const SwStartNode* pNewStartNode =
-            aPam.GetNode()->FindSttNodeByType(SwFlyStartNode);
+            aPam.GetNode().FindSttNodeByType(SwFlyStartNode);
         if(!pNewStartNode || pNewStartNode != pOwnStartNode)
         {
             uno::RuntimeException aExcept;
@@ -3274,7 +3274,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
         (void)p1;
         (void)p2;
 #endif
-        if(aPam.GetNode()->FindFlyStartNode() == rNode.FindFlyStartNode())
+        if(aPam.GetNode().FindFlyStartNode() == rNode.FindFlyStartNode())
         {
             aRef = static_cast<text::XWordCursor*>(
                     new SwXTextCursor(*pFmt->GetDoc(), this, CURSOR_FRAME,

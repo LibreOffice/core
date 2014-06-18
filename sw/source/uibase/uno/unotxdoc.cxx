@@ -838,11 +838,11 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
                 pUnoCrsr->DeleteMark();
             }
         }
-        const SwNode* pRangeNode = pUnoCrsr->GetNode();
-        bParentInExtra = pRangeNode->FindFlyStartNode() ||
-                            pRangeNode->FindFootnoteStartNode() ||
-                            pRangeNode->FindHeaderStartNode() ||
-                            pRangeNode->FindFooterStartNode() ;
+        const SwNode& rRangeNode = pUnoCrsr->GetNode();
+        bParentInExtra = rRangeNode.FindFlyStartNode() ||
+                            rRangeNode.FindFootnoteStartNode() ||
+                            rRangeNode.FindHeaderStartNode() ||
+                            rRangeNode.FindFooterStartNode() ;
     }
 
     util::SearchOptions aSearchOpt;

@@ -197,7 +197,7 @@ throw( uno::RuntimeException, std::exception )
         throw uno::RuntimeException();
 
     // TextPortions are always within a paragraph
-    SwTxtNode* pTxtNd = pUnoCrsr->GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNd = pUnoCrsr->GetNode().GetTxtNode();
     if ( pTxtNd )
     {
         const sal_Int32 nStt = pUnoCrsr->Start()->nContent.GetIndex();

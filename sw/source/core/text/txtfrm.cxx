@@ -677,7 +677,7 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
         *(pPara->GetDelta()) += nD;
         bInv = true;
     }
-    SwCharRange &rReformat = *(pPara->GetReformat());
+    SwCharRange &rReformat = pPara->GetReformat();
     if(aRange != rReformat) {
         if( COMPLETE_STRING == rReformat.Len() )
             rReformat = aRange;
@@ -725,14 +725,14 @@ void SwTxtFrm::CalcLineSpace()
 
     SwTwips nDelta = aNewSize.Height() - Prt().Height();
     // 4291: underflow with free-flying frames
-    if( aInf.GetTxtFly()->IsOn() )
+    if( aInf.GetTxtFly().IsOn() )
     {
         SwRect aTmpFrm( Frm() );
         if( nDelta < 0 )
             aTmpFrm.Height( Prt().Height() );
         else
             aTmpFrm.Height( aNewSize.Height() );
-        if( aInf.GetTxtFly()->Relax( aTmpFrm ) )
+        if( aInf.GetTxtFly().Relax( aTmpFrm ) )
         {
             Init();
             return;
@@ -1652,7 +1652,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 if( !IsLocked() )
                 {
-                    if( pPara->GetRepaint()->HasArea() )
+                    if( pPara->GetRepaint().HasArea() )
                         SetCompletePaint();
                     Init();
                     pPara = 0;
@@ -1742,7 +1742,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             }
             else
             {
-                if( pPara->GetRepaint()->HasArea() )
+                if( pPara->GetRepaint().HasArea() )
                     SetCompletePaint();
                 Init();
                 pPara = 0;
@@ -2417,8 +2417,8 @@ void SwTxtFrm::ChgThisLines()
             // Extend repaint to the bottom.
             if ( HasPara() )
             {
-                SwRepaint *pRepaint = GetPara()->GetRepaint();
-                pRepaint->Bottom( std::max( pRepaint->Bottom(),
+                SwRepaint& rRepaint = GetPara()->GetRepaint();
+                rRepaint.Bottom( std::max( rRepaint.Bottom(),
                                        Frm().Top()+Prt().Bottom()));
             }
         }

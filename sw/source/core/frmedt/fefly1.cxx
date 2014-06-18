@@ -774,7 +774,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
                 case FLY_AT_FLY:
                     if( !pAnchor->GetCntntAnchor() )
                     {
-                        lcl_SetNewFlyPos( *pCursor->GetNode(),
+                        lcl_SetNewFlyPos( pCursor->GetNode(),
                                 *pAnchor, GetCrsrDocPos() );
                     }
                     break;

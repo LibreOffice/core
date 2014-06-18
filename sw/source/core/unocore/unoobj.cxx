@@ -518,7 +518,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, uno::DeploymentExc
         case FN_UNO_IS_NUMBER:
         {
             // multi selection is not considered
-            SwTxtNode *const pTxtNd = rPam.GetNode()->GetTxtNode();
+            SwTxtNode *const pTxtNd = rPam.GetNode().GetTxtNode();
             if (!pTxtNd)
             {
                 throw lang::IllegalArgumentException();
@@ -1037,7 +1037,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand) throw (uno::RuntimeException, std::exc
     {
         rUnoCursor.Move( fnMoveBackward, fnGoDoc );
         //check, that the cursor is not in a table
-        SwTableNode * pTblNode = rUnoCursor.GetNode()->FindTableNode();
+        SwTableNode * pTblNode = rUnoCursor.GetNode().FindTableNode();
         SwCntntNode * pCNode = 0;
         while (pTblNode)
         {
@@ -1050,7 +1050,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand) throw (uno::RuntimeException, std::exc
             rUnoCursor.GetPoint()->nContent.Assign(pCNode, 0);
         }
         SwStartNode const*const pTmp =
-            rUnoCursor.GetNode()->StartOfSectionNode();
+            rUnoCursor.GetNode().StartOfSectionNode();
         if (pTmp->IsSectionNode())
         {
             SwSectionNode const*const pSectionStartNode =
@@ -1171,7 +1171,7 @@ throw (uno::RuntimeException, std::exception)
             ;
         }
 
-        const SwStartNode* pOwnStartNode = rOwnCursor.GetNode()->FindSttNodeByType(eSearchNodeType);
+        const SwStartNode* pOwnStartNode = rOwnCursor.GetNode().FindSttNodeByType(eSearchNodeType);
         while ( pOwnStartNode != NULL
                 && pOwnStartNode->IsSectionNode())
         {
@@ -1179,7 +1179,7 @@ throw (uno::RuntimeException, std::exception)
         }
 
         const SwStartNode* pTmp =
-            pPam->GetNode()->FindSttNodeByType(eSearchNodeType);
+            pPam->GetNode().FindSttNodeByType(eSearchNodeType);
         while ( pTmp != NULL
                 && pTmp->IsSectionNode() )
         {
@@ -2557,11 +2557,9 @@ throw (uno::RuntimeException, std::exception)
 
     SwUnoCrsr & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    SwNode* node = rUnoCursor.GetNode();
+    SwNode& node = rUnoCursor.GetNode();
 
-    if (node == 0) return;
-
-    SwTxtNode* txtNode = node->GetTxtNode();
+    SwTxtNode* txtNode = node.GetTxtNode();
 
     if (txtNode == 0) return;
 

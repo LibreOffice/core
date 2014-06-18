@@ -477,7 +477,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     sal_uInt8 nBulletGrfLvl = 255;      // Die auszugebende Bullet-Grafik
 
     // Sind wir in einer Aufzaehlungs- oder Numerierungliste?
-    const SwTxtNode* pTxtNd = rWrt.pCurPam->GetNode()->GetTxtNode();
+    const SwTxtNode* pTxtNd = rWrt.pCurPam->GetNode().GetTxtNode();
 
     SwHTMLNumRuleInfo aNumInfo;
     if( rHWrt.GetNextNumInfo() )

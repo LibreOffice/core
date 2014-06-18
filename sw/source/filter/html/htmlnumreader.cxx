@@ -338,7 +338,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
     bool bAppend = pPam->GetPoint()->nContent.GetIndex() > 0;
     if( !bAppend )
     {
-        SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
+        SwTxtNode* pTxtNode = pPam->GetNode().GetTxtNode();
 
         bAppend = (pTxtNode && ! pTxtNode->IsOutline() && pTxtNode->IsCountedInList()) ||
 
@@ -399,7 +399,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
             // Beim letzen Append wurde das NumRule-Item und das
             // NodeNum-Objekt mit kopiert. Beides muessen wir noch
             // loeschen. Das ResetAttr loescht das NodeNum-Objekt mit!
-            pPam->GetNode()->GetTxtNode()->ResetAttr( RES_PARATR_NUMRULE );
+            pPam->GetNode().GetTxtNode()->ResetAttr( RES_PARATR_NUMRULE );
 
             rInfo.Clear();
         }
@@ -507,7 +507,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         nOpenParaToken = static_cast< sal_uInt16 >(nToken);
     }
 
-    SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNode = pPam->GetNode().GetTxtNode();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(aNumRuleName) );
     pTxtNode->SetAttrListLevel(nLevel);
     // #i57656# - <IsCounted()> state of text node has to be adjusted accordingly.
@@ -600,7 +600,7 @@ void SwHTMLParser::EndNumBulListItem( int nToken, bool bSetColl,
 
 void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
 {
-    SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNode = pPam->GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNode, "Kein Text-Node an PaM-Position" );
 
     OSL_ENSURE( GetNumInfo().GetNumRule(), "Kein Numerierungs-Regel" );

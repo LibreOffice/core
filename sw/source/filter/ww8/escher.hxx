@@ -170,8 +170,8 @@ public:
 
     virtual void WriteFrmExtraData(const SwFrmFmt& rFmt) SAL_OVERRIDE;
 
-    EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &, const Rectangle*) SAL_OVERRIDE {return &aHostData;}
+    EscherExHostAppData& StartShape(const com::sun::star::uno::Reference<
+        com::sun::star::drawing::XShape > &, const Rectangle*) SAL_OVERRIDE {return aHostData;}
 private:
     //No copying
     SwEscherEx(const SwEscherEx&);

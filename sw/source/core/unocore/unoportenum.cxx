@@ -1253,7 +1253,7 @@ static void lcl_CreatePortions(
             pUnoCrsr->DeleteMark();
         }
 
-        SwTxtNode * const pTxtNode = pUnoCrsr->GetNode()->GetTxtNode();
+        SwTxtNode * const pTxtNode = pUnoCrsr->GetNode().GetTxtNode();
         if (!pTxtNode)
         {
             OSL_FAIL("lcl_CreatePortions: no TextNode - what now ?");

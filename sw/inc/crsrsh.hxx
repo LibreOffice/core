@@ -896,7 +896,7 @@ inline bool SwCrsrShell::IsSelOnePara() const
 
 inline const SwTableNode* SwCrsrShell::IsCrsrInTbl( bool bIsPtInTbl ) const
 {
-    return m_pCurCrsr->GetNode( bIsPtInTbl )->FindTableNode();
+    return m_pCurCrsr->GetNode( bIsPtInTbl ).FindTableNode();
 }
 
 inline bool SwCrsrShell::IsCrsrPtAtEnd() const

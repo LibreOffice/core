@@ -1583,7 +1583,7 @@ sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
         }
         else
         {
-            bBuild = ( GetInfo().GetTxtFly()->IsOn() && ChkFlyUnderflow(GetInfo()) )
+            bBuild = ( GetInfo().GetTxtFly().IsOn() && ChkFlyUnderflow(GetInfo()) )
                      || GetInfo().CheckFtnPortion(pCurr);
             if( bBuild )
             {
@@ -1641,7 +1641,7 @@ sal_Int32 SwTxtFormatter::FormatLine(const sal_Int32 nStartPos)
     // This corrects the start of the reformat range if something has
     // moved to the next line. Otherwise IsFirstReformat in AllowRepaintOpt
     // will give us a wrong result if we have to reformat another line
-    GetInfo().GetParaPortion()->GetReformat()->LeftMove( GetInfo().GetIdx() );
+    GetInfo().GetParaPortion()->GetReformat().LeftMove( GetInfo().GetIdx() );
 
     // delete master copy of rest portion
     xSaveFld.reset();
@@ -1902,7 +1902,7 @@ bool SwTxtFormatter::CalcOnceMore()
 SwTwips SwTxtFormatter::CalcBottomLine() const
 {
     SwTwips nRet = Y() + GetLineHeight();
-    SwTwips nMin = GetInfo().GetTxtFly()->GetMinBottom();
+    SwTwips nMin = GetInfo().GetTxtFly().GetMinBottom();
     if( nMin && ++nMin > nRet )
     {
         SwTwips nDist = pFrm->Frm().Height() - pFrm->Prt().Height()
@@ -1910,12 +1910,12 @@ SwTwips SwTxtFormatter::CalcBottomLine() const
         if( nRet + nDist < nMin )
         {
             const bool bRepaint = HasTruncLines() &&
-                GetInfo().GetParaPortion()->GetRepaint()->Bottom() == nRet-1;
+                GetInfo().GetParaPortion()->GetRepaint().Bottom() == nRet-1;
             nRet = nMin - nDist;
             if( bRepaint )
             {
-                ((SwRepaint*)GetInfo().GetParaPortion()
-                    ->GetRepaint())->Bottom( nRet-1 );
+                ((SwRepaint&)GetInfo().GetParaPortion()
+                    ->GetRepaint()).Bottom( nRet-1 );
                 ((SwTxtFormatInfo&)GetInfo()).SetPaintOfst( 0 );
             }
         }
@@ -2168,7 +2168,7 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
 
 bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
 {
-    OSL_ENSURE( rInf.GetTxtFly()->IsOn(), "SwTxtFormatter::ChkFlyUnderflow: why?" );
+    OSL_ENSURE( rInf.GetTxtFly().IsOn(), "SwTxtFormatter::ChkFlyUnderflow: why?" );
     if( GetCurr() )
     {
         // First we check, whether a fly overlaps with the line.
@@ -2179,7 +2179,7 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
         SwRect aLineVert( aLine );
         if ( pFrm->IsVertical() )
             pFrm->SwitchHorizontalToVertical( aLineVert );
-        SwRect aInter( rInf.GetTxtFly()->GetFrm( aLineVert ) );
+        SwRect aInter( rInf.GetTxtFly().GetFrm( aLineVert ) );
         if ( pFrm->IsVertical() )
             pFrm->SwitchVerticalToHorizontal( aInter );
 
@@ -2199,7 +2199,7 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
             aLineVert = aLine;
             if ( pFrm->IsVertical() )
                 pFrm->SwitchHorizontalToVertical( aLineVert );
-            aInter = rInf.GetTxtFly()->GetFrm( aLineVert );
+            aInter = rInf.GetTxtFly().GetFrm( aLineVert );
             if ( pFrm->IsVertical() )
                 pFrm->SwitchVerticalToHorizontal( aInter );
 
@@ -2259,8 +2259,8 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
     if( GetMulti() || rInf.GetFly() )
         return;
 
-    SwTxtFly *pTxtFly = rInf.GetTxtFly();
-    if( !pTxtFly->IsOn() || rInf.IsIgnoreFly() )
+    SwTxtFly& rTxtFly = rInf.GetTxtFly();
+    if( !rTxtFly.IsOn() || rInf.IsIgnoreFly() )
         return;
 
     const SwLinePortion *pLast = rInf.GetLast();
@@ -2305,7 +2305,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
 
     if ( pFrm->IsVertical() )
         pFrm->SwitchHorizontalToVertical( aLineVert );
-    SwRect aInter( pTxtFly->GetFrm( aLineVert ) );
+    SwRect aInter( rTxtFly.GetFrm( aLineVert ) );
 
     if ( pFrm->IsRightToLeft() )
         pFrm->SwitchRTLtoLTR( aInter );
@@ -2386,7 +2386,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             // or the next margin's top edge, which we need to respect.
             // That means we can comfortably grow up to this value; that's how
             // we save a few empty lines.
-            long nNextTop = pTxtFly->GetNextTop();
+            long nNextTop = rTxtFly.GetNextTop();
             if ( pFrm->IsVertical() )
                 nNextTop = pFrm->SwitchVerticalToHorizontal( nNextTop );
             if( nNextTop > aInter.Bottom() )

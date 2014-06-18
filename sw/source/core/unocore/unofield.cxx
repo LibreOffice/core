@@ -1929,7 +1929,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         else
             pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
 
-        SwTxtAttr* pTxtAttr = aPam.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
+        SwTxtAttr* pTxtAttr = aPam.GetNode().GetTxtNode()->GetFldTxtAttrAt( aPam.GetPoint()->nContent.GetIndex()-1, true );
 
         // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
         if (pTxtAttr)
@@ -1994,7 +1994,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 }
                 // keep inserted annotation
                 {
-                    SwTxtFld* pTxtAttr = aEnd.GetNode()->GetTxtNode()->GetFldTxtAttrAt( aEnd.End()->nContent.GetIndex()-1, true );
+                    SwTxtFld* pTxtAttr = aEnd.GetNode().GetTxtNode()->GetFldTxtAttrAt( aEnd.End()->nContent.GetIndex()-1, true );
                     if ( pTxtAttr != NULL )
                     {
                         m_pImpl->m_pFmtFld = &pTxtAttr->GetFmtFld();

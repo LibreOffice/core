@@ -327,7 +327,7 @@ void SwUndoFmtAttr::RepeatImpl(::sw::RepeatContext & rContext)
     case RES_GRFFMTCOLL:
         {
             SwNoTxtNode *const pNd =
-                rContext.GetRepeatPaM().GetNode()->GetNoTxtNode();
+                rContext.GetRepeatPaM().GetNode().GetNoTxtNode();
             if( pNd )
             {
                 rDoc.SetAttr( m_pFmt->GetAttrSet(), *pNd->GetFmtColl() );
@@ -338,7 +338,7 @@ void SwUndoFmtAttr::RepeatImpl(::sw::RepeatContext & rContext)
     case RES_TXTFMTCOLL:
         {
             SwTxtNode *const pNd =
-                rContext.GetRepeatPaM().GetNode()->GetTxtNode();
+                rContext.GetRepeatPaM().GetNode().GetTxtNode();
             if( pNd )
             {
                 rDoc.SetAttr( m_pFmt->GetAttrSet(), *pNd->GetFmtColl() );
@@ -352,7 +352,7 @@ void SwUndoFmtAttr::RepeatImpl(::sw::RepeatContext & rContext)
             // Steps: search in all FlyFrmFormats for the FlyCntnt attribute
             // and validate if the cursor is in the respective section
             SwFrmFmt *const pFly =
-                rContext.GetRepeatPaM().GetNode()->GetFlyFmt();
+                rContext.GetRepeatPaM().GetNode().GetFlyFmt();
             if( pFly )
             {
                 // Bug 43672: do not set all attributes!

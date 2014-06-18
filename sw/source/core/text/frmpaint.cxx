@@ -422,20 +422,20 @@ SwRect SwTxtFrm::Paint()
     {
         // We return the right paint rect. Use the calculated PaintOfst as the
         // left margin
-        SwRepaint *pRepaint = GetPara()->GetRepaint();
+        SwRepaint& rRepaint = GetPara()->GetRepaint();
         long l;
 
         if ( IsVertLR() ) // mba: the following line was added, but we don't need it for the existing directions; kept for IsVertLR(), but should be checked
-            pRepaint->Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
+            rRepaint.Chg( ( GetUpper()->Frm() ).Pos() + ( GetUpper()->Prt() ).Pos(), ( GetUpper()->Prt() ).SSize() );
 
-        if( pRepaint->GetOfst() )
-            pRepaint->Left( pRepaint->GetOfst() );
+        if( rRepaint.GetOfst() )
+            rRepaint.Left( rRepaint.GetOfst() );
 
-        l = pRepaint->GetRightOfst();
-        if( l && l > pRepaint->Right() )
-             pRepaint->Right( l );
-        pRepaint->SetOfst( 0 );
-        aRet = *pRepaint;
+        l = rRepaint.GetRightOfst();
+        if( l && l > rRepaint.Right() )
+             rRepaint.Right( l );
+        rRepaint.SetOfst( 0 );
+        aRet = rRepaint;
 
         // In case our left edge is the same as the body frame's left edge,
         // then extend the rectangle to include the page margin as well,
@@ -479,7 +479,7 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
             else
             {
                 SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pSh );
-                pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
+                pFnt = new SwFont( aFontAccess.Get()->GetFont() );
             }
 
             const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
@@ -633,7 +633,7 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         SwTxtLineAccess aAccess( (SwTxtFrm*)this );
         SwParaPortion *pPara = aAccess.GetPara();
 
-        SwRepaint &rRepaint = *(pPara->GetRepaint());
+        SwRepaint &rRepaint = pPara->GetRepaint();
 
         // Switch off recycling when in the FlyCntFrm.
         // A DrawRect is called for repainting the line anyways.
@@ -662,12 +662,12 @@ void SwTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         aInf.SetWrongList( ( (SwTxtNode*)GetTxtNode() )->GetWrong() );
         aInf.SetGrammarCheckList( ( (SwTxtNode*)GetTxtNode() )->GetGrammarCheck() );
         aInf.SetSmartTags( ( (SwTxtNode*)GetTxtNode() )->GetSmartTags() );
-        aInf.GetTxtFly()->SetTopRule();
+        aInf.GetTxtFly().SetTopRule();
 
         SwTxtPainter  aLine( (SwTxtFrm*)this, &aInf );
         // Optimization: if no free flying Frm overlaps into our line, the
         // SwTxtFly just switches off
-        aInf.GetTxtFly()->Relax();
+        aInf.GetTxtFly().Relax();
 
         OutputDevice* pOut = aInf.GetOut();
         const bool bOnWin = pSh->GetWin() != 0;

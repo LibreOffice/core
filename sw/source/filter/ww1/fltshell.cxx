@@ -2000,7 +2000,7 @@ void SwFltShell::BeginFootnote()
     OSL_ENSURE(pSavedPos == NULL, "SwFltShell");
     pSavedPos = new SwPosition(*pPaM->GetPoint());
     pPaM->Move(fnMoveBackward, fnGoCntnt);
-    SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
+    SwTxtNode* pTxt = pPaM->GetNode().GetTxtNode();
     SwTxtAttr *const pFN = pTxt->GetTxtAttrForCharAt(
         pPaM->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
     if( !pFN ){         // Happens at footnote in Fly, among others

@@ -686,11 +686,11 @@ SwTOXSortTabBase* SwAccessibleParagraph::GetTOXSortTabBase()
             if( pSect->GetType() == TOX_CONTENT_SECTION )
             {
                 SwTOXSortTabBase* pSortBase = 0;
-                size_t nSize = pTOXBaseSect->GetTOXSortTabBases()->size();
+                size_t nSize = pTOXBaseSect->GetTOXSortTabBases().size();
 
                 for(size_t nIndex = 0; nIndex<nSize; nIndex++ )
                 {
-                    pSortBase = (*(pTOXBaseSect->GetTOXSortTabBases()))[nIndex];
+                    pSortBase = pTOXBaseSect->GetTOXSortTabBases()[nIndex];
                     if( pSortBase->pTOXNd == pTxtNd )
                         break;
                 }

@@ -544,8 +544,8 @@ void SwSpellDialogChildWindow::GetFocus()
                 case SHELL_MODE_TABLE_LIST_TEXT:
                 {
                     SwPaM* pCursor = pWrtShell->GetCrsr();
-                    if(m_pSpellState->m_pPointNode != pCursor->GetNode(true) ||
-                        m_pSpellState->m_pMarkNode != pCursor->GetNode(false)||
+                    if(m_pSpellState->m_pPointNode != &pCursor->GetNode(true) ||
+                        m_pSpellState->m_pMarkNode != &pCursor->GetNode(false)||
                         m_pSpellState->m_nPointPos != pCursor->GetPoint()->nContent.GetIndex()||
                         m_pSpellState->m_nMarkPos != pCursor->GetMark()->nContent.GetIndex())
                             bInvalidate = true;
@@ -601,8 +601,8 @@ void SwSpellDialogChildWindow::LoseFocus()
             {
                 // store a node pointer and a pam-position to be able to check on next GetFocus();
                 SwPaM* pCursor = pWrtShell->GetCrsr();
-                m_pSpellState->m_pPointNode = pCursor->GetNode(true);
-                m_pSpellState->m_pMarkNode = pCursor->GetNode(false);
+                m_pSpellState->m_pPointNode = &pCursor->GetNode(true);
+                m_pSpellState->m_pMarkNode = &pCursor->GetNode(false);
                 m_pSpellState->m_nPointPos = pCursor->GetPoint()->nContent.GetIndex();
                 m_pSpellState->m_nMarkPos = pCursor->GetMark()->nContent.GetIndex();
 

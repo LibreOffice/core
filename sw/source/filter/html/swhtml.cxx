@@ -1671,10 +1671,10 @@ void SwHTMLParser::NextToken( int nToken )
             if( nOpenParaToken )
                 EndPara();
             OSL_ENSURE( !pTable, "table in table not allowed here" );
-            if( !pTable && (IsNewDoc() || !pPam->GetNode()->FindTableNode()) &&
+            if( !pTable && (IsNewDoc() || !pPam->GetNode().FindTableNode()) &&
                 (pPam->GetPoint()->nNode.GetIndex() >
                             pDoc->GetNodes().GetEndOfExtras().GetIndex() ||
-                !pPam->GetNode()->FindFootnoteStartNode() ) )
+                !pPam->GetNode().FindFootnoteStartNode() ) )
             {
                 if ( nParaCnt < 5 )
                     Show();     // show what we have up to here
@@ -2260,7 +2260,7 @@ bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, bool bUpdateNum )
             SetNodeNum( nLvl, false );
         }
         else
-            pPam->GetNode()->GetTxtNode()->ResetAttr( RES_PARATR_NUMRULE );
+            pPam->GetNode().GetTxtNode()->ResetAttr( RES_PARATR_NUMRULE );
     }
 
     // Attrubute im Absatz davor sollte man jetzt setzen (wegen JavaScript)
@@ -3946,7 +3946,7 @@ void SwHTMLParser::EndPara( bool bReal )
     if( HTML_LI_ON==nOpenParaToken && pTable )
     {
 #if OSL_DEBUG_LEVEL > 0
-        const SwNumRule *pNumRule = pPam->GetNode()->GetTxtNode()->GetNumRule();
+        const SwNumRule *pNumRule = pPam->GetNode().GetTxtNode()->GetNumRule();
         OSL_ENSURE( pNumRule, "Wo ist die Numrule geblieben" );
 #endif
     }

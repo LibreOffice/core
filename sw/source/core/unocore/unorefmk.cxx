@@ -221,7 +221,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     ::std::vector<SwTxtAttr *> oldMarks;
     if (bMark)
     {
-        oldMarks = rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+        oldMarks = rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
             rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK);
     }
 
@@ -239,7 +239,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         // #i107672#
         // ensure that we do not retrieve a different mark at the same position
         ::std::vector<SwTxtAttr *> const newMarks(
-            rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+            rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
                 rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
         ::std::vector<SwTxtAttr *>::const_iterator const iter(
             ::std::find_if(newMarks.begin(), newMarks.end(),
@@ -252,9 +252,9 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
     }
     else
     {
-        SwTxtNode *pTxtNd = rPam.GetNode()->GetTxtNode();
+        SwTxtNode *pTxtNd = rPam.GetNode().GetTxtNode();
         OSL_ASSERT(pTxtNd);
-        pTxtAttr = pTxtNd ? rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+        pTxtAttr = pTxtNd ? rPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
                 rPam.GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_REFMARK) : NULL;
     }
 

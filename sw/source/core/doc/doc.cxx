@@ -2154,9 +2154,9 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 
 OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
 {
-    if (rPam.GetNode(true) == rPam.GetNode(false))
+    if (&rPam.GetNode(true) == &rPam.GetNode(false))
     {
-        SwTxtNode * pTxtNode = rPam.GetNode(true)->GetTxtNode();
+        SwTxtNode * pTxtNode = rPam.GetNode(true).GetTxtNode();
 
         if (0 != pTxtNode)
         {
@@ -2170,13 +2170,9 @@ OUString SwDoc::GetPaMDescr(const SwPaM & rPam) const
                 + SW_RESSTR(STR_END_QUOTE);
         }
     }
-    else if (0 != rPam.GetNode(true))
+    else
     {
-        if (0 != rPam.GetNode(false))
-        {
-            return SW_RESSTR(STR_PARAGRAPHS);
-        }
-        return OUString();
+        return SW_RESSTR(STR_PARAGRAPHS);
     }
 
     return OUString("??");

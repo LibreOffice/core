@@ -1953,7 +1953,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     ::std::vector<SwTxtAttr *> oldMarks;
     if (bMark)
     {
-        oldMarks = rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+        oldMarks = rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
             rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK);
     }
 
@@ -1970,7 +1970,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
         // #i107672#
         // ensure that we do not retrieve a different mark at the same position
         ::std::vector<SwTxtAttr *> const newMarks(
-            rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
+            rPam.GetNode().GetTxtNode()->GetTxtAttrsAt(
                 rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_TOXMARK));
         ::std::vector<SwTxtAttr *>::const_iterator const iter(
             ::std::find_if(newMarks.begin(), newMarks.end(),
@@ -1983,7 +1983,7 @@ void SwXDocumentIndexMark::Impl::InsertTOXMark(
     }
     else
     {
-        pTxtAttr = rPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+        pTxtAttr = rPam.GetNode().GetTxtNode()->GetTxtAttrForCharAt(
             rPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_TOXMARK );
     }
 

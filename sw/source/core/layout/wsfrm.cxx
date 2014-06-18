@@ -2526,7 +2526,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
             {   // If we are in an other column/page than the frame with the
                 // reference, we don't need to invalidate its master.
                 SwFrm *pTmp = pCnt->FindFtnBossFrm(true) == FindFtnBossFrm(true)
-                              ?  pCnt->FindMaster()->GetFrm() : pCnt;
+                              ?  &pCnt->FindMaster()->GetFrm() : pCnt;
                 pTmp->Prepare( PREP_ADJUST_FRM );
                 pTmp->InvalidateSize();
             }

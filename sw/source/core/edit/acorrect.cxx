@@ -153,7 +153,7 @@ bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, const
         pPam->GetPoint()->nContent = nPos;
     }
 
-    SwTxtNode * const pNd = pPam->GetNode()->GetTxtNode();
+    SwTxtNode * const pNd = pPam->GetNode().GetTxtNode();
     if ( !pNd )
     {
         return false;
@@ -303,7 +303,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
     // Found a beginning of a paragraph or a Blank,
     // search for the word Kuerzel (Shortcut) in the Auto
-    SwTxtNode* pTxtNd = rCrsr.GetNode()->GetTxtNode();
+    SwTxtNode* pTxtNd = rCrsr.GetNode().GetTxtNode();
     OSL_ENSURE( pTxtNd, "where is the TextNode?" );
 
     bool bRet = false;

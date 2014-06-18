@@ -915,7 +915,7 @@ bool SwCrsrShell::GotoNextOutline()
     SwCursor* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = pCrsr->GetNode();
+    SwNode* pNd = &(pCrsr->GetNode());
     sal_uInt16 nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         ++nPos;
@@ -943,7 +943,7 @@ bool SwCrsrShell::GotoPrevOutline()
     SwCursor* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = pCrsr->GetNode();
+    SwNode* pNd = &(pCrsr->GetNode());
     sal_uInt16 nPos;
     rNds.GetOutLineNds().Seek_Entry( pNd, &nPos );
 
@@ -975,7 +975,7 @@ sal_uInt16 SwCrsrShell::GetOutlinePos( sal_uInt8 nLevel )
     SwPaM* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
-    SwNode* pNd = pCrsr->GetNode();
+    SwNode* pNd = &(pCrsr->GetNode());
     sal_uInt16 nPos;
     if( rNds.GetOutLineNds().Seek_Entry( pNd, &nPos ))
         nPos++; // is at correct position; take next for while

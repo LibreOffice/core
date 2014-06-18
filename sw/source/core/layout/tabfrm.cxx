@@ -133,7 +133,7 @@ extern const SwFrm     *pRowCacheLastCellFrm;
 SwTabFrm* SwTabFrm::GetFollowFlowLineFor()
 {
     SwFlowFrm *pPrec = GetPrecede();
-    if (pPrec && pPrec->GetFrm()->IsTabFrm())
+    if (pPrec && pPrec->GetFrm().IsTabFrm())
     {
         SwTabFrm *pPrevTabFrm = (SwTabFrm*)pPrec;
         assert(this == pPrevTabFrm->GetFollow());

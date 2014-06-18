@@ -106,7 +106,7 @@ void SwTxtAdjuster::FormatBlock( )
     GetInfo().SetIdx( nStart );
     CalcNewBlock( pCurr, pFly );
     GetInfo().SetIdx( nOldIdx );
-    GetInfo().GetParaPortion()->GetRepaint()->SetOfst(0);
+    GetInfo().GetParaPortion()->GetRepaint().SetOfst(0);
 }
 
 static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr,
@@ -677,7 +677,7 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
         case SVX_ADJUST_CENTER:
         {
             CalcFlyAdjust( pCurrent );
-            pPara->GetRepaint()->SetOfst( 0 );
+            pPara->GetRepaint().SetOfst( 0 );
             break;
         }
         case SVX_ADJUST_BLOCK:
@@ -824,7 +824,7 @@ void SwTxtAdjuster::CalcDropAdjust()
 void SwTxtAdjuster::CalcDropRepaint()
 {
     Top();
-    SwRepaint &rRepaint = *GetInfo().GetParaPortion()->GetRepaint();
+    SwRepaint &rRepaint = GetInfo().GetParaPortion()->GetRepaint();
     if( rRepaint.Top() > Y() )
         rRepaint.Top( Y() );
     for( MSHORT i = 1; i < GetDropLines(); ++i )

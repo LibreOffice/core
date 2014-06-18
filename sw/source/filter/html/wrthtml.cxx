@@ -294,7 +294,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     // Tabellen und Bereiche am Doc.-Anfang beachten
     {
-        SwTableNode * pTNd = pCurPam->GetNode()->FindTableNode();
+        SwTableNode * pTNd = pCurPam->GetNode().FindTableNode();
         if( pTNd && bWriteAll )
         {
             // mit dem Tabellen-Node anfangen !!
@@ -307,7 +307,7 @@ sal_uLong SwHTMLWriter::WriteStream()
         // erster Node (der einen Seitenumbruch enthalten darf)
         pStartNdIdx = new SwNodeIndex( pCurPam->GetPoint()->nNode );
 
-        SwSectionNode * pSNd = pCurPam->GetNode()->FindSectionNode();
+        SwSectionNode * pSNd = pCurPam->GetNode().FindSectionNode();
         while( pSNd )
         {
             if( bWriteAll )
@@ -737,30 +737,30 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
               (pCurPam->GetPoint()->nNode.GetIndex() == pCurPam->GetMark()->nNode.GetIndex() &&
                pCurPam->GetPoint()->nContent.GetIndex() <= pCurPam->GetMark()->nContent.GetIndex()) )
         {
-            SwNode * pNd = pCurPam->GetNode();
+            SwNode&  rNd = pCurPam->GetNode();
 
-            OSL_ENSURE( !(pNd->IsGrfNode() || pNd->IsOLENode()),
+            OSL_ENSURE( !(rNd.IsGrfNode() || rNd.IsOLENode()),
                     "Grf- oder OLE-Node hier unerwartet" );
-            if( pNd->IsTxtNode() )
+            if( rNd.IsTxtNode() )
             {
-                SwTxtNode* pTxtNd = pNd->GetTxtNode();
+                SwTxtNode* pTxtNd = rNd.GetTxtNode();
 
                 if( !bFirstLine )
                     pCurPam->GetPoint()->nContent.Assign( pTxtNd, 0 );
 
                 OutHTML_SwTxtNode( *this, *pTxtNd );
             }
-            else if( pNd->IsTableNode() )
+            else if( rNd.IsTableNode() )
             {
-                OutHTML_SwTblNode( *this, *pNd->GetTableNode(), 0 );
+                OutHTML_SwTblNode( *this, *rNd.GetTableNode(), 0 );
                 nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
             }
-            else if( pNd->IsSectionNode() )
+            else if( rNd.IsSectionNode() )
             {
-                OutHTML_Section( *this, *pNd->GetSectionNode() );
+                OutHTML_Section( *this, *rNd.GetSectionNode() );
                 nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : -1;
             }
-            else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
+            else if( &rNd == &pDoc->GetNodes().GetEndOfContent() )
                 break;
 
             pCurPam->GetPoint()->nNode++;   // Bewegen
