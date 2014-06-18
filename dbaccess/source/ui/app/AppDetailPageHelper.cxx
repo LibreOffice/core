@@ -686,7 +686,7 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
     bool bHasFocus = false;
     m_aFL.Show();
     {
-        bHasFocus = pCurrent->HasChildPathFocus();
+        bHasFocus = pCurrent != 0 && pCurrent->HasChildPathFocus();
     _pWindow->Show();
     }
     m_aTBPreview.Show();
