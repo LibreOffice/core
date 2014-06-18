@@ -320,10 +320,19 @@ public:
     virtual bool    PreNotify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void    Tracking( const TrackingEvent& rTEvt ) SAL_OVERRIDE;
 
+    // Paint a tile -- all tile dimensions are in TWIPS.
+    // It is possible to request an infinitely large area, i.e. you are not
+    // restricted to the area in GetDataAreaSize.
     void            PaintTile( VirtualDevice& rDevice,
                                int nOutputWidth, int nOutputHeight,
                                int nTilePosX, int nTilePosY,
                                long nTileWidth, long nTileHeight );
+    // Get the area in the document that contains renderable content. This
+    // is primarily a guide as to the area that should be rendered for read
+    // only documents, however for writeable documents you probably want to
+    // dynamically grab more cells in case the user wants to write to them etc.
+    // This returns a size in TWIPS, suitable for use in PaintTile.
+    Size            GetDataAreaSize();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 

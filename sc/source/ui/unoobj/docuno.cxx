@@ -488,10 +488,15 @@ int ScModelObj::getPart()
 
 Size ScModelObj::getDocumentSize()
 {
-    // TODO: not sure what we want to do here, maybe just return the size for a certain
-    // default minimum number of cells, e.g. 100x100 and more if more cells have
-    // content?
-    return Size( 3200, 3200 );
+    // There seems to be no clear way of getting the grid window for this
+    // particular document, hence we need to hope we get the right window.
+    ScViewData* pViewData = ScDocShell::GetViewData();
+    ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+
+    // We simply return the data area -- it is however possible to request
+    // tiles to be rendered outside this area, ie this is the minimum that
+    // the client should allow the user to see.
+    return pGridWindow->GetDataAreaSize();
 }
 
 uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
