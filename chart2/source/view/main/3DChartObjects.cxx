@@ -12,6 +12,7 @@
 #include <vcl/svapp.hxx>
 
 #include <vcl/opengl/OpenGLHelper.hxx>
+#include <vcl/bmpacc.hxx>
 
 namespace chart {
 
@@ -90,7 +91,15 @@ const TextCacheItem& TextCache::getText(OUString const & rText)
     aDevice.DrawText(Point(0,0), rText);
 
     BitmapEx aText(aDevice.GetBitmapEx(Point(0,0), aDevice.GetOutputSize()));
-    TextCacheItem *pItem = new TextCacheItem(OpenGLHelper::ConvertBitmapExToRGBABuffer(aText), aText.GetSizePixel());
+//    TextCacheItem *pItem = new TextCacheItem(OpenGLHelper::ConvertBitmapExToRGBABuffer(aText), aText.GetSizePixel());
+    Bitmap aBitmap (aText.GetBitmap());
+    BitmapReadAccess *pAcc = aBitmap.AcquireReadAccess();
+    sal_uInt8 *buf = (sal_uInt8 *)pAcc->GetBuffer();
+    long nBmpWidth = aText.GetSizePixel().Width();
+    long nBmpHeight = aText.GetSizePixel().Height();
+    sal_uInt8* pBitmapBuf(new sal_uInt8[3* nBmpWidth * nBmpHeight]);
+    memcpy(pBitmapBuf, buf, 3* nBmpWidth * nBmpHeight);
+    TextCacheItem *pItem = new TextCacheItem(pBitmapBuf, aText.GetSizePixel());
     maTextCache.insert(rText, pItem);
 
     return *maTextCache.find(rText)->second;
