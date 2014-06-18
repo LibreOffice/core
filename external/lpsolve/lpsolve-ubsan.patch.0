@@ -1,0 +1,11 @@
+--- lp_pricePSE.c
++++ lp_pricePSE.c
+@@ -145,7 +147,7 @@
+ 
+   /* Store the active/current pricing type */
+   if(isdual == AUTOMATIC)
+-    isdual = (MYBOOL) lp->edgeVector[0];
++    isdual = lp->edgeVector[0] != 0.0;
+   else
+     lp->edgeVector[0] = isdual;
+ 
