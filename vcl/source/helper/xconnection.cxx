@@ -49,12 +49,14 @@ DisplayConnection::~DisplayConnection()
 
 void DisplayConnection::start()
 {
+    DBG_TESTSOLARMUTEX();
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mpDefInst->SetEventCallback( this );
 }
 
 void DisplayConnection::terminate()
 {
+    DBG_TESTSOLARMUTEX();
     ImplSVData* pSVData = ImplGetSVData();
 
     if( pSVData )
