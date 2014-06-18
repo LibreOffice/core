@@ -2244,10 +2244,17 @@ void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList
 
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
 {
-    SotStorageRef xStg = new SotStorage( sShareAutoCorrFile, STREAM_READ | STREAM_SHARE_DENYNONE, sal_True );
-    OUString sTemp ( pXMLImplWrdStt_ExcptLstStr );
-    if( xStg.Is() && xStg->IsContained( sTemp ) )
-        LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
+    try
+    {
+        SotStorageRef xStg = new SotStorage( sShareAutoCorrFile, STREAM_READ | STREAM_SHARE_DENYNONE, sal_True );
+        OUString sTemp ( pXMLImplWrdStt_ExcptLstStr );
+        if( xStg.Is() && xStg->IsContained( sTemp ) )
+            LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
+    }
+    catch (const css::ucb::ContentCreationException e)
+    {
+        SAL_WARN("editeng", "SvxAutoCorrectLanguageLists::LoadWrdSttExceptList: Caught exception: " << e.Message);
+    }
     return pWrdStt_ExcptLst;
 }
 
