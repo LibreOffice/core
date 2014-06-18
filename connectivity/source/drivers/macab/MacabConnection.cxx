@@ -191,7 +191,7 @@ void SAL_CALL MacabConnection::setCatalog( const OUString& ) throw(SQLException,
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabConnection_BASE::rBHelper.bDisposed);
 
-    // if your database doesn't work with catalogs you go to next method otherwise you kjnow what to do
+    // if your database doesn't work with catalogs you go to next method otherwise you know what to do
 }
 
 OUString SAL_CALL MacabConnection::getCatalog(  ) throw(SQLException, RuntimeException)

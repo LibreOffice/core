@@ -196,7 +196,7 @@ void SAL_CALL KabConnection::setCatalog( const OUString& ) throw(SQLException, R
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
 
-    // if your database doesn't work with catalogs you go to next method otherwise you kjnow what to do
+    // if your database doesn't work with catalogs you go to next method otherwise you know what to do
 }
 
 OUString SAL_CALL KabConnection::getCatalog(  ) throw(SQLException, RuntimeException, std::exception)
