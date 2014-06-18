@@ -2028,10 +2028,7 @@ SvxCellVerJustify ImpEditEngine::GetVerJustification( sal_Int32 nPara ) const
     return static_cast<SvxCellVerJustify>(rItem.GetEnumValue());
 }
 
-
 //  Text changes
-
-
 void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars, EditUndoRemoveChars* pCurUndo )
 {
     if ( IsUndoEnabled() && !IsInUndo() )
@@ -2061,7 +2058,6 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_Int32 nChars, EditU
     }
 
     aEditDoc.RemoveChars( rPaM, nChars );
-    TextModified();
 }
 
 EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_Int32 nNewPos )
