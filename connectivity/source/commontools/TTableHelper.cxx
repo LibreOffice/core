@@ -28,7 +28,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <comphelper/implementationreference.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
@@ -112,8 +111,7 @@ namespace connectivity
 
         Reference< ::com::sun::star::sdbc::XDatabaseMetaData >      m_xMetaData;
         Reference< ::com::sun::star::sdbc::XConnection >            m_xConnection;
-        ::comphelper::ImplementationReference< OTableContainerListener,XContainerListener>
-                                    m_xTablePropertyListener;
+        rtl::Reference<OTableContainerListener> m_xTablePropertyListener;
         ::std::vector< ColumnDesc > m_aColumnDesc;
         OTableHelperImpl(const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection)
             : m_xConnection(_xConnection)
@@ -177,9 +175,9 @@ void SAL_CALL OTableHelper::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_pImpl->m_xTablePropertyListener.is() )
     {
-        m_pTables->removeContainerListener(m_pImpl->m_xTablePropertyListener.getRef());
+        m_pTables->removeContainerListener(m_pImpl->m_xTablePropertyListener.get());
         m_pImpl->m_xTablePropertyListener->clear();
-        m_pImpl->m_xTablePropertyListener.dispose();
+        m_pImpl->m_xTablePropertyListener.clear();
     }
     OTable_TYPEDEF::disposing();
 
@@ -403,8 +401,8 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
                     if ( m_pTables->hasByName(sReferencedName) )
                     {
                         if ( !m_pImpl->m_xTablePropertyListener.is() )
-                            m_pImpl->m_xTablePropertyListener = ::comphelper::ImplementationReference< OTableContainerListener,XContainerListener>( new OTableContainerListener(this) );
-                        m_pTables->addContainerListener(m_pImpl->m_xTablePropertyListener.getRef());
+                            m_pImpl->m_xTablePropertyListener = new OTableContainerListener(this);
+                        m_pTables->addContainerListener(m_pImpl->m_xTablePropertyListener.get());
                         m_pImpl->m_xTablePropertyListener->add(sReferencedName);
                     } // if ( m_pTables->hasByName(sReferencedName) )
                     sOldFKName = sFkName;
