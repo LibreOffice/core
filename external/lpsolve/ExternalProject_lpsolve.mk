@@ -32,6 +32,7 @@ endif # $(COM)
 else # $(OS)!=WNT
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	$(call gb_ExternalProject_run,build,\
+		CC="$(CC) $(if $(debug),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS))" \
 		sh $(if $(filter MACOSX,$(OS)),ccc.osx, \
 		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),ccc.static, \
 		$(if $(filter AIXGCC,$(OS)$(COM)),ccc.aix.gcc, \
