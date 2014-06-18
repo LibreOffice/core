@@ -1560,7 +1560,7 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, sa
 {
     OSL_ENSURE(pLangTable->find(rLanguageTag) == pLangTable->end(), "Language already exists ");
 
-    OUString sUserDirFile( GetAutoCorrFileName( rLanguageTag, sal_True, sal_False ));
+    OUString sUserDirFile( GetAutoCorrFileName( rLanguageTag, true, false, false ));
     OUString sShareDirFile( sUserDirFile );
 
     SvxAutoCorrectLanguageListsPtr pLists = 0;
@@ -1583,10 +1583,15 @@ sal_Bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, sa
             aLastFileTable.erase(nFndPos);
         }
     }
-    else if( ( FStatHelper::IsDocument( sUserDirFile ) ||
-                FStatHelper::IsDocument( sShareDirFile =
-                              GetAutoCorrFileName( rLanguageTag, sal_False, sal_False ) ) ) ||
-        ( sShareDirFile = sUserDirFile, bNewFile ))
+    else if(
+             ( FStatHelper::IsDocument( sUserDirFile ) ||
+               FStatHelper::IsDocument( sShareDirFile =
+                   GetAutoCorrFileName( rLanguageTag, false, false, false ) ) ||
+               FStatHelper::IsDocument( sShareDirFile =
+                   GetAutoCorrFileName( rLanguageTag, false, false, true) )
+             ) ||
+        ( sShareDirFile = sUserDirFile, bNewFile )
+          )
     {
         pLists = new SvxAutoCorrectLanguageLists( *this, sShareDirFile, sUserDirFile );
         LanguageTag aTmp(rLanguageTag);     // this insert() needs a non-const reference
@@ -1902,9 +1907,16 @@ sal_Bool SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
 }
 
 OUString SvxAutoCorrect::GetAutoCorrFileName( const LanguageTag& rLanguageTag,
-                                            sal_Bool bNewFile, sal_Bool bTst ) const
+                                            bool bNewFile, bool bTst, bool bUnlocalized ) const
 {
     OUString sRet, sExt( rLanguageTag.getBcp47() );
+    if (bUnlocalized)
+    {
+        // we don't want variant, so we'll take "fr" instead of "fr-CA" for example
+        ::std::vector< OUString > vecFallBackStrings = rLanguageTag.getFallbackStrings(false);
+        if (!vecFallBackStrings.empty())
+           sExt = vecFallBackStrings[0];
+    }
 
     sExt = "_" + sExt + ".dat";
     if( bNewFile )
