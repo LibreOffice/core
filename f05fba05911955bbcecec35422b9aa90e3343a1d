@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9aa53dc9_7f412f39",
+        "filename": "compilerplugins/clang/returnbyref.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-18T10:41:27Z",
+      "side": 1,
+      "message": "should read \"public: X* ...\" in C++ ;)",
+      "revId": "f05fba05911955bbcecec35422b9aa90e3343a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_5f3e6bb9",
+        "filename": "compilerplugins/clang/returnbyref.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-18T10:41:27Z",
+      "side": 1,
+      "message": "you already rule that out with the isVirtual() check above",
+      "revId": "f05fba05911955bbcecec35422b9aa90e3343a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9aa53dc9_3f4ba75b",
+        "filename": "compilerplugins/clang/returnbyref.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-06-18T10:41:27Z",
+      "side": 1,
+      "message": "* you may want to look through redundant parentheses here, as in \"return (\u0026...);\"\n\n* make sure unaryOperator is actually \"\u0026\"\n\n* unaryOperator-\u003echild_begin() \u003d\u003d unaryOperator-\u003echild_end() can\u0027t really happen, can it?  (and likewise below)",
+      "revId": "f05fba05911955bbcecec35422b9aa90e3343a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
