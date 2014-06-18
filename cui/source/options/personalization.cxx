@@ -49,31 +49,31 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     get( m_pCancelButton, "cancel" );
     m_pCancelButton->SetClickHdl( LINK( this, SelectPersonaDialog, ActionCancel ) );
 
-    get(m_vResultList[0], "result1");
+    get( m_vResultList[0], "result1" );
     m_vResultList[0]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 
-    get(m_vResultList[1], "result2");
+    get( m_vResultList[1], "result2" );
     m_vResultList[1]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 
-    get(m_vResultList[2], "result3");
+    get( m_vResultList[2], "result3" );
     m_vResultList[2]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 
-    get(m_vResultList[3], "result4");
+    get( m_vResultList[3], "result4" );
     m_vResultList[3]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 
-    get(m_vResultList[4], "result5");
+    get( m_vResultList[4], "result5" );
     m_vResultList[4]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 
-    get(m_vResultList[5], "result6");
+    get( m_vResultList[5], "result6" );
     m_vResultList[5]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 
-    get(m_vResultList[6], "result7");
+    get( m_vResultList[6], "result7" );
     m_vResultList[6]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 
-    get(m_vResultList[7], "result8");
+    get( m_vResultList[7], "result8" );
     m_vResultList[7]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 
-    get(m_vResultList[8], "result9");
+    get( m_vResultList[8], "result9" );
     m_vResultList[8]->SetClickHdl( LINK( this, SelectPersonaDialog, SelectPersona ) );
 }
 
@@ -123,60 +123,16 @@ IMPL_LINK( SelectPersonaDialog, ActionCancel, PushButton*, /* pButton */ )
 
 IMPL_LINK( SelectPersonaDialog, SelectPersona, PushButton*, pButton )
 {
-    if( pButton == m_vResultList[0] )
+    for( sal_Int32 index = 0; index < 9; index++ )
     {
-        if( !m_vPersonaSettings[0].isEmpty() )
-            m_aSelectedPersona = m_vPersonaSettings[0];
-    }
+        if( pButton == m_vResultList[index] )
+        {
+            if( !m_vPersonaSettings[index].isEmpty() )
+                m_aSelectedPersona = m_vPersonaSettings[index];
 
-    else if( pButton == m_vResultList[1] )
-    {
-        if( !m_vPersonaSettings[1].isEmpty() )
-            m_aSelectedPersona = m_vPersonaSettings[1];
+            break;
+        }
     }
-
-    else if( pButton == m_vResultList[2] )
-    {
-        if( !m_vPersonaSettings[2].isEmpty() )
-            m_aSelectedPersona = m_vPersonaSettings[2];
-    }
-
-    else if( pButton == m_vResultList[3] )
-    {
-        if( !m_vPersonaSettings[3].isEmpty() )
-            m_aSelectedPersona = m_vPersonaSettings[3];
-    }
-
-    else if( pButton == m_vResultList[4] )
-    {
-        if( !m_vPersonaSettings[4].isEmpty() )
-            m_aSelectedPersona = m_vPersonaSettings[4];
-    }
-
-    else if( pButton == m_vResultList[5] )
-    {
-        if( !m_vPersonaSettings[5].isEmpty() )
-            m_aSelectedPersona = m_vPersonaSettings[5];
-    }
-
-    else if( pButton == m_vResultList[6] )
-    {
-        if( !m_vPersonaSettings[6].isEmpty() )
-            m_aSelectedPersona = m_vPersonaSettings[6];
-    }
-
-    else if( pButton == m_vResultList[7] )
-    {
-        if( !m_vPersonaSettings[7].isEmpty() )
-            m_aSelectedPersona = m_vPersonaSettings[7];
-    }
-
-    else if( pButton == m_vResultList[8] )
-    {
-        if( !m_vPersonaSettings[8].isEmpty() )
-            m_aSelectedPersona = m_vPersonaSettings[8];
-    }
-
     return 0;
 }
 
