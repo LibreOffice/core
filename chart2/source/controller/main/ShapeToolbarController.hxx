@@ -28,7 +28,7 @@
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include <comphelper/implementationreference.hxx>
+#include <rtl/ref.hxx>
 #include <svtools/toolboxcontroller.hxx>
 
 class SfxToolBoxControl;
@@ -39,7 +39,7 @@ namespace chart
 typedef ::cppu::ImplHelper2 < ::com::sun::star::lang::XServiceInfo,
                               ::com::sun::star::frame::XSubToolbarController> ShapeToolbarController_Base;
 
-typedef ::comphelper::ImplementationReference< SfxToolBoxControl, ::com::sun::star::frame::XToolbarController > TToolbarHelper;
+typedef rtl::Reference<SfxToolBoxControl> TToolbarHelper;
 
 class ShapeToolbarController : public ::svt::ToolboxController
                               ,public ShapeToolbarController_Base

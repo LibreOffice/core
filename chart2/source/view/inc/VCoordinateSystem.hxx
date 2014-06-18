@@ -26,7 +26,6 @@
 #include "chartview/ExplicitScaleValues.hxx"
 
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
-#include "comphelper/implementationreference.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
