@@ -10,8 +10,6 @@
 #ifndef INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASFONT_HXX
 #define INCLUDED_CANVAS_SOURCE_OPENGL_OGL_CANVASFONT_HXX
 
-#include <comphelper/implementationreference.hxx>
-
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
@@ -37,9 +35,7 @@ namespace oglcanvas
                        private ::boost::noncopyable
     {
     public:
-        typedef ::comphelper::ImplementationReference<
-            CanvasFont,
-            ::com::sun::star::rendering::XCanvasFont > ImplRef;
+        typedef rtl::Reference<CanvasFont> ImplRef;
 
         CanvasFont( const ::com::sun::star::rendering::FontRequest&                                     fontRequest,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&    extraFontProperties,

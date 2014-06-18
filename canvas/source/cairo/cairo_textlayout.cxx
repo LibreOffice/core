@@ -125,7 +125,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        mpFont.reset();
+        mpFont.clear();
         mpRefDevice.clear();
     }
 
@@ -292,7 +292,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        return mpFont.getRef();
+        return mpFont.get();
     }
 
     rendering::StringContext SAL_CALL TextLayout::getText(  ) throw (uno::RuntimeException, std::exception)

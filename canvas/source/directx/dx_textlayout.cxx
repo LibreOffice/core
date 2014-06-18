@@ -52,7 +52,7 @@ namespace dxcanvas
 
     void SAL_CALL TextLayout::disposing()
     {
-        mpFont.reset();
+        mpFont.clear();
     }
 
     // XTextLayout
@@ -112,7 +112,7 @@ namespace dxcanvas
             aDrawHelper.queryTextBounds(
                 maText,
                 maLogicalAdvancements,
-                mpFont.getRef(),
+                mpFont.get(),
                 mpFont->getFontMatrix()));
 
         return aBounds;
@@ -199,7 +199,7 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        return mpFont.getRef();
+        return mpFont.get();
     }
 
     rendering::StringContext SAL_CALL TextLayout::getText(  ) throw (uno::RuntimeException)
@@ -239,7 +239,7 @@ namespace dxcanvas
             rOutputOffset,
             maText,
             maLogicalAdvancements,
-            mpFont.getRef(),
+            mpFont.get(),
             mpFont->getFontMatrix(),
             bAlphaSurface);
 

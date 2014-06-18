@@ -35,7 +35,7 @@ namespace oglcanvas
 
     void SAL_CALL TextLayout::disposing()
     {
-        mpFont.reset();
+        mpFont.clear();
     }
 
     // XTextLayout
@@ -190,7 +190,7 @@ namespace oglcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        return mpFont.getRef();
+        return mpFont.get();
     }
 
     rendering::StringContext SAL_CALL TextLayout::getText(  ) throw (uno::RuntimeException, std::exception)

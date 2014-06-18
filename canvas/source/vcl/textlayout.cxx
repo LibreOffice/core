@@ -97,7 +97,7 @@ namespace vclcanvas
 
         mpOutDevProvider.reset();
         mxDevice.clear();
-        mpFont.reset();
+        mpFont.clear();
     }
 
     // XTextLayout
@@ -364,7 +364,7 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        return mpFont.getRef();
+        return mpFont.get();
     }
 
     rendering::StringContext SAL_CALL TextLayout::getText(  ) throw (uno::RuntimeException, std::exception)
