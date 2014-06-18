@@ -370,10 +370,7 @@ void Outliner::EndSpelling (void)
     mnStartPageIndex = (sal_uInt16) -1;
 }
 
-
-
-
-bool Outliner::SpellNextDocument (void)
+bool Outliner::SpellNextDocument()
 {
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     if (pViewShell->ISA(OutlineViewShell))
@@ -401,10 +398,8 @@ bool Outliner::SpellNextDocument (void)
         ClearModifyFlag();
     }
 
-    return mbEndOfSearch;
-
+    return !mbEndOfSearch;
 }
-
 
 /**
  * check next text object
