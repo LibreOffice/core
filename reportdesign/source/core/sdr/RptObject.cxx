@@ -324,7 +324,7 @@ OObjectBase::OObjectBase(const OUString& _sComponentName)
 
 OObjectBase::~OObjectBase()
 {
-    m_xMediator.reset();
+    m_xMediator.clear();
     if ( isListening() )
         EndListening();
     m_xReportComponent.clear();
@@ -898,7 +898,7 @@ void OUnoObject::CreateMediator(bool _bReverse)
 
         Reference<XPropertySet> xControlModel(GetUnoControlModel(),uno::UNO_QUERY);
         if ( !m_xMediator.is() && m_xReportComponent.is() && xControlModel.is() )
-            m_xMediator = TMediator::createFromQuery(new OPropertyMediator(m_xReportComponent.get(),xControlModel,getPropertyNameMap(GetObjIdentifier()),_bReverse));
+            m_xMediator = new OPropertyMediator(m_xReportComponent.get(),xControlModel,getPropertyNameMap(GetObjIdentifier()),_bReverse);
         OObjectBase::StartListening();
     }
 }
