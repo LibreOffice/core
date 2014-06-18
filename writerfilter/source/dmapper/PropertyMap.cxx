@@ -159,7 +159,7 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues(bool bCharG
     return m_aValues;
 }
 
-#ifdef DEBUG_DMAPPER_PROPERTY_MAP
+#ifdef DEBUG_DOMAINMAPPER
 static void lcl_AnyToTag(const uno::Any & rAny)
 {
     try {
@@ -186,7 +186,7 @@ static void lcl_AnyToTag(const uno::Any & rAny)
 
 void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite, GrabBagType rGrabBagType )
 {
-#ifdef DEBUG_DMAPPER_PROPERTY_MAP
+#ifdef DEBUG_DOMAINMAPPER
     const OUString& rInsert = PropertyNameSupplier::
         GetPropertyNameSupplier().GetName(eId);
 

@@ -165,7 +165,7 @@ void SettingsTable::lcl_attribute(Id nName, Value & val)
         break;
     default:
     {
-#ifdef DEBUG_DMAPPER_SETTINGS_TABLE
+#ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->element("unhandled");
 #endif
     }
@@ -278,7 +278,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     break;
     default:
     {
-#ifdef DEBUG_DMAPPER_SETTINGS_TABLE
+#ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->element("unhandled");
 #endif
     }

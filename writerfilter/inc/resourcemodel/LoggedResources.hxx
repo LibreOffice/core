@@ -27,7 +27,7 @@
 namespace writerfilter
 {
 
-#ifdef DEBUG_LOGGING
+#ifdef DEBUG_DOMAINMAPPER
 class LoggedResourcesHelper
 {
 public:
@@ -86,7 +86,7 @@ protected:
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
     virtual void lcl_info(const std::string & info) = 0;
 
-#ifdef DEBUG_LOGGING
+#ifdef DEBUG_DOMAINMAPPER
     LoggedResourcesHelper mHelper;
 #endif
 };
@@ -104,7 +104,7 @@ protected:
     virtual void lcl_attribute(Id name, Value & val) = 0;
     virtual void lcl_sprm(Sprm & sprm) = 0;
 
-#ifdef DEBUG_LOGGING
+#ifdef DEBUG_DOMAINMAPPER
     LoggedResourcesHelper mHelper;
 #endif
 };
@@ -120,7 +120,7 @@ public:
 protected:
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;
 
-#ifdef DEBUG_LOGGING
+#ifdef DEBUG_DOMAINMAPPER
     LoggedResourcesHelper mHelper;
 #endif
 };

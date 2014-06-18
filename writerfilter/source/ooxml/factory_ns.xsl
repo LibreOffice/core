@@ -86,13 +86,13 @@ public:
     virtual ListValueMapPointer createListValueMap(Id nId);
     virtual CreateElementMapPointer createCreateElementMap(Id nId);
     virtual TokenToIdMapPointer createTokenToIdMap(Id nId);
-#ifdef DEBUG_FACTORY
+#ifdef DEBUG_DOMAINMAPPER
     virtual string getDefineName(Id nId) const;</xsl:text>
 #endif
     <xsl:call-template name="factoryactiondecls"/>
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
 
-#ifdef DEBUG_FACTORY
+#ifdef DEBUG_DOMAINMAPPER
     virtual string getName() const;
 #endif
     <xsl:text>

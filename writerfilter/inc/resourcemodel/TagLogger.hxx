@@ -56,7 +56,7 @@ namespace writerfilter
 
         static Pointer_t getInstance(const char * name);
 
-#ifdef DEBUG_IMPORT
+#ifdef DEBUG_DOMAINMAPPER
         void setFileName(const std::string & filename);
         void startDocument();
         void endDocument();
@@ -79,7 +79,7 @@ namespace writerfilter
         void endElement();
 #endif
 
-#ifdef DEBUG_CONTEXT_HANDLER
+#ifdef DEBUG_DOMAINMAPPER
         void propertySet(writerfilter::Reference<Properties>::Pointer_t props,
                 IdToString::Pointer_t pIdToString);
 #endif

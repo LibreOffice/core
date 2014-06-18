@@ -68,7 +68,7 @@ protected:
 
 public:
     static Pointer_t Instance();
-#ifdef DEBUG_LOGGING
+#ifdef DEBUG_DOMAINMAPPER
     std::string operator()(sal_uInt32 nId);
 #endif
 };

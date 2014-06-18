@@ -63,9 +63,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_pTablePropsHandler->SetTableManager( this );
 
 #ifdef DEBUG_DOMAINMAPPER
-#ifdef DEBUG_TABLE
     setTagLogger(dmapper_logger);
-#endif
 #endif
 }
 

@@ -864,7 +864,7 @@ void GraphicImport::lcl_attribute(Id nName, Value& rValue)
             }
             break;
         default:
-#ifdef DEBUG_DMAPPER_GRAPHIC_IMPORT
+#ifdef DEBUG_DOMAINMAPPER
             dmapper_logger->element("unhandled");
 #endif
             break;

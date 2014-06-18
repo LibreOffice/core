@@ -67,7 +67,7 @@ std::string RTFSprm::toString() const
 
     std::string sResult;
 
-#ifdef DEBUG_LOGGING
+#ifdef DEBUG_DOMAINMAPPER
     sResult = (*QNameToString::Instance())(m_nKeyword);
 #endif
 

@@ -106,7 +106,7 @@ template <typename T, typename PropertiesPointer>
  */
 class TableManager
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     TagLogger::Pointer_t mpTableLogger;
 #endif
 
@@ -624,7 +624,7 @@ public:
     virtual bool isIgnore() const;
 
 
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     void setTagLogger(TagLogger::Pointer_t _tagLogger)
     {
         mpTableLogger = _tagLogger;
@@ -644,7 +644,7 @@ TableManager<T, PropertiesPointer>::TableManager()
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellDepth(sal_uInt32 nDepth)
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
     {
         mpTableLogger->startElement("tablemanager.cellDepth");
@@ -659,7 +659,7 @@ void TableManager<T, PropertiesPointer>::cellDepth(sal_uInt32 nDepth)
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::inCell()
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->element("tablemanager.inCell");
 #endif
@@ -672,7 +672,7 @@ void TableManager<T, PropertiesPointer>::inCell()
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endCell()
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->element("tablemanager.endCell");
 #endif
@@ -683,7 +683,7 @@ void TableManager<T, PropertiesPointer>::endCell()
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::endRow()
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->element("tablemanager.endRow");
 #endif
@@ -701,7 +701,7 @@ void TableManager<T, PropertiesPointer>::setHandler
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::handle(const T & rHandle)
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger)
     {
         mpTableLogger->startElement("tablemanager.handle");
@@ -725,7 +725,7 @@ bool TableManager<T, PropertiesPointer>::isInTable()
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::startLevel()
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
     {
         typename TableData<T, PropertiesPointer>::Pointer_t pTableData;
@@ -775,7 +775,7 @@ void TableManager<T, PropertiesPointer>::endLevel()
     mState.endLevel();
     mTableDataStack.pop();
 
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
     {
         typename TableData<T, PropertiesPointer>::Pointer_t pTableData;
@@ -887,7 +887,7 @@ void TableManager<T, PropertiesPointer>::props(PropertiesPointer pProps)
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::handle0x7()
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->startElement("tablemanager.handle0x7");
 #endif
@@ -900,7 +900,7 @@ void TableManager<T, PropertiesPointer>::handle0x7()
     else
         endRow();
 
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->endElement();
 #endif
@@ -933,7 +933,7 @@ void TableManager<T, PropertiesPointer>::utext(const sal_uInt8 * data, size_t le
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellProps(PropertiesPointer pProps)
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->startElement("tablemanager.cellProps");
 #endif
@@ -943,7 +943,7 @@ void TableManager<T, PropertiesPointer>::cellProps(PropertiesPointer pProps)
     else
         setCellProps(pProps);
 
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->endElement();
 #endif
@@ -953,14 +953,14 @@ template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::cellPropsByCell
 (unsigned int i, PropertiesPointer pProps)
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->startElement("tablemanager.cellPropsByCell");
 #endif
 
     mTableDataStack.top()->insertCellProperties(i, pProps);
 
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->endElement();
 #endif
@@ -969,7 +969,7 @@ void TableManager<T, PropertiesPointer>::cellPropsByCell
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertRowProps(PropertiesPointer pProps)
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->startElement("tablemanager.insertRowProps");
 #endif
@@ -979,7 +979,7 @@ void TableManager<T, PropertiesPointer>::insertRowProps(PropertiesPointer pProps
     else
         setRowProps(pProps);
 
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->endElement();
 #endif
@@ -988,7 +988,7 @@ void TableManager<T, PropertiesPointer>::insertRowProps(PropertiesPointer pProps
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pProps)
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->startElement("tablemanager.insertTableProps");
 #endif
@@ -998,7 +998,7 @@ void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pPro
     else
         setTableProps(pProps);
 
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->endElement();
 #endif
@@ -1007,7 +1007,7 @@ void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pPro
 template <typename T, typename PropertiesPointer>
 void TableManager<T, PropertiesPointer>::resolveCurrentTable()
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->startElement("tablemanager.resolveCurrentTable");
 #endif
@@ -1056,7 +1056,7 @@ void TableManager<T, PropertiesPointer>::resolveCurrentTable()
     resetTableProps();
     clearData();
 
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     if (mpTableLogger != NULL)
         mpTableLogger->endElement();
 #endif
@@ -1087,7 +1087,7 @@ template <typename T, typename PropertiesPointer>
 void  TableManager<T, PropertiesPointer>::openCell
 (const T & rHandle, PropertiesPointer pProps)
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     mpTableLogger->startElement("tablemanager.openCell");
     mpTableLogger->chars(toString(rHandle));
     mpTableLogger->endElement();
@@ -1106,7 +1106,7 @@ template <typename T, typename PropertiesPointer>
 void  TableManager<T, PropertiesPointer>::closeCell
 (const T & rHandle)
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     mpTableLogger->startElement("tablemanager.closeCell");
     mpTableLogger->chars(toString(rHandle));
     mpTableLogger->endElement();
@@ -1124,7 +1124,7 @@ void  TableManager<T, PropertiesPointer>::closeCell
 template <typename T, typename PropertiesPointer>
 void  TableManager<T, PropertiesPointer>::ensureOpenCell(PropertiesPointer pProps)
 {
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     mpTableLogger->startElement("tablemanager.ensureOpenCell");
 #endif
 
@@ -1141,7 +1141,7 @@ void  TableManager<T, PropertiesPointer>::ensureOpenCell(PropertiesPointer pProp
                 pTableData->insertCellProperties(pProps);
         }
     }
-#ifdef DEBUG_TABLE
+#ifdef DEBUG_DOMAINMAPPER
     mpTableLogger->endElement();
 #endif
 }
