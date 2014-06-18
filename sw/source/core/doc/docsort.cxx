@@ -903,7 +903,7 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, bool bLastBox)
                     pSet->Put( pFmt->GetAttrSet() );
                     if( !ppItemSets )
                     {
-                        size_t nCount = static_cast<size_t>(nRows) * nCols
+                        size_t nCount = static_cast<size_t>(nRows) * nCols;
                         ppItemSets = new SfxItemSet*[nCount];
                         memset(ppItemSets, 0, sizeof(SfxItemSet*) * nCount);
                     }
