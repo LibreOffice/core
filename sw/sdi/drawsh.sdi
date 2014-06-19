@@ -508,5 +508,12 @@ shell SwDrawShell : SwDrawBaseShell
     [
         ExecMethod = Execute ;
     ]
+
+    FN_ADD_TEXT_BOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 }
 

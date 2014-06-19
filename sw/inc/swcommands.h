@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_SWCOMMANDS_H
 
 #define CMD_SID_CREATE_SW_DRAWVIEW                  ".uno:CreateSWDrawView"
+#define CMD_FN_ADD_TEXT_BOX                         ".uno:AddTextBox"
 #define CMD_FN_FRAME_ALIGN_VERT_BOTTOM              ".uno:AlignBottom"
 #define CMD_FN_FRAME_ALIGN_HORZ_CENTER              ".uno:AlignHorizontalCenter"
 #define CMD_FN_FRAME_ALIGN_HORZ_LEFT                ".uno:AlignLeft"
