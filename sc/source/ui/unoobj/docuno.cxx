@@ -958,7 +958,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
         StringRangeEnumerator aRangeEnum( aPagesStr, 0, nPages-1 );
         nSelectCount = aRangeEnum.size();
     }
-    return nSelectCount;
+    return (nSelectCount > 0) ? nSelectCount : 1;
 }
 
 static sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const OUString& rPagesStr, sal_Int32 nTotalPages )
