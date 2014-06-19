@@ -66,17 +66,27 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     if ( pInStrm->remainingSize() == 0 )
         return OUString();
 
-    SotStorageRef aStorage = new SotStorage( pInStrm, false );
-    if ( !aStorage->GetError() )
+    bool bStorageOk = false;
+    try
     {
-        if ( aStorage->IsStream("Equation Native") )
+        SotStorageRef aStorage = new SotStorage( pInStrm, false );
+        bStorageOk = !aStorage->GetError();
+        if (bStorageOk)
         {
-            sal_uInt8 nVersion;
-            if ( GetMathTypeVersion( aStorage, nVersion ) && nVersion <=3 )
-                return OUString("math_MathType_3x");
+            if ( aStorage->IsStream("Equation Native") )
+            {
+                sal_uInt8 nVersion;
+                if ( GetMathTypeVersion( aStorage, nVersion ) && nVersion <=3 )
+                    return OUString("math_MathType_3x");
+            }
         }
     }
-    else
+    catch (const css::ucb::ContentCreationException &e)
+    {
+        SAL_WARN("starmath", "SmFilterDetect::detect caught " << e.Message);
+    }
+
+    if (!bStorageOk)
     {
         // 200 should be enough for the XML
         // version, encoding and !DOCTYPE
