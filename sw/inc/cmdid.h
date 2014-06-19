@@ -478,6 +478,7 @@
 
 #define FN_EXPAND_GLOSSARY          (FN_EXTRA + 28)   /* expand text building blocks */
 #define FN_CHANGE_PAGENUM           (FN_EXTRA + 34)   /* change page numbers*/
+#define FN_ADD_TEXT_BOX             (FN_EXTRA + 35)   /* add text box to draw shape */
 
 //  Region: Glossary
 

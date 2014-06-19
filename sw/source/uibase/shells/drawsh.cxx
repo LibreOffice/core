@@ -32,6 +32,8 @@
 #include <svx/fontworkbar.hxx>
 #include <svx/tbxcustomshapes.hxx>
 #include <uitool.hxx>
+#include <dcontact.hxx>
+#include <textboxhelper.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>
 #include <swwait.hxx>
@@ -397,6 +399,16 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             break;
         }
 
+        case FN_ADD_TEXT_BOX:
+        {
+            if (SdrObject* pObj = IsSingleFillableNonOLESelected())
+            {
+                SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
+                if (pFrmFmt)
+                    SwTextBoxHelper::create(pFrmFmt);
+            }
+            break;
+        }
         default:
             OSL_ENSURE(!this, "wrong dispatcher");
             return;
@@ -500,6 +512,21 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem(nWhich);
                 }
 
+                break;
+            }
+            case FN_ADD_TEXT_BOX:
+            {
+                bool bDisable = true;
+                if (SdrObject* pObj = IsSingleFillableNonOLESelected())
+                {
+                    SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
+                    // Allow creating a TextBox only in case this is a draw format without a TextBox so far.
+                    if (pFrmFmt && pFrmFmt->Which() == RES_DRAWFRMFMT && !SwTextBoxHelper::findTextBox(pFrmFmt))
+                        bDisable = false;
+                }
+
+                if (bDisable)
+                    rSet.DisableItem(nWhich);
                 break;
             }
         }

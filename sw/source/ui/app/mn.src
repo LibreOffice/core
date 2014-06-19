@@ -1044,6 +1044,12 @@ Menu MN_DRAW_POPUPMENU
         MN_FRM_CAPTION_ITEM
         SEPARATOR ;
         MN_DRAW3
+        MenuItem
+        {
+            Identifier = FN_ADD_TEXT_BOX;
+            HelpId = CMD_FN_ADD_TEXT_BOX;
+            Text [ en-US ] = "Add Text Box";
+        };
     };
 };
 
