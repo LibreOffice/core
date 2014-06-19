@@ -1032,32 +1032,10 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     maCommand( rCommand ),
     nNavButtonWidth ( 20 ),
     nNavButtonHeight( 20 ),
-    rnCurrentPalette( rnCurrentPalette_ )
+    rnCurrentPalette( rnCurrentPalette_ ),
+    nNumOfPalettes( 1 )
 
 {
-    SfxObjectShell* pDocSh = SfxObjectShell::Current();
-    const SfxPoolItem* pItem = NULL;
-    XColorListRef pColorList;
-
-    if ( pDocSh )
-    {
-        if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
-            pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
-//-------- Add doc colors to palette
-        XColorEntry* pEntry;
-        std::vector<Color> aColors = pDocSh->GetDocColors();
-        for( unsigned int i = 0; i < aColors.size(); ++i )
-        {
-            pEntry = new XColorEntry( aColors[i],
-                "Document Color " + OUString::number(i) );
-            pColorList->Insert( pEntry, pColorList->Count() );
-        }
-//---------
-    }
-
-    if ( !pColorList.is() )
-        pColorList = XColorList::CreateStdColorList();
-
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
     {
         aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
@@ -1089,29 +1067,16 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
     }
 
-    if ( pColorList.is() )
-    {
-        const long nColorCount(pColorList->Count());
-        const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
-        aColorSet.SetOutputSizePixel(aNewSize);
-        static sal_Int32 nAdd = 4;
+    if( SfxObjectShell::Current()->GetDocColors().size() > 0 )
+        nNumOfPalettes++;
 
-        SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd + nNavButtonHeight));
-        aColorSet.Clear();
-        aColorSet.addEntriesForXColorList(*pColorList);
+    aButtonLeft.SetText("<");
+    aButtonLeft.SetClickHdl( LINK( this, SvxColorWindow_Impl, StepLeftClickHdl ) );
+    aButtonLeft.Show();
 
-        aButtonLeft.SetText("<");
-        aButtonLeft.SetClickHdl( LINK( this, SvxColorWindow_Impl, StepLeftClickHdl ) );
-        aButtonLeft.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
-        aButtonLeft.SetPosPixel(Point(0, aNewSize.Height() + nAdd + 1));
-        aButtonLeft.Show();
-
-        aButtonRight.SetText(">");
-        aButtonRight.SetClickHdl( LINK( this, SvxColorWindow_Impl, StepRightClickHdl ) );
-        aButtonRight.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
-        aButtonRight.SetPosPixel(Point(aNewSize.Width() + nAdd - nNavButtonWidth, aNewSize.Height() + nAdd + 1));
-        aButtonRight.Show();
-    }
+    aButtonRight.SetText(">");
+    aButtonRight.SetClickHdl( LINK( this, SvxColorWindow_Impl, StepRightClickHdl ) );
+    aButtonRight.Show();
 
     aColorSet.SetSelectHdl( LINK( this, SvxColorWindow_Impl, SelectHdl ) );
     SetHelpId( HID_POPUP_COLOR );
@@ -1121,6 +1086,58 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
     AddStatusListener( OUString( ".uno:ColorTableState" ));
     AddStatusListener( maCommand );
+
+    ReloadColorSet();
+}
+
+void SvxColorWindow_Impl::ReloadColorSet()
+{
+    SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    long nColorCount = 0;
+
+    if( rnCurrentPalette == 0 )
+    {
+        const SfxPoolItem* pItem = NULL;
+        XColorListRef pColorList;
+
+        if ( pDocSh )
+        {
+            if ( 0 != ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
+                pColorList = ( (SvxColorListItem*)pItem )->GetColorList();
+        }
+
+        if ( !pColorList.is() )
+            pColorList = XColorList::CreateStdColorList();
+
+
+        if ( pColorList.is() )
+        {
+            nColorCount = pColorList->Count();
+            aColorSet.Clear();
+            aColorSet.addEntriesForXColorList(*pColorList);
+        }
+    }
+    else if( rnCurrentPalette == nNumOfPalettes - 1 )
+    {
+        // Add doc colors to palette
+        std::vector<Color> aColors = pDocSh->GetDocColors();
+        nColorCount = aColors.size();
+        aColorSet.Clear();
+        aColorSet.addEntriesForColorVector(aColors);
+    }
+
+    const Size aNewSize(aColorSet.layoutAllVisible(nColorCount));
+    aColorSet.SetOutputSizePixel(aNewSize);
+    static sal_Int32 nAdd = 4;
+
+    //TODO: Move left/right buttons above the colors
+    SetOutputSizePixel(Size(aNewSize.Width() + nAdd, aNewSize.Height() + nAdd + nNavButtonHeight));
+
+    aButtonLeft.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
+    aButtonLeft.SetPosPixel(Point(0, aNewSize.Height() + nAdd + 1));
+
+    aButtonRight.SetSizePixel(Size(nNavButtonWidth, nNavButtonHeight));
+    aButtonRight.SetPosPixel(Point(aNewSize.Width() + nAdd - nNavButtonWidth, aNewSize.Height() + nAdd + 1));
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
@@ -1176,13 +1193,15 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, StepLeftClickHdl)
 {
-    rnCurrentPalette--;
+    rnCurrentPalette = (rnCurrentPalette - 1) % nNumOfPalettes;
+    ReloadColorSet();
     return 0;
 }
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, StepRightClickHdl)
 {
-    rnCurrentPalette++;
+    rnCurrentPalette = (rnCurrentPalette + 1) % nNumOfPalettes;
+    ReloadColorSet();
     return 0;
 }
 

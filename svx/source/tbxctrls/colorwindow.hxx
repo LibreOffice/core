@@ -49,6 +49,9 @@ private:
     const sal_uInt16 nNavButtonWidth;
     const sal_uInt16 nNavButtonHeight;
     sal_uInt16& rnCurrentPalette;
+    sal_uInt16 nNumOfPalettes;
+
+    void ReloadColorSet();
 
     DECL_LINK( SelectHdl, void * );
     DECL_LINK( StepLeftClickHdl, void * );
