@@ -405,7 +405,7 @@ void Test::checkPreviewString(SvNumberFormatter& aFormatter,
 
 void Test::testFdo44286()
 {
-    LanguageType eLang = LANGUAGE_SYSTEM;
+    LanguageType eLang = LANGUAGE_ENGLISH_US;
     OUString sCode = "YYYY-MM-DD", sExpected;
     double fPreviewNumber;
     SvNumberFormatter aFormatter(m_xContext, eLang);
