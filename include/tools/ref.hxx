@@ -19,6 +19,10 @@
 #ifndef INCLUDED_TOOLS_REF_HXX
 #define INCLUDED_TOOLS_REF_HXX
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <tools/toolsdllapi.h>
 #include <vector>
 
@@ -59,9 +63,9 @@ public:
 
     T * operator &() const { return pObj; }
 
-    T * operator ->() const { return pObj; }
+    T * operator ->() const { assert(pObj != 0); return pObj; }
 
-    T & operator *() const { return *pObj; }
+    T & operator *() const { assert(pObj != 0); return *pObj; }
 
     operator T *() const { return pObj; }
 
