@@ -736,8 +736,17 @@ IMPL_LINK_NOARG(DataSourceTabPage, DownButtonClickedHdl)
 
 IMPL_LINK( DataSourceTabPage, RangeModifiedHdl, Edit*, pEdit )
 {
+    // note: isValid sets the color of the edit field
     if( isRangeFieldContentValid( *pEdit ))
+    {
         setDirty();
+        updateModelFromControl( pEdit );
+        if( pEdit == m_pEDT_RANGE )
+        {
+            if( ! lcl_UpdateCurrentSeriesName( *m_pLB_SERIES ))
+                fillSeriesListBox();
+        }
+    }
 
     // enable/disable OK button
     isValid();
@@ -752,7 +761,7 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
     {
         setDirty();
         updateModelFromControl( pEdit );
-        if( pEdit== m_pEDT_RANGE )
+        if( pEdit == m_pEDT_RANGE )
         {
             if( ! lcl_UpdateCurrentSeriesName( *m_pLB_SERIES ))
                 fillSeriesListBox();
