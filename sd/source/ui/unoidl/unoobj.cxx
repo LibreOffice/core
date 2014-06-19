@@ -775,9 +775,9 @@ void SAL_CALL SdXShape::setPropertyValue( const OUString& aPropertyName, const :
         case WID_BOOKMARK:
         {
             OUString aString;
-            if( pInfo )
+            SdDrawDocument* pDoc = mpModel ? mpModel->GetDoc() : NULL;
+            if (pInfo && pDoc)
             {
-                SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
                 // is the bookmark a page?
                 bool bIsMasterPage;
                 if(pDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage ) != SDRPAGE_NOTFOUND)
