@@ -81,17 +81,12 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
     sal_uInt16 aPageWhichIds[4] = { ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERLEFT,
                                     ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT };
 
-    const SfxItemPool* pItemPool(rExportP.GetDocument() ? rExportP.GetDocument()->GetPool() : NULL);
+    const SfxItemPool* pItemPool(rExportP.GetDocument()->GetPool());
     AddFontItems(aWhichIds, 3, pItemPool, true);
     const SfxItemPool* pEditPool(rExportP.GetDocument()->GetEditPool());
     AddFontItems(aEditWhichIds, 3, pEditPool, false);
 
-    SfxStyleSheetIteratorPtr pItr;
-
-    if(rExportP.GetDocument())
-    {
-        pItr = rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF);
-    }
+    SfxStyleSheetIteratorPtr pItr = rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF);
 
     if(pItr)
     {
