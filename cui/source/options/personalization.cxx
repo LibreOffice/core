@@ -202,6 +202,17 @@ SvxPersonalizationTabPage::SvxPersonalizationTabPage( Window *pParent, const Sfx
 
     get( m_pSelectPersona, "select_persona" );
     m_pSelectPersona->SetClickHdl( LINK( this, SvxPersonalizationTabPage, SelectPersona ) );
+
+    get( m_vDefaultPersonaImages[0], "default1" );
+    m_vDefaultPersonaImages[0]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+
+    get( m_vDefaultPersonaImages[1], "default2" );
+    m_vDefaultPersonaImages[1]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+
+    get( m_vDefaultPersonaImages[2], "default3" );
+    m_vDefaultPersonaImages[2]->SetClickHdl( LINK( this, SvxPersonalizationTabPage, DefaultPersona ) );
+
+    LoadDefaultImages();
 }
 
 SvxPersonalizationTabPage::~SvxPersonalizationTabPage()
@@ -268,6 +279,45 @@ void SvxPersonalizationTabPage::Reset( const SfxItemSet * )
         m_pDefaultPersona->Check();
 }
 
+void SvxPersonalizationTabPage::SetPersonaSettings( const OUString aPersonaSettings )
+{
+    m_aPersonaSettings = aPersonaSettings;
+    m_pOwnPersona->Check();
+}
+
+void SvxPersonalizationTabPage::LoadDefaultImages()
+{
+    OUString gallery( "" );
+    gallery = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER;
+    gallery += "/gallery/personas/";
+    rtl::Bootstrap::expandMacros( gallery );
+    OUString aPersonasList = gallery + "personas_list.txt";
+    SvFileStream aStream( aPersonasList, STREAM_READ );
+    GraphicFilter aFilter;
+    Graphic aGraphic;
+    sal_Int32 nIndex = 0;
+
+    while( aStream.IsOpen() && !aStream.IsEof() )
+    {
+        OString aLine;
+        aStream.ReadLine( aLine );
+        OUString aPersonaSetting( OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 ) );
+        OUString aPreviewFile;
+        sal_Int32 nNewIndex = aPersonaSetting.indexOf( ';', 0 );
+        if( nNewIndex < 0 )
+            break;
+        aPreviewFile = aPersonaSetting.copy( 0, nNewIndex );
+        aPersonaSetting = aPersonaSetting.copy( nNewIndex + 1 );
+        m_vDefaultPersonaSettings.push_back( aPersonaSetting );
+
+        INetURLObject aURLObj( gallery + aPreviewFile );
+        aFilter.ImportGraphic( aGraphic, aURLObj );
+        Bitmap aBmp = aGraphic.GetBitmap();
+        m_vDefaultPersonaImages[nIndex]->Show();
+        m_vDefaultPersonaImages[nIndex++]->SetModeImage( Image( aBmp ) );
+    }
+}
+
 IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
 {
     SelectPersonaDialog aDialog( NULL );
@@ -277,7 +327,7 @@ IMPL_LINK( SvxPersonalizationTabPage, SelectPersona, PushButton*, /*pButton*/ )
         OUString aPersonaSetting( aDialog.GetAppliedPersonaSetting() );
         if ( !aPersonaSetting.isEmpty() )
         {
-            setPersonaSettings( aPersonaSetting );
+            SetPersonaSettings( aPersonaSetting );
         }
 
         break;
@@ -291,6 +341,17 @@ IMPL_LINK( SvxPersonalizationTabPage, ForceSelect, RadioButton*, pButton )
     if ( pButton == m_pOwnPersona && m_aPersonaSettings.isEmpty() )
         SelectPersona( m_pSelectPersona );
 
+    return 0;
+}
+
+IMPL_LINK( SvxPersonalizationTabPage, DefaultPersona, PushButton*, pButton )
+{
+    m_pDefaultPersona->Check();
+    for( sal_Int32 nIndex = 0; nIndex < 3; nIndex++ )
+    {
+        if( pButton == m_vDefaultPersonaImages[nIndex] )
+            m_aPersonaSettings = m_vDefaultPersonaSettings[nIndex];
+    }
     return 0;
 }
 
@@ -349,12 +410,6 @@ static bool parsePersonaInfo( const OString &rBuffer, OUString *pHeaderURL, OUSt
         return false;
 
     return true;
-}
-
-void SvxPersonalizationTabPage::setPersonaSettings( const OUString aPersonaSettings )
-{
-    m_aPersonaSettings = aPersonaSettings;
-    m_pOwnPersona->Check();
 }
 
 SearchAndParseThread::SearchAndParseThread( SelectPersonaDialog* pDialog,
@@ -416,13 +471,13 @@ void SearchAndParseThread::execute()
 
         for( it = vLearnmoreURLs.begin(); it!=vLearnmoreURLs.end(); ++it )
         {
-            OUString sHeaderFile, aPersonaSetting;
-            getPreviewFile( *it, &sHeaderFile, &aPersonaSetting );
-            INetURLObject aURLObj( sHeaderFile );
+            OUString sPreviewFile, aPersonaSetting;
+            getPreviewFile( *it, &sPreviewFile, &aPersonaSetting );
+            INetURLObject aURLObj( sPreviewFile );
             aFilter.ImportGraphic( aGraphic, aURLObj );
             Bitmap aBmp = aGraphic.GetBitmap();
             vResultList.push_back( Image( aBmp ) );
-            m_pPersonaDialog->AddPersonaSetting(aPersonaSetting);
+            m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
         }
 
         // for VCL to be able to do visual changes in the thread
@@ -498,7 +553,7 @@ void SearchAndParseThread::execute()
     }
 }
 
-void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pHeaderFile, OUString *pPersonaSetting )
+void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pPreviewFile, OUString *pPersonaSetting )
 {
     uno::Reference< ucb::XSimpleFileAccess3 > xFileAccess( ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() ), uno::UNO_QUERY );
     if ( !xFileAccess.is() )
@@ -555,7 +610,7 @@ void SearchAndParseThread::getPreviewFile( const OUString& rURL, OUString *pHead
     {
         return;
     }
-    *pHeaderFile = gallery + aPreviewFile;
+    *pPreviewFile = gallery + aPreviewFile;
     *pPersonaSetting = aName + ";" + aHeaderURL + ";" + aFooterURL + ";" + aTextColor + ";" + aAccentColor;
 }
 

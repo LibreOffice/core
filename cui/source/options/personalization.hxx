@@ -29,7 +29,10 @@ private:
     RadioButton *m_pDefaultPersona;         ///< Use the built-in bitmap
     RadioButton *m_pOwnPersona;             ///< Use the user-defined bitmap
     PushButton *m_pSelectPersona;           ///< Let the user select in the 'own' case
+    PushButton *m_vDefaultPersonaImages[3]; ///< Buttons to show the default persona images
     OUString m_aPersonaSettings;            ///< Header and footer images + color to be set in the settings.
+
+    std::vector<OUString> m_vDefaultPersonaSettings;
 
 public:
     ::rtl::Reference< SearchAndParseThread > m_rApplyThread;
@@ -44,7 +47,9 @@ public:
     /// Reset to default settings ([Revert] button).
     virtual void Reset( const SfxItemSet *rSet ) SAL_OVERRIDE;
 
-    void setPersonaSettings( const OUString );
+    void SetPersonaSettings( const OUString );
+
+    void LoadDefaultImages();
 
 private:
     /// Handle the Persona selection
@@ -52,6 +57,9 @@ private:
 
     /// When 'own' is chosen, but the Persona is not chosen yet.
     DECL_LINK( ForceSelect, RadioButton* );
+
+    /// Handle the default Persona selection
+    DECL_LINK( DefaultPersona, PushButton* );
 };
 
 /** Dialog that will allow the user to choose a Persona to use.
