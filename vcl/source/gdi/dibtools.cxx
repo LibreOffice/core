@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include <vcl/salbtype.hxx>
 #include <vcl/dibtools.hxx>
 #include <tools/zcodec.hxx>
@@ -240,7 +244,10 @@ bool ImplReadDIBInfoHeader(SvStream& rIStm, DIBV5Header& rHeader, bool& bTopDown
     }
 
     // #144105# protect a little against damaged files
-    if( rHeader.nSizeImage > ( 16 * static_cast< sal_uInt32 >( rHeader.nWidth * rHeader.nHeight ) ) )
+    assert(rHeader.nHeight >= 0);
+    if (rHeader.nHeight != 0 && rHeader.nWidth >= 0
+        && (rHeader.nSizeImage / 16 / static_cast<sal_uInt32>(rHeader.nHeight)
+            > static_cast<sal_uInt32>(rHeader.nWidth)))
     {
         rHeader.nSizeImage = 0;
     }
