@@ -30,84 +30,74 @@
 #include "poolio.hxx"
 #include <boost/scoped_array.hpp>
 
+/**
+ * Returns the <SfxItemPool> that is being saved.
+ * This should only be used in very exceptional cases e.g.
+ * when guaranteeing file format compatibility:
+ * When overloading a <SfxPoolItem::Store()> getting additional data from the Pool
+ */
 const SfxItemPool* SfxItemPool::GetStoringPool()
-
-/*  [Beschreibung]
-
-    Diese Methode liefert den <SfxItemPool>, der gerade gespeichert wird.
-    Sie sollte nur in Notf"allen verwendet werden, um z.B. File-Format-
-    Kompatibilit"at zu gew"ahrleisten o."o. - z.B. in der "uberladung eines
-    <SfxPoolItem::Store()> zus"atzliche Daten aus dem dazuge"horigen
-    Pool zu besorgen.
-*/
-
 {
     return pStoringPool_;
 }
 
-
+/**
+ * The SfxItemPool is saved to the specified Stream (together with all its
+ * secondary Pools) using its Pool Defaults and pooled Items.
+ * The static defaults are not saved.
+ * [Fileformat]
+ *
+ *  ;First, a compatibility header section
+ *    Start:      0x1111  SFX_ITEMPOOL_TAG_STARTPOOLS(_4/_5)
+ *                sal_uInt8   MAJOR_VER                   ;SfxItemPool version
+ *               sal_uInt8   MINOR_VER                   ;"
+ *               0xFFFF  SFX_ITEMPOOL_TAG_TRICK4OLD      ;ex. GetVersion()
+ *               sal_uInt16  0x0000                      ;Pseudo StyleSheetPool
+ *               sal_uInt16  0x0000                      ;Pseudo StyleSheetPool
+ *
+ *   ;The whole Pool into a record
+ *              record  SfxMiniRecod(SFX_ITEMPOOL_REC)
+ *
+ *   ;Start with a Header for each
+ *   Header:     record      SfxMiniRecord(SFX_ITEMPOOL_REC_HEADER)
+ *               sal_uInt16          GetVersion()        ;Which-Ranges etc.
+ *               String          GetName()               ;Pool name
+ *
+ *  ;The version map: in order to be able to map WhichIds of new file version
+ *    Versions:   record      SfxMultiRecord(SFX_ITEMPOOL_REC_VERSIONS, 0)
+ *               sal_uInt16          OldVersion
+ *               sal_uInt16          OldStartWhich
+ *               sal_uInt16          OldEndWhich
+ *               sal_uInt16[]        NewWhich (OldEndWhich-OldStartWhich+1)
+ *
+ *   ;Now the pooled Items (first the non-SfxSetItems)
+ *   Items:      record      SfxMultiRecord(SFX_ITEMPOOL_REC_WHICHIDS, 0)
+ *                content         SlotId, 0
+ *               sal_uInt16          WhichId
+ *               sal_uInt16          pItem->GetVersion()
+ *               sal_uInt16          Array-Size
+ *               record          SfxMultiRecord(SFX_, 0)
+ *               content             Surrogate
+ *               sal_uInt16              RefCount
+ *               unknown             pItem->Store()
+ *
+ *   ;Now the set Pool defaults
+ *   Defaults:   record      SfxMultiRecord(SFX_ITEMPOOL_REC_DEFAULTS, 0)
+ *               content         SlotId, 0
+ *               sal_uInt16          WhichId
+ *               sal_uInt16          pPoolDef->GetVersion()
+ *               unknown         pPoolDef->Store();
+ *
+ *   ;Hereafter the secondary follows (if present) without compatibility header section
+ */
 SvStream &SfxItemPool::Store(SvStream &rStream) const
-
-/*  [Beschreibung]
-
-    Der SfxItemPool wird inklusive aller seiner Sekund"arpools mit
-    Pool-Defaults und gepoolten Items in dem angegebenen Stream gespeichert.
-    Die statischen Defaults werden nicht gespeichert.
-
-
-    [Fileformat]
-
-    ;zun"achst ein Kompatiblit"ats-Header-Block
-    Start:      0x1111  SFX_ITEMPOOL_TAG_STARTPOOLS(_4/_5)
-                sal_uInt8   MAJOR_VER                   ;SfxItemPool-Version
-                sal_uInt8   MINOR_VER                   ;"
-                0xFFFF  SFX_ITEMPOOL_TAG_TRICK4OLD  ;ex. GetVersion()
-                sal_uInt16  0x0000                      ;Pseudo-StyleSheetPool
-                sal_uInt16  0x0000                      ;Pseudo-StyleSheetPool
-
-    ;den ganzen Pool in einen Record
-                record  SfxMiniRecod(SFX_ITEMPOOL_REC)
-
-    ;je ein Header vorweg
-    Header:     record      SfxMiniRecord(SFX_ITEMPOOL_REC_HEADER)
-                sal_uInt16          GetVersion()            ;Which-Ranges etc.
-                String          GetName()               ;Pool-Name
-
-    ;die Versions-Map, um WhichIds neuer File-Versionen mappen zu k"onnen
-    Versions:   record      SfxMultiRecord(SFX_ITEMPOOL_REC_VERSIONS, 0)
-                sal_uInt16          OldVersion
-                sal_uInt16          OldStartWhich
-                sal_uInt16          OldEndWhich
-                sal_uInt16[]        NewWhich (OldEndWhich-OldStartWhich+1)
-
-    ;jetzt die gepoolten Items (zuerst nicht-SfxSetItems)
-    Items:      record      SfxMultiRecord(SFX_ITEMPOOL_REC_WHICHIDS, 0)
-                content         SlotId, 0
-                sal_uInt16          WhichId
-                sal_uInt16          pItem->GetVersion()
-                sal_uInt16          Array-Size
-                record          SfxMultiRecord(SFX_, 0)
-                content             Surrogate
-                sal_uInt16              RefCount
-                unknown             pItem->Store()
-
-    ;jetzt die gesetzten Pool-Defaults
-    Defaults:   record      SfxMultiRecord(SFX_ITEMPOOL_REC_DEFAULTS, 0)
-                content         SlotId, 0
-                sal_uInt16          WhichId
-                sal_uInt16          pPoolDef->GetVersion()
-                unknown         pPoolDef->Store();
-
-    ;dahinter folgt ggf. der Secondary ohne Kompatiblit"ats-Header-Block
-*/
-
 {
-    // Store-Master finden
+    // Find StoreMaster
     SfxItemPool *pStoreMaster = pImp->mpMaster != this ? pImp->mpMaster : 0;
     while ( pStoreMaster && !pStoreMaster->pImp->bStreaming )
         pStoreMaster = pStoreMaster->pImp->mpSecondary;
 
-    // Alter-Header (Version des Pools an sich und Inhalts-Version 0xffff)
+    // Old header (version of the Pool and content version is 0xffff by default)
     pImp->bStreaming = true;
     if ( !pStoreMaster )
     {
@@ -117,23 +107,23 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         rStream.WriteUInt8( SFX_ITEMPOOL_VER_MAJOR ).WriteUInt8( SFX_ITEMPOOL_VER_MINOR );
         rStream.WriteUInt16( SFX_ITEMPOOL_TAG_TRICK4OLD );
 
-        // SfxStyleSheet-Bug umgehen
+        // Work around SfxStyleSheet bug
         rStream.WriteUInt16( sal_uInt16(0) ); // Version
-        rStream.WriteUInt16( sal_uInt16(0) ); // Count (2. Schleife f"allt sonst auf die Fresse)
+        rStream.WriteUInt16( sal_uInt16(0) ); // Count (or else 2nd loop breaks)
     }
 
-    // jeder Pool ist als ganzes ein Record
+    // Every Pool as a whole is a record
     SfxMiniRecordWriter aPoolRec( &rStream, SFX_ITEMPOOL_REC );
     pStoringPool_ = this;
 
-    // Einzel-Header (Version des Inhalts und Name)
+    // Single header (content version and name)
     {
         SfxMiniRecordWriter aPoolHeaderRec( &rStream, SFX_ITEMPOOL_REC_HEADER);
         rStream.WriteUInt16( pImp->nVersion );
         SfxPoolItem::writeByteString(rStream, pImp->aName);
     }
 
-    // Version-Maps
+    // VersionMaps
     {
         SfxMultiVarRecordWriter aVerRec( &rStream, SFX_ITEMPOOL_REC_VERSIONMAP, 0 );
         for ( size_t nVerNo = 0; nVerNo < pImp->aVersions.size(); ++nVerNo )
@@ -149,17 +139,17 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                 rStream.WriteUInt16( nNewWhich );
             }
 
-            // Workaround gegen Bug in SetVersionMap der 312
+            // Workaround for bug in SetVersionMap 312
             if ( SOFFICE_FILEFORMAT_31 == pImp->mnFileFormatVersion )
                 rStream.WriteUInt16( sal_uInt16(nNewWhich+1) );
         }
     }
 
-    // gepoolte Items
+    // Pooled Items
     {
         SfxMultiMixRecordWriter aWhichIdsRec( &rStream, SFX_ITEMPOOL_REC_WHICHIDS, 0 );
 
-        // erst Atomaren-Items und dann die Sets schreiben (wichtig beim Laden)
+        // First write the atomic Items and then write the Sets (important when loading)
         for (int ft = 0 ; ft < 2 && !rStream.GetError(); ft++)
         {
             pImp->bInSetItem = ft != 0;
@@ -169,18 +159,18 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
             const sal_uInt16 nSize = GetSize_Impl();
             for ( size_t i = 0; i < nSize && !rStream.GetError(); ++i, ++itrArr, ++ppDefItem )
             {
-                // Version des Items feststellen
+                // Get version of the Item
                 sal_uInt16 nItemVersion = (*ppDefItem)->GetVersion( pImp->mnFileFormatVersion );
                 if ( USHRT_MAX == nItemVersion )
-                    // => kam in zu exportierender Version gar nicht vor
+                    // => Was not present in the version that was supposed to be exported
                     continue;
 
-                // !poolable wird gar nicht im Pool gespeichert
-                // und itemsets/plain-items je nach Runde
+                // ! Poolable is not even saved in the Pool
+                // And itemsets/plain-items depending on the round
                 if ( *itrArr && IsItemFlag(**ppDefItem, SFX_ITEM_POOLABLE) &&
                      pImp->bInSetItem == (bool) (*ppDefItem)->ISA(SfxSetItem) )
                 {
-                    // eigene Kennung, globale Which-Id und Item-Version
+                    // Own signature, global WhichId and ItemVersion
                     sal_uInt16 nSlotId = GetSlotId( (*ppDefItem)->Which(), false );
                     aWhichIdsRec.NewContent(nSlotId, 0);
                     rStream.WriteUInt16( (*ppDefItem)->Which() );
@@ -189,13 +179,13 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
                     DBG_ASSERT(nCount, "ItemArr is empty");
                     rStream.WriteUInt32( nCount );
 
-                    // Items an sich schreiben
+                    // Write Items
                     SfxMultiMixRecordWriter aItemsRec( &rStream, SFX_ITEMPOOL_REC_ITEMS, 0 );
                     for ( size_t j = 0; j < nCount; ++j )
                     {
-                        // Item selbst besorgen
+                        // Get Item
                         const SfxPoolItem *pItem = (*itrArr)->operator[](j);
-                        if ( pItem && pItem->GetRefCount() ) //! siehe anderes MI-REF
+                        if ( pItem && pItem->GetRefCount() ) //! See other MI-REF
                         {
                             aItemsRec.NewContent((sal_uInt16)j, 'X' );
 
@@ -233,7 +223,7 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
         pImp->bInSetItem = false;
     }
 
-    // die gesetzten Defaults speichern (Pool-Defaults)
+    // Save the set Defaults (PoolDefaults)
     if ( !rStream.GetError() )
     {
         SfxMultiMixRecordWriter aDefsRec( &rStream, SFX_ITEMPOOL_REC_DEFAULTS, 0 );
@@ -243,25 +233,25 @@ SvStream &SfxItemPool::Store(SvStream &rStream) const
             const SfxPoolItem* pDefaultItem = pImp->ppPoolDefaults[n];
             if ( pDefaultItem )
             {
-                // Version ermitteln
+                // Get version
                 sal_uInt16 nItemVersion = pDefaultItem->GetVersion( pImp->mnFileFormatVersion );
                 if ( USHRT_MAX == nItemVersion )
-                    // => gab es in der Version noch nicht
+                    // => Was not present in the version yet
                     continue;
 
-                // eigene Kennung, globale Kennung, Version
+                // Own signature, global signature, version
                 sal_uInt16 nSlotId = GetSlotId( pDefaultItem->Which(), false );
                 aDefsRec.NewContent( nSlotId, 0 );
                 rStream.WriteUInt16( pDefaultItem->Which() );
                 rStream.WriteUInt16( nItemVersion );
 
-                // Item an sich
+                // Item
                 pDefaultItem->Store( rStream, nItemVersion );
             }
         }
     }
 
-    // weitere Pools rausschreiben
+    // Write out additional Pools
     pStoringPool_ = 0;
     aPoolRec.Close();
     if ( !rStream.GetError() && pImp->mpSecondary )
