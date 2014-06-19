@@ -557,9 +557,11 @@ void IcnGridMap_Impl::Expand()
         else
             nNewGridCols += 50;
 
-        bool* pNewGridMap = new bool[nNewGridRows*nNewGridCols];
-        memset( pNewGridMap, 0, nNewGridRows * nNewGridCols * sizeof(bool) );
-        memcpy( pNewGridMap, _pGridMap, _nGridRows * _nGridCols * sizeof(bool) );
+        size_t nNewCellCount = static_cast<size_t>(nNewGridRows) * nNewGridCols;
+        bool* pNewGridMap = new bool[nNewCellCount];
+        memset(pNewGridMap, 0, nNewCellCount * sizeof(bool));
+        size_t nOldCellCount = static_cast<size_t>(_nGridRows) * _nGridCols;
+        memcpy(pNewGridMap, _pGridMap, nOldCellCount * sizeof(bool));
         delete[] _pGridMap;
         _pGridMap = pNewGridMap;
         _nGridRows = nNewGridRows;
