@@ -223,8 +223,7 @@ RTFValue* RTFValue::Clone()
     return new RTFValue(m_nValue, m_sValue, *m_pAttributes, *m_pSprms, m_xShape, m_xStream, m_xObject, m_bForceString, *m_pShape);
 }
 
-RTFValue* RTFValue::CloneWithSprms(
-        RTFSprms const& rAttributes, RTFSprms const& rSprms)
+RTFValue* RTFValue::CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms)
 {
     return new RTFValue(m_nValue, m_sValue, rAttributes, rSprms, m_xShape, m_xStream, m_xObject, m_bForceString, *m_pShape);
 }

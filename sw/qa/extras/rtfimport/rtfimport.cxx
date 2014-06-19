@@ -1173,10 +1173,8 @@ DECLARE_RTFIMPORT_TEST(testN825305, "n825305.rtf")
 
 DECLARE_RTFIMPORT_TEST(testParaBottomMargin, "para-bottom-margin.rtf")
 {
-    uno::Reference<beans::XPropertySet> xPropertySet(
-        getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(353),
-            getProperty<sal_Int32>(xPropertySet, "ParaBottomMargin"));
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("ParagraphStyles")->getByName("Standard"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(353), getProperty<sal_Int32>(xPropertySet, "ParaBottomMargin"));
 
     // This was 353, i.e. bottom margin of the paragraph was 0.35cm instead of 0.
     // The reason why this is 0 despite the default style containing \sa200

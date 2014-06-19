@@ -30,7 +30,10 @@ public:
     SfxGrabBagItem(const SfxGrabBagItem& rItem);
     virtual ~SfxGrabBagItem();
 
-    const std::map<OUString, com::sun::star::uno::Any>& GetGrabBag() const { return m_aMap;}
+    const std::map<OUString, com::sun::star::uno::Any>& GetGrabBag() const
+    {
+        return m_aMap;
+    }
 
     virtual bool operator==(const SfxPoolItem&) const SAL_OVERRIDE;
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const SAL_OVERRIDE;

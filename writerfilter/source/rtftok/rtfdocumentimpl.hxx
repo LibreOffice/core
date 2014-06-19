@@ -344,7 +344,10 @@ public:
     virtual void finishSubstream() SAL_OVERRIDE;
     virtual bool isSubstream() const SAL_OVERRIDE;
 
-    Stream& Mapper() { return *m_pMapperStream;}
+    Stream& Mapper()
+    {
+        return *m_pMapperStream;
+    }
     void setSubstream(bool bIsSubtream);
     void setSuperstream(RTFDocumentImpl* pSuperstream);
     void setStreamType(Id nId);
@@ -352,7 +355,10 @@ public:
     void setAuthorInitials(OUString& rAuthorInitials);
     void setIgnoreFirst(OUString& rIgnoreFirst);
     void seek(sal_Size nPos);
-    css::uno::Reference<css::lang::XMultiServiceFactory> getModelFactory() { return m_xModelFactory;}
+    css::uno::Reference<css::lang::XMultiServiceFactory> getModelFactory()
+    {
+        return m_xModelFactory;
+    }
     bool isInBackground();
     void setDestinationText(OUString& rString);
     /// Resolve a picture: If not inline, then anchored.
