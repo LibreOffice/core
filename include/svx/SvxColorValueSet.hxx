@@ -39,6 +39,7 @@ public:
     sal_uInt32 getColumnCount() const;
 
     void addEntriesForXColorList(const XColorList& rXColorList, sal_uInt32 nStartIndex = 1);
+    void addEntriesForColorVector(const std::vector<Color>& rColorVector, sal_uInt32 nStartIndex = 1);
     Size layoutAllVisible(sal_uInt32 nEntryCount);
     Size layoutToGivenHeight(sal_uInt32 nHeight, sal_uInt32 nEntryCount);
 };
