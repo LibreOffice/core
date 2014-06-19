@@ -74,8 +74,8 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XController.hpp>
 
-#define THESIZE             1000000 //!!! langt... :-)
-#define TBX_WINDOW_HEIGHT   22 // in Pixeln - fuer alle Systeme gleich?
+#define THESIZE             1000000 // Should be more than enough!
+#define TBX_WINDOW_HEIGHT   22 // in pixel - TODO: The same on all systems?
 #define LEFT_OFFSET         5
 #define INPUTWIN_MULTILINES 6
 const long BUTTON_OFFSET = 2; ///< space between input line and the button to expand / collapse
@@ -140,8 +140,9 @@ ScInputWindowWrapper::ScInputWindowWrapper( Window*          pParentP,
     pBindings->Invalidate( FID_TOGGLEINPUTLINE );
 }
 
-//  GetInfo fliegt wieder raus, wenn es ein SFX_IMPL_TOOLBOX gibt !!!!
-
+/**
+ * GetInfo is disposed of if there's a SFX_IMPL_TOOLBOX!
+ */
 SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
@@ -177,13 +178,13 @@ static ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent, SfxBindings* pBind
 }
 
 ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
-// mit WB_CLIPCHILDREN, sonst Flicker
+        // With WB_CLIPCHILDREN otherwise we get flickering
         ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN) ),
         aWndPos         ( this ),
         pRuntimeWindow ( lcl_chooseRuntimeImpl( this, pBind ) ),
         aTextWindow    ( *pRuntimeWindow ),
         pInputHdl       ( NULL ),
-        aTextOk         ( ScResId( SCSTR_QHELP_BTNOK ) ),       // nicht immer neu aus Resource
+        aTextOk         ( ScResId( SCSTR_QHELP_BTNOK ) ),       // Not always new as a Resource
         aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
         aTextSum        ( ScResId( SCSTR_QHELP_BTNSUM ) ),
         aTextEqual      ( ScResId( SCSTR_QHELP_BTNEQUAL ) ),
@@ -221,8 +222,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     aTextWindow.SetQuickHelpText( ScResId( SCSTR_QHELP_INPUTWND ) );
     aTextWindow.SetHelpId       ( HID_INSWIN_INPUT );
 
-    //  kein SetHelpText, die Hilfetexte kommen aus der Hilfe
-
+    // No SetHelpText: the helptexts come from the Help
     SetItemText ( SID_INPUT_FUNCTION, ScResId( SCSTR_QHELP_BTNCALC ) );
     SetHelpId   ( SID_INPUT_FUNCTION, HID_INSWIN_CALC );
 
@@ -232,35 +232,33 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     SetItemText ( SID_INPUT_EQUAL, aTextEqual );
     SetHelpId   ( SID_INPUT_EQUAL, HID_INSWIN_FUNC );
 
-    SetHelpId( HID_SC_INPUTWIN );   // fuer die ganze Eingabezeile
+    SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
 
     aWndPos     .Show();
     aTextWindow.Show();
 
-    pInputHdl = SC_MOD()->GetInputHdl( pViewSh, false );    // use own handler even if ref-handler is set
+    pInputHdl = SC_MOD()->GetInputHdl( pViewSh, false ); // use own handler even if ref-handler is set
     if (pInputHdl)
         pInputHdl->SetInputWindow( this );
 
     if (pInputHdl && !pInputHdl->GetFormString().isEmpty())
     {
-        //  Umschalten waehrend der Funktionsautopilot aktiv ist
-        //  -> Inhalt des Funktionsautopiloten wieder anzeigen
-        //! auch Selektion (am InputHdl gemerkt) wieder anzeigen
-
+        // Switch over while the Function AutoPilot is active
+        // -> show content of the Function AutoPilot again
+        // Also show selection (remember at the InputHdl)
         aTextWindow.SetTextString( pInputHdl->GetFormString() );
     }
     else if ( pInputHdl && pInputHdl->IsInputMode() )
     {
-        //  wenn waehrend des Editierens die Eingabezeile weg war
-        //  (Editieren einer Formel, dann umschalten zu fremdem Dokument/Hilfe),
-        //  wieder den gerade editierten Text aus dem InputHandler anzeigen
-
-        aTextWindow.SetTextString( pInputHdl->GetEditString() );    // Text anzeigen
+        // If the input row was hidden while editing (e.g. when editing a formula
+        // and then switching to another document or the help), display the text
+        // we just edited from the InputHandler
+        aTextWindow.SetTextString( pInputHdl->GetEditString() ); // Dispaly text
         if ( pInputHdl->IsTopMode() )
-            pInputHdl->SetMode( SC_INPUT_TABLE );       // Focus kommt eh nach unten
+            pInputHdl->SetMode( SC_INPUT_TABLE ); // Focus ends up at the bottom anyways
     }
     else if ( pViewSh )
-        pViewSh->UpdateInputHandler( true ); // unbedingtes Update
+        pViewSh->UpdateInputHandler( true ); // Absolutely necessary update
 
     pImgMgr->RegisterToolBox( this );
     SetAccessibleName(ScResId(STR_ACC_TOOLBAR_FORMULA));
@@ -268,7 +266,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 
 ScInputWindow::~ScInputWindow()
 {
-    bool bDown = ( ScGlobal::pSysLocale == NULL );    // after Clear?
+    bool bDown = ( ScGlobal::pSysLocale == NULL ); // after Clear?
 
     //  if any view's input handler has a pointer to this input window, reset it
     //  (may be several ones, #74522#)
@@ -295,13 +293,11 @@ ScInputWindow::~ScInputWindow()
 
 void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
 {
-    //  wird im Activate der View gerufen...
-
+    //  Is called in the Activate of the View ...
     if ( pNew != pInputHdl )
     {
-        //  Bei Reload (letzte Version) ist pInputHdl der Input-Handler der alten,
-        //  geloeschten ViewShell, darum hier auf keinen Fall anfassen!
-
+        // On Reload (last version) the pInputHdl is the InputHandler of the old, deleted
+        // ViewShell: so don't touch it here!
         pInputHdl = pNew;
         if (pInputHdl)
             pInputHdl->SetInputWindow( this );
@@ -383,8 +379,8 @@ void ScInputWindow::Select()
                     pViewFrm->GetDispatcher()->Execute( SID_OPENDLG_FUNCTION,
                                               SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
 
-                    //  die Toolbox wird sowieso disabled, also braucht auch nicht umgeschaltet
-                    //  zu werden, egal ob's geklappt hat oder nicht
+                    // The Toolbox will be disabled anyways, so we don't need to switch here,
+                    // regardless whether it succeeded or not!
 //                  SetOkCancelMode();
                 }
             }
@@ -398,7 +394,7 @@ void ScInputWindow::Select()
         case SID_INPUT_OK:
             pScMod->InputEnterHandler();
             SetSumAssignMode();
-            aTextWindow.Invalidate();       // sonst bleibt Selektion stehen
+            aTextWindow.Invalidate(); // Or else the Selection remains
             break;
 
         case SID_INPUT_SUM:
@@ -463,7 +459,7 @@ void ScInputWindow::Select()
                             }
                         }
                     }
-                    else                                    // nur in Eingabezeile einfuegen
+                    else // Only insert into input row
                     {
                         ScRangeList aRangeList;
                         const bool bDataFound = pViewSh->GetAutoSumArea( aRangeList );
@@ -479,8 +475,8 @@ void ScInputWindow::Select()
                             {
                                 pHdl->InitRangeFinder( aFormula );
 
-                                //! SetSelection am InputHandler ???
-                                //! bSelIsRef setzen ???
+                                //! SetSelection at the InputHandler?
+                                //! Set bSelIsRef?
                                 const sal_Int32 nOpen = aFormula.indexOf('(');
                                 const sal_Int32 nLen = aFormula.getLength();
                                 if ( nOpen != -1 && nLen > nOpen )
@@ -506,7 +502,7 @@ void ScInputWindow::Select()
         case SID_INPUT_EQUAL:
         {
             aTextWindow.StartEditEngine();
-            if ( pScMod->IsEditMode() )         // nicht, wenn z.B. geschuetzt
+            if ( pScMod->IsEditMode() ) // Isn't if e.g. protected
             {
                 aTextWindow.StartEditEngine();
 
@@ -632,7 +628,7 @@ void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
 
             pScMod->InputChanged(pView);
             if ( bDoEdit )
-                SetOkCancelMode();          // nicht, wenn gleich hinterher Enter/Cancel
+                SetOkCancelMode(); // Not the case if immediately followed by Enter/Cancel
 
             pView->SetEditEngineUpdateMode(true);
         }
@@ -662,7 +658,7 @@ void ScInputWindow::SetOkCancelMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (!bIsOkCancelMode)
     {
-        RemoveItem( 3 ); // SID_INPUT_SUM und SID_INPUT_EQUAL entfernen
+        RemoveItem( 3 ); // Remove SID_INPUT_SUM and SID_INPUT_EQUAL
         RemoveItem( 3 );
         InsertItem( SID_INPUT_CANCEL, IMAGE( SID_INPUT_CANCEL ), 0, 3 );
         InsertItem( SID_INPUT_OK,     IMAGE( SID_INPUT_OK ),     0, 4 );
@@ -684,7 +680,7 @@ void ScInputWindow::SetSumAssignMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (bIsOkCancelMode)
     {
-        // SID_INPUT_CANCEL, und SID_INPUT_OK entfernen
+        // Remove SID_INPUT_CANCEL, and SID_INPUT_OK
         RemoveItem( 3 );
         RemoveItem( 3 );
         InsertItem( SID_INPUT_SUM,   IMAGE( SID_INPUT_SUM ),     0, 3 );
@@ -695,7 +691,7 @@ void ScInputWindow::SetSumAssignMode()
         SetHelpId   ( SID_INPUT_EQUAL, HID_INSWIN_FUNC );
         bIsOkCancelMode = false;
 
-        SetFormulaMode(false);      // kein editieren -> keine Formel
+        SetFormulaMode(false); // No editing -> no formula
     }
 }
 
@@ -759,7 +755,7 @@ void ScInputWindow::SwitchToTextWin()
             sal_Int32 nPara =  pView->GetEditEngine()->GetParagraphCount() ? ( pView->GetEditEngine()->GetParagraphCount() - 1 ) : 0;
             sal_Int32 nLen = pView->GetEditEngine()->GetTextLen( nPara );
             ESelection aSel( nPara, nLen, nPara, nLen );
-            pView->SetSelection( aSel );                // set cursor to end of text
+            pView->SetSelection( aSel ); // set cursor to end of text
         }
     }
 }
@@ -795,8 +791,8 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
         //  update item images
         ScModule*        pScMod  = SC_MOD();
         SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
-        // IMAGE macro uses pScMod, pImgMg
 
+        // IMAGE macro uses pScMod, pImgMg
         SetItemImage( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ) );
         if ( bIsOkCancelMode )
         {
@@ -878,6 +874,7 @@ void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
                 // Don't leave the mouse pointer leave *this* window
                 CaptureMouse();
                 bInResize = true;
+
                 // find the height of the gridwin, we don't wan't to be
                 // able to expand the toolbar too far so we need to
                 // caculate an upper limit
@@ -905,7 +902,6 @@ void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
     ToolBox::MouseButtonUp( rMEvt );
 }
 
-//                  ScInputBarGroup
 
 
 ScInputBarGroup::ScInputBarGroup(Window* pParent, ScTabViewShell* pViewSh)
@@ -1087,6 +1083,7 @@ IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
         aMultiTextWnd.SetNumLines( aMultiTextWnd.GetLastNumExpandedLines() );
     }
     TriggerToolboxLayout();
+
     // Restore focus to input line(s) if necessary
     if (  SC_MOD()->GetInputHdl()->IsTopMode() )
         aMultiTextWnd.GrabFocus();
@@ -1124,6 +1121,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
                 rParent.SetToolbarLayoutMode( TBX_LAYOUT_NORMAL );
             xLayoutManager->lock();
             DataChangedEvent aFakeUpdate( DATACHANGED_SETTINGS, NULL,  SETTINGS_STYLE );
+
             // this basically will trigger the reposititioning of the
             // items in the toolbar from ImplFormat ( which is controlled by
             // mnWinHeight ) which in turn is updated in ImplCalcItem which is
@@ -1131,10 +1129,12 @@ void ScInputBarGroup::TriggerToolboxLayout()
             // controlled via mbFormat. It seems the easiest way to get these
             // booleans set is to send in the fake event below.
             rParent.DataChanged( aFakeUpdate);
+
             // highest item in toolbar will have been calculated via the
             // event above. Call resize on InputBar to pick up the height
             // change
             rParent.Resize();
+
             // unlock relayouts the toolbars in the 4 quadrants
             xLayoutManager->unlock();
         }
@@ -1153,7 +1153,6 @@ void ScInputBarGroup::TextGrabFocus()
 }
 
 
-//                      ScMultiTextWnd
 
 
 ScMultiTextWnd::ScMultiTextWnd( ScInputBarGroup* pParen, ScTabViewShell* pViewSh )
@@ -1289,7 +1288,7 @@ ScMultiTextWnd::DoScroll()
 
 void ScMultiTextWnd::StartEditEngine()
 {
-    //	Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
+    // Don't activate if we're a modal dialog ourselves (Doc-modal dialog)
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
     if ( pObjSh && pObjSh->IsInModalMode() )
         return;
@@ -1386,28 +1385,27 @@ void ScMultiTextWnd::InitEditEngine()
         pEditEngine->SetDefaults( pSet );
     }
 
-    //	Wenn in der Zelle URL-Felder enthalten sind, muessen die auch in
-    //	die Eingabezeile uebernommen werden, weil sonst die Positionen nicht stimmen.
-
+    // If the Cell contains URLFields, they need to be taken over into the entry row,
+    // or else the position is not correct anymore
     bool bFilled = false;
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
-    if ( pHdl )			//!	Testen, ob's der richtige InputHdl ist?
+    if ( pHdl ) //! Test if it's the right InputHdl?
         bFilled = pHdl->GetTextAndFields( *pEditEngine );
 
     pEditEngine->SetUpdateMode( true );
 
-    //	aString ist die Wahrheit...
+    // aString is the truth ...
     if (bFilled && pEditEngine->GetText() == aString)
-        Invalidate();						// Repaint fuer (hinterlegte) Felder
+        Invalidate(); // Repaint for (filled) Field
     else
-        pEditEngine->SetText(aString);		// dann wenigstens den richtigen Text
+        pEditEngine->SetText(aString); // At least the right text then
 
     pEditView = new EditView( pEditEngine, this );
     pEditView->SetInsertMode(bIsInsertMode);
 
-    // Text aus Clipboard wird als ASCII einzeilig uebernommen
+    // Text from Clipboard is taken over as ASCII in a single row
     sal_uLong n = pEditView->GetControlWord();
-    pEditView->SetControlWord( n | EV_CNTRL_SINGLELINEPASTE	);
+    pEditView->SetControlWord( n | EV_CNTRL_SINGLELINEPASTE );
 
     pEditEngine->InsertView( pEditView, EE_APPEND );
 
@@ -1426,7 +1424,7 @@ void ScMultiTextWnd::InitEditEngine()
     //	repaint now to have the EditEngine's version visible
     if (pDocSh)
     {
-        ScDocument* pDoc = pDocSh->GetDocument();	// any document
+        ScDocument* pDoc = pDocSh->GetDocument(); // any document
         sal_uInt8 nScript = pDoc->GetStringScriptType( aString );
         if ( nScript & SCRIPTTYPE_COMPLEX )
             Invalidate();
@@ -1453,7 +1451,6 @@ void ScMultiTextWnd::SetTextString( const OUString& rNewString )
     DoScroll();
 }
 
-// 							ScTextWnd
 
 
 ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
@@ -1466,14 +1463,14 @@ ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
         bInputMode   ( false ),
         mpViewShell(pViewSh)
 {
-    EnableRTL( false );     // EditEngine can't be used with VCL EnableRTL
+    EnableRTL( false ); // EditEngine can't be used with VCL EnableRTL
 
     bIsRTL = GetSettings().GetLayoutRTL();
 
     //  always use application font, so a font with cjk chars can be installed
     Font aAppFont = GetFont();
     aTextFont = aAppFont;
-    aTextFont.SetSize( PixelToLogic( aAppFont.GetSize(), MAP_TWIP ) );  // AppFont ist in Pixeln
+    aTextFont.SetSize( PixelToLogic( aAppFont.GetSize(), MAP_TWIP ) );  // AppFont is in pixels
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
@@ -1517,7 +1514,7 @@ void ScTextWnd::Paint( const Rectangle& rRect )
 
         long nDiff =  GetOutputSizePixel().Height()
                     - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
-//      if (nDiff<2) nDiff=2;       // mind. 1 Pixel
+//      if (nDiff<2) nDiff=2;       // At least 1 pixel
 
         long nStartPos = 0;
         if ( bIsRTL )
@@ -1597,18 +1594,18 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
         // don't modify the font defaults here - the right defaults are
         // already set in StartEditEngine when the EditEngine is created
 
-        // verhindern, dass die EditView beim View-Umschalten wegkommt
+        // Prevent that the EditView is lost when switching between Views
         pScMod->SetInEditCommand( true );
         pEditView->Command( rCEvt );
         pScMod->SetInEditCommand( false );
 
-        //  COMMAND_STARTDRAG heiss noch lange nicht, dass der Inhalt geaendert wurde
-        //  darum in dem Fall kein InputChanged
-        //! erkennen, ob mit Move gedraggt wurde, oder Drag&Move irgendwie verbieten
+        //  COMMAND_STARTDRAG does not mean by far that the content was actually changed,
+        //  so don't trigger an InputChanged.
+        //! Detect if dragged with Move or forbid Drag&Move somehow
 
         if ( nCommand == COMMAND_STARTDRAG )
         {
-            //  ist auf eine andere View gedraggt worden?
+            // Is dragged onto another View?
             ScTabViewShell* pEndViewSh = ScTabViewShell::GetActiveViewShell();
             if ( pEndViewSh != pStartViewSh && pStartViewSh != NULL )
             {
@@ -1617,7 +1614,7 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
                 if ( pHdl && pViewData->HasEditView( pViewData->GetActivePart() ) )
                 {
                     pHdl->CancelHandler();
-                    pViewData->GetView()->ShowCursor();     // fehlt bei KillEditView, weil nicht aktiv
+                    pViewData->GetView()->ShowCursor(); // Missing for KillEditView, due to being inactive
                 }
             }
         }
@@ -1646,7 +1643,7 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
             SC_MOD()->InputChanged( pEditView );
     }
     else
-        Window::Command(rCEvt);     //  sonst soll sich die Basisklasse drum kuemmern...
+        Window::Command(rCEvt); // Or else let the base class handle it...
 
     bInputMode = false;
 }
@@ -1671,7 +1668,7 @@ void ScTextWnd::KeyInput(const KeyEvent& rKEvt)
         bool bUsed = false;
         ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
         if ( pViewSh )
-            bUsed = pViewSh->SfxKeyInput(rKEvt);    // nur Acceleratoren, keine Eingabe
+            bUsed = pViewSh->SfxKeyInput(rKEvt); // Only accelerators, no input
         if (!bUsed)
             Window::KeyInput( rKEvt );
     }
@@ -1682,7 +1679,7 @@ void ScTextWnd::GetFocus()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
-        pViewSh->SetFormShellAtTop( false );     // focus in input line -> FormShell no longer on top
+        pViewSh->SetFormShellAtTop( false ); // focus in input line -> FormShell no longer on top
 }
 
 void ScTextWnd::LoseFocus()
@@ -1691,8 +1688,7 @@ void ScTextWnd::LoseFocus()
 
 OUString ScTextWnd::GetText() const
 {
-    //  ueberladen, um per Testtool an den Text heranzukommen
-
+    //  Overload to get the text via the testtool
     if ( pEditEngine )
         return pEditEngine->GetText();
     else
@@ -1715,9 +1711,10 @@ void ScTextWnd::UpdateAutoCorrFlag()
         sal_uLong nControl = pEditEngine->GetControlWord();
         sal_uLong nOld = nControl;
         if ( bFormulaMode )
-            nControl &= ~EE_CNTRL_AUTOCORRECT;      // keine Autokorrektur in Formeln
+            nControl &= ~EE_CNTRL_AUTOCORRECT; // No AutoCorrect in Formulas
         else
-            nControl |= EE_CNTRL_AUTOCORRECT;       // sonst schon
+            nControl |= EE_CNTRL_AUTOCORRECT; // Else do enable it
+
         if ( nControl != nOld )
             pEditEngine->SetControlWord( nControl );
     }
@@ -1726,7 +1723,7 @@ void ScTextWnd::UpdateAutoCorrFlag()
 
 void ScTextWnd::StartEditEngine()
 {
-    //  Bei "eigener Modalitaet" (Doc-modale Dialoge) nicht aktivieren
+    // Don't activate if we're a modal ourselves (Doc modal Dialog)
     SfxObjectShell* pObjSh = SfxObjectShell::Current();
     if ( pObjSh && pObjSh->IsInModalMode() )
         return;
@@ -1756,6 +1753,7 @@ void ScTextWnd::StartEditEngine()
             SfxItemSet* pSet = new SfxItemSet( pEditEngine->GetEmptyItemSet() );
             EditEngine::SetFontInfoInItemSet( *pSet, aTextFont );
             lcl_ExtendEditFontAttribs( *pSet );
+
             // turn off script spacing to match DrawText output
             pSet->Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
             if ( bIsRTL )
@@ -1763,26 +1761,25 @@ void ScTextWnd::StartEditEngine()
             pEditEngine->SetDefaults( pSet );
         }
 
-        //  Wenn in der Zelle URL-Felder enthalten sind, muessen die auch in
-        //  die Eingabezeile uebernommen werden, weil sonst die Positionen nicht stimmen.
-
+        // If the Cell contains URLFields, they need to be taken over into the entry row,
+        // or else the position is not correct anymore
         bool bFilled = false;
         ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
-        if ( pHdl )         //! Testen, ob's der richtige InputHdl ist?
+        if ( pHdl ) //! Check if it's the right InputHdl?
             bFilled = pHdl->GetTextAndFields( *pEditEngine );
 
         pEditEngine->SetUpdateMode( true );
 
-        //  aString ist die Wahrheit...
+        //  aString is the truth...
         if (bFilled && pEditEngine->GetText() == aString)
-            Invalidate();                       // Repaint fuer (hinterlegte) Felder
+            Invalidate(); // Repaint for (filled) Fields
         else
-            pEditEngine->SetText(aString);      // dann wenigstens den richtigen Text
+            pEditEngine->SetText(aString); // At least the right text then
 
         pEditView = new EditView( pEditEngine, this );
         pEditView->SetInsertMode(bIsInsertMode);
 
-        // Text aus Clipboard wird als ASCII einzeilig uebernommen
+        // The text from the Clipboard is taken over as ASCII in a single row
         sal_uLong n = pEditView->GetControlWord();
         pEditView->SetControlWord( n | EV_CNTRL_SINGLELINEPASTE );
 
@@ -1859,7 +1856,7 @@ void ScTextWnd::StopEditEngine( bool bAll )
             pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
 
         if (bSelection)
-            Invalidate();           // damit Selektion nicht stehenbleibt
+            Invalidate(); // So that the Selection is not left there
     }
 }
 
@@ -1888,8 +1885,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
     {
         bInputMode = true;
 
-        //  Position der Aenderung suchen, nur Rest painten
-
+        // Find position of the change, only paint the rest
         if (!pEditEngine)
         {
             bool bPaintAll;
@@ -1930,7 +1926,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
                 if ( nSize1>0 && nSize2>0 )
                     nTextSize = std::max( nSize1, nSize2 );
                 else
-                    nTextSize = GetOutputSize().Width();        // Ueberlauf
+                    nTextSize = GetOutputSize().Width(); // Overflow
 
                 Point aLogicStart = PixelToLogic(Point(0,0));
                 long nStartPos = aLogicStart.X();
@@ -1939,11 +1935,10 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
                     nInvPos += GetTextWidth(aString,0,nDifPos);
 
                 sal_uInt16 nFlags = 0;
-                if ( nDifPos == aString.getLength() )         // only new characters appended
-                    nFlags = INVALIDATE_NOERASE;        // then background is already clear
-                Invalidate( Rectangle( nInvPos, 0,
-                                        nStartPos+nTextSize, GetOutputSize().Height()-1 ),
-                            nFlags );
+                if ( nDifPos == aString.getLength() ) // only new characters appended
+                    nFlags = INVALIDATE_NOERASE;      // then background is already clear
+
+                Invalidate( Rectangle( nInvPos, 0, nStartPos+nTextSize, GetOutputSize().Height()-1 ), nFlags );
             }
         }
         else
@@ -2071,7 +2066,7 @@ void ScTextWnd::TextGrabFocus()
 }
 
 
-//                          Positionsfenster
+// Position window
 
 
 ScPosWnd::ScPosWnd( Window* pParent ) :
@@ -2082,13 +2077,13 @@ ScPosWnd::ScPosWnd( Window* pParent ) :
 {
     Size aSize( GetTextWidth( OUString("GW99999:GW99999") ),
                 GetTextHeight() );
-    aSize.Width() += 25;    // ??
-    aSize.Height() = CalcWindowSizePixel(11);       // Funktionen: 10 MRU + "andere..."
+    aSize.Width() += 25;    // FIXME: ??
+    aSize.Height() = CalcWindowSizePixel(11); // Functions: 10 MRU + "others..."
     SetSizePixel( aSize );
 
     FillRangeNames();
 
-    StartListening( *SFX_APP() );       // fuer Navigator-Bereichsnamen-Updates
+    StartListening( *SFX_APP() ); // For Navigator rangename updates
 }
 
 ScPosWnd::~ScPosWnd()
@@ -2211,16 +2206,16 @@ void ScPosWnd::FillFunctions()
                     InsertEntry( *pDesc->pFuncName );
                     if (aFirstName.isEmpty())
                         aFirstName = *pDesc->pFuncName;
-                    break;  // nicht weitersuchen
+                    break; // Stop searching
                 }
             }
         }
     }
 
-    //! Eintrag "Andere..." fuer Funktions-Autopilot wieder aufnehmen,
-    //! wenn der Funktions-Autopilot mit dem bisher eingegebenen Text arbeiten kann!
+    //! Re-add entry "Other..." for Function AutoPilot if it can work with text that
+    // has been entered so far
 
-//  InsertEntry( ScGlobal::GetRscString(STR_FUNCTIONLIST_MORE) );
+    //  InsertEntry( ScGlobal::GetRscString(STR_FUNCTIONLIST_MORE) );
 
     SetText(aFirstName);
 }
@@ -2229,8 +2224,7 @@ void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( !bFormulaMode )
     {
-        //  muss die Liste der Bereichsnamen updgedated werden?
-
+        // Does the list of range names need updating?
         if ( rHint.ISA(SfxSimpleHint) )
         {
             sal_uLong nHintId = ((SfxSimpleHint&)rHint).GetId();
@@ -2365,7 +2359,7 @@ void ScPosWnd::Modify()
 
 void ScPosWnd::Select()
 {
-    ComboBox::Select();     //  in VCL gibt GetText() erst danach den ausgewaehlten Eintrag
+    ComboBox::Select(); //  In VCL GetText() only return the selected entry afterwards
 
     HideTip();
 
@@ -2383,8 +2377,8 @@ void ScPosWnd::DoEnter()
             ScModule* pScMod = SC_MOD();
             if ( aText == ScGlobal::GetRscString(STR_FUNCTIONLIST_MORE) )
             {
-                //  Funktions-Autopilot
-                //! mit dem bisher eingegebenen Text weiterarbeiten !!!
+                // Function AutoPilot
+                //! Continue working with the text entered so far
 
                 //! new method at ScModule to query if function autopilot is open
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
@@ -2532,8 +2526,7 @@ void ScPosWnd::ReleaseFocus_Impl()
     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( PTR_CAST( ScTabViewShell, pCurSh ) );
     if ( pHdl && pHdl->IsTopMode() )
     {
-        //  Focus wieder in die Eingabezeile?
-
+        // Focus back in input row?
         ScInputWindow* pInputWin = pHdl->GetInputWindow();
         if (pInputWin)
         {
@@ -2542,8 +2535,7 @@ void ScPosWnd::ReleaseFocus_Impl()
         }
     }
 
-    //  Focus auf die aktive View
-
+    // Set focus to active View
     if ( pCurSh )
     {
         Window* pShellWnd = pCurSh->GetWindow();
@@ -2552,8 +2544,5 @@ void ScPosWnd::ReleaseFocus_Impl()
             pShellWnd->GrabFocus();
     }
 }
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
