@@ -116,7 +116,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     float nYPos = 0.0;
 
     const Color aSeriesColor[] = {
-        COL_RED, COL_GREEN, COL_YELLOW, COL_BROWN, COL_GRAY
+        COL_RED, COL_GREEN, COL_YELLOW, COL_BROWN, COL_BLUE
     };
 
     maCategories.clear();
