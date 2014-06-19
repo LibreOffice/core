@@ -1906,14 +1906,19 @@ std::vector<Color> SwDoc::GetDocColors()
         while( nWhich )
         {
             const SfxPoolItem *pItem;
-            if( SFX_ITEM_SET == pItemSet->GetItemState( nWhich, false, &pItem ) &&
-                RES_CHRATR_COLOR == pItem->Which() )
+            if( SFX_ITEM_SET == pItemSet->GetItemState( nWhich, false, &pItem ) )
             {
-                Color aColor( ((SvxColorItem*)pItem)->GetValue() );
-                if( COL_AUTO != aColor.GetColor() &&
-                    std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
+                sal_uInt16 aWhich = pItem->Which();
+                if( RES_CHRATR_COLOR        == aWhich ||
+                    RES_CHRATR_HIGHLIGHT    == aWhich ||
+                    RES_BACKGROUND          == aWhich )
                 {
-                    docColors.push_back( aColor );
+                    Color aColor( ((SvxColorItem*)pItem)->GetValue() );
+                    if( COL_AUTO != aColor.GetColor() &&
+                        std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
+                    {
+                        docColors.push_back( aColor );
+                    }
                 }
             }
 
