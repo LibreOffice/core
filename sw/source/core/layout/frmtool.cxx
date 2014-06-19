@@ -25,6 +25,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/lspcitem.hxx>
 
+#include <drawdoc.hxx>
 #include <fmtornt.hxx>
 #include <fmthdft.hxx>
 #include <fmtfsize.hxx>

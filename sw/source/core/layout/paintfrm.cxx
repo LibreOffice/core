@@ -28,6 +28,7 @@
 #include <editeng/shaditem.hxx>
 #include <svx/framelink.hxx>
 #include <svx/xflgrit.hxx>
+#include <drawdoc.hxx>
 #include <tgrditem.hxx>
 #include <switerator.hxx>
 #include <fmtsrnd.hxx>

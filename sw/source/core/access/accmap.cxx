@@ -65,6 +65,7 @@
 #include <svx/unoapi.hxx>
 #include <svx/svdmark.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <dflyobj.hxx>

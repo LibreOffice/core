@@ -34,6 +34,7 @@
 #include <svx/shapepropertynotifier.hxx>
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <drawdoc.hxx>
 #include <fmtornt.hxx>
 #include <viewimp.hxx>
 #include <fmtsrnd.hxx>

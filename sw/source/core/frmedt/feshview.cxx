@@ -39,6 +39,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <DocumentSettingManager.hxx>
 #include <cmdid.h>
+#include <drawdoc.hxx>
 #include <poolfmt.hrc>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>

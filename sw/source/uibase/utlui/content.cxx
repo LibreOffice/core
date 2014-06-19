@@ -34,6 +34,7 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
+#include <drawdoc.hxx>
 #include <content.hxx>
 #include <frmfmt.hxx>
 #include <fldbas.hxx>

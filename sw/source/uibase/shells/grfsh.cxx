@@ -45,6 +45,7 @@
 #include <svx/compressgraphicdialog.hxx>
 #include <vcl/GraphicNativeTransform.hxx>
 #include <svx/tbxcolor.hxx>
+#include <drawdoc.hxx>
 #include <fmturl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>

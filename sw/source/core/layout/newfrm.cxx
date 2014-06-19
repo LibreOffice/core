@@ -19,6 +19,7 @@
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
+#include <drawdoc.hxx>
 #include <fmtpdsc.hxx>
 #include <swtable.hxx>
 #include <rootfrm.hxx>

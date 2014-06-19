@@ -22,7 +22,7 @@
 
 #include <svx/svdtypes.hxx>
 
-class SdrModel;
+class SwDrawDocument;
 class SdrPageView;
 
 class IDocumentDrawModelAccess
@@ -31,10 +31,10 @@ public:
 
     /** Draw Model and id accessors
      */
-    virtual const SdrModel* GetDrawModel() const = 0;
-    virtual SdrModel* GetDrawModel() = 0;
-    virtual SdrModel* _MakeDrawModel() = 0;
-    virtual SdrModel* GetOrCreateDrawModel() = 0;
+    virtual const SwDrawDocument* GetDrawModel() const = 0;
+    virtual SwDrawDocument* GetDrawModel() = 0;
+    virtual SwDrawDocument* _MakeDrawModel() = 0;
+    virtual SwDrawDocument* GetOrCreateDrawModel() = 0;
     virtual SdrLayerID GetHeavenId() const = 0;
     virtual SdrLayerID GetHellId() const = 0;
     virtual SdrLayerID GetControlsId() const = 0;

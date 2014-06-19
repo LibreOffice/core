@@ -62,6 +62,7 @@
 #include <fmtcntnt.hxx>
 #include <ndindex.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <docary.hxx>

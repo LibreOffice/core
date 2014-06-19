@@ -24,6 +24,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
 #include <unotools/compatibility.hxx>
+#include <drawdoc.hxx>
 #include <swmodule.hxx>
 #include <linkenum.hxx>
 #include <rootfrm.hxx>

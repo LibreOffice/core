@@ -42,6 +42,7 @@
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <SwStyleNameMapper.hxx>
+#include <drawdoc.hxx>
 #include <fchrfmt.hxx>
 #include <frmatr.hxx>
 #include <txatbase.hxx>

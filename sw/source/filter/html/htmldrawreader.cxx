@@ -39,6 +39,7 @@
 #include <svx/svdpool.hxx>
 
 #include "charatr.hxx"
+#include "drawdoc.hxx"
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>

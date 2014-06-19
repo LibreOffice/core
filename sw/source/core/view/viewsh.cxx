@@ -27,6 +27,7 @@
 #include <svx/srchdlg.hxx>
 #include <svx/svdobj.hxx>
 #include <sfx2/viewsh.hxx>
+#include <drawdoc.hxx>
 #include <swwait.hxx>
 #include <swmodule.hxx>
 #include <fesh.hxx>
