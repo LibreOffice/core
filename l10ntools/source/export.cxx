@@ -637,7 +637,7 @@ int Export::Execute( int nToken, const char * pToken )
         case RSCDEFINELEND:
         break;
         case CONDITION: {
-            if ( nLevel ) {
+            if ( nLevel && pResData ) {
                 WriteData( pResData, true );
             }
         }
