@@ -111,8 +111,10 @@ public:
     virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
     virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE;
     virtual Kind getKind() SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string getName() const SAL_OVERRIDE;
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
 private:
     Id m_nKeyword;
     RTFValue::Pointer_t& m_pValue;

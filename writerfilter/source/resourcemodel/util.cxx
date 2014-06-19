@@ -36,8 +36,7 @@ namespace writerfilter
 using namespace com::sun::star;
 using namespace std;
 
-#if OSL_DEBUG_LEVEL > 1
-
+#ifdef DEBUG_DOMAINMAPPER
 string toString(uno::Reference< text::XTextRange > textRange)
 {
     string result;
@@ -56,8 +55,8 @@ string toString(uno::Reference< text::XTextRange > textRange)
 
     return result;
 }
-
 #endif
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

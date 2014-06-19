@@ -63,7 +63,9 @@ print("""const Token_t OOXML_FAST_TOKENS_END =5805;
 namespace writerfilter {
 namespace ooxml {
 
+#ifdef DEBUG_DOMAINMAPPER
 string fastTokenToId(sal_uInt32 nToken);
+#endif
 
 }}
 

@@ -26,7 +26,7 @@
 
 namespace writerfilter
 {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
     std::string toString(css::uno::Reference< css::text::XTextRange > textRange);
 #endif
 }

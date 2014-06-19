@@ -210,6 +210,7 @@ writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
     return writerfilter::Reference<BinaryObj>::Pointer_t();
 }
 
+#ifdef DEBUG_DOMAINMAPPER
 std::string RTFValue::toString() const
 {
     if (!m_sValue.isEmpty() || m_bForceString)
@@ -217,6 +218,7 @@ std::string RTFValue::toString() const
     else
         return OString::number(m_nValue).getStr();
 }
+#endif
 
 RTFValue* RTFValue::Clone()
 {

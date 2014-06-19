@@ -87,7 +87,7 @@ static string resourceToString
 
 set<OOXMLFastContextHandler *> aSetContexts;
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 class OOXMLIdToString : public IdToString
 {
 public:
@@ -377,7 +377,7 @@ void OOXMLFastContextHandler::endAction(Token_t Element)
     OOXMLFactory::getInstance()->endAction(this, Element);
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 void OOXMLFastContextHandler::dumpXml( const TagLogger::Pointer_t pLogger ) const
 {
     pLogger->startElement("context");
@@ -1088,7 +1088,7 @@ OOXMLValue::Pointer_t OOXMLFastContextHandlerProperties::getValue() const
     return OOXMLValue::Pointer_t(new OOXMLPropertySetValue(mpPropertySet));
 }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG_DOMAINMAPPER
 void OOXMLFastContextHandlerProperties::dumpXml( const TagLogger::Pointer_t pLogger) const
 {
     pLogger->startElement("context");

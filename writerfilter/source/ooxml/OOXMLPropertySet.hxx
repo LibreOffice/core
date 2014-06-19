@@ -37,8 +37,10 @@ public:
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE = 0;
     virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE = 0;
     virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE = 0;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string getName() const SAL_OVERRIDE = 0;
     virtual std::string toString() const SAL_OVERRIDE = 0;
+#endif
     virtual void resolve(Properties & rProperties) = 0;
 
     virtual Sprm * clone() = 0;
@@ -58,7 +60,9 @@ public:
     virtual OOXMLPropertySet * clone() const = 0;
     virtual void setType(const std::string & rsType) = 0;
 
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() = 0;
+#endif
 };
 
 class OOXMLTable : public writerfilter::Reference<Table>

@@ -49,7 +49,9 @@ public:
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
     virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const;
 };
 
@@ -74,9 +76,13 @@ public:
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
     virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
     virtual writerfilter::Reference<Properties>::Pointer_t getProps() SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string getName() const SAL_OVERRIDE;
+#endif
     virtual Kind getKind() SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual Sprm * clone() SAL_OVERRIDE;
     virtual void resolve(Properties & rProperties) SAL_OVERRIDE;
 };
@@ -90,7 +96,9 @@ public:
     virtual ~OOXMLBinaryValue();
 
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
@@ -106,7 +114,9 @@ public:
     virtual int getInt() const SAL_OVERRIDE;
     virtual bool getBool() const SAL_OVERRIDE;
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
@@ -120,7 +130,9 @@ public:
 
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
     virtual OUString getString() const SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
@@ -134,7 +146,9 @@ public:
     virtual ~OOXMLInputStreamValue();
 
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
@@ -168,7 +182,9 @@ public:
 
     virtual void setType(const std::string & rsType) SAL_OVERRIDE;
 
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() SAL_OVERRIDE;
+#endif
 };
 
 class OOXMLPropertySetValue : public OOXMLValue
@@ -179,7 +195,9 @@ public:
     virtual ~OOXMLPropertySetValue();
 
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
@@ -194,7 +212,9 @@ public:
 
     virtual int getInt() const SAL_OVERRIDE;
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
@@ -208,7 +228,9 @@ public:
     virtual ~OOXMLHexValue();
 
     virtual int getInt() const SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
@@ -222,7 +244,9 @@ public:
     virtual ~OOXMLUniversalMeasureValue();
 
     virtual int getInt() const SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue* clone() const SAL_OVERRIDE;
 };
 
@@ -235,7 +259,9 @@ public:
     virtual ~OOXMLShapeValue();
 
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 
@@ -248,7 +274,9 @@ public:
     virtual ~OOXMLStarMathValue();
 
     virtual css::uno::Any getAny() const SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual OOXMLValue * clone() const SAL_OVERRIDE;
 };
 

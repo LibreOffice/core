@@ -333,7 +333,9 @@ public:
     /**
        Returns string representation of this value.
      */
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const = 0;
+#endif
 };
 
 /**
@@ -382,12 +384,16 @@ public:
     /**
        Returns name of sprm.
     */
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string getName() const = 0;
+#endif
 
     /**
        Returns string repesentation of sprm.
      */
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const = 0;
+#endif
 
 protected:
     ~Sprm() {}
