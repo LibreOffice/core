@@ -768,13 +768,15 @@ int RTFDocumentImpl::resolvePict(bool bInline)
 
     // Wrap it in an XShape.
     uno::Reference<drawing::XShape> xShape;
-    xShape = m_pSdrImport->getCurrentShape();//Mapper().PopPendingShape();
+    xShape = m_pSdrImport->getCurrentShape();
     if (xShape.is())
     {
         uno::Reference<lang::XServiceInfo> xSI(xShape, uno::UNO_QUERY_THROW);
-        assert(xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"));
+        if(!xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+            xShape.clear();
     }
-    else
+
+    if (!xShape.is())
     {
         if (m_xModelFactory.is())
             xShape.set(m_xModelFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
