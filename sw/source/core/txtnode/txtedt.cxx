@@ -47,6 +47,7 @@
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <SwGrammarMarkUp.hxx>
+#include <rootfrm.hxx>
 
 #include <txttypes.hxx>
 #include <breakit.hxx>
@@ -1292,7 +1293,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
     bool bFresh = nBegin < nEnd;
 
-    if( nBegin < nEnd )
+    if( bFresh )
     {
         //! register listener to LinguServiceEvents now in order to get
         //! notified about relevant changes in the future
@@ -1374,6 +1375,11 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
         if( nChgStart < nChgEnd )
         {
             aRect = lcl_CalculateRepaintRect( *this, nChgStart, nChgEnd );
+
+            // fdo#71558 notify mispelled word to accessibility
+            SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
+            if( pViewSh )
+                pViewSh->InvalidateAccessibleParaAttrs( *this );
         }
 
         pNode->GetWrong()->SetInvalid( nInvStart, nInvEnd );
