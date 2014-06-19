@@ -19,9 +19,9 @@
 
 #include <osl/diagnose.h>
 
-#include "oox/drawingml/table/tablepartstylecontext.hxx"
-#include "oox/drawingml/table/tablestyletextstylecontext.hxx"
-#include "oox/drawingml/table/tablestylecellstylecontext.hxx"
+#include "drawingml/table/tablepartstylecontext.hxx"
+#include "drawingml/table/tablestyletextstylecontext.hxx"
+#include "drawingml/table/tablestylecellstylecontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

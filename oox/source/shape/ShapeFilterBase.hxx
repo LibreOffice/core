@@ -23,7 +23,7 @@
 #include <boost/shared_ptr.hpp>
 #include <rtl/ref.hxx>
 #include "oox/vml/vmldrawing.hxx"
-#include "oox/drawingml/table/tablestylelist.hxx"
+#include "drawingml/table/tablestylelist.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 

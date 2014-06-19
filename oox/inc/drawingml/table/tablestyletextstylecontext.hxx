@@ -18,24 +18,25 @@
  */
 
 
-#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLEPARTSTYLECONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_TABLE_TABLEPARTSTYLECONTEXT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLETEXTSTYLECONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLETEXTSTYLECONTEXT_HXX
 
-#include <oox/core/contexthandler2.hxx>
-#include <oox/drawingml/table/tablestylepart.hxx>
+#include <oox/core/contexthandler.hxx>
+#include <drawingml/table/tablestylepart.hxx>
 
 namespace oox { namespace drawingml { namespace table {
 
-class TablePartStyleContext : public ::oox::core::ContextHandler2
+class TableStyleTextStyleContext : public ::oox::core::ContextHandler2
 {
 public:
-    TablePartStyleContext( ::oox::core::ContextHandler2Helper& rParent, TableStylePart& rTableStylePart );
-    virtual ~TablePartStyleContext();
+    TableStyleTextStyleContext( ::oox::core::ContextHandler2Helper& rParent,
+            const ::oox::AttributeList& rAttribs,
+            TableStylePart& rTableStylePart );
+    virtual ~TableStyleTextStyleContext();
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
-
     TableStylePart& mrTableStylePart;
 };
 

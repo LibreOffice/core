@@ -19,7 +19,7 @@
 
 #include <osl/diagnose.h>
 
-#include "oox/drawingml/table/tablecellcontext.hxx"
+#include "drawingml/table/tablecellcontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/linepropertiescontext.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"

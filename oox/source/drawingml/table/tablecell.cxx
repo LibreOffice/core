@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/table/tablecell.hxx"
-#include "oox/drawingml/table/tableproperties.hxx"
+#include "drawingml/table/tablecell.hxx"
+#include "drawingml/table/tableproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/core/xmlfilterbase.hxx"

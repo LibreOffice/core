@@ -20,10 +20,10 @@
 #include <osl/diagnose.h>
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/guidcontext.hxx"
-#include "oox/drawingml/table/tablecontext.hxx"
-#include "oox/drawingml/table/tableproperties.hxx"
-#include "oox/drawingml/table/tablestylecontext.hxx"
-#include "oox/drawingml/table/tablerowcontext.hxx"
+#include "drawingml/table/tablecontext.hxx"
+#include "drawingml/table/tableproperties.hxx"
+#include "drawingml/table/tablestylecontext.hxx"
+#include "drawingml/table/tablerowcontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

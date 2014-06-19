@@ -25,7 +25,7 @@
 #include "effectproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
-#include "oox/drawingml/table/tableproperties.hxx"
+#include "drawingml/table/tableproperties.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/drawingml/chart/chartspacefragment.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
