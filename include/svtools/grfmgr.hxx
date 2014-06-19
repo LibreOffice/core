@@ -175,6 +175,10 @@ private:
     Timer*                  mpSwapOutTimer;
     GrfSimpleCacheObj*      mpSimpleCache;
     sal_uLong               mnAnimationLoopCount;
+
+    // a unique increasing ID to be able to say which data change is older
+    sal_uLong               mnDataChangeTimeStamp;
+
     bool                    mbAutoSwapped   : 1;
     bool                    mbTransparent   : 1;
     bool                    mbAnimated      : 1;
@@ -299,8 +303,12 @@ private:
 
                             DECL_LINK( ImplAutoSwapOutHdl, void* );
 
-    void SVT_DLLPRIVATE     ResetCacheTimeOut();
+    // restart SwapOut timer; this is like touching in a cache to reset to the full timeout value
+    void SVT_DLLPRIVATE     restartSwapOutTimer() const;
 
+    // Handle evtl. needed AfterDataChanges, needs to be called when new
+    // graphic data is swapped in/added to the GraphicManager
+    void SVT_DLLPRIVATE     ImplAfterDataChange();
 protected:
 
     virtual void            GraphicManagerDestroyed();
@@ -506,6 +514,9 @@ public:
         double fTopCrop,
         double fRightCrop,
         double fBottomCrop) const;
+
+    // read access
+    sal_uLong GetDataChangeTimeStamp() const { return mnDataChangeTimeStamp; }
 };
 
 typedef ::std::vector< GraphicObject* > GraphicObjectList_impl;
@@ -597,12 +608,21 @@ private:
 
     OString SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
 
+    // This method allows to check memory footprint for all currently swapped in GraphicObjects on this GraphicManager
+    // which are based on Bitmaps. This is needed on 32Bit systems and only does something on those systems. The problem
+    // to solve is that normally the SwapOut is timer-driven, but even with short timer settings there are situations
+    // where this does not trigger - or in other words: A maximum limitation for GraphicManagers was not in place before.
+    // For 32Bit systems this leads to situations where graphics will be missing. This method will actively swap out
+    // the longest swapped in graphics until a maximum memory boundary (derived from user settings in tools/options/memory)
+    // is no longer exceeded
+    void SVT_DLLPRIVATE ImplCheckSizeOfSwappedInGraphics();
 public:
 
                         GraphicManager( sal_uLong nCacheSize = 10000000UL, sal_uLong nMaxObjCacheSize = 2400000UL );
                         ~GraphicManager();
 
     void                SetMaxCacheSize( sal_uLong nNewCacheSize );
+    sal_uLong           GetMaxCacheSize() const;
 
     void                SetMaxObjCacheSize(
                             sal_uLong nNewMaxObjSize,

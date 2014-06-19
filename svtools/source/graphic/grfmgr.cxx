@@ -59,6 +59,19 @@ struct GrfSimpleCacheObj
 
 TYPEINIT1_AUTOFACTORY( GraphicObject, SvDataCopyStream );
 
+// unique increasing ID for being able to detect the GraphicObject with the
+// oldest last data changes
+static sal_uLong aIncrementingTimeOfLastDataChange = 1;
+
+void GraphicObject::ImplAfterDataChange()
+{
+    // set unique timestamp ID of last data change
+    mnDataChangeTimeStamp = aIncrementingTimeOfLastDataChange++;
+
+    // check memory footprint of all GraphicObjects managed and evtl. take action
+    GetGraphicManager().ImplCheckSizeOfSwappedInGraphics();
+}
+
 GraphicObject::GraphicObject( const GraphicManager* pMgr ) :
     maLink      (),
     maUserData  ()
@@ -130,6 +143,9 @@ void GraphicObject::ImplConstruct()
     mbAutoSwapped = false;
     mbIsInSwapIn = false;
     mbIsInSwapOut = false;
+
+    // Init with a unique, increasing ID
+    mnDataChangeTimeStamp = aIncrementingTimeOfLastDataChange++;
 }
 
 void GraphicObject::ImplAssignGraphicData()
@@ -243,6 +259,9 @@ void GraphicObject::ImplAutoSwapIn()
             if( !mbAutoSwapped && mpMgr )
                 mpMgr->ImplGraphicObjectWasSwappedIn( *this );
         }
+
+        // Handle evtl. needed AfterDataChanges
+        ImplAfterDataChange();
     }
 }
 
@@ -744,15 +763,6 @@ void GraphicObject::StopAnimation( OutputDevice* pOut, long nExtraData )
         mpSimpleCache->maGraphic.StopAnimation( pOut, nExtraData );
 }
 
-void GraphicObject::ResetCacheTimeOut()
-{
-    if (mpSwapOutTimer)
-    {
-        mpSwapOutTimer->Stop();
-        mpSwapOutTimer->Start();
-    }
-}
-
 const Graphic& GraphicObject::GetGraphic() const
 {
     GraphicObject *pThis = const_cast<GraphicObject*>(this);
@@ -763,7 +773,7 @@ const Graphic& GraphicObject::GetGraphic() const
     //fdo#50697 If we've been asked to provide the graphic, then reset
     //the cache timeout to start from now and not remain at the
     //time of creation
-    pThis->ResetCacheTimeOut();
+    pThis->restartSwapOutTimer();
 
     return maGraphic;
 }
@@ -785,6 +795,9 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const GraphicObject* pC
 
     if( mpSwapOutTimer )
         mpSwapOutTimer->Start();
+
+    // Handle evtl. needed AfterDataChanges
+    ImplAfterDataChange();
 }
 
 void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
@@ -1101,7 +1114,9 @@ bool GraphicObject::SwapIn()
         bRet = true;
     }
     else if( mpMgr && mpMgr->ImplFillSwappedGraphicObject( *this, maGraphic ) )
+    {
         bRet = true;
+    }
     else
     {
         bRet = maGraphic.SwapIn();
@@ -1111,7 +1126,12 @@ bool GraphicObject::SwapIn()
     }
 
     if( bRet )
+    {
         ImplAssignGraphicData();
+
+        // Handle evtl. needed AfterDataChanges
+        ImplAfterDataChange();
+    }
 
     return bRet;
 }
@@ -1295,6 +1315,16 @@ basegfx::B2DVector GraphicObject::calculateCropScaling(
     }
 
     return basegfx::B2DVector(fFactorX,fFactorY);
+}
+
+// restart SwapOut timer
+void GraphicObject::restartSwapOutTimer() const
+{
+    if( mpSwapOutTimer && mpSwapOutTimer->IsActive() )
+    {
+        mpSwapOutTimer->Stop();
+        mpSwapOutTimer->Start();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
