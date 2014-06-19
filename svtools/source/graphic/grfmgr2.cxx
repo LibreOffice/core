@@ -295,6 +295,17 @@ ByteString GraphicManager::ImplGetUniqueID( const GraphicObject& rObj ) const
 
 // -----------------------------------------------------------------------------
 
+namespace
+{
+    struct simpleSortByDataChangeTimeStamp
+    {
+        bool operator() (GraphicObject* p1, GraphicObject* p2) const
+        {
+            return p1->GetDataChangeTimeStamp() < p2->GetDataChangeTimeStamp();
+        }
+    };
+} // end of anonymous namespace
+
 void GraphicManager::ImplCheckSizeOfSwappedInGraphics()
 {
     // only necessary for 32bit systems
@@ -334,14 +345,6 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics()
         if(nUsedSize >= nMaxCacheSize && !aCandidates.empty())
         {
             // if we use more currently, sort by last DataChangeTimeStamp
-            struct simpleSortByDataChangeTimeStamp
-            {
-                bool operator() (GraphicObject* p1, GraphicObject* p2) const
-                {
-                    return p1->GetDataChangeTimeStamp() < p2->GetDataChangeTimeStamp();
-                }
-            };
-
             // sort by DataChangeTimeStamp so that the oldest get removed first
             ::std::sort(aCandidates.begin(), aCandidates.end(), simpleSortByDataChangeTimeStamp());
 
