@@ -95,13 +95,8 @@ protected:
     virtual void LoseFocus() SAL_OVERRIDE;
 
 public:
-    RefButton(Window* _pParent, const ResId& rResId);
     RefButton(Window* _pParent, WinBits nStyle = 0);
-    RefButton(Window* _pParent, const ResId& rResId,
-              RefEdit* pEdit,   IControlReferenceHandler* pDlg);
-
     void SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit );
-
     void SetStartImage();
     void SetEndImage();
     void DoRef()
