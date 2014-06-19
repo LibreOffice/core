@@ -386,10 +386,17 @@ void ScInterpreter::ScIfError( bool bNAonly )
     }
     else
     {
-        // no error, push 1st argument and continue
+        // no error yet, push 1st argument, test and return appropiate value
         nGlobalError = nOldGlobalError;
         PushTempToken( xToken.get());
-        aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
+        if ( nGlobalError )
+        {
+            // error, calculate 2nd argument
+            nGlobalError = 0;
+            aCode.Jump( pJump[ 1 ], pJump[ nJumpCount ] );
+        }
+        else
+            aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
     }
 }
 
