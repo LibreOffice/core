@@ -2843,11 +2843,12 @@ void XMLTextParagraphExport::exportAnyTextFrame(
             else
                 bIsUICharStyle = false;
 
+            bool bDoSomething = bIsUICharStyle
+                && aCharStyleNamesPropInfoCache.hasProperty( *pRangePropSet );
             XMLTextCharStyleNamesElementExport aCharStylesExport(
-                GetExport(), bIsUICharStyle &&
-                             aCharStyleNamesPropInfoCache.hasProperty(
-                                            *pRangePropSet ), bHasAutoStyle,
-                *pRangePropSet, sCharStyleNames );
+                GetExport(), bDoSomething, bHasAutoStyle,
+                bDoSomething ? *pRangePropSet : Reference<XPropertySet>(),
+                sCharStyleNames );
 
             if( !sStyle.isEmpty() )
                 GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_STYLE_NAME,
