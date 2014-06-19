@@ -778,7 +778,10 @@ void SAL_CALL SfxBaseModel::dispose() throw(RuntimeException, std::exception)
 
     m_pData->m_xDocumentMetadata.clear();
 
-    EndListening( *m_pData->m_pObjectShell );
+    if ( m_pData->m_pObjectShell.Is() )
+    {
+        EndListening( *m_pData->m_pObjectShell );
+    }
 
     m_pData->m_xCurrent = Reference< frame::XController > ();
     m_pData->m_seqControllers = Sequence< Reference< frame::XController > > () ;
