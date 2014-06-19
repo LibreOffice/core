@@ -108,7 +108,11 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
                 i_xDocProps->setEditingCycles( nRevision );
         }
 
-        if( xGlobSect->GetFileTimeValue( aDateTime, PROPID_EDITTIME ) )
+        if( xGlobSect->GetFileTimeValue( aDateTime, PROPID_EDITTIME )
+            && !(aDateTime.NanoSeconds == 0 && aDateTime.Seconds == 0
+                 && aDateTime.Minutes == 0 && aDateTime.Hours == 0
+                 && aDateTime.Day == 0 && aDateTime.Month == 0
+                 && aDateTime.Year == 0) )
         {
             // subtract offset 1601-01-01
             aDateTime.Year  -= 1601;
