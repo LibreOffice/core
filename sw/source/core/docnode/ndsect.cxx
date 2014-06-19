@@ -1363,8 +1363,11 @@ void SwSectionNode::NodesArrChgd()
         }
         else
         {
-            if (CONTENT_SECTION != m_pSection->GetType())
+            if (CONTENT_SECTION != m_pSection->GetType()
+                && m_pSection->IsConnected())
+            {
                 pDoc->GetLinkManager().Remove( &m_pSection->GetBaseLink() );
+            }
 
             if (m_pSection->IsServer())
                 pDoc->GetLinkManager().RemoveServer( m_pSection->GetObject() );
