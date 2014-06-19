@@ -376,7 +376,6 @@ bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrmFmt& rFrmFmt)
     if (xPropertySet.is())
         xPropSetInfo = xPropertySet->getPropertySetInfo();
     uno::Any aFrameProperties ;
-    bool bFrameProperties = 0;
     if (xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("FrameInteropGrabBag"))
     {
         uno::Sequence< beans::PropertyValue > propList;
@@ -391,6 +390,7 @@ bool DocxAttributeOutput::TextBoxIsFramePr(const SwFrmFmt& rFrmFmt)
             }
         }
     }
+    bool bFrameProperties = false;
     aFrameProperties >>= bFrameProperties;
     return bFrameProperties;
 }
