@@ -372,7 +372,7 @@ void OpenGL3DRenderer::init()
     CHECK_GL_ERROR();
     glViewport(0, 0, m_iWidth, m_iHeight);
     Set3DSenceInfo(0xFFFFFF, true);
-    m_GlobalScaleMatrix = glm::scale(0.01f, 0.01f, 0.01f);
+    m_GlobalScaleMatrix = glm::scale(glm::vec3(0.01f, 0.01f, 0.01f));
 }
 
 void OpenGL3DRenderer::SetSize(const Size& rSize)
@@ -1949,7 +1949,7 @@ void OpenGL3DRenderer::GetBatchMiddleInfo(const Extrude3DInfo &extrude3D)
     }
     else
     {
-        glm::mat4 scale = glm::scale(xyScale, xyScale,actualZScale);
+        glm::mat4 scale = glm::scale(glm::vec3(xyScale, xyScale,actualZScale));
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * scale;
     }
@@ -1975,7 +1975,7 @@ void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
         // the height of rounded corner is higher than the cube than use the org scale matrix
         //yScale /= (float)(1 + BOTTOM_THRESHOLD);
         zScale /= (float)(m_RoundBarMesh.bottomThreshold);
-        glm::mat4 scale = glm::scale(xyScale, xyScale, zScale);
+        glm::mat4 scale = glm::scale(glm::vec3(xyScale, xyScale, zScale));
         //MoveModelf(trans, angle, scale);
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * scale * orgTrans;
@@ -1984,7 +1984,7 @@ void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
     {
         // use different matrices for different parts
         glm::mat4 topTrans = glm::translate(glm::vec3(0.0, 0.0, actualZTrans));
-        glm::mat4 topScale = glm::scale(xyScale, xyScale, xyScale);
+        glm::mat4 topScale = glm::scale(glm::vec3(xyScale, xyScale, xyScale));
         glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
         m_Model = aTranslationMatrix * extrude3D.rotation * topTrans * topScale * orgTrans;
     }
@@ -1996,7 +1996,7 @@ void OpenGL3DRenderer::GetBatchTopAndFlatInfo(const Extrude3DInfo &extrude3D)
     m_BarSurface[TOP_SURFACE].colorList.push_back(extrude3D.material.materialColor);
 
     glm::mat4 aTranslationMatrix = glm::translate(glm::vec3(trans.x, trans.y, trans.z));
-    glm::mat4 flatScale = glm::scale(xyScale, xyScale, xyScale);
+    glm::mat4 flatScale = glm::scale(glm::vec3(xyScale, xyScale, xyScale));
     m_Model = aTranslationMatrix * extrude3D.rotation * flatScale;
     m_Model =m_GlobalScaleMatrix * m_Model;
     normalMatrix = glm::mat3(m_Model);
@@ -2022,7 +2022,7 @@ void OpenGL3DRenderer::GetBatchBarsInfo()
         else
         {
             glm::mat4 transformMatrix = glm::translate(glm::vec3(extrude3DInfo.xTransform, extrude3DInfo.yTransform, extrude3DInfo.zTransform));
-            glm::mat4 scaleMatrix = glm::scale(extrude3DInfo.xScale, extrude3DInfo.yScale, extrude3DInfo.zScale);
+            glm::mat4 scaleMatrix = glm::scale(glm::vec3(extrude3DInfo.xScale, extrude3DInfo.yScale, extrude3DInfo.zScale));
             m_Model = transformMatrix * extrude3DInfo.rotation * scaleMatrix;
             m_Model = m_GlobalScaleMatrix * m_Model;
             glm::mat3 normalMatrix(m_Model);
