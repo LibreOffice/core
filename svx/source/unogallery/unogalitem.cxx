@@ -250,13 +250,12 @@ sal_Int8 SAL_CALL GalleryItem::getType()
     return pRet;
 }
 
-
-
 void GalleryItem::_setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const uno::Any* pValues )
-    throw( beans::UnknownPropertyException,
+    throw (beans::UnknownPropertyException,
            beans::PropertyVetoException,
            lang::IllegalArgumentException,
-           lang::WrappedTargetException )
+           lang::WrappedTargetException,
+           uno::RuntimeException)
 {
     const SolarMutexGuard aGuard;
 
