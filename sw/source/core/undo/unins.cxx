@@ -435,7 +435,7 @@ void SwUndoInsert::RepeatImpl(::sw::RepeatContext & rContext)
             // TODO/LATER: Copying through the container would copy the replacement image as well
             comphelper::EmbeddedObjectContainer aCnt;
             OUString aName = aCnt.CreateUniqueObjectName();
-            if ( aCnt.StoreEmbeddedObject( rSwOLE.GetOleRef(), aName, true ) )
+            if (aCnt.StoreEmbeddedObject(rSwOLE.GetOleRef(), aName, true, OUString(), OUString()))
             {
                 uno::Reference < embed::XEmbeddedObject > aNew = aCnt.GetEmbeddedObject( aName );
                 rDoc.Insert( rContext.GetRepeatPaM(),

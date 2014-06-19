@@ -90,6 +90,8 @@ public:
     void                SetDragSourceFlags( sal_uInt16 nFlags );
     void                SetDragWasInternal();
 
+    OUString GetShellID() const;
+
     SdrView*            GetDragSourceView()             { return pDragSourceView; }
     sal_uInt16              GetDragSourceFlags() const      { return nDragSourceFlags; }
 

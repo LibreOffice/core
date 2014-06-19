@@ -689,6 +689,11 @@ void ScDrawTransferObj::SetDragWasInternal()
     bDragWasInternal = true;
 }
 
+OUString ScDrawTransferObj::GetShellID() const
+{
+    return maShellID;
+}
+
 SdrOle2Obj* ScDrawTransferObj::GetSingleObject()
 {
     //  if single OLE object was copied, get its object
@@ -748,7 +753,10 @@ void ScDrawTransferObj::InitDocShell()
         // SdrExchangeView aDestView( pDestModel );
         SdrView aDestView( pDestModel );
         aDestView.ShowSdrPage(aDestView.GetModel()->GetPage(0));
-        aDestView.Paste( *pModel, Point( aSrcSize.Width()/2, aSrcSize.Height()/2 ) );
+        aDestView.Paste(
+            *pModel,
+            Point(aSrcSize.Width()/2, aSrcSize.Height()/2),
+            NULL, 0, OUString(), OUString());
 
         // put objects to right layer (see ScViewFunc::PasteDataFormat for SOT_FORMATSTR_ID_DRAWING)
 

@@ -108,8 +108,6 @@ public:
 
     // for copying complete form structures, not only control models
     virtual SdrModel* GetMarkedObjModel() const SAL_OVERRIDE;
-    using E3dView::Paste;
-    virtual bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0) SAL_OVERRIDE;
 
     virtual bool MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin ) SAL_OVERRIDE;
 

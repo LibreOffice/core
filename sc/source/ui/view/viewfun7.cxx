@@ -74,8 +74,10 @@ static void lcl_AdjustInsertPos( ScViewData* pData, Point& rPos, Size& rSize )
 }
 
 void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
-        bool bGroup, bool bSameDocClipboard )
+        bool bGroup, const OUString& rSrcShellID, const OUString& rDestShellID )
 {
+    bool bSameDocClipboard = rSrcShellID == rDestShellID;
+
     MakeDrawLayer();
     Point aPos( rLogicPos );
 
@@ -221,7 +223,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( !bSameDocClipboard )
             GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( true );
 
-        pScDrawView->Paste( *pModel, aPos, NULL, nOptions );
+        pScDrawView->Paste(*pModel, aPos, NULL, nOptions, rSrcShellID, rDestShellID);
 
         if ( !bSameDocClipboard )
             GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( false );
