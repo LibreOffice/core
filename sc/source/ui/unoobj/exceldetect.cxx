@@ -58,14 +58,24 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
     pStream->Seek(0);
 
     if (!nSize)
+    {
         // 0-size stream.  Failed.
         return false;
+    }
 
-    SotStorageRef xStorage = new SotStorage(pStream, false);
-    if (!xStorage.Is() || xStorage->GetError())
-        return false;
+    try
+    {
+        SotStorageRef xStorage = new SotStorage(pStream, false);
+        if (!xStorage.Is() || xStorage->GetError())
+            return false;
+        return xStorage->IsStream(rName);
+    }
+    catch (const css::ucb::ContentCreationException &e)
+    {
+        SAL_WARN("sc", "hasStream caught " << e.Message);
+    }
 
-    return xStorage->IsStream(rName);
+    return false;
 }
 
 /**
