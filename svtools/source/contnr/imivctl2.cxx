@@ -580,7 +580,7 @@ void IcnGridMap_Impl::Create_Impl()
 
     size_t nCellCount = static_cast<size_t>(_nGridRows) * _nGridCols;
     _pGridMap = new bool[nCellCount];
-    memset(_pGridMap, 0, nCellCount);
+    memset(_pGridMap, 0, nCellCount * sizeof(bool));
 
     const size_t nCount = _pView->aEntries.size();
     for( size_t nCur=0; nCur < nCount; nCur++ )
