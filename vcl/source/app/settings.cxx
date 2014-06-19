@@ -2095,7 +2095,6 @@ static BitmapEx readBitmapEx( const OUString& rPath )
     Graphic aGraphic;
     if ( GraphicFilter::LoadGraphic( aPath, OUString(), aGraphic ) != GRFILTER_OK )
         return BitmapEx();
-
     return aGraphic.GetBitmapEx();
 }
 
@@ -2123,7 +2122,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 
     // now read the new values and setup bitmaps
     OUString aHeader, aFooter;
-    if ( aPersona == "own" )
+    if ( aPersona == "own" || aPersona == "default" )
     {
         sal_Int32 nIndex = 0;
         aHeader = aPersonaSettings.getToken( 0, ';', nIndex );
@@ -2136,11 +2135,6 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
             OUString aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
             rMenuBarTextColor = Color( aColor.toUInt64( 16 ) );
         }
-    }
-    else if ( aPersona == "default" )
-    {
-        aHeader = "header.jpg";
-        aFooter = "footer.jpg";
     }
 
     OUString aName;
