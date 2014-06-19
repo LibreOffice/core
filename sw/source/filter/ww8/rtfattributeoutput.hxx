@@ -76,7 +76,10 @@ public:
 
     // Access to (anyway) private buffers, used by the sdr exporter
     OStringBuffer& RunText();
-    OStringBuffer& Styles() { return m_aStyles; }
+    OStringBuffer& Styles()
+    {
+        return m_aStyles;
+    }
 
     /// Output text (without markup).
     virtual void RawText(const OUString& rText, bool bForceUnicode, rtl_TextEncoding eCharSet) SAL_OVERRIDE;

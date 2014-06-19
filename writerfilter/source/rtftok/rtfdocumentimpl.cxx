@@ -443,12 +443,9 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
     {
         RTFReferenceProperties& rProps = *(RTFReferenceProperties*)it->second.get();
         // Get rid of direct formatting what is already in the style.
-        RTFSprms const sprms(
-                rSprms.cloneAndDeduplicate(rProps.getSprms()));
-        RTFSprms const attributes(
-                rAttributes.cloneAndDeduplicate(rProps.getAttributes()));
-        return writerfilter::Reference<Properties>::Pointer_t(
-                new RTFReferenceProperties(attributes, sprms));
+        RTFSprms const sprms(rSprms.cloneAndDeduplicate(rProps.getSprms()));
+        RTFSprms const attributes(rAttributes.cloneAndDeduplicate(rProps.getAttributes()));
+        return writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(attributes, sprms));
     }
     writerfilter::Reference<Properties>::Pointer_t pRet(new RTFReferenceProperties(rAttributes, rSprms));
     return pRet;
@@ -2782,8 +2779,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             OUString const aName = getStyleName(0);
             if (!aName.isEmpty())
             {
-                m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle,
-                    RTFValue::Pointer_t(new RTFValue(aName)));
+                m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_pStyle, RTFValue::Pointer_t(new RTFValue(aName)));
                 m_aStates.top().nCurrentStyleIndex = 0;
             }
             else
@@ -3355,10 +3351,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     {
     case RTF_FS:
     case RTF_AFS:
-        nSprm = (m_aStates.top().isRightToLeft
-                        || m_aStates.top().eRunType == RTFParserState::HICH)
-                ? NS_ooxml::LN_EG_RPrBase_szCs
-                : NS_ooxml::LN_EG_RPrBase_sz;
+        nSprm = (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::HICH) ? NS_ooxml::LN_EG_RPrBase_szCs : NS_ooxml::LN_EG_RPrBase_sz;
         break;
     case RTF_ANIMTEXT:
         nSprm = NS_ooxml::LN_EG_RPrBase_effect;
@@ -3643,8 +3636,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         {
             m_nCurrentStyleIndex = nParam;
             RTFValue::Pointer_t pValue(new RTFValue(-42)); // TODO no value in enum StyleType?
-            m_aStates.top().aTableAttributes.set(
-                    NS_ooxml::LN_CT_Style_type, pValue); // section style
+            m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_type, pValue); // section style
         }
         break;
     case RTF_TS:
@@ -4605,17 +4597,11 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     {
     case RTF_B:
     case RTF_AB:
-        nSprm = (m_aStates.top().isRightToLeft
-                        || m_aStates.top().eRunType == RTFParserState::HICH)
-                ? NS_ooxml::LN_EG_RPrBase_bCs
-                : NS_ooxml::LN_EG_RPrBase_b;
+        nSprm = (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::HICH) ? NS_ooxml::LN_EG_RPrBase_bCs : NS_ooxml::LN_EG_RPrBase_b;
         break;
     case RTF_I:
     case RTF_AI:
-        nSprm = (m_aStates.top().isRightToLeft
-                        || m_aStates.top().eRunType == RTFParserState::HICH)
-                ? NS_ooxml::LN_EG_RPrBase_iCs
-                : NS_ooxml::LN_EG_RPrBase_i;
+        nSprm = (m_aStates.top().isRightToLeft || m_aStates.top().eRunType == RTFParserState::HICH) ? NS_ooxml::LN_EG_RPrBase_iCs : NS_ooxml::LN_EG_RPrBase_i;
         break;
     case RTF_OUTL:
         nSprm = NS_ooxml::LN_EG_RPrBase_outline;
