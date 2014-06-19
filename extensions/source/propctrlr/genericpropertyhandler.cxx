@@ -439,7 +439,8 @@ namespace pcr
         return eState;
     }
 
-    void SAL_CALL GenericPropertyHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException, std::exception)
+    void SAL_CALL GenericPropertyHandler::addPropertyChangeListener(const Reference< XPropertyChangeListener >& _rxListener)
+        throw (NullPointerException, RuntimeException, std::exception)
     {
         if ( !_rxListener.is() )
             throw NullPointerException();
