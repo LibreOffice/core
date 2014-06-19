@@ -461,11 +461,11 @@ OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 n
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     if (nIndex<0 || nIndex>=getAccessibleActionCount())
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
-    //Solution:When combo_box,it should not has action information.
-    //return TK_RES_STRING( RID_STR_ACC_ACTION_TOGGLEPOPUP);
-    if (m_aBoxType == LISTBOX)
-        return ::rtl::OUString();
-    return m_bIsDropDownBox?::rtl::OUString():TK_RES_STRING( RID_STR_ACC_ACTION_TOGGLEPOPUP);
+
+    if (m_bIsDropDownBox)
+        TK_RES_STRING( RID_STR_ACC_ACTION_TOGGLEPOPUP);
+    else
+        ::rtl::OUString();
 }
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBinding( sal_Int32 nIndex )
