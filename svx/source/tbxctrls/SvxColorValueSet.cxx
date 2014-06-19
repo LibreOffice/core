@@ -90,14 +90,10 @@ void SvxColorValueSet::addEntriesForXColorList(const XColorList& rXColorList, sa
 
 void SvxColorValueSet::addEntriesForColorVector(const std::vector<Color>& rColorVector, sal_uInt32 nStartIndex)
 {
-    const sal_uInt32 nColorCount(rColorVector.size());
-
-    //for(sal_uInt32 nIndex(0); nIndex < nColorCount; nIndex++, nStartIndex++)
     for(std::vector<Color>::const_iterator it = rColorVector.begin();
         it != rColorVector.end(); it++, nStartIndex++)
     {
-        const Color& rEntry = *it;
-        InsertItem(nStartIndex, rEntry, "");
+        InsertItem(nStartIndex, *it, "");
     }
 }
 
