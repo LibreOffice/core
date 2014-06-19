@@ -190,7 +190,7 @@ void SbxValue::Clear()
             {
                 if( aData.pObj != this )
                 {
-                    SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
+                    SAL_INFO("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                     SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                     bool bParentProp = pThisVar && 5345 ==
                     ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
@@ -536,7 +536,7 @@ bool SbxValue::Put( const SbxValues& rVal )
                             {
                                 OSL_FAIL( "TheRealValue" );
                             }
-                            SAL_WARN("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
+                            SAL_INFO("basic.sbx", "Not at Parent-Prop - otherwise CyclicRef");
                             SbxVariable *pThisVar = PTR_CAST(SbxVariable, this);
                             bool bParentProp = pThisVar && 5345 ==
                                     ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) );
