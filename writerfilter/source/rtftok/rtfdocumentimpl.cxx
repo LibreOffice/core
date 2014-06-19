@@ -772,7 +772,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     if (xShape.is())
     {
         uno::Reference<lang::XServiceInfo> xSI(xShape, uno::UNO_QUERY_THROW);
-        if(!xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+        if (!xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"))
             xShape.clear();
     }
 
