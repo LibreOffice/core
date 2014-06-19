@@ -69,6 +69,7 @@
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -783,23 +784,22 @@ uno::Any SwXStyleFamily::getByName(const OUString& rName)
 uno::Sequence< OUString > SwXStyleFamily::getElementNames(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< OUString > aRet;
+    comphelper::SequenceAsVector< OUString > aRet;
     if(pBasePool)
     {
-        SfxStyleSheetIteratorPtr pIterator = pBasePool->CreateIterator(eFamily, SFXSTYLEBIT_ALL);
-        sal_uInt16 nCount = pIterator->Count();
-        aRet.realloc(nCount);
-        OUString* pArray = aRet.getArray();
+        SfxStyleSheetIteratorPtr pIt = pBasePool->CreateIterator(eFamily, SFXSTYLEBIT_ALL);
         OUString aString;
-        for(sal_uInt16 i = 0; i < nCount; i++)
+        for (SfxStyleSheetBase* pStyle = pIt->First(); pStyle; pStyle = pIt->Next())
         {
-            SwStyleNameMapper::FillProgName((*pIterator)[i]->GetName(), aString, lcl_GetSwEnumFromSfxEnum ( eFamily ), true );
-            pArray[i] = aString;
+            SwStyleNameMapper::FillProgName(pStyle->GetName(), aString,
+                                            lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
+            aRet.push_back(aString);
         }
     }
     else
         throw uno::RuntimeException();
-    return aRet;
+
+    return aRet.getAsConstList();
 }
 
 sal_Bool SwXStyleFamily::hasByName(const OUString& rName) throw( uno::RuntimeException )
