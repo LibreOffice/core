@@ -579,7 +579,7 @@ void IcnGridMap_Impl::Create_Impl()
         _nGridCols += 50;
 
     _pGridMap = new bool[ _nGridRows * _nGridCols];
-    memset( (void*)_pGridMap, 0, _nGridRows * _nGridCols );
+    memset( _pGridMap, 0, _nGridRows * _nGridCols * sizeof(bool) );
 
     const size_t nCount = _pView->aEntries.size();
     for( size_t nCur=0; nCur < nCount; nCur++ )
