@@ -154,7 +154,7 @@ public:
                           com::sun::star::chart::XChartDocument > rChartDoc,
                       bool bIncludeTable );
 
-    UniReference< XMLPropertySetMapper > GetPropertySetMapper() const { return mxPropertySetMapper;}
+    UniReference<XMLPropertySetMapper> GetPropertySetMapper() const;
 
     void SetChartRangeAddress( const OUString& rAddress )
         { msChartAddress = rAddress; }
