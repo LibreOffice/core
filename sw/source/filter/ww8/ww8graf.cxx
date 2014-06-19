@@ -65,6 +65,7 @@
 #include <fmtanchr.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <docary.hxx>
 #include <ndgrf.hxx>

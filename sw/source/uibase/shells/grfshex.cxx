@@ -28,6 +28,7 @@
 #include <caption.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <drawdoc.hxx>
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>

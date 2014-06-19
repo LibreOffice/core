@@ -39,6 +39,7 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xformsexport.hxx>
+#include <drawdoc.hxx>
 #include <pam.hxx>
 #include <unofreg.hxx>
 #include <doc.hxx>

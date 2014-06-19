@@ -32,6 +32,7 @@
 #include <svx/swframevalidation.hxx>
 #include <svx/anchorid.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <drawdoc.hxx>
 #include <uitool.hxx>
 #include <fmtornt.hxx>
 #include <cmdid.h>

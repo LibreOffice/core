@@ -32,6 +32,7 @@
 #include <svl/itemset.hxx>
 #include <svx/svdmodel.hxx>
 #include <cmdid.h>
+#include <drawdoc.hxx>
 #include <wdocsh.hxx>
 #include <prtopt.hxx>
 #include <viewsh.hxx>

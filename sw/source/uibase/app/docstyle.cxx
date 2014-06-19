@@ -25,6 +25,7 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/lrspitem.hxx>
+#include <drawdoc.hxx>
 #include <fmtcol.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>

@@ -1921,7 +1921,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             SwDrawDocument * pDrawDoc;
             bool bAuto = *(sal_Bool*) aValue.getValue();
 
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * >( pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 pDrawDoc->SetAutoControlFocus( bAuto );
             else if (bAuto)
             {
@@ -1931,7 +1931,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
                 // SdrModel and we are leaving the default at false,
                 // we don't need to make an SdrModel and can do nothing
                 // #i52858# - method name changed
-                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
                 pDrawDoc->SetAutoControlFocus ( bAuto );
             }
         }
@@ -1941,7 +1941,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
             SwDrawDocument * pDrawDoc;
             bool bMode = *(sal_Bool*)aValue.getValue();
 
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 pDrawDoc->SetOpenInDesignMode( bMode );
             else if (!bMode)
             {
@@ -1952,7 +1952,7 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
                 // we don't need to make an SdrModel and can do
                 // nothing
                 // #i52858# - method name changed
-                pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetOrCreateDrawModel() );
+                pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
                 pDrawDoc->SetOpenInDesignMode ( bMode );
             }
         }
@@ -2091,7 +2091,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             SwDrawDocument * pDrawDoc;
             bool bAuto;
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 bAuto = pDrawDoc->GetAutoControlFocus();
             else
                 bAuto = false;
@@ -2102,7 +2102,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         {
             SwDrawDocument * pDrawDoc;
             bool bMode;
-            if ( 0 != ( pDrawDoc = dynamic_cast< SwDrawDocument * > (pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) ) )
+            if ( 0 != ( pDrawDoc = pDocShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel() ) )
                 bMode = pDrawDoc->GetOpenInDesignMode();
             else
                 bMode = true;

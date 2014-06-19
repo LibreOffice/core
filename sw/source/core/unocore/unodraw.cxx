@@ -21,6 +21,7 @@
 
 #include <cmdid.h>
 
+#include <drawdoc.hxx>
 #include <unodraw.hxx>
 #include <unocoll.hxx>
 #include <unoframe.hxx>

@@ -28,6 +28,7 @@
 
 #include <svx/svdoutl.hxx>
 
+#include "drawdoc.hxx"
 #include "fesh.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"

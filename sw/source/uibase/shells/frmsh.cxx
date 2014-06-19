@@ -44,6 +44,7 @@
 #include <tools/diagnose_ex.h>
 
 #include <doc.hxx>
+#include <drawdoc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <fmturl.hxx>

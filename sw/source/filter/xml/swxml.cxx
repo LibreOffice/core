@@ -48,6 +48,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
 #include <fltini.hxx>
+#include <drawdoc.hxx>
 #include <doc.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>

@@ -22,6 +22,7 @@
 #include <editeng/tstpitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
+#include <drawdoc.hxx>
 #include <hintids.hxx>
 #include <fmtflcnt.hxx>
 #include <txtftn.hxx>

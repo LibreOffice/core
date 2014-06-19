@@ -27,6 +27,7 @@
 
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
 using namespace ::com::sun::star;

@@ -41,6 +41,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
+#include <drawdoc.hxx>
 #include <frmfmt.hxx>
 #include <dcontact.hxx>
 #include <edtwin.hxx>

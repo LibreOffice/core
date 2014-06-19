@@ -75,6 +75,7 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/xflgrit.hxx>
 
+#include <drawdoc.hxx>
 #include <docufld.hxx>
 #include <fmtclds.hxx>
 #include <fmtinfmt.hxx>

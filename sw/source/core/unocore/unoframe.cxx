@@ -42,6 +42,7 @@
 #include <memory>
 #include <hints.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>

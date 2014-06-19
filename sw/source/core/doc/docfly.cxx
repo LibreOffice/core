@@ -35,6 +35,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <ndindex.hxx>
 #include <docary.hxx>
+#include <drawdoc.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <txtflcnt.hxx>

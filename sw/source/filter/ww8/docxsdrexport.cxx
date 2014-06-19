@@ -39,6 +39,7 @@
 #include <fmtautofmt.hxx>
 #include <fmtfsize.hxx>
 
+#include <drawdoc.hxx>
 #include <docxsdrexport.hxx>
 #include <docxexport.hxx>
 #include <docxexportfilter.hxx>

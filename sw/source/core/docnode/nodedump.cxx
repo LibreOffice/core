@@ -8,6 +8,7 @@
  */
 
 #include "doc.hxx"
+#include "drawdoc.hxx"
 #include <IDocumentDrawModelAccess.hxx>
 #include "ndtxt.hxx"
 #include "MarkManager.hxx"

@@ -33,6 +33,7 @@
 #include <string.h>
 #include <osl/endian.h>
 #include <docsh.hxx>
+#include <drawdoc.hxx>
 
 #include <unotools/fltrcfg.hxx>
 #include <vcl/salbtype.hxx>

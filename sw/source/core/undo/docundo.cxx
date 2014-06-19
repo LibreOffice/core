@@ -25,6 +25,7 @@
 
 #include <swmodule.hxx>
 #include <doc.hxx>
+#include <drawdoc.hxx>
 #include <ndarr.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
