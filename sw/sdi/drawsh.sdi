@@ -515,5 +515,12 @@ shell SwDrawShell : SwDrawBaseShell
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+
+    FN_REMOVE_TEXT_BOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 }
 

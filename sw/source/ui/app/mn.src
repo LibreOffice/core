@@ -1050,6 +1050,12 @@ Menu MN_DRAW_POPUPMENU
             HelpId = CMD_FN_ADD_TEXT_BOX;
             Text [ en-US ] = "Add Text Box";
         };
+        MenuItem
+        {
+            Identifier = FN_REMOVE_TEXT_BOX;
+            HelpId = CMD_FN_REMOVE_TEXT_BOX;
+            Text [ en-US ] = "Remove Text Box";
+        };
     };
 };
 

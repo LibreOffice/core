@@ -10103,3 +10103,27 @@ SfxVoidItem AddTextBox FN_ADD_TEXT_BOX
     ToolBoxConfig = TRUE,
     GroupId = GID_DRAWING;
 ]
+
+SfxVoidItem RemoveTextBox FN_REMOVE_TEXT_BOX
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DRAWING;
+]
