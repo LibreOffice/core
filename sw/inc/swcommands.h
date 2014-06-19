@@ -79,6 +79,7 @@
 #define CMD_FN_PRINT_PAGEPREVIEW                    ".uno:PrintPagePreview"
 #define CMD_FN_TABLE_SET_READ_ONLY_CELLS            ".uno:Protect"
 #define CMD_FN_REMOVE_CUR_TOX                       ".uno:RemoveTableOf"
+#define CMD_FN_REMOVE_TEXT_BOX                      ".uno:RemoveTextBox"
 #define CMD_FN_FORMAT_RESET                         ".uno:ResetAttributes"
 #define CMD_FN_TOOL_ANCHOR_AT_CHAR                  ".uno:SetAnchorAtChar"
 #define CMD_FN_TOOL_ANCHOR_CHAR                     ".uno:SetAnchorToChar"

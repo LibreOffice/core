@@ -409,6 +409,16 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             }
             break;
         }
+        case FN_REMOVE_TEXT_BOX:
+        {
+            if (SdrObject* pObj = IsSingleFillableNonOLESelected())
+            {
+                SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
+                if (pFrmFmt)
+                    SwTextBoxHelper::destroy(pFrmFmt);
+            }
+            break;
+        }
         default:
             OSL_ENSURE(!this, "wrong dispatcher");
             return;
@@ -522,6 +532,21 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                     SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
                     // Allow creating a TextBox only in case this is a draw format without a TextBox so far.
                     if (pFrmFmt && pFrmFmt->Which() == RES_DRAWFRMFMT && !SwTextBoxHelper::findTextBox(pFrmFmt))
+                        bDisable = false;
+                }
+
+                if (bDisable)
+                    rSet.DisableItem(nWhich);
+                break;
+            }
+            case FN_REMOVE_TEXT_BOX:
+            {
+                bool bDisable = true;
+                if (SdrObject* pObj = IsSingleFillableNonOLESelected())
+                {
+                    SwFrmFmt* pFrmFmt = ::FindFrmFmt(pObj);
+                    // Allow removing a TextBox only in case it has one.
+                    if (pFrmFmt && SwTextBoxHelper::findTextBox(pFrmFmt))
                         bDisable = false;
                 }
 
