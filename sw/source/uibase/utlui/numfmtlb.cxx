@@ -41,6 +41,7 @@
 #include "dialog.hrc"
 #include <unomid.h>
 #include <sfx2/viewfrm.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -395,9 +396,9 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( this, aCoreSet,
+        boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( this, aCoreSet,
             GetView()->GetViewFrame()->GetFrame().GetFrameInterface(),
-            RC_DLG_SWNUMFMTDLG );
+            RC_DLG_SWNUMFMTDLG ));
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
         if (RET_OK == pDlg->Execute())
@@ -433,8 +434,6 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
         }
         else
             SetDefFormat(nFormat);
-
-        delete pDlg;
     }
     return 0;
 }

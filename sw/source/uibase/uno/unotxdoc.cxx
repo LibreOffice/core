@@ -134,6 +134,7 @@
 #include <svx/svdview.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -922,12 +923,11 @@ Reference< XIndexAccess >
     Reference< XInterface >  xTmp;
     sal_Int32 nResult = 0;
     Reference< XTextCursor >  xCrsr;
-    SwUnoCrsr* pResultCrsr = FindAny(xDesc, xCrsr, true, nResult, xTmp);
+    boost::scoped_ptr<SwUnoCrsr> pResultCrsr(FindAny(xDesc, xCrsr, true, nResult, xTmp));
     if(!pResultCrsr)
         throw RuntimeException();
     Reference< XIndexAccess >  xRet;
-    xRet = new SwXTextRanges( (nResult) ? pResultCrsr : 0 );
-    delete pResultCrsr;
+    xRet = new SwXTextRanges( (nResult) ? pResultCrsr.get() : 0 );
     return xRet;
 }
 
@@ -1985,10 +1985,9 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName, const Any&
         default:
         {
             const SfxPoolItem& rItem = pDocShell->GetDoc()->GetDefault(pEntry->nWID);
-            SfxPoolItem* pNewItem = rItem.Clone();
+            boost::scoped_ptr<SfxPoolItem> pNewItem(rItem.Clone());
             pNewItem->PutValue(aValue, pEntry->nMemberId);
             pDocShell->GetDoc()->SetDefault(*pNewItem);
-            delete pNewItem;
         }
     }
 }

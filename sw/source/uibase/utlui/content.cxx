@@ -88,6 +88,7 @@
 #include <unomid.h>
 
 #include "navmgr.hxx"
+#include <boost/scoped_ptr.hpp>
 
 #define CTYPE_CNT   0
 #define CTYPE_CTT   1
@@ -3256,7 +3257,7 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-        AbstractSwRenameXNamedDlg* pDlg = pFact->CreateSwRenameXNamedDlg(this, xNamed, xNameAccess);
+        boost::scoped_ptr<AbstractSwRenameXNamedDlg> pDlg(pFact->CreateSwRenameXNamedDlg(this, xNamed, xNameAccess));
         OSL_ENSURE(pDlg, "Dialogdiet fail!");
         if(xSecond.is())
             pDlg->SetAlternativeAccess( xSecond, xThird);
@@ -3272,7 +3273,6 @@ void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
         }
         pDlg->SetForbiddenChars(sForbiddenChars);
         pDlg->Execute();
-        delete pDlg;
     }
 }
 

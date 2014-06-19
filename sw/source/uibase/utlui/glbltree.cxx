@@ -57,6 +57,7 @@
 #include <comcore.hrc>
 #include <globals.hrc>
 #include "swabstdlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 
@@ -215,7 +216,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
         if( aData.HasFormat( FORMAT_FILE_LIST ))
         {
             nRet = rEvt.mnAction;
-            SwGlblDocContents* pTempContents = new SwGlblDocContents;
+            boost::scoped_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
             int nAbsContPos = pDropEntry ?
                                 (int) GetModel()->GetAbsPos(pDropEntry):
                                     - 1;
@@ -243,7 +244,6 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
                     }
                 }
             }
-            delete pTempContents;
         }
         else if( !(sFileName =
                         SwNavigationPI::CreateDropFileName( aData )).isEmpty())
@@ -385,7 +385,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
     sal_uInt16 nEnableFlags = GetEnableFlags();
     if(FN_GLOBAL_OPEN == nTbxId)
     {
-        PopupMenu *pMenu = new PopupMenu;
+        boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
         for (sal_uInt16 i = CTX_INSERT_ANY_INDEX; i <= CTX_INSERT_TEXT; i++)
         {
             pMenu->InsertItem( i, aContextStrings[ST_INDEX  - ST_GLOBAL_CONTEXT_FIRST - CTX_INSERT_ANY_INDEX + i] );
@@ -397,13 +397,13 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
         pMenu->EnableItem(CTX_INSERT_NEW_FILE,  0 != (nEnableFlags & ENABLE_INSERT_FILE));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
         pMenu->Execute( pBox, pBox->GetItemRect(nTbxId).BottomLeft());
-        delete pMenu;
+        pMenu.reset();
         pBox->EndSelection();
         pBox->Invalidate();
     }
     else if(FN_GLOBAL_UPDATE == nTbxId)
     {
-        PopupMenu *pMenu = new PopupMenu;
+        boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
         for (sal_uInt16 i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
             pMenu->InsertItem( i, aContextStrings[ST_UPDATE_SEL - ST_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
@@ -412,7 +412,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
         pMenu->EnableItem(CTX_UPDATE_SEL, 0 != (nEnableFlags & ENABLE_UPDATE_SEL));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
         pMenu->Execute( pBox, pBox->GetItemRect(nTbxId).BottomLeft());
-        delete pMenu;
+        pMenu.reset();
         pBox->EndSelection();
         pBox->Invalidate();
     }
@@ -846,7 +846,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             // must be refilled. So you do not have to remember anything,
             // deleting begins at the end.
             SvTreeListEntry* pSelEntry = LastSelected();
-            SwGlblDocContents* pTempContents  = 0;
+            boost::scoped_ptr<SwGlblDocContents> pTempContents;
             pActiveShell->StartAction();
             while(pSelEntry)
             {
@@ -856,12 +856,11 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                 pSelEntry = PrevSelected(pSelEntry);
                 if(pSelEntry)
                 {
-                    delete pTempContents;
-                    pTempContents = new SwGlblDocContents;
+                    pTempContents.reset(new SwGlblDocContents);
                     pActiveShell->GetGlobalDocContent(*pTempContents);
                 }
             }
-            delete pTempContents;
+            pTempContents.reset();
             pActiveShell->EndAction();
             pCont = 0;
         }
@@ -881,12 +880,12 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog(
+                boost::scoped_ptr<AbstractMultiTOXTabDialog> pDlg(pFact->CreateMultiTOXTabDialog(
                                                         this, aSet,
                                                         *pActiveShell,
                                                         0,
                                                         USHRT_MAX,
-                                                        true);
+                                                        true));
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if(RET_OK == pDlg->Execute())
                 {
@@ -898,7 +897,6 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                         pActiveShell->InsertGlobalDocContent( *pContCopy, *pToInsert );
                 }
                 pCont = 0;
-                delete pDlg;
             }
         }
         break;
@@ -1104,7 +1102,7 @@ bool    SwGlobalTree::Update(bool bHard)
         else
         {
             bool bCopy = false;
-            SwGlblDocContents* pTempContents  = new SwGlblDocContents;
+            boost::scoped_ptr<SwGlblDocContents> pTempContents(new SwGlblDocContents);
             pActiveShell->GetGlobalDocContent(*pTempContents);
             if(pTempContents->size() != pSwGlblDocContents->size() ||
                     pTempContents->size() != GetEntryCount())
@@ -1144,7 +1142,6 @@ bool    SwGlobalTree::Update(bool bHard)
                 pTempContents->clear();
 
             }
-            delete pTempContents;
         }
 
     }
@@ -1353,7 +1350,7 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
     Application::SetDefDialogParent( pDefParentWin );
     if ( ERRCODE_NONE == _pFileDlg->GetError() )
     {
-        SfxMediumList* pMedList = pDocInserter->CreateMediumList();
+        boost::scoped_ptr<SfxMediumList> pMedList(pDocInserter->CreateMediumList());
         if ( pMedList )
         {
             Sequence< OUString >aFileNames( pMedList->size() );
@@ -1368,7 +1365,7 @@ IMPL_LINK( SwGlobalTree, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
                 sFileName += OUString(sfx2::cTokenSeparator);
                 pFileNames[nPos++] = sFileName;
             }
-            delete pMedList;
+            pMedList.reset();
             InsertRegion( pDocContent, aFileNames );
             DELETEZ( pDocContent );
         }
