@@ -2326,10 +2326,6 @@ void SchXMLExportHelper_Impl::exportAxis(
         lcl_exportNumberFormat( sNumFormat, xAxisProps, mrExport );
         aPropertyStates = mxExpPropMapper->Filter( xAxisProps );
 
-        fprintf(stdout, "SchXMLExportHelper_Impl::exportAxis:   src shell = '%s'  dest shell = '%s'\n",
-                rtl::OUStringToOString(maSrcShellID, RTL_TEXTENCODING_UTF8).getStr(),
-                rtl::OUStringToOString(maDestShellID, RTL_TEXTENCODING_UTF8).getStr());
-
         if (!maSrcShellID.isEmpty() && !maDestShellID.isEmpty() && maSrcShellID != maDestShellID)
         {
             // Disable link to source number format property when pasting to
