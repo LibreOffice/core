@@ -28,7 +28,6 @@
 #include <rtl/ustring.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/core/relations.hxx>
-#include <oox/drawingml/table/tablestylelist.hxx>
 #include <oox/dllapi.h>
 
 namespace com { namespace sun { namespace star {
@@ -43,6 +42,10 @@ namespace com { namespace sun { namespace star {
 namespace oox {
     namespace drawingml { class Theme; }
     namespace drawingml { namespace chart { class ChartConverter; } }
+    namespace drawingml { namespace table {
+        class TableStyleList;
+        typedef boost::shared_ptr< TableStyleList > TableStyleListPtr;
+    } }
     namespace vml { class Drawing; }
 }
 

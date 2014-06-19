@@ -17,30 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLELISTFRAGMENTHANDLER_HXX
+#define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLELISTFRAGMENTHANDLER_HXX
 
-#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLETEXTSTYLECONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLETEXTSTYLECONTEXT_HXX
+#include <drawingml/table/tablestylelist.hxx>
+#include <oox/core/fragmenthandler2.hxx>
 
-#include <oox/core/contexthandler.hxx>
-#include <oox/drawingml/table/tablestylepart.hxx>
+namespace oox {
+namespace drawingml {
+namespace table {
 
-namespace oox { namespace drawingml { namespace table {
 
-class TableStyleTextStyleContext : public ::oox::core::ContextHandler2
+
+class TableStyleListFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
-    TableStyleTextStyleContext( ::oox::core::ContextHandler2Helper& rParent,
-            const ::oox::AttributeList& rAttribs,
-            TableStylePart& rTableStylePart );
-    virtual ~TableStyleTextStyleContext();
+    explicit            TableStyleListFragmentHandler(
+                            ::oox::core::XmlFilterBase& rFilter,
+                            const OUString& rFragmentPath,
+                            TableStyleList& rTableStyleList );
+    virtual             ~TableStyleListFragmentHandler();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
-    TableStylePart& mrTableStylePart;
+
+    TableStyleList&              mrTableStyleList;
 };
 
-} } }
+
+
+} // namespace table
+} // namespace drawingml
+} // namespace oox
 
 #endif
 

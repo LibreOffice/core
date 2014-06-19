@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLE_HXX
 #define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLE_HXX
 
-#include <oox/drawingml/table/tablestylepart.hxx>
+#include <drawingml/table/tablestylepart.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shape.hxx>
 

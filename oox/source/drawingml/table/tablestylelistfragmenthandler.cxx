@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/table/tablestylelistfragmenthandler.hxx"
-#include "oox/drawingml/table/tablestylecontext.hxx"
+#include "drawingml/table/tablestylelistfragmenthandler.hxx"
+#include "drawingml/table/tablestylecontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;

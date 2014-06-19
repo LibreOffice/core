@@ -23,7 +23,7 @@
 #include "oox/ppt/pptimport.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/dump/pptxdumper.hxx"
-#include "oox/drawingml/table/tablestylelistfragmenthandler.hxx"
+#include "drawingml/table/tablestylelistfragmenthandler.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/ole/vbaproject.hxx"
 

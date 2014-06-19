@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/table/tablerow.hxx"
+#include "drawingml/table/tablerow.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

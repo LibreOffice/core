@@ -17,33 +17,30 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLEROW_HXX
-#define INCLUDED_OOX_DRAWINGML_TABLE_TABLEROW_HXX
 
-#include <oox/drawingml/table/tablecell.hxx>
-#include <vector>
+#ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLECELLSTYLECONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLECELLSTYLECONTEXT_HXX
+
+#include <oox/core/contexthandler2.hxx>
+#include <drawingml/table/tablestylepart.hxx>
 
 namespace oox { namespace drawingml { namespace table {
 
-class TableRow
+class TableStyleCellStyleContext : public ::oox::core::ContextHandler2
 {
 public:
+    TableStyleCellStyleContext( ::oox::core::ContextHandler2Helper& rParent, TableStylePart& rTableStylePart );
+    virtual ~TableStyleCellStyleContext();
 
-    TableRow();
-    ~TableRow();
-
-    void setHeight( sal_Int32 nHeight ){ mnHeight = nHeight; };
-    sal_Int32 getHeight() const { return mnHeight; };
-    std::vector< TableCell >& getTableCells() { return mvTableCells; };
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 private:
-
-    sal_Int32 mnHeight;
-    std::vector< TableCell > mvTableCells;
+    TableStylePart&             mrTableStylePart;
+    sal_Int32                   mnLineType;
 };
 
 } } }
 
-#endif // INCLUDED_OOX_DRAWINGML_TABLE_TABLEROW_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
