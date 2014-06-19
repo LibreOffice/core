@@ -19,18 +19,35 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sw_tox, \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sw_tox, \
+	$(call gb_Helper_optional,AVMEDIA,avmedia) \
+	basegfx \
 	comphelper \
 	cppu \
 	cppuhelper \
+	drawinglayer \
 	editeng \
+	i18nlangtag \
+	i18nutil \
+	lng \
 	sal \
+	salhelper \
+	sax \
+	sb \
+	sfx \
+	sot \
+	svl \
 	svt \
 	svx \
+	svxcore \
 	test \
 	unotest \
 	vcl \
+	tk \
 	tl \
+	ucbhelper \
 	utl \
+	xmlreader \
+	xo \
 	$(gb_UWINAPI) \
 ))
 
@@ -40,6 +57,7 @@ $(eval $(call gb_CppunitTest_use_library_objects,sw_tox, \
 
 $(eval $(call gb_CppunitTest_use_externals,sw_tox, \
 	boost_headers \
+	icuuc \
 	libxml2 \
 ))
 
