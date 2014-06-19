@@ -56,20 +56,21 @@ Sprm::Kind RTFSprm::getKind()
     return Sprm::UNKNOWN;
 }
 
+#ifdef DEBUG_DOMAINMAPPER
 std::string RTFSprm::getName() const
 {
     return "RTFSprm";
 }
+#endif
 
+#ifdef DEBUG_DOMAINMAPPER
 std::string RTFSprm::toString() const
 {
     OStringBuffer aBuf("RTFSprm");
 
     std::string sResult;
 
-#ifdef DEBUG_DOMAINMAPPER
     sResult = (*QNameToString::Instance())(m_nKeyword);
-#endif
 
     aBuf.append(" ('");
     if (sResult.length() == 0)
@@ -82,6 +83,7 @@ std::string RTFSprm::toString() const
 
     return aBuf.makeStringAndClear().getStr();
 }
+#endif
 
 RTFValue::Pointer_t RTFSprms::find(Id nKeyword, bool bFirst, bool bForWrite)
 {

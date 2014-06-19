@@ -46,7 +46,9 @@ public:
     virtual writerfilter::Reference<Properties>::Pointer_t getProperties() SAL_OVERRIDE;
     virtual writerfilter::Reference<Stream>::Pointer_t getStream() SAL_OVERRIDE;
     virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary() SAL_OVERRIDE;
+#ifdef DEBUG_DOMAINMAPPER
     virtual std::string toString() const SAL_OVERRIDE;
+#endif
     virtual RTFValue* Clone();
     virtual RTFValue* CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms);
     RTFSprms& getAttributes();

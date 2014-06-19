@@ -177,6 +177,7 @@ public:
 };
 }
 
+#ifdef DEBUG_DOMAINMAPPER
 string fastTokenToId(sal_uInt32 nToken)
 {
   </xsl:text>
@@ -218,6 +219,7 @@ string fastTokenToId(sal_uInt32 nToken)
 
     return sResult;
 }
+#endif
   </xsl:text>
 </xsl:template>
 

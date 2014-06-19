@@ -30,6 +30,7 @@
 
 namespace writerfilter
 {
+#ifdef DEBUG_DOMAINMAPPER
     class IdToString
     {
     public:
@@ -39,6 +40,7 @@ namespace writerfilter
     protected:
         ~IdToString() {}
     };
+#endif
 
     class TagLogger
     {
