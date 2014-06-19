@@ -245,10 +245,18 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
 {
     if ( IsStgWriter() )
     {
-        SotStorageRef aRef = new SotStorage( rStrm );
-        sal_uLong nResult = Write( rPaM, *aRef, pFName );
-        if ( nResult == ERRCODE_NONE )
-            aRef->Commit();
+        sal_uLong nResult = ERRCODE_ABORT;
+        try
+        {
+            SotStorageRef aRef = new SotStorage( rStrm );
+            nResult = Write( rPaM, *aRef, pFName );
+            if ( nResult == ERRCODE_NONE )
+                aRef->Commit();
+        }
+        catch (const css::ucb::ContentCreationException &e)
+        {
+            SAL_WARN("sw", "SmFilterDetect::detect caught " << e.Message);
+        }
         return nResult;
     }
 
