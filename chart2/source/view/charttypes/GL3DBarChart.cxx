@@ -244,7 +244,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
                     aCats[i], nId));
         nId += ID_STEP;
         opengl3D::Text* p = static_cast<opengl3D::Text*>(&maShapes.back());
-        aTopLeft.x = nXPos + TEXT_HEIGHT;
+        aTopLeft.x = nXPos + TEXT_HEIGHT + 0.5 * BAR_SIZE_X;
         aTopLeft.y = nYPos + calculateTextWidth(aCats[i]) + 0.5 * BAR_DISTANCE_Y;
         aTopRight = aTopLeft;
         aTopRight.y = nYPos + 0.5* BAR_DISTANCE_Y;
@@ -258,7 +258,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
                     aCats[i], nId));
         nId += ID_STEP;
         p = static_cast<opengl3D::Text*>(&maShapes.back());
-        aTopLeft.x = nXPos + TEXT_HEIGHT;
+        aTopLeft.x = nXPos + TEXT_HEIGHT + 0.5 * BAR_SIZE_X;
         aTopLeft.y =  - 0.5 * BAR_DISTANCE_Y;
         aTopRight = aTopLeft;
         aTopRight.y = -calculateTextWidth(aCats[i]) - 0.5* BAR_DISTANCE_Y;
