@@ -801,7 +801,6 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
     try
     {
         const sal_Int32 nPropCount = aDescriptor.getLength();
-        const beans::PropertyValue* pProps = aDescriptor.getConstArray();
 
         const sal_uInt32 nTest =
             EXPORT_META|EXPORT_STYLES|EXPORT_CONTENT|EXPORT_SETTINGS;
@@ -810,6 +809,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             // evaluate descriptor only for flat files and if a base URI
             // has not been provided already
 
+            const beans::PropertyValue* pProps = aDescriptor.getConstArray();
             for( sal_Int32 nIndex = 0; nIndex < nPropCount; nIndex++, pProps++ )
             {
                 const OUString& rPropName = pProps->Name;
@@ -828,6 +828,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
             }
         }
 
+        const beans::PropertyValue* pProps = aDescriptor.getConstArray();
         for (sal_Int32 nIndex = 0; nIndex < nPropCount; ++nIndex, ++pProps)
         {
             const OUString& rPropName = pProps->Name;
