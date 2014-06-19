@@ -413,7 +413,7 @@ void SbxVariable::SetParent( SbxObject* p )
                 bFound = ( this == pChildren->Get(nIdx) );
             }
         }
-        SAL_WARN_IF(
+        SAL_INFO_IF(
             !bFound, "basic.sbx",
             "dangling: [" << GetName() << "].SetParent([" << p->GetName()
                 << "])");
