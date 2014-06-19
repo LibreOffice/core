@@ -197,7 +197,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     const bool bExportSoftHyphens = RTL_TEXTENCODING_UCS2 == rWrt.GetAsciiOptions().GetCharSet() ||
                                     RTL_TEXTENCODING_UTF8 == rWrt.GetAsciiOptions().GetCharSet();
 
-    do {
+    for (;;) {
         const sal_Int32 nNextAttr = std::min(aAttrIter.WhereNext(), nEnd);
 
         if( !aAttrIter.OutAttr( nStrPos ))
@@ -209,8 +209,12 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             rWrt.Strm().WriteUnicodeOrByteText( aOutStr );
         }
         nStrPos = nNextAttr;
+        if (nStrPos >= nEnd)
+        {
+            break;
+        }
         aAttrIter.NextPos();
-    } while( nStrPos < nEnd );
+    }
 
     if( !bLastNd ||
         ( ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
