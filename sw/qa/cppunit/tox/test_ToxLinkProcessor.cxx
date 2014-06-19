@@ -16,13 +16,15 @@
 #include <ToxLinkProcessor.hxx>
 
 #include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include <test/bootstrapfixture.hxx>
+
+#include <swdll.hxx>
 
 using namespace sw;
 
-class ToxLinkProcessorTest : public CppUnit::TestFixture
+class ToxLinkProcessorTest : public test::BootstrapFixture
 {
     void ExceptionIsThrownIfTooManyLinksAreClosed();
     void AddingAndClosingTwoLinksResultsInTwoClosedLinks();
@@ -36,6 +38,11 @@ class ToxLinkProcessorTest : public CppUnit::TestFixture
     CPPUNIT_TEST(LinkSequenceIsPreserved);
     CPPUNIT_TEST_SUITE_END();
 public:
+    void setUp() SAL_OVERRIDE {
+        BootstrapFixture::setUp();
+        SwGlobals::ensure();
+    }
+
     static const OUString STYLE_NAME_1;
     static const OUString STYLE_NAME_2;
     static const sal_uInt16 POOL_ID_1;
