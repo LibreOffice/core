@@ -54,6 +54,7 @@
 #include "access.hrc"
 
 #include <unomid.h>
+#include <boost/scoped_ptr.hpp>
 
 #define PAGE_CHANGE_TIMEOUT 1000
 
@@ -371,7 +372,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
                 HID_NAVI_DRAG_LINK,
                 HID_NAVI_DRAG_COPY,
             };
-            PopupMenu *pMenu = new PopupMenu;
+            boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
             for (sal_uInt16 i = 0; i <= REGION_MODE_EMBEDDED; i++)
             {
                 pMenu->InsertItem( i + 1, aContextArr[i] );
@@ -385,13 +386,13 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
                     POPUPMENU_EXECUTE_DOWN );
             pBox->SetItemDown( nCurrItemId, false );
             pBox->EndSelection();
-            delete pMenu;
+            pMenu.reset();
             pBox->Invalidate();
         }
         break;
         case FN_OUTLINE_LEVEL:
         {
-            PopupMenu *pMenu = new PopupMenu;
+            boost::scoped_ptr<PopupMenu> pMenu(new PopupMenu);
             for (sal_uInt16 i = 101; i <= 100 + MAXLEVEL; i++)
             {
                 pMenu->InsertItem( i, OUString::number(i - 100) );
@@ -404,7 +405,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
                     pBox->GetItemRect(FN_OUTLINE_LEVEL),
                     POPUPMENU_EXECUTE_DOWN );
             pBox->SetItemDown( nCurrItemId, false );
-            delete pMenu;
+            pMenu.reset();
             pBox->EndSelection();
             pBox->Invalidate();
         }
