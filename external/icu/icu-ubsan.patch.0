@@ -1,3 +1,25 @@
+--- source/common/rbbidata.h
++++ source/common/rbbidata.h
+@@ -113,7 +113,7 @@
+                                     /*     StatusTable of the set of matching             */
+                                     /*     tags (rule status values)                      */
+     int16_t          fReserved;
+-    uint16_t         fNextState[2]; /*  Next State, indexed by char category.             */
++    uint16_t         fNextState[1]; /*  Next State, indexed by char category.             */
+                                     /*  This array does not have two elements             */
+                                     /*    Array Size is actually fData->fHeader->fCatCount         */
+                                     /*    CAUTION:  see RBBITableBuilder::getTableSize()  */
+--- source/common/ucmndata.h
++++ source/common/ucmndata.h
+@@ -50,7 +50,7 @@
+ 
+ typedef struct {
+     uint32_t count;
+-    UDataOffsetTOCEntry entry[2];    /* Actual size of array is from count. */
++    UDataOffsetTOCEntry entry[1];    /* Actual size of array is from count. */
+ } UDataOffsetTOC;
+ 
+ /**
 --- source/common/ustring.cpp
 +++ source/common/ustring.cpp
 @@ -1486,7 +1486,7 @@
