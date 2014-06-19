@@ -207,7 +207,10 @@ private:
     Timer*                  mpSwapOutTimer;
     GrfSimpleCacheObj*      mpSimpleCache;
     sal_uLong                   mnAnimationLoopCount;
-    void*                   mpDummy1;
+
+    // a unique increasing ID to be able to say which data change is older
+    sal_uLong               mnDataChangeTimeStamp;
+
     void*                   mpDummy2;
     sal_Bool                mbAutoSwapped   : 1;
     sal_Bool                mbTransparent   : 1;
@@ -298,6 +301,10 @@ private:
                                                  sal_Bool               bEnlarge ) const;
 
                             DECL_LINK( ImplAutoSwapOutHdl, void* );
+
+    // Handle evtl. needed AfterDataChanges, needs to be called when new
+    // graphic data is swapped in/added to the GraphicManager
+    void ImplAfterDataChange();
 
 protected:
 
@@ -481,6 +488,12 @@ public:
         double fTopCrop,
         double fRightCrop,
         double fBottomCrop) const;
+
+    // read access
+    sal_uLong GetDataChangeTimeStamp() const { return mnDataChangeTimeStamp; }
+
+    // restart SwapOut timer; this is like touching in a cache to reset to the full timeout value
+    void restartSwapOutTimer() const;
 };
 
 // ------------------
@@ -544,6 +557,15 @@ private:
     void            SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
     ByteString      SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
+
+    // This method allows to check memory footprint for all currently swapped in GraphicObjects on this GraphicManager
+    // which are based on Bitmaps. This is needed on 32Bit systems and only does something on those systems. The problem
+    // to solve is that normally the SwapOut is timer-driven, but even with short timer settings there are situations
+    // where this does not trigger - or in other words: A maximum limitation for GraphicManagers was not in place before.
+    // For 32Bit systems this leads to situations where graphics will be missing. This method will actively swap out
+    // the longest swapped in graphics until a maximum memory boundary (derived from user settings in tools/options/memory)
+    // is no longer exceeded
+    void ImplCheckSizeOfSwappedInGraphics();
 
 public:
 

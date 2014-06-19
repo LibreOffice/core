@@ -295,9 +295,79 @@ ByteString GraphicManager::ImplGetUniqueID( const GraphicObject& rObj ) const
 
 // -----------------------------------------------------------------------------
 
+void GraphicManager::ImplCheckSizeOfSwappedInGraphics()
+{
+    // only necessary for 32bit systems
+    if(SAL_TYPES_SIZEOFPOINTER <= 4)
+    {
+        // get the currently used memory footprint of all swapped in bitmap graphics
+        // of this graphic manager. Remember candidates in a vector. The size in bytes is
+        // already available, thus this loop is not expensive to execute
+        sal_uLong nUsedSize(0);
+        GraphicObject* pObj = 0;
+        std::vector< GraphicObject* > aCandidates;
+
+        for(pObj = (GraphicObject*)maObjList.First(); pObj; pObj = (GraphicObject*)maObjList.Next())
+        {
+            if(pObj->meType == GRAPHIC_BITMAP && !pObj->IsSwappedOut() && pObj->GetSizeBytes())
+            {
+                aCandidates.push_back(pObj);
+                nUsedSize += pObj->GetSizeBytes();
+            }
+        }
+
+        // detect maximum allowed memory footprint. Use the user-settings of MaxCacheSize (defaulted
+        // to 20MB) and add a decent multiplicator (expecrimented to find one). Limit to
+        // a useful maximum for 32Bit address space
+
+        // default is 20MB, so allow 200MB initially
+        static sal_uLong aMultiplicator(10);
+
+        // max at 500MB; I experimented with 800 for debug and 750 for non-debug settings (pics start
+        // missing when AOO reaches a mem footprint of 1.5GB) but some secure left over space for
+        // app activity is needed
+        static sal_uLong aMaxSize32Bit(500 * 1024 * 1024);
+
+        // calc max allowed cache size
+        const sal_uLong nMaxCacheSize(::std::min(GetMaxCacheSize() * aMultiplicator, aMaxSize32Bit));
+
+        if(nUsedSize >= nMaxCacheSize && !aCandidates.empty())
+        {
+            // if we use more currently, sort by last DataChangeTimeStamp
+            struct simpleSortByDataChangeTimeStamp
+            {
+                bool operator() (GraphicObject* p1, GraphicObject* p2) const
+                {
+                    return p1->GetDataChangeTimeStamp() < p2->GetDataChangeTimeStamp();
+                }
+            };
+
+            // sort by DataChangeTimeStamp so that the oldest get removed first
+            ::std::sort(aCandidates.begin(), aCandidates.end(), simpleSortByDataChangeTimeStamp());
+
+            for(sal_uInt32 a(0); nUsedSize >= nMaxCacheSize && a < aCandidates.size(); a++)
+            {
+                // swap out until we have no more or the goal to use less than nMaxCacheSize
+                // is reached
+                pObj = aCandidates[a];
+                const sal_uLong nSizeBytes(pObj->GetSizeBytes());
+
+                // do not swap out when we have less than 16KB data objects
+                if(nSizeBytes >= (16 * 1024))
+                {
+                    pObj->FireSwapOutRequest();
+                    nUsedSize = (nSizeBytes < nUsedSize) ? nUsedSize - nSizeBytes : 0;
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
 sal_Bool GraphicManager::ImplFillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute )
 {
-    return( mpCache->FillSwappedGraphicObject( rObj, rSubstitute ) );
+    return mpCache->FillSwappedGraphicObject(rObj, rSubstitute);
 }
 
 // -----------------------------------------------------------------------------

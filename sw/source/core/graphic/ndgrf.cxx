@@ -58,14 +58,36 @@
 #include <retrieveinputstreamconsumer.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
+#include <unotools/cacheoptions.hxx>
 
 using namespace com::sun::star;
 
+#define SWAPGRAPHIC_TIMEOUT     5000
 
-// As Writer graphics are no longer painted via the graphic manager - see <SwNoTxtFrm::PaintPicture(..)> -
-// it is needed to swap out the Writer graphics automatically after a certain amount of time.
-// --> 5000ms
-#define TIMETOSWAPOUTGRAPHICAUTOMATICALLY 5000
+// For comments see same method used in svx
+sal_uInt32 getCacheTimeInMs()
+{
+    static bool bSetAtAll(true);
+
+    if(bSetAtAll)
+    {
+        static bool bSetToPreferenceTime(true);
+
+        if(bSetToPreferenceTime)
+        {
+            const SvtCacheOptions aCacheOptions;
+            const sal_Int32 nSeconds(aCacheOptions.GetGraphicManagerObjectReleaseTime());
+
+            return nSeconds * 1000 / 12;
+        }
+        else
+        {
+            return SWAPGRAPHIC_TIMEOUT;
+        }
+    }
+
+    return 0;
+}
 
 // --------------------
 // SwGrfNode
@@ -83,7 +105,7 @@ SwGrfNode::SwGrfNode(
           mbLinkedInputStreamReady( false ),
           mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ), TIMETOSWAPOUTGRAPHICAUTOMATICALLY );
+    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ), getCacheTimeInMs() );
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf = bFrameInPaint = bScaleImageMap = sal_False;
 
     bGrafikArrived = sal_True;
@@ -102,7 +124,7 @@ SwGrfNode::SwGrfNode(
           mbIsStreamReadOnly( sal_False )
 {
     maGrfObj = rGrfObj;
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ), TIMETOSWAPOUTGRAPHICAUTOMATICALLY );
+    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ), getCacheTimeInMs() );
     if ( rGrfObj.HasUserData() && rGrfObj.IsSwappedOut() )
         maGrfObj.SetSwapState();
     bInSwapIn = bChgTwipSize = bChgTwipSizeFromPixel = bLoadLowResGrf = bFrameInPaint = bScaleImageMap = sal_False;
@@ -125,7 +147,7 @@ SwGrfNode::SwGrfNode(
           mbLinkedInputStreamReady( false ),
           mbIsStreamReadOnly( sal_False )
 {
-    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ), TIMETOSWAPOUTGRAPHICAUTOMATICALLY );
+    maGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ), getCacheTimeInMs() );
 
     Graphic aGrf;
     aGrf.SetDefaultType();

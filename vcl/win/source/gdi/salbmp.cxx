@@ -448,35 +448,43 @@ Gdiplus::Bitmap* WinSalBitmap::ImplCreateGdiPlusBitmap(const WinSalBitmap& rAlph
 
         if(pRetval)
         {
-            sal_uInt8* pSrcRGB(pRGB->mpBits);
-            sal_uInt8* pSrcA(pA->mpBits);
-            const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
-            const sal_uInt32 nExtraA(pA->mnScanlineSize - nW);
-            const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
-            const Gdiplus::Rect aAllRect(0, 0, nW, nH);
-            Gdiplus::BitmapData aGdiPlusBitmapData;
-            pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat32bppARGB, &aGdiPlusBitmapData);
-
-            // copy data to Gdiplus::Bitmap; format is BGRA; need to mix BGR from Bitmap and
-            // A from alpha, so inner loop is needed (who invented BitmapEx..?)
-            for(sal_uInt32 y(0); y < nH; y++)
+            if ( pRetval->GetLastStatus() == Gdiplus::Ok ) // 2nd place to secure with new Gdiplus::Bitmap
             {
-                const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
-                sal_uInt8* targetPixels = (sal_uInt8*)aGdiPlusBitmapData.Scan0 + (nYInsert * aGdiPlusBitmapData.Stride);
+                sal_uInt8* pSrcRGB(pRGB->mpBits);
+                sal_uInt8* pSrcA(pA->mpBits);
+                const sal_uInt32 nExtraRGB(pRGB->mnScanlineSize - (nW * 3));
+                const sal_uInt32 nExtraA(pA->mnScanlineSize - nW);
+                const bool bTopDown(pRGB->mnFormat & BMP_FORMAT_TOP_DOWN);
+                const Gdiplus::Rect aAllRect(0, 0, nW, nH);
+                Gdiplus::BitmapData aGdiPlusBitmapData;
+                pRetval->LockBits(&aAllRect, Gdiplus::ImageLockModeWrite, PixelFormat32bppARGB, &aGdiPlusBitmapData);
 
-                for(sal_uInt32 x(0); x < nW; x++)
+                // copy data to Gdiplus::Bitmap; format is BGRA; need to mix BGR from Bitmap and
+                // A from alpha, so inner loop is needed (who invented BitmapEx..?)
+                for(sal_uInt32 y(0); y < nH; y++)
                 {
-                    *targetPixels++ = *pSrcRGB++;
-                    *targetPixels++ = *pSrcRGB++;
-                    *targetPixels++ = *pSrcRGB++;
-                    *targetPixels++ = 0xff - *pSrcA++;
+                    const sal_uInt32 nYInsert(bTopDown ? y : nH - y - 1);
+                    sal_uInt8* targetPixels = (sal_uInt8*)aGdiPlusBitmapData.Scan0 + (nYInsert * aGdiPlusBitmapData.Stride);
+
+                    for(sal_uInt32 x(0); x < nW; x++)
+                    {
+                        *targetPixels++ = *pSrcRGB++;
+                        *targetPixels++ = *pSrcRGB++;
+                        *targetPixels++ = *pSrcRGB++;
+                        *targetPixels++ = 0xff - *pSrcA++;
+                    }
+
+                    pSrcRGB += nExtraRGB;
+                    pSrcA += nExtraA;
                 }
 
-                pSrcRGB += nExtraRGB;
-                pSrcA += nExtraA;
+                pRetval->UnlockBits(&aGdiPlusBitmapData);
             }
-
-            pRetval->UnlockBits(&aGdiPlusBitmapData);
+            else
+            {
+                delete pRetval;
+                pRetval = NULL;
+            }
         }
     }
 

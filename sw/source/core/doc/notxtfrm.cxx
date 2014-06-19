@@ -1019,6 +1019,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                         aContent,
                         aTargetRange,
                         aTargetRange);
+
+                    // need to reset the timer manually (was in original paints at GraphicManager)
+                    rGrfObj.restartSwapOutTimer();
                 }
             }
             else
