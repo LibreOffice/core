@@ -649,12 +649,11 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                     pTmpPor = pTmpPor->GetPortion();
                 }
 
-                const sal_uInt16 i = nSumWidth ?
+                const SwTwips i = nSumWidth ?
                                  ( nSumWidth - 1 ) / nGridWidth + 1 :
                                  0;
                 const SwTwips nTmpWidth = i * nGridWidth;
-                const SwTwips nKernWidth = std::min( (SwTwips)(nTmpWidth - nSumWidth),
-                                                nRestWidth );
+                const SwTwips nKernWidth = std::min(nTmpWidth - nSumWidth, nRestWidth);
                 const sal_uInt16 nKernWidth_1 = (sal_uInt16)(nKernWidth / 2);
 
                 OSL_ENSURE( nKernWidth <= nRestWidth,
