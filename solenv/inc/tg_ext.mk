@@ -164,8 +164,7 @@ $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) : $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE
     @-$(MKDIRHIER) $(PACKAGE_DIR)$(fake_root_dir)
     $(COMMAND_ECHO)cd $(PACKAGE_DIR)$(fake_root_dir) && ( $(shell @$(TYPE) $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE_NAME).unpack)) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @echo make writeable...
-    @cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
-    @cd $(PACKAGE_DIR) && find $(TARFILE_ROOTDIR) -type d -exec chmod a+x {{}} \;
+    @cd $(PACKAGE_DIR) && chmod -R +rwX $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
 
 #add new files to patch
 $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES:+".dummy")
