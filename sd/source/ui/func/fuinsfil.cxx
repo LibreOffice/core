@@ -567,7 +567,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
     // what should we insert?
-    while( !pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
+    while (pPara && !pDocliner->HasParaFlag(pPara, PARAFLAG_ISPAGE))
         pPara = pDocliner->GetParent(pPara);
 
     sal_Int32 nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
