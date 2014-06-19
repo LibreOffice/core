@@ -534,6 +534,8 @@ bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 
     SetModified();
 
+    SwTextBoxHelper::syncFlyFrmAttr(rFlyFmt, rSet);
+
     return bRet;
 }
 

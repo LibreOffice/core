@@ -12,6 +12,7 @@
 #include <fmtcntnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcnct.hxx>
+#include <fmtornt.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
@@ -30,6 +31,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/unopage.hxx>
 #include <svx/svdpage.hxx>
+#include <svl/itemiter.hxx>
 
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -469,6 +471,54 @@ void SwTextBoxHelper::restoreLinks(std::set<_ZSortFly>& rOld, std::vector<SwFrmF
         }
         if (rOldContent.find(aSetIt->GetFmt()) != rOldContent.end())
             const_cast<SwFrmFmt*>(aSetIt->GetFmt())->SetFmtAttr(rOldContent[aSetIt->GetFmt()]);
+    }
+}
+
+void SwTextBoxHelper::syncFlyFrmAttr(SwFrmFmt& rShape, SfxItemSet& rSet)
+{
+    if (SwFrmFmt* pFmt = findTextBox(&rShape))
+    {
+        SfxItemSet aTextBoxSet(pFmt->GetDoc()->GetAttrPool(), aFrmFmtSetRange);
+
+        SfxItemIter aIter(rSet);
+        sal_uInt16 nWhich = aIter.GetCurItem()->Which();
+        do
+        {
+            switch (nWhich)
+            {
+            case RES_VERT_ORIENT:
+            {
+                const SwFmtVertOrient& rOrient = static_cast<const SwFmtVertOrient&>(*aIter.GetCurItem());
+                SwFmtVertOrient aOrient(rOrient);
+
+                Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
+                if (!aRect.IsEmpty())
+                    aOrient.SetPos(aOrient.GetPos() + aRect.getY());
+
+                aTextBoxSet.Put(aOrient);
+            }
+            break;
+            case RES_HORI_ORIENT:
+            {
+                const SwFmtHoriOrient& rOrient = static_cast<const SwFmtHoriOrient&>(*aIter.GetCurItem());
+                SwFmtHoriOrient aOrient(rOrient);
+
+                Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
+                if (!aRect.IsEmpty())
+                    aOrient.SetPos(aOrient.GetPos() + aRect.getX());
+
+                aTextBoxSet.Put(aOrient);
+            }
+            break;
+            }
+
+            if (aIter.IsAtEnd())
+                break;
+        }
+        while (0 != (nWhich = aIter.NextItem()->Which()));
+
+        if (aTextBoxSet.Count())
+            pFmt->GetDoc()->SetFlyFrmAttr(*pFmt, aTextBoxSet);
     }
 }
 

@@ -23,6 +23,7 @@
 #include <swdllapi.h>
 
 class SdrPage;
+class SfxItemSet;
 class SwFrmFmt;
 class SwFrmFmts;
 class SwFmtCntnt;
@@ -56,6 +57,9 @@ public:
     static void syncProperty(SwFrmFmt* pShape, const OUString& rPropertyName, const css::uno::Any& rValue);
     /// Get a property of the underlying TextFrame.
     static void getProperty(SwFrmFmt* pShape, sal_uInt16 nWID, sal_uInt8 nMemberID, css::uno::Any& rValue);
+
+    /// Similar to syncProperty(), but used by the internal API (e.g. for UI purposes).
+    static void syncFlyFrmAttr(SwFrmFmt& rShape, SfxItemSet& rSet);
 
     /// If we have an associated TextFrame, then return that.
     static SwFrmFmt* findTextBox(SwFrmFmt* pShape);
