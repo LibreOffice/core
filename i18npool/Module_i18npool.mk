@@ -40,6 +40,7 @@ $(eval $(call gb_Module_add_targets_for_build,i18npool,\
 
 $(eval $(call gb_Module_add_check_targets,i18npool,\
 	CppunitTest_i18npool_test_breakiterator \
+	CppunitTest_i18npool_test_calendar \
 	CppunitTest_i18npool_test_characterclassification \
 	CppunitTest_i18npool_test_ordinalsuffix \
 	CppunitTest_i18npool_test_textsearch \
