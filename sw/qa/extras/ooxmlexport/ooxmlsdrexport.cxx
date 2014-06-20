@@ -1548,11 +1548,8 @@ DECLARE_OOXMLEXPORT_TEST(testFDO77122, "LinkedTextBoxes.docx")
     if (!pXmlDoc)
         return;
     //ensure that the text box links are preserved.
-    // FIXME why does this fail on Mac?
-#if !defined(MACOSX)
     assertXPath(pXmlDoc, "//wps:txbx[1]", "id", "1");
     assertXPath(pXmlDoc, "//wps:linkedTxbx[1]", "id", "1");
-#endif
 }
 
 DECLARE_OOXMLEXPORT_TEST(test76734_2K7, "test76734_2K7.docx")
