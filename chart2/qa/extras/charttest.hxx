@@ -38,11 +38,17 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/XFormattedString.hpp>
+#include <com/sun/star/chart2/XTitle.hpp>
+#include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
+
 #include <iostream>
 
 #include <libxml/xmlwriter.h>
@@ -209,6 +215,27 @@ Reference< chart2::XChartType > getChartTypeFromDoc( Reference< chart2::XChartDo
     CPPUNIT_ASSERT( xChartTypeSequence.getLength() > nChartType );
 
     return xChartTypeSequence[nChartType];
+}
+
+Reference<chart2::XAxis> getAxisFromDoc(
+    const Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nCooSys, sal_Int32 nAxisDim, sal_Int32 nAxisIndex )
+{
+    Reference<chart2::XDiagram> xDiagram = xChartDoc->getFirstDiagram();
+    CPPUNIT_ASSERT(xDiagram.is());
+
+    Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(xCooSysContainer.is());
+
+    Sequence<Reference<chart2::XCoordinateSystem> > xCooSysSequence = xCooSysContainer->getCoordinateSystems();
+    CPPUNIT_ASSERT(xCooSysSequence.getLength() > nCooSys);
+
+    Reference<chart2::XCoordinateSystem> xCoord = xCooSysSequence[nCooSys];
+    CPPUNIT_ASSERT(xCoord.is());
+
+    Reference<chart2::XAxis> xAxis = xCoord->getAxisByDimension(nAxisDim, nAxisIndex);
+    CPPUNIT_ASSERT(xAxis.is());
+
+    return xAxis;
 }
 
 Reference< chart2::XDataSeries > getDataSeriesFromDoc( uno::Reference< chart2::XChartDocument > xChartDoc,
@@ -404,6 +431,18 @@ uno::Sequence < OUString > ChartTest::getImpressChartColumnDescriptions( const c
     CPPUNIT_ASSERT(xChartData.is());
     uno::Sequence < OUString > seriesList = xChartData->getColumnDescriptions();
     return seriesList;
+}
+
+OUString getTitleString( const Reference<chart2::XTitled>& xTitled, sal_Int32 nIndex = 0 )
+{
+    uno::Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    CPPUNIT_ASSERT(xTitle.is());
+    uno::Sequence<uno::Reference<chart2::XFormattedString> > aFSSeq = xTitle->getText();
+    CPPUNIT_ASSERT(aFSSeq.getLength() > nIndex);
+    uno::Reference<chart2::XFormattedString> xFS = aFSSeq[nIndex];
+    CPPUNIT_ASSERT(xFS.is());
+
+    return xFS->getString();
 }
 
 #endif // INCLUDED_CHART2_QA_EXTRAS_CHARTTEST_HXX
