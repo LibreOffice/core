@@ -278,7 +278,7 @@ void ScDocument::FillInfo(
             RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
             pThisRowInfo->pCellInfo = NULL;                 // wird unten belegt
 
-            sal_uInt16 nHeight = (sal_uInt16) ( nDocHeight * fRowScale );
+            sal_uInt16 nHeight = nDocHeight;
             if (!nHeight)
                 nHeight = 1;
 
@@ -393,11 +393,7 @@ void ScDocument::FillInfo(
         {
             if (!ColHidden(nX, nTab))
             {
-                sal_uInt16 nThisWidth = (sal_uInt16) (GetColWidth( nX, nTab ) * fColScale);
-                if (!nThisWidth)
-                    nThisWidth = 1;
-
-                pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;
+                pRowInfo[0].pCellInfo[nArrCol].nWidth = GetColWidth( nX, nTab );
             }
         }
     }
@@ -418,9 +414,7 @@ void ScDocument::FillInfo(
             // TODO: Optimize this loop.
             if (!ColHidden(nX, nTab))
             {
-                sal_uInt16 nThisWidth = (sal_uInt16) (GetColWidth( nX, nTab ) * fColScale);
-                if (!nThisWidth)
-                    nThisWidth = 1;
+                int nThisWidth = GetColWidth( nX, nTab );
 
                 pRowInfo[0].pCellInfo[nArrCol].nWidth = nThisWidth;           //! dies sollte reichen
 

@@ -711,7 +711,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     else
         aOutputData.SetSolidBackground(true);
 
-    pContentDev->SetMapMode(MAP_PIXEL);
     aOutputData.DrawDocumentBackground();
 
     if ( bGridFirst && ( bGrid || bPage ) )
@@ -918,18 +917,27 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nTilePosX, int nTilePosY,
                               long nTileWidth, long nTileHeight )
 {
-    rDevice.SetOutputSizePixel( Size( nOutputWidth, nOutputHeight ) );
-    // setup the output device to draw the tile
-    MapMode aMapMode( rDevice.GetMapMode() );
-    aMapMode.SetMapUnit( MAP_TWIP );
-    aMapMode.SetOrigin( Point( -nTilePosX, -nTilePosY ) );
-
-    // Scaling. Must convert from pixels to twips. We know
-    // that VirtualDevises use a DPI of 96.
+    // Scaling. Must convert from pixels to TWIPs. We know
+    // that VirtualDevices use a DPI of 96. We might as well do this
+    // calculation now, rather than after another dimension conversion,
+    // to minimise errors.
     Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
                                 Fraction( nTileWidth);
-    Fraction scaleY = Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
-                                Fraction( nTileHeight);
+    Fraction scaleY =  Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
+                                 Fraction( nTileHeight);
+
+    // Now scale back to 100th mm dimensions.
+    nTilePosX = nTilePosX * 2540L / 1440L;
+    nTilePosY = nTilePosY * 2540L / 1440L;
+
+    nTileWidth = nTileWidth * 2540L / 1440L;
+    nTileHeight = nTileHeight * 2540L / 1440L;
+
+    rDevice.SetOutputSizePixel( Size( nOutputWidth, nOutputHeight ) );
+    MapMode aMapMode( rDevice.GetMapMode() );
+    aMapMode.SetMapUnit( MAP_100TH_MM );
+    aMapMode.SetOrigin( Point( -nTilePosX, -nTilePosY ) ); // size
+
     aMapMode.SetScaleX( scaleX );
     aMapMode.SetScaleY( scaleY );
     rDevice.SetMapMode( aMapMode );
