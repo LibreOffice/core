@@ -36,7 +36,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 
 #include <editeng/editeng.hxx>
 #include <editeng/unoedsrc.hxx>

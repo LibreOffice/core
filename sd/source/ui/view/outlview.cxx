@@ -35,7 +35,6 @@
 #include <svl/style.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdundo.hxx>
-#include <svl/brdcst.hxx>
 #include <vcl/msgbox.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/tstpitem.hxx>

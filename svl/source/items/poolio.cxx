@@ -25,7 +25,7 @@
 #include <tools/solar.h>
 #include <svl/itempool.hxx>
 #include "whassert.hxx"
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/filerec.hxx>
 #include "poolio.hxx"
 #include <boost/scoped_ptr.hpp>

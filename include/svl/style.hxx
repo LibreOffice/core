@@ -31,8 +31,8 @@
 #include <rsc/rscsfx.hxx>
 #include <svl/hint.hxx>
 #include <svl/lstner.hxx>
-#include <svl/brdcst.hxx>
 #include <svl/poolitem.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/stylesheetuser.hxx>
 
 #include <svl/style.hrc>
