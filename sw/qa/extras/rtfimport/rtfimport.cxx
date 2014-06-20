@@ -1759,6 +1759,12 @@ DECLARE_RTFIMPORT_TEST(testFontOverride, "font-override.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
 }
 
+DECLARE_RTFIMPORT_TEST(testColumnBreak, "column-break.rtf")
+{
+    // Column break at the very start of the document was ignored.
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_COLUMN_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
