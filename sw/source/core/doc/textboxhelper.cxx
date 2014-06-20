@@ -538,7 +538,7 @@ void SwTextBoxHelper::syncFlyFrmAttr(SwFrmFmt& rShape, SfxItemSet& rSet)
             break;
             default:
                 SAL_WARN("sw.core", "SwTextBoxHelper::syncFlyFrmAttr: unhandled which-id: " << nWhich);
-            break;
+                break;
             }
 
             if (aIter.IsAtEnd())
