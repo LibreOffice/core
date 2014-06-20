@@ -174,6 +174,7 @@ public:
     void testExternalRefCacheXLSX();
     void testExternalRefCacheODS();
     void testHybridSharedStringODS();
+    void testCopyMergedNumberFormats();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testBasicCellContentODS);
@@ -252,6 +253,7 @@ public:
     CPPUNIT_TEST(testExternalRefCacheXLSX);
     CPPUNIT_TEST(testExternalRefCacheODS);
     CPPUNIT_TEST(testHybridSharedStringODS);
+    CPPUNIT_TEST(testCopyMergedNumberFormats);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2579,6 +2581,29 @@ void ScFiltersTest::testHybridSharedStringODS()
 
     // A2 contains formula with MATCH function.  The result must be 2, not #N/A!
     CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0,1,0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCopyMergedNumberFormats()
+{
+    ScDocShellRef xDocSh = loadDoc("copy-merged-number-formats.", ODS);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    // Cells B1, C1 and D1 are formatted as dates.
+    OUString aStrB1 = pDoc->GetString(ScAddress(1,0,0));
+    OUString aStrC1 = pDoc->GetString(ScAddress(2,0,0));
+    OUString aStrD1 = pDoc->GetString(ScAddress(3,0,0));
+
+    ScDocument aCopyDoc;
+    aCopyDoc.InsertTab(0, "CopyHere");
+    pDoc->CopyStaticToDocument(ScRange(1,0,0,3,0,0), 0, &aCopyDoc);
+
+    // Make sure the date formats are copied to the new document.
+    CPPUNIT_ASSERT_EQUAL(aStrB1, aCopyDoc.GetString(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(aStrC1, aCopyDoc.GetString(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL(aStrD1, aCopyDoc.GetString(ScAddress(3,0,0)));
 
     xDocSh->DoClose();
 }
