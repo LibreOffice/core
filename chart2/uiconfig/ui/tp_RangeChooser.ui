@@ -202,7 +202,7 @@
                 <property name="can_focus">True</property>
                 <property name="invisible_char">●</property>
                 <property name="width_chars">5</property>
-                <property name="text" translatable="yes">0</property>
+                <property name="text" translatable="no">0</property>
                 <property name="input_purpose">number</property>
               </object>
               <packing>
@@ -218,7 +218,7 @@
                 <property name="can_focus">True</property>
                 <property name="invisible_char">●</property>
                 <property name="width_chars">5</property>
-                <property name="text" translatable="yes">0</property>
+                <property name="text" translatable="no">0</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
