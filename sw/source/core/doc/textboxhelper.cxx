@@ -13,6 +13,7 @@
 #include <fmtanchr.hxx>
 #include <fmtcnct.hxx>
 #include <fmtornt.hxx>
+#include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
@@ -509,6 +510,34 @@ void SwTextBoxHelper::syncFlyFrmAttr(SwFrmFmt& rShape, SfxItemSet& rSet)
 
                 aTextBoxSet.Put(aOrient);
             }
+            break;
+            case RES_FRM_SIZE:
+            {
+                // In case the shape got resized, then we need to adjust both
+                // the position and the size of the textbox (e.g. larger
+                // rounded edges of a rectangle -> need to push right/down the
+                // textbox).
+                SwFmtVertOrient aVertOrient(rShape.GetVertOrient());
+                SwFmtHoriOrient aHoriOrient(rShape.GetHoriOrient());
+                SwFmtFrmSize aSize(pFmt->GetFrmSize());
+
+                Rectangle aRect = getTextRectangle(&rShape, /*bAbsolute=*/false);
+                if (!aRect.IsEmpty())
+                {
+                    aVertOrient.SetPos(aVertOrient.GetPos() + aRect.getY());
+                    aTextBoxSet.Put(aVertOrient);
+
+                    aHoriOrient.SetPos(aHoriOrient.GetPos() + aRect.getX());
+                    aTextBoxSet.Put(aHoriOrient);
+
+                    aSize.SetWidth(aRect.getWidth());
+                    aSize.SetHeight(aRect.getHeight());
+                    aTextBoxSet.Put(aSize);
+                }
+            }
+            break;
+            default:
+                SAL_WARN("sw.core", "SwTextBoxHelper::syncFlyFrmAttr: unhandled which-id: " << nWhich);
             break;
             }
 

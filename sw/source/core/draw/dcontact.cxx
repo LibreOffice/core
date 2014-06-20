@@ -41,10 +41,12 @@
 #include <fmtanchr.hxx>
 #include <node.hxx>
 #include <fmtcntnt.hxx>
+#include <fmtfsize.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <frmtool.hxx>
 #include <flyfrm.hxx>
+#include <textboxhelper.hxx>
 #include <frmfmt.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
@@ -1381,6 +1383,15 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                         {
                             pAnchorFrm->Prepare( PREP_FLY_ATTR_CHG, GetFmt() );
                         }
+                    }
+
+                    if (SwTextBoxHelper::findTextBox(GetFmt()))
+                    {
+                        // Just notify the textbox that the size has changed, the actual object size is not interesting.
+                        SfxItemSet aResizeSet(GetFmt()->GetDoc()->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE, 0);
+                        SwFmtFrmSize aSize;
+                        aResizeSet.Put(aSize);
+                        SwTextBoxHelper::syncFlyFrmAttr(*GetFmt(), aResizeSet);
                     }
                 }
             }
