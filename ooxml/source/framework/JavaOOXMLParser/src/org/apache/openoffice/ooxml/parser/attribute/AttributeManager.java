@@ -47,14 +47,15 @@ public class AttributeManager
         final NamespaceMap aNamespaceMap,
         final NameMap aNameMap,
         final NameMap aStateNameMap,
-        final SimpleTypeManager aSimpleTypeManager)
+        final SimpleTypeManager aSimpleTypeManager,
+        final Vector<String> aErrorsAndWarnings)
     {
         maStateIdToAttributesMap = new HashMap<>();
         maNamespaceMap = aNamespaceMap;
         maNameMap = aNameMap;
         maStateNameMap = aStateNameMap;
         maSimpleTypeManager = aSimpleTypeManager;
-
+        maErrorsAndWarnings = aErrorsAndWarnings;
         ParseData(aData);
     }
 
@@ -185,7 +186,13 @@ public class AttributeManager
                 if ( ! aUsedAttributes.contains(aAttribute))
                 {
                     if ( ! aAttribute.IsOptional())
-                        throw new RuntimeException("attribute '"+aAttribute.GetName()+"' is not present but also not optional");
+                    {
+                        final String sMessage = String.format("attribute '"+aAttribute.GetName()+"' is not present but also not optional");
+                        if (maErrorsAndWarnings != null)
+                            maErrorsAndWarnings.add(sMessage);
+                        else
+                            throw new RuntimeException(sMessage);
+                    }
                     else
                     {
                         // Add an entry that gives access to the default value.
@@ -262,4 +269,5 @@ public class AttributeManager
     private final NameMap maNameMap;
     private final NameMap maStateNameMap;
     private final SimpleTypeManager maSimpleTypeManager;
+    private final Vector<String> maErrorsAndWarnings;
 }

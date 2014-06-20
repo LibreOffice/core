@@ -32,6 +32,7 @@ public interface INode
     int GetChildCount();
     Iterable<INode> GetChildren();
     INode GetOnlyChild();
+    int GetAttributeCount();
     Iterable<INode> GetAttributes ();
     void AcceptVisitor (final INodeVisitor aVisitor);
     Location GetLocation ();

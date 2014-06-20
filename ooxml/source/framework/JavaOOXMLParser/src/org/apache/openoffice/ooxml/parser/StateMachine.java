@@ -23,6 +23,7 @@ package org.apache.openoffice.ooxml.parser;
 
 import java.io.File;
 import java.util.Stack;
+import java.util.Vector;
 
 import javax.xml.stream.Location;
 
@@ -39,7 +40,9 @@ import org.apache.openoffice.ooxml.parser.type.SimpleTypeManager;
  */
 public class StateMachine
 {
-    public StateMachine (final File aParseTableFile)
+    public StateMachine (
+        final File aParseTableFile,
+        final Vector<String> aErrorsAndWarnings)
     {
         if (Log.Dbg != null)
             Log.Dbg.printf("reading parse tables from %s\n", aParseTableFile.toString());
@@ -60,7 +63,8 @@ public class StateMachine
             maNamespaceMap,
             maNameMap,
             maStateNameMap,
-            maSimpleTypeManager);
+            maSimpleTypeManager,
+            aErrorsAndWarnings);
         mnStartStateId = Integer.parseInt(aReader.GetSection("start-state").firstElement()[1]);
         mnEndStateId = Integer.parseInt(aReader.GetSection("end-state").firstElement()[1]);
 
@@ -68,6 +72,7 @@ public class StateMachine
         maStateStack = new Stack<>();
         maElementContextStack = new Stack<>();
         maActionManager = new ActionManager(maStateNameMap);
+        maErrorsAndWarnings  = aErrorsAndWarnings;
 
         if (Log.Dbg != null)
         {
@@ -89,7 +94,8 @@ public class StateMachine
     public boolean ProcessStartElement (
         final String sNamespaceURI,
         final String sElementName,
-        final Location aLocation,
+        final Location aStartLocation,
+        final Location aEndLocation,
         final AttributeProvider aAttributes)
     {
         boolean bResult = false;
@@ -104,8 +110,8 @@ public class StateMachine
                     sElementName,
                     aNamespaceDescriptor.Id,
                     nElementNameId,
-                    aLocation.getLineNumber(),
-                    aLocation.getColumnNumber());
+                    aStartLocation.getLineNumber(),
+                    aStartLocation.getColumnNumber());
 
             final Transition aTransition = maTransitions.GetTransition(
                 mnCurrentStateId,
@@ -121,8 +127,8 @@ public class StateMachine
                     maNameMap.GetNameForId(nElementNameId),
                     aNamespaceDescriptor.Id,
                     nElementNameId,
-                    aLocation.getLineNumber(),
-                    aLocation.getColumnNumber());
+                    aStartLocation.getLineNumber(),
+                    aStartLocation.getColumnNumber());
                 Log.Err.printf(sText);
                 if (Log.Dbg != null)
                     Log.Dbg.printf(sText);
@@ -176,7 +182,8 @@ public class StateMachine
                     maCurrentElementContext,
                     ActionTrigger.ElementStart,
                     null,
-                    aLocation);
+                    aStartLocation,
+                    aEndLocation);
 
                 bResult = true;
             }
@@ -184,8 +191,8 @@ public class StateMachine
         catch (RuntimeException aException)
         {
             Log.Err.printf("error at line %d and column %d\n",
-                aLocation.getLineNumber(),
-                aLocation.getColumnNumber());
+                aStartLocation.getLineNumber(),
+                aStartLocation.getColumnNumber());
             throw aException;
         }
         return bResult;
@@ -197,7 +204,8 @@ public class StateMachine
     public void ProcessEndElement (
         final String sNamespaceURI,
         final String sElementName,
-        final Location aLocation)
+        final Location aStartLocation,
+        final Location aEndLocation)
     {
         if ( ! maAcceptingStates.Contains(mnCurrentStateId)
             && mnCurrentStateId!=-1)
@@ -226,7 +234,8 @@ public class StateMachine
             aPreviousElementContext,
             ActionTrigger.ElementEnd,
             null,
-            aLocation);
+            aStartLocation,
+            aEndLocation);
 
         if (Log.Dbg != null)
         {
@@ -234,8 +243,8 @@ public class StateMachine
             Log.Dbg.printf("/%s:%s L%d%d\n",
                 aDescriptor.Prefix,
                 sElementName,
-                aLocation.getLineNumber(),
-                aLocation.getColumnNumber());
+                aStartLocation.getLineNumber(),
+                aStartLocation.getColumnNumber());
             Log.Dbg.printf(" %s(%d) <- %s(%d)\n",
                 maStateNameMap.GetNameForId(nPreviousStateId),
                 nPreviousStateId,
@@ -249,7 +258,8 @@ public class StateMachine
 
     public void ProcessCharacters (
         final String sText,
-        final Location aLocation)
+        final Location aStartLocation,
+        final Location aEndLocation)
     {
         if (Log.Dbg != null)
             Log.Dbg.printf("text [%s]\n", sText.replace("\n", "\\n"));
@@ -259,7 +269,8 @@ public class StateMachine
             maCurrentElementContext,
             ActionTrigger.Text,
             sText,
-            aLocation);
+            aStartLocation,
+            aEndLocation);
 
     }
 
@@ -287,12 +298,13 @@ public class StateMachine
         final ElementContext aElementContext,
         final ActionTrigger eTrigger,
         final String sText,
-        final Location aLocation)
+        final Location aStartLocation,
+        final Location aEndLocation)
     {
         final Iterable<IAction> aActions = maActionManager.GetActions(nStateId, eTrigger);
         if (aActions != null)
             for (final IAction aAction : aActions)
-                aAction.Run(eTrigger, aElementContext, sText, aLocation);
+                aAction.Run(eTrigger, aElementContext, sText, aStartLocation, aEndLocation);
     }
 
 
@@ -314,4 +326,5 @@ public class StateMachine
     private SkipStateTable maSkipStates;
     private AcceptingStateTable maAcceptingStates;
     private final ActionManager maActionManager;
+    private final Vector<String> maErrorsAndWarnings;
 }

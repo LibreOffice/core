@@ -30,7 +30,7 @@ import javax.xml.stream.XMLStreamReader;
 public class AttributeProvider
     implements Iterable<String[]>
 {
-    public AttributeProvider(XMLStreamReader aReader)
+    public AttributeProvider (final XMLStreamReader aReader)
     {
         maReader = aReader;
     }

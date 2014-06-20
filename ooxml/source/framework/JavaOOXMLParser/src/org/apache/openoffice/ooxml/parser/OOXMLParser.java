@@ -82,7 +82,7 @@ public class OOXMLParser
         final String sInputFilename)
     {
         long nStartTime = System.currentTimeMillis();
-        final StateMachine aMachine = new StateMachine(new File(sParseTableFilename));
+        final StateMachine aMachine = new StateMachine(new File(sParseTableFilename), null);
         final InputStream aIn = GetInputStream(sInputFilename);
         long nEndTime = System.currentTimeMillis();
 
@@ -129,7 +129,8 @@ public class OOXMLParser
                     final ActionTrigger eTrigger,
                     final ElementContext aContext,
                     final String sText,
-                    final Location aLocation)
+                    final Location aStartLocation,
+                    final Location aEndLocation)
                 {
                     Integer nValue = aActionContext.TypeCounts.get(aContext.GetTypeName());
                     if (nValue == null)
@@ -148,12 +149,13 @@ public class OOXMLParser
                     final ActionTrigger eTrigger,
                     final ElementContext aContext,
                     final String sText,
-                    final Location aLocation)
+                    final Location aStartLocation,
+                    final Location aEndLocation)
                 {
                     System.out.printf("processing %s of element %s at position %d\n",
                         eTrigger,
                         aContext.GetElementName(),
-                        aLocation.getCharacterOffset());
+                        aStartLocation.getCharacterOffset());
 
                     if (aContext.GetAttributes().GetAttributeCount() == 0)
                         System.out.printf("    no attributes\n");
@@ -171,7 +173,8 @@ public class OOXMLParser
                     final ActionTrigger eTrigger,
                     final ElementContext aContext,
                     final String sText,
-                    final Location aLocation)
+                    final Location aStartLocation,
+                    final Location aEndLocation)
                 {
 //                    System.out.printf("%s text \"%s\"\n", aContext.GetTypeName(), sText.replace("\n", "\\n"));
                 }

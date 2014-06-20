@@ -93,6 +93,16 @@ public abstract class Node
 
 
 
+    @Override
+    public int GetAttributeCount ()
+    {
+        return maAttributes.size();
+    }
+
+
+
+
+    @Override
     public Iterable<INode> GetAttributes ()
     {
         return maAttributes;

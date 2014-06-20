@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style type="text/css">
+    $CSS$
+    </style>
+    <script type="text/javascript">
+    $DATA$
+    </script>
+    <script type="text/javascript">
+    $CODE$
+    </script>
+  </head>
+  <body onLoad="InitializeSearch()">
+    <div id="message"></div>
+    <input onKeyUp="CheckInput(this,event)"></input>
+    <br><br><div id="match-count">Matches:</div><br>
+    <div id="history"></div>
+    <div id="matches" cols="100" rows="20" defaultValue="type text to see matching types"></div>
+    <br>
+    <div id="result">no result yet</div>
+  </body>
+</html>

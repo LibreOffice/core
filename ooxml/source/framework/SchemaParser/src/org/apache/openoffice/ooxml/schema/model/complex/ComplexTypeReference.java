@@ -60,6 +60,15 @@ public class ComplexTypeReference
 
 
 
+
+    public QualifiedName GetReferencedTypeName ()
+    {
+        return maReferencedTypeName;
+    }
+
+
+
+
     @Override
     public INode GetReferencedNode (final SchemaBase aSchema)
     {

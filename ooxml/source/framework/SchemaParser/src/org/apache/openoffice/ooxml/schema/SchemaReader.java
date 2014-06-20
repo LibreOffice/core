@@ -40,6 +40,7 @@ import org.apache.openoffice.ooxml.schema.automaton.NonValidatingCreator;
 import org.apache.openoffice.ooxml.schema.automaton.ValidatingCreator;
 import org.apache.openoffice.ooxml.schema.generator.LogGenerator;
 import org.apache.openoffice.ooxml.schema.generator.ParserTablesGenerator;
+import org.apache.openoffice.ooxml.schema.generator.html.HtmlGenerator;
 import org.apache.openoffice.ooxml.schema.model.schema.Schema;
 import org.apache.openoffice.ooxml.schema.model.schema.SchemaBase;
 import org.apache.openoffice.ooxml.schema.parser.SchemaParser;
@@ -150,15 +151,15 @@ public class SchemaReader
                     case "output-nonvalidating-parse-tables":
                         maOutputOperations.add(new Runnable()
                         {
-                            final File maAutomatonLogFile = CreateCheckedOutputFile(aParts.get(1));
-                            final File maSimpleTypeLogFile = CreateCheckedOutputFile(aParts.get(2));
-                            final File maParseTableFile = CreateCheckedOutputFile(aParts.get(3));
+                            final File aAutomatonLogFile = CreateCheckedOutputFile(aParts.get(1));
+                            final File aSimpleTypeLogFile = CreateCheckedOutputFile(aParts.get(2));
+                            final File aParseTableFile = CreateCheckedOutputFile(aParts.get(3));
                             @Override public void run()
                             {
                                 WriteNonValidatingParseTables(
-                                    maAutomatonLogFile,
-                                    maSimpleTypeLogFile,
-                                    maParseTableFile);
+                                    aAutomatonLogFile,
+                                    aSimpleTypeLogFile,
+                                    aParseTableFile);
                             }
                         });
                         break;
@@ -166,15 +167,26 @@ public class SchemaReader
                     case "output-validating-parse-tables":
                         maOutputOperations.add(new Runnable()
                         {
-                            final File maAutomatonLogFile = CreateCheckedOutputFile(aParts.get(1));
-                            final File maSimpleTypeLogFile = CreateCheckedOutputFile(aParts.get(2));
-                            final File maParseTableFile = CreateCheckedOutputFile(aParts.get(3));
+                            final File aAutomatonLogFile = CreateCheckedOutputFile(aParts.get(1));
+                            final File aSimpleTypeLogFile = CreateCheckedOutputFile(aParts.get(2));
+                            final File aParseTableFile = CreateCheckedOutputFile(aParts.get(3));
                             @Override public void run()
                             {
                                 WriteValidatingParseTables(
-                                    maAutomatonLogFile,
-                                    maSimpleTypeLogFile,
-                                    maParseTableFile);
+                                    aAutomatonLogFile,
+                                    aSimpleTypeLogFile,
+                                    aParseTableFile);
+                            }
+                        });
+                        break;
+
+                    case "output-html-page":
+                        maOutputOperations.add(new Runnable()
+                        {
+                            final File aHTMLPageFile = CreateCheckedOutputFile(aParts.get(1));
+                            @Override public void run()
+                            {
+                                WriteHTMLPage(aHTMLPageFile);
                             }
                         });
                         break;
@@ -465,6 +477,22 @@ public class SchemaReader
             aSimpleTypes,
             maOptimizedSchemaBase.AttributeValueToIdMap)
             .Generate(aParseTableFile);
+    }
+
+
+
+
+    private void WriteHTMLPage (
+        final File aHTMLPageFile)
+    {
+        long nStartTime = System.currentTimeMillis();
+
+        new HtmlGenerator(maOptimizedSchemaBase, maTopLevelSchemas, aHTMLPageFile).Generate();
+
+        long nEndTime = System.currentTimeMillis();
+        System.out.printf(
+            "created HTML page in %fs\n",
+            (nEndTime-nStartTime)/1000.0);
     }
 
 
