@@ -269,7 +269,7 @@ void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeExce
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
-        PROPERTY_ID_CURSORNAME, ::cppu::UnoType<OUString>::get(), 0);
+        PROPERTY_ID_CURSORNAME, ::cppu::UnoType<rtl::OUString>::get(), 0);
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING),
         PROPERTY_ID_ESCAPEPROCESSING, ::getBooleanCppuType(), 0);
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
