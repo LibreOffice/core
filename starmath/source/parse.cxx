@@ -884,11 +884,13 @@ void SmParser::NextToken()
 
                             sal_Int32 nTxtStart = m_nBufferIndex;
                             sal_Unicode cChar;
+                            // if the equation ends with dot(.) then increment m_nBufferIndex till end of string only
                             do
                             {
                                 cChar = m_aBufferString[ ++m_nBufferIndex ];
                             }
-                            while ( cChar == '.' || rtl::isAsciiDigit( cChar ) );
+                            while ( (cChar == '.' || rtl::isAsciiDigit( cChar )) &&
+                                     ( m_nBufferIndex < m_aBufferString.getLength() - 1 ) );
 
                             m_aCurToken.aText = m_aBufferString.copy( nTxtStart, m_nBufferIndex - nTxtStart );
                             aRes.EndPos = m_nBufferIndex;
