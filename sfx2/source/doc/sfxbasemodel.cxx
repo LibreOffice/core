@@ -821,9 +821,12 @@ IMPL_SfxBaseModel_DataContainer::impl_setDocumentProperties(
         const Reference< document::XDocumentProperties >& rxNewDocProps)
 {
     m_xDocumentProperties.set(rxNewDocProps, UNO_QUERY_THROW);
-    Reference<util::XModifyBroadcaster> const xMB(m_xDocumentProperties,
-            UNO_QUERY_THROW);
-    xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pObjectShell));
+    if (m_pObjectShell.Is())
+    {
+        Reference<util::XModifyBroadcaster> const xMB(
+            m_xDocumentProperties, UNO_QUERY_THROW);
+        xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pObjectShell));
+    }
 }
 
 // document::XDocumentPropertiesSupplier:
