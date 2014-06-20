@@ -41,7 +41,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
     sd/source/ui/app/strings.src \
     sd/source/ui/app/toolbox.src \
     sd/source/ui/dlg/animobjs.src \
-    sd/source/ui/dlg/dlgass.src \
     sd/source/ui/dlg/navigatr.src \
     sd/source/ui/dlg/PaneDockingWindow.src \
     sd/source/ui/slideshow/slideshow.src \
