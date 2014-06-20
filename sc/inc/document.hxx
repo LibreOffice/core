@@ -1217,13 +1217,14 @@ public:
 
     /**
      * Copy only raw cell values to another document.  Formula cells are
-     * converted to raw cells.  No formatting info are copied.
+     * converted to raw cells.  No formatting info are copied except for
+     * number formats.
      *
      * @param rSrcRange source range in the source document
      * @param nDestTab table in the clip document to copy to.
      * @param pDestDoc document to copy to
      */
-    void CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument* pDestDoc);
+    SC_DLLPUBLIC void CopyStaticToDocument(const ScRange& rSrcRange, SCTAB nDestTab, ScDocument* pDestDoc);
 
     /**
      * Copy only cell, nothing but cell to another document.
