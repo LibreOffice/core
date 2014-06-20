@@ -342,9 +342,6 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
 
     SCTAB nTab = pViewData->GetTabNo();
 
-    double nPPTX = pViewData->GetPPTX();
-    double nPPTY = pViewData->GetPPTY();
-
     Rectangle aMirroredPixel = aPixRect;
     if ( pDoc->IsLayoutRTL( nTab ) )
     {
@@ -354,26 +351,30 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
         aMirroredPixel.Right() = nWidth - 1 - aPixRect.Left();
     }
 
-    long nScrX = ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
+    long nScrX = pOutDev->LogicToPixel( Point( pDoc->GetColWidth( nX1, nTab ), 0 ) ).getX();/*ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );*/
     while ( nScrX <= aMirroredPixel.Left() && nX1 < MAXCOL )
     {
         ++nX1;
-        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
+        nScrX += pOutDev->LogicToPixel( Point( pDoc->GetColWidth( nX1, nTab ), 0 ) ).getX();
     }
     SCCOL nX2 = nX1;
     while ( nScrX <= aMirroredPixel.Right() && nX2 < MAXCOL )
     {
         ++nX2;
-        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
+        nScrX += pOutDev->LogicToPixel( Point( pDoc->GetColWidth( nX2, nTab ), 0 ) ).getX();
     }
 
     long nScrY = 0;
-    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, MAXROW, nPPTY, pDoc, nTab);
+    while ( nScrY < aPixRect.Top() && nY1 < MAXROW )
+    {
+        ++nY1;
+        nScrY += pOutDev->LogicToPixel( Point( 0, pDoc->GetRowHeight( nY1, nTab ) ) ).getY();
+    }
     SCROW nY2 = nY1;
-    if (nScrY <= aPixRect.Bottom() && nY2 < MAXROW)
+    while ( nScrY <= aPixRect.Bottom() && nY2 < MAXROW )
     {
         ++nY2;
-        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
+        nScrY += pOutDev->LogicToPixel( Point( 0, pDoc->GetRowHeight( nY2, nTab ) ) ).getY();
     }
 
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS, pOutDev );           // nicht weiterzeichnen
