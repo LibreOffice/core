@@ -25,12 +25,10 @@
 
 class SfxListener;
 class SfxHint;
-
-
+class SfxBroadcasterTest;
 
 class SVL_DLLPUBLIC SfxBroadcaster
 {
-    friend class SfxListener;
     typedef std::vector<SfxListener*> SfxListenerArr_Impl;
 
     SfxListenerArr_Impl     m_Listeners;
@@ -61,6 +59,9 @@ public:
     {
         return m_Listeners[nNo];
     }
+
+    friend class SfxListener;
+    friend class ::SfxBroadcasterTest;
 };
 
 #endif
