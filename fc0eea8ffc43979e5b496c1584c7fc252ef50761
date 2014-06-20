@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_dd628bad",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-20T09:26:15Z",
+      "side": 1,
+      "message": "If some test is no longer relevant, that\u0027s fine, it happens. But if you want to comment such removal, then please don\u0027t do it here, but in the commit message, since just reading the resulting file will be confusing, as there you just see the comment, without the old comment. ;-)",
+      "revId": "fc0eea8ffc43979e5b496c1584c7fc252ef50761",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5aa745d1_bd57bfc9",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 573,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-06-20T09:26:15Z",
+      "side": 1,
+      "message": "Please keep the naming of the getter method consistent, m_bFoo should be IsFoo(), so IsDiscardHeaderFooter() in this case.",
+      "revId": "fc0eea8ffc43979e5b496c1584c7fc252ef50761",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
