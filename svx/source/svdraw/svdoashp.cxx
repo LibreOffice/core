@@ -621,9 +621,9 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
                     {
                         case mso_sptAccentBorderCallout90 :     // 2 ortho
                         {
-                            if ( !i )
+                            if (i == 0)
                                 nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
-                            else if ( i == 1)
+                            else if (i == 1)
                                 nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE | CUSTOMSHAPE_HANDLE_ORTHO4;
                         }
                         break;
@@ -633,24 +633,24 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
                         case mso_sptCloudCallout :
                         case mso_sptWedgeEllipseCallout :
                         {
-                            if ( !i )
+                            if (i == 0)
                                 nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED;
                         }
                         break;
 
                         case mso_sptBorderCallout1 :            // 2 diag
                         {
-                            if ( !i )
+                            if (i == 0)
                                 nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
-                            else if ( i == 1 )
+                            else if (i == 1)
                                 nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE;
                         }
                         break;
                         case mso_sptBorderCallout2 :            // 3
                         {
-                            if ( !i )
+                            if (i == 0)
                                 nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
-                            else if ( i == 2 )
+                            else if (i == 2)
                                 nMode |= CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_X | CUSTOMSHAPE_HANDLE_RESIZE_ABSOLUTE_Y | CUSTOMSHAPE_HANDLE_MOVE_SHAPE;
                         }
                         break;
@@ -668,7 +668,7 @@ std::vector< SdrCustomShapeInteraction > SdrObjCustomShape::GetInteractionHandle
                         case mso_sptAccentBorderCallout2 :
                         case mso_sptAccentBorderCallout3 :
                         {
-                            if ( !i )
+                            if (i == 0)
                                 nMode |= CUSTOMSHAPE_HANDLE_RESIZE_FIXED | CUSTOMSHAPE_HANDLE_CREATE_FIXED;
                         }
                         break;
