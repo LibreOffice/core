@@ -25,6 +25,7 @@
 #include "res_bmp.hrc"
 
 #include <vcl/svapp.hxx>
+#include <vcl/builder.hxx>
 #include "svtools/svlbitm.hxx"
 #include "svtools/treelistentry.hxx"
 
@@ -32,8 +33,8 @@
 
 SdPageListControl::SdPageListControl(
     ::Window* pParent,
-    const ResId& rResId )
-    : SvTreeListBox(pParent, rResId)
+    const WinBits nStyle )
+    : SvTreeListBox(pParent, nStyle)
 {
     // add lines to tree listbox
     SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
@@ -46,6 +47,15 @@ SdPageListControl::SdPageListControl(
     EnableCheckButton (m_pCheckButton);
 
     SetCheckButtonHdl( LINK(this,SdPageListControl,CheckButtonClickHdl) );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT ::Window* SAL_CALL makeSdPageListControl(::Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = WB_TABSTOP;
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+    return new SdPageListControl(pParent, nWinStyle);
 }
 
 IMPL_LINK_NOARG(SdPageListControl, CheckButtonClickHdl)

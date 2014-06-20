@@ -36,8 +36,8 @@ struct FadeEffectLBImpl;
 class SD_DLLPUBLIC FadeEffectLB : public ListBox
 {
 public:
-                                FadeEffectLB( Window* pParent, SdResId Id );
-                                virtual ~FadeEffectLB();
+    FadeEffectLB(Window* pParent, WinBits nStyle);
+    virtual ~FadeEffectLB();
     virtual void                Fill();
 
 /*  void                        selectEffectFromPage( SdPage* pPage ); */

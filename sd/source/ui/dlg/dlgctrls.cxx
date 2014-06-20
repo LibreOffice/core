@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/builder.hxx>
 
 #include "strings.hrc"
 #include "dlgctrls.hxx"
@@ -32,9 +33,9 @@ struct FadeEffectLBImpl
     std::vector< TransitionPresetPtr > maPresets;
 };
 
-FadeEffectLB::FadeEffectLB( Window* pParent, SdResId Id )
-:   ListBox( pParent, Id ),
-    mpImpl( new FadeEffectLBImpl )
+FadeEffectLB::FadeEffectLB(Window* pParent, WinBits nStyle)
+    : ListBox(pParent, nStyle)
+    , mpImpl(new FadeEffectLBImpl)
 {
 }
 
@@ -66,8 +67,17 @@ void FadeEffectLB::Fill()
     SelectEntryPos(0);
 }
 
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFadeEffectLB(Window* pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nBits = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
 
+    bool bDropdown = VclBuilder::extractDropdown(rMap);
 
+    if (bDropdown)
+        nBits |= WB_DROPDOWN;
+
+    return new FadeEffectLB(pParent, nBits);
+}
 
 void FadeEffectLB::applySelected( SdPage* pSlide ) const
 {
