@@ -7172,7 +7172,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "The values of the standard normal cumulative distribution." ;
+            Text [ en-US ] = "The values of the standard normal distribution." ;
         };
         ExtraData =
         {
