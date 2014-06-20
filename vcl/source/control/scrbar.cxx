@@ -354,18 +354,33 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
             }
             else
             {
-                Size aBtnSize( aSize.Height(), aSize.Height() );
-                maBtn2Rect.Top()    = maBtn1Rect.Top();
-                maBtn2Rect.Left()   = aSize.Width()-aSize.Height();
-                maBtn1Rect.SetSize( aBtnSize );
-                maBtn2Rect.SetSize( aBtnSize );
+                if (aBtn1Region.IsEmpty() && aBtn2Region.IsEmpty())
+                {
+                    Size aBtnSize( aSize.Height(), aSize.Height() );
+                    maBtn2Rect.Top() = maBtn1Rect.Top();
+                    maBtn2Rect.Left() = aSize.Width()-aSize.Height();
+                    maBtn1Rect.SetSize( aBtnSize );
+                    maBtn2Rect.SetSize( aBtnSize );
+                }
+                else
+                {
+                    maBtn1Rect.SetEmpty();
+                    maBtn2Rect.SetEmpty();
+                }
             }
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_HORZ_AREA,
                      aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aTrackRegion ) )
+            {
                 maTrackRect = aTrackRegion;
+            }
             else
-                maTrackRect = Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
+            {
+                if ( ! maBtn1Rect.IsEmpty())
+                    maTrackRect = Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
+                else
+                    maTrackRect = aControlRegion;
+            }
 
             // Check if available space is big enough for thumb ( min thumb size = ScrBar width/height )
             mnThumbPixRange = maTrackRect.Right() - maTrackRect.Left();
@@ -395,18 +410,31 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
             }
             else
             {
-                const Size aBtnSize( aSize.Width(), aSize.Width() );
-                maBtn2Rect.Left()   = maBtn1Rect.Left();
-                maBtn2Rect.Top()    = aSize.Height()-aSize.Width();
-                maBtn1Rect.SetSize( aBtnSize );
-                maBtn2Rect.SetSize( aBtnSize );
+                if (aBtn1Region.IsEmpty() && aBtn2Region.IsEmpty())
+                {
+                    const Size aBtnSize( aSize.Width(), aSize.Width() );
+                    maBtn2Rect.Left()   = maBtn1Rect.Left();
+                    maBtn2Rect.Top()    = aSize.Height()-aSize.Width();
+                    maBtn1Rect.SetSize( aBtnSize );
+                    maBtn2Rect.SetSize( aBtnSize );
+                }
+                else
+                {
+                    maBtn1Rect.SetEmpty();
+                    maBtn2Rect.SetEmpty();
+                }
             }
 
             if ( GetNativeControlRegion( CTRL_SCROLLBAR, PART_TRACK_VERT_AREA,
                      aControlRegion, 0, ImplControlValue(), rtl::OUString(), aBoundingRegion, aTrackRegion ) )
                 maTrackRect = aTrackRegion;
             else
-                maTrackRect = Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
+            {
+                if ( ! maBtn1Rect.IsEmpty())
+                    maTrackRect = Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
+                else
+                    maTrackRect = aControlRegion;
+            }
 
             // Check if available space is big enough for thumb
             mnThumbPixRange = maTrackRect.Bottom() - maTrackRect.Top();

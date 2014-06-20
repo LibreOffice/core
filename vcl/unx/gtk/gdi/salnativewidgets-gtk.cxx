@@ -982,7 +982,10 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         rNativeBoundingRegion = NWGetScrollButtonRect( m_nScreen, nPart, rControlRegion );
         rNativeContentRegion = rNativeBoundingRegion;
 
-        returnVal = sal_True;
+        if (rNativeBoundingRegion.GetWidth()>0 && rNativeBoundingRegion.GetHeight()>0)
+            returnVal = sal_True;
+        else
+            returnVal = sal_False;
     }
     if( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL) )
     {
