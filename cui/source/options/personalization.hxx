@@ -74,6 +74,7 @@ private:
     PushButton *m_pSearchButton;            ///< The search button
     FixedText *m_pProgressLabel;            ///< The label for showing progress of search
     PushButton *m_vResultList[9];           ///< List of buttons to show search results
+    PushButton *m_vSearchSuggestions[9];    ///< List of buttons for the search suggestions
     PushButton *m_pOkButton;                ///< The OK button
     PushButton *m_pCancelButton;            ///< The Cancel button
 
