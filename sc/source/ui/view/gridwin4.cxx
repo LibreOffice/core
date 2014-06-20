@@ -301,6 +301,11 @@ void ScGridWindow::PrePaint()
 
 void ScGridWindow::Paint( const Rectangle& rRect )
 {
+    MapMode aMapMode( GetMapMode() );
+    aMapMode.SetMapUnit( MAP_TWIP );
+    aMapMode.SetScaleX( pViewData->GetZoomX() * Fraction(0.96) );
+    aMapMode.SetScaleY( pViewData->GetZoomY() * Fraction(0.96) );
+    SetMapMode( aMapMode );
     Paint( rRect, this );
 }
 
