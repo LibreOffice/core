@@ -296,7 +296,7 @@ Calendar_gregorian::setDateTime( double fTimeInDays ) throw(RuntimeException, st
     SAL_INFO_IF( fM != fR, "i18npool",
             "Calendar_gregorian::setDateTime: " << std::fixed << fM << " rounded to " << fR);
     UErrorCode status;
-    body->setTime( fR, status = U_ZERO_ERROR);
+    body->setTime( fM, status = U_ZERO_ERROR);
     if ( !U_SUCCESS(status) ) throw ERROR;
     getValue();
 }
@@ -617,7 +617,7 @@ void Calendar_gregorian::setValue() throw(RuntimeException)
         sal_Int32 nDST2 = body->get( UCAL_DST_OFFSET, status = U_ZERO_ERROR);
         if ( !U_SUCCESS(status) )
             nDST2 = nDST1;
-        if ( nZone0 != nZone1 || nZone2 != nZone1 || nDST0 != nDST1 || nDST2 != nDST1 )
+        if ( nZone2 != nZone1 || nDST2 != nDST1 ) //if ( nZone0 != nZone1 || nZone2 != nZone1 || nDST0 != nDST1 || nDST2 != nDST1 )
         {
             // Due to different DSTs, resulting date values may differ if
             // DST is onset at 00:00 and the very onsetRule date was
