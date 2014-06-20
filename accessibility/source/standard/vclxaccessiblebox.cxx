@@ -463,9 +463,9 @@ OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 n
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
 
     if (m_bIsDropDownBox)
-        TK_RES_STRING( RID_STR_ACC_ACTION_TOGGLEPOPUP);
-    else
-        ::rtl::OUString();
+        return TK_RES_STRING(RID_STR_ACC_ACTION_TOGGLEPOPUP);
+
+    return OUString();
 }
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBinding( sal_Int32 nIndex )
