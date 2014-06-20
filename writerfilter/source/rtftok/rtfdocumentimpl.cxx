@@ -2243,6 +2243,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             if (pNum.get() && pNum->getInt() > 1)
                 bColumns = true;
         }
+        checkFirstRun();
         if (bColumns)
         {
             sal_uInt8 sBreak[] = { 0xe };
