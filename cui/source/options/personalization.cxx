@@ -38,6 +38,26 @@ SelectPersonaDialog::SelectPersonaDialog( Window *pParent )
     get( m_pSearchButton, "search_personas" );
     m_pSearchButton->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
 
+    get( m_vSearchSuggestions[0], "suggestion1" );
+    m_vSearchSuggestions[0]->SetText( "libreoffice" );
+    m_vSearchSuggestions[0]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
+
+    get( m_vSearchSuggestions[1], "suggestion2" );
+    m_vSearchSuggestions[1]->SetText( "science" );
+    m_vSearchSuggestions[1]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
+
+    get( m_vSearchSuggestions[2], "suggestion3" );
+    m_vSearchSuggestions[2]->SetText( "firefox" );
+    m_vSearchSuggestions[2]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
+
+    get( m_vSearchSuggestions[3], "suggestion4" );
+    m_vSearchSuggestions[3]->SetText( "nasa" );
+    m_vSearchSuggestions[3]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
+
+    get( m_vSearchSuggestions[4], "suggestion5" );
+    m_vSearchSuggestions[4]->SetText( "harry potter" );
+    m_vSearchSuggestions[4]->SetClickHdl( LINK( this, SelectPersonaDialog, SearchPersonas ) );
+
     get( m_pEdit, "search_term" );
     m_pEdit->SetPlaceholderText( "Search term..." );
 
@@ -85,9 +105,23 @@ OUString SelectPersonaDialog::GetSelectedPersona() const
     return OUString();
 }
 
-IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, /*pButton*/ )
+IMPL_LINK( SelectPersonaDialog, SearchPersonas, PushButton*, pButton )
 {
-    OUString searchTerm = m_pEdit->GetText();
+    OUString searchTerm;
+    if( pButton ==  m_pSearchButton)
+        searchTerm = m_pEdit->GetText();
+    else
+    {
+        for( sal_Int32 nIndex = 0; nIndex < 5; nIndex++ )
+        {
+            if( pButton == m_vSearchSuggestions[nIndex] )
+            {
+                searchTerm = m_vSearchSuggestions[nIndex]->GetDisplayText();
+                break;
+            }
+        }
+    }
+
     if( searchTerm.isEmpty( ) )
         return 0;
 
