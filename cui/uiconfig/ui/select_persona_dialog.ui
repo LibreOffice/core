@@ -154,6 +154,10 @@
                 <property name="vexpand">True</property>
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">6</property>
+                <property name="width_request">624</property>
+                <property name="height_request">219</property>
+                <property name="row_homogeneous">True</property>
+                <property name="column_homogeneous">True</property>
                 <child>
                   <object class="GtkButton" id="result1">
                     <property name="can_focus">True</property>

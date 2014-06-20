@@ -87,7 +87,7 @@ public:
 
     OUString GetSelectedPersona() const;
     void SetProgress( OUString& );
-    void SetImages( std::vector<Image>&);
+    void SetImages( Image, sal_Int32 );
     void AddPersonaSetting( OUString& );
     void ClearSearchResults();
     void SetAppliedPersonaSetting( OUString& );

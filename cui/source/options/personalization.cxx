@@ -166,15 +166,10 @@ void SelectPersonaDialog::SetProgress( OUString& rProgress )
     }
 }
 
-void SelectPersonaDialog::SetImages( std::vector<Image> &rImageList )
+void SelectPersonaDialog::SetImages( Image aImage, sal_Int32 nIndex )
 {
-    sal_Int32 nCount = 0;
-    for( std::vector<Image>::iterator it=rImageList.begin(); it!=rImageList.end(); ++it )
-    {
-        m_vResultList[nCount]->Show();
-        m_vResultList[nCount]->SetModeImage( *it );
-        nCount++;
-    }
+    m_vResultList[nIndex]->Show();
+    m_vResultList[nIndex]->SetModeImage( aImage );
 }
 
 void SelectPersonaDialog::AddPersonaSetting( OUString& rPersonaSetting )
@@ -465,7 +460,7 @@ void SearchAndParseThread::execute()
 
         std::vector<OUString> vLearnmoreURLs = pHandler->getLearnmoreURLs();
         std::vector<OUString>::iterator it;
-        std::vector<Image> vResultList;
+        sal_Int32 nIndex = 0;
         GraphicFilter aFilter;
         Graphic aGraphic;
 
@@ -476,14 +471,16 @@ void SearchAndParseThread::execute()
             INetURLObject aURLObj( sPreviewFile );
             aFilter.ImportGraphic( aGraphic, aURLObj );
             Bitmap aBmp = aGraphic.GetBitmap();
-            vResultList.push_back( Image( aBmp ) );
+
+            // for VCL to be able to do visual changes in the thread
+            SolarMutexGuard aGuard;
+            m_pPersonaDialog->SetImages( Image( aBmp ), nIndex++ );
+            m_pPersonaDialog->setOptimalLayoutSize();
             m_pPersonaDialog->AddPersonaSetting( aPersonaSetting );
         }
 
-        // for VCL to be able to do visual changes in the thread
         SolarMutexGuard aGuard;
 
-        m_pPersonaDialog->SetImages( vResultList );
         sProgress = "";
         m_pPersonaDialog->SetProgress( sProgress );
         m_pPersonaDialog->setOptimalLayoutSize();
