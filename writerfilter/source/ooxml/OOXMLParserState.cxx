@@ -122,8 +122,7 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
     }
 }
 
-void OOXMLParserState::setCharacterProperties
-(OOXMLPropertySet::Pointer_t pProps)
+void OOXMLParserState::setCharacterProperties(OOXMLPropertySet::Pointer_t pProps)
 {
     if (mpCharacterProps.get() == NULL)
         mpCharacterProps = pProps;
@@ -131,8 +130,7 @@ void OOXMLParserState::setCharacterProperties
         mpCharacterProps->add(pProps);
 }
 
-void OOXMLParserState::setCellProperties
-(OOXMLPropertySet::Pointer_t pProps)
+void OOXMLParserState::setCellProperties(OOXMLPropertySet::Pointer_t pProps)
 {
     if (!mCellProps.empty())
     {
@@ -145,8 +143,7 @@ void OOXMLParserState::setCellProperties
     }
 }
 
-void OOXMLParserState::setRowProperties
-(OOXMLPropertySet::Pointer_t pProps)
+void OOXMLParserState::setRowProperties(OOXMLPropertySet::Pointer_t pProps)
 {
     if (!mRowProps.empty())
     {
@@ -202,8 +199,7 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
     }
 }
 
-void OOXMLParserState::setTableProperties
-(OOXMLPropertySet::Pointer_t pProps)
+void OOXMLParserState::setTableProperties(OOXMLPropertySet::Pointer_t pProps)
 {
     if (!mTableProps.empty())
     {
@@ -240,8 +236,8 @@ void OOXMLParserState::incContextCount()
 
 void OOXMLParserState::startTxbxContent()
 {
-    if( inTxbxContent )
-        SAL_WARN( "writerfilter", "Nested w:txbxContent" );
+    SAL_WARN_IF(inTxbxContent, "writerfilter", "Nested w:txbxContent");
+
     inTxbxContent = true;
     // Do not save and reset section group state, it'd cause a new page.
 //    savedInSectionGroup = mbInSectionGroup;
