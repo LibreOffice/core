@@ -350,7 +350,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/lstner.hxx>
 #include <svl/smplhint.hxx>

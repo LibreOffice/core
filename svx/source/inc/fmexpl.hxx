@@ -20,7 +20,7 @@
 #define INCLUDED_SVX_SOURCE_INC_FMEXPL_HXX
 
 #include <svl/lstner.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/childwin.hxx>
 #include <svl/poolitem.hxx>

@@ -23,7 +23,7 @@
 
 #include <svl/itempool.hxx>
 #include "whassert.hxx"
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/smplhint.hxx>
 #include "poolio.hxx"
 

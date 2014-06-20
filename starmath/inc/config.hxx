@@ -19,7 +19,7 @@
 #ifndef INCLUDED_STARMATH_INC_CONFIG_HXX
 #define INCLUDED_STARMATH_INC_CONFIG_HXX
 
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <svl/lstner.hxx>
 #include "format.hxx"
 

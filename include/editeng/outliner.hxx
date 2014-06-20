@@ -23,7 +23,7 @@
 #include <editeng/numitem.hxx>
 #include <i18nlangtag/lang.h>
 #include <rtl/ustring.hxx>
-#include <svl/brdcst.hxx>
+#include <svl/SfxBroadcaster.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <tools/contnr.hxx>
