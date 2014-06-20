@@ -300,7 +300,7 @@ private:
     uno::Reference< uno::XComponentContext > m_xContext;
     bool m_bDiscardChildren;
     bool m_bTookChoice; ///< Did we take the Choice or want Fallback instead?
-    std::stack<SavedAlternateState> m_aSavedAlternateStates;
+    std::vector<SavedAlternateState> m_aSavedAlternateStates;
 
     static sal_uInt32 mnInstanceCount;
 

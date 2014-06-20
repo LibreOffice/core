@@ -181,7 +181,7 @@ bool OOXMLFastContextHandler::prepareMceContext(Token_t nElement, const uno::Ref
                 m_bDiscardChildren = false;
                 aState.m_bTookChoice = m_bTookChoice;
                 m_bTookChoice = false;
-                m_aSavedAlternateStates.push(aState);
+                m_aSavedAlternateStates.push_back(aState);
             }
             break;
         case OOXML_Choice:
@@ -268,8 +268,8 @@ throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
         m_bDiscardChildren = false;
     else if (Element == (NS_mce | OOXML_AlternateContent))
     {
-        SavedAlternateState aState(m_aSavedAlternateStates.top());
-        m_aSavedAlternateStates.pop();
+        SavedAlternateState aState(m_aSavedAlternateStates.back());
+        m_aSavedAlternateStates.pop_back();
         m_bDiscardChildren = aState.m_bDiscardChildren;
         m_bTookChoice = aState.m_bTookChoice;
     }
