@@ -411,6 +411,7 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     cpp/complextoolbarcontrols/ProtocolHandler.xcu \
     cpp/complextoolbarcontrols/WriterListener.cxx \
     cpp/complextoolbarcontrols/WriterWindowState.xcu \
+    cpp/complextoolbarcontrols/description.xml \
     cpp/complextoolbarcontrols/exports.cxx \
     cpp/complextoolbarcontrols/logo_big.png \
     cpp/complextoolbarcontrols/logo_small.png \

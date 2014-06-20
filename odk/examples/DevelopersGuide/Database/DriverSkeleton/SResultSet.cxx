@@ -770,7 +770,7 @@ IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
-        PROPERTY_ID_CURSORNAME, ::cppu::UnoType<OUString>::get(), PropertyAttribute::READONLY);
+        PROPERTY_ID_CURSORNAME, ::cppu::UnoType<rtl::OUString>::get(), PropertyAttribute::READONLY);
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
         PROPERTY_ID_FETCHDIRECTION, ::cppu::UnoType<sal_Int32>::get(), 0);
     pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
