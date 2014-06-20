@@ -70,6 +70,7 @@ $(eval $(call gb_UIConfig_add_toolbarfiles,modules/simpress,\
 ))
 
 $(eval $(call gb_UIConfig_add_uifiles,modules/simpress,\
+	sd/uiconfig/simpress/ui/assistentdialog \
 	sd/uiconfig/simpress/ui/customanimationcreatedialog \
 	sd/uiconfig/simpress/ui/customanimationcreatetab \
 	sd/uiconfig/simpress/ui/customanimationspanel \

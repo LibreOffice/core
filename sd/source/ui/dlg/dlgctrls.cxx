@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <vcl/builder.hxx>
 
 #include "strings.hrc"
 #include "dlgctrls.hxx"
@@ -66,8 +67,10 @@ void FadeEffectLB::Fill()
     SelectEntryPos(0);
 }
 
-
-
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFadeEffectLB(Window* pParent, VclBuilder::stringmap &)
+{
+    return new FadeEffectLB(pParent, 0);
+}
 
 void FadeEffectLB::applySelected( SdPage* pSlide ) const
 {
