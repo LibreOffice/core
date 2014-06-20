@@ -37,8 +37,7 @@ import com.sun.star.lib.uno.helper.ComponentBase;
 import com.sun.star.uno.UnoRuntime;
 
 // factories
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XSingleComponentFactory;
 
 // supported Interfaces
 import com.sun.star.linguistic2.XHyphenator;
@@ -493,26 +492,21 @@ public class SampleHyphenator extends ComponentBase implements
      * Returns a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
      * <p>
-     * @return  returns a <code>XSingleServiceFactory</code> for creating the component
+     * @return  returns a <code>XComponentServiceFactory</code> for creating the component
      * @param   implName     the name of the implementation for which a service is desired
-     * @param   multiFactory the service manager to be used if needed
-     * @param   regKey       the registryKey
      * @see                  com.sun.star.comp.loader.JavaLoader
      */
-    public static XSingleServiceFactory __getServiceFactory(
-        String aImplName,
-        XMultiServiceFactory xMultiFactory,
-        com.sun.star.registry.XRegistryKey xRegKey )
+    public static XSingleComponentFactory __getComponentFactory(
+        String aImplName )
     {
-        XSingleServiceFactory xSingleServiceFactory = null;
+        XSingleComponentFactory xSingleComponentFactory = null;
         if( aImplName.equals( _aSvcImplName ) )
         {
-            xSingleServiceFactory = new OneInstanceFactory(
+            xSingleComponentFactory = new OneInstanceFactory(
                     SampleHyphenator.class, _aSvcImplName,
-                    getSupportedServiceNames_Static(),
-                    xMultiFactory );
+                    getSupportedServiceNames_Static() );
         }
-        return xSingleServiceFactory;
+        return xSingleComponentFactory;
     }
 
     /**

@@ -32,11 +32,11 @@
  *
  *************************************************************************/
 
-import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
 
@@ -49,32 +49,29 @@ import java.lang.reflect.Constructor;
 
 
 public class OneInstanceFactory implements
-        XSingleServiceFactory,
+        XSingleComponentFactory,
         XServiceInfo
 {
     Class       aMyClass;
     String      aSvcImplName;
     String[]    aSupportedSvcNames;
     XInterface  xInstantiatedService;
-    XMultiServiceFactory    xMultiFactory;
 
     public OneInstanceFactory(
             Class       aMyClass,
             String      aSvcImplName,
-            String[]    aSupportedSvcNames,
-            XMultiServiceFactory    xMultiFactory )
+            String[]    aSupportedSvcNames )
     {
         this.aMyClass           = aMyClass;
         this.aSvcImplName       = aSvcImplName;
         this.aSupportedSvcNames = aSupportedSvcNames;
-        this.xMultiFactory      = xMultiFactory;
         xInstantiatedService = null;
     }
 
 
-    // XSingleServiceFactory
+    // XSingleComponentFactory
 
-    public Object createInstance()
+    public Object createInstanceWithContext( XComponentContext context )
         throws com.sun.star.uno.Exception,
                com.sun.star.uno.RuntimeException
     {
@@ -91,15 +88,17 @@ public class OneInstanceFactory implements
             //!! workaround for services not always being created
             //!! via 'createInstanceWithArguments'
             XInitialization xIni = UnoRuntime.queryInterface(
-                XInitialization.class, createInstance());
+                XInitialization.class, createInstanceWithContext(context));
             if (xIni != null)
             {
                 Object[] aArguments = new Object[]{ null, null };
-                if (xMultiFactory != null)
+                if (context != null)
                 {
                     XPropertySet xPropSet = UnoRuntime.queryInterface(
-                        XPropertySet.class ,  xMultiFactory.createInstance(
-                            "com.sun.star.linguistic2.LinguProperties" ) );
+                        XPropertySet.class,
+                        context.getServiceManager().createInstanceWithContext(
+                            "com.sun.star.linguistic2.LinguProperties",
+                            context ) );
                     aArguments[0] = xPropSet;
                 }
                 xIni.initialize( aArguments );
@@ -108,14 +107,14 @@ public class OneInstanceFactory implements
         return xInstantiatedService;
     }
 
-    public Object createInstanceWithArguments( Object[] aArguments )
+    public Object createInstanceWithArgumentsAndContext( Object[] aArguments, XComponentContext context )
         throws com.sun.star.uno.Exception,
                com.sun.star.uno.RuntimeException
     {
         if (xInstantiatedService == null)
         {
             XInitialization xIni = UnoRuntime.queryInterface(
-                XInitialization.class, createInstance());
+                XInitialization.class, createInstanceWithContext( context ));
             if (xIni != null)
                 xIni.initialize( aArguments );
         }
