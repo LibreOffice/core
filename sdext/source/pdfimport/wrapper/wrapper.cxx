@@ -553,7 +553,7 @@ void Parser::parseFontFamilyName( FontAttributes& rResult )
             nLen -= nAttribLen;
             pCopy += nAttribLen;
         }
-        else
+        else if(nLen > 0)
         {
             if( *pCopy != '-' )
                 aNewFamilyName.append( *pCopy );
