@@ -1152,6 +1152,19 @@ class NestedUserCallHdl
         }
 };
 
+/// Notify the format's textbox that it should reconsider its position / size.
+void lcl_textBoxSizeNotify(SwFrmFmt* pFmt)
+{
+    if (SwTextBoxHelper::findTextBox(pFmt))
+    {
+        // Just notify the textbox that the size has changed, the actual object size is not interesting.
+        SfxItemSet aResizeSet(pFmt->GetDoc()->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE, 0);
+        SwFmtFrmSize aSize;
+        aResizeSet.Put(aSize);
+        SwTextBoxHelper::syncFlyFrmAttr(*pFmt, aResizeSet);
+    }
+}
+
 // !!!ATTENTION!!! The object may commit suicide!!!
 
 void SwDrawContact::_Changed( const SdrObject& rObj,
@@ -1385,15 +1398,13 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                         }
                     }
 
-                    if (SwTextBoxHelper::findTextBox(GetFmt()))
-                    {
-                        // Just notify the textbox that the size has changed, the actual object size is not interesting.
-                        SfxItemSet aResizeSet(GetFmt()->GetDoc()->GetAttrPool(), RES_FRM_SIZE, RES_FRM_SIZE, 0);
-                        SwFmtFrmSize aSize;
-                        aResizeSet.Put(aSize);
-                        SwTextBoxHelper::syncFlyFrmAttr(*GetFmt(), aResizeSet);
-                    }
+                    lcl_textBoxSizeNotify(GetFmt());
                 }
+                else if (eType == SDRUSERCALL_RESIZE)
+                    // Even if the bounding box of the shape didn't change,
+                    // notify about the size change, as an adjustment change
+                    // may affect the size of the underlying textbox.
+                    lcl_textBoxSizeNotify(GetFmt());
             }
         }
         break;
