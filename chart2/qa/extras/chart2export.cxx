@@ -62,6 +62,7 @@ public:
     void testFdo78290LineChartMarkerX();
     void testFdo78290ScatterChartMarkerX();
     void testFdo78290CombinationChartMarkerX();
+    void testAxisNumberFormatODS();
 
     CPPUNIT_TEST_SUITE(Chart2ExportTest);
     CPPUNIT_TEST(test);
@@ -95,6 +96,7 @@ public:
     CPPUNIT_TEST(testFdo78290LineChartMarkerX);
     CPPUNIT_TEST(testFdo78290ScatterChartMarkerX);
     CPPUNIT_TEST(testFdo78290CombinationChartMarkerX);
+    CPPUNIT_TEST(testAxisNumberFormatODS);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
@@ -670,6 +672,70 @@ void Chart2ExportTest::testFdo78290CombinationChartMarkerX()
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:symbol[1]","val","x");
     assertXPath(pXmlDoc, "/c:chartSpace[1]/c:chart[1]/c:plotArea[1]/c:lineChart[1]/c:ser[1]/c:marker[1]/c:size[1]","val","7");
+}
+
+void Chart2ExportTest::testAxisNumberFormatODS()
+{
+    struct
+    {
+        void check( const Reference<chart2::XChartDocument>& xChartDoc )
+        {
+            Reference<util::XNumberFormatsSupplier> xNFS(xChartDoc, UNO_QUERY_THROW);
+            Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
+            CPPUNIT_ASSERT(xNumberFormats.is());
+
+            Reference<chart2::XAxis> xAxisX = getAxisFromDoc(xChartDoc, 0, 0, 0);
+            Reference<chart2::XTitled> xTitle(xAxisX, UNO_QUERY_THROW);
+            OUString aTitleText = getTitleString(xTitle);
+            CPPUNIT_ASSERT_EQUAL(OUString("Linked To Source"), aTitleText);
+
+            Reference<beans::XPropertySet> xPS(xAxisX, UNO_QUERY_THROW);
+
+            sal_Int32 nNumFmt = -1;
+            xPS->getPropertyValue("NumberFormat") >>= nNumFmt;
+            CPPUNIT_ASSERT_MESSAGE("Failed to get a number format value from X axis.", nNumFmt != -1);
+            Reference<beans::XPropertySet> xNumPS = xNumberFormats->getByKey(nNumFmt);
+            CPPUNIT_ASSERT(xNumPS.is());
+            sal_Int16 nType = util::NumberFormat::UNDEFINED;
+            xNumPS->getPropertyValue("Type") >>= nType;
+            CPPUNIT_ASSERT_MESSAGE("X axis should be percentage format.", (nType & util::NumberFormat::PERCENT));
+
+            bool bNumFmtLinked = false;
+            xPS->getPropertyValue("LinkNumberFormatToSource") >>= bNumFmtLinked;
+            CPPUNIT_ASSERT_MESSAGE("X axis should have its number format linked to source.", bNumFmtLinked);
+
+            Reference<chart2::XAxis> xAxisY = getAxisFromDoc(xChartDoc, 0, 1, 0);
+            xTitle.set(xAxisY, UNO_QUERY_THROW);
+            aTitleText = getTitleString(xTitle);
+            CPPUNIT_ASSERT_EQUAL(OUString("Not Linked"), aTitleText);
+
+            xPS.set(xAxisY, UNO_QUERY_THROW);
+
+            nNumFmt = -1;
+            xPS->getPropertyValue("NumberFormat") >>= nNumFmt;
+            CPPUNIT_ASSERT_MESSAGE("Failed to get a number format value from Y axis.", nNumFmt != -1);
+            xNumPS = xNumberFormats->getByKey(nNumFmt);
+            CPPUNIT_ASSERT(xNumPS.is());
+            nType = util::NumberFormat::UNDEFINED;
+            xNumPS->getPropertyValue("Type") >>= nType;
+            CPPUNIT_ASSERT_MESSAGE("Y axis should be a normal number format.", (nType & util::NumberFormat::NUMBER));
+
+            bNumFmtLinked = true;
+            xPS->getPropertyValue("LinkNumberFormatToSource") >>= bNumFmtLinked;
+            CPPUNIT_ASSERT_MESSAGE("Y axis should not have its number format linked to source.", !bNumFmtLinked);
+        }
+
+    } aTest;
+
+    load("/chart2/qa/extras/data/ods/", "axis-numformats-linked.ods");
+
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    aTest.check(xChartDoc);
+
+    // Reload the document and make sure everything remains intact.
+    reload("calc8");
+    xChartDoc = getChartDocFromSheet(0, mxComponent);
+    aTest.check(xChartDoc);
 }
 
 void Chart2ExportTest::testBarChartRotation()
