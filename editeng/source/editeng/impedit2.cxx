@@ -4028,9 +4028,7 @@ void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
     {
         OSL_ENSURE( pPortion->GetLines().Count(), "Paragraph with no lines in ParaPortion::CalcHeight" );
         for (sal_Int32 nLine = 0; nLine < pPortion->GetLines().Count(); ++nLine)
-            // Use GetTxtHeight() for first line, otherwise height is small
-            // if the paragraph has proportional line spacing less than 100%.
-            pPortion->nHeight += nLine ? pPortion->GetLines()[nLine]->GetHeight() : pPortion->GetLines()[nLine]->GetTxtHeight();
+            pPortion->nHeight += pPortion->GetLines()[nLine]->GetHeight();
 
         if ( !aStatus.IsOutliner() )
         {
@@ -4173,7 +4171,7 @@ Rectangle ImpEditEngine::GetEditCursor( ParaPortion* pPortion, sal_Int32 nIndex,
     Rectangle aEditCursor;
 
     aEditCursor.Top() = nY;
-    nY += pLine->GetTxtHeight();
+    nY += pLine->GetHeight();
     aEditCursor.Bottom() = nY-1;
 
     // Search within the line...
