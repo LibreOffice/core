@@ -114,7 +114,7 @@
                     <property name="action_name">InsertTextColumn</property>
                     <property name="label" translatable="yes">Insert Text Column</property>
                     <property name="use_underline">True</property>
-                    <property name="icon_name">chart2/res/dataeditor_icon03.png</property>
+                    <property name="icon_name">chart2/res/dataeditor_icon07.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -128,7 +128,7 @@
                     <property name="action_name">RemoveRow</property>
                     <property name="label" translatable="yes">Delete Row</property>
                     <property name="use_underline">True</property>
-                    <property name="icon_name">chart2/res/dataeditor_icon04.png</property>
+                    <property name="icon_name">chart2/res/dataeditor_icon03.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -142,7 +142,7 @@
                     <property name="action_name">RemoveColumn</property>
                     <property name="label" translatable="yes">Delete Series</property>
                     <property name="use_underline">True</property>
-                    <property name="icon_name">chart2/res/dataeditor_icon05.png</property>
+                    <property name="icon_name">chart2/res/dataeditor_icon04.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -166,7 +166,7 @@
                     <property name="action_name">SwapColumn</property>
                     <property name="label" translatable="yes">Move Series Right</property>
                     <property name="use_underline">True</property>
-                    <property name="icon_name">chart2/res/dataeditor_icon06.png</property>
+                    <property name="icon_name">chart2/res/dataeditor_icon05.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -180,7 +180,7 @@
                     <property name="action_name">SwapRow</property>
                     <property name="label" translatable="yes">Move Row Down</property>
                     <property name="use_underline">True</property>
-                    <property name="icon_name">chart2/res/dataeditor_icon07.png</property>
+                    <property name="icon_name">chart2/res/dataeditor_icon06.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
