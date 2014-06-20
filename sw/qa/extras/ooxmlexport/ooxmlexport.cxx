@@ -622,23 +622,11 @@ DECLARE_OOXMLEXPORT_TEST(testFdo48557, "fdo48557.odt")
     // Inner margins of the textframe wasn't exported.
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    if (xIndexAccess->getCount() > 0)
-    {
-        // TODO TextBox: remove this when TextBox is enabled by default
-        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "LeftBorderDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "RightBorderDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TopBorderDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "BottomBorderDistance"));
-    }
-    else
-    {
-        uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextLeftDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextRightDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextUpperDistance"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextLowerDistance"));
-    }
+    uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextLeftDistance"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextRightDistance"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextUpperDistance"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(150), getProperty<sal_Int32>(xFrame, "TextLowerDistance"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testI120928, "i120928.docx")
@@ -984,17 +972,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testFdo60990, "fdo60990.odt")
 {
-    // TODO TextBox: remove this when TextBox is enabled by default
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    bool bTextBox = xIndexAccess->getCount() == 0;
-
     // The shape had no background, no paragraph adjust and no font color.
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
-    if (bTextBox)
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00CFE7F5), getProperty<sal_Int32>(xShape, "FillColor"));
-    else
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00CFE7F5), getProperty<sal_Int32>(xShape, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x00CFE7F5), getProperty<sal_Int32>(xShape, "FillColor"));
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY)->getText();
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
@@ -2166,19 +2146,8 @@ DECLARE_OOXMLEXPORT_TEST(testGroupshapePicture, "groupshape-picture.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testAutofit, "autofit.docx")
 {
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    if (xIndexAccess->getCount())
-    {
-        // TODO TextBox: remove this when TextBox is enabled by default
-        CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(getShape(1), "FrameIsAutomaticHeight")));
-        CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "FrameIsAutomaticHeight")));
-    }
-    else
-    {
-        CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(getShape(1), "TextAutoGrowHeight")));
-        CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "TextAutoGrowHeight")));
-    }
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<sal_Bool>(getShape(1), "TextAutoGrowHeight")));
+    CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(getShape(2), "TextAutoGrowHeight")));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTrackChangesDeletedParagraphMark, "testTrackChangesDeletedParagraphMark.docx")
@@ -2373,33 +2342,15 @@ DECLARE_OOXMLEXPORT_TEST(testFdo73550, "fdo73550.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testPageRelSize, "pagerelsize.docx")
 {
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    if (xIndexAccess->getCount())
-    {
-        // TODO TextBox: remove this when TextBox is enabled by default
-        // First textframe: width is relative from page, but not height.
-        uno::Reference<drawing::XShape> xTextFrame = getTextFrameByName("Frame1");
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
+    // First shape: width is relative from page, but not height.
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "RelativeWidthRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xShape, "RelativeHeightRelation"));
 
-        // Second textframe: height is relative from page, but not height.
-        xTextFrame = getTextFrameByName("Text Box 2");
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeHeightRelation"));
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xTextFrame, "RelativeWidthRelation"));
-    }
-    else
-    {
-        // First shape: width is relative from page, but not height.
-        uno::Reference<drawing::XShape> xShape = getShape(1);
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "RelativeWidthRelation"));
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xShape, "RelativeHeightRelation"));
-
-        // Second shape: height is relative from page, but not height.
-        xShape = getShape(2);
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "RelativeHeightRelation"));
-        CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xShape, "RelativeWidthRelation"));
-    }
+    // Second shape: height is relative from page, but not height.
+    xShape = getShape(2);
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(xShape, "RelativeHeightRelation"));
+    CPPUNIT_ASSERT_EQUAL(text::RelOrientation::FRAME, getProperty<sal_Int16>(xShape, "RelativeWidthRelation"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRelSizeRound, "rel-size-round.docx")
@@ -2658,26 +2609,12 @@ DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
 
 DECLARE_OOXMLEXPORT_TEST(testFloatingTablePosition, "floating-table-position.docx")
 {
-    // Position of text frame was wrong, because some conversion was missing.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    if (xIndexAccess->getCount())
-    {
-        // TODO TextBox: remove this when TextBox is enabled by default
-        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-        // This was 3295.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5964), getProperty<sal_Int32>(xFrame, "HoriOrientPosition"));
-        // This was 4611.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(8133), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
-    }
-    else
-    {
-        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
-        // This was 3295.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5964), getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
-        // This was 4611.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(8133), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
-    }
+    // Position of shape was wrong, because some conversion was missing.
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    // This was 3295.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5964), getProperty<sal_Int32>(xShape, "HoriOrientPosition"));
+    // This was 4611.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8133), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testAbi11739, "abi11739.docx")

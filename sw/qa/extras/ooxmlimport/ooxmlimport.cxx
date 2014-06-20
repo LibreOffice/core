@@ -1494,20 +1494,9 @@ DECLARE_OOXMLIMPORT_TEST(testDefaultSectBreakCols, "default-sect-break-cols.docx
 DECLARE_OOXMLIMPORT_TEST(testFdo69636, "fdo69636.docx")
 {
     // The problem was that the mso-layout-flow-alt:bottom-to-top VML shape property wasn't handled for sw text frames.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    if (xIndexAccess->getCount())
-    {
-        // TODO TextBox: remove this when TextBox is enabled by default
-        uno::Reference<text::XTextRange> xFrame(getShape(1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(900), getProperty<sal_Int32>(getRun(getParagraphOfText(1, xFrame->getText()), 1), "CharRotation"));
-    }
-    else
-    {
-        uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
-        comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-270), aCustomShapeGeometry["TextPreRotateAngle"].get<sal_Int32>());
-    }
+    uno::Reference<beans::XPropertySet> xPropertySet(getShape(1), uno::UNO_QUERY);
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-270), aCustomShapeGeometry["TextPreRotateAngle"].get<sal_Int32>());
 }
 
 DECLARE_OOXMLIMPORT_TEST(testChartProp, "chart-prop.docx")
@@ -1716,26 +1705,12 @@ DECLARE_OOXMLIMPORT_TEST(testMceWpg, "mce-wpg.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testMceNested, "mce-nested.docx")
 {
-    // Vertical position of the textbox was incorrect due to incorrect nested mce handling.
-    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
-    if (xIndexAccess->getCount())
-    {
-        // TODO TextBox: remove this when TextBox is enabled by default
-        uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-        // positionV's posOffset from the bugdoc, was 0.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(EMU_TO_MM100(2514600)), getProperty<sal_Int32>(xFrame, "VertOrientPosition"));
-        // This was -1 (default), make sure the background color is set.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xFrame, "BackColor"));
-    }
-    else
-    {
-        uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
-        // positionV's posOffset from the bugdoc, was 0.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(6987), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
-        // This was -1 (default), make sure the background color is set.
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xShape, "FillColor"));
-    }
+    // Vertical position of the shape was incorrect due to incorrect nested mce handling.
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    // positionV's posOffset from the bugdoc, was 0.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6987), getProperty<sal_Int32>(xShape, "VertOrientPosition"));
+    // This was -1 (default), make sure the background color is set.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4f81bd), getProperty<sal_Int32>(xShape, "FillColor"));
 
     uno::Reference<drawing::XShapeDescriptor> xShapeDescriptor(getShape(2), uno::UNO_QUERY);
     // This was a com.sun.star.drawing.CustomShape, due to incorrect handling of wpg elements after a wps textbox.
