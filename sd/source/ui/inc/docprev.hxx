@@ -23,6 +23,7 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <vcl/window.hxx>
 #include <tools/gen.hxx>
+#include <tools/wintypes.hxx>
 
 #include <rtl/ref.hxx>
 
@@ -49,6 +50,7 @@ protected:
     rtl::Reference< sd::SlideShow > mxSlideShow;
 
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
     static void     CalcSizeAndPos( GDIMetaFile* pFile, Size& rSize, Point& rPoint );
     void            ImpPaint( GDIMetaFile* pFile, OutputDevice* pVDev );
 
@@ -61,7 +63,7 @@ protected:
     void updateViewSettings();
 
 public:
-                    SdDocPreviewWin( Window* pParent, const ResId& rResId );
+                    SdDocPreviewWin( Window* pParent, const WinBits nStyle );
                     virtual ~SdDocPreviewWin();
     void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
     virtual void    Resize() SAL_OVERRIDE;

@@ -26,6 +26,7 @@
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <fadedef.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/settings.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
@@ -60,8 +61,19 @@ void SdDocPreviewWin::SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage
     updateViewSettings();
 }
 
-SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
-: Control(pParent, rResId), pMetaFile( 0 ), bInEffect(false), mpObj(NULL), mnShowPage(0)
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSdDocPreviewWin(Window *pParent, VclBuilder::stringmap &rMap)
+{
+    WinBits nWinStyle = 0;
+
+    OString sBorder = VclBuilder::extractCustomProperty(rMap);
+    if (!sBorder.isEmpty())
+        nWinStyle |= WB_BORDER;
+
+    return new SdDocPreviewWin(pParent, nWinStyle);
+}
+
+SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const WinBits nStyle )
+: Control(pParent, nStyle), pMetaFile( 0 ), bInEffect(false), mpObj(NULL), mnShowPage(0)
 {
     SetBorderStyle( WINDOW_BORDER_MONO );
     svtools::ColorConfig aColorConfig;
@@ -72,6 +84,11 @@ SdDocPreviewWin::SdDocPreviewWin( Window* pParent, const ResId& rResId )
 SdDocPreviewWin::~SdDocPreviewWin()
 {
     delete pMetaFile;
+}
+
+Size SdDocPreviewWin::GetOptimalSize() const
+{
+    return LogicToPixel(Size(122, 96), MAP_APPFONT);
 }
 
 void SdDocPreviewWin::Resize()

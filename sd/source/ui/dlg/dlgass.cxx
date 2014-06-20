@@ -23,6 +23,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/combobox.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/doctempl.hxx>
 #include <svl/lstner.hxx>
 #include <sfx2/objsh.hxx>
@@ -58,7 +59,6 @@
 #include "sdpage.hxx"
 #include "helpids.h"
 #include "assclass.hxx"
-#include "dlgass.hrc"
 #include "dlgass.hxx"
 #include "dlgctrls.hxx"
 #include "strings.hrc"
@@ -75,17 +75,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::sd;
 
 using ::std::vector;
-
-void InterpolateFixedBitmap( FixedBitmap * pBitmap )
-{
-    Bitmap aBmp( pBitmap->GetBitmap() );
-    Size aSize = pBitmap->GetSizePixel();
-    aBmp.Scale( aSize, BMP_SCALE_BESTQUALITY );
-    pBitmap->SetBitmap( aBmp );
-}
-
-
-
 
 
 const char* PageHelpIds[] =
@@ -117,7 +106,7 @@ public:
 class NextButton
 {
 public:
-    NextButton (::Window* pParent, const ResId& rResId);
+    NextButton (::Window* pParent);
 
     void ForceFocusEventBroadcast (void);
     void SetClickHdl (const Link& rLink);
@@ -125,8 +114,8 @@ public:
     void Enable (bool bEnable);
 
 private:
-    PushButton maNextButton1;
-    PushButton maNextButton2;
+    PushButton* mpNextButton1;
+    PushButton* mpNextButton2;
     bool mbIsFirstButtonActive;
 };
 
@@ -273,21 +262,18 @@ public:
 
     // Common
     Assistent           maAssistentFunc;
-    CheckBox            maPreviewFlag;
-    CheckBox            maStartWithFlag;
-    HelpButton          maHelpButton;
-    CancelButton        maCancelButton;
-    PushButton          maLastPageButton;
-    NextButton          maNextPageButton;
-    OKButton            maFinishButton;
-    SdDocPreviewWin     maPreview;
-
-    OUString            maCreateStr;
-    OUString            maOpenStr;
+    CheckBox*           mpPreviewFlag;
+    CheckBox*           mpStartWithFlag;
+    PushButton*         mpLastPageButton;
+    NextButton*         mpNextPageButton;
+    PushButton*         mpFinishButton;
+    SdDocPreviewWin*    mpPreview;
+    VclContainer*       mpPage1235;
 
     // page 1
-    FixedBitmap*        mpPage1FB;
-    FixedLine*          mpPage1ArtFL;
+    VclContainer*       mpPage1;
+    FixedImage*         mpPage1FB;
+    FixedText*          mpPage1ArtFL;
     RadioButton*        mpPage1EmptyRB;
     RadioButton*        mpPage1TemplateRB;
     ListBox*            mpPage1RegionLB;
@@ -297,11 +283,12 @@ public:
     PushButton*         mpPage1OpenPB;
 
     // page 2
-    FixedBitmap*        mpPage2FB;
-    FixedLine*          mpPage2LayoutFL;
+    VclContainer*       mpPage2;
+    FixedImage*         mpPage2FB;
+    FixedText*          mpPage2LayoutFL;
     ListBox*            mpPage2RegionLB;
     ListBox*            mpPage2LayoutLB;
-    FixedLine*          mpPage2OutTypesFL;
+    FixedText*          mpPage2OutTypesFL;
     RadioButton*        mpPage2Medium1RB;
     RadioButton*        mpPage2Medium2RB;
     RadioButton*        mpPage2Medium3RB;
@@ -310,13 +297,14 @@ public:
     RadioButton*        mpPage2Medium6RB;
 
     // page 3
-    FixedBitmap*        mpPage3FB;
-    FixedLine*          mpPage3EffectFL;
+    VclContainer*       mpPage3;
+    FixedImage*         mpPage3FB;
+    FixedText*          mpPage3EffectFL;
     FixedText*          mpPage3EffectFT;
     FadeEffectLB*       mpPage3EffectLB;
     FixedText*          mpPage3SpeedFT;
     ListBox*            mpPage3SpeedLB;
-    FixedLine*          mpPage3PresTypeFL;
+    FixedText*          mpPage3PresTypeFL;
     RadioButton*        mpPage3PresTypeLiveRB;
     RadioButton*        mpPage3PresTypeKioskRB;
     FixedText*          mpPage3PresTimeFT;
@@ -326,17 +314,19 @@ public:
     CheckBox*           mpPage3LogoCB;
 
     // page 4
-    FixedBitmap*        mpPage4FB;
-    FixedLine*          mpPage4PersonalFL;
+    VclContainer*       mpPage4;
+    FixedImage*         mpPage4FB;
+    FixedText*          mpPage4PersonalFL;
     FixedText*          mpPage4AskNameFT;
     Edit*               mpPage4AskNameEDT;
     FixedText*          mpPage4AskTopicFT;
     Edit*               mpPage4AskTopicEDT;
     FixedText*          mpPage4AskInfoFT;
-    MultiLineEdit*      mpPage4AskInfoEDT;
+    VclMultiLineEdit*      mpPage4AskInfoEDT;
 
     // page 5
-    FixedBitmap*        mpPage5FB;
+    VclContainer*       mpPage5;
+    FixedImage*         mpPage5FB;
     FixedText*          mpPage5PageListFT;
     SdPageListControl*  mpPage5PageListCT;
     CheckBox*           mpPage5SummaryCB;
@@ -356,18 +346,46 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mbPreview(true),
     mnShowPage(0),
     mbDocPreview(false),
-    maAssistentFunc(5),
-    maPreviewFlag(pWindow,SdResId(CB_PREVIEW)),
-    maStartWithFlag(pWindow,SdResId(CB_STARTWITH)),
-    maHelpButton(pWindow,SdResId(BUT_HELP)),
-    maCancelButton(pWindow,SdResId(BUT_CANCEL)),
-    maLastPageButton(pWindow,SdResId(BUT_LAST)),
-    maNextPageButton(pWindow,SdResId(BUT_NEXT)),
-    maFinishButton(pWindow,SdResId(BUT_FINISH)),
-    maPreview(pWindow,SdResId(CT_PREVIEW)),
-    maCreateStr(SdResId(STR_CREATE)),
-    maOpenStr(SdResId(STR_OPEN))
+    maAssistentFunc(5)
 {
+    AssistentDlg* assDlg = static_cast<AssistentDlg*>(pWindow);
+    assDlg->get(mpPreviewFlag, "previewCheckbutton");
+    assDlg->get(mpStartWithFlag, "startWithCheckbutton");
+    assDlg->get(mpLastPageButton, "lastPageButton");
+    assDlg->get(mpFinishButton, "finishButton");
+    assDlg->get(mpPreview, "previewControl");
+    assDlg->get(mpPage1235, "page1235Box");
+    mpNextPageButton = new NextButton( pWindow );
+
+    //Lock down the preferred size based on the
+    //initial max-size configuration
+    assDlg->get(mpPage1TemplateLB, "templatesTreeview");
+    assDlg->get(mpPage1OpenLB, "openTreeview");
+    long nHeight = mpPage1TemplateLB->GetTextHeight() * 7;
+    mpPage1TemplateLB->set_height_request(nHeight);
+    mpPage1OpenLB->set_height_request(nHeight);
+
+    assDlg->get(mpPage1, "page1Box");
+    assDlg->get(mpPage2, "page2Box");
+    assDlg->get(mpPage3, "page3Box");
+    assDlg->get(mpPage4, "page4Frame");
+    assDlg->get(mpPage5, "page5Box");
+    Size aSize(mpPage1->get_preferred_size());
+    mpPage1->set_height_request(aSize.Height());
+    mpPage2->set_height_request(aSize.Height());
+    mpPage3->set_height_request(aSize.Height());
+    mpPage4->set_height_request(aSize.Height());
+    mpPage5->set_height_request(aSize.Height());
+    mpPage1->set_width_request(aSize.Width());
+    mpPage2->set_width_request(aSize.Width());
+    mpPage3->set_width_request(aSize.Width());
+    mpPage4->set_width_request(aSize.Width());
+    mpPage5->set_width_request(aSize.Width());
+
+    aSize = assDlg->get_preferred_size();
+    assDlg->set_width_request(aSize.Width());
+    assDlg->set_height_request(aSize.Height());
+
     maPageListFile = "?";
     mbRecentDocumentsReady = false;
     mbTemplatesReady = false;
@@ -375,47 +393,32 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     mpWindow = pWindow;
 
-    if(bAutoPilot)
-        maStartWithFlag.Hide();
+    if (bAutoPilot)
+        mpStartWithFlag->Hide();
     else
-        maAssistentFunc.InsertControl(1, &maStartWithFlag );
+        maAssistentFunc.InsertControl(1, mpStartWithFlag );
 
     // initialize page1 and give it to the assistant functionality
-    maAssistentFunc.InsertControl(1, &maPreview );
-    maAssistentFunc.InsertControl(1, &maPreviewFlag );
-    maAssistentFunc.InsertControl(1,
-        mpPage1FB = new FixedBitmap(pWindow,SdResId(FB_PAGE1)));
-    maAssistentFunc.InsertControl(1,
-        mpPage1ArtFL = new FixedLine(pWindow,SdResId(FL_PAGE1_ARTGROUP)));
-    maAssistentFunc.InsertControl(1,
-        mpPage1EmptyRB=new RadioButton(pWindow,SdResId(RB_PAGE1_EMPTY)));
-    maAssistentFunc.InsertControl(1,
-        mpPage1TemplateRB=new RadioButton(pWindow,SdResId(RB_PAGE1_TEMPLATE)));
-    maAssistentFunc.InsertControl(1,
-        mpPage1OpenRB=new RadioButton(pWindow,SdResId(RB_PAGE1_OPEN)));
-    maAssistentFunc.InsertControl(1,
-        mpPage1RegionLB = new ListBox(pWindow,SdResId(LB_PAGE1_REGION)));
-    maAssistentFunc.InsertControl(1,
-        mpPage1TemplateLB=new ListBox(pWindow,SdResId(LB_PAGE1_TEMPLATES)));
-    maAssistentFunc.InsertControl(1,
-        mpPage1OpenPB=new PushButton(pWindow,SdResId(PB_PAGE1_OPEN)));
-    maAssistentFunc.InsertControl(1,
-        mpPage1OpenLB=new ListBox(pWindow,SdResId(LB_PAGE1_OPEN)));
-
-    // Align the button and list box displayed for the "open existing file"
-    // radio button with the text of that radio button.
-    {
-        RadioButton aEmptyRB (mpWindow);
-        sal_Int32 nIndent (aEmptyRB.CalcMinimumSize(0).Width());
-        sal_Int32 nLeft (mpPage1OpenRB->GetPosPixel().X() + nIndent);
-        sal_Int32 nWidth (mpPage1OpenRB->GetSizePixel().Width() - nIndent);
-        mpPage1OpenPB->SetPosSizePixel(
-            Point(nLeft, mpPage1OpenPB->GetPosPixel().Y()),
-            Size(mpPage1OpenPB->GetSizePixel()));
-        mpPage1OpenLB->SetPosSizePixel(
-            Point(nLeft, mpPage1OpenLB->GetPosPixel().Y()),
-            Size(nWidth, mpPage1OpenLB->GetSizePixel().Height()));
-    }
+    assDlg->get(mpPage1FB, "header1Image");
+    assDlg->get(mpPage1ArtFL, "typeLabel");
+    assDlg->get(mpPage1EmptyRB, "emptyRadiobutton");
+    assDlg->get(mpPage1TemplateRB, "templateRadiobutton");
+    assDlg->get(mpPage1OpenRB, "openRadiobutton");
+    assDlg->get(mpPage1RegionLB, "regionCombobox");
+    assDlg->get(mpPage1OpenPB, "openButton");
+    maAssistentFunc.InsertControl(1, mpPage1 );
+    maAssistentFunc.InsertControl(1, mpPage1235 );
+    maAssistentFunc.InsertControl(1, mpPreview );
+    maAssistentFunc.InsertControl(1, mpPreviewFlag );
+    maAssistentFunc.InsertControl(1, mpPage1FB );
+    maAssistentFunc.InsertControl(1, mpPage1ArtFL );
+    maAssistentFunc.InsertControl(1, mpPage1EmptyRB);
+    maAssistentFunc.InsertControl(1, mpPage1TemplateRB );
+    maAssistentFunc.InsertControl(1, mpPage1OpenRB );
+    maAssistentFunc.InsertControl(1, mpPage1RegionLB );
+    maAssistentFunc.InsertControl(1, mpPage1TemplateLB );
+    maAssistentFunc.InsertControl(1, mpPage1OpenPB );
+    maAssistentFunc.InsertControl(1, mpPage1OpenLB );
 
     // Set text and icon of the 'Open...' button.
     {
@@ -450,31 +453,33 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage1OpenPB->SetClickHdl(LINK(this,AssistentDlgImpl,OpenButtonHdl));
 
     // page 2
-    maAssistentFunc.InsertControl(2, &maPreview );
-    maAssistentFunc.InsertControl(2, &maPreviewFlag );
-    maAssistentFunc.InsertControl(2,
-        mpPage2FB = new FixedBitmap(pWindow,SdResId(FB_PAGE2)));
-    maAssistentFunc.InsertControl(2,
-        mpPage2LayoutFL = new FixedLine( pWindow, SdResId(FL_PAGE2_LAYOUT) ));
-    maAssistentFunc.InsertControl(2,
-        mpPage2RegionLB = new ListBox(pWindow,SdResId(LB_PAGE2_REGION) ));
-    maAssistentFunc.InsertControl(2,
-        mpPage2LayoutLB = new ListBox(pWindow,SdResId(LB_PAGE2_LAYOUT) ));
+    assDlg->get(mpPage2FB, "header2Image");
+    assDlg->get(mpPage2LayoutFL, "layout2Label");
+    assDlg->get(mpPage2RegionLB, "page2RegionCombobox");
+    assDlg->get(mpPage2LayoutLB, "layoutTreeview");
+    maAssistentFunc.InsertControl(2, mpPage2 );
+    maAssistentFunc.InsertControl(2, mpPage1235 );
+    maAssistentFunc.InsertControl(2, mpPreview );
+    maAssistentFunc.InsertControl(2, mpPreviewFlag );
+    maAssistentFunc.InsertControl(2, mpPage2FB );
+    maAssistentFunc.InsertControl(2, mpPage2LayoutFL );
+    maAssistentFunc.InsertControl(2, mpPage2RegionLB );
+    maAssistentFunc.InsertControl(2, mpPage2LayoutLB );
 
-    maAssistentFunc.InsertControl(2,
-        mpPage2OutTypesFL = new FixedLine( pWindow, SdResId(FL_PAGE2_OUTPUTTYPES) ));
-    maAssistentFunc.InsertControl(2,
-        mpPage2Medium5RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM5) ));
-    maAssistentFunc.InsertControl(2,
-        mpPage2Medium3RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM3) ));
-    maAssistentFunc.InsertControl(2,
-        mpPage2Medium4RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM4) ));
-    maAssistentFunc.InsertControl(2,
-        mpPage2Medium1RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM1) ));
-    maAssistentFunc.InsertControl(2,
-        mpPage2Medium2RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM2) ));
-    maAssistentFunc.InsertControl(2,
-        mpPage2Medium6RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM6) ));
+    assDlg->get(mpPage2OutTypesFL, "outTypesLabel");
+    assDlg->get(mpPage2Medium5RB, "medium5Radiobutton");
+    assDlg->get(mpPage2Medium3RB, "medium3Radiobutton");
+    assDlg->get(mpPage2Medium4RB, "medium4Radiobutton");
+    assDlg->get(mpPage2Medium1RB, "medium1Radiobutton");
+    assDlg->get(mpPage2Medium2RB, "medium2Radiobutton");
+    assDlg->get(mpPage2Medium6RB, "medium6Radiobutton");
+    maAssistentFunc.InsertControl(2, mpPage2OutTypesFL );
+    maAssistentFunc.InsertControl(2, mpPage2Medium5RB );
+    maAssistentFunc.InsertControl(2, mpPage2Medium3RB );
+    maAssistentFunc.InsertControl(2, mpPage2Medium4RB );
+    maAssistentFunc.InsertControl(2, mpPage2Medium1RB );
+    maAssistentFunc.InsertControl(2, mpPage2Medium2RB );
+    maAssistentFunc.InsertControl(2, mpPage2Medium6RB );
     mpPage2Medium5RB->Check();
 
     mpPage2RegionLB->SetSelectHdl(LINK(this,AssistentDlgImpl,SelectRegionHdl));
@@ -484,36 +489,39 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     mpPage2LayoutLB->InsertEntry(SD_RESSTR(STR_ISLOADING));
 
     // page 3
-    maAssistentFunc.InsertControl(3, &maPreview );
-    maAssistentFunc.InsertControl(3, &maPreviewFlag );
-    maAssistentFunc.InsertControl(3,
-        mpPage3FB = new FixedBitmap(pWindow,SdResId(FB_PAGE3)));
-    maAssistentFunc.InsertControl(3,
-        mpPage3EffectFL = new FixedLine( pWindow, SdResId(FL_PAGE3_EFFECT) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3EffectFT = new FixedText( pWindow, SdResId(FT_PAGE3_EFFECT) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3EffectLB = new FadeEffectLB( pWindow, SdResId(LB_PAGE3_EFFECT) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3SpeedFT = new FixedText( pWindow, SdResId(FT_PAGE3_SPEED) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3SpeedLB = new FadeEffectLB( pWindow, SdResId(LB_PAGE3_SPEED) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3PresTypeFL = new FixedLine( pWindow, SdResId(FL_PAGE3_PRESTYPE) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3PresTypeLiveRB = new RadioButton( pWindow, SdResId(RB_PAGE3_LIVE) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3PresTypeKioskRB = new RadioButton( pWindow, SdResId(RB_PAGE3_KIOSK) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3PresTimeFT = new FixedText( pWindow, SdResId( FT_PAGE3_TIME) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3PresTimeTMF = new TimeField( pWindow, SdResId( TMF_PAGE3_TIME) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3BreakFT = new FixedText( pWindow, SdResId( FT_PAGE3_BREAK) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3BreakTMF = new TimeField( pWindow, SdResId( TMF_PAGE3_BREAK) ));
-    maAssistentFunc.InsertControl(3,
-        mpPage3LogoCB = new CheckBox( pWindow, SdResId( CB_PAGE3_LOGO) ));
+    assDlg->get(mpPage3FB, "header3Image");
+    assDlg->get(mpPage3EffectFL, "page3EffectLabel");
+    assDlg->get(mpPage3EffectFT, "effectLabel");
+    assDlg->get(mpPage3EffectLB, "effectCombobox");
+    assDlg->get(mpPage3SpeedFT, "speedLabel");
+    assDlg->get(mpPage3SpeedLB, "speedCombobox");
+    assDlg->get(mpPage3PresTypeFL, "presTypeLabel");
+    assDlg->get(mpPage3PresTypeLiveRB, "liveRadiobutton");
+    assDlg->get(mpPage3PresTypeKioskRB, "kioskRadiobutton");
+    assDlg->get(mpPage3PresTimeFT, "presTimeLabel");
+    assDlg->get(mpPage3PresTimeTMF, "timeSpinbutton");
+    assDlg->get(mpPage3BreakFT, "breakLabel");
+    assDlg->get(mpPage3BreakTMF, "breakSpinbutton");
+    assDlg->get(mpPage3LogoCB, "logoCheckbutton");
+
+    maAssistentFunc.InsertControl(3, mpPage3 );
+    maAssistentFunc.InsertControl(3, mpPage1235 );
+    maAssistentFunc.InsertControl(3, mpPreview );
+    maAssistentFunc.InsertControl(3, mpPreviewFlag );
+    maAssistentFunc.InsertControl(3, mpPage3FB );
+    maAssistentFunc.InsertControl(3, mpPage3EffectFL );
+    maAssistentFunc.InsertControl(3, mpPage3EffectFT );
+    maAssistentFunc.InsertControl(3, mpPage3EffectLB );
+    maAssistentFunc.InsertControl(3, mpPage3SpeedFT );
+    maAssistentFunc.InsertControl(3, mpPage3SpeedLB );
+    maAssistentFunc.InsertControl(3, mpPage3PresTypeFL );
+    maAssistentFunc.InsertControl(3, mpPage3PresTypeLiveRB );
+    maAssistentFunc.InsertControl(3, mpPage3PresTypeKioskRB );
+    maAssistentFunc.InsertControl(3, mpPage3PresTimeFT );
+    maAssistentFunc.InsertControl(3, mpPage3PresTimeTMF );
+    maAssistentFunc.InsertControl(3, mpPage3BreakFT );
+    maAssistentFunc.InsertControl(3, mpPage3BreakTMF );
+    maAssistentFunc.InsertControl(3, mpPage3LogoCB );
 
     mpPage3EffectLB->Fill();
     mpPage3EffectLB->SetSelectHdl( LINK(this,AssistentDlgImpl,SelectEffectHdl ));
@@ -544,59 +552,56 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     pEditPage3BreakTMF->SetSelection( aSel2 );
 
     // page 4
-    maAssistentFunc.InsertControl(4,
-        mpPage4FB = new FixedBitmap(pWindow,SdResId(FB_PAGE4)));
-    maAssistentFunc.InsertControl(4,
-        mpPage4PersonalFL = new FixedLine( pWindow, SdResId(FL_PAGE4_PERSONAL) ));
-    maAssistentFunc.InsertControl(4,
-        mpPage4AskNameFT   = new FixedText( pWindow, SdResId(FT_PAGE4_ASKNAME) ));
-    maAssistentFunc.InsertControl(4,
-        mpPage4AskNameEDT  = new Edit( pWindow, SdResId(EDT_PAGE4_ASKNAME) ));
-    maAssistentFunc.InsertControl(4,
-        mpPage4AskTopicFT= new FixedText( pWindow, SdResId(FT_PAGE4_ASKTOPIC) ));
-    maAssistentFunc.InsertControl(4,
-        mpPage4AskTopicEDT = new Edit( pWindow, SdResId(EDT_PAGE4_ASKTOPIC) ));
-    maAssistentFunc.InsertControl(4,
-        mpPage4AskInfoFT   = new FixedText( pWindow, SdResId(FT_PAGE4_ASKINFORMATION) ));
-    maAssistentFunc.InsertControl(4,
-        mpPage4AskInfoEDT  = new MultiLineEdit( pWindow, SdResId(EDT_PAGE4_ASKINFORMATION) ));
+    assDlg->get(mpPage4FB, "header4Image");
+    assDlg->get(mpPage4PersonalFL, "personalLabel");
+    assDlg->get(mpPage4AskNameFT, "askNameLabel");
+    assDlg->get(mpPage4AskNameEDT, "askNameEntry");
+    assDlg->get(mpPage4AskTopicFT, "askTopicLabel");
+    assDlg->get(mpPage4AskTopicEDT, "askTopicEntry");
+    assDlg->get(mpPage4AskInfoFT, "askInfoLabel");
+    assDlg->get(mpPage4AskInfoEDT, "askInformationTextview");
+    maAssistentFunc.InsertControl(4, mpPage4 );
+    maAssistentFunc.InsertControl(4, mpPage4FB );
+    maAssistentFunc.InsertControl(4, mpPage4PersonalFL );
+    maAssistentFunc.InsertControl(4, mpPage4AskNameFT );
+    maAssistentFunc.InsertControl(4, mpPage4AskNameEDT );
+    maAssistentFunc.InsertControl(4, mpPage4AskTopicFT);
+    maAssistentFunc.InsertControl(4, mpPage4AskTopicEDT );
+    maAssistentFunc.InsertControl(4, mpPage4AskInfoFT );
+    maAssistentFunc.InsertControl(4, mpPage4AskInfoEDT );
 
     mpPage4AskNameEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
     mpPage4AskTopicEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
     mpPage4AskInfoEDT->SetModifyHdl(LINK(this,AssistentDlgImpl,UpdateUserDataHdl));
 
     // page 5
-    maAssistentFunc.InsertControl(5, &maPreview );
-    maAssistentFunc.InsertControl(5, &maPreviewFlag );
-    maAssistentFunc.InsertControl(5,
-        mpPage5FB = new FixedBitmap(pWindow,SdResId(FB_PAGE5)));
-    maAssistentFunc.InsertControl(5,
-        mpPage5PageListFT = new FixedText( pWindow, SdResId( FT_PAGE5_PAGELIST ) ));
-    maAssistentFunc.InsertControl(5,
-        mpPage5PageListCT = new SdPageListControl( pWindow, SdResId( CT_PAGE5_PAGELIST ) ));
-    maAssistentFunc.InsertControl(5,
-        mpPage5SummaryCB  = new CheckBox( pWindow, SdResId( CB_PAGE5_SUMMARY ) ));
+    assDlg->get(mpPage5FB, "header5Image");
+    assDlg->get(mpPage5PageListFT, "pageListLabel");
+    assDlg->get(mpPage5PageListCT, "TreeListBox");
+    assDlg->get(mpPage5SummaryCB, "summaryCheckbutton");
+    maAssistentFunc.InsertControl(5, mpPage5 );
+    maAssistentFunc.InsertControl(5, mpPage1235 );
+    maAssistentFunc.InsertControl(5, mpPreview );
+    maAssistentFunc.InsertControl(5, mpPreviewFlag );
+    maAssistentFunc.InsertControl(5, mpPage5FB );
+    maAssistentFunc.InsertControl(5, mpPage5PageListFT );
+    maAssistentFunc.InsertControl(5, mpPage5PageListCT );
+    maAssistentFunc.InsertControl(5, mpPage5SummaryCB );
 
     mpPage5PageListCT->SetSelectHdl(LINK(this,AssistentDlgImpl, PageSelectHdl));
 
 
     // general
-    InterpolateFixedBitmap( mpPage1FB );
-    InterpolateFixedBitmap( mpPage2FB );
-    InterpolateFixedBitmap( mpPage3FB );
-    InterpolateFixedBitmap( mpPage4FB );
-    InterpolateFixedBitmap( mpPage5FB );
+    mpLastPageButton->SetClickHdl(LINK(this,AssistentDlgImpl, LastPageHdl ));
+    mpNextPageButton->SetClickHdl(LINK(this,AssistentDlgImpl, NextPageHdl ));
 
-    maLastPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, LastPageHdl ));
-    maNextPageButton.SetClickHdl(LINK(this,AssistentDlgImpl, NextPageHdl ));
-
-    maPreviewFlag.Check( mbPreview );
-    maPreviewFlag.SetClickHdl(LINK(this, AssistentDlgImpl, PreviewFlagHdl ));
-    maPreview.SetClickHdl(LINK(this,AssistentDlgImpl, EffectPreviewHdl ));
+    mpPreviewFlag->Check( mbPreview );
+    mpPreviewFlag->SetClickHdl(LINK(this, AssistentDlgImpl, PreviewFlagHdl ));
+    mpPreview->SetClickHdl(LINK(this,AssistentDlgImpl, EffectPreviewHdl ));
 
     // sets the exit page
     maAssistentFunc.GotoPage(1);
-    maLastPageButton.Disable();
+    mpLastPageButton->Disable();
 
     maPrevTimer.SetTimeout( 200 );
     maPrevTimer.SetTimeoutHdl( LINK( this, AssistentDlgImpl, UpdatePreviewHdl));
@@ -611,7 +616,7 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
 
     ChangePage();
 
-    mpWindowUpdater->RegisterWindow (&maPreview);
+    mpWindowUpdater->RegisterWindow (mpPreview);
 
     UpdatePreview( true );
 
@@ -674,62 +679,6 @@ AssistentDlgImpl::~AssistentDlgImpl()
             delete (*J);
         delete (*I);
     }
-
-    // page 1
-    delete mpPage1FB;
-    delete mpPage1ArtFL;
-    delete mpPage1EmptyRB;
-    delete mpPage1TemplateRB;
-    delete mpPage1TemplateLB;
-    delete mpPage1RegionLB;
-    delete mpPage1OpenRB;
-    delete mpPage1OpenLB;
-    delete mpPage1OpenPB;
-
-    // page 2
-    delete mpPage2FB;
-    delete mpPage2LayoutFL;
-    delete mpPage2RegionLB;
-    delete mpPage2LayoutLB;
-    delete mpPage2OutTypesFL;
-    delete mpPage2Medium1RB;
-    delete mpPage2Medium2RB;
-    delete mpPage2Medium3RB;
-    delete mpPage2Medium4RB;
-    delete mpPage2Medium5RB;
-    delete mpPage2Medium6RB;
-
-    // page 3
-    delete mpPage3FB;
-    delete mpPage3EffectFL;
-    delete mpPage3EffectFT;
-    delete mpPage3EffectLB;
-    delete mpPage3SpeedFT;
-    delete mpPage3SpeedLB;
-    delete mpPage3PresTypeFL;
-    delete mpPage3PresTypeLiveRB;
-    delete mpPage3PresTypeKioskRB;
-    delete mpPage3PresTimeFT;
-    delete mpPage3PresTimeTMF;
-    delete mpPage3BreakFT;
-    delete mpPage3BreakTMF;
-    delete mpPage3LogoCB;
-
-    // page 4
-    delete mpPage4FB;
-    delete mpPage4PersonalFL;
-    delete mpPage4AskNameFT;
-    delete mpPage4AskNameEDT;
-    delete mpPage4AskTopicFT;
-    delete mpPage4AskTopicEDT;
-    delete mpPage4AskInfoFT;
-    delete mpPage4AskInfoEDT;
-
-    // page 5
-    delete mpPage5FB;
-    delete mpPage5PageListFT;
-    delete mpPage5PageListCT;
-    delete mpPage5SummaryCB;
 }
 
 void AssistentDlgImpl::CloseDocShell()
@@ -937,7 +886,7 @@ void AssistentDlgImpl::SetStartType( StartType eType )
     mpPage1EmptyRB->SetState( eType == ST_EMPTY );
     mpPage1TemplateRB->SetState( eType == ST_TEMPLATE );
     mpPage1OpenRB->SetState( eType == ST_OPEN );
-    maNextPageButton.Enable( eType != ST_OPEN );
+    mpNextPageButton->Enable( eType != ST_OPEN );
 
     mpPage1RegionLB->Show(eType == ST_TEMPLATE);
     mpPage1TemplateLB->Show(eType == ST_TEMPLATE);
@@ -945,9 +894,9 @@ void AssistentDlgImpl::SetStartType( StartType eType )
     mpPage1OpenPB->Show(eType == ST_OPEN);
 
     if (eType == ST_OPEN)
-        maFinishButton.SetText(maOpenStr);
+        mpFinishButton->SetText("~Open");
     else
-        maFinishButton.SetText(maCreateStr);
+        mpFinishButton->SetText("~Create");
 }
 
 StartType AssistentDlgImpl::GetStartType()
@@ -1084,8 +1033,8 @@ void AssistentDlgImpl::LeavePage()
 
 void AssistentDlgImpl::ChangePage()
 {
-    maNextPageButton.Enable(!maAssistentFunc.IsLastPage());
-    maLastPageButton.Enable(!maAssistentFunc.IsFirstPage());
+    mpNextPageButton->Enable(!maAssistentFunc.IsLastPage());
+    mpLastPageButton->Enable(!maAssistentFunc.IsFirstPage());
 
     sal_uInt16 nPage = (sal_uInt16)maAssistentFunc.GetCurrentPage();
 
@@ -1096,12 +1045,12 @@ void AssistentDlgImpl::ChangePage()
 
     UpdatePage();
 
-    if( maNextPageButton.IsEnabled() )
+    if( mpNextPageButton->IsEnabled() )
     {
-      maNextPageButton.ForceFocusEventBroadcast();
+      mpNextPageButton->ForceFocusEventBroadcast();
     }
     else
-        maFinishButton.GrabFocus();
+        mpFinishButton->GrabFocus();
 }
 
 void AssistentDlgImpl::UpdatePage()
@@ -1148,7 +1097,7 @@ void AssistentDlgImpl::UpdatePage()
     case 3:
         {
             if(GetStartType() != ST_TEMPLATE)
-                maNextPageButton.Enable(false);
+                mpNextPageButton->Enable(false);
 
             bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
             mpPage3PresTimeFT->Enable(bKiosk);
@@ -1210,7 +1159,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, EffectPreviewHdl)
                     mpPage3EffectLB->applySelected(pPage);
             }
         }
-        maPreview.startPreview();
+        mpPreview->startPreview();
     }
     return 0;
 }
@@ -1218,9 +1167,9 @@ IMPL_LINK_NOARG(AssistentDlgImpl, EffectPreviewHdl)
 IMPL_LINK_NOARG(AssistentDlgImpl, PreviewFlagHdl)
 
 {
-    if( maPreviewFlag.IsChecked() != mbPreview )
+    if( mpPreviewFlag->IsChecked() != mbPreview )
     {
-        mbPreview = maPreviewFlag.IsChecked();
+        mbPreview = mpPreviewFlag->IsChecked();
         UpdatePreview(true);
     }
     return 0;
@@ -1322,7 +1271,7 @@ IMPL_LINK_NOARG(AssistentDlgImpl, PresTypeHdl)
 {
     if (maDocFile.isEmpty())
     {
-        maNextPageButton.Enable(false);
+        mpNextPageButton->Enable(false);
     }
 
     bool bKiosk = mpPage3PresTypeKioskRB->IsChecked();
@@ -1485,8 +1434,8 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
 
     if(!mbPreview && bDocPreview)
     {
-        maPreview.Invalidate();
-        maPreview.SetObjectShell(0);
+        mpPreview->Invalidate();
+        mpPreview->SetObjectShell(0);
         mbPreviewUpdating = false;
         return;
     }
@@ -1627,10 +1576,10 @@ void AssistentDlgImpl::UpdatePreview( bool bDocPreview )
         UpdateUserData();
 
     if ( !xDocShell.Is() || !mbPreview )
-        maPreview.SetObjectShell( 0 );
+        mpPreview->SetObjectShell( 0 );
     else
     {
-        maPreview.SetObjectShell( xDocShell, mnShowPage );
+        mpPreview->SetObjectShell( xDocShell, mnShowPage );
     }
 
     mbPreviewUpdating = false;
@@ -1820,15 +1769,13 @@ Image AssistentDlgImpl::GetUiIconForCommand (const OUString& sCommandURL)
 
 
 AssistentDlg::AssistentDlg(Window* pParent, bool bAutoPilot) :
-    ModalDialog(pParent,SdResId(DLG_ASS))
+    ModalDialog(pParent, "Assistent", "modules/simpress/ui/assistentdialog.ui")
 {
     Link aFinishLink = LINK(this,AssistentDlg, FinishHdl);
     mpImpl = new AssistentDlgImpl( this, aFinishLink, bAutoPilot );
 
     // button assigmnent
-    mpImpl->maFinishButton.SetClickHdl(LINK(this,AssistentDlg,FinishHdl));
-
-    FreeResource();
+    mpImpl->mpFinishButton->SetClickHdl(LINK(this,AssistentDlg,FinishHdl));
 }
 
 IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
@@ -1911,7 +1858,7 @@ OUString AssistentDlg::GetDocPath() const
 
 bool AssistentDlg::GetStartWithFlag() const
 {
-    return !mpImpl->maStartWithFlag.IsChecked();
+    return !mpImpl->mpStartWithFlag->IsChecked();
 }
 
 bool AssistentDlg::IsDocEmpty() const
@@ -1930,13 +1877,14 @@ uno::Sequence< beans::NamedValue > AssistentDlg::GetPassword()
 
 //===== NextButton ============================================================
 
-NextButton::NextButton (::Window* pParent, const ResId& rResId)
-    : maNextButton1(pParent, rResId),
-      maNextButton2(pParent, rResId),
+NextButton::NextButton (::Window* pParent) :
       mbIsFirstButtonActive(true)
 {
+    AssistentDlg* assDlg = static_cast<AssistentDlg*>(pParent);
+    assDlg->get(mpNextButton1, "nextPage1Button");
+    assDlg->get(mpNextButton2, "nextPage2Button");
     // Hide the unused button.
-    maNextButton2.Hide();
+    mpNextButton2->Hide();
 }
 
 
@@ -1948,16 +1896,16 @@ void NextButton::ForceFocusEventBroadcast (void)
     if (mbIsFirstButtonActive)
     {
         mbIsFirstButtonActive = false;
-        maNextButton2.Show();
-        maNextButton2.GrabFocus();
-        maNextButton1.Hide();
+        mpNextButton2->Show();
+        mpNextButton2->GrabFocus();
+        mpNextButton1->Hide();
     }
     else
     {
         mbIsFirstButtonActive = true;
-        maNextButton1.Show();
-        maNextButton1.GrabFocus();
-        maNextButton2.Hide();
+        mpNextButton1->Show();
+        mpNextButton1->GrabFocus();
+        mpNextButton2->Hide();
     }
 }
 
@@ -1968,8 +1916,8 @@ void NextButton::SetClickHdl (const Link& rLink)
 {
     // Forward the setting of the click handler to the two buttons
     // regardless of which one is currently visible.
-    maNextButton1.SetClickHdl(rLink);
-    maNextButton2.SetClickHdl(rLink);
+    mpNextButton1->SetClickHdl(rLink);
+    mpNextButton2->SetClickHdl(rLink);
 }
 
 
@@ -1979,7 +1927,7 @@ bool NextButton::IsEnabled (void)
 {
     // Because the buttons are both either enabled or disabled, it is
     // sufficient to ask one to determine the state.
-    return maNextButton1.IsEnabled();
+    return mpNextButton1->IsEnabled();
 }
 
 
@@ -1988,8 +1936,8 @@ bool NextButton::IsEnabled (void)
 void NextButton::Enable (bool bEnable)
 {
     // Enable or disable both buttons but do not change visibility or focus.
-    maNextButton1.Enable(bEnable);
-    maNextButton2.Enable(bEnable);
+    mpNextButton1->Enable(bEnable);
+    mpNextButton2->Enable(bEnable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

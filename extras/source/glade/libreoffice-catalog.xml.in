@@ -289,6 +289,9 @@
     <glade-widget-class title="Html Attribute Preview" name="sduilo-SdHtmlAttrPreview"
                         generic-name="Html Attribute Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
+    <glade-widget-class title="Document Preview Window" name="sdlo-SdDocPreviewWin"
+                        generic-name="Document Preview Window" parent="GtkDrawingArea"
+                        icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="Writer Number Preview" name="swuilo-NumberingPreview"
                         generic-name="Writer Number Preview Window" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
@@ -540,6 +543,9 @@
     <glade-widget-class title="Page Objs ListBox" name="sdlo-SdPageObjsTLB"
                         generic-name="SdPageObjsTLB" parent="svtlo-SvTreeListBox"
                         icon-name="widget-gtk-treeview"/>
+    <glade-widget-class title="Page List Control" name="sduilo-SdPageListControl"
+                        generic-name="Page List Control" parent="svtlo-SvTreeListBox"
+                        icon-name="widget-gtk-treeview"/>
     <glade-widget-class title="Checked Tree List" name="svxlo-SvxCheckListBox"
                         generic-name="Checked Tree List" parent="GtkTreeView"
                         icon-name="widget-gtk-treeview"/>
@@ -656,6 +662,10 @@
 
     <glade-widget-class title="Open Document ListBox" name="dbulo-OpenDocumentListBox"
                         generic-name="Open Document ListBox" parent="GtkComboBox"
+                        icon-name="widget-gtk-combobox"/>
+                        
+    <glade-widget-class title="Fade Effect ListBox" name="sdlo-FadeEffectLB"
+                        generic-name="Fade Effect ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
 
     <glade-widget-class title="Open Document Button" name="dbulo-OpenDocumentButton"
