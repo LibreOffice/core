@@ -403,11 +403,11 @@ Size ScGridWindow::GetDataAreaSize()
         nY += pDoc->GetRowHeight( i, nTab );
     }
 
-    // TODO: the scaling is wrong.
-    // TODO: this also ignores any images / etc., which could be outside
+    // TODO: this ignores any images / etc., which could be outside
     // the data area.
 
-    return Size( nX, nY );
+    // This doesn't include the final (bottom & right) borders...
+    return Size( nX * 1440L / 2540L, nY * 1440L / 2540L );
 }
 
 //  Draw  ----------------------------------------------------------------
