@@ -108,7 +108,7 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectang
     rPosAndSize = awt::Rectangle(nPosX,nPosY,nSizX,nSizY);
 }
 
-void SAL_CALL ChartController::executeDispatch_PositionAndSize()
+void ChartController::executeDispatch_PositionAndSize()
 {
     const OUString aCID( m_aSelection.getSelectedCID() );
 

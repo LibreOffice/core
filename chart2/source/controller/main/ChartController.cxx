@@ -1235,7 +1235,7 @@ void SAL_CALL ChartController::releaseContextMenuInterceptor(
 // ____ XEmbeddedClient ____
 // implementation see: ChartController_EditData.cxx
 
-void SAL_CALL ChartController::executeDispatch_ChartType()
+void ChartController::executeDispatch_ChartType()
 {
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
@@ -1251,7 +1251,7 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_SourceData()
+void ChartController::executeDispatch_SourceData()
 {
     //convert properties to ItemSet
     uno::Reference< XChartDocument >   xChartDoc( getModel(), uno::UNO_QUERY );
@@ -1273,7 +1273,7 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
     }
 }
 
-void SAL_CALL ChartController::executeDispatch_MoveSeries( bool bForward )
+void ChartController::executeDispatch_MoveSeries( bool bForward )
 {
     ControllerLockGuardUNO aCLGuard( getModel() );
 

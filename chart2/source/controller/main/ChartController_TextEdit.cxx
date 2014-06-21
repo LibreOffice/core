@@ -46,7 +46,7 @@ namespace chart
 {
 using namespace ::com::sun::star;
 
-void SAL_CALL ChartController::executeDispatch_EditText( const Point* pMousePixel )
+void ChartController::executeDispatch_EditText( const Point* pMousePixel )
 {
     this->StartTextEdit( pMousePixel );
 }
@@ -145,7 +145,7 @@ bool ChartController::EndTextEdit()
     return true;
 }
 
-void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
+void ChartController::executeDispatch_InsertSpecialCharacter()
 {
     SolarMutexGuard aGuard;
     if( !m_pDrawViewWrapper)
