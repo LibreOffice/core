@@ -636,7 +636,7 @@ OUString lcl_getObjectCIDForCommand( const OString& rDispatchCommand, const uno:
 }
 // anonymous namespace
 
-void SAL_CALL ChartController::executeDispatch_FormatObject(const OUString& rDispatchCommand)
+void ChartController::executeDispatch_FormatObject(const OUString& rDispatchCommand)
 {
     uno::Reference< XChartDocument > xChartDocument( getModel(), uno::UNO_QUERY );
     OString aCommand( OUStringToOString( rDispatchCommand, RTL_TEXTENCODING_ASCII_US ) );
@@ -644,7 +644,7 @@ void SAL_CALL ChartController::executeDispatch_FormatObject(const OUString& rDis
     executeDlg_ObjectProperties( rObjectCID );
 }
 
-void SAL_CALL ChartController::executeDispatch_ObjectProperties()
+void ChartController::executeDispatch_ObjectProperties()
 {
     executeDlg_ObjectProperties( m_aSelection.getSelectedCID() );
 }
@@ -675,7 +675,7 @@ OUString lcl_getFormatCIDforSelectedCID( const OUString& rSelectedCID )
 
 }//end anonymous namespace
 
-void SAL_CALL ChartController::executeDlg_ObjectProperties( const OUString& rSelectedObjectCID )
+void ChartController::executeDlg_ObjectProperties( const OUString& rSelectedObjectCID )
 {
     OUString aObjectCID = lcl_getFormatCIDforSelectedCID( rSelectedObjectCID );
 
@@ -788,7 +788,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const OUStri
     return bRet;
 }
 
-void SAL_CALL ChartController::executeDispatch_View3D()
+void ChartController::executeDispatch_View3D()
 {
     try
     {
