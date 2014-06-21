@@ -111,11 +111,6 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     // Each series of data flows from left to right, and multiple series are
     // stacked vertically along y axis.
 
-    // NOTE: These objects are created and positioned in a totally blind
-    // fashion since we don't even have a way to see them on screen.  So, no
-    // guarantee they are positioned correctly.  In fact, they are guaranteed
-    // to be positioned incorrectly.
-
     sal_uInt32 nId = 1;
     float nXEnd = 0.0;
     float nYPos = 0.0;
