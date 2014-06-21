@@ -70,8 +70,13 @@ const size_t STEPS = 200;
 const sal_uLong TIMEOUT = 5;
 const sal_uInt32 ID_STEP = 10;
 
+#if 0
+const float BAR_SIZE_X = 15.0f;
+const float BAR_SIZE_Y = 15.0f;
+#else
 const float BAR_SIZE_X = 30.0f;
 const float BAR_SIZE_Y = 5.0f;
+#endif
 const float BAR_DISTANCE_X = 5.0f;
 const float BAR_DISTANCE_Y = 5.0;
 
