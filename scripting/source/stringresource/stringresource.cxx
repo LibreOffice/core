@@ -1727,7 +1727,7 @@ void StringResourcePersistenceImpl::implScanLocaleNames( const Sequence< OUStrin
         OUString aExtension;
         sal_Int32 iDot = aCompleteName.lastIndexOf( '.' );
         sal_Int32 iSlash = aCompleteName.lastIndexOf( '/' );
-        if( iDot != -1 )
+        if( iDot != -1 && iDot > iSlash)
         {
             sal_Int32 iCopyFrom = (iSlash != -1) ? iSlash + 1 : 0;
             aPureName = aCompleteName.copy( iCopyFrom, iDot-iCopyFrom );
