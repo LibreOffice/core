@@ -443,7 +443,7 @@ private:
             void acquire();
             void release();
         private:
-            sal_Int32 volatile      m_nRefCount;
+            sal_Int32 m_nRefCount;
     };
     class TheModel : public RefCountable
     {
@@ -466,7 +466,7 @@ private:
 
             //the ownership between model and controller is not clear at first
             //each controller might consider himself as owner of the model first
-            bool volatile       m_bOwnership;
+            bool m_bOwnership;
     };
     class TheModelRef
     {
@@ -487,8 +487,8 @@ private:
     mutable ::apphelper::LifeTimeManager    m_aLifeTimeManager;
 
     mutable ::osl::Mutex    m_aControllerMutex;
-    bool volatile       m_bSuspended;
-    bool volatile       m_bCanClose;
+    bool m_bSuspended;
+    bool m_bCanClose;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>        m_xCC;
 
@@ -509,10 +509,10 @@ private:
     SdrDragMode         m_eDragMode;
 
     Timer               m_aDoubleClickTimer;
-    bool volatile       m_bWaitingForDoubleClick;
-    bool volatile       m_bWaitingForMouseUp;
+    bool m_bWaitingForDoubleClick;
+    bool m_bWaitingForMouseUp;
 
-    bool volatile       m_bConnectingToView;
+    bool m_bConnectingToView;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >    m_xUndoManager;
     ::std::auto_ptr< UndoGuard >                                                    m_pTextActionUndoGuard;
