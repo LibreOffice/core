@@ -200,34 +200,7 @@ OpenGL3DRenderer::ShaderResources::~ShaderResources()
 
 void OpenGL3DRenderer::CheckGLSLVersion()
 {
-    char version[256] = {0};
-    strcpy(version, (char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
-    char *p = version;
-    int iVersion = 0;
-    //get the first point
-    while ((*p != '\0') && (*p != '.'))
-    {
-        iVersion = iVersion * 10 + ((*p) - 0x30);
-        p++;
-    }
-    if (iVersion < 3)
-    {
-        maResources.m_b330Support = false;
-        return;
-    }
-    if (iVersion > 3)
-    {
-        maResources.m_b330Support = true;
-        return;
-    }
-    p++;
-    iVersion = *p - 0x30;
-    if (iVersion >= 3)
-    {
-        maResources.m_b330Support = true;
-        return;
-    }
-    maResources.m_b330Support = false;
+    maResources.m_b330Support = GLEW_VERSION_3_3 == 1;
 }
 
 void OpenGL3DRenderer::ShaderResources::LoadShaders()
@@ -252,17 +225,7 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DBatchNormalID = glGetAttribLocation(m_3DBatchProID, "vertexNormalModelspace");
         m_3DBatchColorID = glGetAttribLocation(m_3DBatchProID, "barColor");
         //check whether the texture array is support
-        GLint numExtensions = 0;
-        glGetIntegerv(GL_NUM_EXTENSIONS, &numExtensions);
-        for( GLint i = 0; i < numExtensions; ++i )
-        {
-            OUString currExt = ::rtl::OUString::createFromAscii((char*)glGetStringi(GL_EXTENSIONS, i));
-            if (currExt == "GL_EXT_texture_array")
-            {
-                mbTexBatchSupport = true;
-                break;
-            }
-        }
+        mbTexBatchSupport = GLEW_EXT_texture_array == 1;
         if (mbTexBatchSupport)
         {
             m_BatchTextProID = OpenGLHelper::LoadShaders("textVertexShaderBatch", "textFragmentShaderBatch");
