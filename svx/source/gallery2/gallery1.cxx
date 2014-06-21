@@ -434,66 +434,48 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
     // try fallback, if no entry was found
     if( !pFound )
     {
-        OString aFallback;
+        OUString aFallback;
 
         switch( nThemeId )
         {
             case( GALLERY_THEME_3D ):
-                aFallback = "3D";
+                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_3D);
                 break;
             case( GALLERY_THEME_BULLETS ):
-                aFallback = "Bullets";
+                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_BULLETS);
                 break;
             case( GALLERY_THEME_HOMEPAGE ):
-                aFallback = "Homepage";
+                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_HOMEPAGE);
                 break;
             case( GALLERY_THEME_POWERPOINT ):
-                aFallback = "private://gallery/hidden/imgppt";
+                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_POWERPOINT);
                 break;
             case( GALLERY_THEME_FONTWORK ):
-                aFallback = "private://gallery/hidden/fontwork";
+                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_FONTWORK);
                 break;
             case( GALLERY_THEME_FONTWORK_VERTICAL ):
-                aFallback = "private://gallery/hidden/fontworkvertical";
+                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_FONTWORK_VERTICAL);
                 break;
             case( GALLERY_THEME_SOUNDS ):
-                aFallback = "Sounds";
+                aFallback = GAL_RESSTR(RID_GALLERYSTR_THEME_SOUNDS);
                 break;
             case( RID_GALLERYSTR_THEME_ARROWS ):
-                aFallback = "Arrows";
-                break;
             case( RID_GALLERYSTR_THEME_COMPUTERS ):
-                aFallback = "Computers";
-                break;
             case( RID_GALLERYSTR_THEME_DIAGRAMS ):
-                aFallback = "Diagrams";
-                break;
             case( RID_GALLERYSTR_THEME_EDUCATION ):
-                aFallback = "Education";
-                break;
             case( RID_GALLERYSTR_THEME_ENVIRONMENT ):
-                aFallback = "Environment";
-                break;
             case( RID_GALLERYSTR_THEME_FINANCE ):
-                aFallback = "Finance";
-                break;
             case( RID_GALLERYSTR_THEME_PEOPLE ):
-                aFallback = "People";
-                break;
             case( RID_GALLERYSTR_THEME_SYMBOLS ):
-                aFallback = "Symbols";
-                break;
             case( RID_GALLERYSTR_THEME_TRANSPORT ):
-                aFallback = "Transport";
-                break;
             case( RID_GALLERYSTR_THEME_TXTSHAPES ):
-                aFallback = "Textshapes";
+                aFallback = GAL_RESSTR(static_cast<sal_uInt32>(nThemeId));
                 break;
             default:
                 break;
         }
 
-        pFound = const_cast<Gallery*>(this)->ImplGetThemeEntry(OStringToOUString(aFallback, RTL_TEXTENCODING_ASCII_US));
+        pFound = const_cast<Gallery*>(this)->ImplGetThemeEntry(aFallback);
     }
 
     return( pFound ? pFound->GetThemeName() : OUString() );
