@@ -54,6 +54,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include "dlgunit.hxx"
+#include <boost/scoped_ptr.hpp>
 
 #define SELF_TARGET         "_self"
 #define IMAP_ALL_FILTER     OUString("<Alle>")
@@ -484,7 +485,7 @@ void SvxIMapDlg::DoOpen()
     {
         INetURLObject aURL( aDlg.GetPath() );
         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
-        SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ );
+        boost::scoped_ptr<SvStream> pIStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ ));
 
         if( pIStm )
         {
@@ -497,8 +498,6 @@ void SvxIMapDlg::DoOpen()
             }
             else
                 pIMapWnd->SetImageMap( aLoadIMap );
-
-            delete pIStm;
         }
 
         pIMapWnd->Invalidate();
@@ -561,7 +560,7 @@ bool SvxIMapDlg::DoSave()
             if( aURL.getExtension().isEmpty() )
                 aURL.setExtension( aExt );
 
-            SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
+            boost::scoped_ptr<SvStream> pOStm(::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC ));
             if( pOStm )
             {
                 pIMapWnd->GetImageMap().Write( *pOStm, nFormat, "" );
@@ -569,7 +568,7 @@ bool SvxIMapDlg::DoSave()
                 if( pOStm->GetError() )
                     ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
 
-                delete pOStm;
+                pOStm.reset();
                 pModel->SetChanged( bChanged );
                 bRet = true;
             }

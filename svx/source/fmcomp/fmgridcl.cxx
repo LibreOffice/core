@@ -72,6 +72,7 @@
 #include <vcl/settings.hxx>
 
 #include <math.h>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
@@ -859,11 +860,10 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL);
+                boost::scoped_ptr<AbstractFmShowColsDialog> pDlg(pFact->CreateFmShowColsDialog(NULL));
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();
-                delete pDlg;
             }
 
         }

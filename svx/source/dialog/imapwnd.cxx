@@ -48,6 +48,7 @@
 #include <svx/svxdlg.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using ::com::sun::star::frame::XFrame;
 using ::com::sun::star::uno::Reference;
@@ -643,7 +644,7 @@ void IMapWindow::DoMacroAssign()
         aSet.Put( aMacroItem, SID_ATTR_MACROITEM );
 
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG );
+        boost::scoped_ptr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet, mxDocumentFrame, SID_EVENTCONFIG ));
 
         if ( pMacroDlg && pMacroDlg->Execute() == RET_OK )
         {
@@ -652,8 +653,6 @@ void IMapWindow::DoMacroAssign()
             pModel->SetChanged( true );
             UpdateInfo( false );
         }
-
-        delete pMacroDlg;
     }
 }
 
@@ -667,8 +666,8 @@ void IMapWindow::DoPropertyDialog()
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractURLDlg* aDlg = pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
-                                            pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList );
+            boost::scoped_ptr<AbstractURLDlg> aDlg(pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetAltText(), pIMapObj->GetDesc(),
+                                            pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList ));
             DBG_ASSERT(aDlg, "Dialogdiet fail!");
             if ( aDlg->Execute() == RET_OK )
             {
@@ -690,7 +689,6 @@ void IMapWindow::DoPropertyDialog()
                 pModel->SetChanged( true );
                 UpdateInfo( true );
             }
-            delete aDlg;
         }
     }
 }

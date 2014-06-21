@@ -67,6 +67,8 @@
 #include <tools/resary.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/toolbox.hxx>
+#include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
@@ -1285,11 +1287,11 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxSearchSimilarityDialog* pDlg = pFact->CreateSvxSearchSimilarityDialog( this,
+            boost::scoped_ptr<AbstractSvxSearchSimilarityDialog> pDlg(pFact->CreateSvxSearchSimilarityDialog( this,
                                                                         pSearchItem->IsLEVRelaxed(),
                                                                         pSearchItem->GetLEVOther(),
                                                                         pSearchItem->GetLEVShorter(),
-                                                                        pSearchItem->GetLEVLonger() );
+                                                                        pSearchItem->GetLEVLonger() ));
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if ( pDlg && pDlg->Execute() == RET_OK )
             {
@@ -1299,7 +1301,6 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
                 pSearchItem->SetLEVLonger( pDlg->GetLonger() );
                 SaveToModule_Impl();
             }
-            delete pDlg;
         }
     }
     else if (pBtn == m_pJapOptionsBtn)
@@ -1309,8 +1310,8 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet,
-                    pSearchItem->GetTransliterationFlags() );
+            boost::scoped_ptr<AbstractSvxJSearchOptionsDialog> aDlg(pFact->CreateSvxJSearchOptionsDialog( this, aSet,
+                    pSearchItem->GetTransliterationFlags() ));
             DBG_ASSERT(aDlg, "Dialogdiet fail!");
             int nRet = aDlg->Execute();
             if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
@@ -1319,7 +1320,6 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
                 pSearchItem->SetTransliterationFlags( nFlags );
                 ApplyTransliterationFlags_Impl( nFlags );
             }
-            delete aDlg;
         }
     }
     else if (pBtn == m_pSearchComponent1PB || pBtn == m_pSearchComponent2PB)
@@ -1850,7 +1850,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
     while( *pTmp )
         pTmp++;
     nCnt = pTmp - pPtr + 7;
-    sal_uInt16* pWhRanges = new sal_uInt16[nCnt];
+    boost::scoped_array<sal_uInt16> pWhRanges(new sal_uInt16[nCnt]);
     sal_uInt16 nPos = 0;
 
     while( *pPtr )
@@ -1868,7 +1868,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
     pWhRanges[nPos++] = SID_PARA_BACKGRND_DESTINATION;
     pWhRanges[nPos] = 0;
     SfxItemPool& rPool = pSh->GetPool();
-    SfxItemSet aSet( rPool, pWhRanges );
+    SfxItemSet aSet( rPool, pWhRanges.get() );
     OUString aTxt;
 
     aSet.InvalidateAllItems();
@@ -1893,7 +1893,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        SfxAbstractTabDialog* pDlg = pFact->CreateTabItemDialog(this, aSet);
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabItemDialog(this, aSet));
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         aTxt = pDlg->GetText() + aTxt;
         pDlg->SetText( aTxt );
@@ -1922,9 +1922,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
 
             PaintAttrText_Impl(); // Set AttributText in GroupBox
         }
-        delete pDlg;
     }
-    delete[] pWhRanges;
     return 0;
 }
 
@@ -1979,10 +1977,9 @@ IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl)
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        VclAbstractDialog* pDlg = pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges );
+        boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateSvxSearchAttributeDialog( this, *pSearchList, pImpl->pRanges ));
         DBG_ASSERT(pDlg, "Dialogdiet fail!");
         pDlg->Execute();
-        delete pDlg;
     }
     PaintAttrText_Impl();
     return 0;
