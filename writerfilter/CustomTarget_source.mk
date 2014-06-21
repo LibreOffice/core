@@ -67,18 +67,16 @@ writerfilter_GEN_ooxml_GperfFastToken_hxx=$(writerfilter_WORK)/gperffasttoken.hx
 writerfilter_GEN_ooxml_Model_processed=$(writerfilter_WORK)/model_preprocessed.xml
 writerfilter_GEN_ooxml_NamespaceIds_hxx=$(writerfilter_WORK)/ooxml/OOXMLnamespaceids.hxx
 writerfilter_GEN_ooxml_Namespacesmap_xsl=$(writerfilter_WORK)/namespacesmap.xsl
-writerfilter_GEN_ooxml_Preprocess_xsl=$(writerfilter_WORK)/modelpreprocess.xsl
 writerfilter_GEN_ooxml_QNameToStr_cxx=$(writerfilter_WORK)/ooxml/qnametostr.cxx
 writerfilter_GEN_ooxml_ResourceIds_hxx=$(writerfilter_WORK)/ooxml/resourceids.hxx
 writerfilter_GEN_ooxml_Token_xml=$(writerfilter_WORK)/token.xml
-writerfilter_SRC_model_NamespacePreprocess=$(writerfilter_SRC)/resourcemodel/namespace_preprocess.pl
 writerfilter_SRC_ooxml_FactoryTools_xsl=$(writerfilter_SRC)/ooxml/factorytools.xsl
 writerfilter_SRC_ooxml_FactoryValues_xsl=$(writerfilter_SRC)/ooxml/factory_values.xsl
 writerfilter_SRC_ooxml_FastTokens_py=$(writerfilter_SRC)/ooxml/fasttokens.py
 writerfilter_SRC_ooxml_GperfFastTokenHandler_py=$(writerfilter_SRC)/ooxml/gperffasttokenhandler.py
 writerfilter_SRC_ooxml_Model=$(writerfilter_SRC)/ooxml/model.xml
 writerfilter_SRC_ooxml_NamespaceIds_xsl=$(writerfilter_SRC)/ooxml/namespaceids.xsl
-writerfilter_SRC_ooxml_Preprocess_xsl=$(writerfilter_SRC)/ooxml/modelpreprocess.xsl
+writerfilter_SRC_ooxml_Preprocess_py=$(writerfilter_SRC)/ooxml/modelpreprocess.py
 writerfilter_SRC_ooxml_QNameToStr_xsl=$(writerfilter_SRC)/ooxml/qnametostr.xsl
 writerfilter_SRC_ooxml_ResourceIds_xsl=$(writerfilter_SRC)/ooxml/resourceids.xsl
 
@@ -103,22 +101,13 @@ $(writerfilter_GEN_ooxml_GperfFastToken_hxx) : $(writerfilter_SRC_ooxml_GperfFas
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_GperfFastTokenHandler_py) $(writerfilter_GEN_ooxml_Token_xml)) \
 	| tr -d '\r' | $(GPERF) -c -E -G -I  -LC++ -S1 -t  > $@
 
-$(writerfilter_GEN_ooxml_Model_processed) : $(writerfilter_GEN_ooxml_Namespacesmap_xsl) $(writerfilter_GEN_ooxml_Preprocess_xsl) $(writerfilter_SRC_ooxml_Model)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_GEN_ooxml_Namespacesmap_xsl) $(writerfilter_SRC_ooxml_Model)) > $@
+$(writerfilter_GEN_ooxml_Model_processed) : $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_SRC_ooxml_Model) | $(writerfilter_WORK)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
+	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $(writerfilter_SRC_ooxml_Preprocess_py) $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_SRC_ooxml_Model)) > $@
 
 $(writerfilter_GEN_ooxml_NamespaceIds_hxx) : $(writerfilter_SRC_ooxml_NamespaceIds_xsl) $(writerfilter_GEN_ooxml_Model_processed) | $(writerfilter_WORK)/ooxml/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $(writerfilter_SRC_ooxml_NamespaceIds_xsl) $(writerfilter_GEN_ooxml_Model_processed)) > $@
-
-$(writerfilter_GEN_ooxml_Namespacesmap_xsl) : $(writerfilter_SRC_ooxml_Model) $(writerfilter_DEP_ooxml_Namespaces_txt) \
-		$(writerfilter_SRC_model_NamespacePreprocess) | $(writerfilter_WORK)/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PRL,1)
-	$(PERL) $(writerfilter_SRC_model_NamespacePreprocess) $(writerfilter_DEP_ooxml_Namespaces_txt) > $@
-
-$(writerfilter_GEN_ooxml_Preprocess_xsl) : $(writerfilter_SRC_ooxml_Preprocess_xsl) | $(writerfilter_WORK)/.dir
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,CPY,1)
-	cp -f $(writerfilter_SRC_ooxml_Preprocess_xsl) $@
 
 $(writerfilter_GEN_ooxml_QNameToStr_cxx): $(writerfilter_SRC_ooxml_QNameToStr_xsl) $(writerfilter_SRC_ooxml_FactoryTools_xsl) $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
