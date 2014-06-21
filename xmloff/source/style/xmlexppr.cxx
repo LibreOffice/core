@@ -590,6 +590,7 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
     bool bDelInfo = false;
     if( !pFilterInfo )
     {
+        const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
         pFilterInfo = new FilterPropertiesInfo_Impl;
         for( sal_Int32 i=0; i < nProps; i++ )
         {
@@ -601,7 +602,6 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
                 ( (0 != (nFlags & MID_FLAG_MUST_EXIST)) ||
                   xInfo->hasPropertyByName( rAPIName ) ) )
             {
-                const SvtSaveOptions::ODFDefaultVersion nCurrentVersion( SvtSaveOptions().GetODFDefaultVersion() );
                 const SvtSaveOptions::ODFDefaultVersion nEarliestODFVersionForExport(
                         mpImpl->mxPropMapper->GetEarliestODFVersionForExport(i));
                 if( nCurrentVersion >= nEarliestODFVersionForExport
