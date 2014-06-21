@@ -439,7 +439,7 @@ void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, s
 
 glm::vec3 GL3DBarChart::getCornerPosition(sal_Int8 nId)
 {
-    float pi = 3.1415926;
+    float pi = 3.1415926f;
     switch(nId)
     {
         case 0:
