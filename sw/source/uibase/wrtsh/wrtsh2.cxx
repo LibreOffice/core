@@ -78,7 +78,7 @@ void SwWrtShell::Insert(SwField &rFld)
     StartUndo(UNDO_INSERT, &aRewriter);
 
     bool bDeleted = false;
-    const SwPaM* pAnnotationTextRange = NULL;
+    boost::scoped_ptr<SwPaM> pAnnotationTextRange;
     if ( HasSelection() )
     {
         if ( rFld.GetTyp()->Which() == RES_POSTITFLD )
@@ -96,13 +96,13 @@ void SwWrtShell::Insert(SwField &rFld)
                     EndPara();
                 }
                 const SwPosition rEndPos( *GetCurrentShellCursor().GetPoint() );
-                pAnnotationTextRange = new SwPaM( rStartPos, rEndPos );
+                pAnnotationTextRange.reset(new SwPaM( rStartPos, rEndPos ));
             }
             else
             {
                 NormalizePam( false );
                 const SwPaM& rCurrPaM = GetCurrentShellCursor();
-                pAnnotationTextRange = new SwPaM( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() );
+                pAnnotationTextRange.reset(new SwPaM( *rCurrPaM.GetPoint(), *rCurrPaM.GetMark() ));
                 ClearMark();
             }
         }
@@ -114,14 +114,14 @@ void SwWrtShell::Insert(SwField &rFld)
 
     SwEditShell::Insert2(rFld, bDeleted);
 
-    if ( pAnnotationTextRange != NULL )
+    if ( pAnnotationTextRange )
     {
         if ( GetDoc() != NULL )
         {
             IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess();
             pMarksAccess->makeAnnotationMark( *pAnnotationTextRange, ::rtl::OUString() );
         }
-        delete pAnnotationTextRange;
+        pAnnotationTextRange.reset();
     }
 
     EndUndo();
