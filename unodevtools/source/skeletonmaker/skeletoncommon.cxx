@@ -274,23 +274,16 @@ void checkDefaultInterfaces(
     const OUString & propertyhelper)
 {
     if ( services.empty() ) {
-        if (interfaces.find("com.sun.star.lang.XServiceInfo") != interfaces.end())
-            interfaces.erase("com.sun.star.lang.XServiceInfo");
+        interfaces.erase("com.sun.star.lang.XServiceInfo");
     } else {
         if (interfaces.find("com.sun.star.lang.XServiceInfo") == interfaces.end())
             interfaces.insert("com.sun.star.lang.XServiceInfo");
     }
 
     if ( propertyhelper.equals("_") ) {
-        if (interfaces.find("com.sun.star.beans.XPropertySet")
-            != interfaces.end())
-            interfaces.erase("com.sun.star.beans.XPropertySet");
-        if (interfaces.find("com.sun.star.beans.XFastPropertySet")
-            != interfaces.end())
-            interfaces.erase("com.sun.star.beans.XFastPropertySet");
-        if (interfaces.find("com.sun.star.beans.XPropertyAccess")
-            != interfaces.end())
-            interfaces.erase("com.sun.star.beans.XPropertyAccess");
+        interfaces.erase("com.sun.star.beans.XPropertySet");
+        interfaces.erase("com.sun.star.beans.XFastPropertySet");
+        interfaces.erase("com.sun.star.beans.XPropertyAccess");
     }
 }
 
