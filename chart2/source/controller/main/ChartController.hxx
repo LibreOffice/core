@@ -541,12 +541,12 @@ private:
     void                impl_deleteDrawViewController();
 
     //executeDispatch methods
-    void SAL_CALL       executeDispatch_ObjectProperties();
-    void SAL_CALL       executeDispatch_FormatObject( const OUString& rDispatchCommand );
-    void SAL_CALL       executeDlg_ObjectProperties( const OUString& rObjectCID );
+    void executeDispatch_ObjectProperties();
+    void executeDispatch_FormatObject( const OUString& rDispatchCommand );
+    void executeDlg_ObjectProperties( const OUString& rObjectCID );
     bool                executeDlg_ObjectProperties_withoutUndoGuard( const OUString& rObjectCID, bool bOkClickOnUnchangedDialogSouldBeRatedAsSuccessAlso );
 
-    void SAL_CALL       executeDispatch_ChartType();
+    void executeDispatch_ChartType();
 
     void                executeDispatch_InsertTitles();
     void                executeDispatch_InsertLegend();
@@ -588,16 +588,16 @@ private:
     void                executeDispatch_DeleteMajorGrid();
     void                executeDispatch_DeleteMinorGrid();
 
-    void SAL_CALL       executeDispatch_InsertSpecialCharacter();
-    void SAL_CALL       executeDispatch_EditText( const Point* pMousePixel = NULL );
-    void SAL_CALL       executeDispatch_SourceData();
-    void SAL_CALL       executeDispatch_MoveSeries( bool bForward );
+    void executeDispatch_InsertSpecialCharacter();
+    void executeDispatch_EditText( const Point* pMousePixel = NULL );
+    void executeDispatch_SourceData();
+    void executeDispatch_MoveSeries( bool bForward );
 
     void                StartTextEdit( const Point* pMousePixel = NULL );
     bool                EndTextEdit();
 
-    void SAL_CALL       executeDispatch_View3D();
-    void SAL_CALL       executeDispatch_PositionAndSize();
+    void executeDispatch_View3D();
+    void executeDispatch_PositionAndSize();
 
     void                executeDispatch_EditData();
 
