@@ -53,8 +53,8 @@ SwNavigationMgr::SwNavigationMgr(SwWrtShell & rShell)
 {
 }
 
-// This method is used by the navigation shell - defined in sw/source/ui/inc/navsh.hxx
-// and implemented in sw/source/ui/shells/navsh.cxx
+// This method is used by the navigation shell - defined in sw/source/uibase/inc/navsh.hxx
+// and implemented in sw/source/uibase/shells/navsh.cxx
 // It is called when we want to check if the back button should be enabled or not.
 // The back button should be enabled only if there are some entries in the navigation history
 
