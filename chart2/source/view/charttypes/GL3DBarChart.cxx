@@ -169,7 +169,9 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         {
             if(bMappedFillProperty)
             {
-                nColor = static_cast<sal_uInt32>(rDataSeries.getValueByProperty(nIndex, "FillColor"));
+                double nPropVal = rDataSeries.getValueByProperty(nIndex, "FillColor");
+                if(!rtl::math::isNan(nPropVal))
+                    nColor = static_cast<sal_uInt32>(nPropVal);
             }
 
             float nVal = rDataSeries.getYValue(nIndex);

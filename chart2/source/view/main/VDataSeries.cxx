@@ -1065,7 +1065,7 @@ double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropN
     if(itr == maPropertyMap.end())
     {
         double fNan;
-        ::rtl::math::setNan( & fNan );
+        ::rtl::math::setNan( &fNan );
         return fNan;
     }
 
