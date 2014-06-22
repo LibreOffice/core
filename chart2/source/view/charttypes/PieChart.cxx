@@ -436,9 +436,12 @@ void PieChart::createShapes()
 
                 if(bHasFillColorMapping)
                 {
-                    uno::Reference< beans::XPropertySet > xProps( xPointShape, uno::UNO_QUERY_THROW );
-                    xProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>(
-                                    pSeries->getValueByProperty(nPointIndex, "FillColor"))));
+                    double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
+                    if(!rtl::math::isNan(nPropVal))
+                    {
+                        uno::Reference< beans::XPropertySet > xProps( xPointShape, uno::UNO_QUERY_THROW );
+                        xProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>( nPropVal)));
+                    }
                 }
 
                 //create label

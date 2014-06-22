@@ -324,15 +324,21 @@ void BubbleChart::createShapes()
 
                         if(bHasFillColorMapping)
                         {
-                            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-                            xProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>(
-                                            pSeries->getValueByProperty(nIndex, "FillColor"))));
+                            double nPropVal = pSeries->getValueByProperty(nIndex, "FillColor");
+                            if(!rtl::math::isNan(nPropVal))
+                            {
+                                uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+                                xProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>(nPropVal)));
+                            }
                         }
                         if(bHasBorderColorMapping)
                         {
-                            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
-                            xProps->setPropertyValue("LineColor", uno::makeAny(static_cast<sal_Int32>(
-                                            pSeries->getValueByProperty(nIndex, "LineColor"))));
+                            double nPropVal = pSeries->getValueByProperty(nIndex, "LineColor");
+                            if(!rtl::math::isNan(nPropVal))
+                            {
+                                uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY_THROW );
+                                xProps->setPropertyValue("LineColor", uno::makeAny(static_cast<sal_Int32>(nPropVal)));
+                            }
                         }
 
                         m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
