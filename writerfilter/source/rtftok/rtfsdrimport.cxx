@@ -29,6 +29,7 @@
 #include <filter/msfilter/util.hxx>
 #include <svx/svdtrans.hxx>
 #include <tools/mapunit.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 #include <dmapper/DomainMapper.hxx>
 #include "../dmapper/GraphicHelpers.hxx"
@@ -232,7 +233,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
     uno::Any aAny;
     beans::PropertyValue aPropertyValue;
     awt::Rectangle aViewBox;
-    std::vector<beans::PropertyValue> aPathPropVec;
+    comphelper::SequenceAsVector<beans::PropertyValue> aPath;
     // Default line color is black in Word, blue in Writer.
     uno::Any aLineColor = uno::makeAny(COL_BLACK);
     // Default line width is 0.75 pt (26 mm100) in Word, 0 in Writer.
@@ -388,7 +389,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             while (nCharIndex >= 0);
             aPropertyValue.Name = "Coordinates";
             aPropertyValue.Value <<= aCoordinates;
-            aPathPropVec.push_back(aPropertyValue);
+            aPath.push_back(aPropertyValue);
         }
         else if (i->first == "pSegmentInfo")
         {
@@ -454,7 +455,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             while (nCharIndex >= 0);
             aPropertyValue.Name = "Segments";
             aPropertyValue.Value <<= aSegments;
-            aPathPropVec.push_back(aPropertyValue);
+            aPath.push_back(aPropertyValue);
         }
         else if (i->first == "geoLeft")
             aViewBox.X = i->second.toInt32();
@@ -669,34 +670,24 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
         xDefaulter->createCustomShapeDefaults(OUString::number(nType));
     }
 
-    // Creating Path property
-    uno::Sequence<beans::PropertyValue> aPathPropSeq(aPathPropVec.size());
-    beans::PropertyValue* pPathValues = aPathPropSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = aPathPropVec.begin(); i != aPathPropVec.end(); ++i)
-        *pPathValues++ = *i;
-
     // Creating CustomShapeGeometry property
-    std::vector<beans::PropertyValue> aGeomPropVec;
+    comphelper::SequenceAsVector<beans::PropertyValue> aGeometry;
     if (aViewBox.X || aViewBox.Y || aViewBox.Width || aViewBox.Height)
     {
         aViewBox.Width -= aViewBox.X;
         aViewBox.Height -= aViewBox.Y;
         aPropertyValue.Name = "ViewBox";
         aPropertyValue.Value <<= aViewBox;
-        aGeomPropVec.push_back(aPropertyValue);
+        aGeometry.push_back(aPropertyValue);
     }
-    if (aPathPropSeq.getLength())
+    if (!aPath.empty())
     {
         aPropertyValue.Name = "Path";
-        aPropertyValue.Value <<= aPathPropSeq;
-        aGeomPropVec.push_back(aPropertyValue);
+        aPropertyValue.Value <<= aPath.getAsConstList();
+        aGeometry.push_back(aPropertyValue);
     }
-    uno::Sequence<beans::PropertyValue> aGeomPropSeq(aGeomPropVec.size());
-    beans::PropertyValue* pGeomValues = aGeomPropSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = aGeomPropVec.begin(); i != aGeomPropVec.end(); ++i)
-        *pGeomValues++ = *i;
-    if (aGeomPropSeq.getLength() && xPropertySet.is())
-        xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(aGeomPropSeq));
+    if (!aGeometry.empty() && xPropertySet.is())
+        xPropertySet->setPropertyValue("CustomShapeGeometry", uno::Any(aGeometry.getAsConstList()));
 
     // Set position and size
     if (xShape.is())
