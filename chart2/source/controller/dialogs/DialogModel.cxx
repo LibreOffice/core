@@ -468,6 +468,19 @@ Reference< data::XDataProvider > DialogModel::getDataProvider() const
     return aResult;
 }
 
+namespace {
+
+void addMissingRoles(DialogModel::tRolesWithRanges& rResult, const uno::Sequence<OUString>& rRoles)
+{
+    for(sal_Int32 i = 0, n = rRoles.getLength(); i < n; ++i)
+    {
+        if(rResult.find(rRoles[i]) == rResult.end())
+            rResult.insert(DialogModel::tRolesWithRanges::value_type(rRoles[i], OUString()));
+    }
+}
+
+}
+
 DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
     const Reference< XDataSeries > & xSeries,
     const OUString & aRoleOfSequenceForLabel,
@@ -484,21 +497,11 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
         {
             // add missing mandatory roles
             Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
-            OUString aEmptyString;
-            sal_Int32 nI = 0;
-            for( nI=0; nI < aRoles.getLength(); ++nI )
-            {
-                if( aResult.find( aRoles[nI] ) == aResult.end() )
-                    aResult.insert( DialogModel::tRolesWithRanges::value_type( aRoles[nI], aEmptyString ));
-            }
+            addMissingRoles(aResult, aRoles);
 
             // add missing optional roles
             aRoles = xChartType->getSupportedOptionalRoles();
-            for( nI=0; nI < aRoles.getLength(); ++nI )
-            {
-                if( aResult.find( aRoles[nI] ) == aResult.end() )
-                    aResult.insert( DialogModel::tRolesWithRanges::value_type( aRoles[nI], aEmptyString ));
-            }
+            addMissingRoles(aResult, aRoles);
         }
     }
     catch( const uno::Exception & ex )
