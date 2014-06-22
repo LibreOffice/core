@@ -328,7 +328,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
-                    pDlg->SetCurPageId("fonteffect");
+                    pDlg->SetCurPageId("fonteffects");
                 }
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet )
