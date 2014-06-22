@@ -180,7 +180,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     }
     if (pDlg && nSlot == SID_CHAR_DLG_EFFECT)
     {
-        pDlg->SetCurPageId("fonteffect");
+        pDlg->SetCurPageId("fonteffects");
     }
     else if (pDlg && nSlot == SID_ATTR_CHAR_FONT)
     {
