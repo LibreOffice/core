@@ -462,7 +462,7 @@
               <object class="GtkLabel" id="labelFL_PROPERTIES">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Line spacing</property>
+                <property name="label" translatable="yes">Line Spacing</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

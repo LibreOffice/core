@@ -243,7 +243,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Replacement table</property>
+            <property name="label" translatable="yes">Replacement Table</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -369,7 +369,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Font settings for HTML, Basic and SQL sources</property>
+            <property name="label" translatable="yes">Font Settings for Html, Basic and SQL Sources</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

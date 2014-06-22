@@ -551,7 +551,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Shift cells</property>
+                    <property name="label" translatable="yes">Shift Cells</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

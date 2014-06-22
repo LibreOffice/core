@@ -253,7 +253,7 @@
                           <object class="GtkLabel" id="macronameft">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Macro name</property>
+                            <property name="label" translatable="yes">Macro Name</property>
                             <property name="track_visited_links">False</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>

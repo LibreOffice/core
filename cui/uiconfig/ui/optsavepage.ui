@@ -454,7 +454,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Default file format and ODF settings</property>
+            <property name="label" translatable="yes">Default File Format and ODF Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

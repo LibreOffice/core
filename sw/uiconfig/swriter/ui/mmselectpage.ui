@@ -173,7 +173,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Select starting document for the mail merge</property>
+            <property name="label" translatable="yes">Select Starting Document for the Mail Merge</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

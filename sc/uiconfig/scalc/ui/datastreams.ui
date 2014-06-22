@@ -261,7 +261,7 @@
                   <object class="GtkLabel" id="label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Source stream</property>
+                    <property name="label" translatable="yes">Source Stream</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -360,7 +360,7 @@
                       <object class="GtkLabel" id="label2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">When new data arrives</property>
+                        <property name="label" translatable="yes">When New Data Arrives</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>
@@ -457,7 +457,7 @@
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Maximal amount of rows</property>
+                        <property name="label" translatable="yes">Maximal Amount of Rows</property>
                         <attributes>
                           <attribute name="weight" value="bold"/>
                         </attributes>

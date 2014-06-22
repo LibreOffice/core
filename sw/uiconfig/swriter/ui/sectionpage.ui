@@ -49,7 +49,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">New section</property>
+            <property name="label" translatable="yes">New Section</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -346,7 +346,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Write protection</property>
+                <property name="label" translatable="yes">Write Protection</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

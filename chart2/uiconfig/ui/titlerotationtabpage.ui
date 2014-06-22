@@ -178,7 +178,7 @@
       <object class="GtkLabel" id="labelTextOrient">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Text orientation</property>
+        <property name="label" translatable="yes">Text Orientation</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

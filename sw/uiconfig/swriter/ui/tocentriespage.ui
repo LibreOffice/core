@@ -846,7 +846,7 @@
                   <object class="GtkLabel" id="label14">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Sort by</property>
+                    <property name="label" translatable="yes">Sort By</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -1096,7 +1096,7 @@
                   <object class="GtkLabel" id="label13">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Sort keys</property>
+                    <property name="label" translatable="yes">Sort Keys</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

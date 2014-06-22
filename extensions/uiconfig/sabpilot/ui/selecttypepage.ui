@@ -222,7 +222,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Please select the type of your external address book</property>
+            <property name="label" translatable="yes">Please Select the Type of Your External Address Book</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
