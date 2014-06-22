@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5aa745d1_dd93ab4e",
+        "filename": "cui/uiconfig/ui/acorexceptpage.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-06-22T19:17:39Z",
+      "side": 1,
+      "message": "I have to reset this file. Finding out how to.",
+      "revId": "b8e9e286b6d31bb67aed746c517663351fdcc1bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
