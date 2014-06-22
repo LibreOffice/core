@@ -38,7 +38,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/schart,\
 	chart2/uiconfig/ui/datarangedialog \
 	chart2/uiconfig/ui/dlg_DataLabel \
 	chart2/uiconfig/ui/dlg_InsertErrorBars \
-	chart2/uiconfig/ui/dlg_PropertyMapping \
 	chart2/uiconfig/ui/insertaxisdlg \
 	chart2/uiconfig/ui/insertgriddlg \
 	chart2/uiconfig/ui/inserttitledlg \
