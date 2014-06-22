@@ -989,7 +989,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException, std::
             // - RowCount/IsRowCountFinal
             fireRowcount();
         }
-        else if ( !m_bAfterLast ) // the update went rong
+        else if ( !m_bAfterLast ) // the update went wrong
         {
             ::dbtools::throwSQLException( DBACORE_RESSTRING( RID_STR_UPDATE_FAILED ), SQL_INVALID_CURSOR_POSITION, *this );
         }
