@@ -290,18 +290,4 @@ NS_<namespace/@alias>
     </xsl:for-each>
 </xsl:template>
 
-<xsl:template name="factorydefineidimpls">
-    <xsl:for-each select="//rng:define">
-        <xsl:sort select="@name"/>
-        <xsl:if test="generate-id(key('definename', @name)[1]) = generate-id(.)">
-            <xsl:text>
-const Id </xsl:text>
-            <xsl:call-template name="localidfordefine"/>
-            <xsl:text> = </xsl:text>
-            <xsl:value-of select="position()"/>
-            <xsl:text>;</xsl:text>
-        </xsl:if>
-    </xsl:for-each>
-</xsl:template>
-
 </xsl:stylesheet>
