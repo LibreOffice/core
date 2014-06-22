@@ -84,9 +84,9 @@ $(writerfilter_GEN_ooxml_Factory_cxx) : $(writerfilter_SRC)/ooxml/factoryimpl.xs
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_GEN_ooxml_Factory_hxx) : $(writerfilter_SRC)/ooxml/factoryinc.xsl $(writerfilter_GEN_ooxml_Model_processed)
-	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_XSLTCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
+$(writerfilter_GEN_ooxml_Factory_hxx) : $(writerfilter_SRC)/ooxml/factoryinc.py $(writerfilter_GEN_ooxml_Model_processed)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
+	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
 $(writerfilter_GEN_ooxml_FactoryValues_hxx) : $(writerfilter_SRC_ooxml_FactoryValues_xsl) $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,XSL,1)
