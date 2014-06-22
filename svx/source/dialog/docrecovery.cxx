@@ -58,6 +58,7 @@
 #include <unotools/localfilehelper.hxx>
 #include "svtools/treelistentry.hxx"
 #include <officecfg/Office/Recovery.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace svx{
     namespace DocRecovery{
@@ -655,9 +656,9 @@ SaveDialog::SaveDialog(Window* pParent, RecoveryCore* pCore)
 IMPL_LINK_NOARG(SaveDialog, OKButtonHdl)
 {
     // start crash-save with progress
-    SaveProgressDialog* pProgress = new SaveProgressDialog(this, m_pCore);
+    boost::scoped_ptr<SaveProgressDialog> pProgress(new SaveProgressDialog(this, m_pCore));
     short nResult = pProgress->Execute();
-    delete pProgress;
+    pProgress.reset();
 
     // if "CANCEL" => return "CANCEL"
     // if "OK"     => "AUTOLUNCH" always !
@@ -943,14 +944,14 @@ short RecoveryDialog::execute()
                  // failed recovery documents. They must be saved to
                  // a user selected directrory.
                  short                 nRet                  = DLG_RET_UNKNOWN;
-                 BrokenRecoveryDialog* pBrokenRecoveryDialog = new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted);
+                 boost::scoped_ptr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
                  OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default dir
                  if (pBrokenRecoveryDialog->isExecutionNeeded())
                  {
                      nRet = pBrokenRecoveryDialog->Execute();
                      sSaveDir = pBrokenRecoveryDialog->getSaveDirURL();
                  }
-                 delete pBrokenRecoveryDialog;
+                 pBrokenRecoveryDialog.reset();
 
                  switch(nRet)
                  {
@@ -1012,7 +1013,7 @@ short RecoveryDialog::execute()
                  // If no temp files exists or user decided to ignore it ...
                  // we have to remove all recovery/session data anyway!
                  short                 nRet                  = DLG_RET_UNKNOWN;
-                 BrokenRecoveryDialog* pBrokenRecoveryDialog = new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted);
+                 boost::scoped_ptr<BrokenRecoveryDialog> pBrokenRecoveryDialog(new BrokenRecoveryDialog(this, m_pCore, !m_bWasRecoveryStarted));
                  OUString              sSaveDir              = pBrokenRecoveryDialog->getSaveDirURL(); // get the default save location
 
                  // dialog itself checks if there is a need to copy files for this mode.
@@ -1022,7 +1023,7 @@ short RecoveryDialog::execute()
                      nRet     = pBrokenRecoveryDialog->Execute();
                      sSaveDir = pBrokenRecoveryDialog->getSaveDirURL();
                  }
-                 delete pBrokenRecoveryDialog;
+                 pBrokenRecoveryDialog.reset();
 
                  // Possible states:
                  // a) nRet == DLG_RET_UNKNOWN

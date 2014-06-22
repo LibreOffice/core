@@ -33,7 +33,8 @@
 #include <svx/dialogs.hrc>
 #include <bmpmask.hrc>
 #include <svx/svxids.hrc>
-
+#include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
 
 
 #define BMP_RESID(nId)  ResId(nId, DIALOG_MGR())
@@ -148,14 +149,12 @@ void MaskSet::KeyInput( const KeyEvent& rKEvt )
 
 void MaskSet::onEditColor()
 {
-    SvColorDialog* pColorDlg = new SvColorDialog( GetParent() );
+    boost::scoped_ptr<SvColorDialog> pColorDlg(new SvColorDialog( GetParent() ));
 
     pColorDlg->SetColor(GetItemColor(1));
 
     if( pColorDlg->Execute() )
         SetItemColor( 1, pColorDlg->GetColor() );
-
-    delete pColorDlg;
 }
 
 
@@ -775,12 +774,12 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         long        nR;
         long        nG;
         long        nB;
-        long*       pMinR = new long[nCount];
-        long*       pMaxR = new long[nCount];
-        long*       pMinG = new long[nCount];
-        long*       pMaxG = new long[nCount];
-        long*       pMinB = new long[nCount];
-        long*       pMaxB = new long[nCount];
+        boost::scoped_array<long> pMinR(new long[nCount]);
+        boost::scoped_array<long> pMaxR(new long[nCount]);
+        boost::scoped_array<long> pMinG(new long[nCount]);
+        boost::scoped_array<long> pMaxG(new long[nCount]);
+        boost::scoped_array<long> pMinB(new long[nCount]);
+        boost::scoped_array<long> pMaxB(new long[nCount]);
         sal_uInt16      i;
         bool        bReplace;
 
@@ -1006,13 +1005,6 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 break;
             }
         }
-
-        delete[] pMinR;
-        delete[] pMaxR;
-        delete[] pMinG;
-        delete[] pMaxG;
-        delete[] pMinB;
-        delete[] pMaxB;
     }
 
     LeaveWait();

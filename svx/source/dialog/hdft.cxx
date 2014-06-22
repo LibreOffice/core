@@ -46,6 +46,7 @@
 #include <editeng/boxitem.hxx>
 
 #include <svx/svxdlg.hxx>
+#include <boost/scoped_ptr.hpp>
 // static ----------------------------------------------------------------
 
 // Word 97 incompatibility (#i19922#)
@@ -83,7 +84,7 @@ namespace svx {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, bEnableBackgroundSelector );
+            boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSvxBorderBackgroundDlg( pParent, *pBBSet, bEnableBackgroundSelector ));
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
             {
@@ -98,7 +99,6 @@ namespace svx {
                 }
                 bRes = true;
             }
-            delete pDlg;
         }
         return bRes;
     }
@@ -257,10 +257,9 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
         aSet.Put( SfxBoolItem( nWSharedFirst,  m_pCntSharedFirstBox->IsChecked() ) );
     if(m_pDynSpacingCB->IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
     {
-        SfxBoolItem* pBoolItem = (SfxBoolItem*)pPool->GetDefaultItem(nWDynSpacing).Clone();
+        boost::scoped_ptr<SfxBoolItem> pBoolItem((SfxBoolItem*)pPool->GetDefaultItem(nWDynSpacing).Clone());
         pBoolItem->SetValue(m_pDynSpacingCB->IsChecked());
         aSet.Put(*pBoolItem);
-        delete pBoolItem;
     }
 
     // Size
