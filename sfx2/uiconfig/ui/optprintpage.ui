@@ -478,7 +478,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Reduce print data</property>
+            <property name="label" translatable="yes">Reduce Print Data</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -569,7 +569,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Printer warnings</property>
+            <property name="label" translatable="yes">Printer Warnings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

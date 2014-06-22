@@ -252,7 +252,7 @@
                   <object class="GtkLabel" id="layoutopt">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Layout assistance</property>
+                    <property name="label" translatable="yes">Layout Assistance</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -429,7 +429,7 @@
                   <object class="GtkLabel" id="cursorlabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Direct cursor</property>
+                    <property name="label" translatable="yes">Direct Cursor</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -483,7 +483,7 @@
                   <object class="GtkLabel" id="cursoropt">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Cursor in protected areas</property>
+                    <property name="label" translatable="yes">Cursor in Protected Areas</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

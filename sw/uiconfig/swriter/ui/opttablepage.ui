@@ -213,7 +213,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Input in tables</property>
+                <property name="label" translatable="yes">Input in Tables</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -611,7 +611,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Keyboard handling</property>
+            <property name="label" translatable="yes">Keyboard Handling</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

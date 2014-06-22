@@ -294,7 +294,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Java options</property>
+            <property name="label" translatable="yes">Java Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -384,7 +384,7 @@
           <object class="GtkLabel" id="label12">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Optional (unstable) options</property>
+            <property name="label" translatable="yes">Optional (unstable) Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

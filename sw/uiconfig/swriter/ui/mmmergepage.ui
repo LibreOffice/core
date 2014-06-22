@@ -89,7 +89,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Personalize the mail merge documents</property>
+            <property name="label" translatable="yes">Personalize the Mail Merge Documents</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

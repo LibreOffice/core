@@ -195,7 +195,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="no">Settings only for testpurposes</property>
+            <property name="label" translatable="no">Settings Only for Testpurposes</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

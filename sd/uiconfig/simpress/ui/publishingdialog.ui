@@ -338,7 +338,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0.49000000953674316</property>
-                    <property name="label" translatable="yes">WebCast</property>
+                    <property name="label" translatable="yes">Webcast</property>
                     <attributes>
                       <attribute name="weight" value="semibold"/>
                     </attributes>
@@ -493,7 +493,7 @@
                   <object class="GtkLabel" id="kioskLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Advance slides</property>
+                    <property name="label" translatable="yes">Advance Slides</property>
                     <attributes>
                       <attribute name="weight" value="semibold"/>
                     </attributes>
@@ -769,7 +769,7 @@
                   <object class="GtkLabel" id="publicationLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Publication type</property>
+                    <property name="label" translatable="yes">Publication Type</property>
                     <attributes>
                       <attribute name="weight" value="semibold"/>
                     </attributes>
@@ -1032,7 +1032,7 @@
                       <object class="GtkLabel" id="monitorResolutionLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Monitor resolution</property>
+                        <property name="label" translatable="yes">Monitor Resolution</property>
                         <attributes>
                           <attribute name="weight" value="semibold"/>
                         </attributes>
@@ -1300,7 +1300,7 @@
               <object class="GtkLabel" id="infTitlePageLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Information for the title page</property>
+                <property name="label" translatable="yes">Information for the Title Page</property>
                 <attributes>
                   <attribute name="weight" value="semibold"/>
                 </attributes>
@@ -1377,7 +1377,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0.49000000953674316</property>
-                <property name="label" translatable="yes">Select button style</property>
+                <property name="label" translatable="yes">Select Button Style</property>
                 <attributes>
                   <attribute name="weight" value="semibold"/>
                 </attributes>
@@ -1601,7 +1601,7 @@
               <object class="GtkLabel" id="selectColorLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Select color scheme</property>
+                <property name="label" translatable="yes">Select Color Scheme</property>
                 <attributes>
                   <attribute name="weight" value="semibold"/>
                 </attributes>

@@ -249,7 +249,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Image map</property>
+            <property name="label" translatable="yes">Image Map</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

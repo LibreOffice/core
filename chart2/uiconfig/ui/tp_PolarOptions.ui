@@ -123,7 +123,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Starting angle</property>
+            <property name="label" translatable="yes">Starting Angle</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -166,7 +166,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Plot options</property>
+            <property name="label" translatable="yes">Plot Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

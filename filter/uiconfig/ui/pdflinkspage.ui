@@ -179,7 +179,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Cross-document links</property>
+            <property name="label" translatable="yes">Cross-document Links</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

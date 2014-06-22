@@ -924,7 +924,7 @@
                   <object class="GtkLabel" id="4title">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Fraction bar</property>
+                    <property name="label" translatable="yes">Fraction Bar</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>

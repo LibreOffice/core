@@ -204,7 +204,7 @@ Use the browse button to select a database file.</property>
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Exchange databases</property>
+                    <property name="label" translatable="yes">Exchange Databases</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

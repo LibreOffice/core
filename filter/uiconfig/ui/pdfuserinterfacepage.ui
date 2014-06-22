@@ -118,7 +118,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Window options</property>
+                <property name="label" translatable="yes">Window Options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -211,7 +211,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">User interface options</property>
+                <property name="label" translatable="yes">User Interface Options</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

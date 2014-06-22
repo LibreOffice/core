@@ -94,7 +94,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Color scheme</property>
+            <property name="label" translatable="yes">Color Scheme</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -219,7 +219,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Custom colors</property>
+            <property name="label" translatable="yes">Custom Colors</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
