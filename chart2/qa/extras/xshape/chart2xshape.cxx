@@ -28,9 +28,11 @@ class Chart2XShapeTest : public ChartTest
 public:
 
     void testFdo75075();
+    void testPropertyMappingBarChart();
 
     CPPUNIT_TEST_SUITE(Chart2XShapeTest);
     CPPUNIT_TEST(testFdo75075);
+    CPPUNIT_TEST(testPropertyMappingBarChart);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -77,6 +79,12 @@ void Chart2XShapeTest::testFdo75075()
 {
     load("chart2/qa/extras/xshape/data/ods/", "fdo75075.ods");
     compareAgainstReference("fdo75075.xml");
+}
+
+void Chart2XShapeTest::testPropertyMappingBarChart()
+{
+    load("chart2/qa/extras/xshape/data/ods/", "property-mapping-bar.ods");
+    compareAgainstReference("property-mapping-bar.xml", true);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2XShapeTest);
