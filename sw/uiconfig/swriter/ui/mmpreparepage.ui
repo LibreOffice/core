@@ -233,7 +233,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Preview document</property>
+            <property name="label" translatable="yes">Preview Document</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -327,7 +327,7 @@ Clicking 'Edit Document...' will temporarily reduce the wizard to a small window
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Edit document</property>
+            <property name="label" translatable="yes">Edit Document</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

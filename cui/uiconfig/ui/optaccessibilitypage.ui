@@ -166,7 +166,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Miscellaneous options</property>
+            <property name="label" translatable="yes">Miscellaneous Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -253,7 +253,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Options for high contrast appearance</property>
+            <property name="label" translatable="yes">Options for High Contrast Appearance</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

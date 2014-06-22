@@ -115,7 +115,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Type and title</property>
+            <property name="label" translatable="yes">Type and Title</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -684,7 +684,7 @@
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Create from the following objects</property>
+            <property name="label" translatable="yes">Create from the Following Objects</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -781,7 +781,7 @@
           <object class="GtkLabel" id="label7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Formatting of the entries</property>
+            <property name="label" translatable="yes">Formatting of the Entries</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

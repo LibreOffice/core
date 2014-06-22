@@ -40,7 +40,7 @@
           <object class="GtkLabel" id="label20">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Chart colors</property>
+            <property name="label" translatable="yes">Chart Colors</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -504,7 +504,7 @@
                   <object class="GtkLabel" id="separatoroptions">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Separator options</property>
+                    <property name="label" translatable="yes">Separator Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -576,7 +576,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Other options</property>
+                    <property name="label" translatable="yes">Other Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

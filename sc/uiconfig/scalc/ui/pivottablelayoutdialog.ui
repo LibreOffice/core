@@ -358,7 +358,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">Drag the items into the desired position</property>
+                <property name="label" translatable="yes">Drag the Items into the Desired Position</property>
                 <attributes>
                   <attribute name="underline" value="True"/>
                 </attributes>

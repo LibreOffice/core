@@ -260,7 +260,7 @@
                   <object class="GtkLabel" id="formulaL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Formula fonts</property>
+                    <property name="label" translatable="yes">Formula Fonts</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -397,7 +397,7 @@
                   <object class="GtkLabel" id="customL">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Custom fonts</property>
+                    <property name="label" translatable="yes">Custom Fonts</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

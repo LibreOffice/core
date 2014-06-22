@@ -75,7 +75,7 @@
       <object class="GtkLabel" id="labelLineChange">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Line change</property>
+        <property name="label" translatable="yes">Line Change</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
