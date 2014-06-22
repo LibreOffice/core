@@ -130,7 +130,7 @@
                   <object class="GtkLabel" id="oldpass">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Old password</property>
+                    <property name="label" translatable="yes">Old Password</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -232,7 +232,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">New password</property>
+                    <property name="label" translatable="yes">New Password</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

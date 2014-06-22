@@ -255,7 +255,7 @@
               <object class="GtkLabel" id="label7">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Content alignment</property>
+                <property name="label" translatable="yes">Content Alignment</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

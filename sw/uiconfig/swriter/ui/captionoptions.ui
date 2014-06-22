@@ -121,7 +121,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Numbering captions by chapter</property>
+                    <property name="label" translatable="yes">Numbering Captions By Chapter</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -209,7 +209,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Category and frame format</property>
+                    <property name="label" translatable="yes">Category and Frame Format</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

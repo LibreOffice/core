@@ -164,7 +164,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Abbreviations (no subsequent capital)</property>
+            <property name="label" translatable="yes">Abbreviations (no Subsequent Capital)</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -334,7 +334,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Words with TWo INitial CApitals</property>
+            <property name="label" translatable="yes">Words With Two Initial Capitals</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

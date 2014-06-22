@@ -103,7 +103,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Sequence checking</property>
+            <property name="label" translatable="yes">Sequence Checking</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -193,7 +193,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Cursor control</property>
+            <property name="label" translatable="yes">Cursor Control</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -268,7 +268,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">General options</property>
+            <property name="label" translatable="yes">General Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

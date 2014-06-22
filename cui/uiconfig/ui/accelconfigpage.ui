@@ -50,7 +50,7 @@
               <object class="GtkLabel" id="label21">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Shortcut keys</property>
+                <property name="label" translatable="yes">Shortcut Keys</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

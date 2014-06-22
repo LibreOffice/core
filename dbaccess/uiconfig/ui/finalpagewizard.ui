@@ -14,7 +14,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Decide how to proceed after saving the database</property>
+        <property name="label" translatable="yes">Decide How to Proceed After Saving the Database</property>
         <property name="wrap">True</property>
         <attributes>
           <attribute name="weight" value="bold"/>

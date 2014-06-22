@@ -358,7 +358,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Group by</property>
+                    <property name="label" translatable="yes">Group By</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

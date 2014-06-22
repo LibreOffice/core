@@ -231,7 +231,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Envelope orientation</property>
+            <property name="label" translatable="yes">Envelope Orientation</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -143,7 +143,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">What type of document do you want to create?</property>
+            <property name="label" translatable="yes">What Type of Document Do You Want to Create?</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

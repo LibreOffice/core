@@ -392,7 +392,7 @@
               <object class="GtkLabel" id="include_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Include on slide</property>
+                <property name="label" translatable="yes">Include On Slide</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

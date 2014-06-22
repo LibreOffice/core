@@ -283,7 +283,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Single quotes</property>
+                    <property name="label" translatable="yes">Single Quotes</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -483,7 +483,7 @@
                   <object class="GtkLabel" id="label10">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Double quotes</property>
+                    <property name="label" translatable="yes">Double Quotes</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

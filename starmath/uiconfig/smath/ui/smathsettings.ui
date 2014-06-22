@@ -89,7 +89,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Print options</property>
+            <property name="label" translatable="yes">Print Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -206,7 +206,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Print format</property>
+            <property name="label" translatable="yes">Print Format</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -277,7 +277,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Miscellaneous options</property>
+            <property name="label" translatable="yes">Miscellaneous Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

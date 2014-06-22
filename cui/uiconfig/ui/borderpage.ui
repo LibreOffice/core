@@ -117,7 +117,7 @@
               <object class="GtkLabel" id="label8">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Line arrangement</property>
+                <property name="label" translatable="yes">Line Arrangement</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -428,7 +428,7 @@
               <object class="GtkLabel" id="label10">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Spacing to contents</property>
+                <property name="label" translatable="yes">Spacing to Contents</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -568,7 +568,7 @@
           <object class="GtkLabel" id="label11">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Shadow style</property>
+            <property name="label" translatable="yes">Shadow Style</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

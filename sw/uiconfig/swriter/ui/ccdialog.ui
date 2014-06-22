@@ -173,7 +173,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Send a copy of this mail to...</property>
+                <property name="label" translatable="yes">Send a Copy of This Mail To...</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
