@@ -867,6 +867,7 @@ void XYChartDialogController::adjustParameterToSubType( ChartTypeParameter& rPar
 {
     rParameter.eStackMode=GlobalStackMode_NONE;
     rParameter.b3DLook = false;
+    rParameter.bXAxisWithValues = true;
 
     switch( rParameter.nSubTypeIndex )
     {
