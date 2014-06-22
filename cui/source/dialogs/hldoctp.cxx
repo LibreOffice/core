@@ -23,7 +23,6 @@
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
 #include "hldoctp.hxx"
-#include "hyperdlg.hrc"
 #include "hlmarkwn_def.hxx"
 
 sal_Char const sHash[]          = "#";
@@ -35,49 +34,40 @@ sal_Char const sFileScheme[]    = INET_FILE_SCHEME;
 |*
 |************************************************************************/
 
-SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet)
-    : SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_DOCUMENT ), rItemSet ),
-    maGrpDocument   ( this, CUI_RES (GRP_DOCUMENT) ),
-    maFtPath        ( this, CUI_RES (FT_PATH_DOC) ),
-    maCbbPath       ( this, INET_PROT_FILE ),
-    maBtFileopen    ( this, CUI_RES (BTN_FILEOPEN) ),
-    maGrpTarget     ( this, CUI_RES (GRP_TARGET) ),
-    maFtTarget      ( this, CUI_RES (FT_TARGET_DOC) ),
-    maEdTarget      ( this, CUI_RES (ED_TARGET_DOC) ),
-    maFtURL         ( this, CUI_RES (FT_URL) ),
-    maFtFullURL     ( this, CUI_RES (FT_FULL_URL) ),
-    maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
+SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet)
+    : SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkDocPage", "cui/ui/hyperlinkdocpage.ui", rItemSet ),
     mbMarkWndOpen   ( false )
 {
+    get(m_pCbbPath, "path");
+    m_pCbbPath->SetSmartProtocol(INET_PROT_FILE);
+    get(m_pBtFileopen, "fileopen");
+    m_pBtFileopen->SetModeImage(Image(CUI_RES(RID_SVXBMP_FILEOPEN)));
+    get(m_pEdTarget, "target");
+    get(m_pFtFullURL, "url");
+    get(m_pBtBrowse, "browse");
+    m_pBtBrowse->SetModeImage(Image(CUI_RES(RID_SVXBMP_TARGET)));
+
     // Disable display of bitmap names.
-    maBtBrowse.EnableTextDisplay (false);
-    maBtFileopen.EnableTextDisplay (false);
+    m_pBtBrowse->EnableTextDisplay (false);
+    m_pBtFileopen->EnableTextDisplay (false);
 
     InitStdControls();
-    FreeResource();
 
-    // Init URL-Box (pos&size, Open-Handler)
-    maCbbPath.SetPosSizePixel ( LogicToPixel( Point( COL_2, 15 ), MAP_APPFONT ),
-                                LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
-    maCbbPath.Show();
+    m_pCbbPath->Show();
     OUString aFileScheme( INET_FILE_SCHEME );
-    maCbbPath.SetBaseURL(aFileScheme);
-    maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
+    m_pCbbPath->SetBaseURL(aFileScheme);
+    m_pCbbPath->SetHelpId( HID_HYPERDLG_DOC_PATH );
 
     SetExchangeSupport ();
 
     // overload handlers
-    maBtFileopen.SetClickHdl ( LINK ( this, SvxHyperlinkDocTp, ClickFileopenHdl_Impl ) );
-    maBtBrowse.SetClickHdl   ( LINK ( this, SvxHyperlinkDocTp, ClickTargetHdl_Impl ) );
-    maCbbPath.SetModifyHdl   ( LINK ( this, SvxHyperlinkDocTp, ModifiedPathHdl_Impl ) );
-    maEdTarget.SetModifyHdl  ( LINK ( this, SvxHyperlinkDocTp, ModifiedTargetHdl_Impl ) );
+    m_pBtFileopen->SetClickHdl ( LINK ( this, SvxHyperlinkDocTp, ClickFileopenHdl_Impl ) );
+    m_pBtBrowse->SetClickHdl   ( LINK ( this, SvxHyperlinkDocTp, ClickTargetHdl_Impl ) );
+    m_pCbbPath->SetModifyHdl   ( LINK ( this, SvxHyperlinkDocTp, ModifiedPathHdl_Impl ) );
+    m_pEdTarget->SetModifyHdl  ( LINK ( this, SvxHyperlinkDocTp, ModifiedTargetHdl_Impl ) );
 
-    maCbbPath.SetLoseFocusHdl( LINK ( this, SvxHyperlinkDocTp, LostFocusPathHdl_Impl ) );
+    m_pCbbPath->SetLoseFocusHdl( LINK ( this, SvxHyperlinkDocTp, LostFocusPathHdl_Impl ) );
 
-    maBtBrowse.SetAccessibleRelationMemberOf( &maGrpTarget );
-    maBtBrowse.SetAccessibleRelationLabeledBy( &maFtTarget );
-    maBtFileopen.SetAccessibleRelationMemberOf( &maGrpDocument );
-    maBtFileopen.SetAccessibleRelationLabeledBy( &maFtPath );
     maTimer.SetTimeoutHdl ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
 }
 
@@ -95,13 +85,13 @@ void SvxHyperlinkDocTp::FillDlgFields(const OUString& rStrURL)
 {
     sal_Int32 nPos = rStrURL.indexOf(sHash);
     // path
-    maCbbPath.SetText ( rStrURL.copy( 0, ( nPos == -1 ? rStrURL.getLength() : nPos ) ) );
+    m_pCbbPath->SetText ( rStrURL.copy( 0, ( nPos == -1 ? rStrURL.getLength() : nPos ) ) );
 
     // set target in document at editfield
     OUString aStrMark;
     if ( nPos != -1 && nPos < rStrURL.getLength()-1 )
         aStrMark = rStrURL.copy( nPos+1 );
-     maEdTarget.SetText ( aStrMark );
+     m_pEdTarget->SetText ( aStrMark );
 
     ModifiedPathHdl_Impl ( NULL );
 }
@@ -116,9 +106,9 @@ OUString SvxHyperlinkDocTp::GetCurrentURL ()
 {
     // get data from dialog-controls
     OUString aStrURL;
-    OUString aStrPath ( maCbbPath.GetText() );
-    const OUString aBaseURL ( maCbbPath.GetBaseURL() );
-    OUString aStrMark( maEdTarget.GetText() );
+    OUString aStrPath ( m_pCbbPath->GetText() );
+    const OUString aBaseURL ( m_pCbbPath->GetBaseURL() );
+    OUString aStrMark( m_pEdTarget->GetText() );
 
     if ( aStrPath != aEmptyStr )
     {
@@ -167,9 +157,9 @@ void SvxHyperlinkDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNam
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkDocTp::Create( Window* pWindow, const SfxItemSet& rItemSet )
+IconChoicePage* SvxHyperlinkDocTp::Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return( new SvxHyperlinkDocTp( pWindow, rItemSet ) );
+    return( new SvxHyperlinkDocTp( pWindow, pDlg, rItemSet ) );
 }
 
 /*************************************************************************
@@ -180,7 +170,7 @@ IconChoicePage* SvxHyperlinkDocTp::Create( Window* pWindow, const SfxItemSet& rI
 
 void SvxHyperlinkDocTp::SetInitFocus()
 {
-    maCbbPath.GrabFocus();
+    m_pCbbPath->GrabFocus();
 }
 
 /*************************************************************************
@@ -212,8 +202,8 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
 
         utl::LocalFileHelper::ConvertURLToSystemPath( aURL, aPath );
 
-        maCbbPath.SetBaseURL( aURL );
-        maCbbPath.SetText( aPath );
+        m_pCbbPath->SetBaseURL( aURL );
+        m_pCbbPath->SetText( aPath );
 
         if ( aOldURL != GetCurrentURL() )
             ModifiedPathHdl_Impl (NULL);
@@ -267,7 +257,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl)
     maTimer.SetTimeout( 2500 );
     maTimer.Start();
 
-    maFtFullURL.SetText( maStrURL );
+    m_pFtFullURL->SetText( maStrURL );
 
     return( 0L );
 }
@@ -308,9 +298,9 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl)
     maStrURL = GetCurrentURL();
 
     if ( IsMarkWndVisible() )
-        mpMarkWnd->SelectEntry ( maEdTarget.GetText() );
+        mpMarkWnd->SelectEntry ( m_pEdTarget->GetText() );
 
-    maFtFullURL.SetText( maStrURL );
+    m_pFtFullURL->SetText( maStrURL );
 
     return( 0L );
 }
@@ -325,7 +315,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl)
 {
     maStrURL = GetCurrentURL();
 
-    maFtFullURL.SetText( maStrURL );
+    m_pFtFullURL->SetText( maStrURL );
 
     return (0L);
 }
@@ -338,7 +328,7 @@ IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl)
 
 void SvxHyperlinkDocTp::SetMarkStr ( const OUString& aStrMark )
 {
-    maEdTarget.SetText ( aStrMark );
+    m_pEdTarget->SetText ( aStrMark );
 
     ModifiedTargetHdl_Impl ( NULL );
 }

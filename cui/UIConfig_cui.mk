@@ -70,6 +70,11 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/hangulhanjaadddialog \
 	cui/uiconfig/ui/hangulhanjaoptdialog \
 	cui/uiconfig/ui/hatchpage \
+	cui/uiconfig/ui/hyperlinkdialog \
+	cui/uiconfig/ui/hyperlinkdocpage \
+	cui/uiconfig/ui/hyperlinkinternetpage \
+	cui/uiconfig/ui/hyperlinkmailpage \
+	cui/uiconfig/ui/hyperlinknewdocpage \
 	cui/uiconfig/ui/hyphenate \
 	cui/uiconfig/ui/insertfloatingframe \
 	cui/uiconfig/ui/insertoleobject \

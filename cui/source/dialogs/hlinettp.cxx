@@ -22,7 +22,6 @@
 #include <svl/adrparse.hxx>
 
 #include "hlinettp.hxx"
-#include "hyperdlg.hrc"
 #include "hlmarkwn_def.hxx"
 
 sal_Char const sAnonymous[]    = "anonymous";
@@ -36,62 +35,50 @@ sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
 |************************************************************************/
 
 SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
+                                                 IconChoiceDialog* pDlg,
                                                  const SfxItemSet& rItemSet)
-:   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_INTERNET ),
+:   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkInternetPage", "cui/ui/hyperlinkinternetpage.ui",
                               rItemSet ) ,
-    maGrpLinkTyp           ( this, CUI_RES (GRP_LINKTYPE) ),
-    maRbtLinktypInternet    ( this, CUI_RES (RB_LINKTYP_INTERNET) ),
-    maRbtLinktypFTP         ( this, CUI_RES (RB_LINKTYP_FTP) ),
-    maFtTarget              ( this, CUI_RES (FT_TARGET_HTML) ),
-    maCbbTarget             ( this, INET_PROT_HTTP ),
-    maBtBrowse              ( this, CUI_RES (BTN_BROWSE) ),
-    maFtLogin               ( this, CUI_RES (FT_LOGIN) ),
-    maEdLogin               ( this, CUI_RES (ED_LOGIN) ),
-    maFtPassword            ( this, CUI_RES (FT_PASSWD) ),
-    maEdPassword            ( this, CUI_RES (ED_PASSWD) ),
-    maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
     mbMarkWndOpen           ( false )
 {
+    get(m_pRbtLinktypInternet, "linktyp_internet");
+    get(m_pRbtLinktypFTP, "linktyp_ftp");
+    get(m_pCbbTarget, "target");
+    m_pCbbTarget->SetSmartProtocol(INET_PROT_HTTP);
+    get(m_pBtBrowse, "browse");
+    m_pBtBrowse->SetModeImage(Image(CUI_RES (RID_SVXBMP_BROWSE)));
+    get(m_pFtLogin, "login_label");
+    get(m_pEdLogin, "login");
+    get(m_pFtPassword, "password_label");
+    get(m_pEdPassword, "password");
+    get(m_pCbAnonymous, "anonymous");
+
     // Disable display of bitmap names.
-    maBtBrowse.EnableTextDisplay (false);
+    m_pBtBrowse->EnableTextDisplay (false);
 
     InitStdControls();
-    FreeResource();
 
-    // Init URL-Box (pos&size, Open-Handler)
-    maCbbTarget.SetPosSizePixel ( LogicToPixel( Point( COL_2, 25 ), MAP_APPFONT ),
-                                  LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
-    maCbbTarget.Show();
-    maCbbTarget.SetHelpId( HID_HYPERDLG_INET_PATH );
+    m_pCbbTarget->Show();
+    m_pCbbTarget->SetHelpId( HID_HYPERDLG_INET_PATH );
 
     SetExchangeSupport ();
 
 
     // set defaults
-    maRbtLinktypInternet.Check ();
-    maFtLogin.Show( false );
-    maFtPassword.Show( false );
-    maEdLogin.Show( false );
-    maEdPassword.Show( false );
-    maCbAnonymous.Show( false );
-    maBtBrowse.Enable( true );
+    m_pRbtLinktypInternet->Check ();
+    m_pBtBrowse->Enable( true );
 
 
     // overload handlers
     Link aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
-    maRbtLinktypInternet.SetClickHdl( aLink );
-    maRbtLinktypFTP.SetClickHdl     ( aLink );
-    maCbAnonymous.SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
-    maBtBrowse.SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickBrowseHdl_Impl ) );
-    maEdLogin.SetModifyHdl          ( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
-    maCbbTarget.SetLoseFocusHdl     ( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
-    maCbbTarget.SetModifyHdl        ( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
+    m_pRbtLinktypInternet->SetClickHdl( aLink );
+    m_pRbtLinktypFTP->SetClickHdl     ( aLink );
+    m_pCbAnonymous->SetClickHdl       ( LINK ( this, SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl ) );
+    m_pBtBrowse->SetClickHdl          ( LINK ( this, SvxHyperlinkInternetTp, ClickBrowseHdl_Impl ) );
+    m_pEdLogin->SetModifyHdl          ( LINK ( this, SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl ) );
+    m_pCbbTarget->SetLoseFocusHdl     ( LINK ( this, SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl ) );
+    m_pCbbTarget->SetModifyHdl        ( LINK ( this, SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl ) );
     maTimer.SetTimeoutHdl           ( LINK ( this, SvxHyperlinkInternetTp, TimeoutHdl_Impl ) );
-
-    maFtTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
-    maCbbTarget.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
-    maBtBrowse.SetAccessibleRelationMemberOf( &maGrpLinkTyp );
-    maBtBrowse.SetAccessibleRelationLabeledBy( &maFtTarget );
 }
 
 SvxHyperlinkInternetTp::~SvxHyperlinkInternetTp ()
@@ -125,36 +112,36 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
     // set URL-field
     // Show the scheme, #72740
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-        maCbbTarget.SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
+        m_pCbbTarget->SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
     else
-        maCbbTarget.SetText(rStrURL); // #77696#
+        m_pCbbTarget->SetText(rStrURL); // #77696#
 
     SetScheme(aStrScheme);
 }
 
 void SvxHyperlinkInternetTp::setAnonymousFTPUser()
 {
-    maEdLogin.SetText(OUString(sAnonymous));
+    m_pEdLogin->SetText(OUString(sAnonymous));
     SvAddressParser aAddress( SvtUserOptions().GetEmail() );
-    maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : OUString() );
+    m_pEdPassword->SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : OUString() );
 
-    maFtLogin.Disable ();
-    maFtPassword.Disable ();
-    maEdLogin.Disable ();
-    maEdPassword.Disable ();
-    maCbAnonymous.Check();
+    m_pFtLogin->Disable ();
+    m_pFtPassword->Disable ();
+    m_pEdLogin->Disable ();
+    m_pEdPassword->Disable ();
+    m_pCbAnonymous->Check();
 }
 
 void SvxHyperlinkInternetTp::setFTPUser(const OUString& rUser, const OUString& rPassword)
 {
-    maEdLogin.SetText ( rUser );
-    maEdPassword.SetText ( rPassword );
+    m_pEdLogin->SetText ( rUser );
+    m_pEdPassword->SetText ( rPassword );
 
-    maFtLogin.Enable ();
-    maFtPassword.Enable ();
-    maEdLogin.Enable ();
-    maEdPassword.Enable ();
-    maCbAnonymous.Check(false);
+    m_pFtLogin->Enable ();
+    m_pFtPassword->Enable ();
+    m_pEdLogin->Enable ();
+    m_pEdPassword->Enable ();
+    m_pCbAnonymous->Check(false);
 }
 
 /*************************************************************************
@@ -174,7 +161,7 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( OUString& rStrURL, OUString& aS
 OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 {
     // erase leading and trailing whitespaces
-    OUString aStrURL( maCbbTarget.GetText().trim() );
+    OUString aStrURL( m_pCbbTarget->GetText().trim() );
 
     INetURLObject aURL(aStrURL);
 
@@ -185,8 +172,8 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
     }
 
     // username and password for ftp-url
-    if( aURL.GetProtocol() == INET_PROT_FTP && !maEdLogin.GetText().isEmpty() )
-        aURL.SetUserAndPass ( maEdLogin.GetText(), maEdPassword.GetText() );
+    if( aURL.GetProtocol() == INET_PROT_FTP && !m_pEdLogin->GetText().isEmpty() )
+        aURL.SetUserAndPass ( m_pEdLogin->GetText(), m_pEdPassword->GetText() );
 
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
@@ -200,9 +187,9 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkInternetTp::Create( Window* pWindow, const SfxItemSet& rItemSet )
+IconChoicePage* SvxHyperlinkInternetTp::Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return( new SvxHyperlinkInternetTp( pWindow, rItemSet ) );
+    return( new SvxHyperlinkInternetTp( pWindow, pDlg, rItemSet ) );
 }
 
 /*************************************************************************
@@ -213,7 +200,7 @@ IconChoicePage* SvxHyperlinkInternetTp::Create( Window* pWindow, const SfxItemSe
 
 void SvxHyperlinkInternetTp::SetInitFocus()
 {
-    maCbbTarget.GrabFocus();
+    m_pCbbTarget->GrabFocus();
 }
 
 /*************************************************************************
@@ -224,7 +211,7 @@ void SvxHyperlinkInternetTp::SetInitFocus()
 
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl)
 {
-    OUString aScheme = GetSchemeFromURL( maCbbTarget.GetText() );
+    OUString aScheme = GetSchemeFromURL( m_pCbbTarget->GetText() );
     if( !aScheme.isEmpty() )
         SetScheme( aScheme );
 
@@ -255,10 +242,10 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, TimeoutHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
 {
-    OUString aStrLogin ( maEdLogin.GetText() );
+    OUString aStrLogin ( m_pEdLogin->GetText() );
     if ( aStrLogin.equalsIgnoreAsciiCase( sAnonymous ) )
     {
-        maCbAnonymous.Check();
+        m_pCbAnonymous->Check();
         ClickAnonymousHdl_Impl(NULL);
     }
 
@@ -275,19 +262,19 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
     bool bInternet = !(bFTP);
 
     //update protocol button selection:
-    maRbtLinktypFTP.Check(bFTP);
-    maRbtLinktypInternet.Check(bInternet);
+    m_pRbtLinktypFTP->Check(bFTP);
+    m_pRbtLinktypInternet->Check(bInternet);
 
     //update target:
     RemoveImproperProtocol(rScheme);
-    maCbbTarget.SetSmartProtocol( GetSmartProtocolFromButtons() );
+    m_pCbbTarget->SetSmartProtocol( GetSmartProtocolFromButtons() );
 
     //show/hide  special fields for FTP:
-    maFtLogin.Show( bFTP );
-    maFtPassword.Show( bFTP );
-    maEdLogin.Show( bFTP );
-    maEdPassword.Show( bFTP );
-    maCbAnonymous.Show( bFTP );
+    m_pFtLogin->Show( bFTP );
+    m_pFtPassword->Show( bFTP );
+    m_pEdLogin->Show( bFTP );
+    m_pEdPassword->Show( bFTP );
+    m_pCbAnonymous->Show( bFTP );
 
     //update 'link target in document'-window and opening-button
     if (rScheme.startsWith(sHTTPScheme) || rScheme.isEmpty())
@@ -311,28 +298,28 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 
 void SvxHyperlinkInternetTp::RemoveImproperProtocol(const OUString& aProperScheme)
 {
-    OUString aStrURL ( maCbbTarget.GetText() );
+    OUString aStrURL ( m_pCbbTarget->GetText() );
     if ( aStrURL != aEmptyStr )
     {
         OUString aStrScheme(GetSchemeFromURL(aStrURL));
         if ( !aStrScheme.isEmpty() && aStrScheme != aProperScheme )
         {
             aStrURL = aStrURL.copy( aStrScheme.getLength() );
-            maCbbTarget.SetText ( aStrURL );
+            m_pCbbTarget->SetText ( aStrURL );
         }
     }
 }
 
 OUString SvxHyperlinkInternetTp::GetSchemeFromButtons() const
 {
-    if( maRbtLinktypFTP.IsChecked() )
+    if( m_pRbtLinktypFTP->IsChecked() )
         return OUString(INET_FTP_SCHEME);
     return OUString(INET_HTTP_SCHEME);
 }
 
 INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 {
-    if( maRbtLinktypFTP.IsChecked() )
+    if( m_pRbtLinktypFTP->IsChecked() )
     {
         return INET_PROT_FTP;
     }
@@ -361,17 +348,17 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl)
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl)
 {
     // disable login-editfields if checked
-    if ( maCbAnonymous.IsChecked() )
+    if ( m_pCbAnonymous->IsChecked() )
     {
-        if ( maEdLogin.GetText().toAsciiLowerCase().startsWith( sAnonymous ) )
+        if ( m_pEdLogin->GetText().toAsciiLowerCase().startsWith( sAnonymous ) )
         {
             maStrOldUser = aEmptyStr;
             maStrOldPassword = aEmptyStr;
         }
         else
         {
-            maStrOldUser = maEdLogin.GetText();
-            maStrOldPassword = maEdPassword.GetText();
+            maStrOldUser = m_pEdLogin->GetText();
+            maStrOldPassword = m_pEdPassword->GetText();
         }
 
         setAnonymousFTPUser();
@@ -421,7 +408,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
 
 void SvxHyperlinkInternetTp::RefreshMarkWindow()
 {
-    if ( maRbtLinktypInternet.IsChecked() && IsMarkWndVisible() )
+    if ( m_pRbtLinktypInternet->IsChecked() && IsMarkWndVisible() )
     {
         EnterWait();
         OUString aStrURL( CreateAbsoluteURL() );
@@ -442,7 +429,7 @@ void SvxHyperlinkInternetTp::RefreshMarkWindow()
 
 void SvxHyperlinkInternetTp::SetMarkStr ( const OUString& aStrMark )
 {
-    OUString aStrURL ( maCbbTarget.GetText() );
+    OUString aStrURL ( m_pCbbTarget->GetText() );
 
     const sal_Unicode sUHash = '#';
     sal_Int32 nPos = aStrURL.lastIndexOf( sUHash );
@@ -452,7 +439,7 @@ void SvxHyperlinkInternetTp::SetMarkStr ( const OUString& aStrMark )
 
     aStrURL += OUString(sUHash) + aStrMark;
 
-    maCbbTarget.SetText ( aStrURL );
+    m_pCbbTarget->SetText ( aStrURL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

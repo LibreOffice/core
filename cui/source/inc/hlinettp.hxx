@@ -32,17 +32,15 @@
 class SvxHyperlinkInternetTp : public SvxHyperlinkTabPageBase
 {
 private:
-    FixedLine           maGrpLinkTyp;
-    RadioButton         maRbtLinktypInternet;
-    RadioButton         maRbtLinktypFTP;
-    FixedText           maFtTarget;
-    SvxHyperURLBox      maCbbTarget;
-    ImageButton         maBtBrowse;
-    FixedText           maFtLogin;
-    Edit                maEdLogin;
-    FixedText           maFtPassword;
-    Edit                maEdPassword;
-    CheckBox            maCbAnonymous;
+    RadioButton         *m_pRbtLinktypInternet;
+    RadioButton         *m_pRbtLinktypFTP;
+    SvxHyperURLBox      *m_pCbbTarget;
+    PushButton          *m_pBtBrowse;
+    FixedText           *m_pFtLogin;
+    Edit                *m_pEdLogin;
+    FixedText           *m_pFtPassword;
+    Edit                *m_pEdPassword;
+    CheckBox            *m_pCbAnonymous;
 
     OUString            maStrOldUser;
     OUString            maStrOldPassword;
@@ -75,14 +73,14 @@ protected:
     virtual void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,
                                      OUString& aStrIntName, OUString& aStrFrame,
                                      SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
-    virtual bool ShouldOpenMarkWnd () SAL_OVERRIDE {return ( mbMarkWndOpen && maRbtLinktypInternet.IsChecked() );}
+    virtual bool ShouldOpenMarkWnd () SAL_OVERRIDE {return ( mbMarkWndOpen && m_pRbtLinktypInternet->IsChecked() );}
     virtual void SetMarkWndShouldOpen (sal_Bool bOpen) SAL_OVERRIDE {mbMarkWndOpen=bOpen;}
 
 public:
-    SvxHyperlinkInternetTp ( Window *pParent, const SfxItemSet& rItemSet);
+    SvxHyperlinkInternetTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkInternetTp ();
 
-    static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
+    static  IconChoicePage* Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
     virtual void        SetMarkStr ( const OUString& aStrMark ) SAL_OVERRIDE;
 

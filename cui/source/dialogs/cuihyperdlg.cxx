@@ -24,7 +24,6 @@
 #include "hlmailtp.hxx"
 #include "hldoctp.hxx"
 #include "hldocntp.hxx"
-#include "hyperdlg.hrc"
 #include <svx/svxids.hrc>
 
 using ::com::sun::star::uno::Reference;
@@ -83,7 +82,7 @@ void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
 |************************************************************************/
 
 SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
-:   IconChoiceDialog( pParent, CUI_RES ( RID_SVXDLG_NEWHYPERLINK ) ),
+:   IconChoiceDialog( pParent, "HyperlinkDialog", "cui/ui/hyperlinkdialog.ui" ),
     maCtrl          ( SID_HYPERLINK_GETLINK, *pBindings, this ),
     mpBindings      ( pBindings ),
     mbReadOnly      ( false ),
@@ -112,6 +111,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) );
     pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, SvxHyperlinkNewDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
+    SetCurPageId(RID_SVXPAGE_HYPERLINK_INTERNET);
 
     // create itemset for tabpages
     mpItemSet = new SfxItemSet( SFX_APP()->GetPool(), SID_HYPERLINK_GETLINK,
@@ -301,14 +301,18 @@ sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 
     mbIsHTMLDoc = (pItem->GetInsertMode() & HLINK_HTMLMODE) ? true : false;
 
-    SfxItemSet& aPageSet =  (SfxItemSet&)GetTabPage (nPageId)->GetItemSet ();
-    aPageSet.Put ( *pItem );
-
-    pCurrentPage->Reset( aPageSet );
-    if ( mbGrabFocus )
+    IconChoicePage* pPage = GetTabPage (nPageId);
+    if(pPage)
     {
-        pCurrentPage->SetInitFocus();   // #92535# grab the focus only once at initialization
-        mbGrabFocus = false;
+        SfxItemSet& aPageSet =  (SfxItemSet&)pPage->GetItemSet ();
+        aPageSet.Put ( *pItem );
+
+        pCurrentPage->Reset( aPageSet );
+        if ( mbGrabFocus )
+        {
+            pCurrentPage->SetInitFocus();   // #92535# grab the focus only once at initialization
+            mbGrabFocus = false;
+        }
     }
     return nPageId;
 }

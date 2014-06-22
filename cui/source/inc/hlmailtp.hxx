@@ -30,14 +30,12 @@
 class SvxHyperlinkMailTp : public SvxHyperlinkTabPageBase
 {
 private:
-    FixedLine           maGrpMailNews;
-    RadioButton         maRbtMail;
-    RadioButton         maRbtNews;
-    FixedText           maFtReceiver;
-    SvxHyperURLBox      maCbbReceiver;
-    ImageButton         maBtAdrBook;
-    FixedText           maFtSubject;
-    Edit                maEdSubject;
+    RadioButton         *m_pRbtMail;
+    RadioButton         *m_pRbtNews;
+    SvxHyperURLBox      *m_pCbbReceiver;
+    PushButton          *m_pBtAdrBook;
+    FixedText           *m_pFtSubject;
+    Edit                *m_pEdSubject;
 
     DECL_LINK (Click_SmartProtocol_Impl, void * ); ///< Radiobutton clicked: Type EMAIl or News
     DECL_LINK (ClickAdrBookHdl_Impl  , void * ); ///< Button : Address book
@@ -57,10 +55,10 @@ protected:
                                      SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
 
 public:
-    SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rItemSet);
+    SvxHyperlinkMailTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkMailTp ();
 
-    static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
+    static  IconChoicePage* Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
     virtual void        SetInitFocus() SAL_OVERRIDE;
 };

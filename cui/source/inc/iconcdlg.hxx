@@ -28,6 +28,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/image.hxx>
+#include <vcl/layout.hxx>
 #include <vector>
 
 #define CTRLS_OFFSET        3
@@ -40,7 +41,7 @@ class IconChoiceDialog;
 class IconChoicePage;
 
 // Create-Function
-typedef IconChoicePage* (*CreatePage)(Window *pParent, const SfxItemSet &rAttrSet);
+typedef IconChoicePage* (*CreatePage)(Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet &rAttrSet);
 typedef const sal_uInt16*         (*GetPageRanges)(); // gives international Which-value
 
 // position of iconchoicectrl
@@ -86,7 +87,7 @@ private :
     void                ImplInitSettings();
 
 protected :
-    IconChoicePage( Window *pParent, const ResId &, const SfxItemSet &rAttrSet );
+    IconChoicePage( Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet );
 
     sal_uInt16              GetSlot( sal_uInt16 nWhich ) const  { return pSet->GetPool()->GetSlotId( nWhich ); }
     sal_uInt16              GetWhich( sal_uInt16 nSlot ) const  { return pSet->GetPool()->GetWhich( nSlot ); }
@@ -131,22 +132,24 @@ private :
     EIconChoicePos          meChoicePos;
     ::std::vector< IconChoicePageData* > maPageList;
 
-    SvtIconChoiceCtrl       maIconCtrl;
+    SvtIconChoiceCtrl       *m_pIconCtrl;
 
     sal_uInt16                  mnCurrentPageId;
 
     // Buttons
-    OKButton                aOKBtn;
-    CancelButton            aCancelBtn;
-    HelpButton              aHelpBtn;
-    PushButton              aResetBtn;
+    OKButton                *m_pOKBtn;
+    CancelButton            *m_pCancelBtn;
+    HelpButton              *m_pHelpBtn;
+    PushButton              *m_pResetBtn;
+
+    VclVBox                 *m_pTabContainer;
 
     const SfxItemSet*       pSet;
     SfxItemSet*             pOutSet;
     SfxItemSet*             pExampleSet;
     sal_uInt16*                 pRanges;
 
-    sal_uInt32              nResId;
+    const OString&          rId;
 
     bool                    bHideResetBtn;
     bool                    bModal;
@@ -187,7 +190,7 @@ protected :
 public :
 
     // the IconChoiceCtrl's could also be set in the Ctor
-    IconChoiceDialog ( Window* pParent, const ResId &rResId,
+    IconChoiceDialog ( Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
                        const EIconChoicePos ePos = PosLeft, const SfxItemSet * pItemSet = 0 );
     virtual ~IconChoiceDialog ();
 
@@ -209,12 +212,12 @@ public :
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
-    const OKButton&     GetOKButton() const { return aOKBtn; }
-    OKButton&           GetOKButton() { return aOKBtn; }
-    const CancelButton& GetCancelButton() const { return aCancelBtn; }
-    CancelButton&       GetCancelButton() { return aCancelBtn; }
-    const HelpButton&   GetHelpButton() const { return aHelpBtn; }
-    HelpButton&         GetHelpButton() { return aHelpBtn; }
+    const OKButton&     GetOKButton() const { return *m_pOKBtn; }
+    OKButton&           GetOKButton() { return *m_pOKBtn; }
+    const CancelButton& GetCancelButton() const { return *m_pCancelBtn; }
+    CancelButton&       GetCancelButton() { return *m_pCancelBtn; }
+    const HelpButton&   GetHelpButton() const { return *m_pHelpBtn; }
+    HelpButton&         GetHelpButton() { return *m_pHelpBtn; }
 
     short               Execute() SAL_OVERRIDE;
     void                Start( bool bShow = true );

@@ -46,14 +46,6 @@
 #include "hlmarkwn.hxx"
 #include "iconcdlg.hxx"
 
-/// ComboBox-Control, which is filled with all current framenames
-class SvxFramesComboBox : public ComboBox
-{
-public:
-    SvxFramesComboBox (Window* pParent, const ResId& rResId, SfxDispatcher* pDispatch);
-    virtual ~SvxFramesComboBox ();
-};
-
 /// ComboBox-Control for URL's with History and Autocompletion
 class SvxHyperURLBox : public SvtURLBox, public DropTargetHelper
 {
@@ -75,16 +67,11 @@ public:
 class SvxHyperlinkTabPageBase : public IconChoicePage
 {
 private:
-    FixedLine           *mpGrpMore;
-    FixedText           *mpFtFrame;
-    SvxFramesComboBox   *mpCbbFrame;
-    FixedText           *mpFtForm;
+    ComboBox            *mpCbbFrame;
     ListBox             *mpLbForm;
-    FixedText           *mpFtIndication;
     Edit                *mpEdIndication;
-    FixedText           *mpFtText;
     Edit                *mpEdText;
-    ImageButton         *mpBtScript;
+    PushButton          *mpBtScript;
 
     bool            mbIsCloseDisabled;
 
@@ -125,7 +112,9 @@ protected:
 public:
     SvxHyperlinkTabPageBase (
         Window *pParent,
-        const ResId &rResId,
+        IconChoiceDialog* pDlg,
+        const OString& rID,
+        const OUString& rUIXMLDescription,
         const SfxItemSet& rItemSet
     );
     virtual ~SvxHyperlinkTabPageBase ();
