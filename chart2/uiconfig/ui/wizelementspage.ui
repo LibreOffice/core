@@ -386,7 +386,7 @@
           <object class="GtkLabel" id="Axe">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Choose titles, legend, and grid settings</property>
+            <property name="label" translatable="yes">Choose Titles, Legend, and Grid Settings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -476,7 +476,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Display grids</property>
+            <property name="label" translatable="yes">Display Grids</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

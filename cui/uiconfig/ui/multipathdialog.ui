@@ -188,7 +188,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Mark the default path for new files</property>
+                <property name="label" translatable="yes">Mark the Default Path for New Files</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

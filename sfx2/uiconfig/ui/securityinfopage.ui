@@ -116,7 +116,7 @@
       <object class="GtkLabel" id="label47">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes">File sharing options</property>
+        <property name="label" translatable="yes">File Sharing Options</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>

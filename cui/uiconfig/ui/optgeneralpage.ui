@@ -181,7 +181,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Print dialogs</property>
+            <property name="label" translatable="yes">Print Dialogs</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -254,7 +254,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Document status</property>
+            <property name="label" translatable="yes">Document Status</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -337,7 +337,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Year (two digits)</property>
+            <property name="label" translatable="yes">Year (two Digits)</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

@@ -143,7 +143,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Macro security</property>
+            <property name="label" translatable="yes">Macro Security</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -337,7 +337,7 @@ Do you want to delete password list and reset master password?</property>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Passwords for web connections</property>
+            <property name="label" translatable="yes">Passwords for Web Connections</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -412,7 +412,7 @@ Do you want to delete password list and reset master password?</property>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Security options and warnings</property>
+            <property name="label" translatable="yes">Security Options and Warnings</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

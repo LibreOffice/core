@@ -141,7 +141,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Conversion direction</property>
+                    <property name="label" translatable="yes">Conversion Direction</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -219,7 +219,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Common terms</property>
+                    <property name="label" translatable="yes">Common Terms</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

@@ -43,7 +43,7 @@
               <object class="GtkLabel" id="label3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Apply to selected slides</property>
+                <property name="label" translatable="yes">Apply to Selected Slides</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -184,7 +184,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Modify transition</property>
+                <property name="label" translatable="yes">Modify Transition</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
@@ -273,7 +273,7 @@
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Advance slide</property>
+                <property name="label" translatable="yes">Advance Slide</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

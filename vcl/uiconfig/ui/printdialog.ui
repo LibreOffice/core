@@ -795,7 +795,7 @@
                           <object class="GtkLabel" id="label13">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Range and copies</property>
+                            <property name="label" translatable="yes">Range and Copies</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -1463,7 +1463,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Page sides</property>
+                            <property name="label" translatable="yes">Page Sides</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>

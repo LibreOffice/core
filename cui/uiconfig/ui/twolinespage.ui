@@ -203,7 +203,7 @@
           <object class="GtkLabel" id="label28">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Enclosing character</property>
+            <property name="label" translatable="yes">Enclosing Character</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

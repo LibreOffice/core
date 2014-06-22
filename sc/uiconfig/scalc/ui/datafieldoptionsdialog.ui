@@ -184,7 +184,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Sort by</property>
+                    <property name="label" translatable="yes">Sort By</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -275,7 +275,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Display options</property>
+                    <property name="label" translatable="yes">Display Options</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -440,7 +440,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Show automatically</property>
+                    <property name="label" translatable="yes">Show Automatically</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -487,7 +487,7 @@
                   <object class="GtkLabel" id="label9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Hide items</property>
+                    <property name="label" translatable="yes">Hide Items</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

@@ -496,7 +496,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Create a salutation</property>
+            <property name="label" translatable="yes">Create a Salutation</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
