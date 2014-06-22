@@ -46,7 +46,6 @@
 #include <svx/charthelper.hxx>
 #include <scmod.hxx>
 
-// BM/IHA --
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -65,12 +64,8 @@
 #include <cppuhelper/bootstrap.hxx>
 
 using namespace ::com::sun::star;
-// BM/IHA --
 
-// erAck
 #include "chart2uno.hxx"
-// erAck
-
 #include "fuinsert.hxx"
 #include "tabvwsh.hxx"
 #include "sc.hrc"
