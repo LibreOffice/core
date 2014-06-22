@@ -82,7 +82,6 @@ protected:
     DECL_LINK( RangeUpdateDataHdl, Edit* );
     DECL_LINK( UpButtonClickedHdl, void* );
     DECL_LINK( DownButtonClickedHdl, void* );
-    DECL_LINK( AddMappingHdl, void* );
 
     // ____ RangeSelectionListenerParent ____
     virtual void listeningFinished( const OUString & rNewRange ) SAL_OVERRIDE;
@@ -137,7 +136,6 @@ private:
     FixedText*     m_pFT_DATALABELS;//used for xy charts
     Edit*          m_pEDT_CATEGORIES;
     PushButton*    m_pIMB_RANGE_CAT;
-    PushButton*    m_pBtn_AddMapping;
 
     OUString       m_aFixedTextRange;
 
