@@ -66,9 +66,10 @@ static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
 |
 \**********************************************************************/
 
-IconChoicePage::IconChoicePage( Window *pParent, const ResId &rResId,
+IconChoicePage::IconChoicePage( Window *pParent, const OString& rID,
+                                const OUString& rUIXMLDescription,
                                 const SfxItemSet &rAttrSet )
-:   TabPage                   ( pParent, rResId ),
+:   TabPage                   ( pParent, rID, rUIXMLDescription ),
     pSet                      ( &rAttrSet ),
     bHasExchangeSupport       ( false ),
     pDialog                   ( NULL )
@@ -191,39 +192,46 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 |
 \**********************************************************************/
 
-IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtIconChoiceCtrl(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvtIconChoiceCtrl(pParent, WB_3DLOOK | WB_ICON | WB_BORDER |
+                            WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
+                            WB_NODRAGSELECTION | WB_TABSTOP);
+}
+
+IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
+                                     const OUString& rUIXMLDescription,
                                      const EIconChoicePos ePos,
                                      const SfxItemSet *pItemSet )
-:   ModalDialog         ( pParent, rResId ),
+:   ModalDialog         ( pParent, rID, rUIXMLDescription ),
     meChoicePos     ( ePos ),
-    maIconCtrl      ( this, WB_3DLOOK | WB_ICON | WB_BORDER |
-                            WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                            WB_NODRAGSELECTION | WB_TABSTOP ),
     mnCurrentPageId ( USHRT_MAX ),
 
-    aOKBtn          ( this, WB_DEFBUTTON ),
-    aCancelBtn      ( this, WB_DEFBUTTON ),
-    aHelpBtn        ( this ),
-    aResetBtn       ( this ),
     pSet            ( pItemSet ),
     pOutSet         ( NULL ),
     pExampleSet     ( NULL ),
     pRanges         ( NULL ),
-    nResId          ( rResId.GetId() ),
+    rId             ( rID ),
 
     bHideResetBtn   ( false ),
     bModal          ( false ),
     bInOK           ( false ),
     bItemsReset     ( false )
 {
+    get(m_pOKBtn, "ok");
+    get(m_pCancelBtn, "cancel");
+    get(m_pHelpBtn, "help");
+    get(m_pResetBtn, "back");
+    get(m_pIconCtrl, "icon_control");
+    get(m_pTabContainer, "tab");
 
-    maIconCtrl.SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
+    m_pIconCtrl->SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
     SetCtrlPos ( meChoicePos );
-    maIconCtrl.SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
-    maIconCtrl.Show();
-    maIconCtrl.SetChoiceWithCursor ( true );
-    maIconCtrl.SetSelectionMode( SINGLE_SELECTION );
-    maIconCtrl.SetHelpId( HID_ICCDIALOG_CHOICECTRL );
+    m_pIconCtrl->SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
+    m_pIconCtrl->Show();
+    m_pIconCtrl->SetChoiceWithCursor ( true );
+    m_pIconCtrl->SetSelectionMode( SINGLE_SELECTION );
+    m_pIconCtrl->SetHelpId( HID_ICCDIALOG_CHOICECTRL );
 
     // ItemSet
     if ( pSet )
@@ -233,29 +241,28 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     }
 
     // Buttons
-    aOKBtn.SetClickHdl   ( LINK( this, IconChoiceDialog, OkHdl ) );
-    aOKBtn.SetHelpId( HID_ICCDIALOG_OK_BTN );
-    aCancelBtn.SetHelpId( HID_ICCDIALOG_CANCEL_BTN );
-    aResetBtn.SetClickHdl( LINK( this, IconChoiceDialog, ResetHdl ) );
-    aResetBtn.SetText( CUI_RESSTR(RID_SVXSTR_ICONCHOICEDLG_RESETBUT) );
-    aResetBtn.SetHelpId( HID_ICCDIALOG_RESET_BTN );
-    aOKBtn.Show();
-    aCancelBtn.Show();
-    aHelpBtn.Show();
-    aResetBtn.Show();
+    m_pOKBtn->SetClickHdl   ( LINK( this, IconChoiceDialog, OkHdl ) );
+    m_pOKBtn->SetHelpId( HID_ICCDIALOG_OK_BTN );
+    m_pCancelBtn->SetHelpId( HID_ICCDIALOG_CANCEL_BTN );
+    m_pResetBtn->SetClickHdl( LINK( this, IconChoiceDialog, ResetHdl ) );
+    m_pResetBtn->SetText( CUI_RESSTR(RID_SVXSTR_ICONCHOICEDLG_RESETBUT) );
+    m_pResetBtn->SetHelpId( HID_ICCDIALOG_RESET_BTN );
+    m_pOKBtn->Show();
+    m_pCancelBtn->Show();
+    m_pHelpBtn->Show();
+    m_pResetBtn->Show();
 
     SetPosSizeCtrls ( true );
 }
-
 
 
 IconChoiceDialog ::~IconChoiceDialog ()
 {
     // save configuration at INI-Manager
     // and remove pages
-    SvtViewOptions aTabDlgOpt( E_TABDIALOG, OUString::number(nResId) );
-    aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
-    aTabDlgOpt.SetPageID( mnCurrentPageId );
+    //SvtViewOptions aTabDlgOpt( E_TABDIALOG, rId );
+    //aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
+    //aTabDlgOpt.SetPageID( mnCurrentPageId );
 
     for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
     {
@@ -267,9 +274,9 @@ IconChoiceDialog ::~IconChoiceDialog ()
             OUString aPageData(pData->pPage->GetUserData());
             if ( !aPageData.isEmpty() )
             {
-                SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number(pData->nId) );
+                //SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number(pData->nId) );
 
-                SetViewOptUserItem( aTabPageOpt, aPageData );
+                //SetViewOptUserItem( aTabPageOpt, aPageData );
             }
 
             if ( pData->bOnDemand )
@@ -280,9 +287,9 @@ IconChoiceDialog ::~IconChoiceDialog ()
     }
 
     // remove Userdata from Icons
-    for ( sal_uLong i=0; i < maIconCtrl.GetEntryCount(); i++)
+    for ( sal_uLong i=0; i < m_pIconCtrl->GetEntryCount(); i++)
     {
-        SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
+        SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
         sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
         delete pUserData;
     }
@@ -319,7 +326,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     pData->bOnDemand = bItemsOnDemand;
 
     sal_uInt16 *pId = new sal_uInt16 ( nId );
-    SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon );
+    SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->InsertEntry( rIconText, rChoiceIcon );
     pEntry->SetUserData ( (void*) pId );
     return pEntry;
 }
@@ -351,7 +358,7 @@ void IconChoiceDialog::Paint( const Rectangle& rRect )
 
 EIconChoicePos IconChoiceDialog::SetCtrlPos( const EIconChoicePos& rPos )
 {
-    WinBits aWinBits = maIconCtrl.GetStyle ();
+    WinBits aWinBits = m_pIconCtrl->GetStyle ();
 
     switch ( meChoicePos )
     {
@@ -372,7 +379,7 @@ EIconChoicePos IconChoiceDialog::SetCtrlPos( const EIconChoicePos& rPos )
             aWinBits |= WB_ALIGN_TOP | WB_NOVSCROLL;
             break;
     }
-    maIconCtrl.SetStyle ( aWinBits );
+    m_pIconCtrl->SetStyle ( aWinBits );
 
     SetPosSizeCtrls();
 
@@ -450,7 +457,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
 
     // Reset-Button
     Size aResetButtonSize ( bInit ? aDefaultButtonSize :
-                                    aResetBtn.GetSizePixel () );
+                                    m_pResetBtn->GetSizePixel () );
 
 
     // IconChoiceCtrl resizen & positionieren
@@ -488,8 +495,8 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
                                       nDefaultHeight );
             break;
     }
-    maIconCtrl.SetPosSizePixel ( aIconCtrlPos, aNewIconCtrlSize );
-    maIconCtrl.ArrangeIcons();
+    m_pIconCtrl->SetPosSizePixel ( aIconCtrlPos, aNewIconCtrlSize );
+    m_pIconCtrl->ArrangeIcons();
 
 
     // resize & position the pages
@@ -507,27 +514,27 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
                                       CTRLS_OFFSET );
                 aNewPageSize = Size ( aOutSize.Width() - aNewIconCtrlSize.Width() -
                                       (3*CTRLS_OFFSET),
-                                      aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
+                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
                                       (3*CTRLS_OFFSET) );
                 break;
             case PosRight :
                 aNewPagePos = aCtrlOffset;
                 aNewPageSize = Size ( aOutSize.Width() - aNewIconCtrlSize.Width() -
                                       (3*aCtrlOffset.X()),
-                                      aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
+                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
                                       (3*aCtrlOffset.X()) );
                 break;
             case PosTop :
                 aNewPagePos = Point ( aCtrlOffset.X(), aNewIconCtrlSize.Height() +
                                       (2*aCtrlOffset.X()) );
                 aNewPageSize = Size ( aOutSize.Width() - (2*aCtrlOffset.X()),
-                                      aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
+                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
                                       aNewIconCtrlSize.Height() - (4*aCtrlOffset.X()) );
                 break;
             case PosBottom :
                 aNewPagePos = aCtrlOffset;
                 aNewPageSize = Size ( aOutSize.Width() - (2*aCtrlOffset.X()),
-                                      aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
+                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
                                       aNewIconCtrlSize.Height() - (4*aCtrlOffset.X()) );
                 break;
         }
@@ -543,15 +550,15 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
     if ( meChoicePos == PosRight )
         nXOffset = aNewIconCtrlSize.Width()+(2*aCtrlOffset.X());
 
-    aResetBtn.SetPosSizePixel ( Point( aOutSize.Width() - nXOffset -
+    m_pResetBtn->SetPosSizePixel ( Point( aOutSize.Width() - nXOffset -
                                        aResetButtonSize.Width()-aCtrlOffset.X(),
                                        aOutSize.Height()-aResetButtonSize.Height()-
                                        aCtrlOffset.X() ),
                                aResetButtonSize );
     // Help-Button
     Size aHelpButtonSize ( bInit ? aDefaultButtonSize :
-                                   aHelpBtn.GetSizePixel () );
-    aHelpBtn.SetPosSizePixel ( Point( aOutSize.Width()-aResetButtonSize.Width()-
+                                   m_pHelpBtn->GetSizePixel () );
+    m_pHelpBtn->SetPosSizePixel ( Point( aOutSize.Width()-aResetButtonSize.Width()-
                                       aHelpButtonSize.Width()- nXOffset -
                                       (2*aCtrlOffset.X()),
                                       aOutSize.Height()-aHelpButtonSize.Height()-
@@ -559,16 +566,16 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
                                aHelpButtonSize );
     // Cancel-Button
     Size aCancelButtonSize ( bInit ? aDefaultButtonSize :
-                                     aCancelBtn.GetSizePixel () );
-    aCancelBtn.SetPosSizePixel ( Point( aOutSize.Width()-aCancelButtonSize.Width()-
+                                     m_pCancelBtn->GetSizePixel () );
+    m_pCancelBtn->SetPosSizePixel ( Point( aOutSize.Width()-aCancelButtonSize.Width()-
                                         aResetButtonSize.Width()-aHelpButtonSize.Width()-
                                         (3*aCtrlOffset.X()) -  nXOffset,
                                         aOutSize.Height()-aCancelButtonSize.Height()-
                                         aCtrlOffset.X() ),
                                 aCancelButtonSize );
     // OK-Button
-    Size aOKButtonSize ( bInit ? aDefaultButtonSize : aOKBtn.GetSizePixel () );
-    aOKBtn.SetPosSizePixel ( Point( aOutSize.Width()-aOKButtonSize.Width()-
+    Size aOKButtonSize ( bInit ? aDefaultButtonSize : m_pOKBtn->GetSizePixel () );
+    m_pOKBtn->SetPosSizePixel ( Point( aOutSize.Width()-aOKButtonSize.Width()-
                                     aCancelButtonSize.Width()-aResetButtonSize.Width()-
                                     aHelpButtonSize.Width()-(4*aCtrlOffset.X())-  nXOffset,
                                     aOutSize.Height()-aOKButtonSize.Height()-aCtrlOffset.X() ),
@@ -585,7 +592,7 @@ void IconChoiceDialog::SetPosSizePages ( sal_uInt16 nId )
     if ( pData->pPage )
     {
         Size aOutSize ( GetOutputSizePixel() );
-        Size aIconCtrlSize ( maIconCtrl.GetSizePixel() );
+        Size aIconCtrlSize ( m_pIconCtrl->GetSizePixel() );
 
         Point aNewPagePos;
         Size aNewPageSize;
@@ -594,30 +601,30 @@ void IconChoiceDialog::SetPosSizePages ( sal_uInt16 nId )
             case PosLeft :
                 aNewPagePos = Point ( aIconCtrlSize.Width() + (2*aCtrlOffset.X()),
                                       aCtrlOffset.X() );
-                aNewPageSize = Size ( aOutSize.Width() - maIconCtrl.GetSizePixel().Width() -
+                aNewPageSize = Size ( aOutSize.Width() - m_pIconCtrl->GetSizePixel().Width() -
                                       (3*aCtrlOffset.X()),
-                                      aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
+                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
                                       (3*aCtrlOffset.X()) );
                 break;
             case PosRight :
                 aNewPagePos = aCtrlOffset;
-                aNewPageSize = Size ( aOutSize.Width() - maIconCtrl.GetSizePixel().Width() -
+                aNewPageSize = Size ( aOutSize.Width() - m_pIconCtrl->GetSizePixel().Width() -
                                       (3*aCtrlOffset.X()),
-                                      aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
+                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
                                       (3*aCtrlOffset.X()) );
                 break;
             case PosTop :
                 aNewPagePos = Point ( aCtrlOffset.X(), aIconCtrlSize.Height() +
                                       (2*aCtrlOffset.X()) );
                 aNewPageSize = Size ( aOutSize.Width() - (2*aCtrlOffset.X()),
-                                      aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
-                                      maIconCtrl.GetSizePixel().Height() - (4*aCtrlOffset.X()) );
+                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
+                                      m_pIconCtrl->GetSizePixel().Height() - (4*aCtrlOffset.X()) );
                 break;
             case PosBottom :
                 aNewPagePos = aCtrlOffset;
                 aNewPageSize = Size ( aOutSize.Width() - (2*aCtrlOffset.X()),
-                                      aOutSize.Height() - aOKBtn.GetSizePixel().Height() -
-                                      maIconCtrl.GetSizePixel().Height() - (4*aCtrlOffset.X()) );
+                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
+                                      m_pIconCtrl->GetSizePixel().Height() - (4*aCtrlOffset.X()) );
                 break;
         }
 
@@ -635,9 +642,9 @@ IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
 {
     sal_uLong nPos;
 
-    SvxIconChoiceCtrlEntry *pEntry = maIconCtrl.GetSelectedEntry ( nPos );
+    SvxIconChoiceCtrlEntry *pEntry = m_pIconCtrl->GetSelectedEntry ( nPos );
     if ( !pEntry )
-        pEntry = maIconCtrl.GetCursor( );
+        pEntry = m_pIconCtrl->GetCursor( );
 
     sal_uInt16 *pId = (sal_uInt16*)pEntry->GetUserData ();
 
@@ -737,12 +744,12 @@ void IconChoiceDialog::ActivatePageImpl ()
             }
 
             if ( pTmpSet && !pData->bOnDemand )
-                pData->pPage = (pData->fnCreatePage)( this, *pTmpSet );
+                pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, *pTmpSet );
             else
-                pData->pPage = (pData->fnCreatePage)( this, *CreateInputItemSet( mnCurrentPageId ) );
+                pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, *CreateInputItemSet( mnCurrentPageId ) );
 
-            SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number(pData->nId) );
-            pData->pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
+            //SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number(pData->nId) );
+            //pData->pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
             SetPosSizePages ( pData->nId );
 
             if ( pData->bOnDemand )
@@ -767,9 +774,9 @@ void IconChoiceDialog::ActivatePageImpl ()
 
 
     if ( bReadOnly || bHideResetBtn )
-        aResetBtn.Hide();
+        m_pResetBtn->Hide();
     else
-        aResetBtn.Show();
+        m_pResetBtn->Show();
 
 }
 
@@ -963,7 +970,7 @@ short IconChoiceDialog::Execute()
 void IconChoiceDialog::Start( bool bShow )
 {
 
-    aCancelBtn.SetClickHdl( LINK( this, IconChoiceDialog, CancelHdl ) );
+    m_pCancelBtn->SetClickHdl( LINK( this, IconChoiceDialog, CancelHdl ) );
     bModal = false;
 
     Start_Impl();
@@ -1002,9 +1009,9 @@ void IconChoiceDialog::Start_Impl()
         nActPage = mnCurrentPageId;
 
     // configuration existing?
-    SvtViewOptions aTabDlgOpt( E_TABDIALOG, OUString::number(nResId) );
+    //SvtViewOptions aTabDlgOpt( E_TABDIALOG, rId );
 
-    if ( aTabDlgOpt.Exists() )
+    /*if ( aTabDlgOpt.Exists() )
     {
         // possibly position from config
         SetWindowState(OUStringToOString(aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
@@ -1017,8 +1024,8 @@ void IconChoiceDialog::Start_Impl()
 
         if ( GetPageData ( nActPage ) == NULL )
             nActPage = maPageList.front()->nId;
-    }
-    else if ( USHRT_MAX != mnCurrentPageId && GetPageData ( mnCurrentPageId ) != NULL )
+    }*/
+    //else if ( USHRT_MAX != mnCurrentPageId && GetPageData ( mnCurrentPageId ) != NULL )
         nActPage = mnCurrentPageId;
 
     mnCurrentPageId = nActPage;
@@ -1147,14 +1154,14 @@ short IconChoiceDialog::Ok()
 void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
 {
     // set focus to icon for the current visible page
-    for ( sal_uInt16 i=0; i<maIconCtrl.GetEntryCount(); i++)
+    for ( sal_uInt16 i=0; i<m_pIconCtrl->GetEntryCount(); i++)
     {
-        SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
+        SvxIconChoiceCtrlEntry* pEntry = m_pIconCtrl->GetEntry ( i );
         sal_uInt16* pUserData = (sal_uInt16*) pEntry->GetUserData();
 
         if ( pUserData && *pUserData == nId )
         {
-            maIconCtrl.SetCursor( pEntry );
+            m_pIconCtrl->SetCursor( pEntry );
             break;
         }
     }
