@@ -55,18 +55,13 @@ protected:
     ~SfxItemPoolUser() {}
 };
 
-/*  [Beschreibung]
-
-    Die von dieser Klasse abgeleiteten Klassen dienen der Bereitstellung von
-    Defaults von SfxPoolItems und halten konkrete (konstante) Instanzen, die
-    dann von mehreren Stellen (i.d.R. eines Dokuments) referenziert werden
-    k"onnen.
-
-    Dadurch ist jeder Wert nur einmalig gespeichert, was zu wenig Konstruktor
-    und Destruktor-Aufrufen f"ahrt, Vergleiche zwischen Items eines Dokuments
-    beschleunigt und ein einfaches Laden und Speichern von Attributen
-    bereitstellt.
-*/
+/** Base class for providers of defaults of SfxPoolItems.
+ *
+ * The derived classes hold the concrete (const) instances which are referenced in several places
+ * (usually within a single document).
+ * This helps to lower the amount of calls to lifecycle methods, speeds up comparisons within a document
+ * and facilitates loading and saving of attributes.
+ */
 class SVL_DLLPUBLIC SfxItemPool
 {
     friend struct SfxItemPool_Impl;
@@ -227,19 +222,19 @@ private:
     static const SfxItemPool*       pStoringPool_;
 };
 
-// nur der Pool darf den Referenz-Zaehler manipulieren !!!
+// only the pool may manipulate the reference counts
 inline void SfxItemPool::SetRefCount( SfxPoolItem& rItem, sal_uLong n )
 {
     rItem.SetRefCount(n);
 }
 
-// nur der Pool darf den Referenz-Zaehler manipulieren !!!
+// only the pool may manipulate the reference counts
 inline sal_uLong SfxItemPool::AddRef( const SfxPoolItem& rItem, sal_uLong n )
 {
     return rItem.AddRef(n);
 }
 
-// nur der Pool darf den Referenz-Zaehler manipulieren !!!
+// only the pool may manipulate the reference counts
 inline sal_uLong SfxItemPool::ReleaseRef( const SfxPoolItem& rItem, sal_uLong n )
 {
     return rItem.ReleaseRef(n);
