@@ -28,7 +28,7 @@ namespace chart {
 ChartSpaceModel::ChartSpaceModel() :
     mnDispBlanksAs( XML_gap ),  // not zero as specified
     mnStyle( 2 ),
-    mbAutoTitleDel( false ),
+    mbAutoTitleDel( true ),
     mbPlotVisOnly( false ),
     mbShowLabelsOverMax( false ),
     mbPivotChart( false )
