@@ -96,7 +96,7 @@ bool passesPositiveList(const OUString& rUrl) {
             "/dbaccess/source/ui/inc/toolbox_tmpl.hrc") },
         { RTL_CONSTASCII_STRINGPARAM("/description.xml") },
         { RTL_CONSTASCII_STRINGPARAM("/svx/inc/globlmn_tmpl.hrc") },
-        { RTL_CONSTASCII_STRINGPARAM("/sw/source/ui/inc/redline_tmpl.hrc") }
+        { RTL_CONSTASCII_STRINGPARAM("/sw/source/uibase/inc/redline_tmpl.hrc") }
     };
     return matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
