@@ -502,6 +502,10 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
             // add missing optional roles
             aRoles = xChartType->getSupportedOptionalRoles();
             addMissingRoles(aResult, aRoles);
+
+            // add missing property roles
+            aRoles = xChartType->getSupportedPropertyRoles();
+            addMissingRoles(aResult, aRoles);
         }
     }
     catch( const uno::Exception & ex )

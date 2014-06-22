@@ -28,7 +28,6 @@
 #include "tp_DataSourceControls.hxx"
 #include "ControllerLockGuard.hxx"
 #include "DataSourceHelper.hxx"
-#include "dlg_PropertyMapping.hxx"
 #include <com/sun/star/sheet/XRangeSelection.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
@@ -217,7 +216,6 @@ DataSourceTabPage::DataSourceTabPage(
     get(m_pFT_DATALABELS  ,"FT_DATALABELS");
     get(m_pEDT_CATEGORIES ,"EDT_CATEGORIES");
     get(m_pIMB_RANGE_CAT  ,"IMB_RANGE_CAT");
-    get(m_pBtn_AddMapping ,"BTN_ADD_MAPPING");
 
     m_pFT_CAPTION->Show(!bHideDescription);
 
@@ -246,9 +244,6 @@ DataSourceTabPage::DataSourceTabPage(
     // #i75179# enable setting the background to a different color
     m_pEDT_RANGE->SetStyle( m_pEDT_RANGE->GetStyle() | WB_FORCECTRLBACKGROUND );
     m_pEDT_CATEGORIES->SetStyle( m_pEDT_CATEGORIES->GetStyle() | WB_FORCECTRLBACKGROUND );
-
-    // mapped properties
-    m_pBtn_AddMapping->SetClickHdl( LINK( this, DataSourceTabPage, AddMappingHdl ));
 
     // set symbol font for arrows
     // note: StarSymbol is substituted to OpenSymbol for OOo
@@ -469,12 +464,6 @@ void DataSourceTabPage::fillRoleListBox()
         }
 
         m_pLB_ROLE->SetUpdateMode( true );
-
-        if(pSeriesEntry->m_xChartType
-                ->getSupportedPropertyRoles().getLength() == 0)
-            m_pBtn_AddMapping->Disable();
-        else
-            m_pBtn_AddMapping->Enable();
     }
 }
 
@@ -769,24 +758,6 @@ IMPL_LINK( DataSourceTabPage, RangeUpdateDataHdl, Edit*, pEdit )
     }
     // enable/disable OK button
     isValid();
-
-    return 0;
-}
-
-IMPL_LINK_NOARG( DataSourceTabPage, AddMappingHdl )
-{
-    SeriesEntry * pSeriesEntry = dynamic_cast< SeriesEntry * >( m_pLB_SERIES->FirstSelected());
-    if(!pSeriesEntry)
-        return 0;
-
-    PropertyMappingDlg aDlg(this, pSeriesEntry->m_xChartType);
-    short aRet = aDlg.Execute();
-    if(aRet == RET_OK)
-    {
-        OUString aNewMappingName = DialogModel::ConvertRoleFromUIToInternal(aDlg.getSelectedEntry());
-        if(!aNewMappingName.isEmpty())
-            m_pLB_ROLE->InsertEntry( lcl_GetRoleLBEntry( aNewMappingName, OUString()));
-    }
 
     return 0;
 }
