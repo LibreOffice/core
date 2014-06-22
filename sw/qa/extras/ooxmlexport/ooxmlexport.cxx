@@ -9,8 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
-
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
@@ -88,6 +86,8 @@ protected:
 #undef DECLARE_OOXMLEXPORT_TEST
 #define DECLARE_OOXMLEXPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
 #endif
+
+#if !defined(WNT)
 
 DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
 {
@@ -2097,6 +2097,8 @@ DECLARE_OOXMLEXPORT_TEST(testFileOpenInputOutputError,"floatingtbl_with_formula.
       assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:pPr/w:pStyle", "val", "Normal");
 }
 
+#endif
+
 DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
@@ -3626,8 +3628,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
                 "PartName",
                 "/word/embeddings/oleObject1.xlsm");
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
