@@ -105,7 +105,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/dialogs/dlg_InsertTitle \
     chart2/source/controller/dialogs/dlg_NumberFormat \
     chart2/source/controller/dialogs/dlg_ObjectProperties \
-    chart2/source/controller/dialogs/dlg_PropertyMapping \
     chart2/source/controller/dialogs/dlg_ShapeFont \
     chart2/source/controller/dialogs/dlg_ShapeParagraph \
     chart2/source/controller/dialogs/dlg_View3D \
