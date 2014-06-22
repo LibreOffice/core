@@ -180,7 +180,12 @@
 #define STR_MODIFY                          (RID_SVX_START + 336)//from optdict.src
 
 // hyperlink dialog
-#define RID_SVXDLG_NEWHYPERLINK             (RID_SVX_START + 227)
+#define RID_SVXBMP_SCRIPT                   (RID_SVX_START + 550)
+#define RID_SVXBMP_TARGET                   (RID_SVX_START + 551)
+#define RID_SVXBMP_FILEOPEN                 (RID_SVX_START + 552)
+#define RID_SVXBMP_NEWDOC                   (RID_SVX_START + 553)
+#define RID_SVXBMP_BROWSE                   (RID_SVX_START + 554)
+#define RID_SVXBMP_ADRESSBOOK               (RID_SVX_START + 555)
 #define RID_SVXBMP_HLINETTP                 (RID_SVX_START + 556)
 #define RID_SVXBMP_HLMAILTP                 (RID_SVX_START + 557)
 #define RID_SVXBMP_HLDOCTP                  (RID_SVX_START + 558)

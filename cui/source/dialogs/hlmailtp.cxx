@@ -28,7 +28,6 @@
 #include <unotools/moduleoptions.hxx>
 
 #include "hlmailtp.hxx"
-#include "hyperdlg.hrc"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -39,47 +38,40 @@ using namespace ::com::sun::star;
 |*
 |************************************************************************/
 
-SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rItemSet)
-:   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_MAIL ),
-                              rItemSet ),
-    maGrpMailNews   ( this, CUI_RES (GRP_MAILNEWS) ),
-    maRbtMail       ( this, CUI_RES (RB_LINKTYP_MAIL) ),
-    maRbtNews       ( this, CUI_RES (RB_LINKTYP_NEWS) ),
-    maFtReceiver    ( this, CUI_RES (FT_RECEIVER) ),
-    maCbbReceiver   ( this, INET_PROT_MAILTO ),
-    maBtAdrBook     ( this, CUI_RES (BTN_ADRESSBOOK) ),
-    maFtSubject     ( this, CUI_RES (FT_SUBJECT) ),
-    maEdSubject     ( this, CUI_RES (ED_SUBJECT) )
+SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet)
+:   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkMailPage", "cui/ui/hyperlinkmailpage.ui",
+                              rItemSet )
 {
+    get(m_pRbtMail, "linktyp_mail");
+    get(m_pRbtNews, "linktyp_news");
+    get(m_pCbbReceiver, "receiver");
+    m_pCbbReceiver->SetSmartProtocol(INET_PROT_MAILTO);
+    get(m_pBtAdrBook, "adressbook");
+    m_pBtAdrBook->SetModeImage(Image(CUI_RES(RID_SVXBMP_ADRESSBOOK)));
+    get(m_pFtSubject, "subject_label");
+    get(m_pEdSubject, "subject");
+
     // Disable display of bitmap names.
-    maBtAdrBook.EnableTextDisplay (false);
+    m_pBtAdrBook->EnableTextDisplay (false);
 
     InitStdControls();
-    FreeResource();
 
-    // Init URL-Box (pos&size, Open-Handler)
-    maCbbReceiver.SetPosSizePixel ( LogicToPixel( Point( COL_2, 25 ), MAP_APPFONT ),
-                                    LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
-
-    maCbbReceiver.Show();
-    maCbbReceiver.SetHelpId( HID_HYPERDLG_MAIL_PATH );
+    m_pCbbReceiver->Show();
+    m_pCbbReceiver->SetHelpId( HID_HYPERDLG_MAIL_PATH );
 
     SetExchangeSupport ();
 
     // set defaults
-    maRbtMail.Check ();
+    m_pRbtMail->Check ();
 
     // overload handlers
-    maRbtMail.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
-    maRbtNews.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
-    maBtAdrBook.SetClickHdl      ( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
-    maCbbReceiver.SetModifyHdl   ( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
+    m_pRbtMail->SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
+    m_pRbtNews->SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
+    m_pBtAdrBook->SetClickHdl      ( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
+    m_pCbbReceiver->SetModifyHdl   ( LINK ( this, SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl) );
 
     if ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
-        maBtAdrBook.Hide();
-
-    maBtAdrBook.SetAccessibleRelationMemberOf( &maGrpMailNews );
-    maBtAdrBook.SetAccessibleRelationLabeledBy( &maFtReceiver );
+        m_pBtAdrBook->Hide();
 }
 
 SvxHyperlinkMailTp::~SvxHyperlinkMailTp ()
@@ -117,14 +109,14 @@ void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
         if ( nPos != -1 )
             aStrURLc = aStrURLc.copy( 0, nPos );
 
-        maEdSubject.SetText ( aStrSubject );
+        m_pEdSubject->SetText ( aStrSubject );
     }
     else
     {
-        maEdSubject.SetText (aEmptyStr);
+        m_pEdSubject->SetText (aEmptyStr);
     }
 
-    maCbbReceiver.SetText ( aStrURLc );
+    m_pCbbReceiver->SetText ( aStrURLc );
 
     SetScheme( aStrScheme );
 }
@@ -145,7 +137,7 @@ void SvxHyperlinkMailTp::GetCurentItemData ( OUString& rStrURL, OUString& aStrNa
 
 OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 {
-    OUString aStrURL = maCbbReceiver.GetText();
+    OUString aStrURL = m_pCbbReceiver->GetText();
     INetURLObject aURL(aStrURL);
 
     if( aURL.GetProtocol() == INET_PROT_NOT_VALID )
@@ -157,10 +149,10 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
     // subject for EMail-url
     if( aURL.GetProtocol() == INET_PROT_MAILTO )
     {
-        if ( maEdSubject.GetText() != OUString(aEmptyStr) )
+        if ( m_pEdSubject->GetText() != OUString(aEmptyStr) )
         {
             OUString aQuery("subject=");
-            aQuery += maEdSubject.GetText();
+            aQuery += m_pEdSubject->GetText();
             aURL.SetParam(aQuery);
         }
     }
@@ -177,9 +169,9 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkMailTp::Create( Window* pWindow, const SfxItemSet& rItemSet )
+IconChoicePage* SvxHyperlinkMailTp::Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return( new SvxHyperlinkMailTp( pWindow, rItemSet ) );
+    return( new SvxHyperlinkMailTp( pWindow, pDlg, rItemSet ) );
 }
 
 /*************************************************************************
@@ -190,7 +182,7 @@ IconChoicePage* SvxHyperlinkMailTp::Create( Window* pWindow, const SfxItemSet& r
 
 void SvxHyperlinkMailTp::SetInitFocus()
 {
-    maCbbReceiver.GrabFocus();
+    m_pCbbReceiver->GrabFocus();
 }
 
 /*************************************************************************
@@ -204,16 +196,16 @@ void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
     bool bMail = !rScheme.startsWith(sNewsScheme);
 
     //update protocol button selection:
-    maRbtMail.Check(bMail);
-    maRbtNews.Check(!bMail);
+    m_pRbtMail->Check(bMail);
+    m_pRbtNews->Check(!bMail);
 
     //update target:
     RemoveImproperProtocol(rScheme);
-    maCbbReceiver.SetSmartProtocol( GetSmartProtocolFromButtons() );
+    m_pCbbReceiver->SetSmartProtocol( GetSmartProtocolFromButtons() );
 
     //show/hide  special fields for MAIL:
-    maFtSubject.Enable(bMail);
-    maEdSubject.Enable(bMail);
+    m_pBtAdrBook->Enable(bMail);
+    m_pEdSubject->Enable(bMail);
 }
 
 /*************************************************************************
@@ -224,28 +216,28 @@ void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
 
 void SvxHyperlinkMailTp::RemoveImproperProtocol(const OUString& aProperScheme)
 {
-    OUString aStrURL ( maCbbReceiver.GetText() );
+    OUString aStrURL ( m_pCbbReceiver->GetText() );
     if ( aStrURL != aEmptyStr )
     {
         OUString aStrScheme = GetSchemeFromURL( aStrURL );
         if ( aStrScheme != aEmptyStr && aStrScheme != aProperScheme )
         {
             aStrURL = aStrURL.copy( aStrScheme.getLength() );
-            maCbbReceiver.SetText ( aStrURL );
+            m_pCbbReceiver->SetText ( aStrURL );
         }
     }
 }
 
 OUString SvxHyperlinkMailTp::GetSchemeFromButtons() const
 {
-    if( maRbtNews.IsChecked() )
+    if( m_pRbtNews->IsChecked() )
         return OUString(INET_NEWS_SCHEME);
     return OUString(INET_MAILTO_SCHEME);
 }
 
 INetProtocol SvxHyperlinkMailTp::GetSmartProtocolFromButtons() const
 {
-    if( maRbtNews.IsChecked() )
+    if( m_pRbtNews->IsChecked() )
     {
         return INET_PROT_NEWS;
     }
@@ -273,7 +265,7 @@ IMPL_LINK_NOARG(SvxHyperlinkMailTp, Click_SmartProtocol_Impl)
 
 IMPL_LINK_NOARG(SvxHyperlinkMailTp, ModifiedReceiverHdl_Impl)
 {
-    OUString aScheme = GetSchemeFromURL( maCbbReceiver.GetText() );
+    OUString aScheme = GetSchemeFromURL( m_pCbbReceiver->GetText() );
     if(!aScheme.isEmpty())
         SetScheme( aScheme );
 

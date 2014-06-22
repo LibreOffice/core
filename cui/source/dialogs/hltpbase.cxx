@@ -24,7 +24,6 @@
 #include <svl/macitem.hxx>
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
-#include "hyperdlg.hrc"
 #include "cuihyperdlg.hxx"
 #include "hltpbase.hxx"
 #include "macroass.hxx"
@@ -34,46 +33,17 @@
 
 using namespace ::ucbhelper;
 
-//# ComboBox-Control, which is filled with all current framenames        #
-
-/*************************************************************************
-|*
-|* Contructor / Destructor
-|*
-|************************************************************************/
-
-SvxFramesComboBox::SvxFramesComboBox ( Window* pParent, const ResId& rResId,
-                                        SfxDispatcher* pDispatch )
-:   ComboBox (pParent, rResId)
-{
-    SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
-    SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetTopFrame() : 0;
-    if ( pFrame )
-    {
-        boost::scoped_ptr<TargetList> pList(new TargetList);
-        pFrame->GetTargetList(*pList);
-        if( !pList->empty() )
-        {
-            size_t nCount = pList->size();
-            size_t i;
-            for ( i = 0; i < nCount; i++ )
-            {
-                InsertEntry( pList->at( i ) );
-            }
-        }
-    }
-}
-
-SvxFramesComboBox::~SvxFramesComboBox ()
-{
-}
-
 //# ComboBox-Control for URL's with History and Autocompletion           #
 
 SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart )
 : SvtURLBox         ( pParent, eSmart ),
   DropTargetHelper  ( this )
 {
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxHyperURLBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxHyperURLBox(pParent, INET_PROT_HTTP);
 }
 
 sal_Int8 SvxHyperURLBox::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
@@ -116,21 +86,18 @@ bool SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
 //# Hyperlink-Dialog: Tabpages-Baseclass                                 #
 
 SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
-                                                   const ResId &rResId,
+                                                   IconChoiceDialog* pDlg,
+                                                   const OString& rID,
+                                                   const OUString& rUIXMLDescription,
                                                    const SfxItemSet& rItemSet )
-:   IconChoicePage          ( pParent, rResId, rItemSet ),
-    mpGrpMore               ( NULL ),
-    mpFtFrame               ( NULL ),
+:   IconChoicePage          ( pParent, rID, rUIXMLDescription, rItemSet ),
     mpCbbFrame              ( NULL ),
-    mpFtForm                ( NULL ),
     mpLbForm                ( NULL ),
-    mpFtIndication          ( NULL ),
     mpEdIndication          ( NULL ),
-    mpFtText                ( NULL ),
     mpEdText                ( NULL ),
     mpBtScript              ( NULL ),
     mbIsCloseDisabled       ( false ),
-    mpDialog                ( pParent ),
+    mpDialog                ( pDlg ),
     mbStdControlsInit       ( false ),
     aEmptyStr()
 {
@@ -141,20 +108,6 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
 SvxHyperlinkTabPageBase::~SvxHyperlinkTabPageBase ()
 {
     maTimer.Stop();
-
-    if ( mbStdControlsInit )
-    {
-        delete mpGrpMore;
-        delete mpFtFrame;
-        delete mpCbbFrame;
-        delete mpFtForm;
-        delete mpLbForm;
-        delete mpFtIndication;
-        delete mpEdIndication;
-        delete mpFtText;
-        delete mpEdText ;
-        delete mpBtScript;
-    }
 
     delete mpMarkWnd;
 }
@@ -178,22 +131,34 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 {
     if ( !mbStdControlsInit )
     {
-        mpGrpMore     = new FixedLine           ( this, ResId (GRP_MORE, *m_pResMgr) );
-        mpFtFrame     = new FixedText           ( this, ResId (FT_FRAME, *m_pResMgr) );
-        mpCbbFrame    = new SvxFramesComboBox   ( this, ResId (CB_FRAME, *m_pResMgr), GetDispatcher() );
-        mpFtForm      = new FixedText           ( this, ResId (FT_FORM, *m_pResMgr) );
-        mpLbForm      = new ListBox             ( this, ResId (LB_FORM, *m_pResMgr) );
-        mpFtIndication= new FixedText           ( this, ResId (FT_INDICATION, *m_pResMgr) );
-        mpEdIndication= new Edit                ( this, ResId (ED_INDICATION, *m_pResMgr) );
-        mpFtText      = new FixedText           ( this, ResId (FT_TEXT, *m_pResMgr) );
-        mpEdText      = new Edit                ( this, ResId (ED_TEXT, *m_pResMgr) );
-        mpBtScript    = new ImageButton         ( this, ResId (BTN_SCRIPT, *m_pResMgr) );
+        get(mpCbbFrame, "frame");
+
+        SfxDispatcher* pDispatch = GetDispatcher();
+        SfxViewFrame* pViewFrame = pDispatch ? pDispatch->GetFrame() : 0;
+        SfxFrame* pFrame = pViewFrame ? &pViewFrame->GetTopFrame() : 0;
+        if ( pFrame )
+        {
+            boost::scoped_ptr<TargetList> pList(new TargetList);
+            pFrame->GetTargetList(*pList);
+            if( !pList->empty() )
+            {
+                size_t nCount = pList->size();
+                size_t i;
+                for ( i = 0; i < nCount; i++ )
+                {
+                    mpCbbFrame->InsertEntry( pList->at( i ) );
+                }
+            }
+        }
+
+        get(mpLbForm, "form");
+        get(mpEdIndication, "indication");
+        get(mpEdText, "name");
+        get(mpBtScript, "script");
+        mpBtScript->SetModeImage(Image(CUI_RES (RID_SVXBMP_SCRIPT)));
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
         mpBtScript->EnableTextDisplay (false);
-
-        mpBtScript->SetAccessibleRelationMemberOf( mpGrpMore );
-        mpBtScript->SetAccessibleRelationLabeledBy( mpFtForm );
     }
 
     mbStdControlsInit = true;

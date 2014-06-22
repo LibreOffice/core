@@ -33,7 +33,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 
-#include "hyperdlg.hrc"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
@@ -84,9 +83,9 @@ bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUStri
         }
         if ( bIsValidURL )
         {
-            sal_Int32 nPos = maLbDocTypes.GetSelectEntryPos();
+            sal_Int32 nPos = m_pLbDocTypes->GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
-                aURLObject.SetExtension( ((DocumentTypeData*)maLbDocTypes.GetEntryData( nPos ))->aStrExt );
+                aURLObject.SetExtension( ((DocumentTypeData*)m_pLbDocTypes->GetEntryData( nPos ))->aStrExt );
         }
 
     }
@@ -99,47 +98,41 @@ bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUStri
 |*
 |************************************************************************/
 
-SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& rItemSet)
-:   SvxHyperlinkTabPageBase ( pParent, CUI_RES( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT ), rItemSet ),
-    maGrpNewDoc     ( this, CUI_RES (GRP_NEWDOCUMENT) ),
-    maRbtEditNow    ( this, CUI_RES (RB_EDITNOW) ),
-    maRbtEditLater  ( this, CUI_RES (RB_EDITLATER) ),
-    maFtPath        ( this, CUI_RES (FT_PATH_NEWDOC) ),
-    maCbbPath       ( this, INET_PROT_FILE ),
-    maBtCreate      ( this, CUI_RES (BTN_CREATE) ),
-    maFtDocTypes    ( this, CUI_RES (FT_DOCUMENT_TYPES) ),
-    maLbDocTypes    ( this, CUI_RES (LB_DOCUMENT_TYPES) )
+SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet)
+:   SvxHyperlinkTabPageBase ( pParent, pDlg, "HyperlinkNewDocPage", "cui/ui/hyperlinknewdocpage.ui", rItemSet )
 {
+    get(m_pRbtEditNow, "editnow");
+    get(m_pRbtEditLater, "editlater");
+    get(m_pCbbPath, "path");
+    m_pCbbPath->SetSmartProtocol(INET_PROT_FILE);
+    get(m_pBtCreate, "create");
+    m_pBtCreate->SetModeImage(Image(CUI_RES(RID_SVXBMP_NEWDOC)));
+    get(m_pLbDocTypes, "types");
+
     // Set HC bitmaps and disable display of bitmap names.
-    maBtCreate.EnableTextDisplay (false);
+    m_pBtCreate->EnableTextDisplay (false);
 
     InitStdControls();
-    FreeResource();
 
     SetExchangeSupport ();
 
-    maCbbPath.SetPosSizePixel ( LogicToPixel( Point( COL_2 , 25 ), MAP_APPFONT ),
-                                LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
-    maCbbPath.Show();
-    maCbbPath.SetBaseURL(SvtPathOptions().GetWorkPath());
+    m_pCbbPath->Show();
+    m_pCbbPath->SetBaseURL(SvtPathOptions().GetWorkPath());
 
     // set defaults
-    maRbtEditNow.Check();
+    m_pRbtEditNow->Check();
 
-    maBtCreate.SetClickHdl        ( LINK ( this, SvxHyperlinkNewDocTp, ClickNewHdl_Impl ) );
-
-    maBtCreate.SetAccessibleRelationMemberOf( &maGrpNewDoc );
-    maBtCreate.SetAccessibleRelationLabeledBy( &maFtPath );
+    m_pBtCreate->SetClickHdl        ( LINK ( this, SvxHyperlinkNewDocTp, ClickNewHdl_Impl ) );
 
     FillDocumentList ();
 }
 
 SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 {
-    for ( sal_uInt16 n=0; n<maLbDocTypes.GetEntryCount(); n++ )
+    for ( sal_uInt16 n=0; n<m_pLbDocTypes->GetEntryCount(); n++ )
     {
         DocumentTypeData* pTypeData = (DocumentTypeData*)
-                                      maLbDocTypes.GetEntryData ( n );
+                                      m_pLbDocTypes->GetEntryData ( n );
         delete pTypeData;
     }
 }
@@ -200,14 +193,14 @@ void SvxHyperlinkNewDocTp::FillDocumentList ()
                 OUString aTitleName( aTitle );
                 aTitleName = aTitleName.replaceFirst( "~", "" );
 
-                sal_Int16 nPos = maLbDocTypes.InsertEntry ( aTitleName );
+                sal_Int16 nPos = m_pLbDocTypes->InsertEntry ( aTitleName );
                 OUString aStrDefExt( pFilter->GetDefaultExtension () );
                 DocumentTypeData *pTypeData = new DocumentTypeData ( aDocumentUrl, aStrDefExt.copy( 2 ) );
-                maLbDocTypes.SetEntryData ( nPos, pTypeData );
+                m_pLbDocTypes->SetEntryData ( nPos, pTypeData );
             }
         }
     }
-    maLbDocTypes.SelectEntryPos ( 0 );
+    m_pLbDocTypes->SelectEntryPos ( 0 );
 
     LeaveWait();
 }
@@ -223,9 +216,9 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStr
                                                SvxLinkInsertMode& eMode )
 {
     // get data from dialog-controls
-    rStrURL = maCbbPath.GetText();
+    rStrURL = m_pCbbPath->GetText();
     INetURLObject aURL;
-    if ( ImplGetURLObject( rStrURL, maCbbPath.GetBaseURL(), aURL ) )
+    if ( ImplGetURLObject( rStrURL, m_pCbbPath->GetBaseURL(), aURL ) )
     {
         rStrURL = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
@@ -239,9 +232,9 @@ void SvxHyperlinkNewDocTp::GetCurentItemData ( OUString& rStrURL, OUString& aStr
 |*
 |************************************************************************/
 
-IconChoicePage* SvxHyperlinkNewDocTp::Create( Window* pWindow, const SfxItemSet& rItemSet )
+IconChoicePage* SvxHyperlinkNewDocTp::Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet )
 {
-    return( new SvxHyperlinkNewDocTp( pWindow, rItemSet ) );
+    return( new SvxHyperlinkNewDocTp( pWindow, pDlg, rItemSet ) );
 }
 
 /*************************************************************************
@@ -252,7 +245,7 @@ IconChoicePage* SvxHyperlinkNewDocTp::Create( Window* pWindow, const SfxItemSet&
 
 void SvxHyperlinkNewDocTp::SetInitFocus()
 {
-    maCbbPath.GrabFocus();
+    m_pCbbPath->GrabFocus();
 }
 
 /*************************************************************************
@@ -264,7 +257,7 @@ void SvxHyperlinkNewDocTp::SetInitFocus()
 bool SvxHyperlinkNewDocTp::AskApply()
 {
     INetURLObject aINetURLObject;
-    bool bRet = ImplGetURLObject( maCbbPath.GetText(), maCbbPath.GetBaseURL(), aINetURLObject );
+    bool bRet = ImplGetURLObject( m_pCbbPath->GetText(), m_pCbbPath->GetBaseURL(), aINetURLObject );
     if ( !bRet )
     {
         WarningBox aWarning( this, WB_OK, CUI_RESSTR(RID_SVXSTR_HYPDLG_NOVALIDFILENAME) );
@@ -284,7 +277,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
     EnterWait();
 
     // get data from dialog-controls
-    OUString aStrNewName = maCbbPath.GetText();
+    OUString aStrNewName = m_pCbbPath->GetText();
 
     if ( aStrNewName == aEmptyStr )
         aStrNewName = maStrInitURL;
@@ -293,7 +286,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
     // create a real URL-String
 
     INetURLObject aURL;
-    if ( ImplGetURLObject( aStrNewName, maCbbPath.GetBaseURL(), aURL ) )
+    if ( ImplGetURLObject( aStrNewName, m_pCbbPath->GetBaseURL(), aURL ) )
     {
 
 
@@ -330,11 +323,11 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 if ( aStrNewName != aEmptyStr )
                 {
                     // get private-url
-                    sal_Int32 nPos = maLbDocTypes.GetSelectEntryPos();
+                    sal_Int32 nPos = m_pLbDocTypes->GetSelectEntryPos();
                     if( nPos == LISTBOX_ENTRY_NOTFOUND )
                         nPos=0;
                     OUString aStrDocName ( ( ( DocumentTypeData* )
-                                         maLbDocTypes.GetEntryData( nPos ) )->aStrURL );
+                                         m_pLbDocTypes->GetEntryData( nPos ) )->aStrURL );
 
                     // create items
                     SfxStringItem aName( SID_FILE_NAME, aStrDocName );
@@ -342,7 +335,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     SfxStringItem aFrame( SID_TARGETNAME, OUString("_blank") );
 
                     OUString aStrFlags('S');
-                    if ( maRbtEditLater.IsChecked() )
+                    if ( m_pRbtEditLater->IsChecked() )
                     {
                         aStrFlags += OUString('H');
                     }
@@ -371,7 +364,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     }
                 }
 
-                if ( maRbtEditNow.IsChecked() && pCurrentDocFrame )
+                if ( m_pRbtEditNow->IsChecked() && pCurrentDocFrame )
                 {
                     pCurrentDocFrame->ToTop();
                 }
@@ -381,7 +374,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
         {
         }
 
-        if ( pViewFrame && maRbtEditLater.IsChecked() )
+        if ( pViewFrame && m_pRbtEditLater->IsChecked() )
         {
             SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();
             pObjShell->DoClose();
@@ -403,8 +396,8 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
     uno::Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
 
     OUString            aStrURL;
-    OUString            aTempStrURL( maCbbPath.GetText() );
-    utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, maCbbPath.GetBaseURL(), aStrURL );
+    OUString            aTempStrURL( m_pCbbPath->GetText() );
+    utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, m_pCbbPath->GetBaseURL(), aStrURL );
 
     OUString            aStrPath = aStrURL;
     bool            bZeroPath = aStrPath.isEmpty();
@@ -429,7 +422,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
         if( bHandleFileName )
             aStrName = bZeroPath? aTempStrURL : OUString(aURL.getName());
 
-        maCbbPath.SetBaseURL( xFolderPicker->getDirectory() );
+        m_pCbbPath->SetBaseURL( xFolderPicker->getDirectory() );
         OUString          aStrTmp( xFolderPicker->getDirectory() );
 
         if( aStrTmp[ aStrTmp.getLength() - 1 ] != sSlash[0] )
@@ -442,11 +435,11 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
         INetURLObject   aNewURL( aStrTmp );
 
         if( !aStrName.isEmpty() && !aNewURL.getExtension().isEmpty() &&
-            maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+            m_pLbDocTypes->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url
-            sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
-            aNewURL.setExtension( ( ( DocumentTypeData* ) maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
+            sal_uInt16 nPos = m_pLbDocTypes->GetSelectEntryPos();
+            aNewURL.setExtension( ( ( DocumentTypeData* ) m_pLbDocTypes->GetEntryData( nPos ) )->aStrExt );
         }
 
         if( aNewURL.GetProtocol() == INET_PROT_FILE )
@@ -458,7 +451,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
             aStrTmp = aNewURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
         }
 
-        maCbbPath.SetText ( aStrTmp );
+        m_pCbbPath->SetText ( aStrTmp );
     }
     return( 0L );
 }

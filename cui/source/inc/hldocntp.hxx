@@ -30,14 +30,11 @@
 class SvxHyperlinkNewDocTp : public SvxHyperlinkTabPageBase
 {
 private:
-    FixedLine           maGrpNewDoc;
-    RadioButton         maRbtEditNow;
-    RadioButton         maRbtEditLater;
-    FixedText           maFtPath;
-    SvxHyperURLBox      maCbbPath;
-    ImageButton         maBtCreate;
-    FixedText           maFtDocTypes;
-    ListBox             maLbDocTypes;
+    RadioButton         *m_pRbtEditNow;
+    RadioButton         *m_pRbtEditLater;
+    SvxHyperURLBox      *m_pCbbPath;
+    PushButton          *m_pBtCreate;
+    ListBox             *m_pLbDocTypes;
 
     bool            ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const;
     void                FillDocumentList ();
@@ -53,10 +50,10 @@ protected:
                              SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
 
 public:
-    SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& rItemSet);
+    SvxHyperlinkNewDocTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkNewDocTp ();
 
-    static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
+    static  IconChoicePage* Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
     virtual bool        AskApply () SAL_OVERRIDE;
     virtual void        DoApply () SAL_OVERRIDE;

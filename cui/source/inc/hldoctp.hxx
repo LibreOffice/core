@@ -30,17 +30,12 @@
 class SvxHyperlinkDocTp : public SvxHyperlinkTabPageBase
 {
 private:
-    FixedLine           maGrpDocument;
-    FixedText           maFtPath;
-    SvxHyperURLBox      maCbbPath;
-    ImageButton         maBtFileopen;
+    SvxHyperURLBox      *m_pCbbPath;
+    PushButton          *m_pBtFileopen;
 
-    FixedLine           maGrpTarget;
-    FixedText           maFtTarget;
-    Edit                maEdTarget;
-    FixedText           maFtURL;
-    FixedText           maFtFullURL;
-    ImageButton         maBtBrowse;
+    Edit                *m_pEdTarget;
+    FixedText           *m_pFtFullURL;
+    PushButton          *m_pBtBrowse;
 
     OUString            maStrURL;
 
@@ -71,10 +66,10 @@ protected:
     OUString GetCurrentURL    ();
 
 public:
-    SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet);
+    SvxHyperlinkDocTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);
     virtual ~SvxHyperlinkDocTp ();
 
-    static  IconChoicePage* Create( Window* pWindow, const SfxItemSet& rItemSet );
+    static  IconChoicePage* Create( Window* pWindow, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet );
 
     virtual void        SetMarkStr ( const OUString& aStrMark ) SAL_OVERRIDE;
 
