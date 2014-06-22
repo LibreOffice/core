@@ -40,6 +40,7 @@ public:
     void testSimpleStrictXLSX();
     void testDelayedCellImport(); // chart range referencing content on later sheets
     void testFlatODSStackedColumnChart();
+    void testFdo78080();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -65,6 +66,7 @@ public:
     CPPUNIT_TEST(testSimpleStrictXLSX);
     CPPUNIT_TEST(testDelayedCellImport);
     CPPUNIT_TEST(testFlatODSStackedColumnChart);
+    CPPUNIT_TEST(testFdo78080);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -368,6 +370,17 @@ void Chart2ImportTest::testFlatODSStackedColumnChart()
 
     // The stacked column chart should consist of 5 data series.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5), aSeriesSeq.getLength());
+}
+
+void Chart2ImportTest::testFdo78080()
+{
+    load("/chart2/qa/extras/data/xlsx/", "fdo78080.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XTitled> xTitled(xChartDoc, uno::UNO_QUERY_THROW);
+    Reference<chart2::XTitle> xTitle = xTitled->getTitleObject();
+    CPPUNIT_ASSERT(!xTitle.is());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
