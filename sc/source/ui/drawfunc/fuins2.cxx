@@ -112,7 +112,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
         {
             PutInOrder( nCol1, nCol2 );
             PutInOrder( nRow1, nRow2 );
-            if ( nCol2>nCol1 || nRow2>nRow1 )
+            if (nCol2 >= nCol1 || nRow2 >= nRow1)
             {
                 ScDocument* pDoc = pViewData->GetDocument();
                 pDoc->LimitChartArea( nTab1, nCol1,nRow1, nCol2,nRow2 );
