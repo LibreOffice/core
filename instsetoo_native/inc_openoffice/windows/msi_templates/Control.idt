@@ -195,7 +195,7 @@ PatchWelcome	TextLine2	Text	135	54	228	45	65539		OOO_CONTROL_162
 ReadyToInstall	Back	PushButton	164	243	66	17	3		OOO_CONTROL_163	InstallNow	
 ReadyToInstall	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 ReadyToInstall	BannerLine	Line	0	44	374	0	1				
-ReadyToInstall	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_166	DesktopLink	
+ReadyToInstall	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_166	Back	
 ReadyToInstall	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_167		
 ReadyToInstall	DlgLine	Line	0	234	374	0	1				
 ReadyToInstall	DlgText	Text	21	51	326	20	3		OOO_CONTROL_168		
@@ -205,8 +205,7 @@ ReadyToInstall	DlgTitle2	Text	13	6	280	25	65538		OOO_CONTROL_171
 ReadyToInstall	DlgTitle3	Text	13	6	280	25	65538		OOO_CONTROL_172		
 ReadyToInstall	InstallNow	PushButton	230	243	66	17	3		OOO_CONTROL_173	Cancel	
 ReadyToInstall	DesktopLink	CheckBox	21	100	300	10	3	CREATEDESKTOPLINK	OOO_CONTROL_319	EnableATTools	
-ReadyToInstall	EnableATTools	CheckBox	21	125	300	10	3	ENABLEATTOOLS	OOO_CONTROL_320	EnableQuickstart	
-ReadyToInstall	EnableQuickstart	CheckBox	21	150	300	10	3	QUICKSTART	OOO_CONTROL_321	Back	
+ReadyToInstall	EnableQuickstart	CheckBox	21	125	300	10	3	QUICKSTART	OOO_CONTROL_321	Back	
 ReadyToRemove	Back	PushButton	164	243	66	17	3		OOO_CONTROL_174	RemoveNow	
 ReadyToRemove	Banner	Bitmap	0	0	374	44	1		BannerBmp		
 ReadyToRemove	BannerLine	Line	0	44	374	0	1				
