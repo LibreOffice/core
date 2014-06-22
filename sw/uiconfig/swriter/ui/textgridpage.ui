@@ -419,7 +419,7 @@
           <object class="GtkLabel" id="labelGridLayout">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Grid layout</property>
+            <property name="label" translatable="yes">Grid Layout</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -529,7 +529,7 @@
           <object class="GtkLabel" id="labelFL_DISPLAY">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Grid display</property>
+            <property name="label" translatable="yes">Grid Display</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

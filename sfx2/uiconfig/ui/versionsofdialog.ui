@@ -188,7 +188,7 @@
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">New versions</property>
+                    <property name="label" translatable="yes">New Versions</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
@@ -300,7 +300,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Existing versions</property>
+                    <property name="label" translatable="yes">Existing Versions</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>

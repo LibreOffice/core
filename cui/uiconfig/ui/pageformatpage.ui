@@ -299,7 +299,7 @@
           <object class="GtkLabel" id="labelPaperFormat">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Paper format</property>
+            <property name="label" translatable="yes">Paper Format</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -758,7 +758,7 @@
               <object class="GtkLabel" id="label5">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Layout settings</property>
+                <property name="label" translatable="yes">Layout Settings</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

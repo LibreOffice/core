@@ -344,7 +344,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Default languages for documents</property>
+            <property name="label" translatable="yes">Default Languages for Documents</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -400,7 +400,7 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Enhanced language support</property>
+            <property name="label" translatable="yes">Enhanced Language Support</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

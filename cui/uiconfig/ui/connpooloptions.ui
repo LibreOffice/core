@@ -205,7 +205,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Connection pool</property>
+            <property name="label" translatable="yes">Connection Pool</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

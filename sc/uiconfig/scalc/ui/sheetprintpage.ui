@@ -166,7 +166,7 @@
           <object class="GtkLabel" id="labelPageOrder">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Page order</property>
+            <property name="label" translatable="yes">Page Order</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

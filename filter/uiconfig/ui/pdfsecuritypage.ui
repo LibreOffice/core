@@ -268,7 +268,7 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">File encryption and permission</property>
+            <property name="label" translatable="yes">File Encryption and Permission</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>

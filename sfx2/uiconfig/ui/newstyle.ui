@@ -85,7 +85,7 @@
                     <property name="max_width_chars">60</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="stylename-atkobject">
-                        <property name="AtkObject::accessible-name" translatable="yes">Style name</property>
+                        <property name="AtkObject::accessible-name" translatable="yes">Style Name</property>
                       </object>
                     </child>
                     <child internal-child="entry">
@@ -101,7 +101,7 @@
               <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Style name</property>
+                <property name="label" translatable="yes">Style Name</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
