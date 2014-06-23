@@ -223,8 +223,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
     get(m_pIconCtrl, "icon_control");
     get(m_pTabContainer, "tab");
 
-    m_pIconCtrl->SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
-    SetCtrlPos();
+    SetCtrlStyle();
     m_pIconCtrl->SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
     m_pIconCtrl->Show();
     m_pIconCtrl->SetChoiceWithCursor ( true );
@@ -249,10 +248,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
     m_pCancelBtn->Show();
     m_pHelpBtn->Show();
     m_pResetBtn->Show();
-
-    m_pIconCtrl->ArrangeIcons();
 }
-
 
 IconChoiceDialog ::~IconChoiceDialog ()
 {
@@ -352,13 +348,10 @@ void IconChoiceDialog::Paint( const Rectangle& rRect )
     }
 }
 
-void IconChoiceDialog::SetCtrlPos()
+void IconChoiceDialog::SetCtrlStyle()
 {
-    WinBits aWinBits = m_pIconCtrl->GetStyle ();
-    aWinBits &= ~WB_ALIGN_TOP & ~WB_NOVSCROLL;
-    aWinBits |= WB_ALIGN_LEFT | WB_NOHSCROLL;
-    m_pIconCtrl->SetStyle ( aWinBits );
-
+    WinBits aWinBits = WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN | WB_ALIGN_LEFT | WB_NOHSCROLL;
+    m_pIconCtrl->SetStyle(aWinBits);
     m_pIconCtrl->ArrangeIcons();
 }
 
