@@ -33,6 +33,16 @@
 #define ALFRESCO_CLOUD_REDIRECT_URI "http://127.0.0.1/Callback"
 #define ALFRESCO_CLOUD_SCOPE "public_api"
 
+
+/* OneDrive */
+#define ONEDRIVE_BASE_URL "https://apis.live.net/v5.0"
+#define ONEDRIVE_CLIENT_ID ""
+#define ONEDRIVE_CLIENT_SECRET ""
+#define ONEDRIVE_AUTH_URL "https://login.live.com/oauth20_authorize.srf"
+#define ONEDRIVE_TOKEN_URL "https://login.live.com/oauth20_token.srf"
+#define ONEDRIVE_REDIRECT_URI "https://login.live.com/oauth20_desktop.srf"
+#define ONEDRIVE_SCOPE "wl.offline_access"
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -283,6 +283,9 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
                        OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
     bool bSkipAlfresco = OUString( ALFRESCO_CLOUD_CLIENT_ID ).isEmpty() ||
                        OUString( ALFRESCO_CLOUD_CLIENT_SECRET ).isEmpty();
+    bool bSkipOneDrive= OUString( ONEDRIVE_CLIENT_ID ).isEmpty() ||
+                       OUString( ONEDRIVE_CLIENT_SECRET ).isEmpty();
+
 
     Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
     Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
@@ -290,7 +293,8 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
     {
         OUString sUrl = aTypesUrlsList[i];
         if ( !( sUrl == GDRIVE_BASE_URL && bSkipGDrive ) &&
-             !( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) )
+             !( sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL ) && bSkipAlfresco ) &&
+             !( sUrl == ONEDRIVE_BASE_URL && bSkipOneDrive ) )
         {
             m_pLBServerType->InsertEntry( aTypesNamesList[i] );
             m_aServerTypesURLs.push_back( sUrl );
