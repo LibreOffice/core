@@ -415,27 +415,6 @@ void IconChoiceDialog::Resize()
     }
 }
 
-void IconChoiceDialog::SetPosSizePages ( sal_uInt16 nId )
-{
-    const Point aCtrlOffset ( LogicToPixel( Point( CTRLS_OFFSET, CTRLS_OFFSET ), MAP_APPFONT ) );
-    IconChoicePageData* pData = GetPageData ( nId );
-
-    if ( pData->pPage )
-    {
-        Size aOutSize ( GetOutputSizePixel() );
-        Size aIconCtrlSize ( m_pIconCtrl->GetSizePixel() );
-
-        Point aNewPagePos( aIconCtrlSize.Width() + (2*aCtrlOffset.X()),
-                              aCtrlOffset.X() );
-        Size aNewPageSize( aOutSize.Width() - m_pIconCtrl->GetSizePixel().Width() -
-                              (3*aCtrlOffset.X()),
-                              aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                              (3*aCtrlOffset.X()) );
-
-        pData->pPage->SetPosSizePixel ( aNewPagePos, aNewPageSize );
-    }
-}
-
 /**********************************************************************
 |
 | select a page
@@ -551,10 +530,6 @@ void IconChoiceDialog::ActivatePageImpl ()
                 pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, *pTmpSet );
             else
                 pData->pPage = (pData->fnCreatePage)( m_pTabContainer, this, *CreateInputItemSet( mnCurrentPageId ) );
-
-            //SvtViewOptions aTabPageOpt( E_TABPAGE, OUString::number(pData->nId) );
-            //pData->pPage->SetUserData( GetViewOptUserItem( aTabPageOpt ) );
-            SetPosSizePages ( pData->nId );
 
             if ( pData->bOnDemand )
                 pData->pPage->Reset( (SfxItemSet &)pData->pPage->GetItemSet() );

@@ -161,8 +161,6 @@ private :
     void                    Start_Impl();
     bool                    OK_Impl();
 
-    void                    SetPosSizePages ( sal_uInt16 nId );
-
     void                    FocusOnIcon ( sal_uInt16 nId );
 
 protected :
