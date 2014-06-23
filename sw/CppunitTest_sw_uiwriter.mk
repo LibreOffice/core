@@ -21,6 +21,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_uiwriter, \
     cppuhelper \
     sal \
     svt \
+	svxcore \
     sw \
     test \
     unotest \

@@ -34,6 +34,7 @@
 #include "frmfmt.hxx"
 #include "dflyobj.hxx"
 #include "dcontact.hxx"
+#include "textboxhelper.hxx"
 #include "frmatr.hxx"
 #include "viewsh.hxx"
 #include "viewimp.hxx"
@@ -939,10 +940,27 @@ void SwDrawView::DeleteMarked()
             }
         }
     }
+
+    // Check what textboxes have to be deleted afterwards.
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
+    std::vector<SwFrmFmt*> aTextBoxesToDelete;
+    for (sal_uInt16 i = 0; i < rMarkList.GetMarkCount(); ++i)
+    {
+        SdrObject *pObject = rMarkList.GetMark(i)->GetMarkedSdrObj();
+        SwDrawContact* pDrawContact = static_cast<SwDrawContact*>(GetUserCall(pObject));
+        SwFrmFmt* pFmt = pDrawContact->GetFmt();
+        if (SwFrmFmt* pTextBox = SwTextBoxHelper::findTextBox(pFmt))
+            aTextBoxesToDelete.push_back(pTextBox);
+    }
+
     if ( pDoc->DeleteSelection( *this ) )
     {
         FmFormView::DeleteMarked();
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
+
+        // Only delete these now: earlier deletion would clear the mark list as well.
+        for (std::vector<SwFrmFmt*>::iterator i = aTextBoxesToDelete.begin(); i != aTextBoxesToDelete.end(); ++i)
+            pDoc->DelLayoutFmt(*i);
     }
     pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     if( pTmpRoot )

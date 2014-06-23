@@ -12,6 +12,9 @@
 #include <crsskip.hxx>
 #include <shellio.hxx>
 #include <expfld.hxx>
+#include <drawdoc.hxx>
+
+#include <svx/svdpage.hxx>
 
 #include "UndoManager.hxx"
 
@@ -32,6 +35,7 @@ public:
     void testFdo75110();
     void testFdo75898();
     void testFdo74981();
+    void testShapeTextboxDelete();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -43,6 +47,7 @@ public:
     CPPUNIT_TEST(testFdo75110);
     CPPUNIT_TEST(testFdo75898);
     CPPUNIT_TEST(testFdo74981);
+    CPPUNIT_TEST(testShapeTextboxDelete);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -269,6 +274,23 @@ void SwUiWriterTest::testFdo74981()
     aIdx--;
     pTxtNode = aIdx.GetNode().GetTxtNode();
     CPPUNIT_ASSERT(!pTxtNode->HasHints());
+}
+
+void SwUiWriterTest::testShapeTextboxDelete()
+{
+    SwDoc* pDoc = createDoc("shape-textbox-delete.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SdrPage* pPage = pDoc->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    SdrObject* pObject = pPage->GetObj(0);
+    pWrtShell->SelectObj(Point(), 0, pObject);
+    sal_Int32 nActual = pPage->GetObjCount();
+    // Two objects on the draw page: the shape and its textbox.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nActual);
+
+    pWrtShell->DelSelectedObj();
+    nActual = pPage->GetObjCount();
+    // Both (not only the shape) should be removed by now (the textbox wasn't removed, so this was 1).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nActual);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
