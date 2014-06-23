@@ -113,6 +113,22 @@
                 <property name="position">5</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkButton" id="open">
+                <property name="label">gtk-open</property>
+                <property name="use_action_appearance">False</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="no_show_all">True</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -1227,6 +1243,7 @@
       <action-widget response="0">nextPage1Button</action-widget>
       <action-widget response="0">nextPage2Button</action-widget>
       <action-widget response="0">finishButton</action-widget>
+      <action-widget response="0">open</action-widget>
     </action-widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
@@ -1249,5 +1266,4 @@
       <widget name="page4Frame"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1"/>
 </interface>

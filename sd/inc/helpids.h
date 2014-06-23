@@ -24,12 +24,6 @@
 #define HID_SDGRAPHICVIEWSHELL                                  "SD_HID_SDGRAPHICVIEWSHELL"
 #define HID_SDOUTLINEVIEWSHELL                                  "SD_HID_SDOUTLINEVIEWSHELL"
 #define HID_SD_OPTIONS_SNAP                                     "SD_HID_SD_OPTIONS_SNAP"
-#define HID_SD_AUTOPILOT_PAGE1                                  "SD_HID_SD_AUTOPILOT_PAGE1"
-#define HID_SD_AUTOPILOT_PAGE2                                  "SD_HID_SD_AUTOPILOT_PAGE2"
-#define HID_SD_AUTOPILOT_PAGE3                                  "SD_HID_SD_AUTOPILOT_PAGE3"
-#define HID_SD_AUTOPILOT_PAGE4                                  "SD_HID_SD_AUTOPILOT_PAGE4"
-#define HID_SD_AUTOPILOT_PAGE5                                  "SD_HID_SD_AUTOPILOT_PAGE5"
-#define HID_SD_AUTOPILOT_PAGE6                                  "SD_HID_SD_AUTOPILOT_PAGE6"
 #define HID_SD_CBX_ONLYSELECTED                                 "SD_HID_SD_CBX_ONLYSELECTED"
 #define HID_SD_BTN_FILTERDIALOG                                 "SD_HID_SD_BTN_FILTERDIALOG"
 #define HID_SD_BTN_PAGE                                         "SD_HID_SD_BTN_PAGE"
@@ -86,11 +80,6 @@
 #define HID_SD_CHGFOIL_NAME                                     "SD_HID_SD_CHGFOIL_NAME"
 
 #define HID_FM_CTL_SELECTION                                    "SD_HID_FM_CTL_SELECTION"
-
-#define HID_SD_AUTOPILOT_REGION                                 "SD_HID_SD_AUTOPILOT_REGION"
-#define HID_SD_AUTOPILOT_TEMPLATES                              "SD_HID_SD_AUTOPILOT_TEMPLATES"
-#define HID_SD_AUTOPILOT_OPEN                                   "SD_HID_SD_AUTOPILOT_OPEN"
-#define HID_SD_AUTOPILOT_PAGETEMPLATES                          "SD_HID_SD_AUTOPILOT_PAGETEMPLATES"
 
 #define HID_SD_TABBAR_PAGES                                     "SD_HID_SD_TABBAR_PAGES"
 #define HID_SD_TABBAR_LAYERS                                    "SD_HID_SD_TABBAR_LAYERS"
