@@ -132,7 +132,8 @@ private:
     const ResourceType &
     getResourceType( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
-                     const boost::scoped_ptr< DAVResourceAccess > & rResAccess )
+                     const boost::scoped_ptr< DAVResourceAccess > & rResAccess,
+                     bool * networkAccessAllowed = 0 )
         throw ( ::com::sun::star::uno::Exception );
 
     // Command "open"
