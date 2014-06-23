@@ -915,6 +915,12 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     // copy content
     pRet->Paste( *this );
 
+    if ( bCallInitNew ) {
+        // delete leading page / initial content from target document
+        SwNodeIndex aDeleteIdx( pRet->GetNodes().GetEndOfExtras(), 2 );
+        pRet->GetNodes().Delete( aDeleteIdx, 1 );
+    }
+
     // remove the temporary shell if it is there as it was done before
     pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
 
@@ -926,12 +932,14 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 // copy document content - code from SwFEShell::Paste( SwDoc* )
 void SwDoc::Paste( const SwDoc& rSource )
 {
-    // this has to be empty const sal_uInt16 nStartPageNumber = GetPhyPageNum();
-    // until the end of the NodesArray
-    SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 2 );
-    SwPaM aCpyPam( aSourceIdx ); //DocStart
-    SwNodeIndex aTargetIdx( GetNodes().GetEndOfExtras(), 2 );
-    SwPaM aInsertPam( aTargetIdx ); //replaces PCURCRSR from SwFEShell::Paste()
+    // GetEndOfExtras + 1 = StartOfContent == no content node!
+    // this ensures, that we have at least two nodes in the SwPaM.
+    // @see IDocumentContentOperations::CopyRange
+    SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 1 );
+    SwPaM aCpyPam( aSourceIdx );
+
+    SwNodeIndex aTargetIdx( GetNodes().GetEndOfContent() );
+    SwPaM aInsertPam( aTargetIdx );
 
     aCpyPam.SetMark();
     aCpyPam.Move( fnMoveForward, fnGoDoc );
