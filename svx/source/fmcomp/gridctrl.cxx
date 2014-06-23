@@ -40,6 +40,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/menu.hxx>
@@ -3140,6 +3141,9 @@ bool DbGridControl::SaveRow()
     catch(SQLException&)
     {
         EndCursorAction();
+        Any aError = cppu::getCaughtException();
+        if ( aError.hasValue() )
+            displayException( aError );
         m_bUpdating = false;
         return false;
     }
