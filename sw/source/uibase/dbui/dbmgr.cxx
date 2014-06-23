@@ -1004,17 +1004,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             Application::Reschedule();
 
                         // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
-                        SfxObjectShellLock xWorkDocSh;
                         // copy the source document
-                        if( 1 == nDocNo && (bAsSingleFile || rMergeDescriptor.bCreateSingleFile) )
-                        {
-                            uno::Reference< util::XCloneable > xClone( pSourceDocSh->GetModel(), uno::UNO_QUERY);
-                            uno::Reference< lang::XUnoTunnel > xWorkDocShell( xClone->createClone(), uno::UNO_QUERY);
-                            SwXTextDocument* pWorkModel = reinterpret_cast<SwXTextDocument*>(xWorkDocShell->getSomething(SwXTextDocument::getUnoTunnelId()));
-                            xWorkDocSh = pWorkModel->GetDocShell();
-                        }
-                        else
-                            xWorkDocSh = pSourceDocSh->GetDoc()->CreateCopy( true );
+                        SfxObjectShellLock xWorkDocSh = pSourceDocSh->GetDoc()->CreateCopy( true );
 
                         {
                             //create a view frame for the document
@@ -2801,18 +2792,7 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
             // copy the source document
             // the copy will be closed later, but it is more safe to use SfxObjectShellLock here
-            SfxObjectShellLock xWorkDocSh;
-            if(nDocNo == 1 )
-            {
-                uno::Reference< util::XCloneable > xClone( rSourceView.GetDocShell()->GetModel(), uno::UNO_QUERY);
-                uno::Reference< lang::XUnoTunnel > xWorkDocShell( xClone->createClone(), uno::UNO_QUERY);
-                SwXTextDocument* pWorkModel = reinterpret_cast<SwXTextDocument*>(xWorkDocShell->getSomething(SwXTextDocument::getUnoTunnelId()));
-                xWorkDocSh = pWorkModel->GetDocShell();
-            }
-            else
-            {
-                xWorkDocSh = rSourceView.GetDocShell()->GetDoc()->CreateCopy(true);
-            }
+            SfxObjectShellLock xWorkDocSh = rSourceView.GetDocShell()->GetDoc()->CreateCopy(true);
 #ifdef DBG_UTIL
             if ( nDocNo <= MAX_DOC_DUMP )
                 lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
