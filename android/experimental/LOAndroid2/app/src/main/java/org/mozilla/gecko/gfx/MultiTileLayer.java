@@ -38,30 +38,26 @@
 
 package org.mozilla.gecko.gfx;
 
-import org.mozilla.gecko.gfx.CairoImage;
-import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.SingleTileLayer;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.util.Log;
+
 import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
 /**
  * Encapsulates the logic needed to draw a layer made of multiple tiles.
- *
+ * <p/>
  * TODO: Support repeating.
  */
 public class MultiTileLayer extends Layer {
     private static final String LOGTAG = "GeckoMultiTileLayer";
 
     private final CairoImage mImage;
+    private final ArrayList<SubTile> mTiles;
     private IntSize mTileSize;
     private IntSize mBufferSize;
-    private final ArrayList<SubTile> mTiles;
 
     public MultiTileLayer(CairoImage image, IntSize tileSize) {
         super();
@@ -181,7 +177,7 @@ public class MultiTileLayer extends Layer {
                 if (!RectF.intersects(layerBounds, context.viewport)) {
                     if (firstDirtyTile == null)
                         firstDirtyTile = layer;
-                    dirtyTiles ++;
+                    dirtyTiles++;
                     invalid = true;
                 } else {
                     // This tile intersects with the screen and is dirty,
@@ -207,7 +203,7 @@ public class MultiTileLayer extends Layer {
         if (!screenUpdateDone && firstDirtyTile != null) {
             firstDirtyTile.setSkipTextureUpdate(false);
             firstDirtyTile.performUpdates(context);
-            dirtyTiles --;
+            dirtyTiles--;
         }
 
         return (dirtyTiles == 0);
@@ -217,7 +213,7 @@ public class MultiTileLayer extends Layer {
         IntSize size = getSize();
         for (SubTile layer : mTiles) {
             if (!inTransaction) {
-                layer.beginTransaction(null);
+                layer.beginTransaction();
             }
 
             if (origin != null) {
@@ -246,11 +242,11 @@ public class MultiTileLayer extends Layer {
     }
 
     @Override
-    public void beginTransaction(LayerView aView) {
-        super.beginTransaction(aView);
+    public void beginTransaction() {
+        super.beginTransaction();
 
         for (SubTile layer : mTiles) {
-            layer.beginTransaction(aView);
+            layer.beginTransaction();
         }
     }
 
