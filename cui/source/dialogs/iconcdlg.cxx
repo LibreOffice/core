@@ -201,10 +201,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvtIconChoiceCtrl(Window *p
 
 IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
                                      const OUString& rUIXMLDescription,
-                                     const EIconChoicePos ePos,
                                      const SfxItemSet *pItemSet )
 :   ModalDialog         ( pParent, rID, rUIXMLDescription ),
-    meChoicePos     ( ePos ),
     mnCurrentPageId ( USHRT_MAX ),
 
     pSet            ( pItemSet ),
@@ -226,7 +224,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
     get(m_pTabContainer, "tab");
 
     m_pIconCtrl->SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
-    SetCtrlPos ( meChoicePos );
+    SetCtrlPos();
     m_pIconCtrl->SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
     m_pIconCtrl->Show();
     m_pIconCtrl->SetChoiceWithCursor ( true );
@@ -356,38 +354,14 @@ void IconChoiceDialog::Paint( const Rectangle& rRect )
     }
 }
 
-EIconChoicePos IconChoiceDialog::SetCtrlPos( const EIconChoicePos& rPos )
+void IconChoiceDialog::SetCtrlPos()
 {
     WinBits aWinBits = m_pIconCtrl->GetStyle ();
-
-    switch ( meChoicePos )
-    {
-        case PosLeft :
-            aWinBits &= ~WB_ALIGN_TOP & ~WB_NOVSCROLL;
-            aWinBits |= WB_ALIGN_LEFT | WB_NOHSCROLL;
-            break;
-        case PosRight :
-            aWinBits &= ~WB_ALIGN_TOP & ~WB_NOVSCROLL;
-            aWinBits |= WB_ALIGN_LEFT | WB_NOHSCROLL;
-            break;
-        case PosTop :
-            aWinBits &= ~WB_ALIGN_LEFT & ~WB_NOHSCROLL;
-            aWinBits |= WB_ALIGN_TOP | WB_NOVSCROLL;
-            break;
-        case PosBottom :
-            aWinBits &= ~WB_ALIGN_LEFT & ~WB_NOHSCROLL;
-            aWinBits |= WB_ALIGN_TOP | WB_NOVSCROLL;
-            break;
-    }
+    aWinBits &= ~WB_ALIGN_TOP & ~WB_NOVSCROLL;
+    aWinBits |= WB_ALIGN_LEFT | WB_NOHSCROLL;
     m_pIconCtrl->SetStyle ( aWinBits );
 
     SetPosSizeCtrls();
-
-
-    EIconChoicePos eOldPos = meChoicePos;
-    meChoicePos = rPos;
-
-    return eOldPos;
 }
 
 /**********************************************************************
@@ -433,7 +407,6 @@ void IconChoiceDialog::ShowPage( sal_uInt16 nId )
 \**********************************************************************/
 
 #define ICONCTRL_WIDTH_PIXEL       110
-#define ICONCTRL_HEIGHT_PIXEL       75
 
 void IconChoiceDialog::Resize()
 {
@@ -464,37 +437,10 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
 
     SvtTabAppearanceCfg aCfg;
     const long nDefaultWidth = (aCfg.GetScaleFactor() * ICONCTRL_WIDTH_PIXEL) / 100;
-    const long nDefaultHeight = (aCfg.GetScaleFactor() * ICONCTRL_HEIGHT_PIXEL) / 100;
 
-    Size aNewIconCtrlSize  ( nDefaultWidth,
-                             aOutSize.Height()-(2*aCtrlOffset.X()) );
-    Point aIconCtrlPos;
-    switch ( meChoicePos )
-    {
-        case PosLeft :
-            aIconCtrlPos = aCtrlOffset;
-            aNewIconCtrlSize = Size ( nDefaultWidth,
-                                      aOutSize.Height()-(2*aCtrlOffset.X()) );
-            break;
-        case PosRight :
-            aIconCtrlPos = Point ( aOutSize.Width() - nDefaultWidth -
-                                   aCtrlOffset.X(), aCtrlOffset.X() );
-            aNewIconCtrlSize = Size ( nDefaultWidth,
-                                      aOutSize.Height()-(2*aCtrlOffset.X()) );
-            break;
-        case PosTop :
-            aIconCtrlPos = aCtrlOffset;
-            aNewIconCtrlSize = Size ( aOutSize.Width()-(2*aCtrlOffset.X()),
-                                      nDefaultHeight );
-            break;
-        case PosBottom :
-            aIconCtrlPos = Point ( aCtrlOffset.X(), aOutSize.Height() -
-                                   aResetButtonSize.Height() - (2*aCtrlOffset.X()) -
-                                   nDefaultHeight );
-            aNewIconCtrlSize = Size ( aOutSize.Width()-(2*aCtrlOffset.X()),
-                                      nDefaultHeight );
-            break;
-    }
+    Point aIconCtrlPos(aCtrlOffset);
+    Size aNewIconCtrlSize( nDefaultWidth,
+                              aOutSize.Height()-(2*aCtrlOffset.X()) );
     m_pIconCtrl->SetPosSizePixel ( aIconCtrlPos, aNewIconCtrlSize );
     m_pIconCtrl->ArrangeIcons();
 
@@ -505,39 +451,12 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
     {
         IconChoicePageData* pData = maPageList[ i ];
 
-        Point aNewPagePos;
-        Size aNewPageSize;
-        switch ( meChoicePos )
-        {
-            case PosLeft :
-                aNewPagePos = Point ( aNewIconCtrlSize.Width() + (2*CTRLS_OFFSET),
-                                      CTRLS_OFFSET );
-                aNewPageSize = Size ( aOutSize.Width() - aNewIconCtrlSize.Width() -
-                                      (3*CTRLS_OFFSET),
-                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                                      (3*CTRLS_OFFSET) );
-                break;
-            case PosRight :
-                aNewPagePos = aCtrlOffset;
-                aNewPageSize = Size ( aOutSize.Width() - aNewIconCtrlSize.Width() -
-                                      (3*aCtrlOffset.X()),
-                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                                      (3*aCtrlOffset.X()) );
-                break;
-            case PosTop :
-                aNewPagePos = Point ( aCtrlOffset.X(), aNewIconCtrlSize.Height() +
-                                      (2*aCtrlOffset.X()) );
-                aNewPageSize = Size ( aOutSize.Width() - (2*aCtrlOffset.X()),
-                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                                      aNewIconCtrlSize.Height() - (4*aCtrlOffset.X()) );
-                break;
-            case PosBottom :
-                aNewPagePos = aCtrlOffset;
-                aNewPageSize = Size ( aOutSize.Width() - (2*aCtrlOffset.X()),
-                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                                      aNewIconCtrlSize.Height() - (4*aCtrlOffset.X()) );
-                break;
-        }
+        Point aNewPagePos( aNewIconCtrlSize.Width() + (2*CTRLS_OFFSET),
+                              CTRLS_OFFSET );
+        Size aNewPageSize( aOutSize.Width() - aNewIconCtrlSize.Width() -
+                              (3*CTRLS_OFFSET),
+                              aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
+                              (3*CTRLS_OFFSET) );
 
         if ( pData->pPage )
             pData->pPage->SetPosSizePixel ( aNewPagePos, aNewPageSize );
@@ -545,12 +464,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
 
 
     // position the buttons
-
-    sal_uLong nXOffset=0;
-    if ( meChoicePos == PosRight )
-        nXOffset = aNewIconCtrlSize.Width()+(2*aCtrlOffset.X());
-
-    m_pResetBtn->SetPosSizePixel ( Point( aOutSize.Width() - nXOffset -
+    m_pResetBtn->SetPosSizePixel ( Point( aOutSize.Width() -
                                        aResetButtonSize.Width()-aCtrlOffset.X(),
                                        aOutSize.Height()-aResetButtonSize.Height()-
                                        aCtrlOffset.X() ),
@@ -559,7 +473,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
     Size aHelpButtonSize ( bInit ? aDefaultButtonSize :
                                    m_pHelpBtn->GetSizePixel () );
     m_pHelpBtn->SetPosSizePixel ( Point( aOutSize.Width()-aResetButtonSize.Width()-
-                                      aHelpButtonSize.Width()- nXOffset -
+                                      aHelpButtonSize.Width() -
                                       (2*aCtrlOffset.X()),
                                       aOutSize.Height()-aHelpButtonSize.Height()-
                                       aCtrlOffset.X() ),
@@ -569,7 +483,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
                                      m_pCancelBtn->GetSizePixel () );
     m_pCancelBtn->SetPosSizePixel ( Point( aOutSize.Width()-aCancelButtonSize.Width()-
                                         aResetButtonSize.Width()-aHelpButtonSize.Width()-
-                                        (3*aCtrlOffset.X()) -  nXOffset,
+                                        (3*aCtrlOffset.X()),
                                         aOutSize.Height()-aCancelButtonSize.Height()-
                                         aCtrlOffset.X() ),
                                 aCancelButtonSize );
@@ -577,7 +491,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
     Size aOKButtonSize ( bInit ? aDefaultButtonSize : m_pOKBtn->GetSizePixel () );
     m_pOKBtn->SetPosSizePixel ( Point( aOutSize.Width()-aOKButtonSize.Width()-
                                     aCancelButtonSize.Width()-aResetButtonSize.Width()-
-                                    aHelpButtonSize.Width()-(4*aCtrlOffset.X())-  nXOffset,
+                                    aHelpButtonSize.Width()-(4*aCtrlOffset.X()),
                                     aOutSize.Height()-aOKButtonSize.Height()-aCtrlOffset.X() ),
                             aOKButtonSize );
 
@@ -594,39 +508,12 @@ void IconChoiceDialog::SetPosSizePages ( sal_uInt16 nId )
         Size aOutSize ( GetOutputSizePixel() );
         Size aIconCtrlSize ( m_pIconCtrl->GetSizePixel() );
 
-        Point aNewPagePos;
-        Size aNewPageSize;
-        switch ( meChoicePos )
-        {
-            case PosLeft :
-                aNewPagePos = Point ( aIconCtrlSize.Width() + (2*aCtrlOffset.X()),
-                                      aCtrlOffset.X() );
-                aNewPageSize = Size ( aOutSize.Width() - m_pIconCtrl->GetSizePixel().Width() -
-                                      (3*aCtrlOffset.X()),
-                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                                      (3*aCtrlOffset.X()) );
-                break;
-            case PosRight :
-                aNewPagePos = aCtrlOffset;
-                aNewPageSize = Size ( aOutSize.Width() - m_pIconCtrl->GetSizePixel().Width() -
-                                      (3*aCtrlOffset.X()),
-                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                                      (3*aCtrlOffset.X()) );
-                break;
-            case PosTop :
-                aNewPagePos = Point ( aCtrlOffset.X(), aIconCtrlSize.Height() +
-                                      (2*aCtrlOffset.X()) );
-                aNewPageSize = Size ( aOutSize.Width() - (2*aCtrlOffset.X()),
-                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                                      m_pIconCtrl->GetSizePixel().Height() - (4*aCtrlOffset.X()) );
-                break;
-            case PosBottom :
-                aNewPagePos = aCtrlOffset;
-                aNewPageSize = Size ( aOutSize.Width() - (2*aCtrlOffset.X()),
-                                      aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                                      m_pIconCtrl->GetSizePixel().Height() - (4*aCtrlOffset.X()) );
-                break;
-        }
+        Point aNewPagePos( aIconCtrlSize.Width() + (2*aCtrlOffset.X()),
+                              aCtrlOffset.X() );
+        Size aNewPageSize( aOutSize.Width() - m_pIconCtrl->GetSizePixel().Width() -
+                              (3*aCtrlOffset.X()),
+                              aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
+                              (3*aCtrlOffset.X()) );
 
         pData->pPage->SetPosSizePixel ( aNewPagePos, aNewPageSize );
     }

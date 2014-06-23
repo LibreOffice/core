@@ -44,9 +44,6 @@ class IconChoicePage;
 typedef IconChoicePage* (*CreatePage)(Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet &rAttrSet);
 typedef const sal_uInt16*         (*GetPageRanges)(); // gives international Which-value
 
-// position of iconchoicectrl
-enum EIconChoicePos { PosLeft, PosRight, PosTop, PosBottom };
-
 /// Data-structure for pages in dialog
 struct IconChoicePageData
 {
@@ -129,7 +126,6 @@ class IconChoiceDialog : public ModalDialog
 private :
     friend class IconChoicePage;
 
-    EIconChoicePos          meChoicePos;
     ::std::vector< IconChoicePageData* > maPageList;
 
     SvtIconChoiceCtrl       *m_pIconCtrl;
@@ -191,7 +187,7 @@ public :
 
     // the IconChoiceCtrl's could also be set in the Ctor
     IconChoiceDialog ( Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
-                       const EIconChoicePos ePos = PosLeft, const SfxItemSet * pItemSet = 0 );
+                       const SfxItemSet * pItemSet = 0 );
     virtual ~IconChoiceDialog ();
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
@@ -225,7 +221,7 @@ public :
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
 
-    EIconChoicePos      SetCtrlPos   ( const EIconChoicePos& rPos );
+    void                SetCtrlPos();
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_ICONCDLG_HXX
