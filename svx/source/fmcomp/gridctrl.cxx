@@ -3141,7 +3141,7 @@ bool DbGridControl::SaveRow()
     catch(SQLException&)
     {
         EndCursorAction();
-        Any aError = ::cppu::getCaughtException();
+        Any aError = cppu::getCaughtException();
         if ( aError.hasValue() )
             displayException( aError );
         m_bUpdating = false;
