@@ -978,6 +978,10 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     {
         // it could happen that DoInitNew creates model, that increases the refcount of the object
         pRetShell->DoInitNew();
+
+        // delete initial content from target document
+        SwNodeIndex aTargetIdx( pRet->GetNodes().GetEndOfExtras(), 2 );
+        pRet->GetNodes().Delete( aTargetIdx, 1 );
     }
 
     pRet->acquire();
@@ -988,7 +992,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 
     pRet->ReplaceStyles(*this);
 
-    // copy content
+    // copy source content
     pRet->Paste( *this );
 
     // remove the temporary shell if it is there as it was done before
