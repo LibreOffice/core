@@ -77,17 +77,6 @@ using namespace ::sd;
 using ::std::vector;
 
 
-const char* PageHelpIds[] =
-{
-    HID_SD_AUTOPILOT_PAGE1,
-    HID_SD_AUTOPILOT_PAGE2,
-    HID_SD_AUTOPILOT_PAGE3,
-    HID_SD_AUTOPILOT_PAGE4,
-    HID_SD_AUTOPILOT_PAGE5
-};
-
-
-
 class PasswordEntry
 {
 public:
@@ -260,6 +249,9 @@ public:
     DECL_LINK( SelectEffectHdl, void* );
     DECL_LINK( OpenButtonHdl, Button * );
 
+    OUString            maCreateStr;
+    OUString            maOpenStr;
+
     // Common
     Assistent           maAssistentFunc;
     CheckBox*           mpPreviewFlag;
@@ -353,6 +345,8 @@ AssistentDlgImpl::AssistentDlgImpl( ::Window* pWindow, const Link& rFinishLink, 
     assDlg->get(mpStartWithFlag, "startWithCheckbutton");
     assDlg->get(mpLastPageButton, "lastPageButton");
     assDlg->get(mpFinishButton, "finishButton");
+    maCreateStr = mpFinishButton->GetText();
+    maOpenStr = assDlg->get<PushButton>("open")->GetText();
     assDlg->get(mpPreview, "previewControl");
     assDlg->get(mpPage1235, "page1235Box");
     mpNextPageButton = new NextButton( pWindow );
@@ -894,9 +888,9 @@ void AssistentDlgImpl::SetStartType( StartType eType )
     mpPage1OpenPB->Show(eType == ST_OPEN);
 
     if (eType == ST_OPEN)
-        mpFinishButton->SetText("~Open");
+        mpFinishButton->SetText(maOpenStr);
     else
-        mpFinishButton->SetText("~Create");
+        mpFinishButton->SetText(maCreateStr);
 }
 
 StartType AssistentDlgImpl::GetStartType()
@@ -1035,13 +1029,6 @@ void AssistentDlgImpl::ChangePage()
 {
     mpNextPageButton->Enable(!maAssistentFunc.IsLastPage());
     mpLastPageButton->Enable(!maAssistentFunc.IsFirstPage());
-
-    sal_uInt16 nPage = (sal_uInt16)maAssistentFunc.GetCurrentPage();
-
-    if( mpWindow )
-    {
-        mpWindow->SetHelpId( PageHelpIds[nPage-1]);
-    }
 
     UpdatePage();
 
@@ -1818,7 +1805,6 @@ AssistentDlg::~AssistentDlg()
 {
     delete mpImpl;
 }
-
 
 SfxObjectShellLock AssistentDlg::GetDocument()
 {
