@@ -44,7 +44,7 @@ class SdrText;
 class SVX_DLLPUBLIC SvxTextEditSource : public SvxEditSource, public SvxViewForwarder
 {
 public:
-    SvxTextEditSource( SdrObject* pObj, SdrText* pText, ::com::sun::star::uno::XInterface* pOwner);
+    SvxTextEditSource( SdrObject* pObj, SdrText* pText );
 
     /** Since the views don't broadcast their dying, make sure that
         this object gets destroyed if the view becomes invalid

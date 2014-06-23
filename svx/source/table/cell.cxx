@@ -420,7 +420,7 @@ void Cell::SetModel(SdrModel* pNewModel)
         }
         else
         {
-            SetEditSource( new SvxTextEditSource( &GetObject(), this, static_cast< XWeak * >( this ) ) );
+            SetEditSource( new SvxTextEditSource( &GetObject(), this ) );
         }
 
         SetStyleSheet( 0, true );
