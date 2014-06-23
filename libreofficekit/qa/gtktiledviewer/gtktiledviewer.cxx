@@ -21,6 +21,52 @@ static int help()
     return 1;
 }
 
+static GtkWidget* pDocView;
+
+const float fZooms[] = { 0.25, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 5.0 };
+
+void changeZoom( GtkWidget* pButton, gpointer /* pItem */ )
+{
+    const char *sName = gtk_tool_button_get_stock_id( GTK_TOOL_BUTTON(pButton) );
+
+    float fZoom = 0;
+    const float fCurrentZoom = lok_docview_get_zoom( LOK_DOCVIEW(pDocView) );
+    if ( strcmp(sName, "gtk-zoom-in") == 0)
+    {
+        for ( unsigned int i = 0; i < sizeof( fZooms ) / sizeof( fZooms[0] ); i++ )
+        {
+            if ( fCurrentZoom < fZooms[i] )
+            {
+                fZoom = fZooms[i];
+                break;
+            }
+        }
+    }
+    else if ( strcmp(sName, "gtk-zoom-100") == 0)
+    {
+        fZoom = 1;
+    }
+    else if ( strcmp(sName, "gtk-zoom-fit") == 0)
+    {
+        // TODO -- will need access to lokdocview internals?
+    }
+    else if ( strcmp(sName, "gtk-zoom-out") == 0)
+    {
+        for ( unsigned int i = 0; i < sizeof( fZooms ) / sizeof( fZooms[0] ); i++ )
+        {
+            if ( fCurrentZoom > fZooms[i] )
+            {
+                fZoom = fZooms[i];
+            }
+        }
+    }
+
+    if ( fZoom != 0 )
+    {
+        lok_docview_set_zoom( LOK_DOCVIEW(pDocView), fZoom );
+    }
+}
+
 int main( int argc, char* argv[] )
 {
     if( argc < 2 ||
@@ -42,14 +88,38 @@ int main( int argc, char* argv[] )
     gtk_window_set_default_size(GTK_WINDOW(pWindow), 800, 600);
     g_signal_connect( pWindow, "destroy", G_CALLBACK(gtk_main_quit), NULL );
 
+    GtkWidget* pVBox = gtk_vbox_new( FALSE, 0 );
+    gtk_container_add( GTK_CONTAINER(pWindow), pVBox );
 
-    GtkWidget* pDocView = lok_docview_new( pOffice );
-    gtk_container_add( GTK_CONTAINER(pWindow), pDocView );
+    // Toolbar
+    GtkWidget* pToolbar = gtk_toolbar_new();
+    gtk_toolbar_set_style( GTK_TOOLBAR(pToolbar), GTK_TOOLBAR_ICONS );
+
+    GtkToolItem* pZoomIn = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_IN );
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomIn, 0);
+    g_signal_connect( G_OBJECT(pZoomIn), "clicked", G_CALLBACK(changeZoom), NULL );
+
+    GtkToolItem* pZoom1 = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_100 );
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoom1, -1);
+    g_signal_connect( G_OBJECT(pZoom1), "clicked", G_CALLBACK(changeZoom), NULL );
+
+    GtkToolItem* pZoomFit = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_FIT );
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomFit, -1);
+    g_signal_connect( G_OBJECT(pZoomFit), "clicked", G_CALLBACK(changeZoom), NULL );
+
+    GtkToolItem* pZoomOut = gtk_tool_button_new_from_stock( GTK_STOCK_ZOOM_OUT );
+    gtk_toolbar_insert( GTK_TOOLBAR(pToolbar), pZoomOut, -1);
+    g_signal_connect( G_OBJECT(pZoomOut), "clicked", G_CALLBACK(changeZoom), NULL );
+
+    gtk_box_pack_start( GTK_BOX(pVBox), pToolbar, FALSE, FALSE, 0 ); // Adds to top.
+
+    // Docview
+    pDocView = lok_docview_new( pOffice );
+    gtk_container_add( GTK_CONTAINER(pVBox), pDocView );
+
+    gtk_widget_show_all( pWindow );
 
     lok_docview_open_document( LOK_DOCVIEW(pDocView), argv[2] );
-
-    gtk_widget_show( pDocView );
-    gtk_widget_show( pWindow );
 
     gtk_main();
 
