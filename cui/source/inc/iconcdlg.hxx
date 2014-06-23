@@ -217,7 +217,7 @@ public :
 
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
 
-    void                SetCtrlPos();
+    void                SetCtrlStyle();
 };
 
 #endif // INCLUDED_CUI_SOURCE_INC_ICONCDLG_HXX
