@@ -1343,7 +1343,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             }
             else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
-                if ( nPara || IsFixedCellHeight() || pLine->GetStartPortion() ) // Not the very first line
+                if ( nPara || pLine->GetStartPortion() ) // Not the very first line
                 {
                     // There are documents with PropLineSpace 0, why?
                     // (cmc: re above question :-) such documents can be seen by importing a .ppt
@@ -1673,7 +1673,7 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
         else if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
         {
             sal_Int32 nPara = GetParaPortions().GetPos( pParaPortion );
-            if ( nPara || IsFixedCellHeight() || pTmpLine->GetStartPortion() ) // Not the very first line
+            if ( nPara || pTmpLine->GetStartPortion() ) // Not the very first line
             {
                 // There are documents with PropLineSpace 0, why?
                 // (cmc: re above question :-) such documents can be seen by importing a .ppt
