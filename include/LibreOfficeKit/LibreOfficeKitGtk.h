@@ -37,6 +37,8 @@ struct _LOKDocView
     GtkWidget* pCanvas;
     GdkPixbuf* pPixBuf;
 
+    float fZoom;
+
     LibreOfficeKit* pOffice;
     LibreOfficeKitDocument* pDocument;
 };
@@ -52,6 +54,9 @@ guint           lok_docview_get_type        (void);
 GtkWidget*      lok_docview_new             ( LibreOfficeKit* pOffice );
 gboolean        lok_docview_open_document   (LOKDocView* pDocView,
                                              char* pPath);
+void            lok_docview_set_zoom        (LOKDocView* pDocView,
+                                             float fZoom);
+float           lok_docview_get_zoom        (LOKDocView* pDocView);
 
 #ifdef __cplusplus
 }
