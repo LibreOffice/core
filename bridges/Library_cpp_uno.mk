@@ -63,6 +63,9 @@ else ifeq ($(OS),MACOSX)
 bridges_SELECTED_BRIDGE := gcc3_macosx_intel
 bridge_asm_objects := call
 bridge_exception_objects := cpp2uno except uno2cpp
+else ifeq ($(OS),SOLARIS)
+bridges_SELECTED_BRIDGE := gcc3_solaris_intel
+bridge_exception_objects := cpp2uno except uno2cpp
 else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_intel
 bridge_exception_objects := cpp2uno dllinit uno2cpp
@@ -144,11 +147,6 @@ else ifeq ($(OS)-$(CPUNAME),MACOSX-POWERPC)
 bridges_SELECTED_BRIDGE := gcc3_macosx_powerpc
 bridge_noopt_objects := uno2cpp
 bridge_exception_objects := cpp2uno except
-
-else ifeq ($(OS)-$(CPUNAME),SOLARIS-INTEL)
-
-bridges_SELECTED_BRIDGE := gcc3_solaris_intel
-bridge_exception_objects := cpp2uno except uno2cpp
 
 else ifeq ($(OS)-$(CPUNAME),SOLARIS-SPARC)
 
