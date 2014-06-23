@@ -250,7 +250,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const OString& rID,
     m_pHelpBtn->Show();
     m_pResetBtn->Show();
 
-    SetPosSizeCtrls ( true );
+    m_pIconCtrl->ArrangeIcons();
 }
 
 
@@ -361,7 +361,7 @@ void IconChoiceDialog::SetCtrlPos()
     aWinBits |= WB_ALIGN_LEFT | WB_NOHSCROLL;
     m_pIconCtrl->SetStyle ( aWinBits );
 
-    SetPosSizeCtrls();
+    m_pIconCtrl->ArrangeIcons();
 }
 
 /**********************************************************************
@@ -405,97 +405,14 @@ void IconChoiceDialog::ShowPage( sal_uInt16 nId )
 | Resize Dialog
 |
 \**********************************************************************/
-
-#define ICONCTRL_WIDTH_PIXEL       110
-
 void IconChoiceDialog::Resize()
 {
     Dialog::Resize ();
 
     if ( IsReallyVisible() )
     {
-        SetPosSizeCtrls ();
+        m_pIconCtrl->ArrangeIcons();
     }
-}
-
-void IconChoiceDialog::SetPosSizeCtrls ( bool bInit )
-{
-    const Point aCtrlOffset ( LogicToPixel( Point( CTRLS_OFFSET, CTRLS_OFFSET ), MAP_APPFONT ) );
-    Size aOutSize ( GetOutputSizePixel() );
-
-
-    // Button-Defaults
-
-    Size aDefaultButtonSize = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
-
-    // Reset-Button
-    Size aResetButtonSize ( bInit ? aDefaultButtonSize :
-                                    m_pResetBtn->GetSizePixel () );
-
-
-    // IconChoiceCtrl resizen & positionieren
-
-    SvtTabAppearanceCfg aCfg;
-    const long nDefaultWidth = (aCfg.GetScaleFactor() * ICONCTRL_WIDTH_PIXEL) / 100;
-
-    Point aIconCtrlPos(aCtrlOffset);
-    Size aNewIconCtrlSize( nDefaultWidth,
-                              aOutSize.Height()-(2*aCtrlOffset.X()) );
-    m_pIconCtrl->SetPosSizePixel ( aIconCtrlPos, aNewIconCtrlSize );
-    m_pIconCtrl->ArrangeIcons();
-
-
-    // resize & position the pages
-
-    for ( size_t i = 0; i < maPageList.size(); i++ )
-    {
-        IconChoicePageData* pData = maPageList[ i ];
-
-        Point aNewPagePos( aNewIconCtrlSize.Width() + (2*CTRLS_OFFSET),
-                              CTRLS_OFFSET );
-        Size aNewPageSize( aOutSize.Width() - aNewIconCtrlSize.Width() -
-                              (3*CTRLS_OFFSET),
-                              aOutSize.Height() - m_pOKBtn->GetSizePixel().Height() -
-                              (3*CTRLS_OFFSET) );
-
-        if ( pData->pPage )
-            pData->pPage->SetPosSizePixel ( aNewPagePos, aNewPageSize );
-    }
-
-
-    // position the buttons
-    m_pResetBtn->SetPosSizePixel ( Point( aOutSize.Width() -
-                                       aResetButtonSize.Width()-aCtrlOffset.X(),
-                                       aOutSize.Height()-aResetButtonSize.Height()-
-                                       aCtrlOffset.X() ),
-                               aResetButtonSize );
-    // Help-Button
-    Size aHelpButtonSize ( bInit ? aDefaultButtonSize :
-                                   m_pHelpBtn->GetSizePixel () );
-    m_pHelpBtn->SetPosSizePixel ( Point( aOutSize.Width()-aResetButtonSize.Width()-
-                                      aHelpButtonSize.Width() -
-                                      (2*aCtrlOffset.X()),
-                                      aOutSize.Height()-aHelpButtonSize.Height()-
-                                      aCtrlOffset.X() ),
-                               aHelpButtonSize );
-    // Cancel-Button
-    Size aCancelButtonSize ( bInit ? aDefaultButtonSize :
-                                     m_pCancelBtn->GetSizePixel () );
-    m_pCancelBtn->SetPosSizePixel ( Point( aOutSize.Width()-aCancelButtonSize.Width()-
-                                        aResetButtonSize.Width()-aHelpButtonSize.Width()-
-                                        (3*aCtrlOffset.X()),
-                                        aOutSize.Height()-aCancelButtonSize.Height()-
-                                        aCtrlOffset.X() ),
-                                aCancelButtonSize );
-    // OK-Button
-    Size aOKButtonSize ( bInit ? aDefaultButtonSize : m_pOKBtn->GetSizePixel () );
-    m_pOKBtn->SetPosSizePixel ( Point( aOutSize.Width()-aOKButtonSize.Width()-
-                                    aCancelButtonSize.Width()-aResetButtonSize.Width()-
-                                    aHelpButtonSize.Width()-(4*aCtrlOffset.X()),
-                                    aOutSize.Height()-aOKButtonSize.Height()-aCtrlOffset.X() ),
-                            aOKButtonSize );
-
-    Invalidate();
 }
 
 void IconChoiceDialog::SetPosSizePages ( sal_uInt16 nId )
