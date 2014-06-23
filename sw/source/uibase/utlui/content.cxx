@@ -251,7 +251,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
                 eType = FLYCNTTYPE_GRF;
                 sTypeToken = "graphic";
             }
-            nMemberCount = pWrtShell->GetFlyCount(eType);
+            nMemberCount = pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
             bEdit = true;
         }
         break;
@@ -548,13 +548,13 @@ void    SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 eType = FLYCNTTYPE_OLE;
             else if(nContentType == CONTENT_TYPE_GRAPHIC)
                 eType = FLYCNTTYPE_GRF;
-            OSL_ENSURE(nMemberCount ==  pWrtShell->GetFlyCount(eType),
+            OSL_ENSURE(nMemberCount ==  pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true),
                     "MemberCount differs");
             Point aNullPt;
-            nMemberCount = pWrtShell->GetFlyCount(eType);
+            nMemberCount = pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
             {
-                const SwFrmFmt* pFrmFmt = pWrtShell->GetFlyNum(i,eType);
+                const SwFrmFmt* pFrmFmt = pWrtShell->GetFlyNum(i,eType,/*bIgnoreTextBoxes=*/true);
                 const OUString sFrmName = pFrmFmt->GetName();
 
                 SwContent* pCnt;
