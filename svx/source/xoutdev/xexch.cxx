@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
 #include "svx/xexch.hxx"
+#include <boost/scoped_ptr.hpp>
 
 
 TYPEINIT1_AUTOFACTORY( XFillExchangeData, SvDataCopyStream );
@@ -92,7 +93,6 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
     DBG_ASSERT( rData.pPool, "XFillExchangeData has no pool" );
 
     SfxItemSet*     pSet = new SfxItemSet ( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
-    SfxPoolItem*    pNewItem;
     sal_uInt32      nItemCount = 0;
     sal_uInt16          nWhich, nItemVersion;
 
@@ -109,12 +109,11 @@ SvStream& ReadXFillExchangeData( SvStream& rIStm, XFillExchangeData& rData )
 
         if( nWhich )
         {
-            pNewItem = rData.pPool->GetDefaultItem( nWhich ).Create( rIStm, nItemVersion );
+            boost::scoped_ptr<SfxPoolItem> pNewItem(rData.pPool->GetDefaultItem( nWhich ).Create( rIStm, nItemVersion ));
 
             if( pNewItem )
             {
                 pSet->Put( *pNewItem );
-                delete pNewItem;
             }
         }
     }

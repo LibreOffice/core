@@ -32,6 +32,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
 
@@ -189,9 +190,9 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
             : DRAWMODE_DEFAULT);
 
         // create processor and draw primitives
-        drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
+        boost::scoped_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor2D(drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
             aVirtualDevice,
-            aNewViewInformation2D);
+            aNewViewInformation2D));
 
         if(pProcessor2D)
         {
@@ -201,7 +202,7 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
             aSequence[1] = aBlackRectanglePrimitive;
 
             pProcessor2D->process(aSequence);
-            delete pProcessor2D;
+            pProcessor2D.reset();
         }
 
         // get result bitmap and scale

@@ -24,6 +24,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <boost/bind.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
@@ -45,15 +46,13 @@ void ExternalToolEdit::HandleCloseEvent(ExternalToolEdit* pData)
     Graphic newGraphic;
 
     //import the temp file image stream into the newGraphic
-    SvStream* pStream = utl::UcbStreamHelper::CreateStream(pData->m_aFileName, STREAM_READ);
+    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(pData->m_aFileName, STREAM_READ));
     if(pStream)
     {
         GraphicConverter::Import(*pStream, newGraphic);
 
         // Now update the Graphic in the shell by re-reading from the newGraphic
         pData->Update( newGraphic );
-
-        delete(pStream);
     }
 }
 
