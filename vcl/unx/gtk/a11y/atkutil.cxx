@@ -204,10 +204,10 @@ void DocumentFocusListener::disposing( const lang::EventObject& aEvent )
 void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObject& aEvent )
     throw( uno::RuntimeException, std::exception )
 {
-    switch( aEvent.EventId )
-    {
-        case accessibility::AccessibleEventId::STATE_CHANGED:
-            try
+    try {
+        switch( aEvent.EventId )
+        {
+            case accessibility::AccessibleEventId::STATE_CHANGED:
             {
                 sal_Int16 nState = accessibility::AccessibleStateType::INVALID;
                 aEvent.NewValue >>= nState;
@@ -215,28 +215,30 @@ void DocumentFocusListener::notifyEvent( const accessibility::AccessibleEventObj
                 if( accessibility::AccessibleStateType::FOCUSED == nState )
                     atk_wrapper_focus_tracker_notify_when_idle( getAccessible(aEvent) );
             }
-            catch (const lang::IndexOutOfBoundsException&)
+            break;
+
+            case accessibility::AccessibleEventId::CHILD:
             {
-                g_warning("Focused object has invalid index in parent");
+                uno::Reference< accessibility::XAccessible > xChild;
+                if( (aEvent.OldValue >>= xChild) && xChild.is() )
+                    detachRecursive(xChild);
+
+                if( (aEvent.NewValue >>= xChild) && xChild.is() )
+                    attachRecursive(xChild);
             }
             break;
 
-        case accessibility::AccessibleEventId::CHILD:
-        {
-            uno::Reference< accessibility::XAccessible > xChild;
-            if( (aEvent.OldValue >>= xChild) && xChild.is() )
-                detachRecursive(xChild);
-
-            if( (aEvent.NewValue >>= xChild) && xChild.is() )
-                attachRecursive(xChild);
-        }
-            break;
-
-        case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
+            case accessibility::AccessibleEventId::INVALIDATE_ALL_CHILDREN:
             g_warning( "Invalidate all children called\n" );
             break;
-        default:
-            break;
+
+            default:
+                break;
+        }
+    }
+    catch( const lang::IndexOutOfBoundsException& e )
+    {
+        g_warning("Focused object has invalid index in parent");
     }
 }
 
