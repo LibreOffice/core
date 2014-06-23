@@ -2655,10 +2655,43 @@ uno::Reference<XResultSet> SwDBManager::createCursor(const OUString& _sDataSourc
     return xResultSet;
 }
 
+#ifdef DBG_UTIL
+
+#define MAX_DOC_DUMP 3
+
+#include <iostream>
+
+static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
+                         const char *name, int no = 0 )
+{
+    boost::scoped_ptr< utl::TempFile > aTempFile;
+    OUString sExt( ".odt" );
+    OUString basename = OUString::createFromAscii( name );
+    if (no > 0 )
+        basename += OUString::number(no) + "-";
+    aTempFile.reset( new utl::TempFile( basename, true, &sExt ) );
+    OSL_ENSURE( aTempFile.get(), "Temporary file not available" );
+    INetURLObject aTempFileURL( aTempFile->GetURL() );
+    SfxMedium* pDstMed = new SfxMedium(
+        aTempFileURL.GetMainURL( INetURLObject::NO_DECODE ),
+        STREAM_STD_READWRITE );
+    xTargetDocShell->DoSaveAs( *pDstMed );
+    xTargetDocShell->DoSaveCompleted( pDstMed );
+    if( xTargetDocShell->GetError() )
+        SAL_WARN( "sw.mailmerge", "Error saving: " << aTempFile->GetURL() );
+    else
+        SAL_INFO( "sw.mailmerge", "Saved doc as: " << aTempFile->GetURL() );
+}
+#endif
+
 // merge all data into one resulting document and return the number of merged documents
 sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                             SwView& rSourceView )
 {
+#ifdef DBG_UTIL
+    lcl_SaveDoc( rSourceView.GetDocShell(), "MergeSource" );
+#endif
+
     // check the availability of all data in the config item
     uno::Reference< XResultSet> xResultSet = rMMConfig.GetResultSet();
     if(!xResultSet.is())
@@ -2721,6 +2754,9 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         // create a target docshell to put the merged document into
         SfxObjectShellRef xTargetDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTargetDocShell->DoInitNew( 0 );
+#ifdef DBG_UTIL
+        lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
+#endif
         SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
 
         //the created window has to be located at the same position as the source window
@@ -2777,6 +2813,11 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             {
                 xWorkDocSh = rSourceView.GetDocShell()->GetDoc()->CreateCopy(true);
             }
+#ifdef DBG_UTIL
+            if ( nDocNo <= MAX_DOC_DUMP )
+                lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
+#endif
+
             //create a ViewFrame
             SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
             SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
@@ -2864,6 +2905,11 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                     pWorkDoc->AppendTxtNode( aTestPos );
                 }
             }
+
+#ifdef DBG_UTIL
+            if ( nDocNo <= MAX_DOC_DUMP )
+                lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
+#endif
             pTargetShell->Paste( rWorkShell.GetDoc(), true );
             //convert fields in page styles (header/footer - has to be done after the first document has been pasted
             if(1 == nDocNo)
@@ -2871,6 +2917,11 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 pTargetShell->CalcLayout();
                 pTargetShell->ConvertFieldsToText();
             }
+#ifdef DBG_UTIL
+            if ( nDocNo <= MAX_DOC_DUMP )
+                lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
+#endif
+
             //add the document info to the config item
             SwDocMergeInfo aMergeInfo;
             aMergeInfo.nStartPageInTarget = nPageCountBefore;
