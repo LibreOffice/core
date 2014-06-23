@@ -402,25 +402,9 @@ void IconChoiceDialog::ShowPage( sal_uInt16 nId )
 
 /**********************************************************************
 |
-| Resize Dialog
-|
-\**********************************************************************/
-void IconChoiceDialog::Resize()
-{
-    Dialog::Resize ();
-
-    if ( IsReallyVisible() )
-    {
-        m_pIconCtrl->ArrangeIcons();
-    }
-}
-
-/**********************************************************************
-|
 | select a page
 |
 \**********************************************************************/
-
 IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
 {
     sal_uLong nPos;

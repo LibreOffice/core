@@ -188,7 +188,6 @@ public :
     virtual ~IconChoiceDialog ();
 
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
-    virtual void        Resize() SAL_OVERRIDE;
 
     // interface
     SvxIconChoiceCtrlEntry* AddTabPage(
