@@ -1399,9 +1399,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         /////////////////////////////////////////////////////////////////////
 
         // First, identify whether resource is DAV or not
-        const ResourceType & rType = getResourceType( xEnv, xResAccess );
-
         bool bNetworkAccessAllowed = true;
+        const ResourceType & rType = getResourceType( xEnv, xResAccess, &bNetworkAccessAllowed );
 
         if ( DAV == rType )
         {
@@ -3364,15 +3363,15 @@ Content::getBaseURI( const boost::scoped_ptr< DAVResourceAccess > & rResAccess )
 //=========================================================================
 const Content::ResourceType & Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv,
-                    const boost::scoped_ptr< DAVResourceAccess > & rResAccess )
+                    const boost::scoped_ptr< DAVResourceAccess > & rResAccess,
+                    bool * networkAccessAllowed )
     throw ( uno::Exception )
 {
     if ( m_eResourceType == UNKNOWN )
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-        ResourceType eResourceType;
-        eResourceType = m_eResourceType;
+        ResourceType eResourceType = UNKNOWN;
 
         try
         {
@@ -3420,6 +3419,12 @@ const Content::ResourceType & Content::getResourceType(
                 // resource is NON_DAV
                 eResourceType = NON_DAV;
             }
+            else if (networkAccessAllowed != 0)
+            {
+                *networkAccessAllowed = *networkAccessAllowed
+                    && shouldAccessNetworkAfterException(e);
+            }
+
             // cancel command execution is case that no user authentication data has been provided.
             if ( e.getError() == DAVException::DAV_HTTP_NOAUTH )
             {
