@@ -1933,7 +1933,7 @@ IDocumentLinksAdministration* SwNode::getIDocumentLinksAdministration() { return
 const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return GetDoc(); }
 IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }
-IDocumentListItems& SwNode::getIDocumentListItems() { return *GetDoc(); } // #i83479#
+IDocumentListItems& SwNode::getIDocumentListItems() { return GetDoc()->getIDocumentListItems(); } // #i83479#
 
 const IDocumentMarkAccess* SwNode::getIDocumentMarkAccess() const { return GetDoc()->getIDocumentMarkAccess(); }
 IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc()->GetIStyleAccess(); }

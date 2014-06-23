@@ -2540,7 +2540,7 @@ IDocumentUndoRedo const& SwViewShell::GetIDocumentUndoRedo() const
 // --> OD 2007-11-14 #i83479#
 const IDocumentListItems* SwViewShell::getIDocumentListItemsAccess() const
 {
-    return mpDoc;
+    return &mpDoc->getIDocumentListItems();
 }
 
 const IDocumentOutlineNodes* SwViewShell::getIDocumentOutlineNodesAccess() const

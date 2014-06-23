@@ -31,7 +31,6 @@
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentOutlineNodes.hxx>
-#include <IDocumentListItems.hxx>
 
 #include <IDocumentListsAccess.hxx>
 class SwList;
@@ -195,6 +194,7 @@ class IDocumentDrawModelAccess;
 class IDocumentChartDataProviderAccess;
 class IDocumentTimerAccess;
 class IDocumentLinksAdministration;
+class IDocumentListItems;
 class _SetGetExpFlds;
 
 namespace sw { namespace mark {
@@ -210,6 +210,7 @@ namespace sw {
     class DocumentChartDataProviderManager;
     class DocumentTimerManager;
     class DocumentLinksAdministrationManager;
+    class DocumentListItemsManager;
 }
 
 namespace com { namespace sun { namespace star {
@@ -255,7 +256,6 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentStatistics,
     public IDocumentState,
     public IDocumentLayoutAccess,
-    public IDocumentListItems,
     public IDocumentOutlineNodes,
     public IDocumentListsAccess,
     public IDocumentExternalData
@@ -291,6 +291,7 @@ class SW_DLLPUBLIC SwDoc :
     ::boost::scoped_ptr< ::sw::DocumentDeviceManager > m_pDeviceAccess;
     const ::boost::scoped_ptr< ::sw::DocumentTimerManager > m_pDocumentTimerManager;
     const ::boost::scoped_ptr< ::sw::DocumentLinksAdministrationManager > m_pDocumentLinksAdministrationManager;
+    const ::boost::scoped_ptr< ::sw::DocumentListItemsManager > m_pDocumentListItemsManager;
 
     // Pointer
     SwFrmFmt        *mpDfltFrmFmt;       //< Default formats.
@@ -368,17 +369,8 @@ class SW_DLLPUBLIC SwDoc :
     rtl::Reference<SvxForbiddenCharactersTable> mxForbiddenCharsTable;
     com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor > mxVbaEvents;
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> m_xTemplateToProjectCache;
-public:
-    struct lessThanNodeNum
-    {
-        bool operator()( const SwNodeNum* pNodeNumOne,
-                         const SwNodeNum* pNodeNumTwo ) const;
-    };
 
-    typedef ::std::set< const SwNodeNum*, lessThanNodeNum > tImplSortedNodeNumList;
 private:
-    tImplSortedNodeNumList* mpListItemsList;
-
     ::std::auto_ptr< ::sfx2::IXmlIdRegistry > m_pXmlIdRegistry;
 
     // other
@@ -774,13 +766,8 @@ public:
     IDocumentChartDataProviderAccess & getIDocumentChartDataProviderAccess();
 
     // IDocumentListItems
-    virtual void addListItem( const SwNodeNum& rNodeNum ) SAL_OVERRIDE;
-    virtual void removeListItem( const SwNodeNum& rNodeNum ) SAL_OVERRIDE;
-    virtual OUString getListItemText( const SwNodeNum& rNodeNum,
-                                    const bool bWithNumber = true,
-                                    const bool bWithSpacesForLevel = false ) const SAL_OVERRIDE;
-    virtual void getListItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const SAL_OVERRIDE;
-    virtual void getNumItems( IDocumentListItems::tSortedNodeNumList& orNodeNumList ) const SAL_OVERRIDE;
+    IDocumentListItems const & getIDocumentListItems() const;
+    IDocumentListItems & getIDocumentListItems();
 
     // IDocumentOutlineNodes
     virtual sal_Int32 getOutlineNodesCount() const SAL_OVERRIDE;

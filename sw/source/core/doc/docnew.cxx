@@ -93,6 +93,7 @@
 #include <DocumentChartDataProviderManager.hxx>
 #include <DocumentTimerManager.hxx>
 #include <DocumentLinksAdministrationManager.hxx>
+#include <DocumentListItemsManager.hxx>
 #include <unochart.hxx>
 #include <fldbas.hxx>
 
@@ -202,6 +203,7 @@ SwDoc::SwDoc()
     m_pDeviceAccess( new ::sw::DocumentDeviceManager( *this ) ),
     m_pDocumentTimerManager( new ::sw::DocumentTimerManager( *this ) ),
     m_pDocumentLinksAdministrationManager( new ::sw::DocumentLinksAdministrationManager( *this ) ),
+    m_pDocumentListItemsManager( new ::sw::DocumentListItemsManager() ),
     mpDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     mpEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, mpDfltFrmFmt ) ),
     mpColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, mpDfltFrmFmt ) ),
@@ -245,7 +247,6 @@ SwDoc::SwDoc()
     mpLayoutCache( 0 ),
     mpUnoCallBack(new SwModify(0)),
     mpGrammarContact(createGrammarContact()),
-    mpListItemsList( new tImplSortedNodeNumList() ), // #i83479#
     m_pXmlIdRegistry(),
     mnAutoFmtRedlnCommentNo( 0 ),
     meRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)),
@@ -435,10 +436,6 @@ SwDoc::~SwDoc()
     {
         mpDocShell->SetUndoManager(0);
     }
-
-    // #i83479#
-    delete mpListItemsList;
-    mpListItemsList = 0;
 
     delete mpGrammarContact;
     mpGrammarContact = 0;
