@@ -4,6 +4,5 @@
     tools:context="org.libreoffice.MainActivity" >
     <item android:id="@+id/action_settings"
         android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:orderInCategory="100" />
 </menu>
