@@ -1418,7 +1418,19 @@ private:
         else if (rInfo.maPageSize.Width() < rInfo.maPageSize.Height())
             rInfo.meOrientation = ORIENTATION_LANDSCAPE;
 
-        const Size aPaperSize (rInfo.mpPrinter->GetPaperSize());
+        // Draw should abide by specified paper size
+        Size aPaperSize;
+        if (mpOptions->IsDraw())
+        {
+            aPaperSize.setWidth(rInfo.maPageSize.Width());
+            aPaperSize.setHeight(rInfo.maPageSize.Height());
+        }
+        else
+        {
+            aPaperSize.setWidth(rInfo.mpPrinter->GetPaperSize().Width());
+            aPaperSize.setHeight(rInfo.mpPrinter->GetPaperSize().Height());
+        }
+
         if( (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
               (aPaperSize.Width() < aPaperSize.Height()))
            ||
@@ -1483,10 +1495,21 @@ private:
 
             if (mpOptions->IsTime())
                 aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( Time( Time::SYSTEM ), false, false );
-            aInfo.maPrintSize = aInfo.mpPrinter->GetOutputSize();
-            maPrintSize = awt::Size(
-                aInfo.mpPrinter->GetPaperSize().Width(),
-                aInfo.mpPrinter->GetPaperSize().Height());
+
+            // Draw should use specified paper size when printing
+            if (mpOptions->IsDraw())
+            {
+                aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PK_STANDARD)->GetSize();
+                maPrintSize = awt::Size(aInfo.maPrintSize.Width(),
+                                        aInfo.maPrintSize.Height());
+            }
+            else
+            {
+                aInfo.maPrintSize = aInfo.mpPrinter->GetOutputSize();
+                maPrintSize = awt::Size(
+                    aInfo.mpPrinter->GetPaperSize().Width(),
+                    aInfo.mpPrinter->GetPaperSize().Height());
+            }
 
             switch (mpOptions->GetOutputQuality())
             {
