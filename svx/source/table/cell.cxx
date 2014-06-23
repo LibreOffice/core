@@ -858,27 +858,6 @@ Sequence< sal_Int8 > SAL_CALL Cell::getImplementationId(  ) throw (RuntimeExcept
     return css::uno::Sequence<sal_Int8>();
 }
 
-// XServiceInfo
-OUString SAL_CALL Cell::getImplementationName(  ) throw (RuntimeException, std::exception)
-{
-    return OUString( "com.sun.star.comp.svx.table.Cell" );
-}
-
-sal_Bool SAL_CALL Cell::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
-{
-    return cppu::supportsService( this, ServiceName );
-}
-
-Sequence< OUString > SAL_CALL Cell::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
-{
-    Sequence< OUString > aSeq( SvxUnoTextBase::getSupportedServiceNames() );
-    sal_Int32 nIndex = aSeq.getLength();
-    aSeq.realloc( nIndex + 2 );
-    aSeq[nIndex++] = "com.sun.star.table.cell";
-    aSeq[nIndex++] = "com.sun.star.drawing.cell";
-    return aSeq;
-}
-
 // XLayoutConstrains
 ::com::sun::star::awt::Size SAL_CALL Cell::getMinimumSize()
     throw (RuntimeException,
@@ -1622,25 +1601,6 @@ Sequence< Any > SAL_CALL Cell::getPropertyDefaults( const Sequence< OUString >& 
         *pDefaults++ = getPropertyDefault( *pName++ );
 
     return aDefaults;
-}
-
-
-// XFastPropertySet
-
-
-void SAL_CALL Cell::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
-{
-    (void)aValue;
-    (void)nHandle;
-    throw UnknownPropertyException();
-}
-
-
-// TODO: Refactor this method!
-Any SAL_CALL Cell::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
-{
-    (void)nHandle;
-    throw UnknownPropertyException();
 }
 
 
