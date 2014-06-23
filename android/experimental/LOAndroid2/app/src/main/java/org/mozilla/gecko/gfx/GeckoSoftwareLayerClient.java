@@ -80,7 +80,7 @@ public class GeckoSoftwareLayerClient extends GeckoLayerClient {
     public GeckoSoftwareLayerClient(Context context) {
         super(context);
 
-        mFormat = CairoImage.FORMAT_RGB16_565;
+        mFormat = CairoImage.FORMAT_ARGB32;
 
         mCairoImage = new CairoImage() {
             @Override

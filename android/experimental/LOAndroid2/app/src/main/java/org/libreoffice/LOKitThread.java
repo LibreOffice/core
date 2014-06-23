@@ -28,8 +28,8 @@ public class LOKitThread extends Thread {
     private boolean draw() throws InterruptedException {
         final LibreOfficeMainActivity application = LibreOfficeMainActivity.mAppContext;
 
-        Bitmap bitmap = application.getLayerClient().getLayerController().getDrawable16("dummy_page");
-        bitmap = convert(bitmap, Bitmap.Config.RGB_565);
+        Bitmap bitmap = application.getLayerClient().getLayerController().getDrawable("docu");
+        //bitmap = convert(bitmap, Bitmap.Config.ARGB_8888);
 
         StringWriter stringWriter = new StringWriter();
 
@@ -41,11 +41,11 @@ public class LOKitThread extends Thread {
                 writer.name("y").value(0);
                 writer.name("width").value(bitmap.getWidth());
                 writer.name("height").value(bitmap.getHeight());
-                writer.name("pageWidth").value(1000);
-                writer.name("pageHeight").value(5000);
+                writer.name("pageWidth").value(bitmap.getWidth());
+                writer.name("pageHeight").value(bitmap.getHeight());
                 writer.name("offsetX").value(0);
                 writer.name("offsetY").value(0);
-                writer.name("zoom").value(1.0);
+                writer.name("zoom").value(0.5);
             } else {
                 writer.name("x").value(mViewportMetrics.getOrigin().x);
                 writer.name("y").value(mViewportMetrics.getOrigin().y);
