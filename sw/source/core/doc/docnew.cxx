@@ -1027,14 +1027,15 @@ void SwDoc::Paste( const SwDoc& rSource )
             aIndexBefore--;
 
             rSource.CopyRange( aCpyPam, rInsPos, true );
+            // Note: aCpyPam is invalid now
 
-            {
-                ++aIndexBefore;
-                SwPaM aPaM(SwPosition(aIndexBefore),
-                           SwPosition(rInsPos.nNode));
+            ++aIndexBefore;
+            SwPaM aPaM(SwPosition(aIndexBefore),
+                       SwPosition(rInsPos.nNode));
 
-                MakeUniqueNumRules(aPaM);
-            }
+            aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
+
+            // No need to update the rsid, as this is an empty doc
         }
 
         //TODO: Is this necessary here? SaveTblBoxCntnt( &rInsPos );
