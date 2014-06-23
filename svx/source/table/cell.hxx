@@ -222,7 +222,6 @@ private:
     ::sal_Bool      mbMerged;
     ::sal_Int32     mnRowSpan;
     ::sal_Int32     mnColSpan;
-    ::sal_Int32     mnCachedMinHeight;
 
     Rectangle maCellRect;
 

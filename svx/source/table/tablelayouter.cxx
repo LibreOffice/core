@@ -556,7 +556,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
                 }
                 else
                 {
-                    nMinWidth = std::max( nMinWidth, xCell->getMinimumSize().Width );
+                    nMinWidth = std::max( nMinWidth, xCell->getMinimumWidth() );
                 }
             }
         }
@@ -622,7 +622,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
         while( iter != aMergedCells[nCol].end() )
         {
             CellRef xCell( (*iter++) );
-            sal_Int32 nMinWidth = xCell->getMinimumSize().Width;
+            sal_Int32 nMinWidth = xCell->getMinimumWidth();
 
             for( sal_Int32 nMCol = nCol - xCell->getColumnSpan() + 1; (nMCol > 0) && (nMCol < nCol); ++nMCol )
                 nMinWidth -= maColumns[nMCol].mnSize;
@@ -706,7 +706,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
                 }
                 else
                 {
-                    nMinHeight = std::max( nMinHeight, xCell->getMinimumSize().Height );
+                    nMinHeight = std::max( nMinHeight, xCell->getMinimumHeight() );
                 }
             }
         }
@@ -773,7 +773,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
         while( iter != aMergedCells[nRow].end() )
         {
             CellRef xCell( (*iter++) );
-            sal_Int32 nMinHeight = xCell->getMinimumSize().Height;
+            sal_Int32 nMinHeight = xCell->getMinimumHeight();
 
             for( sal_Int32 nMRow = nRow - xCell->getRowSpan() + 1; (nMRow > 0) && (nMRow < nRow); ++nMRow )
                 nMinHeight -= maRows[nMRow].mnSize;
