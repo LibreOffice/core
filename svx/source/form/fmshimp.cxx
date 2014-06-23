@@ -101,6 +101,7 @@
 #include <functional>
 #include <map>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 // wird fuer Invalidate verwendet -> mitpflegen
 static const sal_uInt16 DatabaseSlotMap[] =
@@ -285,10 +286,10 @@ namespace
         {
             SdrObject* pCurrent = _rMarkList.GetMark( i )->GetMarkedSdrObj();
 
-            SdrObjListIter* pGroupIterator = NULL;
+            boost::scoped_ptr<SdrObjListIter> pGroupIterator;
             if ( pCurrent->IsGroupObject() )
             {
-                pGroupIterator = new SdrObjListIter( *pCurrent->GetSubList() );
+                pGroupIterator.reset(new SdrObjListIter( *pCurrent->GetSubList() ));
                 pCurrent = pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
             }
 
@@ -307,9 +308,6 @@ namespace
                 // next element
                 pCurrent = pGroupIterator && pGroupIterator->IsMore() ? pGroupIterator->Next() : NULL;
             }
-
-            if ( pGroupIterator )
-                delete pGroupIterator;
         }
     }
 

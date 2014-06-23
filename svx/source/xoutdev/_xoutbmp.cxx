@@ -31,6 +31,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <sax/tools/converter.hxx>
+#include <boost/scoped_array.hpp>
 
 #define FORMAT_BMP  OUString("bmp")
 #define FORMAT_GIF  OUString("gif")
@@ -506,16 +507,16 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
             const long          nStartY1 = aWorkRect.Top() + 1L;
             const long          nEndY1 = aWorkRect.Bottom();
             const long          nStartY2 = nEndY1 - 1L;
-            Point*              pPoints1 = NULL;
-            Point*              pPoints2 = NULL;
+            boost::scoped_array<Point> pPoints1;
+            boost::scoped_array<Point> pPoints2;
             long                nX, nY;
             sal_uInt16              nPolyPos = 0;
             const BitmapColor   aBlack = pAcc->GetBestMatchingColor( Color( COL_BLACK ) );
 
             if( nFlags & XOUTBMP_CONTOUR_VERT )
             {
-                pPoints1 = new Point[ nWidth ];
-                pPoints2 = new Point[ nWidth ];
+                pPoints1.reset(new Point[ nWidth ]);
+                pPoints2.reset(new Point[ nWidth ]);
 
                 for( nX = nStartX1; nX < nEndX1; nX++ )
                 {
@@ -551,8 +552,8 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
             }
             else
             {
-                pPoints1 = new Point[ nHeight ];
-                pPoints2 = new Point[ nHeight ];
+                pPoints1.reset(new Point[ nHeight ]);
+                pPoints2.reset(new Point[ nHeight ]);
 
                 for ( nY = nStartY1; nY < nEndY1; nY++ )
                 {
@@ -589,7 +590,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
 
             const sal_uInt16 nNewSize1 = nPolyPos << 1;
 
-            aRetPoly = Polygon( nPolyPos, pPoints1 );
+            aRetPoly = Polygon( nPolyPos, pPoints1.get() );
             aRetPoly.SetSize( nNewSize1 + 1 );
             aRetPoly[ nNewSize1 ] = aRetPoly[ 0 ];
 
@@ -598,9 +599,6 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
 
             if( ( fFactorX != 0. ) && ( fFactorY != 0. ) )
                 aRetPoly.Scale( fFactorX, fFactorY );
-
-            delete[] pPoints1;
-            delete[] pPoints2;
         }
     }
 
