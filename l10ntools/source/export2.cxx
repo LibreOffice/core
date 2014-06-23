@@ -339,7 +339,7 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
 bool Export::CopyFile( const ByteString& source , const ByteString& dest )
 {
 //    cout << "CopyFile( " << source.GetBuffer() << " , " << dest.GetBuffer() << " )\n";
-    const int BUFFERSIZE    = 8192;
+    static const int BUFFERSIZE = 0x100000;
     char buf[ BUFFERSIZE ];
 
     FILE* IN_FILE = fopen( source.GetBuffer() , "r" );
@@ -357,27 +357,30 @@ bool Export::CopyFile( const ByteString& source , const ByteString& dest )
         return false;
     }
 
-    while( fgets( buf , BUFFERSIZE , IN_FILE ) != NULL )
+    bool bOk = true;
+    while( bOk )
     {
-        if( fputs( buf , OUT_FILE ) == EOF )
+        if( feof( IN_FILE ) )
+            break;
+        const size_t nBytesRead = fread( buf, 1, BUFFERSIZE, IN_FILE );
+        if( nBytesRead <= 0 )
+        {
+            if( ferror( IN_FILE ) )
+            {
+                cerr << "Export::CopyFile WARNING: Read problems " << dest.GetBuffer() << "\n";
+                bOk = false;
+            }
+        }
+        else if( fwrite( buf, 1, nBytesRead, OUT_FILE ) <= 0 )
         {
             cerr << "Export::CopyFile WARNING: Write problems " << source.GetBuffer() << "\n";
-            fclose( IN_FILE );
-            fclose( OUT_FILE );
-            return false;
+            bOk = false;
         }
-    }
-    if( ferror( IN_FILE ) )
-    {
-        cerr << "Export::CopyFile WARNING: Read problems " << dest.GetBuffer() << "\n";
-        fclose( IN_FILE );
-        fclose( OUT_FILE );
-        return false;
     }
     fclose ( IN_FILE );
     fclose ( OUT_FILE );
 
-    return true;
+    return bOk;
 }
 
 /*****************************************************************************/
