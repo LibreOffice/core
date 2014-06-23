@@ -3962,7 +3962,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 : SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
+        SetEditSource( new SvxTextEditSource( pObject, 0 ) );
 }
 
 
@@ -3970,7 +3970,7 @@ SvxShapeText::SvxShapeText( SdrObject* pObject, const SfxItemPropertyMapEntry* p
 : SvxShape( pObject, pPropertyMap, pPropertySet ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
     if( pObject && pObject->GetModel() )
-        SetEditSource( new SvxTextEditSource( pObject, 0, static_cast< uno::XWeak * >( this ) ) );
+        SetEditSource( new SvxTextEditSource( pObject, 0 ) );
 }
 
 
@@ -3984,7 +3984,7 @@ SvxShapeText::~SvxShapeText() throw ()
 void SvxShapeText::Create( SdrObject* pNewObj, SvxDrawPage* pNewPage )
 {
     if( pNewObj && (NULL == GetEditSource()))
-        SetEditSource( new SvxTextEditSource( pNewObj, 0, static_cast< uno::XWeak* >(this) ) );
+        SetEditSource( new SvxTextEditSource( pNewObj, 0 ) );
     SvxShape::Create( pNewObj, pNewPage );
 }
 

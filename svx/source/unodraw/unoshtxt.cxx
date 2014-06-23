@@ -102,7 +102,6 @@ private:
     bool                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
     bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
 
-    XInterface*                     mpOwner;
     SvxUnoTextRangeBaseList         maTextRanges;
 
     SvxTextForwarder*               GetBackgroundTextForwarder();
@@ -121,7 +120,7 @@ private:
     void                            dispose();
 
 public:
-    SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText, XInterface* pOwner );
+    SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText );
     SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText, SdrView& rView, const Window& rWindow );
     virtual ~SvxTextEditSourceImpl();
 
@@ -158,7 +157,7 @@ public:
 
 
 
-SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText, XInterface* pOwner )
+SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText )
   : maRefCount      ( 0 ),
     mpObject        ( pObject ),
     mpText          ( pText ),
@@ -175,8 +174,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
     mbOldUndoMode   ( false ),
     mbForwarderIsEditMode ( false ),
     mbShapeIsEditMode     ( false ),
-    mbNotificationsDisabled ( false ),
-    mpOwner( pOwner )
+    mbNotificationsDisabled ( false )
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
 
@@ -213,8 +211,7 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mbOldUndoMode   ( false ),
     mbForwarderIsEditMode ( false ),
     mbShapeIsEditMode     ( true ),
-    mbNotificationsDisabled ( false ),
-    mpOwner(0)
+    mbNotificationsDisabled ( false )
 {
     if( !mpText )
     {
@@ -304,7 +301,6 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
 
         mpWindow = 0;
         m_xLinguServiceManager.clear();
-        mpOwner = 0;
 
         mpModel = pNewModel;
 
@@ -1039,9 +1035,9 @@ IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
 // SvxTextEditSource
 
 
-SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, SdrText* pText, XInterface* pOwner )
+SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, SdrText* pText )
 {
-    mpImpl = new SvxTextEditSourceImpl( pObject, pText, pOwner );
+    mpImpl = new SvxTextEditSourceImpl( pObject, pText );
     mpImpl->acquire();
 }
 
