@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkBox" id="HyperlinkMailPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="hexpand">True</property>
     <property name="vexpand">True</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">6</property>
+    <property name="spacing">24</property>
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
@@ -18,6 +20,7 @@
           <object class="GtkAlignment" id="alignment2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid1">
@@ -26,14 +29,14 @@
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkGrid" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkRadioButton" id="linktyp_mail">
                         <property name="label" translatable="yes">_E-mail</property>
@@ -41,7 +44,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
@@ -61,7 +63,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
                         <property name="xalign">0</property>
                         <property name="active">True</property>
@@ -88,8 +89,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Re_cipient</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">receiver</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -100,11 +103,11 @@
                 </child>
                 <child>
                   <object class="cuilo-SvxHyperURLBox" id="receiver">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-                <property name="invisible_char">•</property>
-              </object>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="invisible_char">•</property>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
@@ -120,7 +123,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Data Sources...</property>
-                    <property name="use_action_appearance">False</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -134,9 +136,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <property name="xalign">0</property>
                     <property name="ypad">1</property>
                     <property name="label" translatable="yes">_Subject</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">subject</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -177,6 +181,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Mail &amp; news</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
@@ -198,20 +205,23 @@
           <object class="GtkAlignment" id="alignment1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkGrid" id="grid3">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="row_spacing">6</property>
-                <property name="column_spacing">6</property>
+                <property name="column_spacing">12</property>
                 <child>
                   <object class="GtkLabel" id="frame_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">F_rame</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">frame</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -225,8 +235,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">Te_xt</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">indication</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -240,8 +252,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <property name="xalign">0</property>
                     <property name="label" translatable="yes">N_ame</property>
                     <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">name</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
@@ -282,13 +296,15 @@
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="row_spacing">6</property>
-                    <property name="column_spacing">6</property>
+                    <property name="column_spacing">12</property>
                     <child>
                       <object class="GtkLabel" id="form_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
                         <property name="label" translatable="yes">F_orm</property>
                         <property name="use_underline">True</property>
+                        <property name="mnemonic_widget">form</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
@@ -317,7 +333,6 @@
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="tooltip_text" translatable="yes">Events</property>
-                        <property name="use_action_appearance">False</property>
                       </object>
                       <packing>
                         <property name="left_attach">3</property>
@@ -362,6 +377,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Further settings</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
           </object>
         </child>
       </object>
