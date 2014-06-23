@@ -247,7 +247,7 @@ namespace basegfx
                         const double fOne(1.0);
                         fCut = (aVecB.getY() * (rCurrB.getX() - rCurrA.getX()) + aVecB.getX() * (rCurrA.getY() - rCurrB.getY())) / fCut;
 
-                        if(fTools::more(fCut, fZero) && fTools::less(fCut, fOne))
+                        if(fTools::moreOrEqual(fCut, fZero) && fTools::lessOrEqual(fCut, fOne))
                         {
                             // it's a candidate, but also need to test parameter value of cut on line 2
                             double fCut2;
@@ -262,7 +262,7 @@ namespace basegfx
                                 fCut2 = (rCurrA.getY() + (fCut * aVecA.getY()) - rCurrB.getY()) / aVecB.getY();
                             }
 
-                            if(fTools::more(fCut2, fZero) && fTools::less(fCut2, fOne))
+                            if(fTools::moreOrEqual(fCut2, fZero) && fTools::lessOrEqual(fCut2, fOne))
                             {
                                 // cut is in range, add point. Two edges can have only one cut, but
                                 // add a cut point to each list. The lists may be the same for
