@@ -293,10 +293,8 @@ IconChoiceDialog ::~IconChoiceDialog ()
     }
 
 
-    if ( pRanges )
-        delete pRanges;
-    if ( pOutSet )
-        delete pOutSet;
+    delete pRanges;
+    delete pOutSet;
 }
 
 /**********************************************************************
