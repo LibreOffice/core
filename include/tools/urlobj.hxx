@@ -866,37 +866,25 @@ public:
 
     enum Part
     {
-        PART_OBSOLETE_NORMAL = 0x001, // Obsolete, do not use!
-        PART_OBSOLETE_FILE = 0x002, // Obsolete, do not use!
-        PART_OBSOLETE_PARAM = 0x004, // Obsolete, do not use!
-        PART_USER_PASSWORD = 0x008,
-        PART_IMAP_ACHAR = 0x010,
-        PART_VIM = 0x020,
-        PART_HOST_EXTRA = 0x040,
-        PART_FPATH = 0x080,
-        PART_AUTHORITY = 0x100,
-        PART_PATH_SEGMENTS_EXTRA = 0x200,
-        PART_REL_SEGMENT_EXTRA = 0x400,
-        PART_URIC = 0x800,
-        PART_HTTP_PATH = 0x1000,
-        PART_FILE_SEGMENT_EXTRA = 0x2000, // Obsolete, do not use!
-        PART_MESSAGE_ID = 0x4000,
-        PART_MESSAGE_ID_PATH = 0x8000,
-        PART_MAILTO = 0x10000,
-        PART_PATH_BEFORE_QUERY = 0x20000,
-        PART_PCHAR = 0x40000,
-        PART_FRAGMENT = 0x80000, // Obsolete, do not use!
-        PART_VISIBLE = 0x100000,
-        PART_VISIBLE_NONSPECIAL = 0x200000,
-        PART_CREATEFRAGMENT = 0x400000,
-        PART_UNO_PARAM_VALUE = 0x800000,
-        PART_UNAMBIGUOUS = 0x1000000,
-        PART_URIC_NO_SLASH = 0x2000000,
-        PART_HTTP_QUERY = 0x4000000, //TODO! unused?
-        PART_NEWS_ARTICLE_LOCALPART = 0x8000000,
-        max_part = 0x80000000
-            // Do not use!  Only there to allow compatible changes in the
-            // future.
+        PART_USER_PASSWORD          = 0x00001,
+        PART_IMAP_ACHAR             = 0x00002,
+        PART_VIM                    = 0x00004,
+        PART_FPATH                  = 0x00008,
+        PART_AUTHORITY              = 0x00010,
+        PART_REL_SEGMENT_EXTRA      = 0x00020,
+        PART_URIC                   = 0x00040,
+        PART_HTTP_PATH              = 0x00080,
+        PART_MESSAGE_ID_PATH        = 0x00100,
+        PART_MAILTO                 = 0x00200,
+        PART_PATH_BEFORE_QUERY      = 0x00400,
+        PART_PCHAR                  = 0x00800,
+        PART_VISIBLE                = 0x01000,
+        PART_VISIBLE_NONSPECIAL     = 0x02000,
+        PART_UNO_PARAM_VALUE        = 0x04000,
+        PART_UNAMBIGUOUS            = 0x08000,
+        PART_URIC_NO_SLASH          = 0x10000,
+        PART_HTTP_QUERY             = 0x20000, //TODO! unused?
+        PART_NEWS_ARTICLE_LOCALPART = 0x40000
     };
 
     enum EscapeType
