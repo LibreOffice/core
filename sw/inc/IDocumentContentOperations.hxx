@@ -65,10 +65,36 @@ public:
     };
 
 public:
-    /** Copying of a range within or to another document.
-        The position can also be within the range!
+    /** Copy a selected content range to a position
+
+        The position can be in the same or in an another document. It can also
+        be within the range!
+
+        \warning The range has to include at least two nodes or has to be a
+        SwDoc::IsColumnSelection!
+
+        Normally this functions should work only with content nodes. But there
+        is a special case used by SwDoc::Paste, which starts the SwPaM at the
+        content start node. This position doesn't contain any content:
+
+        @code
+        SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 1 );
+        @endcode
+
+        This is important, because it prevents merging of the first node of
+        the range into the node pointed to by \p rPos.
+        As a result this keeps all properties of the first real content node,
+        which is the 2nd, including the Flys and the page description. In this
+        case the first (fake) node is silently dropped and all other nodes are
+        just copied.
+
+        @param rPam
+        The source node range to copy
+
+        @param rPos
+        The target copy destination
      */
-    virtual bool CopyRange(SwPaM&, SwPosition&, const bool bCopyAll ) const = 0;
+    virtual bool CopyRange(SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const = 0;
 
     /** Delete section containing the node.
     */
