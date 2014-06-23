@@ -2162,6 +2162,19 @@ AC_ARG_WITH(alfresco-cloud-client-secret,
         --with-alfresco-cloud-client-id is empty, the feature will be disabled]),
 )
 
+AC_ARG_WITH(onedrive-client-id,
+    AS_HELP_STRING([--with-onedrive-client-id],
+        [Provides the client id of the application for OAuth2 authentication
+        on OneDrive. If either this or --with-onedrive-client-secret is
+        empty, the feature will be disabled]),
+)
+
+AC_ARG_WITH(onedrive-client-secret,
+    AS_HELP_STRING([--with-onedrive-client-secret],
+        [Provides the client secret of the application for OAuth2
+        authentication on OneDrive. If either this or
+        --with-onedrive-client-id is empty, the feature will be disabled]),
+)
 dnl ===================================================================
 dnl Do we want to use pre-build binary tarball for recompile
 dnl ===================================================================
@@ -12619,6 +12632,28 @@ else
 fi
 AC_DEFINE_UNQUOTED(ALFRESCO_CLOUD_CLIENT_ID, $ALFRESCO_CLOUD_CLIENT_ID)
 AC_DEFINE_UNQUOTED(ALFRESCO_CLOUD_CLIENT_SECRET, $ALFRESCO_CLOUD_CLIENT_SECRET)
+
+AC_MSG_CHECKING([for OneDrive client id and secret])
+ONEDRIVE_CLIENT_ID="\"$with_onedrive_client_id\""
+ONEDRIVE_CLIENT_SECRET="\"$with_onedrive_client_secret\""
+if test "$with_onedrive_client_id" = "no" -o -z "$with_onedrive_client_id"; then
+#    ONEDRIVE_CLIENT_ID="\"\""
+    ONEDRIVE_CLIENT_ID="00000000441136A5"
+fi
+
+if test "$with_onedrive_client_secret" = "no" -o -z "$with_onedrive_client_secret"; then
+#    ONEDRIVE_CLIENT_SECRET="\"\""
+    ONEDRIVE_CLIENT_SECRET="280mTUglE4C5vbdNOoQAhNrWD5XyqBEV"
+fi
+
+if test -z "$ONEDRIVE_CLIENT_ID" -o -z "$ONEDRIVE_CLIENT_SECRET"; then
+    AC_MSG_RESULT([not set])
+else
+    AC_MSG_RESULT([set])
+fi
+AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_ID, $ONEDRIVE_CLIENT_ID)
+AC_DEFINE_UNQUOTED(ONEDRIVE_CLIENT_SECRET, $ONEDRIVE_CLIENT_SECRET)
+
 
 # ===================================================================
 # De- or increase default verbosity of build process
